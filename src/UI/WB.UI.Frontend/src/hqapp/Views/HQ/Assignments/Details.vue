@@ -659,11 +659,11 @@ export default {
         },
 
         async confirmComplete() {
-            await this.changeStatus('Completed', this.$refs.completeModal)
+            await this.changeStatus('Approved', this.$refs.completeModal)
         },
 
         async confirmReopen() {
-            await this.changeStatus('Active', this.$refs.reopenModal)
+            await this.changeStatus('Open', this.$refs.reopenModal)
         },
 
         async changeStatus(status, modalRef) {
@@ -784,21 +784,21 @@ export default {
         },
         assignmentStatus() {
             const statusMap = {
-                'Active': this.$t('Assignments.StatusActive'),
+                'Open': this.$t('Assignments.StatusActive'),
                 'Finished': this.$t('Assignments.StatusFinished'),
-                'Completed': this.$t('Assignments.StatusCompleted'),
+                'Approved': this.$t('Assignments.StatusCompleted'),
             }
             return statusMap[this.model.status] || this.model.status
         },
         canComplete() {
             if (!this.isHeadquarters && !this.model.isSupervisor) return false
             if (this.isArchived) return false
-            return this.model.status === 'Active' || this.model.status === 'Finished'
+            return this.model.status === 'Open' || this.model.status === 'Finished'
         },
         canReopen() {
             if (!this.isHeadquarters && !this.model.isSupervisor) return false
             if (this.isArchived) return false
-            return this.model.status === 'Finished' || this.model.status === 'Completed'
+            return this.model.status === 'Finished' || this.model.status === 'Approved'
         },
         calendarEventTime() {
             return this.model.calendarEvent != null
@@ -933,7 +933,7 @@ export default {
                             case 'TargetAreaChanged':
                                 return escape(data.TargetArea)
                             case 'Finished':
-                            case 'Completed':
+                            case 'Approved':
                             case 'Reopened':
                                 if (data && data.Comment) {
                                     return self.$t('Assignments.Action_StatusChanged_Comment', {

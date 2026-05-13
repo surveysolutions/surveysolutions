@@ -85,7 +85,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Length = 10,
             });
 
-            capturedModel.Statuses.Should().BeEquivalentTo(new[] { AssignmentStatus.Active, AssignmentStatus.Finished });
+            capturedModel.Statuses.Should().BeEquivalentTo(new[] { AssignmentStatus.Open, AssignmentStatus.Finished });
         }
 
         [Test]
@@ -122,7 +122,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             });
 
             // Server-side filter overrides to only Active and Finished
-            capturedModel.Statuses.Should().BeEquivalentTo(new[] { AssignmentStatus.Active, AssignmentStatus.Finished });
+            capturedModel.Statuses.Should().BeEquivalentTo(new[] { AssignmentStatus.Open, AssignmentStatus.Finished });
         }
     }
 }

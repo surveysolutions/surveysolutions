@@ -54,9 +54,9 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public string CalendarEventComment { get; set; }
 
         /// <summary>
-        /// Local assignment status (Active, Finished, Completed).
+        /// Local assignment status (Open, Finished, Approved).
         /// </summary>
-        public AssignmentStatus Status { get; set; } = AssignmentStatus.Active;
+        public AssignmentStatus Status { get; set; } = AssignmentStatus.Open;
 
         /// <summary>
         /// Comment associated with the last status change, received from server or set locally.

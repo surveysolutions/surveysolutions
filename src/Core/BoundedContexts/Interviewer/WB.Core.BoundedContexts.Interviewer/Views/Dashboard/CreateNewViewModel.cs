@@ -97,11 +97,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     continue;
                 }
 
-                // Completed assignments: hide from interviewer (no actions available)
-                if (assignment.Status == AssignmentStatus.Completed)
+                // Approved assignments: hide from interviewer (no actions available)
+                if (assignment.Status == AssignmentStatus.Approved)
                     continue;
 
-                // Active assignments: show if unlimited or interviews still needed
+                // Open assignments: show if unlimited or interviews still needed
                 if (!dashboardItem.Quantity.HasValue || dashboardItem.InterviewsLeftByAssignmentCount > 0)
                 {
                     yield return dashboardItem;

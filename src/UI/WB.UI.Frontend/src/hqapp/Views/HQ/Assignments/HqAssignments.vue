@@ -85,13 +85,13 @@
                     <button class="btn btn-lg btn-warning" id="btnCompleteSelected"
                         v-if="(config.isHeadquarter || config.isSupervisor) && !showArchive.key"
                         :disabled="!canComplete"
-                        @click="bulkChangeStatus('Completed', 'completeModal')">{{
+                        @click="bulkChangeStatus('Approved', 'completeModal')">{{
                             $t("Assignments.Complete") }}</button>
 
                     <button class="btn btn-lg btn-primary" id="btnReopenSelected"
                         v-if="(config.isHeadquarter || config.isSupervisor) && !showArchive.key"
                         :disabled="!canReopen"
-                        @click="bulkChangeStatus('Active', 'reopenModal')">{{
+                        @click="bulkChangeStatus('Open', 'reopenModal')">{{
                             $t("Assignments.Reopen") }}</button>
 
                     <button class="btn btn-lg btn-danger" id="btnArchiveSelected"
@@ -354,13 +354,13 @@ export default {
         canComplete() {
             if (this.selectedRows.length === 0 || (this.showArchive && this.showArchive.key)) return false
             const data = this.$refs.table.table.rows({ selected: true }).data()
-            return Array.from(data).some(r => r.status === 'Active' || r.status === 'Finished')
+            return Array.from(data).some(r => r.status === 'Open' || r.status === 'Finished')
         },
 
         canReopen() {
             if (this.selectedRows.length === 0 || (this.showArchive && this.showArchive.key)) return false
             const data = this.$refs.table.table.rows({ selected: true }).data()
-            return Array.from(data).some(r => r.status === 'Finished' || r.status === 'Completed')
+            return Array.from(data).some(r => r.status === 'Finished' || r.status === 'Approved')
         },
 
         ddlReceivedByTablet() {
@@ -379,9 +379,9 @@ export default {
         ddlStatus() {
             return [
                 { key: null, value: this.$t('Common.All') },
-                { key: 'Active', value: this.$t('Assignments.StatusActive') },
+                { key: 'Open', value: this.$t('Assignments.StatusActive') },
                 { key: 'Finished', value: this.$t('Assignments.StatusFinished') },
-                { key: 'Completed', value: this.$t('Assignments.StatusCompleted') },
+                { key: 'Approved', value: this.$t('Assignments.StatusCompleted') },
             ]
         },
 
@@ -445,9 +445,9 @@ export default {
                     orderable: false,
                     render(data) {
                         const statusMap = {
-                            'Active': self.$t('Assignments.StatusActive'),
+                            'Open': self.$t('Assignments.StatusActive'),
                             'Finished': self.$t('Assignments.StatusFinished'),
-                            'Completed': self.$t('Assignments.StatusCompleted'),
+                            'Approved': self.$t('Assignments.StatusCompleted'),
                         }
                         return statusMap[data] || data
                     },
@@ -916,7 +916,7 @@ export default {
         },
 
         async confirmStatusChange() {
-            const modalRef = this.statusChangeTargetStatus === 'Completed'
+            const modalRef = this.statusChangeTargetStatus === 'Approved'
                 ? this.$refs.completeModal
                 : this.$refs.reopenModal
             try {

@@ -852,10 +852,10 @@ your next synchronization</value>
     <value>Reopen assignment?</value>
   </data>
   <data name="Dashboard_CompleteAssignment" xml:space="preserve">
-    <value>Complete assignment</value>
+    <value>Approve assignment</value>
   </data>
   <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
-    <value>Complete assignment?</value>
+    <value>Approve assignment?</value>
   </data>
   <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
     <value>Interviewers working offline may still continue data collection until synchronization. Such interviews will still be accepted.</value>
@@ -866,8 +866,8 @@ your next synchronization</value>
   <data name="Dashboard_Assignment_Status_Finished" xml:space="preserve">
     <value>Status: Finished</value>
   </data>
-  <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
-    <value>Status: Completed</value>
+  <data name="Dashboard_Assignment_Status_Approved" xml:space="preserve">
+    <value>Status: Approved</value>
   </data>
   <data name="Dashboard_ShowLocation" xml:space="preserve">
     <value>Show location</value>

@@ -289,8 +289,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         if (!string.IsNullOrEmpty(f.Comment))
                             historyItem.AdditionalData = new { f.Comment };
                         break;
-                    case AssignmentCompleted c2:
-                        historyItem.Action = AssignmentHistoryAction.Completed;
+                    case AssignmentApproved c2:
+                        historyItem.Action = AssignmentHistoryAction.Approved;
                         if (!string.IsNullOrEmpty(c2.Comment))
                             historyItem.AdditionalData = new { c2.Comment };
                         break;

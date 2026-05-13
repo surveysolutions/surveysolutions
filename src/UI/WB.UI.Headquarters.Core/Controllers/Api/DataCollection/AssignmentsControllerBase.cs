@@ -136,12 +136,12 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                             return Forbid();
                         commandService.Execute(new FinishAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
                         break;
-                    case AssignmentStatus.Completed:
+                    case AssignmentStatus.Approved:
                         if (!this.authorizedUser.IsSupervisor)
                             return Forbid();
-                        commandService.Execute(new CompleteAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
+                        commandService.Execute(new ApproveAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
                         break;
-                    case AssignmentStatus.Active:
+                    case AssignmentStatus.Open:
                         commandService.Execute(new ReopenAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
                         break;
                     default:

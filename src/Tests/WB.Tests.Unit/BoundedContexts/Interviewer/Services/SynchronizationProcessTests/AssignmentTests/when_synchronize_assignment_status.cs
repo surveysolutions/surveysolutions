@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 Id = 1,
                 Quantity = 10,
                 QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Active, // server has Active
+                Status = AssignmentStatus.Open, // server has Active
                 StatusComment = null
             };
 
@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             // Assert: local status should be overridden to Active by server
             var updated = assignmentsRepo.GetById(1);
-            updated.Status.Should().Be(AssignmentStatus.Active);
+            updated.Status.Should().Be(AssignmentStatus.Open);
             updated.StatusComment.Should().BeNull("server sent null status comment");
             updated.StatusChangedAtUtc.Should().BeNull("pending flag is cleared after sync");
             // No upload should have been made since there was no pending change
@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 Id = 1,
                 Quantity = 10,
                 QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Completed, // supervisor completed it on server
+                Status = AssignmentStatus.Approved, // supervisor completed it on server
                 StatusComment = "Completed by supervisor"
             };
 
@@ -99,7 +99,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             // Assert: server Completed wins over local Finished
             var updated = assignmentsRepo.GetById(1);
-            updated.Status.Should().Be(AssignmentStatus.Completed);
+            updated.Status.Should().Be(AssignmentStatus.Approved);
             updated.StatusComment.Should().Be("Completed by supervisor");
         }
 

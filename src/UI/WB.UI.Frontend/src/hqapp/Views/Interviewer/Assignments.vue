@@ -185,7 +185,7 @@ export default {
         canFinish() {
             if (this.selectedRows.length === 0) return false
             const data = this.$refs.table.table.rows({ selected: true }).data()
-            return Array.from(data).some(r => r.status === 'Active')
+            return Array.from(data).some(r => r.status === 'Open')
         },
         canReopen() {
             if (this.selectedRows.length === 0) return false
@@ -232,7 +232,7 @@ export default {
         },
 
         async confirmReopen() {
-            await this.changeAssignmentStatus('Active', this.$refs.reopenModal)
+            await this.changeAssignmentStatus('Open', this.$refs.reopenModal)
         },
 
         async changeAssignmentStatus(status, modalRef) {
@@ -377,9 +377,9 @@ export default {
                     orderable: false,
                     render(data) {
                         const statusMap = {
-                            'Active': self.$t('Assignments.StatusActive'),
+                            'Open': self.$t('Assignments.StatusActive'),
                             'Finished': self.$t('Assignments.StatusFinished'),
-                            'Completed': self.$t('Assignments.StatusCompleted'),
+                            'Approved': self.$t('Assignments.StatusCompleted'),
                         }
                         return statusMap[data] || data
                     },

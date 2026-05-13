@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
             switch (Assignment.Status)
             {
-                case AssignmentStatus.Active:
+                case AssignmentStatus.Open:
                     Actions.Add(new ActionDefinition
                     {
                         Command = new MvxAsyncCommand(
@@ -77,8 +77,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     });
                     break;
 
-                case AssignmentStatus.Completed:
-                    // No actions available for completed assignments
+                case AssignmentStatus.Approved:
+                    // No actions available for approved assignments
                     break;
             }
 
@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private async Task ReopenAssignmentAsync()
         {
             await ChangeAssignmentStatusAsync(
-                AssignmentStatus.Active,
+                AssignmentStatus.Open,
                 string.Empty,
                 EnumeratorUIResources.Dashboard_ReopenAssignment_Title,
                 EnumeratorUIResources.Dashboard_Reopen);

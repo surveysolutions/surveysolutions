@@ -36,9 +36,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Assignm
 
         public void ThrowIfCannotFinish()
         {
-            if (this.properties.Status != AssignmentStatus.Active)
+            if (this.properties.Status != AssignmentStatus.Open)
                 throw new AssignmentException(
-                    $"Assignment can only be finished from Active status. Current status: {this.properties.Status}",
+                    $"Assignment can only be finished from Open status. Current status: {this.properties.Status}",
                     AssignmentDomainExceptionType.InvalidStatusTransition)
                 {
                     Data =
@@ -49,11 +49,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Assignm
                 };
         }
 
-        public void ThrowIfCannotComplete()
+        public void ThrowIfCannotApprove()
         {
             if (this.properties.Status != AssignmentStatus.Finished)
                 throw new AssignmentException(
-                    $"Assignment can only be completed from Finished status. Current status: {this.properties.Status}",
+                    $"Assignment can only be approved from Finished status. Current status: {this.properties.Status}",
                     AssignmentDomainExceptionType.InvalidStatusTransition)
                 {
                     Data =
@@ -66,9 +66,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Assignm
 
         public void ThrowIfCannotReopen()
         {
-            if (this.properties.Status != AssignmentStatus.Finished && this.properties.Status != AssignmentStatus.Completed)
+            if (this.properties.Status != AssignmentStatus.Finished && this.properties.Status != AssignmentStatus.Approved)
                 throw new AssignmentException(
-                    $"Assignment can only be reopened from Finished or Completed status. Current status: {this.properties.Status}",
+                    $"Assignment can only be reopened from Finished or Approved status. Current status: {this.properties.Status}",
                     AssignmentDomainExceptionType.InvalidStatusTransition)
                 {
                     Data =

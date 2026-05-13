@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         public string? AssignmentStatusLabel => Assignment.Status switch
         {
             AssignmentStatus.Finished => EnumeratorUIResources.Dashboard_Assignment_Status_Finished,
-            AssignmentStatus.Completed => EnumeratorUIResources.Dashboard_Assignment_Status_Completed,
+            AssignmentStatus.Approved => EnumeratorUIResources.Dashboard_Assignment_Status_Approved,
             _ => null
         };
 

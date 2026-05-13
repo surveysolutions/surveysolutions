@@ -1521,9 +1521,9 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string Dashboard_Assignment_Status_Completed {
+        public static string Dashboard_Assignment_Status_Approved {
             get {
-                return ResourceManager.GetString("Dashboard_Assignment_Status_Completed", resourceCulture);
+                return ResourceManager.GetString("Dashboard_Assignment_Status_Approved", resourceCulture);
             }
         }
         

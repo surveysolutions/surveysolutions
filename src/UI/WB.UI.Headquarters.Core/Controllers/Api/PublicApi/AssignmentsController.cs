@@ -715,8 +715,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     return Forbid();
 
                 var isAllowedInterviewerTransition =
-                    (request.Status == AssignmentStatus.Active && assignment.Status == AssignmentStatus.Finished) ||
-                    (request.Status == AssignmentStatus.Finished && assignment.Status == AssignmentStatus.Active);
+                    (request.Status == AssignmentStatus.Open && assignment.Status == AssignmentStatus.Finished) ||
+                    (request.Status == AssignmentStatus.Finished && assignment.Status == AssignmentStatus.Open);
 
                 if (!isAllowedInterviewerTransition)
                     return Forbid();
@@ -724,7 +724,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             switch (request.Status)
             {
-                case AssignmentStatus.Active:
+                case AssignmentStatus.Open:
                     commandService.Execute(new ReopenAssignment(assignment.PublicKey, authorizedUser.Id,
                         assignment.QuestionnaireId, request.Comment));
                     break;
@@ -732,8 +732,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     commandService.Execute(new FinishAssignment(assignment.PublicKey, authorizedUser.Id,
                         assignment.QuestionnaireId, request.Comment));
                     break;
-                case AssignmentStatus.Completed:
-                    commandService.Execute(new CompleteAssignment(assignment.PublicKey, authorizedUser.Id,
+                case AssignmentStatus.Approved:
+                    commandService.Execute(new ApproveAssignment(assignment.PublicKey, authorizedUser.Id,
                         assignment.QuestionnaireId, request.Comment));
                     break;
                 default:

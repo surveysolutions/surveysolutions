@@ -651,9 +651,9 @@ enum ApplyPolicy {
 }
 
 enum AssignmentStatus {
-  ACTIVE
+  OPEN
   FINISHED
-  COMPLETED
+  APPROVED
 }
 
 enum EntityType {

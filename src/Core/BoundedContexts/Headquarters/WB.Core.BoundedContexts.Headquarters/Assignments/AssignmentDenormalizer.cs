@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         IUpdateHandler<Assignment, AssignmentTargetAreaChanged>,
         IUpdateHandler<Assignment, AssignmentReceivedByTablet>,
         IUpdateHandler<Assignment, AssignmentFinished>,
-        IUpdateHandler<Assignment, AssignmentCompleted>,
+        IUpdateHandler<Assignment, AssignmentApproved>,
         IUpdateHandler<Assignment, AssignmentReopened>
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
@@ -187,12 +187,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 });
         }
 
-        public Assignment Update(Assignment state, IPublishedEvent<AssignmentCompleted> @event)
+        public Assignment Update(Assignment state, IPublishedEvent<AssignmentApproved> @event)
         {
             return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
                 assignment =>
                 {
-                    assignment.Status = AssignmentStatus.Completed;
+                    assignment.Status = AssignmentStatus.Approved;
                     assignment.StatusComment = @event.Payload.Comment;
                 });
         }
@@ -202,7 +202,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
                 assignment =>
                 {
-                    assignment.Status = AssignmentStatus.Active;
+                    assignment.Status = AssignmentStatus.Open;
                     assignment.StatusComment = @event.Payload.Comment;
                 });
         }

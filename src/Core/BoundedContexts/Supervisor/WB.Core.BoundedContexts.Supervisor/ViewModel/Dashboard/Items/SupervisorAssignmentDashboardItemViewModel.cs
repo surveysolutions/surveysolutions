@@ -47,8 +47,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 Label = EnumeratorUIResources.Dashboard_Assign
             });
 
-            // Active: supervisor can Complete via context menu
-            if (Assignment.Status == AssignmentStatus.Active)
+            // Open: supervisor can Approve via context menu
+            if (Assignment.Status == AssignmentStatus.Open)
             {
                 Actions.Add(new ActionDefinition
                 {
@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 });
             }
 
-            // Finished: supervisor can Complete or Reopen — both visible on card as primary actions
+            // Finished: supervisor can Approve or Reopen — both visible on card as primary actions
             if (Assignment.Status == AssignmentStatus.Finished)
             {
                 Actions.Add(new ActionDefinition
@@ -75,8 +75,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 });
             }
 
-            // Completed: supervisor can Reopen — visible on card as a primary button
-            if (Assignment.Status == AssignmentStatus.Completed)
+            // Approved: supervisor can Reopen — visible on card as a primary button
+            if (Assignment.Status == AssignmentStatus.Approved)
             {
                 Actions.Add(new ActionDefinition
                 {
@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
         {
             // Single dialog: shows warning message and optional comment field together
             await ChangeAssignmentStatusAsync(
-                AssignmentStatus.Completed,
+                AssignmentStatus.Approved,
                 EnumeratorUIResources.Dashboard_CompleteAssignment_Message,
                 EnumeratorUIResources.Dashboard_CompleteAssignment_Title,
                 EnumeratorUIResources.Dashboard_CompleteAssignment);
@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
         private async Task ReopenAssignmentAsync()
         {
             await ChangeAssignmentStatusAsync(
-                AssignmentStatus.Active,
+                AssignmentStatus.Open,
                 string.Empty,
                 EnumeratorUIResources.Dashboard_ReopenAssignment_Title,
                 EnumeratorUIResources.Dashboard_Reopen);
