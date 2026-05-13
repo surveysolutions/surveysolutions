@@ -169,6 +169,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels.FinishInstallation
             Assert.That(capturedArg.Identity.Token, Is.EqualTo(token));
             Assert.That(capturedArg.Identity.TenantId, Is.EqualTo(tenantId));
             Assert.That(capturedArg.Identity.Workspace, Is.EqualTo(workspaceName));
+            Assert.That(capturedArg.Identity.PasswordHash, Is.EqualTo("hashedPass"));
         }
     }
 }
