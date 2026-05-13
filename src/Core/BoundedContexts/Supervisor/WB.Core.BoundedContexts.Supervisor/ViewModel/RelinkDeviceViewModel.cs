@@ -6,7 +6,6 @@ using MvvmCross.ViewModels;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
