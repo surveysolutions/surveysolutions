@@ -61,48 +61,18 @@
             </template>
         </ModalFrame>
 
-        <ModalFrame ref="finishModal" :title="$t('Assignments.FinishAssignmentTitle')">
-            <p>{{ $t('Assignments.FinishAssignmentMessage') }}</p>
-            <form onsubmit="return false;">
-                <div class="form-group">
-                    <label class="control-label" for="finishCommentId">
-                        {{ $t("Assignments.Comments") }}
-                    </label>
-                    <textarea control-id="finishCommentId" v-model="statusChangeComment"
-                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
-                        class="form-control" />
-                </div>
-            </form>
-            <template v-slot:actions>
-                <div>
-                    <button type="button" class="btn btn-primary" @click="confirmFinish">{{
-                        $t("Assignments.Finish") }}</button>
-                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                        }}</button>
-                </div>
-            </template>
-        </ModalFrame>
+        <AssignmentStatusChangeModal
+            ref="finishModal"
+            :title="$t('Assignments.FinishAssignmentTitle')"
+            :message="$t('Assignments.FinishAssignmentMessage')"
+            :actionLabel="$t('Assignments.Finish')"
+            @confirm="confirmFinish" />
 
-        <ModalFrame ref="reopenModal" :title="$t('Assignments.ReopenAssignmentTitle')">
-            <form onsubmit="return false;">
-                <div class="form-group">
-                    <label class="control-label" for="reopenCommentId">
-                        {{ $t("Assignments.Comments") }}
-                    </label>
-                    <textarea control-id="reopenCommentId" v-model="statusChangeComment"
-                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
-                        class="form-control" />
-                </div>
-            </form>
-            <template v-slot:actions>
-                <div>
-                    <button type="button" class="btn btn-primary" @click="confirmReopen">{{
-                        $t("Assignments.Reopen") }}</button>
-                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                        }}</button>
-                </div>
-            </template>
-        </ModalFrame>
+        <AssignmentStatusChangeModal
+            ref="reopenModal"
+            :title="$t('Assignments.ReopenAssignmentTitle')"
+            :actionLabel="$t('Assignments.Reopen')"
+            @confirm="confirmReopen" />
     </HqLayout>
 </template>
 
@@ -125,7 +95,6 @@ export default {
             calendarEventId: null,
             calendarAssinmentId: null,
             statusChangeIds: [],
-            statusChangeComment: null,
             selectedRows: [],
         }
     },
@@ -217,35 +186,32 @@ export default {
 
         openFinishModal(rowId) {
             this.statusChangeIds = rowId != null ? [rowId] : [...this.selectedRows]
-            this.statusChangeComment = null
             this.$refs.finishModal.modal()
         },
 
         openReopenModal(rowId) {
             this.statusChangeIds = rowId != null ? [rowId] : [...this.selectedRows]
-            this.statusChangeComment = null
             this.$refs.reopenModal.modal()
         },
 
-        async confirmFinish() {
-            await this.changeAssignmentStatus('Finished', this.$refs.finishModal)
+        async confirmFinish(comment) {
+            await this.changeAssignmentStatus('Finished', this.$refs.finishModal, comment)
         },
 
-        async confirmReopen() {
-            await this.changeAssignmentStatus('Active', this.$refs.reopenModal)
+        async confirmReopen(comment) {
+            await this.changeAssignmentStatus('Active', this.$refs.reopenModal, comment)
         },
 
-        async changeAssignmentStatus(status, modalRef) {
+        async changeAssignmentStatus(status, modalRef, comment) {
             if (!this.statusChangeIds.length) return
             try {
                 await Promise.all(
                     this.statusChangeIds.map(id =>
-                        this.$hq.Assignments.changeStatus(id, status, this.statusChangeComment || null)
+                        this.$hq.Assignments.changeStatus(id, status, comment)
                     )
                 )
                 modalRef.hide()
                 this.statusChangeIds = []
-                this.statusChangeComment = null
                 this.reload()
             } catch (error) {
                 const msg = error?.response?.data?.message || error?.message || this.$t('Common.Error')

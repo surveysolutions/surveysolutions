@@ -85,13 +85,13 @@
                     <button class="btn btn-lg btn-warning" id="btnCompleteSelected"
                         v-if="(config.isHeadquarter || config.isSupervisor) && !showArchive.key"
                         :disabled="!canComplete"
-                        @click="bulkChangeStatus('Completed', 'completeModal')">{{
+                        @click="openCompleteModal">{{
                             $t("Assignments.Complete") }}</button>
 
                     <button class="btn btn-lg btn-primary" id="btnReopenSelected"
                         v-if="(config.isHeadquarter || config.isSupervisor) && !showArchive.key"
                         :disabled="!canReopen"
-                        @click="bulkChangeStatus('Active', 'reopenModal')">{{
+                        @click="openReopenModal">{{
                             $t("Assignments.Reopen") }}</button>
 
                     <button class="btn btn-lg btn-danger" id="btnArchiveSelected"
@@ -101,48 +101,18 @@
             </div>
         </DataTables>
 
-        <ModalFrame ref="completeModal" :title="$t('Assignments.CompleteAssignmentTitle')">
-            <p>{{ $t('Assignments.CompleteAssignmentMessage') }}</p>
-            <form onsubmit="return false;">
-                <div class="form-group">
-                    <label class="control-label" for="completeCommentId">
-                        {{ $t("Assignments.Comments") }}
-                    </label>
-                    <textarea control-id="completeCommentId" v-model="statusChangeComment"
-                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
-                        class="form-control" />
-                </div>
-            </form>
-            <template v-slot:actions>
-                <div>
-                    <button type="button" class="btn btn-primary" @click="confirmStatusChange">{{
-                        $t("Assignments.Complete") }}</button>
-                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                        }}</button>
-                </div>
-            </template>
-        </ModalFrame>
+        <AssignmentStatusChangeModal
+            ref="completeModal"
+            :title="$t('Assignments.CompleteAssignmentTitle')"
+            :message="$t('Assignments.CompleteAssignmentMessage')"
+            :actionLabel="$t('Assignments.Complete')"
+            @confirm="doComplete" />
 
-        <ModalFrame ref="reopenModal" :title="$t('Assignments.ReopenAssignmentTitle')">
-            <form onsubmit="return false;">
-                <div class="form-group">
-                    <label class="control-label" for="reopenCommentId">
-                        {{ $t("Assignments.Comments") }}
-                    </label>
-                    <textarea control-id="reopenCommentId" v-model="statusChangeComment"
-                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
-                        class="form-control" />
-                </div>
-            </form>
-            <template v-slot:actions>
-                <div>
-                    <button type="button" class="btn btn-primary" @click="confirmStatusChange">{{
-                        $t("Assignments.Reopen") }}</button>
-                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                        }}</button>
-                </div>
-            </template>
-        </ModalFrame>
+        <AssignmentStatusChangeModal
+            ref="reopenModal"
+            :title="$t('Assignments.ReopenAssignmentTitle')"
+            :actionLabel="$t('Assignments.Reopen')"
+            @confirm="doReopen" />
 
         <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
             <p>{{ $t("Assignments.NumberOfAssignmentsAffected", { count: selectedRows.length }) }}</p>
@@ -312,8 +282,6 @@ export default {
             canEditQuantity: null,
             mode: null,
             statusChangeIds: [],
-            statusChangeTargetStatus: null,
-            statusChangeComment: null,
         }
     },
 
@@ -908,31 +876,33 @@ export default {
 
         },
 
-        bulkChangeStatus(targetStatus, modalRef) {
+        openCompleteModal() {
             this.statusChangeIds = [...this.selectedRows]
-            this.statusChangeTargetStatus = targetStatus
-            this.statusChangeComment = null
-            this.$refs[modalRef].modal()
+            this.$refs.completeModal.modal()
         },
 
-        async confirmStatusChange() {
-            const modalRef = this.statusChangeTargetStatus === 'Completed'
-                ? this.$refs.completeModal
-                : this.$refs.reopenModal
+        openReopenModal() {
+            this.statusChangeIds = [...this.selectedRows]
+            this.$refs.reopenModal.modal()
+        },
+
+        async doComplete(comment) {
+            await this.executeStatusChange('Completed', this.$refs.completeModal, comment)
+        },
+
+        async doReopen(comment) {
+            await this.executeStatusChange('Active', this.$refs.reopenModal, comment)
+        },
+
+        async executeStatusChange(targetStatus, modalRef, comment) {
             try {
                 await Promise.all(
                     this.statusChangeIds.map(id =>
-                        this.$hq.Assignments.changeStatus(
-                            id,
-                            this.statusChangeTargetStatus,
-                            this.statusChangeComment
-                        )
+                        this.$hq.Assignments.changeStatus(id, targetStatus, comment)
                     )
                 )
                 modalRef.hide()
                 this.statusChangeIds = []
-                this.statusChangeTargetStatus = null
-                this.statusChangeComment = null
                 this.reloadTable()
             } catch (error) {
                 const msg = error?.response?.data?.message || error?.message || this.$t('Common.Error')
