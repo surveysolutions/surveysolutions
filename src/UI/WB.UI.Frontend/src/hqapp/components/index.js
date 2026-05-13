@@ -16,7 +16,6 @@ import FilterInput from './FilterInput'
 import InlineSelector from './InlineSelector'
 import ExpandableList from './ExpandableList.vue'
 import Select from './Select.vue'
-import AssignmentStatusChangeModal from './AssignmentStatusChangeModal.vue'
 
 export function registerComponents(vue) {
 
@@ -36,5 +35,4 @@ export function registerComponents(vue) {
     vue.component('InlineSelector', InlineSelector)
     vue.component('ExpandableList', ExpandableList)
     vue.component('Select', Select)
-    vue.component('AssignmentStatusChangeModal', AssignmentStatusChangeModal)
 }

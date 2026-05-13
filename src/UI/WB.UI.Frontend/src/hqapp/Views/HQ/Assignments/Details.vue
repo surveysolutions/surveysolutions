@@ -388,18 +388,48 @@
                     </template>
                 </ModalFrame>
 
-                <AssignmentStatusChangeModal
-                    ref="completeModal"
-                    :title="$t('Assignments.CompleteAssignmentTitle')"
-                    :message="$t('Assignments.CompleteAssignmentMessage')"
-                    :actionLabel="$t('Assignments.Complete')"
-                    @confirm="confirmComplete" />
+                <ModalFrame ref="completeModal" :title="$t('Assignments.CompleteAssignmentTitle')">
+                    <p>{{ $t('Assignments.CompleteAssignmentMessage') }}</p>
+                    <form onsubmit="return false;">
+                        <div class="form-group">
+                            <label class="control-label" for="completeCommentDetailId">
+                                {{ $t("Assignments.Comments") }}
+                            </label>
+                            <textarea control-id="completeCommentDetailId" v-model="statusChangeComment"
+                                :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                                class="form-control" />
+                        </div>
+                    </form>
+                    <template v-slot:actions>
+                        <div>
+                            <button type="button" class="btn btn-primary" @click="confirmComplete">{{
+                                $t("Assignments.Complete") }}</button>
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                                }}</button>
+                        </div>
+                    </template>
+                </ModalFrame>
 
-                <AssignmentStatusChangeModal
-                    ref="reopenModal"
-                    :title="$t('Assignments.ReopenAssignmentTitle')"
-                    :actionLabel="$t('Assignments.Reopen')"
-                    @confirm="confirmReopen" />
+                <ModalFrame ref="reopenModal" :title="$t('Assignments.ReopenAssignmentTitle')">
+                    <form onsubmit="return false;">
+                        <div class="form-group">
+                            <label class="control-label" for="reopenCommentDetailId">
+                                {{ $t("Assignments.Comments") }}
+                            </label>
+                            <textarea control-id="reopenCommentDetailId" v-model="statusChangeComment"
+                                :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                                class="form-control" />
+                        </div>
+                    </form>
+                    <template v-slot:actions>
+                        <div>
+                            <button type="button" class="btn btn-primary" @click="confirmReopen">{{
+                                $t("Assignments.Reopen") }}</button>
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                                }}</button>
+                        </div>
+                    </template>
+                </ModalFrame>
 
             </div>
         </div>
@@ -435,6 +465,7 @@ export default {
             canEditQuantity: true,
 
             editedAudioRecordingEnabled: null,
+            statusChangeComment: null,
         }
     },
     methods: {
@@ -618,25 +649,28 @@ export default {
         },
 
         openCompleteModal() {
+            this.statusChangeComment = null
             this.$refs.completeModal.modal()
         },
 
         openReopenModal() {
+            this.statusChangeComment = null
             this.$refs.reopenModal.modal()
         },
 
-        async confirmComplete(comment) {
-            await this.changeStatus('Completed', this.$refs.completeModal, comment)
+        async confirmComplete() {
+            await this.changeStatus('Completed', this.$refs.completeModal)
         },
 
-        async confirmReopen(comment) {
-            await this.changeStatus('Active', this.$refs.reopenModal, comment)
+        async confirmReopen() {
+            await this.changeStatus('Active', this.$refs.reopenModal)
         },
 
-        async changeStatus(status, modalRef, comment) {
+        async changeStatus(status, modalRef) {
             try {
-                await this.$hq.Assignments.changeStatus(this.model.id, status, comment)
+                await this.$hq.Assignments.changeStatus(this.model.id, status, this.statusChangeComment)
                 modalRef.hide()
+                this.statusChangeComment = null
                 window.location.reload()
             } catch (error) {
                 const msg = error?.response?.data?.message || error?.message || this.$t('Common.Error')
