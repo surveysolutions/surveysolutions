@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -113,21 +114,43 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
 
                 try
                 {
-                    long downloded = 0;
+                    var offset = this.mapService.GetTempMapOffset(mapDescription.MapName);
+                    var storedETag = offset > 0 ? this.mapService.GetTempMapETag(mapDescription.MapName) : null;
+                    long downloded = offset;
                     using (var streamToSave = this.mapService.GetTempMapSaveStream(mapDescription.MapName))
                     using (var contentStreamResult = await this.synchronizationService
-                        .GetMapContentStream(mapDescription.MapName, cancellationToken)
+                        .GetMapContentStream(mapDescription.MapName, cancellationToken, offset, storedETag)
                         .ConfigureAwait(false))
                     {
                         if (cancellationToken.IsCancellationRequested)
                         {
                             cancellationToken.ThrowIfCancellationRequested();
                         }
+
+                        // If we requested a range but server returned full content (200 OK),
+                        // either range requests are unsupported or the file has changed on the server.
+                        // Reset and download from scratch.
+                        if (offset > 0 && !contentStreamResult.IsPartialContent)
+                        {
+                            logger.Info($"Server returned full content for map '{mapDescription.MapName}' (range not satisfied or file changed). Restarting download from the beginning.");
+                            if (streamToSave.CanSeek)
+                            {
+                                streamToSave.Seek(0, SeekOrigin.Begin);
+                                streamToSave.SetLength(0);
+                            }
+                            offset = 0;
+                            downloded = 0;
+                        }
+
+                        // Store ETag from the (first or resumed) response so the next resume
+                        // can use If-Range to detect server-side file changes.
+                        if (contentStreamResult.ETag != null)
+                            this.mapService.SaveTempMapETag(mapDescription.MapName, contentStreamResult.ETag);
                         
                         var buffer = new byte[1024];
                         var downloadProgressChangedEventArgs = new TransferProgress()
                         {
-                            TotalBytesToReceive = contentStreamResult.ContentLength
+                            TotalBytesToReceive = contentStreamResult.ContentLength + offset
                         };
 
                         int read;
@@ -145,7 +168,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
 
                             if (contentStreamResult.ContentLength != null)
                                 downloadProgressChangedEventArgs.ProgressPercentage =
-                                    Math.Min(Math.Round((decimal)(100 * downloded) / contentStreamResult.ContentLength.Value), 100);
+                                    Math.Min(Math.Round((decimal)(100 * downloded) / (contentStreamResult.ContentLength.Value + offset)), 100);
 
                             downloadProgressChangedEventArgs.BytesReceived = downloded;
                             OnDownloadProgressChanged(downloadProgressChangedEventArgs);

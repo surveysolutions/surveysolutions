@@ -234,7 +234,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.FromResult(new List<MapView>());
         }
 
-        public Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken token = default)
+        public Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken token = default, long offset = 0, string? ifRangeETag = null)
         {
             return Task.FromResult(new RestStreamResult());
         }
