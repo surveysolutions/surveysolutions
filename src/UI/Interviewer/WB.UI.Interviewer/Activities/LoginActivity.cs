@@ -101,7 +101,7 @@ namespace WB.UI.Interviewer.Activities
                 return;
 
             this.biometricLoginButton.Visibility = ViewStates.Gone;
-            this.biometricLoginButton.ContentDescription = EnumeratorUIResources.LoginText;
+            this.biometricLoginButton.ContentDescription = EnumeratorUIResources.MenuItem_Title_Login;
 
             if (!this.ViewModel.HasUser())
                 return;
@@ -115,10 +115,9 @@ namespace WB.UI.Interviewer.Activities
                 ContextCompat.GetMainExecutor(this),
                 new BiometricAuthenticationCallback(this.ViewModel));
             this.biometricPromptInfo = new BiometricPrompt.PromptInfo.Builder()
-                .SetTitle(EnumeratorUIResources.LoginText)
-                .SetSubtitle(EnumeratorUIResources.PasswordHint)
+                .SetTitle(EnumeratorUIResources.MenuItem_Title_Login)
                 .SetAllowedAuthenticators(authenticators)
-                .SetNegativeButtonText(EnumeratorUIResources.Cancel)
+                .SetNegativeButtonText(EnumeratorUIResources.Synchronization_Cancel)
                 .Build();
 
             this.biometricLoginButton.Visibility = ViewStates.Visible;
