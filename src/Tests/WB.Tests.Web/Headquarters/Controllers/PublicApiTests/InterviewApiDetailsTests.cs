@@ -33,6 +33,25 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
         }
 
         [Test]
+        public void text_list_answer_with_pipe_in_value_should_join_with_pipe_delimiter_in_api_response()
+        {
+            var textListQuestionId = Guid.NewGuid();
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.TextListQuestion(textListQuestionId));
+            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
+            interview.AnswerTextListQuestion(userId, textListQuestionId, RosterVector.Empty, DateTime.Now, new[]
+            {
+                Tuple.Create(1m, "a|b"),
+                Tuple.Create(2m, "c"),
+            });
+
+            var apiDetails = new InterviewApiDetails(interview);
+
+            var answer = apiDetails.Answers.Single(a => a.QuestionId.Id == textListQuestionId);
+            Assert.That(answer.Answer, Is.EqualTo("a|b|c"));
+        }
+
+        [Test]
         public void unanswered_text_list_question_should_return_null_in_api_response()
         {
             var textListQuestionId = Guid.NewGuid();
