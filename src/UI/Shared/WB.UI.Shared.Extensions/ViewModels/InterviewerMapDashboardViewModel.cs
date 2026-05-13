@@ -26,7 +26,6 @@ public class InterviewerMapDashboardViewModel : MapDashboardViewModel
     {
         AssignmentStatus.Open,
         AssignmentStatus.Finished,
-        AssignmentStatus.Approved,
     };
 
     public InterviewerMapDashboardViewModel(IPrincipal principal, 
