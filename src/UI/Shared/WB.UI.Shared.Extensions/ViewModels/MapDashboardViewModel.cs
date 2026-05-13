@@ -11,6 +11,7 @@ using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Attributes;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -50,6 +51,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         }
         
         protected abstract InterviewStatus[] InterviewStatuses { get; }
+        protected abstract AssignmentStatus[] AssignmentStatusFilters { get; }
 
         private GraphicsOverlayCollection graphicsOverlays = new GraphicsOverlayCollection();
         public GraphicsOverlayCollection GraphicsOverlays
@@ -102,6 +104,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             CollectQuestionnaires();
             CollectResponsibles();
             CollectInterviewStatuses();
+            CollectAssignmentStatuses();
             await RefreshMarkers(setViewToMarkers: true);
         }
 
@@ -168,6 +171,58 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             if (SelectedStatus != AllStatusDefault)
                 SelectedStatus = AllStatusDefault;
+        }
+
+        private static readonly AssignmentStatusItem AllAssignmentStatusDefault =
+            new AssignmentStatusItem(null, UIResources.MapDashboard_AllStatuses);
+
+        private MvxObservableCollection<AssignmentStatusItem> assignmentStatuses = new MvxObservableCollection<AssignmentStatusItem>();
+        public MvxObservableCollection<AssignmentStatusItem> AssignmentStatuses
+        {
+            get => this.assignmentStatuses;
+            set => this.RaiseAndSetIfChanged(ref this.assignmentStatuses, value);
+        }
+
+        private AssignmentStatusItem selectedAssignmentStatus = AllAssignmentStatusDefault;
+        public AssignmentStatusItem SelectedAssignmentStatus
+        {
+            get => this.selectedAssignmentStatus;
+            set => this.RaiseAndSetIfChanged(ref this.selectedAssignmentStatus, value);
+        }
+
+        private MvxCommand<AssignmentStatusItem> assignmentStatusSelectedCommand;
+        public MvxCommand<AssignmentStatusItem> AssignmentStatusSelectedCommand =>
+            assignmentStatusSelectedCommand ??= new MvxCommand<AssignmentStatusItem>(OnAssignmentStatusSelectedCommand);
+
+        private async void OnAssignmentStatusSelectedCommand(AssignmentStatusItem status)
+        {
+            if (SelectedAssignmentStatus.Title == status.Title &&
+                SelectedAssignmentStatus.Status == status.Status)
+                return;
+
+            SelectedAssignmentStatus = status;
+            await RefreshMarkers(setViewToMarkers: true);
+        }
+
+        private void CollectAssignmentStatuses()
+        {
+            var statusItems = new List<AssignmentStatusItem> { AllAssignmentStatusDefault };
+            foreach (var s in AssignmentStatusFilters)
+                statusItems.Add(new AssignmentStatusItem(s, GetAssignmentStatusDisplayString(s)));
+            AssignmentStatuses = new MvxObservableCollection<AssignmentStatusItem>(statusItems);
+            if (SelectedAssignmentStatus != AllAssignmentStatusDefault)
+                SelectedAssignmentStatus = AllAssignmentStatusDefault;
+        }
+
+        private static string GetAssignmentStatusDisplayString(AssignmentStatus status)
+        {
+            return status switch
+            {
+                AssignmentStatus.Open => UIResources.Assignment_Status_Open,
+                AssignmentStatus.Finished => UIResources.Assignment_Status_Finished,
+                AssignmentStatus.Approved => UIResources.Assignment_Status_Approved,
+                _ => status.ToString()
+            };
         }
 
         private QuestionnaireItem ToQuestionnaireItem(AssignmentDocument assignmentDocument)
@@ -351,6 +406,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 filteredAssignments = filteredAssignments
                     .Where(x => x.ResponsibleId == SelectedResponsible.ResponsibleId)
                     .ToList();
+
+            if (SelectedAssignmentStatus?.Status != null)
+                filteredAssignments = filteredAssignments
+                    .Where(x => x.Status == SelectedAssignmentStatus.Status)
+                    .ToList();
+
             return filteredAssignments;
         }
 

@@ -374,6 +374,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 Quantity = assignment.Quantity,
                 InterviewsNeeded = assignment.InterviewsNeeded,
                 LastUpdatedDate = AnswerUtils.AnswerToString(assignment.UpdatedAtUtc),
+                Status = assignment.Status,
+                StatusComment = assignment.StatusComment,
                 IdentifyingData = assignment.IdentifyingData
                     .Where(d => questionnaire.GetQuestionType(d.Identity.Id) != QuestionType.GpsCoordinates)
                     .Select(d =>
@@ -400,6 +402,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             public string LastUpdatedDate { get; set; }
             public int AssignmentId { get; set; }
             public List<AnswerView> IdentifyingData { get; set; }
+            public AssignmentStatus Status { get; set; }
+            public string StatusComment { get; set; }
         }
     }
 }

@@ -1245,6 +1245,30 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string MapDashboard_AssignmentStatusTitle {
+            get {
+                return ResourceManager.GetString("MapDashboard_AssignmentStatusTitle", resourceCulture);
+            }
+        }
+        
+        public static string Assignment_Status_Open {
+            get {
+                return ResourceManager.GetString("Assignment_Status_Open", resourceCulture);
+            }
+        }
+        
+        public static string Assignment_Status_Finished {
+            get {
+                return ResourceManager.GetString("Assignment_Status_Finished", resourceCulture);
+            }
+        }
+        
+        public static string Assignment_Status_Approved {
+            get {
+                return ResourceManager.GetString("Assignment_Status_Approved", resourceCulture);
+            }
+        }
+        
         public static string AreaMap_Close {
             get {
                 return ResourceManager.GetString("AreaMap_Close", resourceCulture);

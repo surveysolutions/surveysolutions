@@ -93,6 +93,14 @@
                 <strong>{{ $t('Reports.LastUpdatedDate') }}:</strong>
                 &nbsp;{{ selectedTooltip.lastUpdatedDate }}
             </div>
+            <div class="row-fluid">
+                <strong>{{ $t('Common.Status') }}:</strong>
+                &nbsp;{{ assignmentStatusLabel }}
+            </div>
+            <div class="row-fluid" v-if="selectedTooltip.statusComment">
+                <strong>{{ $t('Assignments.StatusChangeComment') }}:</strong>
+                &nbsp;{{ selectedTooltip.statusComment }}
+            </div>
             <div class="row-fluid" v-for="answer in selectedTooltip.identifyingData">
                 <strong>{{ answer.title }}:</strong>
                 &nbsp;{{ answer.answer || $t('Details.NoAnswer') }}
@@ -115,6 +123,21 @@
                 <button class="btn btn-sm btn-assignment" v-if="model.userRole == 'Interviewer'"
                     click-method="createInterview">
                     {{ $t('Common.Create') }}
+                </button>
+
+                <button class="btn btn-sm btn-warning" v-if="canFinishAssignment"
+                    click-method="finishAssignment">
+                    {{ $t('Assignments.Finish') }}
+                </button>
+
+                <button class="btn btn-sm btn-success" v-if="canApproveAssignment"
+                    click-method="approveAssignment">
+                    {{ $t('Assignments.Complete') }}
+                </button>
+
+                <button class="btn btn-sm btn-default" v-if="canReopenAssignment"
+                    click-method="reopenAssignment">
+                    {{ $t('Assignments.Reopen') }}
                 </button>
             </div>
         </div>
@@ -286,6 +309,35 @@ export default {
         api() {
             return this.$hq.MapDashboard
         },
+
+        assignmentStatusLabel() {
+            const statusMap = {
+                'Open': this.$t('Assignments.StatusActive'),
+                'Finished': this.$t('Assignments.StatusFinished'),
+                'Approved': this.$t('Assignments.StatusCompleted'),
+            }
+            return statusMap[this.selectedTooltip.status] || this.selectedTooltip.status || ''
+        },
+
+        canFinishAssignment() {
+            return !this.model.isObserving &&
+                this.model.userRole == 'Interviewer' &&
+                this.selectedTooltip.status == 'Open'
+        },
+
+        canApproveAssignment() {
+            return !this.model.isObserving &&
+                (this.model.userRole == 'Supervisor' || this.model.userRole == 'Headquarter') &&
+                (this.selectedTooltip.status == 'Open' || this.selectedTooltip.status == 'Finished')
+        },
+
+        canReopenAssignment() {
+            return !this.model.isObserving && (
+                (this.model.userRole == 'Interviewer' && this.selectedTooltip.status == 'Finished') ||
+                ((this.model.userRole == 'Supervisor' || this.model.userRole == 'Headquarter') &&
+                    (this.selectedTooltip.status == 'Finished' || this.selectedTooltip.status == 'Approved'))
+            )
+        },
     },
 
     methods: {
@@ -376,6 +428,21 @@ export default {
             )
             this.$refs.assignModal.hide()
             this.newResponsibleId = null
+            await this.refreshAssignmentData()
+        },
+
+        async finishAssignment() {
+            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Finished')
+            await this.refreshAssignmentData()
+        },
+
+        async approveAssignment() {
+            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Approved')
+            await this.refreshAssignmentData()
+        },
+
+        async reopenAssignment() {
+            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Open')
             await this.refreshAssignmentData()
         },
 
