@@ -317,6 +317,5 @@ namespace WB.UI.Shared.Enumerator.Services
         }
 
         private string GetTempETagFileName(string mapName) => GetTempFileName(mapName) + ".etag";
-        }
     }
 }
