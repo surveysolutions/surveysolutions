@@ -5,8 +5,8 @@
                 <h2>{{ $t('Settings.LogoSettings') }}</h2>
                 <p>{{ $t('Settings.LogoSettings_Description') }}</p>
             </div>
-            <form :action="$config.model.updateLogoUrl" method="post" enctype="multipart/form-data" class="col-sm-9"
-                @submit.prevent="onLogoSubmit">
+            <form :action="$config.model.updateLogoUrl" method="post" ref="logoForm" enctype="multipart/form-data"
+                class="col-sm-9" @submit.prevent="onLogoSubmit">
                 <input name="__RequestVerificationToken" type="hidden" :value="this.$hq.Util.getCsrfCookie()" />
                 <div class="block-filter" style="padding-left: 30px">
                     <div class="form-group">
@@ -42,7 +42,8 @@
                     </figure>
                 </div>
                 <div class="block-filter action-block" style="padding-left: 30px">
-                    <form :action="$config.model.removeLogoUrl" method="post" @submit.prevent="onLogoRemove">
+                    <form :action="$config.model.removeLogoUrl" ref="logoFormRemove" method="post"
+                        @submit.prevent="onLogoRemove">
                         <input name="__RequestVerificationToken" type="hidden" :value="this.$hq.Util.getCsrfCookie()" />
                         <button type="submit" class="btn btn-danger">
                             {{ $t('Settings.RemoveLogo') }}
@@ -93,8 +94,7 @@ export default {
                 return;
             }
 
-            const formData = new FormData();
-            formData.append('logo', file);
+            const formData = new FormData(this.$refs.logoForm);
 
             await this.sendLogoRequest(
                 this.$config.model.updateLogoUrl,
@@ -108,7 +108,7 @@ export default {
         },
 
         async onLogoRemove() {
-            const formData = new FormData();
+            const formData = new FormData(this.$refs.logoFormRemove);
 
             await this.sendLogoRequest(
                 this.$config.model.removeLogoUrl,
@@ -119,8 +119,6 @@ export default {
         },
 
         async sendLogoRequest(url, formData, successMsg, errorMsg) {
-            formData.append('__RequestVerificationToken', this.$hq.Util.getCsrfCookie());
-
             try {
                 const response = await fetch(url, {
                     method: 'POST',
