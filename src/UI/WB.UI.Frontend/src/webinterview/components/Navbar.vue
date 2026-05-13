@@ -319,7 +319,21 @@ export default {
             })
         },
         reloadQuestionnaire() {
-            window.location = this.$config.reloadQuestionnaireUrl
+            const reloadQuestionnaireUrl = new URL(this.$config.reloadQuestionnaireUrl, window.location.origin)
+            const interviewPath = `/${this.$route.params.interviewId}`
+            const target = this.$route.path.startsWith(interviewPath)
+                ? this.$route.path.substring(interviewPath.length)
+                : ''
+
+            if (target) {
+                reloadQuestionnaireUrl.searchParams.set('target', target)
+            }
+
+            if (this.$route.hash) {
+                reloadQuestionnaireUrl.searchParams.set('hash', this.$route.hash)
+            }
+
+            window.location = reloadQuestionnaireUrl.toString()
         },
         turnOnDevMode() {
             this.$store.dispatch('setDevMode', { value: true })
