@@ -89,12 +89,15 @@ namespace WB.UI.Shared.Enumerator
                 if (ShouldSkipCrashlyticsReport(exception))
                     return;
 
-                // Unwrap TargetInvocationException layers to get the real root cause,
-                // then record it explicitly in Crashlytics so the inner exception is visible
-                // in the crash report (Crashlytics only sees the outermost JavaProxyThrowable otherwise).
+                // Unwrap JavaProxyThrowable (JNI wrapper) and TargetInvocationException layers
+                // to get the real root cause. Crashlytics only sees the outermost wrapper otherwise,
+                // so the actual inner exception never appears in crash reports.
+                // JavaProxyThrowable is internal so we match by type name.
                 var unwrapped = exception;
-                while (unwrapped is TargetInvocationException { InnerException: not null } tie)
-                    unwrapped = tie.InnerException;
+                while (unwrapped.InnerException != null &&
+                       (unwrapped.GetType().Name == "JavaProxyThrowable" ||
+                        unwrapped is TargetInvocationException))
+                    unwrapped = unwrapped.InnerException;
 
                 if (!ReferenceEquals(unwrapped, exception))
                 {
@@ -115,7 +118,15 @@ namespace WB.UI.Shared.Enumerator
 
         private static bool ShouldSkipCrashlyticsReport(Exception exception)
         {
-            var signature = $"{exception.GetType().FullName}|{exception.Message}|{exception.StackTrace}";
+            // Use the innermost exception for the signature so that different root causes
+            // are not collapsed into a single deduplicated report because they share the
+            // same JavaProxyThrowable / TargetInvocationException outer wrapper.
+            var root = exception;
+            while (root.InnerException != null &&
+                   (root.GetType().Name == "JavaProxyThrowable" || root is TargetInvocationException))
+                root = root.InnerException;
+
+            var signature = $"{root.GetType().FullName}|{root.Message}|{root.StackTrace}";
             var now = DateTime.UtcNow;
 
             lock (crashlyticsDeduplicationSync)

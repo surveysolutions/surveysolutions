@@ -451,7 +451,7 @@
     <value>ការគ្រប់គ្រងរួម បានបញ្ជប់ដោយជោគជ័យ</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>បញ្ចប់កិច្ចការ</value>
+    <value>សម្ភាសន៍ដែលបានបញ្ចប់</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} of {1} {2} ធ្វើរូច</value>

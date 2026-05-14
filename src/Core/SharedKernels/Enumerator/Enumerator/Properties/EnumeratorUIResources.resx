@@ -389,7 +389,7 @@ for further instructions</value>
     <value>Synchronization completed with errors</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>completed assignments</value>
+    <value>completed interviews</value>
   </data>
   <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
     <value>calendar events</value>

@@ -614,10 +614,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (!assignment.QuantityCanBeChanged)
                 return Conflict();
 
+            var newQuantity = assignment.InterviewSummaries.Count;
             this.commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey,
                 this.authorizedUser.Id,
-                assignment.InterviewSummaries.Count,
+                newQuantity,
                 assignment.QuestionnaireId));
+            this.auditLog.AssignmentSizeChanged(id, newQuantity);
 
             return Ok();
         }
@@ -642,10 +644,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (!assignment.QuantityCanBeChanged)
                 return Conflict();
 
+            var newQuantity = assignment.InterviewSummaries.Count;
             this.commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey,
                 this.authorizedUser.Id,
-                assignment.InterviewSummaries.Count,
+                newQuantity,
                 assignment.QuestionnaireId));
+            this.auditLog.AssignmentSizeChanged(id, newQuantity);
 
             return GetUpdatedAssignment(id);
         }

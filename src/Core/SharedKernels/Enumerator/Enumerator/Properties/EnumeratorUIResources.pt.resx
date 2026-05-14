@@ -383,7 +383,7 @@ para mais instruções</value>
     <value>Sincronização concluída com erros</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>atribuições concluídas</value>
+    <value>entrevistas concluídas</value>
   </data>
   <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
     <value>eventos do calendário</value>

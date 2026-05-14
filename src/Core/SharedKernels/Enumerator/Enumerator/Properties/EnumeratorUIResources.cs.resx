@@ -742,7 +742,7 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
     <value>Úprava Vašich rozhovorů v tabletu se změnami ze serveru</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>dokončené dotazníky</value>
+    <value>dokončené rozhovory</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} z {1} {2} dokončeno</value>

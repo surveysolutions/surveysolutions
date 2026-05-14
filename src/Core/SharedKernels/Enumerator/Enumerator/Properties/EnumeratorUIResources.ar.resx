@@ -389,7 +389,7 @@
     <value>اكتملت المزامنة مع وجود أخطاء</value>
   </data>
     <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>المهام المكتملة</value>
+    <value>المقابلات المكتملة</value>
   </data>
     <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
     <value>أحداث التقويم</value>
