@@ -378,7 +378,7 @@ export default {
         },
         ddlStatus() {
             return [
-                { key: null, value: this.$t('Common.All') },
+                { key: null, value: this.$t('Common.Any') },
                 { key: 'Open', value: this.$t('Assignments.StatusActive') },
                 { key: 'Finished', value: this.$t('Assignments.StatusFinished') },
                 { key: 'Approved', value: this.$t('Assignments.StatusCompleted') },
