@@ -179,7 +179,7 @@ export default {
             this.$refs.table.reload()
         },
         addParamsToRequest(requestData) {
-            requestData.status = (this.statusFilter || {}).key
+            requestData.status = this.statusFilter?.key
         },
         statusSelected(newValue) {
             this.statusFilter = newValue
