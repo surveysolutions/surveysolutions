@@ -307,6 +307,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                         if (isTextInputPassword)
                         {
                             editText.InputType = InputTypes.ClassText | InputTypes.TextVariationPassword;
+                            editText.SetSingleLine(true);
+                            ((TextInputLayout)inflatedView).EndIconMode = TextInputLayout.EndIconPasswordToggle;
                         }
                         new MaterialAlertDialogBuilder(this.mvxCurrentTopActivity.Activity)
                             .SetMessage(message.ToAndroidSpanned())
