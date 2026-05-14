@@ -131,7 +131,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         Comments = x.Comments,
                         TargetArea = x.TargetArea,
                         CalendarEvent = GetCalendarEventForAssignmentOrNull(x.Id),
-                        Status = x.Status
+                        Status = x.Status,
+                        StatusComment = x.StatusComment
                     };
 
                     if (input.ShowQuestionnaireTitle)

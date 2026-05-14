@@ -36,5 +36,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public CalendarEventView CalendarEvent { get; set; }
         
         public AssignmentStatus Status { get; set; }
+        public string StatusComment { get; set; }
     }
 }
