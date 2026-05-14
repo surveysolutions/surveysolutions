@@ -110,7 +110,7 @@
                     </label>
                     <textarea control-id="completeCommentId" v-model="statusChangeComment"
                         :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
-                        class="form-control" />
+                        autocomplete="off" class="form-control" />
                 </div>
             </form>
             <template v-slot:actions>
@@ -131,7 +131,7 @@
                     </label>
                     <textarea control-id="reopenCommentId" v-model="statusChangeComment"
                         :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
-                        class="form-control" />
+                        autocomplete="off" class="form-control" />
                 </div>
             </form>
             <template v-slot:actions>
