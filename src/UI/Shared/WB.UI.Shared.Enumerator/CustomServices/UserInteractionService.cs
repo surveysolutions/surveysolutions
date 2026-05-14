@@ -79,6 +79,24 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 okButton, cancelButton, isTextInputPassword);
             return tcs.Task;
         }
+
+        public Task<string> AssignmentStatusChangeAsync(
+            string description,
+            string title = "",
+            string okButton = null,
+            string cancelButton = null,
+            string commentHint = null)
+        {
+            var tcs = new TaskCompletionSource<string>();
+            okButton ??= UIResources.Ok;
+            cancelButton ??= UIResources.Cancel;
+
+            this.AssignmentStatusChangeImpl(description,
+                k => tcs.TrySetResult(k ?? string.Empty),
+                () => tcs.TrySetResult(null),
+                title, okButton, cancelButton, commentHint);
+            return tcs.Task;
+        }
         
         public Task<ChangePasswordDialogResult> ConfirmNewPasswordInputAsync(
            string message,
@@ -335,6 +353,83 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                                 })
                             .SetCancelable(false)
                             .Show();
+                    },
+                    null);
+            }
+            catch
+            {
+                HandleDialogClose(userInteractionId);
+                throw;
+            }
+        }
+
+        private void AssignmentStatusChangeImpl(
+            string description,
+            Action<string> okCallback,
+            Action cancelCallback,
+            string title,
+            string okButton,
+            string cancelButton,
+            string commentHint)
+        {
+            var userInteractionId = Guid.NewGuid();
+
+            try
+            {
+                HandleDialogOpen(userInteractionId);
+
+                Application.SynchronizationContext.Post(
+                    ignored =>
+                    {
+                        if (this.mvxCurrentTopActivity.Activity == null)
+                        {
+                            HandleDialogClose(userInteractionId);
+                            return;
+                        }
+
+                        var activity = this.mvxCurrentTopActivity.Activity;
+                        var inflatedView = activity.LayoutInflater.Inflate(Resource.Layout.assignment_status_change_dialog, null);
+
+                        var descriptionView = inflatedView.FindViewById<TextView>(Resource.Id.assignmentStatusDescription);
+                        if (!string.IsNullOrEmpty(description))
+                        {
+                            descriptionView.Text = description;
+                            descriptionView.Visibility = ViewStates.Visible;
+                        }
+
+                        var commentInputLayout = inflatedView.FindViewById<TextInputLayout>(Resource.Id.assignmentStatusCommentLayout);
+                        var editText = inflatedView.FindViewById<EditText>(Resource.Id.assignmentStatusCommentEditText);
+                        if (commentInputLayout != null && !string.IsNullOrEmpty(commentHint))
+                            commentInputLayout.Hint = commentHint;
+
+                        var cancelBtn = inflatedView.FindViewById<Button>(Resource.Id.assignmentStatusCancelButton);
+                        var okBtn = inflatedView.FindViewById<Button>(Resource.Id.assignmentStatusOkButton);
+
+                        cancelBtn.Text = cancelButton;
+                        okBtn.Text = okButton;
+
+                        var dialogBuilder = new MaterialAlertDialogBuilder(activity)
+                            .SetTitle(title.ToAndroidSpanned())
+                            .SetView(inflatedView)
+                            .SetCancelable(false);
+
+                        var dialog = dialogBuilder.Create();
+
+                        cancelBtn.Click += delegate
+                        {
+                            HandleDialogClose(userInteractionId, () => cancelCallback?.Invoke());
+                            activity.HideKeyboard(inflatedView.WindowToken);
+                            dialog.Dismiss();
+                        };
+
+                        okBtn.Click += delegate
+                        {
+                            HandleDialogClose(userInteractionId, () => okCallback?.Invoke(editText?.Text));
+                            activity.HideKeyboard(inflatedView.WindowToken);
+                            dialog.Dismiss();
+                        };
+
+                        dialog.Show();
                     },
                     null);
             }

@@ -114,11 +114,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
 
         private async Task ChangeAssignmentStatusAsync(AssignmentStatus newStatus, string message, string title, string okButton)
         {
-            var comment = await userInteractionService.ConfirmWithTextInputAsync(
+            var comment = await userInteractionService.AssignmentStatusChangeAsync(
                 message,
                 title: title,
                 okButton: okButton,
-                cancelButton: UIResources.Cancel);
+                cancelButton: UIResources.Cancel,
+                commentHint: EnumeratorUIResources.Dashboard_Assignment_Comment);
 
             if (comment == null) // user cancelled
                 return;
