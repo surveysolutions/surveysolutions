@@ -1,15 +1,6 @@
 <template>
-    <HqLayout :title="title" :hasFilter="true">
-        <template v-slot:filters>
-            <Filters>
-                <FilterBlock :title="$t('Assignments.Status')">
-                    <Typeahead control-id="status_filter" noSearch noClear allowEmpty :values="ddlStatus" :value="statusFilter"
-                        v-on:selected="statusSelected" />
-                </FilterBlock>
-            </Filters>
-        </template>
+    <HqLayout :title="title">
         <DataTables ref="table" :tableOptions="tableOptions"
-            :addParamsToRequest="addParamsToRequest"
             :contextMenuItems="contextMenuItems">
         </DataTables>
 
@@ -114,7 +105,6 @@ export default {
             calendarAssinmentId: null,
             statusChangeId: null,
             statusChangeComment: null,
-            statusFilter: null,
         }
     },
 
@@ -124,13 +114,6 @@ export default {
         },
         dataTable() {
             return this.$refs.table.table
-        },
-        ddlStatus() {
-            return [
-                { key: null, value: this.$t('Common.Any') },
-                { key: 'Open', value: this.$t('Assignments.StatusActive') },
-                { key: 'Completed', value: this.$t('Assignments.StatusCompleted') },
-            ]
         },
         tableOptions() {
             return {
@@ -178,13 +161,6 @@ export default {
     methods: {
         reload() {
             this.$refs.table.reload()
-        },
-        addParamsToRequest(requestData) {
-            requestData.status = this.statusFilter?.key
-        },
-        statusSelected(newValue) {
-            this.statusFilter = newValue
-            this.reload()
         },
         contextMenuItems({ rowData }) {
             const items = [
