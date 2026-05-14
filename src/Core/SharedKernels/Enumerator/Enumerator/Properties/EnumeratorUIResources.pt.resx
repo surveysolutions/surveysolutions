@@ -822,7 +822,13 @@ sua próxima sincronização</value>
   <data name="Dashboard_Reopen" xml:space="preserve">
     <value>Reabrir</value>
   </data>
-  <data name="Dashboard_ShowLocation" xml:space="preserve">
+    <data name="Dashboard_Assignment_Status_Finished" xml:space="preserve">
+    <value>Status: Finished</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Approved" xml:space="preserve">
+    <value>Status: Approved</value>
+  </data>
+<data name="Dashboard_ShowLocation" xml:space="preserve">
     <value>Mostrar localização</value>
   </data>
   <data name="Dashboard_Discard" xml:space="preserve">

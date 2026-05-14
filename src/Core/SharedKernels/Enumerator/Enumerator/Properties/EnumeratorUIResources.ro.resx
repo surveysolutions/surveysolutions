@@ -247,7 +247,13 @@ Trebuie să rezolvați problemele menționate pe copertă</value>
   <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
     <value>Ieșire din Căutare</value>
   </data>
-  <data name="Dashboard_ShowLocation" xml:space="preserve">
+    <data name="Dashboard_Assignment_Status_Finished" xml:space="preserve">
+    <value>Status: Finished</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Approved" xml:space="preserve">
+    <value>Status: Approved</value>
+  </data>
+<data name="Dashboard_ShowLocation" xml:space="preserve">
     <value>Afișare localizare</value>
   </data>
   <data name="Dashboard_Start" xml:space="preserve">

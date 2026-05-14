@@ -834,7 +834,13 @@ hoặc liên hệ với giám sát viên của bạn
     <data name="Dashboard_Reopen" xml:space="preserve">
     <value>Mở lại</value>
   </data>
-    <data name="Dashboard_ShowLocation" xml:space="preserve">
+      <data name="Dashboard_Assignment_Status_Finished" xml:space="preserve">
+    <value>Status: Finished</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Approved" xml:space="preserve">
+    <value>Status: Approved</value>
+  </data>
+<data name="Dashboard_ShowLocation" xml:space="preserve">
     <value>Hiển thị vị trí</value>
   </data>
     <data name="Dashboard_ShowAssignmentMap" xml:space="preserve">
