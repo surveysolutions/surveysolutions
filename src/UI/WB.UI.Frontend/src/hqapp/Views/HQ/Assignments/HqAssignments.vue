@@ -442,7 +442,7 @@ export default {
                     name: 'Status',
                     title: this.$t('Assignments.Status'),
                     searchable: false,
-                    orderable: false,
+                    orderable: true,
                     render(data) {
                         const statusMap = {
                             'Open': self.$t('Assignments.StatusActive'),

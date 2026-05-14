@@ -105,7 +105,10 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             if (isInterviewer)
             {
-                input.Statuses = new[] { AssignmentStatus.Open, AssignmentStatus.Completed };
+                var allowedStatuses = new[] { AssignmentStatus.Open, AssignmentStatus.Completed };
+                input.Statuses = input.Statuses?.Length > 0
+                    ? input.Statuses.Intersect(allowedStatuses).ToArray()
+                    : allowedStatuses;
                 input.SearchByFields = AssignmentsInputModel.SearchTypes.Id 
                     | AssignmentsInputModel.SearchTypes.IdentifyingQuestions
                     | AssignmentsInputModel.SearchTypes.QuestionnaireTitle;

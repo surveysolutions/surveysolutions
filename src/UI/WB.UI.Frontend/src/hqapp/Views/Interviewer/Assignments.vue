@@ -1,29 +1,16 @@
 <template>
-    <HqLayout :title="title">
+    <HqLayout :title="title" :hasFilter="true">
+        <template v-slot:filters>
+            <Filters>
+                <FilterBlock :title="$t('Assignments.Status')">
+                    <Typeahead control-id="status_filter" noSearch noClear allowEmpty :values="ddlStatus" :value="statusFilter"
+                        v-on:selected="statusSelected" />
+                </FilterBlock>
+            </Filters>
+        </template>
         <DataTables ref="table" :tableOptions="tableOptions"
-            :contextMenuItems="contextMenuItems"
-            :selectable="true"
-            @selectedRowsChanged="rows => selectedRows = rows"
-            @page="resetSelection">
-            <div class="panel panel-table" v-if="selectedRows.length">
-                <div class="panel-body">
-                    <input class="double-checkbox-white" type="checkbox" checked disabled />
-                    <label>
-                        <span class="tick"></span>
-                        {{ $t("Assignments.AssignmentsSelected", { count: selectedRows.length }) }}
-                    </label>
-
-                    <button class="btn btn-lg btn-warning" id="btnCompleteSelected"
-                        :disabled="!canComplete"
-                        @click="openCompleteModal(null)">{{
-                            $t("Assignments.Complete") }}</button>
-
-                    <button class="btn btn-lg btn-primary" id="btnReopenSelected"
-                        :disabled="!canReopen"
-                        @click="openReopenModal(null)">{{
-                            $t("Assignments.Reopen") }}</button>
-                </div>
-            </div>
+            :addParamsToRequest="addParamsToRequest"
+            :contextMenuItems="contextMenuItems">
         </DataTables>
 
         <ModalFrame ref="editCalendarModal" :title="$t('Common.EditCalendarEvent')">
@@ -124,9 +111,9 @@ export default {
             newCalendarStarTimezone: null,
             calendarEventId: null,
             calendarAssinmentId: null,
-            statusChangeIds: [],
+            statusChangeId: null,
             statusChangeComment: null,
-            selectedRows: [],
+            statusFilter: null,
         }
     },
 
@@ -136,6 +123,13 @@ export default {
         },
         dataTable() {
             return this.$refs.table.table
+        },
+        ddlStatus() {
+            return [
+                { key: null, value: this.$t('Common.Any') },
+                { key: 'Open', value: this.$t('Assignments.StatusActive') },
+                { key: 'Completed', value: this.$t('Assignments.StatusCompleted') },
+            ]
         },
         tableOptions() {
             return {
@@ -149,10 +143,6 @@ export default {
                     url: this.$config.model.assignmentsEndpoint,
                     type: 'GET',
                     contentType: 'application/json',
-                },
-                select: {
-                    style: 'multi',
-                    selector: 'td>.checkbox-filter',
                 },
                 sDom: 'rf<"table-with-scroll"t>ip',
             }
@@ -182,21 +172,18 @@ export default {
         saveDisabled() {
             return !this.newCalendarStart
         },
-        canComplete() {
-            if (this.selectedRows.length === 0) return false
-            const data = this.$refs.table.table.rows({ selected: true }).data()
-            return Array.from(data).some(r => r.status === 'Open')
-        },
-        canReopen() {
-            if (this.selectedRows.length === 0) return false
-            const data = this.$refs.table.table.rows({ selected: true }).data()
-            return Array.from(data).some(r => r.status === 'Completed')
-        },
     },
 
     methods: {
         reload() {
             this.$refs.table.reload()
+        },
+        addParamsToRequest(requestData) {
+            requestData.status = (this.statusFilter || {}).key
+        },
+        statusSelected(newValue) {
+            this.statusFilter = newValue
+            this.reload()
         },
         contextMenuItems({ rowData }) {
             const items = [
@@ -212,17 +199,33 @@ export default {
                 },
             ]
 
+            if (rowData.status === 'Open') {
+                items.push({
+                    name: this.$t('Assignments.Complete'),
+                    className: 'primary-text',
+                    callback: () => this.openCompleteModal(rowData.id),
+                })
+            }
+
+            if (rowData.status === 'Completed') {
+                items.push({
+                    name: this.$t('Assignments.Reopen'),
+                    className: 'primary-text',
+                    callback: () => this.openReopenModal(rowData.id),
+                })
+            }
+
             return items
         },
 
         openCompleteModal(rowId) {
-            this.statusChangeIds = rowId != null ? [rowId] : [...this.selectedRows]
+            this.statusChangeId = rowId
             this.statusChangeComment = null
             this.$refs.completeModal.modal()
         },
 
         openReopenModal(rowId) {
-            this.statusChangeIds = rowId != null ? [rowId] : [...this.selectedRows]
+            this.statusChangeId = rowId
             this.statusChangeComment = null
             this.$refs.reopenModal.modal()
         },
@@ -236,25 +239,17 @@ export default {
         },
 
         async changeAssignmentStatus(status, modalRef) {
-            if (!this.statusChangeIds.length) return
+            if (!this.statusChangeId) return
             try {
-                await Promise.all(
-                    this.statusChangeIds.map(id =>
-                        this.$hq.Assignments.changeStatus(id, status, this.statusChangeComment || null)
-                    )
-                )
+                await this.$hq.Assignments.changeStatus(this.statusChangeId, status, this.statusChangeComment || null)
                 modalRef.hide()
-                this.statusChangeIds = []
+                this.statusChangeId = null
                 this.statusChangeComment = null
                 this.reload()
             } catch (error) {
                 const msg = error?.response?.data?.message || error?.message || this.$t('Common.Error')
                 toastr.error(msg)
             }
-        },
-
-        resetSelection() {
-            this.selectedRows.splice(0)
         },
 
         getTableColumns() {
@@ -374,12 +369,11 @@ export default {
                     name: 'Status',
                     title: this.$t('Assignments.Status'),
                     searchable: false,
-                    orderable: false,
+                    orderable: true,
                     render(data) {
                         const statusMap = {
                             'Open': self.$t('Assignments.StatusActive'),
                             'Completed': self.$t('Assignments.StatusCompleted'),
-                            'Approved': self.$t('Assignments.StatusCompleted'),
                         }
                         return statusMap[data] || data
                     },
