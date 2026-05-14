@@ -709,11 +709,35 @@
   <data name="Dashboard_Open" xml:space="preserve">
     <value>Открыть</value>
   </data>
-    <data name="Dashboard_Assignment_Status_Finished" xml:space="preserve">
-    <value>Status: Finished</value>
+      <data name="Dashboard_FinishAssignment" xml:space="preserve">
+    <value>Завершить задание</value>
+  </data>
+  <data name="Dashboard_FinishAssignment_Title" xml:space="preserve">
+    <value>Завершить задание?</value>
+  </data>
+  <data name="Dashboard_FinishAssignment_Message" xml:space="preserve">
+    <value>Вы уверены, что перечислили все подходящие единицы для этого задания?</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
+    <value>Открыть задание снова?</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment" xml:space="preserve">
+    <value>Выполнить задание</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
+    <value>Выполнить задание?</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
+    <value>Интервьюеры, работающие в автономном режиме, могут продолжать сбор данных до синхронизации. Такие интервью по-прежнему будут приняты.</value>
+  </data>
+  <data name="Dashboard_Assignment_Comment" xml:space="preserve">
+    <value>Комментарий (необязательно)</value>
+  </data>
+<data name="Dashboard_Assignment_Status_Finished" xml:space="preserve">
+    <value>Статус: Завершено</value>
   </data>
   <data name="Dashboard_Assignment_Status_Approved" xml:space="preserve">
-    <value>Status: Approved</value>
+    <value>Статус: Выполнено</value>
   </data>
 <data name="Dashboard_ShowLocation" xml:space="preserve">
     <value>Показать на карте</value>

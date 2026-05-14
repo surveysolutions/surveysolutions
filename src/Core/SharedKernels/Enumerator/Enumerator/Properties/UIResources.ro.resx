@@ -711,16 +711,16 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Tip</value>
   </data>
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
-    <value>Assignment status</value>
+    <value>Statutul sarcinii</value>
   </data>
   <data name="Assignment_Status_Open" xml:space="preserve">
-    <value>Open</value>
+    <value>Deschis</value>
   </data>
   <data name="Assignment_Status_Finished" xml:space="preserve">
-    <value>Finished</value>
+    <value>Finalizat</value>
   </data>
   <data name="Assignment_Status_Approved" xml:space="preserve">
-    <value>Approved</value>
+    <value>Aprobat</value>
   </data>
 
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">

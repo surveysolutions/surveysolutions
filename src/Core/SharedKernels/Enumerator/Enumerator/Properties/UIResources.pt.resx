@@ -708,16 +708,16 @@ Você pode criar ou editar seus questionários no Survey Solutions Designer</val
     <value>Tipo</value>
   </data>
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
-    <value>Assignment status</value>
+    <value>Status da atribuição</value>
   </data>
   <data name="Assignment_Status_Open" xml:space="preserve">
-    <value>Open</value>
+    <value>Aberto</value>
   </data>
   <data name="Assignment_Status_Finished" xml:space="preserve">
-    <value>Finished</value>
+    <value>Concluído</value>
   </data>
   <data name="Assignment_Status_Approved" xml:space="preserve">
-    <value>Approved</value>
+    <value>Aprovado</value>
   </data>
 
   <data name="MapDashboard_FiltersTitle" xml:space="preserve">

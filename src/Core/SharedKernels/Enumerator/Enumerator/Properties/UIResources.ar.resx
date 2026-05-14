@@ -717,16 +717,16 @@
   <value>النوع</value>
 </data>
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
-    <value>Assignment status</value>
+    <value>حالة التعيين</value>
   </data>
   <data name="Assignment_Status_Open" xml:space="preserve">
-    <value>Open</value>
+    <value>مفتوح</value>
   </data>
   <data name="Assignment_Status_Finished" xml:space="preserve">
-    <value>Finished</value>
+    <value>منتهي</value>
   </data>
   <data name="Assignment_Status_Approved" xml:space="preserve">
-    <value>Approved</value>
+    <value>موافق عليه</value>
   </data>
 
     <data name="MapDashboard_FiltersTitle" xml:space="preserve">

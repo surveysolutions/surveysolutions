@@ -652,16 +652,16 @@
     <value>Loại</value>
   </data>
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
-    <value>Assignment status</value>
+    <value>Trạng thái phân công</value>
   </data>
   <data name="Assignment_Status_Open" xml:space="preserve">
-    <value>Open</value>
+    <value>Mở</value>
   </data>
   <data name="Assignment_Status_Finished" xml:space="preserve">
-    <value>Finished</value>
+    <value>Hoàn thành</value>
   </data>
   <data name="Assignment_Status_Approved" xml:space="preserve">
-    <value>Approved</value>
+    <value>Được phê duyệt</value>
   </data>
 
   <data name="MapDashboard_FiltersTitle" xml:space="preserve">

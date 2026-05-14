@@ -717,16 +717,16 @@ Vous pouvez créer ou modifier vos questionnaires dans Survey Solutions Designer
     <value>Type</value>
   </data>
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
-    <value>Assignment status</value>
+    <value>Statut de l'affectation</value>
   </data>
   <data name="Assignment_Status_Open" xml:space="preserve">
-    <value>Open</value>
+    <value>Ouvert</value>
   </data>
   <data name="Assignment_Status_Finished" xml:space="preserve">
-    <value>Finished</value>
+    <value>Terminé</value>
   </data>
   <data name="Assignment_Status_Approved" xml:space="preserve">
-    <value>Approved</value>
+    <value>Approuvé</value>
   </data>
 
   <data name="MapDashboard_FiltersTitle" xml:space="preserve">
