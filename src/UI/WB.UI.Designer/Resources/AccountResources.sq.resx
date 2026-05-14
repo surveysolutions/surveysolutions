@@ -279,4 +279,7 @@
   <data name="Welcome" xml:space="preserve">
     <value>Mirë se vini në Survey Solutions</value>
   </data>
+  <data name="LastLoginDate" xml:space="preserve">
+    <value>Last login date</value>
+  </data>
 </root>

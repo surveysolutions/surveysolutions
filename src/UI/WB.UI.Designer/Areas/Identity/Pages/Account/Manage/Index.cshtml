@@ -33,6 +33,9 @@
             </p>
         }
     </div>
+    <div class="form-group">
+        <input type="text" class="form-control" value="@Model.LastLoginDate" placeholder="@AccountResources.ResourceManager.GetString("LastLoginDate")" readonly />
+    </div>
     <div class="form-actions">
         <input type="submit" class="btn btn-success btn-lg" value="@AccountResources.Change" />
         <a asp-page="./questionnaire/my" class="btn">

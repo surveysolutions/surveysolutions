@@ -241,4 +241,7 @@
   <data name="PendingEmailUpdate" xml:space="preserve">
     <value>Atualização pendente para {0}</value>
   </data>
+  <data name="LastLoginDate" xml:space="preserve">
+    <value>Last login date</value>
+  </data>
 </root>
