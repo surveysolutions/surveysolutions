@@ -565,7 +565,7 @@
   <data name="StatusCompleted" xml:space="preserve">
       <value>Завершено</value>
   </data>
-  <data name="StatusCompleted" xml:space="preserve">
+  <data name="StatusApproved" xml:space="preserve">
       <value>Выполнено</value>
   </data>
   <data name="CompleteAssignmentTitle" xml:space="preserve">
@@ -574,10 +574,10 @@
   <data name="CompleteAssignmentMessage" xml:space="preserve">
       <value>Вы уверены, что перечислили все подходящие единицы?</value>
   </data>
-  <data name="CompleteAssignmentTitle" xml:space="preserve">
+  <data name="ApproveAssignmentTitle" xml:space="preserve">
       <value>Выполнить задание?</value>
   </data>
-  <data name="CompleteAssignmentMessage" xml:space="preserve">
+  <data name="ApproveAssignmentMessage" xml:space="preserve">
       <value>Интервьюеры, работающие в автономном режиме, могут продолжать сбор данных до синхронизации. Такие интервью по-прежнему будут приняты.</value>
   </data>
   <data name="ReopenAssignmentTitle" xml:space="preserve">
@@ -586,7 +586,7 @@
   <data name="Complete" xml:space="preserve">
       <value>Завершить</value>
   </data>
-  <data name="Complete" xml:space="preserve">
+  <data name="Approve" xml:space="preserve">
       <value>Выполнить</value>
   </data>
   <data name="Reopen" xml:space="preserve">
@@ -601,7 +601,7 @@
   <data name="Action_Completed" xml:space="preserve">
       <value>Завершено</value>
   </data>
-  <data name="Action_Completed" xml:space="preserve">
+  <data name="Action_Approved" xml:space="preserve">
       <value>Выполнено</value>
   </data>
   <data name="Action_Reopened" xml:space="preserve">

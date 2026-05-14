@@ -512,7 +512,7 @@
   <data name="StatusCompleted" xml:space="preserve">
       <value>Completed</value>
   </data>
-  <data name="StatusCompleted" xml:space="preserve">
+  <data name="StatusApproved" xml:space="preserve">
       <value>Approved</value>
   </data>
   <data name="CompleteAssignmentTitle" xml:space="preserve">
@@ -521,10 +521,10 @@
   <data name="CompleteAssignmentMessage" xml:space="preserve">
       <value>Are you sure you have enumerated all eligible units?</value>
   </data>
-  <data name="CompleteAssignmentTitle" xml:space="preserve">
+  <data name="ApproveAssignmentTitle" xml:space="preserve">
       <value>Approve assignment?</value>
   </data>
-  <data name="CompleteAssignmentMessage" xml:space="preserve">
+  <data name="ApproveAssignmentMessage" xml:space="preserve">
       <value>Interviewers working offline may still continue data collection until synchronization. Such interviews will still be accepted.</value>
   </data>
   <data name="ReopenAssignmentTitle" xml:space="preserve">
@@ -533,7 +533,7 @@
   <data name="Complete" xml:space="preserve">
       <value>Complete</value>
   </data>
-  <data name="Complete" xml:space="preserve">
+  <data name="Approve" xml:space="preserve">
       <value>Approve</value>
   </data>
   <data name="Reopen" xml:space="preserve">
@@ -548,7 +548,7 @@
   <data name="Action_Completed" xml:space="preserve">
       <value>Completed</value>
   </data>
-  <data name="Action_Completed" xml:space="preserve">
+  <data name="Action_Approved" xml:space="preserve">
       <value>Approved</value>
   </data>
   <data name="Action_Reopened" xml:space="preserve">

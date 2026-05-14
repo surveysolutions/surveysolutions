@@ -99,8 +99,8 @@
                                             </a>
                                         </li>
                                         <li v-if="canComplete">
-                                            <a href="#" @click.prevent="openCompleteModal">
-                                                {{ $t('Assignments.Complete') }}
+                                            <a href="#" @click.prevent="openApproveModal">
+                                                {{ $t('Assignments.Approve') }}
                                             </a>
                                         </li>
                                         <li v-if="canReopen">
@@ -388,8 +388,8 @@
                     </template>
                 </ModalFrame>
 
-                <ModalFrame ref="completeModal" :title="$t('Assignments.CompleteAssignmentTitle')">
-                    <p>{{ $t('Assignments.CompleteAssignmentMessage') }}</p>
+                <ModalFrame ref="approveModal" :title="$t('Assignments.ApproveAssignmentTitle')">
+                    <p>{{ $t('Assignments.ApproveAssignmentMessage') }}</p>
                     <form onsubmit="return false;">
                         <div class="form-group">
                             <label class="control-label" for="completeCommentDetailId">
@@ -402,8 +402,8 @@
                     </form>
                     <template v-slot:actions>
                         <div>
-                            <button type="button" class="btn btn-primary" @click="confirmComplete">{{
-                                $t("Assignments.Complete") }}</button>
+                            <button type="button" class="btn btn-primary" @click="confirmApprove">{{
+                                $t("Assignments.Approve") }}</button>
                             <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
                                 }}</button>
                         </div>
@@ -648,9 +648,9 @@ export default {
             return false
         },
 
-        openCompleteModal() {
+        openApproveModal() {
             this.statusChangeComment = null
-            this.$refs.completeModal.modal()
+            this.$refs.approveModal.modal()
         },
 
         openReopenModal() {
@@ -658,8 +658,8 @@ export default {
             this.$refs.reopenModal.modal()
         },
 
-        async confirmComplete() {
-            await this.changeStatus('Approved', this.$refs.completeModal)
+        async confirmApprove() {
+            await this.changeStatus('Approved', this.$refs.approveModal)
         },
 
         async confirmReopen() {
@@ -786,7 +786,7 @@ export default {
             const statusMap = {
                 'Open': this.$t('Assignments.StatusActive'),
                 'Completed': this.$t('Assignments.StatusCompleted'),
-                'Approved': this.$t('Assignments.StatusCompleted'),
+                'Approved': this.$t('Assignments.StatusApproved'),
             }
             return statusMap[this.model.status] || this.model.status
         },

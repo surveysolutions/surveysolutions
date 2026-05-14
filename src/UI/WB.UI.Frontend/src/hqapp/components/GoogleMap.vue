@@ -132,7 +132,7 @@
 
                 <button class="btn btn-sm btn-success" v-if="canApproveAssignment"
                     click-method="approveAssignment">
-                    {{ $t('Assignments.Complete') }}
+                    {{ $t('Assignments.Approve') }}
                 </button>
 
                 <button class="btn btn-sm btn-default" v-if="canReopenAssignment"
@@ -314,7 +314,7 @@ export default {
             const statusMap = {
                 'Open': this.$t('Assignments.StatusActive'),
                 'Completed': this.$t('Assignments.StatusCompleted'),
-                'Approved': this.$t('Assignments.StatusCompleted'),
+                'Approved': this.$t('Assignments.StatusApproved'),
             }
             return statusMap[this.selectedTooltip.status] || this.selectedTooltip.status || ''
         },
