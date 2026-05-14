@@ -584,7 +584,7 @@
       <value>Открыть задание снова</value>
   </data>
   <data name="ReopenAssignmentMessage" xml:space="preserve">
-      <value>The assignment will be set back to Open status and interviewers will be able to create new interviews.</value>
+      <value>Заданию будет возвращён статус «Открыто», и интервьюеры смогут создавать новые интервью.</value>
   </data>
   <data name="Complete" xml:space="preserve">
       <value>Завершить</value>
