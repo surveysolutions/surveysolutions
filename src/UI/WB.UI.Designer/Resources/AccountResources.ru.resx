@@ -314,6 +314,6 @@
     <value>Запрошено изменение на {0}</value>
   </data>
   <data name="LastLoginDate" xml:space="preserve">
-    <value>Last login date</value>
+    <value>Дата последнего входа</value>
   </data>
 </root>

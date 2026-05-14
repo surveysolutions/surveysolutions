@@ -242,6 +242,6 @@
     <value>Atualização pendente para {0}</value>
   </data>
   <data name="LastLoginDate" xml:space="preserve">
-    <value>Last login date</value>
+    <value>Data do último login</value>
   </data>
 </root>

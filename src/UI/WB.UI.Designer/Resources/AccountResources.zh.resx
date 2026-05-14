@@ -280,6 +280,6 @@
     <value>显示密码</value>
   </data>
   <data name="LastLoginDate" xml:space="preserve">
-    <value>Last login date</value>
+    <value>最后登录日期</value>
   </data>
 </root>

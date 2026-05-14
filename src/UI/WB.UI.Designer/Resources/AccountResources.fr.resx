@@ -301,6 +301,6 @@
     <value>Mise à jour en attente vers {0}</value>
   </data>
   <data name="LastLoginDate" xml:space="preserve">
-    <value>Last login date</value>
+    <value>Date de dernière connexion</value>
   </data>
 </root>

@@ -36,11 +36,15 @@ namespace WB.Tests.Unit.Designer.Areas.Identity.Pages.Account
                 .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
 
             var model = CreateLoginModel(signInManagerMock.Object, userManagerMock.Object);
+            var beforeLogin = DateTime.UtcNow;
 
             await model.OnPostAsync("/manage");
+            var afterLogin = DateTime.UtcNow;
 
             userManagerMock.Verify(x => x.UpdateAsync(user), Times.Once);
             Assert.That(user.LastLoginDate, Is.Not.Null);
+            Assert.That(user.LastLoginDate!.Value, Is.GreaterThanOrEqualTo(beforeLogin));
+            Assert.That(user.LastLoginDate!.Value, Is.LessThanOrEqualTo(afterLogin));
         }
 
         [Test]

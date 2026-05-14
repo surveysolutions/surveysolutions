@@ -301,6 +301,6 @@
   <value>Actualización pendiente a {0}</value>
 </data>
   <data name="LastLoginDate" xml:space="preserve">
-    <value>Last login date</value>
+    <value>Fecha del último inicio de sesión</value>
   </data>
 </root>

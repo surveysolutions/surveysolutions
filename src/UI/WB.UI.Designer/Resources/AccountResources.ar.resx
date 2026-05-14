@@ -242,6 +242,6 @@
     <value>تحديث معلق إلى {0}</value>
   </data>
   <data name="LastLoginDate" xml:space="preserve">
-    <value>Last login date</value>
+    <value>تاريخ آخر تسجيل دخول</value>
   </data>
 </root>
