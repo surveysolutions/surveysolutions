@@ -411,6 +411,7 @@
                 </ModalFrame>
 
                 <ModalFrame ref="reopenModal" :title="$t('Assignments.ReopenAssignmentTitle')">
+                    <p>{{ $t('Assignments.ReopenAssignmentMessage') }}</p>
                     <form onsubmit="return false;">
                         <div class="form-group">
                             <label class="control-label" for="reopenCommentDetailId">

@@ -415,16 +415,16 @@
     <value>Assignment ID</value>
   </data>
   <data name="MultipleAssignmentsClose" xml:space="preserve">
-      <value>{{count}} selected assignments are going to be closed. Expected value will be set to currently collected interviews count.</value>
+      <value>{{count}} selected assignments are going to be downsized. Expected value will be set to currently collected interviews count.</value>
   </data>
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
       <value>Expected value of the selected assignment {{id}} will be changed from {{quantity}} to {{collected}} (number of currently collected interviews)</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Close</value>
+    <value>Downsize</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
-    <value>Assignment {{id}} cannot be closed since it has web mode enabled</value>
+    <value>Assignment {{id}} cannot be downsized since it has web mode enabled</value>
   </data>
   <data name="AssignmentInfo" xml:space="preserve">
     <value>Detailed assignment info</value>
@@ -575,19 +575,22 @@
       <value>Approved</value>
   </data>
   <data name="CompleteAssignmentTitle" xml:space="preserve">
-      <value>Complete assignment?</value>
+      <value>Complete assignment</value>
   </data>
   <data name="CompleteAssignmentMessage" xml:space="preserve">
       <value>Are you sure you have enumerated all eligible units?</value>
   </data>
   <data name="ApproveAssignmentTitle" xml:space="preserve">
-      <value>Approve assignment?</value>
+      <value>Approve assignment</value>
   </data>
   <data name="ApproveAssignmentMessage" xml:space="preserve">
       <value>Interviewers working offline may still continue data collection until synchronization. Such interviews will still be accepted.</value>
   </data>
   <data name="ReopenAssignmentTitle" xml:space="preserve">
-      <value>Reopen assignment?</value>
+      <value>Reopen assignment</value>
+  </data>
+  <data name="ReopenAssignmentMessage" xml:space="preserve">
+      <value>The assignment will be set back to Open status and interviewers will be able to create new interviews.</value>
   </data>
   <data name="Complete" xml:space="preserve">
       <value>Complete</value>

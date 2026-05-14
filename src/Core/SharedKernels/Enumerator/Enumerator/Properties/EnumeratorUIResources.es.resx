@@ -481,22 +481,22 @@
     <value>Reabrir</value>
   </data>
       <data name="Dashboard_CompleteAssignment" xml:space="preserve">
-    <value>Complete assignment</value>
+    <value>Complete</value>
   </data>
   <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
-    <value>Complete assignment?</value>
+    <value>Complete assignment</value>
   </data>
   <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
     <value>Are you sure you have enumerated all eligible units for this assignment?</value>
   </data>
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
-    <value>Reopen assignment?</value>
+    <value>Reopen assignment</value>
   </data>
   <data name="Dashboard_ApproveAssignment" xml:space="preserve">
-    <value>Approve assignment</value>
+    <value>Approve</value>
   </data>
   <data name="Dashboard_ApproveAssignment_Title" xml:space="preserve">
-    <value>Approve assignment?</value>
+    <value>Approve assignment</value>
   </data>
   <data name="Dashboard_ApproveAssignment_Message" xml:space="preserve">
     <value>Interviewers working offline may still continue data collection until synchronization. Such interviews will still be accepted.</value>

@@ -71,6 +71,7 @@
         </ModalFrame>
 
         <ModalFrame ref="reopenModal" :title="$t('Assignments.ReopenAssignmentTitle')">
+            <p>{{ $t('Assignments.ReopenAssignmentMessage') }}</p>
             <form onsubmit="return false;">
                 <div class="form-group">
                     <label class="control-label" for="reopenCommentId">
@@ -344,6 +345,12 @@ export default {
                     title: this.$t('Assignments.DetailsComments'),
                     searchable: false,
                     orderable: true,
+                    render(data, type, row) {
+                        const parts = []
+                        if (data) parts.push(escape(data))
+                        if (row.statusComment) parts.push('<em>' + escape(row.statusComment) + '</em>')
+                        return parts.join('<br/>')
+                    },
                 },
                 {
                     data: 'calendarEvent',

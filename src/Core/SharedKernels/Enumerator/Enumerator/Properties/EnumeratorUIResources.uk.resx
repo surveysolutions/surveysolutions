@@ -674,21 +674,21 @@
     <value>Завершити завдання</value>
   </data>
   <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
-    <value>Завершити завдання?</value>
+    <value>Завершити завдання</value>
   </data>
   <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
     <value>Ви впевнені, що перерахували всі відповідні одиниці для цього завдання?</value>
   </data>
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
-    <value>Відкрити завдання знову?</value>
+    <value>Відкрити завдання знову</value>
   </data>
-  <data name="Dashboard_CompleteAssignment" xml:space="preserve">
+  <data name="Dashboard_ApproveAssignment" xml:space="preserve">
     <value>Виконати завдання</value>
   </data>
-  <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
-    <value>Виконати завдання?</value>
+  <data name="Dashboard_ApproveAssignment_Title" xml:space="preserve">
+    <value>Виконати завдання</value>
   </data>
-  <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
+  <data name="Dashboard_ApproveAssignment_Message" xml:space="preserve">
     <value>Інтерв'юери, що працюють в автономному режимі, можуть продовжувати збір даних до синхронізації. Такі інтерв'ю будуть прийняті.</value>
   </data>
   <data name="Dashboard_Assignment_Comment" xml:space="preserve">

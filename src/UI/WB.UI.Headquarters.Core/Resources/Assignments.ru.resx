@@ -569,19 +569,22 @@
       <value>Выполнено</value>
   </data>
   <data name="CompleteAssignmentTitle" xml:space="preserve">
-      <value>Завершить задание?</value>
+      <value>Завершить задание</value>
   </data>
   <data name="CompleteAssignmentMessage" xml:space="preserve">
       <value>Вы уверены, что перечислили все подходящие единицы?</value>
   </data>
   <data name="ApproveAssignmentTitle" xml:space="preserve">
-      <value>Выполнить задание?</value>
+      <value>Выполнить задание</value>
   </data>
   <data name="ApproveAssignmentMessage" xml:space="preserve">
       <value>Интервьюеры, работающие в автономном режиме, могут продолжать сбор данных до синхронизации. Такие интервью по-прежнему будут приняты.</value>
   </data>
   <data name="ReopenAssignmentTitle" xml:space="preserve">
-      <value>Открыть задание снова?</value>
+      <value>Открыть задание снова</value>
+  </data>
+  <data name="ReopenAssignmentMessage" xml:space="preserve">
+      <value>The assignment will be set back to Open status and interviewers will be able to create new interviews.</value>
   </data>
   <data name="Complete" xml:space="preserve">
       <value>Завершить</value>
