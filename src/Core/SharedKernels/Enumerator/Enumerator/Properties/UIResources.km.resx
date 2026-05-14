@@ -394,8 +394,8 @@
   <data name="Assignment_Status_Open" xml:space="preserve">
     <value>Open</value>
   </data>
-  <data name="Assignment_Status_Finished" xml:space="preserve">
-    <value>Finished</value>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>Completed</value>
   </data>
   <data name="Assignment_Status_Approved" xml:space="preserve">
     <value>Approved</value>

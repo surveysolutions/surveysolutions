@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         IUpdateHandler<Assignment, AssignmentQuantityChanged>,
         IUpdateHandler<Assignment, AssignmentTargetAreaChanged>,
         IUpdateHandler<Assignment, AssignmentReceivedByTablet>,
-        IUpdateHandler<Assignment, AssignmentFinished>,
+        IUpdateHandler<Assignment, AssignmentCompleted>,
         IUpdateHandler<Assignment, AssignmentApproved>,
         IUpdateHandler<Assignment, AssignmentReopened>
     {
@@ -177,12 +177,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return null;
         }
 
-        public Assignment Update(Assignment state, IPublishedEvent<AssignmentFinished> @event)
+        public Assignment Update(Assignment state, IPublishedEvent<AssignmentCompleted> @event)
         {
             return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
                 assignment =>
                 {
-                    assignment.Status = AssignmentStatus.Finished;
+                    assignment.Status = AssignmentStatus.Completed;
                     assignment.StatusComment = @event.Payload.Comment;
                 });
         }

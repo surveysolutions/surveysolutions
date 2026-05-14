@@ -47,11 +47,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
         /// <summary>
         /// Returns a human-readable label for non-Active assignment statuses, or null when Active.
-        /// Displayed on the dashboard card so users can see Finished/Completed state at a glance.
+        /// Displayed on the dashboard card so users can see Completed state at a glance.
         /// </summary>
         public string? AssignmentStatusLabel => Assignment.Status switch
         {
-            AssignmentStatus.Finished => EnumeratorUIResources.Dashboard_Assignment_Status_Finished,
+            AssignmentStatus.Completed => EnumeratorUIResources.Dashboard_Assignment_Status_Completed,
             AssignmentStatus.Approved => EnumeratorUIResources.Dashboard_Assignment_Status_Approved,
             _ => null
         };

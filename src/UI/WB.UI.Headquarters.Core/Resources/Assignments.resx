@@ -568,16 +568,16 @@
   <data name="StatusActive" xml:space="preserve">
       <value>Open</value>
   </data>
-  <data name="StatusFinished" xml:space="preserve">
-      <value>Finished</value>
+  <data name="StatusCompleted" xml:space="preserve">
+      <value>Completed</value>
   </data>
   <data name="StatusCompleted" xml:space="preserve">
       <value>Approved</value>
   </data>
-  <data name="FinishAssignmentTitle" xml:space="preserve">
-      <value>Finish assignment?</value>
+  <data name="CompleteAssignmentTitle" xml:space="preserve">
+      <value>Complete assignment?</value>
   </data>
-  <data name="FinishAssignmentMessage" xml:space="preserve">
+  <data name="CompleteAssignmentMessage" xml:space="preserve">
       <value>Are you sure you have enumerated all eligible units?</value>
   </data>
   <data name="CompleteAssignmentTitle" xml:space="preserve">
@@ -589,8 +589,8 @@
   <data name="ReopenAssignmentTitle" xml:space="preserve">
       <value>Reopen assignment?</value>
   </data>
-  <data name="Finish" xml:space="preserve">
-      <value>Finish</value>
+  <data name="Complete" xml:space="preserve">
+      <value>Complete</value>
   </data>
   <data name="Complete" xml:space="preserve">
       <value>Approve</value>
@@ -604,8 +604,8 @@
   <data name="Action_StatusChanged_Comment" xml:space="preserve">
       <value>Comment: {{comment}}</value>
   </data>
-  <data name="Action_Finished" xml:space="preserve">
-      <value>Finished</value>
+  <data name="Action_Completed" xml:space="preserve">
+      <value>Completed</value>
   </data>
   <data name="Action_Completed" xml:space="preserve">
       <value>Approved</value>

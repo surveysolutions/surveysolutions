@@ -354,13 +354,13 @@ export default {
         canComplete() {
             if (this.selectedRows.length === 0 || (this.showArchive && this.showArchive.key)) return false
             const data = this.$refs.table.table.rows({ selected: true }).data()
-            return Array.from(data).some(r => r.status === 'Open' || r.status === 'Finished')
+            return Array.from(data).some(r => r.status === 'Open' || r.status === 'Completed')
         },
 
         canReopen() {
             if (this.selectedRows.length === 0 || (this.showArchive && this.showArchive.key)) return false
             const data = this.$refs.table.table.rows({ selected: true }).data()
-            return Array.from(data).some(r => r.status === 'Finished' || r.status === 'Approved')
+            return Array.from(data).some(r => r.status === 'Completed' || r.status === 'Approved')
         },
 
         ddlReceivedByTablet() {
@@ -380,7 +380,7 @@ export default {
             return [
                 { key: null, value: this.$t('Common.Any') },
                 { key: 'Open', value: this.$t('Assignments.StatusActive') },
-                { key: 'Finished', value: this.$t('Assignments.StatusFinished') },
+                { key: 'Completed', value: this.$t('Assignments.StatusCompleted') },
                 { key: 'Approved', value: this.$t('Assignments.StatusCompleted') },
             ]
         },
@@ -446,7 +446,7 @@ export default {
                     render(data) {
                         const statusMap = {
                             'Open': self.$t('Assignments.StatusActive'),
-                            'Finished': self.$t('Assignments.StatusFinished'),
+                            'Completed': self.$t('Assignments.StatusCompleted'),
                             'Approved': self.$t('Assignments.StatusCompleted'),
                         }
                         return statusMap[data] || data

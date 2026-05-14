@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var localAssignment = Create.Entity
                 .AssignmentDocument(1, 10, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
-            localAssignment.Status = AssignmentStatus.Finished;
+            localAssignment.Status = AssignmentStatus.Completed;
             localAssignment.StatusComment = "server comment";
             // No pending upload (StatusChangedAtUtc is null)
 
@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var localAssignment = Create.Entity
                 .AssignmentDocument(1, 10, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
-            localAssignment.Status = AssignmentStatus.Finished;
+            localAssignment.Status = AssignmentStatus.Completed;
 
             var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
             assignmentsRepo.Store(new[] { localAssignment });
@@ -110,7 +110,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var localAssignment = Create.Entity
                 .AssignmentDocument(1, 10, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
-            localAssignment.Status = AssignmentStatus.Finished;
+            localAssignment.Status = AssignmentStatus.Completed;
             localAssignment.StatusComment = "No more households";
             localAssignment.StatusChangedAtUtc = DateTime.UtcNow;
 
@@ -122,7 +122,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 Id = 1,
                 Quantity = 10,
                 QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Finished, // server now reflects the change
+                Status = AssignmentStatus.Completed, // server now reflects the change
                 StatusComment = "No more households"
             };
 
@@ -145,7 +145,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             // Assert: status change was uploaded
             syncService.Verify(s => s.ChangeAssignmentStatusAsync(1, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()), Times.Once);
             capturedChange.Should().NotBeNull();
-            capturedChange.Status.Should().Be(AssignmentStatus.Finished);
+            capturedChange.Status.Should().Be(AssignmentStatus.Completed);
             capturedChange.Comment.Should().Be("No more households");
 
             // After sync, pending flag is cleared
@@ -160,7 +160,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var localAssignment = Create.Entity
                 .AssignmentDocument(1, 10, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
-            localAssignment.Status = AssignmentStatus.Finished;
+            localAssignment.Status = AssignmentStatus.Completed;
             localAssignment.StatusComment = null;
             localAssignment.StatusChangedAtUtc = DateTime.UtcNow;
 
@@ -172,7 +172,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 Id = 1,
                 Quantity = 10,
                 QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Finished
+                Status = AssignmentStatus.Completed
             };
 
             AssignmentStatusChangeApiView capturedChange = null;
@@ -194,14 +194,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             // Assert: status change was uploaded with null comment
             syncService.Verify(s => s.ChangeAssignmentStatusAsync(1, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()), Times.Once);
             capturedChange.Should().NotBeNull();
-            capturedChange.Status.Should().Be(AssignmentStatus.Finished);
+            capturedChange.Status.Should().Be(AssignmentStatus.Completed);
             capturedChange.Comment.Should().BeNull();
         }
 
         [Test]
         public async Task new_assignment_from_server_gets_server_status_and_comment()
         {
-            // Arrange: no local assignments; server returns a Finished assignment with comment
+            // Arrange: no local assignments; server returns a Completed assignment with comment
             var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
 
             var remoteView = new AssignmentApiView
@@ -209,7 +209,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 Id = 42,
                 Quantity = 5,
                 QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Finished,
+                Status = AssignmentStatus.Completed,
                 StatusComment = "All done"
             };
             // remoteDoc is returned by GetAssignmentAsync — needed to populate assignment answers/details
@@ -239,7 +239,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             // Assert: new assignment has Finished status and comment from server
             var created = assignmentsRepo.GetById(42);
             created.Should().NotBeNull();
-            created.Status.Should().Be(AssignmentStatus.Finished);
+            created.Status.Should().Be(AssignmentStatus.Completed);
             created.StatusComment.Should().Be("All done");
         }
     }

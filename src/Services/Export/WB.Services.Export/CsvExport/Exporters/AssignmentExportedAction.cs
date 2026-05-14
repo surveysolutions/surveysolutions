@@ -14,7 +14,7 @@
         QuantityChanged = 8,
         WebModeChanged = 9,
         TargetAreaChanged = 10,
-        Finished = 11,
+        Completed = 11,
         Approved = 12,
         Reopened = 13,
     }

@@ -125,9 +125,9 @@
                     {{ $t('Common.Create') }}
                 </button>
 
-                <button class="btn btn-sm btn-warning" v-if="canFinishAssignment"
-                    click-method="finishAssignment">
-                    {{ $t('Assignments.Finish') }}
+                <button class="btn btn-sm btn-warning" v-if="canCompleteAssignment"
+                    click-method="completeAssignment">
+                    {{ $t('Assignments.Complete') }}
                 </button>
 
                 <button class="btn btn-sm btn-success" v-if="canApproveAssignment"
@@ -313,13 +313,13 @@ export default {
         assignmentStatusLabel() {
             const statusMap = {
                 'Open': this.$t('Assignments.StatusActive'),
-                'Finished': this.$t('Assignments.StatusFinished'),
+                'Completed': this.$t('Assignments.StatusCompleted'),
                 'Approved': this.$t('Assignments.StatusCompleted'),
             }
             return statusMap[this.selectedTooltip.status] || this.selectedTooltip.status || ''
         },
 
-        canFinishAssignment() {
+        canCompleteAssignment() {
             return !this.model.isObserving &&
                 this.model.userRole == 'Interviewer' &&
                 this.selectedTooltip.status == 'Open'
@@ -328,14 +328,14 @@ export default {
         canApproveAssignment() {
             return !this.model.isObserving &&
                 (this.model.userRole == 'Supervisor' || this.model.userRole == 'Headquarter') &&
-                (this.selectedTooltip.status == 'Open' || this.selectedTooltip.status == 'Finished')
+                (this.selectedTooltip.status == 'Open' || this.selectedTooltip.status == 'Completed')
         },
 
         canReopenAssignment() {
             return !this.model.isObserving && (
-                (this.model.userRole == 'Interviewer' && this.selectedTooltip.status == 'Finished') ||
+                (this.model.userRole == 'Interviewer' && this.selectedTooltip.status == 'Completed') ||
                 ((this.model.userRole == 'Supervisor' || this.model.userRole == 'Headquarter') &&
-                    (this.selectedTooltip.status == 'Finished' || this.selectedTooltip.status == 'Approved'))
+                    (this.selectedTooltip.status == 'Completed' || this.selectedTooltip.status == 'Approved'))
             )
         },
     },
@@ -431,8 +431,8 @@ export default {
             await this.refreshAssignmentData()
         },
 
-        async finishAssignment() {
-            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Finished')
+        async completeAssignment() {
+            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Completed')
             await this.refreshAssignmentData()
         },
 

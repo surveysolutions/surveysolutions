@@ -652,7 +652,7 @@ enum ApplyPolicy {
 
 enum AssignmentStatus {
   OPEN
-  FINISHED
+  COMPLETED
   APPROVED
 }
 

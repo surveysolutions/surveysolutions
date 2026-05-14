@@ -759,7 +759,7 @@
   <data name="Assignment_Status_Open" xml:space="preserve">
     <value>Активне</value>
   </data>
-  <data name="Assignment_Status_Finished" xml:space="preserve">
+  <data name="Assignment_Status_Completed" xml:space="preserve">
     <value>Завершено</value>
   </data>
   <data name="Assignment_Status_Approved" xml:space="preserve">

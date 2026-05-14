@@ -63,12 +63,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     Actions.Add(new ActionDefinition
                     {
                         ActionType = ActionType.Context,
-                        Command = new MvxAsyncCommand(this.FinishAssignmentAsync),
-                        Label = EnumeratorUIResources.Dashboard_FinishAssignment
+                        Command = new MvxAsyncCommand(this.CompleteAssignmentAsync),
+                        Label = EnumeratorUIResources.Dashboard_CompleteAssignment
                     });
                     break;
 
-                case AssignmentStatus.Finished:
+                case AssignmentStatus.Completed:
                     Actions.Add(new ActionDefinition
                     {
                         ActionType = ActionType.Primary,
@@ -85,14 +85,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             BindTargetAreaAction(Assignment.Id, Assignment.TargetArea);
         }
 
-        private async Task FinishAssignmentAsync()
+        private async Task CompleteAssignmentAsync()
         {
             // Single dialog: shows warning message and optional comment field together
             await ChangeAssignmentStatusAsync(
-                AssignmentStatus.Finished,
-                EnumeratorUIResources.Dashboard_FinishAssignment_Message,
-                EnumeratorUIResources.Dashboard_FinishAssignment_Title,
-                EnumeratorUIResources.Dashboard_FinishAssignment);
+                AssignmentStatus.Completed,
+                EnumeratorUIResources.Dashboard_CompleteAssignment_Message,
+                EnumeratorUIResources.Dashboard_CompleteAssignment_Title,
+                EnumeratorUIResources.Dashboard_CompleteAssignment);
         }
 
         private async Task ReopenAssignmentAsync()

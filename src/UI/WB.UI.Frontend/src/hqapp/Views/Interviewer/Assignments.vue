@@ -13,10 +13,10 @@
                         {{ $t("Assignments.AssignmentsSelected", { count: selectedRows.length }) }}
                     </label>
 
-                    <button class="btn btn-lg btn-warning" id="btnFinishSelected"
-                        :disabled="!canFinish"
-                        @click="openFinishModal(null)">{{
-                            $t("Assignments.Finish") }}</button>
+                    <button class="btn btn-lg btn-warning" id="btnCompleteSelected"
+                        :disabled="!canComplete"
+                        @click="openCompleteModal(null)">{{
+                            $t("Assignments.Complete") }}</button>
 
                     <button class="btn btn-lg btn-primary" id="btnReopenSelected"
                         :disabled="!canReopen"
@@ -61,22 +61,22 @@
             </template>
         </ModalFrame>
 
-        <ModalFrame ref="finishModal" :title="$t('Assignments.FinishAssignmentTitle')">
-            <p>{{ $t('Assignments.FinishAssignmentMessage') }}</p>
+        <ModalFrame ref="completeModal" :title="$t('Assignments.CompleteAssignmentTitle')">
+            <p>{{ $t('Assignments.CompleteAssignmentMessage') }}</p>
             <form onsubmit="return false;">
                 <div class="form-group">
-                    <label class="control-label" for="finishCommentId">
+                    <label class="control-label" for="completeCommentId">
                         {{ $t("Assignments.Comments") }}
                     </label>
-                    <textarea control-id="finishCommentId" v-model="statusChangeComment"
+                    <textarea control-id="completeCommentId" v-model="statusChangeComment"
                         :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
                         autocomplete="off" class="form-control" />
                 </div>
             </form>
             <template v-slot:actions>
                 <div>
-                    <button type="button" class="btn btn-primary" @click="confirmFinish">{{
-                        $t("Assignments.Finish") }}</button>
+                    <button type="button" class="btn btn-primary" @click="confirmComplete">{{
+                        $t("Assignments.Complete") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
                         }}</button>
                 </div>
@@ -182,7 +182,7 @@ export default {
         saveDisabled() {
             return !this.newCalendarStart
         },
-        canFinish() {
+        canComplete() {
             if (this.selectedRows.length === 0) return false
             const data = this.$refs.table.table.rows({ selected: true }).data()
             return Array.from(data).some(r => r.status === 'Open')
@@ -190,7 +190,7 @@ export default {
         canReopen() {
             if (this.selectedRows.length === 0) return false
             const data = this.$refs.table.table.rows({ selected: true }).data()
-            return Array.from(data).some(r => r.status === 'Finished')
+            return Array.from(data).some(r => r.status === 'Completed')
         },
     },
 
@@ -215,10 +215,10 @@ export default {
             return items
         },
 
-        openFinishModal(rowId) {
+        openCompleteModal(rowId) {
             this.statusChangeIds = rowId != null ? [rowId] : [...this.selectedRows]
             this.statusChangeComment = null
-            this.$refs.finishModal.modal()
+            this.$refs.completeModal.modal()
         },
 
         openReopenModal(rowId) {
@@ -227,8 +227,8 @@ export default {
             this.$refs.reopenModal.modal()
         },
 
-        async confirmFinish() {
-            await this.changeAssignmentStatus('Finished', this.$refs.finishModal)
+        async confirmComplete() {
+            await this.changeAssignmentStatus('Completed', this.$refs.completeModal)
         },
 
         async confirmReopen() {
@@ -378,7 +378,7 @@ export default {
                     render(data) {
                         const statusMap = {
                             'Open': self.$t('Assignments.StatusActive'),
-                            'Finished': self.$t('Assignments.StatusFinished'),
+                            'Completed': self.$t('Assignments.StatusCompleted'),
                             'Approved': self.$t('Assignments.StatusCompleted'),
                         }
                         return statusMap[data] || data

@@ -1467,30 +1467,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string Dashboard_FinishAssignment {
-            get {
-                return ResourceManager.GetString("Dashboard_FinishAssignment", resourceCulture);
-            }
-        }
-        
-        public static string Dashboard_FinishAssignment_Title {
-            get {
-                return ResourceManager.GetString("Dashboard_FinishAssignment_Title", resourceCulture);
-            }
-        }
-        
-        public static string Dashboard_FinishAssignment_Message {
-            get {
-                return ResourceManager.GetString("Dashboard_FinishAssignment_Message", resourceCulture);
-            }
-        }
-        
-        public static string Dashboard_ReopenAssignment_Title {
-            get {
-                return ResourceManager.GetString("Dashboard_ReopenAssignment_Title", resourceCulture);
-            }
-        }
-        
         public static string Dashboard_CompleteAssignment {
             get {
                 return ResourceManager.GetString("Dashboard_CompleteAssignment", resourceCulture);
@@ -1509,15 +1485,39 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Dashboard_ReopenAssignment_Title {
+            get {
+                return ResourceManager.GetString("Dashboard_ReopenAssignment_Title", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_ApproveAssignment {
+            get {
+                return ResourceManager.GetString("Dashboard_ApproveAssignment", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_ApproveAssignment_Title {
+            get {
+                return ResourceManager.GetString("Dashboard_ApproveAssignment_Title", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_ApproveAssignment_Message {
+            get {
+                return ResourceManager.GetString("Dashboard_ApproveAssignment_Message", resourceCulture);
+            }
+        }
+        
         public static string Dashboard_Assignment_Comment {
             get {
                 return ResourceManager.GetString("Dashboard_Assignment_Comment", resourceCulture);
             }
         }
         
-        public static string Dashboard_Assignment_Status_Finished {
+        public static string Dashboard_Assignment_Status_Completed {
             get {
-                return ResourceManager.GetString("Dashboard_Assignment_Status_Finished", resourceCulture);
+                return ResourceManager.GetString("Dashboard_Assignment_Status_Completed", resourceCulture);
             }
         }
         

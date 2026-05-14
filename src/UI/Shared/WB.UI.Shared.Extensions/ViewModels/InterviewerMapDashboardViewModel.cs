@@ -25,7 +25,7 @@ public class InterviewerMapDashboardViewModel : MapDashboardViewModel
     protected override AssignmentStatus[] AssignmentStatusFilters { get; } =
     {
         AssignmentStatus.Open,
-        AssignmentStatus.Finished,
+        AssignmentStatus.Completed,
     };
 
     public InterviewerMapDashboardViewModel(IPrincipal principal, 

@@ -562,16 +562,16 @@
   <data name="StatusActive" xml:space="preserve">
       <value>Активно</value>
   </data>
-  <data name="StatusFinished" xml:space="preserve">
+  <data name="StatusCompleted" xml:space="preserve">
       <value>Завершено</value>
   </data>
   <data name="StatusCompleted" xml:space="preserve">
       <value>Выполнено</value>
   </data>
-  <data name="FinishAssignmentTitle" xml:space="preserve">
+  <data name="CompleteAssignmentTitle" xml:space="preserve">
       <value>Завершить задание?</value>
   </data>
-  <data name="FinishAssignmentMessage" xml:space="preserve">
+  <data name="CompleteAssignmentMessage" xml:space="preserve">
       <value>Вы уверены, что перечислили все подходящие единицы?</value>
   </data>
   <data name="CompleteAssignmentTitle" xml:space="preserve">
@@ -583,7 +583,7 @@
   <data name="ReopenAssignmentTitle" xml:space="preserve">
       <value>Открыть задание снова?</value>
   </data>
-  <data name="Finish" xml:space="preserve">
+  <data name="Complete" xml:space="preserve">
       <value>Завершить</value>
   </data>
   <data name="Complete" xml:space="preserve">
@@ -598,7 +598,7 @@
   <data name="Action_StatusChanged_Comment" xml:space="preserve">
       <value>Комментарий: {{comment}}</value>
   </data>
-  <data name="Action_Finished" xml:space="preserve">
+  <data name="Action_Completed" xml:space="preserve">
       <value>Завершено</value>
   </data>
   <data name="Action_Completed" xml:space="preserve">

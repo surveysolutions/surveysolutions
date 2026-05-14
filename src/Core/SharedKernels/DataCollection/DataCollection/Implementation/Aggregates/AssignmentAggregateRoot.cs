@@ -100,9 +100,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.properties.UpdatedAt = @event.OriginDate;
         }
 
-        protected void Apply(AssignmentFinished @event)
+        protected void Apply(AssignmentCompleted @event)
         {
-            this.properties.Status = AssignmentStatus.Finished;
+            this.properties.Status = AssignmentStatus.Completed;
             this.properties.UpdatedAt = @event.OriginDate;
         }
 
@@ -211,13 +211,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ApplyEvent(new AssignmentWebModeChanged(command.UserId, command.OriginDate, command.WebMode));
         }
 
-        public void FinishAssignment(FinishAssignment command)
+        public void CompleteAssignment(CompleteAssignment command)
         {
             AssignmentPropertiesInvariants invariants = new AssignmentPropertiesInvariants(this.properties);
             invariants.ThrowIfAssignmentDeleted();
-            invariants.ThrowIfCannotFinish();
+            invariants.ThrowIfCannotComplete();
 
-            ApplyEvent(new AssignmentFinished(command.UserId, command.OriginDate, command.Comment));
+            ApplyEvent(new AssignmentCompleted(command.UserId, command.OriginDate, command.Comment));
         }
 
         public void ApproveAssignment(ApproveAssignment command)

@@ -131,10 +131,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             {
                 switch (request.Status)
                 {
-                    case AssignmentStatus.Finished:
+                    case AssignmentStatus.Completed:
                         if (!this.authorizedUser.IsInterviewer)
                             return Forbid();
-                        commandService.Execute(new FinishAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
+                        commandService.Execute(new CompleteAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
                         break;
                     case AssignmentStatus.Approved:
                         if (!this.authorizedUser.IsSupervisor)

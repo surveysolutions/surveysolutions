@@ -90,8 +90,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 var dashboardItem = this.viewModelFactory.GetNew<InterviewerAssignmentDashboardItemViewModel>();
                 dashboardItem.Init(assignment);
 
-                // Finished assignments: always show (so interviewer can Reopen)
-                if (assignment.Status == AssignmentStatus.Finished)
+                // Completed assignments: always show (so interviewer can Reopen)
+                if (assignment.Status == AssignmentStatus.Completed)
                 {
                     yield return dashboardItem;
                     continue;

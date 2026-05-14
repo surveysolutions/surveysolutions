@@ -785,7 +785,7 @@ export default {
         assignmentStatus() {
             const statusMap = {
                 'Open': this.$t('Assignments.StatusActive'),
-                'Finished': this.$t('Assignments.StatusFinished'),
+                'Completed': this.$t('Assignments.StatusCompleted'),
                 'Approved': this.$t('Assignments.StatusCompleted'),
             }
             return statusMap[this.model.status] || this.model.status
@@ -793,12 +793,12 @@ export default {
         canComplete() {
             if (!this.isHeadquarters && !this.model.isSupervisor) return false
             if (this.isArchived) return false
-            return this.model.status === 'Open' || this.model.status === 'Finished'
+            return this.model.status === 'Open' || this.model.status === 'Completed'
         },
         canReopen() {
             if (!this.isHeadquarters && !this.model.isSupervisor) return false
             if (this.isArchived) return false
-            return this.model.status === 'Finished' || this.model.status === 'Approved'
+            return this.model.status === 'Completed' || this.model.status === 'Approved'
         },
         calendarEventTime() {
             return this.model.calendarEvent != null
@@ -932,7 +932,7 @@ export default {
                                 return data.DeviceId
                             case 'TargetAreaChanged':
                                 return escape(data.TargetArea)
-                            case 'Finished':
+                            case 'Completed':
                             case 'Approved':
                             case 'Reopened':
                                 if (data && data.Comment) {

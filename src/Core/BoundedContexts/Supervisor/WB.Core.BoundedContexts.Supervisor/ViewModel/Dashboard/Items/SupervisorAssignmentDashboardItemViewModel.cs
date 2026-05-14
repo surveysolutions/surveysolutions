@@ -53,19 +53,19 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 Actions.Add(new ActionDefinition
                 {
                     ActionType = ActionType.Context,
-                    Command = new MvxAsyncCommand(this.CompleteAssignmentAsync),
-                    Label = EnumeratorUIResources.Dashboard_CompleteAssignment
+                    Command = new MvxAsyncCommand(this.ApproveAssignmentAsync),
+                    Label = EnumeratorUIResources.Dashboard_ApproveAssignment
                 });
             }
 
-            // Finished: supervisor can Approve or Reopen — both visible on card as primary actions
-            if (Assignment.Status == AssignmentStatus.Finished)
+            // Completed: supervisor can Approve or Reopen — both visible on card as primary actions
+            if (Assignment.Status == AssignmentStatus.Completed)
             {
                 Actions.Add(new ActionDefinition
                 {
                     ActionType = ActionType.Primary,
-                    Command = new MvxAsyncCommand(this.CompleteAssignmentAsync),
-                    Label = EnumeratorUIResources.Dashboard_CompleteAssignment
+                    Command = new MvxAsyncCommand(this.ApproveAssignmentAsync),
+                    Label = EnumeratorUIResources.Dashboard_ApproveAssignment
                 });
                 Actions.Add(new ActionDefinition
                 {
@@ -93,14 +93,14 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
             navigationService.NavigateToAsync<AssignAssignmentDialogViewModel, AssignAssignmentDialogArgs>(
                 new AssignAssignmentDialogArgs(Assignment.Id));
 
-        private async Task CompleteAssignmentAsync()
+        private async Task ApproveAssignmentAsync()
         {
             // Single dialog: shows warning message and optional comment field together
             await ChangeAssignmentStatusAsync(
                 AssignmentStatus.Approved,
-                EnumeratorUIResources.Dashboard_CompleteAssignment_Message,
-                EnumeratorUIResources.Dashboard_CompleteAssignment_Title,
-                EnumeratorUIResources.Dashboard_CompleteAssignment);
+                EnumeratorUIResources.Dashboard_ApproveAssignment_Message,
+                EnumeratorUIResources.Dashboard_ApproveAssignment_Title,
+                EnumeratorUIResources.Dashboard_ApproveAssignment);
         }
 
         private async Task ReopenAssignmentAsync()

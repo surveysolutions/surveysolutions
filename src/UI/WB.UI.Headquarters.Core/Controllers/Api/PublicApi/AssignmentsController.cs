@@ -715,8 +715,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     return Forbid();
 
                 var isAllowedInterviewerTransition =
-                    (request.Status == AssignmentStatus.Open && assignment.Status == AssignmentStatus.Finished) ||
-                    (request.Status == AssignmentStatus.Finished && assignment.Status == AssignmentStatus.Open);
+                    (request.Status == AssignmentStatus.Open && assignment.Status == AssignmentStatus.Completed) ||
+                    (request.Status == AssignmentStatus.Completed && assignment.Status == AssignmentStatus.Open);
 
                 if (!isAllowedInterviewerTransition)
                     return Forbid();
@@ -728,8 +728,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     commandService.Execute(new ReopenAssignment(assignment.PublicKey, authorizedUser.Id,
                         assignment.QuestionnaireId, request.Comment));
                     break;
-                case AssignmentStatus.Finished:
-                    commandService.Execute(new FinishAssignment(assignment.PublicKey, authorizedUser.Id,
+                case AssignmentStatus.Completed:
+                    commandService.Execute(new CompleteAssignment(assignment.PublicKey, authorizedUser.Id,
                         assignment.QuestionnaireId, request.Comment));
                     break;
                 case AssignmentStatus.Approved:

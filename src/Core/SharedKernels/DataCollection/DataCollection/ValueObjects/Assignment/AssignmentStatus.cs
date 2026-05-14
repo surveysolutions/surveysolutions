@@ -3,7 +3,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment
     public enum AssignmentStatus
     {
         Open = 0,
-        Finished = 1,
+        Completed = 1,
         Approved = 2,
     }
 }

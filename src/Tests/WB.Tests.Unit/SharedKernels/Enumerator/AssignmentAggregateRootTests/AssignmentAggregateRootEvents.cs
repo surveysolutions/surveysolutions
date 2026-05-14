@@ -265,16 +265,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
         }
 
         [Test]
-        public void when_finish_assignment_should_set_status_to_finished()
+        public void when_complete_assignment_should_set_status_to_completed()
         {
             var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
 
             using (var context = new EventContext())
             {
-                assignment.FinishAssignment(Create.Command.FinishAssignment(comment: "done"));
+                assignment.CompleteAssignment(Create.Command.CompleteAssignment(comment: "done"));
 
-                Assert.That(assignment.properties.Status, Is.EqualTo(WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Finished));
-                context.ShouldContainEvent<AssignmentFinished>(e => e.Comment == "done");
+                Assert.That(assignment.properties.Status, Is.EqualTo(WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Completed));
+                context.ShouldContainEvent<AssignmentCompleted>(e => e.Comment == "done");
             }
         }
 
@@ -282,7 +282,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
         public void when_approve_assignment_should_set_status_to_approved()
         {
             var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
-            assignment.FinishAssignment(Create.Command.FinishAssignment());
+            assignment.CompleteAssignment(Create.Command.CompleteAssignment());
 
             using (var context = new EventContext())
             {
@@ -297,7 +297,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
         public void when_reopen_assignment_should_set_status_to_open()
         {
             var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
-            assignment.FinishAssignment(Create.Command.FinishAssignment());
+            assignment.CompleteAssignment(Create.Command.CompleteAssignment());
             assignment.ApproveAssignment(Create.Command.ApproveAssignment());
 
             using (var context = new EventContext())

@@ -92,7 +92,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var assignment = Create.Entity.AssignmentDocument(1, quantity: 5, interviewsCount: 0,
                 questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
                 .WithResponsible(interviewerId).Build();
-            assignment.Status = AssignmentStatus.Finished;
+            assignment.Status = AssignmentStatus.Completed;
             assignment.StatusComment = "Done for the day";
 
             var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
@@ -103,7 +103,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var response = await handler.GetAssignments(new GetAssignmentsRequest { UserId = interviewerId });
 
             // Assert
-            response.Assignments[0].Status.Should().Be(AssignmentStatus.Finished);
+            response.Assignments[0].Status.Should().Be(AssignmentStatus.Completed);
             response.Assignments[0].StatusComment.Should().Be("Done for the day");
         }
 
@@ -125,14 +125,14 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
                 Id = 1,
                 StatusChange = new AssignmentStatusChangeApiView
                 {
-                    Status = AssignmentStatus.Finished,
+                    Status = AssignmentStatus.Completed,
                     Comment = "No more units"
                 }
             });
 
             // Assert
             var updated = assignments.GetById(1);
-            updated.Status.Should().Be(AssignmentStatus.Finished);
+            updated.Status.Should().Be(AssignmentStatus.Completed);
             updated.StatusComment.Should().Be("No more units");
             updated.StatusChangedAtUtc.Should().NotBeNull();
         }
@@ -155,7 +155,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
                 Id = 1,
                 StatusChange = new AssignmentStatusChangeApiView
                 {
-                    Status = AssignmentStatus.Finished,
+                    Status = AssignmentStatus.Completed,
                     Comment = "I think I'm done"
                 }
             });
