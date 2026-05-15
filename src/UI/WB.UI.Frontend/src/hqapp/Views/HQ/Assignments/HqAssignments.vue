@@ -83,13 +83,13 @@
                         }}</button>
 
                     <button class="btn btn-lg btn-warning" id="btnApproveSelected"
-                        v-if="(config.isHeadquarter || config.isSupervisor) && !showArchive.key"
+                        v-if="(config.isHeadquarter || (config.isSupervisor && config.allowSupervisorChangeAssignmentStatus)) && !showArchive.key"
                         :disabled="!canComplete"
                         @click="bulkChangeStatus('Approved', 'approveModal')">{{
                             $t("Assignments.Approve") }}</button>
 
                     <button class="btn btn-lg btn-primary" id="btnReopenSelected"
-                        v-if="(config.isHeadquarter || config.isSupervisor) && !showArchive.key"
+                        v-if="(config.isHeadquarter || (config.isSupervisor && config.allowSupervisorChangeAssignmentStatus)) && !showArchive.key"
                         :disabled="!canReopen"
                         @click="bulkChangeStatus('Open', 'reopenModal')">{{
                             $t("Assignments.Reopen") }}</button>

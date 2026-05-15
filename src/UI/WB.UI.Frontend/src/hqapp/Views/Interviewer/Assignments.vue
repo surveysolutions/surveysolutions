@@ -176,7 +176,7 @@ export default {
                 },
             ]
 
-            if (rowData.status === 'Open') {
+            if (rowData.status === 'Open' && this.$config.model.allowInterviewerChangeAssignmentStatus) {
                 items.push({
                     name: this.$t('Assignments.Complete'),
                     className: 'primary-text',
@@ -184,7 +184,7 @@ export default {
                 })
             }
 
-            if (rowData.status === 'Completed') {
+            if (rowData.status === 'Completed' && this.$config.model.allowInterviewerChangeAssignmentStatus) {
                 items.push({
                     name: this.$t('Assignments.Reopen'),
                     className: 'primary-text',

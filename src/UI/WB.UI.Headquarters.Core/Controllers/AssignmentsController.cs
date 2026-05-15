@@ -29,6 +29,9 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Controllers.Api;
 using WB.UI.Headquarters.Filters;
@@ -60,6 +63,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly ICalendarEventService calendarEventService;
         private readonly IWebInterviewLinkProvider webInterviewLinkProvider;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
 
         public AssignmentsController(IAuthorizedUser currentUser, 
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
@@ -78,7 +82,8 @@ namespace WB.UI.Headquarters.Controllers
             IInvitationService invitationService, 
             ICalendarEventService calendarEventService, 
             IWebInterviewLinkProvider webInterviewLinkProvider,
-            IAuthorizedUser authorizedUser)
+            IAuthorizedUser authorizedUser,
+            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage)
         {
             this.currentUser = currentUser;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
@@ -98,6 +103,7 @@ namespace WB.UI.Headquarters.Controllers
             this.calendarEventService = calendarEventService;
             this.webInterviewLinkProvider = webInterviewLinkProvider;
             this.authorizedUser = authorizedUser;
+            this.interviewerSettingsStorage = interviewerSettingsStorage;
         }
         
         
@@ -163,6 +169,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaireComboboxViewItems();
+            var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
 
             return View(new  
             {
@@ -172,6 +179,8 @@ namespace WB.UI.Headquarters.Controllers
                 IsHeadquarter = this.currentUser.IsHeadquarter || this.currentUser.IsAdministrator,
                 Questionnaires = questionnaires,
                 MaxInterviewsByAssignment = Constants.MaxInterviewsCountByAssignment,
+                AllowSupervisorChangeAssignmentStatus = interviewerSettings.IsAllowSupervisorChangeAssignmentStatus(),
+                AllowInterviewerChangeAssignmentStatus = interviewerSettings.IsAllowInterviewerChangeAssignmentStatus(),
                 Api = new
                 {
                     Responsible = this.currentUser.IsSupervisor
@@ -194,6 +203,8 @@ namespace WB.UI.Headquarters.Controllers
             var calendarEvent = calendarEventService.GetActiveCalendarEventForAssignmentId(assignment.Id);
             
             ViewBag.Title = string.Format(Pages.AssignmentDetails_PageTitle, assignment.Id);
+
+            var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
 
             var model = new
             {
@@ -235,6 +246,7 @@ namespace WB.UI.Headquarters.Controllers
                 WebMode = assignment.WebMode,
                 IsHeadquarters = this.currentUser.IsAdministrator || this.currentUser.IsHeadquarter,
                 IsSupervisor = this.currentUser.IsSupervisor,
+                AllowSupervisorChangeAssignmentStatus = interviewerSettings.IsAllowSupervisorChangeAssignmentStatus(),
                 Status = assignment.Status.ToString(),
                 StatusComment = assignment.StatusComment,
                 Comments = assignment.Comments,

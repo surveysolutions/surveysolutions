@@ -31,6 +31,9 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.PublicApi.Models;
@@ -60,6 +63,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IInvitationService invitationService;
         private readonly IWebInterviewLinkProvider interviewLinkProvider;
         private readonly IInScopeExecutor inScopeExecutor;
+        private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
 
         public AssignmentsController(
             IAssignmentViewFactory assignmentViewFactory,
@@ -76,7 +80,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             ISerializer serializer,
             IInvitationService invitationService,
             IWebInterviewLinkProvider interviewLinkProvider,
-            IInScopeExecutor inScopeExecutor)
+            IInScopeExecutor inScopeExecutor,
+            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.assignmentsStorage = assignmentsStorage;
@@ -93,6 +98,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.invitationService = invitationService;
             this.interviewLinkProvider = interviewLinkProvider;
             this.inScopeExecutor = inScopeExecutor;
+            this.interviewerSettingsStorage = interviewerSettingsStorage;
         }
 
         /// <summary>
@@ -713,8 +719,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (assignment == null)
                 return NotFound();
 
+            var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
+
             if (authorizedUser.IsInterviewer)
             {
+                if (!interviewerSettings.IsAllowInterviewerChangeAssignmentStatus())
+                    return Forbid();
+
                 if (assignment.ResponsibleId != authorizedUser.Id)
                     return Forbid();
 
@@ -725,6 +736,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 if (!isAllowedInterviewerTransition)
                     return Forbid();
             }
+
+            if (authorizedUser.IsSupervisor && !interviewerSettings.IsAllowSupervisorChangeAssignmentStatus())
+                return Forbid();
 
             switch (request.Status)
             {

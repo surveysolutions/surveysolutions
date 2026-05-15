@@ -89,7 +89,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_interviewer_requests_assignments_with_status_filter_server_side_filter_should_take_priority()
+        public void when_interviewer_requests_assignments_with_status_filter_server_side_filter_should_intersect_with_allowed()
         {
             AssignmentsInputModel capturedModel = null;
             var viewFactory = new Mock<IAssignmentViewFactory>();
@@ -112,7 +112,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Mock.Of<IPlainStorageAccessor<GeoTrackingRecord>>()
             );
 
-            // Interviewer tries to request Completed assignments (which they shouldn't be allowed to see)
+            // Interviewer requests Completed assignments — allowed, so server returns intersection: [Completed]
             controller.Get(new AssignmentsApiController.AssignmentsDataTableRequest
             {
                 Search = new DataTableRequest.SearchInfo(),
@@ -121,8 +121,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Status = "Completed",
             });
 
-            // Server-side filter overrides to only Active and Finished
-            capturedModel.Statuses.Should().BeEquivalentTo(new[] { AssignmentStatus.Open, AssignmentStatus.Completed });
+            capturedModel.Statuses.Should().BeEquivalentTo(new[] { AssignmentStatus.Completed });
         }
     }
 }

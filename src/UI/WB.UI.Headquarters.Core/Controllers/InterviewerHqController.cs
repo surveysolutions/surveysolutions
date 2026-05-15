@@ -20,6 +20,8 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Resources;
@@ -38,6 +40,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IInterviewUniqueKeyGenerator keyGenerator;
         private readonly ICalendarEventService calendarEventService;
+        private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
 
         
         public InterviewerHqController(
@@ -48,7 +51,8 @@ namespace WB.UI.Headquarters.Controllers
             IAssignmentsService assignments,
             IInterviewUniqueKeyGenerator keyGenerator,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            ICalendarEventService calendarEventService)
+            ICalendarEventService calendarEventService,
+            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage)
         {
             this.commandService = commandService;
             this.authorizedUser = authorizedUser;
@@ -58,13 +62,15 @@ namespace WB.UI.Headquarters.Controllers
             this.keyGenerator = keyGenerator;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.calendarEventService = calendarEventService;
+            this.interviewerSettingsStorage = interviewerSettingsStorage;
         }
 
         [ActivePage(MenuItem.CreateNew)]
         [AntiForgeryFilter]
         public IActionResult CreateNew()
         {
-            return View("Index", NewModel(MenuItem.CreateNew));
+            var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
+            return View("Index", NewModel(MenuItem.CreateNew, interviewerSettings));
         }
 
         [ActivePage(MenuItem.Started)]
@@ -90,13 +96,19 @@ namespace WB.UI.Headquarters.Controllers
 
         private InterviewerHqModel NewModel(MenuItem title, params InterviewStatus[] statuses)
         {
+            return NewModel(title, null, statuses);
+        }
+
+        private InterviewerHqModel NewModel(MenuItem title, InterviewerSettings interviewerSettings, params InterviewStatus[] statuses)
+        {
             ViewBag.ActivePage = title;
             return new InterviewerHqModel
             {
                 Title = title.ToUiString(),
                 InterviewerHqEndpoint = Url.Content(@"~/InterviewerHq"),
                 Statuses = statuses.Select(s => s.ToString().ToUpper()).ToArray(),
-                Questionnaires = this.GetQuestionnaires(statuses)
+                Questionnaires = this.GetQuestionnaires(statuses),
+                AllowInterviewerChangeAssignmentStatus = interviewerSettings.IsAllowInterviewerChangeAssignmentStatus(),
             };
         }
         

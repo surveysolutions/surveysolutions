@@ -792,14 +792,18 @@ export default {
             return statusMap[this.model.status] || this.model.status
         },
         canComplete() {
-            if (!this.isHeadquarters && !this.model.isSupervisor) return false
             if (this.isArchived) return false
-            return this.model.status === 'Open' || this.model.status === 'Completed'
+            if (this.isHeadquarters) return this.model.status === 'Open' || this.model.status === 'Completed'
+            if (this.model.isSupervisor && this.model.allowSupervisorChangeAssignmentStatus)
+                return this.model.status === 'Open' || this.model.status === 'Completed'
+            return false
         },
         canReopen() {
-            if (!this.isHeadquarters && !this.model.isSupervisor) return false
             if (this.isArchived) return false
-            return this.model.status === 'Completed' || this.model.status === 'Approved'
+            if (this.isHeadquarters) return this.model.status === 'Completed' || this.model.status === 'Approved'
+            if (this.model.isSupervisor && this.model.allowSupervisorChangeAssignmentStatus)
+                return this.model.status === 'Completed' || this.model.status === 'Approved'
+            return false
         },
         calendarEventTime() {
             return this.model.calendarEvent != null

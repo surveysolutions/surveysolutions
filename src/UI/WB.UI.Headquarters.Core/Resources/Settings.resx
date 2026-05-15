@@ -276,13 +276,13 @@ Possible reasons:
     <value>Allow supervisors to change assignment statuses</value>
   </data>
   <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
-    <value>When enabled, supervisors can approve and reopen assignments from their tablets</value>
+    <value>When enabled, supervisors can approve and reopen assignments</value>
   </data>
   <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
     <value>Allow interviewers to change assignment statuses</value>
   </data>
   <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
-    <value>When enabled, interviewers can complete and reopen assignments from their tablets (requires supervisor setting to be enabled)</value>
+    <value>When enabled, interviewers can complete and reopen assignments (requires supervisor setting to be enabled)</value>
   </data>
   <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve">
       <value>Location accuracy limit</value>
