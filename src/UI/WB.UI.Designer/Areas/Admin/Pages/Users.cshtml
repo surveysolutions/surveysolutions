@@ -60,7 +60,7 @@
                    asp-route-sb="LastLoginDate"
                    asp-route-so="@Model.SortOrder.InvertBooleableInt(Model.SortBy == "LastLoginDate")"
                    asp-route-f="@Model.Filter">
-                    LAST LOGIN
+                    Last login
 
                     @if (Model.SortBy =="LastLoginDate")
                     {
@@ -124,7 +124,7 @@
                                 @user.CreationDate.ConvertToLocalAndFormatDate()
                             </td>
                             <td class="date">
-                                @(user.LastLoginDate.HasValue ? user.LastLoginDate.Value.ConvertToLocalAndFormatDate() : string.Empty)
+                                @(user.LastLoginDate?.ConvertToLocalAndFormatDate() ?? string.Empty)
                             </td>
                             <td>
                                 @(user.IsApproved ? "Yes" : "No")

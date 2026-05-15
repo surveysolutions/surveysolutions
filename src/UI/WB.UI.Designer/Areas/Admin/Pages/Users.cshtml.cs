@@ -104,7 +104,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
         [Display(Name = "Created date", Order = 4)]
         public DateTime CreationDate { get; set; }
 
-        [Display(Name = "Last login date", Order = 4)]
+        [Display(Name = "Last login date", Order = 5)]
         public DateTime? LastLoginDate { get; set; }
 
         [Display(Name = "Email", Order = 2)]
