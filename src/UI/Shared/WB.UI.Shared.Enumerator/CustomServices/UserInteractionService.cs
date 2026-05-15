@@ -408,7 +408,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                         cancelBtn.Text = cancelButton;
                         okBtn.Text = okButton;
 
-                        var dialogBuilder = new MaterialAlertDialogBuilder(activity)
+                        var themedContext = new ContextThemeWrapper(activity, Resource.Style.DialogWithTitle);
+                        var dialogBuilder = new AlertDialog.Builder(themedContext)
                             .SetTitle(title.ToAndroidSpanned())
                             .SetView(inflatedView)
                             .SetCancelable(false);
