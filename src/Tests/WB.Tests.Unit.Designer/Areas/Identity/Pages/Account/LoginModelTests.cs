@@ -67,6 +67,27 @@ namespace WB.Tests.Unit.Designer.Areas.Identity.Pages.Account
             Assert.That(user.LastLoginAtUtc, Is.Null);
         }
 
+        [Test]
+        public async Task when_login_requires_2fa_should_not_store_last_login_date_before_2fa_completion()
+        {
+            var user = new DesignerIdentityUser { EmailConfirmed = true, UserName = "tester" };
+            var userManagerMock = CreateUserManager();
+            userManagerMock.Setup(x => x.FindByNameAsync("tester"))
+                .ReturnsAsync(user);
+
+            var signInManagerMock = CreateSignInManager(userManagerMock.Object);
+            signInManagerMock.Setup(x => x.PasswordSignInAsync(user, "pwd", false, false))
+                .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.TwoFactorRequired);
+
+            var model = CreateLoginModel(signInManagerMock.Object, userManagerMock.Object);
+
+            var result = await model.OnPostAsync("/manage");
+
+            Assert.That(result, Is.InstanceOf<RedirectToPageResult>());
+            userManagerMock.Verify(x => x.UpdateAsync(It.IsAny<DesignerIdentityUser>()), Times.Never);
+            Assert.That(user.LastLoginAtUtc, Is.Null);
+        }
+
         private static LoginModel CreateLoginModel(SignInManager<DesignerIdentityUser> signInManager,
             UserManager<DesignerIdentityUser> userManager)
         {
