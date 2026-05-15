@@ -42,9 +42,9 @@ namespace WB.Tests.Unit.Designer.Areas.Identity.Pages.Account
             var afterLogin = DateTime.UtcNow;
 
             userManagerMock.Verify(x => x.UpdateAsync(user), Times.Once);
-            Assert.That(user.LastLoginDate, Is.Not.Null);
-            Assert.That(user.LastLoginDate!.Value, Is.GreaterThanOrEqualTo(beforeLogin));
-            Assert.That(user.LastLoginDate!.Value, Is.LessThanOrEqualTo(afterLogin));
+            Assert.That(user.LastLoginAtUtc, Is.Not.Null);
+            Assert.That(user.LastLoginAtUtc!.Value, Is.GreaterThanOrEqualTo(beforeLogin));
+            Assert.That(user.LastLoginAtUtc!.Value, Is.LessThanOrEqualTo(afterLogin));
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.Designer.Areas.Identity.Pages.Account
             await model.OnPostAsync("/manage");
 
             userManagerMock.Verify(x => x.UpdateAsync(It.IsAny<DesignerIdentityUser>()), Times.Never);
-            Assert.That(user.LastLoginDate, Is.Null);
+            Assert.That(user.LastLoginAtUtc, Is.Null);
         }
 
         private static LoginModel CreateLoginModel(SignInManager<DesignerIdentityUser> signInManager,

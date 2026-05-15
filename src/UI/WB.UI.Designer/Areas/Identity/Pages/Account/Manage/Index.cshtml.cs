@@ -76,7 +76,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
                 FullName = fullName
             };
             PendingEmail = user.PendingEmail;
-            LastLoginDate = user.LastLoginDate?.ToUIString() ?? string.Empty;
+            LastLoginDate = user.LastLoginAtUtc?.ToUIString() ?? string.Empty;
 
             return Page();
         }

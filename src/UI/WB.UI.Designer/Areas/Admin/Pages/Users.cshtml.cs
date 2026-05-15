@@ -71,7 +71,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                     UserName = identityUser.UserName,
                     Email = identityUser.Email ?? string.Empty,
                     CreationDate = identityUser.CreatedAtUtc,
-                    LastLoginDate = identityUser.LastLoginDate,
+                    LastLoginAtUtc = identityUser.LastLoginAtUtc,
                     IsApproved = identityUser.EmailConfirmed,
                     IsLockedOut = isLockedOut,
                     LockoutEnd = isLockedOut ? (identityUser.LockoutEnd - DateTimeOffset.UtcNow) : null,
@@ -105,7 +105,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
         public DateTime CreationDate { get; set; }
 
         [Display(Name = "Last login date", Order = 5)]
-        public DateTime? LastLoginDate { get; set; }
+        public DateTime? LastLoginAtUtc { get; set; }
 
         [Display(Name = "Email", Order = 2)]
         public string Email { get; set; } = String.Empty;
