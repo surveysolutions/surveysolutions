@@ -378,9 +378,7 @@ export default {
                     this.isDeviceNotificationsEnabledModel,
                     this.isPartialSynchronizationEnabledModel,
                     this.allowSupervisorChangeAssignmentStatusModel,
-                    this.allowSupervisorChangeAssignmentStatusModel
-                        ? this.allowInterviewerChangeAssignmentStatusModel
-                        : false,
+                    this.allowInterviewerChangeAssignmentStatusModel,
                 )
             })
         },
