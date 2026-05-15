@@ -52,7 +52,9 @@
                         v-model:geographyQuestionPeriodInSecondsCancel="geographyQuestionPeriodInSecondsCancel"
                         v-model:geographyQuestionPeriodInSeconds="geographyQuestionPeriodInSeconds"
                         v-model:geographyQuestionAccuracyInMetersCancel="geographyQuestionAccuracyInMetersCancel"
-                        v-model:esriApiKey="esriApiKey" v-model:esriApiKeyInitial="esriApiKeyInitial" />
+                        v-model:esriApiKey="esriApiKey" v-model:esriApiKeyInitial="esriApiKeyInitial"
+                        v-model:allowSupervisorChangeAssignmentStatus="allowSupervisorChangeAssignmentStatus"
+                        v-model:allowInterviewerChangeAssignmentStatus="allowInterviewerChangeAssignmentStatus" />
 
                     <Logo />
                 </div>
@@ -104,6 +106,8 @@ export default {
             dropSchemaDots: 1,
             esriApiKey: null,
             esriApiKeyInitial: null,
+            allowSupervisorChangeAssignmentStatus: true,
+            allowInterviewerChangeAssignmentStatus: true,
 
             isRetentionEnabled: false,
             retentionLimitInDays: null,
@@ -132,6 +136,8 @@ export default {
             this.geographyQuestionPeriodInSecondsCancel = workspaceSettings.data.geographyQuestionPeriodInSeconds
             this.esriApiKey = workspaceSettings.data.esriApiKey
             this.esriApiKeyInitial = workspaceSettings.data.esriApiKey
+            this.allowSupervisorChangeAssignmentStatus = workspaceSettings.data.allowSupervisorChangeAssignmentStatus ?? true
+            this.allowInterviewerChangeAssignmentStatus = workspaceSettings.data.allowInterviewerChangeAssignmentStatus ?? true
 
             this.encryptionEnabled = workspaceSettings.data.exportSettings.isEnabled
             this.encryptionPassword = workspaceSettings.data.exportSettings.password

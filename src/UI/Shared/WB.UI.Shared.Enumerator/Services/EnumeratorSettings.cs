@@ -274,6 +274,22 @@ namespace WB.UI.Shared.Enumerator.Services
             this.SaveCurrentSettings(settings => settings.EsriApiKey = esriApiKey);
         }
 
+        public bool AllowSupervisorChangeAssignmentStatus =>
+            this.CurrentWorkspaceSettings.AllowSupervisorChangeAssignmentStatus ?? true;
+
+        public void SetAllowSupervisorChangeAssignmentStatus(bool allow)
+        {
+            this.SaveCurrentSettings(settings => settings.AllowSupervisorChangeAssignmentStatus = allow);
+        }
+
+        public bool AllowInterviewerChangeAssignmentStatus =>
+            this.CurrentWorkspaceSettings.AllowInterviewerChangeAssignmentStatus ?? true;
+
+        public void SetAllowInterviewerChangeAssignmentStatus(bool allow)
+        {
+            this.SaveCurrentSettings(settings => settings.AllowInterviewerChangeAssignmentStatus = allow);
+        }
+
         public bool SupportOfflineMaps => true;
     }
 }

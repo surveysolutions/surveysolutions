@@ -702,7 +702,7 @@ class AdminSettings {
             data: { allowInterviewerUpdateProfile: allowInterviewerUpdateProfile }
         })
     }
-    setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled, isPartialSynchronizationEnabled) {
+    setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled, isPartialSynchronizationEnabled, allowSupervisorChangeAssignmentStatus, allowInterviewerChangeAssignmentStatus) {
         return this.http({
             method: 'post',
             url: `${this.base}/InterviewerSettings`,
@@ -711,6 +711,8 @@ class AdminSettings {
                 interviewerAutoUpdatesEnabled: isInterviewerAutomaticUpdatesEnabled,
                 notificationsEnabled: isDeviceNotificationsEnabled,
                 partialSynchronizationEnabled: isPartialSynchronizationEnabled,
+                allowSupervisorChangeAssignmentStatus: allowSupervisorChangeAssignmentStatus,
+                allowInterviewerChangeAssignmentStatus: allowInterviewerChangeAssignmentStatus,
             }
         })
     }

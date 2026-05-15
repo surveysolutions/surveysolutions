@@ -26,6 +26,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.userInteractionService = userInteractionService;
         }
 
+        private bool AllowInterviewerChangeAssignmentStatus =>
+            serviceLocator.GetInstance<IEnumeratorSettings>().AllowInterviewerChangeAssignmentStatus;
+
         protected override void BindActions()
         {
             Actions.Clear();
@@ -60,21 +63,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                         Label = EnumeratorUIResources.Dashboard_RemoveCalendarEvent
                     });
 
-                    Actions.Add(new ActionDefinition
+                    if (AllowInterviewerChangeAssignmentStatus)
                     {
-                        ActionType = ActionType.Context,
-                        Command = new MvxAsyncCommand(this.CompleteAssignmentAsync),
-                        Label = EnumeratorUIResources.Dashboard_CompleteAssignment
-                    });
+                        Actions.Add(new ActionDefinition
+                        {
+                            ActionType = ActionType.Context,
+                            Command = new MvxAsyncCommand(this.CompleteAssignmentAsync),
+                            Label = EnumeratorUIResources.Dashboard_CompleteAssignment
+                        });
+                    }
                     break;
 
                 case AssignmentStatus.Completed:
-                    Actions.Add(new ActionDefinition
+                    if (AllowInterviewerChangeAssignmentStatus)
                     {
-                        ActionType = ActionType.Primary,
-                        Command = new MvxAsyncCommand(this.ReopenAssignmentAsync),
-                        Label = EnumeratorUIResources.Dashboard_Reopen
-                    });
+                        Actions.Add(new ActionDefinition
+                        {
+                            ActionType = ActionType.Primary,
+                            Command = new MvxAsyncCommand(this.ReopenAssignmentAsync),
+                            Label = EnumeratorUIResources.Dashboard_Reopen
+                        });
+                    }
                     break;
 
                 case AssignmentStatus.Approved:

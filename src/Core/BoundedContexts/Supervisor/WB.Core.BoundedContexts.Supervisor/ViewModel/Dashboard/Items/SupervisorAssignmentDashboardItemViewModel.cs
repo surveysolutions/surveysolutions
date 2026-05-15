@@ -28,6 +28,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
             this.userInteractionService = userInteractionService;
         }
 
+        private bool AllowSupervisorChangeAssignmentStatus =>
+            serviceLocator.GetInstance<IEnumeratorSettings>().AllowSupervisorChangeAssignmentStatus;
+
         protected override void BindTitles()
         {
             base.BindTitles();
@@ -47,43 +50,46 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 Label = EnumeratorUIResources.Dashboard_Assign
             });
 
-            // Open: supervisor can Approve via context menu
-            if (Assignment.Status == AssignmentStatus.Open)
+            if (AllowSupervisorChangeAssignmentStatus)
             {
-                Actions.Add(new ActionDefinition
+                // Open: supervisor can Approve via context menu
+                if (Assignment.Status == AssignmentStatus.Open)
                 {
-                    ActionType = ActionType.Context,
-                    Command = new MvxAsyncCommand(this.ApproveAssignmentAsync),
-                    Label = EnumeratorUIResources.Dashboard_ApproveAssignment
-                });
-            }
+                    Actions.Add(new ActionDefinition
+                    {
+                        ActionType = ActionType.Context,
+                        Command = new MvxAsyncCommand(this.ApproveAssignmentAsync),
+                        Label = EnumeratorUIResources.Dashboard_ApproveAssignment
+                    });
+                }
 
-            // Completed: supervisor can Approve or Reopen — both visible on card as primary actions
-            if (Assignment.Status == AssignmentStatus.Completed)
-            {
-                Actions.Add(new ActionDefinition
+                // Completed: supervisor can Approve or Reopen — both visible on card as primary actions
+                if (Assignment.Status == AssignmentStatus.Completed)
                 {
-                    ActionType = ActionType.Primary,
-                    Command = new MvxAsyncCommand(this.ApproveAssignmentAsync),
-                    Label = EnumeratorUIResources.Dashboard_ApproveAssignment
-                });
-                Actions.Add(new ActionDefinition
-                {
-                    ActionType = ActionType.Primary,
-                    Command = new MvxAsyncCommand(this.ReopenAssignmentAsync),
-                    Label = EnumeratorUIResources.Dashboard_Reopen
-                });
-            }
+                    Actions.Add(new ActionDefinition
+                    {
+                        ActionType = ActionType.Primary,
+                        Command = new MvxAsyncCommand(this.ApproveAssignmentAsync),
+                        Label = EnumeratorUIResources.Dashboard_ApproveAssignment
+                    });
+                    Actions.Add(new ActionDefinition
+                    {
+                        ActionType = ActionType.Primary,
+                        Command = new MvxAsyncCommand(this.ReopenAssignmentAsync),
+                        Label = EnumeratorUIResources.Dashboard_Reopen
+                    });
+                }
 
-            // Approved: supervisor can Reopen — visible on card as a primary button
-            if (Assignment.Status == AssignmentStatus.Approved)
-            {
-                Actions.Add(new ActionDefinition
+                // Approved: supervisor can Reopen — visible on card as a primary button
+                if (Assignment.Status == AssignmentStatus.Approved)
                 {
-                    ActionType = ActionType.Primary,
-                    Command = new MvxAsyncCommand(this.ReopenAssignmentAsync),
-                    Label = EnumeratorUIResources.Dashboard_Reopen
-                });
+                    Actions.Add(new ActionDefinition
+                    {
+                        ActionType = ActionType.Primary,
+                        Command = new MvxAsyncCommand(this.ReopenAssignmentAsync),
+                        Label = EnumeratorUIResources.Dashboard_Reopen
+                    });
+                }
             }
             
             BindTargetAreaAction(Assignment.Id, Assignment.TargetArea);

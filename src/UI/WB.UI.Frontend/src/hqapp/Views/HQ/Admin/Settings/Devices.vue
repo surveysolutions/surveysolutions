@@ -53,6 +53,39 @@
                 </div>
             </div>
             <div class="col-sm-9">
+                <div class="block-filter">
+                    <div class="form-group">
+                        <input class="checkbox-filter single-checkbox"
+                            v-model="allowSupervisorChangeAssignmentStatusModel"
+                            @change="updateDeviceSettings" id="allowSupervisorChangeAssignmentStatus" type="checkbox" />
+                        <label for="allowSupervisorChangeAssignmentStatus" style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{ $t('Settings.AllowSupervisorChangeAssignmentStatus') }}
+                            <p style="font-weight: normal">
+                                {{ $t('Settings.AllowSupervisorChangeAssignmentStatusDescription') }}
+                            </p>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="block-filter" style="padding-left: 30px">
+                    <div class="form-group">
+                        <input class="checkbox-filter single-checkbox"
+                            v-model="allowInterviewerChangeAssignmentStatusModel"
+                            @change="updateDeviceSettings" id="allowInterviewerChangeAssignmentStatus" type="checkbox"
+                            :disabled="!allowSupervisorChangeAssignmentStatusModel" />
+                        <label for="allowInterviewerChangeAssignmentStatus" style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{ $t('Settings.AllowInterviewerChangeAssignmentStatus') }}
+                            <p style="font-weight: normal">
+                                {{ $t('Settings.AllowInterviewerChangeAssignmentStatusDescription') }}
+                            </p>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
                 <Form v-slot="{ meta }" @submit="noAction" :data-vv-scope="'geographyQuestion'">
                     <div class="block-filter" style="padding-left: 30px">
                         <div class="form-group">
@@ -222,6 +255,8 @@ export default {
         geographyQuestionPeriodInSecondsCancel: Number,
         esriApiKey: String,
         esriApiKeyInitial: String,
+        allowSupervisorChangeAssignmentStatus: Boolean,
+        allowInterviewerChangeAssignmentStatus: Boolean,
     },
     emits: ['update:isInterviewerAutomaticUpdatesEnabled',
         'update:isDeviceNotificationsEnabled',
@@ -232,6 +267,8 @@ export default {
         'update:geographyQuestionPeriodInSecondsCancel',
         'update:esriApiKey',
         'update:esriApiKeyInitial',
+        'update:allowSupervisorChangeAssignmentStatus',
+        'update:allowInterviewerChangeAssignmentStatus',
     ],
     computed: {
         isInterviewerAutomaticUpdatesEnabledModel: {
@@ -308,6 +345,22 @@ export default {
                 this.$emit('update:esriApiKeyInitial', value)
             }
         },
+        allowSupervisorChangeAssignmentStatusModel: {
+            get() {
+                return this.allowSupervisorChangeAssignmentStatus
+            },
+            set(value) {
+                this.$emit('update:allowSupervisorChangeAssignmentStatus', value)
+            }
+        },
+        allowInterviewerChangeAssignmentStatusModel: {
+            get() {
+                return this.allowInterviewerChangeAssignmentStatus
+            },
+            set(value) {
+                this.$emit('update:allowInterviewerChangeAssignmentStatus', value)
+            }
+        },
     },
 
     components: {
@@ -324,6 +377,10 @@ export default {
                     this.isInterviewerAutomaticUpdatesEnabledModel,
                     this.isDeviceNotificationsEnabledModel,
                     this.isPartialSynchronizationEnabledModel,
+                    this.allowSupervisorChangeAssignmentStatusModel,
+                    this.allowSupervisorChangeAssignmentStatusModel
+                        ? this.allowInterviewerChangeAssignmentStatusModel
+                        : false,
                 )
             })
         },
