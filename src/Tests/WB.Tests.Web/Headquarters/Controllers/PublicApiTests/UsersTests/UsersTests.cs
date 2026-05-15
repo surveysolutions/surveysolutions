@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Infrastructure.Native.Workspaces;
@@ -56,14 +58,13 @@ internal class UsersTests : ApiTestContext
             .Returns(adminUser);
 
         var controller = CreateUsersController(userViewViewFactory: userViewFactory.Object);
-        controller.ControllerContext = new ControllerContext
-        {
-            HttpContext = new DefaultHttpContext()
-        };
+        controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() };
+        controller.ProblemDetailsFactory = CreateProblemDetailsFactory();
 
         var result = await controller.Archive(userId.ToString());
 
         var problemDetails = (ValidationProblemDetails)((ObjectResult)result).Value;
+        Assert.That(problemDetails.Status, Is.EqualTo(StatusCodes.Status400BadRequest));
         Assert.That(problemDetails.Errors.ContainsKey("user"), Is.True);
         Assert.That(problemDetails.Errors["user"].First(), Does.Contain("Only interviewers and supervisors"));
     }
@@ -85,15 +86,31 @@ internal class UsersTests : ApiTestContext
             .Returns(adminUser);
 
         var controller = CreateUsersController(userViewViewFactory: userViewFactory.Object);
-        controller.ControllerContext = new ControllerContext
-        {
-            HttpContext = new DefaultHttpContext()
-        };
+        controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() };
+        controller.ProblemDetailsFactory = CreateProblemDetailsFactory();
 
         var result = await controller.UnArchive(userId.ToString());
 
         var problemDetails = (ValidationProblemDetails)((ObjectResult)result).Value;
+        Assert.That(problemDetails.Status, Is.EqualTo(StatusCodes.Status400BadRequest));
         Assert.That(problemDetails.Errors.ContainsKey("user"), Is.True);
         Assert.That(problemDetails.Errors["user"].First(), Does.Contain("Only interviewers and supervisors"));
+    }
+
+    private static ProblemDetailsFactory CreateProblemDetailsFactory()
+    {
+        var factory = new Mock<ProblemDetailsFactory>();
+        factory
+            .Setup(f => f.CreateValidationProblemDetails(
+                It.IsAny<HttpContext>(),
+                It.IsAny<ModelStateDictionary>(),
+                It.IsAny<int?>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>()))
+            .Returns((HttpContext _, ModelStateDictionary ms, int? statusCode, string title, string type, string detail, string instance) =>
+                new ValidationProblemDetails(ms) { Status = statusCode ?? StatusCodes.Status400BadRequest });
+        return factory.Object;
     }
 }
