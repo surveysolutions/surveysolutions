@@ -62,20 +62,24 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         {
             var assignments = this.assignmentDocumentsStorage.LoadAll(request.UserId);
 
+            // Interviewers only receive Open assignments — Completed and Approved assignments
+            // stay on the supervisor tablet and are uploaded to HQ on the supervisor's next sync.
             var result = new GetAssignmentsResponse
             {
-                Assignments = assignments.Select(assignmentDocument => new AssignmentApiView
-                {
-                    Id = assignmentDocument.Id,
-                    ResponsibleId = assignmentDocument.ResponsibleId,
-                    ResponsibleName = assignmentDocument.ResponsibleName,
-                    Quantity = assignmentDocument.Quantity.HasValue ? assignmentDocument.Quantity - assignmentDocument.CreatedInterviewsCount : assignmentDocument.Quantity,
-                    QuestionnaireId = QuestionnaireIdentity.Parse(assignmentDocument.QuestionnaireId),
-                    IsAudioRecordingEnabled = assignmentDocument.IsAudioRecordingEnabled,
-                    TargetArea = assignmentDocument.TargetArea,
-                    Status = assignmentDocument.Status,
-                    StatusComment = assignmentDocument.StatusComment
-                }).ToList()
+                Assignments = assignments
+                    .Where(a => a.Status == AssignmentStatus.Open)
+                    .Select(assignmentDocument => new AssignmentApiView
+                    {
+                        Id = assignmentDocument.Id,
+                        ResponsibleId = assignmentDocument.ResponsibleId,
+                        ResponsibleName = assignmentDocument.ResponsibleName,
+                        Quantity = assignmentDocument.Quantity.HasValue ? assignmentDocument.Quantity - assignmentDocument.CreatedInterviewsCount : assignmentDocument.Quantity,
+                        QuestionnaireId = QuestionnaireIdentity.Parse(assignmentDocument.QuestionnaireId),
+                        IsAudioRecordingEnabled = assignmentDocument.IsAudioRecordingEnabled,
+                        TargetArea = assignmentDocument.TargetArea,
+                        Status = assignmentDocument.Status,
+                        StatusComment = assignmentDocument.StatusComment
+                    }).ToList()
             };
             return Task.FromResult(result);
         }

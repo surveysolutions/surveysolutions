@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -118,11 +119,29 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Status = local.Status,
                     Comment = local.StatusComment
                 };
-                await this.synchronizationService.ChangeAssignmentStatusAsync(local.Id, change, cancellationToken);
-                this.logger.Debug($"Uploaded status change for assignment {local.Id}: {local.Status}");
-                // Clear the pending-upload flag now that the upload succeeded
-                local.StatusChangedAtUtc = null;
-                this.assignmentsRepository.Store(local);
+                try
+                {
+                    await this.synchronizationService.ChangeAssignmentStatusAsync(local.Id, change, cancellationToken);
+                    this.logger.Debug($"Uploaded status change for assignment {local.Id}: {local.Status}");
+                    // Clear the pending-upload flag now that the upload succeeded
+                    local.StatusChangedAtUtc = null;
+                    this.assignmentsRepository.Store(local);
+                }
+                catch (SynchronizationException ex) when (
+                    ex.Type == SynchronizationExceptionType.InvalidUrl ||     // HTTP 400 (invalid transition), 404 (not found), or redirect
+                    ex.Type == SynchronizationExceptionType.Unauthorized)     // HTTP 403 (setting disabled or role mismatch)
+                {
+                    // Server rejected the status change because of a conflict (e.g. the assignment was
+                    // already approved by the supervisor/HQ) or because the operation is not permitted.
+                    // Clear the pending flag so the assignment is not re-uploaded endlessly.
+                    // The download phase will apply the server's authoritative state (or remove the
+                    // assignment if the server no longer sends it in the filtered list).
+                    this.logger.Warn($"Status change upload skipped for assignment {local.Id} ({local.Status}): {ex.Message}. Server state will be applied on download.");
+                    local.StatusChangedAtUtc = null;
+                    this.assignmentsRepository.Store(local);
+                }
+                // Network-level errors (HostUnreachable, NoNetwork, RequestByTimeout, etc.) are NOT caught
+                // here — they propagate and abort the sync so the upload is retried on the next sync.
             }
         }
 

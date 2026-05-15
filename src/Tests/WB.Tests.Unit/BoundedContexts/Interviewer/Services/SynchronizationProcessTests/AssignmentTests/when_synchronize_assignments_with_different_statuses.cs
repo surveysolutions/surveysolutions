@@ -20,68 +20,47 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
     public class when_synchronize_assignments_with_different_statuses
     {
         [Test]
-        public async Task server_returns_Open_for_all_three_assignments_each_gets_correct_status()
+        public async Task server_returns_only_Open_assignment_completed_is_removed_from_tablet()
         {
-            // Arrange: server returns Open/Completed/Approved assignments at once
+            // Arrange: interviewer has Open assignment locally; server (after interviewer completed it) returns
+            // only Open assignments — the completed one is gone from the list → it should be deleted locally.
+            var openLocal = Create.Entity
+                .AssignmentDocument(1, 5, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            openLocal.Status = AssignmentStatus.Open;
+
+            var completedLocal = Create.Entity
+                .AssignmentDocument(2, 3, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            completedLocal.Status = AssignmentStatus.Completed;
+            completedLocal.StatusComment = "Field done";
+
             var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignmentsRepo.Store(new[] { openLocal, completedLocal });
 
-            var questionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA);
-
-            var openAssignment = new AssignmentApiView
+            // Server only returns the still-Open assignment (Completed is kept on server, not sent back)
+            var remoteOpen = new AssignmentApiView
             {
-                Id = 1, Quantity = 5, QuestionnaireId = questionnaireId,
-                Status = AssignmentStatus.Open, StatusComment = null
+                Id = 1, Quantity = 5, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
+                Status = AssignmentStatus.Open
             };
-            var completedAssignment = new AssignmentApiView
-            {
-                Id = 2, Quantity = 3, QuestionnaireId = questionnaireId,
-                Status = AssignmentStatus.Completed, StatusComment = "Field done"
-            };
-            var approvedAssignment = new AssignmentApiView
-            {
-                Id = 3, Quantity = 2, QuestionnaireId = questionnaireId,
-                Status = AssignmentStatus.Approved, StatusComment = "Approved"
-            };
-
-            var remoteDoc1 = Create.Entity.AssignmentApiDocument(1, 5, questionnaireId).Build();
-            var remoteDoc2 = Create.Entity.AssignmentApiDocument(2, 3, questionnaireId).Build();
-            var remoteDoc3 = Create.Entity.AssignmentApiDocument(3, 2, questionnaireId).Build();
-
-            var questionnaireStorage = new Mock<WB.Core.SharedKernels.DataCollection.Repositories.IQuestionnaireStorage>();
-            questionnaireStorage.Setup(s => s.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()))
-                .Returns(Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument()));
 
             var syncService = new Mock<ISynchronizationService>();
             syncService.Setup(s => s.GetAssignmentsAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<AssignmentApiView> { openAssignment, completedAssignment, approvedAssignment });
-            syncService.Setup(s => s.GetAssignmentAsync(1, It.IsAny<CancellationToken>())).ReturnsAsync(remoteDoc1);
-            syncService.Setup(s => s.GetAssignmentAsync(2, It.IsAny<CancellationToken>())).ReturnsAsync(remoteDoc2);
-            syncService.Setup(s => s.GetAssignmentAsync(3, It.IsAny<CancellationToken>())).ReturnsAsync(remoteDoc3);
-            syncService.Setup(s => s.LogAssignmentAsHandledAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(new List<AssignmentApiView> { remoteOpen });
 
             var synchronizer = Create.Service.AssignmentsSynchronizer(
                 synchronizationService: syncService.Object,
-                assignmentsRepository: assignmentsRepo,
-                questionnaireStorage: questionnaireStorage.Object
+                assignmentsRepository: assignmentsRepo
             );
 
             // Act
             await synchronizer.SynchronizeAssignmentsAsync(
                 Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
 
-            // Assert
-            var a1 = assignmentsRepo.GetById(1);
-            a1.Status.Should().Be(AssignmentStatus.Open);
-            a1.StatusComment.Should().BeNull();
-
-            var a2 = assignmentsRepo.GetById(2);
-            a2.Status.Should().Be(AssignmentStatus.Completed);
-            a2.StatusComment.Should().Be("Field done");
-
-            var a3 = assignmentsRepo.GetById(3);
-            a3.Status.Should().Be(AssignmentStatus.Approved);
-            a3.StatusComment.Should().Be("Approved");
+            // Assert: Open assignment stays, Completed is removed
+            assignmentsRepo.GetById(1).Should().NotBeNull();
+            assignmentsRepo.GetById(2).Should().BeNull("Completed assignment no longer returned by server should be removed");
         }
 
         [Test]
@@ -298,6 +277,49 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var updated = assignmentsRepo.GetById(50);
             updated.Status.Should().Be(AssignmentStatus.Completed);
             updated.StatusComment.Should().Be("Consistent comment");
+        }
+
+        [Test]
+        public async Task upload_conflict_rejected_by_server_clears_pending_flag_and_does_not_fail_sync()
+        {
+            // Arrange: interviewer has Completed assignment with pending upload flag
+            // but server rejects the upload (assignment already Approved by supervisor).
+            var local = Create.Entity
+                .AssignmentDocument(60, 4, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            local.Status = AssignmentStatus.Completed;
+            local.StatusComment = "Done offline";
+            local.StatusChangedAtUtc = DateTime.UtcNow.AddMinutes(-5); // pending upload
+
+            var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignmentsRepo.Store(new[] { local });
+
+            // Server rejects upload (conflict: assignment is already in a state that doesn't allow Completed)
+            var conflictException = new WB.Core.SharedKernels.Enumerator.Implementation.Services.SynchronizationException(
+                WB.Core.SharedKernels.Enumerator.Implementation.Services.SynchronizationExceptionType.InvalidUrl,
+                "Bad Request: Invalid status transition");
+
+            // After the failed upload, server no longer returns this assignment (it's Approved → filtered out for interviewer)
+            var syncService = new Mock<ISynchronizationService>();
+            syncService.Setup(s => s.GetAssignmentsAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<AssignmentApiView>());
+            syncService.Setup(s => s.ChangeAssignmentStatusAsync(60, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(conflictException);
+
+            var synchronizer = Create.Service.AssignmentsSynchronizer(
+                synchronizationService: syncService.Object,
+                assignmentsRepository: assignmentsRepo
+            );
+
+            // Act: sync should NOT throw even though upload was rejected
+            Func<Task> act = () => synchronizer.SynchronizeAssignmentsAsync(
+                Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
+
+            await act.Should().NotThrowAsync("conflict rejections must not abort the sync");
+
+            // Assert: upload was attempted, pending flag cleared, assignment removed (server didn't return it)
+            syncService.Verify(s => s.ChangeAssignmentStatusAsync(60, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()), Times.Once);
+            assignmentsRepo.GetById(60).Should().BeNull("assignment was removed since server no longer returns it");
         }
     }
 }

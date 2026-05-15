@@ -85,15 +85,15 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         }
 
         [Test]
-        public async Task GetAssignments_should_include_status_and_comment()
+        public async Task GetAssignments_should_include_status_and_comment_for_open_assignments()
         {
             var interviewerId = Id.g1;
 
             var assignment = Create.Entity.AssignmentDocument(1, quantity: 5, interviewsCount: 0,
                 questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
                 .WithResponsible(interviewerId).Build();
-            assignment.Status = AssignmentStatus.Completed;
-            assignment.StatusComment = "Done for the day";
+            assignment.Status = AssignmentStatus.Open;
+            assignment.StatusComment = "Reopened by supervisor";
 
             var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
             assignments.Store(assignment);
@@ -102,9 +102,9 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             // Act
             var response = await handler.GetAssignments(new GetAssignmentsRequest { UserId = interviewerId });
 
-            // Assert
-            response.Assignments[0].Status.Should().Be(AssignmentStatus.Completed);
-            response.Assignments[0].StatusComment.Should().Be("Done for the day");
+            // Assert: open assignment with comment is returned
+            response.Assignments[0].Status.Should().Be(AssignmentStatus.Open);
+            response.Assignments[0].StatusComment.Should().Be("Reopened by supervisor");
         }
 
         [Test]
@@ -239,7 +239,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         }
 
         [Test]
-        public async Task GetAssignments_should_return_open_completed_and_approved_assignments()
+        public async Task GetAssignments_should_return_only_open_assignments_to_interviewer()
         {
             var interviewerId = Id.g1;
 
@@ -269,11 +269,11 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             // Act
             var response = await handler.GetAssignments(new GetAssignmentsRequest { UserId = interviewerId });
 
-            // Assert: all three assignments returned with correct statuses
-            response.Assignments.Should().HaveCount(3);
+            // Assert: only Open assignment is sent to interviewer; Completed and Approved stay on supervisor
+            response.Assignments.Should().HaveCount(1);
             response.Assignments.Should().Contain(a => a.Status == AssignmentStatus.Open && a.Id == 1);
-            response.Assignments.Should().Contain(a => a.Status == AssignmentStatus.Completed && a.Id == 2 && a.StatusComment == "Done");
-            response.Assignments.Should().Contain(a => a.Status == AssignmentStatus.Approved && a.Id == 3 && a.StatusComment == "All good");
+            response.Assignments.Should().NotContain(a => a.Id == 2, "Completed assignments are not forwarded to interviewers");
+            response.Assignments.Should().NotContain(a => a.Id == 3, "Approved assignments are not forwarded to interviewers");
         }
     }
 }
