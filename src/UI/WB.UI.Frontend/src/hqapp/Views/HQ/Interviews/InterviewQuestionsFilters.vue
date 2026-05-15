@@ -34,7 +34,7 @@
         </ModalFrame>
 
         <ModalFrame ref="questionsExposedSelector" id="modalQuestionsExposedSelector" class="vue-query-builder"
-            :title="$t('Interviews.DynamicFilter')">
+            :title="$t('Interviews.DynamicFilter')" @hidden="restoreQueryAfterCancel">
             <query-builder :config="config" v-model="queryExposedVariables">
 
                 <template #groupOperator="props">
@@ -86,7 +86,7 @@ import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 import gql from 'graphql-tag'
 import InterviewFilter from './InterviewFilter'
-import { find, filter } from 'lodash'
+import { find, filter, isEqual, cloneDeep } from 'lodash'
 import DOMPurify from 'dompurify'
 const sanitizeHtml = text => DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
 
@@ -100,6 +100,7 @@ export default {
             checked: {},
 
             lastSavedQuery: null,
+            savedQuery: { operatorIdentifier: 'all', children: [] },
 
         }
     },
@@ -207,10 +208,21 @@ export default {
                 this.$emit('change', [...this.conditions])
             }
         },
+        cloneQuery(value) {
+            if (value == null)
+                return value
+
+            return cloneDeep(value)
+        },
         saveExposedVariablesFilter() {
+            this.savedQuery = this.cloneQuery(this.queryExposedVariables)
             this.lastSavedQuery = this.transformQuery
             this.$emit('changeFilter', this.transformQuery)
             this.$refs.questionsExposedSelector.hide()
+        },
+
+        restoreQueryAfterCancel() {
+            this.queryExposedVariables = this.cloneQuery(this.savedQuery)
         },
 
         sanitizeHtml: sanitizeHtml,
@@ -567,7 +579,7 @@ export default {
             }
         },
         saveDisabled() {
-            return this.transformQuery === this.lastSavedQuery
+            return isEqual(this.transformQuery, this.lastSavedQuery)
         },
     },
 
