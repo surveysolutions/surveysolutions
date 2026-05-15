@@ -55,6 +55,19 @@
                     }
                 </a>
             </th>
+            <th class="@(Model.SortBy =="LastLoginDate" ? "ordered" : "")">
+                <a asp-route-p="@Model.PageIndex"
+                   asp-route-sb="LastLoginDate"
+                   asp-route-so="@Model.SortOrder.InvertBooleableInt(Model.SortBy == "LastLoginDate")"
+                   asp-route-f="@Model.Filter">
+                    LAST LOGIN
+
+                    @if (Model.SortBy =="LastLoginDate")
+                    {
+                        <span class="glyphicon glyphicon-triangle-@((Model.SortOrder).ToBool() ? "top" : "bottom")"></span>
+                    }
+                </a>
+            </th>
             <th class="@(Model.SortBy =="EmailConfirmed" ? "ordered" : "")">
                 <a asp-route-p="@Model.PageIndex"
                    asp-route-sb="EmailConfirmed"
@@ -109,6 +122,9 @@
                             </td>
                             <td class="date">
                                 @user.CreationDate.ConvertToLocalAndFormatDate()
+                            </td>
+                            <td class="date">
+                                @(user.LastLoginDate.HasValue ? user.LastLoginDate.Value.ConvertToLocalAndFormatDate() : string.Empty)
                             </td>
                             <td>
                                 @(user.IsApproved ? "Yes" : "No")
