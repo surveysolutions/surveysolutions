@@ -176,6 +176,9 @@ export default {
 
             this.autosizeHeaders(params)
             this.setTableRosterHeight()
+            this.$nextTick(() => {
+                this.autosizeRosterTitleColumn()
+            })
         },
 
         autosizeHeaders(event) {
@@ -197,6 +200,34 @@ export default {
 
                 // set all rows height to auto
                 event.api.resetRowHeights()
+            }
+        },
+
+        autosizeRosterTitleColumn() {
+            if (!this.gridApi) return
+            const pinnedHeaderLabel = this.$refs.tableRoster.$el.querySelector(
+                '.ag-pinned-left-header .ag-header-cell-label',
+            )
+            if (!pinnedHeaderLabel) return
+            const pinnedHeaderText = pinnedHeaderLabel.querySelector('.ag-header-cell-text')
+            if (!pinnedHeaderText) return
+
+            // Temporarily disable wrapping to measure natural (unwrapped) text width
+            pinnedHeaderText.style.whiteSpace = 'nowrap'
+            const textWidth = pinnedHeaderText.offsetWidth
+            pinnedHeaderText.style.whiteSpace = ''
+
+            // Add the label's horizontal padding to get the required column width
+            const labelStyle = window.getComputedStyle(pinnedHeaderLabel)
+            const padding =
+                parseFloat(labelStyle.paddingLeft) +
+                parseFloat(labelStyle.paddingRight)
+            const naturalWidth = textWidth + padding
+            const MIN_WIDTH = 180
+            if (naturalWidth > MIN_WIDTH) {
+                this.gridApi.setColumnWidths([
+                    { key: 'rosterTitle', newWidth: naturalWidth },
+                ])
             }
         },
 
