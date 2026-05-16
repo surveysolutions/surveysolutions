@@ -24,7 +24,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 {
     public class AudioService : IAudioService
     {
-        private bool disposed = false;
+        private volatile bool disposed = false;
         private object lockObject = new object();
 
         private readonly ILogger logger;
@@ -114,12 +114,19 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             {
                 if (this.disposed) return;
 
-                if (this.mediaPlayer.IsPlaying)
+                try
                 {
-                    this.mediaPlayer.Stop();
-                    OnOnPlaybackCompleted(new PlaybackCompletedEventArgs(this.playingIdentity));
+                    if (this.mediaPlayer.IsPlaying)
+                    {
+                        this.mediaPlayer.Stop();
+                        OnOnPlaybackCompleted(new PlaybackCompletedEventArgs(this.playingIdentity));
+                    }
                 }
-                
+                catch (ObjectDisposedException)
+                {
+                    return;
+                }
+
                 this.mediaPlayer.Reset();
                 this.fileSystemAccessor.DeleteFile(this.tempFileName);
 
@@ -139,10 +146,17 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             {
                 if (this.disposed) return;
 
-                if (this.mediaPlayer.IsPlaying)
+                try
                 {
-                    this.mediaPlayer.Reset();
-                    this.fileSystemAccessor.DeleteFile(this.tempFileName);
+                    if (this.mediaPlayer.IsPlaying)
+                    {
+                        this.mediaPlayer.Reset();
+                        this.fileSystemAccessor.DeleteFile(this.tempFileName);
+                    }
+                }
+                catch (ObjectDisposedException)
+                {
+                    // MediaPlayer Java peer was already invalidated; nothing to stop
                 }
             }
         }
