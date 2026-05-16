@@ -35,8 +35,8 @@ jobs:
           if [ "${{ github.ref_name }}" == "release" ] ; then
             environment="release"
           fi
-          echo "::set-output name=build_number::${build_number}"
-          echo "::set-output name=environment::${environment}"
+          echo "build_number=${build_number}" >> "$GITHUB_OUTPUT"
+          echo "environment=${environment}" >> "$GITHUB_OUTPUT"
 
   tests-unit-web:
     name: Unit and web tests
@@ -286,10 +286,10 @@ jobs:
           ./installer/build/build-installation.ps1 -HQSourcePath "HQsources" -ClientPath ${{ steps.download.outputs.download-path }} 
           $FileName = Get-ChildItem ./installer/src/SurveySolutionsBootstrap/bin/Release/SurveySolutions*.exe `
             | Select-Object -ExpandProperty FullName
-          Write-Host "::set-output name=filename::$FileName"
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "filename=$FileName"
 
       - name: Sign the installer
-        if: ${{ needs.prepare.outputs.environment == 'release' && false }}
+        if: ${{ needs.prepare.outputs.environment == 'release' }}
         run: |
           & installer/wix314-binaries/insignia.exe `
             -ib ${{ steps.build-installer.outputs.filename }} `
