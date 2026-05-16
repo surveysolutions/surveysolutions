@@ -112,6 +112,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             lock (this.lockObject)
             {
+                if (this.disposed) return;
+
                 if (this.mediaPlayer.IsPlaying)
                 {
                     this.mediaPlayer.Stop();
@@ -135,6 +137,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             lock (this.lockObject)
             {
+                if (this.disposed) return;
+
                 if (this.mediaPlayer.IsPlaying)
                 {
                     this.mediaPlayer.Reset();
