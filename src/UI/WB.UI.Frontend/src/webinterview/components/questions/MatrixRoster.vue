@@ -87,12 +87,17 @@ export default {
         ['$store.getters.scrollState']() {
             this.scroll()
         },
-        ['$me.instances']() {
-            if (this.countOfInstances != this.$me.instances.length) {
-                this.countOfInstances = this.$me.instances.length
-                this.initQuestionsInRows()
-                this.setTableRosterHeight()
-            }
+        ['$me.instances']: {
+            deep: true,
+            handler() {
+                if (this.countOfInstances != this.$me.instances.length) {
+                    this.countOfInstances = this.$me.instances.length
+                    this.initQuestionsInRows()
+                    this.setTableRosterHeight()
+                } else if (this.gridApi) {
+                    this.gridApi.resetRowHeights()
+                }
+            },
         },
         ['$me.questions']() {
             this.instructions =
