@@ -97,7 +97,8 @@ export function createDeletePopup(message) {
     return {
         title: message,
         okButtonTitle: i18n.t('QuestionnaireEditor.Delete'),
-        cancelButtonTitle: i18n.t('QuestionnaireEditor.Cancel')
+        cancelButtonTitle: i18n.t('QuestionnaireEditor.Cancel'),
+        isDanger: true
     };
 }
 
