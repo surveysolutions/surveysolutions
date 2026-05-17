@@ -872,8 +872,10 @@
     <value>Пользователь автоматически заблокирован</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>Персональная информация (опциально) &lt;br&gt; видима только для HQ пользователей</value>
-    <comment>Персональная информация (опциально) &lt;br&gt; видима только для HQ пользователей</comment>
+    <value>Персональная информация</value>
+  </data>
+  <data name="PublicSectionDescription" xml:space="preserve">
+    <value>(опционально, будет видима только аутентифицированным пользователям).</value>
   </data>
   <data name="Supervisor_CreateText" xml:space="preserve">
     <value>Это действие создаст индивидуального пользователя с правами супервизора&lt;br&gt;
@@ -1590,7 +1592,13 @@
     <comment>Причина</comment>
   </data>
   <data name="CreateUser" xml:space="preserve">
-    <value>Создать пользователя</value>
+    <value>Создать учётную запись пользователя</value>
+  </data>
+  <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+    <value>Доступ к рабочему пространству</value>
+  </data>
+  <data name="CreateUser_RoleLabel" xml:space="preserve">
+    <value>Роль пользователя</value>
   </data>
   <data name="ChangePassword" xml:space="preserve">
     <value>Сброс пользовательского пароля</value>
