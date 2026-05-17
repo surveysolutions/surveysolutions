@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             this.HideIfDisabled = questionnaire.ShouldBeHiddenIfDisabled(entityIdentity.Id);
             
-            this.eventRegistry.Subscribe(this, interviewId);
+            this.eventRegistry.Subscribe(this, interviewId, entityIdentity);
             initiated = true;
 
             this.UpdateSelfFromModel().WaitAndUnwrapException(); 
