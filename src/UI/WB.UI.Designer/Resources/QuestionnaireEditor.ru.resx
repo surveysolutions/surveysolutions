@@ -1486,6 +1486,10 @@
     <value>заголовок сценария</value>
     <comment>заголовок сценария</comment>
   </data>
+    <data name="SideBarScenarioRecordNew" xml:space="preserve">
+      <value>Record New Scenario</value>
+    </data>
+
   <data name="Run" xml:space="preserve">
     <value>Выполнить</value>
   </data>
@@ -1636,6 +1640,10 @@
   <data name="CommunicationError" xml:space="preserve">
     <value>Ошибка сети</value>
   </data>
+    <data name="PopupBlocked" xml:space="preserve">
+      <value>Unable to open window. Please allow pop-ups in your browser and try again.</value>
+    </data>
+
   <data name="SideBarCategoriesAddNew" xml:space="preserve">
     <value>Добавить новую категорию</value>
   </data>

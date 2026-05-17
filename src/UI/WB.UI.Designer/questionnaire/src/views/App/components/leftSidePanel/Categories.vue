@@ -8,7 +8,22 @@
 
         <perfect-scrollbar class="scroller">
             <h3>{{ $t('QuestionnaireEditor.SideBarCategoriesCounter', { count: categoriesList.length }) }}</h3>
+            <div class="button-holder" v-if="!isReadOnlyForUser">
+                <p>
+                    <input type="button" :value="$t('QuestionnaireEditor.SideBarCategoriesAddNew')"
+                        class="btn lighter-hover" @click.stop="addNewCategory()" />
+                </p>
+                <p>
+                    <input type="button" :value="$t('QuestionnaireEditor.SideBarCategoriesUploadNew')"
+                        @click.stop="openFileDialog()" class="btn lighter-hover"
+                        capture />
 
+                    <file-upload ref="upload" :input-id="'cfunew'" v-model="file"
+                        :size="10 * 1024 * 1024" :drop="false" :drop-directory="false" @input-file="createAndUploadFile"
+                        accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab">
+                    </file-upload>
+                </p>
+            </div>
             <div class="empty-list" v-show="categoriesList.length == 0">
                 <p>{{ $t('QuestionnaireEditor.SideBarCategoriesEmptyLine1') }}</p>
                 <p>{{ $t('QuestionnaireEditor.SideBarCategoriesEmptyLine2') }}</p>
@@ -35,21 +50,6 @@
                         rel="noopener">{{
                             $t('QuestionnaireEditor.SideBarTab') }}
                     </a>
-                </p>
-                <p>
-                    <input type="button" :value="$t('QuestionnaireEditor.SideBarCategoriesAddNew')"
-                        value="ADD new category" class="btn lighter-hover" @click.stop="addNewCategory()"
-                        v-if="!isReadOnlyForUser" />
-                </p>
-                <p>
-                    <input type="button" :value="$t('QuestionnaireEditor.SideBarCategoriesUploadNew')"
-                        @click.stop="openFileDialog()" value="Upload new categories" class="btn lighter-hover"
-                        v-if="!isReadOnlyForUser" capture />
-
-                    <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'cfunew'" v-model="file"
-                        :size="10 * 1024 * 1024" :drop="false" :drop-directory="false" @input-file="createAndUploadFile"
-                        accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab">
-                    </file-upload>
                 </p>
             </div>
         </perfect-scrollbar>
