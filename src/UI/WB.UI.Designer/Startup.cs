@@ -121,7 +121,7 @@ namespace WB.UI.Designer
                 options.Providers.Add<GzipCompressionProvider>();
             });
             services.Configure<BrotliCompressionProviderOptions>(options =>
-                options.Level = CompressionLevel.Fastest);
+                options.Level = CompressionLevel.Optimal);
 
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             if (connectionString == null)

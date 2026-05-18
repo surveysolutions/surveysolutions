@@ -79,6 +79,11 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
 
             var etag = await ComputeETagAsync(id);
+            if (etag != null && (string?)Request.Headers.IfNoneMatch == etag)
+            {
+                Response.Headers.ETag = etag;
+                return StatusCode(StatusCodes.Status304NotModified);
+            }
 
             var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(id, User.GetIdOrNull());
 
@@ -137,11 +142,20 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if (id.Revision.HasValue)
                 return $"\"{id.Revision:N}\"";
 
+            // For the "latest" revision, derive the ETag from the highest change-record
+            // sequence. Cache the result briefly so repeated requests (including those
+            // that will return 304) do not each fire a sorted DB query.
+            var cacheKey = QuestionnaireETagCache.GetLatestRevisionCacheKey(id.QuestionnaireId);
+            if (memoryCache.TryGetValue(cacheKey, out int cached))
+                return cached > 0 ? $"\"{id.QuestionnaireId:N}_{cached}\"" : null;
+
             var latestSeq = await dbContext.QuestionnaireChangeRecords
                 .Where(r => r.QuestionnaireId == id.QuestionnaireId.ToString("N"))
                 .OrderByDescending(r => r.Sequence)
                 .Select(r => r.Sequence)
                 .FirstOrDefaultAsync();
+
+            memoryCache.Set(cacheKey, latestSeq, QuestionnaireETagCache.LatestRevisionTtl);
 
             return latestSeq > 0 ? $"\"{id.QuestionnaireId:N}_{latestSeq}\"" : null;
         }
