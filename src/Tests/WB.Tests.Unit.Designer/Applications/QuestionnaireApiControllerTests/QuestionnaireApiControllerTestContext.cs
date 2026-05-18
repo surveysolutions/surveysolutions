@@ -6,7 +6,6 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Moq;
 using WB.Core.BoundedContexts.Designer.DataAccess;
@@ -43,8 +42,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),
                 Mock.Of<IOptions<WebTesterSettings>>(),
                 webTesterService ?? Mock.Of<IWebTesterService>(),
-                Mock.Of<DesignerDbContext>(),
-                Mock.Of<IMemoryCache>());
+                Mock.Of<DesignerDbContext>());
 
             return questionnaireController;
         }
