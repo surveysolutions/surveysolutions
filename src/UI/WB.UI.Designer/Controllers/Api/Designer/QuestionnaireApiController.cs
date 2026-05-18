@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.AnonymousQuestionnaires;
@@ -68,13 +71,20 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpGet]
         [Route("get/{id}")]
-        public IActionResult Get(QuestionnaireRevision? id)
+        public async Task<IActionResult> Get(QuestionnaireRevision? id)
         {
             if (id == null)
             {
                 return NotFound(string.Format(ExceptionMessages.QuestionCannotBeFound , id));
             }
-            
+
+            var etag = await ComputeETagAsync(id);
+            if (etag != null && (string?)Request.Headers.IfNoneMatch == etag)
+            {
+                Response.Headers.ETag = etag;
+                return StatusCode(StatusCodes.Status304NotModified);
+            }
+
             var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(id, User.GetIdOrNull());
 
             if (questionnaireInfoView == null)
@@ -82,13 +92,30 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return NotFound(string.Format(ExceptionMessages.QuestionCannotBeFound , id));
             }
 
+            if (etag != null)
+            {
+                Response.OnStarting(() =>
+                {
+                    Response.Headers.ETag = etag;
+                    Response.Headers.CacheControl = "no-cache";
+                    return Task.CompletedTask;
+                });
+            }
+
             return Ok(questionnaireInfoView);
         }
 
         [HttpGet]
         [Route("chapter/{id}")]
-        public IActionResult Chapter(QuestionnaireRevision id, string chapterId)
+        public async Task<IActionResult> Chapter(QuestionnaireRevision id, string chapterId)
         {
+            var etag = await ComputeETagAsync(id);
+            if (etag != null && (string?)Request.Headers.IfNoneMatch == etag)
+            {
+                Response.Headers.ETag = etag;
+                return StatusCode(StatusCodes.Status304NotModified);
+            }
+
             var chapterInfoView = this.chapterInfoViewFactory.Load(id, chapterId: chapterId);
 
             if (chapterInfoView == null)
@@ -96,7 +123,34 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return NotFound();
             }
 
+            if (etag != null)
+            {
+                Response.OnStarting(() =>
+                {
+                    Response.Headers.ETag = etag;
+                    Response.Headers.CacheControl = "no-cache";
+                    return Task.CompletedTask;
+                });
+            }
+
             return Ok(chapterInfoView);
+        }
+
+        private async Task<string?> ComputeETagAsync(QuestionnaireRevision id)
+        {
+            // A specific revision is an immutable snapshot — use its ID directly.
+            if (id.Revision.HasValue)
+                return $"\"{id.Revision:N}\"";
+
+            // For the "latest" revision, derive the ETag from the highest change-record
+            // sequence so the ETag becomes stale the moment a command mutates the questionnaire.
+            var latestSeq = await dbContext.QuestionnaireChangeRecords
+                .Where(r => r.QuestionnaireId == id.QuestionnaireId.ToString("N"))
+                .OrderByDescending(r => r.Sequence)
+                .Select(r => r.Sequence)
+                .FirstOrDefaultAsync();
+
+            return latestSeq > 0 ? $"\"{id.QuestionnaireId:N}_{latestSeq}\"" : null;
         }
 
         [HttpGet]
