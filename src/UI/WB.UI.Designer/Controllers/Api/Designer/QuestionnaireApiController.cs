@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.AnonymousQuestionnaires;
@@ -40,6 +41,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
         private readonly IWebTesterService webTesterService;
         private readonly DesignerDbContext dbContext;
+        private readonly IMemoryCache memoryCache;
         private const int MaxCountOfOptionForFilteredCombobox = 200;
         public const int MaxVerificationErrorsOrWarnings = 100;
 
@@ -51,7 +53,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             IQuestionnaireInfoFactory questionnaireInfoFactory,
             IOptions<WebTesterSettings> webTesterSettings,
             IWebTesterService webTesterService,
-            DesignerDbContext dbContext)
+            DesignerDbContext dbContext,
+            IMemoryCache memoryCache)
         {
             this.chapterInfoViewFactory = chapterInfoViewFactory;
             this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
@@ -62,6 +65,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.webTesterSettings = webTesterSettings;
             this.webTesterService = webTesterService;
             this.dbContext = dbContext;
+            this.memoryCache = memoryCache;
         }
 
         public IActionResult Details(string id)
@@ -136,6 +140,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             return Ok(chapterInfoView);
         }
 
+        private static readonly TimeSpan ETagCacheTtl = TimeSpan.FromSeconds(10);
+
         private async Task<string?> ComputeETagAsync(QuestionnaireRevision id)
         {
             // A specific revision is an immutable snapshot — use its ID directly.
@@ -143,12 +149,19 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return $"\"{id.Revision:N}\"";
 
             // For the "latest" revision, derive the ETag from the highest change-record
-            // sequence so the ETag becomes stale the moment a command mutates the questionnaire.
+            // sequence. Cache the result briefly so repeated requests (including those
+            // that will return 304) do not each fire a sorted DB query.
+            var cacheKey = $"etag_seq_{id.QuestionnaireId:N}";
+            if (memoryCache.TryGetValue(cacheKey, out int cached))
+                return cached > 0 ? $"\"{id.QuestionnaireId:N}_{cached}\"" : null;
+
             var latestSeq = await dbContext.QuestionnaireChangeRecords
                 .Where(r => r.QuestionnaireId == id.QuestionnaireId.ToString("N"))
                 .OrderByDescending(r => r.Sequence)
                 .Select(r => r.Sequence)
                 .FirstOrDefaultAsync();
+
+            memoryCache.Set(cacheKey, latestSeq, ETagCacheTtl);
 
             return latestSeq > 0 ? $"\"{id.QuestionnaireId:N}_{latestSeq}\"" : null;
         }
