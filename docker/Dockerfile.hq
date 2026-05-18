@@ -193,8 +193,6 @@ COPY --from=builder hq /app
 COPY --from=export_builder export /app/Export.Service
 COPY --from=apks /apk /app/Client
 
-RUN ls -la /app && ls -la /app/Export.Service && ls -la /app/Client
-
 ENV HQ_Headquarters__BaseUrl=http://localhost
 ENV HQ_Headquarters__TenantName=survey
 ENV HQ_FileStorage__FFmpegExecutablePath=/usr/bin
