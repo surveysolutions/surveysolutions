@@ -344,7 +344,14 @@ export default defineConfig(({ mode, command }) => {
                 input: inputPages,
                 output: {
                     //inlineDynamicImports: false,
-                    //manualChunks: undefined,
+                    manualChunks(id) {
+                        if (id.includes('ace-builds')) return 'ace';
+                        if (id.includes('vuetify')) return 'vuetify';
+                        if (id.includes('jquery')) return 'jquery';
+                        if (id.includes('/vue/') || id.includes('/vue-router/') || id.includes('/pinia/') || id.includes('/@vue/')) return 'vue';
+                        if (id.includes('i18next')) return 'i18n';
+                        if (id.includes('node_modules')) return 'vendor';
+                    },
                     //format: 'es',
                     assetFileNames: (assetInfo) => {
                         // this file is used to embed styles into an html page for pdf rendering
