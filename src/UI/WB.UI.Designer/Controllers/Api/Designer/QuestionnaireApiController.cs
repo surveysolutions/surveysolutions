@@ -83,11 +83,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
 
             var etag = await ComputeETagAsync(id);
-            if (etag != null && (string?)Request.Headers.IfNoneMatch == etag)
-            {
-                Response.Headers.ETag = etag;
-                return StatusCode(StatusCodes.Status304NotModified);
-            }
 
             var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(id, User.GetIdOrNull());
 

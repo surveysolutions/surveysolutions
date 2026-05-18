@@ -4,6 +4,7 @@ import App from './App.vue';
 import router from './router';
 import i18next from './plugins/localization';
 import I18NextVue from 'i18next-vue';
+import { vuetify } from './plugins/vuetify';
 import { setupErrorHandler } from './plugins/errorHandler';
 import './plugins/dayjs';
 
@@ -12,6 +13,7 @@ import '@mdi/font/css/materialdesignicons.css';
 
 //import '../../questionnaire/content/markup.less';
 //import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap';
 
 import ConfirmDialog from './plugins/confirm';
 import ConfirmPromptDialog from './plugins/confirmPrompt';
@@ -62,16 +64,7 @@ vue.component('confirm-prompt-dialog', ConfirmPromptDialog.default);
 directives(vue);
 
 import './views/Designer/pages/classifications/validationRules';
-
-// Lazy-install Vuetify only for OptionsEditor routes, keeping it out of the main bundle.
-let vuetifyInstalled = false;
-router.beforeEach(async (to) => {
-    if (!vuetifyInstalled && to.path.includes('/questionnaire/edit')) {
-        const { vuetify } = await import('./plugins/vuetify');
-        vue.use(vuetify);
-        vuetifyInstalled = true;
-    }
-});
+vue.use(vuetify);
 
 // Run!
 router.isReady().then(() => {
