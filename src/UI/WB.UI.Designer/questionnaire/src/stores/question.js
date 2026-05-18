@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { getQuestion, updateQuestion } from '../services/questionService';
 import emitter from '../services/emitter';
-import _ from 'lodash';
+import { cloneDeep, isEqual, isEmpty, isNull, filter, findIndex } from 'lodash';
 
 export const useQuestionStore = defineStore('question', {
     state: () => ({
@@ -12,7 +12,7 @@ export const useQuestionStore = defineStore('question', {
     getters: {
         getQuestion: state => state.question,
         getInitialQuestion: state => state.initialQuestion,
-        getIsDirty: state => !_.isEqual(state.question, state.initialQuestion),
+        getIsDirty: state => !isEqual(state.question, state.initialQuestion),
         getIsValid: state => state.isValid
     },
     actions: {
@@ -37,8 +37,8 @@ export const useQuestionStore = defineStore('question', {
                 if (data.isPreFilled) data.questionScope = 'Identifying';
 
                 data.stringifiedCategories = '';
-                this.initialQuestion = _.cloneDeep(data);
-                this.question = _.cloneDeep(this.initialQuestion);
+                this.initialQuestion = cloneDeep(data);
+                this.question = cloneDeep(this.initialQuestion);
             } else {
                 this.clear();
             }
@@ -77,7 +77,7 @@ export const useQuestionStore = defineStore('question', {
             ).then(async response => {
                 //TODO: improve this by subscribing to event
                 var notIsFilteredCombobox = !this.question.isFilteredCombobox;
-                var notIsCascadingCombobox = _.isEmpty(
+                var notIsCascadingCombobox = isEmpty(
                     this.question.cascadeFromQuestionId
                 );
 
@@ -96,13 +96,13 @@ export const useQuestionStore = defineStore('question', {
                     );
                 }
 
-                this.initialQuestion = _.cloneDeep(this.question);
+                this.initialQuestion = cloneDeep(this.question);
             });
         },
 
         trimEmptyOptions() {
-            var notEmptyOptions = _.filter(this.question.options, function(o) {
-                return !_.isNull(o.value || null) || !_.isEmpty(o.title || '');
+            var notEmptyOptions = filter(this.question.options, function(o) {
+                return !isNull(o.value || null) || !isEmpty(o.title || '');
             });
             this.question.options = notEmptyOptions;
         },
@@ -119,16 +119,16 @@ export const useQuestionStore = defineStore('question', {
 
             var wasItFiltered =
                 this.initialQuestion.isFilteredCombobox || false;
-            var wasItCascade = !_.isEmpty(
+            var wasItCascade = !isEmpty(
                 this.initialQuestion.cascadeFromQuestionId
             );
 
             if (
                 (wasItCascade && this.question.isFilteredCombobox) ||
                 (wasItCascade &&
-                    !_.isEmpty(this.initialQuestion.cascadeFromQuestionId)) ||
+                    !isEmpty(this.initialQuestion.cascadeFromQuestionId)) ||
                 (wasItFiltered &&
-                    !_.isEmpty(this.question.cascadeFromQuestionId))
+                    !isEmpty(this.question.cascadeFromQuestionId))
             ) {
                 return true;
             }
@@ -139,7 +139,7 @@ export const useQuestionStore = defineStore('question', {
         getLinkedSource(id) {
             if (!id) return null;
 
-            const index = _.findIndex(
+            const index = findIndex(
                 this.initialQuestion.sourceOfLinkedEntities,
                 function(i) {
                     return i.id === id;
@@ -151,7 +151,7 @@ export const useQuestionStore = defineStore('question', {
         },
 
         discardChanges() {
-            this.question = _.cloneDeep(this.initialQuestion);
+            this.question = cloneDeep(this.initialQuestion);
             this.categoriesTextView = '';
             this.initialCategoriesTextView = '';
         }
