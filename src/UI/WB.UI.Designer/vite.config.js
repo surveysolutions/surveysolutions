@@ -300,7 +300,7 @@ export default defineConfig(({ mode, command }) => {
             alias: [
                 {
                     find: '@',
-                    replacement: path.resolve(__dirname, './questionnare/src'),
+                    replacement: path.resolve(__dirname, './questionnaire/src'),
                 },
                 {
                     find: '~',
