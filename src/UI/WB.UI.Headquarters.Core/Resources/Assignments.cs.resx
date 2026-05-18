@@ -612,7 +612,7 @@
       <value>Comment: {{comment}}</value>
   </data>
   <data name="Action_Completed" xml:space="preserve">
-      <value>Completed</value>
+      <value>Completed 1</value>
   </data>
   <data name="Action_Approved" xml:space="preserve">
       <value>Approved</value>
