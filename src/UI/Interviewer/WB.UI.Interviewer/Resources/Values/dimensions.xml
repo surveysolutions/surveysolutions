@@ -35,6 +35,4 @@
   <dimen name="Relink_FormContainer_Width">400dp</dimen>
 
   <dimen name="SendToSupervisor_Note_MarginTop">76dp</dimen>
-      
-  <dimen name="drawer_elevation">4dp</dimen>
 </resources>
