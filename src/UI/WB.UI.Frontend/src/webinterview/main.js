@@ -30,7 +30,19 @@ import 'flatpickr/dist/flatpickr.css'
 import 'toastr/build/toastr.css'
 
 import moment from 'moment'
-moment.locale(browserLanguage)
+import 'moment/locale/ar'
+import 'moment/locale/cs'
+import 'moment/locale/es'
+import 'moment/locale/fr'
+import 'moment/locale/id'
+import 'moment/locale/pt'
+import 'moment/locale/ro'
+import 'moment/locale/ru'
+import 'moment/locale/uk'
+import 'moment/locale/zh-cn'
+// moment uses 'zh-cn' for generic Chinese ('zh')
+const momentLocaleMap = { zh: 'zh-cn' }
+moment.locale(momentLocaleMap[browserLanguage] || browserLanguage)
 
 import * as poly from 'smoothscroll-polyfill'
 poly.polyfill()
