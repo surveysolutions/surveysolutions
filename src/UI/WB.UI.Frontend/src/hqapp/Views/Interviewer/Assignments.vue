@@ -30,7 +30,7 @@
                         {{ $t("Common.Save") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">{{
                         $t("Common.Cancel")
-                    }}</button>
+                        }}</button>
                     <button type="button" class="btn btn-danger pull-right" role="delete" v-if="calendarEventId != null"
                         @click="deleteCalendarEvent">
                         {{ $t("Common.Delete") }}</button>
@@ -55,7 +55,7 @@
                     <button type="button" class="btn btn-primary" @click="confirmComplete">{{
                         $t("Assignments.Complete") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                    }}</button>
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -77,7 +77,7 @@
                     <button type="button" class="btn btn-primary" @click="confirmReopen">{{
                         $t("Assignments.Reopen") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                    }}</button>
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -166,6 +166,7 @@ export default {
                 {
                     name: this.$t('Assignments.CreateInterview'),
                     className: 'assignment-create',
+                    disabled: rowData.status === 'Completed',
                     callback: () => this.$store.dispatch('createInterview', rowData.id),
                 },
                 {
