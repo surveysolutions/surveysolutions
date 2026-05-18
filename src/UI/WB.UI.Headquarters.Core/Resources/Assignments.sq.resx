@@ -238,7 +238,7 @@
     <value>Korrigjo madhësinë për detyrën {{assignmentId}}</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Mbyll</value>
+    <value>Zvogëlo</value>
   </data>
   <data name="Comments" xml:space="preserve">
     <value>Komento</value>

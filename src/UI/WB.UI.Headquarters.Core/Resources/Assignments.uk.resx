@@ -247,7 +247,7 @@
     <value>Редагувати розмір для завдання {{assignmentId}}</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Закрити</value>
+    <value>Зменшити</value>
   </data>
   <data name="Comments" xml:space="preserve">
     <value>Коментар</value>
@@ -566,7 +566,7 @@
       <value>Завершити</value>
   </data>
   <data name="Approve" xml:space="preserve">
-      <value>Виконати</value>
+      <value>Схвалити</value>
   </data>
   <data name="Reopen" xml:space="preserve">
       <value>Відкрити знову</value>

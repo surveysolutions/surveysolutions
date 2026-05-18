@@ -358,7 +358,7 @@
     <value>Setări de înregistrare audio pentru atribuire {{id}}</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Închide</value>
+    <value>Reducere</value>
   </data>
   <data name="Comments" xml:space="preserve">
     <value>Comentariu</value>

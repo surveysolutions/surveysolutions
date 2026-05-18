@@ -275,7 +275,7 @@
     <value>Upravit velikost dotazníku {{assignmentId}}</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Zavřít</value>
+    <value>Zmenšit</value>
   </data>
   <data name="Comments" xml:space="preserve">
     <value>Poznámka</value>

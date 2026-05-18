@@ -421,7 +421,7 @@
     <value>سيتم تغيير القيمة المتوقعة للتعيين المحدد {{id}} من {{quantity}} إلى {{collected}} (عدد المقابلات التي تم جمعها حاليًا)</value>
 </data>
     <data name="Close" xml:space="preserve">
-  <value>إغلاق</value>
+  <value>تصغير</value>
 </data>
     <data name="AssignmentCloseWebMode" xml:space="preserve">
   <value>لا يمكن إغلاق التعيين {{id}} لأنه يحتوي على وضع الويب مفعل</value>

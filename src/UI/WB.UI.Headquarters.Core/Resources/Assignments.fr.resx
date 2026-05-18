@@ -362,7 +362,7 @@
     <value>La valeur attendue de l'affectation sélectionnée {{id}} sera changée de {{quantity}} à {{collected}} (nombre d'entretiens actuellement collectés)</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Fermer</value>
+    <value>Réduire</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
     <value>L'affectation {{id}} ne peut pas être fermée car elle a le mode web activé</value>

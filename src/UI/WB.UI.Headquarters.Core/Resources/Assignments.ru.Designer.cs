@@ -902,9 +902,124 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("TargetArea", resourceCulture);
             }
         }
+        
         public static string EnterTargetArea {
             get {
                 return ResourceManager.GetString("EnterTargetArea", resourceCulture);
+            }
+        }
+        
+        public static string Status {
+            get {
+                return ResourceManager.GetString("Status", resourceCulture);
+            }
+        }
+        
+        public static string StatusChangeComment {
+            get {
+                return ResourceManager.GetString("StatusChangeComment", resourceCulture);
+            }
+        }
+        
+        public static string StatusActive {
+            get {
+                return ResourceManager.GetString("StatusActive", resourceCulture);
+            }
+        }
+        
+        public static string StatusCompleted {
+            get {
+                return ResourceManager.GetString("StatusCompleted", resourceCulture);
+            }
+        }
+        
+        public static string StatusApproved {
+            get {
+                return ResourceManager.GetString("StatusApproved", resourceCulture);
+            }
+        }
+        
+        public static string CompleteAssignmentTitle {
+            get {
+                return ResourceManager.GetString("CompleteAssignmentTitle", resourceCulture);
+            }
+        }
+        
+        public static string CompleteAssignmentMessage {
+            get {
+                return ResourceManager.GetString("CompleteAssignmentMessage", resourceCulture);
+            }
+        }
+        
+        public static string ApproveAssignmentTitle {
+            get {
+                return ResourceManager.GetString("ApproveAssignmentTitle", resourceCulture);
+            }
+        }
+        
+        public static string ApproveAssignmentMessage {
+            get {
+                return ResourceManager.GetString("ApproveAssignmentMessage", resourceCulture);
+            }
+        }
+        
+        public static string ReopenAssignmentTitle {
+            get {
+                return ResourceManager.GetString("ReopenAssignmentTitle", resourceCulture);
+            }
+        }
+        
+        public static string ReopenAssignmentMessage {
+            get {
+                return ResourceManager.GetString("ReopenAssignmentMessage", resourceCulture);
+            }
+        }
+        
+        public static string Complete {
+            get {
+                return ResourceManager.GetString("Complete", resourceCulture);
+            }
+        }
+        
+        public static string Approve {
+            get {
+                return ResourceManager.GetString("Approve", resourceCulture);
+            }
+        }
+        
+        public static string Reopen {
+            get {
+                return ResourceManager.GetString("Reopen", resourceCulture);
+            }
+        }
+        
+        public static string Action_StatusChanged {
+            get {
+                return ResourceManager.GetString("Action_StatusChanged", resourceCulture);
+            }
+        }
+        
+        public static string Action_StatusChanged_Comment {
+            get {
+                return ResourceManager.GetString("Action_StatusChanged_Comment", resourceCulture);
+            }
+        }
+        
+        public static string Action_Completed {
+            get {
+                return ResourceManager.GetString("Action_Completed", resourceCulture);
+            }
+        }
+        
+        public static string Action_Approved {
+            get {
+                return ResourceManager.GetString("Action_Approved", resourceCulture);
+            }
+        }
+        
+        public static string Action_Reopened {
+            get {
+                return ResourceManager.GetString("Action_Reopened", resourceCulture);
             }
         }
     }

@@ -421,7 +421,7 @@
     <value>O valor esperado da atribuição selecionada {{id}} será alterado de {{quantity}} para {{collected}} (número de entrevistas atualmente coletadas)</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Fechar</value>
+    <value>Reduzir</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
     <value>Atribuição {{id}} não pode ser fechada, pois tem o modo web ativado</value>
