@@ -1,7 +1,6 @@
 <template>
     <HqLayout :title="title">
-        <DataTables ref="table" :tableOptions="tableOptions"
-            :contextMenuItems="contextMenuItems">
+        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems">
         </DataTables>
 
         <ModalFrame ref="editCalendarModal" :title="$t('Common.EditCalendarEvent')">
@@ -31,7 +30,7 @@
                         {{ $t("Common.Save") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">{{
                         $t("Common.Cancel")
-                        }}</button>
+                    }}</button>
                     <button type="button" class="btn btn-danger pull-right" role="delete" v-if="calendarEventId != null"
                         @click="deleteCalendarEvent">
                         {{ $t("Common.Delete") }}</button>
@@ -56,7 +55,7 @@
                     <button type="button" class="btn btn-primary" @click="confirmComplete">{{
                         $t("Assignments.Complete") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                        }}</button>
+                    }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -78,7 +77,7 @@
                     <button type="button" class="btn btn-primary" @click="confirmReopen">{{
                         $t("Assignments.Reopen") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                        }}</button>
+                    }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -172,6 +171,7 @@ export default {
                 {
                     name: this.$t('Common.EditCalendarEvent'),
                     className: 'primary-text',
+                    disabled: rowData.status === 'Completed',
                     callback: () => this.editCalendarEvent(rowData.id, rowData.calendarEvent),
                 },
             ]
