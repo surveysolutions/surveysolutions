@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import { isNull, isUndefined, cloneDeep } from 'lodash'
 import { notice } from '../../../../services/notificationService';
 import { createQuestionForDeleteConfirmationPopup, formatBytes, formatDateTime } from '../../../../services/utilityService'
 import { deleteAttachment, updateAttachment } from '../../../../services/attachmentsService';
@@ -142,7 +142,7 @@ export default {
         },
         //TODO move to reuse
         async fileSelected(file) {
-            if (_.isNull(file) || _.isUndefined(file)) {
+            if (isNull(file) || isUndefined(file)) {
                 return;
             }
 
@@ -210,7 +210,7 @@ export default {
             this.file = [];
         },
         cancel() {
-            var clonned = _.cloneDeep(this.attachmentItem);
+            var clonned = cloneDeep(this.attachmentItem);
             clonned.editAttachment = null;
             this.attachmentItem.editAttachment = clonned;
         },

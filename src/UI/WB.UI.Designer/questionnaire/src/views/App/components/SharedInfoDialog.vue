@@ -200,15 +200,15 @@
                                         <br />
                                         <span>
                                             {{ questionnaire.isAnonymouslyShared
-            ? $t('QuestionnaireEditor.SettingsStatusAllowAnonymousAccess')
-            : $t('QuestionnaireEditor.SettingsStatusDontAllowAnonymousAccess')
+                                                ? $t('QuestionnaireEditor.SettingsStatusAllowAnonymousAccess')
+                                                : $t('QuestionnaireEditor.SettingsStatusDontAllowAnonymousAccess')
                                             }}
                                         </span>
                                         <button v-if="isQuestionnaireOwner" class="btn btn-link answer"
                                             @click="updateAnonymousQuestionnaireSettings()">
                                             {{ questionnaire.isAnonymouslyShared
-            ? $t('QuestionnaireEditor.SettingsTurnOffAnonymousAccess')
-            : $t('QuestionnaireEditor.SettingsTurnOnAnonymousAccess')
+                                                ? $t('QuestionnaireEditor.SettingsTurnOffAnonymousAccess')
+                                                : $t('QuestionnaireEditor.SettingsTurnOnAnonymousAccess')
                                             }}
                                         </button>
                                         <br />
@@ -224,9 +224,9 @@
                                                 <br />
                                                 <div>
                                                     {{ $t('QuestionnaireEditor.AnonymousQuestionnaireGeneratedDate',
-            {
-                datetime: anonymousQuestionnaireShareDate
-            })
+                                                        {
+                                                            datetime: anonymousQuestionnaireShareDate
+                                                    })
                                                     }}
                                                 </div>
                                                 <button class="btn btn-link answer" style="padding-left: 0px;"
@@ -259,14 +259,14 @@
                                         <br />
                                         <span>
                                             {{ questionnaire.isPublic
-            ? $t('QuestionnaireEditor.PublicAccessSettingsStatusOn')
-            : $t('QuestionnaireEditor.PublicAccessSettingsStatusOff')
+                                                ? $t('QuestionnaireEditor.PublicAccessSettingsStatusOn')
+                                                : $t('QuestionnaireEditor.PublicAccessSettingsStatusOff')
                                             }}
                                         </span>
                                         <button class="btn btn-link answer" @click="togglePublicity()">
                                             {{ questionnaire.isPublic
-                                            ? $t('QuestionnaireEditor.PublicAccessSettingsOff')
-                                            : $t('QuestionnaireEditor.PublicAccessSettingsOn')
+                                                ? $t('QuestionnaireEditor.PublicAccessSettingsOff')
+                                                : $t('QuestionnaireEditor.PublicAccessSettingsOn')
                                             }}
                                         </button>
                                     </div>
@@ -285,7 +285,7 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import { find } from 'lodash';
 import Help from './Help.vue';
 import { toLocalDateTime } from '../../../services/utilityService';
 import { findUserByEmailOrLogin } from '../../../services/userService';
@@ -449,8 +449,8 @@ export default {
         },
         getShareType(type) {
             if (type === 'Edit' || type === 'View')
-                return _.find(this.shareTypeOptions, { name: type });
-            else return _.find(this.shareTypeOptions, { name: type.name });
+                return find(this.shareTypeOptions, { name: type });
+            else return find(this.shareTypeOptions, { name: type.name });
         },
         updateTitle() {
             updateQuestionnaireSettings(this.questionnaireId, {

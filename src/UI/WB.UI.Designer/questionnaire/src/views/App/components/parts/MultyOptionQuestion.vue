@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xs-12">
             <label class="wb-label" for="cb-categorical-kind">{{ $t('QuestionnaireEditor.QuestionDisplayMode')
-                }}</label>
+            }}</label>
         </div>
     </div>
     <div class="row">
@@ -168,7 +168,6 @@ import AddClassification from './AddClassification.vue';
 import FilteredComboboxOptionsTemplate from './FilteredComboboxOptionsTemplate.vue'
 import { categoricalMultiKinds } from '../../../../helpers/question'
 import { isInteger } from '../../../../helpers/number';
-import _ from 'lodash';
 
 export default {
     name: 'MultyOptionQuestion',
