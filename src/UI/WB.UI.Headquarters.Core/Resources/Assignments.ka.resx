@@ -185,60 +185,60 @@
   </data>
 
   <data name="Status" xml:space="preserve">
-      <value>Status</value>
+      <value>სტატუსი</value>
   </data>
   <data name="StatusChangeComment" xml:space="preserve">
-      <value>Status comment</value>
+      <value>სტატუსის ცვლილების კომენტარი</value>
   </data>
   <data name="StatusActive" xml:space="preserve">
-      <value>Open</value>
+      <value>ღია</value>
   </data>
   <data name="StatusCompleted" xml:space="preserve">
-      <value>Completed</value>
+      <value>დასრულებული</value>
   </data>
   <data name="StatusApproved" xml:space="preserve">
-      <value>Approved</value>
+      <value>დამტკიცებული</value>
   </data>
   <data name="CompleteAssignmentTitle" xml:space="preserve">
-      <value>Complete assignment</value>
+      <value>დავალების დასრულება</value>
   </data>
   <data name="CompleteAssignmentMessage" xml:space="preserve">
-      <value>Are you sure you have enumerated all eligible units?</value>
+      <value>დარწმუნებული ხართ, რომ Ⴙამოთვალეთ ყველა კვალიფიციური ერთეული?</value>
   </data>
   <data name="ApproveAssignmentTitle" xml:space="preserve">
-      <value>Approve assignment</value>
+      <value>დავალების დამტკიცება</value>
   </data>
   <data name="ApproveAssignmentMessage" xml:space="preserve">
-      <value>Interviewers working offline may still continue data collection until synchronization. Such interviews will still be accepted.</value>
+      <value>ინტერვიუერები, რომლებიც მუშაობენ ოფლაინ რეჟიმში, შეიძლება გააგრძელონ მონაცემთა შეგროვა სინქრონიზაციამდე. ასეთი ინტერვიუები კვლავ მიღებული იქნება.</value>
   </data>
   <data name="ReopenAssignmentTitle" xml:space="preserve">
-      <value>Reopen assignment</value>
+      <value>დავალების ხელახლა გახსნა</value>
   </data>
   <data name="ReopenAssignmentMessage" xml:space="preserve">
-      <value>The assignment will be set back to Open status and interviewers will be able to create new interviews.</value>
+      <value>დავალება დაუბრუნდება ღია სტატუსს და ინტერვიუერები შეძლებენ ახალი ინტერვიუების შექმნას.</value>
   </data>
   <data name="Complete" xml:space="preserve">
-      <value>Complete</value>
+      <value>დასრულება</value>
   </data>
   <data name="Approve" xml:space="preserve">
-      <value>Approve</value>
+      <value>დამტკიცება</value>
   </data>
   <data name="Reopen" xml:space="preserve">
-      <value>Reopen</value>
+      <value>ხელახლა გახსნა</value>
   </data>
   <data name="Action_StatusChanged" xml:space="preserve">
-      <value>Status changed to {{status}}</value>
+      <value>სტატუსი შეიცვალა {{status}}-ზე</value>
   </data>
   <data name="Action_StatusChanged_Comment" xml:space="preserve">
-      <value>Comment: {{comment}}</value>
+      <value>კომენტარი: {{comment}}</value>
   </data>
   <data name="Action_Completed" xml:space="preserve">
-      <value>Completed</value>
+      <value>დასრულებული</value>
   </data>
   <data name="Action_Approved" xml:space="preserve">
-      <value>Approved</value>
+      <value>დამტკიცებული</value>
   </data>
   <data name="Action_Reopened" xml:space="preserve">
-      <value>Reopened</value>
+      <value>ხელახლა გახსნილი</value>
   </data>
 </root>

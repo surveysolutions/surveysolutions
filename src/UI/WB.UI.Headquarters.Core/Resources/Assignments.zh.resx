@@ -290,60 +290,60 @@
   </data>
 
   <data name="Status" xml:space="preserve">
-      <value>Status</value>
+      <value>状态</value>
   </data>
   <data name="StatusChangeComment" xml:space="preserve">
-      <value>Status comment</value>
+      <value>状态变更备注</value>
   </data>
   <data name="StatusActive" xml:space="preserve">
-      <value>Open</value>
+      <value>已开启</value>
   </data>
   <data name="StatusCompleted" xml:space="preserve">
-      <value>Completed</value>
+      <value>已完成</value>
   </data>
   <data name="StatusApproved" xml:space="preserve">
-      <value>Approved</value>
+      <value>已审批</value>
   </data>
   <data name="CompleteAssignmentTitle" xml:space="preserve">
-      <value>Complete assignment</value>
+      <value>完成任务</value>
   </data>
   <data name="CompleteAssignmentMessage" xml:space="preserve">
-      <value>Are you sure you have enumerated all eligible units?</value>
+      <value>您确定已列举所有符合条件的单元吗？</value>
   </data>
   <data name="ApproveAssignmentTitle" xml:space="preserve">
-      <value>Approve assignment</value>
+      <value>审批任务</value>
   </data>
   <data name="ApproveAssignmentMessage" xml:space="preserve">
-      <value>Interviewers working offline may still continue data collection until synchronization. Such interviews will still be accepted.</value>
+      <value>离线工作的访谈员可以在同步之前继续收集数据。此类访谈仍将被接受。</value>
   </data>
   <data name="ReopenAssignmentTitle" xml:space="preserve">
-      <value>Reopen assignment</value>
+      <value>重新开启任务</value>
   </data>
   <data name="ReopenAssignmentMessage" xml:space="preserve">
-      <value>The assignment will be set back to Open status and interviewers will be able to create new interviews.</value>
+      <value>该任务将恢复为“已开启”状态，访谈员将能够创建新的访谈。</value>
   </data>
   <data name="Complete" xml:space="preserve">
-      <value>Complete</value>
+      <value>完成</value>
   </data>
   <data name="Approve" xml:space="preserve">
-      <value>Approve</value>
+      <value>审批</value>
   </data>
   <data name="Reopen" xml:space="preserve">
-      <value>Reopen</value>
+      <value>重新开启</value>
   </data>
   <data name="Action_StatusChanged" xml:space="preserve">
-      <value>Status changed to {{status}}</value>
+      <value>状态已更改为 {{status}}</value>
   </data>
   <data name="Action_StatusChanged_Comment" xml:space="preserve">
-      <value>Comment: {{comment}}</value>
+      <value>备注：{{comment}}</value>
   </data>
   <data name="Action_Completed" xml:space="preserve">
-      <value>Completed</value>
+      <value>已完成</value>
   </data>
   <data name="Action_Approved" xml:space="preserve">
-      <value>Approved</value>
+      <value>已审批</value>
   </data>
   <data name="Action_Reopened" xml:space="preserve">
-      <value>Reopened</value>
+      <value>已重新开启</value>
   </data>
 </root>

@@ -561,60 +561,60 @@
     
 
   <data name="Status" xml:space="preserve">
-      <value>Status</value>
+      <value>Estado</value>
   </data>
   <data name="StatusChangeComment" xml:space="preserve">
-      <value>Status comment</value>
+      <value>Comentário de alteração de estado</value>
   </data>
   <data name="StatusActive" xml:space="preserve">
-      <value>Open</value>
+      <value>Aberto</value>
   </data>
   <data name="StatusCompleted" xml:space="preserve">
-      <value>Completed</value>
+      <value>Concluído</value>
   </data>
   <data name="StatusApproved" xml:space="preserve">
-      <value>Approved</value>
+      <value>Aprovado</value>
   </data>
   <data name="CompleteAssignmentTitle" xml:space="preserve">
-      <value>Complete assignment</value>
+      <value>Concluir atribuição</value>
   </data>
   <data name="CompleteAssignmentMessage" xml:space="preserve">
-      <value>Are you sure you have enumerated all eligible units?</value>
+      <value>Tem certeza de que enumerou todas as unidades elegíveis?</value>
   </data>
   <data name="ApproveAssignmentTitle" xml:space="preserve">
-      <value>Approve assignment</value>
+      <value>Aprovar atribuição</value>
   </data>
   <data name="ApproveAssignmentMessage" xml:space="preserve">
-      <value>Interviewers working offline may still continue data collection until synchronization. Such interviews will still be accepted.</value>
+      <value>Os entrevistadores que trabalham offline podem continuar a recolha de dados até à sincronização. Essas entrevistas ainda serão aceites.</value>
   </data>
   <data name="ReopenAssignmentTitle" xml:space="preserve">
-      <value>Reopen assignment</value>
+      <value>Reabrir atribuição</value>
   </data>
   <data name="ReopenAssignmentMessage" xml:space="preserve">
-      <value>The assignment will be set back to Open status and interviewers will be able to create new interviews.</value>
+      <value>A atribuição será revertida para o estado Aberto e os entrevistadores poderão criar novas entrevistas.</value>
   </data>
   <data name="Complete" xml:space="preserve">
-      <value>Complete</value>
+      <value>Concluir</value>
   </data>
   <data name="Approve" xml:space="preserve">
-      <value>Approve</value>
+      <value>Aprovar</value>
   </data>
   <data name="Reopen" xml:space="preserve">
-      <value>Reopen</value>
+      <value>Reabrir</value>
   </data>
   <data name="Action_StatusChanged" xml:space="preserve">
-      <value>Status changed to {{status}}</value>
+      <value>Estado alterado para {{status}}</value>
   </data>
   <data name="Action_StatusChanged_Comment" xml:space="preserve">
-      <value>Comment: {{comment}}</value>
+      <value>Comentário: {{comment}}</value>
   </data>
   <data name="Action_Completed" xml:space="preserve">
-      <value>Completed</value>
+      <value>Concluído</value>
   </data>
   <data name="Action_Approved" xml:space="preserve">
-      <value>Approved</value>
+      <value>Aprovado</value>
   </data>
   <data name="Action_Reopened" xml:space="preserve">
-      <value>Reopened</value>
+      <value>Reaberto</value>
   </data>
 </root>
