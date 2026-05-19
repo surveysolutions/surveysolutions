@@ -34,6 +34,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.PublicApi.Models;
@@ -740,22 +741,29 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (authorizedUser.IsSupervisor && !interviewerSettings.IsAllowSupervisorChangeAssignmentStatus())
                 return Forbid();
 
-            switch (request.Status)
+            try
             {
-                case AssignmentStatus.Open:
-                    commandService.Execute(new ReopenAssignment(assignment.PublicKey, authorizedUser.Id,
-                        assignment.QuestionnaireId, request.Comment));
-                    break;
-                case AssignmentStatus.Completed:
-                    commandService.Execute(new CompleteAssignment(assignment.PublicKey, authorizedUser.Id,
-                        assignment.QuestionnaireId, request.Comment));
-                    break;
-                case AssignmentStatus.Approved:
-                    commandService.Execute(new ApproveAssignment(assignment.PublicKey, authorizedUser.Id,
-                        assignment.QuestionnaireId, request.Comment));
-                    break;
-                default:
-                    return BadRequest($"Unknown status: {request.Status}");
+                switch (request.Status)
+                {
+                    case AssignmentStatus.Open:
+                        commandService.Execute(new ReopenAssignment(assignment.PublicKey, authorizedUser.Id,
+                            assignment.QuestionnaireId, request.Comment));
+                        break;
+                    case AssignmentStatus.Completed:
+                        commandService.Execute(new CompleteAssignment(assignment.PublicKey, authorizedUser.Id,
+                            assignment.QuestionnaireId, request.Comment));
+                        break;
+                    case AssignmentStatus.Approved:
+                        commandService.Execute(new ApproveAssignment(assignment.PublicKey, authorizedUser.Id,
+                            assignment.QuestionnaireId, request.Comment));
+                        break;
+                    default:
+                        return BadRequest($"Unknown status: {request.Status}");
+                }
+            }
+            catch (AssignmentException e)
+            {
+                return BadRequest(new { Message = e.Message });
             }
 
             return GetUpdatedAssignment(id);
