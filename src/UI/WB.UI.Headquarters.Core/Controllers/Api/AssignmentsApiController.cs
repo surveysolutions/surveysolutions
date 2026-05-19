@@ -105,6 +105,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             if (isInterviewer)
             {
+                input.OnlyWithInterviewsNeeded = true;
                 var allowedStatuses = new[] { AssignmentStatus.Open, AssignmentStatus.Completed };
                 input.Statuses = input.Statuses?.Length > 0
                     ? input.Statuses.Intersect(allowedStatuses).ToArray()

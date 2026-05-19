@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
                 var neededItems = _.Where(x => ids.Contains(x.Id));
 
-                var fetchReqests = this.DefineOrderBy(neededItems, input)
+                var fetchRequests = this.DefineOrderBy(neededItems, input)
                     .Fetch(x => x.IdentifyingData)
                     .Fetch(x => x.Responsible);
                     //.Fetch(x => x.RoleIds); //throws Null reference exception, but should be here :( https://stackoverflow.com/q/21243592/72174
@@ -79,11 +79,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
                 if (input.ShowQuestionnaireTitle)
                 {
-                    list = fetchReqests.Fetch(x => x.Questionnaire).ToList();
+                    list = fetchRequests.Fetch(x => x.Questionnaire).ToList();
                 }
                 else
                 {
-                    list = fetchReqests.ToList();
+                    list = fetchRequests.ToList();
                 }
 
                 return list;
