@@ -400,6 +400,9 @@ public abstract class MarkersMapInteractionViewModel<TParam> : BaseMapInteractio
     {
         var markersGraphic = new List<Graphic>();
 
+        if (Map?.SpatialReference == null)
+            return markersGraphic;
+
         foreach (var assignment in assignments)
         {
             markersGraphic.Add(new Graphic(
@@ -473,6 +476,9 @@ public abstract class MarkersMapInteractionViewModel<TParam> : BaseMapInteractio
     private List<Graphic> GetInterviewsMarkers(IEnumerable<IInterviewMarkerViewModel> interviews)
     {
         var markersGraphics = new List<Graphic>();
+
+        if (Map?.SpatialReference == null)
+            return markersGraphics;
 
         foreach (var interview in interviews)
         {
