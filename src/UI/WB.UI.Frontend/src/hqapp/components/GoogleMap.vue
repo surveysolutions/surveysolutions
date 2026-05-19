@@ -120,7 +120,8 @@
                     {{ $t('Common.Assign') }}
                 </button>
 
-                <button class="btn btn-sm btn-assignment" v-if="model.userRole == 'Interviewer'"
+                <button class="btn btn-sm btn-assignment"
+                    v-if="model.userRole == 'Interviewer' && selectedTooltip.status == 'Open'"
                     click-method="createInterview">
                     {{ $t('Common.Create') }}
                 </button>
@@ -160,7 +161,7 @@
             <div class="form-group">
                 <label class="control-label" for="newResponsibleId">{{
                     $t('Assignments.SelectResponsible')
-                    }}</label>
+                }}</label>
                 <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                     :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                     :fetch-url="model.responsible"></Typeahead>
