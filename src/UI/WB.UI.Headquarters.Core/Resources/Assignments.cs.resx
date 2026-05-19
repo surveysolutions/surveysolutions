@@ -148,7 +148,7 @@
   <data name="Password" xml:space="preserve">
     <value>Heslo</value>
   </data>
-  <data name="ReceivedByTablet_All" xml:space="preserve">
+  <data name="Filter_ShowAll" xml:space="preserve">
     <value>Zobrazit vše</value>
   </data>
   <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">

@@ -52,8 +52,8 @@
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Assignments.Status')">
-                    <Typeahead control-id="status_filter" noSearch noClear allowEmpty :values="ddlStatus" :value="status"
-                        v-on:selected="statusSelected" />
+                    <Typeahead control-id="status_filter" noSearch noClear allowEmpty :values="ddlStatus"
+                        :value="status" v-on:selected="statusSelected" />
                 </FilterBlock>
             </Filters>
         </template>
@@ -84,14 +84,12 @@
 
                     <button class="btn btn-lg btn-warning" id="btnApproveSelected"
                         v-if="(config.isHeadquarter || (config.isSupervisor && config.allowSupervisorChangeAssignmentStatus)) && !showArchive.key"
-                        :disabled="!canComplete"
-                        @click="bulkChangeStatus('Approved', 'approveModal')">{{
+                        :disabled="!canComplete" @click="bulkChangeStatus('Approved', 'approveModal')">{{
                             $t("Assignments.Approve") }}</button>
 
                     <button class="btn btn-lg btn-primary" id="btnReopenSelected"
                         v-if="(config.isHeadquarter || (config.isSupervisor && config.allowSupervisorChangeAssignmentStatus)) && !showArchive.key"
-                        :disabled="!canReopen"
-                        @click="bulkChangeStatus('Open', 'reopenModal')">{{
+                        :disabled="!canReopen" @click="bulkChangeStatus('Open', 'reopenModal')">{{
                             $t("Assignments.Reopen") }}</button>
 
                     <button class="btn btn-lg btn-danger" id="btnArchiveSelected"
@@ -118,7 +116,7 @@
                     <button type="button" class="btn btn-primary" @click="confirmStatusChange">{{
                         $t("Assignments.Approve") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                        }}</button>
+                    }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -140,7 +138,7 @@
                     <button type="button" class="btn btn-primary" @click="confirmStatusChange">{{
                         $t("Assignments.Reopen") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                        }}</button>
+                    }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -150,7 +148,7 @@
             <form onsubmit="return false;">
                 <div class="form-group" :class="{ 'has-warning': showWebModeReassignWarning }">
                     <label class="control-label" for="newResponsibleId">{{ $t("Assignments.SelectResponsible")
-                        }}</label>
+                    }}</label>
                     <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="config.api.responsible"></Typeahead>
@@ -173,7 +171,7 @@
                     <button type="button" class="btn btn-primary" @click="assign" :disabled="!newResponsibleId">{{
                         $t("Common.Assign") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                        }}</button>
+                    }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -188,7 +186,7 @@
                         @click="close">{{
                             $t("Assignments.Close") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                        }}</button>
+                    }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -208,7 +206,7 @@
                         :disabled="!showSelectors">{{
                             $t("Common.Save") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                        }}</button>
+                    }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -238,7 +236,7 @@
                     <button type="button" class="btn btn-primary" :disabled="!showSelectors || !canEditQuantity"
                         @click="updateQuantity">{{ $t("Common.Save") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                        }}</button>
+                    }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -366,7 +364,7 @@ export default {
 
         ddlReceivedByTablet() {
             return [
-                { key: 'All', value: this.$t('Assignments.ReceivedByTablet_All') },
+                { key: 'All', value: this.$t('Assignments.Filter_ShowAll') },
                 { key: 'Received', value: this.$t('Assignments.ReceivedByTablet_Received') },
                 { key: 'NotReceived', value: this.$t('Assignments.ReceivedByTablet_NotReceived') },
             ]
@@ -379,7 +377,7 @@ export default {
         },
         ddlStatus() {
             return [
-                { key: null, value: this.$t('Common.Any') },
+                { key: null, value: this.$t('Assignments.Filter_ShowAll') },
                 { key: 'Open', value: this.$t('Assignments.StatusActive') },
                 { key: 'Completed', value: this.$t('Assignments.StatusCompleted') },
                 { key: 'Approved', value: this.$t('Assignments.StatusApproved') },
