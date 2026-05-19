@@ -203,6 +203,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 gpsQuery = gpsQuery
                     .Where(x => 
                         x.Assignment.ResponsibleId == currentUserId
+                        && x.Assignment.Status != AssignmentStatus.Approved
                     );
             } 
             else if (authorizedUser.IsSupervisor)
