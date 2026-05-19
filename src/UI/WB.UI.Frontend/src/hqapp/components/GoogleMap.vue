@@ -125,18 +125,15 @@
                     {{ $t('Common.Create') }}
                 </button>
 
-                <button class="btn btn-sm btn-warning" v-if="canCompleteAssignment"
-                    click-method="completeAssignment">
+                <button class="btn btn-sm btn-primary" v-if="canCompleteAssignment" click-method="completeAssignment">
                     {{ $t('Assignments.Complete') }}
                 </button>
 
-                <button class="btn btn-sm btn-success" v-if="canApproveAssignment"
-                    click-method="approveAssignment">
+                <button class="btn btn-sm btn-success" v-if="canApproveAssignment" click-method="approveAssignment">
                     {{ $t('Assignments.Approve') }}
                 </button>
 
-                <button class="btn btn-sm btn-default" v-if="canReopenAssignment"
-                    click-method="reopenAssignment">
+                <button class="btn btn-sm btn-default" v-if="canReopenAssignment" click-method="reopenAssignment">
                     {{ $t('Assignments.Reopen') }}
                 </button>
             </div>
@@ -163,7 +160,7 @@
             <div class="form-group">
                 <label class="control-label" for="newResponsibleId">{{
                     $t('Assignments.SelectResponsible')
-                }}</label>
+                    }}</label>
                 <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                     :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                     :fetch-url="model.responsible"></Typeahead>
