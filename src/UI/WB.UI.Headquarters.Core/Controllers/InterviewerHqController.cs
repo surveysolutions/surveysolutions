@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Resources;
@@ -122,6 +123,9 @@ namespace WB.UI.Headquarters.Controllers
             if (!interviewer.IsInterviewer())
                 throw new InvalidOperationException($"Assignment {assignment.Id} has responsible that is not an interviewer. Interview cannot be created");
 
+            if (assignment.Status != AssignmentStatus.Open)
+                throw new InvalidOperationException($"Assignment {assignment.Id} has status {assignment.Status}. Interview cannot be created for assignment that is not open");
+            
             var interviewId = Guid.NewGuid();
             var interviewKey = this.keyGenerator.Get();
 
@@ -164,7 +168,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var assignment = this.assignments.GetAssignment(id);
 
-            if (assignment.InterviewsNeeded <= 0)
+            if (assignment.InterviewsNeeded <= 0 || assignment.Status != AssignmentStatus.Open)
             {
                 TempData["WebInterview.ErrorMessage"] = WebInterviewUI.AssignmentLimitError; 
                 return StatusCode(StatusCodes.Status403Forbidden, new
