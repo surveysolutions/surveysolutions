@@ -156,7 +156,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
                     var streamExists = validateVersionCommand.ExecuteScalar() as bool?;
                     if (streamExists.GetValueOrDefault())
-                        throw new InvalidOperationException(
+                        throw new AggregateConcurrencyException(
                             $"Unexpected stream version. Expected non existant stream, but received stream with version {eventStream.InitialVersion}. EventSourceId: {eventStream.SourceId}");
                 }
             }
@@ -171,7 +171,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     }).ToList();
                 if (eventsFromDb.Count != 1 || eventsFromDb[0] != eventStream.InitialVersion)
                 {
-                    throw new InvalidOperationException(
+                    throw new AggregateConcurrencyException(
                         $"Unexpected stream version. Expected {eventStream.InitialVersion}. EventSourceId: {eventStream.SourceId}");
                 }
             }
