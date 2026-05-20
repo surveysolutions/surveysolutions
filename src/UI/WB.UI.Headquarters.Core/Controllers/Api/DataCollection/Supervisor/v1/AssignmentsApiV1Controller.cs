@@ -53,6 +53,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [HttpPost]
         [Route("{id:int}/ChangeStatus")]
         public override IActionResult ChangeStatus(int id, [FromBody] AssignmentStatusChangeApiView request)
-            => base.ChangeStatus(id, request);
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return base.ChangeStatus(id, request);
+        }
     }
 }
