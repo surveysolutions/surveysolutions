@@ -50,6 +50,13 @@
 .btn-primary {
   background-color: @inline-button-medium-bg-color;
   &:hover { background-color: darken(@inline-button-medium-bg-color, 5%); }
+  &:focus {
+    background-color: @inline-button-medium-bg-color;
+    color: @inline-button-medium-fg-color;
+  }
+  &:focus:hover {
+    background-color: darken(@inline-button-medium-bg-color, 5%);
+  }
   &:active { 
     background-color: darken(@inline-button-medium-bg-color, 5%); 
     &:hover { background-color: darken(@inline-button-medium-bg-color, 5%); }
