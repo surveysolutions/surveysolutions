@@ -908,7 +908,11 @@ export default {
         },
 
         bulkChangeStatus(targetStatus, modalRef) {
-            this.statusChangeIds = [...this.selectedRows]
+            const validStatuses = targetStatus === 'Approved' ? ['Open', 'Completed'] : ['Completed', 'Approved']
+            const data = this.$refs.table.table.rows({ selected: true }).data()
+            this.statusChangeIds = Array.from(data)
+                .filter(r => validStatuses.includes(r.status))
+                .map(r => r.id)
             this.statusChangeTargetStatus = targetStatus
             this.statusChangeComment = null
             this.$refs[modalRef].modal()
