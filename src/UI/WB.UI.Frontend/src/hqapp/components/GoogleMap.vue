@@ -156,12 +156,54 @@
     </div>
     <div id="map-canvas"></div>
 
+    <ModalFrame ref="completeAssignmentModal" :title="$t('Assignments.CompleteAssignmentTitle')">
+        <p>{{ $t('Assignments.CompleteAssignmentMessage') }}</p>
+        <form onsubmit="return false;">
+            <div class="form-group">
+                <label class="control-label" for="completeCommentId">
+                    {{ $t('Assignments.Comments') }}
+                </label>
+                <textarea control-id="completeCommentId" v-model="statusChangeComment"
+                    :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                    autocomplete="off" class="form-control" />
+            </div>
+        </form>
+        <template v-slot:actions>
+            <div>
+                <button type="button" class="btn btn-primary" @click="confirmCompleteAssignment">{{
+                    $t('Assignments.Complete') }}</button>
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t('Common.Cancel') }}</button>
+            </div>
+        </template>
+    </ModalFrame>
+
+    <ModalFrame ref="reopenAssignmentModal" :title="$t('Assignments.ReopenAssignmentTitle')">
+        <p>{{ $t('Assignments.ReopenAssignmentMessage') }}</p>
+        <form onsubmit="return false;">
+            <div class="form-group">
+                <label class="control-label" for="reopenCommentId">
+                    {{ $t('Assignments.Comments') }}
+                </label>
+                <textarea control-id="reopenCommentId" v-model="statusChangeComment"
+                    :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                    autocomplete="off" class="form-control" />
+            </div>
+        </form>
+        <template v-slot:actions>
+            <div>
+                <button type="button" class="btn btn-primary" @click="confirmReopenAssignment">{{
+                    $t('Assignments.Reopen') }}</button>
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t('Common.Cancel') }}</button>
+            </div>
+        </template>
+    </ModalFrame>
+
     <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
         <form onsubmit="return false;">
             <div class="form-group">
                 <label class="control-label" for="newResponsibleId">{{
                     $t('Assignments.SelectResponsible')
-                }}</label>
+                    }}</label>
                 <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                     :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                     :fetch-url="model.responsible"></Typeahead>
@@ -244,6 +286,7 @@ export default {
             newResponsibleId: null,
             isReassignReceivedByTablet: false,
             geoJsonFeatures: null,
+            statusChangeComment: null,
         }
     },
 
@@ -429,8 +472,15 @@ export default {
             await this.refreshAssignmentData()
         },
 
-        async completeAssignment() {
-            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Completed')
+        completeAssignment() {
+            this.statusChangeComment = null
+            this.$refs.completeAssignmentModal.modal({ keyboard: false })
+        },
+
+        async confirmCompleteAssignment() {
+            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Completed', this.statusChangeComment || null)
+            this.$refs.completeAssignmentModal.hide()
+            this.statusChangeComment = null
             await this.refreshAssignmentData()
         },
 
@@ -439,8 +489,15 @@ export default {
             await this.refreshAssignmentData()
         },
 
-        async reopenAssignment() {
-            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Open')
+        reopenAssignment() {
+            this.statusChangeComment = null
+            this.$refs.reopenAssignmentModal.modal({ keyboard: false })
+        },
+
+        async confirmReopenAssignment() {
+            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Open', this.statusChangeComment || null)
+            this.$refs.reopenAssignmentModal.hide()
+            this.statusChangeComment = null
             await this.refreshAssignmentData()
         },
 
