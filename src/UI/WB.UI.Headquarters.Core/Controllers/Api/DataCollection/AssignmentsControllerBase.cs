@@ -115,6 +115,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         {
             if (request == null)
                 return BadRequest();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             var assignment = this.assignmentsService.GetAssignment(id);
             if (assignment == null)
