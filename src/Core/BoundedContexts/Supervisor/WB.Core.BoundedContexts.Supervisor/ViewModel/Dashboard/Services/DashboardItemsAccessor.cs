@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
             return x => 
                 x.ResponsibleId != userId 
                 && x.ReceivedByInterviewerAt == null
-                && x.Status == AssignmentStatus.Open;
+                && (x.Status == AssignmentStatus.Open || x.Status == AssignmentStatus.Closed);
         }
 
         private IEnumerable<AssignmentDocument> GetOutboxAssignments()
