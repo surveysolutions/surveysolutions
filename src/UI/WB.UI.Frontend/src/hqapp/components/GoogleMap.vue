@@ -130,8 +130,8 @@
                     {{ $t('Assignments.Complete') }}
                 </button>
 
-                <button class="btn btn-sm btn-success" v-if="canApproveAssignment" click-method="approveAssignment">
-                    {{ $t('Assignments.Approve') }}
+                <button class="btn btn-sm btn-success" v-if="canCloseAssignment" click-method="closeAssignment">
+                    {{ $t('Assignments.Close') }}
                 </button>
 
                 <button class="btn btn-sm btn-default" v-if="canReopenAssignment" click-method="reopenAssignment">
@@ -355,7 +355,7 @@ export default {
             const statusMap = {
                 'Open': this.$t('Assignments.StatusActive'),
                 'Completed': this.$t('Assignments.StatusCompleted'),
-                'Approved': this.$t('Assignments.StatusApproved'),
+                'Closed': this.$t('Assignments.StatusClosed'),
             }
             return statusMap[this.selectedTooltip.status] || this.selectedTooltip.status || ''
         },
@@ -366,7 +366,7 @@ export default {
                 this.selectedTooltip.status == 'Open'
         },
 
-        canApproveAssignment() {
+        canCloseAssignment() {
             return !this.model.isObserving &&
                 (this.model.userRole == 'Supervisor' || this.model.userRole == 'Headquarter') &&
                 (this.selectedTooltip.status == 'Open' || this.selectedTooltip.status == 'Completed')
@@ -376,7 +376,7 @@ export default {
             return !this.model.isObserving && (
                 (this.model.userRole == 'Interviewer' && this.selectedTooltip.status == 'Completed') ||
                 ((this.model.userRole == 'Supervisor' || this.model.userRole == 'Headquarter') &&
-                    (this.selectedTooltip.status == 'Completed' || this.selectedTooltip.status == 'Approved'))
+                    (this.selectedTooltip.status == 'Completed' || this.selectedTooltip.status == 'Closed'))
             )
         },
     },
@@ -484,8 +484,8 @@ export default {
             await this.refreshAssignmentData()
         },
 
-        async approveAssignment() {
-            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Approved')
+        async closeAssignment() {
+            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Closed')
             await this.refreshAssignmentData()
         },
 

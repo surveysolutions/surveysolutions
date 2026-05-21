@@ -753,8 +753,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                         commandService.Execute(new CompleteAssignment(assignment.PublicKey, authorizedUser.Id,
                             assignment.QuestionnaireId, request.Comment));
                         break;
-                    case AssignmentStatus.Approved:
-                        commandService.Execute(new ApproveAssignment(assignment.PublicKey, authorizedUser.Id,
+                    case AssignmentStatus.Closed:
+                        commandService.Execute(new CloseAssignment(assignment.PublicKey, authorizedUser.Id,
                             assignment.QuestionnaireId, request.Comment));
                         break;
                     default:

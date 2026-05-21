@@ -83,7 +83,7 @@
                                         </li>
                                         <li v-if="isHeadquarters && !isArchived">
                                             <a href="#" @click="closeSelected">
-                                                {{ $t('Assignments.Close') }}
+                                                {{ $t('Assignments.Downsize') }}
                                             </a>
                                         </li>
                                         <li v-if="isHeadquarters && !isArchived">
@@ -99,8 +99,8 @@
                                             </a>
                                         </li>
                                         <li v-if="canComplete">
-                                            <a href="#" @click.prevent="openApproveModal">
-                                                {{ $t('Assignments.Approve') }}
+                                            <a href="#" @click.prevent="openCloseModal">
+                                                {{ $t('Assignments.Close') }}
                                             </a>
                                         </li>
                                         <li v-if="canReopen">
@@ -297,7 +297,7 @@
                         <div>
                             <button type="button" class="btn btn-primary" :disabled="isWebModeAssignmentSelected"
                                 @click="close">
-                                {{ $t('Assignments.Close') }}
+                                {{ $t('Assignments.Downsize') }}
                             </button>
                             <button type="button" class="btn btn-link" data-bs-dismiss="modal">
                                 {{ $t('Common.Cancel') }}
@@ -388,8 +388,8 @@
                     </template>
                 </ModalFrame>
 
-                <ModalFrame ref="approveModal" :title="$t('Assignments.ApproveAssignmentTitle')">
-                    <p>{{ $t('Assignments.ApproveAssignmentMessage') }}</p>
+                <ModalFrame ref="closeModal" :title="$t('Assignments.CloseAssignmentTitle')">
+                    <p>{{ $t('Assignments.CloseAssignmentMessage') }}</p>
                     <form onsubmit="return false;">
                         <div class="form-group">
                             <label class="control-label" for="completeCommentDetailId">
@@ -402,8 +402,8 @@
                     </form>
                     <template v-slot:actions>
                         <div>
-                            <button type="button" class="btn btn-primary" @click="confirmApprove">{{
-                                $t("Assignments.Approve") }}</button>
+                            <button type="button" class="btn btn-primary" @click="confirmClose">{{
+                                $t("Assignments.Close") }}</button>
                             <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
                                 }}</button>
                         </div>
@@ -649,9 +649,9 @@ export default {
             return false
         },
 
-        openApproveModal() {
+        openCloseModal() {
             this.statusChangeComment = null
-            this.$refs.approveModal.modal()
+            this.$refs.closeModal.modal()
         },
 
         openReopenModal() {
@@ -659,8 +659,8 @@ export default {
             this.$refs.reopenModal.modal()
         },
 
-        async confirmApprove() {
-            await this.changeStatus('Approved', this.$refs.approveModal)
+        async confirmClose() {
+            await this.changeStatus('Closed', this.$refs.closeModal)
         },
 
         async confirmReopen() {
@@ -787,7 +787,7 @@ export default {
             const statusMap = {
                 'Open': this.$t('Assignments.StatusActive'),
                 'Completed': this.$t('Assignments.StatusCompleted'),
-                'Approved': this.$t('Assignments.StatusApproved'),
+                'Closed': this.$t('Assignments.StatusClosed'),
             }
             return statusMap[this.model.status] || this.model.status
         },
@@ -800,9 +800,9 @@ export default {
         },
         canReopen() {
             if (this.isArchived) return false
-            if (this.isHeadquarters) return this.model.status === 'Completed' || this.model.status === 'Approved'
+            if (this.isHeadquarters) return this.model.status === 'Completed' || this.model.status === 'Closed'
             if (this.model.isSupervisor && this.model.allowSupervisorChangeAssignmentStatus)
-                return this.model.status === 'Completed' || this.model.status === 'Approved'
+                return this.model.status === 'Completed' || this.model.status === 'Closed'
             return false
         },
         calendarEventTime() {
@@ -938,7 +938,7 @@ export default {
                             case 'TargetAreaChanged':
                                 return escape(data.TargetArea)
                             case 'Completed':
-                            case 'Approved':
+                            case 'Closed':
                             case 'Reopened':
                                 if (data && data.Comment) {
                                     return self.$t('Assignments.Action_StatusChanged_Comment', {

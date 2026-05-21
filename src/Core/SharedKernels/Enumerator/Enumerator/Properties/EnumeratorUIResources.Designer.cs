@@ -1491,21 +1491,21 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string Dashboard_ApproveAssignment {
+        public static string Dashboard_CloseAssignment {
             get {
-                return ResourceManager.GetString("Dashboard_ApproveAssignment", resourceCulture);
+                return ResourceManager.GetString("Dashboard_CloseAssignment", resourceCulture);
             }
         }
         
-        public static string Dashboard_ApproveAssignment_Title {
+        public static string Dashboard_CloseAssignment_Title {
             get {
-                return ResourceManager.GetString("Dashboard_ApproveAssignment_Title", resourceCulture);
+                return ResourceManager.GetString("Dashboard_CloseAssignment_Title", resourceCulture);
             }
         }
         
-        public static string Dashboard_ApproveAssignment_Message {
+        public static string Dashboard_CloseAssignment_Message {
             get {
-                return ResourceManager.GetString("Dashboard_ApproveAssignment_Message", resourceCulture);
+                return ResourceManager.GetString("Dashboard_CloseAssignment_Message", resourceCulture);
             }
         }
         
@@ -1521,9 +1521,9 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string Dashboard_Assignment_Status_Approved {
+        public static string Dashboard_Assignment_Status_Closed {
             get {
-                return ResourceManager.GetString("Dashboard_Assignment_Status_Approved", resourceCulture);
+                return ResourceManager.GetString("Dashboard_Assignment_Status_Closed", resourceCulture);
             }
         }
         

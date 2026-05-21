@@ -660,7 +660,7 @@
   <data name="Assignment_Status_Completed" xml:space="preserve">
     <value>Hoàn thành</value>
   </data>
-  <data name="Assignment_Status_Approved" xml:space="preserve">
+  <data name="Assignment_Status_Closed" xml:space="preserve">
     <value>Được phê duyệt</value>
   </data>
 

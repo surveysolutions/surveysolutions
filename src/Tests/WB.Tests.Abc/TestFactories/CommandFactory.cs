@@ -447,9 +447,9 @@ namespace WB.Tests.Abc.TestFactories
             return new CompleteAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireIdentity ?? new QuestionnaireIdentity(), comment);
         }
 
-        public ApproveAssignment ApproveAssignment(Guid? assignmentId = null, Guid? userId = null, string comment = null, QuestionnaireIdentity questionnaireIdentity = null)
+        public CloseAssignment CloseAssignment(Guid? assignmentId = null, Guid? userId = null, string comment = null, QuestionnaireIdentity questionnaireIdentity = null)
         {
-            return new ApproveAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireIdentity ?? new QuestionnaireIdentity(), comment);
+            return new CloseAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireIdentity ?? new QuestionnaireIdentity(), comment);
         }
 
         public ReopenAssignment ReopenAssignment(Guid? assignmentId = null, Guid? userId = null, string comment = null, QuestionnaireIdentity questionnaireIdentity = null)

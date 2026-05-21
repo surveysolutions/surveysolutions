@@ -33,7 +33,7 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
     {
         AssignmentStatus.Open,
         AssignmentStatus.Completed,
-        AssignmentStatus.Approved,
+        AssignmentStatus.Closed,
     };
 
     public SupervisorMapDashboardViewModel(IPrincipal principal, 

@@ -246,7 +246,7 @@
   <data name="ChangeExpectedModalTitle" xml:space="preserve">
     <value>Редагувати розмір для завдання {{assignmentId}}</value>
   </data>
-  <data name="Close" xml:space="preserve">
+  <data name="Downsize" xml:space="preserve">
     <value>Зменшити</value>
   </data>
   <data name="Comments" xml:space="preserve">
@@ -541,8 +541,8 @@
   <data name="StatusCompleted" xml:space="preserve">
       <value>Завершено</value>
   </data>
-  <data name="StatusApproved" xml:space="preserve">
-      <value>Виконано</value>
+  <data name="StatusClosed" xml:space="preserve">
+      <value>Закрито</value>
   </data>
   <data name="CompleteAssignmentTitle" xml:space="preserve">
       <value>Завершити завдання</value>
@@ -550,10 +550,10 @@
   <data name="CompleteAssignmentMessage" xml:space="preserve">
       <value>Ви впевнені, що перерахували всі відповідні одиниці?</value>
   </data>
-  <data name="ApproveAssignmentTitle" xml:space="preserve">
-      <value>Виконати завдання</value>
+  <data name="CloseAssignmentTitle" xml:space="preserve">
+      <value>Закрити завдання</value>
   </data>
-  <data name="ApproveAssignmentMessage" xml:space="preserve">
+  <data name="CloseAssignmentMessage" xml:space="preserve">
       <value>Інтерв'юери, що працюють в автономному режимі, можуть продовжувати збір даних до синхронізації. Такі інтерв'ю будуть прийняті.</value>
   </data>
   <data name="ReopenAssignmentTitle" xml:space="preserve">
@@ -565,8 +565,8 @@
   <data name="Complete" xml:space="preserve">
       <value>Завершити</value>
   </data>
-  <data name="Approve" xml:space="preserve">
-      <value>Схвалити</value>
+  <data name="Close" xml:space="preserve">
+      <value>Закрити</value>
   </data>
   <data name="Reopen" xml:space="preserve">
       <value>Відкрити знову</value>
@@ -580,8 +580,8 @@
   <data name="Action_Completed" xml:space="preserve">
       <value>Завершено</value>
   </data>
-  <data name="Action_Approved" xml:space="preserve">
-      <value>Виконано</value>
+  <data name="Action_Closed" xml:space="preserve">
+      <value>Закрито</value>
   </data>
   <data name="Action_Reopened" xml:space="preserve">
       <value>Відкрито знову</value>

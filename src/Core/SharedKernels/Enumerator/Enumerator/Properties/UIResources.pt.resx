@@ -716,7 +716,7 @@ Você pode criar ou editar seus questionários no Survey Solutions Designer</val
   <data name="Assignment_Status_Completed" xml:space="preserve">
     <value>Concluído</value>
   </data>
-  <data name="Assignment_Status_Approved" xml:space="preserve">
+  <data name="Assignment_Status_Closed" xml:space="preserve">
     <value>Aprovado</value>
   </data>
 

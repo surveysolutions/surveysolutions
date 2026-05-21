@@ -678,7 +678,7 @@
   <data name="Assignment_Status_Completed" xml:space="preserve">
     <value>Finalizado</value>
   </data>
-  <data name="Assignment_Status_Approved" xml:space="preserve">
+  <data name="Assignment_Status_Closed" xml:space="preserve">
     <value>Aprobado</value>
   </data>
 

@@ -143,7 +143,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var assignment = Create.Entity.AssignmentDocument(1, quantity: 5, interviewsCount: 0,
                 questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
                 .Build();
-            assignment.Status = AssignmentStatus.Approved; // supervisor already completed
+            assignment.Status = AssignmentStatus.Closed; // supervisor already completed
 
             var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
             assignments.Store(assignment);
@@ -162,7 +162,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
 
             // Assert: supervisor's Completed status is preserved
             var updated = assignments.GetById(1);
-            updated.Status.Should().Be(AssignmentStatus.Approved, "supervisor overrides interviewer");
+            updated.Status.Should().Be(AssignmentStatus.Closed, "supervisor overrides interviewer");
         }
 
         [Test]
@@ -257,7 +257,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var approvedDoc = Create.Entity.AssignmentDocument(3, quantity: 1, interviewsCount: 0,
                 questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
                 .WithResponsible(interviewerId).Build();
-            approvedDoc.Status = AssignmentStatus.Approved;
+            approvedDoc.Status = AssignmentStatus.Closed;
             approvedDoc.StatusComment = "All good";
 
             var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();

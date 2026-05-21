@@ -653,7 +653,7 @@ enum ApplyPolicy {
 enum AssignmentStatus {
   OPEN
   COMPLETED
-  APPROVED
+  CLOSED
 }
 
 enum EntityType {

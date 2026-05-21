@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var local = Create.Entity
                 .AssignmentDocument(10, 5, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
-            local.Status = AssignmentStatus.Approved;
+            local.Status = AssignmentStatus.Closed;
             local.StatusComment = "Was approved";
 
             var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
@@ -118,7 +118,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var remote = new AssignmentApiView
             {
                 Id = 20, Quantity = 8, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Approved, StatusComment = "Supervisor approved"
+                Status = AssignmentStatus.Closed, StatusComment = "Supervisor approved"
             };
 
             var syncService = new Mock<ISynchronizationService>();
@@ -136,7 +136,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             // Assert
             var updated = assignmentsRepo.GetById(20);
-            updated.Status.Should().Be(AssignmentStatus.Approved);
+            updated.Status.Should().Be(AssignmentStatus.Closed);
             updated.StatusComment.Should().Be("Supervisor approved");
         }
 
@@ -160,7 +160,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var remoteAfterUpload = new AssignmentApiView
             {
                 Id = 30, Quantity = 4, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Approved, StatusComment = "Already approved"
+                Status = AssignmentStatus.Closed, StatusComment = "Already approved"
             };
 
             var syncService = new Mock<ISynchronizationService>();
@@ -184,7 +184,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             // After sync, server's Approved status overrides local Completed
             var updated = assignmentsRepo.GetById(30);
-            updated.Status.Should().Be(AssignmentStatus.Approved);
+            updated.Status.Should().Be(AssignmentStatus.Closed);
             updated.StatusComment.Should().Be("Already approved");
             updated.StatusChangedAtUtc.Should().BeNull("pending flag is cleared");
         }

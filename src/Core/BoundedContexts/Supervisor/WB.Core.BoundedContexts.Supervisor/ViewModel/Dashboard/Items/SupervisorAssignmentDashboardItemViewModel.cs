@@ -52,25 +52,25 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
 
             if (AllowSupervisorChangeAssignmentStatus)
             {
-                // Open: supervisor can Approve via context menu
+                // Open: supervisor can Close via context menu
                 if (Assignment.Status == AssignmentStatus.Open)
                 {
                     Actions.Add(new ActionDefinition
                     {
                         ActionType = ActionType.Context,
-                        Command = new MvxAsyncCommand(this.ApproveAssignmentAsync),
-                        Label = EnumeratorUIResources.Dashboard_ApproveAssignment
+                        Command = new MvxAsyncCommand(this.CloseAssignmentAsync),
+                        Label = EnumeratorUIResources.Dashboard_CloseAssignment
                     });
                 }
 
-                // Completed: supervisor can Approve or Reopen — both visible on card as primary actions
+                // Completed: supervisor can Close or Reopen — both visible on card as primary actions
                 if (Assignment.Status == AssignmentStatus.Completed)
                 {
                     Actions.Add(new ActionDefinition
                     {
                         ActionType = ActionType.Primary,
-                        Command = new MvxAsyncCommand(this.ApproveAssignmentAsync),
-                        Label = EnumeratorUIResources.Dashboard_ApproveAssignment
+                        Command = new MvxAsyncCommand(this.CloseAssignmentAsync),
+                        Label = EnumeratorUIResources.Dashboard_CloseAssignment
                     });
                     Actions.Add(new ActionDefinition
                     {
@@ -80,8 +80,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                     });
                 }
 
-                // Approved: supervisor can Reopen — visible on card as a primary button
-                if (Assignment.Status == AssignmentStatus.Approved)
+                // Closed: supervisor can Reopen — visible on card as a primary button
+                if (Assignment.Status == AssignmentStatus.Closed)
                 {
                     Actions.Add(new ActionDefinition
                     {
@@ -99,14 +99,14 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
             navigationService.NavigateToAsync<AssignAssignmentDialogViewModel, AssignAssignmentDialogArgs>(
                 new AssignAssignmentDialogArgs(Assignment.Id));
 
-        private async Task ApproveAssignmentAsync()
+        private async Task CloseAssignmentAsync()
         {
             // Single dialog: shows warning message and optional comment field together
             await ChangeAssignmentStatusAsync(
-                AssignmentStatus.Approved,
-                EnumeratorUIResources.Dashboard_ApproveAssignment_Message,
-                EnumeratorUIResources.Dashboard_ApproveAssignment_Title,
-                EnumeratorUIResources.Dashboard_ApproveAssignment);
+                AssignmentStatus.Closed,
+                EnumeratorUIResources.Dashboard_CloseAssignment_Message,
+                EnumeratorUIResources.Dashboard_CloseAssignment_Title,
+                EnumeratorUIResources.Dashboard_CloseAssignment);
         }
 
         private async Task ReopenAssignmentAsync()

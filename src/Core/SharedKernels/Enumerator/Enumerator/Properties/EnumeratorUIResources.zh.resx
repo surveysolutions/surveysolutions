@@ -214,13 +214,13 @@
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>Reopen assignment</value>
   </data>
-  <data name="Dashboard_ApproveAssignment" xml:space="preserve">
+  <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>Approve</value>
   </data>
-  <data name="Dashboard_ApproveAssignment_Title" xml:space="preserve">
+  <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
     <value>Approve assignment</value>
   </data>
-  <data name="Dashboard_ApproveAssignment_Message" xml:space="preserve">
+  <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
     <value>Interviewers working offline may still continue data collection until synchronization. Such interviews will still be accepted.</value>
   </data>
   <data name="Dashboard_Assignment_Comment" xml:space="preserve">
@@ -229,7 +229,7 @@
 <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
     <value>Status: Completed</value>
   </data>
-  <data name="Dashboard_Assignment_Status_Approved" xml:space="preserve">
+  <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
     <value>Status: Approved</value>
   </data>
 <data name="Dashboard_ShowLocation" xml:space="preserve">

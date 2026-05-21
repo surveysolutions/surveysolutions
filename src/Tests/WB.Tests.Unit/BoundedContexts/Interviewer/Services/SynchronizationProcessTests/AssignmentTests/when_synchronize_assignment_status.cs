@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 Id = 1,
                 Quantity = 10,
                 QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Approved, // supervisor completed it on server
+                Status = AssignmentStatus.Closed, // supervisor completed it on server
                 StatusComment = "Completed by supervisor"
             };
 
@@ -99,7 +99,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             // Assert: server Completed wins over local Finished
             var updated = assignmentsRepo.GetById(1);
-            updated.Status.Should().Be(AssignmentStatus.Approved);
+            updated.Status.Should().Be(AssignmentStatus.Closed);
             updated.StatusComment.Should().Be("Completed by supervisor");
         }
 

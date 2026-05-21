@@ -762,8 +762,8 @@
   <data name="Assignment_Status_Completed" xml:space="preserve">
     <value>Завершено</value>
   </data>
-  <data name="Assignment_Status_Approved" xml:space="preserve">
-    <value>Виконано</value>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Закрито</value>
   </data>
 
   <data name="MenuItem_Title_AreaCancel" xml:space="preserve">

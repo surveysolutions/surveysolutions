@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     }
                     break;
 
-                case AssignmentStatus.Approved:
+                case AssignmentStatus.Closed:
                     // No actions available for approved assignments
                     break;
             }

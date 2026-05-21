@@ -4,6 +4,6 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment
     {
         Open = 0,
         Completed = 1,
-        Approved = 2,
+        Closed = 2,
     }
 }

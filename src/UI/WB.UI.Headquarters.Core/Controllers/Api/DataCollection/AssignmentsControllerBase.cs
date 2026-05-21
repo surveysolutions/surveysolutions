@@ -138,10 +138,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                             return Forbid();
                         commandService.Execute(new CompleteAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
                         break;
-                    case AssignmentStatus.Approved:
+                    case AssignmentStatus.Closed:
                         if (!this.authorizedUser.IsSupervisor)
                             return Forbid();
-                        commandService.Execute(new ApproveAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
+                        commandService.Execute(new CloseAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
                         break;
                     case AssignmentStatus.Open:
                         commandService.Execute(new ReopenAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));

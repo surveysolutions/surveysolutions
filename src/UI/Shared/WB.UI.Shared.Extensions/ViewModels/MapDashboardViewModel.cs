@@ -220,7 +220,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 AssignmentStatus.Open => UIResources.Assignment_Status_Open,
                 AssignmentStatus.Completed => UIResources.Assignment_Status_Completed,
-                AssignmentStatus.Approved => UIResources.Assignment_Status_Approved,
+                AssignmentStatus.Closed => UIResources.Assignment_Status_Closed,
                 _ => status.ToString()
             };
         }

@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Assignm
                 };
         }
 
-        public void ThrowIfCannotApprove()
+        public void ThrowIfCannotClose()
         {
             if (this.properties.Status != AssignmentStatus.Open && this.properties.Status != AssignmentStatus.Completed)
                 throw new AssignmentException(
@@ -66,9 +66,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Assignm
 
         public void ThrowIfCannotReopen()
         {
-            if (this.properties.Status != AssignmentStatus.Completed && this.properties.Status != AssignmentStatus.Approved)
+            if (this.properties.Status != AssignmentStatus.Completed && this.properties.Status != AssignmentStatus.Closed)
                 throw new AssignmentException(
-                    $"Assignment can only be reopened from Completed or Approved status. Current status: {this.properties.Status}",
+                    $"Assignment can only be reopened from Completed or Closed status. Current status: {this.properties.Status}",
                     AssignmentDomainExceptionType.InvalidStatusTransition)
                 {
                     Data =

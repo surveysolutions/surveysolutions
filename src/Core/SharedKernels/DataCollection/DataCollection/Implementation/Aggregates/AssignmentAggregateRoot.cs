@@ -106,9 +106,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.properties.UpdatedAt = @event.OriginDate;
         }
 
-        protected void Apply(AssignmentApproved @event)
+        protected void Apply(AssignmentClosed @event)
         {
-            this.properties.Status = AssignmentStatus.Approved;
+            this.properties.Status = AssignmentStatus.Closed;
             this.properties.UpdatedAt = @event.OriginDate;
         }
 
@@ -220,13 +220,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ApplyEvent(new AssignmentCompleted(command.UserId, command.OriginDate, command.Comment));
         }
 
-        public void ApproveAssignment(ApproveAssignment command)
+        public void CloseAssignment(CloseAssignment command)
         {
             AssignmentPropertiesInvariants invariants = new AssignmentPropertiesInvariants(this.properties);
             invariants.ThrowIfAssignmentDeleted();
-            invariants.ThrowIfCannotApprove();
+            invariants.ThrowIfCannotClose();
 
-            ApplyEvent(new AssignmentApproved(command.UserId, command.OriginDate, command.Comment));
+            ApplyEvent(new AssignmentClosed(command.UserId, command.OriginDate, command.Comment));
         }
 
         public void ReopenAssignment(ReopenAssignment command)

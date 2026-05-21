@@ -286,10 +286,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
 
             using (var context = new EventContext())
             {
-                assignment.ApproveAssignment(Create.Command.ApproveAssignment(comment: "approved"));
+                assignment.CloseAssignment(Create.Command.CloseAssignment(comment: "approved"));
 
-                Assert.That(assignment.properties.Status, Is.EqualTo(WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Approved));
-                context.ShouldContainEvent<AssignmentApproved>(e => e.Comment == "approved");
+                Assert.That(assignment.properties.Status, Is.EqualTo(WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Closed));
+                context.ShouldContainEvent<AssignmentClosed>(e => e.Comment == "approved");
             }
         }
 
@@ -298,7 +298,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
         {
             var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
             assignment.CompleteAssignment(Create.Command.CompleteAssignment());
-            assignment.ApproveAssignment(Create.Command.ApproveAssignment());
+            assignment.CloseAssignment(Create.Command.CloseAssignment());
 
             using (var context = new EventContext())
             {

@@ -579,9 +579,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string Close {
+        public static string Downsize {
             get {
-                return ResourceManager.GetString("Close", resourceCulture);
+                return ResourceManager.GetString("Downsize", resourceCulture);
             }
         }
         
@@ -933,9 +933,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string StatusApproved {
+        public static string StatusClosed {
             get {
-                return ResourceManager.GetString("StatusApproved", resourceCulture);
+                return ResourceManager.GetString("StatusClosed", resourceCulture);
             }
         }
         
@@ -951,15 +951,15 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string ApproveAssignmentTitle {
+        public static string CloseAssignmentTitle {
             get {
-                return ResourceManager.GetString("ApproveAssignmentTitle", resourceCulture);
+                return ResourceManager.GetString("CloseAssignmentTitle", resourceCulture);
             }
         }
         
-        public static string ApproveAssignmentMessage {
+        public static string CloseAssignmentMessage {
             get {
-                return ResourceManager.GetString("ApproveAssignmentMessage", resourceCulture);
+                return ResourceManager.GetString("CloseAssignmentMessage", resourceCulture);
             }
         }
         
@@ -981,9 +981,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string Approve {
+        public static string Close {
             get {
-                return ResourceManager.GetString("Approve", resourceCulture);
+                return ResourceManager.GetString("Close", resourceCulture);
             }
         }
         
@@ -1011,9 +1011,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string Action_Approved {
+        public static string Action_Closed {
             get {
-                return ResourceManager.GetString("Action_Approved", resourceCulture);
+                return ResourceManager.GetString("Action_Closed", resourceCulture);
             }
         }
         

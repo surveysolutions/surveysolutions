@@ -77,15 +77,15 @@
                     <button class="btn btn-lg btn-primary" id="btnAssignSelected" v-if="!showArchive.key"
                         @click="assignSelected">{{ $t("Common.Assign") }}</button>
 
-                    <button class="btn btn-lg btn-warning" id="btnCloseSelected"
+                    <button class="btn btn-lg btn-warning" id="btnDownsizeSelected"
                         v-if="config.isHeadquarter && !showArchive.key" @click="closeSelected">{{
-                            $t("Assignments.Close")
+                            $t("Assignments.Downsize")
                         }}</button>
 
-                    <button class="btn btn-lg btn-warning" id="btnApproveSelected"
+                    <button class="btn btn-lg btn-warning" id="btnCloseSelected"
                         v-if="(config.isHeadquarter || (config.isSupervisor && config.allowSupervisorChangeAssignmentStatus)) && !showArchive.key"
-                        :disabled="!canComplete" @click="bulkChangeStatus('Approved', 'approveModal')">{{
-                            $t("Assignments.Approve") }}</button>
+                        :disabled="!canComplete" @click="bulkChangeStatus('Closed', 'closeModal')">{{
+                            $t("Assignments.Close") }}</button>
 
                     <button class="btn btn-lg btn-primary" id="btnReopenSelected"
                         v-if="(config.isHeadquarter || (config.isSupervisor && config.allowSupervisorChangeAssignmentStatus)) && !showArchive.key"
@@ -99,8 +99,8 @@
             </div>
         </DataTables>
 
-        <ModalFrame ref="approveModal" :title="$t('Assignments.ApproveAssignmentTitle')">
-            <p>{{ $t('Assignments.ApproveAssignmentMessage') }}</p>
+        <ModalFrame ref="closeModal" :title="$t('Assignments.CloseAssignmentTitle')">
+            <p>{{ $t('Assignments.CloseAssignmentMessage') }}</p>
             <form onsubmit="return false;">
                 <div class="form-group">
                     <label class="control-label" for="completeCommentId">
@@ -114,7 +114,7 @@
             <template v-slot:actions>
                 <div>
                     <button type="button" class="btn btn-primary" @click="confirmStatusChange">{{
-                        $t("Assignments.Approve") }}</button>
+                        $t("Assignments.Close") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
                     }}</button>
                 </div>
@@ -184,7 +184,7 @@
                 <div>
                     <button type="button" class="btn btn-primary" :disabled="isWebModeAssignmentSelected"
                         @click="close">{{
-                            $t("Assignments.Close") }}</button>
+                            $t("Assignments.Downsize") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
                     }}</button>
                 </div>
@@ -359,7 +359,7 @@ export default {
         canReopen() {
             if (this.selectedRows.length === 0 || (this.showArchive && this.showArchive.key)) return false
             const data = this.$refs.table.table.rows({ selected: true }).data()
-            return Array.from(data).some(r => r.status === 'Completed' || r.status === 'Approved')
+            return Array.from(data).some(r => r.status === 'Completed' || r.status === 'Closed')
         },
 
         ddlReceivedByTablet() {
@@ -380,7 +380,7 @@ export default {
                 { key: null, value: this.$t('Assignments.Filter_ShowAll') },
                 { key: 'Open', value: this.$t('Assignments.StatusActive') },
                 { key: 'Completed', value: this.$t('Assignments.StatusCompleted') },
-                { key: 'Approved', value: this.$t('Assignments.StatusApproved') },
+                { key: 'Closed', value: this.$t('Assignments.StatusClosed') },
             ]
         },
 
@@ -446,7 +446,7 @@ export default {
                         const statusMap = {
                             'Open': self.$t('Assignments.StatusActive'),
                             'Completed': self.$t('Assignments.StatusCompleted'),
-                            'Approved': self.$t('Assignments.StatusApproved'),
+                            'Closed': self.$t('Assignments.StatusClosed'),
                         }
                         return statusMap[data] || data
                     },
@@ -908,7 +908,7 @@ export default {
         },
 
         bulkChangeStatus(targetStatus, modalRef) {
-            const validStatuses = targetStatus === 'Approved' ? ['Open', 'Completed'] : ['Completed', 'Approved']
+            const validStatuses = targetStatus === 'Closed' ? ['Open', 'Completed'] : ['Completed', 'Closed']
             const data = this.$refs.table.table.rows({ selected: true }).data()
             this.statusChangeIds = Array.from(data)
                 .filter(r => validStatuses.includes(r.status))
@@ -919,8 +919,8 @@ export default {
         },
 
         async confirmStatusChange() {
-            const modalRef = this.statusChangeTargetStatus === 'Approved'
-                ? this.$refs.approveModal
+            const modalRef = this.statusChangeTargetStatus === 'Closed'
+                ? this.$refs.closeModal
                 : this.$refs.reopenModal
             try {
                 await Promise.all(

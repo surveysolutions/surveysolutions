@@ -728,8 +728,8 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Assignment_Status_Completed" xml:space="preserve">
     <value>Completed</value>
   </data>
-  <data name="Assignment_Status_Approved" xml:space="preserve">
-    <value>Approved</value>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Closed</value>
   </data>
   <data name="AreaMap_Close" xml:space="preserve">
     <value>Close</value>

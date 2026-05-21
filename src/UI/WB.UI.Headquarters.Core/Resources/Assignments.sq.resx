@@ -237,7 +237,7 @@
   <data name="ChangeExpectedModalTitle" xml:space="preserve">
     <value>Korrigjo madhësinë për detyrën {{assignmentId}}</value>
   </data>
-  <data name="Close" xml:space="preserve">
+  <data name="Downsize" xml:space="preserve">
     <value>Zvogëlo</value>
   </data>
   <data name="Comments" xml:space="preserve">
@@ -487,7 +487,7 @@
   <data name="StatusCompleted" xml:space="preserve">
       <value>Përfunduar</value>
   </data>
-  <data name="StatusApproved" xml:space="preserve">
+  <data name="StatusClosed" xml:space="preserve">
       <value>Aprovuar</value>
   </data>
   <data name="CompleteAssignmentTitle" xml:space="preserve">
@@ -496,10 +496,10 @@
   <data name="CompleteAssignmentMessage" xml:space="preserve">
       <value>Jeni i sigurt që keni numëruar të gjitha njësitë e pranueshme?</value>
   </data>
-  <data name="ApproveAssignmentTitle" xml:space="preserve">
+  <data name="CloseAssignmentTitle" xml:space="preserve">
       <value>Aprovo detyrën</value>
   </data>
-  <data name="ApproveAssignmentMessage" xml:space="preserve">
+  <data name="CloseAssignmentMessage" xml:space="preserve">
       <value>Intervistuesit që punojnë jashtë linje mund të vazhdojnë mbledhjen e të dhënave deri në sinkronizim. Intervistat e tilla do të pranohen gjithsesi.</value>
   </data>
   <data name="ReopenAssignmentTitle" xml:space="preserve">
@@ -511,7 +511,7 @@
   <data name="Complete" xml:space="preserve">
       <value>Përfundo</value>
   </data>
-  <data name="Approve" xml:space="preserve">
+  <data name="Close" xml:space="preserve">
       <value>Aprovo</value>
   </data>
   <data name="Reopen" xml:space="preserve">
@@ -526,7 +526,7 @@
   <data name="Action_Completed" xml:space="preserve">
       <value>Përfunduar</value>
   </data>
-  <data name="Action_Approved" xml:space="preserve">
+  <data name="Action_Closed" xml:space="preserve">
       <value>Aprovuar</value>
   </data>
   <data name="Action_Reopened" xml:space="preserve">

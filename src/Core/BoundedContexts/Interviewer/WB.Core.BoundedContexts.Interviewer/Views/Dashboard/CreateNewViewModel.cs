@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 }
 
                 // Approved assignments: hide from interviewer (no actions available)
-                if (assignment.Status == AssignmentStatus.Approved)
+                if (assignment.Status == AssignmentStatus.Closed)
                     continue;
 
                 // Open assignments: show if unlimited or interviews still needed

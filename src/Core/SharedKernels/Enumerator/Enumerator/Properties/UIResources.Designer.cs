@@ -1263,9 +1263,9 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string Assignment_Status_Approved {
+        public static string Assignment_Status_Closed {
             get {
-                return ResourceManager.GetString("Assignment_Status_Approved", resourceCulture);
+                return ResourceManager.GetString("Assignment_Status_Closed", resourceCulture);
             }
         }
         

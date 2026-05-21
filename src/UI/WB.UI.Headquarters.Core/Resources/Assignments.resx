@@ -420,7 +420,7 @@
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
       <value>Expected value of the selected assignment {{id}} will be changed from {{quantity}} to {{collected}} (number of currently collected interviews)</value>
   </data>
-  <data name="Close" xml:space="preserve">
+  <data name="Downsize" xml:space="preserve">
     <value>Downsize</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
@@ -571,8 +571,8 @@
   <data name="StatusCompleted" xml:space="preserve">
       <value>Completed</value>
   </data>
-  <data name="StatusApproved" xml:space="preserve">
-      <value>Approved</value>
+  <data name="StatusClosed" xml:space="preserve">
+      <value>Closed</value>
   </data>
   <data name="CompleteAssignmentTitle" xml:space="preserve">
       <value>Complete assignment</value>
@@ -580,10 +580,10 @@
   <data name="CompleteAssignmentMessage" xml:space="preserve">
       <value>Are you sure you have enumerated all eligible units?</value>
   </data>
-  <data name="ApproveAssignmentTitle" xml:space="preserve">
-      <value>Approve assignment</value>
+  <data name="CloseAssignmentTitle" xml:space="preserve">
+      <value>Close assignment</value>
   </data>
-  <data name="ApproveAssignmentMessage" xml:space="preserve">
+  <data name="CloseAssignmentMessage" xml:space="preserve">
       <value>Interviewers working offline may still continue data collection until synchronization. Such interviews will still be accepted.</value>
   </data>
   <data name="ReopenAssignmentTitle" xml:space="preserve">
@@ -595,8 +595,8 @@
   <data name="Complete" xml:space="preserve">
       <value>Complete</value>
   </data>
-  <data name="Approve" xml:space="preserve">
-      <value>Approve</value>
+  <data name="Close" xml:space="preserve">
+      <value>Close</value>
   </data>
   <data name="Reopen" xml:space="preserve">
       <value>Reopen</value>
@@ -610,8 +610,8 @@
   <data name="Action_Completed" xml:space="preserve">
       <value>Completed</value>
   </data>
-  <data name="Action_Approved" xml:space="preserve">
-      <value>Approved</value>
+  <data name="Action_Closed" xml:space="preserve">
+      <value>Closed</value>
   </data>
   <data name="Action_Reopened" xml:space="preserve">
       <value>Reopened</value>

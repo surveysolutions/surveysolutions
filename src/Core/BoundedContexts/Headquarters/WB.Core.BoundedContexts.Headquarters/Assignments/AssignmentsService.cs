@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 assignment.ResponsibleId == responsibleId
                 && !assignment.Archived
                 // Interviewers only receive Open assignments.
-                // Once Completed or Approved, the assignment is no longer sent to the interviewer tablet
+                // Once Completed or Closed, the assignment is no longer sent to the interviewer tablet
                 // so it is automatically removed from the device after the next sync.
                 && assignment.Status == AssignmentStatus.Open
                 && (assignment.Quantity == null || assignment.InterviewSummaries.Count < assignment.Quantity)
@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         (assignment.ResponsibleId == supervisorId || assignment.Responsible.ReadonlyProfile.SupervisorId == supervisorId)
                         && !assignment.Archived
                         // Supervisors receive Open and Completed assignments only.
-                        // Approved assignments are considered finalised — they are not sent to the supervisor tablet
+                        // Closed assignments are considered finalised — they are not sent to the supervisor tablet
                         // so that they are automatically removed from the device after the next sync.
                         && (assignment.Status == AssignmentStatus.Open || assignment.Status == AssignmentStatus.Completed)
                         && (assignment.Quantity == null || assignment.InterviewSummaries.Count < assignment.Quantity)
@@ -203,7 +203,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 gpsQuery = gpsQuery
                     .Where(x => 
                         x.Assignment.ResponsibleId == currentUserId
-                        && x.Assignment.Status != AssignmentStatus.Approved
+                        && x.Assignment.Status != AssignmentStatus.Closed
                     );
             } 
             else if (authorizedUser.IsSupervisor)
