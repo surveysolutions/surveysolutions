@@ -139,7 +139,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 assignmentsRepository: assignmentsRepo
             );
 
-            // Act
+            // Act: upload step runs first, then download/sync step
+            await synchronizer.UploadLocalStatusChangesAsync(CancellationToken.None);
             await synchronizer.SynchronizeAssignmentsAsync(Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
 
             // Assert: status change was uploaded
@@ -188,7 +189,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 assignmentsRepository: assignmentsRepo
             );
 
-            // Act
+            // Act: upload step runs first, then download/sync step
+            await synchronizer.UploadLocalStatusChangesAsync(CancellationToken.None);
             await synchronizer.SynchronizeAssignmentsAsync(Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
 
             // Assert: status change was uploaded with null comment

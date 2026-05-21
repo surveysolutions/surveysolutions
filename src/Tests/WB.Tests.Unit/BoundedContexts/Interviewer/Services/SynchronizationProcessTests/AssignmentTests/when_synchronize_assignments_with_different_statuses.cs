@@ -174,7 +174,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 assignmentsRepository: assignmentsRepo
             );
 
-            // Act
+            // Act: upload step runs first, then download/sync step
+            await synchronizer.UploadLocalStatusChangesAsync(CancellationToken.None);
             await synchronizer.SynchronizeAssignmentsAsync(
                 Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
 
@@ -225,7 +226,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 assignmentsRepository: assignmentsRepo
             );
 
-            // Act
+            // Act: upload step runs first, then download/sync step
+            await synchronizer.UploadLocalStatusChangesAsync(CancellationToken.None);
             await synchronizer.SynchronizeAssignmentsAsync(
                 Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
 
@@ -311,11 +313,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 assignmentsRepository: assignmentsRepo
             );
 
-            // Act: sync should NOT throw even though upload was rejected
-            Func<Task> act = () => synchronizer.SynchronizeAssignmentsAsync(
-                Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
+            // Act: upload step should NOT throw even though upload was rejected
+            Func<Task> uploadAct = () => synchronizer.UploadLocalStatusChangesAsync(CancellationToken.None);
+            await uploadAct.Should().NotThrowAsync("conflict rejections must not abort the sync");
 
-            await act.Should().NotThrowAsync("conflict rejections must not abort the sync");
+            // Then sync step removes the assignment (server no longer returns it)
+            await synchronizer.SynchronizeAssignmentsAsync(
+                Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
 
             // Assert: upload was attempted, pending flag cleared, assignment removed (server didn't return it)
             syncService.Verify(s => s.ChangeAssignmentStatusAsync(60, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()), Times.Once);

@@ -50,9 +50,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         public virtual async Task SynchronizeAssignmentsAsync(IProgress<SyncProgressInfo> progress,
             SynchronizationStatistics statistics, CancellationToken cancellationToken)
         {
-            // Upload local status changes (Finished set by interviewer, Complete/Reopen by supervisor)
-            await UploadLocalStatusChangesAsync(cancellationToken);
-
             var remoteAssignments = await this.synchronizationService.GetAssignmentsAsync(cancellationToken);
             var localAssignments = this.assignmentsRepository.LoadAll();
 
@@ -104,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             }
         }
 
-        private async Task UploadLocalStatusChangesAsync(CancellationToken cancellationToken)
+        public async Task UploadLocalStatusChangesAsync(CancellationToken cancellationToken)
         {
             var localAssignments = this.assignmentsRepository.LoadAll();
             // Only upload assignments where a local status change is pending (tracked by StatusChangedAtUtc)
