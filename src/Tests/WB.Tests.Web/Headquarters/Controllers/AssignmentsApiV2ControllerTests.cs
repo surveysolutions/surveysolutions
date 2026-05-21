@@ -127,13 +127,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             completedAssignment.Status = AssignmentStatus.Completed;
             completedAssignment.StatusComment = "All done";
 
-            var approvedAssignment = Create.Entity.Assignment(id: 3, quantity: 2);
-            approvedAssignment.Status = AssignmentStatus.Closed;
-            approvedAssignment.StatusComment = "Approved by supervisor";
+            var closedAssignment = Create.Entity.Assignment(id: 3, quantity: 2);
+            closedAssignment.Status = AssignmentStatus.Closed;
+            closedAssignment.StatusComment = "Closed by supervisor";
 
             var assignmentService = Mock.Of<IAssignmentsService>(
                 s => s.GetAssignments(It.IsAny<Guid>()) == new List<Assignment>
-                    { openAssignment, completedAssignment, approvedAssignment });
+                    { openAssignment, completedAssignment, closedAssignment });
 
             var controller = CreateController(assignmentsService: assignmentService);
 
@@ -142,7 +142,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             result.Should().HaveCount(3);
             result.Should().ContainSingle(a => a.Status == AssignmentStatus.Open && a.StatusComment == null);
             result.Should().ContainSingle(a => a.Status == AssignmentStatus.Completed && a.StatusComment == "All done");
-            result.Should().ContainSingle(a => a.Status == AssignmentStatus.Closed && a.StatusComment == "Approved by supervisor");
+            result.Should().ContainSingle(a => a.Status == AssignmentStatus.Closed && a.StatusComment == "Closed by supervisor");
         }
 
         [Test]
@@ -179,7 +179,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void ChangeStatus_to_Approved_dispatches_CloseAssignment_command()
+        public void ChangeStatus_to_Closed_dispatches_CloseAssignment_command()
         {
             var assignmentId = 2;
             var assignmentPublicKey = Guid.NewGuid();

@@ -78,7 +78,7 @@
                         @click="assignSelected">{{ $t("Common.Assign") }}</button>
 
                     <button class="btn btn-lg btn-warning" id="btnDownsizeSelected"
-                        v-if="config.isHeadquarter && !showArchive.key" @click="closeSelected">{{
+                        v-if="config.isHeadquarter && !showArchive.key" @click="downsizeSelected">{{
                             $t("Assignments.Downsize")
                         }}</button>
 
@@ -744,7 +744,7 @@ export default {
             })
         },
 
-        closeSelected() {
+        downsizeSelected() {
             this.$refs.closeModal.modal({
                 keyboard: false,
             })

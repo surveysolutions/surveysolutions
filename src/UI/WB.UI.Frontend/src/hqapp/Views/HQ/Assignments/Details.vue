@@ -82,7 +82,7 @@
                                             </a>
                                         </li>
                                         <li v-if="isHeadquarters && !isArchived">
-                                            <a href="#" @click="closeSelected">
+                                            <a href="#" @click="downsizeSelected">
                                                 {{ $t('Assignments.Downsize') }}
                                             </a>
                                         </li>
@@ -531,7 +531,7 @@ export default {
             window.location.reload(true)
         },
 
-        closeSelected() {
+        downsizeSelected() {
             this.$refs.closeModal.modal({
                 keyboard: false,
             })
