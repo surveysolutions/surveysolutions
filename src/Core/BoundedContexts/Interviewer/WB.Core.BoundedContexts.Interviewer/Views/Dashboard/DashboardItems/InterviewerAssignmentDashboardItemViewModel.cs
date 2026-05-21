@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
-    public class InterviewerAssignmentDashboardItemViewModel : AssignmentDashboardItemViewModel, IDashboardViewItem
+    public class InterviewerAssignmentDashboardItemViewModel : AssignmentDashboardItemViewModel
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;

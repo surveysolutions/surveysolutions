@@ -19,7 +19,8 @@ using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 {
-    public abstract class AssignmentDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel, IAssignmentMarkerViewModel
+    public abstract class AssignmentDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel, 
+        IAssignmentMarkerViewModel, IDashboardViewItem
     {
         protected readonly IServiceLocator serviceLocator;
         protected AssignmentDocument Assignment = null!;
