@@ -280,6 +280,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         private Expression<Func<AssignmentDocument, bool>> GetCompletedAssignmentsFilter()
         {
+            // All Completed assignments on the supervisor tablet need supervisor attention (Close or Reopen).
+            // HQ-side sync already ensures only assignments belonging to this supervisor's team are downloaded,
+            // so no additional ResponsibleId filtering is required here.
             return x => x.Status == AssignmentStatus.Completed;
         }
 

@@ -92,10 +92,17 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
 
             var questionnaireId = Create.Entity.QuestionnaireIdentity().ToString();
 
-            // Completed assignment — should appear in WaitingForSupervisorAction
+            // Completed assignment assigned to supervisor — should appear in WaitingForSupervisorAction
             var completedDoc = Create.Entity.AssignmentDocument(id: 1, responsibleId: Id.gA, questionnaireIdentity: questionnaireId).Build();
             completedDoc.Status = WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Completed;
             assignments.Store(completedDoc);
+
+            // Completed assignment assigned to an interviewer — should also appear in WaitingForSupervisorAction
+            // (HQ sync ensures only this supervisor's team assignments reach the device)
+            var completedByInterviewerDoc = Create.Entity.AssignmentDocument(id: 3, responsibleId: Id.gB, questionnaireIdentity: questionnaireId).Build();
+            completedByInterviewerDoc.Status = WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Completed;
+            completedByInterviewerDoc.ReceivedByInterviewerAt = DateTime.UtcNow;
+            assignments.Store(completedByInterviewerDoc);
 
             // Open assignment assigned to supervisor — should appear in TasksToBeAssigned, not WaitingForSupervisorAction
             var openDoc = Create.Entity.AssignmentDocument(id: 2, responsibleId: Id.gA, questionnaireIdentity: questionnaireId).Build();
@@ -107,14 +114,19 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             var waitingItems = accessor.WaitingForSupervisorAction().ToList();
             var tasksToAssign = accessor.TasksToBeAssigned().ToList();
 
-            // Assert
+            // Assert: both Completed assignments should be in WaitingForSupervisorAction
             var assignmentWaitingItems = waitingItems.OfType<SupervisorAssignmentDashboardItemViewModel>().ToList();
-            Assert.That(assignmentWaitingItems, Has.Count.EqualTo(1), "Completed assignment should appear in WaitingForSupervisorAction");
+            Assert.That(assignmentWaitingItems, Has.Count.EqualTo(2), "All Completed assignments should appear in WaitingForSupervisorAction");
 
+            // Assert: Open assignment appears in TasksToBeAssigned only
             var openItems = tasksToAssign.OfType<SupervisorAssignmentDashboardItemViewModel>().ToList();
-            Assert.That(openItems, Has.Count.EqualTo(1), "Open assignment should appear in TasksToBeAssigned");
+            Assert.That(openItems, Has.Count.EqualTo(1), "Only Open assignment should appear in TasksToBeAssigned");
 
-            Assert.That(accessor.WaitingForSupervisorActionCount(), Is.EqualTo(1));
+            // Assert: Open assignment not in WaitingForSupervisorAction
+            Assert.That(waitingItems.OfType<SupervisorAssignmentDashboardItemViewModel>().All(i => i.AssignmentId != openDoc.Id),
+                Is.True, "Open assignment should not appear in WaitingForSupervisorAction");
+
+            Assert.That(accessor.WaitingForSupervisorActionCount(), Is.EqualTo(2));
             Assert.That(accessor.TasksToBeAssignedCount(), Is.EqualTo(1));
         }
 
