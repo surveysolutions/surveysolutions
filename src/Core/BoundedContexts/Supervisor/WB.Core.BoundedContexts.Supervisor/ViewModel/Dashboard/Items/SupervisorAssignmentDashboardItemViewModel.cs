@@ -52,18 +52,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
 
             if (AllowSupervisorChangeAssignmentStatus)
             {
-                // Open: supervisor can Close via context menu
-                if (Assignment.Status == AssignmentStatus.Open)
-                {
-                    Actions.Add(new ActionDefinition
-                    {
-                        ActionType = ActionType.Context,
-                        Command = new MvxAsyncCommand(this.CloseAssignmentAsync),
-                        Label = EnumeratorUIResources.Dashboard_CloseAssignment
-                    });
-                }
-
-                // Completed: supervisor can Close or Reopen — both visible on card as primary actions
+                // Completed: supervisor can Close (approve) or Reopen
                 if (Assignment.Status == AssignmentStatus.Completed)
                 {
                     Actions.Add(new ActionDefinition
@@ -80,7 +69,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                     });
                 }
 
-                // Closed: supervisor can Reopen — visible on card as a primary button
+                // Closed: supervisor can Reopen
                 if (Assignment.Status == AssignmentStatus.Closed)
                 {
                     Actions.Add(new ActionDefinition

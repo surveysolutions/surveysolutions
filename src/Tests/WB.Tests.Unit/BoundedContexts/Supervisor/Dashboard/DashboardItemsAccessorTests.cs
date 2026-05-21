@@ -73,8 +73,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             // Act
             IEnumerable<IDashboardItem> waitingForSupervisorAction = accessor.WaitingForSupervisorAction();
 
-
-            var items = waitingForSupervisorAction.Cast<SupervisorInterviewDashboardViewModel>().ToList();
+            var items = waitingForSupervisorAction.OfType<SupervisorInterviewDashboardViewModel>().ToList();
 
             Assert.That(items, Has.Count.EqualTo(5));
             items.Should().ContainSingle(i => i.InterviewId == Id.g1, $"Should contain interview in {InterviewStatus.RejectedBySupervisor} status and responsible supervisor");
@@ -82,6 +81,41 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             items.Should().ContainSingle(i => i.InterviewId == Id.g3, $"Should contain interview in {InterviewStatus.InterviewerAssigned} status and responsible supervisor");
             items.Should().ContainSingle(i => i.InterviewId == Id.g4, $"Should contain interview in {InterviewStatus.RejectedByHeadquarters} status and responsible supervisor");
             items.Should().ContainSingle(i => i.InterviewId == Id.g5, $"Should contain interview in {InterviewStatus.RejectedByHeadquarters} status and responsible interviewer");
+        }
+
+        [Test]
+        public void should_put_completed_assignments_in_waiting_for_supervisor_action()
+        {
+            var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            var principal = Mock.Of<IPrincipal>(x => x.IsAuthenticated == true &&
+                                                     x.CurrentUserIdentity == Mock.Of<IUserIdentity>(u => u.UserId == Id.gA));
+
+            var questionnaireId = Create.Entity.QuestionnaireIdentity().ToString();
+
+            // Completed assignment — should appear in WaitingForSupervisorAction
+            var completedDoc = Create.Entity.AssignmentDocument(id: 1, responsibleId: Id.gA, questionnaireIdentity: questionnaireId).Build();
+            completedDoc.Status = WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Completed;
+            assignments.Store(completedDoc);
+
+            // Open assignment assigned to supervisor — should appear in TasksToBeAssigned, not WaitingForSupervisorAction
+            var openDoc = Create.Entity.AssignmentDocument(id: 2, responsibleId: Id.gA, questionnaireIdentity: questionnaireId).Build();
+            assignments.Store(openDoc);
+
+            var accessor = CreateItemsAccessor(assignments: assignments, principal: principal);
+
+            // Act
+            var waitingItems = accessor.WaitingForSupervisorAction().ToList();
+            var tasksToAssign = accessor.TasksToBeAssigned().ToList();
+
+            // Assert
+            var assignmentWaitingItems = waitingItems.OfType<SupervisorAssignmentDashboardItemViewModel>().ToList();
+            Assert.That(assignmentWaitingItems, Has.Count.EqualTo(1), "Completed assignment should appear in WaitingForSupervisorAction");
+
+            var openItems = tasksToAssign.OfType<SupervisorAssignmentDashboardItemViewModel>().ToList();
+            Assert.That(openItems, Has.Count.EqualTo(1), "Open assignment should appear in TasksToBeAssigned");
+
+            Assert.That(accessor.WaitingForSupervisorActionCount(), Is.EqualTo(1));
+            Assert.That(accessor.TasksToBeAssignedCount(), Is.EqualTo(1));
         }
 
         [Test]
@@ -184,6 +218,12 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             IPlainStorage<InterviewerDocument> interviewers = null
             )
         {
+            var settings = Mock.Of<IEnumeratorSettings>(s =>
+                s.AllowSupervisorChangeAssignmentStatus == true &&
+                s.AllowInterviewerChangeAssignmentStatus == true);
+            var serviceLocator = Mock.Of<IServiceLocator>(sl =>
+                sl.GetInstance<IEnumeratorSettings>() == settings);
+
             var viewModelFactory = new Mock<IInterviewViewModelFactory>();
             viewModelFactory.Setup(x => x.GetNew<SupervisorInterviewDashboardViewModel>())
                 .Returns(() => new SupervisorInterviewDashboardViewModel(Mock.Of<IServiceLocator>(),
@@ -193,6 +233,11 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
                     interviewers ?? Mock.Of<IPlainStorage<InterviewerDocument>>(x => x.GetById(It.IsAny<string>()) == new InterviewerDocument()),
                     Mock.Of<IUserInteractionService>(),
                     Mock.Of<IMapInteractionService>()));
+            viewModelFactory.Setup(x => x.GetNew<SupervisorAssignmentDashboardItemViewModel>())
+                .Returns(() => new SupervisorAssignmentDashboardItemViewModel(serviceLocator,
+                    Mock.Of<IMapInteractionService>(),
+                    Mock.Of<IViewModelNavigationService>(),
+                    Mock.Of<IUserInteractionService>()));
 
             return new DashboardItemsAccessor(
 
