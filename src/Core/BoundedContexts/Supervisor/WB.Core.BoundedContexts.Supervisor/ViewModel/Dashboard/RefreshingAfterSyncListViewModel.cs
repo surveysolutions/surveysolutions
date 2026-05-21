@@ -37,10 +37,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         protected override IDashboardItemWithEvents GetUpdatedDashboardItem(IDashboardItemWithEvents dashboardItem)
         {
-            // After a status change the item may need to move to a different group, so trigger a
-            // full list refresh. Return the existing item temporarily; it will be replaced when
-            // UpdateUiItemsAsync completes and rebuilds the list.
-            _ = UpdateUiItemsAsync();
+            // Update the item in-place: re-fetch its backing data and rebind actions/properties
+            // so the card reflects the new status without a full-list rebuild.
+            dashboardItem.Refresh();
             return dashboardItem;
         }
     }

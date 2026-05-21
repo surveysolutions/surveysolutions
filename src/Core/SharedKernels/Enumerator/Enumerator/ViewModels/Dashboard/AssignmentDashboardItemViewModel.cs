@@ -80,6 +80,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             this.RaiseAllPropertiesChanged();
         }
 
+        /// <inheritdoc />
+        public void Refresh()
+        {
+            var fresh = AssignmentsRepository.GetById(Assignment.Id);
+            if (fresh != null)
+                Init(fresh);
+        }
+
         protected virtual void BindTitles()
         {
             Title = string.Format(EnumeratorUIResources.DashboardItem_Title, Assignment.Title, questionnaireIdentity.Version);
