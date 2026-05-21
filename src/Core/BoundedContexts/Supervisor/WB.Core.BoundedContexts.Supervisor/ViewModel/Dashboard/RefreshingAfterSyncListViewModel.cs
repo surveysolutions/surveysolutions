@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MvvmCross;
 using MvvmCross.Plugin.Messenger;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -35,12 +36,20 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             messengerSubscription?.Dispose();
         }
 
-        protected override IDashboardItemWithEvents GetUpdatedDashboardItem(IDashboardItemWithEvents dashboardItem)
+        protected override void ListViewModel_OnItemUpdated(object sender, EventArgs args)
         {
-            // Update the item in-place: re-fetch its backing data and rebind actions/properties
-            // so the card reflects the new status without a full-list rebuild.
-            dashboardItem.Refresh();
-            return dashboardItem;
+            if (sender is IDashboardItemWithEvents dashboardItem)
+            {
+                // Refresh the item in-place first so buttons update immediately.
+                dashboardItem.Refresh();
+
+                // Then schedule a full list rebuild so items are correctly grouped /
+                // removed after the status change.  Calling UpdateUiItemsAsync() here
+                // (rather than inside GetUpdatedDashboardItem) is safe because this
+                // override does NOT touch UiItems[indexOf] afterwards, eliminating the
+                // ArgumentOutOfRangeException race that occurred with the old approach.
+                _ = UpdateUiItemsAsync();
+            }
         }
     }
 }
