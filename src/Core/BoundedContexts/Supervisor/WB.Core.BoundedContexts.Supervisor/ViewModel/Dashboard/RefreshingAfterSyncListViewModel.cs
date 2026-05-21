@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using MvvmCross;
-using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
@@ -34,6 +33,15 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         {
             base.ViewDisappeared();
             messengerSubscription?.Dispose();
+        }
+
+        protected override IDashboardItemWithEvents GetUpdatedDashboardItem(IDashboardItemWithEvents dashboardItem)
+        {
+            // After a status change the item may need to move to a different group, so trigger a
+            // full list refresh. Return the existing item temporarily; it will be replaced when
+            // UpdateUiItemsAsync completes and rebuilds the list.
+            _ = UpdateUiItemsAsync();
+            return dashboardItem;
         }
     }
 }
