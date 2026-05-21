@@ -20,6 +20,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
         public async Task<GpsLocation> GetLocation(double desiredAccuracy, CancellationToken cancellationToken)
         {
+            
             await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>();
 
             var locationManager = (LocationManager)Application.Context.GetSystemService(Context.LocationService);
@@ -41,14 +42,14 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             // CancellationToken fires (e.g. the user-configured GpsReceiveTimeoutSec elapses).
             using var registration = cancellationToken.Register(() =>
             {
-                locationManager.RemoveUpdates(listener);
+                try { locationManager.RemoveUpdates(listener); } catch { /* ignore – listener may already be unregistered */ }
                 tcs.TrySetResult(null);
             });
 
             // If cancellation happened between request and registration, complete deterministically.
             if (cancellationToken.IsCancellationRequested)
             {
-                locationManager.RemoveUpdates(listener);
+                try { locationManager.RemoveUpdates(listener); } catch { /* ignore */ }
                 tcs.TrySetResult(null);
             }
 
@@ -83,9 +84,6 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 if (location.HasAccuracy && location.Accuracy > desiredAccuracy)
                     return;
 
-                // Unregister immediately so we act as a one-shot listener.
-                locationManager.RemoveUpdates(this);
-
                 var timestamp = GetTimestamp(location);
                 var gpsLocation = new GpsLocation(
                     location.HasAccuracy ? location.Accuracy : null,
@@ -94,7 +92,12 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                     location.Longitude,
                     timestamp);
 
+                // Set result before removing updates so the task always completes even if
+                // RemoveUpdates throws (e.g. when called from a non-looper thread).
                 tcs.TrySetResult(gpsLocation);
+
+                // Unregister so we act as a one-shot listener.
+                try { locationManager.RemoveUpdates(this); } catch { /* ignore – result already set */ }
             }
 
             public void OnProviderDisabled(string provider) { }
