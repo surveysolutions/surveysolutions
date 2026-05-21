@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public bool ShowLocationOnMap => this.settings.ShowLocationOnMap &&
                                          this.googleApiService.GetPlayServicesConnectionStatus() == GoogleApiConnectionStatus.Success;
 
-        public IMvxAsyncCommand SaveAnswerCommand => new MvxAsyncCommand(this.SaveAnswerAsync, () => !this.Answering.InProgress);
+        public IMvxAsyncCommand SaveAnswerCommand { get; private set; }
         public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
         public IMvxCommand NavigateToMapsCommand => new MvxCommand(
             () => this.externalAppLauncher.LaunchMapsWithTargetLocation(this.Answer.Latitude, this.Answer.Longitude));
@@ -89,6 +89,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
+            this.SaveAnswerCommand = new MvxAsyncCommand(this.SaveAnswerAsync, () => !this.Answering.InProgress);
             this.liteEventRegistry = liteEventRegistry;
             this.logger = logger;
             this.googleApiService = googleApiService;
@@ -154,8 +155,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 
                 var mvxGeoLocation = await this.locationService.GetLocation(
                     this.settings.GpsDesiredAccuracy, cts.Token).ConfigureAwait(false);
-                
-                this.userInterfaceStateService.NotifyRefreshFinished();
                 
                 if (mvxGeoLocation == null)
                 {

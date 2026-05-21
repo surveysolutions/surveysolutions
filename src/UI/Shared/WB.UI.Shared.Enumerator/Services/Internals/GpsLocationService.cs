@@ -1,10 +1,11 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Android.Content;
+using Android.Locations;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using Xamarin.Essentials;
+using AndroidLocation = Android.Locations.Location;
+using Application = Android.App.Application;
 
 namespace WB.UI.Shared.Enumerator.Services.Internals
 {
@@ -20,23 +21,93 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
         public async Task<GpsLocation> GetLocation(double desiredAccuracy, CancellationToken cancellationToken)
         {
             await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>();
-            var geolocationAccuracy = GetGeolocationAccuracy(desiredAccuracy);
-            GeolocationRequest geolocationRequest = new GeolocationRequest(geolocationAccuracy);
-            var position = await Geolocation.GetLocationAsync(
-                geolocationRequest, cancellationToken).ConfigureAwait(false);
-            if (position == null)
+
+            var locationManager = (LocationManager)Application.Context.GetSystemService(Context.LocationService);
+
+            if (locationManager == null || !locationManager.IsProviderEnabled(LocationManager.GpsProvider))
                 return null;
 
-            return new GpsLocation(position.Accuracy, position.Altitude, position.Latitude, position.Longitude, position.Timestamp);
+            // Preserve existing contract: canceled requests resolve as timeout/no-fix (null).
+            if (cancellationToken.IsCancellationRequested)
+                return null;
+
+            var tcs = new TaskCompletionSource<GpsLocation>(TaskCreationOptions.RunContinuationsAsynchronously);
+            var listener = new SingleShotLocationListener(tcs, locationManager, desiredAccuracy);
+
+            // Register first so cancellation callback can always remove listener updates.
+            locationManager.RequestLocationUpdates(LocationManager.GpsProvider, 0L, 0f, listener);
+
+            // Register cancellation: remove the listener and complete with null when the
+            // CancellationToken fires (e.g. the user-configured GpsReceiveTimeoutSec elapses).
+            using var registration = cancellationToken.Register(() =>
+            {
+                locationManager.RemoveUpdates(listener);
+                tcs.TrySetResult(null);
+            });
+
+            // If cancellation happened between request and registration, complete deterministically.
+            if (cancellationToken.IsCancellationRequested)
+            {
+                locationManager.RemoveUpdates(listener);
+                tcs.TrySetResult(null);
+            }
+
+            return await tcs.Task.ConfigureAwait(false);
         }
 
-        private static GeolocationAccuracy GetGeolocationAccuracy(double desiredAccuracy)
+        /// <summary>
+        /// One-shot <see cref="ILocationListener"/> that resolves a
+        /// <see cref="TaskCompletionSource{GpsLocation}"/> on the first GPS fix that meets
+        /// the requested accuracy, then unregisters itself.
+        /// </summary>
+        private sealed class SingleShotLocationListener : Java.Lang.Object, ILocationListener
         {
-            if (desiredAccuracy < 100)
-                return GeolocationAccuracy.High;
-            if (desiredAccuracy < 500)
-                return GeolocationAccuracy.Medium;
-            return GeolocationAccuracy.Low;
+            private readonly TaskCompletionSource<GpsLocation> tcs;
+            private readonly LocationManager locationManager;
+            private readonly double desiredAccuracy;
+
+            public SingleShotLocationListener(
+                TaskCompletionSource<GpsLocation> tcs,
+                LocationManager locationManager,
+                double desiredAccuracy)
+            {
+                this.tcs = tcs;
+                this.locationManager = locationManager;
+                this.desiredAccuracy = desiredAccuracy;
+            }
+
+            public void OnLocationChanged(AndroidLocation location)
+            {
+                // Skip fixes that don't meet the configured accuracy threshold — keep
+                // waiting for a better satellite fix rather than accepting a coarse one.
+                if (location.HasAccuracy && location.Accuracy > desiredAccuracy)
+                    return;
+
+                // Unregister immediately so we act as a one-shot listener.
+                locationManager.RemoveUpdates(this);
+
+                var timestamp = GetTimestamp(location);
+                var gpsLocation = new GpsLocation(
+                    location.HasAccuracy ? location.Accuracy : null,
+                    location.HasAltitude ? location.Altitude : null,
+                    location.Latitude,
+                    location.Longitude,
+                    timestamp);
+
+                tcs.TrySetResult(gpsLocation);
+            }
+
+            public void OnProviderDisabled(string provider) { }
+            public void OnProviderEnabled(string provider) { }
+            public void OnStatusChanged(string provider, Availability status, Bundle extras) { }
+
+            private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+            private static DateTimeOffset GetTimestamp(AndroidLocation location)
+            {
+                try { return new DateTimeOffset(Epoch.AddMilliseconds(location.Time)); }
+                catch { return DateTimeOffset.UtcNow; }
+            }
         }
     }
 }
