@@ -57,13 +57,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 {
                     Actions.Add(new ActionDefinition
                     {
-                        ActionType = ActionType.Primary,
+                        ActionType = ActionType.Context,
                         Command = new MvxAsyncCommand(this.CloseAssignmentAsync),
                         Label = EnumeratorUIResources.Dashboard_CloseAssignment
                     });
                     Actions.Add(new ActionDefinition
                     {
-                        ActionType = ActionType.Primary,
+                        ActionType = ActionType.Context,
                         Command = new MvxAsyncCommand(this.ReopenAssignmentAsync),
                         Label = EnumeratorUIResources.Dashboard_Reopen
                     });
@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 {
                     Actions.Add(new ActionDefinition
                     {
-                        ActionType = ActionType.Primary,
+                        ActionType = ActionType.Context,
                         Command = new MvxAsyncCommand(this.ReopenAssignmentAsync),
                         Label = EnumeratorUIResources.Dashboard_Reopen
                     });
