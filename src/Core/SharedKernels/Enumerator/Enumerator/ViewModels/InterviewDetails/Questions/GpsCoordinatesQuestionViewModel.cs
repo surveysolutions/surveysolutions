@@ -148,15 +148,50 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.Answering.StartInProgressIndicator();
             this.userInterfaceStateService.NotifyRefreshStarted();
-            
+
+            // Capture GPS result outside the refresh scope so that NotifyRefreshFinished
+            // can be called before SaveGeoLocationAnswerAsync → SendQuestionCommandAsync,
+            // which internally calls WaitWhileUserInterfaceIsRefreshingAsync and would
+            // deadlock if the refresh is still marked as started.
+            GpsLocation mvxGeoLocation = null;
+            Exception gpsException = null;
+
             try
             {
                 cts = new CancellationTokenSource(TimeSpan.FromSeconds(this.settings.GpsReceiveTimeoutSec));
-                
-                var mvxGeoLocation = await this.locationService.GetLocation(
+                mvxGeoLocation = await this.locationService.GetLocation(
                     this.settings.GpsDesiredAccuracy, cts.Token).ConfigureAwait(false);
-                
-                if (mvxGeoLocation == null)
+            }
+            catch (Exception e)
+            {
+                gpsException = e;
+            }
+            finally
+            {
+                // End the long-running GPS wait before executing the answer command.
+                this.userInterfaceStateService.NotifyRefreshFinished();
+            }
+
+            try
+            {
+                if (gpsException is GpsProviderDisabledException)
+                {
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(EnumeratorUIResources.Error_NoGpsProvider);
+                }
+                else if (gpsException is PermissionException || gpsException is MissingPermissionsException)
+                {
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_MissingPermissions);
+                }
+                else if (gpsException is OperationCanceledException)
+                {
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
+                }
+                else if (gpsException != null)
+                {
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
+                    logger.Warn(gpsException.Message, gpsException);
+                }
+                else if (mvxGeoLocation == null)
                 {
                     await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
                 }
@@ -165,30 +200,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     await this.SetGeoLocationAnswerAsync(mvxGeoLocation);
                 }
             }
-            catch (GpsProviderDisabledException)
-            {
-                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(EnumeratorUIResources.Error_NoGpsProvider);
-            }
-            catch (PermissionException)
-            {
-                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_MissingPermissions);
-            }
-            catch (MissingPermissionsException)
-            {
-                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_MissingPermissions);
-            }
-            catch (OperationCanceledException)
-            {
-                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
-            }
-            catch (Exception e)
-            {
-                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
-                logger.Warn(e.Message, e);
-            }
             finally
             {
-                this.userInterfaceStateService.NotifyRefreshFinished();
                 this.Answering.FinishInProgressIndicator();
             }
         }
