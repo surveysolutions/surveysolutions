@@ -30,6 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
         MvxObservableCollection<ActionDefinition> Actions { get; }
         ActionDefinition PrimaryAction {get;}
+        IEnumerable<ActionDefinition> PrimaryActions { get; }
         ActionDefinition SecondaryAction {get;}
         ActionDefinition TargetAreaAction {get;}
         IEnumerable<ActionDefinition> ContextMenu { get; }
