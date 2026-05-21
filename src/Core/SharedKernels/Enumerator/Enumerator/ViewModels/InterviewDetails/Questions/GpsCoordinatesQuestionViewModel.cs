@@ -165,6 +165,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     await this.SetGeoLocationAnswerAsync(mvxGeoLocation);
                 }
             }
+            catch (GpsProviderDisabledException)
+            {
+                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(EnumeratorUIResources.Error_NoGpsProvider);
+            }
             catch (PermissionException)
             {
                 await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_MissingPermissions);

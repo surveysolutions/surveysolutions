@@ -2,6 +2,7 @@
 using Android.Locations;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using Xamarin.Essentials;
 using AndroidLocation = Android.Locations.Location;
@@ -26,7 +27,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             var locationManager = (LocationManager)Application.Context.GetSystemService(Context.LocationService);
 
             if (locationManager == null || !locationManager.IsProviderEnabled(LocationManager.GpsProvider))
-                return null;
+                throw new GpsProviderDisabledException();
 
             // Preserve existing contract: canceled requests resolve as timeout/no-fix (null).
             if (cancellationToken.IsCancellationRequested)
@@ -35,19 +36,25 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             var tcs = new TaskCompletionSource<GpsLocation>(TaskCreationOptions.RunContinuationsAsynchronously);
             var listener = new SingleShotLocationListener(tcs, locationManager, desiredAccuracy);
 
+            // Enforce a hard 10-minute ceiling regardless of the caller-supplied token.
+            using var hardLimitCts = new CancellationTokenSource(TimeSpan.FromMinutes(10));
+            using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, hardLimitCts.Token);
+            var effectiveToken = linkedCts.Token;
+
             // Register first so cancellation callback can always remove listener updates.
             locationManager.RequestLocationUpdates(LocationManager.GpsProvider, 0L, 0f, listener);
 
             // Register cancellation: remove the listener and complete with null when the
-            // CancellationToken fires (e.g. the user-configured GpsReceiveTimeoutSec elapses).
-            using var registration = cancellationToken.Register(() =>
+            // CancellationToken fires (e.g. the user-configured GpsReceiveTimeoutSec elapses or
+            // the hard 10-minute limit is reached).
+            using var registration = effectiveToken.Register(() =>
             {
                 try { locationManager.RemoveUpdates(listener); } catch { /* ignore – listener may already be unregistered */ }
                 tcs.TrySetResult(null);
             });
 
             // If cancellation happened between request and registration, complete deterministically.
-            if (cancellationToken.IsCancellationRequested)
+            if (effectiveToken.IsCancellationRequested)
             {
                 try { locationManager.RemoveUpdates(listener); } catch { /* ignore */ }
                 tcs.TrySetResult(null);
