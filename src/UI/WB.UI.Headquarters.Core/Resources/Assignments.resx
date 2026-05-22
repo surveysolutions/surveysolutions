@@ -297,7 +297,7 @@
   <data name="UpgradeProgressDoneTitle" xml:space="preserve">
     <value>Upgrade from {{from}} to {{to}} is finished</value>
   </data>
-  <data name="ReceivedByTablet_All" xml:space="preserve">
+  <data name="Filter_ShowAll" xml:space="preserve">
     <value>Show all</value>
   </data>
   <data name="ReceivedByTablet_Received" xml:space="preserve">

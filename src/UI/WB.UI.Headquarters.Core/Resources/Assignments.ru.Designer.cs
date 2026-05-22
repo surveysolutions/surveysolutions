@@ -363,9 +363,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string ReceivedByTablet_All {
+        public static string Filter_ShowAll {
             get {
-                return ResourceManager.GetString("ReceivedByTablet_All", resourceCulture);
+                return ResourceManager.GetString("Filter_ShowAll", resourceCulture);
             }
         }
         

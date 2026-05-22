@@ -277,7 +277,7 @@
   <data name="ReceivedByTablet" xml:space="preserve">
     <value>Получено планшетом</value>
   </data>
-  <data name="ReceivedByTablet_All" xml:space="preserve">
+  <data name="Filter_ShowAll" xml:space="preserve">
     <value>Все</value>
   </data>
   <data name="ReceivedByTablet_NotReceived" xml:space="preserve">

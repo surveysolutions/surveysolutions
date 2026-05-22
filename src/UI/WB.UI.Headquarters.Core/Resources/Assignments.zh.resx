@@ -228,7 +228,7 @@
   <data name="ReceivedByTablet" xml:space="preserve">
     <value>平板电脑已收到</value>
   </data>
-  <data name="ReceivedByTablet_All" xml:space="preserve">
+  <data name="Filter_ShowAll" xml:space="preserve">
     <value>显示全部</value>
   </data>
   <data name="ReceivedByTablet_NotReceived" xml:space="preserve">
