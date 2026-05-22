@@ -565,7 +565,7 @@
   <data name="StatusChangeComment" xml:space="preserve">
       <value>Comentario de cambio de estado</value>
   </data>
-  <data name="StatusActive" xml:space="preserve">
+  <data name="StatusOpen" xml:space="preserve">
       <value>Abierto</value>
   </data>
   <data name="StatusCompleted" xml:space="preserve">

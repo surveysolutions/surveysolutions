@@ -353,7 +353,7 @@ export default {
 
         assignmentStatusLabel() {
             const statusMap = {
-                'Open': this.$t('Assignments.StatusActive'),
+                'Open': this.$t('Assignments.StatusOpen'),
                 'Completed': this.$t('Assignments.StatusCompleted'),
                 'Closed': this.$t('Assignments.StatusClosed'),
             }

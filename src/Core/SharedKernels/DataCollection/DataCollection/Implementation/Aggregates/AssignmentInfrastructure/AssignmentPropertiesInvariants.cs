@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Assignm
         {
             if (this.properties.Status != AssignmentStatus.Open)
                 throw new AssignmentException(
-                    $"Assignment can only be finished from Open status. Current status: {this.properties.Status}",
+                    $"Assignment can only be completed from Open status. Current status: {this.properties.Status}",
                     AssignmentDomainExceptionType.InvalidStatusTransition)
                 {
                     Data =
@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Assignm
         {
             if (this.properties.Status != AssignmentStatus.Open && this.properties.Status != AssignmentStatus.Completed)
                 throw new AssignmentException(
-                    $"Assignment can only be approved from Open and Completed status. Current status: {this.properties.Status}",
+                    $"Assignment can only be closed from Open and Completed status. Current status: {this.properties.Status}",
                     AssignmentDomainExceptionType.InvalidStatusTransition)
                 {
                     Data =

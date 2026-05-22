@@ -939,9 +939,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string StatusActive {
+        public static string StatusOpen {
             get {
-                return ResourceManager.GetString("StatusActive", resourceCulture);
+                return ResourceManager.GetString("StatusOpen", resourceCulture);
             }
         }
         

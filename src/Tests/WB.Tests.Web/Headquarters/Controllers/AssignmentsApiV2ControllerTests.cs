@@ -271,7 +271,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void ChangeStatus_Approve_by_non_supervisor_returns_Forbid()
+        public void ChangeStatus_Close_by_non_supervisor_returns_Forbid()
         {
             var assignmentId = 5;
             var userId = Id.gA;

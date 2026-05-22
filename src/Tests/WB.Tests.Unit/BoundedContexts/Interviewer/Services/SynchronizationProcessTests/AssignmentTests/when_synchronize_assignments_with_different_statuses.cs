@@ -64,14 +64,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         }
 
         [Test]
-        public async Task server_reopens_Approved_assignment_local_becomes_Open()
+        public async Task server_reopens_Closed_assignment_local_becomes_Open()
         {
-            // Arrange: local assignment is Approved (supervisor approved, offline), server now says Open (supervisor reopened)
+            // Arrange: local assignment is Closed (supervisor closed, offline), server now says Open (supervisor reopened)
             var local = Create.Entity
                 .AssignmentDocument(10, 5, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
             local.Status = AssignmentStatus.Closed;
-            local.StatusComment = "Was approved";
+            local.StatusComment = "Was closed";
 
             var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
             assignmentsRepo.Store(new[] { local });
@@ -103,9 +103,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         }
 
         [Test]
-        public async Task server_approves_Completed_assignment_local_becomes_Approved()
+        public async Task server_closes_Completed_assignment_local_becomes_Closed()
         {
-            // Arrange: interviewer completed assignment (Completed), supervisor approved it on server
+            // Arrange: interviewer completed assignment (Completed), supervisor closed it on server
             var local = Create.Entity
                 .AssignmentDocument(20, 8, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
@@ -118,7 +118,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var remote = new AssignmentApiView
             {
                 Id = 20, Quantity = 8, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Closed, StatusComment = "Supervisor approved"
+                Status = AssignmentStatus.Closed, StatusComment = "Supervisor closed"
             };
 
             var syncService = new Mock<ISynchronizationService>();
@@ -137,14 +137,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             // Assert
             var updated = assignmentsRepo.GetById(20);
             updated.Status.Should().Be(AssignmentStatus.Closed);
-            updated.StatusComment.Should().Be("Supervisor approved");
+            updated.StatusComment.Should().Be("Supervisor closed");
         }
 
         [Test]
-        public async Task pending_local_Completed_upload_and_server_already_Approved_are_both_handled()
+        public async Task pending_local_Completed_upload_and_server_already_Closed_are_both_handled()
         {
-            // Arrange: local has Completed pending upload, but server already shows Approved
-            // (supervisor approved on web before device synced — conflict)
+            // Arrange: local has Completed pending upload, but server already shows Closed
+            // (supervisor closed on web before device synced — conflict)
             var local = Create.Entity
                 .AssignmentDocument(30, 4, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
@@ -155,12 +155,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
             assignmentsRepo.Store(new[] { local });
 
-            // Server already shows Approved — the upload will succeed (server can handle it gracefully),
-            // and then the next GetAssignments returns Approved
+            // Server already shows Closed — the upload will succeed (server can handle it gracefully),
+            // and then the next GetAssignments returns Closed
             var remoteAfterUpload = new AssignmentApiView
             {
                 Id = 30, Quantity = 4, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Closed, StatusComment = "Already approved"
+                Status = AssignmentStatus.Closed, StatusComment = "Already closed"
             };
 
             var syncService = new Mock<ISynchronizationService>();
@@ -182,10 +182,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             // Assert: local status change was uploaded
             syncService.Verify(s => s.ChangeAssignmentStatusAsync(30, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()), Times.Once);
 
-            // After sync, server's Approved status overrides local Completed
+            // After sync, server's Closed status overrides local Completed
             var updated = assignmentsRepo.GetById(30);
             updated.Status.Should().Be(AssignmentStatus.Closed);
-            updated.StatusComment.Should().Be("Already approved");
+            updated.StatusComment.Should().Be("Already closed");
             updated.StatusChangedAtUtc.Should().BeNull("pending flag is cleared");
         }
 
@@ -285,7 +285,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         public async Task upload_conflict_rejected_by_server_clears_pending_flag_and_does_not_fail_sync()
         {
             // Arrange: interviewer has Completed assignment with pending upload flag
-            // but server rejects the upload (assignment already Approved by supervisor).
+            // but server rejects the upload (assignment already Closed by supervisor).
             var local = Create.Entity
                 .AssignmentDocument(60, 4, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
@@ -301,7 +301,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 WB.Core.SharedKernels.Enumerator.Implementation.Services.SynchronizationExceptionType.InvalidUrl,
                 "Bad Request: Invalid status transition");
 
-            // After the failed upload, server no longer returns this assignment (it's Approved → filtered out for interviewer)
+            // After the failed upload, server no longer returns this assignment (it's Closed → filtered out for interviewer)
             var syncService = new Mock<ISynchronizationService>();
             syncService.Setup(s => s.GetAssignmentsAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<AssignmentApiView>());

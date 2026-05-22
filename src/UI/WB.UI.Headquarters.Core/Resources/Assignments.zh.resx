@@ -295,7 +295,7 @@
   <data name="StatusChangeComment" xml:space="preserve">
       <value>状态变更备注</value>
   </data>
-  <data name="StatusActive" xml:space="preserve">
+  <data name="StatusOpen" xml:space="preserve">
       <value>已开启</value>
   </data>
   <data name="StatusCompleted" xml:space="preserve">

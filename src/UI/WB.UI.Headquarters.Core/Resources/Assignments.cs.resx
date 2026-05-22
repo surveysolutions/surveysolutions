@@ -569,7 +569,7 @@
   <data name="StatusChangeComment" xml:space="preserve">
       <value>Komentář ke stavu</value>
   </data>
-  <data name="StatusActive" xml:space="preserve">
+  <data name="StatusOpen" xml:space="preserve">
       <value>Otevřeno</value>
   </data>
   <data name="StatusCompleted" xml:space="preserve">

@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         [Test]
         public async Task server_status_overrides_local_status()
         {
-            // Arrange: local has Finished (no pending upload), server returns Active
+            // Arrange: local has Completed (no pending upload), server returns Open
             var localAssignment = Create.Entity
                 .AssignmentDocument(1, 10, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 Id = 1,
                 Quantity = 10,
                 QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Open, // server has Active
+                Status = AssignmentStatus.Open, // server has Open
                 StatusComment = null
             };
 
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             // Act
             await synchronizer.SynchronizeAssignmentsAsync(Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
 
-            // Assert: local status should be overridden to Active by server
+            // Assert: local status should be overridden to Open by server
             var updated = assignmentsRepo.GetById(1);
             updated.Status.Should().Be(AssignmentStatus.Open);
             updated.StatusComment.Should().BeNull("server sent null status comment");
@@ -65,9 +65,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         }
 
         [Test]
-        public async Task server_completed_status_overrides_local_finished()
+        public async Task server_closed_status_overrides_local_completed()
         {
-            // Arrange: local has Finished (no pending upload), server has Completed (supervisor completed it)
+            // Arrange: local has Completed (no pending upload), server has Closed (supervisor closed it)
             var localAssignment = Create.Entity
                 .AssignmentDocument(1, 10, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 Id = 1,
                 Quantity = 10,
                 QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Closed, // supervisor completed it on server
+                Status = AssignmentStatus.Closed, // supervisor closed it on server
                 StatusComment = "Completed by supervisor"
             };
 
@@ -97,7 +97,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             // Act
             await synchronizer.SynchronizeAssignmentsAsync(Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
 
-            // Assert: server Completed wins over local Finished
+            // Assert: server Closed wins over local Completed
             var updated = assignmentsRepo.GetById(1);
             updated.Status.Should().Be(AssignmentStatus.Closed);
             updated.StatusComment.Should().Be("Completed by supervisor");
@@ -106,7 +106,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         [Test]
         public async Task uploads_local_status_change_before_downloading()
         {
-            // Arrange: local assignment with Finished status + comment (pending upload indicated by StatusChangedAtUtc)
+            // Arrange: local assignment with Completed status + comment (pending upload indicated by StatusChangedAtUtc)
             var localAssignment = Create.Entity
                 .AssignmentDocument(1, 10, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
@@ -157,7 +157,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         [Test]
         public async Task uploads_local_status_change_with_no_comment()
         {
-            // Arrange: local assignment with Finished status but no comment (StatusChangedAtUtc set = pending)
+            // Arrange: local assignment with Completed status but no comment (StatusChangedAtUtc set = pending)
             var localAssignment = Create.Entity
                 .AssignmentDocument(1, 10, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
@@ -238,7 +238,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             // Act
             await synchronizer.SynchronizeAssignmentsAsync(Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
 
-            // Assert: new assignment has Finished status and comment from server
+            // Assert: new assignment has Completed status and comment from server
             var created = assignmentsRepo.GetById(42);
             created.Should().NotBeNull();
             created.Status.Should().Be(AssignmentStatus.Completed);

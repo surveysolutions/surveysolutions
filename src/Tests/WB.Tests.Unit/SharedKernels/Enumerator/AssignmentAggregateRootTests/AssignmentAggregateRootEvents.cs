@@ -279,7 +279,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
         }
 
         [Test]
-        public void when_approve_assignment_should_set_status_to_approved()
+        public void when_close_assignment_should_set_status_to_closed()
         {
             var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
             assignment.CompleteAssignment(Create.Command.CompleteAssignment());

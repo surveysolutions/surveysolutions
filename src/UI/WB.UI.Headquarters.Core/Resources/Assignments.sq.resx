@@ -481,7 +481,7 @@
   <data name="StatusChangeComment" xml:space="preserve">
       <value>Koment për ndryshimin e statusit</value>
   </data>
-  <data name="StatusActive" xml:space="preserve">
+  <data name="StatusOpen" xml:space="preserve">
       <value>Hapur</value>
   </data>
   <data name="StatusCompleted" xml:space="preserve">

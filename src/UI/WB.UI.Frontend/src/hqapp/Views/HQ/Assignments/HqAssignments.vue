@@ -378,7 +378,7 @@ export default {
         ddlStatus() {
             return [
                 { key: null, value: this.$t('Assignments.Filter_ShowAll') },
-                { key: 'Open', value: this.$t('Assignments.StatusActive') },
+                { key: 'Open', value: this.$t('Assignments.StatusOpen') },
                 { key: 'Completed', value: this.$t('Assignments.StatusCompleted') },
                 { key: 'Closed', value: this.$t('Assignments.StatusClosed') },
             ]
@@ -444,7 +444,7 @@ export default {
                     orderable: true,
                     render(data) {
                         const statusMap = {
-                            'Open': self.$t('Assignments.StatusActive'),
+                            'Open': self.$t('Assignments.StatusOpen'),
                             'Completed': self.$t('Assignments.StatusCompleted'),
                             'Closed': self.$t('Assignments.StatusClosed'),
                         }

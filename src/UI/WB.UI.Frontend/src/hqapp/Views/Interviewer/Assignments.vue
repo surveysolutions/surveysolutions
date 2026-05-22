@@ -356,7 +356,7 @@ export default {
                     orderable: true,
                     render(data) {
                         const statusMap = {
-                            'Open': self.$t('Assignments.StatusActive'),
+                            'Open': self.$t('Assignments.StatusOpen'),
                             'Completed': self.$t('Assignments.StatusCompleted'),
                         }
                         return statusMap[data] || data

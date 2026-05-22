@@ -276,7 +276,7 @@ Possible reasons:
     <value>Allow supervisors to change assignment statuses</value>
   </data>
   <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
-    <value>When enabled, supervisors can approve and reopen assignments</value>
+    <value>When enabled, supervisors can close and reopen assignments</value>
   </data>
   <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
     <value>Allow interviewers to change assignment statuses</value>

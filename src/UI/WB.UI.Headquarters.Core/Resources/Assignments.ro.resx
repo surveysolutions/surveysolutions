@@ -511,7 +511,7 @@
   <data name="StatusChangeComment" xml:space="preserve">
       <value>Comentariu privind schimbarea stării</value>
   </data>
-  <data name="StatusActive" xml:space="preserve">
+  <data name="StatusOpen" xml:space="preserve">
       <value>Deschis</value>
   </data>
   <data name="StatusCompleted" xml:space="preserve">
