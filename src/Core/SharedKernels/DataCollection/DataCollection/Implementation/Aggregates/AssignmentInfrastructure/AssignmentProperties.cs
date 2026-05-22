@@ -43,6 +43,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Assignm
         
         public string TargetArea { get; set; }
 
-        public AssignmentStatus Status { get; set; } = AssignmentStatus.Open;
+        public AssignmentStatus Status { get; set; } = AssignmentStatus.Active;
     }
 }

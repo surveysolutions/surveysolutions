@@ -832,7 +832,7 @@ namespace WB.UI.Headquarters.Controllers
             if (!webInterviewConfig.Started)
                 throw new InvalidOperationException(@"Web interview is not started for this questionnaire");
 
-            if (assignment.Status != AssignmentStatus.Open)
+            if (assignment.Status != AssignmentStatus.Active)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
                     Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 

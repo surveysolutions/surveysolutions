@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
             return x => 
                 x.ResponsibleId != userId 
                 && x.ReceivedByInterviewerAt == null
-                && (x.Status == AssignmentStatus.Open || x.Status == AssignmentStatus.Closed);
+                && (x.Status == AssignmentStatus.Active || x.Status == AssignmentStatus.Completed);
         }
 
         private IEnumerable<AssignmentDocument> GetOutboxAssignments()
@@ -194,7 +194,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         private Expression<Func<AssignmentDocument, bool>> GetSentToInterviewerAssignmentsFilter()
         {
-            return x => x.ReceivedByInterviewerAt != null && x.Status == AssignmentStatus.Open;
+            return x => x.ReceivedByInterviewerAt != null && x.Status == AssignmentStatus.Active;
         }
 
         private IEnumerable<AssignmentDocument> GetSentToInterviewerAssignments()
@@ -252,7 +252,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
             return x =>
                 x.ResponsibleId == userId
                 && x.ReceivedByInterviewerAt == null
-                && x.Status == AssignmentStatus.Open;
+                && x.Status == AssignmentStatus.Active;
         }
 
         private IEnumerable<AssignmentDocument> GetAssignmentsToAssign()
@@ -283,7 +283,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
             // All Completed assignments on the supervisor tablet need supervisor attention (Close or Reopen).
             // HQ-side sync already ensures only assignments belonging to this supervisor's team are downloaded,
             // so no additional ResponsibleId filtering is required here.
-            return x => x.Status == AssignmentStatus.Completed;
+            return x => x.Status == AssignmentStatus.Finished;
         }
 
         private IEnumerable<AssignmentDocument> GetCompletedAssignments()

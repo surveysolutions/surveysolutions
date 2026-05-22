@@ -731,8 +731,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     return Forbid();
 
                 var isAllowedInterviewerTransition =
-                    (request.Status == AssignmentStatus.Open && assignment.Status == AssignmentStatus.Completed) ||
-                    (request.Status == AssignmentStatus.Completed && assignment.Status == AssignmentStatus.Open);
+                    (request.Status == AssignmentStatus.Active && assignment.Status == AssignmentStatus.Finished) ||
+                    (request.Status == AssignmentStatus.Finished && assignment.Status == AssignmentStatus.Active);
 
                 if (!isAllowedInterviewerTransition)
                     return Forbid();
@@ -745,16 +745,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             {
                 switch (request.Status)
                 {
-                    case AssignmentStatus.Open:
+                    case AssignmentStatus.Active:
                         commandService.Execute(new ReopenAssignment(assignment.PublicKey, authorizedUser.Id,
                             assignment.QuestionnaireId, request.Comment));
                         break;
-                    case AssignmentStatus.Completed:
-                        commandService.Execute(new CompleteAssignment(assignment.PublicKey, authorizedUser.Id,
+                    case AssignmentStatus.Finished:
+                        commandService.Execute(new FinishAssignment(assignment.PublicKey, authorizedUser.Id,
                             assignment.QuestionnaireId, request.Comment));
                         break;
-                    case AssignmentStatus.Closed:
-                        commandService.Execute(new CloseAssignment(assignment.PublicKey, authorizedUser.Id,
+                    case AssignmentStatus.Completed:
+                        commandService.Execute(new ApproveAssignment(assignment.PublicKey, authorizedUser.Id,
                             assignment.QuestionnaireId, request.Comment));
                         break;
                     default:

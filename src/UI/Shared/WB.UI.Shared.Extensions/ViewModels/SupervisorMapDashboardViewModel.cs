@@ -31,9 +31,9 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
 
     protected override AssignmentStatus[] AssignmentStatusFilters { get; } =
     {
-        AssignmentStatus.Open,
+        AssignmentStatus.Active,
+        AssignmentStatus.Finished,
         AssignmentStatus.Completed,
-        AssignmentStatus.Closed,
     };
 
     public SupervisorMapDashboardViewModel(IPrincipal principal, 

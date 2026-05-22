@@ -442,14 +442,14 @@ namespace WB.Tests.Abc.TestFactories
             return new UpdateAssignmentTargetArea(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), targetAreaName, questionnaireIdentity ?? new QuestionnaireIdentity());
         }
 
-        public CompleteAssignment CompleteAssignment(Guid? assignmentId = null, Guid? userId = null, string comment = null, QuestionnaireIdentity questionnaireIdentity = null)
+        public FinishAssignment FinishAssignment(Guid? assignmentId = null, Guid? userId = null, string comment = null, QuestionnaireIdentity questionnaireIdentity = null)
         {
-            return new CompleteAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireIdentity ?? new QuestionnaireIdentity(), comment);
+            return new FinishAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireIdentity ?? new QuestionnaireIdentity(), comment);
         }
 
-        public CloseAssignment CloseAssignment(Guid? assignmentId = null, Guid? userId = null, string comment = null, QuestionnaireIdentity questionnaireIdentity = null)
+        public ApproveAssignment ApproveAssignment(Guid? assignmentId = null, Guid? userId = null, string comment = null, QuestionnaireIdentity questionnaireIdentity = null)
         {
-            return new CloseAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireIdentity ?? new QuestionnaireIdentity(), comment);
+            return new ApproveAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireIdentity ?? new QuestionnaireIdentity(), comment);
         }
 
         public ReopenAssignment ReopenAssignment(Guid? assignmentId = null, Guid? userId = null, string comment = null, QuestionnaireIdentity questionnaireIdentity = null)

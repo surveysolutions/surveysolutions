@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         
         public virtual bool QuantityCanBeChanged => !this.Archived && this.WebMode != true;
 
-        public virtual AssignmentStatus Status { get; set; } = AssignmentStatus.Open;
+        public virtual AssignmentStatus Status { get; set; } = AssignmentStatus.Active;
 
         public virtual string StatusComment { get; set; }
 

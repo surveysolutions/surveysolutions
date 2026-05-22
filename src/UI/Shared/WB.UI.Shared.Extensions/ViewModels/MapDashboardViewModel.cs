@@ -218,9 +218,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             return status switch
             {
-                AssignmentStatus.Open => UIResources.Assignment_Status_Open,
-                AssignmentStatus.Completed => UIResources.Assignment_Status_Completed,
-                AssignmentStatus.Closed => UIResources.Assignment_Status_Closed,
+                AssignmentStatus.Active => UIResources.Assignment_Status_Open,
+                AssignmentStatus.Finished => UIResources.Assignment_Status_Completed,
+                AssignmentStatus.Completed => UIResources.Assignment_Status_Closed,
                 _ => status.ToString()
             };
         }

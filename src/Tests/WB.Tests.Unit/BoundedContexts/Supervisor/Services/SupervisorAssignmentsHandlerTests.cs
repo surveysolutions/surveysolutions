@@ -92,7 +92,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var assignment = Create.Entity.AssignmentDocument(1, quantity: 5, interviewsCount: 0,
                 questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
                 .WithResponsible(interviewerId).Build();
-            assignment.Status = AssignmentStatus.Open;
+            assignment.Status = AssignmentStatus.Active;
             assignment.StatusComment = "Reopened by supervisor";
 
             var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
@@ -103,7 +103,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var response = await handler.GetAssignments(new GetAssignmentsRequest { UserId = interviewerId });
 
             // Assert: open assignment with comment is returned
-            response.Assignments[0].Status.Should().Be(AssignmentStatus.Open);
+            response.Assignments[0].Status.Should().Be(AssignmentStatus.Active);
             response.Assignments[0].StatusComment.Should().Be("Reopened by supervisor");
         }
 
@@ -113,7 +113,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var assignment = Create.Entity.AssignmentDocument(1, quantity: 5, interviewsCount: 0,
                 questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
                 .Build();
-            assignment.Status = AssignmentStatus.Open;
+            assignment.Status = AssignmentStatus.Active;
 
             var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
             assignments.Store(assignment);
@@ -125,14 +125,14 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
                 Id = 1,
                 StatusChange = new AssignmentStatusChangeApiView
                 {
-                    Status = AssignmentStatus.Completed,
+                    Status = AssignmentStatus.Finished,
                     Comment = "No more units"
                 }
             });
 
             // Assert
             var updated = assignments.GetById(1);
-            updated.Status.Should().Be(AssignmentStatus.Completed);
+            updated.Status.Should().Be(AssignmentStatus.Finished);
             updated.StatusComment.Should().Be("No more units");
             updated.StatusChangedAtUtc.Should().NotBeNull();
         }
@@ -143,7 +143,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var assignment = Create.Entity.AssignmentDocument(1, quantity: 5, interviewsCount: 0,
                 questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
                 .Build();
-            assignment.Status = AssignmentStatus.Closed; // supervisor already completed
+            assignment.Status = AssignmentStatus.Completed; // supervisor already completed
 
             var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
             assignments.Store(assignment);
@@ -155,14 +155,14 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
                 Id = 1,
                 StatusChange = new AssignmentStatusChangeApiView
                 {
-                    Status = AssignmentStatus.Completed,
+                    Status = AssignmentStatus.Finished,
                     Comment = "I think I'm done"
                 }
             });
 
             // Assert: supervisor's Completed status is preserved
             var updated = assignments.GetById(1);
-            updated.Status.Should().Be(AssignmentStatus.Closed, "supervisor overrides interviewer");
+            updated.Status.Should().Be(AssignmentStatus.Completed, "supervisor overrides interviewer");
         }
 
         [Test]
@@ -176,7 +176,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
                 Id = 999,
                 StatusChange = new AssignmentStatusChangeApiView
                 {
-                    Status = AssignmentStatus.Completed
+                    Status = AssignmentStatus.Finished
                 }
             });
 
@@ -190,7 +190,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var assignment = Create.Entity.AssignmentDocument(1, quantity: 5, interviewsCount: 0,
                 questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
                 .Build();
-            assignment.Status = AssignmentStatus.Completed;
+            assignment.Status = AssignmentStatus.Finished;
             assignment.StatusComment = "Field finished";
 
             var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
@@ -203,14 +203,14 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
                 Id = 1,
                 StatusChange = new AssignmentStatusChangeApiView
                 {
-                    Status = AssignmentStatus.Open,
+                    Status = AssignmentStatus.Active,
                     Comment = "Oops, need to redo"
                 }
             });
 
             // Assert: Completed status preserved; supervisor change takes precedence
             var updated = assignments.GetById(1);
-            updated.Status.Should().Be(AssignmentStatus.Completed, "supervisor's Completed status is not overridden by interviewer");
+            updated.Status.Should().Be(AssignmentStatus.Finished, "supervisor's Completed status is not overridden by interviewer");
             updated.StatusComment.Should().Be("Field finished", "comment is not changed by ignored request");
         }
 
@@ -220,7 +220,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var assignment = Create.Entity.AssignmentDocument(1, quantity: 5, interviewsCount: 0,
                 questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
                 .Build();
-            assignment.Status = AssignmentStatus.Open;
+            assignment.Status = AssignmentStatus.Active;
 
             var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
             assignments.Store(assignment);
@@ -235,7 +235,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
 
             // Assert: status defaults to Open, assignment remains Open
             var updated = assignments.GetById(1);
-            updated.Status.Should().Be(AssignmentStatus.Open);
+            updated.Status.Should().Be(AssignmentStatus.Active);
         }
 
         [Test]
@@ -246,18 +246,18 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var openDoc = Create.Entity.AssignmentDocument(1, quantity: 1, interviewsCount: 0,
                 questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
                 .WithResponsible(interviewerId).Build();
-            openDoc.Status = AssignmentStatus.Open;
+            openDoc.Status = AssignmentStatus.Active;
 
             var completedDoc = Create.Entity.AssignmentDocument(2, quantity: 1, interviewsCount: 0,
                 questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
                 .WithResponsible(interviewerId).Build();
-            completedDoc.Status = AssignmentStatus.Completed;
+            completedDoc.Status = AssignmentStatus.Finished;
             completedDoc.StatusComment = "Done";
 
             var approvedDoc = Create.Entity.AssignmentDocument(3, quantity: 1, interviewsCount: 0,
                 questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
                 .WithResponsible(interviewerId).Build();
-            approvedDoc.Status = AssignmentStatus.Closed;
+            approvedDoc.Status = AssignmentStatus.Completed;
             approvedDoc.StatusComment = "All good";
 
             var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
@@ -271,7 +271,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
 
             // Assert: only Open assignment is sent to interviewer; Completed and Approved stay on supervisor
             response.Assignments.Should().HaveCount(1);
-            response.Assignments.Should().Contain(a => a.Status == AssignmentStatus.Open && a.Id == 1);
+            response.Assignments.Should().Contain(a => a.Status == AssignmentStatus.Active && a.Id == 1);
             response.Assignments.Should().NotContain(a => a.Id == 2, "Completed assignments are not forwarded to interviewers");
             response.Assignments.Should().NotContain(a => a.Id == 3, "Approved assignments are not forwarded to interviewers");
         }

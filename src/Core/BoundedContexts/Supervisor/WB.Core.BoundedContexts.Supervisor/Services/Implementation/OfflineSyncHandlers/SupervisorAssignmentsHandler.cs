@@ -42,12 +42,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             if (assignment == null)
                 return OkResponse.Task;
 
-            var newStatus = request.StatusChange?.Status ?? AssignmentStatus.Open;
+            var newStatus = request.StatusChange?.Status ?? AssignmentStatus.Active;
 
             // Accept the interviewer's status change only when the assignment is currently Open.
             // If the supervisor has already changed the assignment status (to Finished or Approved),
             // ignore the interviewer's update — supervisor changes always take precedence.
-            if (assignment.Status == AssignmentStatus.Open)
+            if (assignment.Status == AssignmentStatus.Active)
             {
                 assignment.Status = newStatus;
                 assignment.StatusComment = request.StatusChange?.Comment;
@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             var result = new GetAssignmentsResponse
             {
                 Assignments = assignments
-                    .Where(a => a.Status == AssignmentStatus.Open)
+                    .Where(a => a.Status == AssignmentStatus.Active)
                     .Select(assignmentDocument => new AssignmentApiView
                     {
                         Id = assignmentDocument.Id,

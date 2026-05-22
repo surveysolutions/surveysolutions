@@ -123,7 +123,7 @@ namespace WB.UI.Headquarters.Controllers
             if (!interviewer.IsInterviewer())
                 throw new InvalidOperationException($"Assignment {assignment.Id} has responsible that is not an interviewer. Interview cannot be created");
 
-            if (assignment.Status != AssignmentStatus.Open)
+            if (assignment.Status != AssignmentStatus.Active)
                 throw new InvalidOperationException($"Assignment {assignment.Id} has status {assignment.Status}. Interview cannot be created for assignment that is not open");
             
             var interviewId = Guid.NewGuid();
@@ -168,7 +168,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var assignment = this.assignments.GetAssignment(id);
 
-            if (assignment.InterviewsNeeded <= 0 || assignment.Status != AssignmentStatus.Open)
+            if (assignment.InterviewsNeeded <= 0 || assignment.Status != AssignmentStatus.Active)
             {
                 TempData["WebInterview.ErrorMessage"] = WebInterviewUI.AssignmentLimitError; 
                 return StatusCode(StatusCodes.Status403Forbidden, new

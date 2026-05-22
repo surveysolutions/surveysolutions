@@ -27,12 +27,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var openLocal = Create.Entity
                 .AssignmentDocument(1, 5, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
-            openLocal.Status = AssignmentStatus.Open;
+            openLocal.Status = AssignmentStatus.Active;
 
             var completedLocal = Create.Entity
                 .AssignmentDocument(2, 3, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
-            completedLocal.Status = AssignmentStatus.Completed;
+            completedLocal.Status = AssignmentStatus.Finished;
             completedLocal.StatusComment = "Field done";
 
             var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var remoteOpen = new AssignmentApiView
             {
                 Id = 1, Quantity = 5, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Open
+                Status = AssignmentStatus.Active
             };
 
             var syncService = new Mock<ISynchronizationService>();
@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var local = Create.Entity
                 .AssignmentDocument(10, 5, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
-            local.Status = AssignmentStatus.Closed;
+            local.Status = AssignmentStatus.Completed;
             local.StatusComment = "Was approved";
 
             var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
@@ -79,7 +79,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var remote = new AssignmentApiView
             {
                 Id = 10, Quantity = 5, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Open, StatusComment = "Reopened by HQ"
+                Status = AssignmentStatus.Active, StatusComment = "Reopened by HQ"
             };
 
             var syncService = new Mock<ISynchronizationService>();
@@ -97,7 +97,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             // Assert: server's Open status wins
             var updated = assignmentsRepo.GetById(10);
-            updated.Status.Should().Be(AssignmentStatus.Open);
+            updated.Status.Should().Be(AssignmentStatus.Active);
             updated.StatusComment.Should().Be("Reopened by HQ");
             updated.StatusChangedAtUtc.Should().BeNull("pending flag cleared after server override");
         }
@@ -109,7 +109,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var local = Create.Entity
                 .AssignmentDocument(20, 8, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
-            local.Status = AssignmentStatus.Completed;
+            local.Status = AssignmentStatus.Finished;
             local.StatusComment = "Interviewer done";
 
             var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
@@ -118,7 +118,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var remote = new AssignmentApiView
             {
                 Id = 20, Quantity = 8, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Closed, StatusComment = "Supervisor approved"
+                Status = AssignmentStatus.Completed, StatusComment = "Supervisor approved"
             };
 
             var syncService = new Mock<ISynchronizationService>();
@@ -136,7 +136,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             // Assert
             var updated = assignmentsRepo.GetById(20);
-            updated.Status.Should().Be(AssignmentStatus.Closed);
+            updated.Status.Should().Be(AssignmentStatus.Completed);
             updated.StatusComment.Should().Be("Supervisor approved");
         }
 
@@ -148,7 +148,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var local = Create.Entity
                 .AssignmentDocument(30, 4, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
-            local.Status = AssignmentStatus.Completed;
+            local.Status = AssignmentStatus.Finished;
             local.StatusComment = "Done by me";
             local.StatusChangedAtUtc = DateTime.UtcNow.AddMinutes(-5); // pending upload
 
@@ -160,7 +160,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var remoteAfterUpload = new AssignmentApiView
             {
                 Id = 30, Quantity = 4, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Closed, StatusComment = "Already approved"
+                Status = AssignmentStatus.Completed, StatusComment = "Already approved"
             };
 
             var syncService = new Mock<ISynchronizationService>();
@@ -184,7 +184,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             // After sync, server's Approved status overrides local Completed
             var updated = assignmentsRepo.GetById(30);
-            updated.Status.Should().Be(AssignmentStatus.Closed);
+            updated.Status.Should().Be(AssignmentStatus.Completed);
             updated.StatusComment.Should().Be("Already approved");
             updated.StatusChangedAtUtc.Should().BeNull("pending flag is cleared");
         }
@@ -196,14 +196,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var local1 = Create.Entity
                 .AssignmentDocument(41, 5, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
-            local1.Status = AssignmentStatus.Completed;
+            local1.Status = AssignmentStatus.Finished;
             local1.StatusComment = "Done A";
             local1.StatusChangedAtUtc = DateTime.UtcNow;
 
             var local2 = Create.Entity
                 .AssignmentDocument(42, 3, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
-            local2.Status = AssignmentStatus.Open;
+            local2.Status = AssignmentStatus.Active;
             local2.StatusComment = "Need more work";
             local2.StatusChangedAtUtc = DateTime.UtcNow;
 
@@ -211,9 +211,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             assignmentsRepo.Store(new[] { local1, local2 });
 
             var remote1 = new AssignmentApiView
-                { Id = 41, Quantity = 5, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA), Status = AssignmentStatus.Completed };
+                { Id = 41, Quantity = 5, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA), Status = AssignmentStatus.Finished };
             var remote2 = new AssignmentApiView
-                { Id = 42, Quantity = 3, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA), Status = AssignmentStatus.Open };
+                { Id = 42, Quantity = 3, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA), Status = AssignmentStatus.Active };
 
             var syncService = new Mock<ISynchronizationService>();
             syncService.Setup(s => s.GetAssignmentsAsync(It.IsAny<CancellationToken>()))
@@ -247,7 +247,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var local = Create.Entity
                 .AssignmentDocument(50, 6, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
-            local.Status = AssignmentStatus.Completed;
+            local.Status = AssignmentStatus.Finished;
             local.StatusComment = "Consistent comment";
             local.StatusChangedAtUtc = null; // no pending change
 
@@ -257,7 +257,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var remote = new AssignmentApiView
             {
                 Id = 50, Quantity = 6, QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Completed, StatusComment = "Consistent comment"
+                Status = AssignmentStatus.Finished, StatusComment = "Consistent comment"
             };
 
             var syncService = new Mock<ISynchronizationService>();
@@ -277,7 +277,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             syncService.Verify(s => s.ChangeAssignmentStatusAsync(It.IsAny<int>(), It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()), Times.Never);
 
             var updated = assignmentsRepo.GetById(50);
-            updated.Status.Should().Be(AssignmentStatus.Completed);
+            updated.Status.Should().Be(AssignmentStatus.Finished);
             updated.StatusComment.Should().Be("Consistent comment");
         }
 
@@ -289,7 +289,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var local = Create.Entity
                 .AssignmentDocument(60, 4, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
-            local.Status = AssignmentStatus.Completed;
+            local.Status = AssignmentStatus.Finished;
             local.StatusComment = "Done offline";
             local.StatusChangedAtUtc = DateTime.UtcNow.AddMinutes(-5); // pending upload
 

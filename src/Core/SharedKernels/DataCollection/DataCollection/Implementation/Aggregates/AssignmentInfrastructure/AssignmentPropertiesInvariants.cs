@@ -1,4 +1,4 @@
-﻿using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 
@@ -34,11 +34,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Assignm
                 };
         }
 
-        public void ThrowIfCannotComplete()
+        public void ThrowIfCannotFinish()
         {
-            if (this.properties.Status != AssignmentStatus.Open)
+            if (this.properties.Status != AssignmentStatus.Active)
                 throw new AssignmentException(
-                    $"Assignment can only be finished from Open status. Current status: {this.properties.Status}",
+                    $"Assignment can only be finished from Active status. Current status: {this.properties.Status}",
                     AssignmentDomainExceptionType.InvalidStatusTransition)
                 {
                     Data =
@@ -49,11 +49,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Assignm
                 };
         }
 
-        public void ThrowIfCannotClose()
+        public void ThrowIfCannotApprove()
         {
-            if (this.properties.Status != AssignmentStatus.Open && this.properties.Status != AssignmentStatus.Completed)
+            if (this.properties.Status != AssignmentStatus.Active && this.properties.Status != AssignmentStatus.Finished)
                 throw new AssignmentException(
-                    $"Assignment can only be approved from Open and Completed status. Current status: {this.properties.Status}",
+                    $"Assignment can only be approved from Active and Finished status. Current status: {this.properties.Status}",
                     AssignmentDomainExceptionType.InvalidStatusTransition)
                 {
                     Data =
@@ -66,9 +66,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Assignm
 
         public void ThrowIfCannotReopen()
         {
-            if (this.properties.Status != AssignmentStatus.Completed && this.properties.Status != AssignmentStatus.Closed)
+            if (this.properties.Status != AssignmentStatus.Completed && this.properties.Status != AssignmentStatus.Finished)
                 throw new AssignmentException(
-                    $"Assignment can only be reopened from Completed or Closed status. Current status: {this.properties.Status}",
+                    $"Assignment can only be reopened from Completed or Finished status. Current status: {this.properties.Status}",
                     AssignmentDomainExceptionType.InvalidStatusTransition)
                 {
                     Data =

@@ -84,12 +84,12 @@
 
                     <button class="btn btn-lg btn-warning" id="btnCloseSelected"
                         v-if="(config.isHeadquarter || (config.isSupervisor && config.allowSupervisorChangeAssignmentStatus)) && !showArchive.key"
-                        :disabled="!canComplete" @click="bulkChangeStatus('Closed', 'closeModal')">{{
+                        :disabled="!canComplete" @click="bulkChangeStatus('Completed', 'closeModal')">{{
                             $t("Assignments.Close") }}</button>
 
                     <button class="btn btn-lg btn-primary" id="btnReopenSelected"
                         v-if="(config.isHeadquarter || (config.isSupervisor && config.allowSupervisorChangeAssignmentStatus)) && !showArchive.key"
-                        :disabled="!canReopen" @click="bulkChangeStatus('Open', 'reopenModal')">{{
+                        :disabled="!canReopen" @click="bulkChangeStatus('Active', 'reopenModal')">{{
                             $t("Assignments.Reopen") }}</button>
 
                     <button class="btn btn-lg btn-danger" id="btnArchiveSelected"
@@ -353,13 +353,13 @@ export default {
         canComplete() {
             if (this.selectedRows.length === 0 || (this.showArchive && this.showArchive.key)) return false
             const data = this.$refs.table.table.rows({ selected: true }).data()
-            return Array.from(data).some(r => r.status === 'Open' || r.status === 'Completed')
+            return Array.from(data).some(r => r.status === 'Active' || r.status === 'Finished')
         },
 
         canReopen() {
             if (this.selectedRows.length === 0 || (this.showArchive && this.showArchive.key)) return false
             const data = this.$refs.table.table.rows({ selected: true }).data()
-            return Array.from(data).some(r => r.status === 'Completed' || r.status === 'Closed')
+            return Array.from(data).some(r => r.status === 'Finished' || r.status === 'Completed')
         },
 
         ddlReceivedByTablet() {
@@ -378,9 +378,9 @@ export default {
         ddlStatus() {
             return [
                 { key: null, value: this.$t('Assignments.Filter_ShowAll') },
-                { key: 'Open', value: this.$t('Assignments.StatusActive') },
-                { key: 'Completed', value: this.$t('Assignments.StatusCompleted') },
-                { key: 'Closed', value: this.$t('Assignments.StatusClosed') },
+                { key: 'Active', value: this.$t('Assignments.StatusActive') },
+                { key: 'Finished', value: this.$t('Assignments.StatusCompleted') },
+                { key: 'Completed', value: this.$t('Assignments.StatusClosed') },
             ]
         },
 
@@ -444,9 +444,9 @@ export default {
                     orderable: true,
                     render(data) {
                         const statusMap = {
-                            'Open': self.$t('Assignments.StatusActive'),
-                            'Completed': self.$t('Assignments.StatusCompleted'),
-                            'Closed': self.$t('Assignments.StatusClosed'),
+                            'Active': self.$t('Assignments.StatusActive'),
+                            'Finished': self.$t('Assignments.StatusCompleted'),
+                            'Completed': self.$t('Assignments.StatusClosed'),
                         }
                         return statusMap[data] || data
                     },
@@ -908,7 +908,7 @@ export default {
         },
 
         bulkChangeStatus(targetStatus, modalRef) {
-            const validStatuses = targetStatus === 'Closed' ? ['Open', 'Completed'] : ['Completed', 'Closed']
+            const validStatuses = targetStatus === 'Completed' ? ['Active', 'Finished'] : ['Finished', 'Completed']
             const data = this.$refs.table.table.rows({ selected: true }).data()
             this.statusChangeIds = Array.from(data)
                 .filter(r => validStatuses.includes(r.status))
@@ -919,7 +919,7 @@ export default {
         },
 
         async confirmStatusChange() {
-            const modalRef = this.statusChangeTargetStatus === 'Closed'
+            const modalRef = this.statusChangeTargetStatus === 'Completed'
                 ? this.$refs.closeModal
                 : this.$refs.reopenModal
             try {

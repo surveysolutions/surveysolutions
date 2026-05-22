@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         /// <summary>
         /// Local assignment status (Open, Finished, Approved).
         /// </summary>
-        public AssignmentStatus Status { get; set; } = AssignmentStatus.Open;
+        public AssignmentStatus Status { get; set; } = AssignmentStatus.Active;
 
         /// <summary>
         /// Comment associated with the last status change, received from server or set locally.
