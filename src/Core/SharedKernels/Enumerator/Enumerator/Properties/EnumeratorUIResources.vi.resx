@@ -1063,4 +1063,7 @@ hoặc liên hệ với giám sát viên của bạn
   <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
     <value>Trạng thái: Được phê duyệt</value>
   </data>
+  <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
+    <value>Status: Open</value>
+  </data>
 </root>

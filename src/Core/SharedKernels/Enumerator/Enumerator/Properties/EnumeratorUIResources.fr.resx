@@ -1009,4 +1009,7 @@ Il apparaîtra sur l'appareil de l'enquêteur après la prochaine synchronisatio
   <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
     <value>Status: Approved</value>
   </data>
+  <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
+    <value>Status: Open</value>
+  </data>
 </root>

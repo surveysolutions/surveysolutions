@@ -47,11 +47,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         public override string Comments => this.Assignment.Comments;
 
         /// <summary>
-        /// Returns a human-readable label for non-Open assignment statuses, or null when Open.
-        /// Displayed on the dashboard card so users can see Completed or Closed state at a glance.
+        /// Returns a human-readable label for the current assignment status.
+        /// Displayed on the dashboard card so users can see the current status at a glance.
         /// </summary>
         public string? AssignmentStatusLabel => Assignment.Status switch
         {
+            AssignmentStatus.Open => EnumeratorUIResources.Dashboard_Assignment_Status_Open,
             AssignmentStatus.Completed => EnumeratorUIResources.Dashboard_Assignment_Status_Completed,
             AssignmentStatus.Closed => EnumeratorUIResources.Dashboard_Assignment_Status_Closed,
             _ => null

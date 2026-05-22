@@ -869,6 +869,9 @@ your next synchronization</value>
   <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
     <value>Status: Closed</value>
   </data>
+  <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
+    <value>Status: Open</value>
+  </data>
   <data name="Dashboard_ShowLocation" xml:space="preserve">
     <value>Show location</value>
   </data>

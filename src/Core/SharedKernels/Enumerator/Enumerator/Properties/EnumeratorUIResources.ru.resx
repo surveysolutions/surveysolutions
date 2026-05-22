@@ -1093,4 +1093,7 @@
   <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
     <value>Статус: Закрыто</value>
   </data>
+  <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
+    <value>Статус: Открыто</value>
+  </data>
 </root>

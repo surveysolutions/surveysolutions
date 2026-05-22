@@ -1527,6 +1527,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Dashboard_Assignment_Status_Open {
+            get {
+                return ResourceManager.GetString("Dashboard_Assignment_Status_Open", resourceCulture);
+            }
+        }
+        
         public static string Dashboard_ShowLocation {
             get {
                 return ResourceManager.GetString("Dashboard_ShowLocation", resourceCulture);
