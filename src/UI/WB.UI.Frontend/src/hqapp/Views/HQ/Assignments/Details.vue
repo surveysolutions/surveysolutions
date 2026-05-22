@@ -660,11 +660,11 @@ export default {
         },
 
         async confirmClose() {
-            await this.changeStatus('Closed', this.$refs.closeModal)
+            await this.changeStatus('Completed', this.$refs.closeModal)
         },
 
         async confirmReopen() {
-            await this.changeStatus('Open', this.$refs.reopenModal)
+            await this.changeStatus('Active', this.$refs.reopenModal)
         },
 
         async changeStatus(status, modalRef) {
@@ -785,24 +785,24 @@ export default {
         },
         assignmentStatus() {
             const statusMap = {
-                'Open': this.$t('Assignments.StatusActive'),
-                'Completed': this.$t('Assignments.StatusCompleted'),
-                'Closed': this.$t('Assignments.StatusClosed'),
+                'Active': this.$t('Assignments.StatusActive'),
+                'Finished': this.$t('Assignments.StatusCompleted'),
+                'Completed': this.$t('Assignments.StatusClosed'),
             }
             return statusMap[this.model.status] || this.model.status
         },
         canComplete() {
             if (this.isArchived) return false
-            if (this.isHeadquarters) return this.model.status === 'Open' || this.model.status === 'Completed'
+            if (this.isHeadquarters) return this.model.status === 'Active' || this.model.status === 'Finished'
             if (this.model.isSupervisor && this.model.allowSupervisorChangeAssignmentStatus)
-                return this.model.status === 'Open' || this.model.status === 'Completed'
+                return this.model.status === 'Active' || this.model.status === 'Finished'
             return false
         },
         canReopen() {
             if (this.isArchived) return false
-            if (this.isHeadquarters) return this.model.status === 'Completed' || this.model.status === 'Closed'
+            if (this.isHeadquarters) return this.model.status === 'Finished' || this.model.status === 'Completed'
             if (this.model.isSupervisor && this.model.allowSupervisorChangeAssignmentStatus)
-                return this.model.status === 'Completed' || this.model.status === 'Closed'
+                return this.model.status === 'Finished' || this.model.status === 'Completed'
             return false
         },
         calendarEventTime() {
@@ -937,8 +937,8 @@ export default {
                                 return data.DeviceId
                             case 'TargetAreaChanged':
                                 return escape(data.TargetArea)
-                            case 'Completed':
-                            case 'Closed':
+                            case 'Finished':
+                            case 'Approved':
                             case 'Reopened':
                                 if (data && data.Comment) {
                                     return self.$t('Assignments.Action_StatusChanged_Comment', {
