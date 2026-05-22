@@ -255,6 +255,13 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("WebTest/{id:guid}")]
         public async Task<IActionResult> WebTest(Guid id)
         {
+            if (string.IsNullOrWhiteSpace(webTesterSettings.Value.JwtSecretKey))
+                return StatusCode(406, new
+                {
+                    error = "WebTester is not configured",
+                    message = "WebTester:JwtSecretKey must be set in application configuration."
+                });
+
             var userId = User.GetIdOrNull();
             DesignerIdentityUser? user = userId.HasValue
                 ? await userManager.FindByIdAsync(userId.Value.ToString())
