@@ -75,7 +75,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
         private const string CaptchaCompletedKey = "CaptchaCompletedKey";
-        private const string PasswordVerifiedKey = "PasswordVerifiedKey";
         public static readonly string LastCreatedInterviewIdKey = "lastCreatedInterviewId";
 
         private readonly ICalendarEventService calendarEventService;
@@ -91,8 +90,7 @@ namespace WB.UI.Headquarters.Controllers
         
         private bool IsPasswordNeededForInterview(string interviewId)
         {
-            var passedInterviews = HttpContext.Session.Get<List<string>>(PasswordVerifiedKey);
-            return !(passedInterviews?.Contains(interviewId)).GetValueOrDefault();
+            return !HttpContext.Session.IsPasswordVerifiedForInterview(interviewId);
         }
 
         private void RememberCaptchaFilled(string interviewId)
@@ -108,13 +106,7 @@ namespace WB.UI.Headquarters.Controllers
 
         private void RememberPasswordVerified(string interviewId)
         {
-            var interviews = HttpContext.Session.Get<List<string>>(PasswordVerifiedKey) ?? new List<string>();
-            if (!interviews.Contains(interviewId))
-            {
-                interviews.Add(interviewId);
-            }
-
-            HttpContext.Session.Set(PasswordVerifiedKey, interviews);
+            HttpContext.Session.SetPasswordVerifiedForInterview(interviewId);
         }
 
         public WebInterviewController(ICommandService commandService,

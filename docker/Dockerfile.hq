@@ -179,7 +179,6 @@ RUN apk add --no-cache \
     \    
     gdal \
     gdal-tools \
-    curl \
     fontconfig \
     binutils \
     && rm -rf /var/cache/apk/*
@@ -204,6 +203,6 @@ ENV HQ_Scheduler__IsClustered=true
 
 WORKDIR /app
 EXPOSE 80
-HEALTHCHECK --interval=5s --timeout=30s --start-period=2s --retries=3 CMD curl -l http://localhost:80/.hc/ready
+HEALTHCHECK --interval=5s --timeout=30s --start-period=2s --retries=3 CMD wget -qO- http://localhost:80/.hc/ready
 
 ENTRYPOINT ["dotnet", "WB.UI.Headquarters.dll"]
