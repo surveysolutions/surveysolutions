@@ -91,14 +91,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 dashboardItem.Init(assignment);
 
                 // Completed assignments: always show (so interviewer can Reopen)
-                if (assignment.Status == AssignmentStatus.Finished)
+                if (assignment.Status == AssignmentStatus.Completed)
                 {
                     yield return dashboardItem;
                     continue;
                 }
 
                 // Approved assignments: hide from interviewer (no actions available)
-                if (assignment.Status == AssignmentStatus.Completed)
+                if (assignment.Status == AssignmentStatus.Closed)
                     continue;
 
                 // Open assignments: show if unlimited or interviews still needed

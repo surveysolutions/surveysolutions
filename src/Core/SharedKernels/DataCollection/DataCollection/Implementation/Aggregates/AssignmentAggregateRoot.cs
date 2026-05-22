@@ -100,21 +100,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.properties.UpdatedAt = @event.OriginDate;
         }
 
-        protected void Apply(AssignmentFinished @event)
-        {
-            this.properties.Status = AssignmentStatus.Finished;
-            this.properties.UpdatedAt = @event.OriginDate;
-        }
-
-        protected void Apply(AssignmentApproved @event)
+        protected void Apply(AssignmentCompleted @event)
         {
             this.properties.Status = AssignmentStatus.Completed;
             this.properties.UpdatedAt = @event.OriginDate;
         }
 
+        protected void Apply(AssignmentClosed @event)
+        {
+            this.properties.Status = AssignmentStatus.Closed;
+            this.properties.UpdatedAt = @event.OriginDate;
+        }
+
         protected void Apply(AssignmentReopened @event)
         {
-            this.properties.Status = AssignmentStatus.Active;
+            this.properties.Status = AssignmentStatus.Open;
             this.properties.UpdatedAt = @event.OriginDate;
         }
 
@@ -211,22 +211,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ApplyEvent(new AssignmentWebModeChanged(command.UserId, command.OriginDate, command.WebMode));
         }
 
-        public void FinishAssignment(FinishAssignment command)
+        public void CompleteAssignment(CompleteAssignment command)
         {
             AssignmentPropertiesInvariants invariants = new AssignmentPropertiesInvariants(this.properties);
             invariants.ThrowIfAssignmentDeleted();
-            invariants.ThrowIfCannotFinish();
+            invariants.ThrowIfCannotComplete();
 
-            ApplyEvent(new AssignmentFinished(command.UserId, command.OriginDate, command.Comment));
+            ApplyEvent(new AssignmentCompleted(command.UserId, command.OriginDate, command.Comment));
         }
 
-        public void ApproveAssignment(ApproveAssignment command)
+        public void CloseAssignment(CloseAssignment command)
         {
             AssignmentPropertiesInvariants invariants = new AssignmentPropertiesInvariants(this.properties);
             invariants.ThrowIfAssignmentDeleted();
-            invariants.ThrowIfCannotApprove();
+            invariants.ThrowIfCannotClose();
 
-            ApplyEvent(new AssignmentApproved(command.UserId, command.OriginDate, command.Comment));
+            ApplyEvent(new AssignmentClosed(command.UserId, command.OriginDate, command.Comment));
         }
 
         public void ReopenAssignment(ReopenAssignment command)

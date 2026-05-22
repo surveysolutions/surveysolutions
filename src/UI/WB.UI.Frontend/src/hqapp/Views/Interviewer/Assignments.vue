@@ -166,18 +166,18 @@ export default {
                 {
                     name: this.$t('Assignments.CreateInterview'),
                     className: 'assignment-create',
-                    disabled: rowData.status === 'Finished',
+                    disabled: rowData.status === 'Completed',
                     callback: () => this.$store.dispatch('createInterview', rowData.id),
                 },
                 {
                     name: this.$t('Common.EditCalendarEvent'),
                     className: 'primary-text',
-                    disabled: rowData.status === 'Finished',
+                    disabled: rowData.status === 'Completed',
                     callback: () => this.editCalendarEvent(rowData.id, rowData.calendarEvent),
                 },
             ]
 
-            if (rowData.status === 'Active' && this.$config.model.allowInterviewerChangeAssignmentStatus) {
+            if (rowData.status === 'Open' && this.$config.model.allowInterviewerChangeAssignmentStatus) {
                 items.push({
                     name: this.$t('Assignments.Complete'),
                     className: 'primary-text',
@@ -185,7 +185,7 @@ export default {
                 })
             }
 
-            if (rowData.status === 'Finished' && this.$config.model.allowInterviewerChangeAssignmentStatus) {
+            if (rowData.status === 'Completed' && this.$config.model.allowInterviewerChangeAssignmentStatus) {
                 items.push({
                     name: this.$t('Assignments.Reopen'),
                     className: 'primary-text',
@@ -209,11 +209,11 @@ export default {
         },
 
         async confirmComplete() {
-            await this.changeAssignmentStatus('Finished', this.$refs.completeModal)
+            await this.changeAssignmentStatus('Completed', this.$refs.completeModal)
         },
 
         async confirmReopen() {
-            await this.changeAssignmentStatus('Active', this.$refs.reopenModal)
+            await this.changeAssignmentStatus('Open', this.$refs.reopenModal)
         },
 
         async changeAssignmentStatus(status, modalRef) {
@@ -356,8 +356,8 @@ export default {
                     orderable: true,
                     render(data) {
                         const statusMap = {
-                            'Active': self.$t('Assignments.StatusActive'),
-                            'Finished': self.$t('Assignments.StatusCompleted'),
+                            'Open': self.$t('Assignments.StatusActive'),
+                            'Completed': self.$t('Assignments.StatusCompleted'),
                         }
                         return statusMap[data] || data
                     },

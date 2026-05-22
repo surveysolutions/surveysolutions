@@ -85,7 +85,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Length = 10,
             });
 
-            capturedModel.Statuses.Should().BeEquivalentTo(new[] { AssignmentStatus.Active, AssignmentStatus.Finished });
+            capturedModel.Statuses.Should().BeEquivalentTo(new[] { AssignmentStatus.Open, AssignmentStatus.Completed });
         }
 
         [Test]
@@ -112,16 +112,16 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Mock.Of<IPlainStorageAccessor<GeoTrackingRecord>>()
             );
 
-            // Interviewer requests Finished assignments — allowed, so server returns intersection: [Finished]
+            // Interviewer requests Completed assignments — allowed, so server returns intersection: [Completed]
             controller.Get(new AssignmentsApiController.AssignmentsDataTableRequest
             {
                 Search = new DataTableRequest.SearchInfo(),
                 Start = 0,
                 Length = 10,
-                Status = "Finished",
+                Status = "Completed",
             });
 
-            capturedModel.Statuses.Should().BeEquivalentTo(new[] { AssignmentStatus.Finished });
+            capturedModel.Statuses.Should().BeEquivalentTo(new[] { AssignmentStatus.Completed });
         }
     }
 }

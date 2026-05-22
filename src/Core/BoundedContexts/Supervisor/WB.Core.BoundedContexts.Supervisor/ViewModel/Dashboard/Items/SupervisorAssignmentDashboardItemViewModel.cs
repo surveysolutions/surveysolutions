@@ -53,16 +53,16 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
             if (AllowSupervisorChangeAssignmentStatus)
             {
                 // Status-change actions go in the context menu (⋮); "Assign" is the only primary button.
-                if (Assignment.Status != AssignmentStatus.Completed)
+                if (Assignment.Status != AssignmentStatus.Closed)
                 {
                     Actions.Add(new ActionDefinition
                     {
                         ActionType = ActionType.Context,
-                        Command = new MvxAsyncCommand(this.ApproveAssignmentAsync),
-                        Label = EnumeratorUIResources.Dashboard_ApproveAssignment
+                        Command = new MvxAsyncCommand(this.CloseAssignmentAsync),
+                        Label = EnumeratorUIResources.Dashboard_CloseAssignment
                     });
                 }
-                if (Assignment.Status != AssignmentStatus.Active)
+                if (Assignment.Status != AssignmentStatus.Open)
                 {
                     Actions.Add(new ActionDefinition
                     {
@@ -80,20 +80,20 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
             navigationService.NavigateToAsync<AssignAssignmentDialogViewModel, AssignAssignmentDialogArgs>(
                 new AssignAssignmentDialogArgs(Assignment.Id));
 
-        private async Task ApproveAssignmentAsync()
+        private async Task CloseAssignmentAsync()
         {
             // Single dialog: shows warning message and optional comment field together
             await ChangeAssignmentStatusAsync(
-                AssignmentStatus.Completed,
-                EnumeratorUIResources.Dashboard_ApproveAssignment_Message,
-                EnumeratorUIResources.Dashboard_ApproveAssignment_Title,
-                EnumeratorUIResources.Dashboard_ApproveAssignment);
+                AssignmentStatus.Closed,
+                EnumeratorUIResources.Dashboard_CloseAssignment_Message,
+                EnumeratorUIResources.Dashboard_CloseAssignment_Title,
+                EnumeratorUIResources.Dashboard_CloseAssignment);
         }
 
         private async Task ReopenAssignmentAsync()
         {
             await ChangeAssignmentStatusAsync(
-                AssignmentStatus.Active,
+                AssignmentStatus.Open,
                 string.Empty,
                 EnumeratorUIResources.Dashboard_ReopenAssignment_Title,
                 EnumeratorUIResources.Dashboard_Reopen);

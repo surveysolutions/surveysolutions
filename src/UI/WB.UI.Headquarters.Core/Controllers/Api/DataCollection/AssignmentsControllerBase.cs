@@ -133,17 +133,17 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             {
                 switch (request.Status)
                 {
-                    case AssignmentStatus.Finished:
+                    case AssignmentStatus.Completed:
                         if (!this.authorizedUser.IsInterviewer)
                             return Forbid();
-                        commandService.Execute(new FinishAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
+                        commandService.Execute(new CompleteAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
                         break;
-                    case AssignmentStatus.Completed:
+                    case AssignmentStatus.Closed:
                         if (!this.authorizedUser.IsSupervisor)
                             return Forbid();
-                        commandService.Execute(new ApproveAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
+                        commandService.Execute(new CloseAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
                         break;
-                    case AssignmentStatus.Active:
+                    case AssignmentStatus.Open:
                         commandService.Execute(new ReopenAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
                         break;
                     default:

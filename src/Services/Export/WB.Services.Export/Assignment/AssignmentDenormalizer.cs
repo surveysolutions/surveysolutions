@@ -22,8 +22,8 @@ namespace WB.Services.Export.Assignment
         IEventHandler<AssignmentWebModeChanged>,    
         IEventHandler<AssignmentQuantityChanged>,
         IEventHandler<AssignmentTargetAreaChanged>,
-        IEventHandler<AssignmentFinished>,
-        IEventHandler<AssignmentApproved>,
+        IEventHandler<AssignmentCompleted>,
+        IEventHandler<AssignmentClosed>,
         IEventHandler<AssignmentReopened>
     {
         private readonly TenantDbContext dbContext;
@@ -133,14 +133,14 @@ namespace WB.Services.Export.Assignment
             assignment.TargetArea = @event.Event.TargetArea;
         }
 
-        public void Handle(PublishedEvent<AssignmentFinished> @event)
+        public void Handle(PublishedEvent<AssignmentCompleted> @event)
         {
-            AddRecord(@event, AssignmentExportedAction.Finished, null, null, @event.Event.Comment);
+            AddRecord(@event, AssignmentExportedAction.Completed, null, null, @event.Event.Comment);
         }
 
-        public void Handle(PublishedEvent<AssignmentApproved> @event)
+        public void Handle(PublishedEvent<AssignmentClosed> @event)
         {
-            AddRecord(@event, AssignmentExportedAction.Approved, null, null, @event.Event.Comment);
+            AddRecord(@event, AssignmentExportedAction.Closed, null, null, @event.Event.Comment);
         }
 
         public void Handle(PublishedEvent<AssignmentReopened> @event)

@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 // Interviewers only receive Open assignments.
                 // Once Completed or Closed, the assignment is no longer sent to the interviewer tablet
                 // so it is automatically removed from the device after the next sync.
-                && assignment.Status == AssignmentStatus.Active
+                && assignment.Status == AssignmentStatus.Open
                 && (assignment.Quantity == null || assignment.InterviewSummaries.Count < assignment.Quantity)
                 && (assignment.WebMode == null || assignment.WebMode == false))
             .ToList());
@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         // Supervisors receive Open and Completed assignments only.
                         // Closed assignments are considered finalised — they are not sent to the supervisor tablet
                         // so that they are automatically removed from the device after the next sync.
-                        && (assignment.Status == AssignmentStatus.Active || assignment.Status == AssignmentStatus.Finished)
+                        && (assignment.Status == AssignmentStatus.Open || assignment.Status == AssignmentStatus.Completed)
                         && (assignment.Quantity == null || assignment.InterviewSummaries.Count < assignment.Quantity)
                         && (assignment.WebMode == null || assignment.WebMode == false))
                     .ToList());
@@ -203,7 +203,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 gpsQuery = gpsQuery
                     .Where(x => 
                         x.Assignment.ResponsibleId == currentUserId
-                        && x.Assignment.Status != AssignmentStatus.Completed
+                        && x.Assignment.Status != AssignmentStatus.Closed
                     );
             } 
             else if (authorizedUser.IsSupervisor)
@@ -340,7 +340,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                      x.QuestionnaireId.Version == questionnaireId.Version &&
                      x.Responsible.ReadonlyProfile.SupervisorId != null &&
                      !x.Archived &&
-                     x.Status == AssignmentStatus.Active &&
+                     x.Status == AssignmentStatus.Open &&
                      (x.Quantity == null || x.InterviewSummaries.Count < x.Quantity) &&
                      x.WebMode == true;
             return readyForWebInterviewAssignments;

@@ -96,9 +96,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 .EqualTo(10 /* assignment.Quantity */ - 5 /* interviewSummary.Count */));
         }
 
-        [TestCase(AssignmentStatus.Active)]
-        [TestCase(AssignmentStatus.Finished)]
+        [TestCase(AssignmentStatus.Open)]
         [TestCase(AssignmentStatus.Completed)]
+        [TestCase(AssignmentStatus.Closed)]
         public void GetAssignments_should_include_status_in_api_view(AssignmentStatus status)
         {
             var assignmentEntity = Create.Entity.Assignment(quantity: 1);
@@ -121,14 +121,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         public void GetAssignments_should_return_all_three_statuses_for_mixed_assignments()
         {
             var openAssignment = Create.Entity.Assignment(id: 1, quantity: 5);
-            openAssignment.Status = AssignmentStatus.Active;
+            openAssignment.Status = AssignmentStatus.Open;
 
             var completedAssignment = Create.Entity.Assignment(id: 2, quantity: 3);
-            completedAssignment.Status = AssignmentStatus.Finished;
+            completedAssignment.Status = AssignmentStatus.Completed;
             completedAssignment.StatusComment = "All done";
 
             var closedAssignment = Create.Entity.Assignment(id: 3, quantity: 2);
-            closedAssignment.Status = AssignmentStatus.Completed;
+            closedAssignment.Status = AssignmentStatus.Closed;
             closedAssignment.StatusComment = "Closed by supervisor";
 
             var assignmentService = Mock.Of<IAssignmentsService>(
@@ -140,20 +140,20 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var result = controller.GetAssignments(new CancellationToken()).Value;
 
             result.Should().HaveCount(3);
-            result.Should().ContainSingle(a => a.Status == AssignmentStatus.Active && a.StatusComment == null);
-            result.Should().ContainSingle(a => a.Status == AssignmentStatus.Finished && a.StatusComment == "All done");
-            result.Should().ContainSingle(a => a.Status == AssignmentStatus.Completed && a.StatusComment == "Closed by supervisor");
+            result.Should().ContainSingle(a => a.Status == AssignmentStatus.Open && a.StatusComment == null);
+            result.Should().ContainSingle(a => a.Status == AssignmentStatus.Completed && a.StatusComment == "All done");
+            result.Should().ContainSingle(a => a.Status == AssignmentStatus.Closed && a.StatusComment == "Closed by supervisor");
         }
 
         [Test]
-        public void ChangeStatus_to_Finished_dispatches_FinishAssignment_command()
+        public void ChangeStatus_to_Completed_dispatches_CompleteAssignment_command()
         {
             var assignmentId = 1;
             var assignmentPublicKey = Guid.NewGuid();
             var userId = Id.gA;
 
             var assignmentEntity = Create.Entity.Assignment(id: assignmentId, publicKey: assignmentPublicKey, responsibleId: userId);
-            assignmentEntity.Status = AssignmentStatus.Active;
+            assignmentEntity.Status = AssignmentStatus.Open;
 
             var assignmentService = new Mock<IAssignmentsService>();
             assignmentService.Setup(s => s.GetAssignment(assignmentId)).Returns(assignmentEntity);
@@ -169,53 +169,19 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             controller.ChangeStatus(assignmentId, new AssignmentStatusChangeApiView
             {
-                Status = AssignmentStatus.Finished,
+                Status = AssignmentStatus.Completed,
                 Comment = "Done for now"
             });
 
             commandService.Verify(cs => cs.Execute(
-                It.Is<FinishAssignment>(c => c.PublicKey == assignmentPublicKey && c.Comment == "Done for now"),
+                It.Is<CompleteAssignment>(c => c.PublicKey == assignmentPublicKey && c.Comment == "Done for now"),
                 It.IsAny<string>()), Times.Once);
         }
 
         [Test]
-        public void ChangeStatus_to_Completed_dispatches_ApproveAssignment_command()
+        public void ChangeStatus_to_Closed_dispatches_CloseAssignment_command()
         {
             var assignmentId = 2;
-            var assignmentPublicKey = Guid.NewGuid();
-            var userId = Id.gA;
-
-            var assignmentEntity = Create.Entity.Assignment(id: assignmentId, publicKey: assignmentPublicKey,
-                assigneeSupervisorId: userId);
-            assignmentEntity.Status = AssignmentStatus.Finished;
-
-            var assignmentService = new Mock<IAssignmentsService>();
-            assignmentService.Setup(s => s.GetAssignment(assignmentId)).Returns(assignmentEntity);
-
-            var commandService = new Mock<ICommandService>();
-
-            var authorizedUser = Mock.Of<IAuthorizedUser>(u => u.Id == userId && u.IsSupervisor == true);
-
-            var controller = CreateController(
-                authorizedUser: authorizedUser,
-                assignmentsService: assignmentService.Object,
-                commandService: commandService.Object);
-
-            controller.ChangeStatus(assignmentId, new AssignmentStatusChangeApiView
-            {
-                Status = AssignmentStatus.Completed,
-                Comment = "Looks good"
-            });
-
-            commandService.Verify(cs => cs.Execute(
-                It.Is<ApproveAssignment>(c => c.PublicKey == assignmentPublicKey && c.Comment == "Looks good"),
-                It.IsAny<string>()), Times.Once);
-        }
-
-        [Test]
-        public void ChangeStatus_to_Active_dispatches_ReopenAssignment_command()
-        {
-            var assignmentId = 3;
             var assignmentPublicKey = Guid.NewGuid();
             var userId = Id.gA;
 
@@ -237,7 +203,41 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             controller.ChangeStatus(assignmentId, new AssignmentStatusChangeApiView
             {
-                Status = AssignmentStatus.Active,
+                Status = AssignmentStatus.Closed,
+                Comment = "Looks good"
+            });
+
+            commandService.Verify(cs => cs.Execute(
+                It.Is<CloseAssignment>(c => c.PublicKey == assignmentPublicKey && c.Comment == "Looks good"),
+                It.IsAny<string>()), Times.Once);
+        }
+
+        [Test]
+        public void ChangeStatus_to_Open_dispatches_ReopenAssignment_command()
+        {
+            var assignmentId = 3;
+            var assignmentPublicKey = Guid.NewGuid();
+            var userId = Id.gA;
+
+            var assignmentEntity = Create.Entity.Assignment(id: assignmentId, publicKey: assignmentPublicKey,
+                assigneeSupervisorId: userId);
+            assignmentEntity.Status = AssignmentStatus.Closed;
+
+            var assignmentService = new Mock<IAssignmentsService>();
+            assignmentService.Setup(s => s.GetAssignment(assignmentId)).Returns(assignmentEntity);
+
+            var commandService = new Mock<ICommandService>();
+
+            var authorizedUser = Mock.Of<IAuthorizedUser>(u => u.Id == userId && u.IsSupervisor == true);
+
+            var controller = CreateController(
+                authorizedUser: authorizedUser,
+                assignmentsService: assignmentService.Object,
+                commandService: commandService.Object);
+
+            controller.ChangeStatus(assignmentId, new AssignmentStatusChangeApiView
+            {
+                Status = AssignmentStatus.Open,
                 Comment = "Need more data"
             });
 
@@ -247,13 +247,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void ChangeStatus_Finish_by_non_interviewer_returns_Forbid()
+        public void ChangeStatus_Complete_by_non_interviewer_returns_Forbid()
         {
             var assignmentId = 4;
             var userId = Id.gA;
 
             var assignmentEntity = Create.Entity.Assignment(id: assignmentId, assigneeSupervisorId: userId);
-            assignmentEntity.Status = AssignmentStatus.Active;
+            assignmentEntity.Status = AssignmentStatus.Open;
 
             var assignmentService = new Mock<IAssignmentsService>();
             assignmentService.Setup(s => s.GetAssignment(assignmentId)).Returns(assignmentEntity);
@@ -264,7 +264,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var result = controller.ChangeStatus(assignmentId, new AssignmentStatusChangeApiView
             {
-                Status = AssignmentStatus.Finished
+                Status = AssignmentStatus.Completed
             });
 
             result.Should().BeOfType<ForbidResult>();
@@ -277,7 +277,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var userId = Id.gA;
 
             var assignmentEntity = Create.Entity.Assignment(id: assignmentId, assigneeSupervisorId: userId);
-            assignmentEntity.Status = AssignmentStatus.Finished;
+            assignmentEntity.Status = AssignmentStatus.Completed;
 
             var assignmentService = new Mock<IAssignmentsService>();
             assignmentService.Setup(s => s.GetAssignment(assignmentId)).Returns(assignmentEntity);
@@ -288,7 +288,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var result = controller.ChangeStatus(assignmentId, new AssignmentStatusChangeApiView
             {
-                Status = AssignmentStatus.Completed
+                Status = AssignmentStatus.Closed
             });
 
             result.Should().BeOfType<ForbidResult>();
@@ -304,7 +304,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var result = controller.ChangeStatus(999, new AssignmentStatusChangeApiView
             {
-                Status = AssignmentStatus.Finished
+                Status = AssignmentStatus.Completed
             });
 
             result.Should().BeOfType<NotFoundObjectResult>();

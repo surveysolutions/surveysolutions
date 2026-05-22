@@ -271,10 +271,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
 
             using (var context = new EventContext())
             {
-                assignment.FinishAssignment(Create.Command.FinishAssignment(comment: "done"));
+                assignment.CompleteAssignment(Create.Command.CompleteAssignment(comment: "done"));
 
-                Assert.That(assignment.properties.Status, Is.EqualTo(WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Finished));
-                context.ShouldContainEvent<AssignmentFinished>(e => e.Comment == "done");
+                Assert.That(assignment.properties.Status, Is.EqualTo(WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Completed));
+                context.ShouldContainEvent<AssignmentCompleted>(e => e.Comment == "done");
             }
         }
 
@@ -282,14 +282,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
         public void when_approve_assignment_should_set_status_to_approved()
         {
             var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
-            assignment.FinishAssignment(Create.Command.FinishAssignment());
+            assignment.CompleteAssignment(Create.Command.CompleteAssignment());
 
             using (var context = new EventContext())
             {
-                assignment.ApproveAssignment(Create.Command.ApproveAssignment(comment: "approved"));
+                assignment.CloseAssignment(Create.Command.CloseAssignment(comment: "approved"));
 
-                Assert.That(assignment.properties.Status, Is.EqualTo(WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Completed));
-                context.ShouldContainEvent<AssignmentApproved>(e => e.Comment == "approved");
+                Assert.That(assignment.properties.Status, Is.EqualTo(WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Closed));
+                context.ShouldContainEvent<AssignmentClosed>(e => e.Comment == "approved");
             }
         }
 
@@ -297,14 +297,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
         public void when_reopen_assignment_should_set_status_to_open()
         {
             var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
-            assignment.FinishAssignment(Create.Command.FinishAssignment());
-            assignment.ApproveAssignment(Create.Command.ApproveAssignment());
+            assignment.CompleteAssignment(Create.Command.CompleteAssignment());
+            assignment.CloseAssignment(Create.Command.CloseAssignment());
 
             using (var context = new EventContext())
             {
                 assignment.ReopenAssignment(Create.Command.ReopenAssignment(comment: "reopened"));
 
-                Assert.That(assignment.properties.Status, Is.EqualTo(WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Active));
+                Assert.That(assignment.properties.Status, Is.EqualTo(WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Open));
                 context.ShouldContainEvent<AssignmentReopened>(e => e.Comment == "reopened");
             }
         }
@@ -317,7 +317,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
 
             assignment.CreateAssignment(command);
 
-            Assert.That(assignment.properties.Status, Is.EqualTo(WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Active));
+            Assert.That(assignment.properties.Status, Is.EqualTo(WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Open));
         }
 
         [Test]

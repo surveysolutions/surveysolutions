@@ -285,13 +285,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                             w.WebMode
                         };
                         break;
-                    case AssignmentFinished f:
-                        historyItem.Action = AssignmentHistoryAction.Finished;
+                    case AssignmentCompleted f:
+                        historyItem.Action = AssignmentHistoryAction.Completed;
                         if (!string.IsNullOrEmpty(f.Comment))
                             historyItem.AdditionalData = new { f.Comment };
                         break;
-                    case AssignmentApproved c2:
-                        historyItem.Action = AssignmentHistoryAction.Approved;
+                    case AssignmentClosed c2:
+                        historyItem.Action = AssignmentHistoryAction.Closed;
                         if (!string.IsNullOrEmpty(c2.Comment))
                             historyItem.AdditionalData = new { c2.Comment };
                         break;

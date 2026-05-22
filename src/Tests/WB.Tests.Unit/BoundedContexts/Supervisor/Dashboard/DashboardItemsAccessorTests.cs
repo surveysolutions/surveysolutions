@@ -94,13 +94,13 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
 
             // Completed assignment assigned to supervisor — should appear in WaitingForSupervisorAction
             var completedDoc = Create.Entity.AssignmentDocument(id: 1, responsibleId: Id.gA, questionnaireIdentity: questionnaireId).Build();
-            completedDoc.Status = WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Finished;
+            completedDoc.Status = WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Completed;
             assignments.Store(completedDoc);
 
             // Completed assignment assigned to an interviewer — should also appear in WaitingForSupervisorAction
             // (HQ sync ensures only this supervisor's team assignments reach the device)
             var completedByInterviewerDoc = Create.Entity.AssignmentDocument(id: 3, responsibleId: Id.gB, questionnaireIdentity: questionnaireId).Build();
-            completedByInterviewerDoc.Status = WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Finished;
+            completedByInterviewerDoc.Status = WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Completed;
             completedByInterviewerDoc.ReceivedByInterviewerAt = DateTime.UtcNow;
             assignments.Store(completedByInterviewerDoc);
 

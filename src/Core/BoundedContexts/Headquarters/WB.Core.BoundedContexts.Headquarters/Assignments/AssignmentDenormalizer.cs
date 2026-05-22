@@ -27,8 +27,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         IUpdateHandler<Assignment, AssignmentQuantityChanged>,
         IUpdateHandler<Assignment, AssignmentTargetAreaChanged>,
         IUpdateHandler<Assignment, AssignmentReceivedByTablet>,
-        IUpdateHandler<Assignment, AssignmentFinished>,
-        IUpdateHandler<Assignment, AssignmentApproved>,
+        IUpdateHandler<Assignment, AssignmentCompleted>,
+        IUpdateHandler<Assignment, AssignmentClosed>,
         IUpdateHandler<Assignment, AssignmentReopened>
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
@@ -177,17 +177,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return null;
         }
 
-        public Assignment Update(Assignment state, IPublishedEvent<AssignmentFinished> @event)
-        {
-            return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
-                assignment =>
-                {
-                    assignment.Status = AssignmentStatus.Finished;
-                    assignment.StatusComment = @event.Payload.Comment;
-                });
-        }
-
-        public Assignment Update(Assignment state, IPublishedEvent<AssignmentApproved> @event)
+        public Assignment Update(Assignment state, IPublishedEvent<AssignmentCompleted> @event)
         {
             return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
                 assignment =>
@@ -197,12 +187,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 });
         }
 
+        public Assignment Update(Assignment state, IPublishedEvent<AssignmentClosed> @event)
+        {
+            return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
+                assignment =>
+                {
+                    assignment.Status = AssignmentStatus.Closed;
+                    assignment.StatusComment = @event.Payload.Comment;
+                });
+        }
+
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentReopened> @event)
         {
             return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
                 assignment =>
                 {
-                    assignment.Status = AssignmentStatus.Active;
+                    assignment.Status = AssignmentStatus.Open;
                     assignment.StatusComment = @event.Payload.Comment;
                 });
         }

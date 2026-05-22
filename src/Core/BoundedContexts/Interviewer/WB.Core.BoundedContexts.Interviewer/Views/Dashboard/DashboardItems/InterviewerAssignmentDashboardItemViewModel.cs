@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
             switch (Assignment.Status)
             {
-                case AssignmentStatus.Active:
+                case AssignmentStatus.Open:
                     Actions.Add(new ActionDefinition
                     {
                         Command = new MvxAsyncCommand(
@@ -68,13 +68,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                         Actions.Add(new ActionDefinition
                         {
                             ActionType = ActionType.Context,
-                            Command = new MvxAsyncCommand(this.FinishAssignmentAsync),
-                            Label = EnumeratorUIResources.Dashboard_FinishAssignment
+                            Command = new MvxAsyncCommand(this.CompleteAssignmentAsync),
+                            Label = EnumeratorUIResources.Dashboard_CompleteAssignment
                         });
                     }
                     break;
 
-                case AssignmentStatus.Finished:
+                case AssignmentStatus.Completed:
                     if (AllowInterviewerChangeAssignmentStatus)
                     {
                         Actions.Add(new ActionDefinition
@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     }
                     break;
 
-                case AssignmentStatus.Completed:
+                case AssignmentStatus.Closed:
                     // No actions available for closed assignments
                     break;
             }
@@ -94,20 +94,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             BindTargetAreaAction(Assignment.Id, Assignment.TargetArea);
         }
 
-        private async Task FinishAssignmentAsync()
+        private async Task CompleteAssignmentAsync()
         {
             // Single dialog: shows warning message and optional comment field together
             await ChangeAssignmentStatusAsync(
-                AssignmentStatus.Finished,
-                EnumeratorUIResources.Dashboard_FinishAssignment_Message,
-                EnumeratorUIResources.Dashboard_FinishAssignment_Title,
-                EnumeratorUIResources.Dashboard_FinishAssignment);
+                AssignmentStatus.Completed,
+                EnumeratorUIResources.Dashboard_CompleteAssignment_Message,
+                EnumeratorUIResources.Dashboard_CompleteAssignment_Title,
+                EnumeratorUIResources.Dashboard_CompleteAssignment);
         }
 
         private async Task ReopenAssignmentAsync()
         {
             await ChangeAssignmentStatusAsync(
-                AssignmentStatus.Active,
+                AssignmentStatus.Open,
                 string.Empty,
                 EnumeratorUIResources.Dashboard_ReopenAssignment_Title,
                 EnumeratorUIResources.Dashboard_Reopen);
