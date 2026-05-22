@@ -220,20 +220,15 @@
                android:background="?attr/selectableItemBackgroundBorderless"
                app:srcCompat="@drawable/dashboard_expand_handle"
                style="@style/Dashboard_ExpandHandle" />
-    <LinearLayout
-        android:id="@+id/main_action"
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/ExpandHandle">
-      <MvxLinearLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:orientation="horizontal"
-          app:MvxBind="ItemsSource PrimaryActions;"
-          app:MvxItemTemplate="@layout/dashboard_primary_action_item" />
-    </LinearLayout>
+    <Button android:id="@+id/main_action"
+          app:MvxBind="Text PrimaryAction.Label; 
+          Click PrimaryAction.Command;
+          Enabled PrimaryAction.IsEnabled;
+          BackgroundColor InterviewStatusToButton(Status);"            
+          style="@style/Dashboard_InterviewItem_MainActionButton"
+            
+          app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+          app:layout_constraintTop_toBottomOf="@+id/ExpandHandle" />
     <TextView
         android:id="@+id/show_qr_code"
         style="@style/Dashboard_ExtraButton"

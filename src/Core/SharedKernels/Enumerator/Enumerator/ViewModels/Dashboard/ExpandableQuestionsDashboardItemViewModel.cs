@@ -57,7 +57,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             RaisePropertyChanged(nameof(PrimaryAction));
-            RaisePropertyChanged(nameof(PrimaryActions));
             RaisePropertyChanged(nameof(SecondaryAction));
             RaisePropertyChanged(nameof(ContextMenu));
             RaisePropertyChanged(nameof(HasContextMenu));
@@ -101,8 +100,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         protected List<PrefilledQuestion> IdentifyingData;
         protected List<PrefilledQuestion> DetailedIdentifyingData;
 
-        public ActionDefinition PrimaryAction => Actions.FirstOrDefault(a => a.ActionType == ActionType.Primary);
-        public IEnumerable<ActionDefinition> PrimaryActions => Actions.Where(a => a.ActionType == ActionType.Primary);
+        public ActionDefinition PrimaryAction => Actions.SingleOrDefault(a => a.ActionType == ActionType.Primary);
         public ActionDefinition SecondaryAction => Actions.SingleOrDefault(a => a.ActionType == ActionType.Secondary);
         public ActionDefinition ExtraAction => Actions.SingleOrDefault(a => a.ActionType == ActionType.Extra);
         public ActionDefinition TargetAreaAction => Actions.SingleOrDefault(a => a.ActionType == ActionType.TargetArea);
