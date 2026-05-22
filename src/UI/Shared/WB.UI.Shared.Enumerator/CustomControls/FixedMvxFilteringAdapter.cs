@@ -212,6 +212,9 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             return base.GetView(position, convertView, parent);
         }
 
+        public override View GetDropDownView(int position, View convertView, ViewGroup parent)
+            => GetView(position, convertView, parent);
+
         #region Implementation of IFilterable
 
         public Filter Filter { get; set; }
