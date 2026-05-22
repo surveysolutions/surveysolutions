@@ -1091,6 +1091,6 @@
     <value>Статус: Завершено</value>
   </data>
   <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
-    <value>Статус: Закрыто</value>
+    <value>Статус: Принято</value>
   </data>
 </root>
