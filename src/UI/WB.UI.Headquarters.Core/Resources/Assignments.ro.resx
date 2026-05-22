@@ -438,7 +438,7 @@
   <data name="ReceivedByTablet" xml:space="preserve">
     <value>Primit de tabletă</value>
   </data>
-  <data name="Filter_ShowAll" xml:space="preserve">
+  <data name="ReceivedByTablet_All" xml:space="preserve">
     <value>Arata tot</value>
   </data>
   <data name="ReceivedByTablet_NotReceived" xml:space="preserve">

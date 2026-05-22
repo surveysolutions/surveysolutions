@@ -348,7 +348,7 @@
   <data name="ReceivedByTablet" xml:space="preserve">
     <value>Marrë nga tableti</value>
   </data>
-  <data name="Filter_ShowAll" xml:space="preserve">
+  <data name="ReceivedByTablet_All" xml:space="preserve">
     <value>Shfaqi të gjitha</value>
   </data>
   <data name="ReceivedByTablet_NotReceived" xml:space="preserve">
