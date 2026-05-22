@@ -225,37 +225,7 @@
   <data name="Dashboard_SearchWatermark" xml:space="preserve">
     <value>Vendos tekstin për kërkim</value>
   </data>
-      <data name="Dashboard_CompleteAssignment" xml:space="preserve">
-    <value>Complete</value>
-  </data>
-  <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
-    <value>Complete assignment</value>
-  </data>
-  <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
-    <value>Are you sure you have enumerated all eligible units for this assignment?</value>
-  </data>
-  <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
-    <value>Reopen assignment</value>
-  </data>
-  <data name="Dashboard_CloseAssignment" xml:space="preserve">
-    <value>Approve</value>
-  </data>
-  <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
-    <value>Approve assignment</value>
-  </data>
-  <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
-    <value>Interviewers working offline may still continue data collection until synchronization. Such interviews will still be accepted.</value>
-  </data>
-  <data name="Dashboard_Assignment_Comment" xml:space="preserve">
-    <value>Comment (optional)</value>
-  </data>
-<data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
-    <value>Status: Completed</value>
-  </data>
-  <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
-    <value>Status: Approved</value>
-  </data>
-<data name="Dashboard_ShowLocation" xml:space="preserve">
+  <data name="Dashboard_ShowLocation" xml:space="preserve">
     <value>Shfaq vendndodhjen</value>
   </data>
   <data name="Dashboard_Start" xml:space="preserve">
@@ -905,5 +875,35 @@
   </data>
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>Përgjigjja e marre duket të mos vijë nga shërbimi Survey Solutions. Kjo zakonisht shkaktohet nga një proxy rrjeti, firewall ose gateway sigurie që kap lidhjen. Ju lutemi kontrolloni lidhjen tuaj të rrjetit ose kontaktoni mbështetjen e TI.</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
+    <value>Complete assignment</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
+    <value>Are you sure you have enumerated all eligible units for this assignment?</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
+    <value>Reopen assignment</value>
+  </data>
+  <data name="Dashboard_CloseAssignment" xml:space="preserve">
+    <value>Approve</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
+    <value>Approve assignment</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
+    <value>Interviewers working offline may still continue data collection until synchronization. Such interviews will still be accepted.</value>
+  </data>
+  <data name="Dashboard_Assignment_Comment" xml:space="preserve">
+    <value>Comment (optional)</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
+    <value>Status: Completed</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
+    <value>Status: Approved</value>
   </data>
 </root>

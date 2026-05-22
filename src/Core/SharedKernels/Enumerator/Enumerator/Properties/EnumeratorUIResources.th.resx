@@ -438,7 +438,7 @@
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>การตอบกลับที่ได้รับดูเหมือนไม่มาจากเซิร์ฟเวอร์ Survey Solutions โดยปกติสถานะนี้เกิดจากพร็อกซีเครือข่าย ไฟร์วอลล์ หรือเกตเวย์ความปลอดภัยที่ดักจับการเชื่อมต่อ กรุณาตรวจสอบการเชื่อมต่อเครือข่ายหรือ ติดต่อฝ่ายไอทีของคุณ</value>
   </data>
-    <data name="Dashboard_CompleteAssignment" xml:space="preserve">
+  <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>Complete</value>
   </data>
   <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
@@ -462,7 +462,7 @@
   <data name="Dashboard_Assignment_Comment" xml:space="preserve">
     <value>Comment (optional)</value>
   </data>
-<data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
+  <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
     <value>Status: Completed</value>
   </data>
   <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">

@@ -442,7 +442,7 @@ Silahkan masukkan password Anda yang diperbarui. Jika hal itu tidak menyelesaika
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>Respons yang diterima tampaknya tidak berasal dari server Survey Solutions. Ini biasanya disebabkan oleh proxy jaringan, firewall, atau gateway keamanan yang mencegat koneksi. Periksa koneksi jaringan Anda atau hubungi dukungan TI.</value>
   </data>
-    <data name="Dashboard_CompleteAssignment" xml:space="preserve">
+  <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>Complete</value>
   </data>
   <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
@@ -466,7 +466,7 @@ Silahkan masukkan password Anda yang diperbarui. Jika hal itu tidak menyelesaika
   <data name="Dashboard_Assignment_Comment" xml:space="preserve">
     <value>Comment (optional)</value>
   </data>
-<data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
+  <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
     <value>Status: Completed</value>
   </data>
   <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">

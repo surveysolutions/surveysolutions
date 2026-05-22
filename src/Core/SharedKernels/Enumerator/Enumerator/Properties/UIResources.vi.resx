@@ -651,19 +651,6 @@
   <data name="MapDashboard_TypeTitle" xml:space="preserve">
     <value>Loại</value>
   </data>
-  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
-    <value>Trạng thái phân công</value>
-  </data>
-  <data name="Assignment_Status_Open" xml:space="preserve">
-    <value>Mở</value>
-  </data>
-  <data name="Assignment_Status_Completed" xml:space="preserve">
-    <value>Hoàn thành</value>
-  </data>
-  <data name="Assignment_Status_Closed" xml:space="preserve">
-    <value>Được phê duyệt</value>
-  </data>
-
   <data name="MapDashboard_FiltersTitle" xml:space="preserve">
     <value>Bộ lọc</value>
   </data>
@@ -919,5 +906,17 @@
   </data>
   <data name="SelectShapefileTitle" xml:space="preserve">
     <value>Chọn Ranh giới:</value>
+  </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>Mở</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>Hoàn thành</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Được phê duyệt</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>Trạng thái phân công</value>
   </data>
 </root>

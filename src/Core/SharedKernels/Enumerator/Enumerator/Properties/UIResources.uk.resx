@@ -753,19 +753,6 @@
   <data name="MapDashboard_TypeTitle" xml:space="preserve">
     <value>Тип</value>
   </data>
-  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
-    <value>Статус завдання</value>
-  </data>
-  <data name="Assignment_Status_Open" xml:space="preserve">
-    <value>Активне</value>
-  </data>
-  <data name="Assignment_Status_Completed" xml:space="preserve">
-    <value>Завершено</value>
-  </data>
-  <data name="Assignment_Status_Closed" xml:space="preserve">
-    <value>Закрито</value>
-  </data>
-
   <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
     <value>Вихід з редактора мап</value>
   </data>
@@ -900,5 +887,17 @@
   </data>
   <data name="Warnings" xml:space="preserve">
     <value>Попередження</value>
+  </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>Активне</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>Завершено</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Закрито</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>Статус завдання</value>
   </data>
 </root>

@@ -247,37 +247,7 @@ Trebuie să rezolvați problemele menționate pe copertă</value>
   <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
     <value>Ieșire din Căutare</value>
   </data>
-      <data name="Dashboard_CompleteAssignment" xml:space="preserve">
-    <value>Complete</value>
-  </data>
-  <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
-    <value>Complete assignment</value>
-  </data>
-  <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
-    <value>Are you sure you have enumerated all eligible units for this assignment?</value>
-  </data>
-  <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
-    <value>Reopen assignment</value>
-  </data>
-  <data name="Dashboard_CloseAssignment" xml:space="preserve">
-    <value>Approve</value>
-  </data>
-  <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
-    <value>Approve assignment</value>
-  </data>
-  <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
-    <value>Interviewers working offline may still continue data collection until synchronization. Such interviews will still be accepted.</value>
-  </data>
-  <data name="Dashboard_Assignment_Comment" xml:space="preserve">
-    <value>Comment (optional)</value>
-  </data>
-<data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
-    <value>Status: Completed</value>
-  </data>
-  <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
-    <value>Status: Approved</value>
-  </data>
-<data name="Dashboard_ShowLocation" xml:space="preserve">
+  <data name="Dashboard_ShowLocation" xml:space="preserve">
     <value>Afișare localizare</value>
   </data>
   <data name="Dashboard_Start" xml:space="preserve">
@@ -985,4 +955,34 @@ Va apărea pe dispozitivul Anchetator după următoarea sincronizare </value>
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>Răspunsul primit pare să nu provină de la serverul Survey Solutions. De obicei acest lucru este cauzat de un proxy de rețea, firewall sau un gateway de securitate care interceptează conexiunea. Vă rugăm să verificați conexiunea de rețea sau contactați asistența IT.</value>
   </data>
-  </root>
+    <data name="Dashboard_CompleteAssignment" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
+    <value>Complete assignment</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
+    <value>Are you sure you have enumerated all eligible units for this assignment?</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
+    <value>Reopen assignment</value>
+  </data>
+  <data name="Dashboard_CloseAssignment" xml:space="preserve">
+    <value>Approve</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
+    <value>Approve assignment</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
+    <value>Interviewers working offline may still continue data collection until synchronization. Such interviews will still be accepted.</value>
+  </data>
+  <data name="Dashboard_Assignment_Comment" xml:space="preserve">
+    <value>Comment (optional)</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
+    <value>Status: Completed</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
+    <value>Status: Approved</value>
+  </data>
+</root>

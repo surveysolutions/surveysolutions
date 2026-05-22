@@ -707,19 +707,6 @@ Você pode criar ou editar seus questionários no Survey Solutions Designer</val
   <data name="MapDashboard_TypeTitle" xml:space="preserve">
     <value>Tipo</value>
   </data>
-  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
-    <value>Status da atribuição</value>
-  </data>
-  <data name="Assignment_Status_Open" xml:space="preserve">
-    <value>Aberto</value>
-  </data>
-  <data name="Assignment_Status_Completed" xml:space="preserve">
-    <value>Concluído</value>
-  </data>
-  <data name="Assignment_Status_Closed" xml:space="preserve">
-    <value>Aprovado</value>
-  </data>
-
   <data name="MapDashboard_FiltersTitle" xml:space="preserve">
     <value>Filtros</value>
   </data>
@@ -1010,5 +997,17 @@ sem resposta</value>
   </data>
   <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
     <value>Interrompido</value>
+  </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>Aberto</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>Concluído</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Aprovado</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>Status da atribuição</value>
   </data>
 </root>

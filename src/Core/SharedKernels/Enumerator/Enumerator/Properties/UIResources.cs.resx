@@ -525,19 +525,6 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
   <data name="MapDashboard_TypeTitle" xml:space="preserve">
     <value>Typ</value>
   </data>
-  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
-    <value>Stav přiřazení</value>
-  </data>
-  <data name="Assignment_Status_Open" xml:space="preserve">
-    <value>Otevřeno</value>
-  </data>
-  <data name="Assignment_Status_Completed" xml:space="preserve">
-    <value>Dokončeno</value>
-  </data>
-  <data name="Assignment_Status_Closed" xml:space="preserve">
-    <value>Schváleno</value>
-  </data>
-
   <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
     <value>Ukončit editaci map</value>
   </data>
@@ -950,4 +937,16 @@ chyby</value>
     <value>Nezodpovězené
 otázky</value>
 </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>Otevřeno</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>Dokončeno</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Schváleno</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>Stav přiřazení</value>
+  </data>
 </root>

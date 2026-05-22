@@ -135,19 +135,7 @@
   <data name="AreaMap_Cancel" xml:space="preserve">
     <value>Anulo</value>
   </data>
-    <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
-    <value>Assignment status</value>
-  </data>
-  <data name="Assignment_Status_Open" xml:space="preserve">
-    <value>Open</value>
-  </data>
-  <data name="Assignment_Status_Completed" xml:space="preserve">
-    <value>Completed</value>
-  </data>
-  <data name="Assignment_Status_Closed" xml:space="preserve">
-    <value>Approved</value>
-  </data>
-<data name="AreaMap_Close" xml:space="preserve">
+  <data name="AreaMap_Close" xml:space="preserve">
     <value>Mbyll</value>
   </data>
   <data name="AreaMap_Edit" xml:space="preserve">
@@ -716,5 +704,17 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Po</value>
+  </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Approved</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>Assignment status</value>
   </data>
 </root>

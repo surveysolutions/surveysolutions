@@ -710,19 +710,6 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
   <data name="MapDashboard_TypeTitle" xml:space="preserve">
     <value>Tip</value>
   </data>
-  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
-    <value>Statutul sarcinii</value>
-  </data>
-  <data name="Assignment_Status_Open" xml:space="preserve">
-    <value>Deschis</value>
-  </data>
-  <data name="Assignment_Status_Completed" xml:space="preserve">
-    <value>Finalizat</value>
-  </data>
-  <data name="Assignment_Status_Closed" xml:space="preserve">
-    <value>Aprobat</value>
-  </data>
-
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Meniul de control</value>
   </data>
@@ -785,5 +772,17 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
   </data>
   <data name="NoComment" xml:space="preserve">
     <value>Nu este specificat niciun comentariu</value>
+  </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>Deschis</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>Finalizat</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Aprobat</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>Statutul sarcinii</value>
   </data>
 </root>

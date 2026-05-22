@@ -378,9 +378,6 @@
   <data name="Yes" xml:space="preserve">
     <value>ใช่</value>
   </data>
-  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
-    <value>Assignment status</value>
-  </data>
   <data name="Assignment_Status_Open" xml:space="preserve">
     <value>Open</value>
   </data>
@@ -389,5 +386,8 @@
   </data>
   <data name="Assignment_Status_Closed" xml:space="preserve">
     <value>Approved</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>Assignment status</value>
   </data>
 </root>
