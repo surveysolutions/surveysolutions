@@ -52,12 +52,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
 
             if (AllowSupervisorChangeAssignmentStatus)
             {
-                // Completed: supervisor can Close (approve) or Reopen
+                // Status-change actions go in the context menu (⋮); "Assign" is the only primary button.
                 if (Assignment.Status != AssignmentStatus.Closed)
                 {
                     Actions.Add(new ActionDefinition
                     {
-                        ActionType = ActionType.Primary,
+                        ActionType = ActionType.Context,
                         Command = new MvxAsyncCommand(this.CloseAssignmentAsync),
                         Label = EnumeratorUIResources.Dashboard_CloseAssignment
                     });
@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 {
                     Actions.Add(new ActionDefinition
                     {
-                        ActionType = ActionType.Primary,
+                        ActionType = ActionType.Context,
                         Command = new MvxAsyncCommand(this.ReopenAssignmentAsync),
                         Label = EnumeratorUIResources.Dashboard_Reopen
                     });
