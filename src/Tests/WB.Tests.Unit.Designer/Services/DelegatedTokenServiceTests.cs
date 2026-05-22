@@ -22,11 +22,14 @@ namespace WB.Tests.Unit.Designer.Services
 
         private static DelegatedTokenService Svc(int exp = 10)
         {
-            var s = Options.Create(new WebTesterSettings { DelegatedJwtExpirationMinutes = exp });
+            var s = Options.Create(new WebTesterSettings
+            {
+                JwtSecretKey = TestSecret,
+                DelegatedJwtExpirationMinutes = exp
+            });
             var c = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    ["WebTester:JwtSecretKey"]        = TestSecret,
                     ["Providers:Assistant:JwtIssuer"] = "WB.Designer"
                 }).Build();
             return new DelegatedTokenService(s, c);
