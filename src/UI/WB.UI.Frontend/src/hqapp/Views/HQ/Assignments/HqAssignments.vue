@@ -116,7 +116,7 @@
                     <button type="button" class="btn btn-primary" @click="confirmStatusChange">{{
                         $t("Assignments.Close") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                    }}</button>
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -138,7 +138,7 @@
                     <button type="button" class="btn btn-primary" @click="confirmStatusChange">{{
                         $t("Assignments.Reopen") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                    }}</button>
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -148,7 +148,7 @@
             <form onsubmit="return false;">
                 <div class="form-group" :class="{ 'has-warning': showWebModeReassignWarning }">
                     <label class="control-label" for="newResponsibleId">{{ $t("Assignments.SelectResponsible")
-                    }}</label>
+                        }}</label>
                     <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="config.api.responsible"></Typeahead>
@@ -171,7 +171,7 @@
                     <button type="button" class="btn btn-primary" @click="assign" :disabled="!newResponsibleId">{{
                         $t("Common.Assign") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                    }}</button>
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -186,7 +186,7 @@
                         @click="close">{{
                             $t("Assignments.Downsize") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                    }}</button>
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -206,7 +206,7 @@
                         :disabled="!showSelectors">{{
                             $t("Common.Save") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                    }}</button>
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -236,7 +236,7 @@
                     <button type="button" class="btn btn-primary" :disabled="!showSelectors || !canEditQuantity"
                         @click="updateQuantity">{{ $t("Common.Save") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                    }}</button>
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -961,6 +961,7 @@ export default {
         this.id = this.$route.query.id
 
         this.receivedByTabletSelected(this.ddlReceivedByTablet[0])
+        this.statusSelected(this.ddlStatus[0])
 
 
         self.loadQuestionnaireId((questionnaireId, version) => {
