@@ -176,9 +176,11 @@ namespace WB.UI.Designer
 
             // JWT scheme registration policy:
             //
-            //   WebTester:JwtSecretKey  — REQUIRED. Fail fast at startup if absent; without it
-            //                             every /api/webtester/* call returns 401 and the whole
-            //                             code-exchange integration is non-functional.
+            //   WebTester:JwtSecretKey  — OPTIONAL. When absent the WebTester scheme is still
+            //                             registered with a random placeholder key (generated
+            //                             at startup via RandomNumberGenerator) so requests
+            //                             return a clean 401/configuration error instead of
+            //                             a 500 caused by an unknown scheme name.
             //
             //   Providers:Assistant:JwtSecretKey — OPTIONAL. When absent the assistant scheme is
             //                             still registered but uses a random placeholder key
