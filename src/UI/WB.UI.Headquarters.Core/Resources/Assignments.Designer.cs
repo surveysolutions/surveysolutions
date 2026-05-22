@@ -1035,18 +1035,6 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string Action_Finished {
-            get {
-                return ResourceManager.GetString("Action_Finished", resourceCulture);
-            }
-        }
-        
-        public static string Action_Approved {
-            get {
-                return ResourceManager.GetString("Action_Approved", resourceCulture);
-            }
-        }
-        
         public static string Action_Reopened {
             get {
                 return ResourceManager.GetString("Action_Reopened", resourceCulture);

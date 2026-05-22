@@ -121,7 +121,7 @@
                 </button>
 
                 <button class="btn btn-sm btn-assignment"
-                    v-if="model.userRole == 'Interviewer' && selectedTooltip.status == 'Active'"
+                    v-if="model.userRole == 'Interviewer' && selectedTooltip.status == 'Open'"
                     click-method="createInterview">
                     {{ $t('Common.Create') }}
                 </button>
@@ -353,9 +353,9 @@ export default {
 
         assignmentStatusLabel() {
             const statusMap = {
-                'Active': this.$t('Assignments.StatusActive'),
-                'Finished': this.$t('Assignments.StatusCompleted'),
-                'Completed': this.$t('Assignments.StatusClosed'),
+                'Open': this.$t('Assignments.StatusActive'),
+                'Completed': this.$t('Assignments.StatusCompleted'),
+                'Closed': this.$t('Assignments.StatusClosed'),
             }
             return statusMap[this.selectedTooltip.status] || this.selectedTooltip.status || ''
         },
@@ -363,20 +363,20 @@ export default {
         canCompleteAssignment() {
             return !this.model.isObserving &&
                 this.model.userRole == 'Interviewer' &&
-                this.selectedTooltip.status == 'Active'
+                this.selectedTooltip.status == 'Open'
         },
 
         canCloseAssignment() {
             return !this.model.isObserving &&
                 (this.model.userRole == 'Supervisor' || this.model.userRole == 'Headquarter') &&
-                (this.selectedTooltip.status == 'Active' || this.selectedTooltip.status == 'Finished')
+                (this.selectedTooltip.status == 'Open' || this.selectedTooltip.status == 'Completed')
         },
 
         canReopenAssignment() {
             return !this.model.isObserving && (
-                (this.model.userRole == 'Interviewer' && this.selectedTooltip.status == 'Finished') ||
+                (this.model.userRole == 'Interviewer' && this.selectedTooltip.status == 'Completed') ||
                 ((this.model.userRole == 'Supervisor' || this.model.userRole == 'Headquarter') &&
-                    (this.selectedTooltip.status == 'Finished' || this.selectedTooltip.status == 'Completed'))
+                    (this.selectedTooltip.status == 'Completed' || this.selectedTooltip.status == 'Closed'))
             )
         },
     },
@@ -478,14 +478,14 @@ export default {
         },
 
         async confirmCompleteAssignment() {
-            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Finished', this.statusChangeComment || null)
+            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Completed', this.statusChangeComment || null)
             this.$refs.completeAssignmentModal.hide()
             this.statusChangeComment = null
             await this.refreshAssignmentData()
         },
 
         async closeAssignment() {
-            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Completed')
+            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Closed')
             await this.refreshAssignmentData()
         },
 
@@ -495,7 +495,7 @@ export default {
         },
 
         async confirmReopenAssignment() {
-            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Active', this.statusChangeComment || null)
+            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Open', this.statusChangeComment || null)
             this.$refs.reopenAssignmentModal.hide()
             this.statusChangeComment = null
             await this.refreshAssignmentData()
