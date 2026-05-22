@@ -164,6 +164,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
         private bool IsNeedUpdateApp(Assignment assignment)
         {
+            #if !DEBUG
+            
             var productVersion = this.Request.GetProductVersionFromUserAgent(ProductName);
 
             if (productVersion == null)
@@ -171,7 +173,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
             if (!string.IsNullOrWhiteSpace(assignment.TargetArea) && productVersion <= new Version(24, 6))
                 return true;
-            
+
+            #endif
+
             return false;
         }
     }
