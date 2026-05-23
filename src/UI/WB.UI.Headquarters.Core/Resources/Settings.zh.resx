@@ -201,16 +201,4 @@
   <data name="InterviewerAutoUpdateEnabled" xml:space="preserve">
     <value>Android应用程序自动更新启用</value>
   </data>
-  <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve">
-    <value>Allow supervisors to change assignment statuses</value>
-  </data>
-  <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
-    <value>When enabled, supervisors can approve and reopen assignments from their tablets</value>
-  </data>
-  <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
-    <value>Allow interviewers to change assignment statuses</value>
-  </data>
-  <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
-    <value>When enabled, interviewers can complete and reopen assignments from their tablets (requires supervisor setting to be enabled)</value>
-  </data>
 </root>
