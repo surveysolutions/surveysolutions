@@ -241,4 +241,7 @@
   <data name="Action_Reopened" xml:space="preserve">
       <value>ხელახლა გახსნილი</value>
   </data>
+  <data name="Downsize" xml:space="preserve">
+    <value>შემცირება</value>
+  </data>
 </root>

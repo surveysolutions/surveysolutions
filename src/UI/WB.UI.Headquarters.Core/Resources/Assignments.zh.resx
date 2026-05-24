@@ -346,4 +346,7 @@
   <data name="Action_Reopened" xml:space="preserve">
       <value>已重新开启</value>
   </data>
+  <data name="Downsize" xml:space="preserve">
+    <value>缩减</value>
+  </data>
 </root>
