@@ -6,7 +6,6 @@
     @Html.RenderHqConfig(new
     {
         AssignmentsEndpoint = Url.Action("Get", "AssignmentsApi"),
-        AssignmentsApi = Url.Content("~/api/v1/assignments"),
         InterviewerHqEndpoint = Url.Content(@"~/interviewerHq"),
         AllowInterviewerChangeAssignmentStatus = Model.AllowInterviewerChangeAssignmentStatus
     })
