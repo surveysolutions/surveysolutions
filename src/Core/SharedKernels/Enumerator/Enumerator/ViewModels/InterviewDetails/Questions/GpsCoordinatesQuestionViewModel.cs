@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
@@ -90,10 +91,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
             this.SaveAnswerCommand = new MvxAsyncCommand(this.SaveAnswerAsync, () => !this.Answering.InProgress);
+            this.Answering.PropertyChanged += this.OnAnsweringPropertyChanged;
             this.liteEventRegistry = liteEventRegistry;
             this.logger = logger;
             this.googleApiService = googleApiService;
             this.externalAppLauncher = externalAppLauncher;
+        }
+
+        private void OnAnsweringPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(AnsweringViewModel.InProgress))
+                this.SaveAnswerCommand.RaiseCanExecuteChanged();
         }
 
         public Identity Identity => this.questionIdentity;
@@ -253,6 +261,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             cts?.Cancel();
             cts?.Dispose();
+
+            this.Answering.PropertyChanged -= this.OnAnsweringPropertyChanged;
             
             this.liteEventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
