@@ -176,9 +176,11 @@ namespace WB.UI.Designer
 
             // JWT scheme registration policy:
             //
-            //   WebTester:JwtSecretKey  — REQUIRED. Fail fast at startup if absent; without it
-            //                             every /api/webtester/* call returns 401 and the whole
-            //                             code-exchange integration is non-functional.
+            //   WebTester:JwtSecretKey  — OPTIONAL. When absent the WebTester scheme is still
+            //                             registered with a random placeholder key (generated
+            //                             at startup via RandomNumberGenerator) so requests
+            //                             return a clean 401/configuration error instead of
+            //                             a 500 caused by an unknown scheme name.
             //
             //   Providers:Assistant:JwtSecretKey — OPTIONAL. When absent the assistant scheme is
             //                             still registered but uses a random placeholder key
@@ -193,21 +195,22 @@ namespace WB.UI.Designer
             if (!string.IsNullOrWhiteSpace(webTesterJwtSecretKey) && webTesterJwtSecretKey.Length < 32)
                 throw new InvalidOperationException("WebTester JWT secret key is too short.");
 
-            // Fail fast when the WebTester delegated key is absent.
-            if (string.IsNullOrWhiteSpace(webTesterJwtSecretKey))
-                throw new InvalidOperationException(
-                    "WebTester:JwtSecretKey must be configured. Set it in application configuration (for example, appsettings.ini).");
-
+            // When WebTester:JwtSecretKey is absent the scheme is still registered but uses a
+            // cryptographically random placeholder key generated at startup. This guarantees the
+            // scheme is registered (so [Authorize(Schemes=...)] never causes a 500) while making
+            // it impossible for an attacker to forge a token.
+            // The QuestionnaireApiController.WebTest action will return a configuration error
+            // when a user tries to run in WebTester without the key being set.
             var jwtIssuer = Configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer";
 
             // Signing keys for the delegated WebTester scheme.
             // Trust only the WebTester signing key so Assistant tokens cannot be replayed
             // against /api/webtester/* by reusing a different secret accepted by this scheme.
-            // webTesterJwtSecretKey is guaranteed non-empty by the fail-fast above.
-            var delegatedSigningKeys = new List<SecurityKey>
-            {
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(webTesterJwtSecretKey))
-            };
+            // When the key is absent a random placeholder is used (same pattern as AssistantScheme).
+            var delegatedSigningKey = string.IsNullOrWhiteSpace(webTesterJwtSecretKey)
+                ? new SymmetricSecurityKey(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32))
+                : new SymmetricSecurityKey(Encoding.UTF8.GetBytes(webTesterJwtSecretKey));
+            var delegatedSigningKeys = new List<SecurityKey> { delegatedSigningKey };
 
             // ── Isolated scheme: AI Assistant back-channel calls ───────────────────────────
             // Validates tokens with aud="WB.AssistantService" signed by Providers:Assistant:JwtSecretKey.

@@ -29,7 +29,7 @@ namespace WB.UI.Designer.Services
         {
             this.settings = settings.Value;
 
-            var secretKey = configuration["WebTester:JwtSecretKey"];
+            var secretKey = this.settings.JwtSecretKey;
             if (string.IsNullOrWhiteSpace(secretKey))
                 throw new InvalidOperationException(
                     "JWT secret key is not configured. " +

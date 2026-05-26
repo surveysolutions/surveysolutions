@@ -112,6 +112,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             lock (this.lockObject)
             {
+                if (this.disposed)
+                    return;
+
                 if (this.mediaPlayer.IsPlaying)
                 {
                     this.mediaPlayer.Stop();
@@ -133,8 +136,14 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public void Stop()
         {
+            if (this.disposed)
+                return;
+
             lock (this.lockObject)
             {
+                if (this.disposed)
+                    return;
+
                 if (this.mediaPlayer.IsPlaying)
                 {
                     this.mediaPlayer.Reset();
@@ -374,6 +383,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             
             lock (this.lockObject)
             {
+                if (disposed) return;
+
+                this.disposed = true;
                 this.ReleaseAudioRecorder();
 
                 try
@@ -399,8 +411,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 {
                     // Ignore cleanup errors
                 }
-
-                this.disposed = true;
             }
         }
 
