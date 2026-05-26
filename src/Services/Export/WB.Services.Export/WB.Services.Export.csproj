@@ -64,7 +64,7 @@
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
         <PackageReference Include="Refit" Version="8.0.0" />
         <PackageReference Include="prometheus-net" Version="8.2.1" />
-        <PackageReference Include="Scrutor" Version="7.0.0" />
+        <PackageReference Include="Scrutor" Version="6.1.0" />
         <PackageReference Include="System.Diagnostics.Tracing" Version="4.3.0" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.18.0" />
         <PackageReference Include="System.Reactive" Version="6.0.1" />
