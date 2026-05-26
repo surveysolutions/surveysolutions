@@ -175,4 +175,4 @@ src/
 - **Localization resources reside only in *.resx files:** Even for frontend, .json files are derivatives. Any change in resouces must affect all existing cultures.
 - **Building of the apps makes changes:** package-lock.json, other locale/[culture].json and *.cshtml files. These changes must not be committed.
 - **Most meaningful C# code changes require new unit tests:** Especially if changed classes (or neighbouring classes) already have them.
-- **Only meningfull changes:** no other lines must be changed for formatting or other reasons. Moving parts of code only if it has great value.
+- **Only meaningful changes are allowed:** Do not change other lines for formatting or unrelated reasons. Move code only when it provides substantial value.
