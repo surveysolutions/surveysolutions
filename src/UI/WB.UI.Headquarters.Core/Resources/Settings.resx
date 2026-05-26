@@ -272,18 +272,6 @@ Possible reasons:
   <data name="PartialSynchronizationDescription" xml:space="preserve">
     <value>When enabled, interviewer tablets will send answers in noncompleted interviews to Headquarters</value>
   </data>
-  <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve">
-    <value>Allow supervisors to change assignment statuses</value>
-  </data>
-  <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
-    <value>When enabled, supervisors can close and reopen assignments</value>
-  </data>
-  <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
-    <value>Allow interviewers to change assignment statuses</value>
-  </data>
-  <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
-    <value>When enabled, interviewers can complete and reopen assignments (requires supervisor setting to be enabled)</value>
-  </data>
   <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve">
       <value>Location accuracy limit</value>
   </data>
@@ -523,5 +511,21 @@ Possible reasons:
   </data>
   <data name="LogoRemoveError" xml:space="preserve">
     <value>Failed to remove logo. Please try again.</value>
+  </data>
+
+  <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve">
+    <value>Allow supervisors to change assignment statuses</value>
+  </data>
+
+  <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>When enabled, supervisors can close and reopen assignments</value>
+  </data>
+
+  <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
+    <value>Allow interviewers to change assignment statuses</value>
+  </data>
+
+  <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>When enabled, interviewers can complete and reopen assignments (requires supervisor setting to be enabled)</value>
   </data>
 </root>

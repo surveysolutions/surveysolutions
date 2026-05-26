@@ -237,8 +237,8 @@
   <data name="ChangeExpectedModalTitle" xml:space="preserve">
     <value>Korrigjo madhësinë për detyrën {{assignmentId}}</value>
   </data>
-  <data name="Downsize" xml:space="preserve">
-    <value>Zvogëlo</value>
+  <data name="Close" xml:space="preserve">
+    <value>Mbyll</value>
   </data>
   <data name="Comments" xml:space="preserve">
     <value>Komento</value>
@@ -348,7 +348,7 @@
   <data name="ReceivedByTablet" xml:space="preserve">
     <value>Marrë nga tableti</value>
   </data>
-  <data name="Filter_ShowAll" xml:space="preserve">
+  <data name="ReceivedByTablet_All" xml:space="preserve">
     <value>Shfaqi të gjitha</value>
   </data>
   <data name="ReceivedByTablet_NotReceived" xml:space="preserve">
@@ -475,60 +475,83 @@
     <value>Modaliteti</value>
   </data>
 
+  <data name="Downsize" xml:space="preserve">
+    <value>Zvogëlo</value>
+  </data>
+
+  <data name="Filter_ShowAll" xml:space="preserve">
+    <value>Shfaqi të gjitha</value>
+  </data>
+
+
   <data name="Status" xml:space="preserve">
       <value>Statusi</value>
   </data>
+
   <data name="StatusChangeComment" xml:space="preserve">
       <value>Koment për ndryshimin e statusit</value>
   </data>
+
   <data name="StatusOpen" xml:space="preserve">
       <value>Hapur</value>
   </data>
+
   <data name="StatusCompleted" xml:space="preserve">
       <value>Përfunduar</value>
   </data>
+
   <data name="StatusClosed" xml:space="preserve">
       <value>Aprovuar</value>
   </data>
+
   <data name="CompleteAssignmentTitle" xml:space="preserve">
       <value>Përfundo detyrën</value>
   </data>
+
   <data name="CompleteAssignmentMessage" xml:space="preserve">
       <value>Jeni i sigurt që keni numëruar të gjitha njësitë e pranueshme?</value>
   </data>
+
   <data name="CloseAssignmentTitle" xml:space="preserve">
       <value>Aprovo detyrën</value>
   </data>
+
   <data name="CloseAssignmentMessage" xml:space="preserve">
       <value>Intervistuesit që punojnë jashtë linje mund të vazhdojnë mbledhjen e të dhënave deri në sinkronizim. Intervistat e tilla do të pranohen gjithsesi.</value>
   </data>
+
   <data name="ReopenAssignmentTitle" xml:space="preserve">
       <value>Rihap detyrën</value>
   </data>
+
   <data name="ReopenAssignmentMessage" xml:space="preserve">
       <value>Detyra do të rikthehet në statusin Hapur dhe intervistuesit do të mund të krijojnë intervista të reja.</value>
   </data>
+
   <data name="Complete" xml:space="preserve">
       <value>Përfundo</value>
   </data>
-  <data name="Close" xml:space="preserve">
-      <value>Aprovo</value>
-  </data>
+
   <data name="Reopen" xml:space="preserve">
       <value>Rihap</value>
   </data>
+
   <data name="Action_StatusChanged" xml:space="preserve">
       <value>Statusi ndryshoi në {{status}}</value>
   </data>
+
   <data name="Action_StatusChanged_Comment" xml:space="preserve">
       <value>Koment: {{comment}}</value>
   </data>
+
   <data name="Action_Completed" xml:space="preserve">
       <value>Përfunduar</value>
   </data>
+
   <data name="Action_Closed" xml:space="preserve">
       <value>Aprovuar</value>
   </data>
+
   <data name="Action_Reopened" xml:space="preserve">
       <value>Rihapuar</value>
   </data>

@@ -297,7 +297,7 @@
     <data name="UpgradeProgressDoneTitle" xml:space="preserve">
   <value>تم الانتهاء من الترقية من {{from}} إلى {{to}}</value>
 </data>
-    <data name="Filter_ShowAll" xml:space="preserve">
+    <data name="ReceivedByTablet_All" xml:space="preserve">
   <value>عرض الكل</value>
 </data>
     <data name="ReceivedByTablet_Received" xml:space="preserve">
@@ -420,8 +420,8 @@
     <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
     <value>سيتم تغيير القيمة المتوقعة للتعيين المحدد {{id}} من {{quantity}} إلى {{collected}} (عدد المقابلات التي تم جمعها حاليًا)</value>
 </data>
-    <data name="Downsize" xml:space="preserve">
-  <value>تصغير</value>
+    <data name="Close" xml:space="preserve">
+  <value>إغلاق</value>
 </data>
     <data name="AssignmentCloseWebMode" xml:space="preserve">
   <value>لا يمكن إغلاق التعيين {{id}} لأنه يحتوي على وضع الويب مفعل</value>
@@ -560,60 +560,83 @@
     <value>أدخل المنطقة المستهدفة</value>
 </data>
 
+    <data name="Filter_ShowAll" xml:space="preserve">
+  <value>عرض الكل</value>
+</data>
+
+    <data name="Downsize" xml:space="preserve">
+  <value>تصغير</value>
+</data>
+
+
   <data name="Status" xml:space="preserve">
       <value>الحالة</value>
   </data>
+
   <data name="StatusChangeComment" xml:space="preserve">
       <value>تعليق تغيير الحالة</value>
   </data>
+
   <data name="StatusOpen" xml:space="preserve">
       <value>مفتوح</value>
   </data>
+
   <data name="StatusCompleted" xml:space="preserve">
       <value>مكتمل</value>
   </data>
+
   <data name="StatusClosed" xml:space="preserve">
       <value>معتمد</value>
   </data>
+
   <data name="CompleteAssignmentTitle" xml:space="preserve">
       <value>إكمال التعيين</value>
   </data>
+
   <data name="CompleteAssignmentMessage" xml:space="preserve">
       <value>هل أنت متأكد من إحصاء جميع الوحدات المؤهلة؟</value>
   </data>
+
   <data name="CloseAssignmentTitle" xml:space="preserve">
       <value>اعتماد التعيين</value>
   </data>
+
   <data name="CloseAssignmentMessage" xml:space="preserve">
       <value>يمكن للمقابلين العاملين دون اتصال بالإنترنت الاستمرار في جمع البيانات حتى المزامنة. ستظل هذه المقابلات مقبولة.</value>
   </data>
+
   <data name="ReopenAssignmentTitle" xml:space="preserve">
       <value>إعادة فتح التعيين</value>
   </data>
+
   <data name="ReopenAssignmentMessage" xml:space="preserve">
       <value>سيتم إعادة التعيين إلى الحالة مفتوح وسيتمكن المقابلون من إنشاء مقابلات جديدة.</value>
   </data>
+
   <data name="Complete" xml:space="preserve">
       <value>إكمال</value>
   </data>
-  <data name="Close" xml:space="preserve">
-      <value>اعتماد</value>
-  </data>
+
   <data name="Reopen" xml:space="preserve">
       <value>إعادة فتح</value>
   </data>
+
   <data name="Action_StatusChanged" xml:space="preserve">
       <value>تم تغيير الحالة إلى {{status}}</value>
   </data>
+
   <data name="Action_StatusChanged_Comment" xml:space="preserve">
       <value>تعليق: {{comment}}</value>
   </data>
+
   <data name="Action_Completed" xml:space="preserve">
       <value>مكتمل</value>
   </data>
+
   <data name="Action_Closed" xml:space="preserve">
       <value>معتمد</value>
   </data>
+
   <data name="Action_Reopened" xml:space="preserve">
       <value>أُعيد فتحه</value>
   </data>

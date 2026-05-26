@@ -513,15 +513,19 @@ Raisons possibles :
   <data name="SelectFileWarning" xml:space="preserve">
     <value>Veuillez sélectionner un fichier à télécharger.</value>
 </data>
+
   <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve">
     <value>Autoriser les superviseurs à modifier les statuts des affectations</value>
   </data>
+
   <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
     <value>Lorsque cette option est activée, les superviseurs peuvent approuver et rouvrir des affectations depuis leurs tablettes</value>
   </data>
+
   <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
     <value>Autoriser les enquêteurs à modifier les statuts des affectations</value>
   </data>
+
   <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
     <value>Lorsque cette option est activée, les enquêteurs peuvent terminer et rouvrir des affectations depuis leurs tablettes (nécessite l'activation du paramètre superviseur)</value>
   </data>

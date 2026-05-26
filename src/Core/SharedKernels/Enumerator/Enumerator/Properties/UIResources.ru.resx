@@ -1000,15 +1000,19 @@
     <value>Неотвеченные
 вопросы</value>
   </data>
+
   <data name="Assignment_Status_Open" xml:space="preserve">
     <value>Активно</value>
   </data>
+
   <data name="Assignment_Status_Completed" xml:space="preserve">
     <value>Завершено</value>
   </data>
+
   <data name="Assignment_Status_Closed" xml:space="preserve">
     <value>Закрыто</value>
   </data>
+
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
     <value>Статус задания</value>
   </data>

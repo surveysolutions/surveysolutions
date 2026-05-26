@@ -1040,36 +1040,47 @@
     <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>يبدو أن الاستجابة المستلمة لا تأتي من خادم Survey Solutions. يُسبب ذلك عادة وكيل شبكة أو جدار ناري أو بوابة أمان تقوم باعتراض الاتصال. يرجى التحقق من اتصال الشبكة لديك أو الاتصال بدعم تكنولوجيا المعلومات.</value>
   </data>
+
   <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>إكمال</value>
   </data>
+
   <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
     <value>إكمال التعيين</value>
   </data>
+
   <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
     <value>هل أنت متأكد من إحصاء جميع الوحدات المؤهلة؟</value>
   </data>
+
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>إعادة فتح التعيين</value>
   </data>
+
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>اعتماد</value>
   </data>
+
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
     <value>اعتماد التعيين</value>
   </data>
+
   <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
     <value>يمكن للمقابلين العاملين دون اتصال بالإنترنت الاستمرار في جمع البيانات حتى المزامنة. ستظل هذه المقابلات مقبولة.</value>
   </data>
+
   <data name="Dashboard_Assignment_Comment" xml:space="preserve">
     <value>تعليق (اختياري)</value>
   </data>
+
   <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
     <value>الحالة: مكتمل</value>
   </data>
+
   <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
     <value>الحالة: معتمد</value>
   </data>
+
   <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
     <value>الحالة: مفتوح</value>
   </data>

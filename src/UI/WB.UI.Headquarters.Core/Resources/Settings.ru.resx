@@ -525,15 +525,19 @@
   <data name="SelectFileWarning" xml:space="preserve">
     <value>Пожалуйста, выберите файл для загрузки.</value>
 </data>
+
   <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve">
     <value>Разрешить супервайзерам изменять статусы заданий</value>
   </data>
+
   <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
     <value>При включении супервайзеры смогут утверждать и возобновлять задания</value>
   </data>
+
   <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
     <value>Разрешить интервьюерам изменять статусы заданий</value>
   </data>
+
   <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
     <value>При включении интервьюеры смогут завершать и возобновлять задания (требует включённой настройки для супервайзеров)</value>
   </data>

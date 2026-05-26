@@ -297,7 +297,7 @@
   <data name="UpgradeProgressDoneTitle" xml:space="preserve">
     <value>Actualización de {{from}} a {{to}} finalizada</value>
   </data>
-  <data name="Filter_ShowAll" xml:space="preserve">
+  <data name="ReceivedByTablet_All" xml:space="preserve">
     <value>Mostrar todo</value>
   </data>
   <data name="ReceivedByTablet_Received" xml:space="preserve">
@@ -420,8 +420,8 @@
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
     <value>El valor esperado de la asignación seleccionada {{id}} se cambiará de {{quantity}} a {{collected}} (número de entrevistas actualmente recopiladas)</value>
   </data>
-  <data name="Downsize" xml:space="preserve">
-    <value>Reducir</value>
+  <data name="Close" xml:space="preserve">
+    <value>Cerrar</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
     <value>La asignación {{id}} no se puede cerrar ya que tiene el modo web habilitado</value>
@@ -559,60 +559,83 @@
     <value>Ingresar área objetivo</value>
 </data>
 
+  <data name="Filter_ShowAll" xml:space="preserve">
+    <value>Mostrar todo</value>
+  </data>
+
+  <data name="Downsize" xml:space="preserve">
+    <value>Reducir</value>
+  </data>
+
+
   <data name="Status" xml:space="preserve">
       <value>Estado</value>
   </data>
+
   <data name="StatusChangeComment" xml:space="preserve">
       <value>Comentario de cambio de estado</value>
   </data>
+
   <data name="StatusOpen" xml:space="preserve">
       <value>Abierto</value>
   </data>
+
   <data name="StatusCompleted" xml:space="preserve">
       <value>Completado</value>
   </data>
+
   <data name="StatusClosed" xml:space="preserve">
       <value>Aprobado</value>
   </data>
+
   <data name="CompleteAssignmentTitle" xml:space="preserve">
       <value>Completar asignación</value>
   </data>
+
   <data name="CompleteAssignmentMessage" xml:space="preserve">
       <value>¿Está seguro de haber enumerado todas las unidades elegibles?</value>
   </data>
+
   <data name="CloseAssignmentTitle" xml:space="preserve">
       <value>Aprobar asignación</value>
   </data>
+
   <data name="CloseAssignmentMessage" xml:space="preserve">
       <value>Los entrevistadores que trabajan sin conexión pueden continuar recopilando datos hasta la sincronización. Dichas entrevistas seguirán siendo aceptadas.</value>
   </data>
+
   <data name="ReopenAssignmentTitle" xml:space="preserve">
       <value>Reabrir asignación</value>
   </data>
+
   <data name="ReopenAssignmentMessage" xml:space="preserve">
       <value>La asignación volverá al estado Abierto y los entrevistadores podrán crear nuevas entrevistas.</value>
   </data>
+
   <data name="Complete" xml:space="preserve">
       <value>Completar</value>
   </data>
-  <data name="Close" xml:space="preserve">
-      <value>Aprobar</value>
-  </data>
+
   <data name="Reopen" xml:space="preserve">
       <value>Reabrir</value>
   </data>
+
   <data name="Action_StatusChanged" xml:space="preserve">
       <value>Estado cambiado a {{status}}</value>
   </data>
+
   <data name="Action_StatusChanged_Comment" xml:space="preserve">
       <value>Comentario: {{comment}}</value>
   </data>
+
   <data name="Action_Completed" xml:space="preserve">
       <value>Completado</value>
   </data>
+
   <data name="Action_Closed" xml:space="preserve">
       <value>Aprobado</value>
   </data>
+
   <data name="Action_Reopened" xml:space="preserve">
       <value>Reabierto</value>
   </data>

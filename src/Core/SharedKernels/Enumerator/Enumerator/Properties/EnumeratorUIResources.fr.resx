@@ -979,36 +979,47 @@ Il apparaîtra sur l'appareil de l'enquêteur après la prochaine synchronisatio
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>La réponse reçue ne semble pas provenir du serveur Survey Solutions. Cela est généralement causé par un proxy réseau, un pare-feu ou une passerelle de sécurité interceptant la connexion. Veuillez vérifier votre connexion réseau ou contacter le support informatique.</value>
   </data>
+
   <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>Terminer</value>
   </data>
+
   <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
     <value>Terminer l'affectation</value>
   </data>
+
   <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
     <value>Êtes-vous sûr d'avoir recensé toutes les unités éligibles ?</value>
   </data>
+
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>Rouvrir l'affectation</value>
   </data>
+
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>Approuver</value>
   </data>
+
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
     <value>Approuver l'affectation</value>
   </data>
+
   <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
     <value>Les enquêteurs travaillant hors ligne peuvent continuer à collecter des données jusqu'à la synchronisation. Ces entretiens seront toujours acceptés.</value>
   </data>
+
   <data name="Dashboard_Assignment_Comment" xml:space="preserve">
     <value>Commentaire (facultatif)</value>
   </data>
+
   <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
     <value>Statut : Terminé</value>
   </data>
+
   <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
     <value>Statut : Approuvé</value>
   </data>
+
   <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
     <value>Statut : Ouvert</value>
   </data>

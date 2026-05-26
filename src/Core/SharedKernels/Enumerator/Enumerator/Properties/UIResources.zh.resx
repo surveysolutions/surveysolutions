@@ -660,15 +660,19 @@
   <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
     <value>您确定想从相关的二维表要移除{0}行吗？</value>
   </data>
+
   <data name="Assignment_Status_Open" xml:space="preserve">
     <value>已开启</value>
   </data>
+
   <data name="Assignment_Status_Completed" xml:space="preserve">
     <value>已完成</value>
   </data>
+
   <data name="Assignment_Status_Closed" xml:space="preserve">
     <value>已审批</value>
   </data>
+
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
     <value>分配状态</value>
   </data>

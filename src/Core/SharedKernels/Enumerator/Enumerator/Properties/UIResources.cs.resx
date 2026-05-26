@@ -937,15 +937,19 @@ chyby</value>
     <value>Nezodpovězené
 otázky</value>
 </data>
+
   <data name="Assignment_Status_Open" xml:space="preserve">
     <value>Otevřeno</value>
   </data>
+
   <data name="Assignment_Status_Completed" xml:space="preserve">
     <value>Dokončeno</value>
   </data>
+
   <data name="Assignment_Status_Closed" xml:space="preserve">
     <value>Schváleno</value>
   </data>
+
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
     <value>Stav přiřazení</value>
   </data>
