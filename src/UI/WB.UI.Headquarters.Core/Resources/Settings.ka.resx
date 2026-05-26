@@ -193,15 +193,12 @@
   <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve">
     <value>სუპერვაიზერებს მიეცეთ დავალებების სტატუსების შეცვლის უფლება</value>
   </data>
-
   <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
     <value>ჩართვის შემთხვევაში, სუპერვაიზერებს შეეძლებათ დავალებების დამტკიცება და ხელახლა გახსნა ტაბლეტებიდან</value>
   </data>
-
   <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
     <value>ინტერვიუერებს მიეცეთ დავალებების სტატუსების შეცვლის უფლება</value>
   </data>
-
   <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
     <value>ჩართვის შემთხვევაში, ინტერვიუერებს შეეძლებათ დავალებების დასრულება და ხელახლა გახსნა ტაბლეტებიდან (საჭიროებს სუპერვაიზერის პარამეტრის ჩართვას)</value>
   </data>

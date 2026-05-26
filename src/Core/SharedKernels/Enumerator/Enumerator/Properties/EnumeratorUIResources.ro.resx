@@ -959,43 +959,33 @@ Va apărea pe dispozitivul Anchetator după următoarea sincronizare </value>
   <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>Finalizați</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
     <value>Finalizați atribuirea</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
     <value>Sunteți sigur că ați enumerat toate unitățile eligibile?</value>
   </data>
-
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>Redeschideți atribuirea</value>
   </data>
-
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>Aprobați</value>
   </data>
-
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
     <value>Aprobați atribuirea</value>
   </data>
-
   <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
     <value>Intervievatorii care lucrează offline pot continua colectarea datelor până la sincronizare. Aceste interviuri vor fi în continuare acceptate.</value>
   </data>
-
   <data name="Dashboard_Assignment_Comment" xml:space="preserve">
     <value>Comentariu (opțional)</value>
   </data>
-
   <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
     <value>Stare: Finalizat</value>
   </data>
-
   <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
     <value>Stare: Aprobat</value>
   </data>
-
   <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
     <value>Stare: Deschis</value>
   </data>

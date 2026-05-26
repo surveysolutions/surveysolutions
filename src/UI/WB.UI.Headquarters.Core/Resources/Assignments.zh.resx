@@ -292,84 +292,63 @@
   <data name="Filter_ShowAll" xml:space="preserve">
     <value>显示全部</value>
   </data>
-
-
   <data name="Status" xml:space="preserve">
       <value>状态</value>
   </data>
-
   <data name="StatusChangeComment" xml:space="preserve">
       <value>状态变更备注</value>
   </data>
-
   <data name="StatusOpen" xml:space="preserve">
       <value>已开启</value>
   </data>
-
   <data name="StatusCompleted" xml:space="preserve">
       <value>已完成</value>
   </data>
-
   <data name="StatusClosed" xml:space="preserve">
       <value>已审批</value>
   </data>
-
   <data name="CompleteAssignmentTitle" xml:space="preserve">
       <value>完成任务</value>
   </data>
-
   <data name="CompleteAssignmentMessage" xml:space="preserve">
       <value>您确定已列举所有符合条件的单元吗？</value>
   </data>
-
   <data name="CloseAssignmentTitle" xml:space="preserve">
       <value>审批任务</value>
   </data>
-
   <data name="CloseAssignmentMessage" xml:space="preserve">
       <value>离线工作的访谈员可以在同步之前继续收集数据。此类访谈仍将被接受。</value>
   </data>
-
   <data name="ReopenAssignmentTitle" xml:space="preserve">
       <value>重新开启任务</value>
   </data>
-
   <data name="ReopenAssignmentMessage" xml:space="preserve">
       <value>该任务将恢复为“已开启”状态，访谈员将能够创建新的访谈。</value>
   </data>
-
   <data name="Complete" xml:space="preserve">
       <value>完成</value>
   </data>
-
   <data name="Close" xml:space="preserve">
       <value>审批</value>
   </data>
-
   <data name="Reopen" xml:space="preserve">
       <value>重新开启</value>
   </data>
-
   <data name="Action_StatusChanged" xml:space="preserve">
       <value>状态已更改为 {{status}}</value>
   </data>
-
   <data name="Action_StatusChanged_Comment" xml:space="preserve">
       <value>备注：{{comment}}</value>
   </data>
-
   <data name="Action_Completed" xml:space="preserve">
       <value>已完成</value>
   </data>
-
   <data name="Action_Closed" xml:space="preserve">
       <value>已审批</value>
   </data>
-
   <data name="Action_Reopened" xml:space="preserve">
       <value>已重新开启</value>
   </data>
-
   <data name="Downsize" xml:space="preserve">
     <value>缩减</value>
   </data>

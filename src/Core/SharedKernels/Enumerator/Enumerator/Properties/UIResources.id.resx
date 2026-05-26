@@ -382,15 +382,12 @@ Anda dapat membuat atau menyunting kuesioner Anda pada Desainer Survey Solutions
   <data name="Assignment_Status_Open" xml:space="preserve">
     <value>Terbuka</value>
   </data>
-
   <data name="Assignment_Status_Completed" xml:space="preserve">
     <value>Selesai</value>
   </data>
-
   <data name="Assignment_Status_Closed" xml:space="preserve">
     <value>Disetujui</value>
   </data>
-
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
     <value>Status penugasan</value>
   </data>

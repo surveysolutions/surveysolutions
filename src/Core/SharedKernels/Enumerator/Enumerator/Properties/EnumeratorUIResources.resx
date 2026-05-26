@@ -1044,43 +1044,33 @@ It will appear on interviewer device after next synchronization</value>
   <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>Complete</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
     <value>Complete assignment</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
     <value>Are you sure you have enumerated all eligible units for this assignment?</value>
   </data>
-
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>Reopen assignment</value>
   </data>
-
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>Close</value>
   </data>
-
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
     <value>Close assignment</value>
   </data>
-
   <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
     <value>Interviewers working offline may still continue data collection until synchronization. Such interviews will still be accepted.</value>
   </data>
-
   <data name="Dashboard_Assignment_Comment" xml:space="preserve">
     <value>Comment (optional)</value>
   </data>
-
   <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
     <value>Status: Completed</value>
   </data>
-
   <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
     <value>Status: Closed</value>
   </data>
-
   <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
     <value>Status: Open</value>
   </data>

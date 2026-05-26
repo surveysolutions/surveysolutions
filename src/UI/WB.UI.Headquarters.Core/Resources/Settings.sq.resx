@@ -319,15 +319,12 @@
   <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve">
     <value>Lejo mbikëqyrësit të ndryshojnë statuset e detyrave</value>
   </data>
-
   <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
     <value>Kur aktivizohet, mbikëqyrësit mund të aprovojnë dhe rihapën detyrat nga tabletat e tyre</value>
   </data>
-
   <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
     <value>Lejo intervistuesit të ndryshojnë statuset e detyrave</value>
   </data>
-
   <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
     <value>Kur aktivizohet, intervistuesit mund të përfundojnë dhe rihapën detyrat nga tabletat e tyre (kërkon aktivizimin e cilësimit të mbikëqyrësit)</value>
   </data>

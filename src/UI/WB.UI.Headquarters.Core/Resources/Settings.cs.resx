@@ -511,15 +511,12 @@
   <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve">
     <value>Povolit supervizorům měnit stavy žádanek</value>
   </data>
-
   <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
     <value>Pokud je povoleno, mohou supervizoři schvalovat a znovu otevírat žádanky ze svých tabletů</value>
   </data>
-
   <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
     <value>Povolit tazatelům měnit stavy žádanek</value>
   </data>
-
   <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
     <value>Pokud je povoleno, mohou tazatelé dokončovat a znovu otevírat žádanky ze svých tabletů (vyžaduje povolení nastavení supervizora)</value>
   </data>

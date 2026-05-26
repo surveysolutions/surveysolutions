@@ -651,43 +651,33 @@
   <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>დასრულება</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
     <value>დავალების დასრულება</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
     <value>დარწმუნებული ხართ, რომ ჩამოთვალეთ ყველა კვალიფიციური ერთეული?</value>
   </data>
-
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>დავალების ხელახლა გახსნა</value>
   </data>
-
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>დამტკიცება</value>
   </data>
-
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
     <value>დავალების დამტკიცება</value>
   </data>
-
   <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
     <value>ინტერვიუერები, რომლებიც მუშაობენ ოფლაინ რეჟიმში, შეიძლება გააგრძელონ მონაცემთა შეგროვება სინქრონიზაციამდე. ასეთი ინტერვიუები კვლავ მიღებული იქნება.</value>
   </data>
-
   <data name="Dashboard_Assignment_Comment" xml:space="preserve">
     <value>კომენტარი (სურვილისამებრ)</value>
   </data>
-
   <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
     <value>სტატუსი: დასრულებული</value>
   </data>
-
   <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
     <value>სტატუსი: დამტკიცებული</value>
   </data>
-
   <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
     <value>სტატუსი: ღია</value>
   </data>

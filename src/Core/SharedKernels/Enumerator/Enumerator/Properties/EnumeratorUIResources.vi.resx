@@ -1037,43 +1037,33 @@ hoặc liên hệ với giám sát viên của bạn
   <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
     <value>Trạng thái: Hoàn thành</value>
   </data>
-
   <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
     <value>Trạng thái: Được phê duyệt</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>Hoàn thành</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
     <value>Hoàn thành phân công</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
     <value>Bạn có chắc chắn đã liệt kê tất cả các đơn vị đủ điều kiện?</value>
   </data>
-
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>Mở lại phân công</value>
   </data>
-
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>Phê duyệt</value>
   </data>
-
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
     <value>Phê duyệt phân công</value>
   </data>
-
   <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
     <value>Những người phỏng vấn làm việc ngoại tuyến vẫn có thể tiếp tục thu thập dữ liệu cho đến khi đồng bộ hóa. Các cuộc phỏng vấn đó vẫn sẽ được chấp nhận.</value>
   </data>
-
   <data name="Dashboard_Assignment_Comment" xml:space="preserve">
     <value>Nhận xét (tùy chọn)</value>
   </data>
-
   <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
     <value>Trạng thái: Mở</value>
   </data>

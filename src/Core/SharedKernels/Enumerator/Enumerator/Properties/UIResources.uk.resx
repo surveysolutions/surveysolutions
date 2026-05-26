@@ -892,15 +892,12 @@
   <data name="Assignment_Status_Open" xml:space="preserve">
     <value>Активне</value>
   </data>
-
   <data name="Assignment_Status_Completed" xml:space="preserve">
     <value>Завершено</value>
   </data>
-
   <data name="Assignment_Status_Closed" xml:space="preserve">
     <value>Закрито</value>
   </data>
-
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
     <value>Статус завдання</value>
   </data>

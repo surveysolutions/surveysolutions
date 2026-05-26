@@ -392,15 +392,12 @@
   <data name="Assignment_Status_Open" xml:space="preserve">
     <value>បើក</value>
   </data>
-
   <data name="Assignment_Status_Completed" xml:space="preserve">
     <value>បានបញ្ចប់</value>
   </data>
-
   <data name="Assignment_Status_Closed" xml:space="preserve">
     <value>បានយល់ព្រម</value>
   </data>
-
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
     <value>ស្ថានភាពការចាត់តាំង</value>
   </data>

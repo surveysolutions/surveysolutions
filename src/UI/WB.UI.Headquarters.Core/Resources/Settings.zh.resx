@@ -205,15 +205,12 @@
   <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve">
     <value>允许督导员更改任务状态</value>
   </data>
-
   <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
     <value>启用后，督导员可以从平板电脑审批和重新开启任务</value>
   </data>
-
   <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
     <value>允许访谈员更改任务状态</value>
   </data>
-
   <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
     <value>启用后，访谈员可以从平板电脑完成和重新开启任务（需要启用督导员设置）</value>
   </data>

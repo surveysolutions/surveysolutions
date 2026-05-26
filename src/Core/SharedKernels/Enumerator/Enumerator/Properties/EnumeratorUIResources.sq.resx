@@ -880,43 +880,33 @@
   <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>Përfundo</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
     <value>Përfundo detyrën</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
     <value>Jeni i sigurt që keni numëruar të gjitha njësitë e pranueshme?</value>
   </data>
-
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>Rihap detyrën</value>
   </data>
-
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>Aprovo</value>
   </data>
-
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
     <value>Aprovo detyrën</value>
   </data>
-
   <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
     <value>Intervistuesit që punojnë jashtë linje mund të vazhdojnë mbledhjen e të dhënave deri në sinkronizim. Intervistat e tilla do të pranohen gjithsesi.</value>
   </data>
-
   <data name="Dashboard_Assignment_Comment" xml:space="preserve">
     <value>Koment (opsional)</value>
   </data>
-
   <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
     <value>Statusi: Përfunduar</value>
   </data>
-
   <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
     <value>Statusi: Aprovuar</value>
   </data>
-
   <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
     <value>Statusi: Hapur</value>
   </data>
