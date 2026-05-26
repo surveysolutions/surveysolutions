@@ -61,8 +61,6 @@ namespace WB.UI.Shared.Enumerator
                 FieldInfo stackTrace = typeof(Exception).GetField("stack_trace", BindingFlags.NonPublic | BindingFlags.Instance);
                 stackTrace?.SetValue(exception, null);
                 this.ProcessException(exception);
-
-                ProcessException(args.Exception);
             };
 
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
