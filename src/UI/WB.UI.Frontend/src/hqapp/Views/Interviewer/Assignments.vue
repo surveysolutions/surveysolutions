@@ -144,6 +144,16 @@ export default {
                     width: '5%',
                 },
                 {
+                    data: 'isFinished',
+                    name: 'IsFinished',
+                    title: this.$t('Assignments.Status'),
+                    orderable: false,
+                    searchable: false,
+                    render(data) {
+                        return data ? self.$t('Assignments.StatusFinished') : self.$t('Assignments.StatusOpen')
+                    },
+                },
+                {
                     data: 'quantity',
                     name: 'Quantity',
                     class: 'type-numeric',

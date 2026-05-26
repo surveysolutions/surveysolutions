@@ -33,5 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public bool WebModeEnabledOnQuestionnaire { get; set; }
 
         public CalendarEventView CalendarEvent { get; set; }
+
+        public bool IsFinished { get; set; }
     }
 }

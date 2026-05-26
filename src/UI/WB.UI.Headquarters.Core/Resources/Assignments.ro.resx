@@ -504,4 +504,13 @@
   <data name="WebModeEnabledWarning" xml:space="preserve">
     <value>Sarcina nu poate fi terminată. Are modul web activat, în timp ce chestionarul are modul de colectare web dezactivat</value>
   </data>
+  <data name="Status" xml:space="preserve">
+      <value>Status</value>
+  </data>
+  <data name="StatusOpen" xml:space="preserve">
+      <value>Open</value>
+  </data>
+  <data name="StatusFinished" xml:space="preserve">
+      <value>Finished</value>
+  </data>
 </root>

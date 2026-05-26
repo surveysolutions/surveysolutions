@@ -5,6 +5,7 @@ using AutoFixture;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.DenormalizerStorage;
@@ -120,6 +121,79 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             });
 
             Assert.That(result.Items.First(), Has.Property(nameof(AssignmentRow.Id)).EqualTo(1));
+        }
+
+        [Test]
+        public void should_mark_assignment_as_finished_when_all_interviews_are_done()
+        {
+            var fixture = NewFixture();
+
+            fixture.Register<IQueryableReadSideRepositoryReader<Assignment, Guid>>(() =>
+                new InMemoryReadSideRepositoryAccessor<Assignment, Guid>(
+                    new Dictionary<Guid, Assignment>
+                    {
+                        { Id.g1, Create.Entity.Assignment(1, quantity: 2) }
+                    }
+                ));
+
+            var summaryAccessor = new InMemoryReadSideRepositoryAccessor<InterviewSummary>();
+            summaryAccessor.Store(Create.Entity.InterviewSummary(assignmentId: 1), "i1");
+            summaryAccessor.Store(Create.Entity.InterviewSummary(assignmentId: 1), "i2");
+            fixture.Register<IQueryableReadSideRepositoryReader<InterviewSummary>>(() => summaryAccessor);
+
+            var sut = fixture.Create<AssignmentViewFactory>();
+
+            var result = sut.Load(new AssignmentsInputModel { Offset = 0, Limit = 20 });
+
+            Assert.That(result.Items.Single(), Has.Property(nameof(AssignmentRow.IsFinished)).True);
+        }
+
+        [Test]
+        public void should_not_mark_assignment_as_finished_when_interviews_still_needed()
+        {
+            var fixture = NewFixture();
+
+            fixture.Register<IQueryableReadSideRepositoryReader<Assignment, Guid>>(() =>
+                new InMemoryReadSideRepositoryAccessor<Assignment, Guid>(
+                    new Dictionary<Guid, Assignment>
+                    {
+                        { Id.g1, Create.Entity.Assignment(1, quantity: 3) }
+                    }
+                ));
+
+            var summaryAccessor = new InMemoryReadSideRepositoryAccessor<InterviewSummary>();
+            summaryAccessor.Store(Create.Entity.InterviewSummary(assignmentId: 1), "i1");
+            fixture.Register<IQueryableReadSideRepositoryReader<InterviewSummary>>(() => summaryAccessor);
+
+            var sut = fixture.Create<AssignmentViewFactory>();
+
+            var result = sut.Load(new AssignmentsInputModel { Offset = 0, Limit = 20 });
+
+            Assert.That(result.Items.Single(), Has.Property(nameof(AssignmentRow.IsFinished)).False);
+        }
+
+        [Test]
+        public void should_not_mark_unlimited_assignment_as_finished()
+        {
+            var fixture = NewFixture();
+
+            fixture.Register<IQueryableReadSideRepositoryReader<Assignment, Guid>>(() =>
+                new InMemoryReadSideRepositoryAccessor<Assignment, Guid>(
+                    new Dictionary<Guid, Assignment>
+                    {
+                        { Id.g1, Create.Entity.Assignment(1, quantity: null) }
+                    }
+                ));
+
+            var summaryAccessor = new InMemoryReadSideRepositoryAccessor<InterviewSummary>();
+            summaryAccessor.Store(Create.Entity.InterviewSummary(assignmentId: 1), "i1");
+            fixture.Register<IQueryableReadSideRepositoryReader<InterviewSummary>>(() => summaryAccessor);
+
+            var sut = fixture.Create<AssignmentViewFactory>();
+
+            var result = sut.Load(new AssignmentsInputModel { Offset = 0, Limit = 20 });
+
+            Assert.That(result.Items.Single(), Has.Property(nameof(AssignmentRow.IsFinished)).False);
         }
 
         IFixture NewFixture()

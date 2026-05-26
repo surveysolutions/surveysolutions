@@ -559,4 +559,13 @@
         <value>Área Alvo</value>
     </data>
     
+  <data name="Status" xml:space="preserve">
+      <value>Status</value>
+  </data>
+  <data name="StatusOpen" xml:space="preserve">
+      <value>Open</value>
+  </data>
+  <data name="StatusFinished" xml:space="preserve">
+      <value>Finished</value>
+  </data>
 </root>
