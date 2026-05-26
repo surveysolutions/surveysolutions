@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross;
 using MvvmCross.Base;
@@ -118,18 +119,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             // IsLoading is true by default — the screen opens immediately with a loading indicator.
             // Load counts and entity lists on a background thread.
+            _loadingCts?.Cancel();
+            _loadingCts = new CancellationTokenSource();
+            var cancellationToken = _loadingCts.Token;
             _ = Task.Run(async () =>
             {
                 try
                 {
-                    await LoadDataForDisplayAsync(interviewId, navigationState, forSupervisor);
+                    await LoadDataForDisplayAsync(interviewId, navigationState, forSupervisor, cancellationToken);
+                }
+                catch (OperationCanceledException)
+                {
+                    // User navigated away before loading finished — expected, nothing to do.
                 }
                 catch (Exception ex)
                 {
                     Logger.Error("Failed to load complete screen data", ex);
                     IsLoading = false;
                 }
-            });
+            }, cancellationToken);
         }
 
         /// <summary>
@@ -137,9 +145,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         /// then pushes UI updates onto the main thread.
         /// Subclasses can override to add extra loading steps (e.g. supervisor counts, criticality).
         /// </summary>
-        protected virtual async Task LoadDataForDisplayAsync(string interviewId, NavigationState navigationState, bool forSupervisor = false)
+        protected virtual async Task LoadDataForDisplayAsync(string interviewId, NavigationState navigationState, bool forSupervisor = false, CancellationToken cancellationToken = default)
         {
             // --- Heavy work on background thread ---
+            cancellationToken.ThrowIfCancellationRequested();
             this.InterviewState.Init(interviewId, null);
             var status = InterviewState.Status;
             var questionsCount = InterviewState.QuestionsCount;
@@ -147,9 +156,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var unansweredCount = questionsCount - answeredCount;
             var errorsCount = InterviewState.InvalidAnswersCount;
 
+            cancellationToken.ThrowIfCancellationRequested();
             var topUnansweredResult = this.entitiesListViewModelFactory.GetTopUnansweredQuestions(interviewId, navigationState, forSupervisor);
             var unansweredQuestions = topUnansweredResult.Entities.ToList();
 
+            cancellationToken.ThrowIfCancellationRequested();
             var topErrorsResult = this.entitiesListViewModelFactory.GetTopEntitiesWithErrors(interviewId, navigationState);
             var entitiesWithErrors = topErrorsResult.Entities.ToList();
 
@@ -158,7 +169,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             // --- Marshal UI updates to main thread ---
             await InvokeOnMainThreadAsync(() =>
             {
-                if (isDisposed) return;
+                if (isDisposed)
+                {
+                    // Dispose ViewModels that were created but won't be added to any tab.
+                    entitiesWithErrors.ForEach(vm => vm.DisposeIfDisposable());
+                    unansweredQuestions.ForEach(vm => vm.DisposeIfDisposable());
+                    return;
+                }
 
                 this.CompleteStatus = status;
                 this.AnsweredCount = answeredCount;
@@ -182,7 +199,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 RaisePropertyChanged(nameof(IsAllOk));
             });
 
-            if (isDisposed) return;
+            if (isDisposed || cancellationToken.IsCancellationRequested) return;
             await OnTabDataLoadedAsync(interviewId, navigationState);
         }
 
@@ -294,7 +311,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private string comment;
         private bool requestWebInterview;
         private bool canSwitchToWebMode;
-        private bool isDisposed;
+        private CancellationTokenSource _loadingCts;
+        protected bool isDisposed;
         private bool isCompletionAllowed;
         
         private bool hasCriticalIssues;
@@ -409,6 +427,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 return;
 
             isDisposed = true;
+
+            _loadingCts?.Cancel();
+            _loadingCts?.Dispose();
+            _loadingCts = null;
             
             Name?.Dispose();
             InterviewState?.DisposeIfDisposable();

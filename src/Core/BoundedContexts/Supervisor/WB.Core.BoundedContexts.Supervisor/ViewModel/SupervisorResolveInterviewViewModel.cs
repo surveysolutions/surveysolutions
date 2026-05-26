@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.Commands;
-using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -21,7 +20,6 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -112,6 +110,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
             await InvokeOnMainThreadAsync(() =>
             {
+                if (isDisposed)
+                {
+                    topFailedCriticalRules.ForEach(vm => vm.DisposeIfDisposable());
+                    topUnansweredCriticalQuestions.ForEach(vm => vm.DisposeIfDisposable());
+                    return;
+                }
+
                 base.AnsweredCount = answeredCount;
                 base.ErrorsCount = errorsCount;
                 base.UnansweredCount = unansweredCount;
