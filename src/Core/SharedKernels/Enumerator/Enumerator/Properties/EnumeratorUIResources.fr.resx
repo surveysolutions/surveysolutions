@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -979,7 +979,6 @@ Il apparaîtra sur l'appareil de l'enquêteur après la prochaine synchronisatio
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>La réponse reçue ne semble pas provenir du serveur Survey Solutions. Cela est généralement causé par un proxy réseau, un pare-feu ou une passerelle de sécurité interceptant la connexion. Veuillez vérifier votre connexion réseau ou contacter le support informatique.</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>Terminer</value>
   </data>

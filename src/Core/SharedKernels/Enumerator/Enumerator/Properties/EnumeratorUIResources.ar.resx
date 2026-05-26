@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -1040,7 +1040,6 @@
     <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>يبدو أن الاستجابة المستلمة لا تأتي من خادم Survey Solutions. يُسبب ذلك عادة وكيل شبكة أو جدار ناري أو بوابة أمان تقوم باعتراض الاتصال. يرجى التحقق من اتصال الشبكة لديك أو الاتصال بدعم تكنولوجيا المعلومات.</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>إكمال</value>
   </data>

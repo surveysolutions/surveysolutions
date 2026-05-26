@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -1037,7 +1037,6 @@ Aparecerá no dispositivo do entrevistador após a próxima sincronização</val
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>A resposta recebida parece não vir do servidor Survey Solutions. Normalmente isto é causado por um proxy de rede, firewall ou gateway de segurança que intercepta a ligação. Verifique a sua ligação de rede ou contacte o suporte de TI.</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>Concluir</value>
   </data>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -442,7 +442,6 @@ Silahkan masukkan password Anda yang diperbarui. Jika hal itu tidak menyelesaika
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>Respons yang diterima tampaknya tidak berasal dari server Survey Solutions. Ini biasanya disebabkan oleh proxy jaringan, firewall, atau gateway keamanan yang mencegat koneksi. Periksa koneksi jaringan Anda atau hubungi dukungan TI.</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>Selesaikan</value>
   </data>

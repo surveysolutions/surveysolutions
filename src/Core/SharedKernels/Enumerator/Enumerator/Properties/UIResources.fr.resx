@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -997,7 +997,6 @@ critiques</value>
     <value>Questions
 sans réponse</value>
 </data>
-
   <data name="Assignment_Status_Open" xml:space="preserve">
     <value>Ouvert</value>
   </data>

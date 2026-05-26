@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -997,7 +997,6 @@ errors</value>
     <value>Unanswered
 questions</value>
   </data>
-
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
     <value>Assignment status</value>
   </data>

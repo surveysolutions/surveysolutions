@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -773,7 +773,6 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
   <data name="NoComment" xml:space="preserve">
     <value>Nu este specificat niciun comentariu</value>
   </data>
-
   <data name="Assignment_Status_Open" xml:space="preserve">
     <value>Deschis</value>
   </data>

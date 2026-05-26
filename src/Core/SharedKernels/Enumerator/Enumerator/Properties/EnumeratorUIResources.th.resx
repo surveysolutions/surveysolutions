@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -438,7 +438,6 @@
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>การตอบกลับที่ได้รับดูเหมือนไม่มาจากเซิร์ฟเวอร์ Survey Solutions โดยปกติสถานะนี้เกิดจากพร็อกซีเครือข่าย ไฟร์วอลล์ หรือเกตเวย์ความปลอดภัยที่ดักจับการเชื่อมต่อ กรุณาตรวจสอบการเชื่อมต่อเครือข่ายหรือ ติดต่อฝ่ายไอทีของคุณ</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>เสร็จสิ้น</value>
   </data>

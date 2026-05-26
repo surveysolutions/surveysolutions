@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -1033,7 +1033,6 @@ hoặc liên hệ với giám sát viên của bạn
     <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>Phản hồi nhận được dường như không đến từ máy chủ Survey Solutions. Điều này thường do proxy mạng, tường lửa hoặc cổng bảo mật chặn kết nối. Vui lòng kiểm tra kết nối mạng hoặc liên hệ với bộ phận hỗ trợ CNTT.</value>
   </data>
-
   <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
     <value>Trạng thái: Hoàn thành</value>
   </data>

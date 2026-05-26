@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -888,7 +888,6 @@
   <data name="Warnings" xml:space="preserve">
     <value>Попередження</value>
   </data>
-
   <data name="Assignment_Status_Open" xml:space="preserve">
     <value>Активне</value>
   </data>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -1040,7 +1040,6 @@ It will appear on interviewer device after next synchronization</value>
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
       <value>The response received does not appear to come from the Survey Solutions server. This is usually caused by a network proxy, firewall, or security gateway intercepting the connection. Please check your network connection or contact your IT support.</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>Complete</value>
   </data>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -558,7 +558,6 @@
     <data name="EnterTargetArea" xml:space="preserve">
     <value>Ingresar área objetivo</value>
 </data>
-
   <data name="Filter_ShowAll" xml:space="preserve">
     <value>Mostrar todo</value>
   </data>

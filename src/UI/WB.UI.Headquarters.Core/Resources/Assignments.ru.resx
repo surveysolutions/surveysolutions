@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -548,9 +548,10 @@
   </data>
   <data name="TargetArea" xml:space="preserve">
       <value>Область назначения</value>
-  </data>  <data name="EnterTargetArea" xml:space="preserve">
+  </data>
+  <data name="EnterTargetArea" xml:space="preserve">
       <value>Введите область</value>
-  </data>
+  </data>
   <data name="Filter_ShowAll" xml:space="preserve">
     <value>Все</value>
   </data>

@@ -876,7 +876,6 @@
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>Përgjigjja e marre duket të mos vijë nga shërbimi Survey Solutions. Kjo zakonisht shkaktohet nga një proxy rrjeti, firewall ose gateway sigurie që kap lidhjen. Ju lutemi kontrolloni lidhjen tuaj të rrjetit ose kontaktoni mbështetjen e TI.</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>Përfundo</value>
   </data>

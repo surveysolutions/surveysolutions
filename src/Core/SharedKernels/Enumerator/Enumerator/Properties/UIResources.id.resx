@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -378,7 +378,6 @@ Anda dapat membuat atau menyunting kuesioner Anda pada Desainer Survey Solutions
     <value>Untuk menyelesaikan layar
 </value>
   </data>
-
   <data name="Assignment_Status_Open" xml:space="preserve">
     <value>Terbuka</value>
   </data>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -513,7 +513,6 @@ Raisons possibles :
   <data name="SelectFileWarning" xml:space="preserve">
     <value>Veuillez sélectionner un fichier à télécharger.</value>
 </data>
-
   <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve">
     <value>Autoriser les superviseurs à modifier les statuts des affectations</value>
   </data>

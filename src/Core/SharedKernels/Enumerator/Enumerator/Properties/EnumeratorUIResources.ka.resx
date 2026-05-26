@@ -647,7 +647,6 @@
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>დაავადება მიღებული პასუხი არ ჩანს სარეალარ(server) Survey Solutions. ეს ჩვეულებრივია გამოწვეული ქსელის პროქსით, ფაიერვოლით ან უსაფრთხოების გეითვეით, რომელიც ამარენტებს კავშირს. გთხოვთ შეამოწმოთ თქვენი ქსელის კავშირი ან დაუკავშირდით IT მხარდაჭერას.</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>დასრულება</value>
   </data>

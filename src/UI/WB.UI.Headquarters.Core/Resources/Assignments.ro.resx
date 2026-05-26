@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -504,7 +504,6 @@
   <data name="WebModeEnabledWarning" xml:space="preserve">
     <value>Sarcina nu poate fi terminată. Are modul web activat, în timp ce chestionarul are modul de colectare web dezactivat</value>
   </data>
-
   <data name="Downsize" xml:space="preserve">
     <value>Reducere</value>
   </data>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -975,7 +975,6 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>Přijatá odpověď se nezdá pocházet ze serveru Survey Solutions. Obvykle to způsobuje síťový proxy, firewall nebo bezpečnostní brána, které zachycují připojení. Zkontrolujte své síťové připojení nebo kontaktujte IT podporu.</value>
   </data>
-
   <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>Dokončit</value>
   </data>

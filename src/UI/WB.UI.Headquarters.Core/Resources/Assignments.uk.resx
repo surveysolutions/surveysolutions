@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -528,7 +528,6 @@
   <data name="Property" xml:space="preserve">
       <value>Властивість</value>
   </data>
-
   <data name="Downsize" xml:space="preserve">
     <value>Зменшити</value>
   </data>
