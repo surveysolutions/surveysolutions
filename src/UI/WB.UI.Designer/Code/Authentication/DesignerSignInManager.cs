@@ -26,7 +26,7 @@ namespace WB.UI.Designer.Code.Authentication
         public override async Task<SignInResult> TwoFactorAuthenticatorSignInAsync(string code, bool isPersistent,
             bool rememberClient)
         {
-            var result = await base.TwoFactorAuthenticatorSignInAsync(code, isPersistent, rememberClient);
+            var result = await BaseTwoFactorAuthenticatorSignInAsync(code, isPersistent, rememberClient);
             if (result.Succeeded)
                 await this.UpdateLastLoginForTwoFactorAuthenticationUserAsync();
 
@@ -35,7 +35,7 @@ namespace WB.UI.Designer.Code.Authentication
 
         public override async Task<SignInResult> TwoFactorRecoveryCodeSignInAsync(string recoveryCode)
         {
-            var result = await base.TwoFactorRecoveryCodeSignInAsync(recoveryCode);
+            var result = await BaseTwoFactorRecoveryCodeSignInAsync(recoveryCode);
             if (result.Succeeded)
                 await this.UpdateLastLoginForTwoFactorAuthenticationUserAsync();
 
@@ -45,12 +45,23 @@ namespace WB.UI.Designer.Code.Authentication
         public override async Task<SignInResult> TwoFactorSignInAsync(string provider, string code, bool isPersistent,
             bool rememberClient)
         {
-            var result = await base.TwoFactorSignInAsync(provider, code, isPersistent, rememberClient);
+            var result = await BaseTwoFactorSignInAsync(provider, code, isPersistent, rememberClient);
             if (result.Succeeded)
                 await this.UpdateLastLoginForTwoFactorAuthenticationUserAsync();
 
             return result;
         }
+
+        protected virtual Task<SignInResult> BaseTwoFactorAuthenticatorSignInAsync(string code, bool isPersistent,
+            bool rememberClient)
+            => base.TwoFactorAuthenticatorSignInAsync(code, isPersistent, rememberClient);
+
+        protected virtual Task<SignInResult> BaseTwoFactorRecoveryCodeSignInAsync(string recoveryCode)
+            => base.TwoFactorRecoveryCodeSignInAsync(recoveryCode);
+
+        protected virtual Task<SignInResult> BaseTwoFactorSignInAsync(string provider, string code, bool isPersistent,
+            bool rememberClient)
+            => base.TwoFactorSignInAsync(provider, code, isPersistent, rememberClient);
 
         private async Task UpdateLastLoginForTwoFactorAuthenticationUserAsync()
         {
