@@ -125,7 +125,10 @@
                                 @user.CreationDate.ConvertToLocalAndFormatDate()
                             </td>
                             <td class="date">
-                                @(user.LastLoginAtUtc?.ConvertToLocalAndFormatDate() ?? string.Empty)
+                                @if (user.LastLoginAtUtc.HasValue)
+                                {
+                                    <time data-utc="@(user.LastLoginAtUtc.Value.ToString("s"))Z"></time>
+                                }
                             </td>
                             <td>
                                 @(user.IsApproved ? "Yes" : "No")
@@ -167,3 +170,12 @@
         }
     </div>
 </div>
+
+@section scripts {
+<script>
+    document.querySelectorAll('time[data-utc]').forEach(function (el) {
+        var d = new Date(el.getAttribute('data-utc'));
+        el.textContent = d.toLocaleString();
+    });
+</script>
+}
