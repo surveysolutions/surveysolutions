@@ -193,6 +193,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
             interviewRepository.Setup(x => x.Get(It.IsAny<string>()))
                 .Returns(interview);
+            interviewRepository.Setup(x => x.GetOrThrow(It.IsAny<string>()))
+                .Returns(interview);
 
             var viewModel = CreateViewModel(interviewRepository: interviewRepository.Object);
 

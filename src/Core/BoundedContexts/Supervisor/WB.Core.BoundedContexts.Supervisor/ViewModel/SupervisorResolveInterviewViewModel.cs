@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         protected override async Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState)
         {
             // Override base counts with supervisor-specific values (run on background thread).
-            var iv = this.interviewRepository.Get(interviewId);
+            var iv = this.interviewRepository.GetOrThrow(interviewId);
             var answeredCount = iv.CountActiveAnsweredQuestionsInInterviewForSupervisor();
             var errorsCount = iv.CountInvalidEntitiesInInterviewForSupervisor();
             var unansweredCount = iv.CountActiveQuestionsInInterviewForSupervisor() - answeredCount;

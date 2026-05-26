@@ -135,7 +135,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 catch (Exception ex)
                 {
                     Logger.Error("Failed to load complete screen data", ex);
-                    IsLoading = false;
+                    await InvokeOnMainThreadAsync(() =>
+                    {
+                        if (isDisposed) return;
+                        IsLoading = false;
+                    });
                 }
             }, cancellationToken);
         }
@@ -148,6 +152,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         protected virtual async Task LoadDataForDisplayAsync(string interviewId, NavigationState navigationState, bool forSupervisor = false, CancellationToken cancellationToken = default)
         {
             // --- Heavy work on background thread ---
+            if (isDisposed) return;
             cancellationToken.ThrowIfCancellationRequested();
             this.InterviewState.Init(interviewId, null);
             var status = InterviewState.Status;
@@ -333,47 +338,56 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             return true;
         }
 
-        protected Task CollectCriticalityInfo(string interviewId, NavigationState navigationState)
+        protected async Task CollectCriticalityInfo(string interviewId, NavigationState navigationState)
         {
             var topFailedCriticalRulesInfo = this.entitiesListViewModelFactory.GetTopFailedCriticalRules(interviewId, navigationState);
             var topFailedCriticalRules = topFailedCriticalRulesInfo.Entities.ToList();
-            if (topFailedCriticalRules.Count > 0)
-            {
-                var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
-                var takeCount = Math.Max(0, entitiesListViewModelFactory.MaxNumberOfEntities - tabViewModel.Items.Count);
-                tabViewModel.Items.AddRange(topFailedCriticalRules.Take(takeCount));
-                tabViewModel.Total += topFailedCriticalRulesInfo.Total;
-            }
 
             var topUnansweredCriticalQuestionsInfo = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState);
             var topUnansweredCriticalQuestions = topUnansweredCriticalQuestionsInfo.Entities.ToList();
-            if (topUnansweredCriticalQuestions.Count > 0)
-            {
-                var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
-                var takeCount = Math.Max(0, entitiesListViewModelFactory.MaxNumberOfEntities - tabViewModel.Items.Count);
-                tabViewModel.Items.AddRange(topUnansweredCriticalQuestions.Take(takeCount));
-                tabViewModel.Total += topUnansweredCriticalQuestionsInfo.Total;
-            }
             
-            HasCriticalIssues = topUnansweredCriticalQuestions.Count > 0 || topFailedCriticalRules.Count > 0;
-
-            if (HasCriticalIssues)
+            await InvokeOnMainThreadAsync(() =>
             {
-                CompleteStatus = GroupStatus.CompletedInvalid;
-
-                if (CriticalityLevel == SharedKernels.DataCollection.ValueObjects.Interview.CriticalityLevel.Warn)
+                if (isDisposed)
                 {
-                    this.CompleteButtonComment = UIResources.Interview_Complete_Note_For_Supervisor_with_Criticality;
+                    topFailedCriticalRules.ForEach(vm => vm.DisposeIfDisposable());
+                    topUnansweredCriticalQuestions.ForEach(vm => vm.DisposeIfDisposable());
+                    return;
                 }
-                else
-                {
-                    this.CompleteButtonComment = UIResources.Interview_Complete_CriticalIssues_Instrunction;
-                }
-            }
 
-            IsCompletionAllowed = CalculateIsCompletionAllowed();
-            IsLoading = false;
-            return Task.CompletedTask;
+                var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
+                if (topFailedCriticalRules.Count > 0)
+                {
+                    var takeCount = Math.Max(0, entitiesListViewModelFactory.MaxNumberOfEntities - tabViewModel.Items.Count);
+                    tabViewModel.Items.AddRange(topFailedCriticalRules.Take(takeCount));
+                    tabViewModel.Total += topFailedCriticalRulesInfo.Total;
+                }
+
+                if (topUnansweredCriticalQuestions.Count > 0)
+                {
+                    var takeCount = Math.Max(0, entitiesListViewModelFactory.MaxNumberOfEntities - tabViewModel.Items.Count);
+                    tabViewModel.Items.AddRange(topUnansweredCriticalQuestions.Take(takeCount));
+                    tabViewModel.Total += topUnansweredCriticalQuestionsInfo.Total;
+                }
+
+                HasCriticalIssues = topUnansweredCriticalQuestions.Count > 0 || topFailedCriticalRules.Count > 0;
+                if (HasCriticalIssues)
+                {
+                    CompleteStatus = GroupStatus.CompletedInvalid;
+
+                    if (CriticalityLevel == SharedKernels.DataCollection.ValueObjects.Interview.CriticalityLevel.Warn)
+                    {
+                        this.CompleteButtonComment = UIResources.Interview_Complete_Note_For_Supervisor_with_Criticality;
+                    }
+                    else
+                    {
+                        this.CompleteButtonComment = UIResources.Interview_Complete_CriticalIssues_Instrunction;
+                    }
+                }
+
+                IsCompletionAllowed = CalculateIsCompletionAllowed();
+                IsLoading = false;
+            });
         }
         
         protected virtual async Task CompleteInterviewAsync()

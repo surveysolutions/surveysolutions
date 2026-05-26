@@ -85,8 +85,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             if (!this.HasCriticalFeature(interviewId)
                 || CriticalityLevel == SharedKernels.DataCollection.ValueObjects.Interview.CriticalityLevel.Ignore)
             {
-                IsCompletionAllowed = true;
-                IsLoading = false;
+                await InvokeOnMainThreadAsync(() =>
+                {
+                    if (isDisposed) return;
+                    IsCompletionAllowed = true;
+                    IsLoading = false;
+                });
             }
             else
             {
