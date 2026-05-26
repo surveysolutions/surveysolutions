@@ -158,6 +158,20 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                         commandService.Execute(new CloseAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
                         break;
                     case AssignmentStatus.Open:
+                        if (this.authorizedUser.IsInterviewer)
+                        {
+                            if (assignment.Status != AssignmentStatus.Completed)
+                                return Forbid();
+                        }
+                        else if (this.authorizedUser.IsSupervisor)
+                        {
+                            if (assignment.Status != AssignmentStatus.Completed && assignment.Status != AssignmentStatus.Closed)
+                                return Forbid();
+                        }
+                        else
+                        {
+                            return Forbid();
+                        }
                         commandService.Execute(new ReopenAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
                         break;
                     default:
