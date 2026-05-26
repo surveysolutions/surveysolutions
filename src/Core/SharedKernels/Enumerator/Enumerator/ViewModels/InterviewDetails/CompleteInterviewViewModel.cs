@@ -208,11 +208,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         /// Base implementation marks loading complete and computes completion eligibility.
         /// Subclasses override to add criticality, supervisor-specific counts, etc.
         /// </summary>
-        protected virtual Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState)
+        protected virtual async Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState)
         {
-            IsCompletionAllowed = CalculateIsCompletionAllowed();
-            IsLoading = false;
-            return Task.CompletedTask;
+            await InvokeOnMainThreadAsync(() =>
+            {
+                if (isDisposed) return;
+
+                IsCompletionAllowed = CalculateIsCompletionAllowed();
+                IsLoading = false;
+            });
         }
 
         public List<TabViewModel> Tabs { get; set; } = new();
