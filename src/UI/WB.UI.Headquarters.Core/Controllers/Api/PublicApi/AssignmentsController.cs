@@ -741,6 +741,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (authorizedUser.IsSupervisor && !interviewerSettings.IsAllowSupervisorChangeAssignmentStatus())
                 return Forbid();
 
+            if (authorizedUser.IsSupervisor)
+            {
+                var isAllowedSupervisorTransition =
+                    request.Status == AssignmentStatus.Closed ||
+                    request.Status == AssignmentStatus.Open;
+
+                if (!isAllowedSupervisorTransition)
+                    return Forbid();
+            }
+
             try
             {
                 switch (request.Status)

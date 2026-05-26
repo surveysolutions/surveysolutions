@@ -80,14 +80,14 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             return tcs.Task;
         }
 
-        public Task<string> AssignmentStatusChangeAsync(
+        public Task<string?> AssignmentStatusChangeAsync(
             string description,
             string title = "",
             string okButton = null,
             string cancelButton = null,
             string commentHint = null)
         {
-            var tcs = new TaskCompletionSource<string>();
+            var tcs = new TaskCompletionSource<string?>();
             okButton ??= UIResources.Ok;
             cancelButton ??= UIResources.Cancel;
 

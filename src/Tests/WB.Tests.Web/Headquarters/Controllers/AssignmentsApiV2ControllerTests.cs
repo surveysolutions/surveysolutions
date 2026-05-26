@@ -13,10 +13,13 @@ using Microsoft.AspNetCore.Routing;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -31,13 +34,23 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         private AssignmentsApiV2Controller CreateController(
             IAuthorizedUser authorizedUser = null,
             IAssignmentsService assignmentsService = null,
-            ICommandService commandService = null)
+            ICommandService commandService = null,
+            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage = null)
         {
+            if (interviewerSettingsStorage == null)
+            {
+                var storageMock = new Mock<IPlainKeyValueStorage<InterviewerSettings>>();
+                storageMock.Setup(s => s.GetById(AppSetting.InterviewerSettings))
+                    .Returns(new InterviewerSettings());
+                interviewerSettingsStorage = storageMock.Object;
+            }
+
             var controller = new AssignmentsApiV2Controller(
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 assignmentsService ?? Mock.Of<IAssignmentsService>(),
                 Mock.Of<IUserToDeviceService>(),
-                commandService ?? Mock.Of<ICommandService>());
+                commandService ?? Mock.Of<ICommandService>(),
+                interviewerSettingsStorage);
 
             controller.ControllerContext = new ControllerContext(new ActionContext(
                 new DefaultHttpContext(), new RouteData(), new ControllerActionDescriptor()));

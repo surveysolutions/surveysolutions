@@ -177,7 +177,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public bool ShowArchive { get; set; }
 
         /// <summary>
-        /// Filter by assignment status. Comma-separated values of Active, Finished, Completed
+        /// Filter by assignment status. Comma-separated values of Open, Completed, Closed
         /// </summary>
         public string Status { get; set; }
 
@@ -212,6 +212,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         /// Optional comment for the status change
         /// </summary>
         [DataMember]
+        [MaxLength(500)]
         public string Comment { get; set; }
     }
 

@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
@@ -25,16 +28,19 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         private readonly IAssignmentsService assignmentsService;
         private readonly ICommandService commandService;
         private readonly IUserToDeviceService userToDeviceService;
+        private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
 
         protected AssignmentsControllerBase(IAuthorizedUser authorizedUser,
             IAssignmentsService assignmentsService,
             IUserToDeviceService userToDeviceService,
-            ICommandService commandService)
+            ICommandService commandService,
+            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage)
         {
             this.authorizedUser = authorizedUser;
             this.assignmentsService = assignmentsService;
             this.commandService = commandService;
             this.userToDeviceService = userToDeviceService;
+            this.interviewerSettingsStorage = interviewerSettingsStorage;
         }
 
         public virtual ActionResult<AssignmentApiDocument> GetAssignment(int id)
@@ -128,6 +134,14 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             {
                 return Forbid();
             }
+
+            var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
+
+            if (this.authorizedUser.IsInterviewer && !interviewerSettings.IsAllowInterviewerChangeAssignmentStatus())
+                return Forbid();
+
+            if (this.authorizedUser.IsSupervisor && !interviewerSettings.IsAllowSupervisorChangeAssignmentStatus())
+                return Forbid();
 
             try
             {

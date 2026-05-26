@@ -11,7 +11,7 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
         {
             Create.Column("statuscomment")
                 .OnTable("assignments")
-                .AsString()
+                .AsString(500)
                 .Nullable();
         }
     }
