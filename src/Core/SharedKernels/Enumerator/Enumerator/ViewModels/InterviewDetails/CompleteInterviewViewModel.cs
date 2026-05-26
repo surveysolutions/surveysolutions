@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
-using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -81,56 +79,125 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             this.InterviewId = Guid.Parse(interviewId);
-            
-            this.InterviewState.Init(interviewId, null);
-            this.CompleteStatus = InterviewState.Status;
+
+            // Fast synchronous setup: just enough to show the screen immediately.
+            // All expensive interview traversals are deferred to the background task below.
             this.Name.InitAsStatic(UIResources.Interview_Complete_Screen_Title);
 
             var interview = this.interviewRepository.Get(interviewId);
             var interviewKey = interview.GetInterviewKey()?.ToString();
             this.CompleteScreenTitle = string.Format(UIResources.Interview_Complete_Title, interviewKey);
 
-
-            var questionsCount = InterviewState.QuestionsCount;
-            this.AnsweredCount = InterviewState.AnsweredQuestionsCount;
-
-            this.UnansweredCount = questionsCount - this.AnsweredCount;
-            var topUnansweredQuestions = this.entitiesListViewModelFactory.GetTopUnansweredQuestions(interviewId, navigationState, forSupervisor);
-            var unansweredQuestions = topUnansweredQuestions.Entities.ToList();
-
-            this.ErrorsCount = InterviewState.InvalidAnswersCount;
-            var topEntitiesWithErrors = this.entitiesListViewModelFactory.GetTopEntitiesWithErrors(interviewId, navigationState);
-            var entitiesWithErrors = topEntitiesWithErrors.Entities.ToList();
-            this.EntitiesWithErrorsDescription = UIResources.Interview_Complete_Entities_With_Errors + " " + MoreThan(this.ErrorsCount);
-
-            this.Tabs = new List<TabViewModel>();
-
-            Tabs.Add(new TabViewModel()
+            this.Tabs = new List<TabViewModel>
             {
-                Title  = UIResources.Interview_Complete_Tab_Title_Critical,
-                Items = new(),
-                TabContent = CompleteTabContent.CriticalError,
-                Total = 0,
-            });
-            Tabs.Add(new TabViewModel()
-            {
-                Title  = UIResources.Interview_Complete_Tab_Title_WithErrors,
-                Items = new(entitiesWithErrors),
-                TabContent = CompleteTabContent.Error,
-                Total = topEntitiesWithErrors.Total,
-            });
-            Tabs.Add(new TabViewModel()
-            {
-                Title  = UIResources.Interview_Complete_Tab_Title_Unanswered,
-                Items = new(unansweredQuestions),
-                TabContent = CompleteTabContent.Unanswered,
-                Total = topUnansweredQuestions.Total,
-            });
+                new TabViewModel
+                {
+                    Title  = UIResources.Interview_Complete_Tab_Title_Critical,
+                    Items = new(),
+                    TabContent = CompleteTabContent.CriticalError,
+                    Total = 0,
+                },
+                new TabViewModel
+                {
+                    Title  = UIResources.Interview_Complete_Tab_Title_WithErrors,
+                    Items = new(),
+                    TabContent = CompleteTabContent.Error,
+                    Total = 0,
+                },
+                new TabViewModel
+                {
+                    Title  = UIResources.Interview_Complete_Tab_Title_Unanswered,
+                    Items = new(),
+                    TabContent = CompleteTabContent.Unanswered,
+                    Total = 0,
+                },
+            };
 
             this.Comment = lastCompletionComments.Get(this.InterviewId);
             this.CommentLabel = UIResources.Interview_Complete_Note_For_Supervisor;
+
+            // IsLoading is true by default — the screen opens immediately with a loading indicator.
+            // Load counts and entity lists on a background thread.
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await LoadDataForDisplayAsync(interviewId, navigationState, forSupervisor);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("Failed to load complete screen data", ex);
+                    IsLoading = false;
+                }
+            });
         }
-        
+
+        /// <summary>
+        /// Loads all expensive interview data (state counts, entity lists) on the calling (background) thread,
+        /// then pushes UI updates onto the main thread.
+        /// Subclasses can override to add extra loading steps (e.g. supervisor counts, criticality).
+        /// </summary>
+        protected virtual async Task LoadDataForDisplayAsync(string interviewId, NavigationState navigationState, bool forSupervisor = false)
+        {
+            // --- Heavy work on background thread ---
+            this.InterviewState.Init(interviewId, null);
+            var status = InterviewState.Status;
+            var questionsCount = InterviewState.QuestionsCount;
+            var answeredCount = InterviewState.AnsweredQuestionsCount;
+            var unansweredCount = questionsCount - answeredCount;
+            var errorsCount = InterviewState.InvalidAnswersCount;
+
+            var topUnansweredResult = this.entitiesListViewModelFactory.GetTopUnansweredQuestions(interviewId, navigationState, forSupervisor);
+            var unansweredQuestions = topUnansweredResult.Entities.ToList();
+
+            var topErrorsResult = this.entitiesListViewModelFactory.GetTopEntitiesWithErrors(interviewId, navigationState);
+            var entitiesWithErrors = topErrorsResult.Entities.ToList();
+
+            var errorsDescription = UIResources.Interview_Complete_Entities_With_Errors + " " + MoreThan(errorsCount);
+
+            // --- Marshal UI updates to main thread ---
+            await InvokeOnMainThreadAsync(() =>
+            {
+                if (isDisposed) return;
+
+                this.CompleteStatus = status;
+                this.AnsweredCount = answeredCount;
+                this.UnansweredCount = unansweredCount;
+                this.ErrorsCount = errorsCount;
+                this.EntitiesWithErrorsDescription = errorsDescription;
+
+                var errorsTab = this.Tabs.First(t => t.TabContent == CompleteTabContent.Error);
+                errorsTab.Items.AddRange(entitiesWithErrors);
+                errorsTab.Total = topErrorsResult.Total;
+
+                var unansweredTab = this.Tabs.First(t => t.TabContent == CompleteTabContent.Unanswered);
+                unansweredTab.Items.AddRange(unansweredQuestions);
+                unansweredTab.Total = topUnansweredResult.Total;
+
+                RaisePropertyChanged(nameof(AnsweredCount));
+                RaisePropertyChanged(nameof(UnansweredCount));
+                RaisePropertyChanged(nameof(ErrorsCount));
+                RaisePropertyChanged(nameof(EntitiesWithErrorsDescription));
+                RaisePropertyChanged(nameof(Tabs));
+                RaisePropertyChanged(nameof(IsAllOk));
+            });
+
+            if (isDisposed) return;
+            await OnTabDataLoadedAsync(interviewId, navigationState);
+        }
+
+        /// <summary>
+        /// Called after the base tab data (counts, entity lists) has been loaded and pushed to the UI.
+        /// Base implementation marks loading complete and computes completion eligibility.
+        /// Subclasses override to add criticality, supervisor-specific counts, etc.
+        /// </summary>
+        protected virtual Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState)
+        {
+            IsCompletionAllowed = CalculateIsCompletionAllowed();
+            IsLoading = false;
+            return Task.CompletedTask;
+        }
+
         public List<TabViewModel> Tabs { get; set; } = new();
         
         public int AnsweredCount { get; set; }

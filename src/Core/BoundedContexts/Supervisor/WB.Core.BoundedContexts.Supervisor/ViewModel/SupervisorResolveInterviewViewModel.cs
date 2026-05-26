@@ -79,9 +79,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             RunConfiguration(interviewId, navigationState, true);
 
             this.Name.InitAsStatic(InterviewDetails.Resolve);
-
             this.CommentLabel = InterviewDetails.ResolveComment;
 
+            // Load the interview for fast fields needed by Approve/Reject/Assign canExecute predicates.
             interview = this.interviewRepository.Get(interviewId);
             this.status = interview.Status;
 
@@ -90,32 +90,51 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 ? UIResources.Interview_Complete_Screen_Description
                 : string.Format(UIResources.Interview_Complete_Screen_DescriptionWithInterviewKey, interviewKey);
 
-            base.AnsweredCount = interview.CountActiveAnsweredQuestionsInInterviewForSupervisor();
-            base.ErrorsCount = interview.CountInvalidEntitiesInInterviewForSupervisor();
-            base.UnansweredCount = interview.CountActiveQuestionsInInterviewForSupervisor() - base.AnsweredCount;
-
             var interviewView = this.interviews.GetById(interviewId);
             this.receivedByInterviewerTabletAt = interviewView.ReceivedByInterviewerAtUtc;
 
+            // IsLoading stays true; OnTabDataLoadedAsync loads supervisor-specific counts and clears it.
+        }
+
+        protected override async Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState)
+        {
+            // Override base counts with supervisor-specific values (run on background thread).
+            var iv = this.interviewRepository.Get(interviewId);
+            var answeredCount = iv.CountActiveAnsweredQuestionsInInterviewForSupervisor();
+            var errorsCount = iv.CountInvalidEntitiesInInterviewForSupervisor();
+            var unansweredCount = iv.CountActiveQuestionsInInterviewForSupervisor() - answeredCount;
+
             var topFailedCriticalRulesFromState = this.entitiesListViewModelFactory.GetTopFailedCriticalRulesFromState(interviewId, navigationState);
             var topFailedCriticalRules = topFailedCriticalRulesFromState.Entities.ToList();
-            if (topFailedCriticalRules.Count > 0)
-            {
-                var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
-                tabViewModel.Items.AddRange(topFailedCriticalRules);
-                tabViewModel.Total += topFailedCriticalRulesFromState.Total;
-            }
 
             var topUnansweredCriticalQuestionsInfo = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState);
             var topUnansweredCriticalQuestions = topUnansweredCriticalQuestionsInfo.Entities.ToList();
-            if (topUnansweredCriticalQuestions.Count > 0)
+
+            await InvokeOnMainThreadAsync(() =>
             {
-                var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
-                tabViewModel.Items.AddRange(topUnansweredCriticalQuestions);
-                tabViewModel.Total += topUnansweredCriticalQuestionsInfo.Total;
-            }
-            
-            IsLoading = false;
+                base.AnsweredCount = answeredCount;
+                base.ErrorsCount = errorsCount;
+                base.UnansweredCount = unansweredCount;
+                RaisePropertyChanged(nameof(AnsweredCount));
+                RaisePropertyChanged(nameof(ErrorsCount));
+                RaisePropertyChanged(nameof(UnansweredCount));
+
+                if (topFailedCriticalRules.Count > 0)
+                {
+                    var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
+                    tabViewModel.Items.AddRange(topFailedCriticalRules);
+                    tabViewModel.Total += topFailedCriticalRulesFromState.Total;
+                }
+
+                if (topUnansweredCriticalQuestions.Count > 0)
+                {
+                    var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
+                    tabViewModel.Items.AddRange(topUnansweredCriticalQuestions);
+                    tabViewModel.Total += topUnansweredCriticalQuestionsInfo.Total;
+                }
+
+                IsLoading = false;
+            });
         }
 
         public IMvxAsyncCommand Approve => new MvxAsyncCommand(async () =>
