@@ -709,7 +709,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("{id:int}/changeStatus")]
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
-        [AuthorizeByRole(UserRoles.Supervisor, UserRoles.Interviewer)]
+        [AuthorizeByRole(UserRoles.Headquarter, UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Interviewer)]
         [ObservingNotAllowed]
         public async Task<ActionResult<AssignmentDetails>> ChangeStatus(int id, [FromBody] ChangeAssignmentStatusRequest request)
         {
@@ -746,9 +746,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 if (assignment.ResponsibleId != authorizedUser.Id)
                 {
                     var responsible = await this.userManager.FindByIdAsync(assignment.ResponsibleId);
-                    if (!responsible.IsInRole(UserRoles.Interviewer))
+                    if (responsible == null || !responsible.IsInRole(UserRoles.Interviewer))
                         return Forbid();
-                    if (responsible.WorkspaceProfile.SupervisorId != this.authorizedUser.Id)
+                    if (responsible.WorkspaceProfile?.SupervisorId != this.authorizedUser.Id)
                         return Forbid();
                 }
 
@@ -757,6 +757,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     request.Status == AssignmentStatus.Open;
 
                 if (!isAllowedSupervisorTransition)
+                    return Forbid();
+            }
+
+            if (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator)
+            {
+                var isAllowedHqTransition =
+                    request.Status == AssignmentStatus.Closed ||
+                    request.Status == AssignmentStatus.Open;
+
+                if (!isAllowedHqTransition)
                     return Forbid();
             }
 

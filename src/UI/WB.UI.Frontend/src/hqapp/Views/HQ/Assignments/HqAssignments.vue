@@ -176,7 +176,7 @@
             </template>
         </ModalFrame>
 
-        <ModalFrame ref="closeModal" :title="$t('Pages.ConfirmationNeededTitle')">
+        <ModalFrame ref="downsizeModal" :title="$t('Pages.ConfirmationNeededTitle')">
             <p v-if="selectedRows.length === 1">{{ singleCloseMessage }}</p>
             <p v-else>{{ $t("Assignments.MultipleAssignmentsClose", { count: selectedRows.length }) }}</p>
 
@@ -745,7 +745,7 @@ export default {
         },
 
         downsizeSelected() {
-            this.$refs.closeModal.modal({
+            this.$refs.downsizeModal.modal({
                 keyboard: false,
             })
         },
@@ -766,7 +766,7 @@ export default {
                     })
                 })
             )
-            this.$refs.closeModal.hide()
+            this.$refs.downsizeModal.hide()
             this.reloadTable()
         },
 
