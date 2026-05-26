@@ -176,4 +176,4 @@ src/
 - **Building of the apps makes changes:** package-lock.json, other locale/[culture].json and *.cshtml files. These changes must not be committed.
 - **Most meaningful C# code changes require new unit tests:** Especially if changed classes (or neighbouring classes) already have them.
 - **Only meaningful changes are allowed:** Do not change other lines for formatting or unrelated reasons. Move code only when it provides substantial value.
-- **Always use CRLF (\r\n) line endings**
+- **Follow existing line endings and rely on `.gitattributes`:** Do not rewrite files just to change line endings; keep `*.sln` files as CRLF where required.
