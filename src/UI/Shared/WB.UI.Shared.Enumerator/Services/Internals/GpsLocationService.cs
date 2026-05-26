@@ -88,7 +88,9 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             {
                 // Skip fixes that don't meet the configured accuracy threshold — keep
                 // waiting for a better satellite fix rather than accepting a coarse one.
-                if (location.HasAccuracy && location.Accuracy > desiredAccuracy)
+                // Non-positive desired accuracy means "accept the first fix" instead of
+                // rejecting every accurate reading and timing out.
+                if (desiredAccuracy > 0 && location.HasAccuracy && location.Accuracy > desiredAccuracy)
                     return;
 
                 var timestamp = GetTimestamp(location);
