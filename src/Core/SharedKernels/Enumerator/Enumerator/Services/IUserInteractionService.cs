@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     {
         Task<bool> ConfirmAsync(string message, string title = "", string okButton = null, string cancelButton = null, bool isHtml = true);
         Task<string> ConfirmWithTextInputAsync(string message, string title = "", string okButton = null, string cancelButton = null, bool isTextInputPassword = false);
-        Task<string?> AssignmentStatusChangeAsync(string description, string title = "", string okButton = null, string cancelButton = null, string commentHint = null);
+        Task<string> AssignmentStatusChangeAsync(string description, string title = "", string okButton = null, string cancelButton = null, string commentHint = null);
         Task<ChangePasswordDialogResult> ConfirmNewPasswordInputAsync(string message, string title = "", string okButton = null, string cancelButton = null, Func<ChangePasswordDialogOkCallback, Task> okCallback = null);
         Task AlertAsync(string message, string title = "", string okButton = null);
 
