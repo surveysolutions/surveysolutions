@@ -78,21 +78,24 @@ namespace WB.UI.Headquarters.Controllers
         [AntiForgeryFilter]
         public IActionResult Started()
         {
-            return View("Interviews", NewModel(MenuItem.Started, InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted));
+            var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
+            return View("Interviews", NewModel(MenuItem.Started, interviewerSettings, InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted));
         }
 
         [ActivePage(MenuItem.Rejected)]
         [AntiForgeryFilter]
         public IActionResult Rejected()
         {
-            return View("Interviews", NewModel(MenuItem.Rejected, InterviewStatus.RejectedBySupervisor));
+            var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
+            return View("Interviews", NewModel(MenuItem.Rejected, interviewerSettings, InterviewStatus.RejectedBySupervisor));
         }
 
         [ActivePage(MenuItem.Completed)]
         [AntiForgeryFilter]
         public IActionResult Completed()
         {
-            return View("Interviews", NewModel(MenuItem.Completed, InterviewStatus.Completed));
+            var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
+            return View("Interviews", NewModel(MenuItem.Completed, interviewerSettings, InterviewStatus.Completed));
         }
 
         private InterviewerHqModel NewModel(MenuItem title, params InterviewStatus[] statuses)
