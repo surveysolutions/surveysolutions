@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -116,7 +119,65 @@ namespace WB.Tests.Web.Headquarters.Integrity
         {
             var context = new DefaultHttpContext();
             context.Request.Path = path;
+
+            // Wire up proper response lifecycle so OnStarting callbacks fire and
+            // HasStarted is set correctly — DefaultHttpContext alone does not do this.
+            var responseFeature = new TestHttpResponseFeature();
+            context.Features.Set<IHttpResponseFeature>(responseFeature);
+            context.Features.Set<IHttpResponseBodyFeature>(new TestHttpResponseBodyFeature(responseFeature));
+
             return context;
+        }
+
+        /// <summary>
+        /// Replacement for the default <see cref="HttpResponseFeature"/> that tracks
+        /// whether the response has started and fires <c>OnStarting</c> callbacks when
+        /// <see cref="TriggerOnStartingAsync"/> is called (normally done by the server).
+        /// </summary>
+        private class TestHttpResponseFeature : HttpResponseFeature
+        {
+            private bool hasStarted;
+            private readonly List<(Func<object, Task> Callback, object State)> callbacks = new();
+
+            public override bool HasStarted => hasStarted;
+
+            public override void OnStarting(Func<object, Task> callback, object state)
+                => callbacks.Add((callback, state));
+
+            public async Task TriggerOnStartingAsync()
+            {
+                if (hasStarted) return;
+                hasStarted = true;
+                foreach (var (cb, state) in callbacks)
+                    await cb(state);
+            }
+        }
+
+        /// <summary>
+        /// Replacement body feature that calls <see cref="TestHttpResponseFeature.TriggerOnStartingAsync"/>
+        /// when <see cref="StartAsync"/> or <see cref="CompleteAsync"/> is called, matching real-server behaviour.
+        /// </summary>
+        private class TestHttpResponseBodyFeature : IHttpResponseBodyFeature
+        {
+            private readonly TestHttpResponseFeature responseFeature;
+
+            public TestHttpResponseBodyFeature(TestHttpResponseFeature responseFeature)
+                => this.responseFeature = responseFeature;
+
+            public Stream Stream => Stream.Null;
+            public System.IO.Pipelines.PipeWriter Writer
+                => System.IO.Pipelines.PipeWriter.Create(Stream.Null);
+
+            public async Task StartAsync(CancellationToken cancellationToken = default)
+                => await responseFeature.TriggerOnStartingAsync();
+
+            public async Task CompleteAsync()
+                => await responseFeature.TriggerOnStartingAsync();
+
+            public Task SendFileAsync(string path, long offset, long? count, CancellationToken cancellationToken = default)
+                => Task.CompletedTask;
+
+            public void DisableBuffering() { }
         }
     }
 }
