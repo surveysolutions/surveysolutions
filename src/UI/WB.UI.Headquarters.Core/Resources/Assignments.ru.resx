@@ -550,7 +550,7 @@
       <value>Область назначения</value>
   </data>  <data name="EnterTargetArea" xml:space="preserve">
       <value>Введите область</value>
-  </data>  <data name="Filter_ShowAll" xml:space="preserve">
+  <data name="Filter_ShowAll" xml:space="preserve">
     <value>Все</value>
   </data>
   <data name="Downsize" xml:space="preserve">
@@ -610,4 +610,4 @@
   <data name="Action_Reopened" xml:space="preserve">
       <value>Открыто снова</value>
   </data>
-</root>
+  </data></root>
