@@ -47,6 +47,7 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
     public event EventHandler<LocationReceivedEventArgs> LocationReceived;
 
     LocationManager locationManager;
+    private long serviceStartTimeMs;
 
     public override void OnCreate()
     {
@@ -90,6 +91,9 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
 
         long minTimeMs = 5000;
         float minDistanceM = 1;
+        // Record start time *before* registering so that any cached fix delivered
+        // immediately by a mock/external-sensor provider is discarded.
+        serviceStartTimeMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         locationManager.RequestLocationUpdates(LocationManager.GpsProvider, minTimeMs, minDistanceM, this);
 
         return StartCommandResult.NotSticky;
@@ -119,6 +123,11 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
 
     public virtual void OnLocationChanged(Location location)
     {
+        // Discard fixes that predate the service start — these are cached/stale positions
+        // that mock/external-sensor providers may deliver as a first callback.
+        if (location.Time < serviceStartTimeMs)
+            return;
+
         var dateTimeOffset = GetTimestamp(location).ToUniversalTime();
         var gpsLocation = new GpsLocation(location.Accuracy, location.Altitude, location.Latitude, location.Longitude,
             dateTimeOffset);
