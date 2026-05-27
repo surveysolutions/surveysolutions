@@ -719,6 +719,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             var assignment = assignmentsStorage.GetAssignment(id);
             if (assignment == null)
                 return NotFound();
+            
+            if (assignment.Status == request.Status)
+                return Ok("Assignment already has the requested status.");
 
             var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
 
