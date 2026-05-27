@@ -142,14 +142,23 @@ namespace WB.Tests.Web.Headquarters.Integrity
             public override bool HasStarted => hasStarted;
 
             public override void OnStarting(Func<object, Task> callback, object state)
-                => callbacks.Add((callback, state));
+            {
+                if (hasStarted)
+                    throw new InvalidOperationException("Response has already started.");
+                callbacks.Add((callback, state));
+            }
 
             public async Task TriggerOnStartingAsync()
             {
                 if (hasStarted) return;
-                hasStarted = true;
-                foreach (var (cb, state) in callbacks)
+                // Execute OnStarting callbacks in LIFO order and allow callbacks to register additional callbacks.
+                while (callbacks.Count > 0)
+                {
+                    var (cb, state) = callbacks[^1];
+                    callbacks.RemoveAt(callbacks.Count - 1);
                     await cb(state);
+                }
+                hasStarted = true;
             }
         }
 
