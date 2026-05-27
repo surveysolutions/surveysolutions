@@ -24,7 +24,24 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
     public bool HasGpsProvider()
     {
         var locationManager = (LocationManager)Application.Context.GetSystemService(Context.LocationService);
-        return locationManager.IsProviderEnabled(LocationManager.GpsProvider);
+        if (locationManager == null) return false;
+
+        // Hardware GPS enabled — straightforward case.
+        if (locationManager.IsProviderEnabled(LocationManager.GpsProvider))
+            return true;
+
+        // External GPS sensor connected via a mock location app (Developer Settings →
+        // "Allow mock locations"): the GPS provider appears in GetProviders(enabledOnly: true)
+        // even when the built-in hardware GPS chip is switched off.
+        try
+        {
+            return locationManager.GetProviders(enabledOnly: true)
+                                  .Contains(LocationManager.GpsProvider);
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     public IGeolocationListener GetListen(IGeolocationListener geolocationListener)

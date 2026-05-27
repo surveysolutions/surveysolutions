@@ -22,12 +22,17 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
         public async Task<GpsLocation> GetLocation(double desiredAccuracy, CancellationToken cancellationToken)
         {
-            
             await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>();
 
             var locationManager = (LocationManager)Application.Context.GetSystemService(Context.LocationService);
 
-            if (locationManager == null || !locationManager.IsProviderEnabled(LocationManager.GpsProvider))
+            if (locationManager == null)
+                throw new GpsProviderDisabledException();
+
+            // Accept hardware GPS *or* an active mock provider for the GPS provider —
+            // the latter is how external Bluetooth/USB GPS sensors are exposed on Android
+            // when "Allow mock locations" is enabled in Developer Settings.
+            if (!IsGpsProviderAvailable(locationManager))
                 throw new GpsProviderDisabledException();
 
             // Preserve existing contract: canceled requests resolve as timeout/no-fix (null).
@@ -62,6 +67,38 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             }
 
             return await tcs.Task.ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Returns <c>true</c> when a GPS fix can be expected — either from the built-in
+        /// hardware GPS chip or from an external sensor (Bluetooth / USB) that injects fixes
+        /// into the GPS provider via an Android mock location app (Developer Settings →
+        /// "Allow mock locations" / "Select mock location app").
+        /// <para>
+        /// <see cref="LocationManager.GetProviders(bool)"/> with <c>enabledOnly = true</c>
+        /// includes the GPS provider whenever it is active, whether through real hardware
+        /// or through a registered mock-location provider — unlike
+        /// <see cref="LocationManager.IsProviderEnabled"/> which only reflects the hardware
+        /// toggle in the device Location settings.
+        /// </para>
+        /// </summary>
+        private static bool IsGpsProviderAvailable(LocationManager locationManager)
+        {
+            // Primary check: hardware GPS enabled.
+            if (locationManager.IsProviderEnabled(LocationManager.GpsProvider))
+                return true;
+
+            // Secondary check: a mock location app is active for the GPS provider
+            // (external sensor scenario).
+            try
+            {
+                return locationManager.GetProviders(enabledOnly: true)
+                                      .Contains(LocationManager.GpsProvider);
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         /// <summary>
