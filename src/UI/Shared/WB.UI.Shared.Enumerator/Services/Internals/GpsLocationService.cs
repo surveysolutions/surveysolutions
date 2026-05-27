@@ -40,7 +40,13 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 return null;
 
             var tcs = new TaskCompletionSource<GpsLocation>(TaskCreationOptions.RunContinuationsAsynchronously);
-            var listener = new SingleShotLocationListener(tcs, locationManager, desiredAccuracy);
+
+            // Capture the request time *before* registering the listener so that any fix
+            // whose timestamp predates this moment is recognised as a stale cached value
+            // and discarded. This guards against mock/external-sensor providers that may
+            // replay a previously injected position as the very first callback.
+            var requestTimeMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            var listener = new SingleShotLocationListener(tcs, locationManager, desiredAccuracy, requestTimeMs);
 
             // Enforce a hard 10-minute ceiling regardless of the caller-supplied token.
             using var hardLimitCts = new CancellationTokenSource(TimeSpan.FromMinutes(10));
@@ -111,19 +117,28 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             private readonly TaskCompletionSource<GpsLocation> tcs;
             private readonly LocationManager locationManager;
             private readonly double desiredAccuracy;
+            private readonly long requestTimeMs;
 
             public SingleShotLocationListener(
                 TaskCompletionSource<GpsLocation> tcs,
                 LocationManager locationManager,
-                double desiredAccuracy)
+                double desiredAccuracy,
+                long requestTimeMs)
             {
                 this.tcs = tcs;
                 this.locationManager = locationManager;
                 this.desiredAccuracy = desiredAccuracy;
+                this.requestTimeMs = requestTimeMs;
             }
 
             public void OnLocationChanged(AndroidLocation location)
             {
+                // Reject fixes that predate the request — these are cached/stale positions
+                // that some providers (especially mock/external-sensor providers) may deliver
+                // as the very first callback before any fresh fix is available.
+                if (location.Time < requestTimeMs)
+                    return;
+
                 // Skip fixes that don't meet the configured accuracy threshold — keep
                 // waiting for a better satellite fix rather than accepting a coarse one.
                 // Non-positive desired accuracy means "accept the first fix" instead of
