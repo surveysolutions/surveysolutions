@@ -152,6 +152,9 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 // waiting for a better satellite fix rather than accepting a coarse one.
                 // Non-positive desired accuracy means "accept the first fix" instead of
                 // rejecting every accurate reading and timing out.
+                // Note: mock locations (external GPS sensors) reporting accuracy = 0 or no
+                // accuracy naturally pass this check (0 > threshold is always false), so no
+                // special-casing is needed for them.
                 if (desiredAccuracy > 0 && location.HasAccuracy && location.Accuracy > desiredAccuracy)
                     return;
 

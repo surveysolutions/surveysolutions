@@ -15,12 +15,21 @@ namespace WB.UI.Shared.Enumerator.Services;
 
 public class LocationReceivedEventArgs : EventArgs
 {
-    public LocationReceivedEventArgs(GpsLocation location)
+    public LocationReceivedEventArgs(GpsLocation location, bool isFromMockProvider = false)
     {
         Location = location;
+        IsFromMockProvider = isFromMockProvider;
     }
 
     public GpsLocation Location { get; }
+
+    /// <summary>
+    /// True when the fix was injected by an external GPS sensor via Android's mock
+    /// location API (Developer Options → "Select mock location app").
+    /// Accuracy thresholds should not be applied to these fixes because external
+    /// sensors may report a fixed or zero accuracy value regardless of actual quality.
+    /// </summary>
+    public bool IsFromMockProvider { get; }
 }
 
 public interface INotificationManager
@@ -47,7 +56,6 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
     public event EventHandler<LocationReceivedEventArgs> LocationReceived;
 
     LocationManager locationManager;
-    private long serviceStartTimeMs;
 
     public override void OnCreate()
     {
@@ -91,10 +99,6 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
 
         long minTimeMs = 5000;
         float minDistanceM = 1;
-        // Use the monotonic boot clock so that wall-clock misconfiguration on the device
-        // cannot cause fresh fixes to be rejected. ElapsedRealtime() and
-        // location.ElapsedRealtimeNanos share the same origin (time since last boot).
-        serviceStartTimeMs = SystemClock.ElapsedRealtime();
         locationManager.RequestLocationUpdates(LocationManager.GpsProvider, minTimeMs, minDistanceM, this);
 
         return StartCommandResult.NotSticky;
@@ -124,16 +128,6 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
 
     public virtual void OnLocationChanged(Location location)
     {
-        // Discard fixes that predate the service start using the monotonic boot clock,
-        // which is unaffected by device wall-clock misconfiguration.
-        // Skip this check for mock locations (external GPS sensors): they inject fixes
-        // via a mock provider whose timestamps may originate from the sensor's own
-        // buffer and can legitimately predate the service start time.
-        if (!location.IsFromMockProvider)
-        {
-            if (location.ElapsedRealtimeNanos / 1_000_000L < serviceStartTimeMs)
-                return;
-        }
 
         var dateTimeOffset = GetTimestamp(location).ToUniversalTime();
         var gpsLocation = new GpsLocation(
@@ -143,12 +137,12 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
             location.Longitude,
             dateTimeOffset);
 
-        OnGpsLocationChanged(gpsLocation);
+        OnGpsLocationChanged(gpsLocation, location.IsFromMockProvider);
     }
 
-    protected virtual void OnGpsLocationChanged(GpsLocation gpsLocation)
+    protected virtual void OnGpsLocationChanged(GpsLocation gpsLocation, bool isFromMockProvider = false)
     {
-        this.LocationReceived?.Invoke(this, new LocationReceivedEventArgs(gpsLocation));
+        this.LocationReceived?.Invoke(this, new LocationReceivedEventArgs(gpsLocation, isFromMockProvider));
     }
 
     public virtual void OnProviderDisabled(string provider)
