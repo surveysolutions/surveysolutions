@@ -91,9 +91,10 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
 
         long minTimeMs = 5000;
         float minDistanceM = 1;
-        // Record start time *before* registering so that any cached fix delivered
-        // immediately by a mock/external-sensor provider is discarded.
-        serviceStartTimeMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        // Use the monotonic boot clock so that wall-clock misconfiguration on the device
+        // cannot cause fresh fixes to be rejected. ElapsedRealtime() and
+        // location.ElapsedRealtimeNanos share the same origin (time since last boot).
+        serviceStartTimeMs = SystemClock.ElapsedRealtime();
         locationManager.RequestLocationUpdates(LocationManager.GpsProvider, minTimeMs, minDistanceM, this);
 
         return StartCommandResult.NotSticky;
@@ -123,13 +124,23 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
 
     public virtual void OnLocationChanged(Location location)
     {
-        // Discard fixes that predate the service start — these are cached/stale positions
-        // that mock/external-sensor providers may deliver as a first callback.
-        if (location.Time < serviceStartTimeMs)
-            return;
+        // Discard fixes that predate the service start using the monotonic boot clock,
+        // which is unaffected by device wall-clock misconfiguration.
+        // Skip this check for mock locations (external GPS sensors): they inject fixes
+        // via a mock provider whose timestamps may originate from the sensor's own
+        // buffer and can legitimately predate the service start time.
+        if (!location.IsFromMockProvider)
+        {
+            if (location.ElapsedRealtimeNanos / 1_000_000L < serviceStartTimeMs)
+                return;
+        }
 
         var dateTimeOffset = GetTimestamp(location).ToUniversalTime();
-        var gpsLocation = new GpsLocation(location.Accuracy, location.Altitude, location.Latitude, location.Longitude,
+        var gpsLocation = new GpsLocation(
+            location.HasAccuracy ? location.Accuracy : null,
+            location.HasAltitude ? location.Altitude : null,
+            location.Latitude,
+            location.Longitude,
             dateTimeOffset);
 
         OnGpsLocationChanged(gpsLocation);

@@ -41,12 +41,13 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
             var tcs = new TaskCompletionSource<GpsLocation>(TaskCreationOptions.RunContinuationsAsynchronously);
 
-            // Capture the request time *before* registering the listener so that any fix
-            // whose timestamp predates this moment is recognised as a stale cached value
-            // and discarded. This guards against mock/external-sensor providers that may
-            // replay a previously injected position as the very first callback.
-            var requestTimeMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            var listener = new SingleShotLocationListener(tcs, locationManager, desiredAccuracy, requestTimeMs);
+            // Capture the monotonic boot-clock time *before* registering the listener.
+            // We use SystemClock.ElapsedRealtime() / location.ElapsedRealtimeNanos rather
+            // than wall-clock time (DateTimeOffset.UtcNow) so that an incorrect device
+            // clock cannot cause fresh GPS fixes to be wrongly rejected as stale.
+            // Both values share the same monotonic origin (time since last boot).
+            var requestElapsedRealtimeMs = SystemClock.ElapsedRealtime();
+            var listener = new SingleShotLocationListener(tcs, locationManager, desiredAccuracy, requestElapsedRealtimeMs);
 
             // Enforce a hard 10-minute ceiling regardless of the caller-supplied token.
             using var hardLimitCts = new CancellationTokenSource(TimeSpan.FromMinutes(10));
@@ -117,27 +118,35 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             private readonly TaskCompletionSource<GpsLocation> tcs;
             private readonly LocationManager locationManager;
             private readonly double desiredAccuracy;
-            private readonly long requestTimeMs;
+            private readonly long requestElapsedRealtimeMs;
 
             public SingleShotLocationListener(
                 TaskCompletionSource<GpsLocation> tcs,
                 LocationManager locationManager,
                 double desiredAccuracy,
-                long requestTimeMs)
+                long requestElapsedRealtimeMs)
             {
                 this.tcs = tcs;
                 this.locationManager = locationManager;
                 this.desiredAccuracy = desiredAccuracy;
-                this.requestTimeMs = requestTimeMs;
+                this.requestElapsedRealtimeMs = requestElapsedRealtimeMs;
             }
 
             public void OnLocationChanged(AndroidLocation location)
             {
-                // Reject fixes that predate the request — these are cached/stale positions
-                // that some providers (especially mock/external-sensor providers) may deliver
-                // as the very first callback before any fresh fix is available.
-                if (location.Time < requestTimeMs)
-                    return;
+                // Reject fixes that predate the listener registration using the monotonic
+                // boot clock. This is immune to device wall-clock misconfiguration:
+                // location.ElapsedRealtimeNanos and SystemClock.ElapsedRealtime() both
+                // measure time since last boot from the same origin.
+                // Skip this check for mock locations (external GPS sensors): they inject
+                // fixes via a mock provider whose timestamps may originate from the
+                // sensor's own buffer and can legitimately predate the registration moment.
+                if (!location.IsFromMockProvider)
+                {
+                    var fixElapsedRealtimeMs = location.ElapsedRealtimeNanos / 1_000_000L;
+                    if (fixElapsedRealtimeMs < requestElapsedRealtimeMs)
+                        return;
+                }
 
                 // Skip fixes that don't meet the configured accuracy threshold — keep
                 // waiting for a better satellite fix rather than accepting a coarse one.
