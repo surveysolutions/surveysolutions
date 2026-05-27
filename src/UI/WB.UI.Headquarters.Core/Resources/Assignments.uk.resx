@@ -588,4 +588,10 @@
   <data name="Action_Reopened" xml:space="preserve">
       <value>Відкрито знову</value>
   </data>
+  <data name="CompleteAssignmentMessageInterviewer" xml:space="preserve">
+      <value>Ви впевнені, що перерахували всі підходящі одиниці для цього завдання?</value>
+  </data>
+  <data name="CommentOptional" xml:space="preserve">
+      <value>Коментар (необов'язково)</value>
+  </data>
 </root>

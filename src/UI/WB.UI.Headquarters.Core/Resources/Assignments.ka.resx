@@ -243,4 +243,10 @@
   <data name="Downsize" xml:space="preserve">
     <value>შემცირება</value>
   </data>
+  <data name="CompleteAssignmentMessageInterviewer" xml:space="preserve">
+      <value>დარწმუნებული ხართ, რომ ჩამოთვალეთ ყველა კვალიფიციური ერთეული ამ დავალებისთვის?</value>
+  </data>
+  <data name="CommentOptional" xml:space="preserve">
+      <value>კომენტარი (არასავალდებულო)</value>
+  </data>
 </root>

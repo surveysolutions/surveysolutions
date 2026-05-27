@@ -618,4 +618,10 @@
   <data name="Action_Reopened" xml:space="preserve">
       <value>Reabierto</value>
   </data>
+  <data name="CompleteAssignmentMessageInterviewer" xml:space="preserve">
+      <value>¿Está seguro de haber enumerado todas las unidades elegibles para esta asignación?</value>
+  </data>
+  <data name="CommentOptional" xml:space="preserve">
+      <value>Comentario (opcional)</value>
+  </data>
 </root>

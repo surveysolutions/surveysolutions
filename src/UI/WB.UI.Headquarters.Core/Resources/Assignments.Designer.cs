@@ -1040,5 +1040,17 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("Action_Reopened", resourceCulture);
             }
         }
+        
+        public static string CompleteAssignmentMessageInterviewer {
+            get {
+                return ResourceManager.GetString("CompleteAssignmentMessageInterviewer", resourceCulture);
+            }
+        }
+        
+        public static string CommentOptional {
+            get {
+                return ResourceManager.GetString("CommentOptional", resourceCulture);
+            }
+        }
     }
 }

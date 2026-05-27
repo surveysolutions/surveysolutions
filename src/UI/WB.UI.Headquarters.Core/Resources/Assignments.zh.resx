@@ -351,4 +351,10 @@
   <data name="Downsize" xml:space="preserve">
     <value>缩减</value>
   </data>
+  <data name="CompleteAssignmentMessageInterviewer" xml:space="preserve">
+      <value>您确定已列举此任务的所有符合条件的单元吗？</value>
+  </data>
+  <data name="CommentOptional" xml:space="preserve">
+      <value>评论（可选）</value>
+  </data>
 </root>

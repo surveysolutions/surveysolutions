@@ -39,14 +39,11 @@
         </ModalFrame>
 
         <ModalFrame ref="completeModal" :title="$t('Assignments.CompleteAssignmentTitle')">
-            <p>{{ $t('Assignments.CompleteAssignmentMessage') }}</p>
+            <p>{{ $t('Assignments.CompleteAssignmentMessageInterviewer') }}</p>
             <form onsubmit="return false;">
                 <div class="form-group">
-                    <label class="control-label" for="completeCommentId">
-                        {{ $t("Assignments.Comments") }}
-                    </label>
                     <textarea control-id="completeCommentId" v-model="statusChangeComment"
-                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                        :placeholder="$t('Assignments.CommentOptional')" name="comments" rows="4" maxlength="500"
                         autocomplete="off" class="form-control" />
                 </div>
             </form>
@@ -61,14 +58,10 @@
         </ModalFrame>
 
         <ModalFrame ref="reopenModal" :title="$t('Assignments.ReopenAssignmentTitle')">
-            <p>{{ $t('Assignments.ReopenAssignmentMessage') }}</p>
             <form onsubmit="return false;">
                 <div class="form-group">
-                    <label class="control-label" for="reopenCommentId">
-                        {{ $t("Assignments.Comments") }}
-                    </label>
                     <textarea control-id="reopenCommentId" v-model="statusChangeComment"
-                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                        :placeholder="$t('Assignments.CommentOptional')" name="comments" rows="4" maxlength="500"
                         autocomplete="off" class="form-control" />
                 </div>
             </form>

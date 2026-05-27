@@ -564,4 +564,10 @@
   <data name="Action_Reopened" xml:space="preserve">
       <value>Redeschis</value>
   </data>
+  <data name="CompleteAssignmentMessageInterviewer" xml:space="preserve">
+      <value>Sunteți sigur că ați enumerat toate unitățile eligibile pentru această atribuire?</value>
+  </data>
+  <data name="CommentOptional" xml:space="preserve">
+      <value>Comentariu (opțional)</value>
+  </data>
 </root>

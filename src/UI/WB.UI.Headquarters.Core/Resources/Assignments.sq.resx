@@ -534,4 +534,10 @@
   <data name="Action_Reopened" xml:space="preserve">
       <value>Rihapuar</value>
   </data>
+  <data name="CompleteAssignmentMessageInterviewer" xml:space="preserve">
+      <value>A jeni i sigurt se keni renditur të gjitha njësitë e pranueshme për këtë detyrë?</value>
+  </data>
+  <data name="CommentOptional" xml:space="preserve">
+      <value>Koment (opsional)</value>
+  </data>
 </root>
