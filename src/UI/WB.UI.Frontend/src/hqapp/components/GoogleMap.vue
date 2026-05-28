@@ -767,6 +767,8 @@ export default {
                 }
                 if (type == 'Assignment') {
                     const rRole = feature.getProperty('responsibleRole')
+                    const assignmentStatus = feature.getProperty('status')
+                    const userRole = self.model.userRole
                     let markerForm = ''
                     switch (rRole) {
                         case 'Interviewer':
@@ -779,9 +781,16 @@ export default {
                             markerForm = 'triangle'
                             break
                     }
+                    // Show green marker for completed assignments (interviewer view)
+                    // or closed assignments (supervisor/HQ/admin view)
+                    const isDone =
+                        (userRole === 'Interviewer' && assignmentStatus === 'Completed') ||
+                        ((userRole === 'Supervisor' || userRole === 'Headquarter' || userRole === 'Administrator') &&
+                            assignmentStatus === 'Closed')
+                    const markerSuffix = isDone ? '-done.svg' : '-x.png'
                     return {
                         icon: {
-                            url: `/img/google-maps-markers/${markerForm}-assignment-x.png`,
+                            url: `/img/google-maps-markers/${markerForm}-assignment${markerSuffix}`,
                         },
                     }
                 }

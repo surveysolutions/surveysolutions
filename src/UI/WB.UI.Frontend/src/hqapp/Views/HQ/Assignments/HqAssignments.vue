@@ -82,7 +82,7 @@
                             $t("Assignments.Downsize")
                         }}</button>
 
-                    <button class="btn btn-lg btn-warning" id="btnCloseSelected"
+                    <button class="btn btn-lg btn-primary" id="btnCloseSelected"
                         v-if="(config.isHeadquarter || (config.isSupervisor && config.allowSupervisorChangeAssignmentStatus)) && !showArchive.key"
                         :disabled="!canComplete" @click="bulkChangeStatus('Closed', 'closeModal')">{{
                             $t("Assignments.Close") }}</button>

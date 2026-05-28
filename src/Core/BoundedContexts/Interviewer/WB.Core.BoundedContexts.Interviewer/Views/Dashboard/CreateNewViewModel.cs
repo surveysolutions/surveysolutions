@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Title = EnumeratorUIResources.Dashboard_AssignmentsTabTitle;
 
             var censusQuestionnairesCount = this.questionnaireViewRepository.Count(questionnaire => questionnaire.Census);
-            var assignmentsCount = this.assignmentsRepository.Count();
+            var assignmentsCount = this.assignmentsRepository.Count(a => a.Status == AssignmentStatus.Open);
 
             this.ItemsCount = censusQuestionnairesCount + assignmentsCount;
 
@@ -87,19 +87,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             foreach (var assignment in dbAssignments)
             {
-                var dashboardItem = this.viewModelFactory.GetNew<InterviewerAssignmentDashboardItemViewModel>();
-                dashboardItem.Init(assignment);
-
-                // Completed assignments: always show (so interviewer can Reopen)
+                // Completed and Closed assignments are shown in the Completed tab
                 if (assignment.Status == AssignmentStatus.Completed)
-                {
-                    yield return dashboardItem;
                     continue;
-                }
 
                 // Approved assignments: hide from interviewer (no actions available)
                 if (assignment.Status == AssignmentStatus.Closed)
                     continue;
+
+                var dashboardItem = this.viewModelFactory.GetNew<InterviewerAssignmentDashboardItemViewModel>();
+                dashboardItem.Init(assignment);
 
                 // Open assignments: show if unlimited or interviews still needed
                 if (!dashboardItem.Quantity.HasValue || dashboardItem.InterviewsLeftByAssignmentCount > 0)
