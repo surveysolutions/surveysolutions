@@ -2,7 +2,6 @@
 *.bsl linguist-vendored
 # Windows forced line-endings
 *.sln crlf
-*.resx -text
 
 #
 ## These files are binary and should be left untouched
