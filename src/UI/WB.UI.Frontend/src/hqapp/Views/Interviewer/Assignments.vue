@@ -57,6 +57,25 @@
             </template>
         </ModalFrame>
 
+        <ModalFrame ref="closeModal" :title="$t('Assignments.CloseAssignmentTitle')">
+            <p>{{ $t('Assignments.CloseAssignmentMessage') }}</p>
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <textarea control-id="closeCommentId" v-model="statusChangeComment"
+                        :placeholder="$t('Assignments.CommentOptional')" name="comments" rows="4" maxlength="500"
+                        autocomplete="off" class="form-control" />
+                </div>
+            </form>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" @click="confirmClose">{{
+                        $t("Assignments.Close") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
+                </div>
+            </template>
+        </ModalFrame>
+
         <ModalFrame ref="reopenModal" :title="$t('Assignments.ReopenAssignmentTitle')">
             <form onsubmit="return false;">
                 <div class="form-group">
@@ -178,7 +197,15 @@ export default {
                 })
             }
 
-            if (rowData.status === 'Completed' && this.$config.model.allowInterviewerChangeAssignmentStatus) {
+            if ((rowData.status === 'Open' || rowData.status === 'Completed') && this.$config.model.allowInterviewerChangeAssignmentStatus) {
+                items.push({
+                    name: this.$t('Assignments.Close'),
+                    className: 'primary-text',
+                    callback: () => this.openCloseModal(rowData.id),
+                })
+            }
+
+            if ((rowData.status === 'Completed' || rowData.status === 'Closed') && this.$config.model.allowInterviewerChangeAssignmentStatus) {
                 items.push({
                     name: this.$t('Assignments.Reopen'),
                     className: 'primary-text',
@@ -195,6 +222,12 @@ export default {
             this.$refs.completeModal.modal()
         },
 
+        openCloseModal(rowId) {
+            this.statusChangeId = rowId
+            this.statusChangeComment = null
+            this.$refs.closeModal.modal()
+        },
+
         openReopenModal(rowId) {
             this.statusChangeId = rowId
             this.statusChangeComment = null
@@ -203,6 +236,10 @@ export default {
 
         async confirmComplete() {
             await this.changeAssignmentStatus('Completed', this.$refs.completeModal)
+        },
+
+        async confirmClose() {
+            await this.changeAssignmentStatus('Closed', this.$refs.closeModal)
         },
 
         async confirmReopen() {
@@ -351,6 +388,7 @@ export default {
                         const statusMap = {
                             'Open': self.$t('Assignments.StatusOpen'),
                             'Completed': self.$t('Assignments.StatusCompleted'),
+                            'Closed': self.$t('Assignments.StatusClosed'),
                         }
                         return statusMap[data] || data
                     },
