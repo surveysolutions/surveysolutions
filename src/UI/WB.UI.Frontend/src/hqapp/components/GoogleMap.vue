@@ -177,6 +177,27 @@
         </template>
     </ModalFrame>
 
+    <ModalFrame ref="closeAssignmentModal" :title="$t('Assignments.CloseAssignmentTitle')">
+        <p>{{ $t('Assignments.CloseAssignmentMessage') }}</p>
+        <form onsubmit="return false;">
+            <div class="form-group">
+                <label class="control-label" for="closeCommentId">
+                    {{ $t('Assignments.Comments') }}
+                </label>
+                <textarea control-id="closeCommentId" v-model="statusChangeComment"
+                    :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                    autocomplete="off" class="form-control" />
+            </div>
+        </form>
+        <template v-slot:actions>
+            <div>
+                <button type="button" class="btn btn-primary" @click="confirmCloseAssignment">{{
+                    $t('Assignments.Close') }}</button>
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t('Common.Cancel') }}</button>
+            </div>
+        </template>
+    </ModalFrame>
+
     <ModalFrame ref="reopenAssignmentModal" :title="$t('Assignments.ReopenAssignmentTitle')">
         <p>{{ $t('Assignments.ReopenAssignmentMessage') }}</p>
         <form onsubmit="return false;">
@@ -484,8 +505,15 @@ export default {
             await this.refreshAssignmentData()
         },
 
-        async closeAssignment() {
-            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Closed')
+        closeAssignment() {
+            this.statusChangeComment = null
+            this.$refs.closeAssignmentModal.modal({ keyboard: false })
+        },
+
+        async confirmCloseAssignment() {
+            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Closed', this.statusChangeComment || null)
+            this.$refs.closeAssignmentModal.hide()
+            this.statusChangeComment = null
             await this.refreshAssignmentData()
         },
 
