@@ -721,7 +721,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NotFound();
             
             if (assignment.Status == request.Status)
-                return Ok("Assignment already has the requested status.");
+                return GetUpdatedAssignment(id);
 
             var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
 
