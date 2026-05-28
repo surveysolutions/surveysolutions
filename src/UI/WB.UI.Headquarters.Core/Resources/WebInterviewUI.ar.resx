@@ -124,7 +124,7 @@
     <value>لم يتم حفظ الإجابة</value>
   </data>
   <data name="CommunicationError" xml:space="preserve">
-    <value>Communication error</value>
+    <value>خطأ في الاتصال</value>
   </data>
   <data name="AudioClickRecord" xml:space="preserve">
     <value>أنقر للقيام بتسجيل صوتي</value>

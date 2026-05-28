@@ -213,7 +213,7 @@
     <value>La respuesta no se guardó</value>
   </data>
   <data name="CommunicationError" xml:space="preserve">
-    <value>Communication error</value>
+    <value>Error de comunicación</value>
   </data>
   <data name="NotCalculated" xml:space="preserve">
     <value>No calculado</value>

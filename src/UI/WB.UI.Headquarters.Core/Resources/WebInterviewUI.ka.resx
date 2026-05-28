@@ -124,7 +124,7 @@
     <value>პასუხი არ არის შენახული</value>
   </data>
   <data name="CommunicationError" xml:space="preserve">
-    <value>Communication error</value>
+    <value>კომუნიკაციის შეცდომა</value>
   </data>
   <data name="AudioClickRecord" xml:space="preserve">
     <value>დააჭირეთ აუდიოს ჩაწერაზე</value>

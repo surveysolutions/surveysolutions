@@ -104,7 +104,7 @@
     <value>Odpověď nebyla uložena</value>
   </data>
   <data name="CommunicationError" xml:space="preserve">
-    <value>Communication error</value>
+    <value>Chyba komunikace</value>
   </data>
   <data name="AreaRecord" xml:space="preserve">
     <value>Upravit oblast</value>

@@ -209,7 +209,7 @@
     <value>Ответ не сохранен</value>
   </data>
   <data name="CommunicationError" xml:space="preserve">
-    <value>Communication error</value>
+    <value>Ошибка связи</value>
   </data>
   <data name="NotCalculated" xml:space="preserve">
     <value>Не посчитано</value>

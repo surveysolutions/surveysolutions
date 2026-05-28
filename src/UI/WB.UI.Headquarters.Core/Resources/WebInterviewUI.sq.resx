@@ -124,7 +124,7 @@
     <value>Përgjigjja nuk u ruajt</value>
   </data>
   <data name="CommunicationError" xml:space="preserve">
-    <value>Communication error</value>
+    <value>Gabim komunikimi</value>
   </data>
   <data name="AreaRecord" xml:space="preserve">
     <value>Hapësira e redaktimit</value>
