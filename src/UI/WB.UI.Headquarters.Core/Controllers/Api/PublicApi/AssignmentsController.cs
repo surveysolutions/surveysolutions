@@ -170,6 +170,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 listView.Assignments = AssignmentsPublicApiMapper.ToAssignmentViewItemList(result.Items);
                 return listView;
             }
+            catch (ArgumentException ex)
+            {
+                unitOfWork.DiscardChanges();
+                return BadRequest(ex.Message);
+            }
             catch (NotSupportedException)
             {
                 unitOfWork.DiscardChanges();
@@ -810,8 +815,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             var result = new List<AssignmentStatus>();
             foreach (var part in parts)
             {
-                if (Enum.TryParse<AssignmentStatus>(part.Trim(), ignoreCase: true, out var status))
-                    result.Add(status);
+                if (!Enum.TryParse<AssignmentStatus>(part.Trim(), ignoreCase: true, out var status))
+                    throw new ArgumentException(
+                        $"Invalid status value: '{part.Trim()}'. Allowed values: {string.Join(", ", Enum.GetNames<AssignmentStatus>())}.");
+                result.Add(status);
             }
             return result.Count > 0 ? result.ToArray() : null;
         }
