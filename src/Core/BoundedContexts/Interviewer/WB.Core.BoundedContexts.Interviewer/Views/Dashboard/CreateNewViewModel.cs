@@ -126,5 +126,29 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 .FirstOrDefault(x => x.AssignmentId == assignmentId.Value)
                 ?.DecreaseInterviewsCount();
         }
+
+        /// <summary>
+        /// Raised when an assignment in this tab changes status and should move to another tab.
+        /// </summary>
+        public event EventHandler? OnAssignmentStatusChanged;
+
+        protected override void ListViewModel_OnItemUpdated(object sender, EventArgs args)
+        {
+            if (sender is AssignmentDashboardItemViewModel assignmentItem)
+            {
+                var assignment = assignmentsRepository.GetById(assignmentItem.AssignmentId);
+                if (assignment == null || assignment.Status != AssignmentStatus.Open)
+                {
+                    // Assignment is no longer Open — remove it from this tab
+                    assignmentItem.OnItemUpdated -= ListViewModel_OnItemUpdated;
+                    UiItems.Remove(assignmentItem);
+                    ItemsCount = Math.Max(0, ItemsCount - 1);
+                    OnAssignmentStatusChanged?.Invoke(this, EventArgs.Empty);
+                    return;
+                }
+            }
+
+            base.ListViewModel_OnItemUpdated(sender, args);
+        }
     }
 }

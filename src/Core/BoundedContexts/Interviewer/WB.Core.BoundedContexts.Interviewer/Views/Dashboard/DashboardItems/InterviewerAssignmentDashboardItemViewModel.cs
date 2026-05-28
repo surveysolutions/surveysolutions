@@ -92,6 +92,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             }
 
             BindTargetAreaAction(Assignment.Id, Assignment.TargetArea);
+
+            // Completed assignments appear green on the interviewer dashboard
+            if (Assignment.Status == AssignmentStatus.Completed)
+                Status = DashboardInterviewStatus.Completed;
         }
 
         private async Task CompleteAssignmentAsync()

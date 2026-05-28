@@ -120,6 +120,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CompletedInterviews.OnItemsLoaded += this.OnItemsLoaded;
             this.CreateNew.OnItemsLoaded += this.OnItemsLoaded;
             this.WebInterviews.OnItemsLoaded += this.OnItemsLoaded;
+
+            this.CreateNew.OnAssignmentStatusChanged += this.OnCreateNewAssignmentStatusChanged;
+            this.CompletedInterviews.OnAssignmentStatusChanged += this.OnCompletedInterviewsAssignmentStatusChanged;
         }
 
         public DashboardNotificationsViewModel DashboardNotifications { get; set; }
@@ -268,6 +271,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             await this.CreateNew.LoadAsync(this.Synchronization);
         }
 
+        private async void OnCreateNewAssignmentStatusChanged(object? sender, EventArgs e)
+        {
+            // An assignment moved out of the New Assignments tab — refresh the Completed tab
+            await this.CompletedInterviews.LoadAsync(this.LastVisitedInterviewId);
+            await this.RaisePropertyChanged(() => this.DashboardTitle);
+        }
+
+        private async void OnCompletedInterviewsAssignmentStatusChanged(object? sender, EventArgs e)
+        {
+            // An assignment moved out of the Completed tab — refresh the New Assignments tab
+            await this.CreateNew.LoadAsync(this.Synchronization);
+            await this.RaisePropertyChanged(() => this.DashboardTitle);
+        }
+
         private void OnItemsLoaded(object? sender, EventArgs e) =>
             this.IsInProgress = !(this.StartedInterviews.IsItemsLoaded
                                   && this.RejectedInterviews.IsItemsLoaded
@@ -364,6 +381,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CompletedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
             this.WebInterviews.OnItemsLoaded -= this.OnItemsLoaded;
             this.CreateNew.OnItemsLoaded -= this.OnItemsLoaded;
+            this.CreateNew.OnAssignmentStatusChanged -= this.OnCreateNewAssignmentStatusChanged;
+            this.CompletedInterviews.OnAssignmentStatusChanged -= this.OnCompletedInterviewsAssignmentStatusChanged;
             this.Synchronization.OnCancel -= this.Synchronization_OnCancel;
             this.Synchronization.OnProgressChanged -= this.Synchronization_OnProgressChanged;
             

@@ -104,12 +104,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     UiItems.Remove(assignmentItem);
                     ItemsCount--;
                     UpdateTitle();
+                    OnAssignmentStatusChanged?.Invoke(this, EventArgs.Empty);
                     return;
                 }
             }
 
             base.ListViewModel_OnItemUpdated(sender, args);
         }
+
+        /// <summary>
+        /// Raised when an assignment in this tab changes status and should move to another tab.
+        /// </summary>
+        public event EventHandler? OnAssignmentStatusChanged;
 
         private async void InterviewDashboardItem_OnItemRemoved(object? sender, System.EventArgs e)
         {
