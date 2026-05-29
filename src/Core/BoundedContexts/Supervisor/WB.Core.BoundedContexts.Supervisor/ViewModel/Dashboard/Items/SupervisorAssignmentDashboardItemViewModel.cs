@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Commands;
+using MvvmCross.Plugin.Messenger;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -119,6 +121,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
             AssignmentsRepository.Store(Assignment);
 
             RaiseOnItemUpdated();
+            Mvx.IoCProvider.GetSingleton<IMvxMessenger>().Publish(new DashboardChangedMessage(this));
         }
     }
 }
