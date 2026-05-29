@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -121,7 +120,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
             AssignmentsRepository.Store(Assignment);
 
             RaiseOnItemUpdated();
-            Mvx.IoCProvider.GetSingleton<IMvxMessenger>().Publish(new DashboardChangedMessage(this));
+            serviceLocator.GetInstance<IMvxMessenger>().Publish(new DashboardChangedMessage(this));
         }
     }
 }
