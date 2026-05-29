@@ -152,11 +152,15 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 // waiting for a better satellite fix rather than accepting a coarse one.
                 // Non-positive desired accuracy means "accept the first fix" instead of
                 // rejecting every accurate reading and timing out.
-                // Note: mock locations (external GPS sensors) reporting accuracy = 0 or no
-                // accuracy naturally pass this check (0 > threshold is always false), so no
-                // special-casing is needed for them.
-                if (desiredAccuracy > 0 && location.HasAccuracy && location.Accuracy > desiredAccuracy)
-                    return;
+                // Skip this filter for mock locations (external GPS sensors via Developer
+                // Options → "Select mock location app"): they often report a fixed or
+                // vendor-specific accuracy value that does not reflect actual signal quality,
+                // and blocking on it causes every fix to be rejected until timeout.
+                if (!location.IsFromMockProvider)
+                {
+                    if (desiredAccuracy > 0 && location.HasAccuracy && location.Accuracy > desiredAccuracy)
+                        return;
+                }
 
                 var timestamp = GetTimestamp(location);
                 var gpsLocation = new GpsLocation(

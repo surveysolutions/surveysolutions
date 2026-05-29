@@ -74,9 +74,15 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
 
     private async void ServiceOnLocationReceived(object sender, LocationReceivedEventArgs e)
     {
-        var accuracyInMeters = settings.GeographyQuestionAccuracyInMeters;
-        if (e.Location.Accuracy > accuracyInMeters)
-            return;
+        // Skip the accuracy filter for external GPS sensors (mock provider): they often
+        // report a fixed or vendor-specific accuracy value that does not reflect actual
+        // signal quality. Applying the threshold would silently drop every fix until timeout.
+        if (!e.IsFromMockProvider)
+        {
+            var accuracyInMeters = settings.GeographyQuestionAccuracyInMeters;
+            if (e.Location.Accuracy > accuracyInMeters)
+                return;
+        }
 
         // Create a snapshot to avoid collection modification during enumeration
         var listenersCopy = listeners.Values.ToArray();
