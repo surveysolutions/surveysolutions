@@ -290,7 +290,7 @@
                     </template>
                 </ModalFrame>
 
-                <ModalFrame ref="closeModal" :title="$t('Pages.ConfirmationNeededTitle')">
+                <ModalFrame ref="downsizeModal" :title="$t('Pages.ConfirmationNeededTitle')">
                     <p>{{ singleCloseMessage }}</p>
 
                     <template v-slot:actions>
@@ -532,7 +532,7 @@ export default {
         },
 
         downsizeSelected() {
-            this.$refs.closeModal.modal({
+            this.$refs.downsizeModal.modal({
                 keyboard: false,
             })
         },
@@ -549,7 +549,7 @@ export default {
                     toastr.warning(msg)
                 }
             })
-            this.$refs.closeModal.hide()
+            this.$refs.downsizeModal.hide()
 
             window.location.reload(true)
         },
