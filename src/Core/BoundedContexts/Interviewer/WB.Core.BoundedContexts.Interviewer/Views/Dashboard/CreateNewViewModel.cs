@@ -5,9 +5,7 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -132,7 +130,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         /// </summary>
         public event EventHandler? OnAssignmentStatusChanged;
 
-        protected override void ListViewModel_OnItemUpdated(object sender, EventArgs args)
+        protected override void ListViewModel_OnItemUpdated(object? sender, EventArgs args)
         {
             if (sender is AssignmentDashboardItemViewModel assignmentItem)
             {
