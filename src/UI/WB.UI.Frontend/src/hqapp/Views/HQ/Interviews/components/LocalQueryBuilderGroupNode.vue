@@ -3,7 +3,7 @@
         <slot name="groupOperator" v-bind="groupController" />
 
         <div :class="groupChildrenClass">
-            <div v-for="child in safeChildren" :key="childKey(child)" class="query-builder-child">
+            <div v-for="(child, index) in safeChildren" :key="childKey(child)" class="query-builder-child">
                 <button type="button" class="query-builder-child__delete-child" @click="removeChild(index)"
                     v-html="deleteLabel(child)"></button>
 
