@@ -45,7 +45,6 @@
         "moment": "^2.29.4",
         "moment-timezone": "^0.5.46",
         "qrcode": "^1.5.4",
-        "query-builder-vue-3": "^1.0.1",
         "smoothscroll-polyfill": "^0.4.0",
         "toastr": "^2.1.4",
         "vee-validate": "^4.15.0",
