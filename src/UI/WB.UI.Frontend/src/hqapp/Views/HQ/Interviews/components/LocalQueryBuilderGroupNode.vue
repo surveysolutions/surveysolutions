@@ -22,7 +22,7 @@
                 <slot v-else name="rule" v-bind="ruleController(child)" />
 
                 <button type="button" class="query-builder-child__delete-child" @click="removeChild(index)"
-                    v-html="deleteLabel(child)"></button>
+                    v-text="deleteLabel(child)"></button>
             </div>
         </div>
 
