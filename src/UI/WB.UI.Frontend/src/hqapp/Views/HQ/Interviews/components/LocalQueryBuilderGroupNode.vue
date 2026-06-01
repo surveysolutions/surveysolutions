@@ -3,7 +3,7 @@
         <slot name="groupOperator" v-bind="groupController" />
 
         <div :class="groupChildrenClass">
-            <div v-for="(child, index) in safeChildren" :key="childKey(child)" class="query-builder-child">
+            <div v-for="(child, index) in safeChildren" :key="childKey(child, index)" class="query-builder-child">
                 <local-query-builder-group-node v-if="isGroup(child)" :group="child" :config="config"
                     :depth="depth + 1">
                     <template #groupOperator="slotProps">
@@ -47,6 +47,12 @@ export default {
         group: {
             type: Object,
             required: true,
+        },
+
+        data() {
+            return {
+                generatedChildIds: new WeakMap(),
+            }
         },
         config: {
             type: Object,
@@ -104,11 +110,20 @@ export default {
     },
 
     methods: {
-        childKey(child) {
-            if (!child._id) {
-                child._id = nextId()
+        childKey(child, index) {
+            if (child?._id) {
+                return child._id
             }
-            return child._id
+
+            if (child && typeof child === 'object') {
+                if (!this.generatedChildIds.has(child)) {
+                    this.generatedChildIds.set(child, nextId())
+                }
+
+                return this.generatedChildIds.get(child)
+            }
+
+            return `child-${index}`
         },
         isGroup(child) {
             return Array.isArray(child?.children)

@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { isEqual } from 'lodash'
 import LocalQueryBuilderGroupNode from './LocalQueryBuilderGroupNode.vue'
 
 const defaultGroup = () => ({ operatorIdentifier: 'all', children: [] })
@@ -83,7 +84,7 @@ export default {
             handler(newValue) {
                 const normalizedValue = normalizeGroup(newValue)
 
-                if (JSON.stringify(normalizedValue) !== JSON.stringify(this.query)) {
+                if (!isEqual(normalizedValue, this.query)) {
                     this.query = normalizedValue
                 }
             },
@@ -93,7 +94,7 @@ export default {
             handler(newValue) {
                 const normalizedValue = normalizeGroup(newValue)
 
-                if (JSON.stringify(normalizedValue) !== JSON.stringify(this.modelValue)) {
+                if (!isEqual(normalizedValue, this.modelValue)) {
                     this.$emit('update:modelValue', normalizedValue)
                 }
             },
