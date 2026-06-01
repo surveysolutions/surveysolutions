@@ -386,7 +386,7 @@
     <value>Задание №</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Завершить</value>
+    <value>Закрыть</value>
   </data>
   <data name="MultipleAssignmentsClose" xml:space="preserve">
       <value>{{count}} выбранных заданий будет завершено. Ожидаемое количество будет установлено в текущее количество собранных интервью.</value>
