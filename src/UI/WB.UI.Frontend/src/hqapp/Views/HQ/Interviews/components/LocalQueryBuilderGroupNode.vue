@@ -4,9 +4,6 @@
 
         <div :class="groupChildrenClass">
             <div v-for="(child, index) in safeChildren" :key="childKey(child)" class="query-builder-child">
-                <button type="button" class="query-builder-child__delete-child" @click="removeChild(index)"
-                    v-html="deleteLabel(child)"></button>
-
                 <local-query-builder-group-node v-if="isGroup(child)" :group="child" :config="config"
                     :depth="depth + 1">
                     <template #groupOperator="slotProps">
@@ -23,6 +20,9 @@
                 </local-query-builder-group-node>
 
                 <slot v-else name="rule" v-bind="ruleController(child)" />
+
+                <button type="button" class="query-builder-child__delete-child" @click="removeChild(index)"
+                    v-html="deleteLabel(child)"></button>
             </div>
         </div>
 
