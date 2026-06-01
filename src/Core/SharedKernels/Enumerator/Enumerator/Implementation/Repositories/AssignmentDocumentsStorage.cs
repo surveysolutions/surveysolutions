@@ -33,17 +33,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
         protected override void CreateTable(SQLiteConnectionWithLock connect)
         {
-            connect.CreateTable<AssignmentDocument>(CreateFlags.MigrateTable);
-            connect.CreateTable<AssignmentDocument.AssignmentAnswer>(CreateFlags.MigrateTable);
-            connect.CreateTable<AssignmentDocument.AssignmentProtectedVariable>(CreateFlags.MigrateTable);
+            connect.CreateTable<AssignmentDocument>();
+            connect.CreateTable<AssignmentDocument.AssignmentAnswer>();
+            connect.CreateTable<AssignmentDocument.AssignmentProtectedVariable>();
         }
 
         public AssignmentDocumentsStorage(SQLiteConnectionWithLock storage, ILogger logger, IEncryptionService encryptionService)
             : base(storage, logger)
         {
             this.encryptionService = encryptionService;
-            storage.CreateTable<AssignmentDocument.AssignmentAnswer>(CreateFlags.MigrateTable);
-            storage.CreateTable<AssignmentDocument.AssignmentProtectedVariable>(CreateFlags.MigrateTable);
+            storage.CreateTable<AssignmentDocument.AssignmentAnswer>();
+            storage.CreateTable<AssignmentDocument.AssignmentProtectedVariable>();
         }
 
         public new void Remove(int assignmentId)
