@@ -60,9 +60,7 @@ namespace WB.UI.Shared.Enumerator
                 // this is super dirty hack in order to get exception's stack trace which happend inside async method
                 FieldInfo stackTrace = typeof(Exception).GetField("stack_trace", BindingFlags.NonPublic | BindingFlags.Instance);
                 stackTrace?.SetValue(exception, null);
-                this.ProcessException(Java.Lang.Throwable.FromException(exception));
-
-                ProcessException(args.Exception);
+                this.ProcessException(exception);
             };
 
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
@@ -83,6 +81,7 @@ namespace WB.UI.Shared.Enumerator
         protected virtual void ProcessException(Exception exception)
         {
             NLog.LogManager.GetCurrentClassLogger().Error(exception);
+            NLog.LogManager.Flush(TimeSpan.FromSeconds(3));
 
             try
             {
