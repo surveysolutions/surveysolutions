@@ -1001,7 +1001,7 @@
 вопросы</value>
   </data>
   <data name="Assignment_Status_Open" xml:space="preserve">
-    <value>Активно</value>
+    <value>Открыто</value>
   </data>
   <data name="Assignment_Status_Completed" xml:space="preserve">
     <value>Завершено</value>

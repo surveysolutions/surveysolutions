@@ -33,8 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
         protected override void CreateTable(SQLiteConnectionWithLock connect)
         {
-            base.CreateTable(connect);
-            
+            connect.CreateTable<AssignmentDocument>(CreateFlags.MigrateTable);
             connect.CreateTable<AssignmentDocument.AssignmentAnswer>();
             connect.CreateTable<AssignmentDocument.AssignmentProtectedVariable>();
         }

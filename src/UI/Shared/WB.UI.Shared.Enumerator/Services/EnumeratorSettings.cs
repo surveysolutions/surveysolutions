@@ -275,7 +275,7 @@ namespace WB.UI.Shared.Enumerator.Services
         }
 
         public bool AllowSupervisorChangeAssignmentStatus =>
-            this.CurrentWorkspaceSettings.AllowSupervisorChangeAssignmentStatus ?? true;
+            this.CurrentWorkspaceSettings?.AllowSupervisorChangeAssignmentStatus ?? true;
 
         public void SetAllowSupervisorChangeAssignmentStatus(bool allow)
         {
@@ -283,7 +283,7 @@ namespace WB.UI.Shared.Enumerator.Services
         }
 
         public bool AllowInterviewerChangeAssignmentStatus =>
-            this.CurrentWorkspaceSettings.AllowInterviewerChangeAssignmentStatus ?? true;
+            this.CurrentWorkspaceSettings?.AllowInterviewerChangeAssignmentStatus ?? true;
 
         public void SetAllowInterviewerChangeAssignmentStatus(bool allow)
         {

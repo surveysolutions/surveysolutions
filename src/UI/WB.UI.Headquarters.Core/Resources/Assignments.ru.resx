@@ -565,7 +565,7 @@
       <value>Комментарий к изменению статуса</value>
   </data>
   <data name="StatusOpen" xml:space="preserve">
-      <value>Активно</value>
+      <value>Открыто</value>
   </data>
   <data name="StatusCompleted" xml:space="preserve">
       <value>Завершено</value>
