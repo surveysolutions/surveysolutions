@@ -152,12 +152,13 @@ export default {
             this.group.operatorIdentifier = operatorIdentifier
         },
         deleteLabel(child) {
-            if (this.isGroup(child)) {
-                return this.config.labels?.removeGroup ?? '&times;'
-            }
+            const rawLabel = this.isGroup(child)
+                ? (this.config.labels?.removeGroup ?? '&times;')
+                : (this.config.labels?.removeRule ?? '&times;')
 
-            return this.config.labels?.removeRule ?? '&times;'
-        },
+            const safeLabel = String(rawLabel).replace(/<[^>]*>/g, '')
+            return safeLabel || '&times;'
+        }
         ruleController(child) {
             return {
                 ruleIdentifier: child.identifier,
