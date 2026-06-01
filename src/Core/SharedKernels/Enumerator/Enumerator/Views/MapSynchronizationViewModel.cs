@@ -160,6 +160,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
                 if (!syncProgressInfo.IsRunning)
                 {
+                    if (this.subscribedProgress != null)
+                        this.subscribedProgress.Progress.ProgressChanged -= ProgressOnProgressChanged;
                     this.subscribedProgress = null;
                     this.synchronizationCancellationTokenSource = null;
                     this.OnSyncCompleted();

@@ -126,6 +126,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
+            this.SyncMaps();
             return StartCommandResult.NotSticky;
         }
     }
