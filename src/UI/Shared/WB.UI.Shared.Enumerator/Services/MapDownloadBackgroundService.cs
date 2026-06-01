@@ -16,7 +16,7 @@ namespace WB.UI.Shared.Enumerator.Services
     {
         private ServiceBinder<MapDownloadBackgroundService> binder;
         private Thread thread;
-        private bool isSyncRunning;
+        private volatile bool isSyncRunning;
 
         private const int NotificationId = 2;
         private const string ChannelId = "map_sync_channel_id";
