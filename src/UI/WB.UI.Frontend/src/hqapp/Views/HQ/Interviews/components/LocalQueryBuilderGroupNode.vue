@@ -158,7 +158,7 @@ export default {
 
             const safeLabel = String(rawLabel).replace(/<[^>]*>/g, '')
             return safeLabel === '&times;' ? '×' : (safeLabel || '×')
-        }
+        },
         ruleController(child) {
             return {
                 ruleIdentifier: child.identifier,
