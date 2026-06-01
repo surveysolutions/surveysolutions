@@ -141,9 +141,10 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
             var userId = this.principal.CurrentUserIdentity.UserId;
             return x => 
                 x.Status == AssignmentStatus.Completed
+                || x.Status == AssignmentStatus.Closed
                 || (x.ResponsibleId != userId 
                     && x.ReceivedByInterviewerAt == null
-                    && (x.Status == AssignmentStatus.Open || x.Status == AssignmentStatus.Closed));
+                    && x.Status == AssignmentStatus.Open);
         }
 
         private IEnumerable<AssignmentDocument> GetOutboxAssignments()
