@@ -40,14 +40,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 return null;
 
             var tcs = new TaskCompletionSource<GpsLocation>(TaskCreationOptions.RunContinuationsAsynchronously);
-
-            // Capture the monotonic boot-clock time *before* registering the listener.
-            // We use SystemClock.ElapsedRealtime() / location.ElapsedRealtimeNanos rather
-            // than wall-clock time (DateTimeOffset.UtcNow) so that an incorrect device
-            // clock cannot cause fresh GPS fixes to be wrongly rejected as stale.
-            // Both values share the same monotonic origin (time since last boot).
-            var requestElapsedRealtimeMs = SystemClock.ElapsedRealtime();
-            var listener = new SingleShotLocationListener(tcs, locationManager, desiredAccuracy, requestElapsedRealtimeMs);
+            var listener = new SingleShotLocationListener(tcs, locationManager, desiredAccuracy);
 
             // Enforce a hard 10-minute ceiling regardless of the caller-supplied token.
             using var hardLimitCts = new CancellationTokenSource(TimeSpan.FromMinutes(10));
@@ -55,7 +48,17 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             var effectiveToken = linkedCts.Token;
 
             // Register first so cancellation callback can always remove listener updates.
-            locationManager.RequestLocationUpdates(LocationManager.GpsProvider, 0L, 0f, listener);
+            // Register for GPS_PROVIDER explicitly plus every currently-enabled provider so
+            // that fixes from an external Bluetooth/USB GPS sensor (which may register under
+            // a custom or network provider name via the mock location API) are also received.
+            var allProviders = locationManager.GetProviders(enabledOnly: true)
+                                              .Append(LocationManager.GpsProvider)
+                                              .Distinct();
+            foreach (var provider in allProviders)
+            {
+                try { locationManager.RequestLocationUpdates(provider, 0L, 0f, listener); }
+                catch { /* provider may have disappeared between enumeration and registration */ }
+            }
 
             // Register cancellation: remove the listener and complete with null when the
             // CancellationToken fires (e.g. the user-configured GpsReceiveTimeoutSec elapses or
@@ -77,30 +80,27 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
         }
 
         /// <summary>
-        /// Returns <c>true</c> when a GPS fix can be expected — either from the built-in
-        /// hardware GPS chip or from an external sensor (Bluetooth / USB) that injects fixes
-        /// into the GPS provider via an Android mock location app (Developer Settings →
-        /// "Allow mock locations" / "Select mock location app").
-        /// <para>
-        /// <see cref="LocationManager.GetProviders(bool)"/> with <c>enabledOnly = true</c>
-        /// includes the GPS provider whenever it is active, whether through real hardware
-        /// or through a registered mock-location provider — unlike
-        /// <see cref="LocationManager.IsProviderEnabled"/> which only reflects the hardware
-        /// toggle in the device Location settings.
-        /// </para>
+        /// Returns <c>true</c> when location services are available and a fix can be expected.
+        /// On API 28+, Android manages location as a single on/off toggle — if location is
+        /// enabled, all providers (hardware GPS and any active mock provider for an external
+        /// Bluetooth/USB sensor) are accessible.
+        /// On API &lt;28, falls back to checking the GPS provider or any available provider.
         /// </summary>
         private static bool IsGpsProviderAvailable(LocationManager locationManager)
         {
-            // Primary check: hardware GPS enabled.
+            // On API 28+, IsLocationEnabled is the single authoritative flag.
+            // IsProviderEnabled("gps") only reflects hardware state and returns false when
+            // hardware GPS is off — even when a mock location app (external GPS sensor) is
+            // actively injecting fixes into the GPS provider.
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.P)
+                return locationManager.IsLocationEnabled;
+
+            // API < 28: check GPS provider directly, or fall back to any enabled provider.
             if (locationManager.IsProviderEnabled(LocationManager.GpsProvider))
                 return true;
-
-            // Secondary check: a mock location app is active for the GPS provider
-            // (external sensor scenario).
             try
             {
-                return locationManager.GetProviders(enabledOnly: true)
-                                      .Contains(LocationManager.GpsProvider);
+                return locationManager.GetProviders(enabledOnly: true).Count > 0;
             }
             catch
             {
@@ -118,35 +118,21 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             private readonly TaskCompletionSource<GpsLocation> tcs;
             private readonly LocationManager locationManager;
             private readonly double desiredAccuracy;
-            private readonly long requestElapsedRealtimeMs;
 
             public SingleShotLocationListener(
                 TaskCompletionSource<GpsLocation> tcs,
                 LocationManager locationManager,
-                double desiredAccuracy,
-                long requestElapsedRealtimeMs)
+                double desiredAccuracy)
             {
                 this.tcs = tcs;
                 this.locationManager = locationManager;
                 this.desiredAccuracy = desiredAccuracy;
-                this.requestElapsedRealtimeMs = requestElapsedRealtimeMs;
             }
 
             public void OnLocationChanged(AndroidLocation location)
             {
-                // Reject fixes that predate the listener registration using the monotonic
-                // boot clock. This is immune to device wall-clock misconfiguration:
-                // location.ElapsedRealtimeNanos and SystemClock.ElapsedRealtime() both
-                // measure time since last boot from the same origin.
-                // Skip this check for mock locations (external GPS sensors): they inject
-                // fixes via a mock provider whose timestamps may originate from the
-                // sensor's own buffer and can legitimately predate the registration moment.
-                if (!location.IsFromMockProvider)
-                {
-                    var fixElapsedRealtimeMs = location.ElapsedRealtimeNanos / 1_000_000L;
-                    if (fixElapsedRealtimeMs < requestElapsedRealtimeMs)
-                        return;
-                }
+                // External GPS devices may emit valid fixes whose elapsedRealtime timestamp
+                // does not align with the device monotonic clock. Do not reject by age.
 
                 // Skip fixes that don't meet the configured accuracy threshold — keep
                 // waiting for a better satellite fix rather than accepting a coarse one.

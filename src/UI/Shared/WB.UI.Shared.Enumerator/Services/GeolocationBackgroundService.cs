@@ -99,7 +99,18 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
 
         long minTimeMs = 5000;
         float minDistanceM = 1;
-        locationManager.RequestLocationUpdates(LocationManager.GpsProvider, minTimeMs, minDistanceM, this);
+        // Register for GPS_PROVIDER plus every currently-enabled provider so that fixes
+        // from an external Bluetooth/USB GPS sensor (which may register under a custom
+        // provider name via the mock location API) are also received.
+        // RemoveUpdates(this) in OnDestroy removes all registrations at once.
+        var allProviders = locationManager.GetProviders(enabledOnly: true)
+                                          .Append(LocationManager.GpsProvider)
+                                          .Distinct();
+        foreach (var provider in allProviders)
+        {
+            try { locationManager.RequestLocationUpdates(provider, minTimeMs, minDistanceM, this); }
+            catch { /* provider may have disappeared between enumeration and registration */ }
+        }
 
         return StartCommandResult.NotSticky;
     }

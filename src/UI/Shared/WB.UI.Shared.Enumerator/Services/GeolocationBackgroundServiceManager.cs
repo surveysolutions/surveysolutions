@@ -26,17 +26,19 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
         var locationManager = (LocationManager)Application.Context.GetSystemService(Context.LocationService);
         if (locationManager == null) return false;
 
-        // Hardware GPS enabled — straightforward case.
+        // On API 28+, location is a single on/off toggle. IsLocationEnabled is the
+        // correct check — IsProviderEnabled("gps") only reflects hardware GPS state and
+        // returns false when hardware GPS is off but an external sensor (mock location app)
+        // is actively injecting fixes.
+        if (Build.VERSION.SdkInt >= BuildVersionCodes.P)
+            return locationManager.IsLocationEnabled;
+
+        // API < 28: check GPS provider specifically, or any enabled provider as fallback.
         if (locationManager.IsProviderEnabled(LocationManager.GpsProvider))
             return true;
-
-        // External GPS sensor connected via a mock location app (Developer Settings →
-        // "Allow mock locations"): the GPS provider appears in GetProviders(enabledOnly: true)
-        // even when the built-in hardware GPS chip is switched off.
         try
         {
-            return locationManager.GetProviders(enabledOnly: true)
-                                  .Contains(LocationManager.GpsProvider);
+            return locationManager.GetProviders(enabledOnly: true).Count > 0;
         }
         catch
         {
