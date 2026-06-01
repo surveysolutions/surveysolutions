@@ -48,12 +48,6 @@ export default {
             type: Object,
             required: true,
         },
-
-        data() {
-            return {
-                generatedChildIds: new WeakMap(),
-            }
-        },
         config: {
             type: Object,
             required: true,
@@ -62,6 +56,12 @@ export default {
             type: Number,
             default: 1,
         },
+    },
+
+    data() {
+        return {
+            generatedChildIds: new WeakMap(),
+        }
     },
 
     computed: {
