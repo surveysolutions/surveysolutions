@@ -118,6 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             {
                 this.subscribedProgress.Progress.ProgressChanged -= ProgressOnProgressChanged;
                 this.subscribedProgress = null;
+                this.synchronizationCancellationTokenSource = null;
             }
 
             if (mapSyncProgressStatus != null)
