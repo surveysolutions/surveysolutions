@@ -1,82 +1,28 @@
-﻿using System.Net;
-using System.Net.Http;
-using Microsoft.AspNetCore.Http;
-using Moq;
+﻿using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
-using WB.Tests.Abc;
-
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests
 {
     public class CloseEndpointTests : BaseAssignmentsControllerTest
     {
         [Test]
-        public void should_return_404_when_assignment_not_found()
+        public void should_return_400_with_obsolete_message_for_post()
         {
-            var httpResponseMessage = this.controller.ClosePost(14);
-            Assert.That(httpResponseMessage, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(StatusCodes.Status404NotFound));
-        }
-
-        [Test]
-        public void should_return_409_for_web_enabled_assignment()
-        {
-            var assignment = Create.Entity.Assignment(id: 4, quantity: 5, webMode: true);
-            this.SetupAssignment(assignment);
-
-            var httpResponseMessage = this.controller.ClosePost(assignment.Id);
-            Assert.That(httpResponseMessage, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(StatusCodes.Status409Conflict));
-        }
-
-        [Test]
-        public void should_return_409_for_archived_assignment()
-        {
-            var assignment = Create.Entity.Assignment(id: 4, quantity: 5);
-            assignment.Archived = true;
-            this.SetupAssignment(assignment);
-
-            var httpResponseMessage = this.controller.ClosePost(assignment.Id);
-            Assert.That(httpResponseMessage, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(StatusCodes.Status409Conflict));
-        }
-
-        [Test]
-        public void should_publish_command_update_quantity_and_return_200_for_closed_assignment()
-        {
-            var assignment = Create.Entity.Assignment(id: 4, quantity: 5);
-            assignment.InterviewSummaries.Add(Create.Entity.InterviewSummary());
-            this.SetupAssignment(assignment);
+            var result = this.controller.ClosePost(14);
             
-            var httpResponseMessage = this.controller.ClosePost(assignment.Id);
-
-            commandService.Verify(x => 
-                x.Execute(It.Is<UpdateAssignmentQuantity>(c => c.Quantity == 1 && c.PublicKey == assignment.PublicKey), null),
-                Times.Once);
-            Assert.That(httpResponseMessage, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(StatusCodes.Status200OK));
+            Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
+            var badRequest = (BadRequestObjectResult)result;
+            Assert.That(badRequest.Value, Is.EqualTo("The 'close' endpoint is obsolete. Use 'downsize' or 'changeStatus' depending on your needs."));
         }
-
+        
         [Test]
-        public void should_log_assignment_size_changed_in_audit_log_when_closing_via_post()
+        public void should_return_400_with_obsolete_message_for_patch()
         {
-            var assignment = Create.Entity.Assignment(id: 4, quantity: 5);
-            assignment.InterviewSummaries.Add(Create.Entity.InterviewSummary());
-            this.SetupAssignment(assignment);
-
-            this.controller.ClosePost(assignment.Id);
-
-            this.auditLog.Verify(x => x.AssignmentSizeChanged(assignment.Id, 1), Times.Once);
-        }
-
-        [Test]
-        public void should_log_assignment_size_changed_in_audit_log_when_closing_via_patch()
-        {
-            var assignment = Create.Entity.Assignment(id: 4, quantity: 5);
-            assignment.InterviewSummaries.Add(Create.Entity.InterviewSummary());
-            this.SetupAssignment(assignment);
-
-            this.controller.Close(assignment.Id);
-
-            this.auditLog.Verify(x => x.AssignmentSizeChanged(assignment.Id, 1), Times.Once);
+            var result = this.controller.Close(14).Result;
+            
+            Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
+            var badRequest = (BadRequestObjectResult)result;
+            Assert.That(badRequest.Value, Is.EqualTo("The 'close' endpoint is obsolete. Use 'downsize' or 'changeStatus' depending on your needs."));
         }
     }
 }

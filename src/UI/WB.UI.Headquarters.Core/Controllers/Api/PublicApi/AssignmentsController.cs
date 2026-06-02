@@ -614,41 +614,46 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         }
 
         [HttpPost]
-        [Obsolete("Use PATCH method instead")]
+        [Obsolete("Use 'downsize' or 'changeStatus' instead")]
         [Route("{id:int}/close")]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
         public ActionResult ClosePost(int id)
         {
-            var assignment = assignmentsStorage.GetAssignment(id);
-            if (assignment == null)
-                return NotFound();
-            if (!assignment.QuantityCanBeChanged)
-                return Conflict();
-
-            var newQuantity = assignment.InterviewSummaries.Count;
-            this.commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey,
-                this.authorizedUser.Id,
-                newQuantity,
-                assignment.QuestionnaireId));
-            this.auditLog.AssignmentSizeChanged(id, newQuantity);
-
-            return Ok();
+            return BadRequest("The 'close' endpoint is obsolete. Use 'downsize' or 'changeStatus' depending on your needs.");
         }
 
-        /// <summary>
-        /// Close assignment by setting Size to the amount of collected interviews
-        /// </summary>
-        /// <param name="id">Assignment id</param>
-        /// <response code="200">Assignment closed</response>
-        /// <response code="404">Assignment not found</response>
-        /// <response code="409">Quantity cannot be changed. Assignment either archived or has web mode enabled</response>
         [HttpPatch]
+        [Obsolete("Use 'downsize' or 'changeStatus' instead")]
         [Route("{id:int}/close")]
         [Produces(MediaTypeNames.Application.Json)]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
         public ActionResult<AssignmentDetails> Close(int id)
+        {
+            return BadRequest("The 'close' endpoint is obsolete. Use 'downsize' or 'changeStatus' depending on your needs.");
+        }
+
+        [HttpPost]
+        [Obsolete("Use PATCH method instead")]
+        [Route("{id:int}/downsize")]
+        [ObservingNotAllowed]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
+        public ActionResult<AssignmentDetails> DownsizePost(int id) => Downsize(id);
+
+        /// <summary>
+        /// Downsize assignment by setting Size to the amount of collected interviews
+        /// </summary>
+        /// <param name="id">Assignment id</param>
+        /// <response code="200">Assignment downsized</response>
+        /// <response code="404">Assignment not found</response>
+        /// <response code="409">Quantity cannot be changed. Assignment either archived or has web mode enabled</response>
+        [HttpPatch]
+        [Route("{id:int}/downsize")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ObservingNotAllowed]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
+        public ActionResult<AssignmentDetails> Downsize(int id)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
             if (assignment == null)
