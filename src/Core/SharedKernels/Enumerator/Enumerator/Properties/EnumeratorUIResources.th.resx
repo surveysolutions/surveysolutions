@@ -450,6 +450,9 @@
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>เปิดงานที่มอบหมายอีกครั้ง</value>
   </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>งานที่มอบหมายจะถูกตั้งค่ากลับเป็นสถานะเปิด และผู้สัมภาษณ์จะสามารถสร้างการสัมภาษณ์ใหม่ได้</value>
+  </data>
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>อนุมัติ</value>
   </data>
