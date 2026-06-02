@@ -1070,10 +1070,13 @@
     <value>Завершить задание</value>
   </data>
   <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
-    <value>Вы уверены, что перечислили все подходящие единицы для этого задания?</value>
+    <value>Вы уверены, что перечислили все подходящие единицы?</value>
   </data>
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>Открыть задание снова</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>Заданию будет возвращён статус «Открыто», и интервьюеры смогут создавать новые интервью.</value>
   </data>
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>Закрыть</value>

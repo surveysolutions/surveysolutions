@@ -888,6 +888,9 @@
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>Rihap detyrën</value>
   </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>Detyra do të rikthehet në statusin Hapur dhe intervistuesit do të mund të krijojnë intervista të reja.</value>
+  </data>
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>Aprovo</value>
   </data>

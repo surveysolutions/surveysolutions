@@ -1049,6 +1049,9 @@ Aparecerá no dispositivo do entrevistador após a próxima sincronização</val
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>Reabrir atribuição</value>
   </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>A atribuição será revertida para o estado Aberto e os entrevistadores poderão criar novas entrevistas.</value>
+  </data>
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>Aprovar</value>
   </data>

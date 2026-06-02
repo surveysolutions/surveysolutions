@@ -987,6 +987,9 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>Znovu otevřít žádanku</value>
   </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>Žádanka bude nastavena zpět na stav Otevřeno a tazatelé budou moci vytvářet nové rozhovory.</value>
+  </data>
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>Schválit</value>
   </data>

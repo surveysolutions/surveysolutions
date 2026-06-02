@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
         {
             await ChangeAssignmentStatusAsync(
                 AssignmentStatus.Open,
-                string.Empty,
+                EnumeratorUIResources.Dashboard_ReopenAssignment_Message,
                 EnumeratorUIResources.Dashboard_ReopenAssignment_Title,
                 EnumeratorUIResources.Dashboard_Reopen);
         }
