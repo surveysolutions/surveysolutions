@@ -604,6 +604,8 @@ export default {
                     )
                 })
             }
+
+            marker.setProperty('status', this.selectedTooltip.status)
         },
 
         setMapCanvasStyle() {
@@ -809,13 +811,19 @@ export default {
                             markerForm = 'triangle'
                             break
                     }
-                    // Show green marker for completed assignments (interviewer view)
-                    // or closed assignments (supervisor/HQ/admin view)
-                    const isDone =
-                        (userRole === 'Interviewer' && assignmentStatus === 'Completed') ||
-                        ((userRole === 'Supervisor' || userRole === 'Headquarter' || userRole === 'Administrator') &&
-                            assignmentStatus === 'Closed')
-                    const markerSuffix = isDone ? '-done.svg' : '-x.png'
+                    // Show green solid marker for completed assignments (interviewer view)
+                    // or green hollow/bagel marker for closed assignments (supervisor/HQ/admin view)
+                    let markerSuffix = '-x.png'
+                    if (userRole === 'Interviewer' && assignmentStatus === 'Completed') {
+                        markerSuffix = '-done.svg'
+                    } else if (
+                        (userRole === 'Supervisor' ||
+                            userRole === 'Headquarter' ||
+                            userRole === 'Administrator') &&
+                        assignmentStatus === 'Closed'
+                    ) {
+                        markerSuffix = '-closed.svg'
+                    }
                     return {
                         icon: {
                             url: `/img/google-maps-markers/${markerForm}-assignment${markerSuffix}`,
