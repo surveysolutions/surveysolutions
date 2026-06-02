@@ -654,7 +654,7 @@
     <value>დავალების დასრულება</value>
   </data>
   <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
-    <value>დარწმუნებული ხართ, რომ Ⴙამოთვალეთ ყველა კვალიფიციური ერთეული?</value>
+    <value>დარწმუნებული ხართ, რომ ჩამოთვალეთ ყველა კვალიფიციური ერთეული?</value>
   </data>
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>დავალების ხელახლა გახსნა</value>
