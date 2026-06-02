@@ -1052,6 +1052,9 @@
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>إعادة فتح التعيين</value>
   </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>سيتم إعادة التعيين إلى الحالة مفتوح وسيتمكن المقابلون من إنشاء مقابلات جديدة.</value>
+  </data>
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>اعتماد</value>
   </data>

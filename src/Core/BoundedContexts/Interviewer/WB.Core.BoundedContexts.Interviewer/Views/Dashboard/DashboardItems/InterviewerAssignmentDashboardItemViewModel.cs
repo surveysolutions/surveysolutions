@@ -112,7 +112,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             await ChangeAssignmentStatusAsync(
                 AssignmentStatus.Open,
-                string.Empty,
+                EnumeratorUIResources.Dashboard_ReopenAssignment_Message,
                 EnumeratorUIResources.Dashboard_ReopenAssignment_Title,
                 EnumeratorUIResources.Dashboard_Reopen);
         }

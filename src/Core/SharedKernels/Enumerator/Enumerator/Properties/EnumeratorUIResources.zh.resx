@@ -860,6 +860,9 @@
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>重新开启任务</value>
   </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>该任务将恢复为“已开启”状态，访谈员将能够创建新的访谈。</value>
+  </data>
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>审批</value>
   </data>

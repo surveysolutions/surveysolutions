@@ -1047,10 +1047,13 @@ It will appear on interviewer device after next synchronization</value>
     <value>Complete assignment</value>
   </data>
   <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
-    <value>Are you sure you have enumerated all eligible units for this assignment?</value>
+    <value>Are you sure you have enumerated all eligible units?</value>
   </data>
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>Reopen assignment</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>The assignment will be set back to Open status and interviewers will be able to create new interviews.</value>
   </data>
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>Close</value>

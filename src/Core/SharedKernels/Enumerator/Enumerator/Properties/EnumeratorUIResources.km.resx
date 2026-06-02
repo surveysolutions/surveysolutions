@@ -579,6 +579,9 @@
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>បើកការចាត់តាំងឡើងវិញ</value>
   </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>ការចាត់តាំងនឹងត្រូវកំណត់ត្រឡប់ទៅស្ថានភាព បើក ហើយអ្នកសម្ភាសន៍នឹងអាចបង្កើតការសម្ភាសន៍ថ្មីបាន។</value>
+  </data>
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>យល់ព្រម</value>
   </data>

@@ -986,10 +986,13 @@ Il apparaîtra sur l'appareil de l'enquêteur après la prochaine synchronisatio
     <value>Terminer l'affectation</value>
   </data>
   <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
-    <value>Êtes-vous sûr d'avoir recensé toutes les unités éligibles ?</value>
+    <value>Êtes-vous sûr d’avoir recensé toutes les unités éligibles ?</value>
   </data>
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>Rouvrir l'affectation</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>L’affectation sera remise au statut Ouvert et les enquêteurs pourront créer de nouveaux entretiens.</value>
   </data>
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>Approuver</value>

@@ -659,6 +659,9 @@
   <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
     <value>დავალების ხელახლა გახსნა</value>
   </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>დავალება დაუბრუნდება ღია სტატუსს და ინტერვიუერები შეძლებენ ახალი ინტერვიუების შექმნას.</value>
+  </data>
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>დამტკიცება</value>
   </data>
