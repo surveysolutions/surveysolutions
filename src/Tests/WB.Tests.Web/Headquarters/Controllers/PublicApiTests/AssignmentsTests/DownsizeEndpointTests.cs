@@ -44,12 +44,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             assignment.InterviewSummaries.Add(Create.Entity.InterviewSummary());
             this.SetupAssignment(assignment);
             
-            var result = this.controller.Downsize(assignment.Id).Result;
+            var result = this.controller.Downsize(assignment.Id);
 
             commandService.Verify(x => 
                 x.Execute(It.Is<UpdateAssignmentQuantity>(c => c.Quantity == 1 && c.PublicKey == assignment.PublicKey), null),
                 Times.Once);
-            Assert.That(result, Is.InstanceOf<AssignmentDetails>());
+            Assert.That(result.Value, Is.InstanceOf<AssignmentDetails>());
         }
 
         [Test]
