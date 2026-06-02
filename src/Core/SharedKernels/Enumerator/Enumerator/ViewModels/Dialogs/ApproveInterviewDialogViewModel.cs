@@ -42,6 +42,7 @@ public class ApproveInterviewDialogViewModel : ActionDialogViewModel<ApproveInte
     public override string ApplyTitle => UIResources.Supervisor_Complete_Approve_btn;
 
     public override bool ShowResponsibles => false;
+    public override bool CanApply => true;
 
     protected override async Task ApplyAsync()
     {
