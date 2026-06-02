@@ -430,7 +430,7 @@ namespace WB.UI.Designer
             // both applications to keep the integration functional.
             const int minimumServiceApiKeyLength = 32;
             var serviceApiKey = Configuration["WebTester:ServiceApiKey"];
-            if (serviceApiKey != null && serviceApiKey.Length < minimumServiceApiKeyLength)
+            if (!string.IsNullOrWhiteSpace(serviceApiKey) && serviceApiKey.Length < minimumServiceApiKeyLength)
                 throw new InvalidOperationException(
                     $"WebTester:ServiceApiKey must be at least {minimumServiceApiKeyLength} characters long.");
 
