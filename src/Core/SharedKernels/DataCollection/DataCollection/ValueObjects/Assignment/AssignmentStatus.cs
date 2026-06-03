@@ -6,7 +6,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment
         Open = 0,
         /// <summary>Assignment marked as complete by the interviewer</summary>
         Completed = 1,
-        /// <summary>Assignment closed (downsized) by supervisor</summary>
+        /// <summary>Assignment closed by supervisor/HQ (final state)</summary>
         Closed = 2,
     }
 }
