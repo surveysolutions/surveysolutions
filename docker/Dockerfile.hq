@@ -177,8 +177,6 @@ RUN apk add --no-cache \
     icu-libs \ 
     icu-data-full \
     \    
-    gdal \
-    gdal-tools \
     fontconfig \
     binutils \
     && rm -rf /var/cache/apk/*
