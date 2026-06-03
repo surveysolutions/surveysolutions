@@ -44,16 +44,20 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
             var newStatus = request.StatusChange?.Status ?? AssignmentStatus.Open;
 
+            // Interviewers can only mark an assignment as Completed (Open -> Completed) via offline sync.
+            // Ignore any other status (e.g. Closed) to avoid privilege escalation (HQ upload uses supervisor credentials).
+            if (newStatus != AssignmentStatus.Completed && newStatus != AssignmentStatus.Open)
+                return OkResponse.Task;
+
             // Accept the interviewer's status change only when the assignment is currently Open.
-            // If the supervisor has already changed the assignment status (to Finished or Approved),
-            // ignore the interviewer's update — supervisor changes always take precedence.
-            if (assignment.Status == AssignmentStatus.Open)
-            {
-                assignment.Status = newStatus;
-                assignment.StatusComment = request.StatusChange?.Comment;
-                assignment.StatusChangedAtUtc = DateTime.UtcNow;
-                this.assignmentDocumentsStorage.Store(assignment);
-            }
+            // If the supervisor has already changed the status, ignore the interviewer's update.
+            if (assignment.Status != AssignmentStatus.Open || newStatus == AssignmentStatus.Open)
+                return OkResponse.Task;
+
+            assignment.Status = AssignmentStatus.Completed;
+            assignment.StatusComment = request.StatusChange?.Comment;
+            assignment.StatusChangedAtUtc = DateTime.UtcNow;
+            this.assignmentDocumentsStorage.Store(assignment);
 
             return OkResponse.Task;
         }
