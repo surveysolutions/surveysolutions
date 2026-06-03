@@ -618,10 +618,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("{id:int}/close")]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
-        public ActionResult ClosePost(int id)
-        {
-            return BadRequest("The 'close' endpoint is obsolete. Use 'downsize' or 'changeStatus' depending on your needs.");
-        }
+        public ActionResult<AssignmentDetails> ClosePost(int id) => Downsize(id);
 
         [HttpPatch]
         [Obsolete("Use 'downsize' or 'changeStatus' instead")]
@@ -629,18 +626,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Produces(MediaTypeNames.Application.Json)]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
-        public ActionResult<AssignmentDetails> Close(int id)
-        {
-            return BadRequest("The 'close' endpoint is obsolete. Use 'downsize' or 'changeStatus' depending on your needs.");
-        }
-
-        [HttpPost]
-        [Obsolete("Use PATCH method instead")]
-        [Route("{id:int}/downsize")]
-        [ObservingNotAllowed]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
-        public ActionResult<AssignmentDetails> DownsizePost(int id) => Downsize(id);
-
+        public ActionResult<AssignmentDetails> Close(int id) => Downsize(id);
+        
         /// <summary>
         /// Downsize assignment by setting Size to the amount of collected interviews
         /// </summary>

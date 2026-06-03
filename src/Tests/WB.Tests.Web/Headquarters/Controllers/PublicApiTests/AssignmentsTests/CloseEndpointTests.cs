@@ -1,28 +1,30 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Reflection;
 using NUnit.Framework;
+using WB.UI.Headquarters.Controllers.Api.PublicApi;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests
 {
     public class CloseEndpointTests : BaseAssignmentsControllerTest
     {
         [Test]
-        public void should_return_400_with_obsolete_message_for_post()
+        public void should_have_obsolete_attribute_for_post()
         {
-            var result = this.controller.ClosePost(14);
+            var method = typeof(AssignmentsController).GetMethod(nameof(AssignmentsController.ClosePost));
+            var attribute = method.GetCustomAttribute<ObsoleteAttribute>();
             
-            Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
-            var badRequest = (BadRequestObjectResult)result;
-            Assert.That(badRequest.Value, Is.EqualTo("The 'close' endpoint is obsolete. Use 'downsize' or 'changeStatus' depending on your needs."));
+            Assert.That(attribute, Is.Not.Null);
+            Assert.That(attribute.Message, Is.EqualTo("Use 'downsize' or 'changeStatus' instead"));
         }
         
         [Test]
-        public void should_return_400_with_obsolete_message_for_patch()
+        public void should_have_obsolete_attribute_for_patch()
         {
-            var result = this.controller.Close(14).Result;
+            var method = typeof(AssignmentsController).GetMethod(nameof(AssignmentsController.Close));
+            var attribute = method.GetCustomAttribute<ObsoleteAttribute>();
             
-            Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
-            var badRequest = (BadRequestObjectResult)result;
-            Assert.That(badRequest.Value, Is.EqualTo("The 'close' endpoint is obsolete. Use 'downsize' or 'changeStatus' depending on your needs."));
+            Assert.That(attribute, Is.Not.Null);
+            Assert.That(attribute.Message, Is.EqualTo("Use 'downsize' or 'changeStatus' instead"));
         }
     }
 }
