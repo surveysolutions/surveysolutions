@@ -45,7 +45,6 @@
         "moment": "^2.29.4",
         "moment-timezone": "^0.5.46",
         "qrcode": "^1.5.4",
-        "query-builder-vue-3": "^1.0.1",
         "smoothscroll-polyfill": "^0.4.0",
         "toastr": "^2.1.4",
         "vee-validate": "^4.15.0",
@@ -144,10 +143,11 @@
         "jest-environment-jsdom": ">=30.2.0",
         "json-schema": ">=0.4.0",
         "json5": "2.2.3",
+        "js-cookie": ">=3.0.7",
         "yargs-parser": ">=13.1.2",
         "merge": ">=2.1.1",
         "loader-utils": "2.0.4",
-        "nanoid": ">=2.1.11",
+        "nanoid": ">=3.3.12",
         "node-fetch": "3.2.10",
         "node-forge": "1.3.1",
         "node-notifier": ">=8.0.1",
@@ -162,6 +162,6 @@
         "ts-node": "10.8.0",
         "vue-jest": ">=3.0.7",
         "ua-parser-js": "1.0.33",
-        "ws": ">=8.18.0"
+        "ws": ">=8.20.1"
     }
 }
