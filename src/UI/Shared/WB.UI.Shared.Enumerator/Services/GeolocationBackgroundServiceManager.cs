@@ -24,7 +24,26 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
     public bool HasGpsProvider()
     {
         var locationManager = (LocationManager)Application.Context.GetSystemService(Context.LocationService);
-        return locationManager.IsProviderEnabled(LocationManager.GpsProvider);
+        if (locationManager == null) return false;
+
+        // On API 28+, location is a single on/off toggle. IsLocationEnabled is the
+        // correct check — IsProviderEnabled("gps") only reflects hardware GPS state and
+        // returns false when hardware GPS is off but an external sensor (mock location app)
+        // is actively injecting fixes.
+        if (Build.VERSION.SdkInt >= BuildVersionCodes.P)
+            return locationManager.IsLocationEnabled;
+
+        // API < 28: check GPS provider specifically, or any enabled provider as fallback.
+        if (locationManager.IsProviderEnabled(LocationManager.GpsProvider))
+            return true;
+        try
+        {
+            return locationManager.GetProviders(enabledOnly: true).Count > 0;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     public IGeolocationListener GetListen(IGeolocationListener geolocationListener)
@@ -57,9 +76,15 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
 
     private async void ServiceOnLocationReceived(object sender, LocationReceivedEventArgs e)
     {
-        var accuracyInMeters = settings.GeographyQuestionAccuracyInMeters;
-        if (e.Location.Accuracy > accuracyInMeters)
-            return;
+        // Skip the accuracy filter for external GPS sensors (mock provider): they often
+        // report a fixed or vendor-specific accuracy value that does not reflect actual
+        // signal quality. Applying the threshold would silently drop every fix until timeout.
+        if (!e.IsFromMockProvider)
+        {
+            var accuracyInMeters = settings.GeographyQuestionAccuracyInMeters;
+            if (e.Location.Accuracy > accuracyInMeters)
+                return;
+        }
 
         // Create a snapshot to avoid collection modification during enumeration
         var listenersCopy = listeners.Values.ToArray();
