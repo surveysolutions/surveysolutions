@@ -69,6 +69,9 @@ namespace WB.UI.Designer.Areas.Admin.Pages
 
             [Display(Name = "Full name", Order = 2)]
             public string? FullName { get; set; }
+
+            [Display(Name = "Last login date", Order = 4)]
+            public string? LastLoginDate { get; set; }
         }
 
         public AccountViewModel Account { get; private set; } = new AccountViewModel();
@@ -112,7 +115,8 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 UserName = account.UserName ?? String.Empty,
                 OwnedQuestionnaires = ownedQuestionnaires,
                 SharedQuestionnaires = sharedQuestionnaires,
-                FullName = await this.users.GetFullName(account.Id)
+                FullName = await this.users.GetFullName(account.Id),
+                LastLoginDate = account.LastLoginAtUtc?.ToUIString()
             };
             this.Account = accountViewModel;
 
