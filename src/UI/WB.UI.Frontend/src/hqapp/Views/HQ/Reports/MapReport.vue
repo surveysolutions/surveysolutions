@@ -124,6 +124,7 @@ import { isNull, chain, debounce, delay, forEach, find, flatten, toNumber, isEqu
 import routeSync from '~/shared/routeSync'
 import InterviewFilter from '../Interviews/InterviewQuestionsFilters'
 import { cloneWithWritableProperties } from '~/shared/clone'
+import simpleheat from 'simpleheat'
 
 const mapStyles = [
     {
@@ -489,9 +490,101 @@ export default {
 
             this.map = new google.maps.Map(document.getElementById('map-canvas'), this.getMapOptions())
 
-            this.heatmap = new google.maps.visualization.HeatmapLayer({
-                map: this.map,
-            })
+            class HeatmapOverlay extends google.maps.OverlayView {
+                constructor(opts = {}) {
+                    super()
+                    this._opts = opts
+                    this._data = []
+                    this._canvas = null
+                    this._heat = null
+                    if (opts.map) {
+                        this.setMap(opts.map)
+                    }
+                }
+
+                onAdd() {
+                    const canvas = document.createElement('canvas')
+                    canvas.style.cssText = 'position:absolute;pointer-events:none;'
+                    this._canvas = canvas
+                    this.getPanes().overlayLayer.appendChild(canvas)
+                    this._heat = simpleheat(canvas)
+                    this._heat.radius(parseInt(this._opts.radius, 10) || 30)
+                }
+
+                draw() {
+                    if (!this._canvas || !this._heat) return
+
+                    const projection = this.getProjection()
+                    if (!projection) return
+
+                    const map = this.getMap()
+                    const mapDiv = map.getDiv()
+                    const width = mapDiv.offsetWidth
+                    const height = mapDiv.offsetHeight
+
+                    if (width <= 0 || height <= 0) return
+
+                    const bounds = map.getBounds()
+                    if (!bounds) return
+
+                    const ne = projection.fromLatLngToDivPixel(bounds.getNorthEast())
+                    const sw = projection.fromLatLngToDivPixel(bounds.getSouthWest())
+
+                    const left = Math.round(Math.min(ne.x, sw.x))
+                    const top = Math.round(Math.min(ne.y, sw.y))
+
+                    this._canvas.style.left = left + 'px'
+                    this._canvas.style.top = top + 'px'
+
+                    if (this._canvas.width !== width || this._canvas.height !== height) {
+                        this._canvas.width = width
+                        this._canvas.height = height
+                        this._heat.resize()
+                    }
+
+                    const pixelData = this._data.map(point => {
+                        const pixel = projection.fromLatLngToDivPixel(point.location)
+                        return [
+                            Math.round(pixel.x - left),
+                            Math.round(pixel.y - top),
+                            point.weight || 1,
+                        ]
+                    })
+
+                    const max = pixelData.length > 0
+                        ? pixelData.reduce((m, d) => Math.max(m, d[2]), 1)
+                        : 1
+
+                    this._heat.data(pixelData)
+                    this._heat.max(max)
+                    this._heat.radius(parseInt(this._opts.radius, 10) || 30)
+                    this._heat.draw()
+                }
+
+                onRemove() {
+                    if (this._canvas && this._canvas.parentNode) {
+                        this._canvas.parentNode.removeChild(this._canvas)
+                    }
+                    this._canvas = null
+                    this._heat = null
+                }
+
+                setData(data) {
+                    this._data = data || []
+                    if (this._heat) {
+                        this.draw()
+                    }
+                }
+
+                setOptions(opts) {
+                    Object.assign(this._opts, opts)
+                    if (this._heat) {
+                        this.draw()
+                    }
+                }
+            }
+
+            this.heatmap = new HeatmapOverlay({ map: this.map })
 
             this.infoWindow = new google.maps.InfoWindow()
 
