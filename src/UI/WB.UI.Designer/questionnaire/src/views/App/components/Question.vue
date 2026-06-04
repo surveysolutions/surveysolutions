@@ -56,7 +56,7 @@
 
             <div class="form-group">
                 <label for="edit-question-title-highlight" class="wb-label">{{ $t('QuestionnaireEditor.QuestionText')
-                    }}</label><br>
+                }}</label><br>
 
                 <ExpressionEditor id="edit-question-title-highlight" v-model="activeQuestion.title"></ExpressionEditor>
 
@@ -88,7 +88,7 @@
                     <input id="cb-hide-instructions" type="checkbox" class="wb-checkbox"
                         v-model="activeQuestion.hideInstructions" />
                     <label for="cb-hide-instructions"><span></span>{{ $t('QuestionnaireEditor.QuestionHideInstruction')
-                        }}
+                    }}
                         <help link="hideInstructions" />
                     </label>
 
@@ -170,7 +170,7 @@
                     <input id="cb-is-critical" type="checkbox" class="wb-checkbox"
                         v-model="activeQuestion.isCritical" />
                     <label for="cb-is-critical"><span></span>{{ $t('QuestionnaireEditor.QuestionIsCritical')
-                        }} <help link="isCritical"></help></label>
+                    }} <help link="isCritical"></help></label>
 
                 </div>
                 <div class="form-group pull-right" v-if="doesQuestionSupportQuestionScope()">
@@ -260,7 +260,7 @@ import QRBarcodeQuestion from './parts/QRBarcodeQuestion.vue'
 import SingleOptionQuestion from './parts/SingleOptionQuestion.vue'
 import TextListQuestion from './parts/TextListQuestion.vue'
 import TextQuestion from './parts/TextQuestion.vue'
-import { useMagicKeys } from '@vueuse/core';
+import { useKeyShortcut } from '../../../composables/useKeyShortcut';
 import emitter from '../../../services/emitter';
 
 export default {
@@ -341,13 +341,7 @@ export default {
             };
         });
 
-        const { ctrl_s } = useMagicKeys({
-            passive: false,
-            onEventFired(e) {
-                if (e.ctrlKey && e.key === 's' && e.type === 'keydown')
-                    e.preventDefault()
-            },
-        });
+        const ctrl_s = useKeyShortcut(e => e.ctrlKey && e.key === 's');
 
         return {
             questionStore, commentsStore, ctrl_s
