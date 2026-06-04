@@ -40,6 +40,7 @@ using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.Native.Files;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
+using WB.UI.Designer.Code.Authentication;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Code.Vue;
@@ -131,7 +132,8 @@ namespace WB.UI.Designer
             services
                 .AddDefaultIdentity<DesignerIdentityUser>()
                 .AddRoles<DesignerIdentityRole>()
-                .AddEntityFrameworkStores<DesignerDbContext>();
+                .AddEntityFrameworkStores<DesignerDbContext>()
+                .AddSignInManager<DesignerSignInManager>();
 
             services.AddHealthChecks()
                 .AddCheck<DatabaseConnectionCheck>("database");
