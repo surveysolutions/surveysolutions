@@ -544,20 +544,29 @@ export default {
 
                     const pixelData = this._data.map(point => {
                         const pixel = projection.fromLatLngToDivPixel(point.location)
+                        const weight = point.weight ?? 1
                         return [
                             Math.round(pixel.x - left),
                             Math.round(pixel.y - top),
-                            point.weight || 1,
+                            weight,
                         ]
                     })
 
-                    const max = pixelData.length > 0
+                    const computedMax = pixelData.length > 0
                         ? pixelData.reduce((m, d) => Math.max(m, d[2]), 1)
                         : 1
 
+                    const maxIntensity = Number.parseFloat(this._opts.maxIntensity)
+                    const max = Number.isFinite(maxIntensity) && maxIntensity > 0 ? maxIntensity : computedMax
+
+                    const baseRadius = Number.parseInt(this._opts.radius, 10) || 30
+                    const radius = this._opts.dissipating === false
+                        ? Math.max(1, Math.min(200, Math.round(baseRadius * Math.pow(2, (map.getZoom() - 10) / 2))))
+                        : baseRadius
+
                     this._heat.data(pixelData)
                     this._heat.max(max)
-                    this._heat.radius(parseInt(this._opts.radius, 10) || 30)
+                    this._heat.radius(radius)
                     this._heat.draw()
                 }
 
