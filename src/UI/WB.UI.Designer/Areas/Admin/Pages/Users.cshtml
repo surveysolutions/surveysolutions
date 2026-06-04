@@ -177,5 +177,13 @@
         var d = new Date(el.getAttribute('data-utc'));
         el.textContent = d.toLocaleString();
     });
+
+    (function () {
+        var header = document.getElementById('user-table-header');
+        var content = document.getElementById('table-content-holder');
+        if (header && content) {
+            content.style.top = header.offsetHeight + 'px';
+        }
+    })();
 </script>
 }
