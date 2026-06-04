@@ -79,6 +79,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public AssignmentStatus Status { get; set; }
 
         [JsonProperty("comment")]
+        [System.ComponentModel.DataAnnotations.MaxLength(500)]
         public string Comment { get; set; }
     }
 }
