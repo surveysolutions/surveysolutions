@@ -127,7 +127,7 @@
                             <td class="date">
                                 @if (user.LastLoginAtUtc.HasValue)
                                 {
-                                    <time data-utc="@(user.LastLoginAtUtc.Value.ToString("s"))Z"></time>
+                                    @(user.LastLoginAtUtc.Value.ConvertToLocalAndFormatDate())
                                 }
                             </td>
                             <td>
@@ -172,11 +172,7 @@
 </div>
 
 @section scripts {
-<script>
-    document.querySelectorAll('time[data-utc]').forEach(function (el) {
-        var d = new Date(el.getAttribute('data-utc'));
-        el.textContent = d.toLocaleString();
-    });
+<script>   
 
     (function () {
         var header = document.getElementById('user-table-header');

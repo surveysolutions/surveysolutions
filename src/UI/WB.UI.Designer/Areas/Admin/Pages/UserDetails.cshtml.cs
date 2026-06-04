@@ -16,6 +16,7 @@ using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
+using WB.UI.Designer.Utils;
 
 namespace WB.UI.Designer.Areas.Admin.Pages
 {
@@ -116,7 +117,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 OwnedQuestionnaires = ownedQuestionnaires,
                 SharedQuestionnaires = sharedQuestionnaires,
                 FullName = await this.users.GetFullName(account.Id),
-                LastLoginDate = account.LastLoginAtUtc?.ToUIString()
+                LastLoginDate = account.LastLoginAtUtc == null ? "" : account.LastLoginAtUtc.Value.ConvertToLocalAndFormatDate()
             };
             this.Account = accountViewModel;
 
