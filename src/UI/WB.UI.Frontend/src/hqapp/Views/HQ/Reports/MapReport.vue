@@ -124,7 +124,112 @@ import { isNull, chain, debounce, delay, forEach, find, flatten, toNumber, isEqu
 import routeSync from '~/shared/routeSync'
 import InterviewFilter from '../Interviews/InterviewQuestionsFilters'
 import { cloneWithWritableProperties } from '~/shared/clone'
-import simpleheat from 'simpleheat'
+
+function createSimpleheat(canvas) {
+    let points = []
+    let radius = 30
+    let max = 1
+    let circleCache = null
+
+    const ctx = canvas.getContext('2d')
+
+    const getCircle = () => {
+        if (circleCache && circleCache.radius === radius) {
+            return circleCache.canvas
+        }
+
+        const circle = document.createElement('canvas')
+        const size = radius * 2
+        circle.width = size
+        circle.height = size
+
+        const circleCtx = circle.getContext('2d')
+        const gradient = circleCtx.createRadialGradient(radius, radius, 0, radius, radius, radius)
+        gradient.addColorStop(0, 'rgba(0,0,0,1)')
+        gradient.addColorStop(1, 'rgba(0,0,0,0)')
+        circleCtx.fillStyle = gradient
+        circleCtx.fillRect(0, 0, size, size)
+
+        circleCache = { radius, canvas: circle }
+        return circle
+    }
+
+    const paletteCanvas = document.createElement('canvas')
+    paletteCanvas.width = 1
+    paletteCanvas.height = 256
+
+    const paletteCtx = paletteCanvas.getContext('2d')
+    const paletteGradient = paletteCtx.createLinearGradient(0, 0, 0, 256)
+    paletteGradient.addColorStop(0, '#0000ff')
+    paletteGradient.addColorStop(0.25, '#00ffff')
+    paletteGradient.addColorStop(0.5, '#00ff00')
+    paletteGradient.addColorStop(0.75, '#ffff00')
+    paletteGradient.addColorStop(1, '#ff0000')
+    paletteCtx.fillStyle = paletteGradient
+    paletteCtx.fillRect(0, 0, 1, 256)
+    const palette = paletteCtx.getImageData(0, 0, 1, 256).data
+
+    return {
+        data(value) {
+            points = value || []
+            return this
+        },
+
+        max(value) {
+            max = Number.isFinite(value) && value > 0 ? value : 1
+            return this
+        },
+
+        radius(value) {
+            const parsed = Number.parseFloat(value)
+            radius = Number.isFinite(parsed) && parsed > 0 ? Math.round(parsed) : 30
+            circleCache = null
+            return this
+        },
+
+        resize() {
+            return this
+        },
+
+        draw() {
+            const width = canvas.width
+            const height = canvas.height
+            ctx.clearRect(0, 0, width, height)
+
+            if (points.length === 0 || max <= 0) {
+                return this
+            }
+
+            const circle = getCircle()
+            const offset = circle.width / 2
+            ctx.globalCompositeOperation = 'source-over'
+
+            for (let i = 0; i < points.length; i++) {
+                const point = points[i]
+                const alpha = Math.max(0, Math.min(1, point[2] / max))
+                if (alpha <= 0) continue
+
+                ctx.globalAlpha = alpha
+                ctx.drawImage(circle, point[0] - offset, point[1] - offset)
+            }
+
+            const image = ctx.getImageData(0, 0, width, height)
+            const data = image.data
+            for (let i = 0; i < data.length; i += 4) {
+                const alpha = data[i + 3]
+                if (alpha === 0) continue
+
+                const index = Math.min(alpha * 4, palette.length - 4)
+                data[i] = palette[index]
+                data[i + 1] = palette[index + 1]
+                data[i + 2] = palette[index + 2]
+            }
+
+            ctx.putImageData(image, 0, 0)
+            return this
+        },
+    }
+}
 
 const mapStyles = [
     {
@@ -507,7 +612,7 @@ export default {
                     canvas.style.cssText = 'position:absolute;pointer-events:none;'
                     this._canvas = canvas
                     this.getPanes().overlayLayer.appendChild(canvas)
-                    this._heat = simpleheat(canvas)
+                    this._heat = createSimpleheat(canvas)
                     this._heat.radius(parseInt(this._opts.radius, 10) || 30)
                 }
 
