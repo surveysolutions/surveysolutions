@@ -107,9 +107,15 @@ namespace WB.UI.Headquarters.Controllers.Api
             {
                 input.OnlyWithInterviewsNeeded = true;
                 var allowedStatuses = new[] { AssignmentStatus.Open, AssignmentStatus.Completed };
-                input.Statuses = input.Statuses?.Length > 0
-                    ? input.Statuses.Intersect(allowedStatuses).ToArray()
-                    : allowedStatuses;
+                if (input.Statuses?.Length > 0)
+                {
+                    var filteredStatuses = input.Statuses.Intersect(allowedStatuses).ToArray();
+                    input.Statuses = filteredStatuses.Length > 0 ? filteredStatuses : allowedStatuses;
+                }
+                else
+                {
+                    input.Statuses = allowedStatuses;
+                }
                 input.SearchByFields = AssignmentsInputModel.SearchTypes.Id 
                     | AssignmentsInputModel.SearchTypes.IdentifyingQuestions
                     | AssignmentsInputModel.SearchTypes.QuestionnaireTitle;
