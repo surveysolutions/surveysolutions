@@ -534,4 +534,88 @@
   <data name="Action_Reopened" xml:space="preserve">
       <value>Rihapuar</value>
   </data>
+  <data name="Action_QuantityChanged" xml:space="preserve">
+    <value>Madhësia ndryshoi</value>
+  </data>
+  <data name="Action_TargetAreaChanged" xml:space="preserve">
+    <value>Zona e Synuar ndryshoi</value>
+  </data>
+  <data name="Action_UpgradedFrom" xml:space="preserve">
+    <value>Kaluar në nivel të ri nga detyra {{id}}</value>
+  </data>
+  <data name="CawiModeEnable" xml:space="preserve">
+    <value>Aktivizo modalitetin CAWI</value>
+  </data>
+  <data name="ChangeModeModalTitle" xml:space="preserve">
+    <value>Ndrysho modalitetin e detyrës {{assignmentId}}</value>
+  </data>
+  <data name="ChangeTargetAreaModalTitle" xml:space="preserve">
+    <value>Ndrysho Zonën e Synuar për detyrën {{assignmentId}}</value>
+  </data>
+  <data name="DateFromPast" xml:space="preserve">
+    <value>Data e zgjedhur është në të kaluarën</value>
+  </data>
+  <data name="DetailsGeoTracking" xml:space="preserve">
+    <value>Gjurmim Gjeografik</value>
+  </data>
+  <data name="DetailsTargetAreaa" xml:space="preserve">
+    <value>Zona e Synuar</value>
+  </data>
+  <data name="EnterTargetArea" xml:space="preserve">
+    <value>Vendosni Zonën e Synuar</value>
+  </data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+    <value>Kaluani te shembulli i lidhjes për Intervistën në Ueb</value>
+  </data>
+  <data name="ModeExplanation" xml:space="preserve">
+    <value>Modaliteti CAWI lejon mbledhjen e të dhënave direkt nga të anketuarit</value>
+  </data>
+  <data name="NoComment" xml:space="preserve">
+    <value>(pa koment)</value>
+  </data>
+  <data name="Property" xml:space="preserve">
+    <value>Karakteristika</value>
+  </data>
+  <data name="ResponsibleRequired" xml:space="preserve">
+    <value>Kërkohet personi përgjegjës</value>
+  </data>
+  <data name="StartWebInterview" xml:space="preserve">
+    <value>Nis intervistën në ueb</value>
+  </data>
+  <data name="TargetArea" xml:space="preserve">
+    <value>Redakto Zonën e Synuar</value>
+  </data>
+  <data name="TargetAreaExplanation" xml:space="preserve">
+    <value>Specifikoni emrin e hartës së Zonës së Synuar për detyrën</value>
+  </data>
+  <data name="Tooltip_Table_Email" xml:space="preserve">
+    <value>Email për njoftime</value>
+  </data>
+  <data name="Tooltip_Table_Password" xml:space="preserve">
+    <value>Fjalëkalim për kufizimin e aksesit</value>
+  </data>
+  <data name="Tooltip_Table_ReceivedByTablet" xml:space="preserve">
+    <value>Tregues nëse detyra është shkarkuar në tablet. Klikoni mbi ikonën e renditjes për të renditur sipas kohës së marrjes.</value>
+  </data>
+  <data name="UpgradeError" xml:space="preserve">
+    <value>Ndodhi një gabim. Provoni përsëri më vonë.</value>
+  </data>
+  <data name="UpgradeProgressErrors" xml:space="preserve">
+    <value>Me gabime {{errorCount}}</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Vlera</value>
+  </data>
+  <data name="WebModeEnabledWarning" xml:space="preserve">
+    <value>Detyra nuk mund të mbyllet. Ajo ka modalitetin ueb të aktivizuar, ndërkohë pyetësori ka modalitetin e grumbullimit ueb të çaktivizuar</value>
+  </data>
+  <data name="WebModeNonInterviewer" xml:space="preserve">
+    <value>Të gjitha detyrat për intervistat ueb duhet t'i caktohen intervistuesit</value>
+  </data>
+  <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
+    <value>Po ricaktoni detyrën ueb tek një përdorues që nuk është INTERVISTUES. Nëse e keni dërguar tashmë lidhjen për këtë detyrë, të anketuarit nuk do të mund të përgjigjen derisa detyra të kthehet tek një përdorues me rolin INTERVISTUES.</value>
+  </data>
+  <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
+    <value>Po ricaktoni detyrat ueb tek një përdorues që nuk është INTERVISTUES. Nëse i keni dërguar tashmë lidhjet për këto detyra, të anketuarit nuk do të mund të përgjigjen derisa detyrat të kthehen tek një përdorues me rolin INTERVISTUES.</value>
+  </data>
 </root>
