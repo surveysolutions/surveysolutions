@@ -991,4 +991,82 @@ Va apărea pe dispozitivul Anchetator după următoarea sincronizare </value>
   <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
     <value>Stare: Deschis</value>
   </data>
-  </root>
+    <data name="Dashboard_WebInterviewsLinkText" xml:space="preserve">
+    <value>Interviuri Web ({0})</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspaces" xml:space="preserve">
+    <value>Se actualizează spațiile de lucru</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesFinished" xml:space="preserve">
+    <value>Lista spațiilor de lucru a fost actualizată</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesError" xml:space="preserve">
+    <value>Eroare la obținerea listei de spații de lucru. Vă rugăm contactați administratorul de sistem. </value>
+  </data>
+  <data name="BluetoothPermissionRequired" xml:space="preserve">
+    <value>Este necesară permisiunea Bluetooth pentru sincronizarea offline</value>
+  </data>
+  <data name="NearbyPermissionRequired" xml:space="preserve">
+    <value>Este necesară permisiunea pentru dispozitivele Wi-Fi din apropiere pentru sincronizarea offline</value>
+  </data>
+  <data name="Synchronization_PasswordChangeRequired" xml:space="preserve">
+    <value>Parola dvs. a fost resetată. Trebuie să o schimbați pentru a accesa site-ul.</value>
+  </data>
+  <data name="YouChangeYouPasswordTryToLoginAgainWithNewPassword" xml:space="preserve">
+    <value>Ați schimbat parola curentă. Încercați să vă autentificați din nou cu noua parolă.</value>
+  </data>
+  <data name="MenuItem_Title_Return" xml:space="preserve">
+    <value>Înapoi</value>
+  </data>
+  <data name="MenuItem_Title_Workspaces" xml:space="preserve">
+    <value>Spații de lucru</value>
+  </data>
+  <data name="MenuItem_Title_RefreshWorkspaces" xml:space="preserve">
+    <value>Actualizare spații de lucru</value>
+  </data>
+  <data name="Synchronization_UploadGeoTracking" xml:space="preserve">
+    <value>Încărcarea informațiilor de geolocalizare</value>
+  </data>
+  <data name="Synchronization_RemoveObsoleteGeoTracking" xml:space="preserve">
+    <value>Eliminarea informațiilor de geolocalizare depășite</value>
+  </data>
+  <data name="Dashboard_WebInterviewTabText" xml:space="preserve">
+    <value>Interviuri în modul interviu web. Vor fi eliminate în timpul sincronizării când interviul web este finalizat de respondent</value>
+  </data>
+  <data name="Dashboard_ShowAssignmentMap" xml:space="preserve">
+    <value>Afișați zona țintă</value>
+  </data>
+  <data name="Dashboard_CantOpenCawi" xml:space="preserve">
+    <value>Nu puteți deschide interviul în modul CAWI. Va fi trimis la sediu după sincronizare.</value>
+  </data>
+  <data name="Dashboard_CawiLabel" xml:space="preserve">
+    <value>{0} (CAWI)</value>
+  </data>
+  <data name="DashboardItem_QRCode" xml:space="preserve">
+    <value>Afișați codul QR</value>
+  </data>
+  <data name="Synchronization_WorkspaceAccessDisabledReason" xml:space="preserve">
+    <value>Contul dvs. nu mai este activ în spațiul de lucru. Vă rugăm contactați administratorul de sistem.</value>
+  </data>
+  <data name="Interview_Progress_Format" xml:space="preserve">
+    <value>Progres: {0}/{1}</value>
+  </data>
+  <data name="Error_NoGpsProvider" xml:space="preserve">
+    <value>Nu există un furnizor GPS pe acest dispozitiv</value>
+  </data>
+  <data name="Error_NoTargetAreaShapefile" xml:space="preserve">
+    <value>Nu există limite pentru zona țintă</value>
+  </data>
+  <data name="Dashboard_CreateInterview_TargetArea_Warning" xml:space="preserve">
+    <value>Sarcina vă solicită să creați un interviu direct din harta sarcinilor. Se recomandă utilizarea modului Geo Fencing. Doriți să continuați?</value>
+  </data>
+  <data name="AssigmentMap_CreateInterview_OutTargetArea_Warning" xml:space="preserve">
+    <value>Creați un interviu în afara zonei țintă. Doriți să continuați?</value>
+  </data>
+  <data name="AssigmentMap_CreateInterview_DisabledTargetArea_Warning" xml:space="preserve">
+    <value>Se recomandă activarea geofencing-ului pentru a verifica zona țintă. Doriți să continuați?</value>
+  </data>
+  <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
+    <value>Ați utilizat Geo Tracking sau Geo Fencing la crearea unui interviu. Activați-l din nou dacă doriți să îl utilizați.</value>
+  </data>
+</root>
