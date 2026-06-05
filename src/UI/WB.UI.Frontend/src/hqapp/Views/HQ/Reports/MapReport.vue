@@ -204,16 +204,31 @@ function createSimpleheat(canvas) {
             const offset = circle.width / 2
             ctx.globalCompositeOperation = 'source-over'
 
+            let minX = width, minY = height, maxX = 0, maxY = 0
+
             for (let i = 0; i < points.length; i++) {
                 const point = points[i]
                 const alpha = Math.max(0, Math.min(1, point[2] / max))
                 if (alpha <= 0) continue
 
                 ctx.globalAlpha = alpha
-                ctx.drawImage(circle, point[0] - offset, point[1] - offset)
+                const px = point[0] - offset
+                const py = point[1] - offset
+                ctx.drawImage(circle, px, py)
+
+                minX = Math.min(minX, Math.max(0, Math.floor(px)))
+                minY = Math.min(minY, Math.max(0, Math.floor(py)))
+                maxX = Math.max(maxX, Math.min(width, Math.ceil(px + circle.width)))
+                maxY = Math.max(maxY, Math.min(height, Math.ceil(py + circle.height)))
             }
 
-            const image = ctx.getImageData(0, 0, width, height)
+            if (minX >= maxX || minY >= maxY) {
+                return this
+            }
+
+            const regionW = maxX - minX
+            const regionH = maxY - minY
+            const image = ctx.getImageData(minX, minY, regionW, regionH)
             const data = image.data
             for (let i = 0; i < data.length; i += 4) {
                 const alpha = data[i + 3]
@@ -225,7 +240,7 @@ function createSimpleheat(canvas) {
                 data[i + 2] = palette[index + 2]
             }
 
-            ctx.putImageData(image, 0, 0)
+            ctx.putImageData(image, minX, minY)
             return this
         },
     }
