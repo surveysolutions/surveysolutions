@@ -994,7 +994,7 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
     <value>Schválit</value>
   </data>
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
-    <value>Schválit žádanku</value>
+    <value>Uzavřít žádanku</value>
   </data>
   <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
     <value>Tazatelé pracující offline mohou stále pokračovat ve sběru dat až do synchronizace. Takové rozhovory budou stále přijaty.</value>

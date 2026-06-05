@@ -974,7 +974,7 @@ Va apărea pe dispozitivul Anchetator după următoarea sincronizare </value>
     <value>Aprobați</value>
   </data>
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
-    <value>Aprobați atribuirea</value>
+    <value>Închideți atribuirea</value>
   </data>
   <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
     <value>Intervievatorii care lucrează offline pot continua colectarea datelor până la sincronizare. Aceste interviuri vor fi în continuare acceptate.</value>

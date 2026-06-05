@@ -587,7 +587,7 @@
       <value>هل أنت متأكد من إحصاء جميع الوحدات المؤهلة؟</value>
   </data>
   <data name="CloseAssignmentTitle" xml:space="preserve">
-      <value>اعتماد التعيين</value>
+      <value>إغلاق التعيين</value>
   </data>
   <data name="CloseAssignmentMessage" xml:space="preserve">
       <value>يمكن للمقابلين العاملين دون اتصال بالإنترنت الاستمرار في جمع البيانات حتى المزامنة. ستظل هذه المقابلات مقبولة.</value>
@@ -596,7 +596,7 @@
       <value>إعادة فتح التعيين</value>
   </data>
   <data name="ReopenAssignmentMessage" xml:space="preserve">
-      <value>سيتم إعادة التعيين إلى الحالة مفتوح وسيتمكن المقابلون من إنشاء مقابلات جديدة.</value>
+      <value>سيتم إعادة التعيين إلى الحالة مفتوح وسيتمكن المقابلين من إنشاء مقابلات جديدة.</value>
   </data>
   <data name="Complete" xml:space="preserve">
       <value>إكمال</value>

@@ -895,7 +895,7 @@
     <value>Aprovo</value>
   </data>
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
-    <value>Aprovo detyrën</value>
+    <value>Mbyll detyrën</value>
   </data>
   <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
     <value>Intervistuesit që punojnë jashtë linje mund të vazhdojnë mbledhjen e të dhënave deri në sinkronizim. Intervistat e tilla do të pranohen gjithsesi.</value>

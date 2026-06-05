@@ -532,7 +532,7 @@
       <value>Sunteți sigur că ați enumerat toate unitățile eligibile?</value>
   </data>
   <data name="CloseAssignmentTitle" xml:space="preserve">
-      <value>Aprobați atribuirea</value>
+      <value>Închideți atribuirea</value>
   </data>
   <data name="CloseAssignmentMessage" xml:space="preserve">
       <value>Intervievatorii care lucrează offline pot continua colectarea datelor până la sincronizare. Aceste interviuri vor fi în continuare acceptate.</value>

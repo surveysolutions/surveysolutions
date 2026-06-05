@@ -527,7 +527,7 @@
       <value>Êtes-vous sûr d’avoir recensé toutes les unités éligibles ?</value>
   </data>
   <data name="CloseAssignmentTitle" xml:space="preserve">
-      <value>Approuver l’affectation</value>
+      <value>Clôturer l’affectation</value>
   </data>
   <data name="CloseAssignmentMessage" xml:space="preserve">
       <value>Les enquêteurs travaillant hors ligne peuvent continuer à collecter des données jusqu’à la synchronisation. Ces entretiens seront toujours acceptés.</value>

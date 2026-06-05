@@ -502,7 +502,7 @@
       <value>Jeni i sigurt që keni numëruar të gjitha njësitë e pranueshme?</value>
   </data>
   <data name="CloseAssignmentTitle" xml:space="preserve">
-      <value>Aprovo detyrën</value>
+      <value>Mbyll detyrën</value>
   </data>
   <data name="CloseAssignmentMessage" xml:space="preserve">
       <value>Intervistuesit që punojnë jashtë linje mund të vazhdojnë mbledhjen e të dhënave deri në sinkronizim. Intervistat e tilla do të pranohen gjithsesi.</value>

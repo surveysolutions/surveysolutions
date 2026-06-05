@@ -205,7 +205,7 @@
       <value>დარწმუნებული ხართ, რომ Ⴙამოთვალეთ ყველა კვალიფიციური ერთეული?</value>
   </data>
   <data name="CloseAssignmentTitle" xml:space="preserve">
-      <value>დავალების დამტკიცება</value>
+      <value>დავალების დახურვა</value>
   </data>
   <data name="CloseAssignmentMessage" xml:space="preserve">
       <value>ინტერვიუერები, რომლებიც მუშაობენ ოფლაინ რეჟიმში, შეიძლება გააგრძელონ მონაცემთა შეგროვა სინქრონიზაციამდე. ასეთი ინტერვიუები კვლავ მიღებული იქნება.</value>

@@ -313,7 +313,7 @@
       <value>您确定已列举所有符合条件的单元吗？</value>
   </data>
   <data name="CloseAssignmentTitle" xml:space="preserve">
-      <value>审批任务</value>
+      <value>关闭任务</value>
   </data>
   <data name="CloseAssignmentMessage" xml:space="preserve">
       <value>离线工作的访谈员可以在同步之前继续收集数据。此类访谈仍将被接受。</value>

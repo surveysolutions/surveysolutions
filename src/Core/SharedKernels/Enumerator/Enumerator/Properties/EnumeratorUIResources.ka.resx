@@ -666,7 +666,7 @@
     <value>დამტკიცება</value>
   </data>
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
-    <value>დავალების დამტკიცება</value>
+    <value>დავალების დახურვა</value>
   </data>
   <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
     <value>ინტერვიუერები, რომლებიც მუშაობენ ოფლაინ რეჟიმში, შეიძლება გააგრძელონ მონაცემთა შეგროვება სინქრონიზაციამდე. ასეთი ინტერვიუები კვლავ მიღებული იქნება.</value>

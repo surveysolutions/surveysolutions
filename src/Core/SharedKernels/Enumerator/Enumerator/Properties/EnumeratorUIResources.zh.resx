@@ -867,7 +867,7 @@
     <value>审批</value>
   </data>
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
-    <value>审批任务</value>
+    <value>关闭任务</value>
   </data>
   <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
     <value>离线工作的访谈员可以在同步之前继续收集数据。此类访谈仍将被接受。</value>

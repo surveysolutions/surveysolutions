@@ -998,7 +998,7 @@ Il apparaîtra sur l'appareil de l'enquêteur après la prochaine synchronisatio
     <value>Approuver</value>
   </data>
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
-    <value>Approuver l'affectation</value>
+    <value>Fermer l'affectation</value>
   </data>
   <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
     <value>Les enquêteurs travaillant hors ligne peuvent continuer à collecter des données jusqu'à la synchronisation. Ces entretiens seront toujours acceptés.</value>

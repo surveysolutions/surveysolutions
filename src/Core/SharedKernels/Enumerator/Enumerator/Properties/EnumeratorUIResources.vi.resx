@@ -1058,7 +1058,7 @@ hoặc liên hệ với giám sát viên của bạn
     <value>Phê duyệt</value>
   </data>
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
-    <value>Phê duyệt phân công</value>
+    <value>Đóng phân công</value>
   </data>
   <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
     <value>Những người phỏng vấn làm việc ngoại tuyến vẫn có thể tiếp tục thu thập dữ liệu cho đến khi đồng bộ hóa. Các cuộc phỏng vấn đó vẫn sẽ được chấp nhận.</value>
