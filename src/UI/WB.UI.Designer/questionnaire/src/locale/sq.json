@@ -573,6 +573,7 @@
     "UserNameExists": "Emri i përdoruesit ekziston tashmë. Ju lutemi, vendosni një emër tjetër përdoruesi.",
     "UserNameForEmailExists": "Ekziston tashmë një emër përdoruesi për këtë adresë e-mail-i. Ju lutemi, vendosni një adresë tjetër e-mail-i.",
     "Welcome": "Mirë se vini në Survey Solutions",
+    "LastLoginDate": "Data e hyrjes së fundit",
     "Forum": "Forum",
     "LogoutText": "You have successfully logged out of the application.",
     "LockedOut": "Locked out",
