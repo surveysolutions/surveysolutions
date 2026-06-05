@@ -1621,7 +1621,7 @@
     <value>Interview packages({{count}})</value>
   </data>
   <data name="Admin_InterviewPackages_Subtitle" xml:space="preserve">
-    <value>If you lost interview or get massage that interview was corrupted, &lt;br/&gt; you can find data by that interview here</value>
+    <value>If you lost interview or get message that interview was corrupted, &lt;br/&gt; you can find data by that interview here</value>
   </data>
   <data name="Admin_InterviewPackages_NumberOfPackagesAffected" xml:space="preserve">
     <value>{{count}} packages is going to be changed</value>
