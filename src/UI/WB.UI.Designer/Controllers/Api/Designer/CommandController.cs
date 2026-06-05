@@ -81,6 +81,30 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             IAttachmentService attachmentService,
             IDesignerTranslationService translationsService,
             IReusableCategoriesService reusableCategoriesService,
+            IFileSystemAccessor fileSystemAccessor)
+            : this(
+                commandService,
+                dbContext,
+                logger,
+                commandPreprocessor,
+                lookupTableService,
+                attachmentService,
+                translationsService,
+                reusableCategoriesService,
+                fileSystemAccessor,
+                new MemoryCache(new MemoryCacheOptions()))
+        {
+        }
+
+        public CommandController(
+            ICommandService commandService,
+            DesignerDbContext dbContext,
+            ILogger<CommandController> logger,
+            ICommandInflater commandPreprocessor,
+            ILookupTableService lookupTableService,
+            IAttachmentService attachmentService,
+            IDesignerTranslationService translationsService,
+            IReusableCategoriesService reusableCategoriesService,
             IFileSystemAccessor fileSystemAccessor,
             IMemoryCache memoryCache)
         {
