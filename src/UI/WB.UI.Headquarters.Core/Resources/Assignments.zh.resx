@@ -313,7 +313,7 @@
       <value>您确定已列举所有符合条件的单元吗？</value>
   </data>
   <data name="CloseAssignmentTitle" xml:space="preserve">
-      <value>审批任务</value>
+      <value>关闭任务</value>
   </data>
   <data name="CloseAssignmentMessage" xml:space="preserve">
       <value>离线工作的访谈员可以在同步之前继续收集数据。此类访谈仍将被接受。</value>
@@ -350,5 +350,272 @@
   </data>
   <data name="Downsize" xml:space="preserve">
     <value>缩减</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>操作</value>
+  </data>
+  <data name="Action_Archived" xml:space="preserve">
+    <value>已存档</value>
+  </data>
+  <data name="Action_AudioRecordingChanged" xml:space="preserve">
+    <value>录音设置已更改</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_False" xml:space="preserve">
+    <value>已禁用录音</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_True" xml:space="preserve">
+    <value>已启用录音</value>
+  </data>
+  <data name="Action_Created" xml:space="preserve">
+    <value>已创建</value>
+  </data>
+  <data name="Action_Created_Comment" xml:space="preserve">
+    <value>备注：{{comment}}</value>
+  </data>
+  <data name="Action_Created_Responsible" xml:space="preserve">
+    <value>已分配给 {{responsible}}</value>
+  </data>
+  <data name="Action_Deleted" xml:space="preserve">
+    <value>已删除</value>
+  </data>
+  <data name="Action_ExpectedValueChanged" xml:space="preserve">
+    <value>预期值已更改</value>
+  </data>
+  <data name="Action_ExpectedValueChanged_To" xml:space="preserve">
+    <value>预期值已更改为 {{quantity}}</value>
+  </data>
+  <data name="Action_ExpectedValueChanged_To_Unlimited" xml:space="preserve">
+    <value>预期值已更改为不限</value>
+  </data>
+  <data name="Action_QuantityChanged" xml:space="preserve">
+    <value>预期值已更改</value>
+  </data>
+  <data name="Action_Reassigned" xml:space="preserve">
+    <value>已重新分配</value>
+  </data>
+  <data name="Action_Reassigned_To" xml:space="preserve">
+    <value>已重新分配给 {{newResponsible}}</value>
+  </data>
+  <data name="Action_Reassigned_To_Comment" xml:space="preserve">
+    <value>备注：{{comment}}</value>
+  </data>
+  <data name="Action_ReceivedByTablet" xml:space="preserve">
+    <value>已被平板接收</value>
+  </data>
+  <data name="Action_TargetAreaChanged" xml:space="preserve">
+    <value>目标区域已更改</value>
+  </data>
+  <data name="Action_UnArchived" xml:space="preserve">
+    <value>已取消存档</value>
+  </data>
+  <data name="Action_UpgradedFrom" xml:space="preserve">
+    <value>从任务 {{id}} 升级</value>
+  </data>
+  <data name="Action_WebModeChanged" xml:space="preserve">
+    <value>Web 模式已更改</value>
+  </data>
+  <data name="Action_WebModeChanged_False" xml:space="preserve">
+    <value>已禁用 Web 模式</value>
+  </data>
+  <data name="Action_WebModeChanged_True" xml:space="preserve">
+    <value>已启用 Web 模式</value>
+  </data>
+  <data name="Activated" xml:space="preserve">
+    <value>已激活</value>
+  </data>
+  <data name="Actor" xml:space="preserve">
+    <value>由</value>
+  </data>
+  <data name="AssignmentCloseWebMode" xml:space="preserve">
+    <value>由于已启用 Web 模式，无法关闭任务 {{id}}</value>
+  </data>
+  <data name="AssignmentExpectedInWebMode" xml:space="preserve">
+    <value>Web 模式任务的预期值不能更改。</value>
+  </data>
+  <data name="AssignmentHistory" xml:space="preserve">
+    <value>历史</value>
+  </data>
+  <data name="AssignmentId" xml:space="preserve">
+    <value>任务 ID</value>
+  </data>
+  <data name="AssignmentInfo" xml:space="preserve">
+    <value>任务详细信息</value>
+  </data>
+  <data name="AudioRecordingEnable" xml:space="preserve">
+    <value>启用录音</value>
+  </data>
+  <data name="AudioRecordingExplanation" xml:space="preserve">
+    <value>启用音频审计后，Interviewer 应用将录制访谈音频。请注意，同步数据量会显著增加。</value>
+  </data>
+  <data name="CawiActivated" xml:space="preserve">
+    <value>CAWI 已启用</value>
+  </data>
+  <data name="CawiModeEnable" xml:space="preserve">
+    <value>启用 CAWI 模式</value>
+  </data>
+  <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
+    <value>任务 {{id}} 的录音设置</value>
+  </data>
+  <data name="ChangeModeModalTitle" xml:space="preserve">
+    <value>更改任务 {{assignmentId}} 的模式</value>
+  </data>
+  <data name="ChangeTargetAreaModalTitle" xml:space="preserve">
+    <value>更改任务 {{assignmentId}} 的目标区域</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>备注</value>
+  </data>
+  <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
+    <value>此任务将以 Web 模式使用</value>
+  </data>
+  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+    <value>为此任务选择负责人（总部、主管或访问员）</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>日期</value>
+  </data>
+  <data name="DateFromPast" xml:space="preserve">
+    <value>所选日期早于当前日期</value>
+  </data>
+  <data name="DetailsComments" xml:space="preserve">
+    <value>备注</value>
+  </data>
+  <data name="DetailsGeoTracking" xml:space="preserve">
+    <value>地理跟踪</value>
+  </data>
+  <data name="DetailsTargetAreaa" xml:space="preserve">
+    <value>目标区域</value>
+  </data>
+  <data name="Details_Column" xml:space="preserve">
+    <value>详细信息</value>
+  </data>
+  <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
+    <value>Web 模式下预期值为 1 的任务，其任务密码必须唯一</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EmailExplanation" xml:space="preserve">
+    <value>Email 将用于与任务接收者沟通</value>
+  </data>
+  <data name="EnterComments" xml:space="preserve">
+    <value>在此输入备注</value>
+  </data>
+  <data name="EnterEmail" xml:space="preserve">
+    <value>输入 Email</value>
+  </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>输入密码</value>
+  </data>
+  <data name="EnterTargetArea" xml:space="preserve">
+    <value>输入目标区域</value>
+  </data>
+  <data name="ErrorToCreateAssignment" xml:space="preserve">
+    <value>无法创建任务。</value>
+  </data>
+  <data name="ExpectedForWebMode" xml:space="preserve">
+    <value>Web 模式下预期值为 1 的任务必须提供 Email 或密码</value>
+  </data>
+  <data name="ExpectedInstructions" xml:space="preserve">
+    <value>必须为数字，-1 表示不限；若指定了 Email，则必须为 1</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Email 无效</value>
+  </data>
+  <data name="InvalidExpectedMessage" xml:space="preserve">
+    <value>预期值无效</value>
+  </data>
+  <data name="InvalidExpectedWithEmail" xml:space="preserve">
+    <value>对于提供了 Email 的任务，允许的预期值为 1</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>密码无效</value>
+  </data>
+  <data name="IsAudioRecordingEnabled" xml:space="preserve">
+    <value>录音</value>
+  </data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+    <value>切换到 Web 访谈链接示例</value>
+  </data>
+  <data name="ModeExplanation" xml:space="preserve">
+    <value>CAWI 模式允许直接从受访者收集数据</value>
+  </data>
+  <data name="MultipleAssignmentsClose" xml:space="preserve">
+    <value>将关闭所选的 {{count}} 个任务。预期值将设置为当前已收集的访谈数量。</value>
+  </data>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>新建任务</value>
+  </data>
+  <data name="NoComment" xml:space="preserve">
+    <value>（无备注）</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>密码</value>
+  </data>
+  <data name="PasswordExplanation" xml:space="preserve">
+    <value>密码将用于保护任务</value>
+  </data>
+  <data name="PasswordInstructions" xml:space="preserve">
+    <value>至少输入 6 位数字和大写字母，或输入单个符号"?"以生成密码</value>
+  </data>
+  <data name="Property" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>ver. {{version}}</value>
+  </data>
+  <data name="ResponsibleRequired" xml:space="preserve">
+    <value>必须指定负责人</value>
+  </data>
+  <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
+    <value>所选任务 {{id}} 的预期值将从 {{quantity}} 更改为 {{collected}}（当前已收集的访谈数量）</value>
+  </data>
+  <data name="StartWebInterview" xml:space="preserve">
+    <value>开始 Web 访谈</value>
+  </data>
+  <data name="TargetArea" xml:space="preserve">
+    <value>编辑目标区域</value>
+  </data>
+  <data name="TargetAreaExplanation" xml:space="preserve">
+    <value>为任务指定目标区域地图名称</value>
+  </data>
+  <data name="Tooltip_Table_Email" xml:space="preserve">
+    <value>用于通知的 Email</value>
+  </data>
+  <data name="Tooltip_Table_IsAudioRecordingEnabled" xml:space="preserve">
+    <value>记录访谈过程</value>
+  </data>
+  <data name="Tooltip_Table_Password" xml:space="preserve">
+    <value>用于限制访问的密码</value>
+  </data>
+  <data name="Tooltip_Table_ReceivedByTablet" xml:space="preserve">
+    <value>指示该任务是否已下载到平板。点击排序图标可按接收时间排序。</value>
+  </data>
+  <data name="Tooltip_Table_WebMode" xml:space="preserve">
+    <value>任务模式</value>
+  </data>
+  <data name="UpgradeError" xml:space="preserve">
+    <value>发生错误。请稍后重试。</value>
+  </data>
+  <data name="UpgradeProgressErrors" xml:space="preserve">
+    <value>错误数 {{errorCount}}</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>值</value>
+  </data>
+  <data name="WebMode" xml:space="preserve">
+    <value>模式</value>
+  </data>
+  <data name="WebModeEnabledWarning" xml:space="preserve">
+    <value>无法完成任务。该任务已启用 Web 模式，而问卷已禁用 Web 收集模式</value>
+  </data>
+  <data name="WebModeNonInterviewer" xml:space="preserve">
+    <value>所有 Web 访谈任务都必须分配给访问员</value>
+  </data>
+  <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
+    <value>您正在将 Web 任务重新分配给一个不是 INTERVIEWER 的用户。如果您已经发送了此任务的链接，则在任务重新分配回 INTERVIEWER 角色的用户之前，受访者将无法回应您的调查。</value>
+  </data>
+  <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
+    <value>您正在将 Web 任务重新分配给一个不是 INTERVIEWER 的用户。如果您已经发送了这些任务的链接，则在任务重新分配回 INTERVIEWER 角色的用户之前，受访者将无法回应您的调查。</value>
   </data>
 </root>

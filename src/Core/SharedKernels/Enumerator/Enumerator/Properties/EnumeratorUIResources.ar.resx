@@ -1059,7 +1059,7 @@
     <value>اعتماد</value>
   </data>
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
-    <value>اعتماد التعيين</value>
+    <value>إغلاق التعيين</value>
   </data>
   <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
     <value>يمكن للمقابلين العاملين دون اتصال بالإنترنت الاستمرار في جمع البيانات حتى المزامنة. ستظل هذه المقابلات مقبولة.</value>

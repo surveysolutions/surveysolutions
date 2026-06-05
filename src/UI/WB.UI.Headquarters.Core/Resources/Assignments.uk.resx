@@ -187,7 +187,7 @@
     <value>Активний</value>
   </data>
   <data name="Actor" xml:space="preserve">
-    <value>By</value>
+    <value>Ким</value>
   </data>
   <data name="AllAssignments" xml:space="preserve">
     <value>Всі завдання</value>
@@ -587,5 +587,35 @@
   </data>
   <data name="Action_Reopened" xml:space="preserve">
       <value>Відкрито знову</value>
+  </data>
+  <data name="Action_QuantityChanged" xml:space="preserve">
+    <value>Очікувана кількість змінена</value>
+  </data>
+  <data name="Action_TargetAreaChanged" xml:space="preserve">
+    <value>Цільову зону змінено</value>
+  </data>
+  <data name="ChangeTargetAreaModalTitle" xml:space="preserve">
+    <value>Змінити цільову зону для призначення {{assignmentId}}</value>
+  </data>
+  <data name="DetailsGeoTracking" xml:space="preserve">
+    <value>Геолокація</value>
+  </data>
+  <data name="DetailsTargetAreaa" xml:space="preserve">
+    <value>Цільова зона</value>
+  </data>
+  <data name="EnterTargetArea" xml:space="preserve">
+    <value>Введіть цільову зону</value>
+  </data>
+  <data name="TargetArea" xml:space="preserve">
+    <value>Редагувати цільову зону</value>
+  </data>
+  <data name="TargetAreaExplanation" xml:space="preserve">
+    <value>Вкажіть назву карти цільової зони для призначення</value>
+  </data>
+  <data name="Tooltip_Table_ReceivedByTablet" xml:space="preserve">
+    <value>Індикатор того, чи було завантажено призначення на планшет. Натисніть на значок сортування, щоб відсортувати за часом отримання.</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Значення</value>
   </data>
 </root>

@@ -205,7 +205,7 @@
       <value>დარწმუნებული ხართ, რომ Ⴙამოთვალეთ ყველა კვალიფიციური ერთეული?</value>
   </data>
   <data name="CloseAssignmentTitle" xml:space="preserve">
-      <value>დავალების დამტკიცება</value>
+      <value>დავალების დახურვა</value>
   </data>
   <data name="CloseAssignmentMessage" xml:space="preserve">
       <value>ინტერვიუერები, რომლებიც მუშაობენ ოფლაინ რეჟიმში, შეიძლება გააგრძელონ მონაცემთა შეგროვა სინქრონიზაციამდე. ასეთი ინტერვიუები კვლავ მიღებული იქნება.</value>
@@ -242,5 +242,380 @@
   </data>
   <data name="Downsize" xml:space="preserve">
     <value>შემცირება</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>მოქმედება</value>
+  </data>
+  <data name="Action_Archived" xml:space="preserve">
+    <value>დაარქივებული</value>
+  </data>
+  <data name="Action_AudioRecordingChanged" xml:space="preserve">
+    <value>აუდიოჩანაწერის პარამეტრი შეიცვალა</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_False" xml:space="preserve">
+    <value>აუდიოჩანაწერი გამორთულია</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_True" xml:space="preserve">
+    <value>აუდიოჩანაწერი ჩართულია</value>
+  </data>
+  <data name="Action_Created" xml:space="preserve">
+    <value>შექმნილი</value>
+  </data>
+  <data name="Action_Created_Comment" xml:space="preserve">
+    <value>კომენტარი: {{comment}}</value>
+  </data>
+  <data name="Action_Created_Responsible" xml:space="preserve">
+    <value>{{responsible}}-ს დაენიშნა</value>
+  </data>
+  <data name="Action_Deleted" xml:space="preserve">
+    <value>წაშლილი</value>
+  </data>
+  <data name="Action_ExpectedValueChanged" xml:space="preserve">
+    <value>მოსალოდნელი მნიშვნელობა შეიცვალა</value>
+  </data>
+  <data name="Action_ExpectedValueChanged_To" xml:space="preserve">
+    <value>მოსალოდნელი მნიშვნელობა შეიცვალა: {{quantity}}</value>
+  </data>
+  <data name="Action_ExpectedValueChanged_To_Unlimited" xml:space="preserve">
+    <value>მოსალოდნელი მნიშვნელობა შეიცვალა: შეუზღუდავი</value>
+  </data>
+  <data name="Action_QuantityChanged" xml:space="preserve">
+    <value>მოსალოდნელი მნიშვნელობა შეიცვალა</value>
+  </data>
+  <data name="Action_Reassigned" xml:space="preserve">
+    <value>ხელახლა გადანაწილდა</value>
+  </data>
+  <data name="Action_Reassigned_To" xml:space="preserve">
+    <value>{{newResponsible}}-ს გადაეცა</value>
+  </data>
+  <data name="Action_Reassigned_To_Comment" xml:space="preserve">
+    <value>კომენტარი: {{comment}}</value>
+  </data>
+  <data name="Action_ReceivedByTablet" xml:space="preserve">
+    <value>ტაბლეტზე მიღებულია</value>
+  </data>
+  <data name="Action_TargetAreaChanged" xml:space="preserve">
+    <value>სამიზნე არეალი შეიცვალა</value>
+  </data>
+  <data name="Action_UnArchived" xml:space="preserve">
+    <value>ამოღებულია არქივიდან</value>
+  </data>
+  <data name="Action_UpgradedFrom" xml:space="preserve">
+    <value>განახლებულია დავალებიდან {{id}}</value>
+  </data>
+  <data name="Action_WebModeChanged" xml:space="preserve">
+    <value>ვებ რეჟიმი შეიცვალა</value>
+  </data>
+  <data name="Action_WebModeChanged_False" xml:space="preserve">
+    <value>ვებ რეჟიმი გამორთულია</value>
+  </data>
+  <data name="Action_WebModeChanged_True" xml:space="preserve">
+    <value>ვებ რეჟიმი ჩართულია</value>
+  </data>
+  <data name="Activated" xml:space="preserve">
+    <value>აქტივირებული</value>
+  </data>
+  <data name="Actor" xml:space="preserve">
+    <value>მიერ</value>
+  </data>
+  <data name="AssignTo" xml:space="preserve">
+    <value>მიანიჭეთ</value>
+  </data>
+  <data name="AssignmentCloseWebMode" xml:space="preserve">
+    <value>დავალება {{id}} ვერ დაიხურება, რადგან მასზე ჩართულია ვებ რეჟიმი</value>
+  </data>
+  <data name="AssignmentExpectedInWebMode" xml:space="preserve">
+    <value>ვებ რეჟიმის დავალებისთვის მოსალოდნელი მნიშვნელობის შეცვლა შეუძლებელია.</value>
+  </data>
+  <data name="AssignmentHistory" xml:space="preserve">
+    <value>ისტორია</value>
+  </data>
+  <data name="AssignmentId" xml:space="preserve">
+    <value>დავალების ID</value>
+  </data>
+  <data name="AssignmentInfo" xml:space="preserve">
+    <value>დავალების დეტალური ინფორმაცია</value>
+  </data>
+  <data name="AssignmentsSelected_other" xml:space="preserve">
+    <value>არჩეულია {{count}} დავალება</value>
+  </data>
+  <data name="AudioRecordingEnable" xml:space="preserve">
+    <value>აუდიოჩანაწერის ჩართვა</value>
+  </data>
+  <data name="AudioRecordingExplanation" xml:space="preserve">
+    <value>როდესაც აუდიოაუდიტი ჩართულია, Interviewer აპლიკაცია ჩაიწერს ინტერვიუს ხმას. გაითვალისწინეთ, რომ სინქრონიზაციის მონაცემების მოცულობა მნიშვნელოვნად გაიზრდება.</value>
+  </data>
+  <data name="CawiActivated" xml:space="preserve">
+    <value>CAWI აქტივირებულია</value>
+  </data>
+  <data name="CawiModeEnable" xml:space="preserve">
+    <value>ჩართეთ CAWI რეჟიმი</value>
+  </data>
+  <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
+    <value>დავალება {{id}}-ის აუდიოჩანაწერის პარამეტრები</value>
+  </data>
+  <data name="ChangeModeModalTitle" xml:space="preserve">
+    <value>შეცვალეთ რეჟიმი დავალებისთვის {{assignmentId}}</value>
+  </data>
+  <data name="ChangeTargetAreaModalTitle" xml:space="preserve">
+    <value>შეცვალეთ სამიზნე არეალი დავალებისთვის {{assignmentId}}</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>კომენტარი</value>
+  </data>
+  <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
+    <value>ეს დავალება გამოყენებული იქნება ვებ რეჟიმში</value>
+  </data>
+  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+    <value>აირჩიეთ პასუხისმგებელი პირი (Headquarters, Supervisor ან Interviewer) ამ დავალებისთვის</value>
+  </data>
+  <data name="CreatingNewAssignment" xml:space="preserve">
+    <value>შექმენით ახალი დავალება კითხვარისთვის {{questionnaire}}</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>თარიღი</value>
+  </data>
+  <data name="DateFromPast" xml:space="preserve">
+    <value>არჩეული თარიღი წარსულშია</value>
+  </data>
+  <data name="DetailsComments" xml:space="preserve">
+    <value>კომენტარი</value>
+  </data>
+  <data name="DetailsGeoTracking" xml:space="preserve">
+    <value>გეოტრეკინგი</value>
+  </data>
+  <data name="DetailsTargetAreaa" xml:space="preserve">
+    <value>სამიზნე არეალი</value>
+  </data>
+  <data name="Details_Column" xml:space="preserve">
+    <value>დეტალები</value>
+  </data>
+  <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
+    <value>ვებ რეჟიმში, როცა მოსალოდნელი მნიშვნელობა 1-ია, დავალების პაროლი უნიკალური უნდა იყოს</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EmailExplanation" xml:space="preserve">
+    <value>Email გამოყენებული იქნება დავალების მიმღებთან კომუნიკაციისთვის</value>
+  </data>
+  <data name="EnterComments" xml:space="preserve">
+    <value>შეიყვანეთ თქვენი კომენტარი აქ</value>
+  </data>
+  <data name="EnterEmail" xml:space="preserve">
+    <value>შეიყვანეთ Email</value>
+  </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>შეიყვანეთ პაროლი</value>
+  </data>
+  <data name="EnterTargetArea" xml:space="preserve">
+    <value>შეიყვანეთ სამიზნე არეალი</value>
+  </data>
+  <data name="ErrorToCreateAssignment" xml:space="preserve">
+    <value>დავალების შექმნა შეუძლებელია.</value>
+  </data>
+  <data name="ExpectedForWebMode" xml:space="preserve">
+    <value>ვებ რეჟიმისთვის, თუ მოსალოდნელი მნიშვნელობა 1-ია, მითითებული უნდა იყოს Email ან პაროლი</value>
+  </data>
+  <data name="ExpectedInstructions" xml:space="preserve">
+    <value>უნდა იყოს რიცხვი, -1 ნიშნავს შეუზღუდავს, ხოლო თუ მითითებულია Email, მნიშვნელობა უნდა იყოს 1</value>
+  </data>
+  <data name="Filter_ShowAll" xml:space="preserve">
+    <value>ყველას ჩვენება</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Email არასწორია</value>
+  </data>
+  <data name="InvalidExpected" xml:space="preserve">
+    <value>მოსალოდნელი მნიშვნელობის ველი უნდა იყოს -1 ან მეტი.</value>
+  </data>
+  <data name="InvalidExpectedMessage" xml:space="preserve">
+    <value>მოსალოდნელი მნიშვნელობა არასწორია</value>
+  </data>
+  <data name="InvalidExpectedWithEmail" xml:space="preserve">
+    <value>იმ დავალებებისთვის, სადაც Email მითითებულია, დასაშვები მოსალოდნელი მნიშვნელობა არის 1</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>პაროლი არასწორია</value>
+  </data>
+  <data name="IsAudioRecordingEnabled" xml:space="preserve">
+    <value>აუდიოჩანაწერი</value>
+  </data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+    <value>Web Interview ბმულის ნიმუშზე გადართვა</value>
+  </data>
+  <data name="ModeExplanation" xml:space="preserve">
+    <value>CAWI რეჟიმი მონაცემების უშუალოდ რესპონდენტებისგან შეგროვების საშუალებას იძლევა</value>
+  </data>
+  <data name="MultipleAssignmentsClose" xml:space="preserve">
+    <value>არჩეული {{count}} დავალება დაიხურება. მოსალოდნელი მნიშვნელობა დაყენდება ამჟამად შეგროვებული ინტერვიუების რაოდენობაზე.</value>
+  </data>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>ახალი დავალება</value>
+  </data>
+  <data name="NoComment" xml:space="preserve">
+    <value>(კომენტარის გარეშე)</value>
+  </data>
+  <data name="NumberOfAssignmentsAffected_other" xml:space="preserve">
+    <value>შეიცვლება {{count}} დავალება</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>პაროლი</value>
+  </data>
+  <data name="PasswordExplanation" xml:space="preserve">
+    <value>პაროლი გამოყენებული იქნება დავალების დასაცავად</value>
+  </data>
+  <data name="PasswordInstructions" xml:space="preserve">
+    <value>მინიმუმ 6 ციფრი და დიდი ასო, ან ერთი სიმბოლო '?' პაროლის გენერირებისთვის</value>
+  </data>
+  <data name="Property" xml:space="preserve">
+    <value>თვისება</value>
+  </data>
+  <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>ver. {{version}}</value>
+  </data>
+  <data name="ReceivedByTablet" xml:space="preserve">
+    <value>ტაბლეტზე მიღებულია</value>
+  </data>
+  <data name="ReceivedByTablet_All" xml:space="preserve">
+    <value>ყველას ჩვენება</value>
+  </data>
+  <data name="ReceivedByTablet_NotReceived" xml:space="preserve">
+    <value>ტაბლეტზე არ არის მიღებული</value>
+  </data>
+  <data name="ReceivedByTablet_Received" xml:space="preserve">
+    <value>ტაბლეტზე მიღებულია</value>
+  </data>
+  <data name="ResponsibleRequired" xml:space="preserve">
+    <value>პასუხისმგებელი სავალდებულოა</value>
+  </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+    <value>აირჩიეთ არსებული კითხვარი, საიდანაც უნდა განახლდეს დავალებები</value>
+  </data>
+  <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
+    <value>აირჩიეთ კითხვარი, საიდანაც უნდა განახლდეს</value>
+  </data>
+  <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
+    <value>არჩეული დავალების {{id}} მოსალოდნელი მნიშვნელობა შეიცვლება {{quantity}}-დან {{collected}}-მდე (ამჟამად შეგროვებული ინტერვიუების რაოდენობა)</value>
+  </data>
+  <data name="StartWebInterview" xml:space="preserve">
+    <value>ვებ ინტერვიუს დაწყება</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>შეჩერება</value>
+  </data>
+  <data name="TargetArea" xml:space="preserve">
+    <value>სამიზნე არეალის რედაქტირება</value>
+  </data>
+  <data name="TargetAreaExplanation" xml:space="preserve">
+    <value>მიუთითეთ სამიზნე არეალის რუკის სახელი დავალებისთვის</value>
+  </data>
+  <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
+    <value>მაჩვენებელი იმისა, აქტიურია დავალება თუ დაარქივებულია.</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>აირჩიეთ კითხვარი მისი დაკავშირებული დავალებების სანახავად. აირჩიეთ "ყველა კითხვარი", რათა ნახოთ ნებისმიერ კითხვართან დაკავშირებული დავალებები.</value>
+  </data>
+  <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
+    <value>აირჩიეთ კითხვარის ვერსია მის დაკავშირებულ დავალებების სანახავად. აირჩიეთ "ყველა ვერსია", რათა ნახოთ არჩეული კითხვარის ნებისმიერი ვერსიის დავალებები.</value>
+  </data>
+  <data name="Tooltip_Filter_Received" xml:space="preserve">
+    <value>მაჩვენებელი იმისა, მიღებულია თუ არა დავალება</value>
+  </data>
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+    <value>პასუხისმგებელი მომხმარებელი. დააწკაპუნეთ ველზე, რათა აირჩიოთ მომხმარებლის სახელი უშუალოდ, ან აკრიფეთ სიის შემდგომი გაფილტვრისთვის.</value>
+  </data>
+  <data name="Tooltip_Table_Count" xml:space="preserve">
+    <value>ამ დავალებისთვის ამჟამად გაგზავნილი ინტერვიუების რაოდენობა. შესაძლოა შექმნილი იყოს მეტი ინტერვიუ, მაგრამ ჯერ არ იყოს სინქრონიზებული. დაკავშირებული ინტერვიუების სანახავად დააწკაპუნეთ ნებისმიერ უჯრაზე. დათვლის მიხედვით დასალაგებლად დააწკაპუნეთ დალაგების ხატულაზე.</value>
+  </data>
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+    <value>როდის შეიქმნა დავალება თავდაპირველად. დროის მიხედვით დასალაგებლად დააწკაპუნეთ დალაგების ხატულაზე.</value>
+  </data>
+  <data name="Tooltip_Table_Email" xml:space="preserve">
+    <value>შეტყობინებებისთვის გამოყენებული Email</value>
+  </data>
+  <data name="Tooltip_Table_ExpectedValue" xml:space="preserve">
+    <value>ამ დავალებისთვის დასაშვები ინტერვიუების მაქსიმალური რაოდენობა. ამ რიცხვის შესაცვლელად დააწკაპუნეთ ნებისმიერ უჯრაზე. მოსალოდნელი მნიშვნელობის მიხედვით დასალაგებლად დააწკაპუნეთ დალაგების ხატულაზე.</value>
+  </data>
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+    <value>ინფორმაცია, რომელიც განსაზღვრავს თითოეულ დავალებას. ეს არის პასუხები იმ კითხვებზე, რომლებიც Designer-ში მონიშნულია როგორც იდენტიფიცირებადი.</value>
+  </data>
+  <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">
+    <value>ამ დავალების დასასრულებლად საჭირო ინტერვიუების რაოდენობა.</value>
+  </data>
+  <data name="Tooltip_Table_IsAudioRecordingEnabled" xml:space="preserve">
+    <value>ინტერვიუს პროცესის ჩაწერა</value>
+  </data>
+  <data name="Tooltip_Table_Password" xml:space="preserve">
+    <value>წვდომის შესაზღუდი პაროლი</value>
+  </data>
+  <data name="Tooltip_Table_ReceivedByTablet" xml:space="preserve">
+    <value>მაჩვენებელი იმისა, არის თუ არა დავალება ტაბლეტზე ჩამოტვირთული. მიღების დროის მიხედვით დასალაგებლად დააწკაპუნეთ დალაგების ხატულაზე.</value>
+  </data>
+  <data name="Tooltip_Table_Responsible" xml:space="preserve">
+    <value>მომხმარებელი, რომელიც ამჟამად პასუხისმგებელია დავალებაზე. მომხმარებლის სახელის მიხედვით დასალაგებლად დააწკაპუნეთ დალაგების ხატულაზე.</value>
+  </data>
+  <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
+    <value>როდის განახლდა დავალება ბოლოს. დროის მიხედვით დასალაგებლად დააწკაპუნეთ დალაგების ხატულაზე.</value>
+  </data>
+  <data name="Tooltip_Table_WebMode" xml:space="preserve">
+    <value>დავალების რეჟიმი</value>
+  </data>
+  <data name="UpgradeBtn" xml:space="preserve">
+    <value>განახლება</value>
+  </data>
+  <data name="UpgradeCancelled" xml:space="preserve">
+    <value>განახლება შეჩერდა</value>
+  </data>
+  <data name="UpgradeDescription" xml:space="preserve">
+    <value>როდესაც დავალებები განახლდება, ყველა დაუხურავი დავალება განახლდება.</value>
+  </data>
+  <data name="UpgradeDownloadFailed" xml:space="preserve">
+    <value>ჩამოტვირთვის სია</value>
+  </data>
+  <data name="UpgradeError" xml:space="preserve">
+    <value>მოხდა შეცდომა. სცადეთ მოგვიანებით.</value>
+  </data>
+  <data name="UpgradePreparation" xml:space="preserve">
+    <value>სხვა განახლებების დასრულების მოლოდინში</value>
+  </data>
+  <data name="UpgradeProgressDone" xml:space="preserve">
+    <value>დასრულდა</value>
+  </data>
+  <data name="UpgradeProgressDoneCount" xml:space="preserve">
+    <value>წარმატებით განახლდა: {{processed}}</value>
+  </data>
+  <data name="UpgradeProgressDoneTitle" xml:space="preserve">
+    <value>განახლება {{from}}-დან {{to}}-მდე დასრულდა</value>
+  </data>
+  <data name="UpgradeProgressErrorCount" xml:space="preserve">
+    <value>ვერ განახლდა: {{count}}</value>
+  </data>
+  <data name="UpgradeProgressErrors" xml:space="preserve">
+    <value>შეცდომებით {{errorCount}}</value>
+  </data>
+  <data name="UpgradeProgressNumbers" xml:space="preserve">
+    <value>მიმდინარეობს განახლება {{processed}} / {{totalCount}}</value>
+  </data>
+  <data name="UpgradeProgressTitle" xml:space="preserve">
+    <value>მიმდინარეობს დავალებების განახლება {{from}}-დან {{to}}-მდე</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>მნიშვნელობა</value>
+  </data>
+  <data name="WebMode" xml:space="preserve">
+    <value>რეჟიმი</value>
+  </data>
+  <data name="WebModeEnabledWarning" xml:space="preserve">
+    <value>დავალების დასრულება შეუძლებელია. მასზე ჩართულია ვებ რეჟიმი, მაშინ როცა კითხვარზე ვებ შეგროვების რეჟიმი გამორთულია</value>
+  </data>
+  <data name="WebModeNonInterviewer" xml:space="preserve">
+    <value>ვებ ინტერვიუს ყველა დავალება ინტერვიუერს უნდა მიენიჭოს</value>
+  </data>
+  <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
+    <value>თქვენ ვებ დავალებას თავიდან ანიჭებთ მომხმარებელს, რომელიც არ არის INTERVIEWER. თუ ამ დავალების ბმული უკვე გაგზავნილი გაქვთ, რესპონდენტები ვერ შეძლებენ თქვენს გამოკითხვაზე პასუხს მანამდე, სანამ დავალება კვლავ არ დაბრუნდება INTERVIEWER როლის მქონე მომხმარებელთან.</value>
+  </data>
+  <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
+    <value>თქვენ ვებ დავალებებს თავიდან ანიჭებთ მომხმარებელს, რომელიც არ არის INTERVIEWER. თუ ამ დავალებების ბმულები უკვე გაგზავნილი გაქვთ, რესპონდენტები ვერ შეძლებენ თქვენს გამოკითხვაზე პასუხს მანამდე, სანამ დავალებები კვლავ არ დაბრუნდება INTERVIEWER როლის მქონე მომხმარებელთან.</value>
   </data>
 </root>

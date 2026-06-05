@@ -461,7 +461,7 @@ Silahkan masukkan password Anda yang diperbarui. Jika hal itu tidak menyelesaika
     <value>Setujui</value>
   </data>
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
-    <value>Setujui penugasan</value>
+    <value>Tutup penugasan</value>
   </data>
   <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
     <value>Pewawancara yang bekerja secara offline masih dapat melanjutkan pengumpulan data hingga sinkronisasi. Wawancara tersebut tetap akan diterima.</value>

@@ -1046,7 +1046,7 @@
     <value>Aprobar</value>
   </data>
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
-    <value>Aprobar asignación</value>
+    <value>Cerrar asignación</value>
   </data>
   <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
     <value>Los entrevistadores que trabajan sin conexión pueden continuar recopilando datos hasta la sincronización. Dichas entrevistas seguirán siendo aceptadas.</value>

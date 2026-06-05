@@ -587,7 +587,7 @@
       <value>Tem certeza de que enumerou todas as unidades elegíveis?</value>
   </data>
   <data name="CloseAssignmentTitle" xml:space="preserve">
-      <value>Aprovar atribuição</value>
+      <value>Fechar atribuição</value>
   </data>
   <data name="CloseAssignmentMessage" xml:space="preserve">
       <value>Os entrevistadores que trabalham offline podem continuar a recolha de dados até à sincronização. Essas entrevistas ainda serão aceites.</value>

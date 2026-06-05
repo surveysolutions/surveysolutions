@@ -590,7 +590,7 @@
       <value>Jste si jisti, že jste sečetli všechny způsobilé jednotky?</value>
   </data>
   <data name="CloseAssignmentTitle" xml:space="preserve">
-      <value>Schválit žádanku</value>
+      <value>Uzavřít žádanku</value>
   </data>
   <data name="CloseAssignmentMessage" xml:space="preserve">
       <value>Tazatelé pracující offline mohou stále pokračovat ve sběru dat až do synchronizace. Takové rozhovory budou stále přijaty.</value>

@@ -612,4 +612,13 @@
   <data name="Action_Reopened" xml:space="preserve">
       <value>Открыто снова</value>
   </data>
+  <data name="AssignmentsSelected_other" xml:space="preserve">
+    <value>{{count}} заданий выбрано</value>
+  </data>
+  <data name="NumberOfAssignmentsAffected_other" xml:space="preserve">
+    <value>{{count}} заданий будет изменено</value>
+  </data>
+  <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
+    <value>Вы переназначаете веб-задания пользователю, который не является ИНТЕРВЬЮЕРОМ. Если вы уже отправили ссылки на эти задания, респонденты не смогут отвечать на ваш опрос, пока задания не будут возвращены пользователю с ролью ИНТЕРВЬЮЕР.</value>
+  </data>
 </root>

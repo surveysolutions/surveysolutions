@@ -457,7 +457,7 @@
     <value>อนุมัติ</value>
   </data>
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
-    <value>อนุมัติงานที่มอบหมาย</value>
+    <value>ปิดงานที่มอบหมาย</value>
   </data>
   <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
     <value>ผู้สัมภาษณ์ที่ทำงานแบบออฟไลน์ยังคงสามารถเก็บข้อมูลได้จนกว่าจะซิงโครไนซ์ การสัมภาษณ์ดังกล่าวยังคงได้รับการยอมรับ</value>
