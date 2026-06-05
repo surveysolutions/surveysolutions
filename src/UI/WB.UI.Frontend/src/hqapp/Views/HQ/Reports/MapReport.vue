@@ -131,7 +131,7 @@ function createSimpleheat(canvas) {
     let max = 1
     let circleCache = null
 
-    const ctx = canvas.getContext('2d')
+    const ctx = canvas.getContext('2d', { willReadFrequently: true })
 
     const getCircle = () => {
         if (circleCache && circleCache.radius === radius) {
@@ -602,6 +602,7 @@ export default {
                     this._data = []
                     this._canvas = null
                     this._heat = null
+                    this._rafId = null
                     if (opts.map) {
                         this.setMap(opts.map)
                     }
@@ -617,6 +618,15 @@ export default {
                 }
 
                 draw() {
+                    if (!this._canvas || !this._heat) return
+                    if (this._rafId) return
+                    this._rafId = requestAnimationFrame(() => {
+                        this._rafId = null
+                        this._renderFrame()
+                    })
+                }
+
+                _renderFrame() {
                     if (!this._canvas || !this._heat) return
 
                     const projection = this.getProjection()
@@ -641,9 +651,15 @@ export default {
                     this._canvas.style.left = left + 'px'
                     this._canvas.style.top = top + 'px'
 
-                    if (this._canvas.width !== width || this._canvas.height !== height) {
-                        this._canvas.width = width
-                        this._canvas.height = height
+                    const dpr = window.devicePixelRatio || 1
+                    const backingWidth = Math.round(width * dpr)
+                    const backingHeight = Math.round(height * dpr)
+
+                    if (this._canvas.width !== backingWidth || this._canvas.height !== backingHeight) {
+                        this._canvas.width = backingWidth
+                        this._canvas.height = backingHeight
+                        this._canvas.style.width = width + 'px'
+                        this._canvas.style.height = height + 'px'
                         this._heat.resize()
                     }
 
@@ -652,8 +668,8 @@ export default {
                         const weight = point.weight ?? 1
 
                         return [
-                            Math.round(pixel.x - left),
-                            Math.round(pixel.y - top),
+                            Math.round((pixel.x - left) * dpr),
+                            Math.round((pixel.y - top) * dpr),
                             weight,
 
                         ]
@@ -682,12 +698,16 @@ export default {
 
                     this._heat.data(pixelData)
                     this._heat.max(max)
-                    this._heat.radius(radius)
+                    this._heat.radius(Math.round(radius * dpr))
 
                     this._heat.draw()
                 }
 
                 onRemove() {
+                    if (this._rafId) {
+                        cancelAnimationFrame(this._rafId)
+                        this._rafId = null
+                    }
                     if (this._canvas && this._canvas.parentNode) {
                         this._canvas.parentNode.removeChild(this._canvas)
                     }
