@@ -202,7 +202,7 @@ function createSimpleheat(canvas) {
 
             const circle = getCircle()
             const offset = circle.width / 2
-            ctx.globalCompositeOperation = 'source-over'
+            ctx.globalCompositeOperation = 'lighter'
 
             let minX = width, minY = height, maxX = 0, maxY = 0
 
