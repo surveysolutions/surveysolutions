@@ -1741,4 +1741,40 @@
   <data name="AssignmentDetails_PageTitle" xml:space="preserve">
       <value>Завдання {0}</value>
   </data>
+  <data name="IncludeEsriTitle" xml:space="preserve">
+    <value>Include mapping functionality</value>
+  </data>
+  <data name="MapDetails_EmptyMapData" xml:space="preserve">
+    <value>Preview data is missing for this map</value>
+  </data>
+  <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
+    <value>Critical verifications</value>
+  </data>
+  <data name="Questionnaire_CriticalVerificationLevel" xml:space="preserve">
+    <value>Action at submission</value>
+  </data>
+  <data name="Questionnaire_ChangeCriticalVerificationLevelTitle" xml:space="preserve">
+    <value>Set action at submission</value>
+  </data>
+  <data name="Questionnaire_SetActionOnSubmissionExplanation" xml:space="preserve">
+    <value>Select what action should be done before the interview is submitted</value>
+  </data>
+  <data name="Questionnaire_SetActionOnSubmissionExplanationIgnore" xml:space="preserve">
+    <value>IGNORE - do not check any critical rules even when they are present.</value>
+  </data>
+  <data name="Questionnaire_SetActionOnSubmissionExplanationWarn" xml:space="preserve">
+    <value>WARN - do check critical rules and warn the user before the interview is submitted.</value>
+  </data>
+  <data name="Questionnaire_SetActionOnSubmissionExplanationBlock" xml:space="preserve">
+    <value>BLOCK - do check critical rules and prohibit submitting the interview when critical issues are present.</value>
+  </data>
+  <data name="ShowKey" xml:space="preserve">
+    <value>Show key</value>
+  </data>
+  <data name="Observer_Memo1" xml:space="preserve">
+    <value>Observers can monitor data collection but cannot make changes. Impersonate another user (supervisor or headquarters) to access interviews, assignments, reports, and other data. Observers cannot create assignments, set answers, comment, approve/reject interviews, export data, or modify server data.</value>
+  </data>
+  <data name="Observer_Memo2" xml:space="preserve">
+    <value>Click an account and select 'View as this user in read-only mode' to start. Use the yellow link at the top to return to your account.</value>
+  </data>
 </root>
