@@ -143,19 +143,14 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return $"\"{id.Revision:N}\"";
 
             // For the "latest" revision, derive the ETag from the highest change-record
-            // sequence. Cache the result briefly so repeated requests (including those
-            // that will return 304) do not each fire a sorted DB query.
-            var cacheKey = QuestionnaireETagCache.GetLatestRevisionCacheKey(id.QuestionnaireId);
-            if (memoryCache.TryGetValue(cacheKey, out int cached))
-                return cached > 0 ? $"\"{id.QuestionnaireId:N}_{cached}\"" : null;
-
+            // sequence. Do not cache this value here: questionnaire changes can be saved
+            // through multiple mutation paths, and correctness requires every one of them
+            // to invalidate the cache entry.
             var latestSeq = await dbContext.QuestionnaireChangeRecords
                 .Where(r => r.QuestionnaireId == id.QuestionnaireId.ToString("N"))
                 .OrderByDescending(r => r.Sequence)
                 .Select(r => r.Sequence)
                 .FirstOrDefaultAsync();
-
-            memoryCache.Set(cacheKey, latestSeq, QuestionnaireETagCache.LatestRevisionTtl);
 
             return latestSeq > 0 ? $"\"{id.QuestionnaireId:N}_{latestSeq}\"" : null;
         }
