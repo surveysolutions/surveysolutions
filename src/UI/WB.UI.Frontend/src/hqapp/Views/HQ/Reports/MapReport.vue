@@ -907,7 +907,7 @@ export default {
         setMapData(data, extendBounds) {
             const toRemove = {}
 
-            this.infoWindow.close(self.map)
+            this.infoWindow.close()
 
             this.totalAnswers = data.totalPoint
             const features = data.featureCollection.features
