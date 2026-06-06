@@ -318,4 +318,7 @@
   <data name="You" xml:space="preserve">
     <value>dumneata</value>
   </data>
+  <data name="IncludeScenarios" xml:space="preserve">
+    <value>Includeți scenariile</value>
+  </data>
 </root>

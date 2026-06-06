@@ -312,4 +312,7 @@
   <data name="You" xml:space="preserve">
     <value>ju</value>
   </data>
+  <data name="IncludeScenarios" xml:space="preserve">
+    <value>Përfshi skenarët</value>
+  </data>
 </root>
