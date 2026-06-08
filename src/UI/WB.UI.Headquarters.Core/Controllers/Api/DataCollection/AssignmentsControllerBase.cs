@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
