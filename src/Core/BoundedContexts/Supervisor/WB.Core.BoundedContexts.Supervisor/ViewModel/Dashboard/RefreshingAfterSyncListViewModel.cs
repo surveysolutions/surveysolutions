@@ -27,7 +27,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public override void ViewAppeared()
         {
             base.ViewAppeared();
-            messengerSubscription = Messenger.Subscribe<DashboardChangedMessage>(async msg => await this.UpdateUiItemsAsync(), MvxReference.Strong);
+            messengerSubscription = Messenger.Subscribe<DashboardChangedMessage>(
+                msg => _ = RefreshAfterDashboardChangedAsync(), 
+                MvxReference.Strong);
             _ = UpdateUiItemsAsync();
         }
 
@@ -47,9 +49,21 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
                 // Then schedule a full list rebuild so items are correctly grouped /
                 // removed after the status change.  Calling UpdateUiItemsAsync() here
                 // (rather than inside GetUpdatedDashboardItem) is safe because this
-                // override does NOT touch UiItems[indexOf] afterwards, eliminating the
+                // override does NOT touch UiItems[indexOf] afterwords, eliminating the
                 // ArgumentOutOfRangeException race that occurred with the old approach.
                 _ = UpdateUiItemsAsync();
+            }
+        }
+
+        private async Task RefreshAfterDashboardChangedAsync()
+        {
+            try
+            {
+                await UpdateUiItemsAsync();
+            }
+            catch (Exception)
+            {
+                // Prevent unhandled exceptions from async fire-and-forget message handling.
             }
         }
     }
