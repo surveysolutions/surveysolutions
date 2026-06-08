@@ -815,7 +815,7 @@ export default {
                     // or green hollow/bagel marker for closed assignments (supervisor/HQ/admin view)
                     let markerSuffix = '-x.png'
                     if (userRole === 'Interviewer' && assignmentStatus === 'Completed') {
-                        markerSuffix = '-completed.svg'
+                        markerSuffix = '-done.svg'
                     } else if (
                         (userRole === 'Supervisor' ||
                             userRole === 'Headquarter' ||
