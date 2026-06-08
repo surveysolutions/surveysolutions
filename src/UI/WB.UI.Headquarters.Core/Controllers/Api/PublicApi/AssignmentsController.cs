@@ -683,9 +683,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (this.authorizedUser.IsSupervisor && assignment.ResponsibleId != this.authorizedUser.Id)
             {
                 var responsible = await this.userManager.FindByIdAsync(assignment.ResponsibleId);
-                if (!responsible.IsInRole(UserRoles.Interviewer))
+                if (responsible == null || !responsible.IsInRole(UserRoles.Interviewer))
                     return Forbid();
-                if (responsible.WorkspaceProfile.SupervisorId != this.authorizedUser.Id)
+                if (responsible.WorkspaceProfile?.SupervisorId != this.authorizedUser.Id)
                     return Forbid();
             }
 
