@@ -55,6 +55,7 @@ jobs:
 
       - name: Scan image with twistcli
         # Exit code 1 means either policy violation or twistcli error — both are treated as failure.
+        # tee writes stdout both to the log and to twistcli_output.txt for the artifact.
         run: |
           ./twistcli images scan \
             --address "${{ secrets.PCC_CONSOLE_URL }}" \
@@ -62,7 +63,8 @@ jobs:
             --password "${{ secrets.PCC_PASS }}" \
             --details \
             --output-file pcc_scan_results.json \
-            "${{ steps.image.outputs.name }}"
+            "${{ steps.image.outputs.name }}" \
+          | tee twistcli_output.txt; exit "${PIPESTATUS[0]}"
 
       - name: Generate human-readable report
         if: ${{ !cancelled() }}
@@ -174,4 +176,5 @@ jobs:
           path: |
             scan_report.md
             pcc_scan_results.json
+            twistcli_output.txt
           retention-days: 30
