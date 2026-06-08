@@ -107,15 +107,24 @@ namespace WB.UI.Headquarters.Controllers.Api
             {
                 input.OnlyWithInterviewsNeeded = true;
                 var allowedStatuses = new[] { AssignmentStatus.Open, AssignmentStatus.Completed };
-                if (input.Statuses?.Length > 0)
-                {
-                    var filteredStatuses = input.Statuses.Intersect(allowedStatuses).ToArray();
-                    input.Statuses = filteredStatuses.Length > 0 ? filteredStatuses : allowedStatuses;
-                }
-                else
-                {
-                    input.Statuses = allowedStatuses;
-                }
+                if (input.Statuses?.Length > 0)
+
+                {
+
+                    var filteredStatuses = input.Statuses.Intersect(allowedStatuses).ToArray();
+
+                    input.Statuses = filteredStatuses.Length > 0 ? filteredStatuses : allowedStatuses;
+
+                }
+
+                else
+
+                {
+
+                    input.Statuses = allowedStatuses;
+
+                }
+
                 input.SearchByFields = AssignmentsInputModel.SearchTypes.Id 
                     | AssignmentsInputModel.SearchTypes.IdentifyingQuestions
                     | AssignmentsInputModel.SearchTypes.QuestionnaireTitle;
@@ -183,6 +192,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [ObservingNotAllowed]
         public IActionResult Assign([FromBody] AssignRequest request)
         {
@@ -247,15 +257,15 @@ namespace WB.UI.Headquarters.Controllers.Api
             {
                 if ((password.Length < AssignmentConstants.PasswordLength ||
                      AssignmentConstants.PasswordStrength.Match(password).Length <= 0))
-                    this.BadRequest(new {Message = "Invalid Password. At least 6 numbers and upper case letters or single symbol '?' to generate password"});
+                    return this.BadRequest(new {Message = "Invalid Password. At least 6 numbers and upper case letters or single symbol '?' to generate password"});
             }
 
             //assignment with email must have quantity = 1
             if (!string.IsNullOrEmpty(request.Email) && request.Quantity != 1)
-                this.BadRequest(new {Message = "For assignments with provided email allowed quantity is 1"});
+                return this.BadRequest(new {Message = "For assignments with provided email allowed quantity is 1"});
 
             if ((!string.IsNullOrEmpty(request.Email) || !string.IsNullOrEmpty(password)) && request.WebMode != true)
-                this.BadRequest(new {Message = "For assignments having Email or Password Web Mode should be activated"});
+                return this.BadRequest(new {Message = "For assignments having Email or Password Web Mode should be activated"});
 
             if (quantity == 1 && (request.WebMode == null || request.WebMode == true) &&
                 string.IsNullOrEmpty(request.Email) && !string.IsNullOrEmpty(password))
@@ -278,7 +288,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 var assignment = assignmentFactory.CreateAssignment(authorizedUser.Id,
                 interview.QuestionnaireIdentity,
                 request.ResponsibleId,
-                request.Quantity,
+                quantity,
                 request.Email,
                 password,
                 request.WebMode,
