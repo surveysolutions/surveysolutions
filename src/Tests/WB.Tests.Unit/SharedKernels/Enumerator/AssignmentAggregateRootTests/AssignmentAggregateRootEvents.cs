@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
         [Test]
         public void when_create_assignment()
         {
-            //arrange
+            // arrange
             var assignmentPublicKey = Guid.NewGuid();
             var assignmentId = 7;
             var userId = Guid.NewGuid();
