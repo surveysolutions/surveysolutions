@@ -31,3 +31,4 @@
 *.bz2 binary
 *.swp binary
 *.dll binary
+src/Core/BoundedContexts/Interviewer/WB.Core.BoundedContexts.Interviewer/Views/Dashboard/DashboardItems/InterviewerAssignmentDashboardItemViewModel.cs -text
