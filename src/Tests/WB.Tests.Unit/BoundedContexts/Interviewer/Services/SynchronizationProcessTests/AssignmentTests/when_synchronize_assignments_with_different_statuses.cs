@@ -356,8 +356,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             var synchronizer = Create.Service.AssignmentsSynchronizer(
                 synchronizationService: syncService.Object,
-                assignmentsRepository: assignmentsRepo
-            );
+                assignmentsRepository: assignmentsRepo);
 
             // Act: transport-level error must propagate so the sync fails and the change is retried later
             Func<Task> act = () => synchronizer.UploadLocalStatusChangesAsync(CancellationToken.None);
@@ -367,6 +366,80 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             // Assert: pending flag is still set — the change will be retried on the next sync
             assignmentsRepo.GetById(70).StatusChangedAtUtc.Should().NotBeNull(
                 "transport-level failure must preserve the pending-upload flag for retry");
+        }
+
+        [Test]
+        public async Task transient_http401_during_upload_propagates_and_preserves_pending_flag()
+        {
+            // Arrange: assignment has a pending status change
+            var local = Create.Entity
+                .AssignmentDocument(80, 2, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            local.Status = AssignmentStatus.Completed;
+            local.StatusComment = "Done offline";
+            local.StatusChangedAtUtc = DateTime.UtcNow.AddMinutes(-5);
+
+            var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignmentsRepo.Store(new[] { local });
+
+            // Server returns HTTP 401 mid-sync (transient session expiry; credentials were valid at
+            // the authentication step that preceded this upload step).
+            var restEx = new RestException("Unauthorized", HttpStatusCode.Unauthorized, RestExceptionType.Unexpected);
+            var syncEx = new SynchronizationException(SynchronizationExceptionType.Unauthorized, "Unauthorized", restEx);
+
+            var syncService = new Mock<ISynchronizationService>();
+            syncService.Setup(s => s.ChangeAssignmentStatusAsync(80, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(syncEx);
+
+            var synchronizer = Create.Service.AssignmentsSynchronizer(
+                synchronizationService: syncService.Object,
+                assignmentsRepository: assignmentsRepo);
+
+            // Act: transient 401 must propagate so the sync fails and retries next time
+            Func<Task> act = () => synchronizer.UploadLocalStatusChangesAsync(CancellationToken.None);
+            await act.Should().ThrowAsync<SynchronizationException>(
+                "a transient HTTP 401 during upload must not silently discard the pending change");
+
+            // Assert: pending flag still set — will be retried on next sync
+            assignmentsRepo.GetById(80).StatusChangedAtUtc.Should().NotBeNull(
+                "HTTP 401 is transient; the pending-upload flag must be preserved for retry");
+        }
+
+        [Test]
+        public async Task permanent_http403_during_upload_clears_pending_flag_and_does_not_throw()
+        {
+            // Arrange: assignment has a pending status change
+            var local = Create.Entity
+                .AssignmentDocument(90, 3, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            local.Status = AssignmentStatus.Completed;
+            local.StatusComment = "Done offline";
+            local.StatusChangedAtUtc = DateTime.UtcNow.AddMinutes(-5);
+
+            var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignmentsRepo.Store(new[] { local });
+
+            // Server returns HTTP 403 Forbidden: this interviewer's role does not permit this
+            // status transition (permanent policy decision, not a session issue).
+            var restEx = new RestException("Forbidden", HttpStatusCode.Forbidden, RestExceptionType.Unexpected);
+            var syncEx = new SynchronizationException(SynchronizationExceptionType.Unauthorized, "Unauthorized", restEx);
+
+            var syncService = new Mock<ISynchronizationService>();
+            syncService.Setup(s => s.ChangeAssignmentStatusAsync(90, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(syncEx);
+
+            var synchronizer = Create.Service.AssignmentsSynchronizer(
+                synchronizationService: syncService.Object,
+                assignmentsRepository: assignmentsRepo);
+
+            // Act: permanent 403 must NOT propagate — sync continues, server state wins on download
+            Func<Task> act = () => synchronizer.UploadLocalStatusChangesAsync(CancellationToken.None);
+            await act.Should().NotThrowAsync(
+                "a permanent HTTP 403 rejection must not abort the sync; server state will be applied on download");
+
+            // Assert: pending flag cleared — no endless re-upload
+            assignmentsRepo.GetById(90).StatusChangedAtUtc.Should().BeNull(
+                "HTTP 403 is a permanent business rejection; pending flag must be cleared");
         }
     }
 }

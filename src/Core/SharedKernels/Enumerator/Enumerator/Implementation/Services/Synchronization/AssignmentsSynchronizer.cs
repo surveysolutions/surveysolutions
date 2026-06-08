@@ -126,24 +126,36 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     this.assignmentsRepository.Store(local);
                 }
                 catch (SynchronizationException ex) when (
-                    ex.Type == SynchronizationExceptionType.InvalidUrl ||     // HTTP 400 (invalid transition), 404 (not found), or redirect
-                    ex.Type == SynchronizationExceptionType.Unauthorized)     // HTTP 403 (setting disabled or role mismatch)
+                    ex.Type == SynchronizationExceptionType.InvalidUrl ||  // HTTP 400/404/302/405 (server rejected transition) or transport URI error
+                    ex.Type == SynchronizationExceptionType.Unauthorized)  // HTTP 401 (transient session) or HTTP 403 (permanent role denial)
                 {
-                    // Guard: if this is a transport-level URL configuration problem (the server address
-                    // itself is wrong), the inner RestException carries RestExceptionType.InvalidUrl.
-                    // In that case we must NOT clear the pending flag — the upload should be retried
-                    // on the next sync. Re-throw so the sync fails visibly.
+                    // Guard 1: transport-level URL misconfiguration — inner RestException.Type is
+                    // RestExceptionType.InvalidUrl (not an HTTP response at all). The device cannot
+                    // reach the server; do not discard the pending change. Re-throw so the sync
+                    // fails visibly and the upload is retried on the next sync.
                     if (ex.Type == SynchronizationExceptionType.InvalidUrl
                         && ex.InnerException is RestException { Type: RestExceptionType.InvalidUrl })
                     {
                         throw;
                     }
 
-                    // Server rejected the status change because of a conflict (e.g. the assignment was
-                    // already approved by the supervisor/HQ) or because the operation is not permitted
-                    // (HTTP 400/404/403). Clear the pending flag so the assignment is not re-uploaded
-                    // endlessly. The download phase will apply the server's authoritative state (or
-                    // remove the assignment if the server no longer sends it in the filtered list).
+                    // Guard 2: HTTP 401 Unauthorized — device already authenticated before this upload
+                    // step ran, so a 401 here is a transient server-side auth failure (session expiry,
+                    // load-balancer quirk). Preserve the pending flag and re-throw so the sync fails
+                    // and the upload is retried on the next sync.
+                    if (ex.Type == SynchronizationExceptionType.Unauthorized
+                        && ex.InnerException is RestException { StatusCode: System.Net.HttpStatusCode.Unauthorized })
+                    {
+                        throw;
+                    }
+
+                    // Remaining cases are permanent business rejections:
+                    //   - HTTP 400/404/302/405 → server refused the status transition (conflict,
+                    //     invalid transition, assignment no longer exists for this interviewer).
+                    //   - HTTP 403 → operation not permitted for this role/policy.
+                    // Clear the pending flag so the assignment is not re-uploaded endlessly.
+                    // The download phase will apply the server's authoritative state (or remove
+                    // the assignment if the server no longer returns it in the list).
                     this.logger.Warn($"Status change upload skipped for assignment {local.Id} ({local.Status}): {ex.Message}. Server state will be applied on download.");
                     local.StatusChangedAtUtc = null;
                     this.assignmentsRepository.Store(local);
