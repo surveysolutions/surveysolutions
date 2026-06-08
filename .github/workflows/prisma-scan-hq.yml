@@ -64,10 +64,114 @@ jobs:
             --output-file pcc_scan_results.json \
             "${{ steps.image.outputs.name }}"
 
+      - name: Generate human-readable report
+        if: ${{ !cancelled() }}
+        run: |
+          IMAGE="${{ steps.image.outputs.name }}"
+          SCAN_TIME=$(jq -r '.results[0].scanTime // "unknown"' pcc_scan_results.json)
+          CONSOLE_URL=$(jq -r '.consoleURL // ""' pcc_scan_results.json)
+
+          VULN_PASS=$(jq -r '.results[0].vulnerabilitiesScanPassed' pcc_scan_results.json)
+          COMP_PASS=$(jq -r '.results[0].complianceScanPassed' pcc_scan_results.json)
+
+          VCRIT=$(jq -r '.results[0].vulnerabilityDistribution.critical // 0' pcc_scan_results.json)
+          VHIGH=$(jq -r '.results[0].vulnerabilityDistribution.high    // 0' pcc_scan_results.json)
+          VMED=$(jq -r  '.results[0].vulnerabilityDistribution.medium  // 0' pcc_scan_results.json)
+          VLOW=$(jq -r  '.results[0].vulnerabilityDistribution.low     // 0' pcc_scan_results.json)
+          VTOT=$(jq -r  '.results[0].vulnerabilityDistribution.total   // 0' pcc_scan_results.json)
+
+          CCRIT=$(jq -r '.results[0].complianceDistribution.critical // 0' pcc_scan_results.json)
+          CHIGH=$(jq -r '.results[0].complianceDistribution.high    // 0' pcc_scan_results.json)
+          CMED=$(jq -r  '.results[0].complianceDistribution.medium  // 0' pcc_scan_results.json)
+          CLOW=$(jq -r  '.results[0].complianceDistribution.low     // 0' pcc_scan_results.json)
+          CTOT=$(jq -r  '.results[0].complianceDistribution.total   // 0' pcc_scan_results.json)
+
+          {
+            echo "# Prisma Cloud Scan Report"
+            echo ""
+            echo "| Field        | Value |"
+            echo "|---|---|"
+            echo "| **Image**    | \`${IMAGE}\` |"
+            echo "| **Branch**   | \`${{ github.ref_name }}\` |"
+            echo "| **Scan time**| ${SCAN_TIME} |"
+            echo "| **Run**      | [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |"
+            if [ -n "$CONSOLE_URL" ] && [ "$CONSOLE_URL" != "null" ]; then
+              echo "| **Console**  | [View in Prisma Cloud](${CONSOLE_URL}) |"
+            fi
+            echo ""
+
+            if [ "$VULN_PASS" = "true" ]; then
+              echo "## Vulnerabilities — PASSED ✅"
+            else
+              echo "## Vulnerabilities — FAILED ❌"
+            fi
+            echo ""
+            echo "| Severity | Count |"
+            echo "|---|---|"
+            echo "| 🔴 Critical | ${VCRIT} |"
+            echo "| 🟠 High     | ${VHIGH} |"
+            echo "| 🟡 Medium   | ${VMED}  |"
+            echo "| 🔵 Low      | ${VLOW}  |"
+            echo "| **Total**   | **${VTOT}** |"
+            echo ""
+
+            if [ "$COMP_PASS" = "true" ]; then
+              echo "## Compliance — PASSED ✅"
+            else
+              echo "## Compliance — FAILED ❌"
+            fi
+            echo ""
+            echo "| Severity | Count |"
+            echo "|---|---|"
+            echo "| 🔴 Critical | ${CCRIT} |"
+            echo "| 🟠 High     | ${CHIGH} |"
+            echo "| 🟡 Medium   | ${CMED}  |"
+            echo "| 🔵 Low      | ${CLOW}  |"
+            echo "| **Total**   | **${CTOT}** |"
+            echo ""
+
+            VULN_COUNT=$(jq '.results[0].vulnerabilities | length' pcc_scan_results.json)
+            if [ "$VULN_COUNT" -gt 0 ]; then
+              echo "## Vulnerability Details"
+              echo ""
+              echo "| CVE | Severity | Package | Version | Status | Fix available |"
+              echo "|---|---|---|---|---|---|"
+              jq -r '
+                .results[0].vulnerabilities[]
+                | [.id, .severity, .packageName, .packageVersion, .status,
+                   (if .fixedDate != null and .fixedDate != "" then "Yes" else "No" end)]
+                | @tsv
+              ' pcc_scan_results.json | sort -t$'\t' -k2,2r | \
+              while IFS=$'\t' read -r cve sev pkg ver stat fix; do
+                echo "| ${cve} | ${sev} | ${pkg} | ${ver} | ${stat} | ${fix} |"
+              done
+              echo ""
+            fi
+
+            COMP_COUNT=$(jq '.results[0].compliances | length' pcc_scan_results.json)
+            if [ "$COMP_COUNT" -gt 0 ]; then
+              echo "## Compliance Issues"
+              echo ""
+              echo "| ID | Severity | Title |"
+              echo "|---|---|---|"
+              jq -r '
+                .results[0].compliances[]
+                | [(.id | tostring), .severity, .title]
+                | @tsv
+              ' pcc_scan_results.json | sort -t$'\t' -k2,2r | \
+              while IFS=$'\t' read -r id sev title; do
+                echo "| ${id} | ${sev} | ${title} |"
+              done
+              echo ""
+            fi
+          } | tee scan_report.md >> "$GITHUB_STEP_SUMMARY"
+
       - name: Upload scan results
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: prisma-cloud-scan-results
-          path: pcc_scan_results.json
+          path: |
+            scan_report.md
+            pcc_scan_results.json
           retention-days: 30
