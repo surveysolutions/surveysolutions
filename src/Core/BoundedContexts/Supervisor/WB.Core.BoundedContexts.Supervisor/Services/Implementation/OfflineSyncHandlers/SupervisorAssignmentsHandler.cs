@@ -44,34 +44,21 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
             var newStatus = request.StatusChange?.Status ?? AssignmentStatus.Open;
 
-            // Interviewers can only change assignment status via offline sync within the Open <-> Completed lifecycle.
+            // Interviewers can only mark an assignment as Completed (Open -> Completed) via offline sync.
             // Ignore any other status (e.g. Closed) to avoid privilege escalation (HQ upload uses supervisor credentials).
             if (newStatus != AssignmentStatus.Completed && newStatus != AssignmentStatus.Open)
                 return OkResponse.Task;
-
-
-
-            // Accept Open -> Completed.
-            if (assignment.Status == AssignmentStatus.Open && newStatus == AssignmentStatus.Completed)
-            {
-                assignment.Status = AssignmentStatus.Completed;
-                assignment.StatusComment = request.StatusChange?.Comment;
-                assignment.StatusChangedAtUtc = DateTime.UtcNow;
-                this.assignmentDocumentsStorage.Store(assignment);
+            
+            // Accept the interviewer's status change only when the assignment is currently Open.
+            // If the supervisor has already changed the status, ignore the interviewer's update.
+            if (assignment.Status != AssignmentStatus.Open || newStatus == AssignmentStatus.Open)
                 return OkResponse.Task;
-            }
-
-            // Accept Completed -> Open (reopen) only if the assignment is still Completed on the supervisor.
-            // If the supervisor/HQ has already advanced it further, ignore the interviewer's update.
-            if (assignment.Status == AssignmentStatus.Completed && newStatus == AssignmentStatus.Open)
-            {
-                assignment.Status = AssignmentStatus.Open;
-                assignment.StatusComment = request.StatusChange?.Comment;
-                assignment.StatusChangedAtUtc = DateTime.UtcNow;
-                this.assignmentDocumentsStorage.Store(assignment);
-                return OkResponse.Task;
-            }
-
+            
+            assignment.Status = AssignmentStatus.Completed;
+            assignment.StatusComment = request.StatusChange?.Comment;
+            assignment.StatusChangedAtUtc = DateTime.UtcNow;
+            this.assignmentDocumentsStorage.Store(assignment);
+            
             return OkResponse.Task;
         }
 

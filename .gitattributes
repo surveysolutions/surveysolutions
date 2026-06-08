@@ -32,3 +32,4 @@
 *.swp binary
 *.dll binary
 src/Core/BoundedContexts/Interviewer/WB.Core.BoundedContexts.Interviewer/Views/Dashboard/DashboardItems/InterviewerAssignmentDashboardItemViewModel.cs -text
+src/UI/WB.UI.Frontend/src/hqapp/Views/HQ/Assignments/Details.vue -text
