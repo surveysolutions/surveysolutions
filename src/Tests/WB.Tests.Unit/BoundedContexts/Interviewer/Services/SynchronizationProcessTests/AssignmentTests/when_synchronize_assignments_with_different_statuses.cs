@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -324,6 +327,46 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             // Assert: upload was attempted, pending flag cleared, assignment removed (server didn't return it)
             syncService.Verify(s => s.ChangeAssignmentStatusAsync(60, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()), Times.Once);
             assignmentsRepo.GetById(60).Should().BeNull("assignment was removed since server no longer returns it");
+        }
+
+        [Test]
+        public async Task transport_level_invalid_url_during_upload_propagates_and_preserves_pending_flag()
+        {
+            // Arrange: assignment has a pending status change
+            var local = Create.Entity
+                .AssignmentDocument(70, 2, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            local.Status = AssignmentStatus.Completed;
+            local.StatusComment = "Done offline";
+            local.StatusChangedAtUtc = DateTime.UtcNow.AddMinutes(-10);
+
+            var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignmentsRepo.Store(new[] { local });
+
+            // Server cannot be reached because the URL is misconfigured: HTTP client raises InvalidUrl
+            // (not an HTTP 400/404 from the server, but a transport-layer URI error).
+            var transportException = new RestException(
+                "No such host is known", HttpStatusCode.ServiceUnavailable, RestExceptionType.InvalidUrl);
+            var syncException = new SynchronizationException(
+                SynchronizationExceptionType.InvalidUrl, "Invalid endpoint", transportException);
+
+            var syncService = new Mock<ISynchronizationService>();
+            syncService.Setup(s => s.ChangeAssignmentStatusAsync(70, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(syncException);
+
+            var synchronizer = Create.Service.AssignmentsSynchronizer(
+                synchronizationService: syncService.Object,
+                assignmentsRepository: assignmentsRepo
+            );
+
+            // Act: transport-level error must propagate so the sync fails and the change is retried later
+            Func<Task> act = () => synchronizer.UploadLocalStatusChangesAsync(CancellationToken.None);
+            await act.Should().ThrowAsync<SynchronizationException>(
+                "a transport-level URL error must not silently discard the pending change");
+
+            // Assert: pending flag is still set — the change will be retried on the next sync
+            assignmentsRepo.GetById(70).StatusChangedAtUtc.Should().NotBeNull(
+                "transport-level failure must preserve the pending-upload flag for retry");
         }
     }
 }

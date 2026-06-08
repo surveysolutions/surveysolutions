@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -128,11 +129,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     ex.Type == SynchronizationExceptionType.InvalidUrl ||     // HTTP 400 (invalid transition), 404 (not found), or redirect
                     ex.Type == SynchronizationExceptionType.Unauthorized)     // HTTP 403 (setting disabled or role mismatch)
                 {
+                    // Guard: if this is a transport-level URL configuration problem (the server address
+                    // itself is wrong), the inner RestException carries RestExceptionType.InvalidUrl.
+                    // In that case we must NOT clear the pending flag — the upload should be retried
+                    // on the next sync. Re-throw so the sync fails visibly.
+                    if (ex.Type == SynchronizationExceptionType.InvalidUrl
+                        && ex.InnerException is RestException { Type: RestExceptionType.InvalidUrl })
+                    {
+                        throw;
+                    }
+
                     // Server rejected the status change because of a conflict (e.g. the assignment was
-                    // already approved by the supervisor/HQ) or because the operation is not permitted.
-                    // Clear the pending flag so the assignment is not re-uploaded endlessly.
-                    // The download phase will apply the server's authoritative state (or remove the
-                    // assignment if the server no longer sends it in the filtered list).
+                    // already approved by the supervisor/HQ) or because the operation is not permitted
+                    // (HTTP 400/404/403). Clear the pending flag so the assignment is not re-uploaded
+                    // endlessly. The download phase will apply the server's authoritative state (or
+                    // remove the assignment if the server no longer sends it in the filtered list).
                     this.logger.Warn($"Status change upload skipped for assignment {local.Id} ({local.Status}): {ex.Message}. Server state will be applied on download.");
                     local.StatusChangedAtUtc = null;
                     this.assignmentsRepository.Store(local);
