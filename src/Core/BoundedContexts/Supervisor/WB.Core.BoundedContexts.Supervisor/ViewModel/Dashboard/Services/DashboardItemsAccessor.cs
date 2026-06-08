@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -59,11 +60,16 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
                 var dashboardItem = ConvertInterviewToViewModel(interviewView);
                 yield return dashboardItem;
             }
+
+            foreach (var assignment in GetCompletedAssignments())
+            {
+                yield return ConvertAssignmentToViewModel(assignment);
+            }
         }
 
         public int WaitingForSupervisorActionCount()
         {
-            return GetItemsWaitingForSupervisorActionCount();
+            return GetItemsWaitingForSupervisorActionCount() + GetCompletedAssignmentsCount();
         }
 
         public IEnumerable<IDashboardItem> Outbox()
@@ -134,8 +140,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
         {
             var userId = this.principal.CurrentUserIdentity.UserId;
             return x => 
-                x.ResponsibleId != userId 
-                && x.ReceivedByInterviewerAt == null;
+                x.Status == AssignmentStatus.Completed
+                || x.Status == AssignmentStatus.Closed
+                || (x.ResponsibleId != userId 
+                    && x.ReceivedByInterviewerAt == null
+                    && x.Status == AssignmentStatus.Open);
         }
 
         private IEnumerable<AssignmentDocument> GetOutboxAssignments()
@@ -187,7 +196,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         private Expression<Func<AssignmentDocument, bool>> GetSentToInterviewerAssignmentsFilter()
         {
-            return x => x.ReceivedByInterviewerAt != null;
+            return x => x.ReceivedByInterviewerAt != null && x.Status == AssignmentStatus.Open;
         }
 
         private IEnumerable<AssignmentDocument> GetSentToInterviewerAssignments()
@@ -244,7 +253,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
             return x =>
                 x.ResponsibleId == userId
-                && x.ReceivedByInterviewerAt == null;
+                && x.ReceivedByInterviewerAt == null
+                && x.Status == AssignmentStatus.Open;
         }
 
         private IEnumerable<AssignmentDocument> GetAssignmentsToAssign()
@@ -269,5 +279,27 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         public bool IsSentToInterviewer(Guid interviewId) 
             => GetSentToInterviewerInterviews().Any(x => x.InterviewId == interviewId);
+
+        private Expression<Func<AssignmentDocument, bool>> GetCompletedAssignmentsFilter()
+        {
+            // All Completed assignments on the supervisor tablet need supervisor attention (Close or Reopen).
+            // HQ-side sync already ensures only assignments belonging to this supervisor's team are downloaded,
+            // so no additional ResponsibleId filtering is required here.
+            return x => x.Status == AssignmentStatus.Completed;
+        }
+
+        private IEnumerable<AssignmentDocument> GetCompletedAssignments()
+        {
+            return this.principal.IsAuthenticated
+                ? this.assignments.Query(GetCompletedAssignmentsFilter())
+                : Array.Empty<AssignmentDocument>();
+        }
+
+        private int GetCompletedAssignmentsCount()
+        {
+            return this.principal.IsAuthenticated
+                ? this.assignments.Count(GetCompletedAssignmentsFilter())
+                : 0;
+        }
     }
 }
