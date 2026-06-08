@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models
@@ -120,6 +121,12 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         /// </summary>
         [DataMember]
         public bool IsAudioRecordingEnabled { get; set; }
+
+        /// <summary>
+        /// Current status of the assignment
+        /// </summary>
+        [DataMember]
+        public AssignmentStatus Status { get; set; }
     }
 
     public class AssignmentAssignRequest
@@ -170,6 +177,11 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public bool ShowArchive { get; set; }
 
         /// <summary>
+        /// Filter by assignment status. Comma-separated values of Open, Completed, Closed
+        /// </summary>
+        public string Status { get; set; }
+
+        /// <summary>
         /// Possible values are
         /// Id, ResponsibleName, InterviewsCount, Quantity, UpdatedAtUtc, CreatedAtUtc
         /// Followed by ordering direction "ASC" or "DESC"
@@ -185,6 +197,23 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public AssignmentDetails Assignment { get; set; }
         public ImportDataVerificationState VerificationStatus { get; set; }
         public string WebInterviewLink { get; set; }
+    }
+
+    public class ChangeAssignmentStatusRequest
+    {
+        /// <summary>
+        /// New assignment status
+        /// </summary>
+        [DataMember]
+        [Required]
+        public AssignmentStatus Status { get; set; }
+
+        /// <summary>
+        /// Optional comment for the status change
+        /// </summary>
+        [DataMember]
+        [MaxLength(500)]
+        public string Comment { get; set; }
     }
 
     public class CreateAssignmentApiRequest

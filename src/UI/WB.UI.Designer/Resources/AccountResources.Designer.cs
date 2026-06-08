@@ -464,6 +464,15 @@ namespace WB.UI.Designer.Resources {
                 return ResourceManager.GetString("PendingEmailUpdate", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Last login date.
+        /// </summary>
+        public static string LastLoginDate {
+            get {
+                return ResourceManager.GetString("LastLoginDate", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Register.
