@@ -86,6 +86,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             if (dashboardItemWithEvents is AssignmentDashboardItemViewModel assignmentItem)
             {
                 var assignment = assignmentsRepository.GetById(assignmentItem.AssignmentId);
+                if (assignment == null)
+                {
+                    // Assignment may have been removed/changed concurrently.
+                    // Keep current item to avoid null-deref; removal can be handled by update flow.
+                    return dashboardItemWithEvents;
+                }
+                
                 return (IDashboardItemWithEvents)assignmentViewModelFactory.GetDashboardAssignment(assignment);
             }
 
@@ -119,9 +126,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private async void InterviewDashboardItem_OnItemRemoved(object? sender, System.EventArgs e)
         {
-            if (sender == null) return;
-            var dashboardItem = (InterviewDashboardItemViewModel) sender;
+            if (sender is not InterviewDashboardItemViewModel dashboardItem) return;
 
+            // Prevent stale subscriptions / duplicate callback execution
+            dashboardItem.OnItemRemoved -= this.InterviewDashboardItem_OnItemRemoved;
+            
             this.ItemsCount--;
             this.UpdateTitle();
 
