@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -10,15 +8,12 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
@@ -48,12 +43,15 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             var authorizedUserId = this.authorizedUser.Id;
 
             Assignment assignment = this.assignmentsService.GetAssignment(id);
+            if (assignment == null)
+                return NotFound("Assignment not found");
 
-            if (assignment.ResponsibleId != authorizedUserId && assignment.Responsible.ReadonlyProfile.SupervisorId != authorizedUserId)
+            if (assignment.ResponsibleId != authorizedUserId &&
+                assignment.Responsible?.ReadonlyProfile?.SupervisorId != authorizedUserId)
             {
                 return Forbid();
             }
-            
+
             var isNeedUpdateApp = IsNeedUpdateApp(assignment);
             if (isNeedUpdateApp)
                 return StatusCode(StatusCodes.Status426UpgradeRequired);
@@ -104,7 +102,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
             var authorizedUserId = this.authorizedUser.Id;
             if (assignment.ResponsibleId != authorizedUserId &&
-                assignment.Responsible.ReadonlyProfile.SupervisorId != authorizedUserId)
+                assignment.Responsible?.ReadonlyProfile?.SupervisorId != authorizedUserId)
             {
                 return NotFound("Assignment was reassigned");
             }
