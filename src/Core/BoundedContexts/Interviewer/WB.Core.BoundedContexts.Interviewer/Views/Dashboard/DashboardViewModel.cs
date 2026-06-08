@@ -164,6 +164,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void SubscribeOnMessages()
         {
+            // Guard against duplicate subscriptions when ViewAppeared is invoked repeatedly.
+            if (startingLongOperationMessageSubscriptionToken != null || stopLongOperationMessageSubscriptionToken != null)
+                return;
+
             startingLongOperationMessageSubscriptionToken =
                 messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
             stopLongOperationMessageSubscriptionToken =
@@ -174,6 +178,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             startingLongOperationMessageSubscriptionToken?.Dispose();
             stopLongOperationMessageSubscriptionToken?.Dispose();
+
+            startingLongOperationMessageSubscriptionToken = null;
+            stopLongOperationMessageSubscriptionToken = null;
         }
 
         public bool SynchronizationWithHqEnabled
