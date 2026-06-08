@@ -24,10 +24,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IInterviewerSettings interviewerSettings;
-        private LocalSynchronizationViewModel synchronization = null!;
+        private readonly IMvxCommand synchronizationCommand;
+        private LocalSynchronizationViewModel? synchronization;
 
-        public IMvxCommand SynchronizationCommand => new MvxCommand(this.RunSynchronization,
-            () => !this.synchronization.IsSynchronizationInProgress && this.interviewerSettings.AllowSyncWithHq);
+        public IMvxCommand SynchronizationCommand => this.synchronizationCommand;
 
         public CreateNewViewModel(
             IPlainStorage<QuestionnaireView> questionnaireViewRepository,
@@ -41,6 +41,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.assignmentsRepository = assignmentsRepository;
             this.viewModelNavigationService = viewModelNavigationService;
             this.interviewerSettings = interviewerSettings;
+            this.synchronizationCommand = new MvxCommand(this.RunSynchronization, this.CanRunSynchronization);
         }
 
         public async Task LoadAsync(LocalSynchronizationViewModel sync)
@@ -54,10 +55,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.ItemsCount = censusQuestionnairesCount + assignmentsCount;
 
             await this.UpdateUiItemsAsync();
+            this.synchronizationCommand.RaiseCanExecuteChanged();
+        }
+
+        private bool CanRunSynchronization()
+        {
+            return this.synchronization != null
+                && !this.synchronization.IsSynchronizationInProgress
+                && this.interviewerSettings.AllowSyncWithHq;
         }
 
         private void RunSynchronization()
         {
+            if (this.synchronization == null)
+                return;
+
             if (this.viewModelNavigationService.HasPendingOperations)
             {
                 this.viewModelNavigationService.ShowWaitMessage();
@@ -66,6 +78,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             this.synchronization.IsSynchronizationInProgress = true;
             this.synchronization.Synchronize();
+            this.synchronizationCommand.RaiseCanExecuteChanged();
         }
 
         public bool SynchronizationWithHqEnabled => this.interviewerSettings.AllowSyncWithHq;
