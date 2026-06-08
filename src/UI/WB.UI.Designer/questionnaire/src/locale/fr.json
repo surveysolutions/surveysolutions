@@ -337,6 +337,7 @@
     "HotkeysOpenSection": "Ouvrir la section",
     "HotkeysPrint": "Imprimer",
     "HotkeysSearch": "Rechercher des sous-sections et des questions dans la section",
+    "HotkeysTest": "Tester le questionnaire dans WebTester",
     "MultipleDependencies": "Une ou plusieurs questions/sous-sections dépendent de",
     "NoPermissions": "Vous n'avez pas les permissions pour modifier ce questionnaire",
     "NotAnImage": "Le fichier choisi n'est pas une image",
@@ -578,7 +579,8 @@
     "LockedOutText": "Votre compte est verrouillé. Contactez l'administrateur pour déverrouiller votre compte",
     "PasswordEmailSent": "Veuillez vérifier votre e-mail pour réinitialiser votre mot de passe.",
     "EmailChangeShouldBeConfirmed": "Veuillez suivre les instructions envoyées à l'e-mail fourni ({0}) pour confirmer le changement d'e-mail.",
-    "PendingEmailUpdate": "Mise à jour en attente vers {0}"
+    "PendingEmailUpdate": "Mise à jour en attente vers {0}",
+    "LastLoginDate": "Date de dernière connexion"
   },
   "QuestionnaireController": {
     "Action": "Action",

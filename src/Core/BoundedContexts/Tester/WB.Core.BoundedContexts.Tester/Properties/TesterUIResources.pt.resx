@@ -107,6 +107,9 @@
   <data name="Login_Error_EmptyName" xml:space="preserve">
     <value>Por favor, insira um login correto</value>
   </data>
+  <data name="TesterLoginAccountHintText" xml:space="preserve">
+    <value>Faça login neste aplicativo usando as credenciais que você criou em https://designer.mysurvey.solutions. Para registrar uma nova conta, visite o mesmo site.</value>
+  </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Questionários</value>
   </data>

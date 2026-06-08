@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using SQLite;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.SharedKernels.Enumerator.Views
@@ -51,6 +52,22 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public DateTimeOffset? CalendarEvent { get; set; }
         public string CalendarEventTimezoneId { get; set; }
         public string CalendarEventComment { get; set; }
+
+        /// <summary>
+        /// Local assignment status (Open, Completed, Closed).
+        /// </summary>
+        public AssignmentStatus Status { get; set; } = AssignmentStatus.Open;
+        /// <summary>
+        /// Comment associated with the last status change, received from server or set locally.
+        /// </summary>
+        public string StatusComment { get; set; }
+
+        /// <summary>
+        /// UTC timestamp when the assignment status was last changed locally on the tablet.
+        /// A non-null value here means there is a pending upload to the server.
+        /// Cleared (set to null) after successful sync with server.
+        /// </summary>
+        public DateTime? StatusChangedAtUtc { get; set; }
 
 
         public class AssignmentAnswer
