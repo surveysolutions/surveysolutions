@@ -4,52 +4,70 @@ on:
   workflow_dispatch:
 
 env:
-  NODE_VERSION: 22
+  REGISTRY: ghcr.io
 
 jobs:
   prisma-scan:
-    name: Build and Prisma Cloud Scan
+    name: Prisma Cloud Scan
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      security-events: write  # required to upload SARIF results to GitHub code scanning
+      packages: read
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Build Headquarters Docker image (local, no push)
-        shell: pwsh
-        run: |
-          ./.build.ps1 DockerHq `
-            -BuildNumber ${{ github.run_number }} `
-            -dockerRegistry hq-scan `
-            -nodeVersion "${{ env.NODE_VERSION }}" `
-            -noDockerPush
-        env:
-          DOCKER_BUILDKIT: 0
-
-      - name: Get built image reference
+      - name: Resolve image tag from branch name
         id: image
         run: |
-          IMAGE=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep "^hq-scan/headquarters:" | head -1)
-          if [ -z "$IMAGE" ]; then
-            echo "::error::No headquarters image found after build"
-            exit 1
-          fi
+          # Replicate the tag escaping from .build.ps1 Get-DockerTags / EscapedBranchName
+          branch="${{ github.ref_name }}"
+          tag="${branch}"
+          # Remove KP ticket prefixes, underscores, plus signs
+          tag=$(echo "$tag" | sed -E 's/([Kk][Pp]-?[0-9]+)|_|\+//g')
+          # Replace slashes and backslashes with dashes
+          tag=$(echo "$tag" | tr '/\\' '-')
+          # Strip leading non-alphanumeric characters
+          tag=$(echo "$tag" | sed -E 's/^[^[:alnum:]]*//')
+          # Truncate to 128 characters
+          tag="${tag:0:128}"
+          IMAGE="${{ env.REGISTRY }}/${{ github.repository }}/headquarters:${tag}"
           echo "name=${IMAGE}" >> "$GITHUB_OUTPUT"
+          echo "Resolved image: ${IMAGE}"
 
-      - name: Prisma Cloud image scan
-        id: scan
-        uses: PaloAltoNetworks/prisma-cloud-scan@v1.9
+      - name: Log in to the GitHub Container Registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
-          pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
-          pcc_user: ${{ secrets.PCC_USER }}
-          pcc_pass: ${{ secrets.PCC_PASS }}
-          image_name: ${{ steps.image.outputs.name }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload SARIF file
+      - name: Pull Headquarters image
+        run: docker pull "${{ steps.image.outputs.name }}"
+
+      - name: Download twistcli
+        # twistcli is downloaded from the console so its version always matches the server.
+        # Access Key ID is used as the username, Secret Key as the password (Enterprise Edition).
+        run: |
+          curl --silent --show-error --fail \
+            -u "${{ secrets.PCC_USER }}:${{ secrets.PCC_PASS }}" \
+            --output ./twistcli \
+            "${{ secrets.PCC_CONSOLE_URL }}/api/v1/util/twistcli"
+          chmod +x ./twistcli
+
+      - name: Scan image with twistcli
+        # Exit code 1 means either policy violation or twistcli error — both are treated as failure.
+        run: |
+          ./twistcli images scan \
+            --address "${{ secrets.PCC_CONSOLE_URL }}" \
+            --user "${{ secrets.PCC_USER }}" \
+            --password "${{ secrets.PCC_PASS }}" \
+            --details \
+            --output-file pcc_scan_results.json \
+            "${{ steps.image.outputs.name }}"
+
+      - name: Upload scan results
         if: ${{ !cancelled() }}
-        uses: github/codeql-action/upload-sarif@v4
+        uses: actions/upload-artifact@v4
         with:
-          sarif_file: ${{ steps.scan.outputs.sarif_file }}
+          name: prisma-cloud-scan-results
+          path: pcc_scan_results.json
+          retention-days: 30
