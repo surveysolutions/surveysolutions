@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 cancelButton: UIResources.Cancel,
                 commentHint: EnumeratorUIResources.Dashboard_Assignment_Comment);
 
-            if (comment == null) // user cancelled
+            if (comment == null) // user has canceled
                 return;
 
             Assignment.Status = newStatus;
