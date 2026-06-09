@@ -442,4 +442,40 @@ Silahkan masukkan password Anda yang diperbarui. Jika hal itu tidak menyelesaika
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>Respons yang diterima tampaknya tidak berasal dari server Survey Solutions. Ini biasanya disebabkan oleh proxy jaringan, firewall, atau gateway keamanan yang mencegat koneksi. Periksa koneksi jaringan Anda atau hubungi dukungan TI.</value>
   </data>
+  <data name="Dashboard_CompleteAssignment" xml:space="preserve">
+    <value>Selesaikan</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
+    <value>Selesaikan penugasan</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
+    <value>Apakah Anda yakin telah menghitung semua unit yang memenuhi syarat?</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
+    <value>Buka kembali penugasan</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>Penugasan akan dikembalikan ke status Terbuka dan pewawancara akan dapat membuat wawancara baru.</value>
+  </data>
+  <data name="Dashboard_CloseAssignment" xml:space="preserve">
+    <value>Setujui</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
+    <value>Tutup penugasan</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
+    <value>Pewawancara yang bekerja secara offline masih dapat melanjutkan pengumpulan data hingga sinkronisasi. Wawancara tersebut tetap akan diterima.</value>
+  </data>
+  <data name="Dashboard_Assignment_Comment" xml:space="preserve">
+    <value>Komentar (opsional)</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
+    <value>Status: Selesai</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
+    <value>Status: Disetujui</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
+    <value>Status: Terbuka</value>
+  </data>
 </root>
