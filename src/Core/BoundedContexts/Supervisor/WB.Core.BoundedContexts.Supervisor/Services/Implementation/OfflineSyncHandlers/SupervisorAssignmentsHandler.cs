@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
@@ -24,6 +25,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<GetAssignmentRequest, GetAssignmentResponse>(GetAssignment);
             requestHandler.RegisterHandler<GetAssignmentsRequest, GetAssignmentsResponse>(GetAssignments);
             requestHandler.RegisterHandler<LogAssignmentAsHandledRequest, OkResponse>(LogAssignmentAsHandled);
+            requestHandler.RegisterHandler<ChangeAssignmentStatusRequest, OkResponse>(ChangeAssignmentStatus);
         }
 
         private Task<OkResponse> LogAssignmentAsHandled(LogAssignmentAsHandledRequest request)
@@ -34,22 +36,54 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             return OkResponse.Task;
         }
 
+        public Task<OkResponse> ChangeAssignmentStatus(ChangeAssignmentStatusRequest request)
+        {
+            var assignment = this.assignmentDocumentsStorage.GetById(request.Id);
+            if (assignment == null)
+                return OkResponse.Task;
+
+            var newStatus = request.StatusChange?.Status ?? AssignmentStatus.Open;
+
+            // Interviewers can only mark an assignment as Completed (Open -> Completed) via offline sync.
+            // Ignore any other status (e.g. Closed) to avoid privilege escalation (HQ upload uses supervisor credentials).
+            if (newStatus != AssignmentStatus.Completed && newStatus != AssignmentStatus.Open)
+                return OkResponse.Task;
+            
+            // Accept the interviewer's status change only when the assignment is currently Open.
+            // If the supervisor has already changed the status, ignore the interviewer's update.
+            if (assignment.Status != AssignmentStatus.Open || newStatus == AssignmentStatus.Open)
+                return OkResponse.Task;
+            
+            assignment.Status = AssignmentStatus.Completed;
+            assignment.StatusComment = request.StatusChange?.Comment;
+            assignment.StatusChangedAtUtc = DateTime.UtcNow;
+            this.assignmentDocumentsStorage.Store(assignment);
+            
+            return OkResponse.Task;
+        }
+
         public Task<GetAssignmentsResponse> GetAssignments(GetAssignmentsRequest request)
         {
             var assignments = this.assignmentDocumentsStorage.LoadAll(request.UserId);
 
+            // Interviewers only receive Open assignments — Completed and Approved assignments
+            // stay on the supervisor tablet and are uploaded to HQ on the supervisor's next sync.
             var result = new GetAssignmentsResponse
             {
-                Assignments = assignments.Select(assignmentDocument => new AssignmentApiView
-                {
-                    Id = assignmentDocument.Id,
-                    ResponsibleId = assignmentDocument.ResponsibleId,
-                    ResponsibleName = assignmentDocument.ResponsibleName,
-                    Quantity = assignmentDocument.Quantity.HasValue ? assignmentDocument.Quantity - assignmentDocument.CreatedInterviewsCount : assignmentDocument.Quantity,
-                    QuestionnaireId = QuestionnaireIdentity.Parse(assignmentDocument.QuestionnaireId),
-                    IsAudioRecordingEnabled = assignmentDocument.IsAudioRecordingEnabled,
-                    TargetArea = assignmentDocument.TargetArea
-                }).ToList()
+                Assignments = assignments
+                    .Where(a => a.Status == AssignmentStatus.Open)
+                    .Select(assignmentDocument => new AssignmentApiView
+                    {
+                        Id = assignmentDocument.Id,
+                        ResponsibleId = assignmentDocument.ResponsibleId,
+                        ResponsibleName = assignmentDocument.ResponsibleName,
+                        Quantity = assignmentDocument.Quantity.HasValue ? assignmentDocument.Quantity - assignmentDocument.CreatedInterviewsCount : assignmentDocument.Quantity,
+                        QuestionnaireId = QuestionnaireIdentity.Parse(assignmentDocument.QuestionnaireId),
+                        IsAudioRecordingEnabled = assignmentDocument.IsAudioRecordingEnabled,
+                        TargetArea = assignmentDocument.TargetArea,
+                        Status = assignmentDocument.Status,
+                        StatusComment = assignmentDocument.StatusComment
+                    }).ToList()
             };
             return Task.FromResult(result);
         }
