@@ -574,6 +574,7 @@
     "FullName": "全名 ",
     "ManageAccount": "管理账号",
     "ShowPassword": "显示密码",
+    "LastLoginDate": "最后登录日期",
     "Forum": "Forum",
     "LogoutText": "You have successfully logged out of the application.",
     "LockedOut": "Locked out",

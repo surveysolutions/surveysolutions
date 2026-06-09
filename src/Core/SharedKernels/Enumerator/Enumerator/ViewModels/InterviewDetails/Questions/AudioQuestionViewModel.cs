@@ -290,7 +290,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.audioService.OnPlaybackCompleted -= OnPlaybackCompleted;
             this.liteEventRegistry.Unsubscribe(this);
-            this.audioService?.Dispose();
             this.QuestionState.Dispose();
             this.InstructionViewModel.Dispose();
         }

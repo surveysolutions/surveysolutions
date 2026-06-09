@@ -381,4 +381,16 @@
   <data name="Yes" xml:space="preserve">
     <value>ใช่</value>
   </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>เปิด</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>เสร็จสิ้น</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>ได้รับอนุมัติ</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>สถานะงานที่มอบหมาย</value>
+  </data>
 </root>

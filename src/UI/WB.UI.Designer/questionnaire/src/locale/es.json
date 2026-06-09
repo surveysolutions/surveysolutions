@@ -580,7 +580,8 @@
     "PasswordEmailSent": "Por favor revise su correo electrónico para restablecer su contraseña.",
     "ShowPassword": "Mostrar contraseña",
     "EmailChangeShouldBeConfirmed": "Por favor, siga las instrucciones enviadas al correo electrónico proporcionado ({0}) para confirmar el cambio de correo electrónico.",
-    "PendingEmailUpdate": "Actualización pendiente a {0}"
+    "PendingEmailUpdate": "Actualización pendiente a {0}",
+    "LastLoginDate": "Fecha del último inicio de sesión"
   },
   "QuestionnaireController": {
     "Action": "Action",

@@ -997,4 +997,16 @@ críticos</value>
     <value>Preguntas
 sin respuesta</value>
   </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>Abierto</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>Finalizado</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Aprobado</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>Estado de la asignación</value>
+  </data>
 </root>

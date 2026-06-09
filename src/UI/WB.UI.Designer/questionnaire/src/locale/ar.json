@@ -580,7 +580,8 @@
     "LockedOutText": "حسابك مغلق. اتصل بالمسؤول لفتح حسابك",
     "PasswordEmailSent": "يرجى التحقق من بريدك الإلكتروني لإعادة تعيين كلمة المرور الخاصة بك.",
     "EmailChangeShouldBeConfirmed": "يرجى اتباع التعليمات المرسلة إلى البريد الإلكتروني المقدم ({0}) لتأكيد تغيير البريد الإلكتروني.",
-    "PendingEmailUpdate": "تحديث معلق إلى {0}"
+    "PendingEmailUpdate": "تحديث معلق إلى {0}",
+    "LastLoginDate": "تاريخ آخر تسجيل دخول"
   },
   "QuestionnaireController": {
     "Action": "إجراء",

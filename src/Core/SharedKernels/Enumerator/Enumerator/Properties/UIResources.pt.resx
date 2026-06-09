@@ -1001,4 +1001,16 @@ sem resposta</value>
   <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
     <value>Interrompido</value>
   </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>Aberto</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>Concluído</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Aprovado</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>Status da atribuição</value>
+  </data>
 </root>
