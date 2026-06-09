@@ -6,5 +6,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
     public interface ISupervisorPrincipal : IPrincipal
     {
         //new ISupervisorUserIdentity CurrentUserIdentity { get; }
+
+        void SaveSupervisor(SupervisorIdentity supervisor);
     }
 }

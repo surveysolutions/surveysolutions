@@ -36,5 +36,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 
         protected override IUserIdentity GetUserByName(string userName)
                 => this.usersStorage.Where(user => user.Name.ToLower() == userName).FirstOrDefault();
+
+        public void SaveSupervisor(SupervisorIdentity supervisor)
+        {
+            this.usersStorage.Store(supervisor);
+        }
     }
 }
