@@ -198,10 +198,13 @@ jobs:
             | "<tr class=\"sev-\(.severity)\">"
               + "<td><a href=\"https://nvd.nist.gov/vuln/detail/\(.id)\" target=\"_blank\">\(.id)</a></td>"
               + "<td><span class=\"sev \(.severity)\">\(.severity)</span></td>"
+              + "<td>\(.cvss // "—")</td>"
               + "<td>\(.packageName)</td>"
               + "<td>\(.packageVersion)</td>"
               + "<td>\(.status // "—")</td>"
               + "<td>\(if .fixedDate != null and .fixedDate != "" then "✔ Yes" else "—" end)</td>"
+              + "<td>\(.publishedDate // "—" | if . != "—" then .[0:10] else . end)</td>"
+              + "<td>\(.discoveredDate // "—" | if . != "—" then .[0:10] else . end)</td>"
               + "<td class=\"desc\">\(.description // "" | .[0:120])…</td>"
               + "</tr>"
           ' pcc_scan_results.json 2>/dev/null || echo "")
@@ -281,7 +284,7 @@ jobs:
           </div>
           $(if [ -n "$VULN_ROWS" ]; then cat <<VTABLE
           <table>
-            <thead><tr><th>CVE</th><th>Severity</th><th>Package</th><th>Version</th><th>Status</th><th>Fix</th><th>Description</th></tr></thead>
+            <thead><tr><th>CVE</th><th>Severity</th><th>CVSS</th><th>Package</th><th>Version</th><th>Status</th><th>Fix</th><th>Published</th><th>Discovered</th><th>Description</th></tr></thead>
             <tbody>${VULN_ROWS}</tbody>
           </table>
           VTABLE
