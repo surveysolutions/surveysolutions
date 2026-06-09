@@ -513,4 +513,16 @@ Possíveis razões:
   <data name="SelectFileWarning" xml:space="preserve">
     <value>Por favor, selecione um arquivo para enviar.</value>
 </data>
+  <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve">
+    <value>Permitir que os supervisores alterem os estados das atribuições</value>
+  </data>
+  <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>Quando ativado, os supervisores podem aprovar e reabrir atribuições a partir dos seus tablets</value>
+  </data>
+  <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
+    <value>Permitir que os entrevistadores alterem os estados das atribuições</value>
+  </data>
+  <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>Quando ativado, os entrevistadores podem concluir e reabrir atribuições a partir dos seus tablets (requer que a definição do supervisor esteja ativada)</value>
+  </data>
 </root>

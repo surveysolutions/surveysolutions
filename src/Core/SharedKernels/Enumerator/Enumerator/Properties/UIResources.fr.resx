@@ -997,4 +997,16 @@ critiques</value>
     <value>Questions
 sans réponse</value>
 </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>Ouvert</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>Terminé</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Approuvé</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>Statut de l'affectation</value>
+  </data>
 </root>
