@@ -56,6 +56,8 @@ jobs:
       - name: Scan image with twistcli
         # Exit code 1 means either policy violation or twistcli error — both are treated as failure.
         # tee writes stdout both to the log and to twistcli_output.txt for the artifact.
+        env:
+          NO_COLOR: "1"
         run: |
           ./twistcli images scan \
             --address "${{ secrets.PCC_CONSOLE_URL }}" \
