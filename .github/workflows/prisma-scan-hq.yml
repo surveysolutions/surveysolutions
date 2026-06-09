@@ -1,0 +1,55 @@
+name: Prisma Cloud Scan — Headquarters Docker Image
+
+on:
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: 22
+
+jobs:
+  prisma-scan:
+    name: Build and Prisma Cloud Scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write  # required to upload SARIF results to GitHub code scanning
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Headquarters Docker image (local, no push)
+        shell: pwsh
+        run: |
+          ./.build.ps1 DockerHq `
+            -BuildNumber ${{ github.run_number }} `
+            -dockerRegistry hq-scan `
+            -nodeVersion "${{ env.NODE_VERSION }}" `
+            -noDockerPush
+        env:
+          DOCKER_BUILDKIT: 0
+
+      - name: Get built image reference
+        id: image
+        run: |
+          IMAGE=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep "^hq-scan/headquarters:" | head -1)
+          if [ -z "$IMAGE" ]; then
+            echo "::error::No headquarters image found after build"
+            exit 1
+          fi
+          echo "name=${IMAGE}" >> "$GITHUB_OUTPUT"
+
+      - name: Prisma Cloud image scan
+        id: scan
+        uses: PaloAltoNetworks/prisma-cloud-scan@v1.9
+        with:
+          pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
+          pcc_user: ${{ secrets.PCC_USER }}
+          pcc_pass: ${{ secrets.PCC_PASS }}
+          image_name: ${{ steps.image.outputs.name }}
+
+      - name: Upload SARIF file
+        if: ${{ !cancelled() }}
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif_file }}
