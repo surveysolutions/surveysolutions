@@ -19,6 +19,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
+        private const string RecaptchaV3LoginAction = "login";
         private readonly SignInManager<DesignerIdentityUser> signInManager;
         private readonly UserManager<DesignerIdentityUser> userManager;
         private readonly ILogger<LoginModel> logger;
@@ -101,7 +102,8 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                             var recaptcha = await this.recaptchaService.Validate(Request);
                             var isValid = recaptcha.success;
                             if (isValid && captchaConfig.Value.CaptchaType == CaptchaProviderType.RecaptchaV3)
-                                isValid = recaptcha.score >= captchaConfig.Value.RecaptchaV3MinimumScore;
+                                isValid = recaptcha.score >= captchaConfig.Value.RecaptchaV3MinimumScore
+                                    && string.Equals(recaptcha.action, RecaptchaV3LoginAction, StringComparison.Ordinal);
 
                             if (!isValid)
                             {

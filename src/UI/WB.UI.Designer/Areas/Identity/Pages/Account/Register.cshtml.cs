@@ -23,6 +23,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
+        private const string RecaptchaV3RegisterAction = "register";
         public IOptions<CaptchaConfig> CaptchaOptions { get; }
 
         private readonly UserManager<DesignerIdentityUser> userManager;
@@ -97,7 +98,8 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                     var recaptcha = await this.recaptchaService.Validate(Request);
                     var isValid = recaptcha.success;
                     if (isValid && this.CaptchaOptions.Value.CaptchaType == CaptchaProviderType.RecaptchaV3)
-                        isValid = recaptcha.score >= this.CaptchaOptions.Value.RecaptchaV3MinimumScore;
+                        isValid = recaptcha.score >= this.CaptchaOptions.Value.RecaptchaV3MinimumScore
+                            && string.Equals(recaptcha.action, RecaptchaV3RegisterAction, StringComparison.Ordinal);
 
                     if (!isValid)
                     {

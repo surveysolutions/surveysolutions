@@ -910,6 +910,7 @@ namespace WB.UI.Headquarters.Controllers
                 StartedDate = interview.StartedDate?.UtcDateTime.ToString("o"),
                 QuestionnaireTitle = model.QuestionnaireTitle,
                 UseCaptcha = model.UseCaptcha,
+                UseRecaptchaV3 = model.UseRecaptchaV3,
                 HostedCaptchaHtml = model.HostedCaptchaHtml,
                 RecaptchaSiteKey = model.RecaptchaSiteKey,
                 HasPassword = model.HasPassword,

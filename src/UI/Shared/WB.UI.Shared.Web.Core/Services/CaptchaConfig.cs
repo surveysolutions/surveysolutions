@@ -10,6 +10,9 @@
 
     public enum CaptchaProviderType
     {
-        None, Recaptcha, RecaptchaV3, Hosted
+        None = 0,
+        Recaptcha = 1,
+        Hosted = 2,
+        RecaptchaV3 = 3
     }
 }

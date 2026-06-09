@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -94,6 +95,28 @@ namespace WB.Tests.Unit.Applications.Headquarters
             Assert.That(model.UseRecaptchaV3, Is.False);
         }
 
+        [Test]
+        public void when_resume_interview_with_recaptcha_v3_then_resume_model_should_have_v3_flag()
+        {
+            const string interviewId = "11111111111111111111111111111111";
+            var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
+            var interview = Mock.Of<IStatefulInterview>(i =>
+                i.QuestionnaireIdentity == questionnaireIdentity
+                && i.CurrentResponsibleId == Guid.NewGuid());
+            var statefulInterviewRepository = Mock.Of<IStatefulInterviewRepository>(r =>
+                r.Get(interviewId) == interview);
+            var controller = CreateControllerForCaptchaTest(
+                CaptchaProviderType.RecaptchaV3,
+                "test-site-key",
+                statefulInterviewRepository);
+
+            var getResumeModel = typeof(WebInterviewController).GetMethod("GetResumeModel",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            var model = getResumeModel?.Invoke(controller, new object[] { interviewId }) as ResumeWebInterview;
+            Assert.That(model, Is.Not.Null);
+            Assert.That(model!.UseRecaptchaV3, Is.True);
+        }
+
         private WebInterviewController CreateController(int quantity, string interviewId)
         {
             var assignment = Mock.Of<Assignment>(a =>
@@ -173,7 +196,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
         /// </summary>
         private WebInterviewController CreateControllerForCaptchaTest(
             CaptchaProviderType captchaType,
-            string siteKey)
+            string siteKey,
+            IStatefulInterviewRepository statefulInterviewRepository = null)
         {
             var assignment = Mock.Of<Assignment>(a =>
                 a.Id == 999
@@ -205,7 +229,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             var controller = new WebInterviewController(
                 Mock.Of<ICommandService>(),
                 configProvider,
-                Mock.Of<IStatefulInterviewRepository>(),
+                statefulInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 Mock.Of<IUserViewFactory>(),
                 Mock.Of<IInterviewUniqueKeyGenerator>(),
                 Mock.Of<ICaptchaProvider>(),
@@ -234,4 +258,3 @@ namespace WB.Tests.Unit.Applications.Headquarters
         }
     }
 }
-

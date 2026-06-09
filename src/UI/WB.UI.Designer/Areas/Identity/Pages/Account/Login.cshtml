@@ -71,7 +71,7 @@
             <div class="recaptcha">
                 @if (CaptchaConfig.Value.CaptchaType == CaptchaProviderType.RecaptchaV3)
                 {
-                    @(Html.Recaptcha<RecaptchaV3HiddenInput>(CaptchaRecaptchaSettings.Value, new RecaptchaV3HiddenInput()))
+                    @(Html.Recaptcha<RecaptchaV3HiddenInput>(CaptchaRecaptchaSettings.Value, new RecaptchaV3HiddenInput { Action = "login" }))
                 }
                 else
                 {

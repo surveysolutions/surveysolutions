@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -9,6 +10,8 @@ namespace WB.UI.Headquarters.Services
 {
     public class RecaptchaV3Provider : ICaptchaProvider
     {
+        private const string WebInterviewPath = "/WebInterview";
+        private const string WebInterviewExpectedAction = "start";
         private readonly IRecaptchaService recaptchaService;
         private readonly IOptions<CaptchaConfig> captchaConfig;
 
@@ -22,6 +25,10 @@ namespace WB.UI.Headquarters.Services
         {
             var validationResult = await recaptchaService.Validate(request);
             if (!validationResult.success)
+                return false;
+
+            if (request.Path.StartsWithSegments(WebInterviewPath, StringComparison.OrdinalIgnoreCase)
+                && !string.Equals(validationResult.action, WebInterviewExpectedAction, StringComparison.Ordinal))
                 return false;
 
             return validationResult.score >= captchaConfig.Value.RecaptchaV3MinimumScore;

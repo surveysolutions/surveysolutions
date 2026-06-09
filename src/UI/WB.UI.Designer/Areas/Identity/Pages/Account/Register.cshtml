@@ -58,7 +58,7 @@
     else if (Model.CaptchaOptions.Value.CaptchaType == CaptchaProviderType.RecaptchaV3)
     {
         <div class="recaptcha">
-            @(Html.Recaptcha<RecaptchaV3HiddenInput>(CaptchaRecaptchaSettings.Value, new RecaptchaV3HiddenInput()))
+            @(Html.Recaptcha<RecaptchaV3HiddenInput>(CaptchaRecaptchaSettings.Value, new RecaptchaV3HiddenInput { Action = "register" }))
         </div>
     }
 
