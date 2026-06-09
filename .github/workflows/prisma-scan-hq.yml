@@ -15,7 +15,7 @@ jobs:
       packages: read
 
     steps:
-      - name: Resolve image tag from branch name
+      - name: '[1/8] Resolve image tag from branch name'
         id: image
         run: |
           # Replicate the tag escaping from .build.ps1 Get-DockerTags / EscapedBranchName
@@ -33,17 +33,17 @@ jobs:
           echo "name=${IMAGE}" >> "$GITHUB_OUTPUT"
           echo "Resolved image: ${IMAGE}"
 
-      - name: Log in to the GitHub Container Registry
+      - name: '[2/8] Log in to the GitHub Container Registry'
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Pull Headquarters image
+      - name: '[3/8] Pull Headquarters image'
         run: docker pull "${{ steps.image.outputs.name }}"
 
-      - name: Download twistcli
+      - name: '[4/8] Download twistcli'
         # twistcli is downloaded from the console so its version always matches the server.
         # Access Key ID is used as the username, Secret Key as the password (Enterprise Edition).
         run: |
@@ -53,7 +53,7 @@ jobs:
             "${{ secrets.PCC_CONSOLE_URL }}/api/v1/util/twistcli"
           chmod +x ./twistcli
 
-      - name: Scan image with twistcli
+      - name: '[5/8] Scan image with twistcli'
         # Exit code 1 means either policy violation or twistcli error — both are treated as failure.
         # tee writes stdout both to the log and to twistcli_output.txt for the artifact.
         env:
@@ -68,7 +68,7 @@ jobs:
             "${{ steps.image.outputs.name }}" \
           | tee twistcli_output.txt; exit "${PIPESTATUS[0]}"
 
-      - name: Generate human-readable report
+      - name: '[6/8] Generate human-readable report'
         if: ${{ !cancelled() }}
         run: |
           IMAGE="${{ steps.image.outputs.name }}"
@@ -170,7 +170,7 @@ jobs:
             fi
           } | tee scan_report.md >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Generate HTML report
+      - name: '[7/8] Generate HTML report'
         if: ${{ !cancelled() }}
         run: |
           IMAGE="${{ steps.image.outputs.name }}"
@@ -307,7 +307,7 @@ jobs:
           </html>
           HTML
 
-      - name: Upload scan results
+      - name: '[8/8] Upload scan results'
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
