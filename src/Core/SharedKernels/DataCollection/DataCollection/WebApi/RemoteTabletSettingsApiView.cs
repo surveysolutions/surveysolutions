@@ -11,6 +11,8 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
             WebInterviewUrlTemplate = string.Empty;
             GeographyQuestionAccuracyInMeters = 10;
             GeographyQuestionPeriodInSeconds = 10;
+            AllowSupervisorChangeAssignmentStatus = true;
+            AllowInterviewerChangeAssignmentStatus = true;
         }
 
         public bool NotificationsEnabled { get; set; }
@@ -20,5 +22,8 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public int GeographyQuestionPeriodInSeconds { get; set; }
         
         public string EsriApiKey { get; set; } = string.Empty;
+
+        public bool AllowSupervisorChangeAssignmentStatus { get; set; }
+        public bool AllowInterviewerChangeAssignmentStatus { get; set; }
     }
 }

@@ -294,4 +294,7 @@
   <data name="Welcome" xml:space="preserve">
     <value>Bine ați venit la Survey Solutions</value>
   </data>
+  <data name="LastLoginDate" xml:space="preserve">
+    <value>Data ultimei autentificări</value>
+  </data>
 </root>
