@@ -138,9 +138,9 @@ public class GeoTiffInfoReaderTests
     }
 
     [Test]
-    public void TryReadGeoTiffBounds_geotiff_without_crs_returns_coordinates_as_is()
+    public void TryReadGeoTiffBounds_geotiff_without_crs_returns_false()
     {
-        // GeoKeyDirectory with zero keys → epsgCode=0 → coordinates not reprojected
+        // GeoKeyDirectory with zero keys → epsgCode=0 → unknown CRS → returns false
         string path = WriteTempTiff(TiffBuilder.GeoTiffWithPixelScaleAndTiepoint(
             width: 5, height: 5,
             scaleX: 1.0, scaleY: 1.0,
@@ -149,13 +149,9 @@ public class GeoTiffInfoReaderTests
         try
         {
             bool result = GeoTiffInfoReader.TryReadGeoTiffBounds(
-                path, out double xMin, out double yMin, out double xMax, out double yMax);
+                path, out _, out _, out _, out _);
 
-            Assert.That(result, Is.True);
-            Assert.That(xMin, Is.EqualTo(10.0).Within(1e-9));
-            Assert.That(xMax, Is.EqualTo(15.0).Within(1e-9));
-            Assert.That(yMin, Is.EqualTo(15.0).Within(1e-9));
-            Assert.That(yMax, Is.EqualTo(20.0).Within(1e-9));
+            Assert.That(result, Is.False);
         }
         finally { File.Delete(path); }
     }

@@ -245,7 +245,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             item.YMaxVal = geoYMax;
                             item.Wkid = WGS84Wkid;
                         }
-                        else if (!GeoTiffInfoReader.IsGeoTIFF(fullPath))
+                        else
                         {
                             throw new InvalidOperationException(".tif file is not recognized as map");
                         }

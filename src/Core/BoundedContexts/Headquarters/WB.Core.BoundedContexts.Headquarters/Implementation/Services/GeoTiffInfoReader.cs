@@ -100,10 +100,12 @@ public static class GeoTiffInfoReader
         // Reproject to WGS84 when needed
         var (epsgCode, modelType) = ReadEpsgFromGeoKeys(tiff);
 
-        bool alreadyWgs84 = modelType == 2 && epsgCode == 4326;
-        bool unknownCrs = epsgCode == 0;
+        if (epsgCode == 0)
+            return false; // CRS unknown – cannot guarantee WGS84 output
 
-        if (!alreadyWgs84 && !unknownCrs)
+        bool alreadyWgs84 = modelType == 2 && epsgCode == 4326;
+
+        if (!alreadyWgs84)
         {
             try
             {
