@@ -317,6 +317,14 @@ export default {
     async mounted() {
         await this.init()
     },
+
+    beforeUnmount() {
+        if (this.mapReloadSkipTimeoutId != null) {
+            clearTimeout(this.mapReloadSkipTimeoutId)
+            this.mapReloadSkipTimeoutId = null
+        }
+    },
+
     watch: {
         shapefileName(to) {
             nextTick(() => {
