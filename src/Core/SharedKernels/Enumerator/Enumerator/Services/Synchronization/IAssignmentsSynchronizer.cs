@@ -7,6 +7,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
 {
     public interface IAssignmentsSynchronizer
     {
+        Task UploadLocalStatusChangesAsync(CancellationToken cancellationToken);
+
         Task SynchronizeAssignmentsAsync(IProgress<SyncProgressInfo> progress,
             SynchronizationStatistics statistics, CancellationToken cancellationToken);
     }
