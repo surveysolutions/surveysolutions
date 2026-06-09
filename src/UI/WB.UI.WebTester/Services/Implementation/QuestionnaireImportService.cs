@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,55 +47,57 @@ namespace WB.UI.WebTester.Services.Implementation
             this.categoriesManagementService = categoriesManagementService ?? throw new ArgumentNullException(nameof(categoriesManagementService));
         }
 
-        private ConcurrentDictionary<Guid, QuestionnaireIdentity> TokenToQuestionnaireMap { get; } 
+        // Keyed by interviewId (unique per run), not by questionnaireId.
+        private ConcurrentDictionary<Guid, QuestionnaireIdentity> InterviewToQuestionnaireMap { get; }
             = new ConcurrentDictionary<Guid, QuestionnaireIdentity>();
+
         private readonly object tokensLock = new object();
 
-        public void RemoveQuestionnaire(Guid designerToken)
+        public void RemoveQuestionnaire(Guid interviewId)
         {
             lock (tokensLock)
             {
-                if (!TokenToQuestionnaireMap.ContainsKey(designerToken)) return;
+                if (!InterviewToQuestionnaireMap.ContainsKey(interviewId)) return;
 
-                var questionnaireId = TokenToQuestionnaireMap[designerToken];
+                var questionnaireId = InterviewToQuestionnaireMap[interviewId];
 
                 questionnaireStorage.DeleteQuestionnaireDocument(questionnaireId.QuestionnaireId, questionnaireId.Version);
                 questionnaireDocumentStorage.Remove(questionnaireId.ToString());
                 translationManagementService.Delete(questionnaireId);
 
-                attachmentsStorage.RemoveArea(designerToken);
-                TokenToQuestionnaireMap.Remove(designerToken, out _);
+                attachmentsStorage.RemoveArea(interviewId);
+                InterviewToQuestionnaireMap.TryRemove(interviewId, out _);
             }
         }
 
-        public async Task<QuestionnaireIdentity> ImportQuestionnaire(Guid designerToken)
+        public async Task<QuestionnaireIdentity> ImportQuestionnaire(Guid questionnaireId, Guid interviewId)
         {
-            var questionnaire = await webTesterApi.GetQuestionnaireAsync(designerToken.ToString());
+            // All Designer API calls use questionnaireId (the questionnaire's stable ID).
+            var questionnaire = await webTesterApi.GetQuestionnaireAsync(questionnaireId.ToString());
 
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.Document.PublicKey, Interlocked.Increment(ref version));
 
-            var translations = await webTesterApi.GetTranslationsAsync(designerToken.ToString());
+            var translations = await webTesterApi.GetTranslationsAsync(questionnaireId.ToString());
 
             var attachments = new List<QuestionnaireAttachment>();
-
             foreach (Attachment documentAttachment in questionnaire.Document.Attachments)
             {
-                var content = await webTesterApi.GetAttachmentContentAsync(designerToken.ToString(), documentAttachment.ContentId);
-                
+                var content = await webTesterApi.GetAttachmentContentAsync(questionnaireId.ToString(), documentAttachment.ContentId);
                 attachments.Add(new QuestionnaireAttachment(documentAttachment.AttachmentId, content));
             }
 
-            var categories = await webTesterApi.GetCategoriesAsync(designerToken.ToString());
+            var categories = await webTesterApi.GetCategoriesAsync(questionnaireId.ToString());
 
             lock (tokensLock)
             {
-                TokenToQuestionnaireMap[designerToken] = questionnaireIdentity;
+                // Local storage keyed by interviewId so parallel runs don't overwrite each other.
+                InterviewToQuestionnaireMap[interviewId] = questionnaireIdentity;
 
                 foreach (var attachment in attachments)
                 {
-                    this.attachmentsStorage.Store(attachment, attachment.Content.Id, designerToken);
+                    this.attachmentsStorage.Store(attachment, attachment.Content.Id, interviewId);
                 }
-                
+
                 this.categoriesManagementService.RemoveCategories(questionnaireIdentity);
                 categories.GroupBy(x => x.CategoriesId).ForEach(x =>
                 {
@@ -123,10 +125,11 @@ namespace WB.UI.WebTester.Services.Implementation
                     TranslationId = x.TranslationId
                 }));
             }
-            
-            var settings = await webTesterApi.GetQuestionnaireSettingsAsync(designerToken.ToString());
 
-            this.appdomainsPerInterviewManager.SetupForInterview(designerToken,
+            var settings = await webTesterApi.GetQuestionnaireSettingsAsync(questionnaireId.ToString());
+
+            // Appdomain is keyed by interviewId — parallel runs each get an isolated container.
+            this.appdomainsPerInterviewManager.SetupForInterview(interviewId,
                 questionnaireIdentity,
                 questionnaire.Assembly,
                 settings);
