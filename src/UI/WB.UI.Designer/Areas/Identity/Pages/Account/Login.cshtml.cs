@@ -151,6 +151,8 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                         
                         if (result.Succeeded)
                         {
+                            user.LastLoginAtUtc = DateTime.UtcNow;
+                            await userManager.UpdateAsync(user);
                             logger.LogInformation("User logged in.");
                             return LocalRedirect(returnUrl);
                         }

@@ -342,4 +342,16 @@
   <data name="LogoSettings_Description" xml:space="preserve">
     <value>Sigla companiei afișează o imagine particularizată pe pagina de conectare a serverului și pe pagina de conectare a aplicației operatorului. Faceți clic pe butonul Alegeți fișierul pentru a încărca o imagine de pe computer pe server.</value>
   </data>
+  <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve">
+    <value>Permite supraveghetorilor să schimbe stările atribuirilor</value>
+  </data>
+  <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>Când este activat, supraveghetorii pot aproba și redeschide atribuirile de pe tabletele lor</value>
+  </data>
+  <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
+    <value>Permite intervievatorilor să schimbe stările atribuirilor</value>
+  </data>
+  <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>Când este activat, intervievatorii pot finaliza și redeschide atribuirile de pe tabletele lor (necesită activarea setării supraveghetorului)</value>
+  </data>
 </root>
