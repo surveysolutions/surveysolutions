@@ -309,12 +309,16 @@ jobs:
 
       - name: '[8/8] Upload scan results'
         if: ${{ !cancelled() }}
+        run: |
+          mkdir -p scan-results
+          for f in scan_report.md scan_report.html pcc_scan_results.json twistcli_output.txt; do
+            [ -f "$f" ] && mv "$f" scan-results/
+          done
+
+      - name: Upload artifact
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: prisma-cloud-scan-results
-          path: |
-            scan_report.md
-            scan_report.html
-            pcc_scan_results.json
-            twistcli_output.txt
+          path: scan-results/
           retention-days: 30
