@@ -12,6 +12,7 @@ namespace WB.UI.Headquarters.Models
         public string[] Statuses { get; set; }
         public string Title { get; set; }
         public List<QuestionnaireVersionsComboboxViewItem> Questionnaires { get; set; }
+        public bool AllowInterviewerChangeAssignmentStatus { get; set; }
 
         public override string ToString()
         {
