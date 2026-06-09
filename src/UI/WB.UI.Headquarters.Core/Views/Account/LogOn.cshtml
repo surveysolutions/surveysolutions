@@ -1,7 +1,9 @@
 ﻿@using reCAPTCHA.AspNetCore
+@using reCAPTCHA.AspNetCore.Versions
 @using WB.UI.Headquarters.Services
 @using WB.UI.Shared.Web.Captcha
 @inject ICaptchaProvider captchaProvider;
+@inject IOptions<RecaptchaSettings> RecaptchaSettings;
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.LogOnModel
 @{
     Layout = "_Logon";
@@ -66,8 +68,11 @@
                                 <div class="form-group">
                                     @if (captchaProvider is RecaptchaProvider)
                                     {
-                                        @inject IOptions<RecaptchaSettings> RecaptchaSettings
-                                        @Html.Recaptcha(RecaptchaSettings.Value)
+                                        @(Html.Recaptcha<RecaptchaV2Checkbox>(RecaptchaSettings.Value, new RecaptchaV2Checkbox()))
+                                    }
+                                    else if (captchaProvider is RecaptchaV3Provider)
+                                    {
+                                        @(Html.Recaptcha<RecaptchaV3HiddenInput>(RecaptchaSettings.Value, new RecaptchaV3HiddenInput()))
                                     }
                                     else if (captchaProvider is HostedCaptchaProvider hosted)
                                     {
