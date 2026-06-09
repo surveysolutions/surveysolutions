@@ -19,12 +19,15 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
                                                            .ToList();
         }
 
+        private static string EscapeForPipeDelimited(string value)
+            => value?.Replace(@"\", @"\\").Replace("|", @"\|");
+
         private static string GetApiAnswerString(InterviewTreeQuestion question)
         {
             if (question.IsTextList)
             {
                 var answer = (question.InterviewQuestion as InterviewTreeTextListQuestion)?.GetAnswer();
-                return answer == null ? null : string.Join("|", answer.Rows.Select(r => r.Text));
+                return answer == null ? null : string.Join("|", answer.Rows.Select(r => EscapeForPipeDelimited(r.Text)));
             }
 
             if (question.IsMultiLinkedToList)
@@ -42,7 +45,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
                 var refListOptions = refListQuestionAllOptions
                     ?.Where(x => multiToListAnswers?.Contains(x.Value) ?? false)
                     .ToArray();
-                return refListOptions == null ? string.Empty : string.Join("|", refListOptions.Select(o => o.Text));
+                return refListOptions == null ? string.Empty : string.Join("|", refListOptions.Select(o => EscapeForPipeDelimited(o.Text)));
             }
 
             return question.GetAnswerAsString(CultureInfo.InvariantCulture);

@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
         }
 
         [Test]
-        public void text_list_answer_with_pipe_in_value_should_join_with_pipe_delimiter_in_api_response()
+        public void text_list_answer_with_pipe_in_value_should_escape_pipe_in_api_response()
         {
             var textListQuestionId = Guid.NewGuid();
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             var apiDetails = new InterviewApiDetails(interview);
 
             var answer = apiDetails.Answers.Single(a => a.QuestionId.Id == textListQuestionId);
-            Assert.That(answer.Answer, Is.EqualTo("a|b|c"));
+            Assert.That(answer.Answer, Is.EqualTo(@"a\|b|c"));
         }
 
         [Test]
