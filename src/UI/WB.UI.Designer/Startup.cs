@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -41,6 +42,7 @@ using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.Native.Files;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
+using WB.UI.Designer.Code.Authentication;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Code.Vue;
@@ -136,14 +138,15 @@ namespace WB.UI.Designer
             services
                 .AddDefaultIdentity<DesignerIdentityUser>()
                 .AddRoles<DesignerIdentityRole>()
-                .AddEntityFrameworkStores<DesignerDbContext>();
+                .AddEntityFrameworkStores<DesignerDbContext>()
+                .AddSignInManager<DesignerSignInManager>();
 
             services.AddHealthChecks()
                 .AddCheck<DatabaseConnectionCheck>("database");
 
-            // Read the JWT secret key once; all JWT-related registration is gated on its presence.
+            // Read JWT secret keys.
             var jwtSecretKey = Configuration["Providers:Assistant:JwtSecretKey"];
-            var jwtEnabled = !string.IsNullOrWhiteSpace(jwtSecretKey);
+            var webTesterJwtSecretKey = Configuration["WebTester:JwtSecretKey"];
 
             var authBuilder = services
                 .AddAuthentication(sharedOptions =>
@@ -151,22 +154,27 @@ namespace WB.UI.Designer
                     sharedOptions.DefaultScheme = "boc";
                     sharedOptions.DefaultChallengeScheme = "boc";
                 })
-                .AddPolicyScheme("boc", "Basic or cookie or JWT", options =>
+                .AddPolicyScheme("boc", "Basic or cookie", options =>
                 {
                     options.ForwardDefaultSelector = context =>
                     {
                         var authHeader = context.Request.Headers["Authorization"].ToString();
-                        if (!string.IsNullOrEmpty(authHeader))
-                        {
-                            // Only forward to the JWT handler when the secret key is configured;
-                            // otherwise fall through to basic auth so Bearer tokens are rejected
-                            // rather than being handled with no validation rules.
-                            if (jwtEnabled && authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
-                            {
-                                return JwtBearerDefaults.AuthenticationScheme;
-                            }
+
+                        // Bearer tokens for the AI-Assistant back-channel are only forwarded to the
+                        // dedicated JWT scheme for assistant API routes. This keeps assistant tokens
+                        // from authenticating unrelated endpoints that use the default [Authorize]
+                        // policy without an explicit AuthenticationSchemes setting.
+                        // Note: WebTester-delegated endpoints specify AuthenticationSchemes =
+                        // DelegatedTokenService.DelegatedScheme explicitly and therefore never pass
+                        // through this selector.
+                        if (!string.IsNullOrEmpty(authHeader)
+                            && authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase)
+                            && context.Request.Path.StartsWithSegments("/api/v1/assistant", StringComparison.OrdinalIgnoreCase))
+                            return JwtTokenService.AssistantScheme;
+
+                        if (!string.IsNullOrEmpty(authHeader)
+                            && authHeader.StartsWith("Basic ", StringComparison.OrdinalIgnoreCase))
                             return "basic";
-                        }
 
                         return IdentityConstants.ApplicationScheme;
                     };
@@ -174,26 +182,71 @@ namespace WB.UI.Designer
                 .AddScheme<BasicAuthenticationSchemeOptions, BasicAuthenticationHandler>("basic",
                     opts => { opts.Realm = "mysurvey.solutions"; });
 
-            // Only register the JWT bearer handler when the secret key is present; registering it
-            // without TokenValidationParameters would leave the handler with no validation rules,
-            // causing unpredictable accept/reject behaviour.
-            if (jwtEnabled)
+            // JWT scheme registration policy:
+            //
+            //   WebTester:JwtSecretKey  — OPTIONAL. When absent the WebTester scheme is still
+            //                             registered with a random placeholder key (generated
+            //                             at startup via RandomNumberGenerator) so requests
+            //                             return a clean 401/configuration error instead of
+            //                             a 500 caused by an unknown scheme name.
+            //
+            //   Providers:Assistant:JwtSecretKey — OPTIONAL. When absent the assistant scheme is
+            //                             still registered but uses a random placeholder key
+            //                             (generated at startup via RandomNumberGenerator) that
+            //                             no attacker can predict or forge tokens with, so all
+            //                             /api/v1/assistant/* requests fail with a clean 401
+            //                             instead of a 500 caused by an unknown scheme name.
+
+            // Validate lengths for any key that is actually provided.
+            if (!string.IsNullOrWhiteSpace(jwtSecretKey) && jwtSecretKey.Length < 32)
+                throw new InvalidOperationException("JWT secret key is too short.");
+            if (!string.IsNullOrWhiteSpace(webTesterJwtSecretKey) && webTesterJwtSecretKey.Length < 32)
+                throw new InvalidOperationException("WebTester JWT secret key is too short.");
+
+            // When WebTester:JwtSecretKey is absent the scheme is still registered but uses a
+            // cryptographically random placeholder key generated at startup. This guarantees the
+            // scheme is registered (so [Authorize(Schemes=...)] never causes a 500) while making
+            // it impossible for an attacker to forge a token.
+            // The QuestionnaireApiController.WebTest action will return a configuration error
+            // when a user tries to run in WebTester without the key being set.
+            var jwtIssuer = Configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer";
+
+            // Signing keys for the delegated WebTester scheme.
+            // Trust only the WebTester signing key so Assistant tokens cannot be replayed
+            // against /api/webtester/* by reusing a different secret accepted by this scheme.
+            // When the key is absent a random placeholder is used (same pattern as AssistantScheme).
+            var delegatedSigningKey = string.IsNullOrWhiteSpace(webTesterJwtSecretKey)
+                ? new SymmetricSecurityKey(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32))
+                : new SymmetricSecurityKey(Encoding.UTF8.GetBytes(webTesterJwtSecretKey));
+            var delegatedSigningKeys = new List<SecurityKey> { delegatedSigningKey };
+
+            // ── Isolated scheme: AI Assistant back-channel calls ───────────────────────────
+            // Validates tokens with aud="WB.AssistantService" signed by Providers:Assistant:JwtSecretKey.
+            // Applied explicitly on /api/v1/assistant/* endpoints only.
+            // Assistant tokens cannot authenticate any other endpoint.
             {
-                if (jwtSecretKey is { Length: < 32 })
-                    throw new InvalidOperationException("JWT secret key is too short.");
-                
-                authBuilder.AddJwtBearer(options =>
+                var assistantAudience = Configuration["Providers:Assistant:JwtAudience"] ?? "WB.AssistantService";
+                // When the key is absent, use a cryptographically random placeholder generated
+                // at startup. This guarantees the scheme is registered (so [Authorize(Schemes=...)]
+                // never causes a 500) while making it impossible for an attacker to forge a token:
+                // the placeholder value is unknown and changes with every process restart.
+                // Do NOT use a fixed value such as new byte[32] (all-zeros) here — that is a
+                // known, guessable key and would allow arbitrary token forgery.
+                var assistantSigningKey = string.IsNullOrWhiteSpace(jwtSecretKey)
+                    ? new SymmetricSecurityKey(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32))
+                    : new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey));
+                authBuilder.AddJwtBearer(JwtTokenService.AssistantScheme, options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
+                        ValidateIssuer           = true,
+                        ValidateAudience         = true,
+                        ValidateLifetime         = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer",
-                        ValidAudience = Configuration["Providers:Assistant:JwtAudience"] ?? "WB.AssistantService",
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey!)),
-                        ClockSkew = TimeSpan.FromMinutes(5)
+                        ValidIssuer              = jwtIssuer,
+                        ValidAudience            = assistantAudience,
+                        IssuerSigningKey         = assistantSigningKey,
+                        ClockSkew                = TimeSpan.FromMinutes(5)
                     };
 
                     options.Events = new JwtBearerEvents
@@ -206,23 +259,17 @@ namespace WB.UI.Designer
                                 context.Response.Headers.Append("X-Token-Error", "Token has expired");
                             }
                             else if (context.Exception is SecurityTokenInvalidSignatureException)
-                            {
                                 context.Response.Headers.Append("X-Token-Error", "Invalid token signature");
-                            }
                             else if (context.Exception is SecurityTokenInvalidIssuerException)
-                            {
                                 context.Response.Headers.Append("X-Token-Error", "Invalid token issuer");
-                            }
                             else if (context.Exception is SecurityTokenInvalidAudienceException)
-                            {
                                 context.Response.Headers.Append("X-Token-Error", "Invalid token audience");
-                            }
                             else
                             {
-                                var logger = context.HttpContext.RequestServices
+                                context.HttpContext.RequestServices
                                     .GetRequiredService<ILoggerFactory>()
-                                    .CreateLogger("JwtAuthentication");
-                                logger.LogWarning(context.Exception, "JWT authentication failed.");
+                                    .CreateLogger("JwtAuthentication")
+                                    .LogWarning(context.Exception, "Assistant JWT authentication failed.");
                                 context.Response.Headers.Append("X-Token-Error", "Token validation failed");
                             }
                             return Task.CompletedTask;
@@ -230,31 +277,55 @@ namespace WB.UI.Designer
                         OnChallenge = context =>
                         {
                             context.HandleResponse();
-                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            context.Response.StatusCode  = StatusCodes.Status401Unauthorized;
                             context.Response.ContentType = "application/json";
 
                             var errorMessage = context.AuthenticateFailure?.Message ?? "Unauthorized";
                             if (context.AuthenticateFailure is SecurityTokenExpiredException)
-                            {
                                 errorMessage = "JWT token has expired. Please generate a new token.";
-                            }
                             else if (context.AuthenticateFailure is SecurityTokenInvalidSignatureException)
-                            {
                                 errorMessage = "JWT token has invalid signature.";
-                            }
 
                             var result = JsonSerializer.Serialize(new
                             {
-                                error = "Unauthorized",
-                                message = errorMessage,
+                                error     = "Unauthorized",
+                                message   = errorMessage,
                                 timestamp = DateTime.UtcNow
                             });
-
                             return context.Response.WriteAsync(result);
                         }
                     };
                 });
             }
+
+            // ── Isolated scheme: WebTester delegated back-channel calls ───────────────────
+            // Accepts ONLY tokens with aud="WB.Designer" AND azp="WB.WebTester".
+            // Applied explicitly on /api/webtester/* endpoints only.
+            authBuilder.AddJwtBearer(DelegatedTokenService.DelegatedScheme, options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer           = true,
+                    ValidateAudience         = true,
+                    ValidateLifetime         = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer              = jwtIssuer,
+                    ValidAudience            = DelegatedTokenService.DelegatedAudience,
+                    IssuerSigningKeys         = delegatedSigningKeys,
+                    ClockSkew                = TimeSpan.FromMinutes(5)
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        var azp = context.Principal?.FindFirstValue("azp");
+                        if (!string.Equals(azp, WebTesterConstants.ServiceName, StringComparison.OrdinalIgnoreCase))
+                            context.Fail($"Delegated token must have azp={WebTesterConstants.ServiceName}.");
+                        return Task.CompletedTask;
+                    }
+                };
+            });
             
             services.AddAuthorization(options =>
             {
@@ -361,6 +432,16 @@ namespace WB.UI.Designer
             services.Configure<PdfSettings>(Configuration.GetSection("Pdf"));
             services.Configure<QuestionnaireHistorySettings>(Configuration.GetSection("QuestionnaireHistorySettings"));
             services.Configure<WebTesterSettings>(Configuration.GetSection("WebTester"));
+
+            // The auth exchange flow depends on matching WebTester:ServiceApiKey values in Designer
+            // and WebTester. If the key is missing or too short, exchange requests fail; configure it in
+            // both applications to keep the integration functional.
+            const int minimumServiceApiKeyLength = 32;
+            var serviceApiKey = Configuration["WebTester:ServiceApiKey"];
+            if (!string.IsNullOrWhiteSpace(serviceApiKey) && serviceApiKey.Length < minimumServiceApiKeyLength)
+                throw new InvalidOperationException(
+                    $"WebTester:ServiceApiKey must be at least {minimumServiceApiKeyLength} characters long.");
+
 
             aspCoreKernel = new AspCoreKernel(services);
 
