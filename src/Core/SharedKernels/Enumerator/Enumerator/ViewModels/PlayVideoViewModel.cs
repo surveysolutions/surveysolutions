@@ -32,8 +32,8 @@ public class PlayVideoViewModel : PlayMediaViewModel
 
     public IMvxAsyncCommand OpenFullScreenCommand => new MvxAsyncCommand(async () =>
     {
-        if (InitValues == null) return;
         var args = InitValues;
+        if (args == null) return;
         await ViewModelNavigationService.Close(this);
         await ViewModelNavigationService.NavigateToAsync<PlayVideoFullScreenViewModel, PlayMediaViewModelArgs>(args);
     });
