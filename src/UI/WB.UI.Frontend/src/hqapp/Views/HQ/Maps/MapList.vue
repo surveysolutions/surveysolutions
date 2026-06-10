@@ -104,9 +104,7 @@ export default {
             const fd = new FormData()
             var fileToUpload = this.$refs.uploader.files[0]
 
-            var filesize = ((fileToUpload.size / 1024) / 1024).toFixed(4)
-
-            if (filesize >= 1024) {
+            if (fileToUpload.size > 500 * 1024 * 1024) {
                 statusupdater(self.$t('Pages.Map_UploadingFileTooBig'))
                 return
             }
