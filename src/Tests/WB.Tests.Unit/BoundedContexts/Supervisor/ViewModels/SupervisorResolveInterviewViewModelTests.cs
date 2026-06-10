@@ -211,22 +211,22 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
         public void should_update_entities_with_errors_description_from_supervisor_errors_count()
         {
             var interview = Mock.Of<IStatefulInterview>(
-                x => x.CountActiveAnsweredQuestionsInInterviewForSupervisor() == 3
-                     && x.CountInvalidEntitiesInInterviewForSupervisor() == 2 
-                     && x.CountActiveQuestionsInInterviewForSupervisor() == 8
+                     x => x.CountActiveAnsweredQuestionsInInterviewForSupervisor() == 3
+                     && x.CountInvalidEntitiesInInterviewForSupervisor() == 2
+                          && x.CountActiveQuestionsInInterviewForSupervisor() == 8
             );
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
             interviewRepository.Setup(x => x.Get(It.IsAny<string>()))
-                .Returns(interview);
+                     .Returns(interview);
             interviewRepository.Setup(x => x.GetOrThrow(It.IsAny<string>()))
-                .Returns(interview);
+                     .Returns(interview);
 
             var viewModel = CreateViewModel(interviewRepository: interviewRepository.Object);
 
             viewModel.Configure(Id.g1.FormatGuid(), Create.Other.NavigationState(interviewRepository.Object));
 
             Assert.That(viewModel, Has.Property(nameof(viewModel.EntitiesWithErrorsDescription))
-                .EqualTo(WB.Core.SharedKernels.Enumerator.Properties.UIResources.Interview_Complete_Entities_With_Errors + " 2"));
+                     .EqualTo(WB.Core.SharedKernels.Enumerator.Properties.UIResources.Interview_Complete_Entities_With_Errors + " 2"));
         }
 
         [Test]

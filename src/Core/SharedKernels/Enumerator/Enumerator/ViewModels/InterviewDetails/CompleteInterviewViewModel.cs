@@ -390,6 +390,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 }
 
                 IsCompletionAllowed = CalculateIsCompletionAllowed();
+                RaisePropertyChanged(nameof(IsAllOk));
                 IsLoading = false;
             });
         }

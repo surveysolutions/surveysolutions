@@ -101,6 +101,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             var answeredCount = iv.CountActiveAnsweredQuestionsInInterviewForSupervisor();
             var errorsCount = iv.CountInvalidEntitiesInInterviewForSupervisor();
             var unansweredCount = iv.CountActiveQuestionsInInterviewForSupervisor() - answeredCount;
+            var errorsDescription = UIResources.Interview_Complete_Entities_With_Errors + " " + MoreThan(errorsCount);
 
             var topFailedCriticalRulesFromState = this.entitiesListViewModelFactory.GetTopFailedCriticalRulesFromState(interviewId, navigationState);
             var topFailedCriticalRules = topFailedCriticalRulesFromState.Entities.ToList();
@@ -120,7 +121,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 base.AnsweredCount = answeredCount;
                 base.ErrorsCount = errorsCount;
                 base.UnansweredCount = unansweredCount;
-                base.EntitiesWithErrorsDescription = UIResources.Interview_Complete_Entities_With_Errors + " " + MoreThan(errorsCount);
+                base.EntitiesWithErrorsDescription = errorsDescription;
                 RaisePropertyChanged(nameof(AnsweredCount));
                 RaisePropertyChanged(nameof(ErrorsCount));
                 RaisePropertyChanged(nameof(UnansweredCount));
