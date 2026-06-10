@@ -138,6 +138,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                     tabViewModel.Total += topUnansweredCriticalQuestionsInfo.Total;
                 }
 
+                RaisePropertyChanged(nameof(IsAllOk));
                 IsLoading = false;
             });
         }
