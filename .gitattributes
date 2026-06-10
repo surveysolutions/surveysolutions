@@ -1,7 +1,11 @@
-* text=auto
+* text=auto eol=lf
 *.bsl linguist-vendored
 # Windows forced line-endings
-*.sln crlf
+*.sln  text eol=crlf
+
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.sh   text eol=lf
 
 #
 ## These files are binary and should be left untouched
@@ -31,5 +35,4 @@
 *.bz2 binary
 *.swp binary
 *.dll binary
-src/Core/BoundedContexts/Interviewer/WB.Core.BoundedContexts.Interviewer/Views/Dashboard/DashboardItems/InterviewerAssignmentDashboardItemViewModel.cs -text
-src/UI/WB.UI.Frontend/src/hqapp/Views/HQ/Assignments/Details.vue -text
+
