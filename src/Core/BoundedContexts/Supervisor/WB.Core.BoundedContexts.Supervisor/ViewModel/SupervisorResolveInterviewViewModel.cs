@@ -120,9 +120,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 base.AnsweredCount = answeredCount;
                 base.ErrorsCount = errorsCount;
                 base.UnansweredCount = unansweredCount;
+                base.EntitiesWithErrorsDescription = UIResources.Interview_Complete_Entities_With_Errors + " " + MoreThan(errorsCount);
                 RaisePropertyChanged(nameof(AnsweredCount));
                 RaisePropertyChanged(nameof(ErrorsCount));
                 RaisePropertyChanged(nameof(UnansweredCount));
+                RaisePropertyChanged(nameof(EntitiesWithErrorsDescription));
 
                 if (topFailedCriticalRules.Count > 0)
                 {

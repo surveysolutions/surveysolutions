@@ -120,6 +120,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             // IsLoading is true by default — the screen opens immediately with a loading indicator.
             // Load counts and entity lists on a background thread.
             _loadingCts?.Cancel();
+            _loadingCts?.Dispose();
             _loadingCts = new CancellationTokenSource();
             var cancellationToken = _loadingCts.Token;
             _ = Task.Run(async () =>
@@ -170,11 +171,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var entitiesWithErrors = topErrorsResult.Entities.ToList();
 
             var errorsDescription = UIResources.Interview_Complete_Entities_With_Errors + " " + MoreThan(errorsCount);
+            cancellationToken.ThrowIfCancellationRequested();
 
             // --- Marshal UI updates to main thread ---
             await InvokeOnMainThreadAsync(() =>
             {
-                if (isDisposed)
+                if (isDisposed || cancellationToken.IsCancellationRequested)
                 {
                     // Dispose ViewModels that were created but won't be added to any tab.
                     entitiesWithErrors.ForEach(vm => vm.DisposeIfDisposable());
@@ -204,7 +206,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 RaisePropertyChanged(nameof(IsAllOk));
             });
 
-            if (isDisposed || cancellationToken.IsCancellationRequested) return;
+            cancellationToken.ThrowIfCancellationRequested();
+            if (isDisposed) return;
             await OnTabDataLoadedAsync(interviewId, navigationState);
         }
 
@@ -221,6 +224,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 IsCompletionAllowed = CalculateIsCompletionAllowed();
                 IsLoading = false;
+                RaisePropertyChanged(nameof(IsAllOk));
             });
         }
 
@@ -232,7 +236,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public int ErrorsCount { get; set; }
 
-        public string EntitiesWithErrorsDescription { get; private set; }
+        public string EntitiesWithErrorsDescription { get; protected set; }
 
         public bool CanSwitchToWebMode
         {
