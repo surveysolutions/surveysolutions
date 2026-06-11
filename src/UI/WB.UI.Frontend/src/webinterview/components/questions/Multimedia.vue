@@ -60,6 +60,13 @@ export default {
         '$me.answer'() {
             this.uploadingImage = null
         },
+        '$me.validity.errorMessage'(val) {
+            if (val) {
+                this.uploadingImage = null
+                this.$refs.uploader.type = ''
+                this.$refs.uploader.type = 'file'
+            }
+        },
     },
 
     methods: {
