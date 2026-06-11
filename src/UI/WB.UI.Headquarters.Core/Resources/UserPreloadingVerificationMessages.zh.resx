@@ -228,4 +228,121 @@
   <data name="PLU0014Recomendation" xml:space="preserve">
     <value>只允许使用字母、点、空格和撇号</value>
   </data>
+
+
+  <data name="PLU0001Recomendation" xml:space="preserve">
+      <value>User must be unique </value>
+  </data>
+
+  <data name="PLU0002Recomendation" xml:space="preserve">
+      <value>Resolve duplicates</value>
+  </data>
+
+  <data name="PLU0007Recomendation" xml:space="preserve">
+      <value>Fix email</value>
+  </data>
+
+  <data name="PLU0008Recomendation" xml:space="preserve">
+      <value>Fix phone number</value>
+  </data>
+
+  <data name="PLU0010Recomendation" xml:space="preserve">
+      <value>Verify value for supervisor</value>
+  </data>
+
+  <data name="PLU0015" xml:space="preserve">
+    <value>Password too short</value>
+  </data>
+
+  <data name="PLU0015Description" xml:space="preserve">
+    <value>Password '{0}' is too short</value>
+  </data>
+
+  <data name="PLU0015Recomendation" xml:space="preserve">
+    <value>Password must be at least 10 characters long</value>
+  </data>
+
+  <data name="PLU0016" xml:space="preserve">
+    <value>Simple password</value>
+  </data>
+
+  <data name="PLU0016Description" xml:space="preserve">
+    <value>Password '{0}' does not contain non alphanumeric character</value>
+  </data>
+
+  <data name="PLU0016Recomendation" xml:space="preserve">
+    <value>Add at least one non alphanumeric character</value>
+  </data>
+
+  <data name="PLU0017" xml:space="preserve">
+    <value>Simple password</value>
+  </data>
+
+  <data name="PLU0017Description" xml:space="preserve">
+    <value>Password '{0}' does not contain digit</value>
+  </data>
+
+  <data name="PLU0017Recomendation" xml:space="preserve">
+    <value>Add at least one digit ('0'-'9').</value>
+  </data>
+
+  <data name="PLU0018" xml:space="preserve">
+    <value>Simple password</value>
+  </data>
+
+  <data name="PLU0018Description" xml:space="preserve">
+    <value>Password '{0}' does not contain lower case character</value>
+  </data>
+
+  <data name="PLU0018Recomendation" xml:space="preserve">
+    <value>Add at least one lowercase character ('a'-'z').</value>
+  </data>
+
+  <data name="PLU0019" xml:space="preserve">
+    <value>Simple password</value>
+  </data>
+
+  <data name="PLU0019Description" xml:space="preserve">
+    <value>Password '{0}' does not contain upper case character</value>
+  </data>
+
+  <data name="PLU0019Recomendation" xml:space="preserve">
+    <value>Add at least one uppercase ('A'-'Z').</value>
+  </data>
+
+  <data name="PLU0020" xml:space="preserve">
+    <value>Simple password</value>
+  </data>
+
+  <data name="PLU0020Description" xml:space="preserve">
+    <value>Password '{0}' does not contain enough unique characters</value>
+  </data>
+
+  <data name="PLU0020Recomendation" xml:space="preserve">
+      <value>Add different characters.</value>
+  </data>
+
+  <data name="PLU0021" xml:space="preserve">
+    <value>Password required</value>
+  </data>
+
+  <data name="PLU0021Description" xml:space="preserve">
+    <value>Password is required </value>
+  </data>
+
+  <data name="PLU0021Recomendation" xml:space="preserve">
+    <value>Add password</value>
+  </data>
+
+  <data name="PLU0022" xml:space="preserve">
+    <value>Workspace not found</value>
+  </data>
+
+  <data name="PLU0022Description" xml:space="preserve">
+    <value>Workspace must exist and be enabled</value>
+  </data>
+
+  <data name="PLU0022Recomendation" xml:space="preserve">
+    <value>Check workspace name</value>
+  </data>
 </root>

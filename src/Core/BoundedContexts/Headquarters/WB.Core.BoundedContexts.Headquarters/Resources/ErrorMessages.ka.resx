@@ -141,4 +141,21 @@
   <data name="TemplateNotFound" xml:space="preserve">
     <value>"{0}" კითხვარი არ მოიძებნა. გთხოვთ, განაახლოთ კითხვარების ჩამონათვალი</value>
   </data>
+
+
+  <data name="InvalidAuthenticatorCode" xml:space="preserve">
+    <value>Invalid authenticator code.</value>
+  </data>
+
+  <data name="InvalidRecoveryCode" xml:space="preserve">
+    <value>Invalid recovery code entered.</value>
+  </data>
+
+  <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
+      <value>Another questionnaire is being imported to Headquarters now.</value>
+  </data>
+
+  <data name="ApiUserIsNotAllowedToSignIn" xml:space="preserve">
+      <value>Api user is not allowed to signin with user interface</value>
+  </data>
 </root>

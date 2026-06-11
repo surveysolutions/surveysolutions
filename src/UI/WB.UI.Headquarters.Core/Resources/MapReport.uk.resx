@@ -138,4 +138,9 @@
   <data name="ViewInterviewContent" xml:space="preserve">
     <value>Переглянути деталі інтерв'ю</value>
   </data>
+
+
+  <data name="ReloadGeoTacking" xml:space="preserve">
+      <value>Reload  tracks</value>
+  </data>
 </root>

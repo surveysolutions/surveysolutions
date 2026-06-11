@@ -1694,4 +1694,45 @@
   <data name="AIAssistant" xml:space="preserve">
       <value>ИИ</value>
   </data>
+
+
+  <data name="ErrorsCounter_plural" xml:space="preserve">
+    <value>{{count}} errors</value>
+  </data>
+
+  <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
+    <value>{{count}} Files Attachments ({{bytes}} total)</value>
+  </data>
+
+  <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
+    <value>{{count}} Lookup Tables:</value>
+  </data>
+
+  <data name="SideBarMacroCounter_plural" xml:space="preserve">
+    <value>{{count}} Macros:</value>
+  </data>
+
+  <data name="SideBarSectionsCounter_plural" xml:space="preserve">
+    <value>{{count}} Sections:</value>
+  </data>
+
+  <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
+    <value>{{count}} Translations</value>
+  </data>
+
+  <data name="WarningsCounter_plural" xml:space="preserve">
+    <value>{{count}} warnings</value>
+  </data>
+
+  <data name="CompilationErrorsCounter_plural" xml:space="preserve">
+    <value>{{count}} errors found</value>
+  </data>
+
+  <data name="CompilationWarningsCounter_plural" xml:space="preserve">
+    <value>{{count}} warnings found</value>
+  </data>
+
+  <data name="FindReplaceInAllFound_plural" xml:space="preserve">
+    <value>in {{count}} found entities?</value>
+  </data>
 </root>

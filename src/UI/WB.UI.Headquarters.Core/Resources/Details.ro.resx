@@ -165,4 +165,13 @@
   <data name="YouCanChangeResponsibleInterviewer" xml:space="preserve">
     <value>Puteți schimba responsabilul pentru interviu la respingere. Vă rugăm să alegeți un alt anchetator responsabil</value>
   </data>
+
+
+  <data name="Area_Coordinates" xml:space="preserve">
+    <value>Coordinates</value>
+  </data>
+
+  <data name="InterviewMode" xml:space="preserve">
+    <value>Mode</value>
+  </data>
 </root>

@@ -195,4 +195,13 @@
   <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
     <value>Începeți un interviu nou</value>
   </data>
+
+
+  <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve">
+    <value>Invitation</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
+    <value>Welcome Header</value>
+  </data>
 </root>

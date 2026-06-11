@@ -132,4 +132,9 @@
   <data name="HasUsersToImport" xml:space="preserve">
     <value>请等待至前一批用户导入完成</value>
   </data>
+
+
+  <data name="FileDoesNotContainAnyData" xml:space="preserve">
+    <value>The file '{0}' does not contain any user data</value>
+  </data>
 </root>

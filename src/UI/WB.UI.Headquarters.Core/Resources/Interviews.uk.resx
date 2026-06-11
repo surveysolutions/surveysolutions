@@ -283,4 +283,13 @@
     <value>&lt;h3&gt;&lt;b&gt;Буде відізвано підтвердження для {{count}}&lt;/b&gt; інтерв'ю.&lt;/h3&gt;
 &lt;b&gt;Зверніть увагу!&lt;/b&gt; Ви можете відізвати підтвердження інтерв'ю лише з таким статусом: &lt;i&gt;{{status1}}&lt;/i&gt;.</value>
   </data>
+
+
+  <data name="Tooltip_Table_InterviewMode" xml:space="preserve">
+    <value>Show current status (CAPI or CAWI) of each interview</value>
+  </data>
+
+  <data name="WebInterviewResponsibleWarning" xml:space="preserve">
+      <value>Responsible is not Interviewer. Link will not work.</value>
+  </data>
 </root>

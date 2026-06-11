@@ -354,4 +354,21 @@
   <data name="Variable_Update" xml:space="preserve">
     <value>Variabila {0} a fost actualizată</value>
   </data>
+
+
+  <data name="CriticalRule_Add" xml:space="preserve">
+    <value>Critical rule {0} added</value>
+  </data>
+
+  <data name="CriticalRule_Delete" xml:space="preserve">
+    <value>Critical rule {0} deleted</value>
+  </data>
+
+  <data name="CriticalRule_Update" xml:space="preserve">
+    <value>Critical rule {0} updated</value>
+  </data>
+
+  <data name="Translation_Replace" xml:space="preserve">
+    <value>Document switched to {0} translation</value>
+  </data>
 </root>

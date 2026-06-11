@@ -273,4 +273,62 @@
   <data name="ObserversCountDescription" xml:space="preserve">
       <value>观测员 ({{count}})</value>
   </data>
+
+
+  <data name="CreateAdministrator" xml:space="preserve">
+    <value>Create administrator</value>
+  </data>
+
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Reset Password</value>
+  </data>
+
+  <data name="ResetPasswordTitle" xml:space="preserve">
+    <value>Reset user password</value>
+  </data>
+
+  <data name="UserNotFound" xml:space="preserve">
+    <value>User not found</value>
+  </data>
+
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Password for user {0} changed</value>
+  </data>
+
+
+  <data name="Filter_AllUsers" xml:space="preserve">
+    <value>All users</value>
+  </data>
+
+  <data name="Filter_WithMissingWorkspace" xml:space="preserve">
+    <value>Missing workspaces</value>
+  </data>
+
+  <data name="Filter_WithDisabledWorkspaces" xml:space="preserve">
+    <value>With disabled workspaces only</value>
+  </data>
+
+  <data name="Filter_Locked" xml:space="preserve">
+    <value>Locked users</value>
+  </data>
+
+  <data name="Filter_Archived" xml:space="preserve">
+    <value>Archived users</value>
+  </data>
+
+  <data name="UsersTitle" xml:space="preserve">
+    <value>Users</value>
+  </data>
+
+  <data name="AddUser" xml:space="preserve">
+    <value>Add User</value>
+  </data>
+
+  <data name="UploadUsers" xml:space="preserve">
+    <value>Upload Users</value>
+  </data>
+
+  <data name="ApiTokenTitle" xml:space="preserve">
+      <value>User API Token</value>
+  </data>
 </root>

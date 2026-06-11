@@ -312,4 +312,25 @@
   <data name="You" xml:space="preserve">
     <value>ju</value>
   </data>
+
+
+  <data name="ControlPanel" xml:space="preserve">
+    <value>Control panel</value>
+  </data>
+
+  <data name="RestoreQuestionnaireDocument" xml:space="preserve">
+    <value>Restore questionnaire document (old)</value>
+  </data>
+
+  <data name="ExcelOrTabFilesOnly" xml:space="preserve">
+    <value>Only Excel or tab-separated values files are accepted</value>
+  </data>
+
+  <data name="SaveAs" xml:space="preserve">
+    <value>Save as</value>
+  </data>
+
+  <data name="CloneDeletedWarning" xml:space="preserve">
+      <value>You are creating a copy of deleted questionnaire. Some parts might be lost.</value>
+  </data>
 </root>

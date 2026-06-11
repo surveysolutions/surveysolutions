@@ -282,4 +282,33 @@
   <data name="LastLoginDate" xml:space="preserve">
     <value>Data e hyrjes së fundit</value>
   </data>
+
+
+  <data name="Forum" xml:space="preserve">
+    <value>Forum</value>
+  </data>
+
+  <data name="LogoutText" xml:space="preserve">
+    <value>You have successfully logged out of the application.</value>
+  </data>
+
+  <data name="LockedOut" xml:space="preserve">
+    <value>Locked out</value>
+  </data>
+
+  <data name="LockedOutText" xml:space="preserve">
+    <value>Your account is locked. Contact the administrator to unlock your account</value>
+  </data>
+
+  <data name="PasswordEmailSent" xml:space="preserve">
+    <value>Please check your email to reset your password.</value>
+  </data>
+
+  <data name="EmailChangeShouldBeConfirmed" xml:space="preserve">
+    <value>Please follow instructions sent to provided email ({0}) to confirm email change.</value>
+  </data>
+
+  <data name="PendingEmailUpdate" xml:space="preserve">
+    <value>Pending update to {0}</value>
+  </data>
 </root>

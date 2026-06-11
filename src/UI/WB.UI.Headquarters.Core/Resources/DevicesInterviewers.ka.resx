@@ -144,4 +144,13 @@
   <data name="WrongDateOnTablet" xml:space="preserve">
     <value>დრო არასწორია ტაბლეტზე</value>
   </data>
+
+
+  <data name="TeamSize" xml:space="preserve">
+    <value>Team size</value>
+  </data>
+
+  <data name="Interviewers" xml:space="preserve">
+    <value>Interviewers</value>
+  </data>
 </root>

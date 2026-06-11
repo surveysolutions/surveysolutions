@@ -138,4 +138,9 @@
   <data name="Assignment" xml:space="preserve">
     <value>任务</value>
   </data>
+
+
+  <data name="ReloadGeoTacking" xml:space="preserve">
+      <value>Reload  tracks</value>
+  </data>
 </root>

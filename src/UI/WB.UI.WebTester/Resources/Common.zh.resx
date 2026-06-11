@@ -144,4 +144,9 @@
   <data name="TheWorldBankGroup" xml:space="preserve">
     <value>世界银行集团</value>
   </data>
+
+
+  <data name="ReloadPartialInterviewErrorMessage" xml:space="preserve">
+    <value>Interview data can't be applied to new version of questionnaire. We apply some data only.</value>
+  </data>
 </root>

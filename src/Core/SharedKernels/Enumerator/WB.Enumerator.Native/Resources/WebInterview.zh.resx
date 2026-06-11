@@ -237,4 +237,192 @@
   <data name="WelcomeText" xml:space="preserve">
     <value>您好，欢迎使用Survey Solutions网络访谈</value>
   </data>
+
+
+  <data name="DownloadAnswers" xml:space="preserve">
+    <value>Download interview transcript</value>
+  </data>
+
+  <data name="DownloadAnswersHint" xml:space="preserve">
+    <value>Download interview answers as pdf file</value>
+  </data>
+
+  <data name="Start" xml:space="preserve">
+    <value>Start new interview</value>
+  </data>
+
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Wrong password</value>
+  </data>
+
+  <data name="ResumeInterview" xml:space="preserve">
+    <value>Resume interview</value>
+  </data>
+
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve">
+    <value>Cannot modify interview that was received by device</value>
+  </data>
+
+  <data name="EnterPasswordText" xml:space="preserve">
+    <value>This link is protected with password, that was distributed with the link. Please enter it here</value>
+  </data>
+
+  <data name="Error_Forbidden" xml:space="preserve">
+    <value>Forbidden</value>
+  </data>
+
+  <data name="Error_UserNotAuthorised" xml:space="preserve">
+    <value>User is not authorized</value>
+  </data>
+
+  <data name="CompleteInterview" xml:space="preserve">
+    <value>Complete interview</value>
+  </data>
+
+  <data name="Filters_Title" xml:space="preserve">
+    <value>Filter Questions</value>
+  </data>
+
+  <data name="Filters_Flagged" xml:space="preserve">
+    <value>Flagged</value>
+  </data>
+
+  <data name="Filters_WithComments" xml:space="preserve">
+    <value>With comments</value>
+  </data>
+
+  <data name="Filters_Invalid" xml:space="preserve">
+    <value>Invalid</value>
+  </data>
+
+  <data name="Filters_Valid" xml:space="preserve">
+    <value>Valid</value>
+  </data>
+
+  <data name="Filters_Answered" xml:space="preserve">
+    <value>Answered</value>
+  </data>
+
+  <data name="Filters_NotAnswered" xml:space="preserve">
+    <value>Not answered</value>
+  </data>
+
+  <data name="Filters_ForSupervisor" xml:space="preserve">
+    <value>For supervisor</value>
+  </data>
+
+  <data name="Filters_ForInterviewer" xml:space="preserve">
+    <value>For interviewer</value>
+  </data>
+
+  <data name="Filters_NotFlagged" xml:space="preserve">
+    <value>No flag</value>
+  </data>
+
+  <data name="Filters_CriticalQuestions" xml:space="preserve">
+    <value>Critical questions</value>
+  </data>
+
+  <data name="Filters_CriticalRules" xml:space="preserve">
+    <value>Critical rules</value>
+  </data>
+
+  <data name="PoweredBy" xml:space="preserve">
+    <value>Powered by</value>
+  </data>
+
+  <data name="Filters_ClearSelection" xml:space="preserve">
+    <value>Reset all filters</value>
+  </data>
+
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+
+  <data name="QuestionnaireNameFormat" xml:space="preserve">
+    <value>{0} (ver. {1})</value>
+  </data>
+
+  <data name="InterviewSizeLimitReached" xml:space="preserve">
+    <value>Interview contains total number of roster instances and questions exceeding the system limits.</value>
+  </data>
+
+  <data name="AssignmentLimitReached" xml:space="preserve">
+    <value>We collect all interviews in this survey.</value>
+  </data>
+
+  <data name="InterviewNotFound" xml:space="preserve">
+    <value>Interview was not found.</value>
+  </data>
+
+  <data name="Email_InvitationTemplate_Subject" xml:space="preserve">
+    <value>Invitation to take a part in %SURVEYNAME%</value>
+  </data>
+
+  <data name="Email_InvitationTemplate_Message" xml:space="preserve">
+    <value>Welcome to %SURVEYNAME%!
+
+To take the survey click on the following link: %SURVEYLINK% and enter your password: %PASSWORD%
+ 
+Thank you for your cooperation!</value>
+  </data>
+
+  <data name="Email_NoResponse_Subject" xml:space="preserve">
+    <value>Reminder, don’t forget to take a part in %SURVEYNAME%</value>
+  </data>
+
+  <data name="Email_NoResponse_Message" xml:space="preserve">
+    <value>You are receiving this reminder because you haven’t started responding to %SURVEYNAME%!
+ 
+To take the survey click on the following link: %SURVEYLINK% and enter your password: %PASSWORD%
+ 
+Thank you for your cooperation!</value>
+  </data>
+
+  <data name="Email_PartialResponse_Subject" xml:space="preserve">
+    <value>Reminder, please complete your response to %SURVEYNAME%</value>
+  </data>
+
+  <data name="Email_PartialResponse_Message" xml:space="preserve">
+    <value>You are receiving this reminder because you have started responding to %SURVEYNAME%, but haven’t completed the process.
+ 
+To continue the survey click on the following link: %SURVEYLINK% and enter your password: %PASSWORD%.
+ 
+Please answer all applicable questions and click the ‘COMPLETE’ button to submit your responses.
+ 
+Thank you for your cooperation!</value>
+  </data>
+
+  <data name="Email_RejectEmail_Subject" xml:space="preserve">
+    <value>Your action is required in %SURVEYNAME%</value>
+  </data>
+
+  <data name="Email_RejectEmail_Message" xml:space="preserve">
+    <value>Thank you for taking part in %SURVEYNAME%!
+ 
+While processing your response our staff has found some issues, which you are hereby asked to review.
+ 
+To continue the survey click on the following link: %SURVEYLINK% and enter your password: %PASSWORD%.
+ 
+We would appreciate if you try addressing all issues marked in your response and click the ‘COMPLETE’ button to submit your responses.
+ 
+Thank you for your cooperation!</value>
+  </data>
+
+  <data name="NoteForSupervisor" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+
+  <data name="Complete" xml:space="preserve">
+    <value>Complete</value>
+    <comment>Complete interview button text</comment>
+  </data>
+
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+    <value>Link to web interview landing page example</value>
+  </data>
 </root>

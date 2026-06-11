@@ -126,4 +126,21 @@
   <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
     <value>Vetëm supervizori përgjegjës për këtë detyrë mund t’u përgjigjet pyetjeve të supervizorit të saj</value>
   </data>
+
+
+  <data name="WebModeAssignmentShouldBeOnInterviewer" xml:space="preserve">
+    <value>An assignment for web interview must have an interviewer as responsible</value>
+  </data>
+
+  <data name="AssignmentResponsibleNotFound" xml:space="preserve">
+    <value>Responsible was not found</value>
+  </data>
+
+ <data name="QuestionnaireWasDeleted" xml:space="preserve">
+    <value>Questionnaire was deleted</value>
+  </data>
+
+ <data name="AssignmentLimitReached" xml:space="preserve">
+    <value>Assignment limit was reached</value>
+  </data>
 </root>

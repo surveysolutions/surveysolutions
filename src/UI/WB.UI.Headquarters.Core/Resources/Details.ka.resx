@@ -141,4 +141,45 @@
   <data name="Overview" xml:space="preserve">
     <value>მიმოხილვა</value>
   </data>
+
+
+  <data name="Area_Coordinates" xml:space="preserve">
+    <value>Coordinates</value>
+  </data>
+
+  <data name="YouCanChangeResponsibleInterviewer" xml:space="preserve">
+    <value>You can change responsible for interview on reject. Please, choose responsible interviewer</value>
+  </data>
+
+  <data name="FlagTitleFlagged" xml:space="preserve">
+    <value>Flagged</value>
+  </data>
+
+  <data name="FlagTitleUnflagged" xml:space="preserve">
+    <value>Not flagged</value>
+  </data>
+
+  <data name="NoSearchResults" xml:space="preserve">
+    <value>No items found</value>
+  </data>
+
+  <data name="SearchResult_Count" xml:space="preserve">
+    <value>{{ count }} item found:</value>
+  </data>
+
+  <data name="SearchResult_Count_other" xml:space="preserve">
+    <value>{{ count }} items found:</value>
+  </data>
+
+  <data name="Status" xml:space="preserve">
+    <value>Status: {{ name }}</value>
+  </data>
+
+  <data name="ShowQuestionnaireDetails" xml:space="preserve">
+    <value>Show questionnaire details</value>
+  </data>
+
+  <data name="InterviewMode" xml:space="preserve">
+    <value>Mode</value>
+  </data>
 </root>

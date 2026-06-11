@@ -182,4 +182,157 @@
   <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
       <value>ინტერვიუები შეგიძლიათ დაამტკიცოთ მხოლოდ შემდეგ სტატუსებიდან: {{status1}}, {{status2}}, {{status3}}</value>
   </data>
+
+
+  <data name="AssignReceivedWarning" xml:space="preserve">
+    <value>Current responsible interviewers will not be notified about the reassignment until the next synchronization. If they have started working on the interview already, all the data that they have entered before the next synchronization will be DISCARDED!</value>
+  </data>
+
+  <data name="ApproveReceivedWarning" xml:space="preserve">
+    <value>Current responsible interviewers will not be notified about the interview(s) approving until the next synchronization. If they have started working on the interview already, all the data that they have entered before the next synchronization will be DISCARDED!</value>
+  </data>
+
+  <data name="SwitchToCawiReceivedWarning" xml:space="preserve">
+    <value>Current responsible interviewers will not be notified about the interview(s) switching interview mode until the next synchronization. If they have started working on the interview already, all the data that they have entered before the next synchronization will be DISCARDED!</value>
+  </data>
+
+  <data name="ChooseResponsible" xml:space="preserve">
+    <value>Please choose a Supervisor or Interviewer.</value>
+  </data>
+
+  <data name="RejectToOriginal" xml:space="preserve">
+    <value>Reject to original responsible</value>
+  </data>
+
+  <data name="RejectToNewResponsible" xml:space="preserve">
+    <value>Reject and choose new responsible</value>
+  </data>
+
+  <data name="Tooltip_Filter_Assignment" xml:space="preserve">
+    <value>Assignment ID. Click in the field to type the full ID number.</value>
+  </data>
+
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>Select a questionnaire to see its associated interviews in the list. Select “All questionnaires” to see interviews associated with any questionnaire.</value>
+  </data>
+
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+    <value>User responsible. Click in the field to choose a user name either by selecting it directly or typing to filter the list of user names further.</value>
+  </data>
+
+  <data name="Tooltip_Filter_Status" xml:space="preserve">
+    <value>Status of interview. Select a status to see all interviews with that status. Select “All statuses” to see interviews with any status.</value>
+  </data>
+
+  <data name="Tooltip_Table_Assignment" xml:space="preserve">
+    <value>Identifier for the assignment to which this interview belongs. Click on the sort icon to sort by assignment number.</value>
+  </data>
+
+  <data name="Tooltip_Table_HideShowIdentifying" xml:space="preserve">
+    <value>Click here to hide or show the identifying questions. Hiding identifying questions may provide more space for other information. Showing identifying questions may provide details for differentiating between interviews.</value>
+  </data>
+
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+    <value>Information that identifies each assignment. These are the answers to questions marked as identifying in Designer.</value>
+  </data>
+
+  <data name="Tooltip_Table_InterviewKey" xml:space="preserve">
+    <value>Short case identifier that appears throughout the system--in Headquarters, Supervisor, and Interviewer. Consider using this ID  when communicating with field team, rather than a large set of identifying question.</value>
+  </data>
+
+  <data name="Tooltip_Table_LastUpdate" xml:space="preserve">
+    <value>When changes to the interview were last posted to the server. Click on the sort icon to sort by time.</value>
+  </data>
+
+  <data name="Tooltip_Table_ReceivedByInterviewer" xml:space="preserve">
+    <value>Indicator for whether the interview has been downloaded onto the interviewer’s tablet. Click on the sort icon to sort by receipt by the interviewer.</value>
+  </data>
+
+  <data name="Tooltip_Table_Responsible" xml:space="preserve">
+    <value>User currently responsible for the assignment. Click sort icon to sort user name.</value>
+  </data>
+
+  <data name="Tooltip_Table_Status" xml:space="preserve">
+    <value>Status of the interview in the survey workflow. Click on the sort icon to sort by status.</value>
+  </data>
+
+  <data name="Tooltip_Table_ErrorsCount" xml:space="preserve">
+    <value>Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1.</value>
+  </data>
+
+  <data name="Errors" xml:space="preserve">
+    <value>Errors count</value>
+  </data>
+
+  <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve">
+    <value>Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release.</value>
+  </data>
+
+  <data name="Tooltip_Table_InterviewMode" xml:space="preserve">
+    <value>Show current status (CAPI or CAWI) of each interview</value>
+  </data>
+
+    <data name="NotAnsweredCount" xml:space="preserve">
+    <value>Not answered</value>
+  </data>
+
+  <data name="ChooseQuestionsTitle" xml:space="preserve">
+    <value>Choose identifying questions to use in the filter</value>
+  </data>
+
+  <data name="DynamicFilter" xml:space="preserve">
+    <value>Dynamic filter</value>
+  </data>
+
+  <data name="FiltersByQuestions" xml:space="preserve">
+    <value>Filters by questions</value>
+  </data>
+
+  <data name="QuestionsSelector" xml:space="preserve">
+    <value>Questions selector</value>
+  </data>
+
+  <data name="AdvancedFilterSelector" xml:space="preserve">
+    <value>Dynamic filter</value>
+  </data>
+
+  <data name="QuestionsFilterNotAvailable" xml:space="preserve">
+    <value>Filters by questions is only available when specific questionnaire version is selected</value>
+  </data>
+
+  <data name="DynamicFilterNotAvailable" xml:space="preserve">
+    <value>No data available</value>
+  </data>
+
+  <data name="ApproveConfirmMessage_other" xml:space="preserve">
+      <value>{{count}} interviews will be approved.</value>
+  </data>
+
+  <data name="DynamicFilter_MatchType" xml:space="preserve">
+    <value>Match Type</value>
+  </data>
+
+  <data name="DynamicFilter_MatchTypes_And" xml:space="preserve">
+    <value>AND</value>
+  </data>
+
+  <data name="DynamicFilter_MatchTypes_Or" xml:space="preserve">
+    <value>OR</value>
+  </data>
+
+  <data name="DynamicFilter_MatchTypes_AddRule" xml:space="preserve">
+    <value>Add Rule</value>
+  </data>
+
+  <data name="DynamicFilter_MatchTypes_AddGroup" xml:space="preserve">
+    <value>Add Group</value>
+  </data>
+
+  <data name="DynamicFilter_MatchTypes_ValuePlaceholder" xml:space="preserve">
+    <value>value</value>
+  </data>
+
+  <data name="WebInterviewResponsibleWarning" xml:space="preserve">
+      <value>Responsible is not Interviewer. Link will not work.</value>
+  </data>
 </root>

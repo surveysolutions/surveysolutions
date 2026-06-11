@@ -180,4 +180,13 @@
   <data name="UpgradeAssignments" xml:space="preserve">
     <value>升级任务</value>
   </data>
+
+
+  <data name="Importing" xml:space="preserve">
+    <value>Importing {{percent}}%</value>
+  </data>
+
+  <data name="Prepare" xml:space="preserve">
+    <value>Receiving questionnaire data</value>
+  </data>
 </root>

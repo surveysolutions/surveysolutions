@@ -297,4 +297,13 @@
   <data name="LastLoginDate" xml:space="preserve">
     <value>Data ultimei autentificări</value>
   </data>
+
+
+  <data name="EmailChangeShouldBeConfirmed" xml:space="preserve">
+    <value>Please follow instructions sent to provided email ({0}) to confirm email change.</value>
+  </data>
+
+  <data name="PendingEmailUpdate" xml:space="preserve">
+    <value>Pending update to {0}</value>
+  </data>
 </root>

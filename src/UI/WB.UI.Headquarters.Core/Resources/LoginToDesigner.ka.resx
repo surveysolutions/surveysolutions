@@ -141,4 +141,9 @@
   <data name="UserDesignerCredentials" xml:space="preserve">
     <value>გთხოვთ, შეხვიდეთ ავტორიზაციით რომელსაც იყენებთ თქვენს კითხვარებში შესასვლელად დიზაინერის საიტზე და ტესტერის აპლიკაციაში</value>
   </data>
+
+
+  <data name="SessionExpired" xml:space="preserve">
+    <value>Session has expired please sign in again</value>
+  </data>
 </root>

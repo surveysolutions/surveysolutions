@@ -213,4 +213,418 @@
   <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
     <value>启用后，访谈员可以从平板电脑完成和重新开启任务（需要启用督导员设置）</value>
   </data>
+
+
+  <data name="ClearExportCache_Title" xml:space="preserve">
+    <value>Clear export cache</value>
+  </data>
+
+  <data name="ClearExportCache_Description" xml:space="preserve">
+    <value>This operation will clear all export cache data. Next export will take more time.</value>
+  </data>
+
+  <data name="RemoveExportCache" xml:space="preserve">
+    <value>Clear cache</value>
+  </data>
+
+  <data name="RemoveExportCacheConfirm" xml:space="preserve">
+    <value>Are you sure you want to clear export cache? All generated export files will be removed from the server and will NOT be available for download.</value>
+  </data>
+
+  <data name="RemoveExportCacheSuccess" xml:space="preserve">
+    <value>Export cache was cleared successfully</value>
+  </data>
+
+  <data name="RemovingExportCache" xml:space="preserve">
+    <value>Clearing export cache is running</value>
+  </data>
+
+  <data name="RemoveExportCacheFail" xml:space="preserve">
+    <value>Export cache cannot be cleared at the moment. Please try again later.
+Possible reasons:
+* An export file is being generated.
+* Generated export file is being downloaded.
+* Removing of generated export file is blocked by another program.
+* etc.</value>
+  </data>
+
+    <data name="RemoveExportCacheGeneratingFail" xml:space="preserve">
+    <value>Export cache cannot be cleared in the current moment. An export file is being generated.</value>
+  </data>
+
+  <data name="RemoveExportCache_Warning" xml:space="preserve">
+    <value>Warning! This is an irreversible action</value>
+  </data>
+
+  <data name="UserProfileSettings_Title" xml:space="preserve">
+    <value>User profile</value>
+  </data>
+
+  <data name="WebInterviewEmailNotifications_Title" xml:space="preserve">
+    <value>Web interview</value>
+  </data>
+
+  <data name="MobileAppSettings_Title" xml:space="preserve">
+    <value>Interviewer/Supervisor applications</value>
+  </data>
+
+  <data name="MobileAppSettings_Description" xml:space="preserve">
+    <value>Specific settings by Android version of Interviewer/Supervisor application</value>
+  </data>
+
+  <data name="AllowInterviewerUpdateProfile" xml:space="preserve">
+    <value>Enumerator's profile editing</value>
+  </data>
+
+  <data name="AllowWebInterviewEmailNotifications" xml:space="preserve">
+    <value>Web interview email notifications</value>
+  </data>
+
+  <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
+    <value>Allow enumerators to update their contact information in their account profile</value>
+  </data>
+
+  <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve">
+    <value>Allow respondents to web interviews to request emails with links to resume started interviews (effective if bulk email service provider is set up)</value>
+  </data>
+
+  <data name="ChangeStateDisabledConfirm" xml:space="preserve">
+    <value>Are you sure you want to change the export file security settings? The exported data files will no longer be protected by a password.</value>
+  </data>
+
+  <data name="LogoSettings_Description1" xml:space="preserve">
+    <value>Click the 'Choose file' button to upload an image from your computer to the server to be used as a logo image. Then click 'Save' button.</value>
+  </data>
+
+  <data name="AutoUpdateDescription" xml:space="preserve">
+    <value>If checked then only latest version of Interviewer/Supervisor application can synchronize with Headquarters</value>
+  </data>
+
+  <data name="InterviewerPartialSynchronization" xml:space="preserve">
+    <value>Enable partial synchronization</value>
+  </data>
+
+  <data name="PartialSynchronizationDescription" xml:space="preserve">
+    <value>When enabled, interviewer tablets will send answers in noncompleted interviews to Headquarters</value>
+  </data>
+
+  <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve">
+      <value>Location accuracy limit</value>
+  </data>
+
+  <data name="GeographyQuestionAccuracyInMetersDescription" xml:space="preserve">
+      <value>Set threshold accuracy in meters for obtained location coordinates </value>
+  </data>
+
+  <data name="InterviewerGeographyQuestionPeriodInSeconds" xml:space="preserve">
+    <value>Geography question period</value>
+  </data>
+
+  <data name="GeographyQuestionPeriodInSecondsDescription" xml:space="preserve">
+    <value>Set period in seconds for geography question</value>
+  </data>
+
+  <data name="EmailProvider_Amazon" xml:space="preserve">
+    <value>Amazon Simple Email Service (SES)</value>
+  </data>
+
+  <data name="EmailProvider_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+
+  <data name="EmailProvider_Sendgrid" xml:space="preserve">
+    <value>SendGrid Email Delivery Service</value>
+  </data>
+
+  <data name="EmailProvider_NoneDescription" xml:space="preserve">
+    <value>Invitation messages for web interviews are not sent to the respondents by Survey Solutions.</value>
+  </data>
+
+  <data name="EmailProvider_AmazonDescription" xml:space="preserve">
+    <value>Configure the parameters to access Amazon SES below. More information on usage of Amazon SES with Survey Solutions is available </value>
+  </data>
+
+  <data name="EmailProvider_SendgridDescription" xml:space="preserve">
+    <value>Configure the parameters to access SendGrid below. More information on usage of SendGrid with Survey Solutions is available </value>
+  </data>
+
+  <data name="EmailProvider_SenderAddress" xml:space="preserve">
+    <value>Sender email address</value>
+  </data>
+
+  <data name="EmailProvider_SendGridApiKey" xml:space="preserve">
+    <value>API key</value>
+  </data>
+
+  <data name="EmailProvider_AwsAccessKeyId" xml:space="preserve">
+    <value>Access key ID</value>
+  </data>
+
+  <data name="EmailProvider_AwsSecretAccessKey" xml:space="preserve">
+    <value>Secret access key</value>
+  </data>
+
+  <data name="EmailProvider_TestEmailAddress" xml:space="preserve">
+    <value>Email address</value>
+  </data>
+
+  <data name="EmailProvider_SendTestEmail" xml:space="preserve">
+    <value>Send email</value>
+  </data>
+
+  <data name="EmailProvider_SendTestEmailResult" xml:space="preserve">
+    <value>An example of invitation email was sent successfully</value>
+  </data>
+
+  <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve">
+    <value>Send test email</value>
+  </data>
+
+  <data name="EmailProvider_PageDesc" xml:space="preserve">
+    <value>Set up bulk email service provider. Configure how the invitations for web interviews will be sent.</value>
+  </data>
+
+  <data name="EmailProvider_SenderHeader" xml:space="preserve">
+    <value>Sender information</value>
+  </data>
+
+  <data name="EmailProvider_SenderHelp" xml:space="preserve">
+    <value>Email address of the sender that will appear in the FROM field of the incoming messages.</value>
+  </data>
+
+  <data name="EmailProvider_ReplyAddressHelp" xml:space="preserve">
+    <value>Email address where the replies from the invitees may be sent (default is the sender email address.)</value>
+  </data>
+
+  <data name="EmailProvider_SenderName" xml:space="preserve">
+    <value>Sender name</value>
+  </data>
+
+  <data name="EmailProvider_ReplyAddress" xml:space="preserve">
+    <value>Reply address</value>
+  </data>
+
+  <data name="EmailProvider_SenderNameHelp" xml:space="preserve">
+    <value>Name of the sender that will appear in the FROM field of the incoming messages.</value>
+  </data>
+
+  <data name="EmailProvider_Address" xml:space="preserve">
+    <value>Sender postal address</value>
+  </data>
+
+  <data name="EmailProvider_AddressHelp" xml:space="preserve">
+    <value>Current postal address of the sender.</value>
+  </data>
+
+  <data name="EmailProvider_ServiceProvideHeader" xml:space="preserve">
+    <value>Specify bulk email service provider</value>
+  </data>
+
+  <data name="EmailProvider_AwsAccessKeyIdHelp" xml:space="preserve">
+    <value>You can find the AWS account ID from AWS Management Console</value>
+  </data>
+
+  <data name="EmailProvider_AwsSecretAccessKeyHelp" xml:space="preserve">
+    <value>Found in Security Credentials at AWS Management Console</value>
+  </data>
+
+  <data name="EmailProvider_AwsRegion" xml:space="preserve">
+    <value>Region</value>
+  </data>
+
+  <data name="EmailProvider_AwsRegionHelp" xml:space="preserve">
+    <value>Region for the AWS Management Console</value>
+  </data>
+
+  <data name="EmailProvider_AwsRegion_Unknown" xml:space="preserve">
+    <value>Selected unknown region. Please check it.</value>
+  </data>
+
+  <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve">
+    <value>You can find it on API Keys page under SendGrid settings menu item</value>
+  </data>
+
+  <data name="EmailProvider_GeneralError" xml:space="preserve">
+    <value>General error occurred</value>
+  </data>
+
+  <data name="EmailProvider_HelpLinkText" xml:space="preserve">
+    <value>here</value>
+  </data>
+
+  <data name="EmailProvider_SendTestEmailMessage" xml:space="preserve">
+    <value>Send yourself a test email message to verify that the bulk email service is functional and to get a preview of what the respondents will receive.</value>
+  </data>
+
+  <data name="EmailProvider_SettingsSavedSuccessfully" xml:space="preserve">
+    <value>Email service configuration was saved successfully.</value>
+  </data>
+
+  <data name="DeviceNotifications" xml:space="preserve">
+    <value>Enable notifications on device</value>
+  </data>
+
+  <data name="DeviceNotificationsDescription" xml:space="preserve">
+    <value>When enabled devices will notify owners about changes and actions to be taken</value>
+  </data>
+
+  <data name="EsriApiKey" xml:space="preserve">
+      <value>ESRI API Key</value>
+  </data>
+
+  <data name="EsriApiKeyDescription" xml:space="preserve">
+      <value>This key will allow to use online maps on devices. Be advised that usage of this service could cost you extra money. Please consult with service provider</value>
+  </data>
+
+  <data name="EmailProvider_Smtp" xml:space="preserve">
+    <value>SMTP Server</value>
+  </data>
+
+  <data name="EmailProvider_SmtpDescription" xml:space="preserve">
+    <value>Configure the parameters to access SMTP server below. More information on usage of SMTP server with Survey Solutions is available </value>
+  </data>
+
+  <data name="EmailProvider_SmtpHost" xml:space="preserve">
+    <value>Host</value>
+  </data>
+
+  <data name="EmailProvider_SmtpHostHelp" xml:space="preserve">
+    <value>SMTP server address</value>
+  </data>
+
+  <data name="EmailProvider_SmtpPort" xml:space="preserve">
+    <value>Port</value>
+  </data>
+
+  <data name="EmailProvider_SmtpPortHelp" xml:space="preserve">
+    <value>SMTP port</value>
+  </data>
+
+  <data name="EmailProvider_SmtpTlsEncryption" xml:space="preserve">
+    <value>Use TLS encryption</value>
+  </data>
+
+  <data name="EmailProvider_SmtpTlsEncryptionHelp" xml:space="preserve">
+    <value>TLS (Transport Layer Security) encryption secure communication. It encrypts data transmitted between clients and servers.</value>
+  </data>
+
+  <data name="EmailProvider_SmtpAuthentication" xml:space="preserve">
+    <value>Use authentication</value>
+  </data>
+
+  <data name="EmailProvider_SmtpAuthenticationHelp" xml:space="preserve">
+    <value>SMTP authentication verifies the identity of an email client or server before allowing it to send email through an SMTP server.</value>
+  </data>
+
+  <data name="EmailProvider_SmtpUsername" xml:space="preserve">
+    <value>Username</value>
+  </data>
+
+  <data name="EmailProvider_SmtpUsernameHelp" xml:space="preserve">
+    <value>Credential used during the SMTP authentication process to verify the identity.</value>
+  </data>
+
+  <data name="EmailProvider_SmtpPassword" xml:space="preserve">
+    <value>Password</value>
+  </data>
+
+  <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve">
+    <value>Credential used during the SMTP authentication process to verify the identity.</value>
+  </data>
+
+  <data name="WorkspaceSettings" xml:space="preserve">
+      <value>Workspace settings</value>
+  </data>
+
+  <data name="Export" xml:space="preserve">
+      <value>Export</value>
+  </data>
+
+  <data name="GlobalNote" xml:space="preserve">
+      <value>Global note</value>
+  </data>
+
+  <data name="UserProfile" xml:space="preserve">
+      <value>User profile</value>
+  </data>
+
+  <data name="Devices" xml:space="preserve">
+      <value>Devices</value>
+  </data>
+
+  <data name="WebInterview" xml:space="preserve">
+      <value>Web interview</value>
+  </data>
+
+  <data name="FileRetentionTitle" xml:space="preserve">
+      <value>Retention policy</value>
+  </data>
+
+    <data name="FileRetentionDescription" xml:space="preserve">
+      <value>Older export files will be periodically deleted according to these settings</value>
+  </data>
+
+  <data name="RetentionInDaysTitle" xml:space="preserve">
+      <value>Days to keep</value>
+  </data>
+
+    <data name="RetentionInDaysDescription" xml:space="preserve">
+      <value>Number of days export file will be preserved</value>
+  </data>
+
+  <data name="RetentionInCountTitle" xml:space="preserve">
+      <value>Number of files to keep</value>
+  </data>
+
+    <data name="RetentionInCountDescription" xml:space="preserve">
+      <value>Maximum amount of export files to keep in the storage</value>
+  </data>
+
+    <data name="EnableFileRetention" xml:space="preserve">
+      <value>Enable retention policy</value>
+  </data>
+
+  <data name="RetentionPolicyEnablingConfirm" xml:space="preserve">
+    <value>Are you sure you want to turn retention policy on? Export data files could be deleted.</value>
+  </data>
+
+    <data name="ForceRunRetentionPolicy" xml:space="preserve">
+      <value>Force run</value>
+  </data>
+
+    <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve">
+      <value>Warning! This is a critical action that will affect existing export files in this workspace</value>
+  </data>
+
+    <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
+      <value>Are you sure you want to forcibly run the retention policy now? Please note that this action may result in the irrecoverable deletion of export files stored in this workspace, rendering them unavailable for download.</value>
+  </data>
+
+  <data name="ExportEncryption_Warning" xml:space="preserve">
+    <value>Modifying the encryption settings will remove all previously generated export files, requiring new exports to be created</value>
+  </data>
+
+  <data name="LogoSizeLimit" xml:space="preserve">
+    <value>Logo image size should be less than {{size}}</value>
+  </data>
+
+  <data name="SelectFileWarning" xml:space="preserve">
+    <value>Please select a file to upload.</value>
+  </data>
+
+  <data name="LogoUploadSuccess" xml:space="preserve">
+    <value>Logo uploaded successfully.</value>
+  </data>
+
+  <data name="LogoUploadError" xml:space="preserve">
+    <value>Failed to upload logo. Please try again.</value>
+  </data>
+
+  <data name="LogoRemoveSuccess" xml:space="preserve">
+    <value>Logo was successfully removed.</value>
+  </data>
+
+  <data name="LogoRemoveError" xml:space="preserve">
+    <value>Failed to remove logo. Please try again.</value>
+  </data>
 </root>

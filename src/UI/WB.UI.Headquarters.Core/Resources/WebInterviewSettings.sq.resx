@@ -249,4 +249,75 @@
   <data name="WelcomePage" xml:space="preserve">
     <value>Faqen e mirëseardhjes</value>
   </data>
+
+
+  <data name="LinkToInterviewPage" xml:space="preserve">
+    <value>Web Interview Landing</value>
+  </data>
+
+  <data name="CompleteEmailMessage" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+
+  <data name="InterviewDataInsertInTextDescription" xml:space="preserve">
+    <value>In this email template you can use %question_variable% placeholder in the text as an answer on question in interview. Question must be from top level of questionnaire (not inside rosters).</value>
+  </data>
+
+  <data name="InterviewDataInsertBarcodeDescription" xml:space="preserve">
+    <value>%question_variable:barcode% - display answer as Barcode Code 128</value>
+  </data>
+
+  <data name="InterviewDataInsertQrCodeDescription" xml:space="preserve">
+    <value>%question_variable:qrcode% - display answer as QR Code</value>
+  </data>
+
+  <data name="AnswerOn" xml:space="preserve">
+    <value>answer on {{variable}}</value>
+  </data>
+
+  <data name="Resume" xml:space="preserve">
+    <value>Resume</value>
+    <comment>Resume button title</comment>
+  </data>
+
+  <data name="StartNew" xml:space="preserve">
+    <value>Start new interview</value>
+    <comment>Start new interview button title</comment>
+  </data>
+
+  <data name="Sending" xml:space="preserve">
+      <value>Sending</value>
+  </data>
+
+  <data name="NoErrors" xml:space="preserve">
+      <value>No errors</value>
+  </data>
+
+  <data name="NothingWasSent" xml:space="preserve">
+      <value>Nothing was sent</value>
+  </data>
+
+  <data name="ProcessCancelled" xml:space="preserve">
+      <value>The process was cancelled</value>
+  </data>
+
+  <data name="DownloadErrors" xml:space="preserve">
+      <value>Download list of assignments with errors</value>
+  </data>
+
+  <data name="SendingFailed" xml:space="preserve">
+      <value>Sending invitations has failed. Please contact your server administrator to check the email provider settings</value>
+  </data>
+
+  <data name="TotalSent" xml:space="preserve">
+      <value>{{ totalCount }} invitations to send</value>
+  </data>
+
+  <data name="TotalProcessed" xml:space="preserve">
+      <value>{{ processedCount }} sent successfully</value>
+  </data>
+
+  <data name="TotalWithErrors" xml:space="preserve">
+      <value>{{ withErrorsCount }} not sent because of errors.</value>
+  </data>
 </root>

@@ -324,4 +324,61 @@
   <data name="Variable_Update" xml:space="preserve">
     <value>计算变量{0}已添加</value>
   </data>
+
+
+  <data name="Categories_Add" xml:space="preserve">
+    <value>Categories {0} added</value>
+  </data>
+
+  <data name="Categories_Delete" xml:space="preserve">
+    <value>Categories {0} deleted</value>
+  </data>
+
+  <data name="Categories_Update" xml:space="preserve">
+    <value>Categories {0} updated</value>
+  </data>
+
+  <data name="CriticalRule_Add" xml:space="preserve">
+    <value>Critical rule {0} added</value>
+  </data>
+
+  <data name="CriticalRule_Delete" xml:space="preserve">
+    <value>Critical rule {0} deleted</value>
+  </data>
+
+  <data name="CriticalRule_Update" xml:space="preserve">
+    <value>Critical rule {0} updated</value>
+  </data>
+
+  <data name="Translation_Replace" xml:space="preserve">
+    <value>Document switched to {0} translation</value>
+  </data>
+
+  <data name="Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+
+  <data name="LeaveComment" xml:space="preserve">
+    <value>Leave a comment</value>
+  </data>
+
+  <data name="ExtractAtRevision" xml:space="preserve">
+      <value>Extract at revision</value>
+  </data>
+
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+
+  <data name="Questionnaire_Move" xml:space="preserve">
+    <value>Questionnaire ownership transferred to user with email "{0}"</value>
+  </data>
+
+  <data name="Questionnaire_ImportToHq" xml:space="preserve">
+    <value>Imported questionnaire to Headquarters ({0}) as {2} by {1}</value>
+  </data>
+
+  <data name="MigratedNewCoverSupport" xml:space="preserve">
+    <value>Cover page generated</value>
+  </data>
 </root>

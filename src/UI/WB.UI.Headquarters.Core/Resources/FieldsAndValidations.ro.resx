@@ -270,4 +270,33 @@
   <data name="VerificationCodeFieldName" xml:space="preserve">
     <value>CODUL DE VERIFICARE</value>
   </data>
+
+
+  <data name="AllowRelinkTablet" xml:space="preserve">
+    <value>Allow relinking to a different device with loss of data on the original device.</value>
+  </data>
+
+  <data name="RestrictedAccountMessage" xml:space="preserve">
+    <value>This account is restricted to perform this action</value>
+  </data>
+
+  <data name="RestrictedAccount" xml:space="preserve">
+    <value>This account is restricted</value>
+  </data>
+
+  <data name="WorkspaceRequired" xml:space="preserve">
+    <value>Workspace is required</value>
+  </data>
+
+  <data name="WorkspaceMissing" xml:space="preserve">
+    <value>Workspace not found</value>
+  </data>
+
+  <data name="UserRoleRequired" xml:space="preserve">
+    <value>User role is required</value>
+  </data>
+
+  <data name="PasswordChangeRequired" xml:space="preserve">
+    <value>Your password has been reset. You must change it to get access to site.</value>
+  </data>
 </root>

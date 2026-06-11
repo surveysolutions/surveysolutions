@@ -126,4 +126,21 @@
   <data name="QuestionnaireVariableUniqueFormat" xml:space="preserve">
     <value> 您已经从设计器导入过问卷变量为 '{0}' 的问卷。如果你仍想导入这个特殊的问卷，请再设计器中重命名其问卷变量。</value>
   </data>
+
+
+  <data name="WebModeAssignmentShouldBeOnInterviewer" xml:space="preserve">
+    <value>An assignment for web interview must have an interviewer as responsible</value>
+  </data>
+
+  <data name="AssignmentResponsibleNotFound" xml:space="preserve">
+    <value>Responsible was not found</value>
+  </data>
+
+ <data name="QuestionnaireWasDeleted" xml:space="preserve">
+    <value>Questionnaire was deleted</value>
+  </data>
+
+ <data name="AssignmentLimitReached" xml:space="preserve">
+    <value>Assignment limit was reached</value>
+  </data>
 </root>

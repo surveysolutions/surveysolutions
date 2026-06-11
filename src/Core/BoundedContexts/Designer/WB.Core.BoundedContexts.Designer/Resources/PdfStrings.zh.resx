@@ -384,4 +384,85 @@
   <data name="SpecialValues" xml:space="preserve">
     <value>特殊值</value>
   </data>
+
+
+  <data name="Appendix_CriticalRules" xml:space="preserve">
+    <value>Appendix {0} {1} critical rules</value>
+  </data>
+
+  <data name="OwnedBy" xml:space="preserve">
+    <value>Questionnaire owned by {0}</value>
+  </data>
+
+  <data name="CriticalityCondition" xml:space="preserve">
+    <value>Critical Condition:</value>
+  </data>
+
+  <data name="CriticalityMessage" xml:space="preserve">
+    <value>Message:</value>
+  </data>
+
+  <data name="Description" xml:space="preserve">
+    <value>Description:</value>
+  </data>
+
+  <data name="QuestionType_Area_Polygon" xml:space="preserve">
+    <value>polygon</value>
+  </data>
+
+  <data name="QuestionType_Area_Polyline" xml:space="preserve">
+    <value>polyline</value>
+  </data>
+
+  <data name="QuestionType_Area_Multipoint" xml:space="preserve">
+    <value>multipoint</value>
+  </data>
+
+  <data name="QuestionType_Area_Point" xml:space="preserve">
+    <value>point</value>
+  </data>
+
+  <data name="SourceOfCategories" xml:space="preserve">
+    <value>Source of categories:</value>
+  </data>
+
+  <data name="RosterSourceOfCategories" xml:space="preserve">
+    <value>Roster</value>
+  </data>
+
+  <data name="TextListSourceOfCategories" xml:space="preserve">
+    <value>Text list question</value>
+  </data>
+
+  <data name="QuestionInRosterSourceOfCategories" xml:space="preserve">
+    <value>Question</value>
+  </data>
+
+  <data name="InRosterSourceOfCategories" xml:space="preserve">
+    <value>in roster</value>
+  </data>
+  
+  <data name="GeographyType" xml:space="preserve">
+    <value>Geography type</value>
+  </data>
+
+  <data name="GeographyInputMode" xml:space="preserve">
+    <value>Input mode</value>
+  </data>
+
+  <data name="GeometryOverlapDetection" xml:space="preserve">
+    <value>Overlap detection</value>
+  </data>
+
+  <data name="VariableExcludedFromExport" xml:space="preserve">
+    <value>This variable is excluded from the exported data</value>
+  </data>
+
+  <data name="On" xml:space="preserve">
+    <value>ON</value>
+  </data>
+
+  <data name="Off" xml:space="preserve">
+    <value>OFF</value>
+  </data>
 </root>

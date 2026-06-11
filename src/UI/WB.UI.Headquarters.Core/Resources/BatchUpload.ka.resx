@@ -537,4 +537,81 @@
   <data name="ViewListPrefilledData" xml:space="preserve">
     <value>საჭირო საიდენტიფიკაციო მონაცემების ნახვა</value>
   </data>
+
+
+  <data name="BatchDescription" xml:space="preserve">
+    <value>Upload a zip-archive with one or more tab separated files corresponding to the main interview level and subordinate rosters. Allows preloading variables at any level of the interview.&lt;br/&gt;
+All data files must contain variable interview__id with a unique string or numeric identifier of the interview. Links within rosters and nested rosters established the same way as in exported data.&lt;br/&gt;
+</value>
+    <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
+  </data>
+
+  <data name="BatchColumnsTitle" xml:space="preserve">
+    <value>Optionally can specify the following columns in the main interview level file:</value>
+  </data>
+
+  <data name="SimpleDescription" xml:space="preserve">
+    <value>Upload tab separated file with values for questions in the interview level only. Include values for identifying questions and other questions at the main interview level. Does not allow preloading values inside rosters.</value>
+  </data>
+
+  <data name="SimpleColumnsTitle" xml:space="preserve">
+    <value>Optionally can specify the following columns:</value>
+  </data>
+
+  <data name="ColumnsDescription" xml:space="preserve">
+    <value>&lt;b&gt;_responsible&lt;/b&gt; - username of a headquarters, supervisor or an interviewer who will be responsible for the assignment;&lt;br/&gt;
+&lt;b&gt;_quantity&lt;/b&gt; - capacity of the assignment;&lt;br/&gt;
+&lt;b&gt;_email&lt;/b&gt; - email of the respondent (for web-interviews only);&lt;br/&gt;
+&lt;b&gt;_password&lt;/b&gt; - password to start an interview (for web-interviews only);&lt;br/&gt;
+&lt;b&gt;_webmode&lt;/b&gt; - mode for assignment (1 for CAWI, 0 or blank for CAPI);&lt;br/&gt;
+&lt;b&gt;_record_audio&lt;/b&gt; - audio recording is enabled for interviews (1 - enabled, 0 - disabled, blank - get this value from questionnaire);&lt;br/&gt;
+&lt;b&gt;_comment&lt;/b&gt; - comments for the assignment;&lt;br/&gt;
+&lt;b&gt;_target_area&lt;/b&gt; - target area for the assignment</value>
+    <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
+  </data>
+
+  <data name="UploadDescription" xml:space="preserve">
+    <value>Upload a file with identifying data to create new assignments.
+Specify usernames for headquarters, supervisors or interviewers to make batch assignments.</value>
+  </data>
+
+  <data name="FileTypeDescription" xml:space="preserve">
+    <value>Save file in UTF8 encoding for support language specific texts.</value>
+  </data>
+
+  <data name="ViewListPreloadedData" xml:space="preserve">
+    <value>View list of preloaded values</value>
+  </data>
+
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>Identifying questions</value>
+  </data>
+
+  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
+    <value>Importing assignments</value>
+  </data>
+
+  <data name="Prerequisite_Questionnaire" xml:space="preserve">
+    <value>Questionnaire cannot be used for preloading</value>
+  </data>
+
+  <data name="HiddenQuestions" xml:space="preserve">
+    <value>Hidden questions</value>
+  </data>
+
+  <data name="RosterSizeQuestions" xml:space="preserve">
+    <value>Roster source questions</value>
+  </data>
+
+  <data name="Select_Responsible" xml:space="preserve">
+    <value>Select default responsible (required)</value>
+  </data>
+
+  <data name="Select_Responsible_Description" xml:space="preserve">
+    <value>If no responsible assigned in batch file use this headquarters/supervisor/interviewer account:</value>
+  </data>
+
+  <data name="RequiredField" xml:space="preserve">
+    <value>This field is mandatory</value>
+  </data>
 </root>

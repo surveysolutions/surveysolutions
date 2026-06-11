@@ -1480,4 +1480,265 @@ Vă rugăm să verificați conexiunea la rețea sau să contactați suportul IT.
   <data name="AIAssistant" xml:space="preserve">
       <value>IA</value>
   </data>
+
+
+  <data name="CopyTo" xml:space="preserve">
+    <value>Copy to</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionExpression" xml:space="preserve">
+      <value>Critical condition</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
+      <value>{{count}} Critical rule:</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
+      <value>{{count}} Critical rules:</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
+      <value>Description</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionsEmptyLine1" xml:space="preserve">
+    <value>Use this tab to define critical rules.</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionsEmptyLine2" xml:space="preserve">
+    <value>Each critical rule consists of a condition and a message. Critical conditions may refer to any questions or variables and must be satisfied (evaluate to true). Treatment of interviews with unsatisfied critical conditions is determined during import of the questionnaire to the data server.</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionsEmptyLine3" xml:space="preserve">
+    <value>Include a message for the interviewer (respondent) to explain what needs to be changed in the interview (the message is displayed when the critical condition is not satisfied). Including hyperlinks to questions in the message is useful for navigation.</value>
+  </data>
+
+  <data name="SideBarHideDescription" xml:space="preserve">
+    <value>hide description</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionMessage" xml:space="preserve">
+      <value>Message</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
+    <value>Critical rule with no message</value>
+  </data>
+
+  <data name="SideBarShowDescription" xml:space="preserve">
+    <value>add description</value>
+  </data>
+
+  <data name="SideBarAddCriticalityCondition" xml:space="preserve">
+    <value>add new critical rule</value>
+  </data>
+
+  <data name="SideBarDownload" xml:space="preserve">
+    <value>Download:</value>
+  </data>
+
+  <data name="SideBarXlsx" xml:space="preserve">
+    <value>Xlsx</value>
+  </data>
+
+  <data name="SideBarTab" xml:space="preserve">
+    <value>Tab</value>
+  </data>
+
+  <data name="SideBarTranslationGetTemplateLinkTextCsv" xml:space="preserve">
+    <value>Tab (txt)</value>
+  </data>
+
+  <data name="AttachmentSizeIsTooBig" xml:space="preserve">
+    <value>Attachment size is too big. Max size: {{size}}</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionsTitle" xml:space="preserve">
+    <value>Critical rules</value>
+  </data>
+
+  <data name="AddFilter" xml:space="preserve">
+    <value>Add filter</value>
+  </data>
+
+  <data name="SettingsAnonymous" xml:space="preserve">
+    <value>Anonymous</value>
+  </data>
+
+  <data name="RegenerateQuestionnaireSharingLink" xml:space="preserve">
+    <value>Regenerate link</value>
+  </data>
+
+  <data name="AnonymousQuestionnaireGeneratedDate" xml:space="preserve">
+    <value>link generated: {{datetime}}</value>
+  </data>
+
+  <data name="SettingsAccessibleToEveryone" xml:space="preserve">
+    <value>accessible in read-only mode to anyone with link</value>
+  </data>
+
+  <data name="SettingsStatusAllowAnonymousAccess" xml:space="preserve">
+    <value>Anonymous sharing is currently turned on.</value>
+  </data>
+
+  <data name="SettingsStatusDontAllowAnonymousAccess" xml:space="preserve">
+    <value>Anonymous sharing is currently turned off.</value>
+  </data>
+
+  <data name="SettingsTurnOnAnonymousAccess" xml:space="preserve">
+    <value>Turn on anonymous sharing.</value>
+  </data>
+
+  <data name="SettingsTurnOffAnonymousAccess" xml:space="preserve">
+    <value>Turn off anonymous sharing.</value>
+  </data>
+
+  <data name="GeometryInputMode" xml:space="preserve">
+    <value>Input mode</value>
+  </data>
+
+  <data name="GeometryOverlapDetection" xml:space="preserve">
+    <value>Overlap detection</value>
+  </data>
+
+  <data name="GeographyInputModeManual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+
+    <data name="GeographyInputModeAutomatic" xml:space="preserve">
+    <value>Automatic</value>
+  </data>
+
+    <data name="GeographyInputModeSemiautomatic" xml:space="preserve">
+    <value>Semiautomatic</value>
+  </data>
+
+  <data name="HotkeysCloseScenarios" xml:space="preserve">
+    <value>Close scenarios panel</value>
+  </data>
+
+  <data name="HotkeysCloseComments" xml:space="preserve">
+    <value>Close comments panel</value>
+  </data>
+
+  <data name="AttachmentName" xml:space="preserve">
+    <value>Attachment name</value>
+  </data>
+
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+
+  <data name="EditorShowComments" xml:space="preserve">
+    <value>Show comments ({{count}})</value>
+  </data>
+  
+  <data name="CollaboratorsDescriptionSettings" xml:space="preserve">
+    <value>the following users have access to this questionnaire</value>
+  </data>
+  
+  <data name="AccessSettings" xml:space="preserve">
+    <value>Access</value>
+  </data>
+
+  <data name="PublicAccessDescriptionSettings" xml:space="preserve">
+    <value>Public questionnaires are visible to all users with an account in this system in read-only mode.</value>
+  </data>
+  
+  <data name="PublicAccessSettingsStatusOn" xml:space="preserve">
+    <value>The questionnaire is currently shared as public.</value>
+  </data>
+
+  <data name="PublicAccessSettingsStatusOff" xml:space="preserve">
+    <value>The questionnaire is currently not shared as public.</value>
+  </data>
+  
+  <data name="PublicAccessSettingsOn" xml:space="preserve">
+    <value>Turn on public access.</value>
+  </data>
+
+  <data name="PublicAccessSettingsOff" xml:space="preserve">
+    <value>Turn off public access.</value>
+  </data>
+
+  <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
+    <value>Link sharing</value>
+  </data>
+  
+  <data name="AnonymousLink" xml:space="preserve">
+    <value>Anonymous link:</value>
+  </data>
+  
+  <data name="CopyLink" xml:space="preserve">
+    <value>Copy link</value>
+  </data>
+
+  <data name="AnonymousQuestionnaireDescriptionSettings" xml:space="preserve">
+    <value>Users having this link will be able to open this questionnaire</value>
+  </data>
+
+  <data name="RefreshPageConfirm" xml:space="preserve">
+    <value>We've updated this site, please refresh page, or you may experience unexpected behavior</value>
+  </data>
+
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+
+  <data name="AttachmentDimensionsAreTooBig" xml:space="preserve">
+    <value>Dimensions are too big</value>
+  </data>
+
+  <data name="HelpOverlapDetection" xml:space="preserve">
+    <value>Display and highlight the overlaps of this question answer with answers to the same questions in sibling roster instances</value>
+  </data>
+
+  <data name="AddEnablingCondition" xml:space="preserve">
+    <value>Add enabling condition</value>
+  </data>
+
+  <data name="ShowList" xml:space="preserve">
+      <value>Show list</value>
+  </data>
+
+  <data name="Login" xml:space="preserve">
+      <value>Login</value>
+  </data>
+
+  <data name="Register" xml:space="preserve">
+      <value>Register</value>
+  </data>
+
+  <data name="No" xml:space="preserve">
+      <value>No</value>
+  </data>
+
+  <data name="QuestionIsCritical" xml:space="preserve">
+      <value>This is a critical question</value>
+  </data>
+
+  <data name="HelpIsCritical" xml:space="preserve">
+      <value>Questionnaire authors may indicate that the answer to a question is critical for interview submission.</value>
+  </data>
+
+  <data name="HelpCriticalityConditionExpression" xml:space="preserve">
+      <value>A logical expression that evaluates the interview as a whole to determine whether it satisfies the critical rules (when this expression evaluates to "True"). It may refer to any questions or variables.</value>
+  </data>
+
+  <data name="HelpCriticalityConditionMessage" xml:space="preserve">
+      <value>This message is shown when the critical condition evaluates to "False" or an exception occurs during expression evaluation. The message may utilize hyperlinks and text substitution.</value>
+  </data>
+
+  <data name="SwitchTo" xml:space="preserve">
+    <value>Switch To</value>
+  </data>
+
+  <data name="SwitchToTranslationConfirm" xml:space="preserve">
+    <value>Switch To will change the display language of the questionnaire. The translation must include text for all elements.</value>
+  </data>
 </root>

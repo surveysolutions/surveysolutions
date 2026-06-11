@@ -213,4 +213,45 @@
   <data name="ReloadInterviewErrorMessage" xml:space="preserve">
     <value>კითხვარის ახალ ვერსიას ვერ მიესადაგება ინტერვიუს მონაცემები. ჩვენ გავხსნით ცარიელ ინტერვიუს</value>
   </data>
+
+
+  <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
+    <value>Anonymous questionnaire url</value>
+  </data>
+
+  <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+
+  <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
+    <value>Can't open the questionnaire. The questionnaire cannot be found.</value>
+  </data>
+
+  <data name="AnonymousQuestionnaires_Error_Confirm" xml:space="preserve">
+    <value>Can't open the questionnaire. Remove it from list?</value>
+  </data>
+
+  <data name="Login_Error_EmptyName" xml:space="preserve">
+    <value>Please enter correct login</value>
+  </data>
+
+  <data name="TesterLoginAccountHintText" xml:space="preserve">
+    <value>Log in to this app using the credentials you created at https://designer.mysurvey.solutions. To register a new account, visit the same site.</value>
+  </data>
+
+  <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
+    <value>Anonymous Questionnaires</value>
+  </data>
+
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+
+  <data name="Prefs_ShowAnswerTime" xml:space="preserve">
+    <value>Show elapsed time per answer</value>
+  </data>
+
+  <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
+    <value>Measures enablement, validation and roster propagation time. Receiving GPS data or picture taking time is not included.</value>
+  </data>
 </root>

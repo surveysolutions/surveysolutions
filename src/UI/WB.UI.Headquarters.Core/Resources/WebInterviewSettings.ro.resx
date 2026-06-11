@@ -297,4 +297,9 @@
     <data name="TotalWithErrors" xml:space="preserve">
     <value>{{ withErrorsCount }} nu au fost trimise din cauza erorilor.</value>
 </data>
+
+
+  <data name="LinkToInterviewPage" xml:space="preserve">
+    <value>Web Interview Landing</value>
+  </data>
 </root>

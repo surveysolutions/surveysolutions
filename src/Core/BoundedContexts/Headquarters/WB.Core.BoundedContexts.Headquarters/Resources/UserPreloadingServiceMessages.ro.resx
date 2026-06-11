@@ -132,4 +132,9 @@
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
     <value>Numărul maxim de înregistrări este {0} </value>
   </data>
+
+
+  <data name="FileDoesNotContainAnyData" xml:space="preserve">
+    <value>The file '{0}' does not contain any user data</value>
+  </data>
 </root>

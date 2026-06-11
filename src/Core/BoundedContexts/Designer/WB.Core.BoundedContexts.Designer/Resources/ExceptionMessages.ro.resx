@@ -390,4 +390,45 @@
   <data name="CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables" xml:space="preserve">
     <value>Secțiunea Copertă poate conține doar întrebări, texte statice și variabile</value>
   </data>
+
+
+  <data name="CriticalRuleAlreadyExist" xml:space="preserve">
+    <value>Critical rule already exists.</value>
+  </data>
+
+  <data name="CriticalRuleIsAbsent" xml:space="preserve">
+    <value>Critical rule is absent.</value>
+  </data>
+
+  <data name="Attachments_uploaded_file_image_is_too_big" xml:space="preserve">
+    <value>Image dimensions are too big</value>
+  </data>
+
+  <data name="TranslationIsNotFull" xml:space="preserve">
+    <value>The translation is incomplete and does not include all required texts for every element</value>
+  </data>
+
+  <data name="CategoryTranslationIsNotFull" xml:space="preserve">
+    <value>The category translation "{0}" is incomplete and does not include all options texts</value>
+  </data>
+
+  <data name="SubsectionCantHaveMoreThan_DirectChildren" xml:space="preserve">
+    <value>Section or sub-section cannot have more than {0} direct child items</value>
+  </data>
+
+  <data name="InvalidUserInfo" xml:space="preserve">
+    <value>Invalid user info.</value>
+  </data>
+
+  <data name="HeaderWasNotFound" xml:space="preserve">
+    <value>Header was not found in file</value>
+  </data>
+
+  <data name="ImportOptions_AttachmentNameTooLong" xml:space="preserve">
+    <value>Attachment name is too long. Attachment name should be less than {0}</value>
+  </data>
+
+  <data name="Questionnaire_CategoriesWereNotFound" xml:space="preserve">
+    <value>Categories were not found</value>
+  </data>
 </root>

@@ -559,4 +559,53 @@
   <data name="CompleteReviewSubmitInterview" xml:space="preserve">
       <value>Інтерв'ю {{key}}</value>
   </data>
+
+
+  <data name="CriticalQuestionErrors" xml:space="preserve">
+    <value>Require answers to this questions:</value>
+  </data>
+
+  <data name="CriticalityConditionsErrors" xml:space="preserve">
+    <value>Require to fix this errors:</value>
+  </data>
+
+  <data name="UnansweredQuestions" xml:space="preserve">
+    <value>Unanswered questions:</value>
+  </data>
+
+  <data name="CompleteCommentCriticalityLevelBlock" xml:space="preserve">
+    <value>To activate the button, please resolve the critical issues</value>
+  </data>
+
+  <data name="CompleteCommentCriticalityLevelWarn" xml:space="preserve">
+    <value>To activate the button, please resolve the critical issues or provide an explanation in the comment box above</value>
+  </data>
+
+  <data name="CompleteNoteCommentCriticality" xml:space="preserve">
+    <value>Please resolve the issues by answering critical questions and making sure the answers satisfy the critical rules</value>
+  </data>
+
+  <data name="CompleteCriticalityWarnConfirmation" xml:space="preserve">
+    <value>Please confirm you want to submit this interview with critical issues.</value>
+  </data>
+
+  <data name="ConfirmationNeededTitle" xml:space="preserve">
+    <value>Confirmation is needed</value>
+  </data>
+
+  <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
+      <value>Critical unanswered questions: {{count}}</value>
+  </data>
+
+  <data name="Complete_FailedCriticalRules" xml:space="preserve">
+      <value>Failed critical rules: {{count}}</value>
+  </data>
+
+  <data name="Complete_UnansweredQuestions" xml:space="preserve">
+      <value>Unanswered questions: {{count}}</value>
+  </data>
+
+  <data name="Complete_QuestionsWithErrors" xml:space="preserve">
+      <value>Questions with errors: {{count}}</value>
+  </data>
 </root>

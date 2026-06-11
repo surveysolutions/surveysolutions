@@ -1169,4 +1169,688 @@
   <data name="AIAssistant" xml:space="preserve">
       <value>AI</value>
   </data>
+
+
+  <data name="SaveAs" xml:space="preserve">
+    <value>Save as</value>
+  </data>
+
+  <data name="CopyTo" xml:space="preserve">
+    <value>Copy to</value>
+  </data>
+
+  <data name="ReadOnlyQuestion" xml:space="preserve">
+    <value>It is readonly question. You cannot edit it.</value>
+  </data>
+
+  <data name="SideBarEditCategories" xml:space="preserve">
+    <value>Edit Categories</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionExpression" xml:space="preserve">
+      <value>Critical condition</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
+      <value>{{count}} Critical rule:</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
+      <value>{{count}} Critical rules:</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
+      <value>Description</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionsEmptyLine1" xml:space="preserve">
+    <value>Use this tab to define critical rules.</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionsEmptyLine2" xml:space="preserve">
+    <value>Each critical rule consists of a condition and a message. Critical conditions may refer to any questions or variables and must be satisfied (evaluate to true). Treatment of interviews with unsatisfied critical conditions is determined during import of the questionnaire to the data server.</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionsEmptyLine3" xml:space="preserve">
+    <value>Include a message for the interviewer (respondent) to explain what needs to be changed in the interview (the message is displayed when the critical condition is not satisfied). Including hyperlinks to questions in the message is useful for navigation.</value>
+  </data>
+
+  <data name="SideBarHideDescription" xml:space="preserve">
+    <value>hide description</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionMessage" xml:space="preserve">
+      <value>Message</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
+    <value>Critical rule with no message</value>
+  </data>
+
+  <data name="SideBarShowDescription" xml:space="preserve">
+    <value>add description</value>
+  </data>
+
+  <data name="SideBarAddCriticalityCondition" xml:space="preserve">
+    <value>add new critical rule</value>
+  </data>
+
+  <data name="SideBarScenarioCounter" xml:space="preserve">
+    <value>{{count}} Scenario:</value>
+  </data>
+
+  <data name="SideBarScenarioCounter_plural" xml:space="preserve">
+    <value>{{count}} Scenarios:</value>
+  </data>
+
+  <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
+    <value>Use this tab to view your scenarios.</value>
+  </data>
+
+  <data name="SideBarScenarioEmptyLine2" xml:space="preserve">
+    <value>A scenario is a snapshot of tester state, you can save it on tester by click on button "Save Scenario".</value>
+  </data>
+
+  <data name="SideBarScenarioName" xml:space="preserve">
+    <value>scenario title</value>
+  </data>
+
+  <data name="SideBarDownload" xml:space="preserve">
+    <value>Download:</value>
+  </data>
+
+  <data name="SideBarXlsx" xml:space="preserve">
+    <value>Xlsx</value>
+  </data>
+
+  <data name="SideBarTab" xml:space="preserve">
+    <value>Tab</value>
+  </data>
+
+  <data name="SideBarTranslationGetTemplateLinkTextCsv" xml:space="preserve">
+    <value>Tab (txt)</value>
+  </data>
+
+  <data name="SideBarCategoriesName" xml:space="preserve">
+    <value>name of categories</value>
+  </data>
+
+  <data name="SideBarCategoriesCounter" xml:space="preserve">
+    <value>{{count}} Categories</value>
+  </data>
+
+  <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
+    <value>Use this tab to manage reusable categories.</value>
+  </data>
+
+  <data name="SideBarCategoriesEmptyLine2" xml:space="preserve">
+    <value>You may download and update categories.</value>
+  </data>
+
+  <data name="SideBarCategoriesEmptyLine3" xml:space="preserve">
+    <value>will be added to list of reusable categories for any types of categorical questions</value>
+  </data>
+
+  <data name="AttachmentSizeIsTooBig" xml:space="preserve">
+    <value>Attachment size is too big. Max size: {{size}}</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionsTitle" xml:space="preserve">
+    <value>Critical rules</value>
+  </data>
+
+  <data name="SideBarScenarioTitle" xml:space="preserve">
+    <value>Scenarios</value>
+  </data>
+
+  <data name="SideBarCategoriesTitle" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+
+  <data name="SideBarCategoriesUploadNew" xml:space="preserve">
+    <value>Upload new categories</value>
+  </data>
+
+  <data name="MoveToAnotherSubSection" xml:space="preserve">
+    <value>Move to another section:</value>
+  </data>
+
+  <data name="FlatRoster" xml:space="preserve">
+    <value>Flat mode</value>
+  </data>
+
+  <data name="QuestionDisplayMode" xml:space="preserve">
+    <value>Display mode</value>
+  </data>
+
+  <data name="BindToReusableCategories" xml:space="preserve">
+    <value>Bind to reusable categories</value>
+  </data>
+
+  <data name="SelectCategories" xml:space="preserve">
+    <value>Select categories</value>
+  </data>
+
+  <data name="SectionVariableName" xml:space="preserve">
+    <value>Variable name</value>
+  </data>
+
+  <data name="AddFilter" xml:space="preserve">
+    <value>Add filter</value>
+  </data>
+
+  <data name="SettingsAnonymous" xml:space="preserve">
+    <value>Anonymous</value>
+  </data>
+
+  <data name="RegenerateQuestionnaireSharingLink" xml:space="preserve">
+    <value>Regenerate link</value>
+  </data>
+
+  <data name="AnonymousQuestionnaireGeneratedDate" xml:space="preserve">
+    <value>link generated: {{datetime}}</value>
+  </data>
+
+  <data name="SettingsAccessibleToEveryone" xml:space="preserve">
+    <value>accessible in read-only mode to anyone with link</value>
+  </data>
+
+  <data name="SettingsStatusAllowAnonymousAccess" xml:space="preserve">
+    <value>Anonymous sharing is currently turned on.</value>
+  </data>
+
+  <data name="SettingsStatusDontAllowAnonymousAccess" xml:space="preserve">
+    <value>Anonymous sharing is currently turned off.</value>
+  </data>
+
+  <data name="SettingsTurnOnAnonymousAccess" xml:space="preserve">
+    <value>Turn on anonymous sharing.</value>
+  </data>
+
+  <data name="SettingsTurnOffAnonymousAccess" xml:space="preserve">
+    <value>Turn off anonymous sharing.</value>
+  </data>
+
+  <data name="VirtualCoverPage" xml:space="preserve">
+    <value>Virtual cover page</value>
+  </data>
+
+  <data name="MigrateToNewCover" xml:space="preserve">
+    <value>Generate cover</value>
+
+  </data>
+
+  <data name="EmptySectionLine4" xml:space="preserve">
+    <value>Questionnaire name, variable, collaboration and other options</value>
+  </data>
+
+  <data name="QuestionCheckboxes" xml:space="preserve">
+    <value>Checkboxes</value>
+  </data>
+
+  <data name="GeometryInputMode" xml:space="preserve">
+    <value>Input mode</value>
+  </data>
+
+  <data name="GeometryOverlapDetection" xml:space="preserve">
+    <value>Overlap detection</value>
+  </data>
+
+  <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
+    <value>Integers between 1 and 50 are allowed</value>
+  </data>
+
+  <data name="GeographyInputModeManual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+
+    <data name="GeographyInputModeAutomatic" xml:space="preserve">
+    <value>Automatic</value>
+  </data>
+
+    <data name="GeographyInputModeSemiautomatic" xml:space="preserve">
+    <value>Semiautomatic</value>
+  </data>
+
+  <data name="Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+
+  <data name="UserDefinedCategories" xml:space="preserve">
+    <value>User defined categories</value>
+  </data>
+
+  <data name="ReusableCategories" xml:space="preserve">
+    <value>Reusable categories</value>
+  </data>
+
+  <data name="SourceOfCategories" xml:space="preserve">
+    <value>Source of categories</value>
+  </data>
+
+  <data name="RostersQuestion" xml:space="preserve">
+    <value>List question or question from roster group</value>
+  </data>
+
+  <data name="QuestionRadioButtonList" xml:space="preserve">
+    <value>Radio button list</value>
+  </data>
+
+  <data name="HelpRosterDisplayMode" xml:space="preserve">
+    <value>Sub-Section - the questions of the roster are shown behind the buttons corresponding to roster instances.
+Flat - the questions of the roster are shown in the same level separated by headers corresponding to roster instances.
+Table - the questions of the roster are shown in the same level as rows and columns of the table. 
+Matrix - a categorical question of the roster is displayed as matrix. 
+Table and Matrix views are supported only in Web survey, tablet falls back to 'Sub-Section' mode.</value>
+  </data>
+
+  <data name="HelpDoNotExport" xml:space="preserve">
+    <value>Mark this variable to exclude it from export</value>
+  </data>
+
+  <data name="VariableNoExport" xml:space="preserve">
+    <value>Do not export</value>
+  </data>
+
+  <data name="HelpAttachmentName" xml:space="preserve">
+    <value>The name of attachment file that will be displayed.</value>
+  </data>
+
+  <data name="HelpCoverPage" xml:space="preserve">
+    <value>The first section of every questionnaire contains identifying questions that are also displayed at the interviewers' and supervisors' dashboards.</value>
+  </data>
+
+  <data name="HelpVirtualCoverPage" xml:space="preserve">
+    <value>Cover is virtual section that shows all identifying questions.
+    Questions cannot be changed in this section</value>
+  </data>
+
+  <data name="HotkeysCloseScenarios" xml:space="preserve">
+    <value>Close scenarios panel</value>
+  </data>
+
+  <data name="HotkeysCloseCategories" xml:space="preserve">
+    <value>Close categories panel</value>
+  </data>
+
+  <data name="HotkeysCloseComments" xml:space="preserve">
+    <value>Close comments panel</value>
+  </data>
+
+  <data name="DeleteConfirmCategories" xml:space="preserve">
+    <value>Are you sure you want to delete set of categories "{{trimmedTitle}}"? Source of categories for categorical questions dependent on it will be changed to user defined categories</value>
+  </data>
+
+  <data name="CategoriesObtained" xml:space="preserve">
+    <value>Obtained {0} row from categories file</value>
+  </data>
+
+  <data name="CategoriesObtained_plural" xml:space="preserve">
+    <value>Obtained {0} rows from categories file</value>
+  </data>
+
+  <data name="OptionsUploadRevert" xml:space="preserve">
+    <value>Revert changes</value>
+  </data>
+
+  <data name="OptionsWindowTitle" xml:space="preserve">
+    <value>Edit categories</value>
+  </data>
+
+  <data name="CascadingOptionsWindowTitle" xml:space="preserve">
+    <value>Edit cascading categories</value>
+  </data>
+
+  <data name="AttachmentName" xml:space="preserve">
+    <value>Attachment name</value>
+  </data>
+
+  <data name="SideBarCategoriesNoName" xml:space="preserve">
+    <value>categories with no name</value>
+  </data>
+
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+
+  <data name="EditorShowComments" xml:space="preserve">
+    <value>Show comments ({{count}})</value>
+  </data>
+
+  <data name="JumpToEdit" xml:space="preserve">
+    <value>Jump to edit</value>
+  </data>
+  
+  <data name="CollaboratorsDescriptionSettings" xml:space="preserve">
+    <value>the following users have access to this questionnaire</value>
+  </data>
+  
+  <data name="AccessSettings" xml:space="preserve">
+    <value>Access</value>
+  </data>
+
+  <data name="PublicAccessDescriptionSettings" xml:space="preserve">
+    <value>Public questionnaires are visible to all users with an account in this system in read-only mode.</value>
+  </data>
+  
+  <data name="PublicAccessSettingsStatusOn" xml:space="preserve">
+    <value>The questionnaire is currently shared as public.</value>
+  </data>
+
+  <data name="PublicAccessSettingsStatusOff" xml:space="preserve">
+    <value>The questionnaire is currently not shared as public.</value>
+  </data>
+  
+  <data name="PublicAccessSettingsOn" xml:space="preserve">
+    <value>Turn on public access.</value>
+  </data>
+
+  <data name="PublicAccessSettingsOff" xml:space="preserve">
+    <value>Turn off public access.</value>
+  </data>
+
+  <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
+    <value>Link sharing</value>
+  </data>
+  
+  <data name="AnonymousLink" xml:space="preserve">
+    <value>Anonymous link:</value>
+  </data>
+  
+  <data name="CopyLink" xml:space="preserve">
+    <value>Copy link</value>
+  </data>
+
+  <data name="AnonymousQuestionnaireDescriptionSettings" xml:space="preserve">
+    <value>Users having this link will be able to open this questionnaire</value>
+  </data>
+
+  <data name="RefreshPageConfirm" xml:space="preserve">
+    <value>We've updated this site, please refresh page, or you may experience unexpected behavior</value>
+  </data>
+
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+
+  <data name="AttachmentDimensionsAreTooBig" xml:space="preserve">
+    <value>Dimensions are too big</value>
+  </data>
+
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+
+  <data name="AllClassifications" xml:space="preserve">
+    <value>All classifications</value>
+  </data>
+
+  <data name="ClassificationShowCategories" xml:space="preserve">
+    <value>Show categories</value>
+  </data>
+
+  <data name="ClassificationsTitle" xml:space="preserve">
+    <value>Question Bank. Classifications</value>
+  </data>
+
+  <data name="QuestionAddClassification" xml:space="preserve">
+    <value>Search for classification</value>
+  </data>
+
+  <data name="SearchClassification" xml:space="preserve">
+    <value>Search classification</value>
+  </data>
+
+  <data name="ReplaceOptionsConfirmation" xml:space="preserve">
+    <value>Are you sure you want to replace existing categories for question "{{trimmedTitle}}"?</value>
+  </data>
+
+  <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
+    <value>Only the first {{count}} categories will be taken for question "{{trimmedTitle}}"?</value>
+  </data>
+
+  <data name="MyClassifications" xml:space="preserve">
+    <value>My classifications</value>
+  </data>
+
+  <data name="ClassificationAdd" xml:space="preserve">
+    <value>Add classification</value>
+  </data>
+
+  <data name="ClassificationAddGroup" xml:space="preserve">
+    <value>Add group</value>
+  </data>
+
+  <data name="ClassificationGroupBreadcrumbs" xml:space="preserve">
+    <value>Groups</value>
+  </data>
+
+  <data name="ClassificationGroupTitle" xml:space="preserve">
+    <value>Group title</value>
+  </data>
+
+  <data name="ClassificationsStringOptionsEditorPlaceholder" xml:space="preserve">
+    <value>Enter categories</value>
+  </data>
+
+  <data name="ClassificationTitle" xml:space="preserve">
+    <value>Classification title</value>
+  </data>
+
+  <data name="SearchForQuestion" xml:space="preserve">
+    <value>Search for question</value>
+  </data>
+
+  <data name="AllFolders" xml:space="preserve">
+    <value>All folders</value>
+  </data>
+
+  <data name="SearchQuestionPlaceholder" xml:space="preserve">
+    <value>Search for a question</value>
+  </data>
+
+  <data name="QuestionsSearchTitle" xml:space="preserve">
+    <value>Question Bank</value>
+  </data>
+
+  <data name="QuestionsSearchEntities" xml:space="preserve">
+    <value>search results</value>
+  </data>
+
+  <data name="ClassificationsSearchEntities" xml:space="preserve">
+    <value>classifications</value>
+  </data>
+
+  <data name="ShowAsList" xml:space="preserve">
+    <value>Show as a list of categories</value>
+  </data>
+
+  <data name="QuestionShowListLimit" xml:space="preserve">
+    <value>If not more than</value>
+  </data>
+
+  <data name="RosterDisplayMode_SubSection" xml:space="preserve">
+    <value>Sub-Section</value>
+  </data>
+
+  <data name="RosterDisplayMode_Flat" xml:space="preserve">
+    <value>Flat</value>
+  </data>
+
+  <data name="RosterDisplayMode_Table" xml:space="preserve">
+    <value>Table</value>
+  </data>
+
+  <data name="RosterDisplayMode_Matrix" xml:space="preserve">
+    <value>Matrix</value>
+  </data>
+
+  <data name="RosterDisplayMode" xml:space="preserve">
+    <value>Display mode:</value>
+  </data>
+
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Are You sure?</value>
+  </data>
+
+  <data name="MakeOwnerConfirmationMessage" xml:space="preserve">
+    <value>If you transfer ownership, the new owner will be notified. You may no longer be able to change ownership settings, and the new owner may also remove your access.</value>
+  </data>
+
+  <data name="SettingsMakeOwner" xml:space="preserve">
+    <value>Make owner</value>
+  </data>
+
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+
+  <data name="Run" xml:space="preserve">
+    <value>Run</value>
+  </data>
+
+  <data name="View" xml:space="preserve">
+    <value>View</value>
+  </data>
+
+  <data name="ScenarioDetails" xml:space="preserve">
+    <value>Scenario</value>
+  </data>
+
+  <data name="Preview" xml:space="preserve">
+    <value>Preview revision #{{revision}}</value>
+  </data>
+
+  <data name="CustomRosterTitle" xml:space="preserve">
+    <value>Custom title</value>
+  </data>
+
+  <data name="HelpOptionValue" xml:space="preserve">
+    <value>Numeric integer code of the category (not visible to the interviewer)</value>
+  </data>
+
+  <data name="HelpOptionTitle" xml:space="preserve">
+    <value>Text label for the category (visible to the interviewer)</value>
+  </data>
+
+  <data name="HelpOverlapDetection" xml:space="preserve">
+    <value>Display and highlight the overlaps of this question answer with answers to the same questions in sibling roster instances</value>
+  </data>
+
+  <data name="NewItem" xml:space="preserve">
+    <value>New item</value>
+  </data>
+
+  <data name="EditItem" xml:space="preserve">
+    <value>Edit item</value>
+  </data>
+
+  <data name="DeleteItemCofirm" xml:space="preserve">
+    <value>Are you sure you want to delete this item?</value>
+  </data>
+
+  <data name="Forum" xml:space="preserve">
+    <value>Forum</value>
+  </data>
+
+  <data name="TableView" xml:space="preserve">
+    <value>Table view</value>
+  </data>
+
+  <data name="StringsView" xml:space="preserve">
+    <value>Text view</value>
+  </data>
+
+  <data name="ValidationIntValue" xml:space="preserve">
+    <value>Value is too big</value>
+  </data>
+
+  <data name="RequiredField" xml:space="preserve">
+    <value>Required field</value>
+  </data>
+
+  <data name="FileUploaded" xml:space="preserve">
+    <value>File uploaded</value>
+  </data>
+
+  <data name="DataChangesReverted" xml:space="preserve">
+    <value>Data changes reverted</value>
+  </data>
+
+  <data name="OptionsSizeLimit" xml:space="preserve">
+    <value>Maximum {max_rows} rows allowed</value>
+  </data>
+
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Network error</value>
+  </data>
+
+  <data name="SideBarCategoriesAddNew" xml:space="preserve">
+    <value>Add new categories</value>
+  </data>
+
+  <data name="RowAdded" xml:space="preserve">
+    <value>Row added</value>
+  </data>
+
+  <data name="OptionsCascadingListError" xml:space="preserve">
+    <value>
+You entered an invalid input. Each line should follow the format: "Title...ParentValue/Value[...Attachment name]". 'Value' and 'ParentValue' must be an integer number. 'Title' must be an alpha-numeric string. 'Attachment name' is optional. No empty lines are allowed.</value>
+  </data>
+
+  <data name="ShowParentValues" xml:space="preserve">
+    <value>Show Parent values</value>
+  </data>
+
+  <data name="HideParentValues" xml:space="preserve">
+    <value>Hide Parent values</value>
+  </data>
+
+  <data name="AddEnablingCondition" xml:space="preserve">
+    <value>Add enabling condition</value>
+  </data>
+
+  <data name="ShowList" xml:space="preserve">
+      <value>Show list</value>
+  </data>
+
+  <data name="Login" xml:space="preserve">
+      <value>Login</value>
+  </data>
+
+  <data name="Register" xml:space="preserve">
+      <value>Register</value>
+  </data>
+
+  <data name="No" xml:space="preserve">
+      <value>No</value>
+  </data>
+
+  <data name="QuestionIsCritical" xml:space="preserve">
+      <value>This is a critical question</value>
+  </data>
+
+  <data name="HelpIsCritical" xml:space="preserve">
+      <value>Questionnaire authors may indicate that the answer to a question is critical for interview submission.</value>
+  </data>
+
+  <data name="HelpCriticalityConditionExpression" xml:space="preserve">
+      <value>A logical expression that evaluates the interview as a whole to determine whether it satisfies the critical rules (when this expression evaluates to "True"). It may refer to any questions or variables.</value>
+  </data>
+
+  <data name="HelpCriticalityConditionMessage" xml:space="preserve">
+      <value>This message is shown when the critical condition evaluates to "False" or an exception occurs during expression evaluation. The message may utilize hyperlinks and text substitution.</value>
+  </data>
+
+  <data name="SwitchTo" xml:space="preserve">
+    <value>Switch To</value>
+  </data>
+
+  <data name="SwitchToTranslationConfirm" xml:space="preserve">
+    <value>Switch To will change the display language of the questionnaire. The translation must include text for all elements.</value>
+  </data>
 </root>

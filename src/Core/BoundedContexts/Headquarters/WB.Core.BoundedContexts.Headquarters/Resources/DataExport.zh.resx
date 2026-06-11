@@ -255,4 +255,313 @@
   <data name="ZipFile" xml:space="preserve">
     <value>Zip压缩文件</value>
   </data>
+
+
+  <data name="Preparing" xml:space="preserve">
+    <value>Preparing</value>
+  </data>
+
+  <data name="DataExport_Destination_Dropbox" xml:space="preserve">
+    <value>Export file will be uploaded to Dropbox</value>
+  </data>
+
+  <data name="DataExport_Destination_File" xml:space="preserve">
+    <value>Export file will be available for download</value>
+  </data>
+
+  <data name="DataExport_Destination_GoogleDrive" xml:space="preserve">
+    <value>Export file will be uploaded to Google Drive</value>
+  </data>
+
+  <data name="DataExport_Destination_OneDrive" xml:space="preserve">
+    <value>Export file will be uploaded to OneDrive</value>
+  </data>
+
+  <data name="DataExport_QueuedOn" xml:space="preserve">
+    <value>Queued on {{date}}</value>
+  </data>
+
+  <data name="DataExport_CompletedOn" xml:space="preserve">
+    <value>Completed on {{date}}</value>
+  </data>
+
+  <data name="DataExport_QuestionnaireWithVersion" xml:space="preserve">
+    <value>{{title}} (ver. {{version}})</value>
+  </data>
+
+  <data name="DataExport_Regenerate" xml:space="preserve">
+    <value>Regenerate</value>
+  </data>
+
+  <data name="DataExport_RegenerateDesc" xml:space="preserve">
+    <value>Queue export with the same params</value>
+  </data>
+
+  <data name="DataExport_FileLastUpdate" xml:space="preserve">
+    <value>Last updated: {{date}}</value>
+  </data>
+
+  <data name="DataExport_FileWasRegenerated" xml:space="preserve">
+    <value>File was regenerated or deleted</value>
+  </data>
+
+  <data name="DataExport_FileSize" xml:space="preserve">
+    <value>File size: {{size}} MB</value>
+  </data>
+
+  <data name="DataExport_ProducedIn" xml:space="preserve">
+    <value>Produced in:</value>
+  </data>
+
+  <data name="DataExport_InQueue" xml:space="preserve">
+    <value>In queue:</value>
+  </data>
+
+  <data name="DataExport_Destination" xml:space="preserve">
+    <value>Destination: {{dest}}</value>
+  </data>
+
+  <data name="DataExport_ServiceIsNotAvailable" xml:space="preserve">
+    <value>Export service is not available</value>
+  </data>
+
+  <data name="DataType" xml:space="preserve">
+    <value>Data type</value>
+  </data>
+
+  <data name="DataType_Binary" xml:space="preserve">
+    <value>Binary Data. Archive with binary data (e.g., pictures, audio)</value>
+  </data>
+
+  <data name="DataType_Ddi" xml:space="preserve">
+    <value>DDI. Data Documentation Initiative XML data</value>
+  </data>
+
+  <data name="DataType_MainSurveyData" xml:space="preserve">
+    <value>Main Survey Data. Zip archive with main interview data</value>
+  </data>
+
+  <data name="FilterTitle" xml:space="preserve">
+    <value>Filter interviews to export</value>
+  </data>
+
+  <data name="SurveyQuestionnaire" xml:space="preserve">
+    <value>Questionnaire</value>
+  </data>
+
+  <data name="SurveyQuestionnaireVersion" xml:space="preserve">
+    <value>Questionnaire version</value>
+  </data>
+
+  <data name="DataType_Paradata" xml:space="preserve">
+    <value>Paradata. Metadata on the interview process (events and timing)</value>
+  </data>
+
+  <data name="DataDestination" xml:space="preserve">
+    <value>Export file destination</value>
+  </data>
+
+  <data name="DataFormat" xml:space="preserve">
+    <value>Data format</value>
+  </data>
+
+  <data name="DataDestination_Dropbox" xml:space="preserve">
+    <value>Upload to Dropbox</value>
+  </data>
+
+  <data name="DataDestination_GoogleDrive" xml:space="preserve">
+    <value>Upload to Google Drive</value>
+  </data>
+
+  <data name="DataDestination_OneDrive" xml:space="preserve">
+    <value>Upload to OneDrive</value>
+  </data>
+
+  <data name="DataDestination_Zip" xml:space="preserve">
+    <value>Download</value>
+  </data>
+
+  <data name="DataFormat_Spss" xml:space="preserve">
+    <value>SPSS format</value>
+  </data>
+
+  <data name="DataFormat_Stata" xml:space="preserve">
+    <value>Stata 14 format</value>
+  </data>
+
+  <data name="DataFormat_Tab" xml:space="preserve">
+    <value>Tab separated data</value>
+  </data>
+
+  <data name="QuestionnaireInformation" xml:space="preserve">
+    <value>Questionnaire information</value>
+  </data>
+
+  <data name="QuestionnaireInformation_Include" xml:space="preserve">
+    <value>Include meta information about questionnaire</value>
+  </data>
+
+  <data name="QuestionnaireInformation_Exclude" xml:space="preserve">
+    <value>Exclude meta information about questionnaire</value>
+  </data>
+
+  <data name="AddToQueue" xml:space="preserve">
+    <value>Add to queue</value>
+  </data>
+
+  <data name="GeneratedDataSets" xml:space="preserve">
+    <value>Previously generated export sets</value>
+  </data>
+
+  <data name="GeneratedDataSets_Desc" xml:space="preserve">
+    <value>Data is exported in a zip archive containing the data files of specified content and type. Below is a list of previously exported data files.</value>
+  </data>
+
+  <data name="NoDataSets" xml:space="preserve">
+    <value>No generated data sets yet</value>
+  </data>
+
+  <data name="DataExportApi" xml:space="preserve">
+    <value>Data export API</value>
+  </data>
+
+  <data name="DataExportApiDesc" xml:space="preserve">
+    <value>You can setup automatic export of collected interview data using our API toolset for more information and instruction use:</value>
+  </data>
+
+  <data name="DataExportApiInfoPage" xml:space="preserve">
+    <value>Data Export API reference</value>
+  </data>
+
+  <data name="Error_Canceled" xml:space="preserve">
+    <value>Export job was canceled by user.</value>
+  </data>
+
+  <data name="Error_NotEnoughExternalStorageSpace" xml:space="preserve">
+    <value>Not enough space fot the selected cloud storage provide. Please free space and restart the job or choose another provider.</value>
+  </data>
+
+  <data name="Error_Unhandled" xml:space="preserve">
+    <value>An unexpected error occurred during export. We are sorry for inconvenience. Please contact your server support team. Additional information to this issue is available at the support page: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
+  </data>
+
+  <data name="AllStatuses" xml:space="preserve">
+    <value>all statuses</value>
+  </data>
+
+  <data name="ApprovedByHeadquarters" xml:space="preserve">
+    <value>Approved by Headquarters status</value>
+  </data>
+
+  <data name="ApprovedBySupervisor" xml:space="preserve">
+    <value>Approved by Supervisor  status</value>
+  </data>
+
+  <data name="DataExport_InterviewsStatus" xml:space="preserve">
+    <value>Interviews in {{status}}.</value>
+  </data>
+
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>Interviewer assigned  status</value>
+  </data>
+
+  <data name="QuestionnaireTranslation" xml:space="preserve">
+    <value>Translation</value>
+  </data>
+
+  <data name="Translation_CardLabel" xml:space="preserve">
+    <value>Translation: {{language}}</value>
+  </data>
+
+  <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
+      <value>Translation</value>
+  </data>
+
+  <data name="SurveyQuestionnaireDateRange" xml:space="preserve">
+      <value>Date range</value>
+  </data>
+
+  <data name="DateRangeAllTime" xml:space="preserve">
+      <value>All time</value>
+  </data>
+
+  <data name="DateRangeLast24hours" xml:space="preserve">
+      <value>Last 24 hours</value>
+  </data>
+
+  <data name="DateRangeLast7days" xml:space="preserve">
+      <value>Last 7 days</value>
+  </data>
+
+  <data name="DateRangeLast30days" xml:space="preserve">
+      <value>Last 30 days</value>
+  </data>
+
+  <data name="DateRangeLastToday" xml:space="preserve">
+      <value>Today</value>
+  </data>
+
+  <data name="DateRangeLastYesterday" xml:space="preserve">
+      <value>Yesterday</value>
+  </data>
+
+  <data name="DateRangeCustom" xml:space="preserve">
+      <value>Custom</value>
+  </data>
+
+  <data name="SurveyQuestionnaireDateRangeFrom" xml:space="preserve">
+      <value>From</value>
+  </data>
+
+  <data name="DateRangeFromAll" xml:space="preserve">
+      <value>Earliest available</value>
+  </data>
+
+  <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
+      <value>To</value>
+  </data>
+
+  <data name="DateRangeToAll" xml:space="preserve">
+      <value>Current moment</value>
+  </data>
+    
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+      <value>Audio Audit. Zip archive containing Audio Audit data</value>
+  </data>
+
+  <data name="ParadataEventsFilter" xml:space="preserve">
+      <value>Events filter</value>
+  </data>
+
+  <data name="ParadataEventsFilter_All" xml:space="preserve">
+      <value>All</value>
+  </data>
+
+  <data name="ParadataEventsFilter_Reduced" xml:space="preserve">
+      <value>Reduced</value>
+  </data>
+
+  <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
+      <value>Reduced paradata set does not include events with the following codes: QuestionEnabled (13), QuestionDisabled (14), GroupEnabled (15), GroupDisabled (16), QuestionDeclaredValid (17), QuestionDeclaredInvalid (18), VariableEnabled (23), VariableDisabled (24).</value>
+  </data>
+
+    <data name="Validation_FromDateInvalid" xml:space="preserve">
+    <value>The "From" date must be a valid date.</value>
+</data>
+
+    <data name="Validation_FromDateInFuture" xml:space="preserve">
+    <value>The "From" date cannot be in the future.</value>
+</data>
+
+    <data name="Validation_ToDateInvalid" xml:space="preserve">
+    <value>The "To" date must be a valid date.</value>
+</data>
+
+    <data name="Validation_FromDateInvalidBeforeTo" xml:space="preserve">
+    <value>The "From" date must be valid before validating the "To" date.</value>
+</data>
+
+    <data name="Validation_ToDateBeforeFrom" xml:space="preserve">
+    <value>The "To" date must be greater than the "From" date.</value>
+</data>
 </root>

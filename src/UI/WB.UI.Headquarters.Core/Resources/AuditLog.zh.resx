@@ -126,4 +126,21 @@
   <data name="ServerFilePath" xml:space="preserve">
     <value>在服务器上的文件位置：</value>
   </data>
+
+
+  <data name="EventType" xml:space="preserve">
+    <value>Event type</value>
+  </data>
+
+  <data name="Log" xml:space="preserve">
+    <value>Log</value>
+  </data>
+
+  <data name="LogDate" xml:space="preserve">
+    <value>Log date</value>
+  </data>
+
+  <data name="User" xml:space="preserve">
+    <value>User</value>
+  </data>
 </root>

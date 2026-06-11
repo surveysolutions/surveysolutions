@@ -159,4 +159,21 @@
   <data name="Status" xml:space="preserve">
     <value>Statusi: {{ name }}</value>
   </data>
+
+
+  <data name="Area_Coordinates" xml:space="preserve">
+    <value>Coordinates</value>
+  </data>
+
+  <data name="YouCanChangeResponsibleInterviewer" xml:space="preserve">
+    <value>You can change responsible for interview on reject. Please, choose responsible interviewer</value>
+  </data>
+
+  <data name="ShowQuestionnaireDetails" xml:space="preserve">
+    <value>Show questionnaire details</value>
+  </data>
+
+  <data name="InterviewMode" xml:space="preserve">
+    <value>Mode</value>
+  </data>
 </root>

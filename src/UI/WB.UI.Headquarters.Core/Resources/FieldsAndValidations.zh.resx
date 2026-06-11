@@ -249,4 +249,61 @@
   <data name="MandatoryField" xml:space="preserve">
     <value>必须指定</value>
   </data>
+
+
+  <data name="AllowRelinkTablet" xml:space="preserve">
+    <value>Allow relinking to a different device with loss of data on the original device.</value>
+  </data>
+
+  <data name="VerificationCodeFieldName" xml:space="preserve">
+    <value>Verification code</value>
+  </data>
+
+  <data name="RestrictedAccountMessage" xml:space="preserve">
+    <value>This account is restricted to perform this action</value>
+  </data>
+
+  <data name="RestrictedAccount" xml:space="preserve">
+    <value>This account is restricted</value>
+  </data>
+
+  <data name="WorkspaceRequired" xml:space="preserve">
+    <value>Workspace is required</value>
+  </data>
+
+  <data name="WorkspaceMissing" xml:space="preserve">
+    <value>Workspace not found</value>
+  </data>
+
+  <data name="UserRoleRequired" xml:space="preserve">
+    <value>User role is required</value>
+  </data>
+
+  <data name="PasswordRequiresDigit" xml:space="preserve">
+      <value>Passwords must have at least one digit ('0'-'9').</value>
+  </data>
+
+  <data name="PasswordRequiresLower" xml:space="preserve">
+      <value>Passwords must have at least one lowercase ('a'-'z').</value>
+  </data>
+
+  <data name="PasswordRequiresNonAlphanumeric" xml:space="preserve">
+      <value>Passwords must have at least one non alphanumeric character.</value>
+  </data>
+
+  <data name="PasswordRequiresUniqueChars" xml:space="preserve">
+      <value>Passwords must use at least {0} different characters.</value>
+  </data>
+
+  <data name="PasswordRequiresUpper" xml:space="preserve">
+      <value>Passwords must have at least one uppercase ('A'-'Z').</value>
+  </data>
+
+  <data name="PasswordTooShort" xml:space="preserve">
+      <value>Passwords must be at least {0} characters.</value>
+  </data>
+
+  <data name="PasswordChangeRequired" xml:space="preserve">
+    <value>Your password has been reset. You must change it to get access to site.</value>
+  </data>
 </root>

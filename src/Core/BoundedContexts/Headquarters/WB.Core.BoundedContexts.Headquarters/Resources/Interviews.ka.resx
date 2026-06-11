@@ -123,4 +123,13 @@
     <data name="ImportInterviews_IncorrectDatafile" xml:space="preserve">
     <value>მონაცემთა ფაილი არასწორია</value>
   </data>
+
+
+    <data name="ImportInterviews_GenericError" xml:space="preserve">
+    <value>Error during import of assignment with answers: {0}. Responsible: {1}, Exception: {2}</value>
+  </data>
+
+    <data name="ImportInterviews_QuestionaireNotFound" xml:space="preserve">
+    <value>Questionnaire was not found</value>
+  </data>
 </root>

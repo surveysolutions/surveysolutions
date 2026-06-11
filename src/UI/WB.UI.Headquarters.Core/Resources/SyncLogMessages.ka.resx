@@ -210,4 +210,90 @@
   <data name="UpdateInterviewPackage" xml:space="preserve">
     <value>&lt;li&gt; გასაუბრების განახლება: &lt;a href="{3}"&gt; {0} &lt;/a&gt;, პაკეტი: {1}, ინდექსის დალაგება: {2} &lt;/ li&gt;</value>
   </data>
+
+
+    <data name="NoMapsForUser" xml:space="preserve">
+    <value>No maps to download</value>
+  </data>
+
+    <data name="GetMaps" xml:space="preserve">
+    <value>Download list of Maps. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
+  </data>
+
+    <data name="GetMap" xml:space="preserve">
+    <value>Download map: {0}</value>
+  </data>
+
+    <data name="PasswordChanged" xml:space="preserve">
+    <value>Password changed and acquired AuthToken</value>
+  </data>
+
+    <data name="FailToChangePassword" xml:space="preserve">
+    <value>User failed to change password</value>
+  </data>
+
+    <data name="ApkRequested" xml:space="preserve">
+    <value>New application file requested</value>
+  </data>
+
+    <data name="SupervisorApkRequested" xml:space="preserve">
+    <value>New Supervisor application file requested</value>
+  </data>
+
+    <data name="ExtendedApkRequested" xml:space="preserve">
+    <value>New extended application file requested</value>
+  </data>
+
+    <data name="ExtendedPatchRequestedFormat" xml:space="preserve">
+    <value>Patch file requested for extended version {0}</value>
+  </data>
+
+    <data name="PatchRequestedFormat" xml:space="preserve">
+    <value>Patch file requested for version {0}</value>
+  </data>
+
+    <data name="SupervisorPatchRequestedFormat" xml:space="preserve">
+    <value>Supervisor patch file requested for version {0}</value>
+  </data>
+
+    <data name="GetInterviewPackageV3" xml:space="preserve">
+    <value>&lt;b&gt;V3&lt;/b&gt; Download interview package: {0}</value>
+  </data>
+
+    <data name="GetInterviewPatch" xml:space="preserve">
+    <value>Download interview changes from HQ: {0}</value>
+    <comment>{0} - count of affected interviews</comment>
+  </data>
+
+    <data name="PostPackageV3" xml:space="preserve">
+    <value>&lt;b&gt;V3&lt;/b&gt; Upload interview: {0}</value>
+  </data>
+
+    <data name="CheckObsoleteInterviews" xml:space="preserve">
+    <value>Check for obsolete interviews. Request: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+  </data>
+
+    <data name="CheckIsPackageDuplicatedFormat" xml:space="preserve">
+    <value>Check for duplicated interview. Interview: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+  </data>
+
+    <data name="AssignmentReceivedByTablet" xml:space="preserve">
+    <value>Assignment &lt;b&gt;{0}&lt;/b&gt; received and stored by device</value>
+  </data>
+
+    <data name="DownloadReusableCategories" xml:space="preserve">
+    <value>Reusable category {0} downloading</value>
+  </data>
+
+    <data name="PostCalendarEventPackage" xml:space="preserve">
+    <value>Upload calendar event: {0}</value>
+  </data>
+
+    <data name="GetCalendarEventPackage" xml:space="preserve">
+    <value>Download calendar event package: {0}</value>
+  </data>
+
+    <data name="CalendarEventsListFormat" xml:space="preserve">
+    <value>Download list of calendar events ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
+  </data>
 </root>

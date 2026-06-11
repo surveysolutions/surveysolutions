@@ -267,4 +267,13 @@
   <data name="PostCalendarEventPackage" xml:space="preserve">
     <value>}ncarcare eveniment calendar: {0}</value>
   </data>
+
+
+    <data name="PasswordChanged" xml:space="preserve">
+    <value>Password changed and acquired AuthToken</value>
+  </data>
+
+    <data name="FailToChangePassword" xml:space="preserve">
+    <value>User failed to change password</value>
+  </data>
 </root>
