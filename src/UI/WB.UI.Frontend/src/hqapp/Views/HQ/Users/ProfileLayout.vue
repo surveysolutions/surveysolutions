@@ -39,7 +39,7 @@
                         v-bind:class="{ 'active': currentTab == 'account' }">
                         <a class="nav-link" id="profile" v-bind:href="getUrl('Manage')">{{
                             $t('Pages.AccountManage_Profile')
-                            }}</a>
+                        }}</a>
                     </li>
                     <li class="nav-item" v-if="showWorkspaces && !forceChangePassword"
                         v-bind:class="{ 'active': currentTab == 'workspaces' }">
@@ -94,12 +94,12 @@ export default {
         },
         canGenerateToken: {
             type: Boolean,
-            require: false,
+            required: false,
             default: false,
         },
         canChangeContactInfo: {
             type: Boolean,
-            require: false,
+            required: false,
             default: false,
         },
     },
