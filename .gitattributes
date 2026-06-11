@@ -1,4 +1,8 @@
 * text=auto
+*.cs   text
+*.vue  text
+*.ts   text
+*.js   text
 *.bsl linguist-vendored
 # Windows forced line-endings
 *.sln  text eol=crlf
@@ -35,4 +39,4 @@
 *.bz2 binary
 *.swp binary
 *.dll binary
-
+*.ico binary
