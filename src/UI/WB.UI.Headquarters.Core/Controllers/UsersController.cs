@@ -1139,12 +1139,11 @@ namespace WB.UI.Headquarters.Controllers
 
         private bool HasPermissionsToManageUser(HqUser user)
         {
-            // Own profile can always be managed
+            // Own profile can be managed, unless the user is an interviewer and profile updates are disabled
             if (user.Id == this.authorizedUser.Id)
             {
-                return true;
-                //!this.authorizedUser.IsInterviewer 
-                // || (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false)
+                return !this.authorizedUser.IsInterviewer
+                    || (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false);
             }
 
             // Administrators can manage all users
