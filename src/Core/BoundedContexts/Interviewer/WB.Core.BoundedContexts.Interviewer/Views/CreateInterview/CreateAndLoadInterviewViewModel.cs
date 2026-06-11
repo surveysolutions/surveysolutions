@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -168,7 +169,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                 
                 var formatGuid = interviewId.FormatGuid();
                 this.lastCreatedInterviewStorage.Store(formatGuid);
-                logger.Warn($"Created interview {interviewId} from assignment {assignment.Id}({assignment.Title}) at {DateTime.Now}");
+                logger.Warn($"Created interview {interviewId} from assignment {assignment.Id}({assignment.Title}) at {DateTime.Now.ToString(DateTimeFormat.DateWithTimeFormat, System.Globalization.CultureInfo.InvariantCulture)}");
                 auditLogService.Write(new CreateInterviewAuditLogEntity(interviewId, assignment.Id, assignment.Title, interviewKey.ToString()));
 
                 return interviewId;
