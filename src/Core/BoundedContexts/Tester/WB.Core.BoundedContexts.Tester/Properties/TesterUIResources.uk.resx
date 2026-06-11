@@ -240,4 +240,9 @@
   <data name="ReloadInterviewErrorMessage" xml:space="preserve">
     <value>Дані інтерв'ю не можуть бути застосовані до нової версії анкети. Ми відкриємо порожнє інтерв'ю</value>
   </data>
+
+
+  <data name="TesterLoginAccountHintText" xml:space="preserve">
+    <value>Увійдіть у цей застосунок, використовуючи облікові дані, які ви створили на https://designer.mysurvey.solutions. Щоб зареєструвати новий обліковий запис, відвідайте той самий сайт.</value>
+  </data>
 </root>
