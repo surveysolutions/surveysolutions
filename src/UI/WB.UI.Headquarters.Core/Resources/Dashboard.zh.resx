@@ -207,72 +207,72 @@
 
 
   <data name="MapDashboard" xml:space="preserve">
-    <value>Map Dashboard</value>
+    <value>地图仪表板</value>
   </data>
 
   <data name="SaveQuestionnaire" xml:space="preserve">
-    <value>Save questionnaire document</value>
+    <value>保存问卷文档</value>
   </data>
 
   <data name="RecordAudio" xml:space="preserve">
-    <value>Record audio</value>
+    <value>录音</value>
   </data>
 
   <data name="QuestionnairePreview" xml:space="preserve">
-    <value>Questionnaire preview</value>
+    <value>问卷预览</value>
   </data>
 
   <data name="RecordAudioTitle" xml:space="preserve">
-    <value>The Interviewer application will record the audio of the interview when audio audit is enabled. Note that the amount of synchronization data would be significantly larger.</value>
+    <value>启用音频审计时，Interviewer 应用程序将录制访谈音频。请注意，同步数据量将显著增加。</value>
   </data>
 
   <data name="SendInvitations" xml:space="preserve">
-    <value>Send invitations</value>
+    <value>发送邀请</value>
   </data>
 
   <data name="DownloadLinks" xml:space="preserve">
-    <value>Download web links</value>
+    <value>下载网络链接</value>
   </data>
 
   <data name="WebMode" xml:space="preserve">
-    <value>Mode</value>
+    <value>模式</value>
   </data>
 
   <data name="Details" xml:space="preserve">
-    <value>Details</value>
+    <value>详情</value>
     <comment>Questionnaire details</comment>
   </data>
 
   <data name="ShowOnDesigner" xml:space="preserve">
-    <value>Show on Designer</value>
+    <value>在 Designer 中显示</value>
   </data>
 
   <data name="ImportedBy" xml:space="preserve">
-    <value>Imported by</value>
+    <value>导入者</value>
   </data>
 
   <data name="ImportedByText" xml:space="preserve">
-    <value>{{role}} user {{name}}</value>
+    <value>{{role}} 用户 {{name}}</value>
   </data>
 
   <data name="QuestionnaireDeleteWarn" xml:space="preserve">
-    <value>{{receivedInterviews}} interviews and {{receivedAssignments}} assignments for new interviews have been received by the interviewers/supervisors working disconnected. After you confirm the deletion of the survey the server will no longer accept the information based on these interviews/assignments, and they will disappear at next synchronization without a possibility of recovery even if contain newly entered/edited information. It is your responsibility to warn/notify the interviewers to no longer fill out those interviews/assignments, because they will not be notified automatically. Do you want to continue?</value>
+    <value>{{receivedInterviews}} 个访谈和 {{receivedAssignments}} 个用于新访谈的任务已被离线工作的访问员/督导员接收。确认删除此调查后，服务器将不再接受基于这些访谈/任务的信息，它们将在下次同步时消失，且无法恢复，即使其中包含新录入或修改的信息。您有责任提醒/通知访问员不要再填写这些访谈/任务，因为系统不会自动通知他们。是否继续？</value>
   </data>
 
   <data name="TypeQuestionnaireName" xml:space="preserve">
-    <value>Please type '{{questionnaireTitle}}' to confirm</value> 
+    <value>请输入 '{{questionnaireTitle}}' 以确认</value> 
   </data>
 
   <data name="UsersManagement" xml:space="preserve">
-      <value>Users Management</value>
+      <value>用户管理</value>
   </data>
 
   <data name="CreateUser" xml:space="preserve">
-      <value>Create User</value>
+      <value>创建用户</value>
   </data>
 
   <data name="ExposedVariables" xml:space="preserve">
-    <value>Exposed Variables</value>
+    <value>公开变量</value>
   </data>
 
   <data name="Edit" xml:space="preserve">

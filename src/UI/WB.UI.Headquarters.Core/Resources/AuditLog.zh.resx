@@ -129,18 +129,18 @@
 
 
   <data name="EventType" xml:space="preserve">
-    <value>Event type</value>
+    <value>事件类型</value>
   </data>
 
   <data name="Log" xml:space="preserve">
-    <value>Log</value>
+    <value>日志</value>
   </data>
 
   <data name="LogDate" xml:space="preserve">
-    <value>Log date</value>
+    <value>日志日期</value>
   </data>
 
   <data name="User" xml:space="preserve">
-    <value>User</value>
+    <value>用户</value>
   </data>
 </root>

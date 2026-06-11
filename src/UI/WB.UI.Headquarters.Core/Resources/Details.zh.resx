@@ -162,18 +162,18 @@
 
 
   <data name="Area_Coordinates" xml:space="preserve">
-    <value>Coordinates</value>
+    <value>坐标</value>
   </data>
 
   <data name="YouCanChangeResponsibleInterviewer" xml:space="preserve">
-    <value>You can change responsible for interview on reject. Please, choose responsible interviewer</value>
+    <value>您可以在驳回时更改访谈负责人。请选择负责的访问员</value>
   </data>
 
   <data name="ShowQuestionnaireDetails" xml:space="preserve">
-    <value>Show questionnaire details</value>
+    <value>显示问卷详情</value>
   </data>
 
   <data name="InterviewMode" xml:space="preserve">
-    <value>Mode</value>
+    <value>模式</value>
   </data>
 </root>

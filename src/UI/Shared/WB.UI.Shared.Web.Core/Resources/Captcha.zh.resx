@@ -132,6 +132,6 @@
 
 
   <data name="CaptchaError" xml:space="preserve">
-      <value>Generate captcha error. Please contact your system administrator.</value>
+      <value>生成验证码错误，请联系您的系统管理员。</value>
   </data>
 </root>

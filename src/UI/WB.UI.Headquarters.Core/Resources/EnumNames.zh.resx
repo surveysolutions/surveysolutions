@@ -186,26 +186,26 @@
 
 
   <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Note for Supervisor</value>
+    <value>督导备注</value>
   </data>
 
   <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
-    <value>Complete</value>
+    <value>完成</value>
   </data>
 
   <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
-    <value>Start new interview</value>
+    <value>开始新访谈</value>
   </data>
 
   <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
-    <value>Resume</value>
+    <value>继续</value>
   </data>
 
   <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve">
-    <value>Invitation</value>
+    <value>邀请链接</value>
   </data>
 
   <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
-    <value>Welcome Header</value>
+    <value>欢迎语标题</value>
   </data>
 </root>

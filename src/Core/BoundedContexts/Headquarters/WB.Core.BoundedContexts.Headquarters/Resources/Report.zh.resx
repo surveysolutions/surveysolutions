@@ -189,10 +189,10 @@
 
 
   <data name="COLUMN_TEAM_SIZE" xml:space="preserve">
-    <value>TEAM SIZE</value>
+    <value>团队规模</value>
   </data>
 
   <data name="TimeLeft" xml:space="preserve">
-    <value>Time left</value>
+    <value>剩余时间</value>
   </data>
 </root>

@@ -147,6 +147,6 @@
 
 
   <data name="ReloadPartialInterviewErrorMessage" xml:space="preserve">
-    <value>Interview data can't be applied to new version of questionnaire. We apply some data only.</value>
+    <value>访谈数据无法应用到新版本的问卷。我们仅应用了部分数据。</value>
   </data>
 </root>

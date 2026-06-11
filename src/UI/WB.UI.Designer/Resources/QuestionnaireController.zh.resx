@@ -315,26 +315,26 @@
 
 
   <data name="ControlPanel" xml:space="preserve">
-    <value>Control panel</value>
+    <value>控制面板</value>
   </data>
 
   <data name="RestoreQuestionnaireDocument" xml:space="preserve">
-    <value>Restore questionnaire document (old)</value>
+    <value>恢复问卷文档（旧版）</value>
   </data>
 
   <data name="ExcelOrTabFilesOnly" xml:space="preserve">
-    <value>Only Excel or tab-separated values files are accepted</value>
+    <value>仅接受 Excel 或制表符分隔值文件</value>
   </data>
 
   <data name="Classifications" xml:space="preserve">
-    <value>Classifications</value>
+    <value>分类</value>
   </data>
 
   <data name="SaveAs" xml:space="preserve">
-    <value>Save as</value>
+    <value>另存为</value>
   </data>
 
   <data name="CloneDeletedWarning" xml:space="preserve">
-      <value>You are creating a copy of deleted questionnaire. Some parts might be lost.</value>
+      <value>您正在创建已删除问卷的副本。某些部分可能会丢失。</value>
   </data>
 </root>

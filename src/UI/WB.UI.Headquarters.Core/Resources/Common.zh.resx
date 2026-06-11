@@ -316,95 +316,95 @@
 
 
   <data name="ViewAssignmentDetails" xml:space="preserve">
-    <value>View assignment details</value>
+    <value>查看任务详情</value>
   </data>
 
   <data name="Apply" xml:space="preserve">
-        <value>Apply</value>
+        <value>应用</value>
   </data>
 
   <data name="Assignments" xml:space="preserve">
-    <value>Assignments</value>
+    <value>任务</value>
   </data>
 
   <data name="EmailProviders" xml:space="preserve">
-    <value>Email providers</value>
+    <value>电子邮件提供商</value>
   </data>
 
   <data name="Clear" xml:space="preserve">
-    <value>Clear</value>
+    <value>清除</value>
   </data>
 
   <data name="MapDashboard" xml:space="preserve">
-    <value>Map Dashboard</value>
+    <value>地图仪表板</value>
   </data>
 
   <data name="OpenAssignment" xml:space="preserve">
-    <value>Open assignment</value>
+    <value>打开任务</value>
   </data>
 
   <data name="Reset" xml:space="preserve">
-    <value>Reset</value>
+    <value>重置</value>
   </data>
 
   <data name="EqualValues" xml:space="preserve">
-    <value>Equals</value>
+    <value>等于</value>
   </data>
 
   <data name="NotEquals" xml:space="preserve">
-    <value>Not equals</value>
+    <value>不等于</value>
   </data>
 
   <data name="SelectOption" xml:space="preserve">
-    <value>Select option</value>
+    <value>选择选项</value>
   </data>
 
   <data name="StartsWith" xml:space="preserve">
-    <value>Starts with</value>
+    <value>开头为</value>
   </data>
 
   <data name="Unknown" xml:space="preserve">
-    <value>Unknown</value>
+    <value>未知</value>
   </data>
 
   <data name="EditCalendarEvent" xml:space="preserve">
-    <value>Edit Calendar Event</value>
+    <value>编辑日历事件</value>
   </data>
 
   <data name="CalendarEvent" xml:space="preserve">
-    <value>Calendar Event</value>
+    <value>日历事件</value>
   </data>
 
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>添加</value>
   </data>
 
   <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>移除</value>
   </data>
 
   <data name="Return" xml:space="preserve">
-    <value>Return</value>
+    <value>返回</value>
   </data>
 
   <data name="ChangeToCAPI" xml:space="preserve">
-    <value>Change to CAPI</value>
+    <value>切换为 CAPI</value>
   </data>
 
   <data name="ChangeToCAPIConfirmHQ" xml:space="preserve">
-    <value>Selected {{count}} interviews mode will be changed to CAPI</value>
+    <value>已选中的 {{count}} 个访谈的模式将切换为 CAPI</value>
   </data>
 
   <data name="ChangeToCAWI" xml:space="preserve">
-    <value>Change to CAWI</value>
+    <value>切换为 CAWI</value>
   </data>
 
   <data name="ChangeToCAWIConfirmHQ" xml:space="preserve">
-    <value>Selected {{count}} interviews mode will be changed to CAWI</value>
+    <value>已选中的 {{count}} 个访谈的模式将切换为 CAWI</value>
   </data>
 
   <data name="InterviewMode" xml:space="preserve">
-    <value>Interview Mode</value>
+    <value>访谈模式</value>
   </data>
 
   <data name="Capi" xml:space="preserve">
@@ -416,34 +416,34 @@
   </data>
 
   <data name="Enable" xml:space="preserve">
-    <value>Enable</value>
+    <value>启用</value>
   </data>
 
   <data name="Disable" xml:space="preserve">
-    <value>Disable</value>
+    <value>禁用</value>
   </data>
 
   <data name="Properties" xml:space="preserve">
-      <value>Properties</value>
+      <value>属性</value>
   </data>
 
   <data name="LinkedUsers" xml:space="preserve">
-      <value>Linked users</value>
+      <value>关联用户</value>
   </data>
 
   <data name="LinkUser" xml:space="preserve">
-      <value>User</value>
+      <value>用户</value>
   </data>
 
   <data name="GeoTrackNumber" xml:space="preserve">
-      <value>Track</value>
+      <value>轨迹</value>
   </data>
 
   <data name="DateRange" xml:space="preserve">
-      <value>Date range</value>
+      <value>日期范围</value>
   </data>
 
   <data name="AllGeoTracks" xml:space="preserve">
-      <value>All geo tracks</value>
+      <value>所有地理轨迹</value>
   </data>
 </root>

@@ -141,6 +141,6 @@
 
 
   <data name="ReloadGeoTacking" xml:space="preserve">
-      <value>Reload  tracks</value>
+      <value>重新加载轨迹</value>
   </data>
 </root>

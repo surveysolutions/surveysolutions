@@ -231,118 +231,118 @@
 
 
   <data name="PLU0001Recomendation" xml:space="preserve">
-      <value>User must be unique </value>
+      <value>用户必须唯一</value>
   </data>
 
   <data name="PLU0002Recomendation" xml:space="preserve">
-      <value>Resolve duplicates</value>
+      <value>解决重复项</value>
   </data>
 
   <data name="PLU0007Recomendation" xml:space="preserve">
-      <value>Fix email</value>
+      <value>修正电子邮件</value>
   </data>
 
   <data name="PLU0008Recomendation" xml:space="preserve">
-      <value>Fix phone number</value>
+      <value>修正电话号码</value>
   </data>
 
   <data name="PLU0010Recomendation" xml:space="preserve">
-      <value>Verify value for supervisor</value>
+      <value>核实督导员的值</value>
   </data>
 
   <data name="PLU0015" xml:space="preserve">
-    <value>Password too short</value>
+    <value>密码过短</value>
   </data>
 
   <data name="PLU0015Description" xml:space="preserve">
-    <value>Password '{0}' is too short</value>
+    <value>密码 '{0}' 太短</value>
   </data>
 
   <data name="PLU0015Recomendation" xml:space="preserve">
-    <value>Password must be at least 10 characters long</value>
+    <value>密码长度必须至少为 10 个字符</value>
   </data>
 
   <data name="PLU0016" xml:space="preserve">
-    <value>Simple password</value>
+    <value>简单密码</value>
   </data>
 
   <data name="PLU0016Description" xml:space="preserve">
-    <value>Password '{0}' does not contain non alphanumeric character</value>
+    <value>密码 '{0}' 不包含非字母数字字符</value>
   </data>
 
   <data name="PLU0016Recomendation" xml:space="preserve">
-    <value>Add at least one non alphanumeric character</value>
+    <value>至少添加一个非字母数字字符</value>
   </data>
 
   <data name="PLU0017" xml:space="preserve">
-    <value>Simple password</value>
+    <value>简单密码</value>
   </data>
 
   <data name="PLU0017Description" xml:space="preserve">
-    <value>Password '{0}' does not contain digit</value>
+    <value>密码 '{0}' 不包含数字</value>
   </data>
 
   <data name="PLU0017Recomendation" xml:space="preserve">
-    <value>Add at least one digit ('0'-'9').</value>
+    <value>至少添加一个数字 ('0'-'9').</value>
   </data>
 
   <data name="PLU0018" xml:space="preserve">
-    <value>Simple password</value>
+    <value>简单密码</value>
   </data>
 
   <data name="PLU0018Description" xml:space="preserve">
-    <value>Password '{0}' does not contain lower case character</value>
+    <value>密码 '{0}' 不包含小写字母</value>
   </data>
 
   <data name="PLU0018Recomendation" xml:space="preserve">
-    <value>Add at least one lowercase character ('a'-'z').</value>
+    <value>至少添加一个小写字母 ('a'-'z').</value>
   </data>
 
   <data name="PLU0019" xml:space="preserve">
-    <value>Simple password</value>
+    <value>简单密码</value>
   </data>
 
   <data name="PLU0019Description" xml:space="preserve">
-    <value>Password '{0}' does not contain upper case character</value>
+    <value>密码 '{0}' 不包含大写字母</value>
   </data>
 
   <data name="PLU0019Recomendation" xml:space="preserve">
-    <value>Add at least one uppercase ('A'-'Z').</value>
+    <value>至少添加一个大写字母 ('A'-'Z').</value>
   </data>
 
   <data name="PLU0020" xml:space="preserve">
-    <value>Simple password</value>
+    <value>简单密码</value>
   </data>
 
   <data name="PLU0020Description" xml:space="preserve">
-    <value>Password '{0}' does not contain enough unique characters</value>
+    <value>密码 '{0}' 不包含足够多的唯一字符</value>
   </data>
 
   <data name="PLU0020Recomendation" xml:space="preserve">
-      <value>Add different characters.</value>
+      <value>添加不同的字符。</value>
   </data>
 
   <data name="PLU0021" xml:space="preserve">
-    <value>Password required</value>
+    <value>需要密码</value>
   </data>
 
   <data name="PLU0021Description" xml:space="preserve">
-    <value>Password is required </value>
+    <value>必须提供密码</value>
   </data>
 
   <data name="PLU0021Recomendation" xml:space="preserve">
-    <value>Add password</value>
+    <value>添加密码</value>
   </data>
 
   <data name="PLU0022" xml:space="preserve">
-    <value>Workspace not found</value>
+    <value>找不到工作区</value>
   </data>
 
   <data name="PLU0022Description" xml:space="preserve">
-    <value>Workspace must exist and be enabled</value>
+    <value>工作区必须存在且已启用</value>
   </data>
 
   <data name="PLU0022Recomendation" xml:space="preserve">
-    <value>Check workspace name</value>
+    <value>检查工作区名称</value>
   </data>
 </root>

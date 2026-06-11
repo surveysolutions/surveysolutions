@@ -174,27 +174,27 @@
 
 
   <data name="AnonymousSharingEmail" xml:space="preserve">
-    <value>Hello {0}, &lt;br/&gt;&lt;br/&gt; You have enabled read-only access to your questionnaire "{1}" for anonymous users via the following link: </value>
+    <value>您好 {0}，&lt;br/&gt;&lt;br/&gt; 您已通过以下链接为匿名用户启用对问卷“{1}”的只读访问：</value>
   </data>
 
   <data name="EmailSendInfo" xml:space="preserve">
-    <value>This message was automatically sent by the Survey Solutions Designer tool.</value>
+    <value>此邮件由 Survey Solutions Designer 工具自动发送。</value>
   </data>
 
   <data name="SystemMailer_AnonymousSharingEmail_Subject" xml:space="preserve">
-    <value>Anonymous sharing link</value>
+    <value>匿名分享链接</value>
   </data>
 
   <data name="TranfserOwnershipNotification" xml:space="preserve">
-    <value>Hello {0}, &lt;br&gt; {1} has transferred ownership of the questionnaire {2} to You</value>
+    <value>您好 {0}，&lt;br&gt; {1} 已将问卷 {2} 的所有权转移给您</value>
   </data>
 
   <data name="EmailChange" xml:space="preserve">
-    <value>Hello {0}, &lt;br/&gt; &lt;br/&gt;
-To confirm email change please use following link: </value>
+    <value>您好 {0}，&lt;br/&gt; &lt;br/&gt;
+请使用以下链接确认电子邮件更改：</value>
   </data>
 
   <data name="EmailChangeLink" xml:space="preserve">
-    <value>confirm</value>
+    <value>确认</value>
   </data>
 </root>

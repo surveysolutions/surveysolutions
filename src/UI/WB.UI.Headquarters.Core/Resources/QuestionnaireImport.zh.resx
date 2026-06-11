@@ -183,10 +183,10 @@
 
 
   <data name="Importing" xml:space="preserve">
-    <value>Importing {{percent}}%</value>
+    <value>正在导入 {{percent}}%</value>
   </data>
 
   <data name="Prepare" xml:space="preserve">
-    <value>Receiving questionnaire data</value>
+    <value>正在接收问卷数据</value>
   </data>
 </root>

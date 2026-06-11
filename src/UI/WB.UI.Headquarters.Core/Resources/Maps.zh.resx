@@ -171,34 +171,34 @@
 
 
   <data name="MapOverlapsWith" xml:space="preserve">
-    <value>Overlaps with:</value>
+    <value>与以下内容重叠：</value>
   </data>
 
   <data name="MapOverlapsWithOther" xml:space="preserve">
-    <value>and {0} other.</value>
+    <value>以及另外 {0} 个。</value>
   </data>
 
   <data name="ShpIsMissingInArchive" xml:space="preserve">
-    <value>File {0}.shp is missing for {0}</value>
+    <value>缺少 {0} 的文件 {0}.shp</value>
   </data>
 
   <data name="ShxIsMissingInArchive" xml:space="preserve">
-    <value>File {0}.shx is missing for {0}.shp</value>
+    <value>缺少 {0}.shp 对应的文件 {0}.shx</value>
   </data>
 
   <data name="DbfIsMissingInArchive" xml:space="preserve">
-    <value>File {0}.dbf is missing for {0}.shp</value>
+    <value>缺少 {0}.shp 对应的文件 {0}.dbf</value>
   </data>
 
   <data name="MapFileSizeLimit" xml:space="preserve">
-    <value>The size of file {0} is larger than applicable limit {1}</value>
+    <value>文件 {0} 的大小超过适用限制 {1}</value>
   </data>
   
   <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve">
-    <value>The file {0} name includes non-UTF-8 characters.</value>
+    <value>文件 {0} 的名称包含非 UTF-8 字符。</value>
   </data>
 
   <data name="MapFileNameHasInvalidChars" xml:space="preserve">
-    <value>The file {0} name includes invalid characters.</value>
+    <value>文件 {0} 的名称包含无效字符。</value>
   </data>
 </root>

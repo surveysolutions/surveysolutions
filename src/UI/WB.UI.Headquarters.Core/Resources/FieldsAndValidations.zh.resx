@@ -252,58 +252,58 @@
 
 
   <data name="AllowRelinkTablet" xml:space="preserve">
-    <value>Allow relinking to a different device with loss of data on the original device.</value>
+    <value>允许重新关联到其他设备，原设备上的数据将丢失。</value>
   </data>
 
   <data name="VerificationCodeFieldName" xml:space="preserve">
-    <value>Verification code</value>
+    <value>验证码</value>
   </data>
 
   <data name="RestrictedAccountMessage" xml:space="preserve">
-    <value>This account is restricted to perform this action</value>
+    <value>此账户受限，无法执行此操作</value>
   </data>
 
   <data name="RestrictedAccount" xml:space="preserve">
-    <value>This account is restricted</value>
+    <value>此账户受限</value>
   </data>
 
   <data name="WorkspaceRequired" xml:space="preserve">
-    <value>Workspace is required</value>
+    <value>工作区为必填项</value>
   </data>
 
   <data name="WorkspaceMissing" xml:space="preserve">
-    <value>Workspace not found</value>
+    <value>找不到工作区</value>
   </data>
 
   <data name="UserRoleRequired" xml:space="preserve">
-    <value>User role is required</value>
+    <value>用户角色为必填项</value>
   </data>
 
   <data name="PasswordRequiresDigit" xml:space="preserve">
-      <value>Passwords must have at least one digit ('0'-'9').</value>
+      <value>密码必须至少包含一个数字（'0'-'9'）。</value>
   </data>
 
   <data name="PasswordRequiresLower" xml:space="preserve">
-      <value>Passwords must have at least one lowercase ('a'-'z').</value>
+      <value>密码必须至少包含一个小写字母（'a'-'z'）。</value>
   </data>
 
   <data name="PasswordRequiresNonAlphanumeric" xml:space="preserve">
-      <value>Passwords must have at least one non alphanumeric character.</value>
+      <value>密码必须至少包含一个非字母数字字符。</value>
   </data>
 
   <data name="PasswordRequiresUniqueChars" xml:space="preserve">
-      <value>Passwords must use at least {0} different characters.</value>
+      <value>密码必须至少使用 {0} 个不同字符。</value>
   </data>
 
   <data name="PasswordRequiresUpper" xml:space="preserve">
-      <value>Passwords must have at least one uppercase ('A'-'Z').</value>
+      <value>密码必须至少包含一个大写字母（'A'-'Z'）。</value>
   </data>
 
   <data name="PasswordTooShort" xml:space="preserve">
-      <value>Passwords must be at least {0} characters.</value>
+      <value>密码长度必须至少为 {0} 个字符。</value>
   </data>
 
   <data name="PasswordChangeRequired" xml:space="preserve">
-    <value>Your password has been reset. You must change it to get access to site.</value>
+    <value>您的密码已被重置。您必须更改密码才能访问站点。</value>
   </data>
 </root>

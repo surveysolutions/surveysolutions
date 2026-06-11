@@ -222,34 +222,34 @@
 
 
   <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
-    <value>Anonymous questionnaire url</value>
+    <value>匿名问卷链接</value>
   </data>
 
   <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
-    <value>Open</value>
+    <value>打开</value>
   </data>
 
   <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
-    <value>Can't open the questionnaire. The questionnaire cannot be found.</value>
+    <value>无法打开问卷。找不到该问卷。</value>
   </data>
 
   <data name="AnonymousQuestionnaires_Error_Confirm" xml:space="preserve">
-    <value>Can't open the questionnaire. Remove it from list?</value>
+    <value>无法打开问卷。将其从列表中移除吗？</value>
   </data>
 
   <data name="Login_Error_EmptyName" xml:space="preserve">
-    <value>Please enter correct login</value>
+    <value>请输入正确的登录名</value>
   </data>
 
   <data name="TesterLoginAccountHintText" xml:space="preserve">
-    <value>Log in to this app using the credentials you created at https://designer.mysurvey.solutions. To register a new account, visit the same site.</value>
+    <value>请使用您在 https://designer.mysurvey.solutions 创建的凭据登录此应用。若要注册新账户，请访问同一网站。</value>
   </data>
 
   <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
-    <value>Anonymous Questionnaires</value>
+    <value>匿名问卷</value>
   </data>
 
   <data name="MenuItem_Title_Login" xml:space="preserve">
-    <value>Login</value>
+    <value>登录</value>
   </data>
 </root>

@@ -219,39 +219,39 @@
 
 
   <data name="AuditLog" xml:space="preserve">
-    <value>Audit Log</value>
+    <value>审计日志</value>
   </data>
 
   <data name="DeviceLogs" xml:space="preserve">
-    <value>Device Logs</value>
+    <value>设备日志</value>
   </data>
     
   <data name="Diagnostics" xml:space="preserve">
-    <value>Diagnostics</value>
+    <value>诊断</value>
   </data>
 
   <data name="InterviewPackages" xml:space="preserve">
-    <value>Interview Packages</value>
+    <value>访谈包</value>
   </data>
 
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>设置</value>
   </data>
 
   <data name="WorkspaceSettings" xml:space="preserve">
-    <value>Workspace Settings</value>
+    <value>工作区设置</value>
   </data>
 
   <data name="EmailProviders" xml:space="preserve">
-    <value>Email Providers</value>
+    <value>电子邮件提供商</value>
   </data>
 
   <data name="MapDashboard" xml:space="preserve">
-    <value>Map Dashboard</value>
+    <value>地图仪表板</value>
   </data>
 
   <data name="TabletInfos" xml:space="preserve">
-    <value>Tablet Infos</value>
+    <value>平板信息</value>
   </data>
 
   <data name="Administration" xml:space="preserve">
@@ -259,10 +259,10 @@
   </data>
 
   <data name="Workspaces" xml:space="preserve">
-      <value>Workspaces</value>
+      <value>工作区</value>
   </data>
 
   <data name="ServerAdministration">
-    <value>Administration</value>
+    <value>服务器管理</value>
   </data>
 </root>

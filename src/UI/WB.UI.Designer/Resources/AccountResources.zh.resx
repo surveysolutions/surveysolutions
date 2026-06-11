@@ -285,30 +285,30 @@
 
 
   <data name="Forum" xml:space="preserve">
-    <value>Forum</value>
+    <value>论坛</value>
   </data>
 
   <data name="LogoutText" xml:space="preserve">
-    <value>You have successfully logged out of the application.</value>
+    <value>您已成功退出应用程序。</value>
   </data>
 
   <data name="LockedOut" xml:space="preserve">
-    <value>Locked out</value>
+    <value>已锁定</value>
   </data>
 
   <data name="LockedOutText" xml:space="preserve">
-    <value>Your account is locked. Contact the administrator to unlock your account</value>
+    <value>您的账户已被锁定。请联系管理员解锁您的账户</value>
   </data>
 
   <data name="PasswordEmailSent" xml:space="preserve">
-    <value>Please check your email to reset your password.</value>
+    <value>请检查您的电子邮件以重置密码。</value>
   </data>
 
   <data name="EmailChangeShouldBeConfirmed" xml:space="preserve">
-    <value>Please follow instructions sent to provided email ({0}) to confirm email change.</value>
+    <value>请按照发送到所提供电子邮件 ({0}) 的说明确认电子邮件更改。</value>
   </data>
 
   <data name="PendingEmailUpdate" xml:space="preserve">
-    <value>Pending update to {0}</value>
+    <value>等待更新为 {0}</value>
   </data>
 </root>

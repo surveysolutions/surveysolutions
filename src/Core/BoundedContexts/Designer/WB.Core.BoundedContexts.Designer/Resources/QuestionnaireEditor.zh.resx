@@ -171,22 +171,22 @@
 
 
   <data name="CoverPageSection" xml:space="preserve">
-    <value>Cover</value>
+    <value>封面</value>
   </data>
 
   <data name="GeometryTypePolygon" xml:space="preserve">
-    <value>Polygon</value>
+    <value>多边形</value>
   </data>
 
     <data name="GeometryTypePolyline" xml:space="preserve">
-    <value>Polyline</value>
+    <value>折线</value>
   </data>
 
     <data name="GeometryTypePoint" xml:space="preserve">
-    <value>Point</value>
+    <value>点</value>
   </data>
 
     <data name="GeometryTypeMultipoint" xml:space="preserve">
-    <value>Multipoint</value>
+    <value>多点</value>
   </data>
 </root>

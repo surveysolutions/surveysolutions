@@ -252,35 +252,35 @@
 
 
     <data name="PasswordChanged" xml:space="preserve">
-    <value>Password changed and acquired AuthToken</value>
+    <value>密码已更改并获取了AuthToken</value>
   </data>
 
     <data name="FailToChangePassword" xml:space="preserve">
-    <value>User failed to change password</value>
+    <value>用户更改密码失败</value>
   </data>
 
     <data name="GetInterviewPatch" xml:space="preserve">
-    <value>Download interview changes from HQ: {0}</value>
+    <value>从HQ下载访谈更改：{0}</value>
     <comment>{0} - count of affected interviews</comment>
   </data>
 
     <data name="AssignmentReceivedByTablet" xml:space="preserve">
-    <value>Assignment &lt;b&gt;{0}&lt;/b&gt; received and stored by device</value>
+    <value>任务 &lt;b&gt;{0}&lt;/b&gt; 已由设备接收并存储</value>
   </data>
 
     <data name="DownloadReusableCategories" xml:space="preserve">
-    <value>Reusable category {0} downloading</value>
+    <value>正在下载可复用类别 {0}</value>
   </data>
 
     <data name="PostCalendarEventPackage" xml:space="preserve">
-    <value>Upload calendar event: {0}</value>
+    <value>上传日历事件：{0}</value>
   </data>
 
     <data name="GetCalendarEventPackage" xml:space="preserve">
-    <value>Download calendar event package: {0}</value>
+    <value>下载日历事件包：{0}</value>
   </data>
 
     <data name="CalendarEventsListFormat" xml:space="preserve">
-    <value>Download list of calendar events ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
+    <value>下载日历事件列表 ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
   </data>
 </root>

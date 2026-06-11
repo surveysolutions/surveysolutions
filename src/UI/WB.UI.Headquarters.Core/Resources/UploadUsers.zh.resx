@@ -231,14 +231,14 @@
 
 
   <data name="Workspace" xml:space="preserve">
-    <value>Workspace</value>
+    <value>工作区</value>
   </data>
 
   <data name="SelectWorkspace" xml:space="preserve">
-    <value>Select Workspace</value>
+    <value>选择工作区</value>
   </data>
 
   <data name="SelectWorkspaceDescription" xml:space="preserve">
-    <value>If no workspace assigned in batch file use this workspace as default</value>
+    <value>如果批处理文件中未分配工作区，则默认使用此工作区</value>
   </data>
 </root>

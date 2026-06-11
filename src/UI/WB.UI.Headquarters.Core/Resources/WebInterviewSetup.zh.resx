@@ -195,102 +195,102 @@
 
 
   <data name="UseCaptcha" xml:space="preserve">
-    <value>Use CAPTCHA before interview start</value>
+    <value>在访谈开始前使用 CAPTCHA</value>
   </data>
 
   <data name="WebInterviewSetup_SendInvitationsTitle" xml:space="preserve">
-    <value>Send invitations</value>
+    <value>发送邀请</value>
   </data>
 
   <data name="Invitations" xml:space="preserve">
-    <value>Invitations</value>
+    <value>邀请</value>
   </data>
 
   <data name="Invitations_TotalInvitations" xml:space="preserve">
-    <value>{{count}} total invitations.</value>
+    <value>共 {{count}} 个邀请。</value>
   </data>
 
   <data name="Invitations_Sent" xml:space="preserve">
-    <value>{{count}} invitations have been sent already.</value>
+    <value>已发送 {{count}} 个邀请。</value>
   </data>
 
   <data name="Invitations_NothingSent" xml:space="preserve">
-    <value>No invitations have been sent yet.</value>
+    <value>尚未发送任何邀请。</value>
   </data>
 
   <data name="Invitations_ToSend" xml:space="preserve">
-    <value>{{count}} invitation to send.</value>
+    <value>{{count}} 个待发送邀请。</value>
   </data>
 
   <data name="Invitations_NothingToSend" xml:space="preserve">
-    <value>No invitations to send as of now.</value>
+    <value>当前没有可发送的邀请。</value>
   </data>
 
   <data name="Invitations_SetupError" xml:space="preserve">
-    <value>Invitations can't be sent.</value>
+    <value>无法发送邀请。</value>
   </data>
 
   <data name="Invitations_EmailIsNotSetUp" xml:space="preserve">
-    <value>Email provider is not set up.</value>
+    <value>尚未设置电子邮件提供商。</value>
   </data>
 
   <data name="Invitations_ChangeEmailSettingsAdmin" xml:space="preserve">
-    <value>You can change these settings at the &lt;a href="{{url}}"&gt;'Email Providers'&lt;/a&gt; page.</value>
+    <value>您可以在 &lt;a href="{{url}}"&gt;“电子邮件提供商”&lt;/a&gt; 页面更改这些设置。</value>
   </data>
 
   <data name="Invitations_ChangeEmailSettingsNotAdmin" xml:space="preserve">
-    <value>Tell your admin user to change these settings at the 'Email Providers' page.</value>
+    <value>请告知管理员在“电子邮件提供商”页面更改这些设置。</value>
   </data>
 
   <data name="Invitations_SurveyIsNotStarted" xml:space="preserve">
-    <value>Web survey is not started. Setup and &lt;a href="{{url}}"&gt;start web survey&lt;/a&gt; before sending invitations.</value>
+    <value>网络调查尚未开始。请先进行设置并&lt;a href="{{url}}"&gt;启动网络调查&lt;/a&gt;，然后再发送邀请。</value>
   </data>
 
   <data name="Invitations_SuccessfulSetup" xml:space="preserve">
-    <value>Web survey has been started and email provider was set up properly. The system is ready to send invitations.</value>
+    <value>网络调查已开始，且电子邮件提供商已正确设置。系统已准备好发送邀请。</value>
   </data>
 
   <data name="Invitations_SendAction" xml:space="preserve">
-    <value>Send {{count}} invitations</value>
+    <value>发送 {{count}} 个邀请</value>
   </data>
 
   <data name="WebInterviewUserMessages_CompleteButton_Descr" xml:space="preserve">
-    <value>Complete</value>
+    <value>完成</value>
   </data>
 
   <data name="WebInterviewUserMessages_CompleteNoteToSupervisor_Descr" xml:space="preserve">
-    <value>Note for Supervisor</value>
+    <value>督导备注</value>
   </data>
 
   <data name="SingleResponse" xml:space="preserve">
-    <value>Limit to one interview per respondent</value>
+    <value>每位受访者仅限一次访谈</value>
   </data>
 
   <data name="WebInterviewUserMessages_StartNewButton_Descr" xml:space="preserve">
-    <value>Start new interview</value>
+    <value>开始新访谈</value>
   </data>
 
   <data name="WebInterviewUserMessages_ResumeButton_Descr" xml:space="preserve">
-    <value>Resume</value>
+    <value>继续</value>
   </data>
 
   <data name="EmailOnComplete" xml:space="preserve">
-    <value>Send email after web interview completion</value>
+    <value>网络访谈完成后发送电子邮件</value>
   </data>
 
   <data name="AttachAnswersToCompleteEmail" xml:space="preserve">
-    <value>Attach Pdf transcript</value>
+    <value>附加 PDF 访谈记录</value>
   </data>
 
   <data name="AllowSwitchToCawiForInterviewer" xml:space="preserve">
-    <value>Allow Interviewer to switch to CAWI mode</value>
+    <value>允许访问员切换到 CAWI 模式</value>
   </data>
 
   <data name="WebInterviewUserMessages_LinkInvitation_Descr" xml:space="preserve">
-    <value>Text that shown to user when they navigate to link to interview that is not yet synced to server</value>
+    <value>当用户通过链接访问尚未与服务器同步的访谈时显示的文本</value>
   </data>
 
   <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
-    <value>Header welcome text on web interview link landing page</value>
+    <value>网络访谈链接落地页上的欢迎语标题</value>
   </data>
 </root>

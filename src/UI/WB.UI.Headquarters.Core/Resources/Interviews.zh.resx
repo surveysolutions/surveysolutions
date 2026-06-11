@@ -220,75 +220,75 @@
 
 
   <data name="AssignReceivedWarning" xml:space="preserve">
-    <value>Current responsible interviewers will not be notified about the reassignment until the next synchronization. If they have started working on the interview already, all the data that they have entered before the next synchronization will be DISCARDED!</value>
+    <value>在下次同步之前，当前负责的访问员不会收到重新分配的通知。如果他们已经开始处理该访谈，则他们在下次同步前录入的所有数据都将被丢弃！</value>
   </data>
 
   <data name="ApproveReceivedWarning" xml:space="preserve">
-    <value>Current responsible interviewers will not be notified about the interview(s) approving until the next synchronization. If they have started working on the interview already, all the data that they have entered before the next synchronization will be DISCARDED!</value>
+    <value>在下次同步之前，当前负责的访问员不会收到访谈已审核通过的通知。如果他们已经开始处理该访谈，则他们在下次同步前录入的所有数据都将被丢弃！</value>
   </data>
 
   <data name="SwitchToCawiReceivedWarning" xml:space="preserve">
-    <value>Current responsible interviewers will not be notified about the interview(s) switching interview mode until the next synchronization. If they have started working on the interview already, all the data that they have entered before the next synchronization will be DISCARDED!</value>
+    <value>在下次同步之前，当前负责的访问员不会收到访谈模式已切换的通知。如果他们已经开始处理该访谈，则他们在下次同步前录入的所有数据都将被丢弃！</value>
   </data>
 
   <data name="RejectToOriginal" xml:space="preserve">
-    <value>Reject to original responsible</value>
+    <value>驳回给原负责人</value>
   </data>
 
   <data name="RejectToNewResponsible" xml:space="preserve">
-    <value>Reject and choose new responsible</value>
+    <value>驳回并选择新负责人</value>
   </data>
 
   <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve">
-    <value>Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release.</value>
+    <value>未回答问题的数量。包括督导、识别型和访问员问题。对于 20.09 版本发布前已完成的访谈，该值可能为 null。</value>
   </data>
 
   <data name="Tooltip_Table_InterviewMode" xml:space="preserve">
-    <value>Show current status (CAPI or CAWI) of each interview</value>
+    <value>显示每个访谈当前的状态（CAPI 或 CAWI）</value>
   </data>
 
     <data name="NotAnsweredCount" xml:space="preserve">
-    <value>Not answered</value>
+    <value>未回答</value>
   </data>
 
   <data name="ChooseQuestionsTitle" xml:space="preserve">
-    <value>Choose identifying questions to use in the filter</value>
+    <value>选择要用于筛选器的识别型问题</value>
   </data>
 
   <data name="DynamicFilter" xml:space="preserve">
-    <value>Dynamic filter</value>
+    <value>动态筛选器</value>
   </data>
 
   <data name="FiltersByQuestions" xml:space="preserve">
-    <value>Filters by questions</value>
+    <value>按问题筛选</value>
   </data>
 
   <data name="QuestionsSelector" xml:space="preserve">
-    <value>Questions selector</value>
+    <value>问题选择器</value>
   </data>
 
   <data name="AdvancedFilterSelector" xml:space="preserve">
-    <value>Dynamic filter</value>
+    <value>动态筛选器</value>
   </data>
 
   <data name="QuestionsFilterNotAvailable" xml:space="preserve">
-    <value>Filters by questions is only available when specific questionnaire version is selected</value>
+    <value>仅在选择特定问卷版本时，才可按问题筛选</value>
   </data>
 
   <data name="DynamicFilterNotAvailable" xml:space="preserve">
-    <value>No data available</value>
+    <value>无可用数据</value>
   </data>
 
   <data name="ApproveConfirmMessage_other" xml:space="preserve">
-      <value>{{count}} interviews will be approved.</value>
+      <value>{{count}} 个访谈将通过审核。</value>
   </data>
 
   <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
-      <value>You can approve interviews with the following statuses only: {{status1}},  {{status2}} and {{status3}}.</value>
+      <value>只能审核处于以下状态的访谈：{{status1}}、{{status2}} 和 {{status3}}。</value>
   </data>
 
   <data name="DynamicFilter_MatchType" xml:space="preserve">
-    <value>Match Type</value>
+    <value>匹配类型</value>
   </data>
 
   <data name="DynamicFilter_MatchTypes_And" xml:space="preserve">
@@ -300,18 +300,18 @@
   </data>
 
   <data name="DynamicFilter_MatchTypes_AddRule" xml:space="preserve">
-    <value>Add Rule</value>
+    <value>添加规则</value>
   </data>
 
   <data name="DynamicFilter_MatchTypes_AddGroup" xml:space="preserve">
-    <value>Add Group</value>
+    <value>添加组</value>
   </data>
 
   <data name="DynamicFilter_MatchTypes_ValuePlaceholder" xml:space="preserve">
-    <value>value</value>
+    <value>值</value>
   </data>
 
   <data name="WebInterviewResponsibleWarning" xml:space="preserve">
-      <value>Responsible is not Interviewer. Link will not work.</value>
+      <value>负责人不是访问员。链接将无法使用。</value>
   </data>
 </root>
