@@ -456,18 +456,36 @@ namespace WB.UI.Designer.Controllers
         public async Task<IActionResult> UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
         {
             bool isActive = postModel.IsActive;
+
+            var questionnaireView = GetQuestionnaireView(id);
+            var questionnaireTitle = questionnaireView?.Title ?? string.Empty;
+
             var anonymousQuestionnaire = dbContext.AnonymousQuestionnaires.FirstOrDefault(a => a.QuestionnaireId == id);
             if (anonymousQuestionnaire == null)
             {
                 anonymousQuestionnaire = new AnonymousQuestionnaire()
                     { QuestionnaireId = id, AnonymousQuestionnaireId = Guid.NewGuid(), IsActive = isActive, GeneratedAtUtc = DateTime.UtcNow };
                 dbContext.AnonymousQuestionnaires.Add(anonymousQuestionnaire);
-                await dbContext.SaveChangesAsync();
             }
 
             anonymousQuestionnaire.IsActive = isActive;
-            dbContext.AnonymousQuestionnaires.Update(anonymousQuestionnaire);
-            await dbContext.SaveChangesAsync();
+
+            var actionType = isActive
+                ? QuestionnaireActionType.AnonymousSharingEnabled
+                : QuestionnaireActionType.AnonymousSharingDisabled;
+
+            // Stage the anonymous questionnaire change and the history entry, then commit them together.
+            await using var transaction = await dbContext.Database.BeginTransactionAsync();
+            await questionnaireHistoryVersionsService.AddQuestionnaireChangeItemAsync(
+                id,
+                User.GetId(),
+                User.GetUserName(),
+                actionType,
+                QuestionnaireItemType.Questionnaire,
+                id,
+                questionnaireTitle,
+                null, null, null, null);
+            await transaction.CommitAsync();
 
             if (isActive)
                 await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);

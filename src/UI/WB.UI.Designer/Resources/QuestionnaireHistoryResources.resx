@@ -366,4 +366,10 @@
   <data name="MigratedNewCoverSupport" xml:space="preserve">
     <value>Cover page generated</value>
   </data>
+  <data name="AnonymousSharingEnabled" xml:space="preserve">
+    <value>Anonymous sharing is turned on for {0}</value>
+  </data>
+  <data name="AnonymousSharingDisabled" xml:space="preserve">
+    <value>Anonymous sharing is turned off for {0}</value>
+  </data>
 </root>

@@ -354,4 +354,13 @@
   <data name="Variable_Update" xml:space="preserve">
     <value>Variabila {0} a fost actualizată</value>
   </data>
+  <data name="Translation_Replace" xml:space="preserve">
+    <value>Documentul a fost schimbat la traducerea {0}</value>
+  </data>
+  <data name="AnonymousSharingEnabled" xml:space="preserve">
+    <value>Partajarea anonimă a fost activată pentru {0}</value>
+  </data>
+  <data name="AnonymousSharingDisabled" xml:space="preserve">
+    <value>Partajarea anonimă a fost dezactivată pentru {0}</value>
+  </data>
 </root>
