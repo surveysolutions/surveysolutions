@@ -452,7 +452,7 @@ Veuillez composer votre mot de passe à nouveau. Si cela ne résout pas le probl
     <value>Langue</value>
   </data>
   <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Originale</value>
   </data>
   <data name="MenuItem_Title_Login" xml:space="preserve">
     <value>Connexion</value>

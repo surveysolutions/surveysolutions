@@ -301,7 +301,7 @@
     <value>En file d'attente:</value>
   </data>
   <data name="DataExport_Destination" xml:space="preserve">
-    <value>Destination: {{dest}}</value>
+    <value>Destination : {{dest}}</value>
   </data>
   <data name="DataExport_ServiceIsNotAvailable" xml:space="preserve">
     <value>Le service d'exportation n'est pas disponible</value>
