@@ -403,811 +403,811 @@
 
 
   <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
-    <value>My</value>
+    <value>របស់ខ្ញុំ</value>
   </data>
 
   <data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
-    <value>Shared with me</value>
+    <value>បានចែករំលែកជាមួយខ្ញុំ</value>
   </data>
 
   <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
-    <value>Public</value>
+    <value>សាធារណៈ</value>
   </data>
 
   <data name="OldPasswordHint" xml:space="preserve">
-    <value>Current password</value>
+    <value>ពាក្យសម្ងាត់បច្ចុប្បន្ន</value>
   </data>
 
   <data name="NewPasswordHint" xml:space="preserve">
-    <value>New password</value>
+    <value>ពាក្យសម្ងាត់ថ្មី</value>
   </data>
 
   <data name="ConfirmNewPasswordHint" xml:space="preserve">
-    <value>Confirm new password</value>
+    <value>បញ្ជាក់ពាក្យសម្ងាត់ថ្មី</value>
   </data>
 
   <data name="Interview_Questions_Audio_SaveAnswer" xml:space="preserve">
-    <value>Tap to record audio</value>
+    <value>ចុចដើម្បីថតសំឡេង</value>
   </data>
 
   <data name="Interview_Questions_Audio_RecordNew" xml:space="preserve">
-    <value>Record new</value>
+    <value>ថតថ្មី</value>
   </data>
 
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>Are you sure you want to remove related roster '{0}' from each related roster?</value>
+    <value>តើអ្នកប្រាកដថាចង់លុប roster ពាក់ព័ន្ធ '{0}' ចេញពី roster ពាក់ព័ន្ធនីមួយៗឬ?</value>
   </data>
 
   <data name="Interview_Questions_RemoveRowFromRosterListMessage" xml:space="preserve">
-    <value>Are you sure you want to remove related rosters?</value>
+    <value>តើអ្នកប្រាកដថាចង់លុប roster ពាក់ព័ន្ធទាំងនេះឬ?</value>
   </data>
 
   <data name="Adjust" xml:space="preserve">
-    <value>Adjust</value>
+    <value>កែតម្រូវ</value>
   </data>
 
   <data name="InvalidTimeMessage" xml:space="preserve">
-    <value>It is important that the clock setting is accurate. Your clock indicates that current date is set incorrect. Adjust the clock by setting the correct date/time before continuing your work.</value>
+    <value>វាសំខាន់ណាស់ដែលការកំណត់ម៉ោងត្រឹមត្រូវ។ នាឡិការបស់អ្នកបង្ហាញថាកាលបរិច្ឆេទបច្ចុប្បន្នត្រូវបានកំណត់មិនត្រឹមត្រូវ។ សូមកែតម្រូវនាឡិកាដោយកំណត់កាលបរិច្ឆេទ/ពេលវេលាឱ្យត្រឹមត្រូវ មុនពេលបន្តការងាររបស់អ្នក។</value>
   </data>
 
   <data name="Warnings" xml:space="preserve">
-    <value>Warnings</value>
+    <value>ការព្រមាន</value>
   </data>
 
   <data name="Interview_Comment_OnPreviousAnswer" xml:space="preserve">
-    <value>On previous answer</value>
+    <value>លើចម្លើយមុន</value>
   </data>
 
   <data name="Interview_Comment_Resolve" xml:space="preserve">
-    <value>Resolve</value>
+    <value>ដោះស្រាយ</value>
   </data>
 
   <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
-    <value>Tap to answer</value>
+    <value>ចុចដើម្បីឆ្លើយ</value>
   </data>
 
   <data name="Interview_Question_Text_Empty" xml:space="preserve">
-    <value>Answer should not be empty</value>
+    <value>ចម្លើយមិនត្រូវទទេ</value>
   </data>
 
   <data name="NoMapsApplication" xml:space="preserve">
-    <value>Navigation application was not found</value>
+    <value>រកមិនឃើញកម្មវិធីរុករកផ្លូវ</value>
   </data>
 
   <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
-    <value>To activate the button, please resolve the critical issues</value>
+    <value>ដើម្បីបើកប៊ូតុង សូមដោះស្រាយបញ្ហាធ្ងន់ធ្ងរ</value>
   </data>
 
   <data name="Interview_Complete_CriticalUnanswered" xml:space="preserve">
-    <value>Critical unanswered questions: {0}</value>
+    <value>សំណួរសំខាន់ដែលមិនទាន់បានឆ្លើយ៖ {0}</value>
   </data>
 
   <data name="Interview_Complete_FailCriticalConditions" xml:space="preserve">
-    <value>Failed critical rules: {0}</value>
+    <value>ច្បាប់សំខាន់ដែលបរាជ័យ៖ {0}</value>
   </data>
 
   <data name="Interview_Complete_WithWarningCriticality" xml:space="preserve">
-    <value>Please confirm you want to submit this interview with critical issues.</value>
+    <value>សូមបញ្ជាក់ថាអ្នកចង់ដាក់ស្នើការសម្ភាសនេះទាំងដែលមានបញ្ហាធ្ងន់ធ្ងរ។</value>
   </data>
 
   <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
-    <value>To activate the button, please resolve the critical issues or provide an explanation in the comment box above</value>
+    <value>ដើម្បីបើកប៊ូតុង សូមដោះស្រាយបញ្ហាធ្ងន់ធ្ងរ ឬផ្តល់ការពន្យល់នៅក្នុងប្រអប់មតិយោបល់ខាងលើ</value>
   </data>
 
   <data name="Interview_Complete_Interview_Status" xml:space="preserve">
-    <value>Interview issues:</value>
+    <value>បញ្ហានៃការសម្ភាស៖</value>
   </data>
 
   <data name="Interview_Complete_CriticalityIssuesDescription" xml:space="preserve">
-    <value>Please resolve the issues by answering critical questions and making sure the answers satisfy the critical rules</value>
+    <value>សូមដោះស្រាយបញ្ហាដោយឆ្លើយសំណួរសំខាន់ៗ និងធានាថាចម្លើយត្រូវតាមច្បាប់សំខាន់ៗ</value>
   </data>
 
   <data name="Interview_Complete_Screen_DescriptionWithInterviewKey" xml:space="preserve">
-    <value>You are about to complete interview {0}</value>
+    <value>អ្នកហៀបនឹងបញ្ចប់ការសម្ភាស {0}</value>
   </data>
 
   <data name="Supervisor_ApplicationName" xml:space="preserve">
-    <value>Survey Solutions Supervisor</value>
+    <value>Survey Solutions អ្នកត្រួតពិនិត្យ</value>
   </data>
 
   <data name="Interviewer_Reassign_Comment" xml:space="preserve">
-    <value>Leave comment for a new responsible</value>
+    <value>ទុកមតិយោបល់សម្រាប់អ្នកទទួលខុសត្រូវថ្មី</value>
   </data>
 
   <data name="Interviewer_Comment" xml:space="preserve">
-    <value>Leave a comment</value>
+    <value>ទុកមតិយោបល់</value>
   </data>
 
   <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
-    <value>Interviewer {0} has already received this interview {1}. Are you sure you want to reassign it?</value>
+    <value>អ្នកសម្ភាស {0} បានទទួលការសម្ភាស {1} នេះរួចហើយ។ តើអ្នកប្រាកដថាចង់ចាត់តាំងវាឡើងវិញឬ?</value>
   </data>
 
   <data name="Interviewer_Reassign_AlreadyReceivedAssignment" xml:space="preserve">
-    <value>Interviewer {0} has already received this assignment {1}. Are you sure you want to reassign it?</value>
+    <value>អ្នកសម្ភាស {0} បានទទួលការចាត់ការ {1} នេះរួចហើយ។ តើអ្នកប្រាកដថាចង់ចាត់តាំងវាឡើងវិញឬ?</value>
   </data>
 
   <data name="Interviewer_Done" xml:space="preserve">
-    <value>Done</value>
+    <value>រួចរាល់</value>
   </data>
 
   <data name="Interviewer_AudioRecording" xml:space="preserve">
-    <value>Audio recording</value>
+    <value>ការថតសំឡេង</value>
   </data>
 
   <data name="PasswordMatchError" xml:space="preserve">
-    <value>Password must be the same</value>
+    <value>ពាក្យសម្ងាត់ត្រូវតែដូចគ្នា</value>
   </data>
 
   <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
-    <value>Tap to record current time</value>
+    <value>ចុចដើម្បីកត់ត្រាពេលវេលាបច្ចុប្បន្ន</value>
   </data>
 
   <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
-    <value>Questions with errors:</value>
+    <value>សំណួរដែលមានកំហុស៖</value>
   </data>
 
   <data name="Interview_Complete_First_n_Entities_With_Errors" xml:space="preserve">
-    <value>First {0} questions with errors:</value>
+    <value>សំណួរដំបូង {0} ដែលមានកំហុស៖</value>
   </data>
 
   <data name="Messages_WaitPendingOperation" xml:space="preserve">
-    <value>Please wait until the current operation is completed</value>
+    <value>សូមរង់ចាំរហូតដល់ប្រតិបត្តិការបច្ចុប្បន្នបានបញ្ចប់</value>
   </data>
 
   <data name="Prefs_VibrateOnErrorSummary" xml:space="preserve">
-    <value>The tablet is going to vibrate when an answer didn't pass the validation</value>
+    <value>ថេប្លេតនឹងញ័រ នៅពេលចម្លើយមិនឆ្លងកាត់ការផ្ទៀងផ្ទាត់</value>
   </data>
 
   <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
-    <value>Vibrate when invalid answer is given</value>
+    <value>ញ័រនៅពេលផ្តល់ចម្លើយមិនត្រឹមត្រូវ</value>
   </data>
 
   <data name="Prefs_CommunicationIntegrityValidationIgnoreTitle" xml:space="preserve">
-    <value>Ignore communication integrity validation</value>
+    <value>មិនអើពើការផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវនៃការទំនាក់ទំនង</value>
   </data>
 
   <data name="Prefs_CommunicationIntegrityValidationIgnoreSummary" xml:space="preserve">
-    <value>When enabled, communication integrity validation errors will be ignored</value>
+    <value>នៅពេលបើក កំហុសនៃការផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវនៃការទំនាក់ទំនងនឹងត្រូវបានមិនអើពើ</value>
   </data>
 
   <data name="Interview_Cover_Screen_Title" xml:space="preserve">
-    <value>Cover</value>
+    <value>គម្រប</value>
   </data>
 
   <data name="Interview_Cover_First_n_Questions_With_Comments" xml:space="preserve">
-    <value>First {0} questions with comments:</value>
+    <value>សំណួរដំបូង {0} ដែលមានមតិយោបល់៖</value>
   </data>
 
   <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
-    <value>Questions with supervisor comments:</value>
+    <value>សំណួរដែលមានមតិយោបល់ពីអ្នកត្រួតពិនិត្យ៖</value>
   </data>
 
   <data name="Interview_Cover_Supervisor_Comments_does_not_exists" xml:space="preserve">
-    <value>No comments from supervisor</value>
+    <value>គ្មានមតិយោបល់ពីអ្នកត្រួតពិនិត្យ</value>
   </data>
 
   <data name="Interview_Other_Comment_Caption" xml:space="preserve">
-    <value>User comment</value>
+    <value>មតិយោបល់អ្នកប្រើ</value>
   </data>
 
   <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
-    <value>Supervisor comment</value>
+    <value>មតិយោបល់អ្នកត្រួតពិនិត្យ</value>
   </data>
 
   <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
-    <value>Supervisor note:</value>
+    <value>កំណត់ចំណាំរបស់អ្នកត្រួតពិនិត្យ៖</value>
   </data>
 
   <data name="Prefs_ShowLocationOnMap" xml:space="preserve">
-    <value>Show location on map</value>
+    <value>បង្ហាញទីតាំងលើផែនទី</value>
   </data>
 
   <data name="Prefs_DownloadUpdatesForInterviewerApp" xml:space="preserve">
-    <value>Download updates for Interviewer application</value>
+    <value>ទាញយកការអាប់ដេតសម្រាប់កម្មវិធី Interviewer</value>
   </data>
 
   <data name="Prefs_ShowLocationOnMapSummary" xml:space="preserve">
-    <value>Load map to show location for GPS questions</value>
+    <value>ផ្ទុកផែនទីដើម្បីបង្ហាញទីតាំងសម្រាប់សំណួរ GPS</value>
   </data>
 
   <data name="Prefs_DownloadUpdatesForInterviewerAppSummary" xml:space="preserve">
-    <value>If interviewers don't have an access to the internet, this functionality should be enabled, because it makes it possible to update their applications during offline synchronization with the Supervisor application</value>
+    <value>ប្រសិនបើអ្នកសម្ភាសមិនមានការចូលប្រើអ៊ីនធឺណិត មុខងារនេះគួរតែត្រូវបានបើក ព្រោះវាធ្វើឱ្យអាចអាប់ដេតកម្មវិធីរបស់ពួកគេបាន នៅពេលធ្វើសមកាលក្រៅបណ្តាញជាមួយកម្មវិធី Supervisor</value>
   </data>
 
   <data name="VariableEmptyValue" xml:space="preserve">
-    <value>&lt;empty&gt;</value>
+    <value>&lt;ទទេ&gt;</value>
   </data>
 
   <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
-    <value>Headquarters comment</value>
+    <value>មតិយោបល់ពីការិយាល័យកណ្ដាល</value>
   </data>
 
   <data name="Interview_Interviewer_Comment_Caption" xml:space="preserve">
-    <value>Interviewer comment</value>
+    <value>មតិយោបល់អ្នកសម្ភាស</value>
   </data>
 
   <data name="GpsQuestion_MissingPermissions" xml:space="preserve">
-    <value>Application does not have enough permissions to execute requested action. Retry answering question and allow access. If you don't see permissions popup then go to Settings and allow application to use device location.</value>
+    <value>កម្មវិធីមិនមានសិទ្ធិគ្រប់គ្រាន់ដើម្បីអនុវត្តសកម្មភាពដែលបានស្នើទេ។ សូមព្យាយាមឆ្លើយសំណួរម្ដងទៀត ហើយអនុញ្ញាតការចូលប្រើ។ ប្រសិនបើអ្នកមិនឃើញផ្ទាំងស្នើសុំសិទ្ធិទេ សូមចូលទៅកាន់ការកំណត់ ហើយអនុញ្ញាតឱ្យកម្មវិធីប្រើទីតាំងឧបករណ៍។</value>
   </data>
 
   <data name="MissingPermissions_Camera" xml:space="preserve">
-    <value>Application needs to have a permission to use camera in order to answer this question. Retry answering question and allow access. If you don't see permissions popup then go to Settings and allow application to use camera.</value>
+    <value>កម្មវិធីត្រូវការសិទ្ធិប្រើកាមេរ៉ា ដើម្បីឆ្លើយសំណួរនេះ។ សូមព្យាយាមឆ្លើយសំណួរម្ដងទៀត ហើយអនុញ្ញាតការចូលប្រើ។ ប្រសិនបើអ្នកមិនឃើញផ្ទាំងស្នើសុំសិទ្ធិទេ សូមចូលទៅកាន់ការកំណត់ ហើយអនុញ្ញាតឱ្យកម្មវិធីប្រើកាមេរ៉ា។</value>
   </data>
 
   <data name="MissingPermissions_Microphone" xml:space="preserve">
-    <value>Application needs to have a permission to use microphone in order to answer this question. Retry answering question and allow access. If you don't see permissions popup then go to Settings and allow application to use microphone.</value>
+    <value>កម្មវិធីត្រូវការសិទ្ធិប្រើមីក្រូហ្វូន ដើម្បីឆ្លើយសំណួរនេះ។ សូមព្យាយាមឆ្លើយសំណួរម្ដងទៀត ហើយអនុញ្ញាតការចូលប្រើ។ ប្រសិនបើអ្នកមិនឃើញផ្ទាំងស្នើសុំសិទ្ធិទេ សូមចូលទៅកាន់ការកំណត់ ហើយអនុញ្ញាតឱ្យកម្មវិធីប្រើមីក្រូហ្វូន។</value>
   </data>
 
   <data name="MissingPermissions_Storage" xml:space="preserve">
-    <value>Application needs to have a permission to use storage in order to answer this question. Retry answering question and allow access. If you don't see permissions popup then go to Settings and allow application to use storage.</value>
+    <value>កម្មវិធីត្រូវការសិទ្ធិប្រើឃ្លាំងផ្ទុក ដើម្បីឆ្លើយសំណួរនេះ។ សូមព្យាយាមឆ្លើយសំណួរម្ដងទៀត ហើយអនុញ្ញាតការចូលប្រើ។ ប្រសិនបើអ្នកមិនឃើញផ្ទាំងស្នើសុំសិទ្ធិទេ សូមចូលទៅកាន់ការកំណត់ ហើយអនុញ្ញាតឱ្យកម្មវិធីប្រើឃ្លាំងផ្ទុក។</value>
   </data>
 
   <data name="MissingPermissions_MapsLocation" xml:space="preserve">
-    <value>Application needs to have a permission to use location. If you don't see permissions popup then go to Settings and allow application to use location.</value>
+    <value>កម្មវិធីត្រូវការសិទ្ធិប្រើទីតាំង។ ប្រសិនបើអ្នកមិនឃើញផ្ទាំងស្នើសុំសិទ្ធិទេ សូមចូលទៅកាន់ការកំណត់ ហើយអនុញ្ញាតឱ្យកម្មវិធីប្រើទីតាំង។</value>
   </data>
 
   <data name="MissingPermissions_Microphone_Global" xml:space="preserve">
-    <value>Application needs to have a permission to use microphone. Retry last action and allow access. If you don't see permissions popup then go to Settings and allow application to use microphone.</value>
+    <value>កម្មវិធីត្រូវការសិទ្ធិប្រើមីក្រូហ្វូន។ សូមព្យាយាមសកម្មភាពចុងក្រោយម្ដងទៀត ហើយអនុញ្ញាតការចូលប្រើ។ ប្រសិនបើអ្នកមិនឃើញផ្ទាំងស្នើសុំសិទ្ធិទេ សូមចូលទៅកាន់ការកំណត់ ហើយអនុញ្ញាតឱ្យកម្មវិធីប្រើមីក្រូហ្វូន។</value>
   </data>
 
   <data name="MissingPermissions_Storage_Global" xml:space="preserve">
-    <value>Application needs to have a permission to use storage. Retry last action and allow access. If you don't see permissions popup then go to Settings and allow application to use storage.</value>
+    <value>កម្មវិធីត្រូវការសិទ្ធិប្រើឃ្លាំងផ្ទុក។ សូមព្យាយាមសកម្មភាពចុងក្រោយម្ដងទៀត ហើយអនុញ្ញាតការចូលប្រើ។ ប្រសិនបើអ្នកមិនឃើញផ្ទាំងស្នើសុំសិទ្ធិទេ សូមចូលទៅកាន់ការកំណត់ ហើយអនុញ្ញាតឱ្យកម្មវិធីប្រើឃ្លាំងផ្ទុក។</value>
   </data>
 
   <data name="MissingPermission" xml:space="preserve">
-    <value>Application has not enough permissions to execute requested action</value>
+    <value>កម្មវិធីមិនមានសិទ្ធិគ្រប់គ្រាន់ដើម្បីអនុវត្តសកម្មភាពដែលបានស្នើ</value>
   </data>
 
   <data name="Ok" xml:space="preserve">
-    <value>OK</value>
+    <value>យល់ព្រម</value>
   </data>
 
   <data name="Multimedia_PickFromGallery" xml:space="preserve">
-    <value>Pick from gallery</value>
+    <value>ជ្រើសពីវិចិត្រសាល</value>
   </data>
 
   <data name="Multimedia_PictureSource" xml:space="preserve">
-    <value>Select an option</value>
+    <value>ជ្រើសរើសជម្រើស</value>
   </data>
 
   <data name="Multimedia_TakePhoto" xml:space="preserve">
-    <value>Take photo</value>
+    <value>ថតរូប</value>
   </data>
 
   <data name="Error" xml:space="preserve">
-    <value>Error</value>
+    <value>កំហុស</value>
   </data>
 
   <data name="Warning" xml:space="preserve">
-    <value>Warning</value>
+    <value>ការព្រមាន</value>
   </data>
 
   <data name="AreaMap_Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>កែសម្រួល</value>
   </data>
 
   <data name="AreaMap_Location" xml:space="preserve">
-    <value>Location</value>
+    <value>ទីតាំង</value>
   </data>
 
   <data name="AreaMap_NoChangesInfo" xml:space="preserve">
-    <value>No changes to be saved.</value>
+    <value>គ្មានការផ្លាស់ប្តូរដែលត្រូវរក្សាទុកទេ។</value>
   </data>
 
   <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
-    <value>Your location is outside the boundaries of the map.</value>
+    <value>ទីតាំងរបស់អ្នកស្ថិតនៅក្រៅព្រំដែននៃផែនទី។</value>
   </data>
 
   <data name="AreaMap_LocationDataSourceFailed" xml:space="preserve">
-    <value>Location cannot be captured. To troubleshoot, please try the following: ensure that you are outdoors, confirm that your GPS is enabled, or change your GPS&apos;s timeout setting</value>
+    <value>មិនអាចចាប់យកទីតាំងបានទេ។ ដើម្បីដោះស្រាយបញ្ហា សូមព្យាយាមដូចខាងក្រោម៖ ធានាថាអ្នកនៅខាងក្រៅអគារ បញ្ជាក់ថា GPS របស់អ្នកត្រូវបានបើក ឬប្ដូរការកំណត់ពេលអស់កំណត់របស់ GPS។</value>
   </data>
 
   <data name="AreaMap_MapIsOutOfVisibleBoundaries" xml:space="preserve">
-    <value>Loaded map is outside of visible boundaries</value>
+    <value>ផែនទីដែលបានផ្ទុកស្ថិតនៅក្រៅព្រំដែនដែលអាចមើលឃើញ</value>
   </data>
 
   <data name="AreaMap_SelectShapefile" xml:space="preserve">
-    <value>Select boundaries file</value>
+    <value>ជ្រើសរើសឯកសារព្រំដែន</value>
   </data>
 
   <data name="AreaMap_ErrorOnShapefileLoading" xml:space="preserve">
-    <value>Error occured on loading. Shapefile cannot be handled</value>
+    <value>មានកំហុសពេលផ្ទុក។ មិនអាចដំណើរការ shapefile បានទេ</value>
   </data>
 
   <data name="AreaMap_NoMapsFound" xml:space="preserve">
-    <value>No maps were found. Please update maps</value>
+    <value>រកមិនឃើញផែនទីទេ។ សូមអាប់ដេតផែនទី</value>
   </data>
 
   <data name="AreaMap_Save" xml:space="preserve">
-    <value>Save</value>
+    <value>រក្សាទុក</value>
   </data>
 
   <data name="AreaMap_Undo" xml:space="preserve">
-    <value>Undo</value>
+    <value>មិនធ្វើវិញ</value>
   </data>
 
   <data name="AreaMap_UpdateMaps" xml:space="preserve">
-    <value>Update maps</value>
+    <value>អាប់ដេតផែនទី</value>
   </data>
 
   <data name="Version_Not_Supports" xml:space="preserve">
-    <value>Your application version does not support this feature. Please install Interviewer with Maps to enable it.</value>
+    <value>កំណែកម្មវិធីរបស់អ្នកមិនគាំទ្រមុខងារនេះទេ។ សូមដំឡើង Interviewer with Maps ដើម្បីបើកវា។</value>
   </data>
 
   <data name="AreaMap_UpdateFailed" xml:space="preserve">
-    <value>Update failed</value>
+    <value>ការអាប់ដេតបរាជ័យ</value>
   </data>
 
   <data name="Device_Does_Not_Support" xml:space="preserve">
-    <value>Your device doesn't support this functionality</value>
+    <value>ឧបករណ៍របស់អ្នកមិនគាំទ្រមុខងារនេះទេ</value>
   </data>
 
   <data name="AreaMap_MapTitle" xml:space="preserve">
-    <value>Map</value>
+    <value>ផែនទី</value>
   </data>
 
   <data name="AreaMap_AreaFormat" xml:space="preserve">
-    <value>Area: {0:0.00} m2</value>
+    <value>ផ្ទៃក្រឡា៖ {0:0.00} m2</value>
   </data>
 
   <data name="AreaMap_OverlapsWith" xml:space="preserve">
-    <value>Overlaps with:</value>
+    <value>ត្រួតស៊ីគ្នាជាមួយ៖</value>
   </data>
 
   <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
-    <value>and {0} other.</value>
+    <value>និង {0} ផ្សេងទៀត។</value>
   </data>
 
   <data name="AreaMap_ItemsOutsideDedicatedArea" xml:space="preserve">
-    <value>Some markers fall outside the outlined area</value>
+    <value>សញ្ញាសម្គាល់ខ្លះស្ថិតនៅក្រៅតំបន់ដែលបានគូសបញ្ជាក់</value>
   </data>
   
   <data name="AreaMap_PointsFormat" xml:space="preserve">
-    <value>Points: {0}</value>
+    <value>ចំណុច៖ {0}</value>
   </data>
 
   <data name="AreaMap_Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>បោះបង់</value>
   </data>
 
   <data name="AreaMap_LengthFormat" xml:space="preserve">
-    <value>Length: {0:0.00} m</value>
+    <value>ប្រវែង៖ {0:0.00} m</value>
   </data>
 
   <data name="AreaMap_PerimeterFormat" xml:space="preserve">
-    <value>Perimeter: {0:0.00} m</value>
+    <value>បរិវេណ៖ {0:0.00} m</value>
   </data>
 
   <data name="AreaMap_Active_Map_Title" xml:space="preserve">
-    <value>ACTIVE MAP:</value>
+    <value>ផែនទីសកម្ម៖</value>
   </data>
 
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
-      <value>AVAILABLE MAPS</value>
+      <value>ផែនទីដែលមាន</value>
   </data>
 
   <data name="AreaMap_LoadShapefile" xml:space="preserve">
-    <value>Load shapefile</value>
+    <value>ផ្ទុក shapefile</value>
   </data>
 
   <data name="AreaMap_ShowBoundaries" xml:space="preserve">
-    <value>Show boundaries</value>
+    <value>បង្ហាញព្រំដែន</value>
   </data>
 
   <data name="AreaMap_HideBoundaries" xml:space="preserve">
-    <value>Hide boundaries</value>
+    <value>លាក់ព្រំដែន</value>
   </data>
 
   <data name="MapDashboard_Assignments" xml:space="preserve">
-    <value>Assignments</value>
+    <value>ការចាត់ការ</value>
   </data>
 
   <data name="MapDashboard_Interviews" xml:space="preserve">
-    <value>Interviews</value>
+    <value>ការសម្ភាស</value>
   </data>
 
   <data name="MapDashboard_Disclaimer" xml:space="preserve">
-    <value>only items with known coordinates are shown</value>
+    <value>បង្ហាញតែធាតុដែលមានកូអរដោនេដែលស្គាល់ប៉ុណ្ណោះ</value>
   </data>
 
   <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
-    <value>All questionnaires</value>
+    <value>កម្រងសំណួរទាំងអស់</value>
   </data>
 
   <data name="MapDashboard_AllResponsibles" xml:space="preserve">
-    <value>All responsibles</value>
+    <value>អ្នកទទួលខុសត្រូវទាំងអស់</value>
   </data>
 
   <data name="MapDashboard_AllStatuses" xml:space="preserve">
-    <value>All statuses</value>
+    <value>ស្ថានភាពទាំងអស់</value>
   </data>
 
   <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
-    <value>Questionnaire</value>
+    <value>កម្រងសំណួរ</value>
   </data>
 
   <data name="MapDashboard_ResponsibleTitle" xml:space="preserve">
-    <value>Responsible</value>
+    <value>អ្នកទទួលខុសត្រូវ</value>
   </data>
 
   <data name="MapDashboard_StatusTitle" xml:space="preserve">
-    <value>Status</value>
+    <value>ស្ថានភាព</value>
   </data>
 
   <data name="MapDashboard_TypeTitle" xml:space="preserve">
-    <value>Type</value>
+    <value>ប្រភេទ</value>
   </data>
 
   <data name="MapDashboard_FiltersTitle" xml:space="preserve">
-    <value>Filters</value>
+    <value>តម្រង</value>
   </data>
 
   <data name="AreaMap_Close" xml:space="preserve">
-    <value>Close</value>
+    <value>បិទ</value>
   </data>
 
   <data name="AreaMap_Update_Maps" xml:space="preserve">
-    <value>Update maps</value>
+    <value>អាប់ដេតផែនទី</value>
   </data>
 
   <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
-    <value>Exit Map Editor</value>
+    <value>ចេញពីកម្មវិធីកែសម្រួលផែនទី</value>
   </data>
 
   <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
-    <value>Clear all</value>
+    <value>សម្អាតទាំងអស់</value>
   </data>
 
   <data name="MenuItem_Title_StartGeofencing" xml:space="preserve">
-    <value>Start geofencing</value>
+    <value>ចាប់ផ្តើម Geo Fencing</value>
   </data>
 
   <data name="MenuItem_Title_StopGeofencing" xml:space="preserve">
-    <value>Stop geofencing</value>
+    <value>បញ្ឈប់ Geo Fencing</value>
   </data>
 
   <data name="MenuItem_Title_StartGeoTracking" xml:space="preserve">
-    <value>Start track recording</value>
+    <value>ចាប់ផ្តើមកត់ត្រាដាន</value>
   </data>
 
   <data name="MenuItem_Title_StopGeoTracking" xml:space="preserve">
-    <value>Stop track recording</value>
+    <value>បញ្ឈប់កត់ត្រាដាន</value>
   </data>
 
   <data name="MenuItem_Title_ShowLocation" xml:space="preserve">
-    <value>Show location</value>
+    <value>បង្ហាញទីតាំង</value>
   </data>
 
   <data name="MenuItem_Title_HideLocation" xml:space="preserve">
-    <value>Hide location</value>
+    <value>លាក់ទីតាំង</value>
   </data>
 
   <data name="MenuItem_Title_ExitToDashboard" xml:space="preserve">
-    <value>Exit to dashboard</value>
+    <value>ចេញទៅផ្ទាំងបញ្ជា</value>
   </data>
 
   <data name="MenuItem_Title_ChangeMap" xml:space="preserve">
-    <value>Change map</value>
+    <value>ប្ដូរផែនទី</value>
   </data>
 
   <data name="MenuItem_Title_ChangeShapefile" xml:space="preserve">
-    <value>Change boundaries</value>
+    <value>ប្ដូរព្រំដែន</value>
   </data>
 
   <data name="MenuItem_Title_CreateInterview" xml:space="preserve">
-    <value>Create New Interview</value>
+    <value>បង្កើតការសម្ភាសថ្មី</value>
   </data>
 
   <data name="AssignmentMap_Title_CreateInterview" xml:space="preserve">
-    <value>Start</value>
+    <value>ចាប់ផ្តើម</value>
   </data>
 
   <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
-    <value>Zoom to map</value>
+    <value>ពង្រីកទៅផែនទី</value>
   </data>
 
   <data name="MenuItem_Title_ZoomShapefile" xml:space="preserve">
-    <value>Zoom to boundaries</value>
+    <value>ពង្រីកទៅព្រំដែន</value>
   </data>
 
   <data name="MenuItem_Title_ZoomCollectedData" xml:space="preserve">
-    <value>Zoom to collected data</value>
+    <value>ពង្រីកទៅទិន្នន័យដែលបានប្រមូល</value>
   </data>
 
   <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
-    <value>Zoom everything</value>
+    <value>ពង្រីកទាំងអស់</value>
   </data>
 
   <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
-    <value>Zoom to tracking records</value>
+    <value>ពង្រីកទៅកំណត់ត្រាតាមដាន</value>
   </data>
 
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
-    <value>Dashboard</value>
+    <value>ផ្ទាំងបញ្ជា</value>
   </data>
 
   <data name="InterviewKey" xml:space="preserve">
-    <value>Interview Key: {0}</value>
+    <value>លេខសម្គាល់ការសម្ភាស៖ {0}</value>
   </data>
 
   <data name="AssignmentN" xml:space="preserve">
-    <value>Assignment #{0}</value>
+    <value>ការចាត់ការ #{0}</value>
   </data>
 
   <data name="AudioQuestion_DurationFormat" xml:space="preserve">
-    <value>{0} of audio recording</value>
+    <value>ការថតសំឡេង {0}</value>
   </data>
 
   <data name="Audio_Io_Exception_Message" xml:space="preserve">
-    <value>Could not save audio file. Please check whether the device has internal storage available.</value>
+    <value>មិនអាចរក្សាទុកឯកសារសំឡេងបានទេ។ សូមពិនិត្យថាឧបករណ៍មានឃ្លាំងផ្ទុកខាងក្នុងគ្រប់គ្រាន់។</value>
   </data>
 
   <data name="Audio_Unhandled_Exception_Message" xml:space="preserve">
-    <value>Unexpected exception during start audio recording</value>
+    <value>មានករណីលើកលែងដែលមិនបានរំពឹងទុកកើតឡើងនៅពេលចាប់ផ្តើមថតសំឡេង</value>
   </data>
 
   <data name="AnswerRecordedMsg" xml:space="preserve">
-    <value>Answer accepted. Took {0} to process</value>
+    <value>បានទទួលយកចម្លើយ។ ចំណាយពេល {0} ដើម្បីដំណើរការ</value>
   </data>
 
   <data name="AnswerRecordedMsgDismiss" xml:space="preserve">
-    <value>Dismiss</value>
+    <value>បិទ</value>
   </data>
 
   <data name="Interview_SignatureClear" xml:space="preserve">
-    <value>Clear</value>
+    <value>សម្អាត</value>
   </data>
 
   <data name="Interview_SignatureSignHere" xml:space="preserve">
-    <value>Sign here</value>
+    <value>ចុះហត្ថលេខានៅទីនេះ</value>
   </data>
 
   <data name="Interview_TakeSignature" xml:space="preserve">
-    <value>Store signature</value>
+    <value>រក្សាទុកហត្ថលេខា</value>
   </data>
 
   <data name="Interview_Questions_Integer_ProtectedValue" xml:space="preserve">
-    <value>New answer to a protected question should be greater or equal to {0}</value>
+    <value>ចម្លើយថ្មីសម្រាប់សំណួរការពារ គួរតែធំជាង ឬស្មើ {0}</value>
   </data>
 
   <data name="Interview_MaxAnswersCount" xml:space="preserve">
-    <value>{0} out of {1} categories selected</value>
+    <value>បានជ្រើសរើសប្រភេទ {0} ក្នុងចំណោម {1}</value>
   </data>
 
   <data name="Interview_MaxAnswersCountSelected" xml:space="preserve">
-    <value>The maximum number of selections ({0}) in this question has been made</value>
+    <value>បានជ្រើសរើសដល់ចំនួនអតិបរមា ({0}) សម្រាប់សំណួរនេះហើយ</value>
   </data>
 
   <data name="Interview_Overview" xml:space="preserve">
-    <value>Overview</value>
+    <value>ទិដ្ឋភាពទូទៅ</value>
   </data>
 
   <data name="Interview_Overview_Name" xml:space="preserve">
-    <value>Overview</value>
+    <value>ទិដ្ឋភាពទូទៅ</value>
   </data>
 
   <data name="Interview_Overview_NotAnswered" xml:space="preserve">
-    <value>Not answered</value>
+    <value>មិនទាន់បានឆ្លើយ</value>
   </data>
 
   <data name="Interview_Overview_AdditionalInfo" xml:space="preserve">
-    <value>Additional info</value>
+    <value>ព័ត៌មានបន្ថែម</value>
   </data>
 
   <data name="Interview_Overview_Warnings" xml:space="preserve">
-    <value>Warning(s)</value>
+    <value>ការព្រមាន</value>
   </data>
 
   <data name="Interview_Overview_Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>មតិយោបល់</value>
   </data>
 
   <data name="Supervisor_Complete_Approve_btn" xml:space="preserve">
-    <value>Approve</value>
+    <value>អនុម័ត</value>
   </data>
 
   <data name="Supervisor_Complete_Assign_btn" xml:space="preserve">
-    <value>Assign</value>
+    <value>ចាត់ការ</value>
   </data>
 
   <data name="Supervisor_Complete_Reject_btn" xml:space="preserve">
-    <value>Reject</value>
+    <value>បដិសេធ</value>
   </data>
 
   <data name="OfflineSync_Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>បោះបង់</value>
   </data>
 
   <data name="OfflineSync_Abort" xml:space="preserve">
-    <value>Abort</value>
+    <value>បញ្ឈប់</value>
   </data>
 
   <data name="OfflineSync_BackToDashboard" xml:space="preserve">
-    <value>Back to dashboard</value>
+    <value>ត្រឡប់ទៅផ្ទាំងបញ្ជា</value>
   </data>
 
   <data name="OfflineSync_Retry" xml:space="preserve">
-    <value>Retry</value>
+    <value>ព្យាយាមម្ដងទៀត</value>
   </data>
 
   <data name="OfflineSync_NetworkInfo" xml:space="preserve">
-    <value>Speed: {0}, Time left: {1}</value>
+    <value>ល្បឿន៖ {0}, ពេលវេលានៅសល់៖ {1}</value>
   </data>
 
   <data name="OfflineSync_InstallPlayServices" xml:space="preserve">
-    <value>Google Play Services must be installed.</value>
+    <value>ត្រូវដំឡើង Google Play Services។</value>
   </data>
 
   <data name="OfflineSync_DeviceNotSupported" xml:space="preserve">
-    <value>This device is not supported.</value>
+    <value>ឧបករណ៍នេះមិនត្រូវបានគាំទ្រ។</value>
   </data>
 
   <data name="Synchronization_FoundDevice" xml:space="preserve">
-    <value>Found interviewer device ({0})</value>
+    <value>បានរកឃើញឧបករណ៍អ្នកសម្ភាស ({0})</value>
     <comment>{0} - interviewer login</comment>
   </data>
 
   <data name="OfflineSync_Supervisor_Title" xml:space="preserve">
-    <value>Synchronization of assignments and interviews</value>
+    <value>ការធ្វើសមកាលការចាត់ការ និងការសម្ភាស</value>
   </data>
 
   <data name="Validity_QuestionDoesntExist" xml:space="preserve">
-    <value>The current roster does not exist anymore. Please navigate to the next available section or roster using the navigation menu.</value>
+    <value>roster បច្ចុប្បន្នលែងមានទៀតហើយ។ សូមទៅកាន់ផ្នែក ឬ roster បន្ទាប់ដែលមាន ដោយប្រើម៉ឺនុយរុករក។</value>
   </data>
 
   <data name="Interview_ShowPdf" xml:space="preserve">
-    <value>Show PDF </value>
+    <value>បង្ហាញ PDF </value>
   </data>
 
   <data name="Interview_PlayVideo" xml:space="preserve">
-    <value>Play Video </value>
+    <value>ចាក់វីដេអូ </value>
   </data>
 
   <data name="Interview_PlayAudio" xml:space="preserve">
-    <value>Play Audio </value>
+    <value>ចាក់សំឡេង </value>
   </data>
 
   <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
-    <value>This interview contains more data than the system allows. If possible, delete unnecessary roster rows and/or unanswer questions.</value>
+    <value>ការសម្ភាសនេះមានទិន្នន័យច្រើនជាងប្រព័ន្ធអនុញ្ញាត។ ប្រសិនបើអាច សូមលុបជួរ roster ដែលមិនចាំបាច់ និង/ឬដកចម្លើយសំណួរចេញ។</value>
   </data>
 
   <data name="Notifications_SummaryTitle" xml:space="preserve">
-    <value>{0} notifications</value>
+    <value>{0} ការជូនដំណឹង</value>
   </data>
 
   <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
-    <value>Are you sure you want to remove {0} row(s) from each related roster?</value>
+    <value>តើអ្នកប្រាកដថាចង់លុបជួរ {0} ចេញពី roster ពាក់ព័ន្ធនីមួយៗឬ?</value>
   </data>
 
   <data name="Interview_Question_HideResolvedComments" xml:space="preserve">
-    <value>Hide resolved</value>
+    <value>លាក់ដែលបានដោះស្រាយ</value>
   </data>
 
   <data name="Interview_Question_ShowResolvedComments" xml:space="preserve">
-    <value>Show resolved</value>
+    <value>បង្ហាញដែលបានដោះស្រាយ</value>
   </data>
 
   <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
-    <value>There is no permission granted to application to self update. Please enable "Allow from this source" option in 'App info' settings menu.</value>
+    <value>កម្មវិធីមិនត្រូវបានផ្តល់សិទ្ធិឱ្យអាប់ដេតខ្លួនឯងទេ។ សូមបើកជម្រើស "Allow from this source" នៅក្នុងម៉ឺនុយការកំណត់ 'App info'។</value>
   </data>
 
   <data name="Comment" xml:space="preserve">
-    <value>Comment</value>
+    <value>មតិយោបល់</value>
   </data>
 
   <data name="NoComment" xml:space="preserve">
-    <value>No comment specified</value>
+    <value>មិនបានបញ្ជាក់មតិយោបល់</value>
   </data>
 
   <data name="Interview_Complete_SwitchTo_WebMode_Checkbox" xml:space="preserve">
-    <value>Switch interview to Web Mode</value>
+    <value>ប្ដូរការសម្ភាសទៅរបៀប Web</value>
   </data>
 
   <data name="Interview_Complete_SwitchTo_WebMode_Instruction" xml:space="preserve">
-    <value>This interview will be accessible online after synchronization. To access the interview the respondent should enter the link below in the browser on an internet-connected computer, tablet, or smartphone. The same link can be scanned using the QR-code shown below.</value>
+    <value>ការសម្ភាសនេះនឹងអាចចូលប្រើតាមអ៊ីនធឺណិតបន្ទាប់ពីការធ្វើសមកាល។ ដើម្បីចូលប្រើការសម្ភាស អ្នកឆ្លើយគួរតែបញ្ចូលតំណខាងក្រោមនៅក្នុង browser លើកុំព្យូទ័រ ថេប្លេត ឬស្មាតហ្វូនដែលមានការតភ្ជាប់អ៊ីនធឺណិត។ តំណដូចគ្នានេះក៏អាចស្កេនបានដោយប្រើ QR-code ដែលបង្ហាញខាងក្រោម។</value>
   </data>
  
   <data name="Interview_Complete_Instruction" xml:space="preserve">
-    <value>Once submitted, this interview will be locked and cannot be edited. Please make sure all information is correct.</value>
+    <value>នៅពេលដាក់ស្នើរួច ការសម្ភាសនេះនឹងត្រូវបានចាក់សោ ហើយមិនអាចកែសម្រួលបានទៀតទេ។ សូមប្រាកដថាព័ត៌មានទាំងអស់ត្រឹមត្រូវ។</value>
   </data>
 
    <data name="Loading" xml:space="preserve">
-    <value>Loading...</value>
+    <value>កំពុងផ្ទុក...</value>
   </data>
 
   <data name="AreaMap_Save_With_Warning_Confirm" xml:space="preserve">
-    <value>You are about to save not a precise the result. Do you want to continue?</value>
+    <value>អ្នកហៀបនឹងរក្សាទុកលទ្ធផលដែលមិនច្បាស់លាស់។ តើអ្នកចង់បន្តឬ?</value>
   </data>
 
   <data name="AreaMap_Start_Measurement" xml:space="preserve">
-    <value>Start</value>
+    <value>ចាប់ផ្តើម</value>
   </data>
 
   <data name="AreaMap_InitLocation" xml:space="preserve">
-    <value>Initiating...</value>
+    <value>កំពុងចាប់ផ្តើម...</value>
   </data>
 
   <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
-    <value>Approved by Headquarters</value>
+    <value>បានអនុម័តដោយការិយាល័យកណ្ដាល</value>
   </data>
 
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Approved by Supervisor</value>
+    <value>បានអនុម័តដោយអ្នកត្រួតពិនិត្យ</value>
   </data>
 
   <data name="InterviewStatus_Completed" xml:space="preserve">
-    <value>Completed</value>
+    <value>បានបញ្ចប់</value>
   </data>
 
   <data name="InterviewStatus_Created" xml:space="preserve">
-    <value>Created</value>
+    <value>បានបង្កើត</value>
   </data>
 
   <data name="InterviewStatus_Deleted" xml:space="preserve">
-    <value>Deleted</value>
+    <value>បានលុប</value>
   </data>
 
   <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
-    <value>Interviewer assigned</value>
+    <value>បានចាត់ឱ្យអ្នកសម្ភាស</value>
   </data>
 
   <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
-    <value>Rejected by Headquarters</value>
+    <value>បានបដិសេធដោយការិយាល័យកណ្ដាល</value>
   </data>
 
   <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
-    <value>Rejected by Supervisor</value>
+    <value>បានបដិសេធដោយអ្នកត្រួតពិនិត្យ</value>
   </data>
 
   <data name="InterviewStatus_Restarted" xml:space="preserve">
-    <value>Restarted</value>
+    <value>បានចាប់ផ្ដើមឡើងវិញ</value>
   </data>
 
   <data name="InterviewStatus_Restored" xml:space="preserve">
-    <value>Restored</value>
+    <value>បានស្ដារឡើងវិញ</value>
   </data>
 
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
-    <value>Supervisor assigned</value>
+    <value>បានចាត់ឱ្យអ្នកត្រួតពិនិត្យ</value>
   </data>
 
   <data name="SelectMapTitle" xml:space="preserve">
-    <value>Select Map:</value>
+    <value>ជ្រើសរើសផែនទី៖</value>
   </data>
 
   <data name="Geofencing_Warning_Message" xml:space="preserve">
-    <value>You are outside of designated area</value>
+    <value>អ្នកស្ថិតនៅក្រៅតំបន់ដែលបានកំណត់</value>
   </data>
 
   <data name="SelectShapefileTitle" xml:space="preserve">
-    <value>Select Boundaries:</value>
+    <value>ជ្រើសរើសព្រំដែន៖</value>
   </data>
   
   <data name="Interview_Complete_Title" xml:space="preserve">
-    <value>Review &amp; Submit
-Interview {0}</value>
+    <value>ពិនិត្យ និងដាក់ស្នើ
+ការសម្ភាស {0}</value>
   </data>
 
   <data name="Interview_Complete_Success_Text" xml:space="preserve">
-    <value>All required questions answered
-No errors detected</value>
+    <value>សំណួរដែលត្រូវការទាំងអស់ត្រូវបានឆ្លើយ
+មិនបានរកឃើញកំហុសទេ</value>
   </data>
 
   <data name="Interview_Complete_MoreCountString" xml:space="preserve">
-    <value>and {0} more</value>
+    <value>និង {0} ទៀត</value>
   </data>
 
   <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
-    <value>Critical
-errors</value>
+    <value>កំហុស
+សំខាន់</value>
   </data>
 
   <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
-    <value>Errors</value>
+    <value>កំហុស</value>
   </data>
 
   <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
-    <value>Unanswered
-questions</value>
+    <value>សំណួរ
+មិនទាន់ឆ្លើយ</value>
   </data>
 </root>

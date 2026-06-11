@@ -729,7 +729,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>Setări chestionar</value>
   </data>
   <data name="QuestionnaireSummary" xml:space="preserve">
-    <value>({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)</value>
+    <value>({{questionsCount}}Î, {{groupsCount}}S, {{rostersCount}}L)</value>
   </data>
   <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
     <value>Sunt permise numere întregi între 1 și 50</value>
@@ -1289,7 +1289,7 @@ Vă rugăm să verificați conexiunea la rețea sau să contactați suportul IT.
     <value>Numele atașamentului</value>
   </data>
   <data name="Test" xml:space="preserve">
-    <value>Test</value>
+    <value>Testare</value>
   </data>
   <data name="ToggleDropdown" xml:space="preserve">
     <value>Comutați meniul derulant</value>
@@ -1298,7 +1298,7 @@ Vă rugăm să verificați conexiunea la rețea sau să contactați suportul IT.
     <value>Comutați căutarea</value>
   </data>
   <data name="Translation_Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Originală</value>
   </data>
   <data name="TranslationsObtained" xml:space="preserve">
     <value>S-a obținut {0} rând din fișierul de traducere</value>

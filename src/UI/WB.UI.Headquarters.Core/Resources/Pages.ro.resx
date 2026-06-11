@@ -184,7 +184,7 @@
     <value>Atenţie!</value>
   </data>
   <data name="Backup_IndexTitle" xml:space="preserve">
-    <value>Index</value>
+    <value>Listă</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Anulare</value>
@@ -943,7 +943,7 @@
     <value>Dimensiune (biți)</value>
   </data>
   <data name="PackagesInfo_Title" xml:space="preserve">
-    <value>Index</value>
+    <value>Listă</value>
   </data>
   <data name="PackagesInfo_UploadDate" xml:space="preserve">
     <value>Data încărcării</value>
@@ -1745,7 +1745,7 @@
     <value>Dacă acesta este ultimul utilizator din echipă conectat la hartă, atunci supervizorul echipei va pierde accesul la hartă.</value>
   </data>
   <data name="QuestionnaireVersionAndName" xml:space="preserve">
-    <value>[ver. {1}] {0}</value>
+    <value>[vers. {1}] {0}</value>
   </data>
   <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
     <value>Verificări critice</value>

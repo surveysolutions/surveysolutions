@@ -195,70 +195,70 @@
 
 
   <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
-    <value>Anonymous questionnaire url</value>
+    <value>URL កម្រងសំណួរអនាមិក</value>
   </data>
 
   <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
-    <value>Open</value>
+    <value>បើក</value>
   </data>
 
   <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
-    <value>Can't open the questionnaire. The questionnaire cannot be found.</value>
+    <value>មិនអាចបើកកម្រងសំណួរបានទេ។ មិនអាចរកឃើញកម្រងសំណួរនេះទេ។</value>
   </data>
 
   <data name="AnonymousQuestionnaires_Error_Confirm" xml:space="preserve">
-    <value>Can't open the questionnaire. Remove it from list?</value>
+    <value>មិនអាចបើកកម្រងសំណួរបានទេ។ លុបវាចេញពីបញ្ជីឬ?</value>
   </data>
 
   <data name="Login_Error_EmptyName" xml:space="preserve">
-    <value>Please enter correct login</value>
+    <value>សូមបញ្ចូលឈ្មោះចូលឱ្យត្រឹមត្រូវ</value>
   </data>
 
   <data name="TesterLoginAccountHintText" xml:space="preserve">
-    <value>Log in to this app using the credentials you created at https://designer.mysurvey.solutions. To register a new account, visit the same site.</value>
+    <value>ចូលទៅក្នុងកម្មវិធីនេះដោយប្រើព័ត៌មានសម្ងាត់ដែលអ្នកបានបង្កើតនៅ https://designer.mysurvey.solutions។ ដើម្បីចុះឈ្មោះគណនីថ្មី សូមចូលទៅកាន់គេហទំព័រដដែល។</value>
   </data>
 
   <data name="MenuItem_Title_Language" xml:space="preserve">
-    <value>Language</value>
+    <value>ភាសា</value>
   </data>
 
   <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Original</value>
+    <value>ដើម</value>
   </data>
 
   <data name="MenuItem_Title_Reload" xml:space="preserve">
-    <value>Reload questionnaire</value>
+    <value>ផ្ទុកកម្រងសំណួរឡើងវិញ</value>
   </data>
 
   <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
-    <value>Anonymous Questionnaires</value>
+    <value>កម្រងសំណួរអនាមិក</value>
   </data>
 
   <data name="MenuItem_Title_Login" xml:space="preserve">
-    <value>Login</value>
+    <value>ចូល</value>
   </data>
 
   <data name="Prefs_ShowAnswerTime" xml:space="preserve">
-    <value>Show elapsed time per answer</value>
+    <value>បង្ហាញពេលវេលាដែលបានចំណាយសម្រាប់ចម្លើយនីមួយៗ</value>
   </data>
 
   <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
-    <value>Measures enablement, validation and roster propagation time. Receiving GPS data or picture taking time is not included.</value>
+    <value>វាវាស់ពេលវេលាសម្រាប់ការបើកដំណើរការ ការផ្ទៀងផ្ទាត់ និងការផ្សព្វផ្សាយ roster។ ពេលវេលាទទួលទិន្នន័យ GPS ឬការថតរូប មិនត្រូវបានរាប់បញ្ចូលទេ។</value>
   </data>
 
   <data name="Prefs_ShowVariables" xml:space="preserve">
-    <value>Show variables</value>
+    <value>បង្ហាញអថេរ</value>
   </data>
 
   <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
-    <value>Variables are shown in the interview with value and description</value>
+    <value>អថេរត្រូវបានបង្ហាញក្នុងការសម្ភាសជាមួយតម្លៃ និងការពិពណ៌នា</value>
   </data>
 
   <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
-    <value>Variables are hidden</value>
+    <value>អថេរត្រូវបានលាក់</value>
   </data>
 
   <data name="ReloadInterviewErrorMessage" xml:space="preserve">
-    <value>Interview data can't be applied to a new version of the questionnaire. We will open a empty interview</value>
+    <value>ទិន្នន័យការសម្ភាសមិនអាចអនុវត្តទៅកំណែថ្មីនៃកម្រងសំណួរបានទេ។ យើងនឹងបើកការសម្ភាសទទេមួយ</value>
   </data>
 </root>
