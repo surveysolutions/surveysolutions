@@ -301,11 +301,11 @@
                         {{ formatDate(this.fullModel.lastCommunicationDate) }} ({{ formatLastCommunication() }})
                         <b>
                             <span
-                                v-if="this.fullModel.lastSuccessfulSync != undefined && this.fullModel.lastCommunicationDate == this.fullModel.lastSuccessfulSync.syncDate"
-                                class="success-text">Successful</span>
-                            <span
                                 v-if="this.fullModel.lastFailedSync != undefined && this.fullModel.lastCommunicationDate == this.fullModel.lastFailedSync.syncDate"
                                 class="error-text">Failed</span>
+                            <span
+                                v-else-if="this.fullModel.lastSuccessfulSync != undefined && this.fullModel.lastCommunicationDate == this.fullModel.lastSuccessfulSync.syncDate"
+                                class="success-text">Successful</span>
                         </b>
                     </li>
                 </ul>
