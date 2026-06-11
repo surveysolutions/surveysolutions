@@ -46,7 +46,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
         public void Save(Questionnaire aggregateRoot)
         {
             var questionnaireDocument = aggregateRoot.QuestionnaireDocument;
-            this.questionnaireStorage.Store(questionnaireDocument, questionnaireDocument.PublicKey.FormatGuid());
+            var questionnaireDocumentToStore = questionnaireDocument;
+            if (questionnaireDocument.Categories?.Any(category => category == null) == true)
+            {
+                questionnaireDocumentToStore = questionnaireDocument.Clone();
+                questionnaireDocumentToStore.Categories.RemoveAll(category => category == null);
+            }
+            this.questionnaireStorage.Store(questionnaireDocumentToStore, questionnaireDocument.PublicKey.FormatGuid());
         }
 
         public T Get<T>(Guid aggregateId) where T : class, IPlainAggregateRoot
