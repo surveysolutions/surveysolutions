@@ -508,7 +508,7 @@
     <value>Konfirmim</value>
   </data>
   <data name="ModalInfo" xml:space="preserve">
-    <value>Info</value>
+    <value>Informacion</value>
   </data>
   <data name="MoveTo" xml:space="preserve">
     <value>Zhvendos në</value>
@@ -813,7 +813,7 @@ Ju lutemi kontrolloni lidhjen tuaj të rrjetit ose kontaktoni mbështetjen tuaj 
     <value>titullari</value>
   </data>
   <data name="SettingsPrivate" xml:space="preserve">
-    <value>Private</value>
+    <value>Privat</value>
   </data>
   <data name="SettingsProvideExistingEmail" xml:space="preserve">
     <value>Vendos email-in ose emrin e regjistrimit të përdoruesit ekzistues </value>
@@ -1448,7 +1448,7 @@ Ju lutemi kontrolloni lidhjen tuaj të rrjetit ose kontaktoni mbështetjen tuaj 
   </data>
 
   <data name="GeographyInputModeManual" xml:space="preserve">
-    <value>Manual</value>
+    <value>Manuale</value>
   </data>
 
     <data name="GeographyInputModeAutomatic" xml:space="preserve">
