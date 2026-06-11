@@ -252,58 +252,58 @@
 
 
   <data name="AllowRelinkTablet" xml:space="preserve">
-    <value>Allow relinking to a different device with loss of data on the original device.</value>
+    <value>Lejo rilidhjen me një pajisje tjetër me humbjen e të dhënave në pajisjen origjinale.</value>
   </data>
 
   <data name="VerificationCodeFieldName" xml:space="preserve">
-    <value>Verification code</value>
+    <value>Kodi i verifikimit</value>
   </data>
 
   <data name="RestrictedAccountMessage" xml:space="preserve">
-    <value>This account is restricted to perform this action</value>
+    <value>Kjo llogari është e kufizuar për të kryer këtë veprim</value>
   </data>
 
   <data name="RestrictedAccount" xml:space="preserve">
-    <value>This account is restricted</value>
+    <value>Kjo llogari është e kufizuar</value>
   </data>
 
   <data name="WorkspaceRequired" xml:space="preserve">
-    <value>Workspace is required</value>
+    <value>Hapësira e punës është e detyrueshme</value>
   </data>
 
   <data name="WorkspaceMissing" xml:space="preserve">
-    <value>Workspace not found</value>
+    <value>Hapësira e punës nuk u gjet</value>
   </data>
 
   <data name="UserRoleRequired" xml:space="preserve">
-    <value>User role is required</value>
+    <value>Roli i përdoruesit është i detyrueshëm</value>
   </data>
 
   <data name="PasswordRequiresDigit" xml:space="preserve">
-      <value>Passwords must have at least one digit ('0'-'9').</value>
+      <value>Fjalëkalimet duhet të kenë të paktën një shifër ('0'-'9').</value>
   </data>
 
   <data name="PasswordRequiresLower" xml:space="preserve">
-      <value>Passwords must have at least one lowercase ('a'-'z').</value>
+      <value>Fjalëkalimet duhet të kenë të paktën një shkronjë të vogël ('a'-'z').</value>
   </data>
 
   <data name="PasswordRequiresNonAlphanumeric" xml:space="preserve">
-      <value>Passwords must have at least one non alphanumeric character.</value>
+      <value>Fjalëkalimet duhet të kenë të paktën një karakter joalfanumerik.</value>
   </data>
 
   <data name="PasswordRequiresUniqueChars" xml:space="preserve">
-      <value>Passwords must use at least {0} different characters.</value>
+      <value>Fjalëkalimet duhet të përdorin të paktën {0} karaktere të ndryshme.</value>
   </data>
 
   <data name="PasswordRequiresUpper" xml:space="preserve">
-      <value>Passwords must have at least one uppercase ('A'-'Z').</value>
+      <value>Fjalëkalimet duhet të kenë të paktën një shkronjë të madhe ('A'-'Z').</value>
   </data>
 
   <data name="PasswordTooShort" xml:space="preserve">
-      <value>Passwords must be at least {0} characters.</value>
+      <value>Fjalëkalimet duhet të kenë të paktën {0} karaktere.</value>
   </data>
 
   <data name="PasswordChangeRequired" xml:space="preserve">
-    <value>Your password has been reset. You must change it to get access to site.</value>
+    <value>Fjalëkalimi juaj është rivendosur. Duhet ta ndryshoni për të hyrë në sajt.</value>
   </data>
 </root>

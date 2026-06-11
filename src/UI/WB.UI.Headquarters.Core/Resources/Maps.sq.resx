@@ -171,34 +171,34 @@
 
 
   <data name="MapOverlapsWith" xml:space="preserve">
-    <value>Overlaps with:</value>
+    <value>Mbivendoset me:</value>
   </data>
 
   <data name="MapOverlapsWithOther" xml:space="preserve">
-    <value>and {0} other.</value>
+    <value>dhe {0} të tjera.</value>
   </data>
 
   <data name="ShpIsMissingInArchive" xml:space="preserve">
-    <value>File {0}.shp is missing for {0}</value>
+    <value>Skedari {0}.shp mungon për {0}</value>
   </data>
 
   <data name="ShxIsMissingInArchive" xml:space="preserve">
-    <value>File {0}.shx is missing for {0}.shp</value>
+    <value>Skedari {0}.shx mungon për {0}.shp</value>
   </data>
 
   <data name="DbfIsMissingInArchive" xml:space="preserve">
-    <value>File {0}.dbf is missing for {0}.shp</value>
+    <value>Skedari {0}.dbf mungon për {0}.shp</value>
   </data>
 
   <data name="MapFileSizeLimit" xml:space="preserve">
-    <value>The size of file {0} is larger than applicable limit {1}</value>
+    <value>Madhësia e skedarit {0} është më e madhe se kufiri i lejuar {1}</value>
   </data>
   
   <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve">
-    <value>The file {0} name includes non-UTF-8 characters.</value>
+    <value>Emri i skedarit {0} përmban karaktere jo-UTF-8.</value>
   </data>
 
   <data name="MapFileNameHasInvalidChars" xml:space="preserve">
-    <value>The file {0} name includes invalid characters.</value>
+    <value>Emri i skedarit {0} përmban karaktere të pavlefshme.</value>
   </data>
 </root>

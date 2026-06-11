@@ -162,18 +162,18 @@
 
 
   <data name="Area_Coordinates" xml:space="preserve">
-    <value>Coordinates</value>
+    <value>Koordinatat</value>
   </data>
 
   <data name="YouCanChangeResponsibleInterviewer" xml:space="preserve">
-    <value>You can change responsible for interview on reject. Please, choose responsible interviewer</value>
+    <value>Ju mund ta ndryshoni përgjegjësin e intervistës gjatë refuzimit. Ju lutemi, zgjidhni intervistuesin përgjegjës</value>
   </data>
 
   <data name="ShowQuestionnaireDetails" xml:space="preserve">
-    <value>Show questionnaire details</value>
+    <value>Shfaq hollësitë e pyetësorit</value>
   </data>
 
   <data name="InterviewMode" xml:space="preserve">
-    <value>Mode</value>
+    <value>Modaliteti</value>
   </data>
 </root>

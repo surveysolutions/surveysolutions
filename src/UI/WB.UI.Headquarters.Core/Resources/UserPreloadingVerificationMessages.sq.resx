@@ -231,118 +231,118 @@
 
 
   <data name="PLU0001Recomendation" xml:space="preserve">
-      <value>User must be unique </value>
+      <value>Përdoruesi duhet të jetë unik</value>
   </data>
 
   <data name="PLU0002Recomendation" xml:space="preserve">
-      <value>Resolve duplicates</value>
+      <value>Zgjidhni dublikatat</value>
   </data>
 
   <data name="PLU0007Recomendation" xml:space="preserve">
-      <value>Fix email</value>
+      <value>Korrigjoni email-in</value>
   </data>
 
   <data name="PLU0008Recomendation" xml:space="preserve">
-      <value>Fix phone number</value>
+      <value>Korrigjoni numrin e telefonit</value>
   </data>
 
   <data name="PLU0010Recomendation" xml:space="preserve">
-      <value>Verify value for supervisor</value>
+      <value>Verifikoni vlerën për supervizorin</value>
   </data>
 
   <data name="PLU0015" xml:space="preserve">
-    <value>Password too short</value>
+    <value>Fjalëkalimi është shumë i shkurtër</value>
   </data>
 
   <data name="PLU0015Description" xml:space="preserve">
-    <value>Password '{0}' is too short</value>
+    <value>Fjalëkalimi '{0}' është shumë i shkurtër</value>
   </data>
 
   <data name="PLU0015Recomendation" xml:space="preserve">
-    <value>Password must be at least 10 characters long</value>
+    <value>Fjalëkalimi duhet të ketë të paktën 10 karaktere</value>
   </data>
 
   <data name="PLU0016" xml:space="preserve">
-    <value>Simple password</value>
+    <value>Fjalëkalim i thjeshtë</value>
   </data>
 
   <data name="PLU0016Description" xml:space="preserve">
-    <value>Password '{0}' does not contain non alphanumeric character</value>
+    <value>Fjalëkalimi '{0}' nuk përmban karakter joalfanumerik</value>
   </data>
 
   <data name="PLU0016Recomendation" xml:space="preserve">
-    <value>Add at least one non alphanumeric character</value>
+    <value>Shtoni të paktën një karakter joalfanumerik</value>
   </data>
 
   <data name="PLU0017" xml:space="preserve">
-    <value>Simple password</value>
+    <value>Fjalëkalim i thjeshtë</value>
   </data>
 
   <data name="PLU0017Description" xml:space="preserve">
-    <value>Password '{0}' does not contain digit</value>
+    <value>Fjalëkalimi '{0}' nuk përmban shifër</value>
   </data>
 
   <data name="PLU0017Recomendation" xml:space="preserve">
-    <value>Add at least one digit ('0'-'9').</value>
+    <value>Shtoni të paktën një shifër ('0'-'9').</value>
   </data>
 
   <data name="PLU0018" xml:space="preserve">
-    <value>Simple password</value>
+    <value>Fjalëkalim i thjeshtë</value>
   </data>
 
   <data name="PLU0018Description" xml:space="preserve">
-    <value>Password '{0}' does not contain lower case character</value>
+    <value>Fjalëkalimi '{0}' nuk përmban karakter me shkronjë të vogël</value>
   </data>
 
   <data name="PLU0018Recomendation" xml:space="preserve">
-    <value>Add at least one lowercase character ('a'-'z').</value>
+    <value>Shtoni të paktën një karakter me shkronjë të vogël ('a'-'z').</value>
   </data>
 
   <data name="PLU0019" xml:space="preserve">
-    <value>Simple password</value>
+    <value>Fjalëkalim i thjeshtë</value>
   </data>
 
   <data name="PLU0019Description" xml:space="preserve">
-    <value>Password '{0}' does not contain upper case character</value>
+    <value>Fjalëkalimi '{0}' nuk përmban karakter me shkronjë të madhe</value>
   </data>
 
   <data name="PLU0019Recomendation" xml:space="preserve">
-    <value>Add at least one uppercase ('A'-'Z').</value>
+    <value>Shtoni të paktën një karakter me shkronjë të madhe ('A'-'Z').</value>
   </data>
 
   <data name="PLU0020" xml:space="preserve">
-    <value>Simple password</value>
+    <value>Fjalëkalim i thjeshtë</value>
   </data>
 
   <data name="PLU0020Description" xml:space="preserve">
-    <value>Password '{0}' does not contain enough unique characters</value>
+    <value>Fjalëkalimi '{0}' nuk përmban mjaftueshëm karaktere unike</value>
   </data>
 
   <data name="PLU0020Recomendation" xml:space="preserve">
-      <value>Add different characters.</value>
+      <value>Shtoni karaktere të ndryshme.</value>
   </data>
 
   <data name="PLU0021" xml:space="preserve">
-    <value>Password required</value>
+    <value>Kërkohet fjalëkalimi</value>
   </data>
 
   <data name="PLU0021Description" xml:space="preserve">
-    <value>Password is required </value>
+    <value>Kërkohet fjalëkalimi</value>
   </data>
 
   <data name="PLU0021Recomendation" xml:space="preserve">
-    <value>Add password</value>
+    <value>Shtoni fjalëkalimin</value>
   </data>
 
   <data name="PLU0022" xml:space="preserve">
-    <value>Workspace not found</value>
+    <value>Hapësira e punës nuk u gjet</value>
   </data>
 
   <data name="PLU0022Description" xml:space="preserve">
-    <value>Workspace must exist and be enabled</value>
+    <value>Hapësira e punës duhet të ekzistojë dhe të jetë e aktivizuar</value>
   </data>
 
   <data name="PLU0022Recomendation" xml:space="preserve">
-    <value>Check workspace name</value>
+    <value>Kontrolloni emrin e hapësirës së punës</value>
   </data>
 </root>

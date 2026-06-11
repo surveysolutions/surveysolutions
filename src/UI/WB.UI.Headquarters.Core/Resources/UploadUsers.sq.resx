@@ -145,7 +145,7 @@
     <value>Shkarkoni formatin .tab për t’u ngarkuar nga përdoruesi </value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>Email-i</value>
   </data>
   <data name="EstimatedTime" xml:space="preserve">
     <value>Ka mbetur afërsisht {{estimatedTime}} </value>
@@ -231,14 +231,14 @@
 
 
   <data name="Workspace" xml:space="preserve">
-    <value>Workspace</value>
+    <value>Hapësira e punës</value>
   </data>
 
   <data name="SelectWorkspace" xml:space="preserve">
-    <value>Select Workspace</value>
+    <value>Zgjidh hapësirën e punës</value>
   </data>
 
   <data name="SelectWorkspaceDescription" xml:space="preserve">
-    <value>If no workspace assigned in batch file use this workspace as default</value>
+    <value>Nëse në skedarin e grupit nuk është caktuar hapësirë pune, përdor këtë hapësirë pune si parazgjedhje</value>
   </data>
 </root>

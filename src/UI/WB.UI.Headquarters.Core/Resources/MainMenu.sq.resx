@@ -219,50 +219,50 @@
 
 
   <data name="AuditLog" xml:space="preserve">
-    <value>Audit Log</value>
+    <value>Regjistri i auditimit</value>
   </data>
 
   <data name="DeviceLogs" xml:space="preserve">
-    <value>Device Logs</value>
+    <value>Regjistrat e pajisjeve</value>
   </data>
     
   <data name="Diagnostics" xml:space="preserve">
-    <value>Diagnostics</value>
+    <value>Diagnostikimi</value>
   </data>
 
   <data name="InterviewPackages" xml:space="preserve">
-    <value>Interview Packages</value>
+    <value>Paketat e intervistës</value>
   </data>
 
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Cilësimet</value>
   </data>
 
   <data name="WorkspaceSettings" xml:space="preserve">
-    <value>Workspace Settings</value>
+    <value>Cilësimet e hapësirës së punës</value>
   </data>
 
   <data name="EmailProviders" xml:space="preserve">
-    <value>Email Providers</value>
+    <value>Ofruesit e email-it</value>
   </data>
 
   <data name="MapDashboard" xml:space="preserve">
-    <value>Map Dashboard</value>
+    <value>Paneli i hartës</value>
   </data>
 
   <data name="TabletInfos" xml:space="preserve">
-    <value>Tablet Infos</value>
+    <value>Të dhënat e tabletëve</value>
   </data>
 
   <data name="Administration" xml:space="preserve">
-    <value>Admin</value>
+    <value>Administrim</value>
   </data>
 
   <data name="Workspaces" xml:space="preserve">
-      <value>Workspaces</value>
+      <value>Hapësirat e punës</value>
   </data>
 
   <data name="ServerAdministration">
-    <value>Administration</value>
+    <value>Administrimi i serverit</value>
   </data>
 </root>

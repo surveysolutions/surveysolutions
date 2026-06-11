@@ -136,7 +136,7 @@
     <value>Shto supervizorin</value>
   </data>
   <data name="Admin" xml:space="preserve">
-    <value>Admin</value>
+    <value>Administrator</value>
   </data>
   <data name="APIUsers" xml:space="preserve">
     <value>Përdoruesit e API-t</value>
@@ -181,7 +181,7 @@
     <value>Redakto: {0}</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>Email-i</value>
   </data>
   <data name="FinishInstallation" xml:space="preserve">
     <value>Përfundo instalimin</value>
@@ -276,59 +276,59 @@
 
 
   <data name="CreateAdministrator" xml:space="preserve">
-    <value>Create administrator</value>
+    <value>Krijo administratorin</value>
   </data>
 
   <data name="ResetPassword" xml:space="preserve">
-    <value>Reset Password</value>
+    <value>Rivendos fjalëkalimin</value>
   </data>
 
   <data name="ResetPasswordTitle" xml:space="preserve">
-    <value>Reset user password</value>
+    <value>Rivendos fjalëkalimin e përdoruesit</value>
   </data>
 
   <data name="UserNotFound" xml:space="preserve">
-    <value>User not found</value>
+    <value>Përdoruesi nuk u gjet</value>
   </data>
 
   <data name="PasswordChanged" xml:space="preserve">
-    <value>Password for user {0} changed</value>
+    <value>Fjalëkalimi për përdoruesin {0} u ndryshua</value>
   </data>
 
 
   <data name="Filter_AllUsers" xml:space="preserve">
-    <value>All users</value>
+    <value>Të gjithë përdoruesit</value>
   </data>
 
   <data name="Filter_WithMissingWorkspace" xml:space="preserve">
-    <value>Missing workspaces</value>
+    <value>Hapësira pune që mungojnë</value>
   </data>
 
   <data name="Filter_WithDisabledWorkspaces" xml:space="preserve">
-    <value>With disabled workspaces only</value>
+    <value>Vetëm me hapësira pune të çaktivizuara</value>
   </data>
 
   <data name="Filter_Locked" xml:space="preserve">
-    <value>Locked users</value>
+    <value>Përdorues të bllokuar</value>
   </data>
 
   <data name="Filter_Archived" xml:space="preserve">
-    <value>Archived users</value>
+    <value>Përdorues të arkivuar</value>
   </data>
 
   <data name="UsersTitle" xml:space="preserve">
-    <value>Users</value>
+    <value>Përdoruesit</value>
   </data>
 
   <data name="AddUser" xml:space="preserve">
-    <value>Add User</value>
+    <value>Shto përdorues</value>
   </data>
 
   <data name="UploadUsers" xml:space="preserve">
-    <value>Upload Users</value>
+    <value>Ngarko përdorues</value>
   </data>
 
   <data name="ApiTokenTitle" xml:space="preserve">
-      <value>User API Token</value>
+      <value>Tokeni API i përdoruesit</value>
   </data>
 </root>

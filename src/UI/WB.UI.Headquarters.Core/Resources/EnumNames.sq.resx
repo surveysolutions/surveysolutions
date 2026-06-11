@@ -145,7 +145,7 @@
     <value>Nisur</value>
   </data>
   <data name="UserRoles_Administrator" xml:space="preserve">
-    <value>Administrator</value>
+    <value>Administratori</value>
   </data>
   <data name="UserRoles_ApiUser" xml:space="preserve">
     <value>PërdoruesApi</value>
@@ -192,18 +192,18 @@
 
 
   <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
-    <value>Start new interview</value>
+    <value>Fillo intervistë të re</value>
   </data>
 
   <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
-    <value>Resume</value>
+    <value>Vazhdo</value>
   </data>
 
   <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve">
-    <value>Invitation</value>
+    <value>Ftesa</value>
   </data>
 
   <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
-    <value>Welcome Header</value>
+    <value>Kreu i mirëseardhjes</value>
   </data>
 </root>

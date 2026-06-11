@@ -222,55 +222,55 @@
 
 
   <data name="MapDashboard" xml:space="preserve">
-    <value>Map Dashboard</value>
+    <value>Paneli i hartës</value>
   </data>
 
   <data name="SaveQuestionnaire" xml:space="preserve">
-    <value>Save questionnaire document</value>
+    <value>Ruaj dokumentin e pyetësorit</value>
   </data>
 
   <data name="QuestionnairePreview" xml:space="preserve">
-    <value>Questionnaire preview</value>
+    <value>Parapamja e pyetësorit</value>
   </data>
 
   <data name="Details" xml:space="preserve">
-    <value>Details</value>
+    <value>Hollësitë</value>
     <comment>Questionnaire details</comment>
   </data>
 
   <data name="ShowOnDesigner" xml:space="preserve">
-    <value>Show on Designer</value>
+    <value>Shfaq në Designer</value>
   </data>
 
   <data name="ImportedBy" xml:space="preserve">
-    <value>Imported by</value>
+    <value>Importuar nga</value>
   </data>
 
   <data name="ImportedByText" xml:space="preserve">
-    <value>{{role}} user {{name}}</value>
+    <value>përdoruesi {{name}} me rolin {{role}}</value>
   </data>
 
   <data name="QuestionnaireDeleteWarn" xml:space="preserve">
-    <value>{{receivedInterviews}} interviews and {{receivedAssignments}} assignments for new interviews have been received by the interviewers/supervisors working disconnected. After you confirm the deletion of the survey the server will no longer accept the information based on these interviews/assignments, and they will disappear at next synchronization without a possibility of recovery even if contain newly entered/edited information. It is your responsibility to warn/notify the interviewers to no longer fill out those interviews/assignments, because they will not be notified automatically. Do you want to continue?</value>
+    <value>Janë pranuar {{receivedInterviews}} intervista dhe {{receivedAssignments}} detyra për intervista të reja nga intervistuesit/supervizorët që punojnë të shkëputur. Pasi të konfirmoni fshirjen e anketës, serveri nuk do të pranojë më informacionin që bazohet në këto intervista/detyra dhe ato do të zhduken në sinkronizimin e ardhshëm pa mundësi rikuperimi, edhe nëse përmbajnë informacion të futur/redaktuar rishtazi. Është përgjegjësia juaj të paralajmëroni/njoftoni intervistuesit që të mos i plotësojnë më ato intervista/detyra, sepse ata nuk do të njoftohen automatikisht. Dëshironi të vazhdoni?</value>
   </data>
 
   <data name="TypeQuestionnaireName" xml:space="preserve">
-    <value>Please type '{{questionnaireTitle}}' to confirm</value> 
+    <value>Ju lutemi shkruani '{{questionnaireTitle}}' për ta konfirmuar</value> 
   </data>
 
   <data name="UsersManagement" xml:space="preserve">
-      <value>Users Management</value>
+      <value>Menaxhimi i përdoruesve</value>
   </data>
 
   <data name="CreateUser" xml:space="preserve">
-      <value>Create User</value>
+      <value>Krijo përdorues</value>
   </data>
 
   <data name="ExposedVariables" xml:space="preserve">
-    <value>Exposed Variables</value>
+    <value>Variablat e ekspozuara</value>
   </data>
 
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Ndrysho</value>
   </data>
 </root>

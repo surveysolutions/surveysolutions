@@ -330,263 +330,263 @@
 
 
   <data name="ClearExportCache_Title" xml:space="preserve">
-    <value>Clear export cache</value>
+    <value>Pastro cache-n e eksportit</value>
   </data>
 
   <data name="ClearExportCache_Description" xml:space="preserve">
-    <value>This operation will clear all export cache data. Next export will take more time.</value>
+    <value>Ky veprim do të pastrojë të gjitha të dhënat e cache-it të eksportit. Eksporti i ardhshëm do të marrë më shumë kohë.</value>
   </data>
 
   <data name="RemoveExportCache" xml:space="preserve">
-    <value>Clear cache</value>
+    <value>Pastro cache-n</value>
   </data>
 
   <data name="RemoveExportCacheConfirm" xml:space="preserve">
-    <value>Are you sure you want to clear export cache? All generated export files will be removed from the server and will NOT be available for download.</value>
+    <value>Jeni i sigurt që dëshironi të pastroni cache-n e eksportit? Të gjithë skedarët e eksportit të gjeneruar do të hiqen nga serveri dhe NUK do të jenë të disponueshëm për shkarkim.</value>
   </data>
 
   <data name="RemoveExportCacheSuccess" xml:space="preserve">
-    <value>Export cache was cleared successfully</value>
+    <value>Cache-i i eksportit u pastrua me sukses</value>
   </data>
 
   <data name="RemovingExportCache" xml:space="preserve">
-    <value>Clearing export cache is running</value>
+    <value>Pastrimi i cache-it të eksportit po ekzekutohet</value>
   </data>
 
   <data name="RemoveExportCacheFail" xml:space="preserve">
-    <value>Export cache cannot be cleared at the moment. Please try again later.
-Possible reasons:
-* An export file is being generated.
-* Generated export file is being downloaded.
-* Removing of generated export file is blocked by another program.
-* etc.</value>
+    <value>Cache-i i eksportit nuk mund të pastrohet për momentin. Ju lutemi provoni përsëri më vonë.
+Arsyet e mundshme:
+* Një skedar eksporti po gjenerohet.
+* Skedari i eksportit i gjeneruar po shkarkohet.
+* Heqja e skedarit të eksportit të gjeneruar është e bllokuar nga një program tjetër.
+* etj.</value>
   </data>
 
     <data name="RemoveExportCacheGeneratingFail" xml:space="preserve">
-    <value>Export cache cannot be cleared in the current moment. An export file is being generated.</value>
+    <value>Cache-i i eksportit nuk mund të pastrohet për momentin. Një skedar eksporti po gjenerohet.</value>
   </data>
 
   <data name="RemoveExportCache_Warning" xml:space="preserve">
-    <value>Warning! This is an irreversible action</value>
+    <value>Paralajmërim! Ky është një veprim i pakthyeshëm</value>
   </data>
 
   <data name="WebInterviewEmailNotifications_Title" xml:space="preserve">
-    <value>Web interview</value>
+    <value>Intervista në internet</value>
   </data>
 
   <data name="AllowWebInterviewEmailNotifications" xml:space="preserve">
-    <value>Web interview email notifications</value>
+    <value>Njoftime me email për intervistat në internet</value>
   </data>
 
   <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve">
-    <value>Allow respondents to web interviews to request emails with links to resume started interviews (effective if bulk email service provider is set up)</value>
+    <value>Lejo të anketuarit në intervistat në internet të kërkojnë email-e me lidhje për të vazhduar intervistat e nisura (efektive nëse është konfiguruar ofruesi i shërbimit të email-eve në masë)</value>
   </data>
 
   <data name="ChangeStateDisabledConfirm" xml:space="preserve">
-    <value>Are you sure you want to change the export file security settings? The exported data files will no longer be protected by a password.</value>
+    <value>Jeni i sigurt që dëshironi të ndryshoni cilësimet e sigurisë së skedarit të eksportit? Skedarët e të dhënave të eksportuara nuk do të mbrohen më me fjalëkalim.</value>
   </data>
 
   <data name="LogoSettings_Description" xml:space="preserve">
-    <value>Company logo is an image that appears on the server login page and on the login page of the Interviewer app.</value>
+    <value>Logoja e kompanisë është një imazh që shfaqet në faqen e hyrjes së serverit dhe në faqen e hyrjes së aplikacionit të Intervistuesit.</value>
   </data>
 
   <data name="LogoSettings_Description1" xml:space="preserve">
-    <value>Click the 'Choose file' button to upload an image from your computer to the server to be used as a logo image. Then click 'Save' button.</value>
+    <value>Klikoni butonin 'Choose file' për të ngarkuar një imazh nga kompjuteri juaj në server që të përdoret si logo. Pastaj klikoni butonin 'Save'.</value>
   </data>
 
   <data name="InterviewerPartialSynchronization" xml:space="preserve">
-    <value>Enable partial synchronization</value>
+    <value>Aktivizo sinkronizimin e pjesshëm</value>
   </data>
 
   <data name="PartialSynchronizationDescription" xml:space="preserve">
-    <value>When enabled, interviewer tablets will send answers in noncompleted interviews to Headquarters</value>
+    <value>Kur aktivizohet, tabletat e intervistuesve do të dërgojnë përgjigjet e intervistave të papërfunduara në Zyrën qendrore</value>
   </data>
 
   <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve">
-      <value>Location accuracy limit</value>
+      <value>Kufiri i saktësisë së vendndodhjes</value>
   </data>
 
   <data name="GeographyQuestionAccuracyInMetersDescription" xml:space="preserve">
-      <value>Set threshold accuracy in meters for obtained location coordinates </value>
+      <value>Vendos pragun e saktësisë në metra për koordinatat e marra të vendndodhjes </value>
   </data>
 
   <data name="InterviewerGeographyQuestionPeriodInSeconds" xml:space="preserve">
-    <value>Geography question period</value>
+    <value>Periudha e pyetjes gjeografike</value>
   </data>
 
   <data name="GeographyQuestionPeriodInSecondsDescription" xml:space="preserve">
-    <value>Set period in seconds for geography question</value>
+    <value>Vendosni periudhën në sekonda për pyetjen gjeografike</value>
   </data>
 
   <data name="EmailProvider_AwsRegion" xml:space="preserve">
-    <value>Region</value>
+    <value>Rajoni</value>
   </data>
 
   <data name="EmailProvider_AwsRegionHelp" xml:space="preserve">
-    <value>Region for the AWS Management Console</value>
+    <value>Rajoni për AWS Management Console</value>
   </data>
 
   <data name="EmailProvider_AwsRegion_Unknown" xml:space="preserve">
-    <value>Selected unknown region. Please check it.</value>
+    <value>Është zgjedhur një rajon i panjohur. Ju lutemi kontrollojeni.</value>
   </data>
 
   <data name="EsriApiKey" xml:space="preserve">
-      <value>ESRI API Key</value>
+      <value>Çelësi API i ESRI</value>
   </data>
 
   <data name="EsriApiKeyDescription" xml:space="preserve">
-      <value>This key will allow to use online maps on devices. Be advised that usage of this service could cost you extra money. Please consult with service provider</value>
+      <value>Ky çelës do të lejojë përdorimin e hartave online në pajisje. Kini parasysh se përdorimi i këtij shërbimi mund t'ju kushtojë para shtesë. Ju lutemi konsultohuni me ofruesin e shërbimit</value>
   </data>
 
   <data name="EmailProvider_Smtp" xml:space="preserve">
-    <value>SMTP Server</value>
+    <value>Serveri SMTP</value>
   </data>
 
   <data name="EmailProvider_SmtpDescription" xml:space="preserve">
-    <value>Configure the parameters to access SMTP server below. More information on usage of SMTP server with Survey Solutions is available </value>
+    <value>Konfiguroni më poshtë parametrat për të hyrë në serverin SMTP. Më shumë informacion për përdorimin e serverit SMTP me Survey Solutions gjendet </value>
   </data>
 
   <data name="EmailProvider_SmtpHost" xml:space="preserve">
-    <value>Host</value>
+    <value>Hosti</value>
   </data>
 
   <data name="EmailProvider_SmtpHostHelp" xml:space="preserve">
-    <value>SMTP server address</value>
+    <value>Adresa e serverit SMTP</value>
   </data>
 
   <data name="EmailProvider_SmtpPort" xml:space="preserve">
-    <value>Port</value>
+    <value>Porta</value>
   </data>
 
   <data name="EmailProvider_SmtpPortHelp" xml:space="preserve">
-    <value>SMTP port</value>
+    <value>Porta SMTP</value>
   </data>
 
   <data name="EmailProvider_SmtpTlsEncryption" xml:space="preserve">
-    <value>Use TLS encryption</value>
+    <value>Përdor enkriptim TLS</value>
   </data>
 
   <data name="EmailProvider_SmtpTlsEncryptionHelp" xml:space="preserve">
-    <value>TLS (Transport Layer Security) encryption secure communication. It encrypts data transmitted between clients and servers.</value>
+    <value>Enkriptimi TLS (Transport Layer Security) siguron komunikim të sigurt. Ai enkripton të dhënat e transmetuara ndërmjet klientëve dhe serverëve.</value>
   </data>
 
   <data name="EmailProvider_SmtpAuthentication" xml:space="preserve">
-    <value>Use authentication</value>
+    <value>Përdor autentikim</value>
   </data>
 
   <data name="EmailProvider_SmtpAuthenticationHelp" xml:space="preserve">
-    <value>SMTP authentication verifies the identity of an email client or server before allowing it to send email through an SMTP server.</value>
+    <value>Autentikimi SMTP verifikon identitetin e një klienti ose serveri email përpara se ta lejojë të dërgojë email përmes një serveri SMTP.</value>
   </data>
 
   <data name="EmailProvider_SmtpUsername" xml:space="preserve">
-    <value>Username</value>
+    <value>Emri i përdoruesit</value>
   </data>
 
   <data name="EmailProvider_SmtpUsernameHelp" xml:space="preserve">
-    <value>Credential used during the SMTP authentication process to verify the identity.</value>
+    <value>Kredenciali i përdorur gjatë procesit të autentikimit SMTP për të verifikuar identitetin.</value>
   </data>
 
   <data name="EmailProvider_SmtpPassword" xml:space="preserve">
-    <value>Password</value>
+    <value>Fjalëkalimi</value>
   </data>
 
   <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve">
-    <value>Credential used during the SMTP authentication process to verify the identity.</value>
+    <value>Kredenciali i përdorur gjatë procesit të autentikimit SMTP për të verifikuar identitetin.</value>
   </data>
 
   <data name="WorkspaceSettings" xml:space="preserve">
-      <value>Workspace settings</value>
+      <value>Cilësimet e hapësirës së punës</value>
   </data>
 
   <data name="Export" xml:space="preserve">
-      <value>Export</value>
+      <value>Eksport</value>
   </data>
 
   <data name="GlobalNote" xml:space="preserve">
-      <value>Global note</value>
+      <value>Shënim global</value>
   </data>
 
   <data name="UserProfile" xml:space="preserve">
-      <value>User profile</value>
+      <value>Profili i përdoruesit</value>
   </data>
 
   <data name="Devices" xml:space="preserve">
-      <value>Devices</value>
+      <value>Pajisjet</value>
   </data>
 
   <data name="WebInterview" xml:space="preserve">
-      <value>Web interview</value>
+      <value>Intervista në internet</value>
   </data>
 
   <data name="FileRetentionTitle" xml:space="preserve">
-      <value>Retention policy</value>
+      <value>Politika e ruajtjes</value>
   </data>
 
     <data name="FileRetentionDescription" xml:space="preserve">
-      <value>Older export files will be periodically deleted according to these settings</value>
+      <value>Skedarët më të vjetër të eksportit do të fshihen periodikisht sipas këtyre cilësimeve</value>
   </data>
 
   <data name="RetentionInDaysTitle" xml:space="preserve">
-      <value>Days to keep</value>
+      <value>Ditë për t'u ruajtur</value>
   </data>
 
     <data name="RetentionInDaysDescription" xml:space="preserve">
-      <value>Number of days export file will be preserved</value>
+      <value>Numri i ditëve që skedari i eksportit do të ruhet</value>
   </data>
 
   <data name="RetentionInCountTitle" xml:space="preserve">
-      <value>Number of files to keep</value>
+      <value>Numri i skedarëve që duhen ruajtur</value>
   </data>
 
     <data name="RetentionInCountDescription" xml:space="preserve">
-      <value>Maximum amount of export files to keep in the storage</value>
+      <value>Numri maksimal i skedarëve të eksportit që duhen mbajtur në hapësirën e ruajtjes</value>
   </data>
 
     <data name="EnableFileRetention" xml:space="preserve">
-      <value>Enable retention policy</value>
+      <value>Aktivizo politikën e ruajtjes</value>
   </data>
 
   <data name="RetentionPolicyEnablingConfirm" xml:space="preserve">
-    <value>Are you sure you want to turn retention policy on? Export data files could be deleted.</value>
+    <value>Jeni i sigurt që dëshironi të aktivizoni politikën e ruajtjes? Skedarët e të dhënave të eksportit mund të fshihen.</value>
   </data>
 
     <data name="ForceRunRetentionPolicy" xml:space="preserve">
-      <value>Force run</value>
+      <value>Ekzekuto tani</value>
   </data>
 
     <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve">
-      <value>Warning! This is a critical action that will affect existing export files in this workspace</value>
+      <value>Paralajmërim! Ky është një veprim kritik që do të ndikojë te skedarët ekzistues të eksportit në këtë hapësirë pune</value>
   </data>
 
     <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
-      <value>Are you sure you want to forcibly run the retention policy now? Please note that this action may result in the irrecoverable deletion of export files stored in this workspace, rendering them unavailable for download.</value>
+      <value>Jeni i sigurt që dëshironi të ekzekutoni me forcë politikën e ruajtjes tani? Ju lutemi vini re se ky veprim mund të rezultojë në fshirjen e pakthyeshme të skedarëve të eksportit të ruajtur në këtë hapësirë pune, duke i bërë të padisponueshëm për shkarkim.</value>
   </data>
 
   <data name="ExportEncryption_Warning" xml:space="preserve">
-    <value>Modifying the encryption settings will remove all previously generated export files, requiring new exports to be created</value>
+    <value>Ndryshimi i cilësimeve të enkriptimit do të heqë të gjithë skedarët e eksportit të gjeneruar më parë, duke kërkuar krijimin e eksporteve të reja</value>
   </data>
 
   <data name="LogoSizeLimit" xml:space="preserve">
-    <value>Logo image size should be less than {{size}}</value>
+    <value>Madhësia e imazhit të logos duhet të jetë më e vogël se {{size}}</value>
   </data>
 
   <data name="SelectFileWarning" xml:space="preserve">
-    <value>Please select a file to upload.</value>
+    <value>Ju lutemi zgjidhni një skedar për ta ngarkuar.</value>
   </data>
 
   <data name="LogoUploadSuccess" xml:space="preserve">
-    <value>Logo uploaded successfully.</value>
+    <value>Logoja u ngarkua me sukses.</value>
   </data>
 
   <data name="LogoUploadError" xml:space="preserve">
-    <value>Failed to upload logo. Please try again.</value>
+    <value>Ngarkimi i logos dështoi. Ju lutemi provoni përsëri.</value>
   </data>
 
   <data name="LogoRemoveSuccess" xml:space="preserve">
-    <value>Logo was successfully removed.</value>
+    <value>Logoja u hoq me sukses.</value>
   </data>
 
   <data name="LogoRemoveError" xml:space="preserve">
-    <value>Failed to remove logo. Please try again.</value>
+    <value>Heqja e logos dështoi. Ju lutemi provoni përsëri.</value>
   </data>
 </root>

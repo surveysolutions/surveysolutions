@@ -241,7 +241,7 @@
     <value>Lloji</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>ver.</value>
+    <value>Versioni</value>
   </data>
   <data name="Week" xml:space="preserve">
     <value>Javë</value>
@@ -249,6 +249,6 @@
 
 
   <data name="BackToTeams" xml:space="preserve">
-    <value>Back to teams</value>
+    <value>Kthehu te ekipet</value>
   </data>
 </root>
