@@ -1273,7 +1273,7 @@
     <value>Shfaq përdoruesit</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>Profili</value>
+    <value>Kontakti</value>
   </data>
   <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
     <value>Vërtetimi me dy faktorë</value>

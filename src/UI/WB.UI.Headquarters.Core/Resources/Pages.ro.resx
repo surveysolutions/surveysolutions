@@ -1208,7 +1208,7 @@
     <value>Aplicație de autentificare</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>Profil</value>
+    <value>Contact</value>
   </data>
   <data name="AccountManage_Status2fa" xml:space="preserve">
     <value>Autentificare cu doi factori este</value>
