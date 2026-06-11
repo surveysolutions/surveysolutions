@@ -1172,91 +1172,91 @@
 
 
   <data name="SaveAs" xml:space="preserve">
-    <value>Save as</value>
+    <value>另存为</value>
   </data>
 
   <data name="CopyTo" xml:space="preserve">
-    <value>Copy to</value>
+    <value>复制到</value>
   </data>
 
   <data name="ReadOnlyQuestion" xml:space="preserve">
-    <value>It is readonly question. You cannot edit it.</value>
+    <value>这是只读问题。您无法编辑它。</value>
   </data>
 
   <data name="SideBarEditCategories" xml:space="preserve">
-    <value>Edit Categories</value>
+    <value>编辑类别</value>
   </data>
 
   <data name="SideBarCriticalityConditionExpression" xml:space="preserve">
-      <value>Critical condition</value>
+      <value>关键条件</value>
   </data>
 
   <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
-      <value>{{count}} Critical rule:</value>
+      <value>{{count}} 条关键规则：</value>
   </data>
 
   <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
-      <value>{{count}} Critical rules:</value>
+      <value>{{count}} 条关键规则：</value>
   </data>
 
   <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
-      <value>Description</value>
+      <value>描述</value>
   </data>
 
   <data name="SideBarCriticalityConditionsEmptyLine1" xml:space="preserve">
-    <value>Use this tab to define critical rules.</value>
+    <value>使用此选项卡定义关键规则。</value>
   </data>
 
   <data name="SideBarCriticalityConditionsEmptyLine2" xml:space="preserve">
-    <value>Each critical rule consists of a condition and a message. Critical conditions may refer to any questions or variables and must be satisfied (evaluate to true). Treatment of interviews with unsatisfied critical conditions is determined during import of the questionnaire to the data server.</value>
+    <value>每条关键规则由一个条件和一条消息组成。关键条件可以引用任何问题或变量，并且必须满足（评估为真）。具有未满足关键条件的访谈的处理方式在将问卷导入数据服务器时确定。</value>
   </data>
 
   <data name="SideBarCriticalityConditionsEmptyLine3" xml:space="preserve">
-    <value>Include a message for the interviewer (respondent) to explain what needs to be changed in the interview (the message is displayed when the critical condition is not satisfied). Including hyperlinks to questions in the message is useful for navigation.</value>
+    <value>为访谈员（受访者）提供一条消息，解释访谈中需要更改的内容（当关键条件不满足时显示该消息）。在消息中包含问题的超链接对导航很有用。</value>
   </data>
 
   <data name="SideBarHideDescription" xml:space="preserve">
-    <value>hide description</value>
+    <value>隐藏描述</value>
   </data>
 
   <data name="SideBarCriticalityConditionMessage" xml:space="preserve">
-      <value>Message</value>
+      <value>消息</value>
   </data>
 
   <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
-    <value>Critical rule with no message</value>
+    <value>无消息的关键规则</value>
   </data>
 
   <data name="SideBarShowDescription" xml:space="preserve">
-    <value>add description</value>
+    <value>添加描述</value>
   </data>
 
   <data name="SideBarAddCriticalityCondition" xml:space="preserve">
-    <value>add new critical rule</value>
+    <value>添加新的关键规则</value>
   </data>
 
   <data name="SideBarScenarioCounter" xml:space="preserve">
-    <value>{{count}} Scenario:</value>
+    <value>{{count}} 个场景：</value>
   </data>
 
   <data name="SideBarScenarioCounter_plural" xml:space="preserve">
-    <value>{{count}} Scenarios:</value>
+    <value>{{count}} 个场景：</value>
   </data>
 
   <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
-    <value>Use this tab to view your scenarios.</value>
+    <value>使用此选项卡查看您的场景。</value>
   </data>
 
   <data name="SideBarScenarioEmptyLine2" xml:space="preserve">
-    <value>A scenario is a snapshot of tester state, you can save it on tester by click on button "Save Scenario".</value>
+    <value>场景是测试器状态的快照，您可以通过点击“保存场景”按钮将其保存到测试器中。</value>
   </data>
 
   <data name="SideBarScenarioName" xml:space="preserve">
-    <value>scenario title</value>
+    <value>场景标题</value>
   </data>
 
   <data name="SideBarDownload" xml:space="preserve">
-    <value>Download:</value>
+    <value>下载：</value>
   </data>
 
   <data name="SideBarXlsx" xml:space="preserve">
@@ -1272,585 +1272,585 @@
   </data>
 
   <data name="SideBarCategoriesName" xml:space="preserve">
-    <value>name of categories</value>
+    <value>类别名称</value>
   </data>
 
   <data name="SideBarCategoriesCounter" xml:space="preserve">
-    <value>{{count}} Categories</value>
+    <value>{{count}} 个类别</value>
   </data>
 
   <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
-    <value>Use this tab to manage reusable categories.</value>
+    <value>使用此选项卡管理可重用类别。</value>
   </data>
 
   <data name="SideBarCategoriesEmptyLine2" xml:space="preserve">
-    <value>You may download and update categories.</value>
+    <value>您可以下载和更新类别。</value>
   </data>
 
   <data name="SideBarCategoriesEmptyLine3" xml:space="preserve">
-    <value>will be added to list of reusable categories for any types of categorical questions</value>
+    <value>将添加到任何分类问题的可重用类别列表中</value>
   </data>
 
   <data name="AttachmentSizeIsTooBig" xml:space="preserve">
-    <value>Attachment size is too big. Max size: {{size}}</value>
+    <value>附件大小过大。最大大小：{{size}}</value>
   </data>
 
   <data name="SideBarCriticalityConditionsTitle" xml:space="preserve">
-    <value>Critical rules</value>
+    <value>关键规则</value>
   </data>
 
   <data name="SideBarScenarioTitle" xml:space="preserve">
-    <value>Scenarios</value>
+    <value>场景</value>
   </data>
 
   <data name="SideBarCategoriesTitle" xml:space="preserve">
-    <value>Categories</value>
+    <value>类别</value>
   </data>
 
   <data name="SideBarCategoriesUploadNew" xml:space="preserve">
-    <value>Upload new categories</value>
+    <value>上传新类别</value>
   </data>
 
   <data name="MoveToAnotherSubSection" xml:space="preserve">
-    <value>Move to another section:</value>
+    <value>移动到另一个部分：</value>
   </data>
 
   <data name="FlatRoster" xml:space="preserve">
-    <value>Flat mode</value>
+    <value>平铺模式</value>
   </data>
 
   <data name="QuestionDisplayMode" xml:space="preserve">
-    <value>Display mode</value>
+    <value>显示模式</value>
   </data>
 
   <data name="BindToReusableCategories" xml:space="preserve">
-    <value>Bind to reusable categories</value>
+    <value>绑定到可重用类别</value>
   </data>
 
   <data name="SelectCategories" xml:space="preserve">
-    <value>Select categories</value>
+    <value>选择类别</value>
   </data>
 
   <data name="SectionVariableName" xml:space="preserve">
-    <value>Variable name</value>
+    <value>变量名称</value>
   </data>
 
   <data name="AddFilter" xml:space="preserve">
-    <value>Add filter</value>
+    <value>添加过滤器</value>
   </data>
 
   <data name="SettingsAnonymous" xml:space="preserve">
-    <value>Anonymous</value>
+    <value>匿名</value>
   </data>
 
   <data name="RegenerateQuestionnaireSharingLink" xml:space="preserve">
-    <value>Regenerate link</value>
+    <value>重新生成链接</value>
   </data>
 
   <data name="AnonymousQuestionnaireGeneratedDate" xml:space="preserve">
-    <value>link generated: {{datetime}}</value>
+    <value>链接生成时间：{{datetime}}</value>
   </data>
 
   <data name="SettingsAccessibleToEveryone" xml:space="preserve">
-    <value>accessible in read-only mode to anyone with link</value>
+    <value>以只读模式向拥有链接的任何人开放</value>
   </data>
 
   <data name="SettingsStatusAllowAnonymousAccess" xml:space="preserve">
-    <value>Anonymous sharing is currently turned on.</value>
+    <value>匿名共享当前已开启。</value>
   </data>
 
   <data name="SettingsStatusDontAllowAnonymousAccess" xml:space="preserve">
-    <value>Anonymous sharing is currently turned off.</value>
+    <value>匿名共享当前已关闭。</value>
   </data>
 
   <data name="SettingsTurnOnAnonymousAccess" xml:space="preserve">
-    <value>Turn on anonymous sharing.</value>
+    <value>开启匿名共享。</value>
   </data>
 
   <data name="SettingsTurnOffAnonymousAccess" xml:space="preserve">
-    <value>Turn off anonymous sharing.</value>
+    <value>关闭匿名共享。</value>
   </data>
 
   <data name="VirtualCoverPage" xml:space="preserve">
-    <value>Virtual cover page</value>
+    <value>虚拟封面页</value>
   </data>
 
   <data name="MigrateToNewCover" xml:space="preserve">
-    <value>Generate cover</value>
+    <value>生成封面</value>
 
   </data>
 
   <data name="EmptySectionLine4" xml:space="preserve">
-    <value>Questionnaire name, variable, collaboration and other options</value>
+    <value>问卷名称、变量、协作及其他选项</value>
   </data>
 
   <data name="QuestionCheckboxes" xml:space="preserve">
-    <value>Checkboxes</value>
+    <value>复选框</value>
   </data>
 
   <data name="GeometryInputMode" xml:space="preserve">
-    <value>Input mode</value>
+    <value>输入模式</value>
   </data>
 
   <data name="GeometryOverlapDetection" xml:space="preserve">
-    <value>Overlap detection</value>
+    <value>重叠检测</value>
   </data>
 
   <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
-    <value>Integers between 1 and 50 are allowed</value>
+    <value>允许1到50之间的整数</value>
   </data>
 
   <data name="GeographyInputModeManual" xml:space="preserve">
-    <value>Manual</value>
+    <value>手动</value>
   </data>
 
     <data name="GeographyInputModeAutomatic" xml:space="preserve">
-    <value>Automatic</value>
+    <value>自动</value>
   </data>
 
     <data name="GeographyInputModeSemiautomatic" xml:space="preserve">
-    <value>Semiautomatic</value>
+    <value>半自动</value>
   </data>
 
   <data name="Filter" xml:space="preserve">
-    <value>Filter</value>
+    <value>过滤器</value>
   </data>
 
   <data name="UserDefinedCategories" xml:space="preserve">
-    <value>User defined categories</value>
+    <value>用户自定义类别</value>
   </data>
 
   <data name="ReusableCategories" xml:space="preserve">
-    <value>Reusable categories</value>
+    <value>可重用类别</value>
   </data>
 
   <data name="SourceOfCategories" xml:space="preserve">
-    <value>Source of categories</value>
+    <value>类别来源</value>
   </data>
 
   <data name="RostersQuestion" xml:space="preserve">
-    <value>List question or question from roster group</value>
+    <value>列表问题或来自名册组的问题</value>
   </data>
 
   <data name="QuestionRadioButtonList" xml:space="preserve">
-    <value>Radio button list</value>
+    <value>单选按钮列表</value>
   </data>
 
   <data name="HelpRosterDisplayMode" xml:space="preserve">
-    <value>Sub-Section - the questions of the roster are shown behind the buttons corresponding to roster instances.
-Flat - the questions of the roster are shown in the same level separated by headers corresponding to roster instances.
-Table - the questions of the roster are shown in the same level as rows and columns of the table. 
-Matrix - a categorical question of the roster is displayed as matrix. 
-Table and Matrix views are supported only in Web survey, tablet falls back to 'Sub-Section' mode.</value>
+    <value>子部分 - 名册的问题显示在对应名册实例的按钮后面。
+平铺 - 名册的问题显示在同一级别，以对应名册实例的标题分隔。
+表格 - 名册的问题以表的行和列的形式显示在同一级别。
+矩阵 - 名册的分类问题以矩阵形式显示。
+表格和矩阵视图仅在Web调查中支持，平板电脑将回退到“子部分”模式。</value>
   </data>
 
   <data name="HelpDoNotExport" xml:space="preserve">
-    <value>Mark this variable to exclude it from export</value>
+    <value>标记此变量以将其从导出中排除</value>
   </data>
 
   <data name="VariableNoExport" xml:space="preserve">
-    <value>Do not export</value>
+    <value>不导出</value>
   </data>
 
   <data name="HelpAttachmentName" xml:space="preserve">
-    <value>The name of attachment file that will be displayed.</value>
+    <value>将要显示的附件文件名称。</value>
   </data>
 
   <data name="HelpCoverPage" xml:space="preserve">
-    <value>The first section of every questionnaire contains identifying questions that are also displayed at the interviewers' and supervisors' dashboards.</value>
+    <value>每个问卷的第一部分包含识别性问题，这些问题也显示在访谈员和督导员的控制台上。</value>
   </data>
 
   <data name="HelpVirtualCoverPage" xml:space="preserve">
-    <value>Cover is virtual section that shows all identifying questions.
-    Questions cannot be changed in this section</value>
+    <value>封面是显示所有识别性问题的虚拟部分。
+    此部分中的问题无法更改</value>
   </data>
 
   <data name="HotkeysCloseScenarios" xml:space="preserve">
-    <value>Close scenarios panel</value>
+    <value>关闭场景面板</value>
   </data>
 
   <data name="HotkeysCloseCategories" xml:space="preserve">
-    <value>Close categories panel</value>
+    <value>关闭类别面板</value>
   </data>
 
   <data name="HotkeysCloseComments" xml:space="preserve">
-    <value>Close comments panel</value>
+    <value>关闭评论面板</value>
   </data>
 
   <data name="DeleteConfirmCategories" xml:space="preserve">
-    <value>Are you sure you want to delete set of categories "{{trimmedTitle}}"? Source of categories for categorical questions dependent on it will be changed to user defined categories</value>
+    <value>您确定要删除类别集“{{trimmedTitle}}”吗？依赖它的分类问题的类别来源将更改为用户自定义类别</value>
   </data>
 
   <data name="CategoriesObtained" xml:space="preserve">
-    <value>Obtained {0} row from categories file</value>
+    <value>从类别文件中获取了 {0} 行</value>
   </data>
 
   <data name="CategoriesObtained_plural" xml:space="preserve">
-    <value>Obtained {0} rows from categories file</value>
+    <value>从类别文件中获取了 {0} 行</value>
   </data>
 
   <data name="OptionsUploadRevert" xml:space="preserve">
-    <value>Revert changes</value>
+    <value>撤销更改</value>
   </data>
 
   <data name="OptionsWindowTitle" xml:space="preserve">
-    <value>Edit categories</value>
+    <value>编辑类别</value>
   </data>
 
   <data name="CascadingOptionsWindowTitle" xml:space="preserve">
-    <value>Edit cascading categories</value>
+    <value>编辑级联类别</value>
   </data>
 
   <data name="AttachmentName" xml:space="preserve">
-    <value>Attachment name</value>
+    <value>附件名称</value>
   </data>
 
   <data name="SideBarCategoriesNoName" xml:space="preserve">
-    <value>categories with no name</value>
+    <value>无名称的类别</value>
   </data>
 
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>默认</value>
   </data>
 
   <data name="Reset" xml:space="preserve">
-    <value>Reset</value>
+    <value>重置</value>
   </data>
 
   <data name="EditorShowComments" xml:space="preserve">
-    <value>Show comments ({{count}})</value>
+    <value>显示评论 ({{count}})</value>
   </data>
 
   <data name="JumpToEdit" xml:space="preserve">
-    <value>Jump to edit</value>
+    <value>跳转到编辑</value>
   </data>
   
   <data name="CollaboratorsDescriptionSettings" xml:space="preserve">
-    <value>the following users have access to this questionnaire</value>
+    <value>以下用户可以访问此问卷</value>
   </data>
   
   <data name="AccessSettings" xml:space="preserve">
-    <value>Access</value>
+    <value>访问</value>
   </data>
 
   <data name="PublicAccessDescriptionSettings" xml:space="preserve">
-    <value>Public questionnaires are visible to all users with an account in this system in read-only mode.</value>
+    <value>公共问卷对系统中所有拥有账号的用户以只读模式可见。</value>
   </data>
   
   <data name="PublicAccessSettingsStatusOn" xml:space="preserve">
-    <value>The questionnaire is currently shared as public.</value>
+    <value>该问卷当前已作为公共问卷共享。</value>
   </data>
 
   <data name="PublicAccessSettingsStatusOff" xml:space="preserve">
-    <value>The questionnaire is currently not shared as public.</value>
+    <value>该问卷当前未作为公共问卷共享。</value>
   </data>
   
   <data name="PublicAccessSettingsOn" xml:space="preserve">
-    <value>Turn on public access.</value>
+    <value>开启公共访问。</value>
   </data>
 
   <data name="PublicAccessSettingsOff" xml:space="preserve">
-    <value>Turn off public access.</value>
+    <value>关闭公共访问。</value>
   </data>
 
   <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
-    <value>Link sharing</value>
+    <value>链接共享</value>
   </data>
   
   <data name="AnonymousLink" xml:space="preserve">
-    <value>Anonymous link:</value>
+    <value>匿名链接：</value>
   </data>
   
   <data name="CopyLink" xml:space="preserve">
-    <value>Copy link</value>
+    <value>复制链接</value>
   </data>
 
   <data name="AnonymousQuestionnaireDescriptionSettings" xml:space="preserve">
-    <value>Users having this link will be able to open this questionnaire</value>
+    <value>拥有此链接的用户将能够打开此问卷</value>
   </data>
 
   <data name="RefreshPageConfirm" xml:space="preserve">
-    <value>We've updated this site, please refresh page, or you may experience unexpected behavior</value>
+    <value>我们已更新此网站，请刷新页面，否则可能会出现意外行为</value>
   </data>
 
   <data name="Refresh" xml:space="preserve">
-    <value>Refresh</value>
+    <value>刷新</value>
   </data>
 
   <data name="AttachmentDimensionsAreTooBig" xml:space="preserve">
-    <value>Dimensions are too big</value>
+    <value>尺寸过大</value>
   </data>
 
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>添加</value>
   </data>
 
   <data name="AllClassifications" xml:space="preserve">
-    <value>All classifications</value>
+    <value>所有分类</value>
   </data>
 
   <data name="ClassificationShowCategories" xml:space="preserve">
-    <value>Show categories</value>
+    <value>显示类别</value>
   </data>
 
   <data name="ClassificationsTitle" xml:space="preserve">
-    <value>Question Bank. Classifications</value>
+    <value>问题库。分类</value>
   </data>
 
   <data name="QuestionAddClassification" xml:space="preserve">
-    <value>Search for classification</value>
+    <value>搜索分类</value>
   </data>
 
   <data name="SearchClassification" xml:space="preserve">
-    <value>Search classification</value>
+    <value>搜索分类</value>
   </data>
 
   <data name="ReplaceOptionsConfirmation" xml:space="preserve">
-    <value>Are you sure you want to replace existing categories for question "{{trimmedTitle}}"?</value>
+    <value>您确定要替换问题“{{trimmedTitle}}”的现有类别吗？</value>
   </data>
 
   <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
-    <value>Only the first {{count}} categories will be taken for question "{{trimmedTitle}}"?</value>
+    <value>问题“{{trimmedTitle}}”只会取前 {{count}} 个类别？</value>
   </data>
 
   <data name="MyClassifications" xml:space="preserve">
-    <value>My classifications</value>
+    <value>我的分类</value>
   </data>
 
   <data name="ClassificationAdd" xml:space="preserve">
-    <value>Add classification</value>
+    <value>添加分类</value>
   </data>
 
   <data name="ClassificationAddGroup" xml:space="preserve">
-    <value>Add group</value>
+    <value>添加组</value>
   </data>
 
   <data name="ClassificationGroupBreadcrumbs" xml:space="preserve">
-    <value>Groups</value>
+    <value>组</value>
   </data>
 
   <data name="ClassificationGroupTitle" xml:space="preserve">
-    <value>Group title</value>
+    <value>组标题</value>
   </data>
 
   <data name="ClassificationsStringOptionsEditorPlaceholder" xml:space="preserve">
-    <value>Enter categories</value>
+    <value>输入类别</value>
   </data>
 
   <data name="ClassificationTitle" xml:space="preserve">
-    <value>Classification title</value>
+    <value>分类标题</value>
   </data>
 
   <data name="SearchForQuestion" xml:space="preserve">
-    <value>Search for question</value>
+    <value>搜索问题</value>
   </data>
 
   <data name="AllFolders" xml:space="preserve">
-    <value>All folders</value>
+    <value>所有文件夹</value>
   </data>
 
   <data name="SearchQuestionPlaceholder" xml:space="preserve">
-    <value>Search for a question</value>
+    <value>搜索问题</value>
   </data>
 
   <data name="QuestionsSearchTitle" xml:space="preserve">
-    <value>Question Bank</value>
+    <value>问题库</value>
   </data>
 
   <data name="QuestionsSearchEntities" xml:space="preserve">
-    <value>search results</value>
+    <value>搜索结果</value>
   </data>
 
   <data name="ClassificationsSearchEntities" xml:space="preserve">
-    <value>classifications</value>
+    <value>分类</value>
   </data>
 
   <data name="ShowAsList" xml:space="preserve">
-    <value>Show as a list of categories</value>
+    <value>以类别列表显示</value>
   </data>
 
   <data name="QuestionShowListLimit" xml:space="preserve">
-    <value>If not more than</value>
+    <value>如果不超过</value>
   </data>
 
   <data name="RosterDisplayMode_SubSection" xml:space="preserve">
-    <value>Sub-Section</value>
+    <value>子部分</value>
   </data>
 
   <data name="RosterDisplayMode_Flat" xml:space="preserve">
-    <value>Flat</value>
+    <value>平铺</value>
   </data>
 
   <data name="RosterDisplayMode_Table" xml:space="preserve">
-    <value>Table</value>
+    <value>表格</value>
   </data>
 
   <data name="RosterDisplayMode_Matrix" xml:space="preserve">
-    <value>Matrix</value>
+    <value>矩阵</value>
   </data>
 
   <data name="RosterDisplayMode" xml:space="preserve">
-    <value>Display mode:</value>
+    <value>显示模式：</value>
   </data>
 
   <data name="AreYouSure" xml:space="preserve">
-    <value>Are You sure?</value>
+    <value>您确定吗？</value>
   </data>
 
   <data name="MakeOwnerConfirmationMessage" xml:space="preserve">
-    <value>If you transfer ownership, the new owner will be notified. You may no longer be able to change ownership settings, and the new owner may also remove your access.</value>
+    <value>如果您转让所有权，新所有者将收到通知。您可能不再能够更改所有权设置，新所有者也可能撤销您的访问权限。</value>
   </data>
 
   <data name="SettingsMakeOwner" xml:space="preserve">
-    <value>Make owner</value>
+    <value>设为所有者</value>
   </data>
 
   <data name="Yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>是</value>
   </data>
 
   <data name="Run" xml:space="preserve">
-    <value>Run</value>
+    <value>运行</value>
   </data>
 
   <data name="View" xml:space="preserve">
-    <value>View</value>
+    <value>查看</value>
   </data>
 
   <data name="ScenarioDetails" xml:space="preserve">
-    <value>Scenario</value>
+    <value>场景</value>
   </data>
 
   <data name="Preview" xml:space="preserve">
-    <value>Preview revision #{{revision}}</value>
+    <value>预览修订版 #{{revision}}</value>
   </data>
 
   <data name="CustomRosterTitle" xml:space="preserve">
-    <value>Custom title</value>
+    <value>自定义标题</value>
   </data>
 
   <data name="HelpOptionValue" xml:space="preserve">
-    <value>Numeric integer code of the category (not visible to the interviewer)</value>
+    <value>类别的数字整数代码（访谈员不可见）</value>
   </data>
 
   <data name="HelpOptionTitle" xml:space="preserve">
-    <value>Text label for the category (visible to the interviewer)</value>
+    <value>类别的文本标签（访谈员可见）</value>
   </data>
 
   <data name="HelpOverlapDetection" xml:space="preserve">
-    <value>Display and highlight the overlaps of this question answer with answers to the same questions in sibling roster instances</value>
+    <value>显示并高亮显示此问题答案与同级名册实例中相同问题答案的重叠部分</value>
   </data>
 
   <data name="NewItem" xml:space="preserve">
-    <value>New item</value>
+    <value>新建项目</value>
   </data>
 
   <data name="EditItem" xml:space="preserve">
-    <value>Edit item</value>
+    <value>编辑项目</value>
   </data>
 
   <data name="DeleteItemCofirm" xml:space="preserve">
-    <value>Are you sure you want to delete this item?</value>
+    <value>您确定要删除此项目吗？</value>
   </data>
 
   <data name="Forum" xml:space="preserve">
-    <value>Forum</value>
+    <value>论坛</value>
   </data>
 
   <data name="TableView" xml:space="preserve">
-    <value>Table view</value>
+    <value>表格视图</value>
   </data>
 
   <data name="StringsView" xml:space="preserve">
-    <value>Text view</value>
+    <value>文本视图</value>
   </data>
 
   <data name="ValidationIntValue" xml:space="preserve">
-    <value>Value is too big</value>
+    <value>值过大</value>
   </data>
 
   <data name="RequiredField" xml:space="preserve">
-    <value>Required field</value>
+    <value>必填字段</value>
   </data>
 
   <data name="FileUploaded" xml:space="preserve">
-    <value>File uploaded</value>
+    <value>文件已上传</value>
   </data>
 
   <data name="DataChangesReverted" xml:space="preserve">
-    <value>Data changes reverted</value>
+    <value>数据更改已撤销</value>
   </data>
 
   <data name="OptionsSizeLimit" xml:space="preserve">
-    <value>Maximum {max_rows} rows allowed</value>
+    <value>最多允许 {max_rows} 行</value>
   </data>
 
   <data name="CommunicationError" xml:space="preserve">
-    <value>Network error</value>
+    <value>网络错误</value>
   </data>
 
   <data name="SideBarCategoriesAddNew" xml:space="preserve">
-    <value>Add new categories</value>
+    <value>添加新类别</value>
   </data>
 
   <data name="RowAdded" xml:space="preserve">
-    <value>Row added</value>
+    <value>已添加行</value>
   </data>
 
   <data name="OptionsCascadingListError" xml:space="preserve">
     <value>
-You entered an invalid input. Each line should follow the format: "Title...ParentValue/Value[...Attachment name]". 'Value' and 'ParentValue' must be an integer number. 'Title' must be an alpha-numeric string. 'Attachment name' is optional. No empty lines are allowed.</value>
+您输入了无效的输入。每行应遵循格式：“标题...父值/值[...附件名称]”。“值”和“父值”必须是整数。“标题”必须是字母数字字符串。“附件名称”是可选的。不允许空行。</value>
   </data>
 
   <data name="ShowParentValues" xml:space="preserve">
-    <value>Show Parent values</value>
+    <value>显示父值</value>
   </data>
 
   <data name="HideParentValues" xml:space="preserve">
-    <value>Hide Parent values</value>
+    <value>隐藏父值</value>
   </data>
 
   <data name="AddEnablingCondition" xml:space="preserve">
-    <value>Add enabling condition</value>
+    <value>添加启用条件</value>
   </data>
 
   <data name="ShowList" xml:space="preserve">
-      <value>Show list</value>
+      <value>显示列表</value>
   </data>
 
   <data name="Login" xml:space="preserve">
-      <value>Login</value>
+      <value>登录</value>
   </data>
 
   <data name="Register" xml:space="preserve">
-      <value>Register</value>
+      <value>注册</value>
   </data>
 
   <data name="No" xml:space="preserve">
-      <value>No</value>
+      <value>否</value>
   </data>
 
   <data name="QuestionIsCritical" xml:space="preserve">
-      <value>This is a critical question</value>
+      <value>这是一个关键问题</value>
   </data>
 
   <data name="HelpIsCritical" xml:space="preserve">
-      <value>Questionnaire authors may indicate that the answer to a question is critical for interview submission.</value>
+      <value>问卷作者可以指定某个问题的答案对于访谈提交至关重要。</value>
   </data>
 
   <data name="HelpCriticalityConditionExpression" xml:space="preserve">
-      <value>A logical expression that evaluates the interview as a whole to determine whether it satisfies the critical rules (when this expression evaluates to "True"). It may refer to any questions or variables.</value>
+      <value>一个逻辑表达式，整体评估访谈以确定其是否满足关键规则（当此表达式评估为“真”时）。它可以引用任何问题或变量。</value>
   </data>
 
   <data name="HelpCriticalityConditionMessage" xml:space="preserve">
-      <value>This message is shown when the critical condition evaluates to "False" or an exception occurs during expression evaluation. The message may utilize hyperlinks and text substitution.</value>
+      <value>当关键条件评估为“假”或表达式评估期间发生异常时，显示此消息。消息可以使用超链接和文本替换。</value>
   </data>
 
   <data name="SwitchTo" xml:space="preserve">
-    <value>Switch To</value>
+    <value>切换到</value>
   </data>
 
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
-    <value>Switch To will change the display language of the questionnaire. The translation must include text for all elements.</value>
+    <value>切换到将更改问卷的显示语言。翻译必须包含所有元素的文本。</value>
   </data>
 </root>
