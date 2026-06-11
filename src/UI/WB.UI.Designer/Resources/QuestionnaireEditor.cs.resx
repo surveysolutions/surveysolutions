@@ -841,7 +841,7 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>Nastavení dotazníku</value>
   </data>
   <data name="QuestionnaireSummary" xml:space="preserve">
-    <value>({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)</value>
+    <value>({{questionsCount}}O, {{groupsCount}}S, {{rostersCount}}R)</value>
   </data>
   <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
     <value>Celá čísla mezi 1 a 50 jsou povolena</value>

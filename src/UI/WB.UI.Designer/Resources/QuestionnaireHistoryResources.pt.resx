@@ -290,7 +290,7 @@
     <value>Lista {0} movida para a lista {1}</value>
   </data>
   <data name="Translation_Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Idioma original</value>
   </data>
   <data name="Translation_DefaultTranslationSet" xml:space="preserve">
     <value>Tradução padrão definida para {0}</value>
