@@ -139,7 +139,7 @@
     <value>Changer le mot de passe</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>Profil</value>
+    <value>Contact</value>
   </data>
   <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
     <value>Authentification à deux facteurs</value>

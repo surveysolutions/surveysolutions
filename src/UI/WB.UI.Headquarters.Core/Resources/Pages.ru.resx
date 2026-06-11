@@ -124,7 +124,7 @@
     <value>Сохранить изменения</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>Профиль</value>
+    <value>Контакт</value>
   </data>
   <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
     <value>Двухфакторная аутентификация</value>

@@ -1041,7 +1041,7 @@
     <value>მომხმარებლების ჩვენება</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>პროფილი</value>
+    <value>კონტაქტი</value>
   </data>
   <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
     <value>ორფაქტორიანი ავთენტიფიკაცია</value>
@@ -1077,7 +1077,8 @@
     <value>მოქმედებების ჟურნალის ჩვენება</value>
   </data>
   <data name="InterviewerProfile_StorageSizeInfo" xml:space="preserve">
-    <value>სისტემის ინფორმაცია და არასინქრონიზებული ინტერვიუს მონაცემები</value>
+    <value>სისტემის ინფორმაცია და არასინქრონიზებული ინტერვიუს მონაცემები</value>
+
   </data>
   <data name="InterviewerProfile_Relinked" xml:space="preserve">
     <value>ხელახლა მიბმული</value>
