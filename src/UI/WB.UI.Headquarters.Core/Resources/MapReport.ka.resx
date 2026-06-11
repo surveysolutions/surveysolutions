@@ -135,15 +135,15 @@
 
 
   <data name="NoGpsQuestionsByQuestionnaire" xml:space="preserve">
-    <value>There are no GPS type questions in the selected questionnaire</value>
+    <value>არჩეულ კითხვარში GPS ტიპის კითხვები არ არის</value>
     <comment>d</comment>
   </data>
 
   <data name="Assignment" xml:space="preserve">
-    <value>Assignment</value>
+    <value>დავალება</value>
   </data>
 
   <data name="ReloadGeoTacking" xml:space="preserve">
-      <value>Reload  tracks</value>
+      <value>ტრეკების თავიდან ჩატვირთვა</value>
   </data>
 </root>

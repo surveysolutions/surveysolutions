@@ -261,14 +261,14 @@
 
 
   <data name="AllowSwitchToCawiForInterviewer" xml:space="preserve">
-    <value>Allow Interviewer to switch to CAWI mode</value>
+    <value>Permiteți intervievatorului să treacă la modul CAWI</value>
   </data>
 
   <data name="WebInterviewUserMessages_LinkInvitation_Descr" xml:space="preserve">
-    <value>Text that shown to user when they navigate to link to interview that is not yet synced to server</value>
+    <value>Text afișat utilizatorului când accesează linkul către un interviu care nu este încă sincronizat cu serverul</value>
   </data>
 
   <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
-    <value>Header welcome text on web interview link landing page</value>
+    <value>Textul antetului de bun venit pe pagina de destinație a linkului pentru interviul web</value>
   </data>
 </root>

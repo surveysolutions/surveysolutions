@@ -271,7 +271,7 @@
     <value>GPS</value>
   </data>
   <data name="QuestionType_Integer" xml:space="preserve">
-    <value>integer</value>
+    <value>întreg</value>
   </data>
   <data name="QuestionType_Linked" xml:space="preserve">
     <value>legat</value>
@@ -390,43 +390,43 @@
 
 
   <data name="Appendix_CriticalRules" xml:space="preserve">
-    <value>Appendix {0} {1} critical rules</value>
+    <value>Anexa {0} {1} reguli critice</value>
   </data>
 
   <data name="OwnedBy" xml:space="preserve">
-    <value>Questionnaire owned by {0}</value>
+    <value>Chestionar deținut de {0}</value>
   </data>
 
   <data name="CriticalityCondition" xml:space="preserve">
-    <value>Critical Condition:</value>
+    <value>Condiție critică:</value>
   </data>
 
   <data name="CriticalityMessage" xml:space="preserve">
-    <value>Message:</value>
+    <value>Mesaj:</value>
   </data>
 
   <data name="Description" xml:space="preserve">
-    <value>Description:</value>
+    <value>Descriere:</value>
   </data>
 
   <data name="QuestionType_Area_Polygon" xml:space="preserve">
-    <value>polygon</value>
+    <value>poligon</value>
   </data>
 
   <data name="QuestionType_Area_Polyline" xml:space="preserve">
-    <value>polyline</value>
+    <value>polilinie</value>
   </data>
 
   <data name="QuestionType_Area_Multipoint" xml:space="preserve">
-    <value>multipoint</value>
+    <value>multipunct</value>
   </data>
 
   <data name="QuestionType_Area_Point" xml:space="preserve">
-    <value>point</value>
+    <value>punct</value>
   </data>
 
   <data name="SourceOfCategories" xml:space="preserve">
-    <value>Source of categories:</value>
+    <value>Sursa categoriilor:</value>
   </data>
 
   <data name="RosterSourceOfCategories" xml:space="preserve">
@@ -434,34 +434,34 @@
   </data>
 
   <data name="TextListSourceOfCategories" xml:space="preserve">
-    <value>Text list question</value>
+    <value>Întrebare cu listă de texte</value>
   </data>
 
   <data name="QuestionInRosterSourceOfCategories" xml:space="preserve">
-    <value>Question</value>
+    <value>Întrebare</value>
   </data>
 
   <data name="InRosterSourceOfCategories" xml:space="preserve">
-    <value>in roster</value>
+    <value>în roster</value>
   </data>
   
   <data name="GeographyType" xml:space="preserve">
-    <value>Geography type</value>
+    <value>Tip de geografie</value>
   </data>
 
   <data name="GeographyInputMode" xml:space="preserve">
-    <value>Input mode</value>
+    <value>Mod de introducere</value>
   </data>
 
   <data name="GeometryOverlapDetection" xml:space="preserve">
-    <value>Overlap detection</value>
+    <value>Detectarea suprapunerii</value>
   </data>
 
   <data name="On" xml:space="preserve">
-    <value>ON</value>
+    <value>PORNIT</value>
   </data>
 
   <data name="Off" xml:space="preserve">
-    <value>OFF</value>
+    <value>OPRIT</value>
   </data>
 </root>

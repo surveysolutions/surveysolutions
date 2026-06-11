@@ -123,26 +123,26 @@
 
 
   <data name="QuestionnaireNameUniqueFormat" xml:space="preserve">
-    <value>Questionnaire '{0}' already exists. Please choose another name.</value>
+    <value>კითხვარი '{0}' უკვე არსებობს. გთხოვთ, აირჩიოთ სხვა სახელი.</value>
   </data>
 
   <data name="QuestionnaireVariableUniqueFormat" xml:space="preserve">
-    <value>You have already imported another questionnaire with questionnaire variable '{0}' from Designer. If you still want to import this particular one, please give it a different questionnaire variable in Designer.</value>
+    <value>თქვენ უკვე გაქვთ Designer-დან იმპორტირებული სხვა კითხვარი კითხვარის ცვლადით '{0}'. თუ მაინც გსურთ სწორედ ამის იმპორტი, Designer-ში მიუთითეთ სხვა კითხვარის ცვლადი.</value>
   </data>
 
   <data name="WebModeAssignmentShouldBeOnInterviewer" xml:space="preserve">
-    <value>An assignment for web interview must have an interviewer as responsible</value>
+    <value>ვებ-ინტერვიუს დავალებაზე პასუხისმგებელი უნდა იყოს ინტერვიუერი</value>
   </data>
 
   <data name="AssignmentResponsibleNotFound" xml:space="preserve">
-    <value>Responsible was not found</value>
+    <value>პასუხისმგებელი პირი ვერ მოიძებნა</value>
   </data>
 
  <data name="QuestionnaireWasDeleted" xml:space="preserve">
-    <value>Questionnaire was deleted</value>
+    <value>კითხვარი წაიშალა</value>
   </data>
 
  <data name="AssignmentLimitReached" xml:space="preserve">
-    <value>Assignment limit was reached</value>
+    <value>დავალებების ლიმიტი მიღწეულია</value>
   </data>
 </root>

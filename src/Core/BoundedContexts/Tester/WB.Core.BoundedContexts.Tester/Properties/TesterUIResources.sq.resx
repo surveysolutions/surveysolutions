@@ -222,34 +222,34 @@
 
 
   <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
-    <value>Anonymous questionnaire url</value>
+    <value>URL-ja e pyetësorit anonim</value>
   </data>
 
   <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
-    <value>Open</value>
+    <value>Hape</value>
   </data>
 
   <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
-    <value>Can't open the questionnaire. The questionnaire cannot be found.</value>
+    <value>Nuk mund të hapet pyetësori. Pyetësori nuk mund të gjendet.</value>
   </data>
 
   <data name="AnonymousQuestionnaires_Error_Confirm" xml:space="preserve">
-    <value>Can't open the questionnaire. Remove it from list?</value>
+    <value>Nuk mund të hapet pyetësori. Ta heqim nga lista?</value>
   </data>
 
   <data name="Login_Error_EmptyName" xml:space="preserve">
-    <value>Please enter correct login</value>
+    <value>Ju lutemi, shkruani login-in e saktë</value>
   </data>
 
   <data name="TesterLoginAccountHintText" xml:space="preserve">
-    <value>Log in to this app using the credentials you created at https://designer.mysurvey.solutions. To register a new account, visit the same site.</value>
+    <value>Hyni në këtë aplikacion duke përdorur kredencialet që keni krijuar në https://designer.mysurvey.solutions. Për të regjistruar një llogari të re, vizitoni të njëjtën faqe.</value>
   </data>
 
   <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
-    <value>Anonymous Questionnaires</value>
+    <value>Pyetësorë anonimë</value>
   </data>
 
   <data name="MenuItem_Title_Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Hyrje</value>
   </data>
 </root>

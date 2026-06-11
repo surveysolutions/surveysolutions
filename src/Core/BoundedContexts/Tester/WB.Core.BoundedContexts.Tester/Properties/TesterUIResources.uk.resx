@@ -243,6 +243,6 @@
 
 
   <data name="TesterLoginAccountHintText" xml:space="preserve">
-    <value>Log in to this app using the credentials you created at https://designer.mysurvey.solutions. To register a new account, visit the same site.</value>
+    <value>Увійдіть у цей застосунок, використовуючи облікові дані, які ви створили на https://designer.mysurvey.solutions. Щоб зареєструвати новий обліковий запис, відвідайте той самий сайт.</value>
   </data>
 </root>

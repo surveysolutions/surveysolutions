@@ -165,54 +165,54 @@
 
 
   <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve">
-    <value>Finish Text</value>
+    <value>დასრულების ტექსტი</value>
   </data>
 
   <data name="WebInterviewUserMessages_Invitation" xml:space="preserve">
-    <value>Welcome Invitation</value>
+    <value>მისასალმებელი მოწვევა</value>
   </data>
 
   <data name="WebInterviewUserMessages_ResumeInvitation" xml:space="preserve">
-    <value>Resume Invitation</value>
+    <value>გაგრძელების მოწვევა</value>
   </data>
 
   <data name="WebInterviewUserMessages_ResumeWelcome" xml:space="preserve">
-    <value>Resume Header</value>
+    <value>გაგრძელების სათაური</value>
   </data>
 
   <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve">
-    <value>Survey Name</value>
+    <value>გამოკითხვის სახელი</value>
   </data>
 
   <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve">
-    <value>Finish Header</value>
+    <value>დასრულების სათაური</value>
   </data>
 
   <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
-    <value>Welcome Header</value>
+    <value>მისასალმებელი სათაური</value>
   </data>
 
   <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Note for Supervisor</value>
+    <value>შენიშვნა ზედამხედველისთვის</value>
   </data>
 
   <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
-    <value>Complete</value>
+    <value>დასრულება</value>
   </data>
 
   <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
-    <value>Start new interview</value>
+    <value>ახალი ინტერვიუს დაწყება</value>
   </data>
 
   <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
-    <value>Resume</value>
+    <value>გაგრძელება</value>
   </data>
 
   <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve">
-    <value>Invitation</value>
+    <value>მოწვევა</value>
   </data>
 
   <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
-    <value>Welcome Header</value>
+    <value>მისასალმებელი სათაური</value>
   </data>
 </root>

@@ -204,10 +204,10 @@
     <value>conteúdo</value>
   </data>
   <data name="SideBarMacroCounter" xml:space="preserve">
-    <value>{{count}} Macro:</value>
+    <value>{{count}} macro:</value>
   </data>
   <data name="SideBarMacroCounter_plural" xml:space="preserve">
-    <value>{{count}} Macros:</value>
+    <value>{{count}} macros:</value>
   </data>
   <data name="SideBarMacroDescription" xml:space="preserve">
     <value>descrição</value>

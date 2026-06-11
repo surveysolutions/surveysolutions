@@ -144,6 +144,6 @@
 
 
   <data name="SessionExpired" xml:space="preserve">
-    <value>Session has expired please sign in again</value>
+    <value>სესიის ვადა ამოიწურა, გთხოვთ, ხელახლა შეხვიდეთ სისტემაში</value>
   </data>
 </root>

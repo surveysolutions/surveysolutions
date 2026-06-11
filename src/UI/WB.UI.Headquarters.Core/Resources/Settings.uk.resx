@@ -402,170 +402,170 @@
 
 
   <data name="RemovingExportCache" xml:space="preserve">
-    <value>Clearing export cache is running</value>
+    <value>Триває очищення кешу експорту</value>
   </data>
 
     <data name="RemoveExportCacheGeneratingFail" xml:space="preserve">
-    <value>Export cache cannot be cleared in the current moment. An export file is being generated.</value>
+    <value>Кеш експорту неможливо очистити зараз. Наразі генерується файл експорту.</value>
   </data>
 
   <data name="EsriApiKey" xml:space="preserve">
-      <value>ESRI API Key</value>
+      <value>Ключ API ESRI</value>
   </data>
 
   <data name="EsriApiKeyDescription" xml:space="preserve">
-      <value>This key will allow to use online maps on devices. Be advised that usage of this service could cost you extra money. Please consult with service provider</value>
+      <value>Цей ключ дозволить використовувати онлайн-карти на пристроях. Зверніть увагу, що використання цієї служби може коштувати вам додаткових коштів. Будь ласка, проконсультуйтеся з постачальником послуг</value>
   </data>
 
   <data name="EmailProvider_Smtp" xml:space="preserve">
-    <value>SMTP Server</value>
+    <value>SMTP сервер</value>
   </data>
 
   <data name="EmailProvider_SmtpDescription" xml:space="preserve">
-    <value>Configure the parameters to access SMTP server below. More information on usage of SMTP server with Survey Solutions is available </value>
+    <value>Налаштуйте нижче параметри доступу до SMTP сервера. Додаткова інформація про використання SMTP сервера з Survey Solutions доступна </value>
   </data>
 
   <data name="EmailProvider_SmtpHost" xml:space="preserve">
-    <value>Host</value>
+    <value>Хост</value>
   </data>
 
   <data name="EmailProvider_SmtpHostHelp" xml:space="preserve">
-    <value>SMTP server address</value>
+    <value>Адреса SMTP сервера</value>
   </data>
 
   <data name="EmailProvider_SmtpPort" xml:space="preserve">
-    <value>Port</value>
+    <value>Порт</value>
   </data>
 
   <data name="EmailProvider_SmtpPortHelp" xml:space="preserve">
-    <value>SMTP port</value>
+    <value>Порт SMTP</value>
   </data>
 
   <data name="EmailProvider_SmtpTlsEncryption" xml:space="preserve">
-    <value>Use TLS encryption</value>
+    <value>Використовувати TLS шифрування</value>
   </data>
 
   <data name="EmailProvider_SmtpTlsEncryptionHelp" xml:space="preserve">
-    <value>TLS (Transport Layer Security) encryption secure communication. It encrypts data transmitted between clients and servers.</value>
+    <value>Шифрування TLS (Transport Layer Security) забезпечує безпечний зв'язок. Воно шифрує дані, що передаються між клієнтами та серверами.</value>
   </data>
 
   <data name="EmailProvider_SmtpAuthentication" xml:space="preserve">
-    <value>Use authentication</value>
+    <value>Використовувати автентифікацію</value>
   </data>
 
   <data name="EmailProvider_SmtpAuthenticationHelp" xml:space="preserve">
-    <value>SMTP authentication verifies the identity of an email client or server before allowing it to send email through an SMTP server.</value>
+    <value>SMTP-автентифікація перевіряє особу поштового клієнта або сервера перед тим, як дозволити йому надсилати електронну пошту через SMTP сервер.</value>
   </data>
 
   <data name="EmailProvider_SmtpUsername" xml:space="preserve">
-    <value>Username</value>
+    <value>Ім'я користувача</value>
   </data>
 
   <data name="EmailProvider_SmtpUsernameHelp" xml:space="preserve">
-    <value>Credential used during the SMTP authentication process to verify the identity.</value>
+    <value>Облікові дані, що використовуються під час процесу SMTP-автентифікації для перевірки особи.</value>
   </data>
 
   <data name="EmailProvider_SmtpPassword" xml:space="preserve">
-    <value>Password</value>
+    <value>Пароль</value>
   </data>
 
   <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve">
-    <value>Credential used during the SMTP authentication process to verify the identity.</value>
+    <value>Облікові дані, що використовуються під час процесу SMTP-автентифікації для перевірки особи.</value>
   </data>
 
   <data name="WorkspaceSettings" xml:space="preserve">
-      <value>Workspace settings</value>
+      <value>Налаштування робочого простору</value>
   </data>
 
   <data name="Export" xml:space="preserve">
-      <value>Export</value>
+      <value>Експорт</value>
   </data>
 
   <data name="GlobalNote" xml:space="preserve">
-      <value>Global note</value>
+      <value>Глобальна примітка</value>
   </data>
 
   <data name="UserProfile" xml:space="preserve">
-      <value>User profile</value>
+      <value>Профіль користувача</value>
   </data>
 
   <data name="Devices" xml:space="preserve">
-      <value>Devices</value>
+      <value>Пристрої</value>
   </data>
 
   <data name="WebInterview" xml:space="preserve">
-      <value>Web interview</value>
+      <value>Веб-інтерв'ю</value>
   </data>
 
   <data name="FileRetentionTitle" xml:space="preserve">
-      <value>Retention policy</value>
+      <value>Політика зберігання</value>
   </data>
 
     <data name="FileRetentionDescription" xml:space="preserve">
-      <value>Older export files will be periodically deleted according to these settings</value>
+      <value>Старі файли експорту періодично видалятимуться відповідно до цих налаштувань</value>
   </data>
 
   <data name="RetentionInDaysTitle" xml:space="preserve">
-      <value>Days to keep</value>
+      <value>Кількість днів зберігання</value>
   </data>
 
     <data name="RetentionInDaysDescription" xml:space="preserve">
-      <value>Number of days export file will be preserved</value>
+      <value>Кількість днів, протягом яких файл експорту зберігатиметься</value>
   </data>
 
   <data name="RetentionInCountTitle" xml:space="preserve">
-      <value>Number of files to keep</value>
+      <value>Кількість файлів для зберігання</value>
   </data>
 
     <data name="RetentionInCountDescription" xml:space="preserve">
-      <value>Maximum amount of export files to keep in the storage</value>
+      <value>Максимальна кількість файлів експорту для зберігання</value>
   </data>
 
     <data name="EnableFileRetention" xml:space="preserve">
-      <value>Enable retention policy</value>
+      <value>Увімкнути політику зберігання</value>
   </data>
 
   <data name="RetentionPolicyEnablingConfirm" xml:space="preserve">
-    <value>Are you sure you want to turn retention policy on? Export data files could be deleted.</value>
+    <value>Ви впевнені, що хочете увімкнути політику зберігання? Файли експорту даних можуть бути видалені.</value>
   </data>
 
     <data name="ForceRunRetentionPolicy" xml:space="preserve">
-      <value>Force run</value>
+      <value>Запустити примусово</value>
   </data>
 
     <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve">
-      <value>Warning! This is a critical action that will affect existing export files in this workspace</value>
+      <value>Увага! Це критична дія, яка вплине на наявні файли експорту в цьому робочому просторі</value>
   </data>
 
     <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
-      <value>Are you sure you want to forcibly run the retention policy now? Please note that this action may result in the irrecoverable deletion of export files stored in this workspace, rendering them unavailable for download.</value>
+      <value>Ви впевнені, що хочете примусово запустити політику зберігання зараз? Зверніть увагу, що ця дія може призвести до безповоротного видалення файлів експорту, збережених у цьому робочому просторі, через що вони стануть недоступними для завантаження.</value>
   </data>
 
   <data name="ExportEncryption_Warning" xml:space="preserve">
-    <value>Modifying the encryption settings will remove all previously generated export files, requiring new exports to be created</value>
+    <value>Зміна налаштувань шифрування видалить усі раніше згенеровані файли експорту, і потрібно буде створити нові експорти</value>
   </data>
 
   <data name="LogoSizeLimit" xml:space="preserve">
-    <value>Logo image size should be less than {{size}}</value>
+    <value>Розмір зображення логотипа має бути меншим за {{size}}</value>
   </data>
 
   <data name="SelectFileWarning" xml:space="preserve">
-    <value>Please select a file to upload.</value>
+    <value>Будь ласка, виберіть файл для завантаження.</value>
   </data>
 
   <data name="LogoUploadSuccess" xml:space="preserve">
-    <value>Logo uploaded successfully.</value>
+    <value>Логотип успішно завантажено.</value>
   </data>
 
   <data name="LogoUploadError" xml:space="preserve">
-    <value>Failed to upload logo. Please try again.</value>
+    <value>Не вдалося завантажити логотип. Будь ласка, спробуйте ще раз.</value>
   </data>
 
   <data name="LogoRemoveSuccess" xml:space="preserve">
-    <value>Logo was successfully removed.</value>
+    <value>Логотип успішно видалено.</value>
   </data>
 
   <data name="LogoRemoveError" xml:space="preserve">
-    <value>Failed to remove logo. Please try again.</value>
+    <value>Не вдалося видалити логотип. Будь ласка, спробуйте ще раз.</value>
   </data>
 </root>

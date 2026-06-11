@@ -222,30 +222,30 @@
 
 
   <data name="AreaQestion_Area" xml:space="preserve">
-    <value>Area</value>
+    <value>Suprafață</value>
   </data>
 
   <data name="AreaQestion_Length" xml:space="preserve">
-    <value>Length</value>
+    <value>Lungime</value>
   </data>
 
   <data name="AreaQestion_Points" xml:space="preserve">
-    <value>Points</value>
+    <value>Puncte</value>
   </data>
 
   <data name="AreaQestion_RequestedAccuracy" xml:space="preserve">
-    <value>Accuracy</value>
+    <value>Acuratețe</value>
   </data>
 
   <data name="AreaQestion_RequestedFrequency" xml:space="preserve">
-    <value>Frequency</value>
+    <value>Frecvență</value>
   </data>
 
   <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
-    <value>square meters</value>
+    <value>metri pătrați</value>
   </data>
 
   <data name="AreaQestion_AreaMeter" xml:space="preserve">
-    <value>meters</value>
+    <value>metri</value>
   </data>
 </root>

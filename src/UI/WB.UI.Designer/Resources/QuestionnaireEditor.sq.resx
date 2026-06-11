@@ -1116,7 +1116,7 @@ Ju lutemi kontrolloni lidhjen tuaj të rrjetit ose kontaktoni mbështetjen tuaj 
     <value>Emërtimi i bashkëlidhjes</value>
   </data>
   <data name="Test" xml:space="preserve">
-    <value>Test</value>
+    <value>Testim</value>
   </data>
   <data name="ToggleDropdown" xml:space="preserve">
     <value>Ndrysho menunë zbritëse</value>
@@ -1235,91 +1235,91 @@ Ju lutemi kontrolloni lidhjen tuaj të rrjetit ose kontaktoni mbështetjen tuaj 
 
 
   <data name="SaveAs" xml:space="preserve">
-    <value>Save as</value>
+    <value>Ruaj si</value>
   </data>
 
   <data name="CopyTo" xml:space="preserve">
-    <value>Copy to</value>
+    <value>Kopjo te</value>
   </data>
 
   <data name="ReadOnlyQuestion" xml:space="preserve">
-    <value>It is readonly question. You cannot edit it.</value>
+    <value>Kjo është pyetje vetëm për lexim. Nuk mund ta redaktoni.</value>
   </data>
 
   <data name="SideBarEditCategories" xml:space="preserve">
-    <value>Edit Categories</value>
+    <value>Redakto Kategoritë</value>
   </data>
 
   <data name="SideBarCriticalityConditionExpression" xml:space="preserve">
-      <value>Critical condition</value>
+      <value>Kusht kritik</value>
   </data>
 
   <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
-      <value>{{count}} Critical rule:</value>
+      <value>{{count}} Rregull kritik:</value>
   </data>
 
   <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
-      <value>{{count}} Critical rules:</value>
+      <value>{{count}} Rregulla kritike:</value>
   </data>
 
   <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
-      <value>Description</value>
+      <value>Përshkrim</value>
   </data>
 
   <data name="SideBarCriticalityConditionsEmptyLine1" xml:space="preserve">
-    <value>Use this tab to define critical rules.</value>
+    <value>Përdorni këtë skedë për të përcaktuar rregullat kritike.</value>
   </data>
 
   <data name="SideBarCriticalityConditionsEmptyLine2" xml:space="preserve">
-    <value>Each critical rule consists of a condition and a message. Critical conditions may refer to any questions or variables and must be satisfied (evaluate to true). Treatment of interviews with unsatisfied critical conditions is determined during import of the questionnaire to the data server.</value>
+    <value>Çdo rregull kritik përbëhet nga një kusht dhe një mesazh. Kushtet kritike mund t'u referohen çdo pyetjeje ose variabli dhe duhet të plotësohen (të vlerësohen si të vërteta). Trajtimi i intervistave me kushte kritike të paplotësuara përcaktohet gjatë importit të pyetësorit në serverin e të dhënave.</value>
   </data>
 
   <data name="SideBarCriticalityConditionsEmptyLine3" xml:space="preserve">
-    <value>Include a message for the interviewer (respondent) to explain what needs to be changed in the interview (the message is displayed when the critical condition is not satisfied). Including hyperlinks to questions in the message is useful for navigation.</value>
+    <value>Përfshini një mesazh për intervistuesin (të intervistuarin) për të shpjeguar çfarë duhet ndryshuar në intervistë (mesazhi shfaqet kur kushti kritik nuk plotësohet). Përfshirja e hiperlidhjeve te pyetjet në mesazh është e dobishme për navigim.</value>
   </data>
 
   <data name="SideBarHideDescription" xml:space="preserve">
-    <value>hide description</value>
+    <value>fshih përshkrimin</value>
   </data>
 
   <data name="SideBarCriticalityConditionMessage" xml:space="preserve">
-      <value>Message</value>
+      <value>Mesazh</value>
   </data>
 
   <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
-    <value>Critical rule with no message</value>
+    <value>Rregull kritik pa mesazh</value>
   </data>
 
   <data name="SideBarShowDescription" xml:space="preserve">
-    <value>add description</value>
+    <value>shto përshkrim</value>
   </data>
 
   <data name="SideBarAddCriticalityCondition" xml:space="preserve">
-    <value>add new critical rule</value>
+    <value>shto rregull të ri kritik</value>
   </data>
 
   <data name="SideBarScenarioCounter" xml:space="preserve">
-    <value>{{count}} Scenario:</value>
+    <value>{{count}} Skenar:</value>
   </data>
 
   <data name="SideBarScenarioCounter_plural" xml:space="preserve">
-    <value>{{count}} Scenarios:</value>
+    <value>{{count}} Skenarë:</value>
   </data>
 
   <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
-    <value>Use this tab to view your scenarios.</value>
+    <value>Përdorni këtë skedë për të parë skenarët tuaj.</value>
   </data>
 
   <data name="SideBarScenarioEmptyLine2" xml:space="preserve">
-    <value>A scenario is a snapshot of tester state, you can save it on tester by click on button "Save Scenario".</value>
+    <value>Skenari është një fotografi e gjendjes së testuesit, mund ta ruani te testuesit duke klikuar butonin "Ruaj Skenarin".</value>
   </data>
 
   <data name="SideBarScenarioName" xml:space="preserve">
-    <value>scenario title</value>
+    <value>titulli i skenarit</value>
   </data>
 
   <data name="SideBarDownload" xml:space="preserve">
-    <value>Download:</value>
+    <value>Shkarko:</value>
   </data>
 
   <data name="SideBarXlsx" xml:space="preserve">
@@ -1335,116 +1335,116 @@ Ju lutemi kontrolloni lidhjen tuaj të rrjetit ose kontaktoni mbështetjen tuaj 
   </data>
 
   <data name="SideBarCategoriesName" xml:space="preserve">
-    <value>name of categories</value>
+    <value>emri i kategorive</value>
   </data>
 
   <data name="SideBarCategoriesCounter" xml:space="preserve">
-    <value>{{count}} Categories</value>
+    <value>{{count}} Kategori</value>
   </data>
 
   <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
-    <value>Use this tab to manage reusable categories.</value>
+    <value>Përdorni këtë skedë për të menaxhuar kategoritë e ripërdorshme.</value>
   </data>
 
   <data name="SideBarCategoriesEmptyLine2" xml:space="preserve">
-    <value>You may download and update categories.</value>
+    <value>Mund të shkarkoni dhe përditësoni kategoritë.</value>
   </data>
 
   <data name="SideBarCategoriesEmptyLine3" xml:space="preserve">
-    <value>will be added to list of reusable categories for any types of categorical questions</value>
+    <value>do të shtohet në listën e kategorive të ripërdorshme për çdo lloj pyetjeje kategorike</value>
   </data>
 
   <data name="AttachmentSizeIsTooBig" xml:space="preserve">
-    <value>Attachment size is too big. Max size: {{size}}</value>
+    <value>Madhësia e bashkëlidhjes është shumë e madhe. Madhësia maksimale: {{size}}</value>
   </data>
 
   <data name="SideBarCriticalityConditionsTitle" xml:space="preserve">
-    <value>Critical rules</value>
+    <value>Rregullat kritike</value>
   </data>
 
   <data name="SideBarScenarioTitle" xml:space="preserve">
-    <value>Scenarios</value>
+    <value>Skenarët</value>
   </data>
 
   <data name="SideBarCategoriesTitle" xml:space="preserve">
-    <value>Categories</value>
+    <value>Kategoritë</value>
   </data>
 
   <data name="SideBarCategoriesUploadNew" xml:space="preserve">
-    <value>Upload new categories</value>
+    <value>Ngarko kategori të reja</value>
   </data>
 
   <data name="FlatRoster" xml:space="preserve">
-    <value>Flat mode</value>
+    <value>Modalitet i sheshtë</value>
   </data>
 
   <data name="QuestionDisplayMode" xml:space="preserve">
-    <value>Display mode</value>
+    <value>Modalitet shfaqjeje</value>
   </data>
 
   <data name="BindToReusableCategories" xml:space="preserve">
-    <value>Bind to reusable categories</value>
+    <value>Lidh me kategoritë e ripërdorshme</value>
   </data>
 
   <data name="SelectCategories" xml:space="preserve">
-    <value>Select categories</value>
+    <value>Zgjidh kategoritë</value>
   </data>
 
   <data name="AddFilter" xml:space="preserve">
-    <value>Add filter</value>
+    <value>Shto filtër</value>
   </data>
 
   <data name="SettingsAnonymous" xml:space="preserve">
-    <value>Anonymous</value>
+    <value>Anonim</value>
   </data>
 
   <data name="RegenerateQuestionnaireSharingLink" xml:space="preserve">
-    <value>Regenerate link</value>
+    <value>Rigjeneroni adresën</value>
   </data>
 
   <data name="AnonymousQuestionnaireGeneratedDate" xml:space="preserve">
-    <value>link generated: {{datetime}}</value>
+    <value>adresa gjeneruar: {{datetime}}</value>
   </data>
 
   <data name="SettingsAccessibleToEveryone" xml:space="preserve">
-    <value>accessible in read-only mode to anyone with link</value>
+    <value>e aksesueshme vetëm për lexim nga çdokush me adresën</value>
   </data>
 
   <data name="SettingsStatusAllowAnonymousAccess" xml:space="preserve">
-    <value>Anonymous sharing is currently turned on.</value>
+    <value>Ndajeja anonime është aktualisht e aktivizuar.</value>
   </data>
 
   <data name="SettingsStatusDontAllowAnonymousAccess" xml:space="preserve">
-    <value>Anonymous sharing is currently turned off.</value>
+    <value>Ndajeja anonime është aktualisht e çaktivizuar.</value>
   </data>
 
   <data name="SettingsTurnOnAnonymousAccess" xml:space="preserve">
-    <value>Turn on anonymous sharing.</value>
+    <value>Aktivizo ndarjen anonime.</value>
   </data>
 
   <data name="SettingsTurnOffAnonymousAccess" xml:space="preserve">
-    <value>Turn off anonymous sharing.</value>
+    <value>Çaktivizo ndarjen anonime.</value>
   </data>
 
   <data name="VirtualCoverPage" xml:space="preserve">
-    <value>Virtual cover page</value>
+    <value>Faqe kopertine virtuale</value>
   </data>
 
   <data name="MigrateToNewCover" xml:space="preserve">
-    <value>Generate cover</value>
+    <value>Gjenero kopertinën</value>
 
   </data>
 
   <data name="EmptySectionLine4" xml:space="preserve">
-    <value>Questionnaire name, variable, collaboration and other options</value>
+    <value>Emri i pyetësorit, variabli, bashkëpunimi dhe opsione të tjera</value>
   </data>
 
   <data name="GeometryInputMode" xml:space="preserve">
-    <value>Input mode</value>
+    <value>Modalitet hyrjeje</value>
   </data>
 
   <data name="GeometryOverlapDetection" xml:space="preserve">
-    <value>Overlap detection</value>
+    <value>Zbulim mbivendosjeje</value>
   </data>
 
   <data name="GeographyInputModeManual" xml:space="preserve">
@@ -1452,276 +1452,276 @@ Ju lutemi kontrolloni lidhjen tuaj të rrjetit ose kontaktoni mbështetjen tuaj 
   </data>
 
     <data name="GeographyInputModeAutomatic" xml:space="preserve">
-    <value>Automatic</value>
+    <value>Automatik</value>
   </data>
 
     <data name="GeographyInputModeSemiautomatic" xml:space="preserve">
-    <value>Semiautomatic</value>
+    <value>Gjysëmautomatik</value>
   </data>
 
   <data name="Filter" xml:space="preserve">
-    <value>Filter</value>
+    <value>Filtër</value>
   </data>
 
   <data name="UserDefinedCategories" xml:space="preserve">
-    <value>User defined categories</value>
+    <value>Kategori të përcaktuara nga përdoruesi</value>
   </data>
 
   <data name="ReusableCategories" xml:space="preserve">
-    <value>Reusable categories</value>
+    <value>Kategori të ripërdorshme</value>
   </data>
 
   <data name="SourceOfCategories" xml:space="preserve">
-    <value>Source of categories</value>
+    <value>Burimi i kategorive</value>
   </data>
 
   <data name="RostersQuestion" xml:space="preserve">
-    <value>List question or question from roster group</value>
+    <value>Pyetje liste ose pyetje nga grupi i rosterit</value>
   </data>
 
   <data name="QuestionRadioButtonList" xml:space="preserve">
-    <value>Radio button list</value>
+    <value>Listë me butona radio</value>
   </data>
 
   <data name="HelpRosterDisplayMode" xml:space="preserve">
-    <value>Sub-Section - the questions of the roster are shown behind the buttons corresponding to roster instances.
-Flat - the questions of the roster are shown in the same level separated by headers corresponding to roster instances.
-Table - the questions of the roster are shown in the same level as rows and columns of the table. 
-Matrix - a categorical question of the roster is displayed as matrix. 
-Table and Matrix views are supported only in Web survey, tablet falls back to 'Sub-Section' mode.</value>
+    <value>Nënseksion - pyetjet e rosterit shfaqen pas butonave që korrespondojnë me instancat e rosterit.
+E sheshtë - pyetjet e rosterit shfaqen në të njëjtin nivel të ndara me tituj që korrespondojnë me instancat e rosterit.
+Tabelë - pyetjet e rosterit shfaqen në të njëjtin nivel si rreshta dhe kolona të tabelës. 
+Matricë - një pyetje kategorike e rosterit shfaqet si matricë. 
+Pamijet Tabelë dhe Matricë mbështeten vetëm në sondazhin në internet, tableti kalon te modaliteti 'Nënseksion'.</value>
   </data>
 
   <data name="HelpDoNotExport" xml:space="preserve">
-    <value>Mark this variable to exclude it from export</value>
+    <value>Shënoni këtë variabël për ta përjashtuar nga eksporti</value>
   </data>
 
   <data name="VariableNoExport" xml:space="preserve">
-    <value>Do not export</value>
+    <value>Mos eksporto</value>
   </data>
 
   <data name="HelpAttachmentName" xml:space="preserve">
-    <value>The name of attachment file that will be displayed.</value>
+    <value>Emri i skedarit të bashkëlidhjes që do të shfaqet.</value>
   </data>
 
   <data name="HelpCoverPage" xml:space="preserve">
-    <value>The first section of every questionnaire contains identifying questions that are also displayed at the interviewers' and supervisors' dashboards.</value>
+    <value>Seksioni i parë i çdo pyetësori përmban pyetjet identifikuese që shfaqen gjithashtu në panelet e intervisteusve dhe mbikëqyrësve.</value>
   </data>
 
   <data name="HelpVirtualCoverPage" xml:space="preserve">
-    <value>Cover is virtual section that shows all identifying questions.
-    Questions cannot be changed in this section</value>
+    <value>Kopertina është seksion virtual që tregon të gjitha pyetjet identifikuese.
+    Pyetjet nuk mund të ndryshohen në këtë seksion</value>
   </data>
 
   <data name="HotkeysCloseScenarios" xml:space="preserve">
-    <value>Close scenarios panel</value>
+    <value>Mbyll panelin e skenarëve</value>
   </data>
 
   <data name="HotkeysCloseCategories" xml:space="preserve">
-    <value>Close categories panel</value>
+    <value>Mbyll panelin e kategorive</value>
   </data>
 
   <data name="HotkeysCloseComments" xml:space="preserve">
-    <value>Close comments panel</value>
+    <value>Mbyll panelin e komenteve</value>
   </data>
 
   <data name="DeleteConfirmCategories" xml:space="preserve">
-    <value>Are you sure you want to delete set of categories "{{trimmedTitle}}"? Source of categories for categorical questions dependent on it will be changed to user defined categories</value>
+    <value>Jeni të sigurt se dëshironi të fshini grupin e kategorive "{{trimmedTitle}}"? Burimi i kategorive për pyetjet kategorike që varen nga ai do të ndryshohet te kategoritë e përcaktuara nga përdoruesi</value>
   </data>
 
   <data name="CategoriesObtained" xml:space="preserve">
-    <value>Obtained {0} row from categories file</value>
+    <value>Marrë {0} rresht nga skedari i kategorive</value>
   </data>
 
   <data name="CategoriesObtained_plural" xml:space="preserve">
-    <value>Obtained {0} rows from categories file</value>
+    <value>Marrë {0} rreshta nga skedari i kategorive</value>
   </data>
 
   <data name="OptionsUploadRevert" xml:space="preserve">
-    <value>Revert changes</value>
+    <value>Rikthe ndryshimet</value>
   </data>
 
   <data name="AttachmentName" xml:space="preserve">
-    <value>Attachment name</value>
+    <value>Emri i bashkëlidhjes</value>
   </data>
 
   <data name="SideBarCategoriesNoName" xml:space="preserve">
-    <value>categories with no name</value>
+    <value>kategori pa emër</value>
   </data>
 
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Parazgjedhur</value>
   </data>
 
   <data name="Reset" xml:space="preserve">
-    <value>Reset</value>
+    <value>Rivendos</value>
   </data>
 
   <data name="EditorShowComments" xml:space="preserve">
-    <value>Show comments ({{count}})</value>
+    <value>Shfaq komentet ({{count}})</value>
   </data>
 
   <data name="JumpToEdit" xml:space="preserve">
-    <value>Jump to edit</value>
+    <value>Kalo te redaktimi</value>
   </data>
   
   <data name="CollaboratorsDescriptionSettings" xml:space="preserve">
-    <value>the following users have access to this questionnaire</value>
+    <value>përdoruesit e mëposhtëm kanë akses në këtë pyetësor</value>
   </data>
   
   <data name="AccessSettings" xml:space="preserve">
-    <value>Access</value>
+    <value>Akses</value>
   </data>
 
   <data name="PublicAccessDescriptionSettings" xml:space="preserve">
-    <value>Public questionnaires are visible to all users with an account in this system in read-only mode.</value>
+    <value>Pyetësorët publik janë të dukshëm për të gjithë përdoruesit me llogari në këtë sistem vetëm për lexim.</value>
   </data>
   
   <data name="PublicAccessSettingsStatusOn" xml:space="preserve">
-    <value>The questionnaire is currently shared as public.</value>
+    <value>Pyetësori aktualisht ndahet si publik.</value>
   </data>
 
   <data name="PublicAccessSettingsStatusOff" xml:space="preserve">
-    <value>The questionnaire is currently not shared as public.</value>
+    <value>Pyetësori aktualisht nuk ndahet si publik.</value>
   </data>
   
   <data name="PublicAccessSettingsOn" xml:space="preserve">
-    <value>Turn on public access.</value>
+    <value>Aktivizo aksesin publik.</value>
   </data>
 
   <data name="PublicAccessSettingsOff" xml:space="preserve">
-    <value>Turn off public access.</value>
+    <value>Çaktivizo aksesin publik.</value>
   </data>
 
   <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
-    <value>Link sharing</value>
+    <value>Ndajeja e adresës</value>
   </data>
   
   <data name="AnonymousLink" xml:space="preserve">
-    <value>Anonymous link:</value>
+    <value>Adresë anonime:</value>
   </data>
   
   <data name="CopyLink" xml:space="preserve">
-    <value>Copy link</value>
+    <value>Kopjo adresën</value>
   </data>
 
   <data name="AnonymousQuestionnaireDescriptionSettings" xml:space="preserve">
-    <value>Users having this link will be able to open this questionnaire</value>
+    <value>Përdoruesit me këtë adresë do të mund të hapin këtë pyetësor</value>
   </data>
 
   <data name="RefreshPageConfirm" xml:space="preserve">
-    <value>We've updated this site, please refresh page, or you may experience unexpected behavior</value>
+    <value>Kemi përditësuar këtë faqe, ju lutemi rifreskoni faqen, ose mund të hasni sjellje të papritur</value>
   </data>
 
   <data name="Refresh" xml:space="preserve">
-    <value>Refresh</value>
+    <value>Rifresko</value>
   </data>
 
   <data name="AttachmentDimensionsAreTooBig" xml:space="preserve">
-    <value>Dimensions are too big</value>
+    <value>Dimensionet janë shumë të mëdha</value>
   </data>
 
   <data name="RosterDisplayMode_SubSection" xml:space="preserve">
-    <value>Sub-Section</value>
+    <value>Nënseksion</value>
   </data>
 
   <data name="RosterDisplayMode_Flat" xml:space="preserve">
-    <value>Flat</value>
+    <value>E sheshtë</value>
   </data>
 
   <data name="RosterDisplayMode_Table" xml:space="preserve">
-    <value>Table</value>
+    <value>Tabelë</value>
   </data>
 
   <data name="RosterDisplayMode_Matrix" xml:space="preserve">
-    <value>Matrix</value>
+    <value>Matricë</value>
   </data>
 
   <data name="RosterDisplayMode" xml:space="preserve">
-    <value>Display mode:</value>
+    <value>Modalitet shfaqjeje:</value>
   </data>
 
   <data name="AreYouSure" xml:space="preserve">
-    <value>Are You sure?</value>
+    <value>Jeni të sigurt?</value>
   </data>
 
   <data name="MakeOwnerConfirmationMessage" xml:space="preserve">
-    <value>If you transfer ownership, the new owner will be notified. You may no longer be able to change ownership settings, and the new owner may also remove your access.</value>
+    <value>Nëse transferoni pronësinë, pronari i ri do të njoftohet. Mund të mos jeni më në gjendje të ndryshoni cilësimet e pronësisë dhe pronari i ri mund t'ju heqë aksesin.</value>
   </data>
 
   <data name="SettingsMakeOwner" xml:space="preserve">
-    <value>Make owner</value>
+    <value>Bëje pronar</value>
   </data>
 
   <data name="Yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>Po</value>
   </data>
 
   <data name="Run" xml:space="preserve">
-    <value>Run</value>
+    <value>Ekzekuto</value>
   </data>
 
   <data name="View" xml:space="preserve">
-    <value>View</value>
+    <value>Shiko</value>
   </data>
 
   <data name="ScenarioDetails" xml:space="preserve">
-    <value>Scenario</value>
+    <value>Skenar</value>
   </data>
 
   <data name="DownloadPdf" xml:space="preserve">
-    <value>Download PDF</value>
+    <value>Shkarko PDF-në</value>
   </data>
 
   <data name="GeneratePdf" xml:space="preserve">
-    <value>Generate pdf</value>
+    <value>Gjenero pdf</value>
   </data>
 
   <data name="ChooseLanguageTitle" xml:space="preserve">
-    <value>Please choose translation</value>
+    <value>Ju lutemi zgjidhni përkthimin</value>
   </data>
 
   <data name="Initializing" xml:space="preserve">
-    <value>Initializing</value>
+    <value>Po inicializohet</value>
   </data>
 
   <data name="RetryExportPDF" xml:space="preserve">
-    <value>Retry export as PDF</value>
+    <value>Provo prapë ta eksportosh si PDF</value>
   </data>
 
   <data name="Translation_Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Fillestar</value>
   </data>
 
   <data name="Preview" xml:space="preserve">
-    <value>Preview revision #{{revision}}</value>
+    <value>Shfaqje paraprake e rishikimit #{{revision}}</value>
   </data>
 
   <data name="CustomRosterTitle" xml:space="preserve">
-    <value>Custom title</value>
+    <value>Titull i personalizuar</value>
   </data>
 
   <data name="HelpOptionValue" xml:space="preserve">
-    <value>Numeric integer code of the category (not visible to the interviewer)</value>
+    <value>Kodi numerik i plotë i kategorisë (nuk është i dukshëm për intervistuesin)</value>
   </data>
 
   <data name="HelpOptionTitle" xml:space="preserve">
-    <value>Text label for the category (visible to the interviewer)</value>
+    <value>Etiketë teksti për kategorinë (e dukshme për intervistuesin)</value>
   </data>
 
   <data name="HelpOverlapDetection" xml:space="preserve">
-    <value>Display and highlight the overlaps of this question answer with answers to the same questions in sibling roster instances</value>
+    <value>Shfaq dhe thekso mbivendosjet e përgjigjes të kësaj pyetje me përgjigjet ndaj pyetjeve të njëjta në instancat vëllezëre të rosterit</value>
   </data>
 
   <data name="NewItem" xml:space="preserve">
-    <value>New item</value>
+    <value>Element i ri</value>
   </data>
 
   <data name="EditItem" xml:space="preserve">
-    <value>Edit item</value>
+    <value>Redakto elementin</value>
   </data>
 
   <data name="DeleteItemCofirm" xml:space="preserve">
-    <value>Are you sure you want to delete this item?</value>
+    <value>Jeni të sigurt se dëshironi të fshini këtë element?</value>
   </data>
 
   <data name="Forum" xml:space="preserve">
@@ -1729,99 +1729,98 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   </data>
 
   <data name="TableView" xml:space="preserve">
-    <value>Table view</value>
+    <value>Pamje tabelare</value>
   </data>
 
   <data name="StringsView" xml:space="preserve">
-    <value>Text view</value>
+    <value>Pamje tekstuale</value>
   </data>
 
   <data name="ValidationIntValue" xml:space="preserve">
-    <value>Value is too big</value>
+    <value>Vlera është shumë e madhe</value>
   </data>
 
   <data name="RequiredField" xml:space="preserve">
-    <value>Required field</value>
+    <value>Fushë e detyrueshme</value>
   </data>
 
   <data name="FileUploaded" xml:space="preserve">
-    <value>File uploaded</value>
+    <value>Skedari u ngarkua</value>
   </data>
 
   <data name="DataChangesReverted" xml:space="preserve">
-    <value>Data changes reverted</value>
+    <value>Ndryshimet e të dhënave u rikthyen</value>
   </data>
 
   <data name="OptionsSizeLimit" xml:space="preserve">
-    <value>Maximum {max_rows} rows allowed</value>
+    <value>Lejohen maksimalisht {max_rows} rreshta</value>
   </data>
 
   <data name="CommunicationError" xml:space="preserve">
-    <value>Network error</value>
+    <value>Gabim rrjeti</value>
   </data>
 
   <data name="SideBarCategoriesAddNew" xml:space="preserve">
-    <value>Add new categories</value>
+    <value>Shto kategori të reja</value>
   </data>
 
   <data name="RowAdded" xml:space="preserve">
-    <value>Row added</value>
+    <value>Rreshti u shtua</value>
   </data>
 
   <data name="OptionsCascadingListError" xml:space="preserve">
-    <value>
-You entered an invalid input. Each line should follow the format: "Title...ParentValue/Value[...Attachment name]". 'Value' and 'ParentValue' must be an integer number. 'Title' must be an alpha-numeric string. 'Attachment name' is optional. No empty lines are allowed.</value>
+    <value>Keni vendosur një hyrje të pavlefshme. Çdo rresht duhet të ndjekë formatin: "Title...ParentValue/Value[...Attachment name]". 'Value' dhe 'ParentValue' duhet të jenë numra të plotë. 'Title' duhet të jetë varg alfanumerik. 'Attachment name' është opsional. Nuk lejohen rreshta bosh.</value>
   </data>
 
   <data name="ShowParentValues" xml:space="preserve">
-    <value>Show Parent values</value>
+    <value>Shfaq vlerat prindërore</value>
   </data>
 
   <data name="HideParentValues" xml:space="preserve">
-    <value>Hide Parent values</value>
+    <value>Fshih vlerat prindërore</value>
   </data>
 
   <data name="AddEnablingCondition" xml:space="preserve">
-    <value>Add enabling condition</value>
+    <value>Shto kusht mundësues</value>
   </data>
 
   <data name="ShowList" xml:space="preserve">
-      <value>Show list</value>
+      <value>Shfaq listën</value>
   </data>
 
   <data name="Login" xml:space="preserve">
-      <value>Login</value>
+      <value>Hyrje</value>
   </data>
 
   <data name="Register" xml:space="preserve">
-      <value>Register</value>
+      <value>Regjistrohu</value>
   </data>
 
   <data name="No" xml:space="preserve">
-      <value>No</value>
+      <value>Jo</value>
   </data>
 
   <data name="QuestionIsCritical" xml:space="preserve">
-      <value>This is a critical question</value>
+      <value>Kjo është një pyetje kritike</value>
   </data>
 
   <data name="HelpIsCritical" xml:space="preserve">
-      <value>Questionnaire authors may indicate that the answer to a question is critical for interview submission.</value>
+      <value>Autorët e pyetësorit mund të tregojnë se përgjigja ndaj një pyetje është kritike për dorëzimin e intervistës.</value>
   </data>
 
   <data name="HelpCriticalityConditionExpression" xml:space="preserve">
-      <value>A logical expression that evaluates the interview as a whole to determine whether it satisfies the critical rules (when this expression evaluates to "True"). It may refer to any questions or variables.</value>
+      <value>Një shprehje logjike që vlerëson intervistën si tërësi për të përcaktuar nëse plotëson rregullat kritike (kur kjo shprehje vlerësohet si "E vërtetë"). Mund t'u referohet çdo pyetjeje ose variabli.</value>
   </data>
 
   <data name="HelpCriticalityConditionMessage" xml:space="preserve">
-      <value>This message is shown when the critical condition evaluates to "False" or an exception occurs during expression evaluation. The message may utilize hyperlinks and text substitution.</value>
+      <value>Ky mesazh shfaqet kur kushti kritik vlerësohet si "E rreme" ose ndodh një përjashtim gjatë vlerësimit të shprehjes. Mesazhi mund të përdorë hiperlidhje dhe zëvendësim teksti.</value>
   </data>
 
   <data name="SwitchTo" xml:space="preserve">
-    <value>Switch To</value>
+    <value>Kalo te</value>
   </data>
 
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
-    <value>Switch To will change the display language of the questionnaire. The translation must include text for all elements.</value>
+    <value>Kalimi do të ndryshojë gjuhën e shfaqjes të pyetësorit. Përkthimi duhet të përfshijë tekst për të gjithë elementët.</value>
   </data>
 </root>

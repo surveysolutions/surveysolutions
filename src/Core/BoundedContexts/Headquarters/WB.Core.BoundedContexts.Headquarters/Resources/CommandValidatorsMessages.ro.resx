@@ -132,14 +132,14 @@
 
 
   <data name="AssignmentResponsibleNotFound" xml:space="preserve">
-    <value>Responsible was not found</value>
+    <value>Responsabilul nu a fost găsit</value>
   </data>
 
  <data name="QuestionnaireWasDeleted" xml:space="preserve">
-    <value>Questionnaire was deleted</value>
+    <value>Chestionarul a fost șters</value>
   </data>
 
  <data name="AssignmentLimitReached" xml:space="preserve">
-    <value>Assignment limit was reached</value>
+    <value>Limita de atribuire a fost atinsă</value>
   </data>
 </root>

@@ -192,90 +192,90 @@
 
 
   <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
-    <value>User is not Headquarters, Supervisor or Interviewer for 1 or more observations.</value>
+    <value>მომხმარებელი არ არის Headquarters, Supervisor ან Interviewer ერთი ან მეტი ჩანაწერისთვის.</value>
   </data>
 
   <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
-    <value>GPS question requires Latitude and Longitude to be set.</value>
+    <value>GPS კითხვისთვის Latitude და Longitude უნდა იყოს მითითებული.</value>
   </data>
 
     <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
-    <value>File with questionnaire level data is missing.</value>
+    <value>კითხვარის დონის მონაცემების ფაილი აკლია.</value>
   </data>
 
   <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
-    <value>Answered options count to multiple choice question can't be more than max allowed answers count.</value>
+    <value>მრავალპასუხიან კითხვაზე მონიშნული ვარიანტების რაოდენობა არ შეიძლება აღემატებოდეს დაშვებული პასუხების მაქსიმალურ რაოდენობას.</value>
   </data>
 
   <data name="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
-    <value>Negative value is not allowed for Categorical Multi select question.</value>
+    <value>Categorical Multi select კითხვისთვის უარყოფითი მნიშვნელობა დაუშვებელია.</value>
   </data>
 
     <data name="PL0042_IdIsEmpty" xml:space="preserve">
-    <value>Id column doesn't have any value.</value>
+    <value>Id სვეტში მნიშვნელობა არ არის.</value>
   </data>
 
     <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
-    <value>Password-protected archives are not supported</value>
+    <value>პაროლით დაცული არქივები მხარდაჭერილი არ არის</value>
   </data>
 
     <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
-    <value>List roster should have a column for text list answers</value>
+    <value>List roster-ს უნდა ჰქონდეს სვეტი ტექსტური სიის პასუხებისთვის</value>
   </data>
 
   <data name="PL0047_ProtectedVariables_MissingColumn" xml:space="preserve">
-    <value>Required column {0} is missing.</value>
+    <value>აუცილებელი სვეტი {0} აკლია.</value>
   </data>
 
   <data name="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" xml:space="preserve">
-    <value>Protected variable is not found in provided questionnaire.</value>
+    <value>დაცული ცვლადი მოწოდებულ კითხვარში ვერ მოიძებნა.</value>
   </data>
 
   <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
-    <value>Variable type cannot be protected.</value>
+    <value>ამ ტიპის ცვლადის დაცვა შეუძლებელია.</value>
   </data>
 
   <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
-    <value>Inconsistent roster code for numeric roster. Sequence of roster codes should be 0, 1, ... to count of roster instances</value>
+    <value>რიცხვითი როსტერისთვის არათანმიმდევრული როსტერის კოდია. როსტერის კოდების მიმდევრობა უნდა იყოს 0, 1, ... როსტერის ელემენტების რაოდენობამდე</value>
   </data>
 
   <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
-    <value>Max quantity shouldn't be more than {0}.</value>
+    <value>მაქსიმალური რაოდენობა არ უნდა აღემატებოდეს {0}-ს.</value>
   </data>
 
   <data name="PL0055_InvalidEmail" xml:space="preserve">
-    <value>Email is not valid</value>
+    <value>ელ. ფოსტის მისამართი არავალიდურია</value>
   </data>
 
   <data name="PL0056_InvalidPassword" xml:space="preserve">
-    <value>Invalid Password. At least 6 numbers and upper case letters or single symbol '?' to generate password</value>
+    <value>არასწორი პაროლი. პაროლის გენერირებისთვის საჭიროა მინიმუმ 6 ციფრი და დიდი ასოები, ან ერთიანი სიმბოლო '?'</value>
   </data>
 
   <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
-    <value>For assignments with provided email allowed quantity is 1</value>
+    <value>ელ. ფოსტის მქონე დავალებებისთვის დასაშვები რაოდენობა არის 1</value>
   </data>
 
   <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
-    <value>Web Mode has to be activated for assignments having Email</value>
+    <value>ელ. ფოსტის მქონე დავალებებისთვის Web Mode ჩართული უნდა იყოს</value>
   </data>
 
   <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
-    <value>Web Mode has to be activated for assignments having Password</value>
+    <value>პაროლის მქონე დავალებებისთვის Web Mode ჩართული უნდა იყოს</value>
   </data>
 
   <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
-    <value>Assignment with size 1 for web mode should have either email or password provided</value>
+    <value>Web mode-ისთვის 1 ზომის დავალებას უნდა ჰქონდეს მითითებული ან ელ. ფოსტა, ან პაროლი</value>
   </data>
 
   <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
-    <value>Password is not unique. Password by assignment for web mode with quantity 1 should be unique</value>
+    <value>პაროლი უნიკალური არ არის. რაოდენობა 1-ის მქონე web mode დავალებისთვის პაროლი უნიკალური უნდა იყოს</value>
   </data>
 
   <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
-    <value>All assignments for web interviews must be made to an interviewer</value>
+    <value>ვებ-ინტერვიუებისთვის ყველა დავალება Interviewer-ზე უნდა იყოს შექმნილი</value>
   </data>
 
   <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
-    <value>Answer to question with variable name {0} can't be preloaded, since it is of unsupported type. Refer to the following support article https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type for details of what can be preloaded in the current version.</value>
+    <value>ცვლადის სახელით {0} კითხვაზე პასუხის წინასწარ ჩატვირთვა შეუძლებელია, რადგან ის დაუჭერელი ტიპისაა. დეტალებისთვის იხილეთ მხარდაჭერის სტატია https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type, სადაც აღწერილია, მიმდინარე ვერსიაში რის წინასწარ ჩატვირთვაა შესაძლებელი.</value>
   </data>
 </root>

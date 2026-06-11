@@ -132,6 +132,6 @@
 
 
   <data name="CaptchaError" xml:space="preserve">
-      <value>Generate captcha error. Please contact your system administrator.</value>
+      <value>კაფჩას გენერირების შეცდომა. გთხოვთ, დაუკავშირდეთ სისტემის ადმინისტრატორს.</value>
   </data>
 </root>

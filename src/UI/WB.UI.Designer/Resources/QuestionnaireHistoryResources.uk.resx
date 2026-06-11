@@ -357,18 +357,18 @@
 
 
   <data name="CriticalRule_Add" xml:space="preserve">
-    <value>Critical rule {0} added</value>
+    <value>Критичне правило {0} додано</value>
   </data>
 
   <data name="CriticalRule_Delete" xml:space="preserve">
-    <value>Critical rule {0} deleted</value>
+    <value>Критичне правило {0} видалено</value>
   </data>
 
   <data name="CriticalRule_Update" xml:space="preserve">
-    <value>Critical rule {0} updated</value>
+    <value>Критичне правило {0} оновлено</value>
   </data>
 
   <data name="Translation_Replace" xml:space="preserve">
-    <value>Document switched to {0} translation</value>
+    <value>Документ переключено на переклад {0}</value>
   </data>
 </root>

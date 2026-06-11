@@ -165,142 +165,142 @@
 
 
   <data name="UseCaptcha" xml:space="preserve">
-    <value>Use CAPTCHA before interview start</value>
+    <value>გამოიყენეთ CAPTCHA ინტერვიუს დაწყებამდე</value>
   </data>
 
   <data name="WebInterviewUserMessages_ResumeInvitation_Descr" xml:space="preserve">
-    <value>Text shown to returning user when interview is resumed. %QUESTIONNAIRE% is substituted with questionnaire name</value>
+    <value>ტექსტი, რომელიც ნაჩვენებია დაბრუნებულ მომხმარებელზე ინტერვიუს გაგრძელებისას. %QUESTIONNAIRE% ჩანაცვლდება კითხვარის სახელით</value>
   </data>
 
   <data name="WebInterviewUserMessages_ResumeWelcome_Descr" xml:space="preserve">
-    <value>Header text shown to returning user before resume an interview</value>
+    <value>სათაურის ტექსტი, რომელიც ნაჩვენებია დაბრუნებულ მომხმარებელზე ინტერვიუს გაგრძელებამდე</value>
   </data>
 
   <data name="WebInterviewUserMessages_SurveyName_Descr" xml:space="preserve">
-    <value>Name of conducted survey. %QUESTIONNAIRE% is substituted with questionnaire name</value>
+    <value>მიმდინარე გამოკითხვის სახელი. %QUESTIONNAIRE% ჩანაცვლდება კითხვარის სახელით</value>
   </data>
 
   <data name="WebInterviewUserMessages_WebSurveyHeader_Descr" xml:space="preserve">
-    <value>Header text shown after interview completion</value>
+    <value>სათაურის ტექსტი, რომელიც ნაჩვენებია ინტერვიუს დასრულების შემდეგ</value>
   </data>
 
   <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
-    <value>Header welcome text on initial page</value>
+    <value>მისალმების სათაურის ტექსტი საწყის გვერდზე</value>
   </data>
 
   <data name="CustomText" xml:space="preserve">
-    <value>Use custom text</value>
+    <value>მორგებული ტექსტის გამოყენება</value>
   </data>
 
   <data name="TextsUpdated" xml:space="preserve">
-    <value>Texts updated</value>
+    <value>ტექსტები განახლდა</value>
   </data>
 
   <data name="SaveAll" xml:space="preserve">
-    <value>Save all</value>
+    <value>ყველაფრის შენახვა</value>
   </data>
 
   <data name="TextCustomize" xml:space="preserve">
-    <value>Text dispayed to respondents can be customized</value>
+    <value>რესპონდენტებისთვის ნაჩვენები ტექსტის მორგება შესაძლებელია</value>
   </data>
 
   <data name="CustomMessageTooLong" xml:space="preserve">
-    <value>Custom message should not contain more than {0} characters (including html)</value>
+    <value>მორგებული შეტყობინება არ უნდა შეიცავდეს {0}-ზე მეტ სიმბოლოს (html-ის ჩათვლით)</value>
   </data>
 
   <data name="WebInterviewSetup_SendInvitationsTitle" xml:space="preserve">
-    <value>Send invitations</value>
+    <value>მოწვევების გაგზავნა</value>
   </data>
 
   <data name="Invitations" xml:space="preserve">
-    <value>Invitations</value>
+    <value>მოწვევები</value>
   </data>
 
   <data name="Invitations_TotalInvitations" xml:space="preserve">
-    <value>{{count}} total invitations.</value>
+    <value>სულ {{count}} მოწვევა.</value>
   </data>
 
   <data name="Invitations_Sent" xml:space="preserve">
-    <value>{{count}} invitations have been sent already.</value>
+    <value>{{count}} მოწვევა უკვე გაგზავნილია.</value>
   </data>
 
   <data name="Invitations_NothingSent" xml:space="preserve">
-    <value>No invitations have been sent yet.</value>
+    <value>ჯერ არცერთი მოწვევა არ გაგზავნილა.</value>
   </data>
 
   <data name="Invitations_ToSend" xml:space="preserve">
-    <value>{{count}} invitation to send.</value>
+    <value>გასაგზავნია {{count}} მოწვევა.</value>
   </data>
 
   <data name="Invitations_NothingToSend" xml:space="preserve">
-    <value>No invitations to send as of now.</value>
+    <value>ამჟამად გასაგზავნი მოწვევა არ არის.</value>
   </data>
 
   <data name="Invitations_SetupError" xml:space="preserve">
-    <value>Invitations can't be sent.</value>
+    <value>მოწვევების გაგზავნა შეუძლებელია.</value>
   </data>
 
   <data name="Invitations_EmailIsNotSetUp" xml:space="preserve">
-    <value>Email provider is not set up.</value>
+    <value>ელ. ფოსტის პროვაიდერი არ არის კონფიგურირებული.</value>
   </data>
 
   <data name="Invitations_ChangeEmailSettingsAdmin" xml:space="preserve">
-    <value>You can change these settings at the &lt;a href="{{url}}"&gt;'Email Providers'&lt;/a&gt; page.</value>
+    <value>ამ პარამეტრების შეცვლა შეგიძლიათ &lt;a href="{{url}}"&gt;'ელ. ფოსტის პროვაიდერები'&lt;/a&gt; გვერდზე.</value>
   </data>
 
   <data name="Invitations_ChangeEmailSettingsNotAdmin" xml:space="preserve">
-    <value>Tell your admin user to change these settings at the 'Email Providers' page.</value>
+    <value>სთხოვეთ თქვენს ადმინისტრატორს, შეცვალოს ეს პარამეტრები 'ელ. ფოსტის პროვაიდერები' გვერდზე.</value>
   </data>
 
   <data name="Invitations_SurveyIsNotStarted" xml:space="preserve">
-    <value>Web survey is not started. Setup and &lt;a href="{{url}}"&gt;start web survey&lt;/a&gt; before sending invitations.</value>
+    <value>Web გამოკითხვა არ არის დაწყებული. მოწვევების გაგზავნამდე დააკონფიგურირეთ და &lt;a href="{{url}}"&gt;დაიწყეთ Web გამოკითხვა&lt;/a&gt;.</value>
   </data>
 
   <data name="Invitations_SuccessfulSetup" xml:space="preserve">
-    <value>Web survey has been started and email provider was set up properly. The system is ready to send invitations.</value>
+    <value>Web გამოკითხვა დაიწყო და ელ. ფოსტის პროვაიდერი სწორად არის კონფიგურირებული. სისტემა მზადაა მოწვევების გასაგზავნად.</value>
   </data>
 
   <data name="Invitations_SendAction" xml:space="preserve">
-    <value>Send {{count}} invitations</value>
+    <value>{{count}} მოწვევის გაგზავნა</value>
   </data>
 
   <data name="WebInterviewUserMessages_CompleteButton_Descr" xml:space="preserve">
-    <value>Complete</value>
+    <value>დასრულება</value>
   </data>
 
   <data name="WebInterviewUserMessages_CompleteNoteToSupervisor_Descr" xml:space="preserve">
-    <value>Note for Supervisor</value>
+    <value>კომენტარი ზედამხედველისთვის</value>
   </data>
 
   <data name="SingleResponse" xml:space="preserve">
-    <value>Limit to one interview per respondent</value>
+    <value>თითო რესპონდენტზე მხოლოდ ერთი ინტერვიუ</value>
   </data>
 
   <data name="WebInterviewUserMessages_StartNewButton_Descr" xml:space="preserve">
-    <value>Start new interview</value>
+    <value>ახალი ინტერვიუს დაწყება</value>
   </data>
 
   <data name="WebInterviewUserMessages_ResumeButton_Descr" xml:space="preserve">
-    <value>Resume</value>
+    <value>გაგრძელება</value>
   </data>
 
   <data name="EmailOnComplete" xml:space="preserve">
-    <value>Send email after web interview completion</value>
+    <value>ელ. ფოსტის გაგზავნა Web ინტერვიუს დასრულების შემდეგ</value>
   </data>
 
   <data name="AttachAnswersToCompleteEmail" xml:space="preserve">
-    <value>Attach Pdf transcript</value>
+    <value>Pdf ტრანსკრიპტის მიმაგრება</value>
   </data>
 
   <data name="AllowSwitchToCawiForInterviewer" xml:space="preserve">
-    <value>Allow Interviewer to switch to CAWI mode</value>
+    <value>ინტერვიუერისთვის CAWI რეჟიმზე გადართვის დაშვება</value>
   </data>
 
   <data name="WebInterviewUserMessages_LinkInvitation_Descr" xml:space="preserve">
-    <value>Text that shown to user when they navigate to link to interview that is not yet synced to server</value>
+    <value>ტექსტი, რომელიც ნაჩვენებია მომხმარებლისთვის, როცა ის გადადის იმ ინტერვიუს ბმულზე, რომელიც ჯერ სერვერთან სინქრონიზებული არ არის</value>
   </data>
 
   <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
-    <value>Header welcome text on web interview link landing page</value>
+    <value>მისალმების სათაურის ტექსტი Web ინტერვიუს ბმულის საწყის გვერდზე</value>
   </data>
 </root>

@@ -251,7 +251,7 @@ Trebuie să rezolvați problemele menționate pe copertă</value>
     <value>Afișare localizare</value>
   </data>
   <data name="Dashboard_Start" xml:space="preserve">
-    <value>Start</value>
+    <value>Începe</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>Începute ({0})</value>
@@ -342,7 +342,7 @@ Trebuie să le finalizați pentru a fi sincronizate</value>
     <value>Colectarea și trimiterea datelor din tabletă către server</value>
   </data>
   <data name="Diagnostics_ServerUrl" xml:space="preserve">
-    <value>Server URL:</value>
+    <value>URL server: </value>
   </data>
   <data name="Diagnostics_Share_Description" xml:space="preserve">
     <value>Toate informațiile de mai jos for fi distribuite ca text. Pot fi trimise prin email, Google Hangouts sau altă aplicație de messenger</value>

@@ -144,18 +144,18 @@
 
 
   <data name="InvalidAuthenticatorCode" xml:space="preserve">
-    <value>Invalid authenticator code.</value>
+    <value>Kodi i aplikacionit vërtetues është i pavlefshëm.</value>
   </data>
 
   <data name="InvalidRecoveryCode" xml:space="preserve">
-    <value>Invalid recovery code entered.</value>
+    <value>Kodi i rikuperimit i futur është i pavlefshëm.</value>
   </data>
 
   <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
-      <value>Another questionnaire is being imported to Headquarters now.</value>
+      <value>Një pyetësor tjetër po importohet në Zyrën Qendrore tani.</value>
   </data>
 
   <data name="ApiUserIsNotAllowedToSignIn" xml:space="preserve">
-      <value>Api user is not allowed to signin with user interface</value>
+      <value>Përdoruesi API nuk lejohet të hyjë përmes ndërfaqes së përdoruesit</value>
   </data>
 </root>

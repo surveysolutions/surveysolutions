@@ -193,7 +193,7 @@
     <value>Intervista në {{status}}.</value>
   </data>
   <data name="DataExport_QuestionnaireWithVersion" xml:space="preserve">
-    <value>{{title}} (ver. {{version}})</value>
+    <value>{{title}} (versioni {{version}})</value>
   </data>
   <data name="DataExport_QueuedOn" xml:space="preserve">
     <value>Vendosur në radhë më {{date}}</value>
@@ -396,126 +396,126 @@
 
 
   <data name="DataExport_CompletedOn" xml:space="preserve">
-    <value>Completed on {{date}}</value>
+    <value>Përfundoi më {{date}}</value>
   </data>
 
   <data name="DataExport_ProducedIn" xml:space="preserve">
-    <value>Produced in:</value>
+    <value>U prodhua për:</value>
   </data>
 
   <data name="DataExport_InQueue" xml:space="preserve">
-    <value>In queue:</value>
+    <value>Në radhë:</value>
   </data>
 
   <data name="SurveyQuestionnaireVersion" xml:space="preserve">
-    <value>Questionnaire version</value>
+    <value>Versioni i pyetësorit</value>
   </data>
 
   <data name="QuestionnaireInformation" xml:space="preserve">
-    <value>Questionnaire information</value>
+    <value>Informacion mbi pyetësorin</value>
   </data>
 
   <data name="QuestionnaireInformation_Include" xml:space="preserve">
-    <value>Include meta information about questionnaire</value>
+    <value>Përfshi informacionin meta mbi pyetësorin</value>
   </data>
 
   <data name="QuestionnaireInformation_Exclude" xml:space="preserve">
-    <value>Exclude meta information about questionnaire</value>
+    <value>Përjashto informacionin meta mbi pyetësorin</value>
   </data>
 
   <data name="QuestionnaireTranslation" xml:space="preserve">
-    <value>Translation</value>
+    <value>Përkthimi</value>
   </data>
 
   <data name="Translation_CardLabel" xml:space="preserve">
-    <value>Translation: {{language}}</value>
+    <value>Përkthimi: {{language}}</value>
   </data>
 
   <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
-      <value>Translation</value>
+      <value>Përkthimi</value>
   </data>
 
   <data name="SurveyQuestionnaireDateRange" xml:space="preserve">
-      <value>Date range</value>
+      <value>Intervali i datave</value>
   </data>
 
   <data name="DateRangeAllTime" xml:space="preserve">
-      <value>All time</value>
+      <value>Gjithë kohën</value>
   </data>
 
   <data name="DateRangeLast24hours" xml:space="preserve">
-      <value>Last 24 hours</value>
+      <value>24 orët e fundit</value>
   </data>
 
   <data name="DateRangeLast7days" xml:space="preserve">
-      <value>Last 7 days</value>
+      <value>7 ditët e fundit</value>
   </data>
 
   <data name="DateRangeLast30days" xml:space="preserve">
-      <value>Last 30 days</value>
+      <value>30 ditët e fundit</value>
   </data>
 
   <data name="DateRangeLastToday" xml:space="preserve">
-      <value>Today</value>
+      <value>Sot</value>
   </data>
 
   <data name="DateRangeLastYesterday" xml:space="preserve">
-      <value>Yesterday</value>
+      <value>Dje</value>
   </data>
 
   <data name="DateRangeCustom" xml:space="preserve">
-      <value>Custom</value>
+      <value>I personalizuar</value>
   </data>
 
   <data name="SurveyQuestionnaireDateRangeFrom" xml:space="preserve">
-      <value>From</value>
+      <value>Nga</value>
   </data>
 
   <data name="DateRangeFromAll" xml:space="preserve">
-      <value>Earliest available</value>
+      <value>Data më e hershme e disponueshme</value>
   </data>
 
   <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
-      <value>To</value>
+      <value>Deri</value>
   </data>
 
   <data name="DateRangeToAll" xml:space="preserve">
-      <value>Current moment</value>
+      <value>Momenti aktual</value>
   </data>
 
   <data name="ParadataEventsFilter" xml:space="preserve">
-      <value>Events filter</value>
+      <value>Filtri i ngjarjeve</value>
   </data>
 
   <data name="ParadataEventsFilter_All" xml:space="preserve">
-      <value>All</value>
+      <value>Të gjitha</value>
   </data>
 
   <data name="ParadataEventsFilter_Reduced" xml:space="preserve">
-      <value>Reduced</value>
+      <value>I reduktuar</value>
   </data>
 
   <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
-      <value>Reduced paradata set does not include events with the following codes: QuestionEnabled (13), QuestionDisabled (14), GroupEnabled (15), GroupDisabled (16), QuestionDeclaredValid (17), QuestionDeclaredInvalid (18), VariableEnabled (23), VariableDisabled (24).</value>
+      <value>Seti i reduktuar i Paradata nuk përfshin ngjarje me kodet vijuese: QuestionEnabled (13), QuestionDisabled (14), GroupEnabled (15), GroupDisabled (16), QuestionDeclaredValid (17), QuestionDeclaredInvalid (18), VariableEnabled (23), VariableDisabled (24).</value>
   </data>
 
     <data name="Validation_FromDateInvalid" xml:space="preserve">
-    <value>The "From" date must be a valid date.</value>
+    <value>Data "Nga" duhet të jetë një datë e vlefshme.</value>
 </data>
 
     <data name="Validation_FromDateInFuture" xml:space="preserve">
-    <value>The "From" date cannot be in the future.</value>
+    <value>Data "Nga" nuk mund të jetë në të ardhmen.</value>
 </data>
 
     <data name="Validation_ToDateInvalid" xml:space="preserve">
-    <value>The "To" date must be a valid date.</value>
+    <value>Data "Deri" duhet të jetë një datë e vlefshme.</value>
 </data>
 
     <data name="Validation_FromDateInvalidBeforeTo" xml:space="preserve">
-    <value>The "From" date must be valid before validating the "To" date.</value>
+    <value>Data "Nga" duhet të jetë e vlefshme para se të verifikohet data "Deri".</value>
 </data>
 
     <data name="Validation_ToDateBeforeFrom" xml:space="preserve">
-    <value>The "To" date must be greater than the "From" date.</value>
+    <value>Data "Deri" duhet të jetë më e vonshme se data "Nga".</value>
 </data>
 </root>

@@ -411,18 +411,18 @@
 
 
   <data name="CriticalRuleAlreadyExist" xml:space="preserve">
-    <value>Critical rule already exists.</value>
+    <value>Критичне правило вже існує.</value>
   </data>
 
   <data name="CriticalRuleIsAbsent" xml:space="preserve">
-    <value>Critical rule is absent.</value>
+    <value>Критичне правило відсутнє.</value>
   </data>
 
   <data name="TranslationIsNotFull" xml:space="preserve">
-    <value>The translation is incomplete and does not include all required texts for every element</value>
+    <value>Переклад неповний і не містить усіх обов'язкових текстів для кожного елемента</value>
   </data>
 
   <data name="CategoryTranslationIsNotFull" xml:space="preserve">
-    <value>The category translation "{0}" is incomplete and does not include all options texts</value>
+    <value>Переклад категорії "{0}" є неповним і не містить текстів усіх варіантів</value>
   </data>
 </root>

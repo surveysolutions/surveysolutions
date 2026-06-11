@@ -346,14 +346,14 @@
 
 
   <data name="GeoTrackNumber" xml:space="preserve">
-  <value>Track</value>
+  <value>Трек</value>
   </data>
 
   <data name="DateRange" xml:space="preserve">
-  <value>Date range</value>
+  <value>Діапазон дат</value>
   </data>
 
   <data name="AllGeoTracks" xml:space="preserve">
-  <value>All geo tracks</value>
+  <value>Усі треки</value>
   </data>
 </root>

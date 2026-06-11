@@ -144,18 +144,18 @@
 
 
   <data name="InvalidAuthenticatorCode" xml:space="preserve">
-    <value>Invalid authenticator code.</value>
+    <value>ავთენტიფიკატორის კოდი არასწორია.</value>
   </data>
 
   <data name="InvalidRecoveryCode" xml:space="preserve">
-    <value>Invalid recovery code entered.</value>
+    <value>შეყვანილია არასწორი აღდგენის კოდი.</value>
   </data>
 
   <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
-      <value>Another questionnaire is being imported to Headquarters now.</value>
+      <value>ამჟამად Headquarters-ში უკვე მიმდინარეობს სხვა კითხვარის იმპორტი.</value>
   </data>
 
   <data name="ApiUserIsNotAllowedToSignIn" xml:space="preserve">
-      <value>Api user is not allowed to signin with user interface</value>
+      <value>API მომხმარებელს მომხმარებლის ინტერფეისით შესვლა არ შეუძლია</value>
   </data>
 </root>

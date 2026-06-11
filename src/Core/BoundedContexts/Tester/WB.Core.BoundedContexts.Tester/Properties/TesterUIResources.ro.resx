@@ -225,30 +225,30 @@
 
 
   <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
-    <value>Anonymous questionnaire url</value>
+    <value>URL chestionar anonim</value>
   </data>
 
   <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
-    <value>Open</value>
+    <value>Deschide</value>
   </data>
 
   <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
-    <value>Can't open the questionnaire. The questionnaire cannot be found.</value>
+    <value>Nu se poate deschide chestionarul. Chestionarul nu poate fi găsit.</value>
   </data>
 
   <data name="AnonymousQuestionnaires_Error_Confirm" xml:space="preserve">
-    <value>Can't open the questionnaire. Remove it from list?</value>
+    <value>Nu se poate deschide chestionarul. Îl eliminați din listă?</value>
   </data>
 
   <data name="TesterLoginAccountHintText" xml:space="preserve">
-    <value>Log in to this app using the credentials you created at https://designer.mysurvey.solutions. To register a new account, visit the same site.</value>
+    <value>Autentificați-vă în această aplicație folosind datele de autentificare create la https://designer.mysurvey.solutions. Pentru a înregistra un cont nou, vizitați același site.</value>
   </data>
 
   <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
-    <value>Anonymous Questionnaires</value>
+    <value>Chestionare anonime</value>
   </data>
 
   <data name="MenuItem_Title_Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Autentificare</value>
   </data>
 </root>

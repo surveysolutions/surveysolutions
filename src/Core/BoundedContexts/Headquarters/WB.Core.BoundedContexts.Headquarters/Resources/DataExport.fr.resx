@@ -277,7 +277,7 @@
     <value>Terminé le {{date}}</value>
   </data>
   <data name="DataExport_QuestionnaireWithVersion" xml:space="preserve">
-    <value>{{title}} (ver. {{version}})</value>
+    <value>{{title}} (v. {{version}})</value>
   </data>
   <data name="DataExport_Regenerate" xml:space="preserve">
     <value>Régénérer</value>

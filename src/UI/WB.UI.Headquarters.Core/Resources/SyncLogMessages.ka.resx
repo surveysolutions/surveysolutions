@@ -213,87 +213,87 @@
 
 
     <data name="NoMapsForUser" xml:space="preserve">
-    <value>No maps to download</value>
+    <value>ჩამოსატვირთი რუკები არ არის</value>
   </data>
 
     <data name="GetMaps" xml:space="preserve">
-    <value>Download list of Maps. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
+    <value>რუკების სიის ჩამოტვირთვა. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
   </data>
 
     <data name="GetMap" xml:space="preserve">
-    <value>Download map: {0}</value>
+    <value>რუკის ჩამოტვირთვა: {0}</value>
   </data>
 
     <data name="PasswordChanged" xml:space="preserve">
-    <value>Password changed and acquired AuthToken</value>
+    <value>პაროლი შეიცვალა და მოიპოვა AuthToken</value>
   </data>
 
     <data name="FailToChangePassword" xml:space="preserve">
-    <value>User failed to change password</value>
+    <value>მომხმარებელმა ვერ შეძლო პაროლის შეცვლა.</value>
   </data>
 
     <data name="ApkRequested" xml:space="preserve">
-    <value>New application file requested</value>
+    <value>მოთხოვნილია ახალი აპლიკაციის ფაილი</value>
   </data>
 
     <data name="SupervisorApkRequested" xml:space="preserve">
-    <value>New Supervisor application file requested</value>
+    <value>მოთხოვნილია Supervisor-ის ახალი აპლიკაციის ფაილი</value>
   </data>
 
     <data name="ExtendedApkRequested" xml:space="preserve">
-    <value>New extended application file requested</value>
+    <value>მოთხოვნილია ახალი გაფართოებული აპლიკაციის ფაილი</value>
   </data>
 
     <data name="ExtendedPatchRequestedFormat" xml:space="preserve">
-    <value>Patch file requested for extended version {0}</value>
+    <value>მოთხოვნილია პაჩის ფაილი გაფართოებული ვერსიისთვის {0}</value>
   </data>
 
     <data name="PatchRequestedFormat" xml:space="preserve">
-    <value>Patch file requested for version {0}</value>
+    <value>მოთხოვნილია პაჩის ფაილი ვერსიისთვის {0}</value>
   </data>
 
     <data name="SupervisorPatchRequestedFormat" xml:space="preserve">
-    <value>Supervisor patch file requested for version {0}</value>
+    <value>მოთხოვნილია Supervisor-ის პაჩის ფაილი ვერსიისთვის {0}</value>
   </data>
 
     <data name="GetInterviewPackageV3" xml:space="preserve">
-    <value>&lt;b&gt;V3&lt;/b&gt; Download interview package: {0}</value>
+    <value>&lt;b&gt;V3&lt;/b&gt; ინტერვიუს პაკეტის ჩამოტვირთვა: {0}</value>
   </data>
 
     <data name="GetInterviewPatch" xml:space="preserve">
-    <value>Download interview changes from HQ: {0}</value>
+    <value>HQ-დან ინტერვიუს ცვლილებების ჩამოტვირთვა: {0}</value>
     <comment>{0} - count of affected interviews</comment>
   </data>
 
     <data name="PostPackageV3" xml:space="preserve">
-    <value>&lt;b&gt;V3&lt;/b&gt; Upload interview: {0}</value>
+    <value>&lt;b&gt;V3&lt;/b&gt; ინტერვიუს ატვირთვა: {0}</value>
   </data>
 
     <data name="CheckObsoleteInterviews" xml:space="preserve">
-    <value>Check for obsolete interviews. Request: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+    <value>მოძველებული ინტერვიუების შემოწმება. მოთხოვნა: &lt;pre&gt;{0}&lt;/pre&gt;</value>
   </data>
 
     <data name="CheckIsPackageDuplicatedFormat" xml:space="preserve">
-    <value>Check for duplicated interview. Interview: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+    <value>დუბლირებული ინტერვიუს შემოწმება. ინტერვიუ: &lt;pre&gt;{0}&lt;/pre&gt;</value>
   </data>
 
     <data name="AssignmentReceivedByTablet" xml:space="preserve">
-    <value>Assignment &lt;b&gt;{0}&lt;/b&gt; received and stored by device</value>
+    <value>დავალება &lt;b&gt;{0}&lt;/b&gt; მიღებულია და შენახულია მოწყობილობაზე</value>
   </data>
 
     <data name="DownloadReusableCategories" xml:space="preserve">
-    <value>Reusable category {0} downloading</value>
+    <value>მიმდინარეობს მრავალჯერადი გამოყენების კატეგორიის ჩამოტვირთვა {0}</value>
   </data>
 
     <data name="PostCalendarEventPackage" xml:space="preserve">
-    <value>Upload calendar event: {0}</value>
+    <value>კალენდრის მოვლენის ატვირთვა: {0}</value>
   </data>
 
     <data name="GetCalendarEventPackage" xml:space="preserve">
-    <value>Download calendar event package: {0}</value>
+    <value>კალენდრის მოვლენის პაკეტის ჩამოტვირთვა: {0}</value>
   </data>
 
     <data name="CalendarEventsListFormat" xml:space="preserve">
-    <value>Download list of calendar events ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
+    <value>კალენდრის მოვლენების სიის ჩამოტვირთვა ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
   </data>
 </root>

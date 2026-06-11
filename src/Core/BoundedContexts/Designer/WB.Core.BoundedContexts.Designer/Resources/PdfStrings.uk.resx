@@ -435,18 +435,18 @@
 
 
   <data name="Appendix_CriticalRules" xml:space="preserve">
-    <value>Appendix {0} {1} critical rules</value>
+    <value>Додаток {0} {1} критичних правил</value>
   </data>
 
   <data name="CriticalityCondition" xml:space="preserve">
-    <value>Critical Condition:</value>
+    <value>Критична умова:</value>
   </data>
 
   <data name="CriticalityMessage" xml:space="preserve">
-    <value>Message:</value>
+    <value>Повідомлення:</value>
   </data>
 
   <data name="Description" xml:space="preserve">
-    <value>Description:</value>
+    <value>Опис:</value>
   </data>
 </root>

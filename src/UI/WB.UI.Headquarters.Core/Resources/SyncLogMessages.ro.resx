@@ -270,10 +270,10 @@
 
 
     <data name="PasswordChanged" xml:space="preserve">
-    <value>Password changed and acquired AuthToken</value>
+    <value>Parola a fost schimbată și s-a obținut AuthToken</value>
   </data>
 
     <data name="FailToChangePassword" xml:space="preserve">
-    <value>User failed to change password</value>
+    <value>Utilizatorul nu a reușit să schimbe parola</value>
   </data>
 </root>

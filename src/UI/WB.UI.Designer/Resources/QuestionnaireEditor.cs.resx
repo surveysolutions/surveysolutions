@@ -1536,7 +1536,7 @@ Zkontrolujte prosím své síťové připojení nebo se obraťte na vaši IT pod
     <value>Aktualizace</value>
   </data>
   <data name="Upload" xml:space="preserve">
-    <value>Upload</value>
+    <value>Nahrát</value>
   </data>
   <data name="UserDefinedCategories" xml:space="preserve">
     <value>Uživatelem definované kategorie</value>
@@ -1620,7 +1620,7 @@ Zkontrolujte prosím své síťové připojení nebo se obraťte na vaši IT pod
       <value>Registrace</value>
   </data>
   <data name="Reset" xml:space="preserve">
-      <value>Reset</value>
+      <value>Resetovat</value>
   </data>
     <data name="ShowList" xml:space="preserve">
         <value>Zobrazit seznam</value>

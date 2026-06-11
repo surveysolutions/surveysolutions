@@ -168,10 +168,10 @@
 
 
   <data name="Area_Coordinates" xml:space="preserve">
-    <value>Coordinates</value>
+    <value>Coordonate</value>
   </data>
 
   <data name="InterviewMode" xml:space="preserve">
-    <value>Mode</value>
+    <value>Mod</value>
   </data>
 </root>

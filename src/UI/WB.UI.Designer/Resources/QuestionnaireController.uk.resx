@@ -330,6 +330,6 @@
 
 
   <data name="CloneDeletedWarning" xml:space="preserve">
-      <value>You are creating a copy of deleted questionnaire. Some parts might be lost.</value>
+      <value>Ви створюєте копію видаленої анкети. Деякі частини можуть бути втрачені.</value>
   </data>
 </root>

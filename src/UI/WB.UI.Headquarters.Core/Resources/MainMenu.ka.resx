@@ -210,62 +210,62 @@
 
 
   <data name="AuditLog" xml:space="preserve">
-    <value>Audit Log</value>
+    <value>აუდიტის ჟურნალი</value>
   </data>
 
   <data name="DeviceLogs" xml:space="preserve">
-    <value>Device Logs</value>
+    <value>მოწყობილობის ჟურნალები</value>
   </data>
     
   <data name="Diagnostics" xml:space="preserve">
-    <value>Diagnostics</value>
+    <value>დიაგნოსტიკა</value>
   </data>
 
   <data name="InterviewPackages" xml:space="preserve">
-    <value>Interview Packages</value>
+    <value>ინტერვიუს პაკეტები</value>
   </data>
 
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>პარამეტრები</value>
   </data>
 
   <data name="WorkspaceSettings" xml:space="preserve">
-    <value>Workspace Settings</value>
+    <value>სამუშაო სივრცის პარამეტრები</value>
   </data>
 
   <data name="EmailProviders" xml:space="preserve">
-    <value>Email Providers</value>
+    <value>ელ. ფოსტის პროვაიდერები</value>
   </data>
 
   <data name="Maps" xml:space="preserve">
-    <value>Maps</value>
+    <value>რუკები</value>
   </data>
 
   <data name="SurveyStatistics" xml:space="preserve">
-    <value>Survey Statistics</value>
+    <value>კვლევის სტატისტიკა</value>
   </data>
 
   <data name="StatusDuration" xml:space="preserve">
-    <value>Status Duration</value>
+    <value>სტატუსის ხანგრძლივობა</value>
   </data>
 
   <data name="MapDashboard" xml:space="preserve">
-    <value>Map Dashboard</value>
+    <value>რუკის დაფა</value>
   </data>
 
   <data name="TabletInfos" xml:space="preserve">
-    <value>Tablet Infos</value>
+    <value>ტაბლეტების ინფორმაცია</value>
   </data>
 
   <data name="Administration" xml:space="preserve">
-    <value>Admin</value>
+    <value>ადმინისტრირება</value>
   </data>
 
   <data name="Workspaces" xml:space="preserve">
-      <value>Workspaces</value>
+      <value>სამუშაო სივრცეები</value>
   </data>
 
   <data name="ServerAdministration">
-    <value>Administration</value>
+    <value>ადმინისტრირება</value>
   </data>
 </root>

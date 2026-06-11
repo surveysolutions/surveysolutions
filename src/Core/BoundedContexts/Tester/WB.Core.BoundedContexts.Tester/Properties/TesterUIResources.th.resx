@@ -192,74 +192,74 @@
 
 
   <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
-    <value>Downloading questionnaire attachments -  {0}%</value>
+    <value>กำลังดาวน์โหลดไฟล์แนบของแบบสอบถาม -  {0}%</value>
   </data>
 
   <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
-    <value>Anonymous questionnaire url</value>
+    <value>URL แบบสอบถามแบบไม่ระบุตัวตน</value>
   </data>
 
   <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
-    <value>Open</value>
+    <value>เปิด</value>
   </data>
 
   <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
-    <value>Can't open the questionnaire. The questionnaire cannot be found.</value>
+    <value>ไม่สามารถเปิดแบบสอบถามได้ ไม่พบแบบสอบถาม</value>
   </data>
 
   <data name="AnonymousQuestionnaires_Error_Confirm" xml:space="preserve">
-    <value>Can't open the questionnaire. Remove it from list?</value>
+    <value>ไม่สามารถเปิดแบบสอบถามได้ ลบออกจากรายการหรือไม่</value>
   </data>
 
   <data name="Login_Error_EmptyName" xml:space="preserve">
-    <value>Please enter correct login</value>
+    <value>โปรดป้อนข้อมูลเข้าสู่ระบบที่ถูกต้อง</value>
   </data>
 
   <data name="TesterLoginAccountHintText" xml:space="preserve">
-    <value>Log in to this app using the credentials you created at https://designer.mysurvey.solutions. To register a new account, visit the same site.</value>
+    <value>เข้าสู่ระบบแอปนี้โดยใช้ข้อมูลประจำตัวที่คุณสร้างไว้ที่ https://designer.mysurvey.solutions หากต้องการลงทะเบียนบัญชีใหม่ โปรดเยี่ยมชมไซต์เดียวกัน</value>
   </data>
 
   <data name="MenuItem_Title_Language" xml:space="preserve">
-    <value>Language</value>
+    <value>ภาษา</value>
   </data>
 
   <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Original</value>
+    <value>ต้นฉบับ</value>
   </data>
 
   <data name="MenuItem_Title_Reload" xml:space="preserve">
-    <value>Reload questionnaire</value>
+    <value>โหลดแบบสอบถามใหม่</value>
   </data>
 
   <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
-    <value>Anonymous Questionnaires</value>
+    <value>แบบสอบถามแบบไม่ระบุตัวตน</value>
   </data>
 
   <data name="MenuItem_Title_Login" xml:space="preserve">
-    <value>Login</value>
+    <value>เข้าสู่ระบบ</value>
   </data>
 
   <data name="Prefs_ShowAnswerTime" xml:space="preserve">
-    <value>Show elapsed time per answer</value>
+    <value>แสดงเวลาที่ใช้ต่อคำตอบ</value>
   </data>
 
   <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
-    <value>Measures enablement, validation and roster propagation time. Receiving GPS data or picture taking time is not included.</value>
+    <value>วัดเวลาในการเปิดใช้งาน การตรวจสอบความถูกต้อง และการเผยแพร่บัญชีรายชื่อ ไม่รวมเวลาในการรับข้อมูล GPS หรือการถ่ายภาพ</value>
   </data>
 
   <data name="Prefs_ShowVariables" xml:space="preserve">
-    <value>Show variables</value>
+    <value>แสดงตัวแปร</value>
   </data>
 
   <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
-    <value>Variables are shown in the interview with value and description</value>
+    <value>ตัวแปรจะแสดงในการสัมภาษณ์พร้อมค่าและคำอธิบาย</value>
   </data>
 
   <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
-    <value>Variables are hidden</value>
+    <value>ตัวแปรถูกซ่อน</value>
   </data>
 
   <data name="ReloadInterviewErrorMessage" xml:space="preserve">
-    <value>Interview data can't be applied to a new version of the questionnaire. We will open a empty interview</value>
+    <value>ไม่สามารถนำข้อมูลการสัมภาษณ์ไปใช้กับแบบสอบถามเวอร์ชันใหม่ได้ เราจะเปิดการสัมภาษณ์ว่าง</value>
   </data>
 </root>

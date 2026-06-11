@@ -61,23 +61,23 @@
 
 
   <data name="Search" xml:space="preserve">
-  <value>Search</value>
+  <value>Cari</value>
   </data>
 
   <data name="Create" xml:space="preserve">
-  <value>Create</value>
+  <value>Buat</value>
   </data>
 
   <data name="ViewAssignmentDetails" xml:space="preserve">
-  <value>View assignment details</value>
+  <value>Lihat detail penugasan</value>
   </data>
 
   <data name="SaveChanges" xml:space="preserve">
-  <value>Save changes</value>
+  <value>Simpan perubahan</value>
   </data>
 
   <data name="Template" xml:space="preserve">
-  <value>Template</value>
+  <value>Templat</value>
   </data>
 
   <data name="Status" xml:space="preserve">
@@ -85,91 +85,91 @@
   </data>
 
   <data name="Assignment" xml:space="preserve">
-  <value>Assignment</value>
+  <value>Penugasan</value>
   </data>
 
   <data name="Responsible" xml:space="preserve">
-  <value>Responsible</value>
+  <value>Penanggung jawab</value>
   </data>
 
   <data name="Save" xml:space="preserve">
-  <value>Save</value>
+  <value>Simpan</value>
   </data>
 
   <data name="Apply" xml:space="preserve">
-    <value>Apply</value>
+    <value>Terapkan</value>
   </data>
 
   <data name="ErrorsLog" xml:space="preserve">
-  <value>Errors log</value>
+  <value>Log kesalahan</value>
   </data>
 
   <data name="Questionnaires" xml:space="preserve">
-  <value>Questionnaires</value>
+  <value>Kuesioner</value>
   </data>
 
   <data name="Questionnaire" xml:space="preserve">
-  <value>Questionnaire</value>
+  <value>Kuesioner</value>
   </data>
 
   <data name="Assignments" xml:space="preserve">
-  <value>Assignments</value>
+  <value>Penugasan</value>
   </data>
 
   <data name="Interviews" xml:space="preserve">
-  <value>Interviews</value>
+  <value>Wawancara</value>
   </data>
 
   <data name="PrefilledQuestions" xml:space="preserve">
-  <value>Identifying Questions</value>
+  <value>Pertanyaan Identifikasi</value>
   </data>
 
   <data name="ShowIdentifying" xml:space="preserve">
-  <value>Show identifying</value>
+  <value>Tampilkan identifikasi</value>
   </data>
 
   <data name="HideIdentifying" xml:space="preserve">
-  <value>Hide</value>
+  <value>Sembunyikan</value>
   </data>
 
   <data name="InterviewKey" xml:space="preserve">
-  <value>Interview Key</value>
+  <value>Kunci Wawancara</value>
   </data>
 
   <data name="LastUpdate" xml:space="preserve">
-  <value>Updated on</value>
+  <value>Diperbarui pada</value>
   </data>
 
   <data name="НasErrors" xml:space="preserve">
-  <value>Нas Errors</value>
+  <value>Memiliki Kesalahan</value>
   </data>
 
   <data name="ReceivedByInterviewer" xml:space="preserve">
-  <value>Received by tablet</value>
+  <value>Diterima oleh tablet</value>
   </data>
 
   <data name="CreatedOnClient" xml:space="preserve">
-  <value>Created on tablet</value>
+  <value>Dibuat di tablet</value>
   </data>
 
   <data name="Any" xml:space="preserve">
-  <value>Any</value>
+  <value>Apa pun</value>
   </data>
 
   <data name="AllAssignments" xml:space="preserve">
-  <value>All assignments</value>
+  <value>Semua penugasan</value>
   </data>
 
   <data name="NoResultsFound" xml:space="preserve">
-  <value>No results found</value>
+  <value>Tidak ada hasil ditemukan</value>
   </data>
 
   <data name="Processing" xml:space="preserve">
-  <value>Processing…</value>
+  <value>Memproses…</value>
   </data>
 
   <data name="Refresh" xml:space="preserve">
-  <value>Refresh</value>
+  <value>Muat ulang</value>
   </data>
 
   <data name="Total" xml:space="preserve">
@@ -177,19 +177,19 @@
   </data>
 
   <data name="CreateNewAssignment" xml:space="preserve">
-  <value>Create new assignment</value>
+  <value>Buat penugasan baru</value>
   </data>
 
   <data name="Name" xml:space="preserve">
-  <value>Name</value>
+  <value>Nama</value>
   </data>
 
   <data name="GetInterviewerApp" xml:space="preserve">
-  <value>Get Interviewer App</value>
+  <value>Dapatkan Aplikasi Interviewer</value>
   </data>
 
   <data name="Loading" xml:space="preserve">
-  <value>Loading. Please wait</value>
+  <value>Memuat. Mohon tunggu</value>
   </data>
 
   <data name="Admin" xml:space="preserve">
@@ -197,35 +197,35 @@
   </data>
 
   <data name="Approve" xml:space="preserve">
-  <value>Approve</value>
+  <value>Setujui</value>
   </data>
 
   <data name="Assign" xml:space="preserve">
-  <value>Assign</value>
+  <value>Tugaskan</value>
   </data>
 
   <data name="Reject" xml:space="preserve">
-  <value>Reject</value>
+  <value>Tolak</value>
   </data>
 
   <data name="Unapprove" xml:space="preserve">
-  <value>Unapprove</value>
+  <value>Batalkan persetujuan</value>
   </data>
 
   <data name="Delete" xml:space="preserve">
-  <value>Delete</value>
+  <value>Hapus</value>
   </data>
 
   <data name="SignIn" xml:space="preserve">
-  <value>Sign in</value>
+  <value>Masuk</value>
   </data>
 
   <data name="Title" xml:space="preserve">
-  <value>Title</value>
+  <value>Judul</value>
   </data>
 
   <data name="AlRightsReserved" xml:space="preserve">
-  <value>All Rights Reserved</value>
+  <value>Hak Cipta Dilindungi</value>
   </data>
 
   <data name="Legal" xml:space="preserve">
@@ -237,39 +237,39 @@
   </data>
 
   <data name="Settings" xml:space="preserve">
-  <value>Settings</value>
+  <value>Pengaturan</value>
   </data>
 
   <data name="EmailProviders" xml:space="preserve">
-  <value>Email providers</value>
+  <value>Penyedia email</value>
   </data>
 
   <data name="AuditLog" xml:space="preserve">
-  <value>Audit log</value>
+  <value>Log audit</value>
   </data>
 
   <data name="Logoff" xml:space="preserve">
-  <value>Logoff</value>
+  <value>Keluar</value>
   </data>
 
   <data name="Cancel" xml:space="preserve">
-  <value>Cancel</value>
+  <value>Batal</value>
   </data>
 
   <data name="Clear" xml:space="preserve">
-  <value>Clear</value>
+  <value>Bersihkan</value>
   </data>
 
   <data name="NewVersionAvailable" xml:space="preserve">
-  <value>New Version Available:</value>
+  <value>Versi Baru Tersedia:</value>
   </data>
 
   <data name="No" xml:space="preserve">
-  <value>No</value>
+  <value>Tidak</value>
   </data>
 
   <data name="Yes" xml:space="preserve">
-  <value>Yes</value>
+  <value>Ya</value>
   </data>
 
   <data name="Ok" xml:space="preserve">
@@ -277,139 +277,139 @@
   </data>
 
   <data name="Download" xml:space="preserve">
-  <value>Download</value>
+  <value>Unduh</value>
   </data>
 
   <data name="DownloadSupervisor" xml:space="preserve">
-  <value>Download Supervisor app</value>
+  <value>Unduh aplikasi Supervisor</value>
   </data>
 
   <data name="Open" xml:space="preserve">
-  <value>Open</value>
+  <value>Buka</value>
   </data>
 
   <data name="ShowStatusHistory" xml:space="preserve">
-  <value>Show Status History</value>
+  <value>Tampilkan Riwayat Status</value>
   </data>
 
   <data name="AllStatuses" xml:space="preserve">
-  <value>All statuses</value>
+  <value>Semua status</value>
   </data>
 
   <data name="AllSupervisors" xml:space="preserve">
-  <value>All supervisors</value>
+  <value>Semua supervisor</value>
   </data>
 
   <data name="AllResponsible" xml:space="preserve">
-  <value>Any responsible</value>
+  <value>Penanggung jawab apa pun</value>
   </data>
 
   <data name="AllQuestionnaires" xml:space="preserve">
-  <value>All questionnaires</value>
+  <value>Semua kuesioner</value>
   </data>
 
   <data name="AllGpsQuestions" xml:space="preserve">
-  <value>All GPS questions</value>
+  <value>Semua pertanyaan GPS</value>
   </data>
 
   <data name="OpenResponsiblesProfile" xml:space="preserve">
-  <value>Open responsible's profile</value>
+  <value>Buka profil penanggung jawab</value>
   </data>
 
   <data name="MapDashboard" xml:space="preserve">
-  <value>Map Dashboard</value>
+  <value>Dasbor Peta</value>
   </data>
 
   <data name="OpenAssignment" xml:space="preserve">
-  <value>Open assignment</value>
+  <value>Buka penugasan</value>
   </data>
 
   <data name="Confirm" xml:space="preserve">
-  <value>Confirm</value>
+  <value>Konfirmasi</value>
   </data>
 
   <data name="Archived" xml:space="preserve">
-  <value>Archived</value>
+  <value>Diarsipkan</value>
   </data>
 
   <data name="NothingSelected" xml:space="preserve">
-  <value>Nothing selected</value>
+  <value>Tidak ada yang dipilih</value>
   </data>
 
   <data name="QuestionnaireVersion" xml:space="preserve">
-  <value>Questionnaire version</value>
+  <value>Versi kuesioner</value>
   </data>
 
   <data name="AllVersions" xml:space="preserve">
-  <value>All versions</value>
+  <value>Semua versi</value>
   </data>
 
   <data name="SelectQuestionnaire" xml:space="preserve">
-  <value>Select questionnaire</value>
+  <value>Pilih kuesioner</value>
   </data>
 
   <data name="Reset" xml:space="preserve">
-  <value>Reset</value>
+  <value>Atur ulang</value>
   </data>
 
   <data name="EqualValues" xml:space="preserve">
-  <value>Equals</value>
+  <value>Sama dengan</value>
   </data>
 
   <data name="NotEquals" xml:space="preserve">
-  <value>Not equals</value>
+  <value>Tidak sama dengan</value>
   </data>
 
   <data name="SelectOption" xml:space="preserve">
-  <value>Select option</value>
+  <value>Pilih opsi</value>
   </data>
 
   <data name="StartsWith" xml:space="preserve">
-  <value>Starts with</value>
+  <value>Dimulai dengan</value>
   </data>
 
   <data name="Unknown" xml:space="preserve">
-  <value>Unknown</value>
+  <value>Tidak diketahui</value>
   </data>
 
   <data name="EditCalendarEvent" xml:space="preserve">
-  <value>Edit Calendar Event</value>
+  <value>Edit Acara Kalender</value>
   </data>
 
   <data name="CalendarEvent" xml:space="preserve">
-  <value>Calendar Event</value>
+  <value>Acara Kalender</value>
   </data>
 
   <data name="Add" xml:space="preserve">
-  <value>Add</value>
+  <value>Tambah</value>
   </data>
 
   <data name="Remove" xml:space="preserve">
-  <value>Remove</value>
+  <value>Hapus</value>
   </data>
 
   <data name="Return" xml:space="preserve">
-  <value>Return</value>
+  <value>Kembali</value>
   </data>
 
   <data name="ChangeToCAPI" xml:space="preserve">
-  <value>Change to CAPI</value>
+  <value>Ubah ke CAPI</value>
   </data>
 
   <data name="ChangeToCAPIConfirmHQ" xml:space="preserve">
-  <value>Selected {{count}} interviews mode will be changed to CAPI</value>
+  <value>Mode {{count}} wawancara yang dipilih akan diubah menjadi CAPI</value>
   </data>
 
   <data name="ChangeToCAWI" xml:space="preserve">
-  <value>Change to CAWI</value>
+  <value>Ubah ke CAWI</value>
   </data>
 
   <data name="ChangeToCAWIConfirmHQ" xml:space="preserve">
-  <value>Selected {{count}} interviews mode will be changed to CAWI</value>
+  <value>Mode {{count}} wawancara yang dipilih akan diubah menjadi CAWI</value>
   </data>
 
   <data name="InterviewMode" xml:space="preserve">
-  <value>Interview Mode</value>
+  <value>Mode Wawancara</value>
   </data>
 
   <data name="Capi" xml:space="preserve">
@@ -421,34 +421,34 @@
   </data>
 
   <data name="Enable" xml:space="preserve">
-  <value>Enable</value>
+  <value>Aktifkan</value>
   </data>
 
   <data name="Disable" xml:space="preserve">
-  <value>Disable</value>
+  <value>Nonaktifkan</value>
   </data>
 
   <data name="Properties" xml:space="preserve">
-  <value>Properties</value>
+  <value>Properti</value>
   </data>
 
   <data name="LinkedUsers" xml:space="preserve">
-  <value>Linked users</value>
+  <value>Pengguna tertaut</value>
   </data>
 
   <data name="LinkUser" xml:space="preserve">
-  <value>User</value>
+  <value>Pengguna</value>
   </data>
 
   <data name="GeoTrackNumber" xml:space="preserve">
-  <value>Track</value>
+  <value>Jejak</value>
   </data>
 
   <data name="DateRange" xml:space="preserve">
-  <value>Date range</value>
+  <value>Rentang tanggal</value>
   </data>
 
   <data name="AllGeoTracks" xml:space="preserve">
-  <value>All geo tracks</value>
+  <value>Semua jejak geo</value>
   </data>
 </root>

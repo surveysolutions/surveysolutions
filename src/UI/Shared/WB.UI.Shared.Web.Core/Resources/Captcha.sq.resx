@@ -132,6 +132,6 @@
 
 
   <data name="CaptchaError" xml:space="preserve">
-      <value>Generate captcha error. Please contact your system administrator.</value>
+      <value>Gabim gjatë gjenerimit të captcha-s. Ju lutemi, kontaktoni administratorin e sistemit.</value>
   </data>
 </root>

@@ -219,14 +219,14 @@
 
 
   <data name="RestartInterview" xml:space="preserve">
-    <value>Interview {0} restarted</value>
+    <value>Interviul {0} a fost repornit</value>
   </data>
 
   <data name="RejectInterviewToInterviewer" xml:space="preserve">
-    <value>Interview {0} rejected to interviewer {1}</value>
+    <value>Interviul {0} a fost respins către intervievatorul {1}</value>
   </data>
 
   <data name="SwitchInterviewMode" xml:space="preserve">
-    <value>Interview {0} switched to {1} mode</value>
+    <value>Interviul {0} a fost comutat în modul {1}</value>
   </data>
 </root>

@@ -180,14 +180,14 @@
 
 
   <data name="UpgradeAssignments" xml:space="preserve">
-    <value>Upgrade assignments</value>
+    <value>დავალებების განახლება</value>
   </data>
 
   <data name="Importing" xml:space="preserve">
-    <value>Importing {{percent}}%</value>
+    <value>იმპორტი {{percent}}%</value>
   </data>
 
   <data name="Prepare" xml:space="preserve">
-    <value>Receiving questionnaire data</value>
+    <value>კითხვარის მონაცემების მიღება</value>
   </data>
 </root>

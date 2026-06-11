@@ -219,19 +219,19 @@ Următoarele date asociate acestui spațiu de lucru vor fi șterse:</value>
 
 
   <data name="WorkspaceCantBeRemoved" xml:space="preserve">
-    <value>Workspace can not be removed because user has assigned work. Reassign all assignments (including archived), not completed interviews and for Supervisor move all team members to another team. Interviews: {0}, Assignments: {1}, Team members: {2}</value>
+    <value>Spațiul de lucru nu poate fi eliminat deoarece utilizatorul are lucru atribuit. Reatribuiți toate sarcinile (inclusiv cele arhivate), interviurile nefinalizate, iar pentru Supervizor mutați toți membrii echipei în altă echipă. Interviuri: {0}, Sarcini: {1}, Membri ai echipei: {2}</value>
     <comment>{0} interviews count, {1} Assignments count, {2} Interviewers count</comment>
   </data>
 
   <data name="Open" xml:space="preserve">
-    <value>Open</value>
+    <value>Deschis</value>
   </data>
 
   <data name="CreatedAt" xml:space="preserve">
-    <value>Created on</value>L
+    <value>Creat pe</value>L
   </data>
 
   <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
-    <value>When the workspace was initially created. Click on the sort icon to sort by time.</value>
+    <value>Când a fost creat inițial spațiul de lucru. Faceți clic pe pictograma de sortare pentru a sorta după timp.</value>
   </data>
 </root>

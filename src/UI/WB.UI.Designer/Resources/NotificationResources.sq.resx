@@ -174,27 +174,27 @@
 
 
   <data name="AnonymousSharingEmail" xml:space="preserve">
-    <value>Hello {0}, &lt;br/&gt;&lt;br/&gt; You have enabled read-only access to your questionnaire "{1}" for anonymous users via the following link: </value>
+    <value>Përshëndetje {0}, &lt;br/&gt;&lt;br/&gt; Ju keni aktivizuar aksesin vetëm për lexim të pyetësorit tuaj "{1}" për përdoruesit anonimë nëpërmjet adresës së mëposhtme: </value>
   </data>
 
   <data name="EmailSendInfo" xml:space="preserve">
-    <value>This message was automatically sent by the Survey Solutions Designer tool.</value>
+    <value>Ky mesazh u dërgua automatikisht nga mjeti Survey Solutions Designer.</value>
   </data>
 
   <data name="SystemMailer_AnonymousSharingEmail_Subject" xml:space="preserve">
-    <value>Anonymous sharing link</value>
+    <value>Adresë ndajeje anonime</value>
   </data>
 
   <data name="TranfserOwnershipNotification" xml:space="preserve">
-    <value>Hello {0}, &lt;br&gt; {1} has transferred ownership of the questionnaire {2} to You</value>
+    <value>Përshëndetje {0}, &lt;br&gt; {1} ka transferuar pronësinë e pyetësorit {2} tek Ju</value>
   </data>
 
   <data name="EmailChange" xml:space="preserve">
-    <value>Hello {0}, &lt;br/&gt; &lt;br/&gt;
-To confirm email change please use following link: </value>
+    <value>Përshëndetje {0}, &lt;br/&gt; &lt;br/&gt;
+Për të konfirmuar ndryshimin e emailit, ju lutemi përdorni adresën e mëposhtme: </value>
   </data>
 
   <data name="EmailChangeLink" xml:space="preserve">
-    <value>confirm</value>
+    <value>konfirmo</value>
   </data>
 </root>

@@ -192,95 +192,95 @@
 
 
   <data name="Maps" xml:space="preserve">
-    <value>Maps</value>
+    <value>რუკები</value>
   </data>
 
   <data name="MapDashboard" xml:space="preserve">
-    <value>Map Dashboard</value>
+    <value>რუკის დაფა</value>
   </data>
 
   <data name="ExportQuestionnaire" xml:space="preserve">
-    <value>Export questionnaire</value>
+    <value>კითხვარის ექსპორტი</value>
   </data>
 
   <data name="SaveQuestionnaire" xml:space="preserve">
-    <value>Save questionnaire document</value>
+    <value>კითხვარის დოკუმენტის შენახვა</value>
   </data>
 
   <data name="RecordAudio" xml:space="preserve">
-    <value>Record audio</value>
+    <value>აუდიოს ჩაწერა</value>
   </data>
 
   <data name="QuestionnairePreview" xml:space="preserve">
-    <value>Questionnaire preview</value>
+    <value>კითხვარის წინასწარი ნახვა</value>
   </data>
 
   <data name="DeleteMap" xml:space="preserve">
-    <value>Delete map</value>
+    <value>რუკის წაშლა</value>
   </data>
 
   <data name="DeleteMapUser" xml:space="preserve">
-    <value>Delete map user</value>
+    <value>რუკის მომხმარებლის წაშლა</value>
   </data>
 
   <data name="UpgradeAssignments" xml:space="preserve">
-    <value>Upgrade assignments</value>
+    <value>დავალებების განახლება</value>
   </data>
 
   <data name="RecordAudioTitle" xml:space="preserve">
-    <value>The Interviewer application will record the audio of the interview when audio audit is enabled. Note that the amount of synchronization data would be significantly larger.</value>
+    <value>აუდიო აუდიტის ჩართვისას Interviewer აპლიკაცია ინტერვიუს აუდიოს ჩაიწერს. გაითვალისწინეთ, რომ სინქრონიზაციის მონაცემების მოცულობა მნიშვნელოვნად გაიზრდება.</value>
   </data>
 
   <data name="SendInvitations" xml:space="preserve">
-    <value>Send invitations</value>
+    <value>მოწვევების გაგზავნა</value>
   </data>
 
   <data name="DownloadLinks" xml:space="preserve">
-    <value>Download web links</value>
+    <value>ვებბმულების ჩამოტვირთვა</value>
   </data>
 
   <data name="WebMode" xml:space="preserve">
-    <value>Mode</value>
+    <value>რეჟიმი</value>
   </data>
 
   <data name="Details" xml:space="preserve">
-    <value>Details</value>
+    <value>დეტალები</value>
     <comment>Questionnaire details</comment>
   </data>
 
   <data name="ShowOnDesigner" xml:space="preserve">
-    <value>Show on Designer</value>
+    <value>Designer-ში ჩვენება</value>
   </data>
 
   <data name="ImportedBy" xml:space="preserve">
-    <value>Imported by</value>
+    <value>დააიმპორტა</value>
   </data>
 
   <data name="ImportedByText" xml:space="preserve">
-    <value>{{role}} user {{name}}</value>
+    <value>{{role}} მომხმარებელი {{name}}</value>
   </data>
 
   <data name="QuestionnaireDeleteWarn" xml:space="preserve">
-    <value>{{receivedInterviews}} interviews and {{receivedAssignments}} assignments for new interviews have been received by the interviewers/supervisors working disconnected. After you confirm the deletion of the survey the server will no longer accept the information based on these interviews/assignments, and they will disappear at next synchronization without a possibility of recovery even if contain newly entered/edited information. It is your responsibility to warn/notify the interviewers to no longer fill out those interviews/assignments, because they will not be notified automatically. Do you want to continue?</value>
+    <value>ინტერვიუერებისა და სუპერვაიზერების მიერ ოფლაინ რეჟიმში მუშაობისას მიღებულია {{receivedInterviews}} ინტერვიუ და ახალი ინტერვიუებისთვის {{receivedAssignments}} დავალება. კვლევის წაშლის დადასტურების შემდეგ სერვერი ამ ინტერვიუებზე ან დავალებებზე დაფუძნებულ ინფორმაციას აღარ მიიღებს და ისინი შემდეგი სინქრონიზაციისას გაქრება აღდგენის შესაძლებლობის გარეშე, მაშინაც კი, თუ შეიცავს ახლად შეყვანილ ან შეცვლილ ინფორმაციას. თქვენი პასუხისმგებლობაა გააფრთხილოთ ან აცნობოთ ინტერვიუერებს, რომ აღარ შეავსონ ეს ინტერვიუები ან დავალებები, რადგან ისინი ავტომატურად არ მიიღებენ შეტყობინებას. გსურთ გაგრძელება?</value>
   </data>
 
   <data name="TypeQuestionnaireName" xml:space="preserve">
-    <value>Please type '{{questionnaireTitle}}' to confirm</value> 
+    <value>დადასტურებისთვის აკრიფეთ '{{questionnaireTitle}}'</value>
   </data>
 
   <data name="UsersManagement" xml:space="preserve">
-      <value>Users Management</value>
+      <value>მომხმარებლების მართვა</value>
   </data>
 
   <data name="CreateUser" xml:space="preserve">
-      <value>Create User</value>
+      <value>მომხმარებლის შექმნა</value>
   </data>
 
   <data name="ExposedVariables" xml:space="preserve">
-    <value>Exposed Variables</value>
+    <value>გამოტანილი ცვლადები</value>
   </data>
 
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>რედაქტირება</value>
   </data>
 </root>

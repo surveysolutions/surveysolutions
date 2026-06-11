@@ -156,14 +156,14 @@
 
 
   <data name="LinkInvitation" xml:space="preserve">
-    <value>You have been invited to take a part in the following survey: "%QUESTIONNAIRE%". Your interview is not ready yet.</value>
+    <value>Ați fost invitat să participați la următorul sondaj: "%QUESTIONNAIRE%". Interviul dvs. nu este încă pregătit.</value>
   </data>
 
   <data name="LinkToInterviewPage" xml:space="preserve">
-    <value>Web Interview</value>
+    <value>Interviu web</value>
   </data>
 
   <data name="LinkWelcome" xml:space="preserve">
-    <value>Hello and Welcome to the Survey Solutions Web Survey</value>
+    <value>Bună ziua și bine ați venit la sondajul web Survey Solutions</value>
   </data>
 </root>

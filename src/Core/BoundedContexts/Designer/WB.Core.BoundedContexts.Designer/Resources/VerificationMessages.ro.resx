@@ -810,54 +810,54 @@
 
 
   <data name="WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion" xml:space="preserve">
-    <value>Special values attachment name must be unique.</value>
+    <value>Numele atașamentului pentru valorile speciale trebuie să fie unic.</value>
   </data>
 
   <data name="WB0139_SpecialValuesAttachmentsReferAbsentAttachment" xml:space="preserve">
-    <value>Special values attachment refers to non existent attachment.</value>
+    <value>Atașamentul pentru valorile speciale face referire la un atașament inexistent.</value>
   </data>
 
   <data name="WB0313_QuestionOptionReferenceToNonExistentAttachment" xml:space="preserve">
-      <value>Question option refers to non existent attachment</value>
+      <value>Opțiunea întrebării face referire la un atașament inexistent</value>
   </data>
 
   <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
-      <value>Question contains multiple options that refer to the same attachment</value>
+      <value>Întrebarea conține mai multe opțiuni care fac referire la același atașament</value>
   </data>
 
   <data name="WB0315_AttachmentHasInvalidName" xml:space="preserve">
-    <value>Attachment name should contain only letters, digits and underscore character. Is starting with letter, no consecutive underscores, not ending with underscore and is not a reserved word. Not empty and less than 32 characters.</value>
+    <value>Numele atașamentului trebuie să conțină doar litere, cifre și caracterul underscore. Trebuie să înceapă cu o literă, să nu conțină underscore-uri consecutive, să nu se termine cu underscore și să nu fie un cuvânt rezervat. Nu poate fi gol și trebuie să aibă mai puțin de 32 de caractere.</value>
   </data>
 
   <data name="WB0316_QuestionnaireWithOldCoverPage" xml:space="preserve">
-    <value>Questionnaire in old format. Please use "Generate cover" link on Cover section.</value>
+    <value>Chestionarul este în format vechi. Vă rugăm să utilizați linkul "Generate cover" din secțiunea Cover.</value>
   </data>
 
   <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
-    <value>Critical question's scope cannot be any of the following: hidden, supervisor.</value>
+    <value>Domeniul întrebării critice nu poate fi niciunul dintre următoarele: hidden, supervisor.</value>
   </data>
 
   <data name="WB0318_CriticalityConditionExpressionHasIncorrectSyntax" xml:space="preserve">
-    <value>Critical condition has a syntax error in expression.</value>
+    <value>Condiția critică are o eroare de sintaxă în expresie.</value>
   </data>
 
   <data name="WB0319_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
-    <value>Critical condition is empty.</value>
+    <value>Condiția critică este goală.</value>
   </data>
 
   <data name="WB0320_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
-    <value>Message in critical rule is empty.</value>
+    <value>Mesajul din regula critică este gol.</value>
   </data>
 
   <data name="WB0321_CriticalityConditionUsingForbiddenClasses" xml:space="preserve">
-    <value>Critical condition is using forbidden type.</value>
+    <value>Condiția critică utilizează un tip interzis.</value>
   </data>
 
   <data name="WB0322_CriticalRuleExpressionIsTooLong" xml:space="preserve">
-    <value>Critical rule expression has more than {0} characters.</value>
+    <value>Expresia regulii critice are mai mult de {0} caractere.</value>
   </data>
 
   <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
-    <value>Critical condition message more than {0} characters.</value>
+    <value>Mesajul condiției critice are mai mult de {0} caractere.</value>
   </data>
 </root>

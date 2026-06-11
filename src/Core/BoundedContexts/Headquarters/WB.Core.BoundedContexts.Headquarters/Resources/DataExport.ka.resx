@@ -231,23 +231,23 @@
 
 
   <data name="Preparing" xml:space="preserve">
-    <value>Preparing</value>
+    <value>მზადდება</value>
   </data>
 
   <data name="Compressing" xml:space="preserve">
-    <value>Compressing</value>
+    <value>იკუმშება</value>
   </data>
 
   <data name="FromDate" xml:space="preserve">
-    <value>From</value>
+    <value>დან</value>
   </data>
 
   <data name="ToDate" xml:space="preserve">
-    <value>To</value>
+    <value>მდე</value>
   </data>
 
   <data name="ZipFile" xml:space="preserve">
-    <value>Zip file</value>
+    <value>Zip ფაილი</value>
   </data>
 
   <data name="Dropbox" xml:space="preserve">
@@ -263,35 +263,35 @@
   </data>
 
   <data name="SaveBinaryDataTo" xml:space="preserve">
-    <value>Save binary data to:</value>
+    <value>ბინარული მონაცემების შენახვა აქ:</value>
   </data>
 
   <data name="ExportBtn" xml:space="preserve">
-    <value>Export</value>
+    <value>ექსპორტი</value>
   </data>
 
   <data name="DataExport_Destination_Dropbox" xml:space="preserve">
-    <value>Export file will be uploaded to Dropbox</value>
+    <value>საექსპორტო ფაილი აიტვირთება Dropbox-ში</value>
   </data>
 
   <data name="DataExport_Destination_File" xml:space="preserve">
-    <value>Export file will be available for download</value>
+    <value>საექსპორტო ფაილი ხელმისაწვდომი იქნება ჩამოსატვირთად</value>
   </data>
 
   <data name="DataExport_Destination_GoogleDrive" xml:space="preserve">
-    <value>Export file will be uploaded to Google Drive</value>
+    <value>საექსპორტო ფაილი აიტვირთება Google Drive-ში</value>
   </data>
 
   <data name="DataExport_Destination_OneDrive" xml:space="preserve">
-    <value>Export file will be uploaded to OneDrive</value>
+    <value>საექსპორტო ფაილი აიტვირთება OneDrive-ში</value>
   </data>
 
   <data name="DataExport_QueuedOn" xml:space="preserve">
-    <value>Queued on {{date}}</value>
+    <value>რიგში ჩადგა {{date}}</value>
   </data>
 
   <data name="DataExport_CompletedOn" xml:space="preserve">
-    <value>Completed on {{date}}</value>
+    <value>დასრულდა {{date}}</value>
   </data>
 
   <data name="DataExport_QuestionnaireWithVersion" xml:space="preserve">
@@ -299,278 +299,278 @@
   </data>
 
   <data name="DataExport_Regenerate" xml:space="preserve">
-    <value>Regenerate</value>
+    <value>ხელახლა გენერირება</value>
   </data>
 
   <data name="DataExport_RegenerateDesc" xml:space="preserve">
-    <value>Queue export with the same params</value>
+    <value>ექსპორტის იმავე პარამეტრებით რიგში ჩაყენება</value>
   </data>
 
   <data name="DataExport_FileLastUpdate" xml:space="preserve">
-    <value>Last updated: {{date}}</value>
+    <value>ბოლო განახლება: {{date}}</value>
   </data>
 
   <data name="DataExport_FileWasRegenerated" xml:space="preserve">
-    <value>File was regenerated or deleted</value>
+    <value>ფაილი ხელახლა დაგენერირდა ან წაიშალა</value>
   </data>
 
   <data name="DataExport_FileSize" xml:space="preserve">
-    <value>File size: {{size}} MB</value>
+    <value>ფაილის ზომა: {{size}} MB</value>
   </data>
 
   <data name="DataExport_ProducedIn" xml:space="preserve">
-    <value>Produced in:</value>
+    <value>შეიქმნა:</value>
   </data>
 
   <data name="DataExport_InQueue" xml:space="preserve">
-    <value>In queue:</value>
+    <value>რიგში:</value>
   </data>
 
   <data name="DataExport_Destination" xml:space="preserve">
-    <value>Destination: {{dest}}</value>
+    <value>დანიშნულება: {{dest}}</value>
   </data>
 
   <data name="DataExport_ServiceIsNotAvailable" xml:space="preserve">
-    <value>Export service is not available</value>
+    <value>ექსპორტის სერვისი მიუწვდომელია</value>
   </data>
 
   <data name="DataType" xml:space="preserve">
-    <value>Data type</value>
+    <value>მონაცემის ტიპი</value>
   </data>
 
   <data name="DataType_Binary" xml:space="preserve">
-    <value>Binary Data. Archive with binary data (e.g., pictures, audio)</value>
+    <value>ბინარული მონაცემები. არქივი ბინარული მონაცემებით (მაგ., სურათები, აუდიო)</value>
   </data>
 
   <data name="DataType_Ddi" xml:space="preserve">
-    <value>DDI. Data Documentation Initiative XML data</value>
+    <value>DDI. Data Documentation Initiative XML მონაცემები</value>
   </data>
 
   <data name="DataType_MainSurveyData" xml:space="preserve">
-    <value>Main Survey Data. Zip archive with main interview data</value>
+    <value>კვლევის ძირითადი მონაცემები. Zip არქივი ინტერვიუს ძირითადი მონაცემებით</value>
   </data>
 
   <data name="FilterTitle" xml:space="preserve">
-    <value>Filter interviews to export</value>
+    <value>გასატანი ინტერვიუების გაფილტვრა</value>
   </data>
 
   <data name="SurveyQuestionnaire" xml:space="preserve">
-    <value>Questionnaire</value>
+    <value>კითხვარი</value>
   </data>
 
   <data name="SurveyQuestionnaireVersion" xml:space="preserve">
-    <value>Questionnaire version</value>
+    <value>კითხვარის ვერსია</value>
   </data>
 
   <data name="DataType_Paradata" xml:space="preserve">
-    <value>Paradata. Metadata on the interview process (events and timing)</value>
+    <value>Paradata. მეტამონაცემები ინტერვიუს პროცესზე (მოვლენები და დრო)</value>
   </data>
 
   <data name="DataDestination" xml:space="preserve">
-    <value>Export file destination</value>
+    <value>საექსპორტო ფაილის დანიშნულება</value>
   </data>
 
   <data name="DataFormat" xml:space="preserve">
-    <value>Data format</value>
+    <value>მონაცემის ფორმატი</value>
   </data>
 
   <data name="DataDestination_Dropbox" xml:space="preserve">
-    <value>Upload to Dropbox</value>
+    <value>Dropbox-ში ატვირთვა</value>
   </data>
 
   <data name="DataDestination_GoogleDrive" xml:space="preserve">
-    <value>Upload to Google Drive</value>
+    <value>Google Drive-ში ატვირთვა</value>
   </data>
 
   <data name="DataDestination_OneDrive" xml:space="preserve">
-    <value>Upload to OneDrive</value>
+    <value>OneDrive-ში ატვირთვა</value>
   </data>
 
   <data name="DataDestination_Zip" xml:space="preserve">
-    <value>Download</value>
+    <value>ჩამოტვირთვა</value>
   </data>
 
   <data name="DataFormat_Spss" xml:space="preserve">
-    <value>SPSS format</value>
+    <value>SPSS ფორმატი</value>
   </data>
 
   <data name="DataFormat_Stata" xml:space="preserve">
-    <value>Stata 14 format</value>
+    <value>Stata 14 ფორმატი</value>
   </data>
 
   <data name="DataFormat_Tab" xml:space="preserve">
-    <value>Tab separated data</value>
+    <value>Tab-ით გამოყოფილი მონაცემები</value>
   </data>
 
   <data name="QuestionnaireInformation" xml:space="preserve">
-    <value>Questionnaire information</value>
+    <value>კითხვარის ინფორმაცია</value>
   </data>
 
   <data name="QuestionnaireInformation_Include" xml:space="preserve">
-    <value>Include meta information about questionnaire</value>
+    <value>კითხვარის შესახებ მეტაინფორმაციის ჩართვა</value>
   </data>
 
   <data name="QuestionnaireInformation_Exclude" xml:space="preserve">
-    <value>Exclude meta information about questionnaire</value>
+    <value>კითხვარის შესახებ მეტაინფორმაციის გამორიცხვა</value>
   </data>
 
   <data name="AddToQueue" xml:space="preserve">
-    <value>Add to queue</value>
+    <value>რიგში დამატება</value>
   </data>
 
   <data name="GeneratedDataSets" xml:space="preserve">
-    <value>Previously generated export sets</value>
+    <value>ადრე გენერირებული ექსპორტის ნაკრებები</value>
   </data>
 
   <data name="GeneratedDataSets_Desc" xml:space="preserve">
-    <value>Data is exported in a zip archive containing the data files of specified content and type. Below is a list of previously exported data files.</value>
+    <value>მონაცემები ექსპორტდება zip არქივში, რომელიც შეიცავს მითითებული შინაარსისა და ტიპის მონაცემთა ფაილებს. ქვემოთ მოცემულია ადრე ექსპორტირებული მონაცემთა ფაილების სია.</value>
   </data>
 
   <data name="NoDataSets" xml:space="preserve">
-    <value>No generated data sets yet</value>
+    <value>ჯერ გენერირებული მონაცემთა ნაკრებები არ არის</value>
   </data>
 
   <data name="DataExportApi" xml:space="preserve">
-    <value>Data export API</value>
+    <value>მონაცემთა ექსპორტის API</value>
   </data>
 
   <data name="DataExportApiDesc" xml:space="preserve">
-    <value>You can setup automatic export of collected interview data using our API toolset for more information and instruction use:</value>
+    <value>შეგიძლიათ შეგროვებული ინტერვიუს მონაცემების ავტომატური ექსპორტის გამართვა ჩვენი API ინსტრუმენტარიუმის გამოყენებით. დამატებითი ინფორმაციისა და ინსტრუქციისთვის იხილეთ:</value>
   </data>
 
   <data name="DataExportApiInfoPage" xml:space="preserve">
-    <value>Data Export API reference</value>
+    <value>Data Export API-ის დოკუმენტაცია</value>
   </data>
 
   <data name="Error_Canceled" xml:space="preserve">
-    <value>Export job was canceled by user.</value>
+    <value>ექსპორტის დავალება მომხმარებელმა გააუქმა.</value>
   </data>
 
   <data name="Error_NotEnoughExternalStorageSpace" xml:space="preserve">
-    <value>Not enough space fot the selected cloud storage provide. Please free space and restart the job or choose another provider.</value>
+    <value>არჩეულ ღრუბლოვან საცავში საკმარისი ადგილი არ არის. გთხოვთ, გაათავისუფლოთ სივრცე და თავიდან გაუშვათ დავალება ან აირჩიოთ სხვა პროვაიდერი.</value>
   </data>
 
   <data name="Error_Unhandled" xml:space="preserve">
-    <value>An unexpected error occurred during export. We are sorry for inconvenience. Please contact your server support team. Additional information to this issue is available at the support page: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
+    <value>ექსპორტის დროს მოხდა გაუთვალისწინებელი შეცდომა. ბოდიშს გიხდით შეფერხებისთვის. გთხოვთ, დაუკავშირდეთ თქვენი სერვერის მხარდაჭერის გუნდს. დამატებითი ინფორმაცია ამ პრობლემის შესახებ ხელმისაწვდომია მხარდაჭერის გვერდზე: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
   </data>
 
   <data name="AllStatuses" xml:space="preserve">
-    <value>all statuses</value>
+    <value>ყველა სტატუსი</value>
   </data>
 
   <data name="ApprovedByHeadquarters" xml:space="preserve">
-    <value>Approved by Headquarters status</value>
+    <value>Headquarters-ის მიერ დამტკიცებული სტატუსი</value>
   </data>
 
   <data name="ApprovedBySupervisor" xml:space="preserve">
-    <value>Approved by Supervisor  status</value>
+    <value>Supervisor-ის მიერ დამტკიცებული სტატუსი</value>
   </data>
 
   <data name="DataExport_InterviewsStatus" xml:space="preserve">
-    <value>Interviews in {{status}}.</value>
+    <value>{{status}} სტატუსში მყოფი ინტერვიუები.</value>
   </data>
 
   <data name="InterviewerAssigned" xml:space="preserve">
-    <value>Interviewer assigned  status</value>
+    <value>Interviewer-ზე მინიჭებული სტატუსი</value>
   </data>
 
   <data name="QuestionnaireTranslation" xml:space="preserve">
-    <value>Translation</value>
+    <value>თარგმანი</value>
   </data>
 
   <data name="Translation_CardLabel" xml:space="preserve">
-    <value>Translation: {{language}}</value>
+    <value>თარგმანი: {{language}}</value>
   </data>
 
   <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
-      <value>Translation</value>
+      <value>თარგმანი</value>
   </data>
 
   <data name="SurveyQuestionnaireDateRange" xml:space="preserve">
-      <value>Date range</value>
+      <value>თარიღების დიაპაზონი</value>
   </data>
 
   <data name="DateRangeAllTime" xml:space="preserve">
-      <value>All time</value>
+      <value>მთელი პერიოდი</value>
   </data>
 
   <data name="DateRangeLast24hours" xml:space="preserve">
-      <value>Last 24 hours</value>
+      <value>ბოლო 24 საათი</value>
   </data>
 
   <data name="DateRangeLast7days" xml:space="preserve">
-      <value>Last 7 days</value>
+      <value>ბოლო 7 დღე</value>
   </data>
 
   <data name="DateRangeLast30days" xml:space="preserve">
-      <value>Last 30 days</value>
+      <value>ბოლო 30 დღე</value>
   </data>
 
   <data name="DateRangeLastToday" xml:space="preserve">
-      <value>Today</value>
+      <value>დღეს</value>
   </data>
 
   <data name="DateRangeLastYesterday" xml:space="preserve">
-      <value>Yesterday</value>
+      <value>გუშინ</value>
   </data>
 
   <data name="DateRangeCustom" xml:space="preserve">
-      <value>Custom</value>
+      <value>მორგებული</value>
   </data>
 
   <data name="SurveyQuestionnaireDateRangeFrom" xml:space="preserve">
-      <value>From</value>
+      <value>დან</value>
   </data>
 
   <data name="DateRangeFromAll" xml:space="preserve">
-      <value>Earliest available</value>
+      <value>ყველაზე ადრეული ხელმისაწვდომი</value>
   </data>
 
   <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
-      <value>To</value>
+      <value>მდე</value>
   </data>
 
   <data name="DateRangeToAll" xml:space="preserve">
-      <value>Current moment</value>
+      <value>მიმდინარე მომენტი</value>
   </data>
     
   <data name="DataType_AudioAuditFiles" xml:space="preserve">
-      <value>Audio Audit. Zip archive containing Audio Audit data</value>
+      <value>აუდიო აუდიტი. Zip არქივი, რომელიც შეიცავს აუდიო აუდიტის მონაცემებს</value>
   </data>
 
   <data name="ParadataEventsFilter" xml:space="preserve">
-      <value>Events filter</value>
+      <value>მოვლენების ფილტრი</value>
   </data>
 
   <data name="ParadataEventsFilter_All" xml:space="preserve">
-      <value>All</value>
+      <value>ყველა</value>
   </data>
 
   <data name="ParadataEventsFilter_Reduced" xml:space="preserve">
-      <value>Reduced</value>
+      <value>შემცირებული</value>
   </data>
 
   <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
-      <value>Reduced paradata set does not include events with the following codes: QuestionEnabled (13), QuestionDisabled (14), GroupEnabled (15), GroupDisabled (16), QuestionDeclaredValid (17), QuestionDeclaredInvalid (18), VariableEnabled (23), VariableDisabled (24).</value>
+      <value>შემცირებული paradata ნაკრები არ მოიცავს მოვლენებს შემდეგი კოდებით: QuestionEnabled (13), QuestionDisabled (14), GroupEnabled (15), GroupDisabled (16), QuestionDeclaredValid (17), QuestionDeclaredInvalid (18), VariableEnabled (23), VariableDisabled (24).</value>
   </data>
 
     <data name="Validation_FromDateInvalid" xml:space="preserve">
-    <value>The "From" date must be a valid date.</value>
+    <value>"From" თარიღი უნდა იყოს ვალიდური თარიღი.</value>
 </data>
 
     <data name="Validation_FromDateInFuture" xml:space="preserve">
-    <value>The "From" date cannot be in the future.</value>
+    <value>"From" თარიღი მომავალში ვერ იქნება.</value>
 </data>
 
     <data name="Validation_ToDateInvalid" xml:space="preserve">
-    <value>The "To" date must be a valid date.</value>
+    <value>"To" თარიღი უნდა იყოს ვალიდური თარიღი.</value>
 </data>
 
     <data name="Validation_FromDateInvalidBeforeTo" xml:space="preserve">
-    <value>The "From" date must be valid before validating the "To" date.</value>
+    <value>"To" თარიღის შემოწმებამდე "From" თარიღი ვალიდური უნდა იყოს.</value>
 </data>
 
     <data name="Validation_ToDateBeforeFrom" xml:space="preserve">
-    <value>The "To" date must be greater than the "From" date.</value>
+    <value>"To" თარიღი უნდა იყოს "From" თარიღზე გვიან.</value>
 </data>
 </root>

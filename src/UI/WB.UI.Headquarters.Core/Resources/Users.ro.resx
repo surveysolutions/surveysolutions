@@ -181,7 +181,7 @@
     <value>Editați: {0}</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>E-mail</value>
   </data>
   <data name="FinishInstallation" xml:space="preserve">
     <value>Încheierea instalării</value>
@@ -306,18 +306,18 @@
 
 
   <data name="UsersTitle" xml:space="preserve">
-    <value>Users</value>
+    <value>Utilizatori</value>
   </data>
 
   <data name="AddUser" xml:space="preserve">
-    <value>Add User</value>
+    <value>Adăugare utilizator</value>
   </data>
 
   <data name="UploadUsers" xml:space="preserve">
-    <value>Upload Users</value>
+    <value>Încărcare utilizatori</value>
   </data>
 
   <data name="ApiTokenTitle" xml:space="preserve">
-      <value>User API Token</value>
+      <value>Token API utilizator</value>
   </data>
 </root>

@@ -276,59 +276,59 @@
 
 
   <data name="CreateAdministrator" xml:space="preserve">
-    <value>Create administrator</value>
+    <value>ადმინისტრატორის შექმნა</value>
   </data>
 
   <data name="ResetPassword" xml:space="preserve">
-    <value>Reset Password</value>
+    <value>პაროლის განულება</value>
   </data>
 
   <data name="ResetPasswordTitle" xml:space="preserve">
-    <value>Reset user password</value>
+    <value>მომხმარებლის პაროლის განულება</value>
   </data>
 
   <data name="UserNotFound" xml:space="preserve">
-    <value>User not found</value>
+    <value>მომხმარებელი ვერ მოიძებნა</value>
   </data>
 
   <data name="PasswordChanged" xml:space="preserve">
-    <value>Password for user {0} changed</value>
+    <value>მომხმარებლის {0} პაროლი შეიცვალა</value>
   </data>
 
 
   <data name="Filter_AllUsers" xml:space="preserve">
-    <value>All users</value>
+    <value>ყველა მომხმარებელი</value>
   </data>
 
   <data name="Filter_WithMissingWorkspace" xml:space="preserve">
-    <value>Missing workspaces</value>
+    <value>სამუშაო სივრცის გარეშე</value>
   </data>
 
   <data name="Filter_WithDisabledWorkspaces" xml:space="preserve">
-    <value>With disabled workspaces only</value>
+    <value>მხოლოდ გამორთული სამუშაო სივრცეებით</value>
   </data>
 
   <data name="Filter_Locked" xml:space="preserve">
-    <value>Locked users</value>
+    <value>დაბლოკილი მომხმარებლები</value>
   </data>
 
   <data name="Filter_Archived" xml:space="preserve">
-    <value>Archived users</value>
+    <value>დაარქივებული მომხმარებლები</value>
   </data>
 
   <data name="UsersTitle" xml:space="preserve">
-    <value>Users</value>
+    <value>მომხმარებლები</value>
   </data>
 
   <data name="AddUser" xml:space="preserve">
-    <value>Add User</value>
+    <value>მომხმარებლის დამატება</value>
   </data>
 
   <data name="UploadUsers" xml:space="preserve">
-    <value>Upload Users</value>
+    <value>მომხმარებლების ატვირთვა</value>
   </data>
 
   <data name="ApiTokenTitle" xml:space="preserve">
-      <value>User API Token</value>
+      <value>მომხმარებლის API Token</value>
   </data>
 </root>

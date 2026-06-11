@@ -147,10 +147,10 @@
 
 
   <data name="TeamSize" xml:space="preserve">
-    <value>Team size</value>
+    <value>გუნდის ზომა</value>
   </data>
 
   <data name="Interviewers" xml:space="preserve">
-    <value>Interviewers</value>
+    <value>ინტერვიუერები</value>
   </data>
 </root>

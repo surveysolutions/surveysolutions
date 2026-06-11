@@ -393,42 +393,42 @@
 
 
   <data name="CriticalRuleAlreadyExist" xml:space="preserve">
-    <value>Critical rule already exists.</value>
+    <value>Regula critică există deja.</value>
   </data>
 
   <data name="CriticalRuleIsAbsent" xml:space="preserve">
-    <value>Critical rule is absent.</value>
+    <value>Regula critică lipsește.</value>
   </data>
 
   <data name="Attachments_uploaded_file_image_is_too_big" xml:space="preserve">
-    <value>Image dimensions are too big</value>
+    <value>Dimensiunile imaginii sunt prea mari</value>
   </data>
 
   <data name="TranslationIsNotFull" xml:space="preserve">
-    <value>The translation is incomplete and does not include all required texts for every element</value>
+    <value>Traducerea este incompletă și nu include toate textele necesare pentru fiecare element</value>
   </data>
 
   <data name="CategoryTranslationIsNotFull" xml:space="preserve">
-    <value>The category translation "{0}" is incomplete and does not include all options texts</value>
+    <value>Traducerea categoriei "{0}" este incompletă și nu include textele tuturor opțiunilor</value>
   </data>
 
   <data name="SubsectionCantHaveMoreThan_DirectChildren" xml:space="preserve">
-    <value>Section or sub-section cannot have more than {0} direct child items</value>
+    <value>Secțiunea sau subsecțiunea nu poate avea mai mult de {0} elemente copil directe</value>
   </data>
 
   <data name="InvalidUserInfo" xml:space="preserve">
-    <value>Invalid user info.</value>
+    <value>Informații de utilizator nevalide.</value>
   </data>
 
   <data name="HeaderWasNotFound" xml:space="preserve">
-    <value>Header was not found in file</value>
+    <value>Antetul nu a fost găsit în fișier</value>
   </data>
 
   <data name="ImportOptions_AttachmentNameTooLong" xml:space="preserve">
-    <value>Attachment name is too long. Attachment name should be less than {0}</value>
+    <value>Numele atașamentului este prea lung. Numele atașamentului trebuie să aibă mai puțin de {0}</value>
   </data>
 
   <data name="Questionnaire_CategoriesWereNotFound" xml:space="preserve">
-    <value>Categories were not found</value>
+    <value>Categoriile nu au fost găsite</value>
   </data>
 </root>

@@ -173,6 +173,6 @@
 
 
   <data name="SearchResult_Count_other" xml:space="preserve">
-    <value>{{ count }} items found:</value>
+    <value>{{ count }} элементов найдено:</value>
   </data>
 </root>

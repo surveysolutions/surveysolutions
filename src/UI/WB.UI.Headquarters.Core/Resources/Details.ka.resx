@@ -144,42 +144,42 @@
 
 
   <data name="Area_Coordinates" xml:space="preserve">
-    <value>Coordinates</value>
+    <value>კოორდინატები</value>
   </data>
 
   <data name="YouCanChangeResponsibleInterviewer" xml:space="preserve">
-    <value>You can change responsible for interview on reject. Please, choose responsible interviewer</value>
+    <value>უარყოფისას შეგიძლიათ შეცვალოთ ინტერვიუს პასუხისმგებელი. გთხოვთ, აირჩიოთ პასუხისმგებელი ინტერვიუერი</value>
   </data>
 
   <data name="FlagTitleFlagged" xml:space="preserve">
-    <value>Flagged</value>
+    <value>მონიშნული</value>
   </data>
 
   <data name="FlagTitleUnflagged" xml:space="preserve">
-    <value>Not flagged</value>
+    <value>მოუნიშნავი</value>
   </data>
 
   <data name="NoSearchResults" xml:space="preserve">
-    <value>No items found</value>
+    <value>ვერაფერი მოიძებნა</value>
   </data>
 
   <data name="SearchResult_Count" xml:space="preserve">
-    <value>{{ count }} item found:</value>
+    <value>{{ count }} ელემენტი მოიძებნა:</value>
   </data>
 
   <data name="SearchResult_Count_other" xml:space="preserve">
-    <value>{{ count }} items found:</value>
+    <value>{{ count }} ელემენტი მოიძებნა:</value>
   </data>
 
   <data name="Status" xml:space="preserve">
-    <value>Status: {{ name }}</value>
+    <value>სტატუსი: {{ name }}</value>
   </data>
 
   <data name="ShowQuestionnaireDetails" xml:space="preserve">
-    <value>Show questionnaire details</value>
+    <value>კითხვარის დეტალების ჩვენება</value>
   </data>
 
   <data name="InterviewMode" xml:space="preserve">
-    <value>Mode</value>
+    <value>რეჟიმი</value>
   </data>
 </root>

@@ -294,34 +294,34 @@
 
 
   <data name="PLU0001Recomendation" xml:space="preserve">
-      <value>User must be unique </value>
+      <value>Utilizatorul trebuie să fie unic </value>
   </data>
 
   <data name="PLU0002Recomendation" xml:space="preserve">
-      <value>Resolve duplicates</value>
+      <value>Rezolvați duplicatele</value>
   </data>
 
   <data name="PLU0007Recomendation" xml:space="preserve">
-      <value>Fix email</value>
+      <value>Remediați adresa de e-mail</value>
   </data>
 
   <data name="PLU0008Recomendation" xml:space="preserve">
-      <value>Fix phone number</value>
+      <value>Remediați numărul de telefon</value>
   </data>
 
   <data name="PLU0010Recomendation" xml:space="preserve">
-      <value>Verify value for supervisor</value>
+      <value>Verificați valoarea pentru supervizor</value>
   </data>
 
   <data name="PLU0022" xml:space="preserve">
-    <value>Workspace not found</value>
+    <value>Spațiul de lucru nu a fost găsit</value>
   </data>
 
   <data name="PLU0022Description" xml:space="preserve">
-    <value>Workspace must exist and be enabled</value>
+    <value>Spațiul de lucru trebuie să existe și să fie activat</value>
   </data>
 
   <data name="PLU0022Recomendation" xml:space="preserve">
-    <value>Check workspace name</value>
+    <value>Verificați numele spațiului de lucru</value>
   </data>
 </root>

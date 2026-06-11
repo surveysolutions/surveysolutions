@@ -136,7 +136,7 @@
     <value>Zona</value>
   </data>
   <data name="QuestionTypeAudio" xml:space="preserve">
-    <value>Audio</value>
+    <value>Regjistrim audio</value>
   </data>
   <data name="QuestionTypeBarcode" xml:space="preserve">
     <value>Barkodi</value>
@@ -171,22 +171,22 @@
 
 
   <data name="CoverPageSection" xml:space="preserve">
-    <value>Cover</value>
+    <value>Kopertina</value>
   </data>
 
   <data name="GeometryTypePolygon" xml:space="preserve">
-    <value>Polygon</value>
+    <value>Poligon</value>
   </data>
 
     <data name="GeometryTypePolyline" xml:space="preserve">
-    <value>Polyline</value>
+    <value>Polivijë</value>
   </data>
 
     <data name="GeometryTypePoint" xml:space="preserve">
-    <value>Point</value>
+    <value>Pikë</value>
   </data>
 
     <data name="GeometryTypeMultipoint" xml:space="preserve">
-    <value>Multipoint</value>
+    <value>Shumëpikë</value>
   </data>
 </root>

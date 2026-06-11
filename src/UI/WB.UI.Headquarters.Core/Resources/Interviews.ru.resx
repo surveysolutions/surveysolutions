@@ -291,6 +291,6 @@
 
 
   <data name="ApproveConfirmMessage_other" xml:space="preserve">
-      <value>{{count}} interviews will be approved.</value>
+      <value>{{count}} интервью будут одобрены.</value>
   </data>
 </root>

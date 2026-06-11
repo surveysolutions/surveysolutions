@@ -1600,106 +1600,106 @@
 
 
   <data name="SideBarCriticalityConditionExpression" xml:space="preserve">
-      <value>Critical condition</value>
+      <value>Критична умова</value>
   </data>
 
   <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
-      <value>{{count}} Critical rule:</value>
+      <value>{{count}} Критичне правило:</value>
   </data>
 
   <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
-      <value>{{count}} Critical rules:</value>
+      <value>{{count}} Критичних правил:</value>
   </data>
 
   <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
-      <value>Description</value>
+      <value>Опис</value>
   </data>
 
   <data name="SideBarCriticalityConditionsEmptyLine1" xml:space="preserve">
-    <value>Use this tab to define critical rules.</value>
+    <value>Використовуйте цю вкладку для визначення критичних правил.</value>
   </data>
 
   <data name="SideBarCriticalityConditionsEmptyLine2" xml:space="preserve">
-    <value>Each critical rule consists of a condition and a message. Critical conditions may refer to any questions or variables and must be satisfied (evaluate to true). Treatment of interviews with unsatisfied critical conditions is determined during import of the questionnaire to the data server.</value>
+    <value>Кожне критичне правило складається з умови та повідомлення. Критичні умови можуть посилатися на будь-які питання або змінні й мають виконуватися (обчислюватися як true). Обробка інтерв'ю з невиконаними критичними умовами визначається під час імпорту анкети на сервер даних.</value>
   </data>
 
   <data name="SideBarCriticalityConditionsEmptyLine3" xml:space="preserve">
-    <value>Include a message for the interviewer (respondent) to explain what needs to be changed in the interview (the message is displayed when the critical condition is not satisfied). Including hyperlinks to questions in the message is useful for navigation.</value>
+    <value>Додайте повідомлення для інтерв'юера (респондента), щоб пояснити, що потрібно змінити в інтерв'ю (повідомлення відображається, коли критична умова не виконується). Для навігації корисно додавати в повідомлення гіперпосилання на питання.</value>
   </data>
 
   <data name="SideBarHideDescription" xml:space="preserve">
-    <value>hide description</value>
+    <value>приховати опис</value>
   </data>
 
   <data name="SideBarCriticalityConditionMessage" xml:space="preserve">
-      <value>Message</value>
+      <value>Повідомлення</value>
   </data>
 
   <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
-    <value>Critical rule with no message</value>
+    <value>Критичне правило без повідомлення</value>
   </data>
 
   <data name="SideBarShowDescription" xml:space="preserve">
-    <value>add description</value>
+    <value>додати опис</value>
   </data>
 
   <data name="SideBarAddCriticalityCondition" xml:space="preserve">
-    <value>add new critical rule</value>
+    <value>додати нове критичне правило</value>
   </data>
 
   <data name="AttachmentSizeIsTooBig" xml:space="preserve">
-    <value>Attachment size is too big. Max size: {{size}}</value>
+    <value>Розмір вкладення завеликий. Максимальний розмір: {{size}}</value>
   </data>
 
   <data name="SideBarCriticalityConditionsTitle" xml:space="preserve">
-    <value>Critical rules</value>
+    <value>Критичні правила</value>
   </data>
 
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>За замовчуванням</value>
   </data>
 
   <data name="Reset" xml:space="preserve">
-    <value>Reset</value>
+    <value>Скинути</value>
   </data>
 
   <data name="RefreshPageConfirm" xml:space="preserve">
-    <value>We've updated this site, please refresh page, or you may experience unexpected behavior</value>
+    <value>Ми оновили цей сайт. Будь ласка, оновіть сторінку, інакше можлива непередбачувана поведінка</value>
   </data>
 
   <data name="Refresh" xml:space="preserve">
-    <value>Refresh</value>
+    <value>Оновити</value>
   </data>
 
   <data name="Login" xml:space="preserve">
-      <value>Login</value>
+      <value>Увійти</value>
   </data>
 
   <data name="Register" xml:space="preserve">
-      <value>Register</value>
+      <value>Зареєструватися</value>
   </data>
 
   <data name="No" xml:space="preserve">
-      <value>No</value>
+      <value>Ні</value>
   </data>
 
   <data name="HelpIsCritical" xml:space="preserve">
-      <value>Questionnaire authors may indicate that the answer to a question is critical for interview submission.</value>
+      <value>Автори анкет можуть позначати, що відповідь на питання є критичною для надсилання інтерв'ю.</value>
   </data>
 
   <data name="HelpCriticalityConditionExpression" xml:space="preserve">
-      <value>A logical expression that evaluates the interview as a whole to determine whether it satisfies the critical rules (when this expression evaluates to "True"). It may refer to any questions or variables.</value>
+      <value>Логічний вираз, який обчислює інтерв'ю загалом, щоб визначити, чи воно відповідає критичним правилам (коли цей вираз обчислюється як "True"). Він може посилатися на будь-які питання або змінні.</value>
   </data>
 
   <data name="HelpCriticalityConditionMessage" xml:space="preserve">
-      <value>This message is shown when the critical condition evaluates to "False" or an exception occurs during expression evaluation. The message may utilize hyperlinks and text substitution.</value>
+      <value>Це повідомлення показується, коли критична умова обчислюється як "False" або під час обчислення виразу виникає виняток. Повідомлення може використовувати гіперпосилання та підстановку тексту.</value>
   </data>
 
   <data name="SwitchTo" xml:space="preserve">
-    <value>Switch To</value>
+    <value>Переключити на</value>
   </data>
 
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
-    <value>Switch To will change the display language of the questionnaire. The translation must include text for all elements.</value>
+    <value>Переключення змінить мову відображення анкети. Переклад має містити текст для всіх елементів.</value>
   </data>
 </root>

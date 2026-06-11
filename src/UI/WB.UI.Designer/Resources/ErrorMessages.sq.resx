@@ -270,10 +270,10 @@
 
 
   <data name="EmailOrLogin_required" xml:space="preserve">
-    <value>Login or Email is required</value>
+    <value>Kërkohet emri i regjistrimit ose email-i</value>
   </data>
 
   <data name="InvalidLoginAttempt" xml:space="preserve">
-      <value>Invalid login attempt</value>
+      <value>Tentativë hyrjeje e pavlefshme</value>
   </data>
 </root>

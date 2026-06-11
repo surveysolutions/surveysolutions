@@ -283,7 +283,7 @@
     <value>Stare</value>
   </data>
   <data name="Template" xml:space="preserve">
-    <value>Template</value>
+    <value>Șablon</value>
   </data>
   <data name="TheWorldBankGroup" xml:space="preserve">
     <value>Grupul Banca Mondială</value>
@@ -364,31 +364,31 @@
 
 
   <data name="Apply" xml:space="preserve">
-        <value>Apply</value>
+        <value>Aplicare</value>
   </data>
 
   <data name="Clear" xml:space="preserve">
-    <value>Clear</value>
+    <value>Goliți</value>
   </data>
 
   <data name="ChangeToCAPI" xml:space="preserve">
-    <value>Change to CAPI</value>
+    <value>Schimbați în CAPI</value>
   </data>
 
   <data name="ChangeToCAPIConfirmHQ" xml:space="preserve">
-    <value>Selected {{count}} interviews mode will be changed to CAPI</value>
+    <value>Modul pentru {{count}} interviuri selectate va fi schimbat în CAPI</value>
   </data>
 
   <data name="ChangeToCAWI" xml:space="preserve">
-    <value>Change to CAWI</value>
+    <value>Schimbați în CAWI</value>
   </data>
 
   <data name="ChangeToCAWIConfirmHQ" xml:space="preserve">
-    <value>Selected {{count}} interviews mode will be changed to CAWI</value>
+    <value>Modul pentru {{count}} interviuri selectate va fi schimbat în CAWI</value>
   </data>
 
   <data name="InterviewMode" xml:space="preserve">
-    <value>Interview Mode</value>
+    <value>Mod interviu</value>
   </data>
 
   <data name="Capi" xml:space="preserve">
@@ -400,34 +400,34 @@
   </data>
 
   <data name="Enable" xml:space="preserve">
-    <value>Enable</value>
+    <value>Activați</value>
   </data>
 
   <data name="Disable" xml:space="preserve">
-    <value>Disable</value>
+    <value>Dezactivați</value>
   </data>
 
   <data name="Properties" xml:space="preserve">
-      <value>Properties</value>
+      <value>Proprietăți</value>
   </data>
 
   <data name="LinkedUsers" xml:space="preserve">
-      <value>Linked users</value>
+      <value>Utilizatori conectați</value>
   </data>
 
   <data name="LinkUser" xml:space="preserve">
-      <value>User</value>
+      <value>Utilizator</value>
   </data>
 
   <data name="GeoTrackNumber" xml:space="preserve">
-      <value>Track</value>
+      <value>Urmă</value>
   </data>
 
   <data name="DateRange" xml:space="preserve">
-      <value>Date range</value>
+      <value>Interval de date</value>
   </data>
 
   <data name="AllGeoTracks" xml:space="preserve">
-      <value>All geo tracks</value>
+      <value>Toate urmele geo</value>
   </data>
 </root>

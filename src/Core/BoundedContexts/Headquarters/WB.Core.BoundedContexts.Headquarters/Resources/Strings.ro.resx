@@ -285,22 +285,22 @@
 
 
   <data name="HQ_Views_ApiTokens_Title" xml:space="preserve">
-      <value>API access</value>
+      <value>Acces API</value>
   </data>
 
   <data name="HQ_Views_Api_Token_Description" xml:space="preserve">
-    <value>API token is used to perform API calls to the system</value>
+    <value>Tokenul API este utilizat pentru a efectua apeluri API către sistem</value>
   </data>
     
   <data name="HQ_Views_Api_Token_Issued" xml:space="preserve">
-    <value>enabled</value>
+    <value>activat</value>
   </data>
 
     <data name="HQ_Views_Api_Token_Not_Issued" xml:space="preserve">
-  <value>disabled</value>
+  <value>dezactivat</value>
   </data>
 
   <data name="HQ_Views_Api_Token_Generate_Description" xml:space="preserve">
-    <value>Please save the token now. You will only be able to see it once!</value>
+    <value>Vă rugăm să salvați tokenul acum. Îl veți putea vedea o singură dată!</value>
   </data>
 </root>

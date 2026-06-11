@@ -185,154 +185,154 @@
 
 
   <data name="AssignReceivedWarning" xml:space="preserve">
-    <value>Current responsible interviewers will not be notified about the reassignment until the next synchronization. If they have started working on the interview already, all the data that they have entered before the next synchronization will be DISCARDED!</value>
+    <value>ამჟამინდელ პასუხისმგებელ ინტერვიუერებს გადანაწილების შესახებ შეტყობინება არ გაეგზავნებათ მომდევნო სინქრონიზაციამდე. თუ მათ უკვე დაიწყეს ინტერვიუზე მუშაობა, მომდევნო სინქრონიზაციამდე შეყვანილი ყველა მონაცემი წაიშლება!</value>
   </data>
 
   <data name="ApproveReceivedWarning" xml:space="preserve">
-    <value>Current responsible interviewers will not be notified about the interview(s) approving until the next synchronization. If they have started working on the interview already, all the data that they have entered before the next synchronization will be DISCARDED!</value>
+    <value>ამჟამინდელ პასუხისმგებელ ინტერვიუერებს ინტერვიუ(ებ)ის დამტკიცების შესახებ შეტყობინება არ გაეგზავნებათ მომდევნო სინქრონიზაციამდე. თუ მათ უკვე დაიწყეს ინტერვიუზე მუშაობა, მომდევნო სინქრონიზაციამდე შეყვანილი ყველა მონაცემი წაიშლება!</value>
   </data>
 
   <data name="SwitchToCawiReceivedWarning" xml:space="preserve">
-    <value>Current responsible interviewers will not be notified about the interview(s) switching interview mode until the next synchronization. If they have started working on the interview already, all the data that they have entered before the next synchronization will be DISCARDED!</value>
+    <value>ამჟამინდელ პასუხისმგებელ ინტერვიუერებს ინტერვიუ(ებ)ის რეჟიმის შეცვლის შესახებ შეტყობინება არ გაეგზავნებათ მომდევნო სინქრონიზაციამდე. თუ მათ უკვე დაიწყეს ინტერვიუზე მუშაობა, მომდევნო სინქრონიზაციამდე შეყვანილი ყველა მონაცემი წაიშლება!</value>
   </data>
 
   <data name="ChooseResponsible" xml:space="preserve">
-    <value>Please choose a Supervisor or Interviewer.</value>
+    <value>გთხოვთ, აირჩიოთ სუპერვაიზერი ან ინტერვიუერი.</value>
   </data>
 
   <data name="RejectToOriginal" xml:space="preserve">
-    <value>Reject to original responsible</value>
+    <value>უარყოფა თავდაპირველ პასუხისმგებელთან</value>
   </data>
 
   <data name="RejectToNewResponsible" xml:space="preserve">
-    <value>Reject and choose new responsible</value>
+    <value>უარყოფა და ახალი პასუხისმგებლის არჩევა</value>
   </data>
 
   <data name="Tooltip_Filter_Assignment" xml:space="preserve">
-    <value>Assignment ID. Click in the field to type the full ID number.</value>
+    <value>დავალების ID. სრული ID ნომრის შესაყვანად დააწკაპუნეთ ველზე.</value>
   </data>
 
   <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
-    <value>Select a questionnaire to see its associated interviews in the list. Select “All questionnaires” to see interviews associated with any questionnaire.</value>
+    <value>აირჩიეთ კითხვარი, რათა სიაში იხილოთ მასთან დაკავშირებული ინტერვიუები. აირჩიეთ „ყველა კითხვარი“, რათა იხილოთ ნებისმიერ კითხვართან დაკავშირებული ინტერვიუები.</value>
   </data>
 
   <data name="Tooltip_Filter_Responsible" xml:space="preserve">
-    <value>User responsible. Click in the field to choose a user name either by selecting it directly or typing to filter the list of user names further.</value>
+    <value>პასუხისმგებელი მომხმარებელი. დააწკაპუნეთ ველზე მომხმარებლის სახელის ასარჩევად — შეგიძლიათ აირჩიოთ პირდაპირ ან აკრიფოთ, რათა სია მეტად გაფილტროთ.</value>
   </data>
 
   <data name="Tooltip_Filter_Status" xml:space="preserve">
-    <value>Status of interview. Select a status to see all interviews with that status. Select “All statuses” to see interviews with any status.</value>
+    <value>ინტერვიუს სტატუსი. აირჩიეთ სტატუსი, რათა იხილოთ ამ სტატუსის ყველა ინტერვიუ. აირჩიეთ „ყველა სტატუსი“, რათა იხილოთ ნებისმიერი სტატუსის ინტერვიუები.</value>
   </data>
 
   <data name="Tooltip_Table_Assignment" xml:space="preserve">
-    <value>Identifier for the assignment to which this interview belongs. Click on the sort icon to sort by assignment number.</value>
+    <value>იმ დავალების იდენტიფიკატორი, რომელსაც ეს ინტერვიუ ეკუთვნის. დავალების ნომრის მიხედვით დასალაგებლად დააწკაპუნეთ დალაგების ხატულაზე.</value>
   </data>
 
   <data name="Tooltip_Table_HideShowIdentifying" xml:space="preserve">
-    <value>Click here to hide or show the identifying questions. Hiding identifying questions may provide more space for other information. Showing identifying questions may provide details for differentiating between interviews.</value>
+    <value>დააწკაპუნეთ აქ, რათა დამალოთ ან აჩვენოთ საიდენტიფიკაციო კითხვები. მათი დამალვა სხვა ინფორმაციისთვის მეტ ადგილს გაათავისუფლებს. მათი ჩვენება ინტერვიუებს შორის გასარჩევად მეტ დეტალს მოგაწვდით.</value>
   </data>
 
   <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
-    <value>Information that identifies each assignment. These are the answers to questions marked as identifying in Designer.</value>
+    <value>ინფორმაცია, რომელიც თითოეულ დავალებას აიდენტიფიცირებს. ეს არის Designer-ში საიდენტიფიკაციოდ მონიშნულ კითხვებზე გაცემული პასუხები.</value>
   </data>
 
   <data name="Tooltip_Table_InterviewKey" xml:space="preserve">
-    <value>Short case identifier that appears throughout the system--in Headquarters, Supervisor, and Interviewer. Consider using this ID  when communicating with field team, rather than a large set of identifying question.</value>
+    <value>საქმის მოკლე იდენტიფიკატორი, რომელიც სისტემაში ყველგან ჩანს — Headquarters-ში, Supervisor-ში და Interviewer-ში. საველე გუნდთან კომუნიკაციისას განიხილეთ ამ ID-ის გამოყენება, ვიდრე საიდენტიფიკაციო კითხვების დიდი ნაკრების.</value>
   </data>
 
   <data name="Tooltip_Table_LastUpdate" xml:space="preserve">
-    <value>When changes to the interview were last posted to the server. Click on the sort icon to sort by time.</value>
+    <value>როდის აიტვირთა ბოლოს ინტერვიუს ცვლილებები სერვერზე. დროის მიხედვით დასალაგებლად დააწკაპუნეთ დალაგების ხატულაზე.</value>
   </data>
 
   <data name="Tooltip_Table_ReceivedByInterviewer" xml:space="preserve">
-    <value>Indicator for whether the interview has been downloaded onto the interviewer’s tablet. Click on the sort icon to sort by receipt by the interviewer.</value>
+    <value>მაჩვენებელი იმისა, ჩამოტვირთულია თუ არა ინტერვიუ ინტერვიუერის ტაბლეტზე. ინტერვიუერის მიერ მიღების მიხედვით დასალაგებლად დააწკაპუნეთ დალაგების ხატულაზე.</value>
   </data>
 
   <data name="Tooltip_Table_Responsible" xml:space="preserve">
-    <value>User currently responsible for the assignment. Click sort icon to sort user name.</value>
+    <value>მომხმარებელი, რომელიც ამჟამად პასუხისმგებელია დავალებაზე. მომხმარებლის სახელით დასალაგებლად დააწკაპუნეთ დალაგების ხატულაზე.</value>
   </data>
 
   <data name="Tooltip_Table_Status" xml:space="preserve">
-    <value>Status of the interview in the survey workflow. Click on the sort icon to sort by status.</value>
+    <value>ინტერვიუს სტატუსი კვლევის სამუშაო პროცესში. სტატუსის მიხედვით დასალაგებლად დააწკაპუნეთ დალაგების ხატულაზე.</value>
   </data>
 
   <data name="Tooltip_Table_ErrorsCount" xml:space="preserve">
-    <value>Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1.</value>
+    <value>აჩვენებს ინტერვიუში არავალიდური კითხვებისა და სტატიკური ტექსტების საერთო რაოდენობას. ერთსა და იმავე ერთეულზე ვერ გავლილი რამდენიმე ვალიდაციის პირობა ითვლება 1-ად.</value>
   </data>
 
   <data name="Errors" xml:space="preserve">
-    <value>Errors count</value>
+    <value>შეცდომების რაოდენობა</value>
   </data>
 
   <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve">
-    <value>Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release.</value>
+    <value>უპასუხოდ დარჩენილი კითხვების რაოდენობა. მოიცავს სუპერვაიზერის, საიდენტიფიკაციო და ინტერვიუერის კითხვებს. შეიძლება შეიცავდეს null მნიშვნელობებს იმ ინტერვიუებისთვის, რომლებიც 20.09 გამოშვებამდე დასრულდა.</value>
   </data>
 
   <data name="Tooltip_Table_InterviewMode" xml:space="preserve">
-    <value>Show current status (CAPI or CAWI) of each interview</value>
+    <value>აჩვენებს თითოეული ინტერვიუს მიმდინარე რეჟიმს (CAPI ან CAWI)</value>
   </data>
 
     <data name="NotAnsweredCount" xml:space="preserve">
-    <value>Not answered</value>
+    <value>უპასუხოდ</value>
   </data>
 
   <data name="ChooseQuestionsTitle" xml:space="preserve">
-    <value>Choose identifying questions to use in the filter</value>
+    <value>აირჩიეთ საიდენტიფიკაციო კითხვები ფილტრში გამოსაყენებლად</value>
   </data>
 
   <data name="DynamicFilter" xml:space="preserve">
-    <value>Dynamic filter</value>
+    <value>დინამიკური ფილტრი</value>
   </data>
 
   <data name="FiltersByQuestions" xml:space="preserve">
-    <value>Filters by questions</value>
+    <value>ფილტრები კითხვების მიხედვით</value>
   </data>
 
   <data name="QuestionsSelector" xml:space="preserve">
-    <value>Questions selector</value>
+    <value>კითხვების ამრჩევი</value>
   </data>
 
   <data name="AdvancedFilterSelector" xml:space="preserve">
-    <value>Dynamic filter</value>
+    <value>დინამიკური ფილტრი</value>
   </data>
 
   <data name="QuestionsFilterNotAvailable" xml:space="preserve">
-    <value>Filters by questions is only available when specific questionnaire version is selected</value>
+    <value>კითხვების მიხედვით ფილტრები ხელმისაწვდომია მხოლოდ მაშინ, როცა არჩეულია კითხვარის კონკრეტული ვერსია</value>
   </data>
 
   <data name="DynamicFilterNotAvailable" xml:space="preserve">
-    <value>No data available</value>
+    <value>მონაცემები არ არის ხელმისაწვდომი</value>
   </data>
 
   <data name="ApproveConfirmMessage_other" xml:space="preserve">
-      <value>{{count}} interviews will be approved.</value>
+      <value>{{count}} ინტერვიუ დამტკიცდება.</value>
   </data>
 
   <data name="DynamicFilter_MatchType" xml:space="preserve">
-    <value>Match Type</value>
+    <value>დამთხვევის ტიპი</value>
   </data>
 
   <data name="DynamicFilter_MatchTypes_And" xml:space="preserve">
-    <value>AND</value>
+    <value>და</value>
   </data>
 
   <data name="DynamicFilter_MatchTypes_Or" xml:space="preserve">
-    <value>OR</value>
+    <value>ან</value>
   </data>
 
   <data name="DynamicFilter_MatchTypes_AddRule" xml:space="preserve">
-    <value>Add Rule</value>
+    <value>წესის დამატება</value>
   </data>
 
   <data name="DynamicFilter_MatchTypes_AddGroup" xml:space="preserve">
-    <value>Add Group</value>
+    <value>ჯგუფის დამატება</value>
   </data>
 
   <data name="DynamicFilter_MatchTypes_ValuePlaceholder" xml:space="preserve">
-    <value>value</value>
+    <value>მნიშვნელობა</value>
   </data>
 
   <data name="WebInterviewResponsibleWarning" xml:space="preserve">
-      <value>Responsible is not Interviewer. Link will not work.</value>
+      <value>პასუხისმგებელი ინტერვიუერი არ არის. ბმული არ იმუშავებს.</value>
   </data>
 </root>

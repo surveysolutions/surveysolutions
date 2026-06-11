@@ -247,7 +247,7 @@
     <value>gjeografia</value>
   </data>
   <data name="QuestionType_Audio" xml:space="preserve">
-    <value>audio</value>
+    <value>regjistrim audio</value>
   </data>
   <data name="QuestionType_Barcode" xml:space="preserve">
     <value>Barkodi</value>
@@ -301,7 +301,7 @@
     <value>po/jo</value>
   </data>
   <data name="Roster" xml:space="preserve">
-    <value>Roster:</value>
+    <value>Rosteri:</value>
   </data>
   <data name="Roster_GeneretedByFixedList" xml:space="preserve">
     <value>gjeneruar nga lista fikse</value>
@@ -387,82 +387,82 @@
 
 
   <data name="Appendix_CriticalRules" xml:space="preserve">
-    <value>Appendix {0} {1} critical rules</value>
+    <value>Shtojca {0} {1} rregullat kritike</value>
   </data>
 
   <data name="OwnedBy" xml:space="preserve">
-    <value>Questionnaire owned by {0}</value>
+    <value>Pyetësori në pronësi të {0}</value>
   </data>
 
   <data name="CriticalityCondition" xml:space="preserve">
-    <value>Critical Condition:</value>
+    <value>Kushti kritik:</value>
   </data>
 
   <data name="CriticalityMessage" xml:space="preserve">
-    <value>Message:</value>
+    <value>Mesazh:</value>
   </data>
 
   <data name="Description" xml:space="preserve">
-    <value>Description:</value>
+    <value>Përshkrim:</value>
   </data>
 
   <data name="QuestionType_Area_Polygon" xml:space="preserve">
-    <value>polygon</value>
+    <value>poligon</value>
   </data>
 
   <data name="QuestionType_Area_Polyline" xml:space="preserve">
-    <value>polyline</value>
+    <value>polivijë</value>
   </data>
 
   <data name="QuestionType_Area_Multipoint" xml:space="preserve">
-    <value>multipoint</value>
+    <value>shumëpikë</value>
   </data>
 
   <data name="QuestionType_Area_Point" xml:space="preserve">
-    <value>point</value>
+    <value>pikë</value>
   </data>
 
   <data name="SourceOfCategories" xml:space="preserve">
-    <value>Source of categories:</value>
+    <value>Burimi i kategorive:</value>
   </data>
 
   <data name="RosterSourceOfCategories" xml:space="preserve">
-    <value>Roster</value>
+    <value>Rosteri</value>
   </data>
 
   <data name="TextListSourceOfCategories" xml:space="preserve">
-    <value>Text list question</value>
+    <value>Pyetje liste teksti</value>
   </data>
 
   <data name="QuestionInRosterSourceOfCategories" xml:space="preserve">
-    <value>Question</value>
+    <value>Pyetje</value>
   </data>
 
   <data name="InRosterSourceOfCategories" xml:space="preserve">
-    <value>in roster</value>
+    <value>në roster</value>
   </data>
   
   <data name="GeographyType" xml:space="preserve">
-    <value>Geography type</value>
+    <value>Lloji i gjeografisë</value>
   </data>
 
   <data name="GeographyInputMode" xml:space="preserve">
-    <value>Input mode</value>
+    <value>Mënyra e hyrjes</value>
   </data>
 
   <data name="GeometryOverlapDetection" xml:space="preserve">
-    <value>Overlap detection</value>
+    <value>Zbulimi i mbivendosjes</value>
   </data>
 
   <data name="VariableExcludedFromExport" xml:space="preserve">
-    <value>This variable is excluded from the exported data</value>
+    <value>Kjo variabël përjashtohet nga të dhënat e eksportuara</value>
   </data>
 
   <data name="On" xml:space="preserve">
-    <value>ON</value>
+    <value>NDEZUR</value>
   </data>
 
   <data name="Off" xml:space="preserve">
-    <value>OFF</value>
+    <value>FIKUR</value>
   </data>
 </root>

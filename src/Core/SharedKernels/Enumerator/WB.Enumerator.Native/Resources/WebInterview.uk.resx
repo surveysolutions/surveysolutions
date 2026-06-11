@@ -379,10 +379,10 @@
 
 
   <data name="Filters_CriticalQuestions" xml:space="preserve">
-    <value>Critical questions</value>
+    <value>Критичні питання</value>
   </data>
 
   <data name="Filters_CriticalRules" xml:space="preserve">
-    <value>Critical rules</value>
+    <value>Критичні правила</value>
   </data>
 </root>

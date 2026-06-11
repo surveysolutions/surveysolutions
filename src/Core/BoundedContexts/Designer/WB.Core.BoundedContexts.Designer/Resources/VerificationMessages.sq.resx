@@ -720,174 +720,174 @@
 
 
   <data name="WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion" xml:space="preserve">
-    <value>Special values attachment name must be unique.</value>
+    <value>Emri i bashkëngjitjes për vlerat e posaçme duhet të jetë unik.</value>
   </data>
 
   <data name="WB0139_SpecialValuesAttachmentsReferAbsentAttachment" xml:space="preserve">
-    <value>Special values attachment refers to non existent attachment.</value>
+    <value>Bashkëngjitja e vlerës së posaçme i referohet një bashkëngjitjeje që nuk ekziston.</value>
   </data>
 
   <data name="WB0282_IdentifyingQuestionInSectionWithCondition" xml:space="preserve">
-    <value>Identifying question cannot be placed inside section with enabling condition.</value>
+    <value>Pyetja identifikuese nuk mund të vendoset brenda një rubrike me kusht aktivizimi.</value>
   </data>
 
   <data name="WB0282_TableRosterContainsNestedGroup" xml:space="preserve">
-    <value>Table roster mode doesn't allow to use nested groups and rosters.</value>
+    <value>Mënyra e rosterit tabelë nuk lejon përdorimin e grupeve dhe rosterëve të folezuar.</value>
   </data>
 
   <data name="WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
-    <value>Table mode allowed only for rosters with no more than {0} questions.</value>
+    <value>Mënyra tabelë lejohet vetëm për rosterë me jo më shumë se {0} pyetje.</value>
   </data>
 
   <data name="WB0284_TableRosterCantContainsSupervisorQuestions" xml:space="preserve">
-    <value>Table roster doesn't allow to use supervisor questions.</value>
+    <value>Rosteri tabelë nuk lejon përdorimin e pyetjeve të supervizorit.</value>
   </data>
 
   <data name="WB0285_TableRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
-    <value>Table roster allows to use only text and numeric questions.</value>
+    <value>Rosteri tabelë lejon përdorimin vetëm të pyetjeve tekstuale dhe numerike.</value>
   </data>
 
   <data name="WB0286_TableAndMatixRosterWorksOnlyInWebMode" xml:space="preserve">
-    <value>Table or Matrix roster mode works only in web survey, on tablets it will be 'sub section' mode.</value>
+    <value>Mënyra e rosterit Tabelë ose Matricë funksionon vetëm në anketë web; në tabletë do të jetë mënyra 'nënrubrikë'.</value>
   </data>
 
   <data name="WB0309_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
-    <value>Questions in Сover section must have variable label.</value>
+    <value>Pyetjet në rubrikën e kopertinës duhet të kenë etiketë të variablës.</value>
   </data>
 
   <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
-    <value>Cover page questions can have only allowed types (Text, Numeric, DateTime, GpsCoordinates, SingleOption)</value>
+    <value>Pyetjet në rubrikën e kopertinës mund të kenë vetëm llojet e lejuara (Text, Numeric, DateTime, GpsCoordinates, SingleOption)</value>
   </data>
 
   <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
-    <value>Label {1} for code {0} is a number different from the value being labeled.</value>
+    <value>Etiketa {1} për kodin {0} është një numër i ndryshëm nga vlera që etiketohet.</value>
   </data>
 
   <data name="WB0289" xml:space="preserve">
-    <value>Name of categories shouldn't be longer than {0} characters.</value>
+    <value>Emri i kategorive nuk duhet të jetë më i gjatë se {0} karaktere.</value>
   </data>
 
   <data name="WB0290" xml:space="preserve">
-    <value>Name of categories shouldn't end with underscore</value>
+    <value>Emri i kategorive nuk duhet të përfundojë me nënvizë</value>
   </data>
 
   <data name="WB0291" xml:space="preserve">
-    <value>Name of categories shouldn't have two and more consecutive underscore characters.</value>
+    <value>Emri i kategorive nuk duhet të ketë dy ose më shumë nënviza radhazi.</value>
   </data>
 
   <data name="WB0292" xml:space="preserve">
-    <value>Name of categories should not be empty.</value>
+    <value>Emri i kategorive nuk duhet të jetë bosh.</value>
   </data>
 
   <data name="WB0293" xml:space="preserve">
-    <value>Name of categories cannot be a reserved word.</value>
+    <value>Emri i kategorive nuk mund të jetë fjalë e rezervuar.</value>
   </data>
 
   <data name="WB0294" xml:space="preserve">
-    <value>Name of categories should contain only letters, digits and underscore character</value>
+    <value>Emri i kategorive duhet të përmbajë vetëm shkronja, shifra dhe karakterin nënvizë</value>
   </data>
 
   <data name="WB0295" xml:space="preserve">
-    <value>Name of categories shouldn't start with digit or underscore</value>
+    <value>Emri i kategorive nuk duhet të fillojë me shifër ose nënvizë</value>
   </data>
 
   <data name="WB0296" xml:space="preserve">
-    <value>Questions have the same categories. Use reusable categories instead</value>
+    <value>Pyetjet kanë të njëjtat kategori. Përdorni në vend të tyre kategori të ripërdorshme</value>
   </data>
 
   <data name="WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
-    <value>Matrix roster allows to use only simple categorical questions: combobox, cascading or yes/no modes are not allowed.</value>
+    <value>Rosteri matricë lejon përdorimin vetëm të pyetjeve të thjeshta kategorike: mënyrat kuti e kombinuar, kaskadë ose po/jo nuk lejohen.</value>
   </data>
 
   <data name="WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
-    <value>Matrix mode allowed only for rosters with no more than {0} question(s).</value>
+    <value>Mënyra matricë lejohet vetëm për rosterë me jo më shumë se {0} pyetje.</value>
   </data>
 
   <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
-    <value>Matrix roster has to contain no supervisor or identifying questions.</value>
+    <value>Rosteri matricë nuk duhet të përmbajë pyetje supervizori ose identifikuese.</value>
   </data>
 
   <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
-    <value>Matrix roster has to contain no linked questions.</value>
+    <value>Rosteri matricë nuk duhet të përmbajë pyetje të lidhura.</value>
   </data>
 
   <data name="WB0302" xml:space="preserve">
-    <value>Substitution cannot reference items from same roster level.</value>
+    <value>Zëvendësimi nuk mund t'u referohet elementeve nga i njëjti nivel rosteri.</value>
   </data>
 
   <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
-    <value>Reusable category cannot have row with same Id and ParentId values</value>
+    <value>Kategoria e ripërdorshme nuk mund të ketë rresht me të njëjtat vlera Id dhe ParentId</value>
   </data>
 
   <data name="WB0306_DuplicatedCategoryParentIdText" xml:space="preserve">
-    <value>Reusable category cannot have row with same ParentId and Text values</value>
+    <value>Kategoria e ripërdorshme nuk mund të ketë rresht me të njëjtin ParentId dhe të njëjtin tekst</value>
   </data>
 
   <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
-    <value>Question references non-existent reusable category.</value>
+    <value>Pyetja i referohet një kategorie të ripërdorshme që nuk ekziston.</value>
   </data>
 
   <data name="WB0390_OnlyStringVariableAllowedAsAttachmentName" xml:space="preserve">
-    <value>Only string variable type can be used as source of the attachment name</value>
+    <value>Vetëm variabla e tipit string mund të përdoret si burim i emrit të bashkëngjitjes</value>
   </data>
 
   <data name="WB0391" xml:space="preserve">
-    <value>Static text cannot reference variable that has deeper roster scope then itself</value>
+    <value>Teksti statik nuk mund t'i referohet një variable që ka sferë rosteri më të thellë se vetja</value>
   </data>
 
   <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
-      <value>Link to hidden question is not allowed</value>
+      <value>Lidhja me pyetjen e fshehur nuk lejohet</value>
   </data>
 
   <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
-    <value>Variables in Сover section must have label.</value>
+    <value>Variablat në rubrikën e kopertinës duhet të kenë etiketë.</value>
   </data>
 
   <data name="WB0312" xml:space="preserve">
-      <value>Categories must have at least two options</value>
+      <value>Kategoritë duhet të kenë të paktën dy opsione</value>
   </data>
 
   <data name="WB0313_QuestionOptionReferenceToNonExistentAttachment" xml:space="preserve">
-      <value>Question option refers to non existent attachment</value>
+      <value>Opsioni i pyetjes i referohet një bashkëngjitjeje që nuk ekziston</value>
   </data>
 
   <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
-      <value>Question contains multiple options that refer to the same attachment</value>
+      <value>Pyetja përmban disa opsione që i referohen së njëjtës bashkëngjitje</value>
   </data>
 
   <data name="WB0315_AttachmentHasInvalidName" xml:space="preserve">
-    <value>Attachment name should contain only letters, digits and underscore character. Is starting with letter, no consecutive underscores, not ending with underscore and is not a reserved word. Not empty and less than 32 characters.</value>
+    <value>Emri i bashkëngjitjes duhet të përmbajë vetëm shkronja, shifra dhe karakterin nënvizë. Duhet të fillojë me shkronjë, të mos ketë nënviza të njëpasnjëshme, të mos përfundojë me nënvizë dhe të mos jetë fjalë e rezervuar. Nuk duhet të jetë bosh dhe duhet të jetë më pak se 32 karaktere.</value>
   </data>
 
   <data name="WB0316_QuestionnaireWithOldCoverPage" xml:space="preserve">
-    <value>Questionnaire in old format. Please use "Generate cover" link on Cover section.</value>
+    <value>Pyetësor në formatin e vjetër. Ju lutemi përdorni lidhjen "Generate cover" te rubrika e kopertinës.</value>
   </data>
 
   <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
-    <value>Critical question's scope cannot be any of the following: hidden, supervisor.</value>
+    <value>Sfera e pyetjes kritike nuk mund të jetë asnjë nga sa vijon: e fshehur, supervizor.</value>
   </data>
 
   <data name="WB0318_CriticalityConditionExpressionHasIncorrectSyntax" xml:space="preserve">
-    <value>Critical condition has a syntax error in expression.</value>
+    <value>Kushti kritik ka gabim sintakse në shprehje.</value>
   </data>
 
   <data name="WB0319_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
-    <value>Critical condition is empty.</value>
+    <value>Kushti kritik është bosh.</value>
   </data>
 
   <data name="WB0320_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
-    <value>Message in critical rule is empty.</value>
+    <value>Mesazhi në rregullin kritik është bosh.</value>
   </data>
 
   <data name="WB0321_CriticalityConditionUsingForbiddenClasses" xml:space="preserve">
-    <value>Critical condition is using forbidden type.</value>
+    <value>Kushti kritik po përdor tip të ndaluar.</value>
   </data>
 
   <data name="WB0322_CriticalRuleExpressionIsTooLong" xml:space="preserve">
-    <value>Critical rule expression has more than {0} characters.</value>
+    <value>Shprehja e rregullit kritik ka më shumë se {0} karaktere.</value>
   </data>
 
   <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
-    <value>Critical condition message more than {0} characters.</value>
+    <value>Mesazhi i kushtit kritik ka më shumë se {0} karaktere.</value>
   </data>
 </root>

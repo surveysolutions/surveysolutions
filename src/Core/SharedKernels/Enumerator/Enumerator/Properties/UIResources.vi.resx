@@ -922,42 +922,42 @@
 
 
   <data name="Prefs_CommunicationIntegrityValidationIgnoreTitle" xml:space="preserve">
-<value>Ignore communication integrity validation</value>
+<value>Bỏ qua xác thực tính toàn vẹn truyền thông</value>
   </data>
 
   <data name="Prefs_CommunicationIntegrityValidationIgnoreSummary" xml:space="preserve">
-<value>When enabled, communication integrity validation errors will be ignored</value>
+<value>Khi bật, các lỗi xác thực tính toàn vẹn truyền thông sẽ bị bỏ qua</value>
   </data>
  
   <data name="Interview_Complete_Instruction" xml:space="preserve">
-<value>Once submitted, this interview will be locked and cannot be edited. Please make sure all information is correct.</value>
+<value>Sau khi gửi, cuộc phỏng vấn này sẽ bị khóa và không thể chỉnh sửa. Vui lòng bảo đảm mọi thông tin đều chính xác.</value>
   </data>
   
   <data name="Interview_Complete_Title" xml:space="preserve">
-<value>Review &amp; Submit
-Interview {0}</value>
+<value>Xem lại &amp; Gửi
+Phỏng vấn {0}</value>
   </data>
 
   <data name="Interview_Complete_Success_Text" xml:space="preserve">
-<value>All required questions answered
-No errors detected</value>
+<value>Tất cả câu hỏi bắt buộc đã được trả lời
+Không phát hiện lỗi</value>
   </data>
 
   <data name="Interview_Complete_MoreCountString" xml:space="preserve">
-<value>and {0} more</value>
+<value>và thêm {0}</value>
   </data>
 
   <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
-<value>Critical
-errors</value>
+<value>Lỗi
+nghiêm trọng</value>
   </data>
 
   <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
-<value>Errors</value>
+<value>Lỗi</value>
   </data>
 
   <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
-<value>Unanswered
-questions</value>
+<value>Câu hỏi
+chưa trả lời</value>
   </data>
 </root>

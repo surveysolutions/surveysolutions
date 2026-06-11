@@ -1483,59 +1483,59 @@ Vă rugăm să verificați conexiunea la rețea sau să contactați suportul IT.
 
 
   <data name="CopyTo" xml:space="preserve">
-    <value>Copy to</value>
+    <value>Copiați la</value>
   </data>
 
   <data name="SideBarCriticalityConditionExpression" xml:space="preserve">
-      <value>Critical condition</value>
+      <value>Condiție critică</value>
   </data>
 
   <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
-      <value>{{count}} Critical rule:</value>
+      <value>{{count}} Regulă critică:</value>
   </data>
 
   <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
-      <value>{{count}} Critical rules:</value>
+      <value>{{count}} Reguli critice:</value>
   </data>
 
   <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
-      <value>Description</value>
+      <value>Descriere</value>
   </data>
 
   <data name="SideBarCriticalityConditionsEmptyLine1" xml:space="preserve">
-    <value>Use this tab to define critical rules.</value>
+    <value>Folosiți această filă pentru a defini regulile critice.</value>
   </data>
 
   <data name="SideBarCriticalityConditionsEmptyLine2" xml:space="preserve">
-    <value>Each critical rule consists of a condition and a message. Critical conditions may refer to any questions or variables and must be satisfied (evaluate to true). Treatment of interviews with unsatisfied critical conditions is determined during import of the questionnaire to the data server.</value>
+    <value>Fiecare regulă critică este formată dintr-o condiție și un mesaj. Condițiile critice se pot referi la orice întrebări sau variabile și trebuie să fie satisfăcute (să se evalueze la true). Tratamentul interviurilor cu condiții critice nesatisfăcute este stabilit în timpul importului chestionarului pe serverul de date.</value>
   </data>
 
   <data name="SideBarCriticalityConditionsEmptyLine3" xml:space="preserve">
-    <value>Include a message for the interviewer (respondent) to explain what needs to be changed in the interview (the message is displayed when the critical condition is not satisfied). Including hyperlinks to questions in the message is useful for navigation.</value>
+    <value>Includeți un mesaj pentru intervievator (respondent) pentru a explica ce trebuie schimbat în interviu (mesajul este afișat atunci când condiția critică nu este satisfăcută). Includerea hyperlinkurilor către întrebări în mesaj este utilă pentru navigare.</value>
   </data>
 
   <data name="SideBarHideDescription" xml:space="preserve">
-    <value>hide description</value>
+    <value>ascundeți descrierea</value>
   </data>
 
   <data name="SideBarCriticalityConditionMessage" xml:space="preserve">
-      <value>Message</value>
+      <value>Mesaj</value>
   </data>
 
   <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
-    <value>Critical rule with no message</value>
+    <value>Regulă critică fără mesaj</value>
   </data>
 
   <data name="SideBarShowDescription" xml:space="preserve">
-    <value>add description</value>
+    <value>adăugați descriere</value>
   </data>
 
   <data name="SideBarAddCriticalityCondition" xml:space="preserve">
-    <value>add new critical rule</value>
+    <value>adăugați o nouă regulă critică</value>
   </data>
 
   <data name="SideBarDownload" xml:space="preserve">
-    <value>Download:</value>
+    <value>Descărcare:</value>
   </data>
 
   <data name="SideBarXlsx" xml:space="preserve">
@@ -1551,55 +1551,55 @@ Vă rugăm să verificați conexiunea la rețea sau să contactați suportul IT.
   </data>
 
   <data name="AttachmentSizeIsTooBig" xml:space="preserve">
-    <value>Attachment size is too big. Max size: {{size}}</value>
+    <value>Dimensiunea atașamentului este prea mare. Dimensiune maximă: {{size}}</value>
   </data>
 
   <data name="SideBarCriticalityConditionsTitle" xml:space="preserve">
-    <value>Critical rules</value>
+    <value>Reguli critice</value>
   </data>
 
   <data name="AddFilter" xml:space="preserve">
-    <value>Add filter</value>
+    <value>Adăugați filtru</value>
   </data>
 
   <data name="SettingsAnonymous" xml:space="preserve">
-    <value>Anonymous</value>
+    <value>Anonim</value>
   </data>
 
   <data name="RegenerateQuestionnaireSharingLink" xml:space="preserve">
-    <value>Regenerate link</value>
+    <value>Regenerați linkul</value>
   </data>
 
   <data name="AnonymousQuestionnaireGeneratedDate" xml:space="preserve">
-    <value>link generated: {{datetime}}</value>
+    <value>link generat: {{datetime}}</value>
   </data>
 
   <data name="SettingsAccessibleToEveryone" xml:space="preserve">
-    <value>accessible in read-only mode to anyone with link</value>
+    <value>accesibil în modul numai pentru citire oricui are linkul</value>
   </data>
 
   <data name="SettingsStatusAllowAnonymousAccess" xml:space="preserve">
-    <value>Anonymous sharing is currently turned on.</value>
+    <value>Partajarea anonimă este activată în prezent.</value>
   </data>
 
   <data name="SettingsStatusDontAllowAnonymousAccess" xml:space="preserve">
-    <value>Anonymous sharing is currently turned off.</value>
+    <value>Partajarea anonimă este dezactivată în prezent.</value>
   </data>
 
   <data name="SettingsTurnOnAnonymousAccess" xml:space="preserve">
-    <value>Turn on anonymous sharing.</value>
+    <value>Activați partajarea anonimă.</value>
   </data>
 
   <data name="SettingsTurnOffAnonymousAccess" xml:space="preserve">
-    <value>Turn off anonymous sharing.</value>
+    <value>Dezactivați partajarea anonimă.</value>
   </data>
 
   <data name="GeometryInputMode" xml:space="preserve">
-    <value>Input mode</value>
+    <value>Mod de introducere</value>
   </data>
 
   <data name="GeometryOverlapDetection" xml:space="preserve">
-    <value>Overlap detection</value>
+    <value>Detectarea suprapunerilor</value>
   </data>
 
   <data name="GeographyInputModeManual" xml:space="preserve">
@@ -1607,138 +1607,138 @@ Vă rugăm să verificați conexiunea la rețea sau să contactați suportul IT.
   </data>
 
     <data name="GeographyInputModeAutomatic" xml:space="preserve">
-    <value>Automatic</value>
+    <value>Automat</value>
   </data>
 
     <data name="GeographyInputModeSemiautomatic" xml:space="preserve">
-    <value>Semiautomatic</value>
+    <value>Semiautomat</value>
   </data>
 
   <data name="HotkeysCloseScenarios" xml:space="preserve">
-    <value>Close scenarios panel</value>
+    <value>Închideți panoul de scenarii</value>
   </data>
 
   <data name="HotkeysCloseComments" xml:space="preserve">
-    <value>Close comments panel</value>
+    <value>Închideți panoul de comentarii</value>
   </data>
 
   <data name="AttachmentName" xml:space="preserve">
-    <value>Attachment name</value>
+    <value>Numele atașamentului</value>
   </data>
 
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Implicit</value>
   </data>
 
   <data name="Reset" xml:space="preserve">
-    <value>Reset</value>
+    <value>Resetați</value>
   </data>
 
   <data name="EditorShowComments" xml:space="preserve">
-    <value>Show comments ({{count}})</value>
+    <value>Afișați comentariile ({{count}})</value>
   </data>
   
   <data name="CollaboratorsDescriptionSettings" xml:space="preserve">
-    <value>the following users have access to this questionnaire</value>
+    <value>următorii utilizatori au acces la acest chestionar</value>
   </data>
   
   <data name="AccessSettings" xml:space="preserve">
-    <value>Access</value>
+    <value>Acces</value>
   </data>
 
   <data name="PublicAccessDescriptionSettings" xml:space="preserve">
-    <value>Public questionnaires are visible to all users with an account in this system in read-only mode.</value>
+    <value>Chestionarele publice sunt vizibile în modul numai pentru citire tuturor utilizatorilor care au un cont în acest sistem.</value>
   </data>
   
   <data name="PublicAccessSettingsStatusOn" xml:space="preserve">
-    <value>The questionnaire is currently shared as public.</value>
+    <value>Chestionarul este partajat în prezent ca public.</value>
   </data>
 
   <data name="PublicAccessSettingsStatusOff" xml:space="preserve">
-    <value>The questionnaire is currently not shared as public.</value>
+    <value>Chestionarul nu este partajat în prezent ca public.</value>
   </data>
   
   <data name="PublicAccessSettingsOn" xml:space="preserve">
-    <value>Turn on public access.</value>
+    <value>Activați accesul public.</value>
   </data>
 
   <data name="PublicAccessSettingsOff" xml:space="preserve">
-    <value>Turn off public access.</value>
+    <value>Dezactivați accesul public.</value>
   </data>
 
   <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
-    <value>Link sharing</value>
+    <value>Partajare prin link</value>
   </data>
   
   <data name="AnonymousLink" xml:space="preserve">
-    <value>Anonymous link:</value>
+    <value>Link anonim:</value>
   </data>
   
   <data name="CopyLink" xml:space="preserve">
-    <value>Copy link</value>
+    <value>Copiați linkul</value>
   </data>
 
   <data name="AnonymousQuestionnaireDescriptionSettings" xml:space="preserve">
-    <value>Users having this link will be able to open this questionnaire</value>
+    <value>Utilizatorii care au acest link vor putea deschide acest chestionar</value>
   </data>
 
   <data name="RefreshPageConfirm" xml:space="preserve">
-    <value>We've updated this site, please refresh page, or you may experience unexpected behavior</value>
+    <value>Am actualizat acest site, vă rugăm să reîmprospătați pagina, altfel este posibil să întâmpinați un comportament neașteptat</value>
   </data>
 
   <data name="Refresh" xml:space="preserve">
-    <value>Refresh</value>
+    <value>Reîmprospătați</value>
   </data>
 
   <data name="AttachmentDimensionsAreTooBig" xml:space="preserve">
-    <value>Dimensions are too big</value>
+    <value>Dimensiunile sunt prea mari</value>
   </data>
 
   <data name="HelpOverlapDetection" xml:space="preserve">
-    <value>Display and highlight the overlaps of this question answer with answers to the same questions in sibling roster instances</value>
+    <value>Afișați și evidențiați suprapunerile răspunsului la această întrebare cu răspunsurile la aceleași întrebări din instanțele de roster înrudite</value>
   </data>
 
   <data name="AddEnablingCondition" xml:space="preserve">
-    <value>Add enabling condition</value>
+    <value>Adăugați condiție de activare</value>
   </data>
 
   <data name="ShowList" xml:space="preserve">
-      <value>Show list</value>
+      <value>Afișați lista</value>
   </data>
 
   <data name="Login" xml:space="preserve">
-      <value>Login</value>
+      <value>Autentificare</value>
   </data>
 
   <data name="Register" xml:space="preserve">
-      <value>Register</value>
+      <value>Înregistrare</value>
   </data>
 
   <data name="No" xml:space="preserve">
-      <value>No</value>
+      <value>Nu</value>
   </data>
 
   <data name="QuestionIsCritical" xml:space="preserve">
-      <value>This is a critical question</value>
+      <value>Aceasta este o întrebare critică</value>
   </data>
 
   <data name="HelpIsCritical" xml:space="preserve">
-      <value>Questionnaire authors may indicate that the answer to a question is critical for interview submission.</value>
+      <value>Autorii chestionarului pot indica faptul că răspunsul la o întrebare este critic pentru trimiterea interviului.</value>
   </data>
 
   <data name="HelpCriticalityConditionExpression" xml:space="preserve">
-      <value>A logical expression that evaluates the interview as a whole to determine whether it satisfies the critical rules (when this expression evaluates to "True"). It may refer to any questions or variables.</value>
+      <value>O expresie logică care evaluează interviul în ansamblu pentru a determina dacă satisface regulile critice (atunci când această expresie se evaluează la "True"). Ea se poate referi la orice întrebări sau variabile.</value>
   </data>
 
   <data name="HelpCriticalityConditionMessage" xml:space="preserve">
-      <value>This message is shown when the critical condition evaluates to "False" or an exception occurs during expression evaluation. The message may utilize hyperlinks and text substitution.</value>
+      <value>Acest mesaj este afișat atunci când condiția critică se evaluează la "False" sau apare o excepție în timpul evaluării expresiei. Mesajul poate utiliza hyperlinkuri și substituirea textului.</value>
   </data>
 
   <data name="SwitchTo" xml:space="preserve">
-    <value>Switch To</value>
+    <value>Comutați la</value>
   </data>
 
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
-    <value>Switch To will change the display language of the questionnaire. The translation must include text for all elements.</value>
+    <value>Comutați la va schimba limba de afișare a chestionarului. Traducerea trebuie să includă text pentru toate elementele.</value>
   </data>
 </root>

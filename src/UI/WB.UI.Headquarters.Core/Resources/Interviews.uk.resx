@@ -286,10 +286,10 @@
 
 
   <data name="Tooltip_Table_InterviewMode" xml:space="preserve">
-    <value>Show current status (CAPI or CAWI) of each interview</value>
+    <value>Показати поточний статус (CAPI або CAWI) кожного інтерв'ю</value>
   </data>
 
   <data name="WebInterviewResponsibleWarning" xml:space="preserve">
-      <value>Responsible is not Interviewer. Link will not work.</value>
+      <value>Відповідальним не є інтерв'юер. Посилання не працюватиме.</value>
   </data>
 </root>

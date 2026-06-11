@@ -246,22 +246,22 @@
 
 
   <data name="SaveQuestionnaire" xml:space="preserve">
-    <value>Save questionnaire document</value>
+    <value>Salvați documentul chestionarului</value>
   </data>
 
   <data name="QuestionnairePreview" xml:space="preserve">
-    <value>Questionnaire preview</value>
+    <value>Previzualizare chestionar</value>
   </data>
 
   <data name="CreateUser" xml:space="preserve">
-      <value>Create User</value>
+      <value>Creați utilizator</value>
   </data>
 
   <data name="ExposedVariables" xml:space="preserve">
-    <value>Exposed Variables</value>
+    <value>Variabile expuse</value>
   </data>
 
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Editare</value>
   </data>
 </root>

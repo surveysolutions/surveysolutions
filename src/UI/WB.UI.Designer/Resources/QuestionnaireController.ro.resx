@@ -321,18 +321,18 @@
 
 
   <data name="RestoreQuestionnaireDocument" xml:space="preserve">
-    <value>Restore questionnaire document (old)</value>
+    <value>Restaurați documentul chestionarului (vechi)</value>
   </data>
 
   <data name="ExcelOrTabFilesOnly" xml:space="preserve">
-    <value>Only Excel or tab-separated values files are accepted</value>
+    <value>Sunt acceptate numai fișiere Excel sau cu valori separate prin Tab</value>
   </data>
 
   <data name="SaveAs" xml:space="preserve">
-    <value>Save as</value>
+    <value>Salvați ca</value>
   </data>
 
   <data name="CloneDeletedWarning" xml:space="preserve">
-      <value>You are creating a copy of deleted questionnaire. Some parts might be lost.</value>
+      <value>Creați o copie a unui chestionar șters. Unele părți s-ar putea pierde.</value>
   </data>
 </root>

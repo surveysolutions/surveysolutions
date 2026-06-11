@@ -237,86 +237,86 @@
 
 
   <data name="HQ_Views_TwoFactorAuthentication_Title" xml:space="preserve">
-    <value>Two factor authentication</value>
+    <value>Vërtetimi me dy faktorë</value>
   </data>
 
   <data name="HQ_Views_TwoFactorAuthentication_Description" xml:space="preserve">
-    <value>Two factor authentication is an advanced security feature that makes it harder for a hacker to sign in to your account with just a stolen password.</value>
+    <value>Vërtetimi me dy faktorë është një veçori e përparuar sigurie që e bën më të vështirë për një haker të hyjë në llogarinë tuaj vetëm me një fjalëkalim të vjedhur.</value>
   </data>
 
   <data name="HQ_Views_TwoFactorAuthentication_Enabled" xml:space="preserve">
-    <value>enabled</value>
+    <value>aktivizuar</value>
   </data>
 
   <data name="HQ_Views_TwoFactorAuthentication_Disabled" xml:space="preserve">
-    <value>disabled</value>
+    <value>çaktivizuar</value>
   </data>
 
   <data name="HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description" xml:space="preserve">
-    <value>Set up a new device for two factor authentication. You can set up several devices simultaneously.</value>
+    <value>Konfiguroni një pajisje të re për vërtetimin me dy faktorë. Mund të konfiguroni disa pajisje njëkohësisht.</value>
   </data>
 
   <data name="HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description" xml:space="preserve">
-    <value>Reset to a new secret code if any of your devices used for the two factor authentication is lost or stolen.</value>
+    <value>Rivendoseni me një kod të ri sekret nëse ndonjë nga pajisjet tuaja të përdorura për vërtetimin me dy faktorë humbet ose vidhet.</value>
   </data>
 
   <data name="HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description" xml:space="preserve">
-    <value>Invalidate any unused recovery codes and generate 10 new ones.</value>
+    <value>Bëjini të pavlefshme kodet e papërdorura të rikuperimit dhe gjeneroni 10 kode të reja.</value>
   </data>
 
   <data name="HQ_Views_TwoFactorAuthentication_Disable2fa_Description" xml:space="preserve">
-    <value>Switch off two factor authentication leaving the account protected only by the password.</value>
+    <value>Çaktivizoni vërtetimin me dy faktorë, duke e lënë llogarinë të mbrojtur vetëm nga fjalëkalimi.</value>
   </data>
 
   <data name="HQ_Views_EnableAuthenticator_Title" xml:space="preserve">
-    <value>Set up authenticator app</value>
+    <value>Konfiguro aplikacionin vërtetues</value>
   </data>
 
   <data name="HQ_Views_ResetAuthenticator_Title" xml:space="preserve">
-    <value>Reset authenticator key</value>
+    <value>Rivendos çelësin e vërtetuesit</value>
   </data>
 
   <data name="HQ_Views_ShowRecoveryCodes_Title" xml:space="preserve">
-    <value>Recovery codes</value>
+    <value>Kodet e rikuperimit</value>
   </data>
 
   <data name="HQ_Views_DisableTwoFactorAuth_Title" xml:space="preserve">
-    <value>Disable two-factor authentication</value>
+    <value>Çaktivizo vërtetimin me dy faktorë</value>
   </data>
 
   <data name="HQ_Views_ResetRecoveryCodes_Title" xml:space="preserve">
-    <value>Reset recovery codes</value>
+    <value>Rivendos kodet e rikuperimit</value>
   </data>
 
   <data name="SurverManagement_MainMenu_ChangePassword" xml:space="preserve">
-    <value>Change password</value>
+    <value>Ndrysho fjalëkalimin</value>
   </data>
 
   <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
-    <value>Not approved by Headquarters</value>
+    <value>Nuk është miratuar nga Zyra Qendrore</value>
   </data>
 
   <data name="AllInterviewersExceptAssignedToInterviewer" xml:space="preserve">
-    <value>Not Assigned to Interviewer</value>
+    <value>Nuk i është caktuar intervistuesit</value>
   </data>
 
   <data name="HQ_Views_ApiTokens_Title" xml:space="preserve">
-      <value>API access</value>
+      <value>Qasja në API</value>
   </data>
 
   <data name="HQ_Views_Api_Token_Description" xml:space="preserve">
-    <value>API token is used to perform API calls to the system</value>
+    <value>API token përdoret për të kryer thirrje API në sistem</value>
   </data>
     
   <data name="HQ_Views_Api_Token_Issued" xml:space="preserve">
-    <value>enabled</value>
+    <value>aktivizuar</value>
   </data>
 
     <data name="HQ_Views_Api_Token_Not_Issued" xml:space="preserve">
-  <value>disabled</value>
+  <value>çaktivizuar</value>
   </data>
 
   <data name="HQ_Views_Api_Token_Generate_Description" xml:space="preserve">
-    <value>Please save the token now. You will only be able to see it once!</value>
+    <value>Ju lutemi, ruajeni token-in tani. Do të mund ta shihni vetëm një herë!</value>
   </data>
 </root>

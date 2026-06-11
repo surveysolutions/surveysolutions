@@ -540,78 +540,78 @@
 
 
   <data name="BatchDescription" xml:space="preserve">
-    <value>Upload a zip-archive with one or more tab separated files corresponding to the main interview level and subordinate rosters. Allows preloading variables at any level of the interview.&lt;br/&gt;
-All data files must contain variable interview__id with a unique string or numeric identifier of the interview. Links within rosters and nested rosters established the same way as in exported data.&lt;br/&gt;
+    <value>ატვირთეთ zip-არქივი, რომელიც შეიცავს ერთ ან მეტ Tab-ით გამოყოფილ ფაილს, რომლებიც შეესაბამება ინტერვიუს მთავარ დონესა და დაქვემდებარებულ როსტერებს. იძლევა ინტერვიუს ნებისმიერ დონეზე ცვლადების წინასწარ ჩატვირთვის საშუალებას.&lt;br/&gt;
+მონაცემების ყველა ფაილი უნდა შეიცავდეს interview__id ცვლადს ინტერვიუს უნიკალური სტრიქონული ან რიცხვითი იდენტიფიკატორით. როსტერებსა და ჩადგმულ როსტერებში კავშირები ყალიბდება იმავე წესით, როგორც ექსპორტირებულ მონაცემებში.&lt;br/&gt;
 </value>
     <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
   </data>
 
   <data name="BatchColumnsTitle" xml:space="preserve">
-    <value>Optionally can specify the following columns in the main interview level file:</value>
+    <value>სურვილისამებრ შეგიძლიათ მიუთითოთ შემდეგი სვეტები ინტერვიუს მთავარი დონის ფაილში:</value>
   </data>
 
   <data name="SimpleDescription" xml:space="preserve">
-    <value>Upload tab separated file with values for questions in the interview level only. Include values for identifying questions and other questions at the main interview level. Does not allow preloading values inside rosters.</value>
+    <value>ატვირთეთ Tab-ით გამოყოფილი ფაილი მხოლოდ ინტერვიუს მთავარ დონეზე არსებული კითხვების მნიშვნელობებით. ჩართეთ მაიდენტიფიცირებელი კითხვებისა და ინტერვიუს მთავარი დონის სხვა კითხვების მნიშვნელობები. არ იძლევა როსტერებში მნიშვნელობების წინასწარ ჩატვირთვის საშუალებას.</value>
   </data>
 
   <data name="SimpleColumnsTitle" xml:space="preserve">
-    <value>Optionally can specify the following columns:</value>
+    <value>სურვილისამებრ შეგიძლიათ მიუთითოთ შემდეგი სვეტები:</value>
   </data>
 
   <data name="ColumnsDescription" xml:space="preserve">
-    <value>&lt;b&gt;_responsible&lt;/b&gt; - username of a headquarters, supervisor or an interviewer who will be responsible for the assignment;&lt;br/&gt;
-&lt;b&gt;_quantity&lt;/b&gt; - capacity of the assignment;&lt;br/&gt;
-&lt;b&gt;_email&lt;/b&gt; - email of the respondent (for web-interviews only);&lt;br/&gt;
-&lt;b&gt;_password&lt;/b&gt; - password to start an interview (for web-interviews only);&lt;br/&gt;
-&lt;b&gt;_webmode&lt;/b&gt; - mode for assignment (1 for CAWI, 0 or blank for CAPI);&lt;br/&gt;
-&lt;b&gt;_record_audio&lt;/b&gt; - audio recording is enabled for interviews (1 - enabled, 0 - disabled, blank - get this value from questionnaire);&lt;br/&gt;
-&lt;b&gt;_comment&lt;/b&gt; - comments for the assignment;&lt;br/&gt;
-&lt;b&gt;_target_area&lt;/b&gt; - target area for the assignment</value>
+    <value>&lt;b&gt;_responsible&lt;/b&gt; - შტაბის, სუპერვაიზერის ან ინტერვიუერის მომხმარებლის სახელი, რომელიც პასუხისმგებელი იქნება დავალებაზე;&lt;br/&gt;
+&lt;b&gt;_quantity&lt;/b&gt; - დავალების ტევადობა;&lt;br/&gt;
+&lt;b&gt;_email&lt;/b&gt; - რესპონდენტის ელ. ფოსტა (მხოლოდ ვებ-ინტერვიუებისთვის);&lt;br/&gt;
+&lt;b&gt;_password&lt;/b&gt; - ინტერვიუს დასაწყებად პაროლი (მხოლოდ ვებ-ინტერვიუებისთვის);&lt;br/&gt;
+&lt;b&gt;_webmode&lt;/b&gt; - დავალების რეჟიმი (1 - CAWI, 0 ან ცარიელი - CAPI);&lt;br/&gt;
+&lt;b&gt;_record_audio&lt;/b&gt; - ინტერვიუებისთვის აუდიოჩაწერა ჩართულია (1 - ჩართულია, 0 - გამორთულია, ცარიელი - ეს მნიშვნელობა კითხვარიდან აიღება);&lt;br/&gt;
+&lt;b&gt;_comment&lt;/b&gt; - კომენტარები დავალებისთვის;&lt;br/&gt;
+&lt;b&gt;_target_area&lt;/b&gt; - დავალების სამიზნე არეალი</value>
     <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
   </data>
 
   <data name="UploadDescription" xml:space="preserve">
-    <value>Upload a file with identifying data to create new assignments.
-Specify usernames for headquarters, supervisors or interviewers to make batch assignments.</value>
+    <value>ატვირთეთ ფაილი მაიდენტიფიცირებელი მონაცემებით ახალი დავალებების შესაქმნელად.
+მიუთითეთ შტაბის, სუპერვაიზერების ან ინტერვიუერების მომხმარებლის სახელები, რათა დავალებები ჯგუფურად განაწილდეს.</value>
   </data>
 
   <data name="FileTypeDescription" xml:space="preserve">
-    <value>Save file in UTF8 encoding for support language specific texts.</value>
+    <value>ენისთვის სპეციფიკური ტექსტების მხარდაჭერისთვის შეინახეთ ფაილი UTF8 კოდირებით.</value>
   </data>
 
   <data name="ViewListPreloadedData" xml:space="preserve">
-    <value>View list of preloaded values</value>
+    <value>წინასწარ ჩატვირთული მნიშვნელობების სიის ნახვა</value>
   </data>
 
   <data name="IdentifyingQuestions" xml:space="preserve">
-    <value>Identifying questions</value>
+    <value>მაიდენტიფიცირებელი კითხვები</value>
   </data>
 
   <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
-    <value>Importing assignments</value>
+    <value>დავალებების იმპორტი</value>
   </data>
 
   <data name="Prerequisite_Questionnaire" xml:space="preserve">
-    <value>Questionnaire cannot be used for preloading</value>
+    <value>კითხვარის გამოყენება წინასწარი ჩატვირთვისთვის შეუძლებელია</value>
   </data>
 
   <data name="HiddenQuestions" xml:space="preserve">
-    <value>Hidden questions</value>
+    <value>დამალული კითხვები</value>
   </data>
 
   <data name="RosterSizeQuestions" xml:space="preserve">
-    <value>Roster source questions</value>
+    <value>როსტერის წყაროს კითხვები</value>
   </data>
 
   <data name="Select_Responsible" xml:space="preserve">
-    <value>Select default responsible (required)</value>
+    <value>ნაგულისხმევი პასუხისმგებლის არჩევა (სავალდებულოა)</value>
   </data>
 
   <data name="Select_Responsible_Description" xml:space="preserve">
-    <value>If no responsible assigned in batch file use this headquarters/supervisor/interviewer account:</value>
+    <value>თუ batch ფაილში პასუხისმგებელი არ არის მითითებული, გამოიყენეთ შტაბის/სუპერვაიზერის/ინტერვიუერის ეს ანგარიში:</value>
   </data>
 
   <data name="RequiredField" xml:space="preserve">
-    <value>This field is mandatory</value>
+    <value>ეს ველი სავალდებულოა</value>
   </data>
 </root>

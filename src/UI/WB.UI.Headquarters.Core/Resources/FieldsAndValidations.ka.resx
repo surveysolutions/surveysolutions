@@ -246,66 +246,66 @@
 
 
   <data name="AllowRelinkTablet" xml:space="preserve">
-    <value>Allow relinking to a different device with loss of data on the original device.</value>
+    <value>დაუშვებს სხვა მოწყობილობასთან ხელახლა დაკავშირებას ორიგინალ მოწყობილობაზე მონაცემების დაკარგვით.</value>
   </data>
 
   <data name="VerificationCodeFieldName" xml:space="preserve">
-    <value>Verification code</value>
+    <value>ვერიფიკაციის კოდი</value>
   </data>
 
   <data name="RestrictedAccountMessage" xml:space="preserve">
-    <value>This account is restricted to perform this action</value>
+    <value>ეს ანგარიში შეზღუდულია ამ მოქმედების შესასრულებლად</value>
   </data>
 
   <data name="RestrictedAccount" xml:space="preserve">
-    <value>This account is restricted</value>
+    <value>ეს ანგარიში შეზღუდულია</value>
   </data>
 
   <data name="WorkspaceRequired" xml:space="preserve">
-    <value>Workspace is required</value>
+    <value>სამუშაო სივრცე სავალდებულოა</value>
   </data>
 
   <data name="WorkspaceMissing" xml:space="preserve">
-    <value>Workspace not found</value>
+    <value>სამუშაო სივრცე ვერ მოიძებნა</value>
   </data>
 
   <data name="UserRoleRequired" xml:space="preserve">
-    <value>User role is required</value>
+    <value>მომხმარებლის როლი სავალდებულოა</value>
   </data>
 
   <data name="UserIsLockedByHq" xml:space="preserve">
-    <value>User is locked by Headquarter</value>
+    <value>მომხმარებელი შტაბის მიერ დაბლოკილია</value>
   </data>
 
   <data name="MandatoryField" xml:space="preserve">
-    <value>This field is mandatory</value>
+    <value>ეს ველი სავალდებულოა</value>
   </data>
 
   <data name="PasswordRequiresDigit" xml:space="preserve">
-      <value>Passwords must have at least one digit ('0'-'9').</value>
+      <value>პაროლი უნდა შეიცავდეს მინიმუმ ერთ ციფრს ('0'-'9').</value>
   </data>
 
   <data name="PasswordRequiresLower" xml:space="preserve">
-      <value>Passwords must have at least one lowercase ('a'-'z').</value>
+      <value>პაროლი უნდა შეიცავდეს მინიმუმ ერთ მცირე ასოს ('a'-'z').</value>
   </data>
 
   <data name="PasswordRequiresNonAlphanumeric" xml:space="preserve">
-      <value>Passwords must have at least one non alphanumeric character.</value>
+      <value>პაროლი უნდა შეიცავდეს მინიმუმ ერთ არაალფანუმერულ სიმბოლოს.</value>
   </data>
 
   <data name="PasswordRequiresUniqueChars" xml:space="preserve">
-      <value>Passwords must use at least {0} different characters.</value>
+      <value>პაროლი უნდა იყენებდეს მინიმუმ {0} განსხვავებულ სიმბოლოს.</value>
   </data>
 
   <data name="PasswordRequiresUpper" xml:space="preserve">
-      <value>Passwords must have at least one uppercase ('A'-'Z').</value>
+      <value>პაროლი უნდა შეიცავდეს მინიმუმ ერთ დიდ ასოს ('A'-'Z').</value>
   </data>
 
   <data name="PasswordTooShort" xml:space="preserve">
-      <value>Passwords must be at least {0} characters.</value>
+      <value>პაროლი უნდა შეიცავდეს მინიმუმ {0} სიმბოლოს.</value>
   </data>
 
   <data name="PasswordChangeRequired" xml:space="preserve">
-    <value>Your password has been reset. You must change it to get access to site.</value>
+    <value>თქვენი პაროლი განახლდა. საიტზე წვდომის მისაღებად უნდა შეცვალოთ იგი.</value>
   </data>
 </root>

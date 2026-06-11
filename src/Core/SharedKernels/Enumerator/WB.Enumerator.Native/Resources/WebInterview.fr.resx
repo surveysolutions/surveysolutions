@@ -367,7 +367,7 @@
     <value>Avertissement</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
-    <value>{0} (ver. {1})</value>
+    <value>{0} (v. {1})</value>
   </data>
   <data name="InterviewSizeLimitReached" xml:space="preserve">
 

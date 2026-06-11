@@ -213,6 +213,6 @@
 
 
   <data name="ServerStatuses" xml:space="preserve">
-      <value>Response statuses</value>
+      <value>Статуси відповідей</value>
   </data>
 </root>

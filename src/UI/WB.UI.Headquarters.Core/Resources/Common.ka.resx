@@ -289,131 +289,131 @@
 
 
   <data name="ViewAssignmentDetails" xml:space="preserve">
-    <value>View assignment details</value>
+    <value>დავალების დეტალების ნახვა</value>
   </data>
 
   <data name="Apply" xml:space="preserve">
-        <value>Apply</value>
+        <value>გამოყენება</value>
   </data>
 
   <data name="Assignments" xml:space="preserve">
-    <value>Assignments</value>
+    <value>დავალებები</value>
   </data>
 
   <data name="AllAssignments" xml:space="preserve">
-    <value>All assignments</value>
+    <value>ყველა დავალება</value>
   </data>
 
   <data name="Processing" xml:space="preserve">
-    <value>Processing…</value>
+    <value>მიმდინარეობს…</value>
   </data>
 
   <data name="EmailProviders" xml:space="preserve">
-    <value>Email providers</value>
+    <value>ელ. ფოსტის პროვაიდერები</value>
   </data>
 
   <data name="AuditLog" xml:space="preserve">
-    <value>Audit log</value>
+    <value>აუდიტის ჟურნალი</value>
   </data>
 
   <data name="Clear" xml:space="preserve">
-    <value>Clear</value>
+    <value>გასუფთავება</value>
   </data>
 
   <data name="DownloadSupervisor" xml:space="preserve">
-    <value>Download Supervisor app</value>
+    <value>Supervisor აპის ჩამოტვირთვა</value>
   </data>
 
   <data name="AllGpsQuestions" xml:space="preserve">
-    <value>All GPS questions</value>
+    <value>ყველა GPS კითხვა</value>
   </data>
 
   <data name="MapDashboard" xml:space="preserve">
-    <value>Map Dashboard</value>
+    <value>რუკის დაფა</value>
   </data>
 
   <data name="OpenAssignment" xml:space="preserve">
-    <value>Open assignment</value>
+    <value>დავალების გახსნა</value>
   </data>
 
   <data name="Archived" xml:space="preserve">
-    <value>Archived</value>
+    <value>დაარქივებული</value>
   </data>
 
   <data name="NothingSelected" xml:space="preserve">
-    <value>Nothing selected</value>
+    <value>არაფერია არჩეული</value>
   </data>
 
   <data name="QuestionnaireVersion" xml:space="preserve">
-    <value>Questionnaire version</value>
+    <value>კითხვარის ვერსია</value>
   </data>
 
   <data name="AllVersions" xml:space="preserve">
-    <value>All versions</value>
+    <value>ყველა ვერსია</value>
   </data>
 
   <data name="Reset" xml:space="preserve">
-    <value>Reset</value>
+    <value>განულება</value>
   </data>
 
   <data name="EqualValues" xml:space="preserve">
-    <value>Equals</value>
+    <value>უდრის</value>
   </data>
 
   <data name="NotEquals" xml:space="preserve">
-    <value>Not equals</value>
+    <value>არ უდრის</value>
   </data>
 
   <data name="SelectOption" xml:space="preserve">
-    <value>Select option</value>
+    <value>აირჩიეთ ვარიანტი</value>
   </data>
 
   <data name="StartsWith" xml:space="preserve">
-    <value>Starts with</value>
+    <value>იწყება</value>
   </data>
 
   <data name="Unknown" xml:space="preserve">
-    <value>Unknown</value>
+    <value>უცნობი</value>
   </data>
 
   <data name="EditCalendarEvent" xml:space="preserve">
-    <value>Edit Calendar Event</value>
+    <value>კალენდრის მოვლენის რედაქტირება</value>
   </data>
 
   <data name="CalendarEvent" xml:space="preserve">
-    <value>Calendar Event</value>
+    <value>კალენდრის მოვლენა</value>
   </data>
 
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>დამატება</value>
   </data>
 
   <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>წაშლა</value>
   </data>
 
   <data name="Return" xml:space="preserve">
-    <value>Return</value>
+    <value>დაბრუნება</value>
   </data>
 
   <data name="ChangeToCAPI" xml:space="preserve">
-    <value>Change to CAPI</value>
+    <value>CAPI-ზე შეცვლა</value>
   </data>
 
   <data name="ChangeToCAPIConfirmHQ" xml:space="preserve">
-    <value>Selected {{count}} interviews mode will be changed to CAPI</value>
+    <value>არჩეული {{count}} ინტერვიუს რეჟიმი შეიცვლება CAPI-ზე</value>
   </data>
 
   <data name="ChangeToCAWI" xml:space="preserve">
-    <value>Change to CAWI</value>
+    <value>CAWI-ზე შეცვლა</value>
   </data>
 
   <data name="ChangeToCAWIConfirmHQ" xml:space="preserve">
-    <value>Selected {{count}} interviews mode will be changed to CAWI</value>
+    <value>არჩეული {{count}} ინტერვიუს რეჟიმი შეიცვლება CAWI-ზე</value>
   </data>
 
   <data name="InterviewMode" xml:space="preserve">
-    <value>Interview Mode</value>
+    <value>ინტერვიუს რეჟიმი</value>
   </data>
 
   <data name="Capi" xml:space="preserve">
@@ -425,34 +425,34 @@
   </data>
 
   <data name="Enable" xml:space="preserve">
-    <value>Enable</value>
+    <value>ჩართვა</value>
   </data>
 
   <data name="Disable" xml:space="preserve">
-    <value>Disable</value>
+    <value>გამორთვა</value>
   </data>
 
   <data name="Properties" xml:space="preserve">
-      <value>Properties</value>
+      <value>თვისებები</value>
   </data>
 
   <data name="LinkedUsers" xml:space="preserve">
-      <value>Linked users</value>
+      <value>დაკავშირებული მომხმარებლები</value>
   </data>
 
   <data name="LinkUser" xml:space="preserve">
-      <value>User</value>
+      <value>მომხმარებელი</value>
   </data>
 
   <data name="GeoTrackNumber" xml:space="preserve">
-      <value>Track</value>
+      <value>ტრეკი</value>
   </data>
 
   <data name="DateRange" xml:space="preserve">
-      <value>Date range</value>
+      <value>თარიღების დიაპაზონი</value>
   </data>
 
   <data name="AllGeoTracks" xml:space="preserve">
-      <value>All geo tracks</value>
+      <value>ყველა გეოტრეკი</value>
   </data>
 </root>

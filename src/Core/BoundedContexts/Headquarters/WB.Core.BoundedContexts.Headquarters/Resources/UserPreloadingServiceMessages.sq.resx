@@ -135,6 +135,6 @@
 
 
   <data name="FileDoesNotContainAnyData" xml:space="preserve">
-    <value>The file '{0}' does not contain any user data</value>
+    <value>Skedari '{0}' nuk përmban asnjë të dhënë përdoruesi</value>
   </data>
 </root>

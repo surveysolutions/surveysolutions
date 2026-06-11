@@ -86,7 +86,7 @@
     <value>{0} (v{1})</value>
   </data>
   <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
-    <value>{0} interview(s)</value>
+    <value>{0} entretien(s)</value>
   </data>
   <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
     <value>Interviews créées : {0}</value>

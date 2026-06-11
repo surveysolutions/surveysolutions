@@ -289,26 +289,26 @@
   </data>
 
   <data name="LogoutText" xml:space="preserve">
-    <value>You have successfully logged out of the application.</value>
+    <value>Ju u larguat me sukses nga aplikacioni.</value>
   </data>
 
   <data name="LockedOut" xml:space="preserve">
-    <value>Locked out</value>
+    <value>Llogari e bllokuar</value>
   </data>
 
   <data name="LockedOutText" xml:space="preserve">
-    <value>Your account is locked. Contact the administrator to unlock your account</value>
+    <value>Llogaria juaj është e bllokuar. Kontaktoni administratorin për të zhbllokuar llogarinë tuaj</value>
   </data>
 
   <data name="PasswordEmailSent" xml:space="preserve">
-    <value>Please check your email to reset your password.</value>
+    <value>Ju lutemi, kontrolloni emailin tuaj për të rivendosur fjalëkalimin.</value>
   </data>
 
   <data name="EmailChangeShouldBeConfirmed" xml:space="preserve">
-    <value>Please follow instructions sent to provided email ({0}) to confirm email change.</value>
+    <value>Ju lutemi, ndiqni udhëzimet e dërguara në emailin e dhënë ({0}) për të konfirmuar ndryshimin e emailit.</value>
   </data>
 
   <data name="PendingEmailUpdate" xml:space="preserve">
-    <value>Pending update to {0}</value>
+    <value>Përditësim në pritje te {0}</value>
   </data>
 </root>

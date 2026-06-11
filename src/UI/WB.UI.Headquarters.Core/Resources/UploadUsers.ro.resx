@@ -145,7 +145,7 @@
     <value>Descărcați template-ul .tab pentru încărcarea de către utilizator</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>E-mail</value>
   </data>
   <data name="EstimatedTime" xml:space="preserve">
     <value>Timpul rămas aproximativ {{estimatedTime}}</value>
@@ -231,14 +231,14 @@
 
 
   <data name="Workspace" xml:space="preserve">
-    <value>Workspace</value>
+    <value>Spațiu de lucru</value>
   </data>
 
   <data name="SelectWorkspace" xml:space="preserve">
-    <value>Select Workspace</value>
+    <value>Selectați spațiul de lucru</value>
   </data>
 
   <data name="SelectWorkspaceDescription" xml:space="preserve">
-    <value>If no workspace assigned in batch file use this workspace as default</value>
+    <value>Dacă în fișierul batch nu este atribuit niciun spațiu de lucru, utilizați acest spațiu de lucru ca implicit</value>
   </data>
 </root>

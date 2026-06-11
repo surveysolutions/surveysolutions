@@ -303,22 +303,22 @@
 
 
   <data name="PLU0001Recomendation" xml:space="preserve">
-      <value>User must be unique </value>
+      <value>Користувач має бути унікальним</value>
   </data>
 
   <data name="PLU0002Recomendation" xml:space="preserve">
-      <value>Resolve duplicates</value>
+      <value>Усуньте дублікати</value>
   </data>
 
   <data name="PLU0007Recomendation" xml:space="preserve">
-      <value>Fix email</value>
+      <value>Виправте ел. пошту</value>
   </data>
 
   <data name="PLU0008Recomendation" xml:space="preserve">
-      <value>Fix phone number</value>
+      <value>Виправте номер телефону</value>
   </data>
 
   <data name="PLU0010Recomendation" xml:space="preserve">
-      <value>Verify value for supervisor</value>
+      <value>Перевірте значення для супервайзера</value>
   </data>
 </root>

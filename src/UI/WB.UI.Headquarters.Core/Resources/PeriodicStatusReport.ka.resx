@@ -234,26 +234,26 @@
 
 
   <data name="BackToTeams" xml:space="preserve">
-    <value>Back to teams</value>
+    <value>გუნდებზე დაბრუნება</value>
   </data>
 
   <data name="OverTheLast" xml:space="preserve">
-    <value>Over the previous</value>
+    <value>წინა</value>
   </data>
 
   <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>Average time that interview was presented on screen of interviewer before completion per interviewer.</value>
+    <value>საშუალო დრო, რომლის განმავლობაშიც ინტერვიუ დასრულებამდე ინტერვიუერის ეკრანზე იყო ნაჩვენები, თითოეული ინტერვიუერის მიხედვით.</value>
   </data>
 
   <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
-    <value>Average time that interview was presented on screen of interviewer before completion per supervisor.</value>
+    <value>საშუალო დრო, რომლის განმავლობაშიც ინტერვიუ დასრულებამდე ინტერვიუერის ეკრანზე იყო ნაჩვენები, თითოეული სუპერვაიზერის მიხედვით.</value>
   </data>
 
   <data name="NumberOfCompletedInterviewsDescriptionPerInterviewer" xml:space="preserve">
-    <value>Number of interview completions by interviewer. Rejected and then completed interviews are counted as separate completion events.</value>
+    <value>ინტერვიუერის მიერ დასრულებული ინტერვიუების რაოდენობა. უარყოფილი და შემდეგ დასრულებული ინტერვიუები ცალკე დასრულების მოვლენებად ითვლება.</value>
   </data>
 
   <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer" xml:space="preserve">
-    <value>Number of approvals and rejections by a supervisor on interviews collected by interviewer</value>
+    <value>სუპერვაიზერის მიერ ინტერვიუერზე შეგროვებულ ინტერვიუებზე შესრულებული დამტკიცებებისა და უარყოფების რაოდენობა</value>
   </data>
 </root>
