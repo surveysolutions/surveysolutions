@@ -105,6 +105,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The file name '{0}' exceeds the maximum allowed length of {1} characters..
+        /// </summary>
+        public static string MapFileNameTooLong {
+            get {
+                return ResourceManager.GetString("MapFileNameTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The file {0} name includes non-UTF-8 characters..
         /// </summary>
         public static string MapFileNameHasNonUtf8Chars {

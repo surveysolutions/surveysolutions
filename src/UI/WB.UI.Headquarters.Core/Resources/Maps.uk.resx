@@ -192,4 +192,7 @@
   <data name="UploadMapsSummaryFormat" xml:space="preserve">
     <value>{0} карт було оброблено з {1} недійсними файлами карт</value>
   </data>
+  <data name="MapFileNameTooLong" xml:space="preserve">
+    <value>Назва файлу '{0}' перевищує максимально допустиму довжину {1} символів.</value>
+  </data>
 </root>

@@ -168,4 +168,7 @@
   <data name="UploadMapsSummaryFormat" xml:space="preserve">
     <value>{0} hărțile au fost procesate cu {1} fișiere de hartă incorecte</value>
   </data>
+  <data name="MapFileNameTooLong" xml:space="preserve">
+    <value>Numele fișierului '{0}' depășește lungimea maximă permisă de {1} caractere.</value>
+  </data>
 </root>
