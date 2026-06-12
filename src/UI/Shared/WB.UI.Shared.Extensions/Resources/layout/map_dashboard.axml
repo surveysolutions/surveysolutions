@@ -188,6 +188,17 @@
 
     <TextView
         style="@style/Area_Dashboard_Text"
+        local:MvxBind="Text Localization('MapDashboard_AssignmentStatusTitle');"/>
+
+    <MvxSpinner
+        android:id="@+id/spinnerAssignmentStatuses"
+        style="@style/Area_Dashboard_Spinner"
+        local:MvxItemTemplate="@layout/item_spinner"
+        local:MvxDropDownItemTemplate="@layout/item_spinnerdropdown"
+        local:MvxBind="ItemsSource AssignmentStatuses; SelectedItem SelectedAssignmentStatus; HandleItemSelected AssignmentStatusSelectedCommand; Enabled ShowAssignments"/>
+
+    <TextView
+        style="@style/Area_Dashboard_Text"
         local:MvxBind="Visible SupportDifferentResponsible; Text Localization('MapDashboard_ResponsibleTitle');"/>
 
     <MvxSpinner

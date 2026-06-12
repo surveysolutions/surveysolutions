@@ -50,6 +50,11 @@
                     <Typeahead control-id="show_archived" noSearch noClear :values="ddlShowArchive" :value="showArchive"
                         v-on:selected="showArchiveSelected" />
                 </FilterBlock>
+
+                <FilterBlock :title="$t('Assignments.Status')">
+                    <Typeahead control-id="status_filter" noSearch noClear allowEmpty :values="ddlStatus"
+                        :value="status" v-on:selected="statusSelected" />
+                </FilterBlock>
             </Filters>
         </template>
 
@@ -72,10 +77,20 @@
                     <button class="btn btn-lg btn-primary" id="btnAssignSelected" v-if="!showArchive.key"
                         @click="assignSelected">{{ $t("Common.Assign") }}</button>
 
-                    <button class="btn btn-lg btn-warning" id="btnCloseSelected"
-                        v-if="config.isHeadquarter && !showArchive.key" @click="closeSelected">{{
-                            $t("Assignments.Close")
+                    <button class="btn btn-lg btn-warning" id="btnDownsizeSelected"
+                        v-if="config.isHeadquarter && !showArchive.key" @click="downsizeSelected">{{
+                            $t("Assignments.Downsize")
                         }}</button>
+
+                    <button class="btn btn-lg btn-primary" id="btnCloseSelected"
+                        v-if="(config.isHeadquarter || (config.isSupervisor && config.allowSupervisorChangeAssignmentStatus)) && !showArchive.key"
+                        :disabled="!canComplete" @click="bulkChangeStatus('Closed', 'closeModal')">{{
+                            $t("Assignments.Close") }}</button>
+
+                    <button class="btn btn-lg btn-primary" id="btnReopenSelected"
+                        v-if="(config.isHeadquarter || (config.isSupervisor && config.allowSupervisorChangeAssignmentStatus)) && !showArchive.key"
+                        :disabled="!canReopen" @click="bulkChangeStatus('Open', 'reopenModal')">{{
+                            $t("Assignments.Reopen") }}</button>
 
                     <button class="btn btn-lg btn-danger" id="btnArchiveSelected"
                         v-if="!showArchive.key && config.isHeadquarter" @click="archiveSelected">{{
@@ -83,6 +98,50 @@
                 </div>
             </div>
         </DataTables>
+
+        <ModalFrame ref="closeModal" :title="$t('Assignments.CloseAssignmentTitle')">
+            <p>{{ $t('Assignments.CloseAssignmentMessage') }}</p>
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label class="control-label" for="completeCommentId">
+                        {{ $t("Assignments.Comments") }}
+                    </label>
+                    <textarea control-id="completeCommentId" v-model="statusChangeComment"
+                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                        autocomplete="off" class="form-control" />
+                </div>
+            </form>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" @click="confirmStatusChange">{{
+                        $t("Assignments.Close") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
+                </div>
+            </template>
+        </ModalFrame>
+
+        <ModalFrame ref="reopenModal" :title="$t('Assignments.ReopenAssignmentTitle')">
+            <p>{{ $t('Assignments.ReopenAssignmentMessage') }}</p>
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label class="control-label" for="reopenCommentId">
+                        {{ $t("Assignments.Comments") }}
+                    </label>
+                    <textarea control-id="reopenCommentId" v-model="statusChangeComment"
+                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                        autocomplete="off" class="form-control" />
+                </div>
+            </form>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" @click="confirmStatusChange">{{
+                        $t("Assignments.Reopen") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
+                </div>
+            </template>
+        </ModalFrame>
 
         <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
             <p>{{ $t("Assignments.NumberOfAssignmentsAffected", { count: selectedRows.length }) }}</p>
@@ -117,7 +176,7 @@
             </template>
         </ModalFrame>
 
-        <ModalFrame ref="closeModal" :title="$t('Pages.ConfirmationNeededTitle')">
+        <ModalFrame ref="downsizeModal" :title="$t('Pages.ConfirmationNeededTitle')">
             <p v-if="selectedRows.length === 1">{{ singleCloseMessage }}</p>
             <p v-else>{{ $t("Assignments.MultipleAssignmentsClose", { count: selectedRows.length }) }}</p>
 
@@ -125,7 +184,7 @@
                 <div>
                     <button type="button" class="btn btn-primary" :disabled="isWebModeAssignmentSelected"
                         @click="close">{{
-                            $t("Assignments.Close") }}</button>
+                            $t("Assignments.Downsize") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
                         }}</button>
                 </div>
@@ -243,6 +302,7 @@ export default {
             totalRows: 0,
             showArchive: null,
             receivedByTablet: null,
+            status: null,
             newResponsibleId: null,
             reassignComment: null,
             editedRowId: null,
@@ -250,6 +310,9 @@ export default {
             editedAudioRecordingEnabled: null,
             canEditQuantity: null,
             mode: null,
+            statusChangeIds: [],
+            statusChangeTargetStatus: null,
+            statusChangeComment: null,
         }
     },
 
@@ -287,9 +350,21 @@ export default {
             return this.anyWebModeAssignmentSelected && this.newResponsibleId.iconClass !== RoleNames.INTERVIEWER.toLowerCase()
         },
 
+        canComplete() {
+            if (this.selectedRows.length === 0 || (this.showArchive && this.showArchive.key)) return false
+            const data = this.$refs.table.table.rows({ selected: true }).data()
+            return Array.from(data).some(r => r.status === 'Open' || r.status === 'Completed')
+        },
+
+        canReopen() {
+            if (this.selectedRows.length === 0 || (this.showArchive && this.showArchive.key)) return false
+            const data = this.$refs.table.table.rows({ selected: true }).data()
+            return Array.from(data).some(r => r.status === 'Completed' || r.status === 'Closed')
+        },
+
         ddlReceivedByTablet() {
             return [
-                { key: 'All', value: this.$t('Assignments.ReceivedByTablet_All') },
+                { key: 'All', value: this.$t('Assignments.Filter_ShowAll') },
                 { key: 'Received', value: this.$t('Assignments.ReceivedByTablet_Received') },
                 { key: 'NotReceived', value: this.$t('Assignments.ReceivedByTablet_NotReceived') },
             ]
@@ -298,6 +373,14 @@ export default {
             return [
                 { key: false, value: this.$t('Assignments.Active') },
                 { key: true, value: this.$t('Assignments.Archived') },
+            ]
+        },
+        ddlStatus() {
+            return [
+                { key: null, value: this.$t('Assignments.Filter_ShowAll') },
+                { key: 'Open', value: this.$t('Assignments.StatusOpen') },
+                { key: 'Completed', value: this.$t('Assignments.StatusCompleted') },
+                { key: 'Closed', value: this.$t('Assignments.StatusClosed') },
             ]
         },
 
@@ -351,6 +434,21 @@ export default {
                         }
                         resultString += '</span>'
                         return resultString
+                    },
+                },
+                {
+                    data: 'status',
+                    name: 'Status',
+                    title: this.$t('Assignments.Status'),
+                    searchable: false,
+                    orderable: true,
+                    render(data) {
+                        const statusMap = {
+                            'Open': self.$t('Assignments.StatusOpen'),
+                            'Completed': self.$t('Assignments.StatusCompleted'),
+                            'Closed': self.$t('Assignments.StatusClosed'),
+                        }
+                        return statusMap[data] || data
                     },
                 },
                 {
@@ -547,6 +645,7 @@ export default {
             requestData.receivedByTablet = (this.receivedByTablet || {}).key
             requestData.teamId = this.teamId
             requestData.id = this.id
+            requestData.status = (this.status || {}).key
         },
 
         userSelected(newValue) {
@@ -568,6 +667,10 @@ export default {
 
         receivedByTabletSelected(newValue) {
             this.receivedByTablet = newValue
+        },
+
+        statusSelected(newValue) {
+            this.status = newValue
         },
 
         showArchiveSelected(newValue) {
@@ -641,8 +744,8 @@ export default {
             })
         },
 
-        closeSelected() {
-            this.$refs.closeModal.modal({
+        downsizeSelected() {
+            this.$refs.downsizeModal.modal({
                 keyboard: false,
             })
         },
@@ -663,7 +766,7 @@ export default {
                     })
                 })
             )
-            this.$refs.closeModal.hide()
+            this.$refs.downsizeModal.hide()
             this.reloadTable()
         },
 
@@ -804,6 +907,42 @@ export default {
 
         },
 
+        bulkChangeStatus(targetStatus, modalRef) {
+            const validStatuses = targetStatus === 'Closed' ? ['Open', 'Completed'] : ['Completed', 'Closed']
+            const data = this.$refs.table.table.rows({ selected: true }).data()
+            this.statusChangeIds = Array.from(data)
+                .filter(r => validStatuses.includes(r.status))
+                .map(r => r.id)
+            this.statusChangeTargetStatus = targetStatus
+            this.statusChangeComment = null
+            this.$refs[modalRef].modal()
+        },
+
+        async confirmStatusChange() {
+            const modalRef = this.statusChangeTargetStatus === 'Closed'
+                ? this.$refs.closeModal
+                : this.$refs.reopenModal
+            try {
+                await Promise.all(
+                    this.statusChangeIds.map(id =>
+                        this.$hq.Assignments.changeStatus(
+                            id,
+                            this.statusChangeTargetStatus,
+                            this.statusChangeComment
+                        )
+                    )
+                )
+                modalRef.hide()
+                this.statusChangeIds = []
+                this.statusChangeTargetStatus = null
+                this.statusChangeComment = null
+                this.reloadTable()
+            } catch (error) {
+                const msg = error?.response?.data?.message || error?.message || this.$t('Common.Error')
+                toastr.error(msg)
+            }
+        },
+
     },
     mounted() {
         var self = this
@@ -822,6 +961,7 @@ export default {
         this.id = this.$route.query.id
 
         this.receivedByTabletSelected(this.ddlReceivedByTablet[0])
+        this.statusSelected(this.ddlStatus[0])
 
 
         self.loadQuestionnaireId((questionnaireId, version) => {
@@ -844,7 +984,7 @@ export default {
 
                 self.reloadTable()
                 self.startWatchers(
-                    ['responsibleId', 'questionnaireId', 'showArchive', 'receivedByTablet', 'questionnaireVersion'],
+                    ['responsibleId', 'questionnaireId', 'showArchive', 'receivedByTablet', 'questionnaireVersion', 'status'],
                     self.reloadTable.bind(self)
                 )
             })

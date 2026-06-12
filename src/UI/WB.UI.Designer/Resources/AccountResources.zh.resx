@@ -279,4 +279,7 @@
   <data name="ShowPassword" xml:space="preserve">
     <value>显示密码</value>
   </data>
+  <data name="LastLoginDate" xml:space="preserve">
+    <value>最后登录日期</value>
+  </data>
 </root>

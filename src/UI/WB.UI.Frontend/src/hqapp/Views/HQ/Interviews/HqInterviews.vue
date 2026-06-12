@@ -691,7 +691,7 @@ export default {
                         if (isInterviewerRole) {
                             resultString +=
                                 '<span class="interviewer"><a href="' +
-                                self.config.api.profile +
+                                self.config.profileUrl +
                                 '/' +
                                 row.responsibleId +
                                 '">' +
