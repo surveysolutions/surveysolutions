@@ -8,6 +8,10 @@ export default {
         forEach(entities, entity => {
             if (entity != null) {
                 entity.updatedAt = new Date()
+                // Restore variable name from cache if not included in this update
+                if (entity.name == null && state.variableNames[entity.id]) {
+                    entity.name = state.variableNames[entity.id]
+                }
                 state.entityDetails[entity.id] = entity
             }
         })
@@ -24,6 +28,7 @@ export default {
         forEach(entitiesToDelete, entity => {
             delete state.entityDetails[entity.identity]
             delete state.fetch.state[entity.identity]
+            delete state.variableNames[entity.identity]
         })
         state.entities = sectionData
     },
@@ -31,7 +36,13 @@ export default {
         forEach(state.entities, entity => {
             delete state.entities[entity.identity]
             delete state.entityDetails[entity.identity]
+            delete state.variableNames[entity.identity]
         })
+    },
+    SET_VARIABLE_NAMES(state, variableNames) {
+        if (variableNames) {
+            Object.assign(state.variableNames, variableNames)
+        }
     },
     CLEAR_ENTITIES(state, { ids }) {
         forEach(ids, id => {
