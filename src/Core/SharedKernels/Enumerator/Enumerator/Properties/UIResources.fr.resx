@@ -576,7 +576,7 @@ Vous pouvez créer ou modifier vos questionnaires dans Survey Solutions Designer
     <value>L'application doit avoir l'autorisation d'utiliser le microphone. Réessayez la dernière action et autorisez l'accès. Si vous ne voyez pas la fenêtre contextuelle des autorisations, allez dans les paramètres et autorisez l'application à utiliser le microphone.</value>
   </data>
   <data name="MissingPermissions_Storage_Global" xml:space="preserve">
-    <value>L'application doit avoir l'autorisation d'utiliser le stockage. Réessayez la dernière action et autorisez l'accès. Si vous ne voyez pas la fenêtre contextuelle des autorisations, allez dans les paramètres et autorisez l'application à utiliser le stockage.</value>
+    <value>Pour stocker des cartes sur l'appareil mobile, Survey Solutions a besoin d'accéder aux fichiers. Si cette autorisation n'est pas accordée, l'application ne pourra stocker aucune carte pour une utilisation hors ligne.</value>
   </data>
   <data name="MissingPermission" xml:space="preserve">
     <value>L'application n'a pas suffisamment d'autorisations pour exécuter l'action demandée</value>
