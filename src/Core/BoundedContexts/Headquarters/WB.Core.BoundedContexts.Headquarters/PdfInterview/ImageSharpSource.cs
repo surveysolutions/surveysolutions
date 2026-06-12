@@ -7,6 +7,7 @@ using SixLabors.ImageSharp.Formats.Bmp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 namespace WB.Core.BoundedContexts.Headquarters.PdfInterview;
 
@@ -19,6 +20,37 @@ public class ImageSharpSource<TPixel> : ImageSource where TPixel : unmanaged, IP
     {
         return (ImageSource.IImageSource)new ImageSharpSource<TPixel>.ImageSharpSourceImpl<TPixel>(
             "*" + Guid.NewGuid().ToString("B"), image, quality, imgFormat is PngFormat);
+    }
+
+    /// <summary>
+    /// Loads an image from <paramref name="imageBytes"/>, downscales it so that neither
+    /// dimension exceeds <paramref name="maxDimension"/> (aspect ratio preserved), and
+    /// returns it as an <see cref="ImageSource.IImageSource"/> ready for PDF embedding.
+    /// </summary>
+    public static ImageSource.IImageSource FromBinaryResized(string name, byte[] imageBytes,
+        int maxDimension = 1024)
+    {
+        var format = Image.DetectFormat(imageBytes) ?? JpegFormat.Instance;
+        var image = Image.Load<TPixel>(imageBytes);
+        try
+        {
+            if (image.Width > maxDimension || image.Height > maxDimension)
+            {
+                image.Mutate(x => x.Resize(new ResizeOptions
+                {
+                    Mode = ResizeMode.Max,
+                    Size = new Size(maxDimension, maxDimension)
+                }));
+            }
+
+            return (ImageSource.IImageSource)new ImageSharpSourceImpl<TPixel>(name, image, quality: null,
+                isTransparent: format is PngFormat);
+        }
+        catch
+        {
+            image.Dispose();
+            throw;
+        }
     }
 
     protected override ImageSource.IImageSource FromBinaryImpl(

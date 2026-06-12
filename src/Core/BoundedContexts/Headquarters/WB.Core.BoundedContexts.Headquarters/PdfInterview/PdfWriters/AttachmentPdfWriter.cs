@@ -40,9 +40,9 @@ public class AttachmentPdfWriter : IPdfWriter
         if (attachment.IsImage())
         {
             paragraph.Format.LineSpacingRule = LineSpacingRule.Single;
-            
-            ImageSource.IImageSource imageSource = ImageSource.FromBinary(attachment.FileName, 
-                () => attachment.Content);
+
+            var imageSource = ImageSharpSource<SixLabors.ImageSharp.PixelFormats.Rgba32>
+                .FromBinaryResized(attachment.FileName, attachment.Content!);
 
             var image = paragraph.AddImage(imageSource);
             image.LockAspectRatio = true;
