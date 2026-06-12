@@ -108,8 +108,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             if (interview == null)
             {
-                logger.Error("Interview is null. interviewId: " + InterviewId);
-                ViewModelNavigationService.NavigateToDashboardAsync().ConfigureAwait(false);
+                logger.Warn("Interview is null in GetEnablementFromInterview. interviewId: " + InterviewId);
                 return false;
             }
             
