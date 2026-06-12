@@ -58,6 +58,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             result.Password = assignment.Password;
             result.TargetArea = assignment.TargetArea;
             result.WebMode = assignment.WebMode;
+            result.Status = assignment.Status;
         }
 
         private static InterviewAnswer ToInterviewAnswer(AggregateInterviewAnswer source, IQuestionnaire? questionnaire)
@@ -111,7 +112,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             Email = row.Email,
             Password = row.Password,
             TargetArea = row.TargetArea,
-            WebMode = row.WebMode
+            WebMode = row.WebMode,
+            Status = row.Status
         };
 
         private static string? GetVariableName(string? value, string? identity, IQuestionnaire? questionnaire)

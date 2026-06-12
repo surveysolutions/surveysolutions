@@ -513,4 +513,16 @@ Posibles razones:
   <data name="SelectFileWarning" xml:space="preserve">
     <value>Por favor, seleccione un archivo para subir.</value>
 </data>
+  <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve">
+    <value>Permitir a los supervisores cambiar los estados de las asignaciones</value>
+  </data>
+  <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>Cuando está habilitado, los supervisores pueden aprobar y reabrir asignaciones desde sus tabletas</value>
+  </data>
+  <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
+    <value>Permitir a los entrevistadores cambiar los estados de las asignaciones</value>
+  </data>
+  <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>Cuando está habilitado, los entrevistadores pueden completar y reabrir asignaciones desde sus tabletas (requiere que la configuración del supervisor esté habilitada)</value>
+  </data>
 </root>
