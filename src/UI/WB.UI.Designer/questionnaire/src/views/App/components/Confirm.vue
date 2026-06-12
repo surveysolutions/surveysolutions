@@ -59,10 +59,26 @@ const confirmDialog = {
     },
     computed: {
         sanitizedTitle() {
-            return DOMPurify.sanitize(this.title || '', this.sanitizeOptions || {
+            const defaultOptions = {
                 ALLOWED_TAGS: [],
                 KEEP_CONTENT: true
-            });
+            };
+
+            const hasSafeOptions = this.sanitizeOptions
+                && typeof this.sanitizeOptions === 'object'
+                && !Array.isArray(this.sanitizeOptions)
+                && Array.isArray(this.sanitizeOptions.ALLOWED_TAGS)
+                && Array.isArray(this.sanitizeOptions.ALLOWED_ATTR);
+
+            const options = hasSafeOptions
+                ? {
+                    ...defaultOptions,
+                    ALLOWED_TAGS: this.sanitizeOptions.ALLOWED_TAGS,
+                    ALLOWED_ATTR: this.sanitizeOptions.ALLOWED_ATTR
+                }
+                : defaultOptions;
+
+            return DOMPurify.sanitize(this.title || '', options);
         }
     },
     mounted() {
