@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -149,6 +151,124 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.Interview
             // Assert
             Assert.That(foundEntries.TotalCount, Is.EqualTo(1));
             Assert.That(foundEntries.Items.Single().InterviewId, Is.EqualTo(summaryWithresponsibleInterviewer.InterviewId));
+        }
+        [Test]
+        public void Should_find_interviews_by_key_substring()
+        {
+            var matchingInterview = Create.Entity.InterviewSummary(key: "ab-cd-ef-12");
+            var nonMatchingInterview = Create.Entity.InterviewSummary(key: "11-11-11-11");
+
+            var storage = new TestInMemoryWriter<InterviewSummary>();
+            storage.Store(matchingInterview, matchingInterview.InterviewId);
+            storage.Store(nonMatchingInterview, nonMatchingInterview.InterviewId);
+
+            var factory = Create.Service.AllInterviewsFactory(storage);
+
+            var result = factory.Load(new AllInterviewsInputModel { SearchBy = "cd-ef" });
+
+            Assert.That(result.TotalCount, Is.EqualTo(1));
+            Assert.That(result.Items.Single().InterviewId, Is.EqualTo(matchingInterview.InterviewId));
+        }
+
+        [Test]
+        public void Should_find_interviews_by_responsibleName_substring()
+        {
+            var matchingInterview = Create.Entity.InterviewSummary(responsibleName: "JohnDoe");
+            var nonMatchingInterview = Create.Entity.InterviewSummary(responsibleName: "JaneSmith");
+
+            var storage = new TestInMemoryWriter<InterviewSummary>();
+            storage.Store(matchingInterview, matchingInterview.InterviewId);
+            storage.Store(nonMatchingInterview, nonMatchingInterview.InterviewId);
+
+            var factory = Create.Service.AllInterviewsFactory(storage);
+
+            var result = factory.Load(new AllInterviewsInputModel { SearchBy = "ohnDo" });
+
+            Assert.That(result.TotalCount, Is.EqualTo(1));
+            Assert.That(result.Items.Single().InterviewId, Is.EqualTo(matchingInterview.InterviewId));
+        }
+
+        [Test]
+        public void Should_find_interviews_by_responsibleName_case_insensitive()
+        {
+            var matchingInterview = Create.Entity.InterviewSummary(responsibleName: "JohnDoe");
+            var nonMatchingInterview = Create.Entity.InterviewSummary(responsibleName: "JaneSmith");
+
+            var storage = new TestInMemoryWriter<InterviewSummary>();
+            storage.Store(matchingInterview, matchingInterview.InterviewId);
+            storage.Store(nonMatchingInterview, nonMatchingInterview.InterviewId);
+
+            var factory = Create.Service.AllInterviewsFactory(storage);
+
+            var result = factory.Load(new AllInterviewsInputModel { SearchBy = "JOHNDOE" });
+
+            Assert.That(result.TotalCount, Is.EqualTo(1));
+            Assert.That(result.Items.Single().InterviewId, Is.EqualTo(matchingInterview.InterviewId));
+        }
+
+        [Test]
+        public void Should_find_interviews_by_identifying_value_substring()
+        {
+            var matchingInterview = Create.Entity.InterviewSummary();
+            matchingInterview.IdentifyEntitiesValues.Add(new IdentifyEntityValue
+            {
+                Entity = new QuestionnaireCompositeItem { EntityId = Guid.NewGuid() },
+                Value = "some text answer",
+                Identifying = true
+            });
+
+            var storage = new TestInMemoryWriter<InterviewSummary>();
+            storage.Store(matchingInterview, matchingInterview.InterviewId);
+
+            var factory = Create.Service.AllInterviewsFactory(storage);
+
+            var result = factory.Load(new AllInterviewsInputModel { SearchBy = "text" });
+
+            Assert.That(result.TotalCount, Is.EqualTo(1));
+            Assert.That(result.Items.Single().InterviewId, Is.EqualTo(matchingInterview.InterviewId));
+        }
+
+        [Test]
+        public void Should_find_interviews_by_identifying_value_case_insensitive()
+        {
+            var matchingInterview = Create.Entity.InterviewSummary();
+            matchingInterview.IdentifyEntitiesValues.Add(new IdentifyEntityValue
+            {
+                Entity = new QuestionnaireCompositeItem { EntityId = Guid.NewGuid() },
+                Value = "SomeAnswer",
+                Identifying = true
+            });
+
+            var storage = new TestInMemoryWriter<InterviewSummary>();
+            storage.Store(matchingInterview, matchingInterview.InterviewId);
+
+            var factory = Create.Service.AllInterviewsFactory(storage);
+
+            var result = factory.Load(new AllInterviewsInputModel { SearchBy = "SOMEANSWER" });
+
+            Assert.That(result.TotalCount, Is.EqualTo(1));
+            Assert.That(result.Items.Single().InterviewId, Is.EqualTo(matchingInterview.InterviewId));
+        }
+
+        [Test]
+        public void Should_not_find_interview_when_identifying_value_is_not_identifying()
+        {
+            var interview = Create.Entity.InterviewSummary();
+            interview.IdentifyEntitiesValues.Add(new IdentifyEntityValue
+            {
+                Entity = new QuestionnaireCompositeItem { EntityId = Guid.NewGuid() },
+                Value = "SomeAnswer",
+                Identifying = false
+            });
+
+            var storage = new TestInMemoryWriter<InterviewSummary>();
+            storage.Store(interview, interview.InterviewId);
+
+            var factory = Create.Service.AllInterviewsFactory(storage);
+
+            var result = factory.Load(new AllInterviewsInputModel { SearchBy = "SomeAnswer" });
+
+            Assert.That(result.TotalCount, Is.EqualTo(0));
         }
     }
 }

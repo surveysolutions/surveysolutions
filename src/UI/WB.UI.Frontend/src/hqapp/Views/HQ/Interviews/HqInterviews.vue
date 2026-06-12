@@ -881,27 +881,27 @@ export default {
                     if (search && search != '') {
                         where.and.push({
                             or: [
-                                { key: { startsWith: search.toLowerCase() } },
+                                { key: { contains: search.toLowerCase() } },
                                 {
                                     clientKey: {
-                                        startsWith: search.toLowerCase(),
+                                        contains: search.toLowerCase(),
                                     },
                                 },
                                 {
                                     responsibleNameLowerCase: {
-                                        startsWith: search.toLowerCase(),
+                                        contains: search.toLowerCase(),
                                     },
                                 },
                                 {
                                     supervisorNameLowerCase: {
-                                        startsWith: search.toLowerCase(),
+                                        contains: search.toLowerCase(),
                                     },
                                 },
                                 {
                                     identifyingData: {
                                         some: {
                                             valueLowerCase: {
-                                                startsWith:
+                                                contains:
                                                     search.toLowerCase(),
                                             },
                                         },
