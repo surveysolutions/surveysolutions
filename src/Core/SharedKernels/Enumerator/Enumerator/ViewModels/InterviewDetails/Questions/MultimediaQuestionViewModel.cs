@@ -220,17 +220,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
                 catch (MissingPermissionsException e) when (e.PermissionType == typeof(Permissions.Camera))
                 {
-                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
-                        .MissingPermissions_Camera);
+                    if (this.Answer != null)
+                        this.userInteractionService.ShowToast(UIResources.MissingPermissions_Camera);
+                    else
+                        await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
+                            .MissingPermissions_Camera);
                 }
                 catch (MissingPermissionsException e) when (e.PermissionType == typeof(Permissions.StorageWrite))
                 {
-                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
-                        .MissingPermissions_Storage);
+                    if (this.Answer != null)
+                        this.userInteractionService.ShowToast(UIResources.MissingPermissions_Storage);
+                    else
+                        await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
+                            .MissingPermissions_Storage);
                 }
                 catch (MissingPermissionsException mpe)
                 {
-                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(mpe.Message);
+                    if (this.Answer != null)
+                        this.userInteractionService.ShowToast(mpe.Message);
+                    else
+                        await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(mpe.Message);
                 }
             }
         }
