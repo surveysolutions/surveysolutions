@@ -177,4 +177,7 @@
   <data name="SignInToDesignerTitle" xml:space="preserve">
     <value>შედით დიზაინერზე</value>
   </data>
+  <data name="CopyWebInterviewSettings" xml:space="preserve">
+    <value>Copy Web Interview settings from the previous version</value>
+  </data>
 </root>

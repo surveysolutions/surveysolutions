@@ -108,6 +108,17 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <input class="checkbox-filter single-checkbox" id="ckbCopyWebInterviewSettings"
+                                type="checkbox" value="True" name="CopyWebInterviewSettings"
+                                v-model="copyWebInterviewSettings" />
+                            <label for="ckbCopyWebInterviewSettings">
+                                <span class="tick"></span>
+                                {{ $t('QuestionnaireImport.CopyWebInterviewSettings') }}
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -168,6 +179,7 @@ export default {
             errorMessage: null,
             dotsCount: 0,
             criticalityLevel: null,
+            copyWebInterviewSettings: false,
         }
     },
     mounted() {

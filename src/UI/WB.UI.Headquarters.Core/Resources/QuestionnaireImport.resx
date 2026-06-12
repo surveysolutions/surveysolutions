@@ -186,4 +186,7 @@
   <data name="Prepare" xml:space="preserve">
     <value>Receiving questionnaire data</value>
   </data>
+  <data name="CopyWebInterviewSettings" xml:space="preserve">
+    <value>Copy Web Interview settings from the previous version</value>
+  </data>
 </root>

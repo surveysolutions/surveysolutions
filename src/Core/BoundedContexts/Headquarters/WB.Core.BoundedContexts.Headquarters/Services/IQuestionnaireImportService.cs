@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         Task<QuestionnaireImportResult> ImportAndMigrateAssignments(Guid questionnaireId, string name,
             bool isCensusMode,
             string comment, string requestUrl, bool includePdf, bool shouldMigrateAssignments,
-            QuestionnaireIdentity migrateFrom, CriticalityLevel? criticalityLevel);
+            QuestionnaireIdentity migrateFrom, CriticalityLevel? criticalityLevel,
+            bool copyWebInterviewSettings = false);
     }
 }
