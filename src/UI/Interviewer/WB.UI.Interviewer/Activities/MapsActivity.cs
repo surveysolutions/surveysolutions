@@ -73,13 +73,20 @@ namespace WB.UI.Interviewer.Activities
         protected override void OnStop()
         {
             base.OnStop();
-            if (this.isBound)
+            if (this.isBound && this.serviceConnection != null)
             {
-                this.UnbindService(this.serviceConnection);
-                this.isBound = false;
-                this.serviceConnection = null;
-                this.Binder = null;
+                try
+                {
+                    this.UnbindService(this.serviceConnection);
+                }
+                catch (Java.Lang.IllegalArgumentException)
+                {
+                }
             }
+
+            this.isBound = false;
+            this.serviceConnection = null;
+            this.Binder = null;
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

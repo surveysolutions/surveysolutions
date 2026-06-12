@@ -52,9 +52,7 @@ namespace WB.UI.Shared.Enumerator.Services
                     }
                     finally
                     {
-                        var completedProgress = this.CurrentProgress;
                         this.CurrentProgress = null;
-                        completedProgress?.CancellationTokenSource.Dispose();
                         StopForeground(true);
                         StopSelf();
                         this.isSyncRunning = false;
