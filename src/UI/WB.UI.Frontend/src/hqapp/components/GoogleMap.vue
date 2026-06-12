@@ -280,6 +280,8 @@ import { Form, Field } from 'vee-validate'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 
+const mapReloadSkipTimeoutMs = 500
+
 export default {
     name: "MapWithMarkers",
     mixins: [routeSync],
@@ -299,6 +301,7 @@ export default {
             selectedTooltip: {},
             readyToUpdate: false,
             isMapReloaded: true,
+            mapReloadSkipTimeoutId: null,
             map: null,
             isLoading: false,
             totalMarkers: 0,
@@ -314,6 +317,14 @@ export default {
     async mounted() {
         await this.init()
     },
+
+    beforeUnmount() {
+        if (this.mapReloadSkipTimeoutId != null) {
+            clearTimeout(this.mapReloadSkipTimeoutId)
+            this.mapReloadSkipTimeoutId = null
+        }
+    },
+
     watch: {
         shapefileName(to) {
             nextTick(() => {
@@ -672,6 +683,18 @@ export default {
             }
         },
 
+        skipNextMapReload() {
+            if (this.mapReloadSkipTimeoutId != null) {
+                clearTimeout(this.mapReloadSkipTimeoutId)
+            }
+
+            this.isMapReloaded = true
+            this.mapReloadSkipTimeoutId = setTimeout(() => {
+                this.isMapReloaded = false
+                this.mapReloadSkipTimeoutId = null
+            }, mapReloadSkipTimeoutMs)
+        },
+
         async initializeMap() {
             const self = this
 
@@ -689,6 +712,10 @@ export default {
                 // i.e. we don't want to load map data twice
                 if (this.isMapReloaded == true) {
                     this.isMapReloaded = false
+                    if (this.mapReloadSkipTimeoutId != null) {
+                        clearTimeout(this.mapReloadSkipTimeoutId)
+                        this.mapReloadSkipTimeoutId = null
+                    }
                     return
                 }
 
@@ -920,6 +947,7 @@ export default {
                                             -30
                                         ),
                                     })
+                                    self.skipNextMapReload()
                                     self.infoWindow.open(self.map)
                                 })
                             } else {
@@ -950,6 +978,7 @@ export default {
                             self.infoWindow.setOptions({
                                 pixelOffset: new google.maps.Size(0, -30),
                             })
+                            self.skipNextMapReload()
                             self.infoWindow.open(self.map)
                         })
                     }
@@ -972,6 +1001,7 @@ export default {
                         self.infoWindow.setOptions({
                             pixelOffset: new google.maps.Size(0, -30),
                         })
+                        self.skipNextMapReload()
                         self.infoWindow.open(self.map)
                     })
                 }
@@ -981,6 +1011,7 @@ export default {
                     nextTick(function () {
                         self.infoWindow.setContent(label)
                         self.infoWindow.setPosition(event.latLng)
+                        self.skipNextMapReload()
                         self.infoWindow.open(self.map)
                     })
                 }
