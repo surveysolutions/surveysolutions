@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
 
@@ -23,16 +24,19 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         private readonly IAssignmentsService assignmentsService;
         private readonly ICommandService commandService;
         private readonly IUserToDeviceService userToDeviceService;
+        private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
 
         protected AssignmentsControllerBase(IAuthorizedUser authorizedUser,
             IAssignmentsService assignmentsService,
             IUserToDeviceService userToDeviceService,
-            ICommandService commandService)
+            ICommandService commandService,
+            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage)
         {
             this.authorizedUser = authorizedUser;
             this.assignmentsService = assignmentsService;
             this.commandService = commandService;
             this.userToDeviceService = userToDeviceService;
+            this.interviewerSettingsStorage = interviewerSettingsStorage;
         }
 
         public virtual ActionResult<AssignmentApiDocument> GetAssignment(int id)
@@ -40,12 +44,15 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             var authorizedUserId = this.authorizedUser.Id;
 
             Assignment assignment = this.assignmentsService.GetAssignment(id);
+            if (assignment == null)
+                return NotFound("Assignment not found");
 
-            if (assignment.ResponsibleId != authorizedUserId && assignment.Responsible.ReadonlyProfile.SupervisorId != authorizedUserId)
+            if (assignment.ResponsibleId != authorizedUserId &&
+                assignment.Responsible?.ReadonlyProfile?.SupervisorId != authorizedUserId)
             {
                 return Forbid();
             }
-            
+
             var isNeedUpdateApp = IsNeedUpdateApp(assignment);
             if (isNeedUpdateApp)
                 return StatusCode(StatusCodes.Status426UpgradeRequired);
@@ -76,7 +83,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                     ResponsibleId = assignment.ResponsibleId,
                     ResponsibleName = assignment.Responsible.Name,
                     IsAudioRecordingEnabled = assignment.AudioRecording,
-                    TargetArea = assignment.TargetArea
+                    TargetArea = assignment.TargetArea,
+                    Status = assignment.Status,
+                    StatusComment = assignment.StatusComment,
+                    UpdatedAtUtc = assignment.UpdatedAtUtc
                 });
             }
 
@@ -93,7 +103,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
             var authorizedUserId = this.authorizedUser.Id;
             if (assignment.ResponsibleId != authorizedUserId &&
-                assignment.Responsible.ReadonlyProfile.SupervisorId != authorizedUserId)
+                assignment.Responsible?.ReadonlyProfile?.SupervisorId != authorizedUserId)
             {
                 return NotFound("Assignment was reassigned");
             }
@@ -106,12 +116,83 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             return Ok();
         }
 
+        public virtual IActionResult ChangeStatus(int id, [FromBody] AssignmentStatusChangeApiView request)
+        {
+            if (request == null)
+                return BadRequest();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var assignment = this.assignmentsService.GetAssignment(id);
+            if (assignment == null)
+                return NotFound("Assignment not found");
+
+            var authorizedUserId = this.authorizedUser.Id;
+            if (assignment.ResponsibleId != authorizedUserId &&
+                (assignment.Responsible?.ReadonlyProfile?.SupervisorId != authorizedUserId))
+            {
+                return Forbid();
+            }
+
+            var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
+
+            if (this.authorizedUser.IsInterviewer && !interviewerSettings.IsAllowInterviewerChangeAssignmentStatus())
+                return Forbid();
+
+            if (this.authorizedUser.IsSupervisor && !interviewerSettings.IsAllowSupervisorChangeAssignmentStatus())
+                return Forbid();
+
+            try
+            {
+                switch (request.Status)
+                {
+                    case AssignmentStatus.Completed:
+                        if (!this.authorizedUser.IsInterviewer)
+                            return Forbid();
+                        commandService.Execute(new CompleteAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
+                        break;
+                    case AssignmentStatus.Closed:
+                        if (!this.authorizedUser.IsSupervisor)
+                            return Forbid();
+                        commandService.Execute(new CloseAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
+                        break;
+                    case AssignmentStatus.Open:
+                        if (this.authorizedUser.IsInterviewer)
+                        {
+                            if (assignment.Status != AssignmentStatus.Completed)
+                                return Forbid();
+                        }
+                        else if (this.authorizedUser.IsSupervisor)
+                        {
+                            if (assignment.Status != AssignmentStatus.Completed && assignment.Status != AssignmentStatus.Closed)
+                                return Forbid();
+                        }
+                        else
+                        {
+                            return Forbid();
+                        }
+                        commandService.Execute(new ReopenAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
+                        break;
+                    default:
+                        return BadRequest("Unknown status");
+                }
+            }
+            catch (AssignmentException e)
+            {
+                return BadRequest(new { Message = e.Message });
+            }
+
+            return Ok();
+        }
+
         protected abstract IEnumerable<Assignment> GetAssignmentsForResponsible(Guid responsibleId);
 
         protected abstract string ProductName { get; }
 
         private bool IsNeedUpdateApp(Assignment assignment)
         {
+            #if !DEBUG
+            
             var productVersion = this.Request.GetProductVersionFromUserAgent(ProductName);
 
             if (productVersion == null)
@@ -119,7 +200,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
             if (!string.IsNullOrWhiteSpace(assignment.TargetArea) && productVersion <= new Version(24, 6))
                 return true;
-            
+
+            #endif
+
             return false;
         }
     }

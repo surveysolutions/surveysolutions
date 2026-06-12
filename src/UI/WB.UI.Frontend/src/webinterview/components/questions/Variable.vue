@@ -40,7 +40,7 @@ export default {
             let value = this.$me.value && this.$me.value != ''
                 ? this.$me.value
                 : this.$t('WebInterviewUI.NotCalculated')
-            return (this.$me.title || this.$me.name) + ' - ' + value
+            return (this.$me.title || this.$me.name) + ': ' + value
         },
         variableClass() {
             const entity = find(this.$store.state.webinterview.entities, d => d.identity == this.id)
