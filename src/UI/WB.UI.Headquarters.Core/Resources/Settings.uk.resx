@@ -387,4 +387,16 @@
   <data name="WebInterviewEmailNotifications_Title" xml:space="preserve">
     <value>Налаштування веб-інтерв'ю</value>
   </data>
+  <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve">
+    <value>Дозволити супервайзерам змінювати статуси завдань</value>
+  </data>
+  <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>Якщо увімкнено, супервайзери зможуть схвалювати та повертати завдання</value>
+  </data>
+  <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
+    <value>Дозволити інтерв'юерам змінювати статуси завдань</value>
+  </data>
+  <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>Якщо увімкнено, інтерв'юери зможуть завершувати та повертати завдання (потребує увімкненого налаштування для супервайзерів)</value>
+  </data>
 </root>

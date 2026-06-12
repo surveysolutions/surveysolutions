@@ -68,6 +68,10 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             if (cameraProvider == null) return;
             
+            // Unbind all existing use cases before binding new ones to avoid
+            // "too many use cases" / "No supported surface combination" errors on resume
+            cameraProvider.UnbindAll();
+            
             // Select back camera
             cameraSelector = new CameraSelector.Builder()
                 .RequireLensFacing(CameraSelector.LensFacingBack)

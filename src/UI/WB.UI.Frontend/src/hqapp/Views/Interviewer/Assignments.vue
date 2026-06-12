@@ -1,6 +1,7 @@
 <template>
     <HqLayout :title="title">
-        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems"></DataTables>
+        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems">
+        </DataTables>
 
         <ModalFrame ref="editCalendarModal" :title="$t('Common.EditCalendarEvent')">
             <form onsubmit="return false;">
@@ -28,11 +29,55 @@
                         @click="updateCalendarEvent">
                         {{ $t("Common.Save") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">{{
-        $t("Common.Cancel")
-    }}</button>
+                        $t("Common.Cancel")
+                    }}</button>
                     <button type="button" class="btn btn-danger pull-right" role="delete" v-if="calendarEventId != null"
                         @click="deleteCalendarEvent">
                         {{ $t("Common.Delete") }}</button>
+                </div>
+            </template>
+        </ModalFrame>
+
+        <ModalFrame ref="completeModal" :title="$t('Assignments.CompleteAssignmentTitle')">
+            <p>{{ $t('Assignments.CompleteAssignmentMessage') }}</p>
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label class="control-label" for="completeCommentId">
+                        {{ $t("Assignments.Comments") }}
+                    </label>
+                    <textarea control-id="completeCommentId" v-model="statusChangeComment"
+                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                        autocomplete="off" class="form-control" />
+                </div>
+            </form>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" @click="confirmComplete">{{
+                        $t("Assignments.Complete") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                    }}</button>
+                </div>
+            </template>
+        </ModalFrame>
+
+        <ModalFrame ref="reopenModal" :title="$t('Assignments.ReopenAssignmentTitle')">
+            <p>{{ $t('Assignments.ReopenAssignmentMessage') }}</p>
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label class="control-label" for="reopenCommentId">
+                        {{ $t("Assignments.Comments") }}
+                    </label>
+                    <textarea control-id="reopenCommentId" v-model="statusChangeComment"
+                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                        autocomplete="off" class="form-control" />
+                </div>
+            </form>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" @click="confirmReopen">{{
+                        $t("Assignments.Reopen") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                    }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -40,13 +85,14 @@
 </template>
 
 <script>
+import * as toastr from 'toastr'
 import { DateFormats, convertToLocal } from '~/shared/helpers'
 import { updateCalendarEvent, addAssignmentCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
 import moment from 'moment-timezone'
 import { map, join, escape } from 'lodash'
 
-import _sanitizeHtml from 'sanitize-html'
-const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
+import DOMPurify from 'dompurify'
+const sanitizeHtml = text => DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
 
 export default {
     data() {
@@ -56,6 +102,8 @@ export default {
             newCalendarStarTimezone: null,
             calendarEventId: null,
             calendarAssinmentId: null,
+            statusChangeId: null,
+            statusChangeComment: null,
         }
     },
 
@@ -69,19 +117,15 @@ export default {
         tableOptions() {
             return {
                 rowId: row => {
-                    return `row${row.id}`
+                    return `row_${row.id}`
                 },
                 deferLoading: 0,
-                order: [[4, 'desc']],
+                order: [[5, 'desc']],
                 columns: this.getTableColumns(),
                 ajax: {
                     url: this.$config.model.assignmentsEndpoint,
                     type: 'GET',
                     contentType: 'application/json',
-                },
-                select: {
-                    style: 'multi',
-                    selector: 'td>.checkbox-filter',
                 },
                 sDom: 'rf<"table-with-scroll"t>ip',
             }
@@ -118,18 +162,72 @@ export default {
             this.$refs.table.reload()
         },
         contextMenuItems({ rowData }) {
-            return [
+            const items = [
                 {
                     name: this.$t('Assignments.CreateInterview'),
                     className: 'assignment-create',
+                    disabled: rowData.status === 'Completed',
                     callback: () => this.$store.dispatch('createInterview', rowData.id),
                 },
                 {
                     name: this.$t('Common.EditCalendarEvent'),
                     className: 'primary-text',
+                    disabled: rowData.status === 'Completed',
                     callback: () => this.editCalendarEvent(rowData.id, rowData.calendarEvent),
                 },
             ]
+
+            if (rowData.status === 'Open' && this.$config.model.allowInterviewerChangeAssignmentStatus) {
+                items.push({
+                    name: this.$t('Assignments.Complete'),
+                    className: 'primary-text',
+                    callback: () => this.openCompleteModal(rowData.id),
+                })
+            }
+
+            if (rowData.status === 'Completed' && this.$config.model.allowInterviewerChangeAssignmentStatus) {
+                items.push({
+                    name: this.$t('Assignments.Reopen'),
+                    className: 'primary-text',
+                    callback: () => this.openReopenModal(rowData.id),
+                })
+            }
+
+            return items
+        },
+
+        openCompleteModal(rowId) {
+            this.statusChangeId = rowId
+            this.statusChangeComment = null
+            this.$refs.completeModal.modal()
+        },
+
+        openReopenModal(rowId) {
+            this.statusChangeId = rowId
+            this.statusChangeComment = null
+            this.$refs.reopenModal.modal()
+        },
+
+        async confirmComplete() {
+            await this.changeAssignmentStatus('Completed', this.$refs.completeModal)
+        },
+
+        async confirmReopen() {
+            await this.changeAssignmentStatus('Open', this.$refs.reopenModal)
+        },
+
+        async changeAssignmentStatus(status, modalRef) {
+            if (!this.statusChangeId) return
+            try {
+                await this.$hq.Assignments.changeStatus(this.statusChangeId, status, this.statusChangeComment || null)
+                modalRef.hide()
+                this.statusChangeId = null
+                this.statusChangeComment = null
+                this.reload()
+            } catch (error) {
+                const msg = error?.response?.data?.message || error?.message || this.$t('Common.Error')
+                toastr.error(msg)
+            }
         },
 
         getTableColumns() {
@@ -224,6 +322,12 @@ export default {
                     title: this.$t('Assignments.DetailsComments'),
                     searchable: false,
                     orderable: true,
+                    render(data, type, row) {
+                        const parts = []
+                        if (data) parts.push(escape(data))
+                        if (row.statusComment) parts.push('<em>' + escape(row.statusComment) + '</em>')
+                        return parts.join('<br/>')
+                    },
                 },
                 {
                     data: 'calendarEvent',
@@ -243,6 +347,20 @@ export default {
                         return ''
                     },
                     width: '180px',
+                },
+                {
+                    data: 'status',
+                    name: 'Status',
+                    title: this.$t('Assignments.Status'),
+                    searchable: false,
+                    orderable: true,
+                    render(data) {
+                        const statusMap = {
+                            'Open': self.$t('Assignments.StatusOpen'),
+                            'Completed': self.$t('Assignments.StatusCompleted'),
+                        }
+                        return statusMap[data] || data
+                    },
                 },
             ]
 

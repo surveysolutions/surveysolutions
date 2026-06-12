@@ -45,6 +45,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             public bool InterviewerAutoUpdatesEnabled { get; set; }
             public bool NotificationsEnabled { get; set; }
             public bool PartialSynchronizationEnabled { get; set; }
+            public bool AllowSupervisorChangeAssignmentStatus { get; set; }
+            public bool AllowInterviewerChangeAssignmentStatus { get; set; }
         }
 
         public class InterviewerGeographyQuestionAccuracyInMetersModel
@@ -154,7 +156,10 @@ namespace WB.UI.Headquarters.Controllers.Api
                 AllowInterviewerUpdateProfile = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false,
                 ExportSettings = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings(),
                     exportSettings.GetExportRetentionSettings(),
-                    exportSettings.GetGeographyExportFormat())
+                    exportSettings.GetGeographyExportFormat()),
+
+                AllowSupervisorChangeAssignmentStatus = interviewerSettings.IsAllowSupervisorChangeAssignmentStatus(),
+                AllowInterviewerChangeAssignmentStatus = interviewerSettings.IsAllowInterviewerChangeAssignmentStatus()
             };
         }
 
@@ -170,6 +175,11 @@ namespace WB.UI.Headquarters.Controllers.Api
                 settings.AutoUpdateEnabled = message.InterviewerAutoUpdatesEnabled;
                 settings.DeviceNotificationsEnabled = message.NotificationsEnabled;
                 settings.PartialSynchronizationEnabled = message.PartialSynchronizationEnabled;
+                settings.AllowSupervisorChangeAssignmentStatus = message.AllowSupervisorChangeAssignmentStatus;
+                // If supervisor setting is off, interviewer setting is also forced off
+                settings.AllowInterviewerChangeAssignmentStatus = message.AllowSupervisorChangeAssignmentStatus
+                    ? message.AllowInterviewerChangeAssignmentStatus
+                    : false;
             });
 
             return Ok(new {success = true});
