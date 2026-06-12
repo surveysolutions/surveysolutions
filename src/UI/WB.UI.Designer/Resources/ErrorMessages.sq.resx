@@ -256,7 +256,7 @@
     <value>Versioni i pyetësorit tuaj ka një problem. Ju lutemi, kontaktoni me support@mysurvey.solutions.</value>
   </data>
   <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
-    <value>Fjala verifikuese është e pasaktë. Ju lutemi, provojeni prapë.</value>
+    <value>Duhet të konfirmoni që nuk jeni robot. Ju lutemi, provoni përsëri.</value>
   </data>
   <data name="Your_email_is_verified" xml:space="preserve">
     <value>Designer e verifikoi me sukses email-in tuaj.</value>

@@ -259,7 +259,7 @@
     <value>Există o problemă cu versiunea chestionarului dvs. Vă rugăm să contactați support@mysurvey.solutions.</value>
   </data>
   <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
-    <value>Cuvântul de verificare este incorect. Vă rugăm să încercați din nou.</value>
+    <value>Trebuie să confirmați că nu sunteți un robot. Vă rugăm să încercați din nou.</value>
   </data>
   <data name="Your_email_is_verified" xml:space="preserve">
     <value>Designerul a verificat cu succes e-mailul dvs.</value>

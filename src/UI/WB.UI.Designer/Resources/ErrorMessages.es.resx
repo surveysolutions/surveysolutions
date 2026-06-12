@@ -235,7 +235,7 @@
     <value>Hay un problema con la versión de su cuestionario. Favor contáctenos en support@mysurvey.solutions</value>
   </data>
   <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
-    <value>Palabra de verificación no es correcta. Favor intente de nuevo</value>
+    <value>Debe confirmar que no es un robot. Por favor, inténtelo de nuevo.</value>
   </data>
   <data name="Your_email_is_verified" xml:space="preserve">
     <value>Designer ha verificado su correo satisfactoriamente</value>

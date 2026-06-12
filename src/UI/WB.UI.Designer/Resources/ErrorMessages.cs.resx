@@ -259,7 +259,7 @@
     <value>Došlo k potížím s verzí dotazníku. Kontaktujte prosím support@mysurvey.solutions.</value>
   </data>
   <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
-    <value>Ověřovací slovo je nesprávné. Zkuste to prosím znovu.</value>
+    <value>Musíte potvrdit, že nejste robot. Zkuste to prosím znovu.</value>
   </data>
   <data name="Your_email_is_verified" xml:space="preserve">
     <value>Návrhář úspěšně ověřil váš e-mail.</value>

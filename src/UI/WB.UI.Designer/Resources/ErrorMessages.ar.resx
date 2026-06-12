@@ -92,7 +92,7 @@
     <value>اسم المستخدم أو كلمة المرور المقدمة غير صحيحة. يرجى إعادة الإدخال.</value>
   </data>
   <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
-    <value>كلمة التحقق غير صحيحة. يرجى المحاولة مرة أخرى.</value>
+    <value>يجب عليك تأكيد أنك لست روبوتًا. يرجى المحاولة مرة أخرى.</value>
   </data>
   <data name="EmptyUserNameOrPassword" xml:space="preserve">
     <value>اسم المستخدم أو كلمة المرور فارغة.</value>
