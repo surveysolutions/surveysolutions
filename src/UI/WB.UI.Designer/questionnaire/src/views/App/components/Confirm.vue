@@ -73,8 +73,11 @@ const confirmDialog = {
             const options = hasSafeOptions
                 ? {
                     ...defaultOptions,
-                    ALLOWED_TAGS: this.sanitizeOptions.ALLOWED_TAGS,
+                    FORBID_TAGS: ['script', 'style', 'svg', 'math'],
+                    FORBID_ATTR: ['style'],
+                    ALLOWED_TAGS: this.sanitizeOptions.ALLOWED_TAGS.filter(t => typeof t === 'string'),
                     ALLOWED_ATTR: this.sanitizeOptions.ALLOWED_ATTR
+                        .filter(a => typeof a === 'string' && !a.toLowerCase().startsWith('on') && a.toLowerCase() !== 'style')
                 }
                 : defaultOptions;
 
