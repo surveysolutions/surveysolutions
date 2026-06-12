@@ -38,12 +38,11 @@
             <query-builder :config="config" v-model="queryExposedVariables">
 
                 <template #groupOperator="props">
-                    <query-builder-group-operator :groupCtrl="props" :labels="labels"
-                        :query.sync="queryExposedVariables" />
+                    <query-builder-group-operator :groupCtrl="props" :labels="labels" />
                 </template>
 
                 <template #groupControl="props">
-                    <query-builder-group :groupCtrl="props" :labels="labels" :query.sync="queryExposedVariables" />
+                    <query-builder-group :groupCtrl="props" :labels="labels" />
                 </template>
 
                 <template #rule="props">
@@ -78,7 +77,7 @@
 </template>
 <script>
 
-import QueryBuilder from 'query-builder-vue-3'
+import QueryBuilder from './components/LocalQueryBuilder.vue'
 import RuleSlot from "./components/CustomBootstrapRule.vue";
 import QueryBuilderGroup from './components/CustomBootstrapGroup.vue'
 import QueryBuilderGroupOperator from './components/CustomBootstrapGroupOperator.vue'

@@ -300,4 +300,7 @@
   <data name="PendingEmailUpdate" xml:space="preserve">
     <value>Mise à jour en attente vers {0}</value>
   </data>
+  <data name="LastLoginDate" xml:space="preserve">
+    <value>Date de dernière connexion</value>
+  </data>
 </root>
