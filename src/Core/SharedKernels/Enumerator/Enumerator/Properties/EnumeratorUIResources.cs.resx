@@ -925,7 +925,7 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
     <value>{0} (CAWI)</value>
   </data>
   <data name="Dashboard_CensusAssignment" xml:space="preserve">
-    <value>Census</value>
+    <value>Sčítání</value>
   </data>
   <data name="DashboardItem_Title" xml:space="preserve">
     <value>{0} (v{1})</value>

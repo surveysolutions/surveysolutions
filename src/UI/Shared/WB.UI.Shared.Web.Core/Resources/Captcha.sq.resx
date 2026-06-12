@@ -129,4 +129,9 @@
   <data name="TryAnother" xml:space="preserve">
     <value>Provoni një tjetër</value>
   </data>
+
+
+  <data name="CaptchaError" xml:space="preserve">
+      <value>Gabim gjatë gjenerimit të captcha-s. Ju lutemi, kontaktoni administratorin e sistemit.</value>
+  </data>
 </root>
