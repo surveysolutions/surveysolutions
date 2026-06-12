@@ -822,9 +822,6 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
   <data name="QuestionInteger" xml:space="preserve">
     <value>Celé číslo</value>
   </data>
-  <data name="QuestionNonNegative" xml:space="preserve">
-    <value>Non-negative</value>
-  </data>
   <data name="QuestionIsLinked" xml:space="preserve">
     <value>Je propojen</value>
   </data>

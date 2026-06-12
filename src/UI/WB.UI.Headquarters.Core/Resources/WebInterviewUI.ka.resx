@@ -313,9 +313,6 @@
   <data name="NumberCannotParse" xml:space="preserve">
     <value>შეტანილი მნიშვნელობა არ შეიძლება იყოს გააზრებული, როგორც მთელი რიცხვი</value>
   </data>
-  <data name="NumberNonNegativeError" xml:space="preserve">
-    <value>Negative values are not allowed for this question</value>
-  </data>
   <data name="NumberEnter" xml:space="preserve">
     <value>შეიყვანეთ ნომერი</value>
   </data>

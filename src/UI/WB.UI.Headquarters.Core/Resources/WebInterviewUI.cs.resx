@@ -331,9 +331,6 @@ Požádejte o pomoc svého garanta.</value>
   <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
     <value>Zadaná hodnota nemůže být menší než chráněná odpověď</value>
   </data>
-  <data name="NumberNonNegativeError" xml:space="preserve">
-    <value>Negative values are not allowed for this question</value>
-  </data>
   <data name="NumberCannotParse" xml:space="preserve">
     <value>Zadanou hodnotu nelze analyzovat jako celočíselnou hodnotu</value>
   </data>

@@ -301,9 +301,6 @@
   <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
     <value>El valor ingresado no puede ser menor que la respuesta protegida</value>
   </data>
-  <data name="NumberNonNegativeError" xml:space="preserve">
-    <value>Negative values are not allowed for this question</value>
-  </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>La respuesta '{{answer}}' es incorrecta porque la pregunta se utiliza como el tamaño de la lista y la respuesta especificada es negativa</value>
     <comment>No traduzca partes dentro de {{}}: {{answer}}</comment>

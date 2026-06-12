@@ -131,7 +131,6 @@
     "QuestionHideInstruction": "Ocultar instrucción",
     "QuestionInstruction": "Instrucción",
     "QuestionInteger": "Entero",
-    "QuestionNonNegative": "Non-negative",
     "QuestionIsLinked": "Está enlazado",
     "QuestionLinkedDescr": "Enlace a la lista o preguntas del grupo de la lista",
     "QuestionMaxListCount": "Máximo número de elementos de lista",

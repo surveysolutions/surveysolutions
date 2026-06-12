@@ -344,9 +344,6 @@
     <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
     <value>الإجابة '{0}' غير صحيحة لأن السؤال هو سؤال مصدر القائمة والإجابة المحددة سلبية</value>
 </data>
-  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
-    <value>Negative values are not allowed for this question</value>
-  </data>
     <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>الإجابة '{0}' غير صحيحة لأن الإجابة أكبر من الحد الأعلى للقائمة '{1}'.</value>
 </data>

@@ -358,9 +358,6 @@
   <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
     <value>Vlera e vendosur nuk mund të jetë më e vogël sesa përgjigjja e mbrojtur</value>
   </data>
-  <data name="NumberNonNegativeError" xml:space="preserve">
-    <value>Negative values are not allowed for this question</value>
-  </data>
   <data name="NumberCannotParse" xml:space="preserve">
     <value>Vlera e vendosur nuk mund të analizohet si vlerë e plotë </value>
   </data>

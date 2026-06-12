@@ -25,7 +25,7 @@
         <div class="col-md-6 inline-inputs">
             <div class="checkbox checkbox-in-column">
                 <input id="cb-is-non-negative" type="checkbox" class="wb-checkbox"
-                    v-model="activeQuestion.isNonNegative" />
+                    v-model="isNonNegativeValue" />
                 <label for="cb-is-non-negative"><span></span>{{ $t('QuestionnaireEditor.QuestionNonNegative') }}</label>
             </div>
         </div>
@@ -71,6 +71,14 @@ export default {
                 return true;
             return isInteger(this.activeQuestion.countOfDecimalPlaces);
         },
+        isNonNegativeValue: {
+            get() {
+                return this.activeQuestion.isNonNegative !== false;
+            },
+            set(value) {
+                this.activeQuestion.isNonNegative = value;
+            }
+        }
     },
     methods: {
         async prepareToSave() {

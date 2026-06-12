@@ -443,9 +443,6 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
     <value>Răspunsul '{0}' este incorect deoarece întrebarea este folosită ca dimensiune a Listei și răspunsul specificat este negativ</value>
   </data>
-  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
-    <value>Negative values are not allowed for this question</value>
-  </data>
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>Valoarea introdusă nu poate fi număr întreg</value>
   </data>

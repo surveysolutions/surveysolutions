@@ -378,9 +378,6 @@
   <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
     <value>Введене значення не може бути меншим за захищену відповідь</value>
   </data>
-  <data name="NumberNonNegativeError" xml:space="preserve">
-    <value>Negative values are not allowed for this question</value>
-  </data>
   <data name="NumberCannotParse" xml:space="preserve">
     <value>Введене значення не може бути оброблено як ціле число</value>
   </data>

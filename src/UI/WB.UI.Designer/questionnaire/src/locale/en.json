@@ -254,7 +254,6 @@
     "GeometryOverlapDetection": "Overlap detection",
     "QuestionDecimalPlaces": "Number of decimal places",
     "QuestionInteger": "Integer",
-    "QuestionNonNegative": "Non-negative",
     "QuestionIsLinked": "Is linked",
     "QuestionMaxListCount": "Maximum number of list elements",
     "QuestionMaxNumberOfAnswers": "Max number of answers",

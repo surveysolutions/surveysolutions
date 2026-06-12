@@ -344,9 +344,6 @@ Vous pouvez créer ou modifier vos questionnaires dans Survey Solutions Designer
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
     <value>La réponse '{0}' est incorrecte car la question est une question source de roster et la réponse spécifiée est négative</value>
   </data>
-  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
-    <value>Negative values are not allowed for this question</value>
-  </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>La réponse '{0}' est incorrecte car la réponse est supérieure à la limite supérieure du roster '{1}'.</value>
   </data>

@@ -269,9 +269,6 @@ Anda dapat membuat atau menyunting kuesioner Anda pada Desainer Survey Solutions
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
     <value>Jawaban '{0}' tidak benar karena pertanyaan yang digunakan sebagai ukuran daftar dan jawaban yang diberikan negatif.</value>
   </data>
-  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
-    <value>Negative values are not allowed for this question</value>
-  </data>
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>Nilai yang dimasukkan tidak bisa diurai sebagai nilai integer</value>
   </data>

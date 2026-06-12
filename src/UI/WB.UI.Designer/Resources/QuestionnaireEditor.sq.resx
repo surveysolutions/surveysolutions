@@ -627,9 +627,6 @@
   <data name="QuestionInteger" xml:space="preserve">
     <value>I plotë</value>
   </data>
-  <data name="QuestionNonNegative" xml:space="preserve">
-    <value>Non-negative</value>
-  </data>
   <data name="QuestionIsLinked" xml:space="preserve">
     <value>Është lidhur</value>
   </data>

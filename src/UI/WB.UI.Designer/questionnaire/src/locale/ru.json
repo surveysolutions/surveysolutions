@@ -187,7 +187,6 @@
     "QuestionCurrentTime": "Текущее время (дата и время)",
     "QuestionDecimalPlaces": "Размер дробной части",
     "QuestionInteger": "Целочисленный",
-    "QuestionNonNegative": "Non-negative",
     "QuestionIsLinked": "Связанный вопрос",
     "QuestionMaxListCount": "Максимальное количество",
     "QuestionMaxNumberOfAnswers": "Количество ответов",

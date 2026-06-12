@@ -253,7 +253,6 @@
     "GeometryOverlapDetection": "كشف التداخل",
     "QuestionDecimalPlaces": "عدد المنازل العشرية",
     "QuestionInteger": "عدد صحيح",
-    "QuestionNonNegative": "Non-negative",
     "QuestionIsLinked": "مرتبط",
     "QuestionMaxListCount": "الحد الأقصى لعدد عناصر القائمة",
     "QuestionMaxNumberOfAnswers": "الحد الأقصى لعدد الإجابات",

@@ -381,9 +381,6 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
     <value>Odpověď "{0}", záporná hodnota není povolena pro seznam (roster)</value>
   </data>
-  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
-    <value>Negative values are not allowed for this question</value>
-  </data>
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>Zadaná hodnota nemůže být zadána jako celé číslo</value>
   </data>
