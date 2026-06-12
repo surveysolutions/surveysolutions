@@ -3,6 +3,7 @@ using System.Linq;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Tests.Abc;
 
@@ -433,6 +434,48 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(sourceCategories1, Has.Exactly(2).Items);
             Assert.That(targetCategories1, Has.Exactly(2).Items);
             Assert.That(sourceCategories1, Is.EqualTo(targetCategories1));
+        }
+
+        [Test]
+        public void when_process_copy_categories_command_should_copy_category_instances_to_target_questionnaire_with_new_id()
+        {
+            // arrange
+            var sourceCategoriesId = Id.g2;
+            var newCategoriesId = Id.g5;
+            var sourceQuestionnaireId = Id.g1;
+            var targetQuestionnaireId = Id.g4;
+
+            var db = Create.InMemoryDbContext();
+            db.CategoriesInstances.AddRange(
+                new[]
+                {
+                    Create.CategoriesInstance(sourceQuestionnaireId, sourceCategoriesId, 1, 1),
+                    Create.CategoriesInstance(sourceQuestionnaireId, sourceCategoriesId, 2, 2)
+                });
+            db.SaveChanges();
+
+            var categoriesService = Create.CategoriesService(db);
+            var processor = Create.CopyPastePreProcessor(categoriesService);
+
+            // act
+            var copyCommand = Create.CopyCategories(
+                targetQuestionnaireId: targetQuestionnaireId,
+                responsibleId: Guid.NewGuid(),
+                sourceQuestionnaireId: sourceQuestionnaireId,
+                sourceCategoriesId: sourceCategoriesId,
+                newCategoriesId: newCategoriesId,
+                name: "copied cat");
+
+            processor.Process(Create.Questionnaire(Guid.NewGuid(), Create.QuestionnaireDocument(targetQuestionnaireId)), copyCommand);
+            db.SaveChanges();
+
+            // assert
+            var sourceCategories = categoriesService.GetCategoriesById(sourceQuestionnaireId, sourceCategoriesId).ToArray();
+            var targetCategories = categoriesService.GetCategoriesById(targetQuestionnaireId, newCategoriesId).ToArray();
+
+            Assert.That(sourceCategories, Has.Exactly(2).Items);
+            Assert.That(targetCategories, Has.Exactly(2).Items);
+            Assert.That(targetCategories.Select(c => c.Id), Is.EqualTo(sourceCategories.Select(c => c.Id)));
         }
     }
 }

@@ -3033,6 +3033,30 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
+        public static string SideBarCategoriesCopy {
+            get {
+                return ResourceManager.GetString("SideBarCategoriesCopy", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCategoriesCopied {
+            get {
+                return ResourceManager.GetString("SideBarCategoriesCopied", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCategoriesPaste {
+            get {
+                return ResourceManager.GetString("SideBarCategoriesPaste", resourceCulture);
+            }
+        }
+        
+        public static string SideBarCategoriesPasteFailed {
+            get {
+                return ResourceManager.GetString("SideBarCategoriesPasteFailed", resourceCulture);
+            }
+        }
+        
         public static string RowAdded {
             get {
                 return ResourceManager.GetString("RowAdded", resourceCulture);

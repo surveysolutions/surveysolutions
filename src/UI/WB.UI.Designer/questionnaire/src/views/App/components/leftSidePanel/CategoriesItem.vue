@@ -26,6 +26,9 @@
                         <a href="javascript:void(0);" class="btn btn-link" @click="editCategories()">{{
                             $t('QuestionnaireEditor.SideBarEditCategories') }}
                         </a>
+                        <a href="javascript:void(0);" class="btn btn-link" @click="copyToClipboard()">{{
+                $t('QuestionnaireEditor.SideBarCategoriesCopy') }}
+                        </a>
                         <file-upload ref="upload" v-if="!isReadOnlyForUser" v-model="file" @input-file="fileSelected"
                             :size="10 * 1024 * 1024" :drop="true" :drop-directory="false"
                             :input-id="'cifu' + categoriesItem.categoriesId"
@@ -57,6 +60,8 @@ import { updateCategories, deleteCategories } from '../../../../services/categor
 import { trimText } from '../../../../services/utilityService'
 import { notice } from '../../../../services/notificationService';
 import dayjs from 'dayjs';
+
+const CATEGORIES_CLIPBOARD_KEY = 'categoriesClipboard';
 
 export default {
     name: 'CategoriesItem',
@@ -125,6 +130,16 @@ export default {
 
         editCategories() {
             this.$emit('editCategoriesOpen', { categoriesId: this.categories.categoriesId })
+        },
+
+        copyToClipboard() {
+            const clipboardData = {
+                sourceQuestionnaireId: this.questionnaireId,
+                categoriesId: this.categories.categoriesId,
+                name: this.categories.name || ''
+            };
+            localStorage.setItem(CATEGORIES_CLIPBOARD_KEY, JSON.stringify(clipboardData));
+            notice(this.$t('QuestionnaireEditor.SideBarCategoriesCopied'));
         },
 
         async fileSelected(newFile) {

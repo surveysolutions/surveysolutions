@@ -1626,6 +1626,18 @@ Please check your network connection or contact your IT support.</value>
   <data name="SideBarCategoriesAddNew" xml:space="preserve">
     <value>Add new categories</value>
   </data>
+  <data name="SideBarCategoriesCopy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="SideBarCategoriesCopied" xml:space="preserve">
+    <value>Categories copied to clipboard</value>
+  </data>
+  <data name="SideBarCategoriesPaste" xml:space="preserve">
+    <value>Paste categories</value>
+  </data>
+  <data name="SideBarCategoriesPasteFailed" xml:space="preserve">
+    <value>Failed to paste categories. Make sure you have access to the source questionnaire.</value>
+  </data>
   <data name="RowAdded" xml:space="preserve">
     <value>Row added</value>
   </data>

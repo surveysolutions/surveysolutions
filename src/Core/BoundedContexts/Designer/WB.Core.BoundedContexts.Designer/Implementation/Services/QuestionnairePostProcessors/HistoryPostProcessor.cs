@@ -90,6 +90,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, ImportQuestionnaireToHq>,
         ICommandPostProcessor<Questionnaire, AddOrUpdateCategories>,
         ICommandPostProcessor<Questionnaire, DeleteCategories>,
+        ICommandPostProcessor<Questionnaire, CopyCategories>,
         ICommandPostProcessor<Questionnaire, MigrateToNewVersion>
     {
         private readonly DesignerDbContext dbContext;
@@ -408,6 +409,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, DeleteCategories command)
             => this.DeleteItemFromStateAndUpdateHistory(command.QuestionnaireId, q => q.CategoriesState, command.CategoriesId,
                 QuestionnaireItemType.Categories, command.ResponsibleId, aggregate.QuestionnaireDocument);
+
+        public void Process(Questionnaire aggregate, CopyCategories command)
+        {
+            this.AddOrUpdateQuestionnaireStateItem(command.QuestionnaireId, command.NewCategoriesId, command.Name,
+                parentId: null, setAction: (s, id, title) => s.CategoriesState[id] = title);
+
+            this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
+                QuestionnaireItemType.Categories, command.NewCategoriesId, command.Name, aggregate.QuestionnaireDocument);
+        }
 
         #endregion
 

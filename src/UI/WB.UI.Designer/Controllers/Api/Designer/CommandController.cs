@@ -567,6 +567,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
              //Categories commands
              { "AddOrUpdateCategories", typeof (AddOrUpdateCategories) },
              { "DeleteCategories", typeof (DeleteCategories) },
+             { "CopyCategories", typeof (CopyCategories) },
              //CriticalRules commands
              { "AddCriticalRule", typeof (AddCriticalRule) },
              { "UpdateCriticalRule", typeof (UpdateCriticalRule) },

@@ -374,6 +374,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 .ForEach(x => x.CategoriesId = null);
         }
 
+        public void CopyCategories(CopyCategories command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
+            AddOrUpdateCategoriesImpl(innerDocument, command.NewCategoriesId, null, command.Name);
+        }
+
         #endregion
 
         #region Attachment command handlers
