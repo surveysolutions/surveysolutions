@@ -579,7 +579,8 @@
     "LockedOutText": "Votre compte est verrouillé. Contactez l'administrateur pour déverrouiller votre compte",
     "PasswordEmailSent": "Veuillez vérifier votre e-mail pour réinitialiser votre mot de passe.",
     "EmailChangeShouldBeConfirmed": "Veuillez suivre les instructions envoyées à l'e-mail fourni ({0}) pour confirmer le changement d'e-mail.",
-    "PendingEmailUpdate": "Mise à jour en attente vers {0}"
+    "PendingEmailUpdate": "Mise à jour en attente vers {0}",
+    "LastLoginDate": "Date de dernière connexion"
   },
   "QuestionnaireController": {
     "Action": "Action",
