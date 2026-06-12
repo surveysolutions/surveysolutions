@@ -218,6 +218,9 @@ export default {
             this.initialCategories = [];
             this.errors = [];
             this.ajax = false;
+            this.convert = false;
+            this.inEditMode = false;
+            this.submitting = false;
             this.readonly = true;
             this.isCascadingCategory = false;
             this.stringsIsValid = true;
@@ -232,7 +235,7 @@ export default {
         async reloadCategories(onDone) {
             if (this.ajax) return;
             if (this.inEditMode || this.convert) {
-                setTimeout(() => this.reloadCategories(onDone), 100);
+                setTimeout(() => { if (this.isOpen) this.reloadCategories(onDone); }, 100);
                 return;
             }
             this.ajax = true;
@@ -279,19 +282,24 @@ export default {
             this.errors = [];
             const token = this.sessionToken;
 
-            const apiResponse = await optionsApi.uploadCategory(file);
+            try {
+                const apiResponse = await optionsApi.uploadCategory(file);
 
-            if (token !== this.sessionToken) return;
+                if (token !== this.sessionToken) return;
 
-            this.errors = apiResponse.errors || [];
-            this.categories = apiResponse.options || [];
+                this.errors = apiResponse.errors || [];
+                this.categories = apiResponse.options || [];
 
-            if (this.$refs.fileInput) {
-                this.$refs.fileInput.value = '';
-            }
+                if (this.$refs.fileInput) {
+                    this.$refs.fileInput.value = '';
+                }
 
-            if (this.$refs.table != null) {
-                this.$refs.table.reset();
+                if (this.$refs.table != null) {
+                    this.$refs.table.reset();
+                }
+            } catch (e) {
+                if (token !== this.sessionToken) return;
+                this.errors = [this.$t('QuestionnaireEditor.CommunicationError')];
             }
         },
 
@@ -299,12 +307,12 @@ export default {
             this.categories = newCategories;
         },
 
-        apply() {
+        async apply() {
             if (this.ajax) return;
             if (!this.canApplyChanges) return;
 
             if (this.inEditMode || this.convert) {
-                setTimeout(() => this.apply(), 100);
+                setTimeout(() => { if (this.isOpen) this.apply(); }, 100);
                 return;
             }
 
@@ -313,29 +321,30 @@ export default {
             this.errors = [];
             const token = this.sessionToken;
 
-            optionsApi
-                .applyOptions(
+            try {
+                const response = await optionsApi.applyOptions(
                     this.categories,
                     this.questionnaireId,
                     this.categoriesId,
                     this.isCascadingCategory,
                     true
-                )
-                .then(response => {
-                    if (token !== this.sessionToken) return;
-                    if (response.isSuccess || response.IsSuccess) {
-                        this.close();
-                    } else {
-                        this.ajax = false;
-                        this.errors = [response.error];
-                    }
-                })
-                .finally(() => {
-                    if (token === this.sessionToken) {
-                        this.ajax = false;
-                        this.submitting = false;
-                    }
-                });
+                );
+                if (token !== this.sessionToken) return;
+                if (response.isSuccess || response.IsSuccess) {
+                    this.close();
+                } else {
+                    this.ajax = false;
+                    this.errors = [response.error];
+                }
+            } catch (e) {
+                if (token !== this.sessionToken) return;
+                this.errors = [this.$t('QuestionnaireEditor.CommunicationError')];
+            } finally {
+                if (token === this.sessionToken) {
+                    this.ajax = false;
+                    this.submitting = false;
+                }
+            }
         }
     }
 };
