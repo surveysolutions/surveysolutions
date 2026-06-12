@@ -1678,6 +1678,12 @@
   <data name="MapList_MapType" xml:space="preserve">
     <value>Tip</value>
   </data>
+  <data name="MapList_MapFileTooltip" xml:space="preserve">
+    <value>Fișier hartă</value>
+  </data>
+  <data name="MapList_ShapeFileTooltip" xml:space="preserve">
+    <value>Fișier shape</value>
+  </data>
   <data name="Map_NoUsers" xml:space="preserve">
     <value>Harta nu este atribuită niciunui utilizator</value>
   </data>

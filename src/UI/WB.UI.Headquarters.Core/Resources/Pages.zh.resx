@@ -1485,6 +1485,12 @@
   <data name="MapList_MapType" xml:space="preserve">
     <value>类型</value>
   </data>
+  <data name="MapList_MapFileTooltip" xml:space="preserve">
+    <value>地图文件</value>
+  </data>
+  <data name="MapList_ShapeFileTooltip" xml:space="preserve">
+    <value>形状文件</value>
+  </data>
   <data name="Map_NoUsers" xml:space="preserve">
     <value>该地图未分配给任何用户</value>
   </data>
