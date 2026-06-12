@@ -160,7 +160,8 @@ namespace WB.UI.Shared.Enumerator
             lookup.Add<RejectInterviewDialogViewModel,  DoActionDialogFragment>();
 
             lookup.Add<PlayAudioViewModel,  PlayAudioDialog>();
-            lookup.Add<PlayVideoViewModel,  PlayVideoActivity>();
+            lookup.Add<PlayVideoViewModel,  PlayVideoDialog>();
+            lookup.Add<PlayVideoFullScreenViewModel, PlayVideoActivity>();
 
             return lookup;
         }
