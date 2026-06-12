@@ -12,7 +12,7 @@
                             {{ header || $t('QuestionnaireEditor.ModalConfirm') }}
                         </h3>
                     </div>
-                    <div class="modal-body" v-sanitize-html="title">
+                    <div class="modal-body" v-html="sanitizedTitle">
                     </div>
                     <div class="modal-footer" v-if="!noControls">
                         <button :class="['btn', 'btn-lg', isDanger ? 'btn-danger' : 'btn-primary']" v-if="!isReadOnly"
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import DOMPurify from 'dompurify';
 import event from '../../../plugins/events';
 
 const confirmDialog = {
@@ -52,8 +53,17 @@ const confirmDialog = {
             noControls: { type: Boolean, required: false },
             isAlert: { type: Boolean, required: false, default: false },
             isDanger: { type: Boolean, required: false, default: false },
+            sanitizeOptions: null,
             isOpen: false
         };
+    },
+    computed: {
+        sanitizedTitle() {
+            return DOMPurify.sanitize(this.title || '', this.sanitizeOptions || {
+                ALLOWED_TAGS: [],
+                KEEP_CONTENT: true
+            });
+        }
     },
     mounted() {
         event.on('open', params => {
@@ -74,6 +84,7 @@ const confirmDialog = {
             this.isDanger = params.isDanger || false;
             this.callback = params.callback;
             this.noControls = params.noControls || false;
+            this.sanitizeOptions = params.sanitizeOptions || null;
             this.isOpen = true;
         },
         cancel() {
