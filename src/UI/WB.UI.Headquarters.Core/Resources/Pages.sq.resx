@@ -1497,6 +1497,12 @@
   <data name="MapList_MapType" xml:space="preserve">
     <value>Lloji</value>
   </data>
+  <data name="MapList_MapFileTooltip" xml:space="preserve">
+    <value>Skedari i hartës</value>
+  </data>
+  <data name="MapList_ShapeFileTooltip" xml:space="preserve">
+    <value>Skedari i formës</value>
+  </data>
   <data name="Map_NoUsers" xml:space="preserve">
     <value>Harta nuk është caktuar te asnjë përdorues</value>
   </data>

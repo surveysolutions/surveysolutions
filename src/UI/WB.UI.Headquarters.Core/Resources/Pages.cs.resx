@@ -1723,6 +1723,12 @@
   <data name="MapList_MapType" xml:space="preserve">
     <value>Typ</value>
   </data>
+  <data name="MapList_MapFileTooltip" xml:space="preserve">
+    <value>Mapový soubor</value>
+  </data>
+  <data name="MapList_ShapeFileTooltip" xml:space="preserve">
+    <value>Soubor tvarů</value>
+  </data>
   <data name="MapUserLink_DiscardConfirm1" xml:space="preserve">
     <value>Pokud se jedná o posledního uživatele v týmu propojeného s mapou, ztratí nadřízený týmu přístup k mapě.</value>
   </data>
