@@ -411,10 +411,10 @@ Vous pouvez créer ou modifier vos questionnaires dans Survey Solutions Designer
     <value>Terminer</value>
   </data>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
-    <value>Survey Solutions Interviewer</value>
+    <value>Enquêteur Survey Solutions</value>
   </data>
   <data name="Supervisor_ApplicationName" xml:space="preserve">
-    <value>Survey Solutions Supervisor</value>
+    <value>Superviseur Survey Solutions</value>
   </data>
   <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
     <value>Pour terminer l'écran</value>

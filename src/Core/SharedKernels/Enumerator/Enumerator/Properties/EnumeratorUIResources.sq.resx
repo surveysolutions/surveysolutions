@@ -304,7 +304,7 @@
     <value>Sfera:</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
-    <value>&lt;font color="red"&gt;No internet connection&lt;/font&gt;</value>
+    <value>&lt;font color="red"&gt;Nuk ka lidhje me internetin&lt;/font&gt;</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
     <value>Lidhja është &lt;font color="red"&gt;jo e mirë &lt;/font&gt;</value>

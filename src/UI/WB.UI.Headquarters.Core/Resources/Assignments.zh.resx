@@ -493,7 +493,7 @@
     <value>Web 模式下预期值为 1 的任务，其任务密码必须唯一</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>电子邮件</value>
   </data>
   <data name="EmailExplanation" xml:space="preserve">
     <value>Email 将用于与任务接收者沟通</value>
