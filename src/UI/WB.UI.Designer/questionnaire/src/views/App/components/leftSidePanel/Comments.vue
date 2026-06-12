@@ -67,7 +67,7 @@
 <script>
 import { getCommentThreads } from '../../../../services/commentsService';
 import { sanitize } from '../../../../services/utilityService';
-import _ from 'lodash';
+import { forEach, isNull, findIndex, filter } from 'lodash';
 import dayjs from 'dayjs';
 
 export default {
@@ -121,19 +121,19 @@ export default {
         async fetch() {
             const data = await getCommentThreads(this.questionnaireId);
 
-            _.forEach(data, function (commentThread) {
+            forEach(data, function (commentThread) {
                 commentThread.resolvedComments = [];
                 commentThread.resolvedAreExpanded = false;
 
-                _.forEach(commentThread.comments, function (comment) {
+                forEach(commentThread.comments, function (comment) {
                     comment.date = dayjs.utc(comment.date)
-                    comment.isResolved = !_.isNull(comment.resolveDate || null);
+                    comment.isResolved = !isNull(comment.resolveDate || null);
                 });
 
-                commentThread.resolvedComments = _.filter(commentThread.comments, {
+                commentThread.resolvedComments = filter(commentThread.comments, {
                     isResolved: true
                 });
-                commentThread.comments = _.filter(commentThread.comments, {
+                commentThread.comments = filter(commentThread.comments, {
                     isResolved: false
                 });
             });
@@ -141,11 +141,11 @@ export default {
             this.commentThreads = data;
         },
         commentResolved(payload) {
-            const index = _.findIndex(this.commentThreads, function (i) {
+            const index = findIndex(this.commentThreads, function (i) {
                 return i.entity.itemId === payload.entityId;
             });
             if (index !== -1) {
-                const indexComment = _.findIndex(this.commentThreads[index].comments, function (i) {
+                const indexComment = findIndex(this.commentThreads[index].comments, function (i) {
                     return i.id === payload.id;
                 });
                 if (indexComment !== -1) {
@@ -159,17 +159,17 @@ export default {
         },
         commentDeleted(payload) {
 
-            const index = _.findIndex(this.commentThreads, function (i) {
+            const index = findIndex(this.commentThreads, function (i) {
                 return i.entity.itemId === payload.entityId;
             });
             if (index !== -1) {
-                const indexComment = _.findIndex(this.commentThreads[index].comments, function (i) {
+                const indexComment = findIndex(this.commentThreads[index].comments, function (i) {
                     return i.id === payload.id;
                 });
                 if (indexComment !== -1) {
                     this.commentThreads[index].comments.splice(indexComment, 1);
                 }
-                const indexCommentResolved = _.findIndex(this.commentThreads[index].resolvedComments, function (i) {
+                const indexCommentResolved = findIndex(this.commentThreads[index].resolvedComments, function (i) {
                     return i.id === payload.id;
                 });
                 if (indexCommentResolved !== -1) {
@@ -182,7 +182,7 @@ export default {
             }
         },
         commentAdded(payload) {
-            const index = _.findIndex(this.commentThreads, function (i) {
+            const index = findIndex(this.commentThreads, function (i) {
                 return i.entity.itemId === payload.entityId;
             });
 
@@ -208,7 +208,7 @@ export default {
         },
 
         staticTextUpdated(payload) {
-            const index = _.findIndex(this.commentThreads, function (i) {
+            const index = findIndex(this.commentThreads, function (i) {
                 return payload.id && i.entity.itemId === payload.id.split('-').join('');
             });
             if (index !== -1) {
@@ -218,7 +218,7 @@ export default {
 
         groupUpdated(payload) {
             var id = payload.group.id.split('-').join('');
-            const index = _.findIndex(this.commentThreads, function (i) {
+            const index = findIndex(this.commentThreads, function (i) {
                 return i.entity.itemId === id
             });
 
@@ -230,7 +230,7 @@ export default {
 
         rosterUpdated(payload) {
             var id = payload.roster.itemId.split('-').join('');
-            const index = _.findIndex(this.commentThreads, function (i) {
+            const index = findIndex(this.commentThreads, function (i) {
                 return i.entity.itemId === id;
             });
             if (index !== -1) {
@@ -240,7 +240,7 @@ export default {
         },
 
         variableUpdated(payload) {
-            const index = _.findIndex(this.commentThreads, function (i) {
+            const index = findIndex(this.commentThreads, function (i) {
                 return i.entity.itemId === payload.id;
             });
             if (index !== -1) {
@@ -250,7 +250,7 @@ export default {
         },
         questionUpdated(payload) {
             const id = payload.id.split('-').join('');
-            const index = _.findIndex(this.commentThreads, function (i) {
+            const index = findIndex(this.commentThreads, function (i) {
                 return i.entity.itemId === id;
             });
             if (index !== -1) {
@@ -263,7 +263,7 @@ export default {
             var id = payload.itemId ?? payload.id;
             if (id) {
                 id = id.split('-').join('');
-                const index = _.findIndex(this.commentThreads, function (i) {
+                const index = findIndex(this.commentThreads, function (i) {
                     return i.entity.itemId === id;
                 });
                 if (index !== -1) {

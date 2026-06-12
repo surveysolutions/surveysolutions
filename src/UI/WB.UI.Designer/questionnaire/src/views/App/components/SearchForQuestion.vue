@@ -30,8 +30,8 @@
                                                     <li v-for="filter in filters">
                                                         <a role="menuitem" tabindex="-1"
                                                             @click="changeFilter(filter)">{{
-                filter.title
-            }}</a>
+                                                            filter.title
+                                                            }}</a>
                                                     </li>
                                                 </ul>
                                             </perfect-scrollbar>
@@ -51,30 +51,30 @@
                                 </div><!-- /input-group -->
                             </form>
                             <span class="group-summary pull-right">{{ totalResults }} {{
-                $t('QuestionnaireEditor.QuestionsSearchEntities')
-            }}</span>
+                                $t('QuestionnaireEditor.QuestionsSearchEntities')
+                                }}</span>
                         </div>
                         <perfect-scrollbar class="scroller">
                             <div class="tile-wrapper">
                                 <div class="tile-column">
                                     <div class="tile" :class="[searchResult.type]"
-                                        v-for="searchResult in  searchResult1 ">
+                                        v-for="searchResult in searchResult1">
                                         <h4>
                                             <div v-if="searchResult.icon !== null" class="icon"
                                                 :class="[searchResult.icon]"></div><a target="_blank"
                                                 rel="noopener noreferrer" :href="getLink(searchResult)"><span
                                                     class="roster-marker" v-show="searchResult.type === 'roster'">{{
-                $t('QuestionnaireEditor.TreeRoster') }}</span> {{ searchResult.title
-                                                }}</a>
+                                                        $t('QuestionnaireEditor.TreeRoster') }}</span> {{ searchResult.title
+                                                    }}</a>
                                         </h4>
                                         <h5>{{ searchResult.questionnaireTitle }}</h5>
                                         <div class="tile-footer clearfix">
                                             <a v-if="searchResult.hasFolder" class="bg-info"
                                                 @click="changeFilter(searchResult.folder)">{{
-                searchResult.folder.title }}</a>
+                                                searchResult.folder.title }}</a>
                                             <button class="btn btn-link add-button"
                                                 @click="pasteEntity(searchResult)">{{
-                $t('QuestionnaireEditor.Add') }}</button>
+                                                    $t('QuestionnaireEditor.Add') }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -86,17 +86,17 @@
                                                 :class="[searchResult.icon]"></div><a target="_blank"
                                                 rel="noopener noreferrer" :href="getLink(searchResult)"><span
                                                     class="roster-marker" v-show="searchResult.type === 'roster'">{{
-                $t('QuestionnaireEditor.TreeRoster') }}</span> {{ searchResult.title
-                                                }}</a>
+                                                        $t('QuestionnaireEditor.TreeRoster') }}</span> {{ searchResult.title
+                                                    }}</a>
                                         </h4>
                                         <h5>{{ searchResult.questionnaireTitle }}</h5>
                                         <div class="tile-footer clearfix">
                                             <a v-if="searchResult.hasFolder" class="bg-info"
                                                 @click="changeFilter(searchResult.folder)">{{
-                                                searchResult.folder.title }}</a>
+                                                    searchResult.folder.title }}</a>
                                             <button class="btn btn-link add-button"
                                                 @click="pasteEntity(searchResult)">{{
-                                                $t('QuestionnaireEditor.Add') }}</button>
+                                                    $t('QuestionnaireEditor.Add') }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -151,6 +151,9 @@ export default {
             return {};
         },
     },
+    created() {
+        this.searchThrottled = debounce(this.search, 1000);
+    },
     methods: {
         loadFilters() {
             return get(this.baseUrl + '/filters').then(response => {
@@ -167,11 +170,6 @@ export default {
             if (type === 'variable')
                 return "icon-variable";
             return null;
-        },
-
-        searchThrottled() {
-            const searchDebounce = debounce(this.search, 1000);
-            searchDebounce();
         },
 
         search() {

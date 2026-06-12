@@ -2,18 +2,18 @@
     <div :class="{ 'pseudo-form-control': focusable === 'true' }" ref="editorHolder" aceEditor>
         <v-ace-editor ref="editor" v-model:value="editorValue" @init="editorInit" theme="github"
             :lang="mode !== 'substitutions' ? 'csharp' : 'text'" :options="{
-        minLines: 1,
-        maxLines: 300,
-        fontSize: 16,
-        highlightActiveLine: false,
-        indentedSoftWrap: false,
-        printMargin: mode !== 'substitutions',
-        showLineNumbers: false,
-        showGutter: false,
-        useWorker: true,
-        wrap: true,
-        placeholder: this.placeholder,
-    }" />
+                minLines: 1,
+                maxLines: 300,
+                fontSize: 16,
+                highlightActiveLine: false,
+                indentedSoftWrap: false,
+                printMargin: mode !== 'substitutions',
+                showLineNumbers: false,
+                showGutter: false,
+                useWorker: true,
+                wrap: true,
+                placeholder: this.placeholder,
+            }" />
     </div>
 </template>
 
@@ -29,7 +29,6 @@ ace.config.setModuleUrl('ace/mode/csharp', modeCsharpUrl);
 ace.config.setModuleUrl('ace/ext/language_tools', tools);
 
 import { setCompleters } from 'ace-builds/src-noconflict/ext-language_tools';
-import _ from 'lodash'
 import { useTreeStore } from '../../../stores/tree';
 
 export default {

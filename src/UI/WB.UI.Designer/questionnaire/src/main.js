@@ -51,7 +51,6 @@ vue.use(pinia);
 //vue.use(i18n);
 vue.use(I18NextVue, { i18next });
 //vue.use(uiv);
-vue.use(vuetify); //reqired by options component. consider either remove or use.
 vue.use(PerfectScrollbarPlugin);
 vue.component('file-upload', VueUploadComponent);
 vue.use(Notifications);
@@ -65,6 +64,7 @@ vue.component('confirm-prompt-dialog', ConfirmPromptDialog.default);
 directives(vue);
 
 import './views/Designer/pages/classifications/validationRules';
+vue.use(vuetify);
 
 // Run!
 router.isReady().then(() => {
