@@ -881,6 +881,9 @@
   <data name="QuestionInteger" xml:space="preserve">
     <value>Integer</value>
   </data>
+  <data name="QuestionNonNegative" xml:space="preserve">
+    <value>Non-negative</value>
+  </data>
   <data name="QuestionIsLinked" xml:space="preserve">
     <value>Is linked</value>
   </data>
