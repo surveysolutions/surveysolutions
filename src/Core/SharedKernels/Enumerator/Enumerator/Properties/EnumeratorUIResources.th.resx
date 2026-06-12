@@ -322,7 +322,7 @@
     <value>การ Synchronize เสร็จสมบูรณ์</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>งานที่ได้รับมอบหมายเสร็จสมบูรณ์</value>
+    <value>การสัมภาษณ์ที่เสร็จสมบูรณ์</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} จาก {1} {2} เสร็จแล้ว</value>
@@ -437,5 +437,41 @@
   </data>
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>การตอบกลับที่ได้รับดูเหมือนไม่มาจากเซิร์ฟเวอร์ Survey Solutions โดยปกติสถานะนี้เกิดจากพร็อกซีเครือข่าย ไฟร์วอลล์ หรือเกตเวย์ความปลอดภัยที่ดักจับการเชื่อมต่อ กรุณาตรวจสอบการเชื่อมต่อเครือข่ายหรือ ติดต่อฝ่ายไอทีของคุณ</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment" xml:space="preserve">
+    <value>เสร็จสิ้น</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
+    <value>เสร็จสิ้นงานที่มอบหมาย</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
+    <value>คุณแน่ใจหรือไม่ว่าคุณได้นับหน่วยที่มีสิทธิ์ทั้งหมดแล้ว?</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
+    <value>เปิดงานที่มอบหมายอีกครั้ง</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>งานที่มอบหมายจะถูกตั้งค่ากลับเป็นสถานะเปิด และผู้สัมภาษณ์จะสามารถสร้างการสัมภาษณ์ใหม่ได้</value>
+  </data>
+  <data name="Dashboard_CloseAssignment" xml:space="preserve">
+    <value>อนุมัติ</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
+    <value>ปิดงานที่มอบหมาย</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
+    <value>ผู้สัมภาษณ์ที่ทำงานแบบออฟไลน์ยังคงสามารถเก็บข้อมูลได้จนกว่าจะซิงโครไนซ์ การสัมภาษณ์ดังกล่าวยังคงได้รับการยอมรับ</value>
+  </data>
+  <data name="Dashboard_Assignment_Comment" xml:space="preserve">
+    <value>ความคิดเห็น (ไม่บังคับ)</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
+    <value>สถานะ: เสร็จสิ้น</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
+    <value>สถานะ: ได้รับอนุมัติ</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
+    <value>สถานะ: เปิด</value>
   </data>
 </root>

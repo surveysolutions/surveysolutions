@@ -47,5 +47,11 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void SetEsriApiKey(string esriApiKey);
         
         bool SupportOfflineMaps { get; }
+
+        bool AllowSupervisorChangeAssignmentStatus { get; }
+        void SetAllowSupervisorChangeAssignmentStatus(bool allow);
+
+        bool AllowInterviewerChangeAssignmentStatus { get; }
+        void SetAllowInterviewerChangeAssignmentStatus(bool allow);
     }
 }

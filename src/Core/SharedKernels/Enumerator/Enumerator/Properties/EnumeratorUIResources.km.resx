@@ -451,7 +451,7 @@
     <value>ការគ្រប់គ្រងរួម បានបញ្ជប់ដោយជោគជ័យ</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>បញ្ចប់កិច្ចការ</value>
+    <value>សម្ភាសន៍ដែលបានបញ្ចប់</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} of {1} {2} ធ្វើរូច</value>
@@ -566,5 +566,41 @@
   </data>
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>ការឆ្លើយតបដែលទទួលបានហាក់ដូចជាមិនមកពីម៉ាស៊ីនមេ Survey Solutions។ ជាទូទៅនេះកើតឡើងដោយพรុកស៊ី (proxy) បណ្ដាញ ដ៏ជា firewall ឬប្រព័ន្ធជម្រកសុវត្ថិភាពដែលរាំងខ្ទប់ការតភ្ជាប់។ សូមពិនិត្យការតភ្ជាប់បណ្ដាញ ឬទាក់ទងការគាំទ្រ IT។</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment" xml:space="preserve">
+    <value>បញ្ចប់</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
+    <value>បញ្ចប់ការចាត់តាំង</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
+    <value>តើអ្នកប្រាកដថាអ្នកបានរាប់អង្គភាពទាំងអស់ដែលមានសិទ្ធិ?</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
+    <value>បើកការចាត់តាំងឡើងវិញ</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>ការចាត់តាំងនឹងត្រូវកំណត់ត្រឡប់ទៅស្ថានភាព បើក ហើយអ្នកសម្ភាសន៍នឹងអាចបង្កើតការសម្ភាសន៍ថ្មីបាន។</value>
+  </data>
+  <data name="Dashboard_CloseAssignment" xml:space="preserve">
+    <value>យល់ព្រម</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
+    <value>បិទការចាត់តាំង</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
+    <value>អ្នកសម្ភាសន៍ដែលធ្វើការក្រៅបណ្តាញនៅតែអាចបន្តប្រមូលទិន្នន័យបានរហូតដល់ការធ្វើសមកាលកម្ម។ ការសម្ភាសន៍បែបនោះនឹងត្រូវបានទទួលយក។</value>
+  </data>
+  <data name="Dashboard_Assignment_Comment" xml:space="preserve">
+    <value>មតិយោបល់ (ស្រេចចិត្ត)</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
+    <value>ស្ថានភាព: បានបញ្ចប់</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
+    <value>ស្ថានភាព: បានយល់ព្រម</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
+    <value>ស្ថានភាព: បើក</value>
   </data>
 </root>
