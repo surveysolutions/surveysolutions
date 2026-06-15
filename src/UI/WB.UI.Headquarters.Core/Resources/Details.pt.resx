@@ -154,7 +154,7 @@
     <value>{{ count }} itens encontrados:</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status: {{ name }}</value>
+    <value>Estado: {{ name }}</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionário: {{ name }}</value>

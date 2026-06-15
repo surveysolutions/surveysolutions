@@ -4,7 +4,7 @@ import vue from '@vitejs/plugin-vue'
 import LocalizationPlugin from './tools/vite-plugin-localization'
 import fs from 'fs';
 import { globSync } from 'glob'
-import saveSelectedFilesPlugin from './tools/saveSelectedFilesPlugin.cjs';
+import saveSelectedFilesPlugin from './tools/saveSelectedFilesPlugin.js';
 import { normalizePath } from 'vite';
 
 const baseDir = path.relative(__dirname, "./");
@@ -365,10 +365,8 @@ export default defineConfig(({ mode, command }) => {
             minify: isProdMode,
             outDir,
             manifest: isDevMode,
-            rollupOptions: {
+            rolldownOptions: {
                 input: inputPages,
-                maxParallelFileOps: 1,
-                cache: false,
                 plugins: [
                     /*inject({
                         jQuery: "jquery",

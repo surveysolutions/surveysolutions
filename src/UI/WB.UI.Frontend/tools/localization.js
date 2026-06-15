@@ -4,7 +4,7 @@ import path from 'path'
 import crypto from 'crypto'
 import xmldoc from 'xmldoc'
 
-module.exports = class LocalizationBuilder {
+export default class LocalizationBuilder {
     constructor(options) {
         this.options = options || {
             patterns: ['../**/*.resx'],
@@ -217,4 +217,4 @@ module.exports = class LocalizationBuilder {
         this.ensureDirectoryExistence(dirname);
         fs.mkdirSync(dirname);
     }
-};
+}

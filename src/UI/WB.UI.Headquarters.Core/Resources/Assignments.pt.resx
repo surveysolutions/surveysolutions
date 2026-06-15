@@ -346,7 +346,7 @@
     <value>Nova Atribuição</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>E-mail</value>
   </data>
   <data name="EmailExplanation" xml:space="preserve">
     <value>O email será usado na comunicação com o destinatário da atribuição</value>
