@@ -22,11 +22,6 @@
         </template>
         <template v-slot:headers>
             <div>
-                <ol class="breadcrumb" v-if="!isOwnProfile">
-                    <li>
-                        <a v-bind:href="referrerUrl">{{ referrerTitle }}</a>
-                    </li>
-                </ol>
                 <h1>{{ $t('Strings.HQ_Views_Manage_Title') }}<b v-if="!isOwnProfile">
                         : {{ userName }}
                     </b></h1>
@@ -137,15 +132,6 @@ export default {
         showWorkspaces() {
             return this.$config.model.userInfo.canChangeWorkspacesList
         },
-        referrerUrl() {
-            const returnUrl = this.$route.query['returnUrl']
-            if (returnUrl != null && returnUrl.startsWith('/')) {
-                return returnUrl
-            }
-
-            return '/users/UsersManagement'
-        },
-
     },
     methods: {
         getUrl: function (baseUrl) {
