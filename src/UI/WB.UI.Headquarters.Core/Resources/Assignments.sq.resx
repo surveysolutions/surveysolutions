@@ -277,7 +277,7 @@
     <value>Fjalëkalimi sipas detyrave për modalitetin ueb me vlerë 1 duhet të jetë unik</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>Email-i</value>
   </data>
   <data name="EmailExplanation" xml:space="preserve">
     <value>Email-i do të përdoret në komunikimin me marrësin e detyrës</value>
@@ -343,7 +343,7 @@
     <value>Pyetësor</value>
   </data>
   <data name="QuestionnaireVersion" xml:space="preserve">
-    <value>ver. {{version}}</value>
+    <value>verz. {{version}}</value>
   </data>
   <data name="ReceivedByTablet" xml:space="preserve">
     <value>Marrë nga tableti</value>

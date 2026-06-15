@@ -141,4 +141,21 @@
   <data name="TemplateNotFound" xml:space="preserve">
     <value>Pyetësori "{0}" nuk mund të gjendet. Ju lutemi, rifreskoni listën e pyetësorëve.</value>
   </data>
+
+
+  <data name="InvalidAuthenticatorCode" xml:space="preserve">
+    <value>Kodi i aplikacionit vërtetues është i pavlefshëm.</value>
+  </data>
+
+  <data name="InvalidRecoveryCode" xml:space="preserve">
+    <value>Kodi i rikuperimit i futur është i pavlefshëm.</value>
+  </data>
+
+  <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
+      <value>Një pyetësor tjetër po importohet në Zyrën Qendrore tani.</value>
+  </data>
+
+  <data name="ApiUserIsNotAllowedToSignIn" xml:space="preserve">
+      <value>Përdoruesi API nuk lejohet të hyjë përmes ndërfaqes së përdoruesit</value>
+  </data>
 </root>

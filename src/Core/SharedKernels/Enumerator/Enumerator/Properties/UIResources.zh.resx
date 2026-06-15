@@ -672,4 +672,449 @@
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
     <value>分配状态</value>
   </data>
+
+
+  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
+    <value>我的</value>
+  </data>
+
+  <data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
+    <value>与我共享的</value>
+  </data>
+
+  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
+    <value>公开</value>
+  </data>
+
+  <data name="OldPasswordHint" xml:space="preserve">
+    <value>当前密码</value>
+  </data>
+
+  <data name="NewPasswordHint" xml:space="preserve">
+    <value>新密码</value>
+  </data>
+
+  <data name="ConfirmNewPasswordHint" xml:space="preserve">
+    <value>确认新密码</value>
+  </data>
+
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>您确定要从每个相关二维表中移除相关的二维表“{0}”吗？</value>
+  </data>
+
+  <data name="Interview_Questions_RemoveRowFromRosterListMessage" xml:space="preserve">
+    <value>您确定要移除相关的二维表吗？</value>
+  </data>
+
+  <data name="Adjust" xml:space="preserve">
+    <value>调整</value>
+  </data>
+
+  <data name="InvalidTimeMessage" xml:space="preserve">
+    <value>时间设置准确非常重要。您的时钟显示当前日期设置不正确。请先通过设置正确的日期/时间来调整时钟，然后再继续工作。</value>
+  </data>
+
+  <data name="Interview_Comment_OnPreviousAnswer" xml:space="preserve">
+    <value>关于上一条答案</value>
+  </data>
+
+  <data name="Interview_Comment_Resolve" xml:space="preserve">
+    <value>处理</value>
+  </data>
+
+  <data name="NoMapsApplication" xml:space="preserve">
+    <value>未找到导航应用程序</value>
+  </data>
+
+  <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
+    <value>要激活此按钮，请先解决关键问题</value>
+  </data>
+
+  <data name="Interview_Complete_CriticalUnanswered" xml:space="preserve">
+    <value>关键未回答问题：{0}</value>
+  </data>
+
+  <data name="Interview_Complete_FailCriticalConditions" xml:space="preserve">
+    <value>未通过的关键规则：{0}</value>
+  </data>
+
+  <data name="Interview_Complete_WithWarningCriticality" xml:space="preserve">
+    <value>请确认您要在存在关键问题的情况下提交此访谈。</value>
+  </data>
+
+  <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
+    <value>要激活此按钮，请先解决关键问题，或在上方评论框中提供说明</value>
+  </data>
+
+  <data name="Interview_Complete_Interview_Status" xml:space="preserve">
+    <value>访谈问题：</value>
+  </data>
+
+  <data name="Interview_Complete_CriticalityIssuesDescription" xml:space="preserve">
+    <value>请通过回答关键问题并确保答案满足关键规则来解决这些问题</value>
+  </data>
+
+  <data name="Interviewer_Reassign_Comment" xml:space="preserve">
+    <value>给新负责人留言</value>
+  </data>
+
+  <data name="Interviewer_Comment" xml:space="preserve">
+    <value>发表评论</value>
+  </data>
+
+  <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
+    <value>访问员 {0} 已接收此访谈 {1}。您确定要重新分配吗？</value>
+  </data>
+
+  <data name="Interviewer_Reassign_AlreadyReceivedAssignment" xml:space="preserve">
+    <value>访问员 {0} 已接收此任务 {1}。您确定要重新分配吗？</value>
+  </data>
+
+  <data name="PasswordMatchError" xml:space="preserve">
+    <value>密码必须一致</value>
+  </data>
+
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreTitle" xml:space="preserve">
+    <value>忽略通信完整性验证</value>
+  </data>
+
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreSummary" xml:space="preserve">
+    <value>启用后，将忽略通信完整性验证错误</value>
+  </data>
+
+  <data name="Interview_Cover_Supervisor_Comments_does_not_exists" xml:space="preserve">
+    <value>没有督导评论</value>
+  </data>
+
+  <data name="MissingPermissions_MapsLocation" xml:space="preserve">
+    <value>应用程序需要位置使用权限。如果您没有看到权限弹窗，请前往“设置”并允许应用程序使用位置。</value>
+  </data>
+
+  <data name="MissingPermissions_Microphone_Global" xml:space="preserve">
+    <value>应用程序需要麦克风使用权限。请重试上一操作并允许访问。如果您没有看到权限弹窗，请前往“设置”并允许应用程序使用麦克风。</value>
+  </data>
+
+  <data name="MissingPermissions_Storage_Global" xml:space="preserve">
+    <value>应用程序需要存储使用权限。请重试上一操作并允许访问。如果您没有看到权限弹窗，请前往“设置”并允许应用程序使用存储。</value>
+  </data>
+
+  <data name="AreaMap_LocationDataSourceFailed" xml:space="preserve">
+    <value>无法获取位置。若要排查问题，请尝试以下操作：确保您位于室外、确认已启用 GPS，或更改 GPS 超时设置</value>
+  </data>
+
+  <data name="AreaMap_MapIsOutOfVisibleBoundaries" xml:space="preserve">
+    <value>已加载的地图超出可见范围</value>
+  </data>
+
+  <data name="AreaMap_SelectShapefile" xml:space="preserve">
+    <value>选择边界文件</value>
+  </data>
+
+  <data name="AreaMap_ErrorOnShapefileLoading" xml:space="preserve">
+    <value>加载时发生错误。无法处理 shapefile</value>
+  </data>
+
+  <data name="AreaMap_AreaFormat" xml:space="preserve">
+    <value>面积：{0:0.00} m2</value>
+  </data>
+
+  <data name="AreaMap_OverlapsWith" xml:space="preserve">
+    <value>与以下内容重叠：</value>
+  </data>
+
+  <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
+    <value>以及另外 {0} 个。</value>
+  </data>
+
+  <data name="AreaMap_ItemsOutsideDedicatedArea" xml:space="preserve">
+    <value>部分标记点位于勾画区域之外</value>
+  </data>
+  
+  <data name="AreaMap_PointsFormat" xml:space="preserve">
+    <value>点：{0}</value>
+  </data>
+
+  <data name="AreaMap_LengthFormat" xml:space="preserve">
+    <value>长度：{0:0.00} m</value>
+  </data>
+
+  <data name="AreaMap_PerimeterFormat" xml:space="preserve">
+    <value>周长：{0:0.00} m</value>
+  </data>
+
+  <data name="AreaMap_LoadShapefile" xml:space="preserve">
+    <value>加载 shapefile</value>
+  </data>
+
+  <data name="AreaMap_ShowBoundaries" xml:space="preserve">
+    <value>显示边界</value>
+  </data>
+
+  <data name="AreaMap_HideBoundaries" xml:space="preserve">
+    <value>隐藏边界</value>
+  </data>
+
+  <data name="MapDashboard_Assignments" xml:space="preserve">
+    <value>任务</value>
+  </data>
+
+  <data name="MapDashboard_Interviews" xml:space="preserve">
+    <value>访谈</value>
+  </data>
+
+  <data name="MapDashboard_Disclaimer" xml:space="preserve">
+    <value>仅显示已知坐标的项目</value>
+  </data>
+
+  <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
+    <value>所有问卷</value>
+  </data>
+
+  <data name="MapDashboard_AllResponsibles" xml:space="preserve">
+    <value>所有负责人</value>
+  </data>
+
+  <data name="MapDashboard_AllStatuses" xml:space="preserve">
+    <value>所有状态</value>
+  </data>
+
+  <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
+    <value>问卷</value>
+  </data>
+
+  <data name="MapDashboard_ResponsibleTitle" xml:space="preserve">
+    <value>负责人</value>
+  </data>
+
+  <data name="MapDashboard_StatusTitle" xml:space="preserve">
+    <value>状态</value>
+  </data>
+
+  <data name="MapDashboard_TypeTitle" xml:space="preserve">
+    <value>类型</value>
+  </data>
+
+  <data name="MapDashboard_FiltersTitle" xml:space="preserve">
+    <value>筛选器</value>
+  </data>
+
+  <data name="MenuItem_Title_StartGeofencing" xml:space="preserve">
+    <value>开始地理围栏</value>
+  </data>
+
+  <data name="MenuItem_Title_StopGeofencing" xml:space="preserve">
+    <value>停止地理围栏</value>
+  </data>
+
+  <data name="MenuItem_Title_StartGeoTracking" xml:space="preserve">
+    <value>开始轨迹记录</value>
+  </data>
+
+  <data name="MenuItem_Title_StopGeoTracking" xml:space="preserve">
+    <value>停止轨迹记录</value>
+  </data>
+
+  <data name="MenuItem_Title_ShowLocation" xml:space="preserve">
+    <value>显示位置</value>
+  </data>
+
+  <data name="MenuItem_Title_HideLocation" xml:space="preserve">
+    <value>隐藏位置</value>
+  </data>
+
+  <data name="MenuItem_Title_ExitToDashboard" xml:space="preserve">
+    <value>返回仪表板</value>
+  </data>
+
+  <data name="MenuItem_Title_ChangeMap" xml:space="preserve">
+    <value>更换地图</value>
+  </data>
+
+  <data name="MenuItem_Title_ChangeShapefile" xml:space="preserve">
+    <value>更换边界</value>
+  </data>
+
+  <data name="MenuItem_Title_CreateInterview" xml:space="preserve">
+    <value>创建新访谈</value>
+  </data>
+
+  <data name="AssignmentMap_Title_CreateInterview" xml:space="preserve">
+    <value>开始</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
+    <value>缩放至地图</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomShapefile" xml:space="preserve">
+    <value>缩放至边界</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomCollectedData" xml:space="preserve">
+    <value>缩放至已收集数据</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
+    <value>缩放全部</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
+    <value>缩放至轨迹记录</value>
+  </data>
+
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>仪表板</value>
+  </data>
+
+  <data name="Interview_MaxAnswersCountSelected" xml:space="preserve">
+    <value>此问题已达到最大选择数 ({0})</value>
+  </data>
+
+  <data name="Interview_PlayVideo" xml:space="preserve">
+    <value>播放视频 </value>
+  </data>
+
+  <data name="Interview_PlayAudio" xml:space="preserve">
+    <value>播放音频 </value>
+  </data>
+
+  <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
+    <value>此访谈包含的数据超出系统允许范围。如有可能，请删除不必要的二维表行和/或取消问题作答。</value>
+  </data>
+
+  <data name="Notifications_SummaryTitle" xml:space="preserve">
+    <value>{0} 条通知</value>
+  </data>
+
+  <data name="Interview_Question_HideResolvedComments" xml:space="preserve">
+    <value>隐藏已处理</value>
+  </data>
+
+  <data name="Interview_Question_ShowResolvedComments" xml:space="preserve">
+    <value>显示已处理</value>
+  </data>
+
+  <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
+    <value>应用程序没有自我更新权限。请在“应用信息”设置菜单中启用“允许来自此来源”选项。</value>
+  </data>
+
+  <data name="Comment" xml:space="preserve">
+    <value>评论</value>
+  </data>
+
+  <data name="NoComment" xml:space="preserve">
+    <value>未填写评论</value>
+  </data>
+
+  <data name="Interview_Complete_SwitchTo_WebMode_Checkbox" xml:space="preserve">
+    <value>将访谈切换到 Web 模式</value>
+  </data>
+
+  <data name="Interview_Complete_SwitchTo_WebMode_Instruction" xml:space="preserve">
+    <value>同步后，此访谈将可在线访问。要访问该访谈，受访者应在联网的电脑、平板电脑或智能手机的浏览器中输入下方链接。也可以扫描下方显示的 QR-code 使用同一链接。</value>
+  </data>
+ 
+  <data name="Interview_Complete_Instruction" xml:space="preserve">
+    <value>提交后，此访谈将被锁定且无法编辑。请确保所有信息均正确。</value>
+  </data>
+
+   <data name="Loading" xml:space="preserve">
+    <value>正在加载...</value>
+  </data>
+
+  <data name="AreaMap_Save_With_Warning_Confirm" xml:space="preserve">
+    <value>您即将保存一个不够精确的结果。是否继续？</value>
+  </data>
+
+  <data name="AreaMap_Start_Measurement" xml:space="preserve">
+    <value>开始</value>
+  </data>
+
+  <data name="AreaMap_InitLocation" xml:space="preserve">
+    <value>正在初始化...</value>
+  </data>
+
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>已被 Headquarters 批准</value>
+  </data>
+
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>已被督导批准</value>
+  </data>
+
+  <data name="InterviewStatus_Completed" xml:space="preserve">
+    <value>已完成</value>
+  </data>
+
+  <data name="InterviewStatus_Created" xml:space="preserve">
+    <value>已创建</value>
+  </data>
+
+  <data name="InterviewStatus_Deleted" xml:space="preserve">
+    <value>已删除</value>
+  </data>
+
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>已分配给访问员</value>
+  </data>
+
+  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+    <value>已被 Headquarters 拒绝</value>
+  </data>
+
+  <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+    <value>已被督导拒绝</value>
+  </data>
+
+  <data name="InterviewStatus_Restarted" xml:space="preserve">
+    <value>已重启</value>
+  </data>
+
+  <data name="InterviewStatus_Restored" xml:space="preserve">
+    <value>已恢复</value>
+  </data>
+
+  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+    <value>已分配给督导</value>
+  </data>
+
+  <data name="SelectMapTitle" xml:space="preserve">
+    <value>选择地图：</value>
+  </data>
+
+  <data name="Geofencing_Warning_Message" xml:space="preserve">
+    <value>您位于指定区域之外</value>
+  </data>
+
+  <data name="SelectShapefileTitle" xml:space="preserve">
+    <value>选择边界：</value>
+  </data>
+  
+  <data name="Interview_Complete_Title" xml:space="preserve">
+    <value>审核并提交
+访谈 {0}</value>
+  </data>
+
+  <data name="Interview_Complete_Success_Text" xml:space="preserve">
+    <value>所有必答问题均已回答
+未发现错误</value>
+  </data>
+
+  <data name="Interview_Complete_MoreCountString" xml:space="preserve">
+    <value>以及另外 {0} 个</value>
+  </data>
+
+  <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
+    <value>关键
+错误</value>
+  </data>
+
+  <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
+    <value>错误</value>
+  </data>
+
+  <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
+    <value>未回答
+问题</value>
+  </data>
 </root>
