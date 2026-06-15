@@ -190,7 +190,7 @@
     <value>Specificați  numărul maxim de alocări care vor fi generate pentru acest interviu. Valori permise: -1 pentru nelimitat, 0 pentru nul, alt număr pentru numărul maxim de alocări</value>
   </data>
   <data name="Stop" xml:space="preserve">
-    <value>Stop</value>
+    <value>Oprire</value>
   </data>
   <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
     <value>Indicator pentru starea interviului alocat (activ sau arhivat)</value>
@@ -503,5 +503,119 @@
   </data>
   <data name="WebModeEnabledWarning" xml:space="preserve">
     <value>Sarcina nu poate fi terminată. Are modul web activat, în timp ce chestionarul are modul de colectare web dezactivat</value>
+  </data>
+  <data name="Downsize" xml:space="preserve">
+    <value>Reducere</value>
+  </data>
+  <data name="Filter_ShowAll" xml:space="preserve">
+    <value>Arata tot</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+      <value>Stare</value>
+  </data>
+  <data name="StatusChangeComment" xml:space="preserve">
+      <value>Comentariu privind schimbarea stării</value>
+  </data>
+  <data name="StatusOpen" xml:space="preserve">
+      <value>Deschis</value>
+  </data>
+  <data name="StatusCompleted" xml:space="preserve">
+      <value>Finalizat</value>
+  </data>
+  <data name="StatusClosed" xml:space="preserve">
+      <value>Aprobat</value>
+  </data>
+  <data name="CompleteAssignmentTitle" xml:space="preserve">
+      <value>Finalizați atribuirea</value>
+  </data>
+  <data name="CompleteAssignmentMessage" xml:space="preserve">
+      <value>Sunteți sigur că ați enumerat toate unitățile eligibile?</value>
+  </data>
+  <data name="CloseAssignmentTitle" xml:space="preserve">
+      <value>Închideți atribuirea</value>
+  </data>
+  <data name="CloseAssignmentMessage" xml:space="preserve">
+      <value>Intervievatorii care lucrează offline pot continua colectarea datelor până la sincronizare. Aceste interviuri vor fi în continuare acceptate.</value>
+  </data>
+  <data name="ReopenAssignmentTitle" xml:space="preserve">
+      <value>Redeschideți atribuirea</value>
+  </data>
+  <data name="ReopenAssignmentMessage" xml:space="preserve">
+      <value>Atribuirea va fi readusă la starea Deschis şi intervievatorii vor putea crea noi interviuri.</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+      <value>Finalizați</value>
+  </data>
+  <data name="Reopen" xml:space="preserve">
+      <value>Redeschideți</value>
+  </data>
+  <data name="Action_StatusChanged" xml:space="preserve">
+      <value>Stare modificată în {{status}}</value>
+  </data>
+  <data name="Action_StatusChanged_Comment" xml:space="preserve">
+      <value>Comentariu: {{comment}}</value>
+  </data>
+  <data name="Action_Completed" xml:space="preserve">
+      <value>Finalizat</value>
+  </data>
+  <data name="Action_Closed" xml:space="preserve">
+      <value>Aprobat</value>
+  </data>
+  <data name="Action_Reopened" xml:space="preserve">
+      <value>Redeschis</value>
+  </data>
+  <data name="Action_QuantityChanged" xml:space="preserve">
+    <value>Valoarea așteptată s-a modificat</value>
+  </data>
+  <data name="Action_TargetAreaChanged" xml:space="preserve">
+    <value>Zona țintă s-a modificat</value>
+  </data>
+  <data name="Action_UpgradedFrom" xml:space="preserve">
+    <value>Actualizat din sarcina {{id}}</value>
+  </data>
+  <data name="CawiModeEnable" xml:space="preserve">
+    <value>Activați modul CAWI</value>
+  </data>
+  <data name="ChangeModeModalTitle" xml:space="preserve">
+    <value>Schimbați modul pentru sarcina {{assignmentId}}</value>
+  </data>
+  <data name="ChangeTargetAreaModalTitle" xml:space="preserve">
+    <value>Schimbați zona țintă pentru sarcina {{assignmentId}}</value>
+  </data>
+  <data name="DetailsGeoTracking" xml:space="preserve">
+    <value>Urmărire geografică</value>
+  </data>
+  <data name="DetailsTargetAreaa" xml:space="preserve">
+    <value>Zona țintă</value>
+  </data>
+  <data name="EnterTargetArea" xml:space="preserve">
+    <value>Introduceți zona țintă</value>
+  </data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+    <value>Comutați la exemplul de link pentru interviu web</value>
+  </data>
+  <data name="ModeExplanation" xml:space="preserve">
+    <value>Modul CAWI permite colectarea datelor direct de la respondenți</value>
+  </data>
+  <data name="Property" xml:space="preserve">
+    <value>Proprietate</value>
+  </data>
+  <data name="TargetArea" xml:space="preserve">
+    <value>Editați zona țintă</value>
+  </data>
+  <data name="TargetAreaExplanation" xml:space="preserve">
+    <value>Specificați numele hărții zonei țintă pentru sarcină</value>
+  </data>
+  <data name="Tooltip_Table_Email" xml:space="preserve">
+    <value>Email pentru notificări</value>
+  </data>
+  <data name="Tooltip_Table_Password" xml:space="preserve">
+    <value>Parolă pentru restricționarea accesului</value>
+  </data>
+  <data name="Tooltip_Table_ReceivedByTablet" xml:space="preserve">
+    <value>Indicator dacă sarcina a fost descărcată pe tabletă. Faceți clic pe pictograma de sortare pentru a sorta după ora de primire.</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Valoare</value>
   </data>
 </root>
