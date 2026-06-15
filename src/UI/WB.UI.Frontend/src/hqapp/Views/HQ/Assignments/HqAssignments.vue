@@ -339,7 +339,7 @@ export default {
             const dataRow = this.$refs.table.table.rows({ selected: true }).data()[0]
             const result = this.$t('Assignments.SingleAssignmentCloseConfirm', {
                 id: this.selectedRows[0],
-                quantity: dataRow.quantity,
+                quantity: dataRow.quantity == null ? (-1 + ' (' + this.$t('Assignments.Unlimited') + ')') : dataRow.quantity,
                 collected: dataRow.interviewsCount,
             })
             return result
