@@ -139,7 +139,7 @@
     <value>Cambiar clave</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>Perfil</value>
+    <value>Contacto</value>
   </data>
   <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
     <value>Autenticación de dos factores</value>
@@ -520,7 +520,7 @@
     <value>Fecha de la última comunicación</value>
   </data>
   <data name="InterviewerProfile_Relinked" xml:space="preserve">
-    <value>Relinked</value>
+    <value>Vinculado de nuevo</value>
   </data>
   <data name="InterviewerProfile_TotalSyncTime" xml:space="preserve">
     <value>Duración de la sincronización</value>
