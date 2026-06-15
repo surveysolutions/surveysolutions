@@ -63,7 +63,7 @@
 
                             <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfunew'" v-model="file"
                                 :size="maxFileSize" :drop="false" :drop-directory="false" @input-file="fileSelected"
-                                accept=".pdf,image/*,video/*,audio/*">
+                                @input-filter="inputFilter" accept=".pdf,image/*,video/*,audio/*">
                             </file-upload>
 
                             <a :href="getDownloadUrl()" class="btn btn-default pull-right" target="_blank"
@@ -235,6 +235,12 @@ export default {
                 notice(this.$t('QuestionnaireEditor.AttachmentSizeIsTooBig', {
                     size: formatBytes(this.maxFileSize),
                 }));
+                return false;
+            }
+            const unsupportedTypes = ['image/heic', 'image/heif', 'image/heic-sequence', 'image/heif-sequence'];
+            const heicExtensionRegex = /\.(heic|heif)$/i;
+            if (unsupportedTypes.includes(file.type) || heicExtensionRegex.test(file.name)) {
+                notice(this.$t('QuestionnaireEditor.AttachmentTypeIsNotSupported'));
                 return false;
             }
             return true;
