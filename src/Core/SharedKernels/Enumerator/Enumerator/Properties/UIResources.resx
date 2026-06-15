@@ -181,7 +181,7 @@
     <value>Your login or password is incorrect</value>
   </data>
   <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
-    <value>Tap to record GPS</value>
+    <value>Record GPS</value>
   </data>
   <data name="Interview_Questions_Audio_SaveAnswer" xml:space="preserve">
     <value>Tap to record audio</value>
