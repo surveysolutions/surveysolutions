@@ -75,6 +75,7 @@ const confirmDialog = {
                     ...defaultOptions,
                     FORBID_TAGS: ['script', 'style', 'svg', 'math', 'iframe', 'object', 'embed', 'link', 'meta', 'base'],
                     FORBID_ATTR: ['style'],
+                    ALLOWED_URI_REGEXP: /^(?:https?:|\/)/i,
                     ALLOWED_TAGS: this.sanitizeOptions.ALLOWED_TAGS.filter(t => typeof t === 'string'),
                     ALLOWED_ATTR: this.sanitizeOptions.ALLOWED_ATTR
                         .filter(a => typeof a === 'string' && !a.toLowerCase().startsWith('on') && a.toLowerCase() !== 'style')
