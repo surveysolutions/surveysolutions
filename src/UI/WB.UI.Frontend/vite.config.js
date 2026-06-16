@@ -366,8 +366,20 @@ export default defineConfig(({ mode, command }) => {
             outDir,
             manifest: isDevMode,
             rolldownOptions: {
+                onLog(level, log, handler) {
+                    if (log.code === 'INVALID_ANNOTATION') return
+                    handler(level, log)
+                },
                 input: inputPages,
                 plugins: [
+                    {
+                        name: 'fix-signalr-pure-annotations',
+                        transform(code, id) {
+                            if (id.includes('@microsoft/signalr')) {
+                                return code.replace(/\/\*#__PURE__\*\/ function /g, 'function ')
+                            }
+                        }
+                    },
                     /*inject({
                         jQuery: "jquery",
                         //"window.jQuery": "jquery",
