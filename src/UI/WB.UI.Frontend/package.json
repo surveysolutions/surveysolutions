@@ -24,7 +24,7 @@
         "@vee-validate/rules": "^4.15.0",
         "@vue/apollo-option": "^4.2.0",
         "autonumeric": "^4.10.5",
-        "axios": "^1.15.2",
+        "axios": "^1.18.0",
         "bootstrap": "^5.3.3",
         "bootstrap-select": "^1.13.18",
         "chart.js": "^4.4.7",
@@ -56,7 +56,7 @@
         "vuex": "^4.1.0"
     },
     "devDependencies": {
-        "@vitejs/plugin-vue": "5.2.4",
+        "@vitejs/plugin-vue": "^6.0.7",
         "@vue/test-utils": "^2.4.6",
         "autoprefixer": "^10.4.20",
         "eslint": "^10.0.2",
@@ -70,7 +70,7 @@
         "sass": "^1.85.0",
         "terser": "^5.37.0",
         "test-exclude": "^7.0.1",
-        "vite": "6.4.2",
+        "vite": "^8.0.0",
         "xmldoc": "^1.1.2"
     },
     "prettier": {

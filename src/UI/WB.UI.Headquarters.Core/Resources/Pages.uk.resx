@@ -139,7 +139,7 @@
     <value>Логін</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>Профіль</value>
+    <value>Контакт</value>
   </data>
   <data name="AccountManage_Role" xml:space="preserve">
     <value>Роль</value>
