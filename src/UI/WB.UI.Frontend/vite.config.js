@@ -367,9 +367,9 @@ export default defineConfig(({ mode, command }) => {
             manifest: isDevMode,
             rolldownOptions: {
                 onLog(level, log, handler) {
-                    if (log.code === 'INVALID_ANNOTATION') return
+                    if (log.code === 'INVALID_ANNOTATION' && (log.id?.includes('@microsoft/signalr') || log?.loc?.file?.includes('@microsoft/signalr'))) return
                     handler(level, log)
-                },
+                }
                 input: inputPages,
                 plugins: [
                     {
