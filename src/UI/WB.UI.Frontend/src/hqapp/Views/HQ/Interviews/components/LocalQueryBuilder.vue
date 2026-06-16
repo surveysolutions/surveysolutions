@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { isEqual } from 'lodash'
+import { isEqual } from 'lodash-es'
 import LocalQueryBuilderGroupNode from './LocalQueryBuilderGroupNode.vue'
 
 const defaultGroup = () => ({ operatorIdentifier: 'all', children: [] })

@@ -382,7 +382,7 @@
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import ExportProcessCard from './ExportProcessCard'
 import gql from 'graphql-tag'
-import { filter, toNumber, map } from 'lodash'
+import { filter, toNumber, map } from 'lodash-es'
 import { DateFormats } from '~/shared/helpers'
 import moment from 'moment'
 

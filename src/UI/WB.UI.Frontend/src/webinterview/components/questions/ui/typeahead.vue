@@ -23,7 +23,7 @@
     </div>
 </template>
 <script lang="js">
-import { escape, escapeRegExp } from 'lodash'
+import { escape, escapeRegExp } from 'lodash-es'
 
 export default {
     name: 'wb-typeahead',

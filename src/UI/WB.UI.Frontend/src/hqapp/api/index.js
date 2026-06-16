@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { map } from 'lodash'
+import { map } from 'lodash-es'
 import { installAxiosInterceptors } from '~/shared/serverValidator'
 
 class QuestionnaireApi {

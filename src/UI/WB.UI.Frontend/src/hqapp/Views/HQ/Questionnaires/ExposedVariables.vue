@@ -112,7 +112,7 @@
 </template>
 
 <script>
-import { map } from 'lodash'
+import { map } from 'lodash-es'
 import DOMPurify from 'dompurify'
 const sanitizeHtml = text => DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
 

@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { each } from 'lodash'
+import { each } from 'lodash-es'
 import QRCode from 'qrcode'
 
 export default {

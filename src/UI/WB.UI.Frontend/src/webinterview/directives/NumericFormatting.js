@@ -1,6 +1,6 @@
 //import Vue from 'vue'
 import AutoNumeric from 'autonumeric/src/main'
-import { assign } from 'lodash'
+import { assign } from 'lodash-es'
 
 const defaults = {
     digitGroupSeparator: '',

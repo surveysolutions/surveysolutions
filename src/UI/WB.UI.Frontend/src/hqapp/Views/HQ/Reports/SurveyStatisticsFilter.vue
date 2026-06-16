@@ -79,7 +79,7 @@
 
 <script>
 import routeSync from '~/shared/routeSync'
-import { xor, find, assign, isEqual, chain, filter } from 'lodash'
+import { xor, find, assign, isEqual, chain, filter } from 'lodash-es'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 
 export default {

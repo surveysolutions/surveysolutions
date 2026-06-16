@@ -262,7 +262,7 @@
 </style>
 
 <script>
-import { escape, unescape } from 'lodash'
+import { escape, unescape } from 'lodash-es'
 
 export default {
     emits: ['input', 'update:modelValue'],

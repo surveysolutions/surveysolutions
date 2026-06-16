@@ -52,7 +52,7 @@
 
 <script>
 //import Vue from 'vue'
-import { each } from 'lodash'
+import { each } from 'lodash-es'
 
 export default {
     data() {

@@ -62,7 +62,7 @@
 import moment from 'moment'
 import { formatNumber } from './formatNumber'
 import routeSync from '~/shared/routeSync'
-import { map, find } from 'lodash'
+import { map, find } from 'lodash-es'
 import { DateFormats } from '~/shared/helpers'
 
 export default {

@@ -89,7 +89,7 @@ import * as toastr from 'toastr'
 import { DateFormats, convertToLocal } from '~/shared/helpers'
 import { updateCalendarEvent, addAssignmentCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
 import moment from 'moment'
-import { map, join, escape } from 'lodash'
+import { map, join, escape } from 'lodash-es'
 
 import DOMPurify from 'dompurify'
 const sanitizeHtml = text => DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })

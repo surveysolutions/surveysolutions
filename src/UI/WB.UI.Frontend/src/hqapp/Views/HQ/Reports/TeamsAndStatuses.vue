@@ -31,7 +31,7 @@
 </template>
 <script>
 import { formatNumber } from './helpers'
-import { assign, isNumber, isUndefined } from 'lodash'
+import { assign, isNumber, isUndefined } from 'lodash-es'
 export default {
     data() {
         return {

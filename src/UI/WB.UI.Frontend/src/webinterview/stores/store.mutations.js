@@ -1,4 +1,4 @@
-import { forEach, differenceBy } from 'lodash'
+import { forEach, differenceBy } from 'lodash-es'
 import browserLocalStore from '~/shared/localStorage'
 import { setDevModeSetting } from './showVariablesPreference'
 

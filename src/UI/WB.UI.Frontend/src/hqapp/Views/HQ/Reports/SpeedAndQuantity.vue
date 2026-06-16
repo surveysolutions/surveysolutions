@@ -62,7 +62,7 @@
 <script>
 import moment from 'moment'
 import routeSync from '~/shared/routeSync'
-import { find } from 'lodash'
+import { find } from 'lodash-es'
 
 export default {
     mixins: [routeSync],

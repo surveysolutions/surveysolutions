@@ -66,7 +66,7 @@
 
 <script>
 import OverviewItem from './components/OverviewItem'
-import { slice } from 'lodash'
+import { slice } from 'lodash-es'
 
 export default {
     components: { OverviewItem },

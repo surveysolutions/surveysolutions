@@ -40,7 +40,7 @@
 import { entityDetails } from '../mixins'
 //import Vue from 'vue'
 import modal from '@/shared/modal'
-import { find, map, includes, without, filter as loFilter } from 'lodash'
+import { find, map, includes, without, filter as loFilter } from 'lodash-es'
 import { api } from '../../api/http'
 
 export default {

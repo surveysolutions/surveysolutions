@@ -120,7 +120,7 @@
 import * as toastr from 'toastr'
 import { nextTick } from 'vue'
 import gql from 'graphql-tag'
-import { isNull, chain, debounce, delay, forEach, find, flatten, toNumber, isEqual, isNumber } from 'lodash'
+import { isNull, chain, debounce, delay, forEach, find, flatten, toNumber, isEqual, isNumber } from 'lodash-es'
 import routeSync from '~/shared/routeSync'
 import InterviewFilter from '../Interviews/InterviewQuestionsFilters'
 import { cloneWithWritableProperties } from '~/shared/clone'

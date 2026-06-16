@@ -1,4 +1,4 @@
-import { concat } from 'lodash'
+import { concat } from 'lodash-es'
 import { api } from '~/webinterview/api/http'
 
 export default {

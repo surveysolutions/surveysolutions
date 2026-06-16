@@ -38,7 +38,7 @@
 <script>
 import QuestionDetail from './QuestionDetail'
 import SurveyStatisticsFilter from './SurveyStatisticsFilter'
-import { map, round, concat } from 'lodash'
+import { map, round, concat } from 'lodash-es'
 
 export default {
     components: {

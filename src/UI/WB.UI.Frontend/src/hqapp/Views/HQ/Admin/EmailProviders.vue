@@ -466,7 +466,7 @@
 <script>
 
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import { isEmpty } from 'lodash'
+import { isEmpty } from 'lodash-es'
 import { getCsrfCookie } from '../../../api/index'
 
 export default {

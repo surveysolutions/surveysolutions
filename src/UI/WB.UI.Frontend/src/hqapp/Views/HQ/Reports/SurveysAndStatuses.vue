@@ -27,7 +27,7 @@
 
 import { formatNumber } from './helpers'
 import routeSync from '~/shared/routeSync'
-import { escape } from 'lodash'
+import { escape } from 'lodash-es'
 
 export default {
     mixins: [routeSync],

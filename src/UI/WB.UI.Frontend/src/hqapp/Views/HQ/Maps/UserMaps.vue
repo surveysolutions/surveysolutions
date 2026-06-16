@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { map, join, uniqBy, filter, some, orderBy } from 'lodash'
+import { map, join, uniqBy, filter, some, orderBy } from 'lodash-es'
 import * as toastr from 'toastr'
 import gql from 'graphql-tag'
 const query = gql`query UserMaps($workspace: String!, $order: [MapsSort!], $skip: Int, $take: Int, $where: MapsFilter) {

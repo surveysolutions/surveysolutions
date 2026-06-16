@@ -28,7 +28,7 @@
 
 <script lang="js">
 import { entityDetails } from '../mixins'
-import { map, find, isEqual, filter } from 'lodash'
+import { map, find, isEqual, filter } from 'lodash-es'
 import { shouldShowAnsweredOptionsOnlyForMulti } from './question_helpers'
 
 export default {

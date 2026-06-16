@@ -50,7 +50,7 @@
 <script>
 import routeSync from '~/shared/routeSync'
 import moment from 'moment'
-import { forEach, findIndex, assign, sortBy, find } from 'lodash'
+import { forEach, findIndex, assign, sortBy, find } from 'lodash-es'
 import CumulativeLineChart from './CumulativeChart'
 
 export default {

@@ -1,4 +1,4 @@
-import { capitalize, sum, unionBy, find } from 'lodash'
+import { capitalize, sum, unionBy, find } from 'lodash-es'
 import { api } from '../../../../../webinterview/api/http'
 
 function getSelectedFlags(state) {

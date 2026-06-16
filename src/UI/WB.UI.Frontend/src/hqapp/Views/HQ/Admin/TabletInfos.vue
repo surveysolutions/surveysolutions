@@ -16,7 +16,7 @@
 <script>
 import { DateFormats, humanFileSize } from '~/shared/helpers'
 import moment from 'moment'
-import { escape } from 'lodash'
+import { escape } from 'lodash-es'
 
 export default {
     data() {

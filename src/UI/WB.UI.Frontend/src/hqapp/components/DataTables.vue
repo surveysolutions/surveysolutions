@@ -43,7 +43,7 @@ DataTable.use(DataTablesLib)
 import 'jquery-contextmenu'
 import 'jquery-contextmenu/dist/jquery.contextMenu.css'
 import './datatable.plugins'
-import { template, debounce, includes, without, assign } from 'lodash'
+import { template, debounce, includes, without, assign } from 'lodash-es'
 
 $.fn.dataTable.ext.errMode = function (a, b, c, d) {
     // swallow all errors for production

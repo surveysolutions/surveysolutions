@@ -273,7 +273,7 @@
 
 <script>
 import * as toastr from 'toastr'
-import { isEqual, map, join, assign, findIndex } from 'lodash'
+import { isEqual, map, join, assign, findIndex } from 'lodash-es'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 import { RoleNames } from '~/shared/constants'

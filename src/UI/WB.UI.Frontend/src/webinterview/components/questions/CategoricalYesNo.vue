@@ -57,7 +57,7 @@ import { entityDetails } from '../mixins'
 import { nextTick } from 'vue'
 import * as $ from 'jquery'
 import modal from '@/shared/modal'
-import { find, findIndex, filter } from 'lodash'
+import { find, findIndex, filter } from 'lodash-es'
 import { shouldShowAnsweredOptionsOnlyForMulti } from './question_helpers'
 
 export default {

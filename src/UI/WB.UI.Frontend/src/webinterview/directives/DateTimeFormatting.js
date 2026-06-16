@@ -1,5 +1,5 @@
 import { DateFormats } from '~/shared/helpers';
-import { forEach } from 'lodash';
+import { forEach } from 'lodash-es';
 import moment from 'moment';
 
 export function registerDateTimeFormatting(app) {

@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { map, isUndefined, isEmpty, filter } from 'lodash'
+import { map, isUndefined, isEmpty, filter } from 'lodash-es'
 import gql from 'graphql-tag'
 
 const query = gql`query assignments($workspace: String!, $where: AssignmentsFilter) {

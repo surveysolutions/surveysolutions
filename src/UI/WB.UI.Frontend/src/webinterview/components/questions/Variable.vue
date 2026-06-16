@@ -14,7 +14,7 @@
 <script lang="js">
 import { entityDetails } from '../mixins'
 import { getLocationHash } from '~/shared/helpers'
-import { debounce, find } from 'lodash'
+import { debounce, find } from 'lodash-es'
 
 export default {
     name: 'Variable',

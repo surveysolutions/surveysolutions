@@ -434,7 +434,7 @@ import {
     isNumber,
     toNumber,
     isEqual,
-} from 'lodash'
+} from 'lodash-es'
 import InterviewFilter from './InterviewQuestionsFilters'
 import gql from 'graphql-tag'
 import * as toastr from 'toastr'

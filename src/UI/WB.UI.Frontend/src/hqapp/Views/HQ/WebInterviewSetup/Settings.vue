@@ -621,7 +621,7 @@
 
 <script>
 import { marked } from 'marked'
-import { map, isNil } from 'lodash'
+import { map, isNil } from 'lodash-es'
 import emitter from '~/shared/emitter';
 
 import { Form, Field, ErrorMessage } from 'vee-validate'

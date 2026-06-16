@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import escape from 'lodash'
+import { escape } from 'lodash-es'
 import { DateFormats } from '~/shared/helpers'
 import moment from 'moment'
 

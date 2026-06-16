@@ -21,7 +21,7 @@
 
 <script lang="js">
 import { entityDetails } from '../mixins'
-import { find } from 'lodash'
+import { find } from 'lodash-es'
 
 export default {
     name: 'ReadonlyQuestion',

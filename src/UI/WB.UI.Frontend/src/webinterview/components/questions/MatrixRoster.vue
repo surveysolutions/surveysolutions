@@ -23,7 +23,7 @@ import "@ag-grid-community/styles/ag-grid.css";
 import "@ag-grid-community/styles/ag-theme-quartz.css";
 
 import { entityDetails } from '../mixins'
-import { debounce, map } from 'lodash'
+import { debounce, map } from 'lodash-es'
 import { AgGridVue } from '@ag-grid-community/vue3'
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 

@@ -445,7 +445,7 @@ import { RoleNames } from '~/shared/constants'
 import * as toastr from 'toastr'
 
 import moment from 'moment'
-import { escape } from 'lodash'
+import { escape } from 'lodash-es'
 
 import '@/assets/css/markup-web-interview.scss'
 import '@/assets/css/markup-interview-review.scss'

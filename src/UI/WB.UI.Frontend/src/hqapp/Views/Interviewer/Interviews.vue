@@ -87,7 +87,7 @@
 import { DateFormats, convertToLocal } from '~/shared/helpers'
 import moment from 'moment'
 import { updateCalendarEvent, addInterviewCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
-import { map, join, toNumber, filter, escape } from 'lodash'
+import { map, join, toNumber, filter, escape } from 'lodash-es'
 import gql from 'graphql-tag'
 import { config } from '~/shared/config'
 import DOMPurify from 'dompurify'

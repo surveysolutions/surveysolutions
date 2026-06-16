@@ -39,7 +39,7 @@
 </template>
 
 <script lang="js">
-import { find, difference, join } from 'lodash'
+import { find, difference, join } from 'lodash-es'
 import { entityDetails, tableCellEditor } from '../mixins'
 import modal from '@/shared/modal'
 

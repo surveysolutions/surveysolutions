@@ -35,7 +35,7 @@
 
 <script>
 
-import { filter } from 'lodash'
+import { filter } from 'lodash-es'
 
 export default {
     name: 'workspace-manager',

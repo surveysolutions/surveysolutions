@@ -96,7 +96,7 @@
 
 <script>
 
-import { orderBy } from 'lodash'
+import { orderBy } from 'lodash-es'
 import * as toastr from 'toastr'
 import gql from 'graphql-tag'
 import { DateFormats } from '~/shared/helpers'

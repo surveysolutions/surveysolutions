@@ -246,7 +246,7 @@ import { nextTick } from 'vue'
 import * as toastr from 'toastr'
 import http from '~/webinterview/api/http'
 import { RoleNames } from '~/shared/constants'
-import { filter } from 'lodash'
+import { filter } from 'lodash-es'
 import '@/assets/css/markup-web-interview.scss'
 import { defineAsyncComponent } from 'vue';
 import { Form, Field, ErrorMessage } from 'vee-validate'

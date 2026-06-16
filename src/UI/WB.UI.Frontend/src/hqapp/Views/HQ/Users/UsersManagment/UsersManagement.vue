@@ -105,7 +105,7 @@
 
 <script>
 import * as toastr from 'toastr'
-import { map, find, filter } from 'lodash'
+import { map, find, filter } from 'lodash-es'
 import routeSync from '~/shared/routeSync'
 import WorkspaceManager from './WorkspaceManager.vue'
 import AddInterviewerToWorkspace from './AddInterviewerToWorkspace'

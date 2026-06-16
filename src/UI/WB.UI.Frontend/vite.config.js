@@ -237,7 +237,7 @@ export default defineConfig(({ mode, command }) => {
                 },
                 {
                     find: 'vue',
-                    replacement: 'vue/dist/vue.esm-bundler.js',
+                    replacement: 'vue/dist/vue.runtime.esm-bundler.js',
                 },
                 /*{
                     find: 'jquery',
@@ -422,7 +422,6 @@ export default defineConfig(({ mode, command }) => {
                         if (id.includes('/flatpickr/')) return 'vendor-flatpickr'
                         if (id.includes('/toastr/')) return 'vendor-toastr'
                         if (id.includes('/bootstrap/')) return 'vendor-bootstrap'
-                        if (id.includes('/lodash/')) return 'vendor-lodash'
                         if (id.includes('/@ag-grid-community/')) return 'vendor-ag-grid'
                     },
                     assetFileNames: (assetInfo) => {

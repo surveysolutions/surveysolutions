@@ -18,7 +18,7 @@
 </template>
 
 <script lang="js">
-import { find } from 'lodash'
+import { find } from 'lodash-es'
 import { designerMixin } from '../mixins'
 export default {
     name: 'TableRoster_QuestionTitle',

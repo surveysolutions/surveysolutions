@@ -79,7 +79,7 @@
 
 
 <script>
-import { isEmpty } from 'lodash'
+import { isEmpty } from 'lodash-es'
 
 export default {
     computed: {

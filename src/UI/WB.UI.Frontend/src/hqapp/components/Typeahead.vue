@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { assign, chain, find, filter, escape, escapeRegExp } from 'lodash'
+import { assign, chain, find, filter, escape, escapeRegExp } from 'lodash-es'
 
 
 export default {

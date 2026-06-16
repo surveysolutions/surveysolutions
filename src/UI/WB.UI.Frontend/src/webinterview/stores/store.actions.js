@@ -1,4 +1,4 @@
-import { map, debounce, uniq, forEach } from 'lodash'
+import { map, debounce, uniq, forEach } from 'lodash-es'
 
 import { batchedAction } from '../helpers'
 import { api } from '../api/http'

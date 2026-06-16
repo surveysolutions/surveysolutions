@@ -347,7 +347,7 @@ import { convertToLocal } from '~/shared/helpers'
 import moment from 'moment'
 import ChangeToCapi from '../Interviews/ChangeModeModal.vue'
 
-import { map, assign } from 'lodash'
+import { map, assign } from 'lodash-es'
 
 export default {
     data() {

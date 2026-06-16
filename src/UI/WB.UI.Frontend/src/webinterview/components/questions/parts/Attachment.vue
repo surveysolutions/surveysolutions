@@ -45,7 +45,7 @@
 </template>
 <script lang="js">
 import axios from 'axios'
-import { startsWith } from 'lodash'
+import { startsWith } from 'lodash-es'
 
 function appendSearchParam(uri, name, value) {
     const url = new URL(uri, window.location.origin);

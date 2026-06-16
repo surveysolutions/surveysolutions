@@ -22,7 +22,7 @@
 </template>
 <script>
 
-import { find } from 'lodash'
+import { find } from 'lodash-es'
 import DOMPurify from 'dompurify'
 const sanitizeHtml = text => DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
 

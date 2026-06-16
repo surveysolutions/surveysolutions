@@ -9,7 +9,7 @@
 
 <script lang="js">
 import { getLocationHash } from '~/shared/helpers'
-import { debounce } from 'lodash'
+import { debounce } from 'lodash-es'
 
 export default {
     name: 'MatrixRoster_QuestionEditor',

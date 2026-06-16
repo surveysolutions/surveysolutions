@@ -51,7 +51,7 @@
 <script>
 import { formatNumber } from './helpers'
 import routeSync from '~/shared/routeSync'
-import { chain } from 'lodash'
+import { chain } from 'lodash-es'
 
 export default {
     mixins: [routeSync],

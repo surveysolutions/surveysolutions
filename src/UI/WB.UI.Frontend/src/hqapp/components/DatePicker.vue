@@ -16,7 +16,7 @@
 import Flatpickr from 'flatpickr'
 import { browserLanguage } from '~/shared/helpers'
 import FlatpickrLocale from 'flatpickr/dist/l10n'
-import { assign } from 'lodash'
+import { assign } from 'lodash-es'
 
 Flatpickr.localize(FlatpickrLocale[browserLanguage])
 // You have to import css yourself

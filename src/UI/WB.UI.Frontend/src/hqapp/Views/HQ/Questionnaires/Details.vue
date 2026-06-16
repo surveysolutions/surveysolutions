@@ -257,7 +257,7 @@
 <script>
 import { DateFormats } from '~/shared/helpers'
 import moment from 'moment'
-import { find } from 'lodash'
+import { find } from 'lodash-es'
 
 import '@/assets/css/markup-web-interview.scss'
 import '@/assets/css/markup-interview-review.scss'

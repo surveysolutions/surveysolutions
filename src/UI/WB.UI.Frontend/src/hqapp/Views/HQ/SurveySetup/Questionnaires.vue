@@ -1,9 +1,9 @@
 <template>
     <HqLayout :title="$config.model.title" :hasFilter="false" :topicButton="$t('Dashboard.ImportTemplate')"
         :topicButtonRef="!$config.model.isObserver
-        ? $config.model.importQuestionnaireUrl
-        : ''
-        ">
+            ? $config.model.importQuestionnaireUrl
+            : ''
+            ">
         <template v-slot:subtitle>
             <ol class="list-unstyled">
                 <li>{{ $t('Dashboard.SurveySetupIntroMessage1') }}</li>
@@ -25,7 +25,7 @@
                     {{
                         $t(
                             'Pages.GlobalSettings_DeleteQuestionnaireConfirmation',
-                    )
+                        )
                     }}
                 </p>
                 <p class="text-danger" v-if="this.deletionWarnMsg">
@@ -61,7 +61,7 @@
 import { DateFormats } from '~/shared/helpers'
 import moment from 'moment'
 import gql from 'graphql-tag'
-import parseInt from 'lodash'
+import { parseInt } from 'lodash-es'
 
 const interviewsQuestionnaireDeletionQuery = gql`
     query interviewsList($workspace: String!, $where: InterviewsFilter) {

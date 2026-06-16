@@ -41,7 +41,7 @@
 <script lang="js">
 
 import { entityPartial } from '~/webinterview/components/mixins'
-import { filter, find } from 'lodash'
+import { filter, find } from 'lodash-es'
 
 export default {
     mixins: [entityPartial],

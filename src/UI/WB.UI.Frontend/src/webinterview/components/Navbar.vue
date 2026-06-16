@@ -196,7 +196,7 @@
 </template>
 <script lang="js">
 import axios from 'axios'
-import { filter } from 'lodash'
+import { filter } from 'lodash-es'
 import Modal from 'bootstrap/js/dist/modal'
 import { nextTick } from 'vue'
 

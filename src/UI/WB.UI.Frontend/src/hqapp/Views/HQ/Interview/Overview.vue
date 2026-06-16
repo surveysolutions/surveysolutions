@@ -8,7 +8,7 @@
 
 <script>
 import OverviewItem from './components/OverviewItem'
-import { slice, sortedIndexBy } from 'lodash'
+import { slice, sortedIndexBy } from 'lodash-es'
 
 export default {
     components: { OverviewItem },
