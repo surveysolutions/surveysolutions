@@ -85,8 +85,8 @@ const router = new Router({
 
 vue.use(router)
 
-import { registerGlobalComponents } from '~/webinterview/componentsRegistry'
-registerGlobalComponents(vue, { router, store })
+import { registerBaseGlobalComponents } from '~/webinterview/componentsRegistry'
+registerBaseGlobalComponents(vue, { router, store })
 
 
 vue.config.globalProperties.$eventHub = vue

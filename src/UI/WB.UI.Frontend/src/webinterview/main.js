@@ -56,8 +56,10 @@ const router = createRouter(store)
 vue.use(store)
 vue.use(router)
 
-import { registerGlobalComponents } from './componentsRegistry'
-registerGlobalComponents(vue, { router, store })
+import { registerBaseGlobalComponents } from './componentsRegistry'
+import { registerQuestionGlobalComponents } from './componentsQuestionRegistry'
+registerBaseGlobalComponents(vue, { router, store })
+registerQuestionGlobalComponents(vue)
 
 box.init(i18n, browserLanguage)
 

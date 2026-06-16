@@ -21,6 +21,7 @@ import Facets from './Facets'
 import SearchResults from './SearchResults'
 import Sidebar from '~/webinterview/components/Sidebar'
 import DetailsInfo from './DetailsInfo.vue'
+import { registerQuestionGlobalComponents } from '~/webinterview/componentsQuestionRegistry'
 import { nextTick } from 'vue'
 import http from '~/webinterview/api/http'
 //const Interview = () => import('~/webinterview/components/Interview.vue')
@@ -31,6 +32,13 @@ import '@/assets/css/markup-web-interview.scss'
 import '@/assets/css/markup-interview-review.scss'
 
 export default {
+    async beforeCreate() {
+        if (!this.$root.__wiQuestionComponentsRegistered) {
+            registerQuestionGlobalComponents(this.$root)
+            this.$root.__wiQuestionComponentsRegistered = true
+        }
+    },
+
     watch: {
         ['$route.hash'](to) {
             if (to != null) {
