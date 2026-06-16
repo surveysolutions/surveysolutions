@@ -439,9 +439,9 @@ import InterviewFilter from './InterviewQuestionsFilters'
 import gql from 'graphql-tag'
 import * as toastr from 'toastr'
 
-import _sanitizeHtml from 'sanitize-html'
+import DOMPurify from 'dompurify'
 const sanitizeHtml = (text) =>
-    _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
+    DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
 
 const query = gql`
     query hqInterviews(
@@ -691,7 +691,7 @@ export default {
                         if (isInterviewerRole) {
                             resultString +=
                                 '<span class="interviewer"><a href="' +
-                                self.config.api.profile +
+                                self.config.profileUrl +
                                 '/' +
                                 row.responsibleId +
                                 '">' +

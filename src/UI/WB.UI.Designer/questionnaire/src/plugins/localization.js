@@ -1,6 +1,6 @@
 import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 function loadLocaleMessages() {
     const locales = import.meta.glob('../locale/*.json', { eager: true });
@@ -77,8 +77,8 @@ function collectFormats(obj, found = new Set(), exclude = new Set()) {
 const momentFormats = collectFormats(messages, new Set(), new Set(Object.keys(customFormatters)));
 momentFormats.forEach((fmt) => {
     i18next.services.formatter.add(fmt, (value) => {
-        if (moment.isDate(value) || moment.isMoment(value))
-            return moment(value).format(fmt);
+        if (value instanceof Date || dayjs.isDayjs(value))
+            return dayjs(value).format(fmt);
         return value;
     });
 });

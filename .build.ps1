@@ -232,7 +232,7 @@ task frontend {
 	
     $nodever = (node --version).replace("v", "").split(".")[0]
     
-	$env:NODE_OPTIONS="--max-old-space-size=6144 --openssl-legacy-provider"	
+	$env:NODE_OPTIONS="--max-old-space-size=6144"
 	
 	try {
         Write-Build 10 "Calculating memory"
