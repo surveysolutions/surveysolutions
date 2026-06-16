@@ -28,8 +28,8 @@ export default {
         forEach(entitiesToDelete, entity => {
             delete state.entityDetails[entity.identity]
             delete state.fetch.state[entity.identity]
-            delete state.variableNames[entity.identity]
         })
+        state.variableNames = {}
         state.entities = sectionData
     },
     CLEAR_SECTION_ENTITIES(state) {
