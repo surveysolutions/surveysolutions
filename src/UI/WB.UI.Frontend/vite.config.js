@@ -371,7 +371,6 @@ export default defineConfig(({ mode, command }) => {
                     handler(level, log)
                 },
                 input: inputPages,
-                plugins: [
                     {
                         name: 'fix-signalr-pure-annotations',
                         transform(code, id) {
