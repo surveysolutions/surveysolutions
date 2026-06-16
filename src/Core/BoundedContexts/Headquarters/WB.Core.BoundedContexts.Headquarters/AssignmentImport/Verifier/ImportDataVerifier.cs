@@ -228,7 +228,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             foreach (var serviceValue in (assignmentRow.RosterInstanceCodes ?? Array.Empty<AssignmentValue>()).Union(
                 new[] {assignmentRow.InterviewIdValue, assignmentRow.Responsible, assignmentRow.Quantity,
-                    assignmentRow.Email, assignmentRow.Password, assignmentRow.WebMode}))
+                    assignmentRow.Email, assignmentRow.Password, assignmentRow.WebMode, assignmentRow.AudioRecordingScope}))
             {
                 if (serviceValue == null) continue;
 
@@ -347,8 +347,55 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentQuantity>(WebmodeSizeOneHasNoEmailOrPassword, "PL0060", messages.PL0060_WebmodeSizeOneHasNoEmailOrPassword),
             Error<AssignmentWebMode>(WebmodeSizeOneHasNoEmailOrPassword, "PL0060", messages.PL0060_WebmodeSizeOneHasNoEmailOrPassword),
             Error<AssignmentResponsible>(WebModeOnlyForInterviewer, "PL0062", messages.PL0062_WebModeOnlyForInterviewer),
+            VerifyAudioRecordingScope,
             ErrorsByNotPermittedQuestions,
         };
+
+        private IEnumerable<PanelImportVerificationError> VerifyAudioRecordingScope(PreloadingAssignmentRow row, BaseAssignmentValue value, IQuestionnaire questionnaire)
+        {
+            if (value is not AssignmentAudioRecordingScope scopeValue) yield break;
+
+            foreach (var variableName in scopeValue.Scope ?? Array.Empty<string>())
+            {
+                switch (GetAudioRecordingScopeMatch(variableName, questionnaire))
+                {
+                    case AudioRecordingScopeMatch.NotFound:
+                        yield return ToCellError("PL0064",
+                            string.Format(messages.PL0064_AudioRecordingScope_VariableNotFoundInQuestionnaire, variableName),
+                            row, scopeValue.Column, variableName);
+                        break;
+                    case AudioRecordingScopeMatch.NotSupported:
+                        yield return ToCellError("PL0065",
+                            string.Format(messages.PL0065_AudioRecordingScope_VariableIsNotSectionGroupOrRoster, variableName),
+                            row, scopeValue.Column, variableName);
+                        break;
+                    case AudioRecordingScopeMatch.Ambiguous:
+                        yield return ToCellError("PL0066",
+                            string.Format(messages.PL0066_AudioRecordingScope_VariableIsAmbiguous, variableName),
+                            row, scopeValue.Column, variableName);
+                        break;
+                }
+            }
+        }
+
+        private enum AudioRecordingScopeMatch { Valid, NotFound, NotSupported, Ambiguous }
+
+        private static AudioRecordingScopeMatch GetAudioRecordingScopeMatch(string variableName, IQuestionnaire questionnaire)
+        {
+            var matchingGroups = questionnaire.GetAllGroups()
+                .Where(groupId => string.Equals(questionnaire.GetGroupVariableName(groupId), variableName,
+                    StringComparison.OrdinalIgnoreCase))
+                .Take(2)
+                .ToArray();
+
+            if (matchingGroups.Length == 1) return AudioRecordingScopeMatch.Valid;
+            if (matchingGroups.Length > 1) return AudioRecordingScopeMatch.Ambiguous;
+
+            // not a section/group/roster: distinguish a known-but-unsupported entity (e.g. a question) from an unknown name
+            return questionnaire.HasQuestion(variableName)
+                ? AudioRecordingScopeMatch.NotSupported
+                : AudioRecordingScopeMatch.NotFound;
+        }
 
         private IEnumerable<PanelImportVerificationError> ErrorsByNotPermittedQuestions(PreloadingAssignmentRow row, BaseAssignmentValue value, IQuestionnaire questionnaire)
         {
@@ -653,6 +700,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                     or ServiceColumns.PasswordColumnName 
                     or ServiceColumns.WebModeColumnName 
                     or ServiceColumns.RecordAudioColumnName 
+                    or ServiceColumns.AudioRecordingScopeColumnName 
                     or ServiceColumns.CommentsColumnName  
                     or ServiceColumns.TargetAreaColumnName && 
                 IsQuestionnaireFile(file.QuestionnaireOrRosterName, questionnaire)) return false;

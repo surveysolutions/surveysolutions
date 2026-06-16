@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         public AssignmentWebMode WebMode { get; set; }
         public AssignmentRecordAudio RecordAudio { get; set; }
+        public AssignmentAudioRecordingScope AudioRecordingScope { get; set; }
         public AssignmentComments Comments { get; set; }
         public AssignmentTargetArea TargetArea { get; set; }
 
@@ -199,6 +200,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
     public class AssignmentRecordAudio : AssignmentValue
     {
         public bool? DoesNeedRecord { get; set; }
+    }
+
+    [DebuggerDisplay("{Value}")]
+    public class AssignmentAudioRecordingScope : AssignmentValue
+    {
+        public string[] Scope { get; set; } = Array.Empty<string>();
     }
 
     [DebuggerDisplay("{Value}")]

@@ -242,6 +242,23 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             return recordAudio;
         }
 
+        public static AssignmentAudioRecordingScope ToAssignmentAudioRecordingScope(this PreloadingValue preloadingScope)
+        {
+            var scope = (preloadingScope.Value ?? string.Empty)
+                .Split(',')
+                .Select(x => x.Trim())
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToArray();
+
+            return new AssignmentAudioRecordingScope
+            {
+                Column = preloadingScope.Column,
+                Value = preloadingScope.Value,
+                Scope = scope
+            };
+        }
+
         public static AssignmentWebMode ToAssignmentWebMode(this PreloadingValue preloadingWebMode)
         {
             var webMode = new AssignmentWebMode

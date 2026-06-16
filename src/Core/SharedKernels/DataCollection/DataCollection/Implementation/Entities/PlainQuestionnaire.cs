@@ -971,6 +971,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public string GetRosterVariableName(Guid id) => this.GetGroupOrThrow(id).VariableName;
 
+        public string GetGroupVariableName(Guid id) => this.GetGroupOrThrow(id).VariableName;
+
         public HashSet<int> GetValidationWarningsIndexes(Guid entityId)
         {
             return this.cacheOfWarningsIndeces.GetOrAdd(entityId,  

@@ -2105,6 +2105,7 @@ namespace WB.Tests.Abc.TestFactories
             AssignmentEmail assignmentEmail = null,
             AssignmentPassword assignmentPassword = null,
             AssignmentWebMode assignmentWebMode = null,
+            AssignmentAudioRecordingScope assignmentAudioRecordingScope = null,
             params BaseAssignmentValue[] answers) => new PreloadingAssignmentRow
         {
             FileName = fileName,
@@ -2116,7 +2117,8 @@ namespace WB.Tests.Abc.TestFactories
             Answers = answers,
             Email = assignmentEmail,
             Password = assignmentPassword,
-            WebMode = assignmentWebMode
+            WebMode = assignmentWebMode,
+            AudioRecordingScope = assignmentAudioRecordingScope
             };
 
         public AssignmentResponsible AssignmentResponsible(string responsibleName, UserToVerify userInfo = null) => new AssignmentResponsible
@@ -2137,6 +2139,13 @@ namespace WB.Tests.Abc.TestFactories
             WebMode = webMode,
             Value = webMode == true ? "1" : "",
             Column = ServiceColumns.WebModeColumnName
+        };
+
+        public AssignmentAudioRecordingScope AssignmentAudioRecordingScope(params string[] scope) => new AssignmentAudioRecordingScope
+        {
+            Scope = scope ?? System.Array.Empty<string>(),
+            Value = string.Join(",", scope ?? System.Array.Empty<string>()),
+            Column = ServiceColumns.AudioRecordingScopeColumnName
         };
 
         public AssignmentPassword AssignmentPassword(string password) => new AssignmentPassword

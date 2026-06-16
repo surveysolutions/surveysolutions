@@ -298,6 +298,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool HasAnyCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId, int selectedParentValue);
         string GetRosterVariableName(Guid id);
+        string GetGroupVariableName(Guid id);
         HashSet<int> GetValidationWarningsIndexes(Guid entityId);
         bool IsSignature(Guid entityIdentityId);
         bool IsRosterTriggeredByOrderedMultiQuestion(Guid rosterId);

@@ -39,6 +39,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
         public const string EmailColumnName = "_email";
         public const string PasswordColumnName = "_password";
         public const string RecordAudioColumnName = "_record_audio";
+        public const string AudioRecordingScopeColumnName = "_aascope";
         public const string CommentsColumnName = "_comment";
         public const string TargetAreaColumnName = "_target_area";
 

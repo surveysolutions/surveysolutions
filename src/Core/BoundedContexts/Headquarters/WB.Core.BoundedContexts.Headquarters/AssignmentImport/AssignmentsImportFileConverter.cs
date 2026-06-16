@@ -37,6 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 var preloadingPassword = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.PasswordColumnName);
                 var preloadingWebMode = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.WebModeColumnName);
                 var preloadingRecordAudio = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.RecordAudioColumnName);
+                var preloadingAudioRecordingScope = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.AudioRecordingScopeColumnName);
                 var preloadingComments = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.CommentsColumnName);
                 var preloadingTargetArea = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.TargetAreaColumnName);
 
@@ -54,6 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     Password = preloadingPassword?.ToAssignmentPassword(),
                     WebMode = preloadingWebMode?.ToAssignmentWebMode(),
                     RecordAudio = preloadingRecordAudio?.ToAssignmentRecordAudio(),
+                    AudioRecordingScope = preloadingAudioRecordingScope?.ToAssignmentAudioRecordingScope(),
                     Comments = preloadingComments?.ToAssignmentComments(),
                     TargetArea = preloadingTargetArea?.ToAssignmentTargetArea(),
                 };

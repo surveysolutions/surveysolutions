@@ -256,4 +256,13 @@
   <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
     <value>Answer to question with variable name {0} can't be preloaded, since it is of unsupported type. Refer to the following support article https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type for details of what can be preloaded in the current version.</value>
   </data>
+  <data name="PL0064_AudioRecordingScope_VariableNotFoundInQuestionnaire" xml:space="preserve">
+    <value>Audio recording scope '_aascope' contains variable name '{0}' that does not exist in the questionnaire.</value>
+  </data>
+  <data name="PL0065_AudioRecordingScope_VariableIsNotSectionGroupOrRoster" xml:space="preserve">
+    <value>Audio recording scope '_aascope' contains variable name '{0}' that is not a section, group or roster. Only sections, groups and rosters are supported.</value>
+  </data>
+  <data name="PL0066_AudioRecordingScope_VariableIsAmbiguous" xml:space="preserve">
+    <value>Audio recording scope '_aascope' contains variable name '{0}' that is ambiguous, since it refers to more than one entity.</value>
+  </data>
 </root>
