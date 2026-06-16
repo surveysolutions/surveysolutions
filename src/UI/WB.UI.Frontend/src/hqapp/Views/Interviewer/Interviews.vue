@@ -73,7 +73,7 @@
                         {{ $t("Common.Save") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">{{
                         $t("Common.Cancel")
-                    }}</button>
+                        }}</button>
                     <button type="button" class="btn btn-danger pull-right" role="delete" v-if="calendarEventId != null"
                         @click="deleteCalendarEvent">
                         {{ $t("Common.Delete") }}</button>
@@ -85,7 +85,7 @@
 
 <script>
 import { DateFormats, convertToLocal } from '~/shared/helpers'
-import moment from 'moment-timezone'
+import moment from 'moment'
 import { updateCalendarEvent, addInterviewCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
 import { map, join, toNumber, filter, escape } from 'lodash'
 import gql from 'graphql-tag'

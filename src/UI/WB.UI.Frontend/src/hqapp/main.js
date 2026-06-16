@@ -1,7 +1,8 @@
-import 'bootstrap'
-import * as bootstrap from 'bootstrap'
-window.bootstrap = bootstrap
-window.Dropdown = bootstrap.Dropdown
+import Dropdown from 'bootstrap/js/dist/dropdown'
+import Modal from 'bootstrap/js/dist/modal'
+import Tooltip from 'bootstrap/js/dist/tooltip'
+window.bootstrap = { Dropdown, Modal, Tooltip }
+window.Dropdown = Dropdown
 
 import '../assets/css/markup.scss'
 import '../assets/css/markup-specific.scss'

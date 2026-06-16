@@ -100,7 +100,7 @@ import { orderBy } from 'lodash'
 import * as toastr from 'toastr'
 import gql from 'graphql-tag'
 import { DateFormats } from '~/shared/helpers'
-import moment from 'moment-timezone'
+import moment from 'moment'
 import FilterBlock from '../../../components/FilterBlock.vue'
 
 export default {

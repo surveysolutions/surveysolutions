@@ -25,12 +25,12 @@
                                         }}:</span>
                                         <span class="data">{{
                                             createdDate
-                                            }}</span>
+                                        }}</span>
                                     </li>
                                     <li id="detailsInfo_responsibleListItem">
                                         <span class="data-label">{{
                                             $t('Details.Responsible')
-                                            }}:
+                                        }}:
                                         </span>
                                         <span v-if="isInterviewerResponsible" class="data">
                                             <a v-bind:href="interviewerProfileUrl
@@ -38,22 +38,22 @@
                                         </span>
                                         <span v-else class="data supervisor">{{
                                             model.responsible.name
-                                        }}</span>
+                                            }}</span>
                                     </li>
                                 </ul>
                                 <ul class="list-unstyled pull-left table-info">
                                     <li id="detailsInfo_lastUpdatedListItem">
                                         <span class="data-label">{{
                                             this.$t('Details.LastUpdated')
-                                            }}:</span>
+                                        }}:</span>
                                         <span class="data">{{
                                             updatedDate
-                                            }}</span>
+                                        }}</span>
                                     </li>
                                     <li>
                                         <span class="data-label">{{
                                             $t('Common.CalendarEvent')
-                                            }}:</span>
+                                        }}:</span>
                                         <span class="data" data-bs-toggle="tooltip" v-if="calendarEventComment != null"
                                             :title="calendarEventComment == null ||
                                                 calendarEventComment == ''
@@ -124,7 +124,7 @@
                             <span :title="$t('Assignments.StartWebInterview')" class="glyphicon glyphicon-link" />
                         </a>
                         <span v-if="this.model.isArchived" class="label label-default">{{ $t('Common.Archived')
-                        }}</span>
+                            }}</span>
                     </h3>
                     <table class="table table-striped table-bordered">
                         <thead>
@@ -172,7 +172,7 @@
                                             <h4>
                                                 <span>{{
                                                     question.title
-                                                }}</span>
+                                                    }}</span>
                                             </h4>
                                             <div class="answer">
                                                 <div v-dompurify-html="question.answer"></div>
@@ -355,7 +355,7 @@
                             <button type="button" class="btn btn-primary" :disabled="!showSelectors || !canEditQuantity"
                                 @click="updateQuantity">{{ $t("Common.Save") }}</button>
                             <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                            }}</button>
+                                }}</button>
                         </div>
                     </template>
                 </ModalFrame>
@@ -405,7 +405,7 @@
                             <button type="button" class="btn btn-primary" @click="confirmClose">{{
                                 $t("Assignments.Close") }}</button>
                             <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                            }}</button>
+                                }}</button>
                         </div>
                     </template>
                 </ModalFrame>
@@ -427,7 +427,7 @@
                             <button type="button" class="btn btn-primary" @click="confirmReopen">{{
                                 $t("Assignments.Reopen") }}</button>
                             <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                            }}</button>
+                                }}</button>
                         </div>
                     </template>
                 </ModalFrame>
@@ -444,7 +444,7 @@ import { DateFormats, convertToLocal } from '~/shared/helpers'
 import { RoleNames } from '~/shared/constants'
 import * as toastr from 'toastr'
 
-import moment from 'moment-timezone'
+import moment from 'moment'
 import { escape } from 'lodash'
 
 import '@/assets/css/markup-web-interview.scss'

@@ -17,7 +17,7 @@
                                 $t('Common.Assignment')
                             }}
                             <a :href="this.$config.model.assignmentDetailsUrl">#{{ this.$config.model.assignmentId
-                                }}</a>)
+                            }}</a>)
                         </li>
                         <li id="detailsInfo_qusetionnaireTitleListItem" class="questionnaire-title">
                             [ver.{{ this.$config.model.questionnaireVersion }}]
@@ -40,7 +40,7 @@
                             <span class="data-label">{{ $t('Details.Duration') }}:</span>
                             <span class="data">{{
                                 this.$config.model.interviewDuration
-                            }}</span>
+                                }}</span>
                         </li>
                         <li id="detailsInfo_responsibleListItem">
                             <span class="data-label">{{ $t('Details.Responsible') }}:
@@ -51,24 +51,24 @@
                             </span>
                             <span v-else class="data supervisor">{{
                                 this.$config.model.responsible
-                            }}</span>
+                                }}</span>
                         </li>
                         <li id="detailsInfo_supervisorListItem">
                             <span class="data-label">{{ $t('Users.Supervisor') }}:
                             </span>
                             <span class="data supervisor">{{
                                 this.$config.model.supervisor
-                            }}</span>
+                                }}</span>
                         </li>
                     </ul>
                     <ul class="list-unstyled pull-left table-info">
                         <li id="detailsInfo_StatusListItem">
                             <span class="data-label">{{
                                 this.$t('Details.Status')
-                            }}</span>
+                                }}</span>
                             <span class="data">{{
                                 this.$config.model.statusName
-                            }}</span>
+                                }}</span>
                             <button type="button" class="btn btn-link gray-action-unit" @click="showStatusesHistory">
                                 {{ $t('Common.ShowStatusHistory') }}
                             </button>
@@ -274,7 +274,7 @@
                 <div class="form-group">
                     <label class="control-label" for="newResponsibleId">{{
                         $t('Assignments.SelectResponsible')
-                    }}</label>
+                        }}</label>
                     <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="config.api.responsible"></Typeahead>
@@ -344,7 +344,7 @@ import SwitchLanguage from './SwitchLanguage'
 import StatusesHistory from './StatusesHistory'
 import OverviewModal from './OverviewModal'
 import { convertToLocal } from '~/shared/helpers'
-import moment from 'moment-timezone'
+import moment from 'moment'
 import ChangeToCapi from '../Interviews/ChangeModeModal.vue'
 
 import { map, assign } from 'lodash'

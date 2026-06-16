@@ -1,4 +1,4 @@
-import moment from 'moment-timezone'
+import moment from 'moment'
 
 export const browserLanguage = window.CONFIG.locale.locale
 
@@ -32,7 +32,6 @@ export function convertToLocal(startUtc, startTimezone) {
     return startUtc == null
         ? null
         : moment.utc(startUtc)
-            .tz(startTimezone)
             .local()
             .format(DateFormats.dateTimeInList)
 }

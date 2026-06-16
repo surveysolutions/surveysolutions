@@ -1,6 +1,6 @@
 <template>
     <teleport to="body">
-        <div v-if="isOpen" class="modal" :class="class" :id="id" ref="modal" tabindex="-1" role="dialog"
+        <div v-if="isOpen" class="modal" :class="$props.class" :id="id" ref="modal" tabindex="-1" role="dialog"
             :aria-labelledby="titleId">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -30,7 +30,7 @@
 
 <script>
 import { nextTick } from 'vue'
-import { Modal } from 'bootstrap'
+import Modal from 'bootstrap/js/dist/modal'
 
 export default {
     props: {

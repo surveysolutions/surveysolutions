@@ -39,7 +39,7 @@
                 </li>
                 <li v-if="!this.$config.model.authorizedUser.isInterviewer">
                     <a :href="this.$config.model.api.audioAuditLogUrl">{{ $t('Pages.InterviewerProfile_ShowAuditLog')
-                        }}</a>
+                    }}</a>
                 </li>
             </ul>
             <figure class="qrcode-wrapper" v-if="this.$config.model.fullModel.supportQRCodeGeneration">
@@ -264,7 +264,7 @@
                             <span v-if="!this.fullModel.hasUpdateForInterviewerApp" class="success-text">{{
                                 $t('Pages.InterviewerProfile_InterviewerUpToDate') }}</span>
                             <span v-else class="error-text">{{ $t('Pages.InterviewerProfile_InterviewerCanBeUpdated')
-                                }}</span>
+                            }}</span>
                         </b>
                     </li>
                     <li v-if="this.fullModel.deviceAssignmentDate">
@@ -438,7 +438,7 @@
 <script>
 import { MarkerClusterer, Cluster, SuperClusterAlgorithm } from '@googlemaps/markerclusterer'
 import { nextTick } from 'vue'
-import { Tooltip } from 'bootstrap'
+import Tooltip from 'bootstrap/js/dist/tooltip'
 import * as toastr from 'toastr'
 import { DateFormats, humanFileSize } from '~/shared/helpers'
 import moment from 'moment'

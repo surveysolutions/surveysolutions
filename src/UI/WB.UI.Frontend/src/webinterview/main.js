@@ -25,7 +25,6 @@ const i18n = Vuei18n.initialize(browserLanguage, vue)
 import { validatePageLoad } from '~/shared/serverValidator'
 validatePageLoad()
 
-import 'bootstrap'
 import 'flatpickr/dist/flatpickr.css'
 import 'toastr/build/toastr.css'
 

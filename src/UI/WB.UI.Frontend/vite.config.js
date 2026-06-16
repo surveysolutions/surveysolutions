@@ -232,10 +232,6 @@ export default defineConfig(({ mode, command }) => {
                     replacement: path.resolve(__dirname, 'src')
                 },
                 {
-                    find: 'moment$',
-                    replacement: path.resolve(__dirname, 'moment/moment.js')
-                },
-                {
                     find: '~',
                     replacement: path.resolve(__dirname, 'src')
                 },
@@ -388,6 +384,47 @@ export default defineConfig(({ mode, command }) => {
                     })*/
                 ],
                 output: {
+                    manualChunks(id) {
+                        if (!id.includes('node_modules')) return
+
+                        if (
+                            id.includes('/vue/') ||
+                            id.includes('/@vue/') ||
+                            id.includes('/vue-router/') ||
+                            id.includes('/vuex/')
+                        ) return 'vendor-vue'
+
+                        if (
+                            id.includes('/@apollo/') ||
+                            id.includes('/graphql') ||
+                            id.includes('/graphql-tag') ||
+                            id.includes('/zen-observable')
+                        ) return 'vendor-apollo'
+
+                        if (
+                            id.includes('/jquery/') ||
+                            id.includes('/jquery-contextmenu/') ||
+                            id.includes('/jquery-mask-plugin/') ||
+                            id.includes('/datatables.net')
+                        ) return 'vendor-jquery-datatables'
+
+                        if (
+                            id.includes('/moment/') ||
+                            id.includes('/chartjs-adapter-moment/')
+                        ) return 'vendor-moment'
+
+                        if (
+                            id.includes('/chart.js/') ||
+                            id.includes('/vue-chartjs/')
+                        ) return 'vendor-charts'
+
+                        if (id.includes('/@microsoft/signalr/')) return 'vendor-signalr'
+                        if (id.includes('/flatpickr/')) return 'vendor-flatpickr'
+                        if (id.includes('/toastr/')) return 'vendor-toastr'
+                        if (id.includes('/bootstrap/')) return 'vendor-bootstrap'
+                        if (id.includes('/lodash/')) return 'vendor-lodash'
+                        if (id.includes('/@ag-grid-community/')) return 'vendor-ag-grid'
+                    },
                     assetFileNames: (assetInfo) => {
                         let extType = assetInfo.name.split('.').at(1);
                         if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {

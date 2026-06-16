@@ -12,21 +12,33 @@
     <locale component="hq"></locale>
     @RenderSection("scripts", false)
   <script type="module" crossorigin src="/js/hq_vue.js"></script>
+  <link rel="modulepreload" crossorigin href="/js/rolldown-runtime.js">
+  <link rel="modulepreload" crossorigin href="/js/vendor-bootstrap.js">
+  <link rel="modulepreload" crossorigin href="/js/vendor-ag-grid.js">
+  <link rel="modulepreload" crossorigin href="/js/vendor-jquery-datatables.js">
   <link rel="modulepreload" crossorigin href="/js/serverValidator.js">
   <link rel="modulepreload" crossorigin href="/js/_plugin-vue_export-helper.js">
   <link rel="modulepreload" crossorigin href="/js/preload-helper.js">
-  <link rel="modulepreload" crossorigin href="/js/HubConnectionBuilder.js">
+  <link rel="modulepreload" crossorigin href="/js/vendor-apollo.js">
+  <link rel="modulepreload" crossorigin href="/js/vendor-signalr.js">
   <link rel="modulepreload" crossorigin href="/js/axios.js">
-  <link rel="modulepreload" crossorigin href="/js/lodash.js">
-  <link rel="modulepreload" crossorigin href="/js/moment.js">
+  <link rel="modulepreload" crossorigin href="/js/vendor-charts.js">
+  <link rel="modulepreload" crossorigin href="/js/vendor-moment.js">
+  <link rel="modulepreload" crossorigin href="/js/vendor-lodash.js">
+  <link rel="modulepreload" crossorigin href="/js/vendor-toastr.js">
   <link rel="modulepreload" crossorigin href="/js/config.js">
   <link rel="modulepreload" crossorigin href="/js/questions.js">
   <link rel="modulepreload" crossorigin href="/js/componentsRegistry.js">
-  <link rel="modulepreload" crossorigin href="/js/l10n.js">
+  <link rel="modulepreload" crossorigin href="/js/vendor-vue.js">
+  <link rel="modulepreload" crossorigin href="/js/vendor-flatpickr.js">
   <link rel="modulepreload" crossorigin href="/js/compatibility.js">
   <link rel="modulepreload" crossorigin href="/js/main.js">
+  <link rel="stylesheet" crossorigin href="/css/vendor-ag-grid.css">
+  <link rel="stylesheet" crossorigin href="/css/vendor-jquery-datatables.css">
   <link rel="stylesheet" crossorigin href="/css/serverValidator.css">
+  <link rel="stylesheet" crossorigin href="/css/vendor-toastr.css">
   <link rel="stylesheet" crossorigin href="/css/componentsRegistry.css">
+  <link rel="stylesheet" crossorigin href="/css/vendor-flatpickr.css">
   <link rel="stylesheet" crossorigin href="/css/main.css">
   <link rel="stylesheet" crossorigin href="/css/markup-specific.css">
 </head>

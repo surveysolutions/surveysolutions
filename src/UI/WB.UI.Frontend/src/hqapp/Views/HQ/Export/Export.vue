@@ -384,7 +384,7 @@ import ExportProcessCard from './ExportProcessCard'
 import gql from 'graphql-tag'
 import { filter, toNumber, map } from 'lodash'
 import { DateFormats } from '~/shared/helpers'
-import moment from 'moment-timezone'
+import moment from 'moment'
 
 const dataFormatNum = {
     Tabular: 1,

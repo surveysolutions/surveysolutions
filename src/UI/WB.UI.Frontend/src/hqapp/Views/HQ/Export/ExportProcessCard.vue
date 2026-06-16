@@ -130,7 +130,7 @@
 <script>
 import modal from '@/shared/modal'
 import { DateFormats } from '~/shared/helpers'
-import moment from 'moment-timezone'
+import moment from 'moment'
 
 export default {
     props: {
