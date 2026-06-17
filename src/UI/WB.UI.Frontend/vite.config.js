@@ -392,6 +392,7 @@ export default defineConfig(({ mode, command }) => {
                     })*/
                 ],
                 output: {
+                    experimentalMinChunkSize: 10_000,
                     manualChunks(id) {
                         if (!id.includes('node_modules')) return
 
