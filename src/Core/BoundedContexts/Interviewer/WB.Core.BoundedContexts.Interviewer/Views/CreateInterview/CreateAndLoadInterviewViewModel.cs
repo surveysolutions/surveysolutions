@@ -143,7 +143,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                     interviewKey,
                     assignment.Id,
                     assignment.IsAudioRecordingEnabled, 
-                    InterviewMode.CAPI
+                    InterviewMode.CAPI,
+                    assignment.AudioAuditScope?.ToArray()
                 );
 
                 this.commandService.Execute(createInterviewCommand);

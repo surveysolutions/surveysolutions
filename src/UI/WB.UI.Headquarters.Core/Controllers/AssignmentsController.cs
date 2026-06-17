@@ -227,6 +227,7 @@ namespace WB.UI.Headquarters.Controllers
                 IsObserving = this.currentUser.IsObserving,
                 Password = assignment.Password,
                 ProtectedVariables = assignment.ProtectedVariables,
+                AudioAuditScope = assignment.AudioAuditScope,
                 Quantity = assignment.Quantity,
                 Questionnaire = new 
                 {
