@@ -73,29 +73,32 @@ jobs:
           IMAGE="${{ steps.image.outputs.name }}"
           SCAN_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-          # wizcli v1 JSON schema:
-          #   .failedPolicyMatches[]         — policies that failed (BLOCK/AUDIT)
-          #   .analytics.vulnerabilities.*Count — severity totals
-          #   .vulnerableSBOMArtifactsByNameVersion[] — vulnerable packages
-          #     .name, .version, .type.group, .type.osPackageManager
-          #     .vulnerabilityFindings.severities.*Count
-          #     .vulnerabilityFindings.fixedVersion
-          #     .vulnerabilityFindings.remediation
+          # wizcli v1 JSON schema (all scan data under .result):
+          #   .status.verdict                              — "PASS" | "WARN_BY_POLICY" | "FAIL_BY_POLICY"
+          #   .result.failedPolicyMatches[]               — policies that triggered
+          #   .result.vulnerableSBOMArtifactsByNameVersion[] — vulnerable packages
+          #     .vulnerabilityFindings.severities.*Count  — per-package counts
+          #   .reportUrl                                  — link to Wiz console
+          #   .result.analytics.*                         — aggregate CVE counts (may be 0 if policy filters apply)
 
-          FAILED_POLICIES=$(jq -r '
-            [.failedPolicyMatches[]? | select(.policy.policyLifecycleEnforcements[]?.enforcementMethod == "BLOCK")]
-            | length
-          ' wiz_scan_results.json 2>/dev/null || echo "0")
-          if [ "$FAILED_POLICIES" -gt 0 ]; then RESULT="FAILED"; else RESULT="PASSED"; fi
+          VERDICT=$(jq -r '.status.verdict // "UNKNOWN"' wiz_scan_results.json)
+          case "$VERDICT" in
+            PASS)              RESULT="PASSED" ;;
+            WARN_BY_POLICY)    RESULT="WARNED" ;;
+            *)                 RESULT="FAILED" ;;
+          esac
 
-          VCRIT=$(jq -r '.analytics.vulnerabilities.criticalCount // 0' wiz_scan_results.json)
-          VHIGH=$(jq -r '.analytics.vulnerabilities.highCount     // 0' wiz_scan_results.json)
-          VMED=$(jq -r  '.analytics.vulnerabilities.mediumCount   // 0' wiz_scan_results.json)
-          VLOW=$(jq -r  '.analytics.vulnerabilities.lowCount      // 0' wiz_scan_results.json)
-          VINFO=$(jq -r '.analytics.vulnerabilities.infoCount     // 0' wiz_scan_results.json)
-          VTOT=$(jq -r  '.analytics.vulnerabilities.totalCount    // 0' wiz_scan_results.json)
+          REPORT_URL=$(jq -r '.reportUrl // ""' wiz_scan_results.json)
 
-          PKG_COUNT=$(jq '(.vulnerableSBOMArtifactsByNameVersion // []) | length' wiz_scan_results.json)
+          # Sum severity counts across all vulnerable packages
+          VCRIT=$(jq '[.result.vulnerableSBOMArtifactsByNameVersion[]?.vulnerabilityFindings.severities.criticalCount // 0] | add // 0' wiz_scan_results.json)
+          VHIGH=$(jq '[.result.vulnerableSBOMArtifactsByNameVersion[]?.vulnerabilityFindings.severities.highCount     // 0] | add // 0' wiz_scan_results.json)
+          VMED=$(jq  '[.result.vulnerableSBOMArtifactsByNameVersion[]?.vulnerabilityFindings.severities.mediumCount   // 0] | add // 0' wiz_scan_results.json)
+          VLOW=$(jq  '[.result.vulnerableSBOMArtifactsByNameVersion[]?.vulnerabilityFindings.severities.lowCount      // 0] | add // 0' wiz_scan_results.json)
+          VINFO=$(jq '[.result.vulnerableSBOMArtifactsByNameVersion[]?.vulnerabilityFindings.severities.infoCount     // 0] | add // 0' wiz_scan_results.json)
+          VTOT=$((VCRIT + VHIGH + VMED + VLOW + VINFO))
+
+          PKG_COUNT=$(jq '(.result.vulnerableSBOMArtifactsByNameVersion // []) | length' wiz_scan_results.json)
 
           # ── Markdown / Job Summary ────────────────────────────────────────────
           {
@@ -106,12 +109,17 @@ jobs:
             echo "| **Image**    | \`${IMAGE}\` |"
             echo "| **Branch**   | \`${{ github.ref_name }}\` |"
             echo "| **Scan time**| ${SCAN_TIME} |"
-            echo "| **Result**   | ${RESULT} |"
+            echo "| **Result**   | ${RESULT} (${VERDICT}) |"
             echo "| **Run**      | [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |"
+            if [ -n "$REPORT_URL" ] && [ "$REPORT_URL" != "null" ]; then
+              echo "| **Wiz Console** | [View scan results](${REPORT_URL}) |"
+            fi
             echo ""
 
             if [ "$RESULT" = "PASSED" ]; then
               echo "## Vulnerabilities — PASSED ✅"
+            elif [ "$RESULT" = "WARNED" ]; then
+              echo "## Vulnerabilities — WARNED ⚠️"
             else
               echo "## Vulnerabilities — FAILED ❌"
             fi
@@ -132,7 +140,7 @@ jobs:
               echo "| Package | Version | Critical | High | Medium | Low | Fixed in | Remediation |"
               echo "|---|---|---|---|---|---|---|---|"
               jq -r '
-                .vulnerableSBOMArtifactsByNameVersion[]
+                .result.vulnerableSBOMArtifactsByNameVersion[]
                 | [
                     .name,
                     .version,
@@ -151,14 +159,14 @@ jobs:
               echo ""
             fi
 
-            POLICY_COUNT=$(jq '(.failedPolicyMatches // []) | length' wiz_scan_results.json)
+            POLICY_COUNT=$(jq '(.result.failedPolicyMatches // []) | length' wiz_scan_results.json)
             if [ "$POLICY_COUNT" -gt 0 ]; then
               echo "## Failed Policies"
               echo ""
               echo "| Policy | Type | Enforcement |"
               echo "|---|---|---|"
               jq -r '
-                .failedPolicyMatches[]
+                .result.failedPolicyMatches[]
                 | [
                     .policy.name,
                     .policy.type,
@@ -177,12 +185,14 @@ jobs:
           # ── HTML report ───────────────────────────────────────────────────────
           if [ "$RESULT" = "PASSED" ]; then
             RESULT_BADGE='<span class="badge pass">PASSED</span>'
+          elif [ "$RESULT" = "WARNED" ]; then
+            RESULT_BADGE='<span class="badge warn">WARNED</span>'
           else
             RESULT_BADGE='<span class="badge fail">FAILED</span>'
           fi
 
           PKG_ROWS=$(jq -r '
-            .vulnerableSBOMArtifactsByNameVersion[]
+            .result.vulnerableSBOMArtifactsByNameVersion[]
             | . as $p
             | ($p.vulnerabilityFindings.severities.criticalCount // 0) as $c
             | ($p.vulnerabilityFindings.severities.highCount     // 0) as $h
@@ -203,7 +213,7 @@ jobs:
           ' wiz_scan_results.json 2>/dev/null || echo "")
 
           POLICY_ROWS=$(jq -r '
-            .failedPolicyMatches[]
+            .result.failedPolicyMatches[]
             | "<tr>"
               + "<td>\(.policy.name)</td>"
               + "<td>\(.policy.type)</td>"
@@ -239,6 +249,7 @@ jobs:
             .badge { display: inline-block; border-radius: 4px; padding: 2px 10px;
                      font-size: 12px; font-weight: 600; text-transform: uppercase; }
             .badge.pass { background: #1a4731; color: #3fb950; border: 1px solid #238636; }
+            .badge.warn { background: #2e2009; color: #e3b341; border: 1px solid #9e6a03; }
             .badge.fail { background: #3d1c1e; color: #f85149; border: 1px solid #da3633; }
             table { width: 100%; border-collapse: collapse; background: #161b22;
                     border: 1px solid #30363d; border-radius: 8px; overflow: hidden; margin-top: 12px; }
@@ -259,6 +270,7 @@ jobs:
             <strong>Branch:</strong> <code>${{ github.ref_name }}</code> &nbsp;|&nbsp;
             <strong>Scan time:</strong> ${SCAN_TIME} &nbsp;|&nbsp;
             <strong>Run:</strong> <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">#${{ github.run_id }}</a>
+            $([ -n "$REPORT_URL" ] && [ "$REPORT_URL" != "null" ] && echo "&nbsp;|&nbsp; <a href=\"${REPORT_URL}\" target=\"_blank\">View in Wiz →</a>")
           </div>
 
           <h2><div class="section-header">Vulnerabilities &nbsp; ${RESULT_BADGE}</div></h2>
