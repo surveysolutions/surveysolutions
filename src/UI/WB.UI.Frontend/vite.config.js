@@ -396,6 +396,8 @@ export default defineConfig(({ mode, command }) => {
                     manualChunks(id) {
                         if (!id.includes('node_modules')) return
 
+                        if (id.includes('/lodash-es/')) return 'vendor-lodash'
+
                         if (
                             id.includes('/vue/') ||
                             id.includes('/@vue/') ||
