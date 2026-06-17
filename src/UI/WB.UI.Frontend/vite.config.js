@@ -243,6 +243,10 @@ export default defineConfig(({ mode, command }) => {
                     find: 'moment',
                     replacement: path.resolve(__dirname, 'src/shared/momentCompat.js'),
                 },
+                {
+                    find: 'lodash',
+                    replacement: 'lodash-es',
+                },
                 /*{
                     find: 'jquery',
                     replacement: 'jquery/dist/jquery.min.js',
