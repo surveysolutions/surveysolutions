@@ -87,7 +87,7 @@
 
 <script>
 import { map, isUndefined, isEmpty, filter } from 'lodash-es'
-import gql from 'graphql-tag'
+import { gql, gqlRequest } from '~/hqapp/api/graphql'
 
 const query = gql`query assignments($workspace: String!, $where: AssignmentsFilter) {
   assignments(
@@ -260,16 +260,12 @@ export default {
                         { responsibleId: { in: interviewersArray } }],
                 }
 
-                const response = await self.$apollo.query({
-                    query,
-                    variables: {
-                        where: where,
-                        workspace: this.$store.getters.workspace,
-                    },
-                    fetchPolicy: 'network-only',
+                const response = await gqlRequest(query, {
+                    where: where,
+                    workspace: this.$store.getters.workspace,
                 })
 
-                self.showWebModeReassignWarning = response.data.assignments.filteredCount > 0
+                self.showWebModeReassignWarning = response.assignments.filteredCount > 0
             } else {
                 self.showWebModeReassignWarning = false
             }

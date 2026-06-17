@@ -1,13 +1,10 @@
 <template>
-    <HqLayout :hasFilter="true"
-        :hasHeader="true"
-        :fixedWidth="false">
+    <HqLayout :hasFilter="true" :hasHeader="true" :fixedWidth="false">
         <template v-slot:filters>
 
             <Filters :title="$t('Common.Properties')">
                 <FilterBlock>
-                    <ul class="list-group small"
-                        style="list-style: none;">
+                    <ul class="list-group small" style="list-style: none;">
                         <li v-if="!$config.model.shapeType"><strong>{{
                             $t("Pages.MapDetails_MaxScale") }}:</strong> <span>{{ $config.model.maxScale }}</span>
                         </li>
@@ -19,7 +16,7 @@
                         </li>
                         <li v-if="$config.model.shapesCount"><strong>{{
                             $t("Pages.MapDetails_ShapesCount") }}:</strong> <span>{{ $config.model.shapesCount
-                        }}</span>
+                                }}</span>
                         </li>
                         <li><strong>{{ $t("Pages.MapDetails_Size") }}:</strong> <span>{{
                             $config.model.size }}</span>
@@ -29,11 +26,10 @@
                             importDate }}</span>
                         </li>
                         <li v-if="$config.model.uploadedBy"><strong>
-                            {{ $t("Pages.MapDetails_UploadedBy") }}:</strong> <span>{{ $config.model.uploadedBy
-                        }}</span>
+                                {{ $t("Pages.MapDetails_UploadedBy") }}:</strong> <span>{{ $config.model.uploadedBy
+                                }}</span>
                         </li>
-                        <li v-if="$config.model.showDuplicateLabelsWarning"
-                            class="text-danger">
+                        <li v-if="$config.model.showDuplicateLabelsWarning" class="text-danger">
                             <strong>{{ $t("Pages.MapList_HasDuplicateLabels") }}: </strong>
                             <span>{{ $t("Common.Yes") }}</span>
                         </li>
@@ -41,8 +37,7 @@
                 </FilterBlock>
 
                 <template v-slot:additional>
-                    <div class="filters-container"
-                        id="linkedUsers">
+                    <div class="filters-container" id="linkedUsers">
                         <h4>
                             {{ $t('Common.LinkedUsers') }}
                         </h4>
@@ -50,32 +45,23 @@
 
                             <h5>{{ $t("Pages.MapDetails_SelectUser") }}</h5>
                             <div class="input-group">
-                                <Typeahead control-id="newLikedUserId"
-                                    :placeholder="$t('Common.LinkUser')"
-                                    :value="newLikedUserId"
-                                    :ajax-params="{}"
-                                    @selected="newLinkedUserSelected"
-                                    :fetch-url="config.api.users"
-                                    class="with-extra-btn">
+                                <Typeahead control-id="newLikedUserId" :placeholder="$t('Common.LinkUser')"
+                                    :value="newLikedUserId" :ajax-params="{}" @selected="newLinkedUserSelected"
+                                    :fetch-url="config.api.users" class="with-extra-btn">
                                 </Typeahead>
 
                                 <div class="input-group-btn">
-                                    <button class="btn btn-success"
-                                        @click="linkUserToMap"
+                                    <button class="btn btn-success" @click="linkUserToMap"
                                         :disabled="!newLikedUserId || config.isObserving">
-                                        <span aria-hidden="true"
-                                            class="glyphicon add"></span>
+                                        <span aria-hidden="true" class="glyphicon add"></span>
                                     </button>
                                 </div>
 
                             </div>
 
-                            <DataTables ref="table"
-                                :tableOptions="tableOptions"
-                                :addParamsToRequest="addParamsToRequest"
-                                :contextMenuItems="contextMenuItems"
-                                :supportContextMenu="!config.isObserving"
-                                style="margin-left: 0px;">
+                            <DataTables ref="table" :tableOptions="tableOptions"
+                                :addParamsToRequest="addParamsToRequest" :contextMenuItems="contextMenuItems"
+                                :supportContextMenu="!config.isObserving" style="margin-left: 0px;">
                             </DataTables>
                         </div>
                     </div>
@@ -84,10 +70,7 @@
         </template>
 
 
-        <Confirm ref="confirmDiscard"
-            id="discardConfirm"
-            :okTitle="$t('Pages.MapDetails_Unlink')"
-            okClass="btn-danger">
+        <Confirm ref="confirmDiscard" id="discardConfirm" :okTitle="$t('Pages.MapDetails_Unlink')" okClass="btn-danger">
             <p>{{ $t("Pages.MapUserLink_DiscardConfirm") }} </p>
             <p class="text-danger">{{ $t("Pages.MapUserLink_DiscardConfirm1") }} </p>
         </Confirm>
@@ -103,10 +86,8 @@
             </div>
         </template>
         <div style="display: flex; width: 100%; height: 100%; flex-direction: column;">
-            <iframe title="Map preview"
-                style="flex-grow: 1; border: none; margin: 0; padding: 0; min-height: 550px;"
-                id="map-iframe"
-                :src="$config.model.mapPreviewUrl"></iframe>
+            <iframe title="Map preview" style="flex-grow: 1; border: none; margin: 0; padding: 0; min-height: 550px;"
+                id="map-iframe" :src="$config.model.mapPreviewUrl"></iframe>
             <p> {{ mapDisclaimer }} </p>
         </div>
 
@@ -117,7 +98,7 @@
 
 import { orderBy } from 'lodash-es'
 import * as toastr from 'toastr'
-import gql from 'graphql-tag'
+import { gql, gqlRequest } from '~/hqapp/api/graphql'
 import { DateFormats } from '~/shared/helpers'
 import moment from 'moment'
 import FilterBlock from '../../../components/FilterBlock.vue'
@@ -157,19 +138,19 @@ export default {
             const self = this
             this.$refs.confirmDiscard.promt(ok => {
                 if (ok) {
-                    self.$apollo.mutate({
-                        mutation: gql`
+                    gqlRequest(
+                        gql`
                                 mutation deleteUserFromMap($workspace: String!, $fileName: String!, $userName: String!) {
                                     deleteUserFromMap(workspace: $workspace, fileName: $fileName, userName: $userName) {
                                         fileName
                                     }
                                 }`,
-                        variables: {
+                        {
                             'fileName': fileName,
                             'userName': userName,
                             workspace: self.$store.getters.workspace,
                         },
-                    }).then(response => {
+                    ).then(response => {
                         self.$refs.table.reload()
                     }).catch(err => {
                         console.error(err)
@@ -190,19 +171,19 @@ export default {
                 const fileName = this.$config.model.fileName
                 const userName = this.newLikedUserId.value
 
-                self.$apollo.mutate({
-                    mutation: gql`
+                gqlRequest(
+                    gql`
                                 mutation AddUserToMap($workspace: String!, $fileName: String!, $userName: String!) {
                                     addUserToMap(workspace: $workspace, fileName: $fileName, userName: $userName) {
                                         fileName
                                     }
                                 }`,
-                    variables: {
+                    {
                         'fileName': fileName,
                         'userName': userName,
                         workspace: self.$store.getters.workspace,
                     },
-                }).then(response => {
+                ).then(response => {
                     self.$refs.table.reload()
                 }).catch(err => {
                     console.error(err)
@@ -249,20 +230,16 @@ export default {
                                             }
                                         }
                                     }`
-                    self.$apollo.query({
-                        query,
-                        variables: {
-                            'fileName': self.$config.model.fileName,
-                            workspace: self.$store.getters.workspace,
-                        },
-                        fetchPolicy: 'network-only',
+                    gqlRequest(query, {
+                        'fileName': self.$config.model.fileName,
+                        workspace: self.$store.getters.workspace,
                     }).then(response => {
 
-                        if (response.data.maps.nodes == 0) {
+                        if (response.maps.nodes == 0) {
                             window.location.href = self.$config.model.mapsUrl
                         }
 
-                        const users = response.data.maps.nodes[0].users
+                        const users = response.maps.nodes[0].users
                         const orderedUsers = orderBy(users, [column.data], [order_col.dir])
                         self.totalRows = users.length
                         self.filteredCount = users.length

@@ -1,17 +1,13 @@
 <template>
     <HqLayout :title="title">
-        <DataTables ref="table"
-            :tableOptions="tableOptions"
-            :contextMenuItems="contextMenuItems">
+        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems">
         </DataTables>
 
-        <ModalFrame ref="editCalendarModal"
-            :title="$t('Common.EditCalendarEvent')">
+        <ModalFrame ref="editCalendarModal" :title="$t('Common.EditCalendarEvent')">
             <form onsubmit="return false;">
 
                 <div class="form-group">
-                    <DatePicker :config="datePickerConfig"
-                        :value="selectedDate">
+                    <DatePicker :config="datePickerConfig" :value="selectedDate">
                     </DatePicker>
                     <div v-if="dateInPast">
                         <span class="text-danger">{{ $t("Assignments.DateFromPast") }}</span>
@@ -19,105 +15,69 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label"
-                        for="commentsId">
+                    <label class="control-label" for="commentsId">
                         {{ $t("Assignments.Comments") }}
                     </label>
-                    <textarea control-id="commentsId"
-                        v-model="editCalendarComment"
-                        :placeholder="$t('Assignments.EnterComments')"
-                        name="comments"
-                        rows="6"
-                        maxlength="500"
+                    <textarea control-id="commentsId" v-model="editCalendarComment"
+                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="6" maxlength="500"
                         class="form-control" />
                 </div>
             </form>
             <template v-slot:actions>
                 <div>
-                    <button type="button"
-                        class="btn btn-primary"
-                        role="confirm"
-                        @disable="saveDisabled"
+                    <button type="button" class="btn btn-primary" role="confirm" @disable="saveDisabled"
                         @click="updateCalendarEvent">
                         {{ $t("Common.Save") }}</button>
-                    <button type="button"
-                        class="btn btn-link"
-                        data-bs-dismiss="modal"
-                        role="cancel">{{
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">{{
                         $t("Common.Cancel")
-                    }}</button>
-                    <button type="button"
-                        class="btn btn-danger pull-right"
-                        role="delete"
-                        v-if="calendarEventId != null"
+                        }}</button>
+                    <button type="button" class="btn btn-danger pull-right" role="delete" v-if="calendarEventId != null"
                         @click="deleteCalendarEvent">
                         {{ $t("Common.Delete") }}</button>
                 </div>
             </template>
         </ModalFrame>
 
-        <ModalFrame ref="completeModal"
-            :title="$t('Assignments.CompleteAssignmentTitle')">
+        <ModalFrame ref="completeModal" :title="$t('Assignments.CompleteAssignmentTitle')">
             <p>{{ $t('Assignments.CompleteAssignmentMessage') }}</p>
             <form onsubmit="return false;">
                 <div class="form-group">
-                    <label class="control-label"
-                        for="completeCommentId">
+                    <label class="control-label" for="completeCommentId">
                         {{ $t("Assignments.Comments") }}
                     </label>
-                    <textarea control-id="completeCommentId"
-                        v-model="statusChangeComment"
-                        :placeholder="$t('Assignments.EnterComments')"
-                        name="comments"
-                        rows="4"
-                        maxlength="500"
-                        autocomplete="off"
-                        class="form-control" />
+                    <textarea control-id="completeCommentId" v-model="statusChangeComment"
+                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                        autocomplete="off" class="form-control" />
                 </div>
             </form>
             <template v-slot:actions>
                 <div>
-                    <button type="button"
-                        class="btn btn-primary"
-                        @click="confirmComplete">{{
-                            $t("Assignments.Complete") }}</button>
-                    <button type="button"
-                        class="btn btn-link"
-                        data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                    }}</button>
+                    <button type="button" class="btn btn-primary" @click="confirmComplete">{{
+                        $t("Assignments.Complete") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
 
-        <ModalFrame ref="reopenModal"
-            :title="$t('Assignments.ReopenAssignmentTitle')">
+        <ModalFrame ref="reopenModal" :title="$t('Assignments.ReopenAssignmentTitle')">
             <p>{{ $t('Assignments.ReopenAssignmentMessage') }}</p>
             <form onsubmit="return false;">
                 <div class="form-group">
-                    <label class="control-label"
-                        for="reopenCommentId">
+                    <label class="control-label" for="reopenCommentId">
                         {{ $t("Assignments.Comments") }}
                     </label>
-                    <textarea control-id="reopenCommentId"
-                        v-model="statusChangeComment"
-                        :placeholder="$t('Assignments.EnterComments')"
-                        name="comments"
-                        rows="4"
-                        maxlength="500"
-                        autocomplete="off"
-                        class="form-control" />
+                    <textarea control-id="reopenCommentId" v-model="statusChangeComment"
+                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                        autocomplete="off" class="form-control" />
                 </div>
             </form>
             <template v-slot:actions>
                 <div>
-                    <button type="button"
-                        class="btn btn-primary"
-                        @click="confirmReopen">{{
-                            $t("Assignments.Reopen") }}</button>
-                    <button type="button"
-                        class="btn btn-link"
-                        data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                    }}</button>
+                    <button type="button" class="btn btn-primary" @click="confirmReopen">{{
+                        $t("Assignments.Reopen") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -410,7 +370,7 @@ export default {
             const self = this
             this.$refs.editCalendarModal.hide()
 
-            deleteCalendarEvent(self.$apollo, {
+            deleteCalendarEvent({
                 'publicKey': self.calendarEventId == null ? null : self.calendarEventId.replaceAll('-', ''),
                 workspace: self.$store.getters.workspace,
             }, self.reload)
@@ -440,11 +400,11 @@ export default {
 
             if (self.calendarEventId != null) {
                 variables.publicKey = self.calendarEventId.replaceAll('-', ''),
-                updateCalendarEvent(self.$apollo, variables, self.reload)
+                    updateCalendarEvent(variables, self.reload)
             }
             else {
                 variables.assignmentId = self.calendarAssinmentId,
-                addAssignmentCalendarEvent(self.$apollo, variables, self.reload)
+                    addAssignmentCalendarEvent(variables, self.reload)
             }
         },
     },

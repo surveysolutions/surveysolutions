@@ -1,39 +1,27 @@
 <template>
-    <HqLayout :title="title"
-        :hasFilter="true">
+    <HqLayout :title="title" :hasFilter="true">
         <template v-slot:filters>
             <Filters>
                 <FilterBlock :title="$t('Common.Questionnaire')">
-                    <Typeahead control-id="questionnaireId"
-                        data-vv-name="questionnaireId"
-                        data-vv-as="questionnaire"
-                        :placeholder="$t('Common.AllQuestionnaires')"
-                        :value="questionnaireId"
-                        :values="questionnaires"
+                    <Typeahead control-id="questionnaireId" data-vv-name="questionnaireId" data-vv-as="questionnaire"
+                        :placeholder="$t('Common.AllQuestionnaires')" :value="questionnaireId" :values="questionnaires"
                         v-on:selected="questionnaireSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                    <Typeahead control-id="questionnaireVersion"
-                        data-vv-name="questionnaireVersion"
-                        data-vv-as="questionnaireVersion"
-                        :placeholder="$t('Common.AllVersions')"
-                        :disabled="questionnaireId == null"
-                        :value="questionnaireVersion"
+                    <Typeahead control-id="questionnaireVersion" data-vv-name="questionnaireVersion"
+                        data-vv-as="questionnaireVersion" :placeholder="$t('Common.AllVersions')"
+                        :disabled="questionnaireId == null" :value="questionnaireVersion"
                         :values="questionnaireId == null ? [] : questionnaireId.versions"
                         v-on:selected="questionnaireVersionSelected" />
                 </FilterBlock>
                 <FilterBlock :title="$t('Pages.Filters_Assignment')">
                     <div class="input-group">
-                        <input class="form-control with-clear-btn"
-                            :placeholder="$t('Common.AllAssignments')"
-                            type="text"
-                            v-model="assignmentId" />
-                        <div class="input-group-btn"
-                            @click="clearAssignmentFilter">
+                        <input class="form-control with-clear-btn" :placeholder="$t('Common.AllAssignments')"
+                            type="text" v-model="assignmentId" />
+                        <div class="input-group-btn" @click="clearAssignmentFilter">
                             <div class="btn btn-default">
-                                <span class="glyphicon glyphicon-remove"
-                                    aria-hidden="true"></span>
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                             </div>
                         </div>
                     </div>
@@ -41,39 +29,29 @@
             </Filters>
         </template>
 
-        <DataTables ref="table"
-            :tableOptions="tableOptions"
-            :contextMenuItems="contextMenuItems" />
+        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems" />
 
         <template v-slot:modals>
-            <Confirm ref="confirmRestart"
-                id="restartModal">
+            <Confirm ref="confirmRestart" id="restartModal">
                 <div>
                     <label for="txtRestartInterviewComment">
                         {{ $t('Pages.InterviewerHq_RestartConfirm') }}:
                     </label>
-                    <textarea class="form-control"
-                        rows="10"
-                        maxlength="200"
-                        name="txtRestartInterviewComment"
-                        id="restartInterviewComment"
-                        v-model="restart_comment"></textarea>
+                    <textarea class="form-control" rows="10" maxlength="200" name="txtRestartInterviewComment"
+                        id="restartInterviewComment" v-model="restart_comment"></textarea>
                 </div>
             </Confirm>
 
-            <Confirm ref="confirmDiscard"
-                id="discardConfirm">
+            <Confirm ref="confirmDiscard" id="discardConfirm">
                 {{ $t("Pages.InterviewerHq_DiscardConfirm") }}
             </Confirm>
         </template>
 
-        <ModalFrame ref="editCalendarModal"
-            :title="$t('Common.EditCalendarEvent')">
+        <ModalFrame ref="editCalendarModal" :title="$t('Common.EditCalendarEvent')">
             <form onsubmit="return false;">
 
                 <div class="form-group">
-                    <DatePicker :config="datePickerConfig"
-                        :value="selectedDate">
+                    <DatePicker :config="datePickerConfig" :value="selectedDate">
                     </DatePicker>
                     <div v-if="dateInPast">
                         <span class="text-danger">{{ $t("Assignments.DateFromPast") }}</span>
@@ -81,36 +59,22 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label"
-                        for="commentsId">
+                    <label class="control-label" for="commentsId">
                         {{ $t("Assignments.Comments") }}
                     </label>
-                    <textarea control-id="commentsId"
-                        v-model="editCalendarComment"
-                        :placeholder="$t('Assignments.EnterComments')"
-                        name="comments"
-                        rows="6"
-                        maxlength="500"
+                    <textarea control-id="commentsId" v-model="editCalendarComment"
+                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="6" maxlength="500"
                         class="form-control" />
                 </div>
             </form>
             <template v-slot:actions>
                 <div>
-                    <button type="button"
-                        class="btn btn-primary"
-                        role="confirm"
-                        @click="updateCalendarEvent">
+                    <button type="button" class="btn btn-primary" role="confirm" @click="updateCalendarEvent">
                         {{ $t("Common.Save") }}</button>
-                    <button type="button"
-                        class="btn btn-link"
-                        data-bs-dismiss="modal"
-                        role="cancel">{{
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">{{
                         $t("Common.Cancel")
                     }}</button>
-                    <button type="button"
-                        class="btn btn-danger pull-right"
-                        role="delete"
-                        v-if="calendarEventId != null"
+                    <button type="button" class="btn btn-danger pull-right" role="delete" v-if="calendarEventId != null"
                         @click="deleteCalendarEvent">
                         {{ $t("Common.Delete") }}</button>
                 </div>
@@ -124,7 +88,7 @@ import { DateFormats, convertToLocal } from '~/shared/helpers'
 import moment from 'moment'
 import { updateCalendarEvent, addInterviewCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
 import { map, join, toNumber, filter, escape } from 'lodash-es'
-import gql from 'graphql-tag'
+import { gql, gqlRequest } from '~/hqapp/api/graphql'
 import { config } from '~/shared/config'
 import DOMPurify from 'dompurify'
 const sanitizeHtml = text => DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
@@ -263,12 +227,8 @@ export default {
                         variables.where = where
                     }
 
-                    self.$apollo.query({
-                        query,
-                        variables: variables,
-                        fetchPolicy: 'network-only',
-                    }).then(response => {
-                        const data = response.data.interviews
+                    gqlRequest(query, variables).then(response => {
+                        const data = response.interviews
 
                         callback({
                             recordsTotal: data.totalCount,
@@ -364,18 +324,18 @@ export default {
 
             if (self.calendarEventId != null) {
                 variables.publicKey = self.calendarEventId.replaceAll('-', ''),
-                updateCalendarEvent(self.$apollo, variables, self.reload)
+                    updateCalendarEvent(variables, self.reload)
             }
             else {
                 variables.interviewId = self.calendarInterviewId,
-                addInterviewCalendarEvent(self.$apollo, variables, self.reload)
+                    addInterviewCalendarEvent(variables, self.reload)
             }
         },
         deleteCalendarEvent() {
             const self = this
             this.$refs.editCalendarModal.hide()
 
-            deleteCalendarEvent(self.$apollo, {
+            deleteCalendarEvent({
                 'publicKey': self.calendarEventId == null ? null : self.calendarEventId.replaceAll('-', ''),
                 workspace: self.$store.getters.workspace,
             }, self.reload)

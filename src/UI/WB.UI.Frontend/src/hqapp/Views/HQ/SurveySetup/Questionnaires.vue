@@ -1,11 +1,9 @@
 <template>
-    <HqLayout :title="$config.model.title"
-        :hasFilter="false"
-        :topicButton="$t('Dashboard.ImportTemplate')"
+    <HqLayout :title="$config.model.title" :hasFilter="false" :topicButton="$t('Dashboard.ImportTemplate')"
         :topicButtonRef="!$config.model.isObserver
             ? $config.model.importQuestionnaireUrl
             : ''
-        ">
+            ">
         <template v-slot:subtitle>
             <ol class="list-unstyled">
                 <li>{{ $t('Dashboard.SurveySetupIntroMessage1') }}</li>
@@ -15,14 +13,10 @@
 
 
 
-        <DataTables ref="table"
-            multiorder
-            :tableOptions="tableOptions"
-            :contextMenuItems="contextMenuItems">
+        <DataTables ref="table" multiorder :tableOptions="tableOptions" :contextMenuItems="contextMenuItems">
         </DataTables>
 
-        <ModalFrame ref="deleteQuestionnaireModal"
-            :title="$t('Pages.ConfirmationNeededTitle')">
+        <ModalFrame ref="deleteQuestionnaireModal" :title="$t('Pages.ConfirmationNeededTitle')">
             <form onsubmit="return false;">
                 <p style="color: red">
                     {{ $t('Pages.GlobalSettings_DeleteQuestionnaireWarning') }}
@@ -34,37 +28,28 @@
                         )
                     }}
                 </p>
-                <p class="text-danger"
-                    v-if="this.deletionWarnMsg">
+                <p class="text-danger" v-if="this.deletionWarnMsg">
                     {{ deletionWarnMsg }}
                 </p>
                 <div class="form-group">
                     <div style="overflow-x: auto">
-                        <label style="white-space: pre"
-                            class="control-label"
-                            for="deleteConfirmInput">
+                        <label style="white-space: pre" class="control-label" for="deleteConfirmInput">
                             {{ deletionApproveLabel }}
                         </label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="text"
-                        class="form-control"
-                        id="deleteConfirmInput"
+                    <input type="text" class="form-control" id="deleteConfirmInput"
                         v-model="deletionQuestionnaireName" />
                 </div>
             </form>
             <template v-slot:actions>
                 <div>
-                    <button type="button"
-                        class="btn btn-danger"
-                        :disabled="deleteBtnDisabled"
+                    <button type="button" class="btn btn-danger" :disabled="deleteBtnDisabled"
                         @click="deleteQuestionnaire">
                         {{ $t('Common.Delete') }}
                     </button>
-                    <button type="button"
-                        class="btn btn-link"
-                        data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">
                         {{ $t('Common.Cancel') }}
                     </button>
                 </div>
@@ -75,7 +60,7 @@
 <script>
 import { DateFormats } from '~/shared/helpers'
 import moment from 'moment'
-import gql from 'graphql-tag'
+import { gql, gqlRequest } from '~/hqapp/api/graphql'
 import { parseInt } from 'lodash-es'
 
 const interviewsQuestionnaireDeletionQuery = gql`
@@ -250,9 +235,9 @@ export default {
                         this.$refs.deleteQuestionnaireModal.modal('show')
 
                         const questionnaireGuid = selectedRow.questionnaireId
-                        const interviewsQueryResult = await this.$apollo.query({
-                            query: interviewsQuestionnaireDeletionQuery,
-                            variables: {
+                        const interviewsQueryResult = await gqlRequest(
+                            interviewsQuestionnaireDeletionQuery,
+                            {
                                 where: {
                                     and: [
                                         {
@@ -278,48 +263,42 @@ export default {
                                     ],
                                 },
                                 workspace: this.$store.getters.workspace,
-                            },
-                            fetchPolicy: 'network-only',
-                        })
+                            })
 
-                        const assignmentsQueryResult = await this.$apollo.query(
+                        const assignmentsQueryResult = await gqlRequest(
+                            assignmentsQuestionnaireDeletionQuery,
                             {
-                                query: assignmentsQuestionnaireDeletionQuery,
-                                variables: {
-                                    where: {
-                                        and: [
-                                            {
-                                                questionnaireId: {
-                                                    id: {
-                                                        eq: questionnaireGuid.replaceAll(
-                                                            '-',
-                                                            ''
-                                                        ),
-                                                    },
-                                                    version: {
-                                                        eq: parseInt(
-                                                            selectedRow.version
-                                                        ),
-                                                    },
+                                where: {
+                                    and: [
+                                        {
+                                            questionnaireId: {
+                                                id: {
+                                                    eq: questionnaireGuid.replaceAll(
+                                                        '-',
+                                                        ''
+                                                    ),
+                                                },
+                                                version: {
+                                                    eq: parseInt(
+                                                        selectedRow.version
+                                                    ),
                                                 },
                                             },
-                                            {
-                                                receivedByTabletAtUtc: {
-                                                    neq: null,
-                                                },
+                                        },
+                                        {
+                                            receivedByTabletAtUtc: {
+                                                neq: null,
                                             },
-                                        ],
-                                    },
-                                    workspace: this.$store.getters.workspace,
+                                        },
+                                    ],
                                 },
-                                fetchPolicy: 'network-only',
-                            }
-                        )
+                                workspace: this.$store.getters.workspace,
+                            })
 
                         const receivedInterviews =
-                            interviewsQueryResult.data.interviews.filteredCount
+                            interviewsQueryResult.interviews.filteredCount
                         const receivedAssignments =
-                            assignmentsQueryResult.data.assignments
+                            assignmentsQueryResult.assignments
                                 .filteredCount
 
                         if (receivedInterviews > 0 || receivedAssignments > 0) {

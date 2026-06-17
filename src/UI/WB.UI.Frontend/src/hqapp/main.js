@@ -60,35 +60,6 @@ toastr.options.escapeHtml = true
 
 import hqApi from './api'
 
-function routeNeedsApollo(path) {
-    return path.startsWith('/Maps')
-        || path.startsWith('/Export')
-        || path.startsWith('/Interviewer/Assignments')
-        || path.startsWith('/Interviewer/Interviews')
-}
-
-let apolloInstallPromise = null
-let isApolloInstalled = false
-
-async function ensureApolloProvider(app) {
-    if (isApolloInstalled) return
-    if (!apolloInstallPromise) {
-        apolloInstallPromise = Promise.all([
-            import('./api/graphql'),
-            import('@vue/apollo-option'),
-        ]).then(([apolloClientModule, apolloOptionModule]) => {
-            const apolloProvider = apolloOptionModule.createApolloProvider({
-                defaultClient: apolloClientModule.default,
-            })
-
-            app.use(apolloProvider)
-            isApolloInstalled = true
-        })
-    }
-
-    await apolloInstallPromise
-}
-
 vue.use(config)
 vue.use(http)
 vue.use(hqApi)
@@ -105,10 +76,6 @@ const router = new Router({
 
 router.beforeEach(async (to, from, next) => {
     try {
-        if (routeNeedsApollo(to.path)) {
-            await ensureApolloProvider(vue)
-        }
-
         next()
     } catch (error) {
         next(error)

@@ -1,34 +1,24 @@
 <template>
-    <HqLayout :hasFilter="false"
-        :title="$t('Pages.MapList_Title')">
+    <HqLayout :hasFilter="false" :title="$t('Pages.MapList_Title')">
         <template v-slot:headers>
             <div>
                 <div class="topic-with-button">
                     <h1>{{ $t('Pages.MapList_Title') }}</h1>
-                    <label class="btn btn-success btn-file"
-                        v-if="actionsAlowed">
+                    <label class="btn btn-success btn-file" v-if="actionsAlowed">
                         {{ $t('Pages.MapList_Upload') }}
-                        <input accept=".zip"
-                            ref="uploader"
-                            id="File"
-                            name="File"
-                            @change="onFileChange"
-                            type="file"
+                        <input accept=".zip" ref="uploader" id="File" name="File" @change="onFileChange" type="file"
                             value="" />
                     </label>
                 </div>
                 <div ref="status">
                     <p>{{ statusMessage }}</p>
                 </div>
-                <div ref="errors"
-                    class="alert alert-danger">
-                    <div v-for="error in errorList"
-                        :key="error">
+                <div ref="errors" class="alert alert-danger">
+                    <div v-for="error in errorList" :key="error">
                         {{ error }}
                     </div>
                 </div>
-                <ol class="list-unstyled"
-                    v-if="!isSupervisor">
+                <ol class="list-unstyled" v-if="!isSupervisor">
                     <li>{{ $t('Pages.MapList_UploadDescription') }} </li>
                     <li>{{ $t('Pages.MapList_UploadDescriptionExtra') }}</li>
                 </ol>
@@ -40,16 +30,11 @@
                 </p>
             </div>
         </template>
-        <DataTables ref="table"
-            :tableOptions="tableOptions"
-            :contextMenuItems="contextMenuItems"
+        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems"
             :supportContextMenu="actionsAlowed">
         </DataTables>
         <template v-slot:modals>
-            <Confirm ref="confirmDiscard"
-                id="discardConfirm"
-                :okTitle="$t('Common.Delete')"
-                okClass="btn-danger">
+            <Confirm ref="confirmDiscard" id="discardConfirm" :okTitle="$t('Common.Delete')" okClass="btn-danger">
                 {{ deleteDialogBody }}
             </Confirm>
         </template>
@@ -61,7 +46,7 @@
 import { DateFormats, humanFileSize } from '~/shared/helpers'
 import moment from 'moment'
 import * as toastr from 'toastr'
-import gql from 'graphql-tag'
+import { gql, gqlRequest } from '~/hqapp/api/graphql'
 const query = gql`query MapsList($workspace: String!, $order: [MapsSort!], $skip: Int, $take: Int, $where: MapsFilter) {
   maps(workspace: $workspace, order: $order, skip: $skip, take: $take, where: $where) {
     totalCount
@@ -178,18 +163,18 @@ export default {
             this.deleteMapName = fileName
             this.$refs.confirmDiscard.promt(ok => {
                 if (ok) {
-                    self.$apollo.mutate({
-                        mutation: gql`
+                    gqlRequest(
+                        gql`
                                 mutation deleteMap($workspace: String!, $fileName: String!) {
                                     deleteMap(workspace: $workspace, fileName: $fileName) {
                                         fileName
                                     }
                                 }`,
-                        variables: {
+                        {
                             'fileName': fileName,
                             workspace: self.$store.getters.workspace,
                         },
-                    }).then(response => {
+                    ).then(response => {
                         self.$refs.table.reload()
                     }).catch(err => {
                         console.error(err)
@@ -299,12 +284,8 @@ export default {
                         variables.where = where
                     }
 
-                    self.$apollo.query({
-                        query,
-                        variables: variables,
-                        fetchPolicy: 'network-only',
-                    }).then(response => {
-                        const data = response.data.maps
+                    gqlRequest(query, variables).then(response => {
+                        const data = response.maps
                         self.totalRows = data.totalCount
                         self.filteredCount = data.filteredCount
                         callback({

@@ -1,78 +1,47 @@
 <template>
-    <HqLayout :hasFilter="true"
-        :hasHeader="false">
+    <HqLayout :hasFilter="true" :hasHeader="false">
         <template v-slot:filters>
             <Filters>
                 <FilterBlock :title="$t('Common.Questionnaire')">
-                    <Typeahead control-id="questionnaireId"
-                        no-clear
-                        :placeholder="$t('Common.SelectQuestionnaire')"
-                        :value="selectedQuestionnaireId"
-                        :values="questionnaires"
-                        v-on:selected="selectQuestionnaire" />
+                    <Typeahead control-id="questionnaireId" no-clear :placeholder="$t('Common.SelectQuestionnaire')"
+                        :value="selectedQuestionnaireId" :values="questionnaires" v-on:selected="selectQuestionnaire" />
                 </FilterBlock>
                 <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                    <Typeahead control-id="questionnaireVersion"
-                        :placeholder="$t('Common.AllVersions')"
+                    <Typeahead control-id="questionnaireVersion" :placeholder="$t('Common.AllVersions')"
                         :value="selectedVersion"
                         :values="selectedQuestionnaireId == null ? null : selectedQuestionnaireId.versions"
-                        v-on:selected="selectQuestionnaireVersion"
-                        :disabled="selectedQuestionnaireId == null" />
+                        v-on:selected="selectQuestionnaireVersion" :disabled="selectedQuestionnaireId == null" />
                 </FilterBlock>
                 <FilterBlock :title="$t('Reports.Variables')">
-                    <Typeahead control-id="gpsQuestion"
-                        :placeholder="$t('Common.AllGpsQuestions')"
-                        no-search
-                        no-clear
-                        :values="gpsQuestions"
-                        :value="selectedQuestion"
-                        @selected="selectGpsQuestion" />
+                    <Typeahead control-id="gpsQuestion" :placeholder="$t('Common.AllGpsQuestions')" no-search no-clear
+                        :values="gpsQuestions" :value="selectedQuestion" @selected="selectGpsQuestion" />
                 </FilterBlock>
                 <FilterBlock>
                     <div class="center-block">
-                        <Checkbox :label="$t('Reports.HeatMapView')"
-                            name="pivot"
-                            v-model="showHeatmap" />
+                        <Checkbox :label="$t('Reports.HeatMapView')" name="pivot" v-model="showHeatmap" />
                     </div>
                 </FilterBlock>
-                <FilterBlock :title="$t('Reports.HeatRadius')"
-                    v-if="showHeatmap">
-                    <input type="range"
-                        min="1"
-                        max="200"
-                        value="50"
-                        class="slider"
-                        id="myRange"
-                        v-model="heatMapOptions.radius"
-                        @change="updateHeatMap" />
+                <FilterBlock :title="$t('Reports.HeatRadius')" v-if="showHeatmap">
+                    <input type="range" min="1" max="200" value="50" class="slider" id="myRange"
+                        v-model="heatMapOptions.radius" @change="updateHeatMap" />
                 </FilterBlock>
-                <FilterBlock v-if="isLoading"
-                    :title="$t('Reports.MapDataLoading')">
+                <FilterBlock v-if="isLoading" :title="$t('Reports.MapDataLoading')">
                     <div class="progress">
-                        <div class="progress-bar progress-bar-striped active"
-                            role="progressbar"
-                            aria-valuenow="100"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                            style="width: 100%"></div>
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100"
+                            aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
                     </div>
                 </FilterBlock>
 
                 <template v-slot:additional>
                     <InterviewFilter :questionnaireId="where.questionnaireId"
-                        :questionnaireVersion="where.questionnaireVersion"
-                        :value="conditions"
-                        :exposedValuesFilter="exposedValuesFilter"
-                        @change="questionFilterChanged"
+                        :questionnaireVersion="where.questionnaireVersion" :value="conditions"
+                        :exposedValuesFilter="exposedValuesFilter" @change="questionFilterChanged"
                         @changeFilter="changeExposedValuesFilter" />
                 </template>
 
                 <div class="preset-filters-container">
-                    <div class="center-block"
-                        style="margin-left: 0">
-                        <button class="btn btn-default btn-lg"
-                            id="reloadMarkersInBounds"
-                            v-if="readyToUpdate"
+                    <div class="center-block" style="margin-left: 0">
+                        <button class="btn btn-default btn-lg" id="reloadMarkersInBounds" v-if="readyToUpdate"
                             @click="reloadMarkersInBounds">{{ $t("MapReport.ReloadMarkers") }}</button>
                     </div>
                 </div>
@@ -100,11 +69,9 @@
                     <strong>{{ $t("Reports.LastUpdatedDate") }}:</strong>
                     &nbsp;{{ selectedTooltip.lastUpdatedDate }}
                 </div>
-                <div class="row-fluid"
-                    style="white-space:nowrap;">
+                <div class="row-fluid" style="white-space:nowrap;">
                     <strong>{{ $t("MapReport.ViewInterviewContent") }}:</strong>&nbsp;
-                    <a v-bind:href="api.GetInterviewDetailsUrl(selectedTooltip.interviewId)"
-                        target="_blank">{{
+                    <a v-bind:href="api.GetInterviewDetailsUrl(selectedTooltip.interviewId)" target="_blank">{{
                         $t("MapReport.details") }}</a>
                 </div>
             </div>
@@ -152,7 +119,7 @@
 <script>
 import * as toastr from 'toastr'
 import { nextTick } from 'vue'
-import gql from 'graphql-tag'
+import { gql, gqlRequest } from '~/hqapp/api/graphql'
 import { isNull, chain, debounce, delay, forEach, find, flatten, toNumber, isEqual, isNumber } from 'lodash-es'
 import routeSync from '~/shared/routeSync'
 import InterviewFilter from '../Interviews/InterviewQuestionsFilters'
@@ -952,13 +919,9 @@ export default {
                 request.where = { interviewFilter: where }
             }
 
-            const report = await this.$apollo.query({
-                query,
-                variables: request,
-                fetchPolicy: 'network-only',
-            })
+            const report = await gqlRequest(query, request)
 
-            var mapReport = cloneWithWritableProperties(report.data.mapReport.report)
+            var mapReport = cloneWithWritableProperties(report.mapReport.report)
             forEach(mapReport.featureCollection.features, feature => {
                 if (!Array.isArray(feature.geometry.coordinates)) {
                     var coordinates = feature.geometry.coordinates

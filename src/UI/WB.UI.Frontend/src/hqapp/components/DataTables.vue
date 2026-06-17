@@ -1,19 +1,14 @@
 <template>
     <div :class="wrapperClass">
-        <span id="loadingPixel"
-            style="display:none"
-            :data-loading="isProcessingFlag"></span>
-        <table ref="table"
-            v-bind:class="tableClass"
+        <span id="loadingPixel" style="display:none" :data-loading="isProcessingFlag"></span>
+        <table ref="table" v-bind:class="tableClass"
             class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive">
             <thead ref="header">
                 <slot name="header"></slot>
             </thead>
             <tbody ref="body"></tbody>
             <transition name="fade">
-                <div class="dataTables_processing"
-                    v-if="isProcessing"
-                    :class="{ 'error': errorMessage != null }">
+                <div class="dataTables_processing" v-if="isProcessing" :class="{ 'error': errorMessage != null }">
                     <div v-if="errorMessage">
                         {{ errorMessage }}
                     </div>
@@ -23,24 +18,20 @@
                 </div>
             </transition>
         </table>
-        <div class="download-report-as"
-            v-if="exportable">
+        <div class="download-report-as" v-if="exportable">
             {{ $t("Pages.DownloadReport") }}
-            <a target="_blank"
-                v-bind:href="this.export.excel"
-                v-dompurify-html="'XLSX'">
+            <a target="_blank" v-bind:href="this.export.excel" v-dompurify-html="'XLSX'">
             </a>,
-            <a target="_blank"
-                v-bind:href="this.export.csv"
-                v-dompurify-html="'CSV'">
+            <a target="_blank" v-bind:href="this.export.csv" v-dompurify-html="'CSV'">
             </a>
             {{ $t("Pages.Or") }}
-            <a target="_blank"
-                v-bind:href="this.export.tab">
+            <a target="_blank" v-bind:href="this.export.tab">
                 TAB
             </a>
         </div>
         <slot />
+        <DataTableContextMenu :visible="contextMenu.visible" :items="contextMenu.items" :x="contextMenu.x"
+            :y="contextMenu.y" @close="contextMenu.visible = false" />
     </div>
 </template>
 
@@ -51,9 +42,8 @@ import DataTablesLib from 'datatables.net'
 import 'datatables.net-select'
 DataTable.use(DataTablesLib)
 
-import 'jquery-contextmenu'
-import 'jquery-contextmenu/dist/jquery.contextMenu.css'
 import './datatable.plugins'
+import DataTableContextMenu from './DataTableContextMenu.vue'
 import { template, debounce, includes, without, assign } from 'lodash-es'
 
 $.fn.dataTable.ext.errMode = function (a, b, c, d) {
@@ -76,6 +66,7 @@ var checkBox = template(
 
 export default {
     name: 'DataTable',
+    components: { DataTableContextMenu },
     props: {
         addParamsToRequest: {
             type: Function,
@@ -158,6 +149,18 @@ export default {
                 csv: null,
                 tab: null,
             },
+            contextMenu: {
+                visible: false,
+                items: [],
+                x: 0,
+                y: 0,
+            },
+        }
+    },
+
+    beforeUnmount() {
+        if (this.$refs.table) {
+            $(this.$refs.table).off('click.dt-contextmenu')
         }
     },
 
@@ -329,6 +332,8 @@ export default {
             }
 
             if (shouldDestroy && this.table != null) {
+                $(this.$refs.table).off('click.dt-contextmenu')
+                this.contextMenu.visible = false
                 this.table.destroy()
                 $(this.$refs.header).empty()
                 $(this.$refs.body).empty()
@@ -482,24 +487,28 @@ export default {
         },
 
         initContextMenu() {
-            if (this.supportContextMenu != true) return
+            if (this.supportContextMenu !== true) return
             if (this.contextMenuItems == null) return
-            var contextMenuOptions = {
-                selector: '#' + this.$refs.table.attributes.id.value + ' tbody tr td:not(.checkbox-cell)',
-                autoHide: false,
-                build: $trigger => {
-                    var selectedRow = this.selectRowAndGetData($trigger)
 
-                    if (selectedRow.rowData == null) return false
+            $(this.$refs.table).on('click.dt-contextmenu', 'tbody tr td:not(.checkbox-cell)', (event) => {
+                const selectedRow = this.selectRowAndGetData($(event.currentTarget))
 
-                    var items = this.contextMenuItems(selectedRow)
-                    if (items == null) return
-                    return { items: items }
-                },
-                trigger: 'left',
-            }
+                if (selectedRow.rowData == null) {
+                    this.contextMenu.visible = false
+                    return
+                }
 
-            $.contextMenu(contextMenuOptions)
+                const items = this.contextMenuItems(selectedRow)
+                if (items == null || items.length === 0) {
+                    this.contextMenu.visible = false
+                    return
+                }
+
+                this.contextMenu.items = items
+                this.contextMenu.x = event.clientX
+                this.contextMenu.y = event.clientY
+                this.contextMenu.visible = true
+            })
         },
 
         rowsSelected(e, dt, type, ar) {

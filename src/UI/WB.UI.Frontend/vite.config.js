@@ -407,11 +407,9 @@ export default defineConfig(({ mode, command }) => {
                         ) return 'vendor-vue'
 
                         if (
-                            id.includes('/@apollo/') ||
-                            id.includes('/graphql') ||
-                            id.includes('/graphql-tag') ||
-                            id.includes('/zen-observable')
-                        ) return 'vendor-apollo'
+                            id.includes('/graphql-request/') ||
+                            id.includes('/node_modules/graphql/')
+                        ) return 'vendor-graphql'
 
                         if (id.includes('/jquery-mask-plugin/')) return 'vendor-jquery-mask'
 

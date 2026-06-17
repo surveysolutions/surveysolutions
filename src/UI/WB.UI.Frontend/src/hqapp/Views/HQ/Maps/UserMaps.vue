@@ -13,11 +13,9 @@
                 </p>
             </div>
         </template>
-        <DataTables ref="table"
-            :tableOptions="tableOptions"></DataTables>
+        <DataTables ref="table" :tableOptions="tableOptions"></DataTables>
         <template v-slot:models>
-            <Confirm ref="confirmDiscard"
-                id="discardConfirm">
+            <Confirm ref="confirmDiscard" id="discardConfirm">
                 {{ $t("Pages.Map_DiscardConfirm") }}
             </Confirm>
         </template>
@@ -27,7 +25,7 @@
 <script>
 import { map, join, uniqBy, filter, some, orderBy } from 'lodash-es'
 import * as toastr from 'toastr'
-import gql from 'graphql-tag'
+import { gql, gqlRequest } from '~/hqapp/api/graphql'
 const query = gql`query UserMaps($workspace: String!, $order: [MapsSort!], $skip: Int, $take: Int, $where: MapsFilter) {
   maps(workspace: $workspace, order: $order, skip: $skip, take: $take, where: $where) {
     totalCount,
@@ -147,12 +145,8 @@ export default {
                         variables.where = where
                     }
 
-                    self.$apollo.query({
-                        query,
-                        variables: variables,
-                        fetchPolicy: 'network-only',
-                    }).then(response => {
-                        const nodes = response.data.maps.nodes
+                    gqlRequest(query, variables).then(response => {
+                        const nodes = response.maps.nodes
 
                         const interviewers = uniqBy(map(nodes, 'users').flat(), 'userName')
                         const sortedInterviewers = orderBy(interviewers, [column.data], [order_col.dir])
