@@ -43,34 +43,31 @@ jobs:
       - name: '[3/8] Pull Headquarters image'
         run: docker pull "${{ steps.image.outputs.name }}"
 
-      - name: '[4/8] Download wizcli'
-        # Always downloads the latest version matching the Wiz tenant.
+      - name: '[4/7] Download wizcli'
+        # Downloads wizcli v1 from the canonical v1 endpoint.
         run: |
           curl --silent --show-error --fail --location \
             --output ./wizcli \
-            "https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64"
+            "https://wizcli.app.wiz.io/v1/latest/wizcli-linux-amd64"
           chmod +x ./wizcli
           ./wizcli version
 
-      - name: '[5/8] Authenticate wizcli'
-        run: |
-          ./wizcli auth \
-            --id "${{ secrets.WIZ_CLIENT_ID }}" \
-            --secret "${{ secrets.WIZ_CLIENT_SECRET }}"
-
-      - name: '[6/8] Scan image with wizcli'
+      - name: '[5/7] Scan image with wizcli'
+        # v1: no separate auth step — credentials are passed via env vars.
         # Exit code 1 = policy violation or scan error — both treated as failure.
-        # tee writes stdout both to the log and to wizcli_output.txt for the artifact.
+        # --stdout=human + tee captures the human-readable output for the artifact.
         env:
-          NO_COLOR: "1"
+          WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
+          WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
         run: |
-          ./wizcli docker scan \
-            --image "${{ steps.image.outputs.name }}" \
-            --output-file wiz_scan_results.json \
-            --output-format json \
+          ./wizcli scan container-image \
+            --stdout=human \
+            --no-color \
+            --json-output-file wiz_scan_results.json \
+            "${{ steps.image.outputs.name }}" \
           | tee wizcli_output.txt; exit "${PIPESTATUS[0]}"
 
-      - name: '[7/8] Generate reports'
+      - name: '[6/7] Generate reports'
         if: ${{ !cancelled() }}
         run: |
           IMAGE="${{ steps.image.outputs.name }}"
@@ -244,7 +241,7 @@ jobs:
           </html>
           HTML
 
-      - name: '[8/8] Upload scan results'
+      - name: '[7/7] Upload scan results'
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
