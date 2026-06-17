@@ -256,4 +256,7 @@
   <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
     <value>Answer to question with variable name {0} can't be preloaded, since it is of unsupported type. Refer to the following support article https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type for details of what can be preloaded in the current version.</value>
   </data>
+  <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+    <value>Audio audit scope variable name '{0}' is invalid. It must reference an existing section, group or roster (questions are not allowed).</value>
+  </data>
 </root>

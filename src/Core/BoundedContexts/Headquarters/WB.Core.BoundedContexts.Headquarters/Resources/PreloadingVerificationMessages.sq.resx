@@ -258,4 +258,7 @@
   <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
     <value>Përgjigjja për pyetjen me emrin e variablit {0} nuk mund të ngarkohet paraprakisht, pasi është e një lloji të pambështetur. Shihni artikullin vijues të mbështetjes https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type për hollësi mbi atë që mund të ngarkohet paraprakisht në versionin aktual.</value>
   </data>
+  <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+    <value>Audio audit scope variable name '{0}' is invalid. It must reference an existing section, group or roster (questions are not allowed).</value>
+  </data>
 </root>

@@ -259,4 +259,7 @@
   <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
     <value>Ответ на вопрос с именем {0} не может быть загружен, так как тип не поддерживается. Пожалуйста, ознакомьтесь https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type </value>
   </data>
+  <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+    <value>Audio audit scope variable name '{0}' is invalid. It must reference an existing section, group or roster (questions are not allowed).</value>
+  </data>
 </root>

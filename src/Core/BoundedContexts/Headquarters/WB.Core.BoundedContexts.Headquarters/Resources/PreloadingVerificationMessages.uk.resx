@@ -255,4 +255,7 @@
   <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
     <value>Відповідь на питання з іменем {0} не може бути попередньо завантажена, оскільки вона має непідтримуваний тип. Зверніться до наступної статті підтримки https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type для отримання детальної інформації про те, що можна попередньо завантажити у поточній версії.</value>
   </data>
+  <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+    <value>Audio audit scope variable name '{0}' is invalid. It must reference an existing section, group or roster (questions are not allowed).</value>
+  </data>
 </root>

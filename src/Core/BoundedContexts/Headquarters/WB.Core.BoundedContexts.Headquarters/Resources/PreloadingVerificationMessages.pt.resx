@@ -255,4 +255,7 @@
   <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
     <value>A resposta à pergunta com o nome da variável {0} não pode ser pré-carregada, pois é de um tipo não suportado. Consulte o seguinte artigo de suporte https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type para obter detalhes sobre o que pode ser pré-carregado na versão atual.</value>
   </data>
+  <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+    <value>Audio audit scope variable name '{0}' is invalid. It must reference an existing section, group or roster (questions are not allowed).</value>
+  </data>
 </root>

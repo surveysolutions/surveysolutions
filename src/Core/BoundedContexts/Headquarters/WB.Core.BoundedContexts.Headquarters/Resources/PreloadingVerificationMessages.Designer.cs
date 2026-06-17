@@ -320,5 +320,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("PL0063_NoPermittedQuestion", resourceCulture);
             }
         }
+        
+        public static string PL0064_AudioAuditScopeInvalidEntity {
+            get {
+                return ResourceManager.GetString("PL0064_AudioAuditScopeInvalidEntity", resourceCulture);
+            }
+        }
     }
 }

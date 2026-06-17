@@ -228,6 +228,19 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 Value = answer.Value
             };
 
+        public static AssignmentAudioAuditScope ToAssignmentAudioAuditScope(this PreloadingValue answer) =>
+            new AssignmentAudioAuditScope
+            {
+                Column = answer.Column,
+                Value = answer.Value,
+                VariableNames = string.IsNullOrWhiteSpace(answer.Value)
+                    ? Array.Empty<string>()
+                    : answer.Value.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(x => x.Trim())
+                        .Where(x => x.Length > 0)
+                        .ToArray()
+            };
+
         public static AssignmentRecordAudio ToAssignmentRecordAudio(this PreloadingValue preloadingWebMode)
         {
             var recordAudio = new AssignmentRecordAudio
