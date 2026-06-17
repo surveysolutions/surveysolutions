@@ -63,8 +63,8 @@ export default {
         showContextMenu(event) {
             const menuWidth = 200;
             const menuHeight = 250;
-            const x = Math.min(event.clientX, window.innerWidth - menuWidth);
-            const y = Math.min(event.clientY, window.innerHeight - menuHeight);
+            const x = Math.max(0, Math.min(event.clientX, window.innerWidth - menuWidth));
+            const y = Math.max(0, Math.min(event.clientY, window.innerHeight - menuHeight));
             this.treeContextMenuStore.show(
                 this.item,
                 this.stat,

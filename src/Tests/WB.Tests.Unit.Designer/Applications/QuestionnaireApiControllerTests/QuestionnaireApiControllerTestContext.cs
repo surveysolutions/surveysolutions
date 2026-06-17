@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                 Mock.Of<IOptions<WebTesterSettings>>(),
                 webTesterService ?? Mock.Of<IWebTesterService>(),
                 userManager.Object,
-                Mock.Of<DesignerDbContext>());
+                Create.InMemoryDbContext());
 
             return questionnaireController;
         }

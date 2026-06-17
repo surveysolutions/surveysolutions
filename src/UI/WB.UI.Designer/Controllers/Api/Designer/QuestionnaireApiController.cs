@@ -99,7 +99,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 Response.OnStarting(() =>
                 {
                     Response.Headers.ETag = etag;
-                    Response.Headers.CacheControl = "no-cache";
+                    Response.Headers.CacheControl = "private, no-cache";
+                    Response.Headers.Vary = "Cookie";
                     return Task.CompletedTask;
                 });
             }
@@ -130,7 +131,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 Response.OnStarting(() =>
                 {
                     Response.Headers.ETag = etag;
-                    Response.Headers.CacheControl = "no-cache";
+                    Response.Headers.CacheControl = "private, no-cache";
+                    Response.Headers.Vary = "Cookie";
                     return Task.CompletedTask;
                 });
             }

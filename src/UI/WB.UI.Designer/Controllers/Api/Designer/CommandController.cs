@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
@@ -63,7 +62,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IDesignerTranslationService translationsService;
         private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IMemoryCache memoryCache;
 
         // Get the default form options so that we can use them to set the default limits for
         // request body data
@@ -82,31 +80,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             IDesignerTranslationService translationsService,
             IReusableCategoriesService reusableCategoriesService,
             IFileSystemAccessor fileSystemAccessor)
-            : this(
-                commandService,
-                dbContext,
-                logger,
-                commandPreprocessor,
-                lookupTableService,
-                attachmentService,
-                translationsService,
-                reusableCategoriesService,
-                fileSystemAccessor,
-                new MemoryCache(new MemoryCacheOptions()))
-        {
-        }
-
-        public CommandController(
-            ICommandService commandService,
-            DesignerDbContext dbContext,
-            ILogger<CommandController> logger,
-            ICommandInflater commandPreprocessor,
-            ILookupTableService lookupTableService,
-            IAttachmentService attachmentService,
-            IDesignerTranslationService translationsService,
-            IReusableCategoriesService reusableCategoriesService,
-            IFileSystemAccessor fileSystemAccessor,
-            IMemoryCache memoryCache)
         {
             this.logger = logger;
             this.commandInflater = commandPreprocessor;
@@ -117,7 +90,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.translationsService = translationsService;
             this.reusableCategoriesService = reusableCategoriesService;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.memoryCache = memoryCache;
         }
 
         public class AttachmentModel
@@ -192,7 +164,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             var updateAttachment = this.ProcessCommand(command).Response;
             await dbContext.SaveChangesAsync();
-            InvalidateLatestRevisionETag(command);
             return updateAttachment;
         }
 
@@ -279,7 +250,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             var updateLookupTable = this.ProcessCommand(updateLookupTableCommand).Response;
 
             await dbContext.SaveChangesAsync();
-            InvalidateLatestRevisionETag(updateLookupTableCommand);
 
             return updateLookupTable;
         }
@@ -302,7 +272,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     if (!commandProcessResult.HasErrors)
                     {
                         await dbContext.SaveChangesAsync();
-                        InvalidateLatestRevisionETag(concreteCommand);
                         transaction.Commit();
                     }
                     else
@@ -402,8 +371,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if (commandResponse.HasErrors || model.File == null)
             {
                 await dbContext.SaveChangesAsync();
-                if (!commandResponse.HasErrors)
-                    InvalidateLatestRevisionETag(command);
                 return commandResponse.Response;
             }
 
@@ -414,7 +381,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 : string.Format(QuestionnaireEditor.TranslationsObtained_plural, storedTranslationsCount);
 
             await dbContext.SaveChangesAsync();
-            InvalidateLatestRevisionETag(command);
 
             return Ok(resultMessage);
         }
@@ -481,7 +447,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return commandResponse.Response;
 
             await dbContext.SaveChangesAsync();
-            InvalidateLatestRevisionETag(command);
 
             var storedCategoriesCount = this.reusableCategoriesService.GetCategoriesById(command.QuestionnaireId, command.CategoriesId).Count();
 
@@ -656,19 +621,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
 
             return new CommandProcessResult(Ok(), false);
-        }
-
-        private void InvalidateLatestRevisionETag(ICommand command)
-        {
-            var questionnaireIdProperty = command.GetType().GetProperty("QuestionnaireId");
-            if (questionnaireIdProperty?.PropertyType != typeof(Guid))
-                return;
-
-            var questionnaireId = (Guid?)questionnaireIdProperty.GetValue(command);
-            if (!questionnaireId.HasValue || questionnaireId.Value == Guid.Empty)
-                return;
-
-            QuestionnaireETagCache.InvalidateLatestRevision(this.memoryCache, questionnaireId.Value);
         }
     }
 
