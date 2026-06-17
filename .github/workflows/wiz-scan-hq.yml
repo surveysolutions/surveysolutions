@@ -1,0 +1,257 @@
+name: Wiz CLI Scan — Headquarters Docker Image
+
+on:
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  wiz-scan:
+    name: Wiz CLI Scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: '[1/8] Resolve image tag from branch name'
+        id: image
+        run: |
+          # Replicate the tag escaping from .build.ps1 Get-DockerTags / EscapedBranchName
+          branch="${{ github.ref_name }}"
+          tag="${branch}"
+          # Remove KP ticket prefixes, underscores, plus signs
+          tag=$(echo "$tag" | sed -E 's/([Kk][Pp]-?[0-9]+)|_|\+//g')
+          # Replace slashes and backslashes with dashes
+          tag=$(echo "$tag" | tr '/\\' '-')
+          # Strip leading non-alphanumeric characters
+          tag=$(echo "$tag" | sed -E 's/^[^[:alnum:]]*//')
+          # Truncate to 128 characters
+          tag="${tag:0:128}"
+          IMAGE="${{ env.REGISTRY }}/${{ github.repository }}/headquarters:${tag}"
+          echo "name=${IMAGE}" >> "$GITHUB_OUTPUT"
+          echo "Resolved image: ${IMAGE}"
+
+      - name: '[2/8] Log in to the GitHub Container Registry'
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: '[3/8] Pull Headquarters image'
+        run: docker pull "${{ steps.image.outputs.name }}"
+
+      - name: '[4/8] Download wizcli'
+        # Always downloads the latest version matching the Wiz tenant.
+        run: |
+          curl --silent --show-error --fail --location \
+            --output ./wizcli \
+            "https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64"
+          chmod +x ./wizcli
+          ./wizcli version
+
+      - name: '[5/8] Authenticate wizcli'
+        run: |
+          ./wizcli auth \
+            --id "${{ secrets.WIZ_CLIENT_ID }}" \
+            --secret "${{ secrets.WIZ_CLIENT_SECRET }}"
+
+      - name: '[6/8] Scan image with wizcli'
+        # Exit code 1 = policy violation or scan error — both treated as failure.
+        # tee writes stdout both to the log and to wizcli_output.txt for the artifact.
+        env:
+          NO_COLOR: "1"
+        run: |
+          ./wizcli docker scan \
+            --image "${{ steps.image.outputs.name }}" \
+            --output-file wiz_scan_results.json \
+            --output-format json \
+          | tee wizcli_output.txt; exit "${PIPESTATUS[0]}"
+
+      - name: '[7/8] Generate reports'
+        if: ${{ !cancelled() }}
+        run: |
+          IMAGE="${{ steps.image.outputs.name }}"
+          SCAN_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+          # wizcli docker scan JSON output schema:
+          #   .result           — "PASSED" | "FAILED"
+          #   .analytics        — severity count fields
+          #   .vulnerabilities  — array of findings
+          RESULT=$(jq -r '.result // "UNKNOWN"' wiz_scan_results.json)
+
+          VCRIT=$(jq -r '.analytics.criticalSeverityCount      // 0' wiz_scan_results.json)
+          VHIGH=$(jq -r '.analytics.highSeverityCount          // 0' wiz_scan_results.json)
+          VMED=$(jq -r  '.analytics.mediumSeverityCount        // 0' wiz_scan_results.json)
+          VLOW=$(jq -r  '.analytics.lowSeverityCount           // 0' wiz_scan_results.json)
+          VINFO=$(jq -r '.analytics.informationalSeverityCount // 0' wiz_scan_results.json)
+          VTOT=$(jq -r  '.analytics.totalVulnerabilityCount    // 0' wiz_scan_results.json)
+
+          # ── Markdown / Job Summary ────────────────────────────────────────────
+          {
+            echo "# Wiz CLI Scan Report"
+            echo ""
+            echo "| Field        | Value |"
+            echo "|---|---|"
+            echo "| **Image**    | \`${IMAGE}\` |"
+            echo "| **Branch**   | \`${{ github.ref_name }}\` |"
+            echo "| **Scan time**| ${SCAN_TIME} |"
+            echo "| **Result**   | ${RESULT} |"
+            echo "| **Run**      | [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |"
+            echo ""
+
+            if [ "$RESULT" = "PASSED" ]; then
+              echo "## Vulnerabilities — PASSED ✅"
+            else
+              echo "## Vulnerabilities — FAILED ❌"
+            fi
+            echo ""
+            echo "| Severity      | Count |"
+            echo "|---|---|"
+            echo "| 🔴 Critical   | ${VCRIT}  |"
+            echo "| 🟠 High       | ${VHIGH}  |"
+            echo "| 🟡 Medium     | ${VMED}   |"
+            echo "| 🔵 Low        | ${VLOW}   |"
+            echo "| ⚪ Info        | ${VINFO}  |"
+            echo "| **Total**     | **${VTOT}** |"
+            echo ""
+
+            VULN_COUNT=$(jq '.vulnerabilities | length' wiz_scan_results.json)
+            if [ "$VULN_COUNT" -gt 0 ]; then
+              echo "## Vulnerability Details"
+              echo ""
+              echo "| CVE | Severity | CVSS | Package | Version | Fixed in | Published |"
+              echo "|---|---|---|---|---|---|---|"
+              jq -r '
+                .vulnerabilities[]
+                | [
+                    .name,
+                    (.severity | ascii_downcase),
+                    (.score // "—" | tostring),
+                    .packageName,
+                    .packageVersion,
+                    (.fixedVersion // "—"),
+                    (.publishedDate // "—" | if . != "—" then .[0:10] else . end)
+                  ]
+                | @tsv
+              ' wiz_scan_results.json | sort -t$'\t' -k2,2r | \
+              while IFS=$'\t' read -r cve sev cvss pkg ver fix pub; do
+                echo "| ${cve} | ${sev} | ${cvss} | ${pkg} | ${ver} | ${fix} | ${pub} |"
+              done
+              echo ""
+            fi
+          } | tee scan_report.md >> "$GITHUB_STEP_SUMMARY"
+
+          # ── HTML report ───────────────────────────────────────────────────────
+          if [ "$RESULT" = "PASSED" ]; then
+            RESULT_BADGE='<span class="badge pass">PASSED</span>'
+          else
+            RESULT_BADGE='<span class="badge fail">FAILED</span>'
+          fi
+
+          VULN_ROWS=$(jq -r '
+            .vulnerabilities[]
+            | "<tr class=\"sev-\(.severity | ascii_downcase)\">"
+              + "<td><a href=\"https://nvd.nist.gov/vuln/detail/\(.name)\" target=\"_blank\">\(.name)</a></td>"
+              + "<td><span class=\"sev \(.severity | ascii_downcase)\">\(.severity | ascii_downcase)</span></td>"
+              + "<td>\(.score // "—")</td>"
+              + "<td>\(.packageName)</td>"
+              + "<td>\(.packageVersion)</td>"
+              + "<td>\(.fixedVersion // "—")</td>"
+              + "<td>\(.publishedDate // "—" | if . != "—" then .[0:10] else . end)</td>"
+              + "<td class=\"desc\">\(.description // "" | .[0:140])…</td>"
+              + "</tr>"
+          ' wiz_scan_results.json 2>/dev/null || echo "")
+
+          cat > scan_report.html <<HTML
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+          <meta charset="UTF-8">
+          <title>Wiz Scan — Headquarters</title>
+          <style>
+            *, *::before, *::after { box-sizing: border-box; }
+            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                   margin: 0; padding: 24px; background: #0d1117; color: #c9d1d9; font-size: 14px; }
+            h1 { font-size: 22px; color: #e6edf3; margin: 0 0 4px; }
+            h2 { font-size: 16px; color: #e6edf3; margin: 32px 0 12px; border-bottom: 1px solid #30363d; padding-bottom: 6px; }
+            .meta { color: #8b949e; font-size: 13px; margin-bottom: 24px; }
+            .meta a { color: #58a6ff; text-decoration: none; }
+            .cards { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+            .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+                    padding: 16px 24px; min-width: 120px; text-align: center; }
+            .card .num { font-size: 32px; font-weight: 700; line-height: 1.1; }
+            .card .label { font-size: 12px; color: #8b949e; margin-top: 4px; text-transform: uppercase; letter-spacing: .5px; }
+            .num.critical { color: #f85149; }
+            .num.high     { color: #e3b341; }
+            .num.medium   { color: #d29922; }
+            .num.low      { color: #388bfd; }
+            .num.info     { color: #8b949e; }
+            .num.total    { color: #e6edf3; }
+            .badge { display: inline-block; border-radius: 4px; padding: 2px 10px;
+                     font-size: 12px; font-weight: 600; text-transform: uppercase; }
+            .badge.pass { background: #1a4731; color: #3fb950; border: 1px solid #238636; }
+            .badge.fail { background: #3d1c1e; color: #f85149; border: 1px solid #da3633; }
+            table { width: 100%; border-collapse: collapse; background: #161b22;
+                    border: 1px solid #30363d; border-radius: 8px; overflow: hidden; margin-top: 12px; }
+            thead th { background: #21262d; color: #8b949e; font-weight: 600; font-size: 12px;
+                       text-transform: uppercase; letter-spacing: .4px; padding: 10px 12px; text-align: left; }
+            tbody td { padding: 8px 12px; border-top: 1px solid #21262d; vertical-align: top; }
+            tbody tr:hover td { background: #1c2128; }
+            td.desc { color: #8b949e; font-size: 12px; max-width: 320px; }
+            .sev { display: inline-block; border-radius: 3px; padding: 1px 7px; font-size: 11px; font-weight: 600; text-transform: capitalize; }
+            .sev.critical { background: #3d1c1e; color: #f85149; border: 1px solid #da3633; }
+            .sev.high     { background: #2e2009; color: #e3b341; border: 1px solid #9e6a03; }
+            .sev.medium   { background: #2e2009; color: #d29922; border: 1px solid #9e6a03; }
+            .sev.low      { background: #0d1926; color: #388bfd; border: 1px solid #1f6feb; }
+            .sev.informational { background: #161b22; color: #8b949e; border: 1px solid #30363d; }
+            a { color: #58a6ff; text-decoration: none; }
+            a:hover { text-decoration: underline; }
+            .section-header { display: flex; align-items: center; gap: 12px; }
+          </style>
+          </head>
+          <body>
+          <h1>🛡 Wiz CLI Scan Report</h1>
+          <div class="meta">
+            <strong>Image:</strong> <code>${IMAGE}</code> &nbsp;|&nbsp;
+            <strong>Branch:</strong> <code>${{ github.ref_name }}</code> &nbsp;|&nbsp;
+            <strong>Scan time:</strong> ${SCAN_TIME} &nbsp;|&nbsp;
+            <strong>Run:</strong> <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">#${{ github.run_id }}</a>
+          </div>
+
+          <h2><div class="section-header">Vulnerabilities &nbsp; ${RESULT_BADGE}</div></h2>
+          <div class="cards">
+            <div class="card"><div class="num critical">${VCRIT}</div><div class="label">Critical</div></div>
+            <div class="card"><div class="num high">${VHIGH}</div><div class="label">High</div></div>
+            <div class="card"><div class="num medium">${VMED}</div><div class="label">Medium</div></div>
+            <div class="card"><div class="num low">${VLOW}</div><div class="label">Low</div></div>
+            <div class="card"><div class="num info">${VINFO}</div><div class="label">Info</div></div>
+            <div class="card"><div class="num total">${VTOT}</div><div class="label">Total</div></div>
+          </div>
+          $(if [ -n "$VULN_ROWS" ]; then cat <<VTABLE
+          <table>
+            <thead>
+              <tr><th>CVE</th><th>Severity</th><th>CVSS</th><th>Package</th><th>Version</th><th>Fixed in</th><th>Published</th><th>Description</th></tr>
+            </thead>
+            <tbody>${VULN_ROWS}</tbody>
+          </table>
+          VTABLE
+          fi)
+
+          </body>
+          </html>
+          HTML
+
+      - name: '[8/8] Upload scan results'
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: wiz-scan-results
+          path: |
+            scan_report.md
+            scan_report.html
+            wiz_scan_results.json
+            wizcli_output.txt
+          retention-days: 30
