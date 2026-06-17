@@ -1,4 +1,5 @@
 import { defineAsyncComponent } from 'vue'
+import { ButtonType, GroupStatus } from '../questionConstants'
 
 // tslint:disable-next-line:ordered-imports
 
@@ -44,19 +45,5 @@ export function registerQuestionComponents(vue) {
     vue.component('wb-humburger', defineAsyncComponent(() => import('./ui/humburger')))
     vue.component('wb-typeahead', defineAsyncComponent(() => import('./ui/typeahead')))
 }
-export const GroupStatus = {
-    Disabled: 'Disabled',
-    NotStarted: 'NotStarted',
-    Started: 'Started',
-    StartedInvalid: 'StartedInvalid',
-    Completed: 'Completed',
-    CompletedInvalid: 'CompletedInvalid',
-}
-
-export const ButtonType = {
-    Start: 'Start',
-    Next: 'Next',
-    Parent: 'Parent',
-    Complete: 'Complete',
-}
+export { GroupStatus, ButtonType }
 

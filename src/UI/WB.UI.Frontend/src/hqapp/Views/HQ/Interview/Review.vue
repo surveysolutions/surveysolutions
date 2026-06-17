@@ -1,24 +1,18 @@
 <template>
-    <main class="web-interview web-interview-for-supervisor"
-        :class="classes">
+    <main class="web-interview web-interview-for-supervisor" :class="classes">
         <div class="container-fluid">
             <div class="row">
                 <DetailsInfo />
                 <Facets />
                 <SearchResults />
-                <Sidebar :showComplete="false"
-                    :show-foldback-button-as-hamburger="false" />
+                <Sidebar :showComplete="false" :show-foldback-button-as-hamburger="false" />
                 <section class="questionnaire details-interview">
-                    <Interview :interviewId="interviewId"
-                        mode="review"
-                        @connected="connected" />
+                    <Interview :interviewId="interviewId" mode="review" @connected="connected" />
                 </section>
             </div>
         </div>
         <IdleTimeoutService />
-        <span id="loadingPixel"
-            style="display:none"
-            :data-loading="isLoading"></span>
+        <span id="loadingPixel" style="display:none" :data-loading="isLoading"></span>
     </main>
 </template>
 
@@ -27,7 +21,7 @@ import Facets from './Facets'
 import SearchResults from './SearchResults'
 import Sidebar from '~/webinterview/components/Sidebar'
 import DetailsInfo from './DetailsInfo.vue'
-import { registerQuestionGlobalComponents } from '~/webinterview/componentsQuestionRegistry'
+import { ensureQuestionGlobalComponents } from '~/webinterview/componentsQuestionRegistry'
 import { nextTick } from 'vue'
 import http from '~/webinterview/api/http'
 //const Interview = () => import('~/webinterview/components/Interview.vue')
@@ -39,10 +33,7 @@ import '@/assets/css/markup-interview-review.scss'
 
 export default {
     async beforeCreate() {
-        if (!this.$root.__wiQuestionComponentsRegistered) {
-            registerQuestionGlobalComponents(this.$root)
-            this.$root.__wiQuestionComponentsRegistered = true
-        }
+        ensureQuestionGlobalComponents(this.$root)
     },
 
     watch: {

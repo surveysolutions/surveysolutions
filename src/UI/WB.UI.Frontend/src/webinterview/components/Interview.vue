@@ -1,10 +1,8 @@
 <template>
     <div>
-        <signalr @connected="connected"
-            :interviewId="interviewId"
-            :mode="mode" />
+        <signalr @connected="connected" :interviewId="interviewId" :mode="mode" />
         <reconnecting-banner />
-        <router-view />
+        <router-view v-if="questionComponentsReady" />
     </div>
 </template>
 
@@ -12,10 +10,17 @@
 
 import http from '~/webinterview/api/http'
 import browserLocalStore from '~/shared/localStorage'
+import { ensureQuestionGlobalComponents } from '~/webinterview/componentsQuestionRegistry'
 import { defineAsyncComponent } from 'vue'
 
 export default {
     name: 'WebInterviwew',
+
+    data() {
+        return {
+            questionComponentsReady: false,
+        }
+    },
 
     props: {
         mode: {
@@ -27,6 +32,13 @@ export default {
     components: {
         signalr: defineAsyncComponent(() => import('./signalr/core.signalr')),
         ReconnectingBanner: defineAsyncComponent(() => import('./ReconnectingBanner.vue')),
+    },
+
+    created() {
+        ensureQuestionGlobalComponents(this.$root)
+            .then(() => {
+                this.questionComponentsReady = true
+            })
     },
 
     beforeMount() {

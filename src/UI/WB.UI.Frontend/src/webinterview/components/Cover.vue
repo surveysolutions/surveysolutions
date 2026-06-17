@@ -1,19 +1,17 @@
 <template>
-    <div class="unit-section"
-        :class="coverStatusClass">
+    <div class="unit-section" :class="coverStatusClass">
         <div class="unit-title">
             <wb-humburger :showFoldbackButtonAsHamburger="showHumburger"></wb-humburger>
             <h3 id="cover-title">
                 {{
                     this.$store.state.webinterview.breadcrumbs.title ||
-                        this.$store.state.webinterview.coverInfo.title ||
-                        $t('WebInterviewUI.Cover')
+                    this.$store.state.webinterview.coverInfo.title ||
+                    $t('WebInterviewUI.Cover')
                 }}
             </h3>
         </div>
 
-        <div class="wrapper-info error"
-            v-if="hasBrokenPackage">
+        <div class="wrapper-info error" v-if="hasBrokenPackage">
             <div class="container-info">
                 <h4 class="error-text">
                     {{ $t('WebInterviewUI.CoverBrokenPackegeTitle') }}
@@ -24,8 +22,7 @@
             </div>
         </div>
 
-        <div class="wrapper-info"
-            v-if="hasSupervisorComment">
+        <div class="wrapper-info" v-if="hasSupervisorComment">
             <div class="container-info">
                 <h4 class="info-block gray-uppercase">
                     {{ $t('WebInterviewUI.CoverSupervisorNote') }}
@@ -36,32 +33,25 @@
             </div>
         </div>
 
-        <div class="wrapper-info"
-            v-if="commentedQuestions.length > 0">
+        <div class="wrapper-info" v-if="commentedQuestions.length > 0">
             <div class="container-info">
                 <h4 class="info-block gray-uppercase">
                     {{ commentsTitle }}
                 </h4>
                 <ul class="list-unstyled marked-questions">
-                    <li v-for="commentedQuestion in commentedQuestions"
-                        :key="commentedQuestion.id">
-                        <a href="javascript:void(0);"
-                            @click="navigateTo(commentedQuestion)">{{ commentedQuestion.title
-                        }}</a>
+                    <li v-for="commentedQuestion in commentedQuestions" :key="commentedQuestion.id">
+                        <a href="javascript:void(0);" @click="navigateTo(commentedQuestion)">{{ commentedQuestion.title
+                            }}</a>
                     </li>
                 </ul>
             </div>
         </div>
 
         <template v-for="entity in entities">
-            <ReadonlyQuestion v-if="entity.isReadonly"
-                :key="entity.identity"
-                :id="entity.identity">
+            <ReadonlyQuestion v-if="entity.isReadonly" :key="entity.identity" :id="entity.identity">
             </ReadonlyQuestion>
 
-            <component v-else
-                :key="`${entity.identity}-${entity.entityType}`"
-                :is="entity.entityType"
+            <component v-else :key="`${entity.identity}-${entity.entityType}`" :is="entity.entityType"
                 :id="entity.identity"></component>
         </template>
     </div>
@@ -69,7 +59,7 @@
 
 <script lang="js">
 import isEmpty from 'lodash/isEmpty'
-import { GroupStatus } from './questions'
+import { GroupStatus } from './questionConstants'
 
 export default {
     name: 'cover-readonly-view',
