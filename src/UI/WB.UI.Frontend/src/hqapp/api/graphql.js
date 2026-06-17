@@ -2,7 +2,7 @@ import { GraphQLClient, gql } from 'graphql-request'
 
 export { gql }
 
-const client = new GraphQLClient('/graphql')
+const client = new GraphQLClient(new URL('/graphql', window.location.origin).toString())
 
 export async function gqlRequest(document, variables) {
     try {
