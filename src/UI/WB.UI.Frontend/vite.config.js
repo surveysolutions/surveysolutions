@@ -239,6 +239,10 @@ export default defineConfig(({ mode, command }) => {
                     find: 'vue',
                     replacement: 'vue/dist/vue.runtime.esm-bundler.js',
                 },
+                {
+                    find: 'moment',
+                    replacement: path.resolve(__dirname, 'src/shared/momentCompat.js'),
+                },
                 /*{
                     find: 'jquery',
                     replacement: 'jquery/dist/jquery.min.js',
@@ -409,9 +413,9 @@ export default defineConfig(({ mode, command }) => {
                         ) return 'vendor-jquery-datatables'
 
                         if (
-                            id.includes('/moment/') ||
-                            id.includes('/chartjs-adapter-moment/')
-                        ) return 'vendor-moment'
+                            id.includes('/dayjs/') ||
+                            id.includes('/chartjs-adapter-dayjs-4/')
+                        ) return 'vendor-dayjs'
 
                         if (
                             id.includes('/chart.js/') ||

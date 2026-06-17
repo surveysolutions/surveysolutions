@@ -76,7 +76,7 @@ const chartOptions = {
 }
 
 import { Line } from 'vue-chartjs'
-import 'chartjs-adapter-moment'
+import 'chartjs-adapter-dayjs-4'
 import { Chart, LineController, Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale, TimeScale, Filler } from 'chart.js';
 
 Chart.register(LineController, Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale, TimeScale, Filler);
