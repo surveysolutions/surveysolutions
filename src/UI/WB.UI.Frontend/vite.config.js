@@ -432,6 +432,10 @@ export default defineConfig(({ mode, command }) => {
                         if (id.includes('/toastr/')) return 'vendor-toastr'
                         if (id.includes('/bootstrap/')) return 'vendor-bootstrap'
                         if (id.includes('/@ag-grid-community/')) return 'vendor-ag-grid'
+                        if (id.includes('/axios/')) return 'vendor-misc'
+                        if (id.includes('/marked/') || id.includes('/dompurify/')) return 'vendor-misc'
+                        if (id.includes('/vee-validate/') || id.includes('/@vee-validate/')) return 'vendor-misc'
+                        if (id.includes('/qrcode/') || id.includes('/mitt/') || id.includes('/autonumeric/')) return 'vendor-misc'
                     },
                     assetFileNames: (assetInfo) => {
                         let extType = assetInfo.name.split('.').at(1);
