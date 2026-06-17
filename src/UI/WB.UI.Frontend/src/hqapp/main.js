@@ -53,7 +53,6 @@ import './validate.js'
 import box from '@/shared/modal'
 box.init(i18n, browserLanguage)
 
-import 'flatpickr/dist/flatpickr.css'
 import 'toastr/build/toastr.css'
 import * as toastr from 'toastr'
 toastr.options.escapeHtml = true
