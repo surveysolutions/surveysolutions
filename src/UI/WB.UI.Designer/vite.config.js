@@ -330,10 +330,9 @@ export default defineConfig(({ mode, command }) => {
             minify: isProdMode,
             outDir,
             manifest: true,
-            rollupOptions: {
+            rolldownOptions: {
                 //external: ['jquery'],
                 //preserveEntrySignatures: true,
-                cache: false,
                 //maxParallelFileOps: 2,
                 plugins: [
                     inject({
