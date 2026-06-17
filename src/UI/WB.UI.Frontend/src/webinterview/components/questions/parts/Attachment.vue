@@ -1,42 +1,63 @@
 <template>
     <div class="attachment">
-        <div v-if="localContentType === 'image' && thumbPath" class="image-zoom-box image-wrapper"
+        <div v-if="localContentType === 'image' && thumbPath"
+            class="image-zoom-box image-wrapper"
             :class="customCssClass">
-            <img :src="thumbPath" alt="custom photo" class="zoomImg" @load="imageLoaded" @click="showModal(true)"
+            <img :src="thumbPath"
+                alt="custom photo"
+                class="zoomImg"
+                @load="imageLoaded"
+                @click="showModal(true)"
                 :style="previewStyle" />
             <Teleport to="body">
-                <div class="modal-img" v-if="modal" :style="modalView" @click="showModal(false)">
+                <div class="modal-img"
+                    v-if="modal"
+                    :style="modalView"
+                    @click="showModal(false)">
                     <span class="close-zoomming-img">×</span>
-                    <img class="modal-img-content" :src="fullPath" alt />
+                    <img class="modal-img-content"
+                        :src="fullPath"
+                        alt />
                     <span class="caption"></span>
                 </div>
             </Teleport>
         </div>
         <div v-if="localContentType === 'audio'">
             <div class="instructions-wrapper">
-                <a class="btn btn-link" :href="contentUrl" target="_blank">
+                <a class="btn btn-link"
+                    :href="contentUrl"
+                    target="_blank">
                     {{ $t("Common.Download") }}
                 </a>
             </div>
             <div>
-                <audio controls preload="auto" :src="contentUrl">{{ $t('WebInterviewUI.MultimediaNotSupported')
+                <audio controls
+                    preload="auto"
+                    :src="contentUrl">{{ $t('WebInterviewUI.MultimediaNotSupported')
                 }}</audio>
             </div>
         </div>
         <div v-if="localContentType === 'video'">
             <div class="instructions-wrapper">
-                <a class="btn btn-link" :href="contentUrl" target="_blank">
+                <a class="btn btn-link"
+                    :href="contentUrl"
+                    target="_blank">
                     {{ $t("Common.Download") }}
                 </a>
             </div>
             <div>
-                <video controls preload="auto" style="width:300px" :src="contentUrl">{{
+                <video controls
+                    preload="auto"
+                    style="width:300px"
+                    :src="contentUrl">{{
                     $t('WebInterviewUI.MultimediaNotSupported') }}</video>
             </div>
         </div>
         <div v-if="localContentType === 'pdf'">
             <div class="instructions-wrapper">
-                <a class="btn btn-link" :href="contentUrl" target="_blank">
+                <a class="btn btn-link"
+                    :href="contentUrl"
+                    target="_blank">
                     {{ $t("Common.Download") }}
                 </a>
             </div>
@@ -48,9 +69,9 @@ import axios from 'axios'
 import { startsWith } from 'lodash-es'
 
 function appendSearchParam(uri, name, value) {
-    const url = new URL(uri, window.location.origin);
-    url.searchParams.append(name, value);
-    return url.toString();
+    const url = new URL(uri, window.location.origin)
+    url.searchParams.append(name, value)
+    return url.toString()
 }
 
 export default {
@@ -188,7 +209,7 @@ export default {
         appendCache(uri) {
             if (this.cache)
                 return appendSearchParam(uri, 'cache', this.cache)
-            return uri;
+            return uri
         },
         showModal(show) {
             if (this.previewOnly)

@@ -176,7 +176,7 @@ export default {
 
     // called by server side. refresh
     refreshEntities({ state, dispatch, getters, rootState }, questions) {
-        
+
         questions.forEach(id => {
             if (state.entityDetails[id]) { // do not fetch entity that is no in the visible list
                 dispatch('fetchEntity', { id, source: 'server' })

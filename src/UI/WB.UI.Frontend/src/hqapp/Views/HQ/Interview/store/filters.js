@@ -111,10 +111,10 @@ export default {
         },
 
         CHANGE_FILTERS(state, { filter, value }) {
-            const resetOther = state.filter[filter].resetOther;
+            const resetOther = state.filter[filter].resetOther
 
             Object.keys(state.filter).forEach(key => {
-                const currectFilter = state.filter[key];
+                const currectFilter = state.filter[key]
                 if (resetOther === true)
                     currectFilter.value = false
                 else if (currectFilter.resetOther === true)

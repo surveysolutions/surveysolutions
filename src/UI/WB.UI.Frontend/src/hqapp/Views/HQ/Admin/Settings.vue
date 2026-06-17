@@ -65,8 +65,7 @@
 
 
 <script>
-import { Form, Field, ErrorMessage } from 'vee-validate'
-import emitter from '~/shared/emitter';
+import emitter from '~/shared/emitter'
 
 import Export from './Settings/Export'
 import Note from './Settings/Note'
@@ -81,10 +80,6 @@ export default {
         Profile,
         Devices,
         Logo,
-
-        Form,
-        Field,
-        ErrorMessage,
     },
     data() {
         return {

@@ -21,46 +21,73 @@
                 </div>
                 <div class="col-sm-12">
                     <form-group :label="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')"
-                        :error="modelState['Workspace']" :mandatory="true">
-                        <div class="field form-control" :class="{ answered: workspace != null }"
+                        :error="modelState['Workspace']"
+                        :mandatory="true">
+                        <div class="field form-control"
+                            :class="{ answered: workspace != null }"
                             style="padding:0 10px 0 0">
-                            <Typeahead control-id="workspace" :value="workspace" :ajax-params="{}"
-                                :fetch-url="model.api.workspacesUrl" @selected="workspaceSelected"></Typeahead>
+                            <Typeahead control-id="workspace"
+                                :value="workspace"
+                                :ajax-params="{}"
+                                :fetch-url="model.api.workspacesUrl"
+                                @selected="workspaceSelected"></Typeahead>
                         </div>
                     </form-group>
-                    <form-group :label="$t('Pages.UsersManage_RoleFilterPlaceholder')" :error="modelState['Role']"
+                    <form-group :label="$t('Pages.UsersManage_RoleFilterPlaceholder')"
+                        :error="modelState['Role']"
                         :mandatory="true">
-                        <div class="field form-control" :class="{ answered: role != null }" style="padding:0 10px 0 0">
-                            <Typeahead control-id="role" :value="role" :values="model.roles" @selected="roleSelected">
+                        <div class="field form-control"
+                            :class="{ answered: role != null }"
+                            style="padding:0 10px 0 0">
+                            <Typeahead control-id="role"
+                                :value="role"
+                                :values="model.roles"
+                                @selected="roleSelected">
                             </Typeahead>
                         </div>
                     </form-group>
-                    <form-group :label="$t('FieldsAndValidations.UserNameFieldName')" :error="modelState['UserName']"
+                    <form-group :label="$t('FieldsAndValidations.UserNameFieldName')"
+                        :error="modelState['UserName']"
                         :mandatory="true">
-                        <TextInput v-model.trim="userName" :haserror="modelState['UserName'] !== undefined"
-                            id="UserName" :maxlength="usernameMaxLength" />
+                        <TextInput v-model.trim="userName"
+                            :haserror="modelState['UserName'] !== undefined"
+                            id="UserName"
+                            :maxlength="usernameMaxLength" />
                     </form-group>
-                    <form-group v-if="isInterviewer" :label="$t('Pages.Interviewers_SupervisorTitle')"
-                        :error="modelState['SupervisorId']" :mandatory="true">
-                        <div class="field" :class="{ answered: supervisor != null }">
-                            <Typeahead control-id="supervisor" :value="supervisor"
+                    <form-group v-if="isInterviewer"
+                        :label="$t('Pages.Interviewers_SupervisorTitle')"
+                        :error="modelState['SupervisorId']"
+                        :mandatory="true">
+                        <div class="field"
+                            :class="{ answered: supervisor != null }">
+                            <Typeahead control-id="supervisor"
+                                :value="supervisor"
                                 :ajax-params="{ workspace: (this.workspace || {}).key }"
-                                :fetch-url="$config.model.api.supervisorWorkspaceUrl" @selected="supervisorSelected">
+                                :fetch-url="$config.model.api.supervisorWorkspaceUrl"
+                                @selected="supervisorSelected">
                             </Typeahead>
                         </div>
                     </form-group>
-                    <form-group :label="$t('FieldsAndValidations.NewPasswordFieldName')" :error="modelState['Password']"
+                    <form-group :label="$t('FieldsAndValidations.NewPasswordFieldName')"
+                        :error="modelState['Password']"
                         :mandatory="true">
-                        <TextInput type="password" v-model.trim="password"
-                            :haserror="modelState['Password'] !== undefined" id="Password" />
+                        <TextInput type="password"
+                            v-model.trim="password"
+                            :haserror="modelState['Password'] !== undefined"
+                            id="Password" />
                     </form-group>
                     <form-group :label="$t('FieldsAndValidations.ConfirmPasswordFieldName')"
-                        :error="modelState['ConfirmPassword']" :mandatory="true">
-                        <TextInput type="password" v-model.trim="confirmPassword"
-                            :haserror="modelState['ConfirmPassword'] !== undefined" id="ConfirmPassword" />
+                        :error="modelState['ConfirmPassword']"
+                        :mandatory="true">
+                        <TextInput type="password"
+                            v-model.trim="confirmPassword"
+                            :haserror="modelState['ConfirmPassword'] !== undefined"
+                            id="ConfirmPassword" />
                     </form-group>
                     <div class="block-filter">
-                        <input id="ShowPassword" type="checkbox" style="margin-right:5px"
+                        <input id="ShowPassword"
+                            type="checkbox"
+                            style="margin-right:5px"
                             onclick="var pass = document.getElementById('Password');pass.type = (pass.type === 'text' ? 'password' : 'text');var confirm = document.getElementById('ConfirmPassword');confirm.type = (confirm.type === 'text' ? 'password' : 'text');">
                         <label for="ShowPassword">
                             <span></span>{{ $t('Pages.ShowPassword') }}
@@ -71,27 +98,38 @@
                     <div class="separate-line"></div>
                 </div>
                 <div class="col-sm-12">
-                    <h5 class="extra-margin-bottom" v-dompurify-html="$t('Pages.PublicSection')"></h5>
+                    <h5 class="extra-margin-bottom"
+                        v-dompurify-html="$t('Pages.PublicSection')"></h5>
                     <form-group :label="$t('FieldsAndValidations.PersonNameFieldName')"
                         :error="modelState['PersonName']">
-                        <TextInput v-model.trim="personName" :haserror="modelState['PersonName'] !== undefined"
+                        <TextInput v-model.trim="personName"
+                            :haserror="modelState['PersonName'] !== undefined"
                             id="PersonName" />
                     </form-group>
-                    <form-group :label="$t('FieldsAndValidations.EmailFieldName')" :error="modelState['Email']">
-                        <TextInput v-model.trim="email" :haserror="modelState['Email'] !== undefined" id="Email" />
+                    <form-group :label="$t('FieldsAndValidations.EmailFieldName')"
+                        :error="modelState['Email']">
+                        <TextInput v-model.trim="email"
+                            :haserror="modelState['Email'] !== undefined"
+                            id="Email" />
                     </form-group>
                     <form-group :label="$t('FieldsAndValidations.PhoneNumberFieldName')"
                         :error="modelState['PhoneNumber']">
-                        <TextInput v-model.trim="phoneNumber" :haserror="modelState['PhoneNumber'] !== undefined"
+                        <TextInput v-model.trim="phoneNumber"
+                            :haserror="modelState['PhoneNumber'] !== undefined"
                             id="PhoneNumber" />
                     </form-group>
                 </div>
 
                 <div class="col-sm-12">
                     <div class="block-filter">
-                        <button type="submit" class="btn btn-success" style="margin-right:5px" id="btnCreate"
+                        <button type="submit"
+                            class="btn btn-success"
+                            style="margin-right:5px"
+                            id="btnCreate"
                             @click="createAccount">{{ $t('Pages.Create') }}</button>
-                        <a class="btn btn-default" v-bind:href="referrerUrl" id="lnkCancel">
+                        <a class="btn btn-default"
+                            v-bind:href="referrerUrl"
+                            id="lnkCancel">
                             {{ $t('Common.Cancel') }}
                         </a>
                     </div>

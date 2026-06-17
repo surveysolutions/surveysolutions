@@ -1,10 +1,13 @@
 <template>
-    <HqLayout :hasFilter="true" :hasHeader="true" :fixedWidth="false">
+    <HqLayout :hasFilter="true"
+        :hasHeader="true"
+        :fixedWidth="false">
         <template v-slot:filters>
 
             <Filters :title="$t('Common.Properties')">
                 <FilterBlock>
-                    <ul class="list-group small" style="list-style: none;">
+                    <ul class="list-group small"
+                        style="list-style: none;">
                         <li v-if="!$config.model.shapeType"><strong>{{
                             $t("Pages.MapDetails_MaxScale") }}:</strong> <span>{{ $config.model.maxScale }}</span>
                         </li>
@@ -16,7 +19,7 @@
                         </li>
                         <li v-if="$config.model.shapesCount"><strong>{{
                             $t("Pages.MapDetails_ShapesCount") }}:</strong> <span>{{ $config.model.shapesCount
-                                }}</span>
+                        }}</span>
                         </li>
                         <li><strong>{{ $t("Pages.MapDetails_Size") }}:</strong> <span>{{
                             $config.model.size }}</span>
@@ -26,10 +29,11 @@
                             importDate }}</span>
                         </li>
                         <li v-if="$config.model.uploadedBy"><strong>
-                                {{ $t("Pages.MapDetails_UploadedBy") }}:</strong> <span>{{ $config.model.uploadedBy
-                                }}</span>
+                            {{ $t("Pages.MapDetails_UploadedBy") }}:</strong> <span>{{ $config.model.uploadedBy
+                        }}</span>
                         </li>
-                        <li v-if="$config.model.showDuplicateLabelsWarning" class="text-danger">
+                        <li v-if="$config.model.showDuplicateLabelsWarning"
+                            class="text-danger">
                             <strong>{{ $t("Pages.MapList_HasDuplicateLabels") }}: </strong>
                             <span>{{ $t("Common.Yes") }}</span>
                         </li>
@@ -37,7 +41,8 @@
                 </FilterBlock>
 
                 <template v-slot:additional>
-                    <div class="filters-container" id="linkedUsers">
+                    <div class="filters-container"
+                        id="linkedUsers">
                         <h4>
                             {{ $t('Common.LinkedUsers') }}
                         </h4>
@@ -45,23 +50,32 @@
 
                             <h5>{{ $t("Pages.MapDetails_SelectUser") }}</h5>
                             <div class="input-group">
-                                <Typeahead control-id="newLikedUserId" :placeholder="$t('Common.LinkUser')"
-                                    :value="newLikedUserId" :ajax-params="{}" @selected="newLinkedUserSelected"
-                                    :fetch-url="config.api.users" class="with-extra-btn">
+                                <Typeahead control-id="newLikedUserId"
+                                    :placeholder="$t('Common.LinkUser')"
+                                    :value="newLikedUserId"
+                                    :ajax-params="{}"
+                                    @selected="newLinkedUserSelected"
+                                    :fetch-url="config.api.users"
+                                    class="with-extra-btn">
                                 </Typeahead>
 
                                 <div class="input-group-btn">
-                                    <button class="btn btn-success" @click="linkUserToMap"
+                                    <button class="btn btn-success"
+                                        @click="linkUserToMap"
                                         :disabled="!newLikedUserId || config.isObserving">
-                                        <span aria-hidden="true" class="glyphicon add"></span>
+                                        <span aria-hidden="true"
+                                            class="glyphicon add"></span>
                                     </button>
                                 </div>
 
                             </div>
 
-                            <DataTables ref="table" :tableOptions="tableOptions"
-                                :addParamsToRequest="addParamsToRequest" :contextMenuItems="contextMenuItems"
-                                :supportContextMenu="!config.isObserving" style="margin-left: 0px;">
+                            <DataTables ref="table"
+                                :tableOptions="tableOptions"
+                                :addParamsToRequest="addParamsToRequest"
+                                :contextMenuItems="contextMenuItems"
+                                :supportContextMenu="!config.isObserving"
+                                style="margin-left: 0px;">
                             </DataTables>
                         </div>
                     </div>
@@ -70,7 +84,10 @@
         </template>
 
 
-        <Confirm ref="confirmDiscard" id="discardConfirm" :okTitle="$t('Pages.MapDetails_Unlink')" okClass="btn-danger">
+        <Confirm ref="confirmDiscard"
+            id="discardConfirm"
+            :okTitle="$t('Pages.MapDetails_Unlink')"
+            okClass="btn-danger">
             <p>{{ $t("Pages.MapUserLink_DiscardConfirm") }} </p>
             <p class="text-danger">{{ $t("Pages.MapUserLink_DiscardConfirm1") }} </p>
         </Confirm>
@@ -86,8 +103,10 @@
             </div>
         </template>
         <div style="display: flex; width: 100%; height: 100%; flex-direction: column;">
-            <iframe title="Map preview" style="flex-grow: 1; border: none; margin: 0; padding: 0; min-height: 550px;"
-                id="map-iframe" :src="$config.model.mapPreviewUrl"></iframe>
+            <iframe title="Map preview"
+                style="flex-grow: 1; border: none; margin: 0; padding: 0; min-height: 550px;"
+                id="map-iframe"
+                :src="$config.model.mapPreviewUrl"></iframe>
             <p> {{ mapDisclaimer }} </p>
         </div>
 
@@ -110,32 +129,32 @@ export default {
         }
     },
     mounted() {
-        this.reload();
+        this.reload()
     },
     methods: {
         reload() {
             if (this.$refs.table) {
-                this.$refs.table.reload();
+                this.$refs.table.reload()
             }
         },
         addParamsToRequest(requestData) {
-            requestData.mapName = this.$config.model.fileName;
+            requestData.mapName = this.$config.model.fileName
         },
         contextMenuItems({ rowData }) {
             if (this.config.isObserving)
-                return null;
+                return null
 
             return [{
-                name: this.$t("Pages.MapDetails_DelinkUser"),
+                name: this.$t('Pages.MapDetails_DelinkUser'),
                 callback: () => {
-                    if (this.config.isObserving) return;
+                    if (this.config.isObserving) return
 
-                    this.delinkUserFromMap(rowData.userName, this.$config.model.fileName);
+                    this.delinkUserFromMap(rowData.userName, this.$config.model.fileName)
                 },
-            }];
+            }]
         },
         delinkUserFromMap(userName, fileName) {
-            const self = this;
+            const self = this
             this.$refs.confirmDiscard.promt(ok => {
                 if (ok) {
                     self.$apollo.mutate({
@@ -146,30 +165,30 @@ export default {
                                     }
                                 }`,
                         variables: {
-                            "fileName": fileName,
-                            "userName": userName,
+                            'fileName': fileName,
+                            'userName': userName,
                             workspace: self.$store.getters.workspace,
                         },
                     }).then(response => {
-                        self.$refs.table.reload();
+                        self.$refs.table.reload()
                     }).catch(err => {
-                        console.error(err);
-                        toastr.error(err.message.toString());
-                    });
+                        console.error(err)
+                        toastr.error(err.message.toString())
+                    })
                 }
-            });
+            })
         },
         newLinkedUserSelected(newValue) {
             this.newLikedUserId = newValue
         },
         linkUserToMap() {
 
-            if (this.config.isObserving) return;
+            if (this.config.isObserving) return
 
             if (this.newLikedUserId) {
-                const self = this;
-                const fileName = this.$config.model.fileName;
-                const userName = this.newLikedUserId.value;
+                const self = this
+                const fileName = this.$config.model.fileName
+                const userName = this.newLikedUserId.value
 
                 self.$apollo.mutate({
                     mutation: gql`
@@ -179,44 +198,44 @@ export default {
                                     }
                                 }`,
                     variables: {
-                        "fileName": fileName,
-                        "userName": userName,
+                        'fileName': fileName,
+                        'userName': userName,
                         workspace: self.$store.getters.workspace,
                     },
                 }).then(response => {
-                    self.$refs.table.reload();
+                    self.$refs.table.reload()
                 }).catch(err => {
-                    console.error(err);
-                    toastr.error(err.message.toString());
-                });
+                    console.error(err)
+                    toastr.error(err.message.toString())
+                })
 
-                this.newLikedUserId = null;
+                this.newLikedUserId = null
             }
-        }
+        },
     },
     computed: {
         config() {
-            return this.$config.model;
+            return this.$config.model
         },
         tableOptions() {
-            var self = this;
+            var self = this
             return {
                 deferLoading: 0,
                 language: {
-                    emptyTable: this.$t("Pages.Map_NoUsers"),
+                    emptyTable: this.$t('Pages.Map_NoUsers'),
                 },
                 columns: [
                     {
-                        data: "userName",
-                        name: "UserName",
-                        "class": "title",
-                        title: this.$t("Pages.MapDetails_InterviewerName"),
+                        data: 'userName',
+                        name: 'UserName',
+                        'class': 'title',
+                        title: this.$t('Pages.MapDetails_InterviewerName'),
                         orderable: true,
                     },
                 ],
                 ajax(data, callback, settings) {
-                    const order_col = data.order[0];
-                    const column = data.columns[order_col.column];
+                    const order_col = data.order[0]
+                    const column = data.columns[order_col.column]
                     const query = gql`query MapDetailsQuery($workspace: String!,  $fileName: String!) {
                                         maps(workspace: $workspace, where: {
                                                 fileName: {
@@ -229,61 +248,61 @@ export default {
                                                 }
                                             }
                                         }
-                                    }`;
+                                    }`
                     self.$apollo.query({
                         query,
                         variables: {
-                            "fileName": self.$config.model.fileName,
+                            'fileName': self.$config.model.fileName,
                             workspace: self.$store.getters.workspace,
                         },
-                        fetchPolicy: "network-only",
+                        fetchPolicy: 'network-only',
                     }).then(response => {
 
                         if (response.data.maps.nodes == 0) {
-                            window.location.href = self.$config.model.mapsUrl;
+                            window.location.href = self.$config.model.mapsUrl
                         }
 
-                        const users = response.data.maps.nodes[0].users;
-                        const orderedUsers = orderBy(users, [column.data], [order_col.dir]);
-                        self.totalRows = users.length;
-                        self.filteredCount = users.length;
+                        const users = response.data.maps.nodes[0].users
+                        const orderedUsers = orderBy(users, [column.data], [order_col.dir])
+                        self.totalRows = users.length
+                        self.filteredCount = users.length
                         callback({
                             recordsTotal: self.totalRows,
                             recordsFiltered: self.filteredCount,
                             draw: ++this.draw,
                             data: orderedUsers,
-                        });
+                        })
                     }).catch(err => {
                         callback({
                             recordsTotal: 0,
                             recordsFiltered: 0,
                             data: [],
                             error: err.toString(),
-                        });
-                        console.error(err);
-                        toastr.error(err.message.toString());
-                    });
+                        })
+                        console.error(err)
+                        toastr.error(err.message.toString())
+                    })
                 },
                 responsive: false,
                 filter: false,
                 searching: false,
-                order: [[0, "asc"]],
-                sDom: "rf<\"table-with-scroll\"t>ip",
-            };
+                order: [[0, 'asc']],
+                sDom: 'rf<"table-with-scroll"t>ip',
+            }
         },
         mapDisclaimer() {
             if (this.$config.model.shapesCount) {
                 return this.$config.model.isPreviewGeoJson
-                    ? this.$t("Pages.MapDetails_SimplifiedShapefilesDisclaimer")
-                    : this.$t("Pages.MapDetails_FullShapefilesDisclaimer");
+                    ? this.$t('Pages.MapDetails_SimplifiedShapefilesDisclaimer')
+                    : this.$t('Pages.MapDetails_FullShapefilesDisclaimer')
             }
-            return this.$t("Pages.MapDetails_MapDisclaimer");
+            return this.$t('Pages.MapDetails_MapDisclaimer')
         },
         importDate() {
-            var date = moment.utc(this.$config.model.importDate);
-            return date.local().format(DateFormats.dateTime);
+            var date = moment.utc(this.$config.model.importDate)
+            return date.local().format(DateFormats.dateTime)
         },
     },
-    components: { FilterBlock }
+    components: { FilterBlock },
 }
 </script>

@@ -1,27 +1,27 @@
-import axios from 'axios';
-import { getCurrentVersion } from './headquartersService';
+import axios from 'axios'
+import { getCurrentVersion } from './headquartersService'
 import * as toastr from 'toastr'
 
-const errorUrl = '/error/report';
+const errorUrl = '/error/report'
 
 
 export function errorHandler(err, vm, info) {
 
-    const ignoreStatusCodes = [];
+    const ignoreStatusCodes = []
 
     const ignoredMessages = [
         'NetworkError when attempting to fetch resource.',
         'Failed to fetch',
-        'Load failed'
-    ];
+        'Load failed',
+    ]
 
     tryToShowErrorTooltip(err)
 
-    const status = err.response?.status;
+    const status = err.response?.status
 
-    if (status && ignoreStatusCodes.includes(status)) return false;
+    if (status && ignoreStatusCodes.includes(status)) return false
     if (err.message && ignoredMessages.includes(err.message)) {
-        return false;
+        return false
     }
 
     var errorDetails = {
@@ -32,21 +32,21 @@ export function errorHandler(err, vm, info) {
             route: vm?.$route.fullPath,
             info,
             stack: err.stack ? getNestedErrorDetails(err) : '',
-            version: getCurrentVersion()
-        }
-    };
+            version: getCurrentVersion(),
+        },
+    }
 
     if (err.response) {
-        errorDetails.additionalData.resposeStatus = err.response.status;
-        errorDetails.additionalData.requestedUrl = err.response.url;
+        errorDetails.additionalData.resposeStatus = err.response.status
+        errorDetails.additionalData.requestedUrl = err.response.url
     }
 
     axios.post(errorUrl, errorDetails)
         .catch(function (error) {
-            console.error('Error sending error details to server:', error);
-        });
+            console.error('Error sending error details to server:', error)
+        })
 
-    console.error('Error Handler:', err);
+    console.error('Error Handler:', err)
 
 
     function tryToShowErrorTooltip(error) {
@@ -88,21 +88,21 @@ export function errorHandler(err, vm, info) {
 }
 
 function getNestedErrorDetails(error) {
-    let errorDetails = '';
+    let errorDetails = ''
     while (error) {
-        errorDetails += `Message: ${error.message}\nStack: ${error.stack}\n\n`;
-        error = error.cause;
+        errorDetails += `Message: ${error.message}\nStack: ${error.stack}\n\n`
+        error = error.cause
     }
-    return errorDetails;
+    return errorDetails
 }
 
 
 export function setupErrorHandler(app) {
 
-    app.config.errorHandler = errorHandler;
+    app.config.errorHandler = errorHandler
 
     window.addEventListener('error', function (e) {
-        if (e.error) return false;
+        if (e.error) return false
 
         var errorDetails = {
             message: e.error.message,
@@ -110,25 +110,25 @@ export function setupErrorHandler(app) {
             additionalData: {
                 source: 'error event',
                 stack: getNestedErrorDetails(e.error),
-                version: getCurrentVersion()
-            }
-        };
+                version: getCurrentVersion(),
+            },
+        }
 
         axios.post(errorUrl, errorDetails)
             .catch(function (error) {
-                console.error('Error sending error details to server:', error);
-            });
+                console.error('Error sending error details to server:', error)
+            })
 
-        return false;
-    });
+        return false
+    })
 
     window.addEventListener('unhandledrejection', function (e) {
-        const status = e.reason?.response?.status;
-        const message = e.reason?.body?.message ?? e.reason?.message;
+        const status = e.reason?.response?.status
+        const message = e.reason?.body?.message ?? e.reason?.message
 
-        if (status && ignoreStatusCodes.includes(status)) return false;
+        if (status && ignoreStatusCodes.includes(status)) return false
         if (message && ignoredMessages.includes(message)) {
-            return false;
+            return false
         }
 
         var errorDetails = {
@@ -141,17 +141,17 @@ export function setupErrorHandler(app) {
                     e.reason instanceof Error
                         ? getNestedErrorDetails(e.reason)
                         : e.reason?.stack,
-                version: getCurrentVersion()
-            }
-        };
+                version: getCurrentVersion(),
+            },
+        }
 
         axios.post(errorUrl, errorDetails)
             .catch(function (error) {
-                console.error('Error sending error details to server:', error);
-            });
+                console.error('Error sending error details to server:', error)
+            })
 
-        return false;
-    });
+        return false
+    })
 
-    app.config.globalProperties.$errorHandler = app.config.errorHandler;
+    app.config.globalProperties.$errorHandler = app.config.errorHandler
 }

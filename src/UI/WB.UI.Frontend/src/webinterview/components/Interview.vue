@@ -1,6 +1,8 @@
 <template>
     <div>
-        <signalr @connected="connected" :interviewId="interviewId" :mode="mode" />
+        <signalr @connected="connected"
+            :interviewId="interviewId"
+            :mode="mode" />
         <reconnecting-banner />
         <router-view />
     </div>
@@ -10,7 +12,7 @@
 
 import http from '~/webinterview/api/http'
 import browserLocalStore from '~/shared/localStorage'
-import { defineAsyncComponent } from 'vue';
+import { defineAsyncComponent } from 'vue'
 
 export default {
     name: 'WebInterviwew',
@@ -28,8 +30,8 @@ export default {
     },
 
     beforeMount() {
-        const app = this.$root;
-        http.install(app, { store: this.$store });
+        const app = this.$root
+        http.install(app, { store: this.$store })
     },
     beforeRouteUpdate(to, from, next) {
         return this.changeSection(to.params.sectionId, from.params.sectionId)

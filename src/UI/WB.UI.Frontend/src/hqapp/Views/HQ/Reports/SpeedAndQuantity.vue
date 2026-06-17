@@ -1,8 +1,12 @@
 <template>
-    <HqLayout :title="title" :subtitle="reportDescription" :hasFilter="true">
+    <HqLayout :title="title"
+        :subtitle="reportDescription"
+        :hasFilter="true">
         <template v-slot:subtitle>
             <div>
-                <a v-if="model.canNavigateToQuantityBySupervisors" :href="getSupervisorsUrl" class="btn btn-default">
+                <a v-if="model.canNavigateToQuantityBySupervisors"
+                    :href="getSupervisorsUrl"
+                    class="btn btn-default">
                     <span class="glyphicon glyphicon-arrow-left"></span>
                     {{ $t('PeriodicStatusReport.BackToSupervisors') }}
                 </a>
@@ -11,39 +15,66 @@
         <template v-slot:filters>
             <Filters>
                 <FilterBlock :title="$t('PeriodicStatusReport.InterviewActions')">
-                    <Typeahead ref="reportTypeControl" control-id="reportTypeId" no-clear data-vv-name="reportTypeId"
-                        data-vv-as="reportType" :placeholder="$t('PeriodicStatusReport.InterviewActions')"
-                        :value="reportTypeId" :values="$config.model.reportTypes" v-on:selected="reportTypeSelected" />
+                    <Typeahead ref="reportTypeControl"
+                        control-id="reportTypeId"
+                        no-clear
+                        data-vv-name="reportTypeId"
+                        data-vv-as="reportType"
+                        :placeholder="$t('PeriodicStatusReport.InterviewActions')"
+                        :value="reportTypeId"
+                        :values="$config.model.reportTypes"
+                        v-on:selected="reportTypeSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Common.Questionnaire')">
-                    <Typeahead ref="questionnaireIdControl" control-id="questionnaireId" data-vv-name="questionnaireId"
-                        data-vv-as="questionnaire" :placeholder="$t('Common.AllQuestionnaires')"
-                        :value="questionnaireId" :values="$config.model.questionnaires"
+                    <Typeahead ref="questionnaireIdControl"
+                        control-id="questionnaireId"
+                        data-vv-name="questionnaireId"
+                        data-vv-as="questionnaire"
+                        :placeholder="$t('Common.AllQuestionnaires')"
+                        :value="questionnaireId"
+                        :values="$config.model.questionnaires"
                         v-on:selected="questionnaireSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                    <Typeahead ref="questionnaireVersionControl" control-id="questionnaireVersion"
-                        data-vv-name="questionnaireVersion" data-vv-as="questionnaireVersion"
-                        :placeholder="$t('Common.AllVersions')" :disabled="questionnaireId == null"
-                        :value="questionnaireVersion" :values="questionnaireId == null ? [] : questionnaireId.versions"
+                    <Typeahead ref="questionnaireVersionControl"
+                        control-id="questionnaireVersion"
+                        data-vv-name="questionnaireVersion"
+                        data-vv-as="questionnaireVersion"
+                        :placeholder="$t('Common.AllVersions')"
+                        :disabled="questionnaireId == null"
+                        :value="questionnaireVersion"
+                        :values="questionnaireId == null ? [] : questionnaireId.versions"
                         v-on:selected="questionnaireVersionSelected" />
                 </FilterBlock>
                 <FilterBlock :title="$t('PeriodicStatusReport.OverTheLast')">
-                    <Typeahead ref="overTheLast" control-id="overTheLast" no-clear data-vv-name="overTheLast"
-                        data-vv-as="overTheLast" :placeholder="$t('PeriodicStatusReport.OverTheLast')"
-                        :value="overTheLast" :values="$config.model.overTheLasts" v-on:selected="overTheLastSelected" />
+                    <Typeahead ref="overTheLast"
+                        control-id="overTheLast"
+                        no-clear
+                        data-vv-name="overTheLast"
+                        data-vv-as="overTheLast"
+                        :placeholder="$t('PeriodicStatusReport.OverTheLast')"
+                        :value="overTheLast"
+                        :values="$config.model.overTheLasts"
+                        v-on:selected="overTheLastSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('PeriodicStatusReport.PeriodUnit')">
-                    <Typeahead ref="period" control-id="period" no-clear
-                        :placeholder="$t('PeriodicStatusReport.Period')" data-vv-name="period" data-vv-as="period"
-                        v-on:selected="periodSelected" :value="period" :values="$config.model.periods"></Typeahead>
+                    <Typeahead ref="period"
+                        control-id="period"
+                        no-clear
+                        :placeholder="$t('PeriodicStatusReport.Period')"
+                        data-vv-name="period"
+                        data-vv-as="period"
+                        v-on:selected="periodSelected"
+                        :value="period"
+                        :values="$config.model.periods"></Typeahead>
                 </FilterBlock>
 
                 <FilterBlock :title="$t('PeriodicStatusReport.LastDateToShowLabel')">
-                    <DatePicker :config="datePickerConfig" :value="selectedDate"></DatePicker>
+                    <DatePicker :config="datePickerConfig"
+                        :value="selectedDate"></DatePicker>
                 </FilterBlock>
             </Filters>
         </template>
@@ -54,8 +85,16 @@
             </div>
         </div>
 
-        <DataTables ref="table" v-if="mounted" :tableOptions="tableOptions" :addParamsToRequest="addParamsToRequest"
-            @ajaxComplete="onTableReload" noPaging noSearch exportable hasTotalRow noSelect></DataTables>
+        <DataTables ref="table"
+            v-if="mounted"
+            :tableOptions="tableOptions"
+            :addParamsToRequest="addParamsToRequest"
+            @ajaxComplete="onTableReload"
+            noPaging
+            noSearch
+            exportable
+            hasTotalRow
+            noSelect></DataTables>
     </HqLayout>
 </template>
 
@@ -402,7 +441,7 @@ export default {
                 columnCount: this.overTheLast.key,
                 period: this.period.key,
                 from: this.from,
-                supervisorId: this.supervisorId
+                supervisorId: this.supervisorId,
             }
         },
         columnsCount() {

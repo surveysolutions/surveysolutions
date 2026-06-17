@@ -2,7 +2,8 @@
     <HqLayout>
         <div class="row">
             <div class="col-md-6 col-xs-12">
-                <div class="panel" :class="panelStatus">
+                <div class="panel"
+                    :class="panelStatus">
                     <div class="panel-heading">
                         <h3 v-if="report == null">
                             {{ $t("Diagnostics.WaitForHealthcheck") }}
@@ -13,11 +14,17 @@
                     </div>
                     <div class="panel-body health-checks">
                         <ul class="list-group">
-                            <a class="list-group-item" v-for="entry in entries" :key="entry.name"
-                                :href="entry.item.data.url" :class="itemStatus(entry)">
+                            <a class="list-group-item"
+                                v-for="entry in entries"
+                                :key="entry.name"
+                                :href="entry.item.data.url"
+                                :class="itemStatus(entry)">
                                 <h4>{{ $t("Diagnostics." + entry.name) }}</h4>
                                 <p>{{ entry.item.description }}</p>
-                                <div class="well" v-if="entry.item.exception">{{ entry.item.exception.Message }}</div>
+                                <div class="well"
+                                    v-if="entry.item.exception">
+                                    {{ entry.item.exception.Message }}
+                                </div>
                             </a>
                         </ul>
                     </div>
@@ -32,7 +39,8 @@
                         <ul class="list-group">
                             <li class="list-group-item"
                                 :class="{ 'list-group-item-warning': statusResponse.requested != statusResponse.response }"
-                                v-for="statusResponse in statusResponses" :key="statusResponse.requested">
+                                v-for="statusResponse in statusResponses"
+                                :key="statusResponse.requested">
                                 <b>{{ statusResponse.requested }}: </b>{{ statusResponse.response }}
                             </li>
                         </ul>
@@ -41,7 +49,8 @@
             </div>
             <div class="col-md-6 col-xs-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading" style="height: 40px">
+                    <div class="panel-heading"
+                        style="height: 40px">
                         <h3 class="pull-left">
                             {{ $t("Diagnostics.ServerMetrics") }}
                         </h3><span class="pull-right">{{ lastUpdate }}</span>
@@ -49,7 +58,9 @@
                     <div class="panel-body">
                         <p v-if="metrics == null || metrics.length == 0">{{ $t("Diagnostics.WaitingForMetrics") }}</p>
                         <ul class="list-group">
-                            <li class="list-group-item" v-for="metric in metrics" :key="metric.name">
+                            <li class="list-group-item"
+                                v-for="metric in metrics"
+                                :key="metric.name">
                                 <b>{{ metric.name }}: </b>{{ metric.value }}
                             </li>
                         </ul>
@@ -63,7 +74,9 @@
                     </div>
                     <div class="panel-body">
                         <ol>
-                            <li v-dateTimeFormatting v-for="(m, index) in signalrDiagMessages" :key="index"
+                            <li v-dateTimeFormatting
+                                v-for="(m, index) in signalrDiagMessages"
+                                :key="index"
                                 :class="{ 'text-danger': m.isError }">
                                 [<time :datetime="m.date"></time>]
                                 {{ m.msg }}
@@ -171,14 +184,14 @@ export default {
 
 
         getResponseStatuses() {
-            let stusesToCheck = [200, 503, 502, 406, 401];
-            let self = this;
+            let stusesToCheck = [200, 503, 502, 406, 401]
+            let self = this
             stusesToCheck.forEach(status => {
                 this.$hq.ControlPanel.getServerResponseStatus(status).then(response => {
                     self.statusResponses.push(
                         {
                             requested: status,
-                            response: response
+                            response: response,
                         })
                 })
             })

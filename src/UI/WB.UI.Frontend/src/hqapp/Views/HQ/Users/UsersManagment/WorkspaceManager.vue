@@ -1,17 +1,28 @@
 <template>
-    <ModalFrame ref="manageWorkspaces" :title="$t('Pages.UserManagement_ManageWorkspacesTitle')">
+    <ModalFrame ref="manageWorkspaces"
+        :title="$t('Pages.UserManagement_ManageWorkspacesTitle')">
         <form onsubmit="return false;">
             <div class="action-container">
-                <p v-if="isAdding" data-suso="title-add" v-dompurify-html="$t('Pages.UserManagement_SubtitleAdd')"></p>
-                <p v-else data-suso="title-remove" v-dompurify-html="$t('Pages.UserManagement_SubtitleRemove')"></p>
+                <p v-if="isAdding"
+                    data-suso="title-add"
+                    v-dompurify-html="$t('Pages.UserManagement_SubtitleAdd')"></p>
+                <p v-else
+                    data-suso="title-remove"
+                    v-dompurify-html="$t('Pages.UserManagement_SubtitleRemove')"></p>
 
-                <FilterInput v-model="search" :placeholder="$t('Common.Search')"></FilterInput>
+                <FilterInput v-model="search"
+                    :placeholder="$t('Common.Search')"></FilterInput>
 
                 <div style="padding-top: 20px; padding-left: 12px; height: 380px; overflow: auto">
-                    <ul class="list-unstyled" data-suso="workspaces-list">
-                        <li v-for="workspace in workspacesList" :key="'d' + draw + '__' + workspace.key">
-                            <Checkbox :label="workspace.value" :name="workspace.key" :value="selected[workspace.key]"
-                                :classes="workspace.iconClass" :checked="selected[workspace.key] || false"
+                    <ul class="list-unstyled"
+                        data-suso="workspaces-list">
+                        <li v-for="workspace in workspacesList"
+                            :key="'d' + draw + '__' + workspace.key">
+                            <Checkbox :label="workspace.value"
+                                :name="workspace.key"
+                                :value="selected[workspace.key]"
+                                :classes="workspace.iconClass"
+                                :checked="selected[workspace.key] || false"
                                 @input="v => selected[workspace.key] = v" />
 
                         </li>
@@ -21,13 +32,24 @@
         </form>
         <template v-slot:actions>
             <div>
-                <button v-if="isAdding" type="button" data-suso="btn-add" class="btn btn-primary " @click="add"
+                <button v-if="isAdding"
+                    type="button"
+                    data-suso="btn-add"
+                    class="btn btn-primary "
+                    @click="add"
                     role="confirm">{{ $t("Common.Add") }}</button>
-                <button v-else type="button" class="btn btn-primary" data-suso="btn-remove" @click="remove"
+                <button v-else
+                    type="button"
+                    class="btn btn-primary"
+                    data-suso="btn-remove"
+                    @click="remove"
                     role="confirm">{{ $t("Common.Remove") }}</button>
-                <button type="button" class="btn btn-link" data-suso="btn-cancel" data-bs-dismiss="modal"
+                <button type="button"
+                    class="btn btn-link"
+                    data-suso="btn-cancel"
+                    data-bs-dismiss="modal"
                     role="cancel">{{
-                        $t("Common.Cancel") }}</button>
+                    $t("Common.Cancel") }}</button>
             </div>
         </template>
     </ModalFrame>

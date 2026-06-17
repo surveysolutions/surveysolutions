@@ -1,14 +1,18 @@
 /* eslint-disable vue/require-v-for-key */
 <template>
-    <HqLayout :hasFilter="false" :hasRow="false" :mainClass="'enumerators'">
+    <HqLayout :hasFilter="false"
+        :hasRow="false"
+        :mainClass="'enumerators'">
         <template v-slot:headers>
-            <ol class="breadcrumb" v-if="!this.$config.model.authorizedUser.isInterviewer">
+            <ol class="breadcrumb"
+                v-if="!this.$config.model.authorizedUser.isInterviewer">
                 <li>
                     <a :href="this.$config.model.api.listUrl">{{ $t('Pages.InterviewerProfile_Interviewers') }}</a>
                 </li>
             </ol>
             <h1>
-                <span v-if="this.$config.model.fullModel.isArchived" class="badge">{{ $t('Common.Archived') }}</span>
+                <span v-if="this.$config.model.fullModel.isArchived"
+                    class="badge">{{ $t('Common.Archived') }}</span>
                 {{ $t('Pages.InterviewerProfile_AssignedToFormat', {
                     interviewer:
                         this.$config.model.fullModel.interviewerName, supervisor: this.$config.model.fullModel.supervisorName
@@ -22,18 +26,21 @@
                         this.$config.model.fullModel.email
                 }) }}</li>
                 <li v-if="this.$config.model.fullModel.fullName">{{ $t('Pages.InterviewerProfile_FullNameFormat',
-                    { fullName: this.$config.model.fullModel.fullName }) }}</li>
+                                                                       { fullName: this.$config.model.fullModel.fullName }) }}</li>
                 <li v-if="this.$config.model.fullModel.phone">{{ $t('Pages.InterviewerProfile_PhoneFormat', {
                     phone:
                         this.$config.model.fullModel.phone
                 }) }}</li>
 
                 <li v-if="this.$config.model.fullModel.isModifiable">
-                    <a v-if="!this.$config.model.fullModel.isArchived" :href="this.$config.model.api.manageUrl">{{
-                        $t('Pages.InterviewerProfile_Info') }}</a>
+                    <a v-if="!this.$config.model.fullModel.isArchived"
+                        :href="this.$config.model.api.manageUrl">{{
+                            $t('Pages.InterviewerProfile_Info') }}</a>
                     <form v-if="this.$config.model.fullModel.isArchived && $config.model.authorizedUser.isHeadquarters"
                         method="post">
-                        <input class="btn btn-success" type="button" :value="$t('Pages.Unarchive')"
+                        <input class="btn btn-success"
+                            type="button"
+                            :value="$t('Pages.Unarchive')"
                             @click="unArchive" />
                     </form>
                 </li>
@@ -42,10 +49,15 @@
                     }}</a>
                 </li>
             </ul>
-            <figure class="qrcode-wrapper" v-if="this.$config.model.fullModel.supportQRCodeGeneration">
-                <a target="_blank" :title="$t('Pages.InterviewerProfile_QrCodeAlt')"
+            <figure class="qrcode-wrapper"
+                v-if="this.$config.model.fullModel.supportQRCodeGeneration">
+                <a target="_blank"
+                    :title="$t('Pages.InterviewerProfile_QrCodeAlt')"
                     href="https://support.mysurvey.solutions/interviewer/config/set-up-an-interviewer-tablet-by-scanning-a-barcode/">
-                    <img id="download-qr" :alt="$t('Pages.InterviewerProfile_QrCodeAlt')" width="250" height="250"
+                    <img id="download-qr"
+                        :alt="$t('Pages.InterviewerProfile_QrCodeAlt')"
+                        width="250"
+                        height="250"
                         :src="this.$config.model.fullModel.qrCodeAsBase64String" />
                 </a>
             </figure>
@@ -71,7 +83,9 @@
                         <div class="amount-of-questionnaires">
                             {{ this.$config.model.fullModel.waitingInterviewsForApprovalCount }}
                         </div>
-                        <div class="description">{{ $t('Pages.InterviewerProfile_WaitingForApproval') }}</div>
+                        <div class="description">
+                            {{ $t('Pages.InterviewerProfile_WaitingForApproval') }}
+                        </div>
                     </div>
                     <div class="number-information">
                         <div class="amount-of-questionnaires">
@@ -84,12 +98,18 @@
             </div>
         </div>
 
-        <div class="row" v-if="showMap">
-            <div class="col-sm-9 map" v-if="markerExist">
-                <div ref="map" id="map-canvas" class="extra-margin-bottom" style="width:100%; height: 400px"></div>
+        <div class="row"
+            v-if="showMap">
+            <div class="col-sm-9 map"
+                v-if="markerExist">
+                <div ref="map"
+                    id="map-canvas"
+                    class="extra-margin-bottom"
+                    style="width:100%; height: 400px"></div>
                 <div style="display: none;">
                     <div ref="tooltip">
-                        <div class="map-tooltip-info" v-for="selectedTooltip in selectedTooltips"
+                        <div class="map-tooltip-info"
+                            v-for="selectedTooltip in selectedTooltips"
                             :key="selectedTooltip.interviewKey">
                             <p>
                                 <span>#{{ selectedTooltip.interviewKey }}</span>
@@ -119,27 +139,41 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-9 map" v-if="!markerExist">{{ $t("Pages.InterviewerProfile_NoMarkers") }}</div>
+            <div class="col-sm-9 map"
+                v-if="!markerExist">
+                {{ $t("Pages.InterviewerProfile_NoMarkers") }}
+            </div>
         </div>
-        <div class="row" v-if="totalTrafficUsed > 0">
+        <div class="row"
+            v-if="totalTrafficUsed > 0">
             <div class="col-sm-12 clearfix">
                 <h3>{{ $t("Pages.InterviewerProfile_TrafficUsageHeader") }}</h3>
                 <div class="graphic-wrapper traffic-usage">
-                    <div class="t-monthly-usage" v-for="monthlyUsage in trafficUsage" :key="monthlyUsage.month">
+                    <div class="t-monthly-usage"
+                        v-for="monthlyUsage in trafficUsage"
+                        :key="monthlyUsage.month">
                         <div class="t-month">
                             {{ monthlyUsage.month }}
                         </div>
-                        <div class="t-daily-usage" v-for="dailyUsage in monthlyUsage.dailyUsage"
+                        <div class="t-daily-usage"
+                            v-for="dailyUsage in monthlyUsage.dailyUsage"
                             :key="dailyUsage.timestamp">
                             <div class="t-unit-wrapper">
-                                <div class="t-up" data-bs-toggle="tooltip" data-placement="right"
-                                    :title="formatKb(dailyUsage.up)" :style="{ height: dailyUsage.upInPer + '%' }">
+                                <div class="t-up"
+                                    data-bs-toggle="tooltip"
+                                    data-placement="right"
+                                    :title="formatKb(dailyUsage.up)"
+                                    :style="{ height: dailyUsage.upInPer + '%' }">
                                 </div>
-                                <div class="t-down" data-bs-toggle="tooltip" data-placement="right"
-                                    :title="formatKb(dailyUsage.down)" :style="{ height: dailyUsage.downInPer + '%' }">
+                                <div class="t-down"
+                                    data-bs-toggle="tooltip"
+                                    data-placement="right"
+                                    :title="formatKb(dailyUsage.down)"
+                                    :style="{ height: dailyUsage.downInPer + '%' }">
                                 </div>
                             </div>
-                            <div class="t-day" :class="{ 't-no-sync': dailyUsage.up + dailyUsage.down === 0 }">
+                            <div class="t-day"
+                                :class="{ 't-no-sync': dailyUsage.up + dailyUsage.down === 0 }">
                                 {{ dailyUsage.day }}
                             </div>
                         </div>
@@ -167,7 +201,8 @@
                 </div>
             </div>
         </div>
-        <div class="row" v-if="this.$config.model.fullModel.hasDeviceInfo">
+        <div class="row"
+            v-if="this.$config.model.fullModel.hasDeviceInfo">
             <div class="col-sm-12 clearfix">
                 <h3>{{ $t('Pages.InterviewerProfile_Sync_Activity_Title') }}</h3>
                 <div class="graphic-wrapper clearfix">
@@ -178,31 +213,39 @@
                             <div class="day">
                                 {{ syncDay.day }}
                             </div>
-                            <div class="quarter-of-day" v-for="(syncDayQuarter, idx) in syncDay.quarters" :key="idx">
-                                <div class="recent-activity" v-if="!syncDayQuarter.HasAnyActivity">
+                            <div class="quarter-of-day"
+                                v-for="(syncDayQuarter, idx) in syncDay.quarters"
+                                :key="idx">
+                                <div class="recent-activity"
+                                    v-if="!syncDayQuarter.HasAnyActivity">
                                     <div v-if="syncDayQuarter.failedSynchronizationsCount > 0"
                                         class="failed-connection"></div>
                                     <div v-else-if="syncDayQuarter.synchronizationsWithoutChangesCount > 0"
                                         class="successful-connection"></div>
                                 </div>
-                                <div class="recent-activity" v-else>
+                                <div class="recent-activity"
+                                    v-else>
                                     <div v-repeat="syncDayQuarter.downloadedAssignmentsInProportionCount"
                                         class="downloaded">
                                     </div>
-                                    <div v-for="item in syncDayQuarter.uploadedInterviewsInProportionCount" :key="item"
+                                    <div v-for="item in syncDayQuarter.uploadedInterviewsInProportionCount"
+                                        :key="item"
                                         class="uploaded"></div>
-                                    <div v-if="syncDayQuarter.hasMoreThanMaxActionsCount" class="over-limit">
+                                    <div v-if="syncDayQuarter.hasMoreThanMaxActionsCount"
+                                        class="over-limit">
                                         <span></span>
                                     </div>
                                 </div>
 
                                 <div class="unfinished-assignments">
                                     <div class="half-of-quarter">
-                                        <div v-for="item in syncDayQuarter.allAssignmentsOnDeviceCount" :key="item"
+                                        <div v-for="item in syncDayQuarter.allAssignmentsOnDeviceCount"
+                                            :key="item"
                                             class="unfinished-unit"></div>
                                     </div>
                                     <div class="half-of-quarter">
-                                        <div v-for="item in syncDayQuarter.allAssignmentsOnDeviceCount" :key="item"
+                                        <div v-for="item in syncDayQuarter.allAssignmentsOnDeviceCount"
+                                            :key="item"
                                             class="unfinished-unit"></div>
                                     </div>
                                 </div>
@@ -248,7 +291,8 @@
                 </div>
             </div>
         </div>
-        <div class="row" v-if="this.$config.model.fullModel.hasDeviceInfo">
+        <div class="row"
+            v-if="this.$config.model.fullModel.hasDeviceInfo">
             <div class="col-sm-6 connection-statistics">
                 <h3>{{ $t('Pages.InterviewerProfile_DeviceAndConnectionStatistics') }}</h3>
                 <ul class="list-unstyled">
@@ -261,9 +305,11 @@
                         <b>
                             {{ $t('Pages.InterviewerProfile_InterviewerAppVersion') }}:
                             {{ this.fullModel.interviewerAppVersion }} —
-                            <span v-if="!this.fullModel.hasUpdateForInterviewerApp" class="success-text">{{
+                            <span v-if="!this.fullModel.hasUpdateForInterviewerApp"
+                                class="success-text">{{
                                 $t('Pages.InterviewerProfile_InterviewerUpToDate') }}</span>
-                            <span v-else class="error-text">{{ $t('Pages.InterviewerProfile_InterviewerCanBeUpdated')
+                            <span v-else
+                                class="error-text">{{ $t('Pages.InterviewerProfile_InterviewerCanBeUpdated')
                             }}</span>
                         </b>
                     </li>
@@ -271,7 +317,8 @@
                         <b>
                             {{ $t('Pages.InterviewerProfile_DeviceAssignmentDate') }}:
                             {{ formatDate(this.fullModel.deviceAssignmentDate, true) }} (UTC)
-                            <span v-if="this.fullModel.registredDevicesCount > 1" style="color: red;">({{
+                            <span v-if="this.fullModel.registredDevicesCount > 1"
+                                style="color: red;">({{
                                 $t('Pages.InterviewerProfile_Relinked') }})</span>
                         </b>
                     </li>
@@ -295,7 +342,8 @@
                 <ConnectionStats :prefix="$t('Pages.InterviewerProfile_LastFailedSync')"
                     :syncInfo="this.fullModel.lastFailedSync"></ConnectionStats>
 
-                <ul v-if="this.fullModel.lastCommunicationDate" class="list-unstyled">
+                <ul v-if="this.fullModel.lastCommunicationDate"
+                    class="list-unstyled">
                     <li>
                         {{ $t('Pages.InterviewerProfile_LastSyncronizationDate') }}:
                         {{ formatDate(this.fullModel.lastCommunicationDate) }} ({{ formatLastCommunication() }})
@@ -311,7 +359,8 @@
                 </ul>
             </div>
         </div>
-        <div class="row" v-if="this.$config.model.fullModel.hasDeviceInfo">
+        <div class="row"
+            v-if="this.$config.model.fullModel.hasDeviceInfo">
             <div class="col-sm-8 detailed-statistics-block">
                 <h3>{{ $t('Pages.InterviewerProfile_DeviceInfo') }}</h3>
                 <table class="table table-striped table-bordered">
@@ -350,8 +399,10 @@
                         <tr>
                             <td>{{ $t('Pages.InterviewerProfile_DeviceLocation') }}</td>
                             <td id="device-address">
-                                <a v-bind:href="goolgeMapUrl" v-if="hasLastKnownLocation"
-                                    :title="$t('WebInterviewUI.ShowOnMap')" target="_blank">
+                                <a v-bind:href="goolgeMapUrl"
+                                    v-if="hasLastKnownLocation"
+                                    :title="$t('WebInterviewUI.ShowOnMap')"
+                                    target="_blank">
                                     {{ fullModel.deviceLocationOrLastKnownLocationLat }},
                                     {{ fullModel.deviceLocationOrLastKnownLocationLon }}</a>
                             </td>
@@ -365,13 +416,13 @@
                             <td>
                                 {{
                                     $t('Pages.InterviewerProfile_BatteryStatusFormat',
-                                        {
-                                            percent: this.fullModel.batteryStatus,
-                                            power: this.fullModel.batteryPowerSource,
-                                            powerSaver: this.fullModel.isPowerSaveMode ?
-                                                $t('Pages.InterviewerProfile_BatteryStatus_SaverIsOn') :
-                                                $t('Pages.InterviewerProfile_BatteryStatus_SaverIsOff')
-                                        })
+                                       {
+                                           percent: this.fullModel.batteryStatus,
+                                           power: this.fullModel.batteryPowerSource,
+                                           powerSaver: this.fullModel.isPowerSaveMode ?
+                                               $t('Pages.InterviewerProfile_BatteryStatus_SaverIsOn') :
+                                               $t('Pages.InterviewerProfile_BatteryStatus_SaverIsOff')
+                                       })
                                 }}
                             </td>
                         </tr>
@@ -395,7 +446,8 @@
                 </table>
             </div>
         </div>
-        <div class="row" v-if="this.$config.model.fullModel.hasDeviceInfo">
+        <div class="row"
+            v-if="this.$config.model.fullModel.hasDeviceInfo">
             <div class="col-sm-8 detailed-statistics-block">
                 <h3>{{ $t('Pages.InterviewerProfile_LastConnectionStatistics') }}</h3>
                 <table class="table table-striped table-bordered">
@@ -743,7 +795,7 @@ export default {
             let AdvancedMarkerElement = null
             let PinElement = null
             if (hasMapId) {
-                const markerLib = await google.maps.importLibrary("marker")
+                const markerLib = await google.maps.importLibrary('marker')
                 AdvancedMarkerElement = markerLib.AdvancedMarkerElement
                 PinElement = markerLib.PinElement
             }

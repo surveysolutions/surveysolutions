@@ -1,7 +1,7 @@
 //import Vue from 'vue'
 
 import Confirm from './Confirm'
-import DataTables from "./DataTables"
+import DataTables from './DataTables'
 import FilterBlock from './FilterBlock'
 import Filters from './Filters'
 import HqLayout from './HqLayout'

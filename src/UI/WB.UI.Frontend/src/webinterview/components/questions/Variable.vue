@@ -1,11 +1,19 @@
 <template>
-    <div class="question static-text variable" :class="variableClass" v-if="!$me.isLoading" :id="hash">
+    <div class="question static-text variable"
+        :class="variableClass"
+        v-if="!$me.isLoading"
+        :id="hash">
         <div class="question-editor">
             <div>
                 <h5>
-                    <a class="open-designer" v-if="this.$config.inWebTesterMode && $me.name" href="javascript:void(0);"
-                        @click="openDesigner($me.id)" v-dompurify-html="'[' + $me.name + ']'"></a>
-                    <span v-dateTimeFormatting v-linkToRoute v-dompurify-html="title"></span>
+                    <a class="open-designer"
+                        v-if="this.$config.inWebTesterMode && $me.name"
+                        href="javascript:void(0);"
+                        @click="openDesigner($me.id)"
+                        v-dompurify-html="'[' + $me.name + ']'"></a>
+                    <span v-dateTimeFormatting
+                        v-linkToRoute
+                        v-dompurify-html="title"></span>
                 </h5>
             </div>
         </div>
@@ -46,7 +54,7 @@ export default {
             const entity = find(this.$store.state.webinterview.entities, d => d.identity == this.id)
             return [
                 {
-                    'section-variable': !entity.isCover
+                    'section-variable': !entity.isCover,
                 },
             ]
         },

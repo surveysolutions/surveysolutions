@@ -35,8 +35,12 @@
                     </div>
                 </div>
 
-                <DataTables id="id-table" ref="table" :tableOptions="tableOptions" noSelect
-                    @cell-clicked="cellAllClicked" :noPaging="false">
+                <DataTables id="id-table"
+                    ref="table"
+                    :tableOptions="tableOptions"
+                    noSelect
+                    @cell-clicked="cellAllClicked"
+                    :noPaging="false">
                 </DataTables>
             </div>
             <div class="col-sm-6">
@@ -62,13 +66,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="variable in exposedVariables" :key="'id' + '__' + variable.id">
+                        <tr v-for="variable in exposedVariables"
+                            :key="'id' + '__' + variable.id">
                             <td>{{ getEntityDisplayType(variable.entityType) }}</td>
                             <td>{{ variable.variable }}</td>
                             <!-- <td>{{ variable.label }}</td> -->
                             <td>{{ getVariableLabel(variable) }}</td>
                             <td>
-                                <button style="font-size:19px;" class="close"
+                                <button style="font-size:19px;"
+                                    class="close"
                                     @click="removeExposedClicked(variable.id)">&times;</button>
                             </td>
                         </tr>
@@ -76,33 +82,45 @@
                 </table>
 
                 <div class="action-buttons">
-                    <button @click="saveVariables" :disabled="saveDisabled" class="btn btn-success">
+                    <button @click="saveVariables"
+                        :disabled="saveDisabled"
+                        class="btn btn-success">
                         {{ $t('Common.Save') }}
                     </button>
                 </div>
             </div>
         </div>
 
-        <ModalFrame ref="exposedChangeModal" :title="$t('Pages.ConfirmationNeededTitle')">
+        <ModalFrame ref="exposedChangeModal"
+            :title="$t('Pages.ConfirmationNeededTitle')">
             <p>{{ $t("Pages.ExposedVariables_ChangeMessage") }}</p>
             <template v-slot:actions>
                 <div>
-                    <button type="button" class="btn btn-success" v-bind:disabled="model.isObserving"
+                    <button type="button"
+                        class="btn btn-success"
+                        v-bind:disabled="model.isObserving"
                         @click="changeExposedStatusSend">{{ $t("Common.Save") }}</button>
-                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                    <button type="button"
+                        class="btn btn-link"
+                        data-bs-dismiss="modal">{{ $t("Common.Cancel")
                     }}</button>
                 </div>
             </template>
         </ModalFrame>
 
 
-        <ModalFrame ref="exposedRemoveModal" :title="$t('Pages.ConfirmationNeededTitle')">
+        <ModalFrame ref="exposedRemoveModal"
+            :title="$t('Pages.ConfirmationNeededTitle')">
             <p>{{ $t("Pages.ExposedVariables_RemoveMessage") }}</p>
             <template v-slot:actions>
                 <div>
-                    <button type="button" class="btn btn-danger" v-bind:disabled="model.isObserving"
+                    <button type="button"
+                        class="btn btn-danger"
+                        v-bind:disabled="model.isObserving"
                         @click="removeExposedVariable">{{ $t("Common.Remove") }}</button>
-                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                    <button type="button"
+                        class="btn btn-link"
+                        data-bs-dismiss="modal">{{ $t("Common.Cancel")
                     }}</button>
                 </div>
             </template>
@@ -261,7 +279,7 @@ export default {
                     variable: rowData.variable,
                     entityType: rowData.entityType,
                 })
-                row.node().classList.add('disabled');
+                row.node().classList.add('disabled')
             }
         },
         removeExposedClicked(id) {
@@ -275,7 +293,7 @@ export default {
 
             var row = this.$refs.table.table.row('#' + this.idToRemove)
             if (row != null)
-                row.node().classList.remove('disabled');
+                row.node().classList.remove('disabled')
             this.$refs.exposedRemoveModal.hide()
         },
         getVariableLabel(variable) {

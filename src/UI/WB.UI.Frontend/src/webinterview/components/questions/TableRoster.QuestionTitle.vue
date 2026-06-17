@@ -1,17 +1,27 @@
 <template>
-    <popover class="w-100 d-block" :enable="hasInstructions" trigger="hover-focus" append-to="body">
-        <div class="ag-cell-label-container" v-bind:class="{ 'has-instruction': hasInstructions }">
+    <popover class="w-100 d-block"
+        :enable="hasInstructions"
+        trigger="hover-focus"
+        append-to="body">
+        <div class="ag-cell-label-container"
+            v-bind:class="{ 'has-instruction': hasInstructions }">
             <div class="ag-header-cell-label">
 
-                <a class="open-designer" style="word-break: break-all;" v-if="this.$config.inWebTesterMode && name"
-                    href="javascript:void(0);" @click="openDesigner(questionId)"
+                <a class="open-designer"
+                    style="word-break: break-all;"
+                    v-if="this.$config.inWebTesterMode && name"
+                    href="javascript:void(0);"
+                    @click="openDesigner(questionId)"
                     v-dompurify-html="'[' + name + ']'"></a>
-                <span class="ag-header-cell-text" style="word-break: break-all;" v-dompurify-html="title"></span>
+                <span class="ag-header-cell-text"
+                    style="word-break: break-all;"
+                    v-dompurify-html="title"></span>
             </div>
         </div>
         <template v-slot:popover>
             <div class="instruction-tooltip">
-                <span v-dateTimeFormatting v-dompurify-html="instruction"></span>
+                <span v-dateTimeFormatting
+                    v-dompurify-html="instruction"></span>
             </div>
         </template>
     </popover>

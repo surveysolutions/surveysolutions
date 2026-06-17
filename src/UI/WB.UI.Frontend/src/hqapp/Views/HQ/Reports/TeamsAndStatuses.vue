@@ -1,19 +1,29 @@
 <template>
-    <HqLayout :title="$config.model.reportName" :subtitle="$config.model.subtitle" :hasFilter="true">
+    <HqLayout :title="$config.model.reportName"
+        :subtitle="$config.model.subtitle"
+        :hasFilter="true">
         <template v-slot:filters>
             <Filters>
                 <FilterBlock :title="$t('Common.Questionnaire')">
-                    <Typeahead control-id="questionnaireId" ref="questionnaireIdControl" data-vv-name="questionnaireId"
-                        data-vv-as="questionnaire" :placeholder="$t('Common.AllQuestionnaires')"
-                        :value="questionnaireId" v-on:selected="questionnaireSelected"
+                    <Typeahead control-id="questionnaireId"
+                        ref="questionnaireIdControl"
+                        data-vv-name="questionnaireId"
+                        data-vv-as="questionnaire"
+                        :placeholder="$t('Common.AllQuestionnaires')"
+                        :value="questionnaireId"
+                        v-on:selected="questionnaireSelected"
                         :fetch-url="$config.model.questionnairesUrl" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                    <Typeahead control-id="questionnaireVersion" ref="questionnaireVersionControl"
-                        data-vv-name="questionnaireVersion" data-vv-as="questionnaireVersion"
-                        :placeholder="$t('Common.AllVersions')" :value="questionnaireVersion"
-                        v-on:selected="questionnaireVersionSelected" :fetch-url="questionnaireVersionFetchUrl"
+                    <Typeahead control-id="questionnaireVersion"
+                        ref="questionnaireVersionControl"
+                        data-vv-name="questionnaireVersion"
+                        data-vv-as="questionnaireVersion"
+                        :placeholder="$t('Common.AllVersions')"
+                        :value="questionnaireVersion"
+                        v-on:selected="questionnaireVersionSelected"
+                        :fetch-url="questionnaireVersionFetchUrl"
                         :disabled="questionnaireVersionFetchUrl == null" />
                 </FilterBlock>
             </Filters>
@@ -25,8 +35,12 @@
                         this.questionnaireVersion.value}}</h4>
             </div>
         </div>
-        <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" :no-search="true"
-            exportable hasTotalRow></DataTables>
+        <DataTables ref="table"
+            :tableOptions="tableOptions"
+            :addParamsToRequest="addFilteringParams"
+            :no-search="true"
+            exportable
+            hasTotalRow></DataTables>
     </HqLayout>
 </template>
 <script>

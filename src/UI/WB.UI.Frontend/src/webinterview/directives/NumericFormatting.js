@@ -15,18 +15,18 @@ const defaults = {
 export function registerNumericFormatting(app) {
     app.directive('numericFormatting', {
         mounted(el, binding) {
-            const settings = assign({}, defaults, binding.value);
-            el.autoNumericElement = new AutoNumeric(el, settings);
+            const settings = assign({}, defaults, binding.value)
+            el.autoNumericElement = new AutoNumeric(el, settings)
 
             el.addEventListener('autoNumeric:rawValueModified', (e) => {
-                e.target.setAttribute('numeric-string', AutoNumeric.getNumericString(e.target));
-            });
+                e.target.setAttribute('numeric-string', AutoNumeric.getNumericString(e.target))
+            })
         },
         beforeUnmount(el) {
             if (el.autoNumericElement) {
-                el.autoNumericElement.remove();
-                delete el.autoNumericElement;
+                el.autoNumericElement.remove()
+                delete el.autoNumericElement
             }
-        }
-    });
+        },
+    })
 }

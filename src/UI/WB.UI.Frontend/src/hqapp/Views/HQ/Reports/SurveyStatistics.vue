@@ -1,5 +1,7 @@
 <template>
-    <HqLayout has-filter :title="$t('MainMenu.SurveyStatistics')" :subtitle="$t('Pages.SurveyStatisticsDescription')">
+    <HqLayout has-filter
+        :title="$t('MainMenu.SurveyStatistics')"
+        :subtitle="$t('Pages.SurveyStatisticsDescription')">
         <div class="clearfix">
             <div class="col-sm-8">
                 <h4>{{ this.filter.questionnaire == null ? $t('Common.AllQuestionnaires') :
@@ -11,10 +13,12 @@
         <div>
             <div class="row">
                 <div class="col-md-6">
-                    <QuestionDetail :question="filter.question" :title="$t('Reports.Question')"></QuestionDetail>
+                    <QuestionDetail :question="filter.question"
+                        :title="$t('Reports.Question')"></QuestionDetail>
                 </div>
                 <div class="col-md-6">
-                    <QuestionDetail :question="filter.condition" :title="$t('Reports.ConditionQuestion')">
+                    <QuestionDetail :question="filter.condition"
+                        :title="$t('Reports.ConditionQuestion')">
                     </QuestionDetail>
                 </div>
             </div>
@@ -22,16 +26,27 @@
 
         <template v-slot:filters>
             <Filters>
-                <SurveyStatisticsFilter @input="filterChanged" @mounted="filtersLoaded" :isSupervisor="isSupervisor" />
+                <SurveyStatisticsFilter @input="filterChanged"
+                    @mounted="filtersLoaded"
+                    :isSupervisor="isSupervisor" />
             </Filters>
         </template>
-        <div class="alert-warning" v-if="warnings.length > 0">{{
+        <div class="alert-warning"
+            v-if="warnings.length > 0">{{
             $t('Reports.QuestionnaireCompatibilityIssues_UnknownAnswer')}}
         </div>
 
-        <DataTables ref="table" v-if="isFiltersLoaded" noSearch exportable multiorder hasTotalRow noSelect
-            :tableOptions="tableOptions" :pageLength="isPivot ? this.filter.condition.Answers.length : 15"
-            @ajaxComplete="onTableReload" :addParamsToRequest="addFilteringParams"></DataTables>
+        <DataTables ref="table"
+            v-if="isFiltersLoaded"
+            noSearch
+            exportable
+            multiorder
+            hasTotalRow
+            noSelect
+            :tableOptions="tableOptions"
+            :pageLength="isPivot ? this.filter.condition.Answers.length : 15"
+            @ajaxComplete="onTableReload"
+            :addParamsToRequest="addFilteringParams"></DataTables>
     </HqLayout>
 </template>
 
@@ -230,7 +245,7 @@ export default {
                 ...this.identifyingColumns,
                 ...this.numericColumns,
                 ...this.categoriesColumns,
-                ...this.totalColumn
+                ...this.totalColumn,
             ]
         },
 

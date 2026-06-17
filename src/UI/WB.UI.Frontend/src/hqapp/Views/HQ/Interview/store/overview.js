@@ -62,5 +62,5 @@ export default {
             state.additionalInfo[additionalInfo.id] = additionalInfo.data
         },
     },
-    getters: {}
+    getters: {},
 }

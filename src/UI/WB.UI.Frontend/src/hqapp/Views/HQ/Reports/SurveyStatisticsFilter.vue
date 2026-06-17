@@ -80,7 +80,7 @@
 <script>
 import routeSync from '~/shared/routeSync'
 import { xor, find, assign, isEqual, chain, filter } from 'lodash-es'
-import { Form, Field, ErrorMessage } from 'vee-validate'
+import { Form, Field } from 'vee-validate'
 
 export default {
     mixins: [
@@ -90,7 +90,6 @@ export default {
     components: {
         Form,
         Field,
-        ErrorMessage
     },
     data() {
         return {

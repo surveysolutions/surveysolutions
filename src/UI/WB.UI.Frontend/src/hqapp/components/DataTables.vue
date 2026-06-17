@@ -1,14 +1,19 @@
 <template>
     <div :class="wrapperClass">
-        <span id="loadingPixel" style="display:none" :data-loading="isProcessingFlag"></span>
-        <table ref="table" v-bind:class="tableClass"
+        <span id="loadingPixel"
+            style="display:none"
+            :data-loading="isProcessingFlag"></span>
+        <table ref="table"
+            v-bind:class="tableClass"
             class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive">
             <thead ref="header">
                 <slot name="header"></slot>
             </thead>
             <tbody ref="body"></tbody>
             <transition name="fade">
-                <div class="dataTables_processing" v-if="isProcessing" :class="{ 'error': errorMessage != null }">
+                <div class="dataTables_processing"
+                    v-if="isProcessing"
+                    :class="{ 'error': errorMessage != null }">
                     <div v-if="errorMessage">
                         {{ errorMessage }}
                     </div>
@@ -18,14 +23,20 @@
                 </div>
             </transition>
         </table>
-        <div class="download-report-as" v-if="exportable">
+        <div class="download-report-as"
+            v-if="exportable">
             {{ $t("Pages.DownloadReport") }}
-            <a target="_blank" v-bind:href="this.export.excel" v-dompurify-html="'XLSX'">
+            <a target="_blank"
+                v-bind:href="this.export.excel"
+                v-dompurify-html="'XLSX'">
             </a>,
-            <a target="_blank" v-bind:href="this.export.csv" v-dompurify-html="'CSV'">
+            <a target="_blank"
+                v-bind:href="this.export.csv"
+                v-dompurify-html="'CSV'">
             </a>
             {{ $t("Pages.Or") }}
-            <a target="_blank" v-bind:href="this.export.tab">
+            <a target="_blank"
+                v-bind:href="this.export.tab">
                 TAB
             </a>
         </div>
@@ -209,7 +220,7 @@ export default {
                 searchHighlight: true,
                 paging: !this.noPaging,
                 searching: !this.noSearch,
-                autoWidth: false
+                autoWidth: false,
             }
 
             if (this.mutliRowSelect) {
@@ -324,10 +335,10 @@ export default {
             }
 
             $.extend(true, $.fn.dataTable.defaults, {
-                "columnDefs": [
-                    { "targets": '_all', "render": $.fn.dataTable.render.text() }
-                ]
-            });
+                'columnDefs': [
+                    { 'targets': '_all', 'render': $.fn.dataTable.render.text() },
+                ],
+            })
 
             this.table = $(this.$refs.table).DataTable(options)
 

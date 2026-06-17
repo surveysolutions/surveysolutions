@@ -1,23 +1,39 @@
 ﻿<template>
-    <wb-question :question="$me" questionCssClassName="numeric-question" :no-comments="noComments">
+    <wb-question :question="$me"
+        questionCssClassName="numeric-question"
+        :no-comments="noComments">
         <div class="question-unit">
             <div class="options-group">
-                <div class="form-group" v-if="$me.isProtected">
+                <div class="form-group"
+                    v-if="$me.isProtected">
                     <div class="field locked-option unavailable-option answered">
-                        <input type="number" class="field-to-fill" placeholder="Tap to enter number"
-                            :value="$me.protectedAnswer" disabled />
-                        <button type="submit" class="btn btn-link btn-clear">
+                        <input type="number"
+                            class="field-to-fill"
+                            placeholder="Tap to enter number"
+                            :value="$me.protectedAnswer"
+                            disabled />
+                        <button type="submit"
+                            class="btn btn-link btn-clear">
                             <span></span>
                         </button>
                         <div class="lock"></div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="field" :class="{ answered: $me.isAnswered }">
-                        <input ref="inputInt" type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"
-                            :placeholder="noAnswerWatermark" :title="noAnswerWatermark" :value="$me.answer"
-                            v-blurOnEnterKey :disabled="isSpecialValueSelected || !$me.acceptAnswer"
-                            :class="{ 'special-value-selected': isSpecialValueSelected }" @blur="answerIntegerQuestion"
+                    <div class="field"
+                        :class="{ answered: $me.isAnswered }">
+                        <input ref="inputInt"
+                            type="text"
+                            autocomplete="off"
+                            inputmode="numeric"
+                            class="field-to-fill"
+                            :placeholder="noAnswerWatermark"
+                            :title="noAnswerWatermark"
+                            :value="$me.answer"
+                            v-blurOnEnterKey
+                            :disabled="isSpecialValueSelected || !$me.acceptAnswer"
+                            :class="{ 'special-value-selected': isSpecialValueSelected }"
+                            @blur="answerIntegerQuestion"
                             v-numericFormatting="{
                                 digitGroupSeparator: groupSeparator,
                                 decimalCharacter: decimalSeparator,
@@ -30,16 +46,25 @@
                     </div>
                 </div>
                 <template v-if="isSpecialValueSelected != false">
-                    <div class="radio" v-for="option in $me.options" :key="$me.id + '_' + option.value">
+                    <div class="radio"
+                        v-for="option in $me.options"
+                        :key="$me.id + '_' + option.value">
                         <div class="field">
-                            <input class="wb-radio" type="radio" :id="$me.id + '_' + option.value" :name="$me.id"
-                                :value="option.value" :disabled="!$me.acceptAnswer" v-model="specialValue" />
+                            <input class="wb-radio"
+                                type="radio"
+                                :id="$me.id + '_' + option.value"
+                                :name="$me.id"
+                                :value="option.value"
+                                :disabled="!$me.acceptAnswer"
+                                v-model="specialValue" />
                             <label :for="$me.id + '_' + option.value">
                                 <span class="tick"></span>
                                 {{ option.title }}
                             </label>
-                            <wb-remove-answer :on-remove="removeAnswer" v-if="!$me.isProtected" />
-                            <wb-attachment :attachmentName="option.attachmentName" :interviewId="interviewId"
+                            <wb-remove-answer :on-remove="removeAnswer"
+                                v-if="!$me.isProtected" />
+                            <wb-attachment :attachmentName="option.attachmentName"
+                                :interviewId="interviewId"
                                 v-if="option.attachmentName" />
                         </div>
                     </div>
@@ -207,7 +232,7 @@ export default {
             return false
         },
     },
-    beforeDestroy() {
+    beforeUnmount() {
         if (this.autoNumericElement) {
             this.autoNumericElement.remove()
         }

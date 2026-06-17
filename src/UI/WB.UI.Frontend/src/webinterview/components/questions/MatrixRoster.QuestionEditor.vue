@@ -1,7 +1,11 @@
 <template>
-    <div class="ag-input-text-wrapper" :id="hash">
-        <component ref='editQuestionComponent' :key="question.identity"
-            v-bind:is="'MatrixRoster_' + question.entityType" v-bind:id="question.identity" :editorParams="params">
+    <div class="ag-input-text-wrapper"
+        :id="hash">
+        <component ref='editQuestionComponent'
+            :key="question.identity"
+            v-bind:is="'MatrixRoster_' + question.entityType"
+            v-bind:id="question.identity"
+            :editorParams="params">
         </component>
         <wb-progress :visible="isFetchInProgress" />
     </div>

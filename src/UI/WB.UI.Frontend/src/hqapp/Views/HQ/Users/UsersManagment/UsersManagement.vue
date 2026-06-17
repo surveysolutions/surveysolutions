@@ -85,12 +85,12 @@
         <AddInterviewerToWorkspace ref="addInterviewerToWorkspace" @addInterviewerWorkspace="addInterviewerWorkspace" />
 
         <template v-slot:modals>
-            <Confirm ref="confirmArchive" id="confirmArchive" slot="modals">
+            <Confirm ref="confirmArchive" id="confirmArchive">
                 {{ $t('Pages.Users_ArchiveUsersConfirmMessage') }}
                 <br /> <br />
                 {{ $t('Pages.Users_UsersConfirm') }}
             </Confirm>
-            <Confirm ref="confirmUnarchive" id="confirmUnarchive" slot="modals">
+            <Confirm ref="confirmUnarchive" id="confirmUnarchive">
                 {{ $t('Pages.Users_UnarchiveUsersWarning') }}
                 <br /> <br />
                 {{ $t('Pages.Users_UsersConfirm') }}

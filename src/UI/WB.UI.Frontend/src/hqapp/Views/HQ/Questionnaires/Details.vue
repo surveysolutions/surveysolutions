@@ -9,12 +9,15 @@
                                 {{ this.$t('Pages.Questionnaire_Info') }}:
                                 <b>
                                     {{ $t('Pages.QuestionnaireNameVersionFirst',
-                                        {
-                                            name: model.title,
-                                            version: model.version,
-                                        }) }}
-                                    <a :href="model.designerUrl" target="_blank" v-if="model.designerUrl != null">
-                                        <span :title="$t('Dashboard.ShowOnDesigner')" class="glyphicon glyphicon-link">
+                                          {
+                                              name: model.title,
+                                              version: model.version,
+                                          }) }}
+                                    <a :href="model.designerUrl"
+                                        target="_blank"
+                                        v-if="model.designerUrl != null">
+                                        <span :title="$t('Dashboard.ShowOnDesigner')"
+                                            class="glyphicon glyphicon-link">
                                         </span>
                                     </a>
                                 </b>
@@ -22,9 +25,14 @@
                         </div>
                         <div class="questionnaire-details-actions clearfix">
                             <div class="buttons-container">
-                                <div class="dropdown aside-menu" :disabled="model.isObserving">
-                                    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false" class="btn btn-link" :disabled="model.isObserving">
+                                <div class="dropdown aside-menu"
+                                    :disabled="model.isObserving">
+                                    <button type="button"
+                                        data-bs-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        class="btn btn-link"
+                                        :disabled="model.isObserving">
                                         <span></span>
                                     </button>
                                     <ul class="dropdown-menu context-menu-list context-menu-root">
@@ -86,7 +94,8 @@
 
                 <!--  -->
 
-                <div class="col-sm-6" style="padding-top: 30px">
+                <div class="col-sm-6"
+                    style="padding-top: 30px">
                     <table class="table table-striped table-bordered">
                         <tbody>
                             <tr>
@@ -122,8 +131,11 @@
                                 <td>
                                     <form v-on:submit.prevent="false">
                                         <div class="form-group mb-20">
-                                            <input class="checkbox-filter" id="recordAudio" type="checkbox"
-                                                v-model="audioAudit" @change="recordAudioChanged" />
+                                            <input class="checkbox-filter"
+                                                id="recordAudio"
+                                                type="checkbox"
+                                                v-model="audioAudit"
+                                                @change="recordAudioChanged" />
                                             <label for="recordAudio">
                                                 <span class="tick"></span>
                                             </label>
@@ -135,7 +147,8 @@
                                 <td class="text-nowrap">
                                     {{ $t('Pages.Questionnaire_CriticalVerificationLevel') }}
                                 </td>
-                                <td v-if="model.criticalitySupport === true" class="pointer editable"
+                                <td v-if="model.criticalitySupport === true"
+                                    class="pointer editable"
                                     @click="criticalityLevelChange">
                                     {{ criticalityLevelDisplay }}
                                 </td>
@@ -154,7 +167,8 @@
                                         <li>
                                             <a :href="model.mainPdfUrl">{{ getDefaultTranslationName() }}</a>
                                         </li>
-                                        <li v-for="lang in model.translatedPdfVersions" v-bind:key="lang.name">
+                                        <li v-for="lang in model.translatedPdfVersions"
+                                            v-bind:key="lang.name">
                                             <a :href="lang.pdfUrl">{{ lang.name }}</a>
                                         </li>
                                     </ul>
@@ -172,7 +186,8 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col-sm-6" style="padding-top: 30px">
+                <div class="col-sm-6"
+                    style="padding-top: 30px">
                     <h3>{{ $t('Pages.Questionnaire_Stats') }}</h3>
                     <table class="table table-striped table-bordered">
                         <tbody>
@@ -204,15 +219,22 @@
                     </table>
                 </div>
             </div>
-            <ModalFrame ref="audioAuditModal" :title="$t('Pages.ConfirmationNeededTitle')" :canClose="false">
+            <ModalFrame ref="audioAuditModal"
+                :title="$t('Pages.ConfirmationNeededTitle')"
+                :canClose="false">
                 <p>{{ $t('Pages.GlobalSettings_TurningAudioAuditOn') }}</p>
                 <template v-slot:actions>
                     <div>
-                        <button type="button" class="btn btn-danger" v-bind:disabled="model.isObserving"
+                        <button type="button"
+                            class="btn btn-danger"
+                            v-bind:disabled="model.isObserving"
                             @click="recordAudioSend(true)">
                             {{ $t('Common.Ok') }}
                         </button>
-                        <button type="button" class="btn btn-link" data-bs-dismiss="modal" @click="cancelSetAudio">
+                        <button type="button"
+                            class="btn btn-link"
+                            data-bs-dismiss="modal"
+                            @click="cancelSetAudio">
                             {{ $t('Common.Cancel') }}
                         </button>
                     </div>
@@ -231,20 +253,29 @@
 
                 <form onsubmit="return false;">
                     <div class="form-group">
-                        <Typeahead ref="criticalityLevel" control-id="criticalityLevel" no-clear
-                            data-vv-name="criticalityLevel" data-vv-as="criticalityLevel"
-                            v-on:selected="criticalityLevelSelected" no-search :value="criticalityLevel"
+                        <Typeahead ref="criticalityLevel"
+                            control-id="criticalityLevel"
+                            no-clear
+                            data-vv-name="criticalityLevel"
+                            data-vv-as="criticalityLevel"
+                            v-on:selected="criticalityLevelSelected"
+                            no-search
+                            :value="criticalityLevel"
                             :values="this.$config.model.criticalityLevels">
                         </Typeahead>
                     </div>
                 </form>
                 <template v-slot:actions>
                     <div>
-                        <button type="button" class="btn btn-primary" @click="updateCriticalityLevel"
+                        <button type="button"
+                            class="btn btn-primary"
+                            @click="updateCriticalityLevel"
                             :disabled="!showSelectors">
                             {{ $t('Common.Save') }}
                         </button>
-                        <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                        <button type="button"
+                            class="btn btn-link"
+                            data-bs-dismiss="modal">
                             {{ $t('Common.Cancel') }}
                         </button>
                     </div>
@@ -276,7 +307,7 @@ export default {
         },
         showSelectors() {
             return !this.$config.model.isObserver && !this.$config.model.isObserving
-        }
+        },
     },
     mounted() {
         this.audioAudit = this.$config.model.audioAudit
@@ -309,11 +340,11 @@ export default {
         },
         async updateCriticalityLevel() {
             const response = await this.$hq.Questionnaire(this.model.questionnaireId, this.model.version)
-                .CriticalityLevel(this.criticalityLevel.key);
+                .CriticalityLevel(this.criticalityLevel.key)
             if (response.status === 204) {
-                this.model.criticalityLevel = this.criticalityLevel.key;
+                this.model.criticalityLevel = this.criticalityLevel.key
                 this.criticalityLevelDisplay = find(this.$config.model.criticalityLevels, { key: this.model.criticalityLevel }).value
-                this.$refs.criticalityLevelModal.hide();
+                this.$refs.criticalityLevelModal.hide()
             }
         },
         async recordAudioSend(needToCloseModal) {

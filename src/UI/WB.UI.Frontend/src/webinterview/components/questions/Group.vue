@@ -1,8 +1,15 @@
 <template>
-    <wb-question :question="$me" :questionCssClassName="statusClass" noTitle="true" noValidation="true"
-        noInstructions="true" noComments="true" noFlag="true">
+    <wb-question :question="$me"
+        :questionCssClassName="statusClass"
+        noTitle="true"
+        noValidation="true"
+        noInstructions="true"
+        noComments="true"
+        noFlag="true">
         <div class="options-group">
-            <a class="btn btn-roster-section" :class="btnStatusClass" :disabled="shouldDisable ? true : null"
+            <a class="btn btn-roster-section"
+                :class="btnStatusClass"
+                :disabled="shouldDisable ? true : null"
                 @click="navigate">
                 <span v-dompurify-html="$me.title"></span><span
                     v-if="this.$me.isRoster && !this.$me.hasCustomRosterTitle"> -
@@ -79,9 +86,9 @@ export default {
                 'has-error': !this.$me.validity.isValid,
                 '': this.$me.validity.isValid && !this.isCompleted,
             },
-                {
-                    'answered': this.isCompleted,
-                }]
+            {
+                'answered': this.isCompleted,
+            }]
         },
         shouldDisable() {
             return this.clicked == true && this.$store.getters.loadingProgress === true

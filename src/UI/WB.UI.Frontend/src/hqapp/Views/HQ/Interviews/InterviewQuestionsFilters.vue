@@ -1,17 +1,23 @@
 <template>
-    <div class="filters-container" id="questionsFilters">
+    <div class="filters-container"
+        id="questionsFilters">
         <h4>
             {{ $t("Interviews.FiltersByQuestions") }}
         </h4>
         <div class="block-filter">
-            <button type="button" id="btnQuestionsFilter" class="btn" :disabled="isDisabled"
+            <button type="button"
+                id="btnQuestionsFilter"
+                class="btn"
+                :disabled="isDisabled"
                 :title="isDisabled ? $t('Interviews.QuestionsFilterNotAvailable') : ''"
                 @click="$refs.questionsSelector.modal()">
                 {{ $t("Interviews.QuestionsSelector") }}
             </button>
         </div>
 
-        <ModalFrame ref="questionsSelector" id="modalQuestionsSelector" :title="$t('Interviews.ChooseQuestionsTitle')">
+        <ModalFrame ref="questionsSelector"
+            id="modalQuestionsSelector"
+            :title="$t('Interviews.ChooseQuestionsTitle')">
             <form onsubmit="return false;">
                 <div class="action-container">
                     <!-- <div class="pull-right">
@@ -20,52 +26,73 @@
                     <div>
                         <Checkbox v-for="questionnaireItem in questionnaireItemsList"
                             :key="'cb_' + questionnaireItem.variable"
-                            :label="`${sanitizeHtml(questionnaireItem.title)}`" :value="isChecked(questionnaireItem)"
-                            :name="'check_' + questionnaireItem.variable" @input.self="check(questionnaireItem)" />
+                            :label="`${sanitizeHtml(questionnaireItem.title)}`"
+                            :value="isChecked(questionnaireItem)"
+                            :name="'check_' + questionnaireItem.variable"
+                            @input.self="check(questionnaireItem)" />
                     </div>
                 </div>
             </form>
             <template v-slot:actions>
                 <div>
-                    <button id="btnQuestionsSelectorOk" type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                    <button id="btnQuestionsSelectorOk"
+                        type="button"
+                        class="btn btn-primary"
+                        data-bs-dismiss="modal"
                         role="cancel">{{ $t("Common.Ok") }}</button>
                 </div>
             </template>
         </ModalFrame>
 
-        <ModalFrame ref="questionsExposedSelector" id="modalQuestionsExposedSelector" class="vue-query-builder"
+        <ModalFrame ref="questionsExposedSelector"
+            id="modalQuestionsExposedSelector"
+            class="vue-query-builder"
             :title="$t('Interviews.DynamicFilter')">
-            <query-builder :config="config" v-model="queryExposedVariables">
+            <query-builder :config="config"
+                v-model="queryExposedVariables">
 
                 <template #groupOperator="props">
-                    <query-builder-group-operator :groupCtrl="props" :labels="labels" />
+                    <query-builder-group-operator :groupCtrl="props"
+                        :labels="labels" />
                 </template>
 
                 <template #groupControl="props">
-                    <query-builder-group :groupCtrl="props" :labels="labels" />
+                    <query-builder-group :groupCtrl="props"
+                        :labels="labels" />
                 </template>
 
                 <template #rule="props">
-                    <rule-slot :ruleCtrl="props" :rule="getRuleById(props.ruleIdentifier)" :labels="labels" />
+                    <rule-slot :ruleCtrl="props"
+                        :rule="getRuleById(props.ruleIdentifier)"
+                        :labels="labels" />
                 </template>
 
             </query-builder>
             <!-- <div>{{queryExposedVariables}}</div> -->
             <template v-slot:actions>
                 <div>
-                    <button id="btnQuestionsExposedSelectorOk" type="button" class="btn btn-primary"
-                        :disabled="saveDisabled" @click="saveExposedVariablesFilter">{{ $t("Common.Apply") }}</button>
+                    <button id="btnQuestionsExposedSelectorOk"
+                        type="button"
+                        class="btn btn-primary"
+                        :disabled="saveDisabled"
+                        @click="saveExposedVariablesFilter">{{ $t("Common.Apply") }}</button>
                 </div>
             </template>
         </ModalFrame>
 
-        <InterviewFilter v-for="condition in conditions" :key="'filter_' + condition.variable"
-            :id="'filter_' + condition.variable" :item="itemFor(condition)" :condition="condition"
+        <InterviewFilter v-for="condition in conditions"
+            :key="'filter_' + condition.variable"
+            :id="'filter_' + condition.variable"
+            :item="itemFor(condition)"
+            :condition="condition"
             @change="conditionChanged">
         </InterviewFilter>
 
         <div class="block-filter">
-            <button type="button" id="btnExposedQuestionsFilter" class="btn" :disabled="isDynamicDisabled"
+            <button type="button"
+                id="btnExposedQuestionsFilter"
+                class="btn"
+                :disabled="isDynamicDisabled"
                 :title="isDynamicDisabled ? $t('Interviews.DynamicFilterNotAvailable') : ''"
                 @click="$refs.questionsExposedSelector.modal()">
                 {{ $t("Interviews.AdvancedFilterSelector") }}
@@ -78,7 +105,7 @@
 <script>
 
 import QueryBuilder from './components/LocalQueryBuilder.vue'
-import RuleSlot from "./components/CustomBootstrapRule.vue";
+import RuleSlot from './components/CustomBootstrapRule.vue'
 import QueryBuilderGroup from './components/CustomBootstrapGroup.vue'
 import QueryBuilderGroupOperator from './components/CustomBootstrapGroupOperator.vue'
 import moment from 'moment'
@@ -92,7 +119,7 @@ const sanitizeHtml = text => DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWE
 export default {
     data() {
         return {
-            queryExposedVariables: { operatorIdentifier: "all", children: [] },
+            queryExposedVariables: { operatorIdentifier: 'all', children: [] },
             conditions: [], /** { } */
             questionnaireItems: [],
             selectedQuestion: null,
@@ -151,13 +178,13 @@ export default {
 
         questionnaireId() {
             this.conditions = this.value
-            this.queryExposedVariables = { operatorIdentifier: "all", children: [] }
+            this.queryExposedVariables = { operatorIdentifier: 'all', children: [] }
             this.saveExposedVariablesFilter()
         },
 
         questionnaireVersion() {
             this.conditions = this.value
-            this.queryExposedVariables = { operatorIdentifier: "all", children: [] }
+            this.queryExposedVariables = { operatorIdentifier: 'all', children: [] }
             this.saveExposedVariablesFilter()
         },
     },
@@ -266,7 +293,7 @@ export default {
                 var notAnsweredResult = {}
                 notAnsweredResult.or =
                     [{ identifyingData: { none: { entity: { variable: { eq: query.identifier } } } } },
-                    { identifyingData: { some: some } }]
+                        { identifyingData: { some: some } }]
                 return notAnsweredResult
             }
 
@@ -296,7 +323,7 @@ export default {
                                 and: [
                                     { identifyingData: { some: leftOn } },
                                     { identifyingData: { some: rightOn } },
-                                ]
+                                ],
                             }
                             return dateOnResult
                         }
@@ -311,7 +338,7 @@ export default {
                                 or: [
                                     { identifyingData: { some: leftNotOn } },
                                     { identifyingData: { some: rightNotOn } },
-                                ]
+                                ],
                             }
                             return dateNotOnResult
                         }
@@ -447,7 +474,7 @@ export default {
                 rule.unaryOperators = map.unaryOperators
 
             return rule
-        }
+        },
     },
 
     computed: {
@@ -473,7 +500,7 @@ export default {
                     'ffff00',
                     'ff00ff',
                     '9900ff',
-                    '999900'
+                    '999900',
                 ],
             }
         },
@@ -575,7 +602,7 @@ export default {
         QueryBuilder,
         QueryBuilderGroup,
         QueryBuilderGroupOperator,
-        RuleSlot
+        RuleSlot,
     },
 }
 </script>

@@ -9,7 +9,7 @@
         "dev": "vite build --mode development",
         "test": "jest",
         "hot": "vite",
-        "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
+        "lint": "eslint --ext .js,.vue --fix src",
         "format": "prettier .  --write"
     },
     "dependencies": {

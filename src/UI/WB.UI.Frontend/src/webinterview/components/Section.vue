@@ -1,8 +1,13 @@
 <template>
-    <div id="questionsList" class="unit-section section" :class="sectionClass">
+    <div id="questionsList"
+        class="unit-section section"
+        :class="sectionClass">
         <SectionLoadingProgress />
         <Breadcrumbs :showHumburger="showHumburger" />
-        <component v-for="entity in entities" :key="entity.identity" :is="entity.entityType" :id="entity.identity">
+        <component v-for="entity in entities"
+            :key="entity.identity"
+            :is="entity.entityType"
+            :id="entity.identity">
         </component>
     </div>
 </template>

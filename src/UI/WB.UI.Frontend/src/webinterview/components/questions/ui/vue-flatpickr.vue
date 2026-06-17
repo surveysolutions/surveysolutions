@@ -1,6 +1,13 @@
 <template>
-    <input type="text" :id="id" :disabled="disabled" :class="inputClass" :name="name" :placeholder="placeholder"
-        :required="required" v-model="mutableValue" data-input />
+    <input type="text"
+        :id="id"
+        :disabled="disabled"
+        :class="inputClass"
+        :name="name"
+        :placeholder="placeholder"
+        :required="required"
+        v-model="mutableValue"
+        data-input />
 </template>
 
 <script type="text/javascript">
@@ -30,7 +37,7 @@ export default {
         // https://chmln.github.io/flatpickr/options/
         config: {
             type: Object,
-            default: () => ({})
+            default: () => ({}),
         },
         disabled: Boolean,
         placeholder: {
@@ -74,7 +81,7 @@ export default {
             this.fp = new Flatpickr(elem, this.mergedConfig)
         }
     },
-    beforeDestroy() {
+    beforeUnmount() {
         // Free up memory
         if (this.fp) {
             this.fp.destroy()

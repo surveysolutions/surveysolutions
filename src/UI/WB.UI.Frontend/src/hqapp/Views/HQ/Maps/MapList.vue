@@ -1,24 +1,34 @@
 <template>
-    <HqLayout :hasFilter="false" :title="$t('Pages.MapList_Title')">
+    <HqLayout :hasFilter="false"
+        :title="$t('Pages.MapList_Title')">
         <template v-slot:headers>
             <div>
                 <div class="topic-with-button">
                     <h1>{{ $t('Pages.MapList_Title') }}</h1>
-                    <label class="btn btn-success btn-file" v-if="actionsAlowed">
+                    <label class="btn btn-success btn-file"
+                        v-if="actionsAlowed">
                         {{ $t('Pages.MapList_Upload') }}
-                        <input accept=".zip" ref="uploader" id="File" name="File" @change="onFileChange" type="file"
+                        <input accept=".zip"
+                            ref="uploader"
+                            id="File"
+                            name="File"
+                            @change="onFileChange"
+                            type="file"
                             value="" />
                     </label>
                 </div>
                 <div ref="status">
                     <p>{{ statusMessage }}</p>
                 </div>
-                <div ref="errors" class="alert alert-danger">
-                    <div v-for="error in errorList" :key="error">
+                <div ref="errors"
+                    class="alert alert-danger">
+                    <div v-for="error in errorList"
+                        :key="error">
                         {{ error }}
                     </div>
                 </div>
-                <ol class="list-unstyled" v-if="!isSupervisor">
+                <ol class="list-unstyled"
+                    v-if="!isSupervisor">
                     <li>{{ $t('Pages.MapList_UploadDescription') }} </li>
                     <li>{{ $t('Pages.MapList_UploadDescriptionExtra') }}</li>
                 </ol>
@@ -30,11 +40,16 @@
                 </p>
             </div>
         </template>
-        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems"
+        <DataTables ref="table"
+            :tableOptions="tableOptions"
+            :contextMenuItems="contextMenuItems"
             :supportContextMenu="actionsAlowed">
         </DataTables>
         <template v-slot:modals>
-            <Confirm ref="confirmDiscard" id="discardConfirm" :okTitle="$t('Common.Delete')" okClass="btn-danger">
+            <Confirm ref="confirmDiscard"
+                id="discardConfirm"
+                :okTitle="$t('Common.Delete')"
+                okClass="btn-danger">
                 {{ deleteDialogBody }}
             </Confirm>
         </template>
@@ -96,7 +111,7 @@ export default {
                 return
             }
 
-            const self = this;
+            const self = this
 
             const statusupdater = this.updateStatus
             const reloader = this.reload
@@ -206,7 +221,7 @@ export default {
                         title: this.$t('Pages.MapList_MapName'),
                         render(data) {
                             return `<a href="${self.$hq.basePath}Maps/Details?mapname=${encodeURIComponent(data)}">${data}</a>`
-                        }
+                        },
                     },
                     {
                         data: 'fileName',

@@ -1,12 +1,22 @@
 <template>
-    <div class="form-date input-group" id="dates-range">
-        <input type="text" :id="id" :disabled="disabled ? true : null" class="form-control flatpickr-input"
-            readonly="readonly" :name="name" :placeholder="placeholder" :required="required" v-model="mutableValue"
+    <div class="form-date input-group"
+        id="dates-range">
+        <input type="text"
+            :id="id"
+            :disabled="disabled ? true : null"
+            class="form-control flatpickr-input"
+            readonly="readonly"
+            :name="name"
+            :placeholder="placeholder"
+            :required="required"
+            v-model="mutableValue"
             data-input />
-        <button type="submit" class="btn btn-link btn-clear">
+        <button type="submit"
+            class="btn btn-link btn-clear">
             <span></span>
         </button>
-        <span class="input-group-addon" data-toggle>
+        <span class="input-group-addon"
+            data-toggle>
             <span class="calendar"></span>
         </span>
     </div>
@@ -115,7 +125,7 @@ export default {
             this.fp = new Flatpickr(elem, config)
         }
     },
-    beforeDestroy() {
+    beforeUnmount() {
         // Free up memory
         if (this.fp) {
             this.fp.destroy()
@@ -157,19 +167,19 @@ export default {
         },
         detectUserSettings(config) {
             const is24HourFormat = new Intl.DateTimeFormat(undefined, {
-                hour: "numeric",
+                hour: 'numeric',
                 hour12: false,
             })
                 .formatToParts()
-                .some((part) => part.type === "hour");
+                .some((part) => part.type === 'hour')
 
-            const firstDay = new Intl.DateTimeFormat(undefined, { weekday: "long" })
+            const firstDay = new Intl.DateTimeFormat(undefined, { weekday: 'long' })
                 .resolvedOptions()
-                .firstDay || 0;
+                .firstDay || 0
 
-            config.value.firstDayOfWeek = firstDay;
-            config.value.time_24hr = is24HourFormat;
-        }
+            config.value.firstDayOfWeek = firstDay
+            config.value.time_24hr = is24HourFormat
+        },
     },
 }
 </script>

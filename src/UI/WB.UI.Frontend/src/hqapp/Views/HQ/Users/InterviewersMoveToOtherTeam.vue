@@ -2,7 +2,7 @@
     <div>
         <Confirm id="move-interviewer-confirmation" ref="move"
             :title="$t('Pages.Interviewers_MoveInterviewerPopupTitle', { names: this.formatNames(this.interviewers) })"
-            slot="modals" :disableOk="!whatToDoWithAssignments || !supervisor">
+            :disableOk="!whatToDoWithAssignments || !supervisor">
             <div class="alert">
                 <Typeahead ref="supervisorControl" control-id="supervisorToAssign" data-vv-name="supervisor"
                     data-vv-as="supervisor" :placeholder="$t('Common.AllSupervisors')" :value="supervisor"
@@ -63,7 +63,8 @@
                                     <a target="_blank"
                                         :href="$config.model.interviewerProfile + '/' + interviewer.userId"
                                         :v-text="interviewer.userName"
-                                        :class="{ 'text-danger': interviewer.inProgress }">{{ interviewer.userName }}</a>
+                                        :class="{ 'text-danger': interviewer.inProgress }">{{ interviewer.userName
+                                        }}</a>
                                 </span>
                             </td>
                             <td v-text="interviewer.interviewsProcessed"></td>
@@ -256,7 +257,7 @@ export default {
                     and: [
                         { webMode: { eq: true } },
                         { archived: { eq: false } },
-                        { responsibleId: { in: interviewersArray } }]
+                        { responsibleId: { in: interviewersArray } }],
                 }
 
                 const response = await self.$apollo.query({

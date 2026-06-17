@@ -11,7 +11,8 @@
                                         {{ $t('Assignments.AssignmentId') }}:
                                         {{ model.id }}
                                     </li>
-                                    <li id="detailsInfo_qusetionnaireTitleListItem" class="questionnaire-title">
+                                    <li id="detailsInfo_qusetionnaireTitleListItem"
+                                        class="questionnaire-title">
                                         [ver.{{ model.questionnaire.version }}]
                                         {{ model.questionnaire.title }}
                                     </li>
@@ -32,13 +33,16 @@
                                             $t('Details.Responsible')
                                         }}:
                                         </span>
-                                        <span v-if="isInterviewerResponsible" class="data">
+                                        <span v-if="isInterviewerResponsible"
+                                            class="data">
                                             <a v-bind:href="interviewerProfileUrl
-                                                " class="interviewer">{{ model.responsible.name }}</a>
+                                               "
+                                                class="interviewer">{{ model.responsible.name }}</a>
                                         </span>
-                                        <span v-else class="data supervisor">{{
+                                        <span v-else
+                                            class="data supervisor">{{
                                             model.responsible.name
-                                            }}</span>
+                                        }}</span>
                                     </li>
                                 </ul>
                                 <ul class="list-unstyled pull-left table-info">
@@ -54,14 +58,16 @@
                                         <span class="data-label">{{
                                             $t('Common.CalendarEvent')
                                         }}:</span>
-                                        <span class="data" data-bs-toggle="tooltip" v-if="calendarEventComment != null"
+                                        <span class="data"
+                                            data-bs-toggle="tooltip"
+                                            v-if="calendarEventComment != null"
                                             :title="calendarEventComment == null ||
                                                 calendarEventComment == ''
                                                 ? this.$t(
                                                     'Assignments.NoComment',
                                                 )
                                                 : calendarEventComment
-                                                ">
+                                            ">
                                             {{ calendarEventTime }}
                                         </span>
                                     </li>
@@ -70,41 +76,53 @@
                         </div>
                         <div class="questionnaire-details-actions clearfix">
                             <div class="buttons-container">
-                                <div class="dropdown aside-menu" :disabled="config.isObserving" v-if="showMoreButton">
-                                    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false" class="btn btn-link" :disabled="config.isObserving">
+                                <div class="dropdown aside-menu"
+                                    :disabled="config.isObserving"
+                                    v-if="showMoreButton">
+                                    <button type="button"
+                                        data-bs-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        class="btn btn-link"
+                                        :disabled="config.isObserving">
                                         <span></span>
                                     </button>
                                     <ul class="dropdown-menu context-menu-list context-menu-root">
                                         <li v-if="!isArchived">
-                                            <a href="#" @click="assignSelected">
+                                            <a href="#"
+                                                @click="assignSelected">
                                                 {{ $t('Common.Assign') }}
                                             </a>
                                         </li>
                                         <li v-if="isHeadquarters && !isArchived">
-                                            <a href="#" @click="downsizeSelected">
+                                            <a href="#"
+                                                @click="downsizeSelected">
                                                 {{ $t('Assignments.Downsize') }}
                                             </a>
                                         </li>
                                         <li v-if="isHeadquarters && !isArchived">
-                                            <a href="#" @click="archiveSelected">
+                                            <a href="#"
+                                                @click="archiveSelected">
                                                 {{ $t('Assignments.Archive') }}
                                             </a>
                                         </li>
                                         <li v-if="isHeadquarters && isArchived">
-                                            <a href="#" @click="unarchiveSelected">
+                                            <a href="#"
+                                                @click="unarchiveSelected">
                                                 {{
                                                     $t('Assignments.Unarchive')
                                                 }}
                                             </a>
                                         </li>
                                         <li v-if="canComplete">
-                                            <a href="#" @click.prevent="openCloseModal">
+                                            <a href="#"
+                                                @click.prevent="openCloseModal">
                                                 {{ $t('Assignments.Close') }}
                                             </a>
                                         </li>
                                         <li v-if="canReopen">
-                                            <a href="#" @click.prevent="openReopenModal">
+                                            <a href="#"
+                                                @click.prevent="openReopenModal">
                                                 {{ $t('Assignments.Reopen') }}
                                             </a>
                                         </li>
@@ -117,22 +135,31 @@
 
                 <!--  -->
 
-                <div class="col-sm-6" style="padding-top: 30px">
+                <div class="col-sm-6"
+                    style="padding-top: 30px">
                     <h3>
                         {{ $t('Assignments.AssignmentInfo') }}
-                        <a v-if="model.webMode && model.invitationToken" :href="webInterviewUrl" target="_blank">
-                            <span :title="$t('Assignments.StartWebInterview')" class="glyphicon glyphicon-link" />
+                        <a v-if="model.webMode && model.invitationToken"
+                            :href="webInterviewUrl"
+                            target="_blank">
+                            <span :title="$t('Assignments.StartWebInterview')"
+                                class="glyphicon glyphicon-link" />
                         </a>
-                        <span v-if="this.model.isArchived" class="label label-default">{{ $t('Common.Archived')
-                            }}</span>
+                        <span v-if="this.model.isArchived"
+                            class="label label-default">{{ $t('Common.Archived')
+                        }}</span>
                     </h3>
                     <table class="table table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th class="sorting_disabled" rowspan="1" colspan="1">
+                                <th class="sorting_disabled"
+                                    rowspan="1"
+                                    colspan="1">
                                     {{ $t('Assignments.Property') }}
                                 </th>
-                                <th class="sorting_disabled" rowspan="1" colspan="1">
+                                <th class="sorting_disabled"
+                                    rowspan="1"
+                                    colspan="1">
                                     {{ $t('Assignments.Value') }}
                                 </th>
                             </tr>
@@ -143,7 +170,10 @@
                                 <td class="text-nowrap">
                                     {{ $t('Assignments.Expected') }}
                                 </td>
-                                <td class="pointer editable" @click="quantityChange">{{ quantity }}</td>
+                                <td class="pointer editable"
+                                    @click="quantityChange">
+                                    {{ quantity }}
+                                </td>
                             </tr>
                             <tr v-if="model.isHeadquarters">
                                 <td class="text-nowrap">
@@ -166,13 +196,14 @@
                                     {{ $t('Assignments.IdentifyingQuestions') }}
                                 </td>
                                 <td style="word-wrap: break-word">
-                                    <div v-bind:key="question.id" v-for="question in model.identifyingData"
+                                    <div v-bind:key="question.id"
+                                        v-for="question in model.identifyingData"
                                         class="overview-item">
                                         <div class="item-content">
                                             <h4>
                                                 <span>{{
                                                     question.title
-                                                    }}</span>
+                                                }}</span>
                                             </h4>
                                             <div class="answer">
                                                 <div v-dompurify-html="question.answer"></div>
@@ -185,7 +216,8 @@
                                 <td class="text-nowrap">
                                     {{ $t('Assignments.IsAudioRecordingEnabled') }}
                                 </td>
-                                <td :class="{ 'pointer editable': model.isHeadquarters }" @click="audioRecordingChange">
+                                <td :class="{ 'pointer editable': model.isHeadquarters }"
+                                    @click="audioRecordingChange">
                                     {{ isAudioRecordingEnabled }}
                                 </td>
                             </tr>
@@ -217,11 +249,13 @@
                                 <td class="text-nowrap">
                                     {{ this.$t('Assignments.DetailsTargetAreaa') }}
                                     <span v-if="model.api.geoTarckingUrl">
-                                        (<a :href="model.api.geoTarckingUrl" style="text-decoration: underline;">{{
+                                        (<a :href="model.api.geoTarckingUrl"
+                                            style="text-decoration: underline;">{{
                                             this.$t('Assignments.DetailsGeoTracking') }}</a>)
                                     </span>
                                 </td>
-                                <td :class="{ 'pointer editable': model.isHeadquarters }" @click="targetAreaChange">
+                                <td :class="{ 'pointer editable': model.isHeadquarters }"
+                                    @click="targetAreaChange">
                                     <a v-if="model.targetArea"
                                         :href="$hq.basePath + 'Maps/Details?mapname=' + encodeURIComponent(model.targetArea)">
                                         {{ model.targetArea }}
@@ -250,56 +284,82 @@
                     </table>
                 </div>
 
-                <div class="col-sm-6" style="padding-top: 30px">
+                <div class="col-sm-6"
+                    style="padding-top: 30px">
                     <h3>{{ $t('Assignments.AssignmentHistory') }}</h3>
-                    <DataTables ref="assignmentHistoryTable" :tableOptions="tableOptions" noSearch :noPaging="false"
+                    <DataTables ref="assignmentHistoryTable"
+                        :tableOptions="tableOptions"
+                        noSearch
+                        :noPaging="false"
                         :wrapperClass="{ 'table-wrapper': true }"></DataTables>
                 </div>
 
-                <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
+                <ModalFrame ref="assignModal"
+                    :title="$t('Common.Assign')">
                     <form onsubmit="return false;">
-                        <div class="form-group" :class="{ 'has-warning': showWebModeReassignWarning }">
-                            <label class="control-label" for="newResponsibleId">
+                        <div class="form-group"
+                            :class="{ 'has-warning': showWebModeReassignWarning }">
+                            <label class="control-label"
+                                for="newResponsibleId">
                                 {{ $t('Assignments.SelectResponsible') }}
                             </label>
-                            <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
-                                :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
+                            <Typeahead control-id="newResponsibleId"
+                                :placeholder="$t('Common.Responsible')"
+                                :value="newResponsibleId"
+                                :ajax-params="{}"
+                                @selected="newResponsibleSelected"
                                 :fetch-url="config.api.responsible"></Typeahead>
-                            <span class="help-block" v-if="showWebModeReassignWarning">
+                            <span class="help-block"
+                                v-if="showWebModeReassignWarning">
                                 {{ $t('Assignments.WebModeReassignToNonInterviewer', { count: 1 }) }}
                             </span>
                         </div>
                         <div class="form-group">
-                            <label class="control-label" for="commentsId">
+                            <label class="control-label"
+                                for="commentsId">
                                 {{ $t('Assignments.Comments') }}
                             </label>
-                            <textarea control-id="commentsId" v-model="reassignComment"
-                                :placeholder="$t('Assignments.EnterComments')" name="comments" rows="6" maxlength="500"
+                            <textarea control-id="commentsId"
+                                v-model="reassignComment"
+                                :placeholder="$t('Assignments.EnterComments')"
+                                name="comments"
+                                rows="6"
+                                maxlength="500"
                                 class="form-control" />
                         </div>
                     </form>
                     <template v-slot:actions>
                         <div>
-                            <button type="button" class="btn btn-primary" @click="assign" :disabled="!newResponsibleId">
+                            <button type="button"
+                                class="btn btn-primary"
+                                @click="assign"
+                                :disabled="!newResponsibleId">
                                 {{ $t('Common.Assign') }}
                             </button>
-                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                            <button type="button"
+                                class="btn btn-link"
+                                data-bs-dismiss="modal">
                                 {{ $t('Common.Cancel') }}
                             </button>
                         </div>
                     </template>
                 </ModalFrame>
 
-                <ModalFrame ref="downsizeModal" :title="$t('Pages.ConfirmationNeededTitle')">
+                <ModalFrame ref="downsizeModal"
+                    :title="$t('Pages.ConfirmationNeededTitle')">
                     <p>{{ singleCloseMessage }}</p>
 
                     <template v-slot:actions>
                         <div>
-                            <button type="button" class="btn btn-primary" :disabled="isWebModeAssignmentSelected"
+                            <button type="button"
+                                class="btn btn-primary"
+                                :disabled="isWebModeAssignmentSelected"
                                 @click="close">
                                 {{ $t('Assignments.Downsize') }}
                             </button>
-                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                            <button type="button"
+                                class="btn btn-link"
+                                data-bs-dismiss="modal">
                                 {{ $t('Common.Cancel') }}
                             </button>
                         </div>
@@ -311,17 +371,22 @@
                     <p>{{ $t('Assignments.AudioRecordingExplanation') }}</p>
                     <form onsubmit="return false;">
                         <div class="form-group">
-                            <Checkbox :label="$t('Assignments.AudioRecordingEnable')" name="audioRecordingEnabled"
+                            <Checkbox :label="$t('Assignments.AudioRecordingEnable')"
+                                name="audioRecordingEnabled"
                                 v-model="editedAudioRecordingEnabled" />
                         </div>
                     </form>
                     <template v-slot:actions>
                         <div>
-                            <button type="button" class="btn btn-primary" @click="upateAudioRecording"
+                            <button type="button"
+                                class="btn btn-primary"
+                                @click="upateAudioRecording"
                                 :disabled="!showSelectors">
                                 {{ $t('Common.Save') }}
                             </button>
-                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                            <button type="button"
+                                class="btn btn-link"
+                                data-bs-dismiss="modal">
                                 {{ $t('Common.Cancel') }}
                             </button>
                         </div>
@@ -334,15 +399,28 @@
                     <p v-if="!canEditQuantity">
                         <b>{{ $t("Assignments.AssignmentExpectedInWebMode") }}</b>
                     </p>
-                    <Form ref="quantityForm" onsubmit="return false;" v-slot="{ meta }">
-                        <div class="form-group" v-bind:class="{ 'has-error': meta.valid == false }">
-                            <label class="control-label" for="newQuantity">
+                    <Form ref="quantityForm"
+                        onsubmit="return false;"
+                        v-slot="{ meta }">
+                        <div class="form-group"
+                            v-bind:class="{ 'has-error': meta.valid == false }">
+                            <label class="control-label"
+                                for="newQuantity">
                                 {{ $t("Assignments.Expected") }}
                             </label>
-                            <Field type="text" class="form-control" v-model.trim="editedQuantity" name="editedQuantity"
-                                :rules="validateQuantity" :data-vv-as="$t('Assignments.Expected')" maxlength="5"
-                                autocomplete="off" @keyup.enter="updateQuantity" id="newQuantity"
-                                :disabled="!canEditQuantity" :validateOnBlur="true" :validateOnChange="true"
+                            <Field type="text"
+                                class="form-control"
+                                v-model.trim="editedQuantity"
+                                name="editedQuantity"
+                                :rules="validateQuantity"
+                                :data-vv-as="$t('Assignments.Expected')"
+                                maxlength="5"
+                                autocomplete="off"
+                                @keyup.enter="updateQuantity"
+                                id="newQuantity"
+                                :disabled="!canEditQuantity"
+                                :validateOnBlur="true"
+                                :validateOnChange="true"
                                 :validateOnInput="true" />
                             <span class="text-danger">
                                 <ErrorMessage name="editedQuantity" />
@@ -352,10 +430,14 @@
                     </Form>
                     <template v-slot:actions>
                         <div>
-                            <button type="button" class="btn btn-primary" :disabled="!showSelectors || !canEditQuantity"
+                            <button type="button"
+                                class="btn btn-primary"
+                                :disabled="!showSelectors || !canEditQuantity"
                                 @click="updateQuantity">{{ $t("Common.Save") }}</button>
-                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                                }}</button>
+                            <button type="button"
+                                class="btn btn-link"
+                                data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                            }}</button>
                         </div>
                     </template>
                 </ModalFrame>
@@ -364,14 +446,23 @@
                     :title="$t('Assignments.ChangeTargetAreaModalTitle', { assignmentId: model.id })">
                     <p>{{ $t("Assignments.TargetAreaExplanation") }}</p>
 
-                    <Form ref="quantityForm" onsubmit="return false;" v-slot="{ meta }">
-                        <div class="form-group" v-bind:class="{ 'has-error': meta.valid == false }">
-                            <label class="control-label" for="newTargetArea">
+                    <Form ref="quantityForm"
+                        onsubmit="return false;"
+                        v-slot="{ meta }">
+                        <div class="form-group"
+                            v-bind:class="{ 'has-error': meta.valid == false }">
+                            <label class="control-label"
+                                for="newTargetArea">
                                 {{ $t("Assignments.TargetArea") }}
                             </label>
-                            <Field type="text" class="form-control" v-model.trim="editedTargetAreaName"
-                                name="editedTargetAreaName" :data-vv-as="$t('Assignments.TargetArea')"
-                                autocomplete="off" @keyup.enter="updateTargetArea" id="newTargetArea" />
+                            <Field type="text"
+                                class="form-control"
+                                v-model.trim="editedTargetAreaName"
+                                name="editedTargetAreaName"
+                                :data-vv-as="$t('Assignments.TargetArea')"
+                                autocomplete="off"
+                                @keyup.enter="updateTargetArea"
+                                id="newTargetArea" />
                             <span class="text-danger">
                                 <ErrorMessage name="editedTargetAreaName" />
                             </span>
@@ -379,55 +470,81 @@
                     </Form>
                     <template v-slot:actions>
                         <div>
-                            <button type="button" class="btn btn-primary" :disabled="!showSelectors"
+                            <button type="button"
+                                class="btn btn-primary"
+                                :disabled="!showSelectors"
                                 @click="updateTargetArea">{{ $t("Common.Save") }}</button>
-                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                            <button type="button"
+                                class="btn btn-link"
+                                data-bs-dismiss="modal">
                                 {{ $t("Common.Cancel") }}
                             </button>
                         </div>
                     </template>
                 </ModalFrame>
 
-                <ModalFrame ref="closeModal" :title="$t('Assignments.CloseAssignmentTitle')">
+                <ModalFrame ref="closeModal"
+                    :title="$t('Assignments.CloseAssignmentTitle')">
                     <p>{{ $t('Assignments.CloseAssignmentMessage') }}</p>
                     <form onsubmit="return false;">
                         <div class="form-group">
-                            <label class="control-label" for="completeCommentDetailId">
+                            <label class="control-label"
+                                for="completeCommentDetailId">
                                 {{ $t("Assignments.Comments") }}
                             </label>
-                            <textarea control-id="completeCommentDetailId" v-model="statusChangeComment"
-                                :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
-                                autocomplete="off" class="form-control" />
+                            <textarea control-id="completeCommentDetailId"
+                                v-model="statusChangeComment"
+                                :placeholder="$t('Assignments.EnterComments')"
+                                name="comments"
+                                rows="4"
+                                maxlength="500"
+                                autocomplete="off"
+                                class="form-control" />
                         </div>
                     </form>
                     <template v-slot:actions>
                         <div>
-                            <button type="button" class="btn btn-primary" @click="confirmClose">{{
-                                $t("Assignments.Close") }}</button>
-                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                                }}</button>
+                            <button type="button"
+                                class="btn btn-primary"
+                                @click="confirmClose">{{
+                                    $t("Assignments.Close") }}</button>
+                            <button type="button"
+                                class="btn btn-link"
+                                data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                            }}</button>
                         </div>
                     </template>
                 </ModalFrame>
 
-                <ModalFrame ref="reopenModal" :title="$t('Assignments.ReopenAssignmentTitle')">
+                <ModalFrame ref="reopenModal"
+                    :title="$t('Assignments.ReopenAssignmentTitle')">
                     <p>{{ $t('Assignments.ReopenAssignmentMessage') }}</p>
                     <form onsubmit="return false;">
                         <div class="form-group">
-                            <label class="control-label" for="reopenCommentDetailId">
+                            <label class="control-label"
+                                for="reopenCommentDetailId">
                                 {{ $t("Assignments.Comments") }}
                             </label>
-                            <textarea control-id="reopenCommentDetailId" v-model="statusChangeComment"
-                                :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
-                                autocomplete="off" class="form-control" />
+                            <textarea control-id="reopenCommentDetailId"
+                                v-model="statusChangeComment"
+                                :placeholder="$t('Assignments.EnterComments')"
+                                name="comments"
+                                rows="4"
+                                maxlength="500"
+                                autocomplete="off"
+                                class="form-control" />
                         </div>
                     </form>
                     <template v-slot:actions>
                         <div>
-                            <button type="button" class="btn btn-primary" @click="confirmReopen">{{
-                                $t("Assignments.Reopen") }}</button>
-                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                                }}</button>
+                            <button type="button"
+                                class="btn btn-primary"
+                                @click="confirmReopen">{{
+                                    $t("Assignments.Reopen") }}</button>
+                            <button type="button"
+                                class="btn btn-link"
+                                data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                            }}</button>
                         </div>
                     </template>
                 </ModalFrame>
@@ -477,7 +594,7 @@ export default {
                     (data) => {
                         this.editedAudioRecordingEnabled = data.Enabled
                         this.$refs.editAudioEnabledModal.modal()
-                    },
+                    }
                 )
             }
         },
@@ -504,7 +621,7 @@ export default {
         upateAudioRecording() {
             this.$hq.Assignments.setAudioSettings(
                 this.model.id,
-                this.editedAudioRecordingEnabled,
+                this.editedAudioRecordingEnabled
             ).then(() => {
                 this.$refs.editAudioEnabledModal.hide()
                 window.location.reload(true)
@@ -577,19 +694,19 @@ export default {
         },
 
         validateQuantity(value) {
-            const regex = /^-?([0-9]+)$/i;
+            const regex = /^-?([0-9]+)$/i
 
             if (!regex.test(value)) {
-                return 'This field must be a valid number';
+                return 'This field must be a valid number'
             }
 
             if (value <= -2)
-                return 'This field must be greater or equal to -1';
+                return 'This field must be greater or equal to -1'
 
             if (value > this.config.maxInterviewsByAssignment)
-                return 'This field must be less than limit';
+                return 'This field must be less than limit'
 
-            return true;
+            return true
 
         },
         async updateQuantity() {
@@ -809,7 +926,7 @@ export default {
             return this.model.calendarEvent != null
                 ? convertToLocal(
                     this.model.calendarEvent.startUtc,
-                    this.model.calendarEvent.startTimezone,
+                    this.model.calendarEvent.startTimezone
                 )
                 : ''
         },
@@ -821,7 +938,7 @@ export default {
                 ? this.$t('Assignments.NoComment')
                 : escape(this.model.calendarEvent.comment).replaceAll(
                     '\n',
-                    '<br/>',
+                    '<br/>'
                 )
         },
 
@@ -862,14 +979,14 @@ export default {
                                     'Assignments.Action_Created_Responsible',
                                     {
                                         responsible: data.Responsible,
-                                    },
+                                    }
                                 )
                                 if (data.Comment) {
                                     createdText +=
                                         '<br/>' +
                                         self.$t(
                                             'Assignments.Action_Created_Comment',
-                                            { comment: escape(data.Comment) },
+                                            { comment: escape(data.Comment) }
                                         )
                                 }
 
@@ -880,7 +997,7 @@ export default {
                                             'Assignments.Action_UpgradedFrom',
                                             {
                                                 id: `<a href='./${data.UpgradedFromId}'>${data.UpgradedFromId}</a>`,
-                                            },
+                                            }
                                         )
                                 }
                                 return createdText
@@ -888,11 +1005,11 @@ export default {
                             case 'AudioRecordingChanged':
                                 if (data.AudioRecording) {
                                     return self.$t(
-                                        'Assignments.Action_AudioRecordingChanged_True',
+                                        'Assignments.Action_AudioRecordingChanged_True'
                                     )
                                 } else {
                                     return self.$t(
-                                        'Assignments.Action_AudioRecordingChanged_False',
+                                        'Assignments.Action_AudioRecordingChanged_False'
                                     )
                                 }
                             case 'Reassigned': {
@@ -900,7 +1017,7 @@ export default {
                                     'Assignments.Action_Reassigned_To',
                                     {
                                         newResponsible: data.NewResponsible,
-                                    },
+                                    }
                                 )
                                 if (data.Comment) {
                                     result += '<br/>'
@@ -908,7 +1025,7 @@ export default {
                                         'Assignments.Action_Reassigned_To_Comment',
                                         {
                                             comment: escape(data.Comment),
-                                        },
+                                        }
                                     )
                                 }
                                 return result
@@ -916,21 +1033,21 @@ export default {
                             case 'QuantityChanged':
                                 if (data.Quantity == null) {
                                     return self.$t(
-                                        'Assignments.Action_ExpectedValueChanged_To_Unlimited',
+                                        'Assignments.Action_ExpectedValueChanged_To_Unlimited'
                                     )
                                 }
                                 return self.$t(
                                     'Assignments.Action_ExpectedValueChanged_To',
-                                    { quantity: data.Quantity },
+                                    { quantity: data.Quantity }
                                 )
                             case 'WebModeChanged':
                                 if (data.WebMode) {
                                     return self.$t(
-                                        'Assignments.Action_WebModeChanged_True',
+                                        'Assignments.Action_WebModeChanged_True'
                                     )
                                 } else {
                                     return self.$t(
-                                        'Assignments.Action_WebModeChanged_False',
+                                        'Assignments.Action_WebModeChanged_False'
                                     )
                                 }
                             case 'ReceivedByTablet':

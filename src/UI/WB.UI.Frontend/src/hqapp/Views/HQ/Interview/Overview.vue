@@ -1,6 +1,9 @@
 <template>
     <div>
-        <OverviewItem v-for="item in items" :key="item.id" :item="item" @mount="registerItemToStick" />
+        <OverviewItem v-for="item in items"
+            :key="item.id"
+            :item="item"
+            @mount="registerItemToStick" />
 
         <div ref="sentinel"></div>
     </div>

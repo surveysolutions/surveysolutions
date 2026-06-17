@@ -1,14 +1,25 @@
 <template>
     <HqLayout tag="tablet-infos-page">
         <div class="row">
-            <form method="post" ref="frm" class="topic-with-button" enctype="multipart/form-data">
+            <form method="post"
+                ref="frm"
+                class="topic-with-button"
+                enctype="multipart/form-data">
                 <label class="btn btn-success btn-file">
                     {{ $t('Pages.Upload_Upload') }}
-                    <input ref="uploader" name="file" @change="onFileChange" type="file" accept=".zip" value="" />
+                    <input ref="uploader"
+                        name="file"
+                        @change="onFileChange"
+                        type="file"
+                        accept=".zip"
+                        value="" />
                 </label>
-                <input name="__RequestVerificationToken" type="hidden" :value="this.$hq.Util.getCsrfCookie()" />
+                <input name="__RequestVerificationToken"
+                    type="hidden"
+                    :value="this.$hq.Util.getCsrfCookie()" />
             </form>
-            <DataTables ref="table" :tableOptions="tableOptions"></DataTables>
+            <DataTables ref="table"
+                :tableOptions="tableOptions"></DataTables>
         </div>
     </HqLayout>
 </template>

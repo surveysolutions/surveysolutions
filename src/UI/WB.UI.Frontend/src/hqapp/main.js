@@ -8,13 +8,13 @@ import '../assets/css/markup.scss'
 import '../assets/css/markup-specific.scss'
 
 import { createApp } from 'vue'
-import App from './App.vue';
+import App from './App.vue'
 import { validatePageLoad } from '~/shared/serverValidator'
 
 const vue = createApp(App)
 
 import { setupErrorHandler } from '../shared/errorHandler.js'
-setupErrorHandler(vue);
+setupErrorHandler(vue)
 
 import Vuei18n from '~/shared/plugins/locale'
 import { browserLanguage } from '~/shared/helpers'
@@ -42,7 +42,7 @@ vue.component('ProfileLayout', ProfileLayout)
 
 import './compatibility.js'
 
-import VueDOMPurifyHTML from 'vue-dompurify-html';
+import VueDOMPurifyHTML from 'vue-dompurify-html'
 vue.use(VueDOMPurifyHTML)
 
 import Bootstrap5Popover from '~/shared/components/Bootstrap5Popover.vue'
@@ -80,7 +80,7 @@ const views = viewsProvider(store)
 
 const router = new Router({
     routes: views.routes,
-    store: store
+    store: store,
 }).router
 
 vue.use(router)
@@ -95,5 +95,5 @@ import emitter from '~/shared/emitter'
 vue.config.globalProperties.$emitter = emitter
 
 router.isReady().then(() => {
-    vue.mount('#vueApp');
-});
+    vue.mount('#vueApp')
+})

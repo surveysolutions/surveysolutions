@@ -1,20 +1,31 @@
 <template>
-    <aside class="content" v-if="sections" style="transform: translateZ(0);">
-        <div v-if="interviewState != null" class="interview-progress">
+    <aside class="content"
+        v-if="sections"
+        style="transform: translateZ(0);">
+        <div v-if="interviewState != null"
+            class="interview-progress">
             <div class="progress-counts">
                 {{ this.$t('WebInterviewUI.Progress') }}:{{ interviewState.answeredQuestionsCount }}/{{ interviewState.activeQuestionCount }}
             </div>
-            <wb-progress :striped=false :visible="interviewState != null" :valuemax="interviewState.activeQuestionCount"
+            <wb-progress :striped=false
+                :visible="interviewState != null"
+                :valuemax="interviewState.activeQuestionCount"
                 :valuenow="interviewState.answeredQuestionsCount" />
             <div class="progress-percents">
                 {{ progressPercent }}%
             </div>
         </div>
-        <wb-humburger id="sidebarHamburger" :show-foldback-button-as-hamburger="showFoldbackButtonAsHamburger" />
+        <wb-humburger id="sidebarHamburger"
+            :show-foldback-button-as-hamburger="showFoldbackButtonAsHamburger" />
         <div class="panel-group structured-content">
-            <SidebarPanel :panel="coverSection" v-if="showCover" />
-            <SidebarPanel v-for="section in sections" :key="section.id" :panel="section" :currentPanel="currentPanel" />
-            <SidebarPanel :panel="completeSection" v-if="showComplete && !$config.splashScreen" />
+            <SidebarPanel :panel="coverSection"
+                v-if="showCover" />
+            <SidebarPanel v-for="section in sections"
+                :key="section.id"
+                :panel="section"
+                :currentPanel="currentPanel" />
+            <SidebarPanel :panel="completeSection"
+                v-if="showComplete && !$config.splashScreen" />
         </div>
     </aside>
 </template>

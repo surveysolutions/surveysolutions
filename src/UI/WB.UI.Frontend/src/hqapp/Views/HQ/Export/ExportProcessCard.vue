@@ -1,7 +1,8 @@
 <template>
     <div class="export-card">
         <div class="top-row">
-            <div class="format-data" :class="iconClass">
+            <div class="format-data"
+                :class="iconClass">
                 <div class="gray-text-row">
                     <b>#{{ data.id }}&nbsp;</b>
                     <span v-if="!isCompleted">
@@ -9,14 +10,16 @@
                     <span v-else>
                         {{ $t('DataExport.DataExport_CompletedOn', { date: data.endDate }) }}</span>
                 </div>
-                <div class="h3 mb-05" v-if="data.questionnaireIdentity != null">
+                <div class="h3 mb-05"
+                    v-if="data.questionnaireIdentity != null">
                     {{ $t('DataExport.DataExport_QuestionnaireWithVersion',
-                        { title: data.title, version: data.questionnaireIdentity.version }) }}
+                          { title: data.title, version: data.questionnaireIdentity.version }) }}
                 </div>
                 <p class="mb-0 font-regular">
                     <u class="font-bold">{{ data.format }}{{ data.format == "Paradata" && data.paradataReduced == true ?
                         " (" + $t("DataExport.ParadataEventsFilter_Reduced") + ")" : "" }}</u> format.
-                    <span v-if="data.format != 'DDI' && data.interviewStatus != null" class="font-bold">
+                    <span v-if="data.format != 'DDI' && data.interviewStatus != null"
+                        class="font-bold">
                         {{ $t('DataExport.DataExport_InterviewsStatus', {
                             status: $t('DataExport.' + data.interviewStatus),
                             interpolation: { escapeValue: false }
@@ -24,19 +27,24 @@
                     </span>
                     <span>&nbsp;{{ translation }}</span>
                 </p>
-                <p class="mb-0 font-regular" v-if="data.fromDate || data.toDate" :title="dateRangeTitle">
+                <p class="mb-0 font-regular"
+                    v-if="data.fromDate || data.toDate"
+                    :title="dateRangeTitle">
                     {{ $t('DataExport.FromDate') }}
                     <span class="font-bold">{{ formatDate(data.fromDate) || '-' }}</span>
                     {{ $t('DataExport.ToDate') }}
                     <span class="font-bold">{{ formatDate(data.toDate) || '-' }}</span>
                 </p>
-                <p class="mb-0 font-regular" v-if="data.fromDate == null && data.toDate == null">
+                <p class="mb-0 font-regular"
+                    v-if="data.fromDate == null && data.toDate == null">
                     <span class="font-bold">{{ $t('DataExport.DateRangeAllTime') }}</span>
                 </p>
             </div>
         </div>
-        <div class="bottom-row" :class="{ 'is-failed': isFailed, 'is-successful': isSuccessfull }">
-            <div class="export-destination" :class="data.dataDestination">
+        <div class="bottom-row"
+            :class="{ 'is-failed': isFailed, 'is-successful': isSuccessfull }">
+            <div class="export-destination"
+                :class="data.dataDestination">
                 <p>
                     <span v-if="data.dataDestination != null">
                         {{
@@ -47,11 +55,13 @@
                     </span>
                 </p>
 
-                <p v-if="isFailed" class="text-danger">
+                <p v-if="isFailed"
+                    class="text-danger">
                     <span>{{ data.error }}</span>
                 </p>
 
-                <p class="font-regular" v-if="data.jobStatus == 'Completed'">
+                <p class="font-regular"
+                    v-if="data.jobStatus == 'Completed'">
                     <span class="font-bold"> {{ $t('DataExport.DataExport_InQueue') }}&nbsp;</span>
                     <span>{{ getInQueueTime(data) }}&nbsp;</span>
 
@@ -59,37 +69,56 @@
                     <span> {{ getProducedTime(data) }}&nbsp;</span>
                 </p>
 
-                <div class="d-flex ai-center" v-if="data.isRunning">
+                <div class="d-flex ai-center"
+                    v-if="data.isRunning">
                     <span class="success-text status">{{ data.processStatus }}</span>
                     <div class="cancelable-progress">
-                        <div class="progress" v-if="isRunning">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
-                                aria-valuemax="100" v-bind:style="{ width: data.progress + '%' }" />
+                        <div class="progress"
+                            v-if="isRunning">
+                            <div class="progress-bar"
+                                role="progressbar"
+                                aria-valuenow="0"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                                v-bind:style="{ width: data.progress + '%' }" />
                         </div>
                     </div>
-                    <button class="btn btn-link" type="button" @click="cancel">{{ $t('Strings.Cancel') }}</button>
+                    <button class="btn btn-link"
+                        type="button"
+                        @click="cancel">
+                        {{ $t('Strings.Cancel') }}
+                    </button>
                 </div>
-                <div class="d-flex ai-center" v-else>
-                    <a v-if="!data.isRunning && data.hasFile && data.dataDestination == 'File'" :href="downloadFileUrl"
+                <div class="d-flex ai-center"
+                    v-else>
+                    <a v-if="!data.isRunning && data.hasFile && data.dataDestination == 'File'"
+                        :href="downloadFileUrl"
                         class="btn btn-primary btn-lg">{{ $t('DataExport.Download') }}</a>
-                    <div v-if="data.hasFile" class="file-info">
+                    <div v-if="data.hasFile"
+                        class="file-info">
                         {{ $t('DataExport.DataExport_FileLastUpdate', { date: data.dataFileLastUpdateDate }) }}
                         <br />
                         {{ $t('DataExport.DataExport_FileSize', { size: data.fileSize }) }}
                     </div>
-                    <div v-if="!data.hasFile && !isFailed" class="file-info">{{
+                    <div v-if="!data.hasFile && !isFailed"
+                        class="file-info">{{
                         $t('DataExport.DataExport_FileWasRegenerated') }}</div>
                 </div>
             </div>
         </div>
-        <div class="dropdown aside-menu" v-if="!data.isRunning && canRegenerate">
-            <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+        <div class="dropdown aside-menu"
+            v-if="!data.isRunning && canRegenerate">
+            <button type="button"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
                 class="btn btn-link">
                 <span></span>
             </button>
             <ul class="dropdown-menu">
                 <li>
-                    <a href="#" @click="regenerate">
+                    <a href="#"
+                        @click="regenerate">
                         {{ $t('DataExport.DataExport_Regenerate') }}
                         <br />
                         <small>{{ $t('DataExport.DataExport_RegenerateDesc') }}</small>
@@ -97,7 +126,9 @@
                 </li>
             </ul>
         </div>
-        <div class="card-loading" style="display: block;" v-if="data.isInitializing">
+        <div class="card-loading"
+            style="display: block;"
+            v-if="data.isInitializing">
             <div class="top-row-loading">
                 <div class="animated-background">
                     <div class="background-masker mask-top-left"></div>
@@ -180,7 +211,7 @@ export default {
                 (this.data.fromDate ? (this.data.fromDate + ' (UTC)') : '-') +
                 ' ' +
                 this.$t('DataExport.ToDate') + ' ' +
-                (this.data.toDate ? (this.data.toDate + ' (UTC)') : '-');
+                (this.data.toDate ? (this.data.toDate + ' (UTC)') : '-')
             return title
             //return data.fromDate + ' - ' + data.toDate
         },
@@ -221,24 +252,24 @@ export default {
 
         getProducedTime(data) {
             if (data == undefined || data.endDate == undefined || data.beginDate == undefined)
-                return 'unknown';
+                return 'unknown'
 
             return this.formatDiff(data.beginDate, data.endDate)
         },
         getInQueueTime(data) {
             if (data == undefined || data.createdDate == undefined || data.beginDate == undefined)
-                return 'unknown';
+                return 'unknown'
 
-            return this.formatDiff(data.beginDate, data.createdDate);
+            return this.formatDiff(data.beginDate, data.createdDate)
         },
         formatDiff(start, end) {
             if (start == undefined || end == undefined)
-                return 'unknown';
+                return 'unknown'
 
-            let diff = moment(end).diff(moment(start));
-            let duration = moment.duration(diff);
+            let diff = moment(end).diff(moment(start))
+            let duration = moment.duration(diff)
 
-            return duration.humanize({ m: 60, h: 24, d: 7, w: 4 });
+            return duration.humanize({ m: 60, h: 24, d: 7, w: 4 })
         },
         formatDate(date) {
             if (date)
