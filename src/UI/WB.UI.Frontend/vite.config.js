@@ -392,7 +392,8 @@ export default defineConfig(({ mode, command }) => {
                     })*/
                 ],
                 output: {
-                    experimentalMinChunkSize: 10_000,
+                    // Keep splitting enabled so route/component dynamic imports stay async.
+                    codeSplitting: true,
                     manualChunks(id) {
                         if (!id.includes('node_modules')) return
 

@@ -58,16 +58,58 @@ import 'toastr/build/toastr.css'
 import * as toastr from 'toastr'
 toastr.options.escapeHtml = true
 
-import * as poly from 'smoothscroll-polyfill'
-poly.polyfill()
+function routeNeedsSmoothScroll(path) {
+    return path.startsWith('/Maps')
+        || path.startsWith('/Reports')
+        || path.startsWith('/Interviews')
+        || path.startsWith('/Profile')
+}
+
+let smoothscrollInstallPromise = null
+let isSmoothscrollInstalled = false
+
+async function ensureSmoothscrollPolyfill() {
+    if (isSmoothscrollInstalled) return
+    if (!smoothscrollInstallPromise) {
+        smoothscrollInstallPromise = import('smoothscroll-polyfill').then((module) => {
+            module.polyfill()
+            isSmoothscrollInstalled = true
+        })
+    }
+
+    await smoothscrollInstallPromise
+}
 
 import hqApi from './api'
-import apolloClient from './api/graphql'
-import { createApolloProvider } from '@vue/apollo-option'
-const apolloProvider = createApolloProvider({
-    defaultClient: apolloClient,
-})
-vue.use(apolloProvider)
+
+function routeNeedsApollo(path) {
+    return path.startsWith('/Maps')
+        || path.startsWith('/Export')
+        || path.startsWith('/Interviewer/Assignments')
+        || path.startsWith('/Interviewer/Interviews')
+}
+
+let apolloInstallPromise = null
+let isApolloInstalled = false
+
+async function ensureApolloProvider(app) {
+    if (isApolloInstalled) return
+    if (!apolloInstallPromise) {
+        apolloInstallPromise = Promise.all([
+            import('./api/graphql'),
+            import('@vue/apollo-option'),
+        ]).then(([apolloClientModule, apolloOptionModule]) => {
+            const apolloProvider = apolloOptionModule.createApolloProvider({
+                defaultClient: apolloClientModule.default,
+            })
+
+            app.use(apolloProvider)
+            isApolloInstalled = true
+        })
+    }
+
+    await apolloInstallPromise
+}
 
 vue.use(config)
 vue.use(http)
@@ -82,6 +124,22 @@ const router = new Router({
     routes: views.routes,
     store: store,
 }).router
+
+router.beforeEach(async (to, from, next) => {
+    try {
+        if (routeNeedsSmoothScroll(to.path)) {
+            await ensureSmoothscrollPolyfill()
+        }
+
+        if (routeNeedsApollo(to.path)) {
+            await ensureApolloProvider(vue)
+        }
+
+        next()
+    } catch (error) {
+        next(error)
+    }
+})
 
 vue.use(router)
 
