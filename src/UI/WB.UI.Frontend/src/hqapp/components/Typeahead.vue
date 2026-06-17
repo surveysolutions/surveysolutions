@@ -1,42 +1,23 @@
 ﻿<template>
-    <div class="combo-box"
-        :title="value == null ? '' : value.value"
-        :id="controlId">
+    <div class="combo-box" :title="value == null ? '' : value.value" :id="controlId">
         <div class="btn-group btn-input clearfix">
-            <button type="button"
-                :id="buttonId"
-                class="btn dropdown-toggle"
-                data-bs-toggle="dropdown"
+            <button type="button" :id="buttonId" class="btn dropdown-toggle" data-bs-toggle="dropdown"
                 :disabled="disabled">
-                <span data-bind="label"
-                    v-if="value == null"
-                    class="gray-text">{{ placeholderText }}</span>
-                <span data-bind="label"
-                    :class="[value.iconClass]"
-                    v-else>{{ value.value }}</span>
+                <span data-bind="label" v-if="value == null" class="gray-text">{{ placeholderText }}</span>
+                <span data-bind="label" :class="[value.iconClass]" v-else>{{ value.value }}</span>
             </button>
-            <ul ref="dropdownMenu"
-                class="dropdown-menu"
-                role="menu">
+            <ul ref="dropdownMenu" class="dropdown-menu" role="menu">
                 <li v-if="!noSearch">
-                    <input type="text"
-                        ref="searchBox"
-                        :id="inputId"
-                        :placeholder="$t('Common.Search')"
-                        @input="updateOptionsList"
-                        @keyup.down="onSearchBoxDownKey"
-                        v-model="searchTerm" />
+                    <input type="text" ref="searchBox" :id="inputId" :placeholder="$t('Common.Search')"
+                        @input="updateOptionsList" @keyup.down="onSearchBoxDownKey" v-model="searchTerm" />
                 </li>
                 <li v-if="forceLoadingState">
                     <a>{{ $t("Common.Loading") }}</a>
                 </li>
                 <template v-if="!forceLoadingState">
-                    <li v-for="option in options"
-                        :key="keyFunc(option.item)">
-                        <a :class="[option.item.iconClass]"
-                            href="javascript:void(0);"
-                            @click="selectOption(option.item)"
-                            v-dompurify-html="highlight(option, searchTerm)"
+                    <li v-for="option in options" :key="keyFunc(option.item)">
+                        <a :class="[option.item.iconClass]" href="javascript:void(0);"
+                            @click="selectOption(option.item)" v-dompurify-html="highlight(option, searchTerm)"
                             @keydown.up="onOptionUpKey"></a>
                     </li>
                 </template>
@@ -48,17 +29,14 @@
                 </li>
             </ul>
         </div>
-        <button v-if="value != null && !noClear"
-            class="btn btn-link btn-clear"
-            type="button"
-            @click="clear">
+        <button v-if="value != null && !noClear" class="btn btn-link btn-clear" type="button" @click="clear">
             <span></span>
         </button>
     </div>
 </template>
 
 <script>
-import { assign, chain, find, filter, escape, escapeRegExp } from 'lodash-es'
+import { assign, find, filter, escape, escapeRegExp } from 'lodash-es'
 
 
 export default {
@@ -232,12 +210,10 @@ export default {
         setOptions(values, wrap = true) {
             if (wrap == false) return values
 
-            return chain(values).filter(v => v != null).map(v => {
-                return {
-                    item: v,
-                    matches: null,
-                }
-            }).value()
+            return values.filter(v => v != null).map(v => ({
+                item: v,
+                matches: null,
+            }))
         },
 
         clear() {

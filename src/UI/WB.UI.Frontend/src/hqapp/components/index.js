@@ -1,5 +1,6 @@
 //import Vue from 'vue'
 
+import { defineAsyncComponent } from 'vue'
 import Confirm from './Confirm'
 import FilterBlock from './FilterBlock'
 import Filters from './Filters'
@@ -14,14 +15,15 @@ import InlineSelector from './InlineSelector'
 import ExpandableList from './ExpandableList.vue'
 import Select from './Select.vue'
 
-const AsyncDataTables = () => import('./DataTables')
-const AsyncTypeahead = () => import('./Typeahead')
-const AsyncDatePicker = () => import('./DatePicker')
+const AsyncTypeahead = defineAsyncComponent(() => import('./Typeahead'))
+const AsyncDatePicker = defineAsyncComponent(() => import('./DatePicker'))
+
+import DataTables from './DataTables'
 
 export function registerComponents(vue) {
 
     vue.component('Confirm', Confirm)
-    vue.component('DataTables', AsyncDataTables)
+    vue.component('DataTables', DataTables)
     vue.component('FilterBlock', FilterBlock)
     vue.component('Filters', Filters)
     vue.component('HqLayout', HqLayout)

@@ -42,9 +42,26 @@ defineRule('callLocalMethod', (value, { method }) => {
     return result ? true : 'Validation error'
 })
 
-import(`@vee-validate/i18n/dist/locale/${lang}.json`).then((messages) => {
-    configure({
-        generateMessage: localize({ [lang]: messages.default }),
+const localeImports = {
+    ar: () => import('@vee-validate/i18n/dist/locale/ar.json'),
+    cs: () => import('@vee-validate/i18n/dist/locale/cs.json'),
+    en: () => import('@vee-validate/i18n/dist/locale/en.json'),
+    es: () => import('@vee-validate/i18n/dist/locale/es.json'),
+    fr: () => import('@vee-validate/i18n/dist/locale/fr.json'),
+    id: () => import('@vee-validate/i18n/dist/locale/id.json'),
+    ka: () => import('@vee-validate/i18n/dist/locale/ka.json'),
+    km: () => import('@vee-validate/i18n/dist/locale/km.json'),
+    ro: () => import('@vee-validate/i18n/dist/locale/ro.json'),
+    ru: () => import('@vee-validate/i18n/dist/locale/ru.json'),
+    sq: () => import('@vee-validate/i18n/dist/locale/sq.json'),
+    th: () => import('@vee-validate/i18n/dist/locale/th.json'),
+    uk: () => import('@vee-validate/i18n/dist/locale/uk.json'),
+    vi: () => import('@vee-validate/i18n/dist/locale/vi.json'),
+}
+
+    ; (localeImports[lang] || localeImports['en'])().then((messages) => {
+        configure({
+            generateMessage: localize({ [lang]: messages.default }),
+        })
+        setLocale(lang)
     })
-    setLocale(lang)
-})
