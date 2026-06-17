@@ -415,21 +415,15 @@ export default defineConfig(({ mode, command }) => {
 
                         if (id.includes('/jquery-mask-plugin/')) return 'vendor-jquery-mask'
 
-                        if (
-                            id.includes('/jquery/') ||
-                            id.includes('/jquery-contextmenu/') ||
-                            id.includes('/datatables.net')
-                        ) return 'vendor-jquery-datatables'
+                        if (id.includes('/jquery/')) return 'vendor-jquery'
 
-                        if (
-                            id.includes('/dayjs/') ||
-                            id.includes('/chartjs-adapter-dayjs-4/')
-                        ) return 'vendor-dayjs'
+                        if (id.includes('/dayjs/')) return 'vendor-dayjs'
 
-                        if (
-                            id.includes('/chart.js/') ||
-                            id.includes('/vue-chartjs/')
-                        ) return 'vendor-charts'
+                        // NOTE: Do NOT assign DataTables or chart packages to manual chunks.
+                        // In Rolldown (Vite 8), their Vue wrappers pull Vue runtime into the
+                        // named chunk, which then becomes eager for every Vue entry including
+                        // web interview. Keeping them unassigned lets them stay attached to
+                        // their owning HQ async components and routes.
 
                         if (id.includes('/@microsoft/signalr/')) return 'vendor-signalr'
                         if (id.includes('/flatpickr/')) return 'vendor-flatpickr'
