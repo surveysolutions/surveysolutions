@@ -440,7 +440,7 @@ export default defineConfig(({ mode, command }) => {
                         if (id.includes('/marked/') || id.includes('/dompurify/')) return 'vendor-markdown-sanitize'
                         if (id.includes('/vee-validate/') || id.includes('/@vee-validate/')) return 'vendor-validation'
                         if (id.includes('/qrcode/')) return 'vendor-qrcode'
-                        if (id.includes('/autonumeric/')) return 'vendor-autonumeric'
+
                         if (id.includes('/mitt/')) return 'vendor-events'
                     },
                     assetFileNames: (assetInfo) => {
