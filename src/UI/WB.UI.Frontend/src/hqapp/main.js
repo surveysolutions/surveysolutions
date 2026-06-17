@@ -58,28 +58,6 @@ import 'toastr/build/toastr.css'
 import * as toastr from 'toastr'
 toastr.options.escapeHtml = true
 
-function routeNeedsSmoothScroll(path) {
-    return path.startsWith('/Maps')
-        || path.startsWith('/Reports')
-        || path.startsWith('/Interviews')
-        || path.startsWith('/Profile')
-}
-
-let smoothscrollInstallPromise = null
-let isSmoothscrollInstalled = false
-
-async function ensureSmoothscrollPolyfill() {
-    if (isSmoothscrollInstalled) return
-    if (!smoothscrollInstallPromise) {
-        smoothscrollInstallPromise = import('smoothscroll-polyfill').then((module) => {
-            module.polyfill()
-            isSmoothscrollInstalled = true
-        })
-    }
-
-    await smoothscrollInstallPromise
-}
-
 import hqApi from './api'
 
 function routeNeedsApollo(path) {
@@ -127,10 +105,6 @@ const router = new Router({
 
 router.beforeEach(async (to, from, next) => {
     try {
-        if (routeNeedsSmoothScroll(to.path)) {
-            await ensureSmoothscrollPolyfill()
-        }
-
         if (routeNeedsApollo(to.path)) {
             await ensureApolloProvider(vue)
         }

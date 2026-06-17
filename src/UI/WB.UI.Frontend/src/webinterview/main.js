@@ -31,9 +31,6 @@ import 'toastr/build/toastr.css'
 import moment from 'moment'
 moment.locale(browserLanguage)
 
-import * as poly from 'smoothscroll-polyfill'
-poly.polyfill()
-
 import box from '@/shared/modal'
 
 import createRouter from './router'
