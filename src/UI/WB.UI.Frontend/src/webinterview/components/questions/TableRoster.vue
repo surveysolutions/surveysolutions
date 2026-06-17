@@ -1,33 +1,22 @@
 <template>
-    <div class="question table-view scroller"
-        :id="hash"
-        v-if="rowData.length > 0">
-        <ag-grid-vue ref="tableRoster"
-            class="ag-theme-customStyles roster-table"
-            domLayout="autoHeight"
-            rowHeight="40"
-            headerHeight="50"
-            :defaultColDef="defaultColDef"
-            :columnDefs="columnDefs"
-            :rowData="rowData"
-            :grid-options="gridOptions"
-            @grid-ready="onGridReady"
-            @column-resized="autosizeHeaders"
-            :modules="gridModules"
-            @cell-editing-stopped="endCellEditting"></ag-grid-vue>
+    <div class="question table-view scroller" :id="hash" v-if="rowData.length > 0">
+        <ag-grid-vue ref="tableRoster" class="ag-theme-customStyles roster-table" domLayout="autoHeight" rowHeight="40"
+            headerHeight="50" :defaultColDef="defaultColDef" :columnDefs="columnDefs" :rowData="rowData"
+            :grid-options="gridOptions" @grid-ready="onGridReady" @column-resized="autosizeHeaders"
+            :modules="gridModules" @cell-editing-stopped="endCellEditting"></ag-grid-vue>
     </div>
 </template>
 
 <script lang="js">
 /* eslint-disable vue/no-unused-components */
 
-import '@ag-grid-community/styles/ag-grid.css'
-import '@ag-grid-community/styles/ag-theme-quartz.css'
+import 'ag-grid-community/styles/ag-grid.css'
+import 'ag-grid-community/styles/ag-theme-quartz.css'
 
 import { entityDetails } from '../mixins'
 import { debounce, every, some, map } from 'lodash-es'
-import { AgGridVue } from '@ag-grid-community/vue3'
-import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model'
+import { AgGridVue } from 'ag-grid-vue3'
+import { ClientSideRowModelModule } from 'ag-grid-community'
 
 import TableRoster_QuestionEditor from './TableRoster.QuestionEditor'
 import TableRoster_ViewAnswer from './TableRoster.ViewAnswer'
@@ -46,7 +35,6 @@ export default {
             columnDefs: null,
             rowData: null,
             gridApi: null,
-            columnApi: null,
             countOfInstances: 0,
         }
     },
@@ -183,7 +171,6 @@ export default {
 
         onGridReady(params) {
             this.gridApi = params.api
-            this.columnApi = params.columnApi
 
             this.autosizeHeaders(params)
             this.setTableRosterHeight()

@@ -13,9 +13,8 @@
         "format": "prettier .  --write"
     },
     "dependencies": {
-        "@ag-grid-community/client-side-row-model": "^32.1.0",
-        "@ag-grid-community/styles": "^32.1.0",
-        "@ag-grid-community/vue3": "^32.1.0",
+        "ag-grid-community": "35.3.1",
+        "ag-grid-vue3": "35.3.1",
         "@frsource/autoresize-textarea": "^2.0.122",
         "@googlemaps/markerclusterer": "^2.5.3",
         "@microsoft/signalr": "^10.0.0",
@@ -42,7 +41,7 @@
         "qrcode": "^1.5.4",
         "toastr": "^2.1.4",
         "vee-validate": "^4.15.0",
-        "vue": "3.5.13",
+        "vue": "^3.5.38",
         "vue-chartjs": "^5.3.1",
         "vue-dompurify-html": "^5.3.0",
         "vue-recaptcha": "^2.0.3",

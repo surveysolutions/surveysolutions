@@ -427,7 +427,7 @@ export default defineConfig(({ mode, command }) => {
                         if (id.includes('/flatpickr/')) return 'vendor-flatpickr'
                         if (id.includes('/toastr/')) return 'vendor-toastr'
                         if (id.includes('/bootstrap/')) return 'vendor-bootstrap'
-                        // NOTE: Do NOT assign @ag-grid-community/* to a manualChunks name here.
+                        // NOTE: Do NOT assign ag-grid-community/ag-grid-vue3 to a manualChunks name here.
                         // In Rolldown (Vite 8), assigning a package to a named manual chunk
                         // causes its entire static dependency tree (including @vue/runtime-dom,
                         // @vue/reactivity, etc.) to be co-located in that same chunk. Since Vue

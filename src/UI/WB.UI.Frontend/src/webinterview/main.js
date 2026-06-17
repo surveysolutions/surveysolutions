@@ -28,6 +28,9 @@ validatePageLoad()
 import 'flatpickr/dist/flatpickr.css'
 import 'toastr/build/toastr.css'
 
+import { provideGlobalGridOptions } from 'ag-grid-community'
+provideGlobalGridOptions({ theme: 'legacy' })
+
 import moment from 'moment'
 moment.locale(browserLanguage)
 
