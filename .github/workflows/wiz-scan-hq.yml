@@ -73,18 +73,29 @@ jobs:
           IMAGE="${{ steps.image.outputs.name }}"
           SCAN_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-          # wizcli docker scan JSON output schema:
-          #   .result           — "PASSED" | "FAILED"
-          #   .analytics        — severity count fields
-          #   .vulnerabilities  — array of findings
-          RESULT=$(jq -r '.result // "UNKNOWN"' wiz_scan_results.json)
+          # wizcli v1 JSON schema:
+          #   .failedPolicyMatches[]         — policies that failed (BLOCK/AUDIT)
+          #   .analytics.vulnerabilities.*Count — severity totals
+          #   .vulnerableSBOMArtifactsByNameVersion[] — vulnerable packages
+          #     .name, .version, .type.group, .type.osPackageManager
+          #     .vulnerabilityFindings.severities.*Count
+          #     .vulnerabilityFindings.fixedVersion
+          #     .vulnerabilityFindings.remediation
 
-          VCRIT=$(jq -r '.analytics.criticalSeverityCount      // 0' wiz_scan_results.json)
-          VHIGH=$(jq -r '.analytics.highSeverityCount          // 0' wiz_scan_results.json)
-          VMED=$(jq -r  '.analytics.mediumSeverityCount        // 0' wiz_scan_results.json)
-          VLOW=$(jq -r  '.analytics.lowSeverityCount           // 0' wiz_scan_results.json)
-          VINFO=$(jq -r '.analytics.informationalSeverityCount // 0' wiz_scan_results.json)
-          VTOT=$(jq -r  '.analytics.totalVulnerabilityCount    // 0' wiz_scan_results.json)
+          FAILED_POLICIES=$(jq -r '
+            [.failedPolicyMatches[]? | select(.policy.policyLifecycleEnforcements[]?.enforcementMethod == "BLOCK")]
+            | length
+          ' wiz_scan_results.json 2>/dev/null || echo "0")
+          if [ "$FAILED_POLICIES" -gt 0 ]; then RESULT="FAILED"; else RESULT="PASSED"; fi
+
+          VCRIT=$(jq -r '.analytics.vulnerabilities.criticalCount // 0' wiz_scan_results.json)
+          VHIGH=$(jq -r '.analytics.vulnerabilities.highCount     // 0' wiz_scan_results.json)
+          VMED=$(jq -r  '.analytics.vulnerabilities.mediumCount   // 0' wiz_scan_results.json)
+          VLOW=$(jq -r  '.analytics.vulnerabilities.lowCount      // 0' wiz_scan_results.json)
+          VINFO=$(jq -r '.analytics.vulnerabilities.infoCount     // 0' wiz_scan_results.json)
+          VTOT=$(jq -r  '.analytics.vulnerabilities.totalCount    // 0' wiz_scan_results.json)
+
+          PKG_COUNT=$(jq '(.vulnerableSBOMArtifactsByNameVersion // []) | length' wiz_scan_results.json)
 
           # ── Markdown / Job Summary ────────────────────────────────────────────
           {
@@ -105,37 +116,59 @@ jobs:
               echo "## Vulnerabilities — FAILED ❌"
             fi
             echo ""
-            echo "| Severity      | Count |"
+            echo "| Severity    | Count |"
             echo "|---|---|"
-            echo "| 🔴 Critical   | ${VCRIT}  |"
-            echo "| 🟠 High       | ${VHIGH}  |"
-            echo "| 🟡 Medium     | ${VMED}   |"
-            echo "| 🔵 Low        | ${VLOW}   |"
-            echo "| ⚪ Info        | ${VINFO}  |"
-            echo "| **Total**     | **${VTOT}** |"
+            echo "| 🔴 Critical | ${VCRIT}  |"
+            echo "| 🟠 High     | ${VHIGH}  |"
+            echo "| 🟡 Medium   | ${VMED}   |"
+            echo "| 🔵 Low      | ${VLOW}   |"
+            echo "| ⚪ Info      | ${VINFO}  |"
+            echo "| **Total**   | **${VTOT}** |"
             echo ""
 
-            VULN_COUNT=$(jq '.vulnerabilities | length' wiz_scan_results.json)
-            if [ "$VULN_COUNT" -gt 0 ]; then
-              echo "## Vulnerability Details"
+            if [ "$PKG_COUNT" -gt 0 ]; then
+              echo "## Vulnerable Packages"
               echo ""
-              echo "| CVE | Severity | CVSS | Package | Version | Fixed in | Published |"
-              echo "|---|---|---|---|---|---|---|"
+              echo "| Package | Version | Critical | High | Medium | Low | Fixed in | Remediation |"
+              echo "|---|---|---|---|---|---|---|---|"
               jq -r '
-                .vulnerabilities[]
+                .vulnerableSBOMArtifactsByNameVersion[]
                 | [
                     .name,
-                    (.severity | ascii_downcase),
-                    (.score // "—" | tostring),
-                    .packageName,
-                    .packageVersion,
-                    (.fixedVersion // "—"),
-                    (.publishedDate // "—" | if . != "—" then .[0:10] else . end)
+                    .version,
+                    (.vulnerabilityFindings.severities.criticalCount // 0 | tostring),
+                    (.vulnerabilityFindings.severities.highCount     // 0 | tostring),
+                    (.vulnerabilityFindings.severities.mediumCount   // 0 | tostring),
+                    (.vulnerabilityFindings.severities.lowCount      // 0 | tostring),
+                    (.vulnerabilityFindings.fixedVersion  // "—"),
+                    (.vulnerabilityFindings.remediation   // "—")
                   ]
                 | @tsv
-              ' wiz_scan_results.json | sort -t$'\t' -k2,2r | \
-              while IFS=$'\t' read -r cve sev cvss pkg ver fix pub; do
-                echo "| ${cve} | ${sev} | ${cvss} | ${pkg} | ${ver} | ${fix} | ${pub} |"
+              ' wiz_scan_results.json | sort -t$'\t' -k3,3rn -k4,4rn | \
+              while IFS=$'\t' read -r name ver crit high med low fix rem; do
+                echo "| ${name} | ${ver} | ${crit} | ${high} | ${med} | ${low} | ${fix} | \`${rem}\` |"
+              done
+              echo ""
+            fi
+
+            POLICY_COUNT=$(jq '(.failedPolicyMatches // []) | length' wiz_scan_results.json)
+            if [ "$POLICY_COUNT" -gt 0 ]; then
+              echo "## Failed Policies"
+              echo ""
+              echo "| Policy | Type | Enforcement |"
+              echo "|---|---|---|"
+              jq -r '
+                .failedPolicyMatches[]
+                | [
+                    .policy.name,
+                    .policy.type,
+                    (.policy.policyLifecycleEnforcements // []
+                     | map(.enforcementMethod) | unique | join(", "))
+                  ]
+                | @tsv
+              ' wiz_scan_results.json | \
+              while IFS=$'\t' read -r name type enf; do
+                echo "| ${name} | ${type} | ${enf} |"
               done
               echo ""
             fi
@@ -148,17 +181,33 @@ jobs:
             RESULT_BADGE='<span class="badge fail">FAILED</span>'
           fi
 
-          VULN_ROWS=$(jq -r '
-            .vulnerabilities[]
-            | "<tr class=\"sev-\(.severity | ascii_downcase)\">"
-              + "<td><a href=\"https://nvd.nist.gov/vuln/detail/\(.name)\" target=\"_blank\">\(.name)</a></td>"
-              + "<td><span class=\"sev \(.severity | ascii_downcase)\">\(.severity | ascii_downcase)</span></td>"
-              + "<td>\(.score // "—")</td>"
-              + "<td>\(.packageName)</td>"
-              + "<td>\(.packageVersion)</td>"
-              + "<td>\(.fixedVersion // "—")</td>"
-              + "<td>\(.publishedDate // "—" | if . != "—" then .[0:10] else . end)</td>"
-              + "<td class=\"desc\">\(.description // "" | .[0:140])…</td>"
+          PKG_ROWS=$(jq -r '
+            .vulnerableSBOMArtifactsByNameVersion[]
+            | . as $p
+            | ($p.vulnerabilityFindings.severities.criticalCount // 0) as $c
+            | ($p.vulnerabilityFindings.severities.highCount     // 0) as $h
+            | ($p.vulnerabilityFindings.severities.mediumCount   // 0) as $m
+            | ($p.vulnerabilityFindings.severities.lowCount      // 0) as $l
+            | ($p.vulnerabilityFindings.fixedVersion  // "—") as $fix
+            | ($p.vulnerabilityFindings.remediation   // "—") as $rem
+            | "<tr>"
+              + "<td>\($p.name)</td>"
+              + "<td>\($p.version)</td>"
+              + "<td class=\"num critical\">\($c)</td>"
+              + "<td class=\"num high\">\($h)</td>"
+              + "<td class=\"num medium\">\($m)</td>"
+              + "<td class=\"num low\">\($l)</td>"
+              + "<td>\($fix)</td>"
+              + "<td><code>\($rem)</code></td>"
+              + "</tr>"
+          ' wiz_scan_results.json 2>/dev/null || echo "")
+
+          POLICY_ROWS=$(jq -r '
+            .failedPolicyMatches[]
+            | "<tr>"
+              + "<td>\(.policy.name)</td>"
+              + "<td>\(.policy.type)</td>"
+              + "<td>\((.policy.policyLifecycleEnforcements // []) | map(.enforcementMethod) | unique | join(", "))</td>"
               + "</tr>"
           ' wiz_scan_results.json 2>/dev/null || echo "")
 
@@ -178,7 +227,7 @@ jobs:
             .meta a { color: #58a6ff; text-decoration: none; }
             .cards { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
             .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px;
-                    padding: 16px 24px; min-width: 120px; text-align: center; }
+                    padding: 16px 24px; min-width: 100px; text-align: center; }
             .card .num { font-size: 32px; font-weight: 700; line-height: 1.1; }
             .card .label { font-size: 12px; color: #8b949e; margin-top: 4px; text-transform: uppercase; letter-spacing: .5px; }
             .num.critical { color: #f85149; }
@@ -197,13 +246,7 @@ jobs:
                        text-transform: uppercase; letter-spacing: .4px; padding: 10px 12px; text-align: left; }
             tbody td { padding: 8px 12px; border-top: 1px solid #21262d; vertical-align: top; }
             tbody tr:hover td { background: #1c2128; }
-            td.desc { color: #8b949e; font-size: 12px; max-width: 320px; }
-            .sev { display: inline-block; border-radius: 3px; padding: 1px 7px; font-size: 11px; font-weight: 600; text-transform: capitalize; }
-            .sev.critical { background: #3d1c1e; color: #f85149; border: 1px solid #da3633; }
-            .sev.high     { background: #2e2009; color: #e3b341; border: 1px solid #9e6a03; }
-            .sev.medium   { background: #2e2009; color: #d29922; border: 1px solid #9e6a03; }
-            .sev.low      { background: #0d1926; color: #388bfd; border: 1px solid #1f6feb; }
-            .sev.informational { background: #161b22; color: #8b949e; border: 1px solid #30363d; }
+            code { background: #21262d; border-radius: 3px; padding: 1px 5px; font-size: 12px; }
             a { color: #58a6ff; text-decoration: none; }
             a:hover { text-decoration: underline; }
             .section-header { display: flex; align-items: center; gap: 12px; }
@@ -227,14 +270,23 @@ jobs:
             <div class="card"><div class="num info">${VINFO}</div><div class="label">Info</div></div>
             <div class="card"><div class="num total">${VTOT}</div><div class="label">Total</div></div>
           </div>
-          $(if [ -n "$VULN_ROWS" ]; then cat <<VTABLE
+          $(if [ -n "$PKG_ROWS" ]; then cat <<PTABLE
+          <h2>Vulnerable Packages</h2>
           <table>
             <thead>
-              <tr><th>CVE</th><th>Severity</th><th>CVSS</th><th>Package</th><th>Version</th><th>Fixed in</th><th>Published</th><th>Description</th></tr>
+              <tr><th>Package</th><th>Version</th><th>Critical</th><th>High</th><th>Medium</th><th>Low</th><th>Fixed in</th><th>Remediation</th></tr>
             </thead>
-            <tbody>${VULN_ROWS}</tbody>
+            <tbody>${PKG_ROWS}</tbody>
           </table>
-          VTABLE
+          PTABLE
+          fi)
+          $(if [ -n "$POLICY_ROWS" ]; then cat <<POLTABLE
+          <h2>Failed Policies</h2>
+          <table>
+            <thead><tr><th>Policy</th><th>Type</th><th>Enforcement</th></tr></thead>
+            <tbody>${POLICY_ROWS}</tbody>
+          </table>
+          POLTABLE
           fi)
 
           </body>
