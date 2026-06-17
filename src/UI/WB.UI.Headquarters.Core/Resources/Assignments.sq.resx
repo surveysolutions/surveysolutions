@@ -199,7 +199,7 @@
     <value>Arkivuar</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
-    <value>Detyra {{id}} nuk mund të mbyllet, pasi e ka modalitetin ueb të aktivizuar </value>
+    <value>Detyra {{id}} nuk mund të zvogëlohet, pasi e ka modalitetin ueb të aktivizuar </value>
   </data>
   <data name="AssignmentHistory" xml:space="preserve">
     <value>Historiku</value>
@@ -319,7 +319,7 @@
     <value>Regjistrim audio</value>
   </data>
   <data name="MultipleAssignmentsClose" xml:space="preserve">
-    <value>{{count}} detyra të përzgjedhura do të mbyllen. Madhësia do të vendoset sipas numrin aktual të intervistave të mbledhura.</value>
+    <value>{{count}} detyra të përzgjedhura do të zvogëlohen. Madhësia do të vendoset sipas numrin aktual të intervistave të mbledhura.</value>
   </data>
   <data name="NewAssignment" xml:space="preserve">
     <value>Detyrë e re</value>
