@@ -2,7 +2,6 @@ import { registerComponents } from './components'
 import { registerPartsComponents } from './components/questions/parts'
 import { registerDerictives } from './directives'
 
-import 'jquery-mask-plugin'
 import './misc/htmlPoly.js'
 
 import Idle from './IdleTimeout'

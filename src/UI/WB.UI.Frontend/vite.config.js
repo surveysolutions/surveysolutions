@@ -413,10 +413,11 @@ export default defineConfig(({ mode, command }) => {
                             id.includes('/zen-observable')
                         ) return 'vendor-apollo'
 
+                        if (id.includes('/jquery-mask-plugin/')) return 'vendor-jquery-mask'
+
                         if (
                             id.includes('/jquery/') ||
                             id.includes('/jquery-contextmenu/') ||
-                            id.includes('/jquery-mask-plugin/') ||
                             id.includes('/datatables.net')
                         ) return 'vendor-jquery-datatables'
 
