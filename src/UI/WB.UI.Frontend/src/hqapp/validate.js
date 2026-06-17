@@ -6,22 +6,9 @@ import { required, email, integer, max_value, min, min_value, max, numeric, not_
 
 import { browserLanguage } from '~/shared/helpers'
 import { localize, setLocale } from '@vee-validate/i18n'
-import es from '@vee-validate/i18n/dist/locale/es.json'
-import vi from '@vee-validate/i18n/dist/locale/vi.json'
-import uk from '@vee-validate/i18n/dist/locale/uk.json'
-import th from '@vee-validate/i18n/dist/locale/th.json'
-import sq from '@vee-validate/i18n/dist/locale/sq.json'
-import ru from '@vee-validate/i18n/dist/locale/ru.json'
-import ro from '@vee-validate/i18n/dist/locale/ro.json'
-import km from '@vee-validate/i18n/dist/locale/km.json'
-import ka from '@vee-validate/i18n/dist/locale/ka.json'
-import id from '@vee-validate/i18n/dist/locale/id.json'
-import fr from '@vee-validate/i18n/dist/locale/fr.json'
-import en from '@vee-validate/i18n/dist/locale/en.json'
-import cs from '@vee-validate/i18n/dist/locale/cs.json'
-import ar from '@vee-validate/i18n/dist/locale/ar.json'
 
-setLocale(browserLanguage)
+const supportedLocales = ['ar', 'cs', 'en', 'es', 'fr', 'id', 'ka', 'km', 'ro', 'ru', 'sq', 'th', 'uk', 'vi']
+const lang = supportedLocales.includes(browserLanguage) ? browserLanguage : 'en'
 
 defineRule('required', required)
 defineRule('email', email)
@@ -55,21 +42,9 @@ defineRule('callLocalMethod', (value, { method }) => {
     return result ? true : 'Validation error'
 })
 
-configure({
-    generateMessage: localize({
-        en,
-        es,
-        vi,
-        uk,
-        th,
-        sq,
-        ru,
-        ro,
-        km,
-        ka,
-        id,
-        fr,
-        cs,
-        ar,
-    }),
+import(`@vee-validate/i18n/dist/locale/${lang}.json`).then((messages) => {
+    configure({
+        generateMessage: localize({ [lang]: messages.default }),
+    })
+    setLocale(lang)
 })
