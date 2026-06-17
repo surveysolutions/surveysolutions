@@ -258,7 +258,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 assignmentToImport.Answers,
                 assignmentToImport.ProtectedVariables,
                 assignmentToImport.Comments,
-                assignmentToImport.TargetArea);
+                assignmentToImport.TargetArea,
+                audioAuditScope: assignmentToImport.AudioAuditScope?.ToArray());
 
             this.invitationService.CreateInvitationForWebInterview(assignment);
 

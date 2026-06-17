@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Mapping
                 mapper.Type<PostgresJson<List<InterviewAnswer>>>();
             });
             this.Property(x => x.ProtectedVariables, m => m.Type<PostgresJson<List<string>>>());
+            this.Property(x => x.AudioAuditScope, m => m.Type<PostgresJson<List<System.Guid>>>());
         }
     }
 }
