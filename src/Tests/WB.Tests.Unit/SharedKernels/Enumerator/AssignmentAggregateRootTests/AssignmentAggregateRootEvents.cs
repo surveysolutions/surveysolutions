@@ -87,6 +87,39 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
         }
 
         [Test]
+        public void when_create_assignment_with_audio_audit_scope_should_store_and_publish_scope()
+        {
+            var scope = new[] { Guid.NewGuid(), Guid.NewGuid() };
+            var command = Create.Command.CreateAssignment(audioAuditScope: scope);
+            var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
+
+            using (var eventContext = new EventContext())
+            {
+                //act
+                assignment.CreateAssignment(command);
+
+                //assert
+                Assert.That(assignment.properties.AudioAuditScope, Is.EqualTo(scope));
+                eventContext.ShouldContainEvent<AssignmentCreated>(e => e.AudioAuditScope.Length == 2
+                    && e.AudioAuditScope[0] == scope[0]
+                    && e.AudioAuditScope[1] == scope[1]);
+            }
+        }
+
+        [Test]
+        public void when_create_assignment_without_audio_audit_scope_should_store_empty_scope()
+        {
+            var command = Create.Command.CreateAssignment();
+            var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
+
+            //act
+            assignment.CreateAssignment(command);
+
+            //assert
+            Assert.That(assignment.properties.AudioAuditScope, Is.Empty);
+        }
+
+        [Test]
         public void when_created_with_minus_one_as_quantity()
         {
             

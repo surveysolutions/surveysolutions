@@ -19,6 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
         public string Comment { get; }
         public int? UpgradedFromId { get; }
         public string TargetArea { get; }
+        public Guid[] AudioAuditScope { get; }
 
         public CreateAssignment(Guid publicKey,
             int id,
@@ -34,7 +35,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
             List<string> protectedVariables,
             string comment,
             string targetArea,
-            int? upgradedFromId = null) 
+            int? upgradedFromId = null,
+            Guid[] audioAuditScope = null) 
             : base(publicKey, userId, questionnaireId)
         {
             Id = id;
@@ -49,6 +51,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
             Comment = comment;
             UpgradedFromId = upgradedFromId;
             TargetArea = targetArea;
+            AudioAuditScope = audioAuditScope ?? Array.Empty<Guid>();
         }
     }
 }

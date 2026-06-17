@@ -153,6 +153,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId, @event.QuestionnaireVersion);
             this.properties.AssignmentId = @event.AssignmentId;
             this.properties.IsAudioRecordingEnabled = @event.IsAudioRecordingEnabled;
+            this.properties.AudioAuditScope = @event.AudioAuditScope ?? Array.Empty<Guid>();
             this.properties.WasCreated = true;
         }
 
@@ -1239,7 +1240,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.AssignmentId,
                 command.IsAudioRecordingEnabled,
                 command.OriginDate,
-                questionnaire.IsUsingExpressionStorage()));
+                questionnaire.IsUsingExpressionStorage(),
+                command.AudioAuditScope));
 
 
             this.ApplyEvent(new SupervisorAssigned(command.UserId, command.SupervisorId, command.OriginDate));
