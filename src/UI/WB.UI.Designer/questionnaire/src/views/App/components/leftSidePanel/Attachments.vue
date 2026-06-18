@@ -199,6 +199,12 @@ export default {
                 }));
                 return false;
             }
+            const unsupportedTypes = ['image/heic', 'image/heif', 'image/heic-sequence', 'image/heif-sequence'];
+            const heicExtensionRegex = /\.(heic|heif)$/i;
+            if (unsupportedTypes.includes(file.type) || heicExtensionRegex.test(file.name)) {
+                notice(this.$t('QuestionnaireEditor.AttachmentTypeIsNotSupported'));
+                return false;
+            }
             return true;
         },
     }

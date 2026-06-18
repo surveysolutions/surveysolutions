@@ -402,6 +402,7 @@
     "SideBarCategoriesEmptyLine2": "Mund të shkarkoni dhe përditësoni kategoritë.",
     "SideBarCategoriesEmptyLine3": "do të shtohet në listën e kategorive të ripërdorshme për çdo lloj pyetjeje kategorike",
     "AttachmentSizeIsTooBig": "Madhësia e bashkëlidhjes është shumë e madhe. Madhësia maksimale: {{size}}",
+    "AttachmentTypeIsNotSupported": "Ky lloj bashkëlidhje nuk mbështetet.",
     "SideBarCriticalityConditionsTitle": "Rregullat kritike",
     "SideBarScenarioTitle": "Skenarët",
     "SideBarCategoriesTitle": "Kategoritë",
