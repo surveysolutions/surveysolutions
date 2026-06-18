@@ -331,7 +331,7 @@
     <value>De către </value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
-    <value>Sarcina nr. {{id}} nu poate fi închisă deoarece are modul web activat</value>
+    <value>Sarcina nr. {{id}} nu poate fi redusă deoarece are modul web activat</value>
   </data>
   <data name="AssignmentHistory" xml:space="preserve">
     <value>Istorie</value>
@@ -418,7 +418,7 @@
     <value>Înregistrare audio</value>
   </data>
   <data name="MultipleAssignmentsClose" xml:space="preserve">
-    <value>Cele {{count}} sarcini selectate vor fi închise. Dimensiunea va fi setată la numărul de interviuri colectate în prezent.</value>
+    <value>Cele {{count}} sarcini selectate vor fi reduse. Dimensiunea va fi setată la numărul de interviuri colectate în prezent.</value>
   </data>
   <data name="NewAssignment" xml:space="preserve">
     <value>Sarcină nouă</value>
