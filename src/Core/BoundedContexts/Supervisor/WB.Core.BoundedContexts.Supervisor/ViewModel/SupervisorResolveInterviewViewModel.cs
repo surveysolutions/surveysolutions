@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.Commands;
-using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -21,7 +20,6 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -79,9 +77,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             RunConfiguration(interviewId, navigationState, true);
 
             this.Name.InitAsStatic(InterviewDetails.Resolve);
-
             this.CommentLabel = InterviewDetails.ResolveComment;
 
+            // Load the interview for fast fields needed by Approve/Reject/Assign canExecute predicates.
             interview = this.interviewRepository.Get(interviewId);
             this.status = interview.Status;
 
@@ -90,32 +88,62 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 ? UIResources.Interview_Complete_Screen_Description
                 : string.Format(UIResources.Interview_Complete_Screen_DescriptionWithInterviewKey, interviewKey);
 
-            base.AnsweredCount = interview.CountActiveAnsweredQuestionsInInterviewForSupervisor();
-            base.ErrorsCount = interview.CountInvalidEntitiesInInterviewForSupervisor();
-            base.UnansweredCount = interview.CountActiveQuestionsInInterviewForSupervisor() - base.AnsweredCount;
-
             var interviewView = this.interviews.GetById(interviewId);
             this.receivedByInterviewerTabletAt = interviewView.ReceivedByInterviewerAtUtc;
 
+            // IsLoading stays true; OnTabDataLoadedAsync loads supervisor-specific counts and clears it.
+        }
+
+        protected override async Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState)
+        {
+            // Override base counts with supervisor-specific values (run on background thread).
+            var iv = this.interviewRepository.GetOrThrow(interviewId);
+            var answeredCount = iv.CountActiveAnsweredQuestionsInInterviewForSupervisor();
+            var errorsCount = iv.CountInvalidEntitiesInInterviewForSupervisor();
+            var unansweredCount = iv.CountActiveQuestionsInInterviewForSupervisor() - answeredCount;
+            var errorsDescription = UIResources.Interview_Complete_Entities_With_Errors + " " + MoreThan(errorsCount);
+
             var topFailedCriticalRulesFromState = this.entitiesListViewModelFactory.GetTopFailedCriticalRulesFromState(interviewId, navigationState);
             var topFailedCriticalRules = topFailedCriticalRulesFromState.Entities.ToList();
-            if (topFailedCriticalRules.Count > 0)
-            {
-                var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
-                tabViewModel.Items.AddRange(topFailedCriticalRules);
-                tabViewModel.Total += topFailedCriticalRulesFromState.Total;
-            }
 
             var topUnansweredCriticalQuestionsInfo = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState);
             var topUnansweredCriticalQuestions = topUnansweredCriticalQuestionsInfo.Entities.ToList();
-            if (topUnansweredCriticalQuestions.Count > 0)
+
+            await InvokeOnMainThreadAsync(() =>
             {
-                var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
-                tabViewModel.Items.AddRange(topUnansweredCriticalQuestions);
-                tabViewModel.Total += topUnansweredCriticalQuestionsInfo.Total;
-            }
-            
-            IsLoading = false;
+                if (isDisposed)
+                {
+                    topFailedCriticalRules.ForEach(vm => vm.DisposeIfDisposable());
+                    topUnansweredCriticalQuestions.ForEach(vm => vm.DisposeIfDisposable());
+                    return;
+                }
+
+                base.AnsweredCount = answeredCount;
+                base.ErrorsCount = errorsCount;
+                base.UnansweredCount = unansweredCount;
+                base.EntitiesWithErrorsDescription = errorsDescription;
+                RaisePropertyChanged(nameof(AnsweredCount));
+                RaisePropertyChanged(nameof(ErrorsCount));
+                RaisePropertyChanged(nameof(UnansweredCount));
+                RaisePropertyChanged(nameof(EntitiesWithErrorsDescription));
+
+                if (topFailedCriticalRules.Count > 0)
+                {
+                    var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
+                    tabViewModel.Items.AddRange(topFailedCriticalRules);
+                    tabViewModel.Total += topFailedCriticalRulesFromState.Total;
+                }
+
+                if (topUnansweredCriticalQuestions.Count > 0)
+                {
+                    var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
+                    tabViewModel.Items.AddRange(topUnansweredCriticalQuestions);
+                    tabViewModel.Total += topUnansweredCriticalQuestionsInfo.Total;
+                }
+
+                RaisePropertyChanged(nameof(IsAllOk));
+                IsLoading = false;
+            });
         }
 
         public IMvxAsyncCommand Approve => new MvxAsyncCommand(async () =>
