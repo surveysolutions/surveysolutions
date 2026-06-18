@@ -368,7 +368,7 @@
     <value>Stata 14 формат</value>
   </data>
   <data name="DataFormat_Tab" xml:space="preserve">
-    <value>Tab separated data</value>
+    <value>Данные с разделением табуляцией</value>
   </data>
   <data name="AddToQueue" xml:space="preserve">
     <value>Добавить в очередь</value>

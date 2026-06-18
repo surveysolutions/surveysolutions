@@ -213,4 +213,97 @@
   <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
       <value>Ju mund të miratoni vetëm intervistat me këto statuse: {{status1}} dhe {{status2}}, {{status3}}</value>
   </data>
+
+
+  <data name="AssignReceivedWarning" xml:space="preserve">
+    <value>Intervistuesit aktualisht përgjegjës nuk do të njoftohen për ricaktimin deri në sinkronizimin e ardhshëm. Nëse ata kanë filluar tashmë të punojnë në intervistë, të gjitha të dhënat që kanë futur para sinkronizimit të ardhshëm do të HIDHEN POSHTË!</value>
+  </data>
+
+  <data name="ApproveReceivedWarning" xml:space="preserve">
+    <value>Intervistuesit aktualisht përgjegjës nuk do të njoftohen për miratimin e intervistës/intervistave deri në sinkronizimin e ardhshëm. Nëse ata kanë filluar tashmë të punojnë në intervistë, të gjitha të dhënat që kanë futur para sinkronizimit të ardhshëm do të HIDHEN POSHTË!</value>
+  </data>
+
+  <data name="SwitchToCawiReceivedWarning" xml:space="preserve">
+    <value>Intervistuesit aktualisht përgjegjës nuk do të njoftohen për ndryshimin e modalitetit të intervistës/intervistave deri në sinkronizimin e ardhshëm. Nëse ata kanë filluar tashmë të punojnë në intervistë, të gjitha të dhënat që kanë futur para sinkronizimit të ardhshëm do të HIDHEN POSHTË!</value>
+  </data>
+
+  <data name="RejectToOriginal" xml:space="preserve">
+    <value>Refuzo te përgjegjësi fillestar</value>
+  </data>
+
+  <data name="RejectToNewResponsible" xml:space="preserve">
+    <value>Refuzo dhe zgjidh përgjegjës të ri</value>
+  </data>
+
+  <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve">
+    <value>Numri i pyetjeve pa përgjigje. Përfshin pyetjet e supervizorit, identifikuese dhe të intervistuesit. Mund të përmbajë vlera null për intervistat që janë përfunduar para versionit 20.09.</value>
+  </data>
+
+  <data name="Tooltip_Table_InterviewMode" xml:space="preserve">
+    <value>Shfaq statusin aktual (CAPI ose CAWI) të secilës intervistë</value>
+  </data>
+
+    <data name="NotAnsweredCount" xml:space="preserve">
+    <value>Pa përgjigje</value>
+  </data>
+
+  <data name="ChooseQuestionsTitle" xml:space="preserve">
+    <value>Zgjidhni pyetjet identifikuese për t'i përdorur në filtër</value>
+  </data>
+
+  <data name="DynamicFilter" xml:space="preserve">
+    <value>Filtri dinamik</value>
+  </data>
+
+  <data name="FiltersByQuestions" xml:space="preserve">
+    <value>Filtrat sipas pyetjeve</value>
+  </data>
+
+  <data name="QuestionsSelector" xml:space="preserve">
+    <value>Përzgjedhësi i pyetjeve</value>
+  </data>
+
+  <data name="AdvancedFilterSelector" xml:space="preserve">
+    <value>Filtri dinamik</value>
+  </data>
+
+  <data name="QuestionsFilterNotAvailable" xml:space="preserve">
+    <value>Filtrat sipas pyetjeve janë të disponueshëm vetëm kur zgjidhet një version specifik i pyetësorit</value>
+  </data>
+
+  <data name="DynamicFilterNotAvailable" xml:space="preserve">
+    <value>Nuk ka të dhëna të disponueshme</value>
+  </data>
+
+  <data name="ApproveConfirmMessage_other" xml:space="preserve">
+      <value>{{count}} intervista do të miratohen.</value>
+  </data>
+
+  <data name="DynamicFilter_MatchType" xml:space="preserve">
+    <value>Lloji i përputhjes</value>
+  </data>
+
+  <data name="DynamicFilter_MatchTypes_And" xml:space="preserve">
+    <value>DHE</value>
+  </data>
+
+  <data name="DynamicFilter_MatchTypes_Or" xml:space="preserve">
+    <value>OSE</value>
+  </data>
+
+  <data name="DynamicFilter_MatchTypes_AddRule" xml:space="preserve">
+    <value>Shto rregull</value>
+  </data>
+
+  <data name="DynamicFilter_MatchTypes_AddGroup" xml:space="preserve">
+    <value>Shto grup</value>
+  </data>
+
+  <data name="DynamicFilter_MatchTypes_ValuePlaceholder" xml:space="preserve">
+    <value>vlera</value>
+  </data>
+
+  <data name="WebInterviewResponsibleWarning" xml:space="preserve">
+      <value>Përgjegjësi nuk është Intervistues. Lidhja nuk do të funksionojë.</value>
+  </data>
 </root>

@@ -16,6 +16,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.GenericSubdomains.Portable;
@@ -1131,6 +1132,181 @@ namespace WB.Tests.Unit.Applications.Headquarters
             Assert.That(createdUser, Is.Not.Null);
             Assert.That(createdUser.UserName, Is.EqualTo("testobserver"));
             Assert.That(createdUser.PasswordChangeRequired, Is.True);
+        }
+
+        #endregion
+
+        #region UpdateUser Tests
+
+        [Test]
+        public async Task UpdateUser_WhenInterviewerUpdatesOwnProfileAndAllowProfileUpdateIsDisabled_ShouldReturnForbidden()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var user = Mock.Of<HqUser>(u => u.Id == userId);
+            var authorizedUser = Mock.Of<IAuthorizedUser>(u =>
+                u.Id == userId &&
+                u.IsInterviewer == true &&
+                u.IsAdministrator == false &&
+                u.IsHeadquarter == false);
+
+            var profileSettings = new ProfileSettings { AllowInterviewerUpdateProfile = false };
+            var profileSettingsStorage = Mock.Of<IPlainKeyValueStorage<ProfileSettings>>(s =>
+                s.GetById(AppSetting.ProfileSettings) == profileSettings);
+
+            var userManagerStore = CreateUserManagerMockForUpdateUser(userToFind: user);
+            var userManager = CreateHqUserManager(userManagerStore);
+            var controller = CreateControllerForUpdateUser(
+                userManager: userManager,
+                authorizedUser: authorizedUser,
+                profileSettingsStorage: profileSettingsStorage);
+
+            var model = new EditUserModel { UserId = userId };
+
+            // Act
+            var result = await controller.UpdateUser(model);
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<ForbidResult>());
+        }
+
+        [Test]
+        public async Task UpdateUser_WhenInterviewerUpdatesOwnProfileAndAllowProfileUpdateIsEnabled_ShouldNotReturnForbidden()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var user = Mock.Of<HqUser>(u => u.Id == userId);
+            var authorizedUser = Mock.Of<IAuthorizedUser>(u =>
+                u.Id == userId &&
+                u.IsInterviewer == true &&
+                u.IsAdministrator == false &&
+                u.IsHeadquarter == false &&
+                u.UserName == "interviewer");
+
+            var profileSettings = new ProfileSettings { AllowInterviewerUpdateProfile = true };
+            var profileSettingsStorage = Mock.Of<IPlainKeyValueStorage<ProfileSettings>>(s =>
+                s.GetById(AppSetting.ProfileSettings) == profileSettings);
+
+            var userManagerStore = CreateUserManagerMockForUpdateUser(userToFind: user);
+            var userManager = CreateHqUserManager(userManagerStore);
+            var controller = CreateControllerForUpdateUser(
+                userManager: userManager,
+                authorizedUser: authorizedUser,
+                profileSettingsStorage: profileSettingsStorage);
+
+            var model = new EditUserModel { UserId = userId };
+
+            // Act
+            var result = await controller.UpdateUser(model);
+
+            // Assert: Profile update guard passed; result is not Forbid
+            Assert.That(result, Is.Not.InstanceOf<ForbidResult>());
+        }
+
+        [Test]
+        public async Task UpdateUser_WhenInterviewerAccessesOwnAccount_HasPermissionsToManageUser_AllowsAccess()
+        {
+            // Own-account access must always pass HasPermissionsToManageUser regardless of role.
+            // The Forbid from AllowInterviewerUpdateProfile (disabled) confirms the permission
+            // check passed and only the contact-info guard fired.
+            var userId = Guid.NewGuid();
+            var user = Mock.Of<HqUser>(u => u.Id == userId);
+            var authorizedUser = Mock.Of<IAuthorizedUser>(u =>
+                u.Id == userId &&
+                u.IsInterviewer == true &&
+                u.IsAdministrator == false &&
+                u.IsHeadquarter == false &&
+                u.IsSupervisor == false);
+
+            var profileSettings = new ProfileSettings { AllowInterviewerUpdateProfile = false };
+            var profileSettingsStorage = Mock.Of<IPlainKeyValueStorage<ProfileSettings>>(s =>
+                s.GetById(AppSetting.ProfileSettings) == profileSettings);
+
+            var userManagerStore = CreateUserManagerMockForUpdateUser(userToFind: user);
+            var userManager = CreateHqUserManager(userManagerStore);
+            var controller = CreateControllerForUpdateUser(
+                userManager: userManager,
+                authorizedUser: authorizedUser,
+                profileSettingsStorage: profileSettingsStorage);
+
+            var model = new EditUserModel { UserId = userId };
+
+            // Act – HasPermissionsToManageUser passes (own account); only the profile-update guard fires
+            var result = await controller.UpdateUser(model);
+
+            // Assert: result is ForbidResult from the profile-update guard, not a NotFound
+            Assert.That(result, Is.InstanceOf<ForbidResult>());
+        }
+
+        [Test]
+        public async Task UpdateUser_WhenInterviewerAttemptsToManageAnotherUser_ShouldReturnForbidden()
+        {
+            // HasPermissionsToManageUser must deny access when interviewer targets a different user's account.
+            var userId = Guid.NewGuid();
+            var authorizedUserId = Guid.NewGuid();
+
+            var user = Mock.Of<HqUser>(u => u.Id == userId);
+            var authorizedUser = Mock.Of<IAuthorizedUser>(u =>
+                u.Id == authorizedUserId &&
+                u.IsInterviewer == true &&
+                u.IsAdministrator == false &&
+                u.IsHeadquarter == false &&
+                u.IsSupervisor == false);
+
+            var userManagerStore = CreateUserManagerMockForUpdateUser(userToFind: user);
+            var userManager = CreateHqUserManager(userManagerStore);
+            var controller = CreateControllerForUpdateUser(
+                userManager: userManager,
+                authorizedUser: authorizedUser);
+
+            var model = new EditUserModel { UserId = userId };
+
+            // Act
+            var result = await controller.UpdateUser(model);
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<ForbidResult>());
+        }
+
+        #endregion
+
+        #region Helper Methods for UpdateUser Tests
+
+        private UsersController CreateControllerForUpdateUser(
+            HqUserManager userManager = null,
+            IAuthorizedUser authorizedUser = null,
+            IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage = null)
+        {
+            var controller = new UsersController(
+                authorizedUser ?? Mock.Of<IAuthorizedUser>(u => u.IsAdministrator == true),
+                userManager ?? CreateHqUserManager(CreateUserManagerMockForUpdateUser()),
+                profileSettingsStorage ?? Mock.Of<IPlainKeyValueStorage<ProfileSettings>>(),
+                Mock.Of<UrlEncoder>(),
+                Mock.Of<IOptions<HeadquartersConfig>>(),
+                Mock.Of<IWorkspacesStorage>(),
+                Mock.Of<ITokenProvider>(),
+                new UsersManagementSettings(null));
+            controller.ControllerContext.HttpContext = Mock.Of<HttpContext>(c =>
+                c.Session == new MockHttpSession()
+                && c.Request == Mock.Of<HttpRequest>(r => r.Cookies == Mock.Of<IRequestCookieCollection>())
+                && c.Response == Mock.Of<HttpResponse>(r => r.Cookies == Mock.Of<IResponseCookies>()));
+            controller.Url = Mock.Of<IUrlHelper>(x => x.Action(It.IsAny<UrlActionContext>()) == "url");
+
+            return controller;
+        }
+
+        private IUserStore<HqUser> CreateUserManagerMockForUpdateUser(HqUser userToFind = null)
+        {
+            var userStore = new Mock<IUserStore<HqUser>>();
+            userStore.As<IUserPasswordStore<HqUser>>();
+
+            userStore.Setup(u => u.FindByIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((string _, CancellationToken __) => userToFind);
+
+            userStore.Setup(u => u.UpdateAsync(It.IsAny<HqUser>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            return userStore.Object;
         }
 
         #endregion

@@ -415,7 +415,7 @@
     <value>Assignment ID</value>
   </data>
   <data name="MultipleAssignmentsClose" xml:space="preserve">
-      <value>{{count}} selected assignments are going to be closed. Expected value will be set to currently collected interviews count.</value>
+      <value>{{count}} selected assignments are going to be downsized. Expected value will be set to currently collected interviews count.</value>
   </data>
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
       <value>Expected value of the selected assignment {{id}} will be changed from {{quantity}} to {{collected}} (number of currently collected interviews)</value>
@@ -424,7 +424,7 @@
     <value>Close</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
-    <value>Assignment {{id}} cannot be closed since it has web mode enabled</value>
+    <value>Assignment {{id}} cannot be downsized since it has web mode enabled</value>
   </data>
   <data name="AssignmentInfo" xml:space="preserve">
     <value>Detailed assignment info</value>
