@@ -427,7 +427,7 @@
     <value>由</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
-    <value>由于已启用 Web 模式，无法关闭任务 {{id}}</value>
+    <value>由于已启用 Web 模式，无法缩减任务 {{id}}</value>
   </data>
   <data name="AssignmentExpectedInWebMode" xml:space="preserve">
     <value>Web 模式任务的预期值不能更改。</value>
@@ -493,7 +493,7 @@
     <value>Web 模式下预期值为 1 的任务，其任务密码必须唯一</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>电子邮件</value>
   </data>
   <data name="EmailExplanation" xml:space="preserve">
     <value>Email 将用于与任务接收者沟通</value>
@@ -541,7 +541,7 @@
     <value>CAWI 模式允许直接从受访者收集数据</value>
   </data>
   <data name="MultipleAssignmentsClose" xml:space="preserve">
-    <value>将关闭所选的 {{count}} 个任务。预期值将设置为当前已收集的访谈数量。</value>
+    <value>将缩减所选的 {{count}} 个任务。预期值将设置为当前已收集的访谈数量。</value>
   </data>
   <data name="NewAssignment" xml:space="preserve">
     <value>新建任务</value>
