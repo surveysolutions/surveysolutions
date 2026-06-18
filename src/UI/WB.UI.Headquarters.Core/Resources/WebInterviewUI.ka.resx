@@ -434,4 +434,220 @@
   <data name="CompleteReviewSubmitInterview" xml:space="preserve">
       <value>ინტერვიუ {{key}}</value>
   </data>
+
+
+  <data name="CommentOnPreviousAnswer" xml:space="preserve">
+    <value>წინა პასუხზე</value>
+  </data>
+
+  <data name="NotCalculated" xml:space="preserve">
+    <value>არ არის გამოთვლილი</value>
+  </data>
+
+  <data name="MaxAnswersCountSelected" xml:space="preserve">
+    <value>ამ კითხვაში შერჩევების მაქსიმალური რაოდენობა ({{value}}) უკვე გაკეთებულია</value>
+  </data>
+
+  <data name="AreaRecord" xml:space="preserve">
+    <value>არეალის რედაქტირება</value>
+  </data>
+
+  <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
+    <value>შეყვანილი მნიშვნელობა ვერ იქნება დაცულ პასუხზე ნაკლები</value>
+  </data>
+
+  <data name="CriticalQuestionErrors" xml:space="preserve">
+    <value>მოითხოვს პასუხს შემდეგ კითხვებზე:</value>
+  </data>
+
+  <data name="CriticalityConditionsErrors" xml:space="preserve">
+    <value>მოითხოვს ამ შეცდომების გამოსწორებას:</value>
+  </data>
+
+  <data name="UnansweredQuestions" xml:space="preserve">
+    <value>უპასუხო კითხვები:</value>
+  </data>
+
+  <data name="CompleteNoteToSupervisor" xml:space="preserve">
+    <value>კომენტარი</value>
+  </data>
+
+  <data name="CoverBrokenPackegeTitle" xml:space="preserve">
+    <value>შეცდომა: ეს ინტერვიუ დაზიანებულია</value>
+  </data>
+
+  <data name="CoverBrokenPackegeText" xml:space="preserve">
+    <value>ყურადღება! ეს ინტერვიუ შეიცავს დაზიანებულ მონაცემებს, &lt;br /&gt;
+ხელმისაწვდომია მხოლოდ ინტერვიუს წინა ვერსია. &lt;br /&gt;
+დახმარებისთვის დაუკავშირდით მხარდაჭერის გუნდს.</value>
+  </data>
+
+  <data name="CommentPosting" xml:space="preserve">
+    <value>იგზავნება...</value>
+  </data>
+
+  <data name="InterviewReceivedCantModify" xml:space="preserve">
+    <value>ინტერვიუ მიღებულია ინტერვიუერის მიერ და მისი შეცვლა შეუძლებელია</value>
+  </data>
+
+  <data name="ShowOnMap" xml:space="preserve">
+    <value>რუკაზე ჩვენება</value>
+  </data>
+
+  <data name="WebTesterSessionOver" xml:space="preserve">
+    <value>ტესტერის სესია დასრულდა</value>
+  </data>
+
+  <data name="WebTesterSessionOverMessage" xml:space="preserve">
+    <value>გთხოვთ, დახუროთ ეს გვერდი. ახალი გვერდის გახსნა შეგიძლიათ Designer საიტზე დაბრუნებით</value>
+  </data>
+
+  <data name="CompleteCommentCriticalityLevelBlock" xml:space="preserve">
+    <value>ღილაკის გასააქტიურებლად გთხოვთ, მოაგვაროთ კრიტიკული პრობლემები</value>
+  </data>
+
+  <data name="CompleteCommentCriticalityLevelWarn" xml:space="preserve">
+    <value>ღილაკის გასააქტიურებლად გთხოვთ, მოაგვაროთ კრიტიკული პრობლემები ან მიუთითოთ განმარტება ზემოთ მოცემულ კომენტარის ველში</value>
+  </data>
+
+  <data name="CompleteNoteCommentCriticality" xml:space="preserve">
+    <value>გთხოვთ, მოაგვაროთ პრობლემები კრიტიკულ კითხვებზე პასუხის გაცემით და დარწმუნდით, რომ პასუხები აკმაყოფილებს კრიტიკულ წესებს</value>
+  </data>
+
+  <data name="CompleteCriticalityWarnConfirmation" xml:space="preserve">
+    <value>გთხოვთ, დაადასტუროთ, რომ გსურთ ამ ინტერვიუს გაგზავნა კრიტიკული პრობლემებით.</value>
+  </data>
+
+  <data name="ConfirmationNeededTitle" xml:space="preserve">
+    <value>საჭიროა დადასტურება</value>
+  </data>
+
+  <data name="LoadingQuestionnaire" xml:space="preserve">
+    <value>კითხვარი იტვირთება. გთხოვთ, დაელოდოთ...</value>
+  </data>
+
+  <data name="WarningsHeader" xml:space="preserve">
+    <value>გაფრთხილებები</value>
+  </data>
+
+  <data name="ReloadQuestionnaire" xml:space="preserve">
+    <value>კითხვარის თავიდან ჩატვირთვა</value>
+  </data>
+
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>უპასუხო</value>
+  </data>
+
+  <data name="Interview_Overview_NoValue" xml:space="preserve">
+    <value>მნიშვნელობა არ არის</value>
+  </data>
+
+  <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
+    <value>დამატებითი ინფორმაცია კითხვაზე</value>
+  </data>
+
+  <data name="MultimediaNotSupported" xml:space="preserve">
+    <value>თქვენი ბრაუზერი არ უჭერს მხარს მულტიმედიის დაკვრას. შეგიძლიათ ამის ნაცვლად ჩამოტვირთოთ.</value>
+  </data>
+
+  <data name="EmailLink_Placeholder" xml:space="preserve">
+    <value>შეიყვანეთ ელ. ფოსტა</value>
+  </data>
+
+  <data name="EmailLink_InvalidEmail" xml:space="preserve">
+    <value>{{email}} ელ. ფოსტის არასწორი მისამართია</value>
+  </data>
+
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ დაკავშირებული როსტერის '{{rosterTitle}}' წაშლა?</value>
+  </data>
+
+  <data name="SaveScenario" xml:space="preserve">
+    <value>სცენარის შენახვა</value>
+  </data>
+
+  <data name="Resolve" xml:space="preserve">
+    <value>მოგვარება</value>
+    <comment>Resolve comment button text</comment>
+  </data>
+
+  <data name="ResolveHint" xml:space="preserve">
+    <value>მოგვარებული კომენტარები ნაგულისხმევად დამალულია, მაგრამ მათი ნახვა შეუძლია ინტერვიუს ყველა მონაწილეს</value>
+  </data>
+
+  <data name="HideResolved" xml:space="preserve">
+    <value>მოგვარებულების დამალვა</value>
+  </data>
+
+  <data name="ShowResolved" xml:space="preserve">
+    <value>მოგვარებულების ჩვენება</value>
+  </data>
+
+  <data name="SaveScenarioOptions" xml:space="preserve">
+    <value>აირჩიეთ შესაცვლელი სცენარი</value>
+  </data>
+
+  <data name="SaveScenarioDesignerLogin" xml:space="preserve">
+    <value>Designer აპლიკაციაში სესიას ვადა გაუვიდა. შესანახად შედით Designer აპლიკაციაში.</value>
+  </data>
+
+  <data name="SaveScenarioGoToDesigner" xml:space="preserve">
+    <value>Designer-ის გახსნა</value>
+  </data>
+
+  <data name="NoQuestionnaireAccess" xml:space="preserve">
+    <value>თქვენ არ გაქვთ წვდომა კითხვარზე</value>
+  </data>
+
+  <data name="SaveScenarioName" xml:space="preserve">
+    <value>სახელი</value>
+  </data>
+
+  <data name="SaveScenarioOptions_ReplaceExisting" xml:space="preserve">
+    <value>არსებულის ჩანაცვლება</value>
+  </data>
+
+  <data name="SaveScenarioOptions_SaveNew" xml:space="preserve">
+    <value>ახლის შენახვა</value>
+  </data>
+
+  <data name="PickLocation" xml:space="preserve">
+    <value>რუკიდან არჩევა</value>
+  </data>
+
+  <data name="EnterPassword" xml:space="preserve">
+    <value>შეიყვანეთ პაროლი</value>
+  </data>
+
+  <data name="Progress" xml:space="preserve">
+    <value>პროგრესი</value>
+  </data>
+
+  <data name="SwitchToWebMode" xml:space="preserve">
+    <value>ინტერვიუს Web რეჟიმზე გადართვა</value>
+  </data>
+
+  <data name="SwitchToWebMode_LinkDescription" xml:space="preserve">
+    <value>ამ ინტერვიუს გასაგრძელებლად შეიძლება გამოყენებულ იქნას შემდეგი ბმული</value>
+  </data>
+
+  <data name="AssignmentLimitError" xml:space="preserve">
+    <value>ამ დავალებიდან ვეღარ შექმნით მეტ ინტერვიუს</value>
+  </data>
+
+  <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
+      <value>კრიტიკული უპასუხო კითხვები: {{count}}</value>
+  </data>
+
+  <data name="Complete_FailedCriticalRules" xml:space="preserve">
+      <value>ჩავარდნილი კრიტიკული წესები: {{count}}</value>
+  </data>
+
+  <data name="Complete_UnansweredQuestions" xml:space="preserve">
+      <value>უპასუხო კითხვები: {{count}}</value>
+  </data>
+
+  <data name="Complete_QuestionsWithErrors" xml:space="preserve">
+      <value>შეცდომების მქონე კითხვები: {{count}}</value>
+  </data>
 </root>

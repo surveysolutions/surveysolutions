@@ -39,12 +39,12 @@ export default {
         }
     },
     props: {
-        filteredCount: { type: Number, require: true },
-        title: { type: String, require: true },
-        confirmMessage: { type: String, require: true },
-        receivedByInterviewerItemsCount: { type: Number, require: true },
+        filteredCount: { type: Number, required: true },
+        title: { type: String, required: true },
+        confirmMessage: { type: String, required: true },
+        receivedByInterviewerItemsCount: { type: Number, required: true },
         confirmReceivedByInterviewer: { type: Boolean, default() { return false } },
-        modalId: { type: String, require: true },
+        modalId: { type: String, required: true },
     },
     methods: {
         modal(params) {
