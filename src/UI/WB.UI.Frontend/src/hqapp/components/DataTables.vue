@@ -491,6 +491,11 @@ export default {
             if (this.contextMenuItems == null) return
 
             $(this.$refs.table).on('click.dt-contextmenu', 'tbody tr td:not(.checkbox-cell)', (event) => {
+                if ($(event.target).closest('a').length > 0) {
+                    this.contextMenu.visible = false
+                    return
+                }
+
                 const selectedRow = this.selectRowAndGetData($(event.currentTarget))
 
                 if (selectedRow.rowData == null) {
