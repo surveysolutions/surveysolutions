@@ -6,7 +6,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-label="Close" @click="close"></button>
-                        <h3 class="modal-title" id="categories-editor-modal-title" v-if="options">{{ formTitle }}</h3>
+                        <h3 class="modal-title" id="categories-editor-modal-title">{{ formTitle }}</h3>
                     </div>
                     <div class="modal-body categories-editor-modal-body">
                         <div v-if="errors.length > 0" class="alert alert-danger categories-editor-errors">
@@ -251,9 +251,7 @@ export default {
                 this.initialCategories = cloneDeep(data.options);
                 this.readonly = data.isReadonly;
 
-                if (data.options.find(o => o.parentValue != null)) {
-                    this.isCascadingCategory = true;
-                }
+                this.isCascadingCategory = data.options.some(o => o.parentValue != null);
 
                 delete data.options;
                 this.options = data;
