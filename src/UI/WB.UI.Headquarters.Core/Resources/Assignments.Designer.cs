@@ -405,9 +405,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string ReceivedByTablet_All {
+        public static string Filter_ShowAll {
             get {
-                return ResourceManager.GetString("ReceivedByTablet_All", resourceCulture);
+                return ResourceManager.GetString("Filter_ShowAll", resourceCulture);
             }
         }
         
@@ -651,9 +651,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string Close {
+        public static string Downsize {
             get {
-                return ResourceManager.GetString("Close", resourceCulture);
+                return ResourceManager.GetString("Downsize", resourceCulture);
             }
         }
         
@@ -924,6 +924,120 @@ namespace WB.UI.Headquarters.Resources {
         public static string EnterTargetArea {
             get {
                 return ResourceManager.GetString("EnterTargetArea", resourceCulture);
+            }
+        }
+        
+        public static string Status {
+            get {
+                return ResourceManager.GetString("Status", resourceCulture);
+            }
+        }
+        
+        public static string StatusChangeComment {
+            get {
+                return ResourceManager.GetString("StatusChangeComment", resourceCulture);
+            }
+        }
+        
+        public static string StatusOpen {
+            get {
+                return ResourceManager.GetString("StatusOpen", resourceCulture);
+            }
+        }
+        
+        public static string StatusCompleted {
+            get {
+                return ResourceManager.GetString("StatusCompleted", resourceCulture);
+            }
+        }
+        
+        public static string StatusClosed {
+            get {
+                return ResourceManager.GetString("StatusClosed", resourceCulture);
+            }
+        }
+        
+        public static string CompleteAssignmentTitle {
+            get {
+                return ResourceManager.GetString("CompleteAssignmentTitle", resourceCulture);
+            }
+        }
+        
+        public static string CompleteAssignmentMessage {
+            get {
+                return ResourceManager.GetString("CompleteAssignmentMessage", resourceCulture);
+            }
+        }
+        
+        public static string CloseAssignmentTitle {
+            get {
+                return ResourceManager.GetString("CloseAssignmentTitle", resourceCulture);
+            }
+        }
+        
+        public static string CloseAssignmentMessage {
+            get {
+                return ResourceManager.GetString("CloseAssignmentMessage", resourceCulture);
+            }
+        }
+        
+        public static string ReopenAssignmentTitle {
+            get {
+                return ResourceManager.GetString("ReopenAssignmentTitle", resourceCulture);
+            }
+        }
+        
+        public static string ReopenAssignmentMessage {
+            get {
+                return ResourceManager.GetString("ReopenAssignmentMessage", resourceCulture);
+            }
+        }
+        
+        public static string Complete {
+            get {
+                return ResourceManager.GetString("Complete", resourceCulture);
+            }
+        }
+        
+        public static string Close {
+            get {
+                return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        public static string Reopen {
+            get {
+                return ResourceManager.GetString("Reopen", resourceCulture);
+            }
+        }
+        
+        public static string Action_StatusChanged {
+            get {
+                return ResourceManager.GetString("Action_StatusChanged", resourceCulture);
+            }
+        }
+        
+        public static string Action_StatusChanged_Comment {
+            get {
+                return ResourceManager.GetString("Action_StatusChanged_Comment", resourceCulture);
+            }
+        }
+        
+        public static string Action_Completed {
+            get {
+                return ResourceManager.GetString("Action_Completed", resourceCulture);
+            }
+        }
+        
+        public static string Action_Closed {
+            get {
+                return ResourceManager.GetString("Action_Closed", resourceCulture);
+            }
+        }
+        
+        public static string Action_Reopened {
+            get {
+                return ResourceManager.GetString("Action_Reopened", resourceCulture);
             }
         }
     }
