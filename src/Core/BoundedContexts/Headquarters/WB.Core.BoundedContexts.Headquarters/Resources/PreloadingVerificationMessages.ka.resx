@@ -189,4 +189,93 @@
   <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
     <value>რაოდენობა მეტი ან ტოლი უნდა იყოს -1-ის</value>
   </data>
+
+
+  <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
+    <value>მომხმარებელი არ არის Headquarters, Supervisor ან Interviewer ერთი ან მეტი ჩანაწერისთვის.</value>
+  </data>
+
+  <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
+    <value>GPS კითხვისთვის Latitude და Longitude უნდა იყოს მითითებული.</value>
+  </data>
+
+    <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+    <value>კითხვარის დონის მონაცემების ფაილი აკლია.</value>
+  </data>
+
+  <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+    <value>მრავალპასუხიან კითხვაზე მონიშნული ვარიანტების რაოდენობა არ შეიძლება აღემატებოდეს დაშვებული პასუხების მაქსიმალურ რაოდენობას.</value>
+  </data>
+
+  <data name="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
+    <value>Categorical Multi select კითხვისთვის უარყოფითი მნიშვნელობა დაუშვებელია.</value>
+  </data>
+
+    <data name="PL0042_IdIsEmpty" xml:space="preserve">
+    <value>Id სვეტში მნიშვნელობა არ არის.</value>
+  </data>
+
+    <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+    <value>პაროლით დაცული არქივები მხარდაჭერილი არ არის</value>
+  </data>
+
+    <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
+    <value>List roster-ს უნდა ჰქონდეს სვეტი ტექსტური სიის პასუხებისთვის</value>
+  </data>
+
+  <data name="PL0047_ProtectedVariables_MissingColumn" xml:space="preserve">
+    <value>აუცილებელი სვეტი {0} აკლია.</value>
+  </data>
+
+  <data name="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" xml:space="preserve">
+    <value>დაცული ცვლადი მოწოდებულ კითხვარში ვერ მოიძებნა.</value>
+  </data>
+
+  <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
+    <value>ამ ტიპის ცვლადის დაცვა შეუძლებელია.</value>
+  </data>
+
+  <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
+    <value>რიცხვითი როსტერისთვის არათანმიმდევრული როსტერის კოდია. როსტერის კოდების მიმდევრობა უნდა იყოს 0, 1, ... როსტერის ელემენტების რაოდენობამდე</value>
+  </data>
+
+  <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
+    <value>მაქსიმალური რაოდენობა არ უნდა აღემატებოდეს {0}-ს.</value>
+  </data>
+
+  <data name="PL0055_InvalidEmail" xml:space="preserve">
+    <value>ელ. ფოსტის მისამართი არავალიდურია</value>
+  </data>
+
+  <data name="PL0056_InvalidPassword" xml:space="preserve">
+    <value>არასწორი პაროლი. პაროლის გენერირებისთვის საჭიროა მინიმუმ 6 ციფრი და დიდი ასოები, ან ერთიანი სიმბოლო '?'</value>
+  </data>
+
+  <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
+    <value>ელ. ფოსტის მქონე დავალებებისთვის დასაშვები რაოდენობა არის 1</value>
+  </data>
+
+  <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
+    <value>ელ. ფოსტის მქონე დავალებებისთვის Web Mode ჩართული უნდა იყოს</value>
+  </data>
+
+  <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
+    <value>პაროლის მქონე დავალებებისთვის Web Mode ჩართული უნდა იყოს</value>
+  </data>
+
+  <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
+    <value>Web mode-ისთვის 1 ზომის დავალებას უნდა ჰქონდეს მითითებული ან ელ. ფოსტა, ან პაროლი</value>
+  </data>
+
+  <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
+    <value>პაროლი უნიკალური არ არის. რაოდენობა 1-ის მქონე web mode დავალებისთვის პაროლი უნიკალური უნდა იყოს</value>
+  </data>
+
+  <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
+    <value>ვებ-ინტერვიუებისთვის ყველა დავალება Interviewer-ზე უნდა იყოს შექმნილი</value>
+  </data>
+
+  <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
+    <value>ცვლადის სახელით {0} კითხვაზე პასუხის წინასწარ ჩატვირთვა შეუძლებელია, რადგან ის დაუჭერელი ტიპისაა. დეტალებისთვის იხილეთ მხარდაჭერის სტატია https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type, სადაც აღწერილია, მიმდინარე ვერსიაში რის წინასწარ ჩატვირთვაა შესაძლებელი.</value>
+  </data>
 </root>
