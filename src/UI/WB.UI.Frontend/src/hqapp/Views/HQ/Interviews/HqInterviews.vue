@@ -769,6 +769,12 @@ export default {
                     orderable: false,
                     createdCell(td, cellData, rowData, row, col) {
                         $(td).attr('role', 'mode')
+                        if (rowData.cawiLink != null) {
+                            $(td).on('click', 'a[data-cawi-link]', function (e) {
+                                e.preventDefault()
+                                navigator.clipboard.writeText($(this).data('cawi-link'))
+                            })
+                        }
                     },
                     render(data, type, rowData) {
                         if (rowData.cawiLink != null) {
@@ -777,7 +783,7 @@ export default {
                                 extraWarning = 'style=\'color:red;\' title=\'' + self.$t('Interviews.WebInterviewResponsibleWarning') + '\''
 
                             return (
-                                '<a href="' + rowData.cawiLink + '"' + extraWarning + '>' +
+                                '<a href="#" data-cawi-link="' + rowData.cawiLink + '"' + extraWarning + '>' +
                                 data +
                                 ' <span class="glyphicon glyphicon-link"/></a>'
                             )
