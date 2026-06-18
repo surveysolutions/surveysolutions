@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -81,9 +82,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
 
             var etag = await ComputeETagAsync(id);
-            if (etag != null && (string?)Request.Headers.IfNoneMatch == etag)
+            if (etag != null && IsNotModified(Request, etag))
             {
-                Response.Headers.ETag = etag;
+                SetCacheValidationHeaders(etag);
                 return StatusCode(StatusCodes.Status304NotModified);
             }
 
@@ -96,13 +97,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             if (etag != null)
             {
-                Response.OnStarting(() =>
-                {
-                    Response.Headers.ETag = etag;
-                    Response.Headers.CacheControl = "private, no-cache";
-                    Response.Headers.Vary = "Cookie";
-                    return Task.CompletedTask;
-                });
+                SetCacheValidationHeaders(etag);
             }
 
             return Ok(questionnaireInfoView);
@@ -113,9 +108,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         public async Task<IActionResult> Chapter(QuestionnaireRevision id, string chapterId)
         {
             var etag = await ComputeETagAsync(id);
-            if (etag != null && (string?)Request.Headers.IfNoneMatch == etag)
+            if (etag != null && IsNotModified(Request, etag))
             {
-                Response.Headers.ETag = etag;
+                SetCacheValidationHeaders(etag);
                 return StatusCode(StatusCodes.Status304NotModified);
             }
 
@@ -128,13 +123,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             if (etag != null)
             {
-                Response.OnStarting(() =>
-                {
-                    Response.Headers.ETag = etag;
-                    Response.Headers.CacheControl = "private, no-cache";
-                    Response.Headers.Vary = "Cookie";
-                    return Task.CompletedTask;
-                });
+                SetCacheValidationHeaders(etag);
             }
 
             return Ok(chapterInfoView);
@@ -157,6 +146,26 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 .FirstOrDefaultAsync();
 
             return latestSeq > 0 ? $"\"{id.QuestionnaireId:N}_{latestSeq}\"" : null;
+        }
+
+        private static bool IsNotModified(HttpRequest request, string etag)
+        {
+            var ifNoneMatch = request.GetTypedHeaders().IfNoneMatch;
+            if (ifNoneMatch == null || ifNoneMatch.Count == 0)
+                return false;
+
+            var currentTag = EntityTagHeaderValue.Parse(etag);
+
+            return ifNoneMatch.Any(candidate =>
+                candidate == EntityTagHeaderValue.Any ||
+                string.Equals(candidate.Tag.ToString(), currentTag.Tag.ToString(), StringComparison.Ordinal));
+        }
+
+        private void SetCacheValidationHeaders(string etag)
+        {
+            Response.Headers.ETag = etag;
+            Response.Headers.CacheControl = "private, no-cache";
+            Response.Headers.Vary = "Cookie";
         }
 
         [HttpGet]

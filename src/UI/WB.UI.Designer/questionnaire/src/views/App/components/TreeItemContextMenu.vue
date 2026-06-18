@@ -49,7 +49,10 @@
                     <a @click="copyItem()">{{ $t('QuestionnaireEditor.Copy') }}</a>
                 </li>
                 <li>
-                    <a @click="pasteItemAfter()" :disabled="canPaste ? null : true"
+                    <a @click="pasteItemAfter()"
+                        :aria-disabled="canPaste ? null : 'true'"
+                        :class="{ disabled: !canPaste }"
+                        :tabindex="canPaste ? null : -1"
                         v-if="!store.questionnaire?.isReadOnlyForUser && !store.currentChapter?.isReadOnly">
                         {{ $t('QuestionnaireEditor.PasteAfter') }}
                     </a>

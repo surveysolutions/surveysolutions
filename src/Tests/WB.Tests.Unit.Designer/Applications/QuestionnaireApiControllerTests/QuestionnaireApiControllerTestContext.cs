@@ -33,7 +33,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             IQuestionnaireVerifier questionnaireVerifier = null,
             IVerificationErrorsMapper verificationErrorsMapper = null,
             IQuestionnaireInfoFactory questionnaireInfoFactory = null,
-            IWebTesterService webTesterService = null)
+            IWebTesterService webTesterService = null,
+            DesignerDbContext dbContext = null)
         {
             var userStore = new Mock<IUserStore<DesignerIdentityUser>>();
             var userManager = new Mock<UserManager<DesignerIdentityUser>>(
@@ -49,7 +50,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                 Mock.Of<IOptions<WebTesterSettings>>(),
                 webTesterService ?? Mock.Of<IWebTesterService>(),
                 userManager.Object,
-                Create.InMemoryDbContext());
+                dbContext ?? Create.InMemoryDbContext());
 
             return questionnaireController;
         }

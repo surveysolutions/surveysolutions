@@ -119,6 +119,7 @@ namespace WB.UI.Designer
             services.AddResponseCompression(options =>
             {
                 options.EnableForHttps = true;
+                options.Providers.Clear();
                 options.Providers.Add<BrotliCompressionProvider>();
                 options.Providers.Add<GzipCompressionProvider>();
             });
