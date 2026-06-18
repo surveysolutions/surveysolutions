@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AutoMapper;
 using Main.Core.Documents;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -60,7 +59,9 @@ namespace WB.UI.WebTester
             registry.Bind<IImportQuestionnaireAndCreateInterviewService, ImportQuestionnaireAndCreateInterviewService>();
 
             registry.BindAsSingleton<IEvictionObservable, IEvictionNotifier, TokenEviction>();
-
+            registry.BindAsSingleton<IWebTesterJwtStore, WebTesterJwtStore>();
+            registry.BindAsSingleton<IUserContextStore, InMemoryUserContextStore>();
+            registry.BindAsSingleton<IImportStatusStore, InMemoryImportStatusStore>();
             registry.Bind<IEnumeratorGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
             registry.Bind<ISupervisorGroupStateCalculationStrategy, SupervisorGroupStateCalculationStrategy>();
             registry.BindAsSingleton<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
@@ -99,11 +100,6 @@ namespace WB.UI.WebTester
                 
                 return Options.Create(fileStorageConfig);
             });
-
-            registry.BindToMethodInSingletonScope(context => new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new WebInterviewAutoMapProfile());
-            }).CreateMapper());
 
             registry.BindToConstant(() => JsonSerializer.Create(new JsonSerializerSettings
             {

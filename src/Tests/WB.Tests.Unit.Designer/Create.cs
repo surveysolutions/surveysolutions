@@ -278,8 +278,8 @@ namespace WB.Tests.Unit.Designer
             return new Group(title)
             {
                 PublicKey = groupId ?? Guid.NewGuid(),
-                VariableName = variable,
-                ConditionExpression = enablementCondition,
+                VariableName = variable ?? string.Empty,
+                ConditionExpression = enablementCondition ?? string.Empty,
                 HideIfDisabled = hideIfDisabled,
                 Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
                 RosterSizeQuestionId = rosterSizeQuestionId,

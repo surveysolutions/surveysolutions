@@ -38,12 +38,11 @@
             <query-builder :config="config" v-model="queryExposedVariables">
 
                 <template #groupOperator="props">
-                    <query-builder-group-operator :groupCtrl="props" :labels="labels"
-                        :query.sync="queryExposedVariables" />
+                    <query-builder-group-operator :groupCtrl="props" :labels="labels" />
                 </template>
 
                 <template #groupControl="props">
-                    <query-builder-group :groupCtrl="props" :labels="labels" :query.sync="queryExposedVariables" />
+                    <query-builder-group :groupCtrl="props" :labels="labels" />
                 </template>
 
                 <template #rule="props">
@@ -78,7 +77,7 @@
 </template>
 <script>
 
-import QueryBuilder from 'query-builder-vue-3'
+import QueryBuilder from './components/LocalQueryBuilder.vue'
 import RuleSlot from "./components/CustomBootstrapRule.vue";
 import QueryBuilderGroup from './components/CustomBootstrapGroup.vue'
 import QueryBuilderGroupOperator from './components/CustomBootstrapGroupOperator.vue'
@@ -87,8 +86,8 @@ import { DateFormats } from '~/shared/helpers'
 import gql from 'graphql-tag'
 import InterviewFilter from './InterviewFilter'
 import { find, filter } from 'lodash'
-import _sanitizeHtml from 'sanitize-html'
-const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
+import DOMPurify from 'dompurify'
+const sanitizeHtml = text => DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
 
 export default {
     data() {

@@ -997,4 +997,16 @@
     <value>أسئلة
 بدون إجابة</value>
 </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>مفتوح</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>منتهي</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>موافق عليه</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>حالة التعيين</value>
+  </data>
 </root>

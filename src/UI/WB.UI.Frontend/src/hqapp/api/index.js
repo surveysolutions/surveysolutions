@@ -429,6 +429,15 @@ class AssignmentsApi {
             responsible: responsible,
         })
     }
+
+    changeStatus(assignmentId, status, comment) {
+        var url = `${this.base}/${assignmentId}/changeStatus`
+
+        return this.http.post(url, {
+            status: status,
+            comment: comment || null,
+        })
+    }
 }
 
 class WebInterviewSettingsApi {
@@ -704,7 +713,7 @@ class AdminSettings {
             data: { allowInterviewerUpdateProfile: allowInterviewerUpdateProfile }
         })
     }
-    setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled, isPartialSynchronizationEnabled) {
+    setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled, isPartialSynchronizationEnabled, allowSupervisorChangeAssignmentStatus, allowInterviewerChangeAssignmentStatus) {
         return this.http({
             method: 'post',
             url: `${this.base}/InterviewerSettings`,
@@ -713,6 +722,8 @@ class AdminSettings {
                 interviewerAutoUpdatesEnabled: isInterviewerAutomaticUpdatesEnabled,
                 notificationsEnabled: isDeviceNotificationsEnabled,
                 partialSynchronizationEnabled: isPartialSynchronizationEnabled,
+                allowSupervisorChangeAssignmentStatus: allowSupervisorChangeAssignmentStatus,
+                allowInterviewerChangeAssignmentStatus: allowInterviewerChangeAssignmentStatus,
             }
         })
     }

@@ -119,7 +119,7 @@
     <value>Por favor, entre ou</value>
   </data>
   <data name="LoginName" xml:space="preserve">
-    <value>Login</value>
+    <value>Nome de usuário</value>
   </data>
   <data name="FullName" xml:space="preserve">
     <value>Nome completo</value>
@@ -240,5 +240,8 @@
   </data>
   <data name="PendingEmailUpdate" xml:space="preserve">
     <value>Atualização pendente para {0}</value>
+  </data>
+  <data name="LastLoginDate" xml:space="preserve">
+    <value>Data do último login</value>
   </data>
 </root>

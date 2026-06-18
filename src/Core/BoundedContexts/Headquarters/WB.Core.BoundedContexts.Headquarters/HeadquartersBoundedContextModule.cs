@@ -433,7 +433,10 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<UpdateAssignmentQuantity>(aggregate => aggregate.UpdateAssignmentQuantity)
                 .Handles<UpdateAssignmentTargetArea>(aggregate => aggregate.UpdateAssignmentTargetArea)
                 .Handles<UpgradeAssignmentCommand>(aggregate => aggregate.UpgradeAssignment)
-                .Handles<UpdateAssignmentWebMode>(aggregate => aggregate.UpdateAssignmentWebMode);
+                .Handles<UpdateAssignmentWebMode>(aggregate => aggregate.UpdateAssignmentWebMode)
+                .Handles<CompleteAssignment>(aggregate => aggregate.CompleteAssignment)
+                .Handles<CloseAssignment>(aggregate => aggregate.CloseAssignment)
+                .Handles<ReopenAssignment>(aggregate => aggregate.ReopenAssignment);
 
             CommandRegistry.Configure<AssignmentAggregateRoot, AssignmentCommand>(configuration => configuration
                 .ValidatedBy<QuestionnaireStateForAssignmentValidator>()
