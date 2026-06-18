@@ -35,14 +35,14 @@ export default {
     },
 
     created() {
-        ensureQuestionGlobalComponents(this.$root)
+        ensureQuestionGlobalComponents(this.$.appContext.app)
             .then(() => {
                 this.questionComponentsReady = true
             })
     },
 
     beforeMount() {
-        const app = this.$root
+        const app = this.$.appContext.app
         http.install(app, { store: this.$store })
     },
     beforeRouteUpdate(to, from, next) {

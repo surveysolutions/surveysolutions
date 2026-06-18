@@ -33,7 +33,7 @@ import '@/assets/css/markup-interview-review.scss'
 
 export default {
     async beforeCreate() {
-        ensureQuestionGlobalComponents(this.$root)
+        ensureQuestionGlobalComponents(this.$.appContext.app)
     },
 
     watch: {

@@ -4,16 +4,16 @@ import * as toastr from 'toastr'
 
 const errorUrl = '/error/report'
 
+const ignoreStatusCodes = []
+
+const ignoredMessages = [
+    'NetworkError when attempting to fetch resource.',
+    'Failed to fetch',
+    'Load failed',
+]
 
 export function errorHandler(err, vm, info) {
 
-    const ignoreStatusCodes = []
-
-    const ignoredMessages = [
-        'NetworkError when attempting to fetch resource.',
-        'Failed to fetch',
-        'Load failed',
-    ]
 
     tryToShowErrorTooltip(err)
 
