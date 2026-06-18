@@ -1,7 +1,9 @@
+using System.ComponentModel;
 using FluentMigrator;
 
-namespace WB.Persistence.Headquarters.Migrations.PlainStore
+namespace WB.Persistence.Headquarters.Migrations.Workspace
 {
+    [Localizable(false)]
     [Migration(202606171200)]
     public class M202606171200_AddAudioAuditScopeToAssignments : Migration
     {

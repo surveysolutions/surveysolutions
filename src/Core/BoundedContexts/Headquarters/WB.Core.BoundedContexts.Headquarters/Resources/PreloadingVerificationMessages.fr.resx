@@ -256,6 +256,6 @@
     <value>La réponse à la question avec le nom de variable {0} ne peut pas être préchargée, car elle est de type non pris en charge. Reportez-vous à l'article de support suivant https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type pour plus de détails sur ce qui peut être préchargé dans la version actuelle.</value>
   </data>
   <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
-    <value>Audio audit scope variable name '{0}' is invalid. It must reference an existing section, group or roster (questions are not allowed).</value>
+    <value>Le nom de la variable de la portée de l'audit audio '{0}' n'est pas valide. Il doit faire référence à une section, un groupe ou un roster existant (les questions ne sont pas autorisées).</value>
   </data>
 </root>
