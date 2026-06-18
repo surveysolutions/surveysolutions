@@ -312,4 +312,25 @@
   <data name="You" xml:space="preserve">
     <value>ju</value>
   </data>
+
+
+  <data name="ControlPanel" xml:space="preserve">
+    <value>Paneli i kontrollit</value>
+  </data>
+
+  <data name="RestoreQuestionnaireDocument" xml:space="preserve">
+    <value>Rikthe dokumentin e pyetësorit (i vjetër)</value>
+  </data>
+
+  <data name="ExcelOrTabFilesOnly" xml:space="preserve">
+    <value>Pranohen vetëm skedarët Excel ose me vlera të ndara me tab</value>
+  </data>
+
+  <data name="SaveAs" xml:space="preserve">
+    <value>Ruaj si</value>
+  </data>
+
+  <data name="CloneDeletedWarning" xml:space="preserve">
+      <value>Jeni duke krijuar një kopje të pyetësorit të fshirë. Disa pjesë mund të jenë humbur.</value>
+  </data>
 </root>

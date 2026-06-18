@@ -354,4 +354,230 @@
   <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
     <value>Când este activat, intervievatorii pot finaliza și redeschide atribuirile de pe tabletele lor (necesită activarea setării supraveghetorului)</value>
   </data>
+
+
+  <data name="ClearExportCache_Title" xml:space="preserve">
+    <value>Ștergeți memoria cache de export</value>
+  </data>
+
+  <data name="ClearExportCache_Description" xml:space="preserve">
+    <value>Această operațiune va șterge toate datele din memoria cache de export. Următorul export va dura mai mult.</value>
+  </data>
+
+  <data name="RemoveExportCache" xml:space="preserve">
+    <value>Ștergeți memoria cache</value>
+  </data>
+
+  <data name="RemoveExportCacheConfirm" xml:space="preserve">
+    <value>Sigur doriți să ștergeți memoria cache de export? Toate fișierele de export generate vor fi eliminate de pe server și NU vor fi disponibile pentru descărcare.</value>
+  </data>
+
+  <data name="RemoveExportCacheSuccess" xml:space="preserve">
+    <value>Memoria cache de export a fost ștearsă cu succes</value>
+  </data>
+
+  <data name="RemovingExportCache" xml:space="preserve">
+    <value>Ștergerea memoriei cache de export este în curs</value>
+  </data>
+
+  <data name="RemoveExportCacheFail" xml:space="preserve">
+    <value>Memoria cache de export nu poate fi ștearsă în acest moment. Vă rugăm să încercați din nou mai târziu.
+Motive posibile:
+* Se generează un fișier de export.
+* Un fișier de export generat este descărcat.
+* Ștergerea fișierului de export generat este blocată de un alt program.
+* etc.</value>
+  </data>
+
+    <data name="RemoveExportCacheGeneratingFail" xml:space="preserve">
+    <value>Memoria cache de export nu poate fi ștearsă în acest moment. Se generează un fișier de export.</value>
+  </data>
+
+  <data name="RemoveExportCache_Warning" xml:space="preserve">
+    <value>Atenție! Aceasta este o acțiune ireversibilă</value>
+  </data>
+
+  <data name="ChangeStateDisabledConfirm" xml:space="preserve">
+    <value>Sigur doriți să modificați setările de securitate ale fișierelor de export? Fișierele de date exportate nu vor mai fi protejate prin parolă.</value>
+  </data>
+
+  <data name="LogoSettings_Description1" xml:space="preserve">
+    <value>Faceți clic pe butonul „Alegeți fișierul” pentru a încărca o imagine de pe computer pe server, pentru a fi utilizată ca imagine de logo. Apoi faceți clic pe butonul „Salvare”.</value>
+  </data>
+
+  <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve">
+      <value>Limita de precizie a locației</value>
+  </data>
+
+  <data name="GeographyQuestionAccuracyInMetersDescription" xml:space="preserve">
+      <value>Setați pragul de precizie, în metri, pentru coordonatele locației obținute </value>
+  </data>
+
+  <data name="InterviewerGeographyQuestionPeriodInSeconds" xml:space="preserve">
+    <value>Perioada întrebării geografice</value>
+  </data>
+
+  <data name="GeographyQuestionPeriodInSecondsDescription" xml:space="preserve">
+    <value>Setați perioada, în secunde, pentru întrebarea geografică</value>
+  </data>
+
+  <data name="EsriApiKey" xml:space="preserve">
+      <value>Cheie API ESRI</value>
+  </data>
+
+  <data name="EsriApiKeyDescription" xml:space="preserve">
+      <value>Această cheie va permite utilizarea hărților online pe dispozitive. Rețineți că utilizarea acestui serviciu vă poate costa bani suplimentari. Vă rugăm să consultați furnizorul de servicii</value>
+  </data>
+
+  <data name="EmailProvider_Smtp" xml:space="preserve">
+    <value>Server SMTP</value>
+  </data>
+
+  <data name="EmailProvider_SmtpDescription" xml:space="preserve">
+    <value>Configurați mai jos parametrii pentru accesarea serverului SMTP. Mai multe informații despre utilizarea serverului SMTP cu Survey Solutions sunt disponibile </value>
+  </data>
+
+  <data name="EmailProvider_SmtpHost" xml:space="preserve">
+    <value>Gazdă</value>
+  </data>
+
+  <data name="EmailProvider_SmtpHostHelp" xml:space="preserve">
+    <value>Adresa serverului SMTP</value>
+  </data>
+
+  <data name="EmailProvider_SmtpPort" xml:space="preserve">
+    <value>Port</value>
+  </data>
+
+  <data name="EmailProvider_SmtpPortHelp" xml:space="preserve">
+    <value>Port SMTP</value>
+  </data>
+
+  <data name="EmailProvider_SmtpTlsEncryption" xml:space="preserve">
+    <value>Utilizați criptarea TLS</value>
+  </data>
+
+  <data name="EmailProvider_SmtpTlsEncryptionHelp" xml:space="preserve">
+    <value>Criptarea TLS (Transport Layer Security) asigură comunicarea securizată. Aceasta criptează datele transmise între clienți și servere.</value>
+  </data>
+
+  <data name="EmailProvider_SmtpAuthentication" xml:space="preserve">
+    <value>Utilizați autentificarea</value>
+  </data>
+
+  <data name="EmailProvider_SmtpAuthenticationHelp" xml:space="preserve">
+    <value>Autentificarea SMTP verifică identitatea unui client sau server de E-mail înainte de a-i permite să trimită E-mail printr-un server SMTP.</value>
+  </data>
+
+  <data name="EmailProvider_SmtpUsername" xml:space="preserve">
+    <value>Nume utilizator</value>
+  </data>
+
+  <data name="EmailProvider_SmtpUsernameHelp" xml:space="preserve">
+    <value>Datele de autentificare utilizate în timpul procesului de autentificare SMTP pentru a verifica identitatea.</value>
+  </data>
+
+  <data name="EmailProvider_SmtpPassword" xml:space="preserve">
+    <value>Parolă</value>
+  </data>
+
+  <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve">
+    <value>Datele de autentificare utilizate în timpul procesului de autentificare SMTP pentru a verifica identitatea.</value>
+  </data>
+
+  <data name="WorkspaceSettings" xml:space="preserve">
+      <value>Setări spațiu de lucru</value>
+  </data>
+
+  <data name="Export" xml:space="preserve">
+      <value>Export</value>
+  </data>
+
+  <data name="GlobalNote" xml:space="preserve">
+      <value>Notă globală</value>
+  </data>
+
+  <data name="UserProfile" xml:space="preserve">
+      <value>Profil utilizator</value>
+  </data>
+
+  <data name="Devices" xml:space="preserve">
+      <value>Dispozitive</value>
+  </data>
+
+  <data name="WebInterview" xml:space="preserve">
+      <value>Interviu web</value>
+  </data>
+
+  <data name="FileRetentionTitle" xml:space="preserve">
+      <value>Politica de păstrare</value>
+  </data>
+
+    <data name="FileRetentionDescription" xml:space="preserve">
+      <value>Fișierele de export mai vechi vor fi șterse periodic conform acestor setări</value>
+  </data>
+
+  <data name="RetentionInDaysTitle" xml:space="preserve">
+      <value>Zile de păstrat</value>
+  </data>
+
+    <data name="RetentionInDaysDescription" xml:space="preserve">
+      <value>Numărul de zile în care fișierul de export va fi păstrat</value>
+  </data>
+
+  <data name="RetentionInCountTitle" xml:space="preserve">
+      <value>Numărul de fișiere de păstrat</value>
+  </data>
+
+    <data name="RetentionInCountDescription" xml:space="preserve">
+      <value>Numărul maxim de fișiere de export care vor fi păstrate în stocare</value>
+  </data>
+
+    <data name="EnableFileRetention" xml:space="preserve">
+      <value>Activați politica de păstrare</value>
+  </data>
+
+  <data name="RetentionPolicyEnablingConfirm" xml:space="preserve">
+    <value>Sigur doriți să activați politica de păstrare? Fișierele de date exportate pot fi șterse.</value>
+  </data>
+
+    <data name="ForceRunRetentionPolicy" xml:space="preserve">
+      <value>Rulare forțată</value>
+  </data>
+
+    <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve">
+      <value>Atenție! Aceasta este o acțiune critică ce va afecta fișierele de export existente în acest spațiu de lucru</value>
+  </data>
+
+    <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
+      <value>Sigur doriți să rulați forțat politica de păstrare acum? Rețineți că această acțiune poate duce la ștergerea irecuperabilă a fișierelor de export stocate în acest spațiu de lucru, făcându-le indisponibile pentru descărcare.</value>
+  </data>
+
+  <data name="ExportEncryption_Warning" xml:space="preserve">
+    <value>Modificarea setărilor de criptare va elimina toate fișierele de export generate anterior, fiind necesară crearea unor exporturi noi</value>
+  </data>
+
+  <data name="LogoSizeLimit" xml:space="preserve">
+    <value>Dimensiunea imaginii logo trebuie să fie mai mică de {{size}}</value>
+  </data>
+
+  <data name="SelectFileWarning" xml:space="preserve">
+    <value>Vă rugăm să selectați un fișier pentru încărcare.</value>
+  </data>
+
+  <data name="LogoUploadSuccess" xml:space="preserve">
+    <value>Logo-ul a fost încărcat cu succes.</value>
+  </data>
+
+  <data name="LogoUploadError" xml:space="preserve">
+    <value>Încărcarea logo-ului a eșuat. Vă rugăm să încercați din nou.</value>
+  </data>
+
+  <data name="LogoRemoveSuccess" xml:space="preserve">
+    <value>Logo-ul a fost eliminat cu succes.</value>
+  </data>
+
+  <data name="LogoRemoveError" xml:space="preserve">
+    <value>Eliminarea logo-ului a eșuat. Vă rugăm să încercați din nou.</value>
+  </data>
 </root>

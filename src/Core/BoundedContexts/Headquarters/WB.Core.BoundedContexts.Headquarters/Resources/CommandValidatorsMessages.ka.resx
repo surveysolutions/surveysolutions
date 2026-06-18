@@ -120,4 +120,29 @@
   <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
     <value>ამ დავალებაზე პასუხისმგებელ ზედამხედველს შეუძლია გასცეს მხოლოდ პასუხი ზედამხედველის კითხვებს</value>
   </data>
+
+
+  <data name="QuestionnaireNameUniqueFormat" xml:space="preserve">
+    <value>კითხვარი '{0}' უკვე არსებობს. გთხოვთ, აირჩიოთ სხვა სახელი.</value>
+  </data>
+
+  <data name="QuestionnaireVariableUniqueFormat" xml:space="preserve">
+    <value>თქვენ უკვე გაქვთ Designer-დან იმპორტირებული სხვა კითხვარი კითხვარის ცვლადით '{0}'. თუ მაინც გსურთ სწორედ ამის იმპორტი, Designer-ში მიუთითეთ სხვა კითხვარის ცვლადი.</value>
+  </data>
+
+  <data name="WebModeAssignmentShouldBeOnInterviewer" xml:space="preserve">
+    <value>ვებ-ინტერვიუს დავალებაზე პასუხისმგებელი უნდა იყოს ინტერვიუერი</value>
+  </data>
+
+  <data name="AssignmentResponsibleNotFound" xml:space="preserve">
+    <value>პასუხისმგებელი პირი ვერ მოიძებნა</value>
+  </data>
+
+ <data name="QuestionnaireWasDeleted" xml:space="preserve">
+    <value>კითხვარი წაიშალა</value>
+  </data>
+
+ <data name="AssignmentLimitReached" xml:space="preserve">
+    <value>დავალებების ლიმიტი მიღწეულია</value>
+  </data>
 </root>
