@@ -572,7 +572,7 @@ export default {
             return (this.sendGridIsSetUp || this.awsIsSetUp || this.smtpIsSetUp) && !this.isFormDirty
         }
     },
-    watch: {
+    watch: {
         /*isFormDirty(val) {
             console.log(val)
             if (val) {
@@ -585,16 +585,23 @@ export default {
                 this.sendEmailResult = null
             }
         },*/
-        provider: function (val) {
-            if (val === 'none') {
-                this.$refs.settigsForm.validate()
-            }
-        },
-        testEmailAddress: function () {
-            this.sendEmailResult = null
-            this.sendingErrors = []
-        },
-    },
+        isFormDirty(val) {
+            if (val) {
+                this.providerSettingsResult = null
+                this.sendEmailResult = null
+                this.sendingErrors = []
+            }
+        },
+        provider: function (val) {
+            if (val === 'none') {
+                this.$refs.settigsForm.validate()
+            }
+        },
+        testEmailAddress: function () {
+            this.sendEmailResult = null
+            this.sendingErrors = []
+        },
+    },
     methods: {
         noAction() {
             return false
