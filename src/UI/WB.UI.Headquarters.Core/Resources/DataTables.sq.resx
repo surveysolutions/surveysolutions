@@ -133,10 +133,10 @@
     <value>Po shfaq 0 në 0 nga 0 të dhëna të regjistruara</value>
   </data>
   <data name="InfoFiltered" xml:space="preserve">
-    <value>(filtered from _MAX_ total entries)</value>
+    <value>(e filtruar nga _MAX_ hyrje gjithsej)</value>
   </data>
   <data name="InfoThousands" xml:space="preserve">
-    <value>,</value>
+    <value>.</value>
   </data>
   <data name="LengthMenu" xml:space="preserve">
     <value>Shfaq të dhënat e _MENU_ </value>
@@ -167,5 +167,10 @@
   </data>
   <data name="ZeroRecords" xml:space="preserve">
     <value>Nuk i gjetën të dhëna që përputhen </value>
+  </data>
+
+
+  <data name="InfoPostFix" xml:space="preserve">
+    <value />
   </data>
 </root>

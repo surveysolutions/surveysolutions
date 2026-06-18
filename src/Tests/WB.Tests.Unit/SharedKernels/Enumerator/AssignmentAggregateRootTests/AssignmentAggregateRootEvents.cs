@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
         [Test]
         public void when_create_assignment()
         {
-            //arrange
+            // arrange
             var assignmentPublicKey = Guid.NewGuid();
             var assignmentId = 7;
             var userId = Guid.NewGuid();
@@ -262,6 +262,62 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
             var assignmentException = exception as AssignmentException;
             Assert.That(assignmentException, Is.Not.Null);
             Assert.That(assignmentException.ExceptionType, Is.EqualTo(AssignmentDomainExceptionType.AssignmentDeleted));
+        }
+
+        [Test]
+        public void when_complete_assignment_should_set_status_to_completed()
+        {
+            var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
+
+            using (var context = new EventContext())
+            {
+                assignment.CompleteAssignment(Create.Command.CompleteAssignment(comment: "done"));
+
+                Assert.That(assignment.properties.Status, Is.EqualTo(WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Completed));
+                context.ShouldContainEvent<AssignmentCompleted>(e => e.Comment == "done");
+            }
+        }
+
+        [Test]
+        public void when_close_assignment_should_set_status_to_closed()
+        {
+            var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
+            assignment.CompleteAssignment(Create.Command.CompleteAssignment());
+
+            using (var context = new EventContext())
+            {
+                assignment.CloseAssignment(Create.Command.CloseAssignment(comment: "approved"));
+
+                Assert.That(assignment.properties.Status, Is.EqualTo(WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Closed));
+                context.ShouldContainEvent<AssignmentClosed>(e => e.Comment == "approved");
+            }
+        }
+
+        [Test]
+        public void when_reopen_assignment_should_set_status_to_open()
+        {
+            var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
+            assignment.CompleteAssignment(Create.Command.CompleteAssignment());
+            assignment.CloseAssignment(Create.Command.CloseAssignment());
+
+            using (var context = new EventContext())
+            {
+                assignment.ReopenAssignment(Create.Command.ReopenAssignment(comment: "reopened"));
+
+                Assert.That(assignment.properties.Status, Is.EqualTo(WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Open));
+                context.ShouldContainEvent<AssignmentReopened>(e => e.Comment == "reopened");
+            }
+        }
+
+        [Test]
+        public void when_assignment_created_should_have_open_status_by_default()
+        {
+            var command = Create.Command.CreateAssignment();
+            var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
+
+            assignment.CreateAssignment(command);
+
+            Assert.That(assignment.properties.Status, Is.EqualTo(WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Open));
         }
 
         [Test]

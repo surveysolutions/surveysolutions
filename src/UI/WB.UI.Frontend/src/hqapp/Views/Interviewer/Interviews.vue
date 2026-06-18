@@ -254,7 +254,7 @@ export default {
                     style: 'multi',
                     selector: 'td>.checkbox-filter',
                 },
-                sDom: 'rf<"table-with-scroll"t>ip',
+                dom: 'rf<"table-with-scroll"t>ip',
             }
         },
         selectedDate() {

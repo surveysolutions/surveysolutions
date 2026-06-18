@@ -234,4 +234,89 @@
   <data name="Teams" xml:space="preserve">
     <value>团队</value>
   </data>
+
+
+  <data name="HQ_Views_TwoFactorAuthentication_Title" xml:space="preserve">
+    <value>Two factor authentication</value>
+  </data>
+
+  <data name="HQ_Views_TwoFactorAuthentication_Description" xml:space="preserve">
+    <value>Two factor authentication is an advanced security feature that makes it harder for a hacker to sign in to your account with just a stolen password.</value>
+  </data>
+
+  <data name="HQ_Views_TwoFactorAuthentication_Enabled" xml:space="preserve">
+    <value>enabled</value>
+  </data>
+
+  <data name="HQ_Views_TwoFactorAuthentication_Disabled" xml:space="preserve">
+    <value>disabled</value>
+  </data>
+
+  <data name="HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description" xml:space="preserve">
+    <value>Set up a new device for two factor authentication. You can set up several devices simultaneously.</value>
+  </data>
+
+  <data name="HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description" xml:space="preserve">
+    <value>Reset to a new secret code if any of your devices used for the two factor authentication is lost or stolen.</value>
+  </data>
+
+  <data name="HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description" xml:space="preserve">
+    <value>Invalidate any unused recovery codes and generate 10 new ones.</value>
+  </data>
+
+  <data name="HQ_Views_TwoFactorAuthentication_Disable2fa_Description" xml:space="preserve">
+    <value>Switch off two factor authentication leaving the account protected only by the password.</value>
+  </data>
+
+  <data name="HQ_Views_EnableAuthenticator_Title" xml:space="preserve">
+    <value>Set up authenticator app</value>
+  </data>
+
+  <data name="HQ_Views_ResetAuthenticator_Title" xml:space="preserve">
+    <value>Reset authenticator key</value>
+  </data>
+
+  <data name="HQ_Views_ShowRecoveryCodes_Title" xml:space="preserve">
+    <value>Recovery codes</value>
+  </data>
+
+  <data name="HQ_Views_DisableTwoFactorAuth_Title" xml:space="preserve">
+    <value>Disable two-factor authentication</value>
+  </data>
+
+  <data name="HQ_Views_ResetRecoveryCodes_Title" xml:space="preserve">
+    <value>Reset recovery codes</value>
+  </data>
+
+  <data name="SurverManagement_MainMenu_ChangePassword" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+
+  <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
+    <value>Not approved by Headquarters</value>
+  </data>
+
+  <data name="AllInterviewersExceptAssignedToInterviewer" xml:space="preserve">
+    <value>Not Assigned to Interviewer</value>
+  </data>
+
+  <data name="HQ_Views_ApiTokens_Title" xml:space="preserve">
+      <value>API access</value>
+  </data>
+
+  <data name="HQ_Views_Api_Token_Description" xml:space="preserve">
+    <value>API token is used to perform API calls to the system</value>
+  </data>
+    
+  <data name="HQ_Views_Api_Token_Issued" xml:space="preserve">
+    <value>enabled</value>
+  </data>
+
+    <data name="HQ_Views_Api_Token_Not_Issued" xml:space="preserve">
+  <value>disabled</value>
+  </data>
+
+  <data name="HQ_Views_Api_Token_Generate_Description" xml:space="preserve">
+    <value>Please save the token now. You will only be able to see it once!</value>
+  </data>
 </root>

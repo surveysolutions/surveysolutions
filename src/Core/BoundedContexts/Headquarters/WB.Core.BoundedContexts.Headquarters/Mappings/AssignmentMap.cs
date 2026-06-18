@@ -31,6 +31,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.WebMode);
             Property(x => x.Comments);
             Property(x => x.TargetArea);
+            Property(x => x.Status);
+            Property(x => x.StatusComment);
 
             Component(x => x.QuestionnaireId, cmp =>
             {
