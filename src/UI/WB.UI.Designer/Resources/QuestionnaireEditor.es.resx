@@ -526,7 +526,7 @@
     <value>Debe enlazar esta pregunta</value>
   </data>
   <data name="QuestionnaireSummary" xml:space="preserve">
-    <value>({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)</value>
+    <value>({{questionsCount}}P, {{groupsCount}}S, {{rostersCount}}L)</value>
   </data>
   <data name="QuestionOnlyInts" xml:space="preserve">
     <value>Solamente se permiten enteros</value>
@@ -774,10 +774,10 @@ Por favor, compruebe su conexión de red o póngase en contacto con el soporte d
     <value>contenido</value>
   </data>
   <data name="SideBarMacroCounter" xml:space="preserve">
-    <value>{{count}} Macro:</value>
+    <value>{{count}} macro:</value>
   </data>
   <data name="SideBarMacroCounter_plural" xml:space="preserve">
-    <value>{{count}} Macros:</value>
+    <value>{{count}} macros:</value>
   </data>
   <data name="SideBarMacroDescription" xml:space="preserve">
     <value>descripción</value>
@@ -1083,7 +1083,7 @@ Por favor, compruebe su conexión de red o póngase en contacto con el soporte d
     <value>Agregar comentario</value>
   </data>
   <data name="HelpOptionTitle" xml:space="preserve">
-    <value>Text label for the category (visible to the interviewer)</value>
+    <value>Etiqueta de texto para la categoría (visible para el entrevistador)</value>
   </data>
   <data name="HelpOptionValue" xml:space="preserve">
     <value>Código entero numérico de la categoría (invisible para el entrevistador)</value>
@@ -1096,7 +1096,7 @@ Por favor, compruebe su conexión de red o póngase en contacto con el soporte d
     <value>La portada es una sección virtual que muestra todas las preguntas de identificación. Las preguntas no se pueden cambiar en esta sección</value>
   </data>
   <data name="HideIfDisabledNested" xml:space="preserve">
-    <value>Nested from questionnaire</value>
+    <value>Anidado del cuestionario</value>
   </data>
   <data name="HideResolvedComments" xml:space="preserve">
     <value>Ocultar comentarios resueltos</value>
@@ -1165,13 +1165,13 @@ Por favor, compruebe su conexión de red o póngase en contacto con el soporte d
     <value>Se permiten números enteros entre 1 y 50</value>
   </data>
   <data name="QuestionRadioButtonList" xml:space="preserve">
-    <value>Radio button list</value>
+    <value>Lista de botones de opción</value>
   </data>
   <data name="QuestionShowListLimit" xml:space="preserve">
     <value>Si no más de</value>
   </data>
   <data name="QuestionsSearchEntities" xml:space="preserve">
-    <value>search results</value>
+    <value>resultados de búsqueda</value>
   </data>
   <data name="QuestionsSearchTitle" xml:space="preserve">
     <value>Banco de preguntas</value>
@@ -1222,10 +1222,10 @@ Por favor, compruebe su conexión de red o póngase en contacto con el soporte d
     <value>Buscar una pregunta</value>
   </data>
   <data name="SectionVariableName" xml:space="preserve">
-    <value>Variable name</value>
+    <value>Nombre de variable</value>
   </data>
   <data name="SelectCategories" xml:space="preserve">
-    <value>Select categories</value>
+    <value>Seleccionar categorías</value>
   </data>
   <data name="SelectCountry" xml:space="preserve">
     <value>Seleccionar país</value>
