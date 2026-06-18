@@ -72,7 +72,7 @@
                                     }
                                     else if (captchaProvider is RecaptchaV3Provider)
                                     {
-                                        @(Html.Recaptcha<RecaptchaV3HiddenInput>(RecaptchaSettings.Value, new RecaptchaV3HiddenInput()))
+                                        @(Html.Recaptcha<RecaptchaV3HiddenInput>(RecaptchaSettings.Value, new RecaptchaV3HiddenInput { Action = "login" }))
                                     }
                                     else if (captchaProvider is HostedCaptchaProvider hosted)
                                     {

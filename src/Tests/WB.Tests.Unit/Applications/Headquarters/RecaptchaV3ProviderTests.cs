@@ -93,4 +93,44 @@ public class RecaptchaV3ProviderTests
 
         result.Should().BeFalse();
     }
+
+    [Test]
+    public async Task when_logon_captcha_action_is_login_should_return_true()
+    {
+        var recaptchaService = Mock.Of<IRecaptchaService>(s =>
+            s.Validate(It.IsAny<HttpRequest>(), It.IsAny<bool>()) == Task.FromResult(new RecaptchaResponse
+            {
+                success = true,
+                score = 0.9,
+                action = "login"
+            }));
+        var captchaConfig = Options.Create(new CaptchaConfig { RecaptchaV3MinimumScore = 0.5 });
+        var request = new DefaultHttpContext().Request;
+        request.Path = "/Account/LogOn";
+
+        var provider = new RecaptchaV3Provider(recaptchaService, captchaConfig);
+        var result = await provider.IsCaptchaValid(request);
+
+        result.Should().BeTrue();
+    }
+
+    [Test]
+    public async Task when_logon_captcha_action_does_not_match_should_return_false()
+    {
+        var recaptchaService = Mock.Of<IRecaptchaService>(s =>
+            s.Validate(It.IsAny<HttpRequest>(), It.IsAny<bool>()) == Task.FromResult(new RecaptchaResponse
+            {
+                success = true,
+                score = 0.9,
+                action = "start"
+            }));
+        var captchaConfig = Options.Create(new CaptchaConfig { RecaptchaV3MinimumScore = 0.5 });
+        var request = new DefaultHttpContext().Request;
+        request.Path = "/Account/LogOn";
+
+        var provider = new RecaptchaV3Provider(recaptchaService, captchaConfig);
+        var result = await provider.IsCaptchaValid(request);
+
+        result.Should().BeFalse();
+    }
 }

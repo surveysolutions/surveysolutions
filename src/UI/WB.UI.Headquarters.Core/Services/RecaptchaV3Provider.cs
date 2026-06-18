@@ -12,6 +12,8 @@ namespace WB.UI.Headquarters.Services
     {
         private const string WebInterviewPath = "/WebInterview";
         private const string WebInterviewExpectedAction = "start";
+        private const string AccountLogOnPath = "/Account/LogOn";
+        private const string AccountLogOnExpectedAction = "login";
         private readonly IRecaptchaService recaptchaService;
         private readonly IOptions<CaptchaConfig> captchaConfig;
 
@@ -29,6 +31,10 @@ namespace WB.UI.Headquarters.Services
 
             if (request.Path.StartsWithSegments(WebInterviewPath, StringComparison.OrdinalIgnoreCase)
                 && !string.Equals(validationResult.action, WebInterviewExpectedAction, StringComparison.Ordinal))
+                return false;
+
+            if (request.Path.StartsWithSegments(AccountLogOnPath, StringComparison.OrdinalIgnoreCase)
+                && !string.Equals(validationResult.action, AccountLogOnExpectedAction, StringComparison.Ordinal))
                 return false;
 
             return validationResult.score >= captchaConfig.Value.RecaptchaV3MinimumScore;

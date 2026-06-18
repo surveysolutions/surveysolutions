@@ -101,7 +101,11 @@ export default {
                 script.onerror = () => { /* Script failed to load — the form remains submittable without a token; the server will reject the request */ }
                 document.head.appendChild(script)
             } else {
-                this.executeRecaptchaV3(siteKey)
+                if (window.grecaptcha) {
+                    this.executeRecaptchaV3(siteKey)
+                } else {
+                    existingScript.addEventListener('load', () => this.executeRecaptchaV3(siteKey), { once: true })
+                }
             }
         },
         executeRecaptchaV3(siteKey) {
@@ -110,6 +114,9 @@ export default {
                 window.grecaptcha.execute(siteKey, { action: 'start' }).then(token => {
                     this.recaptchaV3Token = token
                     // Refresh the token every 90 seconds (v3 tokens expire after 2 minutes)
+                    if (this.recaptchaV3IntervalId !== null) {
+                        clearInterval(this.recaptchaV3IntervalId)
+                    }
                     this.recaptchaV3IntervalId = setInterval(() => {
                         if (!window.grecaptcha) {
                             clearInterval(this.recaptchaV3IntervalId)
