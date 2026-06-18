@@ -233,7 +233,7 @@
     <value>Neaktivní</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
-    <value>Dotazník {{id}} nelze zavřít, protože má povolený webový režim</value>
+    <value>Dotazník {{id}} nelze zmenšit, protože má povolený webový režim</value>
   </data>
   <data name="AssignmentHistory" xml:space="preserve">
     <value>Historie</value>
@@ -359,7 +359,7 @@
     <value>Režim CAWI umožňuje sbírat data přímo od respondentů</value>
   </data>
   <data name="MultipleAssignmentsClose" xml:space="preserve">
-    <value>Vybraných dotazníků, které budou uzavřeny - {{count}}. Velikost bude nastavena podle aktuálního počtu shromážděných rozhovorů.</value>
+    <value>Vybraných dotazníků, které budou zmenšeny - {{count}}. Velikost bude nastavena podle aktuálního počtu shromážděných rozhovorů.</value>
   </data>
   <data name="NewAssignment" xml:space="preserve">
     <value>Nový dotazník</value>

@@ -415,7 +415,7 @@
   <value>معرف التعيين</value>
 </data>
     <data name="MultipleAssignmentsClose" xml:space="preserve">
-    <value>سيتم إغلاق {{count}} تعيينات مختارة. سيتم تعيين القيمة المتوقعة إلى عدد المقابلات التي تم جمعها حاليًا.</value>
+    <value>سيتم تصغير {{count}} تعيينات مختارة. سيتم تعيين القيمة المتوقعة إلى عدد المقابلات التي تم جمعها حاليًا.</value>
 </data>
     <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
     <value>سيتم تغيير القيمة المتوقعة للتعيين المحدد {{id}} من {{quantity}} إلى {{collected}} (عدد المقابلات التي تم جمعها حاليًا)</value>
@@ -424,7 +424,7 @@
   <value>إغلاق</value>
 </data>
     <data name="AssignmentCloseWebMode" xml:space="preserve">
-  <value>لا يمكن إغلاق التعيين {{id}} لأنه يحتوي على وضع الويب مفعل</value>
+  <value>لا يمكن تصغير التعيين {{id}} لأنه يحتوي على وضع الويب مفعل</value>
 </data>
     <data name="AssignmentInfo" xml:space="preserve">
   <value>معلومات التعيين التفصيلية</value>

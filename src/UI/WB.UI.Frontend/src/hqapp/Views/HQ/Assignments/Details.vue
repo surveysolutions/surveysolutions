@@ -657,7 +657,7 @@ export default {
             const self = this
 
             const url = `${self.config.api.assignmentsApi}/${self.model.id}/close`
-            self.$http.post(url).catch((error) => {
+            await self.$http.post(url).catch((error) => {
                 if (error.isAxiosError && error.response.status === 409) {
                     const msg = this.$t('Assignments.AssignmentCloseWebMode', {
                         id: self.model.id,
@@ -810,7 +810,7 @@ export default {
 
             const result = this.$t('Assignments.SingleAssignmentCloseConfirm', {
                 id: this.model.id,
-                quantity: this.model.quantity,
+                quantity: this.quantity,
                 collected: this.model.interviewsProvided,
             })
             return result
