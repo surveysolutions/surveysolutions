@@ -1,6 +1,6 @@
 <template>
     <div class="categories">
-        <categories-editor-modal ref="categoriesEditorModal" />
+        <categories-editor-modal v-if="modalEverOpened" ref="categoriesEditorModal" />
 
         <perfect-scrollbar class="scroller">
             <h3>{{ $t('QuestionnaireEditor.SideBarCategoriesCounter', { count: categoriesList.length }) }}</h3>
@@ -54,8 +54,9 @@
 
 <script>
 
+import { defineAsyncComponent } from 'vue';
 import CategoriesItem from './CategoriesItem.vue';
-import CategoriesEditorModal from './CategoriesEditorModal.vue';
+const CategoriesEditorModal = defineAsyncComponent(() => import('./CategoriesEditorModal.vue'));
 
 import { newGuid } from '../../../../helpers/guid';
 import { isNull, isUndefined } from 'lodash'
@@ -74,6 +75,7 @@ export default {
         return {
             downloadBaseUrl: '/categories',
             file: [],
+            modalEverOpened: false,
         }
     },
     computed: {
@@ -138,7 +140,10 @@ export default {
         },
 
         editCategoriesOpen(event) {
-            this.$refs.categoriesEditorModal.open(this.questionnaireId, event.categoriesId);
+            this.modalEverOpened = true;
+            this.$nextTick(() => {
+                this.$refs.categoriesEditorModal.open(this.questionnaireId, event.categoriesId);
+            });
         }
     },
 }

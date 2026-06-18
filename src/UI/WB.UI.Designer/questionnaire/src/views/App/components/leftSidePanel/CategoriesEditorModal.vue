@@ -229,7 +229,7 @@ export default {
         },
 
         setCascadingCategory(cascadingCategory) {
-            this.isCascadingCategory = cascadingCategory;
+            this.isCascadingCategory = !!cascadingCategory;
         },
 
         async reloadCategories(onDone) {
