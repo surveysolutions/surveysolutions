@@ -187,6 +187,6 @@
     <value>Aktualizace dotazníků</value>
   </data>
   <data name="CopyWebInterviewSettings" xml:space="preserve">
-    <value>Copy Web Interview settings from the previous version</value>
+    <value>Zkopírovat nastavení Web Interview z předchozí verze (včetně e-mailových šablon a textů obrazovek)</value>
   </data>
 </root>

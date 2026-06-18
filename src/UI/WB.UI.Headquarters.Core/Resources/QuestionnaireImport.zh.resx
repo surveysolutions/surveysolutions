@@ -181,6 +181,6 @@
     <value>升级任务</value>
   </data>
   <data name="CopyWebInterviewSettings" xml:space="preserve">
-    <value>Copy Web Interview settings from the previous version</value>
+    <value>Copy Web Interview settings from the previous version (including email templates and screen texts)</value>
   </data>
 </root>

@@ -187,6 +187,6 @@
   <value>استلام بيانات الاستبيان</value>
 </data>
 <data name="CopyWebInterviewSettings" xml:space="preserve">
-  <value>Copy Web Interview settings from the previous version</value>
+  <value>نسخ إعدادات مقابلة الويب من الإصدار السابق (بما في ذلك قوالب البريد الإلكتروني ونصوص الشاشة)</value>
 </data>
 </root>
