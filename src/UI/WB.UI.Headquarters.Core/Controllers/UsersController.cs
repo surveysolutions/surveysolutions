@@ -287,7 +287,10 @@ namespace WB.UI.Headquarters.Controllers
                     TokenIssued = await this.tokenProvider.DoesTokenExist(user),
                     CanSetupTwoFactorAuthentication = HasPermissionsToSetupTwoFactorAuthentication(user),
                     IsRelinkAllowed = user.Profile?.IsRelinkAllowed() ?? false,
-                    IsRestricted = IsAccountRestricted(user.Id)
+                    IsRestricted = IsAccountRestricted(user.Id),
+                    CanChangeContactInfo =
+                        !authorizedUser.IsInterviewer
+                        || (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false)
                 },
                 Api = new
                 {
@@ -378,7 +381,10 @@ namespace WB.UI.Headquarters.Controllers
                     CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
                     RecoveryCodes = string.Join(" ", RecoveryCodes),
                     CanSetupTwoFactorAuthentication =  tokenProvider.CanGenerate && HasPermissionsToSetupTwoFactorAuthentication(user),
-                    IsRestricted = IsAccountRestricted(user.Id)
+                    IsRestricted = IsAccountRestricted(user.Id),
+                    CanChangeContactInfo =
+                        !authorizedUser.IsInterviewer
+                        || (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false)
                 },
                 Api = new
                 {
@@ -481,7 +487,10 @@ namespace WB.UI.Headquarters.Controllers
                     CanChangeWorkspacesList = authorizedUser.IsAdministrator && userRole is UserRoles.Headquarter or UserRoles.ApiUser or UserRoles.Supervisor,
                     CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
                     CanSetupTwoFactorAuthentication = tokenProvider.CanGenerate && HasPermissionsToSetupTwoFactorAuthentication(user),
-                    IsRestricted = IsAccountRestricted(user.Id)
+                    IsRestricted = IsAccountRestricted(user.Id),
+                    CanChangeContactInfo =
+                        !authorizedUser.IsInterviewer
+                        || (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false)
                 },
                 Api = new
                 {
@@ -765,6 +774,11 @@ namespace WB.UI.Headquarters.Controllers
             if (currentUser == null) return NotFound("User not found");
 
             if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
+
+            // Interviewers cannot update their own contact info when profile updates are disabled
+            if (currentUser.Id == authorizedUser.Id && authorizedUser.IsInterviewer
+                && !(this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false))
+                return this.Forbid();
 
             if (currentUser.IsArchived)
             {
@@ -1130,12 +1144,9 @@ namespace WB.UI.Headquarters.Controllers
 
         private bool HasPermissionsToManageUser(HqUser user)
         {
-            // Own profile can always be managed (except interviewers need special permission)
+            // Own profile can always be accessed (e.g., for password and 2FA management)
             if (user.Id == this.authorizedUser.Id)
-            {
-                return !this.authorizedUser.IsInterviewer 
-                       || (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false);
-            }
+                return true;
 
             // Administrators can manage all users
             if (this.authorizedUser.IsAdministrator)

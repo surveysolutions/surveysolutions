@@ -210,4 +210,9 @@
   <data name="WaitingForMetrics" xml:space="preserve">
     <value>Розрахунок метрик</value>
   </data>
+
+
+  <data name="ServerStatuses" xml:space="preserve">
+      <value>Статуси відповідей</value>
+  </data>
 </root>

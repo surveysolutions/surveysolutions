@@ -603,6 +603,6 @@ Veuillez vérifier que toutes les informations sont correctes.</value>
     <value>Activer le mode développeur</value>
   </data>
   <data name="CompleteReviewSubmitInterview" xml:space="preserve">
-      <value>Interview {{key}}</value>
+      <value>Entretien {{key}}</value>
   </data>
 </root>

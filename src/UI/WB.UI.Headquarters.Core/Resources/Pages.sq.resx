@@ -565,7 +565,7 @@
     <value>Pyetësorët e marrë nga Intervistuesi </value>
   </data>
   <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
-      <value>E-mail: {{email}}</value>
+      <value>Email-i: {{email}}</value>
   </data>
   <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
       <value>Emri i plotë: {{fullName}}</value>
@@ -1069,7 +1069,7 @@
     <value>Hollësitë e të dhënave personale (fakultative) &lt;br&gt; do të shihen vetëm nga përdoruesit e ZQ-së</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
-      <value>{{name}} (ver. {{version}})</value>
+      <value>{{name}} (versioni {{version}})</value>
   </data>
   <data name="RejectedByHeadquarters" xml:space="preserve">
     <value>Refuzuar nga zyra qendrore </value>
@@ -1273,7 +1273,7 @@
     <value>Shfaq përdoruesit</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>Profili</value>
+    <value>Kontakti</value>
   </data>
   <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
     <value>Vërtetimi me dy faktorë</value>
@@ -1441,7 +1441,7 @@
     <value>Detyra {0}</value>
   </data>
   <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
-    <value>[ver. {{version}}] {{name}} </value>
+    <value>[versioni {{version}}] {{name}} </value>
   </data>
   <data name="Tablet_RelinkMessage" xml:space="preserve">
     <value>Një pajisje e vetme është lidhur me këtë llogari.</value>
@@ -1459,7 +1459,7 @@
     <value>Përfshi funksionalitetin e hartimit</value>
   </data>
   <data name="Filters_Shapefiles" xml:space="preserve">
-    <value>Shapefiles</value>
+    <value>Skedarë Shapefile</value>
   </data>
   <data name="Filters_None" xml:space="preserve">
     <value>Asnjë</value>
@@ -1744,7 +1744,7 @@
     <value>Nëse ky është përdoruesi i fundit në ekip i lidhur me hartën, atëherë mbikëqyrësi i ekipit do të humbasë qasjen në hartë.</value>
   </data>
   <data name="QuestionnaireVersionAndName" xml:space="preserve">
-    <value>[ver. {1}] {0}</value>
+    <value>[versioni {1}] {0}</value>
   </data>
   <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
     <value>Verifikimet kritike</value>
