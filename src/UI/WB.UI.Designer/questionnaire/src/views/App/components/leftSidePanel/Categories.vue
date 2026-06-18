@@ -54,10 +54,8 @@
 
 <script>
 
-import { defineAsyncComponent } from 'vue';
 import CategoriesItem from './CategoriesItem.vue';
-const CategoriesEditorModal = defineAsyncComponent(() => import('./CategoriesEditorModal.vue'));
-
+import CategoriesEditorModal from './CategoriesEditorModal.vue';
 import { newGuid } from '../../../../helpers/guid';
 import { isNull, isUndefined } from 'lodash'
 import { updateCategories } from '../../../../services/categoriesService'
