@@ -25,12 +25,12 @@
                                         }}:</span>
                                         <span class="data">{{
                                             createdDate
-                                        }}</span>
+                                            }}</span>
                                     </li>
                                     <li id="detailsInfo_responsibleListItem">
                                         <span class="data-label">{{
                                             $t('Details.Responsible')
-                                        }}:
+                                            }}:
                                         </span>
                                         <span v-if="isInterviewerResponsible" class="data">
                                             <a v-bind:href="interviewerProfileUrl
@@ -38,22 +38,22 @@
                                         </span>
                                         <span v-else class="data supervisor">{{
                                             model.responsible.name
-                                            }}</span>
+                                        }}</span>
                                     </li>
                                 </ul>
                                 <ul class="list-unstyled pull-left table-info">
                                     <li id="detailsInfo_lastUpdatedListItem">
                                         <span class="data-label">{{
                                             this.$t('Details.LastUpdated')
-                                        }}:</span>
+                                            }}:</span>
                                         <span class="data">{{
                                             updatedDate
-                                        }}</span>
+                                            }}</span>
                                     </li>
                                     <li>
                                         <span class="data-label">{{
                                             $t('Common.CalendarEvent')
-                                        }}:</span>
+                                            }}:</span>
                                         <span class="data" data-bs-toggle="tooltip" v-if="calendarEventComment != null"
                                             :title="calendarEventComment == null ||
                                                 calendarEventComment == ''
@@ -82,8 +82,8 @@
                                             </a>
                                         </li>
                                         <li v-if="isHeadquarters && !isArchived">
-                                            <a href="#" @click="closeSelected">
-                                                {{ $t('Assignments.Close') }}
+                                            <a href="#" @click="downsizeSelected">
+                                                {{ $t('Assignments.Downsize') }}
                                             </a>
                                         </li>
                                         <li v-if="isHeadquarters && !isArchived">
@@ -96,6 +96,16 @@
                                                 {{
                                                     $t('Assignments.Unarchive')
                                                 }}
+                                            </a>
+                                        </li>
+                                        <li v-if="canComplete">
+                                            <a href="#" @click.prevent="openCloseModal">
+                                                {{ $t('Assignments.Close') }}
+                                            </a>
+                                        </li>
+                                        <li v-if="canReopen">
+                                            <a href="#" @click.prevent="openReopenModal">
+                                                {{ $t('Assignments.Reopen') }}
                                             </a>
                                         </li>
                                     </ul>
@@ -114,7 +124,7 @@
                             <span :title="$t('Assignments.StartWebInterview')" class="glyphicon glyphicon-link" />
                         </a>
                         <span v-if="this.model.isArchived" class="label label-default">{{ $t('Common.Archived')
-                            }}</span>
+                        }}</span>
                     </h3>
                     <table class="table table-striped table-bordered">
                         <thead>
@@ -162,7 +172,7 @@
                                             <h4>
                                                 <span>{{
                                                     question.title
-                                                    }}</span>
+                                                }}</span>
                                             </h4>
                                             <div class="answer">
                                                 <div v-dompurify-html="question.answer"></div>
@@ -224,6 +234,18 @@
                                 </td>
                                 <td>{{ model.comments }}</td>
                             </tr>
+                            <tr>
+                                <td class="text-nowrap">
+                                    {{ $t('Assignments.Status') }}
+                                </td>
+                                <td>{{ assignmentStatus }}</td>
+                            </tr>
+                            <tr v-if="model.statusComment">
+                                <td class="text-nowrap">
+                                    {{ $t('Assignments.StatusChangeComment') }}
+                                </td>
+                                <td>{{ model.statusComment }}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -268,14 +290,14 @@
                     </template>
                 </ModalFrame>
 
-                <ModalFrame ref="closeModal" :title="$t('Pages.ConfirmationNeededTitle')">
+                <ModalFrame ref="downsizeModal" :title="$t('Pages.ConfirmationNeededTitle')">
                     <p>{{ singleCloseMessage }}</p>
 
                     <template v-slot:actions>
                         <div>
                             <button type="button" class="btn btn-primary" :disabled="isWebModeAssignmentSelected"
                                 @click="close">
-                                {{ $t('Assignments.Close') }}
+                                {{ $t('Assignments.Downsize') }}
                             </button>
                             <button type="button" class="btn btn-link" data-bs-dismiss="modal">
                                 {{ $t('Common.Cancel') }}
@@ -333,7 +355,7 @@
                             <button type="button" class="btn btn-primary" :disabled="!showSelectors || !canEditQuantity"
                                 @click="updateQuantity">{{ $t("Common.Save") }}</button>
                             <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                                }}</button>
+                            }}</button>
                         </div>
                     </template>
                 </ModalFrame>
@@ -366,6 +388,50 @@
                     </template>
                 </ModalFrame>
 
+                <ModalFrame ref="closeModal" :title="$t('Assignments.CloseAssignmentTitle')">
+                    <p>{{ $t('Assignments.CloseAssignmentMessage') }}</p>
+                    <form onsubmit="return false;">
+                        <div class="form-group">
+                            <label class="control-label" for="completeCommentDetailId">
+                                {{ $t("Assignments.Comments") }}
+                            </label>
+                            <textarea control-id="completeCommentDetailId" v-model="statusChangeComment"
+                                :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                                autocomplete="off" class="form-control" />
+                        </div>
+                    </form>
+                    <template v-slot:actions>
+                        <div>
+                            <button type="button" class="btn btn-primary" @click="confirmClose">{{
+                                $t("Assignments.Close") }}</button>
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                            }}</button>
+                        </div>
+                    </template>
+                </ModalFrame>
+
+                <ModalFrame ref="reopenModal" :title="$t('Assignments.ReopenAssignmentTitle')">
+                    <p>{{ $t('Assignments.ReopenAssignmentMessage') }}</p>
+                    <form onsubmit="return false;">
+                        <div class="form-group">
+                            <label class="control-label" for="reopenCommentDetailId">
+                                {{ $t("Assignments.Comments") }}
+                            </label>
+                            <textarea control-id="reopenCommentDetailId" v-model="statusChangeComment"
+                                :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                                autocomplete="off" class="form-control" />
+                        </div>
+                    </form>
+                    <template v-slot:actions>
+                        <div>
+                            <button type="button" class="btn btn-primary" @click="confirmReopen">{{
+                                $t("Assignments.Reopen") }}</button>
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                            }}</button>
+                        </div>
+                    </template>
+                </ModalFrame>
+
             </div>
         </div>
     </main>
@@ -376,6 +442,7 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
 import { nextTick } from 'vue'
 import { DateFormats, convertToLocal } from '~/shared/helpers'
 import { RoleNames } from '~/shared/constants'
+import * as toastr from 'toastr'
 
 import moment from 'moment-timezone'
 import { escape } from 'lodash'
@@ -398,7 +465,8 @@ export default {
 
             canEditQuantity: true,
 
-            editedAudioRecordingEnabled: null
+            editedAudioRecordingEnabled: null,
+            statusChangeComment: null,
         }
     },
     methods: {
@@ -463,8 +531,8 @@ export default {
             window.location.reload(true)
         },
 
-        closeSelected() {
-            this.$refs.closeModal.modal({
+        downsizeSelected() {
+            this.$refs.downsizeModal.modal({
                 keyboard: false,
             })
         },
@@ -472,7 +540,7 @@ export default {
             const self = this
 
             const url = `${self.config.api.assignmentsApi}/${self.model.id}/close`
-            self.$http.post(url).catch((error) => {
+            await self.$http.post(url).catch((error) => {
                 if (error.isAxiosError && error.response.status === 409) {
                     const msg = this.$t('Assignments.AssignmentCloseWebMode', {
                         id: self.model.id,
@@ -481,7 +549,7 @@ export default {
                     toastr.warning(msg)
                 }
             })
-            this.$refs.closeModal.hide()
+            this.$refs.downsizeModal.hide()
 
             window.location.reload(true)
         },
@@ -579,7 +647,37 @@ export default {
                 })
 
             return false
-        }
+        },
+
+        openCloseModal() {
+            this.statusChangeComment = null
+            this.$refs.closeModal.modal()
+        },
+
+        openReopenModal() {
+            this.statusChangeComment = null
+            this.$refs.reopenModal.modal()
+        },
+
+        async confirmClose() {
+            await this.changeStatus('Closed', this.$refs.closeModal)
+        },
+
+        async confirmReopen() {
+            await this.changeStatus('Open', this.$refs.reopenModal)
+        },
+
+        async changeStatus(status, modalRef) {
+            try {
+                await this.$hq.Assignments.changeStatus(this.model.id, status, this.statusChangeComment)
+                modalRef.hide()
+                this.statusChangeComment = null
+                window.location.reload()
+            } catch (error) {
+                const msg = error?.response?.data?.message || error?.message || this.$t('Common.Error')
+                toastr.error(msg)
+            }
+        },
     },
 
     computed: {
@@ -595,7 +693,7 @@ export default {
 
             const result = this.$t('Assignments.SingleAssignmentCloseConfirm', {
                 id: this.model.id,
-                quantity: this.model.quantity,
+                quantity: this.quantity,
                 collected: this.model.interviewsProvided,
             })
             return result
@@ -684,6 +782,28 @@ export default {
             return this.model.quantity == null
                 ? '-1 (' + this.$t('Assignments.Unlimited') + ')'
                 : this.model.quantity
+        },
+        assignmentStatus() {
+            const statusMap = {
+                'Open': this.$t('Assignments.StatusOpen'),
+                'Completed': this.$t('Assignments.StatusCompleted'),
+                'Closed': this.$t('Assignments.StatusClosed'),
+            }
+            return statusMap[this.model.status] || this.model.status
+        },
+        canComplete() {
+            if (this.isArchived) return false
+            if (this.isHeadquarters) return this.model.status === 'Open' || this.model.status === 'Completed'
+            if (this.model.isSupervisor && this.model.allowSupervisorChangeAssignmentStatus)
+                return this.model.status === 'Open' || this.model.status === 'Completed'
+            return false
+        },
+        canReopen() {
+            if (this.isArchived) return false
+            if (this.isHeadquarters) return this.model.status === 'Completed' || this.model.status === 'Closed'
+            if (this.model.isSupervisor && this.model.allowSupervisorChangeAssignmentStatus)
+                return this.model.status === 'Completed' || this.model.status === 'Closed'
+            return false
         },
         calendarEventTime() {
             return this.model.calendarEvent != null
@@ -817,6 +937,15 @@ export default {
                                 return data.DeviceId
                             case 'TargetAreaChanged':
                                 return escape(data.TargetArea)
+                            case 'Completed':
+                            case 'Closed':
+                            case 'Reopened':
+                                if (data && data.Comment) {
+                                    return self.$t('Assignments.Action_StatusChanged_Comment', {
+                                        comment: escape(data.Comment),
+                                    })
+                                }
+                                return ''
                         }
                         return ''
                     },

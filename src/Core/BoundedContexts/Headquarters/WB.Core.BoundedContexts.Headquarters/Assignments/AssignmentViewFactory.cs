@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
                 var neededItems = _.Where(x => ids.Contains(x.Id));
 
-                var fetchReqests = this.DefineOrderBy(neededItems, input)
+                var fetchRequests = this.DefineOrderBy(neededItems, input)
                     .Fetch(x => x.IdentifyingData)
                     .Fetch(x => x.Responsible);
                     //.Fetch(x => x.RoleIds); //throws Null reference exception, but should be here :( https://stackoverflow.com/q/21243592/72174
@@ -79,11 +79,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
                 if (input.ShowQuestionnaireTitle)
                 {
-                    list = fetchReqests.Fetch(x => x.Questionnaire).ToList();
+                    list = fetchRequests.Fetch(x => x.Questionnaire).ToList();
                 }
                 else
                 {
-                    list = fetchReqests.ToList();
+                    list = fetchRequests.ToList();
                 }
 
                 return list;
@@ -130,7 +130,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         ReceivedByTabletAtUtc = x.ReceivedByTabletAtUtc,
                         Comments = x.Comments,
                         TargetArea = x.TargetArea,
-                        CalendarEvent = GetCalendarEventForAssignmentOrNull(x.Id)
+                        CalendarEvent = GetCalendarEventForAssignmentOrNull(x.Id),
+                        Status = x.Status,
+                        StatusComment = x.StatusComment
                     };
 
                     if (input.ShowQuestionnaireTitle)
@@ -283,6 +285,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                             w.WebMode
                         };
                         break;
+                    case AssignmentCompleted f:
+                        historyItem.Action = AssignmentHistoryAction.Completed;
+                        if (!string.IsNullOrEmpty(f.Comment))
+                            historyItem.AdditionalData = new { f.Comment };
+                        break;
+                    case AssignmentClosed c2:
+                        historyItem.Action = AssignmentHistoryAction.Closed;
+                        if (!string.IsNullOrEmpty(c2.Comment))
+                            historyItem.AdditionalData = new { c2.Comment };
+                        break;
+                    case AssignmentReopened ro:
+                        historyItem.Action = AssignmentHistoryAction.Reopened;
+                        if (!string.IsNullOrEmpty(ro.Comment))
+                            historyItem.AdditionalData = new { ro.Comment };
+                        break;
                 }
 
                 result.History.Add(historyItem);
@@ -425,6 +442,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             if (input.Id.HasValue)
             {
                 items = items.Where(x => x.Id == input.Id);
+            }
+
+            if (input.Statuses != null && input.Statuses.Length > 0)
+            {
+                items = items.Where(x => input.Statuses.Contains(x.Status));
             }
 
             return items;

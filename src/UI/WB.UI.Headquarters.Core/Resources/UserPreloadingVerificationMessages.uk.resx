@@ -300,4 +300,25 @@
   <data name="PLU0022Recomendation" xml:space="preserve">
     <value>Перевірте назву робочого простору</value>
   </data>
+
+
+  <data name="PLU0001Recomendation" xml:space="preserve">
+      <value>Користувач має бути унікальним</value>
+  </data>
+
+  <data name="PLU0002Recomendation" xml:space="preserve">
+      <value>Усуньте дублікати</value>
+  </data>
+
+  <data name="PLU0007Recomendation" xml:space="preserve">
+      <value>Виправте ел. пошту</value>
+  </data>
+
+  <data name="PLU0008Recomendation" xml:space="preserve">
+      <value>Виправте номер телефону</value>
+  </data>
+
+  <data name="PLU0010Recomendation" xml:space="preserve">
+      <value>Перевірте значення для супервайзера</value>
+  </data>
 </root>
