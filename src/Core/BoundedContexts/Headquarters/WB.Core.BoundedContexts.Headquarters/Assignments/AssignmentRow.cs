@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
@@ -33,5 +34,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public bool WebModeEnabledOnQuestionnaire { get; set; }
 
         public CalendarEventView CalendarEvent { get; set; }
+        
+        public AssignmentStatus Status { get; set; }
+        public string StatusComment { get; set; }
     }
 }

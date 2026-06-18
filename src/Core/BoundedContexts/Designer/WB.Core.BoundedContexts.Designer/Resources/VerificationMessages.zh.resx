@@ -699,4 +699,201 @@
   <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
     <value>问卷模板标题不能包含两个或两个以上连续的下换线字符。</value>
   </data>
+
+
+  <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
+    <value>问卷包含的二维表实例总数 {0} 超过系统限制 {1}</value>
+  </data>
+
+  <data name="WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion" xml:space="preserve">
+    <value>数值型问题的特殊值附件名称必须唯一。</value>
+  </data>
+
+  <data name="WB0139_SpecialValuesAttachmentsReferAbsentAttachment" xml:space="preserve">
+    <value>特殊值附件引用了不存在的附件。</value>
+  </data>
+
+  <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+      <value>平铺模式仅适用于包含不超过 {0} 个问题或静态文本的二维表。</value>
+  </data>
+
+  <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
+    <value>平铺模式不允许使用嵌套二维表。</value>
+  </data>
+
+  <data name="WB0280_TextContainsLinkToUnknownQuestionOrGroup" xml:space="preserve">
+    <value>文本包含指向未知问题、子章节、二维表或 pdf 附件的链接。</value>
+  </data>
+
+  <data name="WB0057_LinksAreProhibitedOnNavigationElements" xml:space="preserve">
+    <value>导航元素中禁止使用链接：章节、子章节、二维表</value>
+  </data>
+
+  <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
+    <value>元素总数 ({0}) 超过系统限制 ({1})。请考虑减少问题、静态文本、变量或固定二维表中的项目数量。</value>
+  </data>
+
+  <data name="WB0282_IdentifyingQuestionInSectionWithCondition" xml:space="preserve">
+    <value>识别型问题不能放置在带有启用条件的章节中。</value>
+  </data>
+
+  <data name="WB0282_TableRosterContainsNestedGroup" xml:space="preserve">
+    <value>表格模式的二维表不允许使用嵌套组和二维表。</value>
+  </data>
+
+  <data name="WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>表格模式仅适用于包含不超过 {0} 个问题的二维表。</value>
+  </data>
+
+  <data name="WB0284_TableRosterCantContainsSupervisorQuestions" xml:space="preserve">
+    <value>表格模式的二维表不允许使用督导问题。</value>
+  </data>
+
+  <data name="WB0285_TableRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+    <value>表格模式的二维表仅允许使用文本题和数值题。</value>
+  </data>
+
+  <data name="WB0286_TableAndMatixRosterWorksOnlyInWebMode" xml:space="preserve">
+    <value>表格或矩阵二维表模式仅在 Web 调查中可用，在平板上将显示为“子章节”模式。</value>
+  </data>
+
+  <data name="WB0309_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
+    <value>封面中的问题必须具有变量标签。</value>
+  </data>
+
+  <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
+    <value>封面页问题只能使用允许的类型（Text、Numeric、DateTime、GpsCoordinates、SingleOption）</value>
+  </data>
+
+  <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
+    <value>代码 {0} 的标签 {1} 是一个与被标记值不同的数字。</value>
+  </data>
+
+  <data name="WB0289" xml:space="preserve">
+    <value>类别名称长度不能超过 {0} 个字符。</value>
+  </data>
+
+  <data name="WB0290" xml:space="preserve">
+    <value>类别名称不能以下划线结尾</value>
+  </data>
+
+  <data name="WB0291" xml:space="preserve">
+    <value>类别名称不能包含两个或更多连续下划线。</value>
+  </data>
+
+  <data name="WB0292" xml:space="preserve">
+    <value>类别名称不能为空。</value>
+  </data>
+
+  <data name="WB0293" xml:space="preserve">
+    <value>类别名称不能是保留字。</value>
+  </data>
+
+  <data name="WB0294" xml:space="preserve">
+    <value>类别名称只能包含字母、数字和下划线</value>
+  </data>
+
+  <data name="WB0295" xml:space="preserve">
+    <value>类别名称不能以数字或下划线开头</value>
+  </data>
+
+  <data name="WB0296" xml:space="preserve">
+    <value>问题使用了相同的类别。请改用可复用类别</value>
+  </data>
+
+  <data name="WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+    <value>矩阵二维表仅允许使用简单的分类题：不允许使用 combobox、cascading 或 yes/no 模式。</value>
+  </data>
+
+  <data name="WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>矩阵模式仅适用于包含不超过 {0} 个问题的二维表。</value>
+  </data>
+
+  <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
+    <value>矩阵二维表中不能包含督导问题或识别型问题。</value>
+  </data>
+
+  <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
+    <value>矩阵二维表中不能包含链接题。</value>
+  </data>
+
+  <data name="WB0302" xml:space="preserve">
+    <value>替换不能引用同一二维表层级中的项目。</value>
+  </data>
+
+  <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
+    <value>可复用类别中不能存在 Id 和 ParentId 值相同的行</value>
+  </data>
+
+  <data name="WB0306_DuplicatedCategoryParentIdText" xml:space="preserve">
+    <value>可复用类别中不能存在 ParentId 和 Text 值相同的行</value>
+  </data>
+
+  <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
+    <value>问题引用了不存在的可复用类别。</value>
+  </data>
+
+  <data name="WB0390_OnlyStringVariableAllowedAsAttachmentName" xml:space="preserve">
+    <value>只有字符串类型变量可用作附件名称来源</value>
+  </data>
+
+  <data name="WB0391" xml:space="preserve">
+    <value>静态文本不能引用二维表范围比其自身更深的变量</value>
+  </data>
+
+  <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
+      <value>不允许链接到隐藏问题</value>
+  </data>
+
+  <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
+    <value>封面中的变量必须具有标签。</value>
+  </data>
+
+  <data name="WB0312" xml:space="preserve">
+      <value>类别至少必须包含两个选项</value>
+  </data>
+
+  <data name="WB0313_QuestionOptionReferenceToNonExistentAttachment" xml:space="preserve">
+      <value>问题选项引用了不存在的附件</value>
+  </data>
+
+  <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
+      <value>问题包含多个引用同一附件的选项</value>
+  </data>
+
+  <data name="WB0315_AttachmentHasInvalidName" xml:space="preserve">
+    <value>附件名称只能包含字母、数字和下划线。必须以字母开头，不能包含连续下划线，不能以下划线结尾，且不能是保留字。不能为空，并且长度必须小于 32 个字符。</value>
+  </data>
+
+  <data name="WB0316_QuestionnaireWithOldCoverPage" xml:space="preserve">
+    <value>问卷为旧格式。请使用封面章节上的“Generate cover”链接。</value>
+  </data>
+
+  <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
+    <value>关键问题的范围不能为以下任一项：隐藏、督导。</value>
+  </data>
+
+  <data name="WB0318_CriticalityConditionExpressionHasIncorrectSyntax" xml:space="preserve">
+    <value>关键条件表达式存在语法错误。</value>
+  </data>
+
+  <data name="WB0319_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+    <value>关键条件为空。</value>
+  </data>
+
+  <data name="WB0320_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+    <value>关键规则中的消息为空。</value>
+  </data>
+
+  <data name="WB0321_CriticalityConditionUsingForbiddenClasses" xml:space="preserve">
+    <value>关键条件使用了禁止的类型。</value>
+  </data>
+
+  <data name="WB0322_CriticalRuleExpressionIsTooLong" xml:space="preserve">
+    <value>关键规则表达式超过 {0} 个字符。</value>
+  </data>
+
+  <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
+    <value>关键条件消息超过 {0} 个字符。</value>
+  </data>
 </root>

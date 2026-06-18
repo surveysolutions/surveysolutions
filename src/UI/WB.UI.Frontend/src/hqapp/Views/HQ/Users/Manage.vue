@@ -2,7 +2,8 @@
     <ProfileLayout ref="profileView" :role="userInfo.role" :isOwnProfile="userInfo.isOwnProfile"
         :forceChangePassword="userInfo.forceChangePassword" :canChangePassword="userInfo.canChangePassword"
         :userName="userInfo.userName" :userId="userInfo.userId" :currentTab="currentTab"
-        :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted">
+        :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted"
+        :canChangeContactInfo="userInfo.canChangeContactInfo">
         <div>
             <form-group :label="$t('FieldsAndValidations.PersonNameFieldName')" :error="modelState['PersonName']">
                 <TextInput v-model.trim="personName" :haserror="modelState['PersonName'] !== undefined"
@@ -52,7 +53,8 @@
         <div>
             <div class="block-filter">
                 <button type="submit" class="btn btn-success" style="margin-right:5px" id="btnUpdateUser"
-                    v-bind:disabled="userInfo.isObserving || userInfo.isRestricted" @click="updateAccount">{{
+                    v-bind:disabled="userInfo.isObserving || userInfo.isRestricted || !userInfo.canChangeContactInfo"
+                    @click="updateAccount">{{
                         $t('Pages.Update') }}</button>
                 <a class="btn btn-default" v-bind:href="referrerUrl" id="lnkCancelUpdateUser">
                     {{ $t('Common.Cancel') }}
