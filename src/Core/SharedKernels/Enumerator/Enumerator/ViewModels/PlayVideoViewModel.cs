@@ -34,7 +34,8 @@ public class PlayVideoViewModel : PlayMediaViewModel
     {
         var args = InitValues;
         if (args == null) return;
-        await ViewModelNavigationService.Close(this);
-        await ViewModelNavigationService.NavigateToAsync<PlayVideoFullScreenViewModel, PlayMediaViewModelArgs>(args);
+        var navigated = await ViewModelNavigationService.NavigateToAsync<PlayVideoFullScreenViewModel, PlayMediaViewModelArgs>(args);
+        if (navigated)
+            await ViewModelNavigationService.Close(this);
     });
 }
