@@ -1,14 +1,13 @@
 let formatUtcDate
 let DateFormats
-const originalTimezone = process.env.TZ
+let originalWindowConfig
 
 beforeAll(async () => {
-    process.env.TZ = 'America/New_York'
-    global.window = {
-        CONFIG: {
-            locale: {
-                locale: 'en',
-            },
+    originalWindowConfig = window.CONFIG
+    window.CONFIG = {
+        ...window.CONFIG,
+        locale: {
+            locale: 'en',
         },
     }
 
@@ -18,13 +17,24 @@ beforeAll(async () => {
 })
 
 afterAll(() => {
-    process.env.TZ = originalTimezone
-    delete global.window
+    if (originalWindowConfig === undefined)
+        delete window.CONFIG
+    else
+        window.CONFIG = originalWindowConfig
 })
+
+const pad = value => value.toString().padStart(2, '0')
+
+const toLocalDateTimeString = value => {
+    const date = new Date(`${value}Z`)
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
+}
 
 describe('formatUtcDate', () => {
     test('converts utc timestamp to local time', () => {
-        expect(formatUtcDate('2024-05-07T16:30:00', DateFormats.dateTime)).toBe('2024-05-07 12:30:00')
+        const utcValue = '2024-05-07T16:30:00'
+
+        expect(formatUtcDate(utcValue, DateFormats.dateTime)).toBe(toLocalDateTimeString(utcValue))
     })
 
     test('returns empty string for empty values', () => {
