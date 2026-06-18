@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using NUnit.Framework;
 using SixLabors.ImageSharp;
@@ -63,6 +64,38 @@ public class ImageSharpSourceTests
         var source = ImageSharpSource<Rgba32>.FromBinaryResized("my_photo.jpg", imageBytes, maxDimension: 1024);
 
         Assert.That(source.Name, Is.EqualTo("my_photo.jpg"));
+    }
+
+    [TestCase(null)]
+    [TestCase("")]
+    [TestCase(" ")]
+    public void when_name_is_null_or_whitespace_should_throw_argument_exception(string name)
+    {
+        var imageBytes = CreateJpegImageBytes(width: 10, height: 10);
+
+        var act = () => ImageSharpSource<Rgba32>.FromBinaryResized(name!, imageBytes, maxDimension: 1024);
+
+        Assert.That(act, Throws.ArgumentException.With.Property("ParamName").EqualTo("name"));
+    }
+
+    [Test]
+    public void when_image_bytes_are_null_should_throw_argument_null_exception()
+    {
+        var act = () => ImageSharpSource<Rgba32>.FromBinaryResized("photo.jpg", null!, maxDimension: 1024);
+
+        Assert.That(act, Throws.ArgumentNullException.With.Property("ParamName").EqualTo("imageBytes"));
+    }
+
+    [TestCase(0)]
+    [TestCase(-1)]
+    public void when_max_dimension_is_not_positive_should_throw_argument_out_of_range_exception(int maxDimension)
+    {
+        var imageBytes = CreateJpegImageBytes(width: 10, height: 10);
+
+        var act = () => ImageSharpSource<Rgba32>.FromBinaryResized("photo.jpg", imageBytes, maxDimension);
+
+        Assert.That(act,
+            Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("maxDimension"));
     }
 
     private static byte[] CreateJpegImageBytes(int width, int height)

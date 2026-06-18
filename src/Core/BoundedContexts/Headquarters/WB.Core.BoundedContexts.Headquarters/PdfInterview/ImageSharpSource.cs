@@ -30,6 +30,16 @@ public class ImageSharpSource<TPixel> : ImageSource where TPixel : unmanaged, IP
     public static ImageSource.IImageSource FromBinaryResized(string name, byte[] imageBytes,
         int maxDimension = 1024)
     {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
+
+        ArgumentNullException.ThrowIfNull(imageBytes);
+
+        if (imageBytes.Length == 0)
+            throw new ArgumentException("Value cannot be an empty collection.", nameof(imageBytes));
+
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maxDimension);
+
         var format = Image.DetectFormat(imageBytes) ?? JpegFormat.Instance;
         var image = Image.Load<TPixel>(imageBytes);
         try
