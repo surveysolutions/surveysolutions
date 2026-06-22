@@ -286,7 +286,7 @@
     <value>Кипр</value>
   </data>
   <data name="CZE" xml:space="preserve">
-    <value>Чешская Республика</value>
+    <value>Чехия</value>
   </data>
   <data name="DEU" xml:space="preserve">
     <value>Германия</value>
@@ -547,7 +547,7 @@
     <value>Маршалловы острова</value>
   </data>
   <data name="MKD" xml:space="preserve">
-    <value>Республика Македония</value>
+    <value>Северная Македония</value>
   </data>
   <data name="MLI" xml:space="preserve">
     <value>Мали</value>
@@ -721,7 +721,7 @@
     <value>Сан-Марино</value>
   </data>
   <data name="SOM" xml:space="preserve">
-    <value>Сомали</value>
+    <value>Федеративная Республика Сомали</value>
   </data>
   <data name="SPM" xml:space="preserve">
     <value>Сент-Пьер и Микелон</value>
@@ -748,7 +748,7 @@
     <value>Швеция</value>
   </data>
   <data name="SWZ" xml:space="preserve">
-    <value>Свазиленд</value>
+    <value>Эсватини</value>
   </data>
   <data name="SYC" xml:space="preserve">
     <value>Сейшелы</value>
@@ -790,7 +790,7 @@
     <value>Тунис</value>
   </data>
   <data name="TUR" xml:space="preserve">
-    <value>Турция</value>
+    <value>Türkiye</value>
   </data>
   <data name="TUV" xml:space="preserve">
     <value>Тувалу</value>
