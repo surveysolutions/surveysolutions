@@ -464,6 +464,12 @@
   <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
     <value>Вибрировать когда дан не валидный ответ</value>
   </data>
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreTitle" xml:space="preserve">
+    <value>Игнорировать проверку целостности соединения</value>
+  </data>
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreSummary" xml:space="preserve">
+    <value>Если включено, ошибки проверки целостности соединения будут игнорироваться</value>
+  </data>
   <data name="Interview_Question_Text_Empty" xml:space="preserve">
     <value>Ответ не может быть пустым</value>
   </data>
@@ -993,5 +999,17 @@
   <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
     <value>Неотвеченные
 вопросы</value>
+  </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>Открыто</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>Завершено</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Закрыто</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>Статус задания</value>
   </data>
 </root>

@@ -120,6 +120,21 @@
   <data name="ExportEncryption_Title" xml:space="preserve">
     <value>Exportação de criptografia</value>
   </data>
+  <data name="GeographyExportFormat_Title" xml:space="preserve">
+    <value>Formato de exportação geográfica</value>
+  </data>
+  <data name="GeographyExportFormat_Description" xml:space="preserve">
+    <value>Escolha como as respostas devem ser formatadas para perguntas de geografia.</value>
+  </data>
+  <data name="GeographyExportFormat_Wkt" xml:space="preserve">
+    <value>WKT (Well-Known Text)</value>
+  </data>
+  <data name="GeographyExportFormat_GeoJson" xml:space="preserve">
+    <value>GeoJSON</value>
+  </data>
+  <data name="GeographyExportFormat_ArrayOfCoordinates" xml:space="preserve">
+    <value>String de geometria do Survey Solutions</value>
+  </data>
   <data name="ClearExportCache_Title" xml:space="preserve">
     <value>Limpar cache de exportação</value>
   </data>
@@ -391,7 +406,7 @@ Possíveis razões:
     <value>Configure os parâmetros para acessar o servidor SMTP abaixo. Mais informações sobre o uso do servidor SMTP com o Survey Solutions estão disponíveis </value>
   </data>
   <data name="EmailProvider_SmtpHost" xml:space="preserve">
-    <value>Host</value>
+    <value>Servidor</value>
   </data>
   <data name="EmailProvider_SmtpHostHelp" xml:space="preserve">
     <value>Endereço do servidor SMTP</value>
@@ -498,4 +513,16 @@ Possíveis razões:
   <data name="SelectFileWarning" xml:space="preserve">
     <value>Por favor, selecione um arquivo para enviar.</value>
 </data>
+  <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve">
+    <value>Permitir que os supervisores alterem os estados das atribuições</value>
+  </data>
+  <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>Quando ativado, os supervisores podem aprovar e reabrir atribuições a partir dos seus tablets</value>
+  </data>
+  <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
+    <value>Permitir que os entrevistadores alterem os estados das atribuições</value>
+  </data>
+  <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>Quando ativado, os entrevistadores podem concluir e reabrir atribuições a partir dos seus tablets (requer que a definição do supervisor esteja ativada)</value>
+  </data>
 </root>

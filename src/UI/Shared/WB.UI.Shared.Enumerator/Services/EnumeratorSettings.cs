@@ -47,6 +47,7 @@ namespace WB.UI.Shared.Enumerator.Services
         public string LastOpenedMapName => this.CurrentWorkspaceSettings?.LastOpenedMapName;
 
         public abstract bool VibrateOnError { get; }
+        public abstract bool CommunicationIntegrityValidationIgnore { get; }
         public abstract bool ShowLocationOnMap { get; }
         public abstract int GpsReceiveTimeoutSec { get; }
         public abstract double GpsDesiredAccuracy { get; }
@@ -271,6 +272,22 @@ namespace WB.UI.Shared.Enumerator.Services
         public void SetEsriApiKey(string esriApiKey)
         {
             this.SaveCurrentSettings(settings => settings.EsriApiKey = esriApiKey);
+        }
+
+        public bool AllowSupervisorChangeAssignmentStatus =>
+            this.CurrentWorkspaceSettings?.AllowSupervisorChangeAssignmentStatus ?? true;
+
+        public void SetAllowSupervisorChangeAssignmentStatus(bool allow)
+        {
+            this.SaveCurrentSettings(settings => settings.AllowSupervisorChangeAssignmentStatus = allow);
+        }
+
+        public bool AllowInterviewerChangeAssignmentStatus =>
+            this.CurrentWorkspaceSettings?.AllowInterviewerChangeAssignmentStatus ?? true;
+
+        public void SetAllowInterviewerChangeAssignmentStatus(bool allow)
+        {
+            this.SaveCurrentSettings(settings => settings.AllowInterviewerChangeAssignmentStatus = allow);
         }
 
         public bool SupportOfflineMaps => true;

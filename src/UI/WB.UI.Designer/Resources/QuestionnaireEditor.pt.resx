@@ -62,7 +62,7 @@
     <value>Adicionar nova seção</value>
   </data>
   <data name="Backup" xml:space="preserve">
-    <value>Backup</value>
+    <value>Cópia de segurança</value>
   </data>
   <data name="SaveAs" xml:space="preserve">
     <value>Salvar como</value>
@@ -204,10 +204,10 @@
     <value>conteúdo</value>
   </data>
   <data name="SideBarMacroCounter" xml:space="preserve">
-    <value>{{count}} Macro:</value>
+    <value>{{count}} macro:</value>
   </data>
   <data name="SideBarMacroCounter_plural" xml:space="preserve">
-    <value>{{count}} Macros:</value>
+    <value>{{count}} macros:</value>
   </data>
   <data name="SideBarMacroDescription" xml:space="preserve">
     <value>descrição</value>
@@ -1074,6 +1074,9 @@
   <data name="HotkeysSearch" xml:space="preserve">
     <value>Pesquisar por subseções e perguntas na seção</value>
   </data>
+  <data name="HotkeysTest" xml:space="preserve">
+    <value>Testar questionário no WebTester</value>
+  </data>
   <data name="MultipleDependencies" xml:space="preserve">
     <value>Uma ou mais perguntas/subseções dependem de</value>
   </data>
@@ -1211,6 +1214,11 @@
   </data>
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>A solicitação falhou inesperadamente.</value>
+  </data>
+  <data name="ApplicationNotAvailable" xml:space="preserve">
+    <value>Não é possível concluir a solicitação. A resposta recebida não parece ser proveniente do servidor do Survey Solutions.
+Isso geralmente é causado por um proxy de rede, firewall ou gateway de segurança interceptando a conexão.
+Por favor, verifique sua conexão de rede ou entre em contato com o suporte de TI.</value>
   </data>
   <data name="IncorrectRosterTitle" xml:space="preserve">
     <value>Título da lista incorreto</value>
@@ -1498,7 +1506,7 @@
       <value>Tentar exportar como PDF novamente</value>
   </data>
   <data name="Translation_Original" xml:space="preserve">
-      <value>Original</value>
+      <value>Idioma original</value>
   </data>
   <data name="Preview" xml:space="preserve">
       <value>Pré-visualizar revisão #{{revision}}</value>
@@ -1605,5 +1613,8 @@
   </data>
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>Alterar para mudará o idioma de exibição do questionário. A tradução deve incluir texto para todos os elementos.</value>
+  </data>
+  <data name="AIAssistant" xml:space="preserve">
+      <value>IA</value>
   </data>
 </root>

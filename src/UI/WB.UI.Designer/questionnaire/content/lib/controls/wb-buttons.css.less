@@ -1,26 +1,32 @@
 .btn {
   padding: 5px 6px;  
   border: none;
-  background-color: @inline-button-bg-color;
+  background-color: @neutral-button-bg-color;
   font-style: normal;
-  &:hover { background-color: darken(@inline-button-bg-color, 5%); }
+  &:hover { background-color: darken(@neutral-button-bg-color, 5%); }
   &.lighter-hover {
-    &:hover { background-color: lighten(@inline-button-bg-color, 5%); }
+    &:hover { background-color: lighten(@neutral-button-bg-color, 5%); }
   }
   border-radius: 3px;
   //vertical-align: text-bottom;
-  color: @inline-button-normal-color;
+  color: @primary-link-color;
 
   .inline-button-fontstyle();
 
   &.error {
-    color: @inline-button-error-color;
+    color: @error-button-color;
   }
 
   &[disabled] {
     opacity: 1;
     color: #fff;
     background: transparent url(../../i/btn-disabled.png);
+  }
+
+  &.btn-danger {
+    background-color: @error-button-color;
+    color: #fff;
+    &:hover { background-color: @error-button-hover-color; }
   }
 }
 
@@ -42,11 +48,11 @@
 }
 
 .btn-primary {
-  background-color: @inline-button-medium-bg-color;
-  &:hover { background-color: darken(@inline-button-medium-bg-color, 5%); }
+  background-color: @success-button-color;
+  &:hover { background-color: darken(@success-button-color, 5%); }
   &:active { 
-    background-color: darken(@inline-button-medium-bg-color, 5%); 
-    &:hover { background-color: darken(@inline-button-medium-bg-color, 5%); }
+    background-color: darken(@success-button-color, 5%); 
+    &:hover { background-color: darken(@success-button-color, 5%); }
   }
   .inline-button-fontstyle();
   text-transform: uppercase;

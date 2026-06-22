@@ -59,7 +59,7 @@
     <PackageReference Include="GeoJSON.Net" Version="1.4.1" />
     <PackageReference Include="Iesi.Collections" Version="4.1.1" />
     <PackageReference Include="MediatR" Version="12.5.0" />
-    <PackageReference Include="MailKit" Version="4.12.1" />
+    <PackageReference Include="MailKit" Version="4.16.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.3.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.5" />
@@ -71,9 +71,9 @@
     <PackageReference Include="NewId" Version="4.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NHibernate" Version="5.5.2" />
-    <PackageReference Include="NodaTime" Version="3.2.2" />
+    <PackageReference Include="NodaTime" Version="3.3.2" />
     <PackageReference Include="PasswordGenerator" Version="2.1.0" />
-    <PackageReference Include="Polly" Version="8.5.2" />
+    <PackageReference Include="Polly" Version="8.6.6" />
     <PackageReference Include="Quartz" Version="3.13.1" />
     <PackageReference Include="refit" Version="8.0.0" />
     <PackageReference Include="Sendgrid" Version="9.29.3" />

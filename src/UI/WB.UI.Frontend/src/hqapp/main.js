@@ -8,6 +8,7 @@ import '../assets/css/markup-specific.scss'
 
 import { createApp } from 'vue'
 import App from './App.vue';
+import { validatePageLoad } from '~/shared/serverValidator'
 
 const vue = createApp(App)
 
@@ -17,6 +18,10 @@ setupErrorHandler(vue);
 import Vuei18n from '~/shared/plugins/locale'
 import { browserLanguage } from '~/shared/helpers'
 const i18n = Vuei18n.initialize(browserLanguage, vue)
+// validatePageLoad is called after i18n is initialized to ensure $t() is available
+// when the HEAD/GET response arrives and the error modal may need to be rendered.
+// The global axios interceptor is installed by vue.use(http) below — no duplicate needed here.
+validatePageLoad()
 
 //plugin registration in Vue
 import http from '~/shared/plugins/http'
@@ -36,14 +41,11 @@ vue.component('ProfileLayout', ProfileLayout)
 
 import './compatibility.js'
 
-import PortalVue from 'portal-vue'
-vue.use(PortalVue)
-
 import VueDOMPurifyHTML from 'vue-dompurify-html';
 vue.use(VueDOMPurifyHTML)
 
-import { Popover } from 'uiv'
-vue.component('popover', Popover)
+import Bootstrap5Popover from '~/shared/components/Bootstrap5Popover.vue'
+vue.component('popover', Bootstrap5Popover)
 
 import './validate.js'
 
@@ -85,8 +87,6 @@ vue.use(router)
 import { registerGlobalComponents } from '~/webinterview/componentsRegistry'
 registerGlobalComponents(vue, { router, store })
 
-import { pageTitle } from 'vue-page-title'
-vue.use(pageTitle)
 
 vue.config.globalProperties.$eventHub = vue
 

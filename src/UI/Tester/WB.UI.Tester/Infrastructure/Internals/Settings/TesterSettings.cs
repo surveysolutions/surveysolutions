@@ -108,6 +108,8 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
             }
         }
 
+        public bool CommunicationIntegrityValidationIgnore => false;
+
         public double GpsDesiredAccuracy
         {
             get
@@ -192,5 +194,17 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         }
 
         public bool SupportOfflineMaps => false;
+
+        public bool AllowSupervisorChangeAssignmentStatus => true;
+        public void SetAllowSupervisorChangeAssignmentStatus(bool allow)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AllowInterviewerChangeAssignmentStatus => true;
+        public void SetAllowInterviewerChangeAssignmentStatus(bool allow)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

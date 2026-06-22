@@ -139,7 +139,7 @@
     <value>Change password</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>Profile</value>
+    <value>Contact</value>
   </data>
   <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
     <value>Two factor authentication</value>
@@ -1381,6 +1381,9 @@
   <data name="MapList_Updated" xml:space="preserve">
     <value>Updated on</value>
   </data>
+  <data name="MapList_HasDuplicateLabels" xml:space="preserve">
+    <value>Has Duplicate Labels</value>
+  </data>
   <data name="MapLinking_DescriptionTitle" xml:space="preserve">
     <value>Manage user map links</value>
   </data>
@@ -1424,7 +1427,7 @@
     <value>File is too big</value>
   </data>
   <data name="Map_UploadingSuccess" xml:space="preserve">
-    <value>Maps were succesfuly uploaded</value>
+    <value>Maps were successfully uploaded</value>
   </data>
   <data name="Interviewers_MoveToAnotherTeam" xml:space="preserve">
     <value>Move to another team</value>
@@ -1623,7 +1626,7 @@
     <value>Interview packages({{count}})</value>
   </data>
   <data name="Admin_InterviewPackages_Subtitle" xml:space="preserve">
-    <value>If you lost interview or get massage that interview was corrupted, &lt;br/&gt; you can find data by that interview here</value>
+    <value>If you lost interview or get message that interview was corrupted, &lt;br/&gt; you can find data by that interview here</value>
   </data>
   <data name="Admin_InterviewPackages_NumberOfPackagesAffected" xml:space="preserve">
     <value>{{count}} packages is going to be changed</value>

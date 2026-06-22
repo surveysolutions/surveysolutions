@@ -1138,6 +1138,9 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="HotkeysSearch" xml:space="preserve">
     <value>Search for sub-sections and questions in section</value>
   </data>
+  <data name="HotkeysTest" xml:space="preserve">
+    <value>Test questionnaire in WebTester</value>
+  </data>
   <data name="MultipleDependencies" xml:space="preserve">
     <value>One or more questions/sub-sections depend on</value>
   </data>
@@ -1275,6 +1278,11 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   </data>
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>Request failed unexpectedly.</value>
+  </data>
+  <data name="ApplicationNotAvailable" xml:space="preserve">
+    <value>Unable to complete the request. The response received does not appear to come from the Survey Solutions server.
+This is usually caused by a network proxy, firewall, or security gateway intercepting the connection.
+Please check your network connection or contact your IT support.</value>
   </data>
   <data name="IncorrectRosterTitle" xml:space="preserve">
     <value>Incorrect roster title question</value>
@@ -1666,5 +1674,8 @@ You entered an invalid input. Each line should follow the format: "Title...Paren
   </data>
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>Switch To will change the display language of the questionnaire. The translation must include text for all elements.</value>
+  </data>
+  <data name="AIAssistant" xml:space="preserve">
+      <value>AI</value>
   </data>
 </root>

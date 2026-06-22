@@ -219,6 +219,9 @@
   <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>Ваша учетная запись не подтверждена. Обратитесь к Вашему супервизору.</value>
   </data>
+  <data name="CommunicationIntegrityFailed" xml:space="preserve">
+    <value>Полученный ответ не выглядит исходящим с сервера Survey Solutions. Обычно это вызвано перехватом соединения сетевым прокси, брандмауэром или шлюзом безопасности. Пожалуйста, проверьте сетевое соединение или обратитесь в службу ИТ-поддержки.</value>
+  </data>
   <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
     <value>Ваше приложение не совместимо с приложением супервизора. Обновите Ваше приложение Interviewer.</value>
   </data>
@@ -1059,5 +1062,41 @@
   </data>
   <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
       <value>Вы использовали функции Гео локации при создании последнего интервью. Пожалуйста, включите их, если необходимо</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment" xml:space="preserve">
+    <value>Завершить задание</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
+    <value>Завершить задание</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
+    <value>Вы уверены, что перечислили все подходящие единицы?</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
+    <value>Открыть задание снова</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>Заданию будет возвращён статус «Открыто», и интервьюеры смогут создавать новые интервью.</value>
+  </data>
+  <data name="Dashboard_CloseAssignment" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
+    <value>Закрыть задание</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
+    <value>Интервьюеры, работающие в автономном режиме, могут продолжать сбор данных до синхронизации. Такие интервью по-прежнему будут приняты.</value>
+  </data>
+  <data name="Dashboard_Assignment_Comment" xml:space="preserve">
+    <value>Комментарий (необязательно)</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
+    <value>Статус: Завершено</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
+    <value>Статус: Закрыто</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
+    <value>Статус: Открыто</value>
   </data>
 </root>

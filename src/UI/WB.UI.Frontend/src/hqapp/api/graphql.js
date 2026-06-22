@@ -3,10 +3,16 @@ import { ApolloLink } from '@apollo/client/core'
 import { createHttpLink } from '@apollo/client/core'
 import { onError } from '@apollo/client/link/error'
 import { InMemoryCache } from '@apollo/client/cache'
-import fetch from 'isomorphic-unfetch'
+import { validateFetchResponse } from '~/shared/serverValidator'
+
+const validatingFetch = async (uri, options) => {
+    const response = await fetch(uri, options)
+    validateFetchResponse(response)
+    return response
+}
 
 const link = createHttpLink({
-    fetch,
+    fetch: validatingFetch,
     uri: '/graphql',
 })
 

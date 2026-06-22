@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Main.Core.Entities.SubEntities;
+using NHibernate;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Infrastructure.Native.Fetching;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -40,6 +42,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             x.Where(assignment =>
                 assignment.ResponsibleId == responsibleId
                 && !assignment.Archived
+                // Interviewers only receive Open assignments.
+                // Once Completed or Closed, the assignment is no longer sent to the interviewer tablet
+                // so it is automatically removed from the device after the next sync.
+                && assignment.Status == AssignmentStatus.Open
                 && (assignment.Quantity == null || assignment.InterviewSummaries.Count < assignment.Quantity)
                 && (assignment.WebMode == null || assignment.WebMode == false))
             .ToList());
@@ -51,6 +57,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 x.Where(assignment =>
                         (assignment.ResponsibleId == supervisorId || assignment.Responsible.ReadonlyProfile.SupervisorId == supervisorId)
                         && !assignment.Archived
+                        // Supervisors receive Open and Completed assignments only.
+                        // Closed assignments are considered finalised — they are not sent to the supervisor tablet
+                        // so that they are automatically removed from the device after the next sync.
+                        && (assignment.Status == AssignmentStatus.Open || assignment.Status == AssignmentStatus.Completed)
                         && (assignment.Quantity == null || assignment.InterviewSummaries.Count < assignment.Quantity)
                         && (assignment.WebMode == null || assignment.WebMode == false))
                     .ToList());
@@ -68,6 +78,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         {
             var assignment = this.assignmentsAccessor.Query(_ => _.Where(a => a.Id == id));
             return assignment.SingleOrDefault();
+        }
+
+        public Assignment GetAssignmentWithUpgradeLock(int id)
+        {
+            // Load the assignment by id; the row-level lock is acquired via Session.Refresh(..., LockMode.Upgrade).
+            var assignment = this.assignmentsAccessor.Query(_ => _.Where(a => a.Id == id)).SingleOrDefault();
+            return GetAssignmentWithUpgradeLock(assignment);
+        }
+
+        public Assignment GetAssignmentWithUpgradeLock(Assignment assignment)
+        {
+            if (assignment == null) return null;
+
+            // Acquire a row-level write lock (SELECT ... FOR UPDATE) and reload entity state
+            // to prevent concurrent creation of interviews for size-limited CAWI assignments.
+            this.sessionProvider.Session.Refresh(assignment, LockMode.Upgrade);
+
+            return assignment;
         }
 
         public Assignment GetAssignmentByAggregateRootId(Guid id)
@@ -175,6 +203,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 gpsQuery = gpsQuery
                     .Where(x => 
                         x.Assignment.ResponsibleId == currentUserId
+                        && x.Assignment.Status != AssignmentStatus.Closed
                     );
             } 
             else if (authorizedUser.IsSupervisor)
@@ -191,7 +220,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     AssignmentId = a.Assignment.Id,
                     Latitude = a.Answer.Latitude,
                     Longitude = a.Answer.Longitude,
-                    ResponsibleRoleId = a.Assignment.Responsible.RoleIds.FirstOrDefault()
+                    ResponsibleRoleId = a.Assignment.Responsible.RoleIds.FirstOrDefault(),
+                    Status = a.Assignment.Status
                 })
                 .Distinct()
                 .ToList();
@@ -311,6 +341,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                      x.QuestionnaireId.Version == questionnaireId.Version &&
                      x.Responsible.ReadonlyProfile.SupervisorId != null &&
                      !x.Archived &&
+                     x.Status == AssignmentStatus.Open &&
                      (x.Quantity == null || x.InterviewSummaries.Count < x.Quantity) &&
                      x.WebMode == true;
             return readyForWebInterviewAssignments;

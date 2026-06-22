@@ -509,6 +509,12 @@
     <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
   <value>الاهتزاز عند إعطاء إجابة غير صالحة</value>
 </data>
+    <data name="Prefs_CommunicationIntegrityValidationIgnoreTitle" xml:space="preserve">
+  <value>تجاهل التحقق من سلامة الاتصال</value>
+</data>
+    <data name="Prefs_CommunicationIntegrityValidationIgnoreSummary" xml:space="preserve">
+  <value>عند التفعيل، سيتم تجاهل أخطاء التحقق من سلامة الاتصال</value>
+</data>
     <data name="Interview_Cover_Screen_Title" xml:space="preserve">
   <value>الغلاف</value>
 </data>
@@ -991,4 +997,16 @@
     <value>أسئلة
 بدون إجابة</value>
 </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>مفتوح</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>منتهي</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>موافق عليه</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>حالة التعيين</value>
+  </data>
 </root>

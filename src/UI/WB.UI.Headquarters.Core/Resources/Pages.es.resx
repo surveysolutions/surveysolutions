@@ -139,7 +139,7 @@
     <value>Cambiar clave</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>Perfil</value>
+    <value>Contacto</value>
   </data>
   <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
     <value>Autenticación de dos factores</value>
@@ -520,7 +520,7 @@
     <value>Fecha de la última comunicación</value>
   </data>
   <data name="InterviewerProfile_Relinked" xml:space="preserve">
-    <value>Relinked</value>
+    <value>Vinculado de nuevo</value>
   </data>
   <data name="InterviewerProfile_TotalSyncTime" xml:space="preserve">
     <value>Duración de la sincronización</value>
@@ -1377,6 +1377,9 @@
   </data>
   <data name="MapList_Updated" xml:space="preserve">
     <value>Actualizado en</value>
+  </data>
+  <data name="MapList_HasDuplicateLabels" xml:space="preserve">
+    <value>Tiene etiquetas duplicadas</value>
   </data>
   <data name="MapLinking_DescriptionTitle" xml:space="preserve">
     <value>Gestionar enlaces de mapas de usuarios</value>

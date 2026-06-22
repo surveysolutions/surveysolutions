@@ -896,6 +896,9 @@
   <data name="HotkeysSearch" xml:space="preserve">
     <value>Поиск в подсекциях и вопросах в секции</value>
   </data>
+  <data name="HotkeysTest" xml:space="preserve">
+    <value>Тестировать анкету в WebTester</value>
+  </data>
   <data name="MultipleDependencies" xml:space="preserve">
     <value>Один или более вопросов/подсекций зависит от </value>
   </data>
@@ -1180,6 +1183,11 @@
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>Запрос завершился неудачно.</value>
     <comment>Запрос завершился неудачно.</comment>
+  </data>
+  <data name="ApplicationNotAvailable" xml:space="preserve">
+    <value>Невозможно выполнить запрос. Полученный ответ, по всей видимости, не поступает с сервера Survey Solutions.
+Как правило, это вызвано сетевым прокси-сервером, брандмауэром или шлюзом безопасности, перехватывающим соединение.
+Проверьте подключение к сети или обратитесь в службу поддержки IT.</value>
   </data>
   <data name="SelectedInvalidItem" xml:space="preserve">
     <value>Выбранный недопустимый элемент. Почини это.</value>
@@ -1620,7 +1628,7 @@
     <value>Файл загружен</value>
   </data>
   <data name="DataChangesReverted" xml:space="preserve">
-    <value>Data changes reverted</value>
+    <value>Изменения данных отменены</value>
   </data>
   <data name="OptionsSizeLimit" xml:space="preserve">
     <value>Максимально допустимо только {max_rows} строк</value>
@@ -1683,4 +1691,48 @@
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>Переключить на изменит язык отображения опросника. Перевод должен содержать текст для всех элементов.</value>
 </data>
+  <data name="AIAssistant" xml:space="preserve">
+      <value>ИИ</value>
+  </data>
+
+
+  <data name="ErrorsCounter_plural" xml:space="preserve">
+    <value>{{count}} ошибок</value>
+  </data>
+
+  <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
+    <value>{{count}} вложений ({{bytes}} всего)</value>
+  </data>
+
+  <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
+    <value>{{count}} таблиц подстановки:</value>
+  </data>
+
+  <data name="SideBarMacroCounter_plural" xml:space="preserve">
+    <value>{{count}} макросов:</value>
+  </data>
+
+  <data name="SideBarSectionsCounter_plural" xml:space="preserve">
+    <value>{{count}} разделов:</value>
+  </data>
+
+  <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
+    <value>{{count}} переводов</value>
+  </data>
+
+  <data name="WarningsCounter_plural" xml:space="preserve">
+    <value>{{count}} предупреждений</value>
+  </data>
+
+  <data name="CompilationErrorsCounter_plural" xml:space="preserve">
+    <value>{{count}} ошибок найдено</value>
+  </data>
+
+  <data name="CompilationWarningsCounter_plural" xml:space="preserve">
+    <value>{{count}} предупреждений найдено</value>
+  </data>
+
+  <data name="FindReplaceInAllFound_plural" xml:space="preserve">
+    <value>в {{count}} найденных объектах?</value>
+  </data>
 </root>

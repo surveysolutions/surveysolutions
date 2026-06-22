@@ -126,6 +126,9 @@
   <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>Su cuenta no está aprobada. Por favor, póngase en contacto con su supervisor.</value>
   </data>
+  <data name="CommunicationIntegrityFailed" xml:space="preserve">
+    <value>La respuesta recibida no parece provenir del servidor de Survey Solutions. Esto suele ser causado por un proxy de red, firewall o pasarela de seguridad que intercepta la conexión. Por favor, compruebe su conexión de red o contacte con el soporte de TI.</value>
+  </data>
   <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
     <value>Su aplicación no es compatible con el servidor. Actualice la aplicación del entrevistador.</value>
   </data>
@@ -319,7 +322,7 @@
     <value>Sincronización completada con éxito</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>tareas completadas</value>
+    <value>entrevistas completadas</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} de {1} {2} completados</value>
@@ -763,7 +766,7 @@
     <value>Todos los mapas se sincronizaron</value>
   </data>
   <data name="Maps_Title" xml:space="preserve">
-    <value>Maps</value>
+    <value>Mapas</value>
   </data>
   <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
     <value>Comprobando mapas en el servidor</value>
@@ -835,7 +838,7 @@
     <value>Seleccione un nuevo responsable para la entrevista. Aparecerá en el dispositivo del entrevistador después de la próxima sincronización.</value>
   </data>
   <data name="SupervisorVersion" xml:space="preserve">
-    <value>Supervisor version: {0}</value>
+    <value>Versión del supervisor: {0}</value>
   </data>
   <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
     <value>Compruebe si hay entrevistas obsoletas</value>
@@ -1023,5 +1026,41 @@
 </data>
   <data name="MenuItem_Title_Return" xml:space="preserve">
       <value>Regresar</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment" xml:space="preserve">
+    <value>Completar</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
+    <value>Completar asignación</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
+    <value>¿Está seguro de haber enumerado todas las unidades elegibles?</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
+    <value>Reabrir asignación</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>La asignación volverá al estado Abierto y los entrevistadores podrán crear nuevas entrevistas.</value>
+  </data>
+  <data name="Dashboard_CloseAssignment" xml:space="preserve">
+    <value>Aprobar</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
+    <value>Cerrar asignación</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
+    <value>Los entrevistadores que trabajan sin conexión pueden continuar recopilando datos hasta la sincronización. Dichas entrevistas seguirán siendo aceptadas.</value>
+  </data>
+  <data name="Dashboard_Assignment_Comment" xml:space="preserve">
+    <value>Comentario (opcional)</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
+    <value>Estado: Completado</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
+    <value>Estado: Aprobado</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
+    <value>Estado: Abierto</value>
   </data>
 </root>

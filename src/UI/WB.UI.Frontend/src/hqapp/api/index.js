@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { map } from 'lodash'
+import { installAxiosInterceptors } from '~/shared/serverValidator'
 
 class QuestionnaireApi {
     constructor(questionnaireId, version, http) {
@@ -428,6 +429,15 @@ class AssignmentsApi {
             responsible: responsible,
         })
     }
+
+    changeStatus(assignmentId, status, comment) {
+        var url = `${this.base}/${assignmentId}/changeStatus`
+
+        return this.http.post(url, {
+            status: status,
+            comment: comment || null,
+        })
+    }
 }
 
 class WebInterviewSettingsApi {
@@ -621,6 +631,15 @@ class ExportSettings {
                 headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             })
     }
+
+    setGeographyExportFormat(geographyExportFormat) {
+        return this.http({
+            method: 'post',
+            url: `${this.base}/SetGeographyExportFormat`,
+            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
+            data: { geographyExportFormat: geographyExportFormat }
+        })
+    }
 }
 
 // var $webInterviewSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "WebInterviewSettings" })';
@@ -683,7 +702,7 @@ class AdminSettings {
             data: { allowInterviewerUpdateProfile: allowInterviewerUpdateProfile }
         })
     }
-    setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled, isPartialSynchronizationEnabled) {
+    setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled, isPartialSynchronizationEnabled, allowSupervisorChangeAssignmentStatus, allowInterviewerChangeAssignmentStatus) {
         return this.http({
             method: 'post',
             url: `${this.base}/InterviewerSettings`,
@@ -692,6 +711,8 @@ class AdminSettings {
                 interviewerAutoUpdatesEnabled: isInterviewerAutomaticUpdatesEnabled,
                 notificationsEnabled: isDeviceNotificationsEnabled,
                 partialSynchronizationEnabled: isPartialSynchronizationEnabled,
+                allowSupervisorChangeAssignmentStatus: allowSupervisorChangeAssignmentStatus,
+                allowInterviewerChangeAssignmentStatus: allowInterviewerChangeAssignmentStatus,
             }
         })
     }
@@ -761,6 +782,7 @@ class HqApiClient {
         this.http = axios.create({
             baseURL: basePath,
         })
+        installAxiosInterceptors(this.http)
     }
 
     Questionnaire(questionnaireId, version) {

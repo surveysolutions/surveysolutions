@@ -825,6 +825,18 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Prefs_CommunicationIntegrityValidationIgnoreTitle {
+            get {
+                return ResourceManager.GetString("Prefs_CommunicationIntegrityValidationIgnoreTitle", resourceCulture);
+            }
+        }
+        
+        public static string Prefs_CommunicationIntegrityValidationIgnoreSummary {
+            get {
+                return ResourceManager.GetString("Prefs_CommunicationIntegrityValidationIgnoreSummary", resourceCulture);
+            }
+        }
+        
         public static string Interview_Cover_Screen_Title {
             get {
                 return ResourceManager.GetString("Interview_Cover_Screen_Title", resourceCulture);
@@ -1230,6 +1242,30 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string MapDashboard_FiltersTitle {
             get {
                 return ResourceManager.GetString("MapDashboard_FiltersTitle", resourceCulture);
+            }
+        }
+        
+        public static string MapDashboard_AssignmentStatusTitle {
+            get {
+                return ResourceManager.GetString("MapDashboard_AssignmentStatusTitle", resourceCulture);
+            }
+        }
+        
+        public static string Assignment_Status_Open {
+            get {
+                return ResourceManager.GetString("Assignment_Status_Open", resourceCulture);
+            }
+        }
+        
+        public static string Assignment_Status_Completed {
+            get {
+                return ResourceManager.GetString("Assignment_Status_Completed", resourceCulture);
+            }
+        }
+        
+        public static string Assignment_Status_Closed {
+            get {
+                return ResourceManager.GetString("Assignment_Status_Closed", resourceCulture);
             }
         }
         

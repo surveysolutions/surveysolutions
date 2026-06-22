@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Captcha;
 using Microsoft.AspNetCore.Http;
@@ -71,11 +72,9 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IOptions<RecaptchaSettings> recaptchaSettings;
         private readonly IOptions<CaptchaConfig> captchaConfig;
         private readonly IServiceLocator serviceLocator;
-        private readonly IAggregateRootPrototypeService prototypeService;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
         private const string CaptchaCompletedKey = "CaptchaCompletedKey";
-        private const string PasswordVerifiedKey = "PasswordVerifiedKey";
         public static readonly string LastCreatedInterviewIdKey = "lastCreatedInterviewId";
 
         private readonly ICalendarEventService calendarEventService;
@@ -91,8 +90,7 @@ namespace WB.UI.Headquarters.Controllers
         
         private bool IsPasswordNeededForInterview(string interviewId)
         {
-            var passedInterviews = HttpContext.Session.Get<List<string>>(PasswordVerifiedKey);
-            return !(passedInterviews?.Contains(interviewId)).GetValueOrDefault();
+            return !HttpContext.Session.IsPasswordVerifiedForInterview(interviewId);
         }
 
         private void RememberCaptchaFilled(string interviewId)
@@ -108,13 +106,7 @@ namespace WB.UI.Headquarters.Controllers
 
         private void RememberPasswordVerified(string interviewId)
         {
-            var interviews = HttpContext.Session.Get<List<string>>(PasswordVerifiedKey) ?? new List<string>();
-            if (!interviews.Contains(interviewId))
-            {
-                interviews.Add(interviewId);
-            }
-
-            HttpContext.Session.Set(PasswordVerifiedKey, interviews);
+            HttpContext.Session.SetPasswordVerifiedForInterview(interviewId);
         }
 
         public WebInterviewController(ICommandService commandService,
@@ -131,7 +123,6 @@ namespace WB.UI.Headquarters.Controllers
             IOptions<RecaptchaSettings> recaptchaSettings,
             IOptions<CaptchaConfig> captchaConfig,
             IServiceLocator serviceLocator,
-            IAggregateRootPrototypeService prototypeService, 
             IQuestionnaireStorage questionnaireStorage, 
             IInScopeExecutor inScopeExecutor,
             IMemoryCache memoryCache,
@@ -153,7 +144,6 @@ namespace WB.UI.Headquarters.Controllers
             this.recaptchaSettings = recaptchaSettings;
             this.captchaConfig = captchaConfig;
             this.serviceLocator = serviceLocator;
-            this.prototypeService = prototypeService;
             this.questionnaireStorage = questionnaireStorage;
             this.inScopeExecutor = inScopeExecutor;
             this.memoryCache = memoryCache;
@@ -842,6 +832,10 @@ namespace WB.UI.Headquarters.Controllers
             if (!webInterviewConfig.Started)
                 throw new InvalidOperationException(@"Web interview is not started for this questionnaire");
 
+            if (assignment.Status != AssignmentStatus.Open)
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
+                    Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
+
             var responsible = this.usersRepository.GetUser(assignment.ResponsibleId);
             
             if (responsible == null)
@@ -853,7 +847,6 @@ namespace WB.UI.Headquarters.Controllers
 
             var interviewId = Guid.NewGuid();
             var interviewKey = this.keyGenerator.Get();
-            this.prototypeService.MarkAsPrototype(interviewId, PrototypeType.Temporary);
 
             var createInterviewCommand = new CreateInterview(
                 interviewId,

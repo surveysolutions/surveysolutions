@@ -411,10 +411,10 @@ Vous pouvez créer ou modifier vos questionnaires dans Survey Solutions Designer
     <value>Terminer</value>
   </data>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
-    <value>Survey Solutions Interviewer</value>
+    <value>Enquêteur Survey Solutions</value>
   </data>
   <data name="Supervisor_ApplicationName" xml:space="preserve">
-    <value>Survey Solutions Supervisor</value>
+    <value>Superviseur Survey Solutions</value>
   </data>
   <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
     <value>Pour terminer l'écran</value>
@@ -508,6 +508,12 @@ Vous pouvez créer ou modifier vos questionnaires dans Survey Solutions Designer
   </data>
   <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
     <value>Vibrer lorsqu'une réponse invalide est donnée</value>
+  </data>
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreTitle" xml:space="preserve">
+    <value>Ignorer la validation d'intégrité des communications</value>
+  </data>
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreSummary" xml:space="preserve">
+    <value>Si cette option est activée, les erreurs de validation d'intégrité des communications seront ignorées</value>
   </data>
   <data name="Interview_Cover_Screen_Title" xml:space="preserve">
     <value>Couverture</value>
@@ -991,4 +997,16 @@ critiques</value>
     <value>Questions
 sans réponse</value>
 </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>Ouvert</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>Terminé</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Approuvé</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>Statut de l'affectation</value>
+  </data>
 </root>

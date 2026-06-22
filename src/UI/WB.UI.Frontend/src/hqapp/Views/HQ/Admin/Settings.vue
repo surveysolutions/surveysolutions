@@ -41,7 +41,8 @@
                         v-model:retentionLimitInDays="retentionLimitInDays"
                         v-model:retentionLimitQuantity="retentionLimitQuantity"
                         v-model:retentionLimitInDaysCancel="retentionLimitInDaysCancel"
-                        v-model:retentionLimitQuantityCancel="retentionLimitQuantityCancel" />
+                        v-model:retentionLimitQuantityCancel="retentionLimitQuantityCancel"
+                        v-model:geographyExportFormat="geographyExportFormat" />
                     <Note v-model="globalNotice" />
                     <Profile v-model="isAllowInterviewerUpdateProfile" />
                     <Devices v-model:isInterviewerAutomaticUpdatesEnabled="isInterviewerAutomaticUpdatesEnabled"
@@ -51,7 +52,9 @@
                         v-model:geographyQuestionPeriodInSecondsCancel="geographyQuestionPeriodInSecondsCancel"
                         v-model:geographyQuestionPeriodInSeconds="geographyQuestionPeriodInSeconds"
                         v-model:geographyQuestionAccuracyInMetersCancel="geographyQuestionAccuracyInMetersCancel"
-                        v-model:esriApiKey="esriApiKey" v-model:esriApiKeyInitial="esriApiKeyInitial" />
+                        v-model:esriApiKey="esriApiKey" v-model:esriApiKeyInitial="esriApiKeyInitial"
+                        v-model:allowSupervisorChangeAssignmentStatus="allowSupervisorChangeAssignmentStatus"
+                        v-model:allowInterviewerChangeAssignmentStatus="allowInterviewerChangeAssignmentStatus" />
 
                     <Logo />
                 </div>
@@ -103,12 +106,15 @@ export default {
             dropSchemaDots: 1,
             esriApiKey: null,
             esriApiKeyInitial: null,
+            allowSupervisorChangeAssignmentStatus: true,
+            allowInterviewerChangeAssignmentStatus: true,
 
             isRetentionEnabled: false,
             retentionLimitInDays: null,
             retentionLimitQuantity: null,
             retentionLimitInDaysCancel: null,
             retentionLimitQuantityCancel: null,
+            geographyExportFormat: 'Wkt',
         }
     },
     async beforeMount() {
@@ -130,6 +136,8 @@ export default {
             this.geographyQuestionPeriodInSecondsCancel = workspaceSettings.data.geographyQuestionPeriodInSeconds
             this.esriApiKey = workspaceSettings.data.esriApiKey
             this.esriApiKeyInitial = workspaceSettings.data.esriApiKey
+            this.allowSupervisorChangeAssignmentStatus = workspaceSettings.data.allowSupervisorChangeAssignmentStatus ?? true
+            this.allowInterviewerChangeAssignmentStatus = workspaceSettings.data.allowInterviewerChangeAssignmentStatus ?? true
 
             this.encryptionEnabled = workspaceSettings.data.exportSettings.isEnabled
             this.encryptionPassword = workspaceSettings.data.exportSettings.password
@@ -141,6 +149,7 @@ export default {
             this.retentionLimitQuantity = workspaceSettings.data.exportSettings.retentionLimitQuantity
             this.retentionLimitInDaysCancel = workspaceSettings.data.exportSettings.retentionLimitInDays
             this.retentionLimitQuantityCancel = workspaceSettings.data.exportSettings.retentionLimitQuantity
+            this.geographyExportFormat = workspaceSettings.data.exportSettings.geographyExportFormat ?? 'Wkt'
         },
 
         setPageActive(titleType, messageType) {

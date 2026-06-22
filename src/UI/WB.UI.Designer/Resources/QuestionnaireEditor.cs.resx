@@ -626,6 +626,9 @@ Zobrazení tabulky a matice jsou podporována pouze ve webovém průzkumu, table
   <data name="HotkeysSearch" xml:space="preserve">
     <value>Vyhledávání podsekcí a otázek v sekci</value>
   </data>
+  <data name="HotkeysTest" xml:space="preserve">
+    <value>Testovat dotazník ve WebTesteru</value>
+  </data>
   <data name="HotkeysShortcuts" xml:space="preserve">
     <value>Klávesové zkratky</value>
   </data>
@@ -838,7 +841,7 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>Nastavení dotazníku</value>
   </data>
   <data name="QuestionnaireSummary" xml:space="preserve">
-    <value>({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)</value>
+    <value>({{questionsCount}}O, {{groupsCount}}S, {{rostersCount}}R)</value>
   </data>
   <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
     <value>Celá čísla mezi 1 a 50 jsou povolena</value>
@@ -917,6 +920,11 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
   </data>
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>Požadavek se neočekávaně nezdařil.</value>
+  </data>
+  <data name="ApplicationNotAvailable" xml:space="preserve">
+    <value>Požadavek nelze dokončit. Přijatá odpověď nevypadá, že pochází ze serveru Survey Solutions.
+To je obvykle způsobeno síťovým proxy serverem, firewallem nebo bezpečnostní bránou, která zachytává připojení.
+Zkontrolujte prosím své síťové připojení nebo se obraťte na vaši IT podporu.</value>
   </data>
   <data name="RequiredField" xml:space="preserve">
     <value>Povinné pole</value>
@@ -1528,7 +1536,7 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>Aktualizace</value>
   </data>
   <data name="Upload" xml:space="preserve">
-    <value>Upload</value>
+    <value>Nahrát</value>
   </data>
   <data name="UserDefinedCategories" xml:space="preserve">
     <value>Uživatelem definované kategorie</value>
@@ -1612,7 +1620,7 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
       <value>Registrace</value>
   </data>
   <data name="Reset" xml:space="preserve">
-      <value>Reset</value>
+      <value>Resetovat</value>
   </data>
     <data name="ShowList" xml:space="preserve">
         <value>Zobrazit seznam</value>
@@ -1664,5 +1672,8 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
   </data>
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>Přepnutím se změní jazyk zobrazení dotazníku. Překlad musí obsahovat text pro všechny prvky.</value>
+  </data>
+  <data name="AIAssistant" xml:space="preserve">
+      <value>AI</value>
   </data>
 </root>

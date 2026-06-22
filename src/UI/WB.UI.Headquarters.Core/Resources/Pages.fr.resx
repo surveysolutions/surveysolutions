@@ -139,7 +139,7 @@
     <value>Changer le mot de passe</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>Profil</value>
+    <value>Contact</value>
   </data>
   <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
     <value>Authentification à deux facteurs</value>
@@ -906,7 +906,7 @@
     <value>Langue</value>
   </data>
   <data name="InterviewDetails_DefaultTranslation" xml:space="preserve">
-    <value>original</value>
+    <value>Original</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Connexion</value>
@@ -924,7 +924,7 @@
     <value>Code de récupération</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
-    <value>{{name}} (ver. {{version}})</value>
+    <value>{{name}} (v. {{version}})</value>
     <comment>{0} - Nom du questionnaire, {1} - Version du questionnaire</comment>
   </data>
   <data name="GetLatestApp" xml:space="preserve">
@@ -1378,6 +1378,9 @@
   <data name="MapList_Updated" xml:space="preserve">
     <value>Mis à jour le</value>
   </data>
+  <data name="MapList_HasDuplicateLabels" xml:space="preserve">
+    <value>A des étiquettes en double</value>
+  </data>
   <data name="MapLinking_DescriptionTitle" xml:space="preserve">
     <value>Gérer les liens de carte utilisateur</value>
   </data>
@@ -1746,7 +1749,7 @@
     <value>Si c'est le dernier utilisateur de l'équipe lié à la carte, le superviseur de l'équipe perdra l'accès à la carte.</value>
   </data>
   <data name="QuestionnaireVersionAndName" xml:space="preserve">
-    <value>[ver. {1}] {0}</value>
+    <value>[v. {1}] {0}</value>
   </data>
   <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
     <value>Vérifications critiques</value>

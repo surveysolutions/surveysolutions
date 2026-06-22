@@ -13,15 +13,17 @@ vue.use(VueDOMPurifyHTML)
 import config from '~/shared/config'
 vue.use(config)
 
-import PortalVue from 'portal-vue'
-vue.use(PortalVue)
-
-import { Popover } from 'uiv'
-vue.component('popover', Popover)
+import Bootstrap5Popover from '~/shared/components/Bootstrap5Popover.vue'
+vue.component('popover', Bootstrap5Popover)
 
 import Vuei18n from '~/shared/plugins/locale'
 import { browserLanguage } from '~/shared/helpers'
 const i18n = Vuei18n.initialize(browserLanguage, vue)
+
+// validatePageLoad is called after i18n is initialized to ensure $t() is available
+// when the response arrives and the error modal may need to be rendered.
+import { validatePageLoad } from '~/shared/serverValidator'
+validatePageLoad()
 
 import 'bootstrap'
 import 'flatpickr/dist/flatpickr.css'
