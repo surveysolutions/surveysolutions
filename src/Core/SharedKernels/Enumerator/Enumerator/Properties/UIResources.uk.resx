@@ -900,4 +900,157 @@
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
     <value>Статус завдання</value>
   </data>
+
+
+  <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
+    <value>Щоб активувати кнопку, будь ласка, усуньте критичні проблеми</value>
+  </data>
+
+  <data name="Interview_Complete_CriticalUnanswered" xml:space="preserve">
+    <value>Критичні питання без відповіді: {0}</value>
+  </data>
+
+  <data name="Interview_Complete_FailCriticalConditions" xml:space="preserve">
+    <value>Невиконані критичні правила: {0}</value>
+  </data>
+
+  <data name="Interview_Complete_WithWarningCriticality" xml:space="preserve">
+    <value>Будь ласка, підтвердьте, що хочете надіслати це інтерв'ю з критичними проблемами.</value>
+  </data>
+
+  <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
+    <value>Щоб активувати кнопку, будь ласка, усуньте критичні проблеми або надайте пояснення в полі коментаря вище</value>
+  </data>
+
+  <data name="Interview_Complete_Interview_Status" xml:space="preserve">
+    <value>Проблеми інтерв'ю:</value>
+  </data>
+
+  <data name="Interview_Complete_CriticalityIssuesDescription" xml:space="preserve">
+    <value>Будь ласка, усуньте проблеми, відповівши на критичні питання та переконавшись, що відповіді задовольняють критичні правила</value>
+  </data>
+
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreTitle" xml:space="preserve">
+    <value>Ігнорувати перевірку цілісності зв'язку</value>
+  </data>
+
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreSummary" xml:space="preserve">
+    <value>Коли ввімкнено, помилки перевірки цілісності зв'язку будуть ігноруватися</value>
+  </data>
+
+  <data name="MenuItem_Title_StartGeofencing" xml:space="preserve">
+    <value>Почати геозонування</value>
+  </data>
+
+  <data name="MenuItem_Title_StopGeofencing" xml:space="preserve">
+    <value>Зупинити геозонування</value>
+  </data>
+
+  <data name="MenuItem_Title_StartGeoTracking" xml:space="preserve">
+    <value>Почати запис треку</value>
+  </data>
+
+  <data name="MenuItem_Title_StopGeoTracking" xml:space="preserve">
+    <value>Зупинити запис треку</value>
+  </data>
+
+  <data name="MenuItem_Title_ShowLocation" xml:space="preserve">
+    <value>Показати місцезнаходження</value>
+  </data>
+
+  <data name="MenuItem_Title_HideLocation" xml:space="preserve">
+    <value>Приховати місцезнаходження</value>
+  </data>
+
+  <data name="MenuItem_Title_ExitToDashboard" xml:space="preserve">
+    <value>Вийти на панель</value>
+  </data>
+
+  <data name="MenuItem_Title_ChangeMap" xml:space="preserve">
+    <value>Змінити карту</value>
+  </data>
+
+  <data name="MenuItem_Title_ChangeShapefile" xml:space="preserve">
+    <value>Змінити межі</value>
+  </data>
+
+  <data name="MenuItem_Title_CreateInterview" xml:space="preserve">
+    <value>Створити нове інтерв'ю</value>
+  </data>
+
+  <data name="AssignmentMap_Title_CreateInterview" xml:space="preserve">
+    <value>Почати</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
+    <value>Масштабувати до карти</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomShapefile" xml:space="preserve">
+    <value>Масштабувати до меж</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomCollectedData" xml:space="preserve">
+    <value>Масштабувати до зібраних даних</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
+    <value>Показати все</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
+    <value>Масштабувати до записів трекінгу</value>
+  </data>
+
+  <data name="Interview_PlayVideo" xml:space="preserve">
+    <value>Відтворити відео</value>
+  </data>
+
+  <data name="Interview_PlayAudio" xml:space="preserve">
+    <value>Відтворити аудіо</value>
+  </data>
+ 
+  <data name="Interview_Complete_Instruction" xml:space="preserve">
+    <value>Після надсилання це інтерв'ю буде заблоковано, і його не можна буде редагувати. Будь ласка, переконайтеся, що вся інформація правильна.</value>
+  </data>
+
+  <data name="SelectMapTitle" xml:space="preserve">
+    <value>Виберіть карту:</value>
+  </data>
+
+  <data name="Geofencing_Warning_Message" xml:space="preserve">
+    <value>Ви перебуваєте поза визначеною зоною</value>
+  </data>
+
+  <data name="SelectShapefileTitle" xml:space="preserve">
+    <value>Виберіть межі:</value>
+  </data>
+  
+  <data name="Interview_Complete_Title" xml:space="preserve">
+    <value>Перевірка та надсилання
+Інтерв'ю {0}</value>
+  </data>
+
+  <data name="Interview_Complete_Success_Text" xml:space="preserve">
+    <value>На всі обов'язкові питання надано відповіді
+Помилок не виявлено</value>
+  </data>
+
+  <data name="Interview_Complete_MoreCountString" xml:space="preserve">
+    <value>і ще {0}</value>
+  </data>
+
+  <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
+    <value>Критичні
+помилки</value>
+  </data>
+
+  <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
+    <value>Помилки</value>
+  </data>
+
+  <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
+    <value>Питання
+без відповіді</value>
+  </data>
 </root>

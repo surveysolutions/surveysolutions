@@ -171,7 +171,7 @@ export default {
                 ? (this.config.labels?.removeGroup ?? '&times;')
                 : (this.config.labels?.removeRule ?? '&times;')
 
-            const safeLabel = String(rawLabel).replace(/<[^>]*>/g, '')
+            const safeLabel = String(rawLabel).replace(/[<>]/g, '')
             return safeLabel === '&times;' ? '×' : (safeLabel || '×')
         },
         ruleController(child) {
