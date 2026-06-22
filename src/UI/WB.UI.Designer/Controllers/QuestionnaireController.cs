@@ -544,10 +544,9 @@ namespace WB.UI.Designer.Controllers
             // Only Razor rendering and SMTP send are potentially long-running and are launched
             // as a timed task. They do not use request-scoped services: ViewRenderService
             // creates its own DefaultHttpContext, and MailSender uses only singleton options.
-            var sendTask = SendEmailAsync(user.Email, userName, sharingLink, questionnaireTitle);
-
             try
             {
+                var sendTask = SendEmailAsync(user.Email, userName, sharingLink, questionnaireTitle);
                 using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(requestAborted);
                 timeoutCts.CancelAfter(TimeSpan.FromSeconds(AnonymousSharingEmailTimeoutSeconds));
 
