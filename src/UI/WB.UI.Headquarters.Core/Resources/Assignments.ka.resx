@@ -322,7 +322,7 @@
     <value>მიანიჭეთ</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
-    <value>დავალება {{id}} ვერ დაიხურება, რადგან მასზე ჩართულია ვებ რეჟიმი</value>
+    <value>დავალება {{id}} ვერ შემცირდება, რადგან მასზე ჩართულია ვებ რეჟიმი</value>
   </data>
   <data name="AssignmentExpectedInWebMode" xml:space="preserve">
     <value>ვებ რეჟიმის დავალებისთვის მოსალოდნელი მნიშვნელობის შეცვლა შეუძლებელია.</value>
@@ -448,7 +448,7 @@
     <value>CAWI რეჟიმი მონაცემების უშუალოდ რესპონდენტებისგან შეგროვების საშუალებას იძლევა</value>
   </data>
   <data name="MultipleAssignmentsClose" xml:space="preserve">
-    <value>არჩეული {{count}} დავალება დაიხურება. მოსალოდნელი მნიშვნელობა დაყენდება ამჟამად შეგროვებული ინტერვიუების რაოდენობაზე.</value>
+    <value>არჩეული {{count}} დავალება შემცირდება. მოსალოდნელი მნიშვნელობა დაყენდება ამჟამად შეგროვებული ინტერვიუების რაოდენობაზე.</value>
   </data>
   <data name="NewAssignment" xml:space="preserve">
     <value>ახალი დავალება</value>
