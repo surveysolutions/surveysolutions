@@ -33,9 +33,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnablementViewModelT
             var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
             var questionIdentity = Create.Entity.Identity(questionId, RosterVector.Empty);
 
-            // First call (inside Init) returns the real interview; second call returns null to simulate reload transition
+            // First two calls (Init + initial update) return the real interview; explicit call under test returns null
             var interviewRepositoryMock = new Mock<IStatefulInterviewRepository>();
             interviewRepositoryMock.SetupSequence(r => r.Get(It.IsAny<string>()))
+                .Returns(interview)
                 .Returns(interview)
                 .Returns(default(IStatefulInterview));
 

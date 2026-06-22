@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             if (interview == null)
             {
-                logger.Warn("Interview is null in GetEnablementFromInterview. interviewId: " + InterviewId);
+                logger.Debug("Interview is null in GetEnablementFromInterview. interviewId: " + InterviewId);
                 return false;
             }
             
