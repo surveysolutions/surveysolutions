@@ -4,64 +4,62 @@
             :style="{ top: store.y + 'px', left: store.x + 'px', display: 'block' }" ref="menuEl">
             <ul class="dropdown-menu" role="menu">
                 <li>
-                    <a @click="addQuestion()" v-if="!store.questionnaire?.isReadOnlyForUser &&
+                    <button type="button" class="dropdown-item" @click="addQuestion()" v-if="!store.questionnaire?.isReadOnlyForUser &&
                         !store.currentChapter?.isReadOnly">{{
                             isGroup
                                 ? $t('QuestionnaireEditor.TreeAddQuestion')
                                 : $t('QuestionnaireEditor.TreeAddQuestionAfter')
-                        }}</a>
+                        }}</button>
                 </li>
                 <li>
-                    <a @click="addGroup()" v-if="!store.questionnaire?.isReadOnlyForUser &&
+                    <button type="button" class="dropdown-item" @click="addGroup()" v-if="!store.questionnaire?.isReadOnlyForUser &&
                         !store.currentChapter?.isReadOnly &&
                         !store.currentChapter?.isCover">{{
                             isGroup
                                 ? $t('QuestionnaireEditor.TreeAddSection')
                                 : $t('QuestionnaireEditor.TreeAddSectionAfter')
-                        }}</a>
+                        }}</button>
                 </li>
                 <li>
-                    <a @click="addRoster()" v-if="!store.questionnaire?.isReadOnlyForUser &&
+                    <button type="button" class="dropdown-item" @click="addRoster()" v-if="!store.questionnaire?.isReadOnlyForUser &&
                         !store.currentChapter?.isReadOnly &&
                         !store.currentChapter?.isCover">{{
                             isGroup
                                 ? $t('QuestionnaireEditor.TreeAddRoster')
                                 : $t('QuestionnaireEditor.TreeAddRosterAfter')
-                        }}</a>
+                        }}</button>
                 </li>
                 <li>
-                    <a @click="addStaticText()" v-if="!store.questionnaire?.isReadOnlyForUser &&
+                    <button type="button" class="dropdown-item" @click="addStaticText()" v-if="!store.questionnaire?.isReadOnlyForUser &&
                         !store.currentChapter?.isReadOnly">{{
                             isGroup
                                 ? $t('QuestionnaireEditor.TreeAddStaticText')
                                 : $t('QuestionnaireEditor.TreeAddStaticTextAfter')
-                        }}</a>
+                        }}</button>
                 </li>
                 <li>
-                    <a @click="addVariable()" v-if="!store.questionnaire?.isReadOnlyForUser &&
+                    <button type="button" class="dropdown-item" @click="addVariable()" v-if="!store.questionnaire?.isReadOnlyForUser &&
                         !store.currentChapter?.isReadOnly">{{
                             isGroup
                                 ? $t('QuestionnaireEditor.TreeAddVariable')
                                 : $t('QuestionnaireEditor.TreeAddVariableAfter')
-                        }}</a>
+                        }}</button>
                 </li>
                 <li>
-                    <a @click="copyItem()">{{ $t('QuestionnaireEditor.Copy') }}</a>
+                    <button type="button" class="dropdown-item" @click="copyItem()">{{ $t('QuestionnaireEditor.Copy') }}</button>
                 </li>
                 <li>
-                    <a @click="pasteItemAfter()"
-                        :aria-disabled="canPaste ? null : 'true'"
-                        :class="{ disabled: !canPaste }"
-                        :tabindex="canPaste ? null : -1"
+                    <button type="button" class="dropdown-item" @click="pasteItemAfter()"
+                        :disabled="!canPaste"
                         v-if="!store.questionnaire?.isReadOnlyForUser && !store.currentChapter?.isReadOnly">
                         {{ $t('QuestionnaireEditor.PasteAfter') }}
-                    </a>
+                    </button>
                 </li>
                 <li>
-                    <a @click="deleteItem()" v-if="!store.questionnaire?.isReadOnlyForUser &&
+                    <button type="button" class="dropdown-item" @click="deleteItem()" v-if="!store.questionnaire?.isReadOnlyForUser &&
                         !store.currentChapter?.isReadOnly">
                         {{ $t('QuestionnaireEditor.Delete') }}
-                    </a>
+                    </button>
                 </li>
             </ul>
         </div>

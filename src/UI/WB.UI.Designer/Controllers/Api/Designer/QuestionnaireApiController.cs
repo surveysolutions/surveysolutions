@@ -163,9 +163,20 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         private void SetCacheValidationHeaders(string etag)
         {
+            // Set immediately so unit tests inspecting headers synchronously can observe them.
             Response.Headers.ETag = etag;
             Response.Headers.CacheControl = "private, no-cache";
             Response.Headers.Vary = "Cookie";
+
+            // Re-apply in OnStarting so these headers survive the [ResponseCache(NoStore = true)]
+            // result filter that runs after the action and would otherwise overwrite Cache-Control.
+            Response.OnStarting(() =>
+            {
+                Response.Headers.ETag = etag;
+                Response.Headers.CacheControl = "private, no-cache";
+                Response.Headers.Vary = "Cookie";
+                return Task.CompletedTask;
+            });
         }
 
         [HttpGet]
