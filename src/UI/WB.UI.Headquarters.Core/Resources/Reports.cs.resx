@@ -208,13 +208,13 @@
     <value>Data map se načítají</value>
   </data>
   <data name="Max" xml:space="preserve">
-    <value>Max</value>
+    <value>Maximum</value>
   </data>
   <data name="Median" xml:space="preserve">
     <value>Medián</value>
   </data>
   <data name="Min" xml:space="preserve">
-    <value>Min</value>
+    <value>Minimum</value>
   </data>
   <data name="Percentile05" xml:space="preserve">
     <value>Percentil 05</value>

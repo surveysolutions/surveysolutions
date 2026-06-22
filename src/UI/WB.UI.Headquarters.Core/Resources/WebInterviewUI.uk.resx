@@ -562,4 +562,53 @@
   <data name="CompleteReviewSubmitInterview" xml:space="preserve">
       <value>Інтерв'ю {{key}}</value>
   </data>
+
+
+  <data name="CriticalQuestionErrors" xml:space="preserve">
+    <value>Потрібно відповісти на ці питання:</value>
+  </data>
+
+  <data name="CriticalityConditionsErrors" xml:space="preserve">
+    <value>Потрібно виправити ці помилки:</value>
+  </data>
+
+  <data name="UnansweredQuestions" xml:space="preserve">
+    <value>Питання без відповіді:</value>
+  </data>
+
+  <data name="CompleteCommentCriticalityLevelBlock" xml:space="preserve">
+    <value>Щоб активувати кнопку, будь ласка, усуньте критичні проблеми</value>
+  </data>
+
+  <data name="CompleteCommentCriticalityLevelWarn" xml:space="preserve">
+    <value>Щоб активувати кнопку, будь ласка, усуньте критичні проблеми або надайте пояснення в полі коментаря вище</value>
+  </data>
+
+  <data name="CompleteNoteCommentCriticality" xml:space="preserve">
+    <value>Будь ласка, усуньте проблеми, відповівши на критичні питання та переконавшись, що відповіді задовольняють критичні правила</value>
+  </data>
+
+  <data name="CompleteCriticalityWarnConfirmation" xml:space="preserve">
+    <value>Будь ласка, підтвердьте, що хочете надіслати це інтерв'ю з критичними проблемами.</value>
+  </data>
+
+  <data name="ConfirmationNeededTitle" xml:space="preserve">
+    <value>Потрібне підтвердження</value>
+  </data>
+
+  <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
+      <value>Критичні питання без відповіді: {{count}}</value>
+  </data>
+
+  <data name="Complete_FailedCriticalRules" xml:space="preserve">
+      <value>Невиконані критичні правила: {{count}}</value>
+  </data>
+
+  <data name="Complete_UnansweredQuestions" xml:space="preserve">
+      <value>Питання без відповіді: {{count}}</value>
+  </data>
+
+  <data name="Complete_QuestionsWithErrors" xml:space="preserve">
+      <value>Питання з помилками: {{count}}</value>
+  </data>
 </root>
