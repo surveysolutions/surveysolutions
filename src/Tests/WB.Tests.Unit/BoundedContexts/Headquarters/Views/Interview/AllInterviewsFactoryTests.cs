@@ -171,6 +171,29 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.Interview
         }
 
         [Test]
+        public void Should_find_interviews_by_client_key_substring()
+        {
+            var matchingInterview = Create.Entity.InterviewSummary(interviewId: Guid.NewGuid());
+            matchingInterview.ClientKey = "client-key-123";
+            var nonMatchingInterview = Create.Entity.InterviewSummary(interviewId: Guid.NewGuid());
+            nonMatchingInterview.ClientKey = "other-key-999";
+            var nullClientKeyInterview = Create.Entity.InterviewSummary(interviewId: Guid.NewGuid());
+            nullClientKeyInterview.ClientKey = null;
+
+            var storage = new TestInMemoryWriter<InterviewSummary>();
+            storage.Store(matchingInterview, matchingInterview.InterviewId);
+            storage.Store(nonMatchingInterview, nonMatchingInterview.InterviewId);
+            storage.Store(nullClientKeyInterview, nullClientKeyInterview.InterviewId);
+
+            var factory = Create.Service.AllInterviewsFactory(storage);
+
+            var result = factory.Load(new AllInterviewsInputModel { SearchBy = "key-12" });
+
+            Assert.That(result.TotalCount, Is.EqualTo(1));
+            Assert.That(result.Items.Single().InterviewId, Is.EqualTo(matchingInterview.InterviewId));
+        }
+
+        [Test]
         public void Should_find_interviews_by_responsibleName_substring()
         {
             var matchingInterview = Create.Entity.InterviewSummary(responsibleName: "JohnDoe");
