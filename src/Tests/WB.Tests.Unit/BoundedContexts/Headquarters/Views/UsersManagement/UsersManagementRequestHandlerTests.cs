@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
@@ -7,6 +8,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.Code.UsersManagement;
 using WB.UI.Headquarters.Models.Api;
@@ -173,6 +175,138 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
             }
 
             return -1;
+        }
+
+        [Test]
+        public async Task when_sorting_by_fullname_ascending_null_and_empty_string_sort_together()
+        {
+            var userNullFullName = Create.Entity.HqUser(Id.g1, role: UserRoles.Headquarter);
+            userNullFullName.FullName = null;
+
+            var userEmptyFullName = Create.Entity.HqUser(Id.g2, role: UserRoles.Headquarter);
+            userEmptyFullName.FullName = "";
+
+            var userAlice = Create.Entity.HqUser(Id.g3, role: UserRoles.Headquarter);
+            userAlice.FullName = "Alice";
+
+            var userZoe = Create.Entity.HqUser(Id.g4, role: UserRoles.Headquarter);
+            userZoe.FullName = "Zoe";
+
+            Users = new[] { userZoe, userNullFullName, userAlice, userEmptyFullName };
+
+            var response = await Subject.Handle(new UsersManagementRequest
+            {
+                Length = 10,
+                Order = new List<DataTableRequest.SortOrder>
+                {
+                    new DataTableRequest.SortOrder { Name = "FullName", Dir = OrderDirection.Asc }
+                }
+            });
+
+            var resultNames = response.Data.Select(u => u.FullName).ToList();
+
+            // null and "" both coalesce to "" so they sort before "Alice" and "Zoe"
+            Assert.That(resultNames.IndexOf("Alice"), Is.LessThan(resultNames.IndexOf("Zoe")));
+            Assert.That(resultNames.IndexOf("Alice"), Is.GreaterThan(resultNames.IndexOf(null)));
+            Assert.That(resultNames.IndexOf("Alice"), Is.GreaterThan(resultNames.IndexOf("")));
+        }
+
+        [Test]
+        public async Task when_sorting_by_fullname_descending_null_and_empty_string_sort_together()
+        {
+            var userNullFullName = Create.Entity.HqUser(Id.g1, role: UserRoles.Headquarter);
+            userNullFullName.FullName = null;
+
+            var userEmptyFullName = Create.Entity.HqUser(Id.g2, role: UserRoles.Headquarter);
+            userEmptyFullName.FullName = "";
+
+            var userAlice = Create.Entity.HqUser(Id.g3, role: UserRoles.Headquarter);
+            userAlice.FullName = "Alice";
+
+            var userZoe = Create.Entity.HqUser(Id.g4, role: UserRoles.Headquarter);
+            userZoe.FullName = "Zoe";
+
+            Users = new[] { userZoe, userNullFullName, userAlice, userEmptyFullName };
+
+            var response = await Subject.Handle(new UsersManagementRequest
+            {
+                Length = 10,
+                Order = new List<DataTableRequest.SortOrder>
+                {
+                    new DataTableRequest.SortOrder { Name = "FullName", Dir = OrderDirection.Desc }
+                }
+            });
+
+            var resultNames = response.Data.Select(u => u.FullName).ToList();
+
+            // descending: "Zoe" first, then "Alice", then null/"" at the end
+            Assert.That(resultNames.IndexOf("Zoe"), Is.LessThan(resultNames.IndexOf("Alice")));
+            Assert.That(resultNames.IndexOf("Alice"), Is.LessThan(resultNames.IndexOf(null)));
+            Assert.That(resultNames.IndexOf("Alice"), Is.LessThan(resultNames.IndexOf("")));
+        }
+
+        [Test]
+        public async Task when_sorting_by_username_ascending_should_order_by_username()
+        {
+            Users = new[]
+            {
+                Create.Entity.HqUser(Id.g1, userName: "charlie", role: UserRoles.Headquarter),
+                Create.Entity.HqUser(Id.g2, userName: "alice",   role: UserRoles.Headquarter),
+                Create.Entity.HqUser(Id.g3, userName: "bob",     role: UserRoles.Headquarter),
+            };
+
+            var response = await Subject.Handle(new UsersManagementRequest
+            {
+                Length = 10,
+                Order = new List<DataTableRequest.SortOrder>
+                {
+                    new DataTableRequest.SortOrder { Name = "UserName", Dir = OrderDirection.Asc }
+                }
+            });
+
+            var userNames = response.Data.Select(u => u.UserName).ToList();
+            Assert.That(userNames, Is.EqualTo(new[] { "alice", "bob", "charlie" }));
+        }
+
+        [Test]
+        public async Task when_sorting_by_username_descending_should_order_by_username_descending()
+        {
+            Users = new[]
+            {
+                Create.Entity.HqUser(Id.g1, userName: "charlie", role: UserRoles.Headquarter),
+                Create.Entity.HqUser(Id.g2, userName: "alice",   role: UserRoles.Headquarter),
+                Create.Entity.HqUser(Id.g3, userName: "bob",     role: UserRoles.Headquarter),
+            };
+
+            var response = await Subject.Handle(new UsersManagementRequest
+            {
+                Length = 10,
+                Order = new List<DataTableRequest.SortOrder>
+                {
+                    new DataTableRequest.SortOrder { Name = "UserName", Dir = OrderDirection.Desc }
+                }
+            });
+
+            var userNames = response.Data.Select(u => u.UserName).ToList();
+            Assert.That(userNames, Is.EqualTo(new[] { "charlie", "bob", "alice" }));
+        }
+
+        [Test]
+        public async Task when_no_sort_order_specified_should_return_results_without_sorting()
+        {
+            Users = new[]
+            {
+                Create.Entity.HqUser(Id.g1, userName: "charlie", role: UserRoles.Headquarter),
+                Create.Entity.HqUser(Id.g2, userName: "alice",   role: UserRoles.Headquarter),
+                Create.Entity.HqUser(Id.g3, userName: "bob",     role: UserRoles.Headquarter),
+            };
+
+            var response = await Subject.Handle(new UsersManagementRequest
+            {
+                Length = 10
+            });
+
+            Assert.That(response.Data.Count(), Is.EqualTo(3));
         }
     }
 }
