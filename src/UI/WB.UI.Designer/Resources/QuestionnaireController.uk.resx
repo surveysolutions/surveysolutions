@@ -327,4 +327,9 @@
   <data name="You" xml:space="preserve">
     <value>ти</value>
   </data>
+
+
+  <data name="CloneDeletedWarning" xml:space="preserve">
+      <value>Ви створюєте копію видаленої анкети. Деякі частини можуть бути втрачені.</value>
+  </data>
 </root>
