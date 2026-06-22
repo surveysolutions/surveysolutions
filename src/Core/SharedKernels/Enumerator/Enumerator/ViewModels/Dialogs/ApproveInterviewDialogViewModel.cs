@@ -36,6 +36,7 @@ public class ApproveInterviewDialogViewModel : ActionDialogViewModel<ApproveInte
         this.commandService = commandService;
         this.auditLogService = auditLogService;
         this.messenger = messenger;
+        this.CanApply = true;
     }
 
     public override string DialogTitle => UIResources.Supervisor_Complete_Approve_btn;

@@ -287,7 +287,7 @@
     <value>Nouvelle affectation</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>E-mail</value>
   </data>
   <data name="EmailExplanation" xml:space="preserve">
     <value>L'email sera utilisé dans la communication avec le destinataire de l'affectation</value>
@@ -350,13 +350,13 @@
     <value>Le mot de passe par affectation pour le mode web avec une quantité de 1 doit être unique</value>
   </data>
     <data name="QuestionnaireVersion" xml:space="preserve">
-    <value>ver. {{version}}</value>
+    <value>v. {{version}}</value>
   </data>
   <data name="AssignmentId" xml:space="preserve">
     <value>ID d'affectation</value>
   </data>
   <data name="MultipleAssignmentsClose" xml:space="preserve">
-    <value>{{count}} affectations sélectionnées vont être fermées. La valeur attendue sera définie sur le nombre d'entretiens actuellement collectés.</value>
+    <value>{{count}} affectations sélectionnées vont être réduites. La valeur attendue sera définie sur le nombre d'entretiens actuellement collectés.</value>
   </data>
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
     <value>La valeur attendue de l'affectation sélectionnée {{id}} sera changée de {{quantity}} à {{collected}} (nombre d'entretiens actuellement collectés)</value>
@@ -365,7 +365,7 @@
     <value>Fermer</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
-    <value>L'affectation {{id}} ne peut pas être fermée car elle a le mode web activé</value>
+    <value>L'affectation {{id}} ne peut pas être réduite car elle a le mode web activé</value>
   </data>
   <data name="AssignmentInfo" xml:space="preserve">
     <value>Informations détaillées sur l'affectation</value>

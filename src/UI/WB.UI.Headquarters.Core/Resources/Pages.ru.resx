@@ -124,7 +124,7 @@
     <value>Сохранить изменения</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>Профиль</value>
+    <value>Контакт</value>
   </data>
   <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
     <value>Двухфакторная аутентификация</value>
@@ -418,7 +418,7 @@
     <value>Фильтр</value>
   </data>
   <data name="Layout_Legal" xml:space="preserve">
-    <value>Legal</value>
+    <value>Правовая информация</value>
   </data>
   <data name="NoResults" xml:space="preserve">
     <value>Результаты не найдены</value>
@@ -1468,7 +1468,7 @@
     <comment>Домой</comment>
   </data>
   <data name="AppUpdates" xml:space="preserve">
-    <value>Apk infos</value>
+    <value>Информация о APK</value>
   </data>
   <data name="Configuration" xml:space="preserve">
     <value>Настройки</value>
