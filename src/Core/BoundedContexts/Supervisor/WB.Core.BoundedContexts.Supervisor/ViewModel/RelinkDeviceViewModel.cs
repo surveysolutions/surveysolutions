@@ -110,6 +110,10 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             {
                 this.ErrorMessage = ex.Message;
             }
+            catch (OperationCanceledException) when (this.cancellationTokenSource.IsCancellationRequested)
+            {
+                // User-initiated cancellation (Back navigation) — no error message.
+            }
             catch (Exception)
             {
                 this.ErrorMessage = EnumeratorUIResources.UnexpectedException;
