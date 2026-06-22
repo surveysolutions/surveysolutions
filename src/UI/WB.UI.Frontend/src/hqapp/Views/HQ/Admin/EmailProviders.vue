@@ -585,18 +585,11 @@ export default {
                 this.sendEmailResult = null
             }
         },*/
-        isFormDirty(val) {
-            if (val) {
-                this.providerSettingsResult = null
-                this.sendEmailResult = null
-                this.sendingErrors = []
-            }
-        },
-        provider: function (val) {
-            if (val === 'none') {
-                this.$refs.settigsForm.validate()
-            }
-        },
+        provider: function (val) {
+            if (val === 'none') {
+                this.$refs.settigsForm.validate()
+            }
+        },
         testEmailAddress: function () {
             this.sendEmailResult = null
             this.sendingErrors = []
