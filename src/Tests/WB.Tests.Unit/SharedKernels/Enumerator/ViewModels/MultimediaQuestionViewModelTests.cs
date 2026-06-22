@@ -1,5 +1,5 @@
-using System;
-using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using MvvmCross.Base;
@@ -39,6 +39,24 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
         }
 
+        private static IEnumerable<TestCaseData> MissingPermissionCases()
+        {
+            yield return new TestCaseData(
+                    new MissingPermissionsException("no camera", typeof(Permissions.Camera)),
+                    UIResources.MissingPermissions_Camera)
+                .SetName("when_camera_permission_denied");
+
+            yield return new TestCaseData(
+                    new MissingPermissionsException("no storage", typeof(Permissions.StorageWrite)),
+                    UIResources.MissingPermissions_Storage)
+                .SetName("when_storage_permission_denied");
+
+            yield return new TestCaseData(
+                    new MissingPermissionsException("custom permission error", new Exception("inner")),
+                    "custom permission error")
+                .SetName("when_generic_permission_error_occurs");
+        }
+
         private static MultimediaQuestionViewModel CreateViewModel(
             IPrincipal principal = null,
             IStatefulInterviewRepository interviewRepository = null,
@@ -68,40 +86,28 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 fileSystemAccessor: fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
         }
 
-        // Calls the private RequestAnswerAsync method directly, bypassing MvvmCross command infrastructure.
-        private static Task InvokeRequestAnswerAsync(MultimediaQuestionViewModel viewModel)
-        {
-            var method = typeof(MultimediaQuestionViewModel)
-                .GetMethod("RequestAnswerAsync", BindingFlags.NonPublic | BindingFlags.Instance);
-            return (Task)method!.Invoke(viewModel, null);
-        }
-
-        // Sets private fields that would normally be initialized by Init(), allowing tests
-        // to call RequestAnswerAsync without a fully wired interview/questionnaire.
         private static void SetPrivateFields(MultimediaQuestionViewModel viewModel,
             Identity questionIdentity = null,
             string variableName = "q1")
         {
             var type = typeof(MultimediaQuestionViewModel);
-            type.GetField("questionIdentity", BindingFlags.NonPublic | BindingFlags.Instance)!
+            type.GetField("questionIdentity", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
                 .SetValue(viewModel, questionIdentity ?? Create.Entity.Identity());
-            type.GetField("variableName", BindingFlags.NonPublic | BindingFlags.Instance)!
+            type.GetField("variableName", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
                 .SetValue(viewModel, variableName);
         }
 
-        [Test]
-        public async Task when_camera_permission_denied_and_question_already_has_answer_should_not_mark_question_invalid()
+        private static MultimediaQuestionViewModel CreateViewModelForPermissionsFailure(
+            MissingPermissionsException exception,
+            Mock<IUserInteractionService> userInteractionService,
+            Mock<ValidityViewModel> validityViewModel)
         {
-            // arrange
             var pictureChooser = new Mock<IPictureChooser>();
-            pictureChooser.Setup(p => p.TakePicture())
-                .ThrowsAsync(new MissingPermissionsException("no camera", typeof(Permissions.Camera)));
+            pictureChooser.Setup(p => p.TakePicture()).ThrowsAsync(exception);
 
-            var userInteractionService = new Mock<IUserInteractionService>();
-            userInteractionService.Setup(u => u.SelectOneOptionFromList(It.IsAny<string>(), It.IsAny<string[]>()))
+            userInteractionService
+                .Setup(u => u.SelectOneOptionFromList(It.IsAny<string>(), It.IsAny<string[]>()))
                 .ReturnsAsync(UIResources.Multimedia_TakePhoto);
-
-            var validityViewModel = new Mock<ValidityViewModel>();
 
             var questionState = new Mock<QuestionStateViewModel<PictureQuestionAnswered>>();
             questionState.Setup(q => q.Validity).Returns(validityViewModel.Object);
@@ -111,86 +117,51 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 userInteractionService: userInteractionService.Object,
                 questionStateViewModel: questionState.Object);
 
-            // simulate question already has an answer
-            viewModel.Answer = new byte[] { 1, 2, 3 };
             SetPrivateFields(viewModel);
+            return viewModel;
+        }
 
-            // act — call private method directly to avoid MvvmCross thread-dispatch infrastructure
-            await InvokeRequestAnswerAsync(viewModel);
+        [TestCaseSource(nameof(MissingPermissionCases))]
+        public async Task when_permission_request_fails_for_answered_question_should_show_toast(
+            MissingPermissionsException exception,
+            string expectedMessage)
+        {
+            var userInteractionService = new Mock<IUserInteractionService>();
+            var validityViewModel = new Mock<ValidityViewModel>();
+            var viewModel = CreateViewModelForPermissionsFailure(exception, userInteractionService, validityViewModel);
+            viewModel.Answer = new byte[] { 1, 2, 3 };
 
-            // assert: validity should NOT be marked with an error
+            await viewModel.RequestAnswerCommand.ExecuteAsync();
+
+            userInteractionService.Verify(
+                u => u.ShowToast(expectedMessage, It.IsAny<bool>()),
+                Times.Once,
+                "ShowToast should be called when retake fails but answer already exists");
             validityViewModel.Verify(
                 v => v.MarkAnswerAsNotSavedWithMessage(It.IsAny<string>()),
                 Times.Never,
                 "MarkAnswerAsNotSavedWithMessage should not be called when question already has an answer");
         }
 
-        [Test]
-        public async Task when_camera_permission_denied_and_question_already_has_answer_should_show_toast()
+        [TestCaseSource(nameof(MissingPermissionCases))]
+        public async Task when_permission_request_fails_for_unanswered_question_should_mark_answer_as_not_saved(
+            MissingPermissionsException exception,
+            string expectedMessage)
         {
-            // arrange
-            var pictureChooser = new Mock<IPictureChooser>();
-            pictureChooser.Setup(p => p.TakePicture())
-                .ThrowsAsync(new MissingPermissionsException("no camera", typeof(Permissions.Camera)));
-
             var userInteractionService = new Mock<IUserInteractionService>();
-            userInteractionService.Setup(u => u.SelectOneOptionFromList(It.IsAny<string>(), It.IsAny<string[]>()))
-                .ReturnsAsync(UIResources.Multimedia_TakePhoto);
-
             var validityViewModel = new Mock<ValidityViewModel>();
-            var questionState = new Mock<QuestionStateViewModel<PictureQuestionAnswered>>();
-            questionState.Setup(q => q.Validity).Returns(validityViewModel.Object);
+            var viewModel = CreateViewModelForPermissionsFailure(exception, userInteractionService, validityViewModel);
 
-            var viewModel = CreateViewModel(
-                pictureChooser: pictureChooser.Object,
-                userInteractionService: userInteractionService.Object,
-                questionStateViewModel: questionState.Object);
+            await viewModel.RequestAnswerCommand.ExecuteAsync();
 
-            viewModel.Answer = new byte[] { 1, 2, 3 };
-            SetPrivateFields(viewModel);
-
-            // act
-            await InvokeRequestAnswerAsync(viewModel);
-
-            // assert: a toast should be shown
-            userInteractionService.Verify(
-                u => u.ShowToast(It.IsAny<string>(), It.IsAny<bool>()),
-                Times.Once,
-                "ShowToast should be called when retake fails but answer already exists");
-        }
-
-        [Test]
-        public async Task when_camera_permission_denied_and_question_has_no_answer_should_mark_question_invalid()
-        {
-            // arrange
-            var pictureChooser = new Mock<IPictureChooser>();
-            pictureChooser.Setup(p => p.TakePicture())
-                .ThrowsAsync(new MissingPermissionsException("no camera", typeof(Permissions.Camera)));
-
-            var userInteractionService = new Mock<IUserInteractionService>();
-            userInteractionService.Setup(u => u.SelectOneOptionFromList(It.IsAny<string>(), It.IsAny<string[]>()))
-                .ReturnsAsync(UIResources.Multimedia_TakePhoto);
-
-            var validityViewModel = new Mock<ValidityViewModel>();
-            var questionState = new Mock<QuestionStateViewModel<PictureQuestionAnswered>>();
-            questionState.Setup(q => q.Validity).Returns(validityViewModel.Object);
-
-            var viewModel = CreateViewModel(
-                pictureChooser: pictureChooser.Object,
-                userInteractionService: userInteractionService.Object,
-                questionStateViewModel: questionState.Object);
-
-            // Answer is null (no existing answer)
-            SetPrivateFields(viewModel);
-
-            // act
-            await InvokeRequestAnswerAsync(viewModel);
-
-            // assert: validity should be marked with an error
             validityViewModel.Verify(
-                v => v.MarkAnswerAsNotSavedWithMessage(It.IsAny<string>()),
+                v => v.MarkAnswerAsNotSavedWithMessage(expectedMessage),
                 Times.Once,
                 "MarkAnswerAsNotSavedWithMessage should be called when there is no existing answer");
+            userInteractionService.Verify(
+                u => u.ShowToast(It.IsAny<string>(), It.IsAny<bool>()),
+                Times.Never,
+                "ShowToast should not be called when there is no existing answer");
         }
     }
 }
