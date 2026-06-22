@@ -499,14 +499,10 @@ namespace WB.UI.Headquarters.Controllers
             var names = new List<string>();
             foreach (var entityId in assignment.AudioAuditScope)
             {
-                try
-                {
+                if (questionnaire.HasGroup(entityId))
                     names.Add(questionnaire.GetEntityVariableOrThrow(entityId));
-                }
-                catch
-                {
+                else
                     names.Add(entityId.ToString());
-                }
             }
             return names;
         }

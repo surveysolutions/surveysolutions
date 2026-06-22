@@ -759,7 +759,7 @@ export default {
             return this.$t('Common.No')
         },
         hasAudioAuditScope() {
-            return this.model.audioAuditScope && this.model.audioAuditScope.length > 0
+            return this.model.audioAuditScopeVariableNames && this.model.audioAuditScopeVariableNames.length > 0
         },
         isReceivedByTablet() {
             return this.model.receivedByTabletAtUtc != null
