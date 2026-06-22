@@ -406,7 +406,7 @@ Posibles razones:
     <value>Configure los parámetros para acceder al servidor SMTP a continuación. Más información sobre el uso del servidor SMTP con Survey Solutions está disponible </value>
   </data>
   <data name="EmailProvider_SmtpHost" xml:space="preserve">
-    <value>Host</value>
+    <value>Servidor</value>
   </data>
   <data name="EmailProvider_SmtpHostHelp" xml:space="preserve">
     <value>Dirección del servidor SMTP</value>

@@ -86,7 +86,7 @@
     <value>{0} (v{1})</value>
   </data>
   <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
-    <value>{0} interview(s)</value>
+    <value>{0} entretien(s)</value>
   </data>
   <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
     <value>Interviews créées : {0}</value>
@@ -452,7 +452,7 @@ Veuillez composer votre mot de passe à nouveau. Si cela ne résout pas le probl
     <value>Langue</value>
   </data>
   <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Originale</value>
   </data>
   <data name="MenuItem_Title_Login" xml:space="preserve">
     <value>Connexion</value>

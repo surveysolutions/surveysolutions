@@ -346,7 +346,7 @@
     <value>Nova Atribuição</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>E-mail</value>
   </data>
   <data name="EmailExplanation" xml:space="preserve">
     <value>O email será usado na comunicação com o destinatário da atribuição</value>
@@ -415,7 +415,7 @@
     <value>ID da atribuição</value>
   </data>
   <data name="MultipleAssignmentsClose" xml:space="preserve">
-    <value>{{count}} atribuições selecionadas serão fechadas. O valor esperado será definido para o número de entrevistas atualmente coletadas.</value>
+    <value>{{count}} atribuições selecionadas serão reduzidas. O valor esperado será definido para o número de entrevistas atualmente coletadas.</value>
   </data>
     <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
     <value>O valor esperado da atribuição selecionada {{id}} será alterado de {{quantity}} para {{collected}} (número de entrevistas atualmente coletadas)</value>
@@ -424,7 +424,7 @@
     <value>Fechar</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
-    <value>Atribuição {{id}} não pode ser fechada, pois tem o modo web ativado</value>
+    <value>Atribuição {{id}} não pode ser reduzida, pois tem o modo web ativado</value>
   </data>
   <data name="AssignmentInfo" xml:space="preserve">
     <value>Informações detalhadas da atribuição</value>

@@ -389,13 +389,13 @@
     <value>Закрыть</value>
   </data>
   <data name="MultipleAssignmentsClose" xml:space="preserve">
-      <value>{{count}} выбранных заданий будет завершено. Ожидаемое количество будет установлено в текущее количество собранных интервью.</value>
+      <value>{{count}} выбранных заданий будет уменьшено. Ожидаемое количество будет установлено в текущее количество собранных интервью.</value>
   </data>
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
       <value>Для задания '{{id}}' ожидаемое количество {{quantity}} будет установлено в {{collected}}</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
-    <value>Задание {{id}} не может быть закрыто, так как включён веб режим</value>
+    <value>Задание {{id}} не может быть уменьшено, так как включён веб режим</value>
   </data>
   <data name="AssignmentInfo" xml:space="preserve">
     <value>Информация о задании</value>
