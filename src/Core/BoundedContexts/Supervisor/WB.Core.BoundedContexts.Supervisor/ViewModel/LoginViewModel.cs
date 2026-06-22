@@ -41,16 +41,21 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         public override string GetUserPasswordHash()
         {
             var userName = this.UserName;
+            if (string.IsNullOrWhiteSpace(userName))
+                return null;
+
+            var normalizedUserName = userName.ToLower();
             var supervisor = this.supervisorsPlainStorage.FirstOrDefault(x =>
-                string.Equals(x.Name, userName, StringComparison.OrdinalIgnoreCase));
+                x.Name.ToLower() == normalizedUserName);
 
             return supervisor?.PasswordHash;
         }
 
         public override void UpdateLocalUser(string userName, string token, string passwordHash)
         {
+            var normalizedUserName = userName.ToLower();
             var localSupervisor = this.supervisorsPlainStorage.FirstOrDefault(x =>
-                string.Equals(x.Name, userName, StringComparison.OrdinalIgnoreCase));
+                x.Name.ToLower() == normalizedUserName);
             if (localSupervisor == null)
                 throw new InvalidOperationException($"Supervisor with {userName} not found");
 

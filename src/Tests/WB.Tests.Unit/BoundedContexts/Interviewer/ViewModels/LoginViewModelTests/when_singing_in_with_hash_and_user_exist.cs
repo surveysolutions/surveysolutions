@@ -48,6 +48,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         [NUnit.Framework.Test] public void should_close_login_viewmodel() =>
             ViewModelNavigationServiceMock.Verify(x => x.Close(viewModel), Times.Once);
 
+        [NUnit.Framework.Test] public void should_clear_password() =>
+            NUnit.Framework.Assert.That(viewModel.Password, NUnit.Framework.Is.EqualTo(string.Empty));
+
         static LoginViewModel viewModel;
         private static readonly string userName = "Vasya";
         private static readonly string userPasswordHash = "passwordHash";
