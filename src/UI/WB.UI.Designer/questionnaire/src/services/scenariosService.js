@@ -29,12 +29,13 @@ export async function deleteScenario(questionnaireId, scenarioId) {
 
 export function isPopupBlockedError(error) {
     return error === 'popup_blocked'
+        || error?.message === 'popup_blocked'
         || error?.code === 'popup_blocked'
         || error?.name === 'popup_blocked';
 }
 
 export async function runScenario(questionnaireId, scenarioId) {
-    var webTesterWindow = window.open('about:blank', '_blank');
+    var webTesterWindow = window.open('about:blank', '_blank', 'noopener,noreferrer');
 
     if (!webTesterWindow) {
         const err = new Error('popup_blocked');
@@ -42,13 +43,20 @@ export async function runScenario(questionnaireId, scenarioId) {
         throw err;
     }
 
-    var webTestUrl = await get('/api/questionnaire/webTest/' + questionnaireId);
+    webTesterWindow.opener = null;
 
-    if (!isUndefined(scenarioId)) {
-        webTestUrl += '?scenarioId=' + scenarioId;
+    try {
+        var webTestUrl = await get('/api/questionnaire/webTest/' + questionnaireId);
+
+        if (!isUndefined(scenarioId)) {
+            webTestUrl += '?scenarioId=' + scenarioId;
+        }
+
+        webTesterWindow.location.href = webTestUrl;
+    } catch (error) {
+        webTesterWindow.close();
+        throw error;
     }
-
-    webTesterWindow.location.href = webTestUrl;
 }
 
 export async function getScenarioSteps(questionnaireId, scenarioId) {
