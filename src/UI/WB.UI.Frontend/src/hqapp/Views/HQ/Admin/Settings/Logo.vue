@@ -150,18 +150,9 @@ export default {
 
         async sendLogoRequest(url, formData, successMsg, errorMsg) {
             try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    body: formData,
-                })
-
-                if (!response.ok) {
-                    throw new Error('Non-OK response')
-                }
-
+                await this.$http.post(url, formData)
                 toastr.info(successMsg)
-            } catch (err) {
-                console.error(errorMsg, err)
+            } catch {
                 toastr.error(errorMsg)
             }
 
