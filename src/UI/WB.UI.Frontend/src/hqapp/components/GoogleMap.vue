@@ -792,7 +792,7 @@ export default {
                         }
                     }
 
-                    interviewStyle.icon.url = `/img/google-maps-markers/${markerForm}-${action}.png`
+                    interviewStyle.icon.url = `/img/google-maps-markers/${markerForm}-${action}.svg`
                     return interviewStyle
                 }
                 if (type == 'Assignment') {
@@ -813,7 +813,7 @@ export default {
                     }
                     // Show green solid marker for completed assignments (interviewer view)
                     // or green hollow/bagel marker for closed assignments (supervisor/HQ/admin view)
-                    let markerSuffix = '-x.png'
+                    let markerSuffix = '-x.svg'
                     if (userRole === 'Interviewer' && assignmentStatus === 'Completed') {
                         markerSuffix = '-done.svg'
                     } else if (

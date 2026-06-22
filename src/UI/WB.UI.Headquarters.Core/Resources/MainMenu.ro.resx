@@ -228,4 +228,37 @@
   <data name="Workspaces" xml:space="preserve">
     <value>Spații de lucru</value>
   </data>
+
+
+  <data name="AuditLog" xml:space="preserve">
+    <value>Jurnal de audit</value>
+  </data>
+
+  <data name="DeviceLogs" xml:space="preserve">
+    <value>Jurnale dispozitiv</value>
+  </data>
+    
+  <data name="Diagnostics" xml:space="preserve">
+    <value>Diagnostice</value>
+  </data>
+
+  <data name="InterviewPackages" xml:space="preserve">
+    <value>Pachete de interviu</value>
+  </data>
+
+  <data name="Settings" xml:space="preserve">
+    <value>Setări</value>
+  </data>
+
+  <data name="WorkspaceSettings" xml:space="preserve">
+    <value>Setări spațiu de lucru</value>
+  </data>
+
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Furnizori de E-mail</value>
+  </data>
+
+  <data name="TabletInfos" xml:space="preserve">
+    <value>Informații tabletă</value>
+  </data>
 </root>

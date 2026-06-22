@@ -519,7 +519,7 @@ Favor a digitar sua senha atualizada. Se isso não resolver o problema, entre em
     <value>Idioma</value>
   </data>
   <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Idioma original</value>
   </data>
   <data name="MenuItem_Title_Login" xml:space="preserve">
     <value>Entrar</value>
