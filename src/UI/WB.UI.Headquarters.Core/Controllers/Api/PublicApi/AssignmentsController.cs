@@ -555,7 +555,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             return new AudioRecordingEnabled
             {
-                Enabled = assignment.AudioRecording
+                Enabled = assignment.AudioRecording,
+                HasAudioAuditScope = assignment.AudioAuditScope != null && assignment.AudioAuditScope.Count > 0
             };
         }
 

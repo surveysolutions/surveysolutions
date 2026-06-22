@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -228,6 +229,7 @@ namespace WB.UI.Headquarters.Controllers
                 Password = assignment.Password,
                 ProtectedVariables = assignment.ProtectedVariables,
                 AudioAuditScope = assignment.AudioAuditScope,
+                AudioAuditScopeVariableNames = ResolveAudioAuditScopeVariableNames(assignment),
                 Quantity = assignment.Quantity,
                 Questionnaire = new 
                 {
@@ -484,5 +486,29 @@ namespace WB.UI.Headquarters.Controllers
 
         private PanelImportVerificationError[] CreateError(string error, string code = null)
             => new[] {new PanelImportVerificationError(code ?? "PL0000", error)};
+
+        private List<string> ResolveAudioAuditScopeVariableNames(Assignment assignment)
+        {
+            if (assignment.AudioAuditScope == null || assignment.AudioAuditScope.Count == 0)
+                return new List<string>();
+
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignment.QuestionnaireId, null);
+            if (questionnaire == null)
+                return new List<string>();
+
+            var names = new List<string>();
+            foreach (var entityId in assignment.AudioAuditScope)
+            {
+                try
+                {
+                    names.Add(questionnaire.GetEntityVariableOrThrow(entityId));
+                }
+                catch
+                {
+                    names.Add(entityId.ToString());
+                }
+            }
+            return names;
+        }
     }
 }

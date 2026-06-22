@@ -124,6 +124,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         ResponsibleRole = x.Responsible.RoleIds.First().ToUserRole().ToString(),
                         IdentifyingQuestions = this.GetIdentifyingColumnText(x),
                         IsAudioRecordingEnabled = x.AudioRecording,
+                        HasAudioAuditScope = x.AudioAuditScope != null && x.AudioAuditScope.Count > 0,
                         Email = x.Email,
                         Password = x.Password,
                         WebMode = x.WebMode,

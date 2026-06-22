@@ -189,6 +189,14 @@
                                     {{ isAudioRecordingEnabled }}
                                 </td>
                             </tr>
+                            <tr v-if="hasAudioAuditScope">
+                                <td class="text-nowrap">
+                                    {{ $t('Assignments.AudioAuditScopeLabel') }}
+                                </td>
+                                <td>
+                                    {{ model.audioAuditScopeVariableNames.join(', ') }}
+                                </td>
+                            </tr>
                             <tr>
                                 <td class="text-nowrap">
                                     {{ $t('Assignments.Email') }}
@@ -309,6 +317,9 @@
                 <ModalFrame ref="editAudioEnabledModal"
                     :title="$t('Assignments.ChangeAudioRecordingModalTitle', { id: model.id })">
                     <p>{{ $t('Assignments.AudioRecordingExplanation') }}</p>
+                    <p v-if="hasAudioAuditScope" class="text-info">
+                        {{ $t('Assignments.AudioRecordingScopeNotice') }}
+                    </p>
                     <form onsubmit="return false;">
                         <div class="form-group">
                             <Checkbox :label="$t('Assignments.AudioRecordingEnable')" name="audioRecordingEnabled"
@@ -741,9 +752,14 @@ export default {
             return date.local().format(DateFormats.dateTime)
         },
         isAudioRecordingEnabled() {
-            return this.model.isAudioRecordingEnabled
-                ? this.$t('Common.Yes')
-                : this.$t('Common.No')
+            if (this.model.isAudioRecordingEnabled)
+                return this.$t('Common.Yes')
+            if (this.hasAudioAuditScope)
+                return this.$t('Assignments.AudioRecordingPartial')
+            return this.$t('Common.No')
+        },
+        hasAudioAuditScope() {
+            return this.model.audioAuditScope && this.model.audioAuditScope.length > 0
         },
         isReceivedByTablet() {
             return this.model.receivedByTabletAtUtc != null
