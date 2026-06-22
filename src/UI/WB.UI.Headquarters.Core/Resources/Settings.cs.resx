@@ -382,13 +382,13 @@
     <value>Mezipaměť byla úspěšně vymazána</value>
   </data>
   <data name="EmailProvider_Smtp" xml:space="preserve">
-    <value>SMTP Server</value>
+    <value>SMTP server</value>
   </data>
   <data name="EmailProvider_SmtpDescription" xml:space="preserve">
     <value>Níže nakonfigurujte parametry pro přístup k SMTP serveru. Další informace o použití SMTP se Survey Solutions jsou k dispozici </value>
   </data>
   <data name="EmailProvider_SmtpHost" xml:space="preserve">
-    <value>Host</value>
+    <value>Hostitel</value>
   </data>
   <data name="EmailProvider_SmtpHostHelp" xml:space="preserve">
     <value>Adresa SMTP serveru</value>
@@ -397,7 +397,7 @@
     <value>Port</value>
   </data>
   <data name="EmailProvider_SmtpPortHelp" xml:space="preserve">
-    <value>SMTP port</value>
+    <value>Port SMTP</value>
   </data>
   <data name="EmailProvider_SmtpTlsEncryption" xml:space="preserve">
     <value>Použít TLS šifrování</value>

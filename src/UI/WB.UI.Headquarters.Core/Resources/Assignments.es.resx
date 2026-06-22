@@ -415,7 +415,7 @@
     <value>ID de la asignación</value>
   </data>
     <data name="MultipleAssignmentsClose" xml:space="preserve">
-    <value>{{count}} asignaciones seleccionadas se van a cerrar. El valor esperado se establecerá en el número de entrevistas actualmente recopiladas.</value>
+    <value>{{count}} asignaciones seleccionadas se van a reducir. El valor esperado se establecerá en el número de entrevistas actualmente recopiladas.</value>
   </data>
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
     <value>El valor esperado de la asignación seleccionada {{id}} se cambiará de {{quantity}} a {{collected}} (número de entrevistas actualmente recopiladas)</value>
@@ -424,7 +424,7 @@
     <value>Cerrar</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
-    <value>La asignación {{id}} no se puede cerrar ya que tiene el modo web habilitado</value>
+    <value>La asignación {{id}} no se puede reducir ya que tiene el modo web habilitado</value>
   </data>
   <data name="AssignmentInfo" xml:space="preserve">
     <value>Información detallada de la asignación</value>
