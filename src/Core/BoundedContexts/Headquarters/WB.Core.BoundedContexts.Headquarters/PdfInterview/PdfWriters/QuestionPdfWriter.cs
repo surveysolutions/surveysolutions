@@ -141,9 +141,16 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
 
                     if (!string.IsNullOrEmpty(areaAnswer.Coordinates))
                     {
+                        paragraph.Format.AddTabStop(Unit.FromPoint(70), TabAlignment.Left);
+                        paragraph.Format.AddTabStop(Unit.FromPoint(150), TabAlignment.Left);
+
                         paragraph.AddWrapFormattedText(PdfInterviewRes.AreaQestion_Coordinates + ":", PdfStyles.QuestionTitle, textColor);
                         paragraph.AddLineBreak();
-                        paragraph.AddWrapFormattedText($"  {PdfInterviewRes.AreaQestion_Latitude}  {PdfInterviewRes.AreaQestion_Longitude}", PdfStyles.QuestionTitle, textColor);
+                        paragraph.AddWrapFormattedText(" ", PdfStyles.QuestionTitle, textColor);
+                        paragraph.AddTab();
+                        paragraph.AddWrapFormattedText(PdfInterviewRes.AreaQestion_Latitude, PdfStyles.QuestionTitle, textColor);
+                        paragraph.AddTab();
+                        paragraph.AddWrapFormattedText(PdfInterviewRes.AreaQestion_Longitude, PdfStyles.QuestionTitle, textColor);
                         paragraph.AddLineBreak();
 
                         var coordinatePairs = areaAnswer.Coordinates.Split(';');
@@ -154,8 +161,14 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                                 && double.TryParse(parts[0], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var longitude)
                                 && double.TryParse(parts[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var latitude))
                             {
+                                paragraph.AddWrapFormattedText($"{i + 1}", answerStyle, textColor);
+                                paragraph.AddTab();
                                 paragraph.AddWrapFormattedText(
-                                    $"  {i + 1}  {latitude.ToString("F6", System.Globalization.CultureInfo.InvariantCulture)}, {longitude.ToString("F6", System.Globalization.CultureInfo.InvariantCulture)}",
+                                    latitude.ToString("F6", System.Globalization.CultureInfo.InvariantCulture),
+                                    answerStyle, textColor);
+                                paragraph.AddTab();
+                                paragraph.AddWrapFormattedText(
+                                    longitude.ToString("F6", System.Globalization.CultureInfo.InvariantCulture),
                                     answerStyle, textColor);
                             }
                             else
