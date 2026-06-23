@@ -432,11 +432,13 @@ task DockerHq {
         $tags += @("surveysolutions/surveysolutions:latest")
     }
 
-    # if (-not $noDockerPush.IsPresent) {
-    #     $arguments += @(
-    #         "--platform", "linux/amd64,linux/arm64"
-    #     )
-    # }
+    # Multi-arch images can only be exported to a registry, not loaded into the
+    # local docker daemon, so request both platforms only when pushing.
+    if (-not $noDockerPush.IsPresent) {
+        $arguments += @(
+            "--platform", "linux/amd64,linux/arm64"
+        )
+    }
 
     Build-Docker ./docker/Dockerfile.hq $tags $arguments
 }

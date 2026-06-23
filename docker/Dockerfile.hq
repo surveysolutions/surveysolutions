@@ -4,11 +4,12 @@ ARG INFO_VERSION=21.01
 ARG NODE=22
 ARG APK_FILES=build
 
-ARG PLATFORM=amd64
-#amd64 #linux/arm64
-
 # Building WB.UI.Frontend application
-FROM --platform=${PLATFORM} node:$NODE AS frontend
+# Build stages run on the native builder platform ($BUILDPLATFORM) and produce
+# portable output (static frontend assets and framework-dependent .NET binaries),
+# so only the final runtime stage targets the requested platform. This keeps
+# multi-arch (linux/amd64, linux/arm64) builds fast and avoids emulation.
+FROM --platform=$BUILDPLATFORM node:$NODE AS frontend
 
 RUN apt-get update && apt-get install -y jq
 
@@ -35,7 +36,7 @@ COPY [ "src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarte
 RUN NODE_OPTIONS="--max-old-space-size=3072" npm run build -- -- --package
 
 # Building export
-FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine3.23 AS export_builder
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine3.23 AS export_builder
 ARG VERSION
 ARG INFO_VERSION
 
@@ -81,7 +82,7 @@ RUN dotnet publish src/Services/Export/WB.Services.Export.Host \
     -c Release -o /export -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
 # Building HQ 
-FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine3.23 AS builder
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine3.23 AS builder
 ARG VERSION
 ARG INFO_VERSION
 
@@ -150,12 +151,12 @@ RUN dotnet publish src/UI/WB.UI.Headquarters.Core \
     -c Release -o /hq -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
 # Copy APK files if any
-FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine3.23 AS apks
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine3.23 AS apks
 ARG APK_FILES
 COPY ${APK_FILES}/*.apk /apk/
 
 # include noto font into image
-FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine3.23 AS fonts_source
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine3.23 AS fonts_source
 
 COPY installer/src/SurveySolutionsProduct/Fonts /usr/share/fonts
 
