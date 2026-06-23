@@ -39,6 +39,7 @@ namespace WB.UI.Interviewer.ViewModel
         private bool isViewVisible;
         private bool isScopeAuditRecording;
         private readonly SemaphoreSlim audioAuditScopeLock = new SemaphoreSlim(1, 1);
+        private readonly CancellationTokenSource scopeRecordingCancellation = new CancellationTokenSource();
         private readonly ILogger logger;
 
         
@@ -155,7 +156,7 @@ namespace WB.UI.Interviewer.ViewModel
                 }
                 else
                 {
-                    await this.EvaluateAudioAuditScopeRecordingAsync(interviewId);
+                    await this.EvaluateAudioAuditScopeRecordingAsync(interviewId, this.scopeRecordingCancellation.Token);
                 }
 
                 auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(),
@@ -212,11 +213,17 @@ namespace WB.UI.Interviewer.ViewModel
                 return;
 
             var interviewId = Guid.Parse(this.InterviewId);
+            var cancellationToken = this.scopeRecordingCancellation.Token;
             Task.Run(async () =>
             {
                 try
                 {
-                    await this.EvaluateAudioAuditScopeRecordingAsync(interviewId).ConfigureAwait(false);
+                    await this.EvaluateAudioAuditScopeRecordingAsync(interviewId, cancellationToken)
+                        .ConfigureAwait(false);
+                }
+                catch (OperationCanceledException)
+                {
+                    // ViewModel is being disposed; nothing to do.
                 }
                 catch (Exception exc)
                 {
@@ -225,14 +232,17 @@ namespace WB.UI.Interviewer.ViewModel
             });
         }
 
-        private async Task EvaluateAudioAuditScopeRecordingAsync(Guid interviewId)
+        private async Task EvaluateAudioAuditScopeRecordingAsync(Guid interviewId, CancellationToken cancellationToken)
         {
             if (IsAudioRecordingEnabled == true)
                 return;
 
-            await this.audioAuditScopeLock.WaitAsync().ConfigureAwait(false);
+            await this.audioAuditScopeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
             try
             {
+                if (cancellationToken.IsCancellationRequested)
+                    return;
+
                 var interview = interviewRepository.Get(this.InterviewId);
                 if (interview == null)
                     return;
@@ -305,7 +315,7 @@ namespace WB.UI.Interviewer.ViewModel
         public override void Dispose()
         {
             this.NavigationState.ScreenChanged -= this.OnScreenChangedForAudioAuditScope;
-            this.audioAuditScopeLock.Dispose();
+            this.scopeRecordingCancellation.Cancel();
             base.Dispose();
         }
     }
