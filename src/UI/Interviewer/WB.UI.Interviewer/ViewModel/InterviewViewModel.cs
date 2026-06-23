@@ -35,6 +35,8 @@ namespace WB.UI.Interviewer.ViewModel
         private readonly IJsonAllTypesSerializer serializer;
         private readonly IMvxMainThreadAsyncDispatcher asyncDispatcher;
         private bool isAuditStarting;
+        private bool isViewVisible;
+        private bool isScopeAuditRecording;
         private readonly ILogger logger;
 
         
@@ -73,6 +75,8 @@ namespace WB.UI.Interviewer.ViewModel
             this.interviewViewRepository = interviewViewRepository;
             this.serializer = serializer;
             this.asyncDispatcher = asyncDispatcher;
+
+            this.NavigationState.ScreenChanged += this.OnScreenChangedForAudioAuditScope;
         }
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () =>
@@ -141,46 +145,15 @@ namespace WB.UI.Interviewer.ViewModel
                 await commandService.ExecuteAsync(new ResumeInterviewCommand(interviewId,
                     Principal.CurrentUserIdentity.UserId, AgentDeviceType.Tablet));
 
+                this.isViewVisible = true;
+
                 if (IsAudioRecordingEnabled == true && !isAuditStarting)
                 {
-                    await asyncDispatcher.ExecuteOnMainThreadAsync(async () =>
-                    {
-                        isAuditStarting = true;
-                        try
-                        {
-                            await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
-                        }
-                        catch (MissingPermissionsException missingPermissionsException)
-                        {
-                            this.logger.Info("Audio audit failed to start.", exception: missingPermissionsException);
-                            await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
-                                .ConfigureAwait(false);
-
-                            if (missingPermissionsException.PermissionType == typeof(Permissions.Microphone))
-                            {
-                                this.userInteractionService.ShowToast(UIResources.MissingPermissions_Microphone);
-                            }
-                            else if (missingPermissionsException.PermissionType == typeof(Permissions.StorageWrite))
-                            {
-                                this.userInteractionService.ShowToast(UIResources.MissingPermissions_Storage);
-                            }
-                            else
-                            {
-                                this.userInteractionService.ShowToast(missingPermissionsException.Message);
-                            }
-                        }
-                        catch (Exception exc)
-                        {
-                            logger.Warn("Audio audit failed to start.", exception: exc);
-                            await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
-                                .ConfigureAwait(false);
-                            this.userInteractionService.ShowToast(exc.Message);
-                        }
-                        finally
-                        {
-                            isAuditStarting = false;
-                        }
-                    });
+                    await this.StartAudioRecordingWithPermissionHandlingAsync(interviewId);
+                }
+                else
+                {
+                    await this.EvaluateAudioAuditScopeRecordingAsync(interviewId);
                 }
 
                 auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(),
@@ -188,9 +161,89 @@ namespace WB.UI.Interviewer.ViewModel
                 base.ViewAppeared();
             });
         }
+
+        private async Task StartAudioRecordingWithPermissionHandlingAsync(Guid interviewId)
+        {
+            await asyncDispatcher.ExecuteOnMainThreadAsync(async () =>
+            {
+                isAuditStarting = true;
+                try
+                {
+                    await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
+                }
+                catch (MissingPermissionsException missingPermissionsException)
+                {
+                    this.logger.Info("Audio audit failed to start.", exception: missingPermissionsException);
+                    await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
+                        .ConfigureAwait(false);
+
+                    if (missingPermissionsException.PermissionType == typeof(Permissions.Microphone))
+                    {
+                        this.userInteractionService.ShowToast(UIResources.MissingPermissions_Microphone);
+                    }
+                    else if (missingPermissionsException.PermissionType == typeof(Permissions.StorageWrite))
+                    {
+                        this.userInteractionService.ShowToast(UIResources.MissingPermissions_Storage);
+                    }
+                    else
+                    {
+                        this.userInteractionService.ShowToast(missingPermissionsException.Message);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    logger.Warn("Audio audit failed to start.", exception: exc);
+                    await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
+                        .ConfigureAwait(false);
+                    this.userInteractionService.ShowToast(exc.Message);
+                }
+                finally
+                {
+                    isAuditStarting = false;
+                }
+            });
+        }
+
+        private void OnScreenChangedForAudioAuditScope(ScreenChangedEventArgs eventArgs)
+        {
+            if (!this.isViewVisible || IsAudioRecordingEnabled == true || this.InterviewId == null)
+                return;
+
+            var interviewId = Guid.Parse(this.InterviewId);
+            Task.Run(() => this.EvaluateAudioAuditScopeRecordingAsync(interviewId));
+        }
+
+        private async Task EvaluateAudioAuditScopeRecordingAsync(Guid interviewId)
+        {
+            if (IsAudioRecordingEnabled == true)
+                return;
+
+            var interview = interviewRepository.Get(this.InterviewId);
+            if (interview == null)
+                return;
+
+            var scope = interview.GetAudioAuditScope();
+            if (scope == null || scope.Length == 0)
+                return;
+
+            var shouldRecord = interview.ShouldRecordAudioForGroup(this.NavigationState.CurrentGroup);
+
+            if (shouldRecord && !this.isScopeAuditRecording && !this.isAuditStarting)
+            {
+                await this.StartAudioRecordingWithPermissionHandlingAsync(interviewId);
+                this.isScopeAuditRecording = true;
+            }
+            else if (!shouldRecord && this.isScopeAuditRecording)
+            {
+                this.isScopeAuditRecording = false;
+                audioAuditService.StopAudioRecording(interviewId);
+            }
+        }
         
         public override void ViewDisappearing()
         {
+            this.isViewVisible = false;
+
             if (InterviewId != null && Principal.IsAuthenticated)
             {
                 var interview = interviewRepository.Get(this.InterviewId);
@@ -203,8 +256,11 @@ namespace WB.UI.Interviewer.ViewModel
 
                     auditLogService.Write(new CloseInterviewAuditLogEntity(interviewId, interviewKey?.ToString()));
 
-                    if (IsAudioRecordingEnabled == true)
+                    if (IsAudioRecordingEnabled == true || this.isScopeAuditRecording)
+                    {
+                        this.isScopeAuditRecording = false;
                         audioAuditService.StopAudioRecording(interviewId);
+                    }
                 }
             }
 
@@ -221,6 +277,12 @@ namespace WB.UI.Interviewer.ViewModel
             }
 
             base.ViewDisappearing();
+        }
+
+        public override void Dispose()
+        {
+            this.NavigationState.ScreenChanged -= this.OnScreenChangedForAudioAuditScope;
+            base.Dispose();
         }
     }
 }
