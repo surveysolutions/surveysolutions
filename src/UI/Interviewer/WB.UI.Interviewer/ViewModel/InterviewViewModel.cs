@@ -285,7 +285,11 @@ namespace WB.UI.Interviewer.ViewModel
                 if (target.IsRecording && !this.isAuditStarting)
                 {
                     await this.StartAudioRecordingWithPermissionHandlingAsync(interviewId).ConfigureAwait(false);
-                    this.currentRecordingTarget = target;
+                    // Only mark recording as active when the view is still visible; if start failed
+                    // (e.g. missing permission) the helper navigates away and isViewVisible becomes false,
+                    // so we must not store stale state that would prevent future retries.
+                    if (this.isViewVisible)
+                        this.currentRecordingTarget = target;
                 }
             }
             finally

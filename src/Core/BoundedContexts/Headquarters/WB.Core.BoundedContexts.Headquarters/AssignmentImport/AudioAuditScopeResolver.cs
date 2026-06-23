@@ -30,16 +30,20 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             if (variableNames == null)
                 return new AudioAuditScopeResolutionResult();
 
+            // Build lookup once so we don't call GetAllGroups() repeatedly inside the loop.
+            var groupLookup = questionnaire.GetAllGroups()
+                .GroupBy(id => questionnaire.GetRosterVariableName(id) ?? string.Empty,
+                    StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(g => g.Key, g => g.ToList(), StringComparer.OrdinalIgnoreCase);
+
             foreach (var rawName in variableNames)
             {
                 var name = rawName?.Trim();
                 if (string.IsNullOrEmpty(name))
                     continue;
 
-                var matchingGroupIds = questionnaire.GetAllGroups()
-                    .Where(groupId => string.Equals(questionnaire.GetRosterVariableName(groupId), name,
-                        StringComparison.OrdinalIgnoreCase))
-                    .ToList();
+                groupLookup.TryGetValue(name, out var matchingGroupIds);
+                matchingGroupIds ??= new List<Guid>();
 
                 if (matchingGroupIds.Count == 1)
                 {
