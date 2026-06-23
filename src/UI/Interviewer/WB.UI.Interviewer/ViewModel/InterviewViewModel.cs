@@ -292,19 +292,10 @@ namespace WB.UI.Interviewer.ViewModel
                 return null;
 
             var currentGroup = this.NavigationState.CurrentGroup;
-            return interview.ShouldRecordAudioForGroup(currentGroup) ? currentGroup?.Id : null;
-        }
+            if (currentGroup == null || !interview.ShouldRecordAudioForGroup(currentGroup))
+                return null;
 
-        // Teardown stop used when the interview view disappears. Kept lock-free and synchronous so it
-        // cannot deadlock the UI thread against an in-flight start that awaits the main thread.
-        private void StopAudioRecording(Guid interviewId)
-        {
-            if (this.isAudioRecording)
-            {
-                this.isAudioRecording = false;
-                this.currentRecordingKey = null;
-                audioAuditService.StopAudioRecording(interviewId);
-            }
+            return currentGroup.Id;
         }
         
         public override void ViewDisappearing()
@@ -323,7 +314,23 @@ namespace WB.UI.Interviewer.ViewModel
 
                     auditLogService.Write(new CloseInterviewAuditLogEntity(interviewId, interviewKey?.ToString()));
 
-                    this.StopAudioRecording(interviewId);
+                    // isViewVisible is already false, so the single entry point converges to "stop".
+                    // Run it off the UI thread with a non-cancellable token so teardown still stops
+                    // recording (even after Dispose) and field mutation stays under audioRecordingLock,
+                    // while awaiting the lock cannot deadlock the UI thread against an in-flight start.
+                    var recordingInterviewId = interviewId;
+                    Task.Run(async () =>
+                    {
+                        try
+                        {
+                            await this.EvaluateAudioRecordingAsync(recordingInterviewId, CancellationToken.None)
+                                .ConfigureAwait(false);
+                        }
+                        catch (Exception exc)
+                        {
+                            this.logger.Warn("Audio audit failed to stop on view disappearing.", exception: exc);
+                        }
+                    });
                 }
             }
 
