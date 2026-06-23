@@ -297,6 +297,27 @@ namespace WB.UI.Interviewer.ViewModel
 
             return currentGroup.Id;
         }
+
+        // Stops any active recording under the recording lock so the state mutation is atomic with
+        // EvaluateAudioRecordingAsync. Deliberately does not read interviewRepository or any other
+        // per-interview state, so it is safe to run during teardown.
+        private async Task StopAudioRecordingAsync(Guid interviewId)
+        {
+            await this.audioRecordingLock.WaitAsync().ConfigureAwait(false);
+            try
+            {
+                if (this.isAudioRecording)
+                {
+                    this.isAudioRecording = false;
+                    this.currentRecordingKey = null;
+                    audioAuditService.StopAudioRecording(interviewId);
+                }
+            }
+            finally
+            {
+                this.audioRecordingLock.Release();
+            }
+        }
         
         public override void ViewDisappearing()
         {
@@ -314,17 +335,17 @@ namespace WB.UI.Interviewer.ViewModel
 
                     auditLogService.Write(new CloseInterviewAuditLogEntity(interviewId, interviewKey?.ToString()));
 
-                    // isViewVisible is already false, so the single entry point converges to "stop".
-                    // Run it off the UI thread with a non-cancellable token so teardown still stops
-                    // recording (even after Dispose) and field mutation stays under audioRecordingLock,
-                    // while awaiting the lock cannot deadlock the UI thread against an in-flight start.
+                    // isViewVisible is already false. Stop any active recording through the same
+                    // recording lock so the state mutation stays atomic with EvaluateAudioRecordingAsync.
+                    // Run it off the UI thread so awaiting the lock cannot deadlock the UI thread against
+                    // an in-flight start, and so teardown still completes after Dispose. The stop path
+                    // touches neither interviewRepository nor any field disposed by this view model.
                     var recordingInterviewId = interviewId;
                     Task.Run(async () =>
                     {
                         try
                         {
-                            await this.EvaluateAudioRecordingAsync(recordingInterviewId, CancellationToken.None)
-                                .ConfigureAwait(false);
+                            await this.StopAudioRecordingAsync(recordingInterviewId).ConfigureAwait(false);
                         }
                         catch (Exception exc)
                         {
