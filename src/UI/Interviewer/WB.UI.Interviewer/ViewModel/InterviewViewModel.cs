@@ -37,10 +37,13 @@ namespace WB.UI.Interviewer.ViewModel
         private readonly IMvxMainThreadAsyncDispatcher asyncDispatcher;
         private bool isAuditStarting;
         private bool isViewVisible;
-        private bool isScopeAuditRecording;
-        private Guid? scopeRecordingGroupId;
-        private readonly SemaphoreSlim audioAuditScopeLock = new SemaphoreSlim(1, 1);
-        private readonly CancellationTokenSource scopeRecordingCancellation = new CancellationTokenSource();
+        private bool isAudioRecording;
+        private Guid? currentRecordingKey;
+        // Sentinel recording key used when the whole-interview audio audit flag is on. Real group
+        // ids are never Guid.Empty, so there is no collision with the per-group scope keys.
+        private static readonly Guid WholeInterviewRecordingKey = Guid.Empty;
+        private readonly SemaphoreSlim audioRecordingLock = new SemaphoreSlim(1, 1);
+        private readonly CancellationTokenSource audioRecordingCancellation = new CancellationTokenSource();
         private readonly ILogger logger;
 
         
@@ -80,7 +83,7 @@ namespace WB.UI.Interviewer.ViewModel
             this.serializer = serializer;
             this.asyncDispatcher = asyncDispatcher;
 
-            this.NavigationState.ScreenChanged += this.OnScreenChangedForAudioAuditScope;
+            this.NavigationState.ScreenChanged += this.OnScreenChanged;
         }
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () =>
@@ -151,14 +154,7 @@ namespace WB.UI.Interviewer.ViewModel
 
                 this.isViewVisible = true;
 
-                if (IsAudioRecordingEnabled == true && !isAuditStarting)
-                {
-                    await this.StartAudioRecordingWithPermissionHandlingAsync(interviewId);
-                }
-                else
-                {
-                    await this.EvaluateAudioAuditScopeRecordingAsync(interviewId, this.scopeRecordingCancellation.Token);
-                }
+                await this.EvaluateAudioRecordingAsync(interviewId, this.audioRecordingCancellation.Token);
 
                 auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(),
                     assignmentId));
@@ -208,18 +204,18 @@ namespace WB.UI.Interviewer.ViewModel
             });
         }
 
-        private void OnScreenChangedForAudioAuditScope(ScreenChangedEventArgs eventArgs)
+        private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
-            if (!this.isViewVisible || IsAudioRecordingEnabled == true || this.InterviewId == null)
+            if (!this.isViewVisible || this.InterviewId == null)
                 return;
 
             var interviewId = Guid.Parse(this.InterviewId);
-            var cancellationToken = this.scopeRecordingCancellation.Token;
+            var cancellationToken = this.audioRecordingCancellation.Token;
             Task.Run(async () =>
             {
                 try
                 {
-                    await this.EvaluateAudioAuditScopeRecordingAsync(interviewId, cancellationToken)
+                    await this.EvaluateAudioRecordingAsync(interviewId, cancellationToken)
                         .ConfigureAwait(false);
                 }
                 catch (OperationCanceledException)
@@ -228,63 +224,86 @@ namespace WB.UI.Interviewer.ViewModel
                 }
                 catch (Exception exc)
                 {
-                    this.logger.Warn("Audio audit scope evaluation failed.", exception: exc);
+                    this.logger.Warn("Audio audit evaluation failed.", exception: exc);
                 }
             });
         }
 
-        private async Task EvaluateAudioAuditScopeRecordingAsync(Guid interviewId, CancellationToken cancellationToken)
+        /// <summary>
+        /// Single entry point that converges the tablet audio recording to the desired state:
+        /// records the whole interview when the audio audit flag is on, otherwise records only the
+        /// groups included in the audio audit scope, otherwise records nothing. On a group switch the
+        /// current recording is stopped and rerun for the new applicable group, reusing the same
+        /// start/stop paths as the whole-interview audio audit.
+        /// </summary>
+        private async Task EvaluateAudioRecordingAsync(Guid interviewId, CancellationToken cancellationToken)
         {
-            if (IsAudioRecordingEnabled == true)
-                return;
-
-            await this.audioAuditScopeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+            await this.audioRecordingLock.WaitAsync(cancellationToken).ConfigureAwait(false);
             try
             {
                 if (cancellationToken.IsCancellationRequested)
                     return;
 
-                var interview = interviewRepository.Get(this.InterviewId);
-                if (interview == null)
+                var targetKey = this.GetTargetRecordingKey();
+
+                // Already in the desired state.
+                if (this.isAudioRecording && this.currentRecordingKey == targetKey)
                     return;
 
-                var scope = interview.GetAudioAuditScope();
-                if (scope == null || scope.Length == 0)
-                    return;
-
-                var currentGroup = this.NavigationState.CurrentGroup;
-
-                // Re-check visibility under the lock so a navigation event that is processed
-                // after the view started disappearing does not (re)start recording.
-                var shouldRecord = this.isViewVisible
-                    && interview.ShouldRecordAudioForGroup(currentGroup);
-
-                var targetGroupId = shouldRecord ? currentGroup?.Id : null;
-
-                // Already recording the applicable group: nothing to do.
-                if (this.isScopeAuditRecording && this.scopeRecordingGroupId == targetGroupId)
-                    return;
-
-                // Switched group (or left the scope): stop the current recording so that each
-                // applicable group is captured as its own audio file, like the general audio audit.
-                if (this.isScopeAuditRecording)
+                // Stop the current recording when the target changed (group switch or leaving scope),
+                // so each applicable group is captured as its own audio file, like the general audio audit.
+                if (this.isAudioRecording)
                 {
-                    this.isScopeAuditRecording = false;
-                    this.scopeRecordingGroupId = null;
+                    this.isAudioRecording = false;
+                    this.currentRecordingKey = null;
                     audioAuditService.StopAudioRecording(interviewId);
                 }
 
-                // Entered an applicable group: rerun the recording for it.
-                if (shouldRecord && !this.isAuditStarting)
+                // Start recording for the new target.
+                if (targetKey != null && !this.isAuditStarting)
                 {
                     await this.StartAudioRecordingWithPermissionHandlingAsync(interviewId).ConfigureAwait(false);
-                    this.isScopeAuditRecording = true;
-                    this.scopeRecordingGroupId = targetGroupId;
+                    this.isAudioRecording = true;
+                    this.currentRecordingKey = targetKey;
                 }
             }
             finally
             {
-                this.audioAuditScopeLock.Release();
+                this.audioRecordingLock.Release();
+            }
+        }
+
+        // Decides what should currently be recorded: the audio audit flag takes precedence (whole
+        // interview), then the audio audit scope (applicable group), otherwise nothing.
+        private Guid? GetTargetRecordingKey()
+        {
+            if (!this.isViewVisible)
+                return null;
+
+            if (IsAudioRecordingEnabled == true)
+                return WholeInterviewRecordingKey;
+
+            var interview = interviewRepository.Get(this.InterviewId);
+            if (interview == null)
+                return null;
+
+            var scope = interview.GetAudioAuditScope();
+            if (scope == null || scope.Length == 0)
+                return null;
+
+            var currentGroup = this.NavigationState.CurrentGroup;
+            return interview.ShouldRecordAudioForGroup(currentGroup) ? currentGroup?.Id : null;
+        }
+
+        // Teardown stop used when the interview view disappears. Kept lock-free and synchronous so it
+        // cannot deadlock the UI thread against an in-flight start that awaits the main thread.
+        private void StopAudioRecording(Guid interviewId)
+        {
+            if (this.isAudioRecording)
+            {
+                this.isAudioRecording = false;
+                this.currentRecordingKey = null;
+                audioAuditService.StopAudioRecording(interviewId);
             }
         }
         
@@ -304,12 +323,7 @@ namespace WB.UI.Interviewer.ViewModel
 
                     auditLogService.Write(new CloseInterviewAuditLogEntity(interviewId, interviewKey?.ToString()));
 
-                    if (IsAudioRecordingEnabled == true || this.isScopeAuditRecording)
-                    {
-                        this.isScopeAuditRecording = false;
-                        this.scopeRecordingGroupId = null;
-                        audioAuditService.StopAudioRecording(interviewId);
-                    }
+                    this.StopAudioRecording(interviewId);
                 }
             }
 
@@ -330,8 +344,8 @@ namespace WB.UI.Interviewer.ViewModel
 
         public override void Dispose()
         {
-            this.NavigationState.ScreenChanged -= this.OnScreenChangedForAudioAuditScope;
-            this.scopeRecordingCancellation.Cancel();
+            this.NavigationState.ScreenChanged -= this.OnScreenChanged;
+            this.audioRecordingCancellation.Cancel();
             base.Dispose();
         }
     }
