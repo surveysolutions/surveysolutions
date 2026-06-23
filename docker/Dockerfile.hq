@@ -85,6 +85,7 @@ RUN dotnet publish src/Services/Export/WB.Services.Export.Host \
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine3.23 AS builder
 ARG VERSION
 ARG INFO_VERSION
+ARG TARGETARCH
 
 COPY src/Directory.Build.props src/Directory.Build.props
 
@@ -146,9 +147,12 @@ COPY [ "src/UI/WB.UI.Headquarters.Core",\
 
 COPY --from=frontend /src/UI/WB.UI.Frontend/dist/package/hq src/UI/WB.UI.Headquarters.Core
 
-#-r linux-x64 --self-contained
-RUN dotnet publish src/UI/WB.UI.Headquarters.Core \
-    -c Release -o /hq -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
+# Publish framework-dependent but with an explicit RID derived from TARGETARCH so the
+# correct per-architecture native assets (e.g. SkiaSharp) are included in the output.
+RUN RID="linux-$(case "${TARGETARCH}" in arm64) echo arm64;; *) echo x64;; esac)" && \
+    dotnet publish src/UI/WB.UI.Headquarters.Core \
+    -c Release -o /hq -r "${RID}" --no-self-contained \
+    -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
 # Copy APK files if any
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine3.23 AS apks
