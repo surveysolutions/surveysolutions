@@ -37,14 +37,37 @@ namespace WB.UI.Interviewer.ViewModel
         private readonly IMvxMainThreadAsyncDispatcher asyncDispatcher;
         private bool isAuditStarting;
         private bool isViewVisible;
-        private bool isAudioRecording;
-        private Guid? currentRecordingKey;
-        // Sentinel recording key used when the whole-interview audio audit flag is on. Real group
-        // ids are never Guid.Empty, so there is no collision with the per-group scope keys.
-        private static readonly Guid WholeInterviewRecordingKey = Guid.Empty;
+        private RecordingTarget currentRecordingTarget = RecordingTarget.None;
         private readonly SemaphoreSlim audioRecordingLock = new SemaphoreSlim(1, 1);
         private readonly CancellationTokenSource audioRecordingCancellation = new CancellationTokenSource();
         private readonly ILogger logger;
+
+        // Describes what the tablet should currently be recording. Distinguishes "nothing",
+        // "whole interview" (audio audit flag) and a specific scoped group without overloading any
+        // group id value, so a group whose id happens to be Guid.Empty cannot be confused with
+        // whole-interview recording.
+        private readonly struct RecordingTarget : IEquatable<RecordingTarget>
+        {
+            public static readonly RecordingTarget None = new RecordingTarget(false, null);
+            public static readonly RecordingTarget WholeInterview = new RecordingTarget(true, null);
+            public static RecordingTarget Group(Guid groupId) => new RecordingTarget(true, groupId);
+
+            private RecordingTarget(bool isRecording, Guid? groupId)
+            {
+                this.IsRecording = isRecording;
+                this.GroupId = groupId;
+            }
+
+            public bool IsRecording { get; }
+            public Guid? GroupId { get; }
+
+            public bool Equals(RecordingTarget other) =>
+                this.IsRecording == other.IsRecording && this.GroupId == other.GroupId;
+
+            public override bool Equals(object obj) => obj is RecordingTarget other && this.Equals(other);
+
+            public override int GetHashCode() => HashCode.Combine(this.IsRecording, this.GroupId);
+        }
 
         
         public InterviewViewModel(
@@ -244,27 +267,25 @@ namespace WB.UI.Interviewer.ViewModel
                 if (cancellationToken.IsCancellationRequested)
                     return;
 
-                var targetKey = this.GetTargetRecordingKey();
+                var target = this.GetTargetRecording();
 
                 // Already in the desired state.
-                if (this.isAudioRecording && this.currentRecordingKey == targetKey)
+                if (this.currentRecordingTarget.Equals(target))
                     return;
 
                 // Stop the current recording when the target changed (group switch or leaving scope),
                 // so each applicable group is captured as its own audio file, like the general audio audit.
-                if (this.isAudioRecording)
+                if (this.currentRecordingTarget.IsRecording)
                 {
-                    this.isAudioRecording = false;
-                    this.currentRecordingKey = null;
+                    this.currentRecordingTarget = RecordingTarget.None;
                     audioAuditService.StopAudioRecording(interviewId);
                 }
 
                 // Start recording for the new target.
-                if (targetKey != null && !this.isAuditStarting)
+                if (target.IsRecording && !this.isAuditStarting)
                 {
                     await this.StartAudioRecordingWithPermissionHandlingAsync(interviewId).ConfigureAwait(false);
-                    this.isAudioRecording = true;
-                    this.currentRecordingKey = targetKey;
+                    this.currentRecordingTarget = target;
                 }
             }
             finally
@@ -275,27 +296,27 @@ namespace WB.UI.Interviewer.ViewModel
 
         // Decides what should currently be recorded: the audio audit flag takes precedence (whole
         // interview), then the audio audit scope (applicable group), otherwise nothing.
-        private Guid? GetTargetRecordingKey()
+        private RecordingTarget GetTargetRecording()
         {
             if (!this.isViewVisible)
-                return null;
+                return RecordingTarget.None;
 
             if (IsAudioRecordingEnabled == true)
-                return WholeInterviewRecordingKey;
+                return RecordingTarget.WholeInterview;
 
             var interview = interviewRepository.Get(this.InterviewId);
             if (interview == null)
-                return null;
+                return RecordingTarget.None;
 
             var scope = interview.GetAudioAuditScope();
             if (scope == null || scope.Length == 0)
-                return null;
+                return RecordingTarget.None;
 
             var currentGroup = this.NavigationState.CurrentGroup;
             if (currentGroup == null || !interview.ShouldRecordAudioForGroup(currentGroup))
-                return null;
+                return RecordingTarget.None;
 
-            return currentGroup.Id;
+            return RecordingTarget.Group(currentGroup.Id);
         }
 
         // Stops any active recording under the recording lock so the state mutation is atomic with
@@ -306,10 +327,9 @@ namespace WB.UI.Interviewer.ViewModel
             await this.audioRecordingLock.WaitAsync().ConfigureAwait(false);
             try
             {
-                if (this.isAudioRecording)
+                if (this.currentRecordingTarget.IsRecording)
                 {
-                    this.isAudioRecording = false;
-                    this.currentRecordingKey = null;
+                    this.currentRecordingTarget = RecordingTarget.None;
                     audioAuditService.StopAudioRecording(interviewId);
                 }
             }
@@ -341,6 +361,7 @@ namespace WB.UI.Interviewer.ViewModel
                     // an in-flight start, and so teardown still completes after Dispose. The stop path
                     // touches neither interviewRepository nor any field disposed by this view model.
                     var recordingInterviewId = interviewId;
+                    var recordingLogger = this.logger;
                     Task.Run(async () =>
                     {
                         try
@@ -349,7 +370,7 @@ namespace WB.UI.Interviewer.ViewModel
                         }
                         catch (Exception exc)
                         {
-                            this.logger.Warn("Audio audit failed to stop on view disappearing.", exception: exc);
+                            recordingLogger.Warn("Audio audit failed to stop on view disappearing.", exception: exc);
                         }
                     });
                 }
