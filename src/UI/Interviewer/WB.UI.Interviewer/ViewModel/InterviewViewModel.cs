@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.Commands;
@@ -37,6 +38,7 @@ namespace WB.UI.Interviewer.ViewModel
         private bool isAuditStarting;
         private bool isViewVisible;
         private bool isScopeAuditRecording;
+        private readonly SemaphoreSlim audioAuditScopeLock = new SemaphoreSlim(1, 1);
         private readonly ILogger logger;
 
         
@@ -210,7 +212,17 @@ namespace WB.UI.Interviewer.ViewModel
                 return;
 
             var interviewId = Guid.Parse(this.InterviewId);
-            Task.Run(() => this.EvaluateAudioAuditScopeRecordingAsync(interviewId));
+            Task.Run(async () =>
+            {
+                try
+                {
+                    await this.EvaluateAudioAuditScopeRecordingAsync(interviewId).ConfigureAwait(false);
+                }
+                catch (Exception exc)
+                {
+                    this.logger.Warn("Audio audit scope evaluation failed.", exception: exc);
+                }
+            });
         }
 
         private async Task EvaluateAudioAuditScopeRecordingAsync(Guid interviewId)
@@ -218,25 +230,36 @@ namespace WB.UI.Interviewer.ViewModel
             if (IsAudioRecordingEnabled == true)
                 return;
 
-            var interview = interviewRepository.Get(this.InterviewId);
-            if (interview == null)
-                return;
-
-            var scope = interview.GetAudioAuditScope();
-            if (scope == null || scope.Length == 0)
-                return;
-
-            var shouldRecord = interview.ShouldRecordAudioForGroup(this.NavigationState.CurrentGroup);
-
-            if (shouldRecord && !this.isScopeAuditRecording && !this.isAuditStarting)
+            await this.audioAuditScopeLock.WaitAsync().ConfigureAwait(false);
+            try
             {
-                await this.StartAudioRecordingWithPermissionHandlingAsync(interviewId);
-                this.isScopeAuditRecording = true;
+                var interview = interviewRepository.Get(this.InterviewId);
+                if (interview == null)
+                    return;
+
+                var scope = interview.GetAudioAuditScope();
+                if (scope == null || scope.Length == 0)
+                    return;
+
+                // Re-check visibility under the lock so a navigation event that is processed
+                // after the view started disappearing does not (re)start recording.
+                var shouldRecord = this.isViewVisible
+                    && interview.ShouldRecordAudioForGroup(this.NavigationState.CurrentGroup);
+
+                if (shouldRecord && !this.isScopeAuditRecording && !this.isAuditStarting)
+                {
+                    await this.StartAudioRecordingWithPermissionHandlingAsync(interviewId).ConfigureAwait(false);
+                    this.isScopeAuditRecording = true;
+                }
+                else if (!shouldRecord && this.isScopeAuditRecording)
+                {
+                    this.isScopeAuditRecording = false;
+                    audioAuditService.StopAudioRecording(interviewId);
+                }
             }
-            else if (!shouldRecord && this.isScopeAuditRecording)
+            finally
             {
-                this.isScopeAuditRecording = false;
-                audioAuditService.StopAudioRecording(interviewId);
+                this.audioAuditScopeLock.Release();
             }
         }
         
@@ -282,6 +305,7 @@ namespace WB.UI.Interviewer.ViewModel
         public override void Dispose()
         {
             this.NavigationState.ScreenChanged -= this.OnScreenChangedForAudioAuditScope;
+            this.audioAuditScopeLock.Dispose();
             base.Dispose();
         }
     }
