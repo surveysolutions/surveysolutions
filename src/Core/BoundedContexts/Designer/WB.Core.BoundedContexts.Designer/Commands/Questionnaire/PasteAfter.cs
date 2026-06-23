@@ -15,6 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
         }
 
         public Guid SourceQuestionnaireId { get; private set; }
+        public Guid? SourceQuestionnaireRevisionId { get; set; }
         public Guid SourceItemId { get; private set; }
 
         public Guid ItemToPasteAfterId { get; private set; }

@@ -63,19 +63,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (command is PasteAfter currentPasteItemAfterCommand)
             {
                 currentPasteItemAfterCommand.SourceDocument =
-                    GetQuestionnaire(currentPasteItemAfterCommand.SourceQuestionnaireId);
+                    GetQuestionnaire(currentPasteItemAfterCommand.SourceQuestionnaireId,
+                        currentPasteItemAfterCommand.SourceQuestionnaireRevisionId);
             }
 
             if (command is PasteInto currentPasteItemIntoCommand)
             {
                 currentPasteItemIntoCommand.SourceDocument =
-                    GetQuestionnaire(currentPasteItemIntoCommand.SourceQuestionnaireId);
+                    GetQuestionnaire(currentPasteItemIntoCommand.SourceQuestionnaireId,
+                        currentPasteItemIntoCommand.SourceQuestionnaireRevisionId);
             }
         }
 
-        private QuestionnaireDocument GetQuestionnaire(Guid id)
+        private QuestionnaireDocument GetQuestionnaire(Guid id, Guid? revisionId = null)
         {
-            var questionnaire = this.questionnaireDocumentReader.GetById(id.FormatGuid());
+            var questionnaireIdentity = revisionId.HasValue
+                ? $"{id:N}${revisionId.Value:N}"
+                : id.FormatGuid();
+
+            var questionnaire = this.questionnaireDocumentReader.GetById(questionnaireIdentity);
 
             if (questionnaire == null)
             {

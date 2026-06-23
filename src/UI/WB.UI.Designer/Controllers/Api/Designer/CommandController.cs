@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
@@ -462,10 +463,13 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             try
             {
                 Type resultCommandType = GetTypeOfResultCommandOrThrowArgumentException(commandType);
+                var sourceQuestionnaireRevisionId = (Guid?)null;
+                var commandForDeserialization =
+                    NormalizeCopyPasteSourceQuestionnaireId(commandType, serializedCommand, out sourceQuestionnaireRevisionId);
                 ICommand? deserialized;
                 try
                 {
-                    deserialized = JsonConvert.DeserializeObject(serializedCommand, resultCommandType) as ICommand;
+                    deserialized = JsonConvert.DeserializeObject(commandForDeserialization, resultCommandType) as ICommand;
                 }
                 catch (ArgumentException ae)
                 {
@@ -478,6 +482,14 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 if (deserialized == null)
                     throw new CommandDeserializationException(
                         $"Failed to deserialize command of type '{commandType}':\r\n{serializedCommand}");
+
+                if (sourceQuestionnaireRevisionId.HasValue)
+                {
+                    if (deserialized is PasteAfter pasteAfter)
+                        pasteAfter.SourceQuestionnaireRevisionId = sourceQuestionnaireRevisionId;
+                    else if (deserialized is PasteInto pasteInto)
+                        pasteInto.SourceQuestionnaireRevisionId = sourceQuestionnaireRevisionId;
+                }
 
                 return deserialized;
             }
@@ -500,6 +512,52 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 throw new CommandDeserializationException(
                     $"Failed to deserialize command of type '{commandType}':\r\n{serializedCommand}", e);
             }
+        }
+
+        private string NormalizeCopyPasteSourceQuestionnaireId(string commandType, string serializedCommand,
+            out Guid? sourceQuestionnaireRevisionId)
+        {
+            sourceQuestionnaireRevisionId = null;
+
+            if (commandType != nameof(PasteInto) && commandType != nameof(PasteAfter))
+                return serializedCommand;
+
+            var command = JObject.Parse(serializedCommand);
+            var sourceQuestionnaireIdToken = command[nameof(PasteInto.SourceQuestionnaireId).ToCamelCase()];
+
+            if (sourceQuestionnaireIdToken == null || sourceQuestionnaireIdToken.Type != JTokenType.String)
+                return serializedCommand;
+
+            var sourceQuestionnaireId = sourceQuestionnaireIdToken.Value<string>();
+            if (string.IsNullOrWhiteSpace(sourceQuestionnaireId))
+                return serializedCommand;
+
+            var parts = sourceQuestionnaireId.Split('$');
+            if (parts.Length == 1)
+                return serializedCommand;
+
+            if (parts.Length != 2 || !Guid.TryParse(parts[0], out var questionnaireId))
+                throw new ArgumentException("Invalid source questionnaire id.");
+
+            var historyRecordId = parts[1];
+            QuestionnaireChangeRecord? history;
+            if (int.TryParse(historyRecordId, out var historySequence))
+            {
+                history = this.dbContext.QuestionnaireChangeRecords.SingleOrDefault(r =>
+                    r.QuestionnaireId == questionnaireId.FormatGuid() && r.Sequence == historySequence);
+            }
+            else
+            {
+                history = this.dbContext.QuestionnaireChangeRecords.SingleOrDefault(r =>
+                    r.QuestionnaireChangeRecordId.StartsWith(historyRecordId));
+            }
+
+            if (history == null)
+                throw new ArgumentException("Invalid source questionnaire id.");
+
+            sourceQuestionnaireRevisionId = Guid.Parse(history.QuestionnaireChangeRecordId);
+            command[nameof(PasteInto.SourceQuestionnaireId).ToCamelCase()] = questionnaireId.ToString("N");
+            return command.ToString(Formatting.None);
         }
 
         protected Dictionary<string, Type> KnownCommandTypes => new Dictionary<string, Type>

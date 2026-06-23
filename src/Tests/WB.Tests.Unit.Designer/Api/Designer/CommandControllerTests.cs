@@ -22,6 +22,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Controllers.Api.Designer;
@@ -150,6 +151,36 @@ namespace WB.Tests.Unit.Designer.Api.Designer
             var result = controller.Deserialize("UpdateQuestionnaire", json);
 
             Assert.That(result, Is.InstanceOf<UpdateQuestionnaire>());
+        }
+
+        [Test]
+        public void Deserialize_paste_into_with_historical_source_questionnaire_sequence_sets_source_revision()
+        {
+            var sourceQuestionnaireId = Guid.NewGuid();
+            var sourceQuestionnaireRevisionId = Guid.NewGuid();
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.QuestionnaireChangeRecords.Add(Create.QuestionnaireChangeRecord(
+                questionnaireChangeRecordId: sourceQuestionnaireRevisionId.FormatGuid(),
+                questionnaireId: sourceQuestionnaireId.FormatGuid(),
+                sequence: 74));
+            dbContext.SaveChanges();
+
+            var controller = CreateController(dbContext: dbContext);
+            var json = SerializeCommand(new
+            {
+                sourceQuestionnaireId = $"{sourceQuestionnaireId:N}$74",
+                sourceItemId = Guid.NewGuid(),
+                parentId = Guid.NewGuid(),
+                entityId = Guid.NewGuid(),
+                questionnaireId = Guid.NewGuid()
+            });
+
+            var result = controller.Deserialize(nameof(PasteInto), json);
+
+            var pasteInto = result as PasteInto;
+            Assert.That(pasteInto, Is.Not.Null);
+            Assert.That(pasteInto!.SourceQuestionnaireId, Is.EqualTo(sourceQuestionnaireId));
+            Assert.That(pasteInto.SourceQuestionnaireRevisionId, Is.EqualTo(sourceQuestionnaireRevisionId));
         }
 
         [Test]
@@ -775,8 +806,6 @@ namespace WB.Tests.Unit.Designer.Api.Designer
         #endregion
     }
 }
-
-
 
 
 
