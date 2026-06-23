@@ -540,16 +540,24 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 throw new ArgumentException("Invalid source questionnaire id.");
 
             var historyRecordId = parts[1];
-            QuestionnaireChangeRecord? history;
+            var formattedQuestionnaireId = questionnaireId.FormatGuid();
+            QuestionnaireChangeRecord? history = null;
             if (int.TryParse(historyRecordId, out var historySequence))
             {
                 history = this.dbContext.QuestionnaireChangeRecords.SingleOrDefault(r =>
-                    r.QuestionnaireId == questionnaireId.FormatGuid() && r.Sequence == historySequence);
+                    r.QuestionnaireId == formattedQuestionnaireId && r.Sequence == historySequence);
             }
-            else
+
+            if (history == null)
             {
-                history = this.dbContext.QuestionnaireChangeRecords.SingleOrDefault(r =>
-                    r.QuestionnaireChangeRecordId.StartsWith(historyRecordId));
+                var matchedHistoryRecords = this.dbContext.QuestionnaireChangeRecords
+                    .Where(r => r.QuestionnaireId == formattedQuestionnaireId
+                                && r.QuestionnaireChangeRecordId.StartsWith(historyRecordId))
+                    .Take(2)
+                    .ToArray();
+
+                if (matchedHistoryRecords.Length == 1)
+                    history = matchedHistoryRecords[0];
             }
 
             if (history == null)

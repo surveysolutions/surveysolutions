@@ -184,6 +184,70 @@ namespace WB.Tests.Unit.Designer.Api.Designer
         }
 
         [Test]
+        public void Deserialize_paste_into_with_historical_source_questionnaire_revision_prefix_scopes_lookup_to_source_questionnaire()
+        {
+            var sourceQuestionnaireId = Guid.NewGuid();
+            var sourceQuestionnaireRevisionId = Guid.Parse("abcdef12-1111-1111-1111-111111111111");
+            var anotherQuestionnaireId = Guid.NewGuid();
+            var anotherQuestionnaireRevisionId = Guid.Parse("abcdef12-2222-2222-2222-222222222222");
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.QuestionnaireChangeRecords.Add(Create.QuestionnaireChangeRecord(
+                questionnaireChangeRecordId: sourceQuestionnaireRevisionId.FormatGuid(),
+                questionnaireId: sourceQuestionnaireId.FormatGuid(),
+                sequence: 74));
+            dbContext.QuestionnaireChangeRecords.Add(Create.QuestionnaireChangeRecord(
+                questionnaireChangeRecordId: anotherQuestionnaireRevisionId.FormatGuid(),
+                questionnaireId: anotherQuestionnaireId.FormatGuid(),
+                sequence: 12));
+            dbContext.SaveChanges();
+
+            var controller = CreateController(dbContext: dbContext);
+            var json = SerializeCommand(new
+            {
+                sourceQuestionnaireId = $"{sourceQuestionnaireId:N}$abcdef12",
+                sourceItemId = Guid.NewGuid(),
+                parentId = Guid.NewGuid(),
+                entityId = Guid.NewGuid(),
+                questionnaireId = Guid.NewGuid()
+            });
+
+            var result = controller.Deserialize(nameof(PasteInto), json);
+
+            var pasteInto = result as PasteInto;
+            Assert.That(pasteInto, Is.Not.Null);
+            Assert.That(pasteInto!.SourceQuestionnaireRevisionId, Is.EqualTo(sourceQuestionnaireRevisionId));
+        }
+
+        [Test]
+        public void Deserialize_paste_into_with_numeric_historical_source_questionnaire_revision_prefix_falls_back_from_sequence_lookup()
+        {
+            var sourceQuestionnaireId = Guid.NewGuid();
+            var sourceQuestionnaireRevisionId = Guid.Parse("12345678-1234-1234-1234-1234567890ab");
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.QuestionnaireChangeRecords.Add(Create.QuestionnaireChangeRecord(
+                questionnaireChangeRecordId: sourceQuestionnaireRevisionId.FormatGuid(),
+                questionnaireId: sourceQuestionnaireId.FormatGuid(),
+                sequence: 74));
+            dbContext.SaveChanges();
+
+            var controller = CreateController(dbContext: dbContext);
+            var json = SerializeCommand(new
+            {
+                sourceQuestionnaireId = $"{sourceQuestionnaireId:N}$123",
+                sourceItemId = Guid.NewGuid(),
+                parentId = Guid.NewGuid(),
+                entityId = Guid.NewGuid(),
+                questionnaireId = Guid.NewGuid()
+            });
+
+            var result = controller.Deserialize(nameof(PasteInto), json);
+
+            var pasteInto = result as PasteInto;
+            Assert.That(pasteInto, Is.Not.Null);
+            Assert.That(pasteInto!.SourceQuestionnaireRevisionId, Is.EqualTo(sourceQuestionnaireRevisionId));
+        }
+
+        [Test]
         public void Deserialize_null_serialized_command_throws_CommandDeserializationException()
         {
             var controller = CreateController();
@@ -806,7 +870,6 @@ namespace WB.Tests.Unit.Designer.Api.Designer
         #endregion
     }
 }
-
 
 
 
