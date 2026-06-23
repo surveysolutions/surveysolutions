@@ -1,5 +1,6 @@
 using System;
 using FluentAssertions;
+using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -15,6 +16,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         private static readonly Guid GroupId = Guid.Parse("22222222222222222222222222222222");
         private static readonly Guid RosterId = Guid.Parse("33333333333333333333333333333333");
         private static readonly Guid QuestionId = Guid.Parse("44444444444444444444444444444444");
+        private static readonly Guid FlatRosterId = Guid.Parse("55555555555555555555555555555555");
 
         private static IQuestionnaire CreateQuestionnaire()
         {
@@ -29,7 +31,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                                 children: new[]
                                 {
                                     Create.Entity.TextQuestion(questionId: QuestionId, variable: "first_name")
-                                })
+                                }),
+                            Create.Entity.Roster(rosterId: FlatRosterId, variable: "flat_roster",
+                                displayMode: RosterDisplayMode.Flat,
+                                fixedTitles: new[] { "1", "2" })
                         })
                 });
 
@@ -71,6 +76,18 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             result.HasErrors.Should().BeTrue();
             result.InvalidVariableNames.Should().BeEquivalentTo(new[] { "first_name" });
             result.EntityIds.Should().BeEmpty();
+        }
+
+        [Test]
+        public void should_report_flat_roster_variable_name_as_invalid()
+        {
+            var questionnaire = CreateQuestionnaire();
+
+            var result = AudioAuditScopeResolver.Resolve(questionnaire, new[] { "household", "flat_roster" });
+
+            result.HasErrors.Should().BeTrue();
+            result.InvalidVariableNames.Should().BeEquivalentTo(new[] { "flat_roster" });
+            result.EntityIds.Should().BeEquivalentTo(new[] { GroupId });
         }
 
         [Test]

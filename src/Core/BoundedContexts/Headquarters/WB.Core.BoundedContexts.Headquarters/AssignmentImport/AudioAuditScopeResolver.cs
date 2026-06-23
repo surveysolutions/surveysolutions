@@ -17,8 +17,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
     /// <summary>
     /// Resolves selective Audio Audit scope variable names (from the <c>_aascope</c> import column or
-    /// the assignment API) into questionnaire entity ids. Only sections, groups and rosters are allowed;
-    /// questions, unknown and ambiguous names are reported as invalid.
+    /// the assignment API) into questionnaire entity ids. Only sections, groups and non-flat rosters are
+    /// allowed; questions, flat rosters, unknown and ambiguous names are reported as invalid.
     /// </summary>
     public static class AudioAuditScopeResolver
     {
@@ -44,6 +44,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 if (matchingGroupIds.Count == 1)
                 {
                     var entityId = matchingGroupIds[0];
+
+                    // Flat rosters can't be selected as an Audio Audit scope.
+                    if (questionnaire.IsFlatRoster(entityId))
+                    {
+                        invalid.Add(name);
+                        continue;
+                    }
+
                     if (!entityIds.Contains(entityId))
                         entityIds.Add(entityId);
                 }

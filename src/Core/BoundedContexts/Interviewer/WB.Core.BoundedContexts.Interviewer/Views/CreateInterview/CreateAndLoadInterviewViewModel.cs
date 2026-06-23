@@ -20,9 +20,11 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.Core.SharedKernels.Enumerator.Views;
+using Xamarin.Essentials;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
 {
@@ -38,6 +40,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
         private readonly IUserInteractionService userInteractionService;
         private readonly ICalendarEventStorage calendarEventStorage;
         private readonly IViewModelEventRegistry viewModelEventRegistry;
+        private readonly IPermissionsService permissionsService;
 
         public CreateAndLoadInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService, 
@@ -54,7 +57,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             IUserInteractionService userInteractionService,
             IJsonAllTypesSerializer serializer,
             ICalendarEventStorage calendarEventStorage,
-            IViewModelEventRegistry viewModelEventRegistry) 
+            IViewModelEventRegistry viewModelEventRegistry,
+            IPermissionsService permissionsService) 
             : base(interviewerPrincipal, viewModelNavigationService, interviewRepository, commandService, logger,
                 userInteractionService, interviewsRepository, serializer, auditLogService, viewModelEventRegistry)
         {
@@ -68,6 +72,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             this.userInteractionService = userInteractionService;
             this.calendarEventStorage = calendarEventStorage;
             this.viewModelEventRegistry = viewModelEventRegistry;
+            this.permissionsService = permissionsService;
         }
 
         protected int AssignmentId { get; set; }
@@ -128,6 +133,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
 
                 this.assignmentsRepository.FetchPreloadedData(assignment);
                 var questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
+
+                // If the interview will record selective Audio Audit (scope), the microphone permission
+                // must be granted up front. When it is rejected, the interview must not be created.
+                if (assignment.AudioAuditScope != null && assignment.AudioAuditScope.Count > 0)
+                {
+                    try
+                    {
+                        await this.permissionsService.AssureHasPermissionOrThrow<Permissions.Microphone>();
+                    }
+                    catch (MissingPermissionsException)
+                    {
+                        this.userInteractionService.ShowToast(UIResources.MissingPermissions_Microphone);
+                        return null;
+                    }
+                }
 
                 List<InterviewAnswer> answers = this.GetAnswers(assignment.Answers);
                 List<string> protectedVariables = assignment.ProtectedVariables.Select(x => x.Variable).ToList();

@@ -38,6 +38,7 @@ namespace WB.UI.Interviewer.ViewModel
         private bool isAuditStarting;
         private bool isViewVisible;
         private bool isScopeAuditRecording;
+        private Guid? scopeRecordingGroupId;
         private readonly SemaphoreSlim audioAuditScopeLock = new SemaphoreSlim(1, 1);
         private readonly CancellationTokenSource scopeRecordingCancellation = new CancellationTokenSource();
         private readonly ILogger logger;
@@ -251,20 +252,34 @@ namespace WB.UI.Interviewer.ViewModel
                 if (scope == null || scope.Length == 0)
                     return;
 
+                var currentGroup = this.NavigationState.CurrentGroup;
+
                 // Re-check visibility under the lock so a navigation event that is processed
                 // after the view started disappearing does not (re)start recording.
                 var shouldRecord = this.isViewVisible
-                    && interview.ShouldRecordAudioForGroup(this.NavigationState.CurrentGroup);
+                    && interview.ShouldRecordAudioForGroup(currentGroup);
 
-                if (shouldRecord && !this.isScopeAuditRecording && !this.isAuditStarting)
+                var targetGroupId = shouldRecord ? currentGroup?.Id : null;
+
+                // Already recording the applicable group: nothing to do.
+                if (this.isScopeAuditRecording && this.scopeRecordingGroupId == targetGroupId)
+                    return;
+
+                // Switched group (or left the scope): stop the current recording so that each
+                // applicable group is captured as its own audio file, like the general audio audit.
+                if (this.isScopeAuditRecording)
+                {
+                    this.isScopeAuditRecording = false;
+                    this.scopeRecordingGroupId = null;
+                    audioAuditService.StopAudioRecording(interviewId);
+                }
+
+                // Entered an applicable group: rerun the recording for it.
+                if (shouldRecord && !this.isAuditStarting)
                 {
                     await this.StartAudioRecordingWithPermissionHandlingAsync(interviewId).ConfigureAwait(false);
                     this.isScopeAuditRecording = true;
-                }
-                else if (!shouldRecord && this.isScopeAuditRecording)
-                {
-                    this.isScopeAuditRecording = false;
-                    audioAuditService.StopAudioRecording(interviewId);
+                    this.scopeRecordingGroupId = targetGroupId;
                 }
             }
             finally
@@ -292,6 +307,7 @@ namespace WB.UI.Interviewer.ViewModel
                     if (IsAudioRecordingEnabled == true || this.isScopeAuditRecording)
                     {
                         this.isScopeAuditRecording = false;
+                        this.scopeRecordingGroupId = null;
                         audioAuditService.StopAudioRecording(interviewId);
                     }
                 }
