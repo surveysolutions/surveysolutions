@@ -775,6 +775,11 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
 
+            // Interviewers cannot update their own contact info when profile updates are disabled
+            if (currentUser.Id == authorizedUser.Id && authorizedUser.IsInterviewer
+                && !(this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false))
+                return this.Forbid();
+
             if (currentUser.IsArchived)
             {
                 if(currentUser.FullName != editModel.PersonName)
@@ -1139,12 +1144,9 @@ namespace WB.UI.Headquarters.Controllers
 
         private bool HasPermissionsToManageUser(HqUser user)
         {
-            // Own profile can be managed, unless the user is an interviewer and profile updates are disabled
+            // Own profile can always be accessed (e.g., for password and 2FA management)
             if (user.Id == this.authorizedUser.Id)
-            {
-                return !this.authorizedUser.IsInterviewer
-                    || (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false);
-            }
+                return true;
 
             // Administrators can manage all users
             if (this.authorizedUser.IsAdministrator)
