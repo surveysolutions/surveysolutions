@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.UI.Designer.CommonWeb;
@@ -18,17 +19,20 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
+        private const string RecaptchaV3LoginAction = "login";
         private readonly SignInManager<DesignerIdentityUser> signInManager;
         private readonly UserManager<DesignerIdentityUser> userManager;
         private readonly ILogger<LoginModel> logger;
         private readonly ICaptchaService captchaService;
         private readonly IRecaptchaService recaptchaService;
+        private readonly IOptions<CaptchaConfig> captchaConfig;
 
         public LoginModel(SignInManager<DesignerIdentityUser> signInManager, 
             UserManager<DesignerIdentityUser> userManager,
             ILogger<LoginModel> logger,
             ICaptchaService captchaService,
-            IRecaptchaService recaptchaService
+            IRecaptchaService recaptchaService,
+            IOptions<CaptchaConfig> captchaConfig
             )
         {
             this.signInManager = signInManager;
@@ -36,6 +40,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             this.logger = logger;
             this.captchaService = captchaService;
             this.recaptchaService = recaptchaService;
+            this.captchaConfig = captchaConfig;
         }
 
         [BindProperty] 
@@ -95,7 +100,12 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                         try
                         {
                             var recaptcha = await this.recaptchaService.Validate(Request);
-                            if (!recaptcha.success)
+                            var isValid = recaptcha.success;
+                            if (isValid && captchaConfig.Value.CaptchaType == CaptchaProviderType.RecaptchaV3)
+                                isValid = recaptcha.score >= captchaConfig.Value.RecaptchaV3MinimumScore
+                                    && string.Equals(recaptcha.action, RecaptchaV3LoginAction, StringComparison.Ordinal);
+
+                            if (!isValid)
                             {
                                 this.ErrorMessage = ErrorMessages.You_did_not_type_the_verification_word_correctly;
                                 return Page();
