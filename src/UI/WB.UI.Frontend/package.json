@@ -96,6 +96,7 @@
             "^.+\\.jsx?$": "babel-jest"
         },
         "moduleNameMapper": {
+            "^moment$": "<rootDir>/src/shared/momentCompat.js",
             "^@/(.*)$": "<rootDir>/src/$1",
             "^~/(.*)$": "<rootDir>/src/$1"
         },
