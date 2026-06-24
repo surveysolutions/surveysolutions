@@ -228,4 +228,121 @@
   <data name="PLU0014Recomendation" xml:space="preserve">
     <value>Lejohen vetëm shkronja, pika, hapësira dhe apostrofë</value>
   </data>
+
+
+  <data name="PLU0001Recomendation" xml:space="preserve">
+      <value>Përdoruesi duhet të jetë unik</value>
+  </data>
+
+  <data name="PLU0002Recomendation" xml:space="preserve">
+      <value>Zgjidhni dublikatat</value>
+  </data>
+
+  <data name="PLU0007Recomendation" xml:space="preserve">
+      <value>Korrigjoni email-in</value>
+  </data>
+
+  <data name="PLU0008Recomendation" xml:space="preserve">
+      <value>Korrigjoni numrin e telefonit</value>
+  </data>
+
+  <data name="PLU0010Recomendation" xml:space="preserve">
+      <value>Verifikoni vlerën për supervizorin</value>
+  </data>
+
+  <data name="PLU0015" xml:space="preserve">
+    <value>Fjalëkalimi është shumë i shkurtër</value>
+  </data>
+
+  <data name="PLU0015Description" xml:space="preserve">
+    <value>Fjalëkalimi '{0}' është shumë i shkurtër</value>
+  </data>
+
+  <data name="PLU0015Recomendation" xml:space="preserve">
+    <value>Fjalëkalimi duhet të ketë të paktën 10 karaktere</value>
+  </data>
+
+  <data name="PLU0016" xml:space="preserve">
+    <value>Fjalëkalim i thjeshtë</value>
+  </data>
+
+  <data name="PLU0016Description" xml:space="preserve">
+    <value>Fjalëkalimi '{0}' nuk përmban karakter joalfanumerik</value>
+  </data>
+
+  <data name="PLU0016Recomendation" xml:space="preserve">
+    <value>Shtoni të paktën një karakter joalfanumerik</value>
+  </data>
+
+  <data name="PLU0017" xml:space="preserve">
+    <value>Fjalëkalim i thjeshtë</value>
+  </data>
+
+  <data name="PLU0017Description" xml:space="preserve">
+    <value>Fjalëkalimi '{0}' nuk përmban shifër</value>
+  </data>
+
+  <data name="PLU0017Recomendation" xml:space="preserve">
+    <value>Shtoni të paktën një shifër ('0'-'9').</value>
+  </data>
+
+  <data name="PLU0018" xml:space="preserve">
+    <value>Fjalëkalim i thjeshtë</value>
+  </data>
+
+  <data name="PLU0018Description" xml:space="preserve">
+    <value>Fjalëkalimi '{0}' nuk përmban karakter me shkronjë të vogël</value>
+  </data>
+
+  <data name="PLU0018Recomendation" xml:space="preserve">
+    <value>Shtoni të paktën një karakter me shkronjë të vogël ('a'-'z').</value>
+  </data>
+
+  <data name="PLU0019" xml:space="preserve">
+    <value>Fjalëkalim i thjeshtë</value>
+  </data>
+
+  <data name="PLU0019Description" xml:space="preserve">
+    <value>Fjalëkalimi '{0}' nuk përmban karakter me shkronjë të madhe</value>
+  </data>
+
+  <data name="PLU0019Recomendation" xml:space="preserve">
+    <value>Shtoni të paktën një karakter me shkronjë të madhe ('A'-'Z').</value>
+  </data>
+
+  <data name="PLU0020" xml:space="preserve">
+    <value>Fjalëkalim i thjeshtë</value>
+  </data>
+
+  <data name="PLU0020Description" xml:space="preserve">
+    <value>Fjalëkalimi '{0}' nuk përmban mjaftueshëm karaktere unike</value>
+  </data>
+
+  <data name="PLU0020Recomendation" xml:space="preserve">
+      <value>Shtoni karaktere të ndryshme.</value>
+  </data>
+
+  <data name="PLU0021" xml:space="preserve">
+    <value>Kërkohet fjalëkalimi</value>
+  </data>
+
+  <data name="PLU0021Description" xml:space="preserve">
+    <value>Kërkohet fjalëkalimi</value>
+  </data>
+
+  <data name="PLU0021Recomendation" xml:space="preserve">
+    <value>Shtoni fjalëkalimin</value>
+  </data>
+
+  <data name="PLU0022" xml:space="preserve">
+    <value>Hapësira e punës nuk u gjet</value>
+  </data>
+
+  <data name="PLU0022Description" xml:space="preserve">
+    <value>Hapësira e punës duhet të ekzistojë dhe të jetë e aktivizuar</value>
+  </data>
+
+  <data name="PLU0022Recomendation" xml:space="preserve">
+    <value>Kontrolloni emrin e hapësirës së punës</value>
+  </data>
 </root>

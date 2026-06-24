@@ -1243,7 +1243,7 @@
     <value>显示用户</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>个人资料</value>
+    <value>联系方式</value>
   </data>
   <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
     <value>双因素身份验证</value>

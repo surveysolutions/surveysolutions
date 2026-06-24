@@ -199,7 +199,7 @@
     <value>Архівовано</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
-    <value>Завдання {{id}} не можна закрити, оскільки воно у веб-режимі</value>
+    <value>Завдання {{id}} не можна зменшити, оскільки воно у веб-режимі</value>
   </data>
   <data name="AssignmentHistory" xml:space="preserve">
     <value>Історія</value>
@@ -337,7 +337,7 @@
     <value>Режим CAWI дозволяє збирати дані безпосередньо від респондентів</value>
   </data>
   <data name="MultipleAssignmentsClose" xml:space="preserve">
-    <value>{{count}} вибрані завдання буде закрито. Розмір буде встановлено до поточної кількості зібраних інтерв'ю.</value>
+    <value>{{count}} вибрані завдання буде зменшено. Розмір буде встановлено до поточної кількості зібраних інтерв'ю.</value>
   </data>
   <data name="NewAssignment" xml:space="preserve">
     <value>Нове завдання</value>
