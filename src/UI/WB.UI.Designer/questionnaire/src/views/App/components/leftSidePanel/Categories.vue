@@ -53,14 +53,16 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue';
 
 import CategoriesItem from './CategoriesItem.vue';
-import CategoriesEditorModal from './CategoriesEditorModal.vue';
 import { newGuid } from '../../../../helpers/guid';
 import { isNull, isUndefined } from 'lodash'
 import { updateCategories } from '../../../../services/categoriesService'
 import { notice } from '../../../../services/notificationService';
 import dayjs from 'dayjs';
+
+const CategoriesEditorModal = defineAsyncComponent(() => import('./CategoriesEditorModal.vue'));
 
 export default {
     name: 'Categories',
@@ -137,10 +139,19 @@ export default {
             await updateCategories(this.questionnaireId, categories)
         },
 
+        openCategoriesEditorModal(questionnaireId, categoriesId, retries = 20) {
+            if (this.$refs.categoriesEditorModal?.open) {
+                this.$refs.categoriesEditorModal.open(questionnaireId, categoriesId);
+                return;
+            }
+            if (retries > 0)
+                setTimeout(() => this.openCategoriesEditorModal(questionnaireId, categoriesId, retries - 1), 0);
+        },
+
         editCategoriesOpen(event) {
             this.modalEverOpened = true;
             this.$nextTick(() => {
-                this.$refs.categoriesEditorModal.open(this.questionnaireId, event.categoriesId);
+                this.openCategoriesEditorModal(this.questionnaireId, event.categoriesId);
             });
         }
     },
