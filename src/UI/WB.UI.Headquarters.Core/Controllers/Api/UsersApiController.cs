@@ -25,6 +25,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native.Sanitizer;
 using WB.UI.Headquarters.Controllers.Services;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Resources;
@@ -350,14 +351,14 @@ namespace WB.UI.Headquarters.Controllers.Api
         private ImportUserError ToImportError(UserImportVerificationError error) => new ImportUserError
         {
             Line = error.RowNumber.ToString(@"D2"),
-            Column = error.ColumnName.ToLower(),
+            Column = error.ColumnName?.RemoveHtmlTags().ToLower(),
             Message = ToImportErrorMessage(error.Code),
-            Description = ToImportErrorDescription(error.Code, error.CellValue),
-            Recomendation = ToImportErrorRecomendation(error.Code)
+            Description = ToImportErrorDescription(error.Code, error.CellValue?.RemoveHtmlTags()),
+            Recommendation = ToImportErrorRecommendation(error.Code)
         };
 
-        private string ToImportErrorRecomendation(string errorCode)
-            => UserPreloadingVerificationMessages.ResourceManager.GetString($"{errorCode}Recomendation");
+        private string ToImportErrorRecommendation(string errorCode)
+            => UserPreloadingVerificationMessages.ResourceManager.GetString($"{errorCode}Recommendation");
 
         private string ToImportErrorDescription(string errorCode, string errorCellValue)
             => string.Format(UserPreloadingVerificationMessages.ResourceManager.GetString($"{errorCode}Description"), errorCellValue);
@@ -365,7 +366,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         private string ToImportErrorMessage(string errorCode)
             => UserPreloadingVerificationMessages.ResourceManager.GetString(errorCode);
 
-        private ImportUserError[] ToImportError(string message) => new[] {new ImportUserError {Message = message}};
+        private ImportUserError[] ToImportError(string message) => new[] {new ImportUserError {Message = message?.RemoveHtmlTags()}};
 
         public class ImportUserError
         {
@@ -373,7 +374,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             public string Column { get; set; }
             public string Message { get; set; }
             public string Description { get; set; }
-            public string Recomendation { get; set; }
+            public string Recommendation { get; set; }
         }
 
         private IActionResult CreateReportResponse(ExportFileType type, ReportView report, string reportName)
