@@ -151,6 +151,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         object GetVariableValueByOrDeeperRosterLevel(Guid variableId, RosterVector variableRosterVector);
 
         IEnumerable<Identity> GetInvalidEntitiesInInterview();
+        IEnumerable<Identity> GetInvalidEntitiesInInterviewForSupervisor();
 
         bool IsFirstEntityBeforeSecond(Identity first, Identity second);
 
