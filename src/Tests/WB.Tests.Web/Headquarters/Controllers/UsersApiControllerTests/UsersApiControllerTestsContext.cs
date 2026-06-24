@@ -34,6 +34,6 @@ namespace WB.Tests.Web.Headquarters.Controllers.UsersApiControllerTests
                 mediator ?? Mock.Of<IMediator>(),
                 Mock.Of<ILogger<UsersApiController>>());
         }
-    }2222222
+    }
 }
 
