@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -24,6 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
     public abstract class MapSyncProviderBase : AbstractSynchronizationProcess, IMapSyncProvider
     {
         private const int DownloadBufferSize = 64 * 1024;
+        private const int UnknownLengthProgressStepBytes = 512 * 1024;
 
         private readonly ISynchronizationService synchronizationService;
         private readonly ILogger logger;
@@ -100,11 +102,28 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                     continue;
 
                 var lastReportedProgressBucket = -1;
+                long nextUnknownLengthProgressReportAt = 0;
 
                 void OnDownloadProgressChanged(TransferProgress args)
                 {
                     if (!args.TotalBytesToReceive.HasValue || args.TotalBytesToReceive.Value <= 0)
+                    {
+                        if (args.BytesReceived < nextUnknownLengthProgressReportAt)
+                            return;
+
+                        nextUnknownLengthProgressReportAt = args.BytesReceived + UnknownLengthProgressStepBytes;
+
+                        progress.Report(new SyncProgressInfo
+                        {
+                            Title = string.Format(EnumeratorUIResources.MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format,
+                                mapDescription.MapName, processedMapsCount, items.Count, 0),
+                            Description = string.Format(CultureInfo.InvariantCulture, "Downloaded {0:0.0} MB", args.BytesReceived / (1024d * 1024d)),
+                            Status = SynchronizationStatus.Download,
+                            TransferProgress = args
+                        });
+
                         return;
+                    }
 
                     var currentProgressBucket = (int) (args.ProgressPercentage / 5m);
                     if (currentProgressBucket <= lastReportedProgressBucket)
@@ -117,7 +136,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                         Title =
                             string.Format(EnumeratorUIResources.MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format,
                                             mapDescription.MapName, processedMapsCount, items.Count, args.ProgressPercentage),
-                        Status = SynchronizationStatus.Download
+                        Status = SynchronizationStatus.Download,
+                        TransferProgress = args
                     });
                 }
 

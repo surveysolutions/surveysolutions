@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
@@ -89,17 +90,59 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
                 synchronizationService: synchronizationService.Object,
                 mapService: mapService.Object);
 
-            var downloadReports = 0;
-            var progress = new Progress<SyncProgressInfo>(p =>
-            {
-                if (p.Status == SynchronizationStatus.Download)
-                    downloadReports++;
-            });
+            var progress = new ImmediateProgress();
 
             await service.Synchronize(progress, CancellationToken.None, new SynchronizationStatistics());
 
+            var downloadReports = progress.Items.Count(p => p.Status == SynchronizationStatus.Download);
             Assert.That(downloadReports, Is.EqualTo(1));
             mapService.Verify(x => x.MoveTempMapToPermanent("big-map.tpk"), Times.Once);
+        }
+
+        [Test]
+        public async Task should_report_download_progress_for_unknown_content_length_without_spam()
+        {
+            var synchronizationService = new Mock<IOnlineSynchronizationService>();
+            synchronizationService.Setup(x => x.GetMapList(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<MapView> { new MapView { MapName = "chunked-map.tpk" } });
+
+            var sourceBytes = new byte[20 * 1024];
+            synchronizationService.Setup(x => x.GetMapContentStream("chunked-map.tpk", It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new RestStreamResult
+                {
+                    ContentLength = null,
+                    Stream = new ChunkedReadStream(sourceBytes, 1024)
+                });
+
+            var tempStream = new MemoryStream();
+            var mapService = new Mock<IMapService>();
+            mapService.Setup(x => x.GetAvailableMaps(false)).Returns(new List<MapDescription>());
+            mapService.Setup(x => x.GetAvailableShapefiles()).Returns(new List<ShapefileDescription>());
+            mapService.Setup(x => x.DoesMapExist("chunked-map.tpk")).Returns(false);
+            mapService.Setup(x => x.GetTempMapSaveStream("chunked-map.tpk")).Returns(tempStream);
+
+            var service = Create.Service.MapSyncProvider(
+                synchronizationService: synchronizationService.Object,
+                mapService: mapService.Object);
+
+            var progress = new ImmediateProgress();
+
+            await service.Synchronize(progress, CancellationToken.None, new SynchronizationStatistics());
+
+            var downloadEvents = progress.Items.Where(p => p.Status == SynchronizationStatus.Download).ToList();
+            Assert.That(downloadEvents.Count, Is.EqualTo(1));
+            Assert.That(downloadEvents[0].Description, Does.Contain("Downloaded"));
+            mapService.Verify(x => x.MoveTempMapToPermanent("chunked-map.tpk"), Times.Once);
+        }
+
+        private sealed class ImmediateProgress : IProgress<SyncProgressInfo>
+        {
+            public List<SyncProgressInfo> Items { get; } = new List<SyncProgressInfo>();
+
+            public void Report(SyncProgressInfo value)
+            {
+                this.Items.Add(value);
+            }
         }
 
         private sealed class ChunkedReadStream : Stream
