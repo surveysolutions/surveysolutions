@@ -525,4 +525,22 @@ Raisons possibles :
   <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
     <value>Lorsque cette option est activée, les enquêteurs peuvent terminer et rouvrir des affectations depuis leurs tablettes (nécessite l'activation du paramètre superviseur)</value>
   </data>
+  <data name="AudioRecordingQuality" xml:space="preserve">
+    <value>Qualité d'enregistrement audio</value>
+  </data>
+  <data name="AudioRecordingQualityDescription" xml:space="preserve">
+    <value>Qualité audio utilisée par l'application de l'enquêteur lors de l'enregistrement audio (audit audio et questions audio)</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono44kHz" xml:space="preserve">
+    <value>Mono, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve">
+    <value>Mono, 22.05 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve">
+    <value>Stéréo, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
+    <value>Stéréo, 48 kHz</value>
+  </data>
 </root>

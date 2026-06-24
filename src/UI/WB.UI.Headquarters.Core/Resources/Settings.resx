@@ -524,4 +524,22 @@ Possible reasons:
   <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
     <value>When enabled, interviewers can complete and reopen assignments (requires supervisor setting to be enabled)</value>
   </data>
+  <data name="AudioRecordingQuality" xml:space="preserve">
+    <value>Audio recording quality</value>
+  </data>
+  <data name="AudioRecordingQualityDescription" xml:space="preserve">
+    <value>Audio quality used by the interviewer application when recording audio (audio audit and audio questions)</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono44kHz" xml:space="preserve">
+    <value>Mono, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve">
+    <value>Mono, 22.05 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve">
+    <value>Stereo, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
+    <value>Stereo, 48 kHz</value>
+  </data>
 </root>

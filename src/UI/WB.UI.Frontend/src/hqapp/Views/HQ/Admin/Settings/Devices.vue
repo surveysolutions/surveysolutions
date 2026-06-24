@@ -86,6 +86,29 @@
                 </div>
             </div>
             <div class="col-sm-9">
+                <div class="block-filter">
+                    <div class="form-group">
+                        <label for="audioRecordingQuality" style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{ $t('Settings.AudioRecordingQuality') }}
+                            <p style="font-weight: normal;margin-bottom: 0px">
+                                {{ $t('Settings.AudioRecordingQualityDescription') }}
+                            </p>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" id="audioRecordingQuality"
+                            v-model="audioRecordingQualityModel" @change="updateDeviceSettings"
+                            style="max-width: 365px">
+                            <option v-for="option in audioRecordingQualityOptions" :key="option.value"
+                                :value="option.value">
+                                {{ option.title }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
                 <Form v-slot="{ meta }" @submit="noAction" :data-vv-scope="'geographyQuestion'">
                     <div class="block-filter" style="padding-left: 30px">
                         <div class="form-group">
@@ -257,6 +280,7 @@ export default {
         esriApiKeyInitial: String,
         allowSupervisorChangeAssignmentStatus: Boolean,
         allowInterviewerChangeAssignmentStatus: Boolean,
+        audioRecordingQuality: String,
     },
     emits: ['update:isInterviewerAutomaticUpdatesEnabled',
         'update:isDeviceNotificationsEnabled',
@@ -269,6 +293,7 @@ export default {
         'update:esriApiKeyInitial',
         'update:allowSupervisorChangeAssignmentStatus',
         'update:allowInterviewerChangeAssignmentStatus',
+        'update:audioRecordingQuality',
     ],
     computed: {
         isInterviewerAutomaticUpdatesEnabledModel: {
@@ -361,6 +386,22 @@ export default {
                 this.$emit('update:allowInterviewerChangeAssignmentStatus', value)
             }
         },
+        audioRecordingQualityModel: {
+            get() {
+                return this.audioRecordingQuality
+            },
+            set(value) {
+                this.$emit('update:audioRecordingQuality', value)
+            }
+        },
+        audioRecordingQualityOptions() {
+            return [
+                { value: 'Mono44kHz', title: this.$t('Settings.AudioRecordingQuality_Mono44kHz') },
+                { value: 'Mono22kHz', title: this.$t('Settings.AudioRecordingQuality_Mono22kHz') },
+                { value: 'Stereo44kHz', title: this.$t('Settings.AudioRecordingQuality_Stereo44kHz') },
+                { value: 'Stereo48kHz', title: this.$t('Settings.AudioRecordingQuality_Stereo48kHz') },
+            ]
+        },
     },
 
     components: {
@@ -379,6 +420,7 @@ export default {
                     this.isPartialSynchronizationEnabledModel,
                     this.allowSupervisorChangeAssignmentStatusModel,
                     this.allowInterviewerChangeAssignmentStatusModel,
+                    this.audioRecordingQualityModel,
                 )
             })
         },

@@ -537,4 +537,22 @@
   <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
     <value>При включении интервьюеры смогут завершать и возобновлять задания (требует включённой настройки для супервайзеров)</value>
   </data>
+  <data name="AudioRecordingQuality" xml:space="preserve">
+    <value>Качество аудиозаписи</value>
+  </data>
+  <data name="AudioRecordingQualityDescription" xml:space="preserve">
+    <value>Качество звука, используемое приложением интервьюера при записи аудио (аудиоаудит и аудиовопросы)</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono44kHz" xml:space="preserve">
+    <value>Моно, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve">
+    <value>Моно, 22.05 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve">
+    <value>Стерео, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
+    <value>Стерео, 48 kHz</value>
+  </data>
 </root>
