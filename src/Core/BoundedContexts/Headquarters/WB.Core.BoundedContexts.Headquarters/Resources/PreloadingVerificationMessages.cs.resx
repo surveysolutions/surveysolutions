@@ -256,6 +256,6 @@
     <value>Odpověď na otázku s názvem proměnné {0} nelze předem načíst, protože jde o nepodporovaný typ. Podrobnosti o aktuální verzi najdete na: https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type</value>
   </data>
   <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
-    <value>Název proměnné rozsahu zvukového auditu '{0}' je neplatný. Musí odkazovat na existující sekci, skupinu nebo seznam (roster) (otázky nejsou povoleny).</value>
+    <value>Název proměnné rozsahu zvukového auditu '{0}' je neplatný. Musí odkazovat na existující sekci, skupinu nebo seznam (roster) (otázky a ploché seznamy (flat roster) nejsou povoleny).</value>
   </data>
 </root>

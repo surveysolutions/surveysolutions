@@ -260,6 +260,6 @@
     <value>Ответ на вопрос с именем {0} не может быть загружен, так как тип не поддерживается. Пожалуйста, ознакомьтесь https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type </value>
   </data>
   <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
-    <value>Имя переменной области аудиоконтроля '{0}' недопустимо. Оно должно ссылаться на существующий раздел, группу или ростер (вопросы не допускаются).</value>
+    <value>Имя переменной области аудиоконтроля '{0}' недопустимо. Оно должно ссылаться на существующий раздел, группу или ростер (вопросы и плоские ростеры (flat roster) не допускаются).</value>
   </data>
 </root>

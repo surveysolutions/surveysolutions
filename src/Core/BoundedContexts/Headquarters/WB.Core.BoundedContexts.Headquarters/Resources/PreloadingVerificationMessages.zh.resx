@@ -268,6 +268,6 @@
     <value>Answer to question with variable name {0} can't be preloaded, since it is of unsupported type. Refer to the following support article https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type for details of what can be preloaded in the current version.</value>
   </data>
   <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
-    <value>音频审核范围变量名称 '{0}' 无效。它必须引用现有的章节、组或滚动表（不允许使用问题）。</value>
+    <value>音频审核范围变量名称 '{0}' 无效。它必须引用现有的章节、组或滚动表（不允许使用问题和平面滚动表）。</value>
   </data>
 </root>
