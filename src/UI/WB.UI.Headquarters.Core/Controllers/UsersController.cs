@@ -17,7 +17,6 @@ using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
-using WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -46,6 +45,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IWorkspacesStorage workspaces;
         private readonly ITokenProvider tokenProvider;
         private readonly UsersManagementSettings usersManagementSettings;
+        private readonly IWorkspaceContextAccessor workspaceContextAccessor;
         
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
@@ -59,7 +59,8 @@ namespace WB.UI.Headquarters.Controllers
             IOptions<HeadquartersConfig> options,
             IWorkspacesStorage workspaces,
             ITokenProvider tokenProvider,
-            UsersManagementSettings usersManagementSettings)
+            UsersManagementSettings usersManagementSettings,
+            IWorkspaceContextAccessor workspaceContextAccessor)
         {
             this.authorizedUser = authorizedUser;
             this.userManager = userManager;
@@ -69,6 +70,7 @@ namespace WB.UI.Headquarters.Controllers
             this.workspaces = workspaces;
             this.tokenProvider = tokenProvider;
             this.usersManagementSettings = usersManagementSettings;
+            this.workspaceContextAccessor = workspaceContextAccessor;
         }
         
         [Authorize(Roles = "Administrator, Observer")]
@@ -290,7 +292,8 @@ namespace WB.UI.Headquarters.Controllers
                     IsRestricted = IsAccountRestricted(user.Id),
                     CanChangeContactInfo =
                         !authorizedUser.IsInterviewer
-                        || (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false)
+                        || (workspaceContextAccessor.CurrentWorkspace()?.Name != WorkspaceConstants.WorkspaceNames.UsersWorkspaceName 
+                            && (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false))
                 },
                 Api = new
                 {
@@ -384,7 +387,8 @@ namespace WB.UI.Headquarters.Controllers
                     IsRestricted = IsAccountRestricted(user.Id),
                     CanChangeContactInfo =
                         !authorizedUser.IsInterviewer
-                        || (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false)
+                        || (workspaceContextAccessor.CurrentWorkspace()?.Name != WorkspaceConstants.WorkspaceNames.UsersWorkspaceName 
+                            && (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false))
                 },
                 Api = new
                 {
@@ -490,7 +494,8 @@ namespace WB.UI.Headquarters.Controllers
                     IsRestricted = IsAccountRestricted(user.Id),
                     CanChangeContactInfo =
                         !authorizedUser.IsInterviewer
-                        || (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false)
+                        || (workspaceContextAccessor.CurrentWorkspace()?.Name != WorkspaceConstants.WorkspaceNames.UsersWorkspaceName 
+                            && (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false))
                 },
                 Api = new
                 {
@@ -774,10 +779,13 @@ namespace WB.UI.Headquarters.Controllers
             if (currentUser == null) return NotFound("User not found");
 
             if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
-
+            
             // Interviewers cannot update their own contact info when profile updates are disabled
-            if (currentUser.Id == authorizedUser.Id && authorizedUser.IsInterviewer
-                && !(this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false))
+            if (currentUser.Id == authorizedUser.Id 
+                && authorizedUser.IsInterviewer
+                && (workspaceContextAccessor.CurrentWorkspace()?.Name == WorkspaceConstants.WorkspaceNames.UsersWorkspaceName 
+                    ||
+                    !(this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false)))
                 return this.Forbid();
 
             if (currentUser.IsArchived)
