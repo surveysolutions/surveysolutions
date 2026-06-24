@@ -189,6 +189,8 @@ namespace WB.UI.Interviewer.ViewModel
         {
             await asyncDispatcher.ExecuteOnMainThreadAsync(async () =>
             {
+                if (!this.isViewVisible)
+                    return;
                 isAuditStarting = true;
                 try
                 {

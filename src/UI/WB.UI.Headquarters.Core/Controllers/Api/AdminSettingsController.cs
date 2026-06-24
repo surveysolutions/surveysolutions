@@ -48,7 +48,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             public bool PartialSynchronizationEnabled { get; set; }
             public bool AllowSupervisorChangeAssignmentStatus { get; set; }
             public bool AllowInterviewerChangeAssignmentStatus { get; set; }
-            public AudioRecordingQuality AudioRecordingQuality { get; set; }
+            public AudioRecordingQuality? AudioRecordingQuality { get; set; }
         }
 
         public class InterviewerGeographyQuestionAccuracyInMetersModel
@@ -183,7 +183,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 settings.AllowInterviewerChangeAssignmentStatus = message.AllowSupervisorChangeAssignmentStatus
                     ? message.AllowInterviewerChangeAssignmentStatus
                     : false;
-                settings.AudioRecordingQuality = message.AudioRecordingQuality;
+                if (message.AudioRecordingQuality.HasValue)
+                    settings.AudioRecordingQuality = message.AudioRecordingQuality.Value;
             });
 
             return Ok(new {success = true});
