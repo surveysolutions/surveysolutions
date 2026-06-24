@@ -168,20 +168,31 @@ namespace WB.UI.Interviewer.ViewModel
 
             Task.Run(async () =>
             {
-                var interviewId = Guid.Parse(InterviewId);
-                var interview = interviewRepository.Get(this.InterviewId);
-                if (interview == null) return;
+                try
+                {
+                    var interviewId = Guid.Parse(InterviewId);
+                    var interview = interviewRepository.Get(this.InterviewId);
+                    if (interview == null) return;
 
-                await commandService.ExecuteAsync(new ResumeInterviewCommand(interviewId,
-                    Principal.CurrentUserIdentity.UserId, AgentDeviceType.Tablet));
+                    await commandService.ExecuteAsync(new ResumeInterviewCommand(interviewId,
+                        Principal.CurrentUserIdentity.UserId, AgentDeviceType.Tablet));
 
-                this.isViewVisible = true;
+                    this.isViewVisible = true;
 
-                await this.EvaluateAudioRecordingAsync(interviewId, this.audioRecordingCancellation.Token);
+                    await this.EvaluateAudioRecordingAsync(interviewId, this.audioRecordingCancellation.Token);
 
-                auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(),
-                    assignmentId));
-                base.ViewAppeared();
+                    auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(),
+                        assignmentId));
+                    base.ViewAppeared();
+                }
+                catch (OperationCanceledException)
+                {
+                    // ViewModel is being disposed; nothing to do.
+                }
+                catch (Exception exc)
+                {
+                    this.logger.Warn("Audio audit evaluation failed on view appeared.", exception: exc);
+                }
             });
         }
 
