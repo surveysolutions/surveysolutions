@@ -179,7 +179,8 @@ export default {
             this.criticalityLevel = value
         },
         formatDate(date) {
-            return new moment(date).format(DateFormats.dateTime)
+            if (!date) return ''
+            return moment.utc(date).local().format(DateFormats.dateTime)
         },
         selectQuestionnaire(value) {
             this.questionnaireId = value
