@@ -351,7 +351,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         private ImportUserError ToImportError(UserImportVerificationError error) => new ImportUserError
         {
             Line = error.RowNumber.ToString(@"D2"),
-            Column = error.ColumnName?.RemoveHtmlTags().ToLower(),
+            Column = error.ColumnName?.RemoveHtmlTags().ToLowerInvariant(),
             Message = ToImportErrorMessage(error.Code),
             Description = ToImportErrorDescription(error.Code, error.CellValue?.RemoveHtmlTags()),
             Recommendation = ToImportErrorRecommendation(error.Code)
