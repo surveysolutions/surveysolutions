@@ -5,5 +5,6 @@ namespace Main.Core.Entities.SubEntities.Question
         bool IsInteger { get; set; }
         int? CountOfDecimalPlaces { get; set; }
         bool UseFormatting { get; set; }
+        bool IsNonNegative { get; set; }
     }
 }

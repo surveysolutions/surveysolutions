@@ -45,6 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly ThrottlingViewModel throttlingModel;
 
         private bool isRosterSizeQuestion;
+        private bool isNonNegativeQuestion;
         private int answerMaxValue;
 
         private decimal? previousAnswer;
@@ -155,6 +156,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
 
             this.isRosterSizeQuestion = questionnaire.IsRosterSizeQuestion(entityIdentity.Id);
+            this.isNonNegativeQuestion = questionnaire.IsQuestionNonNegative(entityIdentity.Id);
             this.answerMaxValue = Constants.MaxRosterRowCount;
             this.ProtectedAnswer = answerModel.ProtectedAnswer?.Value;
 
@@ -236,6 +238,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 var message = string.Format(UIResources.Interview_Questions_Integer_ProtectedValue,
                     ProtectedAnswer);
                 await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message, answeredOrSelectedValue.ToString());
+                return;
+            }
+
+            if (this.isNonNegativeQuestion && !isSpecialValueSelected && answeredOrSelectedValue < 0)
+            {
+                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Integer_NegativeAnswer);
                 return;
             }
 
