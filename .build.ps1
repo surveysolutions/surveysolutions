@@ -193,7 +193,9 @@ function Add-MultiArchArguments($arguments = @()) {
         $builderName = "surveysolutions-multiarch"
         docker buildx inspect $builderName 2>$null | Out-Null
         if ($LASTEXITCODE -ne 0) {
-            exec { docker buildx create --name $builderName --driver docker-container --bootstrap }
+            # Pipe to Out-Host so the builder name printed by 'buildx create'
+            # is not captured into this function's return value.
+            exec { docker buildx create --name $builderName --driver docker-container --bootstrap } | Out-Host
         }
 
         $arguments += @(
