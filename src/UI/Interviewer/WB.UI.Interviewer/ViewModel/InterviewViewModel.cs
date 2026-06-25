@@ -408,11 +408,12 @@ namespace WB.UI.Interviewer.ViewModel
             base.ViewDisappearing();
         }
 
-        public override void Dispose()
-        {
-            this.NavigationState.ScreenChanged -= this.OnScreenChanged;
-            this.audioRecordingCancellation.Cancel();
-            base.Dispose();
-        }
+public override void Dispose()
+{
+    this.NavigationState.ScreenChanged -= this.OnScreenChanged;
+    this.audioRecordingCancellation.Cancel();
+    this.audioRecordingCancellation.Dispose();
+    base.Dispose();
+}
     }
 }
