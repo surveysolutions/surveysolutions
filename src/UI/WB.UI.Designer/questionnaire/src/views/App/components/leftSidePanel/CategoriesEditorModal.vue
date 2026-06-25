@@ -5,8 +5,8 @@
             <div class="oe-modal-dialog options-editor-modal-dialog">
                 <div class="oe-modal-content">
                     <div class="oe-modal-header">
-                        <button type="button" class="oe-modal-close" aria-label="Close" @click="close"></button>
                         <h3 class="oe-modal-title" id="options-editor-modal-title">{{ formTitle }}</h3>
+                        <button type="button" class="oe-modal-close" aria-label="Close" @click="close"></button>
                     </div>
                     <div class="oe-modal-body options-editor-modal-body">
                         <div v-if="errors.length > 0" class="alert alert-danger options-editor-errors">
@@ -16,10 +16,10 @@
                         <v-tabs v-model="tab" color="primary" fixed-tabs grow>
                             <v-tab value="table" :disabled="!stringsIsValid">{{
                                 $t('QuestionnaireEditor.TableView')
-                            }}</v-tab>
+                                }}</v-tab>
                             <v-tab value="strings">{{
                                 $t('QuestionnaireEditor.StringsView')
-                            }}</v-tab>
+                                }}</v-tab>
                         </v-tabs>
 
                         <v-window v-model="tab">
