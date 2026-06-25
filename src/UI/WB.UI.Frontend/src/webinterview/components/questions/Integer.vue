@@ -65,7 +65,7 @@ export default {
     props: ['noComments'],
     computed: {
         autoNumericElement() {
-            return this.$refs.inputInt.autoNumericElement
+            return this.$refs.inputInt?.autoNumericElement
         },
         isSpecialValueSelected() {
             if (this.$me.answer == null || this.$me.answer == undefined)
@@ -207,7 +207,7 @@ export default {
             return false
         },
     },
-    beforeDestroy() {
+    beforeUnmount() {
         if (this.autoNumericElement) {
             this.autoNumericElement.remove()
         }
