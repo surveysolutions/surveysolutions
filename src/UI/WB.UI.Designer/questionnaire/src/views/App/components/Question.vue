@@ -1,10 +1,7 @@
 <template>
     <form role="form" method="POST" id="question-editor" name="questionForm" unsaved-warning-form
         v-show="activeQuestion">
-        <div id="show-reload-details-promt" class="ng-cloak" v-show="shouldUserSeeReloadDetailsPromt">
-            <div class="inner">{{ $t('QuestionnaireEditor.QuestionToUpdateOptions') }} <a @click="fetch()"
-                    href="javascript:void(0);">{{ $t('QuestionnaireEditor.QuestionClickReload') }}</a></div>
-        </div>
+        <options-editor-modal v-if="optionsModalEverOpened" ref="optionsEditorModal" @applied="handleOptionsApplied" />
         <div class="form-holder">
             <Breadcrumbs :breadcrumbs="activeQuestion.breadcrumbs" />
             <div class="row">
@@ -239,6 +236,7 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue';
 import { useQuestionStore } from '../../../stores/question';
 import { useCommentsStore } from '../../../stores/comments';
 import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
@@ -263,9 +261,13 @@ import TextQuestion from './parts/TextQuestion.vue'
 import { useKeyShortcut } from '../../../composables/useKeyShortcut';
 import emitter from '../../../services/emitter';
 
+const loadOptionsEditorModal = () => import('./leftSidePanel/CategoriesEditorModal.vue');
+const OptionsEditorModal = defineAsyncComponent(loadOptionsEditorModal);
+
 export default {
     name: 'Question',
     components: {
+        OptionsEditorModal,
         MoveToChapterSnippet,
         ExpressionEditor,
         Breadcrumbs,
@@ -288,14 +290,12 @@ export default {
     },
     provide() {
         return {
-            openExternalEditor: this.openExternalEditor,
+            openOptionsEditor: this.openOptionsEditor,
         };
     },
     data() {
         return {
-            shouldUserSeeReloadDetailsPromt: false,
-            openEditor: null,
-
+            optionsModalEverOpened: false,
             showInstruction: null,
             showEnablingConditions: null,
         }
@@ -352,23 +352,6 @@ export default {
     },
     mounted() {
         this.scrollTo();
-
-        // https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API
-        // Automatically reload window when the options editor popup closes. If supported by browser.
-        if ('BroadcastChannel' in window) {
-            this.bcChannel = new BroadcastChannel("editcategory")
-            this.bcChannel.onmessage = ev => {
-                if (ev.data === 'close#' + this.openEditor) {
-                    window.location.reload();
-                }
-            }
-        }
-    },
-    beforeUnmount() {
-        if (this.bcChannel) {
-            this.bcChannel.close();
-            this.bcChannel = null;
-        }
     },
     computed: {
         currentQuestionScope() {
@@ -408,8 +391,6 @@ export default {
     methods: {
         async fetch() {
             await this.questionStore.fetchQuestionData(this.questionnaireId, this.questionId);
-            this.shouldUserSeeReloadDetailsPromt = false;
-
             this.showInstruction = this.activeQuestion.instructions ? true : false;
             this.showEnablingConditions = this.activeQuestion.enablementCondition ? true : false;
         },
@@ -434,12 +415,14 @@ export default {
 
         cancel() {
             this.questionStore.discardChanges();
-
-            this.shouldUserSeeReloadDetailsPromt = false;
             this.showInstruction = this.activeQuestion.instructions ? true : false;
             this.showEnablingConditions = this.activeQuestion.enablementCondition ? true : false;
 
             emitter.emit('questionChangesDiscarded', this.activeQuestion);
+        },
+        async handleOptionsApplied({ entityId }) {
+            if (entityId !== this.questionId) return;
+            await this.fetch();
         },
         toggleComments() {
             this.commentsStore.toggleComments();
@@ -687,11 +670,15 @@ export default {
             setFocusIn(focusId);
         },
 
-        openExternalEditor(id, url) {
-            this.shouldUserSeeReloadDetailsPromt = true;
-            this.openEditor = id
+        async openOptionsEditor(questionId, isCascading = false) {
+            this.optionsModalEverOpened = true;
+            await loadOptionsEditorModal();
+            await this.$nextTick();
 
-            window.open(url, "", "scrollbars=yes, center=yes, modal=yes, width=960, height=745, top=" + (screen.height - 745) / 4 + ", left= " + (screen.width - 960) / 2, true);
+            this.$refs.optionsEditorModal?.open(this.questionnaireId, questionId, {
+                isCategory: false,
+                isCascading,
+            });
         },
     }
 }

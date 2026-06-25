@@ -1,15 +1,15 @@
 <template>
     <teleport to="body">
-        <div v-if="isOpen" class="modal fade in categories-editor-modal" role="dialog"
-            tabindex="-1" aria-labelledby="categories-editor-modal-title" style="z-index: 1050; display: block;">
-            <div class="modal-dialog modal-xl">
+        <div v-if="isOpen" class="modal fade in options-editor-modal" role="dialog"
+            tabindex="-1" aria-labelledby="options-editor-modal-title" style="z-index: 1050; display: block;">
+            <div class="modal-dialog options-editor-modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" aria-label="Close" @click="close"></button>
-                        <h3 class="modal-title" id="categories-editor-modal-title">{{ formTitle }}</h3>
+                        <h3 class="modal-title" id="options-editor-modal-title">{{ formTitle }}</h3>
                     </div>
-                    <div class="modal-body categories-editor-modal-body">
-                        <div v-if="errors.length > 0" class="alert alert-danger categories-editor-errors">
+                    <div class="modal-body options-editor-modal-body">
+                        <div v-if="errors.length > 0" class="alert alert-danger options-editor-errors">
                             <div v-for="error in errors" :key="error">{{ error }}</div>
                         </div>
 
@@ -26,7 +26,7 @@
                             <v-window-item value="table">
                                 <category-table ref="table" :categories="categories"
                                     :parent-categories="parentCategories" :loading="loading"
-                                    :is-category="true" :is-cascading="isCascadingCategory"
+                                    :is-category="isCategory" :is-cascading="isCascadingEnabled"
                                     :readonly="isReadonly"
                                     @setCascading="setCascadingCategory"
                                     @update-categories="updateCategories" />
@@ -34,7 +34,7 @@
                             <v-window-item value="strings">
                                 <category-strings v-if="tab === 'strings'" ref="stringsEditor"
                                     :loading="loading"
-                                    :show-parent-value="isCascadingCategory"
+                                    :show-parent-value="isCascadingEnabled"
                                     :categories="categories"
                                     :readonly="isReadonly"
                                     @string-valid="v => (stringsIsValid = v)"
@@ -45,8 +45,8 @@
                             </v-window-item>
                         </v-window>
                     </div>
-                    <div class="modal-footer categories-editor-modal-footer">
-                        <div class="categories-editor-footer-left">
+                    <div class="modal-footer options-editor-modal-footer">
+                        <div class="options-editor-footer-left">
                             <button v-if="!isReadonly" type="button" class="btn btn-primary"
                                 :disabled="!canApplyChanges || submitting" @click="apply">
                                 {{ $t('QuestionnaireEditor.OptionsUploadApply') }}
@@ -59,8 +59,8 @@
                                 {{ $t('QuestionnaireEditor.Close') }}
                             </button>
                         </div>
-                        <div class="categories-editor-footer-right">
-                            <label v-if="!isReadonly" class="btn btn-default categories-editor-upload-label">
+                        <div class="options-editor-footer-right">
+                            <label v-if="!isReadonly" class="btn btn-default options-editor-upload-label">
                                 {{ $t('QuestionnaireEditor.Upload') }}
                                 <input type="file" style="display:none" ref="fileInput"
                                     accept=".tab,.txt,.tsv,.xls,.xlsx,.ods" @change="uploadFile">
@@ -93,9 +93,10 @@ import CategoryTable from '../../../OptionsEditor/components/OptionItemsTable.vu
 import CategoryStrings from '../../../OptionsEditor/components/OptionItemsAsStrings.vue';
 import { optionsApi } from '../../../OptionsEditor/services';
 import { isEqual, cloneDeep } from 'lodash';
+import { sanitize } from '../../../../services/utilityService';
 
 export default {
-    name: 'CategoriesEditorModal',
+    name: 'OptionsEditorModal',
 
     components: {
         CategoryTable,
@@ -106,7 +107,10 @@ export default {
         return {
             isOpen: false,
             questionnaireId: null,
-            categoriesId: null,
+            entityId: null,
+            isCategory: false,
+            forcedCascading: false,
+            isCascading: false,
             sessionToken: 0,
 
             tab: '',
@@ -124,7 +128,6 @@ export default {
             stringsIsDirty: false,
 
             readonly: true,
-            isCascadingCategory: false,
             stringsIsValid: true,
         };
     },
@@ -138,12 +141,26 @@ export default {
             return this.readonly;
         },
 
+        isCascadingEnabled() {
+            return this.forcedCascading || this.isCascading;
+        },
+
         formTitle() {
             if (this.options) {
+                if (!this.isCategory && this.isCascadingEnabled) {
+                    return (
+                        this.$t('QuestionnaireEditor.CascadingOptionsWindowTitle') +
+                        ': ' +
+                        sanitize(this.options.questionTitle)
+                    );
+                }
+
                 return (
                     this.$t('QuestionnaireEditor.OptionsWindowTitle') +
                     ': ' +
-                    this.options.categoriesName
+                    (this.isCategory
+                        ? this.options.categoriesName
+                        : sanitize(this.options.questionTitle))
                 );
             }
             return '';
@@ -152,18 +169,18 @@ export default {
         exportOptionsAsTabUri() {
             return optionsApi.getExportOptionsAsTabUri(
                 this.questionnaireId,
-                this.categoriesId,
-                true,
-                this.isCascadingCategory
+                this.entityId,
+                this.isCategory,
+                this.isCascadingEnabled
             );
         },
 
         exportOptionsAsExlsUri() {
             return optionsApi.getExportOptionsAsExlsUri(
                 this.questionnaireId,
-                this.categoriesId,
-                true,
-                this.isCascadingCategory
+                this.entityId,
+                this.isCategory,
+                this.isCascadingEnabled
             );
         },
 
@@ -185,9 +202,12 @@ export default {
     },
 
     methods: {
-        open(questionnaireId, categoriesId) {
+        open(questionnaireId, entityId, { isCategory = false, isCascading = false } = {}) {
             this.questionnaireId = questionnaireId;
-            this.categoriesId = categoriesId;
+            this.entityId = entityId;
+            this.isCategory = isCategory;
+            this.forcedCascading = isCascading;
+            this.isCascading = isCascading;
             // Increment session token so any in-flight requests from a previous open()
             // will be ignored when they resolve.
             this.sessionToken++;
@@ -196,13 +216,13 @@ export default {
             this.options = null;
             this.categories = [];
             this.initialCategories = [];
+            this.parentCategories = null;
             this.errors = [];
             this.submitting = false;
             this.ajax = false;
             this.convert = false;
             this.inEditMode = false;
             this.readonly = true;
-            this.isCascadingCategory = false;
             this.stringsIsValid = true;
             this.stringsIsDirty = false;
             this.tab = '';
@@ -213,23 +233,28 @@ export default {
         close() {
             this.sessionToken++;
             this.isOpen = false;
+            this.questionnaireId = null;
+            this.entityId = null;
+            this.isCategory = false;
+            this.forcedCascading = false;
+            this.isCascading = false;
             this.options = null;
             this.categories = [];
             this.initialCategories = [];
+            this.parentCategories = null;
             this.errors = [];
             this.ajax = false;
             this.convert = false;
             this.inEditMode = false;
             this.submitting = false;
             this.readonly = true;
-            this.isCascadingCategory = false;
             this.stringsIsValid = true;
             this.stringsIsDirty = false;
             this.tab = '';
         },
 
         setCascadingCategory(cascadingCategory) {
-            this.isCascadingCategory = !!cascadingCategory;
+            this.isCascading = !!cascadingCategory;
         },
 
         async reloadCategories(onDone) {
@@ -242,19 +267,41 @@ export default {
             const token = this.sessionToken;
 
             try {
-                const data = await optionsApi.getCategoryOptions(
-                    this.questionnaireId,
-                    this.categoriesId
-                );
+                const data = this.isCategory
+                    ? await optionsApi.getCategoryOptions(
+                        this.questionnaireId,
+                        this.entityId
+                    )
+                    : await optionsApi.getOptions(
+                        this.questionnaireId,
+                        this.entityId,
+                        this.isCascadingEnabled
+                    );
                 if (token !== this.sessionToken) return;
+
                 this.categories = data.options;
                 this.initialCategories = cloneDeep(data.options);
                 this.readonly = data.isReadonly;
 
-                this.isCascadingCategory = data.options.some(o => o.parentValue != null);
+                if (this.isCategory) {
+                    this.isCascading = data.options.some(o => o.parentValue != null);
+                }
 
                 delete data.options;
                 this.options = data;
+
+                if (
+                    !this.isCategory &&
+                    this.options.cascadeFromQuestionId
+                ) {
+                    const parent = await optionsApi.getOptions(
+                        this.questionnaireId,
+                        this.options.cascadeFromQuestionId,
+                        false
+                    );
+                    if (token !== this.sessionToken) return;
+                    this.parentCategories = parent.options;
+                }
 
                 if (onDone) onDone.apply(this);
             } catch (e) {
@@ -281,7 +328,13 @@ export default {
             const token = this.sessionToken;
 
             try {
-                const apiResponse = await optionsApi.uploadCategory(file);
+                const apiResponse = this.isCategory
+                    ? await optionsApi.uploadCategory(file)
+                    : await optionsApi.uploadOptions(
+                        this.questionnaireId,
+                        this.entityId,
+                        file
+                    );
 
                 if (token !== this.sessionToken) return;
 
@@ -323,13 +376,15 @@ export default {
                 const response = await optionsApi.applyOptions(
                     this.categories,
                     this.questionnaireId,
-                    this.categoriesId,
-                    this.isCascadingCategory,
-                    true
+                    this.entityId,
+                    this.isCascadingEnabled,
+                    this.isCategory
                 );
                 if (token !== this.sessionToken) return;
                 if (response.isSuccess || response.IsSuccess) {
+                    const entityId = this.entityId;
                     this.close();
+                    this.$emit('applied', { entityId });
                 } else {
                     this.ajax = false;
                     this.errors = [response.error];
@@ -349,36 +404,45 @@ export default {
 </script>
 
 <style scoped>
-.categories-editor-modal-body {
-    padding: 0;
-    min-height: 400px;
+.options-editor-modal-dialog {
+    width: min(96vw, 1680px);
+    max-width: calc(100vw - 32px);
 }
 
-.categories-editor-errors {
+.options-editor-modal-body {
+    padding: 0;
+    min-height: 400px;
+    max-height: calc(100vh - 180px);
+    overflow: auto;
+}
+
+.options-editor-errors {
     margin: 12px;
 }
 
-.categories-editor-modal-footer {
+.options-editor-modal-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+    gap: 12px;
+}
+
+.options-editor-footer-left {
+    display: flex;
     gap: 8px;
-}
-
-.categories-editor-footer-left {
-    display: flex;
-    gap: 4px;
     align-items: center;
+    flex-wrap: wrap;
 }
 
-.categories-editor-footer-right {
+.options-editor-footer-right {
     display: flex;
-    gap: 4px;
+    gap: 8px;
     align-items: center;
+    flex-wrap: wrap;
 }
 
-.categories-editor-upload-label {
+.options-editor-upload-label {
     cursor: pointer;
     margin-bottom: 0;
 }

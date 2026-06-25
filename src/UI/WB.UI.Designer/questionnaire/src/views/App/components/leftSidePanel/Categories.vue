@@ -1,6 +1,6 @@
 <template>
     <div class="categories">
-        <categories-editor-modal v-if="modalEverOpened" ref="categoriesEditorModal" />
+        <options-editor-modal v-if="modalEverOpened" ref="categoriesEditorModal" />
 
         <perfect-scrollbar class="scroller">
             <h3>{{ $t('QuestionnaireEditor.SideBarCategoriesCounter', { count: categoriesList.length }) }}</h3>
@@ -62,13 +62,13 @@ import { updateCategories } from '../../../../services/categoriesService'
 import { notice } from '../../../../services/notificationService';
 import dayjs from 'dayjs';
 
-const loadCategoriesEditorModal = () => import('./CategoriesEditorModal.vue');
-const CategoriesEditorModal = defineAsyncComponent(loadCategoriesEditorModal);
+const loadOptionsEditorModal = () => import('./CategoriesEditorModal.vue');
+const OptionsEditorModal = defineAsyncComponent(loadOptionsEditorModal);
 
 export default {
     name: 'Categories',
     inject: ['questionnaire', 'isReadOnlyForUser'],
-    components: { CategoriesItem, CategoriesEditorModal },
+    components: { CategoriesItem, OptionsEditorModal },
     props: {
         questionnaireId: { type: String, required: true },
     },
@@ -141,10 +141,10 @@ export default {
         },
 
         async openCategoriesEditorModal(questionnaireId, categoriesId) {
-            await loadCategoriesEditorModal();
+            await loadOptionsEditorModal();
             await this.$nextTick();
 
-            this.$refs.categoriesEditorModal?.open(questionnaireId, categoriesId);
+            this.$refs.categoriesEditorModal?.open(questionnaireId, categoriesId, { isCategory: true });
         },
 
         async editCategoriesOpen(event) {
