@@ -155,12 +155,12 @@ RUN RID="linux-$(case "${TARGETARCH}" in arm64) echo arm64;; *) echo x64;; esac)
     -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
 # Copy APK files if any
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine3.23 AS apks
+FROM --platform=$BUILDPLATFORM alpine:3.23 AS apks
 ARG APK_FILES
 COPY ${APK_FILES}/*.apk /apk/
 
 # include noto font into image
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine3.23 AS fonts_source
+FROM --platform=$BUILDPLATFORM alpine:3.23 AS fonts_source
 
 COPY installer/src/SurveySolutionsProduct/Fonts /usr/share/fonts
 
