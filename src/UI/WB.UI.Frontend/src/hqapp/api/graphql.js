@@ -1,8 +1,18 @@
 import { GraphQLClient, gql } from 'graphql-request'
+import { validateFetchResponse } from '~/shared/serverValidator'
 
 export { gql }
 
-const client = new GraphQLClient(new URL('/graphql', window.location.origin).toString())
+const client = new GraphQLClient(
+    new URL('/graphql', window.location.origin).toString(),
+    {
+        fetch: async (...args) => {
+            const response = await fetch(...args)
+            validateFetchResponse(response)
+            return response
+        },
+    }
+)
 
 export async function gqlRequest(document, variables) {
     try {

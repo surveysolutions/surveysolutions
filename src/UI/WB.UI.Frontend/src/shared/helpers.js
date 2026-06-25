@@ -29,9 +29,22 @@ export function humanFileSize(bytes, si) {
 }
 
 export function convertToLocal(startUtc, startTimezone) {
-    return startUtc == null
-        ? null
-        : moment.utc(startUtc)
-            .local()
-            .format(DateFormats.dateTimeInList)
+    if (startUtc == null) {
+        return null
+    }
+
+    const startTime = moment.utc(startUtc)
+
+    if (startTimezone) {
+        try {
+            return startTime
+                .tz(startTimezone)
+                .local()
+                .format(DateFormats.dateTimeInList)
+        } catch { /* fall back to UTC->local conversion when timezone is invalid */ }
+    }
+
+    return startTime
+        .local()
+        .format(DateFormats.dateTimeInList)
 }
