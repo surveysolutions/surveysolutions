@@ -205,13 +205,12 @@ namespace WB.UI.Interviewer.ViewModel
                 isAuditStarting = true;
                 try
                 {
-                    await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
+                    await audioAuditService.StartAudioRecordingAsync(interviewId);
                 }
                 catch (MissingPermissionsException missingPermissionsException)
                 {
                     this.logger.Info("Audio audit failed to start.", exception: missingPermissionsException);
-                    await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
-                        .ConfigureAwait(false);
+                    await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
 
                     if (missingPermissionsException.PermissionType == typeof(Permissions.Microphone))
                     {
@@ -408,12 +407,19 @@ namespace WB.UI.Interviewer.ViewModel
             base.ViewDisappearing();
         }
 
-public override void Dispose()
-{
-    this.NavigationState.ScreenChanged -= this.OnScreenChanged;
-    this.audioRecordingCancellation.Cancel();
-    this.audioRecordingCancellation.Dispose();
-    base.Dispose();
-}
+public override void Dispose()
+
+{
+
+    this.NavigationState.ScreenChanged -= this.OnScreenChanged;
+
+    this.audioRecordingCancellation.Cancel();
+
+    this.audioRecordingCancellation.Dispose();
+
+    base.Dispose();
+
+}
+
     }
 }
