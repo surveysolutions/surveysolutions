@@ -19883,7 +19883,7 @@
             <li lc="id-ID" tx="Tekan untuk merekam GPS" ts="Translated" qs="ToReview" />
             <li lc="km" tx="កត់ជី ភីអេស" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Toque para registrar GPS" ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="Tap to record GPS" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Record GPS" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Определить местоположение" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="แตะเพื่อบันทึก GPS" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="Визначити місце розташування" ts="Translated" qs="ToReview" />
