@@ -1,14 +1,14 @@
 <template>
     <teleport to="body">
-        <div v-if="isOpen" class="modal fade in options-editor-modal" role="dialog"
-            tabindex="-1" aria-labelledby="options-editor-modal-title" style="z-index: 1050; display: block;">
-            <div class="modal-dialog options-editor-modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" aria-label="Close" @click="close"></button>
-                        <h3 class="modal-title" id="options-editor-modal-title">{{ formTitle }}</h3>
+        <div v-if="isOpen" class="oe-modal-overlay" role="dialog" aria-modal="true" tabindex="-1"
+            aria-labelledby="options-editor-modal-title">
+            <div class="oe-modal-dialog options-editor-modal-dialog">
+                <div class="oe-modal-content">
+                    <div class="oe-modal-header">
+                        <button type="button" class="oe-modal-close" aria-label="Close" @click="close"></button>
+                        <h3 class="oe-modal-title" id="options-editor-modal-title">{{ formTitle }}</h3>
                     </div>
-                    <div class="modal-body options-editor-modal-body">
+                    <div class="oe-modal-body options-editor-modal-body">
                         <div v-if="errors.length > 0" class="alert alert-danger options-editor-errors">
                             <div v-for="error in errors" :key="error">{{ error }}</div>
                         </div>
@@ -25,65 +25,54 @@
                         <v-window v-model="tab">
                             <v-window-item value="table">
                                 <category-table ref="table" :categories="categories"
-                                    :parent-categories="parentCategories" :loading="loading"
-                                    :is-category="isCategory" :is-cascading="isCascadingEnabled"
-                                    :readonly="isReadonly"
-                                    @setCascading="setCascadingCategory"
-                                    @update-categories="updateCategories" />
+                                    :parent-categories="parentCategories" :loading="loading" :is-category="isCategory"
+                                    :is-cascading="isCascadingEnabled" :readonly="isReadonly"
+                                    @setCascading="setCascadingCategory" @update-categories="updateCategories" />
                             </v-window-item>
                             <v-window-item value="strings">
-                                <category-strings v-if="tab === 'strings'" ref="stringsEditor"
-                                    :loading="loading"
-                                    :show-parent-value="isCascadingEnabled"
-                                    :categories="categories"
-                                    :readonly="isReadonly"
-                                    @string-valid="v => (stringsIsValid = v)"
-                                    @changeCategories="v => (categories = v)"
-                                    @editing="v => (inEditMode = v)"
-                                    @inprogress="v => (convert = v)"
-                                    @is-dirty="v => (stringsIsDirty = v)" />
+                                <category-strings v-if="tab === 'strings'" ref="stringsEditor" :loading="loading"
+                                    :show-parent-value="isCascadingEnabled" :categories="categories"
+                                    :readonly="isReadonly" @string-valid="v => (stringsIsValid = v)"
+                                    @changeCategories="v => (categories = v)" @editing="v => (inEditMode = v)"
+                                    @inprogress="v => (convert = v)" @is-dirty="v => (stringsIsDirty = v)" />
                             </v-window-item>
                         </v-window>
                     </div>
-                    <div class="modal-footer options-editor-modal-footer">
+                    <div class="oe-modal-footer options-editor-modal-footer">
                         <div class="options-editor-footer-left">
-                            <button v-if="!isReadonly" type="button" class="btn btn-primary"
-                                :disabled="!canApplyChanges || submitting" @click="apply">
+                            <v-btn v-if="!isReadonly" color="primary" :disabled="!canApplyChanges || submitting"
+                                :loading="submitting" @click="apply">
                                 {{ $t('QuestionnaireEditor.OptionsUploadApply') }}
-                            </button>
-                            <button v-if="!isReadonly" type="button" class="btn btn-default"
-                                :disabled="!isDirty" @click="resetChanges">
+                            </v-btn>
+                            <v-btn v-if="!isReadonly" variant="outlined" :disabled="!isDirty" @click="resetChanges">
                                 {{ $t('QuestionnaireEditor.OptionsUploadRevert') }}
-                            </button>
-                            <button type="button" class="btn btn-link" @click="close">
+                            </v-btn>
+                            <v-btn variant="text" @click="close">
                                 {{ $t('QuestionnaireEditor.Close') }}
-                            </button>
+                            </v-btn>
                         </div>
                         <div class="options-editor-footer-right">
-                            <label v-if="!isReadonly" class="btn btn-default options-editor-upload-label">
+                            <v-btn v-if="!isReadonly" variant="outlined" class="options-editor-upload-label"
+                                @click="$refs.fileInput?.click()">
                                 {{ $t('QuestionnaireEditor.Upload') }}
-                                <input type="file" style="display:none" ref="fileInput"
-                                    accept=".tab,.txt,.tsv,.xls,.xlsx,.ods" @change="uploadFile">
-                            </label>
+                            </v-btn>
+                            <input v-if="!isReadonly" type="file" style="display:none" ref="fileInput"
+                                accept=".tab,.txt,.tsv,.xls,.xlsx,.ods" @change="uploadFile">
                             <span>{{ $t('QuestionnaireEditor.SideBarDownload') }}</span>
-                            <a :href="!canDownloadCategories ? null : exportOptionsAsExlsUri"
-                                :class="{ 'disabled': !canDownloadCategories }"
-                                @click="!canDownloadCategories && $event.preventDefault()"
-                                class="btn btn-default">
+                            <v-btn variant="outlined" :disabled="!canDownloadCategories"
+                                :href="canDownloadCategories ? exportOptionsAsExlsUri : undefined">
                                 {{ $t('QuestionnaireEditor.SideBarXlsx') }}
-                            </a>
-                            <a :href="!canDownloadCategories ? null : exportOptionsAsTabUri"
-                                :class="{ 'disabled': !canDownloadCategories }"
-                                @click="!canDownloadCategories && $event.preventDefault()"
-                                class="btn btn-default">
+                            </v-btn>
+                            <v-btn variant="outlined" :disabled="!canDownloadCategories"
+                                :href="canDownloadCategories ? exportOptionsAsTabUri : undefined">
                                 {{ $t('QuestionnaireEditor.SideBarTab') }}
-                            </a>
+                            </v-btn>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div v-if="isOpen" class="modal-backdrop fade in" style="z-index: 1040;"></div>
+        <div v-if="isOpen" class="oe-modal-backdrop"></div>
     </teleport>
 </template>
 
@@ -404,6 +393,97 @@ export default {
 </script>
 
 <style scoped>
+.oe-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 16px;
+    overflow: auto;
+}
+
+.oe-modal-dialog {
+    position: relative;
+    margin: 0;
+}
+
+.oe-modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.24);
+    overflow: hidden;
+}
+
+.oe-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.oe-modal-title {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.3;
+}
+
+.oe-modal-close {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    color: #6b7280;
+}
+
+.oe-modal-close::before,
+.oe-modal-close::after {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 7px;
+    width: 16px;
+    height: 2px;
+    background: currentColor;
+}
+
+.oe-modal-close::before {
+    transform: rotate(45deg);
+}
+
+.oe-modal-close::after {
+    transform: rotate(-45deg);
+}
+
+.oe-modal-close:hover {
+    color: #111827;
+}
+
+.oe-modal-body {
+    display: block;
+}
+
+.oe-modal-footer {
+    padding: 12px 16px;
+    border-top: 1px solid #e5e7eb;
+    background: #fff;
+}
+
+.oe-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1040;
+    background: rgba(0, 0, 0, 0.5);
+}
+
 .options-editor-modal-dialog {
     width: min(96vw, 1680px);
     max-width: calc(100vw - 32px);
