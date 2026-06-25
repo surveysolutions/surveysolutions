@@ -435,7 +435,16 @@ task DockerHq {
     # Multi-arch images can only be exported to a registry, not loaded into the
     # local docker daemon, so request both platforms only when pushing.
     if (-not $noDockerPush.IsPresent) {
+        # The default 'docker' buildx driver does not support multi-platform
+        # builds, so ensure a 'docker-container' driver builder exists and use it.
+        $builderName = "surveysolutions-multiarch"
+        docker buildx inspect $builderName 2>$null | Out-Null
+        if ($LASTEXITCODE -ne 0) {
+            exec { docker buildx create --name $builderName --driver docker-container --bootstrap }
+        }
+
         $arguments += @(
+            "--builder", $builderName,
             "--platform", "linux/amd64,linux/arm64"
         )
     }
