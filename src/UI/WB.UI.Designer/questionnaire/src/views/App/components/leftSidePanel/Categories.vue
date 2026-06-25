@@ -62,7 +62,8 @@ import { updateCategories } from '../../../../services/categoriesService'
 import { notice } from '../../../../services/notificationService';
 import dayjs from 'dayjs';
 
-const CategoriesEditorModal = defineAsyncComponent(() => import('./CategoriesEditorModal.vue'));
+const loadCategoriesEditorModal = () => import('./CategoriesEditorModal.vue');
+const CategoriesEditorModal = defineAsyncComponent(loadCategoriesEditorModal);
 
 export default {
     name: 'Categories',
@@ -139,20 +140,17 @@ export default {
             await updateCategories(this.questionnaireId, categories)
         },
 
-        openCategoriesEditorModal(questionnaireId, categoriesId, retries = 20) {
-            if (this.$refs.categoriesEditorModal?.open) {
-                this.$refs.categoriesEditorModal.open(questionnaireId, categoriesId);
-                return;
-            }
-            if (retries > 0)
-                setTimeout(() => this.openCategoriesEditorModal(questionnaireId, categoriesId, retries - 1), 0);
+        async openCategoriesEditorModal(questionnaireId, categoriesId) {
+            await loadCategoriesEditorModal();
+            await this.$nextTick();
+
+            this.$refs.categoriesEditorModal?.open(questionnaireId, categoriesId);
         },
 
-        editCategoriesOpen(event) {
+        async editCategoriesOpen(event) {
             this.modalEverOpened = true;
-            this.$nextTick(() => {
-                this.openCategoriesEditorModal(this.questionnaireId, event.categoriesId);
-            });
+            await this.$nextTick();
+            await this.openCategoriesEditorModal(this.questionnaireId, event.categoriesId);
         }
     },
 }
