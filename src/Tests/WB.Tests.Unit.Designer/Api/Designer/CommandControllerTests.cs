@@ -20,6 +20,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.GenericSubdomains.Portable;
@@ -154,21 +155,19 @@ namespace WB.Tests.Unit.Designer.Api.Designer
         }
 
         [Test]
-        public void Deserialize_paste_into_with_historical_source_questionnaire_sequence_sets_source_revision()
+        public void Deserialize_paste_into_with_source_questionnaire_revision_sets_source_revision()
         {
             var sourceQuestionnaireId = Guid.NewGuid();
             var sourceQuestionnaireRevisionId = Guid.NewGuid();
-            var dbContext = Create.InMemoryDbContext();
-            dbContext.QuestionnaireChangeRecords.Add(Create.QuestionnaireChangeRecord(
-                questionnaireChangeRecordId: sourceQuestionnaireRevisionId.FormatGuid(),
-                questionnaireId: sourceQuestionnaireId.FormatGuid(),
-                sequence: 74));
-            dbContext.SaveChanges();
-
-            var controller = CreateController(dbContext: dbContext);
+            var controller = CreateController();
             var json = SerializeCommand(new
             {
-                sourceQuestionnaireId = $"{sourceQuestionnaireId:N}$74",
+                sourceQuestionnaireId = sourceQuestionnaireId,
+                sourceQuestionnaireRevision = new
+                {
+                    questionnaireId = sourceQuestionnaireId,
+                    revision = sourceQuestionnaireRevisionId
+                },
                 sourceItemId = Guid.NewGuid(),
                 parentId = Guid.NewGuid(),
                 entityId = Guid.NewGuid(),
@@ -180,71 +179,10 @@ namespace WB.Tests.Unit.Designer.Api.Designer
             var pasteInto = result as PasteInto;
             Assert.That(pasteInto, Is.Not.Null);
             Assert.That(pasteInto!.SourceQuestionnaireId, Is.EqualTo(sourceQuestionnaireId));
-            Assert.That(pasteInto.SourceQuestionnaireRevisionId, Is.EqualTo(sourceQuestionnaireRevisionId));
-        }
-
-        [Test]
-        public void Deserialize_paste_into_with_historical_source_questionnaire_revision_prefix_scopes_lookup_to_source_questionnaire()
-        {
-            var sourceQuestionnaireId = Guid.NewGuid();
-            var sourceQuestionnaireRevisionId = Guid.Parse("abcdef12-1111-1111-1111-111111111111");
-            var anotherQuestionnaireId = Guid.NewGuid();
-            var anotherQuestionnaireRevisionId = Guid.Parse("abcdef12-2222-2222-2222-222222222222");
-            var dbContext = Create.InMemoryDbContext();
-            dbContext.QuestionnaireChangeRecords.Add(Create.QuestionnaireChangeRecord(
-                questionnaireChangeRecordId: sourceQuestionnaireRevisionId.FormatGuid(),
-                questionnaireId: sourceQuestionnaireId.FormatGuid(),
-                sequence: 74));
-            dbContext.QuestionnaireChangeRecords.Add(Create.QuestionnaireChangeRecord(
-                questionnaireChangeRecordId: anotherQuestionnaireRevisionId.FormatGuid(),
-                questionnaireId: anotherQuestionnaireId.FormatGuid(),
-                sequence: 12));
-            dbContext.SaveChanges();
-
-            var controller = CreateController(dbContext: dbContext);
-            var json = SerializeCommand(new
-            {
-                sourceQuestionnaireId = $"{sourceQuestionnaireId:N}$abcdef12",
-                sourceItemId = Guid.NewGuid(),
-                parentId = Guid.NewGuid(),
-                entityId = Guid.NewGuid(),
-                questionnaireId = Guid.NewGuid()
-            });
-
-            var result = controller.Deserialize(nameof(PasteInto), json);
-
-            var pasteInto = result as PasteInto;
-            Assert.That(pasteInto, Is.Not.Null);
-            Assert.That(pasteInto!.SourceQuestionnaireRevisionId, Is.EqualTo(sourceQuestionnaireRevisionId));
-        }
-
-        [Test]
-        public void Deserialize_paste_into_with_numeric_historical_source_questionnaire_revision_prefix_falls_back_from_sequence_lookup()
-        {
-            var sourceQuestionnaireId = Guid.NewGuid();
-            var sourceQuestionnaireRevisionId = Guid.Parse("12345678-1234-1234-1234-1234567890ab");
-            var dbContext = Create.InMemoryDbContext();
-            dbContext.QuestionnaireChangeRecords.Add(Create.QuestionnaireChangeRecord(
-                questionnaireChangeRecordId: sourceQuestionnaireRevisionId.FormatGuid(),
-                questionnaireId: sourceQuestionnaireId.FormatGuid(),
-                sequence: 74));
-            dbContext.SaveChanges();
-
-            var controller = CreateController(dbContext: dbContext);
-            var json = SerializeCommand(new
-            {
-                sourceQuestionnaireId = $"{sourceQuestionnaireId:N}$123",
-                sourceItemId = Guid.NewGuid(),
-                parentId = Guid.NewGuid(),
-                entityId = Guid.NewGuid(),
-                questionnaireId = Guid.NewGuid()
-            });
-
-            var result = controller.Deserialize(nameof(PasteInto), json);
-
-            var pasteInto = result as PasteInto;
-            Assert.That(pasteInto, Is.Not.Null);
-            Assert.That(pasteInto!.SourceQuestionnaireRevisionId, Is.EqualTo(sourceQuestionnaireRevisionId));
+            Assert.That(pasteInto.SourceQuestionnaireRevision, Is.Not.Null);
+            Assert.That(pasteInto.SourceQuestionnaireRevision, Is.InstanceOf<QuestionnaireRevision>());
+            Assert.That(pasteInto.SourceQuestionnaireRevision.QuestionnaireId, Is.EqualTo(sourceQuestionnaireId));
+            Assert.That(pasteInto.SourceQuestionnaireRevision.Revision, Is.EqualTo(sourceQuestionnaireRevisionId));
         }
 
         [Test]
@@ -870,7 +808,6 @@ namespace WB.Tests.Unit.Designer.Api.Designer
         #endregion
     }
 }
-
 
 
 

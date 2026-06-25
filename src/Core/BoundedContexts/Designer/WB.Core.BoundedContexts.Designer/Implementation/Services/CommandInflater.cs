@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -63,25 +64,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (command is PasteAfter currentPasteItemAfterCommand)
             {
                 currentPasteItemAfterCommand.SourceDocument =
-                    GetQuestionnaire(currentPasteItemAfterCommand.SourceQuestionnaireId,
-                        currentPasteItemAfterCommand.SourceQuestionnaireRevisionId);
+                    GetQuestionnaire(currentPasteItemAfterCommand.SourceQuestionnaireRevision ??
+                        new QuestionnaireRevision(currentPasteItemAfterCommand.SourceQuestionnaireId));
             }
 
             if (command is PasteInto currentPasteItemIntoCommand)
             {
                 currentPasteItemIntoCommand.SourceDocument =
-                    GetQuestionnaire(currentPasteItemIntoCommand.SourceQuestionnaireId,
-                        currentPasteItemIntoCommand.SourceQuestionnaireRevisionId);
+                    GetQuestionnaire(currentPasteItemIntoCommand.SourceQuestionnaireRevision ??
+                        new QuestionnaireRevision(currentPasteItemIntoCommand.SourceQuestionnaireId));
             }
         }
 
-        private QuestionnaireDocument GetQuestionnaire(Guid id, Guid? revisionId = null)
+        private QuestionnaireDocument GetQuestionnaire(QuestionnaireRevision questionnaireRevision)
         {
-            var questionnaireIdentity = revisionId.HasValue
-                ? $"{id:N}${revisionId.Value:N}"
-                : id.FormatGuid();
-
-            var questionnaire = this.questionnaireDocumentReader.GetById(questionnaireIdentity);
+            var questionnaire = this.questionnaireDocumentReader.GetById(questionnaireRevision.ToString());
 
             if (questionnaire == null)
             {
@@ -93,7 +90,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 this.user.IsAdmin)
                 return questionnaire;
 
-            var questionnaireListItem = this.dbContext.Questionnaires.Include(x => x.SharedPersons).FirstOrDefault(x => x.QuestionnaireId == id.FormatGuid());
+            var questionnaireListItem = this.dbContext.Questionnaires.Include(x => x.SharedPersons)
+                .FirstOrDefault(x => x.QuestionnaireId == questionnaireRevision.QuestionnaireId.FormatGuid());
             if (questionnaireListItem == null ||
                 questionnaireListItem.SharedPersons.All(x => x.UserId != this.user.Id))
             {

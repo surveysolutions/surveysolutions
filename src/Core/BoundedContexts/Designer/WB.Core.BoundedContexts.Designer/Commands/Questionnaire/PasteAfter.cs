@@ -1,6 +1,7 @@
 ﻿using Main.Core.Documents;
 using System;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
@@ -15,7 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
         }
 
         public Guid SourceQuestionnaireId { get; private set; }
-        public Guid? SourceQuestionnaireRevisionId { get; set; }
+        public QuestionnaireRevision? SourceQuestionnaireRevision { get; set; }
         public Guid SourceItemId { get; private set; }
 
         public Guid ItemToPasteAfterId { get; private set; }
