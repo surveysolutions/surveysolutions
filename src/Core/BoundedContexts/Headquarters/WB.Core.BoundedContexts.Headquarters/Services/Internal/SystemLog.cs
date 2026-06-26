@@ -168,12 +168,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 
         public void WorkspaceEnabled(string workspaceName)
         {
-            this.Append(LogEntryType.WorkspaceEnabled, "workspace", workspaceName, workspace: workspaceName);
+            this.Append(LogEntryType.WorkspaceEnabled, "workspace", workspaceName);
         }
 
         public void WorkspaceDisabled(string workspaceName)
         {
-            this.Append(LogEntryType.WorkspaceDisabled, "workspace", workspaceName, workspace: workspaceName);
+            this.Append(LogEntryType.WorkspaceDisabled, "workspace", workspaceName);
         }
 
         public void WorkspaceUserAssigned(string userName, ICollection<string> workspaces)
@@ -199,16 +199,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
                     "action type on submission changed", level.ToString()); 
         }
         private void Append(LogEntryType type, string target, string action, string args = null,
-                string responsibleName = null, Guid? responsibleUserId = null, string workspace = null) 
+                string responsibleName = null, Guid? responsibleUserId = null) 
         {
                 AppendLogEntry(responsibleUserId ?? this.authorizedUser.Id,
                     responsibleName ?? this.authorizedUser.UserName,
                     type,
-                    $"{target}: {action}" + (args != null ? $"; {args}" : ""),
-                    workspace);
+                    $"{target}: {action}" + (args != null ? $"; {args}" : ""));
         }
 
-        private void AppendLogEntry(Guid? userid, string userName, LogEntryType type, string log, string workspace = null)
+        private void AppendLogEntry(Guid? userid, string userName, LogEntryType type, string log)
         {
                 inScopeExecutor.Execute(systemLogStorage =>
                 {
@@ -229,7 +228,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
                     {
                         logger.Error("Error on system log writing", e);
                     }
-                }, workspace);
+                });
         }
         
     }
