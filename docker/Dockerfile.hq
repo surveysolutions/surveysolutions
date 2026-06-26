@@ -147,9 +147,11 @@ COPY [ "src/UI/WB.UI.Headquarters.Core",\
 
 COPY --from=frontend /src/UI/WB.UI.Frontend/dist/package/hq src/UI/WB.UI.Headquarters.Core
 
-# Publish framework-dependent but with an explicit RID derived from TARGETARCH so the
+# Publish framework-dependent but with an explicit musl RID derived from TARGETARCH so the
 # correct per-architecture native assets (e.g. SkiaSharp) are included in the output.
-RUN RID="linux-$(case "${TARGETARCH}" in arm64) echo arm64;; *) echo x64;; esac)" && \
+# The runtime image is Alpine (musl), so musl RIDs (linux-musl-*) must be used; glibc
+# RIDs (linux-x64/linux-arm64) would embed glibc native assets that fail to load on musl.
+RUN RID="linux-musl-$(case "${TARGETARCH}" in arm64) echo arm64;; *) echo x64;; esac)" && \
     dotnet publish src/UI/WB.UI.Headquarters.Core \
     -c Release -o /hq -r "${RID}" --no-self-contained \
     -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"

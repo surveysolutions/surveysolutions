@@ -191,8 +191,15 @@ function Add-MultiArchArguments($arguments = @()) {
         # The default 'docker' buildx driver does not support multi-platform
         # builds, so ensure a 'docker-container' driver builder exists and use it.
         $builderName = "surveysolutions-multiarch"
-        docker buildx inspect $builderName 2>$null | Out-Null
-        if ($LASTEXITCODE -ne 0) {
+        $inspect = docker buildx inspect $builderName 2>$null | Out-String
+        $builderExists = $LASTEXITCODE -eq 0
+        if ($builderExists -and ($inspect -notmatch "Driver:\s*docker-container")) {
+            # An existing builder using the default 'docker' driver cannot perform
+            # multi-platform builds, so remove it and recreate with the right driver.
+            exec { docker buildx rm $builderName } | Out-Host
+            $builderExists = $false
+        }
+        if (-not $builderExists) {
             # Pipe to Out-Host so the builder name printed by 'buildx create'
             # is not captured into this function's return value.
             exec { docker buildx create --name $builderName --driver docker-container --bootstrap } | Out-Host
