@@ -19,7 +19,7 @@
         "@vee-validate/i18n": "^4.15.0",
         "@vee-validate/rules": "^4.15.0",
         "ag-grid-community": "36.0.0",
-        "ag-grid-vue3": "^36.0.0",
+        "ag-grid-vue3": "36.0.0",
         "autonumeric": "^4.10.5",
         "axios": "^1.18.0",
         "bootstrap": "^5.3.3",
