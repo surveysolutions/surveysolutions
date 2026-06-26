@@ -19,8 +19,6 @@
 
 <script lang="js">
 /* eslint-disable vue/no-unused-components */
-import 'ag-grid-community/styles/ag-grid.css'
-import 'ag-grid-community/styles/ag-theme-quartz.css'
 
 import { entityDetails } from '../mixins'
 import { debounce, map } from 'lodash-es'
