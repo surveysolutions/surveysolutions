@@ -16,10 +16,10 @@
                         <v-tabs v-model="tab" color="primary" fixed-tabs grow>
                             <v-tab value="table" :disabled="!stringsIsValid">{{
                                 $t('QuestionnaireEditor.TableView')
-                                }}</v-tab>
+                            }}</v-tab>
                             <v-tab value="strings">{{
                                 $t('QuestionnaireEditor.StringsView')
-                                }}</v-tab>
+                            }}</v-tab>
                         </v-tabs>
 
                         <v-window v-model="tab">
@@ -46,9 +46,6 @@
                             </v-btn>
                             <v-btn v-if="!isReadonly" variant="outlined" :disabled="!isDirty" @click="resetChanges">
                                 {{ $t('QuestionnaireEditor.OptionsUploadRevert') }}
-                            </v-btn>
-                            <v-btn variant="text" @click="close">
-                                {{ $t('QuestionnaireEditor.Close') }}
                             </v-btn>
                         </div>
                         <div class="options-editor-footer-right">
