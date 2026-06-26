@@ -626,7 +626,7 @@ export default {
                     searchable: false,
                     render(data) {
                         const questionsWithTitles = map(data, question => {
-                            return question.title + ': ' + sanitizeHtml(question.answer)
+                            return `${sanitizeHtml(question.title)}: <strong>${sanitizeHtml(question.answer)}</strong>`
                         })
                         return join(questionsWithTitles, ', ')
                     },
