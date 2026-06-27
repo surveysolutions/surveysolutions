@@ -1,6 +1,9 @@
 <template>
-    <div role="tabpanel" class="tab-pane active page-preview-block" id="export">
-        <div class="row contain-input" data-suso="settings-page">
+    <div role="tabpanel"
+        class="tab-pane active page-preview-block"
+        id="export">
+        <div class="row contain-input"
+            data-suso="settings-page">
             <div class="col-sm-9">
                 <h2>{{ $t('Settings.ExportEncryption_Title') }}</h2>
                 <p>{{ $t('Settings.ExportEncryption_Description') }}</p>
@@ -8,25 +11,35 @@
             <div class="col-sm-9">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input class="checkbox-filter single-checkbox" v-model="encryptionEnabledModel"
-                            @change="changeEncryptionEnabled" id="isEnabled" type="checkbox" />
-                        <label for="isEnabled" style="font-weight: bold">
+                        <input class="checkbox-filter single-checkbox"
+                            v-model="encryptionEnabledModel"
+                            @change="changeEncryptionEnabled"
+                            id="isEnabled"
+                            type="checkbox" />
+                        <label for="isEnabled"
+                            style="font-weight: bold">
                             <span class="tick"></span>
                             {{ $t('Settings.EnableEncryption') }}
                         </label>
                     </div>
                 </div>
-                <div class="block-filter" style="padding-left: 30px">
-                    <label for="exportPassword" style="font-weight: bold">
+                <div class="block-filter"
+                    style="padding-left: 30px">
+                    <label for="exportPassword"
+                        style="font-weight: bold">
                         <span class="tick"></span>
                         {{ $t('Settings.Password') }}
                     </label>
                     <div class="form-group">
                         <div class="input-group">
-                            <input id="exportPassword" type="text" v-model="encryptionPasswordModel" readonly="readonly"
+                            <input id="exportPassword"
+                                type="text"
+                                v-model="encryptionPasswordModel"
+                                readonly="readonly"
                                 class="form-control" />
                             <span class="input-group-btn">
-                                <button class="btn btn-default" @click="regenPassword"
+                                <button class="btn btn-default"
+                                    @click="regenPassword"
                                     :disabled="!encryptionEnabledModel">
                                     <i class="glyphicon glyphicon-refresh"></i>
                                 </button>
@@ -36,7 +49,8 @@
                 </div>
             </div>
         </div>
-        <div class="row contain-input" data-suso="settings-page">
+        <div class="row contain-input"
+            data-suso="settings-page">
             <div class="col-sm-9">
                 <h2>{{ $t('Settings.FileRetentionTitle') }}</h2>
                 <p>{{ $t('Settings.FileRetentionDescription') }}</p>
@@ -44,19 +58,27 @@
             <div class="col-sm-9">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input class="checkbox-filter single-checkbox" v-model="isRetentionEnabledModel"
-                            @change="changeRetentionEnabled" id="isRetentionEnabled" type="checkbox" />
-                        <label for="isRetentionEnabled" style="font-weight: bold">
+                        <input class="checkbox-filter single-checkbox"
+                            v-model="isRetentionEnabledModel"
+                            @change="changeRetentionEnabled"
+                            id="isRetentionEnabled"
+                            type="checkbox" />
+                        <label for="isRetentionEnabled"
+                            style="font-weight: bold">
                             <span class="tick"></span>
                             {{ $t('Settings.EnableFileRetention') }}
                         </label>
                     </div>
                 </div>
 
-                <Form v-slot="{ meta }" @submit="noAction" ref="retentionForm">
-                    <div class="block-filter" style="padding-left: 30px">
+                <Form v-slot="{ meta }"
+                    @submit="noAction"
+                    ref="retentionForm">
+                    <div class="block-filter"
+                        style="padding-left: 30px">
                         <div class="form-group">
-                            <label for="Days" style="font-weight: bold">
+                            <label for="Days"
+                                style="font-weight: bold">
                                 <span class="tick"></span>
                                 {{ $t('Settings.RetentionInDaysTitle') }}
                                 <p style="font-weight: normal; margin-bottom: 0px;">
@@ -66,23 +88,36 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group input-group-save">
-                                <Field class="form-control number" v-model="inDaysModel" :rules="{
-                                    integer: true,
-                                    required: false,
-                                    min_value: 1,
-                                    max_value: 1000
-                                }" :validateOnChange="true" :validateOnInput="true" name="Days" label="Days"
-                                    id="retentionInDays" type="number" :disabled="!isRetentionEnabledModel"
+                                <Field class="form-control number"
+                                    v-model="inDaysModel"
+                                    :rules="{
+                                        integer: true,
+                                        required: false,
+                                        min_value: 1,
+                                        max_value: 1000
+                                    }"
+                                    :validateOnChange="true"
+                                    :validateOnInput="true"
+                                    name="Days"
+                                    label="Days"
+                                    id="retentionInDays"
+                                    type="number"
+                                    :disabled="!isRetentionEnabledModel"
                                     onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" />
                             </div>
-                            <button type="button" class="btn btn-success" :disabled="inDaysModel == inDaysCancelModel
-                                || (inDaysModel !== '' && inDaysModel < 1)
-                                || (inDaysModel !== '' && inDaysModel > 1000)
-                                || meta.valid == false
-                                " @click="updateInDays">
+                            <button type="button"
+                                class="btn btn-success"
+                                :disabled="inDaysModel == inDaysCancelModel
+                                    || (inDaysModel !== '' && inDaysModel < 1)
+                                    || (inDaysModel !== '' && inDaysModel > 1000)
+                                    || meta.valid == false
+                                "
+                                @click="updateInDays">
                                 {{ $t('Common.Save') }}
                             </button>
-                            <button type="button" class="btn btn-link" :disabled="inDaysModel == inDaysCancelModel"
+                            <button type="button"
+                                class="btn btn-link"
+                                :disabled="inDaysModel == inDaysCancelModel"
                                 @click="cancelInDays">
                                 {{ $t('Common.Cancel') }}
                             </button>
@@ -94,10 +129,14 @@
                 </Form>
             </div>
             <div class="col-sm-9">
-                <Form v-slot="{ meta }" @submit="noAction" :disabled="!isRetentionEnabledModel">
-                    <div class="block-filter" style="padding-left: 30px">
+                <Form v-slot="{ meta }"
+                    @submit="noAction"
+                    :disabled="!isRetentionEnabledModel">
+                    <div class="block-filter"
+                        style="padding-left: 30px">
                         <div class="form-group">
-                            <label for="Files" style="font-weight: bold">
+                            <label for="Files"
+                                style="font-weight: bold">
                                 <span class="tick"></span>
                                 {{ $t('Settings.RetentionInCountTitle') }}
                                 <p style="font-weight: normal;margin-bottom: 0px">
@@ -107,24 +146,37 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group input-group-save">
-                                <Field class="form-control number" v-model="inCountLimitModel" :rules="{
-                                    integer: true,
-                                    required: false,
-                                    min_value: 1,
-                                    max_value: 100000,
-                                }" :validateOnChange="true" :validateOnInput="true" label="Files" id="Files"
-                                    name="Files" type="number" :disabled="!isRetentionEnabledModel"
+                                <Field class="form-control number"
+                                    v-model="inCountLimitModel"
+                                    :rules="{
+                                        integer: true,
+                                        required: false,
+                                        min_value: 1,
+                                        max_value: 100000,
+                                    }"
+                                    :validateOnChange="true"
+                                    :validateOnInput="true"
+                                    label="Files"
+                                    id="Files"
+                                    name="Files"
+                                    type="number"
+                                    :disabled="!isRetentionEnabledModel"
                                     onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" />
                             </div>
-                            <button type="button" class="btn btn-success" :disabled="inCountLimitModel ==
-                                inCountLimitCancelModel ||
-                                (inCountLimitModel !== '' && inCountLimitModel < 1) ||
-                                (inCountLimitModel !== '' && inCountLimitModel > 100000) ||
-                                meta.valid == false" @click="updateInCountLimit">
+                            <button type="button"
+                                class="btn btn-success"
+                                :disabled="inCountLimitModel ==
+                                    inCountLimitCancelModel ||
+                                    (inCountLimitModel !== '' && inCountLimitModel < 1) ||
+                                    (inCountLimitModel !== '' && inCountLimitModel > 100000) ||
+                                    meta.valid == false"
+                                @click="updateInCountLimit">
                                 {{ $t('Common.Save') }}
                             </button>
-                            <button type="button" class="btn btn-link"
-                                :disabled="inCountLimitModel == inCountLimitCancelModel" @click="cancelInCountLimit">
+                            <button type="button"
+                                class="btn btn-link"
+                                :disabled="inCountLimitModel == inCountLimitCancelModel"
+                                @click="cancelInCountLimit">
                                 {{ $t('Common.Cancel') }}
                             </button>
                         </div>
@@ -135,23 +187,31 @@
                 </Form>
             </div>
             <div class="col-sm-9">
-                <div class="block-filter" style="padding-left: 30px">
-                    <button type="button" class="btn btn-danger" @click="forceRunRetentionPolicy"
-                        :disabled="!isRetentionEnabledModel" style="margin-right: 15px">
+                <div class="block-filter"
+                    style="padding-left: 30px">
+                    <button type="button"
+                        class="btn btn-danger"
+                        @click="forceRunRetentionPolicy"
+                        :disabled="!isRetentionEnabledModel"
+                        style="margin-right: 15px">
                         {{ $t('Settings.ForceRunRetentionPolicy') }}
                     </button>
                 </div>
             </div>
         </div>
-        <div class="row contain-input" data-suso="settings-page">
+        <div class="row contain-input"
+            data-suso="settings-page">
             <div class="col-sm-9">
                 <h2>{{ $t('Settings.GeographyExportFormat_Title') }}</h2>
                 <p>{{ $t('Settings.GeographyExportFormat_Description') }}</p>
             </div>
             <div class="col-sm-9">
-                <div class="block-filter" style="padding-left: 30px">
+                <div class="block-filter"
+                    style="padding-left: 30px">
                     <div class="form-group">
-                        <Typeahead control-id="geographyExportFormat" noSearch noClear
+                        <Typeahead control-id="geographyExportFormat"
+                            noSearch
+                            noClear
                             :values="geographyFormatOptions"
                             :value="geographyFormatValue"
                             @selected="onGeographyFormatSelected" />
@@ -159,21 +219,28 @@
                 </div>
             </div>
         </div>
-        <div class="row contain-input" data-suso="settings-page">
+        <div class="row contain-input"
+            data-suso="settings-page">
             <div class="col-sm-9">
                 <h2>{{ $t('Settings.ClearExportCache_Title') }}</h2>
                 <p>{{ $t('Settings.ClearExportCache_Description') }}</p>
             </div>
             <div class="col-sm-9">
-                <div class="block-filter" style="padding-left: 30px">
-                    <button type="button" class="btn btn-danger" @click="removeExportCache"
-                        :disabled="!allowToRemoveExportCache" style="margin-right: 15px">
+                <div class="block-filter"
+                    style="padding-left: 30px">
+                    <button type="button"
+                        class="btn btn-danger"
+                        @click="removeExportCache"
+                        :disabled="!allowToRemoveExportCache"
+                        style="margin-right: 15px">
                         {{ $t('Settings.RemoveExportCache') }}
                     </button>
-                    <span v-if="!allowToRemoveExportCache && statusDropExportCache == 'Removing'" style="color:blue">
+                    <span v-if="!allowToRemoveExportCache && statusDropExportCache == 'Removing'"
+                        style="color:blue">
                         {{ $t('Settings.RemovingExportCache') + ".".repeat(dropSchemaDots) }}
                     </span>
-                    <span v-if="statusDropExportCache == 'Removed'" style="color:green">
+                    <span v-if="statusDropExportCache == 'Removed'"
+                        style="color:green">
                         {{ $t('Settings.RemoveExportCacheSuccess') }}
                     </span>
                     <div v-if="statusDropExportCache == 'Error'">
@@ -253,7 +320,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:encryptionEnabled', value)
-            }
+            },
         },
         encryptionPasswordModel: {
             get() {
@@ -261,7 +328,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:encryptionPassword', value)
-            }
+            },
         },
         isRetentionEnabledModel: {
             get() {
@@ -269,7 +336,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:isRetentionEnabled', value)
-            }
+            },
         },
         inDaysModel: {
             get() {
@@ -277,7 +344,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:retentionLimitInDays', value)
-            }
+            },
         },
         inCountLimitModel: {
             get() {
@@ -285,7 +352,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:retentionLimitQuantity', value)
-            }
+            },
         },
         inDaysCancelModel: {
             get() {
@@ -293,7 +360,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:retentionLimitInDaysCancel', value)
-            }
+            },
         },
         inCountLimitCancelModel: {
             get() {
@@ -301,7 +368,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:retentionLimitQuantityCancel', value)
-            }
+            },
         },
         geographyFormatOptions() {
             return [
@@ -330,10 +397,10 @@ export default {
             modal.confirm(self.encryptionEnabledModel
                 ? self.$t('Settings.ChangeStateConfirm')
                 : self.$t('Settings.ChangeStateDisabledConfirm'), result => {
-                    if (result) {
-                        self.$hq.ExportSettings.setEncryption(
-                            self.encryptionEnabledModel,
-                        ).then(response => {
+                if (result) {
+                    self.$hq.ExportSettings.setEncryption(
+                        self.encryptionEnabledModel
+                    ).then(response => {
 
 
 
@@ -345,15 +412,15 @@ export default {
 
 
 
-                            self.encryptionEnabledModel = response.data.isEnabled
-                            self.encryptionPasswordModel = response.data.password
-                        })
-                        return
-                    } else {
-                        self.encryptionEnabledModel = !self.encryptionEnabledModel
-                        return
-                    }
-                })
+                        self.encryptionEnabledModel = response.data.isEnabled
+                        self.encryptionPasswordModel = response.data.password
+                    })
+                    return
+                } else {
+                    self.encryptionEnabledModel = !self.encryptionEnabledModel
+                    return
+                }
+            })
         },
         regenPassword() {
             const self = this
@@ -368,7 +435,7 @@ export default {
             modal.confirm(self.$t('Settings.RegeneratePasswordConfirm'), result => {
                 if (result) {
                     self.$hq.ExportSettings.regenPassword(
-                        self.encryptionEnabledModel,
+                        self.encryptionEnabledModel
                     ).then(response => {
                         this.encryptionPasswordModel = response.data.password
                         this.encryptionEnabledModel = response.data.isEnabled
@@ -386,7 +453,7 @@ export default {
                     '<h2>' + self.$t('Pages.ConfirmationNeededTitle') + '</h2>',
                 message:
                     `<p style="color: red;"> ${self.$t(
-                        'Settings.RemoveExportCache_Warning',
+                        'Settings.RemoveExportCache_Warning'
                     )}</p>` +
                     `<p>${self.$t('Settings.RemoveExportCacheConfirm')}</p>`,
                 buttons: {
@@ -416,7 +483,7 @@ export default {
                     '<h2>' + self.$t('Pages.ConfirmationNeededTitle') + '</h2>',
                 message:
                     `<p style="color: red;"> ${self.$t(
-                        'Settings.ForceRunRetentionPolicy_Warning',
+                        'Settings.ForceRunRetentionPolicy_Warning'
                     )}</p>` +
                     `<p>${self.$t('Settings.ForceRunRetentionPolicy_Confirm')}</p>`,
                 buttons: {
@@ -436,7 +503,7 @@ export default {
                                     return
                                 } else {
                                     this.statusDropExportCache = 'Error'
-                                    this.allowToRemoveExportCache = true;
+                                    this.allowToRemoveExportCache = true
                                     return
                                 }
                             }
@@ -457,7 +524,7 @@ export default {
                     .then((response) => {
                         const success = response.data.success
 
-                        this.dropSchemaTimer = setInterval(async () => await this.checkStatusDropExportCache(), 1000);
+                        this.dropSchemaTimer = setInterval(async () => await this.checkStatusDropExportCache(), 1000)
                     })
                     .catch((e) => {
                         if (
@@ -469,7 +536,7 @@ export default {
                             return
                         } else {
                             this.statusDropExportCache = 'Error'
-                            this.allowToRemoveExportCache = true;
+                            this.allowToRemoveExportCache = true
                             return
                         }
                     })
@@ -480,14 +547,14 @@ export default {
             this.statusDropExportCache = status.data.status
 
             if (this.dropSchemaDots >= 3)
-                this.dropSchemaDots = 1;
+                this.dropSchemaDots = 1
             else
-                this.dropSchemaDots++;
+                this.dropSchemaDots++
 
             if (this.statusDropExportCache != 'Removing' && this.dropSchemaTimer != null) {
                 clearInterval(this.dropSchemaTimer)
                 this.dropSchemaTimer = null
-                this.allowToRemoveExportCache = true;
+                this.allowToRemoveExportCache = true
             }
         },
         showAlert(message) {
@@ -513,7 +580,7 @@ export default {
                 modal.confirm(self.$t('Settings.RetentionPolicyEnablingConfirm'), result => {
                     if (result) {
                         self.$hq.ExportSettings.changeRetentionState(
-                            self.isRetentionEnabledModel,
+                            self.isRetentionEnabledModel
                         )
                         return
                     }
@@ -569,6 +636,6 @@ export default {
         noAction() {
             // Do nothing
         },
-    }
+    },
 }
 </script>

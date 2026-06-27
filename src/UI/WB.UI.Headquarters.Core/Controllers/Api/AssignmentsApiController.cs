@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Sanitizer;
 using WB.UI.Headquarters.Code;
@@ -93,7 +94,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 UserRole = request.UserRole,
                 ReceivedByTablet = request.ReceivedByTablet,
                 SupervisorId = request.TeamId,
-                Id = request.Id
+                Id = request.Id,
+                Statuses = ParseStatuses(request.Status)
             };
             
             if (this.authorizedUser.IsSupervisor)
@@ -104,6 +106,25 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (isInterviewer)
             {
                 input.OnlyWithInterviewsNeeded = true;
+                var allowedStatuses = new[] { AssignmentStatus.Open, AssignmentStatus.Completed };
+                if (input.Statuses?.Length > 0)
+
+                {
+
+                    var filteredStatuses = input.Statuses.Intersect(allowedStatuses).ToArray();
+
+                    input.Statuses = filteredStatuses.Length > 0 ? filteredStatuses : allowedStatuses;
+
+                }
+
+                else
+
+                {
+
+                    input.Statuses = allowedStatuses;
+
+                }
+
                 input.SearchByFields = AssignmentsInputModel.SearchTypes.Id 
                     | AssignmentsInputModel.SearchTypes.IdentifyingQuestions
                     | AssignmentsInputModel.SearchTypes.QuestionnaireTitle;
@@ -171,6 +192,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [ObservingNotAllowed]
         public IActionResult Assign([FromBody] AssignRequest request)
         {
@@ -235,15 +257,15 @@ namespace WB.UI.Headquarters.Controllers.Api
             {
                 if ((password.Length < AssignmentConstants.PasswordLength ||
                      AssignmentConstants.PasswordStrength.Match(password).Length <= 0))
-                    this.BadRequest(new {Message = "Invalid Password. At least 6 numbers and upper case letters or single symbol '?' to generate password"});
+                    return this.BadRequest(new {Message = "Invalid Password. At least 6 numbers and upper case letters or single symbol '?' to generate password"});
             }
 
             //assignment with email must have quantity = 1
             if (!string.IsNullOrEmpty(request.Email) && request.Quantity != 1)
-                this.BadRequest(new {Message = "For assignments with provided email allowed quantity is 1"});
+                return this.BadRequest(new {Message = "For assignments with provided email allowed quantity is 1"});
 
             if ((!string.IsNullOrEmpty(request.Email) || !string.IsNullOrEmpty(password)) && request.WebMode != true)
-                this.BadRequest(new {Message = "For assignments having Email or Password Web Mode should be activated"});
+                return this.BadRequest(new {Message = "For assignments having Email or Password Web Mode should be activated"});
 
             if (quantity == 1 && (request.WebMode == null || request.WebMode == true) &&
                 string.IsNullOrEmpty(request.Email) && !string.IsNullOrEmpty(password))
@@ -266,7 +288,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 var assignment = assignmentFactory.CreateAssignment(authorizedUser.Id,
                 interview.QuestionnaireIdentity,
                 request.ResponsibleId,
-                request.Quantity,
+                quantity,
                 request.Email,
                 password,
                 request.WebMode,
@@ -331,6 +353,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             public AssignmentReceivedState ReceivedByTablet { get; set; }
 
             public int? Id { get; set; }
+            
+            public string Status { get; set; }
         }
         
         [HttpPost]
@@ -338,6 +362,21 @@ namespace WB.UI.Headquarters.Controllers.Api
         public AssignmentForMapPointView AssignmentMapPoint([FromBody]AssignmentForMapPointViewModel data)
         {
             return data == null ? null : GetAssignmentForMapPointView(data.AssignmentId);
+        }
+
+        private static AssignmentStatus[] ParseStatuses(string statusFilter)
+        {
+            if (string.IsNullOrWhiteSpace(statusFilter))
+                return null;
+
+            var parts = statusFilter.Split(',', StringSplitOptions.RemoveEmptyEntries);
+            var result = new List<AssignmentStatus>();
+            foreach (var part in parts)
+            {
+                if (Enum.TryParse<AssignmentStatus>(part.Trim(), ignoreCase: true, out var status))
+                    result.Add(status);
+            }
+            return result.Count > 0 ? result.ToArray() : null;
         }
 
         private AssignmentForMapPointView GetAssignmentForMapPointView(int assignmentId)
@@ -355,6 +394,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 Quantity = assignment.Quantity,
                 InterviewsNeeded = assignment.InterviewsNeeded,
                 LastUpdatedDate = AnswerUtils.AnswerToString(assignment.UpdatedAtUtc),
+                Status = assignment.Status,
+                StatusComment = assignment.StatusComment,
                 IdentifyingData = assignment.IdentifyingData
                     .Where(d => questionnaire.GetQuestionType(d.Identity.Id) != QuestionType.GpsCoordinates)
                     .Select(d =>
@@ -381,6 +422,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             public string LastUpdatedDate { get; set; }
             public int AssignmentId { get; set; }
             public List<AnswerView> IdentifyingData { get; set; }
+            public AssignmentStatus Status { get; set; }
+            public string StatusComment { get; set; }
         }
     }
 }
