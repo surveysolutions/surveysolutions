@@ -3,6 +3,7 @@ using HotChocolate.Types;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.CalendarEvents;
 
@@ -26,6 +27,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments
             
             descriptor.Field(x => x.ResponsibleId).Type<NonNullType<UuidType>>();
             descriptor.Field(x => x.WebMode).Type<NonNullType<BooleanType>>();
+            descriptor.Field(x => x.Status).Type<NonNullType<EnumType<AssignmentStatus>>>();
 
             descriptor.Field("calendarEvent")
                 .Description("Active Calendar Event associated with assignment")

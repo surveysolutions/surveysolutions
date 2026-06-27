@@ -346,7 +346,7 @@
     <value>Nova Atribuição</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>E-mail</value>
   </data>
   <data name="EmailExplanation" xml:space="preserve">
     <value>O email será usado na comunicação com o destinatário da atribuição</value>
@@ -415,7 +415,7 @@
     <value>ID da atribuição</value>
   </data>
   <data name="MultipleAssignmentsClose" xml:space="preserve">
-    <value>{{count}} atribuições selecionadas serão fechadas. O valor esperado será definido para o número de entrevistas atualmente coletadas.</value>
+    <value>{{count}} atribuições selecionadas serão reduzidas. O valor esperado será definido para o número de entrevistas atualmente coletadas.</value>
   </data>
     <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
     <value>O valor esperado da atribuição selecionada {{id}} será alterado de {{quantity}} para {{collected}} (número de entrevistas atualmente coletadas)</value>
@@ -424,7 +424,7 @@
     <value>Fechar</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
-    <value>Atribuição {{id}} não pode ser fechada, pois tem o modo web ativado</value>
+    <value>Atribuição {{id}} não pode ser reduzida, pois tem o modo web ativado</value>
   </data>
   <data name="AssignmentInfo" xml:space="preserve">
     <value>Informações detalhadas da atribuição</value>
@@ -559,4 +559,64 @@
         <value>Área Alvo</value>
     </data>
     
+  <data name="Filter_ShowAll" xml:space="preserve">
+    <value>Mostrar tudo</value>
+  </data>
+  <data name="Downsize" xml:space="preserve">
+    <value>Reduzir</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+      <value>Estado</value>
+  </data>
+  <data name="StatusChangeComment" xml:space="preserve">
+      <value>Comentário de alteração de estado</value>
+  </data>
+  <data name="StatusOpen" xml:space="preserve">
+      <value>Aberto</value>
+  </data>
+  <data name="StatusCompleted" xml:space="preserve">
+      <value>Concluído</value>
+  </data>
+  <data name="StatusClosed" xml:space="preserve">
+      <value>Aprovado</value>
+  </data>
+  <data name="CompleteAssignmentTitle" xml:space="preserve">
+      <value>Concluir atribuição</value>
+  </data>
+  <data name="CompleteAssignmentMessage" xml:space="preserve">
+      <value>Tem certeza de que enumerou todas as unidades elegíveis?</value>
+  </data>
+  <data name="CloseAssignmentTitle" xml:space="preserve">
+      <value>Fechar atribuição</value>
+  </data>
+  <data name="CloseAssignmentMessage" xml:space="preserve">
+      <value>Os entrevistadores que trabalham offline podem continuar a recolha de dados até à sincronização. Essas entrevistas ainda serão aceites.</value>
+  </data>
+  <data name="ReopenAssignmentTitle" xml:space="preserve">
+      <value>Reabrir atribuição</value>
+  </data>
+  <data name="ReopenAssignmentMessage" xml:space="preserve">
+      <value>A atribuição será revertida para o estado Aberto e os entrevistadores poderão criar novas entrevistas.</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+      <value>Concluir</value>
+  </data>
+  <data name="Reopen" xml:space="preserve">
+      <value>Reabrir</value>
+  </data>
+  <data name="Action_StatusChanged" xml:space="preserve">
+      <value>Estado alterado para {{status}}</value>
+  </data>
+  <data name="Action_StatusChanged_Comment" xml:space="preserve">
+      <value>Comentário: {{comment}}</value>
+  </data>
+  <data name="Action_Completed" xml:space="preserve">
+      <value>Concluído</value>
+  </data>
+  <data name="Action_Closed" xml:space="preserve">
+      <value>Aprovado</value>
+  </data>
+  <data name="Action_Reopened" xml:space="preserve">
+      <value>Reaberto</value>
+  </data>
 </root>

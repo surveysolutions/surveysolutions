@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             this.OnItemsLoaded?.Invoke(this, EventArgs.Empty);
         }
 
-        protected void ListViewModel_OnItemUpdated(object sender, EventArgs args)
+        protected virtual void ListViewModel_OnItemUpdated(object sender, EventArgs args)
         {
             if (sender is IDashboardItemWithEvents dashboardItem)
             {

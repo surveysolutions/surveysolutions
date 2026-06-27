@@ -29,6 +29,7 @@ using WB.UI.Shared.Web.LoggingIntegration;
 using WB.UI.Shared.Web.Versions;
 using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Services;
+using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.UI.WebTester
 {
@@ -70,15 +71,30 @@ namespace WB.UI.WebTester
             services.Configure<TesterConfiguration>(this.Configuration);
             services.AddHttpContextAccessor();
 
+            // Warn at startup if the service-to-service key is not configured. Without it every
+            // code exchange will be rejected by Designer, making WebTester integration non-functional.
+            // We allow startup so that local/dev environments work without requiring a key, but
+            // exchange requests will fail at runtime with a clear error via CodeExchangeClient.
+            var serviceApiKey = Configuration["ServiceApiKey"];
+            if (string.IsNullOrWhiteSpace(serviceApiKey))
+                Log.Warning(
+                    "ServiceApiKey is not configured. Code exchange with Designer will fail. " +
+                    "Set it in appsettings.ini or via environment variables. " +
+                    "Its value must match WebTester:ServiceApiKey in Designer.");
+
             services.AddHealthChecks()
                 //.AddCheck<DesignerConnectionCheck>("designer-connection")
                 ;
 
+            services.AddTransient<DesignerJwtAuthHandler>();
+            services.AddTransient<ICodeExchangeClient, CodeExchangeClient>();
+            services.AddSingleton<IWebTesterSessionService, WebTesterSessionService>();
             services.AddHttpClientWithConfigurator<IDesignerWebTesterApi, DesignerApiConfigurator>(
                     new RefitSettings
                     {
                         ContentSerializer = ContentSerializer
                     })
+                .AddHttpMessageHandler<DesignerJwtAuthHandler>()
 #if DEBUG
            .ConfigurePrimaryHttpMessageHandler(() =>
                new HttpClientHandler
@@ -160,6 +176,10 @@ namespace WB.UI.WebTester
             });
 
             app.UseRouting();
+
+            // Enriches log scope with UserId/CorrelationId/TraceId for every request.
+            // Must be after UseRouting so route values (id) are available.
+            app.UseMiddleware<UserContextMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

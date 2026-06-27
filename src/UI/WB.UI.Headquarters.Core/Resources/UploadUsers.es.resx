@@ -160,7 +160,7 @@
     <value>{{supervisorsCount}} supervisores y {{interviewersCount}} entrevistadores</value>
   </data>
   <data name="Line" xml:space="preserve">
-    <value>line</value>
+    <value>línea</value>
   </data>
   <data name="ManualInterviewerCreateLink" xml:space="preserve">
     <value>entrevistador</value>

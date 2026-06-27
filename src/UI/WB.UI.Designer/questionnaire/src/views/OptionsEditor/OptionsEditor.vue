@@ -91,6 +91,7 @@ import CategoryStrings from './components/OptionItemsAsStrings.vue';
 import { optionsApi } from './services';
 import 'vuetify/styles';
 import { isEqual, cloneDeep } from 'lodash';
+import { sanitize } from '../../services/utilityService';
 
 export default {
     name: 'CategoriesEditor',
@@ -167,14 +168,14 @@ export default {
                 return (
                     this.$t('QuestionnaireEditor.CascadingOptionsWindowTitle') +
                     ': ' +
-                    this.options.questionTitle
+                    sanitize(this.options.questionTitle)
                 );
             }
 
             return (
                 this.$t('QuestionnaireEditor.OptionsWindowTitle') +
                 ': ' +
-                this.options.questionTitle
+                sanitize(this.options.questionTitle)
             );
         },
 
