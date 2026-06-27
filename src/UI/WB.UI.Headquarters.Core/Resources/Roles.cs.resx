@@ -121,7 +121,7 @@
     <value>Garant</value>
   </data>
   <data name="Administrator" xml:space="preserve">
-    <value>Admin</value>
+    <value>Správce</value>
   </data>
   <data name="ApiUser" xml:space="preserve">
     <value>Uživatel rozhraní pro programování aplikací</value>

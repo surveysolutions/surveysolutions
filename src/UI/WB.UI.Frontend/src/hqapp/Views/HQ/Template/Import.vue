@@ -1,5 +1,6 @@
 <template>
-    <HqLayout :title="$config.model.title" :hasFilter="false">
+    <HqLayout :title="$config.model.title"
+        :hasFilter="false">
         <template v-slot:headers>
             <ol class="breadcrumb">
                 <li>
@@ -22,12 +23,14 @@
                 </a>
             </div>
         </template>
-        <DataTables ref="table" :tableOptions="tableOptions" tableClass='import-interview'></DataTables>
+        <DataTables ref="table"
+            :tableOptions="tableOptions"
+            tableClass='import-interview'></DataTables>
     </HqLayout>
 </template>
 
 <script>
-import escape from 'lodash'
+import { escape } from 'lodash-es'
 import { DateFormats } from '~/shared/helpers'
 import moment from 'moment'
 

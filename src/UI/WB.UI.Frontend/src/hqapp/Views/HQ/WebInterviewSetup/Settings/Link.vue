@@ -80,17 +80,16 @@
 
 <script>
 import settings from './settingsMixin'
-import { Form, Field, ErrorMessage } from 'vee-validate'
+import { Form, Field } from 'vee-validate'
 
 export default {
     components: {
         Form,
         Field,
-        ErrorMessage,
     },
     mixins: [settings],
     mounted() {
         this.$refs.linkPage.resetForm({ values: this.$refs.linkPage.values })
-    }
+    },
 }
 </script>

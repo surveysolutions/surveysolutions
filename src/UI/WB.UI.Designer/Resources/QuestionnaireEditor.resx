@@ -1138,6 +1138,9 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="HotkeysSearch" xml:space="preserve">
     <value>Search for sub-sections and questions in section</value>
   </data>
+  <data name="HotkeysTest" xml:space="preserve">
+    <value>Test questionnaire in WebTester</value>
+  </data>
   <data name="MultipleDependencies" xml:space="preserve">
     <value>One or more questions/sub-sections depend on</value>
   </data>
