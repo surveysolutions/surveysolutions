@@ -1,6 +1,4 @@
 //import Vue from 'vue'
-import AutoNumeric from 'autonumeric/src/main'
-import { assign } from 'lodash'
 
 const defaults = {
     digitGroupSeparator: '',
@@ -12,21 +10,43 @@ const defaults = {
     modifyValueOnWheel: false,
 }
 
+let autoNumericPromise
+
+async function loadAutoNumeric() {
+    if (!autoNumericPromise) {
+        autoNumericPromise = import('autonumeric/src/main').then((module) => module.default)
+    }
+
+    return autoNumericPromise
+}
+
 export function registerNumericFormatting(app) {
     app.directive('numericFormatting', {
-        mounted(el, binding) {
-            const settings = assign({}, defaults, binding.value);
-            el.autoNumericElement = new AutoNumeric(el, settings);
+        async mounted(el, binding) {
+            const AutoNumeric = await loadAutoNumeric()
+            if (el.__numericFormattingDisposed) return
 
-            el.addEventListener('autoNumeric:rawValueModified', (e) => {
-                e.target.setAttribute('numeric-string', AutoNumeric.getNumericString(e.target));
-            });
+            const settings = Object.assign({}, defaults, binding.value)
+            el.autoNumericElement = new AutoNumeric(el, settings)
+
+            el.__numericFormattingListener = (e) => {
+                e.target.setAttribute('numeric-string', AutoNumeric.getNumericString(e.target))
+            }
+
+            el.addEventListener('autoNumeric:rawValueModified', el.__numericFormattingListener)
         },
         beforeUnmount(el) {
-            if (el.autoNumericElement) {
-                el.autoNumericElement.remove();
-                delete el.autoNumericElement;
+            el.__numericFormattingDisposed = true
+
+            if (el.__numericFormattingListener) {
+                el.removeEventListener('autoNumeric:rawValueModified', el.__numericFormattingListener)
+                delete el.__numericFormattingListener
             }
-        }
-    });
+
+            if (el.autoNumericElement) {
+                el.autoNumericElement.remove()
+                delete el.autoNumericElement
+            }
+        },
+    })
 }

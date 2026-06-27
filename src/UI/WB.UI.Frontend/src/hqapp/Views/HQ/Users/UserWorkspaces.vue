@@ -1,17 +1,28 @@
 <template>
-    <ProfileLayout ref="profile" :role="userInfo.role" :forceChangePassword="false" :isOwnProfile="userInfo.isOwnProfile"
-        :canChangePassword="userInfo.canChangePassword" :userName="userInfo.userName" :currentTab="currentTab"
-        :userId="userInfo.userId" :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted">
+    <ProfileLayout ref="profile"
+        :role="userInfo.role"
+        :forceChangePassword="false"
+        :isOwnProfile="userInfo.isOwnProfile"
+        :canChangePassword="userInfo.canChangePassword"
+        :userName="userInfo.userName"
+        :currentTab="currentTab"
+        :userId="userInfo.userId"
+        :canGenerateToken="userInfo.canGetApiToken"
+        :isRestricted="userInfo.isRestricted">
 
         <h4>
             {{ $t('Workspaces.AssignedWorkspaces') }}
         </h4>
         <div class="form-group">
             <ul class="list-unstyled">
-                <li v-for="workspace in allWorkspaces" v-bind:key="workspace.Name">
-                    <input class="checkbox-filter single-checkbox" v-model="workspace.Assigned" :id="workspace.Name"
+                <li v-for="workspace in allWorkspaces"
+                    v-bind:key="workspace.Name">
+                    <input class="checkbox-filter single-checkbox"
+                        v-model="workspace.Assigned"
+                        :id="workspace.Name"
                         type="checkbox" />
-                    <label :for="workspace.Name" :class="{ 'disabled-item': workspace.DisabledAtUtc != null }">
+                    <label :for="workspace.Name"
+                        :class="{ 'disabled-item': workspace.DisabledAtUtc != null }">
                         <span class="tick"></span>
                         {{ workspace.DisplayName }}
                     </label>
@@ -20,10 +31,14 @@
         </div>
         <div>
             <div class="block-filter">
-                <button type="button" class="btn btn-success" id="btnSaveWorkspaces" @click="save"
+                <button type="button"
+                    class="btn btn-success"
+                    id="btnSaveWorkspaces"
+                    @click="save"
                     v-bind:disabled="userInfo.isObserving || userInfo.isRestricted || inProgress">{{ $t('Pages.Update')
                     }}</button>
-                <span class="text-success marl" v-if="updated">{{ $t('Workspaces.WorkspacesUpdated') }}</span>
+                <span class="text-success marl"
+                    v-if="updated">{{ $t('Workspaces.WorkspacesUpdated') }}</span>
             </div>
         </div>
 
