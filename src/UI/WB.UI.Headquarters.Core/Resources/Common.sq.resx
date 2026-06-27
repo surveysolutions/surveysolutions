@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Admin" xml:space="preserve">
-    <value>Admin</value>
+    <value>Administratori</value>
   </data>
   <data name="AllAssignments" xml:space="preserve">
     <value>Të gjitha detyrat</value>
@@ -232,7 +232,7 @@
     <value>Nuk u zgjodh asgjë</value>
   </data>
   <data name="Ok" xml:space="preserve">
-      <value>OK</value>
+      <value>Dakord</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>I/e hapur</value>
@@ -320,5 +320,126 @@
   </data>
   <data name="НasErrors" xml:space="preserve">
     <value>Ka gabime</value>
+  </data>
+
+
+  <data name="ViewAssignmentDetails" xml:space="preserve">
+    <value>Shih hollësitë e detyrës</value>
+  </data>
+
+  <data name="Apply" xml:space="preserve">
+        <value>Zbato</value>
+  </data>
+
+  <data name="Assignments" xml:space="preserve">
+    <value>Detyrat</value>
+  </data>
+
+  <data name="Clear" xml:space="preserve">
+    <value>Pastro</value>
+  </data>
+
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Paneli i hartës</value>
+  </data>
+
+  <data name="EqualValues" xml:space="preserve">
+    <value>Barazohet me</value>
+  </data>
+
+  <data name="NotEquals" xml:space="preserve">
+    <value>Nuk barazohet me</value>
+  </data>
+
+  <data name="SelectOption" xml:space="preserve">
+    <value>Zgjidhni opsionin</value>
+  </data>
+
+  <data name="StartsWith" xml:space="preserve">
+    <value>Fillon me</value>
+  </data>
+
+  <data name="Unknown" xml:space="preserve">
+    <value>I panjohur</value>
+  </data>
+
+  <data name="EditCalendarEvent" xml:space="preserve">
+    <value>Ndrysho ngjarjen e kalendarit</value>
+  </data>
+
+  <data name="CalendarEvent" xml:space="preserve">
+    <value>Ngjarje e kalendarit</value>
+  </data>
+
+  <data name="Add" xml:space="preserve">
+    <value>Shto</value>
+  </data>
+
+  <data name="Remove" xml:space="preserve">
+    <value>Hiq</value>
+  </data>
+
+  <data name="Return" xml:space="preserve">
+    <value>Kthehu</value>
+  </data>
+
+  <data name="ChangeToCAPI" xml:space="preserve">
+    <value>Ndrysho në CAPI</value>
+  </data>
+
+  <data name="ChangeToCAPIConfirmHQ" xml:space="preserve">
+    <value>Modaliteti i {{count}} intervistave të përzgjedhura do të ndryshohet në CAPI</value>
+  </data>
+
+  <data name="ChangeToCAWI" xml:space="preserve">
+    <value>Ndrysho në CAWI</value>
+  </data>
+
+  <data name="ChangeToCAWIConfirmHQ" xml:space="preserve">
+    <value>Modaliteti i {{count}} intervistave të përzgjedhura do të ndryshohet në CAWI</value>
+  </data>
+
+  <data name="InterviewMode" xml:space="preserve">
+    <value>Modaliteti i intervistës</value>
+  </data>
+
+  <data name="Capi" xml:space="preserve">
+    <value>CAPI</value>
+  </data>
+
+  <data name="Cawi" xml:space="preserve">
+    <value>CAWI</value>
+  </data>
+
+  <data name="Enable" xml:space="preserve">
+    <value>Aktivizo</value>
+  </data>
+
+  <data name="Disable" xml:space="preserve">
+    <value>Çaktivizo</value>
+  </data>
+
+  <data name="Properties" xml:space="preserve">
+      <value>Vetitë</value>
+  </data>
+
+  <data name="LinkedUsers" xml:space="preserve">
+      <value>Përdoruesit e lidhur</value>
+  </data>
+
+  <data name="LinkUser" xml:space="preserve">
+      <value>Përdoruesi</value>
+  </data>
+
+  <data name="GeoTrackNumber" xml:space="preserve">
+      <value>Gjurma</value>
+  </data>
+
+  <data name="DateRange" xml:space="preserve">
+      <value>Intervali i datave</value>
+  </data>
+
+  <data name="AllGeoTracks" xml:space="preserve">
+      <value>Të gjitha gjurmët gjeografike</value>
   </data>
 </root>

@@ -1,10 +1,10 @@
-import { globbySync } from 'globby';
-import fs from 'fs';
-import path from 'path';
-import crypto from 'crypto';
-import xmldoc from 'xmldoc';
+import fg from 'fast-glob';
+import fs from 'fs'
+import path from 'path'
+import crypto from 'crypto'
+import xmldoc from 'xmldoc'
 
-module.exports = class LocalizationBuilder {
+export default class LocalizationBuilder {
     constructor(options) {
         this.options = options || {
             patterns: ['../**/*.resx'],
@@ -33,10 +33,9 @@ module.exports = class LocalizationBuilder {
     writeFiles(destination, folder, namespaces) {
         const response = {};
         const destinationFolder = path.join(destination, folder);
-        //switch from rimraf sync to fs
-        //sync(destinationFolder);
         fs.rmSync(destinationFolder, { recursive: true, force: true });
-        
+        //rimrafSync(destinationFolder);
+
         Object.keys(this.localeInfo).forEach(language => {
             const locale = this.localeInfo[language];
             const content = {};
@@ -53,13 +52,15 @@ module.exports = class LocalizationBuilder {
                 ? ''
                 : '.' + this.getHash(fileBody);
 
-            const filename = language + hash + '.json';
+            const filename = language + hash + '.js';
 
             const resultPath = path.join(destinationFolder, filename);
 
             this.ensureDirectoryExistence(resultPath);
 
             fs.writeFileSync(resultPath, fileBody);
+
+            //console.log('Localization: generated: ', resultPath)
 
             response[language] = path
                 .join(folder, filename)
@@ -71,7 +72,10 @@ module.exports = class LocalizationBuilder {
 
     getFiles() {
         const { patterns } = this.options;
-        let files = globbySync(patterns, { onlyFiles: true });
+        let files = fg.sync(patterns, { onlyFiles: true });
+        if (files.length === 0)
+            throw 'None of resource files (.resx) were found.';
+
         return files;
     }
 
@@ -159,12 +163,12 @@ module.exports = class LocalizationBuilder {
 
         var resourceObject = {};
         var valueNodes = doc.childrenNamed('data');
-        valueNodes.forEach(function(element) {
-            var name = element.attr.name.replaceAll('_plural', '_other');
+        valueNodes.forEach(function (element) {
+            var name = element.attr.name;
             var values = element.childrenNamed('value');
+
             if (values.length == 1) {
                 resourceObject[name] = values[0].val;
-                //.replaceAll('}}', '}');
             }
         });
 
@@ -213,4 +217,4 @@ module.exports = class LocalizationBuilder {
         this.ensureDirectoryExistence(dirname);
         fs.mkdirSync(dirname);
     }
-};
+}

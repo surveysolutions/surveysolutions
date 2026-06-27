@@ -841,7 +841,7 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <value>Nastavení dotazníku</value>
   </data>
   <data name="QuestionnaireSummary" xml:space="preserve">
-    <value>({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)</value>
+    <value>({{questionsCount}}O, {{groupsCount}}S, {{rostersCount}}R)</value>
   </data>
   <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
     <value>Celá čísla mezi 1 a 50 jsou povolena</value>
@@ -1536,7 +1536,7 @@ Zkontrolujte prosím své síťové připojení nebo se obraťte na vaši IT pod
     <value>Aktualizace</value>
   </data>
   <data name="Upload" xml:space="preserve">
-    <value>Upload</value>
+    <value>Nahrát</value>
   </data>
   <data name="UserDefinedCategories" xml:space="preserve">
     <value>Uživatelem definované kategorie</value>
@@ -1620,7 +1620,7 @@ Zkontrolujte prosím své síťové připojení nebo se obraťte na vaši IT pod
       <value>Registrace</value>
   </data>
   <data name="Reset" xml:space="preserve">
-      <value>Reset</value>
+      <value>Resetovat</value>
   </data>
     <data name="ShowList" xml:space="preserve">
         <value>Zobrazit seznam</value>

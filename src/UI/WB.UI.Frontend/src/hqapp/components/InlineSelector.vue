@@ -1,10 +1,17 @@
 <template>
     <span class="dropdown">
-        <span role="button" style="border-bottom: 1px dashed" data-bs-toggle="dropdown" aria-haspopup="true"
+        <span role="button"
+            style="border-bottom: 1px dashed"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
             aria-expanded="true">{{ text }}</span>
-        <ul class="dropdown-menu" style="width:auto">
-            <li v-for="item in options" :key="item[keySelector]" @click="select(item)">
-                <a href="javascript:void(0)" v-dompurify-html="item[valueSelector]" />
+        <ul class="dropdown-menu"
+            style="width:auto">
+            <li v-for="item in options"
+                :key="item[keySelector]"
+                @click="select(item)">
+                <a href="javascript:void(0)"
+                    v-dompurify-html="item[valueSelector]" />
             </li>
         </ul>
     </span>
@@ -36,7 +43,7 @@ export default {
     methods: {
         select(item) {
             //this.$emit('input', item)
-            this.$emit('update:modelValue', item);
+            this.$emit('update:modelValue', item)
         },
     },
 
