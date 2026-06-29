@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -330,7 +329,10 @@ namespace WB.UI.Interviewer.ViewModel
                 return RecordingTarget.None;
 
             var currentGroup = this.NavigationState.CurrentGroup;
-            if (currentGroup == null || !AudioAuditScopeRules.ShouldRecord(IsAudioRecordingEnabled, scope, currentGroup.Id))
+            // Audio Audit is disabled (the whole-interview flag is handled above) and the scope is
+            // non-empty: record only while the currently navigated group is itself listed in the
+            // scope. Scope selection is explicit and is not inherited.
+            if (currentGroup == null || Array.IndexOf(scope, currentGroup.Id) < 0)
                 return RecordingTarget.None;
 
             return RecordingTarget.Group(currentGroup.Id);
