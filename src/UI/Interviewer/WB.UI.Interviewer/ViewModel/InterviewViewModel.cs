@@ -196,8 +196,9 @@ namespace WB.UI.Interviewer.ViewModel
             });
         }
 
-        private async Task StartAudioRecordingWithPermissionHandlingAsync(Guid interviewId)
+        private async Task<bool> StartAudioRecordingWithPermissionHandlingAsync(Guid interviewId)
         {
+            var started = false;
             await asyncDispatcher.ExecuteOnMainThreadAsync(async () =>
             {
                 if (!this.isViewVisible)
@@ -205,12 +206,13 @@ namespace WB.UI.Interviewer.ViewModel
                 isAuditStarting = true;
                 try
                 {
-                    await audioAuditService.StartAudioRecordingAsync(interviewId);
+                    await audioAuditService.StartAudioRecordingAsync(interviewId);
+                    started = true;
                 }
                 catch (MissingPermissionsException missingPermissionsException)
                 {
                     this.logger.Info("Audio audit failed to start.", exception: missingPermissionsException);
-                    await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+                    await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
 
                     if (missingPermissionsException.PermissionType == typeof(Permissions.Microphone))
                     {
@@ -228,8 +230,7 @@ namespace WB.UI.Interviewer.ViewModel
                 catch (Exception exc)
                 {
                     logger.Warn("Audio audit failed to start.", exception: exc);
-                    await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
-                        .ConfigureAwait(false);
+                    await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
                     this.userInteractionService.ShowToast(exc.Message);
                 }
                 finally
@@ -237,6 +238,8 @@ namespace WB.UI.Interviewer.ViewModel
                     isAuditStarting = false;
                 }
             });
+
+            return started;
         }
 
         private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
@@ -296,11 +299,12 @@ namespace WB.UI.Interviewer.ViewModel
                 // Start recording for the new target.
                 if (target.IsRecording && !this.isAuditStarting)
                 {
-                    await this.StartAudioRecordingWithPermissionHandlingAsync(interviewId).ConfigureAwait(false);
-                    // Only mark recording as active when the view is still visible; if start failed
-                    // (e.g. missing permission) the helper navigates away and isViewVisible becomes false,
-                    // so we must not store stale state that would prevent future retries.
-                    if (this.isViewVisible)
+                    var started = await this.StartAudioRecordingWithPermissionHandlingAsync(interviewId)
+                        .ConfigureAwait(false);
+                    // Only mark recording as active when the start actually succeeded; on failure
+                    // (e.g. missing permission) leave the target as None so a later evaluation can retry
+                    // instead of believing recording is already active.
+                    if (started)
                         this.currentRecordingTarget = target;
                 }
             }
