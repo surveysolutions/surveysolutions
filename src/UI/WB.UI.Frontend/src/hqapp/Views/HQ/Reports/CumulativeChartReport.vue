@@ -1,31 +1,43 @@
 <template>
-    <HqLayout :hasFilter="true" :title="$t('Reports.CumulativeInterviewChart')"
+    <HqLayout :hasFilter="true"
+        :title="$t('Reports.CumulativeInterviewChart')"
         :subtitle="$t('Reports.CumulativeInterviewChartSubtitle')">
         <template v-slot:filters>
             <Filters>
                 <FilterBlock :title="$t('Common.Questionnaire')">
-                    <Typeahead control-id="questionnaireId" :placeholder="$t('Common.AllQuestionnaires')"
-                        :value="selectedQuestionnaire" :values="model.templates" v-on:selected="selectQuestionnaire" />
+                    <Typeahead control-id="questionnaireId"
+                        :placeholder="$t('Common.AllQuestionnaires')"
+                        :value="selectedQuestionnaire"
+                        :values="model.templates"
+                        v-on:selected="selectQuestionnaire" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                    <Typeahead control-id="questionnaireVersion" :placeholder="$t('Common.AllVersions')"
+                    <Typeahead control-id="questionnaireVersion"
+                        :placeholder="$t('Common.AllVersions')"
                         :value="selectedVersion"
                         :values="selectedQuestionnaire == null ? null : selectedQuestionnaire.versions"
-                        v-on:selected="selectQuestionnaireVersion" :disabled="selectedQuestionnaire == null" />
+                        v-on:selected="selectQuestionnaireVersion"
+                        :disabled="selectedQuestionnaire == null" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Reports.DatesRange')">
-                    <DatePicker :config="datePickerConfig" :value="selectedDateRange"></DatePicker>
+                    <DatePicker :config="datePickerConfig"
+                        :value="selectedDateRange"></DatePicker>
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Reports.QuickRanges')">
                     <ul class="list-group small input-group">
-                        <li class="list-group-item pointer" v-for="range in quickRanges" :key="range.title"
-                            :class="{ 'list-group-item-success': isSelectedRange(range) }" @click="quickRange(range)">{{
-                                range.title }}</li>
+                        <li class="list-group-item pointer"
+                            v-for="range in quickRanges"
+                            :key="range.title"
+                            :class="{ 'list-group-item-success': isSelectedRange(range) }"
+                            @click="quickRange(range)">{{
+                            range.title }}</li>
                     </ul>
-                    <Checkbox name="relativeRange" :label="$t('Reports.RangeRelativeToData')" v-model="relativeToData">
+                    <Checkbox name="relativeRange"
+                        :label="$t('Reports.RangeRelativeToData')"
+                        v-model="relativeToData">
                     </Checkbox>
                 </FilterBlock>
             </Filters>
@@ -37,11 +49,16 @@
                 </h2>
             </div>
         </div>
-        <CumulativeLineChart ref="chartView" id="interviewChart" :chartData="chartDataForRender"
-            :options="{ title: { display: true, text: this.chartTitle } }" @ready="chartUpdated" @mounted="refreshData">
+        <CumulativeLineChart ref="chartView"
+            id="interviewChart"
+            :chartData="chartDataForRender"
+            :options="{ title: { display: true, text: this.chartTitle } }"
+            @ready="chartUpdated"
+            @mounted="refreshData">
         </CumulativeLineChart>
         <div v-if="base64Encoded != null && hasData">
-            <a id="link" :download="$t('Reports.CumulativeInterviewChart') + ' (' + chartTitle + ').png'"
+            <a id="link"
+                :download="$t('Reports.CumulativeInterviewChart') + ' (' + chartTitle + ').png'"
                 @click="downloadAsImage()">{{ $t("Reports.SaveAsImage") }}</a>
         </div>
     </HqLayout>
@@ -50,7 +67,7 @@
 <script>
 import routeSync from '~/shared/routeSync'
 import moment from 'moment'
-import { forEach, findIndex, assign, sortBy, find } from 'lodash'
+import { forEach, findIndex, assign, sortBy, find } from 'lodash-es'
 import CumulativeLineChart from './CumulativeChart'
 
 export default {
@@ -72,7 +89,7 @@ export default {
                 { status: 'ApprovedBySupervisor', label: this.$t('Strings.InterviewStatus_ApprovedBySupervisor'), backgroundColor: '#13A388' },
                 { status: 'RejectedByHeadquarters', label: this.$t('Strings.InterviewStatus_RejectedByHeadquarters'), backgroundColor: '#E06B5C' },
                 { status: 'ApprovedByHeadquarters', label: this.$t('Strings.InterviewStatus_ApprovedByHeadquarters'), backgroundColor: '#00647F' },
-            ]
+            ],
         }
     },
 
@@ -80,7 +97,7 @@ export default {
         chartDataForRender() {
             return this.chartData || {
                 labels: [],
-                datasets: []
+                datasets: [],
             }
         },
         model() {
@@ -91,8 +108,8 @@ export default {
             return `${this.selectedQuestionnaire == null
                 ? this.$t('Common.AllQuestionnaires')
                 : this.selectedQuestionnaire.value
-                }, ${this.selectedVersion == null ? this.$t('Common.AllVersions').toLowerCase() : this.selectedVersion.value
-                }`
+            }, ${this.selectedVersion == null ? this.$t('Common.AllVersions').toLowerCase() : this.selectedVersion.value
+            }`
         },
 
         queryString() {
@@ -478,7 +495,7 @@ export default {
     },
 
     mounted() {
-        this.refreshData();
+        this.refreshData()
     },
 }
 </script>

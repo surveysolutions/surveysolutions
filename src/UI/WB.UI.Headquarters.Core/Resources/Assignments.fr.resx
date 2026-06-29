@@ -287,7 +287,7 @@
     <value>Nouvelle affectation</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>E-mail</value>
   </data>
   <data name="EmailExplanation" xml:space="preserve">
     <value>L'email sera utilisé dans la communication avec le destinataire de l'affectation</value>
@@ -350,13 +350,13 @@
     <value>Le mot de passe par affectation pour le mode web avec une quantité de 1 doit être unique</value>
   </data>
     <data name="QuestionnaireVersion" xml:space="preserve">
-    <value>ver. {{version}}</value>
+    <value>v. {{version}}</value>
   </data>
   <data name="AssignmentId" xml:space="preserve">
     <value>ID d'affectation</value>
   </data>
   <data name="MultipleAssignmentsClose" xml:space="preserve">
-    <value>{{count}} affectations sélectionnées vont être fermées. La valeur attendue sera définie sur le nombre d'entretiens actuellement collectés.</value>
+    <value>{{count}} affectations sélectionnées vont être réduites. La valeur attendue sera définie sur le nombre d'entretiens actuellement collectés.</value>
   </data>
   <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
     <value>La valeur attendue de l'affectation sélectionnée {{id}} sera changée de {{quantity}} à {{collected}} (nombre d'entretiens actuellement collectés)</value>
@@ -365,7 +365,7 @@
     <value>Fermer</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
-    <value>L'affectation {{id}} ne peut pas être fermée car elle a le mode web activé</value>
+    <value>L'affectation {{id}} ne peut pas être réduite car elle a le mode web activé</value>
   </data>
   <data name="AssignmentInfo" xml:space="preserve">
     <value>Informations détaillées sur l'affectation</value>
@@ -499,4 +499,64 @@
     <data name="TargetAreaExplanation" xml:space="preserve">
     <value>Spécifiez le nom de la carte de la zone cible pour l'affectation</value>
 </data>
+  <data name="Filter_ShowAll" xml:space="preserve">
+    <value>Afficher tout</value>
+  </data>
+  <data name="Downsize" xml:space="preserve">
+    <value>Réduire</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+      <value>Statut</value>
+  </data>
+  <data name="StatusChangeComment" xml:space="preserve">
+      <value>Commentaire de changement de statut</value>
+  </data>
+  <data name="StatusOpen" xml:space="preserve">
+      <value>Ouvert</value>
+  </data>
+  <data name="StatusCompleted" xml:space="preserve">
+      <value>Terminé</value>
+  </data>
+  <data name="StatusClosed" xml:space="preserve">
+      <value>Approuvé</value>
+  </data>
+  <data name="CompleteAssignmentTitle" xml:space="preserve">
+      <value>Terminer l’affectation</value>
+  </data>
+  <data name="CompleteAssignmentMessage" xml:space="preserve">
+      <value>Êtes-vous sûr d’avoir recensé toutes les unités éligibles ?</value>
+  </data>
+  <data name="CloseAssignmentTitle" xml:space="preserve">
+      <value>Clôturer l’affectation</value>
+  </data>
+  <data name="CloseAssignmentMessage" xml:space="preserve">
+      <value>Les enquêteurs travaillant hors ligne peuvent continuer à collecter des données jusqu’à la synchronisation. Ces entretiens seront toujours acceptés.</value>
+  </data>
+  <data name="ReopenAssignmentTitle" xml:space="preserve">
+      <value>Rouvrir l’affectation</value>
+  </data>
+  <data name="ReopenAssignmentMessage" xml:space="preserve">
+      <value>L’affectation sera remise au statut Ouvert et les enquêteurs pourront créer de nouveaux entretiens.</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+      <value>Terminer</value>
+  </data>
+  <data name="Reopen" xml:space="preserve">
+      <value>Rouvrir</value>
+  </data>
+  <data name="Action_StatusChanged" xml:space="preserve">
+      <value>Statut changé en {{status}}</value>
+  </data>
+  <data name="Action_StatusChanged_Comment" xml:space="preserve">
+      <value>Commentaire : {{comment}}</value>
+  </data>
+  <data name="Action_Completed" xml:space="preserve">
+      <value>Terminé</value>
+  </data>
+  <data name="Action_Closed" xml:space="preserve">
+      <value>Approuvé</value>
+  </data>
+  <data name="Action_Reopened" xml:space="preserve">
+      <value>Rouvert</value>
+  </data>
 </root>

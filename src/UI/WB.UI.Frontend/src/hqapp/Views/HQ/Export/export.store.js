@@ -1,4 +1,4 @@
-import { find, findIndex, chunk } from 'lodash'
+import { find, findIndex, chunk } from 'lodash-es'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 import axios from 'axios'
