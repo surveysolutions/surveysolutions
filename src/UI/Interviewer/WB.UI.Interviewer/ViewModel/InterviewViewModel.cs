@@ -324,6 +324,9 @@ namespace WB.UI.Interviewer.ViewModel
                 var started = await this.StartAudioRecordingWithPermissionHandlingAsync(interviewId)
                     .ConfigureAwait(false);
 
+                // Reacquire without the cancellation token on purpose: this commit/cleanup must run
+                // even if the view model is being disposed, so a recording started just above is always
+                // either tracked or stopped (never leaked).
                 await this.audioRecordingLock.WaitAsync().ConfigureAwait(false);
                 try
                 {
