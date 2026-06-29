@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Interviewer;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -329,7 +330,7 @@ namespace WB.UI.Interviewer.ViewModel
                 return RecordingTarget.None;
 
             var currentGroup = this.NavigationState.CurrentGroup;
-            if (currentGroup == null || !interview.ShouldRecordAudioForGroup(currentGroup))
+            if (currentGroup == null || !AudioAuditScopeRules.ShouldRecord(IsAudioRecordingEnabled, scope, currentGroup.Id))
                 return RecordingTarget.None;
 
             return RecordingTarget.Group(currentGroup.Id);

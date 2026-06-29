@@ -916,14 +916,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.properties.AudioAuditScope ?? Array.Empty<Guid>();
         }
 
-        public bool ShouldRecordAudioForGroup(Identity groupIdentity)
-        {
-            return AudioAuditScopeRules.ShouldRecord(
-                this.properties.IsAudioRecordingEnabled,
-                this.properties.AudioAuditScope,
-                groupIdentity?.Id);
-        }
-
         public Guid? GetAttachmentForEntity(Identity entityId)
         {
             var questionnaire = this.GetQuestionnaireOrThrow(this.Language);

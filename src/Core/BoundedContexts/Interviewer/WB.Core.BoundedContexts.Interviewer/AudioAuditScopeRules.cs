@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
+namespace WB.Core.BoundedContexts.Interviewer
 {
     /// <summary>
     /// Business rules that decide whether audio should be recorded for a given

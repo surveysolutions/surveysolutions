@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.BoundedContexts.Interviewer;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.AudioAuditTests
 {
