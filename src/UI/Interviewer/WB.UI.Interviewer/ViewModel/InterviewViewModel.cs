@@ -363,6 +363,19 @@ namespace WB.UI.Interviewer.ViewModel
                 this.audioRecordingLock.Release();
             }
         }
+
+        // Fire-and-forget wrapper used during teardown so unobserved exceptions are logged.
+        private async Task StopAudioRecordingSafelyAsync(Guid interviewId)
+        {
+            try
+            {
+                await this.StopAudioRecordingAsync(interviewId).ConfigureAwait(false);
+            }
+            catch (Exception exc)
+            {
+                this.logger.Warn("Audio audit failed to stop on view disappearing.", exception: exc);
+            }
+        }
         
         public override void ViewDisappearing()
         {
@@ -382,22 +395,11 @@ namespace WB.UI.Interviewer.ViewModel
 
                     // isViewVisible is already false. Stop any active recording through the same
                     // recording lock so the state mutation stays atomic with EvaluateAudioRecordingAsync.
-                    // Run it off the UI thread so awaiting the lock cannot deadlock the UI thread against
-                    // an in-flight start, and so teardown still completes after Dispose. The stop path
-                    // touches neither interviewRepository nor any field disposed by this view model.
-                    var recordingInterviewId = interviewId;
-                    var recordingLogger = this.logger;
-                    Task.Run(async () =>
-                    {
-                        try
-                        {
-                            await this.StopAudioRecordingAsync(recordingInterviewId).ConfigureAwait(false);
-                        }
-                        catch (Exception exc)
-                        {
-                            recordingLogger.Warn("Audio audit failed to stop on view disappearing.", exception: exc);
-                        }
-                    });
+                    // Fire-and-forget: awaiting the lock yields back to the UI thread instead of blocking it,
+                    // so it cannot deadlock against an in-flight start, and teardown still completes after
+                    // Dispose. The stop path touches neither interviewRepository nor any field disposed by
+                    // this view model.
+                    _ = this.StopAudioRecordingSafelyAsync(interviewId);
                 }
             }
 
