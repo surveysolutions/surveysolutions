@@ -531,15 +531,15 @@
     <value>جودة الصوت المستخدمة بواسطة تطبيق الباحث عند تسجيل الصوت (تدقيق الصوت وأسئلة الصوت)</value>
   </data>
   <data name="AudioRecordingQuality_Mono44kHz" xml:space="preserve">
-    <value>أحادي, 44.1 kHz</value>
+    <value>64 kbps, أحادي, 44.1 kHz</value>
   </data>
   <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve">
-    <value>أحادي, 22.05 kHz</value>
+    <value>64 kbps, أحادي, 22.05 kHz</value>
   </data>
   <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve">
-    <value>ستيريو, 44.1 kHz</value>
+    <value>128 kbps, ستيريو, 44.1 kHz</value>
   </data>
   <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
-    <value>ستيريو, 48 kHz</value>
+    <value>128 kbps, ستيريو, 48 kHz</value>
   </data>
 </root>

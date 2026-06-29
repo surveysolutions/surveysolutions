@@ -587,15 +587,15 @@ Motive posibile:
     <value>Calitatea audio utilizată de aplicația operatorului la înregistrarea audio (audit audio și întrebări audio)</value>
   </data>
   <data name="AudioRecordingQuality_Mono44kHz" xml:space="preserve">
-    <value>Mono, 44.1 kHz</value>
+    <value>64 kbps, Mono, 44.1 kHz</value>
   </data>
   <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve">
-    <value>Mono, 22.05 kHz</value>
+    <value>64 kbps, Mono, 22.05 kHz</value>
   </data>
   <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve">
-    <value>Stereo, 44.1 kHz</value>
+    <value>128 kbps, Stereo, 44.1 kHz</value>
   </data>
   <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
-    <value>Stereo, 48 kHz</value>
+    <value>128 kbps, Stereo, 48 kHz</value>
   </data>
 </root>

@@ -116,14 +116,12 @@
                         </label>
                     </div>
                     <div class="form-group">
-                        <select class="form-control" id="audioRecordingQuality"
-                            v-model="audioRecordingQualityModel" @change="updateDeviceSettings"
-                            style="max-width: 365px">
-                            <option v-for="option in audioRecordingQualityOptions" :key="option.value"
-                                :value="option.value">
-                                {{ option.title }}
-                            </option>
-                        </select>
+                        <Typeahead control-id="audioRecordingQuality"
+                            noSearch
+                            noClear
+                            :values="audioRecordingQualityOptions"
+                            :value="audioRecordingQualityValue"
+                            @selected="onAudioRecordingQualitySelected" />
                     </div>
                 </div>
             </div>
@@ -457,11 +455,14 @@ export default {
         },
         audioRecordingQualityOptions() {
             return [
-                { value: 'Mono44kHz', title: this.$t('Settings.AudioRecordingQuality_Mono44kHz') },
-                { value: 'Mono22kHz', title: this.$t('Settings.AudioRecordingQuality_Mono22kHz') },
-                { value: 'Stereo44kHz', title: this.$t('Settings.AudioRecordingQuality_Stereo44kHz') },
-                { value: 'Stereo48kHz', title: this.$t('Settings.AudioRecordingQuality_Stereo48kHz') },
+                { key: 'Mono22kHz', value: this.$t('Settings.AudioRecordingQuality_Mono22kHz') },
+                { key: 'Mono44kHz', value: this.$t('Settings.AudioRecordingQuality_Mono44kHz') },
+                { key: 'Stereo44kHz', value: this.$t('Settings.AudioRecordingQuality_Stereo44kHz') },
+                { key: 'Stereo48kHz', value: this.$t('Settings.AudioRecordingQuality_Stereo48kHz') },
             ]
+        },
+        audioRecordingQualityValue() {
+            return this.audioRecordingQualityOptions.find(o => o.key === this.audioRecordingQuality) || null
         },
     },
 
@@ -484,6 +485,13 @@ export default {
                     this.audioRecordingQualityModel,
                 )
             })
+        },
+
+        onAudioRecordingQualitySelected(item) {
+            if (item != null) {
+                this.audioRecordingQualityModel = item.key
+                this.updateDeviceSettings()
+            }
         },
 
         async updateGeographyQuestionAccuracyInMeters() {

@@ -638,15 +638,15 @@
     <value>ხმის ხარისხი, რომელსაც ინტერვიუერის აპლიკაცია იყენებს აუდიოს ჩაწერისას (აუდიოაუდიტი და აუდიოკითხვები)</value>
   </data>
   <data name="AudioRecordingQuality_Mono44kHz" xml:space="preserve">
-    <value>მონო, 44.1 kHz</value>
+    <value>64 kbps, მონო, 44.1 kHz</value>
   </data>
   <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve">
-    <value>მონო, 22.05 kHz</value>
+    <value>64 kbps, მონო, 22.05 kHz</value>
   </data>
   <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve">
-    <value>სტერეო, 44.1 kHz</value>
+    <value>128 kbps, სტერეო, 44.1 kHz</value>
   </data>
   <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
-    <value>სტერეო, 48 kHz</value>
+    <value>128 kbps, სტერეო, 48 kHz</value>
   </data>
 </root>
