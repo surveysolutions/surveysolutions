@@ -338,11 +338,19 @@ namespace WB.UI.Interviewer.ViewModel
         // Stops any active recording under the recording lock so the state mutation is atomic with
         // EvaluateAudioRecordingAsync. Deliberately does not read interviewRepository or any other
         // per-interview state, so it is safe to run during teardown.
+        // If the view has become visible again before the lock is acquired (user navigated back
+        // quickly), the stop is stale and must not cancel the recording that EvaluateAudioRecordingAsync
+        // may have already started for the returning view.
         private async Task StopAudioRecordingAsync(Guid interviewId)
         {
             await this.audioRecordingLock.WaitAsync().ConfigureAwait(false);
             try
             {
+                // The user navigated back before this stop could run; EvaluateAudioRecordingAsync
+                // will manage the correct recording state — do not interfere.
+                if (this.isViewVisible)
+                    return;
+
                 if (this.currentRecordingTarget.IsRecording)
                 {
                     this.currentRecordingTarget = RecordingTarget.None;
