@@ -144,7 +144,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                     }
                     catch (MissingPermissionsException)
                     {
-                        this.userInteractionService.ShowToast(UIResources.MissingPermissions_Microphone);
+                        // Show a blocking alert (not a fleeting toast) so the interviewer can read why the
+                        // interview cannot start: the microphone permission is required for the whole interview.
+                        await this.userInteractionService.AlertAsync(UIResources.MissingPermissions_Microphone_Interview);
                         return null;
                     }
                 }

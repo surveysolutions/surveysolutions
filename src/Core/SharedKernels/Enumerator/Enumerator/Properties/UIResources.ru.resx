@@ -1012,4 +1012,7 @@
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
     <value>Статус задания</value>
   </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>The application needs permission to use the microphone for the whole duration of the interview. The interview cannot be started until microphone access is granted. Allow microphone access and try again. If you don't see the permissions popup, go to Settings and allow the application to use the microphone.</value>
+  </data>
 </root>
