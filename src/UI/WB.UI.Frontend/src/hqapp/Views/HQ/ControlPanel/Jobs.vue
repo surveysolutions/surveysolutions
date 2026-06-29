@@ -9,7 +9,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="job in jobs" v-bind:key="job.key">
+                    <tr v-for="job in jobs"
+                        v-bind:key="job.key">
                         <td>{{ job.key }}</td>
                         <td>{{ job.value }}</td>
                     </tr>

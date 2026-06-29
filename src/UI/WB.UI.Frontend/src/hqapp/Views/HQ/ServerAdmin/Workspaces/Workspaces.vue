@@ -129,14 +129,13 @@ import * as toastr from 'toastr'
 import DeleteWorkspaceModal from './DeleteWorkspaceModal'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
-import { Form, Field, ErrorMessage } from 'vee-validate'
+import { Form, Field } from 'vee-validate'
 import { ref, nextTick } from 'vue'
 
 export default {
     components: {
         Form,
         Field,
-        ErrorMessage,
         DeleteWorkspaceModal,
     },
 
