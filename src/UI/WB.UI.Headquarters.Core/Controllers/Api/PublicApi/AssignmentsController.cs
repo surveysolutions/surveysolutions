@@ -869,6 +869,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     {Value = assignmentInfo.Comments, Column = nameof(assignmentInfo.Comments)}.ToAssignmentComments(),
                 TargetArea = new PreloadingValue
                     {Value = assignmentInfo.TargetArea, Column = nameof(assignmentInfo.TargetArea)}.ToAssignmentTargetArea(),
+                AudioAuditScope = new AssignmentAudioAuditScope
+                {
+                    Column = ServiceColumns.AudioAuditScopeColumnName,
+                    Value = assignmentInfo.AudioAuditScope == null ? null : string.Join(",", assignmentInfo.AudioAuditScope),
+                    VariableNames = assignmentInfo.AudioAuditScope?.ToArray() ?? Array.Empty<string>()
+                },
             };
 
             var rosterRows = rosterAnswers
