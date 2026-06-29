@@ -1,21 +1,30 @@
 <template>
-    <HqLayout :hasFilter="false" :title="title" :topicButtonRef="this.model.createUrl"
+    <HqLayout :hasFilter="false"
+        :title="title"
+        :topicButtonRef="this.model.createUrl"
         :topicButton="$t('Users.AddHeadquarters')">
         <template v-slot:subtitle>
             <div class="neighbor-block-to-search">
-                <ol v-if="this.model.showInstruction" class="list-unstyled">
+                <ol v-if="this.model.showInstruction"
+                    class="list-unstyled">
                     <li>{{ $t('Pages.Users_Headquarters_Instruction1') }}</li>
                     <li>{{ $t('Pages.Users_Headquarters_Instruction2') }}</li>
                 </ol>
-                <ol v-if="user.isObserver && !user.isObserving" class="list-unstyled">
+                <ol v-if="user.isObserver && !user.isObserving"
+                    class="list-unstyled">
                     <li>{{ $t('Pages.Observer_Memo1') }}</li>
                     <li>{{ $t('Pages.Observer_Memo2') }}</li>
                 </ol>
             </div>
         </template>
 
-        <DataTables ref="table" :tableOptions="tableOptions" @ajaxComplete="onTableReload"
-            :contextMenuItems="contextMenuItems" :supportContextMenu="model.showContextMenu" noSelect :noPaging="false">
+        <DataTables ref="table"
+            :tableOptions="tableOptions"
+            @ajaxComplete="onTableReload"
+            :contextMenuItems="contextMenuItems"
+            :supportContextMenu="model.showContextMenu"
+            noSelect
+            :noPaging="false">
         </DataTables>
 
     </HqLayout>

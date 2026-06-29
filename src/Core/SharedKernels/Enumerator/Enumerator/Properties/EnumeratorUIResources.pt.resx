@@ -383,7 +383,7 @@ para mais instruções</value>
     <value>Sincronização concluída com erros</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>atribuições concluídas</value>
+    <value>entrevistas concluídas</value>
   </data>
   <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
     <value>eventos do calendário</value>
@@ -519,7 +519,7 @@ Favor a digitar sua senha atualizada. Se isso não resolver o problema, entre em
     <value>Idioma</value>
   </data>
   <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Idioma original</value>
   </data>
   <data name="MenuItem_Title_Login" xml:space="preserve">
     <value>Entrar</value>
@@ -1036,5 +1036,41 @@ Aparecerá no dispositivo do entrevistador após a próxima sincronização</val
     </data>
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>A resposta recebida parece não vir do servidor Survey Solutions. Normalmente isto é causado por um proxy de rede, firewall ou gateway de segurança que intercepta a ligação. Verifique a sua ligação de rede ou contacte o suporte de TI.</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment" xml:space="preserve">
+    <value>Concluir</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
+    <value>Concluir atribuição</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
+    <value>Tem certeza de que enumerou todas as unidades elegíveis?</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
+    <value>Reabrir atribuição</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>A atribuição será revertida para o estado Aberto e os entrevistadores poderão criar novas entrevistas.</value>
+  </data>
+  <data name="Dashboard_CloseAssignment" xml:space="preserve">
+    <value>Aprovar</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
+    <value>Fechar atribuição</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
+    <value>Os entrevistadores que trabalham offline podem continuar a recolha de dados até à sincronização. Essas entrevistas ainda serão aceites.</value>
+  </data>
+  <data name="Dashboard_Assignment_Comment" xml:space="preserve">
+    <value>Comentário (opcional)</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
+    <value>Estado: Concluído</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
+    <value>Estado: Aprovado</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
+    <value>Estado: Aberto</value>
   </data>
 </root>

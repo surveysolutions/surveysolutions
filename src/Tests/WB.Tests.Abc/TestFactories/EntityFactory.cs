@@ -2354,7 +2354,17 @@ namespace WB.Tests.Abc.TestFactories
             IServiceLocator serviceLocator,
             IViewModelNavigationService viewModelNavigationService = null)
         {
-            return new InterviewerAssignmentDashboardItemViewModel(serviceLocator, 
+            // Ensure IEnumeratorSettings is available (callers may pass a partial mock)
+            var settings = Mock.Of<IEnumeratorSettings>(s =>
+                s.AllowSupervisorChangeAssignmentStatus == true &&
+                s.AllowInterviewerChangeAssignmentStatus == true);
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetInstance<IEnumeratorSettings>()).Returns(settings);
+            // Forward all other calls to the provided locator
+            locatorMock.Setup(l => l.GetInstance(It.IsAny<Type>()))
+                .Returns<Type>(t => serviceLocator.GetInstance(t));
+
+            return new InterviewerAssignmentDashboardItemViewModel(locatorMock.Object, 
                 viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
                 Mock.Of<IMapInteractionService>(),
                 Mock.Of<IUserInteractionService>());

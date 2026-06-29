@@ -12,7 +12,7 @@
                             {{ header || $t('QuestionnaireEditor.ModalConfirm') }}
                         </h3>
                     </div>
-                    <div class="modal-body" v-dompurify-html="title">
+                    <div class="modal-body" v-html="sanitizedTitle">
                     </div>
                     <div class="modal-footer" v-if="!noControls">
                         <button :class="['btn', 'btn-lg', isDanger ? 'btn-danger' : 'btn-primary']" v-if="!isReadOnly"
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import DOMPurify from 'dompurify';
 import event from '../../../plugins/events';
 
 const confirmDialog = {
@@ -52,8 +53,37 @@ const confirmDialog = {
             noControls: { type: Boolean, required: false },
             isAlert: { type: Boolean, required: false, default: false },
             isDanger: { type: Boolean, required: false, default: false },
+            sanitizeOptions: null,
             isOpen: false
         };
+    },
+    computed: {
+        sanitizedTitle() {
+            const defaultOptions = {
+                ALLOWED_TAGS: [],
+                KEEP_CONTENT: true
+            };
+
+            const hasSafeOptions = this.sanitizeOptions
+                && typeof this.sanitizeOptions === 'object'
+                && !Array.isArray(this.sanitizeOptions)
+                && Array.isArray(this.sanitizeOptions.ALLOWED_TAGS)
+                && Array.isArray(this.sanitizeOptions.ALLOWED_ATTR);
+
+            const options = hasSafeOptions
+                ? {
+                    ...defaultOptions,
+                    FORBID_TAGS: ['script', 'style', 'svg', 'math', 'iframe', 'object', 'embed', 'link', 'meta', 'base'],
+                    FORBID_ATTR: ['style'],
+                    ALLOWED_URI_REGEXP: /^(?:https?:|\/)/i,
+                    ALLOWED_TAGS: this.sanitizeOptions.ALLOWED_TAGS.filter(t => typeof t === 'string'),
+                    ALLOWED_ATTR: this.sanitizeOptions.ALLOWED_ATTR
+                        .filter(a => typeof a === 'string' && !a.toLowerCase().startsWith('on') && a.toLowerCase() !== 'style')
+                }
+                : defaultOptions;
+
+            return DOMPurify.sanitize(this.title || '', options);
+        }
     },
     mounted() {
         event.on('open', params => {
@@ -74,6 +104,7 @@ const confirmDialog = {
             this.isDanger = params.isDanger || false;
             this.callback = params.callback;
             this.noControls = params.noControls || false;
+            this.sanitizeOptions = params.sanitizeOptions || null;
             this.isOpen = true;
         },
         cancel() {
