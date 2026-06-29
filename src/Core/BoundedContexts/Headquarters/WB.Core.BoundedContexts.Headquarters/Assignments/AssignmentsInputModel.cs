@@ -1,6 +1,7 @@
 using System;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
@@ -24,6 +25,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public AssignmentReceivedState ReceivedByTablet { get; set; }
         public int? Id { get; set; }
         public bool NonCawiOnly { set; get; }
+
+        public AssignmentStatus[] Statuses { get; set; }
 
 
         [Flags]

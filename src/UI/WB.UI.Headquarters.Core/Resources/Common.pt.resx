@@ -217,7 +217,7 @@
     <value>Carregando, aguarde</value>
   </data>
   <data name="Admin" xml:space="preserve">
-    <value>Admin</value>
+    <value>Administrador</value>
   </data>
   <data name="Approve" xml:space="preserve">
     <value>Aprovar</value>
@@ -259,7 +259,7 @@
     <value>Log de auditoria</value>
   </data>
   <data name="Logoff" xml:space="preserve">
-    <value>Logoff</value>
+    <value>Sair</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancelar</value>

@@ -15,14 +15,15 @@
         </template>
         <DataTables ref="table" :tableOptions="tableOptions"></DataTables>
         <template v-slot:models>
-            <Confirm ref="confirmDiscard" id="discardConfirm">{{ $t("Pages.Map_DiscardConfirm") }}</Confirm>
+            <Confirm ref="confirmDiscard" id="discardConfirm">
+                {{ $t("Pages.Map_DiscardConfirm") }}
+            </Confirm>
         </template>
     </HqLayout>
 </template>
 
 <script>
-import { map, join, escape } from 'lodash'
-
+import { map, join, escape } from 'lodash-es'
 export default {
     mounted() {
         if (this.$refs.table) {
