@@ -258,4 +258,7 @@
   <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
     <value>Ім'я змінної області аудіоконтролю '{0}' недійсне. Воно повинно посилатися на наявний розділ, групу або ростер (запитання та плоскі ростери (flat roster) не дозволяються).</value>
   </data>
+  <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+    <value>Assignment was not migrated because it uses selective Audio Audit (audio recording scope), which cannot be migrated automatically to a new questionnaire version. Recreate the assignment manually and configure the audio audit scope again.</value>
+  </data>
 </root>

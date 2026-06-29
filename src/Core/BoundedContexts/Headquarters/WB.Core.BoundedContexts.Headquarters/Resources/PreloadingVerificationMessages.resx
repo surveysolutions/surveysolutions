@@ -259,4 +259,7 @@
   <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
     <value>Audio audit scope variable name '{0}' is invalid. It must reference an existing section, group or roster (questions and flat rosters are not allowed).</value>
   </data>
+  <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+    <value>Assignment was not migrated because it uses selective Audio Audit (audio recording scope), which cannot be migrated automatically to a new questionnaire version. Recreate the assignment manually and configure the audio audit scope again.</value>
+  </data>
 </root>

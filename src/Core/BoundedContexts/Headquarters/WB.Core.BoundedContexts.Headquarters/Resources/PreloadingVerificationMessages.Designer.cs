@@ -326,5 +326,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("PL0064_AudioAuditScopeInvalidEntity", resourceCulture);
             }
         }
+        
+        public static string AssignmentUpgrade_SelectiveAudioAuditNotMigrated {
+            get {
+                return ResourceManager.GetString("AssignmentUpgrade_SelectiveAudioAuditNotMigrated", resourceCulture);
+            }
+        }
     }
 }

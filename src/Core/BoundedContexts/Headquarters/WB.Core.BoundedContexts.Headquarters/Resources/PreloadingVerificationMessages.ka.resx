@@ -281,4 +281,7 @@
   <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
     <value>აუდიო აუდიტის არეალის ცვლადის სახელი '{0}' არასწორია. ის უნდა მიუთითებდეს არსებულ სექციაზე, ჯგუფზე ან როსტერზე (კითხვები და ბრტყელი როსტერები (flat roster) დაუშვებელია).</value>
   </data>
+  <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+    <value>Assignment was not migrated because it uses selective Audio Audit (audio recording scope), which cannot be migrated automatically to a new questionnaire version. Recreate the assignment manually and configure the audio audit scope again.</value>
+  </data>
 </root>

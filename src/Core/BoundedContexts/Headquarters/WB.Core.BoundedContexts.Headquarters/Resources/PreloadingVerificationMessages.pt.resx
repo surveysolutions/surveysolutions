@@ -258,4 +258,7 @@
   <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
     <value>O nome da variável do escopo de auditoria de áudio '{0}' é inválido. Deve referir-se a uma seção, grupo ou roster existente (perguntas e rosters planos não são permitidos).</value>
   </data>
+  <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+    <value>Assignment was not migrated because it uses selective Audio Audit (audio recording scope), which cannot be migrated automatically to a new questionnaire version. Recreate the assignment manually and configure the audio audit scope again.</value>
+  </data>
 </root>

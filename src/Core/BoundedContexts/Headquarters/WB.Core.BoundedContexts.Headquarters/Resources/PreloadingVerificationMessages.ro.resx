@@ -258,4 +258,7 @@
   <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
     <value>Numele variabilei domeniului de audit audio '{0}' este invalid. Trebuie să facă referire la o secțiune, un grup sau un roster existent (întrebările și rosterele plate nu sunt permise).</value>
   </data>
+  <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+    <value>Assignment was not migrated because it uses selective Audio Audit (audio recording scope), which cannot be migrated automatically to a new questionnaire version. Recreate the assignment manually and configure the audio audit scope again.</value>
+  </data>
 </root>
