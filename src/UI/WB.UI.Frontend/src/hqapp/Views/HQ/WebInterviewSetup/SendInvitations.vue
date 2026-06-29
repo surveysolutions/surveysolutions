@@ -1,5 +1,7 @@
 <template>
-    <HqLayout :hasRow="false" :fixedWidth="true" :title="$t('WebInterviewSetup.WebInterviewSetup_Title')">
+    <HqLayout :hasRow="false"
+        :fixedWidth="true"
+        :title="$t('WebInterviewSetup.WebInterviewSetup_Title')">
         <template v-slot:headers>
             <div>
                 <ol class="breadcrumb">
@@ -29,15 +31,18 @@
                         }) }}</span>
                         <span v-else>{{ $t('WebInterviewSetup.Invitations_NothingSent') }}</span>
                     </p>
-                    <p v-if="notSentInvitationsCount" class="success-text">{{ $t('WebInterviewSetup.Invitations_ToSend',
-                        {
-                            count:
-                                notSentInvitationsCount
-                        }) }}</p>
-                    <p v-else class="error-text">{{ $t('WebInterviewSetup.Invitations_NothingToSend') }}</p>
+                    <p v-if="notSentInvitationsCount"
+                        class="success-text">{{ $t('WebInterviewSetup.Invitations_ToSend',
+                                               {
+                                                   count:
+                                                       notSentInvitationsCount
+                                               }) }}</p>
+                    <p v-else
+                        class="error-text">{{ $t('WebInterviewSetup.Invitations_NothingToSend') }}</p>
                 </div>
             </div>
-            <div v-if="hasSetupError" class="col-sm-7 col-xs-12">
+            <div v-if="hasSetupError"
+                class="col-sm-7 col-xs-12">
                 <div class="alert alert-danger">
                     <div class="validation-summary-errors">
                         <ul class="list-unstyled">
@@ -47,37 +52,45 @@
                                 <span v-if="$config.model.isAdmin"
                                     v-dompurify-html="$t('WebInterviewSetup.Invitations_ChangeEmailSettingsAdmin', { url: emailProviderUrl })"></span>
                                 <span v-else>{{ $t('WebInterviewSetup.Invitations_ChangeEmailSettingsNotAdmin')
-                                    }}</span>
+                                }}</span>
                             </li>
                             <li v-if="!started">SI002: <span
-                                    v-dompurify-html="$t('WebInterviewSetup.Invitations_SurveyIsNotStarted', { url: webSettingsUrl })"></span>
+                                v-dompurify-html="$t('WebInterviewSetup.Invitations_SurveyIsNotStarted', { url: webSettingsUrl })"></span>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <div v-else class="col-sm-7 col-xs-12">
+            <div v-else
+                class="col-sm-7 col-xs-12">
                 <p>{{ $t('WebInterviewSetup.Invitations_SuccessfulSetup') }}</p>
             </div>
             <form method="post">
-                <input name="__RequestVerificationToken" type="hidden" :value="this.$hq.Util.getCsrfCookie()" />
-                <input type="hidden" :value="questionnaireId" name="questionnaireId" />
+                <input name="__RequestVerificationToken"
+                    type="hidden"
+                    :value="this.$hq.Util.getCsrfCookie()" />
+                <input type="hidden"
+                    :value="questionnaireId"
+                    name="questionnaireId" />
                 <div class="action-buttons">
-                    <button type="submit" :disabled="hasSetupError || notSentInvitationsCount == 0"
+                    <button type="submit"
+                        :disabled="hasSetupError || notSentInvitationsCount == 0"
                         class="btn btn-success ">
                         {{ $t('WebInterviewSetup.Invitations_SendAction', {
                             count: notSentInvitationsCount > 0 ?
                                 notSentInvitationsCount : ""
                         }) }}
                     </button>
-                    <a :href="$config.model.api.surveySetupUrl" class="back-link">
+                    <a :href="$config.model.api.surveySetupUrl"
+                        class="back-link">
                         {{ $t('WebInterviewSetup.BackToQuestionnaires') }}
                     </a>
                 </div>
             </form>
         </div>
         <template v-slot:modals>
-            <Confirm ref="sendInvitationsConfirmation" id="sendInvitationsConfirmation">
+            <Confirm ref="sendInvitationsConfirmation"
+                id="sendInvitationsConfirmation">
                 {{ $t("Pages.WebInterviewSetup_SendInvitationsConfirmation") }}
             </Confirm>
         </template>
@@ -106,11 +119,11 @@ export default {
             .then(function (response) {
                 const invitationsInfo = response.data || {}
                 self.title = self.$t('Pages.QuestionnaireNameFormat', { name: invitationsInfo.title, version: invitationsInfo.version }),
-                    self.questionnaireIdentity = invitationsInfo.questionnaireIdentity,
-                    self.started = invitationsInfo.started,
-                    self.totalInvitationsCount = invitationsInfo.totalInvitationsCount || 0,
-                    self.notSentInvitationsCount = invitationsInfo.notSentInvitationsCount || 0,
-                    self.sentInvitationsCount = invitationsInfo.sentInvitationsCount || 0
+                self.questionnaireIdentity = invitationsInfo.questionnaireIdentity,
+                self.started = invitationsInfo.started,
+                self.totalInvitationsCount = invitationsInfo.totalInvitationsCount || 0,
+                self.notSentInvitationsCount = invitationsInfo.notSentInvitationsCount || 0,
+                self.sentInvitationsCount = invitationsInfo.sentInvitationsCount || 0
                 self.emailProvider = ((invitationsInfo.emailProvider || '') + '').toLocaleLowerCase()
             })
             .catch(function (error) {
