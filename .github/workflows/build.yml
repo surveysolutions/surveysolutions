@@ -328,5 +328,13 @@ jobs:
         with:
           name: Windows Installer
           path: ${{ steps.build-installer.outputs.filename }}
-            #artifacts/WB.UI.Headquarters.Offline.zip
           overwrite: true
+
+      - name: Publish Azure Web App package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Azure Web App Package
+          path: artifacts/WB.UI.Headquarters.Offline.zip
+          if-no-files-found: error
+          overwrite: true
+          compression-level: 0
