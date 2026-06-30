@@ -142,7 +142,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                     {
                         await this.permissionsService.AssureHasPermissionOrThrow<Permissions.Microphone>();
                     }
-                    catch (MissingPermissionsException)
+                    catch (Exception permissionException)
+                    {
+                        // The permission request can surface exceptions other than MissingPermissionsException
+                        // (for example when the activity is recreated while the system dialog is shown). Do not
+                        // fail interview creation on those - rely on the authoritative status check below, which
+                        // reflects the user's actual choice.
+                        logger.Warn($"Microphone permission request for interview {interviewId} did not complete cleanly.", permissionException);
+                    }
+
+                    if (await Permissions.CheckStatusAsync<Permissions.Microphone>() != PermissionStatus.Granted)
                     {
                         // Show a toast (with a longer visibility time) so the interviewer can read why the
                         // interview cannot start: the microphone permission is required for the whole interview.
