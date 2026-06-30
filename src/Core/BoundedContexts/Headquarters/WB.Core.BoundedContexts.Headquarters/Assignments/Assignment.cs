@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
@@ -65,6 +66,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         
         public virtual bool QuantityCanBeChanged => !this.Archived && this.WebMode != true;
 
+        public virtual AssignmentStatus Status { get; set; } = AssignmentStatus.Open;
+
+        public virtual string StatusComment { get; set; }
 
         public virtual DateTime CreatedAtUtc { get; set; }
 

@@ -2,7 +2,7 @@ import axios from 'axios'
 import { config } from '~/shared/config'
 import { installAxiosInterceptors } from '~/shared/serverValidator'
 
-let api = {};
+let api = {}
 
 const httpPlugin = {
 
@@ -65,7 +65,8 @@ const httpPlugin = {
                     store.dispatch('fetch', { id, done: true })
                 }
                 else {
-                    if (err.response.status === 400
+                    if (err.response != null
+                        && err.response.status === 400
                         && err.response.data != null
                         && err.response.data.errorMessage != null) {
                         err.message = err.response.data.errorMessage

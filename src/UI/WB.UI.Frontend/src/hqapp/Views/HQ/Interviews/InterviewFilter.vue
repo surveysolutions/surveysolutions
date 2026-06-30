@@ -1,29 +1,42 @@
 <template>
-    <div class="block-filter" v-if="item != null && isSupported">
+    <div class="block-filter"
+        v-if="item != null && isSupported">
         <h5 :title="sanitizeHtml(item.label || item.title)">
             {{ sanitizeHtml(item.label || item.title) }}
             <div>
-                <inline-selector :options="fieldOptions" no-empty :id="`filter_selector_${condition.variable}`"
-                    v-if="fieldOptions != null" v-model="field" />
+                <inline-selector :options="fieldOptions"
+                    no-empty
+                    :id="`filter_selector_${condition.variable}`"
+                    v-if="fieldOptions != null"
+                    v-model="field" />
             </div>
         </h5>
 
-        <Typeahead v-if="item.type == 'SINGLEOPTION'" :control-id="'filter_input_' + condition.variable"
-            :placeholder="$t('Common.SelectOption')" :values="options" :value="selectedOption"
+        <Typeahead v-if="item.type == 'SINGLEOPTION'"
+            :control-id="'filter_input_' + condition.variable"
+            :placeholder="$t('Common.SelectOption')"
+            :values="options"
+            :value="selectedOption"
             v-on:selected="optionSelected" />
 
-        <filter-input v-if="item.type == 'TEXT' || item.entityType == 'VARIABLE'" :value="condition.value"
-            @input="input" :id="'filter_input_' + condition.variable" />
+        <filter-input v-if="item.type == 'TEXT' || item.entityType == 'VARIABLE'"
+            :value="condition.value"
+            @input="input"
+            :id="'filter_input_' + condition.variable" />
 
-        <filter-input v-if="item.type == 'NUMERIC'" :value="condition.value" type="number" @input="input"
+        <filter-input v-if="item.type == 'NUMERIC'"
+            :value="condition.value"
+            type="number"
+            @input="input"
             :id="'filter_input_' + condition.variable" />
 
     </div>
 </template>
 <script>
 
-import { find } from 'lodash'
-import sanitizeHtml from 'sanitize-html'
+import { find } from 'lodash-es'
+import DOMPurify from 'dompurify'
+const sanitizeHtml = text => DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
 
 export default {
     props: {

@@ -97,7 +97,13 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             NotificationsEnabled = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
                 .IsDeviceNotificationsEnabled(),
             
-            EsriApiKey = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings).GetEsriApiKey()
+            EsriApiKey = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings).GetEsriApiKey(),
+
+            AllowSupervisorChangeAssignmentStatus = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
+                .IsAllowSupervisorChangeAssignmentStatus(),
+
+            AllowInterviewerChangeAssignmentStatus = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
+                .IsAllowInterviewerChangeAssignmentStatus()
         };
     }
 }

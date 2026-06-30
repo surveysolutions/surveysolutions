@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
@@ -65,8 +64,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     return;
                 }
 
+                var writeUserId = httpContextUser.GetIdOrNull();
                 bool hasWriteAccess = httpContextUser.IsAdmin() ||
-                    viewFactory.HasUserChangeAccessToQuestionnaire(questionnaireRevision.QuestionnaireId, httpContextUser.GetId());
+                    (writeUserId.HasValue && viewFactory.HasUserChangeAccessToQuestionnaire(questionnaireRevision.QuestionnaireId, writeUserId.Value));
                 if (!hasWriteAccess)
                 {
                     context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
@@ -88,7 +88,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             bool hasAccess = hasAnonymousAccess ||
                   httpContextUser.IsAdmin() ||
-                  viewFactory.HasUserAccessToQuestionnaire(questionnaireRevision, httpContextUser.GetId());
+                  viewFactory.HasUserAccessToQuestionnaire(questionnaireRevision, httpContextUser.GetIdOrNull());
             if (!hasAccess)
             {
                 context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
