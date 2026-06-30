@@ -754,11 +754,9 @@ export default {
             return date.local().format(DateFormats.dateTime)
         },
         isAudioRecordingEnabled() {
-            if (this.model.isAudioRecordingEnabled)
-                return this.$t('Common.Yes')
-            if (this.hasAudioAuditScope)
-                return this.$t('Assignments.AudioRecordingPartial')
-            return this.$t('Common.No')
+            return this.model.isAudioRecordingEnabled
+                ? this.$t('Common.Yes')
+                : this.$t('Common.No')
         },
         hasAudioAuditScope() {
             return this.model.audioAuditScopeVariableNames && this.model.audioAuditScopeVariableNames.length > 0
