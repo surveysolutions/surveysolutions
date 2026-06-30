@@ -549,6 +549,9 @@
   <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve">
     <value>64 kbps, Моно, 22.05 kHz</value>
   </data>
+  <data name="AudioRecordingQuality_Mono16kHz" xml:space="preserve">
+    <value>32 kbps, Моно, 16 kHz</value>
+  </data>
   <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve">
     <value>128 kbps, Стерео, 44.1 kHz</value>
   </data>

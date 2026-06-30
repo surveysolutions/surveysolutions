@@ -537,6 +537,9 @@ Posibles razones:
   <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve">
     <value>64 kbps, Mono, 22.05 kHz</value>
   </data>
+  <data name="AudioRecordingQuality_Mono16kHz" xml:space="preserve">
+    <value>32 kbps, Mono, 16 kHz</value>
+  </data>
   <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve">
     <value>128 kbps, Estéreo, 44.1 kHz</value>
   </data>

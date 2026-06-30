@@ -11,6 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
         Mono22kHz = 1,
         Stereo44kHz = 2,
         Stereo48kHz = 3,
+        Mono16kHz = 4,
     }
 
     public static class AudioRecordingQualityExtensions
@@ -35,6 +36,8 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
         {
             switch (quality)
             {
+                case AudioRecordingQuality.Mono16kHz:
+                    return 16000;
                 case AudioRecordingQuality.Mono22kHz:
                     return 22050;
                 case AudioRecordingQuality.Stereo48kHz:
@@ -46,7 +49,13 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
 
         public static int GetEncodingBitRate(this AudioRecordingQuality quality)
         {
-            return DefaultBitRate * quality.GetAudioChannels();
+            switch (quality)
+            {
+                case AudioRecordingQuality.Mono16kHz:
+                    return 32000;
+                default:
+                    return DefaultBitRate * quality.GetAudioChannels();
+            }
         }
     }
 }

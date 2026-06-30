@@ -391,6 +391,7 @@ export default {
         },
         audioRecordingQualityOptions() {
             return [
+                { key: 'Mono16kHz', value: this.$t('Settings.AudioRecordingQuality_Mono16kHz') },
                 { key: 'Mono22kHz', value: this.$t('Settings.AudioRecordingQuality_Mono22kHz') },
                 { key: 'Mono44kHz', value: this.$t('Settings.AudioRecordingQuality_Mono44kHz') },
                 { key: 'Stereo44kHz', value: this.$t('Settings.AudioRecordingQuality_Stereo44kHz') },

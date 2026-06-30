@@ -19,6 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.AudioAuditTests
 
         [TestCase(AudioRecordingQuality.Mono44kHz, 1, 44100)]
         [TestCase(AudioRecordingQuality.Mono22kHz, 1, 22050)]
+        [TestCase(AudioRecordingQuality.Mono16kHz, 1, 16000)]
         [TestCase(AudioRecordingQuality.Stereo44kHz, 2, 44100)]
         [TestCase(AudioRecordingQuality.Stereo48kHz, 2, 48000)]
         public void should_map_quality_to_channels_and_sampling_rate(AudioRecordingQuality quality, int channels, int samplingRate)
@@ -32,6 +33,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.AudioAuditTests
         {
             Assert.That(AudioRecordingQuality.Stereo44kHz.GetEncodingBitRate(),
                 Is.EqualTo(AudioRecordingQualityExtensions.DefaultBitRate * 2));
+        }
+
+        [Test]
+        public void mono16kHz_encoding_bit_rate_should_be_32kbps()
+        {
+            Assert.That(AudioRecordingQuality.Mono16kHz.GetEncodingBitRate(), Is.EqualTo(32000));
         }
     }
 }
