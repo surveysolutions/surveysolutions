@@ -103,6 +103,9 @@
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>Odpověď nebyla uložena</value>
   </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Chyba komunikace</value>
+  </data>
   <data name="AreaRecord" xml:space="preserve">
     <value>Upravit oblast</value>
   </data>
