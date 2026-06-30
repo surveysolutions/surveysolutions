@@ -30,6 +30,7 @@ namespace WB.UI.Interviewer.ViewModel
 {
     public class InterviewViewModel : BaseInterviewViewModel
     {
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IAuditLogService auditLogService;
         private readonly IAudioAuditService audioAuditService;
         private readonly IUserInteractionService userInteractionService;
@@ -68,6 +69,7 @@ namespace WB.UI.Interviewer.ViewModel
                 principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, vibrationViewModel, enumeratorSettings)
         {
+            this.questionnaireRepository = questionnaireRepository;
             this.auditLogService = auditLogService;
             this.audioAuditService = audioAuditService;
             this.userInteractionService = userInteractionService;
@@ -262,14 +264,37 @@ namespace WB.UI.Interviewer.ViewModel
             if (scope == null || scope.Length == 0)
                 return RecordingTarget.None;
 
-            var currentGroup = this.NavigationState.CurrentGroup;
+            // The currently navigated scope entity: a regular group/section/roster, or the cover page
+            // section when the cover screen is shown (CoverInterviewViewModel). The cover screen has no
+            // CurrentGroup, so resolve its section id from the questionnaire to honour a scope that
+            // includes the cover page.
+            var currentScopeEntityId = this.GetCurrentScopeEntityId(interview);
             // Audio Audit is disabled (the whole-interview flag is handled above) and the scope is
-            // non-empty: record only while the currently navigated group is itself listed in the
+            // non-empty: record only while the currently navigated entity is itself listed in the
             // scope. Scope selection is explicit and is not inherited.
-            if (currentGroup == null || Array.IndexOf(scope, currentGroup.Id) < 0)
+            if (currentScopeEntityId == null || Array.IndexOf(scope, currentScopeEntityId.Value) < 0)
                 return RecordingTarget.None;
 
-            return RecordingTarget.Group(currentGroup.Id);
+            return RecordingTarget.Group(currentScopeEntityId.Value);
+        }
+
+        // Resolves the id of the entity the interviewer is currently on for scope-membership purposes.
+        // On the cover screen there is no CurrentGroup, so the cover page section id is used so that the
+        // cover page can be part of the audio audit scope.
+        private Guid? GetCurrentScopeEntityId(IStatefulInterview interview)
+        {
+            if (this.NavigationState.CurrentScreenType == ScreenType.Cover)
+            {
+                var questionnaire = this.questionnaireRepository.GetQuestionnaire(
+                    interview.QuestionnaireIdentity, interview.Language);
+
+                if (questionnaire is { IsCoverPageSupported: true })
+                    return questionnaire.CoverPageSectionId;
+
+                return null;
+            }
+
+            return this.NavigationState.CurrentGroup?.Id;
         }
 
         // Fire-and-forget wrapper used during teardown so unobserved exceptions are logged.
