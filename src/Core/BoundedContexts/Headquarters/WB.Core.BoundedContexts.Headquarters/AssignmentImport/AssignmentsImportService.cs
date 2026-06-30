@@ -383,8 +383,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var targetArea = assignment.Select(_ => _.TargetArea).FirstOrDefault(_ => _ != null)?.Value;
             var audioAuditScopeNames = assignment.Select(_ => _.AudioAuditScope).FirstOrDefault(_ => _ != null)?.VariableNames;
             var audioAuditScope = audioAuditScopeNames == null
-                ? new List<Guid>()
-                : AudioAuditScopeResolver.Resolve(questionnaire, audioAuditScopeNames).EntityIds.ToList();
+                ? new List<string>()
+                : AudioAuditScopeResolver.Resolve(questionnaire, audioAuditScopeNames).VariableNames.ToList();
 
             return new AssignmentToImport
             {

@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Assignm
 
         public IList<string> ProtectedVariables { get; set; }
 
-        public Guid[] AudioAuditScope { get; set; } = Array.Empty<Guid>();
+        public string[] AudioAuditScope { get; set; } = Array.Empty<string>();
 
         public bool IsDeleted { get; set; }
         public string Comment { get; set; }

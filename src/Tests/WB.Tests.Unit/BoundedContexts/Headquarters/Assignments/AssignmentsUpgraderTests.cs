@@ -246,7 +246,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 publicKey: Id.g7,
                 quantity: 2,
                 questionnaireIdentity: migrateFrom);
-            assignmentToMigrate.AudioAuditScope = new List<Guid> { Id.gA };
+            assignmentToMigrate.AudioAuditScope = new List<string> { "household" };
 
             assignmentsStorage.Store(assignmentToMigrate, assignmentToMigrate.PublicKey);
 

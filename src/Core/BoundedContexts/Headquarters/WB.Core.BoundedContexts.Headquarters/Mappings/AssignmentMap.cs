@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             });
 
             this.Property(x => x.ProtectedVariables, m => m.Type<PostgresJson<List<string>>>());
-            this.Property(x => x.AudioAuditScope, m => m.Type<PostgresJson<List<System.Guid>>>());
+            this.Property(x => x.AudioAuditScope, m => m.Type<PostgresJson<List<string>>>());
 
             ManyToOne(x => x.Questionnaire, mto =>
             {

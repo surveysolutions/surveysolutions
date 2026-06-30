@@ -553,7 +553,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
         }
 
         [Test]
-        public void when_creating_assignment_with_valid_audio_audit_scope_then_should_pass_resolved_entity_ids_to_command()
+        public void when_creating_assignment_with_valid_audio_audit_scope_then_should_pass_resolved_variable_names_to_command()
         {
             var qid = QuestionnaireIdentity.Parse("f2250674-42e6-4756-b394-b86caa62225e$1");
             var sectionId = Id.gA;
@@ -578,7 +578,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
             });
 
             this.commandService.Verify(ass => ass.Execute(
-                It.Is<CreateAssignment>(x => x.AudioAuditScope.Length == 1 && x.AudioAuditScope[0] == sectionId), null), Times.Once);
+                It.Is<CreateAssignment>(x => x.AudioAuditScope.Length == 1 && x.AudioAuditScope[0] == "section1"), null), Times.Once);
             Assert.That(result.Result, Has.Property(nameof(StatusCodeResult.StatusCode)).EqualTo(StatusCodes.Status201Created));
         }
 

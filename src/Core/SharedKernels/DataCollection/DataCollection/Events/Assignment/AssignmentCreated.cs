@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Assignment
         public string Comment { get; }
         public string TargetArea { get; }
         public int? UpgradedFromId { get; }
-        public Guid[] AudioAuditScope { get; }
+        public string[] AudioAuditScope { get; }
 
         public AssignmentCreated(Guid userId, 
             int id,
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Assignment
             string comment,
             string targetArea,
             int? upgradedFromId,
-            Guid[] audioAuditScope = null) 
+            string[] audioAuditScope = null) 
             : base(userId, originDate)
         {
             Id = id;
@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Assignment
             Comment = comment;
             TargetArea = targetArea;
             UpgradedFromId = upgradedFromId;
-            AudioAuditScope = audioAuditScope ?? Array.Empty<Guid>();
+            AudioAuditScope = audioAuditScope ?? Array.Empty<string>();
         }
     }
 }

@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             state.Answers = @event.Payload.Answers;
             state.ProtectedVariables = @event.Payload.ProtectedVariables.ToList();
-            state.AudioAuditScope = @event.Payload.AudioAuditScope?.ToList() ?? new List<Guid>();
+            state.AudioAuditScope = @event.Payload.AudioAuditScope?.ToList() ?? new List<string>();
             
             var questionnaire = questionnaireStorage.GetQuestionnaireOrThrow(state.QuestionnaireId, null);
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToImmutableHashSet();

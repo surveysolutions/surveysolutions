@@ -264,15 +264,27 @@ namespace WB.UI.Interviewer.ViewModel
             if (scope == null || scope.Length == 0)
                 return RecordingTarget.None;
 
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(
+                interview.QuestionnaireIdentity, interview.Language);
+            if (questionnaire == null)
+                return RecordingTarget.None;
+
             // The currently navigated scope entity: a regular group/section/roster, or the cover page
             // section when the cover screen is shown (CoverInterviewViewModel). The cover screen has no
             // CurrentGroup, so resolve its section id from the questionnaire to honour a scope that
             // includes the cover page.
-            var currentScopeEntityId = this.GetCurrentScopeEntityId(interview);
+            var currentScopeEntityId = this.GetCurrentScopeEntityId(questionnaire);
+            if (currentScopeEntityId == null)
+                return RecordingTarget.None;
+
+            // The audio audit scope is stored as section/group/roster variable names so it survives
+            // questionnaire upgrades; resolve the current entity's variable name to test membership.
+            var currentVariableName = questionnaire.GetRosterVariableName(currentScopeEntityId.Value);
             // Audio Audit is disabled (the whole-interview flag is handled above) and the scope is
             // non-empty: record only while the currently navigated entity is itself listed in the
             // scope. Scope selection is explicit and is not inherited.
-            if (currentScopeEntityId == null || Array.IndexOf(scope, currentScopeEntityId.Value) < 0)
+            if (currentVariableName == null
+                || Array.FindIndex(scope, name => string.Equals(name, currentVariableName, StringComparison.OrdinalIgnoreCase)) < 0)
                 return RecordingTarget.None;
 
             return RecordingTarget.Group(currentScopeEntityId.Value);
@@ -281,13 +293,10 @@ namespace WB.UI.Interviewer.ViewModel
         // Resolves the id of the entity the interviewer is currently on for scope-membership purposes.
         // On the cover screen there is no CurrentGroup, so the cover page section id is used so that the
         // cover page can be part of the audio audit scope.
-        private Guid? GetCurrentScopeEntityId(IStatefulInterview interview)
+        private Guid? GetCurrentScopeEntityId(IQuestionnaire questionnaire)
         {
             if (this.NavigationState.CurrentScreenType == ScreenType.Cover)
             {
-                var questionnaire = this.questionnaireRepository.GetQuestionnaire(
-                    interview.QuestionnaireIdentity, interview.Language);
-
                 if (questionnaire is { IsCoverPageSupported: true })
                     return questionnaire.CoverPageSectionId;
 

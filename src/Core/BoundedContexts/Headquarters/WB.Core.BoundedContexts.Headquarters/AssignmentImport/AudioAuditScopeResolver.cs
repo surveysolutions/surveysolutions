@@ -7,7 +7,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
     public class AudioAuditScopeResolutionResult
     {
-        public Guid[] EntityIds { get; set; } = Array.Empty<Guid>();
+        /// <summary>Canonical variable names that resolved to a section, group or non-flat roster.</summary>
+        public string[] VariableNames { get; set; } = Array.Empty<string>();
 
         /// <summary>Variable names that could not be resolved to a section, group or roster.</summary>
         public string[] InvalidVariableNames { get; set; } = Array.Empty<string>();
@@ -16,15 +17,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
     }
 
     /// <summary>
-    /// Resolves selective Audio Audit scope variable names (from the <c>_aascope</c> import column or
-    /// the assignment API) into questionnaire entity ids. Only sections, groups and non-flat rosters are
-    /// allowed; questions, flat rosters, unknown and ambiguous names are reported as invalid.
+    /// Validates selective Audio Audit scope variable names (from the <c>_aascope</c> import column or
+    /// the assignment API) against the questionnaire. Only sections, groups and non-flat rosters are
+    /// allowed; questions, flat rosters, unknown and ambiguous names are reported as invalid. Valid names
+    /// are returned in their canonical questionnaire casing so the scope can be stored as variable names.
     /// </summary>
     public static class AudioAuditScopeResolver
     {
         public static AudioAuditScopeResolutionResult Resolve(IQuestionnaire questionnaire, IEnumerable<string> variableNames)
         {
-            var entityIds = new List<Guid>();
+            var resolvedNames = new List<string>();
             var invalid = new List<string>();
 
             if (variableNames == null)
@@ -56,8 +58,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                         continue;
                     }
 
-                    if (!entityIds.Contains(entityId))
-                        entityIds.Add(entityId);
+                    // Store the canonical variable name so the scope survives questionnaire upgrades.
+                    var canonicalName = questionnaire.GetRosterVariableName(entityId) ?? name;
+                    if (!resolvedNames.Contains(canonicalName, StringComparer.OrdinalIgnoreCase))
+                        resolvedNames.Add(canonicalName);
                 }
                 else
                 {
@@ -68,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             return new AudioAuditScopeResolutionResult
             {
-                EntityIds = entityIds.ToArray(),
+                VariableNames = resolvedNames.ToArray(),
                 InvalidVariableNames = invalid.ToArray()
             };
         }

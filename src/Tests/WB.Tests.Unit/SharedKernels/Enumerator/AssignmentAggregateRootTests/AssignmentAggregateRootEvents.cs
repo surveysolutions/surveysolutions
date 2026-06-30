@@ -89,7 +89,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
         [Test]
         public void when_create_assignment_with_audio_audit_scope_should_store_and_publish_scope()
         {
-            var scope = new[] { Guid.NewGuid(), Guid.NewGuid() };
+            var scope = new[] { "household", "members_roster" };
             var command = Create.Command.CreateAssignment(audioAuditScope: scope);
             var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
 

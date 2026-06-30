@@ -911,9 +911,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.properties.IsAudioRecordingEnabled;
         }
 
-        public Guid[] GetAudioAuditScope()
+        public string[] GetAudioAuditScope()
         {
-            return this.properties.AudioAuditScope ?? Array.Empty<Guid>();
+            return this.properties.AudioAuditScope ?? Array.Empty<string>();
         }
 
         public Guid? GetAttachmentForEntity(Identity entityId)

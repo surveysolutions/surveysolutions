@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             responsibleSupervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA00");
             questionnaireVersion = 18;
-            audioAuditScope = new[] { Guid.NewGuid(), Guid.NewGuid() };
+            audioAuditScope = new[] { "household", "members_roster" };
 
             var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.Version == questionnaireVersion);
@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private long questionnaireVersion;
         private Guid userId;
         private Guid responsibleSupervisorId;
-        private Guid[] audioAuditScope;
+        private string[] audioAuditScope;
         private Interview interview;
         private CreateInterview command;
     }

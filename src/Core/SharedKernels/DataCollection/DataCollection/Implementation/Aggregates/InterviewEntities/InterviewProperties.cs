@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsValid { get; set; }
 
         public bool? IsAudioRecordingEnabled { get; set; }
-        public Guid[] AudioAuditScope { get; set; } = Array.Empty<Guid>();
+        public string[] AudioAuditScope { get; set; } = Array.Empty<string>();
         public bool WasCreated { get; set; }
 
         public DateTimeOffset? LastPaused { get; set; }

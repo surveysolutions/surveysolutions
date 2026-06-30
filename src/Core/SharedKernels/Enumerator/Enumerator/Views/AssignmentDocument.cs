@@ -42,18 +42,18 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public List<AssignmentProtectedVariable> ProtectedVariables { get; set; } = new List<AssignmentProtectedVariable>();
 
         /// <summary>
-        /// Selective Audio Audit scope (questionnaire section/group/roster ids) serialized as a
-        /// comma-separated list of guids for SQLite persistence. Use <see cref="AudioAuditScope"/> to access the values.
+        /// Selective Audio Audit scope (questionnaire section/group/roster variable names) serialized as a
+        /// comma-separated list for SQLite persistence. Use <see cref="AudioAuditScope"/> to access the values.
         /// </summary>
         public string AudioAuditScopeSerialized { get; set; }
 
         [Ignore]
-        public List<Guid> AudioAuditScope
+        public List<string> AudioAuditScope
         {
             get => string.IsNullOrEmpty(this.AudioAuditScopeSerialized)
-                ? new List<Guid>()
+                ? new List<string>()
                 : this.AudioAuditScopeSerialized.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(Guid.Parse).ToList();
+                    .ToList();
             set => this.AudioAuditScopeSerialized = value == null || value.Count == 0
                 ? null
                 : string.Join(",", value);

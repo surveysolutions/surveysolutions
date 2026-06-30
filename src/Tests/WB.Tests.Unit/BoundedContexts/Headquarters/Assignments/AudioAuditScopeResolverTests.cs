@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void should_resolve_section_group_and_roster_variable_names_to_entity_ids()
+        public void should_resolve_section_group_and_roster_variable_names()
         {
             var questionnaire = CreateQuestionnaire();
             var sectionVariable = questionnaire.GetRosterVariableName(SectionId);
@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 new[] { sectionVariable, "household", "members_roster" });
 
             result.HasErrors.Should().BeFalse();
-            result.EntityIds.Should().BeEquivalentTo(new[] { SectionId, GroupId, RosterId });
+            result.VariableNames.Should().BeEquivalentTo(new[] { sectionVariable, "household", "members_roster" });
         }
 
         [Test]
@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             result.HasErrors.Should().BeTrue();
             result.InvalidVariableNames.Should().BeEquivalentTo(new[] { "does_not_exist" });
-            result.EntityIds.Should().BeEquivalentTo(new[] { GroupId });
+            result.VariableNames.Should().BeEquivalentTo(new[] { "household" });
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             result.HasErrors.Should().BeTrue();
             result.InvalidVariableNames.Should().BeEquivalentTo(new[] { "first_name" });
-            result.EntityIds.Should().BeEmpty();
+            result.VariableNames.Should().BeEmpty();
         }
 
         [Test]
@@ -87,7 +87,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             result.HasErrors.Should().BeTrue();
             result.InvalidVariableNames.Should().BeEquivalentTo(new[] { "flat_roster" });
-            result.EntityIds.Should().BeEquivalentTo(new[] { GroupId });
+            result.VariableNames.Should().BeEquivalentTo(new[] { "household" });
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var result = AudioAuditScopeResolver.Resolve(questionnaire, Array.Empty<string>());
 
             result.HasErrors.Should().BeFalse();
-            result.EntityIds.Should().BeEmpty();
+            result.VariableNames.Should().BeEmpty();
         }
 
         [Test]
@@ -110,7 +110,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 new[] { "household", " ", "household", null });
 
             result.HasErrors.Should().BeFalse();
-            result.EntityIds.Should().BeEquivalentTo(new[] { GroupId });
+            result.VariableNames.Should().BeEquivalentTo(new[] { "household" });
         }
     }
 }

@@ -208,7 +208,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool? GetIsAudioRecordingEnabled();
 
-        Guid[] GetAudioAuditScope();
+        string[] GetAudioAuditScope();
 
         Guid? GetAttachmentForEntity(Identity entityId);
 

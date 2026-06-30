@@ -266,7 +266,7 @@ namespace WB.Tests.Abc.TestFactories
             int? assignmentId = null,
             List<string> protectedAnswers = null,
             InterviewMode interviewMode = InterviewMode.CAPI,
-            Guid[] audioAuditScope = null)
+            string[] audioAuditScope = null)
         {
             return new CreateInterview(
                 interviewId, 
@@ -289,7 +289,7 @@ namespace WB.Tests.Abc.TestFactories
             List<InterviewAnswer> answersToFeaturedQuestions = null,
             Guid? userId = null,
             List<string> protectedAnswers = null,
-            Guid[] audioAuditScope = null)
+            string[] audioAuditScope = null)
         {
             return this.CreateInterview(
                 Guid.NewGuid(),
@@ -316,7 +316,7 @@ namespace WB.Tests.Abc.TestFactories
             List<InterviewAnswer> answers = null,
             List<string> protectedAnswers = null,
             InterviewMode interviewMode = InterviewMode.CAPI,
-            Guid[] audioAuditScope = null
+            string[] audioAuditScope = null
             )
         {
             return this.CreateInterview(interviewId ?? Guid.NewGuid(),
@@ -389,7 +389,7 @@ namespace WB.Tests.Abc.TestFactories
             List<string> protectedVariables = null,
             string comment = null,
             string targetArea = null,
-            Guid[] audioAuditScope = null)
+            string[] audioAuditScope = null)
         {
             return new CreateAssignment(
                 assignmentId ?? Guid.NewGuid(), 

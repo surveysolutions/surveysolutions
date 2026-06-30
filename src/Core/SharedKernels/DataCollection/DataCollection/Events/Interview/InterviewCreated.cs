@@ -12,11 +12,11 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public bool UsesExpressionStorage { get; }
         public DateTime? CreationTime => OriginDate?.UtcDateTime;
         public bool? IsAudioRecordingEnabled { get; set; }
-        public Guid[] AudioAuditScope { get; set; }
+        public string[] AudioAuditScope { get; set; }
 
         public InterviewCreated(Guid userId, Guid questionnaireId, long questionnaireVersion, 
             int? assignmentId, bool? isAudioRecordingEnabled, DateTimeOffset originDate, 
-            bool usesExpressionStorage = false, Guid[] audioAuditScope = null)
+            bool usesExpressionStorage = false, string[] audioAuditScope = null)
             : base(userId, originDate)
         {
             this.QuestionnaireId = questionnaireId;
@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             this.AssignmentId = assignmentId;
             this.IsAudioRecordingEnabled = isAudioRecordingEnabled;
             this.UsesExpressionStorage = usesExpressionStorage;
-            this.AudioAuditScope = audioAuditScope ?? Array.Empty<Guid>();
+            this.AudioAuditScope = audioAuditScope ?? Array.Empty<string>();
         }
     }
 }

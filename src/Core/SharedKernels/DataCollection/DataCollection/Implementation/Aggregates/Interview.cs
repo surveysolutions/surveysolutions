@@ -153,7 +153,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId, @event.QuestionnaireVersion);
             this.properties.AssignmentId = @event.AssignmentId;
             this.properties.IsAudioRecordingEnabled = @event.IsAudioRecordingEnabled;
-            this.properties.AudioAuditScope = @event.AudioAuditScope ?? Array.Empty<Guid>();
+            this.properties.AudioAuditScope = @event.AudioAuditScope ?? Array.Empty<string>();
             this.properties.WasCreated = true;
         }
 

@@ -30,8 +30,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments
             descriptor.Field(x => x.Status).Type<NonNullType<EnumType<AssignmentStatus>>>();
             descriptor.Field(x => x.AudioRecording).Type<NonNullType<BooleanType>>();
             descriptor.Field(x => x.AudioAuditScope)
-                .Description("Identifiers of sections, groups or rosters for which audio is recorded (selective audio audit). Empty when audio audit follows the audioRecording flag.")
-                .Type<ListType<NonNullType<UuidType>>>();
+                .Description("Variable names of sections, groups or rosters for which audio is recorded (selective audio audit). Empty when audio audit follows the audioRecording flag.")
+                .Type<ListType<NonNullType<StringType>>>();
 
             descriptor.Field("calendarEvent")
                 .Description("Active Calendar Event associated with assignment")

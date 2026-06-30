@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.IdentifyingData = new List<IdentifyingAnswer>();
             this.InterviewSummaries = new HashSet<InterviewSummary>();
             this.ProtectedVariables = new List<string>();
-            this.AudioAuditScope = new List<Guid>();
+            this.AudioAuditScope = new List<string>();
             this.GpsAnswers = new HashSet<AssignmentGps>();
         }
 
@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual List<string> ProtectedVariables { get; set; }
 
-        public virtual List<Guid> AudioAuditScope { get; set; }
+        public virtual List<string> AudioAuditScope { get; set; }
 
         public virtual QuestionnaireBrowseItem Questionnaire { get; protected set; }
 

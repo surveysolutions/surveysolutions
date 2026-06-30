@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             int? assignmentId,
             bool? isAudioRecordingEnabled,
             InterviewMode mode,
-            Guid[] audioAuditScope = null)
+            string[] audioAuditScope = null)
             : base(interviewId, userId)
         {
             this.Id = interviewId;
@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             this.AssignmentId = assignmentId;
             this.IsAudioRecordingEnabled = isAudioRecordingEnabled;
             this.Mode = mode;
-            this.AudioAuditScope = audioAuditScope ?? Array.Empty<Guid>();
+            this.AudioAuditScope = audioAuditScope ?? Array.Empty<string>();
         }
 
         public Guid Id { get; }
@@ -48,6 +48,6 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 
         public bool? IsAudioRecordingEnabled { get; }
         public InterviewMode Mode { get; }
-        public Guid[] AudioAuditScope { get; }
+        public string[] AudioAuditScope { get; }
     }
 }
