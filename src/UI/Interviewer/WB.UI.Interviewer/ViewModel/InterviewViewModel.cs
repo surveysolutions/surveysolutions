@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -35,41 +36,9 @@ namespace WB.UI.Interviewer.ViewModel
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IJsonAllTypesSerializer serializer;
         private readonly IMvxMainThreadAsyncDispatcher asyncDispatcher;
-        private bool isAuditStarting;
-        private bool isViewVisible;
-        private RecordingTarget currentRecordingTarget = RecordingTarget.None;
-        private readonly SemaphoreSlim audioRecordingLock = new SemaphoreSlim(1, 1);
-        private readonly CancellationTokenSource audioRecordingCancellation = new CancellationTokenSource();
+        private readonly IAudioAuditRecordingExecutor audioRecordingExecutor;
         private readonly ILogger logger;
 
-        // Describes what the tablet should currently be recording. Distinguishes "nothing",
-        // "whole interview" (audio audit flag) and a specific scoped group without overloading any
-        // group id value, so a group whose id happens to be Guid.Empty cannot be confused with
-        // whole-interview recording.
-        private readonly struct RecordingTarget : IEquatable<RecordingTarget>
-        {
-            public static readonly RecordingTarget None = new RecordingTarget(false, null);
-            public static readonly RecordingTarget WholeInterview = new RecordingTarget(true, null);
-            public static RecordingTarget Group(Guid groupId) => new RecordingTarget(true, groupId);
-
-            private RecordingTarget(bool isRecording, Guid? groupId)
-            {
-                this.IsRecording = isRecording;
-                this.GroupId = groupId;
-            }
-
-            public bool IsRecording { get; }
-            public Guid? GroupId { get; }
-
-            public bool Equals(RecordingTarget other) =>
-                this.IsRecording == other.IsRecording && this.GroupId == other.GroupId;
-
-            public override bool Equals(object obj) => obj is RecordingTarget other && this.Equals(other);
-
-            public override int GetHashCode() => HashCode.Combine(this.IsRecording, this.GroupId);
-        }
-
-        
         public InterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
@@ -92,7 +61,8 @@ namespace WB.UI.Interviewer.ViewModel
             ILogger logger,
             IPlainStorage<InterviewView> interviewViewRepository,
             IJsonAllTypesSerializer serializer,
-            IMvxMainThreadAsyncDispatcher asyncDispatcher)
+            IMvxMainThreadAsyncDispatcher asyncDispatcher,
+            IAudioAuditRecordingExecutor audioRecordingExecutor)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState,
                 principal, viewModelNavigationService,
@@ -105,6 +75,7 @@ namespace WB.UI.Interviewer.ViewModel
             this.interviewViewRepository = interviewViewRepository;
             this.serializer = serializer;
             this.asyncDispatcher = asyncDispatcher;
+            this.audioRecordingExecutor = audioRecordingExecutor;
 
             this.NavigationState.ScreenChanged += this.OnScreenChanged;
         }
@@ -177,9 +148,9 @@ namespace WB.UI.Interviewer.ViewModel
                     await commandService.ExecuteAsync(new ResumeInterviewCommand(interviewId,
                         Principal.CurrentUserIdentity.UserId, AgentDeviceType.Tablet));
 
-                    this.isViewVisible = true;
+                    this.audioRecordingExecutor.IsViewVisible = true;
 
-                    await this.EvaluateAudioRecordingAsync(interviewId, this.audioRecordingCancellation.Token);
+                    await this.EvaluateAudioRecordingAsync(interviewId, this.audioRecordingExecutor.CancellationToken);
 
                     auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(),
                         assignmentId));
@@ -201,7 +172,7 @@ namespace WB.UI.Interviewer.ViewModel
             var started = false;
             await asyncDispatcher.ExecuteOnMainThreadAsync(async () =>
             {
-                if (!this.isViewVisible)
+                if (!this.audioRecordingExecutor.IsViewVisible)
                     return;
                 try
                 {
@@ -239,11 +210,11 @@ namespace WB.UI.Interviewer.ViewModel
 
         private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
-            if (!this.isViewVisible || this.InterviewId == null)
+            if (!this.audioRecordingExecutor.IsViewVisible || this.InterviewId == null)
                 return;
 
             var interviewId = Guid.Parse(this.InterviewId);
-            var cancellationToken = this.audioRecordingCancellation.Token;
+            var cancellationToken = this.audioRecordingExecutor.CancellationToken;
             Task.Run(async () =>
             {
                 try
@@ -263,111 +234,23 @@ namespace WB.UI.Interviewer.ViewModel
         }
 
         /// <summary>
-        /// Single entry point that converges the tablet audio recording to the desired state:
-        /// records the whole interview when the audio audit flag is on, otherwise records only the
-        /// groups included in the audio audit scope, otherwise records nothing. On a group switch the
-        /// current recording is stopped and rerun for the new applicable group, reusing the same
-        /// start/stop paths as the whole-interview audio audit.
-        /// The recording lock is only held while reading/mutating the recording state and while
-        /// stopping; it is deliberately released around <see cref="StartAudioRecordingWithPermissionHandlingAsync"/>,
-        /// which dispatches to the main thread (and may navigate / show toasts on permission failure),
-        /// so teardown stop and subsequent evaluations are never blocked behind that UI work. Concurrent
-        /// starts are prevented by <see cref="isAuditStarting"/>, and the loop re-evaluates afterwards to
-        /// converge to the latest desired target if navigation changed it while the start was running.
+        /// Converges the tablet audio recording to the desired state via the dedicated
+        /// <see cref="IAudioAuditRecordingExecutor"/>: records the whole interview when the audio audit
+        /// flag is on, otherwise records only the groups included in the audio audit scope, otherwise
+        /// records nothing. The view model only supplies the policy — which target is desired
+        /// (<see cref="GetTargetRecording"/>) and how to start a recording with permission handling
+        /// (<see cref="StartAudioRecordingWithPermissionHandlingAsync"/>) — while the executor owns the
+        /// recording lock, in-flight start guard and state.
         /// </summary>
-        private async Task EvaluateAudioRecordingAsync(Guid interviewId, CancellationToken cancellationToken)
-        {
-            while (true)
-            {
-                RecordingTarget target;
-
-                await this.audioRecordingLock.WaitAsync(cancellationToken).ConfigureAwait(false);
-                try
-                {
-                    if (cancellationToken.IsCancellationRequested)
-                        return;
-
-                    // A start initiated by another evaluation is in flight (the lock is released while
-                    // it dispatches to the main thread). That evaluation re-evaluates once it completes,
-                    // so it will converge to the latest desired target — don't race a competing start here.
-                    if (this.isAuditStarting)
-                        return;
-
-                    target = this.GetTargetRecording();
-
-                    // Already in the desired state.
-                    if (this.currentRecordingTarget.Equals(target))
-                        return;
-
-                    // Stop the current recording when the target changed (group switch or leaving scope),
-                    // so each applicable group is captured as its own audio file, like the general audio audit.
-                    if (this.currentRecordingTarget.IsRecording)
-                    {
-                        this.currentRecordingTarget = RecordingTarget.None;
-                        audioAuditService.StopAudioRecording(interviewId);
-                    }
-
-                    if (!target.IsRecording)
-                        return;
-
-                    // Reserve the start so concurrent evaluations and the teardown stop don't race the
-                    // single underlying recorder while we dispatch to the main thread without the lock.
-                    this.isAuditStarting = true;
-                }
-                finally
-                {
-                    this.audioRecordingLock.Release();
-                }
-
-                // Start outside the lock: the main-thread dispatch (which can navigate / show toasts on
-                // permission failure) must not block stop/evaluate calls waiting on the recording lock.
-                var started = await this.StartAudioRecordingWithPermissionHandlingAsync(interviewId)
-                    .ConfigureAwait(false);
-
-                // Reacquire without the cancellation token on purpose: this commit/cleanup must run
-                // even if the view model is being disposed, so a recording started just above is always
-                // either tracked or stopped (never leaked).
-                await this.audioRecordingLock.WaitAsync().ConfigureAwait(false);
-                try
-                {
-                    this.isAuditStarting = false;
-
-                    if (!started)
-                    {
-                        // The start failed (e.g. missing permission, which already navigated away). Leave
-                        // the target as None so a later evaluation can retry, and stop looping so we don't
-                        // spin retrying a failing start while the view is still visible.
-                        return;
-                    }
-
-                    if (this.isViewVisible)
-                    {
-                        this.currentRecordingTarget = target;
-                    }
-                    else
-                    {
-                        // The view disappeared while we were starting; stop the recording we just started
-                        // so we don't keep recording off-screen.
-                        audioAuditService.StopAudioRecording(interviewId);
-                    }
-                }
-                finally
-                {
-                    this.audioRecordingLock.Release();
-                }
-
-                // Loop to converge: navigation may have changed the desired target while the start was
-                // running (other evaluations bailed out because isAuditStarting was set).
-            }
-        }
+        private Task EvaluateAudioRecordingAsync(Guid interviewId, CancellationToken cancellationToken) =>
+            this.audioRecordingExecutor.EvaluateAsync(interviewId, this.GetTargetRecording,
+                this.StartAudioRecordingWithPermissionHandlingAsync, cancellationToken);
 
         // Decides what should currently be recorded: the audio audit flag takes precedence (whole
-        // interview), then the audio audit scope (applicable group), otherwise nothing.
+        // interview), then the audio audit scope (applicable group), otherwise nothing. Visibility is
+        // handled by the executor before this is called.
         private RecordingTarget GetTargetRecording()
         {
-            if (!this.isViewVisible)
-                return RecordingTarget.None;
-
             if (IsAudioRecordingEnabled == true)
                 return RecordingTarget.WholeInterview;
 
@@ -389,40 +272,12 @@ namespace WB.UI.Interviewer.ViewModel
             return RecordingTarget.Group(currentGroup.Id);
         }
 
-        // Stops any active recording under the recording lock so the state mutation is atomic with
-        // EvaluateAudioRecordingAsync. Deliberately does not read interviewRepository or any other
-        // per-interview state, so it is safe to run during teardown.
-        // If the view has become visible again before the lock is acquired (user navigated back
-        // quickly), the stop is stale and must not cancel the recording that EvaluateAudioRecordingAsync
-        // may have already started for the returning view.
-        private async Task StopAudioRecordingAsync(Guid interviewId)
-        {
-            await this.audioRecordingLock.WaitAsync().ConfigureAwait(false);
-            try
-            {
-                // The user navigated back before this stop could run; EvaluateAudioRecordingAsync
-                // will manage the correct recording state — do not interfere.
-                if (this.isViewVisible)
-                    return;
-
-                if (this.currentRecordingTarget.IsRecording)
-                {
-                    this.currentRecordingTarget = RecordingTarget.None;
-                    audioAuditService.StopAudioRecording(interviewId);
-                }
-            }
-            finally
-            {
-                this.audioRecordingLock.Release();
-            }
-        }
-
         // Fire-and-forget wrapper used during teardown so unobserved exceptions are logged.
         private async Task StopAudioRecordingSafelyAsync(Guid interviewId)
         {
             try
             {
-                await this.StopAudioRecordingAsync(interviewId).ConfigureAwait(false);
+                await this.audioRecordingExecutor.StopAsync(interviewId).ConfigureAwait(false);
             }
             catch (Exception exc)
             {
@@ -432,7 +287,7 @@ namespace WB.UI.Interviewer.ViewModel
         
         public override void ViewDisappearing()
         {
-            this.isViewVisible = false;
+            this.audioRecordingExecutor.IsViewVisible = false;
 
             if (InterviewId != null && Principal.IsAuthenticated)
             {
@@ -446,7 +301,7 @@ namespace WB.UI.Interviewer.ViewModel
 
                     auditLogService.Write(new CloseInterviewAuditLogEntity(interviewId, interviewKey?.ToString()));
 
-                    // isViewVisible is already false. Stop any active recording through the same
+                    // IsViewVisible is already false. Stop any active recording through the executor's
                     // recording lock so the state mutation stays atomic with EvaluateAudioRecordingAsync.
                     // Fire-and-forget: awaiting the lock yields back to the UI thread instead of blocking it,
                     // so it cannot deadlock against an in-flight start, and teardown still completes after
@@ -471,19 +326,15 @@ namespace WB.UI.Interviewer.ViewModel
             base.ViewDisappearing();
         }
 
-public override void Dispose()
+        public override void Dispose()
+        {
+            this.NavigationState.ScreenChanged -= this.OnScreenChanged;
 
-{
+            this.audioRecordingExecutor.Cancel();
+            this.audioRecordingExecutor.Dispose();
 
-    this.NavigationState.ScreenChanged -= this.OnScreenChanged;
-
-    this.audioRecordingCancellation.Cancel();
-
-    this.audioRecordingCancellation.Dispose();
-
-    base.Dispose();
-
-}
+            base.Dispose();
+        }
 
     }
 }
