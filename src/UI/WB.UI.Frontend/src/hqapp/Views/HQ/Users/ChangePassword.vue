@@ -1,33 +1,50 @@
 <template>
-    <ProfileLayout ref="profile" :role="userInfo.role" :isOwnProfile="userInfo.isOwnProfile"
-        :forceChangePassword="userInfo.forceChangePassword" :canChangePassword="userInfo.canChangePassword"
-        :userName="userInfo.userName" :userId="userInfo.userId" :currentTab="currentTab"
-        :successMessage="successMessage" :canGenerateToken="userInfo.canGetApiToken"
+    <ProfileLayout ref="profile"
+        :role="userInfo.role"
+        :isOwnProfile="userInfo.isOwnProfile"
+        :forceChangePassword="userInfo.forceChangePassword"
+        :canChangePassword="userInfo.canChangePassword"
+        :userName="userInfo.userName"
+        :userId="userInfo.userId"
+        :currentTab="currentTab"
+        :successMessage="successMessage"
+        :canGenerateToken="userInfo.canGetApiToken"
         :isRestricted="userInfo.isRestricted">
         <div>
-            <div v-if="userInfo.forceChangePassword && userInfo.isOwnProfile" class="alerts form-group"
+            <div v-if="userInfo.forceChangePassword && userInfo.isOwnProfile"
+                class="alerts form-group"
                 style="margin-left:-10px">
                 <div class="alert">
                     {{ $t('FieldsAndValidations.PasswordChangeRequired') }}
                 </div>
                 <br />
             </div>
-            <form-group v-if="isOwnProfile" :label="$t('FieldsAndValidations.OldPasswordFieldName')"
+            <form-group v-if="isOwnProfile"
+                :label="$t('FieldsAndValidations.OldPasswordFieldName')"
                 :error="modelState['OldPassword']">
-                <TextInput type="password" v-model.trim="oldPassword"
-                    :haserror="modelState['OldPassword'] !== undefined" id="OldPassword" />
+                <TextInput type="password"
+                    v-model.trim="oldPassword"
+                    :haserror="modelState['OldPassword'] !== undefined"
+                    id="OldPassword" />
             </form-group>
-            <form-group :label="$t('FieldsAndValidations.NewPasswordFieldName')" :error="modelState['Password']">
-                <TextInput type="password" v-model.trim="password" :haserror="modelState['Password'] !== undefined"
+            <form-group :label="$t('FieldsAndValidations.NewPasswordFieldName')"
+                :error="modelState['Password']">
+                <TextInput type="password"
+                    v-model.trim="password"
+                    :haserror="modelState['Password'] !== undefined"
                     id="Password" />
             </form-group>
             <form-group :label="$t('FieldsAndValidations.ConfirmPasswordFieldName')"
                 :error="modelState['ConfirmPassword']">
-                <TextInput type="password" v-model.trim="confirmPassword"
-                    :haserror="modelState['ConfirmPassword'] !== undefined" id="ConfirmPassword" />
+                <TextInput type="password"
+                    v-model.trim="confirmPassword"
+                    :haserror="modelState['ConfirmPassword'] !== undefined"
+                    id="ConfirmPassword" />
             </form-group>
             <div class="block-filter">
-                <input id="ShowPassword" type="checkbox" style="margin-right:5px"
+                <input id="ShowPassword"
+                    type="checkbox"
+                    style="margin-right:5px"
                     onclick="if(window.CONFIG.model.userInfo.isOwnProfile){var oldPass = document.getElementById('OldPassword');oldPass.type = (oldPass.type === 'text' ? 'password' : 'text');} var pass = document.getElementById('Password');pass.type = (pass.type === 'text' ? 'password' : 'text');var confirm = document.getElementById('ConfirmPassword');confirm.type = (confirm.type === 'text' ? 'password' : 'text');">
                 <label for="ShowPassword">
                     <span></span>{{ $t('Pages.ShowPassword') }}
@@ -37,11 +54,16 @@
 
         <div>
             <div class="block-filter">
-                <button type="submit" class="btn btn-success" style="margin-right:5px" id="btnUpdatePassword"
+                <button type="submit"
+                    class="btn btn-success"
+                    style="margin-right:5px"
+                    id="btnUpdatePassword"
                     v-bind:disabled="userInfo.isObserving || (userInfo.isRestricted && !userInfo.forceChangePassword)"
                     @click="updatePassword">{{
                         $t('Pages.Update') }}</button>
-                <a class="btn btn-default" v-if="!userInfo.forceChangePassword" v-bind:href="referrerUrl"
+                <a class="btn btn-default"
+                    v-if="!userInfo.forceChangePassword"
+                    v-bind:href="referrerUrl"
                     id="lnkCancelUpdatePassword">
                     {{ $t('Common.Cancel') }}
                 </a>
@@ -52,7 +74,7 @@
 
 <script>
 //import Vue from 'vue'
-import { each } from 'lodash'
+import { each } from 'lodash-es'
 
 export default {
     data() {
