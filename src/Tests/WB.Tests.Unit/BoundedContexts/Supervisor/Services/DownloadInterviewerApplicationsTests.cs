@@ -203,7 +203,15 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
 
             // act
             await step.ExecuteAsync();
-            await Task.Delay(100); // allow Progress<T> callbacks to be dispatched
+            // Wait for Progress<T> callbacks to drain; poll until count stabilises (up to 5 s)
+            int lastCount1 = -1;
+            var deadline1 = DateTime.UtcNow.AddSeconds(5);
+            while (DateTime.UtcNow < deadline1)
+            {
+                await Task.Delay(20);
+                if (progressReports.Count == lastCount1) break;
+                lastCount1 = progressReports.Count;
+            }
 
             // assert: 100 raw events fired but only ≤101 pass the 1% bucket filter (buckets 0-100 = 101 max)
             var appDownloadReports = progressReports.Count(p => p.Stage == SyncStage.DownloadApplication);
@@ -253,7 +261,15 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
 
             // act
             await step.ExecuteAsync();
-            await Task.Delay(100); // allow Progress<T> callbacks to be dispatched
+            // Wait for Progress<T> callbacks to drain; poll until count stabilises (up to 5 s)
+            int lastCount2 = -1;
+            var deadline2 = DateTime.UtcNow.AddSeconds(5);
+            while (DateTime.UtcNow < deadline2)
+            {
+                await Task.Delay(20);
+                if (progressReports.Count == lastCount2) break;
+                lastCount2 = progressReports.Count;
+            }
 
             // 10 events at 256 KB → only crossings of 512 KB threshold pass → ≤5 reports
             var appDownloadReports = progressReports.Count(r => r.Stage == SyncStage.DownloadApplication);
