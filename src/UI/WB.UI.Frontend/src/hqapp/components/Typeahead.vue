@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { assign, chain, find, filter, escape, escapeRegExp } from 'lodash'
+import { assign, find, filter, escape, escapeRegExp } from 'lodash-es'
 
 
 export default {
@@ -210,22 +210,20 @@ export default {
         setOptions(values, wrap = true) {
             if (wrap == false) return values
 
-            return chain(values).filter(v => v != null).map(v => {
-                return {
-                    item: v,
-                    matches: null,
-                }
-            }).value()
+            return values.filter(v => v != null).map(v => ({
+                item: v,
+                matches: null,
+            }))
         },
 
         clear() {
             this.$emit('selected', null, this.controlId)
-            this.$emit('update:modelValue', null);
+            this.$emit('update:modelValue', null)
             this.searchTerm = ''
         },
         selectOption(value) {
             this.$emit('selected', value, this.controlId)
-            this.$emit('update:modelValue', value);
+            this.$emit('update:modelValue', value)
         },
         selectByKey(key) {
             const itemToSelect = find(this.options, o => o.item.key == key)

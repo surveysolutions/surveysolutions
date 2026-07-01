@@ -1,37 +1,32 @@
-import { ApolloClient } from '@apollo/client/core'
-import { ApolloLink } from '@apollo/client/core'
-import { createHttpLink } from '@apollo/client/core'
-import { onError } from '@apollo/client/link/error'
-import { InMemoryCache } from '@apollo/client/cache'
+import { GraphQLClient, gql } from 'graphql-request'
 import { validateFetchResponse } from '~/shared/serverValidator'
 
-const validatingFetch = async (uri, options) => {
-    const response = await fetch(uri, options)
-    validateFetchResponse(response)
-    return response
+export { gql }
+
+const client = new GraphQLClient(
+    new URL('/graphql', window.location.origin).toString(),
+    {
+        fetch: async (...args) => {
+            const response = await fetch(...args)
+            validateFetchResponse(response)
+            return response
+        },
+    }
+)
+
+export async function gqlRequest(document, variables) {
+    try {
+        return await client.request(document, variables)
+    } catch (error) {
+        if (error.response?.status === 401) {
+            location.reload()
+            return
+        }
+        const errors = error.response?.errors ?? []
+        if (errors.some(e => e.extensions?.code === 'AUTH_NOT_AUTHENTICATED')) {
+            location.reload()
+            return
+        }
+        throw error
+    }
 }
-
-const link = createHttpLink({
-    fetch: validatingFetch,
-    uri: '/graphql',
-})
-
-const logoutLink = onError(({ graphQLErrors, networkError }) => {
-
-    //not enough, sometimes errors are returned as graphQLErrors
-    if (networkError && networkError.statusCode === 401)
-        location.reload()
-
-    if (graphQLErrors)
-        graphQLErrors.forEach(({ extensions }) => {
-            if (extensions && extensions.code && extensions.code === 'AUTH_NOT_AUTHENTICATED')
-                location.reload()
-        })
-})
-
-const cache = new InMemoryCache()
-
-export default new ApolloClient({
-    link: ApolloLink.from([logoutLink, link]),
-    cache,
-})

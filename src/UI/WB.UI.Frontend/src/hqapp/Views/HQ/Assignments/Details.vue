@@ -6,7 +6,7 @@
                     <div class="panel-body clearfix">
                         <div class="about-questionnaire clearfix">
                             <div class="about-questionnaire-details clearfix">
-                                <ul class="main-info-column list-unstyled pull-left">
+                                <ul class="main-info-column list-unstyled">
                                     <li id="detailsInfo_interviewKeyListItem">
                                         {{ $t('Assignments.AssignmentId') }}:
                                         {{ model.id }}
@@ -16,7 +16,7 @@
                                         {{ model.questionnaire.title }}
                                     </li>
                                 </ul>
-                                <ul class="list-unstyled pull-left table-info">
+                                <ul class="list-unstyled table-info">
                                     <li id="detailsInfo_createdAtListItem">
                                         <span class="data-label">{{
                                             this.$t(
@@ -25,12 +25,12 @@
                                         }}:</span>
                                         <span class="data">{{
                                             createdDate
-                                            }}</span>
+                                        }}</span>
                                     </li>
                                     <li id="detailsInfo_responsibleListItem">
                                         <span class="data-label">{{
                                             $t('Details.Responsible')
-                                            }}:
+                                        }}:
                                         </span>
                                         <span v-if="isInterviewerResponsible" class="data">
                                             <a v-bind:href="interviewerProfileUrl
@@ -41,19 +41,19 @@
                                         }}</span>
                                     </li>
                                 </ul>
-                                <ul class="list-unstyled pull-left table-info">
+                                <ul class="list-unstyled table-info">
                                     <li id="detailsInfo_lastUpdatedListItem">
                                         <span class="data-label">{{
                                             this.$t('Details.LastUpdated')
-                                            }}:</span>
+                                        }}:</span>
                                         <span class="data">{{
                                             updatedDate
-                                            }}</span>
+                                        }}</span>
                                     </li>
                                     <li>
                                         <span class="data-label">{{
                                             $t('Common.CalendarEvent')
-                                            }}:</span>
+                                        }}:</span>
                                         <span class="data" data-bs-toggle="tooltip" v-if="calendarEventComment != null"
                                             :title="calendarEventComment == null ||
                                                 calendarEventComment == ''
@@ -143,7 +143,9 @@
                                 <td class="text-nowrap">
                                     {{ $t('Assignments.Expected') }}
                                 </td>
-                                <td class="pointer editable" @click="quantityChange">{{ quantity }}</td>
+                                <td class="pointer editable" @click="quantityChange">
+                                    {{ quantity }}
+                                </td>
                             </tr>
                             <tr v-if="model.isHeadquarters">
                                 <td class="text-nowrap">
@@ -444,8 +446,8 @@ import { DateFormats, convertToLocal } from '~/shared/helpers'
 import { RoleNames } from '~/shared/constants'
 import * as toastr from 'toastr'
 
-import moment from 'moment-timezone'
-import { escape } from 'lodash'
+import moment from 'moment'
+import { escape } from 'lodash-es'
 
 import '@/assets/css/markup-web-interview.scss'
 import '@/assets/css/markup-interview-review.scss'
@@ -477,7 +479,7 @@ export default {
                     (data) => {
                         this.editedAudioRecordingEnabled = data.Enabled
                         this.$refs.editAudioEnabledModal.modal()
-                    },
+                    }
                 )
             }
         },
@@ -504,7 +506,7 @@ export default {
         upateAudioRecording() {
             this.$hq.Assignments.setAudioSettings(
                 this.model.id,
-                this.editedAudioRecordingEnabled,
+                this.editedAudioRecordingEnabled
             ).then(() => {
                 this.$refs.editAudioEnabledModal.hide()
                 window.location.reload(true)
@@ -577,19 +579,19 @@ export default {
         },
 
         validateQuantity(value) {
-            const regex = /^-?([0-9]+)$/i;
+            const regex = /^-?([0-9]+)$/i
 
             if (!regex.test(value)) {
-                return 'This field must be a valid number';
+                return 'This field must be a valid number'
             }
 
             if (value <= -2)
-                return 'This field must be greater or equal to -1';
+                return 'This field must be greater or equal to -1'
 
             if (value > this.config.maxInterviewsByAssignment)
-                return 'This field must be less than limit';
+                return 'This field must be less than limit'
 
-            return true;
+            return true
 
         },
         async updateQuantity() {
@@ -809,7 +811,7 @@ export default {
             return this.model.calendarEvent != null
                 ? convertToLocal(
                     this.model.calendarEvent.startUtc,
-                    this.model.calendarEvent.startTimezone,
+                    this.model.calendarEvent.startTimezone
                 )
                 : ''
         },
@@ -821,7 +823,7 @@ export default {
                 ? this.$t('Assignments.NoComment')
                 : escape(this.model.calendarEvent.comment).replaceAll(
                     '\n',
-                    '<br/>',
+                    '<br/>'
                 )
         },
 
@@ -862,14 +864,14 @@ export default {
                                     'Assignments.Action_Created_Responsible',
                                     {
                                         responsible: data.Responsible,
-                                    },
+                                    }
                                 )
                                 if (data.Comment) {
                                     createdText +=
                                         '<br/>' +
                                         self.$t(
                                             'Assignments.Action_Created_Comment',
-                                            { comment: escape(data.Comment) },
+                                            { comment: escape(data.Comment) }
                                         )
                                 }
 
@@ -880,7 +882,7 @@ export default {
                                             'Assignments.Action_UpgradedFrom',
                                             {
                                                 id: `<a href='./${data.UpgradedFromId}'>${data.UpgradedFromId}</a>`,
-                                            },
+                                            }
                                         )
                                 }
                                 return createdText
@@ -888,11 +890,11 @@ export default {
                             case 'AudioRecordingChanged':
                                 if (data.AudioRecording) {
                                     return self.$t(
-                                        'Assignments.Action_AudioRecordingChanged_True',
+                                        'Assignments.Action_AudioRecordingChanged_True'
                                     )
                                 } else {
                                     return self.$t(
-                                        'Assignments.Action_AudioRecordingChanged_False',
+                                        'Assignments.Action_AudioRecordingChanged_False'
                                     )
                                 }
                             case 'Reassigned': {
@@ -900,7 +902,7 @@ export default {
                                     'Assignments.Action_Reassigned_To',
                                     {
                                         newResponsible: data.NewResponsible,
-                                    },
+                                    }
                                 )
                                 if (data.Comment) {
                                     result += '<br/>'
@@ -908,7 +910,7 @@ export default {
                                         'Assignments.Action_Reassigned_To_Comment',
                                         {
                                             comment: escape(data.Comment),
-                                        },
+                                        }
                                     )
                                 }
                                 return result
@@ -916,21 +918,21 @@ export default {
                             case 'QuantityChanged':
                                 if (data.Quantity == null) {
                                     return self.$t(
-                                        'Assignments.Action_ExpectedValueChanged_To_Unlimited',
+                                        'Assignments.Action_ExpectedValueChanged_To_Unlimited'
                                     )
                                 }
                                 return self.$t(
                                     'Assignments.Action_ExpectedValueChanged_To',
-                                    { quantity: data.Quantity },
+                                    { quantity: data.Quantity }
                                 )
                             case 'WebModeChanged':
                                 if (data.WebMode) {
                                     return self.$t(
-                                        'Assignments.Action_WebModeChanged_True',
+                                        'Assignments.Action_WebModeChanged_True'
                                     )
                                 } else {
                                     return self.$t(
-                                        'Assignments.Action_WebModeChanged_False',
+                                        'Assignments.Action_WebModeChanged_False'
                                     )
                                 }
                             case 'ReceivedByTablet':
