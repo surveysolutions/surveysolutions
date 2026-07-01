@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.BoundedContexts.Headquarters.Views.SystemLog;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.ActionsLog
 {
@@ -22,8 +23,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ActionsLog
             CreateSystemLog(executor.Object)
                 .WorkspaceEnabled("workspace");
 
-            executor.Verify(x => x.Execute(It.IsAny<Action<IPlainStorageAccessor<SystemLogEntry>>>(), null), Times.Once);
+            executor.Verify(x => x.Execute(It.IsAny<Action<IPlainStorageAccessor<SystemLogEntry>>>(),
+                WorkspaceConstants.WorkspaceNames.AdminWorkspaceName), Times.Once);
             executor.Verify(x => x.Execute(It.IsAny<Action<IPlainStorageAccessor<SystemLogEntry>>>(), "workspace"), Times.Never);
+            executor.Verify(x => x.Execute(It.IsAny<Action<IPlainStorageAccessor<SystemLogEntry>>>(), null), Times.Never);
         }
 
         [Test]
@@ -34,8 +37,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ActionsLog
             CreateSystemLog(executor.Object)
                 .WorkspaceDisabled("workspace");
 
-            executor.Verify(x => x.Execute(It.IsAny<Action<IPlainStorageAccessor<SystemLogEntry>>>(), null), Times.Once);
+            executor.Verify(x => x.Execute(It.IsAny<Action<IPlainStorageAccessor<SystemLogEntry>>>(),
+                WorkspaceConstants.WorkspaceNames.AdminWorkspaceName), Times.Once);
             executor.Verify(x => x.Execute(It.IsAny<Action<IPlainStorageAccessor<SystemLogEntry>>>(), "workspace"), Times.Never);
+            executor.Verify(x => x.Execute(It.IsAny<Action<IPlainStorageAccessor<SystemLogEntry>>>(), null), Times.Never);
         }
 
         private static ServiceSystemLog CreateSystemLog(IInScopeExecutor<IPlainStorageAccessor<SystemLogEntry>> inScopeExecutor)
