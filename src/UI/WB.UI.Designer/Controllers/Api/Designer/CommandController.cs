@@ -462,11 +462,10 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             try
             {
                 Type resultCommandType = GetTypeOfResultCommandOrThrowArgumentException(commandType);
-                var commandForDeserialization = serializedCommand;
                 ICommand? deserialized;
                 try
                 {
-                    deserialized = JsonConvert.DeserializeObject(commandForDeserialization, resultCommandType) as ICommand;
+                    deserialized = JsonConvert.DeserializeObject(serializedCommand, resultCommandType) as ICommand;
                 }
                 catch (ArgumentException ae)
                 {

@@ -63,9 +63,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             if (command is PasteAfter currentPasteItemAfterCommand)
             {
-                ValidateSourceQuestionnaireRevision(
-                    currentPasteItemAfterCommand.SourceQuestionnaireId,
-                    currentPasteItemAfterCommand.SourceQuestionnaireRevision);
                 currentPasteItemAfterCommand.SourceDocument =
                     GetQuestionnaire(currentPasteItemAfterCommand.SourceQuestionnaireRevision ??
                         new QuestionnaireRevision(currentPasteItemAfterCommand.SourceQuestionnaireId));
@@ -73,23 +70,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             if (command is PasteInto currentPasteItemIntoCommand)
             {
-                ValidateSourceQuestionnaireRevision(
-                    currentPasteItemIntoCommand.SourceQuestionnaireId,
-                    currentPasteItemIntoCommand.SourceQuestionnaireRevision);
                 currentPasteItemIntoCommand.SourceDocument =
                     GetQuestionnaire(currentPasteItemIntoCommand.SourceQuestionnaireRevision ??
                         new QuestionnaireRevision(currentPasteItemIntoCommand.SourceQuestionnaireId));
-            }
-        }
-
-        private static void ValidateSourceQuestionnaireRevision(Guid sourceQuestionnaireId,
-            QuestionnaireRevision? sourceQuestionnaireRevision)
-        {
-            if (sourceQuestionnaireRevision != null &&
-                sourceQuestionnaireRevision.QuestionnaireId != sourceQuestionnaireId)
-            {
-                throw new CommandInflaitingException(CommandInflatingExceptionType.Common,
-                    "Source questionnaire revision does not match source questionnaire id.");
             }
         }
 

@@ -10,13 +10,20 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
         public PasteAfter(Guid questionnaireId, Guid entityId, Guid itemToPasteAfterId, Guid sourceQuestionnaireId, Guid sourceItemId, Guid responsibleId)
             : base(responsibleId: responsibleId, questionnaireId: questionnaireId, entityId: entityId)
         {
-            this.SourceQuestionnaireId = sourceQuestionnaireId;
+            this.SourceQuestionnaireRevision = new QuestionnaireRevision(sourceQuestionnaireId);
             this.SourceItemId = sourceItemId;
             this.ItemToPasteAfterId = itemToPasteAfterId;
         }
 
-        public Guid SourceQuestionnaireId { get; private set; }
-        public QuestionnaireRevision? SourceQuestionnaireRevision { get; set; }
+        public Guid SourceQuestionnaireId => this.SourceQuestionnaireRevision?.QuestionnaireId ?? Guid.Empty;
+
+        private QuestionnaireRevision? _sourceQuestionnaireRevision;
+        public QuestionnaireRevision? SourceQuestionnaireRevision
+        {
+            get => _sourceQuestionnaireRevision;
+            set { if (value != null) _sourceQuestionnaireRevision = value; }
+        }
+
         public Guid SourceItemId { get; private set; }
 
         public Guid ItemToPasteAfterId { get; private set; }
