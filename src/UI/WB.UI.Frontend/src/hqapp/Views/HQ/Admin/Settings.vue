@@ -1,62 +1,106 @@
 <template>
-    <HqLayout :mainClass="'interview-setup'" :title="$t('Settings.WorkspaceSettings')">
+    <HqLayout :mainClass="'interview-setup'"
+        :title="$t('Settings.WorkspaceSettings')">
         <div class="col-md-12">
             <div class="welcome-page">
-                <ul class="nav nav-tabs" role="tablist" id="settingsTabs">
-                    <li role="presentation" class="nav-item">
-                        <a href="#export" @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
-                            aria-controls="export" role="tab" data-bs-toggle="tab" class="nav-link active">
+                <ul class="nav nav-tabs"
+                    role="tablist"
+                    id="settingsTabs">
+                    <li role="presentation"
+                        class="nav-item">
+                        <a href="#export"
+                            @click.prevent="activateTab('export', 'welcomeTextTitle', 'welcomeTextDescription')"
+                            aria-controls="export"
+                            role="tab"
+                            :aria-selected="activeTab === 'export'"
+                            class="nav-link"
+                            :class="{ active: activeTab === 'export' }">
                             {{ $t('Settings.Export') }}
                         </a>
                     </li>
-                    <li role="presentation" class="nav-item">
-                        <a href="#note" @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
-                            aria-controls="note" role="tab" data-bs-toggle="tab" class="nav-link">
+                    <li role="presentation"
+                        class="nav-item">
+                        <a href="#note"
+                            @click.prevent="activateTab('note', 'welcomeTextTitle', 'welcomeTextDescription')"
+                            aria-controls="note"
+                            role="tab"
+                            :aria-selected="activeTab === 'note'"
+                            class="nav-link"
+                            :class="{ active: activeTab === 'note' }">
                             {{ $t('Settings.GlobalNote') }}
                         </a>
                     </li>
-                    <li role="presentation" class="nav-item">
-                        <a href="#profile" @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
-                            aria-controls="profile" role="tab" data-bs-toggle="tab" class="nav-link">
+                    <li role="presentation"
+                        class="nav-item">
+                        <a href="#profile"
+                            @click.prevent="activateTab('profile', 'welcomeTextTitle', 'welcomeTextDescription')"
+                            aria-controls="profile"
+                            role="tab"
+                            :aria-selected="activeTab === 'profile'"
+                            class="nav-link"
+                            :class="{ active: activeTab === 'profile' }">
                             {{ $t('Settings.UserProfile') }}
                         </a>
                     </li>
-                    <li role="presentation" class="nav-item">
-                        <a href="#devices" @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
-                            aria-controls="devices" role="tab" data-bs-toggle="tab" class="nav-link">
+                    <li role="presentation"
+                        class="nav-item">
+                        <a href="#devices"
+                            @click.prevent="activateTab('devices', 'welcomeTextTitle', 'welcomeTextDescription')"
+                            aria-controls="devices"
+                            role="tab"
+                            :aria-selected="activeTab === 'devices'"
+                            class="nav-link"
+                            :class="{ active: activeTab === 'devices' }">
                             {{ $t('Settings.Devices') }}
                         </a>
                     </li>
-                    <li role="presentation" class="nav-item">
-                        <a href="#logo" @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
-                            aria-controls="logo" role="tab" data-bs-toggle="tab" class="nav-link">
+                    <li role="presentation"
+                        class="nav-item">
+                        <a href="#logo"
+                            @click.prevent="activateTab('logo', 'welcomeTextTitle', 'welcomeTextDescription')"
+                            aria-controls="logo"
+                            role="tab"
+                            :aria-selected="activeTab === 'logo'"
+                            class="nav-link"
+                            :class="{ active: activeTab === 'logo' }">
                             {{ $t('Settings.Logo') }}
                         </a>
                     </li>
 
                 </ul>
                 <div class="tab-content">
-                    <Export v-model:encryptionEnabled="encryptionEnabled"
-                        v-model:encryptionPassword="encryptionPassword" v-model:isRetentionEnabled="isRetentionEnabled"
+                    <Export v-show="activeTab === 'export'"
+                        :class="{ active: activeTab === 'export' }"
+                        v-model:encryptionEnabled="encryptionEnabled"
+                        v-model:encryptionPassword="encryptionPassword"
+                        v-model:isRetentionEnabled="isRetentionEnabled"
                         v-model:retentionLimitInDays="retentionLimitInDays"
                         v-model:retentionLimitQuantity="retentionLimitQuantity"
                         v-model:retentionLimitInDaysCancel="retentionLimitInDaysCancel"
                         v-model:retentionLimitQuantityCancel="retentionLimitQuantityCancel"
                         v-model:geographyExportFormat="geographyExportFormat" />
-                    <Note v-model="globalNotice" />
-                    <Profile v-model="isAllowInterviewerUpdateProfile" />
-                    <Devices v-model:isInterviewerAutomaticUpdatesEnabled="isInterviewerAutomaticUpdatesEnabled"
+                    <Note v-show="activeTab === 'note'"
+                        :class="{ active: activeTab === 'note' }"
+                        v-model="globalNotice" />
+                    <Profile v-show="activeTab === 'profile'"
+                        :class="{ active: activeTab === 'profile' }"
+                        v-model="isAllowInterviewerUpdateProfile" />
+                    <Devices v-show="activeTab === 'devices'"
+                        :class="{ active: activeTab === 'devices' }"
+                        v-model:isInterviewerAutomaticUpdatesEnabled="isInterviewerAutomaticUpdatesEnabled"
                         v-model:isDeviceNotificationsEnabled="isDeviceNotificationsEnabled"
                         v-model:isPartialSynchronizationEnabled="isPartialSynchronizationEnabled"
                         v-model:geographyQuestionAccuracyInMeters="geographyQuestionAccuracyInMeters"
                         v-model:geographyQuestionPeriodInSecondsCancel="geographyQuestionPeriodInSecondsCancel"
                         v-model:geographyQuestionPeriodInSeconds="geographyQuestionPeriodInSeconds"
                         v-model:geographyQuestionAccuracyInMetersCancel="geographyQuestionAccuracyInMetersCancel"
-                        v-model:esriApiKey="esriApiKey" v-model:esriApiKeyInitial="esriApiKeyInitial"
+                        v-model:esriApiKey="esriApiKey"
+                        v-model:esriApiKeyInitial="esriApiKeyInitial"
                         v-model:allowSupervisorChangeAssignmentStatus="allowSupervisorChangeAssignmentStatus"
                         v-model:allowInterviewerChangeAssignmentStatus="allowInterviewerChangeAssignmentStatus" />
 
-                    <Logo />
+                    <Logo v-show="activeTab === 'logo'"
+                        :class="{ active: activeTab === 'logo' }" />
                 </div>
             </div>
         </div>
@@ -110,13 +154,27 @@ export default {
             retentionLimitInDaysCancel: null,
             retentionLimitQuantityCancel: null,
             geographyExportFormat: 'Wkt',
+            activeTab: 'export',
         }
     },
     async beforeMount() {
         await this.getFormData()
+
+        const hashTab = window.location.hash?.replace('#', '')
+        const availableTabs = ['export', 'note', 'profile', 'devices', 'logo']
+        if (availableTabs.includes(hashTab)) {
+            this.activeTab = hashTab
+        }
     },
     methods: {
         noAction() { },
+        activateTab(tab, titleType, messageType) {
+            this.activeTab = tab
+            if (window.location.hash !== `#${tab}`) {
+                window.history.replaceState(null, '', `#${tab}`)
+            }
+            this.setPageActive(titleType, messageType)
+        },
         async getFormData() {
 
             const workspaceSettings = await this.$hq.AdminSettings.getWorkspaceSettings()
