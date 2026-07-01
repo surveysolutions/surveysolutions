@@ -226,6 +226,7 @@
     <item name="android:textColor">@color/editorTextColor</item>
     <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
     <item name="android:paddingBottom">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:singleLine">false</item>
   </style>
 
   <style name="Interview_Question_Answer_FilteredComboBox_Item_Background">
