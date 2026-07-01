@@ -10,13 +10,13 @@
 <script lang="js">
 /* eslint-disable vue/no-unused-components */
 
-import "@ag-grid-community/styles/ag-grid.css";
-import "@ag-grid-community/styles/ag-theme-quartz.css";
+import 'ag-grid-community/styles/ag-grid.css'
+import 'ag-grid-community/styles/ag-theme-quartz.css'
 
 import { entityDetails } from '../mixins'
-import { debounce, every, some, map } from 'lodash'
-import { AgGridVue } from '@ag-grid-community/vue3'
-import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
+import { debounce, every, some, map } from 'lodash-es'
+import { AgGridVue } from 'ag-grid-vue3'
+import { ClientSideRowModelModule } from 'ag-grid-community'
 
 import TableRoster_QuestionEditor from './TableRoster.QuestionEditor'
 import TableRoster_ViewAnswer from './TableRoster.ViewAnswer'
@@ -35,7 +35,6 @@ export default {
             columnDefs: null,
             rowData: null,
             gridApi: null,
-            columnApi: null,
             countOfInstances: 0,
         }
     },
@@ -94,7 +93,7 @@ export default {
         },
         gridModules() {
             return [ClientSideRowModelModule]
-        }
+        },
     },
     methods: {
         initQuestionAsColumns() {
@@ -123,7 +122,7 @@ export default {
                             value: question,
                         },
                     }
-                },
+                }
             )
             columnsFromQuestions.unshift({
                 headerName: this.$me.title,
@@ -165,14 +164,13 @@ export default {
                     })
 
                     return instanceAsRow
-                },
+                }
             )
             this.rowData = rosterInstancesWithQuestionsAsRows
         },
 
         onGridReady(params) {
             this.gridApi = params.api
-            this.columnApi = params.columnApi
 
             this.autosizeHeaders(params)
             this.setTableRosterHeight()
@@ -184,7 +182,7 @@ export default {
                 event.api.setGridOption('headerHeight', MIN_HEIGHT)
                 const headerCells =
                     this.$refs.tableRoster.$el.getElementsByClassName(
-                        'ag-header-cell-label',
+                        'ag-header-cell-label'
                     )
                 let minHeight = MIN_HEIGHT
                 for (let index = 0; index < headerCells.length; index++) {

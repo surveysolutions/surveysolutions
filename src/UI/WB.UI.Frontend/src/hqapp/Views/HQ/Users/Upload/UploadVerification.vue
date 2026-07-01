@@ -37,7 +37,7 @@
 
 <script>
 import * as toastr from 'toastr'
-import {isEmpty} from 'lodash'
+import {isEmpty} from 'lodash-es'
 
 export default {
     data: function() {
