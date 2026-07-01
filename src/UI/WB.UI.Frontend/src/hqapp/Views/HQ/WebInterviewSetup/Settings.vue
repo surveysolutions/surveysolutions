@@ -621,10 +621,8 @@
 
 <script>
 import { marked } from 'marked'
-import { map, isNil } from 'lodash'
-import emitter from '~/shared/emitter';
-
-import { Form, Field, ErrorMessage } from 'vee-validate'
+import { map, isNil } from 'lodash-es'
+import emitter from '~/shared/emitter'
 
 import Welcome from './Settings/Welcome'
 import Resume from './Settings/Resume'
@@ -638,9 +636,6 @@ import '@/assets/css/markup-interview-review.scss'
 export default {
     components: {
         Welcome, Resume, Complete, Finish, LinkInterview,
-        Form,
-        Field,
-        ErrorMessage
     },
 
     data() {

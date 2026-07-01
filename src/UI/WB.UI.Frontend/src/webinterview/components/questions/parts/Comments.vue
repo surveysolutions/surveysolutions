@@ -1,37 +1,58 @@
 <template>
     <div class="information-block comments-block">
-        <button href="javascript:void(0);" class="btn btn-link show-resolved-comments" v-if="showResolvedVisible"
+        <button href="javascript:void(0);"
+            class="btn btn-link show-resolved-comments"
+            v-if="showResolvedVisible"
             @click="showResolved = !showResolved">
             <span>{{ showResolved ? this.$t('WebInterviewUI.HideResolved') :
                 this.$t('WebInterviewUI.ShowResolved')}}</span>
         </button>
 
-        <template v-for="comment in visibleComments" :key="comment.commentTimeUtc">
-            <wb-comment-item :userRole="comment.userRole" :text="comment.text" :isOwnComment="comment.isOwnComment"
-                :date="comment.commentTimeUtc" :resolved="comment.resolved"
+        <template v-for="comment in visibleComments"
+            :key="comment.commentTimeUtc">
+            <wb-comment-item :userRole="comment.userRole"
+                :text="comment.text"
+                :isOwnComment="comment.isOwnComment"
+                :date="comment.commentTimeUtc"
+                :resolved="comment.resolved"
                 :commentOnPreviousAnswer="comment.commentOnPreviousAnswer" />
         </template>
 
-        <div class="comment active" v-if="isShowingAddCommentDialog">
-            <form class="form-inline" onsubmit="return false;">
+        <div class="comment active"
+            v-if="isShowingAddCommentDialog">
+            <form class="form-inline"
+                onsubmit="return false;">
                 <label>{{ $t("WebInterviewUI.CommentYours") }}</label>
                 <div class="form-group">
                     <div class="input-group comment-field">
-                        <input type="text" class="form-control" v-on:keyup.enter="postComment" v-model="comment"
+                        <input type="text"
+                            class="form-control"
+                            v-on:keyup.enter="postComment"
+                            v-model="comment"
                             :placeholder='$t("WebInterviewUI.CommentEnter")'
-                            :disabled="!$store.getters.addCommentsAllowed" :id="inpAddCommentId" :title="inputTitle"
+                            :disabled="!$store.getters.addCommentsAllowed"
+                            :id="inpAddCommentId"
+                            :title="inputTitle"
                             maxlength="750" />
                         <div class="input-group-btn">
-                            <button type="button" class="btn btn-default btn-post-comment" :class="buttonClass"
-                                @click="postComment($event)" :disabled="!allowPostComment" :id="btnAddCommentId">
+                            <button type="button"
+                                class="btn btn-default btn-post-comment"
+                                :class="buttonClass"
+                                @click="postComment($event)"
+                                :disabled="!allowPostComment"
+                                :id="btnAddCommentId">
                                 {{ postBtnText }}
                             </button>
                         </div>
                     </div>
                 </div>
             </form>
-            <button href="javascript:void(0);" class="btn btn-link resolve-comments" :disabled="isResolving"
-                v-if="resolveAllowed" @click="resolve" :title="$t('WebInterviewUI.ResolveHint')">
+            <button href="javascript:void(0);"
+                class="btn btn-link resolve-comments"
+                :disabled="isResolving"
+                v-if="resolveAllowed"
+                @click="resolve"
+                :title="$t('WebInterviewUI.ResolveHint')">
                 <span class="text-success">{{ this.$t('WebInterviewUI.Resolve') }}</span>
             </button>
         </div>
@@ -41,7 +62,7 @@
 <script lang="js">
 
 import { entityPartial } from '~/webinterview/components/mixins'
-import { filter, find } from 'lodash'
+import { filter, find } from 'lodash-es'
 
 export default {
     mixins: [entityPartial],

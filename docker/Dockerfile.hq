@@ -185,7 +185,6 @@ RUN apk add --no-cache \
     icu-data-full \
     \    
     fontconfig \
-    binutils \
     && rm -rf /var/cache/apk/*
 
 COPY --from=fonts_source /usr/share/fonts /usr/share/fonts
