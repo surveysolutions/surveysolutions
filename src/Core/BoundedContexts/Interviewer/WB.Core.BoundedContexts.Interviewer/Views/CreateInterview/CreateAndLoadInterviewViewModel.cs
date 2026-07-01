@@ -134,9 +134,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                 this.assignmentsRepository.FetchPreloadedData(assignment);
                 var questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
 
-                // If the interview will record selective Audio Audit (scope), the microphone permission
-                // must be granted up front. When it is rejected, the interview must not be created.
-                if (assignment.AudioAuditScope != null && assignment.AudioAuditScope.Count > 0)
+                // If the interview will record audio (whole-interview audio audit or a selective Audio Audit
+                // scope), the microphone permission must be granted up front. When it is rejected, the
+                // interview must not be created.
+                var willRecordAudio = assignment.IsAudioRecordingEnabled
+                    || (assignment.AudioAuditScope != null && assignment.AudioAuditScope.Count > 0);
+                if (willRecordAudio)
                 {
                     try
                     {
