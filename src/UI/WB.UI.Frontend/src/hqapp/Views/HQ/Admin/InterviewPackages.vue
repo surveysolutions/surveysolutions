@@ -97,7 +97,7 @@
                             $t("Common.Ok") }}</button>
                     <button type="button"
                         class="btn btn-link"
-                        data-dismiss="modal">
+                        data-bs-dismiss="modal">
                         {{ $t("Common.Cancel") }}
                     </button>
                 </div>

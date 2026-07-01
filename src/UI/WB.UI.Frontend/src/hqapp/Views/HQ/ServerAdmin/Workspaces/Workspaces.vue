@@ -159,7 +159,7 @@ export default {
             this.newWorkspaceName = null
 
             this.$refs.createWorkspaceForm?.resetForm()
-            this.$refs.createWorkspaceModal.modal('show')
+            this.$refs.createWorkspaceModal.modal()
         },
         loadData() {
             if (this.$refs.table) {
@@ -277,7 +277,7 @@ export default {
                             this.editedRowId = parsedRowId
                             this.editedDisplayName = rowData.DisplayName
 
-                            this.$refs.editWorkspaceModal.modal('show')
+                            this.$refs.editWorkspaceModal.modal()
                             nextTick(() => {
                                 this.$refs.editWorkspaceForm.resetForm()
                             })
@@ -328,7 +328,7 @@ export default {
                             const parsedRowId = rowData.Name
                             this.editedRowId = parsedRowId
 
-                            this.$refs.disableWorkspaceModal.modal('show')
+                            this.$refs.disableWorkspaceModal.modal()
                         },
                     })
 

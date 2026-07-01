@@ -109,7 +109,7 @@ export default {
                     this.loading = false
                 })
 
-            this.$refs.deleteWorkspaceModal.modal('show')
+            this.$refs.deleteWorkspaceModal.modal()
         },
     },
 }
