@@ -420,7 +420,7 @@
     <value>ზედამხედველის კომენტარი</value>
   </data>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
-    <value>Survey Solutions Interviewer</value>
+    <value>Survey Solutions ინტერვიუერი</value>
   </data>
   <data name="Interviewer_AudioRecording" xml:space="preserve">
     <value>აუდიო-ჩაწერა</value>
@@ -456,7 +456,7 @@
     <value>შესვლა</value>
   </data>
   <data name="LoginTitleText" xml:space="preserve">
-    <value>Survey Solutions Questionnaire Tester</value>
+    <value>Survey Solutions კითხვარის ტესტერი</value>
   </data>
   <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
     <value>რუკების ედიტორიდან გამოსვლა</value>
@@ -507,7 +507,7 @@
     <value>თქვენ არ შეგიძლიათ MvxLocation სერვისების ერთ ჯერზე უფრო მეტად გაშვება</value>
   </data>
   <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
-    <value>START</value>
+    <value>დაწყება</value>
   </data>
   <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
     <value>მეტრების რაოდენობა სიზუსტის დასადგენად</value>
@@ -562,5 +562,595 @@
   </data>
   <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
     <value>დარწმუნებული ხართ, რომ გსურთ წაშალოთ {0} მწკრივ(ები)ი თითოეული დაკავშირებული როსტერისგან?</value>
+  </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>ღია</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>დასრულებული</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>დამტკიცებული</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>დავალების სტატუსი</value>
+  </data>
+
+
+  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
+    <value>ჩემი</value>
+  </data>
+
+  <data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
+    <value>ჩემთან გაზიარებული</value>
+  </data>
+
+  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
+    <value>საჯარო</value>
+  </data>
+
+  <data name="OldPasswordHint" xml:space="preserve">
+    <value>მიმდინარე პაროლი</value>
+  </data>
+
+  <data name="NewPasswordHint" xml:space="preserve">
+    <value>ახალი პაროლი</value>
+  </data>
+
+  <data name="ConfirmNewPasswordHint" xml:space="preserve">
+    <value>დაადასტურეთ ახალი პაროლი</value>
+  </data>
+
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ დაკავშირებული როსტერის '{0}' წაშლა თითოეული დაკავშირებული როსტერიდან?</value>
+  </data>
+
+  <data name="Interview_Questions_RemoveRowFromRosterListMessage" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ დაკავშირებული როსტერების წაშლა?</value>
+  </data>
+
+  <data name="Adjust" xml:space="preserve">
+    <value>გასწორება</value>
+  </data>
+
+  <data name="InvalidTimeMessage" xml:space="preserve">
+    <value>მნიშვნელოვანია, რომ საათის პარამეტრი ზუსტი იყოს. თქვენი საათი მიუთითებს, რომ მიმდინარე თარიღი არასწორადაა დაყენებული. სამუშაოს გაგრძელებამდე გაასწორეთ საათი სწორი თარიღისა და დროის მითითებით.</value>
+  </data>
+
+  <data name="Warnings" xml:space="preserve">
+    <value>გაფრთხილებები</value>
+  </data>
+
+  <data name="Interview_Comment_OnPreviousAnswer" xml:space="preserve">
+    <value>წინა პასუხზე</value>
+  </data>
+
+  <data name="Interview_Comment_Resolve" xml:space="preserve">
+    <value>მოგვარება</value>
+  </data>
+
+  <data name="NoMapsApplication" xml:space="preserve">
+    <value>ნავიგაციის აპლიკაცია ვერ მოიძებნა</value>
+  </data>
+
+  <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
+    <value>ღილაკის გასააქტიურებლად, გთხოვთ, მოაგვაროთ კრიტიკული პრობლემები</value>
+  </data>
+
+  <data name="Interview_Complete_CriticalUnanswered" xml:space="preserve">
+    <value>უპასუხოდ დარჩენილი კრიტიკული კითხვები: {0}</value>
+  </data>
+
+  <data name="Interview_Complete_FailCriticalConditions" xml:space="preserve">
+    <value>ვერ დაკმაყოფილდა კრიტიკული წესები: {0}</value>
+  </data>
+
+  <data name="Interview_Complete_WithWarningCriticality" xml:space="preserve">
+    <value>გთხოვთ, დაადასტუროთ, რომ გსურთ ამ ინტერვიუს გაგზავნა კრიტიკული პრობლემებით.</value>
+  </data>
+
+  <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
+    <value>ღილაკის გასააქტიურებლად, გთხოვთ, მოაგვაროთ კრიტიკული პრობლემები ან მიუთითოთ ახსნა ზემოთ მოცემულ კომენტარის ველში</value>
+  </data>
+
+  <data name="Interview_Complete_Interview_Status" xml:space="preserve">
+    <value>ინტერვიუს პრობლემები:</value>
+  </data>
+
+  <data name="Interview_Complete_CriticalityIssuesDescription" xml:space="preserve">
+    <value>გთხოვთ, მოაგვაროთ პრობლემები კრიტიკულ კითხვებზე პასუხის გაცემით და დარწმუნდით, რომ პასუხები აკმაყოფილებს კრიტიკულ წესებს</value>
+  </data>
+
+  <data name="Supervisor_ApplicationName" xml:space="preserve">
+    <value>Survey Solutions ზედამხედველი</value>
+  </data>
+
+  <data name="Interviewer_Reassign_Comment" xml:space="preserve">
+    <value>დატოვეთ კომენტარი ახალი პასუხისმგებელი პირისთვის</value>
+  </data>
+
+  <data name="Interviewer_Comment" xml:space="preserve">
+    <value>დატოვეთ კომენტარი</value>
+  </data>
+
+  <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
+    <value>ინტერვიუერმა {0} უკვე მიიღო ეს ინტერვიუ {1}. დარწმუნებული ხართ, რომ გსურთ მისი ხელახლა გადანაწილება?</value>
+  </data>
+
+  <data name="Interviewer_Reassign_AlreadyReceivedAssignment" xml:space="preserve">
+    <value>ინტერვიუერმა {0} უკვე მიიღო ეს დავალება {1}. დარწმუნებული ხართ, რომ გსურთ მისი ხელახლა გადანაწილება?</value>
+  </data>
+
+  <data name="PasswordMatchError" xml:space="preserve">
+    <value>პაროლები უნდა ემთხვეოდეს</value>
+  </data>
+
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreTitle" xml:space="preserve">
+    <value>კომუნიკაციის მთლიანობის შემოწმების იგნორირება</value>
+  </data>
+
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreSummary" xml:space="preserve">
+    <value>ჩართვის შემთხვევაში კომუნიკაციის მთლიანობის შემოწმების შეცდომები იგნორირებული იქნება</value>
+  </data>
+
+  <data name="Interview_Cover_Supervisor_Comments_does_not_exists" xml:space="preserve">
+    <value>ზედამხედველის კომენტარები არ არის</value>
+  </data>
+
+  <data name="Prefs_DownloadUpdatesForInterviewerApp" xml:space="preserve">
+    <value>ინტერვიუერის აპლიკაციის განახლებების ჩამოტვირთვა</value>
+  </data>
+
+  <data name="Prefs_DownloadUpdatesForInterviewerAppSummary" xml:space="preserve">
+    <value>თუ ინტერვიუერებს ინტერნეტთან წვდომა არ აქვთ, ეს ფუნქცია უნდა იყოს ჩართული, რადგან ის შესაძლებელს ხდის მათი აპლიკაციების განახლებას ზედამხედველის აპლიკაციასთან ოფლაინ სინქრონიზაციის დროს</value>
+  </data>
+
+  <data name="MissingPermissions_MapsLocation" xml:space="preserve">
+    <value>აპლიკაციას სჭირდება მდებარეობაზე წვდომის ნებართვა. თუ ნებართვის ფანჯარა არ გამოჩნდება, გადადით პარამეტრებში და ნება დართეთ აპლიკაციას მდებარეობის გამოყენება.</value>
+  </data>
+
+  <data name="MissingPermissions_Microphone_Global" xml:space="preserve">
+    <value>აპლიკაციას სჭირდება მიკროფონზე წვდომის ნებართვა. გაიმეორეთ ბოლო მოქმედება და დაუშვით წვდომა. თუ ნებართვის ფანჯარა არ გამოჩნდება, გადადით პარამეტრებში და ნება დართეთ აპლიკაციას მიკროფონის გამოყენება.</value>
+  </data>
+
+  <data name="MissingPermissions_Storage_Global" xml:space="preserve">
+    <value>აპლიკაციას სჭირდება საცავზე წვდომის ნებართვა. გაიმეორეთ ბოლო მოქმედება და დაუშვით წვდომა. თუ ნებართვის ფანჯარა არ გამოჩნდება, გადადით პარამეტრებში და ნება დართეთ აპლიკაციას საცავის გამოყენება.</value>
+  </data>
+
+  <data name="Warning" xml:space="preserve">
+    <value>გაფრთხილება</value>
+  </data>
+
+  <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
+    <value>თქვენი მდებარეობა რუკის საზღვრებს გარეთაა.</value>
+  </data>
+
+  <data name="AreaMap_LocationDataSourceFailed" xml:space="preserve">
+    <value>მდებარეობის დაფიქსირება შეუძლებელია. პრობლემის გადასაჭრელად სცადეთ შემდეგი: დარწმუნდით, რომ ღია სივრცეში ხართ, გადაამოწმეთ, რომ GPS ჩართულია, ან შეცვალეთ GPS-ის დაყოვნების პარამეტრი</value>
+  </data>
+
+  <data name="AreaMap_MapIsOutOfVisibleBoundaries" xml:space="preserve">
+    <value>ჩატვირთული რუკა ხილული საზღვრების გარეთაა</value>
+  </data>
+
+  <data name="AreaMap_SelectShapefile" xml:space="preserve">
+    <value>საზღვრების ფაილის არჩევა</value>
+  </data>
+
+  <data name="AreaMap_ErrorOnShapefileLoading" xml:space="preserve">
+    <value>ჩატვირთვისას მოხდა შეცდომა. Shapefile-ის დამუშავება შეუძლებელია</value>
+  </data>
+
+  <data name="AreaMap_AreaFormat" xml:space="preserve">
+    <value>ფართობი: {0:0.00} m2</value>
+  </data>
+
+  <data name="AreaMap_OverlapsWith" xml:space="preserve">
+    <value>იკვეთება:</value>
+  </data>
+
+  <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
+    <value>და კიდევ {0} სხვა.</value>
+  </data>
+
+  <data name="AreaMap_ItemsOutsideDedicatedArea" xml:space="preserve">
+    <value>ზოგიერთი მარკერი მონიშნული არეალის გარეთაა</value>
+  </data>
+  
+  <data name="AreaMap_PointsFormat" xml:space="preserve">
+    <value>წერტილები: {0}</value>
+  </data>
+
+  <data name="AreaMap_LengthFormat" xml:space="preserve">
+    <value>სიგრძე: {0:0.00} m</value>
+  </data>
+
+  <data name="AreaMap_PerimeterFormat" xml:space="preserve">
+    <value>პერიმეტრი: {0:0.00} m</value>
+  </data>
+
+  <data name="AreaMap_LoadShapefile" xml:space="preserve">
+    <value>Shapefile-ის ჩატვირთვა</value>
+  </data>
+
+  <data name="AreaMap_ShowBoundaries" xml:space="preserve">
+    <value>საზღვრების ჩვენება</value>
+  </data>
+
+  <data name="AreaMap_HideBoundaries" xml:space="preserve">
+    <value>საზღვრების დამალვა</value>
+  </data>
+
+  <data name="MapDashboard_Assignments" xml:space="preserve">
+    <value>დავალებები</value>
+  </data>
+
+  <data name="MapDashboard_Interviews" xml:space="preserve">
+    <value>ინტერვიუები</value>
+  </data>
+
+  <data name="MapDashboard_Disclaimer" xml:space="preserve">
+    <value>ნაჩვენებია მხოლოდ ცნობილი კოორდინატების მქონე ელემენტები</value>
+  </data>
+
+  <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
+    <value>ყველა კითხვარი</value>
+  </data>
+
+  <data name="MapDashboard_AllResponsibles" xml:space="preserve">
+    <value>ყველა პასუხისმგებელი</value>
+  </data>
+
+  <data name="MapDashboard_AllStatuses" xml:space="preserve">
+    <value>ყველა სტატუსი</value>
+  </data>
+
+  <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
+    <value>კითხვარი</value>
+  </data>
+
+  <data name="MapDashboard_ResponsibleTitle" xml:space="preserve">
+    <value>პასუხისმგებელი</value>
+  </data>
+
+  <data name="MapDashboard_StatusTitle" xml:space="preserve">
+    <value>სტატუსი</value>
+  </data>
+
+  <data name="MapDashboard_TypeTitle" xml:space="preserve">
+    <value>ტიპი</value>
+  </data>
+
+  <data name="MapDashboard_FiltersTitle" xml:space="preserve">
+    <value>ფილტრები</value>
+  </data>
+
+  <data name="MenuItem_Title_StartGeofencing" xml:space="preserve">
+    <value>გეოღობის დაწყება</value>
+  </data>
+
+  <data name="MenuItem_Title_StopGeofencing" xml:space="preserve">
+    <value>გეოღობის გაჩერება</value>
+  </data>
+
+  <data name="MenuItem_Title_StartGeoTracking" xml:space="preserve">
+    <value>ტრეკის ჩაწერის დაწყება</value>
+  </data>
+
+  <data name="MenuItem_Title_StopGeoTracking" xml:space="preserve">
+    <value>ტრეკის ჩაწერის გაჩერება</value>
+  </data>
+
+  <data name="MenuItem_Title_ShowLocation" xml:space="preserve">
+    <value>მდებარეობის ჩვენება</value>
+  </data>
+
+  <data name="MenuItem_Title_HideLocation" xml:space="preserve">
+    <value>მდებარეობის დამალვა</value>
+  </data>
+
+  <data name="MenuItem_Title_ExitToDashboard" xml:space="preserve">
+    <value>დაფაზე გასვლა</value>
+  </data>
+
+  <data name="MenuItem_Title_ChangeMap" xml:space="preserve">
+    <value>რუკის შეცვლა</value>
+  </data>
+
+  <data name="MenuItem_Title_ChangeShapefile" xml:space="preserve">
+    <value>საზღვრების შეცვლა</value>
+  </data>
+
+  <data name="MenuItem_Title_CreateInterview" xml:space="preserve">
+    <value>ახალი ინტერვიუს შექმნა</value>
+  </data>
+
+  <data name="AssignmentMap_Title_CreateInterview" xml:space="preserve">
+    <value>დაწყება</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
+    <value>რუკაზე მასშტაბირება</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomShapefile" xml:space="preserve">
+    <value>საზღვრებზე მასშტაბირება</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomCollectedData" xml:space="preserve">
+    <value>შეგროვებულ მონაცემებზე მასშტაბირება</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
+    <value>ყველაფრის მასშტაბირება</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
+    <value>ტრეკინგის ჩანაწერებზე მასშტაბირება</value>
+  </data>
+
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>დაფა</value>
+  </data>
+
+  <data name="AnswerRecordedMsg" xml:space="preserve">
+    <value>პასუხი მიღებულია. დამუშავებას დასჭირდა {0}</value>
+  </data>
+
+  <data name="AnswerRecordedMsgDismiss" xml:space="preserve">
+    <value>დახურვა</value>
+  </data>
+
+  <data name="Interview_SignatureClear" xml:space="preserve">
+    <value>გასუფთავება</value>
+  </data>
+
+  <data name="Interview_SignatureSignHere" xml:space="preserve">
+    <value>აქ მოაწერეთ ხელი</value>
+  </data>
+
+  <data name="Interview_TakeSignature" xml:space="preserve">
+    <value>ხელმოწერის შენახვა</value>
+  </data>
+
+  <data name="Interview_Questions_Integer_ProtectedValue" xml:space="preserve">
+    <value>დაცულ კითხვაზე ახალი პასუხი უნდა იყოს {0}-ზე მეტი ან ტოლი</value>
+  </data>
+
+  <data name="Interview_MaxAnswersCount" xml:space="preserve">
+    <value>არჩეულია {0} კატეგორია {1}-დან</value>
+  </data>
+
+  <data name="Interview_MaxAnswersCountSelected" xml:space="preserve">
+    <value>ამ კითხვაში მონიშნულია მაქსიმალური რაოდენობა ({0})</value>
+  </data>
+
+  <data name="Interview_Overview" xml:space="preserve">
+    <value>მიმოხილვა</value>
+  </data>
+
+  <data name="Interview_Overview_Name" xml:space="preserve">
+    <value>მიმოხილვა</value>
+  </data>
+
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>უპასუხოდ</value>
+  </data>
+
+  <data name="Interview_Overview_AdditionalInfo" xml:space="preserve">
+    <value>დამატებითი ინფორმაცია</value>
+  </data>
+
+  <data name="Interview_Overview_Warnings" xml:space="preserve">
+    <value>გაფრთხილება(ები)</value>
+  </data>
+
+  <data name="Interview_Overview_Comments" xml:space="preserve">
+    <value>კომენტარები</value>
+  </data>
+
+  <data name="Supervisor_Complete_Approve_btn" xml:space="preserve">
+    <value>დამტკიცება</value>
+  </data>
+
+  <data name="Supervisor_Complete_Assign_btn" xml:space="preserve">
+    <value>მინიჭება</value>
+  </data>
+
+  <data name="Supervisor_Complete_Reject_btn" xml:space="preserve">
+    <value>უარყოფა</value>
+  </data>
+
+  <data name="OfflineSync_Cancel" xml:space="preserve">
+    <value>გაუქმება</value>
+  </data>
+
+  <data name="OfflineSync_Abort" xml:space="preserve">
+    <value>შეწყვეტა</value>
+  </data>
+
+  <data name="OfflineSync_BackToDashboard" xml:space="preserve">
+    <value>დაფაზე დაბრუნება</value>
+  </data>
+
+  <data name="OfflineSync_Retry" xml:space="preserve">
+    <value>ხელახლა ცდა</value>
+  </data>
+
+  <data name="OfflineSync_NetworkInfo" xml:space="preserve">
+    <value>სიჩქარე: {0}, დარჩენილი დრო: {1}</value>
+  </data>
+
+  <data name="OfflineSync_InstallPlayServices" xml:space="preserve">
+    <value>Google Play Services უნდა იყოს დაინსტალირებული.</value>
+  </data>
+
+  <data name="OfflineSync_DeviceNotSupported" xml:space="preserve">
+    <value>ეს მოწყობილობა არ არის მხარდაჭერილი.</value>
+  </data>
+
+  <data name="Synchronization_FoundDevice" xml:space="preserve">
+    <value>ნაპოვნია ინტერვიუერის მოწყობილობა ({0})</value>
+    <comment>{0} - interviewer login</comment>
+  </data>
+
+  <data name="OfflineSync_Supervisor_Title" xml:space="preserve">
+    <value>დავალებებისა და ინტერვიუების სინქრონიზაცია</value>
+  </data>
+
+  <data name="Validity_QuestionDoesntExist" xml:space="preserve">
+    <value>მიმდინარე როსტერი აღარ არსებობს. გთხოვთ, ნავიგაციის მენიუს გამოყენებით გადადით შემდეგ ხელმისაწვდომ სექციაზე ან როსტერზე.</value>
+  </data>
+
+  <data name="Interview_ShowPdf" xml:space="preserve">
+    <value>PDF-ის ჩვენება </value>
+  </data>
+
+  <data name="Interview_PlayVideo" xml:space="preserve">
+    <value>ვიდეოს დაკვრა </value>
+  </data>
+
+  <data name="Interview_PlayAudio" xml:space="preserve">
+    <value>აუდიოს დაკვრა </value>
+  </data>
+
+  <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
+    <value>ეს ინტერვიუ შეიცავს სისტემის მიერ დაშვებულზე მეტ მონაცემს. თუ შესაძლებელია, წაშალეთ არასაჭირო როსტერის რიგები და/ან მოხსენით პასუხები კითხვებზე.</value>
+  </data>
+
+  <data name="Notifications_SummaryTitle" xml:space="preserve">
+    <value>{0} შეტყობინება</value>
+  </data>
+
+  <data name="Interview_Question_HideResolvedComments" xml:space="preserve">
+    <value>მოგვარებულის დამალვა</value>
+  </data>
+
+  <data name="Interview_Question_ShowResolvedComments" xml:space="preserve">
+    <value>მოგვარებულის ჩვენება</value>
+  </data>
+
+  <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
+    <value>აპლიკაციას თვითგანახლებისთვის ნებართვა არ აქვს მინიჭებული. გთხოვთ, ჩართოთ "Allow from this source" ოფცია "App info" პარამეტრების მენიუში.</value>
+  </data>
+
+  <data name="Comment" xml:space="preserve">
+    <value>კომენტარი</value>
+  </data>
+
+  <data name="NoComment" xml:space="preserve">
+    <value>კომენტარი მითითებული არ არის</value>
+  </data>
+
+  <data name="Interview_Complete_SwitchTo_WebMode_Checkbox" xml:space="preserve">
+    <value>ინტერვიუს Web Mode-ზე გადართვა</value>
+  </data>
+
+  <data name="Interview_Complete_SwitchTo_WebMode_Instruction" xml:space="preserve">
+    <value>სინქრონიზაციის შემდეგ ეს ინტერვიუ ონლაინ იქნება ხელმისაწვდომი. ინტერვიუზე წვდომისთვის რესპონდენტმა ქვემოთ მოცემული ბმული უნდა შეიყვანოს ინტერნეტთან დაკავშირებულ კომპიუტერში, ტაბლეტში ან სმარტფონში ბრაუზერში. იგივე ბმულის სკანირება შესაძლებელია ქვემოთ ნაჩვენები QR-კოდის გამოყენებით.</value>
+  </data>
+ 
+  <data name="Interview_Complete_Instruction" xml:space="preserve">
+    <value>გაგზავნის შემდეგ ეს ინტერვიუ დაიბლოკება და მისი რედაქტირება აღარ იქნება შესაძლებელი. გთხოვთ, დარწმუნდეთ, რომ ყველა ინფორმაცია სწორია.</value>
+  </data>
+
+   <data name="Loading" xml:space="preserve">
+    <value>იტვირთება...</value>
+  </data>
+
+  <data name="AreaMap_Save_With_Warning_Confirm" xml:space="preserve">
+    <value>თქვენ აპირებთ არაზუსტი შედეგის შენახვას. გსურთ გაგრძელება?</value>
+  </data>
+
+  <data name="AreaMap_Start_Measurement" xml:space="preserve">
+    <value>დაწყება</value>
+  </data>
+
+  <data name="AreaMap_InitLocation" xml:space="preserve">
+    <value>ინიციალიზაცია...</value>
+  </data>
+
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>დამტკიცებულია შტაბის მიერ</value>
+  </data>
+
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>დამტკიცებულია ზედამხედველის მიერ</value>
+  </data>
+
+  <data name="InterviewStatus_Completed" xml:space="preserve">
+    <value>დასრულებულია</value>
+  </data>
+
+  <data name="InterviewStatus_Created" xml:space="preserve">
+    <value>შექმნილია</value>
+  </data>
+
+  <data name="InterviewStatus_Deleted" xml:space="preserve">
+    <value>წაშლილია</value>
+  </data>
+
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>ინტერვიუერი მინიჭებულია</value>
+  </data>
+
+  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+    <value>უარყოფილია შტაბის მიერ</value>
+  </data>
+
+  <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+    <value>უარყოფილია ზედამხედველის მიერ</value>
+  </data>
+
+  <data name="InterviewStatus_Restarted" xml:space="preserve">
+    <value>თავიდან დაწყებულია</value>
+  </data>
+
+  <data name="InterviewStatus_Restored" xml:space="preserve">
+    <value>აღდგენილია</value>
+  </data>
+
+  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+    <value>ზედამხედველი მინიჭებულია</value>
+  </data>
+
+  <data name="SelectMapTitle" xml:space="preserve">
+    <value>რუკის არჩევა:</value>
+  </data>
+
+  <data name="Geofencing_Warning_Message" xml:space="preserve">
+    <value>თქვენ განსაზღვრული არეალის გარეთ ხართ</value>
+  </data>
+
+  <data name="SelectShapefileTitle" xml:space="preserve">
+    <value>საზღვრების არჩევა:</value>
+  </data>
+  
+  <data name="Interview_Complete_Title" xml:space="preserve">
+    <value>გადახედვა და გაგზავნა
+ინტერვიუ {0}</value>
+  </data>
+
+  <data name="Interview_Complete_Success_Text" xml:space="preserve">
+    <value>ყველა სავალდებულო კითხვას გაცემულია პასუხი
+შეცდომები არ დაფიქსირდა</value>
+  </data>
+
+  <data name="Interview_Complete_MoreCountString" xml:space="preserve">
+    <value>და კიდევ {0}</value>
+  </data>
+
+  <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
+    <value>კრიტიკული
+შეცდომები</value>
+  </data>
+
+  <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
+    <value>შეცდომები</value>
+  </data>
+
+  <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
+    <value>უპასუხოდ დარჩენილი
+კითხვები</value>
   </data>
 </root>

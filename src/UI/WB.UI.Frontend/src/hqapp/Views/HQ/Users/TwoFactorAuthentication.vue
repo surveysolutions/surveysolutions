@@ -1,23 +1,32 @@
 <template>
-    <ProfileLayout ref="profile" :role="userInfo.role" :isOwnProfile="isOwnProfile" :userName="userInfo.userName"
-        :canChangePassword="userInfo.canChangePassword" :userId="userInfo.userId" :currentTab="currentTab"
-        :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted">
+    <ProfileLayout ref="profile"
+        :role="userInfo.role"
+        :isOwnProfile="isOwnProfile"
+        :userName="userInfo.userName"
+        :canChangePassword="userInfo.canChangePassword"
+        :userId="userInfo.userId"
+        :currentTab="currentTab"
+        :canGenerateToken="userInfo.canGetApiToken"
+        :isRestricted="userInfo.isRestricted">
         <div class="block-filter">
             <p>{{ $t('Strings.HQ_Views_TwoFactorAuthentication_Description') }}</p>
         </div>
         <div class="block-filter">
             <h3>
                 {{ $t('Pages.AccountManage_Status2fa') }}
-                <span style="color:green;" v-if="is2faEnabled"> {{
+                <span style="color:green;"
+                    v-if="is2faEnabled"> {{
                     $t('Strings.HQ_Views_TwoFactorAuthentication_Enabled') }}
                 </span>
-                <span style="color:red;" v-if="!is2faEnabled"> {{
+                <span style="color:red;"
+                    v-if="!is2faEnabled"> {{
                     $t('Strings.HQ_Views_TwoFactorAuthentication_Disabled') }}
                 </span>
             </h3>
         </div>
 
-        <div class="alert alert-warning" v-if="is2faEnabled && recoveryCodesLeft <= 3">
+        <div class="alert alert-warning"
+            v-if="is2faEnabled && recoveryCodesLeft <= 3">
             <strong>{{ $t('Pages.RecoveryCodesLeft') }} {{ recoveryCodesLeft }}.</strong>
             <p>{{ $t('Pages.RecoveryCodesYouCan') }} <a :href="getUrl('GenerateRecoveryCodes')">{{
                 $t('Pages.GenerateRecoveryCodesLink') }}</a>.</p>
@@ -31,14 +40,16 @@
                         <div class="block-filter">
                             <h3>{{ $t('Pages.SetupAuthenticator') }}</h3>
                             <span>{{ $t('Strings.HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description')
-                                }}</span>
+                            }}</span>
                         </div>
                         <div>
-                            <button id="enable-authenticator" type="submit" @click="navigateTo('SetupAuthenticator')"
+                            <button id="enable-authenticator"
+                                type="submit"
+                                @click="navigateTo('SetupAuthenticator')"
                                 style="display: inline-block;"
                                 v-bind:disabled="userInfo.isObserving || userInfo.isRestricted"
                                 class="btn btn-success">{{
-                                    $t('Pages.SetupAuthenticator') }}</button>
+                                $t('Pages.SetupAuthenticator') }}</button>
                         </div>
                     </div>
                 </div>
@@ -49,33 +60,38 @@
                         <div class="block-filter">
                             <h3>{{ $t('Pages.ResetAuthenticator') }}</h3>
                             <span>{{ $t('Strings.HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description')
-                                }}</span>
+                            }}</span>
                         </div>
                         <div>
-                            <button id="reset-authenticator" type="submit" @click="navigateTo('ResetAuthenticator')"
+                            <button id="reset-authenticator"
+                                type="submit"
+                                @click="navigateTo('ResetAuthenticator')"
                                 style="display: inline-block;"
                                 v-bind:disabled="userInfo.isObserving || userInfo.isRestricted"
                                 class="btn btn-success">{{
-                                    $t('Pages.ResetAuthenticator') }}
+                                $t('Pages.ResetAuthenticator') }}
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4" v-if="is2faEnabled">
+            <div class="col-sm-4"
+                v-if="is2faEnabled">
                 <div class="flex-block selection-box">
                     <div class="block">
                         <div class="block-filter">
                             <h3>{{ $t('Pages.ResetRecoveryCodes') }}</h3>
                             <span>{{ $t('Strings.HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description')
-                                }}</span>
+                            }}</span>
                         </div>
                         <div>
-                            <button id="reset-codes" type="submit" @click="navigateTo('ResetRecoveryCodes')"
+                            <button id="reset-codes"
+                                type="submit"
+                                @click="navigateTo('ResetRecoveryCodes')"
                                 style="display: inline-block;"
                                 v-bind:disabled="userInfo.isObserving || userInfo.isRestricted"
                                 class="btn btn-success">{{
-                                    $t('Pages.ResetRecoveryCodes') }} </button>
+                                $t('Pages.ResetRecoveryCodes') }} </button>
                         </div>
                     </div>
                 </div>
@@ -84,7 +100,10 @@
 
         <div v-if="is2faEnabled">
             <p>{{ $t('Strings.HQ_Views_TwoFactorAuthentication_Disable2fa_Description') }}</p>
-            <button id="disable-2fa" type="submit" @click="navigateTo('Disable2fa')" class="btn btn-danger"
+            <button id="disable-2fa"
+                type="submit"
+                @click="navigateTo('Disable2fa')"
+                class="btn btn-danger"
                 v-bind:disabled="userInfo.isObserving || userInfo.isRestricted">{{ $t('Pages.Disable2fa') }}</button>
         </div>
     </ProfileLayout>

@@ -2565,6 +2565,12 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string MapList_HasDuplicateLabels {
+            get {
+                return ResourceManager.GetString("MapList_HasDuplicateLabels", resourceCulture);
+            }
+        }
+        
         public static string MapLinking_DescriptionTitle {
             get {
                 return ResourceManager.GetString("MapLinking_DescriptionTitle", resourceCulture);

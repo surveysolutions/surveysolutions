@@ -1,13 +1,17 @@
 <template>
     <Layout>
-        <Navbar slot="header" />
-        <div class="row" slot>
-            <router-view name="sideBar"></router-view>
-            <section class="questionnaire details-interview">
-                <router-view mode="web"></router-view>
-            </section>
-            <IdleTimeoutService />
-        </div>
+        <template v-slot:header>
+            <Navbar  />
+        </template>
+        <template v-slot>
+            <div class="row" >
+                <router-view name="sideBar"></router-view>
+                <section class="questionnaire details-interview">
+                    <router-view mode="web"></router-view>
+                </section>
+                <IdleTimeoutService />
+            </div>
+        </template>
     </Layout>
 </template>
 
@@ -16,7 +20,7 @@
 import '@/assets/css/markup.scss'
 import '@/assets/css/markup-web-interview.scss'
 
-import { onMounted } from 'vue';
+import { onMounted } from 'vue'
 
 export default {
     name: 'app',
@@ -30,7 +34,7 @@ export default {
             if (typeof window.ajustDetailsPanelHeight === 'function') {
                 window.ajustDetailsPanelHeight()
             }
-        });
+        })
     },
 }
 </script>

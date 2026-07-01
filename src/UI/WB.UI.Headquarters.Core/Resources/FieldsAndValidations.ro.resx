@@ -270,4 +270,33 @@
   <data name="VerificationCodeFieldName" xml:space="preserve">
     <value>CODUL DE VERIFICARE</value>
   </data>
+
+
+  <data name="AllowRelinkTablet" xml:space="preserve">
+    <value>Permiteți reconectarea la un alt dispozitiv cu pierderea datelor de pe dispozitivul original.</value>
+  </data>
+
+  <data name="RestrictedAccountMessage" xml:space="preserve">
+    <value>Acest cont este restricționat să efectueze această acțiune</value>
+  </data>
+
+  <data name="RestrictedAccount" xml:space="preserve">
+    <value>Acest cont este restricționat</value>
+  </data>
+
+  <data name="WorkspaceRequired" xml:space="preserve">
+    <value>Spațiul de lucru este obligatoriu</value>
+  </data>
+
+  <data name="WorkspaceMissing" xml:space="preserve">
+    <value>Spațiul de lucru nu a fost găsit</value>
+  </data>
+
+  <data name="UserRoleRequired" xml:space="preserve">
+    <value>Rolul utilizatorului este obligatoriu</value>
+  </data>
+
+  <data name="PasswordChangeRequired" xml:space="preserve">
+    <value>Parola dvs. a fost resetată. Trebuie să o schimbați pentru a obține acces la site.</value>
+  </data>
 </root>

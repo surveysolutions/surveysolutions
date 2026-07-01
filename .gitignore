@@ -142,3 +142,10 @@ artifacts
 appsettings.*.ini
 !/installer/src/**/appsettings.*.ini
 appsettings.*.json
+.translation_work/
+batch*.json
+ka_untranslated.json
+ro_translation_gaps.json
+translation_missing.txt
+translation_work/
+translated_batch*.json
