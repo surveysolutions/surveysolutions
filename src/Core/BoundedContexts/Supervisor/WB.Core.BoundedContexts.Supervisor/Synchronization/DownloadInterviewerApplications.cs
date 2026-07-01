@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
     public class DownloadInterviewerApplications : SynchronizationStep
     {
-        private const int ProgressReportStepPercent = 5;
+        private const int ProgressReportStepPercent = 1;
         private const int UnknownLengthProgressStepBytes = 512 * 1024;
 
         private class DownloadProgressState

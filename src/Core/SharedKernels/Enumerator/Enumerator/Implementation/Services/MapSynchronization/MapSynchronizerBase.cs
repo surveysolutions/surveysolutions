@@ -123,7 +123,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                         return;
                     }
 
-                    var currentProgressBucket = (int) (args.ProgressPercentage / 5m);
+                    var currentProgressBucket = (int) (args.ProgressPercentage / 1m);
                     if (currentProgressBucket <= lastReportedProgressBucket)
                         return;
 

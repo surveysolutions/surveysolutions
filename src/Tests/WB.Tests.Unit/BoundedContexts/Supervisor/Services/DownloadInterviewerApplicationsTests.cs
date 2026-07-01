@@ -161,7 +161,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         }
 
         [Test]
-        public async Task when_downloading_apk_with_known_size_progress_should_be_throttled_to_5_percent_buckets()
+        public async Task when_downloading_apk_with_known_size_progress_should_be_throttled_to_1_percent_buckets()
         {
             // arrange
             int? version = 12345;
@@ -205,10 +205,10 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             await step.ExecuteAsync();
             await Task.Delay(100); // allow Progress<T> callbacks to be dispatched
 
-            // assert: 100 raw events fired but only ≤21 pass the 5% bucket filter (buckets 0-20 = 21 max)
+            // assert: 100 raw events fired but only ≤101 pass the 1% bucket filter (buckets 0-100 = 101 max)
             var appDownloadReports = progressReports.Count(p => p.Stage == SyncStage.DownloadApplication);
-            Assert.That(appDownloadReports, Is.LessThanOrEqualTo(21),
-                $"Expected at most 21 throttled reports (one per 5% bucket), got {appDownloadReports}");
+            Assert.That(appDownloadReports, Is.LessThanOrEqualTo(101),
+                $"Expected at most 101 throttled reports (one per 1% bucket), got {appDownloadReports}");
         }
 
         [Test]

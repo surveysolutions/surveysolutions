@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
         }
 
         [Test]
-        public async Task should_report_download_progress_only_once_when_percent_does_not_change()
+        public async Task should_report_download_progress_only_when_bucket_changes()
         {
             var synchronizationService = new Mock<IOnlineSynchronizationService>();
             synchronizationService.Setup(x => x.GetMapList(It.IsAny<CancellationToken>()))
@@ -95,7 +95,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
             await service.Synchronize(progress, CancellationToken.None, new SynchronizationStatistics());
 
             var downloadReports = progress.Items.Count(p => p.Status == SynchronizationStatus.Download);
-            Assert.That(downloadReports, Is.EqualTo(1));
+            Assert.That(downloadReports, Is.EqualTo(3));
             mapService.Verify(x => x.MoveTempMapToPermanent("big-map.tpk"), Times.Once);
         }
 
