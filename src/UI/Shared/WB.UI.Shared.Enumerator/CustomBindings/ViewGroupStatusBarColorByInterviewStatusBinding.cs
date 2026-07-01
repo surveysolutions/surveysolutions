@@ -1,15 +1,21 @@
 ﻿using Android.Graphics;
 using Android.Views;
 using AndroidX.Core.Content;
+using MvvmCross;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class ViewGroupStatusBarColorByInterviewStatusBinding : BaseBinding<ViewGroup, GroupStatus>
     {
+        private readonly ILogger logger;
+
         public ViewGroupStatusBarColorByInterviewStatusBinding(ViewGroup androidControl)
             : base(androidControl)
         {
+            this.logger = Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<ViewGroupStatusBarColorByInterviewStatusBinding>();
         }
 
         protected override void SetValueToView(ViewGroup target, GroupStatus value)
@@ -39,13 +45,14 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             });
         }
 
-        private static void SetBackgroundColor(ViewGroup target, int colorResourceId)
+        private void SetBackgroundColor(ViewGroup target, int colorResourceId)
         {
             try
             {
                 var color = new Color(ContextCompat.GetColor(target.Context, colorResourceId));
 
-                if (target.Context is not Activity activity)
+                var activity = target.GetActivity();
+                if (activity == null)
                     return;
 
                 Window window = activity.Window;
@@ -56,11 +63,21 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 window.ClearFlags(WindowManagerFlags.TranslucentStatus);
                 window.SetStatusBarColor(color);
             }
-            catch (ObjectDisposedException)
+            catch (ObjectDisposedException ex)
             {
+                logger.Warn($"Cannot set status bar color - context or window is disposed. Color resource: {colorResourceId}", ex);
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
+                logger.Warn($"Cannot set status bar color - invalid operation. Color resource: {colorResourceId}", ex);
+            }
+            catch (Java.Lang.IllegalStateException ex)
+            {
+                logger.Warn($"Cannot set status bar color - illegal state. Color resource: {colorResourceId}", ex);
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"Unexpected error setting status bar color. Color resource: {colorResourceId}", ex);
             }
         }
     }
