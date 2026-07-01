@@ -1,5 +1,7 @@
 <template>
-    <div role="tabpanel" class="tab-pane page-preview-block" id="devices">
+    <div role="tabpanel"
+        class="tab-pane page-preview-block"
+        id="devices">
         <div class="row contain-input">
             <div class="col-sm-9">
                 <h2>{{ $t('Settings.MobileAppSettings_Title') }}</h2>
@@ -9,9 +11,12 @@
                 <div class="block-filter">
                     <div class="form-group">
                         <input class="checkbox-filter single-checkbox"
-                            v-model="isInterviewerAutomaticUpdatesEnabledModel" @change="updateDeviceSettings"
-                            id="interviewerAutomaticUpdatesEnabled" type="checkbox" />
-                        <label for="interviewerAutomaticUpdatesEnabled" style="font-weight: bold">
+                            v-model="isInterviewerAutomaticUpdatesEnabledModel"
+                            @change="updateDeviceSettings"
+                            id="interviewerAutomaticUpdatesEnabled"
+                            type="checkbox" />
+                        <label for="interviewerAutomaticUpdatesEnabled"
+                            style="font-weight: bold">
                             <span class="tick"></span>
                             {{ $t('Settings.InterviewerAutoUpdate') }}
                             <p style="font-weight: normal">
@@ -24,9 +29,13 @@
             <div class="col-sm-9">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input class="checkbox-filter single-checkbox" v-model="isDeviceNotificationsEnabledModel"
-                            @change="updateDeviceSettings" id="deviceNotificationsEnabled" type="checkbox" />
-                        <label for="deviceNotificationsEnabled" style="font-weight: bold">
+                        <input class="checkbox-filter single-checkbox"
+                            v-model="isDeviceNotificationsEnabledModel"
+                            @change="updateDeviceSettings"
+                            id="deviceNotificationsEnabled"
+                            type="checkbox" />
+                        <label for="deviceNotificationsEnabled"
+                            style="font-weight: bold">
                             <span class="tick"></span>
                             {{ $t('Settings.DeviceNotifications') }}
                             <p style="font-weight: normal">
@@ -39,10 +48,13 @@
             <div class="col-sm-9">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input class="checkbox-filter single-checkbox" v-model="isPartialSynchronizationEnabledModel"
-                            @change="updateDeviceSettings" id="interviewerPartialSynchronizationEnabled"
+                        <input class="checkbox-filter single-checkbox"
+                            v-model="isPartialSynchronizationEnabledModel"
+                            @change="updateDeviceSettings"
+                            id="interviewerPartialSynchronizationEnabled"
                             type="checkbox" />
-                        <label for="interviewerPartialSynchronizationEnabled" style="font-weight: bold">
+                        <label for="interviewerPartialSynchronizationEnabled"
+                            style="font-weight: bold">
                             <span class="tick"></span>
                             {{ $t('Settings.InterviewerPartialSynchronization') }}
                             <p style="font-weight: normal">
@@ -57,8 +69,11 @@
                     <div class="form-group">
                         <input class="checkbox-filter single-checkbox"
                             v-model="allowSupervisorChangeAssignmentStatusModel"
-                            @change="updateDeviceSettings" id="allowSupervisorChangeAssignmentStatus" type="checkbox" />
-                        <label for="allowSupervisorChangeAssignmentStatus" style="font-weight: bold">
+                            @change="updateDeviceSettings"
+                            id="allowSupervisorChangeAssignmentStatus"
+                            type="checkbox" />
+                        <label for="allowSupervisorChangeAssignmentStatus"
+                            style="font-weight: bold">
                             <span class="tick"></span>
                             {{ $t('Settings.AllowSupervisorChangeAssignmentStatus') }}
                             <p style="font-weight: normal">
@@ -69,13 +84,17 @@
                 </div>
             </div>
             <div class="col-sm-9">
-                <div class="block-filter" style="padding-left: 30px">
+                <div class="block-filter"
+                    style="padding-left: 30px">
                     <div class="form-group">
                         <input class="checkbox-filter single-checkbox"
                             v-model="allowInterviewerChangeAssignmentStatusModel"
-                            @change="updateDeviceSettings" id="allowInterviewerChangeAssignmentStatus" type="checkbox"
+                            @change="updateDeviceSettings"
+                            id="allowInterviewerChangeAssignmentStatus"
+                            type="checkbox"
                             :disabled="!allowSupervisorChangeAssignmentStatusModel" />
-                        <label for="allowInterviewerChangeAssignmentStatus" style="font-weight: bold">
+                        <label for="allowInterviewerChangeAssignmentStatus"
+                            style="font-weight: bold">
                             <span class="tick"></span>
                             {{ $t('Settings.AllowInterviewerChangeAssignmentStatus') }}
                             <p style="font-weight: normal">
@@ -86,10 +105,14 @@
                 </div>
             </div>
             <div class="col-sm-9">
-                <Form v-slot="{ meta }" @submit="noAction" :data-vv-scope="'geographyQuestion'">
-                    <div class="block-filter" style="padding-left: 30px">
+                <Form v-slot="{ meta }"
+                    @submit="noAction"
+                    :data-vv-scope="'geographyQuestion'">
+                    <div class="block-filter"
+                        style="padding-left: 30px">
                         <div class="form-group">
-                            <label for="interviewerGeographyQuestionAccuracyInMeters" style="font-weight: bold">
+                            <label for="interviewerGeographyQuestionAccuracyInMeters"
+                                style="font-weight: bold">
                                 <span class="tick"></span>
                                 {{ $t('Settings.InterviewerGeographyQuestionAccuracyInMeters') }}
                                 <p style="font-weight: normal;margin-bottom: 0px">
@@ -99,25 +122,35 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group input-group-save">
-                                <Field class="form-control number" v-model="geographyQuestionAccuracyInMetersModel"
+                                <Field class="form-control number"
+                                    v-model="geographyQuestionAccuracyInMetersModel"
                                     :rules="{
                                         integer: true,
                                         required: true,
                                         min_value: 1,
                                         max_value: 1000,
-                                    }" :validateOnChange="true" :validateOnInput="true" name="accuracy"
-                                    label="Accuracy" id="interviewerGeographyQuestionAccuracyInMeters" type="number"
+                                    }"
+                                    :validateOnChange="true"
+                                    :validateOnInput="true"
+                                    name="accuracy"
+                                    label="Accuracy"
+                                    id="interviewerGeographyQuestionAccuracyInMeters"
+                                    type="number"
                                     onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" />
                             </div>
-                            <button type="button" class="btn btn-success" :disabled="geographyQuestionAccuracyInMetersModel ==
-                                geographyQuestionAccuracyInMetersCancelModel ||
-                                geographyQuestionAccuracyInMetersModel < 1 ||
-                                geographyQuestionAccuracyInMetersModel > 1000 ||
-                                meta.valid == false
-                                " @click="updateGeographyQuestionAccuracyInMeters">
+                            <button type="button"
+                                class="btn btn-success"
+                                :disabled="geographyQuestionAccuracyInMetersModel ==
+                                    geographyQuestionAccuracyInMetersCancelModel ||
+                                    geographyQuestionAccuracyInMetersModel < 1 ||
+                                    geographyQuestionAccuracyInMetersModel > 1000 ||
+                                    meta.valid == false
+                                "
+                                @click="updateGeographyQuestionAccuracyInMeters">
                                 {{ $t('Common.Save') }}
                             </button>
-                            <button type="button" class="btn btn-link"
+                            <button type="button"
+                                class="btn btn-link"
                                 :disabled="geographyQuestionAccuracyInMetersModel == geographyQuestionAccuracyInMetersCancelModel"
                                 @click="cancelGeographyQuestionAccuracyInMeters">
                                 {{ $t('Common.Cancel') }}
@@ -130,10 +163,13 @@
                 </Form>
             </div>
             <div class="col-sm-9">
-                <Form v-slot="{ meta }" @submit="noAction">
-                    <div class="block-filter" style="padding-left: 30px">
+                <Form v-slot="{ meta }"
+                    @submit="noAction">
+                    <div class="block-filter"
+                        style="padding-left: 30px">
                         <div class="form-group">
-                            <label for="interviewerGeographyQuestionPeriodInSeconds" style="font-weight: bold">
+                            <label for="interviewerGeographyQuestionPeriodInSeconds"
+                                style="font-weight: bold">
                                 <span class="tick"></span>
                                 {{ $t('Settings.InterviewerGeographyQuestionPeriodInSeconds') }}
                                 <p style="font-weight: normal;margin-bottom: 0px">
@@ -143,24 +179,34 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group input-group-save">
-                                <Field class="form-control number" v-model="geographyQuestionPeriodInSecondsModel"
+                                <Field class="form-control number"
+                                    v-model="geographyQuestionPeriodInSecondsModel"
                                     :rules="{
                                         integer: true,
                                         required: true,
                                         min_value: 5,
                                         max_value: 1000,
-                                    }" :validateOnChange="true" :validateOnInput="true" label="Period"
-                                    id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number"
+                                    }"
+                                    :validateOnChange="true"
+                                    :validateOnInput="true"
+                                    label="Period"
+                                    id="interviewerGeographyQuestionPeriodInSeconds"
+                                    name="period"
+                                    type="number"
                                     onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" />
                             </div>
-                            <button type="button" class="btn btn-success" :disabled="geographyQuestionPeriodInSecondsModel ==
-                                geographyQuestionPeriodInSecondsCancelModel ||
-                                geographyQuestionPeriodInSecondsModel < 5 ||
-                                geographyQuestionPeriodInSecondsModel > 1000 ||
-                                meta.valid == false" @click="updateGeographyQuestionPeriodInSeconds">
+                            <button type="button"
+                                class="btn btn-success"
+                                :disabled="geographyQuestionPeriodInSecondsModel ==
+                                    geographyQuestionPeriodInSecondsCancelModel ||
+                                    geographyQuestionPeriodInSecondsModel < 5 ||
+                                    geographyQuestionPeriodInSecondsModel > 1000 ||
+                                    meta.valid == false"
+                                @click="updateGeographyQuestionPeriodInSeconds">
                                 {{ $t('Common.Save') }}
                             </button>
-                            <button type="button" class="btn btn-link"
+                            <button type="button"
+                                class="btn btn-link"
                                 :disabled="geographyQuestionPeriodInSecondsModel == geographyQuestionPeriodInSecondsCancelModel"
                                 @click="cancelGeographyQuestionPeriodInSeconds">
                                 {{ $t('Common.Cancel') }}
@@ -174,35 +220,50 @@
             </div>
 
             <div class="col-sm-9">
-                <div class="block-filter" style="padding-left: 30px">
+                <div class="block-filter"
+                    style="padding-left: 30px">
                     <div class="form-group">
-                        <label for="esriApiKey" style="font-weight: bold">
+                        <label for="esriApiKey"
+                            style="font-weight: bold">
                             <span class="tick"></span>
                             {{ $t('Settings.EsriApiKey') }}
-                            <p class="error" style="font-weight: normal;margin-bottom: 0px">
+                            <p class="error"
+                                style="font-weight: normal;margin-bottom: 0px">
                                 {{ $t('Settings.EsriApiKeyDescription') }}
                             </p>
                         </label>
                     </div>
                     <div class="form-group">
                         <div class="input-group input-group-save">
-                            <input class="form-control number" type="password" v-model="esriApiKeyModel" id="esriApiKey"
+                            <input class="form-control number"
+                                type="password"
+                                v-model="esriApiKeyModel"
+                                id="esriApiKey"
                                 name="esriKey" />
                         </div>
-                        <button type="button" class="btn btn-success" :disabled="esriApiKeyModel ==
-                            esriApiKeyInitialModel" @click="updateEsriApiKey">
+                        <button type="button"
+                            class="btn btn-success"
+                            :disabled="esriApiKeyModel ==
+                                esriApiKeyInitialModel"
+                            @click="updateEsriApiKey">
                             {{ $t('Common.Save') }}
                         </button>
-                        <button type="button" class="btn btn-link" :disabled="esriApiKeyModel ==
-                            esriApiKeyInitialModel" @click="cancelEsriApiKey">
+                        <button type="button"
+                            class="btn btn-link"
+                            :disabled="esriApiKeyModel ==
+                                esriApiKeyInitialModel"
+                            @click="cancelEsriApiKey">
                             {{ $t('Common.Cancel') }}
                         </button>
                     </div>
                 </div>
-                <div class="block-filter" style="padding-left: 30px">
-                    <input id="ShowKey" type="checkbox"
+                <div class="block-filter"
+                    style="padding-left: 30px">
+                    <input id="ShowKey"
+                        type="checkbox"
                         onclick="var pass = document.getElementById('esriApiKey');pass.type = (pass.type === 'text' ? 'password' : 'text');">
-                    <label for="ShowKey" style="padding-left:5px;">
+                    <label for="ShowKey"
+                        style="padding-left:5px;">
                         <span></span>{{ $t('Pages.ShowKey') }}
                     </label>
                 </div>
@@ -277,7 +338,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:isInterviewerAutomaticUpdatesEnabled', value)
-            }
+            },
         },
         isDeviceNotificationsEnabledModel: {
             get() {
@@ -285,7 +346,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:isDeviceNotificationsEnabled', value)
-            }
+            },
         },
         isPartialSynchronizationEnabledModel: {
             get() {
@@ -293,7 +354,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:isPartialSynchronizationEnabled', value)
-            }
+            },
         },
 
         geographyQuestionAccuracyInMetersModel: {
@@ -302,7 +363,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:geographyQuestionAccuracyInMeters', value)
-            }
+            },
         },
         geographyQuestionAccuracyInMetersCancelModel: {
             get() {
@@ -310,7 +371,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:geographyQuestionAccuracyInMetersCancel', value)
-            }
+            },
         },
 
         geographyQuestionPeriodInSecondsModel: {
@@ -319,7 +380,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:geographyQuestionPeriodInSeconds', value)
-            }
+            },
         },
         geographyQuestionPeriodInSecondsCancelModel: {
             get() {
@@ -327,7 +388,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:geographyQuestionPeriodInSecondsCancel', value)
-            }
+            },
         },
         esriApiKeyModel: {
             get() {
@@ -335,7 +396,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:esriApiKey', value)
-            }
+            },
         },
         esriApiKeyInitialModel: {
             get() {
@@ -343,7 +404,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:esriApiKeyInitial', value)
-            }
+            },
         },
         allowSupervisorChangeAssignmentStatusModel: {
             get() {
@@ -351,7 +412,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:allowSupervisorChangeAssignmentStatus', value)
-            }
+            },
         },
         allowInterviewerChangeAssignmentStatusModel: {
             get() {
@@ -359,7 +420,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:allowInterviewerChangeAssignmentStatus', value)
-            }
+            },
         },
     },
 
@@ -378,7 +439,7 @@ export default {
                     this.isDeviceNotificationsEnabledModel,
                     this.isPartialSynchronizationEnabledModel,
                     this.allowSupervisorChangeAssignmentStatusModel,
-                    this.allowInterviewerChangeAssignmentStatusModel,
+                    this.allowInterviewerChangeAssignmentStatusModel
                 )
             })
         },
@@ -389,7 +450,7 @@ export default {
             else
                 nextTick(() => {
                     this.$hq.AdminSettings.setGeographyQuestionAccuracyInMeters(
-                        this.geographyQuestionAccuracyInMetersModel,
+                        this.geographyQuestionAccuracyInMetersModel
                     ).then(() => {
                         this.geographyQuestionAccuracyInMetersCancelModel =
                             this.geographyQuestionAccuracyInMetersModel
@@ -406,7 +467,7 @@ export default {
             else
                 nextTick(() => {
                     this.$hq.AdminSettings.setGeographyQuestionPeriodInSeconds(
-                        this.geographyQuestionPeriodInSecondsModel,
+                        this.geographyQuestionPeriodInSecondsModel
                     ).then(() => {
                         this.geographyQuestionPeriodInSecondsCancelModel =
                             this.geographyQuestionPeriodInSecondsModel
@@ -420,7 +481,7 @@ export default {
         async updateEsriApiKey() {
             nextTick(() => {
                 return this.$hq.AdminSettings.setEsriApiKey(
-                    this.esriApiKeyModel,
+                    this.esriApiKeyModel
                 ).then(() => {
                     this.esriApiKeyInitialModel = this.esriApiKeyModel
                 })
@@ -430,7 +491,7 @@ export default {
         noAction() {
             // Do nothing
         },
-    }
+    },
 }
 
 </script>

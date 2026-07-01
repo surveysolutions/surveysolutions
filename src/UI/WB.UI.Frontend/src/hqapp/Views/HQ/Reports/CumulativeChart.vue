@@ -1,6 +1,8 @@
 <template>
     <div class="interviewChart">
-        <Line :data="chartData" ref="chart" :options="chartOptions" />
+        <Line :data="chartData"
+            ref="chart"
+            :options="chartOptions" />
     </div>
 </template>
 
@@ -13,7 +15,7 @@ const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     layout: {
-        padding: 5
+        padding: 5,
     },
     interaction: {
         intersect: false,
@@ -28,7 +30,7 @@ const chartOptions = {
             mode: 'x',
             intersect: false,
             position: 'average',
-        }
+        },
     },
     scales: {
         x:
@@ -76,10 +78,10 @@ const chartOptions = {
 }
 
 import { Line } from 'vue-chartjs'
-import 'chartjs-adapter-moment'
-import { Chart, LineController, Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale, TimeScale, Filler } from 'chart.js';
+import 'chartjs-adapter-dayjs-4'
+import { Chart, LineController, Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale, TimeScale, Filler } from 'chart.js'
 
-Chart.register(LineController, Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale, TimeScale, Filler);
+Chart.register(LineController, Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale, TimeScale, Filler)
 
 
 export default {
@@ -88,12 +90,12 @@ export default {
     props: {
         chartData: {
             type: Object,
-            required: true
+            required: true,
         },
         options: {
             type: Object,
-            required: false
-        }
+            required: false,
+        },
     },
     computed: {
         chartOptions() {
@@ -101,19 +103,19 @@ export default {
             this.options.animation = {
                 onComplete: () => {
                     self.$emit('ready')
-                }
+                },
             }
 
             return Object.assign(chartOptions, this.options)
-        }
+        },
     },
     expose: ['getImage'],
     methods: {
         getImage() {
             if (this.$refs.chart.chart == null) return null
             return this.$refs.chart.chart.canvas.toDataURL('image/png')
-        }
-    }
+        },
+    },
 
 }
 </script>
