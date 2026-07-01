@@ -1,8 +1,15 @@
 <template>
     <span class="dropdown  bootstrap-select">
-        <button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-default"
-            data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-1" aria-haspopup="listbox"
-            aria-expanded="false" :title="text" :disabled="isDisabled">
+        <button type="button"
+            tabindex="-1"
+            class="btn dropdown-toggle bs-placeholder btn-default"
+            data-bs-toggle="dropdown"
+            role="combobox"
+            aria-owns="bs-select-1"
+            aria-haspopup="listbox"
+            aria-expanded="false"
+            :title="text"
+            :disabled="isDisabled">
             <div class="filter-option">
                 <div class="filter-option-inner">
                     <div class="filter-option-inner-inner">{{ text }}</div>
@@ -10,11 +17,21 @@
             </div><span class="bs-caret"><span class="caret"></span></span>
         </button>
         <div class="dropdown-menu">
-            <div class="inner" role="listbox" id="bs-select-1" tabindex="-1" aria-activedescendant="bs-select-1-0">
-                <ul class="dropdown-menu inner show" role="presentation">
-                    <li v-for="item in options" :key="item[keySelector]" @click="select(item)"
+            <div class="inner"
+                role="listbox"
+                id="bs-select-1"
+                tabindex="-1"
+                aria-activedescendant="bs-select-1-0">
+                <ul class="dropdown-menu inner show"
+                    role="presentation">
+                    <li v-for="item in options"
+                        :key="item[keySelector]"
+                        @click="select(item)"
                         :class="{ selected: item[keySelector] == modelValue, active: item[keySelector] == modelValue }">
-                        <a role="option" class="dropdown-item" id="bs-select-1-1" tabindex="0">
+                        <a role="option"
+                            class="dropdown-item"
+                            id="bs-select-1-1"
+                            tabindex="0">
                             <span class="text">{{ item[valueSelector] }}</span>
                         </a>
                     </li>
@@ -52,8 +69,8 @@ export default {
     methods: {
         select(item) {
             const value = item[this.keySelector]
-            this.$emit('update:modelValue', value);
-            this.$emit('change', value);
+            this.$emit('update:modelValue', value)
+            this.$emit('change', value)
         },
     },
     computed: {
@@ -68,6 +85,6 @@ export default {
             }
             return selOption[this.valueSelector]
         },
-    }
+    },
 }
 </script>
