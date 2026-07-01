@@ -1,11 +1,15 @@
 <template>
-    <wb-question :question="$me" questionCssClassName=" audio-question">
+    <wb-question :question="$me"
+        questionCssClassName=" audio-question">
         <div class="question-unit">
             <div class="options-group">
-                <button type="button" class="btn btn-default btn-lg btn-action-questionnaire"
-                    v-if="!isRecording && !$me.isAnswered" v-on:click="startRecording"
+                <button type="button"
+                    class="btn btn-default btn-lg btn-action-questionnaire"
+                    v-if="!isRecording && !$me.isAnswered"
+                    v-on:click="startRecording"
                     :disabled="!$me.acceptAnswer"><span></span>{{ $t('WebInterviewUI.AudioClickRecord') }}</button>
-                <div class="field answered" v-if="$me.isAnswered">
+                <div class="field answered"
+                    v-if="$me.isAnswered">
                     <ul class="block-with-data list-unstyled">
                         <li :id="answerHolderId">{{ $t("WebInterviewUI.AudioRecordingDuration", {
                             humanizedLength:
@@ -14,37 +18,56 @@
                     </ul>
                     <wb-remove-answer />
                 </div>
-                <div v-if="$me.isAnswered" class="action-btn-holder time-question">
-                    <audio controls preload="auto" style="width:100%" :src="audioRecordPath">
+                <div v-if="$me.isAnswered"
+                    class="action-btn-holder time-question">
+                    <audio controls
+                        preload="auto"
+                        style="width:100%"
+                        :src="audioRecordPath">
                     </audio>
                 </div>
                 <wb-lock />
             </div>
         </div>
-        <div class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content" :id="modalId">
+        <div class="modal fade"
+            tabindex="-1"
+            role="dialog">
+            <div class="modal-dialog"
+                role="document">
+                <div class="modal-content"
+                    :id="modalId">
                     <div class="modal-header">
-                        <button type="button" v-on:click="cancelRecording" class="close" data-bs-dismiss="modal"
+                        <button type="button"
+                            v-on:click="cancelRecording"
+                            class="close"
+                            data-bs-dismiss="modal"
                             aria-label="Close">
                             <span aria-hidden="true"></span>
                         </button>
                         <h4 class="modal-title">
                             {{ $t("WebInterviewUI.AudioRecording") }}
                         </h4>
-                        <h5 v-dateTimeFormatting v-dompurify-html="$me.title"></h5>
+                        <h5 v-dateTimeFormatting
+                            v-dompurify-html="$me.title"></h5>
                     </div>
                     <div class="modal-body">
-                        <canvas class="analyser" width="100" height="100"></canvas>
+                        <canvas class="analyser"
+                            width="100"
+                            height="100"></canvas>
                     </div>
                     <div class="modal-footer">
                         <div class="recordign-time">
                             {{ formattedTimer }}
                         </div>
-                        <button type="button" v-on:click="stopRecording" class="btn btn-primary" v-if="isRecording">
+                        <button type="button"
+                            v-on:click="stopRecording"
+                            class="btn btn-primary"
+                            v-if="isRecording">
                             {{ $t("WebInterviewUI.Done") }}
                         </button>
-                        <button type="button" v-on:click="cancelRecording" class="btn btn-link "
+                        <button type="button"
+                            v-on:click="cancelRecording"
+                            class="btn btn-link "
                             data-bs-dismiss="modal">
                             {{ $t("WebInterviewUI.Cancel") }}
                         </button>
@@ -54,11 +77,13 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
-        <div class="modal-backdrop in" style="display: none"></div>
+        <div class="modal-backdrop in"
+            style="display: none"></div>
         <!-- /.modal -->
         <template v-slot:sideMenu>
             <li>
-                <a :href="audioRecordPath" v-if="isRecorded">{{ $t("Common.Download") }}</a>
+                <a :href="audioRecordPath"
+                    v-if="isRecorded">{{ $t("Common.Download") }}</a>
             </li>
         </template>
     </wb-question>
@@ -161,8 +186,8 @@ export default {
                         self.maxDurationInterval = setInterval(self.stopRecording, self.maxDuration)
                     },
                     errorCallback: (error, stack) => {
-                        console.error('An error occurred in a child component:', error);
-                        console.error('Stack trace:', stack);
+                        console.error('An error occurred in a child component:', error)
+                        console.error('Stack trace:', stack)
                         self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.AudioInitializationFailed'))
                         this.closeModal()
                     },
