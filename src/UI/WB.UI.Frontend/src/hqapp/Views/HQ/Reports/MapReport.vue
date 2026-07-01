@@ -119,8 +119,8 @@
 <script>
 import * as toastr from 'toastr'
 import { nextTick } from 'vue'
-import gql from 'graphql-tag'
-import { isNull, chain, debounce, delay, forEach, find, flatten, toNumber, isEqual, isNumber } from 'lodash'
+import { gql, gqlRequest } from '~/hqapp/api/graphql'
+import { isNull, debounce, delay, forEach, find, flatten, toNumber, isEqual, isNumber } from 'lodash-es'
 import routeSync from '~/shared/routeSync'
 import InterviewFilter from '../Interviews/InterviewQuestionsFilters'
 import { cloneWithWritableProperties } from '~/shared/clone'
@@ -562,12 +562,9 @@ export default {
             return this.api
                 .GpsQuestionsByQuestionnaire(this.questionnaireId.key, this.selectedVersionValue)
                 .then(response => {
-                    this.gpsQuestions = chain(response.data)
+                    this.gpsQuestions = (response.data || [])
                         .filter(d => d != null && d != '')
-                        .map(d => {
-                            return { key: d, value: d }
-                        })
-                        .value()
+                        .map(d => ({ key: d, value: d }))
 
                     if (this.gpsQuestions.length > 0) {
                         this.selectGpsQuestion(this.gpsQuestions[0])
@@ -919,13 +916,9 @@ export default {
                 request.where = { interviewFilter: where }
             }
 
-            const report = await this.$apollo.query({
-                query,
-                variables: request,
-                fetchPolicy: 'network-only',
-            })
+            const report = await gqlRequest(query, request)
 
-            var mapReport = cloneWithWritableProperties(report.data.mapReport.report)
+            var mapReport = cloneWithWritableProperties(report.mapReport.report)
             forEach(mapReport.featureCollection.features, feature => {
                 if (!Array.isArray(feature.geometry.coordinates)) {
                     var coordinates = feature.geometry.coordinates
