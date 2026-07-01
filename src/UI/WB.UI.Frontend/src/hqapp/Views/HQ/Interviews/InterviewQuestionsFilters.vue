@@ -85,7 +85,7 @@ import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 import { gql, gqlRequest } from '~/hqapp/api/graphql'
 import InterviewFilter from './InterviewFilter'
-import { find, filter } from 'lodash-es'
+import { find, filter, cloneDeep, isEqual } from 'lodash-es'
 import DOMPurify from 'dompurify'
 const sanitizeHtml = text => DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
 
