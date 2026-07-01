@@ -30,7 +30,7 @@
                         {{ $t("Common.Save") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">{{
                         $t("Common.Cancel")
-                    }}</button>
+                        }}</button>
                     <button type="button" class="btn btn-danger pull-right" role="delete" v-if="calendarEventId != null"
                         @click="deleteCalendarEvent">
                         {{ $t("Common.Delete") }}</button>
@@ -55,7 +55,7 @@
                     <button type="button" class="btn btn-primary" @click="confirmComplete">{{
                         $t("Assignments.Complete") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                    }}</button>
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -77,7 +77,7 @@
                     <button type="button" class="btn btn-primary" @click="confirmReopen">{{
                         $t("Assignments.Reopen") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                    }}</button>
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -88,8 +88,8 @@
 import * as toastr from 'toastr'
 import { DateFormats, convertToLocal } from '~/shared/helpers'
 import { updateCalendarEvent, addAssignmentCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
-import moment from 'moment-timezone'
-import { map, join, escape } from 'lodash'
+import moment from 'moment'
+import { map, join, escape } from 'lodash-es'
 
 import DOMPurify from 'dompurify'
 const sanitizeHtml = text => DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
@@ -370,7 +370,7 @@ export default {
             const self = this
             this.$refs.editCalendarModal.hide()
 
-            deleteCalendarEvent(self.$apollo, {
+            deleteCalendarEvent({
                 'publicKey': self.calendarEventId == null ? null : self.calendarEventId.replaceAll('-', ''),
                 workspace: self.$store.getters.workspace,
             }, self.reload)
@@ -400,11 +400,11 @@ export default {
 
             if (self.calendarEventId != null) {
                 variables.publicKey = self.calendarEventId.replaceAll('-', ''),
-                    updateCalendarEvent(self.$apollo, variables, self.reload)
+                    updateCalendarEvent(variables, self.reload)
             }
             else {
                 variables.assignmentId = self.calendarAssinmentId,
-                    addAssignmentCalendarEvent(self.$apollo, variables, self.reload)
+                    addAssignmentCalendarEvent(variables, self.reload)
             }
         },
     },

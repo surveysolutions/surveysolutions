@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
@@ -91,6 +92,65 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 interviewExportedDataDenormalizer);
 
             ClassicAssert.AreEqual(interviewHistoryView.Records[0].Parameters["question"], variableName);
+        }
+
+        [Test]
+        public void when_InterviewCreated_with_assignment_id_should_include_assignment_parameter()
+        {
+            var interviewId = Id.gA;
+            const int assignmentId = 42;
+
+            var interviewHistoryView = CreateInterviewHistoryView(interviewId);
+            var events = new List<IEvent>
+            {
+                Create.Event.InterviewCreated(assignmentId: assignmentId)
+            };
+
+            var denormalizer = CreateInterviewHistoryDenormalizer();
+
+            PublishEventsOnOnInterviewExportedDataDenormalizer(events, interviewHistoryView, denormalizer);
+
+            interviewHistoryView.Records[0].Action.Should().Be(InterviewHistoricalAction.InterviewCreated);
+            interviewHistoryView.Records[0].Parameters["assignment"].Should().Be(assignmentId.ToString());
+        }
+
+        [Test]
+        public void when_InterviewCreated_without_assignment_id_should_not_include_assignment_parameter()
+        {
+            var interviewId = Id.gA;
+
+            var interviewHistoryView = CreateInterviewHistoryView(interviewId);
+            var events = new List<IEvent>
+            {
+                Create.Event.InterviewCreated(assignmentId: null)
+            };
+
+            var denormalizer = CreateInterviewHistoryDenormalizer();
+
+            PublishEventsOnOnInterviewExportedDataDenormalizer(events, interviewHistoryView, denormalizer);
+
+            interviewHistoryView.Records[0].Action.Should().Be(InterviewHistoricalAction.InterviewCreated);
+            interviewHistoryView.Records[0].Parameters.Should().NotContainKey("assignment");
+        }
+
+        [Test]
+        public void when_InterviewOnClientCreated_with_assignment_id_should_include_assignment_parameter()
+        {
+            var interviewId = Id.gA;
+            const int assignmentId = 7;
+
+            var interviewHistoryView = CreateInterviewHistoryView(interviewId);
+            var events = new List<IEvent>
+            {
+                Create.Event.InterviewOnClientCreated(assignmentId: assignmentId)
+            };
+
+            var denormalizer = CreateInterviewHistoryDenormalizer();
+
+            PublishEventsOnOnInterviewExportedDataDenormalizer(events, interviewHistoryView, denormalizer);
+
+            interviewHistoryView.Records[0].Action.Should().Be(InterviewHistoricalAction.InterviewCreated);
+            interviewHistoryView.Records[0].Parameters["assignment"].Should().Be(assignmentId.ToString());
         }
 
         [Test]
