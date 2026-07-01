@@ -131,7 +131,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
 
             var downloadEvents = progress.Items.Where(p => p.Status == SynchronizationStatus.Download).ToList();
             Assert.That(downloadEvents.Count, Is.EqualTo(1));
-            Assert.That(downloadEvents[0].Description, Does.Contain("Downloaded"));
+            Assert.That(downloadEvents[0].Description, Is.Null.Or.Empty);
+            Assert.That(downloadEvents[0].Title, Does.Not.Contain("0%"));
             mapService.Verify(x => x.MoveTempMapToPermanent("chunked-map.tpk"), Times.Once);
         }
 

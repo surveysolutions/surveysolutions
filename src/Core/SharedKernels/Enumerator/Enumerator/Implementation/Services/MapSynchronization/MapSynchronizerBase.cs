@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -116,8 +115,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                         progress.Report(new SyncProgressInfo
                         {
                             Title = string.Format(EnumeratorUIResources.MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format,
-                                mapDescription.MapName, processedMapsCount, items.Count, 0),
-                            Description = string.Format(CultureInfo.InvariantCulture, "Downloaded {0:0.0} MB", args.BytesReceived / (1024d * 1024d)),
+                                mapDescription.MapName, processedMapsCount, items.Count, "?"),
                             Status = SynchronizationStatus.Download,
                             TransferProgress = args
                         });
