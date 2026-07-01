@@ -201,4 +201,430 @@
   <data name="InterviewerAutoUpdateEnabled" xml:space="preserve">
     <value>Android应用程序自动更新启用</value>
   </data>
+  <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve">
+    <value>允许督导员更改任务状态</value>
+  </data>
+  <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>启用后，督导员可以从平板电脑审批和重新开启任务</value>
+  </data>
+  <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
+    <value>允许访谈员更改任务状态</value>
+  </data>
+  <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>启用后，访谈员可以从平板电脑完成和重新开启任务（需要启用督导员设置）</value>
+  </data>
+
+
+  <data name="ClearExportCache_Title" xml:space="preserve">
+    <value>清除导出缓存</value>
+  </data>
+
+  <data name="ClearExportCache_Description" xml:space="preserve">
+    <value>此操作将清除所有导出缓存数据。下一次导出将花费更多时间。</value>
+  </data>
+
+  <data name="RemoveExportCache" xml:space="preserve">
+    <value>清除缓存</value>
+  </data>
+
+  <data name="RemoveExportCacheConfirm" xml:space="preserve">
+    <value>您确定要清除导出缓存吗？所有已生成的导出文件都将从服务器中删除，并且将无法下载。</value>
+  </data>
+
+  <data name="RemoveExportCacheSuccess" xml:space="preserve">
+    <value>导出缓存已成功清除</value>
+  </data>
+
+  <data name="RemovingExportCache" xml:space="preserve">
+    <value>正在清除导出缓存</value>
+  </data>
+
+  <data name="RemoveExportCacheFail" xml:space="preserve">
+    <value>当前无法清除导出缓存。请稍后重试。
+可能的原因：
+* 正在生成导出文件。
+* 正在下载已生成的导出文件。
+* 删除已生成导出文件的操作被其他程序阻止。
+* 等等。</value>
+  </data>
+
+    <data name="RemoveExportCacheGeneratingFail" xml:space="preserve">
+    <value>当前无法清除导出缓存。正在生成导出文件。</value>
+  </data>
+
+  <data name="RemoveExportCache_Warning" xml:space="preserve">
+    <value>警告！此操作不可逆</value>
+  </data>
+
+  <data name="UserProfileSettings_Title" xml:space="preserve">
+    <value>用户资料</value>
+  </data>
+
+  <data name="WebInterviewEmailNotifications_Title" xml:space="preserve">
+    <value>网络访谈</value>
+  </data>
+
+  <data name="MobileAppSettings_Title" xml:space="preserve">
+    <value>访问员/督导应用程序</value>
+  </data>
+
+  <data name="MobileAppSettings_Description" xml:space="preserve">
+    <value>按访问员/督导 Android 应用程序版本设置的特定选项</value>
+  </data>
+
+  <data name="AllowInterviewerUpdateProfile" xml:space="preserve">
+    <value>访问员资料编辑</value>
+  </data>
+
+  <data name="AllowWebInterviewEmailNotifications" xml:space="preserve">
+    <value>网络访谈电子邮件通知</value>
+  </data>
+
+  <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
+    <value>允许访问员在其账户资料中更新联系信息</value>
+  </data>
+
+  <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve">
+    <value>允许网络访谈的受访者请求接收包含链接的电子邮件，以继续已开始的访谈（仅在已设置群发电子邮件服务提供商时生效）</value>
+  </data>
+
+  <data name="ChangeStateDisabledConfirm" xml:space="preserve">
+    <value>您确定要更改导出文件安全设置吗？导出的数据文件将不再受密码保护。</value>
+  </data>
+
+  <data name="LogoSettings_Description1" xml:space="preserve">
+    <value>点击“选择文件”按钮，将计算机中的图像上传到服务器并用作标识图像。然后点击“保存”按钮。</value>
+  </data>
+
+  <data name="AutoUpdateDescription" xml:space="preserve">
+    <value>如果选中，则只有最新版本的访问员/督导应用程序可以与 Headquarters 同步</value>
+  </data>
+
+  <data name="InterviewerPartialSynchronization" xml:space="preserve">
+    <value>启用部分同步</value>
+  </data>
+
+  <data name="PartialSynchronizationDescription" xml:space="preserve">
+    <value>启用后，访问员平板将把未完成访谈中的答案发送到 Headquarters</value>
+  </data>
+
+  <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve">
+      <value>位置精度限制</value>
+  </data>
+
+  <data name="GeographyQuestionAccuracyInMetersDescription" xml:space="preserve">
+      <value>设置获取的位置坐标的精度阈值（米）</value>
+  </data>
+
+  <data name="InterviewerGeographyQuestionPeriodInSeconds" xml:space="preserve">
+    <value>地理问题周期</value>
+  </data>
+
+  <data name="GeographyQuestionPeriodInSecondsDescription" xml:space="preserve">
+    <value>设置地理问题的周期（秒）</value>
+  </data>
+
+  <data name="EmailProvider_Amazon" xml:space="preserve">
+    <value>Amazon Simple Email Service (SES)</value>
+  </data>
+
+  <data name="EmailProvider_None" xml:space="preserve">
+    <value>无</value>
+  </data>
+
+  <data name="EmailProvider_Sendgrid" xml:space="preserve">
+    <value>SendGrid 电子邮件投递服务</value>
+  </data>
+
+  <data name="EmailProvider_NoneDescription" xml:space="preserve">
+    <value>Survey Solutions 不会向受访者发送网络访谈邀请消息。</value>
+  </data>
+
+  <data name="EmailProvider_AmazonDescription" xml:space="preserve">
+    <value>请在下方配置访问 Amazon SES 所需的参数。有关在 Survey Solutions 中使用 Amazon SES 的更多信息，请参见 </value>
+  </data>
+
+  <data name="EmailProvider_SendgridDescription" xml:space="preserve">
+    <value>请在下方配置访问 SendGrid 所需的参数。有关在 Survey Solutions 中使用 SendGrid 的更多信息，请参见 </value>
+  </data>
+
+  <data name="EmailProvider_SenderAddress" xml:space="preserve">
+    <value>发件人电子邮件地址</value>
+  </data>
+
+  <data name="EmailProvider_SendGridApiKey" xml:space="preserve">
+    <value>API 密钥</value>
+  </data>
+
+  <data name="EmailProvider_AwsAccessKeyId" xml:space="preserve">
+    <value>访问密钥 ID</value>
+  </data>
+
+  <data name="EmailProvider_AwsSecretAccessKey" xml:space="preserve">
+    <value>秘密访问密钥</value>
+  </data>
+
+  <data name="EmailProvider_TestEmailAddress" xml:space="preserve">
+    <value>电子邮件地址</value>
+  </data>
+
+  <data name="EmailProvider_SendTestEmail" xml:space="preserve">
+    <value>发送电子邮件</value>
+  </data>
+
+  <data name="EmailProvider_SendTestEmailResult" xml:space="preserve">
+    <value>邀请电子邮件示例已成功发送</value>
+  </data>
+
+  <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve">
+    <value>发送测试电子邮件</value>
+  </data>
+
+  <data name="EmailProvider_PageDesc" xml:space="preserve">
+    <value>设置群发电子邮件服务提供商。配置网络访谈邀请将如何发送。</value>
+  </data>
+
+  <data name="EmailProvider_SenderHeader" xml:space="preserve">
+    <value>发件人信息</value>
+  </data>
+
+  <data name="EmailProvider_SenderHelp" xml:space="preserve">
+    <value>将在收到的邮件的 FROM 字段中显示的发件人电子邮件地址。</value>
+  </data>
+
+  <data name="EmailProvider_ReplyAddressHelp" xml:space="preserve">
+    <value>受邀者回复邮件时可发送到的电子邮件地址（默认与发件人电子邮件地址相同。）</value>
+  </data>
+
+  <data name="EmailProvider_SenderName" xml:space="preserve">
+    <value>发件人名称</value>
+  </data>
+
+  <data name="EmailProvider_ReplyAddress" xml:space="preserve">
+    <value>回复地址</value>
+  </data>
+
+  <data name="EmailProvider_SenderNameHelp" xml:space="preserve">
+    <value>将在收到的邮件的 FROM 字段中显示的发件人名称。</value>
+  </data>
+
+  <data name="EmailProvider_Address" xml:space="preserve">
+    <value>发件人邮寄地址</value>
+  </data>
+
+  <data name="EmailProvider_AddressHelp" xml:space="preserve">
+    <value>发件人当前的邮寄地址。</value>
+  </data>
+
+  <data name="EmailProvider_ServiceProvideHeader" xml:space="preserve">
+    <value>指定群发电子邮件服务提供商</value>
+  </data>
+
+  <data name="EmailProvider_AwsAccessKeyIdHelp" xml:space="preserve">
+    <value>您可以在 AWS Management Console 中找到 AWS 账户 ID</value>
+  </data>
+
+  <data name="EmailProvider_AwsSecretAccessKeyHelp" xml:space="preserve">
+    <value>可在 AWS Management Console 的 Security Credentials 中找到</value>
+  </data>
+
+  <data name="EmailProvider_AwsRegion" xml:space="preserve">
+    <value>区域</value>
+  </data>
+
+  <data name="EmailProvider_AwsRegionHelp" xml:space="preserve">
+    <value>AWS Management Console 的区域</value>
+  </data>
+
+  <data name="EmailProvider_AwsRegion_Unknown" xml:space="preserve">
+    <value>选择了未知区域。请检查。</value>
+  </data>
+
+  <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve">
+    <value>您可以在 SendGrid 设置菜单项下的 API Keys 页面中找到它</value>
+  </data>
+
+  <data name="EmailProvider_GeneralError" xml:space="preserve">
+    <value>发生一般错误</value>
+  </data>
+
+  <data name="EmailProvider_HelpLinkText" xml:space="preserve">
+    <value>这里</value>
+  </data>
+
+  <data name="EmailProvider_SendTestEmailMessage" xml:space="preserve">
+    <value>给自己发送一封测试电子邮件，以验证群发电子邮件服务是否正常工作，并预览受访者将收到的内容。</value>
+  </data>
+
+  <data name="EmailProvider_SettingsSavedSuccessfully" xml:space="preserve">
+    <value>电子邮件服务配置已成功保存。</value>
+  </data>
+
+  <data name="DeviceNotifications" xml:space="preserve">
+    <value>启用设备通知</value>
+  </data>
+
+  <data name="DeviceNotificationsDescription" xml:space="preserve">
+    <value>启用后，设备将通知所有者需要采取的更改和操作</value>
+  </data>
+
+  <data name="EsriApiKey" xml:space="preserve">
+      <value>ESRI API 密钥</value>
+  </data>
+
+  <data name="EsriApiKeyDescription" xml:space="preserve">
+      <value>此密钥将允许在设备上使用在线地图。请注意，使用此服务可能会产生额外费用。请咨询服务提供商</value>
+  </data>
+
+  <data name="EmailProvider_Smtp" xml:space="preserve">
+    <value>SMTP 服务器</value>
+  </data>
+
+  <data name="EmailProvider_SmtpDescription" xml:space="preserve">
+    <value>请在下方配置访问 SMTP 服务器所需的参数。有关在 Survey Solutions 中使用 SMTP 服务器的更多信息，请参见 </value>
+  </data>
+
+  <data name="EmailProvider_SmtpHost" xml:space="preserve">
+    <value>主机</value>
+  </data>
+
+  <data name="EmailProvider_SmtpHostHelp" xml:space="preserve">
+    <value>SMTP 服务器地址</value>
+  </data>
+
+  <data name="EmailProvider_SmtpPort" xml:space="preserve">
+    <value>端口</value>
+  </data>
+
+  <data name="EmailProvider_SmtpPortHelp" xml:space="preserve">
+    <value>SMTP 端口</value>
+  </data>
+
+  <data name="EmailProvider_SmtpTlsEncryption" xml:space="preserve">
+    <value>使用 TLS 加密</value>
+  </data>
+
+  <data name="EmailProvider_SmtpTlsEncryptionHelp" xml:space="preserve">
+    <value>TLS（传输层安全）加密可保障通信安全。它会对客户端与服务器之间传输的数据进行加密。</value>
+  </data>
+
+  <data name="EmailProvider_SmtpAuthentication" xml:space="preserve">
+    <value>使用身份验证</value>
+  </data>
+
+  <data name="EmailProvider_SmtpAuthenticationHelp" xml:space="preserve">
+    <value>SMTP 身份验证会在允许电子邮件客户端或服务器通过 SMTP 服务器发送邮件之前验证其身份。</value>
+  </data>
+
+  <data name="EmailProvider_SmtpUsername" xml:space="preserve">
+    <value>用户名</value>
+  </data>
+
+  <data name="EmailProvider_SmtpUsernameHelp" xml:space="preserve">
+    <value>在 SMTP 身份验证过程中用于验证身份的凭据。</value>
+  </data>
+
+  <data name="EmailProvider_SmtpPassword" xml:space="preserve">
+    <value>密码</value>
+  </data>
+
+  <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve">
+    <value>在 SMTP 身份验证过程中用于验证身份的凭据。</value>
+  </data>
+
+  <data name="WorkspaceSettings" xml:space="preserve">
+      <value>工作区设置</value>
+  </data>
+
+  <data name="Export" xml:space="preserve">
+      <value>导出</value>
+  </data>
+
+  <data name="GlobalNote" xml:space="preserve">
+      <value>全局注释</value>
+  </data>
+
+  <data name="UserProfile" xml:space="preserve">
+      <value>用户资料</value>
+  </data>
+
+  <data name="Devices" xml:space="preserve">
+      <value>设备</value>
+  </data>
+
+  <data name="WebInterview" xml:space="preserve">
+      <value>网络访谈</value>
+  </data>
+
+  <data name="FileRetentionTitle" xml:space="preserve">
+      <value>保留策略</value>
+  </data>
+
+    <data name="FileRetentionDescription" xml:space="preserve">
+      <value>较旧的导出文件将根据这些设置定期删除</value>
+  </data>
+
+  <data name="RetentionInDaysTitle" xml:space="preserve">
+      <value>保留天数</value>
+  </data>
+
+    <data name="RetentionInDaysDescription" xml:space="preserve">
+      <value>导出文件将被保留的天数</value>
+  </data>
+
+  <data name="RetentionInCountTitle" xml:space="preserve">
+      <value>保留的文件数</value>
+  </data>
+
+    <data name="RetentionInCountDescription" xml:space="preserve">
+      <value>存储中保留的导出文件最大数量</value>
+  </data>
+
+    <data name="EnableFileRetention" xml:space="preserve">
+      <value>启用保留策略</value>
+  </data>
+
+  <data name="RetentionPolicyEnablingConfirm" xml:space="preserve">
+    <value>您确定要启用保留策略吗？导出数据文件可能会被删除。</value>
+  </data>
+
+    <data name="ForceRunRetentionPolicy" xml:space="preserve">
+      <value>强制运行</value>
+  </data>
+
+    <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve">
+      <value>警告！这是一个关键操作，会影响此工作区中现有的导出文件</value>
+  </data>
+
+    <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
+      <value>您确定要立即强制运行保留策略吗？请注意，此操作可能会导致存储在此工作区中的导出文件被不可恢复地删除，从而无法下载。</value>
+  </data>
+
+  <data name="ExportEncryption_Warning" xml:space="preserve">
+    <value>修改加密设置将删除此前所有已生成的导出文件，并需要重新创建导出</value>
+  </data>
+
+  <data name="LogoSizeLimit" xml:space="preserve">
+    <value>标识图片大小必须小于 {{size}}</value>
+  </data>
+
+  <data name="SelectFileWarning" xml:space="preserve">
+    <value>请选择要上传的文件。</value>
+  </data>
+
+  <data name="LogoUploadSuccess" xml:space="preserve">
+    <value>标识上传成功。</value>
+  </data>
+
+  <data name="LogoUploadError" xml:space="preserve">
+    <value>上传标识失败。请重试。</value>
+  </data>
+
+  <data name="LogoRemoveSuccess" xml:space="preserve">
+    <value>标识已成功删除。</value>
+  </data>
+
+  <data name="LogoRemoveError" xml:space="preserve">
+    <value>删除标识失败。请重试。</value>
+  </data>
 </root>

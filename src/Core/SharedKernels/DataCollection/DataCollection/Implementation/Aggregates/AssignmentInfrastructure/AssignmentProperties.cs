@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.AssignmentInfrastructure
 {
@@ -41,5 +42,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Assignm
         public string Comment { get; set; }
         
         public string TargetArea { get; set; }
+
+        public AssignmentStatus Status { get; set; } = AssignmentStatus.Open;
     }
 }

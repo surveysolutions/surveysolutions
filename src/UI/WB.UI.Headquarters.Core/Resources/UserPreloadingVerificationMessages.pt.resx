@@ -201,46 +201,46 @@
   <data name="PLU0014" xml:space="preserve">
     <value>Formato de nome completo errado</value>
   </data>
-  <data name="PLU0001Recomendation" xml:space="preserve">
+  <data name="PLU0001Recommendation" xml:space="preserve">
     <value>O usuário deve ser único</value>
   </data>
-  <data name="PLU0002Recomendation" xml:space="preserve">
+  <data name="PLU0002Recommendation" xml:space="preserve">
     <value>Resolver duplicatas</value>
   </data>
-  <data name="PLU0003Recomendation" xml:space="preserve">
+  <data name="PLU0003Recommendation" xml:space="preserve">
     <value>O usuário arquivado não pode ser reutilizado porque pertence a outra equipe</value>
   </data>
-  <data name="PLU0004Recomendation" xml:space="preserve">
+  <data name="PLU0004Recommendation" xml:space="preserve">
     <value>O usuário arquivado não pode ser reutilizado porque existe em outro papel</value>
   </data>
-  <data name="PLU0005Recomendation" xml:space="preserve">
+  <data name="PLU0005Recommendation" xml:space="preserve">
     <value>O nome de login deve ter entre 3 e 15 caracteres e pode conter apenas letras, dígitos e o símbolo de sublinhado. As letras devem ser apenas do alfabeto latino (inglês): 'A'..'Z' ou 'a'..'z'. Outras letras (cirílico, árabe, etc.) não são válidas para uso em nomes de login.</value>
   </data>
-  <data name="PLU0006Recomendation" xml:space="preserve">
+  <data name="PLU0006Recommendation" xml:space="preserve">
     <value>Deve conter pelo menos um número, um caractere maiúsculo e um caractere minúsculo. O comprimento deve ser entre 10 e 100 caracteres</value>
   </data>
-  <data name="PLU0007Recomendation" xml:space="preserve">
+  <data name="PLU0007Recommendation" xml:space="preserve">
     <value>Corrigir e-mail</value>
   </data>
-  <data name="PLU0008Recomendation" xml:space="preserve">
+  <data name="PLU0008Recommendation" xml:space="preserve">
     <value>Corrigir número de telefone</value>
   </data>
-  <data name="PLU0009Recomendation" xml:space="preserve">
+  <data name="PLU0009Recommendation" xml:space="preserve">
     <value>Somente "supervisor" ou "entrevistador" são permitidos</value>
   </data>
-  <data name="PLU0010Recomendation" xml:space="preserve">
+  <data name="PLU0010Recommendation" xml:space="preserve">
     <value>Corrigir supervisor</value>
   </data>
-  <data name="PLU0011Recomendation" xml:space="preserve">
+  <data name="PLU0011Recommendation" xml:space="preserve">
     <value>Remova o valor do supervisor</value>
   </data>
-  <data name="PLU0012Recomendation" xml:space="preserve">
+  <data name="PLU0012Recommendation" xml:space="preserve">
     <value>Não deve conter mais de 100 caracteres</value>
   </data>
-  <data name="PLU0013Recomendation" xml:space="preserve">
+  <data name="PLU0013Recommendation" xml:space="preserve">
     <value>Não deve conter mais de 15 caracteres</value>
   </data>
-  <data name="PLU0014Recomendation" xml:space="preserve">
+  <data name="PLU0014Recommendation" xml:space="preserve">
     <value>Somente letras, pontos, espaços e apóstrofos são permitidos</value>
   </data>
   <data name="PLU0015" xml:space="preserve">
@@ -249,7 +249,7 @@
   <data name="PLU0015Description" xml:space="preserve">
     <value>A senha '{0}' é muito curta</value>
   </data>
-  <data name="PLU0015Recomendation" xml:space="preserve">
+  <data name="PLU0015Recommendation" xml:space="preserve">
     <value>A senha deve ter pelo menos 10 caracteres</value>
   </data>
   <data name="PLU0016" xml:space="preserve">
@@ -258,7 +258,7 @@
   <data name="PLU0016Description" xml:space="preserve">
     <value>A senha '{0}' não contém caractere não alfanumérico</value>
   </data>
-  <data name="PLU0016Recomendation" xml:space="preserve">
+  <data name="PLU0016Recommendation" xml:space="preserve">
     <value>Adicione pelo menos um caractere não alfanumérico</value>
   </data>
   <data name="PLU0017" xml:space="preserve">
@@ -267,7 +267,7 @@
   <data name="PLU0017Description" xml:space="preserve">
     <value>A senha '{0}' não contém dígito</value>
   </data>
-  <data name="PLU0017Recomendation" xml:space="preserve">
+  <data name="PLU0017Recommendation" xml:space="preserve">
     <value>Adicione pelo menos um dígito ('0'-'9').</value>
   </data>
   <data name="PLU0018" xml:space="preserve">
@@ -276,7 +276,7 @@
   <data name="PLU0018Description" xml:space="preserve">
     <value>A senha '{0}' não contém caractere minúsculo</value>
   </data>
-  <data name="PLU0018Recomendation" xml:space="preserve">
+  <data name="PLU0018Recommendation" xml:space="preserve">
     <value>Adicione pelo menos um caractere minúsculo ('a'-'z').</value>
   </data>
   <data name="PLU0019" xml:space="preserve">
@@ -285,7 +285,7 @@
   <data name="PLU0019Description" xml:space="preserve">
     <value>A senha '{0}' não contém caractere maiúsculo</value>
   </data>
-  <data name="PLU0019Recomendation" xml:space="preserve">
+  <data name="PLU0019Recommendation" xml:space="preserve">
     <value>Adicione pelo menos um caractere maiúsculo ('A'-'Z').</value>
   </data>
   <data name="PLU0020" xml:space="preserve">
@@ -294,7 +294,7 @@
   <data name="PLU0020Description" xml:space="preserve">
     <value>A senha '{0}' não contém caracteres únicos suficientes</value>
   </data>
-  <data name="PLU0020Recomendation" xml:space="preserve">
+  <data name="PLU0020Recommendation" xml:space="preserve">
     <value>Adicione caracteres diferentes.</value>
   </data>
   <data name="PLU0021" xml:space="preserve">
@@ -303,7 +303,7 @@
   <data name="PLU0021Description" xml:space="preserve">
     <value>A senha é necessária</value>
   </data>
-  <data name="PLU0021Recomendation" xml:space="preserve">
+  <data name="PLU0021Recommendation" xml:space="preserve">
     <value>Adicione senha</value>
   </data>
   <data name="PLU0022" xml:space="preserve">
@@ -312,7 +312,7 @@
   <data name="PLU0022Description" xml:space="preserve">
     <value>O espaço de trabalho deve existir e estar habilitado</value>
   </data>
-  <data name="PLU0022Recomendation" xml:space="preserve">
+  <data name="PLU0022Recommendation" xml:space="preserve">
     <value>Verifique o nome do espaço de trabalho</value>
   </data>
 </root>

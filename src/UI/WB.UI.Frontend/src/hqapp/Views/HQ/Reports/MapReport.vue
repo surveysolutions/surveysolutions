@@ -119,11 +119,132 @@
 <script>
 import * as toastr from 'toastr'
 import { nextTick } from 'vue'
-import gql from 'graphql-tag'
-import { isNull, chain, debounce, delay, forEach, find, flatten, toNumber, isEqual, isNumber } from 'lodash'
+import { gql, gqlRequest } from '~/hqapp/api/graphql'
+import { isNull, debounce, delay, forEach, find, flatten, toNumber, isEqual, isNumber } from 'lodash-es'
 import routeSync from '~/shared/routeSync'
 import InterviewFilter from '../Interviews/InterviewQuestionsFilters'
 import { cloneWithWritableProperties } from '~/shared/clone'
+
+function createSimpleheat(canvas) {
+    let points = []
+    let radius = 30
+    let max = 1
+    let circleCache = null
+
+    const ctx = canvas.getContext('2d', { willReadFrequently: true })
+
+    const getCircle = () => {
+        if (circleCache && circleCache.radius === radius) {
+            return circleCache.canvas
+        }
+
+        const circle = document.createElement('canvas')
+        const size = radius * 2
+        circle.width = size
+        circle.height = size
+
+        const circleCtx = circle.getContext('2d')
+        const gradient = circleCtx.createRadialGradient(radius, radius, 0, radius, radius, radius)
+        gradient.addColorStop(0, 'rgba(0,0,0,1)')
+        gradient.addColorStop(1, 'rgba(0,0,0,0)')
+        circleCtx.fillStyle = gradient
+        circleCtx.fillRect(0, 0, size, size)
+
+        circleCache = { radius, canvas: circle }
+        return circle
+    }
+
+    const paletteCanvas = document.createElement('canvas')
+    paletteCanvas.width = 1
+    paletteCanvas.height = 256
+
+    const paletteCtx = paletteCanvas.getContext('2d')
+    const paletteGradient = paletteCtx.createLinearGradient(0, 0, 0, 256)
+    paletteGradient.addColorStop(0, '#0000ff')
+    paletteGradient.addColorStop(0.25, '#00ffff')
+    paletteGradient.addColorStop(0.5, '#00ff00')
+    paletteGradient.addColorStop(0.75, '#ffff00')
+    paletteGradient.addColorStop(1, '#ff0000')
+    paletteCtx.fillStyle = paletteGradient
+    paletteCtx.fillRect(0, 0, 1, 256)
+    const palette = paletteCtx.getImageData(0, 0, 1, 256).data
+
+    return {
+        data(value) {
+            points = value || []
+            return this
+        },
+
+        max(value) {
+            max = Number.isFinite(value) && value > 0 ? value : 1
+            return this
+        },
+
+        radius(value) {
+            const parsed = Number.parseFloat(value)
+            radius = Number.isFinite(parsed) && parsed > 0 ? Math.round(parsed) : 30
+            circleCache = null
+            return this
+        },
+
+        resize() {
+            return this
+        },
+
+        draw() {
+            const width = canvas.width
+            const height = canvas.height
+            ctx.clearRect(0, 0, width, height)
+
+            if (points.length === 0 || max <= 0) {
+                return this
+            }
+
+            const circle = getCircle()
+            const offset = circle.width / 2
+            ctx.globalCompositeOperation = 'lighter'
+
+            let minX = width, minY = height, maxX = 0, maxY = 0
+
+            for (let i = 0; i < points.length; i++) {
+                const point = points[i]
+                const alpha = Math.max(0, Math.min(1, point[2] / max))
+                if (alpha <= 0) continue
+
+                ctx.globalAlpha = alpha
+                const px = point[0] - offset
+                const py = point[1] - offset
+                ctx.drawImage(circle, px, py)
+
+                minX = Math.min(minX, Math.max(0, Math.floor(px)))
+                minY = Math.min(minY, Math.max(0, Math.floor(py)))
+                maxX = Math.max(maxX, Math.min(width, Math.ceil(px + circle.width)))
+                maxY = Math.max(maxY, Math.min(height, Math.ceil(py + circle.height)))
+            }
+
+            if (minX >= maxX || minY >= maxY) {
+                return this
+            }
+
+            const regionW = maxX - minX
+            const regionH = maxY - minY
+            const image = ctx.getImageData(minX, minY, regionW, regionH)
+            const data = image.data
+            for (let i = 0; i < data.length; i += 4) {
+                const alpha = data[i + 3]
+                if (alpha === 0) continue
+
+                const index = Math.min(alpha * 4, palette.length - 4)
+                data[i] = palette[index]
+                data[i + 1] = palette[index + 1]
+                data[i + 2] = palette[index + 2]
+            }
+
+            ctx.putImageData(image, minX, minY)
+            return this
+        },
+    }
+}
 
 const mapStyles = [
     {
@@ -441,12 +562,9 @@ export default {
             return this.api
                 .GpsQuestionsByQuestionnaire(this.questionnaireId.key, this.selectedVersionValue)
                 .then(response => {
-                    this.gpsQuestions = chain(response.data)
+                    this.gpsQuestions = (response.data || [])
                         .filter(d => d != null && d != '')
-                        .map(d => {
-                            return { key: d, value: d }
-                        })
-                        .value()
+                        .map(d => ({ key: d, value: d }))
 
                     if (this.gpsQuestions.length > 0) {
                         this.selectGpsQuestion(this.gpsQuestions[0])
@@ -489,9 +607,142 @@ export default {
 
             this.map = new google.maps.Map(document.getElementById('map-canvas'), this.getMapOptions())
 
-            this.heatmap = new google.maps.visualization.HeatmapLayer({
-                map: this.map,
-            })
+            class HeatmapOverlay extends google.maps.OverlayView {
+                constructor(opts = {}) {
+                    super()
+                    this._opts = opts
+                    this._data = []
+                    this._canvas = null
+                    this._heat = null
+                    this._rafId = null
+                    if (opts.map) {
+                        this.setMap(opts.map)
+                    }
+                }
+
+                onAdd() {
+                    const canvas = document.createElement('canvas')
+                    canvas.style.cssText = 'position:absolute;pointer-events:none;'
+                    this._canvas = canvas
+                    this.getPanes().overlayLayer.appendChild(canvas)
+                    this._heat = createSimpleheat(canvas)
+                    this._heat.radius(parseInt(this._opts.radius, 10) || 30)
+                }
+
+                draw() {
+                    if (!this._canvas || !this._heat) return
+                    if (this._rafId) return
+                    this._rafId = requestAnimationFrame(() => {
+                        this._rafId = null
+                        this._renderFrame()
+                    })
+                }
+
+                _renderFrame() {
+                    if (!this._canvas || !this._heat) return
+
+                    const projection = this.getProjection()
+                    if (!projection) return
+
+                    const map = this.getMap()
+                    const mapDiv = map.getDiv()
+                    const width = mapDiv.offsetWidth
+                    const height = mapDiv.offsetHeight
+
+                    if (width <= 0 || height <= 0) return
+
+                    const bounds = map.getBounds()
+                    if (!bounds) return
+
+                    const ne = projection.fromLatLngToDivPixel(bounds.getNorthEast())
+                    const sw = projection.fromLatLngToDivPixel(bounds.getSouthWest())
+
+                    const left = Math.round(Math.min(ne.x, sw.x))
+                    const top = Math.round(Math.min(ne.y, sw.y))
+
+                    this._canvas.style.left = left + 'px'
+                    this._canvas.style.top = top + 'px'
+
+                    const dpr = window.devicePixelRatio || 1
+                    const backingWidth = Math.round(width * dpr)
+                    const backingHeight = Math.round(height * dpr)
+
+                    if (this._canvas.width !== backingWidth || this._canvas.height !== backingHeight) {
+                        this._canvas.width = backingWidth
+                        this._canvas.height = backingHeight
+                        this._canvas.style.width = width + 'px'
+                        this._canvas.style.height = height + 'px'
+                        this._heat.resize()
+                    }
+
+                    const pixelData = this._data.map(point => {
+                        const pixel = projection.fromLatLngToDivPixel(point.location)
+                        const weight = point.weight ?? 1
+
+                        return [
+                            Math.round((pixel.x - left) * dpr),
+                            Math.round((pixel.y - top) * dpr),
+                            weight,
+
+                        ]
+                    })
+
+                    const computedMax = pixelData.length > 0
+
+                        ? pixelData.reduce((m, d) => Math.max(m, d[2]), 1)
+                        : 1
+
+                    const maxIntensity = Number.parseFloat(this._opts.maxIntensity)
+
+                    const max = Number.isFinite(maxIntensity) && maxIntensity > 0 ? maxIntensity : computedMax
+
+
+
+                    const baseRadius = Number.parseInt(this._opts.radius, 10) || 30
+
+                    const radius = this._opts.dissipating === false
+
+                        ? Math.max(1, Math.min(200, Math.round(baseRadius * Math.pow(2, (map.getZoom() - 10) / 2))))
+
+                        : baseRadius
+
+
+
+                    this._heat.data(pixelData)
+                    this._heat.max(max)
+                    this._heat.radius(Math.round(radius * dpr))
+
+                    this._heat.draw()
+                }
+
+                onRemove() {
+                    if (this._rafId) {
+                        cancelAnimationFrame(this._rafId)
+                        this._rafId = null
+                    }
+                    if (this._canvas && this._canvas.parentNode) {
+                        this._canvas.parentNode.removeChild(this._canvas)
+                    }
+                    this._canvas = null
+                    this._heat = null
+                }
+
+                setData(data) {
+                    this._data = data || []
+                    if (this._heat) {
+                        this.draw()
+                    }
+                }
+
+                setOptions(opts) {
+                    Object.assign(this._opts, opts)
+                    if (this._heat) {
+                        this.draw()
+                    }
+                }
+            }
+
+            this.heatmap = new HeatmapOverlay({ map: this.map })
 
             this.infoWindow = new google.maps.InfoWindow()
 
@@ -665,13 +916,9 @@ export default {
                 request.where = { interviewFilter: where }
             }
 
-            const report = await this.$apollo.query({
-                query,
-                variables: request,
-                fetchPolicy: 'network-only',
-            })
+            const report = await gqlRequest(query, request)
 
-            var mapReport = cloneWithWritableProperties(report.data.mapReport.report)
+            var mapReport = cloneWithWritableProperties(report.mapReport.report)
             forEach(mapReport.featureCollection.features, feature => {
                 if (!Array.isArray(feature.geometry.coordinates)) {
                     var coordinates = feature.geometry.coordinates
@@ -688,7 +935,7 @@ export default {
         setMapData(data, extendBounds) {
             const toRemove = {}
 
-            this.infoWindow.close(self.map)
+            this.infoWindow.close()
 
             this.totalAnswers = data.totalPoint
             const features = data.featureCollection.features
