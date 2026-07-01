@@ -7,10 +7,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
     public class PasteInto : QuestionnaireEntityAddCommand
     {
-        public PasteInto(Guid questionnaireId, Guid entityId, Guid sourceQuestionnaireId, Guid sourceItemId, Guid parentId, Guid responsibleId)
+        public PasteInto(Guid questionnaireId, Guid entityId, Guid sourceQuestionnaireId, Guid sourceItemId, Guid parentId, Guid responsibleId, Guid? sourceQuestionnaireRevisionId = null)
             : base(responsibleId: responsibleId, questionnaireId: questionnaireId, entityId: entityId, parentId: parentId)
         {
-            this.SourceQuestionnaireRevision = new QuestionnaireRevision(sourceQuestionnaireId);
+            this.SourceQuestionnaireRevision = new QuestionnaireRevision(sourceQuestionnaireId, sourceQuestionnaireRevisionId);
             this.SourceItemId = sourceItemId;
         }
 

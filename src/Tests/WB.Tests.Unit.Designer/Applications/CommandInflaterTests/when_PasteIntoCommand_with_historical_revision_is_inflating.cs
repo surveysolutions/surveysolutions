@@ -31,10 +31,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
             documentStorage.Setup(storage => storage.GetById(expectedQuestionnaireIdentity))
                 .Returns(questionnaire);
 
-            command = new PasteInto(questionnaireId, entityId, questionnaireId, entityId, questionnaireId, ownerId)
-            {
-                SourceQuestionnaireRevision = sourceQuestionnaireRevision
-            };
+            command = new PasteInto(questionnaireId, entityId, questionnaireId, entityId, questionnaireId, ownerId, revisionId);
 
             commandInflater = CreateCommandInflater(dbContext: dbContext, storage: documentStorage.Object);
 
