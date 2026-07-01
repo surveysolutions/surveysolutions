@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -165,8 +166,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         {
             // arrange
             int? version = 12345;
-            var progressReports = new List<SyncProgressInfo>();
-            var progress = new Progress<SyncProgressInfo>(r => progressReports.Add(r));
+            var progressReports = new ConcurrentQueue<SyncProgressInfo>();
+            var progress = new Progress<SyncProgressInfo>(progressReports.Enqueue);
 
             var mockOfSupervisorSynchronization = new Mock<ISupervisorSynchronizationService>();
             mockOfSupervisorSynchronization.Setup(x => x.GetLatestApplicationVersionAsync(It.IsAny<CancellationToken>()))
@@ -224,8 +225,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         {
             // arrange
             int? version = 12345;
-            var progressReports = new List<SyncProgressInfo>();
-            var progress = new Progress<SyncProgressInfo>(r => progressReports.Add(r));
+            var progressReports = new ConcurrentQueue<SyncProgressInfo>();
+            var progress = new Progress<SyncProgressInfo>(progressReports.Enqueue);
 
             var mockOfSupervisorSynchronization = new Mock<ISupervisorSynchronizationService>();
             mockOfSupervisorSynchronization.Setup(x => x.GetLatestApplicationVersionAsync(It.IsAny<CancellationToken>()))
@@ -275,6 +276,59 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var appDownloadReports = progressReports.Count(r => r.Stage == SyncStage.DownloadApplication);
             Assert.That(appDownloadReports, Is.LessThanOrEqualTo(5),
                 $"With unknown content length, expected at most 5 throttled reports (one per 512KB step), got {appDownloadReports}");
+        }
+
+        [Test]
+        public async Task when_downloading_apk_with_unknown_size_progress_should_report_unknown_total_and_percentage()
+        {
+            // arrange
+            int? version = 12345;
+            var progressReported = new TaskCompletionSource<SyncProgressInfo>(TaskCreationOptions.RunContinuationsAsynchronously);
+            var progress = new Progress<SyncProgressInfo>(report =>
+            {
+                if (report.Stage == SyncStage.DownloadApplication)
+                    progressReported.TrySetResult(report);
+            });
+
+            var mockOfSupervisorSynchronization = new Mock<ISupervisorSynchronizationService>();
+            mockOfSupervisorSynchronization.Setup(x => x.GetLatestApplicationVersionAsync(It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(version));
+            mockOfSupervisorSynchronization.Setup(x =>
+                    x.GetInterviewerApplicationAsync(It.IsAny<byte[]>(), It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()))
+                .Returns<byte[], IProgress<TransferProgress>, CancellationToken>((_, p, _) =>
+                {
+                    p.Report(new TransferProgress
+                    {
+                        TotalBytesToReceive = null,
+                        BytesReceived = 512 * 1024L,
+                        ProgressPercentage = 0
+                    });
+                    return Task.FromResult(new byte[] { 1, 2, 3 });
+                });
+            mockOfSupervisorSynchronization.Setup(x =>
+                    x.GetInterviewerApplicationWithMapsAsync(It.IsAny<byte[]>(), It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<byte[]>(null));
+
+            var mockOfSupervisorSettings = new Mock<ISupervisorSettings>();
+            mockOfSupervisorSettings.Setup(x => x.DownloadUpdatesForInterviewerApp).Returns(true);
+            mockOfSupervisorSettings.Setup(x => x.GetApplicationVersionCode()).Returns(version.Value);
+
+            var step = CreateDownloadInterviewerAppPatches(
+                synchronizationService: mockOfSupervisorSynchronization.Object,
+                supervisorSettings: mockOfSupervisorSettings.Object,
+                progress: progress);
+
+            // act
+            await step.ExecuteAsync();
+            var completedTask = await Task.WhenAny(progressReported.Task, Task.Delay(TimeSpan.FromSeconds(5)));
+
+            // assert
+            Assert.That(completedTask, Is.SameAs(progressReported.Task), "Expected a download progress report to be published");
+            var downloadReport = await progressReported.Task;
+            Assert.That(downloadReport, Is.Not.Null);
+            Assert.That(downloadReport.StageExtraInfo["totalKilobytes"], Is.EqualTo("?"));
+            Assert.That(downloadReport.StageExtraInfo["progressPercentage"], Is.EqualTo("?"));
+            Assert.That(downloadReport.Description, Does.Contain("?"));
         }
 
         private static DownloadInterviewerApplications CreateDownloadInterviewerAppPatches(

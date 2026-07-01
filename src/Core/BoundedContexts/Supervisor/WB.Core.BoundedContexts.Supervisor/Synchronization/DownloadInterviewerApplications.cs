@@ -163,7 +163,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             
             var receivedDataHumanized = NumericTextFormatter.FormatBytesHumanized(downloadProgress.BytesReceived);
             var receivedSpeedHumanized = NumericTextFormatter.FormatSpeedHumanized(downloadProgress.BytesReceived, progressState.StopWatch.Elapsed);
-            var totalSizeHumanized = NumericTextFormatter.FormatBytesHumanized(downloadProgress.TotalBytesToReceive ?? 0);
+            var hasKnownTotalLength = downloadProgress.TotalBytesToReceive.HasValue && downloadProgress.TotalBytesToReceive.Value > 0;
+            var totalSizeHumanized = hasKnownTotalLength
+                ? NumericTextFormatter.FormatBytesHumanized(downloadProgress.TotalBytesToReceive.Value)
+                : "?";
+            var progressPercentage = hasKnownTotalLength
+                ? ((int)downloadProgress.ProgressPercentage).ToString()
+                : "?";
 
             Context.Progress.Report(new SyncProgressInfo
             {
@@ -173,7 +179,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
                     receivedDataHumanized,
                     totalSizeHumanized,
                     receivedSpeedHumanized,
-                    (int)downloadProgress.ProgressPercentage),
+                    progressPercentage),
                 Status = SynchronizationStatus.Download,
                 Stage = SyncStage.DownloadApplication,
                 StageExtraInfo = new Dictionary<string, string>()
@@ -181,7 +187,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
                     {"receivedKilobytes", receivedDataHumanized},
                     {"totalKilobytes", totalSizeHumanized},
                     {"receivingRate", receivedSpeedHumanized},
-                    {"progressPercentage", ((int) downloadProgress.ProgressPercentage).ToString()}
+                    {"progressPercentage", progressPercentage}
                 }
             });
         }
