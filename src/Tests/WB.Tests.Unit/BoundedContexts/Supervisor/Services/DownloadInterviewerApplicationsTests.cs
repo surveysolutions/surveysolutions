@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
@@ -9,8 +11,8 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Tests.Abc;
-using Xamarin.Essentials;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
 {
@@ -158,12 +160,114 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             mockOfFileSystemAccessor.Verify(x => x.DeleteDirectory(It.Is<string>(y => y.Contains(oldSupervisorVersion.ToString()))), Times.Once);
         }
 
+        [Test]
+        public async Task when_downloading_apk_with_known_size_progress_should_be_throttled_to_5_percent_buckets()
+        {
+            // arrange
+            int? version = 12345;
+            var progressReports = new List<SyncProgressInfo>();
+            var progress = new Progress<SyncProgressInfo>(r => progressReports.Add(r));
+
+            var mockOfSupervisorSynchronization = new Mock<ISupervisorSynchronizationService>();
+            mockOfSupervisorSynchronization.Setup(x => x.GetLatestApplicationVersionAsync(It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(version));
+            mockOfSupervisorSynchronization.Setup(x =>
+                    x.GetInterviewerApplicationAsync(It.IsAny<byte[]>(), It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()))
+                .Returns<byte[], IProgress<TransferProgress>, CancellationToken>((_, p, _) =>
+                {
+                    const long total = 1_000_000;
+                    // Fire 100 events — one per 1%
+                    for (int i = 1; i <= 100; i++)
+                    {
+                        p.Report(new TransferProgress
+                        {
+                            TotalBytesToReceive = total,
+                            BytesReceived = total * i / 100,
+                            ProgressPercentage = i
+                        });
+                    }
+                    return Task.FromResult(new byte[] { 1, 2, 3 });
+                });
+            mockOfSupervisorSynchronization.Setup(x =>
+                    x.GetInterviewerApplicationWithMapsAsync(It.IsAny<byte[]>(), It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<byte[]>(null));
+
+            var mockOfSupervisorSettings = new Mock<ISupervisorSettings>();
+            mockOfSupervisorSettings.Setup(x => x.DownloadUpdatesForInterviewerApp).Returns(true);
+            mockOfSupervisorSettings.Setup(x => x.GetApplicationVersionCode()).Returns(version.Value);
+
+            var step = CreateDownloadInterviewerAppPatches(
+                synchronizationService: mockOfSupervisorSynchronization.Object,
+                supervisorSettings: mockOfSupervisorSettings.Object,
+                progress: progress);
+
+            // act
+            await step.ExecuteAsync();
+            await Task.Delay(100); // allow Progress<T> callbacks to be dispatched
+
+            // assert: 100 raw events fired but only ≤21 pass the 5% bucket filter (buckets 0-20 = 21 max)
+            var appDownloadReports = progressReports.Count(p => p.Stage == SyncStage.DownloadApplication);
+            Assert.That(appDownloadReports, Is.LessThanOrEqualTo(21),
+                $"Expected at most 21 throttled reports (one per 5% bucket), got {appDownloadReports}");
+        }
+
+        [Test]
+        public async Task when_downloading_apk_with_unknown_size_progress_should_be_throttled_by_bytes()
+        {
+            // arrange
+            int? version = 12345;
+            var progressReports = new List<SyncProgressInfo>();
+            var progress = new Progress<SyncProgressInfo>(r => progressReports.Add(r));
+
+            var mockOfSupervisorSynchronization = new Mock<ISupervisorSynchronizationService>();
+            mockOfSupervisorSynchronization.Setup(x => x.GetLatestApplicationVersionAsync(It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(version));
+            mockOfSupervisorSynchronization.Setup(x =>
+                    x.GetInterviewerApplicationAsync(It.IsAny<byte[]>(), It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()))
+                .Returns<byte[], IProgress<TransferProgress>, CancellationToken>((_, p, _) =>
+                {
+                    // Fire 10 events at 256 KB each — below the 512 KB per-step threshold
+                    for (int i = 1; i <= 10; i++)
+                    {
+                        p.Report(new TransferProgress
+                        {
+                            TotalBytesToReceive = null, // unknown length
+                            BytesReceived = 256 * 1024L * i,
+                            ProgressPercentage = 0
+                        });
+                    }
+                    return Task.FromResult(new byte[] { 1, 2, 3 });
+                });
+            mockOfSupervisorSynchronization.Setup(x =>
+                    x.GetInterviewerApplicationWithMapsAsync(It.IsAny<byte[]>(), It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<byte[]>(null));
+
+            var mockOfSupervisorSettings = new Mock<ISupervisorSettings>();
+            mockOfSupervisorSettings.Setup(x => x.DownloadUpdatesForInterviewerApp).Returns(true);
+            mockOfSupervisorSettings.Setup(x => x.GetApplicationVersionCode()).Returns(version.Value);
+
+            var step = CreateDownloadInterviewerAppPatches(
+                synchronizationService: mockOfSupervisorSynchronization.Object,
+                supervisorSettings: mockOfSupervisorSettings.Object,
+                progress: progress);
+
+            // act
+            await step.ExecuteAsync();
+            await Task.Delay(100); // allow Progress<T> callbacks to be dispatched
+
+            // 10 events at 256 KB → only crossings of 512 KB threshold pass → ≤5 reports
+            var appDownloadReports = progressReports.Count(r => r.Stage == SyncStage.DownloadApplication);
+            Assert.That(appDownloadReports, Is.LessThanOrEqualTo(5),
+                $"With unknown content length, expected at most 5 throttled reports (one per 512KB step), got {appDownloadReports}");
+        }
+
         private static DownloadInterviewerApplications CreateDownloadInterviewerAppPatches(
             ISupervisorSynchronizationService synchronizationService = null,
             ILogger logger = null,
             IFileSystemAccessor fileSystemAccessor = null,
             IPermissionsService permissions = null,
-            ISupervisorSettings supervisorSettings = null)
+            ISupervisorSettings supervisorSettings = null,
+            IProgress<SyncProgressInfo> progress = null)
         {
             return new DownloadInterviewerApplications(0,
                 logger: logger ?? Mock.Of<ILogger>(),
@@ -172,7 +276,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
                 permissions: permissions ?? Mock.Of<IPermissionsService>(), 
                 supervisorSettings: supervisorSettings ?? Mock.Of<ISupervisorSettings>())
             {
-                Context = Create.Entity.EnumeratorSynchonizationContext()
+                Context = Create.Entity.EnumeratorSynchonizationContext(progress)
             };
         }
     }

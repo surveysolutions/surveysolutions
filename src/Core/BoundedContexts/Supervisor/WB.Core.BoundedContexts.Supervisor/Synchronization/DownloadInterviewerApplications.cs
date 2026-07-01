@@ -20,6 +20,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
     public class DownloadInterviewerApplications : SynchronizationStep
     {
+        private const int ProgressReportStepPercent = 5;
+        private const int UnknownLengthProgressStepBytes = 512 * 1024;
+
+        private class DownloadProgressState
+        {
+            public Stopwatch StopWatch;
+            public int LastReportedProgressBucket = -1;
+            public long NextUnknownLengthProgressReportAt;
+        }
+
         private readonly ISupervisorSynchronizationService supervisorSynchronizationService;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IPermissionsService permissions;
@@ -91,7 +101,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
         private async Task DownloadInterviewerApksAsync(string interviewerApksDirectory)
         {
-            Stopwatch sw = null;
+            var interviewerProgressState = new DownloadProgressState();
+            var interviewerWithMapsProgressState = new DownloadProgressState();
 
             try
             {
@@ -100,18 +111,22 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
                 var interviewerApk = await this.supervisorSynchronizationService
                     .GetInterviewerApplicationAsync(this.fileSystemAccessor.ReadHash(interviewerAppFilePath),
-                        new Progress<TransferProgress>(downloadProgress => { UpdateProgress(downloadProgress, ref sw); }), Context.CancellationToken);
+                        new Progress<TransferProgress>(downloadProgress =>
+                        {
+                            UpdateProgress(downloadProgress, interviewerProgressState);
+                        }), Context.CancellationToken);
 
                 if (interviewerApk != null)
                 {
                     this.fileSystemAccessor.WriteAllBytes(interviewerAppFilePath, interviewerApk);
                 }
 
-                sw = null;
-
                 var interviewerWithMapsApk = await this.supervisorSynchronizationService
                     .GetInterviewerApplicationWithMapsAsync(this.fileSystemAccessor.ReadHash(interviewerWithMapsAppFilePath),
-                        new Progress<TransferProgress>(downloadProgress => { UpdateProgress(downloadProgress, ref sw); }),
+                        new Progress<TransferProgress>(downloadProgress =>
+                        {
+                            UpdateProgress(downloadProgress, interviewerWithMapsProgressState);
+                        }),
                         Context.CancellationToken);
 
                 if (interviewerWithMapsApk != null)
@@ -125,13 +140,29 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             }
         }
 
-        private void UpdateProgress(TransferProgress downloadProgress, ref Stopwatch stopWatch)
+        private void UpdateProgress(TransferProgress downloadProgress, DownloadProgressState progressState)
         {
-            if (stopWatch == null) stopWatch = Stopwatch.StartNew();
-            if (downloadProgress.ProgressPercentage % 1 != 0) return;
+            if (progressState.StopWatch == null) progressState.StopWatch = Stopwatch.StartNew();
+
+            if (!downloadProgress.TotalBytesToReceive.HasValue || downloadProgress.TotalBytesToReceive.Value <= 0)
+            {
+                if (downloadProgress.BytesReceived < progressState.NextUnknownLengthProgressReportAt)
+                    return;
+
+                progressState.NextUnknownLengthProgressReportAt =
+                    downloadProgress.BytesReceived + UnknownLengthProgressStepBytes;
+            }
+            else
+            {
+                var currentProgressBucket = (int)(downloadProgress.ProgressPercentage / ProgressReportStepPercent);
+                if (currentProgressBucket <= progressState.LastReportedProgressBucket)
+                    return;
+
+                progressState.LastReportedProgressBucket = currentProgressBucket;
+            }
             
             var receivedDataHumanized = NumericTextFormatter.FormatBytesHumanized(downloadProgress.BytesReceived);
-            var receivedSpeedHumanized = NumericTextFormatter.FormatSpeedHumanized(downloadProgress.BytesReceived, stopWatch.Elapsed);
+            var receivedSpeedHumanized = NumericTextFormatter.FormatSpeedHumanized(downloadProgress.BytesReceived, progressState.StopWatch.Elapsed);
             var totalSizeHumanized = NumericTextFormatter.FormatBytesHumanized(downloadProgress.TotalBytesToReceive ?? 0);
 
             Context.Progress.Report(new SyncProgressInfo
