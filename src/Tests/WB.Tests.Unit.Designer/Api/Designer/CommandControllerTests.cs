@@ -155,6 +155,37 @@ namespace WB.Tests.Unit.Designer.Api.Designer
         }
 
         [Test]
+        public void Deserialize_paste_after_with_source_questionnaire_revision_sets_source_revision()
+        {
+            var sourceQuestionnaireId = Guid.NewGuid();
+            var sourceQuestionnaireRevisionId = Guid.NewGuid();
+            var controller = CreateController();
+            var json = SerializeCommand(new
+            {
+                sourceQuestionnaireId = sourceQuestionnaireId,
+                sourceQuestionnaireRevision = new
+                {
+                    questionnaireId = sourceQuestionnaireId,
+                    revision = sourceQuestionnaireRevisionId
+                },
+                sourceItemId = Guid.NewGuid(),
+                itemToPasteAfterId = Guid.NewGuid(),
+                entityId = Guid.NewGuid(),
+                questionnaireId = Guid.NewGuid()
+            });
+
+            var result = controller.Deserialize(nameof(PasteAfter), json);
+
+            var pasteAfter = result as PasteAfter;
+            Assert.That(pasteAfter, Is.Not.Null);
+            Assert.That(pasteAfter!.SourceQuestionnaireId, Is.EqualTo(sourceQuestionnaireId));
+            Assert.That(pasteAfter.SourceQuestionnaireRevision, Is.Not.Null);
+            Assert.That(pasteAfter.SourceQuestionnaireRevision, Is.InstanceOf<QuestionnaireRevision>());
+            Assert.That(pasteAfter.SourceQuestionnaireRevision.QuestionnaireId, Is.EqualTo(sourceQuestionnaireId));
+            Assert.That(pasteAfter.SourceQuestionnaireRevision.Revision, Is.EqualTo(sourceQuestionnaireRevisionId));
+        }
+
+        [Test]
         public void Deserialize_paste_into_with_source_questionnaire_revision_sets_source_revision()
         {
             var sourceQuestionnaireId = Guid.NewGuid();
@@ -808,7 +839,6 @@ namespace WB.Tests.Unit.Designer.Api.Designer
         #endregion
     }
 }
-
 
 
 
