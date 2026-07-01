@@ -1,12 +1,3 @@
-import Vue from 'vue'
-
-Vue.$t = function(str) {
-    return str
-}
-Vue.prototype.$t = function(str) {
-    return str
-}
-
 import '~/webinterview/components'
 import '~/webinterview/components/questions'
 import '~/webinterview/components/questions/parts'
@@ -14,14 +5,11 @@ import '../parts'
 import '~/webinterview/directives/DateTimeFormatting'
 import '~/webinterview/directives/MaskedText'
 import '~/webinterview/directives/LinkToRoute'
-import { mount, createLocalVue  } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import TextQuestion from '../TextQuestion.vue'
 import Question from '../Question.vue'
 import RemoveAnswer from '../parts/RemoveAnswer.vue'
-import Vuex from 'vuex'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { createStore } from 'vuex'
 
 
 describe('TextQuestion component', () => {
@@ -29,16 +17,16 @@ describe('TextQuestion component', () => {
     const webinterview = {}
     const entityDetails = {}
     entityDetails['111'] = {
-        isLoading : false,
+        isLoading: false,
         isDisabled: false,
         isAnswered: true,
-        validity: { isValid: true, warnings:[] },
+        validity: { isValid: true, warnings: [] },
         hideIfDisabled: false,
         id: '111',
         answer: 'same test',
         comments: [],
     }
-    webinterview.fetch = { state: {}}
+    webinterview.fetch = { state: {} }
     webinterview.entityDetails = entityDetails
 
     let state = {
@@ -49,17 +37,32 @@ describe('TextQuestion component', () => {
         isReviewMode: () => false,
     }
 
-    let store = new Vuex.Store({
+    const store = createStore({
         state,
         getters,
     })
 
     const wrapper = mount(TextQuestion, {
-        propsData: {
+        props: {
             id: '111',
         },
-        store,
-        localVue,
+        global: {
+            plugins: [store],
+            mocks: {
+                $t: (str) => str,
+            },
+            components: {
+                'wb-question': Question,
+                'wb-remove-answer': RemoveAnswer,
+                'wb-lock': { template: '<div />' },
+                'textarea-autosize': { template: '<textarea />' },
+            },
+            directives: {
+                blurOnEnterKey: () => { },
+                maskedText: () => { },
+                autosize: () => { },
+            },
+        },
     })
 
     it('is visible', () => {
@@ -73,7 +76,7 @@ describe('TextQuestion component', () => {
     })
 
     it('contains text editor', () => {
-        expect(wrapper.find('textarea-autosize').exists()).toBe(true)
+        expect(wrapper.find('textarea').exists()).toBe(true)
         const html = wrapper.html()
         expect(html.includes('textarea')).toBe(true)
     })

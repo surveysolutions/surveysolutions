@@ -1,9 +1,9 @@
 import { find } from 'lodash-es'
+import * as lodash from 'lodash-es'
+import filtersStore from '../filters'
+import searchResults from './_searchResults.json'
 
-window._ = require("lodash")
-
-const filtersStore = require("../filters").default;
-const searchResults = require("./_searchResults.json")
+window._ = lodash
 
 describe("filters search", () => {
     describe("when aggregating search results", () => {

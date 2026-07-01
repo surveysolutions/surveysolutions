@@ -1,107 +1,107 @@
-import { defineConfig } from 'vite';
-import path from 'path';
+import { defineConfig } from 'vite'
+import path from 'path'
 import vue from '@vitejs/plugin-vue'
 import LocalizationPlugin from './tools/vite-plugin-localization'
-import fs from 'fs';
+import fs from 'fs'
 import { globSync } from 'glob'
-import saveSelectedFilesPlugin from './tools/saveSelectedFilesPlugin.js';
-import { normalizePath } from 'vite';
+import saveSelectedFilesPlugin from './tools/saveSelectedFilesPlugin.js'
+import { normalizePath } from 'vite'
 
-const baseDir = path.relative(__dirname, "./");
-const join = path.join.bind(path, baseDir);
-const uiFolder = join("..");
-const hqFolder = path.join(uiFolder, "WB.UI.Headquarters.Core");
-const webTesterFolder = path.join(uiFolder, "WB.UI.WebTester");
+const baseDir = path.relative(__dirname, './')
+const join = path.join.bind(path, baseDir)
+const uiFolder = join('..')
+const hqFolder = path.join(uiFolder, 'WB.UI.Headquarters.Core')
+const webTesterFolder = path.join(uiFolder, 'WB.UI.WebTester')
 
 const locales = {
-    hq: ["Assignments", "Common", "Dashboard", "DataExport", "DataTables",
-        "Details", "DevicesInterviewers", "Diagnostics", "Interviews", "MainMenu", "MapReport",
-        "Pages", "Report", "Reports", "Settings", "Strings", "TabletLogs", "UploadUsers",
-        "Users", "WebInterview", "WebInterviewSettings", "WebInterviewSetup", "WebInterviewUI",
-        "FieldsAndValidations", "PeriodicStatusReport", "LoginToDesigner", "ImportQuestionnaire", "QuestionnaireImport",
-        "QuestionnaireClonning", "Archived", "BatchUpload", "ControlPanel", "AuditLog", "OutdatedBrowser", "InterviewerAuditRecord"
-        , "Roles", "Workspaces"],
-    webtester: ["WebInterviewUI", "WebInterview", "Common", "Details"],
-    webinterview: ["WebInterviewUI", "WebInterview", "Common", "Details"]
+    hq: ['Assignments', 'Common', 'Dashboard', 'DataExport', 'DataTables',
+        'Details', 'DevicesInterviewers', 'Diagnostics', 'Interviews', 'MainMenu', 'MapReport',
+        'Pages', 'Report', 'Reports', 'Settings', 'Strings', 'TabletLogs', 'UploadUsers',
+        'Users', 'WebInterview', 'WebInterviewSettings', 'WebInterviewSetup', 'WebInterviewUI',
+        'FieldsAndValidations', 'PeriodicStatusReport', 'LoginToDesigner', 'ImportQuestionnaire', 'QuestionnaireImport',
+        'QuestionnaireClonning', 'Archived', 'BatchUpload', 'ControlPanel', 'AuditLog', 'OutdatedBrowser', 'InterviewerAuditRecord'
+        , 'Roles', 'Workspaces'],
+    webtester: ['WebInterviewUI', 'WebInterview', 'Common', 'Details'],
+    webinterview: ['WebInterviewUI', 'WebInterview', 'Common', 'Details'],
 }
 
-const isPack = process.argv.indexOf("--package") >= 0;
+const isPack = process.argv.indexOf('--package') >= 0
 
-const hqDist = !isPack ? hqFolder : join("dist", "package", "hq")
-const webTesterDist = !isPack ? webTesterFolder : join("dist", "package", "webtester")
+const hqDist = !isPack ? hqFolder : join('dist', 'package', 'hq')
+const webTesterDist = !isPack ? webTesterFolder : join('dist', 'package', 'webtester')
 
 const pages = {
 
     finishInstallation: {
-        entry: "src/pages/finishInstallation.js",
-        filename: path.join(hqDist, "Views", "Shared", "_FinishInstallation.cshtml"),
-        template: path.join(hqFolder, "Views", "Shared", "_FinishInstallation.Template.cshtml")
+        entry: 'src/pages/finishInstallation.js',
+        filename: path.join(hqDist, 'Views', 'Shared', '_FinishInstallation.cshtml'),
+        template: path.join(hqFolder, 'Views', 'Shared', '_FinishInstallation.Template.cshtml'),
     },
 
     logon: {
-        entry: "src/pages/logon.js",
-        filename: path.join(hqDist, "Views", "Shared", "_Logon.cshtml"),
-        template: path.join(hqFolder, "Views", "Shared", "_Logon.Template.cshtml")
+        entry: 'src/pages/logon.js',
+        filename: path.join(hqDist, 'Views', 'Shared', '_Logon.cshtml'),
+        template: path.join(hqFolder, 'Views', 'Shared', '_Logon.Template.cshtml'),
     },
 
     hq_vue: {
-        entry: "src/hqapp/main.js",
-        filename: path.join(hqDist, "Views", "Shared", "_Layout.cshtml"),
-        template: path.join(hqFolder, "Views", "Shared", "_Layout.Template.cshtml"),
+        entry: 'src/hqapp/main.js',
+        filename: path.join(hqDist, 'Views', 'Shared', '_Layout.cshtml'),
+        template: path.join(hqFolder, 'Views', 'Shared', '_Layout.Template.cshtml'),
     },
 
     webinterview: {
-        entry: "src/hqapp/main.js",
-        filename: path.join(hqDist, "Views", "WebInterview", "_WebInterviewLayout.cshtml"),
-        template: path.join(hqFolder, "Views", "WebInterview", "_WebInterviewLayout.Template.cshtml")
+        entry: 'src/hqapp/main.js',
+        filename: path.join(hqDist, 'Views', 'WebInterview', '_WebInterviewLayout.cshtml'),
+        template: path.join(hqFolder, 'Views', 'WebInterview', '_WebInterviewLayout.Template.cshtml'),
     },
     webinterviewRun: {
-        entry: "src/webinterview/main.js",
-        filename: path.join(hqDist, "Views", "WebInterview", "Index.cshtml"),
-        template: path.join(hqFolder, "Views", "WebInterview", "Index.Template.cshtml")
+        entry: 'src/webinterview/main.js',
+        filename: path.join(hqDist, 'Views', 'WebInterview', 'Index.cshtml'),
+        template: path.join(hqFolder, 'Views', 'WebInterview', 'Index.Template.cshtml'),
     },
 
     webtester: {
-        entry: "src/webinterview/main.js",
-        filename: path.join(webTesterDist, "Views", "Shared", "_Layout.cshtml"),
-        template: path.join(webTesterFolder, "Views", "Shared", "_Layout.Template.cshtml")
+        entry: 'src/webinterview/main.js',
+        filename: path.join(webTesterDist, 'Views', 'Shared', '_Layout.cshtml'),
+        template: path.join(webTesterFolder, 'Views', 'Shared', '_Layout.Template.cshtml'),
     },
 
     under_construction: {
-        entry: "src/pages/under_construction.js",
-        filename: path.join(hqDist, "Views", "UnderConstruction", "Index.cshtml"),
-        template: path.join(hqFolder, "Views", "UnderConstruction", "Index.Template.cshtml")
+        entry: 'src/pages/under_construction.js',
+        filename: path.join(hqDist, 'Views', 'UnderConstruction', 'Index.cshtml'),
+        template: path.join(hqFolder, 'Views', 'UnderConstruction', 'Index.Template.cshtml'),
     },
 
     empty_layout: {
-        entry: "src/hqapp/main.js",
+        entry: 'src/hqapp/main.js',
         //entry: path.join("src", "hqapp", "main.js"),
-        filename: path.join(hqDist, "Views", "Shared", "_EmptyLayout.cshtml"),
-        template: path.join(hqFolder, "Views", "Shared", "_EmptyLayout.Template.cshtml")
-    }
-};
+        filename: path.join(hqDist, 'Views', 'Shared', '_EmptyLayout.cshtml'),
+        template: path.join(hqFolder, 'Views', 'Shared', '_EmptyLayout.Template.cshtml'),
+    },
+}
 
 const resourcesTargets = [
-    { source: join(".resources", "**", "*.js"), destination: join("dist", "locale"), isFlat: false },
-    { source: join("dist", "locale", "hq", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "hq") },
-    { source: join("dist", "locale", "webinterview", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "webinterview") },
-    { source: join("dist", "locale", "webtester", "*.*"), destination: path.join(webTesterDist, "wwwroot", "locale", "webtester") },
+    { source: join('.resources', '**', '*.js'), destination: join('dist', 'locale'), isFlat: false },
+    { source: join('dist', 'locale', 'hq', '*.*'), destination: path.join(hqDist, 'wwwroot', 'locale', 'hq') },
+    { source: join('dist', 'locale', 'webinterview', '*.*'), destination: path.join(hqDist, 'wwwroot', 'locale', 'webinterview') },
+    { source: join('dist', 'locale', 'webtester', '*.*'), destination: path.join(webTesterDist, 'wwwroot', 'locale', 'webtester') },
 ]
 
 const fileTargets = [
     //{ source: join(".resources", "**", "*.js"), destination: join("dist", "locale"), isFlat: false },
 
-    { source: join("dist", "img", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "img"), isFlat: false },
-    { source: join("dist", "fonts", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "fonts") },
-    { source: join("dist", "css", "*.*"), destination: path.join(hqDist, "wwwroot", "css") },
-    { source: join("dist", "js", "*.*"), destination: path.join(hqDist, "wwwroot", "js") },
+    { source: join('dist', 'img', '**', '*.*'), destination: path.join(hqDist, 'wwwroot', 'img'), isFlat: false },
+    { source: join('dist', 'fonts', '**', '*.*'), destination: path.join(hqDist, 'wwwroot', 'fonts') },
+    { source: join('dist', 'css', '*.*'), destination: path.join(hqDist, 'wwwroot', 'css') },
+    { source: join('dist', 'js', '*.*'), destination: path.join(hqDist, 'wwwroot', 'js') },
     //{ source: join("dist", "locale", "hq", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "hq") },
     //{ source: join("dist", "locale", "webinterview", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "webinterview") },
 
-    { source: join("dist", "img", "**", "*.*"), destination: path.join(webTesterDist, "wwwroot", "img"), isFlat: false },
-    { source: join("dist", "fonts", "*.*"), destination: path.join(webTesterDist, "wwwroot", "fonts") },
-    { source: join("dist", "css", "*.*"), destination: path.join(webTesterDist, "wwwroot", "css") },
-    { source: join("dist", "js", "*.*"), destination: path.join(webTesterDist, "wwwroot", "js") },
+    { source: join('dist', 'img', '**', '*.*'), destination: path.join(webTesterDist, 'wwwroot', 'img'), isFlat: false },
+    { source: join('dist', 'fonts', '*.*'), destination: path.join(webTesterDist, 'wwwroot', 'fonts') },
+    { source: join('dist', 'css', '*.*'), destination: path.join(webTesterDist, 'wwwroot', 'css') },
+    { source: join('dist', 'js', '*.*'), destination: path.join(webTesterDist, 'wwwroot', 'js') },
     //{ source: join("dist", "locale", "webtester", "*.*"), destination: path.join(webTesterDist, "wwwroot", "locale", "webtester") },
 
     //{ source: join("dist", ".vite"), destination: path.join(hqDist, "wwwroot") },
@@ -109,15 +109,15 @@ const fileTargets = [
 
 
 const resxFiles = [
-    normalizePath("../WB.UI.Headquarters.Core/**/*.resx"),
-    normalizePath("../../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx"),
-    normalizePath("../../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx")
+    normalizePath('../WB.UI.Headquarters.Core/**/*.resx'),
+    normalizePath('../../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx'),
+    normalizePath('../../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx'),
 ]
 
-let inputPages = {};
+let inputPages = {}
 
-var pagesSources = [];
-var pagesTargets = [];
+var pagesSources = []
+var pagesTargets = []
 
 for (var attr in pages) {
     const pageObj = pages[attr]
@@ -126,14 +126,14 @@ for (var attr in pages) {
     const origFolder = path.dirname(pageObj.filename)
     //const templateFilename = path.basename(pageObj.template)
     const templateFilenameHtml = attr + '.html'
-    var templatesFolderFull = path.join(baseDir, ".templates")
+    var templatesFolderFull = path.join(baseDir, '.templates')
 
-    var destFileFolderFull = path.join(baseDir, "dist", ".templates")
+    var destFileFolderFull = path.join(baseDir, 'dist', '.templates')
     var templateHtmlPath = path.join(templatesFolderFull, templateFilenameHtml)
     var filenameHtmlPath = path.join(destFileFolderFull, filenameHtml)
-    var distFileName = path.join(baseDir, "dist", filenameHtml)
-    var filenameHtmlPathVite = path.join(destFileFolderFull, ".vite", filenameHtml)
-    var distFileNameVite = path.join(baseDir, "dist", ".vite", filenameHtml)
+    var distFileName = path.join(baseDir, 'dist', filenameHtml)
+    var filenameHtmlPathVite = path.join(destFileFolderFull, '.vite', filenameHtml)
+    var distFileNameVite = path.join(baseDir, 'dist', '.vite', filenameHtml)
 
     //console.log("templateHtmlPath: " + templateHtmlPath, " distFileName: " + distFileName)
     //console.log("filenameHtmlPath: " + filenameHtmlPath)
@@ -147,7 +147,7 @@ for (var attr in pages) {
     pageObj.filename = filenameHtml
     pageObj.template = templateHtmlPath
 
-    inputPages[attr] = templateHtmlPath;
+    inputPages[attr] = templateHtmlPath
     //pageObj.entry = join(pageObj.entry)
     //inputPages[attr] = join(pageObj.entry);
 }
@@ -164,28 +164,28 @@ clearBeforeBuild.push('./dist')
 function copyTargets(targets) {
     for (const target of targets) {
 
-        const sources = globSync(normalizePath(target.src));
+        const sources = globSync(normalizePath(target.src))
         //console.log(`Copying from ${target.src}, sources:`, sources);
 
         // Derive base dir from glob pattern (everything before first wildcard)
-        const srcBase = target.src.split(/[*{]/)[0].replace(/[/\\]$/, '');
+        const srcBase = target.src.split(/[*{]/)[0].replace(/[/\\]$/, '')
 
         for (const src of sources) {
-            const destDir = path.resolve(__dirname, target.dest);
+            const destDir = path.resolve(__dirname, target.dest)
 
-            let destFile;
+            let destFile
             if (target.flatten === false) {
                 // Preserve folder structure relative to srcBase
-                const relativePath = path.relative(srcBase, src);
-                destFile = path.join(destDir, target.rename ?? relativePath);
+                const relativePath = path.relative(srcBase, src)
+                destFile = path.join(destDir, target.rename ?? relativePath)
             } else {
                 // Flatten: just use filename
-                destFile = path.join(destDir, target.rename ?? path.basename(src));
+                destFile = path.join(destDir, target.rename ?? path.basename(src))
             }
 
-            fs.mkdirSync(path.dirname(destFile), { recursive: true });
+            fs.mkdirSync(path.dirname(destFile), { recursive: true })
             //console.log(`Copying ${src} -> ${destFile}, target.isFlat: ${target.isFlat}`);
-            fs.copyFileSync(src, destFile);
+            fs.copyFileSync(src, destFile)
         }
     }
 }
@@ -193,22 +193,22 @@ function copyTargets(targets) {
 // https://vitejs.dev/config/
 export default defineConfig(({ mode, command }) => {
 
-    const isDevMode = mode === 'development';
+    const isDevMode = mode === 'development'
     const isProdMode = !isDevMode
     const isServe = command === 'serve'
 
-    const base = command == 'serve' ? '/.vite/' : '/';
+    const base = command == 'serve' ? '/.vite/' : '/'
     //const base = '/.vite/';
 
     //const outDir = path.join(hqDist, "wwwroot");
     //const outDir = path.join(hqDist, "dist");
     //const outDir = join("dist");
-    const outDir = "dist";
+    const outDir = 'dist'
     //const outDir = path.join(hqDist, "wwwroot");
 
     if (isServe && mode != 'test') {
-        fs.rmSync(outDir, { recursive: true, force: true });
-        fs.mkdirSync(outDir);
+        fs.rmSync(outDir, { recursive: true, force: true })
+        fs.mkdirSync(outDir)
     }
 
     return {
@@ -229,14 +229,14 @@ export default defineConfig(({ mode, command }) => {
             alias: [
                 {
                     find: '@',
-                    replacement: path.resolve(__dirname, 'src')
+                    replacement: path.resolve(__dirname, 'src'),
                 },
                 {
                     find: '~',
-                    replacement: path.resolve(__dirname, 'src')
+                    replacement: path.resolve(__dirname, 'src'),
                 },
                 {
-                    find: 'vue',
+                    find: /^vue$/,
                     replacement: 'vue/dist/vue.runtime.esm-bundler.js',
                 },
                 {
@@ -263,12 +263,12 @@ export default defineConfig(({ mode, command }) => {
                 '.jsx',
                 '.tsx',
                 '.json',
-                '.vue'
-            ]
+                '.vue',
+            ],
         },
         transpile: [
             'autonumeric',
-            '@googlemaps/markerclusterer'
+            '@googlemaps/markerclusterer',
         ],
         //optimizeDeps: {
         //include: ['jquery'],
@@ -280,10 +280,10 @@ export default defineConfig(({ mode, command }) => {
                     template: {
                         compilerOptions: {
                             compatConfig: {
-                                MODE: 2
-                            }
-                        }
-                    }
+                                MODE: 2,
+                            },
+                        },
+                    },
                 }),
             //vitePluginRequire.default(),
             //viteCommonjs(),
@@ -292,25 +292,25 @@ export default defineConfig(({ mode, command }) => {
             //    targetFiles: fileTargets.map(target => target.destination)
             //}),
             saveSelectedFilesPlugin({
-                filesToSave: pagesTargets
+                filesToSave: pagesTargets,
             }),
             // 1. 'options' hook: clean + copy page sources
             {
                 name: 'clean-before-build',
                 options() {
                     for (const dir of clearBeforeBuild) {
-                        fs.rmSync(dir, { recursive: true, force: true });
+                        fs.rmSync(dir, { recursive: true, force: true })
                     }
                     // copy page templates and locale resources
                     const targets = pagesSources.concat(resourcesTargets).map(i => ({
                         src: i.source,
                         dest: path.resolve(__dirname, i.destination),
                         ...(i.name ? { rename: i.name } : {}),
-                        ...(typeof i.isFlat === 'boolean' ? { flatten: i.isFlat } : {})
-                    }));
+                        ...(typeof i.isFlat === 'boolean' ? { flatten: i.isFlat } : {}),
+                    }))
                     // console.log(`=========copy options, targets:`, targets);
-                    copyTargets(targets);
-                }
+                    copyTargets(targets)
+                },
             },
 
             // 2. 'writeBundle' hook: copy locale resources
@@ -320,33 +320,33 @@ export default defineConfig(({ mode, command }) => {
                     const targets = resourcesTargets.map(i => ({
                         src: i.source,
                         dest: path.resolve(__dirname, i.destination),
-                        ...(typeof i.isFlat === 'boolean' ? { flatten: i.isFlat } : {})
-                    }));
+                        ...(typeof i.isFlat === 'boolean' ? { flatten: i.isFlat } : {}),
+                    }))
                     //console.log(`=========copy writeBundle, targets:`, targets);
-                    copyTargets(targets);
-                }
+                    copyTargets(targets)
+                },
             },
 
             // 3. 'closeBundle' hook: copy pages and file targets
             {
                 name: 'copy-files-closeBundle',
                 closeBundle() {
-                    if (isServe) return;
+                    if (isServe) return
                     const targets = pagesTargets.concat(fileTargets).map(i => ({
                         src: i.source,
                         dest: path.resolve(__dirname, i.destination),
                         ...(i.name ? { rename: i.name } : {}),
-                        ...(i.isFlat === false ? { flatten: false } : {})
-                    }));
+                        ...(i.isFlat === false ? { flatten: false } : {}),
+                    }))
                     //console.log(`=========copy closeBundle, targets:`, targets);
-                    copyTargets(targets);
-                }
+                    copyTargets(targets)
+                },
             },
             LocalizationPlugin({
                 patterns: resxFiles,
-                destination: "./.resources",
+                destination: './.resources',
                 locales: locales,
-                noHash: isDevMode
+                noHash: isDevMode,
             }),
         ],
         /*define: {
@@ -359,11 +359,21 @@ export default defineConfig(({ mode, command }) => {
             port: 3001,
             watch: {
                 paths: ['src/**/*'],
-                ignored: ['**/.resources/**']
+                ignored: ['**/.resources/**'],
             },
             fs: {
                 allow: ['..'],
             },
+        },
+        test: {
+            globals: true,
+            environment: 'jsdom',
+            setupFiles: ['./tests/setup-jest.js'],
+            include: [
+                '**/tests/unit/**/*.spec.{js,jsx,ts,tsx}',
+                '**/__tests__/**/*.{test,spec}.{js,jsx,ts,tsx}',
+            ],
+            exclude: ['**/.resources/**'],
         },
         build: {
             minify: isProdMode,
@@ -382,7 +392,7 @@ export default defineConfig(({ mode, command }) => {
                             if (id.includes('@microsoft/signalr')) {
                                 return code.replace(/\/\*#__PURE__\*\/ function /g, 'function ')
                             }
-                        }
+                        },
                     },
                     /*inject({
                         jQuery: "jquery",
@@ -444,16 +454,16 @@ export default defineConfig(({ mode, command }) => {
                         if (id.includes('/mitt/')) return 'vendor-events'
                     },
                     assetFileNames: (assetInfo) => {
-                        let extType = assetInfo.name.split('.').at(1);
+                        let extType = assetInfo.name.split('.').at(1)
                         if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
-                            extType = 'img';
+                            extType = 'img'
                         }
                         if (/ttf|woff|woff2|eot/i.test(extType)) {
-                            extType = 'fonts';
+                            extType = 'fonts'
                         }
                         if (isDevMode)
                             return `${extType}/[name][extname]`
-                        return `${extType}/[name]-[hash][extname]`;
+                        return `${extType}/[name]-[hash][extname]`
                     },
                     chunkFileNames: (chunkInfo) => {
                         if (isDevMode)
@@ -478,37 +488,37 @@ const silenceSomeSassDeprecationWarnings = {
         warn(message, options) {
             //console.log(message)
             //console.log(options)
-            const { stderr } = process;
-            const span = options.span ?? undefined;
-            const stack = (options.stack === 'null' ? undefined : options.stack) ?? undefined;
+            const { stderr } = process
+            const span = options.span ?? undefined
+            const stack = (options.stack === 'null' ? undefined : options.stack) ?? undefined
 
             if (options.deprecation) {
                 //if (stack.indexOf('node_modules') != - 1) {
                 //    return;
                 //}
                 if (stack.indexOf('assets/bootstrap') != -1) {
-                    return;
+                    return
                 }
 
                 if (message.startsWith('Using / for division outside of calc() is deprecated')) {
                     // silences above deprecation warning
-                    return;
+                    return
                 }
-                stderr.write('DEPRECATION ');
+                stderr.write('DEPRECATION ')
             }
-            stderr.write(`WARNING: ${message}\n`);
+            stderr.write(`WARNING: ${message}\n`)
 
             if (span !== undefined) {
                 // output the snippet that is causing this warning
-                stderr.write(`\n"${span.text}"\n`);
+                stderr.write(`\n"${span.text}"\n`)
             }
 
             if (stack !== undefined) {
                 // indent each line of the stack
-                stderr.write(`    ${stack.toString().trimEnd().replace(/\n/gm, '\n    ')}\n`);
+                stderr.write(`    ${stack.toString().trimEnd().replace(/\n/gm, '\n    ')}\n`)
             }
 
-            stderr.write('\n');
-        }
-    }
-};
+            stderr.write('\n')
+        },
+    },
+}
