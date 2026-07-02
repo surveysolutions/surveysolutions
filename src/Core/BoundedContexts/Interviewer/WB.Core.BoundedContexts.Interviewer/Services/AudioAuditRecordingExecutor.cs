@@ -162,9 +162,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             if (this.isDisposed)
                 return;
 
+            // Mark disposed and signal cancellation, but avoid disposing synchronization primitives here.
+            // EvaluateAsync/StopAsync can still be running (they are triggered from fire-and-forget tasks)
+            // and may need to re-acquire the lock for cleanup; disposing the lock/CTS can cause
+            // ObjectDisposedException and leave a recording running.
             this.isDisposed = true;
-            this.cancellation.Dispose();
-            this.audioRecordingLock.Dispose();
+            try
+            {
+                this.cancellation.Cancel();
+            }
+            catch
+            {
+                // Ignore: cancellation source may already be in a terminal state.
+            }
         }
     }
 }
