@@ -42,9 +42,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             var oldAssignment = assignments.GetAssignment(assignmentId);
             if (!oldAssignment.IsCompleted)
             {
-                // Selective Audio Audit scope references questionnaire entities by id and is not migrated
-                // automatically to a new questionnaire version. Skip such assignments and report an
-                // explanatory error so it is surfaced in the upgrade errors (assignments) file.
+                // Selective Audio Audit scope is not migrated automatically to a new questionnaire version.
+                // Skip such assignments and report an explanatory error so it is surfaced in the upgrade
+                // errors (assignments) file.
                 if (oldAssignment.AudioAuditScope != null && oldAssignment.AudioAuditScope.Count > 0)
                 {
                     throw new AssignmentUpgradeException(
