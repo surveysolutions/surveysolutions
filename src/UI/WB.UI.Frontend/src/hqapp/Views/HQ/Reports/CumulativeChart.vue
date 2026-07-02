@@ -10,7 +10,7 @@
 const chartOptions = {
     elements: {
         point: { radius: 0 },
-        line: { fill: true, tension: 0 },
+        line: { tension: 0 },
     },
     responsive: true,
     maintainAspectRatio: false,
