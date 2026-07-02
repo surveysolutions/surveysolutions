@@ -213,6 +213,9 @@ jobs:
           name: Mobile Apps All
           path: artifacts
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Build and push
         shell: pwsh
         run: |
