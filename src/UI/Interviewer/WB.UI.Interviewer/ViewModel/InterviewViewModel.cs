@@ -185,7 +185,7 @@ namespace WB.UI.Interviewer.ViewModel
 
                     if (missingPermissionsException.PermissionType == typeof(Permissions.Microphone))
                     {
-                        this.userInteractionService.ShowToast(UIResources.MissingPermissions_Microphone);
+                        this.userInteractionService.ShowToast(UIResources.MissingPermissions_Microphone_Interview, isLong: true);
                     }
                     else if (missingPermissionsException.PermissionType == typeof(Permissions.StorageWrite))
                     {
