@@ -285,6 +285,16 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
             await executor.EvaluateAsync(interviewId, () => RecordingTarget.WholeInterview, Start, CancellationToken.None);
 
             audioAuditService.Received(1).StopAudioRecording(interviewId);
+
+            // A subsequent evaluation on the disposed executor must return immediately (no operation is
+            // started) rather than deadlocking on the now-disposed recording lock.
+            var secondStartCount = 0;
+            var secondEvaluation = executor.EvaluateAsync(interviewId, () => RecordingTarget.WholeInterview,
+                _ => { secondStartCount++; return Task.FromResult(true); }, CancellationToken.None);
+
+            Assert.That(secondEvaluation.IsCompleted, Is.True, "evaluation after disposal must not block");
+            await secondEvaluation;
+            Assert.That(secondStartCount, Is.EqualTo(0));
         }
 
         [Test]

@@ -157,7 +157,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
                         // Cancellation/disposal or the view disappearing may have happened while we were
                         // starting (that dispatch runs without the lock). Do not keep a recording that a
-                        // torn-down or hidden screen no longer wants: stop it and bail.
+                        // torn-down or hidden screen no longer wants: stop it and bail. Both the per-evaluation
+                        // token and the executor's own cancellation are checked because the caller may pass a
+                        // token other than this.CancellationToken; neither check is redundant.
                         if (cancellationToken.IsCancellationRequested || this.IsCancelled || !this.IsViewVisible)
                         {
                             this.logger.Debug($"Audio audit stopping just-started recording for interview {interviewId} (screen hidden or cancelled).");
