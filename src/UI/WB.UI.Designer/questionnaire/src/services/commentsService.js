@@ -1,6 +1,5 @@
 import { get, patch, del, post, commandCall } from './apiService';
 import emitter from './emitter';
-import _ from 'lodash';
 import { newGuid } from '../helpers/guid';
 
 export async function getComments(questionnaireId, entityId) {

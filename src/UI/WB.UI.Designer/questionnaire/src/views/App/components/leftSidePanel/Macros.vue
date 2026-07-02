@@ -38,14 +38,14 @@
                     </div>
                     <div class="actions" v-if="isEditorDirty(macro)">
                         <button v-if="!isReadOnlyForUser" class="btn lighter-hover" @click="saveMacro(macro)">{{
-                        $t('QuestionnaireEditor.Save') }}
+                            $t('QuestionnaireEditor.Save') }}
                         </button>
                         <button type="button" class="btn lighter-hover" @click="cancel(macro)">{{
-                        $t('QuestionnaireEditor.Cancel') }}</button>
+                            $t('QuestionnaireEditor.Cancel') }}</button>
                         <button class="btn btn-default pull-right" v-if="isDescriptionEmpty(macro)" type="button"
                             @click="toggleDescription(macro)">
                             {{ isDescriptionVisible(macro) ? $t('QuestionnaireEditor.SideBarMacroHideDescription') :
-                        $t('QuestionnaireEditor.SideBarMacroShowDescription') }}
+                                $t('QuestionnaireEditor.SideBarMacroShowDescription') }}
                         </button>
                     </div>
                 </li>
@@ -61,7 +61,7 @@
 <script>
 import ExpressionEditor from '../ExpressionEditor.vue';
 import { createQuestionForDeleteConfirmationPopup } from '../../../../services/utilityService'
-import _ from 'lodash';
+import { isEmpty, cloneDeep } from 'lodash';
 import { newGuid } from '../../../../helpers/guid';
 import { addMacro, deleteMacro, updateMacro } from '../../../../services/macrosService';
 
@@ -108,13 +108,13 @@ export default {
             return macro.editMacro.description.trim().length === 0;
         },
         isDescriptionVisible(macro) {
-            return macro.editMacro.isDescriptionVisible || !_.isEmpty(macro.editMacro.description)
+            return macro.editMacro.isDescriptionVisible || !isEmpty(macro.editMacro.description)
         },
         saveMacro(macro) {
             updateMacro(this.questionnaire.questionnaireId, macro.editMacro);
         },
         cancel(macro) {
-            var clonned = _.cloneDeep(macro);
+            var clonned = cloneDeep(macro);
             clonned.editMacro = null;
             macro.editMacro = clonned;
         },

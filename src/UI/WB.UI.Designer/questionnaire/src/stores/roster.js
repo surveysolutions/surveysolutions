@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { getRoster } from '../services/rosterService';
 import { get, commandCall } from '../services/apiService';
 import emitter from '../services/emitter';
-import _ from 'lodash';
+import { cloneDeep, isEqual } from 'lodash';
 
 export const useRosterStore = defineStore('roster', {
     state: () => ({
@@ -13,7 +13,7 @@ export const useRosterStore = defineStore('roster', {
     getters: {
         getRoster: state => state.roster,
         getInitialRoster: state => state.initialRoster,
-        getIsDirty: state => !_.isEqual(state.roster, state.initialRoster)
+        getIsDirty: state => !isEqual(state.roster, state.initialRoster)
     },
     actions: {
         setupListeners() {
@@ -97,8 +97,8 @@ export const useRosterStore = defineStore('roster', {
             ];
             for (const field of contextFields) {
                 if (freshData[field] !== undefined) {
-                    this.roster[field] = _.cloneDeep(freshData[field]);
-                    this.initialRoster[field] = _.cloneDeep(freshData[field]);
+                    this.roster[field] = cloneDeep(freshData[field]);
+                    this.initialRoster[field] = cloneDeep(freshData[field]);
                 }
             }
         },
@@ -109,8 +109,8 @@ export const useRosterStore = defineStore('roster', {
         },
 
         setRosterData(data) {
-            this.initialRoster = _.cloneDeep(data);
-            this.roster = _.cloneDeep(this.initialRoster);
+            this.initialRoster = cloneDeep(data);
+            this.roster = cloneDeep(this.initialRoster);
         },
 
         clear() {
@@ -120,7 +120,7 @@ export const useRosterStore = defineStore('roster', {
         },
 
         discardChanges() {
-            this.roster = _.cloneDeep(this.initialRoster);
+            this.roster = cloneDeep(this.initialRoster);
         }
     }
 });

@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.IO.Compression;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Localization;
@@ -117,7 +119,12 @@ namespace WB.UI.Designer
             services.AddResponseCompression(options =>
             {
                 options.EnableForHttps = true;
+                options.Providers.Clear();
+                options.Providers.Add<BrotliCompressionProvider>();
+                options.Providers.Add<GzipCompressionProvider>();
             });
+            services.Configure<BrotliCompressionProviderOptions>(options =>
+                options.Level = CompressionLevel.Optimal);
 
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             if (connectionString == null)
