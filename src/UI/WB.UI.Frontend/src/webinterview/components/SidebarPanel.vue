@@ -26,7 +26,7 @@
     </div>
 </template>
 <script lang="js">
-import { GroupStatus } from './questions'
+import { GroupStatus } from './questionConstants'
 
 export default {
     name: 'sidebar-panel',

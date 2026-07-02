@@ -7,48 +7,40 @@
         "serve": "vite preview",
         "build": "vite build",
         "dev": "vite build --mode development",
-        "test": "jest",
         "hot": "vite",
-        "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
+        "lint": "eslint --ext .js,.vue --fix src",
         "format": "prettier .  --write"
     },
     "dependencies": {
-        "@ag-grid-community/client-side-row-model": "^32.1.0",
-        "@ag-grid-community/styles": "^32.1.0",
-        "@ag-grid-community/vue3": "^32.1.0",
-        "@apollo/client": "3.12.7",
         "@frsource/autoresize-textarea": "^2.0.122",
         "@googlemaps/markerclusterer": "^2.5.3",
         "@microsoft/signalr": "^10.0.0",
         "@vee-validate/i18n": "^4.15.0",
         "@vee-validate/rules": "^4.15.0",
-        "@vue/apollo-option": "^4.2.0",
+        "ag-grid-community": "36.0.0",
+        "ag-grid-vue3": "36.0.0",
         "autonumeric": "^4.10.5",
         "axios": "^1.18.0",
         "bootstrap": "^5.3.3",
-        "bootstrap-select": "^1.13.18",
         "chart.js": "^4.4.7",
-        "chartjs-adapter-moment": "^1.0.1",
+        "chartjs-adapter-dayjs-4": "^1.0.4",
         "datatables.net": "2.2.1",
         "datatables.net-select": "2.1.0",
         "datatables.net-vue3": "3.0.4",
-        "dompurify": "^3.4.1",
+        "dayjs": "^1.11.13",
+        "dompurify": "^3.4.11",
         "flatpickr": "^4.6.9",
-        "graphql-tag": "^2.12.6",
+        "graphql-request": "^7.4.0",
         "i18next": "^24.2.1",
         "jquery": "^3.7.1",
-        "jquery-contextmenu": "^2.9.2",
         "jquery-mask-plugin": "^1.14.16",
-        "lodash": "^4.18.1",
+        "lodash-es": "^4.18.1",
         "marked": "^15.0.6",
         "mitt": "^3.0.1",
-        "moment": "^2.29.4",
-        "moment-timezone": "^0.5.46",
         "qrcode": "^1.5.4",
-        "smoothscroll-polyfill": "^0.4.0",
         "toastr": "^2.1.4",
         "vee-validate": "^4.15.0",
-        "vue": "3.5.13",
+        "vue": "^3.5.39",
         "vue-chartjs": "^5.3.1",
         "vue-dompurify-html": "^5.3.0",
         "vue-recaptcha": "^2.0.3",
@@ -57,16 +49,13 @@
     },
     "devDependencies": {
         "@vitejs/plugin-vue": "^6.0.7",
-        "@vue/test-utils": "^2.4.6",
         "autoprefixer": "^10.4.20",
         "eslint": "^10.0.2",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-vue": "^10.8.0",
         "fast-glob": "^3.3.3",
-        "jest": "^30.2.0",
         "prettier": "3.0.0",
         "sass": "^1.85.0",
-        "terser": "^5.37.0",
         "vite": "^8.0.0",
         "xmldoc": "^1.1.2"
     },
@@ -81,42 +70,11 @@
         }
     },
     "browserslist": [
-        "last 2 versions",
-        "ie > 10"
+        "last 2 Chrome versions",
+        "last 2 Firefox versions",
+        "last 2 Safari versions",
+        "last 2 Edge versions"
     ],
-    "jest": {
-        "verbose": true,
-        "testEnvironment": "jsdom",
-        "setupFiles": [
-            "./tests/setup-jest.js"
-        ],
-        "moduleFileExtensions": [
-            "js",
-            "jsx",
-            "json",
-            "vue"
-        ],
-        "transform": {
-            "^.+\\.vue$": "vue-jest",
-            ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
-            "^.+\\.jsx?$": "babel-jest"
-        },
-        "moduleNameMapper": {
-            "^@/(.*)$": "<rootDir>/src/$1",
-            "^~/(.*)$": "<rootDir>/src/$1"
-        },
-        "snapshotSerializers": [
-            "jest-serializer-vue"
-        ],
-        "testMatch": [
-            "**/tests/unit/**/*.spec.(js|jsx|ts|tsx)",
-            "**/__tests__/**/*.(test|spec).(js|jsx|ts|tsx)"
-        ],
-        "testURL": "http://localhost/",
-        "testPathIgnorePatterns": [
-            "/locale//.resources/"
-        ]
-    },
     "overrides": {
         "@babel/traverse": ">=7.23.3",
         "@types/ejs": "3.1.8",
@@ -136,8 +94,6 @@
         "graphql-ws": "5.14.0",
         "glob": ">=13.0.6",
         "glob-parent": "6.0.2",
-        "jest-config": ">=30.2.0",
-        "jest-environment-jsdom": ">=30.2.0",
         "json-schema": ">=0.4.0",
         "json5": "2.2.3",
         "js-cookie": ">=3.0.7",
@@ -157,7 +113,6 @@
         "svgo": ">=2.8.0",
         "trim-newlines": ">=3.0.1",
         "ts-node": "10.8.0",
-        "vue-jest": ">=3.0.7",
         "ua-parser-js": "1.0.33",
         "ws": ">=8.20.1"
     }

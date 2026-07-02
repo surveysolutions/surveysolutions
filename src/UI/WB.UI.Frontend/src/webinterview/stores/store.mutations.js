@@ -1,4 +1,4 @@
-import { forEach, differenceBy } from 'lodash'
+import { forEach, differenceBy } from 'lodash-es'
 import browserLocalStore from '~/shared/localStorage'
 import { setDevModeSetting } from './showVariablesPreference'
 
@@ -82,7 +82,7 @@ export default {
         state.coverInfo = coverInfo
     },
     SET_COMPLETE_INFO(state, completeInfo) {
-        state.criticalityInfo = null;
+        state.criticalityInfo = null
         state['completeInfo'] = completeInfo
 
         if (state.criticalityLevel && completeInfo.criticalityLevel != state.criticalityLevel)
