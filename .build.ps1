@@ -184,6 +184,36 @@ function Get-DockerTags($name, $registry = $dockerRegistry) {
     )
 }
 
+function Add-MultiArchArguments($arguments = @()) {
+    # Multi-arch images can only be exported to a registry, not loaded into the
+    # local docker daemon, so request both platforms only when pushing.
+    if (-not $noDockerPush.IsPresent) {
+        # The default 'docker' buildx driver does not support multi-platform
+        # builds, so ensure a 'docker-container' driver builder exists and use it.
+        $builderName = "surveysolutions-multiarch"
+        $inspect = docker buildx inspect $builderName 2>$null | Out-String
+        $builderExists = $LASTEXITCODE -eq 0
+        if ($builderExists -and ($inspect -notmatch "Driver:\s*docker-container")) {
+            # An existing builder using the default 'docker' driver cannot perform
+            # multi-platform builds, so remove it and recreate with the right driver.
+            exec { docker buildx rm $builderName } | Out-Host
+            $builderExists = $false
+        }
+        if (-not $builderExists) {
+            # Pipe to Out-Host so the builder name printed by 'buildx create'
+            # is not captured into this function's return value.
+            exec { docker buildx create --name $builderName --driver docker-container --bootstrap } | Out-Host
+        }
+
+        $arguments += @(
+            "--builder", $builderName,
+            "--platform", "linux/amd64,linux/arm64"
+        )
+    }
+
+    return $arguments
+}
+
 function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
     # Set-Alias MSBuild (Resolve-MSBuild)
        
@@ -432,17 +462,14 @@ task DockerHq {
         $tags += @("surveysolutions/surveysolutions:latest")
     }
 
-    # if (-not $noDockerPush.IsPresent) {
-    #     $arguments += @(
-    #         "--platform", "linux/amd64,linux/arm64"
-    #     )
-    # }
+    $arguments = Add-MultiArchArguments $arguments
 
     Build-Docker ./docker/Dockerfile.hq $tags $arguments
 }
 
 task DockerDesigner {
-    Build-Docker ./docker/Dockerfile.designer (Get-DockerTags "designer")
+    $arguments = Add-MultiArchArguments
+    Build-Docker ./docker/Dockerfile.designer (Get-DockerTags "designer") $arguments
 }
 
 task DockerWebTester {
