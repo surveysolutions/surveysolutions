@@ -32,7 +32,6 @@ namespace WB.UI.Interviewer.ViewModel
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IAuditLogService auditLogService;
-        private readonly IAudioAuditService audioAuditService;
         private readonly IUserInteractionService userInteractionService;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IJsonAllTypesSerializer serializer;
@@ -57,7 +56,6 @@ namespace WB.UI.Interviewer.ViewModel
             VibrationViewModel vibrationViewModel,
             IEnumeratorSettings enumeratorSettings,
             IAuditLogService auditLogService,
-            IAudioAuditService audioAuditService,
             IUserInteractionService userInteractionService,
             ILogger logger,
             IPlainStorage<InterviewView> interviewViewRepository,
@@ -71,7 +69,6 @@ namespace WB.UI.Interviewer.ViewModel
         {
             this.questionnaireRepository = questionnaireRepository;
             this.auditLogService = auditLogService;
-            this.audioAuditService = audioAuditService;
             this.userInteractionService = userInteractionService;
             this.logger = logger;
             this.interviewViewRepository = interviewViewRepository;
@@ -178,7 +175,7 @@ namespace WB.UI.Interviewer.ViewModel
                     return;
                 try
                 {
-                    await audioAuditService.StartAudioRecordingAsync(interviewId);
+                    await audioRecordingExecutor.StartAudioRecordingAsync(interviewId);
                     started = true;
                 }
                 catch (MissingPermissionsException missingPermissionsException)

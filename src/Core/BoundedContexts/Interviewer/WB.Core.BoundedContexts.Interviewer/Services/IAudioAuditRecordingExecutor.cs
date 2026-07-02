@@ -1,18 +1,20 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services
 {
     /// <summary>
-    /// Owns the tablet audio-audit recording state machine extracted from the interview view model:
-    /// the recording lock, the currently active <see cref="RecordingTarget"/>, the in-flight start
-    /// guard and the cancellation that ties recording to the lifetime of the screen. The view model
-    /// only supplies the policy (which target is desired and how to start a recording with permission
-    /// handling) and toggles <see cref="IsViewVisible"/>; all concurrency lives here so it can be
-    /// unit-tested in isolation.
+    /// Single interface for working with tablet audio audit: it exposes the low-level recording
+    /// operations (via <see cref="IAudioAuditService"/>) together with the recording state machine
+    /// extracted from the interview view model — the recording lock, the currently active
+    /// <see cref="RecordingTarget"/>, the in-flight start guard and the cancellation that ties
+    /// recording to the lifetime of the screen. The view model only supplies the policy (which target
+    /// is desired and how to start a recording with permission handling) and toggles
+    /// <see cref="IsViewVisible"/>; all concurrency lives here so it can be unit-tested in isolation.
     /// </summary>
-    public interface IAudioAuditRecordingExecutor : IDisposable
+    public interface IAudioAuditRecordingExecutor : IAudioAuditService, IDisposable
     {
         /// <summary>Whether the interview screen is currently visible. Set by the view model on appear/disappear.</summary>
         bool IsViewVisible { get; set; }

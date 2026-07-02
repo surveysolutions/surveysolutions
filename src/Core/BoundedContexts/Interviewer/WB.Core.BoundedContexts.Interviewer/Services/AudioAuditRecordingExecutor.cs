@@ -19,6 +19,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.audioAuditService = audioAuditService ?? throw new ArgumentNullException(nameof(audioAuditService));
         }
 
+        public Task StartAudioRecordingAsync(Guid interviewId)
+            => this.audioAuditService.StartAudioRecordingAsync(interviewId);
+
+        public void StopAudioRecording(Guid interviewId)
+            => this.audioAuditService.StopAudioRecording(interviewId);
+
+        public void CheckAndProcessAllAuditFiles()
+            => this.audioAuditService.CheckAndProcessAllAuditFiles();
+
         public bool IsViewVisible { get; set; }
 
         public CancellationToken CancellationToken => this.cancellation.Token;
