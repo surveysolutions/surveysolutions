@@ -169,11 +169,21 @@ jobs:
     runs-on: ubuntu-latest
     needs: [prepare, mobile]
     steps:
-      - name: Union Mibile Apps
-        uses: actions/upload-artifact/merge@v4
+      - name: Download mobile app artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: Mobile-Apps-*
+          path: mobile-apps
+          merge-multiple: true
+
+      - name: Publish Mobile Apps All
+        uses: actions/upload-artifact@v4
         with:
           name: Mobile Apps All
-          pattern: Mobile-Apps-*
+          path: mobile-apps
+          if-no-files-found: error
+          overwrite: true
+          retention-days: 30
 
   docker:
     needs: [prepare, mobile, union-apps]
@@ -328,5 +338,13 @@ jobs:
         with:
           name: Windows Installer
           path: ${{ steps.build-installer.outputs.filename }}
-            #artifacts/WB.UI.Headquarters.Offline.zip
           overwrite: true
+
+      - name: Publish Azure Web App package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Azure Web App Package
+          path: artifacts/WB.UI.Headquarters.Offline.zip
+          if-no-files-found: error
+          overwrite: true
+          compression-level: 0
