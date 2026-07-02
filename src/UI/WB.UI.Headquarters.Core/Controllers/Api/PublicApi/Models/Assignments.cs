@@ -252,6 +252,13 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         [DataMember] public string TargetArea { get; set; }
         
         /// <summary>
+        /// List of section, group or roster variable names for which audio should be recorded (selective audio audit).
+        /// When omitted or empty, audio audit follows the <see cref="IsAudioRecordingEnabled"/> flag.
+        /// </summary>
+        [DataMember]
+        public List<string> AudioAuditScope { get; set; } = new List<string>();
+        
+        /// <summary>
         /// List of protected variables
         /// </summary> 
         [DataMember]

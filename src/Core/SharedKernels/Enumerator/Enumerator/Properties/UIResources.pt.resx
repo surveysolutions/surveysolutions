@@ -1010,4 +1010,7 @@ sem resposta</value>
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
     <value>Status da atribuição</value>
   </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>É necessário acesso ao microfone para realizar esta entrevista. A entrevista não pode ser iniciada até que o acesso seja concedido.</value>
+  </data>
 </root>

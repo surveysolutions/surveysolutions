@@ -1917,6 +1917,12 @@ namespace WB.Tests.Abc.TestFactories
                 return this;
             }
 
+            public AssignmentDocumentBuilder WithAudioAuditScope(params string[] variableNames)
+            {
+                this._entity.AudioAuditScope = variableNames?.ToList() ?? new List<string>();
+                return this;
+            }
+
             public AssignmentDocument Build() => this._entity;
         }
 

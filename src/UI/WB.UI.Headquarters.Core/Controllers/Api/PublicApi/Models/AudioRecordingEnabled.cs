@@ -9,5 +9,11 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         /// </summary>
         [DataMember(IsRequired = true)]
         public bool Enabled { get; set; }
+
+        /// <summary>
+        /// Indicates if the assignment has a selective audio audit scope defined
+        /// </summary>
+        [DataMember(IsRequired = true)]
+        public bool HasAudioAuditScope { get; set; }
     }
 }

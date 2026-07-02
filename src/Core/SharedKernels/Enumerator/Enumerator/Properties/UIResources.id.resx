@@ -1216,4 +1216,7 @@ kritis</value>
     <value>Pertanyaan
 belum dijawab</value>
   </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>Akses mikrofon diperlukan untuk melakukan wawancara ini. Wawancara tidak dapat dimulai sampai akses diberikan.</value>
+  </data>
 </root>

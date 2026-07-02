@@ -1009,4 +1009,7 @@
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
     <value>حالة التعيين</value>
   </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>يلزم الوصول إلى الميكروفون لإجراء هذه المقابلة. لا يمكن بدء المقابلة حتى يتم منح الإذن.</value>
+  </data>
 </root>

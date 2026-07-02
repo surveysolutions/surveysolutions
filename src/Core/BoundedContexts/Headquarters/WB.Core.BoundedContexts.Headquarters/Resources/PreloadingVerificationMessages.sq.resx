@@ -258,4 +258,10 @@
   <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
     <value>Përgjigjja për pyetjen me emrin e variablit {0} nuk mund të ngarkohet paraprakisht, pasi është e një lloji të pambështetur. Shihni artikullin vijues të mbështetjes https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type për hollësi mbi atë që mund të ngarkohet paraprakisht në versionin aktual.</value>
   </data>
+  <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+    <value>Emri i variablës së fushës së auditimit audio '{0}' është i pavlefshëm. Duhet t'i referohet një seksioni, grupi ose rosteri ekzistues (pyetjet dhe rosterët e sheshtë nuk lejohen).</value>
+  </data>
+  <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+    <value>Assignment was not migrated because it uses selective Audio Audit (audio recording scope), which cannot be migrated automatically to a new questionnaire version. Recreate the assignment manually and configure the audio audit scope again.</value>
+  </data>
 </root>
