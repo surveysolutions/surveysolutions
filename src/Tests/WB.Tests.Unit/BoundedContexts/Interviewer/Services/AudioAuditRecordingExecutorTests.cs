@@ -210,5 +210,25 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
             executor.Cancel();
             Assert.That(executor.CancellationToken.IsCancellationRequested, Is.True);
         }
+
+        [Test]
+        public void when_cancel_called_after_dispose_should_not_throw()
+        {
+            var executor = CreateExecutor();
+
+            executor.Dispose();
+
+            Assert.DoesNotThrow(() => executor.Cancel());
+        }
+
+        [Test]
+        public void when_disposed_more_than_once_should_not_throw()
+        {
+            var executor = CreateExecutor();
+
+            executor.Dispose();
+
+            Assert.DoesNotThrow(() => executor.Dispose());
+        }
     }
 }

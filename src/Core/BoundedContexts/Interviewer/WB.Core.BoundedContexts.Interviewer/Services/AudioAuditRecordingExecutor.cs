@@ -13,6 +13,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private RecordingTarget currentRecordingTarget = RecordingTarget.None;
         private readonly SemaphoreSlim audioRecordingLock = new SemaphoreSlim(1, 1);
         private readonly CancellationTokenSource cancellation = new CancellationTokenSource();
+        private bool isDisposed;
 
         public AudioAuditRecordingExecutor(IAudioAuditService audioAuditService)
         {
@@ -145,10 +146,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             }
         }
 
-        public void Cancel() => this.cancellation.Cancel();
+        public void Cancel()
+        {
+            // The owning view model can be disposed more than once (e.g. NavigateBack disposes it and
+            // MvvmCross disposes it again on activity destroy), so guard against cancelling a source
+            // that has already been disposed.
+            if (this.isDisposed)
+                return;
+
+            this.cancellation.Cancel();
+        }
 
         public void Dispose()
         {
+            if (this.isDisposed)
+                return;
+
+            this.isDisposed = true;
             this.cancellation.Dispose();
             this.audioRecordingLock.Dispose();
         }
