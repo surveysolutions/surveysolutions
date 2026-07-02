@@ -1,6 +1,6 @@
 <template>
     <div class="categories">
-        <options-editor-modal v-if="modalEverOpened" ref="categoriesEditorModal" />
+        <options-editor-modal v-if="modalEverOpened" ref="categoriesEditorModal" @applied="onCategoriesApplied" />
 
         <perfect-scrollbar class="scroller">
             <h3>{{ $t('QuestionnaireEditor.SideBarCategoriesCounter', { count: categoriesList.length }) }}</h3>
@@ -86,6 +86,24 @@ export default {
     },
     methods: {
 
+        async ensureCategoriesEditorModalReady() {
+            await loadOptionsEditorModal();
+
+            if (!this.modalEverOpened)
+                this.modalEverOpened = true;
+
+            for (let attempt = 0; attempt < 6; attempt++) {
+                await this.$nextTick();
+
+                if (this.$refs.categoriesEditorModal)
+                    return this.$refs.categoriesEditorModal;
+
+                await new Promise(resolve => setTimeout(resolve, 0));
+            }
+
+            return this.$refs.categoriesEditorModal;
+        },
+
         openFileDialog() {
             const fu = this.$refs.upload
             fu.$el.querySelector("#" + fu.inputId).click()
@@ -141,15 +159,25 @@ export default {
         },
 
         async openCategoriesEditorModal(questionnaireId, categoriesId) {
-            await loadOptionsEditorModal();
-            await this.$nextTick();
+            const categoriesEditorModal = await this.ensureCategoriesEditorModalReady();
+            categoriesEditorModal?.open(questionnaireId, categoriesId, { isCategory: true });
+        },
 
-            this.$refs.categoriesEditorModal?.open(questionnaireId, categoriesId, { isCategory: true });
+        onCategoriesApplied(event) {
+            if (!event || !event.entityId || !event.newEntityId || event.entityId === event.newEntityId)
+                return;
+
+            const category = this.categoriesList.find(x => x.categoriesId === event.entityId);
+            if (!category)
+                return;
+
+            category.categoriesId = event.newEntityId;
+
+            if (category.editCategories)
+                category.editCategories.categoriesId = event.newEntityId;
         },
 
         async editCategoriesOpen(event) {
-            this.modalEverOpened = true;
-            await this.$nextTick();
             await this.openCategoriesEditorModal(this.questionnaireId, event.categoriesId);
         }
     },

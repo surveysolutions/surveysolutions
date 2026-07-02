@@ -16,10 +16,10 @@
                         <v-tabs v-model="tab" color="primary" fixed-tabs grow>
                             <v-tab value="table" :disabled="!stringsIsValid">{{
                                 $t('QuestionnaireEditor.TableView')
-                            }}</v-tab>
+                                }}</v-tab>
                             <v-tab value="strings">{{
                                 $t('QuestionnaireEditor.StringsView')
-                            }}</v-tab>
+                                }}</v-tab>
                         </v-tabs>
 
                         <v-window v-model="tab">
@@ -369,8 +369,9 @@ export default {
                 if (token !== this.sessionToken) return;
                 if (response.isSuccess || response.IsSuccess) {
                     const entityId = this.entityId;
+                    const newEntityId = response.newEntityId || response.NewEntityId || entityId;
                     this.close();
-                    this.$emit('applied', { entityId });
+                    this.$emit('applied', { entityId, newEntityId });
                 } else {
                     this.ajax = false;
                     this.errors = [response.error];
