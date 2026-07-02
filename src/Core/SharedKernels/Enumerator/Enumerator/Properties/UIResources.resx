@@ -1010,6 +1010,6 @@ questions</value>
     <value>Closed</value>
   </data>
   <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
-    <value>The application needs permission to use the microphone for the whole duration of the interview. The interview cannot be started until microphone access is granted. Allow microphone access and try again. If you don't see the permissions popup, go to Settings and allow the application to use the microphone.</value>
+    <value>Microphone access is required to conduct this interview. The interview cannot be started until access is granted.</value>
   </data>
 </root>

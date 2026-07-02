@@ -961,6 +961,6 @@ nghiêm trọng</value>
 chưa trả lời</value>
   </data>
   <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
-    <value>The application needs permission to use the microphone for the whole duration of the interview. The interview cannot be started until microphone access is granted. Allow microphone access and try again. If you don't see the permissions popup, go to Settings and allow the application to use the microphone.</value>
+    <value>Cần có quyền truy cập micro để tiến hành cuộc phỏng vấn này. Không thể bắt đầu cuộc phỏng vấn cho đến khi được cấp quyền.</value>
   </data>
 </root>

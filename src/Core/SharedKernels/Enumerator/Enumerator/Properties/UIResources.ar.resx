@@ -1010,6 +1010,6 @@
     <value>حالة التعيين</value>
   </data>
   <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
-    <value>The application needs permission to use the microphone for the whole duration of the interview. The interview cannot be started until microphone access is granted. Allow microphone access and try again. If you don't see the permissions popup, go to Settings and allow the application to use the microphone.</value>
+    <value>يلزم الوصول إلى الميكروفون لإجراء هذه المقابلة. لا يمكن بدء المقابلة حتى يتم منح الإذن.</value>
   </data>
 </root>
