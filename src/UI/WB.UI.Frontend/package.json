@@ -7,7 +7,6 @@
         "serve": "vite preview",
         "build": "vite build",
         "dev": "vite build --mode development",
-        "test": "jest",
         "hot": "vite",
         "lint": "eslint --ext .js,.vue --fix src",
         "format": "prettier .  --write"
@@ -50,13 +49,11 @@
     },
     "devDependencies": {
         "@vitejs/plugin-vue": "^6.0.7",
-        "@vue/test-utils": "^2.4.6",
         "autoprefixer": "^10.4.20",
         "eslint": "^10.0.2",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-vue": "^10.8.0",
         "fast-glob": "^3.3.3",
-        "jest": "^30.2.0",
         "prettier": "3.0.0",
         "sass": "^1.85.0",
         "vite": "^8.0.0",
@@ -78,40 +75,6 @@
         "last 2 Safari versions",
         "last 2 Edge versions"
     ],
-    "jest": {
-        "verbose": true,
-        "testEnvironment": "jsdom",
-        "setupFiles": [
-            "./tests/setup-jest.js"
-        ],
-        "moduleFileExtensions": [
-            "js",
-            "jsx",
-            "json",
-            "vue"
-        ],
-        "transform": {
-            "^.+\\.vue$": "vue-jest",
-            ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
-            "^.+\\.jsx?$": "babel-jest"
-        },
-        "moduleNameMapper": {
-            "^moment$": "<rootDir>/src/shared/momentCompat.js",
-            "^@/(.*)$": "<rootDir>/src/$1",
-            "^~/(.*)$": "<rootDir>/src/$1"
-        },
-        "snapshotSerializers": [
-            "jest-serializer-vue"
-        ],
-        "testMatch": [
-            "**/tests/unit/**/*.spec.(js|jsx|ts|tsx)",
-            "**/__tests__/**/*.(test|spec).(js|jsx|ts|tsx)"
-        ],
-        "testURL": "http://localhost/",
-        "testPathIgnorePatterns": [
-            "/locale//.resources/"
-        ]
-    },
     "overrides": {
         "@babel/traverse": ">=7.23.3",
         "@types/ejs": "3.1.8",
@@ -131,8 +94,6 @@
         "graphql-ws": "5.14.0",
         "glob": ">=13.0.6",
         "glob-parent": "6.0.2",
-        "jest-config": ">=30.2.0",
-        "jest-environment-jsdom": ">=30.2.0",
         "json-schema": ">=0.4.0",
         "json5": "2.2.3",
         "js-cookie": ">=3.0.7",
@@ -152,7 +113,6 @@
         "svgo": ">=2.8.0",
         "trim-newlines": ">=3.0.1",
         "ts-node": "10.8.0",
-        "vue-jest": ">=3.0.7",
         "ua-parser-js": "1.0.33",
         "ws": ">=8.20.1"
     }
