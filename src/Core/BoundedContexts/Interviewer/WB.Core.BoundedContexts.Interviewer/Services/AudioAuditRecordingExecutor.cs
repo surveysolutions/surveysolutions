@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services
@@ -8,6 +9,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
     public class AudioAuditRecordingExecutor : IAudioAuditRecordingExecutor
     {
         private readonly IAudioAuditService audioAuditService;
+        private readonly ILogger logger;
 
         private bool isAuditStarting;
         private RecordingTarget currentRecordingTarget = RecordingTarget.None;
@@ -15,9 +17,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly CancellationTokenSource cancellation = new CancellationTokenSource();
         private bool isDisposed;
 
-        public AudioAuditRecordingExecutor(IAudioAuditService audioAuditService)
+        public AudioAuditRecordingExecutor(IAudioAuditService audioAuditService, ILogger logger)
         {
             this.audioAuditService = audioAuditService ?? throw new ArgumentNullException(nameof(audioAuditService));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public Task StartAudioRecordingAsync(Guid interviewId)
@@ -85,7 +88,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
                 // Start outside the lock: the main-thread dispatch (which can navigate / show toasts on
                 // permission failure) must not block stop/evaluate calls waiting on the recording lock.
-                var started = await startRecordingAsync(interviewId).ConfigureAwait(false);
+                bool started;
+                try
+                {
+                    started = await startRecordingAsync(interviewId).ConfigureAwait(false);
+                }
+                catch (Exception exception)
+                {
+                    // A failure here (e.g. the recorder throwing) must be treated like started == false:
+                    // reset the start guard below and stop looping, otherwise isAuditStarting would stay
+                    // set and every future evaluation would bail out, silently disabling recording.
+                    this.logger.Error("Audio audit recording failed to start.", exception);
+                    started = false;
+                }
 
                 // Reacquire without the cancellation token on purpose: this commit/cleanup must run
                 // even if the view model is being disposed, so a recording started just above is always

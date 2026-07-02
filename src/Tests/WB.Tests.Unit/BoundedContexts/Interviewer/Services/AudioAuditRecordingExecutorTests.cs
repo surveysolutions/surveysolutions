@@ -14,7 +14,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
     public class AudioAuditRecordingExecutorTests
     {
         private static AudioAuditRecordingExecutor CreateExecutor(IAudioAuditService audioAuditService = null)
-            => new AudioAuditRecordingExecutor(audioAuditService ?? Substitute.For<IAudioAuditService>());
+            => new AudioAuditRecordingExecutor(audioAuditService ?? Substitute.For<IAudioAuditService>(),
+                Substitute.For<WB.Core.GenericSubdomains.Portable.Services.ILogger>());
 
         [Test]
         public async Task when_target_is_whole_interview_should_start_recording_once()
@@ -199,6 +200,39 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
             await executor.StopAsync(interviewId);
 
             audioAuditService.DidNotReceiveWithAnyArgs().StopAudioRecording(default);
+        }
+
+        [Test]
+        public async Task when_start_throws_should_clear_guard_and_allow_subsequent_retry()
+        {
+            var audioAuditService = Substitute.For<IAudioAuditService>();
+            var executor = CreateExecutor(audioAuditService);
+            executor.IsViewVisible = true;
+            var interviewId = Guid.NewGuid();
+
+            var startCount = 0;
+
+            // First evaluation: the start throws. The guard must be cleared so a later evaluation can retry.
+            await executor.EvaluateAsync(interviewId, () => RecordingTarget.WholeInterview,
+                _ =>
+                {
+                    startCount++;
+                    throw new InvalidOperationException("recorder failed");
+                },
+                CancellationToken.None);
+
+            Assert.That(startCount, Is.EqualTo(1));
+
+            // Second evaluation: the start succeeds, proving the guard was released after the failure.
+            await executor.EvaluateAsync(interviewId, () => RecordingTarget.WholeInterview,
+                _ =>
+                {
+                    startCount++;
+                    return Task.FromResult(true);
+                },
+                CancellationToken.None);
+
+            Assert.That(startCount, Is.EqualTo(2));
         }
 
         [Test]
