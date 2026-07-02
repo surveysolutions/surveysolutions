@@ -1,7 +1,18 @@
 import { defineAsyncComponent } from 'vue'
 import { ButtonType, GroupStatus } from '../questionConstants'
+import { ensureAgGridStyles } from './agGridStyles'
 
 // tslint:disable-next-line:ordered-imports
+
+const loadTableRoster = async () => {
+    await ensureAgGridStyles()
+    return import('./TableRoster')
+}
+
+const loadMatrixRoster = async () => {
+    await ensureAgGridStyles()
+    return import('./MatrixRoster')
+}
 
 export function registerQuestionComponents(vue) {
 
@@ -27,8 +38,8 @@ export function registerQuestionComponents(vue) {
     vue.component('TextQuestion', defineAsyncComponent(() => import('./TextQuestion')))
     vue.component('Area', defineAsyncComponent(() => import('./Geography')))
     vue.component('Variable', defineAsyncComponent(() => import('./Variable')))
-    vue.component('TableRoster', defineAsyncComponent(() => import('./TableRoster')))
-    vue.component('MatrixRoster', defineAsyncComponent(() => import('./MatrixRoster')))
+    vue.component('TableRoster', defineAsyncComponent(loadTableRoster))
+    vue.component('MatrixRoster', defineAsyncComponent(loadMatrixRoster))
     vue.component('Unsupported', defineAsyncComponent(() => import('./Unsupported')))
     vue.component('ReadonlyQuestion', defineAsyncComponent(() => import('./ReadonlyQuestion')))
 

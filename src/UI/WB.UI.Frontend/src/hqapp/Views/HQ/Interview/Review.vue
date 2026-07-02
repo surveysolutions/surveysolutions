@@ -28,8 +28,7 @@ import http from '~/webinterview/api/http'
 //import Interview from '~/webinterview/components/Interview.vue'
 import { defineAsyncComponent } from 'vue'
 
-import '@/assets/css/markup-web-interview.scss'
-import '@/assets/css/markup-interview-review.scss'
+import '@/assets/css/markup-web-interview-review.scss'
 
 export default {
     async beforeCreate() {
