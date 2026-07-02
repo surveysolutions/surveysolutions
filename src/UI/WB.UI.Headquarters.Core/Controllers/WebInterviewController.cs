@@ -1088,9 +1088,17 @@ namespace WB.UI.Headquarters.Controllers
             return invitation;
         }
 
-        private Assignment GetCurrentAssignment(Invitation invitation)
+        private Assignment GetCurrentAssignment(Invitation? invitation)
         {
-            return this.assignments.GetAssignment(invitation.AssignmentId) ?? invitation.Assignment;
+            var assignment = invitation == null
+                ? null
+                : this.assignments.GetAssignment(invitation.AssignmentId) ?? invitation.Assignment;
+
+            if (assignment == null)
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound,
+                    Enumerator.Native.Resources.WebInterview.Error_NotFound);
+
+            return assignment;
         }
     }
 }
