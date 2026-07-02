@@ -1,10 +1,6 @@
 <template>
     <div class="categories">
-        <div id="show-reload-details-promt" class="ng-cloak" v-show="shouldUserSeeReloadPromt">
-            <div class="inner">{{ $t('QuestionnaireEditor.QuestionToUpdateOptions') }} <a href="#"
-                    onclick="window.location.reload(true);">{{ $t('QuestionnaireEditor.QuestionClickReload') }}</a>
-            </div>
-        </div>
+        <options-editor-modal v-if="modalEverOpened" ref="categoriesEditorModal" @applied="onCategoriesApplied" />
 
         <perfect-scrollbar class="scroller">
             <h3>{{ $t('QuestionnaireEditor.SideBarCategoriesCounter', { count: categoriesList.length }) }}</h3>
@@ -57,43 +53,30 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue';
 
 import CategoriesItem from './CategoriesItem.vue';
-
 import { newGuid } from '../../../../helpers/guid';
-import { isNull, isUndefined, some } from 'lodash'
+import { isNull, isUndefined } from 'lodash'
 import { updateCategories } from '../../../../services/categoriesService'
 import { notice } from '../../../../services/notificationService';
 import dayjs from 'dayjs';
 
+const loadOptionsEditorModal = () => import('./CategoriesEditorModal.vue');
+const OptionsEditorModal = defineAsyncComponent(loadOptionsEditorModal);
+
 export default {
     name: 'Categories',
     inject: ['questionnaire', 'isReadOnlyForUser'],
-    components: { CategoriesItem, },
+    components: { CategoriesItem, OptionsEditorModal },
     props: {
         questionnaireId: { type: String, required: true },
     },
     data() {
         return {
-            shouldUserSeeReloadPromt: false,
-            openEditor: null,
-            bcChannel: null,
-
             downloadBaseUrl: '/categories',
             file: [],
-        }
-    },
-    mounted() {
-        // https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API
-        // Automatically reload window on popup close. If supported by browser
-        if ('BroadcastChannel' in window) {
-            this.bcChannel = new BroadcastChannel("editcategory")
-            this.bcChannel.onmessage = ev => {
-                console.log(ev.data)
-                if (ev.data === 'close#' + this.openEditor) {
-                    window.location.reload();
-                }
-            }
+            modalEverOpened: false,
         }
     },
     computed: {
@@ -102,6 +85,24 @@ export default {
         },
     },
     methods: {
+
+        async ensureCategoriesEditorModalReady() {
+            await loadOptionsEditorModal();
+
+            if (!this.modalEverOpened)
+                this.modalEverOpened = true;
+
+            for (let attempt = 0; attempt < 6; attempt++) {
+                await this.$nextTick();
+
+                if (this.$refs.categoriesEditorModal)
+                    return this.$refs.categoriesEditorModal;
+
+                await new Promise(resolve => setTimeout(resolve, 0));
+            }
+
+            return this.$refs.categoriesEditorModal;
+        },
 
         openFileDialog() {
             const fu = this.$refs.upload
@@ -157,13 +158,27 @@ export default {
             await updateCategories(this.questionnaireId, categories)
         },
 
-        editCategoriesOpen(event) {
-            this.shouldUserSeeReloadPromt = true;
-            this.openEditor = event.categoriesId
+        async openCategoriesEditorModal(questionnaireId, categoriesId) {
+            const categoriesEditorModal = await this.ensureCategoriesEditorModalReady();
+            categoriesEditorModal?.open(questionnaireId, categoriesId, { isCategory: true });
+        },
 
-            window.open("/questionnaire/editcategories/" + this.questionnaireId + "?categoriesid=" + event.categoriesId,
-                "", "scrollbars=yes, center=yes, modal=yes, width=960, height=745, top=" + (screen.height - 745) / 4
-                + ", left= " + (screen.width - 960) / 2, true);
+        onCategoriesApplied(event) {
+            if (!event || !event.entityId || !event.newEntityId || event.entityId === event.newEntityId)
+                return;
+
+            const category = this.categoriesList.find(x => x.categoriesId === event.entityId);
+            if (!category)
+                return;
+
+            category.categoriesId = event.newEntityId;
+
+            if (category.editCategories)
+                category.editCategories.categoriesId = event.newEntityId;
+        },
+
+        async editCategoriesOpen(event) {
+            await this.openCategoriesEditorModal(this.questionnaireId, event.categoriesId);
         }
     },
 }
