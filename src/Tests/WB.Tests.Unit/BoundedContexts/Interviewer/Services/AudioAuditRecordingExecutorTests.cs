@@ -264,5 +264,117 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
 
             Assert.DoesNotThrow(() => executor.Dispose());
         }
+
+        [Test]
+        public async Task when_disposed_while_start_in_flight_should_stop_started_recording_and_not_throw()
+        {
+            var audioAuditService = Substitute.For<IAudioAuditService>();
+            var executor = CreateExecutor(audioAuditService);
+            executor.IsViewVisible = true;
+            var interviewId = Guid.NewGuid();
+
+            // The start completes successfully, but the executor is disposed while it is in flight (between
+            // reserving the start and committing the target). The just-started recording must be stopped and
+            // no ObjectDisposedException must leak from the disposed synchronization primitives.
+            Task<bool> Start(Guid _)
+            {
+                executor.Dispose();
+                return Task.FromResult(true);
+            }
+
+            await executor.EvaluateAsync(interviewId, () => RecordingTarget.WholeInterview, Start, CancellationToken.None);
+
+            audioAuditService.Received(1).StopAudioRecording(interviewId);
+        }
+
+        [Test]
+        public async Task when_stop_starts_before_disposal_should_complete_stop_and_dispose_resources()
+        {
+            var audioAuditService = Substitute.For<IAudioAuditService>();
+            var executor = CreateExecutor(audioAuditService);
+            executor.IsViewVisible = true;
+            var interviewId = Guid.NewGuid();
+
+            await executor.EvaluateAsync(interviewId, () => RecordingTarget.WholeInterview,
+                _ => Task.FromResult(true), CancellationToken.None);
+
+            // Screen teardown: view hidden, stop issued, then Cancel/Dispose (as the interview view model does
+            // on NavigateBack). The stop must still run to completion even though disposal follows immediately.
+            executor.IsViewVisible = false;
+            var stopTask = executor.StopAsync(interviewId);
+            executor.Cancel();
+            executor.Dispose();
+            await stopTask;
+
+            audioAuditService.Received(1).StopAudioRecording(interviewId);
+            // The executor is now fully disposed; a second dispose must remain safe.
+            Assert.DoesNotThrow(() => executor.Dispose());
+        }
+
+        [Test]
+        public async Task when_cancelled_while_waiting_lock_should_not_start_recording()
+        {
+            var audioAuditService = Substitute.For<IAudioAuditService>();
+            var executor = CreateExecutor(audioAuditService);
+            executor.IsViewVisible = true;
+            var interviewId = Guid.NewGuid();
+            var startCount = 0;
+
+            using var cts = new CancellationTokenSource();
+            cts.Cancel();
+
+            await executor.EvaluateAsync(interviewId, () => RecordingTarget.WholeInterview,
+                _ => { startCount++; return Task.FromResult(true); }, cts.Token);
+
+            Assert.That(startCount, Is.EqualTo(0), "a cancelled evaluation must not start a recording");
+            audioAuditService.DidNotReceiveWithAnyArgs().StopAudioRecording(default);
+        }
+
+        [Test]
+        public async Task when_cancelled_after_start_should_stop_just_started_recording()
+        {
+            var audioAuditService = Substitute.For<IAudioAuditService>();
+            var executor = CreateExecutor(audioAuditService);
+            executor.IsViewVisible = true;
+            var interviewId = Guid.NewGuid();
+
+            using var cts = new CancellationTokenSource();
+
+            // Cancellation is requested while the start is dispatching (mid permission dialog): the just-started
+            // recording must be stopped rather than kept active.
+            Task<bool> Start(Guid _)
+            {
+                cts.Cancel();
+                return Task.FromResult(true);
+            }
+
+            await executor.EvaluateAsync(interviewId, () => RecordingTarget.WholeInterview, Start, cts.Token);
+
+            audioAuditService.Received(1).StopAudioRecording(interviewId);
+        }
+
+        [Test]
+        public async Task when_desired_target_toggles_faster_than_start_should_stop_after_iteration_cap()
+        {
+            var audioAuditService = Substitute.For<IAudioAuditService>();
+            var executor = CreateExecutor(audioAuditService);
+            executor.IsViewVisible = true;
+            var interviewId = Guid.NewGuid();
+
+            var startCount = 0;
+            var groupA = Guid.NewGuid();
+            var groupB = Guid.NewGuid();
+
+            // A runaway provider that flips the desired group on every read. Without a cap this would loop
+            // forever doing start/stop; the executor must bound the number of convergence iterations.
+            RecordingTarget FlipFlopTarget()
+                => RecordingTarget.Group(startCount % 2 == 0 ? groupA : groupB);
+
+            await executor.EvaluateAsync(interviewId, FlipFlopTarget,
+                _ => { startCount++; return Task.FromResult(true); }, CancellationToken.None);
+
+            Assert.That(startCount, Is.LessThanOrEqualTo(10),
+                "the convergence loop must be bounded to avoid thrashing the recorder");
+        }
     }
 }

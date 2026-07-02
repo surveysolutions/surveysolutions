@@ -136,34 +136,42 @@ namespace WB.UI.Interviewer.ViewModel
                 return;
             }
 
-            Task.Run(async () =>
+            // base.ViewAppeared() must always run, on the UI thread that invoked ViewAppeared(), so it is
+            // called here directly rather than being buried inside a background task where an exception (or
+            // the wrong thread) could skip it.
+            base.ViewAppeared();
+
+            this.audioRecordingExecutor.IsViewVisible = true;
+
+            // Fire-and-forget the resume + audio convergence off the UI thread (all exceptions are handled
+            // inside OnViewAppearedAsync); no Task.Run wrapper is used.
+            _ = this.OnViewAppearedAsync();
+        }
+
+        private async Task OnViewAppearedAsync()
+        {
+            try
             {
-                try
-                {
-                    var interviewId = Guid.Parse(InterviewId);
-                    var interview = interviewRepository.Get(this.InterviewId);
-                    if (interview == null) return;
+                var interviewId = Guid.Parse(InterviewId);
+                var interview = interviewRepository.Get(this.InterviewId);
+                if (interview == null) return;
 
-                    await commandService.ExecuteAsync(new ResumeInterviewCommand(interviewId,
-                        Principal.CurrentUserIdentity.UserId, AgentDeviceType.Tablet));
+                await commandService.ExecuteAsync(new ResumeInterviewCommand(interviewId,
+                    Principal.CurrentUserIdentity.UserId, AgentDeviceType.Tablet));
 
-                    this.audioRecordingExecutor.IsViewVisible = true;
+                await this.EvaluateAudioRecordingAsync(interviewId, this.audioRecordingExecutor.CancellationToken);
 
-                    await this.EvaluateAudioRecordingAsync(interviewId, this.audioRecordingExecutor.CancellationToken);
-
-                    auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(),
-                        assignmentId));
-                    base.ViewAppeared();
-                }
-                catch (OperationCanceledException)
-                {
-                    // ViewModel is being disposed; nothing to do.
-                }
-                catch (Exception exc)
-                {
-                    this.logger.Warn("Audio audit evaluation failed on view appeared.", exception: exc);
-                }
-            });
+                auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(),
+                    assignmentId));
+            }
+            catch (OperationCanceledException)
+            {
+                // ViewModel is being disposed; nothing to do.
+            }
+            catch (Exception exc)
+            {
+                this.logger.Warn("Audio audit evaluation failed on view appeared.", exception: exc);
+            }
         }
 
         private async Task<bool> StartAudioRecordingWithPermissionHandlingAsync(Guid interviewId)
@@ -360,6 +368,17 @@ namespace WB.UI.Interviewer.ViewModel
         public override void Dispose()
         {
             this.NavigationState.ScreenChanged -= this.OnScreenChanged;
+
+            // Defensive stop: ViewDisappearing() normally stops any active recording, but if the
+            // OS/Mvx lifecycle skipped it (headless navigation, tests, a future refactor) an active
+            // recording would otherwise be orphaned — the token gets cancelled but the underlying
+            // recorder is never told to stop. IsViewVisible is forced false so the stop is not treated
+            // as stale, and the stop is issued before Cancel/Dispose so the executor still processes it.
+            this.audioRecordingExecutor.IsViewVisible = false;
+            if (InterviewId != null && Guid.TryParse(InterviewId, out var interviewId))
+            {
+                _ = this.StopAudioRecordingSafelyAsync(interviewId);
+            }
 
             this.audioRecordingExecutor.Cancel();
             this.audioRecordingExecutor.Dispose();
