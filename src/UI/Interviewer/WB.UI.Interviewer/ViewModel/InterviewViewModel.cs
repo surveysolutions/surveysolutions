@@ -36,6 +36,7 @@ namespace WB.UI.Interviewer.ViewModel
         private readonly IMvxMainThreadAsyncDispatcher asyncDispatcher;
         private bool isAuditStarting;
         private readonly ILogger logger;
+        private InterviewerCompleteInterviewViewModel subscribedCompleteInterviewViewModel;
 
         
         public InterviewViewModel(
@@ -101,13 +102,29 @@ namespace WB.UI.Interviewer.ViewModel
             switch (this.NavigationState.CurrentScreenType)
             {
                 case ScreenType.Complete:
+                    // Unsubscribe from any previous complete-screen view model before creating a new one,
+                    // otherwise a stale subscription can fire ChangeInterviewStatus after navigating away
+                    // (see UnsubscribeFromCompleteInterviewViewModel).
+                    this.UnsubscribeFromCompleteInterviewViewModel();
+
                     var completeInterviewViewModel =
                         this.interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
+                    this.subscribedCompleteInterviewViewModel = completeInterviewViewModel;
                     completeInterviewViewModel.PropertyChanged += ChangeInterviewStatus;
                     completeInterviewViewModel.Configure(this.InterviewId, this.NavigationState);
                     return completeInterviewViewModel;
                 default:
+                    this.UnsubscribeFromCompleteInterviewViewModel();
                     return base.UpdateCurrentScreenViewModel(eventArgs);
+            }
+        }
+
+        private void UnsubscribeFromCompleteInterviewViewModel()
+        {
+            if (this.subscribedCompleteInterviewViewModel != null)
+            {
+                this.subscribedCompleteInterviewViewModel.PropertyChanged -= ChangeInterviewStatus;
+                this.subscribedCompleteInterviewViewModel = null;
             }
         }
 
@@ -115,12 +132,29 @@ namespace WB.UI.Interviewer.ViewModel
         {
             if (e.PropertyName != nameof(InterviewerCompleteInterviewViewModel.IsLoading))
                 return;
-            
+
             var completeInterviewViewModel = (InterviewerCompleteInterviewViewModel)sender;
+
+            // Guard against a stale subscription firing after the interviewer has already navigated
+            // away from the Complete screen (e.g. the background criticality check in
+            // CompleteInterviewViewModel.Configure completes after the user taps back to a group).
+            // Only apply the status if this is still the currently displayed complete screen.
+            var isStillCurrentCompleteScreen =
+                this.NavigationState.CurrentScreenType == ScreenType.Complete
+                && ReferenceEquals(this.subscribedCompleteInterviewViewModel, completeInterviewViewModel);
+
             if (!completeInterviewViewModel.IsLoading)
             {
                 completeInterviewViewModel.PropertyChanged -= ChangeInterviewStatus;
-                Status = completeInterviewViewModel.CompleteStatus;
+                if (ReferenceEquals(this.subscribedCompleteInterviewViewModel, completeInterviewViewModel))
+                {
+                    this.subscribedCompleteInterviewViewModel = null;
+                }
+
+                if (isStillCurrentCompleteScreen)
+                {
+                    Status = completeInterviewViewModel.CompleteStatus;
+                }
             }
         }
 
@@ -221,6 +255,12 @@ namespace WB.UI.Interviewer.ViewModel
             }
 
             base.ViewDisappearing();
+        }
+
+        public override void Dispose()
+        {
+            this.UnsubscribeFromCompleteInterviewViewModel();
+            base.Dispose();
         }
     }
 }
