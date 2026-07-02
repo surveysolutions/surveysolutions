@@ -21,6 +21,7 @@ const connectionStore = {
 
             if (isReconnecting) {
                 const handle = setTimeout(() => {
+                    if (state.reconnectBannerHandle !== handle) return
                     commit('IS_RECONNECTING', true)
                     commit('SET_RECONNECT_BANNER_HANDLE', null)
                 }, RECONNECT_BANNER_DELAY_MS)
