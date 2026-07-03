@@ -135,26 +135,28 @@ namespace WB.UI.Interviewer.ViewModel
 
             var completeInterviewViewModel = (InterviewerCompleteInterviewViewModel)sender;
 
-            // Guard against a stale subscription firing after the interviewer has already navigated
-            // away from the Complete screen (e.g. the background criticality check in
-            // CompleteInterviewViewModel.Configure completes after the user taps back to a group).
-            // Only apply the status if this is still the currently displayed complete screen.
-            var isStillCurrentCompleteScreen =
-                this.NavigationState.CurrentScreenType == ScreenType.Complete
-                && ReferenceEquals(this.subscribedCompleteInterviewViewModel, completeInterviewViewModel);
-
             if (!completeInterviewViewModel.IsLoading)
             {
                 completeInterviewViewModel.PropertyChanged -= ChangeInterviewStatus;
-                if (ReferenceEquals(this.subscribedCompleteInterviewViewModel, completeInterviewViewModel))
-                {
-                    this.subscribedCompleteInterviewViewModel = null;
-                }
 
-                if (isStillCurrentCompleteScreen)
+                // Marshal state reads and UI update to the main thread: this handler can be raised
+                // from the Task.Run path in InterviewerCompleteInterviewViewModel.Configure and
+                // accessing NavigationState/subscribedCompleteInterviewViewModel or assigning Status
+                // off the UI thread causes cross-thread UI updates and racey state.
+                asyncDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
-                    Status = completeInterviewViewModel.CompleteStatus;
-                }
+                    // Guard against a stale subscription firing after the interviewer has already
+                    // navigated away from the Complete screen.
+                    if (ReferenceEquals(this.subscribedCompleteInterviewViewModel, completeInterviewViewModel))
+                    {
+                        this.subscribedCompleteInterviewViewModel = null;
+
+                        if (this.NavigationState.CurrentScreenType == ScreenType.Complete)
+                        {
+                            Status = completeInterviewViewModel.CompleteStatus;
+                        }
+                    }
+                });
             }
         }
 
