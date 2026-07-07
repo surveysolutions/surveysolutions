@@ -62,11 +62,17 @@ export function validateJQueryXhr(jqXHR, settings) {
 }
 
 export function validatePageLoad() {
-    const url = window.location.href
-    fetch(url, { method: 'HEAD' })
+    // Rebuild the URL from the current origin and path only (dropping any user-controlled
+    // hash) and pin the request to the same origin. Together with redirect: 'error' this
+    // guarantees the probe is sent to the expected server and cannot be diverted to an
+    // attacker-controlled destination (SSRF hardening, CWE-918).
+    const { origin, pathname, search } = window.location
+    const url = origin + pathname + search
+
+    fetch(url, { method: 'HEAD', redirect: 'error', credentials: 'same-origin' })
         .then(response => {
             if (!response.ok) {
-                return fetch(url, { method: 'GET' })
+                return fetch(url, { method: 'GET', redirect: 'error', credentials: 'same-origin' })
             }
             return response
         })

@@ -6,8 +6,22 @@ export { gql }
 const client = new GraphQLClient(
     new URL('/graphql', window.location.origin).toString(),
     {
-        fetch: async (...args) => {
-            const response = await fetch(...args)
+        fetch: async (input, init = {}) => {
+            // Pin the GraphQL request to the current origin and forbid redirects so it
+            // cannot be diverted to an attacker-controlled destination (SSRF hardening, CWE-918).
+            const target = new URL(
+                typeof input === 'string' ? input : input.url,
+                window.location.origin
+            )
+            if (target.origin !== window.location.origin) {
+                throw new Error('Refusing to send GraphQL request to a cross-origin destination')
+            }
+
+            const response = await fetch(target.toString(), {
+                ...init,
+                redirect: 'error',
+                credentials: 'same-origin',
+            })
             validateFetchResponse(response)
             return response
         },
