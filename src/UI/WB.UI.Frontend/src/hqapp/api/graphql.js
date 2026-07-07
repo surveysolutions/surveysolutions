@@ -8,7 +8,7 @@ const client = new GraphQLClient(
     {
         fetch: async (input, init = {}) => {
             // Pin the GraphQL request to the current origin and forbid redirects so it
-            // cannot be diverted to an attacker-controlled destination (SSRF hardening, CWE-918).
+            // can't follow a redirect to another origin (preventing cross-origin leakage).
             const target = new URL(
                 typeof input === 'string' ? input : input.url,
                 window.location.origin
