@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -41,6 +42,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
         private readonly ICalendarEventStorage calendarEventStorage;
         private readonly IViewModelEventRegistry viewModelEventRegistry;
         private readonly IPermissionsService permissionsService;
+        private int creationStarted;
 
         public CreateAndLoadInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService, 
@@ -96,6 +98,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
 
         public override void ViewAppeared()
         {
+            // The OS lifecycle can raise ViewAppeared() more than once (for example the microphone
+            // permission dialog pauses and then resumes the activity). Guard against re-entrancy so the
+            // interview is created only once and the permission-denied toast is not shown twice.
+            if (Interlocked.CompareExchange(ref this.creationStarted, 1, 0) != 0)
+                return;
+
             Task.Run(CreateAndNavigateToInterviewAsync);
         }
 
