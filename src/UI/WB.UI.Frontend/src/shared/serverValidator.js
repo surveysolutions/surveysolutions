@@ -62,10 +62,8 @@ export function validateJQueryXhr(jqXHR, settings) {
 }
 
 export function validatePageLoad() {
-    // Rebuild the URL from the current origin and path only (dropping any user-controlled
-    // hash) and pin the request to the same origin. Together with redirect: 'error' this
-    // guarantees the probe is sent to the expected server and cannot be diverted to an
-    // attacker-controlled destination (SSRF hardening, CWE-918).
+    // Build an absolute same-origin URL (without the fragment, which is never sent in HTTP requests).
+    // Forbid redirects so this probe can't follow a redirect to another origin.
     const { origin, pathname, search } = window.location
     const url = origin + pathname + search
 
