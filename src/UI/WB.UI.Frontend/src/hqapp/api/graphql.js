@@ -7,8 +7,11 @@ const client = new GraphQLClient(
     new URL('/graphql', window.location.origin).toString(),
     {
         fetch: async (input, init = {}) => {
-            // Pin the GraphQL request to the current origin and forbid redirects so it
-            // can't follow a redirect to another origin (preventing cross-origin leakage).
+            // Pin the GraphQL request to the current origin so it cannot be diverted to an
+            // attacker-controlled destination, even across redirects (SSRF hardening, CWE-918).
+            // Note: we use mode: 'same-origin' rather than redirect: 'error' so that the common
+            // same-origin 302 -> /Account/LogOn auth-expiration redirect is still followed and
+            // gqlRequest can react to it, while cross-origin redirects are blocked.
             const target = new URL(
                 typeof input === 'string' ? input : input.url,
                 window.location.origin
@@ -19,7 +22,7 @@ const client = new GraphQLClient(
 
             const response = await fetch(target.toString(), {
                 ...init,
-                redirect: 'error',
+                mode: 'same-origin',
                 credentials: 'same-origin',
             })
             validateFetchResponse(response)
