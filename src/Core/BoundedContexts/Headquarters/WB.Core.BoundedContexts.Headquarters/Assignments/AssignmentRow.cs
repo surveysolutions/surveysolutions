@@ -21,6 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public string QuestionnaireTitle { get; set; }
         public bool IsAudioRecordingEnabled { get; set; }
         public bool HasAudioAuditScope { get; set; }
+        public List<string> AudioAuditScope { get; set; }
 
         public List<AssignmentIdentifyingQuestionRow> IdentifyingQuestions { get; set; }
         public string Email { get; set; }

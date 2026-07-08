@@ -123,6 +123,13 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public bool IsAudioRecordingEnabled { get; set; }
 
         /// <summary>
+        /// List of section/group/roster variable names for which audio is recorded (selective Audio Audit).
+        /// Empty when audio recording follows the <see cref="IsAudioRecordingEnabled"/> flag.
+        /// </summary>
+        [DataMember]
+        public List<string> AudioAuditScope { get; set; } = new List<string>();
+
+        /// <summary>
         /// Current status of the assignment
         /// </summary>
         [DataMember]
