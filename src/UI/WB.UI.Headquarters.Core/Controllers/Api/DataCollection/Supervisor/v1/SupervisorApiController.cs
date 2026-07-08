@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -33,7 +32,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         private readonly IAuthorizedUser authorizedUser;
         private readonly IInterviewInformationFactory interviewFactory;
         private readonly IInterviewerVersionReader interviewerVersionReader;
-        private readonly IAssignmentsService assignmentsService;
 
         public SupervisorControllerBase(ITabletInformationService tabletInformationService, 
             ISupervisorSyncProtocolVersionProvider syncVersionProvider,
@@ -43,8 +41,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             IClientApkProvider clientApkProvider,
             IAuthorizedUser authorizedUser,
             IInterviewInformationFactory interviewFactory,
-            IInterviewerVersionReader interviewerVersionReader,
-            IAssignmentsService assignmentsService)
+            IInterviewerVersionReader interviewerVersionReader)
             : base(settingsStorage, tenantSettings, userViewFactory, tabletInformationService)
         {
             this.tabletInformationService = tabletInformationService;
@@ -54,7 +51,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             this.authorizedUser = authorizedUser;
             this.interviewFactory = interviewFactory;
             this.interviewerVersionReader = interviewerVersionReader;
-            this.assignmentsService = assignmentsService;
         }
 
         [HttpGet]
@@ -138,11 +134,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             if (deviceSyncProtocolVersion < SupervisorSyncProtocolVersionProvider.V4_MultiWorkspacesIntroduced)
             {
                 if (authorizedUser.Workspaces.Count() > 1)
-                    return StatusCode(StatusCodes.Status426UpgradeRequired);
-            }
-            if (deviceSyncProtocolVersion < SupervisorSyncProtocolVersionProvider.V5_AudioAuditScopeIntroduced)
-            {
-                if (this.assignmentsService.HasAssignmentWithAudioAuditScopeForSupervisor(this.authorizedUser.Id))
                     return StatusCode(StatusCodes.Status426UpgradeRequired);
             }
             if (deviceSyncProtocolVersion > serverSyncProtocolVersion)

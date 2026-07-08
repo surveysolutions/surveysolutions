@@ -41,8 +41,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         AssignmentApiDocument MapAssignment(Assignment assignment);
 
         bool HasAssignmentWithProtectedVariables(Guid responsibleId);
-        bool HasAssignmentWithAudioAuditScope(Guid responsibleId);
-        bool HasAssignmentWithAudioAuditScopeForSupervisor(Guid supervisorId);
         bool HasAssignmentWithAudioRecordingEnabled(Guid responsible);
         bool HasAssignmentWithAudioRecordingEnabled(QuestionnaireIdentity questionnaireIdentity);
         bool DoesExistPasswordInDb(QuestionnaireIdentity questionnaireIdentity, string password);

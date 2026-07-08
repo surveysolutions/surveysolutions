@@ -302,38 +302,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return result;
         }
 
-        public bool HasAssignmentWithAudioAuditScope(Guid responsibleId)
-        {
-            List<List<string>> listOfAudioAuditScopesFromAssignments = this.assignmentsAccessor.Query(_ => _
-                .Where(assignment =>
-                    assignment.ResponsibleId == responsibleId
-                    && !assignment.Archived
-                    && assignment.Status == AssignmentStatus.Open
-                    && (assignment.Quantity == null || assignment.InterviewSummaries.Count < assignment.Quantity)
-                    && (assignment.WebMode == null || assignment.WebMode == false))
-                .Select(x => x.AudioAuditScope)
-                .ToList());
-
-            bool result = listOfAudioAuditScopesFromAssignments.Any(x => (x?.Count ?? 0) > 0);
-            return result;
-        }
-
-        public bool HasAssignmentWithAudioAuditScopeForSupervisor(Guid supervisorId)
-        {
-            List<List<string>> listOfAudioAuditScopesFromAssignments = this.assignmentsAccessor.Query(_ => _
-                .Where(assignment =>
-                    (assignment.ResponsibleId == supervisorId || assignment.Responsible.ReadonlyProfile.SupervisorId == supervisorId)
-                    && !assignment.Archived
-                    && (assignment.Status == AssignmentStatus.Open || assignment.Status == AssignmentStatus.Completed)
-                    && (assignment.Quantity == null || assignment.InterviewSummaries.Count < assignment.Quantity)
-                    && (assignment.WebMode == null || assignment.WebMode == false))
-                .Select(x => x.AudioAuditScope)
-                .ToList());
-
-            bool result = listOfAudioAuditScopesFromAssignments.Any(x => (x?.Count ?? 0) > 0);
-            return result;
-        }
-
 
 
         public List<Assignment> GetAssignmentsReadyForWebInterview(QuestionnaireIdentity questionnaireId)
