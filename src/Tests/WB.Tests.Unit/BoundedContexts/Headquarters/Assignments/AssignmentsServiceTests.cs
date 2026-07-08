@@ -45,6 +45,51 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
+        public void when_assignment_has_no_audio_audit_scope()
+        {
+            var interviewerId = Id.g1;
+
+            var assignmentService = Create.Service.AssignmentService(
+                Create.Entity.Assignment(quantity: null, responsibleId: interviewerId, audioAuditScope: null));
+
+            // Act
+            bool hasAssignmentWithAudioAuditScope = assignmentService.HasAssignmentWithAudioAuditScope(interviewerId);
+
+            Assert.That(hasAssignmentWithAudioAuditScope, Is.False);
+        }
+
+        [Test]
+        public void when_assignment_has_audio_audit_scope()
+        {
+            var interviewerId = Id.g1;
+
+            var assignmentService = Create.Service.AssignmentService(
+                Create.Entity.Assignment(quantity: null, responsibleId: interviewerId, audioAuditScope: null),
+                Create.Entity.Assignment(quantity: null, responsibleId: interviewerId, audioAuditScope: new List<string> { "section1", "roster1" }));
+
+            // Act
+            bool hasAssignmentWithAudioAuditScope = assignmentService.HasAssignmentWithAudioAuditScope(interviewerId);
+
+            Assert.That(hasAssignmentWithAudioAuditScope, Is.True);
+        }
+
+        [Test]
+        public void when_supervisor_team_assignment_has_audio_audit_scope()
+        {
+            var supervisorId = Id.g1;
+            var interviewerId = Id.g2;
+
+            var assignmentService = Create.Service.AssignmentService(
+                Create.Entity.Assignment(quantity: null, responsibleId: interviewerId, assigneeSupervisorId: supervisorId,
+                    audioAuditScope: new List<string> { "section1" }));
+
+            // Act
+            bool hasAssignmentWithAudioAuditScope = assignmentService.HasAssignmentWithAudioAuditScopeForSupervisor(supervisorId);
+
+            Assert.That(hasAssignmentWithAudioAuditScope, Is.True);
+        }
+
+        [Test]
         public void when_getting_assignment_with_upgrade_lock_returns_null_for_missing_assignment()
         {
             var assignmentService = Create.Service.AssignmentService();

@@ -70,7 +70,8 @@ namespace WB.Tests.Web.TestFactories
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettings = null,
             IPlainStorageAccessor<ServerSettings> tenantSettings = null,
             IInterviewerVersionReader interviewerVersionReader = null,
-            IUserToDeviceService userToDeviceService = null)
+            IUserToDeviceService userToDeviceService = null,
+            IAssignmentsService assignmentsService = null)
         {
             var result = new InterviewerControllerBase(
                 tabletInformationService ?? Mock.Of<ITabletInformationService>(),
@@ -82,6 +83,7 @@ namespace WB.Tests.Web.TestFactories
                 tenantSettings ?? new TestPlainStorage<ServerSettings>(),
                 interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
                 userToDeviceService ?? Mock.Of<IUserToDeviceService>(),
+                assignmentsService ?? Mock.Of<IAssignmentsService>(),
                 Mock.Of<IOptions<HeadquartersConfig>>(c => c.Value == new HeadquartersConfig()
                 {
                     IgnoreCompatibility = false

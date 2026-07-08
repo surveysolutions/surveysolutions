@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using NHibernate.Cfg.MappingSchema;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -33,6 +34,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         private readonly IClientApkProvider clientApkProvider;
         private readonly IInterviewerVersionReader interviewerVersionReader;
         private readonly IUserToDeviceService userToDeviceService;
+        private readonly IAssignmentsService assignmentsService;
         private readonly IOptions<HeadquartersConfig> hqConfig;
 
         public enum ClientVersionFromUserAgent
@@ -51,6 +53,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             IPlainStorageAccessor<ServerSettings> tenantSettings,
             IInterviewerVersionReader interviewerVersionReader,
             IUserToDeviceService userToDeviceService,
+            IAssignmentsService assignmentsService,
             IOptions<HeadquartersConfig> hqConfig)
             : base(interviewerSettingsStorage, tenantSettings, userViewFactory, tabletInformationService)
         {
@@ -59,6 +62,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             this.clientApkProvider = clientApkProvider;
             this.interviewerVersionReader = interviewerVersionReader;
             this.userToDeviceService = userToDeviceService;
+            this.assignmentsService = assignmentsService;
             this.hqConfig = hqConfig;
         }
 
@@ -196,6 +200,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.MultiWorkspacesIntroduced)
             {
                 if (authorizedUser.Workspaces.Count() > 1)
+                    return StatusCode(StatusCodes.Status426UpgradeRequired);
+            }
+            if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.AudioAuditScopeIntroduced)
+            {
+                if (this.assignmentsService.HasAssignmentWithAudioAuditScope(this.authorizedUser.Id))
                     return StatusCode(StatusCodes.Status426UpgradeRequired);
             }
             if (deviceSyncProtocolVersion > serverSyncProtocolVersion)
