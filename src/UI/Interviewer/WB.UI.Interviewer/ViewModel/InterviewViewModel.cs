@@ -38,6 +38,8 @@ namespace WB.UI.Interviewer.ViewModel
         private readonly IMvxMainThreadAsyncDispatcher asyncDispatcher;
         private readonly IAudioAuditRecordingExecutor audioRecordingExecutor;
         private readonly ILogger logger;
+        private InterviewerCompleteInterviewViewModel completeInterviewViewModel;
+        private int viewAppearedInProgress;
 
         public InterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
@@ -102,16 +104,30 @@ namespace WB.UI.Interviewer.ViewModel
 
         protected override BaseViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
         {
+            // Unsubscribe from a previous Complete screen so a late IsLoading change (its background
+            // CollectCriticalityInfo may still be running after the screen was navigated away/disposed)
+            // can no longer overwrite the status of the screen the interviewer has since navigated to.
+            this.UnsubscribeFromCompleteInterviewViewModel();
+
             switch (this.NavigationState.CurrentScreenType)
             {
                 case ScreenType.Complete:
-                    var completeInterviewViewModel =
+                    this.completeInterviewViewModel =
                         this.interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
-                    completeInterviewViewModel.PropertyChanged += ChangeInterviewStatus;
-                    completeInterviewViewModel.Configure(this.InterviewId, this.NavigationState);
-                    return completeInterviewViewModel;
+                    this.completeInterviewViewModel.PropertyChanged += ChangeInterviewStatus;
+                    this.completeInterviewViewModel.Configure(this.InterviewId, this.NavigationState);
+                    return this.completeInterviewViewModel;
                 default:
                     return base.UpdateCurrentScreenViewModel(eventArgs);
+            }
+        }
+
+        private void UnsubscribeFromCompleteInterviewViewModel()
+        {
+            if (this.completeInterviewViewModel != null)
+            {
+                this.completeInterviewViewModel.PropertyChanged -= ChangeInterviewStatus;
+                this.completeInterviewViewModel = null;
             }
         }
 
@@ -120,11 +136,11 @@ namespace WB.UI.Interviewer.ViewModel
             if (e.PropertyName != nameof(InterviewerCompleteInterviewViewModel.IsLoading))
                 return;
             
-            var completeInterviewViewModel = (InterviewerCompleteInterviewViewModel)sender;
-            if (!completeInterviewViewModel.IsLoading)
+            var completeViewModel = (InterviewerCompleteInterviewViewModel)sender;
+            if (!completeViewModel.IsLoading)
             {
-                completeInterviewViewModel.PropertyChanged -= ChangeInterviewStatus;
-                Status = completeInterviewViewModel.CompleteStatus;
+                this.UnsubscribeFromCompleteInterviewViewModel();
+                Status = completeViewModel.CompleteStatus;
             }
         }
 
@@ -150,6 +166,13 @@ namespace WB.UI.Interviewer.ViewModel
 
         private async Task OnViewAppearedAsync()
         {
+            // Re-entrancy guard: the OS lifecycle can raise ViewAppeared() again (for example when a
+            // permission dialog pauses and resumes the activity) before a previous run completes. Without
+            // this guard two concurrent ResumeInterviewCommand executions and two OpenInterviewAuditLogEntity
+            // writes would be issued.
+            if (Interlocked.CompareExchange(ref this.viewAppearedInProgress, 1, 0) != 0)
+                return;
+
             try
             {
                 var interviewId = Guid.Parse(InterviewId);
@@ -171,6 +194,10 @@ namespace WB.UI.Interviewer.ViewModel
             catch (Exception exc)
             {
                 this.logger.Warn("Audio audit evaluation failed on view appeared.", exception: exc);
+            }
+            finally
+            {
+                Interlocked.Exchange(ref this.viewAppearedInProgress, 0);
             }
         }
 
@@ -368,6 +395,7 @@ namespace WB.UI.Interviewer.ViewModel
         public override void Dispose()
         {
             this.NavigationState.ScreenChanged -= this.OnScreenChanged;
+            this.UnsubscribeFromCompleteInterviewViewModel();
 
             // Defensive stop: ViewDisappearing() normally stops any active recording, but if the
             // OS/Mvx lifecycle skipped it (headless navigation, tests, a future refactor) an active
