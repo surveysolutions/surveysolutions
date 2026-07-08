@@ -925,7 +925,7 @@ export default {
                 this.editedHasAudioAuditScope = false
                 this.$hq.Assignments.audioSettings(this.editedRowId).then(data => {
                     this.editedAudioRecordingEnabled = data.Enabled
-                    this.editedHasAudioAuditScope = data.HasAudioAuditScope
+                    this.editedHasAudioAuditScope = data.AudioAuditScope != null && data.AudioAuditScope.length > 0
                     this.$refs.editAudioEnabledModal.modal()
                 })
             }

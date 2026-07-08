@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models
 {
@@ -11,9 +12,9 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public bool Enabled { get; set; }
 
         /// <summary>
-        /// Indicates if the assignment has a selective audio audit scope defined
+        /// List of section/group/roster variable names for the selective audio audit scope
         /// </summary>
-        [DataMember(IsRequired = true)]
-        public bool HasAudioAuditScope { get; set; }
+        [DataMember]
+        public List<string> AudioAuditScope { get; set; }
     }
 }
