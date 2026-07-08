@@ -599,8 +599,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
         private static bool AreAudioAuditScopesEqual(List<string> requested, List<string> current)
         {
+            var requestedScope = requested ?? new List<string>();
             var currentScope = current ?? new List<string>();
-            return new HashSet<string>(requested).SetEquals(currentScope);
+            return new HashSet<string>(requestedScope).SetEquals(currentScope);
         }
 
         /// <summary>
