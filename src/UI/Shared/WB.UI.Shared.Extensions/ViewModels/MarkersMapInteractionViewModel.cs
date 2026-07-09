@@ -166,9 +166,10 @@ public abstract class MarkersMapInteractionViewModel<TParam> : BaseMapInteractio
     
     protected async Task RefreshMarkers(bool setViewToMarkers)
     {
-        if (MapView?.Map?.SpatialReference != null)
+        var mapView = this.MapView;
+        if (mapView?.Map?.SpatialReference != null)
         {
-            await this.mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() => { MapView.DismissCallout(); });
+            await this.mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() => { mapView.DismissCallout(); });
 
             try
             {

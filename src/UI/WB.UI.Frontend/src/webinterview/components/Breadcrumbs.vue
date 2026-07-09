@@ -1,8 +1,11 @@
 <template>
-    <div class="unit-title break-line" v-if="showBreadcrumbs">
+    <div class="unit-title break-line"
+        v-if="showBreadcrumbs">
         <ol class="breadcrumb">
-            <li v-for="breadcrumb in entities" :key="breadcrumb.target">
-                <a href="javascript:void(0)" @click="navigate(breadcrumb)">
+            <li v-for="breadcrumb in entities"
+                :key="breadcrumb.target">
+                <a href="javascript:void(0)"
+                    @click="navigate(breadcrumb)">
                     <span v-dompurify-html="breadcrumb.title"></span><span
                         v-if="breadcrumb.isRoster && !breadcrumb.hasCustomRosterTitle"> -
                         <i>{{ getRosterTitle(breadcrumb.rosterTitle) }}</i></span>

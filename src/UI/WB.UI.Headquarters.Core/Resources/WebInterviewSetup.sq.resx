@@ -243,4 +243,37 @@
   <data name="AllowTranscriptDownloading" xml:space="preserve">
       <value>Lejo shkarkimin e transkriptit të intervistës pas dorëzimit</value>
   </data>
+
+
+  <data name="SingleResponse" xml:space="preserve">
+    <value>Kufizoje në një intervistë për çdo të anketuar</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_StartNewButton_Descr" xml:space="preserve">
+    <value>Fillo intervistë të re</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_ResumeButton_Descr" xml:space="preserve">
+    <value>Vazhdo</value>
+  </data>
+
+  <data name="EmailOnComplete" xml:space="preserve">
+    <value>Dërgo email pas përfundimit të intervistës në internet</value>
+  </data>
+
+  <data name="AttachAnswersToCompleteEmail" xml:space="preserve">
+    <value>Bashkëngjit transkriptin PDF</value>
+  </data>
+
+  <data name="AllowSwitchToCawiForInterviewer" xml:space="preserve">
+    <value>Lejo intervistuesin të kalojë në modalitetin CAWI</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_LinkInvitation_Descr" xml:space="preserve">
+    <value>Teksti që i shfaqet përdoruesit kur hap lidhjen për një intervistë që ende nuk është sinkronizuar me serverin</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
+    <value>Teksti i kreut të mirëseardhjes në faqen hyrëse të lidhjes së intervistës në internet</value>
+  </data>
 </root>
