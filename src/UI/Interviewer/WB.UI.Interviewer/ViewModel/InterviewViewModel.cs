@@ -112,11 +112,16 @@ namespace WB.UI.Interviewer.ViewModel
             switch (this.NavigationState.CurrentScreenType)
             {
                 case ScreenType.Complete:
-                    this.completeInterviewViewModel =
+                    // Keep a local reference: Configure() may synchronously raise IsLoading=false, which
+                    // triggers ChangeInterviewStatus -> UnsubscribeFromCompleteInterviewViewModel and nulls
+                    // out the field. Returning the field in that case would yield a null screen and crash
+                    // the CurrentScreen binding, so the local is returned instead.
+                    var completeViewModel =
                         this.interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
-                    this.completeInterviewViewModel.PropertyChanged += ChangeInterviewStatus;
-                    this.completeInterviewViewModel.Configure(this.InterviewId, this.NavigationState);
-                    return this.completeInterviewViewModel;
+                    this.completeInterviewViewModel = completeViewModel;
+                    completeViewModel.PropertyChanged += ChangeInterviewStatus;
+                    completeViewModel.Configure(this.InterviewId, this.NavigationState);
+                    return completeViewModel;
                 default:
                     return base.UpdateCurrentScreenViewModel(eventArgs);
             }
