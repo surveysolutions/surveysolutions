@@ -1,6 +1,11 @@
 <template>
-    <input :ref="'input'" type="text" autocomplete="off" inputmode="numeric" class="ag-cell-edit-input"
-        :value="$me.answer" v-numericFormatting="{
+    <input :ref="'input'"
+        type="text"
+        autocomplete="off"
+        inputmode="numeric"
+        class="ag-cell-edit-input"
+        :value="$me.answer"
+        v-numericFormatting="{
             digitGroupSeparator: groupSeparator,
             decimalCharacter: decimalSeparator,
             decimalPlaces: 0,
@@ -134,7 +139,7 @@ export default {
             }
         })
     },
-    beforeDestroy() {
+    beforeUnmount() {
         this.destroy()
     },
 }

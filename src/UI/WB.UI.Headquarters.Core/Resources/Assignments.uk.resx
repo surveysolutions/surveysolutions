@@ -187,7 +187,7 @@
     <value>Активний</value>
   </data>
   <data name="Actor" xml:space="preserve">
-    <value>By</value>
+    <value>Ким</value>
   </data>
   <data name="AllAssignments" xml:space="preserve">
     <value>Всі завдання</value>
@@ -199,7 +199,7 @@
     <value>Архівовано</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
-    <value>Завдання {{id}} не можна закрити, оскільки воно у веб-режимі</value>
+    <value>Завдання {{id}} не можна зменшити, оскільки воно у веб-режимі</value>
   </data>
   <data name="AssignmentHistory" xml:space="preserve">
     <value>Історія</value>
@@ -337,7 +337,7 @@
     <value>Режим CAWI дозволяє збирати дані безпосередньо від респондентів</value>
   </data>
   <data name="MultipleAssignmentsClose" xml:space="preserve">
-    <value>{{count}} вибрані завдання буде закрито. Розмір буде встановлено до поточної кількості зібраних інтерв'ю.</value>
+    <value>{{count}} вибрані завдання буде зменшено. Розмір буде встановлено до поточної кількості зібраних інтерв'ю.</value>
   </data>
   <data name="NewAssignment" xml:space="preserve">
     <value>Нове завдання</value>
@@ -527,5 +527,95 @@
   </data>
   <data name="Property" xml:space="preserve">
       <value>Властивість</value>
+  </data>
+  <data name="Downsize" xml:space="preserve">
+    <value>Зменшити</value>
+  </data>
+  <data name="Filter_ShowAll" xml:space="preserve">
+    <value>Показати всі</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+      <value>Статус</value>
+  </data>
+  <data name="StatusChangeComment" xml:space="preserve">
+      <value>Коментар до зміни статусу</value>
+  </data>
+  <data name="StatusOpen" xml:space="preserve">
+      <value>Активне</value>
+  </data>
+  <data name="StatusCompleted" xml:space="preserve">
+      <value>Завершено</value>
+  </data>
+  <data name="StatusClosed" xml:space="preserve">
+      <value>Закрито</value>
+  </data>
+  <data name="CompleteAssignmentTitle" xml:space="preserve">
+      <value>Завершити завдання</value>
+  </data>
+  <data name="CompleteAssignmentMessage" xml:space="preserve">
+      <value>Ви впевнені, що перерахували всі відповідні одиниці?</value>
+  </data>
+  <data name="CloseAssignmentTitle" xml:space="preserve">
+      <value>Закрити завдання</value>
+  </data>
+  <data name="CloseAssignmentMessage" xml:space="preserve">
+      <value>Інтерв'юери, що працюють в автономному режимі, можуть продовжувати збір даних до синхронізації. Такі інтерв'ю будуть прийняті.</value>
+  </data>
+  <data name="ReopenAssignmentTitle" xml:space="preserve">
+      <value>Відкрити завдання знову</value>
+  </data>
+  <data name="ReopenAssignmentMessage" xml:space="preserve">
+      <value>Завданню буде повернуто статус «Відкрито», і інтерв'юери зможуть створювати нові інтерв'ю.</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+      <value>Завершити</value>
+  </data>
+  <data name="Reopen" xml:space="preserve">
+      <value>Відкрити знову</value>
+  </data>
+  <data name="Action_StatusChanged" xml:space="preserve">
+      <value>Статус змінено на {{status}}</value>
+  </data>
+  <data name="Action_StatusChanged_Comment" xml:space="preserve">
+      <value>Коментар: {{comment}}</value>
+  </data>
+  <data name="Action_Completed" xml:space="preserve">
+      <value>Завершено</value>
+  </data>
+  <data name="Action_Closed" xml:space="preserve">
+      <value>Закрито</value>
+  </data>
+  <data name="Action_Reopened" xml:space="preserve">
+      <value>Відкрито знову</value>
+  </data>
+  <data name="Action_QuantityChanged" xml:space="preserve">
+    <value>Очікувана кількість змінена</value>
+  </data>
+  <data name="Action_TargetAreaChanged" xml:space="preserve">
+    <value>Цільову зону змінено</value>
+  </data>
+  <data name="ChangeTargetAreaModalTitle" xml:space="preserve">
+    <value>Змінити цільову зону для призначення {{assignmentId}}</value>
+  </data>
+  <data name="DetailsGeoTracking" xml:space="preserve">
+    <value>Геолокація</value>
+  </data>
+  <data name="DetailsTargetAreaa" xml:space="preserve">
+    <value>Цільова зона</value>
+  </data>
+  <data name="EnterTargetArea" xml:space="preserve">
+    <value>Введіть цільову зону</value>
+  </data>
+  <data name="TargetArea" xml:space="preserve">
+    <value>Редагувати цільову зону</value>
+  </data>
+  <data name="TargetAreaExplanation" xml:space="preserve">
+    <value>Вкажіть назву карти цільової зони для призначення</value>
+  </data>
+  <data name="Tooltip_Table_ReceivedByTablet" xml:space="preserve">
+    <value>Індикатор того, чи було завантажено призначення на планшет. Натисніть на значок сортування, щоб відсортувати за часом отримання.</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Значення</value>
   </data>
 </root>
