@@ -1,12 +1,19 @@
 <template>
-    <ModalFrame :id="id" :title="confirm_title" ref="confirmModal">
+    <ModalFrame :id="id"
+        :title="confirm_title"
+        ref="confirmModal">
         <slot />
         <template v-slot:actions>
             <div>
-                <button type="button" :class="ok_class" :disabled="disableOk" @click="confirm">
+                <button type="button"
+                    :class="ok_class"
+                    :disabled="disableOk"
+                    @click="confirm">
                     {{ ok_title }}
                 </button>
-                <button type="button" class="btn btn-link" @click="cancel">
+                <button type="button"
+                    class="btn btn-link"
+                    @click="cancel">
                     {{ $t("Common.Cancel") }}
                 </button>
             </div>
