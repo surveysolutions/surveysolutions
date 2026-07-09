@@ -925,7 +925,7 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
     <value>{0} (CAWI)</value>
   </data>
   <data name="Dashboard_CensusAssignment" xml:space="preserve">
-    <value>Census</value>
+    <value>Sčítání</value>
   </data>
   <data name="DashboardItem_Title" xml:space="preserve">
     <value>{0} (v{1})</value>
@@ -974,5 +974,41 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
 </data>
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>Přijatá odpověď se nezdá pocházet ze serveru Survey Solutions. Obvykle to způsobuje síťový proxy, firewall nebo bezpečnostní brána, které zachycují připojení. Zkontrolujte své síťové připojení nebo kontaktujte IT podporu.</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment" xml:space="preserve">
+    <value>Dokončit</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
+    <value>Dokončit žádanku</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
+    <value>Jste si jisti, že jste sečetli všechny způsobilé jednotky?</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
+    <value>Znovu otevřít žádanku</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>Žádanka bude nastavena zpět na stav Otevřeno a tazatelé budou moci vytvářet nové rozhovory.</value>
+  </data>
+  <data name="Dashboard_CloseAssignment" xml:space="preserve">
+    <value>Schválit</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
+    <value>Uzavřít žádanku</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
+    <value>Tazatelé pracující offline mohou stále pokračovat ve sběru dat až do synchronizace. Takové rozhovory budou stále přijaty.</value>
+  </data>
+  <data name="Dashboard_Assignment_Comment" xml:space="preserve">
+    <value>Komentář (volitelný)</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
+    <value>Stav: Dokončeno</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
+    <value>Stav: Schváleno</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
+    <value>Stav: Otevřeno</value>
   </data>
 </root>

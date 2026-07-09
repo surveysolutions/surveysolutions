@@ -220,7 +220,7 @@
     <value>个访谈被创建</value>
   </data>
   <data name="OutOf" xml:space="preserve">
-    <value>out of</value>
+    <value>/</value>
   </data>
   <data name="PleaseWait" xml:space="preserve">
     <value>请稍等，文件</value>
@@ -560,5 +560,50 @@
   </data>
   <data name="ViewListPreloadedData" xml:space="preserve">
     <value>查看前导值列表</value>
+  </data>
+
+
+  <data name="BatchDescription" xml:space="preserve">
+    <value>上传一个zip压缩包，其中包含一个或多个与访谈主层级及其下级名册对应的制表符分隔文件。可在访谈的任意层级预加载变量。&lt;br/&gt;
+所有数据文件都必须包含变量 interview__id，作为访谈唯一的字符串或数字标识符。名册及嵌套名册之间的链接建立方式与导出数据相同。&lt;br/&gt;
+</value>
+    <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
+  </data>
+
+  <data name="BatchColumnsTitle" xml:space="preserve">
+    <value>还可以在主访谈层级文件中指定以下列：</value>
+  </data>
+
+  <data name="SimpleDescription" xml:space="preserve">
+    <value>上传仅包含访谈层级问题取值的制表符分隔文件。包括识别型问题和主访谈层级其他问题的取值。不支持在名册内预加载取值。</value>
+  </data>
+
+  <data name="SimpleColumnsTitle" xml:space="preserve">
+    <value>还可以指定以下列：</value>
+  </data>
+
+  <data name="ColumnsDescription" xml:space="preserve">
+    <value>&lt;b&gt;_responsible&lt;/b&gt; - 负责该任务的总部、督导员或访问员的用户名；&lt;br/&gt;
+&lt;b&gt;_quantity&lt;/b&gt; - 任务容量；&lt;br/&gt;
+&lt;b&gt;_email&lt;/b&gt; - 受访者的电子邮件地址（仅适用于网络访谈）；&lt;br/&gt;
+&lt;b&gt;_password&lt;/b&gt; - 开始访谈所需的密码（仅适用于网络访谈）；&lt;br/&gt;
+&lt;b&gt;_webmode&lt;/b&gt; - 任务模式（1 表示 CAWI，0 或留空表示 CAPI）；&lt;br/&gt;
+&lt;b&gt;_record_audio&lt;/b&gt; - 是否为访谈启用录音（1 - 启用，0 - 禁用，留空 - 从问卷获取此值）；&lt;br/&gt;
+&lt;b&gt;_comment&lt;/b&gt; - 任务备注；&lt;br/&gt;
+&lt;b&gt;_target_area&lt;/b&gt; - 任务目标区域</value>
+    <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
+  </data>
+
+  <data name="UploadDescription" xml:space="preserve">
+    <value>上传包含识别数据的文件以创建新任务。
+指定总部、督导员或访问员的用户名以批量创建任务。</value>
+  </data>
+
+  <data name="FileTypeDescription" xml:space="preserve">
+    <value>请将文件保存为 UTF8 编码，以支持特定语言的文本。</value>
+  </data>
+
+  <data name="Select_Responsible_Description" xml:space="preserve">
+    <value>如果批量文件中未指定负责人，请使用此总部/督导员/访问员账户：</value>
   </data>
 </root>

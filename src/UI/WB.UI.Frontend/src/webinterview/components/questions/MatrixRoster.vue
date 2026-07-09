@@ -19,13 +19,13 @@
 
 <script lang="js">
 /* eslint-disable vue/no-unused-components */
-import "@ag-grid-community/styles/ag-grid.css";
-import "@ag-grid-community/styles/ag-theme-quartz.css";
+import 'ag-grid-community/styles/ag-grid.css'
+import 'ag-grid-community/styles/ag-theme-quartz.css'
 
 import { entityDetails } from '../mixins'
-import { debounce, map } from 'lodash'
-import { AgGridVue } from '@ag-grid-community/vue3'
-import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
+import { debounce, map } from 'lodash-es'
+import { AgGridVue } from 'ag-grid-vue3'
+import { ClientSideRowModelModule } from 'ag-grid-community'
 
 import MatrixRoster_QuestionEditor from './MatrixRoster.QuestionEditor'
 import MatrixRoster_RosterTitle from './MatrixRoster.RosterTitle'
@@ -43,7 +43,6 @@ export default {
             columnDefs: null,
             rowData: null,
             gridApi: null,
-            columnApi: null,
             countOfInstances: 0,
             title: null,
             instructions: null,
@@ -126,7 +125,7 @@ export default {
         },
         gridModules() {
             return [ClientSideRowModelModule]
-        }
+        },
     },
     methods: {
         initQuestionAsColumns() {
@@ -158,7 +157,7 @@ export default {
                         //    value: question,
                         //},
                     }
-                },
+                }
             )
             columnsFromQuestions.unshift({
                 headerName: '', //this.$me.title,
@@ -196,14 +195,13 @@ export default {
                     })
 
                     return instanceAsRow
-                },
+                }
             )
             this.rowData = rosterInstancesWithQuestionsAsRows
         },
 
         onGridReady(params) {
             this.gridApi = params.api
-            this.columnApi = params.columnApi
 
             this.autosizeHeaders(params)
             this.setTableRosterHeight()
@@ -219,7 +217,7 @@ export default {
                 const MIN_HEIGHT = 16
                 this.gridApi.setGridOption('headerHeight', MIN_HEIGHT)
                 const headerCells = $(this.$refs.matrixRoster.$el).find(
-                    '.ag-header-cell-label',
+                    '.ag-header-cell-label'
                 )
                 let minHeight = MIN_HEIGHT
                 for (let index = 0; index < headerCells.length; index++) {

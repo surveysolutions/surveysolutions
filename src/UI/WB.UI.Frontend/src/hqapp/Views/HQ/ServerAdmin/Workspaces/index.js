@@ -1,4 +1,4 @@
-import Workspaces from './Workspaces'
+const Workspaces = () => import('./Workspaces')
 
 export default class MapComponent {
     get routes() {
