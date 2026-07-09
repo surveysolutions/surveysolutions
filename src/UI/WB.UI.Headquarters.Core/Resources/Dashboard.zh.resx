@@ -204,4 +204,78 @@
   <data name="UpgradeAssignments" xml:space="preserve">
     <value>升级调研任务</value>
   </data>
+
+
+  <data name="MapDashboard" xml:space="preserve">
+    <value>地图仪表板</value>
+  </data>
+
+  <data name="SaveQuestionnaire" xml:space="preserve">
+    <value>保存问卷文档</value>
+  </data>
+
+  <data name="RecordAudio" xml:space="preserve">
+    <value>录音</value>
+  </data>
+
+  <data name="QuestionnairePreview" xml:space="preserve">
+    <value>问卷预览</value>
+  </data>
+
+  <data name="RecordAudioTitle" xml:space="preserve">
+    <value>启用音频审计时，Interviewer 应用程序将录制访谈音频。请注意，同步数据量将显著增加。</value>
+  </data>
+
+  <data name="SendInvitations" xml:space="preserve">
+    <value>发送邀请</value>
+  </data>
+
+  <data name="DownloadLinks" xml:space="preserve">
+    <value>下载网络链接</value>
+  </data>
+
+  <data name="WebMode" xml:space="preserve">
+    <value>模式</value>
+  </data>
+
+  <data name="Details" xml:space="preserve">
+    <value>详情</value>
+    <comment>Questionnaire details</comment>
+  </data>
+
+  <data name="ShowOnDesigner" xml:space="preserve">
+    <value>在 Designer 中显示</value>
+  </data>
+
+  <data name="ImportedBy" xml:space="preserve">
+    <value>导入者</value>
+  </data>
+
+  <data name="ImportedByText" xml:space="preserve">
+    <value>{{role}} 用户 {{name}}</value>
+  </data>
+
+  <data name="QuestionnaireDeleteWarn" xml:space="preserve">
+    <value>{{receivedInterviews}} 个访谈和 {{receivedAssignments}} 个用于新访谈的任务已被离线工作的访问员/督导员接收。确认删除此调查后，服务器将不再接受基于这些访谈/任务的信息，它们将在下次同步时消失，且无法恢复，即使其中包含新录入或修改的信息。您有责任提醒/通知访问员不要再填写这些访谈/任务，因为系统不会自动通知他们。是否继续？</value>
+  </data>
+
+  <data name="TypeQuestionnaireName" xml:space="preserve">
+    <value>请输入 '{{questionnaireTitle}}' 以确认</value> 
+  </data>
+
+  <data name="UsersManagement" xml:space="preserve">
+      <value>用户管理</value>
+  </data>
+
+  <data name="CreateUser" xml:space="preserve">
+      <value>创建用户</value>
+  </data>
+
+  <data name="ExposedVariables" xml:space="preserve">
+    <value>公开变量</value>
+  </data>
+
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
 </root>

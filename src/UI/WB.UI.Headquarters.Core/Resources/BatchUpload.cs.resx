@@ -552,7 +552,7 @@ Všechny datové soubory musí obsahovat proměnnou interview__id s jedinečným
     <value>Vytvoření 1 rozhovoru selhalo</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status</value>
+    <value>Stav</value>
   </data>
   <data name="SupervisorMustBeSelected" xml:space="preserve">
     <value>Musí být vybrán garant nebo tazatel</value>

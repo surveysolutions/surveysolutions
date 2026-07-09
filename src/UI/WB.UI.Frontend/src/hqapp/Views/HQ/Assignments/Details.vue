@@ -6,7 +6,7 @@
                     <div class="panel-body clearfix">
                         <div class="about-questionnaire clearfix">
                             <div class="about-questionnaire-details clearfix">
-                                <ul class="main-info-column list-unstyled pull-left">
+                                <ul class="main-info-column list-unstyled">
                                     <li id="detailsInfo_interviewKeyListItem">
                                         {{ $t('Assignments.AssignmentId') }}:
                                         {{ model.id }}
@@ -16,7 +16,7 @@
                                         {{ model.questionnaire.title }}
                                     </li>
                                 </ul>
-                                <ul class="list-unstyled pull-left table-info">
+                                <ul class="list-unstyled table-info">
                                     <li id="detailsInfo_createdAtListItem">
                                         <span class="data-label">{{
                                             this.$t(
@@ -38,10 +38,10 @@
                                         </span>
                                         <span v-else class="data supervisor">{{
                                             model.responsible.name
-                                            }}</span>
+                                        }}</span>
                                     </li>
                                 </ul>
-                                <ul class="list-unstyled pull-left table-info">
+                                <ul class="list-unstyled table-info">
                                     <li id="detailsInfo_lastUpdatedListItem">
                                         <span class="data-label">{{
                                             this.$t('Details.LastUpdated')
@@ -82,8 +82,8 @@
                                             </a>
                                         </li>
                                         <li v-if="isHeadquarters && !isArchived">
-                                            <a href="#" @click="closeSelected">
-                                                {{ $t('Assignments.Close') }}
+                                            <a href="#" @click="downsizeSelected">
+                                                {{ $t('Assignments.Downsize') }}
                                             </a>
                                         </li>
                                         <li v-if="isHeadquarters && !isArchived">
@@ -96,6 +96,16 @@
                                                 {{
                                                     $t('Assignments.Unarchive')
                                                 }}
+                                            </a>
+                                        </li>
+                                        <li v-if="canComplete">
+                                            <a href="#" @click.prevent="openCloseModal">
+                                                {{ $t('Assignments.Close') }}
+                                            </a>
+                                        </li>
+                                        <li v-if="canReopen">
+                                            <a href="#" @click.prevent="openReopenModal">
+                                                {{ $t('Assignments.Reopen') }}
                                             </a>
                                         </li>
                                     </ul>
@@ -114,7 +124,7 @@
                             <span :title="$t('Assignments.StartWebInterview')" class="glyphicon glyphicon-link" />
                         </a>
                         <span v-if="this.model.isArchived" class="label label-default">{{ $t('Common.Archived')
-                            }}</span>
+                        }}</span>
                     </h3>
                     <table class="table table-striped table-bordered">
                         <thead>
@@ -133,7 +143,9 @@
                                 <td class="text-nowrap">
                                     {{ $t('Assignments.Expected') }}
                                 </td>
-                                <td class="pointer editable" @click="quantityChange">{{ quantity }}</td>
+                                <td class="pointer editable" @click="quantityChange">
+                                    {{ quantity }}
+                                </td>
                             </tr>
                             <tr v-if="model.isHeadquarters">
                                 <td class="text-nowrap">
@@ -162,7 +174,7 @@
                                             <h4>
                                                 <span>{{
                                                     question.title
-                                                    }}</span>
+                                                }}</span>
                                             </h4>
                                             <div class="answer">
                                                 <div v-dompurify-html="question.answer"></div>
@@ -224,6 +236,18 @@
                                 </td>
                                 <td>{{ model.comments }}</td>
                             </tr>
+                            <tr>
+                                <td class="text-nowrap">
+                                    {{ $t('Assignments.Status') }}
+                                </td>
+                                <td>{{ assignmentStatus }}</td>
+                            </tr>
+                            <tr v-if="model.statusComment">
+                                <td class="text-nowrap">
+                                    {{ $t('Assignments.StatusChangeComment') }}
+                                </td>
+                                <td>{{ model.statusComment }}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -268,14 +292,14 @@
                     </template>
                 </ModalFrame>
 
-                <ModalFrame ref="closeModal" :title="$t('Pages.ConfirmationNeededTitle')">
+                <ModalFrame ref="downsizeModal" :title="$t('Pages.ConfirmationNeededTitle')">
                     <p>{{ singleCloseMessage }}</p>
 
                     <template v-slot:actions>
                         <div>
                             <button type="button" class="btn btn-primary" :disabled="isWebModeAssignmentSelected"
                                 @click="close">
-                                {{ $t('Assignments.Close') }}
+                                {{ $t('Assignments.Downsize') }}
                             </button>
                             <button type="button" class="btn btn-link" data-bs-dismiss="modal">
                                 {{ $t('Common.Cancel') }}
@@ -333,7 +357,7 @@
                             <button type="button" class="btn btn-primary" :disabled="!showSelectors || !canEditQuantity"
                                 @click="updateQuantity">{{ $t("Common.Save") }}</button>
                             <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                                }}</button>
+                            }}</button>
                         </div>
                     </template>
                 </ModalFrame>
@@ -366,6 +390,50 @@
                     </template>
                 </ModalFrame>
 
+                <ModalFrame ref="closeModal" :title="$t('Assignments.CloseAssignmentTitle')">
+                    <p>{{ $t('Assignments.CloseAssignmentMessage') }}</p>
+                    <form onsubmit="return false;">
+                        <div class="form-group">
+                            <label class="control-label" for="completeCommentDetailId">
+                                {{ $t("Assignments.Comments") }}
+                            </label>
+                            <textarea control-id="completeCommentDetailId" v-model="statusChangeComment"
+                                :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                                autocomplete="off" class="form-control" />
+                        </div>
+                    </form>
+                    <template v-slot:actions>
+                        <div>
+                            <button type="button" class="btn btn-primary" @click="confirmClose">{{
+                                $t("Assignments.Close") }}</button>
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                            }}</button>
+                        </div>
+                    </template>
+                </ModalFrame>
+
+                <ModalFrame ref="reopenModal" :title="$t('Assignments.ReopenAssignmentTitle')">
+                    <p>{{ $t('Assignments.ReopenAssignmentMessage') }}</p>
+                    <form onsubmit="return false;">
+                        <div class="form-group">
+                            <label class="control-label" for="reopenCommentDetailId">
+                                {{ $t("Assignments.Comments") }}
+                            </label>
+                            <textarea control-id="reopenCommentDetailId" v-model="statusChangeComment"
+                                :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                                autocomplete="off" class="form-control" />
+                        </div>
+                    </form>
+                    <template v-slot:actions>
+                        <div>
+                            <button type="button" class="btn btn-primary" @click="confirmReopen">{{
+                                $t("Assignments.Reopen") }}</button>
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                            }}</button>
+                        </div>
+                    </template>
+                </ModalFrame>
+
             </div>
         </div>
     </main>
@@ -376,9 +444,10 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
 import { nextTick } from 'vue'
 import { DateFormats, convertToLocal } from '~/shared/helpers'
 import { RoleNames } from '~/shared/constants'
+import * as toastr from 'toastr'
 
-import moment from 'moment-timezone'
-import { escape } from 'lodash'
+import moment from 'moment'
+import { escape } from 'lodash-es'
 
 import '@/assets/css/markup-web-interview.scss'
 import '@/assets/css/markup-interview-review.scss'
@@ -398,7 +467,8 @@ export default {
 
             canEditQuantity: true,
 
-            editedAudioRecordingEnabled: null
+            editedAudioRecordingEnabled: null,
+            statusChangeComment: null,
         }
     },
     methods: {
@@ -409,7 +479,7 @@ export default {
                     (data) => {
                         this.editedAudioRecordingEnabled = data.Enabled
                         this.$refs.editAudioEnabledModal.modal()
-                    },
+                    }
                 )
             }
         },
@@ -436,7 +506,7 @@ export default {
         upateAudioRecording() {
             this.$hq.Assignments.setAudioSettings(
                 this.model.id,
-                this.editedAudioRecordingEnabled,
+                this.editedAudioRecordingEnabled
             ).then(() => {
                 this.$refs.editAudioEnabledModal.hide()
                 window.location.reload(true)
@@ -463,8 +533,8 @@ export default {
             window.location.reload(true)
         },
 
-        closeSelected() {
-            this.$refs.closeModal.modal({
+        downsizeSelected() {
+            this.$refs.downsizeModal.modal({
                 keyboard: false,
             })
         },
@@ -472,7 +542,7 @@ export default {
             const self = this
 
             const url = `${self.config.api.assignmentsApi}/${self.model.id}/close`
-            self.$http.post(url).catch((error) => {
+            await self.$http.post(url).catch((error) => {
                 if (error.isAxiosError && error.response.status === 409) {
                     const msg = this.$t('Assignments.AssignmentCloseWebMode', {
                         id: self.model.id,
@@ -481,7 +551,7 @@ export default {
                     toastr.warning(msg)
                 }
             })
-            this.$refs.closeModal.hide()
+            this.$refs.downsizeModal.hide()
 
             window.location.reload(true)
         },
@@ -509,19 +579,19 @@ export default {
         },
 
         validateQuantity(value) {
-            const regex = /^-?([0-9]+)$/i;
+            const regex = /^-?([0-9]+)$/i
 
             if (!regex.test(value)) {
-                return 'This field must be a valid number';
+                return 'This field must be a valid number'
             }
 
             if (value <= -2)
-                return 'This field must be greater or equal to -1';
+                return 'This field must be greater or equal to -1'
 
             if (value > this.config.maxInterviewsByAssignment)
-                return 'This field must be less than limit';
+                return 'This field must be less than limit'
 
-            return true;
+            return true
 
         },
         async updateQuantity() {
@@ -579,7 +649,37 @@ export default {
                 })
 
             return false
-        }
+        },
+
+        openCloseModal() {
+            this.statusChangeComment = null
+            this.$refs.closeModal.modal()
+        },
+
+        openReopenModal() {
+            this.statusChangeComment = null
+            this.$refs.reopenModal.modal()
+        },
+
+        async confirmClose() {
+            await this.changeStatus('Closed', this.$refs.closeModal)
+        },
+
+        async confirmReopen() {
+            await this.changeStatus('Open', this.$refs.reopenModal)
+        },
+
+        async changeStatus(status, modalRef) {
+            try {
+                await this.$hq.Assignments.changeStatus(this.model.id, status, this.statusChangeComment)
+                modalRef.hide()
+                this.statusChangeComment = null
+                window.location.reload()
+            } catch (error) {
+                const msg = error?.response?.data?.message || error?.message || this.$t('Common.Error')
+                toastr.error(msg)
+            }
+        },
     },
 
     computed: {
@@ -595,7 +695,7 @@ export default {
 
             const result = this.$t('Assignments.SingleAssignmentCloseConfirm', {
                 id: this.model.id,
-                quantity: this.model.quantity,
+                quantity: this.quantity,
                 collected: this.model.interviewsProvided,
             })
             return result
@@ -685,11 +785,33 @@ export default {
                 ? '-1 (' + this.$t('Assignments.Unlimited') + ')'
                 : this.model.quantity
         },
+        assignmentStatus() {
+            const statusMap = {
+                'Open': this.$t('Assignments.StatusOpen'),
+                'Completed': this.$t('Assignments.StatusCompleted'),
+                'Closed': this.$t('Assignments.StatusClosed'),
+            }
+            return statusMap[this.model.status] || this.model.status
+        },
+        canComplete() {
+            if (this.isArchived) return false
+            if (this.isHeadquarters) return this.model.status === 'Open' || this.model.status === 'Completed'
+            if (this.model.isSupervisor && this.model.allowSupervisorChangeAssignmentStatus)
+                return this.model.status === 'Open' || this.model.status === 'Completed'
+            return false
+        },
+        canReopen() {
+            if (this.isArchived) return false
+            if (this.isHeadquarters) return this.model.status === 'Completed' || this.model.status === 'Closed'
+            if (this.model.isSupervisor && this.model.allowSupervisorChangeAssignmentStatus)
+                return this.model.status === 'Completed' || this.model.status === 'Closed'
+            return false
+        },
         calendarEventTime() {
             return this.model.calendarEvent != null
                 ? convertToLocal(
                     this.model.calendarEvent.startUtc,
-                    this.model.calendarEvent.startTimezone,
+                    this.model.calendarEvent.startTimezone
                 )
                 : ''
         },
@@ -701,7 +823,7 @@ export default {
                 ? this.$t('Assignments.NoComment')
                 : escape(this.model.calendarEvent.comment).replaceAll(
                     '\n',
-                    '<br/>',
+                    '<br/>'
                 )
         },
 
@@ -742,14 +864,14 @@ export default {
                                     'Assignments.Action_Created_Responsible',
                                     {
                                         responsible: data.Responsible,
-                                    },
+                                    }
                                 )
                                 if (data.Comment) {
                                     createdText +=
                                         '<br/>' +
                                         self.$t(
                                             'Assignments.Action_Created_Comment',
-                                            { comment: escape(data.Comment) },
+                                            { comment: escape(data.Comment) }
                                         )
                                 }
 
@@ -760,7 +882,7 @@ export default {
                                             'Assignments.Action_UpgradedFrom',
                                             {
                                                 id: `<a href='./${data.UpgradedFromId}'>${data.UpgradedFromId}</a>`,
-                                            },
+                                            }
                                         )
                                 }
                                 return createdText
@@ -768,11 +890,11 @@ export default {
                             case 'AudioRecordingChanged':
                                 if (data.AudioRecording) {
                                     return self.$t(
-                                        'Assignments.Action_AudioRecordingChanged_True',
+                                        'Assignments.Action_AudioRecordingChanged_True'
                                     )
                                 } else {
                                     return self.$t(
-                                        'Assignments.Action_AudioRecordingChanged_False',
+                                        'Assignments.Action_AudioRecordingChanged_False'
                                     )
                                 }
                             case 'Reassigned': {
@@ -780,7 +902,7 @@ export default {
                                     'Assignments.Action_Reassigned_To',
                                     {
                                         newResponsible: data.NewResponsible,
-                                    },
+                                    }
                                 )
                                 if (data.Comment) {
                                     result += '<br/>'
@@ -788,7 +910,7 @@ export default {
                                         'Assignments.Action_Reassigned_To_Comment',
                                         {
                                             comment: escape(data.Comment),
-                                        },
+                                        }
                                     )
                                 }
                                 return result
@@ -796,27 +918,36 @@ export default {
                             case 'QuantityChanged':
                                 if (data.Quantity == null) {
                                     return self.$t(
-                                        'Assignments.Action_ExpectedValueChanged_To_Unlimited',
+                                        'Assignments.Action_ExpectedValueChanged_To_Unlimited'
                                     )
                                 }
                                 return self.$t(
                                     'Assignments.Action_ExpectedValueChanged_To',
-                                    { quantity: data.Quantity },
+                                    { quantity: data.Quantity }
                                 )
                             case 'WebModeChanged':
                                 if (data.WebMode) {
                                     return self.$t(
-                                        'Assignments.Action_WebModeChanged_True',
+                                        'Assignments.Action_WebModeChanged_True'
                                     )
                                 } else {
                                     return self.$t(
-                                        'Assignments.Action_WebModeChanged_False',
+                                        'Assignments.Action_WebModeChanged_False'
                                     )
                                 }
                             case 'ReceivedByTablet':
                                 return data.DeviceId
                             case 'TargetAreaChanged':
                                 return escape(data.TargetArea)
+                            case 'Completed':
+                            case 'Closed':
+                            case 'Reopened':
+                                if (data && data.Comment) {
+                                    return self.$t('Assignments.Action_StatusChanged_Comment', {
+                                        comment: escape(data.Comment),
+                                    })
+                                }
+                                return ''
                         }
                         return ''
                     },

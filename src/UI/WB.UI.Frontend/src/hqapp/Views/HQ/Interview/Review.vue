@@ -12,8 +12,6 @@
             </div>
         </div>
         <IdleTimeoutService />
-        <portal-target name="body" multiple>
-        </portal-target>
         <span id="loadingPixel" style="display:none" :data-loading="isLoading"></span>
     </main>
 </template>
@@ -23,16 +21,21 @@ import Facets from './Facets'
 import SearchResults from './SearchResults'
 import Sidebar from '~/webinterview/components/Sidebar'
 import DetailsInfo from './DetailsInfo.vue'
+import { ensureQuestionGlobalComponents } from '~/webinterview/componentsQuestionRegistry'
 import { nextTick } from 'vue'
 import http from '~/webinterview/api/http'
 //const Interview = () => import('~/webinterview/components/Interview.vue')
 //import Interview from '~/webinterview/components/Interview.vue'
-import { defineAsyncComponent } from 'vue';
+import { defineAsyncComponent } from 'vue'
 
 import '@/assets/css/markup-web-interview.scss'
 import '@/assets/css/markup-interview-review.scss'
 
 export default {
+    async beforeCreate() {
+        ensureQuestionGlobalComponents(this.$.appContext.app)
+    },
+
     watch: {
         ['$route.hash'](to) {
             if (to != null) {
@@ -76,8 +79,8 @@ export default {
     },
 
     beforeMount() {
-        const app = this.$root;
-        http.install(app, { store: this.$store });
+        const app = this.$root
+        http.install(app, { store: this.$store })
     },
 
     mounted() {
@@ -104,7 +107,7 @@ export default {
         Interview: defineAsyncComponent(() => import('~/webinterview/components/Interview.vue')),
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
         window.removeEventListener('resize', this.onResize)
     },
 }

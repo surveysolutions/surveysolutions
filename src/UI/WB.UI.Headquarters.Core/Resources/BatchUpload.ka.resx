@@ -537,4 +537,81 @@
   <data name="ViewListPrefilledData" xml:space="preserve">
     <value>საჭირო საიდენტიფიკაციო მონაცემების ნახვა</value>
   </data>
+
+
+  <data name="BatchDescription" xml:space="preserve">
+    <value>ატვირთეთ zip-არქივი, რომელიც შეიცავს ერთ ან მეტ Tab-ით გამოყოფილ ფაილს, რომლებიც შეესაბამება ინტერვიუს მთავარ დონესა და დაქვემდებარებულ როსტერებს. იძლევა ინტერვიუს ნებისმიერ დონეზე ცვლადების წინასწარ ჩატვირთვის საშუალებას.&lt;br/&gt;
+მონაცემების ყველა ფაილი უნდა შეიცავდეს interview__id ცვლადს ინტერვიუს უნიკალური სტრიქონული ან რიცხვითი იდენტიფიკატორით. როსტერებსა და ჩადგმულ როსტერებში კავშირები ყალიბდება იმავე წესით, როგორც ექსპორტირებულ მონაცემებში.&lt;br/&gt;
+</value>
+    <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
+  </data>
+
+  <data name="BatchColumnsTitle" xml:space="preserve">
+    <value>სურვილისამებრ შეგიძლიათ მიუთითოთ შემდეგი სვეტები ინტერვიუს მთავარი დონის ფაილში:</value>
+  </data>
+
+  <data name="SimpleDescription" xml:space="preserve">
+    <value>ატვირთეთ Tab-ით გამოყოფილი ფაილი მხოლოდ ინტერვიუს მთავარ დონეზე არსებული კითხვების მნიშვნელობებით. ჩართეთ მაიდენტიფიცირებელი კითხვებისა და ინტერვიუს მთავარი დონის სხვა კითხვების მნიშვნელობები. არ იძლევა როსტერებში მნიშვნელობების წინასწარ ჩატვირთვის საშუალებას.</value>
+  </data>
+
+  <data name="SimpleColumnsTitle" xml:space="preserve">
+    <value>სურვილისამებრ შეგიძლიათ მიუთითოთ შემდეგი სვეტები:</value>
+  </data>
+
+  <data name="ColumnsDescription" xml:space="preserve">
+    <value>&lt;b&gt;_responsible&lt;/b&gt; - შტაბის, სუპერვაიზერის ან ინტერვიუერის მომხმარებლის სახელი, რომელიც პასუხისმგებელი იქნება დავალებაზე;&lt;br/&gt;
+&lt;b&gt;_quantity&lt;/b&gt; - დავალების ტევადობა;&lt;br/&gt;
+&lt;b&gt;_email&lt;/b&gt; - რესპონდენტის ელ. ფოსტა (მხოლოდ ვებ-ინტერვიუებისთვის);&lt;br/&gt;
+&lt;b&gt;_password&lt;/b&gt; - ინტერვიუს დასაწყებად პაროლი (მხოლოდ ვებ-ინტერვიუებისთვის);&lt;br/&gt;
+&lt;b&gt;_webmode&lt;/b&gt; - დავალების რეჟიმი (1 - CAWI, 0 ან ცარიელი - CAPI);&lt;br/&gt;
+&lt;b&gt;_record_audio&lt;/b&gt; - ინტერვიუებისთვის აუდიოჩაწერა ჩართულია (1 - ჩართულია, 0 - გამორთულია, ცარიელი - ეს მნიშვნელობა კითხვარიდან აიღება);&lt;br/&gt;
+&lt;b&gt;_comment&lt;/b&gt; - კომენტარები დავალებისთვის;&lt;br/&gt;
+&lt;b&gt;_target_area&lt;/b&gt; - დავალების სამიზნე არეალი</value>
+    <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
+  </data>
+
+  <data name="UploadDescription" xml:space="preserve">
+    <value>ატვირთეთ ფაილი მაიდენტიფიცირებელი მონაცემებით ახალი დავალებების შესაქმნელად.
+მიუთითეთ შტაბის, სუპერვაიზერების ან ინტერვიუერების მომხმარებლის სახელები, რათა დავალებები ჯგუფურად განაწილდეს.</value>
+  </data>
+
+  <data name="FileTypeDescription" xml:space="preserve">
+    <value>ენისთვის სპეციფიკური ტექსტების მხარდაჭერისთვის შეინახეთ ფაილი UTF8 კოდირებით.</value>
+  </data>
+
+  <data name="ViewListPreloadedData" xml:space="preserve">
+    <value>წინასწარ ჩატვირთული მნიშვნელობების სიის ნახვა</value>
+  </data>
+
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>მაიდენტიფიცირებელი კითხვები</value>
+  </data>
+
+  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
+    <value>დავალებების იმპორტი</value>
+  </data>
+
+  <data name="Prerequisite_Questionnaire" xml:space="preserve">
+    <value>კითხვარის გამოყენება წინასწარი ჩატვირთვისთვის შეუძლებელია</value>
+  </data>
+
+  <data name="HiddenQuestions" xml:space="preserve">
+    <value>დამალული კითხვები</value>
+  </data>
+
+  <data name="RosterSizeQuestions" xml:space="preserve">
+    <value>როსტერის წყაროს კითხვები</value>
+  </data>
+
+  <data name="Select_Responsible" xml:space="preserve">
+    <value>ნაგულისხმევი პასუხისმგებლის არჩევა (სავალდებულოა)</value>
+  </data>
+
+  <data name="Select_Responsible_Description" xml:space="preserve">
+    <value>თუ batch ფაილში პასუხისმგებელი არ არის მითითებული, გამოიყენეთ შტაბის/სუპერვაიზერის/ინტერვიუერის ეს ანგარიში:</value>
+  </data>
+
+  <data name="RequiredField" xml:space="preserve">
+    <value>ეს ველი სავალდებულოა</value>
+  </data>
 </root>

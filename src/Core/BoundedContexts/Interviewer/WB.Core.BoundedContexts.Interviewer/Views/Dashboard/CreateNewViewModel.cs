@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -25,10 +24,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IInterviewerSettings interviewerSettings;
-        private LocalSynchronizationViewModel synchronization = null!;
+        private readonly IMvxCommand synchronizationCommand;
+        private LocalSynchronizationViewModel? synchronization;
 
-        public IMvxCommand SynchronizationCommand => new MvxCommand(this.RunSynchronization,
-            () => !this.synchronization.IsSynchronizationInProgress && this.interviewerSettings.AllowSyncWithHq);
+        public IMvxCommand SynchronizationCommand => this.synchronizationCommand;
 
         public CreateNewViewModel(
             IPlainStorage<QuestionnaireView> questionnaireViewRepository,
@@ -42,6 +41,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.assignmentsRepository = assignmentsRepository;
             this.viewModelNavigationService = viewModelNavigationService;
             this.interviewerSettings = interviewerSettings;
+            this.synchronizationCommand = new MvxCommand(this.RunSynchronization, this.CanRunSynchronization);
         }
 
         public async Task LoadAsync(LocalSynchronizationViewModel sync)
@@ -50,15 +50,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Title = EnumeratorUIResources.Dashboard_AssignmentsTabTitle;
 
             var censusQuestionnairesCount = this.questionnaireViewRepository.Count(questionnaire => questionnaire.Census);
-            var assignmentsCount = this.assignmentsRepository.Count();
+            var assignmentsCount = this.assignmentsRepository.Count(a => a.Status == AssignmentStatus.Open);
 
             this.ItemsCount = censusQuestionnairesCount + assignmentsCount;
 
             await this.UpdateUiItemsAsync();
+            this.synchronizationCommand.RaiseCanExecuteChanged();
+        }
+
+        private bool CanRunSynchronization()
+        {
+            return this.synchronization != null
+                && !this.synchronization.IsSynchronizationInProgress
+                && this.interviewerSettings.AllowSyncWithHq;
         }
 
         private void RunSynchronization()
         {
+            if (this.synchronization == null)
+                return;
+
             if (this.viewModelNavigationService.HasPendingOperations)
             {
                 this.viewModelNavigationService.ShowWaitMessage();
@@ -67,6 +78,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             this.synchronization.IsSynchronizationInProgress = true;
             this.synchronization.Synchronize();
+            this.synchronizationCommand.RaiseCanExecuteChanged();
         }
 
         public bool SynchronizationWithHqEnabled => this.interviewerSettings.AllowSyncWithHq;
@@ -86,9 +98,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             foreach (var assignment in dbAssignments)
             {
+                // Completed and Closed assignments are shown in the Completed tab
+                if (assignment.Status == AssignmentStatus.Completed)
+                    continue;
+
+                // Approved assignments: hide from interviewer (no actions available)
+                if (assignment.Status == AssignmentStatus.Closed)
+                    continue;
+
                 var dashboardItem = this.viewModelFactory.GetNew<InterviewerAssignmentDashboardItemViewModel>();
                 dashboardItem.Init(assignment);
 
+                // Open assignments: show if unlimited or interviews still needed
                 if (!dashboardItem.Quantity.HasValue || dashboardItem.InterviewsLeftByAssignmentCount > 0)
                 {
                     yield return dashboardItem;
@@ -115,6 +136,30 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 .OfType<InterviewerAssignmentDashboardItemViewModel>()
                 .FirstOrDefault(x => x.AssignmentId == assignmentId.Value)
                 ?.DecreaseInterviewsCount();
+        }
+
+        /// <summary>
+        /// Raised when an assignment in this tab changes status and should move to another tab.
+        /// </summary>
+        public event EventHandler? OnAssignmentStatusChanged;
+
+        protected override void ListViewModel_OnItemUpdated(object? sender, EventArgs args)
+        {
+            if (sender is AssignmentDashboardItemViewModel assignmentItem)
+            {
+                var assignment = assignmentsRepository.GetById(assignmentItem.AssignmentId);
+                if (assignment == null || assignment.Status != AssignmentStatus.Open)
+                {
+                    // Assignment is no longer Open — remove it from this tab
+                    assignmentItem.OnItemUpdated -= ListViewModel_OnItemUpdated;
+                    UiItems.Remove(assignmentItem);
+                    ItemsCount = Math.Max(0, ItemsCount - 1);
+                    OnAssignmentStatusChanged?.Invoke(this, EventArgs.Empty);
+                    return;
+                }
+            }
+
+            base.ListViewModel_OnItemUpdated(sender, args);
         }
     }
 }
