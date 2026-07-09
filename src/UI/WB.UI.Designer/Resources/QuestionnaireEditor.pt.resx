@@ -62,7 +62,7 @@
     <value>Adicionar nova seção</value>
   </data>
   <data name="Backup" xml:space="preserve">
-    <value>Backup</value>
+    <value>Cópia de segurança</value>
   </data>
   <data name="SaveAs" xml:space="preserve">
     <value>Salvar como</value>
@@ -204,10 +204,10 @@
     <value>conteúdo</value>
   </data>
   <data name="SideBarMacroCounter" xml:space="preserve">
-    <value>{{count}} Macro:</value>
+    <value>{{count}} macro:</value>
   </data>
   <data name="SideBarMacroCounter_plural" xml:space="preserve">
-    <value>{{count}} Macros:</value>
+    <value>{{count}} macros:</value>
   </data>
   <data name="SideBarMacroDescription" xml:space="preserve">
     <value>descrição</value>
@@ -1077,6 +1077,9 @@
   <data name="HotkeysSearch" xml:space="preserve">
     <value>Pesquisar por subseções e perguntas na seção</value>
   </data>
+  <data name="HotkeysTest" xml:space="preserve">
+    <value>Testar questionário no WebTester</value>
+  </data>
   <data name="MultipleDependencies" xml:space="preserve">
     <value>Uma ou mais perguntas/subseções dependem de</value>
   </data>
@@ -1506,7 +1509,7 @@ Por favor, verifique sua conexão de rede ou entre em contato com o suporte de T
       <value>Tentar exportar como PDF novamente</value>
   </data>
   <data name="Translation_Original" xml:space="preserve">
-      <value>Original</value>
+      <value>Idioma original</value>
   </data>
   <data name="Preview" xml:space="preserve">
       <value>Pré-visualizar revisão #{{revision}}</value>
