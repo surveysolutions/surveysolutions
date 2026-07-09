@@ -121,7 +121,7 @@
     <value>Přístup odmítnut</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>Profil</value>
+    <value>Kontakt</value>
   </data>
   <data name="AccountManage_SaveChanges" xml:space="preserve">
     <value>Uložit změny</value>
@@ -472,7 +472,7 @@
     <value>Ověřovací kód</value>
   </data>
   <data name="Backup_IndexTitle" xml:space="preserve">
-    <value>Index</value>
+    <value>Přehled</value>
   </data>
   <data name="CautionTitle" xml:space="preserve">
     <value>Pozor:</value>
@@ -661,7 +661,7 @@
     <value>zeměpisná délka</value>
   </data>
   <data name="HealthCheck_Header" xml:space="preserve">
-    <value>Health check monitor</value>
+    <value>Monitor kontroly stavu</value>
   </data>
   <data name="HideFilter" xml:space="preserve">
     <value>Skrýt filtr</value>
@@ -757,7 +757,7 @@
     <value>Zobrazit skupiny</value>
   </data>
   <data name="InterviewDetails_StatusLabel" xml:space="preserve">
-    <value>Status</value>
+    <value>Stav</value>
   </data>
   <data name="InterviewDetails_SupervisorsButtonLabel" xml:space="preserve">
     <value>Garanta</value>
@@ -1144,13 +1144,13 @@
     <value>vybraných rozhovorů</value>
   </data>
   <data name="Kb" xml:space="preserve">
-    <value>Kb</value>
+    <value>kB</value>
   </data>
   <data name="Layout_Filter" xml:space="preserve">
     <value>Filtr</value>
   </data>
   <data name="Layout_Legal" xml:space="preserve">
-    <value>Legal</value>
+    <value>Právní informace</value>
   </data>
   <data name="Layout_RightsReserved" xml:space="preserve">
     <value>Všechna práva vyhrazena.</value>
@@ -1201,7 +1201,7 @@
       <value>Opravdu chcete smazat mapu "{{map}}"?</value>
   </data>
   <data name="Map_Status" xml:space="preserve">
-    <value>Status</value>
+    <value>Stav</value>
   </data>
   <data name="Map_Uploading" xml:space="preserve">
     <value>Nahrávání</value>
@@ -1297,7 +1297,7 @@
     <value>Velikost (byte)</value>
   </data>
   <data name="PackagesInfo_Title" xml:space="preserve">
-    <value>Index</value>
+    <value>Přehled</value>
   </data>
   <data name="PackagesInfo_UserId" xml:space="preserve">
     <value>Uživatelské ID</value>
@@ -1435,7 +1435,7 @@
     <value>Zobrazit filtr</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status</value>
+    <value>Stav</value>
   </data>
   <data name="StatusDuration" xml:space="preserve">
     <value>Doba trvání statusu</value>
@@ -1496,10 +1496,10 @@
     <value>Tazatelé a Šetření</value>
   </data>
   <data name="Survey_Status_Title" xml:space="preserve">
-    <value>Status</value>
+    <value>Stav</value>
   </data>
   <data name="Survey_StatusTitle" xml:space="preserve">
-    <value>Status</value>
+    <value>Stav</value>
   </data>
   <data name="SurveysAndStatuses_HeadquartersDescription" xml:space="preserve">
     <value>Zobrazuje počet rozhovorů podle stavu (sloupcích) pro jednotlivé typy dotazníků (řádky)</value>

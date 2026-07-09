@@ -80,7 +80,7 @@
     <value>تغيير كلمة المرور</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>الملف الشخصي</value>
+    <value>جهة الاتصال</value>
   </data>
   <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
     <value>المصادقة الثنائية</value>
