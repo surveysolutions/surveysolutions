@@ -59,8 +59,9 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 return true;
             }
 
-            // custom view rosters (flat/table/matrix) are not shown as panels themselves,
-            // but their child subsections are surfaced in place of the roster root
+            // custom view rosters (flat/table/matrix) are hidden from the sidebar table of contents,
+            // but they still participate in the navigation hierarchy: their child subsections are
+            // surfaced in place of the roster root so they remain reachable from the TOC
             IEnumerable<InterviewTreeGroup> GetVisibleChildSections(InterviewTreeGroup group)
             {
                 foreach (var child in group.Children.OfType<InterviewTreeGroup>())

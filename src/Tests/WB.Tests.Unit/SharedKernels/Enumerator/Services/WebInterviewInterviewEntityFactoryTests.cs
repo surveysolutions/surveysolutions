@@ -231,6 +231,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
             var sectionPanel = sidebar.Groups.Find(x => x.Id == Create.Identity(sectionId, RosterVector.Empty).ToString());
             Assert.That(sectionPanel, Is.Not.Null);
             Assert.That(sectionPanel.HasChildren, Is.True);
+            Assert.That(sidebar.Groups.Find(x => x.Id == Create.Identity(flatRosterId, Create.RosterVector(1)).ToString()), Is.Null);
         }
 
         #region ApplyValidity tests
