@@ -161,6 +161,78 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
             Assert.That(sidebar.Groups.Find(x=>x.Id == questionnaireDocument.CoverPageSectionId.FormatGuid()), Is.Not.Null);
         }
 
+        [Test]
+        public void When_section_contains_flat_roster_with_subsection_Then_sidebar_shows_subsections_without_flat_roster_root()
+        {
+            //arrange
+            var sectionId = Id.g1;
+            var flatRosterId = Id.g2;
+            var subSectionId = Id.g3;
+
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(sectionId, new IComposite[]
+            {
+                Create.Entity.FixedRoster(flatRosterId, displayMode: Main.Core.Entities.SubEntities.RosterDisplayMode.Flat, fixedTitles: new[]
+                {
+                    Create.Entity.FixedTitle(1, "1"),
+                    Create.Entity.FixedTitle(2, "2"),
+                }, children: new IComposite[]
+                {
+                    Create.Entity.Group(subSectionId, title: "subsection", children: new IComposite[]
+                    {
+                        Create.Entity.NumericIntegerQuestion()
+                    })
+                })
+            });
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+
+            //act
+            var sidebar = factory.GetSidebarChildSectionsOf(null, interview, questionnaire,
+                new[] { Create.Identity(sectionId, RosterVector.Empty).ToString() }, false);
+
+            //assert
+            Assert.That(sidebar.Groups.Find(x => x.Id == Create.Identity(flatRosterId, Create.RosterVector(1)).ToString()), Is.Null);
+            Assert.That(sidebar.Groups.Find(x => x.Id == Create.Identity(subSectionId, Create.RosterVector(1)).ToString()), Is.Not.Null);
+            Assert.That(sidebar.Groups.Find(x => x.Id == Create.Identity(subSectionId, Create.RosterVector(2)).ToString()), Is.Not.Null);
+            Assert.That(sidebar.Groups.FindAll(x => x.ParentId == Create.Identity(sectionId, RosterVector.Empty).ToString()),
+                Has.Exactly(2).Items);
+        }
+
+        [Test]
+        public void When_section_contains_flat_roster_Then_section_has_children_because_of_nested_subsections()
+        {
+            //arrange
+            var sectionId = Id.g1;
+            var flatRosterId = Id.g2;
+            var subSectionId = Id.g3;
+
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(sectionId, new IComposite[]
+            {
+                Create.Entity.FixedRoster(flatRosterId, displayMode: Main.Core.Entities.SubEntities.RosterDisplayMode.Flat, fixedTitles: new[]
+                {
+                    Create.Entity.FixedTitle(1, "1"),
+                }, children: new IComposite[]
+                {
+                    Create.Entity.Group(subSectionId, title: "subsection", children: new IComposite[]
+                    {
+                        Create.Entity.NumericIntegerQuestion()
+                    })
+                })
+            });
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+
+            //act
+            var sidebar = factory.GetSidebarChildSectionsOf(null, interview, questionnaire, new[] { "null" }, false);
+
+            //assert
+            var sectionPanel = sidebar.Groups.Find(x => x.Id == Create.Identity(sectionId, RosterVector.Empty).ToString());
+            Assert.That(sectionPanel, Is.Not.Null);
+            Assert.That(sectionPanel.HasChildren, Is.True);
+        }
+
         #region ApplyValidity tests
 
         [TestCase(GroupStatus.StartedInvalid, false)]
