@@ -4,23 +4,15 @@ import { validateFetchResponse } from '~/shared/serverValidator'
 export { gql }
 
 const client = new GraphQLClient(
-    new URL('/graphql', window.location.origin).toString(),
+    // Fixed, same-origin relative endpoint. Keeping this a constant (never derived from
+    // window.location or any request-controlled value) means the request destination is not
+    // attacker-controllable, which removes the SSRF class entirely (CWE-918).
+    '/graphql',
     {
         fetch: async (input, init = {}) => {
-            // Pin the GraphQL request to the current origin so it cannot be diverted to an
-            // attacker-controlled destination, even across redirects (SSRF hardening, CWE-918).
-            // Note: we use mode: 'same-origin' rather than redirect: 'error' so that the common
-            // same-origin 302 -> /Account/LogOn auth-expiration redirect is still followed and
-            // gqlRequest can react to it, while cross-origin redirects are blocked.
-            const target = new URL(
-                typeof input === 'string' ? input : input.url,
-                window.location.origin
-            )
-            if (target.origin !== window.location.origin) {
-                throw new Error('Refusing to send GraphQL request to a cross-origin destination')
-            }
-
-            const response = await fetch(target.toString(), {
+            // input is always our constant '/graphql'. mode/credentials 'same-origin' keep the
+            // request (and any redirect) on the current origin as defense-in-depth.
+            const response = await fetch(input, {
                 ...init,
                 mode: 'same-origin',
                 credentials: 'same-origin',

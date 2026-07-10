@@ -62,15 +62,16 @@ export function validateJQueryXhr(jqXHR, settings) {
 }
 
 export function validatePageLoad() {
-    // Build an absolute same-origin URL (without the fragment, which is never sent in HTTP requests).
-    // Forbid redirects so this probe can't follow a redirect to another origin.
-    const { origin, pathname, search } = window.location
-    const url = origin + pathname + search
+    // Probe the current page on the SAME origin using a RELATIVE url (path + query only).
+    // The destination host is therefore always the current document origin - it is never taken
+    // from window.location and placed into the request url - so the request cannot be pointed at
+    // another server. mode: 'same-origin' additionally rejects any cross-origin redirect.
+    const url = window.location.pathname + window.location.search
 
-    fetch(url, { method: 'HEAD', redirect: 'error', credentials: 'same-origin' })
+    fetch(url, { method: 'HEAD', mode: 'same-origin', credentials: 'same-origin' })
         .then(response => {
             if (!response.ok) {
-                return fetch(url, { method: 'GET', redirect: 'error', credentials: 'same-origin' })
+                return fetch(url, { method: 'GET', mode: 'same-origin', credentials: 'same-origin' })
             }
             return response
         })
