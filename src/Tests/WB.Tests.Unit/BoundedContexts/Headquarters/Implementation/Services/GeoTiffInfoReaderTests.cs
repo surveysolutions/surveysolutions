@@ -189,8 +189,107 @@ public class GeoTiffInfoReaderTests
         finally { File.Delete(path); }
     }
 
-    // ── Helpers ──────────────────────────────────────────────────────────────
+    [Test]
+    public void TryReadGeoTiffBounds_user_defined_crs_with_esri_pe_wkt_reprojects_to_wgs84()
+    {
+        // Projected CRS is user-defined (32767); the actual CRS is carried as an ESRI PE String
+        // (Web Mercator) in the PCSCitationGeoKey — this mirrors GeoTIFFs produced by ArcGIS.
+        const string esriPeWkt =
+            "ESRI PE String = PROJCS[\"WGS_1984_Web_Mercator_Auxiliary_Sphere\"," +
+            "GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\"," +
+            "SPHEROID[\"WGS_1984\",6378137.0,298.257223563]]," +
+            "PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]]," +
+            "PROJECTION[\"Mercator_Auxiliary_Sphere\"],PARAMETER[\"False_Easting\",0.0]," +
+            "PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",0.0]," +
+            "PARAMETER[\"Standard_Parallel_1\",0.0],PARAMETER[\"Auxiliary_Sphere_Type\",0.0]," +
+            "UNIT[\"Meter\",1.0]]|";
 
+        var geoKeys = new short[]
+        {
+            1, 1, 0, 3,
+            1024, 0, 1, 1,               // GTModelTypeGeoKey = 1 (Projected)
+            3072, 0, 1, 32767,           // ProjectedCSTypeGeoKey = user-defined
+            3073, unchecked((short)34737), (short)esriPeWkt.Length, 0, // PCSCitationGeoKey → GeoAsciiParams, offset 0
+        };
+
+        // Web Mercator meters near Frankfurt (~8.9°E, 49.9°N)
+        string path = WriteTempTiff(TiffBuilder.GeoTiffWithPixelScaleAndTiepoint(
+            width: 10, height: 10,
+            scaleX: 1000.0, scaleY: 1000.0,
+            originX: 989_000.0, originY: 6_430_000.0,
+            geoKeyDirectory: geoKeys,
+            geoAsciiParams: esriPeWkt));
+        try
+        {
+            bool result = GeoTiffInfoReader.TryReadGeoTiffBounds(
+                path, out double xMin, out double yMin, out double xMax, out double yMax);
+
+            Assert.That(result, Is.True);
+            Assert.That(xMin, Is.InRange(8.0, 10.0));
+            Assert.That(xMax, Is.InRange(8.0, 10.0));
+            Assert.That(yMin, Is.InRange(49.0, 51.0));
+            Assert.That(yMax, Is.InRange(49.0, 51.0));
+            Assert.That(xMax, Is.GreaterThan(xMin));
+            Assert.That(yMax, Is.GreaterThan(yMin));
+        }
+        finally { File.Delete(path); }
+    }
+
+    [Test]
+    public void TryReadGeoTiffBounds_unresolvable_epsg_code_without_citation_returns_false()
+    {
+        // A CRS code that DotSpatial cannot resolve and with no citation WKT to fall back on.
+        var geoKeys = new short[]
+        {
+            1, 1, 0, 2,
+            1024, 0, 1, 1,      // GTModelTypeGeoKey = 1 (Projected)
+            3072, 0, 1, 1,      // ProjectedCSTypeGeoKey = 1 (not a valid EPSG projected code)
+        };
+        string path = WriteTempTiff(TiffBuilder.GeoTiffWithPixelScaleAndTiepoint(
+            width: 5, height: 5,
+            scaleX: 1.0, scaleY: 1.0,
+            originX: 10.0, originY: 20.0,
+            geoKeyDirectory: geoKeys));
+        try
+        {
+            bool result = GeoTiffInfoReader.TryReadGeoTiffBounds(path, out _, out _, out _, out _);
+            Assert.That(result, Is.False);
+        }
+        finally { File.Delete(path); }
+    }
+
+    [Test]
+    public void TryReadGeoTiffBounds_datum_needs_missing_grid_shift_falls_back_to_bounds()
+    {
+        // NAD27 (EPSG:4267) uses a grid-shift datum transform to WGS84. DotSpatial ships without
+        // the grid files, so the reader must fall back to a grid-free transform instead of failing.
+        var geoKeys = new short[]
+        {
+            1, 1, 0, 2,
+            1024, 0, 1, 2,      // GTModelTypeGeoKey = 2 (Geographic)
+            2048, 0, 1, 4267,   // GeographicTypeGeoKey = EPSG:4267 (NAD27)
+        };
+        // Geographic degrees: top-left at (-100°, 40°), pixel size 0.1°, 10×10 pixels
+        string path = WriteTempTiff(TiffBuilder.GeoTiffWithPixelScaleAndTiepoint(
+            width: 10, height: 10,
+            scaleX: 0.1, scaleY: 0.1,
+            originX: -100.0, originY: 40.0,
+            geoKeyDirectory: geoKeys));
+        try
+        {
+            bool result = GeoTiffInfoReader.TryReadGeoTiffBounds(
+                path, out double xMin, out double yMin, out double xMax, out double yMax);
+
+            Assert.That(result, Is.True);
+            Assert.That(xMin, Is.EqualTo(-100.0).Within(0.01));
+            Assert.That(xMax, Is.EqualTo(-99.0).Within(0.01));
+            Assert.That(yMin, Is.EqualTo(39.0).Within(0.01));
+            Assert.That(yMax, Is.EqualTo(40.0).Within(0.01));
+        }
+        finally { File.Delete(path); }
+    }
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
     private static string WriteTempTiff(byte[] bytes)
     {
         var path = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N") + ".tif");
@@ -214,29 +313,33 @@ public class GeoTiffInfoReaderTests
     {
         private const ushort TypeShort  = 3;
         private const ushort TypeLong   = 4;
+        private const ushort TypeAscii  = 2;
         private const ushort TypeDouble = 12;
 
         public static byte[] PlainTiff(int width, int height)
-            => Build(width, height, pixelScale: null, tiepoint: null, transformMatrix: null, geoKeyDir: null);
+            => Build(width, height, pixelScale: null, tiepoint: null, transformMatrix: null, geoKeyDir: null, geoAsciiParams: null);
 
         public static byte[] GeoTiffWithCrsOnly(int width, int height, short[] geoKeyDirectory)
-            => Build(width, height, pixelScale: null, tiepoint: null, transformMatrix: null, geoKeyDir: geoKeyDirectory);
+            => Build(width, height, pixelScale: null, tiepoint: null, transformMatrix: null, geoKeyDir: geoKeyDirectory, geoAsciiParams: null);
 
         public static byte[] GeoTiffWithPixelScaleAndTiepoint(int width, int height,
-            double scaleX, double scaleY, double originX, double originY, short[] geoKeyDirectory)
+            double scaleX, double scaleY, double originX, double originY, short[] geoKeyDirectory,
+            string geoAsciiParams = null)
             => Build(width, height,
                 pixelScale: new[] { scaleX, scaleY, 0.0 },
                 tiepoint:   new[] { 0.0, 0.0, 0.0, originX, originY, 0.0 },
                 transformMatrix: null,
-                geoKeyDir: geoKeyDirectory);
+                geoKeyDir: geoKeyDirectory,
+                geoAsciiParams: geoAsciiParams);
 
         public static byte[] GeoTiffWithTransformationMatrix(int width, int height,
             double[] transformMatrix, short[] geoKeyDirectory)
             => Build(width, height, pixelScale: null, tiepoint: null,
-                transformMatrix: transformMatrix, geoKeyDir: geoKeyDirectory);
+                transformMatrix: transformMatrix, geoKeyDir: geoKeyDirectory, geoAsciiParams: null);
 
         private static byte[] Build(int width, int height,
-            double[] pixelScale, double[] tiepoint, double[] transformMatrix, short[] geoKeyDir)
+            double[] pixelScale, double[] tiepoint, double[] transformMatrix, short[] geoKeyDir,
+            string geoAsciiParams)
         {
             var entries = new List<(ushort Tag, ushort Type, uint Count, byte[] Data)>();
 
@@ -245,6 +348,12 @@ public class GeoTiffInfoReaderTests
 
             void AddLong(ushort tag, uint value)
                 => entries.Add((tag, TypeLong, 1, BitConverter.GetBytes(value)));
+
+            void AddAscii(ushort tag, string value)
+            {
+                var data = System.Text.Encoding.ASCII.GetBytes(value + "\0");
+                entries.Add((tag, TypeAscii, (uint)data.Length, data));
+            }
 
             void AddDoubles(ushort tag, double[] values)
             {
@@ -278,6 +387,7 @@ public class GeoTiffInfoReaderTests
             if (tiepoint != null)      AddDoubles(33922, tiepoint);        // ModelTiepointTag
             if (transformMatrix != null) AddDoubles(34264, transformMatrix); // ModelTransformationTag
             if (geoKeyDir != null)     AddShorts(34735, geoKeyDir);        // GeoKeyDirectoryTag
+            if (geoAsciiParams != null) AddAscii(34737, geoAsciiParams);   // GeoAsciiParamsTag
 
             // IFD entries must be in ascending tag order (TIFF spec §2)
             entries.Sort((a, b) => a.Tag.CompareTo(b.Tag));
