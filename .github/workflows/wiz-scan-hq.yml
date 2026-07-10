@@ -74,7 +74,7 @@ jobs:
           SCAN_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
           # wizcli v1 JSON schema (all scan data under .result):
-          #   .status.verdict                              — "PASS" | "WARN_BY_POLICY" | "FAIL_BY_POLICY"
+          #   .status.verdict                              — "PASS" | "PASSED" | "PASSED_BY_POLICY" | "WARN" | "WARN_BY_POLICY" | "WARNED" | "FAIL_BY_POLICY"
           #   .result.failedPolicyMatches[]               — policies that triggered
           #   .result.vulnerableSBOMArtifactsByNameVersion[] — vulnerable packages
           #     .vulnerabilityFindings.severities.*Count  — per-package counts
