@@ -455,9 +455,14 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                     if (questionnaire.IsCustomViewRoster(parentId))
                         continue;
 
-                    var itemRosterVector = groupId.RosterVector.Shrink(metRosters);
-                    var itemIdentity = new Identity(parentId, itemRosterVector);
-                    var treeGroup = statefulInterview.GetGroup(itemIdentity);
+var itemRosterVector = groupId.RosterVector.Shrink(metRosters);
+var itemIdentity = new Identity(parentId, itemRosterVector);
+var treeGroup = statefulInterview.GetGroup(itemIdentity);
+if (treeGroup == null)
+{
+    this.webInterviewNotificationService.ReloadInterview(interviewId);
+    return new BreadcrumbInfo();
+}
                     var breadCrumb = new Breadcrumb
                     {
                         Title = treeGroup.Title.BrowserReadyText,
