@@ -439,7 +439,6 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             if (questionnaire == null) return null;
 
             ReadOnlyCollection<Guid> parentIds = questionnaire.GetParentsStartingFromTop(groupId.Id)
-                .Except(id => questionnaire.IsCustomViewRoster(id))
                 .ToReadOnlyCollection();
 
             var breadCrumbs = new List<Breadcrumb>();
@@ -450,6 +449,12 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 if (questionnaire.IsRosterGroup(parentId))
                 {
                     metRosters++;
+
+                    // custom view rosters (flat/table/matrix) are not shown as breadcrumbs,
+                    // but they still contribute a coordinate to the roster vector of their descendants
+                    if (questionnaire.IsCustomViewRoster(parentId))
+                        continue;
+
                     var itemRosterVector = groupId.RosterVector.Shrink(metRosters);
                     var itemIdentity = new Identity(parentId, itemRosterVector);
                     var treeGroup = statefulInterview.GetGroup(itemIdentity);
