@@ -92,13 +92,19 @@ export default {
             if (!this.modalEverOpened)
                 this.modalEverOpened = true;
 
-            for (let attempt = 0; attempt < 6; attempt++) {
+            // The modal is an async component: rendering it (after modalEverOpened
+            // flips to true) resolves the chunk and mounts the inner component over
+            // several render cycles, so $refs.categoriesEditorModal is not available
+            // immediately. Wait for it to mount, bounded by a wall-clock deadline so a
+            // slow first load does not exhaust a small fixed retry count.
+            const deadline = Date.now() + 5000;
+            while (!this.$refs.categoriesEditorModal && Date.now() < deadline) {
                 await this.$nextTick();
 
                 if (this.$refs.categoriesEditorModal)
-                    return this.$refs.categoriesEditorModal;
+                    break;
 
-                await new Promise(resolve => setTimeout(resolve, 0));
+                await new Promise(resolve => setTimeout(resolve, 16));
             }
 
             return this.$refs.categoriesEditorModal;
@@ -167,7 +173,9 @@ export default {
             if (!event || !event.entityId || !event.newEntityId || event.entityId === event.newEntityId)
                 return;
 
-            const category = this.categoriesList.find(x => x.categoriesId === event.entityId);
+            const category = this.categoriesList.find(x =>
+                x.categoriesId === event.entityId ||
+                (x.editCategories && x.editCategories.categoriesId === event.entityId));
             if (!category)
                 return;
 

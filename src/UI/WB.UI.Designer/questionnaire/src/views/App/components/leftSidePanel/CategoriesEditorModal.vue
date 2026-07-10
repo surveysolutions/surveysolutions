@@ -89,6 +89,8 @@ export default {
         CategoryStrings
     },
 
+    emits: ['applied'],
+
     data() {
         return {
             isOpen: false,

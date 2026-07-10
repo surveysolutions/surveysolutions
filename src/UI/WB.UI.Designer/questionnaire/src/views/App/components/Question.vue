@@ -671,9 +671,22 @@ export default {
         },
 
         async openOptionsEditor(questionId, isCascading = false) {
-            this.optionsModalEverOpened = true;
             await loadOptionsEditorModal();
-            await this.$nextTick();
+
+            if (!this.optionsModalEverOpened)
+                this.optionsModalEverOpened = true;
+
+            // The modal is an async component; wait for it to mount before opening,
+            // bounded by a wall-clock deadline so a slow first load does not race.
+            const deadline = Date.now() + 5000;
+            while (!this.$refs.optionsEditorModal && Date.now() < deadline) {
+                await this.$nextTick();
+
+                if (this.$refs.optionsEditorModal)
+                    break;
+
+                await new Promise(resolve => setTimeout(resolve, 16));
+            }
 
             this.$refs.optionsEditorModal?.open(this.questionnaireId, questionId, {
                 isCategory: false,
