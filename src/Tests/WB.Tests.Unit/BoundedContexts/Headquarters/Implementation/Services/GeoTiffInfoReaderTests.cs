@@ -289,6 +289,48 @@ public class GeoTiffInfoReaderTests
         finally { File.Delete(path); }
     }
 
+    [Test]
+    public void TryReadGeoTiffBounds_user_defined_projected_crs_from_inline_geokeys_reprojects_to_wgs84()
+    {
+        // Mirrors GDAL's classic cea.tif: a user-defined projected CRS (Cylindrical Equal Area on
+        // NAD27) described entirely by inline projection GeoKeys — no EPSG projected code, no WKT.
+        // The projection parameters live in GeoDoubleParams and are referenced via TiffTagLocation 34736.
+        var geoKeys = new short[]
+        {
+            1, 1, 0, 6,
+            1024, 0, 1, 1,                       // GTModelTypeGeoKey = 1 (Projected)
+            2048, 0, 1, 4267,                    // GeographicTypeGeoKey = EPSG:4267 (NAD27)
+            3072, 0, 1, unchecked((short)32767), // ProjectedCSTypeGeoKey = 32767 (user-defined)
+            3075, 0, 1, 28,                      // ProjCoordTransGeoKey = 28 (CT_CylindricalEqualArea)
+            3078, unchecked((short)34736), 1, 0, // ProjStdParallel1GeoKey → GeoDoubleParams[0]
+            3080, unchecked((short)34736), 1, 1, // ProjNatOriginLongGeoKey → GeoDoubleParams[1]
+        };
+        var geoDoubleParams = new[] { 33.75, -117.333333333333 }; // standard parallel, central meridian
+
+        // Projected metres (CEA / NAD27) covering Southern California
+        string path = WriteTempTiff(TiffBuilder.GeoTiffWithPixelScaleAndTiepoint(
+            width: 10, height: 10,
+            scaleX: 100.0, scaleY: 100.0,
+            originX: -28_493.167, originY: 4_255_884.539,
+            geoKeyDirectory: geoKeys,
+            geoDoubleParams: geoDoubleParams));
+        try
+        {
+            bool result = GeoTiffInfoReader.TryReadGeoTiffBounds(
+                path, out double xMin, out double yMin, out double xMax, out double yMax);
+
+            Assert.That(result, Is.True);
+            // Must NOT degrade to reading projected metres as degrees (which yields Infinity/garbage).
+            Assert.That(xMin, Is.InRange(-119.0, -116.0), "xMin should be near -117.6°");
+            Assert.That(xMax, Is.InRange(-119.0, -116.0), "xMax should be near -117.6°");
+            Assert.That(yMin, Is.InRange(33.0, 35.0), "yMin should be near 33.9°");
+            Assert.That(yMax, Is.InRange(33.0, 35.0), "yMax should be near 33.9°");
+            Assert.That(xMax, Is.GreaterThan(xMin));
+            Assert.That(yMax, Is.GreaterThan(yMin));
+        }
+        finally { File.Delete(path); }
+    }
+
     // ── Helpers ──────────────────────────────────────────────────────────────
     private static string WriteTempTiff(byte[] bytes)
     {
@@ -324,22 +366,24 @@ public class GeoTiffInfoReaderTests
 
         public static byte[] GeoTiffWithPixelScaleAndTiepoint(int width, int height,
             double scaleX, double scaleY, double originX, double originY, short[] geoKeyDirectory,
-            string geoAsciiParams = null)
+            string geoAsciiParams = null, double[] geoDoubleParams = null)
             => Build(width, height,
                 pixelScale: new[] { scaleX, scaleY, 0.0 },
                 tiepoint:   new[] { 0.0, 0.0, 0.0, originX, originY, 0.0 },
                 transformMatrix: null,
                 geoKeyDir: geoKeyDirectory,
-                geoAsciiParams: geoAsciiParams);
+                geoAsciiParams: geoAsciiParams,
+                geoDoubleParams: geoDoubleParams);
 
         public static byte[] GeoTiffWithTransformationMatrix(int width, int height,
             double[] transformMatrix, short[] geoKeyDirectory)
             => Build(width, height, pixelScale: null, tiepoint: null,
-                transformMatrix: transformMatrix, geoKeyDir: geoKeyDirectory, geoAsciiParams: null);
+                transformMatrix: transformMatrix, geoKeyDir: geoKeyDirectory, geoAsciiParams: null,
+                geoDoubleParams: null);
 
         private static byte[] Build(int width, int height,
             double[] pixelScale, double[] tiepoint, double[] transformMatrix, short[] geoKeyDir,
-            string geoAsciiParams)
+            string geoAsciiParams, double[] geoDoubleParams = null)
         {
             var entries = new List<(ushort Tag, ushort Type, uint Count, byte[] Data)>();
 
@@ -387,6 +431,7 @@ public class GeoTiffInfoReaderTests
             if (tiepoint != null)      AddDoubles(33922, tiepoint);        // ModelTiepointTag
             if (transformMatrix != null) AddDoubles(34264, transformMatrix); // ModelTransformationTag
             if (geoKeyDir != null)     AddShorts(34735, geoKeyDir);        // GeoKeyDirectoryTag
+            if (geoDoubleParams != null) AddDoubles(34736, geoDoubleParams); // GeoDoubleParamsTag
             if (geoAsciiParams != null) AddAscii(34737, geoAsciiParams);   // GeoAsciiParamsTag
 
             // IFD entries must be in ascending tag order (TIFF spec §2)

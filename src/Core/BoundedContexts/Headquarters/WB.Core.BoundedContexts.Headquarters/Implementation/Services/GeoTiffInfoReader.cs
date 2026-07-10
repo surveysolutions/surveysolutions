@@ -130,8 +130,18 @@ public static class GeoTiffInfoReader
         yMin = Math.Min(Math.Min(ulY, urY), Math.Min(llY, lrY));
         yMax = Math.Max(Math.Max(ulY, urY), Math.Max(llY, lrY));
 
+        // Guard against a mis-resolved CRS producing garbage (infinite/NaN) coordinates.
+        if (!IsFinite(xMin) || !IsFinite(xMax) || !IsFinite(yMin) || !IsFinite(yMax))
+        {
+            xMin = yMin = xMax = yMax = 0;
+            return false;
+        }
+
         return true;
     }
+
+    private static bool IsFinite(double value) => !double.IsNaN(value) && !double.IsInfinity(value);
+
 
     private static (double X, double Y) ReprojectPoint(double x, double y, ProjectionInfo source, ProjectionInfo target)
     {
@@ -187,7 +197,15 @@ public static class GeoTiffInfoReader
     private const int ProjectedCSTypeGeoKey = 3072;  // EPSG projected CRS code
     private const int PCSCitationGeoKey = 3073;      // ASCII, may hold ESRI PE WKT
 
+    // GeoKeys describing a user-defined projection inline (parameters live in GeoDoubleParams).
+    private const int ProjCoordTransGeoKey = 3075;   // projection method (CT_* code)
+    private const int ProjLinearUnitsGeoKey = 3076;  // linear unit (EPSG unit code)
+
     private const int GeoAsciiParamsTagLocation = 34737;
+    private const int GeoDoubleParamsTagLocation = 34736;
+
+    private const int ModelTypeProjected = 1;
+    private const int ModelTypeGeographic = 2;
 
     // Well-known vendor / deprecated CRS codes that DotSpatial cannot resolve numerically,
     // mapped to their EPSG equivalents (all variants below are Web Mercator).
@@ -200,9 +218,55 @@ public static class GeoTiffInfoReader
         { 41001, 3857 },
     };
 
+    // GeoTIFF coordinate transformation codes (ProjCoordTransGeoKey) mapped to PROJ.4 projection names.
+    private static readonly Dictionary<int, string> CoordTransToProj4 = new()
+    {
+        { 1, "tmerc" },   // CT_TransverseMercator
+        { 3, "omerc" },   // CT_ObliqueMercator
+        { 7, "merc" },    // CT_Mercator
+        { 8, "lcc" },     // CT_LambertConfConic_2SP
+        { 9, "lcc" },     // CT_LambertConfConic_1SP (Helmert)
+        { 10, "laea" },   // CT_LambertAzimEqualArea
+        { 11, "aea" },    // CT_AlbersEqualArea
+        { 13, "eqdc" },   // CT_EquidistantConic
+        { 14, "stere" },  // CT_Stereographic
+        { 15, "stere" },  // CT_PolarStereographic
+        { 17, "eqc" },    // CT_Equirectangular
+        { 18, "cass" },   // CT_CassiniSoldner
+        { 19, "gnom" },   // CT_Gnomonic
+        { 20, "mill" },   // CT_MillerCylindrical
+        { 21, "ortho" },  // CT_Orthographic
+        { 22, "poly" },   // CT_Polyconic
+        { 24, "sinu" },   // CT_Sinusoidal
+        { 27, "tmerc" },  // CT_TransvMercator_Modified_Alaska (approx)
+        { 28, "cea" },    // CT_CylindricalEqualArea
+    };
+
+    // Projection parameter GeoKeys mapped to PROJ.4 parameter names.
+    private static readonly Dictionary<int, string> ProjParamToProj4 = new()
+    {
+        { 3078, "lat_1" }, // ProjStdParallel1GeoKey
+        { 3079, "lat_2" }, // ProjStdParallel2GeoKey
+        { 3080, "lon_0" }, // ProjNatOriginLongGeoKey
+        { 3081, "lat_0" }, // ProjNatOriginLatGeoKey
+        { 3082, "x_0" },   // ProjFalseEastingGeoKey
+        { 3083, "y_0" },   // ProjFalseNorthingGeoKey
+        { 3084, "lon_0" }, // ProjFalseOriginLongGeoKey
+        { 3085, "lat_0" }, // ProjFalseOriginLatGeoKey
+        { 3086, "x_0" },   // ProjFalseOriginEastingGeoKey
+        { 3087, "y_0" },   // ProjFalseOriginNorthingGeoKey
+        { 3088, "lon_0" }, // ProjCenterLongGeoKey
+        { 3089, "lat_0" }, // ProjCenterLatGeoKey
+        { 3092, "k_0" },   // ProjScaleAtNatOriginGeoKey
+        { 3093, "k_0" },   // ProjScaleAtCenterGeoKey
+        { 3094, "alpha" }, // ProjAzimuthAngleGeoKey
+        { 3095, "lon_0" }, // ProjStraightVertPoleLongGeoKey
+    };
+
     /// <summary>
     /// Resolves the source projection of a GeoTIFF using several strategies, mirroring the resilience of GDAL:
-    /// direct EPSG code, vendor (ESRI) code mapping, and ESRI WKT parsed from the citation GeoKeys.
+    /// direct EPSG code, vendor (ESRI) code mapping, ESRI WKT from the citation GeoKeys, and – for user-defined
+    /// projected CRS – reconstruction of the projection from the inline projection GeoKeys.
     /// </summary>
     private static bool TryResolveSourceProjection(Tiff tiff, out ProjectionInfo source, out bool isWgs84)
     {
@@ -219,31 +283,54 @@ public static class GeoTiffInfoReader
         int geographicCode = ReadShortGeoKey(entries, GeographicTypeGeoKey) ?? 0;
         int projectedCode = ReadShortGeoKey(entries, ProjectedCSTypeGeoKey) ?? 0;
 
-        // Projected CRS takes priority over the underlying geographic CRS.
-        int primaryCode =
-            (projectedCode != 0 && projectedCode != UserDefinedGeoKey) ? projectedCode :
-            (geographicCode != 0 && geographicCode != UserDefinedGeoKey) ? geographicCode : 0;
-
         // Fast path: geographic WGS84 needs no reprojection.
-        if (modelType == 2 && primaryCode == 4326)
+        if (modelType == ModelTypeGeographic && geographicCode == 4326)
         {
             source = KnownCoordinateSystems.Geographic.World.WGS1984;
             isWgs84 = true;
             return true;
         }
 
-        // 1. Direct EPSG resolution.
-        if (primaryCode != 0 && TryFromEpsg(primaryCode, out source))
-            return true;
+        // Projected data: resolve the *projected* system. Never fall back to the bare geographic
+        // code here – treating projected metres as geographic degrees produces bogus (often infinite)
+        // coordinates after reprojection.
+        if (modelType == ModelTypeProjected || projectedCode != 0)
+        {
+            if (projectedCode != 0 && projectedCode != UserDefinedGeoKey)
+            {
+                if (TryFromEpsg(projectedCode, out source))
+                    return true;
+                if (VendorCrsToEpsg.TryGetValue(projectedCode, out int mappedProjected)
+                    && TryFromEpsg(mappedProjected, out source))
+                    return true;
+            }
 
-        // 2. Known vendor / deprecated code mapped to EPSG.
-        if (primaryCode != 0
-            && VendorCrsToEpsg.TryGetValue(primaryCode, out int mappedEpsg)
-            && TryFromEpsg(mappedEpsg, out source))
-            return true;
+            // User-defined projected CRS: prefer an embedded ESRI WKT, then rebuild from inline GeoKeys.
+            foreach (int citationKey in new[] { PCSCitationGeoKey, GTCitationGeoKey })
+            {
+                var citation = ReadAsciiGeoKey(entries, asciiParams, citationKey);
+                if (TryFromEsriWkt(citation, out source))
+                    return true;
+            }
 
-        // 3. ESRI WKT embedded in the citation GeoKeys (common for ArcGIS user-defined CRS).
-        foreach (int citationKey in new[] { PCSCitationGeoKey, GTCitationGeoKey, GeogCitationGeoKey })
+            if (TryBuildProjectedFromGeoKeys(tiff, entries, geographicCode, out source))
+                return true;
+
+            return false;
+        }
+
+        // Geographic data (modelType == Geographic or unspecified).
+        if (geographicCode != 0 && geographicCode != UserDefinedGeoKey)
+        {
+            if (TryFromEpsg(geographicCode, out source))
+                return true;
+            if (VendorCrsToEpsg.TryGetValue(geographicCode, out int mappedGeographic)
+                && TryFromEpsg(mappedGeographic, out source))
+                return true;
+        }
+
+        // ESRI WKT embedded in the citation GeoKeys (common for ArcGIS user-defined CRS).
+        foreach (int citationKey in new[] { GTCitationGeoKey, GeogCitationGeoKey })
         {
             var citation = ReadAsciiGeoKey(entries, asciiParams, citationKey);
             if (TryFromEsriWkt(citation, out source))
@@ -252,6 +339,65 @@ public static class GeoTiffInfoReader
 
         return false;
     }
+
+    /// <summary>
+    /// Rebuilds a user-defined projected CRS from the inline projection GeoKeys and GeoDoubleParams,
+    /// borrowing the datum/ellipsoid from the underlying geographic CRS. This is what libgeotiff/GDAL do
+    /// for GeoTIFFs that describe their projection with individual GeoKeys rather than an EPSG/WKT string.
+    /// </summary>
+    private static bool TryBuildProjectedFromGeoKeys(Tiff tiff, List<GeoKeyEntry> entries,
+        int geographicCode, out ProjectionInfo source)
+    {
+        source = null;
+
+        int coordTrans = ReadShortGeoKey(entries, ProjCoordTransGeoKey) ?? 0;
+        if (coordTrans == 0 || !CoordTransToProj4.TryGetValue(coordTrans, out string projName))
+            return false;
+
+        var doubleParams = ReadGeoDoubleParams(tiff);
+
+        var proj4 = new StringBuilder();
+        proj4.Append("+proj=").Append(projName);
+
+        foreach (var (paramKey, proj4Name) in ProjParamToProj4)
+        {
+            double? value = ReadDoubleGeoKey(entries, doubleParams, paramKey);
+            if (value.HasValue)
+                proj4.Append(" +").Append(proj4Name).Append('=')
+                     .Append(value.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        }
+
+        proj4.Append(" +units=").Append(LinearUnitToProj4(ReadShortGeoKey(entries, ProjLinearUnitsGeoKey)));
+        proj4.Append(" +no_defs");
+
+        try
+        {
+            var projection = ProjectionInfo.FromProj4String(proj4.ToString());
+            if (projection == null)
+                return false;
+
+            // The proj4 above has no datum – take the geographic datum/ellipsoid from the geographic code.
+            if (geographicCode != 0 && geographicCode != UserDefinedGeoKey
+                && TryFromEpsg(geographicCode, out var geographic))
+            {
+                projection.GeographicInfo = geographic.GeographicInfo;
+            }
+
+            source = projection;
+            return !source.IsLatLon;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
+    private static string LinearUnitToProj4(int? epsgUnitCode) => epsgUnitCode switch
+    {
+        9002 => "ft",     // international foot
+        9003 => "us-ft",  // US survey foot
+        _ => "m",         // 9001 metre / unknown → metres
+    };
 
     private static bool TryFromEpsg(int code, out ProjectionInfo projection)
     {
@@ -306,6 +452,31 @@ public static class GeoTiffInfoReader
         }
 
         return null;
+    }
+
+    private static double? ReadDoubleGeoKey(List<GeoKeyEntry> entries, double[] doubleParams, int keyId)
+    {
+        if (doubleParams == null)
+            return null;
+
+        foreach (var entry in entries)
+        {
+            // DOUBLE-typed GeoKey values are stored in GeoDoubleParams; ValueOffset is the array index.
+            if (entry.KeyId != keyId || entry.TiffTagLocation != GeoDoubleParamsTagLocation)
+                continue;
+
+            int index = entry.ValueOffset;
+            if (index >= 0 && index < doubleParams.Length)
+                return doubleParams[index];
+        }
+
+        return null;
+    }
+
+    private static double[] ReadGeoDoubleParams(Tiff tiff)
+    {
+        var field = tiff.GetField(TiffTag.GEOTIFF_GEODOUBLEPARAMSTAG);
+        return ReadDoubleArray(field);
     }
 
     private static string ReadAsciiGeoKey(List<GeoKeyEntry> entries, string asciiParams, int keyId)
