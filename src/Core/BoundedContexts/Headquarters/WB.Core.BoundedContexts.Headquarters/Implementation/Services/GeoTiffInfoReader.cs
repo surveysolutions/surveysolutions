@@ -22,6 +22,24 @@ public static class GeoTiffInfoReader
         return IsGeoTiff(tiff);
     }
 
+    /// <summary>
+    /// Returns true when the file can be opened as a TIFF image, regardless of whether it carries
+    /// georeferencing. Used to distinguish a valid-but-non-georeferenced TIFF (which we accept) from
+    /// a file that is not a TIFF at all (which we reject).
+    /// </summary>
+    public static bool IsValidTiff(string filePath)
+    {
+        try
+        {
+            using Tiff tiff = Tiff.Open(filePath, "r");
+            return tiff != null && tiff.GetField(TiffTag.IMAGEWIDTH) != null;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
     private static bool IsGeoTiff(Tiff tiff)
     {
         var geoKeyDirectoryTag = tiff?.GetField(TiffTag.GEOTIFF_GEOKEYDIRECTORYTAG);
