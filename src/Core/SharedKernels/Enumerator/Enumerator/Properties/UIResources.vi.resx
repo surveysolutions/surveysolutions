@@ -511,7 +511,7 @@
     <value>Ứng dụng cần có quyền sử dụng micro. Thử lại hành động cuối cùng và cho phép truy cập. Nếu bạn không thấy cửa sổ bật lên quyền, hãy vào Cài đặt và cho phép ứng dụng sử dụng micro.</value>
   </data>
   <data name="MissingPermissions_Storage_Global" xml:space="preserve">
-    <value>Ứng dụng cần có quyền sử dụng bộ nhớ. Thử lại hành động cuối cùng và cho phép truy cập. Nếu bạn không thấy cửa sổ bật lên quyền, hãy vào Cài đặt và cho phép ứng dụng sử dụng bộ nhớ.</value>
+    <value>Để lưu bản đồ trên thiết bị di động, Survey Solutions cần quyền truy cập vào tệp. Nếu không cấp quyền này, ứng dụng sẽ không thể lưu bất kỳ bản đồ nào để sử dụng ngoại tuyến.</value>
   </data>
   <data name="MissingPermission" xml:space="preserve">
     <value>Ứng dụng không có đủ quyền để thực hiện hành động yêu cầu</value>
@@ -906,5 +906,58 @@
   </data>
   <data name="SelectShapefileTitle" xml:space="preserve">
     <value>Chọn Ranh giới:</value>
+  </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>Mở</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>Hoàn thành</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Được phê duyệt</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>Trạng thái phân công</value>
+  </data>
+
+
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreTitle" xml:space="preserve">
+<value>Bỏ qua xác thực tính toàn vẹn truyền thông</value>
+  </data>
+
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreSummary" xml:space="preserve">
+<value>Khi bật, các lỗi xác thực tính toàn vẹn truyền thông sẽ bị bỏ qua</value>
+  </data>
+ 
+  <data name="Interview_Complete_Instruction" xml:space="preserve">
+<value>Sau khi gửi, cuộc phỏng vấn này sẽ bị khóa và không thể chỉnh sửa. Vui lòng bảo đảm mọi thông tin đều chính xác.</value>
+  </data>
+  
+  <data name="Interview_Complete_Title" xml:space="preserve">
+<value>Xem lại &amp; Gửi
+Phỏng vấn {0}</value>
+  </data>
+
+  <data name="Interview_Complete_Success_Text" xml:space="preserve">
+<value>Tất cả câu hỏi bắt buộc đã được trả lời
+Không phát hiện lỗi</value>
+  </data>
+
+  <data name="Interview_Complete_MoreCountString" xml:space="preserve">
+<value>và thêm {0}</value>
+  </data>
+
+  <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
+<value>Lỗi
+nghiêm trọng</value>
+  </data>
+
+  <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
+<value>Lỗi</value>
+  </data>
+
+  <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
+<value>Câu hỏi
+chưa trả lời</value>
   </data>
 </root>

@@ -567,7 +567,7 @@ Você pode criar ou editar seus questionários no Survey Solutions Designer</val
     <value>O aplicativo precisa de permissão para usar o microfone. Tente a última ação novamente e permita o acesso. Se você não vir o pop-up de permissões, vá para Configurações e permita que o aplicativo use o microfone.</value>
   </data>
   <data name="MissingPermissions_Storage_Global" xml:space="preserve">
-    <value>O aplicativo precisa de permissão para usar o armazenamento. Tente a última ação novamente e permita o acesso. Se você não vir o pop-up de permissões, vá para Configurações e permita que o aplicativo use o armazenamento.</value>
+    <value>Para armazenar mapas no dispositivo móvel, o Survey Solutions precisa de acesso aos arquivos. Se essa permissão não for concedida, o aplicativo não poderá armazenar nenhum mapa para uso offline.</value>
   </data>
   <data name="MissingPermission" xml:space="preserve">
     <value>O aplicativo não tem permissões suficientes para executar a ação solicitada</value>
@@ -997,5 +997,17 @@ sem resposta</value>
   </data>
   <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
     <value>Interrompido</value>
+  </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>Aberto</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>Concluído</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Aprovado</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>Status da atribuição</value>
   </data>
 </root>

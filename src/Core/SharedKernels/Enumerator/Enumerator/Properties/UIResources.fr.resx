@@ -411,10 +411,10 @@ Vous pouvez créer ou modifier vos questionnaires dans Survey Solutions Designer
     <value>Terminer</value>
   </data>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
-    <value>Survey Solutions Interviewer</value>
+    <value>Enquêteur Survey Solutions</value>
   </data>
   <data name="Supervisor_ApplicationName" xml:space="preserve">
-    <value>Survey Solutions Supervisor</value>
+    <value>Superviseur Survey Solutions</value>
   </data>
   <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
     <value>Pour terminer l'écran</value>
@@ -576,7 +576,7 @@ Vous pouvez créer ou modifier vos questionnaires dans Survey Solutions Designer
     <value>L'application doit avoir l'autorisation d'utiliser le microphone. Réessayez la dernière action et autorisez l'accès. Si vous ne voyez pas la fenêtre contextuelle des autorisations, allez dans les paramètres et autorisez l'application à utiliser le microphone.</value>
   </data>
   <data name="MissingPermissions_Storage_Global" xml:space="preserve">
-    <value>L'application doit avoir l'autorisation d'utiliser le stockage. Réessayez la dernière action et autorisez l'accès. Si vous ne voyez pas la fenêtre contextuelle des autorisations, allez dans les paramètres et autorisez l'application à utiliser le stockage.</value>
+    <value>Pour stocker des cartes sur l'appareil mobile, Survey Solutions a besoin d'accéder aux fichiers. Si cette autorisation n'est pas accordée, l'application ne pourra stocker aucune carte pour une utilisation hors ligne.</value>
   </data>
   <data name="MissingPermission" xml:space="preserve">
     <value>L'application n'a pas suffisamment d'autorisations pour exécuter l'action demandée</value>
@@ -997,4 +997,16 @@ critiques</value>
     <value>Questions
 sans réponse</value>
 </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>Ouvert</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>Terminé</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Approuvé</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>Statut de l'affectation</value>
+  </data>
 </root>

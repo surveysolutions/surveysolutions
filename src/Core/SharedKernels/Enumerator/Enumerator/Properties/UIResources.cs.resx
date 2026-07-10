@@ -553,7 +553,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Pokud chcete odpovědět na tuto otázku, musí mít aplikace povolení k použití úložiště. Opakujte poslední akci a povolte přístup. Pokud nevidíte vyskakovací okno oprávnění, přejděte do Nastavení a povolte aplikaci používat úložiště.</value>
   </data>
   <data name="MissingPermissions_Storage_Global" xml:space="preserve">
-    <value>Pokud chcete odpovědět na tuto otázku, musí mít aplikace povolení k použití úložiště. Opakujte poslední akci a povolte přístup. Pokud nevidíte vyskakovací okno oprávnění, přejděte do Nastavení a povolte aplikaci používat úložiště.</value>
+    <value>Aby bylo možné ukládat mapy do mobilního zařízení, Survey Solutions potřebuje přístup k souborům. Pokud toto oprávnění neudělíte, aplikace nebude moci ukládat žádné mapy pro offline použití.</value>
   </data>
   <data name="Multimedia_PickFromGallery" xml:space="preserve">
     <value>Vyberte z galerie</value>
@@ -820,7 +820,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Zodpovědný</value>
   </data>
   <data name="MapDashboard_StatusTitle" xml:space="preserve">
-    <value>Status</value>
+    <value>Stav</value>
   </data>
   <data name="MissingPermissions_MapsLocation" xml:space="preserve">
     <value>Pokud chcete odpovědět na tuto otázku, musí mít aplikace povolení k použití mikrofonu. Zkuste to znovu a povolte přístup. Pokud se neobjevilo vyskakovací okno pro nastavení oprávnění, přejděte do Nastavení a povolte aplikaci používat mikrofon.</value>
@@ -937,4 +937,16 @@ chyby</value>
     <value>Nezodpovězené
 otázky</value>
 </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>Otevřeno</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>Dokončeno</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Schváleno</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>Stav přiřazení</value>
+  </data>
 </root>

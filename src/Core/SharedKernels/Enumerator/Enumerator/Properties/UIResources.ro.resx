@@ -207,7 +207,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Punct final de sincronizare</value>
   </data>
   <data name="EndpointText" xml:space="preserve">
-    <value>Web Service Endpoint:</value>
+    <value>Endpoint serviciu web:</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Eroare</value>
@@ -252,7 +252,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Apăsați pentru a introduce numărul</value>
   </data>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
-    <value>Survey Solutions Interviewer</value>
+    <value>Intervievator Survey Solutions</value>
   </data>
   <data name="Interviewer_AudioRecording" xml:space="preserve">
     <value>Înregistrare audio</value>
@@ -480,7 +480,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Intră în cont</value>
   </data>
   <data name="LoginTitleText" xml:space="preserve">
-    <value>Survey Solutions Questionnaire Tester</value>
+    <value>Tester de chestionare Survey Solutions</value>
   </data>
   <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
     <value>Ieșire Editor Hărți</value>
@@ -531,7 +531,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Puteți porni serviciul MvxLocation o singură dată</value>
   </data>
   <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
-    <value>START</value>
+    <value>ÎNCEPE</value>
   </data>
   <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
     <value>Numărul de metri necesari pentru a stabili acuratețea</value>
@@ -651,7 +651,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Ale mele</value>
   </data>
   <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
-    <value>Public</value>
+    <value>Publice</value>
   </data>
   <data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
     <value>Distribuite către mine</value>
@@ -717,7 +717,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Aplicația trebuie să aibă permisiunea de a folosi microfonul pentru a răspunde la această întrebare. Reîncercați ultima operație și permiteți accesul microfonului. Dacă nu vedeți apărând fereastra de permisiuni a microfonului mergeți la Setări și permiteți aplicației să folosească microfonul.</value>
   </data>
   <data name="MissingPermissions_Storage_Global" xml:space="preserve">
-    <value>Aplicația trebuie să aibă permisiunea de a folosi spațiul de stocare pentru a răspunde la această întrebare. Reîncercați ultima operație și permiteți accesul la spațiul de stocare. Dacă nu vedeți apărând fereastra de permisiuni a microfonului mergeți la Setări și permiteți aplicației să folosească spațiul de stocare.</value>
+    <value>Pentru a stoca hărți pe dispozitivul mobil, Survey Solutions are nevoie de acces la fișiere. Dacă această permisiune nu este acordată, aplicația nu va putea stoca nicio hartă pentru utilizare offline.</value>
   </data>
   <data name="Notifications_SummaryTitle" xml:space="preserve">
     <value>{0} notificări</value>
@@ -772,5 +772,314 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
   </data>
   <data name="NoComment" xml:space="preserve">
     <value>Nu este specificat niciun comentariu</value>
+  </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>Deschis</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>Finalizat</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Aprobat</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>Statutul sarcinii</value>
+  </data>
+
+
+  <data name="OldPasswordHint" xml:space="preserve">
+    <value>Parola curentă</value>
+  </data>
+
+  <data name="NewPasswordHint" xml:space="preserve">
+    <value>Parolă nouă</value>
+  </data>
+
+  <data name="ConfirmNewPasswordHint" xml:space="preserve">
+    <value>Confirmați parola nouă</value>
+  </data>
+
+  <data name="NoMapsApplication" xml:space="preserve">
+    <value>Aplicația de navigare nu a fost găsită</value>
+  </data>
+
+  <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
+    <value>Pentru a activa butonul, vă rugăm să rezolvați problemele critice</value>
+  </data>
+
+  <data name="Interview_Complete_CriticalUnanswered" xml:space="preserve">
+    <value>Întrebări critice fără răspuns: {0}</value>
+  </data>
+
+  <data name="Interview_Complete_FailCriticalConditions" xml:space="preserve">
+    <value>Reguli critice încălcate: {0}</value>
+  </data>
+
+  <data name="Interview_Complete_WithWarningCriticality" xml:space="preserve">
+    <value>Confirmați că doriți să trimiteți acest interviu cu probleme critice.</value>
+  </data>
+
+  <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
+    <value>Pentru a activa butonul, vă rugăm să rezolvați problemele critice sau să furnizați o explicație în caseta de comentarii de mai sus</value>
+  </data>
+
+  <data name="Interview_Complete_Interview_Status" xml:space="preserve">
+    <value>Probleme ale interviului:</value>
+  </data>
+
+  <data name="Interview_Complete_CriticalityIssuesDescription" xml:space="preserve">
+    <value>Vă rugăm să rezolvați problemele răspunzând la întrebările critice și asigurându-vă că răspunsurile respectă regulile critice</value>
+  </data>
+
+  <data name="Interviewer_Comment" xml:space="preserve">
+    <value>Lăsați un comentariu</value>
+  </data>
+
+  <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
+    <value>Intervievatorul {0} a primit deja acest interviu {1}. Sigur doriți să îl realocați?</value>
+  </data>
+
+  <data name="Interviewer_Reassign_AlreadyReceivedAssignment" xml:space="preserve">
+    <value>Intervievatorul {0} a primit deja această sarcină {1}. Sigur doriți să o realocați?</value>
+  </data>
+
+  <data name="PasswordMatchError" xml:space="preserve">
+    <value>Parolele trebuie să coincidă</value>
+  </data>
+
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreTitle" xml:space="preserve">
+    <value>Ignorați validarea integrității comunicației</value>
+  </data>
+
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreSummary" xml:space="preserve">
+    <value>Când este activată, erorile de validare a integrității comunicației vor fi ignorate</value>
+  </data>
+
+  <data name="MissingPermissions_MapsLocation" xml:space="preserve">
+    <value>Aplicația trebuie să aibă permisiunea de a utiliza localizarea. Dacă nu vedeți fereastra de permisiuni, mergeți la Setări și permiteți aplicației să utilizeze localizarea.</value>
+  </data>
+
+  <data name="AreaMap_SelectShapefile" xml:space="preserve">
+    <value>Selectați fișierul de limite</value>
+  </data>
+
+  <data name="AreaMap_OverlapsWith" xml:space="preserve">
+    <value>Se suprapune cu:</value>
+  </data>
+
+  <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
+    <value>și încă {0}.</value>
+  </data>
+
+  <data name="AreaMap_ItemsOutsideDedicatedArea" xml:space="preserve">
+    <value>Unele marcaje se află în afara zonei delimitate</value>
+  </data>
+
+  <data name="AreaMap_ShowBoundaries" xml:space="preserve">
+    <value>Afișați limitele</value>
+  </data>
+
+  <data name="AreaMap_HideBoundaries" xml:space="preserve">
+    <value>Ascundeți limitele</value>
+  </data>
+
+  <data name="MapDashboard_AllResponsibles" xml:space="preserve">
+    <value>Toți responsabilii</value>
+  </data>
+
+  <data name="MapDashboard_AllStatuses" xml:space="preserve">
+    <value>Toate stările</value>
+  </data>
+
+  <data name="MapDashboard_ResponsibleTitle" xml:space="preserve">
+    <value>Responsabil</value>
+  </data>
+
+  <data name="MapDashboard_StatusTitle" xml:space="preserve">
+    <value>Stare</value>
+  </data>
+
+  <data name="MenuItem_Title_StartGeofencing" xml:space="preserve">
+    <value>Porniți geofencing</value>
+  </data>
+
+  <data name="MenuItem_Title_StopGeofencing" xml:space="preserve">
+    <value>Opriți geofencing</value>
+  </data>
+
+  <data name="MenuItem_Title_StartGeoTracking" xml:space="preserve">
+    <value>Porniți înregistrarea traseului</value>
+  </data>
+
+  <data name="MenuItem_Title_StopGeoTracking" xml:space="preserve">
+    <value>Opriți înregistrarea traseului</value>
+  </data>
+
+  <data name="MenuItem_Title_ShowLocation" xml:space="preserve">
+    <value>Afișați localizarea</value>
+  </data>
+
+  <data name="MenuItem_Title_HideLocation" xml:space="preserve">
+    <value>Ascundeți localizarea</value>
+  </data>
+
+  <data name="MenuItem_Title_ExitToDashboard" xml:space="preserve">
+    <value>Ieșiți la panoul principal</value>
+  </data>
+
+  <data name="MenuItem_Title_ChangeMap" xml:space="preserve">
+    <value>Schimbați harta</value>
+  </data>
+
+  <data name="MenuItem_Title_ChangeShapefile" xml:space="preserve">
+    <value>Schimbați limitele</value>
+  </data>
+
+  <data name="MenuItem_Title_CreateInterview" xml:space="preserve">
+    <value>Creați un interviu nou</value>
+  </data>
+
+  <data name="AssignmentMap_Title_CreateInterview" xml:space="preserve">
+    <value>Începe</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
+    <value>Zoom la hartă</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomShapefile" xml:space="preserve">
+    <value>Zoom la limite</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomCollectedData" xml:space="preserve">
+    <value>Zoom la datele colectate</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
+    <value>Zoom pe tot</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
+    <value>Zoom la înregistrările traseului</value>
+  </data>
+
+  <data name="Interview_PlayVideo" xml:space="preserve">
+    <value>Redați video </value>
+  </data>
+
+  <data name="Interview_PlayAudio" xml:space="preserve">
+    <value>Redați audio </value>
+  </data>
+
+  <data name="Interview_Complete_SwitchTo_WebMode_Checkbox" xml:space="preserve">
+    <value>Comutați interviul în modul Web</value>
+  </data>
+
+  <data name="Interview_Complete_SwitchTo_WebMode_Instruction" xml:space="preserve">
+    <value>Acest interviu va fi accesibil online după sincronizare. Pentru a accesa interviul, respondentul trebuie să introducă linkul de mai jos în browser pe un computer, tabletă sau smartphone conectat la internet. Același link poate fi scanat folosind codul QR afișat mai jos.</value>
+  </data>
+ 
+  <data name="Interview_Complete_Instruction" xml:space="preserve">
+    <value>După trimitere, acest interviu va fi blocat și nu va mai putea fi editat. Vă rugăm să vă asigurați că toate informațiile sunt corecte.</value>
+  </data>
+
+   <data name="Loading" xml:space="preserve">
+    <value>Se încarcă...</value>
+  </data>
+
+  <data name="AreaMap_Save_With_Warning_Confirm" xml:space="preserve">
+    <value>Sunteți pe punctul de a salva un rezultat imprecis. Doriți să continuați?</value>
+  </data>
+
+  <data name="AreaMap_Start_Measurement" xml:space="preserve">
+    <value>Începe</value>
+  </data>
+
+  <data name="AreaMap_InitLocation" xml:space="preserve">
+    <value>Se inițializează...</value>
+  </data>
+
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>Aprobat de sediul central</value>
+  </data>
+
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>Aprobat de supervizor</value>
+  </data>
+
+  <data name="InterviewStatus_Completed" xml:space="preserve">
+    <value>Finalizat</value>
+  </data>
+
+  <data name="InterviewStatus_Created" xml:space="preserve">
+    <value>Creat</value>
+  </data>
+
+  <data name="InterviewStatus_Deleted" xml:space="preserve">
+    <value>Șters</value>
+  </data>
+
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>Intervievator alocat</value>
+  </data>
+
+  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+    <value>Respins de sediul central</value>
+  </data>
+
+  <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+    <value>Respins de supervizor</value>
+  </data>
+
+  <data name="InterviewStatus_Restarted" xml:space="preserve">
+    <value>Repornit</value>
+  </data>
+
+  <data name="InterviewStatus_Restored" xml:space="preserve">
+    <value>Restaurat</value>
+  </data>
+
+  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+    <value>Supervizor alocat</value>
+  </data>
+
+  <data name="SelectMapTitle" xml:space="preserve">
+    <value>Selectați harta:</value>
+  </data>
+
+  <data name="Geofencing_Warning_Message" xml:space="preserve">
+    <value>Sunteți în afara zonei desemnate</value>
+  </data>
+
+  <data name="SelectShapefileTitle" xml:space="preserve">
+    <value>Selectați limitele:</value>
+  </data>
+  
+  <data name="Interview_Complete_Title" xml:space="preserve">
+    <value>Revizuire și trimitere
+Interviu {0}</value>
+  </data>
+
+  <data name="Interview_Complete_Success_Text" xml:space="preserve">
+    <value>S-a răspuns la toate întrebările obligatorii
+Nu au fost detectate erori</value>
+  </data>
+
+  <data name="Interview_Complete_MoreCountString" xml:space="preserve">
+    <value>și încă {0}</value>
+  </data>
+
+  <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
+    <value>Erori
+critice</value>
+  </data>
+
+  <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
+    <value>Erori</value>
+  </data>
+
+  <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
+    <value>Întrebări
+fără răspuns</value>
   </data>
 </root>

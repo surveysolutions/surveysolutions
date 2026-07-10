@@ -325,7 +325,7 @@
     <value>Iniciar sesión</value>
   </data>
     <data name="LoginTitleText" xml:space="preserve">
-    <value>Survey Solutions Questionnaire Tester</value>
+    <value>Probador de cuestionarios de Survey Solutions</value>
   </data>
     <data name="No" xml:space="preserve">
     <value>No</value>
@@ -562,7 +562,7 @@
     <value>Descartar</value>
   </data>
     <data name="AreaMap_AreaFormat" xml:space="preserve">
-    <value>Area: {0:0.00} m2</value>
+    <value>Área: {0:0.00} m2</value>
   </data>
     <data name="AreaMap_ErrorOnShapefileLoading" xml:space="preserve">
     <value>Ocurrió un error al cargar. Shapefile no se puede abrir</value>
@@ -676,7 +676,7 @@
     <value>La aplicación debe tener permiso para usar el micrófono. Vuelva a intentar la última acción y permita el acceso. Si no ve la ventana emergente de permisos, vaya a Configuración y permita que la aplicación use el micrófono.</value>
   </data>
     <data name="MissingPermissions_Storage_Global" xml:space="preserve">
-    <value>La aplicación debe tener permiso para usar el almacenamiento. Vuelva a intentar la última acción y permita el acceso. Si no ve la ventana emergente de permisos, vaya a Configuración y permita que la aplicación use el almacenamiento.</value>
+    <value>Para almacenar mapas en el dispositivo móvil, Survey Solutions necesita acceso a los archivos. Si no se concede este permiso, la aplicación no podrá almacenar ningún mapa para su uso sin conexión.</value>
   </data>
     <data name="Notifications_SummaryTitle" xml:space="preserve">
     <value>{0} Notificaciones</value>
@@ -993,5 +993,17 @@ críticos</value>
   <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
     <value>Preguntas
 sin respuesta</value>
+  </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>Abierto</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>Finalizado</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Aprobado</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>Estado de la asignación</value>
   </data>
 </root>

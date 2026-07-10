@@ -1,12 +1,12 @@
-import InterviewersAndDevices from './InterviewersAndDevices'
-import StatusDuration from './StatusDuration'
-import MapReport from './MapReport'
-import SurveyStatistics from './SurveyStatistics'
-import TeamsAndStatuses from './TeamsAndStatuses'
-import CumulativeChart from './CumulativeChartReport'
-import SurveysAndStatuses from './SurveysAndStatuses'
-import SurveysAndStatusesForSv from './SurveysAndStatusesForSv'
-import SpeedAndQuantity from './SpeedAndQuantity'
+const InterviewersAndDevices = () => import('./InterviewersAndDevices')
+const StatusDuration = () => import('./StatusDuration')
+const MapReport = () => import('./MapReport')
+const SurveyStatistics = () => import('./SurveyStatistics')
+const TeamsAndStatuses = () => import('./TeamsAndStatuses')
+const CumulativeChart = () => import('./CumulativeChartReport')
+const SurveysAndStatuses = () => import('./SurveysAndStatuses')
+const SurveysAndStatusesForSv = () => import('./SurveysAndStatusesForSv')
+const SpeedAndQuantity = () => import('./SpeedAndQuantity')
 
 export default class ReportComponent {
     constructor(rootStore) {
