@@ -61,7 +61,6 @@ public static class GeoTiffInfoReader
         }
         catch (Exception)
         {
-            xMin = xMax = yMin = yMax = 0;
             return false;
         }
     }
