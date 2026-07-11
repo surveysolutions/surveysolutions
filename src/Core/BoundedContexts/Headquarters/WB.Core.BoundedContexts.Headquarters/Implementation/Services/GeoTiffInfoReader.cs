@@ -49,9 +49,24 @@ public static class GeoTiffInfoReader
 
     /// <summary>
     /// Reads the WGS84 bounding box from a GeoTIFF file using only managed .NET code (no external GDAL tool required).
-    /// Returns false when the file has no georeferencing tags or reprojection fails.
+    /// Returns false when the file has no georeferencing tags, reprojection fails, or the file is corrupted/unreadable.
     /// </summary>
     public static bool TryReadGeoTiffBounds(string filePath,
+        out double xMin, out double yMin, out double xMax, out double yMax)
+    {
+        xMin = xMax = yMin = yMax = 0;
+        try
+        {
+            return TryReadGeoTiffBoundsCore(filePath, out xMin, out yMin, out xMax, out yMax);
+        }
+        catch (Exception)
+        {
+            xMin = xMax = yMin = yMax = 0;
+            return false;
+        }
+    }
+
+    private static bool TryReadGeoTiffBoundsCore(string filePath,
         out double xMin, out double yMin, out double xMax, out double yMax)
     {
         xMin = xMax = yMin = yMax = 0;
