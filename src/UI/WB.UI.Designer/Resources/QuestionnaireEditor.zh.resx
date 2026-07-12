@@ -279,6 +279,9 @@
   <data name="FindReplaceMatchingLines" xml:space="preserve">
     <value>匹配的行：{{count}}</value>
   </data>
+  <data name="FindReplaceCurrentMatch" xml:space="preserve">
+    <value>{{current}} / {{count}}</value>
+  </data>
   <data name="FindReplaceMatchWord" xml:space="preserve">
     <value>匹配整个词</value>
   </data>
