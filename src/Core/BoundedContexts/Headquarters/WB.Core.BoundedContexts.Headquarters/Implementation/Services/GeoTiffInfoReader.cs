@@ -22,6 +22,24 @@ public static class GeoTiffInfoReader
         return IsGeoTiff(tiff);
     }
 
+    /// <summary>
+    /// Returns true when the file can be opened as a TIFF image, regardless of whether it carries
+    /// georeferencing. Used to distinguish a valid-but-non-georeferenced TIFF (which we accept) from
+    /// a file that is not a TIFF at all (which we reject).
+    /// </summary>
+    public static bool IsValidTiff(string filePath)
+    {
+        try
+        {
+            using Tiff tiff = Tiff.Open(filePath, "r");
+            return tiff != null && tiff.GetField(TiffTag.IMAGEWIDTH) != null;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
     private static bool IsGeoTiff(Tiff tiff)
     {
         var geoKeyDirectoryTag = tiff?.GetField(TiffTag.GEOTIFF_GEOKEYDIRECTORYTAG);
@@ -31,9 +49,23 @@ public static class GeoTiffInfoReader
 
     /// <summary>
     /// Reads the WGS84 bounding box from a GeoTIFF file using only managed .NET code (no external GDAL tool required).
-    /// Returns false when the file has no georeferencing tags or reprojection fails.
+    /// Returns false when the file has no georeferencing tags, reprojection fails, or the file is corrupted/unreadable.
     /// </summary>
     public static bool TryReadGeoTiffBounds(string filePath,
+        out double xMin, out double yMin, out double xMax, out double yMax)
+    {
+        xMin = xMax = yMin = yMax = 0;
+        try
+        {
+            return TryReadGeoTiffBoundsCore(filePath, out xMin, out yMin, out xMax, out yMax);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
+    private static bool TryReadGeoTiffBoundsCore(string filePath,
         out double xMin, out double yMin, out double xMax, out double yMax)
     {
         xMin = xMax = yMin = yMax = 0;
