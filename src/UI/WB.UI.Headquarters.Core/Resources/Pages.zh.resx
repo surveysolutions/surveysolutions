@@ -1665,9 +1665,6 @@
   <data name="Admin_Reevaluate_Success" xml:space="preserve">
     <value>访谈重新评估成功</value>
   </data>
-  <data name="CreateUser" xml:space="preserve">
-    <value>创建用户</value>
-  </data>
   <data name="GenerateRecoveryCodes" xml:space="preserve">
     <value>生成恢复代码</value>
   </data>
