@@ -20,8 +20,10 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Controllers.Api.Designer;
@@ -150,6 +152,68 @@ namespace WB.Tests.Unit.Designer.Api.Designer
             var result = controller.Deserialize("UpdateQuestionnaire", json);
 
             Assert.That(result, Is.InstanceOf<UpdateQuestionnaire>());
+        }
+
+        [Test]
+        public void Deserialize_paste_after_with_source_questionnaire_revision_sets_source_revision()
+        {
+            var sourceQuestionnaireId = Guid.NewGuid();
+            var sourceQuestionnaireRevisionId = Guid.NewGuid();
+            var controller = CreateController();
+            var json = SerializeCommand(new
+            {
+                sourceQuestionnaireId = sourceQuestionnaireId,
+                sourceQuestionnaireRevision = new
+                {
+                    questionnaireId = sourceQuestionnaireId,
+                    revision = sourceQuestionnaireRevisionId
+                },
+                sourceItemId = Guid.NewGuid(),
+                itemToPasteAfterId = Guid.NewGuid(),
+                entityId = Guid.NewGuid(),
+                questionnaireId = Guid.NewGuid()
+            });
+
+            var result = controller.Deserialize(nameof(PasteAfter), json);
+
+            var pasteAfter = result as PasteAfter;
+            Assert.That(pasteAfter, Is.Not.Null);
+            Assert.That(pasteAfter!.SourceQuestionnaireId, Is.EqualTo(sourceQuestionnaireId));
+            Assert.That(pasteAfter.SourceQuestionnaireRevision, Is.Not.Null);
+            Assert.That(pasteAfter.SourceQuestionnaireRevision, Is.InstanceOf<QuestionnaireRevision>());
+            Assert.That(pasteAfter.SourceQuestionnaireRevision.QuestionnaireId, Is.EqualTo(sourceQuestionnaireId));
+            Assert.That(pasteAfter.SourceQuestionnaireRevision.Revision, Is.EqualTo(sourceQuestionnaireRevisionId));
+        }
+
+        [Test]
+        public void Deserialize_paste_into_with_source_questionnaire_revision_sets_source_revision()
+        {
+            var sourceQuestionnaireId = Guid.NewGuid();
+            var sourceQuestionnaireRevisionId = Guid.NewGuid();
+            var controller = CreateController();
+            var json = SerializeCommand(new
+            {
+                sourceQuestionnaireId = sourceQuestionnaireId,
+                sourceQuestionnaireRevision = new
+                {
+                    questionnaireId = sourceQuestionnaireId,
+                    revision = sourceQuestionnaireRevisionId
+                },
+                sourceItemId = Guid.NewGuid(),
+                parentId = Guid.NewGuid(),
+                entityId = Guid.NewGuid(),
+                questionnaireId = Guid.NewGuid()
+            });
+
+            var result = controller.Deserialize(nameof(PasteInto), json);
+
+            var pasteInto = result as PasteInto;
+            Assert.That(pasteInto, Is.Not.Null);
+            Assert.That(pasteInto!.SourceQuestionnaireId, Is.EqualTo(sourceQuestionnaireId));
+            Assert.That(pasteInto.SourceQuestionnaireRevision, Is.Not.Null);
+            Assert.That(pasteInto.SourceQuestionnaireRevision, Is.InstanceOf<QuestionnaireRevision>());
+            Assert.That(pasteInto.SourceQuestionnaireRevision.QuestionnaireId, Is.EqualTo(sourceQuestionnaireId));
+            Assert.That(pasteInto.SourceQuestionnaireRevision.Revision, Is.EqualTo(sourceQuestionnaireRevisionId));
         }
 
         [Test]
@@ -775,11 +839,6 @@ namespace WB.Tests.Unit.Designer.Api.Designer
         #endregion
     }
 }
-
-
-
-
-
 
 
 
