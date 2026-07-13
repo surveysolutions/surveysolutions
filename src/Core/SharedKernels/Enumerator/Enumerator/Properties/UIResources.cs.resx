@@ -553,7 +553,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Pokud chcete odpovědět na tuto otázku, musí mít aplikace povolení k použití úložiště. Opakujte poslední akci a povolte přístup. Pokud nevidíte vyskakovací okno oprávnění, přejděte do Nastavení a povolte aplikaci používat úložiště.</value>
   </data>
   <data name="MissingPermissions_Storage_Global" xml:space="preserve">
-    <value>Pokud chcete odpovědět na tuto otázku, musí mít aplikace povolení k použití úložiště. Opakujte poslední akci a povolte přístup. Pokud nevidíte vyskakovací okno oprávnění, přejděte do Nastavení a povolte aplikaci používat úložiště.</value>
+    <value>Aby bylo možné ukládat mapy do mobilního zařízení, Survey Solutions potřebuje přístup k souborům. Pokud toto oprávnění neudělíte, aplikace nebude moci ukládat žádné mapy pro offline použití.</value>
   </data>
   <data name="Multimedia_PickFromGallery" xml:space="preserve">
     <value>Vyberte z galerie</value>
