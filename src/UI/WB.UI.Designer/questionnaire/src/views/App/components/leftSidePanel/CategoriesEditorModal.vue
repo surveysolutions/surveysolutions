@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import 'vuetify/styles';
+import '../../../../plugins/vuetifyStyles.scss';
 import CategoryTable from '../../../OptionsEditor/components/OptionItemsTable.vue';
 import CategoryStrings from '../../../OptionsEditor/components/OptionItemsAsStrings.vue';
 import { optionsApi } from '../../../OptionsEditor/services';
