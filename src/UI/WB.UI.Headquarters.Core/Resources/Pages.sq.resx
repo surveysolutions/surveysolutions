@@ -1665,9 +1665,6 @@
   <data name="Admin_Reevaluate_Success" xml:space="preserve">
     <value>Intervista u rivlerësua me sukses</value>
   </data>
-  <data name="CreateUser" xml:space="preserve">
-    <value>Krijo përdorues</value>
-  </data>
   <data name="GenerateRecoveryCodes" xml:space="preserve">
     <value>Gjenero kodet e rikuperimit</value>
   </data>
