@@ -74,7 +74,7 @@ jobs:
           SCAN_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
           # wizcli v1 JSON schema (all scan data under .result):
-          #   .status.verdict                              — "PASS" | "WARN_BY_POLICY" | "FAIL_BY_POLICY"
+          #   .status.verdict                              — "PASS" | "PASSED" | "PASSED_BY_POLICY" | "WARN" | "WARN_BY_POLICY" | "WARNED" | "FAIL_BY_POLICY"
           #   .result.failedPolicyMatches[]               — policies that triggered
           #   .result.vulnerableSBOMArtifactsByNameVersion[] — vulnerable packages
           #     .vulnerabilityFindings.severities.*Count  — per-package counts
@@ -83,9 +83,9 @@ jobs:
 
           VERDICT=$(jq -r '.status.verdict // "UNKNOWN"' wiz_scan_results.json)
           case "$VERDICT" in
-            PASS)              RESULT="PASSED" ;;
-            WARN_BY_POLICY)    RESULT="WARNED" ;;
-            *)                 RESULT="FAILED" ;;
+            PASS|PASSED|PASSED_BY_POLICY)   RESULT="PASSED" ;;
+            WARN|WARN_BY_POLICY|WARNED)     RESULT="WARNED" ;;
+            *)                              RESULT="FAILED" ;;
           esac
 
           REPORT_URL=$(jq -r '.reportUrl // ""' wiz_scan_results.json)

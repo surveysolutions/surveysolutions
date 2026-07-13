@@ -1009,7 +1009,10 @@
     <value>Supervizori</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>Detaliile cu informații personale (opțional) &lt;br&gt; vor fi vizibile numai pentru HQ</value>
+    <value>Detaliile cu informații personale</value>
+  </data>
+  <data name="PublicSectionDescription" xml:space="preserve">
+    <value>(opțional, va fi vizibil numai pentru utilizatorii autentificați).</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
     <value>{{name}} (ver. {{version}})</value>
@@ -1346,7 +1349,13 @@
     <value>Creați un administrator</value>
   </data>
   <data name="CreateUser" xml:space="preserve">
-    <value>Creați un utilizator</value>
+    <value>Creați un cont de utilizator</value>
+  </data>
+  <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+    <value>Acces la spațiul de lucru</value>
+  </data>
+  <data name="CreateUser_RoleLabel" xml:space="preserve">
+    <value>Rolul utilizatorului</value>
   </data>
   <data name="Diagnostics" xml:space="preserve">
     <value>Diagnostic</value>
