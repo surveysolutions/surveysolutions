@@ -1,31 +1,42 @@
 <template>
     <HqLayout :title="$t('Pages.SurveysAndStatuses_Overview')"
-        :subtitle="$t('Pages.SurveysAndStatuses_SupervisorDescription')" :hasFilter="true">
+        :subtitle="$t('Pages.SurveysAndStatuses_SupervisorDescription')"
+        :hasFilter="true">
         <template v-slot:subtitle>
             <div>
                 <p v-if="questionnaireId != null">
-                    <a id="lnkBackToQuestionnaires" :href="$config.model.selfUrl">{{ $t('Reports.ToAllQuestionnaires')
-                        }}</a>
+                    <a id="lnkBackToQuestionnaires"
+                        :href="$config.model.selfUrl">{{ $t('Reports.ToAllQuestionnaires')
+                    }}</a>
                 </p>
             </div>
         </template>
         <template v-slot:filters>
             <Filters>
                 <FilterBlock :title="$t('Pages.SurveysAndStatuses_InterviewerTitle')">
-                    <Typeahead control-id="responsibleSelector" ref="responsibleIdControl" data-vv-name="responsibleId"
-                        data-vv-as="responsible" :placeholder="$t('Strings.AllInterviewers')" :value="responsible"
-                        v-on:selected="selectResponsible" :fetch-url="$config.model.responsiblesUrl" />
+                    <Typeahead control-id="responsibleSelector"
+                        ref="responsibleIdControl"
+                        data-vv-name="responsibleId"
+                        data-vv-as="responsible"
+                        :placeholder="$t('Strings.AllInterviewers')"
+                        :value="responsible"
+                        v-on:selected="selectResponsible"
+                        :fetch-url="$config.model.responsiblesUrl" />
                 </FilterBlock>
             </Filters>
         </template>
 
-        <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" :no-search="true"
-            exportable :hasTotalRow="questionnaireId != null"></DataTables>
+        <DataTables ref="table"
+            :tableOptions="tableOptions"
+            :addParamsToRequest="addFilteringParams"
+            :no-search="true"
+            exportable
+            :hasTotalRow="questionnaireId != null"></DataTables>
     </HqLayout>
 </template>
 <script>
 import routeSync from '~/shared/routeSync'
-import { escape } from 'lodash'
+import { escape } from 'lodash-es'
 import { formatNumber } from './helpers'
 
 export default {

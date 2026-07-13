@@ -1,4 +1,4 @@
-import { defineAsyncComponent } from 'vue';
+import { defineAsyncComponent } from 'vue'
 
 export function registerPartsComponents(vue) {
 

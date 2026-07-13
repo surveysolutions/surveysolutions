@@ -1,5 +1,6 @@
 <template>
-    <div :class="itemClass" class="overview-item">
+    <div :class="itemClass"
+        class="overview-item">
         <div class="date">
             <div v-if="hasDate">
                 {{ answerDate }}
@@ -8,31 +9,47 @@
                 {{ answerTime }}
             </div>
         </div>
-        <div ref="itemContent" class="item-content" @click="showAdditionalDetails">
+        <div ref="itemContent"
+            class="item-content"
+            @click="showAdditionalDetails">
             <h4>
                 <span v-dompurify-html="item.title"></span>
                 <template v-if="item.rosterTitle != null"><span> - </span>
-                    <i v-if="item.rosterTitle != null" v-dompurify-html="item.rosterTitle"></i>
+                    <i v-if="item.rosterTitle != null"
+                        v-dompurify-html="item.rosterTitle"></i>
                 </template>
             </h4>
-            <div class="answer" v-if="hasAttachment">
-                <wb-attachment :contentId="attachmentContentId" :interviewId="interviewId" :previewOnly="true"
+            <div class="answer"
+                v-if="hasAttachment">
+                <wb-attachment :contentId="attachmentContentId"
+                    :interviewId="interviewId"
+                    :previewOnly="true"
                     customCssClass="static-text-image"></wb-attachment>
             </div>
-            <div class="answer" v-if="item.state != 'Unanswered'">
+            <div class="answer"
+                v-if="item.state != 'Unanswered'">
                 <div v-if="item.controlType === 'image'">
-                    <wb-attachment :filename="item.answer" :previewOnly="true"></wb-attachment>
+                    <wb-attachment :filename="item.answer"
+                        :previewOnly="true"></wb-attachment>
                 </div>
                 <div v-else-if="item.controlType === 'audio'">
-                    <audio controls preload="auto" style="width:300px" :src="audioRecordPath">
+                    <audio controls
+                        preload="auto"
+                        style="width:300px"
+                        :src="audioRecordPath">
                     </audio>
                 </div>
                 <div v-else-if="item.controlType === 'area'">
-                    <iframe title="Area preview" width="100%" height="250px" frameBorder="0"
+                    <iframe title="Area preview"
+                        width="100%"
+                        height="250px"
+                        frameBorder="0"
                         :src="areaAnswerUrl"></iframe>
                 </div>
                 <div v-else-if="item.controlType === 'map'">
-                    <a v-bind:href="goolgeMapUrl" :title="$t('WebInterviewUI.ShowOnMap')" target="_blank">
+                    <a v-bind:href="goolgeMapUrl"
+                        :title="$t('WebInterviewUI.ShowOnMap')"
+                        target="_blank">
                         {{ gpsAnswer.latitude }}, {{ gpsAnswer.longitude }}
                     </a>
                 </div>
@@ -43,15 +60,19 @@
                     {{ item.answer }}
                 </div>
             </div>
-            <div class="btn-link" v-if="item.state == 'Unanswered' && item.controlType !== 'variable'">
+            <div class="btn-link"
+                v-if="item.state == 'Unanswered' && item.controlType !== 'variable'">
                 {{ $t("WebInterviewUI.Interview_Overview_NotAnswered") }}
             </div>
-            <div class="btn-link" v-if="item.state == 'Unanswered' && item.controlType === 'variable'">
+            <div class="btn-link"
+                v-if="item.state == 'Unanswered' && item.controlType === 'variable'">
                 {{ $t("WebInterviewUI.Interview_Overview_NoValue") }}
             </div>
         </div>
 
-        <AdditionalInfo ref="additionalInfo" :item="item" :addCommentsAllowed="$store.getters.addCommentsAllowed" />
+        <AdditionalInfo ref="additionalInfo"
+            :item="item"
+            :addCommentsAllowed="$store.getters.addCommentsAllowed" />
     </div>
 </template>
 
@@ -89,7 +110,7 @@ export default {
         }
     },
 
-    destroyed() {
+    unmounted() {
         if (this.watcher != null) {
             this.watcher.destroy()
         }

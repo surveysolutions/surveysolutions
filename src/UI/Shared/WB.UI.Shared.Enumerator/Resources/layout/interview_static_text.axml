@@ -6,16 +6,8 @@
 
   <TextView
     style="@style/Interview_Question_Title"
-    local:MvxBind="HtmlWithLinks MakeMarkdownLinksExecutable(Text.HtmlText, .); 
-                   Visible Not(StaticTextState.Validity.IsInvalid);
+    local:MvxBind="HtmlWithLinks MakeMarkdownLinksExecutable(Text.HtmlText, .);
                    Tag Format('Static_Valid_Title{0}', Identity)" />
-
-  <TextView
-    style="@style/Interview_Question_Title"
-    android:textColor="@color/errorTextColor"
-    local:MvxBind="Text Text.PlainText; 
-                   Visible StaticTextState.Validity.IsInvalid;
-                   Tag Format('Static_Invalid_Title_{0}', Identity)" />
 
   <include layout="@layout/interview__attachment" />
   <LinearLayout 
