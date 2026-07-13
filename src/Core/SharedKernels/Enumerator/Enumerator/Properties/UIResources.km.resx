@@ -1210,4 +1210,7 @@
     <value>សំណួរ
 មិនទាន់ឆ្លើយ</value>
   </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>តម្រូវឱ្យមានការអនុញ្ញាតប្រើមីក្រូហ្វូន ដើម្បីធ្វើបទសម្ភាសន៍នេះ។ បទសម្ភាសន៍មិនអាចចាប់ផ្តើមបានទេ រហូតដល់មានការអនុញ្ញាត។</value>
+  </data>
 </root>

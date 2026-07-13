@@ -255,4 +255,10 @@
   <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
     <value>Відповідь на питання з іменем {0} не може бути попередньо завантажена, оскільки вона має непідтримуваний тип. Зверніться до наступної статті підтримки https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type для отримання детальної інформації про те, що можна попередньо завантажити у поточній версії.</value>
   </data>
+  <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+    <value>Ім'я змінної області аудіоконтролю '{0}' недійсне. Воно повинно посилатися на наявний розділ, групу або ростер (запитання та плоскі ростери (flat roster) не дозволяються).</value>
+  </data>
+  <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+    <value>Assignment was not migrated because it uses selective Audio Audit (audio recording scope), which cannot be migrated automatically to a new questionnaire version. Recreate the assignment manually and configure the audio audit scope again.</value>
+  </data>
 </root>

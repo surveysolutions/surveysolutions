@@ -524,4 +524,25 @@
   <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
     <value>عند التفعيل، يمكن للمقابلين إكمال التعيينات وإعادة فتحها من أجهزتهم اللوحية (يتطلب تمكين إعداد المشرف)</value>
   </data>
+  <data name="AudioRecordingQuality" xml:space="preserve">
+    <value>جودة تسجيل الصوت</value>
+  </data>
+  <data name="AudioRecordingQualityDescription" xml:space="preserve">
+    <value>جودة الصوت المستخدمة بواسطة تطبيق الباحث عند تسجيل الصوت (تدقيق الصوت وأسئلة الصوت)</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono44kHz" xml:space="preserve">
+    <value>64 kbps, أحادي, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve">
+    <value>64 kbps, أحادي, 22.05 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono16kHz" xml:space="preserve">
+    <value>32 kbps, أحادي, 16 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve">
+    <value>128 kbps, ستيريو, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
+    <value>128 kbps, ستيريو, 48 kHz</value>
+  </data>
 </root>

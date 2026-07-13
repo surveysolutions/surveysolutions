@@ -568,4 +568,25 @@
   <data name="LogoRemoveError" xml:space="preserve">
     <value>Не вдалося видалити логотип. Будь ласка, спробуйте ще раз.</value>
   </data>
+  <data name="AudioRecordingQuality" xml:space="preserve">
+    <value>Якість аудіозапису</value>
+  </data>
+  <data name="AudioRecordingQualityDescription" xml:space="preserve">
+    <value>Якість звуку, що використовується застосунком інтерв'юера під час запису аудіо (аудіоаудит та аудіозапитання)</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono44kHz" xml:space="preserve">
+    <value>64 kbps, Моно, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve">
+    <value>64 kbps, Моно, 22.05 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono16kHz" xml:space="preserve">
+    <value>32 kbps, Моно, 16 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve">
+    <value>128 kbps, Стерео, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
+    <value>128 kbps, Стерео, 48 kHz</value>
+  </data>
 </root>

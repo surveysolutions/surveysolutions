@@ -31,6 +31,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             interviewerSettings.SetNotifications(tabletSettings.NotificationsEnabled);
             interviewerSettings.SetAllowSupervisorChangeAssignmentStatus(tabletSettings.AllowSupervisorChangeAssignmentStatus);
             interviewerSettings.SetAllowInterviewerChangeAssignmentStatus(tabletSettings.AllowInterviewerChangeAssignmentStatus);
+            interviewerSettings.SetAudioRecordingQuality(tabletSettings.AudioRecordingQuality);
         }
     }
 }

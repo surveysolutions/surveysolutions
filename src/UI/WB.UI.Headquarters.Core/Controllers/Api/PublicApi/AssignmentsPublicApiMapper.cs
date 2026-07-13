@@ -50,6 +50,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             result.ResponsibleId = assignment.ResponsibleId;
             result.ResponsibleName = assignment.Responsible.Name;
             result.IsAudioRecordingEnabled = assignment.AudioRecording;
+            result.AudioAuditScope = assignment.AudioAuditScope != null
+                ? new List<string>(assignment.AudioAuditScope)
+                : new List<string>();
             result.Archived = assignment.Archived;
             result.CreatedAtUtc = assignment.CreatedAtUtc;
             result.UpdatedAtUtc = assignment.UpdatedAtUtc;
@@ -109,6 +112,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             ReceivedByTabletAtUtc = row.ReceivedByTabletAtUtc,
             Archived = row.Archived,
             IsAudioRecordingEnabled = row.IsAudioRecordingEnabled,
+            AudioAuditScope = row.AudioAuditScope != null
+                ? new List<string>(row.AudioAuditScope)
+                : new List<string>(),
             Email = row.Email,
             Password = row.Password,
             TargetArea = row.TargetArea,

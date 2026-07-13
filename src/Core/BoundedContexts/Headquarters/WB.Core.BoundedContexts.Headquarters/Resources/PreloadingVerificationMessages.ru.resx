@@ -259,4 +259,10 @@
   <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
     <value>Ответ на вопрос с именем {0} не может быть загружен, так как тип не поддерживается. Пожалуйста, ознакомьтесь https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type </value>
   </data>
+  <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+    <value>Имя переменной области аудиоконтроля '{0}' недопустимо. Оно должно ссылаться на существующий раздел, группу или ростер (вопросы и плоские ростеры (flat roster) не допускаются).</value>
+  </data>
+  <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+    <value>Assignment was not migrated because it uses selective Audio Audit (audio recording scope), which cannot be migrated automatically to a new questionnaire version. Recreate the assignment manually and configure the audio audit scope again.</value>
+  </data>
 </root>
