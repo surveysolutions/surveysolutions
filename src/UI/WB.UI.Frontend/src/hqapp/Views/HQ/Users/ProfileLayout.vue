@@ -126,9 +126,6 @@ export default {
         canLockBySupervisor() {
             return this.isInterviewer
         },
-        referrerTitle() {
-            return this.$t('Dashboard.UsersManagement')
-        },
         showWorkspaces() {
             return this.$config.model.userInfo.canChangeWorkspacesList
         },
