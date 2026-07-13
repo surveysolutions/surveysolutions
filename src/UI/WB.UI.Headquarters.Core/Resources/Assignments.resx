@@ -619,4 +619,13 @@
   <data name="Action_Reopened" xml:space="preserve">
       <value>Reopened</value>
   </data>
+  <data name="AudioRecordingPartial" xml:space="preserve">
+      <value>Partial</value>
+  </data>
+  <data name="AudioAuditScopeLabel" xml:space="preserve">
+      <value>Audio audit scope</value>
+  </data>
+  <data name="AudioRecordingScopeNotice" xml:space="preserve">
+      <value>This assignment has a selective audio audit scope. Enabling full audio recording will record all sections. Disabling it will revert to recording only the selected sections.</value>
+  </data>
 </root>

@@ -172,7 +172,9 @@
             <div>
                 <button type="button" class="btn btn-primary" @click="confirmCompleteAssignment">{{
                     $t('Assignments.Complete') }}</button>
-                <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t('Common.Cancel') }}</button>
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                    {{ $t('Common.Cancel') }}
+                </button>
             </div>
         </template>
     </ModalFrame>
@@ -193,7 +195,9 @@
             <div>
                 <button type="button" class="btn btn-primary" @click="confirmReopenAssignment">{{
                     $t('Assignments.Reopen') }}</button>
-                <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t('Common.Cancel') }}</button>
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                    {{ $t('Common.Cancel') }}
+                </button>
             </div>
         </template>
     </ModalFrame>
@@ -214,7 +218,9 @@
             <div>
                 <button type="button" class="btn btn-primary" @click="confirmCloseAssignment">{{
                     $t('Assignments.Close') }}</button>
-                <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t('Common.Cancel') }}</button>
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                    {{ $t('Common.Cancel') }}
+                </button>
             </div>
         </template>
     </ModalFrame>
@@ -224,7 +230,7 @@
             <div class="form-group">
                 <label class="control-label" for="newResponsibleId">{{
                     $t('Assignments.SelectResponsible')
-                    }}</label>
+                }}</label>
                 <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                     :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                     :fetch-url="model.responsible"></Typeahead>
@@ -274,17 +280,14 @@
 
 <script>
 import { nextTick } from 'vue'
-import { debounce, delay, forEach, find } from 'lodash'
+import { debounce, delay, forEach, find } from 'lodash-es'
 import routeSync from '~/shared/routeSync'
-import { Form, Field } from 'vee-validate'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 
 export default {
-    name: "MapWithMarkers",
+    name: 'MapWithMarkers',
     mixins: [routeSync],
-
-    components: { Form, Field },
 
     props: {
         shapefile: { type: String, default: null },
@@ -328,7 +331,7 @@ export default {
         },
 
         shapefileName() {
-            return this.shapefile;
+            return this.shapefile
         },
 
         canAssign() {
@@ -407,11 +410,11 @@ export default {
         async init() {
             this.setMapCanvasStyle()
             await this.initializeMap()
-            await this.displayShapefileName();
+            await this.displayShapefileName()
 
             this.showPointsOnMap(180, 180, -180, -180, false)
 
-            this.$emit('initialized');
+            this.$emit('initialized')
         },
 
         openInterview() {
@@ -675,7 +678,7 @@ export default {
         async initializeMap() {
             const self = this
 
-            const { Map } = await google.maps.importLibrary("maps");
+            const { Map } = await google.maps.importLibrary('maps')
             //const { Marker } = await google.maps.importLibrary("marker");
             //const { AdvancedMarkerElement } = await google.maps.importLibrary("marker")
 

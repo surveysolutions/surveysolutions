@@ -618,4 +618,13 @@
   <data name="Action_Reopened" xml:space="preserve">
       <value>Reabierto</value>
   </data>
+  <data name="AudioRecordingPartial" xml:space="preserve">
+      <value>Parcial</value>
+  </data>
+  <data name="AudioAuditScopeLabel" xml:space="preserve">
+      <value>Alcance de auditoría de audio</value>
+  </data>
+  <data name="AudioRecordingScopeNotice" xml:space="preserve">
+      <value>Esta asignación tiene un alcance selectivo de auditoría de audio. Habilitar la grabación de audio completa grabará todas las secciones. Deshabilitarla volverá a grabar solo las secciones seleccionadas.</value>
+  </data>
 </root>

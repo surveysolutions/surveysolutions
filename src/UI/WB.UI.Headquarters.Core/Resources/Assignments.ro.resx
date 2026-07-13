@@ -618,4 +618,13 @@
   <data name="Value" xml:space="preserve">
     <value>Valoare</value>
   </data>
+  <data name="AudioRecordingPartial" xml:space="preserve">
+      <value>Parțial</value>
+  </data>
+  <data name="AudioAuditScopeLabel" xml:space="preserve">
+      <value>Domeniu audit audio</value>
+  </data>
+  <data name="AudioRecordingScopeNotice" xml:space="preserve">
+      <value>Această atribuire are un domeniu selectiv de audit audio. Activarea înregistrării audio complete va înregistra toate secțiunile. Dezactivarea va reveni la înregistrarea doar a secțiunilor selectate.</value>
+  </data>
 </root>

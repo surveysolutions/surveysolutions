@@ -618,4 +618,13 @@
   <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
     <value>Po ricaktoni detyrat ueb tek një përdorues që nuk është INTERVISTUES. Nëse i keni dërguar tashmë lidhjet për këto detyra, të anketuarit nuk do të mund të përgjigjen derisa detyrat të kthehen tek një përdorues me rolin INTERVISTUES.</value>
   </data>
+  <data name="AudioRecordingPartial" xml:space="preserve">
+      <value>Pjesërisht</value>
+  </data>
+  <data name="AudioAuditScopeLabel" xml:space="preserve">
+      <value>Fusha e auditimit audio</value>
+  </data>
+  <data name="AudioRecordingScopeNotice" xml:space="preserve">
+      <value>Kjo detyrë ka një fushë selektive të auditimit audio. Aktivizimi i regjistrimit të plotë audio do të regjistrojë të gjitha seksionet. Çaktivizimi do të kthehet në regjistrimin vetëm të seksioneve të zgjedhura.</value>
+  </data>
 </root>

@@ -103,7 +103,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 .IsAllowSupervisorChangeAssignmentStatus(),
 
             AllowInterviewerChangeAssignmentStatus = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
-                .IsAllowInterviewerChangeAssignmentStatus()
+                .IsAllowInterviewerChangeAssignmentStatus(),
+
+            AudioRecordingQuality = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
+                .GetAudioRecordingQuality()
         };
     }
 }

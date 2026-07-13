@@ -576,7 +576,7 @@
   <value>يحتاج التطبيق إلى إذن لاستخدام الميكروفون. أعد محاولة الإجراء الأخير واسمح بالوصول. إذا لم تشاهد نافذة الأذونات المنبثقة، فانتقل إلى الإعدادات واسمح للتطبيق باستخدام الميكروفون.</value>
 </data>
     <data name="MissingPermissions_Storage_Global" xml:space="preserve">
-  <value>يحتاج التطبيق إلى إذن لاستخدام التخزين. أعد محاولة الإجراء الأخير واسمح بالوصول. إذا لم تشاهد نافذة الأذونات المنبثقة، فانتقل إلى الإعدادات واسمح للتطبيق باستخدام التخزين.</value>
+  <value>لتخزين الخرائط على الجهاز المحمول، يحتاج Survey Solutions إلى الوصول إلى الملفات. إذا لم يتم منح هذا الإذن، فلن يتمكن التطبيق من تخزين أي خرائط للاستخدام دون اتصال.</value>
 </data>
     <data name="MissingPermission" xml:space="preserve">
   <value>التطبيق لا يملك الأذونات الكافية لتنفيذ الإجراء المطلوب</value>
@@ -1008,5 +1008,8 @@
   </data>
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
     <value>حالة التعيين</value>
+  </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>يلزم الوصول إلى الميكروفون لإجراء هذه المقابلة. لا يمكن بدء المقابلة حتى يتم منح الإذن.</value>
   </data>
 </root>
