@@ -245,6 +245,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             item.YMaxVal = geoYMax;
                             item.Wkid = WGS84Wkid;
                         }
+                        else if (GeoTiffInfoReader.IsValidTiff(fullPath))
+                        {
+                            // The TIFF is valid but carries no readable georeferencing. Accept it as a
+                            // map without coordinates rather than rejecting an otherwise valid file.
+                            logger.LogWarning(
+                                "Map '{MapName}': could not read GeoTIFF coordinates, importing without bounds.",
+                                mapFile.Name);
+                        }
                         else
                         {
                             throw new InvalidOperationException(".tif file is not recognized as map");
