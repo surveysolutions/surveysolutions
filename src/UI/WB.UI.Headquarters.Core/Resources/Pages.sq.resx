@@ -1066,7 +1066,19 @@
     <value>Supervizorët</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>Hollësitë e të dhënave personale (fakultative) &lt;br&gt; do të shihen vetëm nga përdoruesit e ZQ-së</value>
+    <value>Hollësitë e të dhënave personale</value>
+  </data>
+  <data name="PublicSectionDescription" xml:space="preserve">
+    <value>(opsionale, do të jetë e dukshme vetëm për përdoruesit e vërtetuar).</value>
+  </data>
+  <data name="CreateUser" xml:space="preserve">
+    <value>Krijo llogari përdoruesi</value>
+  </data>
+  <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+    <value>Akses në hapësirën e punës</value>
+  </data>
+  <data name="CreateUser_RoleLabel" xml:space="preserve">
+    <value>Roli i përdoruesit</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
       <value>{{name}} (versioni {{version}})</value>
