@@ -10,7 +10,7 @@ import { useQuestionStore } from '../../../../stores/question'
 
 export default {
     name: 'FilteredComboboxOptions',
-    inject: ['questionnaire', 'currentChapter', 'openExternalEditor'],
+    inject: ['questionnaire', 'currentChapter', 'openOptionsEditor'],
     props: {
         questionnaireId: { type: String, required: true },
         activeQuestion: { type: Object, required: true }
@@ -44,7 +44,7 @@ export default {
                                 isReadOnly: this.questionnaire.isReadOnlyForUser || this.currentChapter.isReadOnly,
                                 isAlert: true,
                                 callback: async alertConfirm => {
-                                    this.openOptionsEditor();
+                                    this.showOptionsEditor();
                                 }
                             }
 
@@ -55,12 +55,12 @@ export default {
 
                 this.$confirm(params);
             } else {
-                this.openOptionsEditor();
+                this.showOptionsEditor();
             }
         },
 
-        openOptionsEditor() {
-            this.openExternalEditor(this.activeQuestion.id, "/questionnaire/editoptions/" + this.questionnaireId + "?questionid=" + this.activeQuestion.id)
+        showOptionsEditor() {
+            this.openOptionsEditor(this.activeQuestion.id)
         },
     }
 }
