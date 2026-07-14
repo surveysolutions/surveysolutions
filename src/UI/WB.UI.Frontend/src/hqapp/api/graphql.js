@@ -43,18 +43,41 @@ export async function gqlRequest(document, variables) {
         return
     }
 
-    const result = await response.json()
-    const errors = result.errors ?? []
-
-    if (errors.length > 0) {
-        if (errors.some(e => e.extensions?.code === 'AUTH_NOT_AUTHENTICATED')) {
-            location.reload()
-            return
+    const body = await response.text()
+    let result = null
+    if (body) {
+        try {
+            result = JSON.parse(body)
+        } catch {
+            result = null
         }
-        throw new GraphQLRequestError(
-            errors.map(e => e.message).join('\n'),
-            { status: response.status, errors, data: result.data }
-        )
+    }
+
+    const errors = result?.errors ?? []
+
+    if (errors.some(e => e.extensions?.code === 'AUTH_NOT_AUTHENTICATED')) {
+        location.reload()
+        return
+    }
+
+    // Throw unless this is a successful GraphQL envelope ({ data, ... }) without errors.
+    // Guards against non-GraphQL responses on /graphql (e.g. 403 { Message: ... } from
+    // ResetPasswordMiddleware), non-JSON bodies, and GraphQL error responses — all of
+    // which would otherwise cause gqlRequest to silently return undefined.
+    if (!response.ok || errors.length > 0 || result === null || !('data' in result)) {
+        const message =
+            errors.map(e => e.message).join('\n') ||
+            result?.Message ||
+            result?.message ||
+            body ||
+            response.statusText ||
+            `GraphQL request failed with status ${response.status}`
+        throw new GraphQLRequestError(message, {
+            status: response.status,
+            errors,
+            data: result?.data,
+            body,
+        })
     }
 
     return result.data
