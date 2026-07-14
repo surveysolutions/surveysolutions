@@ -3,11 +3,20 @@ import { validateFetchResponse } from '~/shared/serverValidator'
 
 export { gql }
 
+// graphql-request v7 requires a valid absolute URL for its internal URL parsing.
+// This constant is never used for the actual request: the custom fetch below always
+// targets the fixed same-origin relative path '/graphql', avoiding any dynamic input.
+const GRAPHQL_ENDPOINT = '/graphql'
+
 const client = new GraphQLClient(
-    new URL('/graphql', window.location.origin).toString(),
+    'https://placeholder.invalid/graphql',
     {
-        fetch: async (...args) => {
-            const response = await fetch(...args)
+        fetch: async (input, init = {}) => {
+            const response = await fetch(GRAPHQL_ENDPOINT, {
+                ...init,
+                mode: 'same-origin',
+                credentials: 'same-origin',
+            })
             validateFetchResponse(response)
             return response
         },
