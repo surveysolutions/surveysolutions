@@ -278,5 +278,36 @@ namespace WB.Tests.Integration.Designer
             Assert.That(searchResult.Items.Count, Is.EqualTo(0));
         }
 
+        [Test]
+        public void when_entity_title_contains_html_tags_should_search_and_return_title_by_visible_text_without_tags()
+        {
+            var questionId = Guid.NewGuid();
+            var questionnaireId = Guid.NewGuid();
+            var questionnaireTitle = "q-title";
+
+            RunActionInScope(sl =>
+            {
+                var dbContext = sl.GetInstance<DesignerDbContext>();
+                dbContext.Questionnaires.Add(Create.Questionnaire.ListViewItem(questionnaireId, questionnaireTitle));
+                dbContext.SaveChanges();
+
+                var searchStorage = sl.GetInstance<IQuestionnaireSearchStorage>();
+                searchStorage.AddOrUpdateEntity(questionnaireId,
+                    new TextQuestion() { QuestionText = "<p>question text</p>", PublicKey = questionId });
+            });
+
+            SearchResult searchResult = null;
+
+            RunActionInScope(sl =>
+            {
+                var searchStorage = sl.GetInstance<IQuestionnaireSearchStorage>();
+                searchResult = searchStorage.Search(new SearchInput() { Query = "question", PageSize = 20 });
+            });
+
+            Assert.That(searchResult.Items.Count, Is.EqualTo(1));
+            Assert.That(searchResult.Items.Single().EntityId, Is.EqualTo(questionId));
+            Assert.That(searchResult.Items.Single().Title, Is.EqualTo("question text"));
+        }
+
     }
 }

@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
 {
@@ -46,13 +47,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
 
             dbContext.Database.GetDbConnection().Execute(sql, new
             {
-                title = GetTitle(composite),
+                title = RemoveHtmlTags(GetTitle(composite)),
                 questionnaireId = questionnaireId,
                 entityId = composite.PublicKey,
                 entityType = GetEntityType(composite),
-                searchText = GetTextUsedForSearch(composite)
+                searchText = RemoveHtmlTags(GetTextUsedForSearch(composite))
             });
         }
+
+        private static string? RemoveHtmlTags(string? value)
+            => value == null ? null : value.RemoveHtmlTags();
 
         private string GetEntityType(IComposite composite)
         {
@@ -81,7 +85,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
                 if (question.QuestionType == QuestionType.SingleOption
                     || question.QuestionType == QuestionType.MultyOption)
                 {
-                    question.Answers.Aggregate(textUsedForSearch, (text, answer)  => text + Environment.NewLine + answer.AnswerText);
+                    textUsedForSearch = question.Answers.Aggregate(textUsedForSearch, (text, answer) => text + Environment.NewLine + answer.AnswerText);
                 }
             }
             return textUsedForSearch;
