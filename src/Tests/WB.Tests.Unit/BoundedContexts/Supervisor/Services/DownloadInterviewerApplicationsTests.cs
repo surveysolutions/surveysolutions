@@ -66,6 +66,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var mockOfSupervisorSettings = new Mock<ISupervisorSettings>();
             mockOfSupervisorSettings.Setup(x => x.DownloadUpdatesForInterviewerApp).Returns(true);
             mockOfSupervisorSettings.Setup(x => x.GetApplicationVersionCode()).Returns(appVersion.Value);
+            mockOfSupervisorSettings.Setup(x => x.ApplicationType).Returns(EnumeratorApplicationType.WithoutMaps);
 
             var step = CreateDownloadInterviewerAppPatches(
                 synchronizationService: mockOfSupervisorSynchronization.Object,
@@ -78,11 +79,54 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             // assert
             mockOfSupervisorSynchronization.Verify(x => x.GetInterviewerApplicationAsync(filehash, 
                 It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Once);
-            
-            mockOfSupervisorSynchronization.Verify(x => x.GetInterviewerApplicationWithMapsAsync(filehash, It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Once);
+
+            // without maps supervisor should not download the with maps interviewer variant
+            mockOfSupervisorSynchronization.Verify(x => x.GetInterviewerApplicationWithMapsAsync(filehash, It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Never);
 
             // verify that no files are written if hash matched remote server, i.e. returned content null
             fs.Verify(f => f.WriteAllBytes(It.IsAny<string>(), It.IsAny<byte[]>()), Times.Never);
+        }
+
+        [Test]
+        public async Task when_ExecuteAsync_and_supervisor_is_with_maps_flavor_then_should_download_only_with_maps_interviewer_variant()
+        {
+            // arrange
+            int? appVersion = 12345;
+            byte[] filehash = new byte[] {1, 2, 3, 4, 5};
+            var mockOfSupervisorSynchronization = new Mock<ISupervisorSynchronizationService>();
+            mockOfSupervisorSynchronization.Setup(x => x.GetLatestApplicationVersionAsync(It.IsAny<CancellationToken>())).Returns(Task.FromResult(appVersion));
+
+            mockOfSupervisorSynchronization.Setup(x =>
+                    x.GetInterviewerApplicationAsync(filehash, It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<byte[]>(null));
+
+            mockOfSupervisorSynchronization.Setup(x =>
+                    x.GetInterviewerApplicationWithMapsAsync(filehash, It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<byte[]>(null));
+
+            var fs = new Mock<IFileSystemAccessor>();
+            fs.Setup(f => f.IsFileExists(It.IsAny<string>())).Returns(true);
+            fs.Setup(f => f.ReadHash(It.IsAny<string>())).Returns(filehash);
+
+            var mockOfSupervisorSettings = new Mock<ISupervisorSettings>();
+            mockOfSupervisorSettings.Setup(x => x.DownloadUpdatesForInterviewerApp).Returns(true);
+            mockOfSupervisorSettings.Setup(x => x.GetApplicationVersionCode()).Returns(appVersion.Value);
+            mockOfSupervisorSettings.Setup(x => x.ApplicationType).Returns(EnumeratorApplicationType.WithMaps);
+
+            var step = CreateDownloadInterviewerAppPatches(
+                synchronizationService: mockOfSupervisorSynchronization.Object,
+                fileSystemAccessor: fs.Object,
+                supervisorSettings: mockOfSupervisorSettings.Object);
+
+            // act
+            await step.ExecuteAsync();
+
+            // assert
+            mockOfSupervisorSynchronization.Verify(x => x.GetInterviewerApplicationWithMapsAsync(filehash,
+                It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Once);
+
+            // with maps supervisor should not download the without maps interviewer variant
+            mockOfSupervisorSynchronization.Verify(x => x.GetInterviewerApplicationAsync(filehash, It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Test]
