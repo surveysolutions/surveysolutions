@@ -47,16 +47,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
 
             dbContext.Database.GetDbConnection().Execute(sql, new
             {
-                title = RemoveHtmlTags(GetTitle(composite)),
+                title = GetTitle(composite)?.RemoveHtmlTags(),
                 questionnaireId = questionnaireId,
                 entityId = composite.PublicKey,
                 entityType = GetEntityType(composite),
-                searchText = RemoveHtmlTags(GetTextUsedForSearch(composite))
+                searchText = GetTextUsedForSearch(composite)?.RemoveHtmlTags()
             });
         }
-
-        private static string? RemoveHtmlTags(string? value)
-            => value == null ? null : value.RemoveHtmlTags();
 
         private string GetEntityType(IComposite composite)
         {
