@@ -10,6 +10,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireSearchSto
         [TestCase(">>>")]
         [TestCase("&|!():*")]
         [TestCase("' \"")]
+        [TestCase("\\")]
         public void when_query_contains_only_tsquery_special_characters_should_return_empty_query(string query)
         {
             var result = QuestionnaireSearchStorage.CreateTextSearchQuery(query);
@@ -33,10 +34,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireSearchSto
             Assert.That(result, Is.EqualTo("house:*"));
         }
 
-        [Test]
-        public void when_multi_word_query_should_join_words_with_logical_and()
+        [TestCase("car dog")]
+        [TestCase("car\tdog")]
+        [TestCase("car\ndog")]
+        public void when_multi_word_query_should_join_words_with_logical_and(string query)
         {
-            var result = QuestionnaireSearchStorage.CreateTextSearchQuery("car dog");
+            var result = QuestionnaireSearchStorage.CreateTextSearchQuery(query);
 
             Assert.That(result, Is.EqualTo("car & dog"));
         }
