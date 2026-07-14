@@ -62,11 +62,16 @@ export function validateJQueryXhr(jqXHR, settings) {
 }
 
 export function validatePageLoad() {
-    const url = window.location.href
-    fetch(url, { method: 'HEAD' })
+    // Probe the current page on the SAME origin using a RELATIVE url (path + query only).
+    // The destination host is therefore always the current document origin - it is never taken
+    // from window.location and placed into the request url - so the request cannot be pointed at
+    // another server. mode: 'same-origin' additionally rejects any cross-origin redirect.
+    const url = window.location.pathname + window.location.search
+
+    fetch(url, { method: 'HEAD', mode: 'same-origin', credentials: 'same-origin' })
         .then(response => {
             if (!response.ok) {
-                return fetch(url, { method: 'GET' })
+                return fetch(url, { method: 'GET', mode: 'same-origin', credentials: 'same-origin' })
             }
             return response
         })

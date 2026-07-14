@@ -4,10 +4,19 @@ import { validateFetchResponse } from '~/shared/serverValidator'
 export { gql }
 
 const client = new GraphQLClient(
-    new URL('/graphql', window.location.origin).toString(),
+    // Fixed, same-origin relative endpoint. Keeping this a constant (never derived from
+    // window.location or any request-controlled value) means the request destination is not
+    // attacker-controllable, which removes the SSRF class entirely (CWE-918).
+    '/graphql',
     {
-        fetch: async (...args) => {
-            const response = await fetch(...args)
+        fetch: async (input, init = {}) => {
+            // input is always our constant '/graphql'. mode/credentials 'same-origin' keep the
+            // request (and any redirect) on the current origin as defense-in-depth.
+            const response = await fetch(input, {
+                ...init,
+                mode: 'same-origin',
+                credentials: 'same-origin',
+            })
             validateFetchResponse(response)
             return response
         },
