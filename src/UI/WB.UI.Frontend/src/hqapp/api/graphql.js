@@ -17,8 +17,9 @@ class GraphQLRequestError extends Error {
 
 function documentToString(document) {
     if (typeof document === 'string') return document
-    // Support DocumentNode / TypedDocumentNode in case a caller passes one.
-    return document?.loc?.source?.body ?? String(document)
+    const body = document?.loc?.source?.body
+    if (typeof body === 'string') return body
+    throw new TypeError('gqlRequest: document must be a GraphQL query string or a DocumentNode produced by gql`...`')
 }
 
 export async function gqlRequest(document, variables) {
