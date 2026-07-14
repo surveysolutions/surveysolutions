@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using Dapper;
 using Main.Core.Entities.Composite;
@@ -47,12 +48,23 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
 
             dbContext.Database.GetDbConnection().Execute(sql, new
             {
-                title = GetTitle(composite)?.RemoveHtmlTags(),
+                title = StripHtml(GetTitle(composite)),
                 questionnaireId = questionnaireId,
                 entityId = composite.PublicKey,
                 entityType = GetEntityType(composite),
-                searchText = GetTextUsedForSearch(composite)?.RemoveHtmlTags()
+                searchText = StripHtml(GetTextUsedForSearch(composite))
             });
+        }
+
+        // Removes HTML tags and decodes HTML entities so that the stored title and the text fed
+        // into to_tsvector contain the visible text. RemoveHtmlTags() (HtmlSanitizer) encodes the
+        // remaining special characters (e.g. '<' -> "&lt;"), which would otherwise pollute both the
+        // displayed title and the full-text index with entity artifacts (lt/gt/amp tokens).
+        private static string? StripHtml(string? value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return value;
+            return WebUtility.HtmlDecode(value.RemoveHtmlTags());
         }
 
         private string GetEntityType(IComposite composite)
