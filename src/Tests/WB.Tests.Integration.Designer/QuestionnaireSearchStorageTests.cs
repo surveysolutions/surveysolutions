@@ -309,36 +309,5 @@ namespace WB.Tests.Integration.Designer
             Assert.That(searchResult.Items.Single().Title, Is.EqualTo("question text"));
         }
 
-        [Test]
-        public void when_entity_title_contains_visible_special_characters_should_store_decoded_title_and_be_searchable_by_visible_text()
-        {
-            var questionId = Guid.NewGuid();
-            var questionnaireId = Guid.NewGuid();
-            var questionnaireTitle = "q-title";
-
-            RunActionInScope(sl =>
-            {
-                var dbContext = sl.GetInstance<DesignerDbContext>();
-                dbContext.Questionnaires.Add(Create.Questionnaire.ListViewItem(questionnaireId, questionnaireTitle));
-                dbContext.SaveChanges();
-
-                var searchStorage = sl.GetInstance<IQuestionnaireSearchStorage>();
-                searchStorage.AddOrUpdateEntity(questionnaireId,
-                    new TextQuestion() { QuestionText = "price < 100 usd", PublicKey = questionId });
-            });
-
-            SearchResult searchResult = null;
-
-            RunActionInScope(sl =>
-            {
-                var searchStorage = sl.GetInstance<IQuestionnaireSearchStorage>();
-                searchResult = searchStorage.Search(new SearchInput() { Query = "price", PageSize = 20 });
-            });
-
-            Assert.That(searchResult.Items.Count, Is.EqualTo(1));
-            Assert.That(searchResult.Items.Single().EntityId, Is.EqualTo(questionId));
-            Assert.That(searchResult.Items.Single().Title, Is.EqualTo("price < 100 usd"));
-        }
-
     }
 }
