@@ -64,7 +64,7 @@ export async function gqlRequest(document, variables) {
     // Guards against non-GraphQL responses on /graphql (e.g. 403 { Message: ... } from
     // ResetPasswordMiddleware), non-JSON bodies, and GraphQL error responses — all of
     // which would otherwise cause gqlRequest to silently return undefined.
-    if (!response.ok || errors.length > 0 || result === null || !('data' in result)) {
+    if (!response.ok || errors.length > 0 || result === null || result?.data === undefined) {
         const message =
             errors.map(e => e.message).join('\n') ||
             result?.Message ||
