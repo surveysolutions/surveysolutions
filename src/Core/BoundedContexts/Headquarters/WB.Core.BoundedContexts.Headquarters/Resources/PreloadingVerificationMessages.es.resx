@@ -259,6 +259,6 @@
     <value>El nombre de la variable del alcance de la auditoría de audio '{0}' no es válido. Debe hacer referencia a una sección, grupo o roster existente (no se permiten preguntas ni rosters planos).</value>
   </data>
   <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
-    <value>Assignment was not migrated because it uses selective Audio Audit (audio recording scope), which cannot be migrated automatically to a new questionnaire version. Recreate the assignment manually and configure the audio audit scope again.</value>
+    <value>La asignación no se migró porque utiliza una auditoría de audio selectiva (alcance de grabación de audio), que no se puede migrar automáticamente a una nueva versión del cuestionario. Vuelva a crear la asignación manualmente y configure nuevamente el alcance de la auditoría de audio.</value>
   </data>
 </root>
