@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
@@ -6,7 +7,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 
@@ -54,18 +54,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         {
             var sAppVersion = this.settings.GetApplicationVersionCode().ToString();
 
-            var interviewerAppFileName = this.settings.ApplicationType == EnumeratorApplicationType.WithMaps
-                ? "interviewer.maps.apk"
-                : "interviewer.apk";
+            var pathToInterviewerApks = this.fileSystemAccessor.CombinePath(
+                this.settings.InterviewerApplicationsDirectory, sAppVersion);
 
-            var pathToInterviewerApk = this.fileSystemAccessor.CombinePath(
-                this.settings.InterviewerApplicationsDirectory, sAppVersion, interviewerAppFileName);
-
-            var hasApk = this.fileSystemAccessor.IsFileExists(pathToInterviewerApk);
+            var hasApks = this.fileSystemAccessor.IsDirectoryExists(pathToInterviewerApks) &&
+                          this.fileSystemAccessor.GetFilesInDirectory(pathToInterviewerApks)
+                              .Count(f => !f.EndsWith(".md5")) == 2;
 
             return Task.FromResult(new GetLatestApplicationVersionResponse
             {
-                InterviewerApplicationVersion = hasApk
+                InterviewerApplicationVersion = hasApks
                     ? this.settings.GetApplicationVersionCode()
                     : (int?) null
             });

@@ -101,28 +101,37 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
         private async Task DownloadInterviewerApksAsync(string interviewerApksDirectory)
         {
-            var progressState = new DownloadProgressState();
+            var interviewerProgressState = new DownloadProgressState();
+            var interviewerWithMapsProgressState = new DownloadProgressState();
 
             try
             {
-                var isWithMaps = this.supervisorSettings.ApplicationType == EnumeratorApplicationType.WithMaps;
-                var appFileName = isWithMaps ? "interviewer.maps.apk" : "interviewer.apk";
-                var appFilePath = this.fileSystemAccessor.CombinePath(interviewerApksDirectory, appFileName);
+                var interviewerAppFilePath = this.fileSystemAccessor.CombinePath(interviewerApksDirectory, "interviewer.apk");
+                var interviewerWithMapsAppFilePath = this.fileSystemAccessor.CombinePath(interviewerApksDirectory, "interviewer.maps.apk");
 
-                var progress = new Progress<TransferProgress>(downloadProgress =>
-                {
-                    UpdateProgress(downloadProgress, progressState);
-                });
-
-                var interviewerApk = isWithMaps
-                    ? await this.supervisorSynchronizationService.GetInterviewerApplicationWithMapsAsync(
-                        this.fileSystemAccessor.ReadHash(appFilePath), progress, Context.CancellationToken)
-                    : await this.supervisorSynchronizationService.GetInterviewerApplicationAsync(
-                        this.fileSystemAccessor.ReadHash(appFilePath), progress, Context.CancellationToken);
+                var interviewerApk = await this.supervisorSynchronizationService
+                    .GetInterviewerApplicationAsync(this.fileSystemAccessor.ReadHash(interviewerAppFilePath),
+                        new Progress<TransferProgress>(downloadProgress =>
+                        {
+                            UpdateProgress(downloadProgress, interviewerProgressState);
+                        }), Context.CancellationToken);
 
                 if (interviewerApk != null)
                 {
-                    this.fileSystemAccessor.WriteAllBytes(appFilePath, interviewerApk);
+                    this.fileSystemAccessor.WriteAllBytes(interviewerAppFilePath, interviewerApk);
+                }
+
+                var interviewerWithMapsApk = await this.supervisorSynchronizationService
+                    .GetInterviewerApplicationWithMapsAsync(this.fileSystemAccessor.ReadHash(interviewerWithMapsAppFilePath),
+                        new Progress<TransferProgress>(downloadProgress =>
+                        {
+                            UpdateProgress(downloadProgress, interviewerWithMapsProgressState);
+                        }),
+                        Context.CancellationToken);
+
+                if (interviewerWithMapsApk != null)
+                {
+                    this.fileSystemAccessor.WriteAllBytes(interviewerWithMapsAppFilePath, interviewerWithMapsApk);
                 }
             }
             catch (Exception exc)

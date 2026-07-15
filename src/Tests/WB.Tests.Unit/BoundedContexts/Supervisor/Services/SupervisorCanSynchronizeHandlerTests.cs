@@ -89,7 +89,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var supervisorSettings = Mock.Of<ISupervisorSettings>(s => s.LastHqSyncTimestamp == 1 && s.GetApplicationVersionCode() == supervisorAppBuildNumber);
 
             var fileSystemAccessor = Mock.Of<IFileSystemAccessor>(x=>
-                x.IsFileExists(It.IsAny<string>()) == true);
+                x.IsDirectoryExists(It.IsAny<string>()) == true &&
+                x.GetFilesInDirectory(It.IsAny<string>(), false) == new []{"apk path 1", "apk path 2"});
 
             var handler = Create.Service.SupervisorSynchronizeHandler(
                 interviewerViewRepository: users.Object, settings: supervisorSettings, fileSystemAccessor: fileSystemAccessor);
