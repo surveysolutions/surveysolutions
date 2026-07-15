@@ -260,6 +260,6 @@
     <value>اسم متغير نطاق التدقيق الصوتي '{0}' غير صالح. يجب أن يشير إلى قسم أو مجموعة أو سجل موجود (الأسئلة والسجلات المسطحة (flat roster) غير مسموح بها).</value>
   </data>
   <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
-    <value>Assignment was not migrated because it uses selective Audio Audit (audio recording scope), which cannot be migrated automatically to a new questionnaire version. Recreate the assignment manually and configure the audio audit scope again.</value>
+    <value>لم يتم ترحيل التكليف لأنه يستخدم تدقيقًا صوتيًا انتقائيًا (نطاق التسجيل الصوتي)، والذي لا يمكن ترحيله تلقائيًا إلى إصدار جديد من الاستبيان. أعد إنشاء التكليف يدويًا وقم بتكوين نطاق التدقيق الصوتي مرة أخرى.</value>
   </data>
 </root>
