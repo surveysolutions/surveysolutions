@@ -667,7 +667,7 @@ export default {
                     searchable: false,
                     render(data, type, row) {
                         if (data) return self.$t('Common.Yes')
-                        if (row.hasAudioAuditScope) return self.$t('Assignments.AudioRecordingPartial')
+                        if (row.hasAudioAuditScope) return self.$t('Assignments.AudioRecordingSelective')
                         return self.$t('Common.No')
                     },
                 },

@@ -618,8 +618,8 @@
   <data name="Value" xml:space="preserve">
     <value>Valoare</value>
   </data>
-  <data name="AudioRecordingPartial" xml:space="preserve">
-      <value>Parțial</value>
+  <data name="AudioRecordingSelective" xml:space="preserve">
+      <value>Selectiv</value>
   </data>
   <data name="AudioAuditScopeLabel" xml:space="preserve">
       <value>Domeniu audit audio</value>
