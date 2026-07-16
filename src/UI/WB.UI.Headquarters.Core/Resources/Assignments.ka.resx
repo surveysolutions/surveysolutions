@@ -618,4 +618,13 @@
   <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
     <value>თქვენ ვებ დავალებებს თავიდან ანიჭებთ მომხმარებელს, რომელიც არ არის INTERVIEWER. თუ ამ დავალებების ბმულები უკვე გაგზავნილი გაქვთ, რესპონდენტები ვერ შეძლებენ თქვენს გამოკითხვაზე პასუხს მანამდე, სანამ დავალებები კვლავ არ დაბრუნდება INTERVIEWER როლის მქონე მომხმარებელთან.</value>
   </data>
+  <data name="AudioRecordingSelective" xml:space="preserve">
+      <value>შერჩევითი</value>
+  </data>
+  <data name="AudioAuditScopeLabel" xml:space="preserve">
+      <value>აუდიო აუდიტის არეალი</value>
+  </data>
+  <data name="AudioRecordingScopeNotice" xml:space="preserve">
+      <value>ამ დავალებას აქვს შერჩევითი აუდიო აუდიტის არეალი. სრული აუდიო ჩაწერის ჩართვა ჩაიწერს ყველა სექციას. გამორთვა დაუბრუნდება მხოლოდ შერჩეული სექციების ჩაწერას.</value>
+  </data>
 </root>

@@ -622,4 +622,13 @@
   <data name="Action_Reopened" xml:space="preserve">
       <value>Znovu otevřeno</value>
   </data>
+  <data name="AudioRecordingSelective" xml:space="preserve">
+      <value>Selektivní</value>
+  </data>
+  <data name="AudioAuditScopeLabel" xml:space="preserve">
+      <value>Rozsah zvukového auditu</value>
+  </data>
+  <data name="AudioRecordingScopeNotice" xml:space="preserve">
+      <value>Toto přiřazení má selektivní rozsah zvukového auditu. Zapnutí plného zvukového záznamu bude nahrávat všechny sekce. Vypnutí se vrátí k nahrávání pouze vybraných sekcí.</value>
+  </data>
 </root>

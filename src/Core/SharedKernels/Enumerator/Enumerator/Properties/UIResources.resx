@@ -576,7 +576,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Application needs to have a permission to use microphone. Retry last action and allow access. If you don't see permissions popup then go to Settings and allow application to use microphone.</value>
   </data>
   <data name="MissingPermissions_Storage_Global" xml:space="preserve">
-    <value>Application needs to have a permission to use storage. Retry last action and allow access. If you don't see permissions popup then go to Settings and allow application to use storage.</value>
+    <value>To store maps on the mobile device Survey Solutions needs access to the files. If this permission is not granted, the app will not be able to store any maps for offline use.</value>
   </data>
   <data name="MissingPermission" xml:space="preserve">
     <value>Application has not enough permissions to execute requested action</value>
@@ -1008,5 +1008,8 @@ questions</value>
   </data>
   <data name="Assignment_Status_Closed" xml:space="preserve">
     <value>Closed</value>
+  </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>Microphone access is required to conduct this interview. The interview cannot be started until access is granted.</value>
   </data>
 </root>

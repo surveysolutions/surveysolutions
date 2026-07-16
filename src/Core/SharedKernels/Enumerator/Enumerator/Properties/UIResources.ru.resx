@@ -859,7 +859,7 @@
     <value>Приложению необходим доступ к микрофону.</value>
   </data>
   <data name="MissingPermissions_Storage_Global" xml:space="preserve">
-    <value>Приложению необходимо разрешение на использование хранилища</value>
+    <value>Для сохранения карт на мобильном устройстве Survey Solutions нужен доступ к файлам. Если это разрешение не предоставлено, приложение не сможет сохранять карты для офлайн-использования.</value>
   </data>
   <data name="Comment" xml:space="preserve">
     <value>Комментарий</value>
@@ -1011,5 +1011,8 @@
   </data>
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
     <value>Статус задания</value>
+  </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>Для проведения интервью необходим доступ к микрофону. Интервью нельзя начать, пока доступ не предоставлен.</value>
   </data>
 </root>
