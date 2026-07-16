@@ -619,4 +619,13 @@
   <data name="Action_Reopened" xml:space="preserve">
       <value>أُعيد فتحه</value>
   </data>
+  <data name="AudioRecordingPartial" xml:space="preserve">
+      <value>جزئي</value>
+  </data>
+  <data name="AudioAuditScopeLabel" xml:space="preserve">
+      <value>نطاق التدقيق الصوتي</value>
+  </data>
+  <data name="AudioRecordingScopeNotice" xml:space="preserve">
+      <value>يحتوي هذا التكليف على نطاق تدقيق صوتي انتقائي. تمكين التسجيل الصوتي الكامل سيسجل جميع الأقسام. تعطيله سيعود إلى تسجيل الأقسام المحددة فقط.</value>
+  </data>
 </root>

@@ -511,7 +511,7 @@
     <value>Ứng dụng cần có quyền sử dụng micro. Thử lại hành động cuối cùng và cho phép truy cập. Nếu bạn không thấy cửa sổ bật lên quyền, hãy vào Cài đặt và cho phép ứng dụng sử dụng micro.</value>
   </data>
   <data name="MissingPermissions_Storage_Global" xml:space="preserve">
-    <value>Ứng dụng cần có quyền sử dụng bộ nhớ. Thử lại hành động cuối cùng và cho phép truy cập. Nếu bạn không thấy cửa sổ bật lên quyền, hãy vào Cài đặt và cho phép ứng dụng sử dụng bộ nhớ.</value>
+    <value>Để lưu bản đồ trên thiết bị di động, Survey Solutions cần quyền truy cập vào tệp. Nếu không cấp quyền này, ứng dụng sẽ không thể lưu bất kỳ bản đồ nào để sử dụng ngoại tuyến.</value>
   </data>
   <data name="MissingPermission" xml:space="preserve">
     <value>Ứng dụng không có đủ quyền để thực hiện hành động yêu cầu</value>
@@ -959,5 +959,8 @@ nghiêm trọng</value>
   <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
 <value>Câu hỏi
 chưa trả lời</value>
+  </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>Cần có quyền truy cập micro để tiến hành cuộc phỏng vấn này. Không thể bắt đầu cuộc phỏng vấn cho đến khi được cấp quyền.</value>
   </data>
 </root>

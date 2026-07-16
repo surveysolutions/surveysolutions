@@ -850,7 +850,10 @@
     <value>ზედამხედველები</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>პერსონალური ინფორმაციის დეტალები (სურვილისამებრ) &lt;br&gt; &lt;br&gt; იქნება ხილული მხოლოდ სათაო ოფისისთვის</value>
+    <value>პერსონალური ინფორმაციის დეტალები</value>
+  </data>
+  <data name="PublicSectionDescription" xml:space="preserve">
+    <value>(სურვილისამებრ, მხოლოდ ავთენტიფიცირებული მომხმარებლებისთვის იქნება ხილული).</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
       <value>{{name}} (ვერ. {{version}})</value>
@@ -1658,7 +1661,13 @@
     <value>ინტერვიუ წარმატებით გადამოწმდა</value>
   </data>
   <data name="CreateUser" xml:space="preserve">
-    <value>მომხმარებლის შექმნა</value>
+    <value>მომხმარებლის ანგარიშის შექმნა</value>
+  </data>
+  <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+    <value>სამუშაო სივრცეში წვდომა</value>
+  </data>
+  <data name="CreateUser_RoleLabel" xml:space="preserve">
+    <value>მომხმარებლის როლი</value>
   </data>
   <data name="GenerateRecoveryCodes" xml:space="preserve">
     <value>აღდგენის კოდების გენერირება</value>

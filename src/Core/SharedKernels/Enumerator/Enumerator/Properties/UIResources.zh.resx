@@ -1117,4 +1117,7 @@
     <value>未回答
 问题</value>
   </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>进行本次访问需要麦克风权限。在授予麦克风访问权限之前，无法开始访问。</value>
+  </data>
 </root>

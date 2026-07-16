@@ -1783,7 +1783,8 @@ namespace WB.Tests.Abc.TestFactories
             Guid? publicKey = null,
             bool isAudioRecordingEnabled = false,
             List<InterviewAnswer> answers = null,
-            List<IdentifyingAnswer> identifyingAnswers = null
+            List<IdentifyingAnswer> identifyingAnswers = null,
+            List<string> audioAuditScope = null
             )
         {
             var result = new Assignment();
@@ -1835,6 +1836,7 @@ namespace WB.Tests.Abc.TestFactories
             result.Password = password;
             result.WebMode = webMode;
             result.AudioRecording = isAudioRecordingEnabled;
+            result.AudioAuditScope = audioAuditScope ?? new List<string>();
             result.Answers = answers ?? new List<InterviewAnswer>();
             result.IdentifyingData = identifyingAnswers ?? new List<IdentifyingAnswer>();
 
@@ -1914,6 +1916,12 @@ namespace WB.Tests.Abc.TestFactories
             public AssignmentDocumentBuilder WithResponsible(Guid responsibleId)
             {
                 this._entity.ResponsibleId = responsibleId;
+                return this;
+            }
+
+            public AssignmentDocumentBuilder WithAudioAuditScope(params string[] variableNames)
+            {
+                this._entity.AudioAuditScope = variableNames?.ToList() ?? new List<string>();
                 return this;
             }
 

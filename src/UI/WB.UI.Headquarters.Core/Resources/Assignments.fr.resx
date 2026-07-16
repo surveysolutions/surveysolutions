@@ -559,4 +559,13 @@
   <data name="Action_Reopened" xml:space="preserve">
       <value>Rouvert</value>
   </data>
+  <data name="AudioRecordingPartial" xml:space="preserve">
+      <value>Partiel</value>
+  </data>
+  <data name="AudioAuditScopeLabel" xml:space="preserve">
+      <value>Portée de l'audit audio</value>
+  </data>
+  <data name="AudioRecordingScopeNotice" xml:space="preserve">
+      <value>Cette affectation dispose d'une portée sélective d'audit audio. L'activation de l'enregistrement audio complet enregistrera toutes les sections. La désactivation reviendra à n'enregistrer que les sections sélectionnées.</value>
+  </data>
 </root>

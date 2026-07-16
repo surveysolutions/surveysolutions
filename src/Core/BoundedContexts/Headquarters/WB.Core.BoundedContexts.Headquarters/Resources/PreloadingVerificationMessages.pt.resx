@@ -255,4 +255,10 @@
   <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
     <value>A resposta à pergunta com o nome da variável {0} não pode ser pré-carregada, pois é de um tipo não suportado. Consulte o seguinte artigo de suporte https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type para obter detalhes sobre o que pode ser pré-carregado na versão atual.</value>
   </data>
+  <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+    <value>O nome da variável do escopo de auditoria de áudio '{0}' é inválido. Deve referir-se a uma seção, grupo ou roster existente (perguntas e rosters planos não são permitidos).</value>
+  </data>
+  <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+    <value>Assignment was not migrated because it uses selective Audio Audit (audio recording scope), which cannot be migrated automatically to a new questionnaire version. Recreate the assignment manually and configure the audio audit scope again.</value>
+  </data>
 </root>

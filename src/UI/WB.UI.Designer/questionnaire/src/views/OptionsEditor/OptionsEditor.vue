@@ -89,7 +89,7 @@ import '@mdi/font/css/materialdesignicons.css'
 import CategoryTable from './components/OptionItemsTable.vue';
 import CategoryStrings from './components/OptionItemsAsStrings.vue';
 import { optionsApi } from './services';
-import 'vuetify/styles';
+import '../../plugins/vuetifyStyles.scss';
 import { isEqual, cloneDeep } from 'lodash';
 import { sanitize } from '../../services/utilityService';
 

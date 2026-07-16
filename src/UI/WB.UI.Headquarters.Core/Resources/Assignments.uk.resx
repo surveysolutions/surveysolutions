@@ -618,4 +618,13 @@
   <data name="Value" xml:space="preserve">
     <value>Значення</value>
   </data>
+  <data name="AudioRecordingPartial" xml:space="preserve">
+      <value>Частково</value>
+  </data>
+  <data name="AudioAuditScopeLabel" xml:space="preserve">
+      <value>Область аудіоконтролю</value>
+  </data>
+  <data name="AudioRecordingScopeNotice" xml:space="preserve">
+      <value>Це призначення має вибіркову область аудіоконтролю. Увімкнення повного аудіозапису записуватиме всі розділи. Вимкнення повернеться до запису лише вибраних розділів.</value>
+  </data>
 </root>

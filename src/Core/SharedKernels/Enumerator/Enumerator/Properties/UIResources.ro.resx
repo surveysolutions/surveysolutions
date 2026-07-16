@@ -717,7 +717,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Aplicația trebuie să aibă permisiunea de a folosi microfonul pentru a răspunde la această întrebare. Reîncercați ultima operație și permiteți accesul microfonului. Dacă nu vedeți apărând fereastra de permisiuni a microfonului mergeți la Setări și permiteți aplicației să folosească microfonul.</value>
   </data>
   <data name="MissingPermissions_Storage_Global" xml:space="preserve">
-    <value>Aplicația trebuie să aibă permisiunea de a folosi spațiul de stocare pentru a răspunde la această întrebare. Reîncercați ultima operație și permiteți accesul la spațiul de stocare. Dacă nu vedeți apărând fereastra de permisiuni a microfonului mergeți la Setări și permiteți aplicației să folosească spațiul de stocare.</value>
+    <value>Pentru a stoca hărți pe dispozitivul mobil, Survey Solutions are nevoie de acces la fișiere. Dacă această permisiune nu este acordată, aplicația nu va putea stoca nicio hartă pentru utilizare offline.</value>
   </data>
   <data name="Notifications_SummaryTitle" xml:space="preserve">
     <value>{0} notificări</value>
@@ -1081,5 +1081,8 @@ critice</value>
   <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
     <value>Întrebări
 fără răspuns</value>
+  </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>Este necesar accesul la microfon pentru a desfășura acest interviu. Interviul nu poate fi început până când accesul nu este acordat.</value>
   </data>
 </root>

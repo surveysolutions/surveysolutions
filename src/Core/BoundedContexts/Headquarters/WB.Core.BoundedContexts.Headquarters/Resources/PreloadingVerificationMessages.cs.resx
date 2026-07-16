@@ -255,4 +255,10 @@
   <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
     <value>Odpověď na otázku s názvem proměnné {0} nelze předem načíst, protože jde o nepodporovaný typ. Podrobnosti o aktuální verzi najdete na: https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type</value>
   </data>
+  <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+    <value>Název proměnné rozsahu zvukového auditu '{0}' je neplatný. Musí odkazovat na existující sekci, skupinu nebo seznam (roster) (otázky a ploché seznamy (flat roster) nejsou povoleny).</value>
+  </data>
+  <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+    <value>Assignment was not migrated because it uses selective Audio Audit (audio recording scope), which cannot be migrated automatically to a new questionnaire version. Recreate the assignment manually and configure the audio audit scope again.</value>
+  </data>
 </root>

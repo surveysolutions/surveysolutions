@@ -143,7 +143,8 @@ namespace WB.UI.Headquarters.Controllers
                 interviewKey,
                 assignment.Id,
                 assignment.AudioRecording,
-                InterviewMode.CAPI);
+                InterviewMode.CAPI,
+                assignment.AudioAuditScope?.ToArray());
 
             this.commandService.Execute(createInterviewCommand);
             

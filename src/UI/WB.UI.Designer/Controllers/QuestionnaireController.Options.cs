@@ -42,7 +42,7 @@ namespace WB.UI.Designer.Controllers
                         option => new QuestionnaireCategoricalOption
                         {
                             Value = option.Id,
-                            ParentValue = option.ParentId != null ? (int)option.ParentId.Value : (int?)null,
+                            ParentValue = option.ParentId != null ? option.ParentId.Value : null,
                             Title = option.Text,
                             AttachmentName = option.AttachmentName
                         });
@@ -81,12 +81,12 @@ namespace WB.UI.Designer.Controllers
         {
             var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, questionId);
 
-            var options = editQuestionView != null
+            var questionOptions = editQuestionView != null
                 ? editQuestionView.Options.Select(
                               option => new QuestionnaireCategoricalOption
                               {
                                   Value = option.Value != null ? (int)option.Value : throw new InvalidOperationException("Option Value must be not null."),
-                                  ParentValue = option.ParentValue != null ? (int)option.ParentValue.Value : (int?)null,
+                                  ParentValue = option.ParentValue != null ? (int)option.ParentValue.Value : null,
                                   Title = option.Title,
                                   AttachmentName = option.AttachmentName
                               })
@@ -99,7 +99,7 @@ namespace WB.UI.Designer.Controllers
                 questionnaireId: id.QuestionnaireId.FormatGuid(),
                 questionId: questionId,
                 questionTitle: editQuestionView?.Title,
-                options: options.ToList(),
+                options: questionOptions.ToList(),
                 isCascading: isCascading,
                 isReadonly: isReadonly
             )
@@ -237,7 +237,7 @@ namespace WB.UI.Designer.Controllers
                             Title = x.Text,
                             Value = int.Parse(x.Id!),
                             ParentValue = string.IsNullOrEmpty(x.ParentId)
-                                ? (int?)null
+                                ? null
                                 : int.Parse(x.ParentId),
                             AttachmentName = x.AttachmentName
                         })
@@ -339,6 +339,17 @@ namespace WB.UI.Designer.Controllers
                     model.Value.CategoriesId);
 
                 var categoriesCommandResult = await this.ExecuteCommand(command);
+                if (categoriesCommandResult is ExpandoObject expando)
+                {
+                    var result = (IDictionary<string, object?>)expando;
+                    if (result.TryGetValue("IsSuccess", out var isSuccessObj)
+                        && isSuccessObj is bool isSuccess
+                        && isSuccess)
+                    {
+                        result["NewEntityId"] = categoriesId;
+                    }
+                }
+
                 return Json(categoriesCommandResult);
             }
             else

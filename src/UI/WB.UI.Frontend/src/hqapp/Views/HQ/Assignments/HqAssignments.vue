@@ -290,6 +290,9 @@
         <ModalFrame ref="editAudioEnabledModal"
             :title="$t('Assignments.ChangeAudioRecordingModalTitle', { id: editedRowId })">
             <p>{{ $t("Assignments.AudioRecordingExplanation") }}</p>
+            <p v-if="editedHasAudioAuditScope" class="text-info">
+                {{ $t("Assignments.AudioRecordingScopeNotice") }}
+            </p>
             <form onsubmit="return false;">
                 <div class="form-group">
                     <Checkbox :label="$t('Assignments.AudioRecordingEnable')"
@@ -427,6 +430,7 @@ export default {
             editedRowId: null,
             editedQuantity: null,
             editedAudioRecordingEnabled: null,
+            editedHasAudioAuditScope: false,
             canEditQuantity: null,
             mode: null,
             statusChangeIds: [],
@@ -661,8 +665,10 @@ export default {
                     title: this.$t('Assignments.IsAudioRecordingEnabled'),
                     tooltip: this.$t('Assignments.Tooltip_Table_IsAudioRecordingEnabled'),
                     searchable: false,
-                    render(data) {
-                        return data ? self.$t('Common.Yes') : self.$t('Common.No')
+                    render(data, type, row) {
+                        if (data) return self.$t('Common.Yes')
+                        if (row.hasAudioAuditScope) return self.$t('Assignments.AudioRecordingPartial')
+                        return self.$t('Common.No')
                     },
                 },
                 {
@@ -916,8 +922,10 @@ export default {
             else if (columnName === 'AudioRecording' && this.config.isHeadquarter && !this.showArchive.key) {
                 this.editedRowId = parsedRowId
                 this.editedAudioRecordingEnabled = null
+                this.editedHasAudioAuditScope = false
                 this.$hq.Assignments.audioSettings(this.editedRowId).then(data => {
                     this.editedAudioRecordingEnabled = data.Enabled
+                    this.editedHasAudioAuditScope = data.AudioAuditScope != null && data.AudioAuditScope.length > 0
                     this.$refs.editAudioEnabledModal.modal()
                 })
             }

@@ -99,6 +99,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 Quantity = assignment.Quantity,
                 CreatedAtUtc = assignment.ReceivedDateUtc,
                 ProtectedVariables = assignment.ProtectedVariables.Select(pv => pv.Variable).ToList(),
+                AudioAuditScope = assignment.AudioAuditScope,
                 ResponsibleId = assignment.ResponsibleId,
                 ResponsibleName = assignment.ResponsibleName,
                 LocationLatitude = assignment.LocationLatitude,
