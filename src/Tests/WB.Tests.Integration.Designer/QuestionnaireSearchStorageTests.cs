@@ -248,5 +248,35 @@ namespace WB.Tests.Integration.Designer
             Assert.That(searchResult.Items.Single().QuestionnaireTitle, Is.EqualTo(questionnaireTitle));
         }
 
+        [Test]
+        public void when_search_query_contains_tsquery_special_characters_should_not_throw()
+        {
+            var questionId = Guid.NewGuid();
+            var questionnaireId = Guid.NewGuid();
+            var questionnaireTitle = "q-title";
+
+            RunActionInScope(sl =>
+            {
+                var dbContext = sl.GetInstance<DesignerDbContext>();
+                dbContext.Questionnaires.Add(Create.Questionnaire.ListViewItem(questionnaireId, questionnaireTitle));
+                dbContext.SaveChanges();
+
+                var searchStorage = sl.GetInstance<IQuestionnaireSearchStorage>();
+                searchStorage.AddOrUpdateEntity(questionnaireId,
+                    new TextQuestion() { QuestionText = "question text", PublicKey = questionId });
+            });
+
+            SearchResult searchResult = null;
+
+            RunActionInScope(sl =>
+            {
+                var searchStorage = sl.GetInstance<IQuestionnaireSearchStorage>();
+                Assert.DoesNotThrow(() =>
+                    searchResult = searchStorage.Search(new SearchInput() { Query = "<<<", PageSize = 20 }));
+            });
+
+            Assert.That(searchResult.Items.Count, Is.EqualTo(0));
+        }
+
     }
 }

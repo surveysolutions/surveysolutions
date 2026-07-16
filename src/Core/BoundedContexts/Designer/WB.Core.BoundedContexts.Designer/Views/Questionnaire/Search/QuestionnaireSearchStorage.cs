@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Dapper;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -160,13 +161,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
             return searchResult;
         }
 
-        private string? CreateTextSearchQuery(string? inputQuery)
+        // Characters that have a special meaning in a PostgreSQL tsquery.
+        // If they are passed as-is to to_tsquery() they cause a syntax error.
+        private static readonly Regex TsQuerySpecialCharacters = new Regex(@"[&|!():*<>\\'""]", RegexOptions.Compiled);
+
+        internal static string? CreateTextSearchQuery(string? inputQuery)
         {
             inputQuery = inputQuery?.Trim().ToLower();
             if (string.IsNullOrEmpty(inputQuery))
                 return inputQuery;
 
-            var words = inputQuery.Split(' ');
+            var words = inputQuery
+                .Split(new[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(word => TsQuerySpecialCharacters.Replace(word, string.Empty))
+                .Where(word => !string.IsNullOrEmpty(word))
+                .ToArray();
+
+            if (words.Length == 0)
+                return string.Empty; // nothing searchable left, to_tsquery('') matches nothing
+
             if (words.Length == 1)
             {
                 return $"{words[0]}:*"; // search word as like
