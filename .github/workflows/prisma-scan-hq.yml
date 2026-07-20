@@ -34,7 +34,7 @@ jobs:
           echo "Resolved image: ${IMAGE}"
 
       - name: '[2/8] Log in to the GitHub Container Registry'
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -312,7 +312,7 @@ jobs:
 
       - name: '[8/8] Upload scan results'
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: prisma-cloud-scan-results
           path: |
