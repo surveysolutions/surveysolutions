@@ -196,7 +196,7 @@ jobs:
         id: version
         run: |
           ver=$(cat ./src/.version | awk -F. '{printf "%s.%02d.%d\n", $1, $2, $3}')
-          echo ::set-output name=version::$ver
+          echo "version=$ver" >> "$GITHUB_OUTPUT"
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
