@@ -1022,6 +1022,9 @@ It will appear on interviewer device after next synchronization</value>
   <data name="Error_NoGpsProvider" xml:space="preserve">
     <value>There is no GPS provider in this device</value>
   </data>
+  <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
+    <value>No suitable provider to determine the location</value>
+  </data>
   <data name="Error_NoTargetAreaShapefile" xml:space="preserve">
     <value>There are no boundaries for target area</value>
   </data>

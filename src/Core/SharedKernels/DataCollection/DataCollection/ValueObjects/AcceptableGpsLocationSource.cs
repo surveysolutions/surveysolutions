@@ -1,0 +1,33 @@
+namespace WB.Core.SharedKernels.DataCollection.ValueObjects
+{
+    /// <summary>
+    /// Controls which sources of a measured location are acceptable when answering a GPS question
+    /// in the Interviewer App. The default value (<see cref="Any"/>) matches the historical
+    /// behaviour where any location (including mock locations) is accepted, so tablets syncing
+    /// with an older server keep the current behaviour.
+    /// </summary>
+    public enum AcceptableGpsLocationSource
+    {
+        /// <summary>
+        /// N: Anything is permitted, without any refusal from Survey Solutions
+        /// (any provider, mock permitted).
+        /// </summary>
+        Any = 0,
+
+        /// <summary>
+        /// A: Anything that is not mock is permitted (any provider - WiFi, fusion, GPS, ... - but no mock locations).
+        /// </summary>
+        AnyNonMock = 1,
+
+        /// <summary>
+        /// E: Built-in GPS is permitted, external GPS (exposed as a mock provider) is permitted, mock is permitted.
+        /// Only the GPS provider is accepted.
+        /// </summary>
+        BuiltInOrExternalGps = 2,
+
+        /// <summary>
+        /// B: Built-in location sensor only - only the GPS provider, no external GPS, no mock locations permitted.
+        /// </summary>
+        BuiltInGpsOnly = 3,
+    }
+}

@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
         public const bool AllowSupervisorChangeAssignmentStatusDefault = true;
         public const bool AllowInterviewerChangeAssignmentStatusDefault = true;
         public const AudioRecordingQuality AudioRecordingQualityDefault = WB.Core.SharedKernels.DataCollection.ValueObjects.AudioRecordingQuality.Mono44kHz;
+        public const AcceptableGpsLocationSource AcceptableGpsLocationSourceDefault = WB.Core.SharedKernels.DataCollection.ValueObjects.AcceptableGpsLocationSource.Any;
 
         public bool AutoUpdateEnabled { get; set; }
         public bool? DeviceNotificationsEnabled { get; set; }
@@ -27,6 +28,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
         public bool? AllowInterviewerChangeAssignmentStatus { get; set; }
 
         public AudioRecordingQuality? AudioRecordingQuality { get; set; }
+
+        public AcceptableGpsLocationSource? AcceptableGpsLocationSource { get; set; }
     }
 
     public static class InterviewerSettingsExtensions
@@ -104,6 +107,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
                 return InterviewerSettings.AudioRecordingQualityDefault;
 
             return settings.AudioRecordingQuality.Value;
+        }
+
+        public static AcceptableGpsLocationSource GetAcceptableGpsLocationSource(this InterviewerSettings settings)
+        {
+            if (settings?.AcceptableGpsLocationSource == null)
+                return InterviewerSettings.AcceptableGpsLocationSourceDefault;
+
+            return settings.AcceptableGpsLocationSource.Value;
         }
     }
 }
