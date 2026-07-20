@@ -20,8 +20,8 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
         AnyNonMock = 1,
 
         /// <summary>
-        /// E: Built-in GPS is permitted, external GPS (exposed as a mock provider) is permitted, mock is permitted.
-        /// Only the GPS provider is accepted.
+        /// E: Built-in GPS is permitted and external GPS (exposed on Android as a mock provider) is permitted.
+        /// Only the GPS provider is accepted, but mock locations reported by that provider are allowed.
         /// </summary>
         BuiltInOrExternalGps = 2,
 

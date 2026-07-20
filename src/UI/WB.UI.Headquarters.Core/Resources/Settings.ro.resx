@@ -602,21 +602,21 @@ Motive posibile:
     <value>128 kbps, Stereo, 48 kHz</value>
   </data>
   <data name="AcceptableGpsLocationSource" xml:space="preserve">
-    <value>Acceptable source(s) of location</value>
+    <value>Surse acceptabile de localizare</value>
   </data>
   <data name="AcceptableGpsLocationSourceDescription" xml:space="preserve">
-    <value>Controls which sources of a measured location are acceptable in the Interviewer App when answering GPS questions. Locations from sources that are not acceptable are refused. The Tester App always accepts any source.</value>
+    <value>Controlează care surse ale unei locații măsurate sunt acceptabile în aplicația Operatorului de interviu la răspunsul la întrebările GPS. Locațiile din surse care nu sunt acceptabile sunt refuzate. Aplicația Tester acceptă întotdeauna orice sursă.</value>
   </data>
   <data name="AcceptableGpsLocationSource_Any" xml:space="preserve">
-    <value>Any source (including mock locations)</value>
+    <value>Orice sursă (inclusiv locații simulate)</value>
   </data>
   <data name="AcceptableGpsLocationSource_AnyNonMock" xml:space="preserve">
-    <value>Any source that is not a mock location</value>
+    <value>Orice sursă care nu este o locație simulată</value>
   </data>
   <data name="AcceptableGpsLocationSource_BuiltInOrExternalGps" xml:space="preserve">
-    <value>Built-in or external GPS (mock locations permitted)</value>
+    <value>GPS integrat sau extern (locațiile simulate sunt permise)</value>
   </data>
   <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
-    <value>Built-in GPS only (no external, no mock locations)</value>
+    <value>Doar GPS integrat (fără extern, fără locații simulate)</value>
   </data>
 </root>

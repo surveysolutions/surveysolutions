@@ -590,21 +590,21 @@
     <value>128 kbps, Стерео, 48 kHz</value>
   </data>
   <data name="AcceptableGpsLocationSource" xml:space="preserve">
-    <value>Acceptable source(s) of location</value>
+    <value>Допустимі джерела місцезнаходження</value>
   </data>
   <data name="AcceptableGpsLocationSourceDescription" xml:space="preserve">
-    <value>Controls which sources of a measured location are acceptable in the Interviewer App when answering GPS questions. Locations from sources that are not acceptable are refused. The Tester App always accepts any source.</value>
+    <value>Визначає, які джерела виміряного місцезнаходження є допустимими в застосунку Інтерв’юера під час відповіді на GPS-запитання. Місцезнаходження з недопустимих джерел відхиляються. Застосунок Тестувальника завжди приймає будь-яке джерело.</value>
   </data>
   <data name="AcceptableGpsLocationSource_Any" xml:space="preserve">
-    <value>Any source (including mock locations)</value>
+    <value>Будь-яке джерело (зокрема імітацію місцезнаходження)</value>
   </data>
   <data name="AcceptableGpsLocationSource_AnyNonMock" xml:space="preserve">
-    <value>Any source that is not a mock location</value>
+    <value>Будь-яке джерело, крім імітації місцезнаходження</value>
   </data>
   <data name="AcceptableGpsLocationSource_BuiltInOrExternalGps" xml:space="preserve">
-    <value>Built-in or external GPS (mock locations permitted)</value>
+    <value>Вбудований або зовнішній GPS (імітація місцезнаходження дозволена)</value>
   </data>
   <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
-    <value>Built-in GPS only (no external, no mock locations)</value>
+    <value>Лише вбудований GPS (без зовнішнього, без імітації місцезнаходження)</value>
   </data>
 </root>

@@ -547,21 +547,21 @@ Raisons possibles :
     <value>128 kbps, Stéréo, 48 kHz</value>
   </data>
   <data name="AcceptableGpsLocationSource" xml:space="preserve">
-    <value>Acceptable source(s) of location</value>
+    <value>Source(s) de localisation acceptable(s)</value>
   </data>
   <data name="AcceptableGpsLocationSourceDescription" xml:space="preserve">
-    <value>Controls which sources of a measured location are acceptable in the Interviewer App when answering GPS questions. Locations from sources that are not acceptable are refused. The Tester App always accepts any source.</value>
+    <value>Détermine quelles sources d’une localisation mesurée sont acceptables dans l’application Enquêteur lors de la réponse aux questions GPS. Les localisations provenant de sources non acceptables sont refusées. L’application Testeur accepte toujours n’importe quelle source.</value>
   </data>
   <data name="AcceptableGpsLocationSource_Any" xml:space="preserve">
-    <value>Any source (including mock locations)</value>
+    <value>N’importe quelle source (y compris les localisations simulées)</value>
   </data>
   <data name="AcceptableGpsLocationSource_AnyNonMock" xml:space="preserve">
-    <value>Any source that is not a mock location</value>
+    <value>N’importe quelle source qui n’est pas une localisation simulée</value>
   </data>
   <data name="AcceptableGpsLocationSource_BuiltInOrExternalGps" xml:space="preserve">
-    <value>Built-in or external GPS (mock locations permitted)</value>
+    <value>GPS intégré ou externe (localisations simulées autorisées)</value>
   </data>
   <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
-    <value>Built-in GPS only (no external, no mock locations)</value>
+    <value>GPS intégré uniquement (pas d’externe, pas de localisations simulées)</value>
   </data>
 </root>

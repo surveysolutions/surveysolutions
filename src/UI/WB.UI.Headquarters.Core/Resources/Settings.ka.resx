@@ -653,21 +653,21 @@
     <value>128 kbps, სტერეო, 48 kHz</value>
   </data>
   <data name="AcceptableGpsLocationSource" xml:space="preserve">
-    <value>Acceptable source(s) of location</value>
+    <value>მდებარეობის დასაშვები წყარო(ები)</value>
   </data>
   <data name="AcceptableGpsLocationSourceDescription" xml:space="preserve">
-    <value>Controls which sources of a measured location are acceptable in the Interviewer App when answering GPS questions. Locations from sources that are not acceptable are refused. The Tester App always accepts any source.</value>
+    <value>განსაზღვრავს, გაზომილი მდებარეობის რომელი წყაროებია დასაშვები ინტერვიუერის აპლიკაციაში GPS კითხვებზე პასუხის გაცემისას. დაუშვებელი წყაროებიდან მიღებული მდებარეობები უარყოფილია. ტესტერის აპლიკაცია ყოველთვის იღებს ნებისმიერ წყაროს.</value>
   </data>
   <data name="AcceptableGpsLocationSource_Any" xml:space="preserve">
-    <value>Any source (including mock locations)</value>
+    <value>ნებისმიერი წყარო (მოჩვენებითი მდებარეობების ჩათვლით)</value>
   </data>
   <data name="AcceptableGpsLocationSource_AnyNonMock" xml:space="preserve">
-    <value>Any source that is not a mock location</value>
+    <value>ნებისმიერი წყარო, რომელიც არ არის მოჩვენებითი მდებარეობა</value>
   </data>
   <data name="AcceptableGpsLocationSource_BuiltInOrExternalGps" xml:space="preserve">
-    <value>Built-in or external GPS (mock locations permitted)</value>
+    <value>ჩაშენებული ან გარე GPS (მოჩვენებითი მდებარეობები დაშვებულია)</value>
   </data>
   <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
-    <value>Built-in GPS only (no external, no mock locations)</value>
+    <value>მხოლოდ ჩაშენებული GPS (გარე GPS-ის გარეშე, მოჩვენებითი მდებარეობების გარეშე)</value>
   </data>
 </root>
