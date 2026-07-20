@@ -621,8 +621,8 @@
   <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
     <value>Вы переназначаете веб-задания пользователю, который не является ИНТЕРВЬЮЕРОМ. Если вы уже отправили ссылки на эти задания, респонденты не смогут отвечать на ваш опрос, пока задания не будут возвращены пользователю с ролью ИНТЕРВЬЮЕР.</value>
   </data>
-  <data name="AudioRecordingPartial" xml:space="preserve">
-      <value>Частично</value>
+  <data name="AudioRecordingSelective" xml:space="preserve">
+      <value>Выборочно</value>
   </data>
   <data name="AudioAuditScopeLabel" xml:space="preserve">
       <value>Область аудиоконтроля</value>

@@ -665,9 +665,10 @@ export default {
                     title: this.$t('Assignments.IsAudioRecordingEnabled'),
                     tooltip: this.$t('Assignments.Tooltip_Table_IsAudioRecordingEnabled'),
                     searchable: false,
+                    orderable: false,
                     render(data, type, row) {
                         if (data) return self.$t('Common.Yes')
-                        if (row.hasAudioAuditScope) return self.$t('Assignments.AudioRecordingPartial')
+                        if (row.hasAudioAuditScope) return self.$t('Assignments.AudioRecordingSelective')
                         return self.$t('Common.No')
                     },
                 },

@@ -622,8 +622,8 @@
   <data name="Action_Reopened" xml:space="preserve">
       <value>Znovu otevřeno</value>
   </data>
-  <data name="AudioRecordingPartial" xml:space="preserve">
-      <value>Částečný</value>
+  <data name="AudioRecordingSelective" xml:space="preserve">
+      <value>Selektivní</value>
   </data>
   <data name="AudioAuditScopeLabel" xml:space="preserve">
       <value>Rozsah zvukového auditu</value>
