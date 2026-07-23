@@ -323,12 +323,21 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<GeoLocationQuestionAnswered> @event)
         {
+            var parameters = this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(
+                    new GeoPosition(@event.Payload.Latitude, @event.Payload.Longitude, @event.Payload.Accuracy,
+                        @event.Payload.Altitude, @event.Payload.Timestamp)),
+                @event.Payload.RosterVector);
+
+            if (!string.IsNullOrEmpty(@event.Payload.GpsProvider))
+            {
+                parameters.Add("provider", @event.Payload.GpsProvider);
+                parameters.Add("mode", @event.Payload.IsFromMockProvider ? "mock" : "device");
+            }
+
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
                 @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
-          this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(new GeoPosition(@event.Payload.Latitude, @event.Payload.Longitude, @event.Payload.Accuracy, @event.Payload.Altitude,
-                        @event.Payload.Timestamp)),
-              @event.Payload.RosterVector));
+                parameters);
 
             return view;
         }
@@ -530,6 +539,19 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                                 if (parameters.TryGetValue("conditions", out var conditions))
                                 {
                                     newParameters["conditions"] = conditions;
+                                }
+
+                                if (action == InterviewHistoricalAction.AnswerSet)
+                                {
+                                    if (parameters.TryGetValue("provider", out var gpsProvider))
+                                    {
+                                        newParameters["provider"] = gpsProvider;
+                                    }
+
+                                    if (parameters.TryGetValue("mode", out var gpsMode))
+                                    {
+                                        newParameters["mode"] = gpsMode;
+                                    }
                                 }
                             }
                         }
