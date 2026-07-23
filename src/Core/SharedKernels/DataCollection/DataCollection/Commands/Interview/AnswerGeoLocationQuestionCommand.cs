@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
@@ -10,10 +11,12 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
         public double Longitude { get; private set; }
         public double? Accuracy { get; private set; }
         public double? Altitude { get; private set; }
+        public string? GpsProvider { get; private set; }
+        public bool IsFromMockProvider { get; private set; }
 
         public AnswerGeoLocationQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector,
             double latitude, double longitude, double? accuracy, double? altitude, 
-            DateTimeOffset timestamp)
+            DateTimeOffset timestamp, string? gpsProvider = null, bool isFromMockProvider = false)
             : base(interviewId, userId, questionId, rosterVector)
         {
             this.Latitude = latitude;
@@ -21,6 +24,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             this.Accuracy = accuracy;
             this.Timestamp = timestamp;
             this.Altitude = altitude;
+            this.GpsProvider = gpsProvider;
+            this.IsFromMockProvider = isFromMockProvider;
         }
     }
 }
