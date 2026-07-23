@@ -33,12 +33,10 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
             // Modes B (BuiltInGpsOnly) and E (BuiltInOrExternalGps) demand the physical GPS provider.
             // Modes A (AnyNonMock) and N (Any) accept any provider.
-            bool requireGpsProvider = acceptableSource == AcceptableGpsLocationSource.BuiltInGpsOnly
-                                      || acceptableSource == AcceptableGpsLocationSource.BuiltInOrExternalGps;
+            bool requireGpsProvider = acceptableSource.RequiresGpsProvider();
             // Mock locations (external Bluetooth/USB GPS sensors are exposed this way on Android)
             // are only permitted in modes E and N.
-            bool allowMock = acceptableSource == AcceptableGpsLocationSource.Any
-                             || acceptableSource == AcceptableGpsLocationSource.BuiltInOrExternalGps;
+            bool allowMock = acceptableSource.AllowsMockProvider();
 
             if (!IsLocationServicesAvailable(locationManager))
             {
