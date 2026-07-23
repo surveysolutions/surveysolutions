@@ -15,7 +15,7 @@ namespace Main.Core.Entities.SubEntities
         /// <summary>Name of the location provider that produced this fix (e.g. "gps", "network", "fused").</summary>
         public string? Provider { get; set; }
 
-        /// <summary>True when the fix was produced by a mock provider (external GPS sensors are exposed this way on Android).</summary>
+        /// <summary>True when the fix was produced by a mock/injected location provider rather than the device hardware.</summary>
         public bool IsFromMockProvider { get; set; }
 
         public GeoPosition()

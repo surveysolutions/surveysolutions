@@ -543,6 +543,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
                                 if (action == InterviewHistoricalAction.AnswerSet)
                                 {
+                                    // Only GeoLocation answers carry these keys; other answer types never set them,
+                                    // so the lookups are no-ops for them and no key collisions are possible.
                                     if (parameters.TryGetValue("provider", out var gpsProvider))
                                     {
                                         newParameters["provider"] = gpsProvider;
