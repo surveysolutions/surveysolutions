@@ -65,6 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken);
         Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken);
         Task LogAssignmentAsHandledAsync(int id, CancellationToken cancellationToken);
+        Task ChangeAssignmentStatusAsync(int id, AssignmentStatusChangeApiView statusChange, CancellationToken cancellationToken);
         Task<string> GetPublicKeyForEncryptionAsync(CancellationToken cancellationToken);
         Task<bool> AreNotificationsEnabledAsync(CancellationToken token);
         Task<List<ReusableCategoriesDto>> GetQuestionnaireReusableCategoriesAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken);

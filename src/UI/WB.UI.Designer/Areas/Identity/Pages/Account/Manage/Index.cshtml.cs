@@ -42,6 +42,8 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
         [TempData]
         public string? ErrorMessage { get; set; }
 
+        public string LastLoginDate { get; set; } = string.Empty;
+
         public string? PendingEmail { get; set; }
 
         [BindProperty]
@@ -74,6 +76,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
                 FullName = fullName
             };
             PendingEmail = user.PendingEmail;
+            LastLoginDate = user.LastLoginAtUtc?.ToUIString() ?? string.Empty;
 
             return Page();
         }

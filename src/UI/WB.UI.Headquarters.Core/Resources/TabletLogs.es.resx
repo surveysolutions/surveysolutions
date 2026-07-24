@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DeviceId" xml:space="preserve">
-    <value>Device id</value>
+    <value>Id. del dispositivo</value>
   </data>
   <data name="PageSubTitle" xml:space="preserve">
     <value>El entrevistador puede navegar a la página de diagnóstico en su dispositivo y tocar el enlace "Enviar registro de seguimiento" para enviar un registro detallado</value>

@@ -139,7 +139,7 @@
     <value>Cambiar clave</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>Perfil</value>
+    <value>Contacto</value>
   </data>
   <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
     <value>Autenticación de dos factores</value>
@@ -520,7 +520,7 @@
     <value>Fecha de la última comunicación</value>
   </data>
   <data name="InterviewerProfile_Relinked" xml:space="preserve">
-    <value>Relinked</value>
+    <value>Vinculado de nuevo</value>
   </data>
   <data name="InterviewerProfile_TotalSyncTime" xml:space="preserve">
     <value>Duración de la sincronización</value>
@@ -885,7 +885,10 @@
     <value>creación masiva de usuarios</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>Los detalles de la información personal (opcional) &lt;br&gt; serán visibles solo para los usuarios de HQ</value>
+    <value>Los detalles de la información personal</value>
+  </data>
+  <data name="PublicSectionDescription" xml:space="preserve">
+    <value>(opcional, será visible solo para usuarios autenticados).</value>
   </data>
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
     <value>Fecha en que se creó la cuenta del entrevistador</value>
@@ -1659,7 +1662,13 @@
     <value>Entrevista reevaluada con éxito</value>
   </data>
   <data name="CreateUser" xml:space="preserve">
-    <value>Crear usuario</value>
+    <value>Crear cuenta de usuario</value>
+  </data>
+  <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+    <value>Acceso al espacio de trabajo</value>
+  </data>
+  <data name="CreateUser_RoleLabel" xml:space="preserve">
+    <value>Rol de usuario</value>
   </data>
   <data name="GenerateRecoveryCodes" xml:space="preserve">
     <value>Generar códigos de recuperación</value>

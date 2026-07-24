@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Domain;
@@ -41,6 +42,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             var oldAssignment = assignments.GetAssignment(assignmentId);
             if (!oldAssignment.IsCompleted)
             {
+                // Selective Audio Audit scope is not migrated automatically to a new questionnaire version.
+                // Skip such assignments and report an explanatory error so it is surfaced in the upgrade
+                // errors (assignments) file.
+                if (oldAssignment.AudioAuditScope != null && oldAssignment.AudioAuditScope.Count > 0)
+                {
+                    throw new AssignmentUpgradeException(
+                        PreloadingVerificationMessages.AssignmentUpgrade_SelectiveAudioAuditNotMigrated);
+                }
+
                 var assignmentVerification =
                     importService.VerifyWithInterviewTree(oldAssignment.Answers, null,
                         targetQuestionnaire);
