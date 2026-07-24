@@ -1071,4 +1071,7 @@
   <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
     <value>Ви використовували геолокацію або геозону під час створення інтерв'ю. Будь ласка, увімкніть їх знову, якщо хочете використовувати.</value>
   </data>
+  <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
+    <value>Немає відповідного джерела для визначення місцезнаходження</value>
+  </data>
 </root>

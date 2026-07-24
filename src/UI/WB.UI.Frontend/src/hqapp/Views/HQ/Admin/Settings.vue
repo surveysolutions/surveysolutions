@@ -106,7 +106,7 @@ export default {
             allowSupervisorChangeAssignmentStatus: true,
             allowInterviewerChangeAssignmentStatus: true,
             audioRecordingQuality: 'Mono44kHz',
-            acceptableGpsLocationSource: 'Any',
+            acceptableGpsLocationSource: 'BuiltInGpsOnly',
             isRetentionEnabled: false,
             retentionLimitInDays: null,
             retentionLimitQuantity: null,
@@ -137,7 +137,7 @@ export default {
             this.allowSupervisorChangeAssignmentStatus = workspaceSettings.data.allowSupervisorChangeAssignmentStatus ?? true
             this.allowInterviewerChangeAssignmentStatus = workspaceSettings.data.allowInterviewerChangeAssignmentStatus ?? true
             this.audioRecordingQuality = workspaceSettings.data.audioRecordingQuality ?? 'Mono44kHz'
-            this.acceptableGpsLocationSource = workspaceSettings.data.acceptableGpsLocationSource ?? 'Any'
+            this.acceptableGpsLocationSource = workspaceSettings.data.acceptableGpsLocationSource ?? 'BuiltInGpsOnly'
 
             this.encryptionEnabled = workspaceSettings.data.exportSettings.isEnabled
             this.encryptionPassword = workspaceSettings.data.exportSettings.password

@@ -300,7 +300,7 @@ namespace WB.UI.Shared.Enumerator.Services
         }
 
         public AcceptableGpsLocationSource AcceptableGpsLocationSource =>
-            this.CurrentWorkspaceSettings?.AcceptableGpsLocationSource ?? AcceptableGpsLocationSource.Any;
+            this.CurrentWorkspaceSettings?.AcceptableGpsLocationSource ?? AcceptableGpsLocationSource.BuiltInGpsOnly;
 
         public void SetAcceptableGpsLocationSource(AcceptableGpsLocationSource source)
         {

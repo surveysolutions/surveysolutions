@@ -652,7 +652,7 @@
     <value>可接受的位置来源</value>
   </data>
   <data name="AcceptableGpsLocationSourceDescription" xml:space="preserve">
-    <value>控制在访员应用程序中回答 GPS 问题时，测得位置的哪些来源是可接受的。来自不可接受来源的位置将被拒绝。测试员应用程序始终接受任何来源。</value>
+    <value>控制在访员应用程序中回答 GPS 问题时，测得位置的哪些来源是可接受的。来自不可接受来源的位置将被拒绝。</value>
   </data>
   <data name="AcceptableGpsLocationSource_Any" xml:space="preserve">
     <value>任何来源（包括模拟位置）</value>

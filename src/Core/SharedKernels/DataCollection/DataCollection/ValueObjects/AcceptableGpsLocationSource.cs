@@ -1,10 +1,11 @@
 namespace WB.Core.SharedKernels.DataCollection.ValueObjects
 {
     /// <summary>
-    /// Controls which sources of a measured location are acceptable when answering a GPS question
-    /// in the Interviewer App. The default value (<see cref="Any"/>) matches the historical
-    /// behaviour where any location (including mock locations) is accepted, so tablets syncing
-    /// with an older server keep the current behaviour.
+    /// Controls which sources of a measured location are acceptable when answering a GPS question,
+    /// and when recording geo-tracking/geofencing fixes, in the Interviewer App. When a workspace has
+    /// not configured a value, the policy default is <see cref="BuiltInGpsOnly"/> (built-in GPS sensor
+    /// only, no external or mock locations). <see cref="Any"/> preserves the historical behaviour where
+    /// any location (including mock locations) is accepted.
     /// </summary>
     public enum AcceptableGpsLocationSource
     {

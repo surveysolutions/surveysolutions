@@ -550,7 +550,7 @@ Raisons possibles :
     <value>Source(s) de localisation acceptable(s)</value>
   </data>
   <data name="AcceptableGpsLocationSourceDescription" xml:space="preserve">
-    <value>Détermine quelles sources d’une localisation mesurée sont acceptables dans l’application Enquêteur lors de la réponse aux questions GPS. Les localisations provenant de sources non acceptables sont refusées. L’application Testeur accepte toujours n’importe quelle source.</value>
+    <value>Détermine quelles sources d’une localisation mesurée sont acceptables dans l’application Enquêteur lors de la réponse aux questions GPS. Les localisations provenant de sources non acceptables sont refusées.</value>
   </data>
   <data name="AcceptableGpsLocationSource_Any" xml:space="preserve">
     <value>N’importe quelle source (y compris les localisations simulées)</value>
