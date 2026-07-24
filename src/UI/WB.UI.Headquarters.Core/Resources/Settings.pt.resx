@@ -550,7 +550,7 @@ Possíveis razões:
     <value>Fonte(s) de localização aceitável(is)</value>
   </data>
   <data name="AcceptableGpsLocationSourceDescription" xml:space="preserve">
-    <value>Controla quais fontes de uma localização medida são aceitáveis no aplicativo do Entrevistador ao responder perguntas de GPS. Localizações de fontes que não são aceitáveis são recusadas. O aplicativo do Testador sempre aceita qualquer fonte.</value>
+    <value>Controla quais fontes de uma localização medida são aceitáveis no aplicativo do Entrevistador ao responder perguntas de GPS. Localizações de fontes que não são aceitáveis são recusadas.</value>
   </data>
   <data name="AcceptableGpsLocationSource_Any" xml:space="preserve">
     <value>Qualquer fonte (incluindo localizações simuladas)</value>

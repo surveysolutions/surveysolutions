@@ -549,7 +549,7 @@ Possible reasons:
     <value>Acceptable source(s) of location</value>
   </data>
   <data name="AcceptableGpsLocationSourceDescription" xml:space="preserve">
-    <value>Controls which sources of a measured location are acceptable in the Interviewer App when answering GPS questions. Locations from sources that are not acceptable are refused. The Tester App always accepts any source.</value>
+    <value>Controls which sources of a measured location are acceptable in the Interviewer App when answering GPS questions. Locations from sources that are not acceptable are refused.</value>
   </data>
   <data name="AcceptableGpsLocationSource_Any" xml:space="preserve">
     <value>Any source (including mock locations)</value>

@@ -549,7 +549,7 @@
     <value>مصادر الموقع المقبولة</value>
   </data>
   <data name="AcceptableGpsLocationSourceDescription" xml:space="preserve">
-    <value>يتحكم في مصادر الموقع المقاس المقبولة في تطبيق الباحث عند الإجابة على أسئلة GPS. يتم رفض المواقع من المصادر غير المقبولة. يقبل تطبيق المختبِر دائمًا أي مصدر.</value>
+    <value>يتحكم في مصادر الموقع المقاس المقبولة في تطبيق الباحث عند الإجابة على أسئلة GPS. يتم رفض المواقع من المصادر غير المقبولة.</value>
   </data>
   <data name="AcceptableGpsLocationSource_Any" xml:space="preserve">
     <value>أي مصدر (بما في ذلك المواقع الوهمية)</value>
