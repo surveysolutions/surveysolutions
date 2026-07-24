@@ -235,7 +235,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 altitude: location.Altitude,
                 latitude: location.Latitude,
                 longitude: location.Longitude,
-                timestamp: location.Timestamp);
+                timestamp: location.Timestamp,
+                gpsProvider: location.Provider,
+                isFromMockProvider: location.IsFromMockProvider);
 
             try
             {
