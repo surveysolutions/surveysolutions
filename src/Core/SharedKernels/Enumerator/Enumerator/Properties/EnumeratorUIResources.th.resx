@@ -1274,4 +1274,7 @@
   <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
     <value>ไม่มีผู้ให้บริการที่เหมาะสมในการระบุตำแหน่ง</value>
   </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>ผู้ให้บริการ GPS ถูกปิดใช้งาน</value>
+  </data>
 </root>

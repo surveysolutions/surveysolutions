@@ -1014,4 +1014,7 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
   <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
     <value>Není k dispozici vhodný poskytovatel pro určení polohy</value>
   </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>Poskytovatel GPS je vypnutý</value>
+  </data>
 </root>

@@ -1074,4 +1074,7 @@
   <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
     <value>Немає відповідного джерела для визначення місцезнаходження</value>
   </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>GPS-приймач вимкнено</value>
+  </data>
 </root>

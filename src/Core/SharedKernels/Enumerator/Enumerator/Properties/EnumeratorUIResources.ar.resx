@@ -1079,4 +1079,7 @@
   <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
     <value>لا يوجد مزوّد مناسب لتحديد الموقع</value>
   </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>مزوّد GPS معطّل</value>
+  </data>
 </root>

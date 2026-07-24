@@ -1072,4 +1072,7 @@ hoặc liên hệ với giám sát viên của bạn
   <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
     <value>Không có nhà cung cấp phù hợp để xác định vị trí</value>
   </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>Nhà cung cấp GPS đã bị tắt</value>
+  </data>
 </root>

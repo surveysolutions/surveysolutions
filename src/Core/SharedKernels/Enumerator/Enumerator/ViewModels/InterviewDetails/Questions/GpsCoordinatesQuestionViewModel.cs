@@ -188,7 +188,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
                 else if (gpsException is GpsProviderDisabledException)
                 {
-                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(EnumeratorUIResources.Error_NoGpsProvider);
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(EnumeratorUIResources.Error_GpsProviderDisabled);
                 }
                 else if (gpsException is PermissionException || gpsException is MissingPermissionsException)
                 {

@@ -1018,4 +1018,7 @@ Il apparaîtra sur l'appareil de l'enquêteur après la prochaine synchronisatio
   <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
     <value>Aucun fournisseur approprié pour déterminer la localisation</value>
   </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>Le fournisseur GPS est désactivé</value>
+  </data>
 </root>

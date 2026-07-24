@@ -1072,4 +1072,7 @@
   <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
     <value>მდებარეობის დასადგენად შესაბამისი წყარო არ არის</value>
   </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>GPS პროვაიდერი გამორთულია</value>
+  </data>
 </root>
