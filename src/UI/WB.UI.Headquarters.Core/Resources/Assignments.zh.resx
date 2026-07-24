@@ -618,4 +618,13 @@
   <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
     <value>您正在将 Web 任务重新分配给一个不是 INTERVIEWER 的用户。如果您已经发送了这些任务的链接，则在任务重新分配回 INTERVIEWER 角色的用户之前，受访者将无法回应您的调查。</value>
   </data>
+  <data name="AudioRecordingSelective" xml:space="preserve">
+      <value>选择性</value>
+  </data>
+  <data name="AudioAuditScopeLabel" xml:space="preserve">
+      <value>音频审核范围</value>
+  </data>
+  <data name="AudioRecordingScopeNotice" xml:space="preserve">
+      <value>此任务具有选择性音频审核范围。启用完整音频录制将录制所有章节。禁用将恢复为仅录制所选章节。</value>
+  </data>
 </root>

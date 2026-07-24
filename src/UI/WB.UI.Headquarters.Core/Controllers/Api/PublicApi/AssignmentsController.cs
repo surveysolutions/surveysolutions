@@ -555,7 +555,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             return new AudioRecordingEnabled
             {
-                Enabled = assignment.AudioRecording
+                Enabled = assignment.AudioRecording,
+                AudioAuditScope = assignment.AudioAuditScope ?? new List<string>()
             };
         }
 
@@ -584,11 +585,23 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (assignment == null || assignment.Archived)
                 return NotFound();
 
+            if (request.AudioAuditScope != null &&
+                !AreAudioAuditScopesEqual(request.AudioAuditScope, assignment.AudioAuditScope))
+                return StatusCode(StatusCodes.Status400BadRequest,
+                    "Audio audit scope cannot be changed through this endpoint.");
+
             commandService.Execute(
                 new UpdateAssignmentAudioRecording(assignment.PublicKey, authorizedUser.Id, 
                     request.Enabled, assignment.QuestionnaireId));
 
             return NoContent();
+        }
+
+        private static bool AreAudioAuditScopesEqual(List<string> requested, List<string> current)
+        {
+            var requestedScope = requested ?? new List<string>();
+            var currentScope = current ?? new List<string>();
+            return new HashSet<string>(requestedScope).SetEquals(currentScope);
         }
 
         /// <summary>
@@ -868,6 +881,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     {Value = assignmentInfo.Comments, Column = nameof(assignmentInfo.Comments)}.ToAssignmentComments(),
                 TargetArea = new PreloadingValue
                     {Value = assignmentInfo.TargetArea, Column = nameof(assignmentInfo.TargetArea)}.ToAssignmentTargetArea(),
+                AudioAuditScope = new AssignmentAudioAuditScope
+                {
+                    Column = ServiceColumns.AudioAuditScopeColumnName,
+                    Value = assignmentInfo.AudioAuditScope == null ? null : string.Join(",", assignmentInfo.AudioAuditScope),
+                    VariableNames = assignmentInfo.AudioAuditScope?.ToArray() ?? Array.Empty<string>()
+                },
             };
 
             var rosterRows = rosterAnswers

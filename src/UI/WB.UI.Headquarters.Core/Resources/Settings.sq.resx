@@ -589,4 +589,25 @@ Arsyet e mundshme:
   <data name="LogoRemoveError" xml:space="preserve">
     <value>Heqja e logos dështoi. Ju lutemi provoni përsëri.</value>
   </data>
+  <data name="AudioRecordingQuality" xml:space="preserve">
+    <value>Cilësia e regjistrimit audio</value>
+  </data>
+  <data name="AudioRecordingQualityDescription" xml:space="preserve">
+    <value>Cilësia audio e përdorur nga aplikacioni i intervistuesit gjatë regjistrimit të audios (auditimi audio dhe pyetjet audio)</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono44kHz" xml:space="preserve">
+    <value>64 kbps, Mono, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve">
+    <value>64 kbps, Mono, 22.05 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono16kHz" xml:space="preserve">
+    <value>32 kbps, Mono, 16 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve">
+    <value>128 kbps, Stereo, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
+    <value>128 kbps, Stereo, 48 kHz</value>
+  </data>
 </root>

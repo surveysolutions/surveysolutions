@@ -255,4 +255,10 @@
   <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
     <value>La respuesta a una pregunta con el nombre de variable {0} no se puede cargar previamente, ya que es de un tipo no admitido. Consulte el siguiente artículo de soporte https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type para obtener detalles sobre lo que se puede precargar en la versión actual.</value>
   </data>
+  <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+    <value>El nombre de la variable del alcance de la auditoría de audio '{0}' no es válido. Debe hacer referencia a una sección, grupo o roster existente (no se permiten preguntas ni rosters planos).</value>
+  </data>
+  <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+    <value>La asignación no se migró porque utiliza una auditoría de audio selectiva (alcance de grabación de audio), que no se puede migrar automáticamente a una nueva versión del cuestionario. Vuelva a crear la asignación manualmente y configure nuevamente el alcance de la auditoría de audio.</value>
+  </data>
 </root>

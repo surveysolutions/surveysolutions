@@ -376,6 +376,7 @@ Todos os arquivos de dados devem conter a variável interview__id com um identif
 &lt;b&gt;_password&lt;/b&gt; - senha para iniciar uma entrevista (apenas para entrevistas web);&lt;br/&gt;
 &lt;b&gt;_webmode&lt;/b&gt; - modo para atribuição (1 para CAWI, 0 ou em branco para CAPI);&lt;br/&gt;
 &lt;b&gt;_record_audio&lt;/b&gt; - gravação de áudio está habilitada para entrevistas (1 - habilitado, 0 - desabilitado, em branco - obter este valor do questionário);&lt;br/&gt;
+&lt;b&gt;_aascope&lt;/b&gt; - nomes de variáveis (separados por vírgula) de seções, grupos ou rosters para gravar áudio quando _record_audio está desativado (escopo seletivo de auditoria de áudio);&lt;br/&gt;
 &lt;b&gt;_comment&lt;/b&gt; - comentários para a atribuição</value>
     <comment>Não traduza _responsible, _quantity, _email, _webmode, _record_audio. Mantenha os nomes em inglês</comment>
   </data>

@@ -6,7 +6,7 @@
 
 - **Primary Languages:** C# (.NET 9), JavaScript/Vue 3 (frontend)
 - **Database:** PostgreSQL (NHibernate ORM for HQ, EF Core for Export service)
-- **Target Runtimes:** .NET 9, Node.js 22 (frontend; match CI workflow `NODE_VERSION`)
+- **Target Runtimes:** .NET 9, Node.js 24 (frontend; match CI workflow `NODE_VERSION`)
 
 ---
 

@@ -1,5 +1,6 @@
 using System;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
 {
@@ -12,6 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
         public const int GeographyQuestionPeriodInSecondsDefault = 10;
         public const bool AllowSupervisorChangeAssignmentStatusDefault = true;
         public const bool AllowInterviewerChangeAssignmentStatusDefault = true;
+        public const AudioRecordingQuality AudioRecordingQualityDefault = WB.Core.SharedKernels.DataCollection.ValueObjects.AudioRecordingQuality.Mono44kHz;
 
         public bool AutoUpdateEnabled { get; set; }
         public bool? DeviceNotificationsEnabled { get; set; }
@@ -23,6 +25,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
 
         public bool? AllowSupervisorChangeAssignmentStatus { get; set; }
         public bool? AllowInterviewerChangeAssignmentStatus { get; set; }
+
+        public AudioRecordingQuality? AudioRecordingQuality { get; set; }
     }
 
     public static class InterviewerSettingsExtensions
@@ -92,6 +96,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
                 return false;
 
             return settings.AllowInterviewerChangeAssignmentStatus.Value;
+        }
+
+        public static AudioRecordingQuality GetAudioRecordingQuality(this InterviewerSettings settings)
+        {
+            if (settings?.AudioRecordingQuality == null)
+                return InterviewerSettings.AudioRecordingQualityDefault;
+
+            return settings.AudioRecordingQuality.Value;
         }
     }
 }

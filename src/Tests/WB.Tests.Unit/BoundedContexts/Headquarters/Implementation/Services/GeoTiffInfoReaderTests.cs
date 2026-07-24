@@ -331,6 +331,23 @@ public class GeoTiffInfoReaderTests
         finally { File.Delete(path); }
     }
 
+    [Test]
+    public void TryReadGeoTiffBounds_corrupted_file_returns_false_instead_of_throwing()
+    {
+        // A file that is not a valid TIFF (random bytes) must return false, not throw.
+        string path = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N") + ".tif");
+        File.WriteAllBytes(path, new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07 });
+        try
+        {
+            Assert.DoesNotThrow(() =>
+            {
+                bool result = GeoTiffInfoReader.TryReadGeoTiffBounds(path, out _, out _, out _, out _);
+                Assert.That(result, Is.False);
+            });
+        }
+        finally { File.Delete(path); }
+    }
+
     // ── Helpers ──────────────────────────────────────────────────────────────
     private static string WriteTempTiff(byte[] bytes)
     {
