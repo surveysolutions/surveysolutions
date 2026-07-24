@@ -32,8 +32,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         public void BecauseOf() =>
             interview.AnswerGeoLocationQuestion(
-                userId, questionId, new decimal[0], DateTime.Now,
-                latitude: -1.234, longitude: 1.00025, accuracy: 10, altitude: 34, timestamp: new DateTimeOffset(DateTime.Now),
+                userId, questionId, Array.Empty<decimal>(), Timestamp,
+                latitude: -1.234, longitude: 1.00025, accuracy: 10, altitude: 34, timestamp: Timestamp,
                 gpsProvider: "gps", isFromMockProvider: true);
 
         [NUnit.Framework.OneTimeTearDown] public void CleanUp()
@@ -52,5 +52,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Interview interview;
         private static Guid userId;
         private static Guid questionId;
+        private static readonly DateTimeOffset Timestamp = new DateTimeOffset(new DateTime(1984, 4, 18), TimeSpan.Zero);
     }
 }

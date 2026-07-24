@@ -993,8 +993,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvents(treeDifference, userId, originDate);
         }
 
+#nullable enable annotations
         public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTimeOffset originDate, double latitude, double longitude,
-            double? accuracy, double? altitude, DateTimeOffset timestamp, string gpsProvider = null, bool isFromMockProvider = false)
+            double? accuracy, double? altitude, DateTimeOffset timestamp, string? gpsProvider = null, bool isFromMockProvider = false)
+#nullable restore
         {
             new InterviewPropertiesInvariants(this.properties)
                 .RequireAnswerCanBeChanged();

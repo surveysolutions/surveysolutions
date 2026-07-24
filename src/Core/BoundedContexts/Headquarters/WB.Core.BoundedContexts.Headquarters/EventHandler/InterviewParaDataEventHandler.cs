@@ -75,6 +75,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewHistoryView, TranslationSwitched>,
         IUpdateHandler<InterviewHistoryView, InterviewModeChanged>
     {
+        private const string GpsProviderParameterName = "provider";
+        private const string GpsModeParameterName = "mode";
+        private const string GpsMockModeValue = "mock";
+        private const string GpsDeviceModeValue = "device";
+
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IUserViewFactory userReader;
 
@@ -330,8 +335,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             if (!string.IsNullOrEmpty(@event.Payload.GpsProvider))
             {
-                parameters.Add("provider", @event.Payload.GpsProvider);
-                parameters.Add("mode", @event.Payload.IsFromMockProvider ? "mock" : "device");
+                parameters.Add(GpsProviderParameterName, @event.Payload.GpsProvider);
+                parameters.Add(GpsModeParameterName, @event.Payload.IsFromMockProvider ? GpsMockModeValue : GpsDeviceModeValue);
             }
 
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
@@ -545,14 +550,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                                 {
                                     // Only GeoLocation answers carry these keys; other answer types never set them,
                                     // so the lookups are no-ops for them and no key collisions are possible.
-                                    if (parameters.TryGetValue("provider", out var gpsProvider))
+                                    if (parameters.TryGetValue(GpsProviderParameterName, out var gpsProvider))
                                     {
-                                        newParameters["provider"] = gpsProvider;
+                                        newParameters[GpsProviderParameterName] = gpsProvider;
                                     }
 
-                                    if (parameters.TryGetValue("mode", out var gpsMode))
+                                    if (parameters.TryGetValue(GpsModeParameterName, out var gpsMode))
                                     {
-                                        newParameters["mode"] = gpsMode;
+                                        newParameters[GpsModeParameterName] = gpsMode;
                                     }
                                 }
                             }

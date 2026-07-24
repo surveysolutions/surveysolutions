@@ -74,7 +74,9 @@ namespace Main.Core.Entities.SubEntities
         {
             if (other == null)
                 return false;
-            
+
+            // Equality intentionally ignores Provider and IsFromMockProvider: they are capture metadata,
+            // not part of the geographic value identity.
             return this.Latitude.Equals(other.Latitude) &&
                 this.Longitude.Equals(other.Longitude) &&
                 this.Accuracy.Equals(other.Accuracy) &&

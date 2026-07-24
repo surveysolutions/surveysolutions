@@ -11,6 +11,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 {
     internal class when_GeoLocationQuestionAnswered_received : InterviewHistoryDenormalizerTestContext
     {
+        private static readonly DateTimeOffset Timestamp = new DateTimeOffset(new DateTime(1984, 4, 18), TimeSpan.Zero);
+
         [Test]
         public void should_include_gps_provider_and_mode_when_provider_present()
         {
@@ -28,8 +30,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var answerEvents = new List<IEvent>
             {
-                new GeoLocationQuestionAnswered(userId, questionId, new decimal[0], DateTime.Now, 1, 2, 3, 4,
-                    new DateTimeOffset(new DateTime(1984, 4, 18)), gpsProvider: "gps", isFromMockProvider: true)
+                new GeoLocationQuestionAnswered(userId, questionId, Array.Empty<decimal>(), Timestamp, 1, 2, 3, 4,
+                    Timestamp, gpsProvider: "gps", isFromMockProvider: true)
             };
 
             var denormalizer = CreateInterviewHistoryDenormalizer(
@@ -60,8 +62,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var answerEvents = new List<IEvent>
             {
-                new GeoLocationQuestionAnswered(userId, questionId, new decimal[0], DateTime.Now, 1, 2, 3, 4,
-                    new DateTimeOffset(new DateTime(1984, 4, 18)), gpsProvider: "fused", isFromMockProvider: false)
+                new GeoLocationQuestionAnswered(userId, questionId, Array.Empty<decimal>(), Timestamp, 1, 2, 3, 4,
+                    Timestamp, gpsProvider: "fused", isFromMockProvider: false)
             };
 
             var denormalizer = CreateInterviewHistoryDenormalizer(
@@ -91,8 +93,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var answerEvents = new List<IEvent>
             {
-                new GeoLocationQuestionAnswered(userId, questionId, new decimal[0], DateTime.Now, 1, 2, 3, 4,
-                    new DateTimeOffset(new DateTime(1984, 4, 18)))
+                new GeoLocationQuestionAnswered(userId, questionId, Array.Empty<decimal>(), Timestamp, 1, 2, 3, 4,
+                    Timestamp)
             };
 
             var denormalizer = CreateInterviewHistoryDenormalizer(
