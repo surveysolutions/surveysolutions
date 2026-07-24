@@ -1011,4 +1011,7 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
   <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
     <value>Stav: Otevřeno</value>
   </data>
+  <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
+    <value>Není k dispozici vhodný poskytovatel pro určení polohy</value>
+  </data>
 </root>

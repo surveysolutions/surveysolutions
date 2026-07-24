@@ -1228,4 +1228,7 @@
   <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
       <value>អ្នកបានប្រើ Geo Tracking ឬ Geo Fencing នៅពេលបង្កើតការសម្ភាស។ សូមបើកវាម្ដងទៀត ប្រសិនបើអ្នកចង់ប្រើវា។</value>
   </data>
+  <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
+    <value>គ្មានអ្នកផ្តល់សេវាសមស្របដើម្បីកំណត់ទីតាំង</value>
+  </data>
 </root>

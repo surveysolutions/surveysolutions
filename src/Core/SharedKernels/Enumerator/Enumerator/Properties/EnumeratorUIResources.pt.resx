@@ -1073,4 +1073,7 @@ Aparecerá no dispositivo do entrevistador após a próxima sincronização</val
   <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
     <value>Estado: Aberto</value>
   </data>
+  <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
+    <value>Nenhum provedor adequado para determinar a localização</value>
+  </data>
 </root>

@@ -1271,4 +1271,7 @@
   <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
       <value>คุณได้ใช้การติดตามภูมิศาสตร์หรือการกำหนดขอบเขตภูมิศาสตร์เมื่อสร้างการสัมภาษณ์ โปรดเปิดใช้งานอีกครั้งหากคุณต้องการใช้</value>
   </data>
+  <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
+    <value>ไม่มีผู้ให้บริการที่เหมาะสมในการระบุตำแหน่ง</value>
+  </data>
 </root>
