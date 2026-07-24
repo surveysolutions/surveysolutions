@@ -40,6 +40,7 @@ using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Headquarters.Services.Maps;
 using WB.UI.Shared.Web.Exceptions;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
@@ -477,6 +478,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (assignment == null)
             {
                 return NotFound();
+            }
+
+            if (targetArea != null && targetArea.Length > MapFilesValidator.MapFileNameLengthLimit)
+            {
+                var truncatedName = targetArea.Length > 100 ? targetArea.Substring(0, 100) + "…" : targetArea;
+                return StatusCode(StatusCodes.Status406NotAcceptable,
+                    string.Format(WB.UI.Headquarters.Resources.Maps.MapFileNameTooLong, truncatedName, MapFilesValidator.MapFileNameLengthLimit));
             }
 
             commandService.Execute(
