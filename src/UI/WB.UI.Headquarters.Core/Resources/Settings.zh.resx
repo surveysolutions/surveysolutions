@@ -648,4 +648,22 @@
   <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
     <value>128 kbps, 立体声, 48 kHz</value>
   </data>
+  <data name="AcceptableGpsLocationSource" xml:space="preserve">
+    <value>可接受的位置来源</value>
+  </data>
+  <data name="AcceptableGpsLocationSourceDescription" xml:space="preserve">
+    <value>控制在访员应用程序中回答 GPS 问题时，测得位置的哪些来源是可接受的。来自不可接受来源的位置将被拒绝。</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_Any" xml:space="preserve">
+    <value>任何来源（包括模拟位置）</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_AnyNonMock" xml:space="preserve">
+    <value>任何非模拟位置的来源</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_BuiltInOrExternalGps" xml:space="preserve">
+    <value>内置或外部 GPS（允许模拟位置）</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
+    <value>仅内置 GPS（无外部，无模拟位置）</value>
+  </data>
 </root>

@@ -49,6 +49,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             public bool AllowSupervisorChangeAssignmentStatus { get; set; }
             public bool AllowInterviewerChangeAssignmentStatus { get; set; }
             public AudioRecordingQuality? AudioRecordingQuality { get; set; }
+            public AcceptableGpsLocationSource? AcceptableGpsLocationSource { get; set; }
         }
 
         public class InterviewerGeographyQuestionAccuracyInMetersModel
@@ -162,7 +163,8 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 AllowSupervisorChangeAssignmentStatus = interviewerSettings.IsAllowSupervisorChangeAssignmentStatus(),
                 AllowInterviewerChangeAssignmentStatus = interviewerSettings.IsAllowInterviewerChangeAssignmentStatus(),
-                AudioRecordingQuality = interviewerSettings.GetAudioRecordingQuality()
+                AudioRecordingQuality = interviewerSettings.GetAudioRecordingQuality(),
+                AcceptableGpsLocationSource = interviewerSettings.GetAcceptableGpsLocationSource()
             };
         }
 
@@ -185,6 +187,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                     : false;
                 if (message.AudioRecordingQuality.HasValue)
                     settings.AudioRecordingQuality = message.AudioRecordingQuality.Value;
+                if (message.AcceptableGpsLocationSource.HasValue)
+                    settings.AcceptableGpsLocationSource = message.AcceptableGpsLocationSource.Value;
             });
 
             return Ok(new {success = true});

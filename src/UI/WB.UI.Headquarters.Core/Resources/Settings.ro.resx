@@ -601,4 +601,22 @@ Motive posibile:
   <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
     <value>128 kbps, Stereo, 48 kHz</value>
   </data>
+  <data name="AcceptableGpsLocationSource" xml:space="preserve">
+    <value>Surse acceptabile de localizare</value>
+  </data>
+  <data name="AcceptableGpsLocationSourceDescription" xml:space="preserve">
+    <value>Controlează care surse ale unei locații măsurate sunt acceptabile în aplicația Operatorului de interviu la răspunsul la întrebările GPS. Locațiile din surse care nu sunt acceptabile sunt refuzate.</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_Any" xml:space="preserve">
+    <value>Orice sursă (inclusiv locații simulate)</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_AnyNonMock" xml:space="preserve">
+    <value>Orice sursă care nu este o locație simulată</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_BuiltInOrExternalGps" xml:space="preserve">
+    <value>GPS integrat sau extern (locațiile simulate sunt permise)</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
+    <value>Doar GPS integrat (fără extern, fără locații simulate)</value>
+  </data>
 </root>

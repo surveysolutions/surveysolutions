@@ -610,4 +610,22 @@ Arsyet e mundshme:
   <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
     <value>128 kbps, Stereo, 48 kHz</value>
   </data>
+  <data name="AcceptableGpsLocationSource" xml:space="preserve">
+    <value>Burim(e) i pranueshëm i vendndodhjes</value>
+  </data>
+  <data name="AcceptableGpsLocationSourceDescription" xml:space="preserve">
+    <value>Kontrollon cilat burime të një vendndodhjeje të matur janë të pranueshme në aplikacionin e Intervistuesit gjatë përgjigjes së pyetjeve GPS. Vendndodhjet nga burime që nuk janë të pranueshme refuzohen.</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_Any" xml:space="preserve">
+    <value>Çdo burim (përfshirë vendndodhjet e simuluara)</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_AnyNonMock" xml:space="preserve">
+    <value>Çdo burim që nuk është vendndodhje e simuluar</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_BuiltInOrExternalGps" xml:space="preserve">
+    <value>GPS i brendshëm ose i jashtëm (lejohen vendndodhjet e simuluara)</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
+    <value>Vetëm GPS i brendshëm (pa të jashtëm, pa vendndodhje të simuluara)</value>
+  </data>
 </root>

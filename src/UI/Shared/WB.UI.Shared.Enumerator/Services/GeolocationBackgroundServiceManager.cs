@@ -1,6 +1,7 @@
 using Android.Content;
 using Android.Locations;
 using Android.OS;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
@@ -76,6 +77,14 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
 
     private async void ServiceOnLocationReceived(object sender, LocationReceivedEventArgs e)
     {
+        // Enforce the workspace-configured acceptable location source for geo-tracking and
+        // geofencing, mirroring the enforcement applied when answering GPS questions: reject
+        // fixes that do not come from the required provider, or that are mock when mock is not
+        // permitted, so background tracking cannot be spoofed with mock/non-GPS locations.
+        bool isFromGpsProvider = e.Location.Provider == LocationManager.GpsProvider;
+        if (!settings.AcceptableGpsLocationSource.IsLocationAcceptable(isFromGpsProvider, e.IsFromMockProvider))
+            return;
+
         // Skip the accuracy filter for external GPS sensors (mock provider): they often
         // report a fixed or vendor-specific accuracy value that does not reflect actual
         // signal quality. Applying the threshold would silently drop every fix until timeout.

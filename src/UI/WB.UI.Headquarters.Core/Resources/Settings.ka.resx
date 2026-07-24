@@ -652,4 +652,22 @@
   <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
     <value>128 kbps, სტერეო, 48 kHz</value>
   </data>
+  <data name="AcceptableGpsLocationSource" xml:space="preserve">
+    <value>მდებარეობის დასაშვები წყარო(ები)</value>
+  </data>
+  <data name="AcceptableGpsLocationSourceDescription" xml:space="preserve">
+    <value>განსაზღვრავს, გაზომილი მდებარეობის რომელი წყაროებია დასაშვები ინტერვიუერის აპლიკაციაში GPS კითხვებზე პასუხის გაცემისას. დაუშვებელი წყაროებიდან მიღებული მდებარეობები უარყოფილია.</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_Any" xml:space="preserve">
+    <value>ნებისმიერი წყარო (მოჩვენებითი მდებარეობების ჩათვლით)</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_AnyNonMock" xml:space="preserve">
+    <value>ნებისმიერი წყარო, რომელიც არ არის მოჩვენებითი მდებარეობა</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_BuiltInOrExternalGps" xml:space="preserve">
+    <value>ჩაშენებული ან გარე GPS (მოჩვენებითი მდებარეობები დაშვებულია)</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
+    <value>მხოლოდ ჩაშენებული GPS (გარე GPS-ის გარეშე, მოჩვენებითი მდებარეობების გარეშე)</value>
+  </data>
 </root>

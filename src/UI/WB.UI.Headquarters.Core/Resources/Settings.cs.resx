@@ -540,4 +540,22 @@
   <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
     <value>128 kbps, Stereo, 48 kHz</value>
   </data>
+  <data name="AcceptableGpsLocationSource" xml:space="preserve">
+    <value>Přijatelné zdroje polohy</value>
+  </data>
+  <data name="AcceptableGpsLocationSourceDescription" xml:space="preserve">
+    <value>Určuje, které zdroje naměřené polohy jsou přijatelné v aplikaci Tazatele při odpovídání na otázky GPS. Polohy ze zdrojů, které nejsou přijatelné, jsou odmítnuty.</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_Any" xml:space="preserve">
+    <value>Jakýkoli zdroj (včetně fiktivních poloh)</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_AnyNonMock" xml:space="preserve">
+    <value>Jakýkoli zdroj, který není fiktivní poloha</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_BuiltInOrExternalGps" xml:space="preserve">
+    <value>Vestavěné nebo externí GPS (fiktivní polohy povoleny)</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
+    <value>Pouze vestavěné GPS (bez externího, bez fiktivních poloh)</value>
+  </data>
 </root>

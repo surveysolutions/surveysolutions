@@ -106,7 +106,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 .IsAllowInterviewerChangeAssignmentStatus(),
 
             AudioRecordingQuality = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
-                .GetAudioRecordingQuality()
+                .GetAudioRecordingQuality(),
+
+            AcceptableGpsLocationSource = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
+                .GetAcceptableGpsLocationSource()
         };
     }
 }

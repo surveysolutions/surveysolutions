@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             supervisorSettings.SetAllowSupervisorChangeAssignmentStatus(tabletSettings.AllowSupervisorChangeAssignmentStatus);
             supervisorSettings.SetAllowInterviewerChangeAssignmentStatus(tabletSettings.AllowInterviewerChangeAssignmentStatus);
             supervisorSettings.SetAudioRecordingQuality(tabletSettings.AudioRecordingQuality);
+            supervisorSettings.SetAcceptableGpsLocationSource(tabletSettings.AcceptableGpsLocationSource);
         }
     }
 }

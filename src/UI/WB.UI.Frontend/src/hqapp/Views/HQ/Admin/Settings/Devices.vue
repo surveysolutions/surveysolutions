@@ -104,6 +104,24 @@
                 </div>
             </div>
             <div class="col-sm-9">
+                <div class="block-filter" style="padding-left: 30px">
+                    <div class="form-group">
+                        <label for="acceptableGpsLocationSource" style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{ $t('Settings.AcceptableGpsLocationSource') }}
+                            <p style="font-weight: normal;margin-bottom: 0px">
+                                {{ $t('Settings.AcceptableGpsLocationSourceDescription') }}
+                            </p>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <Typeahead control-id="acceptableGpsLocationSource" noSearch noClear
+                            :values="acceptableGpsLocationSourceOptions" :value="acceptableGpsLocationSourceValue"
+                            @selected="onAcceptableGpsLocationSourceSelected" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
                 <Form v-slot="{ meta }" @submit="noAction" :data-vv-scope="'geographyQuestion'">
                     <div class="block-filter" style="padding-left: 30px">
                         <div class="form-group">
@@ -276,6 +294,7 @@ export default {
         allowSupervisorChangeAssignmentStatus: Boolean,
         allowInterviewerChangeAssignmentStatus: Boolean,
         audioRecordingQuality: String,
+        acceptableGpsLocationSource: String,
     },
     emits: ['update:isInterviewerAutomaticUpdatesEnabled',
         'update:isDeviceNotificationsEnabled',
@@ -289,6 +308,7 @@ export default {
         'update:allowSupervisorChangeAssignmentStatus',
         'update:allowInterviewerChangeAssignmentStatus',
         'update:audioRecordingQuality',
+        'update:acceptableGpsLocationSource',
     ],
     computed: {
         isInterviewerAutomaticUpdatesEnabledModel: {
@@ -401,6 +421,25 @@ export default {
         audioRecordingQualityValue() {
             return this.audioRecordingQualityOptions.find(o => o.key === this.audioRecordingQuality) || null
         },
+        acceptableGpsLocationSourceModel: {
+            get() {
+                return this.acceptableGpsLocationSource
+            },
+            set(value) {
+                this.$emit('update:acceptableGpsLocationSource', value)
+            },
+        },
+        acceptableGpsLocationSourceOptions() {
+            return [
+                { key: 'BuiltInGpsOnly', value: this.$t('Settings.AcceptableGpsLocationSource_BuiltInGpsOnly') },
+                { key: 'BuiltInOrExternalGps', value: this.$t('Settings.AcceptableGpsLocationSource_BuiltInOrExternalGps') },
+                { key: 'AnyNonMock', value: this.$t('Settings.AcceptableGpsLocationSource_AnyNonMock') },
+                { key: 'Any', value: this.$t('Settings.AcceptableGpsLocationSource_Any') },
+            ]
+        },
+        acceptableGpsLocationSourceValue() {
+            return this.acceptableGpsLocationSourceOptions.find(o => o.key === this.acceptableGpsLocationSource) || null
+        },
     },
 
     components: {
@@ -419,7 +458,8 @@ export default {
                     this.isPartialSynchronizationEnabledModel,
                     this.allowSupervisorChangeAssignmentStatusModel,
                     this.allowInterviewerChangeAssignmentStatusModel,
-                    this.audioRecordingQualityModel
+                    this.audioRecordingQualityModel,
+                    this.acceptableGpsLocationSourceModel
                 )
             })
         },
@@ -427,6 +467,13 @@ export default {
         onAudioRecordingQualitySelected(item) {
             if (item != null) {
                 this.audioRecordingQualityModel = item.key
+                this.updateDeviceSettings()
+            }
+        },
+
+        onAcceptableGpsLocationSourceSelected(item) {
+            if (item != null) {
+                this.acceptableGpsLocationSourceModel = item.key
                 this.updateDeviceSettings()
             }
         },

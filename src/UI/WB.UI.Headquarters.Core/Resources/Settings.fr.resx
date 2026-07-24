@@ -546,4 +546,22 @@ Raisons possibles :
   <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
     <value>128 kbps, Stéréo, 48 kHz</value>
   </data>
+  <data name="AcceptableGpsLocationSource" xml:space="preserve">
+    <value>Source(s) de localisation acceptable(s)</value>
+  </data>
+  <data name="AcceptableGpsLocationSourceDescription" xml:space="preserve">
+    <value>Détermine quelles sources d’une localisation mesurée sont acceptables dans l’application Enquêteur lors de la réponse aux questions GPS. Les localisations provenant de sources non acceptables sont refusées.</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_Any" xml:space="preserve">
+    <value>N’importe quelle source (y compris les localisations simulées)</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_AnyNonMock" xml:space="preserve">
+    <value>N’importe quelle source qui n’est pas une localisation simulée</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_BuiltInOrExternalGps" xml:space="preserve">
+    <value>GPS intégré ou externe (localisations simulées autorisées)</value>
+  </data>
+  <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
+    <value>GPS intégré uniquement (pas d’externe, pas de localisations simulées)</value>
+  </data>
 </root>

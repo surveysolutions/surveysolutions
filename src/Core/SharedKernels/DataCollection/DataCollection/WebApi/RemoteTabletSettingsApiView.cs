@@ -16,6 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
             AllowSupervisorChangeAssignmentStatus = true;
             AllowInterviewerChangeAssignmentStatus = true;
             AudioRecordingQuality = AudioRecordingQuality.Mono44kHz;
+            AcceptableGpsLocationSource = AcceptableGpsLocationSource.BuiltInGpsOnly;
         }
 
         public bool NotificationsEnabled { get; set; }
@@ -30,5 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public bool AllowInterviewerChangeAssignmentStatus { get; set; }
 
         public AudioRecordingQuality AudioRecordingQuality { get; set; }
+
+        public AcceptableGpsLocationSource AcceptableGpsLocationSource { get; set; }
     }
 }
