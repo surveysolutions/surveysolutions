@@ -75,8 +75,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewHistoryView, TranslationSwitched>,
         IUpdateHandler<InterviewHistoryView, InterviewModeChanged>
     {
-        private const string GpsProviderParameterName = "provider";
-        private const string GpsModeParameterName = "mode";
+        private const string GpsProviderParameterName = "gps_provider";
+        private const string GpsModeParameterName = "gps_mode";
         private const string GpsMockModeValue = "mock";
         private const string GpsDeviceModeValue = "device";
 

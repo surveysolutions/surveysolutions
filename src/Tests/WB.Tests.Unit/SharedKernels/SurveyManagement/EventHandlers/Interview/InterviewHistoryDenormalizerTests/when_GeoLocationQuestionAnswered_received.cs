@@ -41,8 +41,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             PublishEventsOnOnInterviewExportedDataDenormalizer(answerEvents, interviewHistoryView, denormalizer);
 
             interviewHistoryView.Records[0].Parameters["answer"].Should().Be("1,2[3]4");
-            interviewHistoryView.Records[0].Parameters["provider"].Should().Be("gps");
-            interviewHistoryView.Records[0].Parameters["mode"].Should().Be("mock");
+            interviewHistoryView.Records[0].Parameters["gps_provider"].Should().Be("gps");
+            interviewHistoryView.Records[0].Parameters["gps_mode"].Should().Be("mock");
         }
 
         [Test]
@@ -72,8 +72,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             PublishEventsOnOnInterviewExportedDataDenormalizer(answerEvents, interviewHistoryView, denormalizer);
 
-            interviewHistoryView.Records[0].Parameters["provider"].Should().Be("fused");
-            interviewHistoryView.Records[0].Parameters["mode"].Should().Be("device");
+            interviewHistoryView.Records[0].Parameters["gps_provider"].Should().Be("fused");
+            interviewHistoryView.Records[0].Parameters["gps_mode"].Should().Be("device");
         }
 
         [Test]
@@ -104,8 +104,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             PublishEventsOnOnInterviewExportedDataDenormalizer(answerEvents, interviewHistoryView, denormalizer);
 
             interviewHistoryView.Records[0].Parameters["answer"].Should().Be("1,2[3]4");
-            interviewHistoryView.Records[0].Parameters.Should().NotContainKey("provider");
-            interviewHistoryView.Records[0].Parameters.Should().NotContainKey("mode");
+            interviewHistoryView.Records[0].Parameters.Should().NotContainKey("gps_provider");
+            interviewHistoryView.Records[0].Parameters.Should().NotContainKey("gps_mode");
         }
     }
 }
