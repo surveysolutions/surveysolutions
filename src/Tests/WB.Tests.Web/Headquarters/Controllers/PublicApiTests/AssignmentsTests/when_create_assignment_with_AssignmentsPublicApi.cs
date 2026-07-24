@@ -528,6 +528,60 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
 
         
         
+        [Test]
+        public void when_creating_assignment_with_invalid_audio_audit_scope_then_should_return_PL0064()
+        {
+            var qid = QuestionnaireIdentity.Parse("f2250674-42e6-4756-b394-b86caa62225e$1");
+
+            var hqUser = Abc.Create.Entity.HqUser();
+            this.SetupResponsibleUser(hqUser);
+            this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocumentWithOneQuestion());
+
+            var response = this.controller.Create(new CreateAssignmentApiRequest
+            {
+                QuestionnaireId = qid.ToString(),
+                Responsible = hqUser.UserName,
+                AudioAuditScope = new List<string> { "no_such_section" }
+            });
+
+            Assert.That(response.Result, Has.Property(nameof(IStatusCodeActionResult.StatusCode)).EqualTo(StatusCodes.Status400BadRequest));
+            var verificationErrors = (((ObjectResult) response.Result).Value as CreateAssignmentResult)
+                ?.VerificationStatus.Errors;
+
+            Assert.That(verificationErrors, Is.Not.Empty);
+            Assert.That(verificationErrors.Select(x => x.Code), Has.Member("PL0064"));
+        }
+
+        [Test]
+        public void when_creating_assignment_with_valid_audio_audit_scope_then_should_pass_resolved_variable_names_to_command()
+        {
+            var qid = QuestionnaireIdentity.Parse("f2250674-42e6-4756-b394-b86caa62225e$1");
+            var sectionId = Id.gA;
+
+            var hqUser = Abc.Create.Entity.HqUser();
+            this.SetupResponsibleUser(hqUser);
+            this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, children: new IComposite[]
+            {
+                Abc.Create.Entity.Group(groupId: sectionId, variable: "section1", children: new IComposite[]
+                {
+                    Abc.Create.Entity.TextQuestion(variable: "q1")
+                })
+            }));
+
+            this.SetupAssignment(Abc.Create.Entity.Assignment(1, qid));
+
+            var result = this.controller.Create(new CreateAssignmentApiRequest
+            {
+                QuestionnaireId = qid.ToString(),
+                Responsible = hqUser.UserName,
+                AudioAuditScope = new List<string> { "section1" }
+            });
+
+            this.commandService.Verify(ass => ass.Execute(
+                It.Is<CreateAssignment>(x => x.AudioAuditScope.Length == 1 && x.AudioAuditScope[0] == "section1"), null), Times.Once);
+            Assert.That(result.Result, Has.Property(nameof(StatusCodeResult.StatusCode)).EqualTo(StatusCodes.Status201Created));
+        }
+
         private IQuestion GetQuestionByType(QuestionType questionType, string variableName, Guid? linked = null)
         {
             return questionType switch

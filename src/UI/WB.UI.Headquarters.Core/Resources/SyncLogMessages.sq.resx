@@ -145,7 +145,7 @@
     <value>&lt;font color="red"&gt;Kërkohet përditësim. Versioni i motorit të intervistuesit - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
   </data>
   <data name="EmptyDevice" xml:space="preserve">
-    <value>&lt;b&gt;[EMPTY DEVICE]&lt;/b&gt;</value>
+    <value>&lt;b&gt;[PAJISJE BOSHE]&lt;/b&gt;</value>
   </data>
   <data name="ExtendedApkRequested" xml:space="preserve">
     <value>Kërkohet skedar i ri për aplikacionin e zgjeruar </value>
@@ -248,5 +248,39 @@
   </data>
   <data name="UpdateInterviewPackage" xml:space="preserve">
     <value>&lt;li&gt;Përditëso intervistën: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, Paketa: {1}, Indeksi i renditjes: {2}&lt;/li&gt;</value>
+  </data>
+
+
+    <data name="PasswordChanged" xml:space="preserve">
+    <value>Fjalëkalimi u ndryshua dhe AuthToken u mor</value>
+  </data>
+
+    <data name="FailToChangePassword" xml:space="preserve">
+    <value>Përdoruesi nuk arriti të ndryshojë fjalëkalimin</value>
+  </data>
+
+    <data name="GetInterviewPatch" xml:space="preserve">
+    <value>Shkarko ndryshimet e intervistës nga HQ: {0}</value>
+    <comment>{0} - count of affected interviews</comment>
+  </data>
+
+    <data name="AssignmentReceivedByTablet" xml:space="preserve">
+    <value>Detyra &lt;b&gt;{0}&lt;/b&gt; u mor dhe u ruajt nga pajisja</value>
+  </data>
+
+    <data name="DownloadReusableCategories" xml:space="preserve">
+    <value>Kategoria e ripërdorshme {0} po shkarkohet</value>
+  </data>
+
+    <data name="PostCalendarEventPackage" xml:space="preserve">
+    <value>Ngarko ngjarjen e kalendarit: {0}</value>
+  </data>
+
+    <data name="GetCalendarEventPackage" xml:space="preserve">
+    <value>Shkarko paketën e ngjarjes së kalendarit: {0}</value>
+  </data>
+
+    <data name="CalendarEventsListFormat" xml:space="preserve">
+    <value>Shkarko listën e ngjarjeve të kalendarit ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
   </data>
 </root>

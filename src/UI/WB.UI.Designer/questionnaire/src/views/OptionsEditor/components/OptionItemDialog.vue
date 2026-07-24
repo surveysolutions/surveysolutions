@@ -4,7 +4,7 @@
             <v-card-title>
                 <span class="headline">{{ title }}</span>
             </v-card-title>
-            <v-card-text>
+            <v-card-text class="option-item-dialog__body">
                 <v-container>
                     <v-form ref="form" v-model="valid" validate-on="input" fast-fail>
                         <v-row>
@@ -82,9 +82,9 @@
     </v-dialog>
 </template>
 
-<style lang="scss">
-body {
-    overflow: scroll;
+<style scoped lang="scss">
+.option-item-dialog__body {
+    overflow: auto;
 }
 </style>
 

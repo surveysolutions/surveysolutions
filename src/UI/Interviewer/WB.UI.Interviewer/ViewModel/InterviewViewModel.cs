@@ -1,9 +1,11 @@
 using System;
 using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -28,16 +30,17 @@ namespace WB.UI.Interviewer.ViewModel
 {
     public class InterviewViewModel : BaseInterviewViewModel
     {
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IAuditLogService auditLogService;
-        private readonly IAudioAuditService audioAuditService;
         private readonly IUserInteractionService userInteractionService;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IJsonAllTypesSerializer serializer;
         private readonly IMvxMainThreadAsyncDispatcher asyncDispatcher;
-        private bool isAuditStarting;
+        private readonly IAudioAuditRecordingExecutor audioRecordingExecutor;
         private readonly ILogger logger;
+        private InterviewerCompleteInterviewViewModel completeInterviewViewModel;
+        private int viewAppearedInProgress;
 
-        
         public InterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
@@ -55,24 +58,27 @@ namespace WB.UI.Interviewer.ViewModel
             VibrationViewModel vibrationViewModel,
             IEnumeratorSettings enumeratorSettings,
             IAuditLogService auditLogService,
-            IAudioAuditService audioAuditService,
             IUserInteractionService userInteractionService,
             ILogger logger,
             IPlainStorage<InterviewView> interviewViewRepository,
             IJsonAllTypesSerializer serializer,
-            IMvxMainThreadAsyncDispatcher asyncDispatcher)
+            IMvxMainThreadAsyncDispatcher asyncDispatcher,
+            IAudioAuditRecordingExecutor audioRecordingExecutor)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState,
                 principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, vibrationViewModel, enumeratorSettings)
         {
+            this.questionnaireRepository = questionnaireRepository;
             this.auditLogService = auditLogService;
-            this.audioAuditService = audioAuditService;
             this.userInteractionService = userInteractionService;
             this.logger = logger;
             this.interviewViewRepository = interviewViewRepository;
             this.serializer = serializer;
             this.asyncDispatcher = asyncDispatcher;
+            this.audioRecordingExecutor = audioRecordingExecutor;
+
+            this.NavigationState.ScreenChanged += this.OnScreenChanged;
         }
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () =>
@@ -98,16 +104,35 @@ namespace WB.UI.Interviewer.ViewModel
 
         protected override BaseViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
         {
+            // Unsubscribe from a previous Complete screen so a late IsLoading change (its background
+            // CollectCriticalityInfo may still be running after the screen was navigated away/disposed)
+            // can no longer overwrite the status of the screen the interviewer has since navigated to.
+            this.UnsubscribeFromCompleteInterviewViewModel();
+
             switch (this.NavigationState.CurrentScreenType)
             {
                 case ScreenType.Complete:
-                    var completeInterviewViewModel =
+                    // Keep a local reference: Configure() may synchronously raise IsLoading=false, which
+                    // triggers ChangeInterviewStatus -> UnsubscribeFromCompleteInterviewViewModel and nulls
+                    // out the field. Returning the field in that case would yield a null screen and crash
+                    // the CurrentScreen binding, so the local is returned instead.
+                    var completeViewModel =
                         this.interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
-                    completeInterviewViewModel.PropertyChanged += ChangeInterviewStatus;
-                    completeInterviewViewModel.Configure(this.InterviewId, this.NavigationState);
-                    return completeInterviewViewModel;
+                    this.completeInterviewViewModel = completeViewModel;
+                    completeViewModel.PropertyChanged += ChangeInterviewStatus;
+                    completeViewModel.Configure(this.InterviewId, this.NavigationState);
+                    return completeViewModel;
                 default:
                     return base.UpdateCurrentScreenViewModel(eventArgs);
+            }
+        }
+
+        private void UnsubscribeFromCompleteInterviewViewModel()
+        {
+            if (this.completeInterviewViewModel != null)
+            {
+                this.completeInterviewViewModel.PropertyChanged -= ChangeInterviewStatus;
+                this.completeInterviewViewModel = null;
             }
         }
 
@@ -116,11 +141,11 @@ namespace WB.UI.Interviewer.ViewModel
             if (e.PropertyName != nameof(InterviewerCompleteInterviewViewModel.IsLoading))
                 return;
             
-            var completeInterviewViewModel = (InterviewerCompleteInterviewViewModel)sender;
-            if (!completeInterviewViewModel.IsLoading)
+            var completeViewModel = (InterviewerCompleteInterviewViewModel)sender;
+            if (!completeViewModel.IsLoading)
             {
-                completeInterviewViewModel.PropertyChanged -= ChangeInterviewStatus;
-                Status = completeInterviewViewModel.CompleteStatus;
+                this.UnsubscribeFromCompleteInterviewViewModel();
+                Status = completeViewModel.CompleteStatus;
             }
         }
 
@@ -132,7 +157,28 @@ namespace WB.UI.Interviewer.ViewModel
                 return;
             }
 
-            Task.Run(async () =>
+            // base.ViewAppeared() must always run, on the UI thread that invoked ViewAppeared(), so it is
+            // called here directly rather than being buried inside a background task where an exception (or
+            // the wrong thread) could skip it.
+            base.ViewAppeared();
+
+            this.audioRecordingExecutor.IsViewVisible = true;
+
+            // Fire-and-forget the resume + audio convergence off the UI thread (all exceptions are handled
+            // inside OnViewAppearedAsync); no Task.Run wrapper is used.
+            _ = this.OnViewAppearedAsync();
+        }
+
+        private async Task OnViewAppearedAsync()
+        {
+            // Re-entrancy guard: the OS lifecycle can raise ViewAppeared() again (for example when a
+            // permission dialog pauses and resumes the activity) before a previous run completes. Without
+            // this guard two concurrent ResumeInterviewCommand executions and two OpenInterviewAuditLogEntity
+            // writes would be issued.
+            if (Interlocked.CompareExchange(ref this.viewAppearedInProgress, 1, 0) != 0)
+                return;
+
+            try
             {
                 var interviewId = Guid.Parse(InterviewId);
                 var interview = interviewRepository.Get(this.InterviewId);
@@ -141,56 +187,179 @@ namespace WB.UI.Interviewer.ViewModel
                 await commandService.ExecuteAsync(new ResumeInterviewCommand(interviewId,
                     Principal.CurrentUserIdentity.UserId, AgentDeviceType.Tablet));
 
-                if (IsAudioRecordingEnabled == true && !isAuditStarting)
-                {
-                    await asyncDispatcher.ExecuteOnMainThreadAsync(async () =>
-                    {
-                        isAuditStarting = true;
-                        try
-                        {
-                            await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
-                        }
-                        catch (MissingPermissionsException missingPermissionsException)
-                        {
-                            this.logger.Info("Audio audit failed to start.", exception: missingPermissionsException);
-                            await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
-                                .ConfigureAwait(false);
-
-                            if (missingPermissionsException.PermissionType == typeof(Permissions.Microphone))
-                            {
-                                this.userInteractionService.ShowToast(UIResources.MissingPermissions_Microphone);
-                            }
-                            else if (missingPermissionsException.PermissionType == typeof(Permissions.StorageWrite))
-                            {
-                                this.userInteractionService.ShowToast(UIResources.MissingPermissions_Storage);
-                            }
-                            else
-                            {
-                                this.userInteractionService.ShowToast(missingPermissionsException.Message);
-                            }
-                        }
-                        catch (Exception exc)
-                        {
-                            logger.Warn("Audio audit failed to start.", exception: exc);
-                            await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
-                                .ConfigureAwait(false);
-                            this.userInteractionService.ShowToast(exc.Message);
-                        }
-                        finally
-                        {
-                            isAuditStarting = false;
-                        }
-                    });
-                }
+                await this.EvaluateAudioRecordingAsync(interviewId, this.audioRecordingExecutor.CancellationToken);
 
                 auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(),
                     assignmentId));
-                base.ViewAppeared();
+            }
+            catch (OperationCanceledException)
+            {
+                // ViewModel is being disposed; nothing to do.
+            }
+            catch (Exception exc)
+            {
+                this.logger.Warn("Audio audit evaluation failed on view appeared.", exception: exc);
+            }
+            finally
+            {
+                Interlocked.Exchange(ref this.viewAppearedInProgress, 0);
+            }
+        }
+
+        private async Task<bool> StartAudioRecordingWithPermissionHandlingAsync(Guid interviewId)
+        {
+            var started = false;
+            await asyncDispatcher.ExecuteOnMainThreadAsync(async () =>
+            {
+                if (!this.audioRecordingExecutor.IsViewVisible)
+                    return;
+                try
+                {
+                    await audioRecordingExecutor.StartAudioRecordingAsync(interviewId);
+                    started = true;
+                }
+                catch (MissingPermissionsException missingPermissionsException)
+                {
+                    this.logger.Info("Audio audit failed to start.", exception: missingPermissionsException);
+                    await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+
+                    if (missingPermissionsException.PermissionType == typeof(Permissions.Microphone))
+                    {
+                        this.userInteractionService.ShowToast(UIResources.MissingPermissions_Microphone_Interview, isLong: true);
+                    }
+                    else if (missingPermissionsException.PermissionType == typeof(Permissions.StorageWrite))
+                    {
+                        this.userInteractionService.ShowToast(UIResources.MissingPermissions_Storage);
+                    }
+                    else
+                    {
+                        this.userInteractionService.ShowToast(missingPermissionsException.Message);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    logger.Warn("Audio audit failed to start.", exception: exc);
+                    await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+                    this.userInteractionService.ShowToast(exc.Message);
+                }
             });
+
+            return started;
+        }
+
+        private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
+        {
+            if (!this.audioRecordingExecutor.IsViewVisible || this.InterviewId == null)
+                return;
+
+            var interviewId = Guid.Parse(this.InterviewId);
+            var cancellationToken = this.audioRecordingExecutor.CancellationToken;
+            Task.Run(async () =>
+            {
+                try
+                {
+                    await this.EvaluateAudioRecordingAsync(interviewId, cancellationToken)
+                        .ConfigureAwait(false);
+                }
+                catch (OperationCanceledException)
+                {
+                    // ViewModel is being disposed; nothing to do.
+                }
+                catch (Exception exc)
+                {
+                    this.logger.Warn("Audio audit evaluation failed.", exception: exc);
+                }
+            });
+        }
+
+        /// <summary>
+        /// Converges the tablet audio recording to the desired state via the dedicated
+        /// <see cref="IAudioAuditRecordingExecutor"/>: records the whole interview when the audio audit
+        /// flag is on, otherwise records only the groups included in the audio audit scope, otherwise
+        /// records nothing. The view model only supplies the policy — which target is desired
+        /// (<see cref="GetTargetRecording"/>) and how to start a recording with permission handling
+        /// (<see cref="StartAudioRecordingWithPermissionHandlingAsync"/>) — while the executor owns the
+        /// recording lock, in-flight start guard and state.
+        /// </summary>
+        private Task EvaluateAudioRecordingAsync(Guid interviewId, CancellationToken cancellationToken) =>
+            this.audioRecordingExecutor.EvaluateAsync(interviewId, this.GetTargetRecording,
+                this.StartAudioRecordingWithPermissionHandlingAsync, cancellationToken);
+
+        // Decides what should currently be recorded: the audio audit flag takes precedence (whole
+        // interview), then the audio audit scope (applicable group), otherwise nothing. Visibility is
+        // handled by the executor before this is called.
+        private RecordingTarget GetTargetRecording()
+        {
+            if (IsAudioRecordingEnabled == true)
+                return RecordingTarget.WholeInterview;
+
+            var interview = interviewRepository.Get(this.InterviewId);
+            if (interview == null)
+                return RecordingTarget.None;
+
+            var scope = interview.GetAudioAuditScope();
+            if (scope == null || scope.Length == 0)
+                return RecordingTarget.None;
+
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(
+                interview.QuestionnaireIdentity, interview.Language);
+            if (questionnaire == null)
+                return RecordingTarget.None;
+
+            // The currently navigated scope entity: a regular group/section/roster, or the cover page
+            // section when the cover screen is shown (CoverInterviewViewModel). The cover screen has no
+            // CurrentGroup, so resolve its section id from the questionnaire to honour a scope that
+            // includes the cover page.
+            var currentScopeEntityId = this.GetCurrentScopeEntityId(questionnaire);
+            if (currentScopeEntityId == null)
+                return RecordingTarget.None;
+
+            // The audio audit scope is stored as section/group/roster variable names so it survives
+            // questionnaire upgrades; resolve the current entity's variable name to test membership.
+            var currentVariableName = questionnaire.GetRosterVariableName(currentScopeEntityId.Value);
+            // Audio Audit is disabled (the whole-interview flag is handled above) and the scope is
+            // non-empty: record only while the currently navigated entity is itself listed in the
+            // scope. Scope selection is explicit and is not inherited.
+            if (currentVariableName == null
+                || Array.FindIndex(scope, name => string.Equals(name, currentVariableName, StringComparison.OrdinalIgnoreCase)) < 0)
+                return RecordingTarget.None;
+
+            return RecordingTarget.Group(currentScopeEntityId.Value);
+        }
+
+        // Resolves the id of the entity the interviewer is currently on for scope-membership purposes.
+        // On the cover screen there is no CurrentGroup, so the cover page section id is used so that the
+        // cover page can be part of the audio audit scope.
+        private Guid? GetCurrentScopeEntityId(IQuestionnaire questionnaire)
+        {
+            if (this.NavigationState.CurrentScreenType == ScreenType.Cover)
+            {
+                if (questionnaire is { IsCoverPageSupported: true })
+                    return questionnaire.CoverPageSectionId;
+
+                return null;
+            }
+
+            return this.NavigationState.CurrentGroup?.Id;
+        }
+
+        // Fire-and-forget wrapper used during teardown so unobserved exceptions are logged.
+        private async Task StopAudioRecordingSafelyAsync(Guid interviewId)
+        {
+            try
+            {
+                await this.audioRecordingExecutor.StopAsync(interviewId).ConfigureAwait(false);
+            }
+            catch (Exception exc)
+            {
+                this.logger.Warn("Audio audit failed to stop on view disappearing.", exception: exc);
+            }
         }
         
         public override void ViewDisappearing()
         {
+            this.audioRecordingExecutor.IsViewVisible = false;
+
             if (InterviewId != null && Principal.IsAuthenticated)
             {
                 var interview = interviewRepository.Get(this.InterviewId);
@@ -203,8 +372,13 @@ namespace WB.UI.Interviewer.ViewModel
 
                     auditLogService.Write(new CloseInterviewAuditLogEntity(interviewId, interviewKey?.ToString()));
 
-                    if (IsAudioRecordingEnabled == true)
-                        audioAuditService.StopAudioRecording(interviewId);
+                    // IsViewVisible is already false. Stop any active recording through the executor's
+                    // recording lock so the state mutation stays atomic with EvaluateAudioRecordingAsync.
+                    // Fire-and-forget: awaiting the lock yields back to the UI thread instead of blocking it,
+                    // so it cannot deadlock against an in-flight start, and teardown still completes after
+                    // Dispose. The stop path touches neither interviewRepository nor any field disposed by
+                    // this view model.
+                    _ = this.StopAudioRecordingSafelyAsync(interviewId);
                 }
             }
 
@@ -222,5 +396,28 @@ namespace WB.UI.Interviewer.ViewModel
 
             base.ViewDisappearing();
         }
+
+        public override void Dispose()
+        {
+            this.NavigationState.ScreenChanged -= this.OnScreenChanged;
+            this.UnsubscribeFromCompleteInterviewViewModel();
+
+            // Defensive stop: ViewDisappearing() normally stops any active recording, but if the
+            // OS/Mvx lifecycle skipped it (headless navigation, tests, a future refactor) an active
+            // recording would otherwise be orphaned — the token gets cancelled but the underlying
+            // recorder is never told to stop. IsViewVisible is forced false so the stop is not treated
+            // as stale, and the stop is issued before Cancel/Dispose so the executor still processes it.
+            this.audioRecordingExecutor.IsViewVisible = false;
+            if (InterviewId != null && Guid.TryParse(InterviewId, out var interviewId))
+            {
+                _ = this.StopAudioRecordingSafelyAsync(interviewId);
+            }
+
+            this.audioRecordingExecutor.Cancel();
+            this.audioRecordingExecutor.Dispose();
+
+            base.Dispose();
+        }
+
     }
 }

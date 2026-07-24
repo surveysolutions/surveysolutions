@@ -31,6 +31,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.WebMode);
             Property(x => x.Comments);
             Property(x => x.TargetArea);
+            Property(x => x.Status);
+            Property(x => x.StatusComment);
 
             Component(x => x.QuestionnaireId, cmp =>
             {
@@ -41,6 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             });
 
             this.Property(x => x.ProtectedVariables, m => m.Type<PostgresJson<List<string>>>());
+            this.Property(x => x.AudioAuditScope, m => m.Type<PostgresJson<List<string>>>());
 
             ManyToOne(x => x.Questionnaire, mto =>
             {

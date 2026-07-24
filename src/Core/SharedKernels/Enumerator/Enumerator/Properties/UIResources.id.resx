@@ -378,4 +378,845 @@ Anda dapat membuat atau menyunting kuesioner Anda pada Desainer Survey Solutions
     <value>Untuk menyelesaikan layar
 </value>
   </data>
+  <data name="Assignment_Status_Open" xml:space="preserve">
+    <value>Terbuka</value>
+  </data>
+  <data name="Assignment_Status_Completed" xml:space="preserve">
+    <value>Selesai</value>
+  </data>
+  <data name="Assignment_Status_Closed" xml:space="preserve">
+    <value>Disetujui</value>
+  </data>
+  <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
+    <value>Status penugasan</value>
+  </data>
+
+
+  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
+    <value>Milik saya</value>
+  </data>
+
+  <data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
+    <value>Dibagikan kepada saya</value>
+  </data>
+
+  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
+    <value>Publik</value>
+  </data>
+
+  <data name="OldPasswordHint" xml:space="preserve">
+    <value>Kata sandi saat ini</value>
+  </data>
+
+  <data name="NewPasswordHint" xml:space="preserve">
+    <value>Kata sandi baru</value>
+  </data>
+
+  <data name="ConfirmNewPasswordHint" xml:space="preserve">
+    <value>Konfirmasi kata sandi baru</value>
+  </data>
+
+  <data name="Interview_Questions_Audio_SaveAnswer" xml:space="preserve">
+    <value>Ketuk untuk merekam audio</value>
+  </data>
+
+  <data name="Interview_Questions_Audio_RecordNew" xml:space="preserve">
+    <value>Rekam baru</value>
+  </data>
+
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>Apakah Anda yakin ingin menghapus roster terkait '{0}' dari setiap roster terkait?</value>
+  </data>
+
+  <data name="Interview_Questions_RemoveRowFromRosterListMessage" xml:space="preserve">
+    <value>Apakah Anda yakin ingin menghapus roster terkait?</value>
+  </data>
+
+  <data name="Adjust" xml:space="preserve">
+    <value>Sesuaikan</value>
+  </data>
+
+  <data name="InvalidTimeMessage" xml:space="preserve">
+    <value>Penting agar pengaturan jam akurat. Jam Anda menunjukkan bahwa tanggal saat ini tidak diatur dengan benar. Sesuaikan jam dengan mengatur tanggal/waktu yang benar sebelum melanjutkan pekerjaan Anda.</value>
+  </data>
+
+  <data name="Warnings" xml:space="preserve">
+    <value>Peringatan</value>
+  </data>
+
+  <data name="Interview_Comment_OnPreviousAnswer" xml:space="preserve">
+    <value>Pada jawaban sebelumnya</value>
+  </data>
+
+  <data name="Interview_Comment_Resolve" xml:space="preserve">
+    <value>Selesaikan</value>
+  </data>
+
+  <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
+    <value>Ketuk untuk menjawab</value>
+  </data>
+
+  <data name="Interview_Question_Text_Empty" xml:space="preserve">
+    <value>Jawaban tidak boleh kosong</value>
+  </data>
+
+  <data name="NoMapsApplication" xml:space="preserve">
+    <value>Aplikasi navigasi tidak ditemukan</value>
+  </data>
+
+  <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
+    <value>Untuk mengaktifkan tombol, silakan selesaikan masalah kritis</value>
+  </data>
+
+  <data name="Interview_Complete_CriticalUnanswered" xml:space="preserve">
+    <value>Pertanyaan kritis yang belum terjawab: {0}</value>
+  </data>
+
+  <data name="Interview_Complete_FailCriticalConditions" xml:space="preserve">
+    <value>Aturan kritis yang gagal: {0}</value>
+  </data>
+
+  <data name="Interview_Complete_WithWarningCriticality" xml:space="preserve">
+    <value>Harap konfirmasi bahwa Anda ingin mengirim wawancara ini dengan masalah kritis.</value>
+  </data>
+
+  <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
+    <value>Untuk mengaktifkan tombol, silakan selesaikan masalah kritis atau berikan penjelasan di kotak komentar di atas</value>
+  </data>
+
+  <data name="Interview_Complete_Interview_Status" xml:space="preserve">
+    <value>Masalah wawancara:</value>
+  </data>
+
+  <data name="Interview_Complete_CriticalityIssuesDescription" xml:space="preserve">
+    <value>Harap selesaikan masalah dengan menjawab pertanyaan kritis dan memastikan jawaban memenuhi aturan kritis</value>
+  </data>
+
+  <data name="Interview_Complete_Screen_DescriptionWithInterviewKey" xml:space="preserve">
+    <value>Anda akan menyelesaikan wawancara {0}</value>
+  </data>
+
+  <data name="Supervisor_ApplicationName" xml:space="preserve">
+    <value>Survey Solutions Supervisor</value>
+  </data>
+
+  <data name="Interviewer_Reassign_Comment" xml:space="preserve">
+    <value>Tinggalkan komentar untuk penanggung jawab baru</value>
+  </data>
+
+  <data name="Interviewer_Comment" xml:space="preserve">
+    <value>Tinggalkan komentar</value>
+  </data>
+
+  <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
+    <value>Interviewer {0} sudah menerima wawancara {1} ini. Apakah Anda yakin ingin menugaskannya kembali?</value>
+  </data>
+
+  <data name="Interviewer_Reassign_AlreadyReceivedAssignment" xml:space="preserve">
+    <value>Interviewer {0} sudah menerima tugas {1} ini. Apakah Anda yakin ingin menugaskannya kembali?</value>
+  </data>
+
+  <data name="Interviewer_Done" xml:space="preserve">
+    <value>Selesai</value>
+  </data>
+
+  <data name="Interviewer_AudioRecording" xml:space="preserve">
+    <value>Perekaman audio</value>
+  </data>
+
+  <data name="PasswordMatchError" xml:space="preserve">
+    <value>Kata sandi harus sama</value>
+  </data>
+
+  <data name="Interviewer_Diagnostics" xml:space="preserve">
+    <value>Diagnostik</value>
+  </data>
+
+  <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
+    <value>Jumlah meter untuk mengatur akurasi</value>
+  </data>
+
+  <data name="Prefs_GpsDesiredAccuracyTitle" xml:space="preserve">
+    <value>Akurasi yang diinginkan untuk pertanyaan GPS</value>
+  </data>
+
+  <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
+    <value>Tampilkan instruksi</value>
+  </data>
+
+  <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
+    <value>Ketuk untuk merekam waktu saat ini</value>
+  </data>
+
+  <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
+    <value>Pertanyaan dengan kesalahan:</value>
+  </data>
+
+  <data name="Interview_Complete_First_n_Entities_With_Errors" xml:space="preserve">
+    <value>{0} pertanyaan pertama dengan kesalahan:</value>
+  </data>
+
+  <data name="Messages_WaitPendingOperation" xml:space="preserve">
+    <value>Harap tunggu hingga operasi saat ini selesai</value>
+  </data>
+
+  <data name="Prefs_VibrateOnErrorSummary" xml:space="preserve">
+    <value>Tablet akan bergetar ketika jawaban tidak lolos validasi</value>
+  </data>
+
+  <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
+    <value>Getarkan saat jawaban tidak valid diberikan</value>
+  </data>
+
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreTitle" xml:space="preserve">
+    <value>Abaikan validasi integritas komunikasi</value>
+  </data>
+
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreSummary" xml:space="preserve">
+    <value>Saat diaktifkan, kesalahan validasi integritas komunikasi akan diabaikan</value>
+  </data>
+
+  <data name="Interview_Cover_Screen_Title" xml:space="preserve">
+    <value>Sampul</value>
+  </data>
+
+  <data name="Interview_Cover_First_n_Questions_With_Comments" xml:space="preserve">
+    <value>{0} pertanyaan pertama dengan komentar:</value>
+  </data>
+
+  <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
+    <value>Pertanyaan dengan komentar supervisor:</value>
+  </data>
+
+  <data name="Interview_Cover_Supervisor_Comments_does_not_exists" xml:space="preserve">
+    <value>Tidak ada komentar dari supervisor</value>
+  </data>
+
+  <data name="Interview_Other_Comment_Caption" xml:space="preserve">
+    <value>Komentar pengguna</value>
+  </data>
+
+  <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
+    <value>Komentar supervisor</value>
+  </data>
+
+  <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
+    <value>Catatan supervisor:</value>
+  </data>
+
+  <data name="Prefs_ShowLocationOnMap" xml:space="preserve">
+    <value>Tampilkan lokasi di peta</value>
+  </data>
+
+  <data name="Prefs_DownloadUpdatesForInterviewerApp" xml:space="preserve">
+    <value>Unduh pembaruan untuk aplikasi Interviewer</value>
+  </data>
+
+  <data name="Prefs_ShowLocationOnMapSummary" xml:space="preserve">
+    <value>Muat peta untuk menampilkan lokasi untuk pertanyaan GPS</value>
+  </data>
+
+  <data name="Prefs_DownloadUpdatesForInterviewerAppSummary" xml:space="preserve">
+    <value>Jika interviewer tidak memiliki akses ke internet, fungsionalitas ini harus diaktifkan, karena ini memungkinkan pembaruan aplikasi mereka selama sinkronisasi offline dengan aplikasi Supervisor</value>
+  </data>
+
+  <data name="VariableEmptyValue" xml:space="preserve">
+    <value>&lt;kosong&gt;</value>
+  </data>
+
+  <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
+    <value>Komentar Headquarters</value>
+  </data>
+
+  <data name="Interview_Interviewer_Comment_Caption" xml:space="preserve">
+    <value>Komentar interviewer</value>
+  </data>
+
+  <data name="GpsQuestion_MissingPermissions" xml:space="preserve">
+    <value>Aplikasi tidak memiliki izin yang cukup untuk menjalankan tindakan yang diminta. Coba jawab pertanyaan lagi dan izinkan akses. Jika Anda tidak melihat popup izin, buka Settings dan izinkan aplikasi menggunakan lokasi perangkat.</value>
+  </data>
+
+  <data name="MissingPermissions_Camera" xml:space="preserve">
+    <value>Aplikasi perlu memiliki izin untuk menggunakan kamera agar dapat menjawab pertanyaan ini. Coba jawab pertanyaan lagi dan izinkan akses. Jika Anda tidak melihat popup izin, buka Settings dan izinkan aplikasi menggunakan kamera.</value>
+  </data>
+
+  <data name="MissingPermissions_Microphone" xml:space="preserve">
+    <value>Aplikasi perlu memiliki izin untuk menggunakan mikrofon agar dapat menjawab pertanyaan ini. Coba jawab pertanyaan lagi dan izinkan akses. Jika Anda tidak melihat popup izin, buka Settings dan izinkan aplikasi menggunakan mikrofon.</value>
+  </data>
+
+  <data name="MissingPermissions_Storage" xml:space="preserve">
+    <value>Aplikasi perlu memiliki izin untuk menggunakan penyimpanan agar dapat menjawab pertanyaan ini. Coba jawab pertanyaan lagi dan izinkan akses. Jika Anda tidak melihat popup izin, buka Settings dan izinkan aplikasi menggunakan penyimpanan.</value>
+  </data>
+
+  <data name="MissingPermissions_MapsLocation" xml:space="preserve">
+    <value>Aplikasi perlu memiliki izin untuk menggunakan lokasi. Jika Anda tidak melihat popup izin, buka Settings dan izinkan aplikasi menggunakan lokasi.</value>
+  </data>
+
+  <data name="MissingPermissions_Microphone_Global" xml:space="preserve">
+    <value>Aplikasi perlu memiliki izin untuk menggunakan mikrofon. Ulangi tindakan terakhir dan izinkan akses. Jika Anda tidak melihat popup izin, buka Settings dan izinkan aplikasi menggunakan mikrofon.</value>
+  </data>
+
+  <data name="MissingPermissions_Storage_Global" xml:space="preserve">
+    <value>Aplikasi perlu memiliki izin untuk menggunakan penyimpanan. Ulangi tindakan terakhir dan izinkan akses. Jika Anda tidak melihat popup izin, buka Settings dan izinkan aplikasi menggunakan penyimpanan.</value>
+  </data>
+
+  <data name="MissingPermission" xml:space="preserve">
+    <value>Aplikasi tidak memiliki izin yang cukup untuk menjalankan tindakan yang diminta</value>
+  </data>
+
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+
+  <data name="Multimedia_PickFromGallery" xml:space="preserve">
+    <value>Pilih dari galeri</value>
+  </data>
+
+  <data name="Multimedia_PictureSource" xml:space="preserve">
+    <value>Pilih opsi</value>
+  </data>
+
+  <data name="Multimedia_TakePhoto" xml:space="preserve">
+    <value>Ambil foto</value>
+  </data>
+
+  <data name="Error" xml:space="preserve">
+    <value>Kesalahan</value>
+  </data>
+
+  <data name="Warning" xml:space="preserve">
+    <value>Peringatan</value>
+  </data>
+
+  <data name="AreaMap_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+
+  <data name="AreaMap_Location" xml:space="preserve">
+    <value>Lokasi</value>
+  </data>
+
+  <data name="AreaMap_NoChangesInfo" xml:space="preserve">
+    <value>Tidak ada perubahan untuk disimpan.</value>
+  </data>
+
+  <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
+    <value>Lokasi Anda berada di luar batas peta.</value>
+  </data>
+
+  <data name="AreaMap_LocationDataSourceFailed" xml:space="preserve">
+    <value>Lokasi tidak dapat ditangkap. Untuk mengatasi masalah, coba lakukan hal berikut: pastikan Anda berada di luar ruangan, pastikan GPS Anda aktif, atau ubah pengaturan batas waktu GPS Anda</value>
+  </data>
+
+  <data name="AreaMap_MapIsOutOfVisibleBoundaries" xml:space="preserve">
+    <value>Peta yang dimuat berada di luar batas yang terlihat</value>
+  </data>
+
+  <data name="AreaMap_SelectShapefile" xml:space="preserve">
+    <value>Pilih file batas</value>
+  </data>
+
+  <data name="AreaMap_ErrorOnShapefileLoading" xml:space="preserve">
+    <value>Terjadi kesalahan saat memuat. Shapefile tidak dapat ditangani</value>
+  </data>
+
+  <data name="AreaMap_NoMapsFound" xml:space="preserve">
+    <value>Tidak ada peta yang ditemukan. Harap perbarui peta</value>
+  </data>
+
+  <data name="AreaMap_Save" xml:space="preserve">
+    <value>Simpan</value>
+  </data>
+
+  <data name="AreaMap_Undo" xml:space="preserve">
+    <value>Urungkan</value>
+  </data>
+
+  <data name="AreaMap_UpdateMaps" xml:space="preserve">
+    <value>Perbarui peta</value>
+  </data>
+
+  <data name="Version_Not_Supports" xml:space="preserve">
+    <value>Versi aplikasi Anda tidak mendukung fitur ini. Harap instal Interviewer with Maps untuk mengaktifkannya.</value>
+  </data>
+
+  <data name="AreaMap_UpdateFailed" xml:space="preserve">
+    <value>Pembaruan gagal</value>
+  </data>
+
+  <data name="Device_Does_Not_Support" xml:space="preserve">
+    <value>Perangkat Anda tidak mendukung fungsi ini</value>
+  </data>
+
+  <data name="AreaMap_MapTitle" xml:space="preserve">
+    <value>Peta</value>
+  </data>
+
+  <data name="AreaMap_AreaFormat" xml:space="preserve">
+    <value>Luas: {0:0.00} m2</value>
+  </data>
+
+  <data name="AreaMap_OverlapsWith" xml:space="preserve">
+    <value>Tumpang tindih dengan:</value>
+  </data>
+
+  <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
+    <value>dan {0} lainnya.</value>
+  </data>
+
+  <data name="AreaMap_ItemsOutsideDedicatedArea" xml:space="preserve">
+    <value>Beberapa penanda berada di luar area yang digariskan</value>
+  </data>
+  
+  <data name="AreaMap_PointsFormat" xml:space="preserve">
+    <value>Titik: {0}</value>
+  </data>
+
+  <data name="AreaMap_Cancel" xml:space="preserve">
+    <value>Batal</value>
+  </data>
+
+  <data name="AreaMap_LengthFormat" xml:space="preserve">
+    <value>Panjang: {0:0.00} m</value>
+  </data>
+
+  <data name="AreaMap_PerimeterFormat" xml:space="preserve">
+    <value>Keliling: {0:0.00} m</value>
+  </data>
+
+  <data name="AreaMap_Active_Map_Title" xml:space="preserve">
+    <value>PETA AKTIF:</value>
+  </data>
+
+  <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
+      <value>PETA YANG TERSEDIA</value>
+  </data>
+
+  <data name="AreaMap_LoadShapefile" xml:space="preserve">
+    <value>Muat shapefile</value>
+  </data>
+
+  <data name="AreaMap_ShowBoundaries" xml:space="preserve">
+    <value>Tampilkan batas</value>
+  </data>
+
+  <data name="AreaMap_HideBoundaries" xml:space="preserve">
+    <value>Sembunyikan batas</value>
+  </data>
+
+  <data name="MapDashboard_Assignments" xml:space="preserve">
+    <value>Penugasan</value>
+  </data>
+
+  <data name="MapDashboard_Interviews" xml:space="preserve">
+    <value>Wawancara</value>
+  </data>
+
+  <data name="MapDashboard_Disclaimer" xml:space="preserve">
+    <value>hanya item dengan koordinat yang diketahui yang ditampilkan</value>
+  </data>
+
+  <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
+    <value>Semua kuesioner</value>
+  </data>
+
+  <data name="MapDashboard_AllResponsibles" xml:space="preserve">
+    <value>Semua penanggung jawab</value>
+  </data>
+
+  <data name="MapDashboard_AllStatuses" xml:space="preserve">
+    <value>Semua status</value>
+  </data>
+
+  <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
+    <value>Kuesioner</value>
+  </data>
+
+  <data name="MapDashboard_ResponsibleTitle" xml:space="preserve">
+    <value>Penanggung jawab</value>
+  </data>
+
+  <data name="MapDashboard_StatusTitle" xml:space="preserve">
+    <value>Status</value>
+  </data>
+
+  <data name="MapDashboard_TypeTitle" xml:space="preserve">
+    <value>Tipe</value>
+  </data>
+
+  <data name="MapDashboard_FiltersTitle" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+
+  <data name="AreaMap_Close" xml:space="preserve">
+    <value>Tutup</value>
+  </data>
+
+  <data name="AreaMap_Update_Maps" xml:space="preserve">
+    <value>Perbarui peta</value>
+  </data>
+
+  <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
+    <value>Keluar dari Editor Peta</value>
+  </data>
+
+  <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
+    <value>Hapus semua</value>
+  </data>
+
+  <data name="MenuItem_Title_StartGeofencing" xml:space="preserve">
+    <value>Mulai geofencing</value>
+  </data>
+
+  <data name="MenuItem_Title_StopGeofencing" xml:space="preserve">
+    <value>Hentikan geofencing</value>
+  </data>
+
+  <data name="MenuItem_Title_StartGeoTracking" xml:space="preserve">
+    <value>Mulai perekaman lintasan</value>
+  </data>
+
+  <data name="MenuItem_Title_StopGeoTracking" xml:space="preserve">
+    <value>Hentikan perekaman lintasan</value>
+  </data>
+
+  <data name="MenuItem_Title_ShowLocation" xml:space="preserve">
+    <value>Tampilkan lokasi</value>
+  </data>
+
+  <data name="MenuItem_Title_HideLocation" xml:space="preserve">
+    <value>Sembunyikan lokasi</value>
+  </data>
+
+  <data name="MenuItem_Title_ExitToDashboard" xml:space="preserve">
+    <value>Keluar ke dasbor</value>
+  </data>
+
+  <data name="MenuItem_Title_ChangeMap" xml:space="preserve">
+    <value>Ganti peta</value>
+  </data>
+
+  <data name="MenuItem_Title_ChangeShapefile" xml:space="preserve">
+    <value>Ganti batas wilayah</value>
+  </data>
+
+  <data name="MenuItem_Title_CreateInterview" xml:space="preserve">
+    <value>Buat Wawancara Baru</value>
+  </data>
+
+  <data name="AssignmentMap_Title_CreateInterview" xml:space="preserve">
+    <value>Mulai</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
+    <value>Zoom ke peta</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomShapefile" xml:space="preserve">
+    <value>Zoom ke batas wilayah</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomCollectedData" xml:space="preserve">
+    <value>Zoom ke data yang dikumpulkan</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
+    <value>Zoom ke semuanya</value>
+  </data>
+
+  <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
+    <value>Zoom ke rekaman pelacakan</value>
+  </data>
+
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Dasbor</value>
+  </data>
+
+  <data name="InterviewKey" xml:space="preserve">
+    <value>Kunci Wawancara: {0}</value>
+  </data>
+
+  <data name="AssignmentN" xml:space="preserve">
+    <value>Penugasan #{0}</value>
+  </data>
+
+  <data name="AudioQuestion_DurationFormat" xml:space="preserve">
+    <value>{0} dari rekaman audio</value>
+  </data>
+
+  <data name="Audio_Io_Exception_Message" xml:space="preserve">
+    <value>Tidak dapat menyimpan file audio. Harap periksa apakah perangkat memiliki penyimpanan internal yang tersedia.</value>
+  </data>
+
+  <data name="Audio_Unhandled_Exception_Message" xml:space="preserve">
+    <value>Terjadi pengecualian tak terduga saat memulai perekaman audio</value>
+  </data>
+
+  <data name="AnswerRecordedMsg" xml:space="preserve">
+    <value>Jawaban diterima. Memerlukan {0} untuk diproses</value>
+  </data>
+
+  <data name="AnswerRecordedMsgDismiss" xml:space="preserve">
+    <value>Tutup</value>
+  </data>
+
+  <data name="Interview_SignatureClear" xml:space="preserve">
+    <value>Hapus</value>
+  </data>
+
+  <data name="Interview_SignatureSignHere" xml:space="preserve">
+    <value>Tanda tangani di sini</value>
+  </data>
+
+  <data name="Interview_TakeSignature" xml:space="preserve">
+    <value>Simpan tanda tangan</value>
+  </data>
+
+  <data name="Interview_Questions_Integer_ProtectedValue" xml:space="preserve">
+    <value>Jawaban baru untuk pertanyaan yang dilindungi harus lebih besar atau sama dengan {0}</value>
+  </data>
+
+  <data name="Interview_MaxAnswersCount" xml:space="preserve">
+    <value>{0} dari {1} kategori dipilih</value>
+  </data>
+
+  <data name="Interview_MaxAnswersCountSelected" xml:space="preserve">
+    <value>Jumlah maksimum pilihan ({0}) untuk pertanyaan ini telah tercapai</value>
+  </data>
+
+  <data name="Interview_Overview" xml:space="preserve">
+    <value>Ikhtisar</value>
+  </data>
+
+  <data name="Interview_Overview_Name" xml:space="preserve">
+    <value>Ikhtisar</value>
+  </data>
+
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>Belum dijawab</value>
+  </data>
+
+  <data name="Interview_Overview_AdditionalInfo" xml:space="preserve">
+    <value>Info tambahan</value>
+  </data>
+
+  <data name="Interview_Overview_Warnings" xml:space="preserve">
+    <value>Peringatan</value>
+  </data>
+
+  <data name="Interview_Overview_Comments" xml:space="preserve">
+    <value>Komentar</value>
+  </data>
+
+  <data name="Supervisor_Complete_Approve_btn" xml:space="preserve">
+    <value>Setujui</value>
+  </data>
+
+  <data name="Supervisor_Complete_Assign_btn" xml:space="preserve">
+    <value>Tugaskan</value>
+  </data>
+
+  <data name="Supervisor_Complete_Reject_btn" xml:space="preserve">
+    <value>Tolak</value>
+  </data>
+
+  <data name="OfflineSync_Cancel" xml:space="preserve">
+    <value>Batalkan</value>
+  </data>
+
+  <data name="OfflineSync_Abort" xml:space="preserve">
+    <value>Hentikan</value>
+  </data>
+
+  <data name="OfflineSync_BackToDashboard" xml:space="preserve">
+    <value>Kembali ke dasbor</value>
+  </data>
+
+  <data name="OfflineSync_Retry" xml:space="preserve">
+    <value>Coba lagi</value>
+  </data>
+
+  <data name="OfflineSync_NetworkInfo" xml:space="preserve">
+    <value>Kecepatan: {0}, Sisa waktu: {1}</value>
+  </data>
+
+  <data name="OfflineSync_InstallPlayServices" xml:space="preserve">
+    <value>Google Play Services harus diinstal.</value>
+  </data>
+
+  <data name="OfflineSync_DeviceNotSupported" xml:space="preserve">
+    <value>Perangkat ini tidak didukung.</value>
+  </data>
+
+  <data name="Synchronization_FoundDevice" xml:space="preserve">
+    <value>Perangkat interviewer ditemukan ({0})</value>
+    <comment>{0} - interviewer login</comment>
+  </data>
+
+  <data name="OfflineSync_Supervisor_Title" xml:space="preserve">
+    <value>Sinkronisasi penugasan dan wawancara</value>
+  </data>
+
+  <data name="Validity_QuestionDoesntExist" xml:space="preserve">
+    <value>Roster saat ini sudah tidak ada lagi. Silakan navigasi ke seksi atau roster berikutnya yang tersedia menggunakan menu navigasi.</value>
+  </data>
+
+  <data name="Interview_ShowPdf" xml:space="preserve">
+    <value>Tampilkan PDF </value>
+  </data>
+
+  <data name="Interview_PlayVideo" xml:space="preserve">
+    <value>Putar Video </value>
+  </data>
+
+  <data name="Interview_PlayAudio" xml:space="preserve">
+    <value>Putar Audio </value>
+  </data>
+
+  <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
+    <value>Wawancara ini berisi lebih banyak data daripada yang diizinkan sistem. Jika memungkinkan, hapus baris roster yang tidak diperlukan dan/atau batalkan jawaban pertanyaan.</value>
+  </data>
+
+  <data name="Notifications_SummaryTitle" xml:space="preserve">
+    <value>{0} notifikasi</value>
+  </data>
+
+  <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
+    <value>Apakah Anda yakin ingin menghapus {0} baris dari setiap roster terkait?</value>
+  </data>
+
+  <data name="Interview_Question_HideResolvedComments" xml:space="preserve">
+    <value>Sembunyikan yang diselesaikan</value>
+  </data>
+
+  <data name="Interview_Question_ShowResolvedComments" xml:space="preserve">
+    <value>Tampilkan yang diselesaikan</value>
+  </data>
+
+  <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
+    <value>Tidak ada izin yang diberikan kepada aplikasi untuk memperbarui dirinya sendiri. Harap aktifkan opsi "Allow from this source" di menu pengaturan 'App info'.</value>
+  </data>
+
+  <data name="Comment" xml:space="preserve">
+    <value>Komentar</value>
+  </data>
+
+  <data name="NoComment" xml:space="preserve">
+    <value>Tidak ada komentar yang ditentukan</value>
+  </data>
+
+  <data name="Interview_Complete_SwitchTo_WebMode_Checkbox" xml:space="preserve">
+    <value>Alihkan wawancara ke Web Mode</value>
+  </data>
+
+  <data name="Interview_Complete_SwitchTo_WebMode_Instruction" xml:space="preserve">
+    <value>Wawancara ini akan dapat diakses secara online setelah sinkronisasi. Untuk mengakses wawancara, responden harus memasukkan tautan di bawah ini ke browser pada komputer, tablet, atau smartphone yang terhubung ke internet. Tautan yang sama juga dapat dipindai menggunakan QR-code yang ditampilkan di bawah ini.</value>
+  </data>
+ 
+  <data name="Interview_Complete_Instruction" xml:space="preserve">
+    <value>Setelah dikirim, wawancara ini akan dikunci dan tidak dapat diedit. Pastikan semua informasi sudah benar.</value>
+  </data>
+
+   <data name="Loading" xml:space="preserve">
+    <value>Memuat...</value>
+  </data>
+
+  <data name="AreaMap_Save_With_Warning_Confirm" xml:space="preserve">
+    <value>Anda akan menyimpan hasil yang tidak presisi. Apakah Anda ingin melanjutkan?</value>
+  </data>
+
+  <data name="AreaMap_Start_Measurement" xml:space="preserve">
+    <value>Mulai</value>
+  </data>
+
+  <data name="AreaMap_InitLocation" xml:space="preserve">
+    <value>Memulai...</value>
+  </data>
+
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>Disetujui oleh Headquarters</value>
+  </data>
+
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>Disetujui oleh Supervisor</value>
+  </data>
+
+  <data name="InterviewStatus_Completed" xml:space="preserve">
+    <value>Selesai</value>
+  </data>
+
+  <data name="InterviewStatus_Created" xml:space="preserve">
+    <value>Dibuat</value>
+  </data>
+
+  <data name="InterviewStatus_Deleted" xml:space="preserve">
+    <value>Dihapus</value>
+  </data>
+
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>Ditugaskan ke interviewer</value>
+  </data>
+
+  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+    <value>Ditolak oleh Headquarters</value>
+  </data>
+
+  <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+    <value>Ditolak oleh Supervisor</value>
+  </data>
+
+  <data name="InterviewStatus_Restarted" xml:space="preserve">
+    <value>Dimulai ulang</value>
+  </data>
+
+  <data name="InterviewStatus_Restored" xml:space="preserve">
+    <value>Dipulihkan</value>
+  </data>
+
+  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+    <value>Ditugaskan ke Supervisor</value>
+  </data>
+
+  <data name="SelectMapTitle" xml:space="preserve">
+    <value>Pilih Peta:</value>
+  </data>
+
+  <data name="Geofencing_Warning_Message" xml:space="preserve">
+    <value>Anda berada di luar area yang ditentukan</value>
+  </data>
+
+  <data name="SelectShapefileTitle" xml:space="preserve">
+    <value>Pilih Batas Wilayah:</value>
+  </data>
+  
+  <data name="Interview_Complete_Title" xml:space="preserve">
+    <value>Tinjau &amp; Kirim
+Wawancara {0}</value>
+  </data>
+
+  <data name="Interview_Complete_Success_Text" xml:space="preserve">
+    <value>Semua pertanyaan wajib telah dijawab
+Tidak ada kesalahan yang terdeteksi</value>
+  </data>
+
+  <data name="Interview_Complete_MoreCountString" xml:space="preserve">
+    <value>dan {0} lagi</value>
+  </data>
+
+  <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
+    <value>Kesalahan
+kritis</value>
+  </data>
+
+  <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
+    <value>Kesalahan</value>
+  </data>
+
+  <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
+    <value>Pertanyaan
+belum dijawab</value>
+  </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>Akses mikrofon diperlukan untuk melakukan wawancara ini. Wawancara tidak dapat dimulai sampai akses diberikan.</value>
+  </data>
 </root>

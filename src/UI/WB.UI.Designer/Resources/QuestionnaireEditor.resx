@@ -619,6 +619,9 @@
   <data name="FindReplaceMatchingLines" xml:space="preserve">
     <value>Matching lines: {{count}}</value>
   </data>
+  <data name="FindReplaceCurrentMatch" xml:space="preserve">
+    <value>{{current}} / {{count}}</value>
+  </data>
   <data name="FindReplaceNext" xml:space="preserve">
     <value>Next</value>
   </data>
@@ -1137,6 +1140,9 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   </data>
   <data name="HotkeysSearch" xml:space="preserve">
     <value>Search for sub-sections and questions in section</value>
+  </data>
+  <data name="HotkeysTest" xml:space="preserve">
+    <value>Test questionnaire in WebTester</value>
   </data>
   <data name="MultipleDependencies" xml:space="preserve">
     <value>One or more questions/sub-sections depend on</value>

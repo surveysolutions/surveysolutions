@@ -80,7 +80,7 @@
     <value>تغيير كلمة المرور</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>الملف الشخصي</value>
+    <value>جهة الاتصال</value>
   </data>
   <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
     <value>المصادقة الثنائية</value>
@@ -826,7 +826,10 @@
     <value>إنشاء دفعة المستخدمين</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>تفاصيل المعلومات الشخصية (اختياري) &lt;br&gt; ستكون مرئية فقط لمستخدمي المقر الرئيسي</value>
+    <value>تفاصيل المعلومات الشخصية</value>
+  </data>
+  <data name="PublicSectionDescription" xml:space="preserve">
+    <value>(اختياري، ستكون مرئية فقط للمستخدمين المصادق عليهم).</value>
   </data>
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
     <value>تاريخ إنشاء حساب المحاور</value>
@@ -1600,7 +1603,13 @@
     <value>تمت إعادة تقييم المقابلة بنجاح</value>
   </data>
   <data name="CreateUser" xml:space="preserve">
-    <value>إنشاء مستخدم</value>
+    <value>إنشاء حساب مستخدم</value>
+  </data>
+  <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+    <value>الوصول إلى مساحة العمل</value>
+  </data>
+  <data name="CreateUser_RoleLabel" xml:space="preserve">
+    <value>دور المستخدم</value>
   </data>
   <data name="GenerateRecoveryCodes" xml:space="preserve">
     <value>توليد رموز الاسترداد</value>

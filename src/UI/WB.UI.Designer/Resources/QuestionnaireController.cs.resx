@@ -250,7 +250,7 @@
     <value>Generování pdf pro "{0}"</value>
   </data>
   <data name="GetHtml" xml:space="preserve">
-    <value>Export Html</value>
+    <value>Export HTML</value>
   </data>
   <data name="Hello" xml:space="preserve">
     <value>Ahoj, {0}</value>
