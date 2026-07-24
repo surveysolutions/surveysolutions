@@ -19,6 +19,11 @@
                 android:enabled="true"
                 android:exported="false"
                 android:foregroundServiceType="location" />
+        <service
+                android:name="WB.UI.Shared.Enumerator.Services.MapDownloadBackgroundService"
+                android:enabled="true"
+                android:exported="false"
+                android:foregroundServiceType="dataSync" />
 
 		<meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_maps_api_key" />
         <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="@bool/com_crashlytics_android_active" />
@@ -44,6 +49,8 @@
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.RECORD_AUDIO" />

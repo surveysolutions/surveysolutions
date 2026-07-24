@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { onMounted } from 'vue';
+import { onMounted } from 'vue'
 
 export default {
     name: 'App',
@@ -17,7 +17,7 @@ export default {
             if (typeof window.ajustDetailsPanelHeight === 'function') {
                 window.ajustDetailsPanelHeight()
             }
-        });
+        })
     },
-};
+}
 </script>

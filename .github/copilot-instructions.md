@@ -6,7 +6,7 @@
 
 - **Primary Languages:** C# (.NET 9), JavaScript/Vue 3 (frontend)
 - **Database:** PostgreSQL (NHibernate ORM for HQ, EF Core for Export service)
-- **Target Runtimes:** .NET 9, Node.js 22 (frontend; match CI workflow `NODE_VERSION`)
+- **Target Runtimes:** .NET 9, Node.js 24 (frontend; match CI workflow `NODE_VERSION`)
 
 ---
 
@@ -170,4 +170,11 @@ src/
 - **Integration tests need config:** Set `appsettings.cloud.ini` / `appsettings.cloud.json` with PostgreSQL credentials before running integration tests locally (mirrors CI environment variables).
 - **Designer uses Vuetify 3:** Do not import Vuetify 2 components or use Vuetify 2 API (`v-data-table` slot names differ between versions, etc.).
 - **Workspace schema isolation:** Running ad-hoc SQL against a specific workspace requires prefixing table names with the workspace schema (e.g., `ws_primary."interviews"`).
-- **All localization resources reside in .resx files, even for frontend, .json files are derivatives
+
+## Very Important:  
+- **Localization resources reside only in *.resx files:** Even for frontend, .json files are derivatives. Any change in resouces must affect all existing cultures.
+- **Building of the apps makes changes:** package-lock.json, other locale/[culture].json and *.cshtml files. These changes must not be committed.
+- **Most meaningful C# code changes require new unit tests:** Especially if changed classes (or neighbouring classes) already have them.
+- **Only meaningful changes are allowed:** Do not change other lines for formatting or unrelated reasons. Move code only when it provides substantial value.
+- **Follow existing line endings and rely on `.gitattributes`:** Do not rewrite files just to change line endings;
+- **Preserve line ending in files:** keep original line endings in files, if mixed LF is a priority. keep `*.sln` files as CRLF where required.

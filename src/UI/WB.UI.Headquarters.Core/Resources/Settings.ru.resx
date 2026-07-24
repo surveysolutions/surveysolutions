@@ -525,4 +525,37 @@
   <data name="SelectFileWarning" xml:space="preserve">
     <value>Пожалуйста, выберите файл для загрузки.</value>
 </data>
+  <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve">
+    <value>Разрешить супервайзерам изменять статусы заданий</value>
+  </data>
+  <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>При включении супервайзеры смогут утверждать и возобновлять задания</value>
+  </data>
+  <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
+    <value>Разрешить интервьюерам изменять статусы заданий</value>
+  </data>
+  <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>При включении интервьюеры смогут завершать и возобновлять задания (требует включённой настройки для супервайзеров)</value>
+  </data>
+  <data name="AudioRecordingQuality" xml:space="preserve">
+    <value>Качество аудиозаписи</value>
+  </data>
+  <data name="AudioRecordingQualityDescription" xml:space="preserve">
+    <value>Качество звука, используемое приложением интервьюера при записи аудио (аудиоаудит и аудиовопросы)</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono44kHz" xml:space="preserve">
+    <value>64 kbps, Моно, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve">
+    <value>64 kbps, Моно, 22.05 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono16kHz" xml:space="preserve">
+    <value>32 kbps, Моно, 16 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve">
+    <value>128 kbps, Стерео, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
+    <value>128 kbps, Стерео, 48 kHz</value>
+  </data>
 </root>

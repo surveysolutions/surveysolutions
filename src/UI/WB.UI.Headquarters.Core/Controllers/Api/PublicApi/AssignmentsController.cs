@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net.Mime;
 using System.Net;
 using System.Threading.Tasks;
-using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +30,11 @@ using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.PublicApi.Models;
@@ -47,7 +51,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
     {
         private readonly IAssignmentsService assignmentsStorage;
         private readonly IAssignmentViewFactory assignmentViewFactory;
-        private readonly IMapper mapper;
         private readonly IUserRepository userManager;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ISystemLog auditLog;
@@ -61,11 +64,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IInvitationService invitationService;
         private readonly IWebInterviewLinkProvider interviewLinkProvider;
         private readonly IInScopeExecutor inScopeExecutor;
+        private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
 
         public AssignmentsController(
             IAssignmentViewFactory assignmentViewFactory,
             IAssignmentsService assignmentsStorage,
-            IMapper mapper,
             IUserRepository userManager,
             IQuestionnaireStorage questionnaireStorage,
             ISystemLog auditLog,
@@ -78,11 +81,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             ISerializer serializer,
             IInvitationService invitationService,
             IWebInterviewLinkProvider interviewLinkProvider,
-            IInScopeExecutor inScopeExecutor)
+            IInScopeExecutor inScopeExecutor,
+            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.assignmentsStorage = assignmentsStorage;
-            this.mapper = mapper;
             this.userManager = userManager;
             this.questionnaireStorage = questionnaireStorage;
             this.auditLog = auditLog;
@@ -96,6 +99,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.invitationService = invitationService;
             this.interviewLinkProvider = interviewLinkProvider;
             this.inScopeExecutor = inScopeExecutor;
+            this.interviewerSettingsStorage = interviewerSettingsStorage;
         }
 
         /// <summary>
@@ -115,7 +119,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignment.QuestionnaireId, null);
 
-            var result = this.mapper.Map<FullAssignmentDetails>(assignment, o => o.Items["questionnaire"] = questionnaire);
+            var result = AssignmentsPublicApiMapper.ToFullAssignmentDetails(assignment, questionnaire);
             return result;
         }
 
@@ -157,13 +161,19 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     Offset = filter.Offset,
                     SearchBy = filter.SearchBy,
                     ShowArchive = filter.ShowArchive,
-                    SupervisorId = filter.SupervisorId
+                    SupervisorId = filter.SupervisorId,
+                    Statuses = ParseStatuses(filter.Status)
                 });
 
                 var listView = new AssignmentsListView(result.Page, result.PageSize, result.TotalCount, filter.Order);
 
-                listView.Assignments = this.mapper.Map<List<AssignmentViewItem>>(result.Items);
+                listView.Assignments = AssignmentsPublicApiMapper.ToAssignmentViewItemList(result.Items);
                 return listView;
+            }
+            catch (ArgumentException ex)
+            {
+                unitOfWork.DiscardChanges();
+                return BadRequest(ex.Message);
             }
             catch (NotSupportedException)
             {
@@ -281,10 +291,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 assignmentToImport, questionnaire, this.authorizedUser.Id);
 
             var assignment = this.assignmentsStorage.GetAssignment(assignmentId);
+            if (assignment == null)
+                return StatusCode(StatusCodes.Status500InternalServerError, "Assignment was created but could not be retrieved.");
 
             var result = new CreateAssignmentResult
             {
-                Assignment = mapper.Map<AssignmentDetails>(assignment)
+                Assignment = AssignmentsPublicApiMapper.ToAssignmentDetails(assignment)
             };
 
             if (assignment?.WebMode == true)
@@ -379,8 +391,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 {
                     var assignmentsService = sl.GetInstance<IAssignmentsService>();
                     var assignment = assignmentsService.GetAssignment(id);
+                    if (assignment == null)
+                        throw new InvalidOperationException($"Assignment {id} could not be retrieved after update.");
 
-                    return this.mapper.Map<AssignmentDetails>(assignment);;
+                    return AssignmentsPublicApiMapper.ToAssignmentDetails(assignment);
                 });
             return updatedDetails;
         }
@@ -541,7 +555,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             return new AudioRecordingEnabled
             {
-                Enabled = assignment.AudioRecording
+                Enabled = assignment.AudioRecording,
+                AudioAuditScope = assignment.AudioAuditScope ?? new List<string>()
             };
         }
 
@@ -570,11 +585,23 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (assignment == null || assignment.Archived)
                 return NotFound();
 
+            if (request.AudioAuditScope != null &&
+                !AreAudioAuditScopesEqual(request.AudioAuditScope, assignment.AudioAuditScope))
+                return StatusCode(StatusCodes.Status400BadRequest,
+                    "Audio audit scope cannot be changed through this endpoint.");
+
             commandService.Execute(
                 new UpdateAssignmentAudioRecording(assignment.PublicKey, authorizedUser.Id, 
                     request.Enabled, assignment.QuestionnaireId));
 
             return NoContent();
+        }
+
+        private static bool AreAudioAuditScopesEqual(List<string> requested, List<string> current)
+        {
+            var requestedScope = requested ?? new List<string>();
+            var currentScope = current ?? new List<string>();
+            return new HashSet<string>(requestedScope).SetEquals(currentScope);
         }
 
         /// <summary>
@@ -600,39 +627,33 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         }
 
         [HttpPost]
-        [Obsolete("Use PATCH method instead")]
+        [Obsolete("Use 'downsize' or 'changeStatus' instead")]
         [Route("{id:int}/close")]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
-        public ActionResult ClosePost(int id)
-        {
-            var assignment = assignmentsStorage.GetAssignment(id);
-            if (assignment == null)
-                return NotFound();
-            if (!assignment.QuantityCanBeChanged)
-                return Conflict();
+        public ActionResult<AssignmentDetails> ClosePost(int id) => Downsize(id);
 
-            this.commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey,
-                this.authorizedUser.Id,
-                assignment.InterviewSummaries.Count,
-                assignment.QuestionnaireId));
-
-            return Ok();
-        }
-
-        /// <summary>
-        /// Close assignment by setting Size to the amount of collected interviews
-        /// </summary>
-        /// <param name="id">Assignment id</param>
-        /// <response code="200">Assignment closed</response>
-        /// <response code="404">Assignment not found</response>
-        /// <response code="409">Quantity cannot be changed. Assignment either archived or has web mode enabled</response>
         [HttpPatch]
+        [Obsolete("Use 'downsize' or 'changeStatus' instead")]
         [Route("{id:int}/close")]
         [Produces(MediaTypeNames.Application.Json)]
         [ObservingNotAllowed]
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
-        public ActionResult<AssignmentDetails> Close(int id)
+        public ActionResult<AssignmentDetails> Close(int id) => Downsize(id);
+        
+        /// <summary>
+        /// Downsize assignment by setting Size to the amount of collected interviews
+        /// </summary>
+        /// <param name="id">Assignment id</param>
+        /// <response code="200">Assignment downsized</response>
+        /// <response code="404">Assignment not found</response>
+        /// <response code="409">Quantity cannot be changed. Assignment either archived or has web mode enabled</response>
+        [HttpPatch]
+        [Route("{id:int}/downsize")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ObservingNotAllowed]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
+        public ActionResult<AssignmentDetails> Downsize(int id)
         {
             var assignment = assignmentsStorage.GetAssignment(id);
             if (assignment == null)
@@ -640,10 +661,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (!assignment.QuantityCanBeChanged)
                 return Conflict();
 
+            var newQuantity = assignment.InterviewSummaries.Count;
             this.commandService.Execute(new UpdateAssignmentQuantity(assignment.PublicKey,
                 this.authorizedUser.Id,
-                assignment.InterviewSummaries.Count,
+                newQuantity,
                 assignment.QuestionnaireId));
+            this.auditLog.AssignmentSizeChanged(id, newQuantity);
 
             return GetUpdatedAssignment(id);
         }
@@ -673,15 +696,136 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (this.authorizedUser.IsSupervisor && assignment.ResponsibleId != this.authorizedUser.Id)
             {
                 var responsible = await this.userManager.FindByIdAsync(assignment.ResponsibleId);
-                if (!responsible.IsInRole(UserRoles.Interviewer))
+                if (responsible == null || !responsible.IsInRole(UserRoles.Interviewer))
                     return Forbid();
-                if (responsible.WorkspaceProfile.SupervisorId != this.authorizedUser.Id)
+                if (responsible.WorkspaceProfile?.SupervisorId != this.authorizedUser.Id)
                     return Forbid();
             }
 
             AssignmentHistory result =
                 await this.assignmentViewFactory.LoadHistoryAsync(assignment.PublicKey, start, length);
             return result;
+        }
+
+        /// <summary>
+        /// Change assignment status
+        /// </summary>
+        /// <param name="id">Assignment id</param>
+        /// <param name="request">Status change request</param>
+        /// <response code="200">Assignment details with updated status</response>
+        /// <response code="400">Invalid request</response>
+        /// <response code="404">Assignment not found</response>
+        [HttpPost]
+        [Route("{id:int}/changeStatus")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [AuthorizeByRole(UserRoles.Headquarter, UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Interviewer)]
+        [ObservingNotAllowed]
+        public async Task<ActionResult<AssignmentDetails>> ChangeStatus(int id, [FromBody] ChangeAssignmentStatusRequest request)
+        {
+            if (request == null || !ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var assignment = assignmentsStorage.GetAssignment(id);
+            if (assignment == null)
+                return NotFound();
+            
+            if (assignment.Status == request.Status)
+                return GetUpdatedAssignment(id);
+
+            var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
+
+            if (authorizedUser.IsInterviewer)
+            {
+                if (!interviewerSettings.IsAllowInterviewerChangeAssignmentStatus())
+                    return Forbid();
+
+                if (assignment.ResponsibleId != authorizedUser.Id)
+                    return Forbid();
+
+                var isAllowedInterviewerTransition =
+                    (request.Status == AssignmentStatus.Open && assignment.Status == AssignmentStatus.Completed) ||
+                    (request.Status == AssignmentStatus.Completed && assignment.Status == AssignmentStatus.Open);
+
+                if (!isAllowedInterviewerTransition)
+                    return Forbid();
+            }
+
+            if (authorizedUser.IsSupervisor && !interviewerSettings.IsAllowSupervisorChangeAssignmentStatus())
+                return Forbid();
+
+            if (authorizedUser.IsSupervisor)
+            {
+                if (assignment.ResponsibleId != authorizedUser.Id)
+                {
+                    var responsible = await this.userManager.FindByIdAsync(assignment.ResponsibleId);
+                    if (responsible == null || !responsible.IsInRole(UserRoles.Interviewer))
+                        return Forbid();
+                    if (responsible.WorkspaceProfile?.SupervisorId != this.authorizedUser.Id)
+                        return Forbid();
+                }
+
+                var isAllowedSupervisorTransition =
+                    request.Status == AssignmentStatus.Closed ||
+                    request.Status == AssignmentStatus.Open;
+
+                if (!isAllowedSupervisorTransition)
+                    return Forbid();
+            }
+
+            if (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator)
+            {
+                var isAllowedHqTransition =
+                    request.Status == AssignmentStatus.Closed ||
+                    request.Status == AssignmentStatus.Open;
+
+                if (!isAllowedHqTransition)
+                    return Forbid();
+            }
+
+            try
+            {
+                switch (request.Status)
+                {
+                    case AssignmentStatus.Open:
+                        commandService.Execute(new ReopenAssignment(assignment.PublicKey, authorizedUser.Id,
+                            assignment.QuestionnaireId, request.Comment));
+                        break;
+                    case AssignmentStatus.Completed:
+                        commandService.Execute(new CompleteAssignment(assignment.PublicKey, authorizedUser.Id,
+                            assignment.QuestionnaireId, request.Comment));
+                        break;
+                    case AssignmentStatus.Closed:
+                        commandService.Execute(new CloseAssignment(assignment.PublicKey, authorizedUser.Id,
+                            assignment.QuestionnaireId, request.Comment));
+                        break;
+                    default:
+                        return BadRequest($"Unknown status: {request.Status}");
+                }
+            }
+            catch (AssignmentException e)
+            {
+                return BadRequest(new { Message = e.Message });
+            }
+
+            return GetUpdatedAssignment(id);
+        }
+
+        private static AssignmentStatus[]? ParseStatuses(string? statusFilter)
+        {
+            if (string.IsNullOrWhiteSpace(statusFilter))
+                return null;
+
+            var parts = statusFilter.Split(',', StringSplitOptions.RemoveEmptyEntries);
+            var result = new List<AssignmentStatus>();
+            foreach (var part in parts)
+            {
+                if (!Enum.TryParse<AssignmentStatus>(part.Trim(), ignoreCase: true, out var status))
+                    throw new ArgumentException(
+                        $"Invalid status value: '{part.Trim()}'. Allowed values: {string.Join(", ", Enum.GetNames<AssignmentStatus>())}.");
+                result.Add(status);
+            }
+            return result.Count > 0 ? result.ToArray() : null;
         }
 
 
@@ -737,6 +881,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     {Value = assignmentInfo.Comments, Column = nameof(assignmentInfo.Comments)}.ToAssignmentComments(),
                 TargetArea = new PreloadingValue
                     {Value = assignmentInfo.TargetArea, Column = nameof(assignmentInfo.TargetArea)}.ToAssignmentTargetArea(),
+                AudioAuditScope = new AssignmentAudioAuditScope
+                {
+                    Column = ServiceColumns.AudioAuditScopeColumnName,
+                    Value = assignmentInfo.AudioAuditScope == null ? null : string.Join(",", assignmentInfo.AudioAuditScope),
+                    VariableNames = assignmentInfo.AudioAuditScope?.ToArray() ?? Array.Empty<string>()
+                },
             };
 
             var rosterRows = rosterAnswers

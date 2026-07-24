@@ -1,15 +1,22 @@
 <template>
     <HqLayout :title="$t('Pages.Admin_InterviewPackages_Title', { count: totalCount })"
-        :subtitle="$t('Pages.Admin_InterviewPackages_Subtitle')" :hasFilter="true">
+        :subtitle="$t('Pages.Admin_InterviewPackages_Subtitle')"
+        :hasFilter="true">
         <template v-slot:filters>
             <Filters>
                 <FilterBlock :title="$t('Pages.Admin_InterviewPackages_Type')">
-                    <input type="radio" name="type" id="typeBroken" :value="false"
+                    <input type="radio"
+                        name="type"
+                        id="typeBroken"
+                        :value="false"
                         v-model="returnOnlyUnknownExceptionType">
                     <label for="typeBroken">
                         {{ $t('Pages.Admin_InterviewPackages_Broken') }}
                     </label>
-                    <input type="radio" id="typeRejected" name="type" :value="true"
+                    <input type="radio"
+                        id="typeRejected"
+                        name="type"
+                        :value="true"
                         v-model="returnOnlyUnknownExceptionType">
                     <label for="typeRejected">
                         {{ $t('Pages.Admin_InterviewPackages_Rejected') }}
@@ -17,69 +24,105 @@
                 </FilterBlock>
                 <FilterBlock :title="$t('Pages.Admin_InterviewPackages_Interviewer')">
                     <Typeahead control-id="responsibleSelector"
-                        :placeholder="$t('Pages.Admin_InterviewPackages_SelectInterviewer')" :value="responsible"
+                        :placeholder="$t('Pages.Admin_InterviewPackages_SelectInterviewer')"
+                        :value="responsible"
                         v-on:selected="selectResponsible"
                         :fetch-url="`${$hq.basePath}api/Teams/InterviewersCombobox`" />
                 </FilterBlock>
                 <FilterBlock :title="$t('Pages.Admin_InterviewPackages_Questionnaire')">
                     <Typeahead control-id="questionnaireSelector"
                         :placeholder="$t('Pages.Admin_InterviewPackages_SelectQuestionnaire')"
-                        :value="questionnaireIdentity" v-on:selected="selectQuestionnaire"
+                        :value="questionnaireIdentity"
+                        v-on:selected="selectQuestionnaire"
                         :fetch-url="`${$hq.basePath}api/QuestionnairesApi/QuestionnairesCombobox`" />
                 </FilterBlock>
                 <FilterBlock v-if="returnOnlyUnknownExceptionType"
                     :title="$t('Pages.Admin_InterviewPackages_ExceptionType')">
                     <Typeahead control-id="exceptionTypeSelector"
-                        :placeholder="$t('Pages.Admin_InterviewPackages_SelectExceptionType')" :value="exceptionType"
+                        :placeholder="$t('Pages.Admin_InterviewPackages_SelectExceptionType')"
+                        :value="exceptionType"
                         v-on:selected="selectExceptionType"
                         :fetch-url="`${$hq.basePath}api/ControlPanelApi/ExceptionTypes`" />
                 </FilterBlock>
                 <FilterBlock :title="$t('Pages.Admin_InterviewPackages_Period')">
-                    <DatePicker :config="datePickerConfig" :value="selectedDateRange" :withClear="true"
+                    <DatePicker :config="datePickerConfig"
+                        :value="selectedDateRange"
+                        :withClear="true"
                         v-on:clear="clearDateRange"></DatePicker>
                 </FilterBlock>
             </Filters>
         </template>
 
-        <DataTables ref="table" :tableOptions="tableOptions" :selectable="true" selectableId="id"
-            @selectedRowsChanged="rows => (selectedPackages = rows)" @totalRows="rows => (totalCount = rows)"
-            @page="resetSelection" :addParamsToRequest="addParamsToRequest" mutliRowSelect :noPaging="false">
+        <DataTables ref="table"
+            :tableOptions="tableOptions"
+            :selectable="true"
+            selectableId="id"
+            @selectedRowsChanged="rows => (selectedPackages = rows)"
+            @totalRows="rows => (totalCount = rows)"
+            @page="resetSelection"
+            :addParamsToRequest="addParamsToRequest"
+            mutliRowSelect
+            :noPaging="false">
         </DataTables>
 
         <template v-slot:modals>
-            <Confirm ref="confirmReprocessSelected" id="confirmReprocessSelected">
+            <Confirm ref="confirmReprocessSelected"
+                id="confirmReprocessSelected">
                 {{ $t('Pages.Admin_InterviewPackages_ReprocessSelectedConfirmation') }}</Confirm>
         </template>
-        <ModalFrame ref="putReasonModal" :title="$t('Pages.ConfirmationNeededTitle')">
+        <ModalFrame ref="putReasonModal"
+            :title="$t('Pages.ConfirmationNeededTitle')">
             <p>{{ $t("Pages.Admin_InterviewPackages_NumberOfPackagesAffected", { count: selectedPackages.length }) }}
             </p>
             <form onsubmit="return false;">
                 <div class="form-group">
-                    <label class="control-label" for="reasonId">{{ $t("Pages.Admin_InterviewPackages_Reason") }}</label>
-                    <Typeahead control-id="reasonId" :placeholder="$t('Pages.Admin_InterviewPackages_SelectReason')"
-                        :value="reason" :ajax-params="{}" @selected="selectReason"
+                    <label class="control-label"
+                        for="reasonId">
+                        {{ $t("Pages.Admin_InterviewPackages_Reason") }}
+                    </label>
+                    <Typeahead control-id="reasonId"
+                        :placeholder="$t('Pages.Admin_InterviewPackages_SelectReason')"
+                        :value="reason"
+                        :ajax-params="{}"
+                        @selected="selectReason"
                         :fetch-url="`${this.$hq.basePath}api/ControlPanelApi/ExpectedExceptionTypes`"></Typeahead>
                 </div>
             </form>
             <template v-slot:actions>
                 <div>
-                    <button type="button" class="btn btn-primary" @click="putReasonAsync" :disabled="!reason">{{
-        $t("Common.Ok") }}</button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                    <button type="button"
+                        class="btn btn-primary"
+                        @click="putReasonAsync"
+                        :disabled="!reason">{{
+                            $t("Common.Ok") }}</button>
+                    <button type="button"
+                        class="btn btn-link"
+                        data-dismiss="modal">
+                        {{ $t("Common.Cancel") }}
+                    </button>
                 </div>
             </template>
         </ModalFrame>
-        <div class="panel panel-table" v-if="hasSelectedPackages">
+        <div class="panel panel-table"
+            v-if="hasSelectedPackages">
             <div class="panel-body">
-                <input class="double-checkbox-white" id="q1az" type="checkbox" checked disabled="disabled" />
+                <input class="double-checkbox-white"
+                    id="q1az"
+                    type="checkbox"
+                    checked
+                    disabled="disabled" />
                 <label for="q1az">
                     <span class="tick"></span>
                     <span>{{ $t('Pages.Admin_InterviewPackages_SelectedPackagesCount',
-        { count: selectedPackages.length }) }}</span>
+                                { count: selectedPackages.length }) }}</span>
                 </label>
-                <button type="button" class="btn btn-primary" @click="reprocessSelected">{{
-        $t('Pages.Admin_InterviewPackages_Reprocess') }}</button>
-                <button type="button" class="btn btn-primary" @click="showReasonModal">{{
+                <button type="button"
+                    class="btn btn-primary"
+                    @click="reprocessSelected">{{
+                    $t('Pages.Admin_InterviewPackages_Reprocess') }}</button>
+                <button type="button"
+                    class="btn btn-primary"
+                    @click="showReasonModal">{{
                     $t('Pages.Admin_InterviewPackages_PutReason') }}</button>
             </div>
         </div>
