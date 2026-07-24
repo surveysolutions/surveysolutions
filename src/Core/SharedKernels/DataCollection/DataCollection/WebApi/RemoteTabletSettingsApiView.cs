@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
             AllowSupervisorChangeAssignmentStatus = true;
             AllowInterviewerChangeAssignmentStatus = true;
             AudioRecordingQuality = AudioRecordingQuality.Mono44kHz;
-            AcceptableGpsLocationSource = AcceptableGpsLocationSource.Any;
+            AcceptableGpsLocationSource = AcceptableGpsLocationSource.BuiltInGpsOnly;
         }
 
         public bool NotificationsEnabled { get; set; }

@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Settings
             InterviewerSettings settings = null;
 
             Assert.That(settings.GetAcceptableGpsLocationSource(), Is.EqualTo(InterviewerSettings.AcceptableGpsLocationSourceDefault));
-            Assert.That(InterviewerSettings.AcceptableGpsLocationSourceDefault, Is.EqualTo(AcceptableGpsLocationSource.Any));
+            Assert.That(InterviewerSettings.AcceptableGpsLocationSourceDefault, Is.EqualTo(AcceptableGpsLocationSource.BuiltInGpsOnly));
         }
 
         [Test]
@@ -21,15 +21,15 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Settings
         {
             var settings = new InterviewerSettings { AcceptableGpsLocationSource = null };
 
-            Assert.That(settings.GetAcceptableGpsLocationSource(), Is.EqualTo(AcceptableGpsLocationSource.Any));
+            Assert.That(settings.GetAcceptableGpsLocationSource(), Is.EqualTo(AcceptableGpsLocationSource.BuiltInGpsOnly));
         }
 
         [Test]
         public void when_source_set_should_return_stored_value()
         {
-            var settings = new InterviewerSettings { AcceptableGpsLocationSource = AcceptableGpsLocationSource.BuiltInGpsOnly };
+            var settings = new InterviewerSettings { AcceptableGpsLocationSource = AcceptableGpsLocationSource.Any };
 
-            Assert.That(settings.GetAcceptableGpsLocationSource(), Is.EqualTo(AcceptableGpsLocationSource.BuiltInGpsOnly));
+            Assert.That(settings.GetAcceptableGpsLocationSource(), Is.EqualTo(AcceptableGpsLocationSource.Any));
         }
     }
 }

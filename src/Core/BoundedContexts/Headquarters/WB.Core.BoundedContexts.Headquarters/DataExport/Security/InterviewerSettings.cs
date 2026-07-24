@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
         public const bool AllowSupervisorChangeAssignmentStatusDefault = true;
         public const bool AllowInterviewerChangeAssignmentStatusDefault = true;
         public const AudioRecordingQuality AudioRecordingQualityDefault = WB.Core.SharedKernels.DataCollection.ValueObjects.AudioRecordingQuality.Mono44kHz;
-        public const AcceptableGpsLocationSource AcceptableGpsLocationSourceDefault = WB.Core.SharedKernels.DataCollection.ValueObjects.AcceptableGpsLocationSource.Any;
+        public const AcceptableGpsLocationSource AcceptableGpsLocationSourceDefault = WB.Core.SharedKernels.DataCollection.ValueObjects.AcceptableGpsLocationSource.BuiltInGpsOnly;
 
         public bool AutoUpdateEnabled { get; set; }
         public bool? DeviceNotificationsEnabled { get; set; }
