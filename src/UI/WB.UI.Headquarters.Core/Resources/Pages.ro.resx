@@ -184,7 +184,7 @@
     <value>Atenţie!</value>
   </data>
   <data name="Backup_IndexTitle" xml:space="preserve">
-    <value>Index</value>
+    <value>Listă</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Anulare</value>
@@ -370,7 +370,7 @@
     <value>comentate</value>
   </data>
   <data name="InterviewDetails_DefaultTranslation" xml:space="preserve">
-    <value>original</value>
+    <value>Original</value>
   </data>
   <data name="InterviewDetails_EnabledButtonLabel" xml:space="preserve">
     <value>autorizate</value>
@@ -544,7 +544,7 @@
     <value>Chestionare primite de Anchetator</value>
   </data>
   <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
-      <value>E-mail: {{email}}</value>
+    <value>E-mail: {{email}}</value>
   </data>
   <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
       <value>Nume complet: {{fullName}}</value>
@@ -772,7 +772,7 @@
     <value>Filtru</value>
   </data>
   <data name="Layout_Legal" xml:space="preserve">
-    <value>Legal</value>
+    <value>Juridic</value>
   </data>
   <data name="Layout_RightsReserved" xml:space="preserve">
     <value>Toate drepturile rezervate.</value>
@@ -943,7 +943,7 @@
     <value>Dimensiune (biți)</value>
   </data>
   <data name="PackagesInfo_Title" xml:space="preserve">
-    <value>Index</value>
+    <value>Listă</value>
   </data>
   <data name="PackagesInfo_UploadDate" xml:space="preserve">
     <value>Data încărcării</value>
@@ -1009,10 +1009,13 @@
     <value>Supervizori</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>Detaliile cu informații personale (opțional) &lt;br&gt; vor fi vizibile numai pentru HQ</value>
+    <value>Detaliile cu informații personale</value>
+  </data>
+  <data name="PublicSectionDescription" xml:space="preserve">
+    <value>(opțional, va fi vizibil numai pentru utilizatorii autentificați).</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
-      <value>{{name}} (ver. {{version}})</value>
+    <value>{{name}} (ver. {{version}})</value>
   </data>
   <data name="RejectedByHeadquarters" xml:space="preserve">
     <value>Respins de coordonatori</value>
@@ -1208,7 +1211,7 @@
     <value>Aplicație de autentificare</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>Profil</value>
+    <value>Contact</value>
   </data>
   <data name="AccountManage_Status2fa" xml:space="preserve">
     <value>Autentificare cu doi factori este</value>
@@ -1346,7 +1349,13 @@
     <value>Creați un administrator</value>
   </data>
   <data name="CreateUser" xml:space="preserve">
-    <value>Creați un utilizator</value>
+    <value>Creați un cont de utilizator</value>
+  </data>
+  <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+    <value>Acces la spațiul de lucru</value>
+  </data>
+  <data name="CreateUser_RoleLabel" xml:space="preserve">
+    <value>Rolul utilizatorului</value>
   </data>
   <data name="Diagnostics" xml:space="preserve">
     <value>Diagnostic</value>
@@ -1448,7 +1457,7 @@
     <value>Pachetele anchetei</value>
   </data>
   <data name="Kb" xml:space="preserve">
-    <value>Kb</value>
+    <value>KB</value>
   </data>
   <data name="LogOn_LoginWithRecoveryCode" xml:space="preserve">
     <value>Ați solictat să vă autentificați cu un cod rerecuperare</value>
@@ -1584,5 +1593,197 @@
   </data>
   <data name="UsersManage_WorkspacesFilterTitle" xml:space="preserve">
     <value>Spațiu de lucru</value>
+  </data>
+  <data name="AntiForgeryError_Title" xml:space="preserve">
+    <value>Date de solicitare invalide.</value>
+  </data>
+  <data name="GlobalSettings_DeleteQuestionnaireWarning" xml:space="preserve">
+    <value>Atenție! Aceasta este o acțiune ireversibilă</value>
+  </data>
+  <data name="Users_ActiveUsers" xml:space="preserve">
+    <value>Utilizatori activi</value>
+  </data>
+  <data name="Users_ArchivedUsers" xml:space="preserve">
+    <value>Utilizatori arhivați</value>
+  </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Deblocați</value>
+  </data>
+  <data name="AutolockDescription" xml:space="preserve">
+    <value>Contul este blocat automat</value>
+  </data>
+  <data name="User_CreateText1" xml:space="preserve">
+    <value>Această acțiune va crea un utilizator individual,</value>
+  </data>
+  <data name="User_CreateText2" xml:space="preserve">
+    <value>pentru a crea mai mulți operatori de interviu și supervizori puteți folosi {{link}}</value>
+  </data>
+  <data name="User_CreateText_UserBatchUploadLinkText" xml:space="preserve">
+    <value>crearea în lot a utilizatorilor</value>
+  </data>
+  <data name="GetInterviewerApp" xml:space="preserve">
+    <value>Descărcați aplicația operator de interviu</value>
+  </data>
+  <data name="Users_UsersConfirm" xml:space="preserve">
+    <value>Doriți să continuați?</value>
+  </data>
+  <data name="Users_UnarchiveUsersWarning" xml:space="preserve">
+    <value>Utilizatorul/utilizatorii vor fi dezarhivați.</value>
+  </data>
+  <data name="Users_ArchiveUsersConfirmMessage" xml:space="preserve">
+    <value>Veți arhiva supervizorii și operatorii de interviu din echipele lor. Operatorii de interviu atribuiți supervizorilor arhivați vor fi arhivați în TOATE spațiile de lucru. Orice date nesincronizate rămase pe dispozitivele utilizatorilor arhivați (operatori de interviu sau supervizori) nu vor fi transmise către server.</value>
+  </data>
+  <data name="AssignmentDetails_PageTitle" xml:space="preserve">
+    <value>Sarcină {0}</value>
+  </data>
+  <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
+    <value>[ver. {{version}}] {{name}} </value>
+  </data>
+  <data name="Tablet_RelinkMessage" xml:space="preserve">
+    <value>Un singur dispozitiv este conectat la acest cont.</value>
+  </data>
+  <data name="AreaQuestion_RequestedAccuracy" xml:space="preserve">
+    <value>Precizie</value>
+  </data>
+  <data name="AreaQuestion_RequestedFrequency" xml:space="preserve">
+    <value>Frecvență</value>
+  </data>
+  <data name="IncludeEsriTitle" xml:space="preserve">
+    <value>Includeți funcționalitatea de cartografiere</value>
+  </data>
+  <data name="Filters_Shapefiles" xml:space="preserve">
+    <value>Fișiere Shapefile</value>
+  </data>
+  <data name="Filters_None" xml:space="preserve">
+    <value>Niciunul</value>
+  </data>
+  <data name="MapDetails_Unlink" xml:space="preserve">
+    <value>Deconectare</value>
+  </data>
+  <data name="MapDetails_FullShapefilesDisclaimer" xml:space="preserve">
+    <value>Această previzualizare afișează fișierul Shapefile încărcat suprapus pe stratul de bază al imaginii din satelit.</value>
+  </data>
+  <data name="MapDetails_SimplifiedShapefilesDisclaimer" xml:space="preserve">
+    <value>Această previzualizare afișează o versiune redusă a fișierului Shapefile încărcat suprapus pe stratul de bază al imaginii din satelit. Fișierul Shapefile original încărcat nu este afișat în această previzualizare din cauza dimensiunii sale mari.</value>
+  </data>
+  <data name="MapDetails_DuplicateLabelsWarning" xml:space="preserve">
+    <value>Atenție! Fișierul Shapefile conține etichete duplicate</value>
+  </data>
+  <data name="MapDetails_UploadedBy" xml:space="preserve">
+    <value>Încărcat de</value>
+  </data>
+  <data name="MapDetails_SelectUser" xml:space="preserve">
+    <value>Selectați utilizatorul</value>
+  </data>
+  <data name="MapDetails_EmptyMapData" xml:space="preserve">
+    <value>Datele de previzualizare lipsesc pentru această hartă</value>
+  </data>
+  <data name="MapDetails_ShapeType" xml:space="preserve">
+    <value>Tip formă</value>
+  </data>
+  <data name="MapDetails_ShapesCount" xml:space="preserve">
+    <value>Număr de forme</value>
+  </data>
+  <data name="MapList_MapType" xml:space="preserve">
+    <value>Tip</value>
+  </data>
+  <data name="Map_NoUsers" xml:space="preserve">
+    <value>Harta nu este atribuită niciunui utilizator</value>
+  </data>
+  <data name="Questionnaire_Exposed_Variables" xml:space="preserve">
+    <value>Variabile expuse ale chestionarului</value>
+  </data>
+  <data name="Exposed_Variables_Description" xml:space="preserve">
+    <value>Selectarea acestor variabile vă va permite să le utilizați în raportare. Interviurile nou create vor fi disponibile imediat. Interviurile colectate anterior vor fi procesate și va dura ceva timp. Puteți selecta până la 15 variabile.</value>
+  </data>
+  <data name="Exposed_Variables_AvailableVariablesTitle" xml:space="preserve">
+    <value>Variabile disponibile</value>
+  </data>
+  <data name="Exposed_Variables_SelectedVariablesTitle" xml:space="preserve">
+    <value>Variabile expuse</value>
+  </data>
+  <data name="ExposedVariables_RemoveMessage" xml:space="preserve">
+    <value>Doriți să eliminați variabila din listă?</value>
+  </data>
+  <data name="AccountManage_StatusApiToken" xml:space="preserve">
+    <value>Accesul la punctele finale REST și GraphQL API este în prezent </value>
+  </data>
+  <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
+    <value>Supervizor (Operatorii de interviu vor fi adăugați în echipa sa)</value>
+  </data>
+  <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
+    <value>Selectați supervizorul</value>
+  </data>
+  <data name="UserManagement_SubtitleAddInterviewer" xml:space="preserve">
+    <value>Selectați spațiul de lucru și supervizorul pentru a crea operatorul de interviu</value>
+  </data>
+  <data name="UsersManage_TeamFilterPlaceHolder" xml:space="preserve">
+    <value>Echipă</value>
+  </data>
+  <data name="UsersManage_TeamFilter" xml:space="preserve">
+    <value>Echipă</value>
+  </data>
+  <data name="ExposedVariables_VariableName" xml:space="preserve">
+    <value>Numele variabilei</value>
+  </data>
+  <data name="ExposedVariables_VariableTitle" xml:space="preserve">
+    <value>Titlu</value>
+  </data>
+  <data name="ExposedVariables_VariableDisplayTitle" xml:space="preserve">
+    <value>Titlu afișat</value>
+  </data>
+  <data name="ExposedVariables_VariableLabel" xml:space="preserve">
+    <value>Etichetă</value>
+  </data>
+  <data name="ExposedVariables_ChangeMessage" xml:space="preserve">
+    <value>Modificați setul de variabile expuse. Actualizarea rapoartelor va dura ceva timp.</value>
+  </data>
+  <data name="Filters_InterviewMode" xml:space="preserve">
+    <value>Mod interviu</value>
+  </data>
+  <data name="Filters_InterviewModePlaceHolder" xml:space="preserve">
+    <value>Toate modurile de interviu</value>
+  </data>
+  <data name="AccountManage_ApiTokens" xml:space="preserve">
+    <value>Tokenuri API</value>
+  </data>
+  <data name="Profile_IssueApiToken" xml:space="preserve">
+    <value>Emiteți</value>
+  </data>
+  <data name="MapUserLink_DiscardConfirm1" xml:space="preserve">
+    <value>Dacă acesta este ultimul utilizator din echipă conectat la hartă, atunci supervizorul echipei va pierde accesul la hartă.</value>
+  </data>
+  <data name="QuestionnaireVersionAndName" xml:space="preserve">
+    <value>[vers. {1}] {0}</value>
+  </data>
+  <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
+    <value>Verificări critice</value>
+  </data>
+  <data name="Questionnaire_CriticalVerificationLevel" xml:space="preserve">
+    <value>Acțiune la trimitere</value>
+  </data>
+  <data name="Questionnaire_ChangeCriticalVerificationLevelTitle" xml:space="preserve">
+    <value>Setați acțiunea la trimitere</value>
+  </data>
+  <data name="Questionnaire_SetActionOnSubmissionExplanation" xml:space="preserve">
+    <value>Selectați ce acțiune trebuie efectuată înainte de trimiterea interviului</value>
+  </data>
+  <data name="Questionnaire_SetActionOnSubmissionExplanationIgnore" xml:space="preserve">
+    <value>IGNORARE - nu verifica nicio regulă critică chiar dacă sunt prezente.</value>
+  </data>
+  <data name="Questionnaire_SetActionOnSubmissionExplanationWarn" xml:space="preserve">
+    <value>AVERTISMENT - verifică regulile critice și avertizează utilizatorul înainte de trimiterea interviului.</value>
+  </data>
+  <data name="Questionnaire_SetActionOnSubmissionExplanationBlock" xml:space="preserve">
+    <value>BLOCARE - verifică regulile critice și interzice trimiterea interviului când sunt prezente probleme critice.</value>
+  </data>
+  <data name="ShowKey" xml:space="preserve">
+    <value>Afișați cheia</value>
+  </data>
+  <data name="Observer_Memo1" xml:space="preserve">
+    <value>Observatorii pot monitoriza colectarea datelor, dar nu pot face modificări. Impersonați un alt utilizator (supervizor sau sediu central) pentru a accesa interviuri, sarcini, rapoarte și alte date. Observatorii nu pot crea sarcini, seta răspunsuri, comenta, aproba/respinge interviuri, exporta date sau modifica datele serverului.</value>
+  </data>
+  <data name="Observer_Memo2" xml:space="preserve">
+    <value>Faceți clic pe un cont și selectați 'Vizualizați ca acest utilizator în modul doar citire' pentru a începe. Folosiți linkul galben din partea de sus pentru a reveni la contul dvs.</value>
   </data>
 </root>

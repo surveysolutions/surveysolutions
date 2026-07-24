@@ -168,4 +168,37 @@
   <data name="UploadMapsSummaryFormat" xml:space="preserve">
     <value>已处理{0}个地图文件，其中{1}个无效</value>
   </data>
+
+
+  <data name="MapOverlapsWith" xml:space="preserve">
+    <value>与以下内容重叠：</value>
+  </data>
+
+  <data name="MapOverlapsWithOther" xml:space="preserve">
+    <value>以及另外 {0} 个。</value>
+  </data>
+
+  <data name="ShpIsMissingInArchive" xml:space="preserve">
+    <value>缺少 {0} 的文件 {0}.shp</value>
+  </data>
+
+  <data name="ShxIsMissingInArchive" xml:space="preserve">
+    <value>缺少 {0}.shp 对应的文件 {0}.shx</value>
+  </data>
+
+  <data name="DbfIsMissingInArchive" xml:space="preserve">
+    <value>缺少 {0}.shp 对应的文件 {0}.dbf</value>
+  </data>
+
+  <data name="MapFileSizeLimit" xml:space="preserve">
+    <value>文件 {0} 的大小超过适用限制 {1}</value>
+  </data>
+  
+  <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve">
+    <value>文件 {0} 的名称包含非 UTF-8 字符。</value>
+  </data>
+
+  <data name="MapFileNameHasInvalidChars" xml:space="preserve">
+    <value>文件 {0} 的名称包含无效字符。</value>
+  </data>
 </root>

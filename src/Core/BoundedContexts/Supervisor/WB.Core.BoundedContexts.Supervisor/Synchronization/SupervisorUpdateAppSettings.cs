@@ -29,6 +29,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             supervisorSettings.SetGeographyQuestionPeriodInSeconds(tabletSettings.GeographyQuestionPeriodInSeconds);
             supervisorSettings.SetEsriApiKey(tabletSettings.EsriApiKey);
             supervisorSettings.SetNotifications(tabletSettings.NotificationsEnabled);
+            supervisorSettings.SetAllowSupervisorChangeAssignmentStatus(tabletSettings.AllowSupervisorChangeAssignmentStatus);
+            supervisorSettings.SetAllowInterviewerChangeAssignmentStatus(tabletSettings.AllowInterviewerChangeAssignmentStatus);
+            supervisorSettings.SetAudioRecordingQuality(tabletSettings.AudioRecordingQuality);
         }
     }
 }

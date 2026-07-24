@@ -249,4 +249,19 @@
   <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
     <value>Fjalëkalimi nuk është unik. Fjalëkalimi i caktuar për modalitetin ueb me sasi 1 duhet të jetë unik</value>
   </data>
+
+
+  <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
+    <value>Të gjitha detyrat për intervista në internet duhet t’i caktohen një intervistuesi</value>
+  </data>
+
+  <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
+    <value>Përgjigjja për pyetjen me emrin e variablit {0} nuk mund të ngarkohet paraprakisht, pasi është e një lloji të pambështetur. Shihni artikullin vijues të mbështetjes https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type për hollësi mbi atë që mund të ngarkohet paraprakisht në versionin aktual.</value>
+  </data>
+  <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+    <value>Emri i variablës së fushës së auditimit audio '{0}' është i pavlefshëm. Duhet t'i referohet një seksioni, grupi ose rosteri ekzistues (pyetjet dhe rosterët e sheshtë nuk lejohen).</value>
+  </data>
+  <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+    <value>Detyra nuk u migrua sepse përdor një auditim audio selektiv (fushëveprimi i regjistrimit audio), i cili nuk mund të migrohet automatikisht në një version të ri të pyetësorit. Rikrijoni detyrën manualisht dhe konfiguroni sërish fushëveprimin e auditimit audio.</value>
+  </data>
 </root>

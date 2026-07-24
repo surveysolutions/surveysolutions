@@ -5,6 +5,7 @@ using Android.OS;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Enumerator.Utils;
@@ -272,6 +273,30 @@ namespace WB.UI.Shared.Enumerator.Services
         public void SetEsriApiKey(string esriApiKey)
         {
             this.SaveCurrentSettings(settings => settings.EsriApiKey = esriApiKey);
+        }
+
+        public bool AllowSupervisorChangeAssignmentStatus =>
+            this.CurrentWorkspaceSettings?.AllowSupervisorChangeAssignmentStatus ?? true;
+
+        public void SetAllowSupervisorChangeAssignmentStatus(bool allow)
+        {
+            this.SaveCurrentSettings(settings => settings.AllowSupervisorChangeAssignmentStatus = allow);
+        }
+
+        public bool AllowInterviewerChangeAssignmentStatus =>
+            this.CurrentWorkspaceSettings?.AllowInterviewerChangeAssignmentStatus ?? true;
+
+        public void SetAllowInterviewerChangeAssignmentStatus(bool allow)
+        {
+            this.SaveCurrentSettings(settings => settings.AllowInterviewerChangeAssignmentStatus = allow);
+        }
+
+        public AudioRecordingQuality AudioRecordingQuality =>
+            this.CurrentWorkspaceSettings?.AudioRecordingQuality ?? AudioRecordingQuality.Mono44kHz;
+
+        public void SetAudioRecordingQuality(AudioRecordingQuality quality)
+        {
+            this.SaveCurrentSettings(settings => settings.AudioRecordingQuality = quality);
         }
 
         public bool SupportOfflineMaps => true;

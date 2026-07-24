@@ -547,4 +547,69 @@ Vă rugăm să vă asigurați că toate informațiile sunt corecte.</value>
   <data name="CompleteReviewSubmitInterview" xml:space="preserve">
       <value>Interviu {{key}}</value>
   </data>
+
+
+  <data name="CriticalQuestionErrors" xml:space="preserve">
+    <value>Necesită răspunsuri la aceste întrebări:</value>
+  </data>
+
+  <data name="CriticalityConditionsErrors" xml:space="preserve">
+    <value>Este necesar să remediați aceste erori:</value>
+  </data>
+
+  <data name="UnansweredQuestions" xml:space="preserve">
+    <value>Întrebări fără răspuns:</value>
+  </data>
+
+  <data name="CompleteCommentCriticalityLevelBlock" xml:space="preserve">
+    <value>Pentru a activa butonul, vă rugăm să rezolvați problemele critice</value>
+  </data>
+
+  <data name="CompleteCommentCriticalityLevelWarn" xml:space="preserve">
+    <value>Pentru a activa butonul, vă rugăm să rezolvați problemele critice sau să oferiți o explicație în caseta de comentarii de mai sus</value>
+  </data>
+
+  <data name="CompleteNoteCommentCriticality" xml:space="preserve">
+    <value>Vă rugăm să rezolvați problemele răspunzând la întrebările critice și asigurându-vă că răspunsurile respectă regulile critice</value>
+  </data>
+
+  <data name="CompleteCriticalityWarnConfirmation" xml:space="preserve">
+    <value>Vă rugăm să confirmați că doriți să trimiteți acest interviu cu probleme critice.</value>
+  </data>
+
+  <data name="ConfirmationNeededTitle" xml:space="preserve">
+    <value>Este necesară confirmarea</value>
+  </data>
+
+  <data name="Progress" xml:space="preserve">
+    <value>Progres</value>
+  </data>
+
+  <data name="SwitchToWebMode" xml:space="preserve">
+    <value>Schimbați interviul în modul Web</value>
+  </data>
+
+  <data name="SwitchToWebMode_LinkDescription" xml:space="preserve">
+    <value>Următorul link poate fi utilizat pentru a continua acest interviu</value>
+  </data>
+
+  <data name="AssignmentLimitError" xml:space="preserve">
+    <value>Nu puteți crea mai multe interviuri din această sarcină</value>
+  </data>
+
+  <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
+      <value>Întrebări critice fără răspuns: {{count}}</value>
+  </data>
+
+  <data name="Complete_FailedCriticalRules" xml:space="preserve">
+      <value>Reguli critice eșuate: {{count}}</value>
+  </data>
+
+  <data name="Complete_UnansweredQuestions" xml:space="preserve">
+      <value>Întrebări fără răspuns: {{count}}</value>
+  </data>
+
+  <data name="Complete_QuestionsWithErrors" xml:space="preserve">
+      <value>Întrebări cu erori: {{count}}</value>
+  </data>
 </root>

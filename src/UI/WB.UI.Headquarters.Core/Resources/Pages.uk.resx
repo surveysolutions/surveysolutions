@@ -139,7 +139,7 @@
     <value>Логін</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>Профіль</value>
+    <value>Контакт</value>
   </data>
   <data name="AccountManage_Role" xml:space="preserve">
     <value>Роль</value>
@@ -370,7 +370,13 @@
     <value>Створити адміністратора</value>
   </data>
   <data name="CreateUser" xml:space="preserve">
-    <value>Створити користувача</value>
+    <value>Створити обліковий запис користувача</value>
+  </data>
+  <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+    <value>Доступ до робочого простору</value>
+  </data>
+  <data name="CreateUser_RoleLabel" xml:space="preserve">
+    <value>Роль користувача</value>
   </data>
   <data name="DetailsQuestionPartialView_WriteCommentPlaceholder" xml:space="preserve">
     <value>Написати коментар...</value>
@@ -1381,7 +1387,10 @@
     <value>Супервізори</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>Особиста інформація (необов'язково) &lt;br&gt; буде видима лише користувачам Headquarters</value>
+    <value>Особиста інформація</value>
+  </data>
+  <data name="PublicSectionDescription" xml:space="preserve">
+    <value>(необов'язково, буде видима лише аутентифікованим користувачам).</value>
   </data>
   <data name="Questionnaire_Exposed_Variables" xml:space="preserve">
     <value>Змінні, що використовуються для звітів</value>
@@ -1740,5 +1749,41 @@
   </data>
   <data name="AssignmentDetails_PageTitle" xml:space="preserve">
       <value>Завдання {0}</value>
+  </data>
+  <data name="IncludeEsriTitle" xml:space="preserve">
+    <value>Увімкнути функціонал картографування</value>
+  </data>
+  <data name="MapDetails_EmptyMapData" xml:space="preserve">
+    <value>Дані попереднього перегляду для цієї карти відсутні</value>
+  </data>
+  <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
+    <value>Критичні перевірки</value>
+  </data>
+  <data name="Questionnaire_CriticalVerificationLevel" xml:space="preserve">
+    <value>Дія при поданні</value>
+  </data>
+  <data name="Questionnaire_ChangeCriticalVerificationLevelTitle" xml:space="preserve">
+    <value>Встановити дію при поданні</value>
+  </data>
+  <data name="Questionnaire_SetActionOnSubmissionExplanation" xml:space="preserve">
+    <value>Виберіть, яка дія має бути виконана перед поданням інтерв'ю</value>
+  </data>
+  <data name="Questionnaire_SetActionOnSubmissionExplanationIgnore" xml:space="preserve">
+    <value>ІГНОРУВАТИ — не перевіряти жодні критичні правила, навіть якщо вони присутні.</value>
+  </data>
+  <data name="Questionnaire_SetActionOnSubmissionExplanationWarn" xml:space="preserve">
+    <value>ПОПЕРЕДЖАТИ — перевіряти критичні правила та попереджати користувача перед поданням інтерв'ю.</value>
+  </data>
+  <data name="Questionnaire_SetActionOnSubmissionExplanationBlock" xml:space="preserve">
+    <value>БЛОКУВАТИ — перевіряти критичні правила та забороняти подання інтерв'ю при наявності критичних проблем.</value>
+  </data>
+  <data name="ShowKey" xml:space="preserve">
+    <value>Показати ключ</value>
+  </data>
+  <data name="Observer_Memo1" xml:space="preserve">
+    <value>Спостерігачі можуть моніторити збір даних, але не можуть вносити зміни. Використовуйте режим імітації іншого користувача (супервайзера або штаб-квартири) для доступу до інтерв'ю, завдань, звітів та інших даних. Спостерігачі не можуть створювати завдання, встановлювати відповіді, коментувати, схвалювати/відхиляти інтерв'ю, експортувати дані або змінювати дані сервера.</value>
+  </data>
+  <data name="Observer_Memo2" xml:space="preserve">
+    <value>Натисніть на обліковий запис і виберіть «Переглянути як цей користувач у режимі тільки для читання», щоб почати. Використовуйте жовте посилання вгорі, щоб повернутися до свого облікового запису.</value>
   </data>
 </root>

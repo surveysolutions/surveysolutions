@@ -271,7 +271,7 @@
     <value>GPS</value>
   </data>
   <data name="QuestionType_Integer" xml:space="preserve">
-    <value>integer</value>
+    <value>întreg</value>
   </data>
   <data name="QuestionType_Linked" xml:space="preserve">
     <value>legat</value>
@@ -386,5 +386,82 @@
   </data>
   <data name="VariableExcludedFromExport" xml:space="preserve">
     <value>Această variabilă este exclusă din datele exportate</value>
+  </data>
+
+
+  <data name="Appendix_CriticalRules" xml:space="preserve">
+    <value>Anexa {0} {1} reguli critice</value>
+  </data>
+
+  <data name="OwnedBy" xml:space="preserve">
+    <value>Chestionar deținut de {0}</value>
+  </data>
+
+  <data name="CriticalityCondition" xml:space="preserve">
+    <value>Condiție critică:</value>
+  </data>
+
+  <data name="CriticalityMessage" xml:space="preserve">
+    <value>Mesaj:</value>
+  </data>
+
+  <data name="Description" xml:space="preserve">
+    <value>Descriere:</value>
+  </data>
+
+  <data name="QuestionType_Area_Polygon" xml:space="preserve">
+    <value>poligon</value>
+  </data>
+
+  <data name="QuestionType_Area_Polyline" xml:space="preserve">
+    <value>polilinie</value>
+  </data>
+
+  <data name="QuestionType_Area_Multipoint" xml:space="preserve">
+    <value>multipunct</value>
+  </data>
+
+  <data name="QuestionType_Area_Point" xml:space="preserve">
+    <value>punct</value>
+  </data>
+
+  <data name="SourceOfCategories" xml:space="preserve">
+    <value>Sursa categoriilor:</value>
+  </data>
+
+  <data name="RosterSourceOfCategories" xml:space="preserve">
+    <value>Listă</value>
+  </data>
+
+  <data name="TextListSourceOfCategories" xml:space="preserve">
+    <value>Întrebare cu listă de texte</value>
+  </data>
+
+  <data name="QuestionInRosterSourceOfCategories" xml:space="preserve">
+    <value>Întrebare</value>
+  </data>
+
+  <data name="InRosterSourceOfCategories" xml:space="preserve">
+    <value>în roster</value>
+  </data>
+  
+  <data name="GeographyType" xml:space="preserve">
+    <value>Tip de geografie</value>
+  </data>
+
+  <data name="GeographyInputMode" xml:space="preserve">
+    <value>Mod de introducere</value>
+  </data>
+
+  <data name="GeometryOverlapDetection" xml:space="preserve">
+    <value>Detectarea suprapunerii</value>
+  </data>
+
+  <data name="On" xml:space="preserve">
+    <value>PORNIT</value>
+  </data>
+
+  <data name="Off" xml:space="preserve">
+    <value>OPRIT</value>
   </data>
 </root>
