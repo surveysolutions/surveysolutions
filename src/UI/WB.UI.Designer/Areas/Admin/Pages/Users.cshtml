@@ -2,6 +2,7 @@
 @using WB.UI.Designer.BootstrapSupport.HtmlHelpers
 @using WB.UI.Designer.Code
 @using WB.UI.Designer.Extensions
+@using WB.UI.Designer.Resources
 @using WB.UI.Designer.Utils
 @model WB.UI.Designer.Areas.Admin.Pages.UsersModel
 @{
@@ -50,6 +51,19 @@
                     Created on
 
                     @if (Model.SortBy =="CreatedAtUtc")
+                    {
+                        <span class="glyphicon glyphicon-triangle-@((Model.SortOrder).ToBool() ? "top" : "bottom")"></span>
+                    }
+                </a>
+            </th>
+            <th class="@(Model.SortBy =="LastLoginAtUtc" ? "ordered" : "")">
+                <a asp-route-p="@Model.PageIndex"
+                   asp-route-sb="LastLoginAtUtc"
+                   asp-route-so="@Model.SortOrder.InvertBooleableInt(Model.SortBy == "LastLoginAtUtc")"
+                   asp-route-f="@Model.Filter">
+                    @AccountResources.LastLoginDate
+ 
+                    @if (Model.SortBy =="LastLoginAtUtc")
                     {
                         <span class="glyphicon glyphicon-triangle-@((Model.SortOrder).ToBool() ? "top" : "bottom")"></span>
                     }
@@ -110,6 +124,12 @@
                             <td class="date">
                                 @user.CreationDate.ConvertToLocalAndFormatDate()
                             </td>
+                            <td class="date">
+                                @if (user.LastLoginAtUtc.HasValue)
+                                {
+                                    @(user.LastLoginAtUtc.Value.ConvertToLocalAndFormatDate())
+                                }
+                            </td>
                             <td>
                                 @(user.IsApproved ? "Yes" : "No")
                             </td>
@@ -150,3 +170,16 @@
         }
     </div>
 </div>
+
+@section scripts {
+<script>   
+
+    (function () {
+        var header = document.getElementById('user-table-header');
+        var content = document.getElementById('table-content-holder');
+        if (header && content) {
+            content.style.top = header.offsetHeight + 'px';
+        }
+    })();
+</script>
+}
