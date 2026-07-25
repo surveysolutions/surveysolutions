@@ -148,7 +148,7 @@
     <value>Exemple de message d'invitation par e-mail</value>
   </data>
   <data name="EmailMessage" xml:space="preserve">
-    <value>Message:</value>
+    <value>Message :</value>
   </data>
   <data name="EmailSubject" xml:space="preserve">
     <value>Objet:</value>
@@ -235,7 +235,7 @@
     <value>Après {{count}} semaines</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Description:</value>
+    <value>Description :</value>
   </data>
   <data name="FieldRequired" xml:space="preserve">
     <value>Le champ est requis.</value>

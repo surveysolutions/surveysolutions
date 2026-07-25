@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Refit;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
@@ -31,8 +31,11 @@ namespace WB.UI.WebTester.Services.Implementation
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IScenarioSerializer serializer;
         private readonly IAggregateRootCache aggregateRootCache;
-        
-        public ImportQuestionnaireAndCreateInterviewService(ICacheStorage<List<InterviewCommand>, Guid> executedCommandsStorage,
+        private readonly IImportStatusStore statusStore;
+        private readonly ILogger<ImportQuestionnaireAndCreateInterviewService> logger;
+
+        public ImportQuestionnaireAndCreateInterviewService(
+            ICacheStorage<List<InterviewCommand>, Guid> executedCommandsStorage,
             ICommandService commandService,
             IImageFileStorage imageFileStorage,
             IEvictionNotifier evictionService,
@@ -42,7 +45,8 @@ namespace WB.UI.WebTester.Services.Implementation
             IQuestionnaireStorage questionnaireStorage,
             IScenarioSerializer serializer,
             IAggregateRootCache aggregateRootCache,
-            ICacheStorage<string, CreationResult> cacheStorage)
+            IImportStatusStore statusStore,
+            ILogger<ImportQuestionnaireAndCreateInterviewService> logger)
         {
             this.executedCommandsStorage = executedCommandsStorage ?? throw new ArgumentNullException(nameof(executedCommandsStorage));
             this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -54,75 +58,95 @@ namespace WB.UI.WebTester.Services.Implementation
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             this.aggregateRootCache = aggregateRootCache ?? throw new ArgumentNullException(nameof(aggregateRootCache));
+            this.statusStore = statusStore ?? throw new ArgumentNullException(nameof(statusStore));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        private static ConcurrentDictionary<Guid, CreationResult> statuses =
-            new ConcurrentDictionary<Guid, CreationResult>();
-
-        public Guid StartImportQuestionnaireAndCreateInterview(Guid designerToken,
-            Guid? originalInterviewId, int? scenarioId)
+        public Guid StartImportQuestionnaireAndCreateInterview(
+            Guid questionnaireId,
+            Guid interviewId,
+            Guid? originalInterviewId,
+            int? scenarioId)
         {
-            //var key = designerToken.ToString();
-            var key = designerToken;
-            if (statuses.TryGetValue(key, out var status))
-                return key;
-            
-            statuses[key] = CreationResult.Loading;
-            
-            var task = ImportQuestionnaireAndCreateInterview(designerToken, originalInterviewId, scenarioId);
-            Action<Task<CreationResult>> continuationFunction = result =>
+            // TryInitialize is a single atomic operation — only one caller can
+            // insert the Loading sentinel for a given interviewId. Any concurrent caller that
+            // loses the race finds the key already present and returns without launching a
+            // second import task, closing the check-then-act window.
+            if (!statusStore.TryInitialize(interviewId))
+                return interviewId;
+
+
+            var task = ImportAndCreate(questionnaireId, interviewId, originalInterviewId, scenarioId);
+            task.ContinueWith(t =>
             {
-                statuses[key] = result.Result;
-            };
-            task.ContinueWith(continuationFunction);
-            
-            return key;
+                if (t.IsFaulted)
+                {
+                    // Observe the exception to prevent UnobservedTaskException from firing.
+                    // Flatten AggregateException so the log entry shows the root cause directly.
+                    var ex = t.Exception!.Flatten().InnerException ?? t.Exception;
+                    logger.LogError(ex,
+                        "Background import faulted. InterviewId={InterviewId}, QuestionnaireId={QuestionnaireId}",
+                        interviewId, questionnaireId);
+                    statusStore.Set(interviewId, CreationResult.Error);
+                }
+                else if (t.IsCanceled)
+                {
+                    logger.LogWarning(
+                        "Background import was canceled. InterviewId={InterviewId}, QuestionnaireId={QuestionnaireId}",
+                        interviewId, questionnaireId);
+                    statusStore.Set(interviewId, CreationResult.Error);
+                }
+                else
+                {
+                    statusStore.Set(interviewId, t.Result);
+                }
+            }, TaskContinuationOptions.ExecuteSynchronously);
+
+            return interviewId;
         }
 
-        public CreationResult? GetStatus(Guid key)
+        public CreationResult? GetStatus(Guid interviewId)
         {
-            if (statuses.TryGetValue(key, out var creationResult))
-                return creationResult;
-            return null;
+            return statusStore.Get(interviewId);
         }
 
-        public CreationResult? RemoveStatus(Guid key)
+        public CreationResult? RemoveStatus(Guid interviewId)
         {
-            if (statuses.TryRemove(key, out var creationResult))
-                return creationResult;
-            return null;
+            return statusStore.Remove(interviewId);
         }
 
-        private async Task<CreationResult> ImportQuestionnaireAndCreateInterview(Guid designerToken,
-            Guid? originalInterviewId, int? scenarioId)
+        private async Task<CreationResult> ImportAndCreate(
+            Guid questionnaireId, Guid interviewId, Guid? originalInterviewId, int? scenarioId)
         {
             try
             {
-                var questionnaire = await ImportQuestionnaireAndCreateInterview(designerToken);
+                var questionnaire = await ImportQuestionnaireAndCreateInterview(questionnaireId, interviewId);
 
                 if (scenarioId.HasValue)
-                    return await ApplyScenario(questionnaire, designerToken, scenarioId.Value);
+                    return await ApplyScenario(questionnaire, questionnaireId, interviewId, scenarioId.Value);
                 if (originalInterviewId.HasValue)
-                    return await ApplyInterviewData(questionnaire, designerToken, originalInterviewId.Value);
+                    return await ApplyInterviewData(questionnaire, questionnaireId, interviewId, originalInterviewId.Value);
             }
             catch (ApiException e) when (e.StatusCode == HttpStatusCode.PreconditionFailed)
             {
                 return CreationResult.Error;
             }
-            catch (TaskCanceledException e) 
+            catch (TaskCanceledException)
             {
                 return CreationResult.Error;
             }
 
-            return CreationResult.EmptyCreated; 
+            return CreationResult.EmptyCreated;
         }
 
-        private async Task<QuestionnaireIdentity> ImportQuestionnaireAndCreateInterview(Guid designerToken)
+        private async Task<QuestionnaireIdentity> ImportQuestionnaireAndCreateInterview(
+            Guid questionnaireId, Guid interviewId)
         {
-            var questionnaire = await questionnaireImportService.ImportQuestionnaire(designerToken);
-            
+            // questionnaireId → Designer API; interviewId → local interview aggregate
+            var questionnaire = await questionnaireImportService.ImportQuestionnaire(questionnaireId, interviewId);
+
             var createInterview = new CreateInterview(
-                interviewId: designerToken,
+                interviewId: interviewId,
                 userId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
                 questionnaireId: questionnaire,
                 answers: new List<InterviewAnswer>(),
@@ -131,7 +155,7 @@ namespace WB.UI.WebTester.Services.Implementation
                 interviewerId: Guid.NewGuid(),
                 interviewKey: new InterviewKey(new Random().Next(99999999)),
                 assignmentId: null,
-                isAudioRecordingEnabled: false, 
+                isAudioRecordingEnabled: false,
                 InterviewMode.CAPI);
 
             this.commandService.Execute(createInterview);
@@ -139,12 +163,14 @@ namespace WB.UI.WebTester.Services.Implementation
             return questionnaire;
         }
 
-        public async Task<CreationResult> ApplyScenario(QuestionnaireIdentity questionnaireIdentity, Guid designerToken, int scenarioId)
+        public async Task<CreationResult> ApplyScenario(
+            QuestionnaireIdentity questionnaireIdentity, Guid questionnaireId, Guid interviewId, int scenarioId)
         {
-            var scenarioSerialized = await this.webTesterApi.GetScenario(designerToken.ToString(), scenarioId);
-            if(scenarioSerialized.StatusCode == HttpStatusCode.NotFound || scenarioSerialized.Content == null)
+            // Scenario fetched using questionnaireId (Designer API path segment).
+            var scenarioSerialized = await this.webTesterApi.GetScenario(questionnaireId.ToString(), scenarioId);
+            if (scenarioSerialized.StatusCode == HttpStatusCode.NotFound || scenarioSerialized.Content == null)
                 return CreationResult.EmptyCreated;
-            
+
             var scenario = this.serializer.Deserialize(scenarioSerialized.Content);
             if (scenario == null)
                 return CreationResult.EmptyCreated;
@@ -155,36 +181,38 @@ namespace WB.UI.WebTester.Services.Implementation
             {
                 var commands = this.scenarioService.ConvertFromScenario(questionnaireDocument, scenario.Steps);
 
-                foreach (var existingInterviewCommand in commands)
+                foreach (var cmd in commands)
                 {
-                    existingInterviewCommand.InterviewId = designerToken;
-                    this.commandService.Execute(existingInterviewCommand);
+                    cmd.InterviewId = interviewId;
+                    this.commandService.Execute(cmd);
                 }
 
                 return CreationResult.DataRestored;
             }
-            catch (InterviewException ie)
+            catch (InterviewException)
             {
                 return CreationResult.DataPartialRestored;
             }
             catch
             {
-                Evict(designerToken);
-                await this.ImportQuestionnaireAndCreateInterview(designerToken);
+                Evict(interviewId);
+                await ImportQuestionnaireAndCreateInterview(questionnaireId, interviewId);
                 return CreationResult.DataRestoreError;
             }
         }
 
-        private async Task<CreationResult> ApplyInterviewData(QuestionnaireIdentity questionnaireId, Guid designerToken, Guid originalInterviewId)
+        private async Task<CreationResult> ApplyInterviewData(
+            QuestionnaireIdentity questionnaireIdentity, Guid questionnaireId, Guid interviewId, Guid originalInterviewId)
         {
             List<InterviewCommand>? existingInterviewCommands = null;
             int lastCommandIndex = 0;
-            
+
             try
             {
-                existingInterviewCommands = this.executedCommandsStorage.Get(originalInterviewId, originalInterviewId) ??
-                                                                    new List<InterviewCommand>();
-                var questionnaireDocument = this.questionnaireStorage.GetQuestionnaire(questionnaireId, null);
+                existingInterviewCommands =
+                    this.executedCommandsStorage.Get(originalInterviewId, originalInterviewId) ??
+                    new List<InterviewCommand>();
+                var questionnaireDocument = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
                 var scenario = this.scenarioService.ConvertFromInterview(questionnaireDocument,
                     existingInterviewCommands.Cast<InterviewCommand>());
@@ -192,49 +220,50 @@ namespace WB.UI.WebTester.Services.Implementation
 
                 foreach (var image in await this.imageFileStorage.GetBinaryFilesForInterview(originalInterviewId))
                 {
-                    var imageBytes = await this.imageFileStorage.GetInterviewBinaryDataAsync(image.InterviewId, image.FileName);
-
-                    this.imageFileStorage.StoreInterviewBinaryData(designerToken, image.FileName, imageBytes,
+                    var imageBytes = await this.imageFileStorage
+                        .GetInterviewBinaryDataAsync(image.InterviewId, image.FileName);
+                    this.imageFileStorage.StoreInterviewBinaryData(interviewId, image.FileName, imageBytes,
                         image.ContentType);
-
                     await this.imageFileStorage.RemoveInterviewBinaryData(originalInterviewId, image.FileName);
                 }
-                
-                foreach (var existingInterviewCommand in commands)
+
+                foreach (var cmd in commands)
                 {
-                    existingInterviewCommand.InterviewId = designerToken;
-                    this.commandService.Execute(existingInterviewCommand);
+                    cmd.InterviewId = interviewId;
+                    this.commandService.Execute(cmd);
                     lastCommandIndex++;
                 }
 
                 return CreationResult.DataRestored;
             }
-            catch (InterviewException ie)
+            catch (InterviewException)
             {
-                if (existingInterviewCommands != null && existingInterviewCommands.Count > 0 && lastCommandIndex > 0)
+                if (existingInterviewCommands != null && existingInterviewCommands.Count > 0 &&
+                    lastCommandIndex > 0)
                 {
                     int count = existingInterviewCommands.Count - lastCommandIndex;
                     existingInterviewCommands.RemoveRange(lastCommandIndex, count);
-                    this.executedCommandsStorage.Store(existingInterviewCommands, originalInterviewId, originalInterviewId);
+                    this.executedCommandsStorage.Store(existingInterviewCommands,
+                        originalInterviewId, originalInterviewId);
                     return CreationResult.DataPartialRestored;
                 }
 
-                Evict(designerToken);
-                await this.ImportQuestionnaireAndCreateInterview(designerToken);
+                Evict(interviewId);
+                await ImportQuestionnaireAndCreateInterview(questionnaireId, interviewId);
                 return CreationResult.DataRestoreError;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Evict(designerToken);
-                await this.ImportQuestionnaireAndCreateInterview(designerToken);
+                Evict(interviewId);
+                await ImportQuestionnaireAndCreateInterview(questionnaireId, interviewId);
                 return CreationResult.DataRestoreError;
             }
         }
 
-        private void Evict(Guid designerToken)
+        private void Evict(Guid interviewId)
         {
-            aggregateRootCache.Evict(designerToken);
-            evictionService.Evict(designerToken);
+            aggregateRootCache.Evict(interviewId);
+            evictionService.Evict(interviewId);
         }
     }
 }

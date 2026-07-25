@@ -150,6 +150,9 @@
   <data name="Login_Error_EmptyName" xml:space="preserve">
     <value>Zadejte správné přihlašovací údaje</value>
   </data>
+  <data name="TesterLoginAccountHintText" xml:space="preserve">
+    <value>Do této aplikace se přihlaste pomocí přihlašovacích údajů, které jste si vytvořili na https://designer.mysurvey.solutions. Nový účet si zaregistrujete na stejném webu.</value>
+  </data>
   <data name="Login_Error_NotFound" xml:space="preserve">
     <value>Webová aplikace Designer není v tuto chvíli přístupná. Zkontrolujte nastavení připojení nebo to zkuste znovu později</value>
   </data>

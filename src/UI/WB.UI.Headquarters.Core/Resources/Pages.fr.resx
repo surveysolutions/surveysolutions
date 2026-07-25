@@ -139,7 +139,7 @@
     <value>Changer le mot de passe</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>Profil</value>
+    <value>Contact</value>
   </data>
   <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
     <value>Authentification à deux facteurs</value>
@@ -885,7 +885,10 @@
     <value>la création par lot d'utilisateurs</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>Les détails des informations personnelles (facultatif) &lt;br&gt; seront visibles uniquement par les utilisateurs du siège</value>
+    <value>Les détails des informations personnelles</value>
+  </data>
+  <data name="PublicSectionDescription" xml:space="preserve">
+    <value>(facultatif, sera visible uniquement pour les utilisateurs authentifiés).</value>
   </data>
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
     <value>Date de création du compte de l'enquêteur</value>
@@ -906,7 +909,7 @@
     <value>Langue</value>
   </data>
   <data name="InterviewDetails_DefaultTranslation" xml:space="preserve">
-    <value>original</value>
+    <value>Original</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Connexion</value>
@@ -924,7 +927,7 @@
     <value>Code de récupération</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
-    <value>{{name}} (ver. {{version}})</value>
+    <value>{{name}} (v. {{version}})</value>
     <comment>{0} - Nom du questionnaire, {1} - Version du questionnaire</comment>
   </data>
   <data name="GetLatestApp" xml:space="preserve">
@@ -1659,7 +1662,13 @@
     <value>Entretien réévalué avec succès</value>
   </data>
   <data name="CreateUser" xml:space="preserve">
-    <value>Créer un utilisateur</value>
+    <value>Créer un compte utilisateur</value>
+  </data>
+  <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+    <value>Accès à l'espace de travail</value>
+  </data>
+  <data name="CreateUser_RoleLabel" xml:space="preserve">
+    <value>Rôle de l'utilisateur</value>
   </data>
   <data name="GenerateRecoveryCodes" xml:space="preserve">
     <value>Générer des codes de récupération</value>
@@ -1749,7 +1758,7 @@
     <value>Si c'est le dernier utilisateur de l'équipe lié à la carte, le superviseur de l'équipe perdra l'accès à la carte.</value>
   </data>
   <data name="QuestionnaireVersionAndName" xml:space="preserve">
-    <value>[ver. {1}] {0}</value>
+    <value>[v. {1}] {0}</value>
   </data>
   <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
     <value>Vérifications critiques</value>

@@ -220,4 +220,13 @@
   <data name="WorkspacesUpdated" xml:space="preserve">
     <value>Оновлений список робочих просторів</value>
   </data>
+
+
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Створено</value>L
+  </data>
+
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+    <value>Коли робочий простір було спочатку створено. Натисніть значок сортування, щоб відсортувати за часом.</value>
+  </data>
 </root>

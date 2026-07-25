@@ -93,6 +93,14 @@
                 <strong>{{ $t('Reports.LastUpdatedDate') }}:</strong>
                 &nbsp;{{ selectedTooltip.lastUpdatedDate }}
             </div>
+            <div class="row-fluid">
+                <strong>{{ $t('Common.Status') }}:</strong>
+                &nbsp;{{ assignmentStatusLabel }}
+            </div>
+            <div class="row-fluid" v-if="selectedTooltip.statusComment">
+                <strong>{{ $t('Assignments.StatusChangeComment') }}:</strong>
+                &nbsp;{{ selectedTooltip.statusComment }}
+            </div>
             <div class="row-fluid" v-for="answer in selectedTooltip.identifyingData">
                 <strong>{{ answer.title }}:</strong>
                 &nbsp;{{ answer.answer || $t('Details.NoAnswer') }}
@@ -112,9 +120,22 @@
                     {{ $t('Common.Assign') }}
                 </button>
 
-                <button class="btn btn-sm btn-assignment" v-if="model.userRole == 'Interviewer'"
+                <button class="btn btn-sm btn-assignment"
+                    v-if="model.userRole == 'Interviewer' && selectedTooltip.status == 'Open'"
                     click-method="createInterview">
                     {{ $t('Common.Create') }}
+                </button>
+
+                <button class="btn btn-sm btn-primary" v-if="canCompleteAssignment" click-method="completeAssignment">
+                    {{ $t('Assignments.Complete') }}
+                </button>
+
+                <button class="btn btn-sm btn-success" v-if="canCloseAssignment" click-method="closeAssignment">
+                    {{ $t('Assignments.Close') }}
+                </button>
+
+                <button class="btn btn-sm btn-default" v-if="canReopenAssignment" click-method="reopenAssignment">
+                    {{ $t('Assignments.Reopen') }}
                 </button>
             </div>
         </div>
@@ -134,6 +155,75 @@
         </div>
     </div>
     <div id="map-canvas"></div>
+
+    <ModalFrame ref="completeAssignmentModal" :title="$t('Assignments.CompleteAssignmentTitle')">
+        <p>{{ $t('Assignments.CompleteAssignmentMessage') }}</p>
+        <form onsubmit="return false;">
+            <div class="form-group">
+                <label class="control-label" for="completeCommentId">
+                    {{ $t('Assignments.Comments') }}
+                </label>
+                <textarea control-id="completeCommentId" v-model="statusChangeComment"
+                    :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                    autocomplete="off" class="form-control" />
+            </div>
+        </form>
+        <template v-slot:actions>
+            <div>
+                <button type="button" class="btn btn-primary" @click="confirmCompleteAssignment">{{
+                    $t('Assignments.Complete') }}</button>
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                    {{ $t('Common.Cancel') }}
+                </button>
+            </div>
+        </template>
+    </ModalFrame>
+
+    <ModalFrame ref="reopenAssignmentModal" :title="$t('Assignments.ReopenAssignmentTitle')">
+        <p>{{ $t('Assignments.ReopenAssignmentMessage') }}</p>
+        <form onsubmit="return false;">
+            <div class="form-group">
+                <label class="control-label" for="reopenCommentId">
+                    {{ $t('Assignments.Comments') }}
+                </label>
+                <textarea control-id="reopenCommentId" v-model="statusChangeComment"
+                    :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                    autocomplete="off" class="form-control" />
+            </div>
+        </form>
+        <template v-slot:actions>
+            <div>
+                <button type="button" class="btn btn-primary" @click="confirmReopenAssignment">{{
+                    $t('Assignments.Reopen') }}</button>
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                    {{ $t('Common.Cancel') }}
+                </button>
+            </div>
+        </template>
+    </ModalFrame>
+
+    <ModalFrame ref="closeAssignmentModal" :title="$t('Assignments.CloseAssignmentTitle')">
+        <p>{{ $t('Assignments.CloseAssignmentMessage') }}</p>
+        <form onsubmit="return false;">
+            <div class="form-group">
+                <label class="control-label" for="closeCommentId">
+                    {{ $t('Assignments.Comments') }}
+                </label>
+                <textarea control-id="closeCommentId" v-model="statusChangeComment"
+                    :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                    autocomplete="off" class="form-control" />
+            </div>
+        </form>
+        <template v-slot:actions>
+            <div>
+                <button type="button" class="btn btn-primary" @click="confirmCloseAssignment">{{
+                    $t('Assignments.Close') }}</button>
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                    {{ $t('Common.Cancel') }}
+                </button>
+            </div>
+        </template>
+    </ModalFrame>
 
     <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
         <form onsubmit="return false;">
@@ -190,17 +280,14 @@
 
 <script>
 import { nextTick } from 'vue'
-import { debounce, delay, forEach, find } from 'lodash'
+import { debounce, delay, forEach, find } from 'lodash-es'
 import routeSync from '~/shared/routeSync'
-import { Form, Field } from 'vee-validate'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 
 export default {
-    name: "MapWithMarkers",
+    name: 'MapWithMarkers',
     mixins: [routeSync],
-
-    components: { Form, Field },
 
     props: {
         shapefile: { type: String, default: null },
@@ -223,6 +310,7 @@ export default {
             newResponsibleId: null,
             isReassignReceivedByTablet: false,
             geoJsonFeatures: null,
+            statusChangeComment: null,
         }
     },
 
@@ -243,7 +331,7 @@ export default {
         },
 
         shapefileName() {
-            return this.shapefile;
+            return this.shapefile
         },
 
         canAssign() {
@@ -286,6 +374,35 @@ export default {
         api() {
             return this.$hq.MapDashboard
         },
+
+        assignmentStatusLabel() {
+            const statusMap = {
+                'Open': this.$t('Assignments.StatusOpen'),
+                'Completed': this.$t('Assignments.StatusCompleted'),
+                'Closed': this.$t('Assignments.StatusClosed'),
+            }
+            return statusMap[this.selectedTooltip.status] || this.selectedTooltip.status || ''
+        },
+
+        canCompleteAssignment() {
+            return !this.model.isObserving &&
+                this.model.userRole == 'Interviewer' &&
+                this.selectedTooltip.status == 'Open'
+        },
+
+        canCloseAssignment() {
+            return !this.model.isObserving &&
+                (this.model.userRole == 'Supervisor' || this.model.userRole == 'Headquarter') &&
+                (this.selectedTooltip.status == 'Open' || this.selectedTooltip.status == 'Completed')
+        },
+
+        canReopenAssignment() {
+            return !this.model.isObserving && (
+                (this.model.userRole == 'Interviewer' && this.selectedTooltip.status == 'Completed') ||
+                ((this.model.userRole == 'Supervisor' || this.model.userRole == 'Headquarter') &&
+                    (this.selectedTooltip.status == 'Completed' || this.selectedTooltip.status == 'Closed'))
+            )
+        },
     },
 
     methods: {
@@ -293,11 +410,11 @@ export default {
         async init() {
             this.setMapCanvasStyle()
             await this.initializeMap()
-            await this.displayShapefileName();
+            await this.displayShapefileName()
 
             this.showPointsOnMap(180, 180, -180, -180, false)
 
-            this.$emit('initialized');
+            this.$emit('initialized')
         },
 
         openInterview() {
@@ -379,6 +496,42 @@ export default {
             await this.refreshAssignmentData()
         },
 
+        completeAssignment() {
+            this.statusChangeComment = null
+            this.$refs.completeAssignmentModal.modal({ keyboard: false })
+        },
+
+        async confirmCompleteAssignment() {
+            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Completed', this.statusChangeComment || null)
+            this.$refs.completeAssignmentModal.hide()
+            this.statusChangeComment = null
+            await this.refreshAssignmentData()
+        },
+
+        closeAssignment() {
+            this.statusChangeComment = null
+            this.$refs.closeAssignmentModal.modal({ keyboard: false })
+        },
+
+        async confirmCloseAssignment() {
+            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Closed', this.statusChangeComment || null)
+            this.$refs.closeAssignmentModal.hide()
+            this.statusChangeComment = null
+            await this.refreshAssignmentData()
+        },
+
+        reopenAssignment() {
+            this.statusChangeComment = null
+            this.$refs.reopenAssignmentModal.modal({ keyboard: false })
+        },
+
+        async confirmReopenAssignment() {
+            await this.$hq.Assignments.changeStatus(this.selectedTooltip.assignmentId, 'Open', this.statusChangeComment || null)
+            this.$refs.reopenAssignmentModal.hide()
+            this.statusChangeComment = null
+            await this.refreshAssignmentData()
+        },
+
         async approveSvInterview() {
             await this.$hq.InterviewsPublicApi.SvApprove(
                 this.selectedTooltip.interviewId
@@ -454,6 +607,8 @@ export default {
                     )
                 })
             }
+
+            marker.setProperty('status', this.selectedTooltip.status)
         },
 
         setMapCanvasStyle() {
@@ -523,7 +678,7 @@ export default {
         async initializeMap() {
             const self = this
 
-            const { Map } = await google.maps.importLibrary("maps");
+            const { Map } = await google.maps.importLibrary('maps')
             //const { Marker } = await google.maps.importLibrary("marker");
             //const { AdvancedMarkerElement } = await google.maps.importLibrary("marker")
 
@@ -640,11 +795,13 @@ export default {
                         }
                     }
 
-                    interviewStyle.icon.url = `/img/google-maps-markers/${markerForm}-${action}.png`
+                    interviewStyle.icon.url = `/img/google-maps-markers/${markerForm}-${action}.svg`
                     return interviewStyle
                 }
                 if (type == 'Assignment') {
                     const rRole = feature.getProperty('responsibleRole')
+                    const assignmentStatus = feature.getProperty('status')
+                    const userRole = self.model.userRole
                     let markerForm = ''
                     switch (rRole) {
                         case 'Interviewer':
@@ -657,9 +814,22 @@ export default {
                             markerForm = 'triangle'
                             break
                     }
+                    // Show green solid marker for completed assignments (interviewer view)
+                    // or green hollow/bagel marker for closed assignments (supervisor/HQ/admin view)
+                    let markerSuffix = '-x.svg'
+                    if (userRole === 'Interviewer' && assignmentStatus === 'Completed') {
+                        markerSuffix = '-done.svg'
+                    } else if (
+                        (userRole === 'Supervisor' ||
+                            userRole === 'Headquarter' ||
+                            userRole === 'Administrator') &&
+                        assignmentStatus === 'Closed'
+                    ) {
+                        markerSuffix = '-closed.svg'
+                    }
                     return {
                         icon: {
-                            url: `/img/google-maps-markers/${markerForm}-assignment-x.png`,
+                            url: `/img/google-maps-markers/${markerForm}-assignment${markerSuffix}`,
                         },
                     }
                 }
