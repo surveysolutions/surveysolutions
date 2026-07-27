@@ -91,7 +91,9 @@ export default {
                         title: this.$t('Users.UserName'),
                         className: 'nowrap',
                         render: function (data, type, row) {
-                            return `<a href='${self.model.editUrl}/${row.userId}'>${data}</a>`
+                            return self.model.editUrl
+                                ? `<a href='${self.model.editUrl}/${row.userId}'>${data}</a>`
+                                : data
                         },
                     },
                     {
