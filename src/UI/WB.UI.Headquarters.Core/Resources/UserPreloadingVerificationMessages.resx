@@ -201,46 +201,46 @@
   <data name="PLU0014" xml:space="preserve">
     <value>Wrong full name format</value>
   </data>
-  <data name="PLU0001Recomendation" xml:space="preserve">
+  <data name="PLU0001Recommendation" xml:space="preserve">
       <value>User must be unique </value>
   </data>
-  <data name="PLU0002Recomendation" xml:space="preserve">
+  <data name="PLU0002Recommendation" xml:space="preserve">
       <value>Resolve duplicates</value>
   </data>
-  <data name="PLU0003Recomendation" xml:space="preserve">
+  <data name="PLU0003Recommendation" xml:space="preserve">
     <value>Archived user cannot be re-used because it belongs to another team</value>
   </data>
-  <data name="PLU0004Recomendation" xml:space="preserve">
+  <data name="PLU0004Recommendation" xml:space="preserve">
     <value>Archived user cannot be re-used because it exists in another role</value>
   </data>
-  <data name="PLU0005Recomendation" xml:space="preserve">
+  <data name="PLU0005Recommendation" xml:space="preserve">
     <value>The login name must be between 3 and 15 characters long, and may contain only letters, digits and the underscore symbol. The letters must be from Latin (English) alphabet only: 'A'..'Z' or 'a'..'z'. Other letters (Cyrillic, Arabic, etc.) are not valid for usage in login names.</value>
   </data>
-  <data name="PLU0006Recomendation" xml:space="preserve">
+  <data name="PLU0006Recommendation" xml:space="preserve">
     <value>It must contain at least one number, one upper case character, and one lower case character. Length should be between 10 and 100 characters</value>
   </data>
-  <data name="PLU0007Recomendation" xml:space="preserve">
+  <data name="PLU0007Recommendation" xml:space="preserve">
       <value>Fix email</value>
   </data>
-  <data name="PLU0008Recomendation" xml:space="preserve">
+  <data name="PLU0008Recommendation" xml:space="preserve">
       <value>Fix phone number</value>
   </data>
-  <data name="PLU0009Recomendation" xml:space="preserve">
+  <data name="PLU0009Recommendation" xml:space="preserve">
     <value>Only "supervisor" or "interviewer" are allowed</value>
   </data>
-  <data name="PLU0010Recomendation" xml:space="preserve">
+  <data name="PLU0010Recommendation" xml:space="preserve">
       <value>Verify value for supervisor</value>
   </data>
-  <data name="PLU0011Recomendation" xml:space="preserve">
+  <data name="PLU0011Recommendation" xml:space="preserve">
       <value>Remove the supervisor value</value>
   </data>
-  <data name="PLU0012Recomendation" xml:space="preserve">
+  <data name="PLU0012Recommendation" xml:space="preserve">
     <value>It should not contain more than 100 characters</value>
   </data>
-  <data name="PLU0013Recomendation" xml:space="preserve">
+  <data name="PLU0013Recommendation" xml:space="preserve">
     <value>It should not contain more than 15 characters</value>
   </data>
-  <data name="PLU0014Recomendation" xml:space="preserve">
+  <data name="PLU0014Recommendation" xml:space="preserve">
     <value>Only letters, dots, spaces, and apostrophes are allowed</value>
   </data>
   <data name="PLU0015" xml:space="preserve">
@@ -249,7 +249,7 @@
   <data name="PLU0015Description" xml:space="preserve">
     <value>Password '{0}' is too short</value>
   </data>
-  <data name="PLU0015Recomendation" xml:space="preserve">
+  <data name="PLU0015Recommendation" xml:space="preserve">
     <value>Password must be at least 10 characters long</value>
   </data>
   <data name="PLU0016" xml:space="preserve">
@@ -258,7 +258,7 @@
   <data name="PLU0016Description" xml:space="preserve">
     <value>Password '{0}' does not contain non alphanumeric character</value>
   </data>
-  <data name="PLU0016Recomendation" xml:space="preserve">
+  <data name="PLU0016Recommendation" xml:space="preserve">
     <value>Add at least one non alphanumeric character</value>
   </data>
   <data name="PLU0017" xml:space="preserve">
@@ -267,7 +267,7 @@
   <data name="PLU0017Description" xml:space="preserve">
     <value>Password '{0}' does not contain digit</value>
   </data>
-  <data name="PLU0017Recomendation" xml:space="preserve">
+  <data name="PLU0017Recommendation" xml:space="preserve">
     <value>Add at least one digit ('0'-'9').</value>
   </data>
   <data name="PLU0018" xml:space="preserve">
@@ -276,7 +276,7 @@
   <data name="PLU0018Description" xml:space="preserve">
     <value>Password '{0}' does not contain lower case character</value>
   </data>
-  <data name="PLU0018Recomendation" xml:space="preserve">
+  <data name="PLU0018Recommendation" xml:space="preserve">
     <value>Add at least one lowercase character ('a'-'z').</value>
   </data>
   <data name="PLU0019" xml:space="preserve">
@@ -285,7 +285,7 @@
   <data name="PLU0019Description" xml:space="preserve">
     <value>Password '{0}' does not contain upper case character</value>
   </data>
-  <data name="PLU0019Recomendation" xml:space="preserve">
+  <data name="PLU0019Recommendation" xml:space="preserve">
     <value>Add at least one uppercase ('A'-'Z').</value>
   </data>
   <data name="PLU0020" xml:space="preserve">
@@ -294,7 +294,7 @@
   <data name="PLU0020Description" xml:space="preserve">
     <value>Password '{0}' does not contain enough unique characters</value>
   </data>
-  <data name="PLU0020Recomendation" xml:space="preserve">
+  <data name="PLU0020Recommendation" xml:space="preserve">
       <value>Add different characters.</value>
   </data>
   <data name="PLU0021" xml:space="preserve">
@@ -303,7 +303,7 @@
   <data name="PLU0021Description" xml:space="preserve">
     <value>Password is required </value>
   </data>
-  <data name="PLU0021Recomendation" xml:space="preserve">
+  <data name="PLU0021Recommendation" xml:space="preserve">
     <value>Add password</value>
   </data>
   <data name="PLU0022" xml:space="preserve">
@@ -312,7 +312,7 @@
   <data name="PLU0022Description" xml:space="preserve">
     <value>Workspace must exist and be enabled</value>
   </data>
-  <data name="PLU0022Recomendation" xml:space="preserve">
+  <data name="PLU0022Recommendation" xml:space="preserve">
     <value>Check workspace name</value>
   </data>
 </root>

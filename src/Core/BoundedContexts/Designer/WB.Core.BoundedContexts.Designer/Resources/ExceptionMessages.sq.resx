@@ -336,4 +336,117 @@
   <data name="VariableWithIdWasNotFound" xml:space="preserve">
     <value>Variabli me identifikues {0} nuk u gjet në pyetësorin {1}</value>
   </data>
+
+
+  <data name="CriticalRuleAlreadyExist" xml:space="preserve">
+    <value>Rregulli kritik ekziston tashmë.</value>
+  </data>
+
+  <data name="CriticalRuleIsAbsent" xml:space="preserve">
+    <value>Rregulli kritik mungon.</value>
+  </data>
+
+  <data name="Attachments_uploaded_file_image_is_too_big" xml:space="preserve">
+    <value>Përmasat e figurës janë shumë të mëdha</value>
+  </data>
+
+  <data name="TranslationIsNotFull" xml:space="preserve">
+    <value>Përkthimi është i paplotë dhe nuk i përfshin të gjitha tekstet e kërkuara për çdo element</value>
+  </data>
+
+  <data name="CategoryTranslationIsNotFull" xml:space="preserve">
+    <value>Përkthimi i kategorisë "{0}" është i paplotë dhe nuk i përfshin tekstet e të gjitha opsioneve</value>
+  </data>
+
+  <data name="QuestionnaireSuportedNewCover" xml:space="preserve">
+    <value>Pyetësori tashmë e mbështet rubrikën e kopertinës.</value>
+  </data>
+
+  <data name="SubsectionCantHaveMoreThan_DirectChildren" xml:space="preserve">
+    <value>Rubrika ose nënrubrika nuk mund të ketë më shumë se {0} elemente të drejtpërdrejta.</value>
+  </data>
+
+  <data name="CantRemoveCoverPageInQuestionnaire" xml:space="preserve">
+    <value>Rubrika e kopertinës nuk mund të hiqet nga pyetësori</value>
+  </data>
+
+  <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
+    <value>Rubrika e kopertinës duhet të jetë rubrika e parë në pyetësor</value>
+  </data>
+
+  <data name="CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables" xml:space="preserve">
+    <value>Rubrika e kopertinës mund të përmbajë vetëm pyetje, tekste statike dhe variabla</value>
+  </data>
+
+  <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
+    <value>Kjo rubrikë kopertine është vetëm për lexim. Nuk mund t'i redaktoni ose rirenditni pyetjet në të.</value>
+  </data>
+
+  <data name="InvalidUserInfo" xml:space="preserve">
+    <value>Informacion i pavlefshëm i përdoruesit.</value>
+  </data>
+
+  <data name="ProvidedFileHasErrors" xml:space="preserve">
+    <value>U gjetën gabime në skedarin e dhënë</value>
+  </data>
+
+  <data name="CategoriesCantBeExtracted" xml:space="preserve">
+    <value>Nxjerrja e kategorive nga skedari i ngarkuar dështoi</value>
+  </data>
+
+  <data name="HeaderWasNotFound" xml:space="preserve">
+    <value>Titulli i kolonës nuk u gjet në skedar</value>
+  </data>
+
+  <data name="ImportOptions_AttachmentNameTooLong" xml:space="preserve">
+    <value>Emri i bashkëngjitjes është shumë i gjatë. Emri i bashkëngjitjes duhet të jetë më pak se {0}</value>
+  </data>
+
+  <data name="Excel_Categories_Int_Invalid" xml:space="preserve">
+    <value>[{0}] Vlerë numerike e pavlefshme</value>
+  </data>
+
+  <data name="Excel_Categories_Empty_Text" xml:space="preserve">
+    <value>[{0}] Titull bosh</value>
+  </data>
+
+  <data name="Excel_Categories_Empty_Value" xml:space="preserve">
+    <value>[{0}] Vlerë boshe</value>
+  </data>
+
+  <data name="Excel_Categories_Duplicated" xml:space="preserve">
+    <value>Kategori të dyfishuara në rreshtat: {0}</value>
+  </data>
+
+  <data name="Excel_Categories_Empty_ParentId" xml:space="preserve">
+    <value>Disa kategori nuk kanë ID prindi</value>
+  </data>
+
+  <data name="Excel_Categories_More_Than_Limit" xml:space="preserve">
+    <value>Bashkësia e kategorive ka më shumë se {0} kategori</value>
+  </data>
+
+  <data name="Excel_NoCategories" xml:space="preserve">
+    <value>Nuk ka kategori në skedar</value>
+  </data>
+
+  <data name="Excel_Categories_Less_2_Options" xml:space="preserve">
+    <value>Bashkësia e kategorive duhet të ketë të paktën 2 kategori</value>
+  </data>
+
+  <data name="Excel_Categories_Text_More_Than_250" xml:space="preserve">
+    <value>[{0}] Teksti i kategorisë duhet të jetë më pak se 250 karaktere</value>
+  </data>
+
+  <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
+    <value>Pranohen vetëm skedarë me vlera të ndara me Tab (*.tab, *.txt, *.tsv) ose Excel (*.xslx, *.xls, *.ods)</value>
+  </data>
+
+  <data name="QuestionnaireAlreadySupportedCover" xml:space="preserve">
+    <value>Pyetësori tashmë e mbështet rubrikën e kopertinës</value>
+  </data>
+
+  <data name="Questionnaire_CategoriesWereNotFound" xml:space="preserve">
+    <value>Kategoritë nuk u gjetën</value>
+  </data>
 </root>
