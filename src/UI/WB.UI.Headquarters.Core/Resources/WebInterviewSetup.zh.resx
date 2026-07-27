@@ -192,4 +192,105 @@
   <data name="AllowTranscriptDownloading" xml:space="preserve">
       <value>允许提交后下载访谈记录</value>
   </data>
+
+
+  <data name="UseCaptcha" xml:space="preserve">
+    <value>在访谈开始前使用 CAPTCHA</value>
+  </data>
+
+  <data name="WebInterviewSetup_SendInvitationsTitle" xml:space="preserve">
+    <value>发送邀请</value>
+  </data>
+
+  <data name="Invitations" xml:space="preserve">
+    <value>邀请</value>
+  </data>
+
+  <data name="Invitations_TotalInvitations" xml:space="preserve">
+    <value>共 {{count}} 个邀请。</value>
+  </data>
+
+  <data name="Invitations_Sent" xml:space="preserve">
+    <value>已发送 {{count}} 个邀请。</value>
+  </data>
+
+  <data name="Invitations_NothingSent" xml:space="preserve">
+    <value>尚未发送任何邀请。</value>
+  </data>
+
+  <data name="Invitations_ToSend" xml:space="preserve">
+    <value>{{count}} 个待发送邀请。</value>
+  </data>
+
+  <data name="Invitations_NothingToSend" xml:space="preserve">
+    <value>当前没有可发送的邀请。</value>
+  </data>
+
+  <data name="Invitations_SetupError" xml:space="preserve">
+    <value>无法发送邀请。</value>
+  </data>
+
+  <data name="Invitations_EmailIsNotSetUp" xml:space="preserve">
+    <value>尚未设置电子邮件提供商。</value>
+  </data>
+
+  <data name="Invitations_ChangeEmailSettingsAdmin" xml:space="preserve">
+    <value>您可以在 &lt;a href="{{url}}"&gt;“电子邮件提供商”&lt;/a&gt; 页面更改这些设置。</value>
+  </data>
+
+  <data name="Invitations_ChangeEmailSettingsNotAdmin" xml:space="preserve">
+    <value>请告知管理员在“电子邮件提供商”页面更改这些设置。</value>
+  </data>
+
+  <data name="Invitations_SurveyIsNotStarted" xml:space="preserve">
+    <value>网络调查尚未开始。请先进行设置并&lt;a href="{{url}}"&gt;启动网络调查&lt;/a&gt;，然后再发送邀请。</value>
+  </data>
+
+  <data name="Invitations_SuccessfulSetup" xml:space="preserve">
+    <value>网络调查已开始，且电子邮件提供商已正确设置。系统已准备好发送邀请。</value>
+  </data>
+
+  <data name="Invitations_SendAction" xml:space="preserve">
+    <value>发送 {{count}} 个邀请</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_CompleteButton_Descr" xml:space="preserve">
+    <value>完成</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor_Descr" xml:space="preserve">
+    <value>督导备注</value>
+  </data>
+
+  <data name="SingleResponse" xml:space="preserve">
+    <value>每位受访者仅限一次访谈</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_StartNewButton_Descr" xml:space="preserve">
+    <value>开始新访谈</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_ResumeButton_Descr" xml:space="preserve">
+    <value>继续</value>
+  </data>
+
+  <data name="EmailOnComplete" xml:space="preserve">
+    <value>网络访谈完成后发送电子邮件</value>
+  </data>
+
+  <data name="AttachAnswersToCompleteEmail" xml:space="preserve">
+    <value>附加 PDF 访谈记录</value>
+  </data>
+
+  <data name="AllowSwitchToCawiForInterviewer" xml:space="preserve">
+    <value>允许访问员切换到 CAWI 模式</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_LinkInvitation_Descr" xml:space="preserve">
+    <value>当用户通过链接访问尚未与服务器同步的访谈时显示的文本</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
+    <value>网络访谈链接落地页上的欢迎语标题</value>
+  </data>
 </root>

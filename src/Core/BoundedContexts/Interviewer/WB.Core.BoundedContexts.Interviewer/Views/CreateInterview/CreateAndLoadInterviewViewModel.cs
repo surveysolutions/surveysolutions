@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -21,9 +22,11 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.Core.SharedKernels.Enumerator.Views;
+using Xamarin.Essentials;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
 {
@@ -39,6 +42,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
         private readonly IUserInteractionService userInteractionService;
         private readonly ICalendarEventStorage calendarEventStorage;
         private readonly IViewModelEventRegistry viewModelEventRegistry;
+        private readonly IPermissionsService permissionsService;
+        private int creationStarted;
 
         public CreateAndLoadInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService, 
@@ -55,7 +60,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             IUserInteractionService userInteractionService,
             IJsonAllTypesSerializer serializer,
             ICalendarEventStorage calendarEventStorage,
-            IViewModelEventRegistry viewModelEventRegistry) 
+            IViewModelEventRegistry viewModelEventRegistry,
+            IPermissionsService permissionsService) 
             : base(interviewerPrincipal, viewModelNavigationService, interviewRepository, commandService, logger,
                 userInteractionService, interviewsRepository, serializer, auditLogService, viewModelEventRegistry)
         {
@@ -69,6 +75,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             this.userInteractionService = userInteractionService;
             this.calendarEventStorage = calendarEventStorage;
             this.viewModelEventRegistry = viewModelEventRegistry;
+            this.permissionsService = permissionsService;
         }
 
         protected int AssignmentId { get; set; }
@@ -92,6 +99,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
 
         public override void ViewAppeared()
         {
+            // The OS lifecycle can raise ViewAppeared() more than once (for example the microphone
+            // permission dialog pauses and then resumes the activity). Guard against re-entrancy so the
+            // interview is created only once and the permission-denied toast is not shown twice.
+            if (Interlocked.CompareExchange(ref this.creationStarted, 1, 0) != 0)
+                return;
+
             Task.Run(CreateAndNavigateToInterviewAsync);
         }
 
@@ -130,6 +143,35 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                 this.assignmentsRepository.FetchPreloadedData(assignment);
                 var questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
 
+                // If the interview will record audio (whole-interview audio audit or a selective Audio Audit
+                // scope), the microphone permission must be granted up front. When it is rejected, the
+                // interview must not be created.
+                var willRecordAudio = assignment.IsAudioRecordingEnabled
+                    || (assignment.AudioAuditScope != null && assignment.AudioAuditScope.Count > 0);
+                if (willRecordAudio)
+                {
+                    try
+                    {
+                        await this.permissionsService.AssureHasPermissionOrThrow<Permissions.Microphone>();
+                    }
+                    catch (Exception permissionException)
+                    {
+                        // The permission request can surface exceptions other than MissingPermissionsException
+                        // (for example when the activity is recreated while the system dialog is shown). Do not
+                        // fail interview creation on those - rely on the authoritative status check below, which
+                        // reflects the user's actual choice.
+                        logger.Warn($"Microphone permission request for interview {interviewId} did not complete cleanly.", permissionException);
+                    }
+
+                    if (await Permissions.CheckStatusAsync<Permissions.Microphone>() != PermissionStatus.Granted)
+                    {
+                        // Show a toast (with a longer visibility time) so the interviewer can read why the
+                        // interview cannot start: the microphone permission is required for the whole interview.
+                        this.userInteractionService.ShowToast(UIResources.MissingPermissions_Microphone_Interview, isLong: true);
+                        return null;
+                    }
+                }
+
                 List<InterviewAnswer> answers = this.GetAnswers(assignment.Answers);
                 List<string> protectedVariables = assignment.ProtectedVariables.Select(x => x.Variable).ToList();
 
@@ -144,7 +186,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                     interviewKey,
                     assignment.Id,
                     assignment.IsAudioRecordingEnabled, 
-                    InterviewMode.CAPI
+                    InterviewMode.CAPI,
+                    assignment.AudioAuditScope?.ToArray()
                 );
 
                 this.commandService.Execute(createInterviewCommand);
