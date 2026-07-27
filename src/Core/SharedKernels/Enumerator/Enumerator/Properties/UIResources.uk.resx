@@ -1053,4 +1053,7 @@
     <value>Питання
 без відповіді</value>
   </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>Для проведення інтерв'ю потрібен доступ до мікрофона. Інтерв'ю не можна розпочати, доки не надано доступ.</value>
+  </data>
 </root>

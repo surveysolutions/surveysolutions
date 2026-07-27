@@ -1082,4 +1082,7 @@ critice</value>
     <value>Întrebări
 fără răspuns</value>
   </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>Este necesar accesul la microfon pentru a desfășura acest interviu. Interviul nu poate fi început până când accesul nu este acordat.</value>
+  </data>
 </root>

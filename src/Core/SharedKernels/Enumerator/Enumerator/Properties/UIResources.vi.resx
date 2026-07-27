@@ -960,4 +960,7 @@ nghiêm trọng</value>
 <value>Câu hỏi
 chưa trả lời</value>
   </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>Cần có quyền truy cập micro để tiến hành cuộc phỏng vấn này. Không thể bắt đầu cuộc phỏng vấn cho đến khi được cấp quyền.</value>
+  </data>
 </root>

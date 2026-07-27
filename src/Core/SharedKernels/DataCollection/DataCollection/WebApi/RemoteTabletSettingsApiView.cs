@@ -1,5 +1,7 @@
 ﻿#nullable enable
 
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
+
 namespace WB.Core.SharedKernels.DataCollection.WebApi
 {
     public class RemoteTabletSettingsApiView
@@ -13,6 +15,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
             GeographyQuestionPeriodInSeconds = 10;
             AllowSupervisorChangeAssignmentStatus = true;
             AllowInterviewerChangeAssignmentStatus = true;
+            AudioRecordingQuality = AudioRecordingQuality.Mono44kHz;
         }
 
         public bool NotificationsEnabled { get; set; }
@@ -25,5 +28,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
 
         public bool AllowSupervisorChangeAssignmentStatus { get; set; }
         public bool AllowInterviewerChangeAssignmentStatus { get; set; }
+
+        public AudioRecordingQuality AudioRecordingQuality { get; set; }
     }
 }

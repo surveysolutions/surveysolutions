@@ -1009,4 +1009,7 @@ sans réponse</value>
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
     <value>Statut de l'affectation</value>
   </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>L'accès au microphone est requis pour mener cet entretien. L'entretien ne peut pas être démarré tant que l'accès n'est pas accordé.</value>
+  </data>
 </root>

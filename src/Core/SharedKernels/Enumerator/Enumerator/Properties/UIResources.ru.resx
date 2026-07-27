@@ -1012,4 +1012,7 @@
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
     <value>Статус задания</value>
   </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>Для проведения интервью необходим доступ к микрофону. Интервью нельзя начать, пока доступ не предоставлен.</value>
+  </data>
 </root>

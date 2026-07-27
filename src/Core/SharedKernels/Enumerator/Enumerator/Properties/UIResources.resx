@@ -1009,4 +1009,7 @@ questions</value>
   <data name="Assignment_Status_Closed" xml:space="preserve">
     <value>Closed</value>
   </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>Microphone access is required to conduct this interview. The interview cannot be started until access is granted.</value>
+  </data>
 </root>

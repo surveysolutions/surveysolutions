@@ -1006,4 +1006,7 @@ sin respuesta</value>
   <data name="MapDashboard_AssignmentStatusTitle" xml:space="preserve">
     <value>Estado de la asignación</value>
   </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>Se requiere acceso al micrófono para realizar esta entrevista. La entrevista no puede iniciarse hasta que se conceda el acceso.</value>
+  </data>
 </root>
