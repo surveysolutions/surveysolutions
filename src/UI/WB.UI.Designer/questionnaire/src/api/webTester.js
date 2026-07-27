@@ -7,13 +7,16 @@ class WebTesterApi{
   async run(questionnaireId, scenarioId) {
       var webTesterWindow = window.open("about:blank", '_blank');
 
+      // Designer returns the full redirect URL with ?code=<one-time-code> already embedded.
+      // JWT never appears in the browser — code is exchanged server-to-server by WebTester.
       const url = await api.get('webTest/' + questionnaireId)
       this.setLocation(webTesterWindow, url, scenarioId);
   }
 
   setLocation(webTesterWindow, url, scenarioId) {
       if (scenarioId) {
-          url += "?scenarioId=" + scenarioId;
+          const separator = url.includes('?') ? '&' : '?'
+          url += separator + 'scenarioId=' + scenarioId
       }
       webTesterWindow.location.href = url;
   }

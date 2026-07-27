@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Packaging;
 using ClosedXML.Graphics;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -249,6 +250,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 throw new InvalidFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
             }
             catch (COMException e)
+            {
+                throw new InvalidFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
+            }
+            catch (OpenXmlPackageException e)
             {
                 throw new InvalidFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
             }
@@ -500,6 +505,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             {
                 var importedTranslation = GetExcelTranslation(worksheetWithHeadersMap, rowNumber);
 
+                if (string.IsNullOrWhiteSpace(importedTranslation.Translation)) continue;
+
                 if (!Guid.TryParse(importedTranslation.EntityId, out _))
                 {
                     var cellAddress = $"{worksheetWithHeadersMap.EntityIdIndex}{rowNumber}";
@@ -566,6 +573,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             for (int rowNumber = 2; rowNumber <= end; rowNumber++)
             {
                 var importedTranslation = GetExcelTranslation(worksheetWithHeadersMap, rowNumber);
+
+                if (string.IsNullOrWhiteSpace(importedTranslation.Translation)) continue;
 
                 if (string.IsNullOrWhiteSpace(importedTranslation.OptionValueOrValidationIndexOrFixedRosterId))
                 {
