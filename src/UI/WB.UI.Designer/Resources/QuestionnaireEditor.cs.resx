@@ -402,6 +402,9 @@
   <data name="FindReplaceMatchingLines" xml:space="preserve">
     <value>Odpovídající řádky: {{count}}</value>
   </data>
+  <data name="FindReplaceCurrentMatch" xml:space="preserve">
+    <value>{{current}} / {{count}}</value>
+  </data>
   <data name="FindReplaceMatchWord" xml:space="preserve">
     <value>Shoda celého slova</value>
   </data>

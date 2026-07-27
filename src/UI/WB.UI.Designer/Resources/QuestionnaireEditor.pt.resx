@@ -557,6 +557,9 @@
   <data name="FindReplaceMatchingLines" xml:space="preserve">
     <value>Linhas correspondentes: {{count}}</value>
   </data>
+  <data name="FindReplaceCurrentMatch" xml:space="preserve">
+    <value>{{current}} / {{count}}</value>
+  </data>
   <data name="FindReplaceNext" xml:space="preserve">
     <value>Próximo</value>
   </data>
