@@ -56,6 +56,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.synchronizationService = synchronizationService;
         }
 
+        protected override bool ShouldCheckVersionBeforeAuthentication => true;
+
         protected override async Task RefreshUserInfo(CancellationToken cancellationToken)
         {
             if (RestCredentials == null)

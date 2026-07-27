@@ -32,6 +32,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         private readonly IAuthorizedUser authorizedUser;
         private readonly IInterviewInformationFactory interviewFactory;
         private readonly IInterviewerVersionReader interviewerVersionReader;
+        private readonly IProductVersion productVersion;
 
         public SupervisorControllerBase(ITabletInformationService tabletInformationService, 
             ISupervisorSyncProtocolVersionProvider syncVersionProvider,
@@ -41,7 +42,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             IClientApkProvider clientApkProvider,
             IAuthorizedUser authorizedUser,
             IInterviewInformationFactory interviewFactory,
-            IInterviewerVersionReader interviewerVersionReader)
+            IInterviewerVersionReader interviewerVersionReader,
+            IProductVersion productVersion)
             : base(settingsStorage, tenantSettings, userViewFactory, tabletInformationService)
         {
             this.tabletInformationService = tabletInformationService;
@@ -51,6 +53,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             this.authorizedUser = authorizedUser;
             this.interviewFactory = interviewFactory;
             this.interviewerVersionReader = interviewerVersionReader;
+            this.productVersion = productVersion;
         }
 
         [HttpGet]
@@ -117,7 +120,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
                 return StatusCode(StatusCodes.Status426UpgradeRequired);
             }
 
-            if (clientApkBuildNumber != null && clientApkBuildNumber > serverApkBuildNumber)
+            var effectiveServerBuildNumber = serverApkBuildNumber ?? productVersion.GetBuildNumber();
+            if (clientApkBuildNumber != null && clientApkBuildNumber > effectiveServerBuildNumber)
             {
                 return StatusCode(StatusCodes.Status406NotAcceptable);
             }

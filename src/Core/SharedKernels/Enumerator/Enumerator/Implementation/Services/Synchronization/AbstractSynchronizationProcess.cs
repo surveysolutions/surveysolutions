@@ -34,6 +34,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         protected readonly IAuditLogService auditLogService;
         private readonly IEnumeratorSettings enumeratorSettings;
+        private readonly IDeviceSettings? deviceSettings;
         private readonly IServiceLocator serviceLocator;
         private readonly IDeviceInformationService deviceInformationService;
         private readonly IUserInteractionService userInteractionService;
@@ -64,11 +65,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.interviewViewRepository = interviewViewRepository;
             this.auditLogService = auditLogService;
             this.enumeratorSettings = enumeratorSettings;
+            this.deviceSettings = enumeratorSettings as IDeviceSettings;
             this.serviceLocator = serviceLocator;
             this.deviceInformationService = deviceInformationService;
             this.userInteractionService = userInteractionService;
             this.assignmentsStorage = assignmentsStorage;
         }
+
+        protected virtual bool ShouldCheckVersionBeforeAuthentication => false;
 
         public virtual async Task Synchronize(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken,
             SynchronizationStatistics statistics)
@@ -233,6 +237,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Token = this.principal.CurrentUserIdentity.Token,
                     Workspace = this.principal.CurrentUserIdentity.Workspace
                 };
+
+                if (ShouldCheckVersionBeforeAuthentication && this.deviceSettings != null)
+                {
+                    var serverVersion = await this.synchronizationService
+                        .GetLatestApplicationVersionAsync(cancellationToken).ConfigureAwait(false);
+                    if (serverVersion.HasValue && serverVersion < this.deviceSettings.GetApplicationVersionCode())
+                        throw new SynchronizationException(
+                            SynchronizationExceptionType.NotSupportedServerSyncProtocolVersion,
+                            EnumeratorUIResources.NotSupportedServerSyncProtocolVersion);
+                }
 
                 bool shouldUpdateCredentialsInDb = false;
 
