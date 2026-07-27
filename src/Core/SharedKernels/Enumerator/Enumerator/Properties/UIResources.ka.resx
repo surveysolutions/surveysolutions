@@ -1153,4 +1153,7 @@
     <value>უპასუხოდ დარჩენილი
 კითხვები</value>
   </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>ინტერვიუს ჩასატარებლად საჭიროა მიკროფონზე წვდომა. ინტერვიუს დაწყება შეუძლებელია, სანამ წვდომა არ იქნება მინიჭებული.</value>
+  </data>
 </root>

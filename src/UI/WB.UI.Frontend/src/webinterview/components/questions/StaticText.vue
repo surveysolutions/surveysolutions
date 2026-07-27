@@ -19,7 +19,7 @@
 <script lang="js">
 import { entityDetails } from '../mixins'
 import { getLocationHash } from '~/shared/helpers'
-import { debounce } from 'lodash'
+import { debounce } from 'lodash-es'
 
 export default {
     name: 'StaticText',
