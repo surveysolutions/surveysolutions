@@ -41,6 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 IsAudioRecordingEnabled = remote.IsAudioRecordingEnabled,
                 Comments = remote.Comments,
                 TargetArea = remote.TargetArea,
+                AudioAuditScope = remote.AudioAuditScope ?? new List<string>(),
                 ProtectedVariables = remote.ProtectedVariables?.Select(x => new AssignmentDocument.AssignmentProtectedVariable
                 {
                     Variable = x,

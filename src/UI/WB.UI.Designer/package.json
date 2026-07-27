@@ -37,7 +37,7 @@
         "bootstrap": "^5.3.3",
         "bootstrap-less": "^3.3.8",
         "dayjs": "^1.11.20",
-        "dompurify": "^3.4.1",
+        "dompurify": "^3.4.11",
         "highlight.js": "^11.11.1",
         "i18next-browser-languagedetector": "^8.0.2",
         "i18next-vue": "^5.0.0",
