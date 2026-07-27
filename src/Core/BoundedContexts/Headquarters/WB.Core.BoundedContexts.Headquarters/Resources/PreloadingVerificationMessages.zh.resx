@@ -271,6 +271,6 @@
     <value>音频审核范围变量名称 '{0}' 无效。它必须引用现有的章节、组或滚动表（不允许使用问题和平面滚动表）。</value>
   </data>
   <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
-    <value>Assignment was not migrated because it uses selective Audio Audit (audio recording scope), which cannot be migrated automatically to a new questionnaire version. Recreate the assignment manually and configure the audio audit scope again.</value>
+    <value>任务未被迁移，因为它使用了选择性音频审核（音频录制范围），无法自动迁移到新的问卷版本。请手动重新创建任务，并重新配置音频审核范围。</value>
   </data>
 </root>
