@@ -1,9 +1,9 @@
 <template>
     <HqLayout :title="$config.model.title" :hasFilter="false" :topicButton="$t('Dashboard.ImportTemplate')"
         :topicButtonRef="!$config.model.isObserver
-        ? $config.model.importQuestionnaireUrl
-        : ''
-        ">
+            ? $config.model.importQuestionnaireUrl
+            : ''
+            ">
         <template v-slot:subtitle>
             <ol class="list-unstyled">
                 <li>{{ $t('Dashboard.SurveySetupIntroMessage1') }}</li>
@@ -25,7 +25,7 @@
                     {{
                         $t(
                             'Pages.GlobalSettings_DeleteQuestionnaireConfirmation',
-                    )
+                        )
                     }}
                 </p>
                 <p class="text-danger" v-if="this.deletionWarnMsg">
@@ -40,6 +40,7 @@
                 </div>
                 <div class="form-group">
                     <input type="text" class="form-control" id="deleteConfirmInput"
+                        autocomplete="off"
                         v-model="deletionQuestionnaireName" />
                 </div>
             </form>
@@ -60,8 +61,8 @@
 <script>
 import { DateFormats } from '~/shared/helpers'
 import moment from 'moment'
-import gql from 'graphql-tag'
-import parseInt from 'lodash'
+import { gql, gqlRequest } from '~/hqapp/api/graphql'
+import { parseInt } from 'lodash-es'
 
 const interviewsQuestionnaireDeletionQuery = gql`
     query interviewsList($workspace: String!, $where: InterviewsFilter) {
@@ -104,7 +105,7 @@ export default {
                         encodeURI(
                             selectedRow.questionnaireId +
                             '$' +
-                            selectedRow.version,
+                            selectedRow.version
                         )
                 },
             })
@@ -235,23 +236,23 @@ export default {
                         this.$refs.deleteQuestionnaireModal.modal('show')
 
                         const questionnaireGuid = selectedRow.questionnaireId
-                        const interviewsQueryResult = await this.$apollo.query({
-                            query: interviewsQuestionnaireDeletionQuery,
-                            variables: {
+                        const interviewsQueryResult = await gqlRequest(
+                            interviewsQuestionnaireDeletionQuery,
+                            {
                                 where: {
                                     and: [
                                         {
                                             questionnaireId: {
                                                 eq: questionnaireGuid.replaceAll(
                                                     '-',
-                                                    '',
+                                                    ''
                                                 ),
                                             },
                                         },
                                         {
                                             questionnaireVersion: {
                                                 eq: parseInt(
-                                                    selectedRow.version,
+                                                    selectedRow.version
                                                 ),
                                             },
                                         },
@@ -263,54 +264,48 @@ export default {
                                     ],
                                 },
                                 workspace: this.$store.getters.workspace,
-                            },
-                            fetchPolicy: 'network-only',
-                        })
+                            })
 
-                        const assignmentsQueryResult = await this.$apollo.query(
+                        const assignmentsQueryResult = await gqlRequest(
+                            assignmentsQuestionnaireDeletionQuery,
                             {
-                                query: assignmentsQuestionnaireDeletionQuery,
-                                variables: {
-                                    where: {
-                                        and: [
-                                            {
-                                                questionnaireId: {
-                                                    id: {
-                                                        eq: questionnaireGuid.replaceAll(
-                                                            '-',
-                                                            '',
-                                                        ),
-                                                    },
-                                                    version: {
-                                                        eq: parseInt(
-                                                            selectedRow.version,
-                                                        ),
-                                                    },
+                                where: {
+                                    and: [
+                                        {
+                                            questionnaireId: {
+                                                id: {
+                                                    eq: questionnaireGuid.replaceAll(
+                                                        '-',
+                                                        ''
+                                                    ),
+                                                },
+                                                version: {
+                                                    eq: parseInt(
+                                                        selectedRow.version
+                                                    ),
                                                 },
                                             },
-                                            {
-                                                receivedByTabletAtUtc: {
-                                                    neq: null,
-                                                },
+                                        },
+                                        {
+                                            receivedByTabletAtUtc: {
+                                                neq: null,
                                             },
-                                        ],
-                                    },
-                                    workspace: this.$store.getters.workspace,
+                                        },
+                                    ],
                                 },
-                                fetchPolicy: 'network-only',
-                            },
-                        )
+                                workspace: this.$store.getters.workspace,
+                            })
 
                         const receivedInterviews =
-                            interviewsQueryResult.data.interviews.filteredCount
+                            interviewsQueryResult.interviews.filteredCount
                         const receivedAssignments =
-                            assignmentsQueryResult.data.assignments
+                            assignmentsQueryResult.assignments
                                 .filteredCount
 
                         if (receivedInterviews > 0 || receivedAssignments > 0) {
                             this.deletionWarnMsg = this.$t(
                                 'Dashboard.QuestionnaireDeleteWarn',
-                                { receivedInterviews, receivedAssignments },
+                                { receivedInterviews, receivedAssignments }
                             )
                         }
                     },
@@ -324,7 +319,7 @@ export default {
                 const response = await this.$hq
                     .Questionnaire(
                         this.deletedQuestionnaireId.questionnaireId,
-                        this.deletedQuestionnaireId.version,
+                        this.deletedQuestionnaireId.version
                     )
                     .Delete()
                 if (response.status == 200) {

@@ -273,4 +273,41 @@
   <data name="WelcomePage" xml:space="preserve">
     <value>Вітальна сторінка</value>
   </data>
+
+
+  <data name="Sending" xml:space="preserve">
+      <value>Надсилання</value>
+  </data>
+
+  <data name="NoErrors" xml:space="preserve">
+      <value>Немає помилок</value>
+  </data>
+
+  <data name="NothingWasSent" xml:space="preserve">
+      <value>Нічого не було надіслано</value>
+  </data>
+
+  <data name="ProcessCancelled" xml:space="preserve">
+      <value>Процес скасовано</value>
+  </data>
+
+  <data name="DownloadErrors" xml:space="preserve">
+      <value>Завантажити список призначень з помилками</value>
+  </data>
+
+  <data name="SendingFailed" xml:space="preserve">
+      <value>Надсилання запрошень не вдалося. Будь ласка, зверніться до адміністратора сервера, щоб перевірити налаштування провайдера електронної пошти</value>
+  </data>
+
+  <data name="TotalSent" xml:space="preserve">
+      <value>{{ totalCount }} запрошень для надсилання</value>
+  </data>
+
+  <data name="TotalProcessed" xml:space="preserve">
+      <value>{{ processedCount }} успішно надіслано</value>
+  </data>
+
+  <data name="TotalWithErrors" xml:space="preserve">
+      <value>{{ withErrorsCount }} не надіслано через помилки.</value>
+  </data>
 </root>

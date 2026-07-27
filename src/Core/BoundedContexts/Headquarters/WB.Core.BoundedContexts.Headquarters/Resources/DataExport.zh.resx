@@ -255,4 +255,313 @@
   <data name="ZipFile" xml:space="preserve">
     <value>Zip压缩文件</value>
   </data>
+
+
+  <data name="Preparing" xml:space="preserve">
+    <value>准备中</value>
+  </data>
+
+  <data name="DataExport_Destination_Dropbox" xml:space="preserve">
+    <value>导出文件将上传至Dropbox</value>
+  </data>
+
+  <data name="DataExport_Destination_File" xml:space="preserve">
+    <value>导出文件可供下载</value>
+  </data>
+
+  <data name="DataExport_Destination_GoogleDrive" xml:space="preserve">
+    <value>导出文件将上传至Google Drive</value>
+  </data>
+
+  <data name="DataExport_Destination_OneDrive" xml:space="preserve">
+    <value>导出文件将上传至OneDrive</value>
+  </data>
+
+  <data name="DataExport_QueuedOn" xml:space="preserve">
+    <value>已排队于 {{date}}</value>
+  </data>
+
+  <data name="DataExport_CompletedOn" xml:space="preserve">
+    <value>已于 {{date}} 完成</value>
+  </data>
+
+  <data name="DataExport_QuestionnaireWithVersion" xml:space="preserve">
+    <value>{{title}} (ver. {{version}})</value>
+  </data>
+
+  <data name="DataExport_Regenerate" xml:space="preserve">
+    <value>重新生成</value>
+  </data>
+
+  <data name="DataExport_RegenerateDesc" xml:space="preserve">
+    <value>使用相同参数加入导出队列</value>
+  </data>
+
+  <data name="DataExport_FileLastUpdate" xml:space="preserve">
+    <value>最后更新：{{date}}</value>
+  </data>
+
+  <data name="DataExport_FileWasRegenerated" xml:space="preserve">
+    <value>文件已被重新生成或删除</value>
+  </data>
+
+  <data name="DataExport_FileSize" xml:space="preserve">
+    <value>文件大小：{{size}} MB</value>
+  </data>
+
+  <data name="DataExport_ProducedIn" xml:space="preserve">
+    <value>生成耗时：</value>
+  </data>
+
+  <data name="DataExport_InQueue" xml:space="preserve">
+    <value>队列中：</value>
+  </data>
+
+  <data name="DataExport_Destination" xml:space="preserve">
+    <value>目标位置：{{dest}}</value>
+  </data>
+
+  <data name="DataExport_ServiceIsNotAvailable" xml:space="preserve">
+    <value>导出服务不可用</value>
+  </data>
+
+  <data name="DataType" xml:space="preserve">
+    <value>数据类型</value>
+  </data>
+
+  <data name="DataType_Binary" xml:space="preserve">
+    <value>二进制数据。包含二进制数据（例如图片、音频）的压缩包</value>
+  </data>
+
+  <data name="DataType_Ddi" xml:space="preserve">
+    <value>DDI。数据文档倡议 XML 数据</value>
+  </data>
+
+  <data name="DataType_MainSurveyData" xml:space="preserve">
+    <value>调查主数据。包含主要访谈数据的 zip 压缩包</value>
+  </data>
+
+  <data name="FilterTitle" xml:space="preserve">
+    <value>筛选要导出的访谈</value>
+  </data>
+
+  <data name="SurveyQuestionnaire" xml:space="preserve">
+    <value>问卷</value>
+  </data>
+
+  <data name="SurveyQuestionnaireVersion" xml:space="preserve">
+    <value>问卷版本</value>
+  </data>
+
+  <data name="DataType_Paradata" xml:space="preserve">
+    <value>辅助数据。有关访谈过程的元数据（事件和时间）</value>
+  </data>
+
+  <data name="DataDestination" xml:space="preserve">
+    <value>导出文件目标位置</value>
+  </data>
+
+  <data name="DataFormat" xml:space="preserve">
+    <value>数据格式</value>
+  </data>
+
+  <data name="DataDestination_Dropbox" xml:space="preserve">
+    <value>上传至Dropbox</value>
+  </data>
+
+  <data name="DataDestination_GoogleDrive" xml:space="preserve">
+    <value>上传至Google Drive</value>
+  </data>
+
+  <data name="DataDestination_OneDrive" xml:space="preserve">
+    <value>上传至OneDrive</value>
+  </data>
+
+  <data name="DataDestination_Zip" xml:space="preserve">
+    <value>下载</value>
+  </data>
+
+  <data name="DataFormat_Spss" xml:space="preserve">
+    <value>SPSS格式</value>
+  </data>
+
+  <data name="DataFormat_Stata" xml:space="preserve">
+    <value>Stata 14格式</value>
+  </data>
+
+  <data name="DataFormat_Tab" xml:space="preserve">
+    <value>制表符分隔数据</value>
+  </data>
+
+  <data name="QuestionnaireInformation" xml:space="preserve">
+    <value>问卷信息</value>
+  </data>
+
+  <data name="QuestionnaireInformation_Include" xml:space="preserve">
+    <value>包含问卷元信息</value>
+  </data>
+
+  <data name="QuestionnaireInformation_Exclude" xml:space="preserve">
+    <value>不包含问卷元信息</value>
+  </data>
+
+  <data name="AddToQueue" xml:space="preserve">
+    <value>添加到队列</value>
+  </data>
+
+  <data name="GeneratedDataSets" xml:space="preserve">
+    <value>此前生成的导出集</value>
+  </data>
+
+  <data name="GeneratedDataSets_Desc" xml:space="preserve">
+    <value>数据将导出为一个 zip 压缩包，其中包含指定内容和类型的数据文件。以下是此前导出的数据文件列表。</value>
+  </data>
+
+  <data name="NoDataSets" xml:space="preserve">
+    <value>尚无已生成的导出集</value>
+  </data>
+
+  <data name="DataExportApi" xml:space="preserve">
+    <value>数据导出 API</value>
+  </data>
+
+  <data name="DataExportApiDesc" xml:space="preserve">
+    <value>您可以使用我们的 API 工具集设置已收集访谈数据的自动导出。更多信息和说明请参阅：</value>
+  </data>
+
+  <data name="DataExportApiInfoPage" xml:space="preserve">
+    <value>数据导出 API 参考</value>
+  </data>
+
+  <data name="Error_Canceled" xml:space="preserve">
+    <value>导出任务已被用户取消。</value>
+  </data>
+
+  <data name="Error_NotEnoughExternalStorageSpace" xml:space="preserve">
+    <value>所选云存储提供商空间不足。请释放空间后重新启动任务，或选择其他提供商。</value>
+  </data>
+
+  <data name="Error_Unhandled" xml:space="preserve">
+    <value>导出过程中发生意外错误。对此带来的不便我们深表歉意。请联系您的服务器支持团队。有关此问题的更多信息，请参阅支持页面：https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/。</value>
+  </data>
+
+  <data name="AllStatuses" xml:space="preserve">
+    <value>所有状态</value>
+  </data>
+
+  <data name="ApprovedByHeadquarters" xml:space="preserve">
+    <value>Headquarters已审核通过状态</value>
+  </data>
+
+  <data name="ApprovedBySupervisor" xml:space="preserve">
+    <value>督导员已审核通过状态</value>
+  </data>
+
+  <data name="DataExport_InterviewsStatus" xml:space="preserve">
+    <value>处于 {{status}} 的访谈。</value>
+  </data>
+
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>已分配访问员状态</value>
+  </data>
+
+  <data name="QuestionnaireTranslation" xml:space="preserve">
+    <value>翻译</value>
+  </data>
+
+  <data name="Translation_CardLabel" xml:space="preserve">
+    <value>翻译：{{language}}</value>
+  </data>
+
+  <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
+      <value>翻译</value>
+  </data>
+
+  <data name="SurveyQuestionnaireDateRange" xml:space="preserve">
+      <value>日期范围</value>
+  </data>
+
+  <data name="DateRangeAllTime" xml:space="preserve">
+      <value>全部时间</value>
+  </data>
+
+  <data name="DateRangeLast24hours" xml:space="preserve">
+      <value>过去 24 小时</value>
+  </data>
+
+  <data name="DateRangeLast7days" xml:space="preserve">
+      <value>过去 7 天</value>
+  </data>
+
+  <data name="DateRangeLast30days" xml:space="preserve">
+      <value>过去 30 天</value>
+  </data>
+
+  <data name="DateRangeLastToday" xml:space="preserve">
+      <value>今天</value>
+  </data>
+
+  <data name="DateRangeLastYesterday" xml:space="preserve">
+      <value>昨天</value>
+  </data>
+
+  <data name="DateRangeCustom" xml:space="preserve">
+      <value>自定义</value>
+  </data>
+
+  <data name="SurveyQuestionnaireDateRangeFrom" xml:space="preserve">
+      <value>从</value>
+  </data>
+
+  <data name="DateRangeFromAll" xml:space="preserve">
+      <value>最早可用时间</value>
+  </data>
+
+  <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
+      <value>到</value>
+  </data>
+
+  <data name="DateRangeToAll" xml:space="preserve">
+      <value>当前时刻</value>
+  </data>
+    
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+      <value>音频审计。包含音频审计数据的 zip 压缩包</value>
+  </data>
+
+  <data name="ParadataEventsFilter" xml:space="preserve">
+      <value>事件筛选</value>
+  </data>
+
+  <data name="ParadataEventsFilter_All" xml:space="preserve">
+      <value>全部</value>
+  </data>
+
+  <data name="ParadataEventsFilter_Reduced" xml:space="preserve">
+      <value>精简</value>
+  </data>
+
+  <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
+      <value>精简辅助数据集不包括以下代码的事件：QuestionEnabled (13)、QuestionDisabled (14)、GroupEnabled (15)、GroupDisabled (16)、QuestionDeclaredValid (17)、QuestionDeclaredInvalid (18)、VariableEnabled (23)、VariableDisabled (24)。</value>
+  </data>
+
+    <data name="Validation_FromDateInvalid" xml:space="preserve">
+    <value>“从”日期必须是有效日期。</value>
+</data>
+
+    <data name="Validation_FromDateInFuture" xml:space="preserve">
+    <value>“从”日期不能是未来日期。</value>
+</data>
+
+    <data name="Validation_ToDateInvalid" xml:space="preserve">
+    <value>“到”日期必须是有效日期。</value>
+</data>
+
+    <data name="Validation_FromDateInvalidBeforeTo" xml:space="preserve">
+    <value>必须先验证“从”日期有效后，才能验证“到”日期。</value>
+</data>
+
+    <data name="Validation_ToDateBeforeFrom" xml:space="preserve">
+    <value>“到”日期必须大于“从”日期。</value>
+</data>
 </root>

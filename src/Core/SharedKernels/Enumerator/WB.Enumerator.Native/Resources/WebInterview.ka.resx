@@ -249,4 +249,176 @@
   <data name="WelcomeText" xml:space="preserve">
     <value>გამარჯობა და კეთილი იყოს თქვენი მობრძანება Survey Solutions ვებ კვლევაში</value>
   </data>
+
+
+  <data name="DownloadAnswers" xml:space="preserve">
+    <value>ინტერვიუს ტრანსკრიპტის ჩამოტვირთვა</value>
+  </data>
+
+  <data name="DownloadAnswersHint" xml:space="preserve">
+    <value>ინტერვიუს პასუხების ჩამოტვირთვა PDF ფაილად</value>
+  </data>
+
+  <data name="Start" xml:space="preserve">
+    <value>ახალი ინტერვიუს დაწყება</value>
+  </data>
+
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>არასწორი პაროლი</value>
+  </data>
+
+  <data name="ResumeInterview" xml:space="preserve">
+    <value>ინტერვიუს გაგრძელება</value>
+  </data>
+
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve">
+    <value>მოწყობილობის მიერ მიღებული ინტერვიუს შეცვლა შეუძლებელია</value>
+  </data>
+
+  <data name="EnterPasswordText" xml:space="preserve">
+    <value>ეს ბმული დაცულია პაროლით, რომელიც ბმულთან ერთად გავრცელდა. გთხოვთ, შეიყვანოთ ის აქ</value>
+  </data>
+
+  <data name="Filters_Title" xml:space="preserve">
+    <value>კითხვების გაფილტვრა</value>
+  </data>
+
+  <data name="Filters_Flagged" xml:space="preserve">
+    <value>მონიშნული</value>
+  </data>
+
+  <data name="Filters_WithComments" xml:space="preserve">
+    <value>კომენტარებით</value>
+  </data>
+
+  <data name="Filters_Invalid" xml:space="preserve">
+    <value>არავალიდური</value>
+  </data>
+
+  <data name="Filters_Valid" xml:space="preserve">
+    <value>ვალიდური</value>
+  </data>
+
+  <data name="Filters_Answered" xml:space="preserve">
+    <value>პასუხგაცემული</value>
+  </data>
+
+  <data name="Filters_NotAnswered" xml:space="preserve">
+    <value>უპასუხო</value>
+  </data>
+
+  <data name="Filters_ForSupervisor" xml:space="preserve">
+    <value>ზედამხედველისთვის</value>
+  </data>
+
+  <data name="Filters_ForInterviewer" xml:space="preserve">
+    <value>ინტერვიუერისთვის</value>
+  </data>
+
+  <data name="Filters_NotFlagged" xml:space="preserve">
+    <value>მონიშვნის გარეშე</value>
+  </data>
+
+  <data name="Filters_CriticalQuestions" xml:space="preserve">
+    <value>კრიტიკული კითხვები</value>
+  </data>
+
+  <data name="Filters_CriticalRules" xml:space="preserve">
+    <value>კრიტიკული წესები</value>
+  </data>
+
+  <data name="Filters_ClearSelection" xml:space="preserve">
+    <value>ყველა ფილტრის გასუფთავება</value>
+  </data>
+
+  <data name="Error" xml:space="preserve">
+    <value>შეცდომა</value>
+  </data>
+
+  <data name="Warning" xml:space="preserve">
+    <value>გაფრთხილება</value>
+  </data>
+
+  <data name="QuestionnaireNameFormat" xml:space="preserve">
+    <value>{0} (ver. {1})</value>
+  </data>
+
+  <data name="InterviewSizeLimitReached" xml:space="preserve">
+    <value>ინტერვიუ შეიცავს როსტერების ერთეულებისა და კითხვების საერთო რაოდენობას, რომელიც აღემატება სისტემის ლიმიტებს.</value>
+  </data>
+
+  <data name="AssignmentLimitReached" xml:space="preserve">
+    <value>ამ გამოკითხვაში ყველა ინტერვიუ შეგროვებულია.</value>
+  </data>
+
+  <data name="InterviewNotFound" xml:space="preserve">
+    <value>ინტერვიუ ვერ მოიძებნა.</value>
+  </data>
+
+  <data name="Email_InvitationTemplate_Subject" xml:space="preserve">
+    <value>მოწვევა %SURVEYNAME%-ში მონაწილეობის მისაღებად</value>
+  </data>
+
+  <data name="Email_InvitationTemplate_Message" xml:space="preserve">
+    <value>მოგესალმებით %SURVEYNAME%-ში!
+
+გამოკითხვაში მონაწილეობის მისაღებად გადადით შემდეგ ბმულზე: %SURVEYLINK% და შეიყვანეთ თქვენი პაროლი: %PASSWORD%
+ 
+გმადლობთ თანამშრომლობისთვის!</value>
+  </data>
+
+  <data name="Email_NoResponse_Subject" xml:space="preserve">
+    <value>შეხსენება, არ დაგავიწყდეთ %SURVEYNAME%-ში მონაწილეობის მიღება</value>
+  </data>
+
+  <data name="Email_NoResponse_Message" xml:space="preserve">
+    <value>თქვენ იღებთ ამ შეხსენებას, რადგან ჯერ არ დაგიწყიათ %SURVEYNAME%-ზე პასუხის გაცემა!
+ 
+გამოკითხვაში მონაწილეობის მისაღებად გადადით შემდეგ ბმულზე: %SURVEYLINK% და შეიყვანეთ თქვენი პაროლი: %PASSWORD%
+ 
+გმადლობთ თანამშრომლობისთვის!</value>
+  </data>
+
+  <data name="Email_PartialResponse_Subject" xml:space="preserve">
+    <value>შეხსენება, გთხოვთ, დაასრულოთ თქვენი პასუხები %SURVEYNAME%-ში</value>
+  </data>
+
+  <data name="Email_PartialResponse_Message" xml:space="preserve">
+    <value>თქვენ იღებთ ამ შეხსენებას, რადგან დაიწყეთ %SURVEYNAME%-ზე პასუხის გაცემა, მაგრამ პროცესი არ დაგისრულებიათ.
+ 
+გამოკითხვის გასაგრძელებლად გადადით შემდეგ ბმულზე: %SURVEYLINK% და შეიყვანეთ თქვენი პაროლი: %PASSWORD%.
+ 
+გთხოვთ, უპასუხოთ ყველა შესაბამის კითხვას და თქვენი პასუხების გასაგზავნად დააჭიროთ ღილაკს ‘COMPLETE’.
+ 
+გმადლობთ თანამშრომლობისთვის!</value>
+  </data>
+
+  <data name="Email_RejectEmail_Subject" xml:space="preserve">
+    <value>თქვენი მოქმედებაა საჭირო %SURVEYNAME%-ში</value>
+  </data>
+
+  <data name="Email_RejectEmail_Message" xml:space="preserve">
+    <value>გმადლობთ %SURVEYNAME%-ში მონაწილეობისთვის!
+ 
+თქვენი პასუხების დამუშავებისას ჩვენმა თანამშრომლებმა აღმოაჩინეს გარკვეული საკითხები, რომელთა გადახედვაც ახლა გევალებათ.
+ 
+გამოკითხვის გასაგრძელებლად გადადით შემდეგ ბმულზე: %SURVEYLINK% და შეიყვანეთ თქვენი პაროლი: %PASSWORD%.
+ 
+მადლობელი ვიქნებით, თუ შეეცდებით თქვენს პასუხებში მონიშნული ყველა საკითხის მოგვარებას და თქვენი პასუხების გასაგზავნად დააჭირეთ ღილაკს ‘COMPLETE’.
+ 
+გმადლობთ თანამშრომლობისთვის!</value>
+  </data>
+
+  <data name="NoteForSupervisor" xml:space="preserve">
+    <value>კომენტარი</value>
+  </data>
+
+  <data name="Complete" xml:space="preserve">
+    <value>დასრულება</value>
+    <comment>Complete interview button text</comment>
+  </data>
+
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+    <value>Web ინტერვიუს საწყისი გვერდის ბმულის მაგალითი</value>
+  </data>
 </root>
