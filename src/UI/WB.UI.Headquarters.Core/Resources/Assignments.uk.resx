@@ -618,8 +618,8 @@
   <data name="Value" xml:space="preserve">
     <value>Значення</value>
   </data>
-  <data name="AudioRecordingPartial" xml:space="preserve">
-      <value>Частково</value>
+  <data name="AudioRecordingSelective" xml:space="preserve">
+      <value>Вибірково</value>
   </data>
   <data name="AudioAuditScopeLabel" xml:space="preserve">
       <value>Область аудіоконтролю</value>

@@ -259,6 +259,6 @@
     <value>Le nom de la variable de la portée de l'audit audio '{0}' n'est pas valide. Il doit faire référence à une section, un groupe ou un roster existant (les questions et les rosters plats ne sont pas autorisés).</value>
   </data>
   <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
-    <value>Assignment was not migrated because it uses selective Audio Audit (audio recording scope), which cannot be migrated automatically to a new questionnaire version. Recreate the assignment manually and configure the audio audit scope again.</value>
+    <value>L'affectation n'a pas été migrée car elle utilise un audit audio sélectif (portée d'enregistrement audio), qui ne peut pas être migré automatiquement vers une nouvelle version du questionnaire. Recréez l'affectation manuellement et configurez à nouveau la portée de l'audit audio.</value>
   </data>
 </root>

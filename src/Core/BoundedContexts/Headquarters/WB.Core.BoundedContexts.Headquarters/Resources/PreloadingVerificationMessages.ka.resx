@@ -282,6 +282,6 @@
     <value>აუდიო აუდიტის არეალის ცვლადის სახელი '{0}' არასწორია. ის უნდა მიუთითებდეს არსებულ სექციაზე, ჯგუფზე ან როსტერზე (კითხვები და ბრტყელი როსტერები (flat roster) დაუშვებელია).</value>
   </data>
   <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
-    <value>Assignment was not migrated because it uses selective Audio Audit (audio recording scope), which cannot be migrated automatically to a new questionnaire version. Recreate the assignment manually and configure the audio audit scope again.</value>
+    <value>დავალება არ გადავიდა, რადგან ის იყენებს შერჩევით აუდიო აუდიტს (აუდიოჩაწერის არეალი), რომლის ავტომატურად გადატანა კითხვარის ახალ ვერსიაზე შეუძლებელია. ხელახლა შექმენით დავალება ხელით და კვლავ დააკონფიგურირეთ აუდიო აუდიტის არეალი.</value>
   </data>
 </root>

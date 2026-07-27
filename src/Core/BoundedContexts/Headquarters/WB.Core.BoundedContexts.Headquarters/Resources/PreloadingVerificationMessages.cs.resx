@@ -259,6 +259,6 @@
     <value>Název proměnné rozsahu zvukového auditu '{0}' je neplatný. Musí odkazovat na existující sekci, skupinu nebo seznam (roster) (otázky a ploché seznamy (flat roster) nejsou povoleny).</value>
   </data>
   <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
-    <value>Assignment was not migrated because it uses selective Audio Audit (audio recording scope), which cannot be migrated automatically to a new questionnaire version. Recreate the assignment manually and configure the audio audit scope again.</value>
+    <value>Úkol nebyl migrován, protože používá selektivní zvukový audit (rozsah nahrávání zvuku), který nelze automaticky migrovat na novou verzi dotazníku. Vytvořte úkol znovu ručně a znovu nakonfigurujte rozsah zvukového auditu.</value>
   </data>
 </root>

@@ -206,7 +206,7 @@ export default {
         },
         updateTimer() {
             var diff = moment.utc(this.currentTime() - this.startRecordingTime)
-            this.formattedTimer = diff.format('mm:ss:SS')
+            this.formattedTimer = diff.format('mm:ss:SSS')
         },
     },
 }
