@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using AutoMapper;
+
 using FluentAssertions;
 using FluentAssertions.Equivalency;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using NSubstitute;
@@ -93,7 +92,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             questionnaireDocument.CoverPageSectionId = coverPageSectionId;
             questionnaireDocument.Children = new List<IComposite>()
             {
-                new Group() { PublicKey = coverPageSectionId, ConditionExpression = null, VariableName = "cover" },
+                new Group() { PublicKey = coverPageSectionId, ConditionExpression = string.Empty, VariableName = "cover" },
                 new Group() { ConditionExpression = "true", VariableName = "chapter" }
             }.ToReadOnlyCollection();
 
@@ -111,7 +110,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             questionnaireDocument.CoverPageSectionId = coverPageSectionId;
             questionnaireDocument.Children = new List<IComposite>()
             {
-                new Group() { PublicKey = coverPageSectionId, ConditionExpression = null, VariableName = "cover"},
+                new Group() { PublicKey = coverPageSectionId, ConditionExpression = string.Empty, VariableName = "cover"},
                 new Group() { ConditionExpression = "true", VariableName = "chapter" },
             }.ToReadOnlyCollection();
 
@@ -215,8 +214,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             );
             questionnaireDocument.Attachments = new List<Attachment>()
             {
-                new Attachment() { Name = "attach #1", AttachmentId = Guid.NewGuid()/*, ContentId = "content1"*/},
-                new Attachment() { Name = "attach #2", AttachmentId = Guid.NewGuid()/*, ContentId = "content2"*/},
+                new Attachment() { Name = "attach #1", AttachmentId = Guid.NewGuid(), ContentId = "attachment1.jpeg"},
+                new Attachment() { Name = "attach #2", AttachmentId = Guid.NewGuid(), ContentId = "attachment2.png"},
             };
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors, q =>
@@ -410,7 +409,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             );
             var cover = (Group)questionnaireDocument.Children[0];
             cover.VariableName = "cover";
-            cover.ConditionExpression = null!;
+            cover.ConditionExpression = string.Empty;
             questionnaireDocument.Add(Create.Chapter(), null);
 
 
@@ -1047,12 +1046,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
         private QuestionnaireDocument DoImportExportQuestionnaire(QuestionnaireDocument questionnaireDocument, out IList<string> errors, Action<Questionnaire> postMappingChanges = null)
         {
-            var mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new QuestionnaireAutoMapperProfile());
-            }).CreateMapper();
-
-            var service = new ImportExportQuestionnaireMapper(mapper);
+            var service = new ImportExportQuestionnaireMapper();
             var questionnaire = service.Map(questionnaireDocument);
             postMappingChanges?.Invoke(questionnaire);
             var json = new QuestionnaireSerializer().Serialize(questionnaire);

@@ -283,7 +283,7 @@
     <value>Stare</value>
   </data>
   <data name="Template" xml:space="preserve">
-    <value>Template</value>
+    <value>Șablon</value>
   </data>
   <data name="TheWorldBankGroup" xml:space="preserve">
     <value>Grupul Banca Mondială</value>
@@ -360,5 +360,74 @@
   </data>
   <data name="ViewAssignmentDetails" xml:space="preserve">
     <value>Vizualizare detalii sarcină</value>
+  </data>
+
+
+  <data name="Apply" xml:space="preserve">
+        <value>Aplicare</value>
+  </data>
+
+  <data name="Clear" xml:space="preserve">
+    <value>Goliți</value>
+  </data>
+
+  <data name="ChangeToCAPI" xml:space="preserve">
+    <value>Schimbați în CAPI</value>
+  </data>
+
+  <data name="ChangeToCAPIConfirmHQ" xml:space="preserve">
+    <value>Modul pentru {{count}} interviuri selectate va fi schimbat în CAPI</value>
+  </data>
+
+  <data name="ChangeToCAWI" xml:space="preserve">
+    <value>Schimbați în CAWI</value>
+  </data>
+
+  <data name="ChangeToCAWIConfirmHQ" xml:space="preserve">
+    <value>Modul pentru {{count}} interviuri selectate va fi schimbat în CAWI</value>
+  </data>
+
+  <data name="InterviewMode" xml:space="preserve">
+    <value>Mod interviu</value>
+  </data>
+
+  <data name="Capi" xml:space="preserve">
+    <value>CAPI</value>
+  </data>
+
+  <data name="Cawi" xml:space="preserve">
+    <value>CAWI</value>
+  </data>
+
+  <data name="Enable" xml:space="preserve">
+    <value>Activați</value>
+  </data>
+
+  <data name="Disable" xml:space="preserve">
+    <value>Dezactivați</value>
+  </data>
+
+  <data name="Properties" xml:space="preserve">
+      <value>Proprietăți</value>
+  </data>
+
+  <data name="LinkedUsers" xml:space="preserve">
+      <value>Utilizatori conectați</value>
+  </data>
+
+  <data name="LinkUser" xml:space="preserve">
+      <value>Utilizator</value>
+  </data>
+
+  <data name="GeoTrackNumber" xml:space="preserve">
+      <value>Urmă</value>
+  </data>
+
+  <data name="DateRange" xml:space="preserve">
+      <value>Interval de date</value>
+  </data>
+
+  <data name="AllGeoTracks" xml:space="preserve">
+      <value>Toate urmele geo</value>
   </data>
 </root>
