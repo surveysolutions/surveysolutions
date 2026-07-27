@@ -7,7 +7,7 @@
                         <textarea v-autosize autocomplete="off" type="text" class="field-to-fill" rows="1"
                             :maxlength="$me.maxLength" :important="true" :value="row.text"
                             :disabled="!$me.acceptAnswer || row.isProtected" v-blurOnEnterKey
-                            @blur.native="updateRow($event, row, index)" @blur="updateRow($event, row, index)" />
+                            @blur="updateRow($event, row, index)" />
                         <button type="submit" class="btn btn-link btn-clear" v-if="$me.acceptAnswer && !row.isProtected"
                             tabindex="-1" @click="confirmAndRemoveRow(index)"><span></span></button>
                         <div class="lock"></div>
@@ -17,7 +17,7 @@
                     <div class="field answered">
                         <textarea v-autosize ref="inputTextArea" autocomplete="off" type="text" rows="1"
                             class="field-to-fill" :disabled="!canAnswer" :placeholder="noAnswerWatermark"
-                            v-blurOnEnterKey :maxlength="$me.maxLength" @blur.native="addRow" @blur="addRow" />
+                            v-blurOnEnterKey :maxlength="$me.maxLength" @blur="addRow" />
                     </div>
                 </div>
                 <wb-lock />
@@ -57,11 +57,11 @@ export default {
     },
     methods: {
         confirmAndRemoveRow(index) {
-            if (!this.canAnswer) return;
+            if (!this.canAnswer) return
 
             if (!this.$me.isRosterSize) {
                 this.removeRow(index)
-                return;
+                return
             }
 
             modal.confirm(this.$t('WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage', {
@@ -69,10 +69,10 @@ export default {
             }), result => {
                 if (result) {
                     this.removeRow(index)
-                    return;
+                    return
                 } else {
                     this.fetch()
-                    return;
+                    return
                 }
             })
         },

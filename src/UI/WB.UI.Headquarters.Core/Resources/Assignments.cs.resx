@@ -233,7 +233,7 @@
     <value>Neaktivní</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
-    <value>Dotazník {{id}} nelze zavřít, protože má povolený webový režim</value>
+    <value>Dotazník {{id}} nelze zmenšit, protože má povolený webový režim</value>
   </data>
   <data name="AssignmentHistory" xml:space="preserve">
     <value>Historie</value>
@@ -359,7 +359,7 @@
     <value>Režim CAWI umožňuje sbírat data přímo od respondentů</value>
   </data>
   <data name="MultipleAssignmentsClose" xml:space="preserve">
-    <value>Vybraných dotazníků, které budou uzavřeny - {{count}}. Velikost bude nastavena podle aktuálního počtu shromážděných rozhovorů.</value>
+    <value>Vybraných dotazníků, které budou zmenšeny - {{count}}. Velikost bude nastavena podle aktuálního počtu shromážděných rozhovorů.</value>
   </data>
   <data name="NewAssignment" xml:space="preserve">
     <value>Nový dotazník</value>
@@ -621,5 +621,14 @@
   </data>
   <data name="Action_Reopened" xml:space="preserve">
       <value>Znovu otevřeno</value>
+  </data>
+  <data name="AudioRecordingSelective" xml:space="preserve">
+      <value>Selektivní</value>
+  </data>
+  <data name="AudioAuditScopeLabel" xml:space="preserve">
+      <value>Rozsah zvukového auditu</value>
+  </data>
+  <data name="AudioRecordingScopeNotice" xml:space="preserve">
+      <value>Toto přiřazení má selektivní rozsah zvukového auditu. Zapnutí plného zvukového záznamu bude nahrávat všechny sekce. Vypnutí se vrátí k nahrávání pouze vybraných sekcí.</value>
   </data>
 </root>
