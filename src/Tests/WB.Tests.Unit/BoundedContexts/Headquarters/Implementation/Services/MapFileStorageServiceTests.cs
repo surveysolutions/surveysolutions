@@ -221,6 +221,101 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
             }
         }
 
+        [Test]
+        public async Task SaveOrUpdateMapAsync_when_tiff_has_no_readable_coordinates_imports_map_without_bounds()
+        {
+            var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            var mapsDirectory = Path.Combine(tempBase, "source");
+            var storageDirectory = Path.Combine(tempBase, "storage");
+            var mapsFolder = Path.Combine(tempBase, "maps");
+            Directory.CreateDirectory(mapsDirectory);
+            Directory.CreateDirectory(storageDirectory);
+            Directory.CreateDirectory(mapsFolder);
+
+            try
+            {
+                const string mapName = "plainmap.tif";
+                WritePlainTiff(Path.Combine(mapsDirectory, mapName));
+
+                var mapStorage = new TestPlainStorage<MapBrowseItem>();
+                var service = Create.Service.MapFileStorageService(
+                    mapsStorage: mapStorage,
+                    fileStorageConfig: Options.Create(new FileStorageConfig { TempData = mapsFolder }),
+                    geospatialConfig: Options.Create(new GeospatialConfig())
+                );
+
+                // Act — a georeferencing-less TIFF must be accepted, not rejected
+                var result = await service.SaveOrUpdateMapAsync(BuildTiffMapFiles(mapName), mapsDirectory);
+
+                // Assert
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result.Id, Is.EqualTo(mapName));
+                Assert.That(result.XMinVal, Is.EqualTo(0));
+                Assert.That(result.YMinVal, Is.EqualTo(0));
+                Assert.That(result.XMaxVal, Is.EqualTo(0));
+                Assert.That(result.YMaxVal, Is.EqualTo(0));
+                Assert.That(mapStorage.GetById(mapName), Is.Not.Null);
+            }
+            finally
+            {
+                Directory.Delete(tempBase, true);
+            }
+        }
+
+        [Test]
+        public void SaveOrUpdateMapAsync_when_tif_file_is_not_a_valid_tiff_throws()
+        {
+            var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            var mapsDirectory = Path.Combine(tempBase, "source");
+            var storageDirectory = Path.Combine(tempBase, "storage");
+            var mapsFolder = Path.Combine(tempBase, "maps");
+            Directory.CreateDirectory(mapsDirectory);
+            Directory.CreateDirectory(storageDirectory);
+            Directory.CreateDirectory(mapsFolder);
+
+            try
+            {
+                const string mapName = "notatiff.tif";
+                // A .tif file whose content is not a TIFF at all must be rejected.
+                File.WriteAllText(Path.Combine(mapsDirectory, mapName), "this is not a tiff file");
+
+                var mapStorage = new TestPlainStorage<MapBrowseItem>();
+                var service = Create.Service.MapFileStorageService(
+                    mapsStorage: mapStorage,
+                    fileStorageConfig: Options.Create(new FileStorageConfig { TempData = mapsFolder }),
+                    geospatialConfig: Options.Create(new GeospatialConfig())
+                );
+
+                // Act / Assert
+                Assert.That(async () => await service.SaveOrUpdateMapAsync(BuildTiffMapFiles(mapName), mapsDirectory),
+                    Throws.Exception.InstanceOf<InvalidOperationException>());
+                Assert.That(mapStorage.GetById(mapName), Is.Null);
+            }
+            finally
+            {
+                Directory.Delete(tempBase, true);
+            }
+        }
+
+        /// <summary>Writes a plain (non-georeferenced) 8×8 TIFF that carries no GeoTIFF tags.</summary>
+        private static void WritePlainTiff(string path)
+        {
+            using var image = new SixLabors.ImageSharp.Image<SixLabors.ImageSharp.PixelFormats.Rgba32>(8, 8);
+            using var stream = File.Create(path);
+            image.Save(stream, new SixLabors.ImageSharp.Formats.Tiff.TiffEncoder());
+        }
+
+        private static MapFiles BuildTiffMapFiles(string mapName) => new MapFiles
+        {
+            Name = mapName,
+            IsShapeFile = false,
+            Size = 0,
+            Files = new List<MapFile>
+            {
+                new MapFile { Name = mapName },
+            }
+        };
+
         /// <summary>
         /// Writes a minimal point shapefile whose "label" attribute contains the supplied values.
         /// Produces the .shp / .shx / .dbf triad that MapFileStorageService reads via Shapefile.OpenRead.
