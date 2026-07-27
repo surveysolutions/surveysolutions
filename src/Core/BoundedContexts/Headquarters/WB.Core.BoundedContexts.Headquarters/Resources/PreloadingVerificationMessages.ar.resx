@@ -256,4 +256,10 @@
     <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
   <value>لا يمكن تحميل إجابة السؤال بالاسم المتغير {0}، لأنه من نوع غير مدعوم. راجع المقالة الداعمة التالية https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type للحصول على تفاصيل حول ما يمكن تحميله في الإصدار الحالي.</value>
 </data>
+  <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+    <value>اسم متغير نطاق التدقيق الصوتي '{0}' غير صالح. يجب أن يشير إلى قسم أو مجموعة أو سجل موجود (الأسئلة والسجلات المسطحة (flat roster) غير مسموح بها).</value>
+  </data>
+  <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+    <value>لم يتم ترحيل التكليف لأنه يستخدم تدقيقًا صوتيًا انتقائيًا (نطاق التسجيل الصوتي)، والذي لا يمكن ترحيله تلقائيًا إلى إصدار جديد من الاستبيان. أعد إنشاء التكليف يدويًا وقم بتكوين نطاق التدقيق الصوتي مرة أخرى.</value>
+  </data>
 </root>

@@ -278,4 +278,10 @@
   <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
     <value>ცვლადის სახელით {0} კითხვაზე პასუხის წინასწარ ჩატვირთვა შეუძლებელია, რადგან ის დაუჭერელი ტიპისაა. დეტალებისთვის იხილეთ მხარდაჭერის სტატია https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type, სადაც აღწერილია, მიმდინარე ვერსიაში რის წინასწარ ჩატვირთვაა შესაძლებელი.</value>
   </data>
+  <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+    <value>აუდიო აუდიტის არეალის ცვლადის სახელი '{0}' არასწორია. ის უნდა მიუთითებდეს არსებულ სექციაზე, ჯგუფზე ან როსტერზე (კითხვები და ბრტყელი როსტერები (flat roster) დაუშვებელია).</value>
+  </data>
+  <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+    <value>დავალება არ გადავიდა, რადგან ის იყენებს შერჩევით აუდიო აუდიტს (აუდიოჩაწერის არეალი), რომლის ავტომატურად გადატანა კითხვარის ახალ ვერსიაზე შეუძლებელია. ხელახლა შექმენით დავალება ხელით და კვლავ დააკონფიგურირეთ აუდიო აუდიტის არეალი.</value>
+  </data>
 </root>

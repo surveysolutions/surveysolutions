@@ -885,7 +885,10 @@
     <value>la création par lot d'utilisateurs</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>Les détails des informations personnelles (facultatif) &lt;br&gt; seront visibles uniquement par les utilisateurs du siège</value>
+    <value>Les détails des informations personnelles</value>
+  </data>
+  <data name="PublicSectionDescription" xml:space="preserve">
+    <value>(facultatif, sera visible uniquement pour les utilisateurs authentifiés).</value>
   </data>
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
     <value>Date de création du compte de l'enquêteur</value>
@@ -1659,7 +1662,13 @@
     <value>Entretien réévalué avec succès</value>
   </data>
   <data name="CreateUser" xml:space="preserve">
-    <value>Créer un utilisateur</value>
+    <value>Créer un compte utilisateur</value>
+  </data>
+  <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+    <value>Accès à l'espace de travail</value>
+  </data>
+  <data name="CreateUser_RoleLabel" xml:space="preserve">
+    <value>Rôle de l'utilisateur</value>
   </data>
   <data name="GenerateRecoveryCodes" xml:space="preserve">
     <value>Générer des codes de récupération</value>
