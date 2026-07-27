@@ -168,4 +168,9 @@
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>正在搜索……</value>
   </data>
+
+
+  <data name="InfoPostFix" xml:space="preserve">
+    <value />
+  </data>
 </root>

@@ -1,8 +1,9 @@
-import Assignments from './Assignments'
-import Interviews from './Interviews'
 import * as toastr from 'toastr'
 import { getCsrfCookie } from '../../api/index'
 import { config } from '~/shared/config'
+
+const Assignments = () => import('./Assignments')
+const Interviews = () => import('./Interviews')
 
 const store = {
     state: {

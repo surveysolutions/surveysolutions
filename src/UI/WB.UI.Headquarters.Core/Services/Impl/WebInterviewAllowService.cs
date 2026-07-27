@@ -54,6 +54,10 @@ namespace WB.UI.Headquarters.Services.Impl
             {
                 if (this.prototypeService.IsPrototype(id))
                 {
+                    // Mark that access was granted via the prototype path so that downstream
+                    // filter steps (e.g. password verification) know they can skip all checks.
+                    if (contextAccessor.HttpContext != null)
+                        contextAccessor.HttpContext.Items[IWebInterviewAllowService.PrototypeAccessGrantedKey] = true;
                     return;
                 }
             }
@@ -63,6 +67,10 @@ namespace WB.UI.Headquarters.Services.Impl
             if (interview == null)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, 
                     Enumerator.Native.Resources.WebInterview.Error_NotFound);
+
+            // Cache the loaded interview so the filter can reuse it without a second DB round-trip.
+            if (contextAccessor.HttpContext != null)
+                contextAccessor.HttpContext.Items[IWebInterviewAllowService.CachedInterviewItemsKey] = interview;
 
             //finish page for anonymous for completed interview
             if ( (!this.authorizedUser.IsAuthenticated || this.authorizedUser.IsInterviewer) 
