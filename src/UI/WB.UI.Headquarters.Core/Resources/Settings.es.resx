@@ -525,4 +525,25 @@ Posibles razones:
   <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
     <value>Cuando está habilitado, los entrevistadores pueden completar y reabrir asignaciones desde sus tabletas (requiere que la configuración del supervisor esté habilitada)</value>
   </data>
+  <data name="AudioRecordingQuality" xml:space="preserve">
+    <value>Calidad de grabación de audio</value>
+  </data>
+  <data name="AudioRecordingQualityDescription" xml:space="preserve">
+    <value>Calidad de audio utilizada por la aplicación del entrevistador al grabar audio (auditoría de audio y preguntas de audio)</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono44kHz" xml:space="preserve">
+    <value>64 kbps, Mono, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve">
+    <value>64 kbps, Mono, 22.05 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono16kHz" xml:space="preserve">
+    <value>32 kbps, Mono, 16 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve">
+    <value>128 kbps, Estéreo, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
+    <value>128 kbps, Estéreo, 48 kHz</value>
+  </data>
 </root>

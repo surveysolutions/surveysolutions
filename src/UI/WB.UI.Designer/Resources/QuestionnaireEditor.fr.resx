@@ -616,6 +616,9 @@
   <data name="FindReplaceMatchingLines" xml:space="preserve">
     <value>Lignes correspondantes : {{count}}</value>
   </data>
+  <data name="FindReplaceCurrentMatch" xml:space="preserve">
+    <value>{{current}} / {{count}}</value>
+  </data>
   <data name="FindReplaceNext" xml:space="preserve">
     <value>Suivant</value>
   </data>
