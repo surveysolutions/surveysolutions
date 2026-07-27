@@ -124,7 +124,7 @@
     <value>Ceci est un instrument pour la conception d'enquête pour la plateforme CAPI de la Banque Mondiale, doté de fonctionnalité de collaboration et d'exportation vers PDF</value>
   </data>
   <data name="AppName" xml:space="preserve">
-    <value>Questionnaire Designer</value>
+    <value>Concepteur de questionnaire</value>
   </data>
   <data name="BackToLogin" xml:space="preserve">
     <value>Retour au login</value>

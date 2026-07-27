@@ -184,7 +184,7 @@
     <value>Atenţie!</value>
   </data>
   <data name="Backup_IndexTitle" xml:space="preserve">
-    <value>Index</value>
+    <value>Listă</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Anulare</value>
@@ -370,7 +370,7 @@
     <value>comentate</value>
   </data>
   <data name="InterviewDetails_DefaultTranslation" xml:space="preserve">
-    <value>original</value>
+    <value>Original</value>
   </data>
   <data name="InterviewDetails_EnabledButtonLabel" xml:space="preserve">
     <value>autorizate</value>
@@ -943,7 +943,7 @@
     <value>Dimensiune (biți)</value>
   </data>
   <data name="PackagesInfo_Title" xml:space="preserve">
-    <value>Index</value>
+    <value>Listă</value>
   </data>
   <data name="PackagesInfo_UploadDate" xml:space="preserve">
     <value>Data încărcării</value>
@@ -1009,7 +1009,10 @@
     <value>Supervizori</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>Detaliile cu informații personale (opțional) &lt;br&gt; vor fi vizibile numai pentru HQ</value>
+    <value>Detaliile cu informații personale</value>
+  </data>
+  <data name="PublicSectionDescription" xml:space="preserve">
+    <value>(opțional, va fi vizibil numai pentru utilizatorii autentificați).</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
     <value>{{name}} (ver. {{version}})</value>
@@ -1208,7 +1211,7 @@
     <value>Aplicație de autentificare</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>Profil</value>
+    <value>Contact</value>
   </data>
   <data name="AccountManage_Status2fa" xml:space="preserve">
     <value>Autentificare cu doi factori este</value>
@@ -1346,7 +1349,13 @@
     <value>Creați un administrator</value>
   </data>
   <data name="CreateUser" xml:space="preserve">
-    <value>Creați un utilizator</value>
+    <value>Creați un cont de utilizator</value>
+  </data>
+  <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+    <value>Acces la spațiul de lucru</value>
+  </data>
+  <data name="CreateUser_RoleLabel" xml:space="preserve">
+    <value>Rolul utilizatorului</value>
   </data>
   <data name="Diagnostics" xml:space="preserve">
     <value>Diagnostic</value>
@@ -1751,7 +1760,7 @@
     <value>Dacă acesta este ultimul utilizator din echipă conectat la hartă, atunci supervizorul echipei va pierde accesul la hartă.</value>
   </data>
   <data name="QuestionnaireVersionAndName" xml:space="preserve">
-    <value>[ver. {1}] {0}</value>
+    <value>[vers. {1}] {0}</value>
   </data>
   <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
     <value>Verificări critice</value>

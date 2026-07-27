@@ -282,4 +282,33 @@
   <data name="LastLoginDate" xml:space="preserve">
     <value>最后登录日期</value>
   </data>
+
+
+  <data name="Forum" xml:space="preserve">
+    <value>论坛</value>
+  </data>
+
+  <data name="LogoutText" xml:space="preserve">
+    <value>您已成功退出应用程序。</value>
+  </data>
+
+  <data name="LockedOut" xml:space="preserve">
+    <value>已锁定</value>
+  </data>
+
+  <data name="LockedOutText" xml:space="preserve">
+    <value>您的账户已被锁定。请联系管理员解锁您的账户</value>
+  </data>
+
+  <data name="PasswordEmailSent" xml:space="preserve">
+    <value>请检查您的电子邮件以重置密码。</value>
+  </data>
+
+  <data name="EmailChangeShouldBeConfirmed" xml:space="preserve">
+    <value>请按照发送到所提供电子邮件 ({0}) 的说明确认电子邮件更改。</value>
+  </data>
+
+  <data name="PendingEmailUpdate" xml:space="preserve">
+    <value>等待更新为 {0}</value>
+  </data>
 </root>

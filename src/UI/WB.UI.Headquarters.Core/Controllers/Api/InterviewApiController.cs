@@ -1,23 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.UI.Headquarters.Controllers.Api

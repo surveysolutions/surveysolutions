@@ -17,7 +17,9 @@
                                 :href="entry.item.data.url" :class="itemStatus(entry)">
                                 <h4>{{ $t("Diagnostics." + entry.name) }}</h4>
                                 <p>{{ entry.item.description }}</p>
-                                <div class="well" v-if="entry.item.exception">{{ entry.item.exception.Message }}</div>
+                                <div class="well" v-if="entry.item.exception">
+                                    {{ entry.item.exception.Message }}
+                                </div>
                             </a>
                         </ul>
                     </div>
@@ -79,7 +81,6 @@
 <script>
 
 import moment from 'moment'
-import * as signalR from '@microsoft/signalr'
 import { DateFormats } from '~/shared/helpers'
 
 export default {
@@ -127,6 +128,7 @@ export default {
         },
 
         async startSignalrDiag() {
+            const signalR = await import('@microsoft/signalr')
             this.pushSignalrMessage('Building connection to server using `/signalrdiag` url')
             const connection = new signalR.HubConnectionBuilder()
                 .withUrl(this.$config.basePath + 'signalrdiag')
@@ -171,14 +173,14 @@ export default {
 
 
         getResponseStatuses() {
-            let stusesToCheck = [200, 503, 502, 406, 401];
-            let self = this;
+            let stusesToCheck = [200, 503, 502, 406, 401]
+            let self = this
             stusesToCheck.forEach(status => {
                 this.$hq.ControlPanel.getServerResponseStatus(status).then(response => {
                     self.statusResponses.push(
                         {
                             requested: status,
-                            response: response
+                            response: response,
                         })
                 })
             })
