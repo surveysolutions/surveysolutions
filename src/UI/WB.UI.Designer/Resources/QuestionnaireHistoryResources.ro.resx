@@ -325,13 +325,13 @@
     <value>Traducerea {0} a fost ștearsă</value>
   </data>
   <data name="Translation_Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Originală</value>
   </data>
   <data name="Translation_Update" xml:space="preserve">
     <value>Traducerea {0} a fost actualizată</value>
   </data>
   <data name="UnknownUserName" xml:space="preserve">
-    <value>&lt;&lt;UNKNOWN&gt;&gt;</value>
+    <value>&lt;&lt;NECUNOSCUT&gt;&gt;</value>
   </data>
   <data name="UserName" xml:space="preserve">
     <value>Nume de utilizator</value>
@@ -353,5 +353,22 @@
   </data>
   <data name="Variable_Update" xml:space="preserve">
     <value>Variabila {0} a fost actualizată</value>
+  </data>
+
+
+  <data name="CriticalRule_Add" xml:space="preserve">
+    <value>Regula critică {0} a fost adăugată</value>
+  </data>
+
+  <data name="CriticalRule_Delete" xml:space="preserve">
+    <value>Regula critică {0} a fost ștearsă</value>
+  </data>
+
+  <data name="CriticalRule_Update" xml:space="preserve">
+    <value>Regula critică {0} a fost actualizată</value>
+  </data>
+
+  <data name="Translation_Replace" xml:space="preserve">
+    <value>Documentul a fost schimbat la traducerea {0}</value>
   </data>
 </root>
