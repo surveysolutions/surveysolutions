@@ -263,10 +263,10 @@
     <value>contenu</value>
   </data>
   <data name="SideBarMacroCounter" xml:space="preserve">
-    <value>{{count}} Macro:</value>
+    <value>{{count}} Macro :</value>
   </data>
   <data name="SideBarMacroCounter_plural" xml:space="preserve">
-    <value>{{count}} Macros:</value>
+    <value>{{count}} Macros :</value>
   </data>
   <data name="SideBarMacroDescription" xml:space="preserve">
     <value>description</value>
@@ -341,10 +341,10 @@
     <value>titre du scénario</value>
   </data>
   <data name="SideBarSectionsCounter" xml:space="preserve">
-    <value>{{count}} Section:</value>
+    <value>{{count}} Section :</value>
   </data>
   <data name="SideBarSectionsCounter_plural" xml:space="preserve">
-    <value>{{count}} Sections:</value>
+    <value>{{count}} Sections :</value>
   </data>
   <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
     <value>Télécharger xlsx</value>
@@ -615,6 +615,9 @@
   </data>
   <data name="FindReplaceMatchingLines" xml:space="preserve">
     <value>Lignes correspondantes : {{count}}</value>
+  </data>
+  <data name="FindReplaceCurrentMatch" xml:space="preserve">
+    <value>{{current}} / {{count}}</value>
   </data>
   <data name="FindReplaceNext" xml:space="preserve">
     <value>Suivant</value>
@@ -1133,6 +1136,9 @@ Les vues Table et Matrice sont uniquement prises en charge dans l'enquête Web, 
   <data name="HotkeysSearch" xml:space="preserve">
     <value>Rechercher des sous-sections et des questions dans la section</value>
   </data>
+  <data name="HotkeysTest" xml:space="preserve">
+    <value>Tester le questionnaire dans WebTester</value>
+  </data>
   <data name="MultipleDependencies" xml:space="preserve">
     <value>Une ou plusieurs questions/sous-sections dépendent de</value>
   </data>
@@ -1517,7 +1523,7 @@ Veuillez vérifier votre connexion réseau ou contacter votre support informatiq
     <value>Plat</value>
   </data>
   <data name="RosterDisplayMode_Table" xml:space="preserve">
-    <value>Table</value>
+    <value>Tableau</value>
   </data>
   <data name="RosterDisplayMode_Matrix" xml:space="preserve">
     <value>Matrice</value>
@@ -1562,7 +1568,7 @@ Veuillez vérifier votre connexion réseau ou contacter votre support informatiq
     <value>Réessayer l'exportation en PDF</value>
   </data>
   <data name="Translation_Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Originale</value>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>Aperçu de la révision #{{revision}}</value>

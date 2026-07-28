@@ -249,4 +249,61 @@
   <data name="UserNameFieldName" xml:space="preserve">
     <value>Emri i përdoruesit</value>
   </data>
+
+
+  <data name="AllowRelinkTablet" xml:space="preserve">
+    <value>Lejo rilidhjen me një pajisje tjetër me humbjen e të dhënave në pajisjen origjinale.</value>
+  </data>
+
+  <data name="VerificationCodeFieldName" xml:space="preserve">
+    <value>Kodi i verifikimit</value>
+  </data>
+
+  <data name="RestrictedAccountMessage" xml:space="preserve">
+    <value>Kjo llogari është e kufizuar për të kryer këtë veprim</value>
+  </data>
+
+  <data name="RestrictedAccount" xml:space="preserve">
+    <value>Kjo llogari është e kufizuar</value>
+  </data>
+
+  <data name="WorkspaceRequired" xml:space="preserve">
+    <value>Hapësira e punës është e detyrueshme</value>
+  </data>
+
+  <data name="WorkspaceMissing" xml:space="preserve">
+    <value>Hapësira e punës nuk u gjet</value>
+  </data>
+
+  <data name="UserRoleRequired" xml:space="preserve">
+    <value>Roli i përdoruesit është i detyrueshëm</value>
+  </data>
+
+  <data name="PasswordRequiresDigit" xml:space="preserve">
+      <value>Fjalëkalimet duhet të kenë të paktën një shifër ('0'-'9').</value>
+  </data>
+
+  <data name="PasswordRequiresLower" xml:space="preserve">
+      <value>Fjalëkalimet duhet të kenë të paktën një shkronjë të vogël ('a'-'z').</value>
+  </data>
+
+  <data name="PasswordRequiresNonAlphanumeric" xml:space="preserve">
+      <value>Fjalëkalimet duhet të kenë të paktën një karakter joalfanumerik.</value>
+  </data>
+
+  <data name="PasswordRequiresUniqueChars" xml:space="preserve">
+      <value>Fjalëkalimet duhet të përdorin të paktën {0} karaktere të ndryshme.</value>
+  </data>
+
+  <data name="PasswordRequiresUpper" xml:space="preserve">
+      <value>Fjalëkalimet duhet të kenë të paktën një shkronjë të madhe ('A'-'Z').</value>
+  </data>
+
+  <data name="PasswordTooShort" xml:space="preserve">
+      <value>Fjalëkalimet duhet të kenë të paktën {0} karaktere.</value>
+  </data>
+
+  <data name="PasswordChangeRequired" xml:space="preserve">
+    <value>Fjalëkalimi juaj është rivendosur. Duhet ta ndryshoni për të hyrë në sajt.</value>
+  </data>
 </root>
