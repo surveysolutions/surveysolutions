@@ -205,7 +205,7 @@
     <value>เว็บไซต์ Survey Solutions Supervisor อยู่ระหว่างการบำรุงรักษา ขออภัยในความไม่สะดวก</value>
   </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
-    <value>Dashboard</value>
+    <value>แดชบอร์ด</value>
   </data>
   <data name="MenuItem_Title_Login" xml:space="preserve">
     <value>เข้าสู่ระบบ</value>
@@ -322,7 +322,7 @@
     <value>การ Synchronize เสร็จสมบูรณ์</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>งานที่ได้รับมอบหมายเสร็จสมบูรณ์</value>
+    <value>การสัมภาษณ์ที่เสร็จสมบูรณ์</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} จาก {1} {2} เสร็จแล้ว</value>
@@ -437,5 +437,838 @@
   </data>
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>การตอบกลับที่ได้รับดูเหมือนไม่มาจากเซิร์ฟเวอร์ Survey Solutions โดยปกติสถานะนี้เกิดจากพร็อกซีเครือข่าย ไฟร์วอลล์ หรือเกตเวย์ความปลอดภัยที่ดักจับการเชื่อมต่อ กรุณาตรวจสอบการเชื่อมต่อเครือข่ายหรือ ติดต่อฝ่ายไอทีของคุณ</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment" xml:space="preserve">
+    <value>เสร็จสิ้น</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
+    <value>เสร็จสิ้นงานที่มอบหมาย</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
+    <value>คุณแน่ใจหรือไม่ว่าคุณได้นับหน่วยที่มีสิทธิ์ทั้งหมดแล้ว?</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
+    <value>เปิดงานที่มอบหมายอีกครั้ง</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>งานที่มอบหมายจะถูกตั้งค่ากลับเป็นสถานะเปิด และผู้สัมภาษณ์จะสามารถสร้างการสัมภาษณ์ใหม่ได้</value>
+  </data>
+  <data name="Dashboard_CloseAssignment" xml:space="preserve">
+    <value>อนุมัติ</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
+    <value>ปิดงานที่มอบหมาย</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
+    <value>ผู้สัมภาษณ์ที่ทำงานแบบออฟไลน์ยังคงสามารถเก็บข้อมูลได้จนกว่าจะซิงโครไนซ์ การสัมภาษณ์ดังกล่าวยังคงได้รับการยอมรับ</value>
+  </data>
+  <data name="Dashboard_Assignment_Comment" xml:space="preserve">
+    <value>ความคิดเห็น (ไม่บังคับ)</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
+    <value>สถานะ: เสร็จสิ้น</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
+    <value>สถานะ: ได้รับอนุมัติ</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
+    <value>สถานะ: เปิด</value>
+  </data>
+
+
+  <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
+    <value>การสัมภาษณ์ {0} รายการ</value>
+  </data>
+
+  <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
+    <value>สร้างการสัมภาษณ์แล้ว: {0}</value>
+  </data>
+
+  <data name="Dashboard_WebInterviewsLinkText" xml:space="preserve">
+    <value>การสัมภาษณ์เว็บ ({0})</value>
+  </data>
+
+  <data name="Dashboard_Start" xml:space="preserve">
+    <value>เริ่ม</value>
+  </data>
+
+  <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
+    <value>สร้างใหม่</value>
+  </data>
+
+  <data name="Dashboard_StartNewInterview" xml:space="preserve">
+    <value>เริ่มการสัมภาษณ์ใหม่</value>
+  </data>
+
+  <data name="Maps_NoMapsText" xml:space="preserve">
+    <value>ซิงโครไนซ์เพื่อรับแผนที่
+หรือติดต่อหัวหน้างานของคุณ
+เพื่อขอคำแนะนำเพิ่มเติม</value>
+  </data>
+
+  <data name="Dashboard_Title" xml:space="preserve">
+    <value>การสัมภาษณ์ {0} รายการสำหรับ {1}</value>
+  </data>
+
+  <data name="Dashboard_RefreshWorkspaces" xml:space="preserve">
+    <value>กำลังรีเฟรชพื้นที่ทำงาน</value>
+  </data>
+
+  <data name="Dashboard_RefreshWorkspacesFinished" xml:space="preserve">
+    <value>อัปเดตรายการพื้นที่ทำงานแล้ว</value>
+  </data>
+
+  <data name="Dashboard_RefreshWorkspacesError" xml:space="preserve">
+    <value>เกิดข้อผิดพลาดในการรับรายการพื้นที่ทำงาน โปรดติดต่อผู้ดูแลระบบของคุณ </value>
+  </data>
+
+  <data name="Maps_Title" xml:space="preserve">
+    <value>แผนที่</value>
+  </data>
+
+  <data name="HostUnreachable" xml:space="preserve">
+    <value>ไม่มีการเข้าถึงอินเทอร์เน็ตไปยังเซิร์ฟเวอร์ของคุณ ตรวจสอบที่อยู่เซิร์ฟเวอร์และ(หรือ)การตั้งค่าเครือข่าย</value>
+  </data>
+
+  <data name="InvalidEndpointShort" xml:space="preserve">
+    <value>ที่อยู่ไม่ถูกต้อง</value>
+  </data>
+
+  <data name="BluetoothPermissionRequired" xml:space="preserve">
+    <value>ต้องมีสิทธิ์ Bluetooth สำหรับการซิงโครไนซ์แบบออฟไลน์</value>
+  </data>
+
+  <data name="NearbyPermissionRequired" xml:space="preserve">
+    <value>ต้องมีสิทธิ์อุปกรณ์ Wi-Fi ใกล้เคียงสำหรับการซิงโครไนซ์แบบออฟไลน์</value>
+  </data>
+
+  <data name="LocationPermissionRequired" xml:space="preserve">
+    <value>ต้องมีสิทธิ์ตำแหน่งที่ตั้งสำหรับการซิงโครไนซ์แบบออฟไลน์</value>
+  </data>
+
+  <data name="Synchronization_Done" xml:space="preserve">
+    <value>เสร็จสิ้น</value>
+  </data>
+
+  <data name="Synchronization_Download_CalendarEvents_Title" xml:space="preserve">
+    <value>กำลังอัปเดตเหตุการณ์ในปฏิทิน</value>
+  </data>
+
+  <data name="Synchronization_Update_Interviews_Title" xml:space="preserve">
+    <value>กำลังอัปเดตการสัมภาษณ์ในเครื่องด้วยการเปลี่ยนแปลงจากเซิร์ฟเวอร์</value>
+  </data>
+
+  <data name="Synchronization_Fail_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>ดาวน์โหลดการสัมภาษณ์บางส่วนแล้ว {0} จาก {1} รายการ</value>
+  </data>
+
+  <data name="Synchronization_PartialInterviews" xml:space="preserve">
+    <value>การเปลี่ยนแปลงการสัมภาษณ์</value>
+  </data>
+
+  <data name="Synchronization_LinkToErrors" xml:space="preserve">
+    <value>สามารถดูข้อมูลเพิ่มเติมเกี่ยวกับข้อผิดพลาดในการซิงโครไนซ์ได้ที่&lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems"&gt;เว็บไซต์สนับสนุน&lt;/a&gt;</value>
+  </data>
+
+  <data name="UpdatingQuestionnaires" xml:space="preserve">
+    <value>กำลังอัปเดตแบบสอบถาม</value>
+  </data>
+
+  <data name="TransferringAssignments" xml:space="preserve">
+    <value>กำลังถ่ายโอนการมอบหมาย</value>
+  </data>
+
+  <data name="TransferringCalendarEvents" xml:space="preserve">
+    <value>กำลังถ่ายโอนเหตุการณ์ในปฏิทิน</value>
+  </data>
+
+  <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
+    <value>ซิงโครไนซ์แผนที่ทั้งหมดแล้ว</value>
+  </data>
+
+  <data name="Synchronization_Success_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>อัปเดตการสัมภาษณ์แล้ว {0} รายการ</value>
+  </data>
+
+  <data name="Synchronization_Success_State_PartialUploadInterviews_Format" xml:space="preserve">
+    <value>อัปโหลดการสัมภาษณ์บางส่วนแล้ว {0} รายการ</value>
+  </data>
+
+  <data name="Synchronization_DoneWithErrors_Title" xml:space="preserve">
+    <value>การซิงโครไนซ์เสร็จสิ้นโดยมีข้อผิดพลาด</value>
+  </data>
+
+  <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
+    <value>เหตุการณ์ในปฏิทิน</value>
+  </data>
+
+  <data name="Synchronization_Receiving_Title_Format" xml:space="preserve">
+    <value>กำลังรับ {0}</value>
+  </data>
+
+  <data name="Synchronization_PasswordChangeRequired" xml:space="preserve">
+    <value>รหัสผ่านของคุณถูกรีเซ็ตแล้ว คุณต้องเปลี่ยนรหัสผ่านเพื่อเข้าถึงไซต์</value>
+  </data>
+
+  <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
+    <value>ผู้ใช้ไม่ได้อยู่ในทีมของหัวหน้างานนี้อีกต่อไป โปรดติดต่อสำนักงานใหญ่ของคุณเพื่อดูรายละเอียด</value>
+  </data>
+
+  <data name="YouChangeYouPasswordTryToLoginAgainWithNewPassword" xml:space="preserve">
+    <value>คุณเปลี่ยนรหัสผ่านปัจจุบันแล้ว โปรดลองเข้าสู่ระบบอีกครั้งด้วยรหัสผ่านใหม่</value>
+  </data>
+
+  <data name="HeadquartersVersion" xml:space="preserve">
+    <value>เวอร์ชันที่สำนักงานใหญ่รองรับ: {0}</value>
+  </data>
+
+  <data name="SupervisorVersion" xml:space="preserve">
+    <value>เวอร์ชันหัวหน้างาน: {0}</value>
+  </data>
+
+  <data name="InterviewerVersion" xml:space="preserve">
+    <value>เวอร์ชันผู้สัมภาษณ์: {0}</value>
+  </data>
+
+  <data name="Synchronization_SupervisorShouldDoOnlineSync_Title" xml:space="preserve">
+    <value>แอปพลิเคชันหัวหน้างานจำเป็นต้องซิงโครไนซ์</value>
+  </data>
+
+  <data name="Synchronization_SupervisorShouldDoOnlineSync" xml:space="preserve">
+    <value>หัวหน้างานควรมีการเปลี่ยนแปลงล่าสุดจากสำนักงานใหญ่เสมอ ดังนั้นจึงควรซิงโครไนซ์เป็นลำดับสุดท้ายในทีมก่อนที่การซิงโครไนซ์แบบออฟไลน์จะพร้อมใช้งาน</value>
+  </data>
+
+  <data name="MenuItem_Title_Return" xml:space="preserve">
+    <value>ส่งกลับ</value>
+  </data>
+
+  <data name="MenuItem_Title_Map_Dashboard" xml:space="preserve">
+    <value>แดชบอร์ดแผนที่</value>
+  </data>
+
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>ภาษา</value>
+  </data>
+
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>ต้นฉบับ</value>
+  </data>
+
+  <data name="MenuItem_Title_Search" xml:space="preserve">
+    <value>ค้นหา</value>
+  </data>
+
+  <data name="MenuItem_Title_Workspaces" xml:space="preserve">
+    <value>พื้นที่ทำงาน</value>
+  </data>
+
+  <data name="MenuItem_Title_RefreshWorkspaces" xml:space="preserve">
+    <value>รีเฟรชพื้นที่ทำงาน</value>
+  </data>
+
+  <data name="Diagnostics_Backup_Description" xml:space="preserve">
+    <value>บันทึกข้อมูลที่เกี่ยวข้องทั้งหมดลงในไฟล์บนอุปกรณ์นี้</value>
+  </data>
+
+  <data name="Diagnostics_Backup_Title" xml:space="preserve">
+    <value>สร้างแพ็กเกจสนับสนุน</value>
+  </data>
+
+  <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
+    <value>เราจะตรวจสอบเวอร์ชันใหม่ของแอปพลิเคชันผู้สัมภาษณ์บนเซิร์ฟเวอร์</value>
+  </data>
+
+  <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
+    <value>เวอร์ชัน: {0} ตรวจสอบเวอร์ชันใหม่</value>
+  </data>
+
+  <data name="Diagnostics_Restore_Description" xml:space="preserve">
+    <value>การคืนค่าข้อมูลที่บันทึกไว้จะทับแทนการมอบหมายปัจจุบันทั้งหมดบนอุปกรณ์นี้</value>
+  </data>
+
+  <data name="Diagnostics_Restore_Title" xml:space="preserve">
+    <value>คืนค่า</value>
+  </data>
+
+  <data name="Diagnostics_Send_Description" xml:space="preserve">
+    <value>ข้อมูลแอปพลิเคชันและการสัมภาษณ์ทั้งหมดจะถูกรวบรวมเป็นไฟล์เก็บถาวรเดียว อาจใช้เวลาถึง 10 นาที</value>
+  </data>
+
+  <data name="Diagnostics_Send_Title" xml:space="preserve">
+    <value>ส่งข้อมูลแท็บเล็ตทั้งหมดไปยังสำนักงานใหญ่เพื่อแก้ไขปัญหา</value>
+  </data>
+
+  <data name="Diagnostics_Share_Description" xml:space="preserve">
+    <value>ข้อมูลทั้งหมดด้านล่างจะถูกแชร์เป็นข้อความธรรมดา สามารถส่งทางอีเมล, Google Hangouts หรือแอปส่งข้อความอื่น ๆ</value>
+  </data>
+
+  <data name="Diagnostics_Share_Title" xml:space="preserve">
+    <value>แชร์ข้อมูลทางเทคนิคทั้งหมด</value>
+  </data>
+
+  <data name="Diagnostics_Title" xml:space="preserve">
+    <value>การวินิจฉัย</value>
+  </data>
+
+  <data name="Diagnostics_ServerUrl" xml:space="preserve">
+    <value>URL เซิร์ฟเวอร์: </value>
+  </data>
+
+  <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
+    <value>การวินิจฉัย</value>
+  </data>
+
+  <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
+    <value>การซิงโครไนซ์แผนที่</value>
+  </data>
+
+  <data name="MenuItem_Title_Maps" xml:space="preserve">
+    <value>แผนที่</value>
+  </data>
+
+  <data name="Share_to_Title" xml:space="preserve">
+    <value>แชร์ข้อมูลไปยัง..</value>
+  </data>
+
+  <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
+    <value>ทดสอบคุณภาพและความเร็วของการเชื่อมต่อกับเซิร์ฟเวอร์</value>
+  </data>
+
+  <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
+    <value>ทดสอบแบนด์วิดท์ไปยังเซิร์ฟเวอร์</value>
+  </data>
+
+  <data name="Diagnostics_Delete" xml:space="preserve">
+    <value>ลบ</value>
+  </data>
+
+  <data name="Diagnostics_Send" xml:space="preserve">
+    <value>ส่ง</value>
+  </data>
+
+  <data name="Diagnostics_TabletInformationReady_Title" xml:space="preserve">
+    <value>ไฟล์เก็บข้อมูลพร้อมแล้ว</value>
+  </data>
+
+  <data name="Diagnostics_TabletInformationScope_Title" xml:space="preserve">
+    <value>ขอบเขต:</value>
+  </data>
+
+  <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
+    <value>เวลาที่สร้าง:</value>
+  </data>
+
+  <data name="Diagnostics_DownloadingPleaseWait" xml:space="preserve">
+    <value>กำลังดาวน์โหลด โปรดรอ...</value>
+  </data>
+
+  <data name="Diagnostics_NewVersionAvaliable_Title" xml:space="preserve">
+    <value>มีเวอร์ชันใหม่ คุณต้องการดาวน์โหลดและอัปเดตแอปพลิเคชันหรือไม่</value>
+  </data>
+
+  <data name="Diagnostics_NewVersionNumber_Title" xml:space="preserve">
+    <value>หมายเลขเวอร์ชัน:</value>
+  </data>
+
+  <data name="Diagnostics_No" xml:space="preserve">
+    <value>ไม่</value>
+  </data>
+
+  <data name="Diagnostics_Update" xml:space="preserve">
+    <value>อัปเดต</value>
+  </data>
+
+  <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
+    <value>คุณมีแอปพลิเคชันเวอร์ชันล่าสุดแล้ว</value>
+  </data>
+
+  <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
+    <value>เวลาที่บันทึก:</value>
+  </data>
+
+  <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
+    <value>ตำแหน่งไฟล์สำรอง:</value>
+  </data>
+
+  <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
+    <value>บันทึกข้อมูลแล้ว</value>
+  </data>
+
+  <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
+    <value>ขอบเขต:</value>
+  </data>
+
+  <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
+    <value>พบข้อมูลที่บันทึกไว้:</value>
+  </data>
+
+  <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
+    <value>การเชื่อมต่อเป็นปกติ</value>
+  </data>
+
+  <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
+    <value>ประเภทการเชื่อมต่อ:</value>
+  </data>
+
+  <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
+    <value>Ping:</value>
+  </data>
+
+  <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
+    <value>ชื่อเครือข่าย:</value>
+  </data>
+
+  <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;ไม่มีการเชื่อมต่ออินเทอร์เน็ต&lt;/font&gt;</value>
+  </data>
+
+  <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
+    <value>การเชื่อมต่อ&lt;font color="red"&gt;ไม่ดี&lt;/font&gt;</value>
+  </data>
+
+  <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;ไม่มีการเชื่อมต่อกับเซิร์ฟเวอร์&lt;/font&gt;</value>
+  </data>
+
+  <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
+    <value>โฟลเดอร์ '{0}' ว่างเปล่า โปรดใส่ข้อมูลสำรองที่คุณต้องการคืนค่าไว้ในโฟลเดอร์</value>
+  </data>
+
+  <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
+    <value>ปลายทางการซิงโครไนซ์ '{0}' แตกต่างจากที่ระบุในการตั้งค่า ('{1}') ต้องการโหลด URL จากการตั้งค่าหรือไม่</value>
+  </data>
+
+  <data name="Prefs_EventChunkSizeSummary" xml:space="preserve">
+    <value>จำนวนเหตุการณ์ที่สามารถอ่านได้ด้วยคิวรีเดียว</value>
+  </data>
+
+  <data name="Prefs_EventChunkSizeTitle" xml:space="preserve">
+    <value>ขนาดชุดเหตุการณ์</value>
+  </data>
+
+  <data name="Synchronization_Download_AttachmentsCleanup" xml:space="preserve">
+    <value>กำลังลบไฟล์แนบที่ล้าสมัย</value>
+  </data>
+
+  <data name="Synchronization_Check_Obsolete_Questionnaires" xml:space="preserve">
+    <value>ตรวจหาแบบสอบถามที่ล้าสมัย</value>
+  </data>
+
+  <data name="Synchronization_Of_AssignmentsFormat" xml:space="preserve">
+    <value>กำลังซิงโครไนซ์การมอบหมาย {0} จาก {1} รายการ</value>
+  </data>
+
+  <data name="AssignmentsSynchronization" xml:space="preserve">
+    <value>กำลังซิงโครไนซ์การมอบหมาย</value>
+  </data>
+
+  <data name="Synchronization_Check_Obsolete_Questionnaires_Description" xml:space="preserve">
+    <value>กำลังลบแบบสอบถาม {0} จาก {1}</value>
+  </data>
+
+  <data name="Synchronization_DownloadApplication" xml:space="preserve">
+    <value>กำลังดาวน์โหลดการอัปเดตแอปพลิเคชัน</value>
+  </data>
+
+  <data name="Synchronization_UploadingApplication" xml:space="preserve">
+    <value>กำลังส่งการอัปเดตแอปพลิเคชัน</value>
+  </data>
+
+  <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
+    <value>ได้รับ {0} จาก {1} ที่ {2} ({3}%)</value>
+  </data>
+
+  <data name="Synchronization_SendingApplication_Description" xml:space="preserve">
+    <value>ส่งแล้ว {0} จาก {1} ที่ {2} ({3}%)</value>
+  </data>
+
+  <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
+    <value>กำลังตรวจสอบการอัปเดตแอปพลิเคชัน</value>
+  </data>
+
+  <data name="Interview_Loading" xml:space="preserve">
+    <value>กำลังโหลดข้อมูลการสัมภาษณ์</value>
+  </data>
+
+  <data name="Interview_Loading_Description" xml:space="preserve">
+    <value>การสัมภาษณ์จะเริ่มในไม่ช้า</value>
+  </data>
+
+  <data name="Interview_Creating" xml:space="preserve">
+    <value>กำลังสร้างการสัมภาษณ์</value>
+  </data>
+
+  <data name="Interview_Creating_Description" xml:space="preserve">
+    <value>อาจใช้เวลาสองสามนาที 
+อย่าออกจากแอปพลิเคชันนี้</value>
+  </data>
+
+  <data name="Interview_Loading_With_Percents" xml:space="preserve">
+    <value>กำลังโหลดข้อมูลการสัมภาษณ์   {0}%</value>
+  </data>
+
+  <data name="Synchronization_Fail_State_FailedToProcess_Format" xml:space="preserve">
+    <value>การสัมภาษณ์ {0} รายการซิงโครไนซ์ไม่สำเร็จ</value>
+  </data>
+
+  <data name="FailedToLoadInterview" xml:space="preserve">
+    <value>ไม่สามารถเปิดการสัมภาษณ์ได้</value>
+  </data>
+
+  <data name="FailedToLoadInterviewDescription" xml:space="preserve">
+    <value>กรณีการสัมภาษณ์ไม่ถูกต้องและไม่สามารถเปิดได้ โปรดติดต่อฝ่ายสนับสนุนหรือลองซิงโครไนซ์เพื่อรีเฟรชกรณี</value>
+  </data>
+
+  <data name="UnacceptableSSLCertificate" xml:space="preserve">
+    <value>ไม่สามารถตรวจสอบใบรับรองสำหรับ URL เป้าหมายได้ โปรดตรวจสอบว่าที่อยู่เว็บไซต์สำนักงานใหญ่ถูกต้องและอุปกรณ์ของคุณมีวันที่และเวลาปัจจุบันที่ถูกต้อง</value>
+  </data>
+
+  <data name="InterviewerFromDifferentTeam" xml:space="preserve">
+    <value>ผู้สัมภาษณ์เป็นส่วนหนึ่งของทีมอื่น โปรดซิงโครไนซ์กับสำนักงานใหญ่</value>
+  </data>
+
+  <data name="Synchronization_DownloadingLogo" xml:space="preserve">
+    <value>กำลังดาวน์โหลดโลโก้</value>
+  </data>
+
+  <data name="Synchronization_UploadingLogo" xml:space="preserve">
+    <value>กำลังอัปโหลดโลโก้</value>
+  </data>
+
+  <data name="Synchronization_UploadAuditLog" xml:space="preserve">
+    <value>อัปโหลดข้อมูลการตรวจสอบ</value>
+  </data>
+
+  <data name="Synchronization_UploadGeoTracking" xml:space="preserve">
+    <value>อัปโหลดข้อมูลการติดตามภูมิศาสตร์</value>
+  </data>
+
+  <data name="Synchronization_RemoveObsoleteGeoTracking" xml:space="preserve">
+    <value>ลบข้อมูลการติดตามภูมิศาสตร์ที่ล้าสมัย</value>
+  </data>
+
+  <data name="Synchronization_ReceivingAuditLog" xml:space="preserve">
+    <value>กำลังรับข้อมูลการตรวจสอบ</value>
+  </data>
+
+  <data name="Dashboard_CreateNewTabText" xml:space="preserve">
+    <value>สร้างการสัมภาษณ์ใหม่โดยใช้แม่แบบ</value>
+  </data>
+
+  <data name="Dashboard_StartedTabText" xml:space="preserve">
+    <value>การสัมภาษณ์ที่เริ่มแล้วแต่ยังไม่เสร็จสมบูรณ์
+คุณต้องทำให้เสร็จเพื่อให้ซิงโครไนซ์ได้</value>
+  </data>
+
+  <data name="Dashboard_RejectedTabText" xml:space="preserve">
+    <value>การสัมภาษณ์ที่หัวหน้างานปฏิเสธ
+โปรดแก้ไขปัญหาที่ระบุไว้บนหน้าปกและส่งกลับไปยังหัวหน้างาน</value>
+  </data>
+
+  <data name="Dashboard_CompletedTabText" xml:space="preserve">
+    <value>การสัมภาษณ์ที่เสร็จสมบูรณ์แล้ว จะถูกอัปโหลดระหว่าง
+การซิงโครไนซ์ครั้งถัดไปของคุณ</value>
+  </data>
+
+  <data name="Dashboard_WebInterviewTabText" xml:space="preserve">
+    <value>การสัมภาษณ์ในโหมดการสัมภาษณ์เว็บ จะถูกลบระหว่างการซิงโครไนซ์เมื่อผู้ตอบทำการสัมภาษณ์เว็บเสร็จสมบูรณ์</value>
+  </data>
+
+  <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
+    <value>คุณสามารถสร้างการสัมภาษณ์ใหม่โดยใช้การมอบหมาย</value>
+  </data>
+
+  <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
+    <value>ต้องเก็บรวบรวม: การสัมภาษณ์ {0} รายการ</value>
+    <comment>{0} - number of interviews created
+    {1} - number of interviewer to be created by assignment</comment>
+  </data>
+
+  <data name="FailedToCreateInterview" xml:space="preserve">
+    <value>ไม่สามารถสร้างการสัมภาษณ์ได้ เหตุผล: {0}</value>
+  </data>
+
+  <data name="Dashboard_AssignmentCard_SubTitleSingleInterivew" xml:space="preserve">
+    <value>การมอบหมายการสัมภาษณ์เดี่ยว</value>
+  </data>
+
+  <data name="Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat" xml:space="preserve">
+    <value>ต้องเก็บรวบรวม: ไม่จำกัด</value>
+    <comment>{0} - number of interviews created</comment>
+  </data>
+
+  <data name="Dashboard_Open" xml:space="preserve">
+    <value>เปิด</value>
+  </data>
+
+  <data name="Dashboard_ViewIssues" xml:space="preserve">
+    <value>ดูปัญหา</value>
+  </data>
+
+  <data name="Dashboard_Reopen" xml:space="preserve">
+    <value>เปิดใหม่</value>
+  </data>
+
+  <data name="Dashboard_ShowLocation" xml:space="preserve">
+    <value>แสดงตำแหน่ง</value>
+  </data>
+
+  <data name="Dashboard_ShowAssignmentMap" xml:space="preserve">
+    <value>แสดงพื้นที่เป้าหมาย</value>
+  </data>
+
+  <data name="Dashboard_Discard" xml:space="preserve">
+    <value>ละทิ้ง</value>
+  </data>
+
+  <data name="Dashboard_AddCalendarEvent" xml:space="preserve">
+    <value>เพิ่มเหตุการณ์ในปฏิทิน</value>
+  </data>
+
+  <data name="Dashboard_EditCalendarEvent" xml:space="preserve">
+    <value>แก้ไขเหตุการณ์ในปฏิทิน</value>
+  </data>
+
+  <data name="Dashboard_RemoveCalendarEvent" xml:space="preserve">
+    <value>ลบเหตุการณ์ในปฏิทิน</value>
+  </data>
+
+  <data name="Dashboard_ShowCalendarEvent" xml:space="preserve">
+    <value>การติดต่อถัดไป: {0}</value>
+  </data>
+
+  <data name="Dashboard_PastDateCalendarEvent" xml:space="preserve">
+    <value>วันที่ที่เลือกอยู่ในอดีต</value>
+  </data>
+
+  <data name="Dashboard_PastTimeCalendarEvent" xml:space="preserve">
+    <value>เวลาที่เลือกอยู่ในอดีต</value>
+  </data>
+
+  <data name="Dashboard_Interview_QuestionsAnsweredFormat" xml:space="preserve">
+    <value>ตอบคำถามแล้ว {0} ข้อ</value>
+  </data>
+
+  <data name="Dashboard_Interview_AssignmentLabelFormat" xml:space="preserve">
+    <value>การมอบหมาย #{0}</value>
+    <comment>{0} - is an assignment id</comment>
+  </data>
+
+  <data name="Dashboard_No_InterviewKey" xml:space="preserve">
+    <value>ไม่มีรหัสการสัมภาษณ์</value>
+  </data>
+
+  <data name="Dashboard_CensusAssignment" xml:space="preserve">
+    <value>สำมะโน</value>
+  </data>
+
+  <data name="Dashboard_CantOpenCawi" xml:space="preserve">
+    <value>คุณไม่สามารถเปิดการสัมภาษณ์ในโหมด CAWI ได้ จะถูกส่งไปยังสำนักงานใหญ่หลังการซิงโครไนซ์</value>
+  </data>
+  
+  <data name="Dashboard_CawiLabel" xml:space="preserve">
+    <value>{0} (CAWI)</value>
+  </data>
+
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
+    <value>กำลังตรวจสอบแผนที่บนเซิร์ฟเวอร์</value>
+  </data>
+
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
+    <value>กำลังจัดการแผนที่ {0}, {1} จาก {2}
+ดาวน์โหลดแล้ว {3}%</value>
+  </data>
+
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
+    <value>การซิงโครไนซ์แผนที่เสร็จสมบูรณ์</value>
+  </data>
+
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" xml:space="preserve">
+    <value>ข้อผิดพลาดในการซิงโครไนซ์แผนที่</value>
+  </data>
+
+  <data name="Dashboard_SearchResult" xml:space="preserve">
+    <value>พบองค์ประกอบ {0} รายการ</value>
+  </data>
+
+  <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
+    <value>ไม่พบอะไร</value>
+  </data>
+
+  <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
+    <value>ทำการค้นหาเพื่อแสดงผลลัพธ์</value>
+  </data>
+
+  <data name="Dashboard_Searching" xml:space="preserve">
+    <value>กำลังค้นหา...</value>
+  </data>
+
+  <data name="Dashboard_SearchWatermark" xml:space="preserve">
+    <value>ป้อนข้อความเพื่อค้นหา</value>
+  </data>
+
+  <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
+    <value>ออกจากการค้นหา</value>
+  </data>
+
+  <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
+    <value>ตรวจหาการสัมภาษณ์ที่ล้าสมัย</value>
+  </data>
+
+  <data name="Dashboard_Assign" xml:space="preserve">
+    <value>มอบหมาย</value>
+  </data>
+
+  <data name="Synchronization_Of_Interviewers" xml:space="preserve">
+    <value>การซิงโครไนซ์ผู้สัมภาษณ์</value>
+  </data>
+
+  <data name="Synchronization_Of_Supervisor_details" xml:space="preserve">
+    <value>การซิงโครไนซ์รายละเอียดหัวหน้างาน</value>
+  </data>
+
+  <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
+    <value>กำลังซิงโครไนซ์ผู้สัมภาษณ์ {0} จาก {1} คน</value>
+  </data>
+
+  <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
+    <value>อนุญาตให้ซิงโครไนซ์กับสำนักงานใหญ่</value>
+  </data>
+
+  <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
+    <value>ปิดใช้งานการตั้งค่านี้หากคุณต้องการซิงโครไนซ์กับแอปพลิเคชันหัวหน้างานบนมือถือเท่านั้น หลังจากซิงโครไนซ์กับแอปหัวหน้างานสำเร็จครั้งแรกแล้ว จะไม่สามารถเปิดใช้งานการตั้งค่านี้กลับได้</value>
+  </data>
+
+  <data name="Prefs_AllowSyncWithHq_Summary_Disabled" xml:space="preserve">
+    <value>ไม่สามารถซิงโครไนซ์กับสำนักงานใหญ่ได้เมื่อมีการซิงโครไนซ์กับแอปพลิเคชันหัวหน้างานสำเร็จอย่างน้อยหนึ่งครั้งแล้ว</value>
+  </data>
+
+  <data name="DashboardItem_Responsible" xml:space="preserve">
+    <value>ผู้รับผิดชอบ: {0}</value>
+  </data>
+
+  <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
+    <value>ถูกสำนักงานใหญ่ปฏิเสธ : {0}</value>
+  </data>
+
+  <data name="DashboardItem_ApprovedBySupervisor" xml:space="preserve">
+    <value>อนุมัติโดยหัวหน้างาน: {0}</value>
+  </data>
+
+  <data name="FinishInstallation_QrBarcodeReaderErrorMessage" xml:space="preserve">
+    <value>เกิดข้อผิดพลาดขณะสแกน</value>
+  </data>
+
+  <data name="SelectResponsible_Reassign" xml:space="preserve">
+    <value>มอบหมายใหม่</value>
+  </data>
+
+  <data name="SelectResponsible_ReassignDescription" xml:space="preserve">
+    <value>เลือกผู้รับผิดชอบใหม่สำหรับการสัมภาษณ์
+จะปรากฏบนอุปกรณ์ของผู้สัมภาษณ์หลังการซิงโครไนซ์ครั้งถัดไป</value>
+  </data>
+
+  <data name="SelectResponsible_ReassignButtonText" xml:space="preserve">
+    <value>มอบหมายใหม่</value>
+  </data>
+
+  <data name="SelectResponsible_CancelButtonText" xml:space="preserve">
+    <value>ยกเลิก</value>
+  </data>
+
+  <data name="Notifications_InterviewsTitle" xml:space="preserve">
+    <value>การสัมภาษณ์</value>
+  </data>
+
+  <data name="Notifications_CompletedInterviewsText" xml:space="preserve">
+    <value>คุณมีการสัมภาษณ์ที่เสร็จสมบูรณ์ {0} รายการที่ควรซิงโครไนซ์</value>
+  </data>
+
+  <data name="Notifications_RejectedInterviewsText" xml:space="preserve">
+    <value>คุณมีการสัมภาษณ์ที่ถูกปฏิเสธ {0} รายการที่ยังไม่ได้จัดการ</value>
+  </data>
+
+  <data name="Notifications_SyncTitle" xml:space="preserve">
+    <value>การซิงโครไนซ์</value>
+  </data>
+
+  <data name="Notifications_SyncTooLongAgoText" xml:space="preserve">
+    <value>ไม่ได้ทำการซิงโครไนซ์เมื่อเร็ว ๆ นี้ โปรดซิงโครไนซ์</value>
+  </data>
+
+  <data name="Notifications_SyncNoRetryTitle" xml:space="preserve">
+    <value>ไม่มีการลองใหม่หลังจากการซิงโครไนซ์ล้มเหลว โปรดลองอีกครั้ง</value>
+  </data>
+
+  <data name="Notifications_ManyStartedInterviews" xml:space="preserve">
+    <value>คุณเริ่มการสัมภาษณ์มากเกินไป โปรดทำให้เสร็จสมบูรณ์</value>
+  </data>
+
+  <data name="Notifications_ManyCompletedInterviews" xml:space="preserve">
+    <value>มีการสัมภาษณ์ที่เสร็จสมบูรณ์จำนวนมาก โปรดซิงโครไนซ์</value>
+  </data>
+
+  <data name="Notifications_StaleAssignments" xml:space="preserve">
+    <value>การมอบหมายบางรายการไม่ได้อัปเดตใน 3 วันที่ผ่านมา</value>
+  </data>
+
+  <data name="Synchronization_UserLinkedToAnotherServer_Description" xml:space="preserve">
+    <value>ผู้ใช้ปัจจุบันถูกสร้างบนอินสแตนซ์อื่นของแอปพลิเคชันสำนักงานใหญ่ เปลี่ยน URL ปลายทางการซิงโครไนซ์เป็นเซิร์ฟเวอร์เดิม</value>
+  </data>
+
+  <data name="Synchronization_UserLinkedToAnotherServer_Status" xml:space="preserve">
+    <value>ผู้ใช้เชื่อมโยงกับเซิร์ฟเวอร์อื่น</value>
+  </data>
+
+  <data name="Diagnostics_SendLogs" xml:space="preserve">
+    <value>ส่งบันทึกการติดตาม</value>
+  </data>
+
+  <data name="Diagnostics_SendLogs_Description" xml:space="preserve">
+    <value>ส่งบันทึกรายละเอียดไปยังไซต์สำนักงานใหญ่เพื่อตรวจสอบปัญหา</value>
+  </data>
+
+  <data name="Diagnostics_SendLogs_Success" xml:space="preserve">
+    <value>ส่งบันทึกไปยังสำนักงานใหญ่แล้ว</value>
+  </data>
+
+  <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
+    <value>บัญชีของคุณไม่ใช้งานบนเซิร์ฟเวอร์นี้อีกต่อไป เนื่องจากพื้นที่ทำงานที่กำหนดบัญชีนี้ถูกผู้ดูแลระบบปิดใช้งาน โปรดติดต่อหัวหน้างานของคุณ</value>
+  </data>
+
+  <data name="DashboardItem_QRCode" xml:space="preserve">
+    <value>แสดง QR Code</value>
+  </data>
+
+  <data name="Synchronization_WorkspaceAccessDisabledReason" xml:space="preserve">
+      <value>บัญชีของคุณไม่ใช้งานในพื้นที่ทำงานอีกต่อไป โปรดติดต่อผู้ดูแลระบบของคุณ</value>
+  </data>
+
+  <data name="Interview_Progress_Format" xml:space="preserve">
+    <value>ความคืบหน้า: {0}/{1}</value>
+  </data>
+
+  <data name="Error_NoGpsProvider" xml:space="preserve">
+    <value>ไม่มีผู้ให้บริการ GPS ในอุปกรณ์นี้</value>
+  </data>
+
+  <data name="Error_NoTargetAreaShapefile" xml:space="preserve">
+    <value>ไม่มีขอบเขตสำหรับพื้นที่เป้าหมาย</value>
+  </data>
+
+  <data name="Dashboard_CreateInterview_TargetArea_Warning" xml:space="preserve">
+    <value>การมอบหมายกำหนดให้คุณสร้างการสัมภาษณ์โดยตรงจากแผนที่การมอบหมาย แนะนำให้ใช้โหมดการกำหนดขอบเขตภูมิศาสตร์ คุณต้องการดำเนินการต่อหรือไม่</value>
+  </data>
+
+  <data name="AssigmentMap_CreateInterview_OutTargetArea_Warning" xml:space="preserve">
+    <value>คุณกำลังสร้างการสัมภาษณ์นอกพื้นที่เป้าหมาย คุณต้องการดำเนินการต่อหรือไม่</value>
+  </data>
+
+  <data name="AssigmentMap_CreateInterview_DisabledTargetArea_Warning" xml:space="preserve">
+    <value>แนะนำให้เปิดใช้งานการกำหนดขอบเขตภูมิศาสตร์เพื่อตรวจสอบพื้นที่เป้าหมาย คุณต้องการดำเนินการต่อหรือไม่</value>
+  </data>
+
+  <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
+      <value>คุณได้ใช้การติดตามภูมิศาสตร์หรือการกำหนดขอบเขตภูมิศาสตร์เมื่อสร้างการสัมภาษณ์ โปรดเปิดใช้งานอีกครั้งหากคุณต้องการใช้</value>
   </data>
 </root>

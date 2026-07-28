@@ -25,7 +25,7 @@
                                             entityId: node.itemId,
                                         }
                                     }">
-                                        <span v-dompurify-html="node.title"></span>
+                                        <span v-sanitize-html="node.title"></span>
                                         <span>&nbsp;</span>
                                         <help link="coverPage" v-if="node.isCover" />
                                     </router-link>

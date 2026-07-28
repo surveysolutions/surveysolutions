@@ -381,10 +381,10 @@
 <script>
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import ExportProcessCard from './ExportProcessCard'
-import gql from 'graphql-tag'
-import { filter, toNumber, map } from 'lodash'
+import { gql, gqlRequest } from '~/hqapp/api/graphql'
+import { filter, toNumber, map } from 'lodash-es'
 import { DateFormats } from '~/shared/helpers'
-import moment from 'moment-timezone'
+import moment from 'moment'
 
 const dataFormatNum = {
     Tabular: 1,
@@ -402,7 +402,7 @@ export default {
         Field,
         Form,
         ErrorMessage,
-        ExportProcessCard
+        ExportProcessCard,
     },
     data() {
         return {
@@ -666,43 +666,43 @@ export default {
         ) {
             const drMode = dateRangeMode?.id
 
-            let from = null;
-            let to = null;
+            let from = null
+            let to = null
 
             switch (drMode) {
-                case "custom":
-                    from = dateRangeFrom ? moment(dateRangeFrom).utc().toISOString() : null;
-                    to = dateRangeTo ? moment(dateRangeTo).utc().toISOString() : null;
-                    break;
+                case 'custom':
+                    from = dateRangeFrom ? moment(dateRangeFrom).utc().toISOString() : null
+                    to = dateRangeTo ? moment(dateRangeTo).utc().toISOString() : null
+                    break
 
-                case "last24hours":
-                    from = moment().subtract(1, 'days').utc().toISOString();
-                    to = moment().utc().toISOString();
-                    break;
+                case 'last24hours':
+                    from = moment().subtract(1, 'days').utc().toISOString()
+                    to = moment().utc().toISOString()
+                    break
 
-                case "last7days":
-                    from = moment().startOf('day').subtract(6, 'days').utc().toISOString(); // 7 days ago
-                    to = moment().utc().toISOString();
-                    break;
+                case 'last7days':
+                    from = moment().startOf('day').subtract(6, 'days').utc().toISOString() // 7 days ago
+                    to = moment().utc().toISOString()
+                    break
 
-                case "last30days":
-                    from = moment().startOf('day').subtract(29, 'days').utc().toISOString(); // 30 days ago
-                    to = moment().utc().toISOString();
-                    break;
+                case 'last30days':
+                    from = moment().startOf('day').subtract(29, 'days').utc().toISOString() // 30 days ago
+                    to = moment().utc().toISOString()
+                    break
 
-                case "today":
-                    from = moment().startOf('day').utc().toISOString(); // Start of today
-                    to = moment().utc().toISOString();
-                    break;
+                case 'today':
+                    from = moment().startOf('day').utc().toISOString() // Start of today
+                    to = moment().utc().toISOString()
+                    break
 
-                case "yesterday":
-                    from = moment().startOf('day').utc().subtract(1, 'days').toISOString(); // Start of yesterday
-                    to = moment().endOf('day').utc().subtract(1, 'days').toISOString(); // End of yesterday
-                    break;
+                case 'yesterday':
+                    from = moment().startOf('day').utc().subtract(1, 'days').toISOString() // Start of yesterday
+                    to = moment().endOf('day').utc().subtract(1, 'days').toISOString() // End of yesterday
+                    break
             }
 
             if (!to || moment(to).isAfter(moment())) {
-                to = moment().utc().toISOString(); // Default to now if not set
+                to = moment().utc().toISOString() // Default to now if not set
             }
 
             var format = dataFormatNum.Tabular
@@ -737,7 +737,7 @@ export default {
                 includeMeta: includeMeta,
                 from: from,
                 to: to,
-                paradataMode: paradataMode
+                paradataMode: paradataMode,
             }
         },
 
@@ -779,16 +779,12 @@ export default {
       `
             if (newValue == null) return
 
-            const translationsResponse = await this.$apollo.query({
-                query,
-                variables: {
-                    id: this.questionnaireId.key,
-                    version: toNumber(newValue.key),
-                    workspace: this.$store.getters.workspace,
-                },
-                fetchPolicy: 'network-only',
+            const translationsResponse = await gqlRequest(query, {
+                id: this.questionnaireId.key,
+                version: toNumber(newValue.key),
+                workspace: this.$store.getters.workspace,
             })
-            const data = translationsResponse.data.questionnaires.nodes[0]
+            const data = translationsResponse.questionnaires.nodes[0]
             this.translations = map(data.translations, (i) => {
                 return { key: i.id, value: i.name }
             })
@@ -835,41 +831,41 @@ export default {
         },
         validateFromDate(value) {
             if (!value) {
-                return true;
+                return true
             }
 
-            const fromDate = moment(value);
-            const now = moment();
+            const fromDate = moment(value)
+            const now = moment()
 
             if (!fromDate.isValid()) {
-                return this.$t('DataExport.Validation_FromDateInvalid');
+                return this.$t('DataExport.Validation_FromDateInvalid')
             }
 
             if (fromDate.isAfter(now)) {
-                return this.$t('DataExport.Validation_FromDateInFuture');
+                return this.$t('DataExport.Validation_FromDateInFuture')
             }
 
 
-            return true;
+            return true
         },
         validateToDate(value) {
             if (!value) {
-                return true;
+                return true
             }
 
-            const toDate = moment(value);
-            const fromDate = moment(this.dateRangeFrom);
+            const toDate = moment(value)
+            const fromDate = moment(this.dateRangeFrom)
 
             if (!toDate.isValid()) {
-                return this.$t('DataExport.Validation_ToDateInvalid');
+                return this.$t('DataExport.Validation_ToDateInvalid')
             }
 
             if (fromDate && toDate.isSameOrBefore(fromDate)) {
-                return this.$t('DataExport.Validation_ToDateBeforeFrom');
+                return this.$t('DataExport.Validation_ToDateBeforeFrom')
             }
 
-            return true;
+            return true
         },
-    }
+    },
 }
 </script>
