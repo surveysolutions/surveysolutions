@@ -511,7 +511,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Republic of Cabo Verde.
+        ///   Looks up a localized string similar to Cabo Verde.
         /// </summary>
         public static string CPV {
             get {
@@ -565,7 +565,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Czech Republic.
+        ///   Looks up a localized string similar to Czechia.
         /// </summary>
         public static string CZE {
             get {
@@ -1348,7 +1348,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Macedonia, FYR.
+        ///   Looks up a localized string similar to North Macedonia.
         /// </summary>
         public static string MKD {
             get {
@@ -1870,7 +1870,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Somalia.
+        ///   Looks up a localized string similar to Federal Republic of Somalia.
         /// </summary>
         public static string SOM {
             get {
@@ -1951,7 +1951,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Swaziland.
+        ///   Looks up a localized string similar to Eswatini.
         /// </summary>
         public static string SWZ {
             get {
@@ -2077,7 +2077,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Turkey.
+        ///   Looks up a localized string similar to Türkiye.
         /// </summary>
         public static string TUR {
             get {
