@@ -196,11 +196,6 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
 
         public bool SupportOfflineMaps => false;
 
-<<<<<<< HEAD
-        public int? GetLastKnownAppVersionCode() => null;
-
-        public void SetLastKnownAppVersionCode(int code) {}
-=======
         public bool AllowSupervisorChangeAssignmentStatus => true;
         public void SetAllowSupervisorChangeAssignmentStatus(bool allow)
         {
@@ -218,6 +213,8 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         {
             throw new NotImplementedException();
         }
->>>>>>> origin/master
+        public int? GetLastKnownAppVersionCode() => null;
+
+        public void SetLastKnownAppVersionCode(int code) {}
     }
 }

@@ -1063,11 +1063,6 @@
   <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
       <value>Вы использовали функции Гео локации при создании последнего интервью. Пожалуйста, включите их, если необходимо</value>
   </data>
-<<<<<<< HEAD
-  <data name="Downgrade_ErrorMessage" xml:space="preserve">
-    <value>This version of the application is older than the previously installed version. Please reinstall the latest version of the application.</value>
-  </data>
-=======
   <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>Завершить задание</value>
   </data>
@@ -1104,5 +1099,7 @@
   <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
     <value>Статус: Открыто</value>
   </data>
->>>>>>> origin/master
+  <data name="Downgrade_ErrorMessage" xml:space="preserve">
+    <value>This version of the application is older than the previously installed version. Please reinstall the latest version of the application.</value>
+  </data>
 </root>

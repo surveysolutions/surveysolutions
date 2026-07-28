@@ -48,11 +48,9 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void SetEsriApiKey(string esriApiKey);
         
         bool SupportOfflineMaps { get; }
-<<<<<<< HEAD
         
         int? GetLastKnownAppVersionCode();
         void SetLastKnownAppVersionCode(int code);
-=======
 
         bool AllowSupervisorChangeAssignmentStatus { get; }
         void SetAllowSupervisorChangeAssignmentStatus(bool allow);
@@ -62,6 +60,5 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 
         AudioRecordingQuality AudioRecordingQuality { get; }
         void SetAudioRecordingQuality(AudioRecordingQuality quality);
->>>>>>> origin/master
     }
 }

@@ -1037,11 +1037,6 @@ Aparecerá no dispositivo do entrevistador após a próxima sincronização</val
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>A resposta recebida parece não vir do servidor Survey Solutions. Normalmente isto é causado por um proxy de rede, firewall ou gateway de segurança que intercepta a ligação. Verifique a sua ligação de rede ou contacte o suporte de TI.</value>
   </data>
-<<<<<<< HEAD
-  <data name="Downgrade_ErrorMessage" xml:space="preserve">
-    <value>This version of the application is older than the previously installed version. Please reinstall the latest version of the application.</value>
-  </data>
-=======
   <data name="Dashboard_CompleteAssignment" xml:space="preserve">
     <value>Concluir</value>
   </data>
@@ -1078,5 +1073,7 @@ Aparecerá no dispositivo do entrevistador após a próxima sincronização</val
   <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
     <value>Estado: Aberto</value>
   </data>
->>>>>>> origin/master
+  <data name="Downgrade_ErrorMessage" xml:space="preserve">
+    <value>This version of the application is older than the previously installed version. Please reinstall the latest version of the application.</value>
+  </data>
 </root>
