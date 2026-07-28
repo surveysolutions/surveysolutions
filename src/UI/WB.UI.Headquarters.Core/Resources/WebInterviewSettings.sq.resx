@@ -249,4 +249,75 @@
   <data name="WelcomePage" xml:space="preserve">
     <value>Faqen e mirëseardhjes</value>
   </data>
+
+
+  <data name="LinkToInterviewPage" xml:space="preserve">
+    <value>Faqja hyrëse e intervistës në internet</value>
+  </data>
+
+  <data name="CompleteEmailMessage" xml:space="preserve">
+    <value>Përfundo</value>
+  </data>
+
+  <data name="InterviewDataInsertInTextDescription" xml:space="preserve">
+    <value>Në këtë shabllon email-i mund të përdorni vendmbajtësin %question_variable% në tekst si përgjigje të pyetjes në intervistë. Pyetja duhet të jetë nga niveli i sipërm i pyetësorit (jo brenda rosterëve).</value>
+  </data>
+
+  <data name="InterviewDataInsertBarcodeDescription" xml:space="preserve">
+    <value>%question_variable:barcode% - shfaq përgjigjen si Barcode Code 128</value>
+  </data>
+
+  <data name="InterviewDataInsertQrCodeDescription" xml:space="preserve">
+    <value>%question_variable:qrcode% - shfaq përgjigjen si QR Code</value>
+  </data>
+
+  <data name="AnswerOn" xml:space="preserve">
+    <value>përgjigjja për {{variable}}</value>
+  </data>
+
+  <data name="Resume" xml:space="preserve">
+    <value>Vazhdo</value>
+    <comment>Resume button title</comment>
+  </data>
+
+  <data name="StartNew" xml:space="preserve">
+    <value>Fillo intervistë të re</value>
+    <comment>Start new interview button title</comment>
+  </data>
+
+  <data name="Sending" xml:space="preserve">
+      <value>Po dërgohet</value>
+  </data>
+
+  <data name="NoErrors" xml:space="preserve">
+      <value>Nuk ka gabime</value>
+  </data>
+
+  <data name="NothingWasSent" xml:space="preserve">
+      <value>Asgjë nuk u dërgua</value>
+  </data>
+
+  <data name="ProcessCancelled" xml:space="preserve">
+      <value>Procesi u anulua</value>
+  </data>
+
+  <data name="DownloadErrors" xml:space="preserve">
+      <value>Shkarko listën e detyrave me gabime</value>
+  </data>
+
+  <data name="SendingFailed" xml:space="preserve">
+      <value>Dërgimi i ftesave dështoi. Ju lutemi kontaktoni administratorin e serverit për të kontrolluar cilësimet e ofruesit të email-it</value>
+  </data>
+
+  <data name="TotalSent" xml:space="preserve">
+      <value>{{ totalCount }} ftesa për t'u dërguar</value>
+  </data>
+
+  <data name="TotalProcessed" xml:space="preserve">
+      <value>{{ processedCount }} u dërguan me sukses</value>
+  </data>
+
+  <data name="TotalWithErrors" xml:space="preserve">
+      <value>{{ withErrorsCount }} nuk u dërguan për shkak të gabimeve.</value>
+  </data>
 </root>

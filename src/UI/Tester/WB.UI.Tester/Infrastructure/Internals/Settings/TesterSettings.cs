@@ -4,6 +4,7 @@ using Android.App;
 using Android.Content;
 using AndroidX.Preference;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Settings
@@ -195,8 +196,28 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
 
         public bool SupportOfflineMaps => false;
 
+<<<<<<< HEAD
         public int? GetLastKnownAppVersionCode() => null;
 
         public void SetLastKnownAppVersionCode(int code) {}
+=======
+        public bool AllowSupervisorChangeAssignmentStatus => true;
+        public void SetAllowSupervisorChangeAssignmentStatus(bool allow)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AllowInterviewerChangeAssignmentStatus => true;
+        public void SetAllowInterviewerChangeAssignmentStatus(bool allow)
+        {
+            throw new NotImplementedException();
+        }
+
+        public AudioRecordingQuality AudioRecordingQuality => AudioRecordingQuality.Mono44kHz;
+        public void SetAudioRecordingQuality(AudioRecordingQuality quality)
+        {
+            throw new NotImplementedException();
+        }
+>>>>>>> origin/master
     }
 }

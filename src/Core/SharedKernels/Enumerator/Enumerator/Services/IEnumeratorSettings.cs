@@ -1,5 +1,6 @@
 ﻿using System;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
 {
@@ -47,8 +48,20 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void SetEsriApiKey(string esriApiKey);
         
         bool SupportOfflineMaps { get; }
+<<<<<<< HEAD
         
         int? GetLastKnownAppVersionCode();
         void SetLastKnownAppVersionCode(int code);
+=======
+
+        bool AllowSupervisorChangeAssignmentStatus { get; }
+        void SetAllowSupervisorChangeAssignmentStatus(bool allow);
+
+        bool AllowInterviewerChangeAssignmentStatus { get; }
+        void SetAllowInterviewerChangeAssignmentStatus(bool allow);
+
+        AudioRecordingQuality AudioRecordingQuality { get; }
+        void SetAudioRecordingQuality(AudioRecordingQuality quality);
+>>>>>>> origin/master
     }
 }
