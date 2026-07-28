@@ -213,87 +213,87 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string PLU0001Recomendation {
+        public static string PLU0001Recommendation {
             get {
-                return ResourceManager.GetString("PLU0001Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0001Recommendation", resourceCulture);
             }
         }
         
-        public static string PLU0002Recomendation {
+        public static string PLU0002Recommendation {
             get {
-                return ResourceManager.GetString("PLU0002Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0002Recommendation", resourceCulture);
             }
         }
         
-        public static string PLU0003Recomendation {
+        public static string PLU0003Recommendation {
             get {
-                return ResourceManager.GetString("PLU0003Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0003Recommendation", resourceCulture);
             }
         }
         
-        public static string PLU0004Recomendation {
+        public static string PLU0004Recommendation {
             get {
-                return ResourceManager.GetString("PLU0004Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0004Recommendation", resourceCulture);
             }
         }
         
-        public static string PLU0005Recomendation {
+        public static string PLU0005Recommendation {
             get {
-                return ResourceManager.GetString("PLU0005Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0005Recommendation", resourceCulture);
             }
         }
         
-        public static string PLU0006Recomendation {
+        public static string PLU0006Recommendation {
             get {
-                return ResourceManager.GetString("PLU0006Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0006Recommendation", resourceCulture);
             }
         }
         
-        public static string PLU0007Recomendation {
+        public static string PLU0007Recommendation {
             get {
-                return ResourceManager.GetString("PLU0007Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0007Recommendation", resourceCulture);
             }
         }
         
-        public static string PLU0008Recomendation {
+        public static string PLU0008Recommendation {
             get {
-                return ResourceManager.GetString("PLU0008Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0008Recommendation", resourceCulture);
             }
         }
         
-        public static string PLU0009Recomendation {
+        public static string PLU0009Recommendation {
             get {
-                return ResourceManager.GetString("PLU0009Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0009Recommendation", resourceCulture);
             }
         }
         
-        public static string PLU0010Recomendation {
+        public static string PLU0010Recommendation {
             get {
-                return ResourceManager.GetString("PLU0010Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0010Recommendation", resourceCulture);
             }
         }
         
-        public static string PLU0011Recomendation {
+        public static string PLU0011Recommendation {
             get {
-                return ResourceManager.GetString("PLU0011Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0011Recommendation", resourceCulture);
             }
         }
         
-        public static string PLU0012Recomendation {
+        public static string PLU0012Recommendation {
             get {
-                return ResourceManager.GetString("PLU0012Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0012Recommendation", resourceCulture);
             }
         }
         
-        public static string PLU0013Recomendation {
+        public static string PLU0013Recommendation {
             get {
-                return ResourceManager.GetString("PLU0013Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0013Recommendation", resourceCulture);
             }
         }
         
-        public static string PLU0014Recomendation {
+        public static string PLU0014Recommendation {
             get {
-                return ResourceManager.GetString("PLU0014Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0014Recommendation", resourceCulture);
             }
         }
         
@@ -309,9 +309,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string PLU0015Recomendation {
+        public static string PLU0015Recommendation {
             get {
-                return ResourceManager.GetString("PLU0015Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0015Recommendation", resourceCulture);
             }
         }
         
@@ -327,9 +327,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string PLU0016Recomendation {
+        public static string PLU0016Recommendation {
             get {
-                return ResourceManager.GetString("PLU0016Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0016Recommendation", resourceCulture);
             }
         }
         
@@ -345,9 +345,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string PLU0017Recomendation {
+        public static string PLU0017Recommendation {
             get {
-                return ResourceManager.GetString("PLU0017Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0017Recommendation", resourceCulture);
             }
         }
         
@@ -363,9 +363,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string PLU0018Recomendation {
+        public static string PLU0018Recommendation {
             get {
-                return ResourceManager.GetString("PLU0018Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0018Recommendation", resourceCulture);
             }
         }
         
@@ -381,9 +381,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string PLU0019Recomendation {
+        public static string PLU0019Recommendation {
             get {
-                return ResourceManager.GetString("PLU0019Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0019Recommendation", resourceCulture);
             }
         }
         
@@ -399,9 +399,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string PLU0020Recomendation {
+        public static string PLU0020Recommendation {
             get {
-                return ResourceManager.GetString("PLU0020Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0020Recommendation", resourceCulture);
             }
         }
         
@@ -417,9 +417,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string PLU0021Recomendation {
+        public static string PLU0021Recommendation {
             get {
-                return ResourceManager.GetString("PLU0021Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0021Recommendation", resourceCulture);
             }
         }
         
@@ -435,9 +435,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string PLU0022Recomendation {
+        public static string PLU0022Recommendation {
             get {
-                return ResourceManager.GetString("PLU0022Recomendation", resourceCulture);
+                return ResourceManager.GetString("PLU0022Recommendation", resourceCulture);
             }
         }
     }

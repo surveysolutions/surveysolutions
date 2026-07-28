@@ -324,4 +324,61 @@
   <data name="Variable_Update" xml:space="preserve">
     <value>计算变量{0}已添加</value>
   </data>
+
+
+  <data name="Categories_Add" xml:space="preserve">
+    <value>分类 {0} 已添加</value>
+  </data>
+
+  <data name="Categories_Delete" xml:space="preserve">
+    <value>分类 {0} 已删除</value>
+  </data>
+
+  <data name="Categories_Update" xml:space="preserve">
+    <value>分类 {0} 已更新</value>
+  </data>
+
+  <data name="CriticalRule_Add" xml:space="preserve">
+    <value>关键规则 {0} 已添加</value>
+  </data>
+
+  <data name="CriticalRule_Delete" xml:space="preserve">
+    <value>关键规则 {0} 已删除</value>
+  </data>
+
+  <data name="CriticalRule_Update" xml:space="preserve">
+    <value>关键规则 {0} 已更新</value>
+  </data>
+
+  <data name="Translation_Replace" xml:space="preserve">
+    <value>文档已切换到 {0} 翻译</value>
+  </data>
+
+  <data name="Comment" xml:space="preserve">
+    <value>评论</value>
+  </data>
+
+  <data name="LeaveComment" xml:space="preserve">
+    <value>发表评论</value>
+  </data>
+
+  <data name="ExtractAtRevision" xml:space="preserve">
+      <value>提取此修订版</value>
+  </data>
+
+  <data name="Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+
+  <data name="Questionnaire_Move" xml:space="preserve">
+    <value>问卷所有权已转移给电子邮件为“{0}”的用户</value>
+  </data>
+
+  <data name="Questionnaire_ImportToHq" xml:space="preserve">
+    <value>问卷已由 {1} 导入到 Headquarters（{0}），名称为 {2}</value>
+  </data>
+
+  <data name="MigratedNewCoverSupport" xml:space="preserve">
+    <value>已生成封面页</value>
+  </data>
 </root>
