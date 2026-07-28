@@ -105,11 +105,11 @@ export default {
                 if ('naturalHeight' in this) {
                     if (this.naturalHeight + this.naturalWidth === 0) {
                         self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoIsNotImage') )
-                        return;
+                        return
                     }
                 } else if (this.width + this.height == 0) {
                     self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoIsNotImage') )
-                    return;
+                    return
                 } else {
                     self.$store.dispatch('answerMultimediaQuestion', {
                         identity: self.id,
@@ -123,7 +123,7 @@ export default {
                     }
 
                     reader.readAsDataURL(file)
-                } 
+                }
             }
 
             image.src = URL.createObjectURL(file)

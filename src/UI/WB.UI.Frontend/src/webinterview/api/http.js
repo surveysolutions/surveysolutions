@@ -3,7 +3,7 @@ import { config } from '~/shared/config'
 import { $t } from '~/shared/plugins/locale'
 import { installAxiosInterceptors } from '~/shared/serverValidator'
 
-let api = {};
+let api = {}
 
 const httpPlugin = {
 
