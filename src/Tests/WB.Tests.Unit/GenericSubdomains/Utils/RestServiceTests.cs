@@ -47,6 +47,25 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
             Assert.That(act, Throws.InstanceOf<RestException>().And.Property(nameof(RestException.Type)).EqualTo(RestExceptionType.NoNetwork));
         }
 
+        [Test]
+        public async Task when_endpoint_has_trailing_spaces_should_trim_them()
+        {
+            var testUserAgent = "SurveySolutions/11";
+            var settings = Mock.Of<IRestServiceSettings>(x => x.Endpoint == "http://localhost/hq   "
+                                                              && x.UserAgent == testUserAgent && x.Timeout == TimeSpan.FromMinutes(1));
+
+            var testMessageHandler = new TestMessageHandler();
+            var httpClient = new HttpClient(testMessageHandler);
+            var httpClientFactory =
+                Mock.Of<IHttpClientFactory>(x => x.CreateClient(It.IsAny<IHttpStatistician>()) == httpClient);
+            RestService service = Create.Service.RestService(httpClientFactory: httpClientFactory, restServiceSettings: settings);
+
+            await service.GetAsync("q", null, null, false, null, CancellationToken.None);
+
+            var httpRequestMessage = testMessageHandler.ExecutedRequests.First();
+            Assert.That(httpRequestMessage.RequestUri?.ToString(), Is.EqualTo("http://localhost/hq/q"));
+        }
+
         /*[Test]
         public void when_host_is_unreachable_should_throw_RestException()
         {

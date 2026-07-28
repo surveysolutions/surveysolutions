@@ -20,11 +20,11 @@
                             {{ $t('QuestionnaireEditor.Save') }}
                         </button>
                         <button type="button" class="btn lighter-hover" @click.stop="cancel()">{{
-                $t('QuestionnaireEditor.Cancel') }}</button>
+                            $t('QuestionnaireEditor.Cancel') }}</button>
                     </div>
                     <div class="permanent-actions pull-right">
                         <a href="javascript:void(0);" class="btn btn-link" @click="editCategories()">{{
-                $t('QuestionnaireEditor.SideBarEditCategories') }}
+                            $t('QuestionnaireEditor.SideBarEditCategories') }}
                         </a>
                         <file-upload ref="upload" v-if="!isReadOnlyForUser" v-model="file" @input-file="fileSelected"
                             :size="10 * 1024 * 1024" :drop="true" :drop-directory="false"
@@ -38,10 +38,10 @@
                         {{ $t('QuestionnaireEditor.SideBarDownload') }}
                         <a :href="exportOptionsBaseUrl + questionnaire.questionnaireId + '?type=xlsx&isCategory=true&entityId=' + categories.categoriesId"
                             class="btn btn-default" target="_blank" rel="noopener">{{
-                $t('QuestionnaireEditor.SideBarXlsx') }}</a>
+                                $t('QuestionnaireEditor.SideBarXlsx') }}</a>
                         <a :href="exportOptionsBaseUrl + questionnaire.questionnaireId + '?type=csv&isCategory=true&entityId=' + categories.categoriesId"
                             class="btn btn-default" target="_blank" rel="noopener">{{
-                $t('QuestionnaireEditor.SideBarTab') }}</a>
+                                $t('QuestionnaireEditor.SideBarTab') }}</a>
 
                     </div>
                 </div>
@@ -56,7 +56,7 @@ import { isNull, isUndefined, cloneDeep } from 'lodash'
 import { updateCategories, deleteCategories } from '../../../../services/categoriesService';
 import { trimText } from '../../../../services/utilityService'
 import { notice } from '../../../../services/notificationService';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 export default {
     name: 'CategoriesItem',
@@ -142,7 +142,7 @@ export default {
 
             categories.meta = {};
             categories.meta.fileName = newFile.name;
-            categories.meta.lastUpdated = moment();
+            categories.meta.lastUpdated = dayjs();
 
 
             var suspectedCategories = categories.meta.fileName.match(/[^[\]]+(?=])/g);

@@ -2,30 +2,30 @@
   .wb-label-fontstyle();
 
   > span {
-    color: #bfd8ed;
+    color: @light-blue-hint-color;
 
     > a {
-      color: #2a81cb;
+      color: @primary-link-color;
     }
   }
 }
 
 .enabling-group-marker {
     display: inline-block;
-    background: #D89400;
+    background: @wb-label-yellow-bg;
     border-radius: 50%;
     width: 10px;
     height: 10px;
     margin-right: 5px;
     &.hide-if-disabled{
-      border: 2px solid #D89400;
+      border: 2px solid @wb-label-yellow-bg;
       background:transparent;
     }
 }
 
 .validation-group-marker {
     display: inline-block;
-    background: #14A6A7;
+    background: @wb-label-teal-bg;
     border-radius: 50%;
     width: 10px;
     height: 10px;
@@ -34,7 +34,7 @@
 
 .criticality-group-marker {
   display: inline-block;
-  background: #75485E;
+  background: @wb-label-maroon-bg;
   border-radius: 50%;
   width: 10px;
   height: 10px;

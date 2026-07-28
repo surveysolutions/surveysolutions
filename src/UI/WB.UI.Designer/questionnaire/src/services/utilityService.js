@@ -2,7 +2,7 @@ import { i18n } from '../plugins/localization';
 import { nextTick } from 'vue';
 import { defer, isNull, isUndefined, findIndex, debounce } from 'lodash';
 import DOMPurify from 'dompurify';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 import ace from 'ace-builds';
 
@@ -75,6 +75,16 @@ export function sanitize(input) {
             KEEP_CONTENT: true // keeps text content while removing tags
         });
         return html;
+    }
+    return input || '';
+}
+
+export function sanitizeMarkup(input) {
+    if (input) {
+        return DOMPurify.sanitize(input, {
+            ALLOWED_TAGS: ['button', 'span'],
+            ALLOWED_ATTR: ['class', 'type', 'disabled']
+        });
     }
     return input || '';
 }
@@ -222,17 +232,11 @@ export const DateFormats = {
 };
 
 export function formatDateTime(utcDateTime) {
-    return moment //(utcDateTime)
-        .utc(utcDateTime)
-        .local()
-        .format(DateFormats.dateTime);
+    return dayjs.utc(utcDateTime).local().format(DateFormats.dateTime);
 }
 
 export function formatDate(utcDate) {
-    return moment
-        .utc(utcDate)
-        .local()
-        .format(DateFormats.date);
+    return dayjs.utc(utcDate).local().format(DateFormats.date);
 }
 
 export function getItemIndexByIdFromParentItemsList(parent, id) {

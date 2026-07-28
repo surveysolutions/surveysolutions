@@ -9,6 +9,7 @@ using Newtonsoft.Json.Serialization;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Infrastructure.Native.Workspaces;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Services
@@ -17,7 +18,8 @@ namespace WB.UI.Headquarters.Services
     {
         private static readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings
         {
-            ContractResolver = new CamelCasePropertyNamesContractResolver()
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            Converters = { new JsonJavaScriptEncodeConverter() }
         };
         
         public static IHtmlContent MainMenuItem(this IHtmlHelper html, string actionName, string controllerName, string linkText, MenuItem renderedPage)
