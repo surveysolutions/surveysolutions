@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          android:versionCode="1"
+          android:versionName="1.0"
+          package="wb.tests.android.instrumentation">
+  <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="34" />
+  <instrumentation
+      android:name="xamarin.android.nunitrunner.NUnitInstrumentation"
+      android:targetPackage="wb.tests.android.instrumentation"
+      android:label="NUnit Tests" />
+  <application android:label="WB.Tests.Android.Instrumentation"></application>
+</manifest>
