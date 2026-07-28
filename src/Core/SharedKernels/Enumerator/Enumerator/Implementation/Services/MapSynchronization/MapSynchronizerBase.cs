@@ -24,6 +24,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
 {
     public abstract class MapSyncProviderBase : AbstractSynchronizationProcess, IMapSyncProvider
     {
+        private const int DownloadBufferSize = 64 * 1024;
+        private const int UnknownLengthProgressStepBytes = 512 * 1024;
+
         private readonly ISynchronizationService synchronizationService;
         private readonly ILogger logger;
         private readonly IPermissionsService permissionsService;
@@ -98,25 +101,50 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                 if (this.mapService.DoesMapExist(mapDescription.MapName))
                     continue;
 
+                var lastReportedProgressBucket = -1;
+                long nextUnknownLengthProgressReportAt = 0;
+
                 void OnDownloadProgressChanged(TransferProgress args)
                 {
-                    if (args.ProgressPercentage % 5 == 0)
+                    if (!args.TotalBytesToReceive.HasValue || args.TotalBytesToReceive.Value <= 0)
                     {
+                        if (args.BytesReceived < nextUnknownLengthProgressReportAt)
+                            return;
+
+                        nextUnknownLengthProgressReportAt = args.BytesReceived + UnknownLengthProgressStepBytes;
+
                         progress.Report(new SyncProgressInfo
                         {
-                            Title =
-                                string.Format(EnumeratorUIResources.MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format,
-                                                mapDescription.MapName, processedMapsCount, items.Count, args.ProgressPercentage),
-                            Status = SynchronizationStatus.Download
+                            Title = string.Format(EnumeratorUIResources.MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format,
+                                mapDescription.MapName, processedMapsCount, items.Count, "?"),
+                            Status = SynchronizationStatus.Download,
+                            TransferProgress = args
                         });
+
+                        return;
                     }
+
+                    var currentProgressBucket = (int) (args.ProgressPercentage / 1m);
+                    if (currentProgressBucket <= lastReportedProgressBucket)
+                        return;
+
+                    lastReportedProgressBucket = currentProgressBucket;
+
+                    progress.Report(new SyncProgressInfo
+                    {
+                        Title =
+                            string.Format(EnumeratorUIResources.MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format,
+                                            mapDescription.MapName, processedMapsCount, items.Count, args.ProgressPercentage),
+                        Status = SynchronizationStatus.Download,
+                        TransferProgress = args
+                    });
                 }
 
                 try
                 {
                     var offset = this.mapService.GetTempMapOffset(mapDescription.MapName);
                     var storedETag = offset > 0 ? this.mapService.GetTempMapETag(mapDescription.MapName) : null;
-                    long downloded = offset;
+                    long downloaded = offset;
                     using (var streamToSave = this.mapService.GetTempMapSaveStream(mapDescription.MapName))
                     using (var contentStreamResult = await this.synchronizationService
                         .GetMapContentStream(mapDescription.MapName, cancellationToken, offset, storedETag)
@@ -139,7 +167,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                                 streamToSave.SetLength(0);
                             }
                             offset = 0;
-                            downloded = 0;
+                            downloaded = 0;
                         }
 
                         // Store ETag from the (first or resumed) response so the next resume
@@ -147,7 +175,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                         if (contentStreamResult.ETag != null)
                             this.mapService.SaveTempMapETag(mapDescription.MapName, contentStreamResult.ETag);
                         
-                        var buffer = new byte[1024];
+                        var buffer = new byte[DownloadBufferSize];
                         var downloadProgressChangedEventArgs = new TransferProgress()
                         {
                             TotalBytesToReceive = contentStreamResult.ContentLength + offset
@@ -162,15 +190,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                                 cancellationToken.ThrowIfCancellationRequested();
                             }
 
-                            downloded += read;
+                            downloaded += read;
 
-                            streamToSave.Write(buffer, 0, read);
+                            await streamToSave.WriteAsync(buffer, 0, read, cancellationToken).ConfigureAwait(false);
 
                             if (contentStreamResult.ContentLength != null)
                                 downloadProgressChangedEventArgs.ProgressPercentage =
-                                    Math.Min(Math.Round((decimal)(100 * downloded) / (contentStreamResult.ContentLength.Value + offset)), 100);
+                                    Math.Min(Math.Round((decimal)(100 * downloaded) / (contentStreamResult.ContentLength.Value + offset)), 100);
 
-                            downloadProgressChangedEventArgs.BytesReceived = downloded;
+                            downloadProgressChangedEventArgs.BytesReceived = downloaded;
                             OnDownloadProgressChanged(downloadProgressChangedEventArgs);
                         }
                     }

@@ -19,7 +19,7 @@
 }
 
 .breadcrumbs-fontstyle(@color) when(@color='blue') {
-  color: @designer-editor-breadcrumbs-color-blue;
+  color: @primary-link-color;
 }
 
 .breadcrumbs-fontstyle(@color) when(@color='gray') {
@@ -35,7 +35,7 @@
 .questionnarie-title-span-gray-fontstyle() {
   .lucida-console-font();
   font-size: 14px;
-  color: @designer-editor-title-span-color;
+  color: @designer-editor-mediumblue-bg-color;
 }
 
 .questionnarie-title-span-error-fontstyle() {
@@ -46,19 +46,19 @@
 
   > a {
     text-decoration: underline;
-    color: @error-message-link-color;
+    color: @error-button-color;
   }
 }
 
 .questionnarie-title-span-success-fontstyle() {
   .lucida-console-font();
   font-size: 16px;
-  color: @success-message-color;
+  color: @success-button-color;
 
   > em {
     .georgia-font();
     font-size: 14px;
-    color: @designer-editor-title-span-color;
+    color: @designer-editor-mediumblue-bg-color;
   }
 }
 
@@ -71,7 +71,7 @@
 
 .chapters-title-fontstyle() {
   .arial-font();
-  color: #3f3f3f;
+  color: @designer-editor-title-color;
   text-transform: none;
   font-weight: normal;
   font-size: 18px;
@@ -89,7 +89,7 @@
   &, > a {
     .arial-font();
     font-size: 16px;
-    color: @designer-editor-chapter-list-color;
+    color: @designer-editor-title-color;
   }
 }
 
@@ -103,7 +103,7 @@
   &, > a {
     .arial-font();
     font-size: 16px;
-    color: @questionnarie-question-list-item-color;
+    color: @designer-editor-title-color;
   }
 }
 
@@ -131,14 +131,14 @@
   .lucida-console-font();
   font-size: 14px;
   font-weight: normal;
-  color: #5d5d5d;
+  color: @designer-secondary-text-color;
 }
 
 .wb-input-text-fontstyle() {
   .lucida-console-font();
   font-size: 14px;
   font-weight: normal;
-  color: #c1c7cb;
+  color: @light-grey;
 }
 
 /** Controls font-styles */
@@ -163,7 +163,7 @@
   font-size: 14px;
   font-style: italic;
   font-weight: normal;
-  color: @verify-popup-color;
+  color: @questionnarie-question-editor-color;
   line-height: 22px;
 }
 
@@ -172,7 +172,7 @@
   font-weight: bold;
   font-size: 12px;
   line-height: 30px;
-  color: @common-blue-color;
+  color: @primary-link-color;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -180,11 +180,11 @@
 .header-menu-fontstyle() {
   .georgia-font();
   font-size: 14px;
-  color: #c1c7cb;
+  color: @light-grey;
 
     > a {
     text-decoration: underline;
-    color: #2a81cb;
+    color: @primary-link-color;
     cursor: pointer;
   }
 }
