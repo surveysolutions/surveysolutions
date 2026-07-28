@@ -1,8 +1,9 @@
+import Alert from 'bootstrap/js/dist/alert'
 import Dropdown from 'bootstrap/js/dist/dropdown'
 import Modal from 'bootstrap/js/dist/modal'
 import Tab from 'bootstrap/js/dist/tab'
 import Tooltip from 'bootstrap/js/dist/tooltip'
-window.bootstrap = { Dropdown, Modal, Tab, Tooltip }
+window.bootstrap = { Alert, Dropdown, Modal, Tab, Tooltip }
 window.Dropdown = Dropdown
 
 import '../assets/css/markup.scss'

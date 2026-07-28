@@ -619,4 +619,13 @@
   <data name="Action_Reopened" xml:space="preserve">
       <value>Reaberto</value>
   </data>
+  <data name="AudioRecordingSelective" xml:space="preserve">
+      <value>Seletivo</value>
+  </data>
+  <data name="AudioAuditScopeLabel" xml:space="preserve">
+      <value>Escopo de auditoria de áudio</value>
+  </data>
+  <data name="AudioRecordingScopeNotice" xml:space="preserve">
+      <value>Esta atribuição tem um escopo seletivo de auditoria de áudio. Habilitar a gravação de áudio completa gravará todas as seções. Desabilitá-la voltará a gravar apenas as seções selecionadas.</value>
+  </data>
 </root>
