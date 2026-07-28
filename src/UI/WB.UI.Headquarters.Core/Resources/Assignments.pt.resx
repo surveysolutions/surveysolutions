@@ -619,8 +619,8 @@
   <data name="Action_Reopened" xml:space="preserve">
       <value>Reaberto</value>
   </data>
-  <data name="AudioRecordingPartial" xml:space="preserve">
-      <value>Parcial</value>
+  <data name="AudioRecordingSelective" xml:space="preserve">
+      <value>Seletivo</value>
   </data>
   <data name="AudioAuditScopeLabel" xml:space="preserve">
       <value>Escopo de auditoria de áudio</value>
