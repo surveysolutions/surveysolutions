@@ -54,7 +54,8 @@
                         v-model:geographyQuestionAccuracyInMetersCancel="geographyQuestionAccuracyInMetersCancel"
                         v-model:esriApiKey="esriApiKey" v-model:esriApiKeyInitial="esriApiKeyInitial"
                         v-model:allowSupervisorChangeAssignmentStatus="allowSupervisorChangeAssignmentStatus"
-                        v-model:allowInterviewerChangeAssignmentStatus="allowInterviewerChangeAssignmentStatus" />
+                        v-model:allowInterviewerChangeAssignmentStatus="allowInterviewerChangeAssignmentStatus"
+                        v-model:audioRecordingQuality="audioRecordingQuality" />
 
                     <Logo />
                 </div>
@@ -103,6 +104,7 @@ export default {
             esriApiKeyInitial: null,
             allowSupervisorChangeAssignmentStatus: true,
             allowInterviewerChangeAssignmentStatus: true,
+            audioRecordingQuality: 'Mono44kHz',
 
             isRetentionEnabled: false,
             retentionLimitInDays: null,
@@ -133,6 +135,7 @@ export default {
             this.esriApiKeyInitial = workspaceSettings.data.esriApiKey
             this.allowSupervisorChangeAssignmentStatus = workspaceSettings.data.allowSupervisorChangeAssignmentStatus ?? true
             this.allowInterviewerChangeAssignmentStatus = workspaceSettings.data.allowInterviewerChangeAssignmentStatus ?? true
+            this.audioRecordingQuality = workspaceSettings.data.audioRecordingQuality ?? 'Mono44kHz'
 
             this.encryptionEnabled = workspaceSettings.data.exportSettings.isEnabled
             this.encryptionPassword = workspaceSettings.data.exportSettings.password

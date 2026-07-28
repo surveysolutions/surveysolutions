@@ -3,31 +3,31 @@
     <div>
         <slot name="title">
             <h3>
-                {{$t('UploadUsers.ImportingUserInfo')}}
+                {{ $t('UploadUsers.ImportingUserInfo') }}
                 <br />
-                {{fileName}}
+                {{ fileName }}
             </h3>
         </slot>
         <div class="row">
             <div class="col-sm-7 col-xs-12 action-block verification-failed active-preloading">
                 <div class="import-progress">
-                    <p class="error-text">{{$t('UploadUsers.VerificationFailed')}}</p>
-                    <p>{{$t('UploadUsers.NoCreatedUsers')}}</p>
+                    <p class="error-text">{{ $t('UploadUsers.VerificationFailed') }}</p>
+                    <p>{{ $t('UploadUsers.NoCreatedUsers') }}</p>
                 </div>
                 <div class="error-block"
                     v-for="(error, i) in verificationErrors"
                     :key="i">
                     <h5 class="error-text">
                         <span v-if="hasLineAndColumn(error)">[{{$t('UploadUsers.Line')}}: {{error.line}}, {{$t('UploadUsers.Column')}}: {{error.column}}] :</span>
-                        {{error.message}}
+                        {{ error.message }}
                     </h5>
-                    <p>{{error.description}}</p>
-                    <p>{{error.recomendation}}</p>
+                    <p>{{ error.description }}</p>
+                    <p>{{ error.recommendation }}</p>
                 </div>
                 <div class="action-buttons">
                     <router-link
                         class="btn btn-link"
-                        :to="{ name: 'upload'}">{{$t('UploadUsers.BackToImport')}}</router-link>
+                        :to="{ name: 'upload' }">{{ $t('UploadUsers.BackToImport') }}</router-link>
                 </div>
             </div>
         </div>
@@ -37,10 +37,10 @@
 
 <script>
 import * as toastr from 'toastr'
-import {isEmpty} from 'lodash-es'
+import { isEmpty } from 'lodash-es'
 
 export default {
-    data: function() {
+    data: function () {
         return {
             selectedFileName: null,
         }
@@ -60,7 +60,7 @@ export default {
         },
     },
     methods: {
-        selectFile(){
+        selectFile() {
             this.selectedFileName = null
             this.$refs.uploader.click()
         },
@@ -86,7 +86,7 @@ export default {
                     const errors = response.data
 
                     if (errors.length > 0) self.$store.dispatch('setUploadVerificationErrors', errors)
-                    else self.$router.push({name: 'uploadprogress'})
+                    else self.$router.push({ name: 'uploadprogress' })
 
                     self.$refs.uploader.value = ''
                 })
@@ -96,7 +96,7 @@ export default {
                     else toastr.error(self.$t('Pages.GlobalSettings_UnhandledExceptionMessage'))
                 })
         },
-        hasLineAndColumn(error){
+        hasLineAndColumn(error) {
             return !isEmpty(error.line) && !isEmpty(error.column)
         },
     },
