@@ -263,10 +263,10 @@
     <value>contenu</value>
   </data>
   <data name="SideBarMacroCounter" xml:space="preserve">
-    <value>{{count}} Macro:</value>
+    <value>{{count}} Macro :</value>
   </data>
   <data name="SideBarMacroCounter_plural" xml:space="preserve">
-    <value>{{count}} Macros:</value>
+    <value>{{count}} Macros :</value>
   </data>
   <data name="SideBarMacroDescription" xml:space="preserve">
     <value>description</value>
@@ -345,10 +345,10 @@
     </data>
 
   <data name="SideBarSectionsCounter" xml:space="preserve">
-    <value>{{count}} Section:</value>
+    <value>{{count}} Section :</value>
   </data>
   <data name="SideBarSectionsCounter_plural" xml:space="preserve">
-    <value>{{count}} Sections:</value>
+    <value>{{count}} Sections :</value>
   </data>
   <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
     <value>Télécharger xlsx</value>
@@ -619,6 +619,9 @@
   </data>
   <data name="FindReplaceMatchingLines" xml:space="preserve">
     <value>Lignes correspondantes : {{count}}</value>
+  </data>
+  <data name="FindReplaceCurrentMatch" xml:space="preserve">
+    <value>{{current}} / {{count}}</value>
   </data>
   <data name="FindReplaceNext" xml:space="preserve">
     <value>Suivant</value>
@@ -1524,7 +1527,7 @@ Veuillez vérifier votre connexion réseau ou contacter votre support informatiq
     <value>Plat</value>
   </data>
   <data name="RosterDisplayMode_Table" xml:space="preserve">
-    <value>Table</value>
+    <value>Tableau</value>
   </data>
   <data name="RosterDisplayMode_Matrix" xml:space="preserve">
     <value>Matrice</value>
@@ -1569,7 +1572,7 @@ Veuillez vérifier votre connexion réseau ou contacter votre support informatiq
     <value>Réessayer l'exportation en PDF</value>
   </data>
   <data name="Translation_Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Originale</value>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>Aperçu de la révision #{{revision}}</value>

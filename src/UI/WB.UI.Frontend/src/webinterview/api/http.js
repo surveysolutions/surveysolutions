@@ -2,7 +2,7 @@ import axios from 'axios'
 import { config } from '~/shared/config'
 import { installAxiosInterceptors } from '~/shared/serverValidator'
 
-let api = {};
+let api = {}
 
 const httpPlugin = {
 

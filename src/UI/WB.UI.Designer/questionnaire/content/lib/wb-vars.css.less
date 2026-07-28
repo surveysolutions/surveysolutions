@@ -4,67 +4,50 @@
  * description: common variables definition
  */
 
-@common-blue-color: #2a81cb;
-@common-red-color: #d20426;
-@common-green-color: #2fc507;
-@common-dark-red-color: #a94442;
-@tree-item-border-color: #edeff1;
-@context-menu-hover-color: #edeff1;
+@primary-link-color: #2a81cb;
+@error-button-color: #d20426;
+@success-button-color: #2fc507;
+@error-button-hover-color: #a94442;
+@neutral-button-bg-color: #edeff1;
 
 @designer-editor-mediumblue-bg-color: #bcc3c8;
 @designer-editor-lightblue-bg-color: #dbdfe2;
-@designer-editor-breadcrumbs-color-blue: @common-blue-color;
 @designer-editor-breadcrumbs-color-gray: #4a4a4a;
 @designer-editor-title-color: #3f3f3f;
 @designer-editor-title-span-color: #b9c3ca;
 @designer-editor-title-span-dark-color: #9ca4aa;
 
-@designer-editor-chapter-list-color: #3f3f3f;
 @designer-editor-chapter-list-span-color: #64686d;
 
-@inline-button-bg-color: #edeff0;
-@inline-button-normal-color: @common-blue-color;
-@inline-button-error-color: @common-red-color;
-
-@inline-button-medium-bg-color: @common-green-color;
 @inline-button-medium-fg-color: #fff;
 
 @error-message-color: #e58e96;
-@warning-message-color: #2a81cb;
-@error-message-link-color: @common-red-color;
-@warning-message-link-color: @common-blue-color;
-@success-message-color: @common-green-color;
 
 @questionnarie-question-editor-color: #555555;
 @questionnarie-question-specific-block-color: #e0e1e2;
 @questionnarie-question-placeholder-color: darken(@questionnarie-question-specific-block-color, 15%);
-@questionnarie-question-list-item-color: #404040;
-@questionnarie-question-list-item-bg-color: @designer-editor-lightblue-bg-color;
-@questionnarie-question-list-item-hover-color: #edeff1;
 @questionnarie-question-list-item-selected-color: #fff;
 @questionnarie-startbox-fg-color: #919ba1;
-@questionnaire-item-border-when-highlighted:#f8f9fa;
-
+@questionnaire-item-border-when-highlighted: #f8f9fa;
 
 @qname-color: #3da802;
 @questionnaire-tree-roster-color: #2075bf;
 /* Override Twitter Bootstrap Variables */
 
 //** Tooltip max width
-@tooltip-max-width:           300px;
+@tooltip-max-width: 300px;
 //** Tooltip text color
-@tooltip-color:               #000;
+@tooltip-color: #000;
 //** Tooltip background color
-@tooltip-bg:                  @designer-editor-mediumblue-bg-color;
-@tooltip-opacity:             .9;
+@tooltip-bg: @designer-editor-mediumblue-bg-color;
+@tooltip-opacity: .9;
 //** Tooltip arrow width
-@tooltip-arrow-width:         5px;
+@tooltip-arrow-width: 5px;
 
 @questionnaire-tree-item-height: 36px;
 @chapter-item-height: 48px;
 
 @chapter-item-selected-color: #fff;
-@chapter-item-hover-color: #dbdfe2;
 
 @left-menu-width: 52px;
 @chapter-title-height: 52px;
@@ -72,12 +55,61 @@
 @spacer-height: 2px;
 @main-height: calc(~"100%" - (@header-height + @spacer-height));
 
+
+@panel-light-bg-color: #f1f2f3;
+
+@verification-modal-footer-hight: 44px;
+
 @verify-popup-color: #555555;
 @verification-modal-content-border-color: #edeff1;
-@verification-modal-header-hight: 70px;
+
 @verification-modal-error-color: #dd2c2c;
-@verification-modal-warning-color: #2075bf;
-@verification-modal-neutral-color: #4a4a4a;
-@verification-item-height: @questionnaire-tree-item-height;
-@verification-item-bg-color: #f2f3f5;
 @verify-popup-error-color: #a60c22;
+
+// Shared colors across multiple files
+@light-grey: #c1c7cb;
+@designer-secondary-text-color: #5d5d5d;
+@light-blue-hint-color: #bfd8ed;
+@designer-muted-color: #a6a8a9;
+@panel-light-border-color: #d7e4ee;
+@designer-panel-text-dark: #5d6468;
+@designer-accent-color: #e004c9;
+@designer-drop-box-color: #78838a;
+@input-border-color: #cccccc;
+
+// Designer editor specific
+@designer-selected-panel-bg: #e5e8ea;
+@designer-panel-grey-color: #7e898f;
+@designer-warning-highlight: #ffcc00;
+@designer-warning-border: #fad540;
+@designer-inline-error-color: #e64545;
+@designer-button-disabled-bg: #e6e6e6;
+@designer-text-medium: #79838a;
+@chapter-btn-border-top-color: #a4aaaf;
+@chapter-btn-border-bottom-color: #999fa4;
+@chapter-btn-hover-border-top-color: #c5c8ca;
+@chapter-btn-hover-border-bottom-color: #a7acaf;
+@chapter-btn-bg-color: #cbd1d5;
+
+// Designer list specific
+@designer-list-sidebar-color: #727d84;
+@designer-list-bottom-border-color: #b1b5b8;
+@designer-list-inactive-color: #cbcbcb;
+@designer-list-item-border-color: #e2e3e4;
+@designer-list-link-color: #1c76c3;
+@designer-list-muted-text-color: #788792;
+@designer-list-error-border-color: #f0d8d8;
+@designer-list-alt-bg-color: #f3f3f3;
+@designer-list-dark-text-color: #4d4d4d;
+@designer-list-text-color: #6b6b6b;
+
+// Label colors
+@wb-label-yellow-bg: #d89400;
+@wb-label-teal-bg: #14a6a7;
+@wb-label-maroon-bg: #75485e;
+
+// Modal colors
+@modal-error-color: #ff2b2b;
+
+// Dropdown colors
+@designer-dropdown-heading-color: #949da3;
