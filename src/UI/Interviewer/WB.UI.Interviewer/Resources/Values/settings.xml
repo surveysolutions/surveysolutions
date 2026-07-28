@@ -6,6 +6,7 @@
   <integer name="GpsDesiredAccuracy">50</integer>
   <integer name="EventChunkSize">1000</integer>
   <bool name="VibrateOnError">true</bool>
+  <bool name="CommunicationIntegrityValidationIgnore">false</bool>
   <bool name="AllowSyncWithHq">true</bool>
   <string name="google_maps_api_key"></string>  
   <string name="arcgisruntime_key"></string>

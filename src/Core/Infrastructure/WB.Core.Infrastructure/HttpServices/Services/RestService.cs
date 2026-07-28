@@ -33,6 +33,7 @@ namespace WB.Core.Infrastructure.HttpServices.Services
         private readonly IHttpClientFactory httpClientFactory;
         private readonly IFastBinaryFilesHttpHandler fileDownloader;
         private ILogger logger;
+        private readonly IIntegrityService integrityService;
 
         public RestService(
             IRestServiceSettings restServiceSettings,
@@ -42,7 +43,8 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             IHttpStatistician httpStatistician,
             IHttpClientFactory httpClientFactory, 
             IFastBinaryFilesHttpHandler fileDownloader,
-            ILogger logger)
+            ILogger logger,
+            IIntegrityService integrityService)
         {
             this.restServiceSettings = restServiceSettings;
             this.networkService = networkService;
@@ -52,6 +54,7 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             this.httpClientFactory = httpClientFactory;
             this.fileDownloader = fileDownloader;
             this.logger = logger;
+            this.integrityService = integrityService;
         }
 
         private Task<ExecuteRequestResult> ExecuteRequestAsync(
@@ -79,7 +82,8 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             Dictionary<string, string> customHeaders = null,
             CancellationToken? userCancellationToken = null)
         {
-            if (!this.IsValidHostAddress(this.restServiceSettings.Endpoint))
+            var endpoint = this.restServiceSettings.Endpoint?.Trim();
+            if (!this.IsValidHostAddress(endpoint))
                 throw new RestException("Invalid URL", type: RestExceptionType.InvalidUrl);
 
             if (this.networkService != null)
@@ -92,7 +96,8 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             var linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(requestTimeoutToken,
                 userCancellationToken ?? default);
 
-            var fullUrl = new Url(this.restServiceSettings.Endpoint, (credentials?.Workspace ?? "") + "/" + url, queryString);
+            var requestPath = new Url(credentials?.Workspace ?? string.Empty, url, null).ToString();
+            var fullUrl = new Url(endpoint, requestPath, queryString);
 
             var request = new HttpRequestMessage()
             {
@@ -153,6 +158,16 @@ namespace WB.Core.Infrastructure.HttpServices.Services
                         .ConfigureAwait(false);
                 this.logger.Debug($"Executed web request url: {request.RequestUri}, response code: {httpResponseMessage.StatusCode}");
 
+                try
+                {
+                    integrityService.ValidateResponseHeadersAndThrow(httpResponseMessage.Headers);
+                }
+                catch
+                {
+                    httpResponseMessage.Dispose();
+                    throw;
+                }
+
                 if (httpResponseMessage.IsSuccessStatusCode
                     || httpResponseMessage.StatusCode == HttpStatusCode.NotModified
                     || httpResponseMessage.StatusCode == HttpStatusCode.NoContent)
@@ -160,7 +175,10 @@ namespace WB.Core.Infrastructure.HttpServices.Services
                     return new ExecuteRequestResult(httpClient, httpResponseMessage);
                 }
 
-                throw new RestException(httpResponseMessage.ReasonPhrase, statusCode: httpResponseMessage.StatusCode);
+                var statusCode = httpResponseMessage.StatusCode;
+                var reasonPhrase = httpResponseMessage.ReasonPhrase;
+                httpResponseMessage.Dispose();
+                throw new RestException(reasonPhrase, statusCode: statusCode);
             }
             catch (OperationCanceledException ex)
             {
@@ -515,7 +533,7 @@ namespace WB.Core.Infrastructure.HttpServices.Services
         }
 
         public bool IsValidHostAddress(string url)
-            => Uri.TryCreate(url, UriKind.Absolute, out var uriResult) &&
+            => Uri.TryCreate(url?.Trim(), UriKind.Absolute, out var uriResult) &&
                (uriResult.Scheme == "http" || uriResult.Scheme == "https");
 
         internal class RestResponse

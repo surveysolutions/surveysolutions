@@ -3,33 +3,33 @@
         <div class="col-md-12">
             <div class="welcome-page">
                 <ul class="nav nav-tabs" role="tablist" id="settingsTabs">
-                    <li role="presentation">
+                    <li role="presentation" class="nav-item">
                         <a href="#export" @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
-                            aria-controls="export" role="tab" data-bs-toggle="tab" class="active">
+                            aria-controls="export" role="tab" data-bs-toggle="tab" class="nav-link active">
                             {{ $t('Settings.Export') }}
                         </a>
                     </li>
-                    <li role="presentation">
+                    <li role="presentation" class="nav-item">
                         <a href="#note" @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
-                            aria-controls="note" role="tab" data-bs-toggle="tab">
+                            aria-controls="note" role="tab" data-bs-toggle="tab" class="nav-link">
                             {{ $t('Settings.GlobalNote') }}
                         </a>
                     </li>
-                    <li role="presentation">
+                    <li role="presentation" class="nav-item">
                         <a href="#profile" @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
-                            aria-controls="profile" role="tab" data-bs-toggle="tab">
+                            aria-controls="profile" role="tab" data-bs-toggle="tab" class="nav-link">
                             {{ $t('Settings.UserProfile') }}
                         </a>
                     </li>
-                    <li role="presentation">
+                    <li role="presentation" class="nav-item">
                         <a href="#devices" @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
-                            aria-controls="devices" role="tab" data-bs-toggle="tab">
+                            aria-controls="devices" role="tab" data-bs-toggle="tab" class="nav-link">
                             {{ $t('Settings.Devices') }}
                         </a>
                     </li>
-                    <li role="presentation">
+                    <li role="presentation" class="nav-item">
                         <a href="#logo" @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
-                            aria-controls="logo" role="tab" data-bs-toggle="tab">
+                            aria-controls="logo" role="tab" data-bs-toggle="tab" class="nav-link">
                             {{ $t('Settings.Logo') }}
                         </a>
                     </li>
@@ -41,7 +41,8 @@
                         v-model:retentionLimitInDays="retentionLimitInDays"
                         v-model:retentionLimitQuantity="retentionLimitQuantity"
                         v-model:retentionLimitInDaysCancel="retentionLimitInDaysCancel"
-                        v-model:retentionLimitQuantityCancel="retentionLimitQuantityCancel" />
+                        v-model:retentionLimitQuantityCancel="retentionLimitQuantityCancel"
+                        v-model:geographyExportFormat="geographyExportFormat" />
                     <Note v-model="globalNotice" />
                     <Profile v-model="isAllowInterviewerUpdateProfile" />
                     <Devices v-model:isInterviewerAutomaticUpdatesEnabled="isInterviewerAutomaticUpdatesEnabled"
@@ -51,7 +52,10 @@
                         v-model:geographyQuestionPeriodInSecondsCancel="geographyQuestionPeriodInSecondsCancel"
                         v-model:geographyQuestionPeriodInSeconds="geographyQuestionPeriodInSeconds"
                         v-model:geographyQuestionAccuracyInMetersCancel="geographyQuestionAccuracyInMetersCancel"
-                        v-model:esriApiKey="esriApiKey" v-model:esriApiKeyInitial="esriApiKeyInitial" />
+                        v-model:esriApiKey="esriApiKey" v-model:esriApiKeyInitial="esriApiKeyInitial"
+                        v-model:allowSupervisorChangeAssignmentStatus="allowSupervisorChangeAssignmentStatus"
+                        v-model:allowInterviewerChangeAssignmentStatus="allowInterviewerChangeAssignmentStatus"
+                        v-model:audioRecordingQuality="audioRecordingQuality" />
 
                     <Logo />
                 </div>
@@ -62,8 +66,7 @@
 
 
 <script>
-import { Form, Field, ErrorMessage } from 'vee-validate'
-import emitter from '~/shared/emitter';
+import emitter from '~/shared/emitter'
 
 import Export from './Settings/Export'
 import Note from './Settings/Note'
@@ -78,10 +81,6 @@ export default {
         Profile,
         Devices,
         Logo,
-
-        Form,
-        Field,
-        ErrorMessage,
     },
     data() {
         return {
@@ -103,12 +102,16 @@ export default {
             dropSchemaDots: 1,
             esriApiKey: null,
             esriApiKeyInitial: null,
+            allowSupervisorChangeAssignmentStatus: true,
+            allowInterviewerChangeAssignmentStatus: true,
+            audioRecordingQuality: 'Mono44kHz',
 
             isRetentionEnabled: false,
             retentionLimitInDays: null,
             retentionLimitQuantity: null,
             retentionLimitInDaysCancel: null,
             retentionLimitQuantityCancel: null,
+            geographyExportFormat: 'Wkt',
         }
     },
     async beforeMount() {
@@ -130,6 +133,9 @@ export default {
             this.geographyQuestionPeriodInSecondsCancel = workspaceSettings.data.geographyQuestionPeriodInSeconds
             this.esriApiKey = workspaceSettings.data.esriApiKey
             this.esriApiKeyInitial = workspaceSettings.data.esriApiKey
+            this.allowSupervisorChangeAssignmentStatus = workspaceSettings.data.allowSupervisorChangeAssignmentStatus ?? true
+            this.allowInterviewerChangeAssignmentStatus = workspaceSettings.data.allowInterviewerChangeAssignmentStatus ?? true
+            this.audioRecordingQuality = workspaceSettings.data.audioRecordingQuality ?? 'Mono44kHz'
 
             this.encryptionEnabled = workspaceSettings.data.exportSettings.isEnabled
             this.encryptionPassword = workspaceSettings.data.exportSettings.password
@@ -141,6 +147,7 @@ export default {
             this.retentionLimitQuantity = workspaceSettings.data.exportSettings.retentionLimitQuantity
             this.retentionLimitInDaysCancel = workspaceSettings.data.exportSettings.retentionLimitInDays
             this.retentionLimitQuantityCancel = workspaceSettings.data.exportSettings.retentionLimitQuantity
+            this.geographyExportFormat = workspaceSettings.data.exportSettings.geographyExportFormat ?? 'Wkt'
         },
 
         setPageActive(titleType, messageType) {

@@ -1,4 +1,7 @@
-import { attach } from '@frsource/autoresize-textarea';
+function resize(el) {
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
+}
 
 const autosize = app => {
     app.directive('autosize', {
@@ -6,13 +9,15 @@ const autosize = app => {
             el.style.overflow = 'hidden';
             el.style.resize = 'none';
             el.style.boxSizing = 'border-box';
-            el.rows = 1;
-
-            const { detach } = attach(el);
-            el.detachAutosize = detach;
+            el._resizeHandler = () => resize(el);
+            el.addEventListener('input', el._resizeHandler);
+            resize(el);
+        },
+        updated(el) {
+            resize(el);
         },
         unmounted(el) {
-            el.detachAutosize();
+            el.removeEventListener('input', el._resizeHandler);
         }
     });
 };

@@ -5,7 +5,7 @@
             <span class="caret"></span>
         </button>
 
-        <div role="menu" class="chapter-menu dropdown-menu dropdown-menu-right">
+        <div role="menu" class="chapter-menu dropdown-menu dropdown-menu-left">
             <h1>{{ $t('QuestionnaireEditor.MoveToAnotherSubSection') }}</h1>
             <ul>
                 <li v-for="chapter in questionnaire.chapters">

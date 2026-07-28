@@ -90,7 +90,8 @@ namespace WB.Services.Export.Host.Controllers
             Guid? translationId,
             ExternalStorageType? storageType,
             bool? includeMeta,
-            bool? paradataReduced)
+            bool? paradataReduced,
+            GeographyExportFormat? geographyExportFormat)
         {
             var args = new DataExportProcessArgs(new ExportSettings
             (
@@ -102,7 +103,8 @@ namespace WB.Services.Export.Host.Controllers
                 translation: translationId,
                 status: status,
                 includeMeta: includeMeta,
-                paradataReduced: paradataReduced
+                paradataReduced: paradataReduced,
+                geographyExportFormat: geographyExportFormat
             ))
             {
                 ArchivePassword = archivePassword,

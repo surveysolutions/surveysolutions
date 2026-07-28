@@ -1,5 +1,6 @@
 ﻿using System;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
 {
@@ -17,6 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         int GpsReceiveTimeoutSec { get; }
         double GpsDesiredAccuracy { get; }
         bool VibrateOnError { get; }
+        
         bool ShowVariables { get; }
         bool ShowLocationOnMap { get; }
         bool ShowAnswerTime { get; }
@@ -46,5 +48,14 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void SetEsriApiKey(string esriApiKey);
         
         bool SupportOfflineMaps { get; }
+
+        bool AllowSupervisorChangeAssignmentStatus { get; }
+        void SetAllowSupervisorChangeAssignmentStatus(bool allow);
+
+        bool AllowInterviewerChangeAssignmentStatus { get; }
+        void SetAllowInterviewerChangeAssignmentStatus(bool allow);
+
+        AudioRecordingQuality AudioRecordingQuality { get; }
+        void SetAudioRecordingQuality(AudioRecordingQuality quality);
     }
 }

@@ -23,6 +23,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.SystemLog;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Resources;
@@ -45,6 +46,9 @@ namespace WB.UI.Headquarters.Controllers.Api
             public bool InterviewerAutoUpdatesEnabled { get; set; }
             public bool NotificationsEnabled { get; set; }
             public bool PartialSynchronizationEnabled { get; set; }
+            public bool AllowSupervisorChangeAssignmentStatus { get; set; }
+            public bool AllowInterviewerChangeAssignmentStatus { get; set; }
+            public AudioRecordingQuality? AudioRecordingQuality { get; set; }
         }
 
         public class InterviewerGeographyQuestionAccuracyInMetersModel
@@ -133,7 +137,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 this.appSettingsStorage.Store(globalNotice, GlobalNotice.GlobalNoticeKey);
             }
 
-            return Ok(new {sucess = true});
+            return Ok(new {success = true});
         }
 
         [HttpGet]
@@ -153,7 +157,12 @@ namespace WB.UI.Headquarters.Controllers.Api
                 
                 AllowInterviewerUpdateProfile = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false,
                 ExportSettings = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings(),
-                    exportSettings.GetExportRetentionSettings())
+                    exportSettings.GetExportRetentionSettings(),
+                    exportSettings.GetGeographyExportFormat()),
+
+                AllowSupervisorChangeAssignmentStatus = interviewerSettings.IsAllowSupervisorChangeAssignmentStatus(),
+                AllowInterviewerChangeAssignmentStatus = interviewerSettings.IsAllowInterviewerChangeAssignmentStatus(),
+                AudioRecordingQuality = interviewerSettings.GetAudioRecordingQuality()
             };
         }
 
@@ -162,16 +171,23 @@ namespace WB.UI.Headquarters.Controllers.Api
         public IActionResult InterviewerSettings([FromBody] InterviewerSettingsModel message)
         {
             if (!ModelState.IsValid)
-                return Ok(new {sucess = false});
+                return Ok(new {success = false});
 
             UpdateInterviewerSettings(settings =>
             {
                 settings.AutoUpdateEnabled = message.InterviewerAutoUpdatesEnabled;
                 settings.DeviceNotificationsEnabled = message.NotificationsEnabled;
                 settings.PartialSynchronizationEnabled = message.PartialSynchronizationEnabled;
+                settings.AllowSupervisorChangeAssignmentStatus = message.AllowSupervisorChangeAssignmentStatus;
+                // If supervisor setting is off, interviewer setting is also forced off
+                settings.AllowInterviewerChangeAssignmentStatus = message.AllowSupervisorChangeAssignmentStatus
+                    ? message.AllowInterviewerChangeAssignmentStatus
+                    : false;
+                if (message.AudioRecordingQuality.HasValue)
+                    settings.AudioRecordingQuality = message.AudioRecordingQuality.Value;
             });
 
-            return Ok(new {sucess = true});
+            return Ok(new {success = true});
         }
 
         private void UpdateInterviewerSettings(Action<InterviewerSettings> updateAction)
@@ -190,14 +206,14 @@ namespace WB.UI.Headquarters.Controllers.Api
         public IActionResult InterviewerGeographyQuestionAccuracyInMeters([FromBody] InterviewerGeographyQuestionAccuracyInMetersModel message)
         {
             if (!ModelState.IsValid)
-                return Ok(new {sucess = false});
+                return Ok(new {success = false});
 
             UpdateInterviewerSettings(settings =>
             {
                 settings.GeographyQuestionAccuracyInMeters = message.GeographyQuestionAccuracyInMeters;
             });
 
-            return Ok(new {sucess = true});
+            return Ok(new {success = true});
         }
 
         [HttpPost]
@@ -205,14 +221,14 @@ namespace WB.UI.Headquarters.Controllers.Api
         public IActionResult InterviewerGeographyQuestionPeriodInSeconds([FromBody] InterviewerGeographyQuestionPeriodInSecondsModel message)
         {
             if (!ModelState.IsValid)
-                return Ok(new {sucess = false});
+                return Ok(new {success = false});
 
             UpdateInterviewerSettings(settings =>
             {
                 settings.GeographyQuestionPeriodInSeconds = message.GeographyQuestionPeriodInSeconds;
             });
 
-            return Ok(new {sucess = true});
+            return Ok(new {success = true});
         }
         
         [HttpPost]
@@ -228,7 +244,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 },
                 AppSetting.ProfileSettings);
 
-            return Ok(new {sucess = true});
+            return Ok(new {success = true});
         }
 
         
@@ -238,7 +254,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             if (!ModelState.IsValid) return this.BadRequest();
             if (RegionEndpoint.EnumerableAllRegions.All(r => r.SystemName != settings.AwsRegion))
-                return Ok(new {sucess = false, error = Settings.EmailProvider_AwsRegion_Unknown });
+                return Ok(new {success = false, error = Settings.EmailProvider_AwsRegion_Unknown });
             
             var currentsSettings = this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
             this.emailProviderSettingsStorage.Store(settings, AppSetting.EmailProviderSettings);
@@ -248,7 +264,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 auditLog.EmailProviderWasChanged((currentsSettings?.Provider ?? EmailProvider.None).ToString(), settings.Provider.ToString());
             }
 
-            return Ok(new {sucess = true});
+            return Ok(new {success = true});
         }
         
         [HttpPost]
@@ -256,7 +272,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         public IActionResult UpdateEsriApiKey([FromBody]EsriApiKeyModel key)
         {
             if (!ModelState.IsValid)
-                return Ok(new {sucess = false});
+                return Ok(new {success = false});
 
             UpdateInterviewerSettings(settings =>
             {
@@ -265,7 +281,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             
             this.auditLog.EsriApiKeyChanged(String.IsNullOrEmpty(key.EsriApiKey));
 
-            return Ok(new {sucess = true});
+            return Ok(new {success = true});
         }
 
         [HttpGet]

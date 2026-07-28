@@ -141,6 +141,12 @@
   <data name="Disconnected" xml:space="preserve">
     <value>Disconnected</value>
   </data>
+  <data name="InvalidServerResponseMessage" xml:space="preserve">
+    <value>The server did not return the expected identification header. You may be connected to a proxy or an incorrect server. Please reload the page.</value>
+  </data>
+  <data name="InvalidServerResponseTitle" xml:space="preserve">
+    <value>Invalid server response</value>
+  </data>
   <data name="ConnectionLostTitle" xml:space="preserve">
     <value>Connection to server is lost.</value>
   </data>
@@ -149,6 +155,13 @@
   </data>
   <data name="CloseInterviewMessage" xml:space="preserve">
     <value>&lt;p&gt;Web Interview supports only one active tab with the interview.&lt;/p&gt;&lt;p&gt;Please reload this page to continue using this tab or close it.&lt;/p&gt;</value>
+  </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>Connection lost. Attempting to reconnect…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>Attempt {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
   </data>
   <data name="CommentAdd" xml:space="preserve">
     <value>Add comment</value>

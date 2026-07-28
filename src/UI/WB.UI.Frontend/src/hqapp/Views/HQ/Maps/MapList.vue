@@ -46,7 +46,7 @@
 import { DateFormats, humanFileSize } from '~/shared/helpers'
 import moment from 'moment'
 import * as toastr from 'toastr'
-import gql from 'graphql-tag'
+import { gql, gqlRequest } from '~/hqapp/api/graphql'
 const query = gql`query MapsList($workspace: String!, $order: [MapsSort!], $skip: Int, $take: Int, $where: MapsFilter) {
   maps(workspace: $workspace, order: $order, skip: $skip, take: $take, where: $where) {
     totalCount
@@ -55,6 +55,7 @@ const query = gql`query MapsList($workspace: String!, $order: [MapsSort!], $skip
       fileName
       importDateUtc
       size
+      hasDuplicateLabels
     }
   }
 }`
@@ -95,12 +96,10 @@ export default {
                 return
             }
 
+            const self = this
+
             const statusupdater = this.updateStatus
             const reloader = this.reload
-            const uploadingMessage = this.$t('Pages.Map_Uploading')
-            const uploadingErrorMessage = this.$t('Pages.Map_UploadingError')
-            const uploadingSuccess = this.$t('Pages.Map_UploadingSuccess')
-            const uploadingFileTooBig = this.$t('Pages.Map_UploadingFileTooBig')
 
             const fd = new FormData()
             var fileToUpload = this.$refs.uploader.files[0]
@@ -108,7 +107,7 @@ export default {
             var filesize = ((fileToUpload.size / 1024) / 1024).toFixed(4)
 
             if (filesize >= 1024) {
-                statusupdater(uploadingFileTooBig)
+                statusupdater(self.$t('Pages.Map_UploadingFileTooBig'))
                 return
             }
 
@@ -119,7 +118,12 @@ export default {
                 xhr() {
                     const xhr = $.ajaxSettings.xhr()
                     xhr.upload.onprogress = (e) => {
-                        statusupdater(uploadingMessage + ' ' + parseInt((e.loaded / e.total) * 100) + '%')
+                        const progress = parseInt((e.loaded / e.total) * 100)
+                        if (progress === 100) {
+                            statusupdater(self.$t('Common.Processing'))
+                        } else {
+                            statusupdater(self.$t('Pages.Map_Uploading') + ' ' + progress + '%')
+                        }
                     }
                     return xhr
                 },
@@ -129,13 +133,13 @@ export default {
                 type: 'POST',
                 success: function (data) {
                     if (!data.isSuccess)
-                        statusupdater(uploadingErrorMessage, data.errors)
+                        statusupdater(self.$t('Pages.Map_UploadingError'), data.errors)
                     else
-                        statusupdater(uploadingSuccess)
+                        statusupdater(self.$t('Pages.Map_UploadingSuccess'))
                     reloader()
                 },
                 error: function (err) {
-                    statusupdater(uploadingErrorMessage)
+                    statusupdater(self.$t('Pages.Map_UploadingError'))
                 },
             })
             this.$refs.uploader.value = ''
@@ -159,18 +163,18 @@ export default {
             this.deleteMapName = fileName
             this.$refs.confirmDiscard.promt(ok => {
                 if (ok) {
-                    self.$apollo.mutate({
-                        mutation: gql`
+                    gqlRequest(
+                        gql`
                                 mutation deleteMap($workspace: String!, $fileName: String!) {
                                     deleteMap(workspace: $workspace, fileName: $fileName) {
                                         fileName
                                     }
                                 }`,
-                        variables: {
+                        {
                             'fileName': fileName,
                             workspace: self.$store.getters.workspace,
                         },
-                    }).then(response => {
+                    ).then(response => {
                         self.$refs.table.reload()
                     }).catch(err => {
                         console.error(err)
@@ -202,7 +206,7 @@ export default {
                         title: this.$t('Pages.MapList_MapName'),
                         render(data) {
                             return `<a href="${self.$hq.basePath}Maps/Details?mapname=${encodeURIComponent(data)}">${data}</a>`
-                        }
+                        },
                     },
                     {
                         data: 'fileName',
@@ -233,6 +237,18 @@ export default {
                                 .utc(data)
                                 .local()
                                 .format(DateFormats.dateTimeInList)
+                        },
+                    },
+                    {
+                        data: 'hasDuplicateLabels',
+                        name: 'HasDuplicateLabels',
+                        class: 'parameters',
+                        title: this.$t('Pages.MapList_HasDuplicateLabels'),
+                        render(data) {
+                            if (data === null || data === undefined) {
+                                return ''
+                            }
+                            return data ? self.$t('Common.Yes') : self.$t('Common.No')
                         },
                     },
                 ],
@@ -268,12 +284,8 @@ export default {
                         variables.where = where
                     }
 
-                    self.$apollo.query({
-                        query,
-                        variables: variables,
-                        fetchPolicy: 'network-only',
-                    }).then(response => {
-                        const data = response.data.maps
+                    gqlRequest(query, variables).then(response => {
+                        const data = response.maps
                         self.totalRows = data.totalCount
                         self.filteredCount = data.filteredCount
                         callback({

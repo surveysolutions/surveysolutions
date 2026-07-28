@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
@@ -334,7 +335,7 @@ namespace WB.Services.Export.Tests
             ICsvWriter csvWriter = null,
             IInterviewFactory interviewFactory = null)
         {
-            return new InterviewsExporter(new ExportQuestionService(),
+            return new InterviewsExporter(new ExportQuestionService(new GeographySerializer(NullLogger<GeographySerializer>.Instance)),
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
                 Create.InterviewErrorsExporter(),
                 csvWriter ?? Mock.Of<ICsvWriter>(),

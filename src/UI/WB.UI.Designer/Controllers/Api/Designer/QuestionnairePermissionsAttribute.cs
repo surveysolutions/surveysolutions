@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
@@ -56,7 +55,18 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             if (write)
             {
-                bool hasWriteAccess = viewFactory.HasUserChangeAccessToQuestionnaire(questionnaireRevision.QuestionnaireId, httpContextUser.GetId());
+                if (httpContextUser.Identity?.IsAuthenticated != true)
+                {
+                    context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
+                    {
+                        StatusCode = StatusCodes.Status401Unauthorized
+                    };
+                    return;
+                }
+
+                var writeUserId = httpContextUser.GetIdOrNull();
+                bool hasWriteAccess = httpContextUser.IsAdmin() ||
+                    (writeUserId.HasValue && viewFactory.HasUserChangeAccessToQuestionnaire(questionnaireRevision.QuestionnaireId, writeUserId.Value));
                 if (!hasWriteAccess)
                 {
                     context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
@@ -67,7 +77,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return;
             }
             
-            if (!httpContextUser.Identity!.IsAuthenticated && !hasAnonymousAccess)
+            if (httpContextUser.Identity?.IsAuthenticated != true && !hasAnonymousAccess)
             {
                 context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
                 {
@@ -78,7 +88,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             bool hasAccess = hasAnonymousAccess ||
                   httpContextUser.IsAdmin() ||
-                  viewFactory.HasUserAccessToQuestionnaire(questionnaireRevision, httpContextUser.GetId());
+                  viewFactory.HasUserAccessToQuestionnaire(questionnaireRevision, httpContextUser.GetIdOrNull());
             if (!hasAccess)
             {
                 context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })

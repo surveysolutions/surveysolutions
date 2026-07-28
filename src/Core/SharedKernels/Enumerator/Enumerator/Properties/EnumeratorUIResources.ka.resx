@@ -528,7 +528,7 @@
     <value>სინქრონიზაცია წარმატებით შესრულდა</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>შესრულებული დავალებები</value>
+    <value>შესრულებული ინტერვიუები</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{1} {2} -დან {0} შესრულებულია</value>
@@ -643,5 +643,430 @@
   </data>
   <data name="Warning" xml:space="preserve">
     <value>გაფრთხილება</value>
+  </data>
+  <data name="CommunicationIntegrityFailed" xml:space="preserve">
+    <value>დაავადება მიღებული პასუხი არ ჩანს სარეალარ(server) Survey Solutions. ეს ჩვეულებრივია გამოწვეული ქსელის პროქსით, ფაიერვოლით ან უსაფრთხოების გეითვეით, რომელიც ამარენტებს კავშირს. გთხოვთ შეამოწმოთ თქვენი ქსელის კავშირი ან დაუკავშირდით IT მხარდაჭერას.</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment" xml:space="preserve">
+    <value>დასრულება</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
+    <value>დავალების დასრულება</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ ჩამოთვალეთ ყველა კვალიფიციური ერთეული?</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
+    <value>დავალების ხელახლა გახსნა</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>დავალება დაუბრუნდება ღია სტატუსს და ინტერვიუერები შეძლებენ ახალი ინტერვიუების შექმნას.</value>
+  </data>
+  <data name="Dashboard_CloseAssignment" xml:space="preserve">
+    <value>დამტკიცება</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
+    <value>დავალების დახურვა</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
+    <value>ინტერვიუერები, რომლებიც მუშაობენ ოფლაინ რეჟიმში, შეიძლება გააგრძელონ მონაცემთა შეგროვება სინქრონიზაციამდე. ასეთი ინტერვიუები კვლავ მიღებული იქნება.</value>
+  </data>
+  <data name="Dashboard_Assignment_Comment" xml:space="preserve">
+    <value>კომენტარი (სურვილისამებრ)</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
+    <value>სტატუსი: დასრულებული</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
+    <value>სტატუსი: დამტკიცებული</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
+    <value>სტატუსი: ღია</value>
+  </data>
+  <data name="Dashboard_WebInterviewsLinkText" xml:space="preserve">
+    <value>ვებ-ინტერვიუები ({0})</value>
+  </data>
+  <data name="Dashboard_StartNewInterview" xml:space="preserve">
+    <value>ახალი ინტერვიუს დაწყება</value>
+  </data>
+  <data name="Maps_NoMapsText" xml:space="preserve">
+    <value>სინქრონიზება, რომ მიიღოთ რუქები
+ან დაუკავშირდით ზედამხედველს
+დამატებითი ინსტრუქციებისთვის</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspaces" xml:space="preserve">
+    <value>სამუშაო სივრცეების განახლება</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesFinished" xml:space="preserve">
+    <value>სამუშაო სივრცეების სია განახლდა</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesError" xml:space="preserve">
+    <value>სამუშაო სივრცეების სიის მიღებისას შეცდომა. გთხოვთ, დაუკავშირდეთ სისტემის ადმინისტრატორს. </value>
+  </data>
+  <data name="Maps_Title" xml:space="preserve">
+    <value>რუქები</value>
+  </data>
+  <data name="InvalidEndpointShort" xml:space="preserve">
+    <value>მისამართი არასწორია</value>
+  </data>
+  <data name="BluetoothPermissionRequired" xml:space="preserve">
+    <value>ოფლაინ სინქრონიზაციისთვის საჭიროა Bluetooth-ის ნებართვა</value>
+  </data>
+  <data name="NearbyPermissionRequired" xml:space="preserve">
+    <value>ოფლაინ სინქრონიზაციისთვის საჭიროა მახლობლად მყოფი Wi-Fi მოწყობილობების ნებართვა</value>
+  </data>
+  <data name="LocationPermissionRequired" xml:space="preserve">
+    <value>ოფლაინ სინქრონიზაციისთვის საჭიროა მდებარეობის ნებართვა</value>
+  </data>
+  <data name="Synchronization_Download_CalendarEvents_Title" xml:space="preserve">
+    <value>კალენდრის მოვლენების განახლება</value>
+  </data>
+  <data name="Synchronization_Update_Interviews_Title" xml:space="preserve">
+    <value>სერვერიდან ცვლილებებით ადგილობრივი ინტერვიუების განახლება</value>
+  </data>
+  <data name="Synchronization_Fail_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>{1} ნაწილობრივი ინტერვიუდან გადმოწერილია {0}</value>
+  </data>
+  <data name="Synchronization_PartialInterviews" xml:space="preserve">
+    <value>ინტერვიუს ცვლილებები</value>
+  </data>
+  <data name="Synchronization_LinkToErrors" xml:space="preserve">
+    <value>სინქრონიზაციის შეცდომების შესახებ დამატებითი ინფორმაცია შეგიძლიათ იხილოთ &lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems"&gt;მხარდაჭერის საიტზე&lt;/a&gt;</value>
+  </data>
+  <data name="UpdatingQuestionnaires" xml:space="preserve">
+    <value>კითხვარების განახლება</value>
+  </data>
+  <data name="TransferringAssignments" xml:space="preserve">
+    <value>დავალებების გადაცემა</value>
+  </data>
+  <data name="TransferringCalendarEvents" xml:space="preserve">
+    <value>კალენდრის მოვლენების გადაცემა</value>
+  </data>
+  <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
+    <value>ყველა რუქა სინქრონიზებულია</value>
+  </data>
+  <data name="Synchronization_Success_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>{0} ინტერვიუ განახლდა</value>
+  </data>
+  <data name="Synchronization_Success_State_PartialUploadInterviews_Format" xml:space="preserve">
+    <value>{0} ინტერვიუ ნაწილობრივ ატვირთულია</value>
+  </data>
+  <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
+    <value>კალენდრის მოვლენები</value>
+  </data>
+  <data name="Synchronization_Receiving_Title_Format" xml:space="preserve">
+    <value>{0}-ის მიღება</value>
+  </data>
+  <data name="Synchronization_PasswordChangeRequired" xml:space="preserve">
+    <value>თქვენი პაროლი განახლდა. საიტზე წვდომისთვის უნდა შეცვალოთ იგი.</value>
+  </data>
+  <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
+    <value>მომხმარებელი ამ ზედამხედველის გუნდს აღარ ეკუთვნის. გთხოვთ, დაუკავშირდეთ სათაო ოფისს დეტალებისთვის.</value>
+  </data>
+  <data name="YouChangeYouPasswordTryToLoginAgainWithNewPassword" xml:space="preserve">
+    <value>თქვენ შეცვალეთ თქვენი ამჟამინდელი პაროლი. სცადეთ ხელახლა შესვლა ახალი პაროლით.</value>
+  </data>
+  <data name="HeadquartersVersion" xml:space="preserve">
+    <value>სათაო ოფისის მხარდაჭერილი ვერსია: {0}</value>
+  </data>
+  <data name="SupervisorVersion" xml:space="preserve">
+    <value>ზედამხედველის ვერსია: {0}</value>
+  </data>
+  <data name="InterviewerVersion" xml:space="preserve">
+    <value>ინტერვიუერის ვერსია: {0}</value>
+  </data>
+  <data name="Synchronization_SupervisorShouldDoOnlineSync_Title" xml:space="preserve">
+    <value>ზედამხედველის აპლიკაციის სინქრონიზება საჭიროა.</value>
+  </data>
+  <data name="Synchronization_SupervisorShouldDoOnlineSync" xml:space="preserve">
+    <value>ზედამხედველს ყოველთვის უნდა ჰქონდეს სათაო ოფისის უახლესი ცვლილებები, ამიტომ ოფლაინ სინქრონიზაციამდე გუნდში ბოლოს სინქრონიზებული უნდა იყოს</value>
+  </data>
+  <data name="MenuItem_Title_Return" xml:space="preserve">
+    <value>უკან</value>
+  </data>
+  <data name="MenuItem_Title_Map_Dashboard" xml:space="preserve">
+    <value>რუქის დაფა</value>
+  </data>
+  <data name="MenuItem_Title_Search" xml:space="preserve">
+    <value>ძებნა</value>
+  </data>
+  <data name="MenuItem_Title_Workspaces" xml:space="preserve">
+    <value>სამუშაო სივრცეები</value>
+  </data>
+  <data name="MenuItem_Title_RefreshWorkspaces" xml:space="preserve">
+    <value>სამუშაო სივრცეების განახლება</value>
+  </data>
+  <data name="Diagnostics_Backup_Description" xml:space="preserve">
+    <value>ყველა შესაბამისი ინფორმაციის ფაილად შენახვა ამ მოწყობილობაზე.</value>
+  </data>
+  <data name="Diagnostics_Backup_Title" xml:space="preserve">
+    <value>მხარდაჭერის პაკეტის გენერირება</value>
+  </data>
+  <data name="Diagnostics_ServerUrl" xml:space="preserve">
+    <value>სერვერის URL: </value>
+  </data>
+  <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
+    <value>რუქების სინქრონიზაცია</value>
+  </data>
+  <data name="MenuItem_Title_Maps" xml:space="preserve">
+    <value>რუქები</value>
+  </data>
+  <data name="AssignmentsSynchronization" xml:space="preserve">
+    <value>დავალება(ებ)ის სინქრონიზაცია</value>
+  </data>
+  <data name="Synchronization_DownloadApplication" xml:space="preserve">
+    <value>აპლიკაციის განახლებების გადმოწერა</value>
+  </data>
+  <data name="Synchronization_UploadingApplication" xml:space="preserve">
+    <value>აპლიკაციის განახლებების გაგზავნა</value>
+  </data>
+  <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
+    <value>მიღებულია {0}/{1}, სიჩქარე {2} ({3}%)</value>
+  </data>
+  <data name="Synchronization_SendingApplication_Description" xml:space="preserve">
+    <value>გაგზავნილია {0}/{1}, სიჩქარე {2} ({3}%)</value>
+  </data>
+  <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
+    <value>აპლიკაციის განახლებების შემოწმება</value>
+  </data>
+  <data name="Interview_Loading_Description" xml:space="preserve">
+    <value>ინტერვიუ მალე დაიწყება</value>
+  </data>
+  <data name="Interview_Creating" xml:space="preserve">
+    <value>ინტერვიუს შექმნა</value>
+  </data>
+  <data name="Interview_Creating_Description" xml:space="preserve">
+    <value>ეს შეიძლება რამდენიმე წუთი გაგრძელდეს, 
+ნუ გახვალთ აპლიკაციიდან</value>
+  </data>
+  <data name="FailedToLoadInterviewDescription" xml:space="preserve">
+    <value>ინტერვიუს საქმე არასწორია და ვერ იხსნება. გთხოვთ, დაუკავშირდეთ მხარდაჭერას ან სცადეთ სინქრონიზაცია საქმეების განახლებისთვის.</value>
+  </data>
+  <data name="InterviewerFromDifferentTeam" xml:space="preserve">
+    <value>ინტერვიუერი სხვა გუნდის წევრია. გთხოვთ, სინქრონიზება გაუკეთეთ სათაო ოფისთან.</value>
+  </data>
+  <data name="Synchronization_UploadingLogo" xml:space="preserve">
+    <value>ლოგოს ატვირთვა</value>
+  </data>
+  <data name="Synchronization_UploadAuditLog" xml:space="preserve">
+    <value>აუდიტის ინფორმაციის ატვირთვა</value>
+  </data>
+  <data name="Synchronization_UploadGeoTracking" xml:space="preserve">
+    <value>გეო-თვალთვალის ინფორმაციის ატვირთვა</value>
+  </data>
+  <data name="Synchronization_RemoveObsoleteGeoTracking" xml:space="preserve">
+    <value>მოძველებული გეო-თვალთვალის ინფორმაციის წაშლა</value>
+  </data>
+  <data name="Synchronization_ReceivingAuditLog" xml:space="preserve">
+    <value>აუდიტის ინფორმაციის მიღება</value>
+  </data>
+  <data name="Dashboard_WebInterviewTabText" xml:space="preserve">
+    <value>ვებ-ინტერვიუს რეჟიმში ინტერვიუები. მოიხსნება სინქრონიზაციისას, როდესაც რესპოდენტი ვებ-ინტერვიუს დასრულებს</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
+    <value>შესასრულებელი: {0} ინტერვიუ(ები)</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_SubTitleSingleInterivew" xml:space="preserve">
+    <value>ერთჯერადი ინტერვიუს დავალება</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat" xml:space="preserve">
+    <value>შესასრულებელი: შეუზღუდავი</value>
+  </data>
+  <data name="Dashboard_ViewIssues" xml:space="preserve">
+    <value>პრობლემების ნახვა</value>
+  </data>
+  <data name="Dashboard_Reopen" xml:space="preserve">
+    <value>ხელახლა გახსნა</value>
+  </data>
+  <data name="Dashboard_ShowAssignmentMap" xml:space="preserve">
+    <value>სამიზნე ზონის ჩვენება</value>
+  </data>
+  <data name="Dashboard_AddCalendarEvent" xml:space="preserve">
+    <value>კალენდრის მოვლენის დამატება</value>
+  </data>
+  <data name="Dashboard_EditCalendarEvent" xml:space="preserve">
+    <value>კალენდრის მოვლენის რედაქტირება</value>
+  </data>
+  <data name="Dashboard_RemoveCalendarEvent" xml:space="preserve">
+    <value>კალენდრის მოვლენის წაშლა</value>
+  </data>
+  <data name="Dashboard_ShowCalendarEvent" xml:space="preserve">
+    <value>შემდეგი კონტაქტი: {0}</value>
+  </data>
+  <data name="Dashboard_PastDateCalendarEvent" xml:space="preserve">
+    <value>არჩეული თარიღი წარსულშია</value>
+  </data>
+  <data name="Dashboard_PastTimeCalendarEvent" xml:space="preserve">
+    <value>არჩეული დრო წარსულშია</value>
+  </data>
+  <data name="Dashboard_Interview_QuestionsAnsweredFormat" xml:space="preserve">
+    <value>{0} კითხვა(ები) გასცა პასუხი</value>
+  </data>
+  <data name="Dashboard_Interview_AssignmentLabelFormat" xml:space="preserve">
+    <value>დავალება #{0}</value>
+  </data>
+  <data name="Dashboard_No_InterviewKey" xml:space="preserve">
+    <value>ინტერვიუს გასაღები არ არის</value>
+  </data>
+  <data name="Dashboard_CensusAssignment" xml:space="preserve">
+    <value>აღწერა</value>
+  </data>
+  <data name="Dashboard_CantOpenCawi" xml:space="preserve">
+    <value>ვერ გახსნით ინტერვიუს CAWI რეჟიმში. სინქრონიზაციის შემდეგ გაეგზავნება სათაო ოფისს.</value>
+  </data>
+  <data name="Dashboard_CawiLabel" xml:space="preserve">
+    <value>{0} (CAWI)</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
+    <value>სერვერზე რუქების შემოწმება</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
+    <value>მუშავდება რუქა {0}, {2}-დან {1}.
+გადმოწერილია {3}%</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
+    <value>რუქების სინქრონიზაცია წარმატებით დასრულდა</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" xml:space="preserve">
+    <value>რუქების სინქრონიზაციის შეცდომა</value>
+  </data>
+  <data name="Dashboard_SearchResult" xml:space="preserve">
+    <value>მოიძებნა {0} ელემენტი</value>
+  </data>
+  <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
+    <value>ვერაფერი ვერ მოიძებნა</value>
+  </data>
+  <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
+    <value>შეასრულეთ ძებნა შედეგების სანახავად</value>
+  </data>
+  <data name="Dashboard_Searching" xml:space="preserve">
+    <value>მიმდინარეობს ძებნა...</value>
+  </data>
+  <data name="Dashboard_SearchWatermark" xml:space="preserve">
+    <value>შეიყვანეთ ტექსტი ძებნისთვის</value>
+  </data>
+  <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
+    <value>ძებნის გამოსვლა</value>
+  </data>
+  <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
+    <value>მოძველებული ინტერვიუების შემოწმება</value>
+  </data>
+  <data name="Dashboard_Assign" xml:space="preserve">
+    <value>მინიჭება</value>
+  </data>
+  <data name="Synchronization_Of_Interviewers" xml:space="preserve">
+    <value>ინტერვიუერების სინქრონიზაცია</value>
+  </data>
+  <data name="Synchronization_Of_Supervisor_details" xml:space="preserve">
+    <value>ზედამხედველის დეტალების სინქრონიზაცია</value>
+  </data>
+  <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
+    <value>{1} ინტერვიუერი(ებ)იდან {0}-ის სინქრონიზება</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
+    <value>სათაო ოფისთან სინქრონიზაციის დაშვება</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
+    <value>გამორთეთ ეს პარამეტრი, თუ გსურთ სინქრონიზება მხოლოდ მობილური ზედამხედველის აპლიკაციასთან. ზედამხედველის აპლიკაციასთან პირველი წარმატებული სინქრონიზაციის შემდეგ ამ პარამეტრის ხელახლა ჩართვა შეუძლებელი იქნება</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary_Disabled" xml:space="preserve">
+    <value>სათაო ოფისთან სინქრონიზაცია შეუძლებელია, მას შემდეგ, რაც ზედამხედველის აპლიკაციასთან ყოფილა ერთი წარმატებული სინქრონიზაცია</value>
+  </data>
+  <data name="DashboardItem_Responsible" xml:space="preserve">
+    <value>პასუხისმგებელი: {0}</value>
+  </data>
+  <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
+    <value>უარყოფილია სათაო ოფისის მიერ: {0}</value>
+  </data>
+  <data name="DashboardItem_ApprovedBySupervisor" xml:space="preserve">
+    <value>დაამტკიცა ზედამხედველმა: {0}</value>
+  </data>
+  <data name="FinishInstallation_QrBarcodeReaderErrorMessage" xml:space="preserve">
+    <value>სკანირებისას შეცდომა მოხდა</value>
+  </data>
+  <data name="SelectResponsible_Reassign" xml:space="preserve">
+    <value>ხელახლა მინიჭება</value>
+  </data>
+  <data name="SelectResponsible_ReassignDescription" xml:space="preserve">
+    <value>აირჩიეთ ინტერვიუს ახალი პასუხისმგებელი.
+ის გამოჩნდება ინტერვიუერის მოწყობილობაზე შემდეგი სინქრონიზაციის შემდეგ</value>
+  </data>
+  <data name="SelectResponsible_ReassignButtonText" xml:space="preserve">
+    <value>ხელახლა მინიჭება</value>
+  </data>
+  <data name="SelectResponsible_CancelButtonText" xml:space="preserve">
+    <value>გაუქმება</value>
+  </data>
+  <data name="Notifications_InterviewsTitle" xml:space="preserve">
+    <value>ინტერვიუები</value>
+  </data>
+  <data name="Notifications_CompletedInterviewsText" xml:space="preserve">
+    <value>თქვენ გაქვთ {0} დასრულებული ინტერვიუ(ები), რომლებიც სინქრონიზაცია საჭიროებს</value>
+  </data>
+  <data name="Notifications_RejectedInterviewsText" xml:space="preserve">
+    <value>თქვენ გაქვთ {0} უარყოფილი ინტერვიუ(ები), რომლებიც არ დამუშავდა</value>
+  </data>
+  <data name="Notifications_SyncTitle" xml:space="preserve">
+    <value>სინქრონიზაცია</value>
+  </data>
+  <data name="Notifications_SyncTooLongAgoText" xml:space="preserve">
+    <value>სინქრონიზაცია დიდი ხნის წინ ჩატარდა. გთხოვთ, სინქრონიზება</value>
+  </data>
+  <data name="Notifications_SyncNoRetryTitle" xml:space="preserve">
+    <value>სინქრონიზაციის ჩავარდნის შემდეგ ხელახლა ცდა არ ყოფილა. გთხოვთ, სცადეთ კიდევ</value>
+  </data>
+  <data name="Notifications_ManyStartedInterviews" xml:space="preserve">
+    <value>თქვენ დაიწყეთ ძალიან ბევრი ინტერვიუ. გთხოვთ, გაასრულეთ ისინი.</value>
+  </data>
+  <data name="Notifications_ManyCompletedInterviews" xml:space="preserve">
+    <value>ბევრი დასრულებული ინტერვიუ არის. გთხოვთ, სინქრონიზება.</value>
+  </data>
+  <data name="Notifications_StaleAssignments" xml:space="preserve">
+    <value>ზოგიერთი დავალება ბოლო 3 დღის განმავლობაში არ განახლებულა.</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherServer_Description" xml:space="preserve">
+    <value>ამჟამინდელი მომხმარებელი შეიქმნა სათაო ოფისის აპლიკაციის სხვა ინსტანციაზე. შეცვალეთ სინქრონიზაციის URL სათავე სერვერზე</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherServer_Status" xml:space="preserve">
+    <value>მომხმარებელი სხვა სერვერთანაა დაკავშირებული</value>
+  </data>
+  <data name="Diagnostics_SendLogs" xml:space="preserve">
+    <value>თვალთვალის ჟურნალების გაგზავნა</value>
+  </data>
+  <data name="Diagnostics_SendLogs_Description" xml:space="preserve">
+    <value>დეტალური ჟურნალების გაგზავნა სათაო ოფისის საიტზე პრობლემების გამოსაძიებლად</value>
+  </data>
+  <data name="Diagnostics_SendLogs_Success" xml:space="preserve">
+    <value>ჟურნალები გაეგზავნა სათაო ოფისს</value>
+  </data>
+  <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
+    <value>თქვენი ანგარიში ამ სერვერზე აღარ არის აქტიური, რადგანაც მასში განსაზღვრული სამუშაო სივრცე ადმინისტრატორმა გამორთო. გთხოვთ, დაუკავშირდეთ თქვენს ზედამხედველს.</value>
+  </data>
+  <data name="DashboardItem_QRCode" xml:space="preserve">
+    <value>QR კოდის ჩვენება</value>
+  </data>
+  <data name="Synchronization_WorkspaceAccessDisabledReason" xml:space="preserve">
+    <value>თქვენი ანგარიში სამუშაო სივრცეში აღარ არის აქტიური. გთხოვთ, დაუკავშირდეთ სისტემის ადმინისტრატორს.</value>
+  </data>
+  <data name="Interview_Progress_Format" xml:space="preserve">
+    <value>პროგრესი: {0}/{1}</value>
+  </data>
+  <data name="Error_NoGpsProvider" xml:space="preserve">
+    <value>ამ მოწყობილობაზე GPS პროვაიდერი არ არის</value>
+  </data>
+  <data name="Error_NoTargetAreaShapefile" xml:space="preserve">
+    <value>სამიზნე ზონისთვის საზღვრები არ არის</value>
+  </data>
+  <data name="Dashboard_CreateInterview_TargetArea_Warning" xml:space="preserve">
+    <value>დავალება მოითხოვს, რომ ინტერვიუ შექმნათ უშუალოდ დავალების რუქიდან. რეკომენდებულია გეო-ღობის (Geo Fencing) რეჟიმის გამოყენება. გსურთ გაგრძელება?</value>
+  </data>
+  <data name="AssigmentMap_CreateInterview_OutTargetArea_Warning" xml:space="preserve">
+    <value>თქვენ სამიზნე ზონის გარეთ ქმნით ინტერვიუს. გსურთ გაგრძელება?</value>
+  </data>
+  <data name="AssigmentMap_CreateInterview_DisabledTargetArea_Warning" xml:space="preserve">
+    <value>რეკომენდებულია გეო-ღობის (Geofencing) ჩართვა სამიზნე ზონის შესამოწმებლად. გსურთ გაგრძელება?</value>
+  </data>
+  <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
+    <value>ინტერვიუს შექმნისას გამოიყენეთ გეო-თვალთვალი ან გეო-ღობე. გთხოვთ, ხელახლა ჩართეთ, თუ გსურთ გამოყენება.</value>
   </data>
 </root>

@@ -86,7 +86,7 @@
     <value>{0} (v{1})</value>
   </data>
   <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
-    <value>{0} interview(s)</value>
+    <value>{0} entretien(s)</value>
   </data>
   <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
     <value>Interviews créées : {0}</value>
@@ -315,7 +315,7 @@ pour plus d'instructions</value>
     <value>Synchronisation terminée avec des erreurs</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>affectations achevées</value>
+    <value>entretiens achevés</value>
   </data>
   <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
     <value>événements du calendrier</value>
@@ -452,7 +452,7 @@ Veuillez composer votre mot de passe à nouveau. Si cela ne résout pas le probl
     <value>Langue</value>
   </data>
   <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Originale</value>
   </data>
   <data name="MenuItem_Title_Login" xml:space="preserve">
     <value>Connexion</value>
@@ -976,4 +976,43 @@ Il apparaîtra sur l'appareil de l'enquêteur après la prochaine synchronisatio
     <data name="Synchronization_UploadGeoTracking" xml:space="preserve">
         <value>Télécharger les informations de géo-suivi</value>
     </data>
+  <data name="CommunicationIntegrityFailed" xml:space="preserve">
+    <value>La réponse reçue ne semble pas provenir du serveur Survey Solutions. Cela est généralement causé par un proxy réseau, un pare-feu ou une passerelle de sécurité interceptant la connexion. Veuillez vérifier votre connexion réseau ou contacter le support informatique.</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment" xml:space="preserve">
+    <value>Terminer</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
+    <value>Terminer l'affectation</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
+    <value>Êtes-vous sûr d’avoir recensé toutes les unités éligibles ?</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
+    <value>Rouvrir l'affectation</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>L’affectation sera remise au statut Ouvert et les enquêteurs pourront créer de nouveaux entretiens.</value>
+  </data>
+  <data name="Dashboard_CloseAssignment" xml:space="preserve">
+    <value>Approuver</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
+    <value>Fermer l'affectation</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
+    <value>Les enquêteurs travaillant hors ligne peuvent continuer à collecter des données jusqu'à la synchronisation. Ces entretiens seront toujours acceptés.</value>
+  </data>
+  <data name="Dashboard_Assignment_Comment" xml:space="preserve">
+    <value>Commentaire (facultatif)</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
+    <value>Statut : Terminé</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
+    <value>Statut : Approuvé</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
+    <value>Statut : Ouvert</value>
+  </data>
 </root>

@@ -213,6 +213,13 @@
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>Ju lutemi ringarkoni faqen për t’u rilidhur dhe për të vijuar këtë intervistë.</value>
   </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>Lidhja u shkëput. Po përpiqemi të rilidhemi…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>Tentativë {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
+  </data>
   <data name="ConnectionLostTitle" xml:space="preserve">
     <value>Lidhja me rrjetin u shkëput.</value>
   </data>
@@ -242,6 +249,12 @@
   </data>
   <data name="DecimalTooBig" xml:space="preserve">
     <value>Vlera e vendosur është shumë e gjatë. Lejohet me më pak se 15 shifra</value>
+  </data>
+  <data name="InvalidServerResponseMessage" xml:space="preserve">
+    <value>Serveri nuk ktheu kokën e identifikimit të pritshme. Mund të jeni lidhur me një server ndërmjetës ose me serverin e gabuar. Ju lutemi rifreskoni faqen.</value>
+  </data>
+  <data name="InvalidServerResponseTitle" xml:space="preserve">
+    <value>Përgjigje e pavlefshme e serverit</value>
   </data>
   <data name="Disconnected" xml:space="preserve">
     <value>I shkëputur</value>
@@ -513,5 +526,94 @@ Sigurohuni që gjithë informacioni është korrekt.</value>
   </data>
   <data name="CompleteReviewSubmitInterview" xml:space="preserve">
       <value>Intervistë {{key}}</value>
+  </data>
+
+
+  <data name="CommentOnPreviousAnswer" xml:space="preserve">
+    <value>Për përgjigjen e mëparshme</value>
+  </data>
+
+  <data name="NotCalculated" xml:space="preserve">
+    <value>Nuk është llogaritur</value>
+  </data>
+
+  <data name="MaxAnswersCountSelected" xml:space="preserve">
+    <value>Numri maksimal i përzgjedhjeve ({{value}}) për këtë pyetje është arritur</value>
+  </data>
+
+  <data name="CriticalQuestionErrors" xml:space="preserve">
+    <value>Kërkohen përgjigje për këto pyetje:</value>
+  </data>
+
+  <data name="CriticalityConditionsErrors" xml:space="preserve">
+    <value>Kërkohet të rregulloni këto gabime:</value>
+  </data>
+
+  <data name="UnansweredQuestions" xml:space="preserve">
+    <value>Pyetje pa përgjigje:</value>
+  </data>
+
+  <data name="CompleteCommentCriticalityLevelBlock" xml:space="preserve">
+    <value>Për të aktivizuar butonin, ju lutemi zgjidhni çështjet kritike</value>
+  </data>
+
+  <data name="CompleteCommentCriticalityLevelWarn" xml:space="preserve">
+    <value>Për të aktivizuar butonin, ju lutemi zgjidhni çështjet kritike ose jepni një shpjegim në kutinë e komenteve më sipër</value>
+  </data>
+
+  <data name="CompleteNoteCommentCriticality" xml:space="preserve">
+    <value>Ju lutemi zgjidhni çështjet duke iu përgjigjur pyetjeve kritike dhe duke u siguruar që përgjigjet plotësojnë rregullat kritike</value>
+  </data>
+
+  <data name="CompleteCriticalityWarnConfirmation" xml:space="preserve">
+    <value>Ju lutemi konfirmoni që dëshironi ta dorëzoni këtë intervistë me çështje kritike.</value>
+  </data>
+
+  <data name="ConfirmationNeededTitle" xml:space="preserve">
+    <value>Kërkohet konfirmim</value>
+  </data>
+
+  <data name="Interview_Overview_NoValue" xml:space="preserve">
+    <value>Nuk ka vlerë</value>
+  </data>
+
+  <data name="PickLocation" xml:space="preserve">
+    <value>Zgjidh nga harta</value>
+  </data>
+
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Vendosni fjalëkalimin</value>
+  </data>
+
+  <data name="Progress" xml:space="preserve">
+    <value>Progresi</value>
+  </data>
+
+  <data name="SwitchToWebMode" xml:space="preserve">
+    <value>Kalo intervistën në modalitetin Ueb</value>
+  </data>
+
+  <data name="SwitchToWebMode_LinkDescription" xml:space="preserve">
+    <value>Lidhja e mëposhtme mund të përdoret për të vazhduar këtë intervistë</value>
+  </data>
+
+  <data name="AssignmentLimitError" xml:space="preserve">
+    <value>Nuk mund të krijoni më shumë intervista nga kjo detyrë</value>
+  </data>
+
+  <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
+      <value>Pyetje kritike pa përgjigje: {{count}}</value>
+  </data>
+
+  <data name="Complete_FailedCriticalRules" xml:space="preserve">
+      <value>Rregulla kritike të dështuara: {{count}}</value>
+  </data>
+
+  <data name="Complete_UnansweredQuestions" xml:space="preserve">
+      <value>Pyetje pa përgjigje: {{count}}</value>
+  </data>
+
+  <data name="Complete_QuestionsWithErrors" xml:space="preserve">
+      <value>Pyetje me gabime: {{count}}</value>
   </data>
 </root>

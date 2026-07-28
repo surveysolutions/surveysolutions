@@ -50,5 +50,6 @@ namespace WB.UI.Headquarters.Services.Impl
         }
 
         public int MaxDegreeOfParallelism { get; } = 10;
+        public bool CommunicationIntegrityValidationIgnore => false;
     }
 }

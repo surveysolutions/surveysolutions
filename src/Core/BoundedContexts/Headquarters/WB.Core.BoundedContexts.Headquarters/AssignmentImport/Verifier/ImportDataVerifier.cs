@@ -235,6 +235,31 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 foreach (var error in this.RowValuesVerifiers.SelectMany(x => x.Invoke(assignmentRow, serviceValue, questionnaire)))
                     if (error != null) yield return error;
             }
+
+            foreach (var error in this.AudioAuditScope_InvalidEntities(assignmentRow, questionnaire))
+                yield return error;
+        }
+
+        private IEnumerable<PanelImportVerificationError> AudioAuditScope_InvalidEntities(
+            PreloadingAssignmentRow assignmentRow, IQuestionnaire questionnaire)
+        {
+            var scope = assignmentRow.AudioAuditScope;
+            if (scope?.VariableNames == null || scope.VariableNames.Length == 0)
+                yield break;
+
+            var resolution = AudioAuditScopeResolver.Resolve(questionnaire, scope.VariableNames);
+            foreach (var invalidName in resolution.InvalidVariableNames)
+            {
+                yield return new PanelImportVerificationError(
+                    "PL0064",
+                    string.Format(messages.PL0064_AudioAuditScopeInvalidEntity, invalidName),
+                    new InterviewImportReference(
+                        scope.Column,
+                        assignmentRow.Row,
+                        PreloadedDataVerificationReferenceType.Cell,
+                        invalidName,
+                        assignmentRow.FileName));
+            }
         }
 
         public IEnumerable<PanelImportVerificationError> VerifyFiles(string originalFileName, PreloadedFileInfo[] files, IQuestionnaire questionnaire)
@@ -654,6 +679,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                     or ServiceColumns.WebModeColumnName 
                     or ServiceColumns.RecordAudioColumnName 
                     or ServiceColumns.CommentsColumnName  
+                    or ServiceColumns.AudioAuditScopeColumnName  
                     or ServiceColumns.TargetAreaColumnName && 
                 IsQuestionnaireFile(file.QuestionnaireOrRosterName, questionnaire)) return false;
 

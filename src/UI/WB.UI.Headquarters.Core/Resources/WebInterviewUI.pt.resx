@@ -138,6 +138,12 @@
   <data name="SessionTimeoutMessage" xml:space="preserve">
     <value>Por favor, recarregue a página para continuar esta entrevista.</value>
   </data>
+  <data name="InvalidServerResponseMessage" xml:space="preserve">
+    <value>O servidor não retornou o cabeçalho de identificação esperado. Você pode estar conectado a um proxy ou a um servidor incorreto. Por favor, recarregue a página.</value>
+  </data>
+  <data name="InvalidServerResponseTitle" xml:space="preserve">
+    <value>Resposta do servidor inválida</value>
+  </data>
   <data name="Disconnected" xml:space="preserve">
     <value>Desconectado</value>
   </data>
@@ -146,6 +152,13 @@
   </data>
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>Por favor, recarregue a página para restaurar a conexão e continuar esta entrevista.</value>
+  </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>Conexão perdida. Tentando reconectar…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>Tentativa {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
   </data>
   <data name="CloseInterviewMessage" xml:space="preserve">
     <value>&lt;p&gt;A Entrevista Web suporta apenas uma guia ativa com a entrevista.&lt;/p&gt;&lt;p&gt;Por favor, recarregue esta página para continuar usando esta guia ou feche-a.&lt;/p&gt;</value>

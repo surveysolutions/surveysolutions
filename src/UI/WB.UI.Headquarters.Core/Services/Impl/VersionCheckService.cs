@@ -15,7 +15,7 @@ namespace WB.UI.Headquarters.Services.Impl
     public class VersionCheckService : IVersionCheckService
     {
         private static DateTime? errorOccurredAt = null;
-        private static readonly int DelayOnErrorInSeconds = 3 * 60;
+        private static readonly int DelayOnErrorInSeconds = 24 * 60 * 60;
 
         private readonly IProductVersion productVersion;
         private readonly IOptions<VersionCheckConfig> versionCheckConfig;
@@ -45,9 +45,11 @@ namespace WB.UI.Headquarters.Services.Impl
 
             if (!memoryCache.TryGetValue(CachePrefix, out VersionCheckingInfo version))
             {
-                var isErrorDelayExpired = errorOccurredAt != null && (DateTime.Now - errorOccurredAt)?.Seconds > DelayOnErrorInSeconds;
+                var errorOccurredAtSnapshot = errorOccurredAt;
+                var isErrorDelayExpired = errorOccurredAtSnapshot != null
+                    && (DateTime.Now - errorOccurredAtSnapshot.Value).TotalSeconds > DelayOnErrorInSeconds;
 
-                if ((errorOccurredAt == null) || isErrorDelayExpired)
+                if (errorOccurredAtSnapshot == null || isErrorDelayExpired)
                 {
                     if (!isChecking)
                     {

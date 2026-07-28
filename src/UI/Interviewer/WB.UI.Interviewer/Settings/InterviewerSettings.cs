@@ -63,6 +63,7 @@ namespace WB.UI.Interviewer.Settings
 
             return $"User: {GetUserInformation()} {Environment.NewLine}" +
                    $"VibrateOnError: {this.VibrateOnError} {Environment.NewLine}" +
+                   $"CommunicationIntegrityValidationIgnore: {this.CommunicationIntegrityValidationIgnore} {Environment.NewLine}" +
                    $"QuestionnairesList: {questionnaireIds} {Environment.NewLine}" +
                    $"InterviewsList: {interviewIds}";
         }
@@ -76,7 +77,8 @@ namespace WB.UI.Interviewer.Settings
             CommunicationBufferSize = Application.Context.Resources?.GetInteger(Resource.Integer.BufferSize) ?? 4096,
             GpsResponseTimeoutInSec = Application.Context.Resources?.GetInteger(Resource.Integer.GpsReceiveTimeoutSec) ?? 30,
             GpsDesiredAccuracy = Application.Context.Resources?.GetInteger(Resource.Integer.GpsDesiredAccuracy) ?? 50,
-            VibrateOnError = Application.Context.Resources?.GetBoolean(Resource.Boolean.VibrateOnError) ?? true
+            VibrateOnError = Application.Context.Resources?.GetBoolean(Resource.Boolean.VibrateOnError) ?? true,
+            CommunicationIntegrityValidationIgnore = Application.Context.Resources?.GetBoolean(Resource.Boolean.CommunicationIntegrityValidationIgnore) ?? false
         };
         
         private ApplicationWorkspaceSettingsView? currentWorkspaceSettings
@@ -100,6 +102,8 @@ namespace WB.UI.Interviewer.Settings
         protected override EnumeratorWorkspaceSettingsView? CurrentWorkspaceSettings => this.currentWorkspaceSettings;
 
         public override bool VibrateOnError => this.currentSettings.VibrateOnError ?? Application.Context.Resources?.GetBoolean(Resource.Boolean.VibrateOnError) ?? true;
+
+        public override bool CommunicationIntegrityValidationIgnore => this.currentSettings.CommunicationIntegrityValidationIgnore ?? Application.Context.Resources?.GetBoolean(Resource.Boolean.CommunicationIntegrityValidationIgnore) ?? false;
 
         public override double GpsDesiredAccuracy => this.currentSettings.GpsDesiredAccuracy.GetValueOrDefault(Application.Context.Resources?.GetInteger(Resource.Integer.GpsDesiredAccuracy) ?? 50);
 
@@ -141,6 +145,14 @@ namespace WB.UI.Interviewer.Settings
             this.SaveCurrentSettings(settings =>
             {
                 settings.VibrateOnError = vibrateOnError;
+            });
+        }
+
+        public void SetCommunicationIntegrityValidationIgnore(bool ignore)
+        {
+            this.SaveCurrentSettings(settings =>
+            {
+                settings.CommunicationIntegrityValidationIgnore = ignore;
             });
         }
 

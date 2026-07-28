@@ -210,11 +210,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
 
             // No validation errors expected in Remove mode for this setup
             Assert.That(modelState.IsValid, Is.True);
-            Assert.That(modelState["Workspaces"], Is.Null);
-                        
             var workspacesEntry = modelState["Workspaces"];
-            if (workspacesEntry != null)
-                Assert.That(workspacesEntry.Errors, Is.Empty);
+            Assert.That(workspacesEntry?.Errors, Is.Null.Or.Empty);
         }
 
         [Test]

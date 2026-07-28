@@ -50,7 +50,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                         yield return InterviewActionFlags.CanChangeToCAWI;
                     }
 
-                    if (interviewSummary.InterviewMode != InterviewMode.CAPI
+                    if (interviewSummary.InterviewMode == InterviewMode.CAWI
                         &&(interviewSummary.Status == InterviewStatus.Created
                            || interviewSummary.Status == InterviewStatus.SupervisorAssigned
                            || interviewSummary.Status == InterviewStatus.InterviewerAssigned

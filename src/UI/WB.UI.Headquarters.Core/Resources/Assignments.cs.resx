@@ -233,7 +233,7 @@
     <value>Neaktivní</value>
   </data>
   <data name="AssignmentCloseWebMode" xml:space="preserve">
-    <value>Dotazník {{id}} nelze zavřít, protože má povolený webový režim</value>
+    <value>Dotazník {{id}} nelze zmenšit, protože má povolený webový režim</value>
   </data>
   <data name="AssignmentHistory" xml:space="preserve">
     <value>Historie</value>
@@ -359,7 +359,7 @@
     <value>Režim CAWI umožňuje sbírat data přímo od respondentů</value>
   </data>
   <data name="MultipleAssignmentsClose" xml:space="preserve">
-    <value>Vybraných dotazníků, které budou uzavřeny - {{count}}. Velikost bude nastavena podle aktuálního počtu shromážděných rozhovorů.</value>
+    <value>Vybraných dotazníků, které budou zmenšeny - {{count}}. Velikost bude nastavena podle aktuálního počtu shromážděných rozhovorů.</value>
   </data>
   <data name="NewAssignment" xml:space="preserve">
     <value>Nový dotazník</value>
@@ -422,7 +422,7 @@
     <value>Začít nový webový dotazník</value>
   </data>
   <data name="Stop" xml:space="preserve">
-    <value>Stop</value>
+    <value>Zastavit</value>
   </data>
   <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
     <value>Indikátor, zda je dotazník aktivní nebo byl deaktivován.</value>
@@ -562,4 +562,73 @@
     <data name="TargetAreaExplanation" xml:space="preserve">
         <value>Zadejte název mapy cílové oblasti pro přiřazení</value>
     </data>    
+  <data name="Filter_ShowAll" xml:space="preserve">
+    <value>Zobrazit vše</value>
+  </data>
+  <data name="Downsize" xml:space="preserve">
+    <value>Zmenšit</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+      <value>Stav</value>
+  </data>
+  <data name="StatusChangeComment" xml:space="preserve">
+      <value>Komentář ke stavu</value>
+  </data>
+  <data name="StatusOpen" xml:space="preserve">
+      <value>Otevřeno</value>
+  </data>
+  <data name="StatusCompleted" xml:space="preserve">
+      <value>Dokončeno</value>
+  </data>
+  <data name="StatusClosed" xml:space="preserve">
+      <value>Schváleno</value>
+  </data>
+  <data name="CompleteAssignmentTitle" xml:space="preserve">
+      <value>Dokončit žádanku</value>
+  </data>
+  <data name="CompleteAssignmentMessage" xml:space="preserve">
+      <value>Jste si jisti, že jste sečetli všechny způsobilé jednotky?</value>
+  </data>
+  <data name="CloseAssignmentTitle" xml:space="preserve">
+      <value>Uzavřít žádanku</value>
+  </data>
+  <data name="CloseAssignmentMessage" xml:space="preserve">
+      <value>Tazatelé pracující offline mohou stále pokračovat ve sběru dat až do synchronizace. Takové rozhovory budou stále přijaty.</value>
+  </data>
+  <data name="ReopenAssignmentTitle" xml:space="preserve">
+      <value>Znovu otevřít žádanku</value>
+  </data>
+  <data name="ReopenAssignmentMessage" xml:space="preserve">
+      <value>Žádanka bude nastavena zpět na stav Otevřeno a tazatelé budou moci vytvářet nové rozhovory.</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+      <value>Dokončit</value>
+  </data>
+  <data name="Reopen" xml:space="preserve">
+      <value>Znovu otevřít</value>
+  </data>
+  <data name="Action_StatusChanged" xml:space="preserve">
+      <value>Stav změněn na {{status}}</value>
+  </data>
+  <data name="Action_StatusChanged_Comment" xml:space="preserve">
+      <value>Komentář: {{comment}}</value>
+  </data>
+  <data name="Action_Completed" xml:space="preserve">
+      <value>Dokončeno</value>
+  </data>
+  <data name="Action_Closed" xml:space="preserve">
+      <value>Schváleno</value>
+  </data>
+  <data name="Action_Reopened" xml:space="preserve">
+      <value>Znovu otevřeno</value>
+  </data>
+  <data name="AudioRecordingSelective" xml:space="preserve">
+      <value>Selektivní</value>
+  </data>
+  <data name="AudioAuditScopeLabel" xml:space="preserve">
+      <value>Rozsah zvukového auditu</value>
+  </data>
+  <data name="AudioRecordingScopeNotice" xml:space="preserve">
+      <value>Toto přiřazení má selektivní rozsah zvukového auditu. Zapnutí plného zvukového záznamu bude nahrávat všechny sekce. Vypnutí se vrátí k nahrávání pouze vybraných sekcí.</value>
+  </data>
 </root>

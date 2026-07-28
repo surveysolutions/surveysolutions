@@ -22,7 +22,7 @@ export default {
                 ) {
                     let callbackType = typeof params.callback;
                     throw new Error(
-                        `Callback type must be an function. Caught: ${callbackType}. Expected: function`
+                        `Callback type must be a function. Caught: ${callbackType}. Expected: function`,
                     );
                 }
                 event.emit('open', params);

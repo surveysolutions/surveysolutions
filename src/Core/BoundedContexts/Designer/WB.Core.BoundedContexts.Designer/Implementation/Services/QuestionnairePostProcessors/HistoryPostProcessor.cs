@@ -177,7 +177,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, creatorId, QuestionnaireActionType.Clone,
                 QuestionnaireItemType.Questionnaire,
-                command.QuestionnaireId, command.Title, null, linkToQuestionnaire);
+                command.QuestionnaireId, command.Title, aggregate.QuestionnaireDocument, linkToQuestionnaire);
         }
 
         public void Process(Questionnaire aggregate, ImportQuestionnaire command)

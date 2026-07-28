@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,7 +15,6 @@ using NetTopologySuite.IO;
 using NetTopologySuite.IO.Esri;
 using NetTopologySuite.Operation.Union;
 using NetTopologySuite.Simplify;
-using Newtonsoft.Json;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -31,14 +29,12 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Configs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     public class MapFileStorageService : IMapStorageService
     {
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
-        private readonly IPlainStorageAccessor<DuplicateMapLabel> duplicateMapLabelPlainStorageAccessor;
         private readonly IPlainStorageAccessor<UserMap> userMapsStorage;
         private readonly ISerializer serializer;
         private readonly IUserRepository userStorage;
@@ -66,8 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IExternalFileStorage externalFileStorage,
             IOptions<GeospatialConfig> geospatialConfig,
             IAuthorizedUser authorizedUser,
-            ILogger<MapFileStorageService> logger, 
-            IPlainStorageAccessor<DuplicateMapLabel> duplicateMapLabelPlainStorageAccessor)
+            ILogger<MapFileStorageService> logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
@@ -75,11 +70,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.userMapsStorage = userMapsStorage;
             this.serializer = serializer;
             this.userStorage = userStorage;
-
             this.externalFileStorage = externalFileStorage;
             this.authorizedUser = authorizedUser;
             this.logger = logger;
-            this.duplicateMapLabelPlainStorageAccessor = duplicateMapLabelPlainStorageAccessor;
             this.geospatialConfig = geospatialConfig;
 
             this.mapsFolderPath = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, MapsFolderName);
@@ -122,10 +115,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     var targetFile = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapName);
                     fileSystemAccessor.MoveFile(tempFile, targetFile);
                 }
-
-                this.duplicateMapLabelPlainStorageAccessor.Remove(l => l.Where(d => d.Map.Id == mapItem.Id));
+                
                 this.mapPlainStorageAccessor.Store(mapItem, mapItem.Id);
-                this.duplicateMapLabelPlainStorageAccessor.Store(mapItem.DuplicateLabels);
+                
                 return mapItem;
             }
             catch
@@ -244,45 +236,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         var tempFile = Path.Combine(mapsDirectory, mapFile.Name);
                         var fullPath = Path.GetFullPath(tempFile);
 
-                        bool isReaded = TryReadGdalInfomation(fullPath, out var deserialized);
-
-                        if (isReaded)
+                        if (GeoTiffInfoReader.TryReadGeoTiffBounds(fullPath,
+                            out double geoXMin, out double geoYMin, out double geoXMax, out double geoYMax))
                         {
-                            if (deserialized?.Wgs84Extent != null)
-                            {
-                                double xMin = double.MaxValue;
-                                double xMax = double.MinValue;
-                                double yMin = double.MaxValue;
-                                double yMax = double.MinValue;
-
-                                foreach (double[][] poli in deserialized.Wgs84Extent.Coordinates)
-                                {
-                                    foreach (double[] coord in poli)
-                                    {
-                                        xMin = Math.Min(xMin, coord[0]);
-                                        xMax = Math.Max(xMax, coord[0]);
-
-                                        yMin = Math.Min(yMin, coord[1]);
-                                        yMax = Math.Max(yMax, coord[1]);
-                                    }
-                                }
-
-                                item.XMinVal = xMin;
-                                item.YMinVal = yMin;
-
-                                item.XMaxVal = xMax;
-                                item.YMaxVal = yMax;
-
-                                item.Wkid = WGS84Wkid; //geographic coordinates Wgs84
-                            }
-                            else
-                                throw new InvalidOperationException(".tif file is not recognized as map");
+                            item.XMinVal = geoXMin;
+                            item.YMinVal = geoYMin;
+                            item.XMaxVal = geoXMax;
+                            item.YMaxVal = geoYMax;
+                            item.Wkid = WGS84Wkid;
+                        }
+                        else if (GeoTiffInfoReader.IsValidTiff(fullPath))
+                        {
+                            // The TIFF is valid but carries no readable georeferencing. Accept it as a
+                            // map without coordinates rather than rejecting an otherwise valid file.
+                            logger.LogWarning(
+                                "Map '{MapName}': could not read GeoTIFF coordinates, importing without bounds.",
+                                mapFile.Name);
                         }
                         else
                         {
-                            var isGeoTiff = GeoTiffInfoReader.IsGeoTIFF(fullPath);
-                            if (!isGeoTiff)
-                                throw new InvalidOperationException(".tif file is not recognized as map");    
+                            throw new InvalidOperationException(".tif file is not recognized as map");
                         }
                     }
                     break;
@@ -301,55 +274,59 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         item.YMaxVal = headerBounds.MaxY;
                         item.ShapeType = shapefileReader.ShapeType.ToString();
                         item.Wkid = 4326;  //geographic coordinates Wgs84
-                        item.ShapesCount = shapefileReader.RecordCount;
                         
-                        int? labelIndexOf = null;
+                        string labelColumnTitle = null;
 
                         for (int i = 0; i < shapefileReader.Fields.Count; i++)
                         {
-                            if (shapefileReader.Fields[i].Name == LabelFieldName)
+                            if (string.Equals(shapefileReader.Fields[i].Name, LabelFieldName, StringComparison.OrdinalIgnoreCase))
                             {
-                                labelIndexOf = i + 1;
+                                labelColumnTitle = shapefileReader.Fields[i].Name;
                                 break;
                             }
                         }
                         
                         CoordinateTransformationFilter coordinateTransformationFilter = null;
                         var projection = shapefileReader.Projection;
-                        var sourceProjectionInfo = ProjectionInfo.FromEsriString(projection);
-                        if (!sourceProjectionInfo.IsLatLon)
+                        if (projection != null)
                         {
-                            var target = KnownCoordinateSystems.Geographic.World.WGS1984;
-                            coordinateTransformationFilter = new CoordinateTransformationFilter(sourceProjectionInfo, target);
+                            var sourceProjectionInfo = ProjectionInfo.FromEsriString(projection);
+                            if (!sourceProjectionInfo.IsLatLon)
+                            {
+                                var target = KnownCoordinateSystems.Geographic.World.WGS1984;
+                                coordinateTransformationFilter = new CoordinateTransformationFilter(sourceProjectionInfo, target);
 
-                            var minHeaderCoordinate = coordinateTransformationFilter.Transform(headerBounds.MinX, headerBounds.MinY);
-                            item.XMinVal = minHeaderCoordinate.X;
-                            item.YMinVal = minHeaderCoordinate.Y;
-                            var maxHeaderCoordinate = coordinateTransformationFilter.Transform(headerBounds.MaxX, headerBounds.MaxY);
-                            item.XMaxVal = maxHeaderCoordinate.X;
-                            item.YMaxVal = maxHeaderCoordinate.Y;
+                                var minHeaderCoordinate = coordinateTransformationFilter.Transform(headerBounds.MinX, headerBounds.MinY);
+                                item.XMinVal = minHeaderCoordinate.X;
+                                item.YMinVal = minHeaderCoordinate.Y;
+                                var maxHeaderCoordinate = coordinateTransformationFilter.Transform(headerBounds.MaxX, headerBounds.MaxY);
+                                item.XMaxVal = maxHeaderCoordinate.X;
+                                item.YMaxVal = maxHeaderCoordinate.Y;
+                            }
                         }
                         
                         FeatureCollection fc = new FeatureCollection();
                         HashSet<string> checkOnUnique = new HashSet<string>();
-                        Dictionary<string, int> duplicateLabels = new Dictionary<string, int>();
+                        bool hasDuplicates = false;
 
                         while (shapefileReader.Read(out bool deleted, out var readFeature))
                         {
+                            if (deleted)
+                                continue;
+                            
                             AttributesTable attribs = new AttributesTable();
 
-                            if (labelIndexOf.HasValue)
+                            if (labelColumnTitle != null && readFeature.Attributes.Exists(labelColumnTitle))
                             {
-                                var labelValue = readFeature.Attributes[LabelFieldName].ToString();
+                                var labelValue = Convert.ToString(readFeature.Attributes[labelColumnTitle]);
 
                                 if (!string.IsNullOrWhiteSpace(labelValue))
                                 {
                                     attribs.Add(LabelFieldName, labelValue);
 
-                                    if (!checkOnUnique.Add(labelValue))
+                                    if (!hasDuplicates && !checkOnUnique.Add(labelValue))
                                     {
-                                        if (!duplicateLabels.TryAdd(labelValue, 2))
-                                            duplicateLabels[labelValue] += 1;
+                                        hasDuplicates = true;
                                     }
                                 }
                             }
@@ -362,16 +339,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         if (fc.Count == 0)
                             throw new ArgumentException($"Can't read any coordinates from {mapFile.Name}.shp file");
 
-                        item.DuplicateLabels.Clear();
-                        foreach (var duplicateLabel in duplicateLabels)
-                        {
-                            item.DuplicateLabels.Add(new DuplicateMapLabel()
-                            {
-                                Label = duplicateLabel.Key,
-                                Count = duplicateLabel.Value,
-                                Map = item,
-                            });
-                        }
+                        item.ShapesCount = fc.Count;
+                        item.HasDuplicateLabels = hasDuplicates;
 
                         var json = GetGeoJson(fc);
                         var byteCount = Encoding.Unicode.GetByteCount(json);
@@ -406,49 +375,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
 
             return item;
-        }
-
-        private bool TryReadGdalInfomation(string fullPath, out GdalInfoOuput gdalInfo)
-        {
-            gdalInfo = null;
-            
-            var valueGdalHome = this.geospatialConfig.Value.GdalHome;
-
-            if (string.IsNullOrWhiteSpace(valueGdalHome))
-                return false;
-                
-            try
-            {
-                this.logger.LogInformation("Reading info from {FileName} with gdalinfo located in {GdalHome}", 
-                    fullPath, valueGdalHome);
-            
-                var startInfo = ConsoleCommand.Read(Path.Combine(valueGdalHome, "gdalinfo"), $"\"{fullPath}\" -json");
-                gdalInfo = JsonConvert.DeserializeObject<GdalInfoOuput>(startInfo);
-
-                return true;
-            }
-            catch (Win32Exception e)
-            {
-                if (e.NativeErrorCode == 2)
-                {
-                    //throw new InvalidOperationException("gdalinfo utility not found. Please install gdal library and add to PATH variable", e);
-                    return false;
-                }
-            }
-            catch (NonZeroExitCodeException e)
-            {
-                if(!string.IsNullOrEmpty(e.ErrorOutput))
-                    logger.LogError(e.ErrorOutput);
-                
-                if (e.ProcessExitCode == 4)
-                {
-                    throw new InvalidOperationException(".tif file is not recognized as map", e);
-                }
-
-                throw;
-            }
-            
-            return false;
         }
 
         private Geometry Transform(Geometry geometry, CoordinateTransformationFilter coordinateTransformation)

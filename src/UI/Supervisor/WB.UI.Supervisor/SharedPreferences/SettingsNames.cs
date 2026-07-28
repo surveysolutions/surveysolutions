@@ -9,5 +9,6 @@ namespace WB.UI.Supervisor.SharedPreferences
         public const string EventChunkSize = "EventChunkSize";
         public const string ShowLocationOnMap = "ShowLocationOnMap";
         public const string DownloadUpdatesForInterviewerApp = "DownloadUpdatesForInterviewerApp";
+        public const string CommunicationIntegrityValidationIgnore = "CommunicationIntegrityValidationIgnore";
     }
 }

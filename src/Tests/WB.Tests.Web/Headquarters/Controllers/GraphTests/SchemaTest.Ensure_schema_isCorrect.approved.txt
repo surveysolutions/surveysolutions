@@ -14,6 +14,7 @@ type Assignment {
   receivedByTabletAtUtc: DateTime
   responsibleId: UUID!
   webMode: Boolean!
+  status: AssignmentStatus!
   "Active Calendar Event associated with assignment"
   calendarEvent: CalendarEvent @cost(weight: "10")
 }
@@ -102,6 +103,7 @@ type HeadquartersQuery {
   questions("Workspace name" workspace: String! = "primary" "Questionnaire id" id: UUID! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionFilter @cost(weight: "10")): [Entity] @authorize @cost(weight: "10")
   questionnaireItems("Workspace name" workspace: String! = "primary" "Questionnaire id" id: UUID! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionnaireItemsFilter @cost(weight: "10")): [QuestionnaireItem] @authorize @cost(weight: "10")
   viewer: Viewer @authorize
+  "Gets a list of user accounts with their attributes. This query is accessible only to users in the role administrator."
   users(skip: Int take: Int order: [UsersSortInput!] @cost(weight: "10") where: UsersFilterInput @cost(weight: "10")): Users @authorize(roles: [ "Administrator" ]) @cost(weight: "10")
   mapReport("Workspace name" workspace: String! = "primary" "Questionnaire id" questionnaireId: UUID! "Questionnaire version" questionnaireVersion: Long "Variable name for question" variable: String "Zoom level" zoom: Int! "Visible area width" clientMapWidth: Int! "East coordinate" east: Float! "West coordinate" west: Float! "North coordinate" north: Float! "South coordinate" south: Float! where: MapReportFilter @cost(weight: "10")): MapReportHolder @authorize @cost(weight: "10")
 }
@@ -221,6 +223,7 @@ type Map {
   minScale: Float!
   shapeType: String
   shapesCount: Int
+  hasDuplicateLabels: Boolean
 }
 
 type MapReport {
@@ -301,6 +304,13 @@ type Viewer {
   workspaces: [String!]!
 }
 
+input AssignmentStatusOperationFilterInput {
+  eq: AssignmentStatus @cost(weight: "10")
+  neq: AssignmentStatus @cost(weight: "10")
+  in: [AssignmentStatus!] @cost(weight: "10")
+  nin: [AssignmentStatus!] @cost(weight: "10")
+}
+
 input AssignmentsFilter {
   and: [AssignmentsFilter!]
   or: [AssignmentsFilter!]
@@ -311,6 +321,7 @@ input AssignmentsFilter {
   webMode: BooleanOperationFilterInput
   receivedByTabletAtUtc: DateTimeOperationFilterInput
   targetArea: StringOperationFilterInput
+  status: AssignmentStatusOperationFilterInput
 }
 
 input BooleanOperationFilterInput {
@@ -503,6 +514,7 @@ input MapsSort {
   fileName: SortEnumType @cost(weight: "10")
   importDateUtc: SortEnumType @cost(weight: "10")
   size: SortEnumType @cost(weight: "10")
+  hasDuplicateLabels: SortEnumType @cost(weight: "10")
 }
 
 input NullableOfQuestionScopeOperationFilterInput {
@@ -636,6 +648,12 @@ enum ApplyPolicy {
   AFTER_RESOLVER
   "The policy is applied in the validation step before the execution."
   VALIDATION
+}
+
+enum AssignmentStatus {
+  OPEN
+  COMPLETED
+  CLOSED
 }
 
 enum EntityType {

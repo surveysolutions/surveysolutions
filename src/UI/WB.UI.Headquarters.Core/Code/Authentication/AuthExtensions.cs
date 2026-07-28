@@ -2,6 +2,7 @@ using System;
 using System.Net.Http.Headers;
 using System.Text;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -43,6 +44,8 @@ namespace WB.UI.Headquarters.Code.Authentication
                     .Build();
             });
 
+            bool isJwtBearerEnabled = configuration.GetValue<bool>("JwtBearer:Enabled");
+
             services.ConfigureApplicationCookie(opt =>
             {
                 opt.LoginPath = "/Account/LogOn";
@@ -67,7 +70,18 @@ namespace WB.UI.Headquarters.Code.Authentication
                     {
                         AuthenticationHeaderValue authHeader =
                             AuthenticationHeaderValue.Parse(ctx.Request.Headers[HeaderNames.Authorization]);
-                        return authHeader.Scheme;
+
+                        // Map case-insensitively to the canonical registered scheme names.
+                        // Returning the raw scheme value can cause an InvalidOperationException in
+                        // AuthenticationMiddleware when the client's casing differs from the registered name.
+                        if (string.Equals(authHeader.Scheme, AuthType.Basic, StringComparison.OrdinalIgnoreCase))
+                            return AuthType.Basic;
+                        if (string.Equals(authHeader.Scheme, AuthType.AuthToken, StringComparison.OrdinalIgnoreCase))
+                            return AuthType.AuthToken;
+                        if (string.Equals(authHeader.Scheme, AuthType.TenantToken, StringComparison.OrdinalIgnoreCase))
+                            return AuthType.TenantToken;
+                        if (isJwtBearerEnabled && string.Equals(authHeader.Scheme, JwtBearerDefaults.AuthenticationScheme, StringComparison.OrdinalIgnoreCase))
+                            return JwtBearerDefaults.AuthenticationScheme;
                     }
 
                     return null;
@@ -87,8 +101,6 @@ namespace WB.UI.Headquarters.Code.Authentication
                 .AddScheme<AuthTokenAuthenticationSchemeOptions, AuthTokenAuthenticationHandler>(AuthType.AuthToken, _ => { })
                 .AddScheme<AuthenticationSchemeOptions, TenantTokenAuthenticationHandler>(AuthType.TenantToken, _ => { });
 
-            bool isJwtBearerEnabled = configuration.GetValue<bool>("JwtBearer:Enabled");
-            
             services.Configure<TokenProviderOptions>(options =>
             {
                 options.IsBearerEnabled = isJwtBearerEnabled;

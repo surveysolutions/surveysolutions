@@ -16,6 +16,7 @@ using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
+using WB.UI.Designer.Utils;
 
 namespace WB.UI.Designer.Areas.Admin.Pages
 {
@@ -53,8 +54,8 @@ namespace WB.UI.Designer.Areas.Admin.Pages
             [Display(Name = "Is Locked Out", Order = 7)]
             public bool IsLockedOut { get; set; }
 
-            [Display(Name = "Can import on HQ", Order = 5)]
-            public bool CanImportOnHq { get; set; }
+            [Display(Name = "Assistant Enabled", Order = 5)]
+            public bool AssistantEnabled { get; set; }
 
             [Display(Name = "Last Password Changed Date", Order = 10)]
             public string? LastPasswordChangedDate { get; set; }
@@ -69,6 +70,9 @@ namespace WB.UI.Designer.Areas.Admin.Pages
 
             [Display(Name = "Full name", Order = 2)]
             public string? FullName { get; set; }
+
+            [Display(Name = "Last login date", Order = 4)]
+            public string? LastLoginDate { get; set; }
         }
 
         public AccountViewModel Account { get; private set; } = new AccountViewModel();
@@ -108,11 +112,12 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 Email = account.Email,
                 IsApproved = account.EmailConfirmed,
                 IsLockedOut = account.LockoutEnd.HasValue && account.LockoutEnd.Value >= DateTimeOffset.UtcNow ,
-                CanImportOnHq = account.CanImportOnHq,
+                AssistantEnabled = account.AssistantEnabled ?? false,
                 UserName = account.UserName ?? String.Empty,
                 OwnedQuestionnaires = ownedQuestionnaires,
                 SharedQuestionnaires = sharedQuestionnaires,
-                FullName = await this.users.GetFullName(account.Id)
+                FullName = await this.users.GetFullName(account.Id),
+                LastLoginDate = account.LastLoginAtUtc == null ? "" : account.LastLoginAtUtc.Value.ConvertToLocalAndFormatDate()
             };
             this.Account = accountViewModel;
 

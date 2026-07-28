@@ -47,6 +47,7 @@ const helpMap = {
     isCritical: $t('QuestionnaireEditor.HelpIsCritical'),
     criticalityConditionExpression: $t('QuestionnaireEditor.HelpCriticalityConditionExpression'),
     criticalityConditionMessage: $t('QuestionnaireEditor.HelpCriticalityConditionMessage'),
+    aiDisclaimer: $t('Assistant.Disclaimer'),
 };
 
 export default {

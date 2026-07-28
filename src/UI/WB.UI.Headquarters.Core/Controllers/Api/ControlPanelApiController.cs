@@ -343,7 +343,6 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult GetServerResponseByStatusCode(int statusCode)
         {
             return StatusCode(statusCode);

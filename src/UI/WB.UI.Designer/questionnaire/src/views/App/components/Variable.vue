@@ -6,7 +6,7 @@
                 <div class="form-group col-xs-6">
                     <label class="wb-label">{{
                         $t('QuestionnaireEditor.VariableType')
-                        }}</label><br />
+                    }}</label><br />
                     <div class="btn-group type-container-dropdown">
                         <button id="variableTypeBtn" class="btn btn-default form-control dropdown-toggle"
                             data-bs-toggle="dropdown" aria-expanded="false" type="button">
@@ -36,7 +36,7 @@
             </div>
             <div class="form-group">
                 <label for="edit-variable-title-highlight" class="wb-label">{{ $t('QuestionnaireEditor.VariableLabel')
-                    }}
+                }}
                     <help link="variableDescription" />
                 </label>
                 <ExpressionEditor id="edit-variable-title-highlight" v-model="activeVariable.label" />
@@ -54,7 +54,7 @@
                         <input id="cb-do-not-export" type="checkbox" class="wb-checkbox"
                             v-model="activeVariable.doNotExport" />
                         <label for="cb-do-not-export"><span></span>{{ $t('QuestionnaireEditor.VariableNoExport')
-                            }}</label>
+                        }}</label>
                         <help link="doNotExport"></help>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                     }}</span>
                     <span v-if="isCommentsBlockVisible">{{
                         $t('QuestionnaireEditor.EditorHideComment')
-                        }}</span>
+                    }}</span>
                 </button>
                 <button type="button" v-if="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button"
                     class="btn btn-lg btn-link error" @click="deleteVariable()" unsaved-warning-clear>
@@ -106,7 +106,7 @@ import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
 import Help from './Help.vue'
-import { useMagicKeys } from '@vueuse/core';
+import { useKeyShortcut } from '../../../composables/useKeyShortcut';
 
 export default {
     name: 'Variable',
@@ -149,13 +149,7 @@ export default {
             };
         });
 
-        const { ctrl_s } = useMagicKeys({
-            passive: false,
-            onEventFired(e) {
-                if (e.ctrlKey && e.key === 's' && e.type === 'keydown')
-                    e.preventDefault()
-            },
-        });
+        const ctrl_s = useKeyShortcut(e => e.ctrlKey && e.key === 's');
 
         return {
             variableStore, commentsStore, ctrl_s

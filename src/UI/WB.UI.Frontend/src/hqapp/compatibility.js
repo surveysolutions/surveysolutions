@@ -1,4 +1,5 @@
 import $ from '~/shared/jquery'
+import { validateJQueryXhr } from '~/shared/serverValidator'
 
 $.fn.preventDoubleSubmission = function () {
     $(this).on('submit', function (e) {
@@ -61,3 +62,9 @@ $(window).resize(function () {
     window.ajustNoticeHeight()
     window.ajustDetailsPanelHeight()
 })
+
+$(document).ajaxComplete(function (event, jqXHR, settings) {
+    validateJQueryXhr(jqXHR, settings)
+})
+
+

@@ -42,6 +42,7 @@ namespace WB.UI.Interviewer.ServiceLocation
 
             registry.Bind<INetworkService, AndroidNetworkService>();
             registry.BindInPerLifetimeScope<IHttpClientFactory, AndroidHttpClientFactory>();
+            registry.Bind<IIntegrityService, IntegrityService>();
             registry.BindAsSingletonWithConstructorArgument<IRestService, RestService>("restServicePointManager", null);
             registry.Bind<IFastBinaryFilesHttpHandler, BinaryFilesHttpHandler>();
             registry.Bind<IInterviewUniqueKeyGenerator, InterviewerInterviewUniqueKeyGenerator>();
