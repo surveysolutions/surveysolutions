@@ -74,8 +74,11 @@ export default {
 
     methods: {
         answerRemoved() {
-            this.$refs.uploader.type = ''
-            this.$refs.uploader.type = 'file'
+            const uploader = this.$refs.uploader
+            if (uploader) {
+                uploader.type = ''
+                uploader.type = 'file'
+            }
         },
         onFileChange(e) {
             this.sendAnswer(() => {
