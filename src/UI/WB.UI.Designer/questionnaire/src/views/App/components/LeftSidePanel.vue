@@ -203,8 +203,6 @@ import CriticalityConditions from './leftSidePanel/CriticalityConditions.vue';
 
 import { setFocusIn } from '../../../services/utilityService'
 
-import { useMagicKeys } from '@vueuse/core';
-
 export default {
     name: 'LeftSidePanel',
     components: {
@@ -228,17 +226,10 @@ export default {
             openPanel: null,//'categories',
         };
     },
-    setup(props) {
-
-        const keys = useMagicKeys();
-        const arrowLeft = keys['arrowleft'];
-        const arrowRight = keys['arrowright'];
-
-        return {
-            arrowLeft, arrowRight
-        };
-    },
     mounted() {
+        this._onKeyDown = this.handleKeyDown.bind(this);
+        document.addEventListener('keydown', this._onKeyDown);
+
         this.$emitter.on('openChaptersList', this.setChaptersPanel);
         this.$emitter.on('openCategoriesList', this.setCategoriesPanel);
         this.$emitter.on('openLookupTables', this.setLookupTablesPanel);
@@ -264,6 +255,8 @@ export default {
         this.$emitter.on('verifing', this.closeOpenPanelIfAny);
     },
     unmounted() {
+        document.removeEventListener('keydown', this._onKeyDown);
+
         this.$emitter.off('openChaptersList', this.setChaptersPanel);
         this.$emitter.off('openCategoriesList', this.setCategoriesPanel);
         this.$emitter.off('openLookupTables', this.setLookupTablesPanel);
@@ -303,18 +296,19 @@ export default {
         isUnfoldedCategories() { return this.openPanel == 'categories' },
         isUnfoldedCriticalityConditions() { return this.openPanel == 'criticalityconditions' },
     },
-    watch: {
-        arrowLeft: function (value) {
-            // if (value)
-            //     this.unfoldChapters();
-        },
-        arrowRight: function (value) {
-            // if (value)
-            //     this.foldChapters();
-        }
-    },
-
     methods: {
+        handleKeyDown(event) {
+            const tag = event.target.tagName;
+            if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || event.target.isContentEditable) {
+                return;
+            }
+            if (event.key === 'ArrowLeft') {
+                this.unfoldChapters();
+            } else if (event.key === 'ArrowRight') {
+                this.foldChapters();
+            }
+        },
+
         foldback() {
             this.openPanel = null;
         },
