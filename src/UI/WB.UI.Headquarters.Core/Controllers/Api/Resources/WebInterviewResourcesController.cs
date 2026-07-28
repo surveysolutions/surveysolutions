@@ -1,7 +1,6 @@
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Storage;
@@ -18,7 +17,6 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
 {
     [Localizable(false)]
     [Route("api/{controller}/{action}")]
-    [WebInterviewResourcesAuthorize(InterviewIdQueryString = "interviewId")]
     public class WebInterviewResourcesController : ControllerBase
     {
         private readonly IAuthorizedUser authorizedUser;
@@ -46,6 +44,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
 
         [HttpHead]
         [ActionName("Content")]
+        [WebInterviewResourcesAuthorize(InterviewIdQueryString = "interviewId")]
         public IActionResult ContentHead([FromQuery] string interviewId, [FromQuery] string contentId)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
@@ -71,6 +70,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
         }
 
         [HttpGet]
+        [WebInterviewResourcesAuthorize(InterviewIdQueryString = "interviewId")]
         public new IActionResult Content([FromQuery] string interviewId, [FromQuery] string contentId)
         {
             return GetAttachmentContentByContentId(interviewId, contentId, 200);
@@ -111,6 +111,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
         }
 
         [HttpGet]
+        [WebInterviewResourcesAuthorize(InterviewIdQueryString = "interviewId")]
         public async Task<IActionResult> Image([FromQuery] string interviewId, [FromQuery] string questionId)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
@@ -148,6 +149,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
         }
         
         [HttpGet]
+        [WebInterviewResourcesAuthorize(InterviewIdQueryString = "interviewId")]
         public IActionResult Attachment([FromQuery] string interviewId, [FromQuery] string attachment)
         {
             if (GetAttachmentById(interviewId, attachment, out var attachmentObj) && attachmentObj != null)
@@ -174,6 +176,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
 
         [HttpHead]
         [ActionName("Attachment")]
+        [WebInterviewResourcesAuthorize(InterviewIdQueryString = "interviewId")]
         public IActionResult AttachmentHead([FromQuery] string interviewId, [FromQuery] string attachment)
         {
             if (GetAttachmentById(interviewId, attachment, out var attachmentObj) && attachmentObj != null)

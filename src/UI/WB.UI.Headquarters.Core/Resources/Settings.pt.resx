@@ -406,7 +406,7 @@ Possíveis razões:
     <value>Configure os parâmetros para acessar o servidor SMTP abaixo. Mais informações sobre o uso do servidor SMTP com o Survey Solutions estão disponíveis </value>
   </data>
   <data name="EmailProvider_SmtpHost" xml:space="preserve">
-    <value>Host</value>
+    <value>Servidor</value>
   </data>
   <data name="EmailProvider_SmtpHostHelp" xml:space="preserve">
     <value>Endereço do servidor SMTP</value>
@@ -513,4 +513,37 @@ Possíveis razões:
   <data name="SelectFileWarning" xml:space="preserve">
     <value>Por favor, selecione um arquivo para enviar.</value>
 </data>
+  <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve">
+    <value>Permitir que os supervisores alterem os estados das atribuições</value>
+  </data>
+  <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>Quando ativado, os supervisores podem aprovar e reabrir atribuições a partir dos seus tablets</value>
+  </data>
+  <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
+    <value>Permitir que os entrevistadores alterem os estados das atribuições</value>
+  </data>
+  <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>Quando ativado, os entrevistadores podem concluir e reabrir atribuições a partir dos seus tablets (requer que a definição do supervisor esteja ativada)</value>
+  </data>
+  <data name="AudioRecordingQuality" xml:space="preserve">
+    <value>Qualidade de gravação de áudio</value>
+  </data>
+  <data name="AudioRecordingQualityDescription" xml:space="preserve">
+    <value>Qualidade de áudio usada pelo aplicativo do entrevistador ao gravar áudio (auditoria de áudio e perguntas de áudio)</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono44kHz" xml:space="preserve">
+    <value>64 kbps, Mono, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve">
+    <value>64 kbps, Mono, 22.05 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono16kHz" xml:space="preserve">
+    <value>32 kbps, Mono, 16 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve">
+    <value>128 kbps, Estéreo, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
+    <value>128 kbps, Estéreo, 48 kHz</value>
+  </data>
 </root>

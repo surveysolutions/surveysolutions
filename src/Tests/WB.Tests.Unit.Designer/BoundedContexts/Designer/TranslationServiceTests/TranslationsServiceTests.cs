@@ -615,6 +615,92 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             Assert.That(translationInstance2.TranslationIndex, Is.EqualTo("1$1"));
         }
 
+        [Test]
+        public void when_storing_translations_from_main_sheet_with_trailing_rows_having_empty_translation_should_not_throw()
+        {
+            // Rows with an empty Translation cell must be silently skipped (not validated),
+            // consistent with how GetWorksheetTranslations skips them.
+            Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            Guid translationId   = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            Guid sectionId       = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            // Row 3 has a non-empty EntityId/Type but an empty Translation – before the fix
+            // Verify() would still validate it and could raise an error for an invalid EntityId.
+            byte[] fileStream = CreateExcel(new Dictionary<string, string[][]>
+            {
+                {
+                    "Translations", new[]
+                    {
+                        new[] { "Entity Id", "Variable", "Type", "Index", "Original text", "Translation" },
+                        new[] { sectionId.ToString("N"), "", "Title", "", "New Section", "Translated Section" },
+                        // trailing row: empty translation → must be skipped, not validated
+                        new[] { "not-a-guid", "", "Title", "", "original", "" }
+                    }
+                }
+            });
+
+            var plainStorageAccessor = Create.InMemoryDbContext();
+            var questionnaire = Create.QuestionnaireDocument(questionnaireId, Create.Group(sectionId));
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
+
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+
+            // act & assert — must not throw InvalidFileException
+            Assert.That(() => service.Store(questionnaireId, translationId, fileStream), Throws.Nothing);
+
+            // only the row with an actual translation should have been stored
+            Assert.That(plainStorageAccessor.TranslationInstances.Count(), Is.EqualTo(1));
+            Assert.That(plainStorageAccessor.TranslationInstances.First().Value, Is.EqualTo("Translated Section"));
+        }
+
+        [Test]
+        public void when_storing_translations_from_categories_sheet_with_trailing_rows_having_empty_translation_should_not_throw()
+        {
+            // Same as above but for a categories worksheet: rows with empty Translation must
+            // be skipped, even when the Index cell is also empty (previously triggered validation error).
+            Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            Guid translationId   = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var categoriesId     = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+            var categoriesName   = "mycat";
+
+            byte[] fileStream = CreateExcel(new Dictionary<string, string[][]>
+            {
+                {
+                    $"@@@_{categoriesName}", new[]
+                    {
+                        new[] { "Index", "Original text", "Translation" },
+                        new[] { "1",     "one",           "один"        },
+                        // trailing row: empty Index AND empty Translation → must be skipped
+                        new[] { "",      "unused",        ""            }
+                    }
+                }
+            });
+
+            var plainStorageAccessor = Create.InMemoryDbContext();
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId);
+            questionnaire.Categories = new List<Categories>
+            {
+                new Categories { Id = categoriesId, Name = categoriesName }
+            };
+
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
+
+            var categories = new Mock<IReusableCategoriesService>();
+            categories.Setup(x => x.GetCategoriesById(questionnaire.PublicKey, categoriesId))
+                .Returns(new List<CategoriesItem> { new CategoriesItem { Id = 1, Text = "one" } }.AsQueryable);
+
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object,
+                reusableCategoriesService: categories.Object);
+
+            // act & assert — must not throw InvalidFileException
+            Assert.That(() => service.Store(questionnaireId, translationId, fileStream), Throws.Nothing);
+
+            Assert.That(plainStorageAccessor.TranslationInstances.Count(), Is.EqualTo(1));
+            Assert.That(plainStorageAccessor.TranslationInstances.First().Value, Is.EqualTo("один"));
+        }
+
         private byte[] GetEmbendedFileContent(string fileName)
         {
            

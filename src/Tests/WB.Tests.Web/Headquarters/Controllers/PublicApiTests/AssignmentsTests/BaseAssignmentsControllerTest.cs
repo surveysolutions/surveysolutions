@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
@@ -16,6 +17,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -37,6 +39,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         protected Mock<IAuthorizedUser> authorizedUser;
         protected Mock<IUserViewFactory> userViewFactory;
 
+        protected Mock<ISystemLog> auditLog;
+
         [SetUp]
         public virtual void Setup()
         {
@@ -55,7 +59,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 this.assignmentsStorage.Object,
                 this.userManager.Object,
                 this.questionnaireStorage.Object,
-                Mock.Of<ISystemLog>(),
+                this.auditLog.Object,
                 Create.Service.ImportDataVerifier(),
                 commandService.Object,
                 authorizedUser.Object,
@@ -66,7 +70,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 Create.Service.NewtonJsonSerializer(),
                 Mock.Of<IInvitationService>(),
                 Mock.Of<IWebInterviewLinkProvider>(),
-                scopeExecutor);
+                scopeExecutor,
+                Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>());
             this.controller.ControllerContext = new ControllerContext()
             {
                 HttpContext = new DefaultHttpContext()
@@ -86,6 +91,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             this.commandService = new Mock<ICommandService>();
             this.authorizedUser = new Mock<IAuthorizedUser>();
             this.userViewFactory = new Mock<IUserViewFactory>();
+            this.auditLog = new Mock<ISystemLog>();
         }
 
         protected void SetupResponsibleUser(HqUser user)
