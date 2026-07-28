@@ -1,5 +1,6 @@
 ﻿using System;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
 {
@@ -53,5 +54,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 
         bool AllowInterviewerChangeAssignmentStatus { get; }
         void SetAllowInterviewerChangeAssignmentStatus(bool allow);
+
+        AudioRecordingQuality AudioRecordingQuality { get; }
+        void SetAudioRecordingQuality(AudioRecordingQuality quality);
     }
 }
