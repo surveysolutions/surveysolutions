@@ -557,6 +557,9 @@
   <data name="FindReplaceMatchingLines" xml:space="preserve">
     <value>الأسطر المطابقة: {{count}}</value>
   </data>
+  <data name="FindReplaceCurrentMatch" xml:space="preserve">
+    <value>{{current}} / {{count}}</value>
+  </data>
   <data name="FindReplaceNext" xml:space="preserve">
     <value>التالي</value>
   </data>
@@ -1074,6 +1077,9 @@
   </data>
   <data name="HotkeysSearch" xml:space="preserve">
       <value>البحث عن الأقسام الفرعية والأسئلة في القسم</value>
+  </data>
+  <data name="HotkeysTest" xml:space="preserve">
+      <value>اختبر الاستبيان في WebTester</value>
   </data>
 
 <data name="MultipleDependencies" xml:space="preserve">

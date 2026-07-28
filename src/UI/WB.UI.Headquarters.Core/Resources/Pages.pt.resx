@@ -127,7 +127,7 @@
     <value>Editar detalhes das informações públicas do perfil</value>
   </data>
   <data name="AccountManage_Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Nome de usuário</value>
   </data>
   <data name="AccountManage_Role" xml:space="preserve">
     <value>Função</value>
@@ -139,7 +139,7 @@
     <value>Alterar senha</value>
   </data>
   <data name="AccountManage_Profile" xml:space="preserve">
-    <value>Perfil</value>
+    <value>Contato</value>
   </data>
   <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
     <value>Autenticação de dois fatores</value>
@@ -885,7 +885,10 @@
     <value>criação em lote de usuários</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>Detalhes das informações pessoais (opcional) &lt;br&gt; serão visíveis apenas para usuários da sede</value>
+    <value>Detalhes das informações pessoais</value>
+  </data>
+  <data name="PublicSectionDescription" xml:space="preserve">
+    <value>(opcional, será visível apenas para usuários autenticados).</value>
   </data>
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
     <value>Data em que a conta do entrevistador foi criada</value>
@@ -906,10 +909,10 @@
     <value>Idioma</value>
   </data>
   <data name="InterviewDetails_DefaultTranslation" xml:space="preserve">
-    <value>original</value>
+    <value>idioma original</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Nome de usuário</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Senha</value>
@@ -1487,7 +1490,7 @@
     <value>Soma total do tráfego de entrada e saída para o usuário em todos os dispositivos</value>
   </data>
   <data name="Kb" xml:space="preserve">
-    <value>Kb</value>
+    <value>KB</value>
     <comment>Kilobytes</comment>
   </data>
   <data name="EmailProviders" xml:space="preserve">
@@ -1659,7 +1662,13 @@
     <value>Entrevista reavaliada com sucesso</value>
   </data>
   <data name="CreateUser" xml:space="preserve">
-    <value>Criar usuário</value>
+    <value>Criar conta de usuário</value>
+  </data>
+  <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+    <value>Acesso ao espaço de trabalho</value>
+  </data>
+  <data name="CreateUser_RoleLabel" xml:space="preserve">
+    <value>Função do usuário</value>
   </data>
   <data name="GenerateRecoveryCodes" xml:space="preserve">
     <value>Gerar códigos de recuperação</value>
@@ -1749,7 +1758,7 @@
     <value>Se este for o último usuário da equipe vinculado ao mapa, o supervisor da equipe perderá o acesso ao mapa.</value>
   </data>
   <data name="QuestionnaireVersionAndName" xml:space="preserve">
-    <value>[ver. {1}] {0}</value>
+    <value>[vers. {1}] {0}</value>
   </data>
   <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
     <value>Verificações críticas</value>
