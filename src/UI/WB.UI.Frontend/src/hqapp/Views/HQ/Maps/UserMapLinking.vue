@@ -26,15 +26,22 @@
                         <a :href="$config.model.downloadAllUrl">
                             {{ $t("Pages.MapLinking_DownloadExisting") }}
                         </a>
-                        <div class="info-block" v-if="actionsAlowed">
+                        <div class="info-block"
+                            v-if="actionsAlowed">
                             <label class="btn btn-success btn-file">
                                 {{ $t("Pages.MapLinking_UploadFile") }}
-                                <input :accept="$config.model.fileExtension" ref="uploader" id="File" name="File"
-                                    @change="onFileChange" type="file" value="" />
+                                <input :accept="$config.model.fileExtension"
+                                    ref="uploader"
+                                    id="File"
+                                    name="File"
+                                    @change="onFileChange"
+                                    type="file"
+                                    value="" />
                             </label>
 
                         </div>
-                        <div class="info-block" v-if="actionsAlowed">
+                        <div class="info-block"
+                            v-if="actionsAlowed">
                             <div ref="status">
                                 <p :class="{'text-danger': isError}">{{ statusMessage }}</p>
                             </div>

@@ -136,7 +136,7 @@
     <value>Изменить пароль</value>
   </data>
   <data name="CompanyName" xml:space="preserve">
-    <value>Группа Всемирного банка</value>
+    <value>The World Bank Group</value>
   </data>
   <data name="CompleteRegistrationInstruction" xml:space="preserve">
     <value>Чтобы завершить процесс регистрации, найдите электронное письмо в своем почтовом ящике, которое содержит дополнительные инструкции</value>
@@ -160,7 +160,7 @@
     <value>Ссылка на сброс пароля недействительна или истек её срок действия. Пожалуйста, попробуйте еще раз</value>
   </data>
   <data name="Legal" xml:space="preserve">
-    <value>Права</value>
+    <value>Правовая информация</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Войти</value>

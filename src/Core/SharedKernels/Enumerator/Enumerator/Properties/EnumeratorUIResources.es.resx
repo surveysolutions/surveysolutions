@@ -766,7 +766,7 @@
     <value>Todos los mapas se sincronizaron</value>
   </data>
   <data name="Maps_Title" xml:space="preserve">
-    <value>Maps</value>
+    <value>Mapas</value>
   </data>
   <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
     <value>Comprobando mapas en el servidor</value>
@@ -838,7 +838,7 @@
     <value>Seleccione un nuevo responsable para la entrevista. Aparecerá en el dispositivo del entrevistador después de la próxima sincronización.</value>
   </data>
   <data name="SupervisorVersion" xml:space="preserve">
-    <value>Supervisor version: {0}</value>
+    <value>Versión del supervisor: {0}</value>
   </data>
   <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
     <value>Compruebe si hay entrevistas obsoletas</value>

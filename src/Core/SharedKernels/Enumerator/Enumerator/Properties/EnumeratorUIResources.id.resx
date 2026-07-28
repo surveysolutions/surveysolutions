@@ -210,7 +210,7 @@ untuk instruksi lebih lanjut</value>
     <value>Dasbor</value>
   </data>
   <data name="MenuItem_Title_Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Masuk</value>
   </data>
   <data name="MenuItem_Title_Settings" xml:space="preserve">
     <value>Pengaturan</value>
@@ -477,5 +477,802 @@ Silahkan masukkan password Anda yang diperbarui. Jika hal itu tidak menyelesaika
   </data>
   <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
     <value>Status: Terbuka</value>
+  </data>
+
+
+  <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
+    <value>{0} wawancara</value>
+  </data>
+
+  <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
+    <value>Wawancara dibuat: {0}</value>
+  </data>
+
+  <data name="Dashboard_WebInterviewsLinkText" xml:space="preserve">
+    <value>Wawancara Web ({0})</value>
+  </data>
+
+  <data name="Dashboard_Start" xml:space="preserve">
+    <value>Mulai</value>
+  </data>
+
+  <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
+    <value>Buat Baru</value>
+  </data>
+
+  <data name="Dashboard_StartNewInterview" xml:space="preserve">
+    <value>Mulai wawancara baru</value>
+  </data>
+
+  <data name="Maps_NoMapsText" xml:space="preserve">
+    <value>Sinkronkan untuk mendapatkan peta
+atau hubungi supervisor Anda
+untuk instruksi lebih lanjut</value>
+  </data>
+
+  <data name="Dashboard_Title" xml:space="preserve">
+    <value>{0} wawancara untuk {1}</value>
+  </data>
+
+  <data name="Dashboard_RefreshWorkspaces" xml:space="preserve">
+    <value>Menyegarkan workspace</value>
+  </data>
+
+  <data name="Dashboard_RefreshWorkspacesFinished" xml:space="preserve">
+    <value>Daftar workspace diperbarui</value>
+  </data>
+
+  <data name="Dashboard_RefreshWorkspacesError" xml:space="preserve">
+    <value>Terjadi kesalahan saat mengambil daftar workspace. Silakan hubungi administrator sistem Anda.</value>
+  </data>
+
+  <data name="Maps_Title" xml:space="preserve">
+    <value>Peta</value>
+  </data>
+
+  <data name="HostUnreachable" xml:space="preserve">
+    <value>Tidak ada akses internet ke server Anda. Periksa alamat server dan(atau) pengaturan jaringan</value>
+  </data>
+
+  <data name="InvalidEndpointShort" xml:space="preserve">
+    <value>Alamat tidak valid</value>
+  </data>
+
+  <data name="BluetoothPermissionRequired" xml:space="preserve">
+    <value>Izin Bluetooth diperlukan untuk sinkronisasi offline</value>
+  </data>
+
+  <data name="NearbyPermissionRequired" xml:space="preserve">
+    <value>Izin perangkat Wi-Fi terdekat diperlukan untuk sinkronisasi offline</value>
+  </data>
+
+  <data name="LocationPermissionRequired" xml:space="preserve">
+    <value>Izin lokasi diperlukan untuk sinkronisasi offline</value>
+  </data>
+
+  <data name="Synchronization_Done" xml:space="preserve">
+    <value>Selesai</value>
+  </data>
+
+  <data name="Synchronization_Download_CalendarEvents_Title" xml:space="preserve">
+    <value>Memperbarui acara kalender</value>
+  </data>
+
+  <data name="Synchronization_Update_Interviews_Title" xml:space="preserve">
+    <value>Memperbarui wawancara lokal dengan perubahan dari server</value>
+  </data>
+
+  <data name="Synchronization_Fail_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>{0} dari {1}  wawancara sebagian diunduh</value>
+  </data>
+
+  <data name="Synchronization_PartialInterviews" xml:space="preserve">
+    <value>perubahan wawancara</value>
+  </data>
+
+  <data name="Synchronization_LinkToErrors" xml:space="preserve">
+    <value>Informasi lebih lanjut tentang kesalahan sinkronisasi dapat ditemukan di &lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems"&gt;situs dukungan&lt;/a&gt;</value>
+  </data>
+
+  <data name="UpdatingQuestionnaires" xml:space="preserve">
+    <value>Memperbarui kuesioner</value>
+  </data>
+
+  <data name="TransferringAssignments" xml:space="preserve">
+    <value>Mentransfer penugasan</value>
+  </data>
+
+  <data name="TransferringCalendarEvents" xml:space="preserve">
+    <value>Mentransfer acara kalender</value>
+  </data>
+
+  <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
+    <value>Semua peta telah disinkronkan</value>
+  </data>
+
+  <data name="Synchronization_Success_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>{0} wawancara telah diperbarui</value>
+  </data>
+
+  <data name="Synchronization_Success_State_PartialUploadInterviews_Format" xml:space="preserve">
+    <value>{0} wawancara sebagian diunggah</value>
+  </data>
+
+  <data name="Synchronization_DoneWithErrors_Title" xml:space="preserve">
+    <value>Sinkronisasi selesai dengan kesalahan</value>
+  </data>
+
+  <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
+    <value>acara kalender</value>
+  </data>
+
+  <data name="Synchronization_Receiving_Title_Format" xml:space="preserve">
+    <value>Menerima {0}</value>
+  </data>
+
+  <data name="Synchronization_PasswordChangeRequired" xml:space="preserve">
+    <value>Password Anda telah direset. Anda harus mengubahnya untuk mendapatkan akses ke situs.</value>
+  </data>
+
+  <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
+    <value>Pengguna tidak lagi tergabung dalam tim Supervisor ini. Silakan hubungi Headquarters Anda untuk detailnya.</value>
+  </data>
+
+  <data name="YouChangeYouPasswordTryToLoginAgainWithNewPassword" xml:space="preserve">
+    <value>Anda telah mengubah password saat ini. Coba login lagi dengan password baru.</value>
+  </data>
+
+  <data name="HeadquartersVersion" xml:space="preserve">
+    <value>Versi Headquarters yang didukung: {0}</value>
+  </data>
+
+  <data name="SupervisorVersion" xml:space="preserve">
+    <value>Versi Supervisor: {0}</value>
+  </data>
+
+  <data name="InterviewerVersion" xml:space="preserve">
+    <value>Versi Interviewer: {0}</value>
+  </data>
+
+  <data name="Synchronization_SupervisorShouldDoOnlineSync_Title" xml:space="preserve">
+    <value>Aplikasi Supervisor perlu disinkronkan.</value>
+  </data>
+
+  <data name="Synchronization_SupervisorShouldDoOnlineSync" xml:space="preserve">
+    <value>Supervisor harus selalu memiliki perubahan terbaru dari Headquarters, jadi aplikasi ini harus disinkronkan terakhir dalam tim sebelum sinkronisasi offline tersedia</value>
+  </data>
+
+  <data name="MenuItem_Title_Return" xml:space="preserve">
+    <value>Kembali</value>
+  </data>
+
+  <data name="MenuItem_Title_Map_Dashboard" xml:space="preserve">
+    <value>Dashboard peta</value>
+  </data>
+
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>Bahasa</value>
+  </data>
+
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>Asli</value>
+  </data>
+
+  <data name="MenuItem_Title_Search" xml:space="preserve">
+    <value>Cari</value>
+  </data>
+
+  <data name="MenuItem_Title_Workspaces" xml:space="preserve">
+    <value>Workspace</value>
+  </data>
+
+  <data name="MenuItem_Title_RefreshWorkspaces" xml:space="preserve">
+    <value>Segarkan workspace</value>
+  </data>
+
+  <data name="Diagnostics_Backup_Description" xml:space="preserve">
+    <value>Simpan semua informasi yang relevan ke file di perangkat ini.</value>
+  </data>
+
+  <data name="Diagnostics_Backup_Title" xml:space="preserve">
+    <value>Buat paket dukungan</value>
+  </data>
+
+  <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
+    <value>Kami akan memeriksa versi yang lebih baru dari aplikasi Interviewer di server</value>
+  </data>
+
+  <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
+    <value>Versi: {0}. Periksa versi baru</value>
+  </data>
+
+  <data name="Diagnostics_Restore_Description" xml:space="preserve">
+    <value>Dengan memulihkan data yang disimpan, Anda akan mengganti semua penugasan saat ini di perangkat ini</value>
+  </data>
+
+  <data name="Diagnostics_Restore_Title" xml:space="preserve">
+    <value>PULIHKAN</value>
+  </data>
+
+  <data name="Diagnostics_Send_Description" xml:space="preserve">
+    <value>Semua data aplikasi dan wawancara akan dikumpulkan ke satu arsip. Ini dapat memakan waktu hingga 10 menit.</value>
+  </data>
+
+  <data name="Diagnostics_Send_Title" xml:space="preserve">
+    <value>Kirim semua informasi tablet ke Headquarters untuk pemecahan masalah.</value>
+  </data>
+
+  <data name="Diagnostics_Share_Description" xml:space="preserve">
+    <value>Semua informasi di bawah ini akan dibagikan sebagai teks biasa. Informasi ini dapat dikirim melalui email, google hangouts, atau aplikasi perpesanan lainnya</value>
+  </data>
+
+  <data name="Diagnostics_Share_Title" xml:space="preserve">
+    <value>Bagikan semua informasi teknis</value>
+  </data>
+
+  <data name="Diagnostics_Title" xml:space="preserve">
+    <value>Diagnostik</value>
+  </data>
+
+  <data name="Diagnostics_ServerUrl" xml:space="preserve">
+    <value>URL server: </value>
+  </data>
+
+  <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
+    <value>Diagnostik</value>
+  </data>
+
+  <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
+    <value>Sinkronisasi Peta</value>
+  </data>
+
+  <data name="MenuItem_Title_Maps" xml:space="preserve">
+    <value>Peta</value>
+  </data>
+
+  <data name="Share_to_Title" xml:space="preserve">
+    <value>Bagikan informasi ke..</value>
+  </data>
+
+  <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
+    <value>Uji kualitas dan kecepatan koneksi dengan server.</value>
+  </data>
+
+  <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
+    <value>Uji bandwidth ke server</value>
+  </data>
+
+  <data name="Diagnostics_Delete" xml:space="preserve">
+    <value>Hapus</value>
+  </data>
+
+  <data name="Diagnostics_Send" xml:space="preserve">
+    <value>Kirim</value>
+  </data>
+
+  <data name="Diagnostics_TabletInformationReady_Title" xml:space="preserve">
+    <value>Arsip data siap</value>
+  </data>
+
+  <data name="Diagnostics_TabletInformationScope_Title" xml:space="preserve">
+    <value>Cakupan:</value>
+  </data>
+
+  <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
+    <value>Saat dibuat:</value>
+  </data>
+
+  <data name="Diagnostics_DownloadingPleaseWait" xml:space="preserve">
+    <value>Mengunduh, harap tunggu...</value>
+  </data>
+
+  <data name="Diagnostics_NewVersionAvaliable_Title" xml:space="preserve">
+    <value>Versi baru tersedia. Apakah Anda ingin mengunduh dan memperbarui aplikasi?</value>
+  </data>
+
+  <data name="Diagnostics_NewVersionNumber_Title" xml:space="preserve">
+    <value>Nomor versi:</value>
+  </data>
+
+  <data name="Diagnostics_No" xml:space="preserve">
+    <value>Tidak</value>
+  </data>
+
+  <data name="Diagnostics_Update" xml:space="preserve">
+    <value>Perbarui</value>
+  </data>
+
+  <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
+    <value>Anda memiliki versi aplikasi terbaru.</value>
+  </data>
+
+  <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
+    <value>Saat Disimpan:</value>
+  </data>
+
+  <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
+    <value>Lokasi file cadangan:</value>
+  </data>
+
+  <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
+    <value>Data disimpan</value>
+  </data>
+
+  <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
+    <value>Cakupan:</value>
+  </data>
+
+  <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
+    <value>Data tersimpan ditemukan:</value>
+  </data>
+
+  <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
+    <value>Koneksi OK</value>
+  </data>
+
+  <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
+    <value>Jenis koneksi:</value>
+  </data>
+
+  <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
+    <value>Ping:</value>
+  </data>
+
+  <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
+    <value>Nama jaringan:</value>
+  </data>
+
+  <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;Tidak ada koneksi internet&lt;/font&gt;</value>
+  </data>
+
+  <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
+    <value>Koneksi &lt;font color="red"&gt;tidak baik&lt;/font&gt;</value>
+  </data>
+
+  <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;Tidak ada koneksi dengan server&lt;/font&gt;</value>
+  </data>
+
+  <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
+    <value>Folder '{0}' kosong. Harap letakkan cadangan yang ingin Anda pulihkan di folder tersebut.</value>
+  </data>
+
+  <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
+    <value>Endpoint sinkronisasi '{0}' berbeda dari yang diberikan di Settings ('{1}'). Muat URL dari Settings?</value>
+  </data>
+
+  <data name="Prefs_EventChunkSizeSummary" xml:space="preserve">
+    <value>Berapa banyak event yang dapat dibaca dengan satu kueri</value>
+  </data>
+
+  <data name="Prefs_EventChunkSizeTitle" xml:space="preserve">
+    <value>Ukuran potongan event</value>
+  </data>
+
+  <data name="Synchronization_Download_AttachmentsCleanup" xml:space="preserve">
+    <value>Menghapus lampiran usang</value>
+  </data>
+
+  <data name="Synchronization_Check_Obsolete_Questionnaires" xml:space="preserve">
+    <value>Periksa kuesioner usang</value>
+  </data>
+
+  <data name="Synchronization_Of_AssignmentsFormat" xml:space="preserve">
+    <value>Menyinkronkan {0} dari {1} penugasan</value>
+  </data>
+
+  <data name="AssignmentsSynchronization" xml:space="preserve">
+    <value>Menyinkronkan penugasan</value>
+  </data>
+
+  <data name="Synchronization_Check_Obsolete_Questionnaires_Description" xml:space="preserve">
+    <value>Menghapus {0} kuesioner dari {1}</value>
+  </data>
+
+  <data name="Synchronization_DownloadApplication" xml:space="preserve">
+    <value>Mengunduh pembaruan aplikasi</value>
+  </data>
+
+  <data name="Synchronization_UploadingApplication" xml:space="preserve">
+    <value>Mengirim pembaruan aplikasi</value>
+  </data>
+
+  <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
+    <value>Diterima {0} dari {1} pada {2} ({3}%)</value>
+  </data>
+
+  <data name="Synchronization_SendingApplication_Description" xml:space="preserve">
+    <value>Terkirim {0} dari {1} pada {2} ({3}%)</value>
+  </data>
+
+  <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
+    <value>Memeriksa pembaruan aplikasi</value>
+  </data>
+
+  <data name="Interview_Loading" xml:space="preserve">
+    <value>Memuat data wawancara</value>
+  </data>
+
+  <data name="Interview_Loading_Description" xml:space="preserve">
+    <value>Wawancara akan segera dimulai</value>
+  </data>
+
+  <data name="Interview_Creating" xml:space="preserve">
+    <value>Membuat wawancara</value>
+  </data>
+
+  <data name="Interview_Creating_Description" xml:space="preserve">
+    <value>Ini dapat memakan waktu beberapa menit,
+jangan keluar dari aplikasi ini</value>
+  </data>
+
+  <data name="Interview_Loading_With_Percents" xml:space="preserve">
+    <value>Memuat data wawancara   {0}%</value>
+  </data>
+
+  <data name="Synchronization_Fail_State_FailedToProcess_Format" xml:space="preserve">
+    <value>{0} wawancara gagal disinkronkan</value>
+  </data>
+
+  <data name="FailedToLoadInterview" xml:space="preserve">
+    <value>Gagal membuka wawancara</value>
+  </data>
+
+  <data name="FailedToLoadInterviewDescription" xml:space="preserve">
+    <value>Kasus wawancara tidak valid dan tidak dapat dibuka. Silakan hubungi dukungan atau coba sinkronkan untuk menyegarkan kasus.</value>
+  </data>
+
+  <data name="UnacceptableSSLCertificate" xml:space="preserve">
+    <value>Gagal memverifikasi sertifikat untuk URL tujuan. Silakan periksa apakah alamat situs web Headquarters valid dan perangkat Anda memiliki tanggal dan waktu saat ini yang benar</value>
+  </data>
+
+  <data name="InterviewerFromDifferentTeam" xml:space="preserve">
+    <value>Interviewer adalah bagian dari tim lain. Silakan sinkronkan dengan Headquarters.</value>
+  </data>
+
+  <data name="Synchronization_DownloadingLogo" xml:space="preserve">
+    <value>Mengunduh logo</value>
+  </data>
+
+  <data name="Synchronization_UploadingLogo" xml:space="preserve">
+    <value>Mengunggah logo</value>
+  </data>
+
+  <data name="Synchronization_UploadAuditLog" xml:space="preserve">
+    <value>Unggah informasi audit</value>
+  </data>
+
+  <data name="Synchronization_UploadGeoTracking" xml:space="preserve">
+    <value>Unggah informasi geo-tracking</value>
+  </data>
+
+  <data name="Synchronization_RemoveObsoleteGeoTracking" xml:space="preserve">
+    <value>Hapus informasi geo-tracking usang</value>
+  </data>
+
+  <data name="Synchronization_ReceivingAuditLog" xml:space="preserve">
+    <value>Menerima informasi audit</value>
+  </data>
+
+  <data name="Dashboard_CreateNewTabText" xml:space="preserve">
+    <value>Buat wawancara baru menggunakan template</value>
+  </data>
+
+  <data name="Dashboard_StartedTabText" xml:space="preserve">
+    <value>Wawancara yang telah dimulai tetapi belum selesai
+Anda perlu menyelesaikannya agar dapat disinkronkan</value>
+  </data>
+
+  <data name="Dashboard_RejectedTabText" xml:space="preserve">
+    <value>Wawancara yang ditolak oleh supervisor
+Silakan selesaikan masalah yang dicatat di halaman sampul dan kirim kembali ke supervisor.</value>
+  </data>
+
+  <data name="Dashboard_CompletedTabText" xml:space="preserve">
+    <value>Wawancara yang selesai, akan diunggah saat
+sinkronisasi Anda berikutnya</value>
+  </data>
+
+  <data name="Dashboard_WebInterviewTabText" xml:space="preserve">
+    <value>Wawancara dalam mode Web interview. Akan dihapus saat sinkronisasi ketika Web interview diselesaikan oleh responden</value>
+  </data>
+
+  <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
+    <value>Anda dapat membuat wawancara baru menggunakan penugasan</value>
+  </data>
+
+  <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
+    <value>Untuk dikumpulkan: {0} wawancara</value>
+    <comment>{0} - number of interviews created
+    {1} - number of interviewer to be created by assignment</comment>
+  </data>
+
+  <data name="FailedToCreateInterview" xml:space="preserve">
+    <value>Gagal membuat wawancara. Alasan: {0}</value>
+  </data>
+
+  <data name="Dashboard_AssignmentCard_SubTitleSingleInterivew" xml:space="preserve">
+    <value>Penugasan wawancara tunggal</value>
+  </data>
+
+  <data name="Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat" xml:space="preserve">
+    <value>Untuk dikumpulkan: tidak terbatas</value>
+    <comment>{0} - number of interviews created</comment>
+  </data>
+
+  <data name="Dashboard_Open" xml:space="preserve">
+    <value>Buka</value>
+  </data>
+
+  <data name="Dashboard_ViewIssues" xml:space="preserve">
+    <value>Lihat Masalah</value>
+  </data>
+
+  <data name="Dashboard_Reopen" xml:space="preserve">
+    <value>Buka kembali</value>
+  </data>
+
+  <data name="Dashboard_ShowLocation" xml:space="preserve">
+    <value>Tampilkan lokasi</value>
+  </data>
+
+  <data name="Dashboard_ShowAssignmentMap" xml:space="preserve">
+    <value>Tampilkan area target</value>
+  </data>
+
+  <data name="Dashboard_Discard" xml:space="preserve">
+    <value>Buang</value>
+  </data>
+
+  <data name="Dashboard_AddCalendarEvent" xml:space="preserve">
+    <value>Tambahkan acara kalender</value>
+  </data>
+
+  <data name="Dashboard_EditCalendarEvent" xml:space="preserve">
+    <value>Edit acara kalender</value>
+  </data>
+
+  <data name="Dashboard_RemoveCalendarEvent" xml:space="preserve">
+    <value>Hapus acara kalender</value>
+  </data>
+
+  <data name="Dashboard_ShowCalendarEvent" xml:space="preserve">
+    <value>Kontak berikutnya: {0}</value>
+  </data>
+
+  <data name="Dashboard_PastDateCalendarEvent" xml:space="preserve">
+    <value>Tanggal yang dipilih berada di masa lalu</value>
+  </data>
+
+  <data name="Dashboard_PastTimeCalendarEvent" xml:space="preserve">
+    <value>Waktu yang dipilih berada di masa lalu</value>
+  </data>
+
+  <data name="Dashboard_Interview_QuestionsAnsweredFormat" xml:space="preserve">
+    <value>{0} pertanyaan dijawab</value>
+  </data>
+
+  <data name="Dashboard_Interview_AssignmentLabelFormat" xml:space="preserve">
+    <value>Penugasan #{0}</value>
+    <comment>{0} - is an assignment id</comment>
+  </data>
+
+  <data name="Dashboard_No_InterviewKey" xml:space="preserve">
+    <value>Tidak ada kunci wawancara</value>
+  </data>
+
+  <data name="Dashboard_CensusAssignment" xml:space="preserve">
+    <value>Sensus</value>
+  </data>
+
+  <data name="Dashboard_CantOpenCawi" xml:space="preserve">
+    <value>Anda tidak dapat membuka wawancara dalam mode CAWI. Ini akan dikirim ke Headquarters setelah sinkronisasi.</value>
+  </data>
+  
+  <data name="Dashboard_CawiLabel" xml:space="preserve">
+    <value>{0} (CAWI)</value>
+  </data>
+
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
+    <value>Memeriksa peta di server</value>
+  </data>
+
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
+    <value>Menangani peta {0}, {1} dari {2}.
+Diunduh {3}%</value>
+  </data>
+
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
+    <value>Sinkronisasi peta berhasil diselesaikan</value>
+  </data>
+
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" xml:space="preserve">
+    <value>Kesalahan sinkronisasi peta</value>
+  </data>
+
+  <data name="Dashboard_SearchResult" xml:space="preserve">
+    <value>{0} elemen ditemukan</value>
+  </data>
+
+  <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
+    <value>Tidak ada yang ditemukan</value>
+  </data>
+
+  <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
+    <value>Lakukan pencarian untuk menampilkan hasil</value>
+  </data>
+
+  <data name="Dashboard_Searching" xml:space="preserve">
+    <value>Mencari...</value>
+  </data>
+
+  <data name="Dashboard_SearchWatermark" xml:space="preserve">
+    <value>Masukkan teks untuk pencarian</value>
+  </data>
+
+  <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
+    <value>Keluar dari Pencarian</value>
+  </data>
+
+  <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
+    <value>Periksa wawancara usang</value>
+  </data>
+
+  <data name="Dashboard_Assign" xml:space="preserve">
+    <value>Tetapkan</value>
+  </data>
+
+  <data name="Synchronization_Of_Interviewers" xml:space="preserve">
+    <value>Sinkronisasi interviewer</value>
+  </data>
+
+  <data name="Synchronization_Of_Supervisor_details" xml:space="preserve">
+    <value>Sinkronisasi detail Supervisor</value>
+  </data>
+
+  <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
+    <value>Menyinkronkan {0} dari {1} interviewer</value>
+  </data>
+
+  <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
+    <value>Izinkan sinkronisasi dengan Headquarters</value>
+  </data>
+
+  <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
+    <value>Nonaktifkan pengaturan ini jika Anda ingin menyinkronkan hanya dengan aplikasi mobile supervisor. Setelah sinkronisasi pertama yang berhasil dengan Supervisor App, pengaturan ini tidak dapat diaktifkan kembali</value>
+  </data>
+
+  <data name="Prefs_AllowSyncWithHq_Summary_Disabled" xml:space="preserve">
+    <value>Tidak mungkin menyinkronkan dengan Headquarters setelah setidaknya ada satu sinkronisasi yang berhasil dengan Supervisor Application</value>
+  </data>
+
+  <data name="DashboardItem_Responsible" xml:space="preserve">
+    <value>Penanggung jawab: {0}</value>
+  </data>
+
+  <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
+    <value>Ditolak oleh Headquarters : {0}</value>
+  </data>
+
+  <data name="DashboardItem_ApprovedBySupervisor" xml:space="preserve">
+    <value>Disetujui oleh Supervisor: {0}</value>
+  </data>
+
+  <data name="FinishInstallation_QrBarcodeReaderErrorMessage" xml:space="preserve">
+    <value>Terjadi kesalahan saat memindai</value>
+  </data>
+
+  <data name="SelectResponsible_Reassign" xml:space="preserve">
+    <value>Tetapkan ulang</value>
+  </data>
+
+  <data name="SelectResponsible_ReassignDescription" xml:space="preserve">
+    <value>Pilih penanggung jawab baru untuk wawancara.
+Ini akan muncul di perangkat interviewer setelah sinkronisasi berikutnya</value>
+  </data>
+
+  <data name="SelectResponsible_ReassignButtonText" xml:space="preserve">
+    <value>Tetapkan ulang</value>
+  </data>
+
+  <data name="SelectResponsible_CancelButtonText" xml:space="preserve">
+    <value>Batal</value>
+  </data>
+
+  <data name="Notifications_InterviewsTitle" xml:space="preserve">
+    <value>Wawancara</value>
+  </data>
+
+  <data name="Notifications_CompletedInterviewsText" xml:space="preserve">
+    <value>Anda memiliki {0} wawancara selesai yang harus disinkronkan</value>
+  </data>
+
+  <data name="Notifications_RejectedInterviewsText" xml:space="preserve">
+    <value>Anda memiliki {0} wawancara yang ditolak dan belum ditangani</value>
+  </data>
+
+  <data name="Notifications_SyncTitle" xml:space="preserve">
+    <value>Sinkronisasi</value>
+  </data>
+
+  <data name="Notifications_SyncTooLongAgoText" xml:space="preserve">
+    <value>Sinkronisasi belum dilakukan akhir-akhir ini. Silakan sinkronkan</value>
+  </data>
+
+  <data name="Notifications_SyncNoRetryTitle" xml:space="preserve">
+    <value>Tidak ada percobaan ulang setelah sinkronisasi gagal. Silakan coba lagi</value>
+  </data>
+
+  <data name="Notifications_ManyStartedInterviews" xml:space="preserve">
+    <value>Anda telah memulai terlalu banyak wawancara. Silakan selesaikan.</value>
+  </data>
+
+  <data name="Notifications_ManyCompletedInterviews" xml:space="preserve">
+    <value>Ada banyak wawancara yang selesai. Silakan sinkronkan.</value>
+  </data>
+
+  <data name="Notifications_StaleAssignments" xml:space="preserve">
+    <value>Beberapa penugasan belum diperbarui dalam 3 hari terakhir.</value>
+  </data>
+
+  <data name="Synchronization_UserLinkedToAnotherServer_Description" xml:space="preserve">
+    <value>Pengguna saat ini dibuat pada instance lain dari aplikasi Headquarters. Ubah URL endpoint sinkronisasi ke server asal</value>
+  </data>
+
+  <data name="Synchronization_UserLinkedToAnotherServer_Status" xml:space="preserve">
+    <value>Pengguna tertaut ke server lain</value>
+  </data>
+
+  <data name="Diagnostics_SendLogs" xml:space="preserve">
+    <value>Kirim log pelacakan</value>
+  </data>
+
+  <data name="Diagnostics_SendLogs_Description" xml:space="preserve">
+    <value>Kirim log terperinci ke situs Headquarters untuk investigasi masalah</value>
+  </data>
+
+  <data name="Diagnostics_SendLogs_Success" xml:space="preserve">
+    <value>Log telah dikirim ke HQ</value>
+  </data>
+
+  <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
+    <value>Akun Anda tidak lagi aktif di server ini, karena workspace tempat akun ini ditentukan telah dinonaktifkan oleh administrator. Silakan hubungi supervisor Anda.</value>
+  </data>
+
+  <data name="DashboardItem_QRCode" xml:space="preserve">
+    <value>Tampilkan QR Code</value>
+  </data>
+
+  <data name="Synchronization_WorkspaceAccessDisabledReason" xml:space="preserve">
+      <value>Akun Anda tidak lagi aktif di workspace. Silakan hubungi administrator sistem Anda.</value>
+  </data>
+
+  <data name="Interview_Progress_Format" xml:space="preserve">
+    <value>Progres: {0}/{1}</value>
+  </data>
+
+  <data name="Error_NoGpsProvider" xml:space="preserve">
+    <value>Tidak ada penyedia GPS di perangkat ini</value>
+  </data>
+
+  <data name="Error_NoTargetAreaShapefile" xml:space="preserve">
+    <value>Tidak ada batas untuk area target</value>
+  </data>
+
+  <data name="Dashboard_CreateInterview_TargetArea_Warning" xml:space="preserve">
+    <value>Penugasan mengharuskan Anda membuat wawancara langsung dari peta Penugasan. Disarankan untuk menggunakan mode Geo Fencing. Apakah Anda ingin melanjutkan?</value>
+  </data>
+
+  <data name="AssigmentMap_CreateInterview_OutTargetArea_Warning" xml:space="preserve">
+    <value>Anda sedang membuat wawancara di luar area target. Apakah Anda ingin melanjutkan?</value>
+  </data>
+
+  <data name="AssigmentMap_CreateInterview_DisabledTargetArea_Warning" xml:space="preserve">
+    <value>Disarankan untuk mengaktifkan geofencing guna memeriksa area target. Apakah Anda ingin melanjutkan?</value>
+  </data>
+
+  <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
+      <value>Anda telah menggunakan Geo Tracking atau Geo Fencing saat membuat wawancara. Silakan aktifkan lagi jika Anda ingin menggunakannya.</value>
   </data>
 </root>

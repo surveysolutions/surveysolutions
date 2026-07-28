@@ -1,32 +1,45 @@
 <template>
     <div class="query-builder-group">
-        <slot name="groupOperator" v-bind="groupController" />
+        <slot name="groupOperator"
+            v-bind="groupController" />
 
         <div :class="groupChildrenClass">
-            <div v-for="(child, index) in safeChildren" :key="childKey(child, index)" class="query-builder-child">
-                <local-query-builder-group-node v-if="isGroup(child)" :group="child" :config="config"
+            <div v-for="(child, index) in safeChildren"
+                :key="childKey(child, index)"
+                class="query-builder-child">
+                <local-query-builder-group-node v-if="isGroup(child)"
+                    :group="child"
+                    :config="config"
                     :depth="depth + 1">
                     <template #groupOperator="slotProps">
-                        <slot name="groupOperator" v-bind="slotProps" />
+                        <slot name="groupOperator"
+                            v-bind="slotProps" />
                     </template>
 
                     <template #groupControl="slotProps">
-                        <slot name="groupControl" v-bind="slotProps" />
+                        <slot name="groupControl"
+                            v-bind="slotProps" />
                     </template>
 
                     <template #rule="slotProps">
-                        <slot name="rule" v-bind="slotProps" />
+                        <slot name="rule"
+                            v-bind="slotProps" />
                     </template>
                 </local-query-builder-group-node>
 
-                <slot v-else name="rule" v-bind="ruleController(child)" />
+                <slot v-else
+                    name="rule"
+                    v-bind="ruleController(child)" />
 
-                <button type="button" class="query-builder-child__delete-child" @click="removeChild(index)"
+                <button type="button"
+                    class="query-builder-child__delete-child"
+                    @click="removeChild(index)"
                     v-text="deleteLabel(child)"></button>
             </div>
         </div>
 
-        <slot name="groupControl" v-bind="groupController" />
+        <slot name="groupControl"
+            v-bind="groupController" />
     </div>
 </template>
 
@@ -171,7 +184,7 @@ export default {
                 ? (this.config.labels?.removeGroup ?? '&times;')
                 : (this.config.labels?.removeRule ?? '&times;')
 
-            const safeLabel = String(rawLabel).replace(/<[^>]*>/g, '')
+            const safeLabel = String(rawLabel).replace(/[<>]/g, '')
             return safeLabel === '&times;' ? '×' : (safeLabel || '×')
         },
         ruleController(child) {
