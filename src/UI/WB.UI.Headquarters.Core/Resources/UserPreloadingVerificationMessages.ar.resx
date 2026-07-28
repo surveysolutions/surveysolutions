@@ -201,46 +201,46 @@
 <data name="PLU0014" xml:space="preserve">
   <value>تنسيق الاسم الكامل خاطئ</value>
 </data>
-<data name="PLU0001Recomendation" xml:space="preserve">
+<data name="PLU0001Recommendation" xml:space="preserve">
   <value>يجب أن يكون المستخدم فريدًا</value>
 </data>
-<data name="PLU0002Recomendation" xml:space="preserve">
+<data name="PLU0002Recommendation" xml:space="preserve">
   <value>حل التكرارات</value>
 </data>
-<data name="PLU0003Recomendation" xml:space="preserve">
+<data name="PLU0003Recommendation" xml:space="preserve">
   <value>لا يمكن إعادة استخدام المستخدم المؤرشف لأنه ينتمي إلى فريق آخر</value>
 </data>
-<data name="PLU0004Recomendation" xml:space="preserve">
+<data name="PLU0004Recommendation" xml:space="preserve">
   <value>لا يمكن إعادة استخدام المستخدم المؤرشف لأنه موجود في دور آخر</value>
 </data>
-<data name="PLU0005Recomendation" xml:space="preserve">
+<data name="PLU0005Recommendation" xml:space="preserve">
   <value>يجب أن يكون اسم تسجيل الدخول بين 3 و 15 حرفًا، ويمكن أن يحتوي فقط على أحرف وأرقام ورمز الشرطة السفلية. يجب أن تكون الأحرف من الأبجدية اللاتينية (الإنجليزية) فقط: 'A'..'Z' أو 'a'..'z'. الأحرف الأخرى (السيريلية، العربية، إلخ) غير صالحة للاستخدام في أسماء تسجيل الدخول.</value>
 </data>
-<data name="PLU0006Recomendation" xml:space="preserve">
+<data name="PLU0006Recommendation" xml:space="preserve">
   <value>يجب أن تحتوي على رقم واحد على الأقل، وحرف كبير واحد وحرف صغير واحد. يجب أن يكون الطول بين 10 و 100 حرف</value>
 </data>
-<data name="PLU0007Recomendation" xml:space="preserve">
+<data name="PLU0007Recommendation" xml:space="preserve">
   <value>إصلاح البريد الإلكتروني</value>
 </data>
-<data name="PLU0008Recomendation" xml:space="preserve">
+<data name="PLU0008Recommendation" xml:space="preserve">
   <value>إصلاح رقم الهاتف</value>
 </data>
-<data name="PLU0009Recomendation" xml:space="preserve">
+<data name="PLU0009Recommendation" xml:space="preserve">
   <value>يسمح فقط بـ "المشرف" أو "المحاور"</value>
 </data>
-<data name="PLU0010Recomendation" xml:space="preserve">
+<data name="PLU0010Recommendation" xml:space="preserve">
   <value>تحقق من قيمة المشرف</value>
 </data>
-<data name="PLU0011Recomendation" xml:space="preserve">
+<data name="PLU0011Recommendation" xml:space="preserve">
   <value>إزالة قيمة المشرف</value>
 </data>
-<data name="PLU0012Recomendation" xml:space="preserve">
+<data name="PLU0012Recommendation" xml:space="preserve">
   <value>يجب ألا يحتوي على أكثر من 100 حرف</value>
 </data>
-<data name="PLU0013Recomendation" xml:space="preserve">
+<data name="PLU0013Recommendation" xml:space="preserve">
   <value>يجب ألا يحتوي على أكثر من 15 حرفًا</value>
 </data>
-<data name="PLU0014Recomendation" xml:space="preserve">
+<data name="PLU0014Recommendation" xml:space="preserve">
   <value>يسمح فقط بالأحرف والنقاط والمسافات والفواصل العليا</value>
 </data>
 <data name="PLU0015" xml:space="preserve">
@@ -249,7 +249,7 @@
 <data name="PLU0015Description" xml:space="preserve">
   <value>كلمة المرور '{0}' قصيرة جدًا</value>
 </data>
-<data name="PLU0015Recomendation" xml:space="preserve">
+<data name="PLU0015Recommendation" xml:space="preserve">
   <value>يجب أن تكون كلمة المرور على الأقل 10 أحرف</value>
 </data>
 <data name="PLU0016" xml:space="preserve">
@@ -258,7 +258,7 @@
 <data name="PLU0016Description" xml:space="preserve">
   <value>كلمة المرور '{0}' لا تحتوي على حرف غير أبجدي رقمي</value>
 </data>
-<data name="PLU0016Recomendation" xml:space="preserve">
+<data name="PLU0016Recommendation" xml:space="preserve">
   <value>أضف حرفًا غير أبجدي رقمي على الأقل</value>
 </data>
 <data name="PLU0017" xml:space="preserve">
@@ -267,7 +267,7 @@
 <data name="PLU0017Description" xml:space="preserve">
   <value>كلمة المرور '{0}' لا تحتوي على رقم</value>
 </data>
-<data name="PLU0017Recomendation" xml:space="preserve">
+<data name="PLU0017Recommendation" xml:space="preserve">
   <value>أضف رقمًا واحدًا على الأقل ('0'-'9').</value>
 </data>
 <data name="PLU0018" xml:space="preserve">
@@ -276,7 +276,7 @@
 <data name="PLU0018Description" xml:space="preserve">
   <value>كلمة المرور '{0}' لا تحتوي على حرف صغير</value>
 </data>
-<data name="PLU0018Recomendation" xml:space="preserve">
+<data name="PLU0018Recommendation" xml:space="preserve">
   <value>أضف حرفًا صغيرًا واحدًا على الأقل ('a'-'z').</value>
 </data>
 <data name="PLU0019" xml:space="preserve">
@@ -285,7 +285,7 @@
 <data name="PLU0019Description" xml:space="preserve">
   <value>كلمة المرور '{0}' لا تحتوي على حرف كبير</value>
 </data>
-<data name="PLU0019Recomendation" xml:space="preserve">
+<data name="PLU0019Recommendation" xml:space="preserve">
   <value>أضف حرفًا كبيرًا واحدًا على الأقل ('A'-'Z').</value>
 </data>
 <data name="PLU0020" xml:space="preserve">
@@ -294,7 +294,7 @@
 <data name="PLU0020Description" xml:space="preserve">
   <value>كلمة المرور '{0}' لا تحتوي على أحرف فريدة كافية</value>
 </data>
-<data name="PLU0020Recomendation" xml:space="preserve">
+<data name="PLU0020Recommendation" xml:space="preserve">
   <value>أضف أحرفًا مختلفة.</value>
 </data>
 <data name="PLU0021" xml:space="preserve">
@@ -303,7 +303,7 @@
 <data name="PLU0021Description" xml:space="preserve">
   <value>كلمة المرور مطلوبة</value>
 </data>
-<data name="PLU0021Recomendation" xml:space="preserve">
+<data name="PLU0021Recommendation" xml:space="preserve">
   <value>أضف كلمة مرور</value>
 </data>
 <data name="PLU0022" xml:space="preserve">
@@ -312,7 +312,7 @@
 <data name="PLU0022Description" xml:space="preserve">
   <value>يجب أن تكون مساحة العمل موجودة ومفعلة</value>
 </data>
-<data name="PLU0022Recomendation" xml:space="preserve">
+<data name="PLU0022Recommendation" xml:space="preserve">
   <value>تحقق من اسم مساحة العمل</value>
 </data>
 </root>
