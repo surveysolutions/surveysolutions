@@ -94,7 +94,9 @@ export default {
                         orderable: true,
                         className: 'nowrap',
                         render: function (data, type, row) {
-                            return row.isArchived ? data : `<a href='/users/Manage/${row.userId}'>${data}</a>`
+                            if (row.isArchived || (self.user.isObserver && !self.user.isObserving))
+                                return data
+                            return `<a href='/users/Manage/${row.userId}'>${data}</a>`
                         },
                     },
                     {
