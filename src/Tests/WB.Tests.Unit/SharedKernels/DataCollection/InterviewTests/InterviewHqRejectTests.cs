@@ -131,10 +131,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             // act
             interview.HqRejectInterviewToSupervisor(headquarterId, supervisorId, "comment", DateTimeOffset.Now);
 
-            // assert
             eventContext.AssertThatContainsEvent<InterviewRejected>();
             eventContext.AssertThatContainsEvent<InterviewStatusChanged>();
-            eventContext.AssertThatContainsEvent<InterviewerAssigned>();
-        }
+            eventContext.AssertThatContainsEvent<InterviewerAssigned>(e => e.InterviewerId == null);
     }
 }
