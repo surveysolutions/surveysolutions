@@ -199,6 +199,7 @@ import axios from 'axios'
 import { filter } from 'lodash-es'
 import Modal from 'bootstrap/js/dist/modal'
 import Collapse from 'bootstrap/js/dist/collapse'
+import 'bootstrap/js/dist/dropdown'
 import { nextTick } from 'vue'
 
 export default {
