@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Activities.Callbacks;
 using WB.UI.Shared.Enumerator.Activities.Dashboard;
+using WB.UI.Shared.Enumerator.CustomControls;
 using WB.UI.Shared.Enumerator.Services;
 using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
@@ -33,7 +34,7 @@ namespace WB.UI.Supervisor.Activities
     {
         private ActionBarDrawerToggle drawerToggle;
 
-        public DrawerLayout DrawerLayout { get; private set; }
+        public SafeDrawerLayout DrawerLayout { get; private set; }
         protected override int ViewResourceId => Resource.Layout.dashboard;
 
         ServiceBinder<SyncBgService> ISyncServiceHost<SyncBgService>.Binder { get; set; }
@@ -45,7 +46,7 @@ namespace WB.UI.Supervisor.Activities
             this.SetSupportActionBar(toolbar);
             SupportActionBar.SetDisplayHomeAsUpEnabled(false);
             
-            this.DrawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
+            this.DrawerLayout = this.FindViewById<SafeDrawerLayout>(Resource.Id.drawer_layout);
             this.drawerToggle = new ActionBarDrawerToggle(this, DrawerLayout, toolbar, 0, 0);
             DrawerLayout.AddDrawerListener(drawerToggle);
 
