@@ -442,6 +442,9 @@
   <data name="FindReplaceMatchingLines" xml:space="preserve">
     <value>Найденные строки: {{count}}</value>
   </data>
+  <data name="FindReplaceCurrentMatch" xml:space="preserve">
+    <value>{{current}} / {{count}}</value>
+  </data>
   <data name="FindReplaceNext" xml:space="preserve">
     <value>Следующее</value>
   </data>
@@ -895,6 +898,9 @@
   </data>
   <data name="HotkeysSearch" xml:space="preserve">
     <value>Поиск в подсекциях и вопросах в секции</value>
+  </data>
+  <data name="HotkeysTest" xml:space="preserve">
+    <value>Тестировать анкету в WebTester</value>
   </data>
   <data name="MultipleDependencies" xml:space="preserve">
     <value>Один или более вопросов/подсекций зависит от </value>
@@ -1625,7 +1631,7 @@
     <value>Файл загружен</value>
   </data>
   <data name="DataChangesReverted" xml:space="preserve">
-    <value>Data changes reverted</value>
+    <value>Изменения данных отменены</value>
   </data>
   <data name="OptionsSizeLimit" xml:space="preserve">
     <value>Максимально допустимо только {max_rows} строк</value>
@@ -1690,5 +1696,46 @@
 </data>
   <data name="AIAssistant" xml:space="preserve">
       <value>ИИ</value>
+  </data>
+
+
+  <data name="ErrorsCounter_plural" xml:space="preserve">
+    <value>{{count}} ошибок</value>
+  </data>
+
+  <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
+    <value>{{count}} вложений ({{bytes}} всего)</value>
+  </data>
+
+  <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
+    <value>{{count}} таблиц подстановки:</value>
+  </data>
+
+  <data name="SideBarMacroCounter_plural" xml:space="preserve">
+    <value>{{count}} макросов:</value>
+  </data>
+
+  <data name="SideBarSectionsCounter_plural" xml:space="preserve">
+    <value>{{count}} разделов:</value>
+  </data>
+
+  <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
+    <value>{{count}} переводов</value>
+  </data>
+
+  <data name="WarningsCounter_plural" xml:space="preserve">
+    <value>{{count}} предупреждений</value>
+  </data>
+
+  <data name="CompilationErrorsCounter_plural" xml:space="preserve">
+    <value>{{count}} ошибок найдено</value>
+  </data>
+
+  <data name="CompilationWarningsCounter_plural" xml:space="preserve">
+    <value>{{count}} предупреждений найдено</value>
+  </data>
+
+  <data name="FindReplaceInAllFound_plural" xml:space="preserve">
+    <value>в {{count}} найденных объектах?</value>
   </data>
 </root>

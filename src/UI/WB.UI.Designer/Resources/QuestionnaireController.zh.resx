@@ -312,4 +312,29 @@
   <data name="NotSupportedBrowserUsedDescr" xml:space="preserve">
     <value>你正在使用不被支持的IE浏览器。某些功能可能无法正常运行。</value>
   </data>
+
+
+  <data name="ControlPanel" xml:space="preserve">
+    <value>控制面板</value>
+  </data>
+
+  <data name="RestoreQuestionnaireDocument" xml:space="preserve">
+    <value>恢复问卷文档（旧版）</value>
+  </data>
+
+  <data name="ExcelOrTabFilesOnly" xml:space="preserve">
+    <value>仅接受 Excel 或制表符分隔值文件</value>
+  </data>
+
+  <data name="Classifications" xml:space="preserve">
+    <value>分类</value>
+  </data>
+
+  <data name="SaveAs" xml:space="preserve">
+    <value>另存为</value>
+  </data>
+
+  <data name="CloneDeletedWarning" xml:space="preserve">
+      <value>您正在创建已删除问卷的副本。某些部分可能会丢失。</value>
+  </data>
 </root>
