@@ -56,7 +56,7 @@
     <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="3.0.1" />
     <PackageReference Include="StackExchange.Exceptional.PostgreSql" Version="3.0.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.15" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.18" />
     <PackageReference Include="System.Text.Json" Version="9.0.5" />
     <PackageReference Include="VueCliMiddleware" Version="6.0.0" />
   </ItemGroup>
