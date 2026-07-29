@@ -17,20 +17,25 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
         private static TaskCompletionSource<QRBarcodeScanResult> scanTaskCompletionSource;
 
         public QRBarcodeScanService(IPermissionsService permissions)
+            : this(permissions, Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>())
         {
-            this.androidCurrentTopActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
+        }
+
+        internal QRBarcodeScanService(IPermissionsService permissions, IMvxAndroidCurrentTopActivity androidCurrentTopActivity)
+        {
+            this.androidCurrentTopActivity = androidCurrentTopActivity;
             this.permissions = permissions;
         }
 
         public async Task<QRBarcodeScanResult> ScanAsync()
         {
             await this.permissions.AssureHasPermissionOrThrow<Permissions.Camera>().ConfigureAwait(false);
-            
+
             scanTaskCompletionSource = new TaskCompletionSource<QRBarcodeScanResult>();
 
             var activity = this.androidCurrentTopActivity.Activity;
             var intent = new Intent(activity, typeof(BarcodeScannerActivity));
-            
+
             activity.StartActivity(intent);
 
             var result = await scanTaskCompletionSource.Task;

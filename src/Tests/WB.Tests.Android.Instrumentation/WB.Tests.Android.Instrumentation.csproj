@@ -7,14 +7,14 @@
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <AndroidApplication>true</AndroidApplication>
-    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <ApplicationId>wb.tests.android.instrumentation</ApplicationId>
-    <ApplicationManifest>Properties\AndroidManifest.xml</ApplicationManifest>
+    <ApplicationManifest>Properties/AndroidManifest.xml</ApplicationManifest>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Android.NUnitRunner" Version="2.0.11" />
     <PackageReference Include="NUnit" Version="4.3.2" />
+    <PackageReference Include="NUnitLite" Version="4.3.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Enumerator\WB.UI.Shared.Enumerator.csproj" />
