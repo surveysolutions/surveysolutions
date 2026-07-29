@@ -502,7 +502,13 @@
     <value>Vytvořit Admina</value>
   </data>
   <data name="CreateUser" xml:space="preserve">
-    <value>Vytvořit uživatele</value>
+    <value>Vytvořit uživatelský účet</value>
+  </data>
+  <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+    <value>Přístup k pracovnímu prostoru</value>
+  </data>
+  <data name="CreateUser_RoleLabel" xml:space="preserve">
+    <value>Role uživatele</value>
   </data>
   <data name="DetailsQuestionPartialView_WriteCommentPlaceholder" xml:space="preserve">
     <value>Napsat poznámku…</value>
@@ -1351,7 +1357,10 @@
     <value>Upravit profil garanta: &lt;strong&gt;{0}&lt;/strong&gt;</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>Podrobnosti o osobních údajích (volitelné) &lt;br&gt; budou viditelné pouze uživatelům Ústředí</value>
+    <value>Podrobnosti o osobních údajích</value>
+  </data>
+  <data name="PublicSectionDescription" xml:space="preserve">
+    <value>(volitelné, bude viditelné pouze pro ověřené uživatele).</value>
   </data>
   <data name="Questionnaire_Exposed_Variables" xml:space="preserve">
     <value>Odhalené proměnné typu dotazníku</value>
