@@ -145,15 +145,8 @@ jobs:
             dotnet build src/Tests/WB.Tests.Android.Instrumentation -c Release -t:Install -f net9.0-android
             adb logcat -c
             adb shell am instrument -w wb.tests.android.instrumentation/wb.tests.android.instrumentation.NUnitInstrumentation | tee instrumentation-output.txt
-            if grep -q "shortMsg=Process crashed" instrumentation-output.txt; then
-              echo "::error::Instrumentation process crashed, see logcat below"
-              adb logcat -d | tail -n 300
-              exit 1
-            fi
-            if ! grep -q "Overall result: Passed" instrumentation-output.txt; then
-              echo "::error::Android instrumentation tests failed"
-              exit 1
-            fi
+            grep -q "shortMsg=Process crashed" instrumentation-output.txt && { echo "::error::Instrumentation process crashed, see logcat below"; adb logcat -d | tail -n 300; exit 1; } || true
+            grep -q "Overall result: Passed" instrumentation-output.txt || { echo "::error::Android instrumentation tests failed"; exit 1; }
 
       - name: Upload instrumentation test output
         if: always()
