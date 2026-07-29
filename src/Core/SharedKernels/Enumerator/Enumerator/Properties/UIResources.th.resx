@@ -1216,4 +1216,7 @@
     <value>คำถาม
 ที่ยังไม่ได้ตอบ</value>
   </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>ต้องมีสิทธิ์เข้าถึงไมโครโฟนเพื่อดำเนินการสัมภาษณ์นี้ ไม่สามารถเริ่มการสัมภาษณ์ได้จนกว่าจะได้รับอนุญาต</value>
+  </data>
 </root>
