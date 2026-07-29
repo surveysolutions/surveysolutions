@@ -69,19 +69,22 @@ export default {
             return this.id + 'lbl'
         },
     },
+    emits: ['hidden'],
     expose: ['hide', 'modal'],
     methods: {
         hide() {
-            nextTick(() => {
-                this.modalInstance?.hide()
-                this.modalInstance?.dispose()
-            })
-            this.isOpen = false
+            this.modalInstance?.hide()
         },
         modal(params) {
             this.isOpen = true
             nextTick(() => {
                 this.modalInstance = new Modal(this.$refs.modal, params || {})
+                this.$refs.modal.addEventListener('hidden.bs.modal', () => {
+                    this.modalInstance?.dispose()
+                    this.modalInstance = null
+                    this.isOpen = false
+                    this.$emit('hidden')
+                }, { once: true })
                 this.modalInstance.show()
             })
         },

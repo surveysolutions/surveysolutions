@@ -627,4 +627,25 @@
   <data name="LogoRemoveError" xml:space="preserve">
     <value>删除标识失败。请重试。</value>
   </data>
+  <data name="AudioRecordingQuality" xml:space="preserve">
+    <value>录音质量</value>
+  </data>
+  <data name="AudioRecordingQualityDescription" xml:space="preserve">
+    <value>调查员应用程序在录制音频（音频审计和音频问题）时使用的音频质量</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono44kHz" xml:space="preserve">
+    <value>64 kbps, 单声道, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve">
+    <value>64 kbps, 单声道, 22.05 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono16kHz" xml:space="preserve">
+    <value>32 kbps, 单声道, 16 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve">
+    <value>128 kbps, 立体声, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
+    <value>128 kbps, 立体声, 48 kHz</value>
+  </data>
 </root>
