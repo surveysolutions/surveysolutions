@@ -107,8 +107,39 @@ jobs:
           printf "[ConnectionSettings]\nTestConnectionStringFormat=\"${DB_CONN}Database=testdb_{0};CommandTimeout=60;\"\n" > src/Tests/WB.Tests.Integration.Designer/appsettings.cloud.ini
           dotnet test src/Tests/WB.Tests.Integration.Designer
 
+  tests-android-instrumentation:
+    name: Android instrumentation tests
+    needs: [tests-unit-web, tests-integration]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
+        with:
+          distribution: 'microsoft'
+          java-version: '11'
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Install android workload
+        run: dotnet workload install android
+      - name: Run instrumentation tests on emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          script: |
+            dotnet build src/Tests/WB.Tests.Android.Instrumentation/WB.Tests.Android.Instrumentation.csproj -c Debug -f net9.0-android -p:RuntimeIdentifier=android-x86_64
+            apk_path=$(find src/Tests/WB.Tests.Android.Instrumentation/bin/Debug/net9.0-android/android-x86_64 -name "*.apk" | head -n 1)
+            if [ -z "$apk_path" ]; then
+              echo "Instrumentation APK not found"
+              exit 1
+            fi
+            adb install -r "$apk_path"
+            adb shell am instrument -w wb.tests.android.instrumentation/xamarin.android.nunitrunner.NUnitInstrumentation
+
   mobile:
-    needs: [prepare, tests-unit-web, tests-integration]
+    needs: [prepare, tests-unit-web, tests-integration, tests-android-instrumentation]
     runs-on: windows-2022
     environment: ${{ needs.prepare.outputs.environment }}
 
