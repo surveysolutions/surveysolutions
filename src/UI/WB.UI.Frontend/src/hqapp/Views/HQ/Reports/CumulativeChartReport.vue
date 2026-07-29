@@ -306,7 +306,7 @@ export default {
                         const info = this.dataSetInfo[infoIndex]
 
                         datasets.push(
-                            assign(info, {
+                            assign({}, info, {
                                 data: set.data,
                                 index: infoIndex,
                                 borderColor: info.backgroundColor,

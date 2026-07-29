@@ -1,8 +1,6 @@
 <template>
     <div class="interviewChart">
-        <Line :data="chartData"
-            ref="chart"
-            :options="chartOptions" />
+        <LineChart :data="chartData" ref="chart" dataset-id-key="status" :options="chartOptions" />
     </div>
 </template>
 
@@ -77,7 +75,7 @@ const chartOptions = {
     },
 }
 
-import { Line } from 'vue-chartjs'
+import { Line as LineChart } from 'vue-chartjs'
 import 'chartjs-adapter-dayjs-4'
 import { Chart, LineController, Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale, TimeScale, Filler } from 'chart.js'
 
@@ -86,7 +84,7 @@ Chart.register(LineController, Title, Tooltip, Legend, LineElement, PointElement
 
 export default {
     name: 'ComulativeLineChart',
-    components: { Line },
+    components: { LineChart },
     props: {
         chartData: {
             type: Object,
@@ -99,14 +97,21 @@ export default {
     },
     computed: {
         chartOptions() {
-            var self = this
-            this.options.animation = {
-                onComplete: () => {
-                    self.$emit('ready')
-                },
-            }
+            const options = this.options || {}
+            const animation = options.animation || {}
+            const userOnComplete = animation.onComplete
 
-            return Object.assign(chartOptions, this.options)
+            return Object.assign({}, chartOptions, options, {
+                animation: Object.assign({}, animation, {
+                    onComplete: (...args) => {
+                        if (typeof userOnComplete === 'function') {
+                            userOnComplete(...args)
+                        }
+
+                        this.$emit('ready')
+                    },
+                }),
+            })
         },
     },
     expose: ['getImage'],
