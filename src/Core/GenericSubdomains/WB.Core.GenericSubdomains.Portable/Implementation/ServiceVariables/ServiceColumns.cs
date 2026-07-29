@@ -41,6 +41,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
         public const string RecordAudioColumnName = "_record_audio";
         public const string CommentsColumnName = "_comment";
         public const string TargetAreaColumnName = "_target_area";
+        public const string AudioAuditScopeColumnName = "_aascope";
 
         //system generated
         public static readonly SortedDictionary<ServiceVariableType, ServiceVariable> SystemVariables = new SortedDictionary<ServiceVariableType, ServiceVariable>

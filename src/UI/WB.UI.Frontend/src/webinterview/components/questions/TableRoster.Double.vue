@@ -1,6 +1,13 @@
 <template>
-    <input type="text" autocomplete="off" inputmode="decimal" class="ag-cell-edit-input" ref="inputDouble"
-        :placeholder="noAnswerWatermark" :title="noAnswerWatermark" :value="$me.answer" :disabled="!$me.acceptAnswer"
+    <input type="text"
+        autocomplete="off"
+        inputmode="decimal"
+        class="ag-cell-edit-input"
+        ref="inputDouble"
+        :placeholder="noAnswerWatermark"
+        :title="noAnswerWatermark"
+        :value="$me.answer"
+        :disabled="!$me.acceptAnswer"
         v-numericFormatting="{
             minimumValue: '-99999999999999.99999999999999',
             maximumValue: '99999999999999.99999999999999',
@@ -51,7 +58,7 @@ export default {
         answerDoubleQuestion(evnt) {
             const answerString = this.autoNumericElement.getNumericString()
             if (answerString.replace(/[^0-9]/g, '').length > 15) {
-                this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalTooBig') + " '" + answerString + "'")
+                this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalTooBig') + ' \'' + answerString + '\'')
                 return
             }
 
@@ -68,7 +75,7 @@ export default {
                 }
 
                 if (answer > 999999999999999 || answer < -999999999999999) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalCannotParse') + " '" + answer + "'")
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalCannotParse') + ' \'' + answer + '\'')
                     return
                 }
 
@@ -98,7 +105,7 @@ export default {
             }
         })
     },
-    beforeDestroy() {
+    beforeUnmount() {
         this.destroy()
     },
 }
