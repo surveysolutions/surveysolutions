@@ -255,4 +255,10 @@
   <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
     <value>Відповідь на питання з іменем {0} не може бути попередньо завантажена, оскільки вона має непідтримуваний тип. Зверніться до наступної статті підтримки https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type для отримання детальної інформації про те, що можна попередньо завантажити у поточній версії.</value>
   </data>
+  <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+    <value>Ім'я змінної області аудіоконтролю '{0}' недійсне. Воно повинно посилатися на наявний розділ, групу або ростер (запитання та плоскі ростери (flat roster) не дозволяються).</value>
+  </data>
+  <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+    <value>Завдання не було перенесено, оскільки в ньому використовується вибірковий аудіоконтроль (область аудіозапису), який неможливо автоматично перенести на нову версію опитувального листа. Створіть завдання заново вручну та знову налаштуйте область аудіоконтролю.</value>
+  </data>
 </root>
