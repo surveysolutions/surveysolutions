@@ -702,7 +702,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             return this;
         }
 
-        private InterviewQuestionInvariants RequireRosterSizeAnswerRespectsMaxRosterRowCount(int answer)        {
+        private InterviewQuestionInvariants RequireRosterSizeAnswerRespectsMaxRosterRowCount(int answer)
+        {
             int maxRosterRowCount = this.Questionnaire.GetMaxRosterRowCount();
 
             if (!this.Questionnaire.IsRosterSizeQuestion(this.QuestionId))

@@ -2426,7 +2426,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool? yesNoView, IList<ValidationCondition> validationConditions,
             string? linkedFilterExpression, bool isTimestamp,
             bool? showAsList, int? showAsListThreshold, Guid? categoriesId = null,
-            bool isNonNegative = true)
+            bool isNonNegative = false)
         {
             AbstractQuestion question;
 
