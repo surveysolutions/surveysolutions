@@ -43,8 +43,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
         {
             bool IsSectionVisible(InterviewTreeGroup x)
             {
-                var isVisible = (!x.IsDisabled() || x.IsDisabled() && !questionnaire.ShouldBeHiddenIfDisabled(x.Identity.Id))
-                                 && !questionnaire.IsCustomViewRoster(x.Identity.Id);
+                var isVisible = !x.IsDisabled() || x.IsDisabled() && !questionnaire.ShouldBeHiddenIfDisabled(x.Identity.Id);
                 if (!isVisible)
                     return false;
 
@@ -58,6 +57,28 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 }
 
                 return true;
+            }
+
+            // custom view rosters (flat/table/matrix) are hidden from the sidebar table of contents,
+            // but they still participate in the navigation hierarchy: their child subsections are
+            // surfaced in place of the roster root so they remain reachable from the TOC
+            IEnumerable<InterviewTreeGroup> GetVisibleChildSections(InterviewTreeGroup group)
+            {
+                foreach (var child in group.Children.OfType<InterviewTreeGroup>())
+                {
+                    if (!IsSectionVisible(child))
+                        continue;
+
+                    if (questionnaire.IsCustomViewRoster(child.Identity.Id))
+                    {
+                        foreach (var descendant in GetVisibleChildSections(child))
+                            yield return descendant;
+                    }
+                    else
+                    {
+                        yield return child;
+                    }
+                }
             }
 
             Sidebar result = new Sidebar();
@@ -77,23 +98,31 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
             foreach (var parentId in sectionIds.Distinct())
             {
-                var childGroups = parentId == null || parentId == "null"
-                    ? interview.GetAllSections()
-                    : interview.GetGroup(Identity.Parse(parentId))?.Children;
+                var isRoot = parentId == null || parentId == "null";
 
-                var children = (childGroups ?? Array.Empty<InterviewTreeGroup>())
-                    .OfType<InterviewTreeGroup>()
-                    .Where(IsSectionVisible);
+                IEnumerable<InterviewTreeGroup> children;
+                if (isRoot)
+                {
+                    children = interview.GetAllSections().OfType<InterviewTreeGroup>().Where(IsSectionVisible);
+                }
+                else
+                {
+                    var parentGroup = interview.GetGroup(Identity.Parse(parentId));
+                    children = parentGroup == null
+                        ? Enumerable.Empty<InterviewTreeGroup>()
+                        : GetVisibleChildSections(parentGroup);
+                }
 
                 foreach (var child in children)
                 {
                     var sidebar = child.ToSidebarPanel();
+                    sidebar.ParentId = isRoot ? null : parentId;
                     sidebar.HasCustomRosterTitle = questionnaire.HasCustomRosterTitle(child.Identity.Id);
                     sidebar.Status = this.CalculateSimpleStatus(child, isReviewMode, interview, questionnaire);
                     this.ApplyValidity(sidebar.Validity, sidebar.Status);
                     sidebar.Collapsed = !visibleSections.Contains(child.Identity);
                     sidebar.Current = visibleSections.Contains(child.Identity);
-                    sidebar.HasChildren = child.Children.OfType<InterviewTreeGroup>().Any(IsSectionVisible);
+                    sidebar.HasChildren = GetVisibleChildSections(child).Any();
                     sidebar.IsDisabled = child.IsDisabled();
 
                     result.Groups.Add(sidebar);

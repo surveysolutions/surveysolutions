@@ -2,7 +2,7 @@
     <div>
         <Confirm id="move-interviewer-confirmation" ref="move"
             :title="$t('Pages.Interviewers_MoveInterviewerPopupTitle', { names: this.formatNames(this.interviewers) })"
-            slot="modals" :disableOk="!whatToDoWithAssignments || !supervisor">
+            :disableOk="!whatToDoWithAssignments || !supervisor">
             <div class="alert">
                 <Typeahead ref="supervisorControl" control-id="supervisorToAssign" data-vv-name="supervisor"
                     data-vv-as="supervisor" :placeholder="$t('Common.AllSupervisors')" :value="supervisor"
@@ -86,8 +86,8 @@
 </template>
 
 <script>
-import { map, isUndefined, isEmpty, filter } from 'lodash'
-import gql from 'graphql-tag'
+import { map, isUndefined, isEmpty, filter } from 'lodash-es'
+import { gql, gqlRequest } from '~/hqapp/api/graphql'
 
 const query = gql`query assignments($workspace: String!, $where: AssignmentsFilter) {
   assignments(
@@ -262,19 +262,15 @@ export default {
                     and: [
                         { webMode: { eq: true } },
                         { archived: { eq: false } },
-                        { responsibleId: { in: interviewersArray } }]
+                        { responsibleId: { in: interviewersArray } }],
                 }
 
-                const response = await self.$apollo.query({
-                    query,
-                    variables: {
-                        where: where,
-                        workspace: self.workspace,
-                    },
-                    fetchPolicy: 'network-only',
+                const response = await gqlRequest(query, {
+                    where: where,
+                    workspace: self.workspace,
                 })
 
-                self.showWebModeReassignWarning = response.data.assignments.filteredCount > 0
+                self.showWebModeReassignWarning = response.assignments.filteredCount > 0
             } else {
                 self.showWebModeReassignWarning = false
             }
