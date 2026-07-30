@@ -474,8 +474,9 @@ namespace WB.UI.Designer.Controllers
                 ? QuestionnaireActionType.AnonymousSharingEnabled
                 : QuestionnaireActionType.AnonymousSharingDisabled;
 
-            // Stage the anonymous questionnaire change and the history entry, then commit them together.
+            // Save the anonymous questionnaire change and the history entry atomically.
             await using var transaction = await dbContext.Database.BeginTransactionAsync();
+            await dbContext.SaveChangesAsync();
             await questionnaireHistoryVersionsService.AddQuestionnaireChangeItemAsync(
                 id,
                 User.GetId(),
