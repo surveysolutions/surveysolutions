@@ -362,15 +362,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 if (input.SearchByFields.HasFlag(AssignmentsInputModel.SearchTypes.IdentifyingQuestions))
                 {
                     textSearchExpression = textSearchExpression
-                        .OrCondition(x => x.IdentifyingData.Any(a => a.AnswerAsString.ToLower().Contains(lowerSearchBy)));
+                        .OrCondition(x => x.IdentifyingData.Any(a => a.AnswerAsString.ToLower().StartsWith(lowerSearchBy)));
                 }
 
                 if (input.SearchByFields.HasFlag(AssignmentsInputModel.SearchTypes.ResponsibleId))
                 {
-                    textSearchExpression = textSearchExpression.OrCondition(x => x.Responsible.Name.ToLower().Contains(lowerSearchBy));
+                    textSearchExpression = textSearchExpression.OrCondition(x => x.Responsible.Name.ToLower().StartsWith(lowerSearchBy));
                 }
 
-                if (input.SearchByFields.HasFlag(AssignmentsInputModel.SearchTypes.ResponsibleId))
+                if (input.SearchByFields.HasFlag(AssignmentsInputModel.SearchTypes.QuestionnaireTitle))
                 {
                     textSearchExpression = textSearchExpression.OrCondition(x => x.Questionnaire.Title.ToLower().Contains(lowerSearchBy));
                 }
@@ -381,6 +381,42 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 }
 
                 items = items.Where(textSearchExpression);
+            }
+
+            if (input.Conditions != null && input.Conditions.Length > 0)
+            {
+                foreach (var condition in input.Conditions)
+                {
+                    if (condition?.Variable == null || condition.Field == null || condition.Value == null)
+                        continue;
+
+                    var variable = condition.Variable;
+                    var fieldParts = condition.Field.Split('|');
+                    if (fieldParts.Length != 2) continue;
+
+                    var fieldName = fieldParts[0];
+                    var operation = fieldParts[1];
+                    var value = condition.Value;
+
+                    switch (fieldName, operation)
+                    {
+                        case ("valueLowerCase", "startsWith"):
+                            items = items.Where(x => x.IdentifyingData.Any(a => a.VariableName == variable && a.AnswerAsString.ToLower().StartsWith(value)));
+                            break;
+                        case ("valueLowerCase", "eq"):
+                            items = items.Where(x => x.IdentifyingData.Any(a => a.VariableName == variable && a.AnswerAsString.ToLower() == value));
+                            break;
+                        case ("answerCode", "eq"):
+                            items = items.Where(x => x.IdentifyingData.Any(a => a.VariableName == variable && a.Answer == value));
+                            break;
+                        case ("answerCode", "neq"):
+                            items = items.Where(x => !x.IdentifyingData.Any(a => a.VariableName == variable && a.Answer == value));
+                            break;
+                        case ("value", "eq"):
+                            items = items.Where(x => x.IdentifyingData.Any(a => a.VariableName == variable && a.Answer == value));
+                            break;
+                    }
+                }
             }
 
             if (input.ReceivedByTablet != AssignmentReceivedState.All)

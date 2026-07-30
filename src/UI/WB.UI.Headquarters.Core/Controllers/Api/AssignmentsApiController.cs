@@ -95,7 +95,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 ReceivedByTablet = request.ReceivedByTablet,
                 SupervisorId = request.TeamId,
                 Id = request.Id,
-                Statuses = ParseStatuses(request.Status)
+                Statuses = ParseStatuses(request.Status),
+                Conditions = ParseConditions(request.Conditions)
             };
             
             if (this.authorizedUser.IsSupervisor)
@@ -355,6 +356,11 @@ namespace WB.UI.Headquarters.Controllers.Api
             public int? Id { get; set; }
             
             public string Status { get; set; }
+
+            /// <summary>
+            /// Per-question filter conditions, each encoded as "variable,field|operator,value"
+            /// </summary>
+            public string[] Conditions { get; set; }
         }
         
         [HttpPost]
@@ -375,6 +381,57 @@ namespace WB.UI.Headquarters.Controllers.Api
             {
                 if (Enum.TryParse<AssignmentStatus>(part.Trim(), ignoreCase: true, out var status))
                     result.Add(status);
+            }
+            return result.Count > 0 ? result.ToArray() : null;
+        }
+
+        private static AssignmentFilterCondition[] ParseConditions(string[] conditionsRaw)
+        {
+            if (conditionsRaw == null || conditionsRaw.Length == 0)
+                return null;
+
+            var result = new List<AssignmentFilterCondition>();
+            foreach (var raw in conditionsRaw)
+            {
+                if (string.IsNullOrWhiteSpace(raw)) continue;
+
+                // Format: "variable,field|operator,jsonValue" (e.g. "varname,valueLowerCase|startsWith,\"john\"")
+                var firstComma = raw.IndexOf(',');
+                if (firstComma < 0) continue;
+
+                var variable = raw[..firstComma];
+                var rest = raw[(firstComma + 1)..];
+
+                var secondComma = rest.IndexOf(',');
+                if (secondComma < 0) continue;
+
+                var field = rest[..secondComma];
+                var jsonValue = rest[(secondComma + 1)..];
+
+                string value;
+                try
+                {
+                    var parsed = System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(jsonValue);
+                    value = parsed.ValueKind switch
+                    {
+                        System.Text.Json.JsonValueKind.String => parsed.GetString(),
+                        System.Text.Json.JsonValueKind.Number => parsed.GetRawText(),
+                        _ => null
+                    };
+                }
+                catch
+                {
+                    continue;
+                }
+
+                if (value == null) continue;
+
+                result.Add(new AssignmentFilterCondition
+                {
+                    Variable = variable,
+                    Field = field,
+                    Value = value
+                });
             }
             return result.Count > 0 ? result.ToArray() : null;
         }
