@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
@@ -39,6 +40,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IWorkspaceContextAccessor workspaceContextAccessor;
         private readonly IWorkspacesStorage workspaces;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly IMoveUserToAnotherTeamService moveUserToAnotherTeamService;
 
         private const int MaxPageSize = 100;
 
@@ -50,7 +52,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             ISystemLog systemLog,
             IWorkspaceContextAccessor workspaceContextAccessor,
             IWorkspacesStorage workspaces,
-            IAuthorizedUser authorizedUser)
+            IAuthorizedUser authorizedUser,
+            IMoveUserToAnotherTeamService moveUserToAnotherTeamService)
         {
             this.usersFactory = usersFactory;
             this.archiveService = archiveService;
@@ -61,6 +64,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.workspaceContextAccessor = workspaceContextAccessor;
             this.workspaces = workspaces;
             this.authorizedUser = authorizedUser;
+            this.moveUserToAnotherTeamService = moveUserToAnotherTeamService;
         }
 
         /// <summary>
@@ -303,6 +307,50 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 Time = record.Time,
                 Message = record.Message,
             }).ToArray();
+        }
+
+        /// <summary>
+        /// Moves interviewer to another team under a different supervisor.
+        /// </summary>
+        /// <param name="id">Interviewer user id</param>
+        /// <param name="request">Move request with target supervisor id and mode</param>
+        /// <response code="200">Interviewer moved successfully</response>
+        /// <response code="400">Request is malformed</response>
+        /// <response code="404">Interviewer or supervisor was not found</response>
+        /// <response code="406">User is not an interviewer, or supervisor id is invalid</response>
+        [HttpPatch]
+        [Route("interviewers/{id:guid}/supervisor")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ObservingNotAllowed]
+        [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
+        public async Task<ActionResult<MoveInterviewerToAnotherTeamResult>> MoveInterviewerToAnotherTeam(Guid id, [FromBody, BindRequired] MoveInterviewerRequest request)
+        {
+            if (!ModelState.IsValid)
+                return ValidationProblem();
+
+            var interviewer = usersFactory.GetUser(new UserViewInputModel(id));
+            if (interviewer == null || !interviewer.Roles.Contains(UserRoles.Interviewer))
+                return NotFound();
+
+            if (interviewer.Supervisor == null || interviewer.Supervisor.Id == Guid.Empty)
+                return StatusCode(StatusCodes.Status406NotAcceptable);
+
+            var supervisor = usersFactory.GetUser(new UserViewInputModel(request.SupervisorId));
+            if (supervisor == null || !supervisor.Roles.Contains(UserRoles.Supervisor))
+            {
+                ModelState.AddModelError(nameof(request.SupervisorId), "Supervisor was not found");
+                return ValidationProblem();
+            }
+
+            var result = await moveUserToAnotherTeamService.Move(
+                authorizedUser.Id,
+                id,
+                request.SupervisorId,
+                interviewer.Supervisor.Id,
+                request.Mode);
+
+            return Ok(result);
         }
 
         /// <summary>

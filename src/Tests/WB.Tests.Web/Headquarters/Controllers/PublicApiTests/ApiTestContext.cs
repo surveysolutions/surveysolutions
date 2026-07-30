@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.PdfInterview;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Users.MoveUserToAnotherTeam;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -44,7 +45,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             ILogger logger = null,
             IUserViewFactory userViewViewFactory = null,
             HqUserManager userManager = null,
-            IWorkspaceContextAccessor workspaceContextAccessor = null)
+            IWorkspaceContextAccessor workspaceContextAccessor = null,
+            IMoveUserToAnotherTeamService moveUserToAnotherTeamService = null,
+            IAuthorizedUser authorizedUser = null)
         {
             return new UsersController(
                 userViewViewFactory ?? Mock.Of<IUserViewFactory>(),
@@ -55,7 +58,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 Mock.Of<ISystemLog>(),
                 workspaceContextAccessor ?? Mock.Of<IWorkspaceContextAccessor>(),
                 Mock.Of<IWorkspacesStorage>(),
-                Mock.Of<IAuthorizedUser>());
+                authorizedUser ?? Mock.Of<IAuthorizedUser>(),
+                moveUserToAnotherTeamService ?? Mock.Of<IMoveUserToAnotherTeamService>());
         }
 
         protected static QuestionnairesPublicApiController CreateQuestionnairesController(
