@@ -81,6 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public bool UseFormatting { get; set; }
         public int? CountOfDecimalPlaces { get; private set; }
         private bool isNonNegativeQuestion;
+        public bool IsNonNegative => this.isNonNegativeQuestion;
 
         public RealQuestionViewModel(
             IPrincipal principal,

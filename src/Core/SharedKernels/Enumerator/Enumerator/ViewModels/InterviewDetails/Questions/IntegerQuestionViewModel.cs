@@ -64,6 +64,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool UseFormatting { get; set; }
 
+        public bool IsNonNegative => this.isNonNegativeQuestion;
+
         public IMvxAsyncCommand ValueChangeCommand => new MvxAsyncCommand(this.SendAnswerIntegerQuestionCommandAsync, () => this.principal.IsAuthenticated);
 
         public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswer);
