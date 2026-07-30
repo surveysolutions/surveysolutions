@@ -1,4 +1,4 @@
-import { isNumber, parseInt } from 'lodash'
+import { isNumber, parseInt } from 'lodash-es'
 
 export function formatNumber(value) {
     if (value == null || value == undefined)

@@ -59,7 +59,7 @@
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
     <data name="reverted" xml:space="preserve">
-    <value>Questionnaire "{0}" reverted</value>
+    <value>Questionário "{0}" revertido</value>
   </data>
     <data name="Edit" xml:space="preserve">
     <value>Editar</value>
@@ -290,7 +290,7 @@
     <value>Lista {0} movida para a lista {1}</value>
   </data>
   <data name="Translation_Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Idioma original</value>
   </data>
   <data name="Translation_DefaultTranslationSet" xml:space="preserve">
     <value>Tradução padrão definida para {0}</value>

@@ -213,6 +213,14 @@
              }
 
              var viewPagerCurrentItem = viewPager.CurrentItem;
+             var itemCount = this.fragmentStateAdapter.ItemCount;
+
+             if (viewPagerCurrentItem >= itemCount && itemCount > 0)
+             {
+                 viewPagerCurrentItem = itemCount - 1;
+                 viewPager.SetCurrentItem(viewPagerCurrentItem, false);
+             }
+
              if (viewPagerCurrentItem > 0)
              {
                  UpdateTypeOfInterviewsViewModelProperty(viewPagerCurrentItem);
@@ -222,6 +230,7 @@
          private void UpdateTypeOfInterviewsViewModelProperty(int tabPosition)
          {
              var fragment = (MvvmCross.Platforms.Android.Views.Fragments.MvxFragment)this.fragmentStateAdapter.CreateFragment(tabPosition);
+             if (fragment == null) return;
              var viewModel = (ListViewModel)fragment.ViewModel;
              this.ViewModel.TypeOfInterviews = viewModel.DashboardType;
          }
