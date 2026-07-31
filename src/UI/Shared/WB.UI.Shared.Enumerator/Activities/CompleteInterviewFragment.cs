@@ -269,7 +269,10 @@ namespace WB.UI.Shared.Enumerator.Activities
                 return computedHeight + recyclerView.PaddingTop + recyclerView.PaddingBottom;
             }
 
-            return recyclerView.MeasuredHeight;
+            if (!recyclerView.CanScrollVertically(1) && !recyclerView.CanScrollVertically(-1))
+                return recyclerView.MeasuredHeight;
+
+            return 0;
         }
 
         private void RecalculateRecyclerViewHeight()
