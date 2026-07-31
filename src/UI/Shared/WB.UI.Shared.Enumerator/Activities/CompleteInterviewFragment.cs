@@ -284,8 +284,10 @@ namespace WB.UI.Shared.Enumerator.Activities
             {
                 if (requestId != recalculateRequestId)
                     return;
-                
-                if (viewPager == null) return;
+
+                if (View == null || IsDetached || viewPager == null)
+                    return;
+
                 int currentItem = viewPager.CurrentItem;
                 
                 // Get the RecyclerView that ViewPager2 uses internally
