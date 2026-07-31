@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         //[TestCase ("zh")]
         public void should_be_the_same_set_of_resources_in_other_cultures_as_it_is_in_English(string culture)
         {
-            russianResourceFiles = TestEnvironment
+            translatedResourceFiles = TestEnvironment
                 .GetAllFilesInSolution($"*.{culture}.resx")
                 .ToList();
 
@@ -35,8 +35,8 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 .Except(TestEnvironment.GetAllFilesInSolution("*.??-??.resx"))
                 .ToList();
 
-            russianResourceNames =
-                from resourceFile in russianResourceFiles
+            translatedResourceNames =
+                from resourceFile in translatedResourceFiles
                 let resourceFileName = GetTranslatedResourceFileNameWithoutExtension(resourceFile)
                 from resource in GetStringResourcesFromResX(resourceFile)
                 where IsNotPluralForm(resource.Key) && !string.IsNullOrEmpty(resource.Value)
@@ -49,29 +49,24 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 where IsNotPluralForm(resource.Key) && !string.IsNullOrEmpty(resource.Value)
                 select $"{resourceFileName}: {resource.Key}";
 
-            //should_find_Russian_resource_files() => 
-            Assert.That(russianResourceFiles, Is.Not.Empty);
+            //should_find_translated_resource_files() => 
+            Assert.That(translatedResourceFiles, Is.Not.Empty);
 
             //should_find_English_resource_files() => 
             Assert.That(englishResourceFiles, Is.Not.Empty);
 
-            //should_be_the_same_set_of_resource_files_in_Russian_as_it_is_in_English() => 
-            Assert.That(russianResourceFiles.Select(f => f.Replace($".{culture}.", ".")).OrderBy(x => x), 
+            //should_be_the_same_set_of_resource_files_in_translated_culture_as_it_is_in_English() => 
+            Assert.That(translatedResourceFiles.Select(f => f.Replace($".{culture}.", ".")).OrderBy(x => x), 
                 Is.EquivalentTo(englishResourceFiles.OrderBy(x => x)));
 
-            // should_be_the_same_set_of_resources_in_Russian_as_it_is_in_English() =>
-            Assert.That(russianResourceNames.OrderBy(x => x), Is.EquivalentTo(englishResourceNames.OrderBy(x => x)));
+            // should_be_the_same_set_of_resources_in_translated_culture_as_it_is_in_English() =>
+            Assert.That(translatedResourceNames.OrderBy(x => x), Is.EquivalentTo(englishResourceNames.OrderBy(x => x)));
         }
 
 
-        private IEnumerable<string> russianResourceFiles;
+        private IEnumerable<string> translatedResourceFiles;
         private IEnumerable<string> englishResourceFiles;
-        private IEnumerable<string> russianResourceNames;
+        private IEnumerable<string> translatedResourceNames;
         private IEnumerable<string> englishResourceNames;
-
-        private static bool IsNotPluralForm(string resourceName)
-        {
-            return !(resourceName.EndsWith("_other") || resourceName.EndsWith("_plural"));
-        }
     }
 }
