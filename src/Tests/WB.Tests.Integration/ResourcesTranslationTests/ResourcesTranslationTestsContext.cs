@@ -28,8 +28,21 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 .Select(element => element.Attribute("name").Value);
         }
 
+        // Parsing the same .resx file repeatedly (e.g. the English/original file gets
+        // re-parsed once per culture [TestCase] in the same test run) is pure wasted I/O
+        // and XML parsing. Cache the parsed result per full path.
+        private static readonly Dictionary<string, Dictionary<string, string>> stringResourcesCache =
+            new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+
         protected static Dictionary<string, string> GetStringResourcesFromResX(string fullPathToResX)
         {
+            lock (stringResourcesCache)
+            {
+                if (stringResourcesCache.TryGetValue(fullPathToResX, out var cached))
+                    return cached;
+            }
+
+            Dictionary<string, string> result;
             try
             {
                 var doc = XDocument
@@ -39,7 +52,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                     .Where(element => element.Name == "data")
                     .OrderBy(element => element.Attribute("name").Value);
                 
-                return doc.ToDictionary(
+                result = doc.ToDictionary(
                     element => element.Attribute("name").Value,
                     element => element.Elements().Single(x => x.Name == "value").Value
                 );
@@ -48,7 +61,13 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             {
                 throw new Exception($"Resouce loading error for file {fullPathToResX}", exc);
             }
-            
+
+            lock (stringResourcesCache)
+            {
+                stringResourcesCache[fullPathToResX] = result;
+            }
+
+            return result;
         }
 
         protected static string GetUiStringFormatEntriesAsString(string value)
@@ -99,6 +118,11 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         private static string TrimEndAfterLastDot(string value)
         {
             return value.Substring(0, value.LastIndexOf('.'));
+        }
+
+        protected static bool IsNotPluralForm(string resourceName)
+        {
+            return !(resourceName.EndsWith("_other") || resourceName.EndsWith("_plural"));
         }
 
         protected IEnumerable<string> GetAllLinkedResourceFiles(IEnumerable<string> csprojFiles)
