@@ -317,6 +317,9 @@
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
     <value>Ответ '{0}' неверный, поскольку нельзя задать отрицательное количество элементов в списке</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>Negative values are not allowed for this question</value>
+  </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>Ответ '{0}' неверный, поскольку он больше значения максимального количества элементов в списке: '{1}'.</value>
   </data>

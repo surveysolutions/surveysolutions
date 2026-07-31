@@ -821,7 +821,10 @@
       <data name="QuestionInteger" xml:space="preserve">
       <value>Inteiro</value>
     </data>
-      <data name="QuestionIsLinked" xml:space="preserve">
+      <data name="QuestionNonNegative" xml:space="preserve">
+    <value>Non-negative</value>
+  </data>
+  <data name="QuestionIsLinked" xml:space="preserve">
       <value>Está vinculado</value>
     </data>
       <data name="QuestionMaxListCount" xml:space="preserve">
