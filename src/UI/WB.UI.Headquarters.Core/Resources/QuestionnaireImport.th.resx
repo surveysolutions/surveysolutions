@@ -38,10 +38,10 @@
   <data name="Prepare" xml:space="preserve"><value>กำลังรับข้อมูลแบบสอบถาม</value></data>
   <data name="Gropus" xml:space="preserve"><value>กลุ่ม</value></data>
   <data name="LastModifiedAt" xml:space="preserve"><value>แก้ไขล่าสุดเมื่อ</value></data>
-  <data name="QuestionsWithConditions" xml:space="preserve"><value>คำถามที่มีเงื่อนไข {count}</value></data>
+  <data name="QuestionsWithConditions" xml:space="preserve"><value>คำถามที่มีเงื่อนไข {{count}}</value></data>
   <data name="Rosters" xml:space="preserve"><value>รายการ</value></data>
   <data name="QuestionnaireExists" xml:space="preserve"><value>แบบสอบถามมีอยู่แล้ว</value></data>
-  <data name="ImportAsNewVersion" xml:space="preserve"><value>นำเข้าเป็นเวอร์ชันใหม่ {version}</value></data>
+  <data name="ImportAsNewVersion" xml:space="preserve"><value>นำเข้าเป็นเวอร์ชันใหม่ {{version}}</value></data>
   <data name="RegularImportTitle" xml:space="preserve"><value>นำเข้าแบบสอบถาม</value></data>
   <data name="RegularImportSubTitle" xml:space="preserve"><value>เลือกแบบสอบถามเพื่อนำเข้า</value></data>
   <data name="MyQuestionnairesTitle" xml:space="preserve"><value>แบบสอบถามของฉัน</value></data>

@@ -38,10 +38,10 @@
   <data name="Prepare" xml:space="preserve"><value>ការទទួលទិន្នន័យកម្រងសំណួរ</value></data>
   <data name="Gropus" xml:space="preserve"><value>ក្រុម</value></data>
   <data name="LastModifiedAt" xml:space="preserve"><value>បានកែប្រែចុងក្រោយ</value></data>
-  <data name="QuestionsWithConditions" xml:space="preserve"><value>សំណួរជាមួយលក្ខខណ្ឌ {count}</value></data>
+  <data name="QuestionsWithConditions" xml:space="preserve"><value>សំណួរជាមួយលក្ខខណ្ឌ {{count}}</value></data>
   <data name="Rosters" xml:space="preserve"><value>បញ្ជី</value></data>
   <data name="QuestionnaireExists" xml:space="preserve"><value>កម្រងសំណួរមានរួចហើយ</value></data>
-  <data name="ImportAsNewVersion" xml:space="preserve"><value>នាំចូលជាកំណែថ្មី {version}</value></data>
+  <data name="ImportAsNewVersion" xml:space="preserve"><value>នាំចូលជាកំណែថ្មី {{version}}</value></data>
   <data name="RegularImportTitle" xml:space="preserve"><value>នាំចូលកម្រងសំណួរ</value></data>
   <data name="RegularImportSubTitle" xml:space="preserve"><value>ជ្រើសរើសកម្រងសំណួរសម្រាប់នាំចូល</value></data>
   <data name="MyQuestionnairesTitle" xml:space="preserve"><value>កម្រងសំណួររបស់ខ្ញុំ</value></data>

@@ -38,10 +38,10 @@
   <data name="Prepare" xml:space="preserve"><value>Menerima data kuesioner</value></data>
   <data name="Gropus" xml:space="preserve"><value>Grup</value></data>
   <data name="LastModifiedAt" xml:space="preserve"><value>Terakhir diubah pada</value></data>
-  <data name="QuestionsWithConditions" xml:space="preserve"><value>Pertanyaan dengan kondisi {count}</value></data>
+  <data name="QuestionsWithConditions" xml:space="preserve"><value>Pertanyaan dengan kondisi {{count}}</value></data>
   <data name="Rosters" xml:space="preserve"><value>Daftar</value></data>
   <data name="QuestionnaireExists" xml:space="preserve"><value>Kuesioner sudah ada</value></data>
-  <data name="ImportAsNewVersion" xml:space="preserve"><value>Impor sebagai versi baru {version}</value></data>
+  <data name="ImportAsNewVersion" xml:space="preserve"><value>Impor sebagai versi baru {{version}}</value></data>
   <data name="RegularImportTitle" xml:space="preserve"><value>Impor kuesioner</value></data>
   <data name="RegularImportSubTitle" xml:space="preserve"><value>Pilih kuesioner untuk diimpor</value></data>
   <data name="MyQuestionnairesTitle" xml:space="preserve"><value>Kuesioner saya</value></data>

@@ -60,17 +60,17 @@
   <data name="ImportingUserInfo" xml:space="preserve"><value>მომხმარებლის ინფორმაციის იმპორტი</value></data>
   <data name="ReUploadTabFile" xml:space="preserve"><value>ფაილის ხელახლა ატვირთვა</value></data>
   <data name="BackToImport" xml:space="preserve"><value>იმპორტზე დაბრუნება</value></data>
-  <data name="Uploading" xml:space="preserve"><value>ატვირთვა... {importedUsersCount} {totalUsersToImportCount}</value></data>
+  <data name="Uploading" xml:space="preserve"><value>ატვირთვა... {{importedUsersCount}} {{totalUsersToImportCount}}</value></data>
   <data name="Cancel" xml:space="preserve"><value>გაუქმება</value></data>
   <data name="Column" xml:space="preserve"><value>სვეტი</value></data>
   <data name="Line" xml:space="preserve"><value>სტრიქონი</value></data>
-  <data name="AllAccountsCreated" xml:space="preserve"><value>ყველა ანგარიში შეიქმნა {total}</value></data>
-  <data name="InterviewersAndSupervisorsCount" xml:space="preserve"><value> ინტერვიუერი,  სუპერვაიზორი {interviewersCount} {supervisorsCount}</value></data>
+  <data name="AllAccountsCreated" xml:space="preserve"><value>ყველა ანგარიში შეიქმნა {{total}}</value></data>
+  <data name="InterviewersAndSupervisorsCount" xml:space="preserve"><value> ინტერვიუერი,  სუპერვაიზორი {{interviewersCount}} {{supervisorsCount}}</value></data>
   <data name="CompleteDescription" xml:space="preserve"><value>მომხმარებლების ატვირთვა დასრულდა</value></data>
   <data name="Questionnaires" xml:space="preserve"><value>კითხვარები</value></data>
-  <data name="UploadInProgress" xml:space="preserve"><value>ატვირთვა მიმდინარეობს {userName}</value></data>
+  <data name="UploadInProgress" xml:space="preserve"><value>ატვირთვა მიმდინარეობს {{userName}}</value></data>
   <data name="UploadInProgressDescription" xml:space="preserve"><value>გთხოვთ დაელოდოთ ატვირთვის დასრულებას</value></data>
-  <data name="EstimatedTime" xml:space="preserve"><value>სავარაუდო დრო {estimatedTime}</value></data>
+  <data name="EstimatedTime" xml:space="preserve"><value>სავარაუდო დრო {{estimatedTime}}</value></data>
   <data name="TimeDetermination" xml:space="preserve"><value>დრო განისაზღვრება...</value></data>
   <data name="SelectWorkspace" xml:space="preserve"><value>სამუშაო სივრცის არჩევა</value></data>
   <data name="SelectWorkspaceDescription" xml:space="preserve"><value>სამუშაო სივრცის არჩევა, სადაც მომხმარებლები შეიქმნება</value></data>

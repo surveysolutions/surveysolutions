@@ -36,10 +36,10 @@
 
   <data name="Gropus" xml:space="preserve"><value>Grupe</value></data>
   <data name="LastModifiedAt" xml:space="preserve"><value>Ndryshuar së fundmi më</value></data>
-  <data name="QuestionsWithConditions" xml:space="preserve"><value>Pyetje me kushte {count}</value></data>
+  <data name="QuestionsWithConditions" xml:space="preserve"><value>Pyetje me kushte {{count}}</value></data>
   <data name="Rosters" xml:space="preserve"><value>Regjistra</value></data>
   <data name="QuestionnaireExists" xml:space="preserve"><value>Pyetësori ekziston</value></data>
-  <data name="ImportAsNewVersion" xml:space="preserve"><value>Importo si version i ri {version}</value></data>
+  <data name="ImportAsNewVersion" xml:space="preserve"><value>Importo si version i ri {{version}}</value></data>
   <data name="RegularImportTitle" xml:space="preserve"><value>Importo pyetësor</value></data>
   <data name="RegularImportSubTitle" xml:space="preserve"><value>Zgjidhni pyetësorin për ta importuar</value></data>
   <data name="MyQuestionnairesTitle" xml:space="preserve"><value>Pyetësorët e mi</value></data>
