@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true"><xsd:complexType><xsd:choice maxOccurs="unbounded">
+      <xsd:element name="data"><xsd:complexType><xsd:sequence>
+        <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+        <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+      </xsd:sequence>
+      <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+      <xsd:attribute ref="xml:space" /></xsd:complexType></xsd:element>
+      <xsd:element name="resheader"><xsd:complexType><xsd:sequence>
+        <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+      </xsd:sequence><xsd:attribute name="name" type="xsd:string" use="required" /></xsd:complexType></xsd:element>
+    </xsd:choice></xsd:complexType></xsd:element></xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="PLU0001Description" xml:space="preserve"><value>ამ სახელი უკვე გამოყენებულია. გამოიყენეთ სხვა მომხმარებლის სახელი.</value></data>
+  <data name="PLU0002Description" xml:space="preserve"><value>ეს ელ-ფოსტა უკვე გამოყენებულია. გამოიყენეთ სხვა ელ-ფოსტა.</value></data>
+  <data name="PLU0003Description" xml:space="preserve"><value>ეს ტელეფონის ნომერი უკვე გამოყენებულია.</value></data>
+  <data name="PLU0004Description" xml:space="preserve"><value>სუპერვაიზორი ვერ მოიძებნა.</value></data>
+  <data name="PLU0005Description" xml:space="preserve"><value>პაროლი ძალიან სუსტია. პაროლი სულ მცირე 8 სიმბოლოს უნდა შეიცავდეს.</value></data>
+  <data name="PLU0006Description" xml:space="preserve"><value>ელ-ფოსტის ფორმატი არასწორია.</value></data>
+  <data name="PLU0007Description" xml:space="preserve"><value>ტელეფონის ნომრის ფორმატი არასწორია.</value></data>
+  <data name="PLU0008Description" xml:space="preserve"><value>მომხმარებლის სახელი ძალიან გრძელია.</value></data>
+  <data name="PLU0009Description" xml:space="preserve"><value>სავალდებულო ველი ცარიელია.</value></data>
+  <data name="PLU0010Description" xml:space="preserve"><value>სუპერვაიზორის სახელი ცარიელია.</value></data>
+  <data name="PLU0011Description" xml:space="preserve"><value>სუპერვაიზორის სვეტი სუპერვაიზორის როლისთვის ცარიელი უნდა იყოს</value></data>
+  <data name="PLU0012Description" xml:space="preserve"><value>სრული სახელის ფორმატი არასწორია.</value></data>
+  <data name="PLU0013Description" xml:space="preserve"><value>ტელეფონის ნომრის ფორმატი არასწორია.</value></data>
+  <data name="PLU0014Description" xml:space="preserve"><value>სრული სახელი შეიცავს დაუშვებელ სიმბოლოებს.</value></data>
+  <data name="PLU0001" xml:space="preserve"><value>შესვლა არ არის უნიკალური</value></data>
+  <data name="PLU0002" xml:space="preserve"><value>დუბლიკატი</value></data>
+  <data name="PLU0003" xml:space="preserve"><value>არასწორი გუნდი</value></data>
+  <data name="PLU0004" xml:space="preserve"><value>არასწორი როლი</value></data>
+  <data name="PLU0005" xml:space="preserve"><value>შესვლის ფორმატი არასწორია</value></data>
+  <data name="PLU0006" xml:space="preserve"><value>პაროლის ფორმატი არასწორია</value></data>
+  <data name="PLU0007" xml:space="preserve"><value>ელ-ფოსტის ფორმატი არასწორია</value></data>
+  <data name="PLU0008" xml:space="preserve"><value>ტელეფონის ნომრის ფორმატი არასწორია</value></data>
+  <data name="PLU0009" xml:space="preserve"><value>როლი არასწორია</value></data>
+  <data name="PLU0010" xml:space="preserve"><value>დამოკიდებულების შეცდომა</value></data>
+  <data name="PLU0011" xml:space="preserve"><value>დამოკიდებულების შეცდომა</value></data>
+  <data name="PLU0012" xml:space="preserve"><value>სრული სახელის სიგრძე არასწორია</value></data>
+  <data name="PLU0013" xml:space="preserve"><value>ტელეფონის ნომრის სიგრძე არასწორია</value></data>
+  <data name="PLU0014" xml:space="preserve"><value>სრული სახელის ფორმატი არასწორია</value></data>
+  <data name="PLU0001Recommendation" xml:space="preserve"><value>მომხმარებელი უნიკალური უნდა იყოს</value></data>
+  <data name="PLU0002Recommendation" xml:space="preserve"><value>დუბლიკატების მოგვარება</value></data>
+  <data name="PLU0003Recommendation" xml:space="preserve"><value>სწორი სუპერვაიზორის მითითება</value></data>
+  <data name="PLU0004Recommendation" xml:space="preserve"><value>სწორი როლის მითითება</value></data>
+  <data name="PLU0005Recommendation" xml:space="preserve"><value>შესვლის გამოსწორება</value></data>
+  <data name="PLU0006Recommendation" xml:space="preserve"><value>პაროლის გამოსწორება</value></data>
+  <data name="PLU0007Recommendation" xml:space="preserve"><value>ელ-ფოსტის გამოსწორება</value></data>
+  <data name="PLU0008Recommendation" xml:space="preserve"><value>ტელეფონის ნომრის გამოსწორება</value></data>
+  <data name="PLU0009Recommendation" xml:space="preserve"><value>დასაშვები მნიშვნელობის გამოყენება</value></data>
+  <data name="PLU0010Recommendation" xml:space="preserve"><value>სუპერვაიზორის განახლება</value></data>
+  <data name="PLU0011Recommendation" xml:space="preserve"><value>სვეტის დაცლა სუპერვაიზორის როლისთვის</value></data>
+  <data name="PLU0012Recommendation" xml:space="preserve"><value>სრული სახელის გამოსწორება</value></data>
+  <data name="PLU0013Recommendation" xml:space="preserve"><value>ტელეფონის ნომრის გამოსწორება</value></data>
+  <data name="PLU0014Recommendation" xml:space="preserve"><value>დაუშვებელი სიმბოლოების ამოღება</value></data>
+  <data name="PLU0015" xml:space="preserve"><value>სამუშაო სივრცე ვერ მოიძებნა</value></data>
+  <data name="PLU0015Description" xml:space="preserve"><value>სამუშაო სივრცე '{0}' ვერ მოიძებნა</value></data>
+  <data name="PLU0015Recommendation" xml:space="preserve"><value>სავალდებულო სამუშაო სივრცის განახლება</value></data>
+  <data name="PLU0016" xml:space="preserve"><value>სამუშაო სივრცე გამორთულია</value></data>
+  <data name="PLU0016Description" xml:space="preserve"><value>სამუშაო სივრცე '{0}' გამორთულია</value></data>
+  <data name="PLU0016Recommendation" xml:space="preserve"><value>გამოიყენეთ სხვა სამუშაო სივრცე</value></data>
+  <data name="PLU0017" xml:space="preserve"><value>მომხმარებელს უფლება არ აქვს სამუშაო სივრცეზე</value></data>
+  <data name="PLU0017Description" xml:space="preserve"><value>მომხმარებელი '{0}' ამ სამუშაო სივრცეში ვერ შეიქმნება</value></data>
+  <data name="PLU0017Recommendation" xml:space="preserve"><value>სამუშაო სივრცის ნებართვების გადამოწმება</value></data>
+  <data name="PLU0018" xml:space="preserve"><value>სუპერვაიზორი სხვა სამუშაო სივრცეში</value></data>
+  <data name="PLU0018Description" xml:space="preserve"><value>სუპერვაიზორი '{0}' სხვა სამუშაო სივრცეშია</value></data>
+  <data name="PLU0018Recommendation" xml:space="preserve"><value>ამ სამუშაო სივრცის სუპერვაიზორის გამოყენება</value></data>
+  <data name="PLU0019" xml:space="preserve"><value>სუპერვაიზორი გამორთულია</value></data>
+  <data name="PLU0019Description" xml:space="preserve"><value>სუპერვაიზორი '{0}' გამორთულია</value></data>
+  <data name="PLU0019Recommendation" xml:space="preserve"><value>სხვა სუპერვაიზორის მითითება</value></data>
+  <data name="PLU0020" xml:space="preserve"><value>სუპერვაიზორი არქივირებულია</value></data>
+  <data name="PLU0020Description" xml:space="preserve"><value>სუპერვაიზორი '{0}' არქივირებულია</value></data>
+  <data name="PLU0020Recommendation" xml:space="preserve"><value>სხვა სუპერვაიზორის მითითება</value></data>
+  <data name="PLU0021" xml:space="preserve"><value>მომხმარებელი სხვა სამუშაო სივრცეში</value></data>
+  <data name="PLU0021Description" xml:space="preserve"><value>მომხმარებელი '{0}' სხვა სამუშაო სივრცეშია</value></data>
+  <data name="PLU0021Recommendation" xml:space="preserve"><value>გადაიყვანეთ მომხმარებელი ან გამოიყენეთ სხვა</value></data>
+  <data name="PLU0022" xml:space="preserve"><value>სუპერვაიზორი სხვა გუნდში</value></data>
+  <data name="PLU0022Description" xml:space="preserve"><value>სუპერვაიზორი '{0}' ამ გუნდის ნაწილი არ არის</value></data>
+  <data name="PLU0022Recommendation" xml:space="preserve"><value>სწორი სუპერვაიზორის მითითება</value></data>
+</root>

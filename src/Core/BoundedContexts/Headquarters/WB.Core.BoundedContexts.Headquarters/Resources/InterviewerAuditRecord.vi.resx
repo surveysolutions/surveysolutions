@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="CloseInterview" xml:space="preserve"><value>Đóng phỏng vấn</value></data>
+  <data name="CompleteInterview" xml:space="preserve"><value>Hoàn thành phỏng vấn</value></data>
+  <data name="RestartInterview" xml:space="preserve"><value>Khởi động lại phỏng vấn</value></data>
+  <data name="ApproveInterview" xml:space="preserve"><value>Phê duyệt phỏng vấn</value></data>
+  <data name="RejectInterview" xml:space="preserve"><value>Từ chối phỏng vấn</value></data>
+  <data name="RejectInterviewToInterviewer" xml:space="preserve"><value>Trả phỏng vấn cho phỏng vấn viên</value></data>
+  <data name="CreateInterviewFromAssignment" xml:space="preserve"><value>Tạo phỏng vấn từ nhiệm vụ</value></data>
+  <data name="DeleteInterview" xml:space="preserve"><value>Xóa phỏng vấn</value></data>
+  <data name="DetailedActionLog" xml:space="preserve"><value>Nhật ký hành động chi tiết</value></data>
+  <data name="PageTitle" xml:space="preserve"><value>Nhật ký hành động phỏng vấn viên</value></data>
+  <data name="OpenInterview" xml:space="preserve"><value>Mở phỏng vấn</value></data>
+  <data name="SynchronizationCompleted" xml:space="preserve"><value>Đồng bộ hoàn tất</value></data>
+  <data name="SynchronizationFailed" xml:space="preserve"><value>Đồng bộ thất bại</value></data>
+  <data name="SynchronizationCanceled" xml:space="preserve"><value>Đồng bộ bị hủy</value></data>
+  <data name="SynchronizationStarted" xml:space="preserve"><value>Đồng bộ bắt đầu</value></data>
+  <data name="Login" xml:space="preserve"><value>Đăng nhập</value></data>
+  <data name="Logout" xml:space="preserve"><value>Đăng xuất</value></data>
+  <data name="Relink" xml:space="preserve"><value>Kết nối lại</value></data>
+  <data name="AnswerSet" xml:space="preserve"><value>Đã đặt câu trả lời</value></data>
+  <data name="AnswerRemoved" xml:space="preserve"><value>Đã xóa câu trả lời</value></data>
+  <data name="CommentSet" xml:space="preserve"><value>Đã đặt nhận xét</value></data>
+  <data name="InterviewKeyAssigned" xml:space="preserve"><value>Đã gán khóa phỏng vấn</value></data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve"><value>Phỏng vấn viên đã nhận phỏng vấn</value></data>
+  <data name="InterviewReceivedBySupervisor" xml:space="preserve"><value>Giám sát viên đã nhận phỏng vấn</value></data>
+  <data name="GpsRequested" xml:space="preserve"><value>Đã yêu cầu GPS</value></data>
+  <data name="GpsLocationObtained" xml:space="preserve"><value>Đã lấy được vị trí GPS</value></data>
+  <data name="AudioToggled" xml:space="preserve"><value>Đã bật/tắt âm thanh</value></data>
+  <data name="DownloadTabLog" xml:space="preserve"><value>Tải xuống nhật ký đầy đủ định dạng Tab</value></data>
+  <data name="RecordsMissing" xml:space="preserve"><value>Chưa có bản ghi</value></data>
+  <data name="OpenApplication" xml:space="preserve"><value>Ứng dụng đã mở</value></data>
+  <data name="AssignResponsibleToInterview" xml:space="preserve"><value>Gán người chịu trách nhiệm {0} cho phỏng vấn {1}</value></data>
+  <data name="AssignResponsibleToAssignment" xml:space="preserve"><value>Gán người chịu trách nhiệm {0} cho nhiệm vụ #{1}</value></data>
+  <data name="FinishInstallation" xml:space="preserve"><value>Cài đặt hoàn tất</value></data>
+  <data name="ShowPrevious7Days" xml:space="preserve"><value>Hiển thị 7 ngày hoạt động trước</value></data>
+  <data name="SynchronizationCompleted_InterviewsUploaded" xml:space="preserve"><value>Đã tải lên {0} phỏng vấn</value></data>
+  <data name="SynchronizationCompleted_InterviewsRemoved" xml:space="preserve"><value>Đã xóa {0} phỏng vấn</value></data>
+  <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve"><value>Đã tải xuống {0} phỏng vấn một phần</value></data>
+  <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve"><value>Đã tải lên {0} phỏng vấn một phần</value></data>
+  <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve"><value>Đã mở lại {0} phỏng vấn sau khi nhận nhận xét</value></data>
+  <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve"><value>Đã từ chối {0} phỏng vấn</value></data>
+  <data name="SynchronizationCompleted_NewInterviewsDownloaded" xml:space="preserve"><value>Đã tải xuống {0} phỏng vấn mới</value></data>
+  <data name="SynchronizationCompleted_NewAssignmentsDownloaded" xml:space="preserve"><value>Đã tải xuống {0} nhiệm vụ mới</value></data>
+  <data name="SynchronizationCompleted_AssignmentsRemoved" xml:space="preserve"><value>Đã xóa {0} nhiệm vụ</value></data>
+  <data name="SynchronizationCompleted_NothingToSync" xml:space="preserve"><value>không có gì để đồng bộ</value></data>
+  <data name="SynchronizationCompleted_InterviewsUpdatedFromHQ" xml:space="preserve"><value>Đã cập nhật {0} phỏng vấn từ Văn phòng trung tâm</value></data>
+  <data name="SynchronizationCompleted_InterviewsDownloaded" xml:space="preserve"><value>Đã tải xuống {0} phỏng vấn mới</value></data>
+  <data name="SynchronizationCompleted_AssignmentsDownloaded" xml:space="preserve"><value>Đã tải xuống {0} nhiệm vụ mới</value></data>
+  <data name="SwitchInterviewMode" xml:space="preserve"><value>Phỏng vấn {0} chuyển sang chế độ {1}</value></data>
+</root>

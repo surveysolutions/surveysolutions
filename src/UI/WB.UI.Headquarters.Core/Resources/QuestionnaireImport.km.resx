@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="BeforeSignInToDesigner" xml:space="preserve"><value>មុនពេលចូល Designer</value></data>
+  <data name="LoginToDesignerError" xml:space="preserve"><value>កំហុសក្នុងការចូល Designer</value></data>
+  <data name="SignInToDesigner" xml:space="preserve"><value>ចូល Designer</value></data>
+  <data name="SignInToDesignerTitle" xml:space="preserve"><value>ចូល Designer</value></data>
+  <data name="DesignerQuestionnaires" xml:space="preserve"><value>កម្រងសំណួររបស់ Designer</value></data>
+  <data name="ImportModeTitle" xml:space="preserve"><value>របៀបនាំចូល</value></data>
+  <data name="ImportModePageTitle" xml:space="preserve"><value>នាំចូលកម្រងសំណួរ</value></data>
+  <data name="ListOfMyQuestionnaires" xml:space="preserve"><value>បញ្ជីកម្រងសំណួររបស់ខ្ញុំ</value></data>
+  <data name="Chapters" xml:space="preserve"><value>ជំពូក</value></data>
+  <data name="CreatedAt" xml:space="preserve"><value>បានបង្កើតនៅ</value></data>
+  <data name="QuestionnaireOwner" xml:space="preserve"><value>ម្ចាស់កម្រងសំណួរ</value></data>
+  <data name="LastModified" xml:space="preserve"><value>បានកែប្រែចុងក្រោយ</value></data>
+  <data name="Questionnaire" xml:space="preserve"><value>កម្រងសំណួរ</value></data>
+  <data name="Questions" xml:space="preserve"><value>សំណួរ</value></data>
+  <data name="Status" xml:space="preserve"><value>ស្ថានភាព</value></data>
+  <data name="Version" xml:space="preserve"><value>កំណែ</value></data>
+  <data name="Import" xml:space="preserve"><value>នាំចូល</value></data>
+  <data name="ImportQuestionnaire" xml:space="preserve"><value>នាំចូលកម្រងសំណួរ</value></data>
+  <data name="Cancel" xml:space="preserve"><value>បោះបង់</value></data>
+  <data name="CancelImport" xml:space="preserve"><value>បោះបង់ការនាំចូល</value></data>
+  <data name="ImportInProgress" xml:space="preserve"><value>ការនាំចូលកំពុងដំណើរការ</value></data>
+  <data name="ImportCompleted" xml:space="preserve"><value>ការនាំចូលបានបញ្ចប់</value></data>
+  <data name="ImportFailed" xml:space="preserve"><value>ការនាំចូលបានបរាជ័យ</value></data>
+  <data name="ViewQuestionnaire" xml:space="preserve"><value>មើលកម្រងសំណួរ</value></data>
+  <data name="ViewInDesigner" xml:space="preserve"><value>មើលក្នុង Designer</value></data>
+  <data name="ImportAnother" xml:space="preserve"><value>នាំចូលផ្សេងទៀត</value></data>
+  <data name="SharedWithMe" xml:space="preserve"><value>ចែករំលែកជាមួយខ្ញុំ</value></data>
+  <data name="PublicQuestionnaires" xml:space="preserve"><value>កម្រងសំណួរសាធារណៈ</value></data>
+  <data name="Filter" xml:space="preserve"><value>ត្រង</value></data>
+  <data name="Search" xml:space="preserve"><value>ស្វែងរក</value></data>
+  <data name="Importing" xml:space="preserve"><value>កំពុងនាំចូល {{percent}}%</value></data>
+  <data name="Prepare" xml:space="preserve"><value>ការទទួលទិន្នន័យកម្រងសំណួរ</value></data>
+  <data name="Gropus" xml:space="preserve"><value>ក្រុម</value></data>
+  <data name="LastModifiedAt" xml:space="preserve"><value>បានកែប្រែចុងក្រោយ</value></data>
+  <data name="QuestionsWithConditions" xml:space="preserve"><value>សំណួរជាមួយលក្ខខណ្ឌ</value></data>
+  <data name="Rosters" xml:space="preserve"><value>បញ្ជី</value></data>
+  <data name="QuestionnaireExists" xml:space="preserve"><value>កម្រងសំណួរមានរួចហើយ</value></data>
+  <data name="ImportAsNewVersion" xml:space="preserve"><value>នាំចូលជាកំណែថ្មី</value></data>
+  <data name="RegularImportTitle" xml:space="preserve"><value>នាំចូលកម្រងសំណួរ</value></data>
+  <data name="RegularImportSubTitle" xml:space="preserve"><value>ជ្រើសរើសកម្រងសំណួរសម្រាប់នាំចូល</value></data>
+  <data name="MyQuestionnairesTitle" xml:space="preserve"><value>កម្រងសំណួររបស់ខ្ញុំ</value></data>
+  <data name="UpgradeAssignments" xml:space="preserve"><value>ធ្វើឱ្យប្រសើរការចាត់ការ</value></data>
+  <data name="UpgradeInterviews" xml:space="preserve"><value>ធ្វើឱ្យប្រសើរការសំភាសន៍</value></data>
+  <data name="NewVersion" xml:space="preserve"><value>កំណែថ្មី</value></data>
+  <data name="OldVersion" xml:space="preserve"><value>កំណែចាស</value></data>
+  <data name="UpgradeTitle" xml:space="preserve"><value>ធ្វើឱ្យប្រសើរ</value></data>
+  <data name="UpgradeSubTitle" xml:space="preserve"><value>ជ្រើសរើសកម្រងសំណួរដើម្បីធ្វើឱ្យប្រសើរ</value></data>
+  <data name="NoQuestionnaires" xml:space="preserve"><value>គ្មានកម្រងសំណួរ</value></data>
+</root>

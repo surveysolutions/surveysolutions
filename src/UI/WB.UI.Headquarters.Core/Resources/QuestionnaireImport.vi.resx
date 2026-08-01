@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="BeforeSignInToDesigner" xml:space="preserve"><value>Trước khi đăng nhập vào Designer</value></data>
+  <data name="LoginToDesignerError" xml:space="preserve"><value>Lỗi khi đăng nhập vào Designer</value></data>
+  <data name="SignInToDesigner" xml:space="preserve"><value>Đăng nhập vào Designer</value></data>
+  <data name="SignInToDesignerTitle" xml:space="preserve"><value>Đăng nhập vào Designer</value></data>
+  <data name="DesignerQuestionnaires" xml:space="preserve"><value>Bảng câu hỏi Designer</value></data>
+  <data name="ImportModeTitle" xml:space="preserve"><value>Chế độ nhập</value></data>
+  <data name="ImportModePageTitle" xml:space="preserve"><value>Nhập bảng câu hỏi</value></data>
+  <data name="ListOfMyQuestionnaires" xml:space="preserve"><value>Danh sách bảng câu hỏi của tôi</value></data>
+  <data name="Chapters" xml:space="preserve"><value>Chương</value></data>
+  <data name="CreatedAt" xml:space="preserve"><value>Tạo ngày</value></data>
+  <data name="QuestionnaireOwner" xml:space="preserve"><value>Chủ sở hữu bảng câu hỏi</value></data>
+  <data name="LastModified" xml:space="preserve"><value>Sửa đổi lần cuối</value></data>
+  <data name="Questionnaire" xml:space="preserve"><value>Bảng câu hỏi</value></data>
+  <data name="Questions" xml:space="preserve"><value>Câu hỏi</value></data>
+  <data name="Status" xml:space="preserve"><value>Trạng thái</value></data>
+  <data name="Version" xml:space="preserve"><value>Phiên bản</value></data>
+  <data name="Import" xml:space="preserve"><value>Nhập</value></data>
+  <data name="ImportQuestionnaire" xml:space="preserve"><value>Nhập bảng câu hỏi</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Hủy</value></data>
+  <data name="CancelImport" xml:space="preserve"><value>Hủy nhập</value></data>
+  <data name="ImportInProgress" xml:space="preserve"><value>Đang nhập</value></data>
+  <data name="ImportCompleted" xml:space="preserve"><value>Nhập hoàn tất</value></data>
+  <data name="ImportFailed" xml:space="preserve"><value>Nhập thất bại</value></data>
+  <data name="ViewQuestionnaire" xml:space="preserve"><value>Xem bảng câu hỏi</value></data>
+  <data name="ViewInDesigner" xml:space="preserve"><value>Xem trong Designer</value></data>
+  <data name="ImportAnother" xml:space="preserve"><value>Nhập khác</value></data>
+  <data name="SharedWithMe" xml:space="preserve"><value>Chia sẻ với tôi</value></data>
+  <data name="PublicQuestionnaires" xml:space="preserve"><value>Bảng câu hỏi công khai</value></data>
+  <data name="Filter" xml:space="preserve"><value>Lọc</value></data>
+  <data name="Search" xml:space="preserve"><value>Tìm kiếm</value></data>
+  <data name="Importing" xml:space="preserve"><value>Đang nhập {{percent}}%</value></data>
+  <data name="Prepare" xml:space="preserve"><value>Đang nhận dữ liệu bảng câu hỏi</value></data>
+  <data name="Gropus" xml:space="preserve"><value>Nhóm</value></data>
+  <data name="LastModifiedAt" xml:space="preserve"><value>Sửa đổi lần cuối vào</value></data>
+  <data name="QuestionsWithConditions" xml:space="preserve"><value>Câu hỏi có điều kiện</value></data>
+  <data name="Rosters" xml:space="preserve"><value>Danh sách</value></data>
+  <data name="QuestionnaireExists" xml:space="preserve"><value>Bảng câu hỏi đã tồn tại</value></data>
+  <data name="ImportAsNewVersion" xml:space="preserve"><value>Nhập như phiên bản mới</value></data>
+  <data name="RegularImportTitle" xml:space="preserve"><value>Nhập bảng câu hỏi</value></data>
+  <data name="RegularImportSubTitle" xml:space="preserve"><value>Chọn bảng câu hỏi để nhập</value></data>
+  <data name="MyQuestionnairesTitle" xml:space="preserve"><value>Bảng câu hỏi của tôi</value></data>
+  <data name="UpgradeAssignments" xml:space="preserve"><value>Nâng cấp nhiệm vụ</value></data>
+  <data name="UpgradeInterviews" xml:space="preserve"><value>Nâng cấp phỏng vấn</value></data>
+  <data name="NewVersion" xml:space="preserve"><value>Phiên bản mới</value></data>
+  <data name="OldVersion" xml:space="preserve"><value>Phiên bản cũ</value></data>
+  <data name="UpgradeTitle" xml:space="preserve"><value>Nâng cấp</value></data>
+  <data name="UpgradeSubTitle" xml:space="preserve"><value>Chọn bảng câu hỏi để nâng cấp</value></data>
+  <data name="NoQuestionnaires" xml:space="preserve"><value>Không có bảng câu hỏi</value></data>
+</root>

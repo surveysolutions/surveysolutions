@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="CloseInterview" xml:space="preserve"><value>გასაუბრების დახურვა</value></data>
+  <data name="CompleteInterview" xml:space="preserve"><value>გასაუბრების დასრულება</value></data>
+  <data name="RestartInterview" xml:space="preserve"><value>გასაუბრების გადატვირთვა</value></data>
+  <data name="ApproveInterview" xml:space="preserve"><value>გასაუბრების დამტკიცება</value></data>
+  <data name="RejectInterview" xml:space="preserve"><value>გასაუბრების უარყოფა</value></data>
+  <data name="RejectInterviewToInterviewer" xml:space="preserve"><value>გასაუბრების ინტერვიუერისთვის დაბრუნება</value></data>
+  <data name="CreateInterviewFromAssignment" xml:space="preserve"><value>გასაუბრების შექმნა დავალებიდან</value></data>
+  <data name="DeleteInterview" xml:space="preserve"><value>გასაუბრების წაშლა</value></data>
+  <data name="DetailedActionLog" xml:space="preserve"><value>ვრცელი სამოქმედო ჟურნალი</value></data>
+  <data name="PageTitle" xml:space="preserve"><value>ინტერვიუერის ქმედებების ჟურნალი</value></data>
+  <data name="OpenInterview" xml:space="preserve"><value>გასაუბრების გახსნა</value></data>
+  <data name="SynchronizationCompleted" xml:space="preserve"><value>სინქრონიზაცია დასრულდა</value></data>
+  <data name="SynchronizationFailed" xml:space="preserve"><value>სინქრონიზაცია ვერ შესრულდა</value></data>
+  <data name="SynchronizationCanceled" xml:space="preserve"><value>სინქრონიზაცია გაუქმდა</value></data>
+  <data name="SynchronizationStarted" xml:space="preserve"><value>სინქრონიზაცია დაიწყო</value></data>
+  <data name="Login" xml:space="preserve"><value>შესვლა</value></data>
+  <data name="Logout" xml:space="preserve"><value>გამოსვლა</value></data>
+  <data name="Relink" xml:space="preserve"><value>ხელახლა დაკავშირება</value></data>
+  <data name="AnswerSet" xml:space="preserve"><value>პასუხი დაყენდა</value></data>
+  <data name="AnswerRemoved" xml:space="preserve"><value>პასუხი წაიშალა</value></data>
+  <data name="CommentSet" xml:space="preserve"><value>კომენტარი დაყენდა</value></data>
+  <data name="InterviewKeyAssigned" xml:space="preserve"><value>გასაუბრებას მიენიჭა გასაღები</value></data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve"><value>გასაუბრება ინტერვიუერმა მიიღო</value></data>
+  <data name="InterviewReceivedBySupervisor" xml:space="preserve"><value>გასაუბრება სუპერვაიზორმა მიიღო</value></data>
+  <data name="GpsRequested" xml:space="preserve"><value>GPS მოთხოვილია</value></data>
+  <data name="GpsLocationObtained" xml:space="preserve"><value>GPS მდებარეობა მიღებულია</value></data>
+  <data name="AudioToggled" xml:space="preserve"><value>აუდიო ჩართული/გამორთული</value></data>
+  <data name="DownloadTabLog" xml:space="preserve"><value>სრული ჟურნალის ჩამოტვირთვა Tab ფორმატში</value></data>
+  <data name="RecordsMissing" xml:space="preserve"><value>ჩანაწერები ჯერ არ არის</value></data>
+  <data name="OpenApplication" xml:space="preserve"><value>აპლიკაცია გაიხსნა</value></data>
+  <data name="AssignResponsibleToInterview" xml:space="preserve"><value>პასუხისმგებელი {0} დაინიშნა გასაუბრებაზე {1}</value></data>
+  <data name="AssignResponsibleToAssignment" xml:space="preserve"><value>პასუხისმგებელი {0} დაინიშნა დავალებაზე #{1}</value></data>
+  <data name="FinishInstallation" xml:space="preserve"><value>ინსტალაცია დასრულდა</value></data>
+  <data name="ShowPrevious7Days" xml:space="preserve"><value>გასული 7 აქტიური დღის ჩვენება</value></data>
+  <data name="SynchronizationCompleted_InterviewsUploaded" xml:space="preserve"><value>{0} გასაუბრება ატვირთულია</value></data>
+  <data name="SynchronizationCompleted_InterviewsRemoved" xml:space="preserve"><value>{0} გასაუბრება ამოღებულია</value></data>
+  <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve"><value>{0} გასაუბრება ნაწილობრივ ჩამოტვირთულია</value></data>
+  <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve"><value>{0} გასაუბრება ნაწილობრივ ატვირთულია</value></data>
+  <data name="SynchronizationCompleted_InterviewsReopened" xml:space="preserve"><value>{0} გასაუბრება ხელახლა გაიხსნა კომენტარების მიღების შემდეგ</value></data>
+  <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve"><value>{0} გასაუბრება უარყოფილია</value></data>
+  <data name="SynchronizationCompleted_NewInterviewsDownloaded" xml:space="preserve"><value>{0} ახალი გასაუბრება ჩამოტვირთულია</value></data>
+  <data name="SynchronizationCompleted_NewAssignmentsDownloaded" xml:space="preserve"><value>{0} ახალი დავალება ჩამოტვირთულია</value></data>
+  <data name="SynchronizationCompleted_AssignmentsRemoved" xml:space="preserve"><value>{0} დავალება ამოღებულია</value></data>
+  <data name="SynchronizationCompleted_NothingToSync" xml:space="preserve"><value>სინქრონიზაციისთვის არაფერია</value></data>
+  <data name="SynchronizationCompleted_InterviewsUpdatedFromHQ" xml:space="preserve"><value>{0} გასაუბრება განახლდა სათაო ოფისიდან</value></data>
+<data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve"><value>{0} გასაუბრება ხელახლა გაიხსნა კომენტარების მიღების შემდეგ</value></data><data name="SynchronizationCompleted_InterviewsDownloaded" xml:space="preserve"><value>{0} ახალი გასაუბრება ჩამოტვირთულია</value></data><data name="SynchronizationCompleted_AssignmentsDownloaded" xml:space="preserve"><value>{0} ახალი დავალება ჩამოტვირთულია</value></data><data name="SwitchInterviewMode" xml:space="preserve"><value>გასაუბრება {0} გადაიყვანა {1} რეჟიმში</value></data></root>

@@ -1,0 +1,364 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="LookupTableAlreadyExist" xml:space="preserve">
+        <value>Bảng tra cứu có id như vậy đã tồn tại.</value>
+        </data>
+    <data name="LookupTableIsAbsent" xml:space="preserve">
+        <value>Bảng tra cứu có id như vậy không có.</value>
+        </data>
+    <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
+        <value>Không thể tải tệp không có dữ liệu</value>
+        </data>
+    <data name="LookupTables_data_value_cannot_be_parsed" xml:space="preserve">
+        <value>Giá trị {0} không thể được phân tích cú pháp dưới dạng số thập phân. Cột {1}, hàng {2}.</value>
+        </data>
+    <data name="LookupTables_empty_or_invalid_header_are_not_allowed" xml:space="preserve">
+        <value>Tiêu đề trống hoặc không hợp lệ không được phép</value>
+        </data>
+    <data name="LookupTables_rowcode_column_is_mandatory" xml:space="preserve">
+        <value>Cột mã hàng bắt buộc bị thiếu</value>
+        </data>
+    <data name="LookupTables_rowcode_values_must_be_unique" xml:space="preserve">
+        <value>Giá trị mã hàng phải là duy nhất</value>
+        </data>
+    <data name="LookupTables_rowcode_value_cannot_be_parsed" xml:space="preserve">
+        <value>Giá trị {0} không thể được phân tích cú pháp dưới dạng số nguyên dài. Cột {1}, hàng {2}.</value>
+        </data>
+    <data name="LookupTables_too_many_columns" xml:space="preserve">
+        <value>Quá nhiều cột trong tệp đã tải lên. Số cột tối đa là {0}</value>
+        </data>
+    <data name="LookupTables_too_many_rows" xml:space="preserve">
+        <value>Bảng tra cứu chứa {1} hàng, vượt quá giới hạn về số lượng hàng trong bảng tra cứu ({0} hàng).</value>
+        </data>
+    <data name="MacroAlreadyExist" xml:space="preserve">
+        <value>Macro đã tồn tại.</value>
+        </data>
+    <data name="MacroIsAbsent" xml:space="preserve">
+        <value>Macro vắng mặt.</value>
+        </data>
+    <data name="CriticalRuleAlreadyExist" xml:space="preserve">
+        <value>Quy tắc quan trọng đã tồn tại.</value>
+        </data>
+    <data name="CriticalRuleIsAbsent" xml:space="preserve">
+        <value>Quy tắc quan trọng vắng mặt.</value>
+        </data>
+    <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
+        <value>Tiêu đề có cùng tên không được phép</value>
+        </data>
+    <data name="Attachments_uploaded_file_is_not_image" xml:space="preserve">
+        <value>Tệp được tải lên không phải là hình ảnh</value>
+        </data>
+    <data name="Attachments_uploaded_file_image_is_too_big" xml:space="preserve">
+        <value>Kích thước hình ảnh quá lớn</value>
+        </data>
+    <data name="Attachments_Unsupported_content" xml:space="preserve">
+        <value>Nội dung tải lên không được hỗ trợ</value>
+        </data>
+    <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
+        <value>Bạn không thể chuyển sang tiểu mục {0} vì nó ở vị trí {1} không được chấp nhận.</value>
+        </data>
+    <data name="ComboboxCannotBeFound" xml:space="preserve">
+        <value>Không thể tìm thấy câu hỏi trong hộp tổ hợp với khóa chung {0}</value>
+        </data>
+    <data name="ItemWithIdExistsAlready" xml:space="preserve">
+        <value>Một hoặc nhiều mục câu hỏi có cùng ID {0} đã tồn tại.</value>
+        </data>
+    <data name="MoreThanOneSubSectionWithSameId" xml:space="preserve">
+        <value>Một hoặc nhiều tiểu mục có cùng ID {0} đã tồn tại:{1}_TK2__.</value>
+        </data>
+    <data name="NoPremissionsToEditQuestionnaire" xml:space="preserve">
+        <value>Bạn không có quyền thay đổi bảng câu hỏi này</value>
+        </data>
+    <data name="TranslationIsNotFull" xml:space="preserve">
+        <value>Bản dịch chưa đầy đủ và không bao gồm tất cả các văn bản cần thiết cho mọi thành phần</value>
+        </data>
+    <data name="CategoryTranslationIsNotFull" xml:space="preserve">
+        <value>Bản dịch danh mục "{0}" chưa đầy đủ và không bao gồm tất cả các văn bản tùy chọn</value>
+        </data>
+    <data name="QuestionCannotBeFound" xml:space="preserve">
+        <value>Không thể tìm thấy câu hỏi có khóa công khai {0}.</value>
+        </data>
+    <data name="QuestionIsNotCombobox" xml:space="preserve">
+        <value>Câu hỏi {0} không phải là combo box</value>
+        </data>
+    <data name="QuestionnaireCantBeFound" xml:space="preserve">
+        <value>Không thể tìm thấy mục câu hỏi có id {0}.</value>
+        </data>
+    <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
+        <value>Tiêu đề của bảng câu hỏi không được để trống hoặc chỉ chứa khoảng trắng.</value>
+        </data>
+    <data name="QuestionnaireSuportedNewCover" xml:space="preserve">
+        <value>Bảng câu hỏi đã hỗ trợ trang bìa.</value>
+        </data>
+    <data name="SubSectionCantBeFound" xml:space="preserve">
+        <value>Không thể tìm thấy phần phụ có khóa chung {0}.</value>
+        </data>
+    <data name="SubSectionDepthLimit" xml:space="preserve">
+        <value>Độ sâu của phần phụ hoặc danh sách không được cao hơn {0}.</value>
+        </data>
+    <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
+        <value>Phần không thể có nhiều hơn {0} mục con</value>
+        </data>
+    <data name="SubsectionCantHaveMoreThan_DirectChildren" xml:space="preserve">
+        <value>Mục hoặc tiểu mục không được có nhiều hơn {0} mục con trực tiếp</value>
+        </data>
+    <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
+        <value>Một hoặc nhiều câu hỏi có cùng ID {0} đã tồn tại:{1}_TK2__.</value>
+        </data>
+    <data name="CantPasteQuestion" xml:space="preserve">
+        <value>Câu hỏi không thể được dán ở đây.</value>
+        </data>
+    <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
+        <value>Không thể xóa phần hiện có cuối cùng khỏi bảng câu hỏi</value>
+        </data>
+    <data name="CantRemoveCoverPageInQuestionnaire" xml:space="preserve">
+        <value>Không thể xóa phần bìa khỏi bảng câu hỏi</value>
+        </data>
+    <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
+        <value>Phần bìa phải là phần đầu tiên trong bảng câu hỏi</value>
+        </data>
+    <data name="CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables" xml:space="preserve">
+        <value>Phần bìa chỉ có thể chứa câu hỏi, văn bản tĩnh và biến</value>
+        </data>
+    <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
+        <value>Đây là phần Bìa chỉ đọc. Bạn không thể chỉnh sửa hoặc sắp xếp lại các câu hỏi trong đó.</value>
+        </data>
+    <data name="CantRemoveUserFromTheList" xml:space="preserve">
+        <value>Không thể xóa người dùng vì nó không tồn tại trong danh sách chia sẻ</value>
+        </data>
+    <data name="FailedToAddGroup" xml:space="preserve">
+        <value>Không thể thêm nhóm {0} vào nhóm {1}. Nhưng nhóm {1} không tồn tại trong tài liệu {2}</value>
+        </data>
+    <data name="ImportOfDeletedQuestionnaire" xml:space="preserve">
+        <value>Đang cố gắng nhập mẫu bảng câu hỏi đã xóa</value>
+        </data>
+    <data name="InvalidFixedTitle" xml:space="preserve">
+        <value>Danh sách tiêu đề không hợp lệ</value>
+        </data>
+    <data name="InvalidValueOfFixedTitle" xml:space="preserve">
+        <value>Bắt buộc phải có giá trị không trống cho tiêu đề danh sách cố định</value>
+        </data>
+    <data name="OnlyQuestionnaireDocumentsAreSupported" xml:space="preserve">
+        <value>Hiện tại chỉ hỗ trợ Tài liệu bảng câu hỏi</value>
+        </data>
+    <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
+        <value>Không thể tìm thấy bảng câu hỏi {0} của phiên bản {1}</value>
+        </data>
+    <data name="QuestionTypeIsNotSupported" xml:space="preserve">
+        <value>Loại câu hỏi không được hỗ trợ: {0}</value>
+        </data>
+    <data name="RosterCantBePaste" xml:space="preserve">
+        <value>Danh sách không thể được dán ở đây.</value>
+        </data>
+    <data name="StaticTextCantBePaste" xml:space="preserve">
+        <value>Văn bản tĩnh không thể được dán ở đây.</value>
+        </data>
+    <data name="UnknownTypeCantBePaste" xml:space="preserve">
+        <value>Loại mục không xác định. Dán không thành công.</value>
+        </data>
+    <data name="UserIsInTheList" xml:space="preserve">
+        <value>Người dùng {0} đã tồn tại trong danh sách chia sẻ.</value>
+        </data>
+    <data name="InvalidUserInfo" xml:space="preserve">
+        <value>Thông tin người dùng không hợp lệ.</value>
+        </data>
+    <data name="UserIsOwner" xml:space="preserve">
+        <value>Người dùng {0} là chủ sở hữu của bảng câu hỏi này. Vui lòng nhập email khác.</value>
+        </data>
+    <data name="ValueOfFixedTitleCantBeParsed" xml:space="preserve">
+        <value>Giá trị danh sách tập hợp các mục đã sửa chỉ được có ký tự số</value>
+        </data>
+    <data name="VariableCantBePaste" xml:space="preserve">
+        <value>Biến không thể được dán ở đây.</value>
+        </data>
+    <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
+        <value>Các danh mục trong câu hỏi xếp tầng không được để trống cột ParentValue.</value>
+        </data>
+    <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
+        <value>Các danh mục trong câu hỏi xếp tầng không được có giá trị số trong cột ParentValue.</value>
+        </data>
+    <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+        <value>Có ít nhất một bản sao của cặp "Tiêu đề" và "Giá trị gốc". Danh sách không được chứa bất kỳ bản sao nào.</value>
+        </data>
+    <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
+        <value>Giá trị danh mục chỉ được có ký tự số</value>
+        </data>
+    <data name="AttachmentIdIsMissing" xml:space="preserve">
+        <value>Thiếu tệp đính kèm có id {0}</value>
+        </data>
+    <data name="LookupTableHasEmptyContent" xml:space="preserve">
+        <value>Bảng tra cứu id {0} không có nội dung</value>
+        </data>
+    <data name="LookupTableIsMissing" xml:space="preserve">
+        <value>Bảng tra cứu có id {0} bị thiếu</value>
+        </data>
+    <data name="OldAttachmentIdIsEmpty" xml:space="preserve">
+        <value>Id tệp đính kèm cũ trống và không có tệp đính kèm {0} trong bảng câu hỏi {1}</value>
+        </data>
+    <data name="ProvidedFileHasErrors" xml:space="preserve">
+        <value>Tìm thấy lỗi trong tập tin được cung cấp</value>
+        </data>
+    <data name="TranlationExcelFileHasErrors" xml:space="preserve">
+        <value>Tìm thấy lỗi trong file excel</value>
+        </data>
+    <data name="TranslationCellIndexIsInvalid" xml:space="preserve">
+        <value>{0} có chỉ mục không hợp lệ tại [{1}]</value>
+        </data>
+    <data name="TranslationCellTypeIsInvalid" xml:space="preserve">
+        <value>{0} có loại không hợp lệ [{1}]</value>
+        </data>
+    <data name="TranslationCel_A_lIsInvalid" xml:space="preserve">
+        <value>{0} có id không hợp lệ tại [{1}]</value>
+        </data>
+    <data name="TranslationFileIsEmpty" xml:space="preserve">
+        <value>Tệp Excel trống - không chứa bảng tính</value>
+        </data>
+    <data name="TranslationsCantBeExtracted" xml:space="preserve">
+        <value>Không thể trích xuất bản dịch từ tệp đã tải lên</value>
+        </data>
+    <data name="CategoriesCantBeExtracted" xml:space="preserve">
+        <value>Không thể trích xuất danh mục từ tệp đã tải lên</value>
+        </data>
+    <data name="TranslationWorksheetIsMissing" xml:space="preserve">
+        <value>Không tìm thấy bảng tính có bản dịch</value>
+        </data>
+    <data name="VariableWithIdWasNotFound" xml:space="preserve">
+        <value>Biến có id {0} không được tìm thấy trong bảng câu hỏi {1}</value>
+        </data>
+    <data name="RequiredHeaderWasNotFound" xml:space="preserve">
+        <value>Không tìm thấy tiêu đề {0} trong tệp excel</value>
+        </data>
+    <data name="HeaderWasNotFound" xml:space="preserve">
+        <value>Không tìm thấy tiêu đề trong tập tin</value>
+        </data>
+    <data name="NoParentCascadingOptions" xml:space="preserve">
+        <value>Không tìm thấy danh mục nào cho câu hỏi xếp tầng dành cho phụ huynh '{0}'</value>
+        </data>
+    <data name="Column" xml:space="preserve">
+        <value>cột</value>
+        </data>
+    <data name="Row" xml:space="preserve">
+        <value>hàng ngang</value>
+        </data>
+    <data name="ImportOptions_MissingRequiredColumns" xml:space="preserve">
+        <value>Một số cột bị thiếu. Đảm bảo rằng bạn tải lên tệp có các cột bắt buộc</value>
+        </data>
+    <data name="ImportOptions_EmptyValue" xml:space="preserve">
+        <value>Giá trị trống</value>
+        </data>
+    <data name="ImportOptions_NotNumber" xml:space="preserve">
+        <value>Giá trị số nguyên 32 bit không hợp lệ '{0}'. Giá trị phải nằm trong khoảng -2147483647 đến 2147483647</value>
+        </data>
+    <data name="ImportOptions_ParentValueNotFound" xml:space="preserve">
+        <value>Câu hỏi dành cho phụ huynh không có danh mục có giá trị '{0}'</value>
+        </data>
+    <data name="ImportOptions_DuplicateByTitleAndParentIds" xml:space="preserve">
+        <value>Danh mục trùng lặp '{0}' với giá trị gốc '{1}'</value>
+        </data>
+    <data name="ImportOptions_DuplicatedParentValues" xml:space="preserve">
+        <value>Câu hỏi dành cho phụ huynh '{0}' có {1} danh mục có giá trị '{2}'</value>
+        </data>
+    <data name="ImportOptions_TitleTooLong" xml:space="preserve">
+        <value>Tiêu đề quá dài. Độ dài tiêu đề phải nhỏ hơn {0}</value>
+        </data>
+    <data name="ImportOptions_AttachmentNameTooLong" xml:space="preserve">
+        <value>Tên tệp đính kèm quá dài. Tên tệp đính kèm phải nhỏ hơn {0}</value>
+        </data>
+    <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
+        <value>Danh mục trùng lặp '{0}' có giá trị '{1}'</value>
+        </data>
+    <data name="Excel_Categories_Int_Invalid" xml:space="preserve">
+        <value>[{0}] Giá trị số không hợp lệ</value>
+        </data>
+    <data name="Excel_Categories_Empty_Text" xml:space="preserve">
+        <value>[{0}] Tiêu đề trống</value>
+        </data>
+    <data name="Excel_Categories_Empty_Value" xml:space="preserve">
+        <value>[{0}] Giá trị trống</value>
+        </data>
+    <data name="Excel_Categories_Duplicated" xml:space="preserve">
+        <value>Danh mục trùng lặp trong hàng: {0}</value>
+        </data>
+    <data name="Excel_Categories_Empty_ParentId" xml:space="preserve">
+        <value>Một số danh mục không có id gốc</value>
+        </data>
+    <data name="Excel_Categories_More_Than_Limit" xml:space="preserve">
+        <value>Bộ danh mục có nhiều hơn {0} danh mục</value>
+        </data>
+    <data name="Excel_NoCategories" xml:space="preserve">
+        <value>Không có danh mục nào trong tập tin</value>
+        </data>
+    <data name="Excel_Categories_Less_2_Options" xml:space="preserve">
+        <value>Bộ danh mục phải có ít nhất 2 danh mục</value>
+        </data>
+    <data name="Excel_Categories_Text_More_Than_250" xml:space="preserve">
+        <value>[{0}] Văn bản của danh mục phải ít hơn 250 ký tự</value>
+        </data>
+    <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
+        <value>Chỉ chấp nhận các tệp có giá trị được phân tách bằng tab (*.tab, *.txt, *.tsv) hoặc excel (*.xslx, *.xls, *.ods)</value>
+        </data>
+    <data name="QuestionnaireAlreadySupportedCover" xml:space="preserve">
+        <value>Bảng câu hỏi đã hỗ trợ trang bìa</value>
+        </data>
+    <data name="Questionnaire_CategoriesWereNotFound" xml:space="preserve">
+        <value>Không tìm thấy danh mục</value>
+        </data>
+</root>

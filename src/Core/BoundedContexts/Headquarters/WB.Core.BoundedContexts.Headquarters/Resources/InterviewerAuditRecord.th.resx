@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="CloseInterview" xml:space="preserve"><value>ปิดการสัมภาษณ์</value></data>
+  <data name="CompleteInterview" xml:space="preserve"><value>เสร็จสิ้นการสัมภาษณ์</value></data>
+  <data name="RestartInterview" xml:space="preserve"><value>เริ่มการสัมภาษณ์ใหม่</value></data>
+  <data name="ApproveInterview" xml:space="preserve"><value>อนุมัติการสัมภาษณ์</value></data>
+  <data name="RejectInterview" xml:space="preserve"><value>ปฏิเสธการสัมภาษณ์</value></data>
+  <data name="RejectInterviewToInterviewer" xml:space="preserve"><value>ส่งคืนการสัมภาษณ์ให้ผู้สัมภาษณ์</value></data>
+  <data name="CreateInterviewFromAssignment" xml:space="preserve"><value>สร้างการสัมภาษณ์จากงานมอบหมาย</value></data>
+  <data name="DeleteInterview" xml:space="preserve"><value>ลบการสัมภาษณ์</value></data>
+  <data name="DetailedActionLog" xml:space="preserve"><value>บันทึกการดำเนินการโดยละเอียด</value></data>
+  <data name="PageTitle" xml:space="preserve"><value>บันทึกการดำเนินการของผู้สัมภาษณ์</value></data>
+  <data name="OpenInterview" xml:space="preserve"><value>เปิดการสัมภาษณ์</value></data>
+  <data name="SynchronizationCompleted" xml:space="preserve"><value>ซิงค์เสร็จสมบูรณ์</value></data>
+  <data name="SynchronizationFailed" xml:space="preserve"><value>การซิงค์ล้มเหลว</value></data>
+  <data name="SynchronizationCanceled" xml:space="preserve"><value>ยกเลิกการซิงค์</value></data>
+  <data name="SynchronizationStarted" xml:space="preserve"><value>เริ่มการซิงค์</value></data>
+  <data name="Login" xml:space="preserve"><value>เข้าสู่ระบบ</value></data>
+  <data name="Logout" xml:space="preserve"><value>ออกจากระบบ</value></data>
+  <data name="Relink" xml:space="preserve"><value>เชื่อมต่อใหม่</value></data>
+  <data name="AnswerSet" xml:space="preserve"><value>ตั้งคำตอบแล้ว</value></data>
+  <data name="AnswerRemoved" xml:space="preserve"><value>ลบคำตอบแล้ว</value></data>
+  <data name="CommentSet" xml:space="preserve"><value>ตั้งความคิดเห็นแล้ว</value></data>
+  <data name="InterviewKeyAssigned" xml:space="preserve"><value>กำหนดคีย์การสัมภาษณ์แล้ว</value></data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve"><value>ผู้สัมภาษณ์ได้รับการสัมภาษณ์แล้ว</value></data>
+  <data name="InterviewReceivedBySupervisor" xml:space="preserve"><value>หัวหน้างานได้รับการสัมภาษณ์แล้ว</value></data>
+  <data name="GpsRequested" xml:space="preserve"><value>ร้องขอ GPS แล้ว</value></data>
+  <data name="GpsLocationObtained" xml:space="preserve"><value>ได้รับตำแหน่ง GPS แล้ว</value></data>
+  <data name="AudioToggled" xml:space="preserve"><value>เปิด/ปิดเสียงแล้ว</value></data>
+  <data name="DownloadTabLog" xml:space="preserve"><value>ดาวน์โหลดบันทึกฉบับสมบูรณ์ในรูปแบบ Tab</value></data>
+  <data name="RecordsMissing" xml:space="preserve"><value>ยังไม่มีบันทึก</value></data>
+  <data name="OpenApplication" xml:space="preserve"><value>เปิดแอปพลิเคชัน</value></data>
+  <data name="AssignResponsibleToInterview" xml:space="preserve"><value>กำหนดผู้รับผิดชอบ {0} ให้การสัมภาษณ์ {1}</value></data>
+  <data name="AssignResponsibleToAssignment" xml:space="preserve"><value>กำหนดผู้รับผิดชอบ {0} ให้งานมอบหมาย #{1}</value></data>
+  <data name="FinishInstallation" xml:space="preserve"><value>การติดตั้งเสร็จสิ้น</value></data>
+  <data name="ShowPrevious7Days" xml:space="preserve"><value>แสดง 7 วันที่ใช้งานก่อนหน้า</value></data>
+  <data name="SynchronizationCompleted_InterviewsUploaded" xml:space="preserve"><value>อัปโหลด {0} การสัมภาษณ์</value></data>
+  <data name="SynchronizationCompleted_InterviewsRemoved" xml:space="preserve"><value>ลบ {0} การสัมภาษณ์</value></data>
+  <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve"><value>ดาวน์โหลด {0} การสัมภาษณ์บางส่วน</value></data>
+  <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve"><value>อัปโหลด {0} การสัมภาษณ์บางส่วน</value></data>
+  <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve"><value>เปิด {0} การสัมภาษณ์ใหม่หลังได้รับความคิดเห็น</value></data>
+  <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve"><value>ปฏิเสธ {0} การสัมภาษณ์</value></data>
+  <data name="SynchronizationCompleted_NewInterviewsDownloaded" xml:space="preserve"><value>ดาวน์โหลด {0} การสัมภาษณ์ใหม่</value></data>
+  <data name="SynchronizationCompleted_NewAssignmentsDownloaded" xml:space="preserve"><value>ดาวน์โหลด {0} งานมอบหมายใหม่</value></data>
+  <data name="SynchronizationCompleted_AssignmentsRemoved" xml:space="preserve"><value>ลบ {0} งานมอบหมาย</value></data>
+  <data name="SynchronizationCompleted_NothingToSync" xml:space="preserve"><value>ไม่มีอะไรต้องซิงค์</value></data>
+  <data name="SynchronizationCompleted_InterviewsUpdatedFromHQ" xml:space="preserve"><value>อัปเดต {0} การสัมภาษณ์จากสำนักงานใหญ่</value></data>
+  <data name="SynchronizationCompleted_InterviewsDownloaded" xml:space="preserve"><value>ดาวน์โหลด {0} การสัมภาษณ์ใหม่</value></data>
+  <data name="SynchronizationCompleted_AssignmentsDownloaded" xml:space="preserve"><value>ดาวน์โหลด {0} งานมอบหมายใหม่</value></data>
+  <data name="SwitchInterviewMode" xml:space="preserve"><value>การสัมภาษณ์ {0} สลับไปโหมด {1}</value></data>
+</root>
