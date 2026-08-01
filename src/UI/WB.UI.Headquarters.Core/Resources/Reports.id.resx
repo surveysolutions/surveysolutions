@@ -4,54 +4,54 @@
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <data name="AbsoluteNumbers" xml:space="preserve"><value>Angka absolut</value></data>
-  <data name="AddNewSupervisor" xml:space="preserve"><value>Tambah supervisor baru</value></data>
-  <data name="AllTeams" xml:space="preserve"><value>Semua tim</value></data>
-  <data name="AllQuestionnaires" xml:space="preserve"><value>Semua kuesioner</value></data>
-  <data name="AllVersions" xml:space="preserve"><value>Semua versi</value></data>
+
+
+
+
+
   <data name="ApprovedByHQ" xml:space="preserve"><value>Disetujui oleh Kantor Pusat</value></data>
   <data name="ApprovedBySupervisor" xml:space="preserve"><value>Disetujui oleh Supervisor</value></data>
-  <data name="ByInterviewer" xml:space="preserve"><value>Berdasarkan pewawancara</value></data>
-  <data name="BySupervisor" xml:space="preserve"><value>Berdasarkan supervisor</value></data>
-  <data name="BySupervisorAndInterviewer" xml:space="preserve"><value>Berdasarkan supervisor dan pewawancara</value></data>
-  <data name="Caption" xml:space="preserve"><value>Judul</value></data>
+
+
+
+
   <data name="Completed" xml:space="preserve"><value>Selesai</value></data>
-  <data name="DetailedView" xml:space="preserve"><value>Tampilan terperinci</value></data>
-  <data name="DeviceTypes" xml:space="preserve"><value>Jenis perangkat</value></data>
-  <data name="Download" xml:space="preserve"><value>Unduh</value></data>
-  <data name="EndDate" xml:space="preserve"><value>Tanggal akhir</value></data>
-  <data name="EntryDate" xml:space="preserve"><value>Tanggal masuk</value></data>
-  <data name="ExpandTeam" xml:space="preserve"><value>Perluas tim</value></data>
-  <data name="ExportToExcel" xml:space="preserve"><value>Ekspor ke Excel</value></data>
-  <data name="Filter" xml:space="preserve"><value>Filter</value></data>
-  <data name="FirstQuestion" xml:space="preserve"><value>Pertanyaan pertama</value></data>
-  <data name="GeoLocations" xml:space="preserve"><value>Lokasi geo</value></data>
-  <data name="HideRejected" xml:space="preserve"><value>Sembunyikan yang ditolak</value></data>
-  <data name="Interviewer" xml:space="preserve"><value>Pewawancara</value></data>
+
+
+
+
+
+
+
+
+
+
+
+
   <data name="InterviewerAssigned" xml:space="preserve"><value>Pewawancara ditugaskan</value></data>
   <data name="Interviewers" xml:space="preserve"><value>Pewawancara</value></data>
-  <data name="LastQuestion" xml:space="preserve"><value>Pertanyaan terakhir</value></data>
-  <data name="MaxStatusDuration" xml:space="preserve"><value>Durasi status maks</value></data>
-  <data name="MinStatusDuration" xml:space="preserve"><value>Durasi status min</value></data>
-  <data name="NoTeamSelected" xml:space="preserve"><value>Tidak ada tim dipilih</value></data>
-  <data name="NotStarted" xml:space="preserve"><value>Belum dimulai</value></data>
-  <data name="NumberOfInterviewDays" xml:space="preserve"><value>Jumlah hari wawancara</value></data>
-  <data name="OtherDeviceType" xml:space="preserve"><value>Jenis perangkat lain</value></data>
-  <data name="QuantityTitle" xml:space="preserve"><value>Judul kuantitas</value></data>
-  <data name="QuestionnaireView" xml:space="preserve"><value>Tampilan kuesioner</value></data>
+
+
+
+
+
+
+
+
+
   <data name="RejectedBySupervisor" xml:space="preserve"><value>Ditolak oleh supervisor</value></data>
   <data name="RejectedByHQ" xml:space="preserve"><value>Ditolak oleh Kantor Pusat</value></data>
-  <data name="ReportsTitle" xml:space="preserve"><value>Laporan</value></data>
-  <data name="ResponsibleUser" xml:space="preserve"><value>Pengguna yang bertanggung jawab</value></data>
-  <data name="ShowRejected" xml:space="preserve"><value>Tampilkan yang ditolak</value></data>
-  <data name="StartDate" xml:space="preserve"><value>Tanggal mulai</value></data>
+
+
+
+
   <data name="StatusDuration" xml:space="preserve"><value>Durasi status</value></data>
-  <data name="StatusDurationTitle" xml:space="preserve"><value>Judul durasi status</value></data>
+
   <data name="Supervisor" xml:space="preserve"><value>Supervisor</value></data>
-  <data name="TabletModel" xml:space="preserve"><value>Model tablet</value></data>
-  <data name="TeamView" xml:space="preserve"><value>Tampilan tim</value></data>
+
+
   <data name="Version" xml:space="preserve"><value>Versi</value></data>
-  <data name="SpeedTitle" xml:space="preserve"><value>Judul kecepatan</value></data>
+
     <data name="CumulativeInterviewChart" xml:space="preserve">
         <value>Bagan Wawancara Kumulatif</value>
     </data>

@@ -28,26 +28,26 @@
   <data name="ManualInterviewerCreateLink" xml:space="preserve"><value>ინტერვიუერის ხელით შექმნა</value></data>
   <data name="OptionalInformation" xml:space="preserve"><value>სურვილისამებრ ინფორმაცია</value></data>
   <data name="Password" xml:space="preserve"><value>პაროლი</value></data>
-  <data name="PhoneNumber" xml:space="preserve"><value>ტელეფონის ნომერი</value></data>
+
   <data name="Role" xml:space="preserve"><value>როლი</value></data>
-  <data name="SupervisorColumnDescription" xml:space="preserve"><value>სუპერვაიზორის მომხმარებლის სახელი</value></data>
-  <data name="Upload" xml:space="preserve"><value>ატვირთვა</value></data>
+
+
   <data name="UserName" xml:space="preserve"><value>მომხმარებლის სახელი</value></data>
   <data name="Workspace" xml:space="preserve"><value>სამუშაო სივრცე</value></data>
-  <data name="DownloadErrors" xml:space="preserve"><value>შეცდომების ჩამოტვირთვა</value></data>
-  <data name="ImportCompleted" xml:space="preserve"><value>იმპორტი დასრულდა</value></data>
-  <data name="ImportCompletedStatus" xml:space="preserve"><value>მომხმარებლების იმპორტი დასრულდა</value></data>
-  <data name="ImportFailed" xml:space="preserve"><value>იმპორტი ვერ შესრულდა</value></data>
-  <data name="ImportStarted" xml:space="preserve"><value>იმპორტი დაიწყო</value></data>
-  <data name="ImportStatus" xml:space="preserve"><value>სტატუსი</value></data>
-  <data name="PageTitle" xml:space="preserve"><value>მომხმარებლების ატვირთვა</value></data>
-  <data name="PreloaderTitle" xml:space="preserve"><value>ასატვირთი ფაილი</value></data>
-  <data name="ResponsibleNotFound" xml:space="preserve"><value>პასუხისმგებელი ვერ მოიძებნა</value></data>
-  <data name="TotalCreated" xml:space="preserve"><value>სულ შექმნილია: {0}</value></data>
-  <data name="TotalErrors" xml:space="preserve"><value>სულ შეცდომა: {0}</value></data>
-  <data name="TotalUpdated" xml:space="preserve"><value>სულ განახლებულია: {0}</value></data>
-  <data name="UserCreatedOrUpdated" xml:space="preserve"><value>მომხმარებელი შეიქმნა ან განახლდა</value></data>
-  <data name="UserNameColumnDescription" xml:space="preserve"><value>მომხმარებლის სახელი (სავალდებულო)</value></data>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <data name="Or" xml:space="preserve"><value>ან</value></data>
   <data name="PasswordDescription" xml:space="preserve"><value>პაროლი (მინ. 6 სიმბოლო)</value></data>
   <data name="Phone" xml:space="preserve"><value>ტელეფონი</value></data>
@@ -60,17 +60,17 @@
   <data name="ImportingUserInfo" xml:space="preserve"><value>მომხმარებლის ინფორმაციის იმპორტი</value></data>
   <data name="ReUploadTabFile" xml:space="preserve"><value>ფაილის ხელახლა ატვირთვა</value></data>
   <data name="BackToImport" xml:space="preserve"><value>იმპორტზე დაბრუნება</value></data>
-  <data name="Uploading" xml:space="preserve"><value>ატვირთვა...</value></data>
+  <data name="Uploading" xml:space="preserve"><value>ატვირთვა... {importedUsersCount} {totalUsersToImportCount}</value></data>
   <data name="Cancel" xml:space="preserve"><value>გაუქმება</value></data>
   <data name="Column" xml:space="preserve"><value>სვეტი</value></data>
   <data name="Line" xml:space="preserve"><value>სტრიქონი</value></data>
-  <data name="AllAccountsCreated" xml:space="preserve"><value>ყველა ანგარიში შეიქმნა</value></data>
-  <data name="InterviewersAndSupervisorsCount" xml:space="preserve"><value>{0} ინტერვიუერი, {1} სუპერვაიზორი</value></data>
+  <data name="AllAccountsCreated" xml:space="preserve"><value>ყველა ანგარიში შეიქმნა {total}</value></data>
+  <data name="InterviewersAndSupervisorsCount" xml:space="preserve"><value> ინტერვიუერი,  სუპერვაიზორი {interviewersCount} {supervisorsCount}</value></data>
   <data name="CompleteDescription" xml:space="preserve"><value>მომხმარებლების ატვირთვა დასრულდა</value></data>
   <data name="Questionnaires" xml:space="preserve"><value>კითხვარები</value></data>
-  <data name="UploadInProgress" xml:space="preserve"><value>ატვირთვა მიმდინარეობს</value></data>
+  <data name="UploadInProgress" xml:space="preserve"><value>ატვირთვა მიმდინარეობს {userName}</value></data>
   <data name="UploadInProgressDescription" xml:space="preserve"><value>გთხოვთ დაელოდოთ ატვირთვის დასრულებას</value></data>
-  <data name="EstimatedTime" xml:space="preserve"><value>სავარაუდო დრო</value></data>
+  <data name="EstimatedTime" xml:space="preserve"><value>სავარაუდო დრო {estimatedTime}</value></data>
   <data name="TimeDetermination" xml:space="preserve"><value>დრო განისაზღვრება...</value></data>
   <data name="SelectWorkspace" xml:space="preserve"><value>სამუშაო სივრცის არჩევა</value></data>
   <data name="SelectWorkspaceDescription" xml:space="preserve"><value>სამუშაო სივრცის არჩევა, სადაც მომხმარებლები შეიქმნება</value></data>

@@ -4,28 +4,28 @@
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <data name="AbsoluteNumbers" xml:space="preserve"><value>ตัวเลขสัมบูรณ์</value></data>
-  <data name="AddNewSupervisor" xml:space="preserve"><value>เพิ่มหัวหน้างานใหม่</value></data>
-  <data name="AllTeams" xml:space="preserve"><value>ทุกทีม</value></data>
-  <data name="AllQuestionnaires" xml:space="preserve"><value>แบบสอบถามทั้งหมด</value></data>
-  <data name="AllVersions" xml:space="preserve"><value>ทุกเวอร์ชัน</value></data>
+
+
+
+
+
   <data name="ApprovedByHQ" xml:space="preserve"><value>อนุมัติโดยสำนักงานใหญ่</value></data>
   <data name="ApprovedBySupervisor" xml:space="preserve"><value>อนุมัติโดยหัวหน้างาน</value></data>
-  <data name="ByInterviewer" xml:space="preserve"><value>ตามผู้สัมภาษณ์</value></data>
-  <data name="BySupervisor" xml:space="preserve"><value>ตามหัวหน้างาน</value></data>
-  <data name="Caption" xml:space="preserve"><value>คำอธิบาย</value></data>
+
+
+
   <data name="Completed" xml:space="preserve"><value>เสร็จสมบูรณ์</value></data>
-  <data name="DetailedView" xml:space="preserve"><value>มุมมองรายละเอียด</value></data>
-  <data name="Download" xml:space="preserve"><value>ดาวน์โหลด</value></data>
-  <data name="EndDate" xml:space="preserve"><value>วันที่สิ้นสุด</value></data>
-  <data name="Filter" xml:space="preserve"><value>กรอง</value></data>
-  <data name="Interviewer" xml:space="preserve"><value>ผู้สัมภาษณ์</value></data>
+
+
+
+
+
   <data name="Interviewers" xml:space="preserve"><value>ผู้สัมภาษณ์</value></data>
-  <data name="NotStarted" xml:space="preserve"><value>ยังไม่เริ่ม</value></data>
-  <data name="NumberOfInterviewDays" xml:space="preserve"><value>จำนวนวันที่สัมภาษณ์</value></data>
-  <data name="ReportsTitle" xml:space="preserve"><value>รายงาน</value></data>
-  <data name="ResponsibleUser" xml:space="preserve"><value>ผู้ใช้ที่รับผิดชอบ</value></data>
-  <data name="StartDate" xml:space="preserve"><value>วันที่เริ่มต้น</value></data>
+
+
+
+
+
   <data name="StatusDuration" xml:space="preserve"><value>ระยะเวลาสถานะ</value></data>
   <data name="Supervisor" xml:space="preserve"><value>หัวหน้างาน</value></data>
   <data name="Version" xml:space="preserve"><value>เวอร์ชัน</value></data>

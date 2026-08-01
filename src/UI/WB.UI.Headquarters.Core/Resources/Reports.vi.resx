@@ -4,28 +4,10 @@
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <data name="AbsoluteNumbers" xml:space="preserve"><value>Số tuyệt đối</value></data>
-  <data name="AddNewSupervisor" xml:space="preserve"><value>Thêm giám sát viên mới</value></data>
-  <data name="AllTeams" xml:space="preserve"><value>Tất cả nhóm</value></data>
-  <data name="AllQuestionnaires" xml:space="preserve"><value>Tất cả bảng câu hỏi</value></data>
-  <data name="AllVersions" xml:space="preserve"><value>Tất cả phiên bản</value></data>
   <data name="ApprovedByHQ" xml:space="preserve"><value>Được phê duyệt bởi Văn phòng trung tâm</value></data>
   <data name="ApprovedBySupervisor" xml:space="preserve"><value>Được phê duyệt bởi Giám sát viên</value></data>
-  <data name="ByInterviewer" xml:space="preserve"><value>Theo phỏng vấn viên</value></data>
-  <data name="BySupervisor" xml:space="preserve"><value>Theo giám sát viên</value></data>
-  <data name="Caption" xml:space="preserve"><value>Chú thích</value></data>
   <data name="Completed" xml:space="preserve"><value>Đã hoàn thành</value></data>
-  <data name="DetailedView" xml:space="preserve"><value>Chế độ xem chi tiết</value></data>
-  <data name="Download" xml:space="preserve"><value>Tải xuống</value></data>
-  <data name="EndDate" xml:space="preserve"><value>Ngày kết thúc</value></data>
-  <data name="Filter" xml:space="preserve"><value>Lọc</value></data>
-  <data name="Interviewer" xml:space="preserve"><value>Phỏng vấn viên</value></data>
   <data name="Interviewers" xml:space="preserve"><value>Phỏng vấn viên</value></data>
-  <data name="NotStarted" xml:space="preserve"><value>Chưa bắt đầu</value></data>
-  <data name="NumberOfInterviewDays" xml:space="preserve"><value>Số ngày phỏng vấn</value></data>
-  <data name="ReportsTitle" xml:space="preserve"><value>Báo cáo</value></data>
-  <data name="ResponsibleUser" xml:space="preserve"><value>Người dùng chịu trách nhiệm</value></data>
-  <data name="StartDate" xml:space="preserve"><value>Ngày bắt đầu</value></data>
   <data name="StatusDuration" xml:space="preserve"><value>Thời gian trạng thái</value></data>
   <data name="Supervisor" xml:space="preserve"><value>Giám sát viên</value></data>
   <data name="Version" xml:space="preserve"><value>Phiên bản</value></data>

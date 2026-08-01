@@ -4,28 +4,28 @@
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <data name="AbsoluteNumbers" xml:space="preserve"><value>ចំនួនដាច់ខាត</value></data>
-  <data name="AddNewSupervisor" xml:space="preserve"><value>បន្ថែមអ្នកត្រួតពិនិត្យថ្មី</value></data>
-  <data name="AllTeams" xml:space="preserve"><value>ក្រុមទាំងអស់</value></data>
-  <data name="AllQuestionnaires" xml:space="preserve"><value>កម្រងសំណួរទាំងអស់</value></data>
-  <data name="AllVersions" xml:space="preserve"><value>កំណែទាំងអស់</value></data>
+
+
+
+
+
   <data name="ApprovedByHQ" xml:space="preserve"><value>បានអនុម័តដោយទីស្នាក់ការ</value></data>
   <data name="ApprovedBySupervisor" xml:space="preserve"><value>បានអនុម័តដោយអ្នកត្រួតពិនិត្យ</value></data>
-  <data name="ByInterviewer" xml:space="preserve"><value>តាមអ្នកសំភាសន៍</value></data>
-  <data name="BySupervisor" xml:space="preserve"><value>តាមអ្នកត្រួតពិនិត្យ</value></data>
-  <data name="Caption" xml:space="preserve"><value>ចំណងជើង</value></data>
+
+
+
   <data name="Completed" xml:space="preserve"><value>បានបញ្ចប់</value></data>
-  <data name="DetailedView" xml:space="preserve"><value>ទិដ្ឋភាពលម្អិត</value></data>
-  <data name="Download" xml:space="preserve"><value>ទាញយក</value></data>
-  <data name="EndDate" xml:space="preserve"><value>កាលបរិច្ឆេទបញ្ចប់</value></data>
-  <data name="Filter" xml:space="preserve"><value>ត្រង</value></data>
-  <data name="Interviewer" xml:space="preserve"><value>អ្នកសំភាសន៍</value></data>
+
+
+
+
+
   <data name="Interviewers" xml:space="preserve"><value>អ្នកសំភាសន៍</value></data>
-  <data name="NotStarted" xml:space="preserve"><value>មិនទាន់បានចាប់ផ្តើម</value></data>
-  <data name="NumberOfInterviewDays" xml:space="preserve"><value>ចំនួនថ្ងៃការសំភាសន៍</value></data>
-  <data name="ReportsTitle" xml:space="preserve"><value>របាយការណ៍</value></data>
-  <data name="ResponsibleUser" xml:space="preserve"><value>អ្នកប្រើប្រាស់ទទួលខុសត្រូវ</value></data>
-  <data name="StartDate" xml:space="preserve"><value>កាលបរិច្ឆេទចាប់ផ្តើម</value></data>
+
+
+
+
+
   <data name="StatusDuration" xml:space="preserve"><value>រយៈពេលស្ថានភាព</value></data>
   <data name="Supervisor" xml:space="preserve"><value>អ្នកត្រួតពិនិត្យ</value></data>
   <data name="Version" xml:space="preserve"><value>កំណែ</value></data>

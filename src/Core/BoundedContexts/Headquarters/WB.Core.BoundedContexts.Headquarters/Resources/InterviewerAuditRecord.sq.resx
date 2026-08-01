@@ -4,33 +4,33 @@
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <data name="CloseInterview" xml:space="preserve"><value>Mbylle intervistën</value></data>
-  <data name="CompleteInterview" xml:space="preserve"><value>Kompletoni intervistën</value></data>
-  <data name="RestartInterview" xml:space="preserve"><value>Rinis intervistën</value></data>
-  <data name="ApproveInterview" xml:space="preserve"><value>Mirato intervistën</value></data>
-  <data name="RejectInterview" xml:space="preserve"><value>Refuzo intervistën</value></data>
-  <data name="RejectInterviewToInterviewer" xml:space="preserve"><value>Kthe intervistën tek ankuesi</value></data>
-  <data name="CreateInterviewFromAssignment" xml:space="preserve"><value>Krijo intervistë nga detyra</value></data>
-  <data name="DeleteInterview" xml:space="preserve"><value>Fshi intervistën</value></data>
+  <data name="CloseInterview" xml:space="preserve"><value>Mbylle intervistën {0}</value></data>
+  <data name="CompleteInterview" xml:space="preserve"><value>Kompletoni intervistën {0}</value></data>
+  <data name="RestartInterview" xml:space="preserve"><value>Rinis intervistën {0}</value></data>
+  <data name="ApproveInterview" xml:space="preserve"><value>Mirato intervistën {0}</value></data>
+  <data name="RejectInterview" xml:space="preserve"><value>Refuzo intervistën {0}</value></data>
+  <data name="RejectInterviewToInterviewer" xml:space="preserve"><value>Kthe intervistën tek ankuesi {0} {1}</value></data>
+  <data name="CreateInterviewFromAssignment" xml:space="preserve"><value>Krijo intervistë nga detyra {0} {1}</value></data>
+  <data name="DeleteInterview" xml:space="preserve"><value>Fshi intervistën {0}</value></data>
   <data name="DetailedActionLog" xml:space="preserve"><value>Regjistri i detajuar i veprimeve</value></data>
   <data name="PageTitle" xml:space="preserve"><value>Regjistri i veprimeve të anketuesit</value></data>
-  <data name="OpenInterview" xml:space="preserve"><value>Hap intervistën</value></data>
+  <data name="OpenInterview" xml:space="preserve"><value>Hap intervistën {0}</value></data>
   <data name="SynchronizationCompleted" xml:space="preserve"><value>Sinkronizimi u kompletua</value></data>
   <data name="SynchronizationFailed" xml:space="preserve"><value>Sinkronizimi dështoi</value></data>
   <data name="SynchronizationCanceled" xml:space="preserve"><value>Sinkronizimi u anulua</value></data>
-  <data name="SynchronizationStarted" xml:space="preserve"><value>Sinkronizimi filloi</value></data>
-  <data name="Login" xml:space="preserve"><value>Hyrja</value></data>
-  <data name="Logout" xml:space="preserve"><value>Dalja</value></data>
+  <data name="SynchronizationStarted" xml:space="preserve"><value>Sinkronizimi filloi {0}</value></data>
+  <data name="Login" xml:space="preserve"><value>Hyrja {0}</value></data>
+  <data name="Logout" xml:space="preserve"><value>Dalja {0}</value></data>
   <data name="Relink" xml:space="preserve"><value>Rilidhi</value></data>
-  <data name="AnswerSet" xml:space="preserve"><value>Përgjigja u vendos</value></data>
-  <data name="AnswerRemoved" xml:space="preserve"><value>Përgjigja u hoq</value></data>
-  <data name="CommentSet" xml:space="preserve"><value>Komenti u vendos</value></data>
-  <data name="InterviewKeyAssigned" xml:space="preserve"><value>Çelësi i intervistës u caktua</value></data>
-  <data name="InterviewReceivedByInterviewer" xml:space="preserve"><value>Intervista u mor nga ankuesi</value></data>
-  <data name="InterviewReceivedBySupervisor" xml:space="preserve"><value>Intervista u mor nga mbikëqyrësi</value></data>
-  <data name="GpsRequested" xml:space="preserve"><value>GPS u kërkua</value></data>
-  <data name="GpsLocationObtained" xml:space="preserve"><value>Vendndodhja GPS u mor</value></data>
-  <data name="AudioToggled" xml:space="preserve"><value>Audio u aktivizua/çaktivizua</value></data>
+
+
+
+
+
+
+
+
+
   <data name="DownloadTabLog" xml:space="preserve"><value>Shkarko regjistrin e plotë në format Tab</value></data>
   <data name="RecordsMissing" xml:space="preserve"><value>Ende nuk ka regjistrime</value></data>
   <data name="OpenApplication" xml:space="preserve"><value>Aplikacioni u hap</value></data>
@@ -44,11 +44,11 @@
   <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve"><value>{0} intervista u ngarkuan pjesërisht</value></data>
   <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve"><value>{0} intervista u rihapën pas marrjes së komenteve</value></data>
   <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve"><value>{0} intervista u refuzuan</value></data>
-  <data name="SynchronizationCompleted_NewInterviewsDownloaded" xml:space="preserve"><value>{0} intervista të reja u shkarkuan</value></data>
-  <data name="SynchronizationCompleted_NewAssignmentsDownloaded" xml:space="preserve"><value>{0} detyra të reja u shkarkuan</value></data>
+
+
   <data name="SynchronizationCompleted_AssignmentsRemoved" xml:space="preserve"><value>{0} detyra u hoqën</value></data>
   <data name="SynchronizationCompleted_NothingToSync" xml:space="preserve"><value>asgjë për të sinkronizuar</value></data>
-  <data name="SynchronizationCompleted_InterviewsUpdatedFromHQ" xml:space="preserve"><value>{0} intervista u përditësuan nga Selia Qendrore</value></data>
+
   <data name="SynchronizationCompleted_InterviewsDownloaded" xml:space="preserve"><value>{0} intervista të reja u shkarkuan</value></data>
   <data name="SynchronizationCompleted_AssignmentsDownloaded" xml:space="preserve"><value>{0} detyra të reja u shkarkuan</value></data>
   <data name="SwitchInterviewMode" xml:space="preserve"><value>Intervista {0} kaloi në modalitetin {1}</value></data>

@@ -122,7 +122,7 @@
         <value>Một hoặc nhiều mục câu hỏi có cùng ID {0} đã tồn tại.</value>
         </data>
     <data name="MoreThanOneSubSectionWithSameId" xml:space="preserve">
-        <value>Một hoặc nhiều tiểu mục có cùng ID {0} đã tồn tại:{1}_TK2__.</value>
+        <value>Một hoặc nhiều tiểu mục có cùng ID {0} đã tồn tại:{1}{2}.</value>
         </data>
     <data name="NoPremissionsToEditQuestionnaire" xml:space="preserve">
         <value>Bạn không có quyền thay đổi bảng câu hỏi này</value>
@@ -161,7 +161,7 @@
         <value>Mục hoặc tiểu mục không được có nhiều hơn {0} mục con trực tiếp</value>
         </data>
     <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
-        <value>Một hoặc nhiều câu hỏi có cùng ID {0} đã tồn tại:{1}_TK2__.</value>
+        <value>Một hoặc nhiều câu hỏi có cùng ID {0} đã tồn tại:{1}{2}.</value>
         </data>
     <data name="CantPasteQuestion" xml:space="preserve">
         <value>Câu hỏi không thể được dán ở đây.</value>

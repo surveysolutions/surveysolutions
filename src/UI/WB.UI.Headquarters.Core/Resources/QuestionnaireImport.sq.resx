@@ -5,7 +5,7 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <data name="BeforeSignInToDesigner" xml:space="preserve"><value>Para se të hyni në Designer</value></data>
-  <data name="LoginToDesignerError" xml:space="preserve"><value>Gabim gjatë hyrjes në Designer</value></data>
+  <data name="LoginToDesignerError" xml:space="preserve"><value>Gabim gjatë hyrjes në Designer {0}</value></data>
   <data name="SignInToDesigner" xml:space="preserve"><value>Hyrje në Designer</value></data>
   <data name="SignInToDesignerTitle" xml:space="preserve"><value>Hyrje në Designer</value></data>
   <data name="DesignerQuestionnaires" xml:space="preserve"><value>Pyetësorët e Designer</value></data>
@@ -14,42 +14,42 @@
   <data name="ListOfMyQuestionnaires" xml:space="preserve"><value>Lista e pyetësorëve të mi</value></data>
   <data name="Chapters" xml:space="preserve"><value>Kapituj</value></data>
   <data name="CreatedAt" xml:space="preserve"><value>Krijuar më</value></data>
-  <data name="QuestionnaireOwner" xml:space="preserve"><value>Pronari i pyetësorit</value></data>
-  <data name="LastModified" xml:space="preserve"><value>Ndryshuar së fundmi</value></data>
-  <data name="Questionnaire" xml:space="preserve"><value>Pyetësor</value></data>
+
+
+
   <data name="Questions" xml:space="preserve"><value>Pyetje</value></data>
-  <data name="Status" xml:space="preserve"><value>Statusi</value></data>
-  <data name="Version" xml:space="preserve"><value>Versioni</value></data>
-  <data name="Import" xml:space="preserve"><value>Impo</value></data>
-  <data name="ImportQuestionnaire" xml:space="preserve"><value>Importo pyetësorin</value></data>
-  <data name="Cancel" xml:space="preserve"><value>Anulo</value></data>
-  <data name="CancelImport" xml:space="preserve"><value>Anulo importin</value></data>
-  <data name="ImportInProgress" xml:space="preserve"><value>Importi në vazhdim</value></data>
-  <data name="ImportCompleted" xml:space="preserve"><value>Importi u kompletua</value></data>
-  <data name="ImportFailed" xml:space="preserve"><value>Importi dështoi</value></data>
-  <data name="ViewQuestionnaire" xml:space="preserve"><value>Shiko pyetësorin</value></data>
-  <data name="ViewInDesigner" xml:space="preserve"><value>Shiko në Designer</value></data>
-  <data name="ImportAnother" xml:space="preserve"><value>Importo tjetër</value></data>
-  <data name="SharedWithMe" xml:space="preserve"><value>Të ndara me mua</value></data>
-  <data name="PublicQuestionnaires" xml:space="preserve"><value>Pyetësorë publikë</value></data>
-  <data name="Filter" xml:space="preserve"><value>Filtro</value></data>
-  <data name="Search" xml:space="preserve"><value>Kërko</value></data>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <data name="Gropus" xml:space="preserve"><value>Grupe</value></data>
   <data name="LastModifiedAt" xml:space="preserve"><value>Ndryshuar së fundmi më</value></data>
-  <data name="QuestionsWithConditions" xml:space="preserve"><value>Pyetje me kushte</value></data>
+  <data name="QuestionsWithConditions" xml:space="preserve"><value>Pyetje me kushte {count}</value></data>
   <data name="Rosters" xml:space="preserve"><value>Regjistra</value></data>
   <data name="QuestionnaireExists" xml:space="preserve"><value>Pyetësori ekziston</value></data>
-  <data name="ImportAsNewVersion" xml:space="preserve"><value>Importo si version i ri</value></data>
+  <data name="ImportAsNewVersion" xml:space="preserve"><value>Importo si version i ri {version}</value></data>
   <data name="RegularImportTitle" xml:space="preserve"><value>Importo pyetësor</value></data>
   <data name="RegularImportSubTitle" xml:space="preserve"><value>Zgjidhni pyetësorin për ta importuar</value></data>
   <data name="MyQuestionnairesTitle" xml:space="preserve"><value>Pyetësorët e mi</value></data>
   <data name="UpgradeAssignments" xml:space="preserve"><value>Përmirëso detyrat</value></data>
-  <data name="UpgradeInterviews" xml:space="preserve"><value>Përmirëso intervistat</value></data>
-  <data name="NewVersion" xml:space="preserve"><value>Version i ri</value></data>
-  <data name="OldVersion" xml:space="preserve"><value>Version i vjetër</value></data>
-  <data name="UpgradeTitle" xml:space="preserve"><value>Përmirëso</value></data>
-  <data name="UpgradeSubTitle" xml:space="preserve"><value>Zgjidhni pyetësorin për ta përmirësuar</value></data>
-  <data name="NoQuestionnaires" xml:space="preserve"><value>Nuk ka pyetësorë</value></data>
+
+
+
+
+
+
   <data name="Importing" xml:space="preserve"><value>Duke importuar {{percent}}%</value></data>
   <data name="Prepare" xml:space="preserve"><value>Duke marrë të dhënat e pyetësorit</value></data>
 </root>

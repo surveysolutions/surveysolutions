@@ -5,7 +5,7 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <data name="BeforeSignInToDesigner" xml:space="preserve"><value>Sebelum masuk ke Designer</value></data>
-  <data name="LoginToDesignerError" xml:space="preserve"><value>Kesalahan saat masuk ke Designer</value></data>
+  <data name="LoginToDesignerError" xml:space="preserve"><value>Kesalahan saat masuk ke Designer {0}</value></data>
   <data name="SignInToDesigner" xml:space="preserve"><value>Masuk ke Designer</value></data>
   <data name="SignInToDesignerTitle" xml:space="preserve"><value>Masuk ke Designer</value></data>
   <data name="DesignerQuestionnaires" xml:space="preserve"><value>Kuesioner Designer</value></data>
@@ -14,42 +14,42 @@
   <data name="ListOfMyQuestionnaires" xml:space="preserve"><value>Daftar kuesioner saya</value></data>
   <data name="Chapters" xml:space="preserve"><value>Bab</value></data>
   <data name="CreatedAt" xml:space="preserve"><value>Dibuat pada</value></data>
-  <data name="QuestionnaireOwner" xml:space="preserve"><value>Pemilik kuesioner</value></data>
-  <data name="LastModified" xml:space="preserve"><value>Terakhir diubah</value></data>
-  <data name="Questionnaire" xml:space="preserve"><value>Kuesioner</value></data>
+
+
+
   <data name="Questions" xml:space="preserve"><value>Pertanyaan</value></data>
-  <data name="Status" xml:space="preserve"><value>Status</value></data>
-  <data name="Version" xml:space="preserve"><value>Versi</value></data>
-  <data name="Import" xml:space="preserve"><value>Impor</value></data>
-  <data name="ImportQuestionnaire" xml:space="preserve"><value>Impor kuesioner</value></data>
-  <data name="Cancel" xml:space="preserve"><value>Batal</value></data>
-  <data name="CancelImport" xml:space="preserve"><value>Batal impor</value></data>
-  <data name="ImportInProgress" xml:space="preserve"><value>Impor sedang berlangsung</value></data>
-  <data name="ImportCompleted" xml:space="preserve"><value>Impor selesai</value></data>
-  <data name="ImportFailed" xml:space="preserve"><value>Impor gagal</value></data>
-  <data name="ViewQuestionnaire" xml:space="preserve"><value>Lihat kuesioner</value></data>
-  <data name="ViewInDesigner" xml:space="preserve"><value>Lihat di Designer</value></data>
-  <data name="ImportAnother" xml:space="preserve"><value>Impor lainnya</value></data>
-  <data name="SharedWithMe" xml:space="preserve"><value>Dibagikan kepada saya</value></data>
-  <data name="PublicQuestionnaires" xml:space="preserve"><value>Kuesioner publik</value></data>
-  <data name="Filter" xml:space="preserve"><value>Filter</value></data>
-  <data name="Search" xml:space="preserve"><value>Cari</value></data>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <data name="Importing" xml:space="preserve"><value>Mengimpor {{percent}}%</value></data>
   <data name="Prepare" xml:space="preserve"><value>Menerima data kuesioner</value></data>
   <data name="Gropus" xml:space="preserve"><value>Grup</value></data>
   <data name="LastModifiedAt" xml:space="preserve"><value>Terakhir diubah pada</value></data>
-  <data name="QuestionsWithConditions" xml:space="preserve"><value>Pertanyaan dengan kondisi</value></data>
+  <data name="QuestionsWithConditions" xml:space="preserve"><value>Pertanyaan dengan kondisi {count}</value></data>
   <data name="Rosters" xml:space="preserve"><value>Daftar</value></data>
   <data name="QuestionnaireExists" xml:space="preserve"><value>Kuesioner sudah ada</value></data>
-  <data name="ImportAsNewVersion" xml:space="preserve"><value>Impor sebagai versi baru</value></data>
+  <data name="ImportAsNewVersion" xml:space="preserve"><value>Impor sebagai versi baru {version}</value></data>
   <data name="RegularImportTitle" xml:space="preserve"><value>Impor kuesioner</value></data>
   <data name="RegularImportSubTitle" xml:space="preserve"><value>Pilih kuesioner untuk diimpor</value></data>
   <data name="MyQuestionnairesTitle" xml:space="preserve"><value>Kuesioner saya</value></data>
   <data name="UpgradeAssignments" xml:space="preserve"><value>Tingkatkan tugas</value></data>
-  <data name="UpgradeInterviews" xml:space="preserve"><value>Tingkatkan wawancara</value></data>
-  <data name="NewVersion" xml:space="preserve"><value>Versi baru</value></data>
-  <data name="OldVersion" xml:space="preserve"><value>Versi lama</value></data>
-  <data name="UpgradeTitle" xml:space="preserve"><value>Tingkatkan</value></data>
-  <data name="UpgradeSubTitle" xml:space="preserve"><value>Pilih kuesioner untuk ditingkatkan</value></data>
-  <data name="NoQuestionnaires" xml:space="preserve"><value>Tidak ada kuesioner</value></data>
+
+
+
+
+
+
 </root>

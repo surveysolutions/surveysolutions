@@ -13,32 +13,32 @@
   <data name="Name" xml:space="preserve"><value>სახელი</value></data>
   <data name="Size" xml:space="preserve"><value>ზომა</value></data>
   <data name="UpdateDate" xml:space="preserve"><value>განახლების თარიღი</value></data>
-  <data name="UploadMapsSummaryFormat" xml:space="preserve"><value>ატვირთულია {0} რუქა</value></data>
-  <data name="DeleteMap" xml:space="preserve"><value>რუქის წაშლა</value></data>
-  <data name="DownloadMap" xml:space="preserve"><value>რუქის ჩამოტვირთვა</value></data>
-  <data name="MapDeleteConfirmation" xml:space="preserve"><value>დარწმუნებული ხართ, რომ გსურთ წაშალოთ ეს რუქა?</value></data>
-  <data name="PageTitle" xml:space="preserve"><value>რუქები</value></data>
-  <data name="UploadMaps" xml:space="preserve"><value>რუქების ატვირთვა</value></data>
-  <data name="UserMaps" xml:space="preserve"><value>მომხმარებლის რუქები</value></data>
-  <data name="Shapefiles" xml:space="preserve"><value>Shapefile-ები</value></data>
-  <data name="XSize" xml:space="preserve"><value>X ზომა</value></data>
-  <data name="YSize" xml:space="preserve"><value>Y ზომა</value></data>
-  <data name="GeoTiff" xml:space="preserve"><value>GeoTIFF</value></data>
-  <data name="Kml" xml:space="preserve"><value>KML</value></data>
-  <data name="Users" xml:space="preserve"><value>მომხმარებლები</value></data>
-  <data name="AssignMaps" xml:space="preserve"><value>რუქების მინიჭება</value></data>
+  <data name="UploadMapsSummaryFormat" xml:space="preserve"><value>ატვირთულია  რუქა {0} {1}</value></data>
+
+
+
+
+
+
+
+
+
+
+
+
+
   <data name="MapEngineIsNotInitialized" xml:space="preserve"><value>რუქის ძრავი ინიციალიზებული არ არის</value></data>
-  <data name="UploadMappingsSummaryFormat" xml:space="preserve"><value>ატვირთულია {0} მიბმულობა</value></data>
+  <data name="UploadMappingsSummaryFormat" xml:space="preserve"><value>ატვირთულია  მიბმულობა {0} {1}</value></data>
   <data name="FileLoadingNotTsvError" xml:space="preserve"><value>ფაილის ატვირთვის შეცდომა: TSV ფაილი მოსალოდნელია</value></data>
   <data name="MappingsLoadingError" xml:space="preserve"><value>მიბმულობების ატვირთვის შეცდომა</value></data>
-  <data name="MapOverlapsWith" xml:space="preserve"><value>რუქა ემთხვევა {0}-ს</value></data>
-  <data name="MapOverlapsWithOther" xml:space="preserve"><value>რუქა ემთხვევა სხვა რუქებს</value></data>
+  <data name="MapOverlapsWith" xml:space="preserve"><value>რუქა ემთხვევა -ს</value></data>
+  <data name="MapOverlapsWithOther" xml:space="preserve"><value>რუქა ემთხვევა სხვა რუქებს {0}</value></data>
   <data name="MapLoadingNoMapsInArchive" xml:space="preserve"><value>არქივში რუქები ვერ მოიძებნა</value></data>
   <data name="MapLoadingUnsupportedFilesInArchive" xml:space="preserve"><value>არქივში მხარდაუჭერელი ფაილებია</value></data>
-  <data name="MapLoadingInvalidFile" xml:space="preserve"><value>ფაილი დაზიანებულია ან მხარდაუჭერელი ფორმატისაა</value></data>
-  <data name="ShpIsMissingInArchive" xml:space="preserve"><value>SHP ფაილი არქივში ვერ მოიძებნა</value></data>
-  <data name="MappingsTsvFileName" xml:space="preserve"><value>მიბმულობები.tsv</value></data>
-  <data name="MapsDuplicateFile" xml:space="preserve"><value>ამ სახელის ფაილი უკვე არსებობს</value></data>
+  <data name="MapLoadingInvalidFile" xml:space="preserve"><value>ფაილი დაზიანებულია ან მხარდაუჭერელი ფორმატისაა {0} {1}</value></data>
+  <data name="ShpIsMissingInArchive" xml:space="preserve"><value>SHP ფაილი არქივში ვერ მოიძებნა {0} {0}</value></data>
+
+
   <data name="ShxIsMissingInArchive" xml:space="preserve"><value>ფაილი {0}.shx გვაკლია {0}.shp-ისთვის</value></data>
   <data name="DbfIsMissingInArchive" xml:space="preserve"><value>ფაილი {0}.dbf გვაკლია {0}.shp-ისთვის</value></data>
   <data name="MapFileSizeLimit" xml:space="preserve"><value>ფაილი {0}-ის ზომა მაქსიმალურ ლიმიტს {1} აჭარბებს</value></data>

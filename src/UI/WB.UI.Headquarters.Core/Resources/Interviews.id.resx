@@ -5,24 +5,24 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve"><value>{{count}} wawancara akan disetujui.</value></data>
-  <data name="ApproveConfirmMessageHQ" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; wawancara akan disetujui.&lt;/h3&gt;&lt;b&gt;Catatan!&lt;/b&gt; Anda hanya dapat menyetujui wawancara dengan status berikut:</value></data>
-  <data name="AssignConfirmMessage" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; wawancara dipilih untuk penugasan ulang.&lt;/h3&gt;</value></data>
+  <data name="ApproveConfirmMessageHQ" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{}&lt;/b&gt; wawancara akan disetujui.&lt;/h3&gt;&lt;b&gt;Catatan!&lt;/b&gt; Anda hanya dapat menyetujui wawancara dengan status berikut: {count} {status1} {status2} {status3}</value></data>
+  <data name="AssignConfirmMessage" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{}&lt;/b&gt; wawancara dipilih untuk penugasan ulang.&lt;/h3&gt; {count} {status1} {status2} {status3}</value></data>
   <data name="AssignReceivedConfirm" xml:space="preserve"><value>Terapkan pada {{count}} wawancara yang sudah diterima pewawancara</value></data>
   <data name="AssignReceivedWarning" xml:space="preserve"><value>Pewawancara yang bertanggung jawab saat ini tidak akan diberi tahu tentang penugasan ulang</value></data>
   <data name="ApproveReceivedWarning" xml:space="preserve"><value>Pewawancara yang bertanggung jawab saat ini tidak akan diberi tahu tentang persetujuan wawancara</value></data>
   <data name="SwitchToCawiReceivedWarning" xml:space="preserve"><value>Pewawancara yang bertanggung jawab saat ini tidak akan diberi tahu tentang perubahan mode wawancara</value></data>
-  <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; wawancara akan ditugaskan.&lt;/h3&gt;</value></data>
+  <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{}&lt;/b&gt; wawancara akan ditugaskan.&lt;/h3&gt; {count} {status1} {status2}</value></data>
   <data name="ChooseResponsibleInterviewer" xml:space="preserve"><value>Silakan pilih Pewawancara.</value></data>
   <data name="ChooseResponsibleSupervisor" xml:space="preserve"><value>Silakan pilih Supervisor.</value></data>
   <data name="ChooseResponsible" xml:space="preserve"><value>Silakan pilih Supervisor atau Pewawancara.</value></data>
   <data name="ContinueConfirmMessage" xml:space="preserve"><value>Apakah Anda ingin melanjutkan?</value></data>
   <data name="ContinueConfirmMessageHQ" xml:space="preserve"><value>Apakah Anda ingin melanjutkan?</value></data>
-  <data name="DeleteConfirmMessageHQ" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; wawancara akan dihapus.&lt;/h3&gt;</value></data>
-  <data name="RejectConfirmMessage" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; wawancara akan ditolak.&lt;/h3&gt;</value></data>
-  <data name="RejectConfirmMessageHQ" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; wawancara akan ditolak.&lt;/h3&gt;</value></data>
+  <data name="DeleteConfirmMessageHQ" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{}&lt;/b&gt; wawancara akan dihapus.&lt;/h3&gt; {count} {status1} {status2}</value></data>
+  <data name="RejectConfirmMessage" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{}&lt;/b&gt; wawancara akan ditolak.&lt;/h3&gt; {count} {status1} {status2}</value></data>
+  <data name="RejectConfirmMessageHQ" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{}&lt;/b&gt; wawancara akan ditolak.&lt;/h3&gt; {count} {status1} {status2}</value></data>
   <data name="RejectToOriginal" xml:space="preserve"><value>Tolak ke penanggung jawab asli</value></data>
   <data name="RejectToNewResponsible" xml:space="preserve"><value>Tolak dan pilih penanggung jawab baru</value></data>
-  <data name="UnapproveConfirmMessageHQ" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; wawancara akan dibatalkan persetujuannya.&lt;/h3&gt;</value></data>
+  <data name="UnapproveConfirmMessageHQ" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{}&lt;/b&gt; wawancara akan dibatalkan persetujuannya.&lt;/h3&gt; {count} {status1}</value></data>
   <data name="Assignment" xml:space="preserve"><value>ID Tugas</value></data>
   <data name="ClientKeyTitle" xml:space="preserve"><value>Kunci yang dihasilkan di perangkat</value></data>
   <data name="Tooltip_Filter_Assignment" xml:space="preserve"><value>ID Tugas</value></data>
@@ -51,7 +51,7 @@
   <data name="DynamicFilterNotAvailable" xml:space="preserve"><value>Tidak ada data yang tersedia</value></data>
   <data name="ApproveConfirmMessage_other" xml:space="preserve"><value>{{count}} wawancara akan disetujui.</value></data>
   <data name="Note" xml:space="preserve"><value>Catatan!</value></data>
-  <data name="ApproveConfirmMessage_Statuses" xml:space="preserve"><value>Anda hanya dapat menyetujui wawancara dengan status berikut: {{status1}}, {{status2}}</value></data>
+  <data name="ApproveConfirmMessage_Statuses" xml:space="preserve"><value>Anda hanya dapat menyetujui wawancara dengan status berikut: {}, {} {status1} {status2} {status3}</value></data>
   <data name="DynamicFilter_MatchType" xml:space="preserve"><value>Jenis Pencocokan</value></data>
   <data name="DynamicFilter_MatchTypes_And" xml:space="preserve"><value>DAN</value></data>
   <data name="DynamicFilter_MatchTypes_Or" xml:space="preserve"><value>ATAU</value></data>

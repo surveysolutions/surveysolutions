@@ -5,7 +5,7 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <data name="BeforeSignInToDesigner" xml:space="preserve"><value>ก่อนเข้าสู่ระบบ Designer</value></data>
-  <data name="LoginToDesignerError" xml:space="preserve"><value>ข้อผิดพลาดในการเข้าสู่ Designer</value></data>
+  <data name="LoginToDesignerError" xml:space="preserve"><value>ข้อผิดพลาดในการเข้าสู่ Designer {0}</value></data>
   <data name="SignInToDesigner" xml:space="preserve"><value>เข้าสู่ Designer</value></data>
   <data name="SignInToDesignerTitle" xml:space="preserve"><value>เข้าสู่ Designer</value></data>
   <data name="DesignerQuestionnaires" xml:space="preserve"><value>แบบสอบถาม Designer</value></data>
@@ -14,42 +14,42 @@
   <data name="ListOfMyQuestionnaires" xml:space="preserve"><value>รายการแบบสอบถามของฉัน</value></data>
   <data name="Chapters" xml:space="preserve"><value>บท</value></data>
   <data name="CreatedAt" xml:space="preserve"><value>สร้างเมื่อ</value></data>
-  <data name="QuestionnaireOwner" xml:space="preserve"><value>เจ้าของแบบสอบถาม</value></data>
-  <data name="LastModified" xml:space="preserve"><value>แก้ไขล่าสุด</value></data>
-  <data name="Questionnaire" xml:space="preserve"><value>แบบสอบถาม</value></data>
+
+
+
   <data name="Questions" xml:space="preserve"><value>คำถาม</value></data>
-  <data name="Status" xml:space="preserve"><value>สถานะ</value></data>
-  <data name="Version" xml:space="preserve"><value>เวอร์ชัน</value></data>
-  <data name="Import" xml:space="preserve"><value>นำเข้า</value></data>
-  <data name="ImportQuestionnaire" xml:space="preserve"><value>นำเข้าแบบสอบถาม</value></data>
-  <data name="Cancel" xml:space="preserve"><value>ยกเลิก</value></data>
-  <data name="CancelImport" xml:space="preserve"><value>ยกเลิกการนำเข้า</value></data>
-  <data name="ImportInProgress" xml:space="preserve"><value>กำลังนำเข้า</value></data>
-  <data name="ImportCompleted" xml:space="preserve"><value>นำเข้าเสร็จสมบูรณ์</value></data>
-  <data name="ImportFailed" xml:space="preserve"><value>นำเข้าล้มเหลว</value></data>
-  <data name="ViewQuestionnaire" xml:space="preserve"><value>ดูแบบสอบถาม</value></data>
-  <data name="ViewInDesigner" xml:space="preserve"><value>ดูใน Designer</value></data>
-  <data name="ImportAnother" xml:space="preserve"><value>นำเข้าอื่น</value></data>
-  <data name="SharedWithMe" xml:space="preserve"><value>แชร์กับฉัน</value></data>
-  <data name="PublicQuestionnaires" xml:space="preserve"><value>แบบสอบถามสาธารณะ</value></data>
-  <data name="Filter" xml:space="preserve"><value>กรอง</value></data>
-  <data name="Search" xml:space="preserve"><value>ค้นหา</value></data>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <data name="Importing" xml:space="preserve"><value>กำลังนำเข้า {{percent}}%</value></data>
   <data name="Prepare" xml:space="preserve"><value>กำลังรับข้อมูลแบบสอบถาม</value></data>
   <data name="Gropus" xml:space="preserve"><value>กลุ่ม</value></data>
   <data name="LastModifiedAt" xml:space="preserve"><value>แก้ไขล่าสุดเมื่อ</value></data>
-  <data name="QuestionsWithConditions" xml:space="preserve"><value>คำถามที่มีเงื่อนไข</value></data>
+  <data name="QuestionsWithConditions" xml:space="preserve"><value>คำถามที่มีเงื่อนไข {count}</value></data>
   <data name="Rosters" xml:space="preserve"><value>รายการ</value></data>
   <data name="QuestionnaireExists" xml:space="preserve"><value>แบบสอบถามมีอยู่แล้ว</value></data>
-  <data name="ImportAsNewVersion" xml:space="preserve"><value>นำเข้าเป็นเวอร์ชันใหม่</value></data>
+  <data name="ImportAsNewVersion" xml:space="preserve"><value>นำเข้าเป็นเวอร์ชันใหม่ {version}</value></data>
   <data name="RegularImportTitle" xml:space="preserve"><value>นำเข้าแบบสอบถาม</value></data>
   <data name="RegularImportSubTitle" xml:space="preserve"><value>เลือกแบบสอบถามเพื่อนำเข้า</value></data>
   <data name="MyQuestionnairesTitle" xml:space="preserve"><value>แบบสอบถามของฉัน</value></data>
   <data name="UpgradeAssignments" xml:space="preserve"><value>อัปเกรดงานมอบหมาย</value></data>
-  <data name="UpgradeInterviews" xml:space="preserve"><value>อัปเกรดการสัมภาษณ์</value></data>
-  <data name="NewVersion" xml:space="preserve"><value>เวอร์ชันใหม่</value></data>
-  <data name="OldVersion" xml:space="preserve"><value>เวอร์ชันเก่า</value></data>
-  <data name="UpgradeTitle" xml:space="preserve"><value>อัปเกรด</value></data>
-  <data name="UpgradeSubTitle" xml:space="preserve"><value>เลือกแบบสอบถามเพื่ออัปเกรด</value></data>
-  <data name="NoQuestionnaires" xml:space="preserve"><value>ไม่มีแบบสอบถาม</value></data>
+
+
+
+
+
+
 </root>

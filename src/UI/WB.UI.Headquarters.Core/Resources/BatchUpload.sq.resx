@@ -14,45 +14,45 @@
   <data name="DataIsValid" xml:space="preserve"><value>Të dhënat janë të vlefshme</value></data>
   <data name="Delete" xml:space="preserve"><value>Fshi</value></data>
   <data name="Details" xml:space="preserve"><value>Detajet</value></data>
-  <data name="Download" xml:space="preserve"><value>Shkarko</value></data>
-  <data name="DownloadTemplate" xml:space="preserve"><value>Shkarko shabllonin</value></data>
-  <data name="Error" xml:space="preserve"><value>Gabim</value></data>
-  <data name="Errors" xml:space="preserve"><value>Gabimet</value></data>
-  <data name="Export" xml:space="preserve"><value>Eksporto</value></data>
+
+
+
+
+
   <data name="File" xml:space="preserve"><value>Skedari</value></data>
-  <data name="Filter" xml:space="preserve"><value>Filtro</value></data>
-  <data name="Import" xml:space="preserve"><value>Impo</value></data>
-  <data name="ImportCompleted" xml:space="preserve"><value>Importi u kompletua</value></data>
-  <data name="ImportFailed" xml:space="preserve"><value>Importi dështoi</value></data>
+
+
+
+
   <data name="ImportInProgress" xml:space="preserve"><value>Procesi tjetër i importit të detyrave po funksionon. Lejohet vetëm një proces i importit të detyrave njëkohësisht.</value></data>
-  <data name="ImportResults" xml:space="preserve"><value>Rezultatet e importit</value></data>
-  <data name="ImportStarted" xml:space="preserve"><value>Importi filloi</value></data>
+
+
   <data name="ImportStatus" xml:space="preserve"><value>Statusi i importit</value></data>
-  <data name="Info" xml:space="preserve"><value>Informacion</value></data>
-  <data name="InterviewerColumn" xml:space="preserve"><value>Kolona e anketuesit</value></data>
-  <data name="InvalidAssignmentFile" xml:space="preserve"><value>Skedari i detyrës është i pavlefshëm</value></data>
-  <data name="Line" xml:space="preserve"><value>Rreshti</value></data>
-  <data name="NoErrors" xml:space="preserve"><value>Pa gabime</value></data>
-  <data name="NoFile" xml:space="preserve"><value>Pa skedar</value></data>
-  <data name="OptionalColumn" xml:space="preserve"><value>Kolonë opsionale</value></data>
-  <data name="PageTitle" xml:space="preserve"><value>Ngarkim i detyrave</value></data>
+
+
+
+
+
+
+
+
   <data name="Processing" xml:space="preserve"><value>Duke procesuar...</value></data>
-  <data name="Quantity" xml:space="preserve"><value>Sasia</value></data>
-  <data name="QuestionnaireVersion" xml:space="preserve"><value>Versioni i pyetësorit</value></data>
-  <data name="RequiredColumn" xml:space="preserve"><value>Kolonë e detyrueshme</value></data>
-  <data name="Responsible" xml:space="preserve"><value>Përgjegjësi</value></data>
+
+
+
+
   <data name="Row" xml:space="preserve"><value>Rreshti</value></data>
   <data name="Status" xml:space="preserve"><value>Statusi</value></data>
-  <data name="SupervisorColumn" xml:space="preserve"><value>Kolona e mbikëqyrësit</value></data>
-  <data name="Title" xml:space="preserve"><value>Titulli</value></data>
-  <data name="TotalErrors" xml:space="preserve"><value>Gabimet totale</value></data>
-  <data name="TotalImported" xml:space="preserve"><value>Totali i importuar</value></data>
+
+
+
+
   <data name="Upload" xml:space="preserve"><value>Ngarko</value></data>
-  <data name="UploadFile" xml:space="preserve"><value>Ngarko skedar</value></data>
-  <data name="Warning" xml:space="preserve"><value>Paralajmërim</value></data>
-  <data name="Warnings" xml:space="preserve"><value>Paralajmërime</value></data>
-  <data name="WebMode" xml:space="preserve"><value>Mënyra Web</value></data>
-  <data name="WorkspaceColumn" xml:space="preserve"><value>Kolona e hapësirës së punës</value></data>
+
+
+
+
+
   <data name="DownloadTemplateArchive" xml:space="preserve"><value>Shkarko shabllon .zip për këtë pyetësor</value></data>
   <data name="FileName" xml:space="preserve"><value>Emri i skedarit</value></data>
   <data name="FileSize" xml:space="preserve"><value>Madhësia e skedarit</value></data>
