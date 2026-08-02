@@ -22,6 +22,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
     // Once a specific app/culture pair reaches the completeness threshold,
     // the warning simply stops firing for that pair.
     [TestFixture]
+    [NonParallelizable]
     internal class when_checking_registered_ui_cultures_match_resource_completeness : ResourcesTranslationTestsContext
     {
         private static readonly Regex CultureInfoRegex = new Regex(
@@ -85,11 +86,13 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
 
             var appResourceFiles = app.ResourceDirs
                 .SelectMany(dir => TestEnvironment.GetAllFilesFromSourceFolder(dir, "*.resx"))
-                .Distinct()
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
             var englishFiles = appResourceFiles
                 .Where(f => !Regex.IsMatch(f, @"\.[a-z]{2}(-[A-Za-z]+)?\.resx$", RegexOptions.IgnoreCase))
+                .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
             Assert.That(englishFiles, Is.Not.Empty, $"{appName}: could not find any base .resx files under {string.Join(", ", app.ResourceDirs)}");
