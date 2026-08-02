@@ -1,4 +1,4 @@
-{
+﻿{
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Questionnaire",
   "type": "object",
@@ -239,6 +239,10 @@
             },
             "IsCritical": {
               "type": "boolean"
+            },
+            "Indent": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         }
