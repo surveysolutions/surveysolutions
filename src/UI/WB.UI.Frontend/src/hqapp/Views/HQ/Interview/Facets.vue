@@ -1,10 +1,13 @@
 <template>
     <aside class="filters">
         <div>
-            <div class="foldback-button" id="hide-filters" @click="hideFacets">
+            <div class="foldback-button"
+                id="hide-filters"
+                @click="hideFacets">
                 <span class="arrow"></span>
                 <span class="arrow"></span>
-                <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-filter"
+                    aria-hidden="true"></span>
             </div>
             <FacetFilters />
         </div>

@@ -207,4 +207,65 @@
   <data name="Users" xml:space="preserve">
     <value>მომხმარებლები</value>
   </data>
+
+
+  <data name="AuditLog" xml:space="preserve">
+    <value>აუდიტის ჟურნალი</value>
+  </data>
+
+  <data name="DeviceLogs" xml:space="preserve">
+    <value>მოწყობილობის ჟურნალები</value>
+  </data>
+    
+  <data name="Diagnostics" xml:space="preserve">
+    <value>დიაგნოსტიკა</value>
+  </data>
+
+  <data name="InterviewPackages" xml:space="preserve">
+    <value>ინტერვიუს პაკეტები</value>
+  </data>
+
+  <data name="Settings" xml:space="preserve">
+    <value>პარამეტრები</value>
+  </data>
+
+  <data name="WorkspaceSettings" xml:space="preserve">
+    <value>სამუშაო სივრცის პარამეტრები</value>
+  </data>
+
+  <data name="EmailProviders" xml:space="preserve">
+    <value>ელ. ფოსტის პროვაიდერები</value>
+  </data>
+
+  <data name="Maps" xml:space="preserve">
+    <value>რუკები</value>
+  </data>
+
+  <data name="SurveyStatistics" xml:space="preserve">
+    <value>კვლევის სტატისტიკა</value>
+  </data>
+
+  <data name="StatusDuration" xml:space="preserve">
+    <value>სტატუსის ხანგრძლივობა</value>
+  </data>
+
+  <data name="MapDashboard" xml:space="preserve">
+    <value>რუკის დაფა</value>
+  </data>
+
+  <data name="TabletInfos" xml:space="preserve">
+    <value>ტაბლეტების ინფორმაცია</value>
+  </data>
+
+  <data name="Administration" xml:space="preserve">
+    <value>ადმინისტრირება</value>
+  </data>
+
+  <data name="Workspaces" xml:space="preserve">
+      <value>სამუშაო სივრცეები</value>
+  </data>
+
+  <data name="ServerAdministration">
+    <value>ადმინისტრირება</value>
+  </data>
 </root>

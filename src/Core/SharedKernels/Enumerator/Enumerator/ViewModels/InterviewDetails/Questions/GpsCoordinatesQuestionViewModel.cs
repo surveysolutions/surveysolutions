@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
@@ -36,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public bool ShowLocationOnMap => this.settings.ShowLocationOnMap &&
                                          this.googleApiService.GetPlayServicesConnectionStatus() == GoogleApiConnectionStatus.Success;
 
-        public IMvxAsyncCommand SaveAnswerCommand => new MvxAsyncCommand(this.SaveAnswerAsync, () => !this.Answering.InProgress);
+        public IMvxAsyncCommand SaveAnswerCommand { get; private set; }
         public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
         public IMvxCommand NavigateToMapsCommand => new MvxCommand(
             () => this.externalAppLauncher.LaunchMapsWithTargetLocation(this.Answer.Latitude, this.Answer.Longitude));
@@ -89,10 +90,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
+            this.SaveAnswerCommand = new MvxAsyncCommand(this.SaveAnswerAsync, () => !this.Answering.InProgress);
+            this.Answering.PropertyChanged += this.OnAnsweringPropertyChanged;
             this.liteEventRegistry = liteEventRegistry;
             this.logger = logger;
             this.googleApiService = googleApiService;
             this.externalAppLauncher = externalAppLauncher;
+        }
+
+        private void OnAnsweringPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(AnsweringViewModel.InProgress))
+                this.SaveAnswerCommand.RaiseCanExecuteChanged();
         }
 
         public Identity Identity => this.questionIdentity;
@@ -147,17 +156,50 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.Answering.StartInProgressIndicator();
             this.userInterfaceStateService.NotifyRefreshStarted();
-            
+
+            // Capture GPS result outside the refresh scope so that NotifyRefreshFinished
+            // can be called before SaveGeoLocationAnswerAsync → SendQuestionCommandAsync,
+            // which internally calls WaitWhileUserInterfaceIsRefreshingAsync and would
+            // deadlock if the refresh is still marked as started.
+            GpsLocation mvxGeoLocation = null;
+            Exception gpsException = null;
+
             try
             {
                 cts = new CancellationTokenSource(TimeSpan.FromSeconds(this.settings.GpsReceiveTimeoutSec));
-                
-                var mvxGeoLocation = await this.locationService.GetLocation(
+                mvxGeoLocation = await this.locationService.GetLocation(
                     this.settings.GpsDesiredAccuracy, cts.Token).ConfigureAwait(false);
-                
+            }
+            catch (Exception e)
+            {
+                gpsException = e;
+            }
+            finally
+            {
+                // End the long-running GPS wait before executing the answer command.
                 this.userInterfaceStateService.NotifyRefreshFinished();
-                
-                if (mvxGeoLocation == null)
+            }
+
+            try
+            {
+                if (gpsException is GpsProviderDisabledException)
+                {
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(EnumeratorUIResources.Error_NoGpsProvider);
+                }
+                else if (gpsException is PermissionException || gpsException is MissingPermissionsException)
+                {
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_MissingPermissions);
+                }
+                else if (gpsException is OperationCanceledException)
+                {
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
+                }
+                else if (gpsException != null)
+                {
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
+                    logger.Warn(gpsException.Message, gpsException);
+                }
+                else if (mvxGeoLocation == null)
                 {
                     await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
                 }
@@ -166,26 +208,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     await this.SetGeoLocationAnswerAsync(mvxGeoLocation);
                 }
             }
-            catch (PermissionException)
-            {
-                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_MissingPermissions);
-            }
-            catch (MissingPermissionsException)
-            {
-                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_MissingPermissions);
-            }
-            catch (OperationCanceledException)
-            {
-                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
-            }
-            catch (Exception e)
-            {
-                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
-                logger.Warn(e.Message, e);
-            }
             finally
             {
-                this.userInterfaceStateService.NotifyRefreshFinished();
                 this.Answering.FinishInProgressIndicator();
             }
         }
@@ -237,6 +261,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             cts?.Cancel();
             cts?.Dispose();
+
+            this.Answering.PropertyChanged -= this.OnAnsweringPropertyChanged;
             
             this.liteEventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
