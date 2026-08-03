@@ -131,11 +131,11 @@ export default {
         const unsavedChanges = useUnsavedChanges();
 
         const shift_question = useKeyShortcut(e =>
-            e.shiftKey && e.code === 'Slash' &&
+            e.key === '?' &&
             !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName?.toUpperCase() ?? '')
         );
 
-        const ctrl_p = useKeyShortcut(e => e.ctrlKey && e.code === 'KeyP');
+        const ctrl_p = useKeyShortcut(e => e.ctrlKey && !e.altKey && e.code === 'KeyP');
 
         return {
             questionnaireStore,
