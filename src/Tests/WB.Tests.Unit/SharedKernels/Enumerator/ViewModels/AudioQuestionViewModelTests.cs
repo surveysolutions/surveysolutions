@@ -84,5 +84,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 Moq.It.IsAny<string>(),
                 Moq.It.IsAny<CancellationToken>()), Times.Never);
         }
+
+        [Test]
+        public void when_dispose_should_not_dispose_shared_audio_service()
+        {
+            var audioService = Substitute.For<IAudioService>();
+
+            var viewModel = CreateAudioQuestionViewModel(audioService: audioService);
+
+            viewModel.Dispose();
+
+            audioService.DidNotReceive().Dispose();
+        }
     }
 }

@@ -15,12 +15,21 @@ namespace WB.UI.Shared.Enumerator.Services;
 
 public class LocationReceivedEventArgs : EventArgs
 {
-    public LocationReceivedEventArgs(GpsLocation location)
+    public LocationReceivedEventArgs(GpsLocation location, bool isFromMockProvider = false)
     {
         Location = location;
+        IsFromMockProvider = isFromMockProvider;
     }
 
     public GpsLocation Location { get; }
+
+    /// <summary>
+    /// True when the fix was injected by an external GPS sensor via Android's mock
+    /// location API (Developer Options → "Select mock location app").
+    /// Accuracy thresholds should not be applied to these fixes because external
+    /// sensors may report a fixed or zero accuracy value regardless of actual quality.
+    /// </summary>
+    public bool IsFromMockProvider { get; }
 }
 
 public interface INotificationManager
@@ -90,7 +99,18 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
 
         long minTimeMs = 5000;
         float minDistanceM = 1;
-        locationManager.RequestLocationUpdates(LocationManager.GpsProvider, minTimeMs, minDistanceM, this);
+        // Register for GPS_PROVIDER plus every currently-enabled provider so that fixes
+        // from an external Bluetooth/USB GPS sensor (which may register under a custom
+        // provider name via the mock location API) are also received.
+        // RemoveUpdates(this) in OnDestroy removes all registrations at once.
+        var allProviders = locationManager.GetProviders(enabledOnly: true)
+                                          .Append(LocationManager.GpsProvider)
+                                          .Distinct();
+        foreach (var provider in allProviders)
+        {
+            try { locationManager.RequestLocationUpdates(provider, minTimeMs, minDistanceM, this); }
+            catch { /* provider may have disappeared between enumeration and registration */ }
+        }
 
         return StartCommandResult.NotSticky;
     }
@@ -119,16 +139,21 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
 
     public virtual void OnLocationChanged(Location location)
     {
+
         var dateTimeOffset = GetTimestamp(location).ToUniversalTime();
-        var gpsLocation = new GpsLocation(location.Accuracy, location.Altitude, location.Latitude, location.Longitude,
+        var gpsLocation = new GpsLocation(
+            location.HasAccuracy ? location.Accuracy : null,
+            location.HasAltitude ? location.Altitude : null,
+            location.Latitude,
+            location.Longitude,
             dateTimeOffset);
 
-        OnGpsLocationChanged(gpsLocation);
+        OnGpsLocationChanged(gpsLocation, location.IsFromMockProvider);
     }
 
-    protected virtual void OnGpsLocationChanged(GpsLocation gpsLocation)
+    protected virtual void OnGpsLocationChanged(GpsLocation gpsLocation, bool isFromMockProvider = false)
     {
-        this.LocationReceived?.Invoke(this, new LocationReceivedEventArgs(gpsLocation));
+        this.LocationReceived?.Invoke(this, new LocationReceivedEventArgs(gpsLocation, isFromMockProvider));
     }
 
     public virtual void OnProviderDisabled(string provider)

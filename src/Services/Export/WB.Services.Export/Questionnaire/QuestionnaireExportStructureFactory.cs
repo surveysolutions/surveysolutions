@@ -714,7 +714,7 @@ namespace WB.Services.Export.Questionnaire
                 this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire));
 
             areaQuestionExportHeader.ColumnHeaders = new List<HeaderColumn>();
-            areaQuestionExportHeader.GeometryType = question.Properties?.GeometryType;
+            areaQuestionExportHeader.GeometryType = question.Properties?.GeometryType ?? GeometryType.Polygon;
 
             var questionLabel = string.IsNullOrEmpty(question.VariableLabel)
                 ? question.QuestionText.RemoveHtmlTags()

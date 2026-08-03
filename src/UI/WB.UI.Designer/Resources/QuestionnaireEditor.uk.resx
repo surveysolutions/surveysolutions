@@ -402,6 +402,9 @@
   <data name="FindReplaceMatchingLines" xml:space="preserve">
     <value>Збігаються рядкі: {{count}}</value>
   </data>
+  <data name="FindReplaceCurrentMatch" xml:space="preserve">
+    <value>{{current}} / {{count}}</value>
+  </data>
   <data name="FindReplaceMatchWord" xml:space="preserve">
     <value>Збіг цілого слова</value>
   </data>
@@ -625,6 +628,9 @@
   </data>
   <data name="HotkeysSearch" xml:space="preserve">
     <value>Пошук підрозділів та запитань у розділі</value>
+  </data>
+  <data name="HotkeysTest" xml:space="preserve">
+    <value>Тестувати анкету у WebTester</value>
   </data>
   <data name="HotkeysShortcuts" xml:space="preserve">
     <value>Комбінації клавіш</value>
@@ -1593,5 +1599,110 @@
   </data>
   <data name="AIAssistant" xml:space="preserve">
       <value>ШІ</value>
+  </data>
+
+
+  <data name="SideBarCriticalityConditionExpression" xml:space="preserve">
+      <value>Критична умова</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
+      <value>{{count}} Критичне правило:</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
+      <value>{{count}} Критичних правил:</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
+      <value>Опис</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionsEmptyLine1" xml:space="preserve">
+    <value>Використовуйте цю вкладку для визначення критичних правил.</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionsEmptyLine2" xml:space="preserve">
+    <value>Кожне критичне правило складається з умови та повідомлення. Критичні умови можуть посилатися на будь-які питання або змінні й мають виконуватися (обчислюватися як true). Обробка інтерв'ю з невиконаними критичними умовами визначається під час імпорту анкети на сервер даних.</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionsEmptyLine3" xml:space="preserve">
+    <value>Додайте повідомлення для інтерв'юера (респондента), щоб пояснити, що потрібно змінити в інтерв'ю (повідомлення відображається, коли критична умова не виконується). Для навігації корисно додавати в повідомлення гіперпосилання на питання.</value>
+  </data>
+
+  <data name="SideBarHideDescription" xml:space="preserve">
+    <value>приховати опис</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionMessage" xml:space="preserve">
+      <value>Повідомлення</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
+    <value>Критичне правило без повідомлення</value>
+  </data>
+
+  <data name="SideBarShowDescription" xml:space="preserve">
+    <value>додати опис</value>
+  </data>
+
+  <data name="SideBarAddCriticalityCondition" xml:space="preserve">
+    <value>додати нове критичне правило</value>
+  </data>
+
+  <data name="AttachmentSizeIsTooBig" xml:space="preserve">
+    <value>Розмір вкладення завеликий. Максимальний розмір: {{size}}</value>
+  </data>
+
+  <data name="SideBarCriticalityConditionsTitle" xml:space="preserve">
+    <value>Критичні правила</value>
+  </data>
+
+  <data name="Default" xml:space="preserve">
+    <value>За замовчуванням</value>
+  </data>
+
+  <data name="Reset" xml:space="preserve">
+    <value>Скинути</value>
+  </data>
+
+  <data name="RefreshPageConfirm" xml:space="preserve">
+    <value>Ми оновили цей сайт. Будь ласка, оновіть сторінку, інакше можлива непередбачувана поведінка</value>
+  </data>
+
+  <data name="Refresh" xml:space="preserve">
+    <value>Оновити</value>
+  </data>
+
+  <data name="Login" xml:space="preserve">
+      <value>Увійти</value>
+  </data>
+
+  <data name="Register" xml:space="preserve">
+      <value>Зареєструватися</value>
+  </data>
+
+  <data name="No" xml:space="preserve">
+      <value>Ні</value>
+  </data>
+
+  <data name="HelpIsCritical" xml:space="preserve">
+      <value>Автори анкет можуть позначати, що відповідь на питання є критичною для надсилання інтерв'ю.</value>
+  </data>
+
+  <data name="HelpCriticalityConditionExpression" xml:space="preserve">
+      <value>Логічний вираз, який обчислює інтерв'ю загалом, щоб визначити, чи воно відповідає критичним правилам (коли цей вираз обчислюється як "True"). Він може посилатися на будь-які питання або змінні.</value>
+  </data>
+
+  <data name="HelpCriticalityConditionMessage" xml:space="preserve">
+      <value>Це повідомлення показується, коли критична умова обчислюється як "False" або під час обчислення виразу виникає виняток. Повідомлення може використовувати гіперпосилання та підстановку тексту.</value>
+  </data>
+
+  <data name="SwitchTo" xml:space="preserve">
+    <value>Переключити на</value>
+  </data>
+
+  <data name="SwitchToTranslationConfirm" xml:space="preserve">
+    <value>Переключення змінить мову відображення анкети. Переклад має містити текст для всіх елементів.</value>
   </data>
 </root>
