@@ -58,4 +58,397 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+
+
+  <data name="Search" xml:space="preserve">
+  <value>Cari</value>
+  </data>
+
+  <data name="Create" xml:space="preserve">
+  <value>Buat</value>
+  </data>
+
+  <data name="ViewAssignmentDetails" xml:space="preserve">
+  <value>Lihat detail penugasan</value>
+  </data>
+
+  <data name="SaveChanges" xml:space="preserve">
+  <value>Simpan perubahan</value>
+  </data>
+
+  <data name="Template" xml:space="preserve">
+  <value>Templat</value>
+  </data>
+
+  <data name="Status" xml:space="preserve">
+  <value>Status</value>
+  </data>
+
+  <data name="Assignment" xml:space="preserve">
+  <value>Penugasan</value>
+  </data>
+
+  <data name="Responsible" xml:space="preserve">
+  <value>Penanggung jawab</value>
+  </data>
+
+  <data name="Save" xml:space="preserve">
+  <value>Simpan</value>
+  </data>
+
+  <data name="Apply" xml:space="preserve">
+    <value>Terapkan</value>
+  </data>
+
+  <data name="ErrorsLog" xml:space="preserve">
+  <value>Log kesalahan</value>
+  </data>
+
+  <data name="Questionnaires" xml:space="preserve">
+  <value>Kuesioner</value>
+  </data>
+
+  <data name="Questionnaire" xml:space="preserve">
+  <value>Kuesioner</value>
+  </data>
+
+  <data name="Assignments" xml:space="preserve">
+  <value>Penugasan</value>
+  </data>
+
+  <data name="Interviews" xml:space="preserve">
+  <value>Wawancara</value>
+  </data>
+
+  <data name="PrefilledQuestions" xml:space="preserve">
+  <value>Pertanyaan Identifikasi</value>
+  </data>
+
+  <data name="ShowIdentifying" xml:space="preserve">
+  <value>Tampilkan identifikasi</value>
+  </data>
+
+  <data name="HideIdentifying" xml:space="preserve">
+  <value>Sembunyikan</value>
+  </data>
+
+  <data name="InterviewKey" xml:space="preserve">
+  <value>Kunci Wawancara</value>
+  </data>
+
+  <data name="LastUpdate" xml:space="preserve">
+  <value>Diperbarui pada</value>
+  </data>
+
+  <data name="НasErrors" xml:space="preserve">
+  <value>Memiliki Kesalahan</value>
+  </data>
+
+  <data name="ReceivedByInterviewer" xml:space="preserve">
+  <value>Diterima oleh tablet</value>
+  </data>
+
+  <data name="CreatedOnClient" xml:space="preserve">
+  <value>Dibuat di tablet</value>
+  </data>
+
+  <data name="Any" xml:space="preserve">
+  <value>Apa pun</value>
+  </data>
+
+  <data name="AllAssignments" xml:space="preserve">
+  <value>Semua penugasan</value>
+  </data>
+
+  <data name="NoResultsFound" xml:space="preserve">
+  <value>Tidak ada hasil ditemukan</value>
+  </data>
+
+  <data name="Processing" xml:space="preserve">
+  <value>Memproses…</value>
+  </data>
+
+  <data name="Refresh" xml:space="preserve">
+  <value>Muat ulang</value>
+  </data>
+
+  <data name="Total" xml:space="preserve">
+  <value>Total</value>
+  </data>
+
+  <data name="CreateNewAssignment" xml:space="preserve">
+  <value>Buat penugasan baru</value>
+  </data>
+
+  <data name="Name" xml:space="preserve">
+  <value>Nama</value>
+  </data>
+
+  <data name="GetInterviewerApp" xml:space="preserve">
+  <value>Dapatkan Aplikasi Interviewer</value>
+  </data>
+
+  <data name="Loading" xml:space="preserve">
+  <value>Memuat. Mohon tunggu</value>
+  </data>
+
+  <data name="Admin" xml:space="preserve">
+  <value>Admin</value>
+  </data>
+
+  <data name="Approve" xml:space="preserve">
+  <value>Setujui</value>
+  </data>
+
+  <data name="Assign" xml:space="preserve">
+  <value>Tugaskan</value>
+  </data>
+
+  <data name="Reject" xml:space="preserve">
+  <value>Tolak</value>
+  </data>
+
+  <data name="Unapprove" xml:space="preserve">
+  <value>Batalkan persetujuan</value>
+  </data>
+
+  <data name="Delete" xml:space="preserve">
+  <value>Hapus</value>
+  </data>
+
+  <data name="SignIn" xml:space="preserve">
+  <value>Masuk</value>
+  </data>
+
+  <data name="Title" xml:space="preserve">
+  <value>Judul</value>
+  </data>
+
+  <data name="AlRightsReserved" xml:space="preserve">
+  <value>Hak Cipta Dilindungi</value>
+  </data>
+
+  <data name="Legal" xml:space="preserve">
+  <value>Legal</value>
+  </data>
+
+  <data name="TheWorldBankGroup" xml:space="preserve">
+  <value>The World Bank Group</value>
+  </data>
+
+  <data name="Settings" xml:space="preserve">
+  <value>Pengaturan</value>
+  </data>
+
+  <data name="EmailProviders" xml:space="preserve">
+  <value>Penyedia email</value>
+  </data>
+
+  <data name="AuditLog" xml:space="preserve">
+  <value>Log audit</value>
+  </data>
+
+  <data name="Logoff" xml:space="preserve">
+  <value>Keluar</value>
+  </data>
+
+  <data name="Cancel" xml:space="preserve">
+  <value>Batal</value>
+  </data>
+
+  <data name="Clear" xml:space="preserve">
+  <value>Bersihkan</value>
+  </data>
+
+  <data name="NewVersionAvailable" xml:space="preserve">
+  <value>Versi Baru Tersedia:</value>
+  </data>
+
+  <data name="No" xml:space="preserve">
+  <value>Tidak</value>
+  </data>
+
+  <data name="Yes" xml:space="preserve">
+  <value>Ya</value>
+  </data>
+
+  <data name="Ok" xml:space="preserve">
+  <value>OK</value>
+  </data>
+
+  <data name="Download" xml:space="preserve">
+  <value>Unduh</value>
+  </data>
+
+  <data name="DownloadSupervisor" xml:space="preserve">
+  <value>Unduh aplikasi Supervisor</value>
+  </data>
+
+  <data name="Open" xml:space="preserve">
+  <value>Buka</value>
+  </data>
+
+  <data name="ShowStatusHistory" xml:space="preserve">
+  <value>Tampilkan Riwayat Status</value>
+  </data>
+
+  <data name="AllStatuses" xml:space="preserve">
+  <value>Semua status</value>
+  </data>
+
+  <data name="AllSupervisors" xml:space="preserve">
+  <value>Semua supervisor</value>
+  </data>
+
+  <data name="AllResponsible" xml:space="preserve">
+  <value>Penanggung jawab apa pun</value>
+  </data>
+
+  <data name="AllQuestionnaires" xml:space="preserve">
+  <value>Semua kuesioner</value>
+  </data>
+
+  <data name="AllGpsQuestions" xml:space="preserve">
+  <value>Semua pertanyaan GPS</value>
+  </data>
+
+  <data name="OpenResponsiblesProfile" xml:space="preserve">
+  <value>Buka profil penanggung jawab</value>
+  </data>
+
+  <data name="MapDashboard" xml:space="preserve">
+  <value>Dasbor Peta</value>
+  </data>
+
+  <data name="OpenAssignment" xml:space="preserve">
+  <value>Buka penugasan</value>
+  </data>
+
+  <data name="Confirm" xml:space="preserve">
+  <value>Konfirmasi</value>
+  </data>
+
+  <data name="Archived" xml:space="preserve">
+  <value>Diarsipkan</value>
+  </data>
+
+  <data name="NothingSelected" xml:space="preserve">
+  <value>Tidak ada yang dipilih</value>
+  </data>
+
+  <data name="QuestionnaireVersion" xml:space="preserve">
+  <value>Versi kuesioner</value>
+  </data>
+
+  <data name="AllVersions" xml:space="preserve">
+  <value>Semua versi</value>
+  </data>
+
+  <data name="SelectQuestionnaire" xml:space="preserve">
+  <value>Pilih kuesioner</value>
+  </data>
+
+  <data name="Reset" xml:space="preserve">
+  <value>Atur ulang</value>
+  </data>
+
+  <data name="EqualValues" xml:space="preserve">
+  <value>Sama dengan</value>
+  </data>
+
+  <data name="NotEquals" xml:space="preserve">
+  <value>Tidak sama dengan</value>
+  </data>
+
+  <data name="SelectOption" xml:space="preserve">
+  <value>Pilih opsi</value>
+  </data>
+
+  <data name="StartsWith" xml:space="preserve">
+  <value>Dimulai dengan</value>
+  </data>
+
+  <data name="Unknown" xml:space="preserve">
+  <value>Tidak diketahui</value>
+  </data>
+
+  <data name="EditCalendarEvent" xml:space="preserve">
+  <value>Edit Acara Kalender</value>
+  </data>
+
+  <data name="CalendarEvent" xml:space="preserve">
+  <value>Acara Kalender</value>
+  </data>
+
+  <data name="Add" xml:space="preserve">
+  <value>Tambah</value>
+  </data>
+
+  <data name="Remove" xml:space="preserve">
+  <value>Hapus</value>
+  </data>
+
+  <data name="Return" xml:space="preserve">
+  <value>Kembali</value>
+  </data>
+
+  <data name="ChangeToCAPI" xml:space="preserve">
+  <value>Ubah ke CAPI</value>
+  </data>
+
+  <data name="ChangeToCAPIConfirmHQ" xml:space="preserve">
+  <value>Mode {{count}} wawancara yang dipilih akan diubah menjadi CAPI</value>
+  </data>
+
+  <data name="ChangeToCAWI" xml:space="preserve">
+  <value>Ubah ke CAWI</value>
+  </data>
+
+  <data name="ChangeToCAWIConfirmHQ" xml:space="preserve">
+  <value>Mode {{count}} wawancara yang dipilih akan diubah menjadi CAWI</value>
+  </data>
+
+  <data name="InterviewMode" xml:space="preserve">
+  <value>Mode Wawancara</value>
+  </data>
+
+  <data name="Capi" xml:space="preserve">
+  <value>CAPI</value>
+  </data>
+
+  <data name="Cawi" xml:space="preserve">
+  <value>CAWI</value>
+  </data>
+
+  <data name="Enable" xml:space="preserve">
+  <value>Aktifkan</value>
+  </data>
+
+  <data name="Disable" xml:space="preserve">
+  <value>Nonaktifkan</value>
+  </data>
+
+  <data name="Properties" xml:space="preserve">
+  <value>Properti</value>
+  </data>
+
+  <data name="LinkedUsers" xml:space="preserve">
+  <value>Pengguna tertaut</value>
+  </data>
+
+  <data name="LinkUser" xml:space="preserve">
+  <value>Pengguna</value>
+  </data>
+
+  <data name="GeoTrackNumber" xml:space="preserve">
+  <value>Jejak</value>
+  </data>
+
+  <data name="DateRange" xml:space="preserve">
+  <value>Rentang tanggal</value>
+  </data>
+
+  <data name="AllGeoTracks" xml:space="preserve">
+  <value>Semua jejak geo</value>
+  </data>
 </root>
