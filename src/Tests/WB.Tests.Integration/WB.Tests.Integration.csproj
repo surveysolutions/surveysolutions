@@ -39,7 +39,9 @@
         <ProjectReference Include="..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
         <ProjectReference Include="..\..\Infrastructure\WB.Persistence.Designer\WB.Persistence.Designer.csproj" />
         <ProjectReference Include="..\..\Infrastructure\WB.Persistence.Headquarters\WB.Persistence.Headquarters.csproj" />
+        <ProjectReference Include="..\..\UI\WB.UI.Designer\WB.UI.Designer.csproj" />
         <ProjectReference Include="..\..\UI\WB.UI.Headquarters.Core\WB.UI.Headquarters.csproj" />
+        <ProjectReference Include="..\..\UI\WB.UI.WebTester\WB.UI.WebTester.csproj" />
         <ProjectReference Include="..\WB.Tests.Abc\WB.Tests.Abc.csproj" />
     </ItemGroup>
     <ItemGroup>
