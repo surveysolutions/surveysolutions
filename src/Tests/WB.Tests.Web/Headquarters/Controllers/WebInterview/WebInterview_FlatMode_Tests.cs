@@ -190,6 +190,49 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         }
 
 
+        [Test]
+        public void GetBreadcrumbs_for_subsection_nested_in_subsection_inside_flat_roster_should_return_intermediate_subsection()
+        {
+            var sectionId = Guid.NewGuid();
+            var rosterId = Guid.NewGuid();
+            var subSectionId = Guid.NewGuid();
+            var childSubSectionId = Guid.NewGuid();
+            var intQuestionId = Guid.NewGuid();
+
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(sectionId, new IComposite[]
+            {
+                Create.Entity.FixedRoster(rosterId, displayMode: RosterDisplayMode.Flat, fixedTitles: new FixedRosterTitle[]
+                {
+                    Create.Entity.FixedTitle(1, "1"),
+                    Create.Entity.FixedTitle(2, "2"),
+                },
+                children: new IComposite[]
+                {
+                    Create.Entity.Group(subSectionId, children: new IComposite[]
+                    {
+                        Create.Entity.Group(childSubSectionId, children: new IComposite[]
+                        {
+                            Create.Entity.NumericIntegerQuestion(intQuestionId)
+                        })
+                    })
+                })
+            });
+            var statefulInterview = SetUp.StatefulInterview(questionnaireDocument);
+            var webInterview = CreateInterviewDataController(statefulInterview, questionnaireDocument);
+
+            var childSubSectionIdentity = Create.Identity(childSubSectionId, Create.RosterVector(1));
+
+            var breadcrumbs = webInterview.GetBreadcrumbs(statefulInterview.Id, childSubSectionIdentity.ToString());
+
+            Assert.That(breadcrumbs, Is.Not.Null);
+            Assert.That(breadcrumbs.Breadcrumbs.Select(x => x.Target), Does.Contain(
+                Create.Identity(sectionId, Create.RosterVector()).ToString()));
+            Assert.That(breadcrumbs.Breadcrumbs.Select(x => x.Target), Does.Contain(
+                Create.Identity(subSectionId, Create.RosterVector(1)).ToString()));
+            Assert.That(breadcrumbs.Breadcrumbs.Select(x => x.Target), Does.Not.Contain(
+                Create.Identity(rosterId, Create.RosterVector(1)).ToString()));
+        }
+
         private InterviewDataController CreateInterviewDataController(IStatefulInterview statefulInterview, 
             QuestionnaireDocument questionnaireDocument)
         { 

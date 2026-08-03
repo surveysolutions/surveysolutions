@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
@@ -50,6 +49,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             var viewFactory = context.HttpContext.RequestServices.GetRequiredService<IQuestionnaireViewFactory>();
             var httpContextUser = context.HttpContext.User;
 
+            bool isApiRequest = context.HttpContext.Request.Path.StartsWithSegments("/api", StringComparison.OrdinalIgnoreCase);
+
             bool hasAnonymousAccess = viewFactory.IsAnonymousQuestionnaire(questionnaireRevision.QuestionnaireId, out var originQuestionnaireId);
             if (hasAnonymousAccess && originQuestionnaireId.HasValue && id is QuestionnaireRevision r)
                 r.MarkAsAnonymousQuestionnaire(originQuestionnaireId.Value);
@@ -58,43 +59,44 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             {
                 if (httpContextUser.Identity?.IsAuthenticated != true)
                 {
-                    context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
-                    {
-                        StatusCode = StatusCodes.Status401Unauthorized
-                    };
+                    context.Result = isApiRequest
+                        ? new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
+                            { StatusCode = StatusCodes.Status401Unauthorized }
+                        : new ChallengeResult();
                     return;
                 }
 
+                var writeUserId = httpContextUser.GetIdOrNull();
                 bool hasWriteAccess = httpContextUser.IsAdmin() ||
-                    viewFactory.HasUserChangeAccessToQuestionnaire(questionnaireRevision.QuestionnaireId, httpContextUser.GetId());
+                    (writeUserId.HasValue && viewFactory.HasUserChangeAccessToQuestionnaire(questionnaireRevision.QuestionnaireId, writeUserId.Value));
                 if (!hasWriteAccess)
                 {
-                    context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
-                    {
-                        StatusCode = StatusCodes.Status403Forbidden
-                    };
+                    context.Result = isApiRequest
+                        ? new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
+                            { StatusCode = StatusCodes.Status403Forbidden }
+                        : new ForbidResult();
                 }
                 return;
             }
             
             if (httpContextUser.Identity?.IsAuthenticated != true && !hasAnonymousAccess)
             {
-                context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
-                {
-                    StatusCode = StatusCodes.Status403Forbidden
-                };
+                context.Result = isApiRequest
+                    ? new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
+                        { StatusCode = StatusCodes.Status401Unauthorized }
+                    : new ChallengeResult();
                 return;
             }
 
             bool hasAccess = hasAnonymousAccess ||
                   httpContextUser.IsAdmin() ||
-                  viewFactory.HasUserAccessToQuestionnaire(questionnaireRevision, httpContextUser.GetId());
+                  viewFactory.HasUserAccessToQuestionnaire(questionnaireRevision, httpContextUser.GetIdOrNull());
             if (!hasAccess)
             {
-                context.Result = new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
-                {
-                    StatusCode = StatusCodes.Status403Forbidden
-                };
+                context.Result = isApiRequest
+                    ? new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
+                        { StatusCode = StatusCodes.Status403Forbidden }
+                    : new ForbidResult();
             }
         }
     }
