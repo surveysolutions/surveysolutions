@@ -208,3 +208,5 @@ Exception: endpoints explicitly decorated `[IgnoreAntiforgeryToken]` (rare). Eve
 **HQ / WebInterview:** Routes are contributed by component providers (classes consumed by `ComponentsProvider`). New routes must go through a provider class that declares `modules` / `initialize`. Routes added directly to the `routes` array skip Vuex module registration.
 
 **Designer:** New routes must be registered centrally in `questionnaire/src/router/index.js`. Flag ad-hoc `router.addRoute(...)` calls in components.
+
+# Critical: If you are not 100% sure in the result, continue looking for Logic, Security, and Performance issues, repeating the review until you are sure for 100%!

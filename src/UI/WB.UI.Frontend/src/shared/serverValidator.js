@@ -9,6 +9,15 @@ function validateHeaderValues(headerValue, url) {
     const urlStr = url && String(url)
     if (urlStr && urlStr.includes('/error/report')) return
 
+    // Skip validation for cross-origin requests (e.g. Designer API calls from Web-tester).
+    // Those responses come from a different server and are not expected to carry the header.
+    if (urlStr) {
+        try {
+            const requestOrigin = new URL(urlStr, window.location.href).origin
+            if (requestOrigin !== window.location.origin) return
+        } catch { /* ignore malformed URLs */ }
+    }
+
     if (headerValue === EXPECTED_HEADER_VALUE) return
 
     if (shownOnce) return

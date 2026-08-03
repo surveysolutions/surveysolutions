@@ -825,4 +825,33 @@
   <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
     <value>Посилання на приховане запитання не дозволяється</value>
   </data>
+
+
+  <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
+    <value>Область видимості критичного питання не може бути жодною з таких: hidden, supervisor.</value>
+  </data>
+
+  <data name="WB0318_CriticalityConditionExpressionHasIncorrectSyntax" xml:space="preserve">
+    <value>Критична умова містить синтаксичну помилку у виразі.</value>
+  </data>
+
+  <data name="WB0319_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+    <value>Критична умова порожня.</value>
+  </data>
+
+  <data name="WB0320_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+    <value>Повідомлення в критичному правилі порожнє.</value>
+  </data>
+
+  <data name="WB0321_CriticalityConditionUsingForbiddenClasses" xml:space="preserve">
+    <value>Критична умова використовує заборонений тип.</value>
+  </data>
+
+  <data name="WB0322_CriticalRuleExpressionIsTooLong" xml:space="preserve">
+    <value>Вираз критичного правила містить понад {0} символів.</value>
+  </data>
+
+  <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
+    <value>Повідомлення критичної умови містить понад {0} символів.</value>
+  </data>
 </root>

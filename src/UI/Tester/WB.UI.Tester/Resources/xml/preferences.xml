@@ -1,22 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto">
-  <EditTextPreference android:key="HttpResponseTimeout" android:numeric="integer" android:defaultValue="@integer/HttpResponseTimeout"/>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+  <EditTextPreference android:key="HttpResponseTimeout" android:numeric="integer" android:defaultValue="@integer/HttpResponseTimeout" app:singleLineTitle="false" />
 
-  <EditTextPreference android:key="GpsReceiveTimeoutSec" android:numeric="integer" android:defaultValue="@integer/GpsReceiveTimeoutSec"/>
-  <EditTextPreference android:key="GpsDesiredAccuracy" android:numeric="integer" android:defaultValue="@integer/GpsDesiredAccuracy"/>
+  <EditTextPreference android:key="GpsReceiveTimeoutSec" android:numeric="integer" android:defaultValue="@integer/GpsReceiveTimeoutSec" app:singleLineTitle="false" />
+  <EditTextPreference android:key="GpsDesiredAccuracy" android:numeric="integer" android:defaultValue="@integer/GpsDesiredAccuracy" app:singleLineTitle="false" />
 
-  <CheckBoxPreference android:key="VibrateOnError" />
-  <CheckBoxPreference android:key="ShowLocationOnMap" />
+  <CheckBoxPreference android:key="VibrateOnError" app:singleLineTitle="false" />
+  <CheckBoxPreference android:key="ShowLocationOnMap" app:singleLineTitle="false" />
   
-  <CheckBoxPreference android:key="ShowVariables" />
+  <CheckBoxPreference android:key="ShowVariables" app:singleLineTitle="false" />
   
-  <CheckBoxPreference android:key="ShowAnsweringTime" />
-  <Preference android:key="version" />
+  <CheckBoxPreference android:key="ShowAnsweringTime" app:singleLineTitle="false" />
+  <Preference android:key="version" app:singleLineTitle="false" />
   
   <PreferenceCategory android:key="dev_settings_category">
-    <EditTextPreference android:key="DesignerEndpointGen1" android:defaultValue="@string/DesignerEndpoint"/>
-    <CheckBoxPreference android:key="AcceptUnsignedSslCertificate" android:defaultValue="@bool/AcceptUnsignedSslCertificate" />
-    <SwitchPreference android:key="TestApplicationCrash" android:defaultValue="false" />  
+    <EditTextPreference android:key="DesignerEndpointGen1" android:defaultValue="@string/DesignerEndpoint" app:singleLineTitle="false" />
+    <CheckBoxPreference android:key="AcceptUnsignedSslCertificate" android:defaultValue="@bool/AcceptUnsignedSslCertificate" app:singleLineTitle="false" />
+    <SwitchPreference android:key="TestApplicationCrash" android:defaultValue="false" app:singleLineTitle="false" />  
   </PreferenceCategory>
   
 </androidx.preference.PreferenceScreen>
