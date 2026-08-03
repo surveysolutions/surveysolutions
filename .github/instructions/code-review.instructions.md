@@ -54,6 +54,7 @@ Every finding must use this structure:
 File: path/to/file.cs, line N
 Problem: One sentence describing the defect.
 Fix: One sentence concrete remediation.
+Instruction trace: repository-wide, code-review, applicable-path-token
 ```
 
 Replace `🔴 CRITICAL` with the appropriate severity prefix:
@@ -61,15 +62,15 @@ Replace `🔴 CRITICAL` with the appropriate severity prefix:
 - `🟠 HIGH` — Definite logic bug, race condition, or unhandled exception path. Should be fixed before merge.
 - `🟡 MEDIUM` — Architectural violation or missing safeguard that will likely cause a future bug.
 
-Omit findings that don't reach 🟡 MEDIUM. When there are no findings, use `✅ No issues found in the diff.` as the result before the instruction trace.
+Omit findings that don't reach 🟡 MEDIUM. When there are no findings, respond with: `✅ No issues found in the diff.`
 
 ### Instruction Trace
 
-End every pull request review response with one line in this format:
+End every individual finding comment with one line in this format:
 
 `Instruction trace: token1, token2`
 
-Include `code-review` and every token required by the other applicable custom instruction files. Do not list an instruction file unless its token requirement was provided in the review context.
+Include `code-review` and every token required by the other custom instruction files applicable to that finding's file. Do not list an instruction file unless its token requirement was provided in the review context. GitHub may produce no comment when it finds no issues; in that case no trace can be emitted.
 
 ---
 

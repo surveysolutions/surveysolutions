@@ -4,7 +4,7 @@ applyTo: "**/*.cs"
 
 # C# Conventions — Survey Solutions
 
-When performing a pull request review, include the token `csharp` in the final `Instruction trace:` line.
+When performing a pull request review, include the token `csharp` in the `Instruction trace:` line at the end of every finding comment about a C# file.
 
 ## Code Style
 

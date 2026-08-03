@@ -181,4 +181,4 @@ src/
 
 ## Copilot Code Review Trace
 
-When performing a pull request review, include the token `repository-wide` in the final `Instruction trace:` line.
+When performing a pull request review, include the token `repository-wide` in the `Instruction trace:` line at the end of every finding comment.
