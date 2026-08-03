@@ -429,7 +429,7 @@ export default {
             };
         });
 
-        const ctrl_s = useKeyShortcut(e => e.ctrlKey && e.code === 'KeyS');
+        const ctrl_s = useKeyShortcut(e => e.ctrlKey && !e.altKey && e.code === 'KeyS');
 
         return {
             rosterStore, commentsStore, ctrl_s

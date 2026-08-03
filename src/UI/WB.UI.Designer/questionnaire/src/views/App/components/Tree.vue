@@ -219,9 +219,9 @@ export default {
         const treeStore = useTreeStore();
         const searchDialog = ref(null);
 
-        const ctrl_f = useKeyShortcut(e => e.ctrlKey && e.code === 'KeyF');
+        const ctrl_f = useKeyShortcut(e => e.ctrlKey && !e.altKey && e.code === 'KeyF');
 
-        const ctrl_h = useKeyShortcut(e => e.ctrlKey && e.code === 'KeyH');
+        const ctrl_h = useKeyShortcut(e => e.ctrlKey && !e.altKey && e.code === 'KeyH');
 
         return {
             treeStore,
