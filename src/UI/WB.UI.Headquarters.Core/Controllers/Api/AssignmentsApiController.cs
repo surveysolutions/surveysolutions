@@ -358,7 +358,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             public string Status { get; set; }
 
             /// <summary>
-            /// Per-question filter conditions, each encoded as "variable,field|operator,value"
+            /// Per-question filter conditions, each encoded as "variable,field|operator,jsonValue"
+            /// where jsonValue is a JSON-encoded string or number (e.g. "\"text\"" or "42").
             /// </summary>
             public string[] Conditions { get; set; }
         }

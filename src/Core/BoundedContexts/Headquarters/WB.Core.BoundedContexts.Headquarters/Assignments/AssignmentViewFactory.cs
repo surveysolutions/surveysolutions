@@ -410,7 +410,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                             items = items.Where(x => x.IdentifyingData.Any(a => a.VariableName == variable && a.Answer == value));
                             break;
                         case ("answerCode", "neq"):
-                            items = items.Where(x => !x.IdentifyingData.Any(a => a.VariableName == variable && a.Answer == value));
+                            items = items.Where(x => x.IdentifyingData.Any(a => a.VariableName == variable && a.Answer != value));
                             break;
                         case ("value", "eq"):
                             items = items.Where(x => x.IdentifyingData.Any(a => a.VariableName == variable && a.Answer == value));

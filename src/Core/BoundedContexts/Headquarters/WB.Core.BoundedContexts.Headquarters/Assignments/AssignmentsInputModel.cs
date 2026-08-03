@@ -29,9 +29,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public AssignmentStatus[] Statuses { get; set; }
 
         /// <summary>
-        /// Per-question filter conditions, each in "variable|field|operator,value" format
-        /// where field|operator matches interview filter conventions:
-        /// valueLowerCase|startsWith, valueLowerCase|eq, answerCode|eq, answerCode|neq, value|eq
+        /// Per-question filter conditions. Each entry has:
+        /// Variable (question variable name), Field as "field|operator" (e.g. valueLowerCase|startsWith,
+        /// valueLowerCase|eq, answerCode|eq, answerCode|neq, value|eq), and Value as the parsed filter value
+        /// (lowercased string for valueLowerCase operators).
         /// </summary>
         public AssignmentFilterCondition[] Conditions { get; set; }
 
