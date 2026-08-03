@@ -1,8 +1,10 @@
 ---
-applyTo: "{src/UI/WB.UI.Frontend/src/**,src/UI/WB.UI.Designer/questionnaire/src/**/*}.{js,ts,vue,jsx,tsx}"
+applyTo: "src/UI/WB.UI.Frontend/src/**/*.js,src/UI/WB.UI.Frontend/src/**/*.ts,src/UI/WB.UI.Frontend/src/**/*.vue,src/UI/WB.UI.Frontend/src/**/*.jsx,src/UI/WB.UI.Frontend/src/**/*.tsx,src/UI/WB.UI.Designer/questionnaire/src/**/*.js,src/UI/WB.UI.Designer/questionnaire/src/**/*.ts,src/UI/WB.UI.Designer/questionnaire/src/**/*.vue,src/UI/WB.UI.Designer/questionnaire/src/**/*.jsx,src/UI/WB.UI.Designer/questionnaire/src/**/*.tsx"
 ---
 
 # Frontend Conventions — Survey Solutions
+
+When performing a pull request review, include the token `frontend` in the final `Instruction trace:` line.
 
 There are **two distinct frontend applications** with different technology choices.
 

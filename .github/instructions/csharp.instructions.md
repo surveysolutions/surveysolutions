@@ -4,6 +4,8 @@ applyTo: "**/*.cs"
 
 # C# Conventions — Survey Solutions
 
+When performing a pull request review, include the token `csharp` in the final `Instruction trace:` line.
+
 ## Code Style
 
 - **Language version:** `latest` — use modern C# features freely (pattern matching, records, switch expressions, etc.).
