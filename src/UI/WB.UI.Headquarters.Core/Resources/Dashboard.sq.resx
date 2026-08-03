@@ -219,4 +219,58 @@
   <data name="WebMode" xml:space="preserve">
     <value>Modaliteti</value>
   </data>
+
+
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Paneli i hartës</value>
+  </data>
+
+  <data name="SaveQuestionnaire" xml:space="preserve">
+    <value>Ruaj dokumentin e pyetësorit</value>
+  </data>
+
+  <data name="QuestionnairePreview" xml:space="preserve">
+    <value>Parapamja e pyetësorit</value>
+  </data>
+
+  <data name="Details" xml:space="preserve">
+    <value>Hollësitë</value>
+    <comment>Questionnaire details</comment>
+  </data>
+
+  <data name="ShowOnDesigner" xml:space="preserve">
+    <value>Shfaq në Designer</value>
+  </data>
+
+  <data name="ImportedBy" xml:space="preserve">
+    <value>Importuar nga</value>
+  </data>
+
+  <data name="ImportedByText" xml:space="preserve">
+    <value>përdoruesi {{name}} me rolin {{role}}</value>
+  </data>
+
+  <data name="QuestionnaireDeleteWarn" xml:space="preserve">
+    <value>Janë pranuar {{receivedInterviews}} intervista dhe {{receivedAssignments}} detyra për intervista të reja nga intervistuesit/supervizorët që punojnë të shkëputur. Pasi të konfirmoni fshirjen e anketës, serveri nuk do të pranojë më informacionin që bazohet në këto intervista/detyra dhe ato do të zhduken në sinkronizimin e ardhshëm pa mundësi rikuperimi, edhe nëse përmbajnë informacion të futur/redaktuar rishtazi. Është përgjegjësia juaj të paralajmëroni/njoftoni intervistuesit që të mos i plotësojnë më ato intervista/detyra, sepse ata nuk do të njoftohen automatikisht. Dëshironi të vazhdoni?</value>
+  </data>
+
+  <data name="TypeQuestionnaireName" xml:space="preserve">
+    <value>Ju lutemi shkruani '{{questionnaireTitle}}' për ta konfirmuar</value> 
+  </data>
+
+  <data name="UsersManagement" xml:space="preserve">
+      <value>Menaxhimi i përdoruesve</value>
+  </data>
+
+  <data name="CreateUser" xml:space="preserve">
+      <value>Krijo përdorues</value>
+  </data>
+
+  <data name="ExposedVariables" xml:space="preserve">
+    <value>Variablat e ekspozuara</value>
+  </data>
+
+  <data name="Edit" xml:space="preserve">
+    <value>Ndrysho</value>
+  </data>
 </root>

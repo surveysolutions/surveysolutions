@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         private int GetDbItemsCount()
             => this.Principal.IsAuthenticated ? this.interviewViewRepository.Count(this.GetDbQuery()) : 0;
 
-        public async Task LoadAsync(Guid? lastVisitedInterviewId)
+        public virtual async Task LoadAsync(Guid? lastVisitedInterviewId)
         {
             this.lastVisitedInterviewId = lastVisitedInterviewId;
 
