@@ -78,7 +78,7 @@ internal class UsersTests : ApiTestContext
     }
 
     [Test]
-    public async Task when_moving_interviewer_and_supervisor_not_found_should_return_validation_problem()
+    public async Task when_moving_interviewer_and_supervisor_not_found_should_return_not_found()
     {
         var interviewerId = Guid.NewGuid();
         var supervisorId = Guid.NewGuid();
@@ -102,8 +102,7 @@ internal class UsersTests : ApiTestContext
             Mode = MoveUserToAnotherTeamMode.MoveAllToNewTeam
         });
 
-        var problemDetails = (ValidationProblemDetails)((ObjectResult)result.Result).Value;
-        Assert.That(problemDetails.Errors.First().Value.First(), Is.EqualTo("Supervisor was not found"));
+        Assert.That(result.Result, Is.InstanceOf<NotFoundResult>());
     }
 
     [Test]
@@ -126,6 +125,12 @@ internal class UsersTests : ApiTestContext
             .Returns(new UserView
             {
                 PublicKey = newSupervisorId,
+                Roles = new HashSet<UserRoles> { UserRoles.Supervisor }
+            });
+        userViewFactory.Setup(x => x.GetUser(It.Is<UserViewInputModel>(m => m.PublicKey == oldSupervisorId)))
+            .Returns(new UserView
+            {
+                PublicKey = oldSupervisorId,
                 Roles = new HashSet<UserRoles> { UserRoles.Supervisor }
             });
 

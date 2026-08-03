@@ -336,12 +336,19 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (interviewer.Supervisor == null || interviewer.Supervisor.Id == Guid.Empty)
                 return StatusCode(StatusCodes.Status406NotAcceptable);
 
-            var supervisor = usersFactory.GetUser(new UserViewInputModel(request.SupervisorId));
-            if (supervisor == null || !supervisor.Roles.Contains(UserRoles.Supervisor))
+            if (!Enum.IsDefined(typeof(MoveUserToAnotherTeamMode), request.Mode))
             {
-                ModelState.AddModelError(nameof(request.SupervisorId), "Supervisor was not found");
+                ModelState.AddModelError(nameof(request.Mode), "Invalid mode value");
                 return ValidationProblem();
             }
+
+            var supervisor = usersFactory.GetUser(new UserViewInputModel(request.SupervisorId));
+            if (supervisor == null || !supervisor.Roles.Contains(UserRoles.Supervisor))
+                return NotFound();
+
+            var previousSupervisor = usersFactory.GetUser(new UserViewInputModel(interviewer.Supervisor.Id));
+            if (previousSupervisor == null || !previousSupervisor.Roles.Contains(UserRoles.Supervisor))
+                return StatusCode(StatusCodes.Status406NotAcceptable);
 
             var result = await moveUserToAnotherTeamService.Move(
                 authorizedUser.Id,
