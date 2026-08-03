@@ -1,5 +1,5 @@
 ---
-applyTo: "src/UI/WB.UI.Frontend/src/**/*.js,src/UI/WB.UI.Frontend/src/**/*.ts,src/UI/WB.UI.Frontend/src/**/*.vue,src/UI/WB.UI.Frontend/src/**/*.jsx,src/UI/WB.UI.Frontend/src/**/*.tsx,src/UI/WB.UI.Designer/questionnaire/src/**/*.js,src/UI/WB.UI.Designer/questionnaire/src/**/*.ts,src/UI/WB.UI.Designer/questionnaire/src/**/*.vue,src/UI/WB.UI.Designer/questionnaire/src/**/*.jsx,src/UI/WB.UI.Designer/questionnaire/src/**/*.tsx"
+applyTo: "{src/UI/WB.UI.Frontend/src/**,src/UI/WB.UI.Designer/questionnaire/src/**/*}.{js,ts,vue,jsx,tsx}"
 ---
 
 # Frontend Conventions — Survey Solutions
