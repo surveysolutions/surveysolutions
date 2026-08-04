@@ -848,4 +848,223 @@
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>收到的响应似乎并非来自 Survey Solutions 服务器。通常这是由网络代理、防火墙或安全网关拦截连接导致的。请检查您的网络连接或联系 IT 支持。</value>
   </data>
+  <data name="Dashboard_CompleteAssignment" xml:space="preserve">
+    <value>完成</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
+    <value>完成任务</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
+    <value>您确定已列举所有符合条件的单元吗？</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
+    <value>重新开启任务</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>该任务将恢复为“已开启”状态，访谈员将能够创建新的访谈。</value>
+  </data>
+  <data name="Dashboard_CloseAssignment" xml:space="preserve">
+    <value>审批</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
+    <value>关闭任务</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
+    <value>离线工作的访谈员可以在同步之前继续收集数据。此类访谈仍将被接受。</value>
+  </data>
+  <data name="Dashboard_Assignment_Comment" xml:space="preserve">
+    <value>备注（可选）</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
+    <value>状态：已完成</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
+    <value>状态：已审批</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
+    <value>状态：已开启</value>
+  </data>
+  <data name="Dashboard_WebInterviewsLinkText" xml:space="preserve">
+    <value>Web 访谈 ({0})</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspaces" xml:space="preserve">
+    <value>正在刷新工作区</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesFinished" xml:space="preserve">
+    <value>工作区列表已更新</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesError" xml:space="preserve">
+    <value>获取工作区列表时出错。请联系您的系统管理员。 </value>
+  </data>
+  <data name="InvalidEndpointShort" xml:space="preserve">
+    <value>地址无效</value>
+  </data>
+  <data name="BluetoothPermissionRequired" xml:space="preserve">
+    <value>离线同步需要蓝牙权限</value>
+  </data>
+  <data name="NearbyPermissionRequired" xml:space="preserve">
+    <value>离线同步需要附近 Wi-Fi 设备权限</value>
+  </data>
+  <data name="Synchronization_Download_CalendarEvents_Title" xml:space="preserve">
+    <value>正在更新日历事件</value>
+  </data>
+  <data name="Synchronization_Update_Interviews_Title" xml:space="preserve">
+    <value>正在使用服务器的更改更新本地访谈</value>
+  </data>
+  <data name="Synchronization_Fail_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>已下载 {1} 个部分访谈中的 {0} 个</value>
+  </data>
+  <data name="Synchronization_PartialInterviews" xml:space="preserve">
+    <value>访谈更改</value>
+  </data>
+  <data name="Synchronization_LinkToErrors" xml:space="preserve">
+    <value>有关同步错误的更多信息，请访问&lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems"&gt;支持网站&lt;/a&gt;</value>
+  </data>
+  <data name="TransferringCalendarEvents" xml:space="preserve">
+    <value>正在传输日历事件</value>
+  </data>
+  <data name="Synchronization_Success_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>{0} 个访谈已更新</value>
+  </data>
+  <data name="Synchronization_Success_State_PartialUploadInterviews_Format" xml:space="preserve">
+    <value>{0} 个访谈已部分上传</value>
+  </data>
+  <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
+    <value>日历事件</value>
+  </data>
+  <data name="Synchronization_PasswordChangeRequired" xml:space="preserve">
+    <value>您的密码已被重置。您必须更改密码才能访问网站。</value>
+  </data>
+  <data name="YouChangeYouPasswordTryToLoginAgainWithNewPassword" xml:space="preserve">
+    <value>您已更改当前密码。请使用新密码重新登录。</value>
+  </data>
+  <data name="HeadquartersVersion" xml:space="preserve">
+    <value>总部支持版本：{0}</value>
+  </data>
+  <data name="SupervisorVersion" xml:space="preserve">
+    <value>主管版本：{0}</value>
+  </data>
+  <data name="InterviewerVersion" xml:space="preserve">
+    <value>访谈员版本：{0}</value>
+  </data>
+  <data name="MenuItem_Title_Return" xml:space="preserve">
+    <value>返回</value>
+  </data>
+  <data name="MenuItem_Title_Map_Dashboard" xml:space="preserve">
+    <value>地图仪表板</value>
+  </data>
+  <data name="MenuItem_Title_Workspaces" xml:space="preserve">
+    <value>工作区</value>
+  </data>
+  <data name="MenuItem_Title_RefreshWorkspaces" xml:space="preserve">
+    <value>刷新工作区</value>
+  </data>
+  <data name="Synchronization_UploadGeoTracking" xml:space="preserve">
+    <value>正在上传地理追踪信息</value>
+  </data>
+  <data name="Synchronization_RemoveObsoleteGeoTracking" xml:space="preserve">
+    <value>正在删除过时的地理追踪信息</value>
+  </data>
+  <data name="Dashboard_WebInterviewTabText" xml:space="preserve">
+    <value>网络访谈模式下的访谈。当受访者完成网络访谈后，同步时将被删除</value>
+  </data>
+  <data name="Dashboard_ShowAssignmentMap" xml:space="preserve">
+    <value>显示目标区域</value>
+  </data>
+  <data name="Dashboard_AddCalendarEvent" xml:space="preserve">
+    <value>添加日历事件</value>
+  </data>
+  <data name="Dashboard_EditCalendarEvent" xml:space="preserve">
+    <value>编辑日历事件</value>
+  </data>
+  <data name="Dashboard_RemoveCalendarEvent" xml:space="preserve">
+    <value>删除日历事件</value>
+  </data>
+  <data name="Dashboard_ShowCalendarEvent" xml:space="preserve">
+    <value>下次联系：{0}</value>
+  </data>
+  <data name="Dashboard_PastDateCalendarEvent" xml:space="preserve">
+    <value>所选日期已过去</value>
+  </data>
+  <data name="Dashboard_PastTimeCalendarEvent" xml:space="preserve">
+    <value>所选时间已过去</value>
+  </data>
+  <data name="Dashboard_CantOpenCawi" xml:space="preserve">
+    <value>无法以 CAWI 模式打开访谈。同步后将发送至总部。</value>
+  </data>
+  <data name="Dashboard_CawiLabel" xml:space="preserve">
+    <value>{0}（CAWI）</value>
+  </data>
+  <data name="Notifications_InterviewsTitle" xml:space="preserve">
+    <value>访谈</value>
+  </data>
+  <data name="Notifications_CompletedInterviewsText" xml:space="preserve">
+    <value>您有 {0} 个已完成的访谈需要同步</value>
+  </data>
+  <data name="Notifications_RejectedInterviewsText" xml:space="preserve">
+    <value>您有 {0} 个未处理的被拒绝访谈</value>
+  </data>
+  <data name="Notifications_SyncTitle" xml:space="preserve">
+    <value>同步</value>
+  </data>
+  <data name="Notifications_SyncTooLongAgoText" xml:space="preserve">
+    <value>最近未进行同步。请同步</value>
+  </data>
+  <data name="Notifications_SyncNoRetryTitle" xml:space="preserve">
+    <value>同步失败后未重试。请再试一次</value>
+  </data>
+  <data name="Notifications_ManyStartedInterviews" xml:space="preserve">
+    <value>您已启动太多访谈。请完成它们。</value>
+  </data>
+  <data name="Notifications_ManyCompletedInterviews" xml:space="preserve">
+    <value>有很多已完成的访谈。请同步。</value>
+  </data>
+  <data name="Notifications_StaleAssignments" xml:space="preserve">
+    <value>某些任务在过去 3 天内未更新。</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherServer_Description" xml:space="preserve">
+    <value>当前用户是在总部应用程序的另一个实例上创建的。请将同步端点 URL 更改为原始服务器</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherServer_Status" xml:space="preserve">
+    <value>用户已链接到另一台服务器</value>
+  </data>
+  <data name="Diagnostics_SendLogs" xml:space="preserve">
+    <value>发送追踪日志</value>
+  </data>
+  <data name="Diagnostics_SendLogs_Description" xml:space="preserve">
+    <value>向总部网站发送详细日志以进行问题调查</value>
+  </data>
+  <data name="Diagnostics_SendLogs_Success" xml:space="preserve">
+    <value>日志已发送至总部</value>
+  </data>
+  <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
+    <value>您的账户在此服务器上不再处于活动状态，因为定义该账户的工作区已被管理员禁用。请联系您的主管。</value>
+  </data>
+  <data name="DashboardItem_QRCode" xml:space="preserve">
+    <value>显示二维码</value>
+  </data>
+  <data name="Synchronization_WorkspaceAccessDisabledReason" xml:space="preserve">
+    <value>您的账户在工作区中不再处于活动状态。请联系您的系统管理员。</value>
+  </data>
+  <data name="Interview_Progress_Format" xml:space="preserve">
+    <value>进度：{0}/{1}</value>
+  </data>
+  <data name="Error_NoGpsProvider" xml:space="preserve">
+    <value>此设备上没有 GPS 提供商</value>
+  </data>
+  <data name="Error_NoTargetAreaShapefile" xml:space="preserve">
+    <value>目标区域没有边界</value>
+  </data>
+  <data name="Dashboard_CreateInterview_TargetArea_Warning" xml:space="preserve">
+    <value>该任务要求您直接从任务地图创建访谈。建议使用地理围栏模式。您是否要继续？</value>
+  </data>
+  <data name="AssigmentMap_CreateInterview_OutTargetArea_Warning" xml:space="preserve">
+    <value>您正在目标区域外创建访谈。您是否要继续？</value>
+  </data>
+  <data name="AssigmentMap_CreateInterview_DisabledTargetArea_Warning" xml:space="preserve">
+    <value>建议启用地理围栏以检查目标区域。您是否要继续？</value>
+  </data>
+  <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
+    <value>您在创建访谈时使用了地理追踪或地理围栏。如果想继续使用，请重新启用它。</value>
+  </data>
 </root>
