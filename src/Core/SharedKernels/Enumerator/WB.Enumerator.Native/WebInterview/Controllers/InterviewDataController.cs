@@ -272,11 +272,12 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         {
             if (sectionId == null) throw new ArgumentNullException(nameof(sectionId));
 
+            if (!Identity.TryParse(sectionId, out var sectionIdentity)) return null;
+
             var statefulInterview = GetCallerInterview(interviewId);
             if (statefulInterview == null) return null;
 
             var questionnaire = this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity);
-            var sectionIdentity = Identity.Parse(sectionId);
 
             if (questionnaire.IsCoverPage(sectionIdentity.Id))
             {
@@ -333,6 +334,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         public virtual SectionData GetFullSectionInfo(Guid interviewId, string sectionId)
         {
             var entities = GetSectionEntities(interviewId, sectionId);
+            if (entities == null) return null;
 
             var details = GetEntitiesDetails(interviewId, entities.Select(e => e.Identity).ToArray(), sectionId);
 
