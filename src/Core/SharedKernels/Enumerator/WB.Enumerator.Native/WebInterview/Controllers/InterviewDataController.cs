@@ -288,6 +288,13 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                     .ToArray();
             }
 
+            // sectionId may be a well-formed identity that does not correspond to any
+            // existing entity in the interview tree (e.g. stale link, removed question, wrong id).
+            // Without this check, GetUnderlyingInterviewerEntities/GetUnderlyingEntitiesForReview
+            // would throw (NullReferenceException/ArgumentException) resulting in a 500 error.
+            if (statefulInterview.GetGroup(sectionIdentity) == null)
+                return null;
+
             var ids = GetGroupEntitiesIds(sectionIdentity);
 
             IEnumerable<Identity> GetGroupEntitiesIds(Identity identity)
@@ -392,7 +399,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 }, firstSection);
             }
 
-            Identity sectionIdentity = Identity.Parse(sectionId);
+            if (!Identity.TryParse(sectionId, out var sectionIdentity)) return null;
 
             var parent = interviewEntityFactory.GetUIParent(statefulInterview, questionnaire, sectionIdentity);
             if (parent != null)
@@ -433,12 +440,19 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         {
             if (sectionId == null) return new BreadcrumbInfo();
 
-            Identity groupId = Identity.Parse(sectionId);
+            if (!Identity.TryParse(sectionId, out var groupId)) return new BreadcrumbInfo();
 
             var statefulInterview = this.GetCallerInterview(interviewId);
             if (statefulInterview == null) return null;
             var questionnaire = this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity);
             if (questionnaire == null) return null;
+
+            // sectionId may be a well-formed identity that does not correspond to any
+            // existing entity in the interview tree/questionnaire (e.g. stale link, removed
+            // question, wrong id). Without this check, GetParentsStartingFromTop would throw
+            // (QuestionnaireException) resulting in a 500 error.
+            if (statefulInterview.GetGroup(groupId) == null)
+                return new BreadcrumbInfo();
 
             ReadOnlyCollection<Guid> parentIds = questionnaire.GetParentsStartingFromTop(groupId.Id)
                 .ToReadOnlyCollection();
