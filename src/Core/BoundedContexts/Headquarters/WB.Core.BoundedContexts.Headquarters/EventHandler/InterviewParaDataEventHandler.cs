@@ -891,7 +891,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             this.AddHistoricalRecord(state, InterviewHistoricalAction.InterviewCreated, @event.Payload.UserId,
                 @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
-                @event.Payload.OriginDate?.Offset);
+                @event.Payload.OriginDate?.Offset,
+                @event.Payload.AssignmentId.HasValue
+                    ? new Dictionary<string, string> { { "assignment", @event.Payload.AssignmentId.Value.ToString() } }
+                    : null);
 
             return state;
         }
@@ -900,7 +903,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             this.AddHistoricalRecord(state, InterviewHistoricalAction.InterviewCreated, @event.Payload.UserId,
                 @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
-                @event.Payload.OriginDate?.Offset);
+                @event.Payload.OriginDate?.Offset,
+                @event.Payload.AssignmentId.HasValue
+                    ? new Dictionary<string, string> { { "assignment", @event.Payload.AssignmentId.Value.ToString() } }
+                    : null);
 
             return state;
         }

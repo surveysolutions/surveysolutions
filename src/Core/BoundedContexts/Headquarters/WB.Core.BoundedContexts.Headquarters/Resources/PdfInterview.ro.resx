@@ -219,4 +219,33 @@
   <data name="NotCalculated" xml:space="preserve">
     <value>Fără valoare</value>
   </data>
+
+
+  <data name="AreaQestion_Area" xml:space="preserve">
+    <value>Suprafață</value>
+  </data>
+
+  <data name="AreaQestion_Length" xml:space="preserve">
+    <value>Lungime</value>
+  </data>
+
+  <data name="AreaQestion_Points" xml:space="preserve">
+    <value>Puncte</value>
+  </data>
+
+  <data name="AreaQestion_RequestedAccuracy" xml:space="preserve">
+    <value>Acuratețe</value>
+  </data>
+
+  <data name="AreaQestion_RequestedFrequency" xml:space="preserve">
+    <value>Frecvență</value>
+  </data>
+
+  <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
+    <value>metri pătrați</value>
+  </data>
+
+  <data name="AreaQestion_AreaMeter" xml:space="preserve">
+    <value>metri</value>
+  </data>
 </root>

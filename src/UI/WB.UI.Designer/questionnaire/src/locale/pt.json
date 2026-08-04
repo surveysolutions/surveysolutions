@@ -579,7 +579,8 @@
     "LockedOutText": "Sua conta está bloqueada. Entre em contato com o administrador para desbloquear sua conta",
     "PasswordEmailSent": "Por favor, verifique seu e-mail para redefinir sua senha.",
     "EmailChangeShouldBeConfirmed": "Por favor, siga as instruções enviadas para o e-mail fornecido ({0}) para confirmar a alteração de e-mail.",
-    "PendingEmailUpdate": "Atualização pendente para {0}"
+    "PendingEmailUpdate": "Atualização pendente para {0}",
+    "LastLoginDate": "Data do último login"
   },
   "QuestionnaireController": {
     "Action": "Ação",
