@@ -168,4 +168,37 @@
   <data name="UploadMapsSummaryFormat" xml:space="preserve">
     <value>{0} hărțile au fost procesate cu {1} fișiere de hartă incorecte</value>
   </data>
+
+
+  <data name="MapOverlapsWith" xml:space="preserve">
+    <value>Se suprapune cu:</value>
+  </data>
+
+  <data name="MapOverlapsWithOther" xml:space="preserve">
+    <value>și {0} altul.</value>
+  </data>
+
+  <data name="ShpIsMissingInArchive" xml:space="preserve">
+    <value>Fișierul {0}.shp lipsește pentru {0}</value>
+  </data>
+
+  <data name="ShxIsMissingInArchive" xml:space="preserve">
+    <value>Fișierul {0}.shx lipsește pentru {0}.shp</value>
+  </data>
+
+  <data name="DbfIsMissingInArchive" xml:space="preserve">
+    <value>Fișierul {0}.dbf lipsește pentru {0}.shp</value>
+  </data>
+
+  <data name="MapFileSizeLimit" xml:space="preserve">
+    <value>Dimensiunea fișierului {0} este mai mare decât limita aplicabilă {1}</value>
+  </data>
+  
+  <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve">
+    <value>Numele fișierului {0} include caractere non-UTF-8.</value>
+  </data>
+
+  <data name="MapFileNameHasInvalidChars" xml:space="preserve">
+    <value>Numele fișierului {0} include caractere nevalide.</value>
+  </data>
 </root>

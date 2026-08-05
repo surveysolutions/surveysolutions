@@ -85,12 +85,12 @@
         <AddInterviewerToWorkspace ref="addInterviewerToWorkspace" @addInterviewerWorkspace="addInterviewerWorkspace" />
 
         <template v-slot:modals>
-            <Confirm ref="confirmArchive" id="confirmArchive" slot="modals">
+            <Confirm ref="confirmArchive" id="confirmArchive">
                 {{ $t('Pages.Users_ArchiveUsersConfirmMessage') }}
                 <br /> <br />
                 {{ $t('Pages.Users_UsersConfirm') }}
             </Confirm>
-            <Confirm ref="confirmUnarchive" id="confirmUnarchive" slot="modals">
+            <Confirm ref="confirmUnarchive" id="confirmUnarchive">
                 {{ $t('Pages.Users_UnarchiveUsersWarning') }}
                 <br /> <br />
                 {{ $t('Pages.Users_UsersConfirm') }}
@@ -105,7 +105,7 @@
 
 <script>
 import * as toastr from 'toastr'
-import { map, find, filter } from 'lodash'
+import { map, find, filter } from 'lodash-es'
 import routeSync from '~/shared/routeSync'
 import WorkspaceManager from './WorkspaceManager.vue'
 import AddInterviewerToWorkspace from './AddInterviewerToWorkspace'
