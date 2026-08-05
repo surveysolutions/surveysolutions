@@ -155,6 +155,30 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
         }
 
         [Test]
+        public async Task should_ignore_role_filter_and_return_interviewers_when_supervisor_is_selected()
+        {
+            var supervisorId = Id.gA;
+
+            Users = new[]
+            {
+                Create.Entity.HqUser(supervisorId, role: UserRoles.Supervisor, workspaces: new[] { "alpha" }),
+                Create.Entity.HqUser(Id.g1, supervisorId: supervisorId, userName: "int1", workspaces: new[] { "alpha" }),
+                Create.Entity.HqUser(Id.g2, role: UserRoles.Headquarter, workspaces: new[] { "alpha" }),
+            };
+
+            var response = await Subject.Handle(new UsersManagementRequest
+            {
+                SupervisorId = supervisorId,
+                Role = UserRoles.Headquarter,
+                Length = 10
+            });
+
+            Assert.That(response.RecordsFiltered, Is.EqualTo(1));
+            Assert.That(response.Data.Single().UserId, Is.EqualTo(Id.g1));
+            Assert.That(response.Data.Single().Role, Is.EqualTo(UserRoles.Interviewer.ToString()));
+        }
+
+        [Test]
         public async Task paging_should_not_affect_filtered_count()
         {
             Users = new[] {
