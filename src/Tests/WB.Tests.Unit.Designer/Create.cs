@@ -795,33 +795,37 @@ namespace WB.Tests.Unit.Designer
             int? sequence = null,
             string diffWithPreviousVersion = null,
             Guid? userId = null,
-            params QuestionnaireChangeReference[] reference)
-        {
-            return new QuestionnaireChangeRecord()
-            {
-                UserId = userId ?? Guid.NewGuid(),
-                QuestionnaireChangeRecordId = questionnaireChangeRecordId ?? Guid.NewGuid().FormatGuid(),
-                QuestionnaireId = questionnaireId,
-                ActionType = action ?? QuestionnaireActionType.Add,
-                TargetItemId = targetId ?? Guid.NewGuid(),
-                TargetItemType = targetType ?? QuestionnaireItemType.Section,
-                References = reference.ToImmutableHashSet(),
-                Sequence = sequence ?? changeRecordSequence++,
-                ResultingQuestionnaireDocument = resultingQuestionnaireDocument,
-                Patch = diffWithPreviousVersion
-            };
-        }
+                    string targetTitle = null,
+                    params QuestionnaireChangeReference[] reference)
+                {
+                    return new QuestionnaireChangeRecord()
+                    {
+                        UserId = userId ?? Guid.NewGuid(),
+                        QuestionnaireChangeRecordId = questionnaireChangeRecordId ?? Guid.NewGuid().FormatGuid(),
+                        QuestionnaireId = questionnaireId,
+                        ActionType = action ?? QuestionnaireActionType.Add,
+                        TargetItemId = targetId ?? Guid.NewGuid(),
+                        TargetItemType = targetType ?? QuestionnaireItemType.Section,
+                        TargetItemTitle = targetTitle,
+                        References = reference.ToImmutableHashSet(),
+                        Sequence = sequence ?? changeRecordSequence++,
+                        ResultingQuestionnaireDocument = resultingQuestionnaireDocument,
+                        Patch = diffWithPreviousVersion
+                    };
+                }
 
-        public static QuestionnaireChangeReference QuestionnaireChangeReference(
-            Guid? referenceId = null,
-            QuestionnaireItemType? referenceType = null)
-        {
-            return new QuestionnaireChangeReference()
-            {
-                ReferenceId = referenceId ?? Guid.NewGuid(),
-                ReferenceType = referenceType ?? QuestionnaireItemType.Section
-            };
-        }
+                public static QuestionnaireChangeReference QuestionnaireChangeReference(
+                    Guid? referenceId = null,
+                    QuestionnaireItemType? referenceType = null,
+                    string referenceTitle = null)
+                {
+                    return new QuestionnaireChangeReference()
+                    {
+                        ReferenceId = referenceId ?? Guid.NewGuid(),
+                        ReferenceType = referenceType ?? QuestionnaireItemType.Section,
+                        ReferenceTitle = referenceTitle ?? string.Empty
+                    };
+                }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
             => Create.QuestionnaireDocument(id: id, children: children, title: "Questionnaire X", variable: "questionnaire_doc");

@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             this.questionnaireViewFactory = questionnaireViewFactory;
         }
 
-        public async Task<QuestionnaireChangeHistory?> LoadAsync(Guid questionnaireId, int page, int pageSize, IPrincipal user)
+        public async Task<QuestionnaireChangeHistory?> LoadAsync(Guid questionnaireId, int page, int pageSize, IPrincipal user, string? search = null)
         {
             var questionnaire = questionnaireDocumentStorage.GetById(questionnaireId.FormatGuid());
 
@@ -59,6 +59,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 query = query.Where(h => !(h.ActionType == QuestionnaireActionType.ImportToHq && adminUsers.Contains(h.UserId)));
             }
 
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var searchLower = search.Trim().ToLower();
+                query = query.Where(h =>
+                    (h.TargetItemTitle != null && h.TargetItemTitle.ToLower().Contains(searchLower)) ||
+                    (h.TargetItemNewTitle != null && h.TargetItemNewTitle.ToLower().Contains(searchLower)) ||
+                    h.References.Any(r => r.ReferenceTitle != null && r.ReferenceTitle.ToLower().Contains(searchLower)));
+            }
+
             var count = await query.CountAsync();
 
             var questionnaireHistory = await query
@@ -71,7 +80,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             return new QuestionnaireChangeHistory(questionnaireId, questionnaire.Title,
                 questionnaireHistory.Select(h => 
                     CreateQuestionnaireChangeHistoryWebItem(questionnaire, h, userId))
-                    .ToList(), page, count, pageSize);
+                    .ToList(), page, count, pageSize, search);
         }
 
         private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(
