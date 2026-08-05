@@ -182,6 +182,11 @@ namespace WB.UI.Headquarters.Code.UsersManagement
                 var roleId = request.Role.Value.ToUserId();
                 query = query.Where(u => u.Roles.Any(r => r.Id == roleId));
             }
+            else if (request.SupervisorId != null)
+            {
+                var interviewerRoleId = UserRoles.Interviewer.ToUserId();
+                query = query.Where(u => u.Roles.Any(r => r.Id == interviewerRoleId));
+            }
 
             if (request.WorkspaceName != null)
                 query = query.Where(u => u.Workspaces.Any(w => w.Workspace.Name == request.WorkspaceName));
@@ -202,6 +207,11 @@ namespace WB.UI.Headquarters.Code.UsersManagement
             if (request.TeamId != null)
             {
                 query = query.Where(x => x.Workspaces.Any(s => s.Supervisor.Id == request.TeamId));
+            }
+
+            if (request.SupervisorId != null)
+            {
+                query = query.Where(x => x.Workspaces.Any(s => s.Supervisor.Id == request.SupervisorId));
             }
 
             query = query.Where(u => u.IsArchived == request.Archive);
