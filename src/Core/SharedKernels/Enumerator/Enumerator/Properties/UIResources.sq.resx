@@ -1102,4 +1102,7 @@ kritike</value>
     <value>Pyetje
 pa përgjigje</value>
   </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>Kërkohet qasje në mikrofon për të zhvilluar këtë intervistë. Intervista nuk mund të fillojë derisa të jepet qasja.</value>
+  </data>
 </root>

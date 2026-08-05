@@ -957,6 +957,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string MissingPermissions_Microphone_Interview {
+            get {
+                return ResourceManager.GetString("MissingPermissions_Microphone_Interview", resourceCulture);
+            }
+        }
+        
         public static string MissingPermissions_Storage_Global {
             get {
                 return ResourceManager.GetString("MissingPermissions_Storage_Global", resourceCulture);
