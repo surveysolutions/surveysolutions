@@ -27,8 +27,7 @@ Include the complete error message as text, not only as a screenshot.
 -->
 
 **Environment**
- - Application: [Headquarters / Designer / Interviewer / Supervisor / Tester /
-Export service / API / Other]
+ - Application: [Headquarters / Designer / Interviewer / Supervisor / Tester / Export service / API / Other]
  - Version: [Server OS, Android, application]
 
 **Screenshots, appsettings, logs**
