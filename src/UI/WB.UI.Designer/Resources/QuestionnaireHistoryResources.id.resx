@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="reverted" xml:space="preserve">
+        <value>Kuesioner "{0}" dikembalikan</value>
+    </data>
+    <data name="Edit" xml:space="preserve">
+        <value>Sunting</value>
+    </data>
+    <data name="QuestionnaireChangeHistory" xml:space="preserve">
+        <value>Riwayat perubahan kuesioner</value>
+    </data>
+    <data name="ThisListDoesNotContainAnyRecords" xml:space="preserve">
+        <value>Daftar ini tidak berisi catatan apa pun</value>
+    </data>
+    <data name="Timestamp" xml:space="preserve">
+        <value>Stempel waktu</value>
+    </data>
+    <data name="UnknownUserName" xml:space="preserve">
+        <value>&lt;&lt;TIDAK DIKETAHUI&gt;&gt;</value>
+    </data>
+    <data name="UserName" xml:space="preserve">
+        <value>Nama belakang</value>
+    </data>
+    <data name="Change" xml:space="preserve">
+        <value>Mengubah</value>
+    </data>
+    <data name="Macro_Delete" xml:space="preserve">
+        <value>Makro {0} dihapus</value>
+    </data>
+    <data name="Macro_Update" xml:space="preserve">
+        <value>Makro {0} diperbarui</value>
+    </data>
+    <data name="Macro_Add" xml:space="preserve">
+        <value>Makro {0} ditambahkan</value>
+    </data>
+    <data name="LookupTable_Delete" xml:space="preserve">
+        <value>Tabel pencarian {0} dihapus</value>
+    </data>
+    <data name="LookupTable_Update" xml:space="preserve">
+        <value>Tabel pencarian {0} diperbarui</value>
+    </data>
+    <data name="LookupTable_Add" xml:space="preserve">
+        <value>Tabel pencarian {0} ditambahkan</value>
+    </data>
+    <data name="Attachment_Delete" xml:space="preserve">
+        <value>Lampiran {0} dihapus</value>
+    </data>
+    <data name="Attachment_Update" xml:space="preserve">
+        <value>Lampiran {0} diperbarui</value>
+    </data>
+    <data name="Variable_Add" xml:space="preserve">
+        <value>Variabel {0} ditambahkan</value>
+    </data>
+    <data name="Variable_Delete" xml:space="preserve">
+        <value>Variabel {0} dihapus</value>
+    </data>
+    <data name="Variable_Update" xml:space="preserve">
+        <value>Variabel {0} diperbarui</value>
+    </data>
+    <data name="Categories_Add" xml:space="preserve">
+        <value>Kategori {0} ditambahkan</value>
+    </data>
+    <data name="Categories_Delete" xml:space="preserve">
+        <value>Kategori {0} dihapus</value>
+    </data>
+    <data name="Categories_Update" xml:space="preserve">
+        <value>Kategori {0} diperbarui</value>
+    </data>
+    <data name="CriticalRule_Add" xml:space="preserve">
+        <value>Aturan kritis {0} ditambahkan</value>
+    </data>
+    <data name="CriticalRule_Delete" xml:space="preserve">
+        <value>Aturan kritis {0} dihapus</value>
+    </data>
+    <data name="CriticalRule_Update" xml:space="preserve">
+        <value>Aturan penting {0} diperbarui</value>
+    </data>
+    <data name="Translation_Delete" xml:space="preserve">
+        <value>Terjemahan {0} dihapus</value>
+    </data>
+    <data name="Translation_Update" xml:space="preserve">
+        <value>Terjemahan {0} diperbarui</value>
+    </data>
+    <data name="Translation_Replace" xml:space="preserve">
+        <value>Dokumen dialihkan ke terjemahan {0}</value>
+    </data>
+    <data name="TextsReplaced" xml:space="preserve">
+        <value>Semua '{0}' diganti dengan '{1}'. Entri {2} terpengaruh</value>
+    </data>
+    <data name="RevertToThisVersion" xml:space="preserve">
+        <value>Kembali ke versi ini</value>
+    </data>
+    <data name="Comment" xml:space="preserve">
+        <value>Komentar</value>
+    </data>
+    <data name="LeaveComment" xml:space="preserve">
+        <value>Tinggalkan komentar</value>
+    </data>
+    <data name="ExtractAtRevision" xml:space="preserve">
+        <value>Ekstrak pada saat revisi</value>
+    </data>
+    <data name="Save" xml:space="preserve">
+        <value>Menyimpan</value>
+    </data>
+    <data name="Confirm" xml:space="preserve">
+        <value>Mengonfirmasi</value>
+    </data>
+    <data name="ResetQuestionnaireToThis" xml:space="preserve">
+        <value>Setel ulang kuesioner ke versi di {0}?</value>
+    </data>
+    <data name="reverted_to" xml:space="preserve">
+        <value>Kuesioner "{0}" dikembalikan ke versi dari {1}</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>Membatalkan</value>
+    </data>
+    <data name="Revert" xml:space="preserve">
+        <value>Kembali</value>
+    </data>
+    <data name="Section_Add" xml:space="preserve">
+        <value>Bagian {0} ditambahkan</value>
+    </data>
+    <data name="Section_Delete" xml:space="preserve">
+        <value>Bagian {0} dihapus</value>
+    </data>
+    <data name="Section_Update" xml:space="preserve">
+        <value>Bagian {0} diperbarui</value>
+    </data>
+    <data name="Question_Add" xml:space="preserve">
+        <value>Pertanyaan {0} ditambahkan</value>
+    </data>
+    <data name="Question_Delete" xml:space="preserve">
+        <value>Pertanyaan {0} dihapus</value>
+    </data>
+    <data name="Question_Update" xml:space="preserve">
+        <value>Pertanyaan {0} diperbarui</value>
+    </data>
+    <data name="Roster_Add" xml:space="preserve">
+        <value>Daftar {0} ditambahkan</value>
+    </data>
+    <data name="Roster_Delete" xml:space="preserve">
+        <value>Daftar {0} dihapus</value>
+    </data>
+    <data name="Roster_Update" xml:space="preserve">
+        <value>Daftar {0} diperbarui</value>
+    </data>
+    <data name="StaticText_Add" xml:space="preserve">
+        <value>Teks statis {0} ditambahkan</value>
+    </data>
+    <data name="StaticText_Delete" xml:space="preserve">
+        <value>Teks statis {0} dihapus</value>
+    </data>
+    <data name="StaticText_Update" xml:space="preserve">
+        <value>Teks statis {0} diperbarui</value>
+    </data>
+    <data name="NoTitle" xml:space="preserve">
+        <value>Tanpa judul</value>
+    </data>
+    <data name="StaticText_Clone" xml:space="preserve">
+        <value>Teks statis {0} diklon dari teks statis {1}</value>
+    </data>
+    <data name="Variable_Clone" xml:space="preserve">
+        <value>Variabel {0} disalin dari variabel {1}</value>
+    </data>
+    <data name="Question_Clone" xml:space="preserve">
+        <value>Pertanyaan {0} diklon dari pertanyaan {1}</value>
+    </data>
+    <data name="Section_Clone" xml:space="preserve">
+        <value>Bagian {0} dikloning dari bagian {1}</value>
+    </data>
+    <data name="Roster_Clone" xml:space="preserve">
+        <value>Roster {0} dikloning dari roster {1}</value>
+    </data>
+    <data name="Questionnaire_Clone" xml:space="preserve">
+        <value>Kuesioner {0} diklon dari kuesioner {1}</value>
+    </data>
+    <data name="Questionnaire_Replace" xml:space="preserve">
+        <value>Kuesioner {0} diganti</value>
+    </data>
+    <data name="Questionnaire_Import" xml:space="preserve">
+        <value>Kuesioner {0} diimpor</value>
+    </data>
+    <data name="Section_GroupBecameARoster" xml:space="preserve">
+        <value>Sub bagian {0} menjadi roster</value>
+    </data>
+    <data name="Roster_RosterBecameAGroup" xml:space="preserve">
+        <value>Roster {0} menjadi sub bagian</value>
+    </data>
+    <data name="Person_Add" xml:space="preserve">
+        <value>Pengguna dengan email {0} ditambahkan ke orang yang dibagikan</value>
+    </data>
+    <data name="Questionnaire_Move" xml:space="preserve">
+        <value>Kepemilikan kuesioner ditransfer ke pengguna dengan email "{0}"</value>
+    </data>
+    <data name="Person_Delete" xml:space="preserve">
+        <value>Pengguna dengan email {0} dihapus dari orang yang dibagikan</value>
+    </data>
+    <data name="Questionnaire_Add" xml:space="preserve">
+        <value>Kuesioner {0} dibuat</value>
+    </data>
+    <data name="Questionnaire_Update" xml:space="preserve">
+        <value>Kuesioner {0} diperbarui</value>
+    </data>
+    <data name="Questionnaire_Delete" xml:space="preserve">
+        <value>Kuesioner {0} dihapus</value>
+    </data>
+    <data name="Question_Move_To_Section" xml:space="preserve">
+        <value>Pertanyaan {0} dipindahkan ke bagian {1}</value>
+    </data>
+    <data name="Question_Move_To_Roster" xml:space="preserve">
+        <value>Pertanyaan {0} dipindahkan ke roster {1}</value>
+    </data>
+    <data name="StaticText_Move_To_Section" xml:space="preserve">
+        <value>Teks statis {0} dipindahkan ke bagian {1}</value>
+    </data>
+    <data name="StaticText_Move_To_Roster" xml:space="preserve">
+        <value>Teks statis {0} dipindahkan ke daftar {1}</value>
+    </data>
+    <data name="Variable_Move_To_Section" xml:space="preserve">
+        <value>Variabel {0} dipindahkan ke bagian {1}</value>
+    </data>
+    <data name="Variable_Move_To_Roster" xml:space="preserve">
+        <value>Variabel {0} dipindahkan ke daftar {1}</value>
+    </data>
+    <data name="Section_Move_To_Section" xml:space="preserve">
+        <value>Bagian {0} dipindahkan ke bagian {1}</value>
+    </data>
+    <data name="Section_Move_To_Roster" xml:space="preserve">
+        <value>Bagian {0} dipindahkan ke roster {1}</value>
+    </data>
+    <data name="Roster_Move_To_Section" xml:space="preserve">
+        <value>Roster {0} dipindahkan ke bagian {1}</value>
+    </data>
+    <data name="Roster_Move_To_Roster" xml:space="preserve">
+        <value>Roster {0} dipindahkan ke roster {1}</value>
+    </data>
+    <data name="Translation_Original" xml:space="preserve">
+        <value>Asli</value>
+    </data>
+    <data name="Translation_DefaultTranslationSet" xml:space="preserve">
+        <value>Terjemahan default disetel ke {0}</value>
+    </data>
+    <data name="Metadata_Update" xml:space="preserve">
+        <value>Metadata kuesioner {0} diperbarui</value>
+    </data>
+    <data name="Questionnaire_ImportToHq" xml:space="preserve">
+        <value>Kuesioner yang diimpor ke Kantor Pusat ({0}) sebagai {2} oleh {1}</value>
+    </data>
+    <data name="MigratedNewCoverSupport" xml:space="preserve">
+        <value>Halaman sampul dibuat</value>
+    </data>
+</root>
