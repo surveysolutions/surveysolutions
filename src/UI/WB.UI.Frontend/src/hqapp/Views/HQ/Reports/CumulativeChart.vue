@@ -1,6 +1,6 @@
 <template>
     <div class="interviewChart">
-        <LineChart :data="chartData" ref="chart" dataset-id-key="status" :options="chartOptions" />
+        <LineChart :data="renderData" ref="chart" dataset-id-key="status" :options="chartOptions" />
     </div>
 </template>
 
@@ -23,11 +23,30 @@ const chartOptions = {
         legend: {
             display: true,
             position: 'top',
+            labels: {
+                generateLabels(chart) {
+                    const statuses = new Set()
+
+                    return Chart.defaults.plugins.legend.labels.generateLabels(chart).filter(item => {
+                        const status = chart.data.datasets[item.datasetIndex].status
+
+                        if (statuses.has(status)) return false
+
+                        statuses.add(status)
+                        return true
+                    })
+                },
+            },
         },
         tooltip: {
             mode: 'x',
             intersect: false,
             position: 'average',
+            filter(item, index, items, data) {
+                const status = data.datasets[item.datasetIndex].status
+
+                return items.findIndex(candidate => data.datasets[candidate.datasetIndex].status === status) === index
+            },
         },
     },
     scales: {
@@ -96,6 +115,18 @@ export default {
         },
     },
     computed: {
+        renderData() {
+            return {
+                labels: [...(this.chartData.labels || [])],
+                datasets: this.chartData.datasets.map(dataset => ({
+                    ...dataset,
+                    data: dataset.data.map(point => {
+                        if (Array.isArray(point)) return [...point]
+                        return point !== null && typeof point === 'object' ? { ...point } : point
+                    }),
+                })),
+            }
+        },
         chartOptions() {
             const options = this.options || {}
             const animation = options.animation || {}
