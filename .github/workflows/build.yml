@@ -138,7 +138,7 @@ jobs:
               exit 1
             fi
             adb install -r "$apk_path"
-            adb shell am instrument -w wb.tests.android.instrumentation/xamarin.android.nunitrunner.NUnitInstrumentation
+            adb shell am instrument -w wb.tests.android.instrumentation/wb.tests.android.instrumentation.NUnitInstrumentation
 
   mobile:
     needs: [prepare, tests-unit-web, tests-integration, tests-android-instrumentation]
