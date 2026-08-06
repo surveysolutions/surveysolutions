@@ -271,4 +271,7 @@
     <data name="CloneDeletedWarning" xml:space="preserve">
         <value>คุณกำลังสร้างสำเนาของแบบสอบถามที่ถูกลบ อาจสูญหายไปบางส่วน..</value>
     </data>
+    <data name="IncludeScenarios" xml:space="preserve">
+        <value>รวมสถานการณ์</value>
+    </data>
 </root>
