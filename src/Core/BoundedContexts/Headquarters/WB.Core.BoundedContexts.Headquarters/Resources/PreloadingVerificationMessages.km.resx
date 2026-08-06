@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
+        <value>[PL0002] គ្មាន។ ទាក់ទងផ្នែកគាំទ្រម៉ាស៊ីនមេរបស់អ្នក។</value>
+    </data>
+    <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
+        <value>ជួរឈរមិនអាចត្រូវបានផ្គូផ្គងទៅនឹងសំណួរណាមួយនៅក្នុងកម្រងសំណួរទេ។</value>
+    </data>
+    <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
+        <value>ឯកសារមិនអាចត្រូវបានផ្គូផ្គងទៅនឹងបញ្ជីឈ្មោះណាមួយនៅក្នុងកម្រងសំណួរទេ។</value>
+    </data>
+    <data name="PL0006_IdDublication" xml:space="preserve">
+        <value>បានរកឃើញតម្លៃលេខសម្គាល់ស្ទួន។</value>
+    </data>
+    <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
+        <value>បាត់ជួរលេខសម្គាល់មេមួយ ឬច្រើន</value>
+    </data>
+    <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
+        <value>កំណត់ត្រាបញ្ជីឈ្មោះមិនមានឪពុកម្តាយទេ។</value>
+    </data>
+    <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
+        <value>លេខសម្គាល់បញ្ជីឈ្មោះមិនស៊ីគ្នានឹងទំហំបញ្ជីឈ្មោះ។</value>
+    </data>
+    <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+        <value>តម្លៃសំណួរមិនត្រូវបានអនុញ្ញាតទេ។</value>
+    </data>
+    <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+        <value>តម្លៃកាលបរិច្ឆេទ ឬពេលវេលាមិនត្រឹមត្រូវដែលបានបញ្ចូលក្នុងសំណួរកាលបរិច្ឆេទ។</value>
+    </data>
+    <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
+        <value>តម្លៃ GPS មិនត្រឹមត្រូវ។</value>
+    </data>
+    <data name="PL0018_ExpectedIntNotParsed" xml:space="preserve">
+        <value>មានតែតម្លៃចំនួនគត់ប៉ុណ្ណោះដែលត្រូវបានអនុញ្ញាត។</value>
+    </data>
+    <data name="PL0019_ExpectedDecimalNotParsed" xml:space="preserve">
+        <value>មានតែតម្លៃពិតប៉ុណ្ណោះដែលត្រូវបានអនុញ្ញាត។</value>
+    </data>
+    <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
+        <value>សំណួរទំហំបញ្ជីឈ្មោះមិនអាចមានតម្លៃអវិជ្ជមានទេ។</value>
+    </data>
+    <data name="PL0024_DataWasNotFound" xml:space="preserve">
+        <value>រកមិនឃើញទិន្នន័យផ្ទុកជាមុនទេ។</value>
+    </data>
+    <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+        <value>ការទទួលខុសត្រូវមិនមានសម្រាប់ការសង្កេត 1 ឬច្រើនទេ។</value>
+    </data>
+    <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
+        <value>ទំនួលខុសត្រូវគឺជាអ្នកប្រើប្រាស់ដែលត្រូវបានចាក់សោសម្រាប់ការសង្កេត 1 ឬច្រើន។</value>
+    </data>
+    <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់មិនមែនជាការិយាល័យកណ្តាល អ្នកគ្រប់គ្រង ឬអ្នកសម្ភាសន៍សម្រាប់ការសង្កេត 1 ឬច្រើននោះទេ។</value>
+    </data>
+    <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
+        <value>ចម្លើយចំពោះសំណួរទំហំបញ្ជីឈ្មោះមិនអាចធំជាង {0} ទេ។</value>
+    </data>
+    <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
+        <value>សំណួរ GPS ទាមទារជួរឈរដាច់ដោយឡែកសម្រាប់រយៈទទឹង និងរយៈបណ្តោយ</value>
+    </data>
+    <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
+        <value>សំណួរ GPS តម្រូវឱ្យកំណត់រយៈទទឹង និងរយៈបណ្តោយ។</value>
+    </data>
+    <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
+        <value>ជួរឈរពីរ ឬច្រើនមានឈ្មោះដូចគ្នា។</value>
+    </data>
+    <data name="PL0032_LatitudeMustBeGeaterThenN90AndLessThen90" xml:space="preserve">
+        <value>រយៈទទឹងត្រូវតែធំជាង -90° និងតិចជាង 90°។</value>
+    </data>
+    <data name="PL0033_LongitudeMustBeGeaterThenN180AndLessThen180" xml:space="preserve">
+        <value>រយៈបណ្តោយត្រូវតែធំជាង -180° និងតិចជាង 180°។</value>
+    </data>
+    <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
+        <value>សញ្ញាបំបែកទសភាគមិនត្រឹមត្រូវ។ និមិត្តសញ្ញា "," មិនត្រូវបានអនុញ្ញាតនៅក្នុងចម្លើយជាលេខទេ។ សូមប្រើ "។" ជំនួសវិញ។</value>
+    </data>
+    <data name="PL0035_QuantityNotParsed" xml:space="preserve">
+        <value>មានតែតម្លៃចំនួនគត់ប៉ុណ្ណោះដែលត្រូវបានអនុញ្ញាត។</value>
+    </data>
+    <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
+        <value>បរិមាណគួរតែធំជាង ឬស្មើនឹង -1 ។</value>
+    </data>
+    <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+        <value>បាត់ឯកសារដែលមានទិន្នន័យកម្រិតកម្រងសំណួរ។</value>
+    </data>
+    <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+        <value>ជម្រើសដែលបានឆ្លើយរាប់បញ្ចូលទៅក្នុងសំណួរជម្រើសច្រើនមិនអាចលើសពីចំនួនចម្លើយដែលអនុញ្ញាតអតិបរមាទេ។</value>
+    </data>
+    <data name="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
+        <value>តម្លៃអវិជ្ជមានមិនត្រូវបានអនុញ្ញាតសម្រាប់សំណួរជ្រើសរើសច្រើនប្រភេទទេ។</value>
+    </data>
+    <data name="PL0042_IdIsEmpty" xml:space="preserve">
+        <value>ជួរឈរលេខសម្គាល់មិនមានតម្លៃទេ។</value>
+    </data>
+    <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+        <value>បណ្ណសារដែលការពារដោយពាក្យសម្ងាត់មិនត្រូវបានគាំទ្រទេ។</value>
+    </data>
+    <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះគួរតែមានជួរឈរសម្រាប់ចម្លើយបញ្ជីអត្ថបទ</value>
+    </data>
+    <data name="PL0047_ProtectedVariables_MissingColumn" xml:space="preserve">
+        <value>បាត់ជួរឈរដែលត្រូវការ {0} ។</value>
+    </data>
+    <data name="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" xml:space="preserve">
+        <value>អថេរដែលបានការពារមិនត្រូវបានរកឃើញនៅក្នុងកម្រងសំណួរដែលបានផ្តល់ទេ។</value>
+    </data>
+    <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
+        <value>ប្រភេទអថេរមិនអាចការពារបានទេ។</value>
+    </data>
+    <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
+        <value>លេខ​កូដ​បញ្ជី​ឈ្មោះ​មិន​ស្រប​គ្នា​សម្រាប់​បញ្ជី​លេខ។ លំដាប់នៃលេខកូដបញ្ជីឈ្មោះគួរតែជា 0, 1, ... ដើម្បីរាប់ចំនួនករណីបញ្ជីឈ្មោះ</value>
+    </data>
+    <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
+        <value>បរិមាណអតិបរមាមិនគួរលើសពី {0} ទេ។</value>
+    </data>
+    <data name="PL0055_InvalidEmail" xml:space="preserve">
+        <value>អ៊ីមែលមិនត្រឹមត្រូវទេ។</value>
+    </data>
+    <data name="PL0056_InvalidPassword" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់មិនត្រឹមត្រូវ។ យ៉ាងហោចណាស់ 6 លេខ និងអក្សរធំ ឬនិមិត្តសញ្ញាតែមួយ '?' ដើម្បីបង្កើតពាក្យសម្ងាត់</value>
+    </data>
+    <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
+        <value>សម្រាប់កិច្ចការដែលមានអ៊ីមែលដែលបានផ្តល់ បរិមាណអនុញ្ញាតគឺ 1</value>
+    </data>
+    <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
+        <value>របៀបបណ្តាញត្រូវតែធ្វើឱ្យសកម្មសម្រាប់កិច្ចការដែលមានអ៊ីមែល</value>
+    </data>
+    <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
+        <value>របៀបបណ្តាញត្រូវតែធ្វើឱ្យសកម្មសម្រាប់កិច្ចការដែលមានពាក្យសម្ងាត់</value>
+    </data>
+    <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
+        <value>ការចាត់តាំងជាមួយទំហំ 1 សម្រាប់របៀបគេហទំព័រគួរតែមានទាំងអ៊ីមែល ឬពាក្យសម្ងាត់ដែលបានផ្តល់ឱ្យ</value>
+    </data>
+    <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់មិនប្លែកទេ។ ពាក្យសម្ងាត់តាមការកំណត់សម្រាប់របៀបគេហទំព័រដែលមានបរិមាណ 1 គួរតែមានតែមួយគត់</value>
+    </data>
+    <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
+        <value>កិច្ចការទាំងអស់សម្រាប់ការសម្ភាសន៍តាមគេហទំព័រត្រូវតែធ្វើឡើងចំពោះអ្នកសម្ភាសន៍</value>
+    </data>
+    <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
+        <value>ចម្លើយចំពោះសំណួរដែលមានឈ្មោះអថេរ {0} មិនអាចផ្ទុកជាមុនបានទេ ព្រោះវាជាប្រភេទមិនគាំទ្រ។ សូមមើលអត្ថបទជំនួយខាងក្រោម https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type សម្រាប់ព័ត៌មានលម្អិតនៃអ្វីដែលអាចត្រូវបានផ្ទុកជាមុននៅក្នុងកំណែបច្ចុប្បន្ន។</value>
+    </data>
+    <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+        <value>ឈ្មោះអថេរវិសាលភាពសវនកម្មសំឡេង '{0}' មិនត្រឹមត្រូវទេ។ វាត្រូវតែយោងផ្នែកដែលមានស្រាប់ ក្រុម ឬបញ្ជីឈ្មោះ (សំណួរ និងបញ្ជីរាយនាមធម្មតាមិនត្រូវបានអនុញ្ញាតទេ)។</value>
+    </data>
+    <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+        <value>កិច្ចការ​មិន​ត្រូវ​បាន​ធ្វើ​ចំណាក​ស្រុក​ទេ ព្រោះ​វា​ប្រើ​ការ​ជ្រើសរើស​សវនកម្ម​អូឌីយ៉ូ (វិសាលភាព​នៃ​ការ​ថត​សំឡេង) ដែល​មិន​អាច​ត្រូវ​បាន​ផ្លាស់​ប្តូរ​ដោយ​ស្វ័យ​ប្រវត្តិ​ទៅ​កំណែ​កម្រង​សំណួរ​ថ្មី។ បង្កើតកិច្ចការឡើងវិញដោយដៃ ហើយកំណត់រចនាសម្ព័ន្ធវិសាលភាពសវនកម្មសំឡេងម្តងទៀត។</value>
+    </data>
+</root>

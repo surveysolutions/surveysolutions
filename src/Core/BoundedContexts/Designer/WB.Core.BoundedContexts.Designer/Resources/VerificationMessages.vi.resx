@@ -1,0 +1,790 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="WB0001_NoQuestions" xml:space="preserve">
+        <value>Bảng câu hỏi phải có ít nhất một câu hỏi.</value>
+        </data>
+    <data name="WB0002_CustomValidationExpressionHasIncorrectSyntax" xml:space="preserve">
+        <value>Điều kiện xác thực có lỗi cú pháp.</value>
+        </data>
+    <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
+        <value>Điều kiện kích hoạt có lỗi cú pháp.</value>
+        </data>
+    <data name="WB0004_VariableHasEmptyExpression" xml:space="preserve">
+        <value>Biến không thể có biểu thức trống.</value>
+        </data>
+    <data name="WB0005_VariableExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>Biểu thức biến có độ dài hơn {0} ký tự.</value>
+        </data>
+    <data name="WB0009_RosterSizeQuestionIsMissing" xml:space="preserve">
+        <value>Câu hỏi về kích thước danh sách bị thiếu.</value>
+        </data>
+    <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
+        <value>Câu hỏi được liên kết tham chiếu đến một câu hỏi không tồn tại.</value>
+        </data>
+    <data name="WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType" xml:space="preserve">
+        <value>Câu hỏi được liên kết tham chiếu đến loại câu hỏi không được hỗ trợ.</value>
+        </data>
+    <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup" xml:space="preserve">
+        <value>Câu hỏi được liên kết tham chiếu đến một câu hỏi không có trong danh sách.</value>
+        </data>
+    <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
+        <value>Câu hỏi có tiêu đề hoặc hướng dẫn thay thế không thể được đánh dấu là nhận dạng.</value>
+        </data>
+    <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
+        <value>Sự thay thế tham chiếu một câu hỏi hoặc biến không tồn tại.</value>
+        </data>
+    <data name="WB0018_SubstitutionReferencesUnsupportedEntity" xml:space="preserve">
+        <value>Việc thay thế tham chiếu đến một mục không được hỗ trợ trong việc thay thế.</value>
+        </data>
+    <data name="WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel" xml:space="preserve">
+        <value>Việc thay thế không thể tham chiếu các mục từ cấp độ danh sách sâu hơn.</value>
+        </data>
+    <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
+        <value>Số lượng câu trả lời tối đa lớn hơn số lượng tùy chọn trả lời.</value>
+        </data>
+    <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
+        <value>Câu hỏi thuộc loại này không thể được xác định.</value>
+        </data>
+    <data name="WB0023_RosterSizeSourceQuestionTypeIsIncorrect" xml:space="preserve">
+        <value>Câu hỏi về nguồn kích thước danh sách không chính xác. Chỉ có thể sử dụng các câu hỏi dạng số, phân loại với nhiều lựa chọn hoặc danh sách văn bản.</value>
+        </data>
+    <data name="WB0027_VariableExpresssionHasIncorrectSyntax" xml:space="preserve">
+        <value>Biểu thức có lỗi cú pháp.</value>
+        </data>
+    <data name="WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>Biểu thức lọc dài hơn {0} ký tự.</value>
+        </data>
+    <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
+        <value>Các câu hỏi xác định không thể nằm trong danh sách.</value>
+        </data>
+    <data name="WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles" xml:space="preserve">
+        <value>Danh sách có câu hỏi nguồn không thể có tập hợp các mục cố định.</value>
+        </data>
+    <data name="WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion" xml:space="preserve">
+        <value>Danh sách tập hợp các mục đã sửa không thể có câu hỏi về nguồn danh sách.</value>
+        </data>
+    <data name="WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion" xml:space="preserve">
+        <value>Danh sách tập hợp các mục đã sửa không thể có câu hỏi tiêu đề danh sách.</value>
+        </data>
+    <data name="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" xml:space="preserve">
+        <value>Danh sách có nguồn danh sách câu hỏi có câu hỏi nguồn không hợp lệ đối với tên của các hàng.</value>
+        </data>
+    <data name="WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion" xml:space="preserve">
+        <value>Danh sách không thể có câu hỏi tiêu đề danh sách khi câu hỏi nguồn danh sách là câu hỏi đa lựa chọn hoặc danh sách theo phân loại.</value>
+        </data>
+    <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
+        <value>Danh sách bộ mục cố định không được có tiêu đề trống hoặc ít hơn hai mục.</value>
+        </data>
+    <data name="WB0038_RosterFixedTitlesHaveMoreThan200Items" xml:space="preserve">
+        <value>Danh sách tập hợp các mục cố định không được có nhiều hơn {0} hàng.</value>
+        </data>
+    <data name="WB0039_TextListQuestionCannotBePrefilled" xml:space="preserve">
+        <value>Danh sách câu hỏi không thể được xác định.</value>
+        </data>
+    <data name="WB0040_TextListQuestionCannotBeFilledBySupervisor" xml:space="preserve">
+        <value>Người giám sát không thể điền câu hỏi vào danh sách.</value>
+        </data>
+    <data name="WB0042_TextListQuestionMaxAnswerInRange1And200" xml:space="preserve">
+        <value>Số phần tử danh sách tối đa phải nằm trong phạm vi [{1}, {0}].</value>
+        </data>
+    <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
+        <value>Câu hỏi có các danh mục có giá trị trống.</value>
+        </data>
+    <data name="WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
+        <value>Điều kiện kích hoạt không thể đề cập đến câu hỏi ở cấp độ danh sách sâu hơn.</value>
+        </data>
+    <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
+        <value>Các phần phụ không thể có điều kiện kích hoạt tham chiếu câu hỏi con.</value>
+        </data>
+    <data name="WB0049_QRBarcodeQuestionIsSupervisorQuestion" xml:space="preserve">
+        <value>Người giám sát không thể điền câu hỏi về mã vạch.</value>
+        </data>
+    <data name="WB0050_QRBarcodeQuestionIsPreFilledQuestion" xml:space="preserve">
+        <value>Câu hỏi về mã vạch không thể xác định được.</value>
+        </data>
+    <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
+        <value>Danh sách phải có cấp độ danh sách sâu hơn hoặc ngang bằng với câu hỏi về quy mô danh sách.</value>
+        </data>
+    <data name="WB0055_RosterHasRosterLevelMoreThan4" xml:space="preserve">
+        <value>Danh sách không được có nhiều hơn {0} danh sách chính.</value>
+        </data>
+    <data name="WB0056_EntityShouldNotHaveCircularReferences" xml:space="preserve">
+        <value>Không được phép tham khảo vòng tròn.</value>
+        </data>
+    <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
+        <value>Tên biến hoặc ID danh sách không thể là một từ dành riêng.</value>
+        </data>
+    <data name="WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster" xml:space="preserve">
+        <value>Nếu mục sử dụng thay thế %rostertitle% thì mục đó cần được đặt trong danh sách.</value>
+        </data>
+    <data name="WB0060_CategoricalQuestionHasLessThan2Options" xml:space="preserve">
+        <value>Câu hỏi có ít hơn {0} danh mục.</value>
+        </data>
+    <data name="WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2" xml:space="preserve">
+        <value>Câu hỏi có số câu trả lời tối đa được phép nhỏ hơn {0}.</value>
+        </data>
+    <data name="WB0062_OptionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+        <value>Biểu thức bộ lọc tùy chọn có lỗi cú pháp.</value>
+        </data>
+    <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
+        <value>Không thể sử dụng câu hỏi liên kết phân loại trong điều kiện xác thực #{0}.</value>
+        </data>
+    <data name="WB0064_CategoricalLinkedQuestionUsedInEnablementCondition" xml:space="preserve">
+        <value>Không thể sử dụng câu hỏi liên kết phân loại trong điều kiện kích hoạt.</value>
+        </data>
+    <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
+        <value>Câu hỏi thuộc loại này không được hỗ trợ.</value>
+        </data>
+    <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
+        <value>Tên biến hoặc ID danh sách hợp lệ không được để trống.</value>
+        </data>
+    <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
+        <value>Danh sách có ID danh sách bằng với tiêu đề bảng câu hỏi.</value>
+        </data>
+    <data name="WB0071_StaticTextIsEmpty" xml:space="preserve">
+        <value>Văn bản tĩnh không được để trống.</value>
+        </data>
+    <data name="WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+        <value>Tiêu đề danh mục phải là duy nhất.</value>
+        </data>
+    <data name="WB0073_OptionValuesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+        <value>Giá trị danh mục phải là duy nhất.</value>
+        </data>
+    <data name="WB0074_CategoricalQuestionHasOptionsAndIsLinked" xml:space="preserve">
+        <value>Câu hỏi phân loại không thể có danh mục và được liên kết với một câu hỏi khác.</value>
+        </data>
+    <data name="WB0075_FilteredComboboxContainsMoreThan5000Options" xml:space="preserve">
+        <value>Chứa nhiều hơn {0} danh mục.</value>
+        </data>
+    <data name="WB0076_CategoricalOptionsCountMoreThan200" xml:space="preserve">
+        <value>Chứa nhiều hơn {0} danh mục.</value>
+        </data>
+    <data name="WB0077_QuestionHasInvalidVariableName" xml:space="preserve">
+        <value>Câu hỏi có tên biến không hợp lệ.</value>
+        </data>
+    <data name="WB0078_MultimediaQuestionIsInterviewersOnly" xml:space="preserve">
+        <value>Câu hỏi hình ảnh chỉ có thể được người phỏng vấn.</value>
+        </data>
+    <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
+        <value>Câu hỏi hình ảnh không thể có điều kiện xác nhận.</value>
+        </data>
+    <data name="WB0083_QuestionCannotBeUsedAsRosterTitle" xml:space="preserve">
+        <value>Câu hỏi thuộc loại hiện tại không thể được sử dụng làm tiêu đề danh sách.</value>
+        </data>
+    <data name="WB0084_CascadingOptionsShouldHaveParent" xml:space="preserve">
+        <value>Các danh mục trong câu hỏi hộp tổ hợp xếp tầng con chỉ nên tham chiếu tùy chọn hiện có trong câu hỏi gốc.</value>
+        </data>
+    <data name="WB0085_CascadingQuestionWrongParentLevel" xml:space="preserve">
+        <value>Câu hỏi nên có mức độ sâu hơn hoặc ngang bằng với câu hỏi chính.</value>
+        </data>
+    <data name="WB0086_ParentCascadingQuestionShouldExist" xml:space="preserve">
+        <value>Câu hỏi trong hộp tổ hợp xếp tầng tham chiếu đến loại câu hỏi bị thiếu hoặc không được hỗ trợ.</value>
+        </data>
+    <data name="WB0087_CascadingQuestionHasCicularReference" xml:space="preserve">
+        <value>Không được phép tham chiếu vòng trong các câu hỏi trong hộp tổ hợp xếp tầng.</value>
+        </data>
+    <data name="WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers" xml:space="preserve">
+        <value>Câu hỏi trong hộp tổ hợp xếp tầng phải có ít hơn {0} danh mục.</value>
+        </data>
+    <data name="WB0089_CascadingQuestionOptionWithParentShouldBeUnique" xml:space="preserve">
+        <value>Câu hỏi trong hộp tổ hợp xếp tầng phải có giá trị duy nhất và danh sách giá trị gốc của các danh mục.</value>
+        </data>
+    <data name="WB0090_LinkedQuestionIsInterviewersOnly" xml:space="preserve">
+        <value>Câu hỏi liên kết chỉ có thể là người phỏng vấn.</value>
+        </data>
+    <data name="WB0091_CascadingChildQuestionShouldNotContainCondition" xml:space="preserve">
+        <value>Câu hỏi về hộp tổ hợp xếp tầng con không được chứa điều kiện kích hoạt.</value>
+        </data>
+    <data name="WB0092_CascadingChildQuesionShouldNotContainValidation" xml:space="preserve">
+        <value>Câu hỏi về hộp tổ hợp xếp tầng con không được chứa điều kiện xác thực.</value>
+        </data>
+    <data name="WB0093_RosterSizeListOptionQuestionShouldBeLimit" xml:space="preserve">
+        <value>Câu hỏi về danh sách nguồn danh sách phải có số lượng phần tử tối đa được đặt.</value>
+        </data>
+    <data name="WB0094_ConditionExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>Điều kiện kích hoạt có độ dài lớn hơn {0} ký tự.</value>
+        </data>
+    <data name="WB0096_GeneralCompilationError" xml:space="preserve">
+        <value>Đã xảy ra lỗi trong quá trình biên soạn bảng câu hỏi.</value>
+        </data>
+    <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
+        <value>Chỉ các ký tự sau đây có thể được sử dụng trong tiêu đề bảng câu hỏi: A..Z a..z 0..9 ( ) \ / _ - và dấu cách.</value>
+        </data>
+    <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
+        <value>Kích thước của bảng câu hỏi xấp xỉ {0:0.##}MB và quá lớn để hoạt động chính xác với Survey Solutions. Cố gắng giảm lượng dữ liệu cho đến khi nó ít nhất ít hơn {1}MB.</value>
+        </data>
+    <data name="WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues" xml:space="preserve">
+        <value>Tập hợp các giá trị danh sách vật phẩm cố định phải là duy nhất.</value>
+        </data>
+    <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200" xml:space="preserve">
+        <value>Số câu trả lời tối đa cho câu hỏi về quy mô danh sách không thể lớn hơn {0}.</value>
+        </data>
+    <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
+        <value>Tiểu mục không được có nhiều hơn {0} tiểu mục chính.</value>
+        </data>
+    <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
+        <value>Chỉ có thể đặt một câu hỏi GPS trong phần trang bìa</value>
+        </data>
+    <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
+        <value>Không thể liên kết nhiều câu hỏi có/không</value>
+        </data>
+    <data name="WB0008_SubstitutionsInVariableLableAreProhibited" xml:space="preserve">
+        <value>Không được phép sử dụng thay thế trong nhãn biến</value>
+        </data>
+    <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
+        <value>Các mục câu hỏi sau (câu hỏi/nhóm/văn bản tĩnh/v.v.) sử dụng cùng một ID nội bộ. Hãy xóa một trong số chúng.</value>
+        </data>
+    <data name="WB0010_MacroHasInvalidName" xml:space="preserve">
+        <value>Macro có tên không hợp lệ.</value>
+        </data>
+    <data name="WB0020_NameForMacrosIsNotUnique" xml:space="preserve">
+        <value>Một Macro khác có cùng tên đã tồn tại.</value>
+        </data>
+    <data name="WB0014_MacroHasEmptyName" xml:space="preserve">
+        <value>Macro không thể có tên trống.</value>
+        </data>
+    <data name="WB0271_MacroHasEmptyContent" xml:space="preserve">
+        <value>Macro không được để trống.</value>
+        </data>
+    <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
+        <value>Số lượng lớn danh sách được tạo ra. Việc xuất cấu trúc này thành tệp dữ liệu có thể gặp vấn đề. Hãy cân nhắc việc giảm số lượng danh sách.</value>
+        </data>
+    <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
+        <value>Không thể xác định được câu hỏi có bộ lọc tùy chọn câu trả lời.</value>
+        </data>
+    <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
+        <value>Các mục có cùng tên được tìm thấy.</value>
+        </data>
+    <data name="WB0024_LookupHasInvalidName" xml:space="preserve">
+        <value>Bảng tra cứu có tên không hợp lệ.</value>
+        </data>
+    <data name="WB0025_LookupHasEmptyName" xml:space="preserve">
+        <value>Bảng tra cứu không được có tên trống.</value>
+        </data>
+    <data name="WB0031_LookupTableHasInvalidHeaders" xml:space="preserve">
+        <value>Bảng tra cứu có tiêu đề cột không hợp lệ.</value>
+        </data>
+    <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
+        <value>Bảng tra cứu có quá nhiều cột</value>
+        </data>
+    <data name="WB0044_LookupTableMoreThan15000Rows" xml:space="preserve">
+        <value>Bảng tra cứu có quá nhiều hàng</value>
+        </data>
+    <data name="WB0047_LookupTableNotUniqueRowcodeValues" xml:space="preserve">
+        <value>Bảng tra cứu không có giá trị mã hàng duy nhất</value>
+        </data>
+    <data name="WB0048_LookupHasEmptyContent" xml:space="preserve">
+        <value>Bảng tra cứu không được để trống</value>
+        </data>
+    <data name="WB0052_LookupNameIsKeyword" xml:space="preserve">
+        <value>Tên bảng tra cứu không thể là một từ dành riêng.</value>
+        </data>
+    <data name="WB0053_LinkedQuestionReferencesNotExistingRoster" xml:space="preserve">
+        <value>Danh sách nguồn của liên kết phải tồn tại.</value>
+        </data>
+    <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
+        <value>Danh sách là nguồn của liên kết là một danh sách, không phải là một tiểu mục.</value>
+        </data>
+    <data name="WB0105_ValidationMessageIsTooLong" xml:space="preserve">
+        <value>Thông báo lỗi xác thực #{0} quá dài. Nó không được dài hơn {1} ký tự.</value>
+        </data>
+    <data name="WB0104_ValidationConditionIsTooLong" xml:space="preserve">
+        <value>Điều kiện xác thực #{0} quá dài. Nó không được dài hơn {1} ký tự.</value>
+        </data>
+    <data name="WB0106_ValidationConditionIsEmpty" xml:space="preserve">
+        <value>Điều kiện xác thực #{0} trống.</value>
+        </data>
+    <data name="WB0107_ValidationMessageIsEmpty" xml:space="preserve">
+        <value>Thông báo lỗi xác thực #{0} trống.</value>
+        </data>
+    <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
+        <value>Phần hoặc Danh sách chứa nhiều hơn {0} câu hỏi, hãy cân nhắc việc chia thành các phần phụ.</value>
+        </data>
+    <data name="WB0202_GroupWithoutQuestions" xml:space="preserve">
+        <value>Phần không có câu hỏi. Hãy xem xét loại bỏ phần trống.</value>
+        </data>
+    <data name="WB0203_RosterHasSingleQuestion" xml:space="preserve">
+        <value>Nhóm danh sách chỉ chứa một câu hỏi. Hãy cân nhắc việc nhóm với những người phân công khác. Đối với danh sách cố định, hãy cân nhắc việc trình bày dưới dạng một tập hợp các câu hỏi độc lập.</value>
+        </data>
+    <data name="WB0204_EmptyRoster" xml:space="preserve">
+        <value>Danh sách trống. Loại bỏ nó nếu nó không cần thiết.</value>
+        </data>
+    <data name="WB0205_TooManyQuestions" xml:space="preserve">
+        <value>Bảng câu hỏi có hơn {0} câu hỏi. Có thể khó quản lý nó.</value>
+        </data>
+    <data name="WB0209_LongEnablementCondition" xml:space="preserve">
+        <value>Điều kiện kích hoạt dài. Có thể có các điều kiện ngắn hơn, dễ đọc hơn với các hàm dựng sẵn (ví dụ: InList()).</value>
+        </data>
+    <data name="WB0210_CategoricalQuestionHasManyOptions" xml:space="preserve">
+        <value>Câu hỏi một lựa chọn có quá nhiều danh mục, hãy cân nhắc chuyển sang hộp tổ hợp.</value>
+        </data>
+    <data name="WB0211_QuestionnaireHasNoGpsQuestion" xml:space="preserve">
+        <value>Bảng câu hỏi không chứa câu hỏi GPS. Hãy cân nhắc thêm câu hỏi về GPS.</value>
+        </data>
+    <data name="WB0206_FewSectionsManyQuestions" xml:space="preserve">
+        <value>Bảng câu hỏi có nhiều hơn {0} câu hỏi nhưng chỉ có một hoặc hai phần. Nhóm các câu hỏi thành các phần để đơn giản hóa việc điều hướng và cải thiện hiệu suất.</value>
+        </data>
+    <data name="WB0212_LongValidationCondition" xml:space="preserve">
+        <value>Điều kiện xác thực #{0} dài. Có thể có các điều kiện ngắn hơn, dễ đọc hơn với các hàm dựng sẵn (ví dụ: InList()).</value>
+        </data>
+    <data name="WB0207_FixedRosterContains3OrLessItems" xml:space="preserve">
+        <value>Danh sách cố định chứa {0} hoặc ít mục hơn. Hãy cân nhắc việc sử dụng các phần phụ và một loạt câu hỏi. Bảng phân công làm phức tạp cấu trúc của dữ liệu được xuất.</value>
+        </data>
+    <data name="WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions" xml:space="preserve">
+        <value>Hơn {0}% câu hỏi không có điều kiện xác nhận. Thêm điều kiện xác nhận để cải thiện chất lượng dữ liệu.</value>
+        </data>
+    <data name="WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>Biểu thức bộ lọc câu hỏi được liên kết dài hơn {0} ký tự.</value>
+        </data>
+    <data name="WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
+        <value>Câu hỏi không thể được sử dụng trong biểu thức lọc riêng của nó.</value>
+        </data>
+    <data name="WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+        <value>Biểu thức lọc có lỗi cú pháp.</value>
+        </data>
+    <data name="WB0065_NameForAttachmentIsNotUnique" xml:space="preserve">
+        <value>Đã tồn tại một tệp đính kèm khác có cùng tên.</value>
+        </data>
+    <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
+        <value>Văn bản tĩnh đề cập đến phần đính kèm vắng mặt</value>
+        </data>
+    <data name="WB0111_AttachmentHasEmptyContent" xml:space="preserve">
+        <value>Tệp đính kèm không được để trống</value>
+        </data>
+    <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">
+        <value>Kích thước tệp đính kèm lớn hơn {0}Mb</value>
+        </data>
+    <data name="WB0214_TotalAttachmentsSizeIsMoreThan50Mb" xml:space="preserve">
+        <value>Tổng kích thước của tệp đính kèm lớn hơn {0}Mb</value>
+        </data>
+    <data name="WB0215_UnusedAttachments" xml:space="preserve">
+        <value>Bảng câu hỏi chứa các tệp đính kèm không được sử dụng</value>
+        </data>
+    <data name="WB0112_VariableHasInvalidName" xml:space="preserve">
+        <value>Biến có tên không hợp lệ.</value>
+        </data>
+    <data name="WB0113_VariableHasEmptyVariableName" xml:space="preserve">
+        <value>Biến không thể có tên trống.</value>
+        </data>
+    <data name="WB0250_ValidationConditionRefersToAFutureQuestion" xml:space="preserve">
+        <value>Điều kiện xác thực #{0} đề cập đến một câu hỏi trong tương lai. Hãy cân nhắc việc đảo ngược thứ tự.</value>
+        </data>
+    <data name="WB0251_EnablementConditionRefersToAFutureQuestion" xml:space="preserve">
+        <value>Điều kiện kích hoạt đề cập đến một câu hỏi trong tương lai. Hãy cân nhắc việc đảo ngược thứ tự.</value>
+        </data>
+    <data name="WB0253_TooFewVariableLabelsAreDefined" xml:space="preserve">
+        <value>Có quá ít nhãn biến được xác định. Thêm nhãn biến để cải thiện khả năng sử dụng của dữ liệu đã xuất và cung cấp đầu vào vào siêu dữ liệu cho định dạng Sáng kiến ​​Tài liệu Dữ liệu (DDI).</value>
+        </data>
+    <data name="WB0254_UseFunctionIsValidEmailToValidateEmailAddress" xml:space="preserve">
+        <value>Sử dụng hàm IsValidEmail() để xác thực địa chỉ email.</value>
+        </data>
+    <data name="WB0255_QuestionIsTooShort" xml:space="preserve">
+        <value>Câu hỏi quá ngắn. Đây có thể là một câu hỏi chưa đầy đủ.</value>
+        </data>
+    <data name="WB0114_CategoricalQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
+        <value>Câu hỏi phân loại chỉ hỗ trợ các giá trị số nguyên trong phạm vi từ {0} đến {1}</value>
+        </data>
+    <data name="WB0115_FixRosterSupportsOnlyIntegerTitleValues" xml:space="preserve">
+        <value>Danh sách cố định chỉ hỗ trợ các giá trị số nguyên.</value>
+        </data>
+    <data name="WB0256_TranslationNameIsInvalid" xml:space="preserve">
+        <value>Tên bản dịch không hợp lệ</value>
+        </data>
+    <data name="WB0257_TranslationHasEmptyContent" xml:space="preserve">
+        <value>Bản dịch có nội dung trống</value>
+        </data>
+    <data name="WB0258_TranslationsHaveDuplicatedNames" xml:space="preserve">
+        <value>Bản dịch có tên trùng lặp</value>
+        </data>
+    <data name="WB0259_QuestionTitleIsTooLong" xml:space="preserve">
+        <value>Nội dung câu hỏi quá dài. Nó không được dài hơn {0} ký tự.</value>
+        </data>
+    <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
+        <value>Tiêu đề quá dài. Nó không được dài hơn {0} ký tự.</value>
+        </data>
+    <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
+        <value>Câu hỏi nguồn danh sách nhiều lựa chọn phải có số lượng câu trả lời tối đa được đặt.</value>
+        </data>
+    <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
+        <value>Bảng câu hỏi chứa các danh sách có tổng số phiên bản danh sách {0} vượt quá giới hạn hệ thống {1}</value>
+        </data>
+    <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
+        <value>Danh sách đã đạt đến giới hạn kích thước. Giảm kích thước danh sách hoặc giảm lồng ghép.</value>
+        </data>
+    <data name="WB0264_GpsQuestion" xml:space="preserve">
+        <value>Bạn có một câu hỏi về GPS. Máy tính bảng phải hỗ trợ định vị địa lý để sử dụng với bảng câu hỏi này.</value>
+        </data>
+    <data name="WB0265_MoreThan30PercentQuestionsAreText" xml:space="preserve">
+        <value>Hơn {0}% câu hỏi là câu hỏi dạng văn bản. Câu hỏi văn bản rất khó trả lời trên máy tính bảng. Thay vào đó, hãy cân nhắc sử dụng các câu hỏi một hoặc nhiều lựa chọn.</value>
+        </data>
+    <data name="WB0266_SameTitle" xml:space="preserve">
+        <value>Câu hỏi trùng lặp. (Các câu hỏi có cùng tiêu đề.)</value>
+        </data>
+    <data name="WB0267_QRBarcodeQuestion" xml:space="preserve">
+        <value>Bạn có một câu hỏi về mã vạch. Máy tính bảng phải hỗ trợ lấy nét tự động để sử dụng với bảng câu hỏi này.</value>
+        </data>
+    <data name="WB0216_NoPrefilledQuestions" xml:space="preserve">
+        <value>Không có câu hỏi xác định được xác định. Xác định ít nhất một câu hỏi xác định.</value>
+        </data>
+    <data name="WB0217_VariableLableMoreThan120Characters" xml:space="preserve">
+        <value>Nhãn biến quá dài (nhiều hơn {0} ký tự) và sẽ bị cắt bớt khi xuất tệp SPSS.</value>
+        </data>
+    <data name="WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions" xml:space="preserve">
+        <value>Các câu hỏi liên tiếp chứa các điều kiện kích hoạt giống hệt nhau. Xem xét việc đặt vào một tiểu mục và gán điều kiện cho tiểu mục đó.</value>
+        </data>
+    <data name="WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options" xml:space="preserve">
+        <value>Nhiều câu hỏi chọn một lần vô điều kiện liên tiếp với các danh mục {0}. Hãy xem xét một câu hỏi trắc nghiệm.</value>
+        </data>
+    <data name="WB0220_RowIndexInMultiOptionBasedRoster" xml:space="preserve">
+        <value>Việc sử dụng @{0} với danh sách có nhiều lựa chọn có thể không ổn định. Thay vào đó hãy cân nhắc sử dụng @{1}.</value>
+        </data>
+    <data name="WB0221_NoCurrentTimeQuestions" xml:space="preserve">
+        <value>Không có câu hỏi thời gian hiện tại được tìm thấy. Hãy cân nhắc việc ghi lại ngày phỏng vấn vào bảng câu hỏi của bạn.</value>
+        </data>
+    <data name="WB0222_SingleOptionPrefilled" xml:space="preserve">
+        <value>Câu hỏi chọn một lần được đánh dấu là xác định. Hãy cân nhắc sử dụng câu hỏi văn bản.</value>
+        </data>
+    <data name="WB0223_SectionWithLessThan5Questions" xml:space="preserve">
+        <value>Phần chứa ít hơn năm câu hỏi. Hãy cân nhắc việc tham gia với các phần khác.</value>
+        </data>
+    <data name="WB0224_TooManySubsectionsAtOneLevel" xml:space="preserve">
+        <value>Quá nhiều phần phụ ở một cấp độ. Xem xét cách bố trí phân cấp.</value>
+        </data>
+    <data name="WB0225_ComboBoxWithLessThan10Elements" xml:space="preserve">
+        <value>Menu thả xuống (hộp tổ hợp) chứa ít hơn 10 phần tử. Hãy xem xét chuyển sang cách trình bày một lựa chọn tiêu chuẩn.</value>
+        </data>
+    <data name="WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope" xml:space="preserve">
+        <value>Câu hỏi được liên kết tham chiếu đến một câu hỏi trong danh sách ở cấp độ sai.</value>
+        </data>
+    <data name="WB0226_SameCascadingParentQuestion" xml:space="preserve">
+        <value>Các câu hỏi trong hộp tổ hợp xếp tầng có cùng câu hỏi gốc.</value>
+        </data>
+    <data name="WB0227_NotShared" xml:space="preserve">
+        <value>Bảng câu hỏi chưa được xem xét. Hãy cân nhắc việc chia sẻ nó với người dùng khác để nhận phản hồi.</value>
+        </data>
+    <data name="WB0228_OmittedOptions" xml:space="preserve">
+        <value>Câu hỏi phân loại có mã danh mục không liên tiếp. Kiểm tra các danh mục bị bỏ qua.</value>
+        </data>
+    <data name="WB0229_SupervisorQuestionInValidation" xml:space="preserve">
+        <value>Câu hỏi của người giám sát được sử dụng để xác nhận. Kiểm tra các điều kiện xem người giám sát không phản hồi hay hướng dẫn người giám sát luôn phản hồi.</value>
+        </data>
+    <data name="WB0230_NonconsecutiveCascadings" xml:space="preserve">
+        <value>Câu hỏi xếp tầng không liên tiếp. Hãy cân nhắc việc đặt các câu hỏi xếp tầng lần lượt.</value>
+        </data>
+    <data name="WB0117_LinkedToTextListQuestionDoesNotSupportFilters" xml:space="preserve">
+        <value>Câu hỏi được liên kết với danh sách không hỗ trợ bộ lọc danh mục</value>
+        </data>
+    <data name="WB0231_MultiOptionWithMoreThan20Options" xml:space="preserve">
+        <value>Câu hỏi nhiều lựa chọn chứa quá nhiều danh mục (&gt;{0}). Sẽ khó điều hướng trên máy tính bảng. Hãy cân nhắc việc chia thành hai câu hỏi trắc nghiệm nếu có thể.</value>
+        </data>
+    <data name="WB0232_FiveOrMoreQuestionsWithSameEnabling" xml:space="preserve">
+        <value>Năm câu hỏi trở lên có cùng điều kiện cho phép. Đặt câu hỏi vào một nhóm và áp dụng điều kiện cho phép duy nhất cho một nhóm để nâng cao hiệu quả của câu hỏi.</value>
+        </data>
+    <data name="WB0233_NestedRosterDegree3OrMore" xml:space="preserve">
+        <value>Danh sách lồng nhau có ba cấp độ lồng nhau trở lên. Hãy thử tránh các cấu trúc phức tạp có thể dẫn đến các vấn đề trong việc thu thập dữ liệu.</value>
+        </data>
+    <data name="WB0234_RosterInRosterWithSameSourceQuestion" xml:space="preserve">
+        <value>Các cấp độ cấp dưới trong một danh sách lồng nhau đều dựa trên cùng một câu hỏi cấp độ gốc. Hãy thử sửa lại, những bảng phân công như vậy có thể dẫn đến vấn đề trong việc thu thập dữ liệu.</value>
+        </data>
+    <data name="WB0235_FewQuestionsWithSameLongEnablement" xml:space="preserve">
+        <value>Điều kiện kích hoạt dài tương tự được sử dụng trong một số câu hỏi. Bạn có thể muốn tạo một biến Boolean để đơn giản hóa việc quản lý mã.</value>
+        </data>
+    <data name="WB0236_FewQuestionsWithSameLongValidation" xml:space="preserve">
+        <value>Điều kiện xác nhận dài tương tự được sử dụng trong một số câu hỏi. Bạn có thể muốn tạo một biến Boolean để đơn giản hóa việc quản lý mã.</value>
+        </data>
+    <data name="WB0237_BitwiseAnd" xml:space="preserve">
+        <value>&amp; được sử dụng trong biểu thức. Đảm bảo bạn hiểu sự khác biệt giữa các toán tử &amp; và &amp;&amp;. Trong hầu hết các trường hợp, hãy sử dụng &amp;&amp;.</value>
+        </data>
+    <data name="WB0238_BitwiseOr" xml:space="preserve">
+        <value>| được sử dụng trong biểu thức. Hãy chắc chắn rằng bạn hiểu sự khác biệt giữa | và || các nhà khai thác. Trong hầu hết các trường hợp, hãy sử dụng ||.</value>
+        </data>
+    <data name="WB0118_ExpressionReferencingForbiddenDateTimeProperies" xml:space="preserve">
+        <value>Biểu thức tham chiếu các thuộc tính Ngày giờ bị cấm: {0}, {1}, {2}. Thay vào đó hãy cân nhắc sử dụng câu hỏi về thời gian hiện tại.</value>
+        </data>
+    <data name="WB0268_DoesNotSupportSubstitution" xml:space="preserve">
+        <value>Bạn cố gắng sử dụng thay thế cho thực thể không được hỗ trợ.</value>
+        </data>
+    <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
+        <value>Câu hỏi không thể có tiêu đề trống.</value>
+        </data>
+    <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
+        <value>Phần không được chứa nhiều hơn {0} câu hỏi.</value>
+        </data>
+    <data name="WB0119_QuestionnaireTitleTooLong" xml:space="preserve">
+        <value>Tiêu đề của bảng câu hỏi không được có nhiều hơn ký hiệu {0}.</value>
+        </data>
+    <data name="WB0120_GroupTitleIsEmpty" xml:space="preserve">
+        <value>Tiêu đề của các phần, tiểu mục không được để trống hoặc chỉ chứa khoảng trắng.</value>
+        </data>
+    <data name="WB0121_VariableNameTooLong" xml:space="preserve">
+        <value>Tên hoặc ID của thành phần này không được dài hơn {0} ký tự.</value>
+        </data>
+    <data name="WB0122_VariableNameHasSpecialCharacters" xml:space="preserve">
+        <value>Tên biến hoặc ID danh sách hợp lệ chỉ được chứa các chữ cái, chữ số và ký tự gạch dưới</value>
+        </data>
+    <data name="WB0123_VariableNameStartWithDigitOrUnderscore" xml:space="preserve">
+        <value>Tên biến hoặc ID danh sách không được bắt đầu bằng chữ số hoặc dấu gạch dưới</value>
+        </data>
+    <data name="WB0124_VariableNameEndWithUnderscore" xml:space="preserve">
+        <value>Tên biến hoặc ID danh sách không được kết thúc bằng dấu gạch dưới</value>
+        </data>
+    <data name="WB0125_VariableNameHasConsecutiveUnderscores" xml:space="preserve">
+        <value>Tên biến hoặc ID danh sách không được có hai ký tự gạch dưới liên tiếp trở lên.</value>
+        </data>
+    <data name="WB0126_VarialbeNameNotUnique" xml:space="preserve">
+        <value>Tên biến hoặc ID danh sách phải là duy nhất trong phạm vi của bảng câu hỏi.</value>
+        </data>
+    <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+        <value>Có ít nhất một bản sao của cặp "Tiêu đề" và "Giá trị gốc". Danh sách không được chứa bất kỳ bản sao nào.</value>
+        </data>
+    <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
+        <value>Số chữ số thập phân không nằm trong phạm vi từ {0} đến {1}.</value>
+        </data>
+    <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
+        <value>Tiêu đề danh mục trống hoặc quá dài. Độ dài của tiêu đề phải nằm trong khoảng từ {0} đến {1} ký tự.</value>
+        </data>
+    <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
+        <value>Bạn không thể sử dụng các thực thể con trong điều kiện kích hoạt cho các phần, phần phụ và bảng phân công.</value>
+        </data>
+    <data name="WB0272_ConditionUsingForbiddenClasses" xml:space="preserve">
+        <value>Điều kiện kích hoạt là sử dụng loại bị cấm.</value>
+        </data>
+    <data name="WB0273_ValidationConditionUsingForbiddenClasses" xml:space="preserve">
+        <value>Điều kiện xác thực đang sử dụng loại bị cấm.</value>
+        </data>
+    <data name="WB0274_VariableUsingForbiddenClasses" xml:space="preserve">
+        <value>Biến đang sử dụng loại bị cấm.</value>
+        </data>
+    <data name="WB0275_FilterExpressionIsUsingForbiddenClasses" xml:space="preserve">
+        <value>Biểu thức lọc đang sử dụng loại bị cấm.</value>
+        </data>
+    <data name="WB0131_SpecialValuesHasNonIntegerOptionsValues" xml:space="preserve">
+        <value>Các giá trị đặc biệt chỉ hỗ trợ các giá trị số nguyên trong phạm vi từ {0} đến {1}.</value>
+        </data>
+    <data name="WB0276_RownameIsNotSupported" xml:space="preserve">
+        <value>Biến @rowname không được hỗ trợ nữa.</value>
+        </data>
+    <data name="WB0132_SpecialValuesHasOptionsWithLongTexts" xml:space="preserve">
+        <value>Tiêu đề có giá trị đặc biệt trống hoặc quá dài. Độ dài của tiêu đề phải nằm trong khoảng từ {0} đến {1} ký tự.</value>
+        </data>
+    <data name="WB0133_SpecialValuesMustBeUniqueForNumericlQuestion" xml:space="preserve">
+        <value>Các giá trị đặc biệt phải là duy nhất.</value>
+        </data>
+    <data name="WB0134_SpecialValuesCountMoreThanMaxOptionCount" xml:space="preserve">
+        <value>Chứa nhiều hơn {0} giá trị đặc biệt.</value>
+        </data>
+    <data name="WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit" xml:space="preserve">
+        <value>Câu hỏi chứa một giá trị đặc biệt, quá lớn và không thể sử dụng trong câu hỏi này vì nó xác định quy mô của danh sách.</value>
+        </data>
+    <data name="WB0136_SpecialValuesHaveOptionsWithEmptyValue" xml:space="preserve">
+        <value>Câu hỏi có (các) giá trị đặc biệt với giá trị trống.</value>
+        </data>
+    <data name="WB0137_SpecialValuesTitlesMustBeUnique" xml:space="preserve">
+        <value>Tiêu đề có giá trị đặc biệt phải là duy nhất.</value>
+        </data>
+    <data name="WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion" xml:space="preserve">
+        <value>Tên tệp đính kèm có giá trị đặc biệt phải là duy nhất.</value>
+        </data>
+    <data name="WB0139_SpecialValuesAttachmentsReferAbsentAttachment" xml:space="preserve">
+        <value>Tệp đính kèm có giá trị đặc biệt đề cập đến tệp đính kèm không tồn tại.</value>
+        </data>
+    <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
+        <value>Tiêu đề của bảng câu hỏi không được có từ hai ký tự gạch dưới liên tiếp trở lên.</value>
+        </data>
+    <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+        <value>Chế độ đơn giản chỉ được phép đối với những danh sách có không quá {0} câu hỏi hoặc văn bản tĩnh.</value>
+        </data>
+    <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
+        <value>Chế độ đơn giản không cho phép sử dụng bảng phân công lồng nhau.</value>
+        </data>
+    <data name="WB0280_TextContainsLinkToUnknownQuestionOrGroup" xml:space="preserve">
+        <value>Văn bản chứa liên kết đến một câu hỏi, tiểu mục, danh sách hoặc tệp đính kèm pdf không xác định.</value>
+        </data>
+    <data name="WB0057_LinksAreProhibitedOnNavigationElements" xml:space="preserve">
+        <value>Liên kết bị cấm trên các thành phần điều hướng: phần, phần phụ, danh sách</value>
+        </data>
+    <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
+        <value>Tổng số phần tử ({0}) vượt quá giới hạn hệ thống ({1}). Hãy cân nhắc giảm số lượng câu hỏi, văn bản tĩnh, biến hoặc mục trong danh sách cố định.</value>
+        </data>
+    <data name="WB0282_IdentifyingQuestionInSectionWithCondition" xml:space="preserve">
+        <value>Câu hỏi nhận dạng không thể được đặt bên trong phần có điều kiện kích hoạt.</value>
+        </data>
+    <data name="WB0282_TableRosterContainsNestedGroup" xml:space="preserve">
+        <value>Chế độ phân công bảng không cho phép sử dụng các nhóm và bảng phân công lồng nhau.</value>
+        </data>
+    <data name="WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+        <value>Chế độ bảng chỉ được phép đối với những người phân công có không quá {0} câu hỏi.</value>
+        </data>
+    <data name="WB0284_TableRosterCantContainsSupervisorQuestions" xml:space="preserve">
+        <value>Bảng phân công không cho phép sử dụng câu hỏi của người giám sát.</value>
+        </data>
+    <data name="WB0285_TableRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+        <value>Danh sách bảng chỉ cho phép sử dụng các câu hỏi văn bản và số.</value>
+        </data>
+    <data name="WB0286_TableAndMatixRosterWorksOnlyInWebMode" xml:space="preserve">
+        <value>Chế độ bảng phân công Bảng hoặc Ma trận chỉ hoạt động trong khảo sát trên web, trên máy tính bảng sẽ là chế độ 'tiểu mục'.</value>
+        </data>
+    <data name="WB0309_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
+        <value>Các câu hỏi ở phần trên phải có nhãn thay đổi.</value>
+        </data>
+    <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
+        <value>Câu hỏi trên trang bìa chỉ có thể có các loại được phép (Văn bản, Số, Ngày giờ, GpsCoordine, SingleOption)</value>
+        </data>
+    <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
+        <value>Nhãn {1} cho mã {0} là một số khác với giá trị được gắn nhãn.</value>
+        </data>
+    <data name="WB0289" xml:space="preserve">
+        <value>Tên danh mục không được dài hơn {0} ký tự.</value>
+        </data>
+    <data name="WB0290" xml:space="preserve">
+        <value>Tên danh mục không được kết thúc bằng dấu gạch dưới</value>
+        </data>
+    <data name="WB0291" xml:space="preserve">
+        <value>Tên danh mục không được có từ hai ký tự gạch dưới liên tiếp trở lên.</value>
+        </data>
+    <data name="WB0292" xml:space="preserve">
+        <value>Tên của danh mục không được để trống.</value>
+        </data>
+    <data name="WB0293" xml:space="preserve">
+        <value>Tên của danh mục không thể là một từ dành riêng.</value>
+        </data>
+    <data name="WB0294" xml:space="preserve">
+        <value>Tên danh mục chỉ được chứa chữ cái, chữ số và ký tự gạch dưới</value>
+        </data>
+    <data name="WB0295" xml:space="preserve">
+        <value>Tên danh mục không được bắt đầu bằng chữ số hoặc dấu gạch dưới</value>
+        </data>
+    <data name="WB0296" xml:space="preserve">
+        <value>Các câu hỏi có cùng loại. Thay vào đó hãy sử dụng các danh mục có thể tái sử dụng</value>
+        </data>
+    <data name="WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+        <value>Danh sách ma trận chỉ cho phép sử dụng các câu hỏi phân loại đơn giản: không cho phép các chế độ combobox, xếp tầng hoặc có/không.</value>
+        </data>
+    <data name="WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+        <value>Chế độ ma trận chỉ được phép đối với danh sách có không quá {0} câu hỏi.</value>
+        </data>
+    <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
+        <value>Danh sách ma trận không được chứa người giám sát hoặc câu hỏi nhận dạng.</value>
+        </data>
+    <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
+        <value>Danh sách ma trận không được chứa câu hỏi liên kết nào.</value>
+        </data>
+    <data name="WB0302" xml:space="preserve">
+        <value>Việc thay thế không thể tham chiếu các mục từ cùng cấp danh sách.</value>
+        </data>
+    <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
+        <value>Danh mục có thể sử dụng lại không thể có hàng có cùng giá trị Id và ParentId</value>
+        </data>
+    <data name="WB0306_DuplicatedCategoryParentIdText" xml:space="preserve">
+        <value>Danh mục có thể sử dụng lại không thể có hàng có cùng giá trị ParentId và Text</value>
+        </data>
+    <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
+        <value>Câu hỏi đề cập đến danh mục có thể tái sử dụng không tồn tại.</value>
+        </data>
+    <data name="WB0390_OnlyStringVariableAllowedAsAttachmentName" xml:space="preserve">
+        <value>Chỉ có thể sử dụng loại biến chuỗi làm nguồn của tên tệp đính kèm</value>
+        </data>
+    <data name="WB0391" xml:space="preserve">
+        <value>Văn bản tĩnh không thể tham chiếu biến có phạm vi phân công sâu hơn chính nó</value>
+        </data>
+    <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
+        <value>Không được phép liên kết đến câu hỏi ẩn</value>
+        </data>
+    <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
+        <value>Các biến trong phần Сover phải có nhãn.</value>
+        </data>
+    <data name="WB0312" xml:space="preserve">
+        <value>Danh mục phải có ít nhất hai lựa chọn</value>
+        </data>
+    <data name="WB0313_QuestionOptionReferenceToNonExistentAttachment" xml:space="preserve">
+        <value>Tùy chọn câu hỏi đề cập đến tệp đính kèm không tồn tại</value>
+        </data>
+    <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
+        <value>Câu hỏi chứa nhiều tùy chọn đề cập đến cùng một tệp đính kèm</value>
+        </data>
+    <data name="WB0315_AttachmentHasInvalidName" xml:space="preserve">
+        <value>Tên tệp đính kèm chỉ được chứa các chữ cái, chữ số và ký tự gạch dưới. Bắt đầu bằng chữ cái, không có dấu gạch dưới liên tiếp, không kết thúc bằng dấu gạch dưới và không phải là từ dành riêng. Không trống và ít hơn 32 ký tự.</value>
+        </data>
+    <data name="WB0316_QuestionnaireWithOldCoverPage" xml:space="preserve">
+        <value>Bảng câu hỏi theo mẫu cũ. Vui lòng sử dụng liên kết "Tạo bìa" trên phần Bìa.</value>
+        </data>
+    <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
+        <value>Phạm vi của câu hỏi quan trọng không thể là bất kỳ phạm vi nào sau đây: ẩn, người giám sát.</value>
+        </data>
+    <data name="WB0318_CriticalityConditionExpressionHasIncorrectSyntax" xml:space="preserve">
+        <value>Điều kiện quan trọng có lỗi cú pháp trong biểu thức.</value>
+        </data>
+    <data name="WB0319_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+        <value>Điều kiện quan trọng trống rỗng.</value>
+        </data>
+    <data name="WB0320_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+        <value>Thông báo trong quy tắc quan trọng trống.</value>
+        </data>
+    <data name="WB0321_CriticalityConditionUsingForbiddenClasses" xml:space="preserve">
+        <value>Điều kiện quan trọng là sử dụng loại bị cấm.</value>
+        </data>
+    <data name="WB0322_CriticalRuleExpressionIsTooLong" xml:space="preserve">
+        <value>Biểu thức quy tắc quan trọng có nhiều hơn {0} ký tự.</value>
+        </data>
+    <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
+        <value>Thông báo tình trạng nghiêm trọng có nhiều hơn {0} ký tự.</value>
+        </data>
+</root>
