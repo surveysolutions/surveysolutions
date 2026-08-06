@@ -48,8 +48,9 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 throw new NoSuitableLocationProviderException();
             }
 
-            // Modes B/E require the GPS provider specifically to be enabled.
-            if (requireGpsProvider && !locationManager.IsProviderEnabled(LocationManager.GpsProvider))
+            // Only mode B requires the hardware GPS provider to be enabled.
+            if (acceptableSource.RequiresEnabledGpsProvider() &&
+                !locationManager.IsProviderEnabled(LocationManager.GpsProvider))
                 throw new GpsProviderDisabledException();
 
             // Preserve existing contract: canceled requests resolve as timeout/no-fix (null).

@@ -17,6 +17,13 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
             || source == AcceptableGpsLocationSource.BuiltInOrExternalGps;
 
         /// <summary>
+        /// Only mode B (<see cref="AcceptableGpsLocationSource.BuiltInGpsOnly"/>) requires
+        /// the hardware GPS provider to be enabled.
+        /// </summary>
+        public static bool RequiresEnabledGpsProvider(this AcceptableGpsLocationSource source) =>
+            source == AcceptableGpsLocationSource.BuiltInGpsOnly;
+
+        /// <summary>
         /// Mock locations (external Bluetooth/USB GPS sensors are exposed this way on Android) are only
         /// permitted in modes E (<see cref="AcceptableGpsLocationSource.BuiltInOrExternalGps"/>) and
         /// N (<see cref="AcceptableGpsLocationSource.Any"/>).

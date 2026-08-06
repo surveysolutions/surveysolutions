@@ -15,6 +15,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.ValueObjects
             Assert.That(source.RequiresGpsProvider(), Is.EqualTo(expected));
         }
 
+        [TestCase(AcceptableGpsLocationSource.BuiltInGpsOnly, true)]
+        [TestCase(AcceptableGpsLocationSource.BuiltInOrExternalGps, false)]
+        [TestCase(AcceptableGpsLocationSource.AnyNonMock, false)]
+        [TestCase(AcceptableGpsLocationSource.Any, false)]
+        public void when_checking_RequiresEnabledGpsProvider_should_return_expected(AcceptableGpsLocationSource source, bool expected)
+        {
+            Assert.That(source.RequiresEnabledGpsProvider(), Is.EqualTo(expected));
+        }
+
         [TestCase(AcceptableGpsLocationSource.BuiltInGpsOnly, false)]
         [TestCase(AcceptableGpsLocationSource.BuiltInOrExternalGps, true)]
         [TestCase(AcceptableGpsLocationSource.AnyNonMock, false)]
