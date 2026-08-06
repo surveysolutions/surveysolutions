@@ -1,0 +1,1622 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AddNewSection" xml:space="preserve">
+        <value>Thêm phần mới</value>
+        </data>
+    <data name="Backup" xml:space="preserve">
+        <value>Hỗ trợ</value>
+        </data>
+    <data name="SaveAs" xml:space="preserve">
+        <value>Lưu dưới dạng</value>
+        </data>
+    <data name="CopyTo" xml:space="preserve">
+        <value>Sao chép vào</value>
+        </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>Hủy bỏ</value>
+        </data>
+    <data name="ChangePassword" xml:space="preserve">
+        <value>Thay đổi mật khẩu</value>
+        </data>
+    <data name="ClickHere" xml:space="preserve">
+        <value>bấm vào đây</value>
+        </data>
+    <data name="Compile" xml:space="preserve">
+        <value>Biên dịch</value>
+        </data>
+    <data name="Copy" xml:space="preserve">
+        <value>Sao chép</value>
+        </data>
+    <data name="Delete" xml:space="preserve">
+        <value>Xóa bỏ</value>
+        </data>
+    <data name="Download" xml:space="preserve">
+        <value>Tải xuống</value>
+        </data>
+    <data name="ErrorsCounter" xml:space="preserve">
+        <value>{{count}} lỗi</value>
+        </data>
+    <data name="ErrorsCounter_plural" xml:space="preserve">
+        <value>{{count}} lỗi</value>
+        </data>
+    <data name="HellowMessageBtn" xml:space="preserve">
+        <value>Xin chào, {{currentUserName}}</value>
+        </data>
+    <data name="Help" xml:space="preserve">
+        <value>Giúp đỡ</value>
+        </data>
+    <data name="History" xml:space="preserve">
+        <value>Lịch sử</value>
+        </data>
+    <data name="LogOut" xml:space="preserve">
+        <value>Đăng xuất</value>
+        </data>
+    <data name="Ok" xml:space="preserve">
+        <value>ĐƯỢC RỒI</value>
+        </data>
+    <data name="Open" xml:space="preserve">
+        <value>Mở</value>
+        </data>
+    <data name="PasteAfter" xml:space="preserve">
+        <value>Dán sau</value>
+        </data>
+    <data name="QuestionnaireSummary" xml:space="preserve">
+        <value>({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)</value>
+        </data>
+    <data name="ReadOnly" xml:space="preserve">
+        <value>Chỉ đọc</value>
+        </data>
+    <data name="ReadOnlyQuestion" xml:space="preserve">
+        <value>Đó là câu hỏi chỉ đọc. Bạn không thể chỉnh sửa nó.</value>
+        </data>
+    <data name="Save" xml:space="preserve">
+        <value>Cứu</value>
+        </data>
+    <data name="SavedAtTimestamp" xml:space="preserve">
+        <value>được lưu tại {{dateTime, H:mm}}</value>
+        </data>
+    <data name="Settings" xml:space="preserve">
+        <value>Cài đặt</value>
+        </data>
+    <data name="SideBarAddMacro" xml:space="preserve">
+        <value>thêm Macro mới</value>
+        </data>
+    <data name="SideBarAttachmentName" xml:space="preserve">
+        <value>tên đính kèm</value>
+        </data>
+    <data name="SideBarAttachmentsCounter" xml:space="preserve">
+        <value>{{count}} Tệp đính kèm (tổng cộng {{bytes}})</value>
+        </data>
+    <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
+        <value>{{count}} Tệp đính kèm (tổng cộng {{bytes}})</value>
+        </data>
+    <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
+        <value>Sử dụng tab này để tải lên các tập tin đa phương tiện có thể được tham chiếu trong bảng câu hỏi.</value>
+        </data>
+    <data name="SideBarAttachmentsEmptyLine2" xml:space="preserve">
+        <value>Để tránh đồng bộ hóa chậm, chúng tôi khuyến nghị kích thước tổng hợp của tất cả các tệp đính kèm không vượt quá 2MB. Đối với các loại, định dạng và kích thước tệp được hỗ trợ</value>
+        </data>
+    <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
+        <value>Để tham chiếu đến tệp đính kèm trong bảng câu hỏi, hãy thêm một thành phần văn bản tĩnh và chỉ định tệp đính kèm {{-name}} trong thuộc tính tệp đính kèm của nó</value>
+        </data>
+    <data name="SideBarAttachmentsEstimate" xml:space="preserve">
+        <value>Ước tính. thời gian tải: {{timeString}} tại {{downloadSpeed}}Kb/s (EDGE)</value>
+        </data>
+    <data name="SideBarAttachmentsUpload" xml:space="preserve">
+        <value>Tải lên mới</value>
+        </data>
+    <data name="SideBarLookupEmptyLine1" xml:space="preserve">
+        <value>Sử dụng tab này để xác định bảng tra cứu.</value>
+        </data>
+    <data name="SideBarLookupEmptyLine2" xml:space="preserve">
+        <value>Bảng tra cứu cung cấp thông tin tham chiếu có thể được truy vấn bằng một khóa và được sử dụng để kích hoạt các điều kiện và biểu thức xác thực.</value>
+        </data>
+    <data name="SideBarLookupEmptyLine3" xml:space="preserve">
+        <value>Bảng tra cứu bao gồm tên và tệp tra cứu, có thể chứa nhiều cột giá trị số được phân cách bằng tab.</value>
+        </data>
+    <data name="SideBarLookupTableAdd" xml:space="preserve">
+        <value>THÊM bảng tra cứu MỚI</value>
+        </data>
+    <data name="SideBarLookupTableDropFile" xml:space="preserve">
+        <value>Thả tập tin vào đây</value>
+        </data>
+    <data name="SideBarEditCategories" xml:space="preserve">
+        <value>Chỉnh sửa danh mục</value>
+        </data>
+    <data name="SideBarLookupTableFileName" xml:space="preserve">
+        <value>tên tập tin</value>
+        </data>
+    <data name="SideBarLookupTableName" xml:space="preserve">
+        <value>tên bảng</value>
+        </data>
+    <data name="SideBarLookupTablesCounter" xml:space="preserve">
+        <value>{{count}} Bảng tra cứu:</value>
+        </data>
+    <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
+        <value>{{count}} Bảng tra cứu:</value>
+        </data>
+    <data name="SideBarLookupTableSelectFile" xml:space="preserve">
+        <value>Chọn tập tin</value>
+        </data>
+    <data name="SideBarLookupTableUpdateFile" xml:space="preserve">
+        <value>Cập nhật tập tin</value>
+        </data>
+    <data name="SideBarMacroContent" xml:space="preserve">
+        <value>nội dung</value>
+        </data>
+    <data name="SideBarMacroCounter" xml:space="preserve">
+        <value>{{count}} Vĩ mô:</value>
+        </data>
+    <data name="SideBarMacroCounter_plural" xml:space="preserve">
+        <value>{{count}} Macro:</value>
+        </data>
+    <data name="SideBarMacroDescription" xml:space="preserve">
+        <value>Sự miêu tả</value>
+        </data>
+    <data name="SideBarMacroEmptyLine1" xml:space="preserve">
+        <value>Sử dụng tab này để xác định thay thế macro.</value>
+        </data>
+    <data name="SideBarMacroEmptyLine2" xml:space="preserve">
+        <value>Macro là một biểu thức được đặt tên có thể được sử dụng để kích hoạt các điều kiện và biểu thức xác thực. Một macro bao gồm tên và nội dung.</value>
+        </data>
+    <data name="SideBarMacroEmptyLine3" xml:space="preserve">
+        <value>có thể được sử dụng trong một biểu thức, để chỉ macro.</value>
+        </data>
+    <data name="SideBarMacroHideDescription" xml:space="preserve">
+        <value>ẩn mô tả</value>
+        </data>
+    <data name="SideBarMacroName" xml:space="preserve">
+        <value>tên vĩ mô</value>
+        </data>
+    <data name="SideBarMacroShowDescription" xml:space="preserve">
+        <value>thêm mô tả</value>
+        </data>
+    <data name="SideBarCriticalityConditionExpression" xml:space="preserve">
+        <value>Tình trạng nguy kịch</value>
+        </data>
+    <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
+        <value>{{count}} Quy tắc quan trọng:</value>
+        </data>
+    <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
+        <value>{{count}} Quy tắc quan trọng:</value>
+        </data>
+    <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
+        <value>Sự miêu tả</value>
+        </data>
+    <data name="SideBarCriticalityConditionsEmptyLine1" xml:space="preserve">
+        <value>Sử dụng tab này để xác định các quy tắc quan trọng.</value>
+        </data>
+    <data name="SideBarCriticalityConditionsEmptyLine2" xml:space="preserve">
+        <value>Mỗi quy tắc quan trọng bao gồm một điều kiện và một thông báo. Các điều kiện quan trọng có thể đề cập đến bất kỳ câu hỏi hoặc biến số nào và phải được thỏa mãn (đánh giá là đúng). Việc xử lý các cuộc phỏng vấn có điều kiện quan trọng không được thỏa mãn được xác định trong quá trình nhập bảng câu hỏi vào máy chủ dữ liệu.</value>
+        </data>
+    <data name="SideBarCriticalityConditionsEmptyLine3" xml:space="preserve">
+        <value>Bao gồm một tin nhắn để người phỏng vấn (người trả lời) giải thích những gì cần thay đổi trong cuộc phỏng vấn (thông báo được hiển thị khi điều kiện quan trọng không được thỏa mãn). Việc bao gồm các siêu liên kết đến các câu hỏi trong tin nhắn sẽ rất hữu ích cho việc điều hướng.</value>
+        </data>
+    <data name="SideBarHideDescription" xml:space="preserve">
+        <value>ẩn mô tả</value>
+        </data>
+    <data name="SideBarCriticalityConditionMessage" xml:space="preserve">
+        <value>Tin nhắn</value>
+        </data>
+    <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
+        <value>Quy tắc quan trọng không có thông báo</value>
+        </data>
+    <data name="SideBarShowDescription" xml:space="preserve">
+        <value>thêm mô tả</value>
+        </data>
+    <data name="SideBarAddCriticalityCondition" xml:space="preserve">
+        <value>thêm quy tắc quan trọng mới</value>
+        </data>
+    <data name="SideBarScenarioCounter" xml:space="preserve">
+        <value>{{count}} Kịch bản:</value>
+        </data>
+    <data name="SideBarScenarioCounter_plural" xml:space="preserve">
+        <value>{{count}} Kịch bản:</value>
+        </data>
+    <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
+        <value>Sử dụng tab này để xem các kịch bản của bạn.</value>
+        </data>
+    <data name="SideBarScenarioEmptyLine2" xml:space="preserve">
+        <value>Kịch bản là ảnh chụp nhanh trạng thái của người thử nghiệm, bạn có thể lưu nó vào người thử nghiệm bằng cách nhấp vào nút "Lưu kịch bản".</value>
+        </data>
+    <data name="SideBarScenarioName" xml:space="preserve">
+        <value>tiêu đề kịch bản</value>
+        </data>
+    <data name="SideBarSectionsCounter" xml:space="preserve">
+        <value>{{count}} Phần:</value>
+        </data>
+    <data name="SideBarSectionsCounter_plural" xml:space="preserve">
+        <value>{{count}} Phần:</value>
+        </data>
+    <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
+        <value>Tải xuống xlsx</value>
+        </data>
+    <data name="SideBarDownload" xml:space="preserve">
+        <value>Tải xuống:</value>
+        </data>
+    <data name="SideBarXlsx" xml:space="preserve">
+        <value>Xlsx</value>
+        </data>
+    <data name="SideBarTab" xml:space="preserve">
+        <value>Thẻ</value>
+        </data>
+    <data name="SideBarTranslationGetTemplate" xml:space="preserve">
+        <value>Nhận mẫu cho</value>
+        </data>
+    <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
+        <value>Excel (xlsx)</value>
+        </data>
+    <data name="SideBarTranslationGetTemplateLinkTextCsv" xml:space="preserve">
+        <value>Thẻ (txt)</value>
+        </data>
+    <data name="SideBarTranslationName" xml:space="preserve">
+        <value>tên dịch</value>
+        </data>
+    <data name="SideBarCategoriesName" xml:space="preserve">
+        <value>tên các danh mục</value>
+        </data>
+    <data name="SideBarTranslationsCounter" xml:space="preserve">
+        <value>{{count}} Dịch thuật</value>
+        </data>
+    <data name="SideBarCategoriesCounter" xml:space="preserve">
+        <value>{{count}} Danh mục</value>
+        </data>
+    <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
+        <value>{{count}} Bản dịch</value>
+        </data>
+    <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
+        <value>Sử dụng tab này để quản lý bản dịch câu hỏi.</value>
+        </data>
+    <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
+        <value>Sử dụng tab này để quản lý các danh mục có thể sử dụng lại.</value>
+        </data>
+    <data name="SideBarTranslationsEmptyLine2" xml:space="preserve">
+        <value>Bạn có thể tải xuống và cập nhật bản dịch sang các ngôn ngữ khác nhau.</value>
+        </data>
+    <data name="SideBarCategoriesEmptyLine2" xml:space="preserve">
+        <value>Bạn có thể tải xuống và cập nhật các danh mục.</value>
+        </data>
+    <data name="SideBarTranslationsEmptyLine3" xml:space="preserve">
+        <value>Bản dịch sẽ được áp dụng trên văn bản gốc và ghi đè các giá trị. Bạn có thể để trống một số văn bản để sử dụng bản dịch gốc mặc định.</value>
+        </data>
+    <data name="SideBarCategoriesEmptyLine3" xml:space="preserve">
+        <value>sẽ được thêm vào danh sách các danh mục có thể sử dụng lại cho bất kỳ loại câu hỏi phân loại nào</value>
+        </data>
+    <data name="ToggleDropdown" xml:space="preserve">
+        <value>Chuyển đổi thả xuống</value>
+        </data>
+    <data name="Update" xml:space="preserve">
+        <value>Cập nhật</value>
+        </data>
+    <data name="VariableName" xml:space="preserve">
+        <value>tên</value>
+        </data>
+    <data name="WarningsCounter" xml:space="preserve">
+        <value>{{count}} cảnh báo</value>
+        </data>
+    <data name="WarningsCounter_plural" xml:space="preserve">
+        <value>{{count}} cảnh báo</value>
+        </data>
+    <data name="Close" xml:space="preserve">
+        <value>Đóng</value>
+        </data>
+    <data name="CompilationErrorsCounter" xml:space="preserve">
+        <value>{{count}} đã tìm thấy lỗi</value>
+        </data>
+    <data name="CompilationErrorsCounter_plural" xml:space="preserve">
+        <value>{{count}} đã tìm thấy lỗi</value>
+        </data>
+    <data name="CompilationLabel" xml:space="preserve">
+        <value>Biên soạn:</value>
+        </data>
+    <data name="CompilationWarningsCounter" xml:space="preserve">
+        <value>Đã tìm thấy cảnh báo {{count}}</value>
+        </data>
+    <data name="CompilationWarningsCounter_plural" xml:space="preserve">
+        <value>Đã tìm thấy cảnh báo {{count}}</value>
+        </data>
+    <data name="MoveTo" xml:space="preserve">
+        <value>Di chuyển đến</value>
+        </data>
+    <data name="Recompile" xml:space="preserve">
+        <value>Biên dịch lại</value>
+        </data>
+    <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
+        <value>định dạng: {{- type}}</value>
+        </data>
+    <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
+        <value>{{width}} × {{height}}px</value>
+        </data>
+    <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
+        <value>kích thước: {{size}}</value>
+        </data>
+    <data name="AttachmentSizeIsTooBig" xml:space="preserve">
+        <value>Kích thước tệp đính kèm quá lớn. Kích thước tối đa: {{size}}</value>
+        </data>
+    <data name="SideBarAttachmentsTitle" xml:space="preserve">
+        <value>Tệp đính kèm</value>
+        </data>
+    <data name="SideBarCommentsTitle" xml:space="preserve">
+        <value>Bình luận</value>
+        </data>
+    <data name="SideBarCriticalityConditionsTitle" xml:space="preserve">
+        <value>Quy tắc quan trọng</value>
+        </data>
+    <data name="SideBarMetadataHeader" xml:space="preserve">
+        <value>Mô tả bảng câu hỏi và thông tin khảo sát</value>
+        </data>
+    <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+        <value>Thông tin cơ bản</value>
+        </data>
+    <data name="SideBarMetadataTitle" xml:space="preserve">
+        <value>Tiêu đề bảng câu hỏi</value>
+        </data>
+    <data name="SideBarMetadataSubtitle" xml:space="preserve">
+        <value>Phụ đề:</value>
+        </data>
+    <data name="SideBarMetadataVersionIdentificator" xml:space="preserve">
+        <value>Mã nhận dạng phiên bản:</value>
+        </data>
+    <data name="SideBarMetadataVersionNotes" xml:space="preserve">
+        <value>Ghi chú phiên bản:</value>
+        </data>
+    <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+        <value>Thông tin dữ liệu khảo sát</value>
+        </data>
+    <data name="SideBarMetadataStudyTypes" xml:space="preserve">
+        <value>Các loại nghiên cứu:</value>
+        </data>
+    <data name="SideBarMetadataKindOfData" xml:space="preserve">
+        <value>Loại dữ liệu:</value>
+        </data>
+    <data name="SideBarMetadataModeOfDataCollection" xml:space="preserve">
+        <value>Phương thức thu thập dữ liệu:</value>
+        </data>
+    <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+        <value>Thông tin khảo sát</value>
+        </data>
+    <data name="SideBarMetadataCountry" xml:space="preserve">
+        <value>Quốc gia:</value>
+        </data>
+    <data name="SideBarMetadataYear" xml:space="preserve">
+        <value>Năm:</value>
+        </data>
+    <data name="SideBarMetadataLanguages" xml:space="preserve">
+        <value>Ngôn ngữ:</value>
+        </data>
+    <data name="SideBarMetadataUnitOfAlalysis" xml:space="preserve">
+        <value>Đơn vị phân tích:</value>
+        </data>
+    <data name="SideBarMetadataCoverage" xml:space="preserve">
+        <value>Bảo hiểm:</value>
+        </data>
+    <data name="SideBarMetadataUniverse" xml:space="preserve">
+        <value>Vũ trụ:</value>
+        </data>
+    <data name="SideBarMetadataPrimaryInvestigator" xml:space="preserve">
+        <value>Điều tra viên sơ cấp:</value>
+        </data>
+    <data name="SideBarMetadataConsultants" xml:space="preserve">
+        <value>Nhà tư vấn:</value>
+        </data>
+    <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+        <value>Thông tin bổ sung</value>
+        </data>
+    <data name="SideBarMetadataNotes" xml:space="preserve">
+        <value>Ghi chú:</value>
+        </data>
+    <data name="SideBarMetadataKeywords" xml:space="preserve">
+        <value>Từ khóa:</value>
+        </data>
+    <data name="SideBarMetadataFunding" xml:space="preserve">
+        <value>Tài trợ:</value>
+        </data>
+    <data name="SideBarMetadataQuestionnaireAccess" xml:space="preserve">
+        <value>Truy cập bảng câu hỏi</value>
+        </data>
+    <data name="SideBarMetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+        <value>Đồng ý công khai bảng câu hỏi này</value>
+        </data>
+    <data name="SideBarAttachmentUploaded" xml:space="preserve">
+        <value>đã tải lên: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
+        </data>
+    <data name="SideBarLookupTitle" xml:space="preserve">
+        <value>Bảng tra cứu</value>
+        </data>
+    <data name="SideBarMacroTitle" xml:space="preserve">
+        <value>Macro</value>
+        </data>
+    <data name="SideBarScenarioTitle" xml:space="preserve">
+        <value>kịch bản</value>
+        </data>
+    <data name="SideBarSectionsTitle" xml:space="preserve">
+        <value>Phần</value>
+        </data>
+    <data name="SideBarTranslationsTitle" xml:space="preserve">
+        <value>Bản dịch</value>
+        </data>
+    <data name="SideBarCategoriesTitle" xml:space="preserve">
+        <value>Thể loại</value>
+        </data>
+    <data name="SideBarTranslationsUploadNew" xml:space="preserve">
+        <value>Tải lên bản dịch mới</value>
+        </data>
+    <data name="SideBarCategoriesUploadNew" xml:space="preserve">
+        <value>Tải lên danh mục mới</value>
+        </data>
+    <data name="AttachmentPreview" xml:space="preserve">
+        <value>Xem trước tệp đính kèm</value>
+        </data>
+    <data name="FindReplaceFindWhat" xml:space="preserve">
+        <value>Tìm những gì:</value>
+        </data>
+    <data name="FindReplaceMatchCase" xml:space="preserve">
+        <value>Hộp diêm</value>
+        </data>
+    <data name="FindReplaceMatchWord" xml:space="preserve">
+        <value>Ghép toàn bộ từ</value>
+        </data>
+    <data name="FindReplaceReplaceWith" xml:space="preserve">
+        <value>Thay thế bằng:</value>
+        </data>
+    <data name="FindReplaceTitle" xml:space="preserve">
+        <value>Tìm và thay thế</value>
+        </data>
+    <data name="FindReplaceUseRegex" xml:space="preserve">
+        <value>Sử dụng biểu thức chính quy</value>
+        </data>
+    <data name="FindReplaceСonfirm" xml:space="preserve">
+        <value>Vui lòng xác nhận hành động.</value>
+        </data>
+    <data name="ModalConfirm" xml:space="preserve">
+        <value>Xác nhận</value>
+        </data>
+    <data name="ModalInfo" xml:space="preserve">
+        <value>Thông tin</value>
+        </data>
+    <data name="MoveToAnotherSubSection" xml:space="preserve">
+        <value>Chuyển sang phần khác:</value>
+        </data>
+    <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
+        <value>Thay thế tất cả</value>
+        </data>
+    <data name="FindReplaceBackToSearch" xml:space="preserve">
+        <value>Quay lại tìm kiếm</value>
+        </data>
+    <data name="FindReplaceDone" xml:space="preserve">
+        <value>Xong</value>
+        </data>
+    <data name="FindReplaceFindAll" xml:space="preserve">
+        <value>Tìm tất cả</value>
+        </data>
+    <data name="FindReplaceInAll" xml:space="preserve">
+        <value>Tất cả</value>
+        </data>
+    <data name="FindReplaceInAllFound" xml:space="preserve">
+        <value>trong thực thể được tìm thấy {{count}}?</value>
+        </data>
+    <data name="FindReplaceInAllFound_plural" xml:space="preserve">
+        <value>trong {{count}} thực thể được tìm thấy?</value>
+        </data>
+    <data name="FindReplaceMatchingLines" xml:space="preserve">
+        <value>Các dòng phù hợp: {{count}}</value>
+        </data>
+    <data name="FindReplaceCurrentMatch" xml:space="preserve">
+        <value>{{current}} / {{count}}</value>
+        </data>
+    <data name="FindReplaceNext" xml:space="preserve">
+        <value>Kế tiếp</value>
+        </data>
+    <data name="FindReplacePrevious" xml:space="preserve">
+        <value>Trước</value>
+        </data>
+    <data name="FindReplaceReplaceAll" xml:space="preserve">
+        <value>Thay thế tất cả ({{count}})</value>
+        </data>
+    <data name="FindReplaceReplaceAllConfirmWith" xml:space="preserve">
+        <value>với</value>
+        </data>
+    <data name="FindReplaceWereReplaced" xml:space="preserve">
+        <value>đã được thay thế bằng</value>
+        </data>
+    <data name="EnablingCondition" xml:space="preserve">
+        <value>Điều kiện kích hoạt</value>
+        </data>
+    <data name="GroupTitle" xml:space="preserve">
+        <value>Tiêu đề</value>
+        </data>
+    <data name="HideIfDisabled" xml:space="preserve">
+        <value>Ẩn nếu bị tắt</value>
+        </data>
+    <data name="FlatRoster" xml:space="preserve">
+        <value>Chế độ phẳng</value>
+        </data>
+    <data name="AddValidationRule" xml:space="preserve">
+        <value>Thêm điều kiện xác thực mới</value>
+        </data>
+    <data name="EnteredMoreThanAllowed" xml:space="preserve">
+        <value>Bạn đã nhập nhiều hơn mức tối đa cho phép {{max}}</value>
+        </data>
+    <data name="ErrorMessage" xml:space="preserve">
+        <value>Thông báo lỗi hoặc cảnh báo</value>
+        </data>
+    <data name="OptionsListError" xml:space="preserve">
+        <value>Bạn đã nhập thông tin đầu vào không hợp lệ. Mỗi dòng phải tuân theo định dạng: 'Tiêu đề...Giá trị[...Tên tệp đính kèm]'. 'Giá trị' phải là số nguyên. 'Tiêu đề' phải là chuỗi chữ và số. 'Tên tệp đính kèm' là tùy chọn. Không được phép có dòng trống.</value>
+        </data>
+    <data name="QuestionAddInstruction" xml:space="preserve">
+        <value>Thêm hướng dẫn cho người phỏng vấn</value>
+        </data>
+    <data name="QuestionClickReload" xml:space="preserve">
+        <value>nhấp vào tải lại</value>
+        </data>
+    <data name="QuestionFilter" xml:space="preserve">
+        <value>Lọc</value>
+        </data>
+    <data name="QuestionGpsNavigation" xml:space="preserve">
+        <value>Câu hỏi này sẽ được coi là câu hỏi điều hướng GPS cho Người phỏng vấn</value>
+        </data>
+    <data name="QuestionHideInstruction" xml:space="preserve">
+        <value>Ẩn hướng dẫn</value>
+        </data>
+    <data name="QuestionInstruction" xml:space="preserve">
+        <value>Chỉ dẫn</value>
+        </data>
+    <data name="QuestionLinkedDescr" xml:space="preserve">
+        <value>Liên kết để liệt kê câu hỏi hoặc câu hỏi từ nhóm danh sách</value>
+        </data>
+    <data name="QuestionMustBeBound" xml:space="preserve">
+        <value>Bạn phải ràng buộc câu hỏi này</value>
+        </data>
+    <data name="QuestionQuestionType" xml:space="preserve">
+        <value>Loại câu hỏi</value>
+        </data>
+    <data name="QuestionDisplayMode" xml:space="preserve">
+        <value>Chế độ hiển thị</value>
+        </data>
+    <data name="BindToReusableCategories" xml:space="preserve">
+        <value>Liên kết với các danh mục có thể sử dụng lại</value>
+        </data>
+    <data name="SelectCategories" xml:space="preserve">
+        <value>Chọn danh mục</value>
+        </data>
+    <data name="QuestionScope" xml:space="preserve">
+        <value>Phạm vi câu hỏi</value>
+        </data>
+    <data name="QuestionText" xml:space="preserve">
+        <value>Nội dung câu hỏi</value>
+        </data>
+    <data name="QuestionToUpdateOptions" xml:space="preserve">
+        <value>Để cập nhật danh mục</value>
+        </data>
+    <data name="QuestionVariableLabel" xml:space="preserve">
+        <value>Nhãn biến</value>
+        </data>
+    <data name="QuestionVariableName" xml:space="preserve">
+        <value>Tên biến</value>
+        </data>
+    <data name="RosterAddItem" xml:space="preserve">
+        <value>Thêm mục</value>
+        </data>
+    <data name="RosterName" xml:space="preserve">
+        <value>Tên danh sách</value>
+        </data>
+    <data name="RosterSource" xml:space="preserve">
+        <value>Nguồn danh sách</value>
+        </data>
+    <data name="RosterSourceFixed" xml:space="preserve">
+        <value>Bộ vật phẩm cố định:</value>
+        </data>
+    <data name="RosterSourceNumericQuestion" xml:space="preserve">
+        <value>Câu hỏi nguồn cho số hàng:</value>
+        </data>
+    <data name="RosterSourceNumericTitles" xml:space="preserve">
+        <value>Câu hỏi nguồn cho tên của các hàng:</value>
+        </data>
+    <data name="RosterSourceQuestion" xml:space="preserve">
+        <value>Câu hỏi nguồn (câu trả lời xác định cả số lượng và tên của các hàng trong bảng phân công):</value>
+        </data>
+    <data name="RosterVariableName" xml:space="preserve">
+        <value>ID danh sách</value>
+        </data>
+    <data name="SectionVariableName" xml:space="preserve">
+        <value>Tên biến</value>
+        </data>
+    <data name="SelectQuestion" xml:space="preserve">
+        <value>Chọn câu hỏi</value>
+        </data>
+    <data name="AddFilter" xml:space="preserve">
+        <value>Thêm bộ lọc</value>
+        </data>
+    <data name="SettingsCan" xml:space="preserve">
+        <value>Có thể</value>
+        </data>
+    <data name="SettingsInviteCollaborators" xml:space="preserve">
+        <value>Mời thêm người dùng bằng cách đăng nhập hoặc email đã đăng ký</value>
+        </data>
+    <data name="SettingsOwner" xml:space="preserve">
+        <value>người sở hữu</value>
+        </data>
+    <data name="SettingsPrivate" xml:space="preserve">
+        <value>Riêng tư</value>
+        </data>
+    <data name="SettingsPublic" xml:space="preserve">
+        <value>Công cộng</value>
+        </data>
+    <data name="SettingsAnonymous" xml:space="preserve">
+        <value>Vô danh</value>
+        </data>
+    <data name="RegenerateQuestionnaireSharingLink" xml:space="preserve">
+        <value>Tạo lại liên kết</value>
+        </data>
+    <data name="AnonymousQuestionnaireGeneratedDate" xml:space="preserve">
+        <value>liên kết được tạo: {{datetime}}</value>
+        </data>
+    <data name="SettingsQuestionnaireName" xml:space="preserve">
+        <value>Tiêu đề bảng câu hỏi</value>
+        </data>
+    <data name="SettingsQuestionnaireSharing" xml:space="preserve">
+        <value>Thực hiện bảng câu hỏi này</value>
+        </data>
+    <data name="SettingsRevokeAccess" xml:space="preserve">
+        <value>Thu hồi quyền truy cập</value>
+        </data>
+    <data name="SettingsTitle" xml:space="preserve">
+        <value>Cài đặt</value>
+        </data>
+    <data name="SettingsVisibleToEveryone" xml:space="preserve">
+        <value>hiển thị cho mọi người ở chế độ chỉ đọc</value>
+        </data>
+    <data name="SettingsAccessibleToEveryone" xml:space="preserve">
+        <value>có thể truy cập ở chế độ chỉ đọc đối với bất kỳ ai có liên kết</value>
+        </data>
+    <data name="SettingsStatusAllowAnonymousAccess" xml:space="preserve">
+        <value>Tính năng chia sẻ ẩn danh hiện đang được bật.</value>
+        </data>
+    <data name="SettingsStatusDontAllowAnonymousAccess" xml:space="preserve">
+        <value>Tính năng chia sẻ ẩn danh hiện đã bị tắt.</value>
+        </data>
+    <data name="SettingsTurnOnAnonymousAccess" xml:space="preserve">
+        <value>Bật chia sẻ ẩn danh.</value>
+        </data>
+    <data name="SettingsTurnOffAnonymousAccess" xml:space="preserve">
+        <value>Tắt chia sẻ ẩn danh.</value>
+        </data>
+    <data name="SettingsVisibleToOwner" xml:space="preserve">
+        <value>chỉ hiển thị với chủ sở hữu</value>
+        </data>
+    <data name="SettingsWhoHasAccess" xml:space="preserve">
+        <value>ai có quyền truy cập</value>
+        </data>
+    <data name="ValidationCondition" xml:space="preserve">
+        <value>Điều kiện xác thực</value>
+        </data>
+    <data name="AddQuestion" xml:space="preserve">
+        <value>Thêm câu hỏi</value>
+        </data>
+    <data name="AddRoster" xml:space="preserve">
+        <value>Thêm danh sách</value>
+        </data>
+    <data name="AddStaticText" xml:space="preserve">
+        <value>Thêm văn bản tĩnh</value>
+        </data>
+    <data name="AddSubsection" xml:space="preserve">
+        <value>Thêm tiểu mục</value>
+        </data>
+    <data name="VirtualCoverPage" xml:space="preserve">
+        <value>Trang bìa ảo</value>
+        </data>
+    <data name="MigrateToNewCover" xml:space="preserve">
+        <value>Tạo bìa</value>
+        </data>
+    <data name="AddVariable" xml:space="preserve">
+        <value>Thêm biến</value>
+        </data>
+    <data name="EmptySectionLine1" xml:space="preserve">
+        <value>Phần này trống.</value>
+        </data>
+    <data name="EmptySectionLine2" xml:space="preserve">
+        <value>Bạn có thể bắt đầu bằng cách sử dụng các nút {{-addQuestionBtn}} và {{-addSubsectionBtn}}</value>
+        </data>
+    <data name="EmptySectionLine3" xml:space="preserve">
+        <value>ở đầu khối này hoặc quản lý các phần bằng bảng điều khiển bên trái {{-panel}}</value>
+        </data>
+    <data name="EmptySectionLine4" xml:space="preserve">
+        <value>Tên bảng câu hỏi, biến, cộng tác và các tùy chọn khác</value>
+        </data>
+    <data name="EmptySectionLine5" xml:space="preserve">
+        <value>có thể tìm thấy ở bảng {{-settingsBtn}} (góc trên bên phải)</value>
+        </data>
+    <data name="NothingFound" xml:space="preserve">
+        <value>Không tìm thấy gì</value>
+        </data>
+    <data name="Paste" xml:space="preserve">
+        <value>Dán</value>
+        </data>
+    <data name="QuestionAddOption" xml:space="preserve">
+        <value>Thêm danh mục</value>
+        </data>
+    <data name="QuestionCascading" xml:space="preserve">
+        <value>Hộp tổ hợp xếp tầng</value>
+        </data>
+    <data name="QuestionComboBox" xml:space="preserve">
+        <value>Hộp tổ hợp</value>
+        </data>
+    <data name="QuestionCheckboxes" xml:space="preserve">
+        <value>Hộp kiểm</value>
+        </data>
+    <data name="QuestionCurrentTime" xml:space="preserve">
+        <value>Dấu thời gian hiện tại (ngày và giờ)</value>
+        </data>
+    <data name="QuestionDefaultDate" xml:space="preserve">
+        <value>Ngày mặc định</value>
+        </data>
+    <data name="GeometryType" xml:space="preserve">
+        <value>Kiểu hình học</value>
+        </data>
+    <data name="GeometryInputMode" xml:space="preserve">
+        <value>Chế độ đầu vào</value>
+        </data>
+    <data name="GeometryOverlapDetection" xml:space="preserve">
+        <value>Phát hiện chồng chéo</value>
+        </data>
+    <data name="QuestionDecimalPlaces" xml:space="preserve">
+        <value>Số chữ số thập phân</value>
+        </data>
+    <data name="QuestionInteger" xml:space="preserve">
+        <value>số nguyên</value>
+        </data>
+    <data name="QuestionIsLinked" xml:space="preserve">
+        <value>Được liên kết</value>
+        </data>
+    <data name="QuestionMaxListCount" xml:space="preserve">
+        <value>Số phần tử danh sách tối đa</value>
+        </data>
+    <data name="QuestionMaxNumberOfAnswers" xml:space="preserve">
+        <value>Số câu trả lời tối đa</value>
+        </data>
+    <data name="QuestionOnlyInts" xml:space="preserve">
+        <value>Chỉ cho phép số nguyên</value>
+        </data>
+    <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
+        <value>Cho phép số nguyên từ 1 đến 50</value>
+        </data>
+    <data name="QuestionOptionsCut" xml:space="preserve">
+        <value>Câu hỏi được đánh dấu là "Hộp tổ hợp" hoặc "Hộp tổ hợp xếp tầng" khi tải lên chi tiết câu hỏi và chứa quá nhiều danh mục, số lượng danh mục bị giảm xuống còn {{count}}</value>
+        </data>
+    <data name="QuestionOrdered" xml:space="preserve">
+        <value>Ghi lại thứ tự trả lời</value>
+        </data>
+    <data name="QuestionPattern" xml:space="preserve">
+        <value>Mẫu</value>
+        </data>
+    <data name="QuestionUploadOptions" xml:space="preserve">
+        <value>Tải lên danh mục mới</value>
+        </data>
+    <data name="QuestionUseSeparator" xml:space="preserve">
+        <value>Sử dụng dấu phân cách 1000</value>
+        </data>
+    <data name="QuestionYesNoMode" xml:space="preserve">
+        <value>Nút Có/Không</value>
+        </data>
+    <data name="GeographyInputModeManual" xml:space="preserve">
+        <value>Thủ công</value>
+        </data>
+    <data name="GeographyInputModeAutomatic" xml:space="preserve">
+        <value>Tự động</value>
+        </data>
+    <data name="GeographyInputModeSemiautomatic" xml:space="preserve">
+        <value>Bán tự động</value>
+        </data>
+    <data name="Search" xml:space="preserve">
+        <value>Tìm kiếm</value>
+        </data>
+    <data name="Filter" xml:space="preserve">
+        <value>Lọc</value>
+        </data>
+    <data name="SelectParentQuestion" xml:space="preserve">
+        <value>Chọn câu hỏi dành cho phụ huynh</value>
+        </data>
+    <data name="SelectParentQuestionError" xml:space="preserve">
+        <value>Bạn phải chọn câu hỏi dành cho phụ huynh</value>
+        </data>
+    <data name="UserDefinedCategories" xml:space="preserve">
+        <value>Danh mục do người dùng xác định</value>
+        </data>
+    <data name="ReusableCategories" xml:space="preserve">
+        <value>Danh mục có thể tái sử dụng</value>
+        </data>
+    <data name="SourceOfCategories" xml:space="preserve">
+        <value>Nguồn danh mục</value>
+        </data>
+    <data name="RostersQuestion" xml:space="preserve">
+        <value>Liệt kê câu hỏi hoặc câu hỏi từ nhóm danh sách</value>
+        </data>
+    <data name="QuestionRadioButtonList" xml:space="preserve">
+        <value>Danh sách nút radio</value>
+        </data>
+    <data name="SettingsInvite" xml:space="preserve">
+        <value>Mời</value>
+        </data>
+    <data name="SettingsProvideExistingEmail" xml:space="preserve">
+        <value>Cung cấp email hoặc thông tin đăng nhập của người dùng hiện tại</value>
+        </data>
+    <data name="SettingsProvideValidEmail" xml:space="preserve">
+        <value>Cung cấp một email hợp lệ</value>
+        </data>
+    <data name="StaticText" xml:space="preserve">
+        <value>Văn bản tĩnh</value>
+        </data>
+    <data name="StaticTextAttachmentName" xml:space="preserve">
+        <value>Tên tệp đính kèm</value>
+        </data>
+    <data name="ToggleSearch" xml:space="preserve">
+        <value>Chuyển đổi tìm kiếm</value>
+        </data>
+    <data name="TreeAddQuestion" xml:space="preserve">
+        <value>Thêm câu hỏi</value>
+        </data>
+    <data name="TreeAddQuestionAfter" xml:space="preserve">
+        <value>Thêm câu hỏi sau</value>
+        </data>
+    <data name="TreeAddRoster" xml:space="preserve">
+        <value>Thêm danh sách</value>
+        </data>
+    <data name="TreeAddRosterAfter" xml:space="preserve">
+        <value>Thêm danh sách sau</value>
+        </data>
+    <data name="TreeAddSection" xml:space="preserve">
+        <value>Thêm tiểu mục</value>
+        </data>
+    <data name="TreeAddSectionAfter" xml:space="preserve">
+        <value>Thêm tiểu mục sau</value>
+        </data>
+    <data name="TreeAddStaticText" xml:space="preserve">
+        <value>Thêm văn bản tĩnh</value>
+        </data>
+    <data name="TreeAddStaticTextAfter" xml:space="preserve">
+        <value>Thêm văn bản tĩnh sau</value>
+        </data>
+    <data name="TreeAddVariable" xml:space="preserve">
+        <value>Thêm biến</value>
+        </data>
+    <data name="TreeAddVariableAfter" xml:space="preserve">
+        <value>Thêm biến sau</value>
+        </data>
+    <data name="TreeRoster" xml:space="preserve">
+        <value>danh sách:</value>
+        </data>
+    <data name="VariableExpression" xml:space="preserve">
+        <value>Sự biểu lộ</value>
+        </data>
+    <data name="VariableLabel" xml:space="preserve">
+        <value>Nhãn biến</value>
+        </data>
+    <data name="VariableType" xml:space="preserve">
+        <value>Loại biến</value>
+        </data>
+    <data name="HelpConditionExpression" xml:space="preserve">
+        <value>Một biểu thức logic kích hoạt (hủy kích hoạt) mục hiện tại tùy thuộc vào câu trả lời cho các câu hỏi khác.</value>
+        </data>
+    <data name="HelpExpression" xml:space="preserve">
+        <value>Một biểu thức logic được tính toán dựa trên câu trả lời cho các câu hỏi khác.</value>
+        </data>
+    <data name="HelpFixedTitles" xml:space="preserve">
+        <value>Số lượng mục xác định kích thước danh sách. Mỗi phần tử của danh sách tương ứng với tiêu đề của hàng danh sách. Mỗi phần tử của danh sách phải được đặt trên một dòng riêng biệt.</value>
+        </data>
+    <data name="HelpHideIfDisabled" xml:space="preserve">
+        <value>Theo mặc định, mục bị tắt sẽ có màu xám. Việc chọn tùy chọn này sẽ ẩn câu hỏi hoặc phần bị tắt trên máy tính bảng.</value>
+        </data>
+    <data name="HelpRosterDisplayMode" xml:space="preserve">
+        <value>Phần phụ - các câu hỏi của danh sách được hiển thị phía sau các nút tương ứng với các phiên bản danh sách.
+Căn hộ - các câu hỏi của danh sách được hiển thị ở cùng cấp độ, được phân tách bằng các tiêu đề tương ứng với các phiên bản danh sách.
+Bảng - các câu hỏi của danh sách được hiển thị ở cùng cấp độ với các hàng và cột của bảng. 
+Ma trận - một câu hỏi phân loại của danh sách được hiển thị dưới dạng ma trận. 
+Chế độ xem Bảng và Ma trận chỉ được hỗ trợ trong khảo sát trên Web, máy tính bảng sẽ quay lại chế độ 'Phần phụ'.</value>
+        </data>
+    <data name="HelpHideInstructions" xml:space="preserve">
+        <value>Theo mặc định, văn bản hướng dẫn được hiển thị trên máy tính bảng. Việc chọn tùy chọn này sẽ chỉ hiển thị dòng hướng dẫn đầu tiên. Nhấn vào dòng đó sẽ hiển thị toàn bộ văn bản.</value>
+        </data>
+    <data name="HelpInstruction" xml:space="preserve">
+        <value>Văn bản hướng dẫn sẽ được đính kèm vào câu hỏi.</value>
+        </data>
+    <data name="HelpIsTimestamp" xml:space="preserve">
+        <value>Tùy chọn này cho phép người dùng đóng dấu thời gian hiện tại trên máy tính bảng</value>
+        </data>
+    <data name="HelpDefaultDate" xml:space="preserve">
+        <value>Ngày này sẽ được hiển thị là ngày bắt đầu lựa chọn trên máy tính bảng</value>
+        </data>
+    <data name="HelpDoNotExport" xml:space="preserve">
+        <value>Đánh dấu biến này để loại trừ nó khỏi xuất</value>
+        </data>
+    <data name="VariableNoExport" xml:space="preserve">
+        <value>Không xuất khẩu</value>
+        </data>
+    <data name="HelpMask" xml:space="preserve">
+        <value>Mục nhập được định dạng cho các giá trị chữ và số: số điện thoại, mã ID, v.v. Ví dụ:"~" - Biểu thị ký tự chữ cái (A-Z,a-z), "#" - Biểu thị ký tự số (0-9), "*" - Biểu thị ký tự chữ và số (A-Z,a-z,0-9). "##/##/####" - ngày, "(###) ###-####" - số điện thoại, "AA####" - số chuyến bay do American AirLines khai thác hoặc "~*-###-~###"</value>
+        </data>
+    <data name="HelpSourceQuestion" xml:space="preserve">
+        <value>Câu hỏi nguồn (câu trả lời tạo ra số hàng)</value>
+        </data>
+    <data name="HelpTitles" xml:space="preserve">
+        <value>Tiêu đề của các hàng.</value>
+        </data>
+    <data name="HelpUseFormatting" xml:space="preserve">
+        <value>Khi được chọn, trường số trên máy tính bảng sẽ có định dạng là: d,ddd,ddd.dd, "d" đại diện cho các chữ số (0-9), “,”(dấu phẩy) là dấu phân cách hàng nghìn và "." (dấu chấm) là ký hiệu dấu thập phân.  Dấu phân cách hàng nghìn và ký hiệu dấu thập phân có thể khác nhau đối với các máy tính bảng có nền văn hóa khác nhau.</value>
+        </data>
+    <data name="HelpValidationExpression" xml:space="preserve">
+        <value>Một biểu thức logic xác nhận câu trả lời cho câu hỏi hiện tại. Có thể bao gồm giá trị của các câu hỏi khác.</value>
+        </data>
+    <data name="HelpValidationMessage" xml:space="preserve">
+        <value>Thông báo lỗi hoặc cảnh báo được hiển thị khi điều kiện xác thực được đánh giá là "Sai" hoặc xảy ra lỗi trong quá trình đánh giá biểu thức.</value>
+        </data>
+    <data name="HelpVariableDescription" xml:space="preserve">
+        <value>Văn bản sẽ được hiển thị bên cạnh một biến nhằm mục đích thử nghiệm</value>
+        </data>
+    <data name="HelpVariableLabel" xml:space="preserve">
+        <value>Một văn bản có tối đa {{maxLength}} ký tự sẽ được đính kèm vào biến được xuất.</value>
+        </data>
+    <data name="HelpVariableName" xml:space="preserve">
+        <value>Tên biến và ID danh sách có thể dài từ {{minLength}} đến {{maxLength}} ký tự và chỉ được chứa các ký tự sau: a-z, A-Z, _ hoặc 0-9. Ký tự đầu tiên không được là 0-9 hoặc _ và ký tự cuối cùng không được là _.</value>
+        </data>
+    <data name="HelpAttachmentName" xml:space="preserve">
+        <value>Tên của tệp đính kèm sẽ được hiển thị.</value>
+        </data>
+    <data name="HelpCoverPage" xml:space="preserve">
+        <value>Phần đầu tiên của mỗi bảng câu hỏi bao gồm các câu hỏi xác định cũng được hiển thị trên bảng thông tin của người phỏng vấn và người giám sát.</value>
+        </data>
+    <data name="HelpVirtualCoverPage" xml:space="preserve">
+        <value>Bìa là phần ảo hiển thị tất cả các câu hỏi nhận dạng.
+    Không thể thay đổi câu hỏi trong phần này</value>
+        </data>
+    <data name="ConditionMightBeBroken" xml:space="preserve">
+        <value>Điều kiện hoặc các mục phụ thuộc xếp tầng có thể bị hỏng</value>
+        </data>
+    <data name="HotkeysCloseLookup" xml:space="preserve">
+        <value>Đóng bảng tra cứu bảng</value>
+        </data>
+    <data name="HotkeysCloseMacros" xml:space="preserve">
+        <value>Đóng bảng macro</value>
+        </data>
+    <data name="HotkeysCloseMetadata" xml:space="preserve">
+        <value>Đóng bảng siêu dữ liệu</value>
+        </data>
+    <data name="HotkeysCloseScenarios" xml:space="preserve">
+        <value>Đóng bảng tình huống</value>
+        </data>
+    <data name="HotkeysCloseTranslations" xml:space="preserve">
+        <value>Đóng bảng dịch</value>
+        </data>
+    <data name="HotkeysCloseCategories" xml:space="preserve">
+        <value>Đóng bảng danh mục</value>
+        </data>
+    <data name="HotkeysCloseComments" xml:space="preserve">
+        <value>Đóng bảng bình luận</value>
+        </data>
+    <data name="HotkeysFocusTitle" xml:space="preserve">
+        <value>Trường tiêu đề tập trung trong trình chỉnh sửa</value>
+        </data>
+    <data name="HotkeysFocusTree" xml:space="preserve">
+        <value>Cây câu hỏi tập trung</value>
+        </data>
+    <data name="HotkeysHideAttachments" xml:space="preserve">
+        <value>Đóng bảng đính kèm</value>
+        </data>
+    <data name="HotkeysHideSections" xml:space="preserve">
+        <value>Đóng phần</value>
+        </data>
+    <data name="HotkeysNavigateToPrevSibling" xml:space="preserve">
+        <value>Điều hướng đến anh chị em trước đó</value>
+        </data>
+    <data name="HotkeysNavigateToSibling" xml:space="preserve">
+        <value>Điều hướng đến anh chị em tiếp theo</value>
+        </data>
+    <data name="HotkeysOpenItem" xml:space="preserve">
+        <value>Mở mục trong trình chỉnh sửa</value>
+        </data>
+    <data name="HotkeysOpenSection" xml:space="preserve">
+        <value>Phần mở</value>
+        </data>
+    <data name="HotkeysPrint" xml:space="preserve">
+        <value>In</value>
+        </data>
+    <data name="HotkeysSearch" xml:space="preserve">
+        <value>Tìm kiếm các tiểu mục và câu hỏi trong mục</value>
+        </data>
+    <data name="HotkeysTest" xml:space="preserve">
+        <value>Kiểm tra bảng câu hỏi trong WebTester</value>
+        </data>
+    <data name="MultipleDependencies" xml:space="preserve">
+        <value>Một hoặc nhiều câu hỏi/tiểu mục phụ thuộc vào</value>
+        </data>
+    <data name="NoPermissions" xml:space="preserve">
+        <value>Bạn không có quyền thay đổi bảng câu hỏi này</value>
+        </data>
+    <data name="NotAnImage" xml:space="preserve">
+        <value>Tệp được chọn không phải là hình ảnh</value>
+        </data>
+    <data name="QuestionOpenEditorConfirm" xml:space="preserve">
+        <value>Để mở trình chỉnh sửa, tất cả các thay đổi chưa được lưu phải được lưu. Chúng ta có nên cứu họ bây giờ không?</value>
+        </data>
+    <data name="QuestionOpenEditorSaved" xml:space="preserve">
+        <value>Nó đã được lưu thành công. Cửa sổ tải tập tin lên sẽ được mở.</value>
+        </data>
+    <data name="SettingsShareEdit" xml:space="preserve">
+        <value>Biên tập</value>
+        </data>
+    <data name="SettingsShareView" xml:space="preserve">
+        <value>Xem</value>
+        </data>
+    <data name="DeleteConfirmQuestion" xml:space="preserve">
+        <value>Bạn có chắc chắn muốn xóa "{{trimmedTitle}}" không?</value>
+        </data>
+    <data name="DeleteConfirmCategories" xml:space="preserve">
+        <value>Bạn có chắc chắn muốn xóa nhóm danh mục "{{trimmedTitle}}" không? Nguồn danh mục cho các câu hỏi phân loại phụ thuộc vào nó sẽ được thay đổi thành danh mục do người dùng xác định</value>
+        </data>
+    <data name="UntitledQuestion" xml:space="preserve">
+        <value>Câu hỏi không có tiêu đề</value>
+        </data>
+    <data name="TranslationsObtained" xml:space="preserve">
+        <value>Đã nhận được hàng {0} từ tệp dịch</value>
+        </data>
+    <data name="TranslationsObtained_plural" xml:space="preserve">
+        <value>Đã nhận được {0} hàng từ tệp dịch</value>
+        </data>
+    <data name="CategoriesObtained" xml:space="preserve">
+        <value>Đã nhận được hàng {0} từ tệp danh mục</value>
+        </data>
+    <data name="CategoriesObtained_plural" xml:space="preserve">
+        <value>Đã nhận được các hàng {0} từ tệp danh mục</value>
+        </data>
+    <data name="UnsavedChangesLeave" xml:space="preserve">
+        <value>Bạn sẽ mất những thay đổi chưa được lưu nếu rời khỏi trang này</value>
+        </data>
+    <data name="UnsavedChangesReload" xml:space="preserve">
+        <value>Bạn sẽ mất những thay đổi chưa được lưu nếu bạn tải lại trang này</value>
+        </data>
+    <data name="Export" xml:space="preserve">
+        <value>Xuất khẩu</value>
+        </data>
+    <data name="OptionsCloseWindow" xml:space="preserve">
+        <value>Đóng cửa sổ?</value>
+        </data>
+    <data name="OptionsUploadApply" xml:space="preserve">
+        <value>Áp dụng thay đổi</value>
+        </data>
+    <data name="OptionsUploadRevert" xml:space="preserve">
+        <value>Hoàn nguyên các thay đổi</value>
+        </data>
+    <data name="OptionsWindowTitle" xml:space="preserve">
+        <value>Chỉnh sửa danh mục</value>
+        </data>
+    <data name="CascadingOptionsWindowTitle" xml:space="preserve">
+        <value>Chỉnh sửa danh mục xếp tầng</value>
+        </data>
+    <data name="OptionsUploadLimit" xml:space="preserve">
+        <value>Không có danh mục. Chọn tệp được phân tách bằng tab. Tệp có thể chứa tối đa {limit} danh mục.</value>
+        </data>
+    <data name="OptionsUploadTitle" xml:space="preserve">
+        <value>Tiêu đề</value>
+        </data>
+    <data name="OptionsUploadValue" xml:space="preserve">
+        <value>Giá trị</value>
+        </data>
+    <data name="AttachmentName" xml:space="preserve">
+        <value>Tên tệp đính kèm</value>
+        </data>
+    <data name="OptionsUploadParent" xml:space="preserve">
+        <value>Giá trị gốc</value>
+        </data>
+    <data name="SideBarMacroNoName" xml:space="preserve">
+        <value>macro không có tên</value>
+        </data>
+    <data name="Upload" xml:space="preserve">
+        <value>Tải lên</value>
+        </data>
+    <data name="SideBarLookupTableNoName" xml:space="preserve">
+        <value>bảng tra cứu không có tên</value>
+        </data>
+    <data name="SideBarTranslationNoName" xml:space="preserve">
+        <value>bản dịch không có tên</value>
+        </data>
+    <data name="SideBarCategoriesNoName" xml:space="preserve">
+        <value>danh mục không có tên</value>
+        </data>
+    <data name="SideBarAttachmentNoName" xml:space="preserve">
+        <value>tập tin đính kèm không có tên</value>
+        </data>
+    <data name="DefaultNewRoster" xml:space="preserve">
+        <value>Danh sách mới</value>
+        </data>
+    <data name="DefaultNewSection" xml:space="preserve">
+        <value>Phần mới</value>
+        </data>
+    <data name="DefaultNewStaticText" xml:space="preserve">
+        <value>Văn bản tĩnh mới</value>
+        </data>
+    <data name="DefaultNewSubsection" xml:space="preserve">
+        <value>Tiểu mục mới</value>
+        </data>
+    <data name="HotkeysShortcuts" xml:space="preserve">
+        <value>Phím tắt</value>
+        </data>
+    <data name="HotkeysShowHideHelp" xml:space="preserve">
+        <value>Hiển thị/ẩn menu trợ giúp này</value>
+        </data>
+    <data name="MarkAsDefault" xml:space="preserve">
+        <value>Đặt làm mặc định</value>
+        </data>
+    <data name="UnMarkAsDefault" xml:space="preserve">
+        <value>Không sử dụng làm mặc định</value>
+        </data>
+    <data name="Default" xml:space="preserve">
+        <value>Mặc định</value>
+        </data>
+    <data name="Reset" xml:space="preserve">
+        <value>Cài lại</value>
+        </data>
+    <data name="PleaseWait" xml:space="preserve">
+        <value>Vui lòng chờ...</value>
+        </data>
+    <data name="EntryWasNotFound" xml:space="preserve">
+        <value>Không tìm thấy mục nhập trong bảng câu hỏi, vui lòng chọn mục khác.</value>
+        </data>
+    <data name="RequestFailedUnexpectedly" xml:space="preserve">
+        <value>Yêu cầu không thành công ngoài mong đợi.</value>
+        </data>
+    <data name="ApplicationNotAvailable" xml:space="preserve">
+        <value>Không thể hoàn thành yêu cầu. Phản hồi nhận được dường như không đến từ máy chủ Giải pháp khảo sát.
+Điều này thường xảy ra do proxy mạng, tường lửa hoặc cổng bảo mật chặn kết nối.
+Vui lòng kiểm tra kết nối mạng của bạn hoặc liên hệ với bộ phận hỗ trợ CNTT của bạn.</value>
+        </data>
+    <data name="IncorrectRosterTitle" xml:space="preserve">
+        <value>Câu hỏi tiêu đề danh sách không chính xác</value>
+        </data>
+    <data name="SelectedInvalidItem" xml:space="preserve">
+        <value>Mục đã chọn không hợp lệ. Sửa nó đi.</value>
+        </data>
+    <data name="SelectItemFromTheList" xml:space="preserve">
+        <value>Chọn mục từ danh sách</value>
+        </data>
+    <data name="UntitledGroupOrRoster" xml:space="preserve">
+        <value>Tiểu mục hoặc danh sách không có tiêu đề</value>
+        </data>
+    <data name="UntitledVariable" xml:space="preserve">
+        <value>Biến không có tiêu đề</value>
+        </data>
+    <data name="UntitledSection" xml:space="preserve">
+        <value>Phần không có tiêu đề</value>
+        </data>
+    <data name="UntitledRoster" xml:space="preserve">
+        <value>Danh sách không có tiêu đề</value>
+        </data>
+    <data name="UntitledStaticText" xml:space="preserve">
+        <value>Văn bản tĩnh không có tiêu đề</value>
+        </data>
+    <data name="SelectModeOfDataCollection" xml:space="preserve">
+        <value>Chọn chế độ thu thập dữ liệu</value>
+        </data>
+    <data name="SelectCountry" xml:space="preserve">
+        <value>Chọn quốc gia</value>
+        </data>
+    <data name="SelectStudyType" xml:space="preserve">
+        <value>Chọn loại hình nghiên cứu</value>
+        </data>
+    <data name="SelectKindOfData" xml:space="preserve">
+        <value>Chọn loại dữ liệu</value>
+        </data>
+    <data name="Test" xml:space="preserve">
+        <value>Bài kiểm tra</value>
+        </data>
+    <data name="QuestionAddSpecialValues" xml:space="preserve">
+        <value>Thêm giá trị đặc biệt</value>
+        </data>
+    <data name="EntityComment" xml:space="preserve">
+        <value>Bình luận mới</value>
+        </data>
+    <data name="IsSignature" xml:space="preserve">
+        <value>Sử dụng bảng chữ ký</value>
+        </data>
+    <data name="HelpNewComment" xml:space="preserve">
+        <value>Thêm nhận xét</value>
+        </data>
+    <data name="VariableVariableName" xml:space="preserve">
+        <value>Tên biến</value>
+        </data>
+    <data name="SideBarCommentsCounter" xml:space="preserve">
+        <value>{{count}} Chủ đề bình luận:</value>
+        </data>
+    <data name="SideBarCommentsCounter_plural" xml:space="preserve">
+        <value>{{count}} Chủ đề bình luận:</value>
+        </data>
+    <data name="SideBarEmptyCommentsLine" xml:space="preserve">
+        <value>Bạn sẽ thấy bình luận ở đây</value>
+        </data>
+    <data name="ViewResolvedCommentsCounter" xml:space="preserve">
+        <value>Xem tất cả {{count}} nhận xét đã được giải quyết</value>
+        </data>
+    <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
+        <value>Xem tất cả {{count}} nhận xét đã được giải quyết</value>
+        </data>
+    <data name="HideResolvedComments" xml:space="preserve">
+        <value>Ẩn nhận xét đã giải quyết</value>
+        </data>
+    <data name="EditorAddComment" xml:space="preserve">
+        <value>Thêm nhận xét</value>
+        </data>
+    <data name="EditorShowComments" xml:space="preserve">
+        <value>Hiển thị bình luận ({{count}})</value>
+        </data>
+    <data name="JumpToEdit" xml:space="preserve">
+        <value>Chuyển sang chỉnh sửa</value>
+        </data>
+    <data name="CommentEditorResolve" xml:space="preserve">
+        <value>Giải quyết</value>
+        </data>
+    <data name="EditorHideComment" xml:space="preserve">
+        <value>Ẩn bình luận</value>
+        </data>
+    <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
+        <value>Bình luận không được chứa nhiều hơn {1} ký tự</value>
+        </data>
+    <data name="IsWarning" xml:space="preserve">
+        <value>Cảnh báo</value>
+        </data>
+    <data name="SettingsQuestionnaireVariable" xml:space="preserve">
+        <value>Biến bảng câu hỏi</value>
+        </data>
+    <data name="CollaboratorsSettings" xml:space="preserve">
+        <value>Cộng tác viên</value>
+        </data>
+    <data name="CollaboratorsDescriptionSettings" xml:space="preserve">
+        <value>những người dùng sau đây có quyền truy cập vào bảng câu hỏi này</value>
+        </data>
+    <data name="AccessSettings" xml:space="preserve">
+        <value>Truy cập</value>
+        </data>
+    <data name="PublicAccessSettings" xml:space="preserve">
+        <value>Quyền truy cập công cộng</value>
+        </data>
+    <data name="PublicAccessDescriptionSettings" xml:space="preserve">
+        <value>Tất cả người dùng có tài khoản trong hệ thống này đều hiển thị các câu hỏi công khai ở chế độ chỉ đọc.</value>
+        </data>
+    <data name="PublicAccessSettingsStatusOn" xml:space="preserve">
+        <value>Bảng câu hỏi hiện đang được chia sẻ ở chế độ công khai.</value>
+        </data>
+    <data name="PublicAccessSettingsStatusOff" xml:space="preserve">
+        <value>Bảng câu hỏi hiện không được chia sẻ dưới dạng công khai.</value>
+        </data>
+    <data name="PublicAccessSettingsOn" xml:space="preserve">
+        <value>Bật quyền truy cập công cộng.</value>
+        </data>
+    <data name="PublicAccessSettingsOff" xml:space="preserve">
+        <value>Tắt quyền truy cập công cộng.</value>
+        </data>
+    <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
+        <value>Chia sẻ liên kết</value>
+        </data>
+    <data name="AnonymousLink" xml:space="preserve">
+        <value>Liên kết ẩn danh:</value>
+        </data>
+    <data name="CopyLink" xml:space="preserve">
+        <value>Sao chép liên kết</value>
+        </data>
+    <data name="AnonymousQuestionnaireDescriptionSettings" xml:space="preserve">
+        <value>Người dùng có liên kết này sẽ có thể mở bảng câu hỏi này</value>
+        </data>
+    <data name="QuestionnaireSettings" xml:space="preserve">
+        <value>Cài đặt bảng câu hỏi</value>
+        </data>
+    <data name="HelpCombobox" xml:space="preserve">
+        <value>Hộp tổ hợp là sự kết hợp giữa danh sách thả xuống và hộp văn bản có thể chỉnh sửa một dòng. Có thể chọn danh mục bằng cách nhập một giá trị hoặc một phần của nó hoặc chọn một giá trị từ danh sách</value>
+        </data>
+    <data name="HelpQuestionnaireVarible" xml:space="preserve">
+        <value>Biến bảng câu hỏi được sử dụng làm tiền tố trong việc tạo tên cho các tệp xuất. Tên biến và ID danh sách có thể dài từ {{minLength}} đến {{maxLength}} ký tự và chỉ được chứa các ký tự sau: a-z, A-Z, _ hoặc 0-9. Ký tự đầu tiên không được là 0-9 hoặc _ và ký tự cuối cùng không được là _.</value>
+        </data>
+    <data name="DeleteCommentConfirm" xml:space="preserve">
+        <value>Bạn có chắc chắn muốn xóa bình luận?</value>
+        </data>
+    <data name="RefreshPageConfirm" xml:space="preserve">
+        <value>Chúng tôi đã cập nhật trang web này, vui lòng làm mới trang, nếu không bạn có thể gặp phải hành vi không mong muốn</value>
+        </data>
+    <data name="Refresh" xml:space="preserve">
+        <value>Làm cho khỏe lại</value>
+        </data>
+    <data name="NotSupportedAttachment" xml:space="preserve">
+        <value>Tệp đã chọn không được hỗ trợ dưới dạng tệp đính kèm</value>
+        </data>
+    <data name="AttachmentDimensionsAreTooBig" xml:space="preserve">
+        <value>Kích thước quá lớn</value>
+        </data>
+    <data name="SettingsHideIfDisabled" xml:space="preserve">
+        <value>Ẩn phần tử khi nó bị vô hiệu hóa</value>
+        </data>
+    <data name="HideIfDisabledNested" xml:space="preserve">
+        <value>Lồng từ bảng câu hỏi</value>
+        </data>
+    <data name="Add" xml:space="preserve">
+        <value>Thêm vào</value>
+        </data>
+    <data name="AllClassifications" xml:space="preserve">
+        <value>Tất cả các phân loại</value>
+        </data>
+    <data name="ClassificationShowCategories" xml:space="preserve">
+        <value>Hiển thị danh mục</value>
+        </data>
+    <data name="ClassificationsTitle" xml:space="preserve">
+        <value>Ngân hàng câu hỏi. Phân loại</value>
+        </data>
+    <data name="QuestionAddClassification" xml:space="preserve">
+        <value>Tìm kiếm phân loại</value>
+        </data>
+    <data name="SearchClassification" xml:space="preserve">
+        <value>Phân loại tìm kiếm</value>
+        </data>
+    <data name="ReplaceOptionsConfirmation" xml:space="preserve">
+        <value>Bạn có chắc chắn muốn thay thế các danh mục hiện có cho câu hỏi "{{trimmedTitle}}" không?</value>
+        </data>
+    <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
+        <value>Chỉ những hạng mục {{count}} đầu tiên mới được chọn cho câu hỏi "{{trimmedTitle}}"?</value>
+        </data>
+    <data name="MyClassifications" xml:space="preserve">
+        <value>Phân loại của tôi</value>
+        </data>
+    <data name="ClassificationAdd" xml:space="preserve">
+        <value>Thêm phân loại</value>
+        </data>
+    <data name="ClassificationAddGroup" xml:space="preserve">
+        <value>Thêm nhóm</value>
+        </data>
+    <data name="ClassificationGroupBreadcrumbs" xml:space="preserve">
+        <value>Nhóm</value>
+        </data>
+    <data name="ClassificationGroupTitle" xml:space="preserve">
+        <value>Tiêu đề nhóm</value>
+        </data>
+    <data name="ClassificationsStringOptionsEditorPlaceholder" xml:space="preserve">
+        <value>Nhập danh mục</value>
+        </data>
+    <data name="ClassificationTitle" xml:space="preserve">
+        <value>Tiêu đề phân loại</value>
+        </data>
+    <data name="SearchForQuestion" xml:space="preserve">
+        <value>Tìm kiếm câu hỏi</value>
+        </data>
+    <data name="AllFolders" xml:space="preserve">
+        <value>Tất cả các thư mục</value>
+        </data>
+    <data name="SearchQuestionPlaceholder" xml:space="preserve">
+        <value>Tìm kiếm câu hỏi</value>
+        </data>
+    <data name="QuestionsSearchTitle" xml:space="preserve">
+        <value>Ngân hàng câu hỏi</value>
+        </data>
+    <data name="QuestionsSearchEntities" xml:space="preserve">
+        <value>kết quả tìm kiếm</value>
+        </data>
+    <data name="ClassificationsSearchEntities" xml:space="preserve">
+        <value>phân loại</value>
+        </data>
+    <data name="ShowAsList" xml:space="preserve">
+        <value>Hiển thị dưới dạng danh sách các danh mục</value>
+        </data>
+    <data name="QuestionShowListLimit" xml:space="preserve">
+        <value>Nếu không nhiều hơn</value>
+        </data>
+    <data name="RosterDisplayMode_SubSection" xml:space="preserve">
+        <value>Tiểu mục</value>
+        </data>
+    <data name="RosterDisplayMode_Flat" xml:space="preserve">
+        <value>Phẳng</value>
+        </data>
+    <data name="RosterDisplayMode_Table" xml:space="preserve">
+        <value>Bàn</value>
+        </data>
+    <data name="RosterDisplayMode_Matrix" xml:space="preserve">
+        <value>Ma trận</value>
+        </data>
+    <data name="RosterDisplayMode" xml:space="preserve">
+        <value>Chế độ hiển thị:</value>
+        </data>
+    <data name="AreYouSure" xml:space="preserve">
+        <value>Bạn có chắc không?</value>
+        </data>
+    <data name="MakeOwnerConfirmationMessage" xml:space="preserve">
+        <value>Nếu bạn chuyển quyền sở hữu, chủ sở hữu mới sẽ được thông báo. Bạn có thể không còn thay đổi được cài đặt quyền sở hữu và chủ sở hữu mới cũng có thể xóa quyền truy cập của bạn.</value>
+        </data>
+    <data name="SettingsMakeOwner" xml:space="preserve">
+        <value>Làm chủ sở hữu</value>
+        </data>
+    <data name="Yes" xml:space="preserve">
+        <value>Đúng</value>
+        </data>
+    <data name="Run" xml:space="preserve">
+        <value>Chạy</value>
+        </data>
+    <data name="View" xml:space="preserve">
+        <value>Xem</value>
+        </data>
+    <data name="ScenarioDetails" xml:space="preserve">
+        <value>Kịch bản</value>
+        </data>
+    <data name="DownloadPdf" xml:space="preserve">
+        <value>Tải xuống bản PDF</value>
+        </data>
+    <data name="GeneratePdf" xml:space="preserve">
+        <value>Tạo pdf</value>
+        </data>
+    <data name="ChooseLanguageTitle" xml:space="preserve">
+        <value>Vui lòng chọn bản dịch</value>
+        </data>
+    <data name="Initializing" xml:space="preserve">
+        <value>Đang khởi tạo</value>
+        </data>
+    <data name="RetryExportPDF" xml:space="preserve">
+        <value>Thử xuất lại dưới dạng PDF</value>
+        </data>
+    <data name="Translation_Original" xml:space="preserve">
+        <value>Nguyên bản</value>
+        </data>
+    <data name="Preview" xml:space="preserve">
+        <value>Xem trước bản sửa đổi #{{revision}}</value>
+        </data>
+    <data name="CustomRosterTitle" xml:space="preserve">
+        <value>Tiêu đề tùy chỉnh</value>
+        </data>
+    <data name="HelpOptionValue" xml:space="preserve">
+        <value>Mã số nguyên của danh mục (người phỏng vấn không nhìn thấy được)</value>
+        </data>
+    <data name="HelpOptionTitle" xml:space="preserve">
+        <value>Nhãn văn bản cho danh mục (người phỏng vấn có thể nhìn thấy)</value>
+        </data>
+    <data name="HelpOverlapDetection" xml:space="preserve">
+        <value>Hiển thị và đánh dấu những phần trùng lặp của câu trả lời câu hỏi này với câu trả lời cho những câu hỏi tương tự trong các trường hợp danh sách anh chị em</value>
+        </data>
+    <data name="NewItem" xml:space="preserve">
+        <value>Mục mới</value>
+        </data>
+    <data name="EditItem" xml:space="preserve">
+        <value>Chỉnh sửa mục</value>
+        </data>
+    <data name="DeleteItemCofirm" xml:space="preserve">
+        <value>Bạn có chắc chắn muốn xóa mục này?</value>
+        </data>
+    <data name="Forum" xml:space="preserve">
+        <value>diễn đàn</value>
+        </data>
+    <data name="TableView" xml:space="preserve">
+        <value>Xem bảng</value>
+        </data>
+    <data name="StringsView" xml:space="preserve">
+        <value>Xem văn bản</value>
+        </data>
+    <data name="ValidationIntValue" xml:space="preserve">
+        <value>Giá trị quá lớn</value>
+        </data>
+    <data name="RequiredField" xml:space="preserve">
+        <value>Trường bắt buộc</value>
+        </data>
+    <data name="FileUploaded" xml:space="preserve">
+        <value>Tệp đã được tải lên</value>
+        </data>
+    <data name="DataChangesReverted" xml:space="preserve">
+        <value>Đã hoàn nguyên các thay đổi về dữ liệu</value>
+        </data>
+    <data name="OptionsSizeLimit" xml:space="preserve">
+        <value>Cho phép tối đa {max_rows} hàng</value>
+        </data>
+    <data name="CommunicationError" xml:space="preserve">
+        <value>Lỗi mạng</value>
+        </data>
+    <data name="SideBarCategoriesAddNew" xml:space="preserve">
+        <value>Thêm danh mục mới</value>
+        </data>
+    <data name="RowAdded" xml:space="preserve">
+        <value>Đã thêm hàng</value>
+        </data>
+    <data name="OptionsCascadingListError" xml:space="preserve">
+        <value>Bạn đã nhập thông tin đầu vào không hợp lệ. Mỗi dòng phải tuân theo định dạng: "Tiêu đề...Giá trị gốc/Giá trị[...Tên tệp đính kèm]". 'Giá trị' và 'Giá trị gốc' phải là số nguyên. 'Tiêu đề' phải là chuỗi chữ và số. 'Tên tệp đính kèm' là tùy chọn. Không được phép có dòng trống.</value>
+        </data>
+    <data name="ShowParentValues" xml:space="preserve">
+        <value>Hiển thị giá trị gốc</value>
+        </data>
+    <data name="HideParentValues" xml:space="preserve">
+        <value>Ẩn giá trị gốc</value>
+        </data>
+    <data name="AddEnablingCondition" xml:space="preserve">
+        <value>Thêm điều kiện kích hoạt</value>
+        </data>
+    <data name="ManageAccount" xml:space="preserve">
+        <value>Quản lý tài khoản</value>
+        </data>
+    <data name="ShowList" xml:space="preserve">
+        <value>Hiển thị danh sách</value>
+        </data>
+    <data name="Login" xml:space="preserve">
+        <value>Đăng nhập</value>
+        </data>
+    <data name="Register" xml:space="preserve">
+        <value>Đăng ký</value>
+        </data>
+    <data name="No" xml:space="preserve">
+        <value>KHÔNG</value>
+        </data>
+    <data name="QuestionIsCritical" xml:space="preserve">
+        <value>Đây là một câu hỏi quan trọng</value>
+        </data>
+    <data name="HelpIsCritical" xml:space="preserve">
+        <value>Tác giả bảng câu hỏi có thể chỉ ra rằng câu trả lời cho một câu hỏi là rất quan trọng để nộp bài phỏng vấn.</value>
+        </data>
+    <data name="HelpCriticalityConditionExpression" xml:space="preserve">
+        <value>Một biểu thức logic đánh giá toàn bộ cuộc phỏng vấn để xác định xem nó có đáp ứng các quy tắc quan trọng hay không (khi biểu thức này đánh giá là "Đúng"). Nó có thể đề cập đến bất kỳ câu hỏi hoặc biến số nào.</value>
+        </data>
+    <data name="HelpCriticalityConditionMessage" xml:space="preserve">
+        <value>Thông báo này được hiển thị khi điều kiện quan trọng được đánh giá là "Sai" hoặc xảy ra ngoại lệ trong quá trình đánh giá biểu thức. Tin nhắn có thể sử dụng các siêu liên kết và thay thế văn bản.</value>
+        </data>
+    <data name="SwitchTo" xml:space="preserve">
+        <value>Chuyển sang</value>
+        </data>
+    <data name="SwitchToTranslationConfirm" xml:space="preserve">
+        <value>Switch To sẽ thay đổi ngôn ngữ hiển thị của bảng câu hỏi. Bản dịch phải bao gồm văn bản cho tất cả các thành phần.</value>
+        </data>
+    <data name="AIAssistant" xml:space="preserve">
+        <value>trí tuệ nhân tạo</value>
+        </data>
+</root>
