@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="COLUMN_TEAM_MEMBER" xml:space="preserve">
+        <value>សមាជិកក្រុម</value>
+    </data>
+    <data name="COLUMN_SUPERVISOR_ASSIGNED" xml:space="preserve">
+        <value>អ្នកគ្រប់គ្រងត្រូវបានចាត់តាំង</value>
+    </data>
+    <data name="COLUMN_INTERVIEWER_ASSIGNED" xml:space="preserve">
+        <value>អ្នកសម្ភាសន៍ត្រូវបានចាត់តាំង</value>
+    </data>
+    <data name="COLUMN_COMPLETED" xml:space="preserve">
+        <value>បានបញ្ចប់</value>
+    </data>
+    <data name="COLUMN_REJECTED_BY_SUPERVISOR" xml:space="preserve">
+        <value>បដិសេធដោយអ្នកគ្រប់គ្រង</value>
+    </data>
+    <data name="COLUMN_APPROVED_BY_SUPERVISOR" xml:space="preserve">
+        <value>អនុម័តដោយអ្នកគ្រប់គ្រង</value>
+    </data>
+    <data name="COLUMN_REJECTED_BY_HQ" xml:space="preserve">
+        <value>បដិសេធដោយទីស្នាក់ការ</value>
+    </data>
+    <data name="COLUMN_APPROVED_BY_HQ" xml:space="preserve">
+        <value>អនុម័តដោយ HQ</value>
+    </data>
+    <data name="COLUMN_TOTAL" xml:space="preserve">
+        <value>TOTAL</value>
+    </data>
+    <data name="TOTAL" xml:space="preserve">
+        <value>សរុប</value>
+    </data>
+    <data name="COLUMN_AVERAGE" xml:space="preserve">
+        <value>មធ្យម</value>
+    </data>
+    <data name="COLUMN_TEMPLATE_VERSION" xml:space="preserve">
+        <value>កំណែសំណួរ</value>
+    </data>
+    <data name="COLUMN_QUESTIONNAIRE_TEMPLATE" xml:space="preserve">
+        <value>ចំណងជើងសំណួរ</value>
+    </data>
+    <data name="COLUMN_TEAMS" xml:space="preserve">
+        <value>ក្រុម</value>
+    </data>
+    <data name="COLUMN_NEVER_SYNCHED" xml:space="preserve">
+        <value>មិនដែលធ្វើសមកាលកម្មទេ។</value>
+    </data>
+    <data name="COLUMN_OLD_VERSION" xml:space="preserve">
+        <value>កម្មវិធីអ្នកសម្ភាសន៍ចាស់</value>
+    </data>
+    <data name="COLUMN_LESS_THAN_100MB_FREE_SPACE" xml:space="preserve">
+        <value>ទំហំទំនេរតិចជាង 100MB</value>
+    </data>
+    <data name="COLUMN_WRONG_TIME_ON_TABLET" xml:space="preserve">
+        <value>ខុសម៉ោងនៅលើថេប្លេត</value>
+    </data>
+    <data name="COLUMN_ANDROID_4_4_OR_LOWER" xml:space="preserve">
+        <value>ប្រព័ន្ធប្រតិបត្តិការ Android 4.4 ឬទាបជាងនេះ។</value>
+    </data>
+    <data name="COLUMN_NO_ASSIGNMENTS_RECEIVED" xml:space="preserve">
+        <value>មិនដែលបានទទួល</value>
+    </data>
+    <data name="COLUMN_NEVER_UPLOADED" xml:space="preserve">
+        <value>មិនដែលផ្ញើ</value>
+    </data>
+    <data name="COLUMN_TABLET_REASSIGNED" xml:space="preserve">
+        <value>ថេប្លេតត្រូវបានចាត់តាំងឡើងវិញ</value>
+    </data>
+    <data name="COLUMN_DAYS" xml:space="preserve">
+        <value>ថ្ងៃ</value>
+    </data>
+    <data name="COLUMN_TEAM_SIZE" xml:space="preserve">
+        <value>ទំហំក្រុម</value>
+    </data>
+    <data name="TimeLeft" xml:space="preserve">
+        <value>ពេលវេលានៅសល់</value>
+    </data>
+</root>

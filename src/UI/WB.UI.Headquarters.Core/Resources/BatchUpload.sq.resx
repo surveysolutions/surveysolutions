@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AdvancedMode" xml:space="preserve"><value>Modaliteti i avancuar i ngarkimit të të dhënave</value></data>
+  <data name="AdvancedModeDescription" xml:space="preserve"><value>Për të para-ngarkuar të dhëna në seksione dhe variabla të tjera, mund të përgatisni një grup skedarësh .tab që korrespondojnë me strukturën e pyetësorit tuaj dhe t'i vendosni në një arkiv .zip. Ju lutemi përdorni arkivin shabllon më poshtë.</value></data>
+  <data name="All" xml:space="preserve"><value>Të gjitha</value></data>
+  <data name="BrowseTeams" xml:space="preserve"><value>Shfleto ekipet</value></data>
+  <data name="Code" xml:space="preserve"><value>Kodi</value></data>
+  <data name="CreateUsers" xml:space="preserve"><value>Krijo përdorues</value></data>
+  <data name="CreatingUsers" xml:space="preserve"><value>Duke krijuar përdorues</value></data>
+  <data name="DataIsValid" xml:space="preserve"><value>Të dhënat janë të vlefshme</value></data>
+  <data name="Delete" xml:space="preserve"><value>Fshi</value></data>
+  <data name="Details" xml:space="preserve"><value>Detajet</value></data>
+
+
+
+
+
+  <data name="File" xml:space="preserve"><value>Skedari</value></data>
+
+
+
+
+  <data name="ImportInProgress" xml:space="preserve"><value>Procesi tjetër i importit të detyrave po funksionon. Lejohet vetëm një proces i importit të detyrave njëkohësisht.</value></data>
+
+
+  <data name="ImportStatus" xml:space="preserve"><value>Statusi i importit</value></data>
+
+
+
+
+
+
+
+
+  <data name="Processing" xml:space="preserve"><value>Duke procesuar...</value></data>
+
+
+
+
+  <data name="Row" xml:space="preserve"><value>Rreshti</value></data>
+  <data name="Status" xml:space="preserve"><value>Statusi</value></data>
+
+
+
+
+  <data name="Upload" xml:space="preserve"><value>Ngarko</value></data>
+
+
+
+
+
+  <data name="DownloadTemplateArchive" xml:space="preserve"><value>Shkarko shabllon .zip për këtë pyetësor</value></data>
+  <data name="FileName" xml:space="preserve"><value>Emri i skedarit</value></data>
+  <data name="FileSize" xml:space="preserve"><value>Madhësia e skedarit</value></data>
+  <data name="Finished" xml:space="preserve"><value>Përfunduar</value></data>
+  <data name="FinishedWithError" xml:space="preserve"><value>Përfunduar me gabim(e)</value></data>
+  <data name="FinishedWithErrorMessage" xml:space="preserve"><value>Përfunduar me gabim(e). Arsyeja:</value></data>
+  <data name="InVerificationProcess" xml:space="preserve"><value>është në proces verifikimi, verifikuar</value></data>
+  <data name="IsInvalid" xml:space="preserve"><value>është i pavlefshëm. Ju lutemi korrigjoni gabim(et) më poshtë dhe ngarko sërish.</value></data>
+  <data name="LastUpdateDate" xml:space="preserve"><value>Data e fundit e përditësimit</value></data>
+  <data name="Message" xml:space="preserve"><value>Mesazhi</value></data>
+  <data name="OutOf" xml:space="preserve"><value>nga</value></data>
+  <data name="PleaseWait" xml:space="preserve"><value>Ju lutemi prisni, skedari</value></data>
+  <data name="ReadyForUserCreation" xml:space="preserve"><value>Gati për krijimin e përdoruesit</value></data>
+  <data name="ReadyForValidation" xml:space="preserve"><value>Gati për validim</value></data>
+  <data name="RecordsCount" xml:space="preserve"><value>Numri i regjistrimeve</value></data>
+  <data name="UploadDate" xml:space="preserve"><value>Data e ngarkimit</value></data>
+  <data name="Uploaded" xml:space="preserve"><value>Ngarkuar</value></data>
+  <data name="UploadNewFile" xml:space="preserve"><value>Ngarko skedar të ri</value></data>
+  <data name="UploadSample" xml:space="preserve"><value>Ngarko mostrën</value></data>
+  <data name="UploadSampleDescription" xml:space="preserve"><value>Për të ngarkuar mostrën që do të intervistohet, ju lutemi përgatisni një skedar (madhësia deri në 300MB) me vlera të ndara me tab (.tab) që korrespondojnë me shablonin më poshtë.</value></data>
+  <data name="UploadUsers" xml:space="preserve"><value>Ngarkim i grupit të përdoruesve</value></data>
+  <data name="UploadUsersDescription" xml:space="preserve"><value>Përgatisni një skedar me vlera të ndara me tab (.tab) që korrespondojnë me një shabllon më poshtë. Kolonat e shënuara me (*) janë të detyrueshme.</value></data>
+  <data name="UserBatchUploads" xml:space="preserve"><value>Ngarkim i grupit të përdoruesve</value></data>
+  <data name="UsersHaveBeenCreated" xml:space="preserve"><value>përdorues janë krijuar</value></data>
+  <data name="Validated" xml:space="preserve"><value>Validuar</value></data>
+  <data name="Validating" xml:space="preserve"><value>Duke validuar</value></data>
+  <data name="ValidationFinishedWithError" xml:space="preserve"><value>Validuar</value></data>
+  <data name="Verify" xml:space="preserve"><value>Verifiko</value></data>
+  <data name="AreYouSureYouWantToDeleteFormat" xml:space="preserve"><value>Jeni i sigurt që dëshironi të fshini këtë skedar?</value></data>
+  <data name="UserPreloadingProcessIsMissing" xml:space="preserve"><value>Procesi i para-ngarkimit të përdoruesit mungon</value></data>
+  <data name="UploadUsers_Title" xml:space="preserve"><value>Lista e skedarëve me përdorues të para-ngarkuar</value></data>
+  <data name="RefreshActionOnUserUpload" xml:space="preserve"><value>Rifreskon</value></data>
+  <data name="BatchUpload_Title" xml:space="preserve"><value>Ngarkim i grupit</value></data>
+  <data name="PrefilledQuestionsRequired" xml:space="preserve"><value>Skedari nuk përmban kolonë(a) për pyetjet identifikuese të detyrueshme: &amp;lt;br/&amp;gt; &amp;lt;b&amp;gt;{0}&amp;lt;/b&amp;gt;</value></data>
+  <data name="ImportInterviews_ChooseFile" xml:space="preserve"><value>Zgjidhni skedarin për t'u ngarkuar</value></data>
+  <data name="ImportInterviews_SelectResponsible" xml:space="preserve"><value>Zgjidhni përgjegjësin</value></data>
+  <data name="ImportInterviews_SelectButtonText" xml:space="preserve"><value>Zgjidh</value></data>
+  <data name="FileSizeLimit" xml:space="preserve"><value>Madhësia e skedarit nuk mund të kalojë 300MB.</value></data>
+  <data name="ImportSample" xml:space="preserve"><value>Importo mostrën</value></data>
+  <data name="FileNotParsed" xml:space="preserve"><value>Skedari nuk u analizua. Lejohen vetëm skedarët me ndarje me tab.</value></data>
+  <data name="FormatNotSupported" xml:space="preserve"><value>Formati i skedarit nuk mbështetet. Të dhënat brenda skedarit do të injorohen</value></data>
+  <data name="SampleCreationResult" xml:space="preserve"><value>Rezultati i Krijimit të Intervistës</value></data>
+  <data name="SampleCreationCompleted" xml:space="preserve"><value>Krijimi i intervistës u kompletua me sukses.</value></data>
+  <data name="UploadNewData" xml:space="preserve"><value>Ngarko të dhëna të reja</value></data>
+  <data name="Column" xml:space="preserve"><value>Kolona</value></data>
+  <data name="VerifySampleData" xml:space="preserve"><value>Verifiko të dhënat</value></data>
+  <data name="CreateSample" xml:space="preserve"><value>Krijo intervista nga këto të dhëna</value></data>
+  <data name="SampleSuccess" xml:space="preserve"><value>Importi i intervistës u kompletua me sukses</value></data>
+  <data name="SampleImportWithErrors" xml:space="preserve"><value>Importi i intervistës u kompletua me gabime</value></data>
+  <data name="NumberInterviewCreated" xml:space="preserve"><value>Intervista të krijuara</value></data>
+  <data name="EstimatedTime" xml:space="preserve"><value>Koha e vlerësuar</value></data>
+  <data name="DownloadInvalidInterviews" xml:space="preserve"><value>Shkarko intervistat e pavlefshme</value></data>
+  <data name="DownloadInvalidAssignments" xml:space="preserve"><value>Shkarko detyrat e pavlefshme</value></data>
+  <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve"><value>Përdoruesi përgjegjës do të caktohet automatikisht</value></data>
+  <data name="VerifyPanelData" xml:space="preserve"><value>Verifiko të dhënat e panelit</value></data>
+  <data name="RunningInterviewImportProcess" xml:space="preserve"><value>Shko te procesi i importit të detyrës në funksionim</value></data>
+  <data name="BatchDescription" xml:space="preserve"><value>Ngarko një arkiv zip me një ose më shumë skedarë të ndarë me tab që korrespondojnë me modelin e pyetësorit tuaj.</value></data>
+  <data name="BatchTitle" xml:space="preserve"><value>Të dhëna identifikuese dhe të mbledhura (arkiv)</value></data>
+  <data name="BatchColumnsTitle" xml:space="preserve"><value>Opsionale mund të specifikohen kolonat e mëposhtme në skedarin kryesor të nivelit të intervistës:</value></data>
+  <data name="CreatingMultipleInterviews" xml:space="preserve"><value>Duke krijuar intervista të shumta</value></data>
+  <data name="CreatingMultipleAssignments" xml:space="preserve"><value>Duke krijuar detyra të shumta</value></data>
+  <data name="EmptySupervisorDescription" xml:space="preserve"><value>Nëse emrat e përdoruesve nuk janë specifikuar në kolonën "_responsible", do t'ju duhet të caktoni mbikëqyrësin.</value></data>
+  <data name="ManualModeDescription" xml:space="preserve"><value>Mund të krijoni detyra individuale duke futur të gjitha të dhënat e nevojshme në {{url}}</value></data>
+  <data name="ManualModeLinkTitle" xml:space="preserve"><value>modalitetin manual</value></data>
+  <data name="SimpleDescription" xml:space="preserve"><value>Ngarko skedar të ndarë me tab me vlera vetëm për pyetje në nivelin e intervistës.</value></data>
+  <data name="SimpleTitle" xml:space="preserve"><value>Vetëm të dhëna identifikuese</value></data>
+  <data name="SimpleColumnsTitle" xml:space="preserve"><value>Opsionale mund të specifikohen kolonat e mëposhtme:</value></data>
+  <data name="ColumnsDescription" xml:space="preserve"><value>&amp;lt;b&amp;gt;_responsible&amp;lt;/b&amp;gt; - emri i përdoruesit të një seli qendrore, mbikëqyrësi ose ankuesi</value></data>
+  <data name="UploadDescription" xml:space="preserve"><value>Ngarko skedar me të dhëna identifikuese për të krijuar detyra të reja. Specifikoni emrat e përdoruesve</value></data>
+  <data name="FileTypeDescription" xml:space="preserve"><value>Ruaje skedarin në kodim UTF8 për mbështetje të teksteve specifike të gjuhës.</value></data>
+  <data name="UploadTabFile" xml:space="preserve"><value>Ngarko skedar .tab</value></data>
+  <data name="UploadZipFile" xml:space="preserve"><value>Ngarko skedar .zip</value></data>
+  <data name="ViewListPrefilledData" xml:space="preserve"><value>Shiko listën e të dhënave të detyrueshme identifikuese</value></data>
+  <data name="ViewListPreloadedData" xml:space="preserve"><value>Shiko listën e vlerave të para-ngarkuara</value></data>
+  <data name="DownloadTabTemplate" xml:space="preserve"><value>Shkarko shabllon .tab për këtë pyetësor</value></data>
+  <data name="DownloadDescListRequiredPreffiledData" xml:space="preserve"><value>Variablat e shënuara si Identifikuese në Designer. Shkarko</value></data>
+  <data name="DownloadLinkTitleListRequiredPreffiledData" xml:space="preserve"><value>shabllon .tab.</value></data>
+  <data name="HideListPrefilledData" xml:space="preserve"><value>Fshih listën e të dhënave të detyrueshme identifikuese</value></data>
+  <data name="PrefilledRequiredData" xml:space="preserve"><value>Të dhëna identifikuese të detyrueshme</value></data>
+  <data name="IdentifyingQuestions" xml:space="preserve"><value>Pyetje identifikuese</value></data>
+  <data name="BatchFileVerificationFailed" xml:space="preserve"><value>Verifikimi i skedarit të ngarkuar dështoi</value></data>
+  <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve"><value>duke krijuar detyra të shumta</value></data>
+  <data name="ImportFrom" xml:space="preserve"><value>Duke importuar informacion nga {{fileName}} për {{title}}</value></data>
+  <data name="ImportInterviews_PageTitle" xml:space="preserve"><value>Duke krijuar intervista të shumta me ngarkim grupor</value></data>
+  <data name="ImportAssignments_PageTitle" xml:space="preserve"><value>Duke krijuar detyra të shumta me ngarkim grupor</value></data>
+  <data name="InterviewsAreNotCreated" xml:space="preserve"><value>Asnjë intervistë nuk u krijua</value></data>
+  <data name="MultipleErrorsWereFound" xml:space="preserve"><value>{{count}} gabime u gjetën</value></data>
+  <data name="SingleErrorFound" xml:space="preserve"><value>1 gabim u gjet</value></data>
+  <data name="BackToImport" xml:space="preserve"><value>Kthehu te importi</value></data>
+  <data name="AssignedToMultipleEnumerators" xml:space="preserve"><value>Caktuar tek {0} anketues</value></data>
+  <data name="AssignedToMultipleSupervisors" xml:space="preserve"><value>Caktuar tek {0} mbikëqyrës</value></data>
+  <data name="AssignedToSingleEnumerator" xml:space="preserve"><value>Caktuar tek 1 anketues</value></data>
+  <data name="AssignedToSingleSupervisor" xml:space="preserve"><value>Caktuar tek 1 mbikëqyrës</value></data>
+  <data name="CreateInterviews" xml:space="preserve"><value>Krijo intervista</value></data>
+  <data name="CreateAssignments" xml:space="preserve"><value>Krijo detyra</value></data>
+  <data name="DataForMultipleInterviewsFound" xml:space="preserve"><value>Të dhëna për {0} intervista u gjetën</value></data>
+  <data name="DataForMultipleAssignmentsFound" xml:space="preserve"><value>Të dhëna për {0} detyra u gjetën</value></data>
+  <data name="DataForSingleInterviewFound" xml:space="preserve"><value>Të dhëna për 1 intervistë u gjetën</value></data>
+  <data name="DataForSingleAssignmentFound" xml:space="preserve"><value>Të dhëna për 1 detyrë u gjetën</value></data>
+  <data name="Importing" xml:space="preserve"><value>Duke importuar</value></data>
+  <data name="ImportInterviewsFor" xml:space="preserve"><value>Duke importuar intervista për {0}</value></data>
+  <data name="ImportAssignmentsFor" xml:space="preserve"><value>Duke importuar detyra për {{title}}</value></data>
+  <data name="ImportInterviews_Done" xml:space="preserve"><value>Bërë:</value></data>
+  <data name="ImportInterviews_NoneFailed" xml:space="preserve"><value>Asnjë nuk dështoi</value></data>
+  <data name="ImportProgressFormat" xml:space="preserve"><value>{{createdCount}} nga {{totalCount}}</value></data>
+  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve"><value>Duke importuar detyra</value></data>
+  <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve"><value>{0} intervista dështuan të krijoheshin</value></data>
+  <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve"><value>{{count}} detyra dështuan të krijoheshin</value></data>
+  <data name="MultipleInterviewsCreated" xml:space="preserve"><value>{0} intervista u krijuan</value></data>
+  <data name="MultipleAssignmentsCreated" xml:space="preserve"><value>{{count}} detyra u krijuan</value></data>
+  <data name="SelectResponsibleToAssign" xml:space="preserve"><value>Zgjidhni përgjegjësin për këtë grup</value></data>
+  <data name="SingleInterviewCreated" xml:space="preserve"><value>1 intervistë u krijua</value></data>
+  <data name="SingleAssignmentCreated" xml:space="preserve"><value>1 detyrë u krijua</value></data>
+  <data name="SingleInterviewFailedToBeCreated" xml:space="preserve"><value>1 intervistë dështoi të krijohej</value></data>
+  <data name="SingleAssignmentFailedToBeCreated" xml:space="preserve"><value>1 detyrë dështoi të krijohej</value></data>
+  <data name="VerificationCompleted" xml:space="preserve"><value>Verifikimi u kompletua</value></data>
+  <data name="SupervisorMustBeSelected" xml:space="preserve"><value>Mbikëqyrësi ose ankuesi duhet të zgjidhet</value></data>
+  <data name="Cell" xml:space="preserve"><value>Qeliza</value></data>
+  <data name="UploadUsers_NotAllowedExtension" xml:space="preserve"><value>Lejohen vetëm skedarët me extensionet {0} dhe {1} për ngarkim.</value></data>
+  <data name="Prerequisite_FileOpen" xml:space="preserve"><value>Skedari i ngarkuar nuk mund të hapet. Ju lutemi kontrolloni që të jetë në formatin e duhur.</value></data>
+  <data name="Prerequisite_TabOrTxtFile" xml:space="preserve"><value>Lejohen vetëm skedarët .tab dhe .txt për ngarkim.</value></data>
+  <data name="Prerequisite_UnsupportedFiles" xml:space="preserve"><value>Skedarët e mëposhtëm nuk mbështeten: {0}.</value></data>
+  <data name="Prerequisite_ZipFile" xml:space="preserve"><value>Lejohen vetëm skedarët .zip për ngarkim.</value></data>
+  <data name="AssignmentsAreNotCreated" xml:space="preserve"><value>Asnjë detyrë nuk u krijua</value></data>
+  <data name="Import_VerificationOfAssignmentData" xml:space="preserve"><value>Verifikimi i të dhënave të detyrës</value></data>
+  <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve"><value>Verifikimi i detyrave për pyetësorin {{title}}</value></data>
+  <data name="Import_VerificationOfDataFile" xml:space="preserve"><value>Verifikimi i skedarit të të dhënave</value></data>
+  <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve"><value>hapi {{verifiedCount}} nga {{totalCount}}</value></data>
+  <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve"><value>Verifikimi i skedarit të të dhënave u krye me sukses</value></data>
+  <data name="Import_Verification_1_AssignmentVerified" xml:space="preserve"><value>1 detyrë u verifikua me sukses</value></data>
+  <data name="Import_Verification_1_Error" xml:space="preserve"><value>1 gabim</value></data>
+  <data name="Import_Verification_AssignmentsVerified" xml:space="preserve"><value>{{count}} detyra u verifikuan me sukses</value></data>
+  <data name="Import_Verification_Errors" xml:space="preserve"><value>{{count}} gabime</value></data>
+  <data name="Prerequisite_Questionnaire" xml:space="preserve"><value>Pyetësori nuk mund të përdoret për para-ngarkim</value></data>
+  <data name="HiddenQuestions" xml:space="preserve"><value>Pyetje të fshehura</value></data>
+  <data name="RosterSizeQuestions" xml:space="preserve"><value>Pyetje burimore të regjistrit</value></data>
+  <data name="Select_Responsible" xml:space="preserve"><value>Zgjidhni përgjegjësin e parazgjedhur (i detyrueshëm)</value></data>
+  <data name="Select_Responsible_Description" xml:space="preserve"><value>Nëse asnjë përgjegjës nuk është caktuar në skedarin e grupit, përdorni këtë seli qendrore/mbikëqyrës/anketues</value></data>
+  <data name="RequiredField" xml:space="preserve"><value>Ky fushë është e detyrueshme</value></data>
+</root>
