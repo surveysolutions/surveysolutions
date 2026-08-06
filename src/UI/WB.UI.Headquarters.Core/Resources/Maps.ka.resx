@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Levels" xml:space="preserve"><value>დონეები</value></data>
+  <data name="MapLoadingInvalidFilesError" xml:space="preserve"><value>ფაილის ატვირთვის შეცდომა: ფაილი არ არის მხარდაჭერილი ფორმატის</value></data>
+  <data name="MapLoadingNotZipError" xml:space="preserve"><value>ფაილის ატვირთვის შეცდომა: ZIP ფაილი მოსალოდნელია</value></data>
+  <data name="MapsLoadingError" xml:space="preserve"><value>რუქების ატვირთვის შეცდომა</value></data>
+  <data name="MaxScale" xml:space="preserve"><value>მაქს. მასშტაბი</value></data>
+  <data name="MinScale" xml:space="preserve"><value>მინ. მასშტაბი</value></data>
+  <data name="Name" xml:space="preserve"><value>სახელი</value></data>
+  <data name="Size" xml:space="preserve"><value>ზომა</value></data>
+  <data name="UpdateDate" xml:space="preserve"><value>განახლების თარიღი</value></data>
+  <data name="UploadMapsSummaryFormat" xml:space="preserve"><value>ატვირთულია  რუქა {0} {1}</value></data>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <data name="MapEngineIsNotInitialized" xml:space="preserve"><value>რუქის ძრავი ინიციალიზებული არ არის</value></data>
+  <data name="UploadMappingsSummaryFormat" xml:space="preserve"><value>ატვირთულია  მიბმულობა {0} {1}</value></data>
+  <data name="FileLoadingNotTsvError" xml:space="preserve"><value>ფაილის ატვირთვის შეცდომა: TSV ფაილი მოსალოდნელია</value></data>
+  <data name="MappingsLoadingError" xml:space="preserve"><value>მიბმულობების ატვირთვის შეცდომა</value></data>
+  <data name="MapOverlapsWith" xml:space="preserve"><value>რუქა ემთხვევა -ს</value></data>
+  <data name="MapOverlapsWithOther" xml:space="preserve"><value>რუქა ემთხვევა სხვა რუქებს {0}</value></data>
+  <data name="MapLoadingNoMapsInArchive" xml:space="preserve"><value>არქივში რუქები ვერ მოიძებნა</value></data>
+  <data name="MapLoadingUnsupportedFilesInArchive" xml:space="preserve"><value>არქივში მხარდაუჭერელი ფაილებია</value></data>
+  <data name="MapLoadingInvalidFile" xml:space="preserve"><value>ფაილი დაზიანებულია ან მხარდაუჭერელი ფორმატისაა {0} {1}</value></data>
+  <data name="ShpIsMissingInArchive" xml:space="preserve"><value>SHP ფაილი არქივში ვერ მოიძებნა {0} {0}</value></data>
+
+
+  <data name="ShxIsMissingInArchive" xml:space="preserve"><value>ფაილი {0}.shx გვაკლია {0}.shp-ისთვის</value></data>
+  <data name="DbfIsMissingInArchive" xml:space="preserve"><value>ფაილი {0}.dbf გვაკლია {0}.shp-ისთვის</value></data>
+  <data name="MapFileSizeLimit" xml:space="preserve"><value>ფაილი {0}-ის ზომა მაქსიმალურ ლიმიტს {1} აჭარბებს</value></data>
+  <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve"><value>ფაილი {0}-ის სახელი შეიცავს არა-UTF-8 სიმბოლოებს.</value></data>
+  <data name="MapFileNameHasInvalidChars" xml:space="preserve"><value>ფაილი {0}-ის სახელი შეიცავს დაუშვებელ სიმბოლოებს.</value></data>
+</root>
