@@ -190,7 +190,7 @@
                                         </div>
                                     </div>
                                     <hr />
-                                    <div v-if="isQuestionnaireOwner || questionnaire.hasViewerAdminRights">
+                                    <div v-if="isQuestionnaireOwner || questionnaire.hasViewerAdminRights || (isQuestionnaireEditor && questionnaire.isAnonymouslyShared)">
                                         <h2>
                                             {{ $t('QuestionnaireEditor.AnonymousQuestionnaireSettings') }}
                                         </h2>
@@ -359,6 +359,9 @@ export default {
             const userEmail = this.currentUser.email;
             var user = this.questionnaire.sharedPersons.find(item => item.email == userEmail);
             return user && user.isOwner;
+        },
+        isQuestionnaireEditor() {
+            return !this.questionnaire.isReadOnlyForUser && !this.isQuestionnaireOwner && !this.questionnaire.hasViewerAdminRights;
         },
         getAnonymousQuestionnaireLink() {
             return (

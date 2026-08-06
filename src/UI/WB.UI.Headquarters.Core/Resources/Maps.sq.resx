@@ -168,4 +168,37 @@
   <data name="UploadMapsSummaryFormat" xml:space="preserve">
     <value>{0} harta u përpunuan, nga të cilat {1} skedarë të pavlefshëm hartash</value>
   </data>
+
+
+  <data name="MapOverlapsWith" xml:space="preserve">
+    <value>Mbivendoset me:</value>
+  </data>
+
+  <data name="MapOverlapsWithOther" xml:space="preserve">
+    <value>dhe {0} të tjera.</value>
+  </data>
+
+  <data name="ShpIsMissingInArchive" xml:space="preserve">
+    <value>Skedari {0}.shp mungon për {0}</value>
+  </data>
+
+  <data name="ShxIsMissingInArchive" xml:space="preserve">
+    <value>Skedari {0}.shx mungon për {0}.shp</value>
+  </data>
+
+  <data name="DbfIsMissingInArchive" xml:space="preserve">
+    <value>Skedari {0}.dbf mungon për {0}.shp</value>
+  </data>
+
+  <data name="MapFileSizeLimit" xml:space="preserve">
+    <value>Madhësia e skedarit {0} është më e madhe se kufiri i lejuar {1}</value>
+  </data>
+  
+  <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve">
+    <value>Emri i skedarit {0} përmban karaktere jo-UTF-8.</value>
+  </data>
+
+  <data name="MapFileNameHasInvalidChars" xml:space="preserve">
+    <value>Emri i skedarit {0} përmban karaktere të pavlefshme.</value>
+  </data>
 </root>

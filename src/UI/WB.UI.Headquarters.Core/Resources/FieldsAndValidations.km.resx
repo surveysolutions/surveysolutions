@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="CannotUpdate_CurrentUserDoesNotExists" xml:space="preserve">
+        <value>មិនអាចធ្វើបច្ចុប្បន្នភាពព័ត៌មានអ្នកប្រើប្រាស់បានទេ ដោយសារអ្នកប្រើប្រាស់បច្ចុប្បន្នមិនមាន</value>
+    </data>
+    <data name="CannotUpdate_CurrentUserIsArchived" xml:space="preserve">
+        <value>មិន​អាច​ធ្វើ​បច្ចុប្បន្នភាព​ព័ត៌មាន​អ្នក​ប្រើ​បាន​ទេ ព្រោះ​អ្នក​ប្រើ​បច្ចុប្បន្ន​ត្រូវ​បាន​ទុក​ក្នុង​ប័ណ្ណសារ</value>
+    </data>
+    <data name="ConfirmPasswordErrorMassage" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់ និងពាក្យសម្ងាត់បញ្ជាក់មិនត្រូវគ្នាទេ។</value>
+    </data>
+    <data name="ConfirmPasswordFieldName" xml:space="preserve">
+        <value>បញ្ជាក់ពាក្យសម្ងាត់</value>
+    </data>
+    <data name="EmailErrorMessage" xml:space="preserve">
+        <value>មិនមែនជាអាសយដ្ឋានអ៊ីមែលត្រឹមត្រូវទេ។</value>
+    </data>
+    <data name="EmailFieldName" xml:space="preserve">
+        <value>អាសយដ្ឋានអ៊ីមែល</value>
+    </data>
+    <data name="AllowRelinkTablet" xml:space="preserve">
+        <value>អនុញ្ញាតឱ្យភ្ជាប់ឡើងវិញទៅឧបករណ៍ផ្សេងដោយការបាត់បង់ទិន្នន័យនៅលើឧបករណ៍ដើម។</value>
+    </data>
+    <data name="IsLockedFieldName" xml:space="preserve">
+        <value>ត្រូវបានចាក់សោដោយ Admin ឬ HQ</value>
+    </data>
+    <data name="PasswordErrorMessage" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់ត្រូវតែមានយ៉ាងហោចណាស់លេខមួយ តួអក្សរធំមួយ និងតួអក្សរតូចមួយ។</value>
+    </data>
+    <data name="PasswordFieldName" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់</value>
+    </data>
+    <data name="PasswordLengthMessage" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់ត្រូវតែមានយ៉ាងហោចណាស់តួអក្សរ {2}</value>
+    </data>
+    <data name="RequiredEmailErrorMessage" xml:space="preserve">
+        <value>អ៊ីមែលត្រូវបានទាមទារ</value>
+    </data>
+    <data name="RequiredPasswordErrorMessage" xml:space="preserve">
+        <value>ទាមទារពាក្យសម្ងាត់</value>
+    </data>
+    <data name="RequiredUserNameErrorMessage" xml:space="preserve">
+        <value>ឈ្មោះអ្នកប្រើត្រូវបានទាមទារ</value>
+    </data>
+    <data name="UserNameErrorMessage" xml:space="preserve">
+        <value>ឈ្មោះចូលត្រូវតែមានចន្លោះពី 3 ទៅ 15 តួអក្សរ ហើយអាចមានតែអក្សរ លេខ និងនិមិត្តសញ្ញាគូសក្រោមប៉ុណ្ណោះ។ អក្សរត្រូវតែមកពីអក្សរឡាតាំង (អង់គ្លេស) តែប៉ុណ្ណោះ៖ 'A'..'Z' ឬ 'a'..'z'។ អក្សរផ្សេងទៀត (Cyrillic, Arabic ។ល។) មិនមានសុពលភាពសម្រាប់ការប្រើប្រាស់ក្នុងឈ្មោះចូលទេ។</value>
+    </data>
+    <data name="UserNameFieldName" xml:space="preserve">
+        <value>ឈ្មោះអ្នកប្រើប្រាស់</value>
+    </data>
+    <data name="InvalidUser" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់មិនត្រឹមត្រូវ</value>
+    </data>
+    <data name="PersonNameFieldName" xml:space="preserve">
+        <value>ឈ្មោះពេញ</value>
+    </data>
+    <data name="PhoneNumberFieldName" xml:space="preserve">
+        <value>លេខទូរស័ព្ទ</value>
+    </data>
+    <data name="VerificationCodeFieldName" xml:space="preserve">
+        <value>លេខកូដផ្ទៀងផ្ទាត់</value>
+    </data>
+    <data name="PhoneErrorMessage" xml:space="preserve">
+        <value>លេខទូរស័ព្ទមិនត្រឹមត្រូវ</value>
+    </data>
+    <data name="PersonNameErrorMessage" xml:space="preserve">
+        <value>ឈ្មោះបុគ្គលមិនអាចមានតួអក្សរច្រើនជាង {1} ទេ។</value>
+    </data>
+    <data name="IsLockedBySupervisorFieldName" xml:space="preserve">
+        <value>ត្រូវបានចាក់សោដោយអ្នកគ្រប់គ្រង</value>
+    </data>
+    <data name="RequiredSupervisorErrorMessage" xml:space="preserve">
+        <value>អ្នកគ្រប់គ្រងត្រូវបានទាមទារ</value>
+    </data>
+    <data name="SupervisorFieldName" xml:space="preserve">
+        <value>អ្នកគ្រប់គ្រង</value>
+    </data>
+    <data name="LogOnModel_UserName" xml:space="preserve">
+        <value>ឈ្មោះអ្នកប្រើប្រាស់</value>
+    </data>
+    <data name="LogOnModel_Password" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់</value>
+    </data>
+    <data name="TroubleshootModel_InterviewId_ErrorMessage" xml:space="preserve">
+        <value>សូមបញ្ចូល GUID ដែលមានសុពលភាពក្នុងទម្រង់ខាងក្រោម xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</value>
+    </data>
+    <data name="UserBatchUploadModel_Required_ErrorMessage" xml:space="preserve">
+        <value>អ្នកត្រូវតែជ្រើសរើសឯកសារដើម្បីផ្ទុកឡើង</value>
+    </data>
+    <data name="UserBatchUploadModel_Validation_ErrorMessage" xml:space="preserve">
+        <value>សូមជ្រើសរើសឯកសារ</value>
+    </data>
+    <data name="UserBatchUploadModel_File_CSV_File" xml:space="preserve">
+        <value>ឯកសារ CSV</value>
+    </data>
+    <data name="BatchUploadModel_Required" xml:space="preserve">
+        <value>អ្នកត្រូវតែជ្រើសរើសឯកសារដើម្បីផ្ទុកឡើង</value>
+    </data>
+    <data name="BatchUploadModel_ValidationErrorMessage" xml:space="preserve">
+        <value>សូមជ្រើសរើសឯកសារមួយ។</value>
+    </data>
+    <data name="BatchUploadModel_FileName" xml:space="preserve">
+        <value>ឯកសារ CSV</value>
+    </data>
+    <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
+        <value>ចំណងជើងកម្រងសំណួរត្រូវបានទាមទារ</value>
+    </data>
+    <data name="CloneQuestionnaireModel_NewTitle_Label" xml:space="preserve">
+        <value>ចំណងជើង</value>
+    </data>
+    <data name="PersonNameAllowedCharactersErrorMessage" xml:space="preserve">
+        <value>ឈ្មោះមនុស្សមានតួអក្សរមិនត្រឹមត្រូវ។ អនុញ្ញាត​ឱ្យ​មាន​តែ​អក្សរ ចំណុច ដកឃ្លា និង​សញ្ញា​ផ្កាយ​ប៉ុណ្ណោះ។</value>
+    </data>
+    <data name="PhoneErrorLength" xml:space="preserve">
+        <value>លេខទូរស័ព្ទមិនអាចមានតួអក្សរលើសពី {1} បានទេ។</value>
+    </data>
+    <data name="OldPasswordErrorMessage" xml:space="preserve">
+        <value>ដើម្បីផ្លាស់ប្តូរពាក្យសម្ងាត់ ផ្តល់ពាក្យសម្ងាត់ដែលមានស្រាប់ត្រឹមត្រូវ។</value>
+    </data>
+    <data name="OldPasswordFieldName" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់ចាស់</value>
+    </data>
+    <data name="RestrictedAccountMessage" xml:space="preserve">
+        <value>គណនីនេះត្រូវបានដាក់កម្រិតដើម្បីអនុវត្តសកម្មភាពនេះ។</value>
+    </data>
+    <data name="RestrictedAccount" xml:space="preserve">
+        <value>គណនីនេះត្រូវបានដាក់កម្រិត</value>
+    </data>
+    <data name="UserName_Taken" xml:space="preserve">
+        <value>សូមជ្រើសរើសឈ្មោះអ្នកប្រើប្រាស់ផ្សេងទៀត។</value>
+    </data>
+    <data name="ConfirmNewPasswordFieldName" xml:space="preserve">
+        <value>បញ្ជាក់ពាក្យសម្ងាត់ថ្មី។</value>
+    </data>
+    <data name="NewPasswordFieldName" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់ថ្មី។</value>
+    </data>
+    <data name="ConfirmPasswordRequired" xml:space="preserve">
+        <value>តម្រូវឱ្យបញ្ជាក់ពាក្យសម្ងាត់</value>
+    </data>
+    <data name="WorkspaceRequired" xml:space="preserve">
+        <value>ត្រូវការកន្លែងធ្វើការ</value>
+    </data>
+    <data name="WorkspaceMissing" xml:space="preserve">
+        <value>រកមិនឃើញកន្លែងធ្វើការទេ។</value>
+    </data>
+    <data name="UserRoleRequired" xml:space="preserve">
+        <value>តម្រូវ​ឱ្យ​មាន​តួនាទី​អ្នក​ប្រើ</value>
+    </data>
+    <data name="UserIsLockedByHq" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់ត្រូវបានចាក់សោដោយការិយាល័យកណ្តាល</value>
+    </data>
+    <data name="MandatoryField" xml:space="preserve">
+        <value>វាលនេះគឺចាំបាច់</value>
+    </data>
+    <data name="PasswordRequiresDigit" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់ត្រូវតែមានយ៉ាងហោចណាស់មួយខ្ទង់ ('0'-'9')។</value>
+    </data>
+    <data name="PasswordRequiresLower" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់ត្រូវតែមានអក្សរតូចយ៉ាងហោចណាស់មួយ ('a'-'z') ។</value>
+    </data>
+    <data name="PasswordRequiresNonAlphanumeric" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់ត្រូវតែមានយ៉ាងហោចណាស់តួអក្សរដែលមិនមែនជាអក្សរក្រមលេខមួយ។</value>
+    </data>
+    <data name="PasswordRequiresUniqueChars" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់ត្រូវតែប្រើយ៉ាងហោចណាស់តួអក្សរផ្សេងគ្នា {0} ។</value>
+    </data>
+    <data name="PasswordRequiresUpper" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់ត្រូវតែមានអក្សរធំយ៉ាងតិចមួយ ('A'-'Z')។</value>
+    </data>
+    <data name="PasswordTooShort" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់ត្រូវតែមានយ៉ាងហោចណាស់តួអក្សរ {0} ។</value>
+    </data>
+    <data name="PasswordChangeRequired" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់របស់អ្នកត្រូវបានកំណត់ឡើងវិញ។ អ្នកត្រូវតែផ្លាស់ប្តូរវាដើម្បីទទួលបានការចូលប្រើគេហទំព័រ។</value>
+    </data>
+</root>
