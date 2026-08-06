@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Complete" xml:space="preserve"><value>Selesai</value></data>
+  <data name="FinishInterviewText" xml:space="preserve"><value>Wawancara ini telah selesai</value></data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve"><value>Tidak dapat mengubah wawancara yang telah diterima oleh perangkat</value></data>
+  <data name="InvitationText" xml:space="preserve"><value>Anda diundang untuk berpartisipasi dalam survei berikut: "%QUESTIONNAIRE%"</value></data>
+  <data name="NoteForSupervisor" xml:space="preserve"><value>Komentar</value></data>
+  <data name="Resume_InvitationText" xml:space="preserve"><value>Anda dapat menavigasi ke wawancara dalam survei berikut: "%QUESTIONNAIRE%"</value></data>
+  <data name="Resume_WelcomeText" xml:space="preserve"><value>Halo dan Selamat Datang di Survei Web Survey Solutions</value></data>
+  <data name="SurveyFormatText" xml:space="preserve"><value>Survei: "%QUESTIONNAIRE%"</value></data>
+  <data name="WebSurvey" xml:space="preserve"><value>Survei Web Survey Solutions</value></data>
+  <data name="WelcomeText" xml:space="preserve"><value>Halo dan Selamat Datang di Survei Web Survey Solutions</value></data>
+  <data name="StartNewInterview" xml:space="preserve"><value>Mulai wawancara baru</value></data>
+  <data name="ResumeInterview" xml:space="preserve"><value>Lanjutkan wawancara</value></data>
+  <data name="LinkInvitation" xml:space="preserve"><value>Anda diundang untuk berpartisipasi dalam survei berikut: "%QUESTIONNAIRE%". Wawancara Anda belum siap.</value></data>
+  <data name="LinkToInterviewPage" xml:space="preserve"><value>Wawancara Web</value></data>
+  <data name="LinkWelcome" xml:space="preserve"><value>Halo dan Selamat Datang di Survei Web Survey Solutions</value></data>
+</root>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
+        <value>[PL0002] ไม่มี ติดต่อฝ่ายสนับสนุนเซิร์ฟเวอร์ของคุณ</value>
+    </data>
+    <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
+        <value>ไม่สามารถแมปคอลัมน์กับคำถามใดๆ ในแบบสอบถามได้</value>
+    </data>
+    <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
+        <value>ไม่สามารถแมปไฟล์กับบัญชีรายชื่อใดๆ ในแบบสอบถามได้</value>
+    </data>
+    <data name="PL0006_IdDublication" xml:space="preserve">
+        <value>พบค่ารหัสที่ซ้ำกัน</value>
+    </data>
+    <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
+        <value>คอลัมน์รหัสพาเรนต์อย่างน้อย 1 คอลัมน์หายไป</value>
+    </data>
+    <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
+        <value>บันทึกบัญชีรายชื่อไม่มีผู้ปกครอง</value>
+    </data>
+    <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
+        <value>รหัสบัญชีรายชื่อไม่สอดคล้องกับขนาดบัญชีรายชื่อ</value>
+    </data>
+    <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+        <value>ไม่อนุญาตให้ใช้ค่าคำถาม</value>
+    </data>
+    <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+        <value>ค่าวันที่หรือเวลาที่ป้อนในคำถามวันที่ไม่ถูกต้อง</value>
+    </data>
+    <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
+        <value>ค่า GPS ไม่ถูกต้อง</value>
+    </data>
+    <data name="PL0018_ExpectedIntNotParsed" xml:space="preserve">
+        <value>อนุญาตเฉพาะค่าจำนวนเต็มเท่านั้น</value>
+    </data>
+    <data name="PL0019_ExpectedDecimalNotParsed" xml:space="preserve">
+        <value>อนุญาตเฉพาะค่าจริงเท่านั้น</value>
+    </data>
+    <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
+        <value>คำถามเกี่ยวกับขนาดบัญชีรายชื่อต้องไม่มีค่าลบ</value>
+    </data>
+    <data name="PL0024_DataWasNotFound" xml:space="preserve">
+        <value>ไม่พบข้อมูลการโหลดล่วงหน้า</value>
+    </data>
+    <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+        <value>ไม่มีผู้รับผิดชอบในการสังเกตตั้งแต่ 1 ครั้งขึ้นไป</value>
+    </data>
+    <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
+        <value>ผู้รับผิดชอบคือผู้ใช้ที่ถูกล็อคสำหรับการสังเกต 1 ครั้งขึ้นไป</value>
+    </data>
+    <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
+        <value>ผู้ใช้ไม่ใช่สำนักงานใหญ่ หัวหน้างาน หรือผู้สัมภาษณ์สำหรับการสังเกตตั้งแต่ 1 ครั้งขึ้นไป</value>
+    </data>
+    <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
+        <value>คำตอบสำหรับคำถามเกี่ยวกับขนาดบัญชีรายชื่อต้องไม่มากกว่า {0}</value>
+    </data>
+    <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
+        <value>คำถามเกี่ยวกับ GPS ต้องมีคอลัมน์ละติจูดและลองจิจูดแยกกัน</value>
+    </data>
+    <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
+        <value>คำถาม GPS จำเป็นต้องตั้งค่าละติจูดและลองจิจูด</value>
+    </data>
+    <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
+        <value>สองคอลัมน์ขึ้นไปมีชื่อเหมือนกัน</value>
+    </data>
+    <data name="PL0032_LatitudeMustBeGeaterThenN90AndLessThen90" xml:space="preserve">
+        <value>ละติจูดต้องมากกว่า -90° และน้อยกว่า 90°</value>
+    </data>
+    <data name="PL0033_LongitudeMustBeGeaterThenN180AndLessThen180" xml:space="preserve">
+        <value>ลองจิจูดต้องมากกว่า -180° และน้อยกว่า 180°</value>
+    </data>
+    <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
+        <value>ตัวคั่นทศนิยมไม่ถูกต้อง ไม่อนุญาตให้ใช้สัญลักษณ์ "," ในคำตอบที่เป็นตัวเลข กรุณาใช้ "." แทน.</value>
+    </data>
+    <data name="PL0035_QuantityNotParsed" xml:space="preserve">
+        <value>อนุญาตเฉพาะค่าจำนวนเต็มเท่านั้น</value>
+    </data>
+    <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
+        <value>ปริมาณควรมากกว่าหรือเท่ากับ -1</value>
+    </data>
+    <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+        <value>ไฟล์ที่มีข้อมูลระดับแบบสอบถามหายไป</value>
+    </data>
+    <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+        <value>ตัวเลือกที่ตอบแล้วนับเป็นคำถามแบบปรนัยต้องไม่เกินจำนวนคำตอบสูงสุดที่อนุญาต</value>
+    </data>
+    <data name="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
+        <value>ไม่อนุญาตให้ใช้ค่าลบสำหรับคำถามแบบเลือกหลายหมวดหมู่</value>
+    </data>
+    <data name="PL0042_IdIsEmpty" xml:space="preserve">
+        <value>คอลัมน์รหัสไม่มีค่าใดๆ</value>
+    </data>
+    <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+        <value>ไม่รองรับไฟล์เก็บถาวรที่มีการป้องกันด้วยรหัสผ่าน</value>
+    </data>
+    <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
+        <value>บัญชีรายชื่อควรมีคอลัมน์สำหรับคำตอบของรายการข้อความ</value>
+    </data>
+    <data name="PL0047_ProtectedVariables_MissingColumn" xml:space="preserve">
+        <value>คอลัมน์ที่จำเป็น {0} หายไป</value>
+    </data>
+    <data name="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" xml:space="preserve">
+        <value>ไม่พบตัวแปรที่ได้รับการป้องกันในแบบสอบถามที่ให้ไว้</value>
+    </data>
+    <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
+        <value>ไม่สามารถป้องกันประเภทตัวแปรได้</value>
+    </data>
+    <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
+        <value>รหัสบัญชีรายชื่อที่ไม่สอดคล้องกันสำหรับบัญชีรายชื่อที่เป็นตัวเลข ลำดับของรหัสบัญชีรายชื่อควรเป็น 0, 1, ... เพื่อนับอินสแตนซ์ของบัญชีรายชื่อ</value>
+    </data>
+    <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
+        <value>ปริมาณสูงสุดไม่ควรเกิน {0}</value>
+    </data>
+    <data name="PL0055_InvalidEmail" xml:space="preserve">
+        <value>อีเมลไม่ถูกต้อง</value>
+    </data>
+    <data name="PL0056_InvalidPassword" xml:space="preserve">
+        <value>รหัสผ่านไม่ถูกต้อง อย่างน้อย 6 ตัวเลขและตัวอักษรตัวพิมพ์ใหญ่หรือสัญลักษณ์ตัวเดียว '?' เพื่อสร้างรหัสผ่าน</value>
+    </data>
+    <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
+        <value>สำหรับการมอบหมายงานพร้อมอีเมลที่ให้ไว้ ปริมาณที่อนุญาตคือ 1</value>
+    </data>
+    <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
+        <value>ต้องเปิดใช้งานโหมดเว็บสำหรับการมอบหมายงานที่มีอีเมล</value>
+    </data>
+    <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
+        <value>ต้องเปิดใช้งานโหมดเว็บสำหรับการมอบหมายที่มีรหัสผ่าน</value>
+    </data>
+    <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
+        <value>การมอบหมายที่มีขนาด 1 สำหรับโหมดเว็บควรมีอีเมลหรือรหัสผ่านให้มา</value>
+    </data>
+    <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
+        <value>รหัสผ่านไม่ซ้ำกัน รหัสผ่านตามการกำหนดสำหรับโหมดเว็บที่มีจำนวน 1 จะต้องไม่ซ้ำกัน</value>
+    </data>
+    <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
+        <value>การมอบหมายงานทั้งหมดสำหรับการสัมภาษณ์ทางเว็บจะต้องทำกับผู้สัมภาษณ์</value>
+    </data>
+    <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
+        <value>ไม่สามารถโหลดคำตอบสำหรับคำถามที่มีชื่อตัวแปร {0} ล่วงหน้าได้ เนื่องจากเป็นประเภทที่ไม่รองรับ โปรดดูบทความสนับสนุนต่อไปนี้ https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type สำหรับรายละเอียดเกี่ยวกับสิ่งที่สามารถโหลดล่วงหน้าได้ในเวอร์ชันปัจจุบัน</value>
+    </data>
+    <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+        <value>ชื่อตัวแปรขอบเขตการตรวจสอบเสียง '{0}' ไม่ถูกต้อง จะต้องอ้างอิงถึงส่วน กลุ่ม หรือบัญชีรายชื่อที่มีอยู่ (ไม่อนุญาตให้ถามคำถามและบัญชีรายชื่อแบบเรียบ)</value>
+    </data>
+    <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+        <value>ไม่ได้ย้ายการมอบหมายงานเนื่องจากใช้การตรวจสอบเสียงแบบเลือกสรร (ขอบเขตการบันทึกเสียง) ซึ่งไม่สามารถย้ายไปยังเวอร์ชันแบบสอบถามใหม่ได้โดยอัตโนมัติ สร้างการมอบหมายใหม่ด้วยตนเองและกำหนดค่าขอบเขตการตรวจสอบเสียงอีกครั้ง</value>
+    </data>
+</root>
