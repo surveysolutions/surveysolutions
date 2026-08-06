@@ -1,0 +1,1622 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AddNewSection" xml:space="preserve">
+        <value>Tambahkan bagian baru</value>
+    </data>
+    <data name="Backup" xml:space="preserve">
+        <value>Cadangan</value>
+    </data>
+    <data name="SaveAs" xml:space="preserve">
+        <value>Simpan sebagai</value>
+    </data>
+    <data name="CopyTo" xml:space="preserve">
+        <value>Salin ke</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>Membatalkan</value>
+    </data>
+    <data name="ChangePassword" xml:space="preserve">
+        <value>Ubah kata sandi</value>
+    </data>
+    <data name="ClickHere" xml:space="preserve">
+        <value>klik disini</value>
+    </data>
+    <data name="Compile" xml:space="preserve">
+        <value>Menyusun</value>
+    </data>
+    <data name="Copy" xml:space="preserve">
+        <value>Menyalin</value>
+    </data>
+    <data name="Delete" xml:space="preserve">
+        <value>Menghapus</value>
+    </data>
+    <data name="Download" xml:space="preserve">
+        <value>Unduh</value>
+    </data>
+    <data name="ErrorsCounter" xml:space="preserve">
+        <value>Kesalahan {{count}}</value>
+    </data>
+    <data name="ErrorsCounter_plural" xml:space="preserve">
+        <value>Kesalahan {{count}}</value>
+    </data>
+    <data name="HellowMessageBtn" xml:space="preserve">
+        <value>Hai, {{currentUserName}}</value>
+    </data>
+    <data name="Help" xml:space="preserve">
+        <value>Membantu</value>
+    </data>
+    <data name="History" xml:space="preserve">
+        <value>Sejarah</value>
+    </data>
+    <data name="LogOut" xml:space="preserve">
+        <value>Keluar</value>
+    </data>
+    <data name="Ok" xml:space="preserve">
+        <value>OKE</value>
+    </data>
+    <data name="Open" xml:space="preserve">
+        <value>Membuka</value>
+    </data>
+    <data name="PasteAfter" xml:space="preserve">
+        <value>Tempel setelahnya</value>
+    </data>
+    <data name="QuestionnaireSummary" xml:space="preserve">
+        <value>({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)</value>
+    </data>
+    <data name="ReadOnly" xml:space="preserve">
+        <value>Hanya Baca</value>
+    </data>
+    <data name="ReadOnlyQuestion" xml:space="preserve">
+        <value>Ini adalah pertanyaan yang hanya bisa dibaca. Anda tidak dapat mengeditnya.</value>
+    </data>
+    <data name="Save" xml:space="preserve">
+        <value>Menyimpan</value>
+    </data>
+    <data name="SavedAtTimestamp" xml:space="preserve">
+        <value>disimpan di {{dateTime, H:mm}}</value>
+    </data>
+    <data name="Settings" xml:space="preserve">
+        <value>Pengaturan</value>
+    </data>
+    <data name="SideBarAddMacro" xml:space="preserve">
+        <value>tambahkan Makro baru</value>
+    </data>
+    <data name="SideBarAttachmentName" xml:space="preserve">
+        <value>nama lampiran</value>
+    </data>
+    <data name="SideBarAttachmentsCounter" xml:space="preserve">
+        <value>Lampiran File {{count}} (total {{bytes}})</value>
+    </data>
+    <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
+        <value>Lampiran File {{count}} (total {{bytes}})</value>
+    </data>
+    <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
+        <value>Gunakan tab ini untuk mengunggah file multimedia yang mungkin dirujuk dalam kuesioner.</value>
+    </data>
+    <data name="SideBarAttachmentsEmptyLine2" xml:space="preserve">
+        <value>Untuk menghindari sinkronisasi yang lambat, kami menyarankan ukuran gabungan semua file terlampir tidak melebihi 2MB. Untuk jenis, format, dan dimensi file yang didukung</value>
+    </data>
+    <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
+        <value>Untuk merujuk ke lampiran dalam kuesioner, tambahkan elemen teks statis dan tentukan lampiran {{-name}} di properti lampirannya</value>
+    </data>
+    <data name="SideBarAttachmentsEstimate" xml:space="preserve">
+        <value>Perkiraan. waktu pemuatan: {{timeString}} pada {{downloadSpeed}}Kb/s (EDGE)</value>
+    </data>
+    <data name="SideBarAttachmentsUpload" xml:space="preserve">
+        <value>Unggah yang baru</value>
+    </data>
+    <data name="SideBarLookupEmptyLine1" xml:space="preserve">
+        <value>Gunakan tab ini untuk menentukan tabel pencarian.</value>
+    </data>
+    <data name="SideBarLookupEmptyLine2" xml:space="preserve">
+        <value>Tabel pencarian menyediakan informasi referensi yang mungkin ditanyakan oleh kunci dan digunakan dalam kondisi pengaktifan dan ekspresi validasi.</value>
+    </data>
+    <data name="SideBarLookupEmptyLine3" xml:space="preserve">
+        <value>Tabel pencarian terdiri dari nama dan file pencarian, yang mungkin berisi beberapa kolom nilai numerik yang dibatasi tab.</value>
+    </data>
+    <data name="SideBarLookupTableAdd" xml:space="preserve">
+        <value>TAMBAHKAN tabel Pencarian BARU</value>
+    </data>
+    <data name="SideBarLookupTableDropFile" xml:space="preserve">
+        <value>Letakkan File di sini</value>
+    </data>
+    <data name="SideBarEditCategories" xml:space="preserve">
+        <value>Sunting Kategori</value>
+    </data>
+    <data name="SideBarLookupTableFileName" xml:space="preserve">
+        <value>nama file</value>
+    </data>
+    <data name="SideBarLookupTableName" xml:space="preserve">
+        <value>nama tabel</value>
+    </data>
+    <data name="SideBarLookupTablesCounter" xml:space="preserve">
+        <value>Tabel Pencarian {{count}}:</value>
+    </data>
+    <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
+        <value>Tabel Pencarian {{count}}:</value>
+    </data>
+    <data name="SideBarLookupTableSelectFile" xml:space="preserve">
+        <value>Pilih berkas</value>
+    </data>
+    <data name="SideBarLookupTableUpdateFile" xml:space="preserve">
+        <value>Perbarui berkas</value>
+    </data>
+    <data name="SideBarMacroContent" xml:space="preserve">
+        <value>isi</value>
+    </data>
+    <data name="SideBarMacroCounter" xml:space="preserve">
+        <value>{{count}} Makro:</value>
+    </data>
+    <data name="SideBarMacroCounter_plural" xml:space="preserve">
+        <value>Makro {{count}}:</value>
+    </data>
+    <data name="SideBarMacroDescription" xml:space="preserve">
+        <value>keterangan</value>
+    </data>
+    <data name="SideBarMacroEmptyLine1" xml:space="preserve">
+        <value>Gunakan tab ini untuk menentukan substitusi makro.</value>
+    </data>
+    <data name="SideBarMacroEmptyLine2" xml:space="preserve">
+        <value>Makro adalah ekspresi bernama yang dapat digunakan dalam kondisi pengaktifan dan ekspresi validasi. Makro terdiri dari nama dan konten.</value>
+    </data>
+    <data name="SideBarMacroEmptyLine3" xml:space="preserve">
+        <value>dapat digunakan dalam ekspresi, untuk merujuk ke makro.</value>
+    </data>
+    <data name="SideBarMacroHideDescription" xml:space="preserve">
+        <value>sembunyikan deskripsi</value>
+    </data>
+    <data name="SideBarMacroName" xml:space="preserve">
+        <value>nama makro</value>
+    </data>
+    <data name="SideBarMacroShowDescription" xml:space="preserve">
+        <value>tambahkan deskripsi</value>
+    </data>
+    <data name="SideBarCriticalityConditionExpression" xml:space="preserve">
+        <value>Kondisi kritis</value>
+    </data>
+    <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
+        <value>{{count}} Aturan penting:</value>
+    </data>
+    <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
+        <value>{{count}} Aturan penting:</value>
+    </data>
+    <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
+        <value>Keterangan</value>
+    </data>
+    <data name="SideBarCriticalityConditionsEmptyLine1" xml:space="preserve">
+        <value>Gunakan tab ini untuk menentukan aturan penting.</value>
+    </data>
+    <data name="SideBarCriticalityConditionsEmptyLine2" xml:space="preserve">
+        <value>Setiap aturan kritis terdiri dari kondisi dan pesan. Kondisi kritis dapat mengacu pada pertanyaan atau variabel apa pun dan harus dipenuhi (dievaluasi hingga benar). Perlakuan wawancara dengan kondisi kritis yang tidak terpenuhi ditentukan pada saat impor kuesioner ke server data.</value>
+    </data>
+    <data name="SideBarCriticalityConditionsEmptyLine3" xml:space="preserve">
+        <value>Menyertakan pesan kepada pewawancara (responden) untuk menjelaskan apa yang perlu diubah dalam wawancara (pesan ditampilkan ketika kondisi kritis tidak terpenuhi). Menyertakan hyperlink ke pertanyaan dalam pesan berguna untuk navigasi.</value>
+    </data>
+    <data name="SideBarHideDescription" xml:space="preserve">
+        <value>sembunyikan deskripsi</value>
+    </data>
+    <data name="SideBarCriticalityConditionMessage" xml:space="preserve">
+        <value>Pesan</value>
+    </data>
+    <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
+        <value>Aturan kritis tanpa pesan</value>
+    </data>
+    <data name="SideBarShowDescription" xml:space="preserve">
+        <value>tambahkan deskripsi</value>
+    </data>
+    <data name="SideBarAddCriticalityCondition" xml:space="preserve">
+        <value>menambahkan aturan kritis baru</value>
+    </data>
+    <data name="SideBarScenarioCounter" xml:space="preserve">
+        <value>Skenario {{count}}:</value>
+    </data>
+    <data name="SideBarScenarioCounter_plural" xml:space="preserve">
+        <value>Skenario {{count}}:</value>
+    </data>
+    <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
+        <value>Gunakan tab ini untuk melihat skenario Anda.</value>
+    </data>
+    <data name="SideBarScenarioEmptyLine2" xml:space="preserve">
+        <value>Skenario adalah cuplikan status penguji, Anda dapat menyimpannya di penguji dengan mengklik tombol "Simpan Skenario".</value>
+    </data>
+    <data name="SideBarScenarioName" xml:space="preserve">
+        <value>judul skenario</value>
+    </data>
+    <data name="SideBarSectionsCounter" xml:space="preserve">
+        <value>Bagian {{count}}:</value>
+    </data>
+    <data name="SideBarSectionsCounter_plural" xml:space="preserve">
+        <value>Bagian {{count}}:</value>
+    </data>
+    <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
+        <value>Unduh xlsx.dll</value>
+    </data>
+    <data name="SideBarDownload" xml:space="preserve">
+        <value>Unduh:</value>
+    </data>
+    <data name="SideBarXlsx" xml:space="preserve">
+        <value>Xlsx</value>
+    </data>
+    <data name="SideBarTab" xml:space="preserve">
+        <value>tab</value>
+    </data>
+    <data name="SideBarTranslationGetTemplate" xml:space="preserve">
+        <value>Dapatkan Templat untuk</value>
+    </data>
+    <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
+        <value>Unggul (xlsx)</value>
+    </data>
+    <data name="SideBarTranslationGetTemplateLinkTextCsv" xml:space="preserve">
+        <value>Tab (txt)</value>
+    </data>
+    <data name="SideBarTranslationName" xml:space="preserve">
+        <value>nama terjemahan</value>
+    </data>
+    <data name="SideBarCategoriesName" xml:space="preserve">
+        <value>nama kategori</value>
+    </data>
+    <data name="SideBarTranslationsCounter" xml:space="preserve">
+        <value>Terjemahan {{count}}</value>
+    </data>
+    <data name="SideBarCategoriesCounter" xml:space="preserve">
+        <value>Kategori {{count}}</value>
+    </data>
+    <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
+        <value>Terjemahan {{count}}</value>
+    </data>
+    <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
+        <value>Gunakan tab ini untuk mengelola terjemahan kuesioner.</value>
+    </data>
+    <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
+        <value>Gunakan tab ini untuk mengelola kategori yang dapat digunakan kembali.</value>
+    </data>
+    <data name="SideBarTranslationsEmptyLine2" xml:space="preserve">
+        <value>Anda dapat mengunduh dan memperbarui terjemahan ke berbagai bahasa.</value>
+    </data>
+    <data name="SideBarCategoriesEmptyLine2" xml:space="preserve">
+        <value>Anda dapat mengunduh dan memperbarui kategori.</value>
+    </data>
+    <data name="SideBarTranslationsEmptyLine3" xml:space="preserve">
+        <value>Terjemahan akan diterapkan pada teks asli dan mengesampingkan nilai. Anda dapat membiarkan beberapa teks kosong untuk menggunakan terjemahan asli default.</value>
+    </data>
+    <data name="SideBarCategoriesEmptyLine3" xml:space="preserve">
+        <value>akan ditambahkan ke daftar kategori yang dapat digunakan kembali untuk semua jenis pertanyaan kategoris</value>
+    </data>
+    <data name="ToggleDropdown" xml:space="preserve">
+        <value>Alihkan Dropdown</value>
+    </data>
+    <data name="Update" xml:space="preserve">
+        <value>Memperbarui</value>
+    </data>
+    <data name="VariableName" xml:space="preserve">
+        <value>nama</value>
+    </data>
+    <data name="WarningsCounter" xml:space="preserve">
+        <value>Peringatan {{count}}</value>
+    </data>
+    <data name="WarningsCounter_plural" xml:space="preserve">
+        <value>Peringatan {{count}}</value>
+    </data>
+    <data name="Close" xml:space="preserve">
+        <value>Menutup</value>
+    </data>
+    <data name="CompilationErrorsCounter" xml:space="preserve">
+        <value>Kesalahan {{count}} ditemukan</value>
+    </data>
+    <data name="CompilationErrorsCounter_plural" xml:space="preserve">
+        <value>Kesalahan {{count}} ditemukan</value>
+    </data>
+    <data name="CompilationLabel" xml:space="preserve">
+        <value>Kompilasi:</value>
+    </data>
+    <data name="CompilationWarningsCounter" xml:space="preserve">
+        <value>Peringatan {{count}} ditemukan</value>
+    </data>
+    <data name="CompilationWarningsCounter_plural" xml:space="preserve">
+        <value>Peringatan {{count}} ditemukan</value>
+    </data>
+    <data name="MoveTo" xml:space="preserve">
+        <value>Pindah ke</value>
+    </data>
+    <data name="Recompile" xml:space="preserve">
+        <value>Kompilasi ulang</value>
+    </data>
+    <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
+        <value>format: {{- type}}</value>
+    </data>
+    <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
+        <value>{{width}} × {{height}} piksel</value>
+    </data>
+    <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
+        <value>ukuran: {{size}}</value>
+    </data>
+    <data name="AttachmentSizeIsTooBig" xml:space="preserve">
+        <value>Ukuran lampiran terlalu besar. Ukuran maksimal: {{size}}</value>
+    </data>
+    <data name="SideBarAttachmentsTitle" xml:space="preserve">
+        <value>Lampiran</value>
+    </data>
+    <data name="SideBarCommentsTitle" xml:space="preserve">
+        <value>Komentar</value>
+    </data>
+    <data name="SideBarCriticalityConditionsTitle" xml:space="preserve">
+        <value>Aturan kritis</value>
+    </data>
+    <data name="SideBarMetadataHeader" xml:space="preserve">
+        <value>Deskripsi kuesioner dan info survei</value>
+    </data>
+    <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+        <value>Informasi dasar</value>
+    </data>
+    <data name="SideBarMetadataTitle" xml:space="preserve">
+        <value>Judul kuesioner</value>
+    </data>
+    <data name="SideBarMetadataSubtitle" xml:space="preserve">
+        <value>Subjudul:</value>
+    </data>
+    <data name="SideBarMetadataVersionIdentificator" xml:space="preserve">
+        <value>Pengidentifikasi versi:</value>
+    </data>
+    <data name="SideBarMetadataVersionNotes" xml:space="preserve">
+        <value>Catatan versi:</value>
+    </data>
+    <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+        <value>Informasi data survei</value>
+    </data>
+    <data name="SideBarMetadataStudyTypes" xml:space="preserve">
+        <value>Jenis studi:</value>
+    </data>
+    <data name="SideBarMetadataKindOfData" xml:space="preserve">
+        <value>Jenis datanya:</value>
+    </data>
+    <data name="SideBarMetadataModeOfDataCollection" xml:space="preserve">
+        <value>Cara Pengumpulan Data:</value>
+    </data>
+    <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+        <value>Informasi survei</value>
+    </data>
+    <data name="SideBarMetadataCountry" xml:space="preserve">
+        <value>Negara:</value>
+    </data>
+    <data name="SideBarMetadataYear" xml:space="preserve">
+        <value>Tahun:</value>
+    </data>
+    <data name="SideBarMetadataLanguages" xml:space="preserve">
+        <value>Bahasa:</value>
+    </data>
+    <data name="SideBarMetadataUnitOfAlalysis" xml:space="preserve">
+        <value>Unit analisis:</value>
+    </data>
+    <data name="SideBarMetadataCoverage" xml:space="preserve">
+        <value>Cakupan:</value>
+    </data>
+    <data name="SideBarMetadataUniverse" xml:space="preserve">
+        <value>Semesta:</value>
+    </data>
+    <data name="SideBarMetadataPrimaryInvestigator" xml:space="preserve">
+        <value>Penyelidik Utama:</value>
+    </data>
+    <data name="SideBarMetadataConsultants" xml:space="preserve">
+        <value>Konsultan:</value>
+    </data>
+    <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+        <value>Informasi tambahan</value>
+    </data>
+    <data name="SideBarMetadataNotes" xml:space="preserve">
+        <value>Catatan:</value>
+    </data>
+    <data name="SideBarMetadataKeywords" xml:space="preserve">
+        <value>Kata kunci:</value>
+    </data>
+    <data name="SideBarMetadataFunding" xml:space="preserve">
+        <value>Pendanaan:</value>
+    </data>
+    <data name="SideBarMetadataQuestionnaireAccess" xml:space="preserve">
+        <value>Akses kuesioner</value>
+    </data>
+    <data name="SideBarMetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+        <value>Setuju untuk mempublikasikan kuesioner ini</value>
+    </data>
+    <data name="SideBarAttachmentUploaded" xml:space="preserve">
+        <value>diunggah: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
+    </data>
+    <data name="SideBarLookupTitle" xml:space="preserve">
+        <value>Tabel pencarian</value>
+    </data>
+    <data name="SideBarMacroTitle" xml:space="preserve">
+        <value>Makro</value>
+    </data>
+    <data name="SideBarScenarioTitle" xml:space="preserve">
+        <value>Skenario</value>
+    </data>
+    <data name="SideBarSectionsTitle" xml:space="preserve">
+        <value>Bagian</value>
+    </data>
+    <data name="SideBarTranslationsTitle" xml:space="preserve">
+        <value>Terjemahan</value>
+    </data>
+    <data name="SideBarCategoriesTitle" xml:space="preserve">
+        <value>Kategori</value>
+    </data>
+    <data name="SideBarTranslationsUploadNew" xml:space="preserve">
+        <value>Unggah terjemahan baru</value>
+    </data>
+    <data name="SideBarCategoriesUploadNew" xml:space="preserve">
+        <value>Unggah kategori baru</value>
+    </data>
+    <data name="AttachmentPreview" xml:space="preserve">
+        <value>Pratinjau lampiran</value>
+    </data>
+    <data name="FindReplaceFindWhat" xml:space="preserve">
+        <value>Temukan apa:</value>
+    </data>
+    <data name="FindReplaceMatchCase" xml:space="preserve">
+        <value>Kasus pertandingan</value>
+    </data>
+    <data name="FindReplaceMatchWord" xml:space="preserve">
+        <value>Cocokkan seluruh kata</value>
+    </data>
+    <data name="FindReplaceReplaceWith" xml:space="preserve">
+        <value>Ganti dengan:</value>
+    </data>
+    <data name="FindReplaceTitle" xml:space="preserve">
+        <value>Temukan dan ganti</value>
+    </data>
+    <data name="FindReplaceUseRegex" xml:space="preserve">
+        <value>Gunakan ekspresi reguler</value>
+    </data>
+    <data name="FindReplaceСonfirm" xml:space="preserve">
+        <value>Harap konfirmasi tindakan.</value>
+    </data>
+    <data name="ModalConfirm" xml:space="preserve">
+        <value>Konfirmasi</value>
+    </data>
+    <data name="ModalInfo" xml:space="preserve">
+        <value>Informasi</value>
+    </data>
+    <data name="MoveToAnotherSubSection" xml:space="preserve">
+        <value>Pindah ke bagian lain:</value>
+    </data>
+    <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
+        <value>Ganti semuanya</value>
+    </data>
+    <data name="FindReplaceBackToSearch" xml:space="preserve">
+        <value>Kembali ke pencarian</value>
+    </data>
+    <data name="FindReplaceDone" xml:space="preserve">
+        <value>Selesai</value>
+    </data>
+    <data name="FindReplaceFindAll" xml:space="preserve">
+        <value>Temukan semuanya</value>
+    </data>
+    <data name="FindReplaceInAll" xml:space="preserve">
+        <value>Semua</value>
+    </data>
+    <data name="FindReplaceInAllFound" xml:space="preserve">
+        <value>di {{count}} ditemukan entitas?</value>
+    </data>
+    <data name="FindReplaceInAllFound_plural" xml:space="preserve">
+        <value>di {{count}} ditemukan entitas?</value>
+    </data>
+    <data name="FindReplaceMatchingLines" xml:space="preserve">
+        <value>Garis yang cocok: {{count}}</value>
+    </data>
+    <data name="FindReplaceCurrentMatch" xml:space="preserve">
+        <value>{{current}} / {{count}}</value>
+    </data>
+    <data name="FindReplaceNext" xml:space="preserve">
+        <value>Berikutnya</value>
+    </data>
+    <data name="FindReplacePrevious" xml:space="preserve">
+        <value>Sebelumnya</value>
+    </data>
+    <data name="FindReplaceReplaceAll" xml:space="preserve">
+        <value>Ganti semua ({{count}})</value>
+    </data>
+    <data name="FindReplaceReplaceAllConfirmWith" xml:space="preserve">
+        <value>dengan</value>
+    </data>
+    <data name="FindReplaceWereReplaced" xml:space="preserve">
+        <value>digantikan dengan</value>
+    </data>
+    <data name="EnablingCondition" xml:space="preserve">
+        <value>Kondisi yang memungkinkan</value>
+    </data>
+    <data name="GroupTitle" xml:space="preserve">
+        <value>Judul</value>
+    </data>
+    <data name="HideIfDisabled" xml:space="preserve">
+        <value>Sembunyikan jika dinonaktifkan</value>
+    </data>
+    <data name="FlatRoster" xml:space="preserve">
+        <value>Modus datar</value>
+    </data>
+    <data name="AddValidationRule" xml:space="preserve">
+        <value>Tambahkan kondisi validasi baru</value>
+    </data>
+    <data name="EnteredMoreThanAllowed" xml:space="preserve">
+        <value>Anda memasukkan lebih dari batas maksimum {{max}}</value>
+    </data>
+    <data name="ErrorMessage" xml:space="preserve">
+        <value>Pesan kesalahan atau peringatan</value>
+    </data>
+    <data name="OptionsListError" xml:space="preserve">
+        <value>Anda memasukkan input yang tidak valid. Setiap baris harus mengikuti format: 'Judul...Nilai[...Nama lampiran]'. 'Nilai' harus berupa bilangan bulat. 'Judul' harus berupa string alfanumerik. 'Nama lampiran' adalah opsional. Tidak ada baris kosong yang diperbolehkan.</value>
+    </data>
+    <data name="QuestionAddInstruction" xml:space="preserve">
+        <value>Tambahkan Instruksi Pewawancara</value>
+    </data>
+    <data name="QuestionClickReload" xml:space="preserve">
+        <value>klik muat ulang</value>
+    </data>
+    <data name="QuestionFilter" xml:space="preserve">
+        <value>Menyaring</value>
+    </data>
+    <data name="QuestionGpsNavigation" xml:space="preserve">
+        <value>Pertanyaan ini akan diperlakukan sebagai pertanyaan navigasi GPS untuk Pewawancara</value>
+    </data>
+    <data name="QuestionHideInstruction" xml:space="preserve">
+        <value>Sembunyikan instruksi</value>
+    </data>
+    <data name="QuestionInstruction" xml:space="preserve">
+        <value>Petunjuk</value>
+    </data>
+    <data name="QuestionLinkedDescr" xml:space="preserve">
+        <value>Ikat ke daftar pertanyaan atau pertanyaan dari grup daftar nama</value>
+    </data>
+    <data name="QuestionMustBeBound" xml:space="preserve">
+        <value>Anda harus mengikat pertanyaan ini</value>
+    </data>
+    <data name="QuestionQuestionType" xml:space="preserve">
+        <value>Jenis pertanyaan</value>
+    </data>
+    <data name="QuestionDisplayMode" xml:space="preserve">
+        <value>Modus tampilan</value>
+    </data>
+    <data name="BindToReusableCategories" xml:space="preserve">
+        <value>Ikat ke kategori yang dapat digunakan kembali</value>
+    </data>
+    <data name="SelectCategories" xml:space="preserve">
+        <value>Pilih kategori</value>
+    </data>
+    <data name="QuestionScope" xml:space="preserve">
+        <value>Ruang lingkup pertanyaan</value>
+    </data>
+    <data name="QuestionText" xml:space="preserve">
+        <value>Teks pertanyaan</value>
+    </data>
+    <data name="QuestionToUpdateOptions" xml:space="preserve">
+        <value>Untuk memperbarui kategori</value>
+    </data>
+    <data name="QuestionVariableLabel" xml:space="preserve">
+        <value>Label variabel</value>
+    </data>
+    <data name="QuestionVariableName" xml:space="preserve">
+        <value>Nama variabel</value>
+    </data>
+    <data name="RosterAddItem" xml:space="preserve">
+        <value>Tambahkan barang</value>
+    </data>
+    <data name="RosterName" xml:space="preserve">
+        <value>Nama daftar</value>
+    </data>
+    <data name="RosterSource" xml:space="preserve">
+        <value>Sumber daftar</value>
+    </data>
+    <data name="RosterSourceFixed" xml:space="preserve">
+        <value>Kumpulan item tetap:</value>
+    </data>
+    <data name="RosterSourceNumericQuestion" xml:space="preserve">
+        <value>Pertanyaan sumber untuk jumlah baris:</value>
+    </data>
+    <data name="RosterSourceNumericTitles" xml:space="preserve">
+        <value>Pertanyaan sumber untuk nama baris:</value>
+    </data>
+    <data name="RosterSourceQuestion" xml:space="preserve">
+        <value>Pertanyaan sumber (jawaban menentukan nomor dan nama baris daftar nama):</value>
+    </data>
+    <data name="RosterVariableName" xml:space="preserve">
+        <value>ID Daftar</value>
+    </data>
+    <data name="SectionVariableName" xml:space="preserve">
+        <value>Nama variabel</value>
+    </data>
+    <data name="SelectQuestion" xml:space="preserve">
+        <value>Pilih pertanyaan</value>
+    </data>
+    <data name="AddFilter" xml:space="preserve">
+        <value>Tambahkan penyaring</value>
+    </data>
+    <data name="SettingsCan" xml:space="preserve">
+        <value>Bisa</value>
+    </data>
+    <data name="SettingsInviteCollaborators" xml:space="preserve">
+        <value>Undang lebih banyak pengguna melalui login atau email terdaftar</value>
+    </data>
+    <data name="SettingsOwner" xml:space="preserve">
+        <value>pemilik</value>
+    </data>
+    <data name="SettingsPrivate" xml:space="preserve">
+        <value>Pribadi</value>
+    </data>
+    <data name="SettingsPublic" xml:space="preserve">
+        <value>Publik</value>
+    </data>
+    <data name="SettingsAnonymous" xml:space="preserve">
+        <value>Anonim</value>
+    </data>
+    <data name="RegenerateQuestionnaireSharingLink" xml:space="preserve">
+        <value>Buat ulang tautan</value>
+    </data>
+    <data name="AnonymousQuestionnaireGeneratedDate" xml:space="preserve">
+        <value>tautan yang dihasilkan: {{datetime}}</value>
+    </data>
+    <data name="SettingsQuestionnaireName" xml:space="preserve">
+        <value>Judul kuesioner</value>
+    </data>
+    <data name="SettingsQuestionnaireSharing" xml:space="preserve">
+        <value>Buatlah kuesioner ini</value>
+    </data>
+    <data name="SettingsRevokeAccess" xml:space="preserve">
+        <value>Cabut akses</value>
+    </data>
+    <data name="SettingsTitle" xml:space="preserve">
+        <value>Pengaturan</value>
+    </data>
+    <data name="SettingsVisibleToEveryone" xml:space="preserve">
+        <value>terlihat oleh semua orang dalam mode hanya baca</value>
+    </data>
+    <data name="SettingsAccessibleToEveryone" xml:space="preserve">
+        <value>dapat diakses dalam mode baca-saja bagi siapa pun yang memiliki tautan</value>
+    </data>
+    <data name="SettingsStatusAllowAnonymousAccess" xml:space="preserve">
+        <value>Berbagi anonim saat ini diaktifkan.</value>
+    </data>
+    <data name="SettingsStatusDontAllowAnonymousAccess" xml:space="preserve">
+        <value>Berbagi anonim saat ini dinonaktifkan.</value>
+    </data>
+    <data name="SettingsTurnOnAnonymousAccess" xml:space="preserve">
+        <value>Aktifkan berbagi anonim.</value>
+    </data>
+    <data name="SettingsTurnOffAnonymousAccess" xml:space="preserve">
+        <value>Matikan berbagi anonim.</value>
+    </data>
+    <data name="SettingsVisibleToOwner" xml:space="preserve">
+        <value>hanya dapat dilihat oleh pemiliknya</value>
+    </data>
+    <data name="SettingsWhoHasAccess" xml:space="preserve">
+        <value>yang mempunyai akses</value>
+    </data>
+    <data name="ValidationCondition" xml:space="preserve">
+        <value>Kondisi validasi</value>
+    </data>
+    <data name="AddQuestion" xml:space="preserve">
+        <value>Tambahkan pertanyaan</value>
+    </data>
+    <data name="AddRoster" xml:space="preserve">
+        <value>Tambahkan daftar</value>
+    </data>
+    <data name="AddStaticText" xml:space="preserve">
+        <value>Tambahkan teks statis</value>
+    </data>
+    <data name="AddSubsection" xml:space="preserve">
+        <value>Tambahkan sub-bagian</value>
+    </data>
+    <data name="VirtualCoverPage" xml:space="preserve">
+        <value>Halaman sampul virtual</value>
+    </data>
+    <data name="MigrateToNewCover" xml:space="preserve">
+        <value>Hasilkan penutup</value>
+    </data>
+    <data name="AddVariable" xml:space="preserve">
+        <value>Tambahkan variabel</value>
+    </data>
+    <data name="EmptySectionLine1" xml:space="preserve">
+        <value>Bagian ini kosong.</value>
+    </data>
+    <data name="EmptySectionLine2" xml:space="preserve">
+        <value>Anda dapat memulai dengan menggunakan tombol {{-addQuestionBtn}} dan {{-addSubsectionBtn}}</value>
+    </data>
+    <data name="EmptySectionLine3" xml:space="preserve">
+        <value>di atas blok ini atau kelola bagian dengan panel kiri {{-panel}}</value>
+    </data>
+    <data name="EmptySectionLine4" xml:space="preserve">
+        <value>Nama kuesioner, variabel, kolaborasi, dan opsi lainnya</value>
+    </data>
+    <data name="EmptySectionLine5" xml:space="preserve">
+        <value>dapat ditemukan di panel {{-settingsBtn}} (pojok kanan atas)</value>
+    </data>
+    <data name="NothingFound" xml:space="preserve">
+        <value>Tidak ada yang ditemukan</value>
+    </data>
+    <data name="Paste" xml:space="preserve">
+        <value>Pasta</value>
+    </data>
+    <data name="QuestionAddOption" xml:space="preserve">
+        <value>Tambahkan kategori</value>
+    </data>
+    <data name="QuestionCascading" xml:space="preserve">
+        <value>Kotak kombo bertingkat</value>
+    </data>
+    <data name="QuestionComboBox" xml:space="preserve">
+        <value>Kotak kombo</value>
+    </data>
+    <data name="QuestionCheckboxes" xml:space="preserve">
+        <value>kotak centang</value>
+    </data>
+    <data name="QuestionCurrentTime" xml:space="preserve">
+        <value>Stempel waktu saat ini (tanggal &amp; waktu)</value>
+    </data>
+    <data name="QuestionDefaultDate" xml:space="preserve">
+        <value>Tanggal bawaan</value>
+    </data>
+    <data name="GeometryType" xml:space="preserve">
+        <value>Tipe geometri</value>
+    </data>
+    <data name="GeometryInputMode" xml:space="preserve">
+        <value>Modus masukan</value>
+    </data>
+    <data name="GeometryOverlapDetection" xml:space="preserve">
+        <value>Deteksi tumpang tindih</value>
+    </data>
+    <data name="QuestionDecimalPlaces" xml:space="preserve">
+        <value>Jumlah tempat desimal</value>
+    </data>
+    <data name="QuestionInteger" xml:space="preserve">
+        <value>Bilangan bulat</value>
+    </data>
+    <data name="QuestionIsLinked" xml:space="preserve">
+        <value>Terhubung</value>
+    </data>
+    <data name="QuestionMaxListCount" xml:space="preserve">
+        <value>Jumlah maksimum elemen daftar</value>
+    </data>
+    <data name="QuestionMaxNumberOfAnswers" xml:space="preserve">
+        <value>Jumlah jawaban maksimal</value>
+    </data>
+    <data name="QuestionOnlyInts" xml:space="preserve">
+        <value>Hanya bilangan bulat yang diperbolehkan</value>
+    </data>
+    <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
+        <value>Bilangan bulat antara 1 dan 50 diperbolehkan</value>
+    </data>
+    <data name="QuestionOptionsCut" xml:space="preserve">
+        <value>Pertanyaan ditandai sebagai "Kotak kombo" atau "Kotak kombo berjenjang" saat mengunggah detail pertanyaan dan berisi terlalu banyak kategori, jumlahnya dikurangi hingga {{count}}</value>
+    </data>
+    <data name="QuestionOrdered" xml:space="preserve">
+        <value>Catat urutan jawaban</value>
+    </data>
+    <data name="QuestionPattern" xml:space="preserve">
+        <value>Pola</value>
+    </data>
+    <data name="QuestionUploadOptions" xml:space="preserve">
+        <value>Unggah kategori baru</value>
+    </data>
+    <data name="QuestionUseSeparator" xml:space="preserve">
+        <value>Gunakan 1000 pemisah</value>
+    </data>
+    <data name="QuestionYesNoMode" xml:space="preserve">
+        <value>tombol Ya/Tidak</value>
+    </data>
+    <data name="GeographyInputModeManual" xml:space="preserve">
+        <value>petunjuk</value>
+    </data>
+    <data name="GeographyInputModeAutomatic" xml:space="preserve">
+        <value>Otomatis</value>
+    </data>
+    <data name="GeographyInputModeSemiautomatic" xml:space="preserve">
+        <value>Setengah otomatis</value>
+    </data>
+    <data name="Search" xml:space="preserve">
+        <value>Mencari</value>
+    </data>
+    <data name="Filter" xml:space="preserve">
+        <value>Menyaring</value>
+    </data>
+    <data name="SelectParentQuestion" xml:space="preserve">
+        <value>Pilih pertanyaan orang tua</value>
+    </data>
+    <data name="SelectParentQuestionError" xml:space="preserve">
+        <value>Anda harus memilih pertanyaan induk</value>
+    </data>
+    <data name="UserDefinedCategories" xml:space="preserve">
+        <value>Kategori yang ditentukan pengguna</value>
+    </data>
+    <data name="ReusableCategories" xml:space="preserve">
+        <value>Kategori yang dapat digunakan kembali</value>
+    </data>
+    <data name="SourceOfCategories" xml:space="preserve">
+        <value>Sumber kategori</value>
+    </data>
+    <data name="RostersQuestion" xml:space="preserve">
+        <value>Daftar pertanyaan atau pertanyaan dari grup roster</value>
+    </data>
+    <data name="QuestionRadioButtonList" xml:space="preserve">
+        <value>Daftar tombol radio</value>
+    </data>
+    <data name="SettingsInvite" xml:space="preserve">
+        <value>Mengundang</value>
+    </data>
+    <data name="SettingsProvideExistingEmail" xml:space="preserve">
+        <value>Berikan email atau login pengguna yang ada</value>
+    </data>
+    <data name="SettingsProvideValidEmail" xml:space="preserve">
+        <value>Berikan email yang valid</value>
+    </data>
+    <data name="StaticText" xml:space="preserve">
+        <value>Teks statis</value>
+    </data>
+    <data name="StaticTextAttachmentName" xml:space="preserve">
+        <value>Nama lampiran</value>
+    </data>
+    <data name="ToggleSearch" xml:space="preserve">
+        <value>Alihkan Pencarian</value>
+    </data>
+    <data name="TreeAddQuestion" xml:space="preserve">
+        <value>Tambahkan pertanyaan</value>
+    </data>
+    <data name="TreeAddQuestionAfter" xml:space="preserve">
+        <value>Tambahkan pertanyaan setelahnya</value>
+    </data>
+    <data name="TreeAddRoster" xml:space="preserve">
+        <value>Tambahkan daftar</value>
+    </data>
+    <data name="TreeAddRosterAfter" xml:space="preserve">
+        <value>Tambahkan daftar setelahnya</value>
+    </data>
+    <data name="TreeAddSection" xml:space="preserve">
+        <value>Tambahkan sub-bagian</value>
+    </data>
+    <data name="TreeAddSectionAfter" xml:space="preserve">
+        <value>Tambahkan sub-bagian setelahnya</value>
+    </data>
+    <data name="TreeAddStaticText" xml:space="preserve">
+        <value>Tambahkan teks statis</value>
+    </data>
+    <data name="TreeAddStaticTextAfter" xml:space="preserve">
+        <value>Tambahkan teks statis setelahnya</value>
+    </data>
+    <data name="TreeAddVariable" xml:space="preserve">
+        <value>Tambahkan variabel</value>
+    </data>
+    <data name="TreeAddVariableAfter" xml:space="preserve">
+        <value>Tambahkan variabel setelahnya</value>
+    </data>
+    <data name="TreeRoster" xml:space="preserve">
+        <value>daftar:</value>
+    </data>
+    <data name="VariableExpression" xml:space="preserve">
+        <value>Ekspresi</value>
+    </data>
+    <data name="VariableLabel" xml:space="preserve">
+        <value>Label variabel</value>
+    </data>
+    <data name="VariableType" xml:space="preserve">
+        <value>Tipe variabel</value>
+    </data>
+    <data name="HelpConditionExpression" xml:space="preserve">
+        <value>Ekspresi logis yang mengaktifkan (menonaktifkan) item saat ini tergantung pada jawaban pertanyaan lainnya.</value>
+    </data>
+    <data name="HelpExpression" xml:space="preserve">
+        <value>Ekspresi logis yang dihitung tergantung pada jawaban pertanyaan lainnya.</value>
+    </data>
+    <data name="HelpFixedTitles" xml:space="preserve">
+        <value>Jumlah item menentukan ukuran daftar. Setiap elemen daftar berhubungan dengan judul baris daftar nama. Setiap elemen daftar harus ditempatkan pada baris terpisah.</value>
+    </data>
+    <data name="HelpHideIfDisabled" xml:space="preserve">
+        <value>Secara default, item yang dinonaktifkan berwarna abu-abu. Mencentang opsi ini akan menyembunyikan pertanyaan atau bagian yang dinonaktifkan di tablet.</value>
+    </data>
+    <data name="HelpRosterDisplayMode" xml:space="preserve">
+        <value>Sub-Bagian - pertanyaan dari daftar nama ditampilkan di belakang tombol yang sesuai dengan contoh daftar nama.
+Datar - pertanyaan dari daftar nama ditampilkan pada tingkat yang sama, dipisahkan oleh header yang sesuai dengan contoh daftar nama.
+Tabel - pertanyaan dalam daftar ditampilkan pada tingkat yang sama dengan baris dan kolom tabel. 
+Matriks - pertanyaan kategoris dari daftar ditampilkan sebagai matriks. 
+Tampilan Tabel dan Matriks hanya didukung dalam survei Web, tablet kembali ke mode 'Sub-Bagian'.</value>
+    </data>
+    <data name="HelpHideInstructions" xml:space="preserve">
+        <value>Secara default, teks instruksi ditampilkan di tablet. Mencentang opsi ini hanya akan menampilkan baris instruksi pertama. Mengetuk baris itu akan menampilkan teks lengkap.</value>
+    </data>
+    <data name="HelpInstruction" xml:space="preserve">
+        <value>Teks instruksi yang akan dilampirkan pada pertanyaan.</value>
+    </data>
+    <data name="HelpIsTimestamp" xml:space="preserve">
+        <value>Opsi ini memungkinkan pengguna untuk menandai waktu saat ini di tablet</value>
+    </data>
+    <data name="HelpDefaultDate" xml:space="preserve">
+        <value>Tanggal ini akan ditampilkan sebagai tanggal mulai pemilihan pada tablet</value>
+    </data>
+    <data name="HelpDoNotExport" xml:space="preserve">
+        <value>Tandai variabel ini untuk mengecualikannya dari ekspor</value>
+    </data>
+    <data name="VariableNoExport" xml:space="preserve">
+        <value>Jangan ekspor</value>
+    </data>
+    <data name="HelpMask" xml:space="preserve">
+        <value>Entri berformat untuk nilai alfanumerik: nomor telepon, kode ID, dll. Contoh:"~" - Mewakili karakter alfanumerik (A-Z,a-z), "#" - Mewakili karakter numerik (0-9), "*" - Mewakili karakter alfanumerik (A-Z,a-z,0-9). "##/##/####" - tanggal, "(###) ###-####" - nomor telepon, "AA####" - nomor penerbangan yang dioperasikan oleh American Airlines atau "~*-###-~###"</value>
+    </data>
+    <data name="HelpSourceQuestion" xml:space="preserve">
+        <value>Pertanyaan sumber (jawaban menghasilkan jumlah baris)</value>
+    </data>
+    <data name="HelpTitles" xml:space="preserve">
+        <value>Judul baris.</value>
+    </data>
+    <data name="HelpUseFormatting" xml:space="preserve">
+        <value>Jika dicentang, kolom numerik pada tablet akan diformat sebagai: d,ddd,ddd.dd, "d" mewakili angka (0-9), “,”(koma) adalah pemisah seribu, dan "." (titik) adalah simbol titik desimal.  Pemisah ribuan dan simbol titik desimal mungkin berbeda untuk tablet dengan budaya berbeda.</value>
+    </data>
+    <data name="HelpValidationExpression" xml:space="preserve">
+        <value>Ekspresi logis yang memvalidasi jawaban atas pertanyaan saat ini. Mungkin menyertakan nilai pertanyaan lain.</value>
+    </data>
+    <data name="HelpValidationMessage" xml:space="preserve">
+        <value>Pesan kesalahan atau peringatan ditampilkan ketika kondisi validasi bernilai "False" atau kesalahan terjadi selama evaluasi ekspresi.</value>
+    </data>
+    <data name="HelpVariableDescription" xml:space="preserve">
+        <value>Teks yang akan ditampilkan di sebelah variabel untuk tujuan pengujian</value>
+    </data>
+    <data name="HelpVariableLabel" xml:space="preserve">
+        <value>Teks hingga karakter {{maxLength}} yang akan dilampirkan ke variabel yang diekspor.</value>
+    </data>
+    <data name="HelpVariableName" xml:space="preserve">
+        <value>Nama variabel dan ID daftar nama dapat terdiri dari karakter {{minLength}} hingga {{maxLength}} dan hanya boleh berisi karakter berikut: a-z, A-Z, _, atau 0-9. Karakter pertama tidak boleh 0-9 atau _ dan karakter terakhir tidak boleh _.</value>
+    </data>
+    <data name="HelpAttachmentName" xml:space="preserve">
+        <value>Nama file lampiran yang akan ditampilkan.</value>
+    </data>
+    <data name="HelpCoverPage" xml:space="preserve">
+        <value>Bagian pertama dari setiap kuesioner berisi pertanyaan-pertanyaan identifikasi yang juga ditampilkan di dashboard pewawancara dan supervisor.</value>
+    </data>
+    <data name="HelpVirtualCoverPage" xml:space="preserve">
+        <value>Sampul adalah bagian virtual yang menampilkan semua pertanyaan identifikasi.
+    Pertanyaan tidak dapat diubah di bagian ini</value>
+    </data>
+    <data name="ConditionMightBeBroken" xml:space="preserve">
+        <value>Kondisi atau item yang bergantung pada cascading mungkin rusak</value>
+    </data>
+    <data name="HotkeysCloseLookup" xml:space="preserve">
+        <value>Tutup panel tabel pencarian</value>
+    </data>
+    <data name="HotkeysCloseMacros" xml:space="preserve">
+        <value>Tutup panel makro</value>
+    </data>
+    <data name="HotkeysCloseMetadata" xml:space="preserve">
+        <value>Tutup panel metadata</value>
+    </data>
+    <data name="HotkeysCloseScenarios" xml:space="preserve">
+        <value>Tutup panel skenario</value>
+    </data>
+    <data name="HotkeysCloseTranslations" xml:space="preserve">
+        <value>Tutup panel terjemahan</value>
+    </data>
+    <data name="HotkeysCloseCategories" xml:space="preserve">
+        <value>Tutup panel kategori</value>
+    </data>
+    <data name="HotkeysCloseComments" xml:space="preserve">
+        <value>Tutup panel komentar</value>
+    </data>
+    <data name="HotkeysFocusTitle" xml:space="preserve">
+        <value>Fokuskan bidang judul di editor</value>
+    </data>
+    <data name="HotkeysFocusTree" xml:space="preserve">
+        <value>Pohon kuesioner fokus</value>
+    </data>
+    <data name="HotkeysHideAttachments" xml:space="preserve">
+        <value>Tutup panel lampiran</value>
+    </data>
+    <data name="HotkeysHideSections" xml:space="preserve">
+        <value>Tutup bagian</value>
+    </data>
+    <data name="HotkeysNavigateToPrevSibling" xml:space="preserve">
+        <value>Arahkan ke saudara sebelumnya</value>
+    </data>
+    <data name="HotkeysNavigateToSibling" xml:space="preserve">
+        <value>Arahkan ke saudara berikutnya</value>
+    </data>
+    <data name="HotkeysOpenItem" xml:space="preserve">
+        <value>Buka item di editor</value>
+    </data>
+    <data name="HotkeysOpenSection" xml:space="preserve">
+        <value>Bagian terbuka</value>
+    </data>
+    <data name="HotkeysPrint" xml:space="preserve">
+        <value>Mencetak</value>
+    </data>
+    <data name="HotkeysSearch" xml:space="preserve">
+        <value>Cari sub-bagian dan pertanyaan di bagian</value>
+    </data>
+    <data name="HotkeysTest" xml:space="preserve">
+        <value>Uji kuesioner di WebTester</value>
+    </data>
+    <data name="MultipleDependencies" xml:space="preserve">
+        <value>Satu atau lebih pertanyaan/sub-bagian bergantung pada</value>
+    </data>
+    <data name="NoPermissions" xml:space="preserve">
+        <value>Anda tidak memiliki izin untuk mengubah kuesioner ini</value>
+    </data>
+    <data name="NotAnImage" xml:space="preserve">
+        <value>File yang dipilih bukan gambar</value>
+    </data>
+    <data name="QuestionOpenEditorConfirm" xml:space="preserve">
+        <value>Untuk membuka editor, semua perubahan yang belum disimpan harus disimpan. Haruskah kita menyelamatkannya sekarang?</value>
+    </data>
+    <data name="QuestionOpenEditorSaved" xml:space="preserve">
+        <value>Itu berhasil disimpan. Jendela untuk mengunggah file akan terbuka.</value>
+    </data>
+    <data name="SettingsShareEdit" xml:space="preserve">
+        <value>Sunting</value>
+    </data>
+    <data name="SettingsShareView" xml:space="preserve">
+        <value>Melihat</value>
+    </data>
+    <data name="DeleteConfirmQuestion" xml:space="preserve">
+        <value>Apakah Anda yakin ingin menghapus "{{trimmedTitle}}"?</value>
+    </data>
+    <data name="DeleteConfirmCategories" xml:space="preserve">
+        <value>Apakah Anda yakin ingin menghapus kumpulan kategori "{{trimmedTitle}}"? Sumber kategori untuk pertanyaan kategoris yang bergantung padanya akan diubah menjadi kategori yang ditentukan pengguna</value>
+    </data>
+    <data name="UntitledQuestion" xml:space="preserve">
+        <value>Pertanyaan tanpa judul</value>
+    </data>
+    <data name="TranslationsObtained" xml:space="preserve">
+        <value>Memperoleh baris {0} dari file terjemahan</value>
+    </data>
+    <data name="TranslationsObtained_plural" xml:space="preserve">
+        <value>Memperoleh baris {0} dari file terjemahan</value>
+    </data>
+    <data name="CategoriesObtained" xml:space="preserve">
+        <value>Memperoleh baris {0} dari file kategori</value>
+    </data>
+    <data name="CategoriesObtained_plural" xml:space="preserve">
+        <value>Memperoleh baris {0} dari file kategori</value>
+    </data>
+    <data name="UnsavedChangesLeave" xml:space="preserve">
+        <value>Anda akan kehilangan perubahan yang belum disimpan jika meninggalkan halaman ini</value>
+    </data>
+    <data name="UnsavedChangesReload" xml:space="preserve">
+        <value>Anda akan kehilangan perubahan yang belum disimpan jika memuat ulang halaman ini</value>
+    </data>
+    <data name="Export" xml:space="preserve">
+        <value>Ekspor</value>
+    </data>
+    <data name="OptionsCloseWindow" xml:space="preserve">
+        <value>Tutup Jendela?</value>
+    </data>
+    <data name="OptionsUploadApply" xml:space="preserve">
+        <value>Terapkan perubahan</value>
+    </data>
+    <data name="OptionsUploadRevert" xml:space="preserve">
+        <value>Kembalikan perubahan</value>
+    </data>
+    <data name="OptionsWindowTitle" xml:space="preserve">
+        <value>Sunting kategori</value>
+    </data>
+    <data name="CascadingOptionsWindowTitle" xml:space="preserve">
+        <value>Edit kategori berjenjang</value>
+    </data>
+    <data name="OptionsUploadLimit" xml:space="preserve">
+        <value>Tidak ada kategori. Pilih file yang dipisahkan tab. File dapat berisi hingga {limit} kategori.</value>
+    </data>
+    <data name="OptionsUploadTitle" xml:space="preserve">
+        <value>Judul</value>
+    </data>
+    <data name="OptionsUploadValue" xml:space="preserve">
+        <value>Nilai</value>
+    </data>
+    <data name="AttachmentName" xml:space="preserve">
+        <value>Nama lampiran</value>
+    </data>
+    <data name="OptionsUploadParent" xml:space="preserve">
+        <value>Nilai orang tua</value>
+    </data>
+    <data name="SideBarMacroNoName" xml:space="preserve">
+        <value>makro tanpa nama</value>
+    </data>
+    <data name="Upload" xml:space="preserve">
+        <value>Mengunggah</value>
+    </data>
+    <data name="SideBarLookupTableNoName" xml:space="preserve">
+        <value>tabel pencarian tanpa nama</value>
+    </data>
+    <data name="SideBarTranslationNoName" xml:space="preserve">
+        <value>terjemahan tanpa nama</value>
+    </data>
+    <data name="SideBarCategoriesNoName" xml:space="preserve">
+        <value>kategori tanpa nama</value>
+    </data>
+    <data name="SideBarAttachmentNoName" xml:space="preserve">
+        <value>lampiran tanpa nama</value>
+    </data>
+    <data name="DefaultNewRoster" xml:space="preserve">
+        <value>Daftar baru</value>
+    </data>
+    <data name="DefaultNewSection" xml:space="preserve">
+        <value>Bagian baru</value>
+    </data>
+    <data name="DefaultNewStaticText" xml:space="preserve">
+        <value>Teks statis baru</value>
+    </data>
+    <data name="DefaultNewSubsection" xml:space="preserve">
+        <value>Sub-bagian baru</value>
+    </data>
+    <data name="HotkeysShortcuts" xml:space="preserve">
+        <value>Pintasan Papan Ketik</value>
+    </data>
+    <data name="HotkeysShowHideHelp" xml:space="preserve">
+        <value>Tampilkan/sembunyikan menu bantuan ini</value>
+    </data>
+    <data name="MarkAsDefault" xml:space="preserve">
+        <value>Tetapkan sebagai default</value>
+    </data>
+    <data name="UnMarkAsDefault" xml:space="preserve">
+        <value>Jangan gunakan sebagai default</value>
+    </data>
+    <data name="Default" xml:space="preserve">
+        <value>Bawaan</value>
+    </data>
+    <data name="Reset" xml:space="preserve">
+        <value>Mengatur ulang</value>
+    </data>
+    <data name="PleaseWait" xml:space="preserve">
+        <value>Harap tunggu...</value>
+    </data>
+    <data name="EntryWasNotFound" xml:space="preserve">
+        <value>Entri tidak ditemukan dalam kuesioner, silakan pilih yang lain.</value>
+    </data>
+    <data name="RequestFailedUnexpectedly" xml:space="preserve">
+        <value>Permintaan gagal secara tidak terduga.</value>
+    </data>
+    <data name="ApplicationNotAvailable" xml:space="preserve">
+        <value>Tidak dapat menyelesaikan permintaan. Respons yang diterima tampaknya tidak berasal dari server Survey Solutions.
+Hal ini biasanya disebabkan oleh proxy jaringan, firewall, atau gateway keamanan yang mencegat koneksi.
+Silakan periksa koneksi jaringan Anda atau hubungi dukungan TI Anda.</value>
+    </data>
+    <data name="IncorrectRosterTitle" xml:space="preserve">
+        <value>Pertanyaan judul daftar nama salah</value>
+    </data>
+    <data name="SelectedInvalidItem" xml:space="preserve">
+        <value>Item yang dipilih tidak valid. Perbaiki.</value>
+    </data>
+    <data name="SelectItemFromTheList" xml:space="preserve">
+        <value>Pilih item dari daftar</value>
+    </data>
+    <data name="UntitledGroupOrRoster" xml:space="preserve">
+        <value>Subbagian atau daftar tanpa judul</value>
+    </data>
+    <data name="UntitledVariable" xml:space="preserve">
+        <value>Variabel tanpa judul</value>
+    </data>
+    <data name="UntitledSection" xml:space="preserve">
+        <value>Bagian tanpa judul</value>
+    </data>
+    <data name="UntitledRoster" xml:space="preserve">
+        <value>Daftar tanpa judul</value>
+    </data>
+    <data name="UntitledStaticText" xml:space="preserve">
+        <value>Teks statis tanpa judul</value>
+    </data>
+    <data name="SelectModeOfDataCollection" xml:space="preserve">
+        <value>Pilih Mode Pengumpulan Data</value>
+    </data>
+    <data name="SelectCountry" xml:space="preserve">
+        <value>Pilih negara</value>
+    </data>
+    <data name="SelectStudyType" xml:space="preserve">
+        <value>Pilih Jenis Studi</value>
+    </data>
+    <data name="SelectKindOfData" xml:space="preserve">
+        <value>Pilih Jenis data</value>
+    </data>
+    <data name="Test" xml:space="preserve">
+        <value>Tes</value>
+    </data>
+    <data name="QuestionAddSpecialValues" xml:space="preserve">
+        <value>Menambah nilai istimewa</value>
+    </data>
+    <data name="EntityComment" xml:space="preserve">
+        <value>Komentar baru</value>
+    </data>
+    <data name="IsSignature" xml:space="preserve">
+        <value>Gunakan papan tanda tangan</value>
+    </data>
+    <data name="HelpNewComment" xml:space="preserve">
+        <value>Tambahkan komentar</value>
+    </data>
+    <data name="VariableVariableName" xml:space="preserve">
+        <value>Nama variabel</value>
+    </data>
+    <data name="SideBarCommentsCounter" xml:space="preserve">
+        <value>{{count}} Rangkaian komentar:</value>
+    </data>
+    <data name="SideBarCommentsCounter_plural" xml:space="preserve">
+        <value>{{count}} Rangkaian komentar:</value>
+    </data>
+    <data name="SideBarEmptyCommentsLine" xml:space="preserve">
+        <value>Anda akan melihat komentar di sini</value>
+    </data>
+    <data name="ViewResolvedCommentsCounter" xml:space="preserve">
+        <value>Lihat semua komentar terselesaikan {{count}}</value>
+    </data>
+    <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
+        <value>Lihat semua komentar terselesaikan {{count}}</value>
+    </data>
+    <data name="HideResolvedComments" xml:space="preserve">
+        <value>Sembunyikan komentar yang terselesaikan</value>
+    </data>
+    <data name="EditorAddComment" xml:space="preserve">
+        <value>Tambahkan komentar</value>
+    </data>
+    <data name="EditorShowComments" xml:space="preserve">
+        <value>Tampilkan komentar ({{count}})</value>
+    </data>
+    <data name="JumpToEdit" xml:space="preserve">
+        <value>Lompat untuk mengedit</value>
+    </data>
+    <data name="CommentEditorResolve" xml:space="preserve">
+        <value>Menyelesaikan</value>
+    </data>
+    <data name="EditorHideComment" xml:space="preserve">
+        <value>Sembunyikan komentar</value>
+    </data>
+    <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
+        <value>Komentar tidak boleh berisi lebih dari karakter {1}</value>
+    </data>
+    <data name="IsWarning" xml:space="preserve">
+        <value>Peringatan</value>
+    </data>
+    <data name="SettingsQuestionnaireVariable" xml:space="preserve">
+        <value>Variabel kuesioner</value>
+    </data>
+    <data name="CollaboratorsSettings" xml:space="preserve">
+        <value>Kolaborator</value>
+    </data>
+    <data name="CollaboratorsDescriptionSettings" xml:space="preserve">
+        <value>pengguna berikut memiliki akses ke kuesioner ini</value>
+    </data>
+    <data name="AccessSettings" xml:space="preserve">
+        <value>Mengakses</value>
+    </data>
+    <data name="PublicAccessSettings" xml:space="preserve">
+        <value>Akses publik</value>
+    </data>
+    <data name="PublicAccessDescriptionSettings" xml:space="preserve">
+        <value>Kuesioner publik dapat dilihat oleh semua pengguna yang memiliki akun di sistem ini dalam mode hanya baca.</value>
+    </data>
+    <data name="PublicAccessSettingsStatusOn" xml:space="preserve">
+        <value>Kuesioner saat ini dibagikan kepada publik.</value>
+    </data>
+    <data name="PublicAccessSettingsStatusOff" xml:space="preserve">
+        <value>Kuesioner saat ini tidak dibagikan kepada publik.</value>
+    </data>
+    <data name="PublicAccessSettingsOn" xml:space="preserve">
+        <value>Aktifkan akses publik.</value>
+    </data>
+    <data name="PublicAccessSettingsOff" xml:space="preserve">
+        <value>Matikan akses publik.</value>
+    </data>
+    <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
+        <value>Berbagi tautan</value>
+    </data>
+    <data name="AnonymousLink" xml:space="preserve">
+        <value>Tautan anonim:</value>
+    </data>
+    <data name="CopyLink" xml:space="preserve">
+        <value>Salin tautan</value>
+    </data>
+    <data name="AnonymousQuestionnaireDescriptionSettings" xml:space="preserve">
+        <value>Pengguna yang memiliki link ini akan dapat membuka kuesioner ini</value>
+    </data>
+    <data name="QuestionnaireSettings" xml:space="preserve">
+        <value>Pengaturan kuesioner</value>
+    </data>
+    <data name="HelpCombobox" xml:space="preserve">
+        <value>Kotak kombo adalah kombinasi daftar drop-down dan kotak teks satu baris yang dapat diedit. Kategori dapat dipilih dengan mengetikkan nilai atau bagiannya atau memilih nilai dari daftar</value>
+    </data>
+    <data name="HelpQuestionnaireVarible" xml:space="preserve">
+        <value>Variabel kuisioner digunakan sebagai awalan dalam membentuk nama file ekspor. Nama variabel dan ID daftar nama dapat terdiri dari karakter {{minLength}} hingga {{maxLength}} dan hanya boleh berisi karakter berikut: a-z, A-Z, _, atau 0-9. Karakter pertama tidak boleh 0-9 atau _ dan karakter terakhir tidak boleh _.</value>
+    </data>
+    <data name="DeleteCommentConfirm" xml:space="preserve">
+        <value>Apakah Anda yakin ingin menghapus komentar?</value>
+    </data>
+    <data name="RefreshPageConfirm" xml:space="preserve">
+        <value>Kami telah memperbarui situs ini, harap segarkan halaman, atau Anda mungkin mengalami perilaku yang tidak terduga</value>
+    </data>
+    <data name="Refresh" xml:space="preserve">
+        <value>Menyegarkan</value>
+    </data>
+    <data name="NotSupportedAttachment" xml:space="preserve">
+        <value>File yang dipilih tidak didukung sebagai lampiran</value>
+    </data>
+    <data name="AttachmentDimensionsAreTooBig" xml:space="preserve">
+        <value>Dimensi terlalu besar</value>
+    </data>
+    <data name="SettingsHideIfDisabled" xml:space="preserve">
+        <value>Sembunyikan elemen saat dinonaktifkan</value>
+    </data>
+    <data name="HideIfDisabledNested" xml:space="preserve">
+        <value>Bersarang dari kuesioner</value>
+    </data>
+    <data name="Add" xml:space="preserve">
+        <value>Menambahkan</value>
+    </data>
+    <data name="AllClassifications" xml:space="preserve">
+        <value>Semua klasifikasi</value>
+    </data>
+    <data name="ClassificationShowCategories" xml:space="preserve">
+        <value>Tampilkan kategori</value>
+    </data>
+    <data name="ClassificationsTitle" xml:space="preserve">
+        <value>Bank Soal. Klasifikasi</value>
+    </data>
+    <data name="QuestionAddClassification" xml:space="preserve">
+        <value>Cari klasifikasi</value>
+    </data>
+    <data name="SearchClassification" xml:space="preserve">
+        <value>Klasifikasi pencarian</value>
+    </data>
+    <data name="ReplaceOptionsConfirmation" xml:space="preserve">
+        <value>Apakah Anda yakin ingin mengganti kategori yang ada untuk pertanyaan "{{trimmedTitle}}"?</value>
+    </data>
+    <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
+        <value>Hanya kategori {{count}} pertama yang akan diambil untuk pertanyaan "{{trimmedTitle}}"?</value>
+    </data>
+    <data name="MyClassifications" xml:space="preserve">
+        <value>Klasifikasi saya</value>
+    </data>
+    <data name="ClassificationAdd" xml:space="preserve">
+        <value>Tambahkan klasifikasi</value>
+    </data>
+    <data name="ClassificationAddGroup" xml:space="preserve">
+        <value>Tambahkan grup</value>
+    </data>
+    <data name="ClassificationGroupBreadcrumbs" xml:space="preserve">
+        <value>Grup</value>
+    </data>
+    <data name="ClassificationGroupTitle" xml:space="preserve">
+        <value>Judul grup</value>
+    </data>
+    <data name="ClassificationsStringOptionsEditorPlaceholder" xml:space="preserve">
+        <value>Masukkan kategori</value>
+    </data>
+    <data name="ClassificationTitle" xml:space="preserve">
+        <value>Judul klasifikasi</value>
+    </data>
+    <data name="SearchForQuestion" xml:space="preserve">
+        <value>Cari pertanyaan</value>
+    </data>
+    <data name="AllFolders" xml:space="preserve">
+        <value>Semua folder</value>
+    </data>
+    <data name="SearchQuestionPlaceholder" xml:space="preserve">
+        <value>Cari pertanyaan</value>
+    </data>
+    <data name="QuestionsSearchTitle" xml:space="preserve">
+        <value>Bank Soal</value>
+    </data>
+    <data name="QuestionsSearchEntities" xml:space="preserve">
+        <value>hasil pencarian</value>
+    </data>
+    <data name="ClassificationsSearchEntities" xml:space="preserve">
+        <value>klasifikasi</value>
+    </data>
+    <data name="ShowAsList" xml:space="preserve">
+        <value>Tampilkan sebagai daftar kategori</value>
+    </data>
+    <data name="QuestionShowListLimit" xml:space="preserve">
+        <value>Jika tidak lebih dari</value>
+    </data>
+    <data name="RosterDisplayMode_SubSection" xml:space="preserve">
+        <value>Ayat</value>
+    </data>
+    <data name="RosterDisplayMode_Flat" xml:space="preserve">
+        <value>Datar</value>
+    </data>
+    <data name="RosterDisplayMode_Table" xml:space="preserve">
+        <value>Meja</value>
+    </data>
+    <data name="RosterDisplayMode_Matrix" xml:space="preserve">
+        <value>Matriks</value>
+    </data>
+    <data name="RosterDisplayMode" xml:space="preserve">
+        <value>Modus tampilan:</value>
+    </data>
+    <data name="AreYouSure" xml:space="preserve">
+        <value>Apa kamu yakin?</value>
+    </data>
+    <data name="MakeOwnerConfirmationMessage" xml:space="preserve">
+        <value>Jika Anda mentransfer kepemilikan, pemilik baru akan diberi tahu. Anda mungkin tidak dapat lagi mengubah setelan kepemilikan, dan pemilik baru juga dapat menghapus akses Anda.</value>
+    </data>
+    <data name="SettingsMakeOwner" xml:space="preserve">
+        <value>Jadikan pemilik</value>
+    </data>
+    <data name="Yes" xml:space="preserve">
+        <value>Ya</value>
+    </data>
+    <data name="Run" xml:space="preserve">
+        <value>Berlari</value>
+    </data>
+    <data name="View" xml:space="preserve">
+        <value>Melihat</value>
+    </data>
+    <data name="ScenarioDetails" xml:space="preserve">
+        <value>Skenario</value>
+    </data>
+    <data name="DownloadPdf" xml:space="preserve">
+        <value>Unduh PDF</value>
+    </data>
+    <data name="GeneratePdf" xml:space="preserve">
+        <value>Hasilkan pdf</value>
+    </data>
+    <data name="ChooseLanguageTitle" xml:space="preserve">
+        <value>Silakan pilih terjemahan</value>
+    </data>
+    <data name="Initializing" xml:space="preserve">
+        <value>Inisialisasi</value>
+    </data>
+    <data name="RetryExportPDF" xml:space="preserve">
+        <value>Coba lagi ekspor sebagai PDF</value>
+    </data>
+    <data name="Translation_Original" xml:space="preserve">
+        <value>Asli</value>
+    </data>
+    <data name="Preview" xml:space="preserve">
+        <value>Pratinjau revisi #{{revision}}</value>
+    </data>
+    <data name="CustomRosterTitle" xml:space="preserve">
+        <value>Judul khusus</value>
+    </data>
+    <data name="HelpOptionValue" xml:space="preserve">
+        <value>Kode integer numerik dari kategori tersebut (tidak terlihat oleh pewawancara)</value>
+    </data>
+    <data name="HelpOptionTitle" xml:space="preserve">
+        <value>Label teks untuk kategori (dapat dilihat oleh pewawancara)</value>
+    </data>
+    <data name="HelpOverlapDetection" xml:space="preserve">
+        <value>Tampilkan dan soroti jawaban pertanyaan ini yang tumpang tindih dengan jawaban atas pertanyaan yang sama dalam contoh daftar saudara</value>
+    </data>
+    <data name="NewItem" xml:space="preserve">
+        <value>Barang baru</value>
+    </data>
+    <data name="EditItem" xml:space="preserve">
+        <value>Sunting barang</value>
+    </data>
+    <data name="DeleteItemCofirm" xml:space="preserve">
+        <value>Apakah Anda yakin ingin menghapus item ini?</value>
+    </data>
+    <data name="Forum" xml:space="preserve">
+        <value>Forum</value>
+    </data>
+    <data name="TableView" xml:space="preserve">
+        <value>Tampilan tabel</value>
+    </data>
+    <data name="StringsView" xml:space="preserve">
+        <value>Tampilan teks</value>
+    </data>
+    <data name="ValidationIntValue" xml:space="preserve">
+        <value>Nilainya terlalu besar</value>
+    </data>
+    <data name="RequiredField" xml:space="preserve">
+        <value>Bidang yang wajib diisi</value>
+    </data>
+    <data name="FileUploaded" xml:space="preserve">
+        <value>Berkas diunggah</value>
+    </data>
+    <data name="DataChangesReverted" xml:space="preserve">
+        <value>Perubahan data dikembalikan</value>
+    </data>
+    <data name="OptionsSizeLimit" xml:space="preserve">
+        <value>Baris maksimum {max_rows} yang diperbolehkan</value>
+    </data>
+    <data name="CommunicationError" xml:space="preserve">
+        <value>Kesalahan jaringan</value>
+    </data>
+    <data name="SideBarCategoriesAddNew" xml:space="preserve">
+        <value>Tambahkan kategori baru</value>
+    </data>
+    <data name="RowAdded" xml:space="preserve">
+        <value>Baris ditambahkan</value>
+    </data>
+    <data name="OptionsCascadingListError" xml:space="preserve">
+        <value>Anda memasukkan input yang tidak valid. Setiap baris harus mengikuti format: "Judul...ParentValue/Value[...Nama lampiran]". 'Value' dan 'ParentValue' harus berupa bilangan bulat. 'Judul' harus berupa string alfanumerik. 'Nama lampiran' adalah opsional. Tidak ada baris kosong yang diperbolehkan.</value>
+    </data>
+    <data name="ShowParentValues" xml:space="preserve">
+        <value>Tampilkan nilai-nilai Induk</value>
+    </data>
+    <data name="HideParentValues" xml:space="preserve">
+        <value>Sembunyikan nilai Induk</value>
+    </data>
+    <data name="AddEnablingCondition" xml:space="preserve">
+        <value>Tambahkan kondisi yang memungkinkan</value>
+    </data>
+    <data name="ManageAccount" xml:space="preserve">
+        <value>Kelola akun</value>
+    </data>
+    <data name="ShowList" xml:space="preserve">
+        <value>Tampilkan daftar</value>
+    </data>
+    <data name="Login" xml:space="preserve">
+        <value>Login</value>
+    </data>
+    <data name="Register" xml:space="preserve">
+        <value>Daftar</value>
+    </data>
+    <data name="No" xml:space="preserve">
+        <value>TIDAK</value>
+    </data>
+    <data name="QuestionIsCritical" xml:space="preserve">
+        <value>Ini adalah pertanyaan kritis</value>
+    </data>
+    <data name="HelpIsCritical" xml:space="preserve">
+        <value>Penulis kuesioner mungkin menunjukkan bahwa jawaban atas sebuah pertanyaan sangat penting untuk penyerahan wawancara.</value>
+    </data>
+    <data name="HelpCriticalityConditionExpression" xml:space="preserve">
+        <value>Ekspresi logis yang mengevaluasi wawancara secara keseluruhan untuk menentukan apakah wawancara tersebut memenuhi aturan kritis (bila ekspresi ini bernilai "Benar"). Ini mungkin merujuk pada pertanyaan atau variabel apa pun.</value>
+    </data>
+    <data name="HelpCriticalityConditionMessage" xml:space="preserve">
+        <value>Pesan ini ditampilkan ketika kondisi kritis bernilai "False" atau pengecualian terjadi selama evaluasi ekspresi. Pesan tersebut dapat menggunakan hyperlink dan substitusi teks.</value>
+    </data>
+    <data name="SwitchTo" xml:space="preserve">
+        <value>Beralih Ke</value>
+    </data>
+    <data name="SwitchToTranslationConfirm" xml:space="preserve">
+        <value>Switch To akan mengubah bahasa tampilan kuesioner. Terjemahan harus menyertakan teks untuk semua elemen.</value>
+    </data>
+    <data name="AIAssistant" xml:space="preserve">
+        <value>AI</value>
+    </data>
+</root>
