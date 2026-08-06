@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             if (!string.IsNullOrWhiteSpace(search))
             {
-                var searchLower = search.Trim().ToLower();
+                var searchLower = search.Trim().ToLowerInvariant();
                 query = query.Where(h =>
                     (h.TargetItemTitle != null && h.TargetItemTitle.ToLower().Contains(searchLower)) ||
                     (h.TargetItemNewTitle != null && h.TargetItemNewTitle.ToLower().Contains(searchLower)) ||
