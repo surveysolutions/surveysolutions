@@ -54,7 +54,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.WebInterview
 
         [TestCase("not-a-guid")]
         [TestCase("00000000-0000-0000-0000-000000000000")]
-        public void GetFullSectionInfo_returns_null_when_section_id_is_not_a_valid_identity(string invalidSectionId)
+        public void GetFullSectionInfo_returns_empty_section_data_when_section_id_is_not_a_valid_identity(string invalidSectionId)
         {
             var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocument();
             var statefulInterview = SetUp.StatefulInterview(questionnaireDocument);
@@ -65,6 +65,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.WebInterview
             Assert.That(section, Is.Not.Null);
             Assert.That(section.Entities, Is.Empty);
             Assert.That(section.Details, Is.Empty);
+        }
 
         [Test]
         public void GetSectionEntities_returns_null_when_section_id_is_not_a_valid_identity()
