@@ -21,9 +21,6 @@
 <script lang="js">
 /* eslint-disable vue/no-unused-components */
 
-import '@ag-grid-community/styles/ag-grid.css'
-import '@ag-grid-community/styles/ag-theme-quartz.css'
-
 import { entityDetails } from '../mixins'
 import { debounce, every, some, map } from 'lodash-es'
 import { AgGridVue } from '@ag-grid-community/vue3'

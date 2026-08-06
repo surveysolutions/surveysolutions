@@ -631,8 +631,7 @@ import Complete from './Settings/Complete'
 import Finish from './Settings/Finish'
 import LinkInterview from './Settings/Link'
 
-import '@/assets/css/markup-web-interview.scss'
-import '@/assets/css/markup-interview-review.scss'
+import '@/assets/css/markup-web-interview-review.scss'
 
 export default {
     components: {
