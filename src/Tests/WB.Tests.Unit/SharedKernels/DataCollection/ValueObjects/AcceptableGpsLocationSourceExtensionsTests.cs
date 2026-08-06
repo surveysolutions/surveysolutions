@@ -8,6 +8,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.ValueObjects
     {
         [TestCase(AcceptableGpsLocationSource.BuiltInGpsOnly, true)]
         [TestCase(AcceptableGpsLocationSource.BuiltInOrExternalGps, true)]
+        [TestCase(AcceptableGpsLocationSource.AnyNonMock, true)]
+        [TestCase(AcceptableGpsLocationSource.Any, true)]
+        [TestCase((AcceptableGpsLocationSource)999, false)]
+        public void when_checking_IsKnownValue_should_return_expected(AcceptableGpsLocationSource source, bool expected)
+        {
+            Assert.That(source.IsKnownValue(), Is.EqualTo(expected));
+        }
+
+        [TestCase(AcceptableGpsLocationSource.BuiltInGpsOnly, true)]
+        [TestCase(AcceptableGpsLocationSource.BuiltInOrExternalGps, true)]
         [TestCase(AcceptableGpsLocationSource.AnyNonMock, false)]
         [TestCase(AcceptableGpsLocationSource.Any, false)]
         public void when_checking_RequiresGpsProvider_should_return_expected(AcceptableGpsLocationSource source, bool expected)
@@ -57,6 +67,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.ValueObjects
             AcceptableGpsLocationSource source, bool isFromGpsProvider, bool isFromMockProvider, bool expected)
         {
             Assert.That(source.IsLocationAcceptable(isFromGpsProvider, isFromMockProvider), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void when_source_value_is_unknown_should_reject_any_location()
+        {
+            var unknown = (AcceptableGpsLocationSource)999;
+
+            Assert.That(unknown.IsLocationAcceptable(isFromGpsProvider: true, isFromMockProvider: false), Is.False);
+            Assert.That(unknown.IsLocationAcceptable(isFromGpsProvider: false, isFromMockProvider: false), Is.False);
+            Assert.That(unknown.IsLocationAcceptable(isFromGpsProvider: true, isFromMockProvider: true), Is.False);
         }
     }
 }

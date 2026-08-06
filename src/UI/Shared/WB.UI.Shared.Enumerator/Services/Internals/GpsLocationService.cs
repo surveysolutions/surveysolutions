@@ -34,9 +34,8 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             // Modes B (BuiltInGpsOnly) and E (BuiltInOrExternalGps) demand the physical GPS provider.
             // Modes A (AnyNonMock) and N (Any) accept any provider.
             bool requireGpsProvider = acceptableSource.RequiresGpsProvider();
-            // Mock locations (external Bluetooth/USB GPS sensors are exposed this way on Android)
-            // are only permitted in modes E and N.
-            bool allowMock = acceptableSource.AllowsMockProvider();
+            if (!acceptableSource.IsKnownValue())
+                throw new NoSuitableLocationProviderException();
 
             if (!IsLocationServicesAvailable(locationManager))
             {
@@ -58,7 +57,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 return null;
 
             var tcs = new TaskCompletionSource<GpsLocation>(TaskCreationOptions.RunContinuationsAsynchronously);
-            var listener = new SingleShotLocationListener(tcs, locationManager, desiredAccuracy, requireGpsProvider, allowMock);
+            var listener = new SingleShotLocationListener(tcs, locationManager, desiredAccuracy, acceptableSource);
 
             // Enforce a hard 10-minute ceiling regardless of the caller-supplied token.
             using var hardLimitCts = new CancellationTokenSource(TimeSpan.FromMinutes(10));
@@ -75,10 +74,24 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 : locationManager.GetProviders(enabledOnly: true)
                                  .Append(LocationManager.GpsProvider)
                                  .Distinct();
+            bool hasRegisteredProvider = false;
             foreach (var provider in allProviders)
             {
-                try { locationManager.RequestLocationUpdates(provider, 0L, 0f, listener); }
-                catch { /* provider may have disappeared between enumeration and registration */ }
+                try
+                {
+                    locationManager.RequestLocationUpdates(provider, 0L, 0f, listener);
+                    hasRegisteredProvider = true;
+                }
+                catch (Java.Lang.IllegalArgumentException)
+                {
+                    // Provider may disappear between enumeration and registration.
+                }
+            }
+
+            if (!hasRegisteredProvider)
+            {
+                try { locationManager.RemoveUpdates(listener); } catch { /* ignore */ }
+                throw new NoSuitableLocationProviderException();
             }
 
             // Register cancellation: remove the listener and complete with null when the
@@ -139,30 +152,26 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             private readonly TaskCompletionSource<GpsLocation> tcs;
             private readonly LocationManager locationManager;
             private readonly double desiredAccuracy;
-            private readonly bool requireGpsProvider;
-            private readonly bool allowMock;
+            private readonly AcceptableGpsLocationSource acceptableSource;
 
             public SingleShotLocationListener(
                 TaskCompletionSource<GpsLocation> tcs,
                 LocationManager locationManager,
                 double desiredAccuracy,
-                bool requireGpsProvider,
-                bool allowMock)
+                AcceptableGpsLocationSource acceptableSource)
             {
                 this.tcs = tcs;
                 this.locationManager = locationManager;
                 this.desiredAccuracy = desiredAccuracy;
-                this.requireGpsProvider = requireGpsProvider;
-                this.allowMock = allowMock;
+                this.acceptableSource = acceptableSource;
             }
 
             public void OnLocationChanged(AndroidLocation location)
             {
                 // Enforce the workspace-configured acceptance criteria: reject fixes that do not
                 // come from the required provider, or that are mock when mock is not permitted.
-                if (this.requireGpsProvider && location.Provider != LocationManager.GpsProvider)
-                    return;
-                if (!this.allowMock && location.IsFromMockProvider)
+                bool isFromGpsProvider = location.Provider == LocationManager.GpsProvider;
+                if (!this.acceptableSource.IsLocationAcceptable(isFromGpsProvider, location.IsFromMockProvider))
                     return;
 
                 // External GPS devices may emit valid fixes whose elapsedRealtime timestamp

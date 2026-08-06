@@ -7,30 +7,52 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
     /// </summary>
     public static class AcceptableGpsLocationSourceExtensions
     {
+        public static bool IsKnownValue(this AcceptableGpsLocationSource source) =>
+            source is AcceptableGpsLocationSource.Any
+                or AcceptableGpsLocationSource.AnyNonMock
+                or AcceptableGpsLocationSource.BuiltInOrExternalGps
+                or AcceptableGpsLocationSource.BuiltInGpsOnly;
+
         /// <summary>
         /// Modes B (<see cref="AcceptableGpsLocationSource.BuiltInGpsOnly"/>) and
         /// E (<see cref="AcceptableGpsLocationSource.BuiltInOrExternalGps"/>) demand the physical GPS provider.
         /// Modes A and N accept any provider.
         /// </summary>
-        public static bool RequiresGpsProvider(this AcceptableGpsLocationSource source) =>
-            source == AcceptableGpsLocationSource.BuiltInGpsOnly
-            || source == AcceptableGpsLocationSource.BuiltInOrExternalGps;
+        public static bool RequiresGpsProvider(this AcceptableGpsLocationSource source) => source switch
+        {
+            AcceptableGpsLocationSource.BuiltInGpsOnly => true,
+            AcceptableGpsLocationSource.BuiltInOrExternalGps => true,
+            AcceptableGpsLocationSource.AnyNonMock => false,
+            AcceptableGpsLocationSource.Any => false,
+            _ => false
+        };
 
         /// <summary>
         /// Only mode B (<see cref="AcceptableGpsLocationSource.BuiltInGpsOnly"/>) requires
         /// the hardware GPS provider to be enabled.
         /// </summary>
-        public static bool RequiresEnabledGpsProvider(this AcceptableGpsLocationSource source) =>
-            source == AcceptableGpsLocationSource.BuiltInGpsOnly;
+        public static bool RequiresEnabledGpsProvider(this AcceptableGpsLocationSource source) => source switch
+        {
+            AcceptableGpsLocationSource.BuiltInGpsOnly => true,
+            AcceptableGpsLocationSource.BuiltInOrExternalGps => false,
+            AcceptableGpsLocationSource.AnyNonMock => false,
+            AcceptableGpsLocationSource.Any => false,
+            _ => false
+        };
 
         /// <summary>
         /// Mock locations (external Bluetooth/USB GPS sensors are exposed this way on Android) are only
         /// permitted in modes E (<see cref="AcceptableGpsLocationSource.BuiltInOrExternalGps"/>) and
         /// N (<see cref="AcceptableGpsLocationSource.Any"/>).
         /// </summary>
-        public static bool AllowsMockProvider(this AcceptableGpsLocationSource source) =>
-            source == AcceptableGpsLocationSource.Any
-            || source == AcceptableGpsLocationSource.BuiltInOrExternalGps;
+        public static bool AllowsMockProvider(this AcceptableGpsLocationSource source) => source switch
+        {
+            AcceptableGpsLocationSource.BuiltInGpsOnly => false,
+            AcceptableGpsLocationSource.BuiltInOrExternalGps => true,
+            AcceptableGpsLocationSource.AnyNonMock => false,
+            AcceptableGpsLocationSource.Any => true,
+            _ => false
+        };
 
         /// <summary>
         /// Returns <c>true</c> when a received fix satisfies the workspace-configured acceptance criteria:
@@ -40,6 +62,9 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
         public static bool IsLocationAcceptable(this AcceptableGpsLocationSource source,
             bool isFromGpsProvider, bool isFromMockProvider)
         {
+            if (!source.IsKnownValue())
+                return false;
+
             if (source.RequiresGpsProvider() && !isFromGpsProvider)
                 return false;
 
