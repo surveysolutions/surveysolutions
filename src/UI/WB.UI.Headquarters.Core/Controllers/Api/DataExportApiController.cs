@@ -357,7 +357,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 ClientId = storageSettings.ClientId,
                 ClientSecret = storageSettings.ClientSecret,
                 RedirectUri = this.externalStoragesSettings.OAuth2.RedirectUri,
-                GrantType = "authorization_code"
+                GrantType = "authorization_code",
+                Scope = storageSettings.Scope
             };
             
             return client.GetTokensByAuthorizationCodeAsync(request);

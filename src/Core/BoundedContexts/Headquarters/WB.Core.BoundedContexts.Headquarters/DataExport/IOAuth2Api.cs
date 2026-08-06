@@ -24,6 +24,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
         public string RedirectUri { get; set; }
         [AliasAs("grant_type")]
         public string GrantType { get; set; }
+        [AliasAs("scope")]
+        public string Scope { get; set; }
     }
     
     public class ExternalStorageRefreshTokenRequest
@@ -36,6 +38,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
         public string ClientSecret { get; set; }
         [AliasAs("grant_type")]
         public string GrantType { get; set; }
+        [AliasAs("scope")]
+        public string Scope { get; set; }
     }
 
     public class ExternalStorageTokenResponse

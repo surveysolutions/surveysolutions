@@ -53,7 +53,8 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
                 RefreshToken = refreshToken,
                 ClientId = storageSettings.ClientId,
                 ClientSecret = storageSettings.ClientSecret,
-                GrantType = "refresh_token"
+                GrantType = "refresh_token",
+                Scope = storageSettings.Scope
             };
 
             return await client.GetAccessTokenByRefreshTokenAsync(request);
