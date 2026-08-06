@@ -52,6 +52,11 @@ export default {
         ['$route.params.sectionId']() {
             this.loadSection()
         },
+        ['$route.hash'](hash) {
+            if (hash) {
+                this.$store.dispatch('sectionRequireScroll', { id: hash })
+            }
+        },
     },
 
     computed: {

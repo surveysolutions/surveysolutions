@@ -46,13 +46,17 @@ export default {
     methods : {
         doScroll: debounce(function() {
             if(this.$store.getters.scrollState == '#' + this.id){
-                window.scroll({ top: this.$el.offsetTop, behavior: 'smooth' })
-                this.$store.dispatch('resetScroll')
+                const el = document.getElementById(this.hash)
+                if (el) {
+                    window.scroll({ top: el.offsetTop, behavior: 'smooth' })
+                    this.$store.dispatch('resetScroll')
+                }
             }
         }, 200),
 
         scroll() {
             if(this.$store && this.$store.state.route.hash === '#' + this.id) {
+                this.$store.dispatch('sectionRequireScroll', { id: this.$store.state.route.hash })
                 this.doScroll()
             }
         },
