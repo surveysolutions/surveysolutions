@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AllData" xml:space="preserve"><value>ข้อมูลทั้งหมด</value></data>
+  <data name="AllDataSpss" xml:space="preserve"><value>ข้อมูลทั้งหมด Spss</value></data>
+  <data name="AllDataStata" xml:space="preserve"><value>ข้อมูลทั้งหมด Stata</value></data>
+  <data name="ApprovedData" xml:space="preserve"><value>ข้อมูลที่อนุมัติแล้ว</value></data>
+  <data name="ApprovedDataSpss" xml:space="preserve"><value>ข้อมูลที่อนุมัติแล้ว Spss</value></data>
+  <data name="ApprovedDataStata" xml:space="preserve"><value>ข้อมูลที่อนุมัติแล้ว Stata</value></data>
+  <data name="BinaryData" xml:space="preserve"><value>ข้อมูลไบนารี</value></data>
+  <data name="CloneQuestionnaire" xml:space="preserve"><value>คัดลอกแบบสอบถาม</value></data>
+  <data name="CreationDate" xml:space="preserve"><value>สร้างเมื่อ</value></data>
+  <data name="History" xml:space="preserve"><value>ประวัติ</value></data>
+  <data name="ImportTemplate" xml:space="preserve"><value>นำเข้าแบบสอบถาม</value></data>
+  <data name="LastEntryDate" xml:space="preserve"><value>แก้ไขเมื่อ</value></data>
+  <data name="NewAssignment" xml:space="preserve"><value>งานมอบหมายใหม่</value></data>
+  <data name="Questionnaires" xml:space="preserve"><value>แบบสอบถาม</value></data>
+  <data name="Maps" xml:space="preserve"><value>แผนที่</value></data>
+  <data name="Title" xml:space="preserve"><value>ชื่อเรื่อง</value></data>
+  <data name="Version" xml:space="preserve"><value>เวอร์ชัน</value></data>
+  <data name="MapDashboard" xml:space="preserve"><value>แดชบอร์ดแผนที่</value></data>
+  <data name="ImportDate" xml:space="preserve"><value>นำเข้าเมื่อ</value></data>
+  <data name="Actions" xml:space="preserve"><value>การดำเนินการ</value></data>
+  <data name="DeleteQuestionnaire" xml:space="preserve"><value>ลบแบบสอบถาม</value></data>
+  <data name="ExportQuestionnaire" xml:space="preserve"><value>ส่งออกแบบสอบถาม</value></data>
+  <data name="SaveQuestionnaire" xml:space="preserve"><value>บันทึกเอกสารแบบสอบถาม</value></data>
+  <data name="Questionnaire" xml:space="preserve"><value>แบบสอบถาม</value></data>
+  <data name="SurveySetupIntroMessage1" xml:space="preserve"><value>คลิกปุ่มนำเข้าแบบสอบถามเพื่อโหลดแบบสอบถามจาก Designer</value></data>
+  <data name="SurveySetupIntroMessage2" xml:space="preserve"><value>คลิกที่แบบสอบถามจากรายการเพื่อสร้างงานมอบหมายการสัมภาษณ์</value></data>
+  <data name="WebInterviewSetup" xml:space="preserve"><value>การตั้งค่าการสัมภาษณ์ทางเว็บ</value></data>
+  <data name="RecordAudio" xml:space="preserve"><value>บันทึกเสียง</value></data>
+  <data name="QuestionnairePreview" xml:space="preserve"><value>ตัวอย่างแบบสอบถาม</value></data>
+  <data name="UploadAssignments" xml:space="preserve"><value>อัปโหลดงานมอบหมาย</value></data>
+  <data name="DeleteMap" xml:space="preserve"><value>ลบแผนที่</value></data>
+  <data name="DeleteMapUser" xml:space="preserve"><value>ลบผู้ใช้แผนที่</value></data>
+  <data name="UpgradeAssignments" xml:space="preserve"><value>อัปเกรดงานมอบหมาย</value></data>
+  <data name="RecordAudioTitle" xml:space="preserve"><value>แอปพลิเคชันผู้สัมภาษณ์จะบันทึกเสียงการสัมภาษณ์เมื่อเปิดใช้งานฟีเจอร์นี้</value></data>
+  <data name="SendInvitations" xml:space="preserve"><value>ส่งคำเชิญ</value></data>
+  <data name="DownloadLinks" xml:space="preserve"><value>ดาวน์โหลดลิงก์เว็บ</value></data>
+  <data name="WebMode" xml:space="preserve"><value>โหมด</value></data>
+  <data name="Details" xml:space="preserve"><value>รายละเอียด</value></data>
+  <data name="ShowOnDesigner" xml:space="preserve"><value>แสดงใน Designer</value></data>
+  <data name="ImportedBy" xml:space="preserve"><value>นำเข้าโดย</value></data>
+  <data name="ImportedByText" xml:space="preserve"><value>ผู้ใช้ {{role}} {{name}}</value></data>
+  <data name="QuestionnaireDeleteWarn" xml:space="preserve"><value>{{receivedInterviews}} การสัมภาษณ์และ {{receivedAssignments}} งานมอบหมายจะถูกลบ</value></data>
+  <data name="TypeQuestionnaireName" xml:space="preserve"><value>กรุณาพิมพ์ '{{questionnaireTitle}}' เพื่อยืนยัน</value></data>
+  <data name="UsersManagement" xml:space="preserve"><value>การจัดการผู้ใช้</value></data>
+  <data name="CreateUser" xml:space="preserve"><value>สร้างผู้ใช้</value></data>
+  <data name="ExposedVariables" xml:space="preserve"><value>ตัวแปรที่เปิดเผย</value></data>
+  <data name="Edit" xml:space="preserve"><value>แก้ไข</value></data>
+</root>
