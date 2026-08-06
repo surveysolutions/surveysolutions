@@ -62,8 +62,9 @@ namespace WB.Tests.Web.Headquarters.Controllers.WebInterview
 
             var section = controller.GetFullSectionInfo(statefulInterview.Id, invalidSectionId);
 
-            Assert.That(section, Is.Null);
-        }
+            Assert.That(section, Is.Not.Null);
+            Assert.That(section.Entities, Is.Empty);
+            Assert.That(section.Details, Is.Empty);
 
         [Test]
         public void GetSectionEntities_returns_null_when_section_id_is_not_a_valid_identity()
