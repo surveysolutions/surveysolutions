@@ -203,6 +203,32 @@
             margin-left: 10px;
         }
     }
+
+    &.jump-target-highlight {
+        animation: jump-target-highlight 1.3s ease-out;
+    }
+}
+
+@keyframes jump-target-highlight {
+    0% {
+        background-color: transparent;
+    }
+
+    20% {
+        background-color: #fffdd8;
+    }
+
+    40% {
+        background-color: transparent;
+    }
+
+    60% {
+        background-color: #fffdd8;
+    }
+
+    100% {
+        background-color: transparent;
+    }
 }
 
 .information-block {
