@@ -142,8 +142,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 }
 
                 RaisePropertyChanged(nameof(IsAllOk));
-                IsLoading = false;
             });
+            
+            await base.OnTabDataLoadedAsync(interviewId, navigationState);
         }
 
         public IMvxAsyncCommand Approve => new MvxAsyncCommand(async () =>
