@@ -1,0 +1,274 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Action" xml:space="preserve">
+        <value>Hoạt động</value>
+        </data>
+    <data name="BackToList" xml:space="preserve">
+        <value>Quay lại danh sách</value>
+        </data>
+    <data name="Backup" xml:space="preserve">
+        <value>Hỗ trợ</value>
+        </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>Hủy bỏ</value>
+        </data>
+    <data name="Assign" xml:space="preserve">
+        <value>Giao phó</value>
+        </data>
+    <data name="Assigning" xml:space="preserve">
+        <value>Phân công</value>
+        </data>
+    <data name="CancelSearch" xml:space="preserve">
+        <value>Hủy tìm kiếm</value>
+        </data>
+    <data name="Close" xml:space="preserve">
+        <value>Đóng</value>
+        </data>
+    <data name="Confirmation" xml:space="preserve">
+        <value>xác nhận</value>
+        </data>
+    <data name="Copy" xml:space="preserve">
+        <value>Sao chép</value>
+        </data>
+    <data name="CopyQuestionnaire" xml:space="preserve">
+        <value>Sao chép bảng câu hỏi</value>
+        </data>
+    <data name="Create" xml:space="preserve">
+        <value>Tạo nên</value>
+        </data>
+    <data name="CreatedBy" xml:space="preserve">
+        <value>Tạo bởi</value>
+        </data>
+    <data name="CreatedDate" xml:space="preserve">
+        <value>Được tạo vào</value>
+        </data>
+    <data name="CreateNew" xml:space="preserve">
+        <value>Tạo mới</value>
+        </data>
+    <data name="NewFolder" xml:space="preserve">
+        <value>Thư mục mới</value>
+        </data>
+    <data name="CreateNewQuestionnaire" xml:space="preserve">
+        <value>Tạo bảng câu hỏi mới</value>
+        </data>
+    <data name="Delete" xml:space="preserve">
+        <value>Xóa bỏ</value>
+        </data>
+    <data name="DeleteFolderConfirmation" xml:space="preserve">
+        <value>Bạn có chắc chắn muốn xóa thư mục {0} không?</value>
+        </data>
+    <data name="CreateSubFolder" xml:space="preserve">
+        <value>Tạo thư mục con</value>
+        </data>
+    <data name="Rename" xml:space="preserve">
+        <value>Đổi tên</value>
+        </data>
+    <data name="AssignFolder" xml:space="preserve">
+        <value>Gán thư mục</value>
+        </data>
+    <data name="DeleteConfirmationText" xml:space="preserve">
+        <value>Bạn có thực sự muốn xóa bảng câu hỏi "{0}" không?</value>
+        </data>
+    <data name="AssignFolderText" xml:space="preserve">
+        <value>Vui lòng chỉ định thư mục cho bảng câu hỏi "{0}"</value>
+        </data>
+    <data name="Deleting" xml:space="preserve">
+        <value>Đang xóa</value>
+        </data>
+    <data name="Designer" xml:space="preserve">
+        <value>Nhà thiết kế</value>
+        </data>
+    <data name="DownloadPdf" xml:space="preserve">
+        <value>Tải xuống bản PDF</value>
+        </data>
+    <data name="EmptyList" xml:space="preserve">
+        <value>Danh sách này không chứa bất kỳ bản ghi nào</value>
+        </data>
+    <data name="Location" xml:space="preserve">
+        <value>Vị trí:</value>
+        </data>
+    <data name="Error" xml:space="preserve">
+        <value>Lỗi</value>
+        </data>
+    <data name="ErrorDescription" xml:space="preserve">
+        <value>Đã xảy ra lỗi khi xử lý yêu cầu của bạn</value>
+        </data>
+    <data name="ExportAsPDF" xml:space="preserve">
+        <value>Xuất dưới dạng PDF</value>
+        </data>
+    <data name="ExportAsHtml" xml:space="preserve">
+        <value>Xuất dưới dạng Html</value>
+        </data>
+    <data name="Forbidden" xml:space="preserve">
+        <value>Bạn không có quyền chỉnh sửa bảng câu hỏi này</value>
+        </data>
+    <data name="ForbiddenDelete" xml:space="preserve">
+        <value>Bạn không có quyền xóa bảng câu hỏi này.</value>
+        </data>
+    <data name="ForbiddenRevert" xml:space="preserve">
+        <value>Bạn không có quyền khôi phục hoạt động cho bảng câu hỏi này.</value>
+        </data>
+    <data name="GeneratingPdf" xml:space="preserve">
+        <value>Đang tạo pdf cho "{0}"</value>
+        </data>
+    <data name="CreatingHtml" xml:space="preserve">
+        <value>Tạo Html cho "{0}"</value>
+        </data>
+    <data name="GeneratePdf" xml:space="preserve">
+        <value>Tạo pdf</value>
+        </data>
+    <data name="GetHtml" xml:space="preserve">
+        <value>Xuất Html</value>
+        </data>
+    <data name="ChooseLanguageTitle" xml:space="preserve">
+        <value>Vui lòng chọn bản dịch</value>
+        </data>
+    <data name="ChooseLanguage" xml:space="preserve">
+        <value>Chọn bản dịch</value>
+        </data>
+    <data name="Initializing" xml:space="preserve">
+        <value>Đang khởi tạo</value>
+        </data>
+    <data name="LastModified" xml:space="preserve">
+        <value>Đã sửa đổi trên</value>
+        </data>
+    <data name="ManageUsers" xml:space="preserve">
+        <value>Quản lý người dùng</value>
+        </data>
+    <data name="MyQuestionnaires" xml:space="preserve">
+        <value>Bảng câu hỏi của tôi</value>
+        </data>
+    <data name="ControlPanel" xml:space="preserve">
+        <value>Bảng điều khiển</value>
+        </data>
+    <data name="Hello" xml:space="preserve">
+        <value>Xin chào, {0}</value>
+        </data>
+    <data name="Open" xml:space="preserve">
+        <value>Mở</value>
+        </data>
+    <data name="PublicQuestionnaires" xml:space="preserve">
+        <value>Bảng câu hỏi công khai</value>
+        </data>
+    <data name="QuestionnaireTreeFolders" xml:space="preserve">
+        <value>Thư mục</value>
+        </data>
+    <data name="FoldersManagement" xml:space="preserve">
+        <value>Quản lý thư mục</value>
+        </data>
+    <data name="FoldersDescription" xml:space="preserve">
+        <value>Bạn có thể định cấu hình cấu trúc thư mục cho trang bảng câu hỏi công khai. Để thực hiện việc này, hãy nhấp vào thư mục bằng nút bên phải và sau đó sử dụng một trong các thao tác:
+&lt;br/&gt;- "Tạo thư mục con" sử dụng để tạo thư mục con 
+&lt;br/&gt;- "Rename" để đổi tên tên thư mục
+&lt;br/&gt;- "Delete" để xóa thư mục cùng với các thư mục con</value>
+        </data>
+    <data name="QuestionnaireTitle" xml:space="preserve">
+        <value>Tiêu đề bảng câu hỏi</value>
+        </data>
+    <data name="RestoreQuestionnaire" xml:space="preserve">
+        <value>Khôi phục bảng câu hỏi</value>
+        </data>
+    <data name="RestoreQuestionnaireDocument" xml:space="preserve">
+        <value>Khôi phục tài liệu bảng câu hỏi (cũ)</value>
+        </data>
+    <data name="RetryExportPDF" xml:space="preserve">
+        <value>Thử xuất lại dưới dạng PDF</value>
+        </data>
+    <data name="SelectTabFile" xml:space="preserve">
+        <value>Vui lòng chọn tệp giá trị được phân tách bằng tab để tải lên</value>
+        </data>
+    <data name="SuccessDeleteMessage" xml:space="preserve">
+        <value>Bảng câu hỏi "{0}" đã được xóa thành công</value>
+        </data>
+    <data name="TabFilesOnly" xml:space="preserve">
+        <value>Chỉ chấp nhận các tệp giá trị được phân tách bằng tab</value>
+        </data>
+    <data name="ExcelOrTabFilesOnly" xml:space="preserve">
+        <value>Chỉ chấp nhận các tệp giá trị được phân tách bằng tab hoặc Excel</value>
+        </data>
+    <data name="Title" xml:space="preserve">
+        <value>Tiêu đề</value>
+        </data>
+    <data name="You" xml:space="preserve">
+        <value>Bạn</value>
+        </data>
+    <data name="Untitled" xml:space="preserve">
+        <value>Không có tiêu đề</value>
+        </data>
+    <data name="SharedQuestionnaires" xml:space="preserve">
+        <value>Bảng câu hỏi được chia sẻ với tôi</value>
+        </data>
+    <data name="NotSupportedBrowserUsed" xml:space="preserve">
+        <value>Trình duyệt Internet không được hỗ trợ. Vui lòng sử dụng trình duyệt khác.</value>
+        </data>
+    <data name="NotSupportedBrowserUsedDescr" xml:space="preserve">
+        <value>Bạn đang sử dụng trình duyệt Internet Explorer không được hỗ trợ. Một số tính năng có thể không hoạt động đúng.</value>
+        </data>
+    <data name="Classifications" xml:space="preserve">
+        <value>Phân loại</value>
+        </data>
+    <data name="SaveAs" xml:space="preserve">
+        <value>Lưu dưới dạng</value>
+        </data>
+    <data name="CloneDeletedWarning" xml:space="preserve">
+        <value>Bạn đang tạo một bản sao của bảng câu hỏi đã bị xóa. Một số bộ phận có thể bị mất.</value>
+        </data>
+</root>
