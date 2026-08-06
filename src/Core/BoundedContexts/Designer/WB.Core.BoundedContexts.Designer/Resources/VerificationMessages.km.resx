@@ -1,0 +1,790 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="WB0001_NoQuestions" xml:space="preserve">
+        <value>កម្រងសំណួរត្រូវតែមានយ៉ាងហោចណាស់សំណួរមួយ។</value>
+    </data>
+    <data name="WB0002_CustomValidationExpressionHasIncorrectSyntax" xml:space="preserve">
+        <value>លក្ខខណ្ឌសុពលភាពមានកំហុសវាក្យសម្ព័ន្ធ។</value>
+    </data>
+    <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
+        <value>ការបើកលក្ខខណ្ឌមានកំហុសវាក្យសម្ព័ន្ធ។</value>
+    </data>
+    <data name="WB0004_VariableHasEmptyExpression" xml:space="preserve">
+        <value>អថេរមិនអាចមានកន្សោមទទេបានទេ។</value>
+    </data>
+    <data name="WB0005_VariableExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>កន្សោមអថេរមានប្រវែងច្រើនជាងតួអក្សរ {0} ។</value>
+    </data>
+    <data name="WB0009_RosterSizeQuestionIsMissing" xml:space="preserve">
+        <value>បាត់សំណួរទំហំបញ្ជីឈ្មោះ។</value>
+    </data>
+    <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
+        <value>សំណួរដែលបានភ្ជាប់សំដៅទៅលើសំណួរដែលមិនមាន។</value>
+    </data>
+    <data name="WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType" xml:space="preserve">
+        <value>សំណួរដែលបានភ្ជាប់សំដៅទៅលើប្រភេទសំណួរដែលមិនត្រូវបានគាំទ្រ។</value>
+    </data>
+    <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup" xml:space="preserve">
+        <value>សំណួរដែលបានភ្ជាប់សំដៅទៅលើសំណួរដែលមិនមាននៅក្នុងបញ្ជីឈ្មោះ។</value>
+    </data>
+    <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
+        <value>សំណួរដែលមានចំណងជើង ឬការណែនាំជំនួស មិនអាចសម្គាល់ថាជាការកំណត់អត្តសញ្ញាណបានទេ។</value>
+    </data>
+    <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
+        <value>ការជំនួសសំដៅលើសំណួរដែលមិនមាន ឬអថេរ។</value>
+    </data>
+    <data name="WB0018_SubstitutionReferencesUnsupportedEntity" xml:space="preserve">
+        <value>ការជំនួសសំដៅលើធាតុដែលមិនត្រូវបានគាំទ្រក្នុងការជំនួស។</value>
+    </data>
+    <data name="WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel" xml:space="preserve">
+        <value>ការជំនួសមិនអាចយោងធាតុពីកម្រិតបញ្ជីឈ្មោះកាន់តែស៊ីជម្រៅបានទេ។</value>
+    </data>
+    <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
+        <value>ចំនួនចម្លើយអតិបរមាគឺធំជាងចំនួនជម្រើសចម្លើយ។</value>
+    </data>
+    <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
+        <value>សំណួរនៃប្រភេទនេះមិនអាចកំណត់អត្តសញ្ញាណបានទេ។</value>
+    </data>
+    <data name="WB0023_RosterSizeSourceQuestionTypeIsIncorrect" xml:space="preserve">
+        <value>សំណួរប្រភពទំហំបញ្ជីឈ្មោះមិនត្រឹមត្រូវទេ។ មានតែលេខ លំដាប់ដែលមានជម្រើសច្រើន ឬសំណួរបញ្ជីអត្ថបទប៉ុណ្ណោះដែលអាចប្រើបាន។</value>
+    </data>
+    <data name="WB0027_VariableExpresssionHasIncorrectSyntax" xml:space="preserve">
+        <value>កន្សោមមានកំហុសវាក្យសម្ព័ន្ធ។</value>
+    </data>
+    <data name="WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>កន្សោមតម្រងគឺវែងជាងតួអក្សរ {0} ។</value>
+    </data>
+    <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
+        <value>ការកំណត់អត្តសញ្ញាណសំណួរមិនអាចមាននៅក្នុងបញ្ជីឈ្មោះទេ។</value>
+    </data>
+    <data name="WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះដែលមានសំណួរប្រភពមិនអាចមានសំណុំធាតុថេរទេ។</value>
+    </data>
+    <data name="WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion" xml:space="preserve">
+        <value>សំណុំនៃធាតុដែលបានជួសជុលមិនអាចមានសំណួរប្រភពបញ្ជីឈ្មោះបានទេ។</value>
+    </data>
+    <data name="WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion" xml:space="preserve">
+        <value>សំណុំនៃធាតុដែលបានជួសជុលមិនអាចមានសំណួរចំណងជើងបញ្ជីឈ្មោះបានទេ។</value>
+    </data>
+    <data name="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះដែលមានប្រភពបញ្ជីឈ្មោះសំណួរមានសំណួរប្រភពមិនត្រឹមត្រូវសម្រាប់ឈ្មោះជួរ។</value>
+    </data>
+    <data name="WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះមិនអាចមានសំណួរចំណងជើងបញ្ជីឈ្មោះទេ នៅពេលដែលសំណួរប្រភពបញ្ជីឈ្មោះគឺជាសំណួរជ្រើសរើសច្រើនប្រភេទ ឬរាយបញ្ជី។</value>
+    </data>
+    <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះធាតុដែលបានជួសជុលមិនអាចមានចំណងជើងទទេ ឬតិចជាងពីរធាតុទេ។</value>
+    </data>
+    <data name="WB0038_RosterFixedTitlesHaveMoreThan200Items" xml:space="preserve">
+        <value>សំណុំនៃធាតុដែលបានជួសជុលមិនអាចមានជួរច្រើនជាង {0} ទេ។</value>
+    </data>
+    <data name="WB0039_TextListQuestionCannotBePrefilled" xml:space="preserve">
+        <value>បញ្ជីសំណួរមិនអាចកំណត់អត្តសញ្ញាណបានទេ។</value>
+    </data>
+    <data name="WB0040_TextListQuestionCannotBeFilledBySupervisor" xml:space="preserve">
+        <value>បញ្ជីសំណួរមិនអាចបំពេញដោយអ្នកគ្រប់គ្រងបានទេ។</value>
+    </data>
+    <data name="WB0042_TextListQuestionMaxAnswerInRange1And200" xml:space="preserve">
+        <value>ចំនួនអតិបរមានៃធាតុបញ្ជីត្រូវតែស្ថិតនៅក្នុងជួរ [{1}, {0}] ។</value>
+    </data>
+    <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
+        <value>សំណួរមានប្រភេទដែលមានតម្លៃទទេ។</value>
+    </data>
+    <data name="WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
+        <value>ការបើកលក្ខខណ្ឌមិនអាចសំដៅទៅលើសំណួរពីកម្រិតបញ្ជីឈ្មោះកាន់តែស៊ីជម្រៅនោះទេ។</value>
+    </data>
+    <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
+        <value>ផ្នែករងមិនអាចមានលក្ខខណ្ឌអនុញ្ញាតឱ្យយោងសំណួរកុមារបានទេ។</value>
+    </data>
+    <data name="WB0049_QRBarcodeQuestionIsSupervisorQuestion" xml:space="preserve">
+        <value>សំណួរបាកូដមិនអាចបំពេញដោយអ្នកគ្រប់គ្រងបានទេ។</value>
+    </data>
+    <data name="WB0050_QRBarcodeQuestionIsPreFilledQuestion" xml:space="preserve">
+        <value>សំណួរបាកូដមិនអាចកំណត់អត្តសញ្ញាណបានទេ។</value>
+    </data>
+    <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះគួរតែមានកម្រិតបញ្ជីឈ្មោះជ្រៅជាង ឬដូចគ្នាទៅនឹងសំណួរទំហំបញ្ជីឈ្មោះ។</value>
+    </data>
+    <data name="WB0055_RosterHasRosterLevelMoreThan4" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះអាចមានមិនលើសពី {0} បញ្ជីឈ្មោះមេ។</value>
+    </data>
+    <data name="WB0056_EntityShouldNotHaveCircularReferences" xml:space="preserve">
+        <value>សេចក្តីយោងសារាចរមិនត្រូវបានអនុញ្ញាតទេ។</value>
+    </data>
+    <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
+        <value>ឈ្មោះអថេរ ឬលេខសម្គាល់បញ្ជីឈ្មោះមិនអាចជាពាក្យដែលបានបម្រុងទុកទេ។</value>
+    </data>
+    <data name="WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster" xml:space="preserve">
+        <value>ប្រសិនបើធាតុប្រើការជំនួស %rostertitle% វាចាំបាច់ត្រូវដាក់នៅខាងក្នុងបញ្ជីឈ្មោះ។</value>
+    </data>
+    <data name="WB0060_CategoricalQuestionHasLessThan2Options" xml:space="preserve">
+        <value>សំណួរមានតិចជាងប្រភេទ {0} ។</value>
+    </data>
+    <data name="WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2" xml:space="preserve">
+        <value>សំណួរមានចម្លើយអនុញ្ញាតអតិបរមាតិចជាង {0} ។</value>
+    </data>
+    <data name="WB0062_OptionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+        <value>កន្សោមតម្រងជម្រើសមានកំហុសវាក្យសម្ព័ន្ធ។</value>
+    </data>
+    <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
+        <value>សំណួរដែលភ្ជាប់តាមប្រភេទមិនអាចប្រើក្នុងលក្ខខណ្ឌសុពលភាព #{0} បានទេ។</value>
+    </data>
+    <data name="WB0064_CategoricalLinkedQuestionUsedInEnablementCondition" xml:space="preserve">
+        <value>សំណួរ​ដែល​ភ្ជាប់​តាម​ប្រភេទ​មិន​អាច​ត្រូវ​បាន​ប្រើ​ក្នុង​លក្ខខណ្ឌ​អនុញ្ញាត​ទេ។</value>
+    </data>
+    <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
+        <value>សំណួរនៃប្រភេទនេះមិនត្រូវបានគាំទ្រទេ។</value>
+    </data>
+    <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
+        <value>អថេរត្រឹមត្រូវ ឬឈ្មោះលេខសម្គាល់បញ្ជីឈ្មោះមិនគួរទទេទេ។</value>
+    </data>
+    <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះមានលេខសម្គាល់បញ្ជីឈ្មោះស្មើនឹងចំណងជើងកម្រងសំណួរ។</value>
+    </data>
+    <data name="WB0071_StaticTextIsEmpty" xml:space="preserve">
+        <value>អត្ថបទឋិតិវន្តមិនអាចទទេបានទេ។</value>
+    </data>
+    <data name="WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+        <value>ចំណងជើងប្រភេទត្រូវតែមានតែមួយ។</value>
+    </data>
+    <data name="WB0073_OptionValuesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+        <value>តម្លៃនៃប្រភេទត្រូវតែមានតែមួយ។</value>
+    </data>
+    <data name="WB0074_CategoricalQuestionHasOptionsAndIsLinked" xml:space="preserve">
+        <value>សំណួរ​ប្រភេទ​មិន​អាច​មាន​ប្រភេទ​និង​ត្រូវ​បាន​ភ្ជាប់​ទៅ​នឹង​សំណួរ​ផ្សេង​ទៀត​។</value>
+    </data>
+    <data name="WB0075_FilteredComboboxContainsMoreThan5000Options" xml:space="preserve">
+        <value>មានប្រភេទ {0} ច្រើនជាង។</value>
+    </data>
+    <data name="WB0076_CategoricalOptionsCountMoreThan200" xml:space="preserve">
+        <value>មានប្រភេទ {0} ច្រើនជាង។</value>
+    </data>
+    <data name="WB0077_QuestionHasInvalidVariableName" xml:space="preserve">
+        <value>សំណួរមានឈ្មោះអថេរមិនត្រឹមត្រូវ។</value>
+    </data>
+    <data name="WB0078_MultimediaQuestionIsInterviewersOnly" xml:space="preserve">
+        <value>សំណួររូបភាពអាចគ្រាន់តែជាអ្នកសម្ភាសន៍ប៉ុណ្ណោះ។</value>
+    </data>
+    <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
+        <value>សំណួររូបភាពមិនអាចមានលក្ខខណ្ឌបញ្ជាក់បានទេ។</value>
+    </data>
+    <data name="WB0083_QuestionCannotBeUsedAsRosterTitle" xml:space="preserve">
+        <value>សំណួរដែលមានប្រភេទបច្ចុប្បន្នមិនអាចប្រើជាចំណងជើងបញ្ជីឈ្មោះបានទេ។</value>
+    </data>
+    <data name="WB0084_CascadingOptionsShouldHaveParent" xml:space="preserve">
+        <value>ប្រភេទ​ក្នុង​សំណួរ​ប្រអប់​បន្សំ​ល្បាក់​កុមារ គួរ​តែ​យោង​តែ​ជម្រើស​ដែល​មាន​ស្រាប់​ក្នុង​សំណួរ​មេ។</value>
+    </data>
+    <data name="WB0085_CascadingQuestionWrongParentLevel" xml:space="preserve">
+        <value>សំណួរគួរតែមានកម្រិតជ្រៅជាង ឬដូចគ្នាទៅនឹងសំណួរមេ។</value>
+    </data>
+    <data name="WB0086_ParentCascadingQuestionShouldExist" xml:space="preserve">
+        <value>ប្រអប់​បញ្ចូល​សំណួរ​យោង​បាត់ ឬ​មិន​ស្គាល់​ប្រភេទ​សំណួរ។</value>
+    </data>
+    <data name="WB0087_CascadingQuestionHasCicularReference" xml:space="preserve">
+        <value>សេចក្តី​យោង​រាង​ជា​រង្វង់​ក្នុង​សំណួរ​ប្រអប់​បន្សំ​ល្បាក់​មិន​ត្រូវ​បាន​អនុញ្ញាត​ទេ។</value>
+    </data>
+    <data name="WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers" xml:space="preserve">
+        <value>សំណួរប្រអប់បន្សំល្បាក់គួរតែមានតិចជាងប្រភេទ {0} ។</value>
+    </data>
+    <data name="WB0089_CascadingQuestionOptionWithParentShouldBeUnique" xml:space="preserve">
+        <value>សំណួរប្រអប់បន្សំជាល្បាក់គួរមានតម្លៃតែមួយគត់ និងបញ្ជីតម្លៃមេនៃប្រភេទ។</value>
+    </data>
+    <data name="WB0090_LinkedQuestionIsInterviewersOnly" xml:space="preserve">
+        <value>សំណួរដែលភ្ជាប់អាចគ្រាន់តែជាអ្នកសម្ភាសន៍ប៉ុណ្ណោះ។</value>
+    </data>
+    <data name="WB0091_CascadingChildQuestionShouldNotContainCondition" xml:space="preserve">
+        <value>សំណួរប្រអប់បន្សំល្បាក់កុមារមិនគួរមានលក្ខខណ្ឌអនុញ្ញាតទេ។</value>
+    </data>
+    <data name="WB0092_CascadingChildQuesionShouldNotContainValidation" xml:space="preserve">
+        <value>សំណួរប្រអប់បន្សំល្បាក់កុមារមិនគួរមានលក្ខខណ្ឌសុពលភាពទេ។</value>
+    </data>
+    <data name="WB0093_RosterSizeListOptionQuestionShouldBeLimit" xml:space="preserve">
+        <value>សំណួរបញ្ជីឈ្មោះប្រភពគួរតែមានចំនួនអតិបរមានៃធាតុដែលបានកំណត់។</value>
+    </data>
+    <data name="WB0094_ConditionExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>ការបើកលក្ខខណ្ឌមានរយៈពេលច្រើនជាងតួអក្សរ {0} ។</value>
+    </data>
+    <data name="WB0096_GeneralCompilationError" xml:space="preserve">
+        <value>កំហុសបានកើតឡើងកំឡុងពេលចងក្រងកម្រងសំណួរ។</value>
+    </data>
+    <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
+        <value>មានតែតួអក្សរខាងក្រោមប៉ុណ្ណោះដែលអាចប្រើក្នុងចំណងជើងកម្រងសំណួរ៖ A..Z a..z 0..9 ( ) \ / _ - និងដកឃ្លា។</value>
+    </data>
+    <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
+        <value>ទំហំនៃកម្រងសំណួរគឺប្រហែល {0:0.##}MB ហើយធំពេកក្នុងការដំណើរការបានត្រឹមត្រូវជាមួយ Survey Solutions។ ព្យាយាមកាត់បន្ថយចំនួនទិន្នន័យរហូតដល់វាយ៉ាងហោចណាស់តិចជាង {1}MB ។</value>
+    </data>
+    <data name="WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues" xml:space="preserve">
+        <value>កំណត់តម្លៃបញ្ជីឈ្មោះធាតុថេរត្រូវតែមានតែមួយគត់។</value>
+    </data>
+    <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200" xml:space="preserve">
+        <value>ចំនួនចម្លើយអតិបរមាសម្រាប់សំណួរទំហំបញ្ជីឈ្មោះមិនអាចធំជាង {0} ទេ។</value>
+    </data>
+    <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
+        <value>ផ្នែករងអាចមានមិនលើសពី {0} ផ្នែករងមេ។</value>
+    </data>
+    <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
+        <value>មានតែសំណួរ GPS មួយប៉ុណ្ណោះដែលអាចត្រូវបានដាក់នៅក្នុងផ្នែកទំព័រគម្រប</value>
+    </data>
+    <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
+        <value>សំណួរច្រើនជ្រើសរើស បាទ/ចាស ទេ មិនអាចភ្ជាប់បានទេ។</value>
+    </data>
+    <data name="WB0008_SubstitutionsInVariableLableAreProhibited" xml:space="preserve">
+        <value>វាមិនត្រូវបានអនុញ្ញាតឱ្យប្រើការជំនួសនៅក្នុងស្លាកអថេរទេ។</value>
+    </data>
+    <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
+        <value>បន្ទាប់ពីធាតុកម្រងសំណួរ (សំណួរ/ក្រុម/អត្ថបទឋិតិវន្ត/ល) ប្រើលេខសម្គាល់ខាងក្នុងដូចគ្នា។ សូមលុបមួយក្នុងចំណោមពួកគេ។</value>
+    </data>
+    <data name="WB0010_MacroHasInvalidName" xml:space="preserve">
+        <value>ម៉ាក្រូមានឈ្មោះមិនត្រឹមត្រូវ។</value>
+    </data>
+    <data name="WB0020_NameForMacrosIsNotUnique" xml:space="preserve">
+        <value>ម៉ាក្រូមួយទៀតដែលមានឈ្មោះដូចគ្នាមានរួចហើយ។</value>
+    </data>
+    <data name="WB0014_MacroHasEmptyName" xml:space="preserve">
+        <value>ម៉ាក្រូមិនអាចមានឈ្មោះទទេបានទេ។</value>
+    </data>
+    <data name="WB0271_MacroHasEmptyContent" xml:space="preserve">
+        <value>ម៉ាក្រូមិនអាចទទេបានទេ។</value>
+    </data>
+    <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះជាច្រើនត្រូវបានបង្កើតឡើង។ ការនាំចេញរចនាសម្ព័ន្ធនេះទៅក្នុងឯកសារទិន្នន័យអាចមានបញ្ហា។ ពិចារណាកាត់បន្ថយចំនួនបញ្ជីឈ្មោះ។</value>
+    </data>
+    <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
+        <value>សំណួរដែលមានតម្រងជម្រើសចម្លើយមិនអាចកំណត់អត្តសញ្ញាណបានទេ។</value>
+    </data>
+    <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
+        <value>រក​ឃើញ​ធាតុ​ដែល​មាន​ឈ្មោះ​ដូច​គ្នា។</value>
+    </data>
+    <data name="WB0024_LookupHasInvalidName" xml:space="preserve">
+        <value>តារាងស្វែងរកមានឈ្មោះមិនត្រឹមត្រូវ។</value>
+    </data>
+    <data name="WB0025_LookupHasEmptyName" xml:space="preserve">
+        <value>តារាងរកមើលមិនអាចមានឈ្មោះទទេបានទេ។</value>
+    </data>
+    <data name="WB0031_LookupTableHasInvalidHeaders" xml:space="preserve">
+        <value>តារាងរកមើលមានបឋមកថាជួរឈរមិនត្រឹមត្រូវ។</value>
+    </data>
+    <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
+        <value>តារាងរកមើលមានជួរឈរច្រើនពេក</value>
+    </data>
+    <data name="WB0044_LookupTableMoreThan15000Rows" xml:space="preserve">
+        <value>តារាងរកមើលមានជួរច្រើនពេក</value>
+    </data>
+    <data name="WB0047_LookupTableNotUniqueRowcodeValues" xml:space="preserve">
+        <value>តារាងរកមើលមិនមានតម្លៃកូដជួរដេកតែមួយទេ។</value>
+    </data>
+    <data name="WB0048_LookupHasEmptyContent" xml:space="preserve">
+        <value>តារាងរកមើលមិនអាចទទេបានទេ។</value>
+    </data>
+    <data name="WB0052_LookupNameIsKeyword" xml:space="preserve">
+        <value>ឈ្មោះតារាងរកមើលមិនអាចជាពាក្យដែលបានបម្រុងទុកទេ។</value>
+    </data>
+    <data name="WB0053_LinkedQuestionReferencesNotExistingRoster" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះដែលជាប្រភពនៃតំណគួរតែមាន។</value>
+    </data>
+    <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះដែលជាប្រភពនៃតំណ គឺជាបញ្ជីឈ្មោះ មិនមែនជាផ្នែករងទេ។</value>
+    </data>
+    <data name="WB0105_ValidationMessageIsTooLong" xml:space="preserve">
+        <value>សារកំហុសក្នុងសុពលភាព #{0} វែងពេក។ វាមិនគួរលើសពីតួអក្សរ {1} ទេ។</value>
+    </data>
+    <data name="WB0104_ValidationConditionIsTooLong" xml:space="preserve">
+        <value>លក្ខខណ្ឌសុពលភាព #{0} វែងពេក។ វាមិនគួរលើសពីតួអក្សរ {1} ទេ។</value>
+    </data>
+    <data name="WB0106_ValidationConditionIsEmpty" xml:space="preserve">
+        <value>លក្ខខណ្ឌសុពលភាព #{0} គឺទទេ។</value>
+    </data>
+    <data name="WB0107_ValidationMessageIsEmpty" xml:space="preserve">
+        <value>សារកំហុសក្នុងសុពលភាព #{0} គឺទទេ។</value>
+    </data>
+    <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
+        <value>ផ្នែក ឬបញ្ជីឈ្មោះមានសំណួរច្រើនជាង {0} ពិចារណាបំបែកទៅជាផ្នែករង។</value>
+    </data>
+    <data name="WB0202_GroupWithoutQuestions" xml:space="preserve">
+        <value>ផ្នែកមិនមានសំណួរទេ។ ពិចារណាដកផ្នែកទទេចេញ។</value>
+    </data>
+    <data name="WB0203_RosterHasSingleQuestion" xml:space="preserve">
+        <value>ក្រុមបញ្ជីឈ្មោះមានសំណួរតែមួយប៉ុណ្ណោះ។ ពិចារណាការដាក់ជាក្រុមជាមួយបញ្ជីឈ្មោះផ្សេងទៀត។ សម្រាប់បញ្ជីឈ្មោះថេរ សូមពិចារណាបង្ហាញជាសំណុំនៃសំណួរឯករាជ្យ។</value>
+    </data>
+    <data name="WB0204_EmptyRoster" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះគឺទទេ។ យកវាចេញប្រសិនបើវាមិនត្រូវការ។</value>
+    </data>
+    <data name="WB0205_TooManyQuestions" xml:space="preserve">
+        <value>កម្រងសំណួរមានសំណួរច្រើនជាង {0} ។ វាអាចពិបាកក្នុងការគ្រប់គ្រងវា។</value>
+    </data>
+    <data name="WB0209_LongEnablementCondition" xml:space="preserve">
+        <value>លក្ខខណ្ឌនៃការបើកដំណើរការមានរយៈពេលយូរ។ វាអាចមានលក្ខខណ្ឌដែលអាចអានបានខ្លីជាង ជាមួយនឹងមុខងារដែលភ្ជាប់មកជាមួយ (ឧ. InList())។</value>
+    </data>
+    <data name="WB0210_CategoricalQuestionHasManyOptions" xml:space="preserve">
+        <value>សំណួរជម្រើសតែមួយមានប្រភេទច្រើនពេក សូមពិចារណាផ្លាស់ប្តូរទៅប្រអប់បន្សំ។</value>
+    </data>
+    <data name="WB0211_QuestionnaireHasNoGpsQuestion" xml:space="preserve">
+        <value>កម្រងសំណួរមិនមានសំណួរ GPS ទេ។ ពិចារណាបន្ថែមសំណួរ GPS ។</value>
+    </data>
+    <data name="WB0206_FewSectionsManyQuestions" xml:space="preserve">
+        <value>កម្រងសំណួរមានច្រើនជាងសំណួរ {0} ប៉ុន្តែមានតែផ្នែកមួយ ឬពីរប៉ុណ្ណោះ។ សំណួរជាក្រុមទៅជាផ្នែកៗ ដើម្បីសម្រួលការរុករក និងកែលម្អការអនុវត្ត។</value>
+    </data>
+    <data name="WB0212_LongValidationCondition" xml:space="preserve">
+        <value>លក្ខខណ្ឌសុពលភាព #{0} មានរយៈពេលយូរ។ វាអាចមានលក្ខខណ្ឌដែលអាចអានបានខ្លីជាង ជាមួយនឹងមុខងារដែលភ្ជាប់មកជាមួយ (ឧ. InList())។</value>
+    </data>
+    <data name="WB0207_FixedRosterContains3OrLessItems" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះថេរមានធាតុ {0} ឬតិចជាងនេះ។ ពិចារណាប្រើផ្នែករង និងសំណួរជាបន្តបន្ទាប់។ បញ្ជីឈ្មោះធ្វើឱ្យស្មុគស្មាញដល់រចនាសម្ព័ន្ធនៃទិន្នន័យដែលបាននាំចេញ។</value>
+    </data>
+    <data name="WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions" xml:space="preserve">
+        <value>សំណួរច្រើនជាង {0}% មិនមានលក្ខខណ្ឌសុពលភាពទេ។ បន្ថែមលក្ខខណ្ឌសុពលភាព ដើម្បីបង្កើនគុណភាពទិន្នន័យ។</value>
+    </data>
+    <data name="WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>កន្សោមតម្រងសំណួរដែលបានភ្ជាប់គឺវែងជាងតួអក្សរ {0} ។</value>
+    </data>
+    <data name="WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
+        <value>សំណួរមិនអាចប្រើក្នុងកន្សោមតម្រងរបស់វាបានទេ។</value>
+    </data>
+    <data name="WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+        <value>កន្សោមតម្រងមានកំហុសវាក្យសម្ព័ន្ធ។</value>
+    </data>
+    <data name="WB0065_NameForAttachmentIsNotUnique" xml:space="preserve">
+        <value>ឯកសារភ្ជាប់មួយផ្សេងទៀតដែលមានឈ្មោះដូចគ្នាមានរួចហើយ។</value>
+    </data>
+    <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
+        <value>អត្ថបទឋិតិវន្តសំដៅលើឯកសារភ្ជាប់ដែលអវត្តមាន</value>
+    </data>
+    <data name="WB0111_AttachmentHasEmptyContent" xml:space="preserve">
+        <value>ឯកសារភ្ជាប់មិនអាចទទេបានទេ។</value>
+    </data>
+    <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">
+        <value>ទំហំឯកសារភ្ជាប់គឺច្រើនជាង {0}Mb</value>
+    </data>
+    <data name="WB0214_TotalAttachmentsSizeIsMoreThan50Mb" xml:space="preserve">
+        <value>ទំហំសរុបនៃឯកសារភ្ជាប់គឺច្រើនជាង {0}Mb</value>
+    </data>
+    <data name="WB0215_UnusedAttachments" xml:space="preserve">
+        <value>កម្រងសំណួរមានឯកសារភ្ជាប់ដែលមិនប្រើ</value>
+    </data>
+    <data name="WB0112_VariableHasInvalidName" xml:space="preserve">
+        <value>អថេរមានឈ្មោះមិនត្រឹមត្រូវ។</value>
+    </data>
+    <data name="WB0113_VariableHasEmptyVariableName" xml:space="preserve">
+        <value>អថេរមិនអាចមានឈ្មោះទទេបានទេ។</value>
+    </data>
+    <data name="WB0250_ValidationConditionRefersToAFutureQuestion" xml:space="preserve">
+        <value>លក្ខខណ្ឌសុពលភាព #{0} សំដៅលើសំណួរនាពេលអនាគត។ ពិចារណាលើការបញ្ច្រាសការបញ្ជាទិញ។</value>
+    </data>
+    <data name="WB0251_EnablementConditionRefersToAFutureQuestion" xml:space="preserve">
+        <value>លក្ខខណ្ឌនៃការអនុញ្ញាត សំដៅលើសំណួរនាពេលអនាគត។ ពិចារណាលើការបញ្ច្រាសការបញ្ជាទិញ។</value>
+    </data>
+    <data name="WB0253_TooFewVariableLabelsAreDefined" xml:space="preserve">
+        <value>ស្លាកអថេរតិចពេកត្រូវបានកំណត់។ បន្ថែមស្លាកអថេរ ដើម្បីបង្កើនលទ្ធភាពប្រើប្រាស់នៃទិន្នន័យដែលបាននាំចេញ និងដើម្បីផ្តល់នូវការបញ្ចូលទៅក្នុងទិន្នន័យមេតាសម្រាប់ទម្រង់ Data Documentation Initiative (DDI)។</value>
+    </data>
+    <data name="WB0254_UseFunctionIsValidEmailToValidateEmailAddress" xml:space="preserve">
+        <value>ប្រើមុខងារ IsValidEmail() ដើម្បីធ្វើសុពលភាពអាសយដ្ឋានអ៊ីមែល។</value>
+    </data>
+    <data name="WB0255_QuestionIsTooShort" xml:space="preserve">
+        <value>សំណួរខ្លីពេក។ នេះប្រហែលជាសំណួរមិនពេញលេញ។</value>
+    </data>
+    <data name="WB0114_CategoricalQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
+        <value>សំណួរប្រភេទគាំទ្រតែតម្លៃចំនួនគត់ក្នុងជួរពី {0} ដល់ {1}</value>
+    </data>
+    <data name="WB0115_FixRosterSupportsOnlyIntegerTitleValues" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះថេរគាំទ្រតែតម្លៃចំនួនគត់ប៉ុណ្ណោះ។</value>
+    </data>
+    <data name="WB0256_TranslationNameIsInvalid" xml:space="preserve">
+        <value>ឈ្មោះការបកប្រែមិនត្រឹមត្រូវទេ។</value>
+    </data>
+    <data name="WB0257_TranslationHasEmptyContent" xml:space="preserve">
+        <value>ការបកប្រែមានខ្លឹមសារទទេ</value>
+    </data>
+    <data name="WB0258_TranslationsHaveDuplicatedNames" xml:space="preserve">
+        <value>ការបកប្រែមានឈ្មោះស្ទួន</value>
+    </data>
+    <data name="WB0259_QuestionTitleIsTooLong" xml:space="preserve">
+        <value>អត្ថបទសំណួរវែងពេក។ វាមិនគួរលើសពីតួអក្សរ {0} ទេ។</value>
+    </data>
+    <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
+        <value>ចំណងជើងវែងពេក។ វាមិនគួរលើសពីតួអក្សរ {0} ទេ។</value>
+    </data>
+    <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
+        <value>សំណួរប្រភពជ្រើសរើសច្រើនគួរមានកំណត់ចំនួនចម្លើយអតិបរមា។</value>
+    </data>
+    <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
+        <value>កម្រងសំណួរមានបញ្ជីឈ្មោះដែលមានចំនួនសរុបនៃករណីបញ្ជីឈ្មោះ {0} លើសពីដែនកំណត់ប្រព័ន្ធ {1}</value>
+    </data>
+    <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះបានឈានដល់ទំហំកំណត់។ កាត់បន្ថយទំហំបញ្ជីឈ្មោះ ឬកាត់បន្ថយសំបុក។</value>
+    </data>
+    <data name="WB0264_GpsQuestion" xml:space="preserve">
+        <value>អ្នកមានសំណួរ GPS ។ ថេប្លេតត្រូវតែគាំទ្រទីតាំងភូមិសាស្ត្រដើម្បីប្រើជាមួយកម្រងសំណួរនេះ។</value>
+    </data>
+    <data name="WB0265_MoreThan30PercentQuestionsAreText" xml:space="preserve">
+        <value>សំណួរច្រើនជាង {0}% គឺជាសំណួរអត្ថបទ។ សំណួរអត្ថបទពិបាកឆ្លើយនៅលើថេប្លេត។ ពិចារណាប្រើសំណួរតែមួយ ឬច្រើនជម្រើសជំនួសវិញ។</value>
+    </data>
+    <data name="WB0266_SameTitle" xml:space="preserve">
+        <value>សំណួរស្ទួន។ (សំណួរមានចំណងជើងដូចគ្នា។ )</value>
+    </data>
+    <data name="WB0267_QRBarcodeQuestion" xml:space="preserve">
+        <value>អ្នកមានសំណួរអំពីបាកូដ។ ថេប្លេតត្រូវតែគាំទ្រ autofocus ដើម្បីប្រើជាមួយកម្រងសំណួរនេះ។</value>
+    </data>
+    <data name="WB0216_NoPrefilledQuestions" xml:space="preserve">
+        <value>គ្មានសំណួរកំណត់អត្តសញ្ញាណត្រូវបានកំណត់ទេ។ កំណត់សំណួរកំណត់អត្តសញ្ញាណយ៉ាងហោចណាស់មួយ។</value>
+    </data>
+    <data name="WB0217_VariableLableMoreThan120Characters" xml:space="preserve">
+        <value>ស្លាកអថេរវែងពេក (ច្រើនជាងតួអក្សរ {0}) ហើយនឹងត្រូវបានកាត់ឱ្យខ្លីនៅក្នុងការនាំចេញឯកសារ SPSS ។</value>
+    </data>
+    <data name="WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions" xml:space="preserve">
+        <value>សំណួរជាប់ៗគ្នាមានលក្ខខណ្ឌបើកដំណើរការដូចគ្នា។ ពិចារណាដាក់ក្នុងផ្នែករង ហើយកំណត់លក្ខខណ្ឌទៅផ្នែករង។</value>
+    </data>
+    <data name="WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options" xml:space="preserve">
+        <value>សំណួរជ្រើសរើសតែមួយដោយគ្មានលក្ខខណ្ឌជាប់គ្នាច្រើនជាមួយប្រភេទ {0} ។ ពិចារណាសំណួរពហុជ្រើសរើសមួយ។</value>
+    </data>
+    <data name="WB0220_RowIndexInMultiOptionBasedRoster" xml:space="preserve">
+        <value>ការប្រើប្រាស់ @{0} ជាមួយនឹងបញ្ជីជម្រើសច្រើនអាចមិនស្ថិតស្ថេរ។ ពិចារណាប្រើ @{1} ជំនួសវិញ។</value>
+    </data>
+    <data name="WB0221_NoCurrentTimeQuestions" xml:space="preserve">
+        <value>រកមិនឃើញសំណួរពេលវេលាបច្ចុប្បន្នទេ។ ពិចារណាកត់ត្រាកាលបរិច្ឆេទនៃការសម្ភាសន៍នៅក្នុងកម្រងសំណួររបស់អ្នក។</value>
+    </data>
+    <data name="WB0222_SingleOptionPrefilled" xml:space="preserve">
+        <value>សំណួរជ្រើសរើសតែមួយត្រូវបានសម្គាល់ថាជាការកំណត់អត្តសញ្ញាណ។ ពិចារណាប្រើសំណួរអត្ថបទ។</value>
+    </data>
+    <data name="WB0223_SectionWithLessThan5Questions" xml:space="preserve">
+        <value>ផ្នែកមានសំណួរតិចជាងប្រាំ។ ពិចារណាចូលរួមជាមួយផ្នែកផ្សេងទៀត។</value>
+    </data>
+    <data name="WB0224_TooManySubsectionsAtOneLevel" xml:space="preserve">
+        <value>ផ្នែករងច្រើនពេកនៅកម្រិតមួយ។ ពិចារណាប្លង់ឋានានុក្រម។</value>
+    </data>
+    <data name="WB0225_ComboBoxWithLessThan10Elements" xml:space="preserve">
+        <value>ម៉ឺនុយទម្លាក់ចុះ (ប្រអប់បន្សំ) មានធាតុតិចជាង 10 ។ ពិចារណាប្តូរទៅតំណាងជម្រើសស្តង់ដារតែមួយ។</value>
+    </data>
+    <data name="WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope" xml:space="preserve">
+        <value>សំណួរដែលបានភ្ជាប់សំដៅលើសំណួរក្នុងបញ្ជីពីកម្រិតខុស។</value>
+    </data>
+    <data name="WB0226_SameCascadingParentQuestion" xml:space="preserve">
+        <value>សំណួរប្រអប់បន្សំល្បាក់មានសំណួរមេដូចគ្នា។</value>
+    </data>
+    <data name="WB0227_NotShared" xml:space="preserve">
+        <value>កម្រងសំណួរមិនត្រូវបានពិនិត្យទេ។ ពិចារណាចែករំលែកវាជាមួយអ្នកប្រើប្រាស់ផ្សេងទៀតសម្រាប់មតិកែលម្អ។</value>
+    </data>
+    <data name="WB0228_OmittedOptions" xml:space="preserve">
+        <value>សំណួរប្រភេទមានលេខកូដប្រភេទមិនជាប់គ្នា។ ពិនិត្យមើលប្រភេទដែលបានលុប។</value>
+    </data>
+    <data name="WB0229_SupervisorQuestionInValidation" xml:space="preserve">
+        <value>សំណួររបស់អ្នកគ្រប់គ្រងត្រូវបានប្រើក្នុងការបញ្ជាក់។ ពិនិត្យមើលគណនីលក្ខខណ្ឌសម្រាប់អ្នកគ្រប់គ្រងមិនឆ្លើយតប ឬណែនាំអ្នកគ្រប់គ្រងឱ្យឆ្លើយតបជានិច្ច។</value>
+    </data>
+    <data name="WB0230_NonconsecutiveCascadings" xml:space="preserve">
+        <value>សំណួរល្បាក់ជាប់គ្នា។ ពិចារណាដាក់សំណួរបន្តបន្ទាប់គ្នា។</value>
+    </data>
+    <data name="WB0117_LinkedToTextListQuestionDoesNotSupportFilters" xml:space="preserve">
+        <value>ភ្ជាប់ទៅសំណួរក្នុងបញ្ជីមិនគាំទ្រតម្រងប្រភេទទេ។</value>
+    </data>
+    <data name="WB0231_MultiOptionWithMoreThan20Options" xml:space="preserve">
+        <value>សំណួរជ្រើសរើសច្រើនមានប្រភេទ (&gt;{0}) ច្រើនពេក។ វានឹងពិបាកក្នុងការរុករកនៅលើថេប្លេត។ ពិចារណាបំបែកជាពីរសំណួរពហុជម្រើសប្រសិនបើអាចធ្វើទៅបាន។</value>
+    </data>
+    <data name="WB0232_FiveOrMoreQuestionsWithSameEnabling" xml:space="preserve">
+        <value>សំណួរប្រាំ ឬច្រើនមានលក្ខខណ្ឌអនុញ្ញាតដូចគ្នា។ ដាក់សំណួរជាក្រុម ហើយអនុវត្តលក្ខខណ្ឌអនុញ្ញាតតែមួយចំពោះក្រុម ដើម្បីបង្កើនប្រសិទ្ធភាពនៃកម្រងសំណួរ។</value>
+    </data>
+    <data name="WB0233_NestedRosterDegree3OrMore" xml:space="preserve">
+        <value>បញ្ជី​ឈ្មោះ​សំបុក​ដែល​មាន​កម្រិត​សំបុក​បី​ឬ​ច្រើន​ជាង។ ព្យាយាមជៀសវាងរចនាសម្ព័ន្ធស្មុគ្រស្មាញបែបនេះដែលអាចនាំឱ្យមានបញ្ហាក្នុងការប្រមូលទិន្នន័យ។</value>
+    </data>
+    <data name="WB0234_RosterInRosterWithSameSourceQuestion" xml:space="preserve">
+        <value>កម្រិត​រង​ក្នុង​បញ្ជី​រាយ​នាម​ដែល​មាន​មូលដ្ឋាន​លើ​សំណួរ​មេ​ដូច​គ្នា។ សាកល្បងកែប្រែ បញ្ជីឈ្មោះបែបនេះអាចនាំឱ្យមានបញ្ហាក្នុងការប្រមូលទិន្នន័យ។</value>
+    </data>
+    <data name="WB0235_FewQuestionsWithSameLongEnablement" xml:space="preserve">
+        <value>លក្ខខណ្ឌបើកដំណើរការវែងដូចគ្នាត្រូវបានប្រើក្នុងសំណួរជាច្រើន។ អ្នកប្រហែលជាចង់បង្កើតអថេរ Boolean ដើម្បីសម្រួលការគ្រប់គ្រងកូដ។</value>
+    </data>
+    <data name="WB0236_FewQuestionsWithSameLongValidation" xml:space="preserve">
+        <value>លក្ខខណ្ឌ​សុពលភាព​យូរ​ដូចគ្នា​ត្រូវ​បាន​ប្រើ​ក្នុង​សំណួរ​មួយ​ចំនួន។ អ្នកប្រហែលជាចង់បង្កើតអថេរ Boolean ដើម្បីសម្រួលការគ្រប់គ្រងកូដ។</value>
+    </data>
+    <data name="WB0237_BitwiseAnd" xml:space="preserve">
+        <value>&amp; ត្រូវបានប្រើក្នុងការបញ្ចេញមតិ។ ត្រូវប្រាកដថាអ្នកយល់ពីភាពខុសគ្នារវាងប្រតិបត្តិករ &amp; និង &amp; &amp; ។ ក្នុងករណីភាគច្រើន ប្រើ &amp;&amp; ។</value>
+    </data>
+    <data name="WB0238_BitwiseOr" xml:space="preserve">
+        <value>| ត្រូវបានប្រើក្នុងការបញ្ចេញមតិ។ ត្រូវប្រាកដថាអ្នកយល់ពីភាពខុសគ្នារវាង | និង || ប្រតិបត្តិករ។ ក្នុងករណីភាគច្រើន ប្រើ || ។</value>
+    </data>
+    <data name="WB0118_ExpressionReferencingForbiddenDateTimeProperies" xml:space="preserve">
+        <value>ការ​យោង​កន្សោម​ដែល​ហាម​ឃាត់​លក្ខណៈ​សម្បត្តិ DateTime៖ {0}, {1}, {2} ។ ពិចារណាប្រើសំណួរពេលវេលាបច្ចុប្បន្នជំនួសវិញ។</value>
+    </data>
+    <data name="WB0268_DoesNotSupportSubstitution" xml:space="preserve">
+        <value>អ្នកព្យាយាមប្រើការជំនួសសម្រាប់អង្គភាពដែលមិនគាំទ្រ។</value>
+    </data>
+    <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
+        <value>សំណួរមិនអាចមានចំណងជើងទទេបានទេ។</value>
+    </data>
+    <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
+        <value>ផ្នែកមិនគួរមានសំណួរច្រើនជាង {0} ទេ។</value>
+    </data>
+    <data name="WB0119_QuestionnaireTitleTooLong" xml:space="preserve">
+        <value>ចំណងជើងនៃកម្រងសំណួរមិនអាចមានច្រើនជាងនិមិត្តសញ្ញា {0} ទេ។</value>
+    </data>
+    <data name="WB0120_GroupTitleIsEmpty" xml:space="preserve">
+        <value>ចំណងជើងនៃផ្នែក និងផ្នែករងមិនអាចទទេ ឬមានដកឃ្លាតែប៉ុណ្ណោះ។</value>
+    </data>
+    <data name="WB0121_VariableNameTooLong" xml:space="preserve">
+        <value>ឈ្មោះ ឬលេខសម្គាល់របស់ធាតុនេះមិនគួរវែងជាងតួអក្សរ {0} ទេ។</value>
+    </data>
+    <data name="WB0122_VariableNameHasSpecialCharacters" xml:space="preserve">
+        <value>អថេរ ឬឈ្មោះលេខសម្គាល់បញ្ជីឈ្មោះត្រឹមត្រូវគួរតែមានតែអក្សរ ខ្ទង់ និងតួអក្សរគូសក្រោម</value>
+    </data>
+    <data name="WB0123_VariableNameStartWithDigitOrUnderscore" xml:space="preserve">
+        <value>ឈ្មោះអថេរ ឬលេខសម្គាល់បញ្ជីឈ្មោះមិនគួរចាប់ផ្តើមដោយខ្ទង់ ឬសញ្ញាគូសក្រោមទេ។</value>
+    </data>
+    <data name="WB0124_VariableNameEndWithUnderscore" xml:space="preserve">
+        <value>ឈ្មោះអថេរ ឬលេខសម្គាល់បញ្ជីឈ្មោះមិនគួរបញ្ចប់ដោយសញ្ញាគូសក្រោមទេ។</value>
+    </data>
+    <data name="WB0125_VariableNameHasConsecutiveUnderscores" xml:space="preserve">
+        <value>ឈ្មោះអថេរ ឬលេខសម្គាល់បញ្ជីឈ្មោះមិនគួរមានតួអក្សរគូសក្រោមពីរ និងច្រើនជាងនេះទេ។</value>
+    </data>
+    <data name="WB0126_VarialbeNameNotUnique" xml:space="preserve">
+        <value>ឈ្មោះអថេរ ឬលេខសម្គាល់បញ្ជីឈ្មោះគួរតែមានតែមួយគត់នៅក្នុងវិសាលភាពនៃកម្រងសំណួរ។</value>
+    </data>
+    <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+        <value>យ៉ាងហោចណាស់មានគូ "ចំណងជើង" និង "តម្លៃមេ" ស្ទួនមួយ។ បញ្ជីមិនគួរមានស្ទួនទេ។</value>
+    </data>
+    <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
+        <value>ចំនួនខ្ទង់ទសភាគមិនស្ថិតនៅក្នុងចន្លោះពី {0} ដល់ {1} ទេ។</value>
+    </data>
+    <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
+        <value>ចំណងជើងប្រភេទគឺទទេ ឬវែងពេក។ ប្រវែងចំណងជើងគួរតែស្ថិតនៅចន្លោះពីតួអក្សរ {0} ដល់ {1} ។</value>
+    </data>
+    <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
+        <value>អ្នក​មិន​អាច​ប្រើ​អង្គភាព​កុមារ​ក្នុង​លក្ខខណ្ឌ​បើក​ដំណើរការ​សម្រាប់​ផ្នែក ផ្នែក​រង និង​បញ្ជី​ឈ្មោះ​ទេ។</value>
+    </data>
+    <data name="WB0272_ConditionUsingForbiddenClasses" xml:space="preserve">
+        <value>ការបើកលក្ខខណ្ឌគឺប្រើប្រភេទហាមឃាត់។</value>
+    </data>
+    <data name="WB0273_ValidationConditionUsingForbiddenClasses" xml:space="preserve">
+        <value>លក្ខខណ្ឌសុពលភាពកំពុងប្រើប្រភេទហាមឃាត់។</value>
+    </data>
+    <data name="WB0274_VariableUsingForbiddenClasses" xml:space="preserve">
+        <value>អថេរកំពុងប្រើប្រភេទហាមឃាត់។</value>
+    </data>
+    <data name="WB0275_FilterExpressionIsUsingForbiddenClasses" xml:space="preserve">
+        <value>កន្សោមតម្រងកំពុងប្រើប្រភេទហាមឃាត់។</value>
+    </data>
+    <data name="WB0131_SpecialValuesHasNonIntegerOptionsValues" xml:space="preserve">
+        <value>តម្លៃពិសេសគាំទ្រតែតម្លៃចំនួនគត់ក្នុងជួរពី {0} ដល់ {1} ។</value>
+    </data>
+    <data name="WB0276_RownameIsNotSupported" xml:space="preserve">
+        <value>អថេរ @rowname មិនត្រូវបានគាំទ្រទៀតទេ។</value>
+    </data>
+    <data name="WB0132_SpecialValuesHasOptionsWithLongTexts" xml:space="preserve">
+        <value>ចំណងជើងតម្លៃពិសេសគឺទទេ ឬវែងពេក។ ប្រវែងចំណងជើងគួរតែស្ថិតនៅចន្លោះពីតួអក្សរ {0} ដល់ {1} ។</value>
+    </data>
+    <data name="WB0133_SpecialValuesMustBeUniqueForNumericlQuestion" xml:space="preserve">
+        <value>តម្លៃពិសេសត្រូវតែមានតែមួយគត់។</value>
+    </data>
+    <data name="WB0134_SpecialValuesCountMoreThanMaxOptionCount" xml:space="preserve">
+        <value>មានច្រើនជាងតម្លៃពិសេស {0} ។</value>
+    </data>
+    <data name="WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit" xml:space="preserve">
+        <value>សំណួរ​មាន​តម្លៃ​ពិសេស ដែល​ធំ​ពេក ហើយ​មិន​អាច​ប្រើ​ក្នុង​សំណួរ​នេះ​បាន​ទេ ព្រោះ​វា​កំណត់​ទំហំ​បញ្ជី​ឈ្មោះ។</value>
+    </data>
+    <data name="WB0136_SpecialValuesHaveOptionsWithEmptyValue" xml:space="preserve">
+        <value>សំណួរមានតម្លៃពិសេសជាមួយនឹងតម្លៃទទេ។</value>
+    </data>
+    <data name="WB0137_SpecialValuesTitlesMustBeUnique" xml:space="preserve">
+        <value>ចំណងជើងតម្លៃពិសេសត្រូវតែមានតែមួយគត់។</value>
+    </data>
+    <data name="WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion" xml:space="preserve">
+        <value>ឈ្មោះឯកសារភ្ជាប់តម្លៃពិសេសត្រូវតែមានតែមួយគត់។</value>
+    </data>
+    <data name="WB0139_SpecialValuesAttachmentsReferAbsentAttachment" xml:space="preserve">
+        <value>ឯកសារភ្ជាប់តម្លៃពិសេសសំដៅលើឯកសារភ្ជាប់ដែលមិនមាន។</value>
+    </data>
+    <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
+        <value>ចំណងជើងកម្រងសំណួរមិនគួរមានតួអក្សរគូសក្រោមពីរ និងច្រើនជាងនេះទេ។</value>
+    </data>
+    <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+        <value>របៀបធម្មតាបានអនុញ្ញាតសម្រាប់តែបញ្ជីឈ្មោះដែលមានសំណួរមិនលើសពី {0} ឬអត្ថបទឋិតិវន្ត។</value>
+    </data>
+    <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
+        <value>មុខងារធម្មតាមិនអនុញ្ញាតឱ្យប្រើបញ្ជីឈ្មោះដែលបានដាក់។</value>
+    </data>
+    <data name="WB0280_TextContainsLinkToUnknownQuestionOrGroup" xml:space="preserve">
+        <value>អត្ថបទមានតំណភ្ជាប់ទៅសំណួរមិនស្គាល់ ផ្នែករង បញ្ជីឈ្មោះ ឬឯកសារភ្ជាប់ pdf ។</value>
+    </data>
+    <data name="WB0057_LinksAreProhibitedOnNavigationElements" xml:space="preserve">
+        <value>តំណភ្ជាប់ត្រូវបានហាមឃាត់លើធាតុរុករក៖ ផ្នែក អនុផ្នែក បញ្ជីឈ្មោះ</value>
+    </data>
+    <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
+        <value>ចំនួនធាតុសរុប ({0}) លើសដែនកំណត់ប្រព័ន្ធ ({1})។ ពិចារណាកាត់បន្ថយចំនួនសំណួរ អត្ថបទឋិតិវន្ត អថេរ ឬធាតុនៅក្នុងបញ្ជីថេរ។</value>
+    </data>
+    <data name="WB0282_IdentifyingQuestionInSectionWithCondition" xml:space="preserve">
+        <value>កំណត់អត្តសញ្ញាណសំណួរមិនអាចដាក់នៅខាងក្នុងផ្នែកដែលមានលក្ខខណ្ឌអនុញ្ញាតបានទេ។</value>
+    </data>
+    <data name="WB0282_TableRosterContainsNestedGroup" xml:space="preserve">
+        <value>របៀបបញ្ជីឈ្មោះតារាងមិនអនុញ្ញាតឱ្យប្រើក្រុម និងបញ្ជីឈ្មោះដែលបានដាក់។</value>
+    </data>
+    <data name="WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+        <value>របៀបតារាងត្រូវបានអនុញ្ញាតសម្រាប់តែបញ្ជីឈ្មោះដែលមានសំណួរមិនលើសពី {0} ។</value>
+    </data>
+    <data name="WB0284_TableRosterCantContainsSupervisorQuestions" xml:space="preserve">
+        <value>តារាងបញ្ជីឈ្មោះមិនអនុញ្ញាតឱ្យប្រើសំណួរអ្នកគ្រប់គ្រងទេ។</value>
+    </data>
+    <data name="WB0285_TableRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+        <value>បញ្ជីតារាងអនុញ្ញាតឱ្យប្រើតែសំណួរជាអក្សរ និងលេខប៉ុណ្ណោះ។</value>
+    </data>
+    <data name="WB0286_TableAndMatixRosterWorksOnlyInWebMode" xml:space="preserve">
+        <value>របៀបបញ្ជីតារាង ឬម៉ាទ្រីសដំណើរការតែនៅក្នុងការស្ទង់មតិលើបណ្តាញប៉ុណ្ណោះ នៅលើថេប្លេតវានឹងជារបៀប 'ផ្នែករង'។</value>
+    </data>
+    <data name="WB0309_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
+        <value>សំណួរនៅក្នុងផ្នែក Сover ត្រូវតែមានស្លាកអថេរ។</value>
+    </data>
+    <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
+        <value>សំណួរទំព័រគម្របអាចមានតែប្រភេទដែលបានអនុញ្ញាត (អត្ថបទ លេខ កាលបរិច្ឆេទ ជីភីអេស កូអរដោណេ ជម្រើសតែមួយ)</value>
+    </data>
+    <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
+        <value>ស្លាក {1} សម្រាប់លេខកូដ {0} គឺជាលេខខុសពីតម្លៃដែលត្រូវបានដាក់ស្លាក។</value>
+    </data>
+    <data name="WB0289" xml:space="preserve">
+        <value>ឈ្មោះនៃប្រភេទមិនគួរវែងជាងតួអក្សរ {0} ទេ។</value>
+    </data>
+    <data name="WB0290" xml:space="preserve">
+        <value>ឈ្មោះ​ប្រភេទ​មិន​គួរ​បញ្ចប់​ដោយ​សញ្ញា​គូស​ក្រោម​ទេ។</value>
+    </data>
+    <data name="WB0291" xml:space="preserve">
+        <value>ឈ្មោះ​ប្រភេទ​មិន​គួរ​មាន​តួអក្សរ​គូស​ក្រោម​ពីរ​និង​ច្រើន​ទៀត​ទេ។</value>
+    </data>
+    <data name="WB0292" xml:space="preserve">
+        <value>ឈ្មោះនៃប្រភេទមិនគួរទទេទេ។</value>
+    </data>
+    <data name="WB0293" xml:space="preserve">
+        <value>ឈ្មោះនៃប្រភេទមិនអាចជាពាក្យដែលបានបម្រុងទុកទេ។</value>
+    </data>
+    <data name="WB0294" xml:space="preserve">
+        <value>ឈ្មោះ​នៃ​ប្រភេទ​គួរ​តែ​មាន​តែ​អក្សរ លេខ និង​តួអក្សរ​គូស​ក្រោម</value>
+    </data>
+    <data name="WB0295" xml:space="preserve">
+        <value>ឈ្មោះ​នៃ​ប្រភេទ​មិន​គួរ​ចាប់​ផ្ដើម​ដោយ​ខ្ទង់ ឬ​សញ្ញា​គូស​ក្រោម​ទេ។</value>
+    </data>
+    <data name="WB0296" xml:space="preserve">
+        <value>សំណួរមានប្រភេទដូចគ្នា។ ប្រើប្រភេទដែលអាចប្រើឡើងវិញបានជំនួសវិញ។</value>
+    </data>
+    <data name="WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះម៉ាទ្រីសអនុញ្ញាតឱ្យប្រើតែសំណួរប្រភេទសាមញ្ញប៉ុណ្ណោះ៖ ប្រអប់បន្សំ ទម្រង់ល្បាក់ ឬ បាទ/ទេ មិនត្រូវបានអនុញ្ញាតទេ។</value>
+    </data>
+    <data name="WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+        <value>របៀបម៉ាទ្រីសបានអនុញ្ញាតសម្រាប់តែបញ្ជីឈ្មោះដែលមានសំណួរមិនលើសពី {0} ទេ។</value>
+    </data>
+    <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
+        <value>បញ្ជីរាយនាម Matrix ត្រូវតែមិនមានសំណួរអ្នកគ្រប់គ្រង ឬកំណត់អត្តសញ្ញាណ។</value>
+    </data>
+    <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះម៉ាទ្រីសត្រូវតែមិនមានសំណួរដែលភ្ជាប់។</value>
+    </data>
+    <data name="WB0302" xml:space="preserve">
+        <value>ការជំនួសមិនអាចយោងធាតុពីកម្រិតបញ្ជីឈ្មោះដូចគ្នាបានទេ។</value>
+    </data>
+    <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
+        <value>ប្រភេទដែលអាចប្រើឡើងវិញបានមិនអាចមានជួរដេកដែលមានតម្លៃ Id និង ParentId ដូចគ្នា។</value>
+    </data>
+    <data name="WB0306_DuplicatedCategoryParentIdText" xml:space="preserve">
+        <value>ប្រភេទដែលអាចប្រើឡើងវិញបានមិនអាចមានជួរដែលមានតម្លៃ ParentId និង Text ដូចគ្នា។</value>
+    </data>
+    <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
+        <value>សំណួរយោងទៅលើប្រភេទដែលមិនអាចប្រើឡើងវិញបាន។</value>
+    </data>
+    <data name="WB0390_OnlyStringVariableAllowedAsAttachmentName" xml:space="preserve">
+        <value>មានតែប្រភេទអថេរខ្សែអក្សរប៉ុណ្ណោះដែលអាចប្រើបានជាប្រភពនៃឈ្មោះឯកសារភ្ជាប់</value>
+    </data>
+    <data name="WB0391" xml:space="preserve">
+        <value>អត្ថបទឋិតិវន្តមិនអាចយោងអថេរដែលមានវិសាលភាពបញ្ជីឈ្មោះជ្រៅជាងខ្លួនវាទេ។</value>
+    </data>
+    <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
+        <value>តំណភ្ជាប់ទៅសំណួរលាក់មិនត្រូវបានអនុញ្ញាតទេ។</value>
+    </data>
+    <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
+        <value>អថេរនៅក្នុងផ្នែក Сover ត្រូវតែមានស្លាក។</value>
+    </data>
+    <data name="WB0312" xml:space="preserve">
+        <value>ប្រភេទត្រូវតែមានយ៉ាងហោចណាស់ជម្រើសពីរ</value>
+    </data>
+    <data name="WB0313_QuestionOptionReferenceToNonExistentAttachment" xml:space="preserve">
+        <value>ជម្រើសសំណួរសំដៅលើឯកសារភ្ជាប់ដែលមិនមាន</value>
+    </data>
+    <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
+        <value>សំណួរមានជម្រើសជាច្រើនដែលយោងទៅឯកសារភ្ជាប់ដូចគ្នា។</value>
+    </data>
+    <data name="WB0315_AttachmentHasInvalidName" xml:space="preserve">
+        <value>ឈ្មោះឯកសារភ្ជាប់គួរតែមានតែអក្សរ លេខ និងតួអក្សរគូស។ គឺចាប់ផ្តើមដោយអក្សរ គ្មានសញ្ញាគូសជាប់គ្នា មិនបញ្ចប់ដោយសញ្ញាគូសក្រោម និងមិនមែនជាពាក្យដែលបានបម្រុងទុកទេ។ មិនទទេ និងតិចជាង 32 តួអក្សរ។</value>
+    </data>
+    <data name="WB0316_QuestionnaireWithOldCoverPage" xml:space="preserve">
+        <value>កម្រងសំណួរជាទម្រង់ចាស់។ សូមប្រើតំណ "បង្កើតគម្រប" នៅលើផ្នែកគម្រប។</value>
+    </data>
+    <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
+        <value>វិសាលភាពនៃសំណួរសំខាន់មិនអាចមានដូចខាងក្រោម៖ លាក់ អ្នកគ្រប់គ្រង។</value>
+    </data>
+    <data name="WB0318_CriticalityConditionExpressionHasIncorrectSyntax" xml:space="preserve">
+        <value>លក្ខខណ្ឌសំខាន់មានកំហុសវាក្យសម្ព័ន្ធនៅក្នុងការបញ្ចេញមតិ។</value>
+    </data>
+    <data name="WB0319_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+        <value>លក្ខខណ្ឌសំខាន់គឺទទេ។</value>
+    </data>
+    <data name="WB0320_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+        <value>សារនៅក្នុងច្បាប់សំខាន់គឺទទេ។</value>
+    </data>
+    <data name="WB0321_CriticalityConditionUsingForbiddenClasses" xml:space="preserve">
+        <value>លក្ខខណ្ឌសំខាន់គឺប្រើប្រភេទហាមឃាត់។</value>
+    </data>
+    <data name="WB0322_CriticalRuleExpressionIsTooLong" xml:space="preserve">
+        <value>កន្សោមច្បាប់សំខាន់មានតួអក្សរច្រើនជាង {0} ។</value>
+    </data>
+    <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
+        <value>សារលក្ខខណ្ឌសំខាន់ច្រើនជាងតួអក្សរ {0} ។</value>
+    </data>
+</root>
