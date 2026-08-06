@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="ExportEncryption_Title" xml:space="preserve"><value>Enkripsi</value></data>
+  <data name="GeographyExportFormat_Title" xml:space="preserve"><value>Format ekspor geografi</value></data>
+  <data name="GeographyExportFormat_Description" xml:space="preserve"><value>Pilih cara format jawaban untuk pertanyaan geografi.</value></data>
+  <data name="GeographyExportFormat_Wkt" xml:space="preserve"><value>WKT (Well-Known Text)</value></data>
+  <data name="GeographyExportFormat_GeoJson" xml:space="preserve"><value>GeoJSON</value></data>
+  <data name="GeographyExportFormat_ArrayOfCoordinates" xml:space="preserve"><value>String Geometri Survey Solutions</value></data>
+  <data name="ClearExportCache_Title" xml:space="preserve"><value>Bersihkan cache ekspor</value></data>
+  <data name="ClearExportCache_Description" xml:space="preserve"><value>Operasi ini akan menghapus semua data cache ekspor.</value></data>
+  <data name="RemoveExportCache" xml:space="preserve"><value>Bersihkan cache</value></data>
+  <data name="RemoveExportCacheConfirm" xml:space="preserve"><value>Apakah Anda yakin ingin membersihkan cache ekspor? Semua file ekspor yang dihasilkan akan dihapus.</value></data>
+  <data name="RemoveExportCacheSuccess" xml:space="preserve"><value>Cache ekspor berhasil dibersihkan</value></data>
+  <data name="RemovingExportCache" xml:space="preserve"><value>Pembersihan cache ekspor sedang berjalan</value></data>
+  <data name="RemoveExportCacheFail" xml:space="preserve"><value>Cache ekspor tidak dapat dibersihkan saat ini. Silakan coba lagi nanti.</value></data>
+  <data name="RemoveExportCacheGeneratingFail" xml:space="preserve"><value>Cache ekspor tidak dapat dibersihkan saat ini. File ekspor sedang dibuat.</value></data>
+  <data name="RemoveExportCache_Warning" xml:space="preserve"><value>Peringatan! Ini adalah tindakan yang tidak dapat dibalik</value></data>
+  <data name="RegeneratePasswordConfirm" xml:space="preserve"><value>Apakah Anda yakin ingin membuat kata sandi baru?</value></data>
+  <data name="Settings_Title" xml:space="preserve"><value>Pengaturan</value></data>
+  <data name="ExportEncryptionSettings" xml:space="preserve"><value>Pengaturan enkripsi ekspor</value></data>
+  <data name="EnableEncryption" xml:space="preserve"><value>Aktifkan enkripsi</value></data>
+  <data name="Password" xml:space="preserve"><value>Kata sandi</value></data>
+  <data name="GlobalNotice" xml:space="preserve"><value>Catatan global</value></data>
+  <data name="Logo" xml:space="preserve"><value>Logo perusahaan</value></data>
+  <data name="LogoUpdated" xml:space="preserve"><value>Logo perusahaan diperbarui</value></data>
+  <data name="UserProfileSettings_Title" xml:space="preserve"><value>Profil pengguna</value></data>
+  <data name="WebInterviewEmailNotifications_Title" xml:space="preserve"><value>Wawancara web</value></data>
+  <data name="MobileAppSettings_Title" xml:space="preserve"><value>Aplikasi Pewawancara/Supervisor</value></data>
+  <data name="MobileAppSettings_Description" xml:space="preserve"><value>Pengaturan khusus berdasarkan versi Android</value></data>
+  <data name="AllowInterviewerUpdateProfile" xml:space="preserve"><value>Pengeditan profil enumerator</value></data>
+  <data name="AllowWebInterviewEmailNotifications" xml:space="preserve"><value>Notifikasi email wawancara web</value></data>
+  <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve"><value>Izinkan enumerator memperbarui informasi kontak mereka</value></data>
+  <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve"><value>Izinkan responden wawancara web meminta email dengan tautan untuk melanjutkan</value></data>
+  <data name="InterviewerAutoUpdate" xml:space="preserve"><value>Aktifkan pembaruan otomatis</value></data>
+  <data name="InterviewerAutoUpdateEnabled" xml:space="preserve"><value>Pembaruan otomatis aplikasi Android diaktifkan</value></data>
+  <data name="InterviewerAutoUpdateDisabled" xml:space="preserve"><value>Pembaruan otomatis aplikasi Android dinonaktifkan</value></data>
+  <data name="LogoNotUpdated" xml:space="preserve"><value>Logo perusahaan tidak diperbarui. Berikan gambar yang valid</value></data>
+  <data name="ChangeStateConfirm" xml:space="preserve"><value>Apakah Anda yakin ingin mengubah pengaturan keamanan file ekspor?</value></data>
+  <data name="GlobalNoteSettings" xml:space="preserve"><value>Catatan global</value></data>
+  <data name="LogoSettings" xml:space="preserve"><value>Logo perusahaan</value></data>
+  <data name="RemoveLogo" xml:space="preserve"><value>Hapus logo</value></data>
+  <data name="GlobalNoteSaved" xml:space="preserve"><value>Catatan disimpan</value></data>
+  <data name="ExportEncryption_Description" xml:space="preserve"><value>Centang 'Aktifkan enkripsi' untuk melindungi arsip data ekspor</value></data>
+  <data name="GlobalNoteSettings_Description" xml:space="preserve"><value>Tentukan teks di bidang 'Catatan global' untuk ditampilkan di bagian atas setiap layar</value></data>
+  <data name="LogoSettings_Description" xml:space="preserve"><value>Logo perusahaan adalah gambar yang muncul di halaman login server</value></data>
+  <data name="CurrentLogo" xml:space="preserve"><value>Logo saat ini</value></data>
+  <data name="GlobalNoteClearingConfirm" xml:space="preserve"><value>Apakah Anda yakin ingin menghapus catatan global?</value></data>
+  <data name="AutoUpdateDescription" xml:space="preserve"><value>Jika dicentang maka hanya versi terbaru aplikasi yang dapat disinkronkan</value></data>
+  <data name="InterviewerPartialSynchronization" xml:space="preserve"><value>Aktifkan sinkronisasi sebagian</value></data>
+  <data name="PartialSynchronizationDescription" xml:space="preserve"><value>Saat diaktifkan, tablet pewawancara akan mengirim jawaban dalam wawancara yang belum selesai</value></data>
+  <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve"><value>Batas akurasi lokasi</value></data>
+  <data name="GeographyQuestionAccuracyInMetersDescription" xml:space="preserve"><value>Tetapkan akurasi ambang batas dalam meter</value></data>
+  <data name="InterviewerGeographyQuestionPeriodInSeconds" xml:space="preserve"><value>Periode pertanyaan geografi</value></data>
+  <data name="GeographyQuestionPeriodInSecondsDescription" xml:space="preserve"><value>Tetapkan periode dalam detik untuk pertanyaan geografi</value></data>
+  <data name="EmailProvider_Amazon" xml:space="preserve"><value>Amazon Simple Email Service (SES)</value></data>
+  <data name="EmailProvider_None" xml:space="preserve"><value>Tidak ada</value></data>
+  <data name="EmailProvider_Sendgrid" xml:space="preserve"><value>Layanan Pengiriman Email SendGrid</value></data>
+  <data name="EmailProvider_NoneDescription" xml:space="preserve"><value>Pesan undangan tidak dikirim ke responden</value></data>
+  <data name="EmailProvider_AmazonDescription" xml:space="preserve"><value>Konfigurasikan parameter untuk mengakses Amazon SES.</value></data>
+  <data name="EmailProvider_SendgridDescription" xml:space="preserve"><value>Konfigurasikan parameter untuk mengakses SendGrid.</value></data>
+  <data name="EmailProvider_SenderAddress" xml:space="preserve"><value>Alamat email pengirim</value></data>
+  <data name="EmailProvider_SendGridApiKey" xml:space="preserve"><value>Kunci API</value></data>
+  <data name="EmailProvider_AwsAccessKeyId" xml:space="preserve"><value>ID kunci akses</value></data>
+  <data name="EmailProvider_AwsSecretAccessKey" xml:space="preserve"><value>Kunci akses rahasia</value></data>
+  <data name="EmailProvider_TestEmailAddress" xml:space="preserve"><value>Alamat email</value></data>
+  <data name="EmailProvider_SendTestEmail" xml:space="preserve"><value>Kirim email</value></data>
+  <data name="EmailProvider_SendTestEmailResult" xml:space="preserve"><value>Contoh email undangan berhasil dikirim</value></data>
+  <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve"><value>Kirim email uji</value></data>
+  <data name="EmailProvider_PageDesc" xml:space="preserve"><value>Siapkan penyedia layanan email massal</value></data>
+  <data name="EmailProvider_SenderHeader" xml:space="preserve"><value>Informasi pengirim</value></data>
+  <data name="EmailProvider_SenderHelp" xml:space="preserve"><value>Alamat email pengirim yang akan muncul di bidang FROM</value></data>
+  <data name="EmailProvider_ReplyAddressHelp" xml:space="preserve"><value>Alamat email tempat balasan dapat dikirim</value></data>
+  <data name="EmailProvider_SenderName" xml:space="preserve"><value>Nama pengirim</value></data>
+  <data name="EmailProvider_ReplyAddress" xml:space="preserve"><value>Alamat balasan</value></data>
+  <data name="EmailProvider_SenderNameHelp" xml:space="preserve"><value>Nama pengirim yang akan muncul di bidang FROM</value></data>
+  <data name="EmailProvider_Address" xml:space="preserve"><value>Alamat pos pengirim</value></data>
+  <data name="EmailProvider_AddressHelp" xml:space="preserve"><value>Alamat pos pengirim saat ini</value></data>
+  <data name="EmailProvider_ServiceProvideHeader" xml:space="preserve"><value>Tentukan penyedia layanan email massal</value></data>
+  <data name="EmailProvider_AwsAccessKeyIdHelp" xml:space="preserve"><value>Anda dapat menemukan ID akun AWS dari Konsol Manajemen AWS</value></data>
+  <data name="EmailProvider_AwsSecretAccessKeyHelp" xml:space="preserve"><value>Ditemukan di Kredensial Keamanan di Konsol Manajemen AWS</value></data>
+  <data name="EmailProvider_AwsRegion" xml:space="preserve"><value>Wilayah</value></data>
+  <data name="EmailProvider_AwsRegionHelp" xml:space="preserve"><value>Wilayah untuk Konsol Manajemen AWS</value></data>
+  <data name="EmailProvider_AwsRegion_Unknown" xml:space="preserve"><value>Wilayah yang dipilih tidak dikenal. Silakan periksa.</value></data>
+  <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve"><value>Anda dapat menemukannya di halaman Kunci API di menu pengaturan SendGrid</value></data>
+  <data name="EmailProvider_GeneralError" xml:space="preserve"><value>Terjadi kesalahan umum</value></data>
+  <data name="EmailProvider_HelpLinkText" xml:space="preserve"><value>di sini</value></data>
+  <data name="EmailProvider_SendTestEmailMessage" xml:space="preserve"><value>Kirim email uji kepada diri sendiri untuk memverifikasi layanan email massal berfungsi</value></data>
+  <data name="EmailProvider_SettingsSavedSuccessfully" xml:space="preserve"><value>Konfigurasi layanan email berhasil disimpan.</value></data>
+  <data name="DeviceNotifications" xml:space="preserve"><value>Aktifkan notifikasi di perangkat</value></data>
+  <data name="DeviceNotificationsDescription" xml:space="preserve"><value>Saat diaktifkan, perangkat akan memberi tahu pemilik tentang perubahan</value></data>
+  <data name="EsriApiKey" xml:space="preserve"><value>Kunci API ESRI</value></data>
+  <data name="EsriApiKeyDescription" xml:space="preserve"><value>Kunci ini akan memungkinkan penggunaan peta online di perangkat</value></data>
+  <data name="EmailProvider_Smtp" xml:space="preserve"><value>Server SMTP</value></data>
+  <data name="EmailProvider_SmtpDescription" xml:space="preserve"><value>Konfigurasikan parameter untuk mengakses server SMTP.</value></data>
+  <data name="EmailProvider_SmtpHost" xml:space="preserve"><value>Host</value></data>
+  <data name="EmailProvider_SmtpHostHelp" xml:space="preserve"><value>Alamat server SMTP</value></data>
+  <data name="EmailProvider_SmtpPort" xml:space="preserve"><value>Port</value></data>
+  <data name="EmailProvider_SmtpPortHelp" xml:space="preserve"><value>Port SMTP</value></data>
+  <data name="EmailProvider_SmtpTlsEncryption" xml:space="preserve"><value>Gunakan enkripsi TLS</value></data>
+  <data name="EmailProvider_SmtpAuthentication" xml:space="preserve"><value>Gunakan autentikasi</value></data>
+  <data name="EmailProvider_SmtpUsername" xml:space="preserve"><value>Nama pengguna</value></data>
+  <data name="EmailProvider_SmtpPassword" xml:space="preserve"><value>Kata sandi</value></data>
+  <data name="WorkspaceSettings" xml:space="preserve"><value>Pengaturan ruang kerja</value></data>
+  <data name="Export" xml:space="preserve"><value>Ekspor</value></data>
+  <data name="GlobalNote" xml:space="preserve"><value>Catatan global</value></data>
+  <data name="UserProfile" xml:space="preserve"><value>Profil pengguna</value></data>
+  <data name="Devices" xml:space="preserve"><value>Perangkat</value></data>
+  <data name="WebInterview" xml:space="preserve"><value>Wawancara web</value></data>
+  <data name="FileRetentionTitle" xml:space="preserve"><value>Kebijakan retensi</value></data>
+  <data name="FileRetentionDescription" xml:space="preserve"><value>File ekspor yang lebih lama akan dihapus secara berkala</value></data>
+  <data name="RetentionInDaysTitle" xml:space="preserve"><value>Hari untuk disimpan</value></data>
+  <data name="RetentionInDaysDescription" xml:space="preserve"><value>Jumlah hari file ekspor akan disimpan</value></data>
+  <data name="RetentionInCountTitle" xml:space="preserve"><value>Jumlah file untuk disimpan</value></data>
+  <data name="RetentionInCountDescription" xml:space="preserve"><value>Jumlah maksimum file ekspor yang disimpan</value></data>
+  <data name="EnableFileRetention" xml:space="preserve"><value>Aktifkan kebijakan retensi</value></data>
+  <data name="RetentionPolicyEnablingConfirm" xml:space="preserve"><value>Apakah Anda yakin ingin mengaktifkan kebijakan retensi?</value></data>
+  <data name="ForceRunRetentionPolicy" xml:space="preserve"><value>Paksa jalankan</value></data>
+  <data name="ExportEncryption_Warning" xml:space="preserve"><value>Mengubah pengaturan enkripsi akan menghapus semua file ekspor yang dihasilkan sebelumnya</value></data>
+  <data name="LogoSizeLimit" xml:space="preserve"><value>Ukuran gambar logo harus kurang dari {{size}}</value></data>
+  <data name="SelectFileWarning" xml:space="preserve"><value>Silakan pilih file untuk diunggah.</value></data>
+  <data name="LogoUploadSuccess" xml:space="preserve"><value>Logo berhasil diunggah.</value></data>
+  <data name="LogoUploadError" xml:space="preserve"><value>Gagal mengunggah logo. Silakan coba lagi.</value></data>
+  <data name="LogoRemoveSuccess" xml:space="preserve"><value>Logo berhasil dihapus.</value></data>
+  <data name="LogoRemoveError" xml:space="preserve"><value>Gagal menghapus logo. Silakan coba lagi.</value></data>
+  <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve"><value>Izinkan supervisor mengubah status tugas</value></data>
+  <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve"><value>Saat diaktifkan, supervisor dapat menutup dan membuka kembali tugas</value></data>
+  <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve"><value>Izinkan pewawancara mengubah status tugas</value></data>
+  <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve"><value>Saat diaktifkan, pewawancara dapat menyelesaikan dan membuka kembali tugas</value></data>
+  <data name="AudioRecordingQuality" xml:space="preserve"><value>Kualitas perekaman audio</value></data>
+  <data name="AudioRecordingQualityDescription" xml:space="preserve"><value>Kualitas audio yang digunakan saat merekam audio</value></data>
+  <data name="AudioRecordingQuality_Mono44kHz" xml:space="preserve"><value>64 kbps, Mono, 44,1 kHz</value></data>
+  <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve"><value>64 kbps, Mono, 22,05 kHz</value></data>
+  <data name="AudioRecordingQuality_Mono16kHz" xml:space="preserve"><value>32 kbps, Mono, 16 kHz</value></data>
+  <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve"><value>128 kbps, Stereo, 44,1 kHz</value></data>
+  <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve"><value>128 kbps, Stereo, 48 kHz</value></data>
+  <data name="ChangeStateDisabledConfirm" xml:space="preserve"><value>Apakah Anda yakin ingin mengubah pengaturan keamanan? Data yang diekspor akan tidak aman.</value></data>
+  <data name="LogoSettings_Description1" xml:space="preserve"><value>Klik tombol 'Pilih file' untuk mengunggah gambar dari komputer Anda ke server</value></data>
+  <data name="EmailProvider_SmtpTlsEncryptionHelp" xml:space="preserve"><value>Enkripsi TLS (Transport Layer Security) mengamankan komunikasi</value></data>
+  <data name="EmailProvider_SmtpAuthenticationHelp" xml:space="preserve"><value>Autentikasi SMTP memverifikasi identitas klien sebelum mengizinkan pengiriman email</value></data>
+  <data name="EmailProvider_SmtpUsernameHelp" xml:space="preserve"><value>Kredensial yang digunakan selama proses autentikasi SMTP</value></data>
+  <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve"><value>Kredensial yang digunakan selama proses autentikasi SMTP</value></data>
+  <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve"><value>Peringatan! Ini adalah tindakan kritis yang akan mempengaruhi file ekspor yang ada</value></data>
+  <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve"><value>Apakah Anda yakin ingin memaksa menjalankan kebijakan retensi sekarang?</value></data>
+</root>

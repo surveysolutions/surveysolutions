@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="InvalidDeviceIdentifier" xml:space="preserve">
+        <value>ឧបករណ៍កំណត់អត្តសញ្ញាណមិនត្រឹមត្រូវ។ មានអ្វីមួយបានកើតឡើងជាមួយនឹងការដំឡើងកម្មវិធីអតិថិជន សូមផ្ញើព័ត៌មានកុំព្យូទ័របន្ទះ។</value>
+    </data>
+    <data name="InvalidUserFormat" xml:space="preserve">
+        <value>ការធ្វើសមកាលកម្មបានបរាជ័យ។ អ្នកប្រើប្រាស់មិនត្រូវបានអនុញ្ញាតទេ។ សូមពិនិត្យមើលការចូល/ពាក្យសម្ងាត់របស់អ្នកសម្រាប់ {0} ។</value>
+    </data>
+    <data name="NoClientIdentifier" xml:space="preserve">
+        <value>ការធ្វើសមកាលកម្មបានបរាជ័យ។ សូមដំឡើងកម្មវិធីឡើងវិញ។ បាត់ឧបករណ៍សម្គាល់ការដំឡើង។ សូមទាក់ទងអ្នកអភិវឌ្ឍន៍។</value>
+    </data>
+    <data name="InterviewerApplicationShouldBeUpdated" xml:space="preserve">
+        <value>ការធ្វើសមកាលកម្មបានបរាជ័យ។ កម្មវិធីរបស់អ្នកមិនត្រូវគ្នាទេ សូមអាប់ដេតកម្មវិធី Interviewer របស់អ្នក។</value>
+    </data>
+    <data name="InterviewerIsNotCompatibleWithThisVersion" xml:space="preserve">
+        <value>ការធ្វើសមកាលកម្មបានបរាជ័យ។ កម្មវិធីរបស់អ្នកមិនត្រូវគ្នាទេ។ លុបកម្មវិធីរបស់អ្នក ហើយទាញយកកំណែថ្មីនៃកម្មវិធី Interviewer</value>
+    </data>
+    <data name="AndroidDeviceIdWasNotProvided" xml:space="preserve">
+        <value>ការធ្វើសមកាលកម្មបានបរាជ័យ។ លេខសម្គាល់ឧបករណ៍ Android មិនត្រូវបានផ្តល់ឱ្យទេ។ សូមទាក់ទងអ្នកអភិវឌ្ឍន៍។</value>
+    </data>
+    <data name="WrongAndroidDeviceIdWasProvided" xml:space="preserve">
+        <value>ការធ្វើសមកាលកម្មបានបរាជ័យ។ លេខសម្គាល់ឧបករណ៍ Android ខុសត្រូវបានផ្តល់ជូន។ សូមទាក់ទងអ្នកអភិវឌ្ឍន៍។</value>
+    </data>
+    <data name="ServerError" xml:space="preserve">
+        <value>ការធ្វើសមកាលកម្មបានបរាជ័យ។ កំហុសម៉ាស៊ីនមេខាងក្នុងបានកើតឡើង។ សូមទាក់ទងអ្នកអភិវឌ្ឍន៍។</value>
+    </data>
+    <data name="FileWasNotFound" xml:space="preserve">
+        <value>ការធ្វើសមកាលកម្មបានបរាជ័យ។ ឯកសារដែលមានកំណែចុងក្រោយបំផុតមិនត្រូវបានរកឃើញទេ។ សូមទាក់ទងអ្នកអភិវឌ្ឍន៍។</value>
+    </data>
+    <data name="IncorrectFilesCount" xml:space="preserve">
+        <value>ការធ្វើសមកាលកម្មបានបរាជ័យ។ ចំនួនឯកសារមិនត្រឹមត្រូវ។ សូមទាក់ទងអ្នកអភិវឌ្ឍន៍។</value>
+    </data>
+    <data name="IncorrectMediaType" xml:space="preserve">
+        <value>ការធ្វើសមកាលកម្មបានបរាជ័យ។ ប្រភេទ​មេឌៀ​មិន​ត្រឹមត្រូវ។ សូមទាក់ទងអ្នកអភិវឌ្ឍន៍។</value>
+    </data>
+    <data name="InvalidSequenceIdentifier" xml:space="preserve">
+        <value>ការធ្វើសមកាលកម្មបានបរាជ័យ។ លេខសម្គាល់លំដាប់មិនត្រឹមត្រូវ។ មានអ្វីមួយបានកើតឡើងជាមួយនឹងការដំឡើងកម្មវិធីអតិថិជន ចុចប៊ូតុង "ផ្ញើព័ត៌មានកុំព្យូទ័របន្ទះ"។</value>
+    </data>
+    <data name="Sync_package_with_id__0__was_not_found_on_serverFormat" xml:space="preserve">
+        <value>ការធ្វើសមកាលកម្មបានបរាជ័យ។  កញ្ចប់សមកាលកម្មជាមួយលេខសម្គាល់ '{0}' មិនត្រូវបានរកឃើញនៅលើម៉ាស៊ីនមេទេ។ សូមទាក់ទងអ្នកអភិវឌ្ឍន៍។</value>
+    </data>
+    <data name="InvalidUserRole" xml:space="preserve">
+        <value>គណនីរបស់អ្នកមិនមានតួនាទីអនុញ្ញាតប្រតិបត្តិការនេះទេ។</value>
+    </data>
+    <data name="Maintenance" xml:space="preserve">
+        <value>ម៉ាស៊ីនមេស្ថិតនៅក្នុងរបៀបថែទាំឥឡូវនេះ។ សូមអភ័យទោសចំពោះការរអាក់រអួល។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។</value>
+    </data>
+    <data name="OldInterviewerNeedsCleanup" xml:space="preserve">
+        <value>ការធ្វើសមកាលកម្មបានបរាជ័យដោយផ្នែក។ ការសម្ភាសន៍ដែលបានបញ្ចប់ត្រូវបានផ្ញើទៅកាន់ម៉ាស៊ីនមេ ប៉ុន្តែអ្នកនឹងមិនទទួលបានកិច្ចការថ្មីទេ។ សូមចូលទៅកាន់ការកំណត់ Android -&gt; Apps -&gt; Interviewer ហើយចុចប៊ូតុង Clear Data។ បន្ទាប់មកធ្វើសមកាលកម្មពីទទេ។</value>
+    </data>
+</root>
