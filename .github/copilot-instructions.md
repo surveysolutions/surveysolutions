@@ -6,7 +6,7 @@
 
 - **Primary Languages:** C# (.NET 9), JavaScript/Vue 3 (frontend)
 - **Database:** PostgreSQL (NHibernate ORM for HQ, EF Core for Export service)
-- **Target Runtimes:** .NET 9, Node.js 22 (frontend; match CI workflow `NODE_VERSION`)
+- **Target Runtimes:** .NET 9, Node.js 24 (frontend; match CI workflow `NODE_VERSION`)
 
 ---
 
@@ -178,3 +178,7 @@ src/
 - **Only meaningful changes are allowed:** Do not change other lines for formatting or unrelated reasons. Move code only when it provides substantial value.
 - **Follow existing line endings and rely on `.gitattributes`:** Do not rewrite files just to change line endings;
 - **Preserve line ending in files:** keep original line endings in files, if mixed LF is a priority. keep `*.sln` files as CRLF where required.
+
+## Copilot Code Review Trace
+
+When performing a pull request review, include the token `repository-wide` in the `Instruction trace:` line at the end of every finding comment.

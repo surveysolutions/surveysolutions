@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType><xsd:choice maxOccurs="unbounded">
+        <xsd:element name="data"><xsd:complexType><xsd:sequence>
+          <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+          <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+        </xsd:sequence>
+        <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+        <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+        <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+        <xsd:attribute ref="xml:space" /></xsd:complexType></xsd:element>
+        <xsd:element name="resheader"><xsd:complexType><xsd:sequence>
+          <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+        </xsd:sequence><xsd:attribute name="name" type="xsd:string" use="required" /></xsd:complexType></xsd:element>
+      </xsd:choice></xsd:complexType></xsd:element></xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="WaitForHealthcheck" xml:space="preserve"><value>ჯანმრთელობის შემოწმების შედეგების მოლოდინი</value></data>
+  <data name="HealthCheckStatus" xml:space="preserve"><value>ჯანმრთელობის მდგომარეობა: {{status}}</value></data>
+  <data name="ServerMetrics" xml:space="preserve"><value>სერვერის მეტრიკა</value></data>
+  <data name="WaitingForMetrics" xml:space="preserve"><value>მეტრიკის გამოთვლა</value></data>
+  <data name="hq_baseurl_check" xml:space="preserve"><value>BaseUrl კონფიგურაციის შემოწმება</value></data>
+  <data name="export_service_check" xml:space="preserve"><value>ექსპორტის სერვისის შემოწმება</value></data>
+  <data name="export_service_connectivity_check" xml:space="preserve"><value>ექსპორტის სერვისის კავშირის შემოწმება</value></data>
+  <data name="broken_packages_check" xml:space="preserve"><value>დაზიანებული პაკეტების შემოწმება</value></data>
+  <data name="database_connection_check" xml:space="preserve"><value>მონაცემთა ბაზასთან კავშირის შემოწმება</value></data>
+  <data name="designer_check" xml:space="preserve"><value>Designer-თან კავშირის შემოწმება</value></data>
+  <data name="temp_folder_permissions" xml:space="preserve"><value>დროებითი საქაღალდის უფლებების შემოწმება</value></data>
+  <data name="temp_folder_permissions_Healthy" xml:space="preserve"><value>დროებით საქაღალდეზე წვდომა წარმატებით დასრულდა</value></data>
+  <data name="temp_folder_permissions_Unhealty_without_permissions" xml:space="preserve"><value>აპლიკაცია ვერ წერს დროებით ფაილებს: {0}</value></data>
+  <data name="temp_folder_permissions_Unhealty_can_not_check" xml:space="preserve"><value>ვერ შემოწმდა დროებითი საქაღალდის უფლებები {0}. შეცდომა: {1}</value></data>
+  <data name="temp_folder_permissions_Degraded_without_permissions" xml:space="preserve"><value>აპლიკაციას არ აქვს პრივილეგია შეამოწმოს დროებითი საქაღალდის უფლებები {0}</value></data>
+  <data name="temp_folder_permissions_Windows_check" xml:space="preserve"><value>სისტემა არ არის Windows</value></data>
+  <data name="UnexpectedBrokenPackages" xml:space="preserve"><value>გამოვლინდა {0} მოულოდნელი დაზიანებული პაკეტი</value></data>
+  <data name="database_connection_check_Healthy" xml:space="preserve"><value>მონაცემთა ბაზასთან კავშირი წარმატებულია</value></data>
+  <data name="database_connection_check_Unhealty" xml:space="preserve"><value>მონაცემთა ბაზასთან კავშირის შეცდომა: {0}</value></data>
+  <data name="export_service_connectivity_check_Healthy" xml:space="preserve"><value>{0}-ზე ექსპორტის სერვისმა უპასუხა სტატუსით {1}</value></data>
+  <data name="export_service_connectivity_check_Degraded" xml:space="preserve"><value>{0}-ზე ექსპორტის სერვისთან კავშირი არ არის</value></data>
+  <data name="designer_connectivity_check_Degraded" xml:space="preserve"><value>{0}-ზე Designer-თან კავშირი არ არის</value></data>
+  <data name="export_service_connectivity_check_Unhealthy" xml:space="preserve"><value>{0}-ზე ექსპორტის სერვისმა უპასუხა სტატუსით {1}</value></data>
+  <data name="export_service_check_Healthy" xml:space="preserve"><value>{0}-ზე ექსპორტის სერვისმა უპასუხა ვერსიით: v{1}</value></data>
+  <data name="designer_service_check_Healthy" xml:space="preserve"><value>{0}-ზე Designer-მა უპასუხა ვერსიით: v{1}</value></data>
+  <data name="hq_baseurl_check_Healthy" xml:space="preserve"><value>Headquarters კონფიგურირებულია Headquarters:BaseUrl: {0}-ით, რომელიც ემთხვევა ბრაუზერის მისამართების ზოლის მიმდინარე URL-ს.</value></data>
+  <data name="hq_baseurl_check_Degraded" xml:space="preserve"><value>Headquarters კონფიგურირებულია Headquarters:BaseUrl: {0}-ით, რომელიც განსხვავდება ბრაუზერის მიმდინარე URL-სგან. ეს შეიძლება პრობლემებს გამოიწვიოს ელ-ფოსტის ბმულებთან და ექსპორტის სერვისის ფუნქციონალობასთან</value></data>
+  <data name="embedded_export_service_check" xml:space="preserve"><value>ჩაშენებული ექსპორტის სერვისის ჰოსტი</value></data>
+  <data name="embedded_export_service_check_Healty" xml:space="preserve"><value>ექსპორტის სერვისი მუშაობს</value></data>
+  <data name="embedded_export_service_check_Degraded" xml:space="preserve"><value>ექსპორტის სერვისი არ მუშაობს</value></data>
+  <data name="Connectivity" xml:space="preserve"><value>Web სოკეტის კავშირი</value></data>
+  <data name="ServerStatuses" xml:space="preserve"><value>პასუხის სტატუსები</value></data>
+</root>

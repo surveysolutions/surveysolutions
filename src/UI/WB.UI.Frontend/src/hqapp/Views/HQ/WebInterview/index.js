@@ -1,9 +1,9 @@
-import Start from './Start'
-import Finish from './Finish'
-import Resume from './Resume'
-import Link from './Link'
-import OutdatedBrowser from './OutdatedBrowser'
-import Error from './Error'
+const Start = () => import('./Start')
+const Finish = () => import('./Finish')
+const Resume = () => import('./Resume')
+const Link = () => import('./Link')
+const OutdatedBrowser = () => import('./OutdatedBrowser')
+const Error = () => import('./Error')
 
 export default class ProfileComponent {
     get routes() {
