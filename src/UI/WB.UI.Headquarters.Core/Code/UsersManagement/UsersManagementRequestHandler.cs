@@ -9,6 +9,7 @@ using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Utils;
 using WB.UI.Headquarters.Models.Api;
 using WorkspaceApiView = WB.Core.SharedKernels.DataCollection.WebApi.WorkspaceApiView;
@@ -66,7 +67,7 @@ namespace WB.UI.Headquarters.Code.UsersManagement
             var recordsFiltered = await query.CountAsync(cancellationToken);
             var sortOrder = request.GetSortOrder();
 
-            var list = await query
+            var list = await ApplyUserSortOrder(query, sortOrder)
                 .Select(u => new UserManagementListItem(u.Id, u.UserName, u.Roles)
                 {
                     UserName = u.UserName,
@@ -78,7 +79,6 @@ namespace WB.UI.Headquarters.Code.UsersManagement
                     IsLocked = u.IsLockedByHeadquaters || u.IsLockedBySupervisor,
                     IsArchived = u.IsArchived
                 })
-                .OrderUsingSortExpression(sortOrder)
                 .Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
                 .ToListAsync(cancellationToken);
 
@@ -119,6 +119,49 @@ namespace WB.UI.Headquarters.Code.UsersManagement
                 RecordsFiltered = recordsFiltered,
                 Data = list
             };
+        }
+
+        private static IQueryable<HqUser> ApplyUserSortOrder(IQueryable<HqUser> query, string sortExpression)
+        {
+            if (string.IsNullOrWhiteSpace(sortExpression))
+                return query;
+
+            if (QueryableExtensions.ParseSortExpression(sortExpression) is not { } sortItems)
+                return query;
+
+            IOrderedQueryable<HqUser> ordered = null;
+            bool first = true;
+
+            foreach (var item in sortItems)
+            {
+                if (item.Field.Equals(nameof(HqUser.FullName), StringComparison.OrdinalIgnoreCase))
+                {
+                    // Coalesce null to empty string so that null and "" sort together,
+                    // preventing them from appearing at both ends of the sorted list.
+                    if (item.Direction == OrderDirection.Asc)
+                        ordered = first ? query.OrderBy(u => u.FullName ?? "") : ordered.ThenBy(u => u.FullName ?? "");
+                    else
+                        ordered = first ? query.OrderByDescending(u => u.FullName ?? "") : ordered.ThenByDescending(u => u.FullName ?? "");
+                }
+                else
+                {
+                    // Map UserManagementListItem field names to HqUser property names where they differ.
+                    var field = item.Field switch
+                    {
+                        "Phone" => nameof(HqUser.PhoneNumber),
+                        _ => item.Field
+                    };
+
+                    if (item.Direction == OrderDirection.Asc)
+                        ordered = first ? query.OrderBy(field) : ordered.ThenBy(field);
+                    else
+                        ordered = first ? query.OrderByDescending(field) : ordered.ThenByDescending(field);
+                }
+
+                first = false;
+            }
+
+            return ordered ?? query;
         }
 
         private static IQueryable<HqUser> ApplyFiltering(UsersManagementRequest request, IQueryable<HqUser> query)
