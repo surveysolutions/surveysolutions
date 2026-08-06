@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Levels" xml:space="preserve"><value>ระดับ</value></data>
+  <data name="MapLoadingInvalidFilesError" xml:space="preserve"><value>เกิดข้อผิดพลาด ไฟล์ต่อไปนี้ถูกละเว้น:</value></data>
+  <data name="MapLoadingNotZipError" xml:space="preserve"><value>เกิดข้อผิดพลาด ไฟล์ไม่ใช่ .zip</value></data>
+  <data name="MapsLoadingError" xml:space="preserve"><value>เกิดข้อผิดพลาดในการโหลดแผนที่</value></data>
+  <data name="MaxScale" xml:space="preserve"><value>มาตราส่วนสูงสุด</value></data>
+  <data name="MinScale" xml:space="preserve"><value>มาตราส่วนต่ำสุด</value></data>
+  <data name="Name" xml:space="preserve"><value>ชื่อ</value></data>
+  <data name="Size" xml:space="preserve"><value>ขนาด (MB)</value></data>
+  <data name="UpdateDate" xml:space="preserve"><value>นำเข้าเมื่อ</value></data>
+  <data name="UploadMapsSummaryFormat" xml:space="preserve"><value>ประมวลผลแผนที่ {0} รายการ พร้อมไฟล์แผนที่ไม่ถูกต้อง {1} รายการ</value></data>
+  <data name="MapEngineIsNotInitialized" xml:space="preserve"><value>ส่วนประกอบแผนที่ยังไม่ได้เริ่มต้น กรุณาติดต่อผู้ดูแลระบบ</value></data>
+  <data name="UploadMappingsSummaryFormat" xml:space="preserve"><value>ลิงก์สำหรับแผนที่ {0} รายการ ประมวลผลพร้อม {1} รายการไม่ถูกต้อง</value></data>
+  <data name="FileLoadingNotTsvError" xml:space="preserve"><value>เกิดข้อผิดพลาด ไฟล์ไม่ใช่ .tab</value></data>
+  <data name="MappingsLoadingError" xml:space="preserve"><value>เกิดข้อผิดพลาดในการโหลดลิงก์แผนที่</value></data>
+  <data name="MapOverlapsWith" xml:space="preserve"><value>ทับซ้อนกับ:</value></data>
+  <data name="MapOverlapsWithOther" xml:space="preserve"><value>และ {0} รายการอื่น</value></data>
+  <data name="MapLoadingNoMapsInArchive" xml:space="preserve"><value>เกิดข้อผิดพลาด ไฟล์อาร์ไคฟ์ไม่มีไฟล์แผนที่</value></data>
+  <data name="MapLoadingUnsupportedFilesInArchive" xml:space="preserve"><value>เกิดข้อผิดพลาด ไฟล์อาร์ไคฟ์มีไฟล์ที่ไม่ใช่แผนที่</value></data>
+  <data name="MapLoadingInvalidFile" xml:space="preserve"><value>ไฟล์ '{0}' มีข้อมูลที่ระบบไม่สามารถประมวลผลได้ ข้อผิดพลาด: {1}</value></data>
+  <data name="ShpIsMissingInArchive" xml:space="preserve"><value>ไฟล์ {0}.shp หายไปสำหรับ {0}</value></data>
+  <data name="ShxIsMissingInArchive" xml:space="preserve"><value>ไฟล์ {0}.shx หายไปสำหรับ {0}.shp</value></data>
+  <data name="DbfIsMissingInArchive" xml:space="preserve"><value>ไฟล์ {0}.dbf หายไปสำหรับ {0}.shp</value></data>
+  <data name="MapFileSizeLimit" xml:space="preserve"><value>ขนาดไฟล์ {0} ใหญ่กว่าขีดจำกัด {1}</value></data>
+  <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve"><value>ชื่อไฟล์ {0} มีอักขระที่ไม่ใช่ UTF-8</value></data>
+  <data name="MapFileNameHasInvalidChars" xml:space="preserve"><value>ชื่อไฟล์ {0} มีอักขระที่ไม่ถูกต้อง</value></data>
+</root>
