@@ -1,0 +1,430 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="DataExport_Title" xml:space="preserve">
+        <value>Xuất dữ liệu</value>
+        </data>
+    <data name="DataExport_Header" xml:space="preserve">
+        <value>Chọn loại và định dạng dữ liệu để xuất</value>
+        </data>
+    <data name="BinaryData" xml:space="preserve">
+        <value>Dữ liệu nhị phân</value>
+        </data>
+    <data name="DDI" xml:space="preserve">
+        <value>DDI</value>
+        </data>
+    <data name="ParaData" xml:space="preserve">
+        <value>Paradata</value>
+        </data>
+    <data name="Name" xml:space="preserve">
+        <value>Tên</value>
+        </data>
+    <data name="Format" xml:space="preserve">
+        <value>Định dạng</value>
+        </data>
+    <data name="StartDate" xml:space="preserve">
+        <value>Ngày bắt đầu</value>
+        </data>
+    <data name="LastUpdateDate" xml:space="preserve">
+        <value>Ngày cập nhật lần cuối</value>
+        </data>
+    <data name="Progress" xml:space="preserve">
+        <value>Tiến triển</value>
+        </data>
+    <data name="ConfirmStop" xml:space="preserve">
+        <value>Bạn có chắc chắn muốn dừng lại không</value>
+        </data>
+    <data name="export" xml:space="preserve">
+        <value>quá trình xuất khẩu</value>
+        </data>
+    <data name="Metadata" xml:space="preserve">
+        <value>Siêu dữ liệu</value>
+        </data>
+    <data name="BinaryDescription" xml:space="preserve">
+        <value>Lưu trữ với dữ liệu nhị phân (ví dụ: hình ảnh, âm thanh)</value>
+        </data>
+    <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
+        <value>Bạn không thể thay đổi cài đặt xuất vì quá trình xuất đang chạy.</value>
+        </data>
+    <data name="Bytes" xml:space="preserve">
+        <value>MB</value>
+        </data>
+    <data name="Completed" xml:space="preserve">
+        <value>Hoàn thành</value>
+        </data>
+    <data name="DataWasNotGenerated" xml:space="preserve">
+        <value>Không được tạo</value>
+        </data>
+    <data name="DDIDescription" xml:space="preserve">
+        <value>Dữ liệu XML của Sáng kiến ​​Tài liệu Dữ liệu</value>
+        </data>
+    <data name="Download" xml:space="preserve">
+        <value>Tải xuống</value>
+        </data>
+    <data name="ExportRange" xml:space="preserve">
+        <value>Phạm vi xuất khẩu:</value>
+        </data>
+    <data name="FileSizeTitle" xml:space="preserve">
+        <value>Kích thước tệp</value>
+        </data>
+    <data name="FormatTitle" xml:space="preserve">
+        <value>định dạng</value>
+        </data>
+    <data name="Generate" xml:space="preserve">
+        <value>Phát ra</value>
+        </data>
+    <data name="Generating" xml:space="preserve">
+        <value>Đang tạo</value>
+        </data>
+    <data name="Preparing" xml:space="preserve">
+        <value>Chuẩn bị</value>
+        </data>
+    <data name="Compressing" xml:space="preserve">
+        <value>nén</value>
+        </data>
+    <data name="LastGeneratedTitle" xml:space="preserve">
+        <value>Được tạo vào</value>
+        </data>
+    <data name="MainSurveyDataTitle" xml:space="preserve">
+        <value>Dữ liệu khảo sát chính</value>
+        </data>
+    <data name="NoDataAvailable" xml:space="preserve">
+        <value>Không có sẵn dữ liệu</value>
+        </data>
+    <data name="ParadataDescription" xml:space="preserve">
+        <value>Siêu dữ liệu về quá trình phỏng vấn (sự kiện và thời gian)</value>
+        </data>
+    <data name="QueuedTitle" xml:space="preserve">
+        <value>Đã xếp hàng</value>
+        </data>
+    <data name="StatusOfExportTitle" xml:space="preserve">
+        <value>Tình trạng phỏng vấn đã xuất</value>
+        </data>
+    <data name="FromDate" xml:space="preserve">
+        <value>Từ</value>
+        </data>
+    <data name="ToDate" xml:space="preserve">
+        <value>ĐẾN</value>
+        </data>
+    <data name="SurveyTemplateTitle" xml:space="preserve">
+        <value>(phiên bản) Bảng câu hỏi khảo sát</value>
+        </data>
+    <data name="ZipArchiveDescription" xml:space="preserve">
+        <value>Lưu trữ zip với dữ liệu phỏng vấn chính</value>
+        </data>
+    <data name="XMLFileDescription" xml:space="preserve">
+        <value>định dạng XML</value>
+        </data>
+    <data name="ItemsInQueue" xml:space="preserve">
+        <value>Các mặt hàng trong hàng đợi xuất:</value>
+        </data>
+    <data name="TabularFormat" xml:space="preserve">
+        <value>Định dạng bảng</value>
+        </data>
+    <data name="ExportExplanation" xml:space="preserve">
+        <value>Nhấn nút "Thêm vào hàng đợi" sẽ tạo ra một kho lưu trữ dữ liệu các cuộc phỏng vấn có sẵn trên máy chủ tại thời điểm đó. Thời gian tạo kho lưu trữ và kích thước kho lưu trữ được hiển thị trong bảng. Có thể tải xuống kho lưu trữ dữ liệu được tạo cuối cùng bằng cách nhấn nút Tải xuống. Nhấn nút "Thêm vào hàng đợi" lần nữa để tạo kho lưu trữ mới.</value>
+        </data>
+    <data name="ZipFile" xml:space="preserve">
+        <value>Tệp zip</value>
+        </data>
+    <data name="Dropbox" xml:space="preserve">
+        <value>Dropbox</value>
+        </data>
+    <data name="OneDrive" xml:space="preserve">
+        <value>OneDrive</value>
+        </data>
+    <data name="GoogleDrive" xml:space="preserve">
+        <value>Google Drive</value>
+        </data>
+    <data name="SaveBinaryDataTo" xml:space="preserve">
+        <value>Lưu dữ liệu nhị phân vào:</value>
+        </data>
+    <data name="ExportBtn" xml:space="preserve">
+        <value>Xuất khẩu</value>
+        </data>
+    <data name="DataExport_Destination_Dropbox" xml:space="preserve">
+        <value>Tệp xuất sẽ được tải lên Dropbox</value>
+        </data>
+    <data name="DataExport_Destination_File" xml:space="preserve">
+        <value>Tệp xuất sẽ có sẵn để tải xuống</value>
+        </data>
+    <data name="DataExport_Destination_GoogleDrive" xml:space="preserve">
+        <value>Tệp xuất sẽ được tải lên Google Drive</value>
+        </data>
+    <data name="DataExport_Destination_OneDrive" xml:space="preserve">
+        <value>Tệp xuất sẽ được tải lên OneDrive</value>
+        </data>
+    <data name="DataExport_QueuedOn" xml:space="preserve">
+        <value>Xếp hàng vào {{date}}</value>
+        </data>
+    <data name="DataExport_CompletedOn" xml:space="preserve">
+        <value>Đã hoàn thành vào {{date}}</value>
+        </data>
+    <data name="DataExport_QuestionnaireWithVersion" xml:space="preserve">
+        <value>{{title}} (phiên bản {{version}})</value>
+        </data>
+    <data name="DataExport_Regenerate" xml:space="preserve">
+        <value>tái sinh</value>
+        </data>
+    <data name="DataExport_RegenerateDesc" xml:space="preserve">
+        <value>Xuất hàng đợi có cùng thông số</value>
+        </data>
+    <data name="DataExport_FileLastUpdate" xml:space="preserve">
+        <value>Cập nhật lần cuối: {{date}}</value>
+        </data>
+    <data name="DataExport_FileWasRegenerated" xml:space="preserve">
+        <value>Tệp đã được tạo lại hoặc bị xóa</value>
+        </data>
+    <data name="DataExport_FileSize" xml:space="preserve">
+        <value>Kích thước tệp: {{size}} MB</value>
+        </data>
+    <data name="DataExport_ProducedIn" xml:space="preserve">
+        <value>Sản xuất tại:</value>
+        </data>
+    <data name="DataExport_InQueue" xml:space="preserve">
+        <value>Trong hàng đợi:</value>
+        </data>
+    <data name="DataExport_Destination" xml:space="preserve">
+        <value>Điểm đến: {{dest}}</value>
+        </data>
+    <data name="DataExport_ServiceIsNotAvailable" xml:space="preserve">
+        <value>Dịch vụ xuất khẩu không có sẵn</value>
+        </data>
+    <data name="DataType" xml:space="preserve">
+        <value>Kiểu dữ liệu</value>
+        </data>
+    <data name="DataType_Binary" xml:space="preserve">
+        <value>Dữ liệu nhị phân. Lưu trữ với dữ liệu nhị phân (ví dụ: hình ảnh, âm thanh)</value>
+        </data>
+    <data name="DataType_Ddi" xml:space="preserve">
+        <value>DDI. Dữ liệu XML của Sáng kiến ​​Tài liệu Dữ liệu</value>
+        </data>
+    <data name="DataType_MainSurveyData" xml:space="preserve">
+        <value>Dữ liệu khảo sát chính. Lưu trữ zip với dữ liệu phỏng vấn chính</value>
+        </data>
+    <data name="FilterTitle" xml:space="preserve">
+        <value>Lọc các cuộc phỏng vấn để xuất</value>
+        </data>
+    <data name="SurveyQuestionnaire" xml:space="preserve">
+        <value>Bảng câu hỏi</value>
+        </data>
+    <data name="SurveyQuestionnaireVersion" xml:space="preserve">
+        <value>Phiên bản câu hỏi</value>
+        </data>
+    <data name="DataType_Paradata" xml:space="preserve">
+        <value>Paradata. Siêu dữ liệu về quá trình phỏng vấn (sự kiện và thời gian)</value>
+        </data>
+    <data name="DataDestination" xml:space="preserve">
+        <value>Đích xuất tệp</value>
+        </data>
+    <data name="DataFormat" xml:space="preserve">
+        <value>Định dạng dữ liệu</value>
+        </data>
+    <data name="DataDestination_Dropbox" xml:space="preserve">
+        <value>Tải lên Dropbox</value>
+        </data>
+    <data name="DataDestination_GoogleDrive" xml:space="preserve">
+        <value>Tải lên Google Drive</value>
+        </data>
+    <data name="DataDestination_OneDrive" xml:space="preserve">
+        <value>Tải lên OneDrive</value>
+        </data>
+    <data name="DataDestination_Zip" xml:space="preserve">
+        <value>Tải xuống</value>
+        </data>
+    <data name="DataFormat_Spss" xml:space="preserve">
+        <value>định dạng SPSS</value>
+        </data>
+    <data name="DataFormat_Stata" xml:space="preserve">
+        <value>Định dạng Stata 14</value>
+        </data>
+    <data name="DataFormat_Tab" xml:space="preserve">
+        <value>Dữ liệu được phân tách bằng tab</value>
+        </data>
+    <data name="QuestionnaireInformation" xml:space="preserve">
+        <value>Thông tin bảng câu hỏi</value>
+        </data>
+    <data name="QuestionnaireInformation_Include" xml:space="preserve">
+        <value>Bao gồm thông tin meta về bảng câu hỏi</value>
+        </data>
+    <data name="QuestionnaireInformation_Exclude" xml:space="preserve">
+        <value>Loại trừ thông tin meta về bảng câu hỏi</value>
+        </data>
+    <data name="AddToQueue" xml:space="preserve">
+        <value>Thêm vào hàng đợi</value>
+        </data>
+    <data name="GeneratedDataSets" xml:space="preserve">
+        <value>Bộ xuất được tạo trước đó</value>
+        </data>
+    <data name="GeneratedDataSets_Desc" xml:space="preserve">
+        <value>Dữ liệu được xuất trong kho lưu trữ zip chứa các tệp dữ liệu có nội dung và loại được chỉ định. Dưới đây là danh sách các tệp dữ liệu đã xuất trước đó.</value>
+        </data>
+    <data name="NoDataSets" xml:space="preserve">
+        <value>Chưa có tập dữ liệu nào được tạo</value>
+        </data>
+    <data name="DataExportApi" xml:space="preserve">
+        <value>API xuất dữ liệu</value>
+        </data>
+    <data name="DataExportApiDesc" xml:space="preserve">
+        <value>Bạn có thể thiết lập tự động xuất dữ liệu phỏng vấn đã thu thập bằng bộ công cụ API của chúng tôi để biết thêm thông tin và hướng dẫn sử dụng:</value>
+        </data>
+    <data name="DataExportApiInfoPage" xml:space="preserve">
+        <value>Tài liệu tham khảo API xuất dữ liệu</value>
+        </data>
+    <data name="Error_Canceled" xml:space="preserve">
+        <value>Công việc xuất đã bị người dùng hủy.</value>
+        </data>
+    <data name="Error_NotEnoughExternalStorageSpace" xml:space="preserve">
+        <value>Không đủ dung lượng cho bộ nhớ đám mây đã chọn. Vui lòng giải phóng dung lượng và bắt đầu lại công việc hoặc chọn nhà cung cấp khác.</value>
+        </data>
+    <data name="Error_Unhandled" xml:space="preserve">
+        <value>Đã xảy ra lỗi không mong muốn trong quá trình xuất. Chúng tôi xin lỗi vì sự bất tiện này. Vui lòng liên hệ với nhóm hỗ trợ máy chủ của bạn. Thông tin bổ sung về vấn đề này có sẵn tại trang hỗ trợ: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
+        </data>
+    <data name="AllStatuses" xml:space="preserve">
+        <value>tất cả trạng thái</value>
+        </data>
+    <data name="ApprovedByHeadquarters" xml:space="preserve">
+        <value>Được phê duyệt bởi trụ sở chính</value>
+        </data>
+    <data name="ApprovedBySupervisor" xml:space="preserve">
+        <value>Được phê duyệt bởi trạng thái Giám sát viên</value>
+        </data>
+    <data name="DataExport_InterviewsStatus" xml:space="preserve">
+        <value>Phỏng vấn ở {{status}}.</value>
+        </data>
+    <data name="InterviewerAssigned" xml:space="preserve">
+        <value>Người phỏng vấn được chỉ định trạng thái</value>
+        </data>
+    <data name="QuestionnaireTranslation" xml:space="preserve">
+        <value>Dịch thuật</value>
+        </data>
+    <data name="Translation_CardLabel" xml:space="preserve">
+        <value>Bản dịch: {{language}}</value>
+        </data>
+    <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
+        <value>Dịch thuật</value>
+        </data>
+    <data name="SurveyQuestionnaireDateRange" xml:space="preserve">
+        <value>Phạm vi ngày</value>
+        </data>
+    <data name="DateRangeAllTime" xml:space="preserve">
+        <value>Mọi lúc</value>
+        </data>
+    <data name="DateRangeLast24hours" xml:space="preserve">
+        <value>24 giờ qua</value>
+        </data>
+    <data name="DateRangeLast7days" xml:space="preserve">
+        <value>7 ngày qua</value>
+        </data>
+    <data name="DateRangeLast30days" xml:space="preserve">
+        <value>30 ngày qua</value>
+        </data>
+    <data name="DateRangeLastToday" xml:space="preserve">
+        <value>Hôm nay</value>
+        </data>
+    <data name="DateRangeLastYesterday" xml:space="preserve">
+        <value>Hôm qua</value>
+        </data>
+    <data name="DateRangeCustom" xml:space="preserve">
+        <value>Phong tục</value>
+        </data>
+    <data name="SurveyQuestionnaireDateRangeFrom" xml:space="preserve">
+        <value>Từ</value>
+        </data>
+    <data name="DateRangeFromAll" xml:space="preserve">
+        <value>Có sẵn sớm nhất</value>
+        </data>
+    <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
+        <value>ĐẾN</value>
+        </data>
+    <data name="DateRangeToAll" xml:space="preserve">
+        <value>Thời điểm hiện tại</value>
+        </data>
+    <data name="DataType_AudioAuditFiles" xml:space="preserve">
+        <value>Kiểm toán âm thanh. Kho lưu trữ zip chứa dữ liệu Kiểm tra âm thanh</value>
+        </data>
+    <data name="ParadataEventsFilter" xml:space="preserve">
+        <value>Bộ lọc sự kiện</value>
+        </data>
+    <data name="ParadataEventsFilter_All" xml:space="preserve">
+        <value>Tất cả</value>
+        </data>
+    <data name="ParadataEventsFilter_Reduced" xml:space="preserve">
+        <value>Giảm</value>
+        </data>
+    <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
+        <value>Bộ paradata giảm không bao gồm các sự kiện có các mã sau: Câu hỏi được kích hoạt (13), Câu hỏi bị vô hiệu hóa (14), GroupEnabled (15), GroupDisabled (16), Câu hỏi được khai báoValid (17), Câu hỏi được khai báo không hợp lệ (18), Biến được kích hoạt (23), Biến bị vô hiệu hóa (24).</value>
+        </data>
+    <data name="Validation_FromDateInvalid" xml:space="preserve">
+        <value>Ngày "Từ" phải là ngày hợp lệ.</value>
+        </data>
+    <data name="Validation_FromDateInFuture" xml:space="preserve">
+        <value>Ngày "Từ" không thể ở trong tương lai.</value>
+        </data>
+    <data name="Validation_ToDateInvalid" xml:space="preserve">
+        <value>Ngày "Tới" phải là ngày hợp lệ.</value>
+        </data>
+    <data name="Validation_FromDateInvalidBeforeTo" xml:space="preserve">
+        <value>Ngày "Từ" phải hợp lệ trước khi xác thực ngày "Tới".</value>
+        </data>
+    <data name="Validation_ToDateBeforeFrom" xml:space="preserve">
+        <value>Ngày "Tới" phải lớn hơn ngày "Từ".</value>
+        </data>
+</root>
