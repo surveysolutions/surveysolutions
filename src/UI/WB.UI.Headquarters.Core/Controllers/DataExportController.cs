@@ -52,7 +52,7 @@ namespace WB.UI.Headquarters.Controllers
                 Statuses = statuses,
                 ExternalStoragesSettings = this.externalStoragesSettings is FakeExternalStoragesSettings
                     ? null
-                    : this.externalStoragesSettings,
+                    : ToPublicSettings(this.externalStoragesSettings),
                 Api = new
                 {
                     // HistoryUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "Paradata"}),
@@ -73,6 +73,38 @@ namespace WB.UI.Headquarters.Controllers
             };
 
             return this.View(export);
+        }
+
+        private static ExternalStoragesPublicSettings ToPublicSettings(ExternalStoragesSettings settings)
+        {
+            if (settings?.OAuth2 == null)
+                return null;
+
+            return new ExternalStoragesPublicSettings
+            {
+                OAuth2 = new ExternalStoragesPublicSettings.OAuth2PublicSettings
+                {
+                    RedirectUri = settings.OAuth2.RedirectUri,
+                    ResponseType = settings.OAuth2.ResponseType,
+                    Dropbox = ToPublicSettings(settings.OAuth2.Dropbox),
+                    OneDrive = ToPublicSettings(settings.OAuth2.OneDrive),
+                    GoogleDrive = ToPublicSettings(settings.OAuth2.GoogleDrive)
+                }
+            };
+        }
+
+        private static ExternalStoragesPublicSettings.ExternalStorageOAuth2PublicSettings ToPublicSettings(
+            ExternalStoragesSettings.ExternalStorageOAuth2Settings settings)
+        {
+            if (settings == null)
+                return null;
+
+            return new ExternalStoragesPublicSettings.ExternalStorageOAuth2PublicSettings
+            {
+                ClientId = settings.ClientId,
+                AuthorizationUri = settings.AuthorizationUri,
+                Scope = settings.Scope
+            };
         }
     }
 }
