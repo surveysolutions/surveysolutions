@@ -271,4 +271,7 @@
     <data name="CloneDeletedWarning" xml:space="preserve">
         <value>Anda sedang membuat salinan kuesioner yang dihapus. Beberapa bagian mungkin hilang.</value>
     </data>
+    <data name="IncludeScenarios" xml:space="preserve">
+        <value>Sertakan skenario</value>
+    </data>
 </root>
