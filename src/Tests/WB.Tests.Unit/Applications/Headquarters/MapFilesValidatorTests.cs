@@ -117,6 +117,57 @@ public class MapFilesValidatorTests
         Assert.That(validatorErrors.Count(), Is.EqualTo(1));
     }
 
+    [Test]
+    public void when_validate_map_name_exceeds_length_limit()
+    {
+        var longMapName = new string('a', 65);
+        var analyzeResults = new AnalyzeResult()
+        {
+            IsValid = true,
+            Maps = new List<MapFiles>()
+            {
+                new MapFiles()
+                {
+                    IsShapeFile = false,
+                    Name = longMapName,
+                    Files = new List<MapFile>() { MapFile("map.tif") }
+                },
+            }
+        };
+
+        var service = CreateMapFilesValidator();
+
+        var validatorErrors = service.Verify(analyzeResults).ToList();
+
+        Assert.That(validatorErrors.Any(), Is.True);
+        Assert.That(validatorErrors.Any(e => e.Message.Contains(MapFilesValidator.MapFileNameLengthLimit.ToString())), Is.True);
+    }
+
+    [Test]
+    public void when_validate_map_name_within_length_limit()
+    {
+        var mapName = new string('a', 64);
+        var analyzeResults = new AnalyzeResult()
+        {
+            IsValid = true,
+            Maps = new List<MapFiles>()
+            {
+                new MapFiles()
+                {
+                    IsShapeFile = false,
+                    Name = mapName,
+                    Files = new List<MapFile>() { MapFile("map.tif") }
+                },
+            }
+        };
+
+        var service = CreateMapFilesValidator();
+
+        var validatorErrors = service.Verify(analyzeResults).ToList();
+
+        Assert.That(validatorErrors, Is.Empty);
+    }
+
     private MapFile MapFile(string name, int size = 5000) => new MapFile() { Name = name, Size = size };
 
     private MapFilesValidator CreateMapFilesValidator()
