@@ -219,6 +219,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
         public string Instructions { get; set; }
         public bool HideInstructions { get; set; }
+        public int Indent { get; set; }
         public bool IsAnswered { get; set; }
         public bool AcceptAnswer { get; set; }
         public bool IsForSupervisor { get; set; }

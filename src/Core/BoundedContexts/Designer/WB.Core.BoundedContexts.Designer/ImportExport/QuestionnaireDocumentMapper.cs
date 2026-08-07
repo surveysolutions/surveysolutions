@@ -298,6 +298,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             dst.Instructions = src.Instructions;
             dst.HideInstructions = src.Properties?.HideInstructions ?? false;
             dst.IsCritical = src.Properties?.IsCritical ?? false;
+            dst.Indent = src.Properties?.Indent ?? 0;
             dst.QuestionScope = (Models.QuestionScope)(int)src.QuestionScope;
             dst.QuestionText = src.QuestionText;
             dst.VariableLabel = src.VariableLabel;
@@ -638,6 +639,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
 
             dst.Properties!.HideInstructions = src.HideInstructions;
             dst.Properties!.IsCritical = src.IsCritical;
+            dst.Properties!.Indent = src.Indent;
         }
 
         private TextQuestion MapTextQuestionFromModel(Models.Question.TextQuestion src, Dictionary<string, Guid> varToIdMap)

@@ -47,7 +47,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             List<ValidationCondition>? validationConditions = null, CategoricalOption[]? options = null, bool? areAnswersOrdered = null,
             QuestionnaireInfoFactory.SelectOption[]? geometryInputModeOptions = null,
             bool? geometryOverlapDetection = null,
-            bool? isCritical = null)
+            bool? isCritical = null,
+            int indent = 0)
         {
 
             this.SourceOfLinkedEntities = sourceOfLinkedEntities ?? new List<DropdownEntityView>();
@@ -103,6 +104,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             GeometryOverlapDetection = geometryOverlapDetection;
 
             IsCritical = isCritical;
+            Indent = indent;
         }
 
         public bool? GeometryOverlapDetection { get; set; }
@@ -164,5 +166,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string? CategoriesId { get; set; }
         public GeometryInputMode GeometryInputMode { get; set; }
         public bool? IsCritical { get; set; }
+        public int Indent { get; set; }
     }
 }
