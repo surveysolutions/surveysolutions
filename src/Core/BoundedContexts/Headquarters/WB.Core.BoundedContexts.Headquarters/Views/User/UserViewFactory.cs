@@ -164,6 +164,47 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
+        public UserListView GetUsersByRoleAcrossWorkspaces(int pageIndex, int pageSize, string searchBy, UserRoles role)
+        {
+            var selectedRoleId = role.ToUserId();
+            var allUsers = this.userRepository.Users
+                .Where(x => x.Roles.Any(r => r.Id == selectedRoleId))
+                .Where(x => !x.IsArchived);
+
+            if (!string.IsNullOrWhiteSpace(searchBy))
+            {
+                var searchByToLower = searchBy.ToLower();
+                allUsers = allUsers.Where(x =>
+                    (x.UserName != null && x.UserName.ToLower().Contains(searchByToLower))
+                    || (x.Email != null && x.Email.ToLower().Contains(searchByToLower)));
+            }
+
+            var filteredUsers = allUsers
+                .OrderBy(x => x.UserName)
+                .Skip((pageIndex - 1) * pageSize).Take(pageSize)
+                .Select(x => new InterviewersItem
+                {
+                    UserId = x.Id,
+                    UserName = x.UserName,
+                    Email = x.Email,
+                    CreationDate = x.CreationDate,
+                    IsArchived = x.IsArchived,
+                    IsLockedBySupervisor = x.IsLockedBySupervisor,
+                    IsLockedByHQ = x.IsLockedByHeadquaters,
+                    FullName = x.FullName,
+                    DeviceId = x.Profile.DeviceId
+                })
+                .ToList();
+
+            return new UserListView
+            {
+                Page = pageIndex,
+                PageSize = pageSize,
+                TotalCount = allUsers.Count(),
+                Items = filteredUsers
+            };
+        }
+
         public UsersView GetTeamResponsibles(int pageSize, string searchBy, Guid? supervisorId, bool showLocked = false, 
             bool? archived = false, QueryFilterRule filterRule = QueryFilterRule.Contains)
         {
