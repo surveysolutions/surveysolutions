@@ -6,9 +6,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
 {
     public interface IOAuth2Api
     {
-        [Post("/token")]
+        [Post("")]
         Task<ApiResponse<ExternalStorageTokenResponse>> GetTokensByAuthorizationCodeAsync([Body(BodySerializationMethod.UrlEncoded)] ExternalStorageAccessTokenRequest request);
-        [Post("/token")]
+        [Post("")]
         Task<ApiResponse<ExternalStorageTokenResponse>> GetAccessTokenByRefreshTokenAsync([Body(BodySerializationMethod.UrlEncoded)] ExternalStorageRefreshTokenRequest request);
     }
     
