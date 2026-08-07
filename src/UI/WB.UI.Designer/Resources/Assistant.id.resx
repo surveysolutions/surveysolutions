@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ClearHistory" xml:space="preserve">
+        <value>Hapus riwayat</value>
+    </data>
+    <data name="NotHelpful" xml:space="preserve">
+        <value>Membuka</value>
+    </data>
+    <data name="Helpful" xml:space="preserve">
+        <value>Bermanfaat</value>
+    </data>
+    <data name="Dislike" xml:space="preserve">
+        <value>Benci</value>
+    </data>
+    <data name="Unhelpful" xml:space="preserve">
+        <value>Tidak membantu</value>
+    </data>
+    <data name="NotUnhelpful" xml:space="preserve">
+        <value>Membuka</value>
+    </data>
+    <data name="UnhelpfulCommentTitle" xml:space="preserve">
+        <value>Tambahkan komentar</value>
+    </data>
+    <data name="UnhelpfulCommentPlaceholder" xml:space="preserve">
+        <value>Tulis komentar singkat (opsional)</value>
+    </data>
+    <data name="UnhelpfulCommentHint" xml:space="preserve">
+        <value>Apa yang salah dengan jawaban ini?</value>
+    </data>
+    <data name="Send" xml:space="preserve">
+        <value>Mengirim</value>
+    </data>
+    <data name="SendFeedback" xml:space="preserve">
+        <value>Kirim masukan</value>
+    </data>
+    <data name="NotHelpfulCommentTitle" xml:space="preserve">
+        <value>Tambahkan komentar</value>
+    </data>
+    <data name="NotHelpfulCommentPlaceholder" xml:space="preserve">
+        <value>Tulis komentar singkat (opsional)</value>
+    </data>
+    <data name="TypeMessage" xml:space="preserve">
+        <value>Ketik pesan Anda...</value>
+    </data>
+    <data name="Title" xml:space="preserve">
+        <value>Asisten AI</value>
+    </data>
+    <data name="WelcomeMessage" xml:space="preserve">
+        <value>Mulai percakapan dengan asisten AI. Pesan Anda mungkin digunakan untuk meningkatkan produk. Jangan membagikan informasi sensitif atau pribadi dalam obrolan ini.</value>
+    </data>
+    <data name="Disclaimer" xml:space="preserve">
+        <value>Konten ini diproduksi oleh sistem AI otomatis dan bukan merupakan informasi resmi atau terverifikasi. Ini mungkin mengandung kesalahan atau kelalaian. Pengguna bertanggung jawab untuk meninjau, memvalidasi, dan melakukan penilaian sebelum digunakan.</value>
+    </data>
+    <data name="DisclaimerLabel" xml:space="preserve">
+        <value>Konten yang dihasilkan oleh AI</value>
+    </data>
+    <data name="ConnectionError" xml:space="preserve">
+        <value>Gagal terhubung ke Asisten.</value>
+    </data>
+    <data name="RateLimitExceeded" xml:space="preserve">
+        <value>Batas tarif terlampaui. Silakan coba lagi nanti.</value>
+    </data>
+    <data name="StopRequest" xml:space="preserve">
+        <value>Berhenti</value>
+    </data>
+    <data name="Copy" xml:space="preserve">
+        <value>Menyalin</value>
+    </data>
+    <data name="CopyCode" xml:space="preserve">
+        <value>Salin kode</value>
+    </data>
+    <data name="NotAuthorized" xml:space="preserve">
+        <value>Tidak diizinkan.</value>
+    </data>
+    <data name="InvalidRequest" xml:space="preserve">
+        <value>Permintaan tidak valid. Silakan periksa format pesan Anda.</value>
+    </data>
+    <data name="AccessDenied" xml:space="preserve">
+        <value>Akses ditolak. Kunci API Anda mungkin tidak memiliki izin yang diperlukan.</value>
+    </data>
+    <data name="ModelNotFound" xml:space="preserve">
+        <value>Model asisten tidak ditemukan. Silakan periksa apakah Anda memiliki akses ke model yang dikonfigurasi.</value>
+    </data>
+    <data name="ServiceUnavailable" xml:space="preserve">
+        <value>Layanan asisten untuk sementara tidak tersedia. Silakan coba lagi nanti.</value>
+    </data>
+</root>
