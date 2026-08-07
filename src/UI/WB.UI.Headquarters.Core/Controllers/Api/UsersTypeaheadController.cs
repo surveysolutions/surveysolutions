@@ -33,6 +33,11 @@ namespace WB.UI.Headquarters.Controllers.Api
             => ToTypeaheadModel(this.usersFactory.GetUsersByRole(offset, limit, null, query, false, UserRoles.Supervisor));
 
         [HttpGet]
+        [Route("allSupervisors")]
+        public TypeaheadApiView AllSupervisors(string query, int limit = 10, int offset = 1)
+            => ToTypeaheadModel(this.usersFactory.GetUsersByRoleAcrossWorkspaces(offset, limit, query, UserRoles.Supervisor));
+
+        [HttpGet]
         [Route("workspaceSupervisors")]
         public TypeaheadApiView WorkspaceSupervisors(string query, string workspace, int limit = 10, int offset = 1)
             => ToTypeaheadModel(this.usersFactory.GetUsersByRole(offset, limit, null, query, false, UserRoles.Supervisor, workspace));
