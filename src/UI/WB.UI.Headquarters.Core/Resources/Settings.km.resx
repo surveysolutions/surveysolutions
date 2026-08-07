@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="ExportEncryption_Title" xml:space="preserve"><value>ការអ៊ិនគ្រីប</value></data>
+  <data name="GeographyExportFormat_Title" xml:space="preserve"><value>ទ្រង់ទ្រាយការនាំចេញភូមិសាស្ត្រ</value></data>
+  <data name="GeographyExportFormat_Wkt" xml:space="preserve"><value>WKT</value></data>
+  <data name="GeographyExportFormat_GeoJson" xml:space="preserve"><value>GeoJSON</value></data>
+  <data name="GeographyExportFormat_ArrayOfCoordinates" xml:space="preserve"><value>ខ្សែអក្សរធរណីមាត្ររបស់ Survey Solutions</value></data>
+  <data name="ClearExportCache_Title" xml:space="preserve"><value>សម្អាតឃ្លាំងចងចាំការនាំចេញ</value></data>
+  <data name="RemoveExportCache" xml:space="preserve"><value>សម្អាតឃ្លាំងចងចាំ</value></data>
+  <data name="RemoveExportCacheConfirm" xml:space="preserve"><value>តើអ្នកប្រាកដជាចង់សម្អាតឃ្លាំងចងចាំការនាំចេញ?</value></data>
+  <data name="RemoveExportCacheSuccess" xml:space="preserve"><value>ឃ្លាំងចងចាំការនាំចេញត្រូវបានសម្អាតដោយជោគជ័យ</value></data>
+  <data name="RemoveExportCache_Warning" xml:space="preserve"><value>ការព្រមាន! នេះជាសកម្មភាពមិនអាចត្រឡប់វិញ</value></data>
+  <data name="Settings_Title" xml:space="preserve"><value>ការកំណត់</value></data>
+  <data name="EnableEncryption" xml:space="preserve"><value>បើកការអ៊ិនគ្រីប</value></data>
+  <data name="Password" xml:space="preserve"><value>ពាក្យសម្ងាត់</value></data>
+  <data name="GlobalNotice" xml:space="preserve"><value>កំណត់ចំណាំសកល</value></data>
+  <data name="Logo" xml:space="preserve"><value>រូបសញ្ញាក្រុមហ៊ុន</value></data>
+  <data name="LogoUpdated" xml:space="preserve"><value>រូបសញ្ញាក្រុមហ៊ុនបានធ្វើបច្ចុប្បន្នភាព</value></data>
+  <data name="UserProfileSettings_Title" xml:space="preserve"><value>ប្រវត្តិរូបអ្នកប្រើប្រាស់</value></data>
+  <data name="WebInterviewEmailNotifications_Title" xml:space="preserve"><value>ការសំភាសន៍តាមវែប</value></data>
+  <data name="MobileAppSettings_Title" xml:space="preserve"><value>កម្មវិធីអ្នកសំភាសន៍/អ្នកត្រួតពិនិត្យ</value></data>
+  <data name="AllowInterviewerUpdateProfile" xml:space="preserve"><value>ការកែប្រែប្រវត្តិរូបអ្នករៀបចំ</value></data>
+  <data name="AllowWebInterviewEmailNotifications" xml:space="preserve"><value>ការជូនដំណឹងអ៊ីម៉ែលការសំភាសន៍តាមវែប</value></data>
+  <data name="InterviewerAutoUpdate" xml:space="preserve"><value>បើកការធ្វើបច្ចុប្បន្នភាពដោយស្វ័យប្រវត្តិ</value></data>
+  <data name="InterviewerAutoUpdateEnabled" xml:space="preserve"><value>ការធ្វើបច្ចុប្បន្នភាពស្វ័យប្រវត្តិត្រូវបានបើក</value></data>
+  <data name="InterviewerAutoUpdateDisabled" xml:space="preserve"><value>ការធ្វើបច្ចុប្បន្នភាពស្វ័យប្រវត្តិត្រូវបានបិទ</value></data>
+  <data name="LogoNotUpdated" xml:space="preserve"><value>រូបសញ្ញាក្រុមហ៊ុនមិនបានធ្វើបច្ចុប្បន្នភាព</value></data>
+  <data name="GlobalNoteSettings" xml:space="preserve"><value>ការកំណត់កំណត់ចំណាំសកល</value></data>
+  <data name="LogoSettings" xml:space="preserve"><value>ការកំណត់រូបសញ្ញា</value></data>
+  <data name="RemoveLogo" xml:space="preserve"><value>ដកចេញរូបសញ្ណា</value></data>
+  <data name="GlobalNoteSaved" xml:space="preserve"><value>កំណត់ចំណាំបានរក្សាទុក</value></data>
+  <data name="CurrentLogo" xml:space="preserve"><value>រូបសញ្ញាបច្ចុប្បន្ន</value></data>
+  <data name="GlobalNoteClearingConfirm" xml:space="preserve"><value>តើអ្នកប្រាកដជាចង់លុបកំណត់ចំណាំសកល?</value></data>
+  <data name="InterviewerPartialSynchronization" xml:space="preserve"><value>បើកការធ្វើសមកាលកម្មដោយផ្នែក</value></data>
+  <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve"><value>ដែនកំណត់ភាពត្រឹមត្រូវទីតាំង</value></data>
+  <data name="InterviewerGeographyQuestionPeriodInSeconds" xml:space="preserve"><value>រយៈពេលសំណួរភូមិសាស្ត្រ</value></data>
+  <data name="EmailProvider_None" xml:space="preserve"><value>គ្មាន</value></data>
+  <data name="EmailProvider_SenderAddress" xml:space="preserve"><value>អាសយដ្ឋានអ៊ីម៉ែលអ្នកផ្ញើ</value></data>
+  <data name="EmailProvider_SendTestEmail" xml:space="preserve"><value>ផ្ញើអ៊ីម៉ែល</value></data>
+  <data name="EmailProvider_SendTestEmailResult" xml:space="preserve"><value>ពោទ្ធ​ន​អ៊ីម៉ែលពិសោធន៍ត្រូវបានផ្ញើដោយជោគជ័យ</value></data>
+  <data name="EmailProvider_SenderName" xml:space="preserve"><value>ឈ្មោះអ្នកផ្ញើ</value></data>
+  <data name="EmailProvider_ReplyAddress" xml:space="preserve"><value>អាសយដ្ឋានឆ្លើយ</value></data>
+  <data name="EmailProvider_SettingsSavedSuccessfully" xml:space="preserve"><value>ការកំណត់ការផ្ញើអ៊ីម៉ែលបានរក្សាទុកដោយជោគជ័យ</value></data>
+  <data name="DeviceNotifications" xml:space="preserve"><value>បើកការជូនដំណឹងលើឧបករណ៍</value></data>
+  <data name="EsriApiKey" xml:space="preserve"><value>កូន ESRI API</value></data>
+  <data name="WorkspaceSettings" xml:space="preserve"><value>ការកំណត់កន្លែងធ្វើការ</value></data>
+  <data name="Export" xml:space="preserve"><value>នាំចេញ</value></data>
+  <data name="GlobalNote" xml:space="preserve"><value>កំណត់ចំណាំសកល</value></data>
+  <data name="UserProfile" xml:space="preserve"><value>ប្រវត្តិរូបអ្នកប្រើប្រាស់</value></data>
+  <data name="Devices" xml:space="preserve"><value>ឧបករណ៍</value></data>
+  <data name="WebInterview" xml:space="preserve"><value>ការសំភាសន៍តាមវែប</value></data>
+  <data name="FileRetentionTitle" xml:space="preserve"><value>គោលការណ៍ការរក្សា</value></data>
+  <data name="EnableFileRetention" xml:space="preserve"><value>បើកគោលការណ៍ការរក្សា</value></data>
+  <data name="RetentionInDaysTitle" xml:space="preserve"><value>ថ្ងៃដើម្បីរក្សា</value></data>
+  <data name="RetentionInCountTitle" xml:space="preserve"><value>ចំនួនឯកសារដើម្បីរក្សា</value></data>
+  <data name="ExportEncryption_Warning" xml:space="preserve"><value>ការផ្លាស់ប្ដូរការកំណត់ការអ៊ិនគ្រីបនឹងដកឯកសារការនាំចេញដែលបានបង្កើតពីមុន</value></data>
+  <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve"><value>អនុញ្ញាតឱ្យអ្នកត្រួតពិនិត្យផ្លាស់ប្ដូរស្ថានភាពការចាត់ការ</value></data>
+  <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve"><value>អនុញ្ញាតឱ្យអ្នកសំភាសន៍ផ្លាស់ប្ដូរស្ថានភាពការចាត់ការ</value></data>
+  <data name="AudioRecordingQuality" xml:space="preserve"><value>គុណភាពការថតអូឌីយ៉ូ</value></data>
+  <data name="LogoSizeLimit" xml:space="preserve"><value>ទំហំរូបភាពរូបសញ្ញាត្រូវតែតិចជាង {{size}}</value></data>
+  <data name="LogoUploadSuccess" xml:space="preserve"><value>បានផ្ទុកឡើងរូបសញ្ញាដោយជោគជ័យ</value></data>
+  <data name="LogoRemoveSuccess" xml:space="preserve"><value>រូបសញ្ញាត្រូវបានដកចេញដោយជោគជ័យ</value></data>
+  <data name="ChangeStateDisabledConfirm" xml:space="preserve"><value>តើអ្នកប្រាកដជាចង់ផ្លាស់ប្ដូរការកំណត់សុវត្ថិភាព?</value></data>
+  <data name="LogoSettings_Description1" xml:space="preserve"><value>ចុចប៊ូតុង 'ជ្រើសរើសឯកសារ' ដើម្បីផ្ទុកឡើងរូបភាពពីកុំព្យូទ័ររបស់អ្នក</value></data>
+  <data name="EmailProvider_SmtpTlsEncryptionHelp" xml:space="preserve"><value>ការអ៊ិនគ្រីប TLS ធានាការប្រាស្រ័យទាក់ទង</value></data>
+  <data name="EmailProvider_SmtpAuthenticationHelp" xml:space="preserve"><value>ការផ្ទៀងផ្ទាត់ SMTP ផ្ទៀងផ្ទាត់អត្តសញ្ញាណ</value></data>
+  <data name="EmailProvider_SmtpUsernameHelp" xml:space="preserve"><value>ព័ត៌មានសម្ងាត់ដែលប្រើក្នុងដំណើរការផ្ទៀងផ្ទាត់ SMTP</value></data>
+  <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve"><value>ព័ត៌មានសម្ងាត់ដែលប្រើក្នុងដំណើរការផ្ទៀងផ្ទាត់ SMTP</value></data>
+  <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve"><value>ការព្រមាន! នេះជាសកម្មភាពសំខាន់ដែលនឹងប៉ះពាល់ដល់ឯកសារការនាំចេញដែលមានស្រាប់</value></data>
+  <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve"><value>តើអ្នកប្រាកដជាចង់បង្ខំដំណើរការគោលការណ៍ការរក្សាឥឡូវ?</value></data>
+    <data name="GeographyExportFormat_Description" xml:space="preserve">
+        <value>ជ្រើសរើសរបៀបដែលចម្លើយគួរតែត្រូវបានធ្វើទ្រង់ទ្រាយសម្រាប់សំណួរភូមិសាស្ត្រ។</value>
+    </data>
+    <data name="ClearExportCache_Description" xml:space="preserve">
+        <value>ប្រតិបត្តិការនេះនឹងសម្អាតទិន្នន័យឃ្លាំងសម្ងាត់នាំចេញទាំងអស់។ ការនាំចេញបន្ទាប់នឹងចំណាយពេលច្រើនទៀត។</value>
+    </data>
+    <data name="RemovingExportCache" xml:space="preserve">
+        <value>ការសម្អាតឃ្លាំងសម្ងាត់នាំចេញកំពុងដំណើរការ</value>
+    </data>
+    <data name="RemoveExportCacheFail" xml:space="preserve">
+        <value>ការនាំចេញឃ្លាំងសម្ងាត់មិនអាចសម្អាតបានទេនៅពេលនេះ។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។
+ហេតុផលដែលអាចកើតមាន៖
+* ឯកសារនាំចេញកំពុងត្រូវបានបង្កើត។
+* ឯកសារនាំចេញដែលបានបង្កើតកំពុងត្រូវបានទាញយក។
+* ការលុបឯកសារនាំចេញដែលបានបង្កើតត្រូវបានរារាំងដោយកម្មវិធីមួយផ្សេងទៀត។
+* ល។</value>
+    </data>
+    <data name="RemoveExportCacheGeneratingFail" xml:space="preserve">
+        <value>ការ​នាំចេញ​ឃ្លាំង​សម្ងាត់​មិន​អាច​ត្រូវ​បាន​សម្អាត​ក្នុង​ពេល​បច្ចុប្បន្ន​នេះ​ទេ។ ឯកសារនាំចេញកំពុងត្រូវបានបង្កើត។</value>
+    </data>
+    <data name="RegeneratePasswordConfirm" xml:space="preserve">
+        <value>តើអ្នកប្រាកដថាចង់បង្កើតពាក្យសម្ងាត់ថ្មីទេ? ពាក្យសម្ងាត់ថ្មីនឹងត្រូវបានអនុវត្តចំពោះឯកសារទិន្នន័យដែលបាននាំចេញទាំងអស់ដែលផលិតចាប់ពីពេលនេះតទៅ។</value>
+    </data>
+    <data name="ExportEncryptionSettings" xml:space="preserve">
+        <value>នាំចេញការកំណត់ការអ៊ិនគ្រីប</value>
+    </data>
+    <data name="MobileAppSettings_Description" xml:space="preserve">
+        <value>ការកំណត់ជាក់លាក់ដោយកំណែ Android នៃកម្មវិធី Interviewer/Supervisor</value>
+    </data>
+    <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
+        <value>អនុញ្ញាតឱ្យអ្នករាប់បញ្ចូលធ្វើបច្ចុប្បន្នភាពព័ត៌មានទំនាក់ទំនងរបស់ពួកគេនៅក្នុងកម្រងព័ត៌មានគណនីរបស់ពួកគេ។</value>
+    </data>
+    <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve">
+        <value>អនុញ្ញាត​ឱ្យ​អ្នក​ឆ្លើយ​តប​ទៅ​នឹង​ការ​សម្ភាស​បណ្ដាញ​ដើម្បី​ស្នើ​អ៊ីមែល​ដែល​មាន​តំណ​ដើម្បី​បន្ត​ការ​សម្ភាស​ដែល​បាន​ចាប់​ផ្តើ​ម (មាន​ប្រសិទ្ធិ​ភាព​ប្រសិន​បើ​អ្នក​ផ្តល់​សេវា​អ៊ី​ម៉ែ​ល​ច្រើន​ត្រូវ​បាន​បង្កើត​ឡើង)</value>
+    </data>
+    <data name="ChangeStateConfirm" xml:space="preserve">
+        <value>តើអ្នកប្រាកដថាចង់ផ្លាស់ប្តូរការកំណត់សុវត្ថិភាពឯកសារនាំចេញទេ? ឯកសារទិន្នន័យនាំចេញទាំងអស់នឹងត្រូវបានការពារដោយពាក្យសម្ងាត់។</value>
+    </data>
+    <data name="ExportEncryption_Description" xml:space="preserve">
+        <value>ធីកប្រអប់ធីក 'បើកការអ៊ិនគ្រីប' ដើម្បីការពារបណ្ណសារទិន្នន័យនាំចេញដោយការអ៊ិនគ្រីបពួកវាជាមួយពាក្យសម្ងាត់ដែលបានផ្តល់។ ផ្លាស់ប្តូរពាក្យសម្ងាត់ដោយចុចប៊ូតុងព្រួញរាងជារង្វង់។ បន្ទាប់ពីការអ៊ិនគ្រីប មានតែមនុស្សដែលស្គាល់ពាក្យសម្ងាត់ប៉ុណ្ណោះដែលអាចបើកទិន្នន័យដែលបាននាំចេញ។</value>
+    </data>
+    <data name="GlobalNoteSettings_Description" xml:space="preserve">
+        <value>បញ្ជាក់អត្ថបទនៅក្នុងវាល 'កំណត់ចំណាំសកល' ដើម្បីបង្ហាញនៅផ្នែកខាងលើនៃអេក្រង់នីមួយៗនៅលើម៉ាស៊ីនមេ។</value>
+    </data>
+    <data name="LogoSettings_Description" xml:space="preserve">
+        <value>និមិត្តសញ្ញាក្រុមហ៊ុនគឺជារូបភាពដែលបង្ហាញនៅលើទំព័រចូលម៉ាស៊ីនមេ និងនៅលើទំព័រចូលនៃកម្មវិធីអ្នកសម្ភាសន៍។</value>
+    </data>
+    <data name="AutoUpdateDescription" xml:space="preserve">
+        <value>ប្រសិនបើធីក នោះមានតែកំណែចុងក្រោយបំផុតនៃកម្មវិធី Interviewer/Supervisor ប៉ុណ្ណោះដែលអាចធ្វើសមកាលកម្មជាមួយការិយាល័យកណ្តាលបាន។</value>
+    </data>
+    <data name="PartialSynchronizationDescription" xml:space="preserve">
+        <value>នៅពេលបើកដំណើរការ ថេប្លេតអ្នកសម្ភាសន៍នឹងផ្ញើចម្លើយនៅក្នុងការសម្ភាសន៍ដែលមិនទាន់បានបញ្ចប់ទៅការិយាល័យកណ្តាល</value>
+    </data>
+    <data name="GeographyQuestionAccuracyInMetersDescription" xml:space="preserve">
+        <value>កំណត់ភាពត្រឹមត្រូវនៃកម្រិតគិតជាម៉ែត្រសម្រាប់កូអរដោនេទីតាំងដែលទទួលបាន</value>
+    </data>
+    <data name="GeographyQuestionPeriodInSecondsDescription" xml:space="preserve">
+        <value>កំណត់រយៈពេលជាវិនាទីសម្រាប់សំណួរភូមិសាស្ត្រ</value>
+    </data>
+    <data name="EmailProvider_Amazon" xml:space="preserve">
+        <value>Amazon Simple Email Service (SES)</value>
+    </data>
+    <data name="EmailProvider_Sendgrid" xml:space="preserve">
+        <value>សេវាផ្ញើអ៊ីមែល SendGrid</value>
+    </data>
+    <data name="EmailProvider_NoneDescription" xml:space="preserve">
+        <value>សារអញ្ជើញសម្រាប់ការសម្ភាសន៍តាមអ៊ីនធឺណិតមិនត្រូវបានផ្ញើទៅកាន់អ្នកឆ្លើយតបដោយ Survey Solutions ទេ។</value>
+    </data>
+    <data name="EmailProvider_AmazonDescription" xml:space="preserve">
+        <value>កំណត់រចនាសម្ព័ន្ធប៉ារ៉ាម៉ែត្រដើម្បីចូលប្រើ Amazon SES ខាងក្រោម។ ព័ត៌មានបន្ថែមអំពីការប្រើប្រាស់ Amazon SES ជាមួយ Survey Solutions មាន</value>
+    </data>
+    <data name="EmailProvider_SendgridDescription" xml:space="preserve">
+        <value>កំណត់រចនាសម្ព័ន្ធប៉ារ៉ាម៉ែត្រដើម្បីចូលប្រើ SendGrid ខាងក្រោម។ ព័ត៌មានបន្ថែមអំពីការប្រើប្រាស់ SendGrid ជាមួយនឹងដំណោះស្រាយស្ទង់មតិមាន</value>
+    </data>
+    <data name="EmailProvider_SendGridApiKey" xml:space="preserve">
+        <value>សោ API</value>
+    </data>
+    <data name="EmailProvider_AwsAccessKeyId" xml:space="preserve">
+        <value>លេខសម្គាល់សោចូល</value>
+    </data>
+    <data name="EmailProvider_AwsSecretAccessKey" xml:space="preserve">
+        <value>សោចូលសម្ងាត់</value>
+    </data>
+    <data name="EmailProvider_TestEmailAddress" xml:space="preserve">
+        <value>អាសយដ្ឋានអ៊ីមែល</value>
+    </data>
+    <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve">
+        <value>ផ្ញើអ៊ីមែលសាកល្បង</value>
+    </data>
+    <data name="EmailProvider_PageDesc" xml:space="preserve">
+        <value>ដំឡើងអ្នកផ្តល់សេវាអ៊ីមែលភាគច្រើន។ កំណត់រចនាសម្ព័ន្ធរបៀបដែលការអញ្ជើញសម្រាប់ការសម្ភាសន៍តាមអ៊ីនធឺណិតនឹងត្រូវបានផ្ញើ។</value>
+    </data>
+    <data name="EmailProvider_SenderHeader" xml:space="preserve">
+        <value>ព័ត៌មានអ្នកផ្ញើ</value>
+    </data>
+    <data name="EmailProvider_SenderHelp" xml:space="preserve">
+        <value>អាសយដ្ឋានអ៊ីមែលរបស់អ្នកផ្ញើដែលនឹងបង្ហាញនៅក្នុងវាល FROM នៃសារចូល។</value>
+    </data>
+    <data name="EmailProvider_ReplyAddressHelp" xml:space="preserve">
+        <value>អាសយដ្ឋានអ៊ីមែលដែលការឆ្លើយតបពីអ្នកអញ្ជើញអាចត្រូវបានផ្ញើ (លំនាំដើមគឺអាសយដ្ឋានអ៊ីមែលអ្នកផ្ញើ។ )</value>
+    </data>
+    <data name="EmailProvider_SenderNameHelp" xml:space="preserve">
+        <value>ឈ្មោះរបស់អ្នកផ្ញើដែលនឹងបង្ហាញនៅក្នុងវាល FROM នៃសារចូល។</value>
+    </data>
+    <data name="EmailProvider_Address" xml:space="preserve">
+        <value>អាសយដ្ឋានប្រៃសណីយ៍អ្នកផ្ញើ</value>
+    </data>
+    <data name="EmailProvider_AddressHelp" xml:space="preserve">
+        <value>អាសយដ្ឋានប្រៃសណីយ៍បច្ចុប្បន្នរបស់អ្នកផ្ញើ។</value>
+    </data>
+    <data name="EmailProvider_ServiceProvideHeader" xml:space="preserve">
+        <value>បញ្ជាក់អ្នកផ្តល់សេវាអ៊ីមែលភាគច្រើន</value>
+    </data>
+    <data name="EmailProvider_AwsAccessKeyIdHelp" xml:space="preserve">
+        <value>អ្នកអាចស្វែងរកលេខសម្គាល់គណនី AWS ពី AWS Management Console</value>
+    </data>
+    <data name="EmailProvider_AwsSecretAccessKeyHelp" xml:space="preserve">
+        <value>រកឃើញនៅក្នុង Security Credentials នៅ AWS Management Console</value>
+    </data>
+    <data name="EmailProvider_AwsRegion" xml:space="preserve">
+        <value>តំបន់</value>
+    </data>
+    <data name="EmailProvider_AwsRegionHelp" xml:space="preserve">
+        <value>តំបន់សម្រាប់កុងសូលគ្រប់គ្រង AWS</value>
+    </data>
+    <data name="EmailProvider_AwsRegion_Unknown" xml:space="preserve">
+        <value>បានជ្រើសរើសតំបន់មិនស្គាល់។ សូមពិនិត្យមើលវា។</value>
+    </data>
+    <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve">
+        <value>អ្នកអាចស្វែងរកវានៅលើទំព័រ API Keys នៅក្រោមធាតុម៉ឺនុយការកំណត់ SendGrid</value>
+    </data>
+    <data name="EmailProvider_GeneralError" xml:space="preserve">
+        <value>កំហុសទូទៅបានកើតឡើង</value>
+    </data>
+    <data name="EmailProvider_HelpLinkText" xml:space="preserve">
+        <value>នៅទីនេះ</value>
+    </data>
+    <data name="EmailProvider_SendTestEmailMessage" xml:space="preserve">
+        <value>ផ្ញើសារអ៊ីមែលសាកល្បងដោយខ្លួនឯង ដើម្បីផ្ទៀងផ្ទាត់ថាសេវាកម្មអ៊ីមែលភាគច្រើនមានមុខងារ និងដើម្បីទទួលបានការមើលជាមុននូវអ្វីដែលអ្នកឆ្លើយតបនឹងទទួលបាន។</value>
+    </data>
+    <data name="DeviceNotificationsDescription" xml:space="preserve">
+        <value>នៅពេលបើកឧបករណ៍នឹងជូនដំណឹងដល់ម្ចាស់អំពីការផ្លាស់ប្តូរ និងសកម្មភាពដែលត្រូវអនុវត្ត</value>
+    </data>
+    <data name="EsriApiKeyDescription" xml:space="preserve">
+        <value>សោនេះនឹងអនុញ្ញាតឱ្យប្រើផែនទីអនឡាញនៅលើឧបករណ៍។ ត្រូវ​បាន​ណែនាំ​ថា​ការ​ប្រើ​ប្រាស់​សេវា​នេះ​អាច​ធ្វើ​ឱ្យ​អ្នក​ចំណាយ​ប្រាក់​បន្ថែម​។ សូមពិគ្រោះជាមួយអ្នកផ្តល់សេវា</value>
+    </data>
+    <data name="EmailProvider_Smtp" xml:space="preserve">
+        <value>ម៉ាស៊ីនមេ SMTP</value>
+    </data>
+    <data name="EmailProvider_SmtpDescription" xml:space="preserve">
+        <value>កំណត់រចនាសម្ព័ន្ធប៉ារ៉ាម៉ែត្រដើម្បីចូលប្រើម៉ាស៊ីនមេ SMTP ខាងក្រោម។ ព័ត៌មានបន្ថែមអំពីការប្រើប្រាស់ម៉ាស៊ីនមេ SMTP ជាមួយនឹងដំណោះស្រាយស្ទង់មតិមាន</value>
+    </data>
+    <data name="EmailProvider_SmtpHost" xml:space="preserve">
+        <value>ម្ចាស់ផ្ទះ</value>
+    </data>
+    <data name="EmailProvider_SmtpHostHelp" xml:space="preserve">
+        <value>អាសយដ្ឋានម៉ាស៊ីនមេ SMTP</value>
+    </data>
+    <data name="EmailProvider_SmtpPort" xml:space="preserve">
+        <value>ច្រក</value>
+    </data>
+    <data name="EmailProvider_SmtpPortHelp" xml:space="preserve">
+        <value>ច្រក SMTP</value>
+    </data>
+    <data name="EmailProvider_SmtpTlsEncryption" xml:space="preserve">
+        <value>ប្រើការអ៊ិនគ្រីប TLS</value>
+    </data>
+    <data name="EmailProvider_SmtpAuthentication" xml:space="preserve">
+        <value>ប្រើការផ្ទៀងផ្ទាត់</value>
+    </data>
+    <data name="EmailProvider_SmtpUsername" xml:space="preserve">
+        <value>ឈ្មោះអ្នកប្រើប្រាស់</value>
+    </data>
+    <data name="EmailProvider_SmtpPassword" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់</value>
+    </data>
+    <data name="FileRetentionDescription" xml:space="preserve">
+        <value>ឯកសារនាំចេញចាស់នឹងត្រូវបានលុបជាទៀងទាត់ដោយយោងទៅតាមការកំណត់ទាំងនេះ</value>
+    </data>
+    <data name="RetentionInDaysDescription" xml:space="preserve">
+        <value>ចំនួនថ្ងៃនៃឯកសារនាំចេញនឹងត្រូវបានរក្សាទុក</value>
+    </data>
+    <data name="RetentionInCountDescription" xml:space="preserve">
+        <value>ចំនួនអតិបរមានៃឯកសារនាំចេញដែលត្រូវរក្សាទុកក្នុងកន្លែងផ្ទុក</value>
+    </data>
+    <data name="RetentionPolicyEnablingConfirm" xml:space="preserve">
+        <value>តើ​អ្នក​ប្រាកដ​ជា​ចង់​បើក​គោលការណ៍​រក្សា​ទុក​ឬ? ការនាំចេញឯកសារទិន្នន័យអាចត្រូវបានលុប។</value>
+    </data>
+    <data name="ForceRunRetentionPolicy" xml:space="preserve">
+        <value>បង្ខំឱ្យរត់</value>
+    </data>
+    <data name="SelectFileWarning" xml:space="preserve">
+        <value>សូមជ្រើសរើសឯកសារដើម្បីផ្ទុកឡើង។</value>
+    </data>
+    <data name="LogoUploadError" xml:space="preserve">
+        <value>បរាជ័យក្នុងការបង្ហោះរូបសញ្ញា។ សូមព្យាយាមម្តងទៀត។</value>
+    </data>
+    <data name="LogoRemoveError" xml:space="preserve">
+        <value>បរាជ័យក្នុងការលុបរូបសញ្ញា។ សូមព្យាយាមម្តងទៀត។</value>
+    </data>
+    <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
+        <value>នៅពេលបើកដំណើរការ អ្នកគ្រប់គ្រងអាចបិទ និងបើកកិច្ចការឡើងវិញ</value>
+    </data>
+    <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
+        <value>នៅពេលបើកដំណើរការ អ្នកសម្ភាសន៍អាចបំពេញ និងបើកកិច្ចការឡើងវិញ (ទាមទារឱ្យបើកដំណើរការអ្នកគ្រប់គ្រង)</value>
+    </data>
+    <data name="AudioRecordingQualityDescription" xml:space="preserve">
+        <value>គុណភាពសំឡេងដែលប្រើដោយកម្មវិធីអ្នកសម្ភាសន៍នៅពេលថតសំឡេង (សវនកម្មសំឡេង និងសំណួរជាសំឡេង)</value>
+    </data>
+    <data name="AudioRecordingQuality_Mono44kHz" xml:space="preserve">
+        <value>64 kbps, ម៉ូណូ, 44.1 kHz</value>
+    </data>
+    <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve">
+        <value>64 kbps, ម៉ូណូ, 22.05 kHz</value>
+    </data>
+    <data name="AudioRecordingQuality_Mono16kHz" xml:space="preserve">
+        <value>32 kbps, ម៉ូណូ, 16 kHz</value>
+    </data>
+    <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve">
+        <value>128 kbps, ស្តេរ៉េអូ, 44.1 kHz</value>
+    </data>
+    <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
+        <value>128 kbps, ស្តេរ៉េអូ, 48 kHz</value>
+    </data>
+</root>

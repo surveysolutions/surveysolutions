@@ -421,7 +421,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private static bool MatrixRosterHasMoreThanAllowedEntities(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-            => group.DisplayMode == RosterDisplayMode.Matrix && group.Children.Count() > MaxEntitiesInMatrixRoster;
+            => group.DisplayMode == RosterDisplayMode.Matrix && group.Children.Count(c => !(c is IVariable)) > MaxEntitiesInMatrixRoster;
 
         private static bool MatrixRosterContainsOnlyAllowedQuestionTypes(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
             => group.DisplayMode == RosterDisplayMode.Matrix && group.Children.Any(composite =>
@@ -436,6 +436,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                                    || (question as MultyOptionsQuestion)?.YesNoView == true;
                         default: return true;
                     }
+                if (composite is IVariable)
+                    return false;
                 return true;
             });
 
