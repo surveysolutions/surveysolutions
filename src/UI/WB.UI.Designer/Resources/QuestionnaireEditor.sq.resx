@@ -1321,6 +1321,9 @@ Ju lutemi kontrolloni lidhjen tuaj të rrjetit ose kontaktoni mbështetjen tuaj 
     <value>titulli i skenarit</value>
   </data>
 
+  <data name="SideBarScenarioRecordNew" xml:space="preserve">
+    <value>Record New Scenario</value>
+  </data>
   <data name="SideBarDownload" xml:space="preserve">
     <value>Shkarko:</value>
   </data>
@@ -1763,6 +1766,9 @@ Pamijet Tabelë dhe Matricë mbështeten vetëm në sondazhin në internet, tabl
     <value>Gabim rrjeti</value>
   </data>
 
+  <data name="PopupBlocked" xml:space="preserve">
+    <value>Unable to open window. Please allow pop-ups in your browser and try again.</value>
+  </data>
   <data name="SideBarCategoriesAddNew" xml:space="preserve">
     <value>Shto kategori të reja</value>
   </data>
