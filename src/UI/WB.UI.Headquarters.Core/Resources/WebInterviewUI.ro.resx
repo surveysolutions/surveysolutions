@@ -333,6 +333,9 @@ Contactați echipa de suport pentru asistență.</value>
   <data name="NumberEnter" xml:space="preserve">
     <value>Introducere număr</value>
   </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Negative values are not allowed for this question</value>
+  </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>Răspunsul '{{answer}}' este incorect deoarece întrebarea este utilizată ca dimensiune a listei, iar răspunsul dat este negativ</value>
   </data>

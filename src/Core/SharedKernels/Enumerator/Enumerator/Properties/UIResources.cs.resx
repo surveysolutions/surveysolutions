@@ -384,6 +384,9 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>Zadaná hodnota nemůže být zadána jako celé číslo</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>Negative values are not allowed for this question</value>
+  </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>Odpověď "{0}", zadaná hodnota je vyšší než je povoleno '{1}'.</value>
   </data>

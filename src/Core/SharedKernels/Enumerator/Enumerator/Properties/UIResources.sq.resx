@@ -426,6 +426,9 @@
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>Vlera e vendosur nuk mund të analizohet si vlerë e plotë</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>Negative values are not allowed for this question</value>
+  </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>Përgjigjja '{0}' është e pasaktë, pasi përgjigjja është më e gjatë sesa kufiri i sipërm '{1}' i Rosterit.</value>
   </data>

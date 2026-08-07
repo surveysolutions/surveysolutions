@@ -304,6 +304,9 @@
   <data name="NumberEnter" xml:space="preserve">
     <value>أدخل رقماً</value>
   </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Negative values are not allowed for this question</value>
+  </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>الإجابة '{{answer}}' غير صحيحة لأن السؤال مستخدم كحجم الجدول والإجابة المحددة سلبية</value>
   </data>
