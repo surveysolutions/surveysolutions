@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -16,14 +18,17 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
+        private readonly IReminderEmailSender reminderEmailSender;
 
 
         public WebInterviewSettingsApiController(
             IWebInterviewConfigProvider webInterviewConfigProvider,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            IReminderEmailSender reminderEmailSender)
         {
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.reminderEmailSender = reminderEmailSender;
         }
 
         public class UpdatePageTemplateModel
@@ -200,6 +205,36 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
             config.Started = false;
             this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
+
+            return Ok();
+        }
+
+        public class SendRemindersNowModel
+        {
+            [Required] public EmailTextTemplateType Type { get; set; }
+        }
+
+        [ValidateAntiForgeryToken]
+        [Route(@"{id}/sendReminders")]
+        [HttpPost]
+        public async Task<IActionResult> SendRemindersNow(string id, [FromBody] SendRemindersNowModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
+                return NotFound();
+
+            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+            if (questionnaire == null)
+                return NotFound();
+
+            var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
+            if (!config.Started)
+                return BadRequest("Web interview is not started.");
+
+            await reminderEmailSender.SendRemindersAsync(questionnaireIdentity, questionnaire.Title, model.Type, 0)
+                .ConfigureAwait(false);
 
             return Ok();
         }
