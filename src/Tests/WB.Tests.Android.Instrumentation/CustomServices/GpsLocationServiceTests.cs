@@ -1,8 +1,8 @@
-using System.Reflection;
 using Android.Locations;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using WB.UI.Shared.Enumerator.Services.Internals;
 
 namespace WB.Tests.Android.Instrumentation.CustomServices
 {
@@ -13,22 +13,8 @@ namespace WB.Tests.Android.Instrumentation.CustomServices
         public async Task when_acceptable_fix_received_should_capture_coordinates()
         {
             var tcs = new TaskCompletionSource<GpsLocation>(TaskCreationOptions.RunContinuationsAsynchronously);
-            var listenerType = Type.GetType(
-                "WB.UI.Shared.Enumerator.Services.Internals.GpsLocationService+SingleShotLocationListener, WB.UI.Shared.Enumerator",
-                throwOnError: false);
-            Assert.That(listenerType, Is.Not.Null, "SingleShotLocationListener type was not found.");
-
-            var listenerConstructor = listenerType!.GetConstructor(
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                binder: null,
-                types: new[] { typeof(TaskCompletionSource<GpsLocation>), typeof(LocationManager), typeof(double), typeof(AcceptableGpsLocationSource) },
-                modifiers: null);
-
-            Assert.That(listenerConstructor, Is.Not.Null,
-                "SingleShotLocationListener constructor signature has changed.");
-
-            var listener = (ILocationListener)listenerConstructor!.Invoke(
-                new object?[] { tcs, null, -1d, AcceptableGpsLocationSource.AnyNonMock });
+            ILocationListener listener = new GpsLocationService.SingleShotLocationListener(
+                tcs, locationManager: null, desiredAccuracy: -1d, acceptableSource: AcceptableGpsLocationSource.AnyNonMock);
 
             var androidLocation = new Location(LocationManager.GpsProvider)
             {

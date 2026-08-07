@@ -147,14 +147,14 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
         /// <see cref="TaskCompletionSource{GpsLocation}"/> on the first GPS fix that meets
         /// the requested accuracy, then unregisters itself.
         /// </summary>
-        private sealed class SingleShotLocationListener : Java.Lang.Object, ILocationListener
+        internal sealed class SingleShotLocationListener : Java.Lang.Object, ILocationListener
         {
             private readonly TaskCompletionSource<GpsLocation> tcs;
             private readonly LocationManager locationManager;
             private readonly double desiredAccuracy;
             private readonly AcceptableGpsLocationSource acceptableSource;
 
-            public SingleShotLocationListener(
+            internal SingleShotLocationListener(
                 TaskCompletionSource<GpsLocation> tcs,
                 LocationManager locationManager,
                 double desiredAccuracy,
