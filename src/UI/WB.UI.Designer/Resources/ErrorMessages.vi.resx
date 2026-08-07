@@ -1,0 +1,217 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ClientVersionIsNotSupported" xml:space="preserve">
+        <value>Không thể mở bảng câu hỏi. Phiên bản của bạn là {0}. Vui lòng cập nhật.</value>
+        </data>
+    <data name="TemplateNotFound" xml:space="preserve">
+        <value>Không thể tìm thấy bảng câu hỏi có id={0}. Vui lòng kiểm tra danh sách các câu hỏi có sẵn hoặc liên hệ với đồng nghiệp đã chia sẻ liên kết câu hỏi với bạn.</value>
+        </data>
+    <data name="Questionnaire_verification_failed" xml:space="preserve">
+        <value>Bảng câu hỏi của bạn có sai sót. Vui lòng xác minh bảng câu hỏi trên Designer.</value>
+        </data>
+    <data name="User_Not_authorized" xml:space="preserve">
+        <value>Người dùng không được ủy quyền. Vui lòng kiểm tra thông tin đăng nhập và mật khẩu của bạn.</value>
+        </data>
+    <data name="OldClientPleaseUpdate" xml:space="preserve">
+        <value>Bạn có phiên bản lỗi thời của ứng dụng Trụ sở chính. Vui lòng liên hệ với quản trị viên máy chủ của bạn để yêu cầu cập nhật.</value>
+        </data>
+    <data name="VersionParameterIsIncorrect" xml:space="preserve">
+        <value>Có vấn đề với phiên bản bảng câu hỏi của bạn. Vui lòng liên hệ support@mysurvey.solutions.</value>
+        </data>
+    <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
+        <value>Không thể nhập bảng câu hỏi. Bảng câu hỏi "{0}" của bạn có phiên bản {1}. Ứng dụng trụ sở chỉ hỗ trợ tối đa phiên bản {2}.</value>
+        </data>
+    <data name="UserLockedOut" xml:space="preserve">
+        <value>Tài khoản của bạn đã bị khóa. Vui lòng liên hệ support@mysurvey.solutions để mở khóa.</value>
+        </data>
+    <data name="ApplicationUpdateRequired" xml:space="preserve">
+        <value>Yêu cầu cập nhật ứng dụng.</value>
+        </data>
+    <data name="ServerError" xml:space="preserve">
+        <value>Đã xảy ra lỗi máy chủ. Vui lòng liên hệ support@mysurvey.solutions.</value>
+        </data>
+    <data name="The_user_name_or_password_provided_is_incorrect" xml:space="preserve">
+        <value>Tên người dùng hoặc mật khẩu được cung cấp không chính xác. Làm ơn vào lại.</value>
+        </data>
+    <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
+        <value>Từ xác minh không chính xác. Vui lòng thử lại.</value>
+        </data>
+    <data name="EmptyUserNameOrPassword" xml:space="preserve">
+        <value>Tên người dùng hoặc mật khẩu trống.</value>
+        </data>
+    <data name="IncorrectUserNameOrPassword" xml:space="preserve">
+        <value>Đăng nhập hoặc mật khẩu không chính xác. Vui lòng thử lại.</value>
+        </data>
+    <data name="AccountBlocked" xml:space="preserve">
+        <value>Tài khoản của bạn bị chặn. Hãy liên hệ với quản trị viên để bỏ chặn tài khoản của bạn.</value>
+        </data>
+    <data name="PasswordResetNotAllowed" xml:space="preserve">
+        <value>Không được phép đặt lại mật khẩu</value>
+        </data>
+    <data name="ConfirmAccount" xml:space="preserve">
+        <value>Vui lòng xác nhận tài khoản của bạn trước. Chúng tôi đã gửi liên kết xác nhận tới {0}. Không nhận được nó?</value>
+        </data>
+    <data name="RequestAnotherEmail" xml:space="preserve">
+        <value>Yêu cầu một cái khác.</value>
+        </data>
+    <data name="Your_email_is_verified" xml:space="preserve">
+        <value>Nhà thiết kế đã xác minh thành công email của bạn.</value>
+        </data>
+    <data name="Unexpected_error_occurred_Please_try_again_later" xml:space="preserve">
+        <value>Đã xảy ra lỗi không mong muốn. Vui lòng thử truy cập lại vào Designer sau.</value>
+        </data>
+    <data name="User_does_not_exist" xml:space="preserve">
+        <value>Người dùng {0} không tồn tại. Vui lòng nhập tên người dùng hoặc email hợp lệ.</value>
+        </data>
+    <data name="The_current_password_is_incorrect_or_the_new_password_is_invalid" xml:space="preserve">
+        <value>Sự kết hợp mật khẩu hiện tại/mới không hợp lệ, vui lòng nhập lại.</value>
+        </data>
+    <data name="User_already_confirmed_in_system" xml:space="preserve">
+        <value>Người dùng {0} đã được xác nhận trong hệ thống. Vui lòng nhập thông tin đăng nhập và mật khẩu của bạn để bắt đầu sử dụng Designer.</value>
+        </data>
+    <data name="User_does_not_exist_Please_enter_a_valid_user_name" xml:space="preserve">
+        <value>Người dùng {0} không tồn tại. Vui lòng nhập tên người dùng hoặc email hợp lệ.</value>
+        </data>
+    <data name="Your_password_successfully_changed" xml:space="preserve">
+        <value>Bạn đã đổi mật khẩu thành công.</value>
+        </data>
+    <data name="The_password_and_confirmation_password_do_not_match" xml:space="preserve">
+        <value>Mật khẩu và mật khẩu xác nhận không khớp.</value>
+        </data>
+    <data name="Password_must_be_at_least_characters_long" xml:space="preserve">
+        <value>Mật khẩu phải dài ít nhất {2} ký tự.</value>
+        </data>
+    <data name="Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character" xml:space="preserve">
+        <value>Mật khẩu phải chứa ít nhất một số, một ký tự chữ hoa và một ký tự chữ thường.</value>
+        </data>
+    <data name="User_name_needs_to_be_between_3_and_15_characters" xml:space="preserve">
+        <value>Tên đăng nhập phải dài từ 3 đến 15 ký tự và chỉ được chứa các chữ cái, chữ số và ký hiệu gạch dưới. Các chữ cái chỉ được lấy từ bảng chữ cái Latinh (tiếng Anh): 'A'..'Z' hoặc 'a'..'z'. Các chữ cái khác (Cyrillic, Ả Rập, v.v.) không hợp lệ để sử dụng trong tên đăng nhập.</value>
+        </data>
+    <data name="Maintenance" xml:space="preserve">
+        <value>Server hiện đang ở chế độ bảo trì. Xin lỗi vì sự bất tiện này. Vui lòng thử lại sau.</value>
+        </data>
+    <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
+        <value>Bảng câu hỏi "{0}" của bạn có chức năng mới: {1}. (Các) tính năng mới không được cài đặt của bạn hỗ trợ. Vui lòng cập nhật.</value>
+        </data>
+    <data name="UserNotApproved" xml:space="preserve">
+        <value>Tài khoản của bạn không được chấp thuận. Vui lòng xác nhận tài khoản của bạn trước. Chúng tôi đã gửi liên kết xác nhận tới {0}.</value>
+        </data>
+    <data name="RestorePassword_EmailSentInstructions" xml:space="preserve">
+        <value>Một tin nhắn đã được gửi đến tài khoản email của bạn. Vui lòng làm theo hướng dẫn trong email để khôi phục mật khẩu.</value>
+        </data>
+    <data name="EmptyTranslationFile" xml:space="preserve">
+        <value>Tệp dịch đã chọn trống</value>
+        </data>
+    <data name="NoAccessToQuestionnaire" xml:space="preserve">
+        <value>Người dùng không có quyền truy cập vào bảng câu hỏi được yêu cầu.</value>
+        </data>
+    <data name="UserNeedToContactSupportFormat" xml:space="preserve">
+        <value>Bạn không được phép thực hiện hành động này. Vui lòng liên hệ với bộ phận hỗ trợ. IP:{0}</value>
+        </data>
+    <data name="Email_required" xml:space="preserve">
+        <value>Email là bắt buộc</value>
+        </data>
+    <data name="EmailOrLogin_required" xml:space="preserve">
+        <value>Đăng nhập hoặc Email là bắt buộc</value>
+        </data>
+    <data name="InvalidEmailAddress" xml:space="preserve">
+        <value>Không phải là địa chỉ email hợp lệ</value>
+        </data>
+    <data name="OldPassword_required" xml:space="preserve">
+        <value>Mật khẩu hiện tại là bắt buộc</value>
+        </data>
+    <data name="Password_required" xml:space="preserve">
+        <value>Cần có mật khẩu</value>
+        </data>
+    <data name="UserName_required" xml:space="preserve">
+        <value>Cần phải đăng nhập</value>
+        </data>
+    <data name="QuestionnaireTitle_required" xml:space="preserve">
+        <value>Tiêu đề bảng câu hỏi là bắt buộc</value>
+        </data>
+    <data name="NoQuestionnaireIdToValidatePremissions" xml:space="preserve">
+        <value>Id bảng câu hỏi không được cung cấp để xác thực quyền</value>
+        </data>
+    <data name="UnhandledExceptionDuringUpdateUserInfo" xml:space="preserve">
+        <value>Không thể cập nhật thông tin người dùng. Vui lòng thử lại sau.</value>
+        </data>
+    <data name="FullNameMaxLengthError" xml:space="preserve">
+        <value>Tên đầy đủ không thể chứa nhiều hơn {1} ký tự</value>
+        </data>
+    <data name="QuestionnaireVariable_required" xml:space="preserve">
+        <value>Biến bảng câu hỏi là bắt buộc</value>
+        </data>
+    <data name="QuestionnaireVariable_rules" xml:space="preserve">
+        <value>Biến bảng câu hỏi được sử dụng làm tiền tố trong việc tạo tên cho các tệp xuất. Tên biến và ID danh sách chỉ được chứa các ký tự sau: a-z, A-Z, _ hoặc 0-9. Ký tự đầu tiên không được là 0-9 hoặc _ và ký tự cuối cùng không được là _.</value>
+        </data>
+    <data name="QuestionnaireVariable_MaxLength" xml:space="preserve">
+        <value>Tên biến và ID danh sách có thể dài từ 1 đến {1} ký tự</value>
+        </data>
+    <data name="QuestionnaireTitle_rules" xml:space="preserve">
+        <value>Chỉ các ký tự sau mới được sử dụng trong tiêu đề bảng câu hỏi: A..Z a..z 0..9 ( ) \ / _ - và dấu cách, đồng thời không được có hai ký tự gạch dưới liên tiếp trở lên.</value>
+        </data>
+    <data name="QuestionnaireTitle_MaxLength" xml:space="preserve">
+        <value>Tiêu đề của bảng câu hỏi không được có nhiều hơn ký hiệu {1}.</value>
+        </data>
+    <data name="InvalidLoginAttempt" xml:space="preserve">
+        <value>Lần đăng nhập không hợp lệ</value>
+        </data>
+</root>

@@ -1,0 +1,538 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="SlowConnection" xml:space="preserve">
+        <value>Kết nối mạng chậm</value>
+        </data>
+    <data name="CloseInterviewTitle" xml:space="preserve">
+        <value>Cuộc phỏng vấn này được mở trong một tab hoặc trình duyệt khác</value>
+        </data>
+    <data name="Network" xml:space="preserve">
+        <value>Mạng</value>
+        </data>
+    <data name="Reload" xml:space="preserve">
+        <value>Tải lại</value>
+        </data>
+    <data name="SessionTimeoutTitle" xml:space="preserve">
+        <value>Phiên của bạn đã hết thời gian</value>
+        </data>
+    <data name="SessionTimeoutMessageTitle" xml:space="preserve">
+        <value>Phiên của bạn đã hết thời gian chờ vì bạn không thực hiện bất kỳ hành động nào trong 15 phút.</value>
+        </data>
+    <data name="SessionTimeoutMessage" xml:space="preserve">
+        <value>Vui lòng tải lại trang để tiếp tục cuộc phỏng vấn này.</value>
+        </data>
+    <data name="Disconnected" xml:space="preserve">
+        <value>Đã ngắt kết nối</value>
+        </data>
+    <data name="InvalidServerResponseMessage" xml:space="preserve">
+        <value>Máy chủ không trả lại tiêu đề nhận dạng dự kiến. Bạn có thể được kết nối với proxy hoặc máy chủ không chính xác. Vui lòng tải lại trang.</value>
+        </data>
+    <data name="InvalidServerResponseTitle" xml:space="preserve">
+        <value>Phản hồi của máy chủ không hợp lệ</value>
+        </data>
+    <data name="ConnectionLostTitle" xml:space="preserve">
+        <value>Kết nối với máy chủ bị mất.</value>
+        </data>
+    <data name="ConnectionLostMessage" xml:space="preserve">
+        <value>Vui lòng tải lại trang để khôi phục kết nối và tiếp tục cuộc phỏng vấn này.</value>
+        </data>
+    <data name="CloseInterviewMessage" xml:space="preserve">
+        <value>&lt;p&gt;Phỏng vấn trên web chỉ hỗ trợ một tab hoạt động với cuộc phỏng vấn.&lt;/p&gt;&lt;p&gt;Vui lòng tải lại trang này để tiếp tục sử dụng tab này hoặc đóng nó lại.&lt;/p&gt;</value>
+        </data>
+    <data name="Reconnecting" xml:space="preserve">
+        <value>Mất kết nối. Đang cố gắng kết nối lại…</value>
+        </data>
+    <data name="ReconnectAttempt" xml:space="preserve">
+        <value>Cố gắng {{count}}</value>
+        </data>
+    <data name="CommentAdd" xml:space="preserve">
+        <value>Thêm nhận xét</value>
+        </data>
+    <data name="CommentHide" xml:space="preserve">
+        <value>Ẩn bình luận</value>
+        </data>
+    <data name="CommentEnter" xml:space="preserve">
+        <value>Nhập bình luận của bạn</value>
+        </data>
+    <data name="CommentPost" xml:space="preserve">
+        <value>Bưu kiện</value>
+        </data>
+    <data name="CommentYours" xml:space="preserve">
+        <value>Bình luận của bạn</value>
+        </data>
+    <data name="CommentOnPreviousAnswer" xml:space="preserve">
+        <value>Về câu trả lời trước</value>
+        </data>
+    <data name="CommentAdmin" xml:space="preserve">
+        <value>Bình luận của quản trị viên</value>
+        </data>
+    <data name="CommentSupervisor" xml:space="preserve">
+        <value>Nhận xét của giám sát viên</value>
+        </data>
+    <data name="CommentInterviewer" xml:space="preserve">
+        <value>Bình luận của người phỏng vấn</value>
+        </data>
+    <data name="CommentHeadquarters" xml:space="preserve">
+        <value>Trụ sở chính bình luận</value>
+        </data>
+    <data name="Comment" xml:space="preserve">
+        <value>Bình luận</value>
+        </data>
+    <data name="Instruction" xml:space="preserve">
+        <value>Chỉ dẫn</value>
+        </data>
+    <data name="InstructionShow" xml:space="preserve">
+        <value>Hiển thị hướng dẫn</value>
+        </data>
+    <data name="ProgressText" xml:space="preserve">
+        <value>{{progress}}% Hoàn thành</value>
+        </data>
+    <data name="AnswerIsInvalid" xml:space="preserve">
+        <value>Câu trả lời không hợp lệ</value>
+        </data>
+    <data name="AnswerWasNotSaved" xml:space="preserve">
+        <value>Câu trả lời chưa được lưu</value>
+        </data>
+    <data name="NotCalculated" xml:space="preserve">
+        <value>Không được tính toán</value>
+        </data>
+    <data name="ClickToAnswer" xml:space="preserve">
+        <value>Bấm để trả lời</value>
+        </data>
+    <data name="Loading" xml:space="preserve">
+        <value>Đang tải...</value>
+        </data>
+    <data name="NoResultsFound" xml:space="preserve">
+        <value>Không tìm thấy kết quả nào</value>
+        </data>
+    <data name="Done" xml:space="preserve">
+        <value>Xong</value>
+        </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>Hủy bỏ</value>
+        </data>
+    <data name="AudioInitializationFailed" xml:space="preserve">
+        <value>Khởi tạo âm thanh không thành công</value>
+        </data>
+    <data name="AudioRecording" xml:space="preserve">
+        <value>Ghi âm</value>
+        </data>
+    <data name="AudioClickRecord" xml:space="preserve">
+        <value>Bấm để ghi âm</value>
+        </data>
+    <data name="AudioRecordNew" xml:space="preserve">
+        <value>Ghi mới</value>
+        </data>
+    <data name="AudioRecordingDuration" xml:space="preserve">
+        <value>{{humanizedLength}} ({{formattedLength}}) ghi âm</value>
+        </data>
+    <data name="RecordCurrentTime" xml:space="preserve">
+        <value>Ghi lại thời gian hiện tại</value>
+        </data>
+    <data name="EnterDate" xml:space="preserve">
+        <value>Nhập ngày</value>
+        </data>
+    <data name="DecimalTooBig" xml:space="preserve">
+        <value>Giá trị đã nhập quá lớn. Cho phép ít hơn 15 chữ số</value>
+        </data>
+    <data name="DecimalCannotParse" xml:space="preserve">
+        <value>Giá trị đã nhập không thể được phân tích cú pháp dưới dạng giá trị thập phân</value>
+        </data>
+    <data name="DecimalEnter" xml:space="preserve">
+        <value>Nhập số</value>
+        </data>
+    <data name="OptionsAvailableAfterAnswer" xml:space="preserve">
+        <value>Danh mục sẽ có sẵn sau khi trả lời câu hỏi được tham chiếu</value>
+        </data>
+    <data name="MaxAnswersCountSelected" xml:space="preserve">
+        <value>Số lượng lựa chọn tối đa ({{value}}) trong câu hỏi này đã được thực hiện</value>
+        </data>
+    <data name="ConfirmRosterRemove" xml:space="preserve">
+        <value>Bạn có chắc chắn muốn xóa danh sách liên quan không?</value>
+        </data>
+    <data name="GPSRecord" xml:space="preserve">
+        <value>Ghi lại GPS</value>
+        </data>
+    <data name="AreaRecord" xml:space="preserve">
+        <value>Chỉnh sửa khu vực</value>
+        </data>
+    <data name="GPSNotAvailable" xml:space="preserve">
+        <value>Trình duyệt của bạn không hỗ trợ nhận Định vị địa lý</value>
+        </data>
+    <data name="GPSPermissionDenied" xml:space="preserve">
+        <value>Trang web này không có quyền sử dụng API vị trí địa lý</value>
+        </data>
+    <data name="GPSPositionUnavailable" xml:space="preserve">
+        <value>Không thể xác định được vị trí hiện tại.</value>
+        </data>
+    <data name="GPSTimeout" xml:space="preserve">
+        <value>Không thể xác định vị trí hiện tại trong khoảng thời gian chờ đã chỉ định.</value>
+        </data>
+    <data name="GPSError" xml:space="preserve">
+        <value>Không thể xác định vị trí do lỗi không xác định (Mã: {{strErrorCode}}).</value>
+        </data>
+    <data name="NumberEnter" xml:space="preserve">
+        <value>Nhập số</value>
+        </data>
+    <data name="NumberCannotParse" xml:space="preserve">
+        <value>Giá trị đã nhập không thể được phân tích cú pháp dưới dạng giá trị số nguyên</value>
+        </data>
+    <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
+        <value>Giá trị đã nhập không được nhỏ hơn câu trả lời được bảo vệ</value>
+        </data>
+    <data name="NumberRosterError" xml:space="preserve">
+        <value>Câu trả lời '{{answer}}' không chính xác vì câu hỏi được sử dụng làm quy mô của danh sách và câu trả lời được chỉ định là phủ định</value>
+        </data>
+    <data name="NumberRosterUpperBound" xml:space="preserve">
+        <value>Câu trả lời '{{answer}}' không chính xác vì câu trả lời lớn hơn giới hạn trên của Danh sách {{answerMaxValue}}.</value>
+        </data>
+    <data name="NumberRosterRemoveConfirm" xml:space="preserve">
+        <value>Bạn có chắc chắn muốn xóa {{amountOfRostersToRemove}} hàng khỏi mỗi danh sách liên quan không?</value>
+        </data>
+    <data name="PhotoUpload" xml:space="preserve">
+        <value>Tải ảnh lên</value>
+        </data>
+    <data name="PhotoTooBig" xml:space="preserve">
+        <value>Hình ảnh quá lớn để tải lên. Vui lòng chọn hình ảnh nhỏ hơn 30 Mb</value>
+        </data>
+    <data name="PhotoIsNotImage" xml:space="preserve">
+        <value>Chỉ cho phép tải lên các tệp hình ảnh</value>
+        </data>
+    <data name="TextEnter" xml:space="preserve">
+        <value>Nhập văn bản</value>
+        </data>
+    <data name="TextEnterMasked" xml:space="preserve">
+        <value>Nhập văn bản {{userFriendlyMask}}</value>
+        </data>
+    <data name="TextEnterNewItem" xml:space="preserve">
+        <value>Nhập mục mới</value>
+        </data>
+    <data name="TextRequired" xml:space="preserve">
+        <value>Vui lòng điền vào tất cả các giá trị được yêu cầu</value>
+        </data>
+    <data name="QuestionUnsupported" xml:space="preserve">
+        <value>Loại câu hỏi không được hỗ trợ</value>
+        </data>
+    <data name="Complete" xml:space="preserve">
+        <value>Hoàn thành</value>
+        </data>
+    <data name="CompleteReviewSubmit" xml:space="preserve">
+        <value>Xem xét và gửi</value>
+        </data>
+    <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
+        <value>Quan trọng &lt;br /&gt;
+Lỗi</value>
+        </data>
+    <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
+        <value>Lỗi</value>
+        </data>
+    <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
+        <value>Chưa được trả lời &lt;br /&gt;
+Câu hỏi</value>
+        </data>
+    <data name="Complete_AllGood" xml:space="preserve">
+        <value>Đã trả lời tất cả các câu hỏi bắt buộc &lt;br /&gt;
+Không phát hiện thấy lỗi</value>
+        </data>
+    <data name="Complete_AndMore" xml:space="preserve">
+        <value>và {{count}} hơn thế nữa</value>
+        </data>
+    <data name="Complete_NoteIsRequired" xml:space="preserve">
+        <value>Cần lưu ý khi nộp hồ sơ phỏng vấn</value>
+        </data>
+    <data name="Complete_Required" xml:space="preserve">
+        <value>Yêu cầu</value>
+        </data>
+    <data name="Complete_Error" xml:space="preserve">
+        <value>Lỗi:</value>
+        </data>
+    <data name="Complete_LastComment" xml:space="preserve">
+        <value>Bình luận cuối cùng:</value>
+        </data>
+    <data name="Complete_SubmitInfo" xml:space="preserve">
+        <value>Sau khi gửi, cuộc phỏng vấn này sẽ bị khóa và không thể chỉnh sửa. &lt;br /&gt;
+Hãy chắc chắn rằng tất cả các thông tin là chính xác.</value>
+        </data>
+    <data name="CompleteQuestionsStatus" xml:space="preserve">
+        <value>Trạng thái câu hỏi:</value>
+        </data>
+    <data name="CompleteQuestionsAnswered" xml:space="preserve">
+        <value>Đã trả lời</value>
+        </data>
+    <data name="CompleteQuestionsUnanswered" xml:space="preserve">
+        <value>Chưa được trả lời</value>
+        </data>
+    <data name="Error" xml:space="preserve">
+        <value>Lỗi</value>
+        </data>
+    <data name="Error_other" xml:space="preserve">
+        <value>Lỗi</value>
+        </data>
+    <data name="CompleteFirstErrors" xml:space="preserve">
+        <value>Câu hỏi {{count}} đầu tiên có lỗi:</value>
+        </data>
+    <data name="CompleteErrors" xml:space="preserve">
+        <value>Các câu hỏi có lỗi:</value>
+        </data>
+    <data name="CriticalQuestionErrors" xml:space="preserve">
+        <value>Yêu cầu trả lời câu hỏi này:</value>
+        </data>
+    <data name="CriticalityConditionsErrors" xml:space="preserve">
+        <value>Yêu cầu sửa lỗi này:</value>
+        </data>
+    <data name="UnansweredQuestions" xml:space="preserve">
+        <value>Những câu hỏi chưa được trả lời:</value>
+        </data>
+    <data name="CompleteNoteToSupervisor" xml:space="preserve">
+        <value>Bình luận</value>
+        </data>
+    <data name="No" xml:space="preserve">
+        <value>KHÔNG</value>
+        </data>
+    <data name="Cover" xml:space="preserve">
+        <value>Che phủ</value>
+        </data>
+    <data name="CoverSupervisorNote" xml:space="preserve">
+        <value>Lưu ý của giám sát viên:</value>
+        </data>
+    <data name="CoverFirstComments" xml:space="preserve">
+        <value>Các thực thể {{count}} đầu tiên có nhận xét:</value>
+        </data>
+    <data name="CoverComments" xml:space="preserve">
+        <value>Câu hỏi kèm theo nhận xét:</value>
+        </data>
+    <data name="CoverBrokenPackegeTitle" xml:space="preserve">
+        <value>Lỗi: Cuộc phỏng vấn này bị hỏng</value>
+        </data>
+    <data name="CoverBrokenPackegeText" xml:space="preserve">
+        <value>Chú ý! Cuộc phỏng vấn này có dữ liệu bị hỏng, &lt;br /&gt;
+chỉ có phiên bản phỏng vấn trước đó. &lt;br /&gt;
+Liên hệ hỗ trợ để được hỗ trợ.</value>
+        </data>
+    <data name="LoadingWait" xml:space="preserve">
+        <value>Đang tải, vui lòng đợi</value>
+        </data>
+    <data name="Search" xml:space="preserve">
+        <value>Tìm kiếm</value>
+        </data>
+    <data name="ToggleNavigation" xml:space="preserve">
+        <value>Chuyển đổi điều hướng</value>
+        </data>
+    <data name="WebInterview" xml:space="preserve">
+        <value>Phỏng vấn trên mạng</value>
+        </data>
+    <data name="Help" xml:space="preserve">
+        <value>Giúp đỡ</value>
+        </data>
+    <data name="SwitchingLanguage" xml:space="preserve">
+        <value>Chuyển đổi ngôn ngữ. Vui lòng chờ...</value>
+        </data>
+    <data name="Yes" xml:space="preserve">
+        <value>Đúng</value>
+        </data>
+    <data name="CommentPosting" xml:space="preserve">
+        <value>Đang đăng...</value>
+        </data>
+    <data name="InterviewReceivedCantModify" xml:space="preserve">
+        <value>Người phỏng vấn đã nhận được cuộc phỏng vấn và không thể sửa đổi</value>
+        </data>
+    <data name="ShowOnMap" xml:space="preserve">
+        <value>Hiển thị trên bản đồ</value>
+        </data>
+    <data name="WebTesterSessionOver" xml:space="preserve">
+        <value>Phiên kiểm tra đã kết thúc</value>
+        </data>
+    <data name="WebTesterSessionOverMessage" xml:space="preserve">
+        <value>Vui lòng đóng trang này. Bạn có thể mở cái mới bằng cách quay lại trang Designer</value>
+        </data>
+    <data name="CompleteCommentCriticalityLevelBlock" xml:space="preserve">
+        <value>Để kích hoạt nút, vui lòng giải quyết các vấn đề quan trọng</value>
+        </data>
+    <data name="CompleteCommentCriticalityLevelWarn" xml:space="preserve">
+        <value>Để kích hoạt nút này, vui lòng giải quyết các vấn đề nghiêm trọng hoặc đưa ra lời giải thích trong hộp nhận xét ở trên</value>
+        </data>
+    <data name="CompleteNoteCommentCriticality" xml:space="preserve">
+        <value>Vui lòng giải quyết vấn đề bằng cách trả lời các câu hỏi quan trọng và đảm bảo câu trả lời đáp ứng các quy tắc quan trọng</value>
+        </data>
+    <data name="CompleteCriticalityWarnConfirmation" xml:space="preserve">
+        <value>Vui lòng xác nhận rằng bạn muốn gửi cuộc phỏng vấn này với các vấn đề quan trọng.</value>
+        </data>
+    <data name="ConfirmationNeededTitle" xml:space="preserve">
+        <value>Cần xác nhận</value>
+        </data>
+    <data name="LoadingQuestionnaire" xml:space="preserve">
+        <value>Đang tải bảng câu hỏi. Vui lòng chờ...</value>
+        </data>
+    <data name="WarningsHeader" xml:space="preserve">
+        <value>Cảnh báo</value>
+        </data>
+    <data name="ReloadQuestionnaire" xml:space="preserve">
+        <value>Tải lại bảng câu hỏi</value>
+        </data>
+    <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+        <value>Chưa được trả lời</value>
+        </data>
+    <data name="Interview_Overview_NoValue" xml:space="preserve">
+        <value>Không có giá trị</value>
+        </data>
+    <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
+        <value>Thông tin câu hỏi bổ sung</value>
+        </data>
+    <data name="MultimediaNotSupported" xml:space="preserve">
+        <value>Phát lại đa phương tiện không được trình duyệt của bạn hỗ trợ. Bạn có thể tải xuống thay thế.</value>
+        </data>
+    <data name="EmailLink_Header" xml:space="preserve">
+        <value>Liên kết tiếp tục</value>
+        </data>
+    <data name="EmailLink_Message" xml:space="preserve">
+        <value>Liên kết này dùng để tiếp tục cuộc phỏng vấn nếu bạn cần tiếp tục sau.</value>
+        </data>
+    <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
+        <value>Bạn có thể tạo một liên kết để tiếp tục cuộc phỏng vấn. Liên kết cố định này có thể được lưu lại và sử dụng sau này.</value>
+        </data>
+    <data name="EmailLink_Placeholder" xml:space="preserve">
+        <value>Nhập email</value>
+        </data>
+    <data name="EmailLink_InvalidEmail" xml:space="preserve">
+        <value>{{email}} là địa chỉ email không hợp lệ</value>
+        </data>
+    <data name="EmailLink_EmailResumeLink" xml:space="preserve">
+        <value>Liên kết tiếp tục</value>
+        </data>
+    <data name="TurnOffDevMode" xml:space="preserve">
+        <value>Tắt Chế độ nhà phát triển</value>
+        </data>
+    <data name="TurnOnDevMode" xml:space="preserve">
+        <value>Bật Chế độ nhà phát triển</value>
+        </data>
+    <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+        <value>Bạn có chắc chắn muốn xóa danh sách liên quan '{{rosterTitle}}' không?</value>
+        </data>
+    <data name="SaveScenario" xml:space="preserve">
+        <value>Lưu kịch bản</value>
+        </data>
+    <data name="Resolve" xml:space="preserve">
+        <value>Giải quyết</value>
+        </data>
+    <data name="ResolveHint" xml:space="preserve">
+        <value>Theo mặc định, các bình luận đã giải quyết bị ẩn nhưng tất cả những người tham gia cuộc phỏng vấn đều có thể xem lại</value>
+        </data>
+    <data name="HideResolved" xml:space="preserve">
+        <value>Ẩn đã giải quyết</value>
+        </data>
+    <data name="ShowResolved" xml:space="preserve">
+        <value>Hiển thị đã giải quyết</value>
+        </data>
+    <data name="SaveScenarioOptions" xml:space="preserve">
+        <value>Chọn kịch bản để thay thế</value>
+        </data>
+    <data name="SaveScenarioDesignerLogin" xml:space="preserve">
+        <value>Phiên trên ứng dụng Designer đã hết hạn. Đăng nhập vào ứng dụng Designer để có thể lưu lại.</value>
+        </data>
+    <data name="SaveScenarioGoToDesigner" xml:space="preserve">
+        <value>Mở nhà thiết kế</value>
+        </data>
+    <data name="NoQuestionnaireAccess" xml:space="preserve">
+        <value>Bạn không có quyền truy cập vào bảng câu hỏi</value>
+        </data>
+    <data name="SaveScenarioName" xml:space="preserve">
+        <value>Tên</value>
+        </data>
+    <data name="SaveScenarioOptions_ReplaceExisting" xml:space="preserve">
+        <value>Thay thế hiện tại</value>
+        </data>
+    <data name="SaveScenarioOptions_SaveNew" xml:space="preserve">
+        <value>Lưu mới</value>
+        </data>
+    <data name="PickLocation" xml:space="preserve">
+        <value>Chọn từ bản đồ</value>
+        </data>
+    <data name="EnterPassword" xml:space="preserve">
+        <value>Nhập mật khẩu</value>
+        </data>
+    <data name="Progress" xml:space="preserve">
+        <value>Tiến triển</value>
+        </data>
+    <data name="SwitchToWebMode" xml:space="preserve">
+        <value>Chuyển cuộc phỏng vấn sang Chế độ Web</value>
+        </data>
+    <data name="SwitchToWebMode_LinkDescription" xml:space="preserve">
+        <value>Liên kết sau đây có thể được sử dụng để tiếp tục cuộc phỏng vấn này</value>
+        </data>
+    <data name="AssignmentLimitError" xml:space="preserve">
+        <value>Bạn không thể tạo thêm cuộc phỏng vấn từ bài tập này</value>
+        </data>
+    <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
+        <value>Những câu hỏi quan trọng chưa được trả lời: {{count}}</value>
+        </data>
+    <data name="Complete_FailedCriticalRules" xml:space="preserve">
+        <value>Các quy tắc quan trọng không thành công: {{count}}</value>
+        </data>
+    <data name="Complete_UnansweredQuestions" xml:space="preserve">
+        <value>Câu hỏi chưa được trả lời: {{count}}</value>
+        </data>
+    <data name="Complete_QuestionsWithErrors" xml:space="preserve">
+        <value>Câu hỏi có lỗi: {{count}}</value>
+        </data>
+    <data name="CompleteReviewSubmitInterview" xml:space="preserve">
+        <value>Phỏng vấn {{key}}</value>
+        </data>
+</root>
