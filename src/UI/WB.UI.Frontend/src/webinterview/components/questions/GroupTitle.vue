@@ -16,6 +16,7 @@
 import { entityDetails } from '../mixins'
 import { GroupStatus } from './index'
 import { debounce } from 'lodash-es'
+import { flashJumpTarget } from './jumpTargetHighlighter'
 
 export default {
     name: 'GroupTitle',
@@ -70,6 +71,7 @@ export default {
         doScroll: debounce(function () {
             if (this.$store.getters.scrollState == this.id) {
                 window.scroll({ top: this.$el.offsetTop, behavior: 'smooth' })
+                flashJumpTarget(this.$el)
                 this.$store.dispatch('resetScroll')
             }
         }, 200),

@@ -14,6 +14,7 @@
 <script lang="js">
 import { getLocationHash } from '~/shared/helpers'
 import { debounce } from 'lodash-es'
+import { flashJumpTarget } from './jumpTargetHighlighter'
 
 export default {
     name: 'MatrixRoster_QuestionEditor',
@@ -71,6 +72,7 @@ export default {
         doScroll: debounce(function () {
             if (this.$store.getters.scrollState == '#' + this.id) {
                 window.scroll({ top: this.$parent.$parent.$el.offsetTop, behavior: 'smooth' })
+                flashJumpTarget(this.$parent.$parent.$el)
                 this.$store.dispatch('resetScroll')
             }
         }, 200),

@@ -40,6 +40,7 @@ import '@ag-grid-community/styles/ag-theme-quartz.css'
 
 import { entityDetails } from '../mixins'
 import { debounce, map } from 'lodash-es'
+import { flashJumpTarget } from './jumpTargetHighlighter'
 import { AgGridVue } from '@ag-grid-community/vue3'
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model'
 
@@ -266,6 +267,7 @@ export default {
         doScroll: debounce(function () {
             if (this.$store.getters.scrollState == '#' + this.id) {
                 window.scroll({ top: this.$el.offsetTop, behavior: 'smooth' })
+                flashJumpTarget(this.$el)
                 this.$store.dispatch('resetScroll')
             }
         }, 200),
