@@ -298,7 +298,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                 section.PageSetup.LeftMargin = Unit.FromPoint(37);
                 section.PageSetup.RightMargin = Unit.FromPoint(33);
                 section.PageSetup.TopMargin = Unit.FromPoint(31);
-                section.PageSetup.BottomMargin = Unit.FromPoint(37);
+                section.PageSetup.BottomMargin = Unit.FromPoint(55);
                 
                 section.PageSetup.FooterDistance = Unit.FromPoint(16);
             }
@@ -335,34 +335,45 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
         private void WriteFooterToAllPages(Document document, IQuestionnaire questionnaire, IStatefulInterview interview)
         {
+            const int maxTitleLength = 80;
+            var title = questionnaire.Title.Length > maxTitleLength
+                ? string.Concat(questionnaire.Title.AsSpan(0, maxTitleLength - 1), "…")
+                : questionnaire.Title;
+            var interviewKey = interview.GetInterviewKey().ToString();
+
             foreach (Section section in document.Sections)
             {
-                //section.Footers.Primary.Format.SpaceAfter = Unit.FromPoint(10);
-                //section.Footers.Primary.Format. SpaceBefore = Unit.FromPoint(10);
                 section.Footers.Primary.Format.LeftIndent = Unit.FromPoint(0);
                 section.Footers.Primary.Format.RightIndent = Unit.FromPoint(0);
-                section.Footers.Primary.Format.Borders.Top = new Border()
+
+                // Compute content width from the section's actual page setup so the footer
+                // adapts correctly if page format or margins are changed in the future.
+                var contentWidth = section.PageSetup.PageWidth
+                    - section.PageSetup.LeftMargin
+                    - section.PageSetup.RightMargin;
+
+                // Use a single paragraph with tab stops so the footer is always exactly one
+                // line tall regardless of title length, preventing body/footer overlap.
+                // The title is also truncated above as a further safeguard.
+                var footerParagraph = section.Footers.Primary.AddParagraph();
+                footerParagraph.Format.Font.Size = Unit.FromPoint(6);
+                footerParagraph.Format.Borders.Top = new Border()
                 {
                     Style = BorderStyle.DashLargeGap,
                     Width = Unit.FromPoint(1)
                 };
-                
-                Paragraph leftFooter = section.Footers.Primary.AddParagraph();
-                leftFooter.AddPageField();
-                leftFooter.AddText(PdfInterviewRes.PageOf);
-                leftFooter.AddNumPagesField();
-                leftFooter.Format.Font.Size = Unit.FromPoint(6);
-                leftFooter.Format.Alignment = ParagraphAlignment.Left;            
-                
-                Paragraph centerFooter = section.Footers.Primary.AddParagraph();
-                centerFooter.AddText(questionnaire.Title);
-                centerFooter.Format.Font.Size = Unit.FromPoint(6);
-                centerFooter.Format.Alignment = ParagraphAlignment.Center;            
+                footerParagraph.Format.TabStops.AddTabStop(contentWidth / 2.0, TabAlignment.Center);
+                footerParagraph.Format.TabStops.AddTabStop(contentWidth, TabAlignment.Right);
 
-                Paragraph rightFooter = section.Footers.Primary.AddParagraph();
-                rightFooter.AddText(interview.GetInterviewKey().ToString());
-                rightFooter.Format.Font.Size = Unit.FromPoint(6);
-                rightFooter.Format.Alignment = ParagraphAlignment.Right;            
+                footerParagraph.AddPageField();
+                footerParagraph.AddText(PdfInterviewRes.PageOf);
+                footerParagraph.AddNumPagesField();
+
+                footerParagraph.AddTab();
+                footerParagraph.AddText(title);
+
+                footerParagraph.AddTab();
+                footerParagraph.AddText(interviewKey);
             }
         }
 
