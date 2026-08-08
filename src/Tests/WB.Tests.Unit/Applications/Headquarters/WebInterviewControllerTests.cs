@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -30,6 +34,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Services;
 
@@ -62,6 +67,85 @@ namespace WB.Tests.Unit.Applications.Headquarters
             controller.Resume(interviewId, "returnUrl");
 
             Assert.That(controller.HttpContext.Session.Get<bool>($"WebInterview-{interviewId}"), Is.EqualTo(true));
+        }
+
+        [Test]
+        public async Task when_resume_post_and_captcha_is_not_filled_should_return_resume_view_with_captcha_error()
+        {
+            // Arrange
+            var interviewId = "11111111111111111111111111111111";
+            var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
+
+            var interview = Mock.Of<IStatefulInterview>(i =>
+                i.QuestionnaireIdentity == questionnaireIdentity);
+
+            var statefulInterviewRepository = Mock.Of<IStatefulInterviewRepository>(r =>
+                r.Get(interviewId) == interview);
+
+            var webInterviewConfig = new WebInterviewConfig
+            {
+                Started = true,
+                UseCaptcha = true,
+                CustomMessages = new Dictionary<WebInterviewUserMessages, string>()
+            };
+            var configProvider = Mock.Of<IWebInterviewConfigProvider>(c =>
+                c.Get(It.IsAny<QuestionnaireIdentity>()) == webInterviewConfig);
+
+            var questionnaire = Mock.Of<IQuestionnaire>(q => q.Title == "Test Questionnaire");
+            var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(s =>
+                s.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+
+            var captchaProvider = new Mock<ICaptchaProvider>();
+            captchaProvider.Setup(c => c.IsCaptchaValid(It.IsAny<HttpRequest>()))
+                .ReturnsAsync(false);
+
+            var captchaConfig = Mock.Of<IOptions<CaptchaConfig>>(o =>
+                o.Value == new CaptchaConfig { CaptchaType = CaptchaProviderType.Recaptcha });
+            var recaptchaSettings = Mock.Of<IOptions<RecaptchaSettings>>(o =>
+                o.Value == new RecaptchaSettings { SiteKey = "test-key" });
+
+            var controller = new WebInterviewController(
+                Mock.Of<ICommandService>(),
+                configProvider,
+                statefulInterviewRepository,
+                Mock.Of<IUserViewFactory>(),
+                Mock.Of<IInterviewUniqueKeyGenerator>(),
+                captchaProvider.Object,
+                Mock.Of<IAssignmentsService>(),
+                Mock.Of<IInvitationService>(),
+                Mock.Of<INativeReadSideStorage<InterviewSummary>>(),
+                Mock.Of<IInvitationMailingService>(),
+                Mock.Of<IPlainKeyValueStorage<EmailProviderSettings>>(),
+                recaptchaSettings,
+                captchaConfig,
+                Mock.Of<IServiceLocator>(),
+                questionnaireStorage,
+                Mock.Of<IInScopeExecutor>(),
+                Mock.Of<IMemoryCache>(),
+                calendarEventService: Mock.Of<ICalendarEventService>(),
+                webInterviewConfigProvider: Mock.Of<IWebInterviewConfigProvider>(),
+                webInterviewLinkProvider: Mock.Of<IWebInterviewLinkProvider>());
+
+            controller.ControllerContext.HttpContext = Mock.Of<HttpContext>(c =>
+                c.Session == new MockHttpSession()
+                && c.Request == Mock.Of<HttpRequest>(r =>
+                    r.Cookies == Mock.Of<IRequestCookieCollection>()
+                    && r.Form == Mock.Of<IFormCollection>())
+                && c.Response == Mock.Of<HttpResponse>(r => r.Cookies == Mock.Of<IResponseCookies>()));
+
+            controller.Url = Mock.Of<IUrlHelper>(x => x.Action(It.IsAny<UrlActionContext>()) == "url");
+            controller.ViewData = new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary());
+
+            // Act
+            var result = await controller.ResumePost(interviewId, null, null);
+
+            // Assert
+            var viewResult = result as ViewResult;
+            Assert.That(viewResult, Is.Not.Null, "Expected ViewResult but got: " + result?.GetType().Name);
+            Assert.That(viewResult!.ViewName, Is.EqualTo("Resume"));
+            var model = viewResult.Model as ResumeWebInterview;
+            Assert.That(model, Is.Not.Null, "Expected ResumeWebInterview model");
+            Assert.That(model!.CaptchaErrors, Is.Not.Empty, "Expected captcha errors to be set");
         }
 
         private WebInterviewController CreateController(int quantity, string interviewId)
