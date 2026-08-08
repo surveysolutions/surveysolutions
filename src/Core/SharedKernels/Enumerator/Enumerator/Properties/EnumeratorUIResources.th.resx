@@ -1271,4 +1271,7 @@
   <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
       <value>คุณได้ใช้การติดตามภูมิศาสตร์หรือการกำหนดขอบเขตภูมิศาสตร์เมื่อสร้างการสัมภาษณ์ โปรดเปิดใช้งานอีกครั้งหากคุณต้องการใช้</value>
   </data>
+  <data name="Downgrade_ErrorMessage" xml:space="preserve">
+    <value>This version of the application is older than the previously installed version. Please reinstall the latest version of the application.</value>
+  </data>
 </root>
