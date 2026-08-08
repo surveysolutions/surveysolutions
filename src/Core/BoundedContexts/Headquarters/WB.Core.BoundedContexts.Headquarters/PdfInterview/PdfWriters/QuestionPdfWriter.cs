@@ -78,7 +78,8 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                     var binaryData = imageFileStorage.GetInterviewBinaryData(interview.Id, fileName);
                     if (binaryData != null)
                     {
-                        ImageSource.IImageSource imageSource = ImageSource.FromBinary(fileName, () => binaryData);
+                        ImageSource.IImageSource imageSource = ImageSharpSource<SixLabors.ImageSharp.PixelFormats.Rgba32>
+                            .FromBinaryResized(fileName, binaryData);
                         var image = paragraph.AddImage(imageSource);
                         image.Width = Unit.FromPoint(300);
                         image.Height = Unit.FromPoint(300);
