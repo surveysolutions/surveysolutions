@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs;
 using WB.Core.Infrastructure.Domain;
@@ -34,6 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
         private Mock<IScheduledTask<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData>> scheduler;
         private Mock<IWorkspacesService> workspaceService;
         private Mock<IWorkspacesCache> cache;
+        private Mock<IWorkspaceBinaryDataStorage> binaryDataStorage;
 
         private readonly Workspace Workspace = Create.Entity.Workspace("test");
 
@@ -46,6 +48,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
             scheduler = new Mock<IScheduledTask<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData>>();
             
             workspaceService = new Mock<IWorkspacesService>();
+            binaryDataStorage = new Mock<IWorkspaceBinaryDataStorage>();
 
             this.workspaces = Create.Storage.InMemoryPlainStorage<Workspace>();
 
@@ -62,6 +65,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
                  questionnaireViewFactory.Object.AsNoScopeExecutor(),
                  executor,
                  exportApi.Object.AsNoScopeExecutor(),
+                 binaryDataStorage.Object.AsNoScopeExecutor(),
                  scheduler.Object, Mock.Of<ISystemLog>());
 
             StoreWorkspaces(Workspace);
@@ -107,6 +111,17 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
             var response = await Subject.Handle(new DeleteWorkspaceRequest(Workspace.Name));
 
             mapStorage.Verify(m => m.DeleteAllMaps(), Times.Once);
+
+            Assert.That(response, Has.Property(nameof(DeleteWorkspaceResponse.Success)).True);
+        }
+
+        [Test]
+        public async Task should_delete_binary_data()
+        {
+            // act
+            var response = await Subject.Handle(new DeleteWorkspaceRequest(Workspace.Name));
+
+            binaryDataStorage.Verify(b => b.DeleteAllBinaryDataForWorkspaceAsync(), Times.Once);
 
             Assert.That(response, Has.Property(nameof(DeleteWorkspaceResponse.Success)).True);
         }
