@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.API;
@@ -34,6 +35,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         private readonly IInterviewerVersionReader interviewerVersionReader;
         private readonly IUserToDeviceService userToDeviceService;
         private readonly IOptions<HeadquartersConfig> hqConfig;
+        private readonly IProductVersion productVersion;
 
         public enum ClientVersionFromUserAgent
         {
@@ -51,7 +53,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             IPlainStorageAccessor<ServerSettings> tenantSettings,
             IInterviewerVersionReader interviewerVersionReader,
             IUserToDeviceService userToDeviceService,
-            IOptions<HeadquartersConfig> hqConfig)
+            IOptions<HeadquartersConfig> hqConfig,
+            IProductVersion productVersion)
             : base(interviewerSettingsStorage, tenantSettings, userViewFactory, tabletInformationService)
         {
             this.syncVersionProvider = syncVersionProvider;
@@ -60,6 +63,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             this.interviewerVersionReader = interviewerVersionReader;
             this.userToDeviceService = userToDeviceService;
             this.hqConfig = hqConfig;
+            this.productVersion = productVersion;
         }
 
         [HttpGet]
@@ -161,7 +165,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             var serverApkBuildNumber = await interviewerVersionReader.InterviewerBuildNumber();
             var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
 
-            if (clientApkBuildNumber != null && clientApkBuildNumber > serverApkBuildNumber)
+            var effectiveServerBuildNumber = serverApkBuildNumber ?? productVersion.GetBuildNumber();
+            if (clientApkBuildNumber != null && clientApkBuildNumber > effectiveServerBuildNumber)
             {
                 return StatusCode(StatusCodes.Status406NotAcceptable);
             }

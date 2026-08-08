@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -251,6 +252,78 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
             // Assert
             Assert.That(httpResponseMessage, Is.InstanceOf<StatusCodeResult>());
             Assert.That(((StatusCodeResult)httpResponseMessage).StatusCode, Is.EqualTo(StatusCodes.Status426UpgradeRequired));
+        }
+
+        [Test]
+        public async Task when_apk_not_stored_on_server_and_client_is_newer_than_server_build_should_return_406()
+        {
+            const int serverHqBuildNumber = 35000;
+            const int clientBuildNumber = 38141;
+            var interviewerUserAgent = string.Format(InterviewerUserAgent, $"25.06.0 (build {clientBuildNumber})");
+
+            var interviewerVersionReader = new Mock<IInterviewerVersionReader>();
+            interviewerVersionReader.Setup(x => x.InterviewerBuildNumber())
+                .ReturnsAsync((int?)null);
+
+            var productVersion = Mock.Of<IProductVersion>(x => x.GetBuildNumber() == serverHqBuildNumber);
+
+            // Auto-update disabled — client with recent build that exceeds server HQ version should be rejected
+            var interviewerSettings = Abc.Create.Entity.InterviewerSettings(autoUpdateEnabled: false);
+            var interviewerSettingsStorage = Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(m =>
+                m.GetById(AppSetting.InterviewerSettings) == interviewerSettings);
+
+            var deviceId = "device";
+            var userToDeviceService = Mock.Of<IUserToDeviceService>(x => x.GetLinkedDeviceId(It.IsAny<Guid>()) == deviceId);
+
+            var interviewerApiController = Web.Create.Controller.InterviewerApiController(
+                syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
+                interviewerVersionReader: interviewerVersionReader.Object,
+                userToDeviceService: userToDeviceService,
+                productVersion: productVersion,
+                interviewerSettings: interviewerSettingsStorage);
+
+            interviewerApiController.Request.Headers[HeaderNames.UserAgent] = interviewerUserAgent;
+
+            // Act
+            IActionResult result = await interviewerApiController.CheckCompatibility(deviceId, InterviewerSyncProtocolVersionProvider.ResolvedCommentsIntroduced);
+
+            // Assert
+            Assert.That(((IStatusCodeActionResult)result).StatusCode, Is.EqualTo(StatusCodes.Status406NotAcceptable));
+        }
+
+        [Test]
+        public async Task when_apk_not_stored_on_server_and_client_equals_server_build_should_allow_sync()
+        {
+            const int serverHqBuildNumber = 35000;
+            var interviewerUserAgent = string.Format(InterviewerUserAgent, $"25.06.0 (build {serverHqBuildNumber})");
+
+            var interviewerVersionReader = new Mock<IInterviewerVersionReader>();
+            interviewerVersionReader.Setup(x => x.InterviewerBuildNumber())
+                .ReturnsAsync((int?)null);
+
+            var productVersion = Mock.Of<IProductVersion>(x => x.GetBuildNumber() == serverHqBuildNumber);
+
+            var interviewerSettings = Abc.Create.Entity.InterviewerSettings(autoUpdateEnabled: false);
+            var interviewerSettingsStorage = Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(m =>
+                m.GetById(AppSetting.InterviewerSettings) == interviewerSettings);
+
+            var deviceId = "device";
+            var userToDeviceService = Mock.Of<IUserToDeviceService>(x => x.GetLinkedDeviceId(It.IsAny<Guid>()) == deviceId);
+
+            var interviewerApiController = Web.Create.Controller.InterviewerApiController(
+                syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
+                interviewerVersionReader: interviewerVersionReader.Object,
+                userToDeviceService: userToDeviceService,
+                productVersion: productVersion,
+                interviewerSettings: interviewerSettingsStorage);
+
+            interviewerApiController.Request.Headers[HeaderNames.UserAgent] = interviewerUserAgent;
+
+            // Act
+            IActionResult result = await interviewerApiController.CheckCompatibility(deviceId, InterviewerSyncProtocolVersionProvider.ResolvedCommentsIntroduced);
+
+            // Assert - should not be 406 (client matches server version)
+            Assert.That(((IStatusCodeActionResult)result).StatusCode, Is.Not.EqualTo(StatusCodes.Status406NotAcceptable));
         }
     }
 }
