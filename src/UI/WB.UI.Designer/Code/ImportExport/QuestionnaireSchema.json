@@ -156,6 +156,7 @@
       "properties": {
         "Name": { "type": "string", "maxLength": 32 },
         "FileName": { "type": "string" },
+        "Description": { "type": "string" },
         "Id": { "$ref": "#/definitions/GUID" }
       },
       "additionalProperties": false,
@@ -369,7 +370,8 @@
       "type": "object",
       "properties": {
         "TableName": {"type": "string", "maxLength": 32 },
-        "FileName": {"type": "string"}
+        "FileName": {"type": "string"},
+        "Description": {"type": "string"}
       },
       "additionalProperties": false,
       "required": ["TableName", "FileName"]
