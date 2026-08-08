@@ -11,7 +11,7 @@ namespace WB.UI.Shared.Enumerator.Activities;
     ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
     HardwareAccelerated = false,
     Exported = false)]
-public class PlayVideoActivity: BaseActivity<PlayVideoViewModel>
+public class PlayVideoActivity: BaseActivity<PlayVideoFullScreenViewModel>
 {
     protected override int ViewResourceId => Resource.Layout.interview_video_view;
 
