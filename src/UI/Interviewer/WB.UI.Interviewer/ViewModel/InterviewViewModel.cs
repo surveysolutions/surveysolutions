@@ -140,12 +140,24 @@ namespace WB.UI.Interviewer.ViewModel
         {
             if (e.PropertyName != nameof(InterviewerCompleteInterviewViewModel.IsLoading))
                 return;
-            
+
             var completeViewModel = (InterviewerCompleteInterviewViewModel)sender;
             if (!completeViewModel.IsLoading)
             {
-                this.UnsubscribeFromCompleteInterviewViewModel();
-                Status = completeViewModel.CompleteStatus;
+                // Marshal state reads and UI update to the main thread: this handler can be raised
+                // from the Task.Run path in InterviewerCompleteInterviewViewModel.Configure and
+                // accessing completeInterviewViewModel or assigning Status off the UI thread causes
+                // cross-thread UI updates and racey state.
+                asyncDispatcher.ExecuteOnMainThreadAsync(() =>
+                {
+                    // Guard against a stale subscription firing after the interviewer has already
+                    // navigated away from the Complete screen.
+                    if (ReferenceEquals(this.completeInterviewViewModel, completeViewModel))
+                    {
+                        this.UnsubscribeFromCompleteInterviewViewModel();
+                        Status = completeViewModel.CompleteStatus;
+                    }
+                });
             }
         }
 
