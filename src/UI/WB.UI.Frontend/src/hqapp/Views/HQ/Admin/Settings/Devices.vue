@@ -274,6 +274,11 @@
 .block-filter .error {
     color: red;
 }
+
+:deep(#acceptableGpsLocationSource) {
+    width: 450px;
+    max-width: 100%;
+}
 </style>
 
 <script>
