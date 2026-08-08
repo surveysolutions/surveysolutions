@@ -60,12 +60,25 @@ export default {
         '$me.answer'() {
             this.uploadingImage = null
         },
+        '$me.validity.errorMessage'(val) {
+            if (val) {
+                this.uploadingImage = null
+                const uploader = this.$refs.uploader
+                if (uploader) {
+                    uploader.type = ''
+                    uploader.type = 'file'
+                }
+            }
+        },
     },
 
     methods: {
         answerRemoved() {
-            this.$refs.uploader.type = ''
-            this.$refs.uploader.type = 'file'
+            const uploader = this.$refs.uploader
+            if (uploader) {
+                uploader.type = ''
+                uploader.type = 'file'
+            }
         },
         onFileChange(e) {
             this.sendAnswer(() => {
