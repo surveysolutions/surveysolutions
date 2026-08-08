@@ -75,8 +75,10 @@ namespace WB.UI.Headquarters
             switch (provider)
             {
                 case CaptchaProviderType.Recaptcha:
-                    services.AddTransient<IRecaptchaService, RecaptchaService>();
                     services.AddTransient<ICaptchaProvider, RecaptchaProvider>();
+                    break;
+                case CaptchaProviderType.RecaptchaV3:
+                    services.AddTransient<ICaptchaProvider, RecaptchaV3Provider>();
                     break;
                 case CaptchaProviderType.Hosted:
                     services.AddTransient<ICaptchaProvider, HostedCaptchaProvider>();
