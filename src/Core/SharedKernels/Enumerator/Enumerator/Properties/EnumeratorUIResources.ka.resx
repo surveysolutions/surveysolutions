@@ -1069,4 +1069,10 @@
   <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
     <value>ინტერვიუს შექმნისას გამოიყენეთ გეო-თვალთვალი ან გეო-ღობე. გთხოვთ, ხელახლა ჩართეთ, თუ გსურთ გამოყენება.</value>
   </data>
+  <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
+    <value>მდებარეობის დასადგენად შესაბამისი წყარო არ არის</value>
+  </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>GPS პროვაიდერი გამორთულია</value>
+  </data>
 </root>

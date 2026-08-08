@@ -168,7 +168,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 cts = new CancellationTokenSource(TimeSpan.FromSeconds(this.settings.GpsReceiveTimeoutSec));
                 mvxGeoLocation = await this.locationService.GetLocation(
-                    this.settings.GpsDesiredAccuracy, cts.Token).ConfigureAwait(false);
+                    this.settings.GpsDesiredAccuracy, this.settings.AcceptableGpsLocationSource, cts.Token).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -182,9 +182,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             try
             {
-                if (gpsException is GpsProviderDisabledException)
+                if (gpsException is NoSuitableLocationProviderException)
                 {
-                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(EnumeratorUIResources.Error_NoGpsProvider);
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(EnumeratorUIResources.Error_NoSuitableLocationProvider);
+                }
+                else if (gpsException is GpsProviderDisabledException)
+                {
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(EnumeratorUIResources.Error_GpsProviderDisabled);
                 }
                 else if (gpsException is PermissionException || gpsException is MissingPermissionsException)
                 {
@@ -231,7 +235,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 altitude: location.Altitude,
                 latitude: location.Latitude,
                 longitude: location.Longitude,
-                timestamp: location.Timestamp);
+                timestamp: location.Timestamp,
+                gpsProvider: location.Provider,
+                isFromMockProvider: location.IsFromMockProvider);
 
             try
             {

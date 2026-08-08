@@ -1275,4 +1275,10 @@ Ini akan muncul di perangkat interviewer setelah sinkronisasi berikutnya</value>
   <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
       <value>Anda telah menggunakan Geo Tracking atau Geo Fencing saat membuat wawancara. Silakan aktifkan lagi jika Anda ingin menggunakannya.</value>
   </data>
+  <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
+    <value>Tidak ada penyedia yang sesuai untuk menentukan lokasi</value>
+  </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>Penyedia GPS dinonaktifkan</value>
+  </data>
 </root>

@@ -1063,4 +1063,10 @@
   <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
     <value>Estado: Abierto</value>
   </data>
+  <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
+    <value>No hay un proveedor adecuado para determinar la ubicación</value>
+  </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>El proveedor de GPS está deshabilitado</value>
+  </data>
 </root>

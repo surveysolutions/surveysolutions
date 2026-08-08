@@ -1062,4 +1062,10 @@
   <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
     <value>Keni përdorur Gjurmimin Gjeografik ose Geo Fencing gjatë krijimit të një interviste. Ju lutemi aktivizojeni sërish nëse dëshironi ta përdorni.</value>
   </data>
+  <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
+    <value>Nuk ka ofrues të përshtatshëm për të përcaktuar vendndodhjen</value>
+  </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>Ofruesi GPS është i çaktivizuar</value>
+  </data>
 </root>

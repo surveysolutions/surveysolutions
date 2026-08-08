@@ -1,6 +1,7 @@
 ﻿using Android.Content;
 using Android.Locations;
 using Android.OS;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -20,7 +21,8 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             this.permissions = permissions;
         }
 
-        public async Task<GpsLocation> GetLocation(double desiredAccuracy, CancellationToken cancellationToken)
+        public async Task<GpsLocation> GetLocation(double desiredAccuracy, AcceptableGpsLocationSource acceptableSource,
+            CancellationToken cancellationToken)
         {
             await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>();
 
@@ -29,10 +31,25 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             if (locationManager == null)
                 throw new GpsProviderDisabledException();
 
-            // Accept hardware GPS *or* an active mock provider for the GPS provider —
-            // the latter is how external Bluetooth/USB GPS sensors are exposed on Android
-            // when "Allow mock locations" is enabled in Developer Settings.
-            if (!IsGpsProviderAvailable(locationManager))
+            // Modes B (BuiltInGpsOnly) and E (BuiltInOrExternalGps) demand the physical GPS provider.
+            // Modes A (AnyNonMock) and N (Any) accept any provider.
+            bool requireGpsProvider = acceptableSource.RequiresGpsProvider();
+            if (!acceptableSource.IsKnownValue())
+                throw new NoSuitableLocationProviderException();
+
+            if (!IsLocationServicesAvailable(locationManager))
+            {
+                // When the mode demands the physical GPS sensor, report the missing GPS chip;
+                // otherwise the failure is a generic "no suitable provider" rather than absence of GPS.
+                if (requireGpsProvider)
+                    throw new GpsProviderDisabledException();
+
+                throw new NoSuitableLocationProviderException();
+            }
+
+            // Only mode B requires the hardware GPS provider to be enabled.
+            if (acceptableSource.RequiresEnabledGpsProvider() &&
+                !locationManager.IsProviderEnabled(LocationManager.GpsProvider))
                 throw new GpsProviderDisabledException();
 
             // Preserve existing contract: canceled requests resolve as timeout/no-fix (null).
@@ -40,7 +57,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 return null;
 
             var tcs = new TaskCompletionSource<GpsLocation>(TaskCreationOptions.RunContinuationsAsynchronously);
-            var listener = new SingleShotLocationListener(tcs, locationManager, desiredAccuracy);
+            var listener = new SingleShotLocationListener(tcs, locationManager, desiredAccuracy, acceptableSource);
 
             // Enforce a hard 10-minute ceiling regardless of the caller-supplied token.
             using var hardLimitCts = new CancellationTokenSource(TimeSpan.FromMinutes(10));
@@ -48,16 +65,33 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             var effectiveToken = linkedCts.Token;
 
             // Register first so cancellation callback can always remove listener updates.
-            // Register for GPS_PROVIDER explicitly plus every currently-enabled provider so
-            // that fixes from an external Bluetooth/USB GPS sensor (which may register under
-            // a custom or network provider name via the mock location API) are also received.
-            var allProviders = locationManager.GetProviders(enabledOnly: true)
-                                              .Append(LocationManager.GpsProvider)
-                                              .Distinct();
+            // When the GPS provider is required, register for it exclusively; otherwise register
+            // for GPS_PROVIDER explicitly plus every currently-enabled provider so that fixes from
+            // an external Bluetooth/USB GPS sensor (which may register under a custom or network
+            // provider name via the mock location API) are also received.
+            var allProviders = requireGpsProvider
+                ? new[] { LocationManager.GpsProvider }.AsEnumerable()
+                : locationManager.GetProviders(enabledOnly: true)
+                                 .Append(LocationManager.GpsProvider)
+                                 .Distinct();
+            bool hasRegisteredProvider = false;
             foreach (var provider in allProviders)
             {
-                try { locationManager.RequestLocationUpdates(provider, 0L, 0f, listener); }
-                catch { /* provider may have disappeared between enumeration and registration */ }
+                try
+                {
+                    locationManager.RequestLocationUpdates(provider, 0L, 0f, listener);
+                    hasRegisteredProvider = true;
+                }
+                catch (Java.Lang.IllegalArgumentException)
+                {
+                    // Provider may disappear between enumeration and registration.
+                }
+            }
+
+            if (!hasRegisteredProvider)
+            {
+                try { locationManager.RemoveUpdates(listener); } catch { /* ignore */ }
+                throw new NoSuitableLocationProviderException();
             }
 
             // Register cancellation: remove the listener and complete with null when the
@@ -86,7 +120,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
         /// Bluetooth/USB sensor) are accessible.
         /// On API &lt;28, falls back to checking the GPS provider or any available provider.
         /// </summary>
-        private static bool IsGpsProviderAvailable(LocationManager locationManager)
+        private static bool IsLocationServicesAvailable(LocationManager locationManager)
         {
             // On API 28+, IsLocationEnabled is the single authoritative flag.
             // IsProviderEnabled("gps") only reflects hardware state and returns false when
@@ -113,24 +147,33 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
         /// <see cref="TaskCompletionSource{GpsLocation}"/> on the first GPS fix that meets
         /// the requested accuracy, then unregisters itself.
         /// </summary>
-        private sealed class SingleShotLocationListener : Java.Lang.Object, ILocationListener
+        internal sealed class SingleShotLocationListener : Java.Lang.Object, ILocationListener
         {
             private readonly TaskCompletionSource<GpsLocation> tcs;
             private readonly LocationManager locationManager;
             private readonly double desiredAccuracy;
+            private readonly AcceptableGpsLocationSource acceptableSource;
 
-            public SingleShotLocationListener(
+            internal SingleShotLocationListener(
                 TaskCompletionSource<GpsLocation> tcs,
                 LocationManager locationManager,
-                double desiredAccuracy)
+                double desiredAccuracy,
+                AcceptableGpsLocationSource acceptableSource)
             {
                 this.tcs = tcs;
                 this.locationManager = locationManager;
                 this.desiredAccuracy = desiredAccuracy;
+                this.acceptableSource = acceptableSource;
             }
 
             public void OnLocationChanged(AndroidLocation location)
             {
+                // Enforce the workspace-configured acceptance criteria: reject fixes that do not
+                // come from the required provider, or that are mock when mock is not permitted.
+                bool isFromGpsProvider = location.Provider == LocationManager.GpsProvider;
+                if (!this.acceptableSource.IsLocationAcceptable(isFromGpsProvider, location.IsFromMockProvider))
+                    return;
+
                 // External GPS devices may emit valid fixes whose elapsedRealtime timestamp
                 // does not align with the device monotonic clock. Do not reject by age.
 
@@ -154,7 +197,9 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                     location.HasAltitude ? location.Altitude : null,
                     location.Latitude,
                     location.Longitude,
-                    timestamp);
+                    timestamp,
+                    location.Provider,
+                    location.IsFromMockProvider);
 
                 // Set result before removing updates so the task always completes even if
                 // RemoveUpdates throws (e.g. when called from a non-looper thread).

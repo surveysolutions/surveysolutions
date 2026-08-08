@@ -1076,4 +1076,10 @@
   <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
     <value>الحالة: مفتوح</value>
   </data>
+  <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
+    <value>لا يوجد مزوّد مناسب لتحديد الموقع</value>
+  </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>مزوّد GPS معطّل</value>
+  </data>
 </root>

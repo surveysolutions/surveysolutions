@@ -213,5 +213,11 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         {
             throw new NotImplementedException();
         }
+
+        public AcceptableGpsLocationSource AcceptableGpsLocationSource => AcceptableGpsLocationSource.Any;
+        public void SetAcceptableGpsLocationSource(AcceptableGpsLocationSource source)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

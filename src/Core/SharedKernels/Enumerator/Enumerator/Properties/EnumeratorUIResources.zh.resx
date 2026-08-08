@@ -1067,4 +1067,10 @@
   <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
     <value>您在创建访谈时使用了地理追踪或地理围栏。如果想继续使用，请重新启用它。</value>
   </data>
+  <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
+    <value>没有合适的提供程序来确定位置</value>
+  </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>GPS 提供程序已禁用</value>
+  </data>
 </root>

@@ -1899,6 +1899,18 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Error_NoSuitableLocationProvider {
+            get {
+                return ResourceManager.GetString("Error_NoSuitableLocationProvider", resourceCulture);
+            }
+        }
+        
+        public static string Error_GpsProviderDisabled {
+            get {
+                return ResourceManager.GetString("Error_GpsProviderDisabled", resourceCulture);
+            }
+        }
+        
         public static string Error_NoTargetAreaShapefile {
             get {
                 return ResourceManager.GetString("Error_NoTargetAreaShapefile", resourceCulture);

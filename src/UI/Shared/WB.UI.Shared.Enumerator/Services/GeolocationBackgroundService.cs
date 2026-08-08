@@ -146,7 +146,9 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
             location.HasAltitude ? location.Altitude : null,
             location.Latitude,
             location.Longitude,
-            dateTimeOffset);
+            dateTimeOffset,
+            location.Provider,
+            location.IsFromMockProvider);
 
         OnGpsLocationChanged(gpsLocation, location.IsFromMockProvider);
     }
