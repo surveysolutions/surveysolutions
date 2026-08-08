@@ -211,7 +211,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
             else
             {
-                throw new Exception("Receive payload transfer update before ReceivePayload call");
+                logger.Warn(
+                    $"Ignoring payload transfer update for unknown payload. Endpoint: {endpoint}, PayloadId: {update.Id}, Status: {update.Status}");
+                return;
             }
 
             PayloadHeader header;
