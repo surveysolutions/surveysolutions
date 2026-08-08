@@ -277,6 +277,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         decimal[] GetFixedRosterCodes(Guid rosterId);
         IReadOnlyCollection<string> GetTranslationLanguages();
         string GetDefaultTranslation();
+        Guid? GetDefaultTranslationId();
         bool IsSubSection(Guid groupId);
         bool IsVariable(Guid id);
         bool HasCustomRosterTitle(Guid id);
