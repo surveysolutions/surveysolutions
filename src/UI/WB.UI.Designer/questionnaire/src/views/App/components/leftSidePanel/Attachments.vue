@@ -51,7 +51,7 @@
 
 <script>
 
-import _ from 'lodash';
+import { reduce, isNull, isUndefined } from 'lodash';
 import dayjs from 'dayjs';
 import { newGuid } from '../../../../helpers/guid';
 import { notice } from '../../../../services/notificationService';
@@ -100,13 +100,13 @@ export default {
             return Math.floor(this.totalSize() / this.benchmarkDownloadSpeed);
         },
         totalSize() {
-            return _.reduce(this.attachments, function (sum, attachment) {
+            return reduce(this.attachments, function (sum, attachment) {
                 return sum + (attachment.content.size || 0);
             }, 0);
         },
 
         async updateAttachmentData(attachment, file, callback) {
-            if (_.isNull(file) || _.isUndefined(file)) {
+            if (isNull(file) || isUndefined(file)) {
                 return;
             }
 
@@ -157,7 +157,7 @@ export default {
                             return;
                         }
 
-                        if (!_.isUndefined(callback)) {
+                        if (!isUndefined(callback)) {
                             await callback();
                         }
                     }
@@ -166,14 +166,14 @@ export default {
                 await reader.readAsDataURL(file.file);
             }
             else {
-                if (!_.isUndefined(callback)) {
+                if (!isUndefined(callback)) {
                     await callback();
                 }
             }
         },
 
         async createAndUploadFile(file) {
-            if (_.isNull(file) || _.isUndefined(file)) {
+            if (isNull(file) || isUndefined(file)) {
                 return;
             }
 

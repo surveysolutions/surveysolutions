@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { get } from '../services/apiService';
-import { findIndex, isNull, isUndefined, cloneDeep, orderBy } from 'lodash';
+import { findIndex, isNull, isUndefined, cloneDeep, orderBy, debounce } from 'lodash';
 import emitter from '../services/emitter';
 import { isNotLinkedOrLinkedToTextList } from '../helpers/question';
 
@@ -300,7 +300,7 @@ export const useTreeStore = defineStore('tree', {
             }
         },
 
-        recalculateVariableNames() {
+        recalculateVariableNames: debounce(function() {
             if (this.info) {
                 var i = 0;
                 this.variableNamesStore.variableNamesCompletions = orderBy(
@@ -328,7 +328,7 @@ export const useTreeStore = defineStore('tree', {
             this.variableNamesStore.lastUpdated = new Date();
 
             emitter.emit('variablesRecalculated');
-        },
+        }, 250),
 
         findTreeItem(itemId) {
             var o;

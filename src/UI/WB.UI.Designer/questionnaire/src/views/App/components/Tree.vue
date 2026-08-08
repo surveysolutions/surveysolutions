@@ -131,6 +131,7 @@
     <SearchDialog ref="searchDialog" :questionnaireId="questionnaireId" />
     <SearchForQuestion ref="searchForQuestion" :questionnaire-id="questionnaireId" :chapter-id="chapterId">
     </SearchForQuestion>
+    <TreeItemContextMenu />
 </template>
 
 <style lang="scss">
@@ -165,6 +166,7 @@ import { addVariable } from '../../../services/variableService';
 import { canPaste, pasteItemInto } from '../../../services/copyPasteService'
 
 import Help from './Help.vue';
+import TreeItemContextMenu from './TreeItemContextMenu.vue';
 
 import { migrateToNewVersion } from '../../../services/questionnaireService'
 import { useKeyShortcut } from '../../../composables/useKeyShortcut';
@@ -181,6 +183,7 @@ export default {
         SearchDialog,
         SearchForQuestion,
         Help,
+        TreeItemContextMenu,
     },
     inject: ['questionnaire'],
     props: {

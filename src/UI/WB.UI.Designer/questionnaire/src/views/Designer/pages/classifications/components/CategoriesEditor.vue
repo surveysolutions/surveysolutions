@@ -71,7 +71,7 @@
 
 import { newGuid } from '../../../../../helpers/guid'
 import { Form, Field, ErrorMessage } from 'vee-validate';
-import _ from 'lodash'
+import { max, map, each, isEmpty, filter, forEach } from 'lodash'
 import { useClassificationsStore } from '../store';
 
 export default {
@@ -127,13 +127,13 @@ export default {
         stringifyCategories() {
             var stringifiedOptions = '';
             var maxLength =
-                _.max(
-                    _.map(this.categories, function (o) {
+                max(
+                    map(this.categories, function (o) {
                         return o.title.length;
                     })
                 ) + 3;
-            _.each(this.categories, function (category) {
-                if (!_.isEmpty(category)) {
+            each(this.categories, function (category) {
+                if (!isEmpty(category)) {
                     stringifiedOptions +=
                         (category.title || '') +
                         Array(
@@ -149,11 +149,11 @@ export default {
         parseOptions() {
             var self = this;
             var optionsStringList = (this.stringifiedOptions || '').split('\n');
-            optionsStringList = _.filter(optionsStringList, function (line) {
-                return !_.isEmpty(line);
+            optionsStringList = filter(optionsStringList, function (line) {
+                return !isEmpty(line);
             });
 
-            var options = _.map(optionsStringList, function (item) {
+            var options = map(optionsStringList, function (item) {
                 var matches = item.match(self.optionsParseRegex);
                 return {
                     value: matches[2] * 1,
@@ -284,11 +284,11 @@ export default {
         },
 
         validateStringOptions(value) {
-            if (!_.isEmpty(value)) {
+            if (!isEmpty(value)) {
                 var options = (value || '').split('\n');
                 var matchPattern = true;
                 var invalidLines = [];
-                _.forEach(options, (option, index) => {
+                forEach(options, (option, index) => {
                     var currentLineValidationResult = this.optionsParseRegex.test(
                         option || ''
                     );

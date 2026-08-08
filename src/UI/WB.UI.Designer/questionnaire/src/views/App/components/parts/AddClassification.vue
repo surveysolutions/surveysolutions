@@ -31,7 +31,7 @@
                                                     <li v-for="group in groups">
                                                         <a role="menuitem" tabindex="-1"
                                                             @click="changeClassificationGroup(group)">{{
-                group.title }}</a>
+                                                            group.title }}</a>
                                                     </li>
                                                 </ul>
                                             </perfect-scrollbar>
@@ -52,7 +52,7 @@
                                 </div><!-- /input-group -->
                             </form>
                             <span class="group-summary pull-right">{{ totalResults }} {{
-                $t('QuestionnaireEditor.ClassificationsSearchEntities') }}</span>
+                                $t('QuestionnaireEditor.ClassificationsSearchEntities') }}</span>
                         </div>
                         <perfect-scrollbar class="scroller">
                             <div class="tile-wrapper">
@@ -63,8 +63,8 @@
                                             :class="{ 'collapsed': classification.categoriesAreOpen == false }"
                                             @click="toggleCategories(classification)">
                                             {{ $t('QuestionnaireEditor.ClassificationShowCategories') }} ({{
-                classification.categoriesCount
-            }})
+                                                classification.categoriesCount
+                                            }})
                                         </button>
                                         <div class="collapse" :class="{ 'in': classification.categoriesAreOpen }"
                                             v-show="classification.categoriesAreOpen">
@@ -73,7 +73,7 @@
                                                     <li v-for="category in classification.categories">
                                                         <span>{{ category.title }}<span>...</span></span> <span
                                                             class="option-value">{{
-                category.value }}</span>
+                                                            category.value }}</span>
                                                     </li>
                                                 </ul>
                                             </perfect-scrollbar>
@@ -81,7 +81,7 @@
                                         <div class="tile-footer clearfix">
                                             <a class="bg-info"
                                                 @click="changeClassificationGroup(classification.group)">{{
-                classification.group.title }}</a>
+                                                classification.group.title }}</a>
                                             <button v-if="!isReadOnlyForUser" class="btn btn-link add-button"
                                                 @click="replaceOptions(classification)">{{ $t('QuestionnaireEditor.Add')
                                                 }}</button>
@@ -95,8 +95,8 @@
                                             :class="{ 'collapsed': classification.categoriesAreOpen == false }"
                                             @click="toggleCategories(classification)">
                                             {{ $t('QuestionnaireEditor.ClassificationShowCategories') }} ({{
-                classification.categoriesCount
-            }})
+                                                classification.categoriesCount
+                                            }})
                                         </button>
                                         <div class="collapse" :class="{ 'in': classification.categoriesAreOpen }"
                                             v-show="classification.categoriesAreOpen">
@@ -105,7 +105,7 @@
                                                     <li v-for="category in classification.categories">
                                                         <span>{{ category.title }}<span>...</span></span> <span
                                                             class="option-value">{{
-                category.value }}</span>
+                                                            category.value }}</span>
                                                     </li>
                                                 </ul>
                                             </perfect-scrollbar>
@@ -113,7 +113,7 @@
                                         <div class="tile-footer clearfix">
                                             <a class="bg-info"
                                                 @click="changeClassificationGroup(classification.group)">{{
-                                                classification.group.title }}</a>
+                                                    classification.group.title }}</a>
                                             <button type="button" v-if="!isReadOnlyForUser"
                                                 class="btn btn-link add-button"
                                                 @click="replaceOptions(classification)">{{ $t('QuestionnaireEditor.Add')
@@ -196,11 +196,10 @@ export default {
             return {};
         },
     },
+    created() {
+        this.searchThrottled = debounce(this.search, 1000);
+    },
     methods: {
-        searchThrottled() {
-            const searchDebounce = debounce(this.search, 1000);
-            searchDebounce();
-        },
         async loadClassificationGroups() {
             const response = await loadClassificationGroups();
             this.groups = response;
