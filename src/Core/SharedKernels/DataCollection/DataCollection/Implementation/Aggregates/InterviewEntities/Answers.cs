@@ -415,7 +415,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public static GpsAnswer FromGeoPosition(GeoPosition value) => value != null ? new GpsAnswer(value) : null;
 
         public GeoLocation ToGeoLocation()
-            => new GeoLocation(Value.Latitude, Value.Longitude, Value.Accuracy, Value.Altitude);
+            => new GeoLocation(Value.Latitude, Value.Longitude, Value.Accuracy, Value.Altitude, Value.Timestamp);
 
         public override string ToString() => Value.ToString();
 
