@@ -307,4 +307,10 @@
   <data name="Translation_Replace" xml:space="preserve">
     <value>تم تبديل المستند إلى الترجمة {0}</value>
   </data>
+  <data name="AnonymousSharingEnabled" xml:space="preserve">
+    <value>تم تفعيل المشاركة المجهولة لـ {0}</value>
+  </data>
+  <data name="AnonymousSharingDisabled" xml:space="preserve">
+    <value>تم إلغاء تفعيل المشاركة المجهولة لـ {0}</value>
+  </data>
 </root>

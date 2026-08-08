@@ -381,4 +381,10 @@
   <data name="MigratedNewCoverSupport" xml:space="preserve">
     <value>Faqja e kopertinës u gjenerua</value>
   </data>
+  <data name="AnonymousSharingEnabled" xml:space="preserve">
+    <value>Ndarja anonime është aktivizuar për {0}</value>
+  </data>
+  <data name="AnonymousSharingDisabled" xml:space="preserve">
+    <value>Ndarja anonime është çaktivizuar për {0}</value>
+  </data>
 </root>
