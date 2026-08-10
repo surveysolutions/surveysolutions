@@ -271,4 +271,7 @@
     <data name="CloneDeletedWarning" xml:space="preserve">
         <value>თქვენ ქმნით წაშლილი კითხვარის ასლს. ზოგიერთი ნაწილი შეიძლება დაიკარგოს.</value>
         </data>
+    <data name="IncludeScenarios" xml:space="preserve">
+        <value>სცენარების ჩართვა</value>
+        </data>
 </root>
