@@ -49,6 +49,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             public bool AllowSupervisorChangeAssignmentStatus { get; set; }
             public bool AllowInterviewerChangeAssignmentStatus { get; set; }
             public AudioRecordingQuality? AudioRecordingQuality { get; set; }
+            public bool AllowSupervisorAudioAuditPlayback { get; set; }
         }
 
         public class InterviewerGeographyQuestionAccuracyInMetersModel
@@ -162,7 +163,8 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 AllowSupervisorChangeAssignmentStatus = interviewerSettings.IsAllowSupervisorChangeAssignmentStatus(),
                 AllowInterviewerChangeAssignmentStatus = interviewerSettings.IsAllowInterviewerChangeAssignmentStatus(),
-                AudioRecordingQuality = interviewerSettings.GetAudioRecordingQuality()
+                AudioRecordingQuality = interviewerSettings.GetAudioRecordingQuality(),
+                AllowSupervisorAudioAuditPlayback = interviewerSettings.IsAllowSupervisorAudioAuditPlayback(),
             };
         }
 
@@ -183,8 +185,10 @@ namespace WB.UI.Headquarters.Controllers.Api
                 settings.AllowInterviewerChangeAssignmentStatus = message.AllowSupervisorChangeAssignmentStatus
                     ? message.AllowInterviewerChangeAssignmentStatus
                     : false;
+                settings.AllowSupervisorAudioAuditPlayback = message.AllowSupervisorAudioAuditPlayback;
                 if (message.AudioRecordingQuality.HasValue)
                     settings.AudioRecordingQuality = message.AudioRecordingQuality.Value;
+                settings.AllowSupervisorAudioAuditPlayback = message.AllowSupervisorAudioAuditPlayback;
             });
 
             return Ok(new {success = true});

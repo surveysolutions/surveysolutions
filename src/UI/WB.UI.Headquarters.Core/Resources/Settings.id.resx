@@ -145,4 +145,10 @@
   <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve"><value>Kredensial yang digunakan selama proses autentikasi SMTP</value></data>
   <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve"><value>Peringatan! Ini adalah tindakan kritis yang akan mempengaruhi file ekspor yang ada</value></data>
   <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve"><value>Apakah Anda yakin ingin memaksa menjalankan kebijakan retensi sekarang?</value></data>
+  <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
+    <value>Allow Supervisors to play audio-audit recordings</value>
+  </data>
+  <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
+    <value>When enabled, Supervisors can access and play audio-audit recordings for their interviews.</value>
+  </data>
 </root>

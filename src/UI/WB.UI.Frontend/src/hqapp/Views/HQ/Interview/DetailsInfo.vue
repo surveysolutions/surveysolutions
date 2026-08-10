@@ -97,6 +97,20 @@
                                 :title="$t('WebInterview.DownloadAnswersHint')" download>{{
                                     $t('WebInterview.DownloadAnswers') }}</a>
                         </li>
+                        <li v-if="audioAuditAvailable !== null">
+                            <template v-if="audioAuditAvailable">
+                                <span class="data">{{ $t('ReviewInterview.AudioAudit_Available') }}</span>
+                                <span class="data">
+                                    <template v-if="audioAuditDurationState === 'loading'">{{ $t('ReviewInterview.AudioAudit_DurationLoading') }}</template>
+                                    <template v-else-if="audioAuditDurationState === 'unavailable'">{{ $t('ReviewInterview.AudioAudit_DurationUnavailable') }}</template>
+                                    <template v-else-if="audioAuditTotalDuration !== null">{{ $t('ReviewInterview.AudioAudit_TotalDuration', { duration: formatAuditDuration(audioAuditTotalDuration) }) }}</template>
+                                </span>
+                                <button type="button" class="btn btn-link gray-action-unit" @click="$emit('toggleAudioPanel')">
+                                    {{ audioAuditPanelOpen ? $t('ReviewInterview.AudioAudit_CloseRecordings') : $t('ReviewInterview.AudioAudit_ViewRecordings') }}
+                                </button>
+                            </template>
+                            <span v-else class="data">{{ $t('ReviewInterview.AudioAudit_NoRecordingsAvailable') }}</span>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -350,6 +364,13 @@ import ChangeToCapi from '../Interviews/ChangeModeModal.vue'
 import { map, assign } from 'lodash-es'
 
 export default {
+    props: {
+        audioAuditPanelOpen: {
+            type: Boolean,
+            default: false,
+        },
+    },
+    emits: ['toggleAudioPanel'],
     data() {
         return {
             approveComment: '',
@@ -359,7 +380,14 @@ export default {
             rejectToNewResponsible: false,
             doApproveReceivedByInterviewer: false,
             isReassignReceivedByInterviewer: false,
+            audioAuditAvailable: null,
+            audioAuditDurationState: 'loading',
+            audioAuditTotalDuration: null,
+            audioAuditSegments: [],
         }
+    },
+    async mounted() {
+        await this.loadAudioAuditInfo()
     },
     methods: {
         assignSelected() {
@@ -626,6 +654,75 @@ export default {
                 .always(function () {
                     if (onDone !== undefined) onDone()
                 })
+        },
+
+        async loadAudioAuditInfo() {
+            try {
+                const interviewId = this.$config.model.id
+                if (!interviewId) return
+
+                const data = await this.$hq.AudioAudit.getInfo(interviewId)
+                this.audioAuditAvailable = data.hasAudioAudit
+                this.audioAuditSegments = data.segments || []
+                this.audioAuditTotalDuration = null
+
+                if (!data.hasAudioAudit) return
+
+                this.audioAuditDurationState = 'loading'
+                this.loadAudioDurations(this.audioAuditSegments)
+            } catch {
+                this.audioAuditAvailable = false
+            }
+        },
+
+        loadAudioDurations(segments) {
+            if (segments.length === 0) {
+                this.audioAuditDurationState = 'unavailable'
+                return
+            }
+
+            const durations = new Array(segments.length).fill(null)
+            let loadedCount = 0
+            let failed = false
+
+            segments.forEach((segment, idx) => {
+                const audio = new Audio()
+                audio.preload = 'metadata'
+                audio.src = this.$hq.AudioAudit.getSegmentUrl(this.$config.model.interviewId, segment.segmentId)
+                audio.addEventListener('loadedmetadata', () => {
+                    if (failed) return
+
+                    durations[idx] = Number.isFinite(audio.duration) ? audio.duration : null
+                    if (durations[idx] === null) {
+                        failed = true
+                        this.audioAuditDurationState = 'unavailable'
+                        this.audioAuditTotalDuration = null
+                        return
+                    }
+
+                    loadedCount++
+                    if (loadedCount === segments.length) {
+                        this.audioAuditTotalDuration = durations.reduce((total, value) => total + value, 0)
+                        this.audioAuditDurationState = 'available'
+                    }
+                })
+                audio.addEventListener('error', () => {
+                    if (failed) return
+
+                    failed = true
+                    this.audioAuditDurationState = 'unavailable'
+                    this.audioAuditTotalDuration = null
+                })
+            })
+        },
+
+        formatAuditDuration(seconds) {
+            const hours = Math.floor(seconds / 3600)
+            const minutes = Math.floor((seconds % 3600) / 60)
+            const remainingSeconds = Math.floor(seconds % 60)
+
+            if (hours > 0) return `${hours}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
+            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
         },
     },
 

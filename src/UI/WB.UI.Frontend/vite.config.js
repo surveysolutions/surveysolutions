@@ -21,7 +21,7 @@ const locales = {
         'Users', 'WebInterview', 'WebInterviewSettings', 'WebInterviewSetup', 'WebInterviewUI',
         'FieldsAndValidations', 'PeriodicStatusReport', 'LoginToDesigner', 'ImportQuestionnaire', 'QuestionnaireImport',
         'QuestionnaireClonning', 'Archived', 'BatchUpload', 'ControlPanel', 'AuditLog', 'OutdatedBrowser', 'InterviewerAuditRecord'
-        , 'Roles', 'Workspaces'],
+        , 'Roles', 'Workspaces', 'ReviewInterview'],
     webtester: ['WebInterviewUI', 'WebInterview', 'Common', 'Details'],
     webinterview: ['WebInterviewUI', 'WebInterview', 'Common', 'Details'],
 }
