@@ -172,7 +172,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 
         public override void Dispose()
         {
-            audioService?.Dispose();
             nameViewModel?.Dispose();
             Name?.Dispose();
 

@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Active" xml:space="preserve">
+        <value>សកម្ម</value>
+    </data>
+    <data name="Archive" xml:space="preserve">
+        <value>បណ្ណសារ</value>
+    </data>
+    <data name="Archived" xml:space="preserve">
+        <value>ទុកក្នុងប័ណ្ណសារ</value>
+    </data>
+    <data name="AssignmentsHeader" xml:space="preserve">
+        <value>កិច្ចការ</value>
+    </data>
+    <data name="AssignmentsSelected" xml:space="preserve">
+        <value>បានជ្រើសរើសកិច្ចការ {{count}}</value>
+    </data>
+    <data name="AssignmentsSelected_other" xml:space="preserve">
+        <value>{{count}} Assignments ត្រូវបានជ្រើសរើស</value>
+    </data>
+    <data name="ExpectedExplanation" xml:space="preserve">
+        <value>បញ្ជាក់ចំនួនអតិបរមានៃការសម្ភាសន៍ដែលត្រូវបង្កើតសម្រាប់កិច្ចការនោះ។ តម្លៃអនុញ្ញាត៖ -1 គឺសម្រាប់កិច្ចការគ្មានដែនកំណត់ 0 គឺសម្រាប់កិច្ចការទទេ លេខសម្រាប់កិច្ចការដែលរំពឹងទុកតម្លៃ</value>
+    </data>
+    <data name="ChangeExpectedModalTitle" xml:space="preserve">
+        <value>កែសម្រួលតម្លៃដែលរំពឹងទុកសម្រាប់កិច្ចការ {{assignmentId}}</value>
+    </data>
+    <data name="ChangeModeModalTitle" xml:space="preserve">
+        <value>ផ្លាស់ប្តូររបៀបសម្រាប់កិច្ចការ {{assignmentId}}</value>
+    </data>
+    <data name="ModeExplanation" xml:space="preserve">
+        <value>របៀប CAWI អនុញ្ញាតឱ្យប្រមូលទិន្នន័យពីអ្នកឆ្លើយតបដោយផ្ទាល់</value>
+    </data>
+    <data name="CreatedAt" xml:space="preserve">
+        <value>បានបង្កើតនៅលើ</value>
+    </data>
+    <data name="IdentifyingQuestions" xml:space="preserve">
+        <value>កំណត់អត្តសញ្ញាណសំណួរ</value>
+    </data>
+    <data name="Count" xml:space="preserve">
+        <value>ប្រមូលបាន។</value>
+    </data>
+    <data name="NumberOfAssignmentsAffected" xml:space="preserve">
+        <value>{{count}} Assignment នឹងត្រូវបានផ្លាស់ប្តូរ</value>
+    </data>
+    <data name="NumberOfAssignmentsAffected_other" xml:space="preserve">
+        <value>{{count}} Assignments នឹងត្រូវបានផ្លាស់ប្តូរ</value>
+    </data>
+    <data name="Expected" xml:space="preserve">
+        <value>រំពឹងទុក</value>
+    </data>
+    <data name="SelectResponsible" xml:space="preserve">
+        <value>ជ្រើសរើសអ្នកទទួលខុសត្រូវ</value>
+    </data>
+    <data name="ResponsibleRequired" xml:space="preserve">
+        <value>ទំនួលខុសត្រូវត្រូវបានទាមទារ</value>
+    </data>
+    <data name="WebModeNonInterviewer" xml:space="preserve">
+        <value>កិច្ចការទាំងអស់សម្រាប់ការសម្ភាសន៍តាមគេហទំព័រត្រូវតែធ្វើឡើងចំពោះអ្នកសម្ភាសន៍</value>
+    </data>
+    <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
+        <value>អ្នក​កំពុង​ចាត់ចែង​កិច្ចការ​គេហទំព័រ​ឡើងវិញ​ទៅ​អ្នក​ប្រើ​ដែល​មិន​មែន​ជា​អ្នក​សម្ភាសន៍។ ប្រសិនបើអ្នកបានផ្ញើតំណសម្រាប់កិច្ចការនេះរួចហើយ អ្នកឆ្លើយសំណួរនឹងមិនអាចឆ្លើយតបទៅនឹងការស្ទង់មតិរបស់អ្នកបានទេ រហូតទាល់តែកិច្ចការត្រូវបានប្រគល់ជូនអ្នកប្រើប្រាស់វិញក្នុងតួនាទីជាអ្នកសម្ភាសន៍។</value>
+    </data>
+    <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
+        <value>អ្នក​កំពុង​ចាត់ចែង​កិច្ចការ​បណ្ដាញ​ឡើងវិញ​ដល់​អ្នក​ប្រើ​ដែល​មិន​មែន​ជា​អ្នក​សម្ភាសន៍។ ប្រសិនបើអ្នកបានផ្ញើតំណសម្រាប់កិច្ចការទាំងនេះរួចហើយ អ្នកឆ្លើយសំណួរនឹងមិនអាចឆ្លើយតបទៅនឹងការស្ទង់មតិរបស់អ្នកបានទេ រហូតទាល់តែកិច្ចការត្រូវបានប្រគល់ជូនអ្នកប្រើប្រាស់វិញក្នុងតួនាទីជាអ្នកសម្ភាសន៍។</value>
+    </data>
+    <data name="ShowArchived" xml:space="preserve">
+        <value>ស្ថានភាពក្នុងប័ណ្ណសារ</value>
+    </data>
+    <data name="Unarchive" xml:space="preserve">
+        <value>មិនទុកក្នុងប័ណ្ណសារ</value>
+    </data>
+    <data name="Unlimited" xml:space="preserve">
+        <value>គ្មានដែនកំណត់</value>
+    </data>
+    <data name="InterviewsNeeded" xml:space="preserve">
+        <value>ត្រូវការសម្ភាសន៍</value>
+    </data>
+    <data name="CreateInterview" xml:space="preserve">
+        <value>ចាប់ផ្តើមសម្ភាសន៍ថ្មី។</value>
+    </data>
+    <data name="UpdatedAt" xml:space="preserve">
+        <value>បានធ្វើបច្ចុប្បន្នភាពនៅលើ</value>
+    </data>
+    <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
+        <value>បំពេញវាលកំណត់អត្តសញ្ញាណទាំងអស់ ឬមួយចំនួន</value>
+    </data>
+    <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+        <value>ជ្រើសរើសអ្នកទទួលខុសត្រូវ (ទីស្នាក់ការកណ្តាល ឬអ្នកគ្រប់គ្រង ឬអ្នកសម្ភាសន៍) សម្រាប់កិច្ចការនេះ។</value>
+    </data>
+    <data name="Questionnaire" xml:space="preserve">
+        <value>កម្រងសំណួរ</value>
+    </data>
+    <data name="AllAssignments" xml:space="preserve">
+        <value>កិច្ចការទាំងអស់។</value>
+    </data>
+    <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
+        <value>សូចនាករ​ថា​តើ​កិច្ចការ​សកម្ម ឬ​ត្រូវ​បាន​ទុក​ក្នុង​ប័ណ្ណសារ។</value>
+    </data>
+    <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+        <value>ជ្រើសរើសកម្រងសំណួរដើម្បីមើលកិច្ចការដែលពាក់ព័ន្ធរបស់វា។ ជ្រើសរើស “កម្រងសំណួរទាំងអស់” ដើម្បីមើលកិច្ចការដែលភ្ជាប់ជាមួយកម្រងសំណួរណាមួយ។</value>
+    </data>
+    <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់ទទួលខុសត្រូវ។ ចុចក្នុងវាលដើម្បីជ្រើសរើសឈ្មោះអ្នកប្រើប្រាស់ដោយជ្រើសរើសវាដោយផ្ទាល់ ឬវាយបញ្ចូលដើម្បីត្រងបញ្ជីឈ្មោះអ្នកប្រើប្រាស់បន្ថែមទៀត។</value>
+    </data>
+    <data name="Tooltip_Table_Count" xml:space="preserve">
+        <value>ចំនួននៃការសម្ភាសដែលបានដាក់ស្នើសម្រាប់ការងារនេះ។ សំភាសន៍ច្រើនទៀតអាចត្រូវបានបង្កើត ប៉ុន្តែមិនត្រូវបានធ្វើសមកាលកម្មទេ។ ចុចលើក្រឡាណាមួយដើម្បីមើលការសម្ភាសន៍ដែលពាក់ព័ន្ធ។ ចុចលើរូបតំណាងតម្រៀប ដើម្បីតម្រៀបតាមចំនួន។</value>
+    </data>
+    <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+        <value>នៅពេលដែលកិច្ចការត្រូវបានបង្កើតដំបូង។ ចុចលើរូបតំណាងតម្រៀបដើម្បីតម្រៀបតាមពេលវេលា។</value>
+    </data>
+    <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+        <value>ព័ត៌មានដែលកំណត់កិច្ចការនីមួយៗ។ ទាំងនេះគឺជាចម្លើយចំពោះសំណួរដែលត្រូវបានសម្គាល់ថាជាការកំណត់អត្តសញ្ញាណនៅក្នុងអ្នករចនា។</value>
+    </data>
+    <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">
+        <value>ចំនួននៃការសម្ភាសន៍ដែលត្រូវការដើម្បីបំពេញកិច្ចការនេះ។</value>
+    </data>
+    <data name="Tooltip_Table_Responsible" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់បច្ចុប្បន្នទទួលខុសត្រូវចំពោះកិច្ចការនេះ។ ចុចរូបតំណាងតម្រៀប ដើម្បីតម្រៀបឈ្មោះអ្នកប្រើប្រាស់។</value>
+    </data>
+    <data name="Tooltip_Table_ExpectedValue" xml:space="preserve">
+        <value>ចំនួនអតិបរិមានៃការសម្ភាសន៍ដែលអាចត្រូវបានធ្វើឡើងសម្រាប់កិច្ចការនេះ។ ចុចលើក្រឡាណាមួយដើម្បីផ្លាស់ប្តូរលេខនេះ។ ចុចលើរូបតំណាងតម្រៀប ដើម្បីតម្រៀបតាមតម្លៃដែលរំពឹងទុក។</value>
+    </data>
+    <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
+        <value>នៅពេលដែលកិច្ចការត្រូវបានធ្វើបច្ចុប្បន្នភាពចុងក្រោយ។ ចុចលើរូបតំណាងតម្រៀបដើម្បីតម្រៀបតាមពេលវេលា។</value>
+    </data>
+    <data name="Tooltip_Table_ReceivedByTablet" xml:space="preserve">
+        <value>សូចនាករសម្រាប់ថាតើកិច្ចការត្រូវបានទាញយកនៅលើកុំព្យូទ័របន្ទះ។ ចុចលើរូបតំណាងតម្រៀប ដើម្បីតម្រៀបតាមពេលវេលាទទួល។</value>
+    </data>
+    <data name="InvalidExpected" xml:space="preserve">
+        <value>វាលដែលរំពឹងទុកត្រូវតែ -1 ឬច្រើនជាងនេះ។</value>
+    </data>
+    <data name="AssignmentExpectedInWebMode" xml:space="preserve">
+        <value>តម្លៃដែលរំពឹងទុកមិនអាចផ្លាស់ប្តូរបានសម្រាប់ការកំណត់មុខងារគេហទំព័រ។</value>
+    </data>
+    <data name="SelectQuestionnaire" xml:space="preserve">
+        <value>ជ្រើសរើសកម្រងសំណួរដែលមានស្រាប់ ដើម្បីដំឡើងកំណែកិច្ចការពី</value>
+    </data>
+    <data name="UpgradeDescription" xml:space="preserve">
+        <value>នៅពេលដែលកិច្ចការត្រូវបានអាប់ដេត កិច្ចការឆ្នើមទាំងអស់នឹងត្រូវបានអាប់ដេត។</value>
+    </data>
+    <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
+        <value>ជ្រើសរើសកម្រងសំណួរដើម្បីដំឡើងកំណែពី</value>
+    </data>
+    <data name="UpgradeBtn" xml:space="preserve">
+        <value>ធ្វើឱ្យប្រសើរឡើង</value>
+    </data>
+    <data name="UpgradeProgressTitle" xml:space="preserve">
+        <value>ធ្វើបច្ចុប្បន្នភាពកិច្ចការពី {{from}} ទៅ {{to}}</value>
+    </data>
+    <data name="UpgradeProgressNumbers" xml:space="preserve">
+        <value>ការធ្វើបច្ចុប្បន្នភាព {{processed}} នៃ {{totalCount}}</value>
+    </data>
+    <data name="UpgradeProgressErrors" xml:space="preserve">
+        <value>ជាមួយនឹងកំហុស {{errorCount}}</value>
+    </data>
+    <data name="Stop" xml:space="preserve">
+        <value>ឈប់</value>
+    </data>
+    <data name="UpgradePreparation" xml:space="preserve">
+        <value>រង់ចាំការអាប់ដេតផ្សេងទៀតដើម្បីបញ្ចប់</value>
+    </data>
+    <data name="UpgradeCancelled" xml:space="preserve">
+        <value>ការអាប់ដេតបានឈប់</value>
+    </data>
+    <data name="UpgradeError" xml:space="preserve">
+        <value>កំហុសបានកើតឡើង។ ព្យាយាមម្តងទៀតនៅពេលក្រោយ។</value>
+    </data>
+    <data name="UpgradeProgressDone" xml:space="preserve">
+        <value>រួចរាល់</value>
+    </data>
+    <data name="UpgradeProgressDoneCount" xml:space="preserve">
+        <value>បានដំឡើងកំណែដោយជោគជ័យ៖ {{processed}}</value>
+    </data>
+    <data name="UpgradeProgressErrorCount" xml:space="preserve">
+        <value>មិនបានដំឡើងកំណែ៖ {{count}}</value>
+    </data>
+    <data name="UpgradeDownloadFailed" xml:space="preserve">
+        <value>បញ្ជីទាញយក</value>
+    </data>
+    <data name="UpgradeProgressDoneTitle" xml:space="preserve">
+        <value>ការដំឡើងកំណែពី {{from}} ទៅ {{to}} ត្រូវបានបញ្ចប់</value>
+    </data>
+    <data name="ReceivedByTablet_All" xml:space="preserve">
+        <value>បង្ហាញទាំងអស់។</value>
+    </data>
+    <data name="ReceivedByTablet_Received" xml:space="preserve">
+        <value>ទទួលបានដោយថេប្លេត</value>
+    </data>
+    <data name="ReceivedByTablet_NotReceived" xml:space="preserve">
+        <value>មិនបានទទួលដោយថេប្លេតទេ។</value>
+    </data>
+    <data name="Tooltip_Filter_Received" xml:space="preserve">
+        <value>សូចនាករ​ថា​តើ​កិច្ចការ​ត្រូវ​បាន​ទទួល​ឬ​អត់</value>
+    </data>
+    <data name="ReceivedByTablet" xml:space="preserve">
+        <value>ទទួលបានដោយថេប្លេត</value>
+    </data>
+    <data name="CreatingNewAssignment" xml:space="preserve">
+        <value>បង្កើតកិច្ចការថ្មីសម្រាប់កម្រងសំណួរ {{questionnaire}}</value>
+    </data>
+    <data name="AssignTo" xml:space="preserve">
+        <value>ចាត់តាំងទៅ</value>
+    </data>
+    <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
+        <value>ជ្រើសរើសកំណែកម្រងសំណួរ ដើម្បីមើលកិច្ចការដែលពាក់ព័ន្ធរបស់វា។ ជ្រើសរើស "កំណែទាំងអស់" ដើម្បីមើលកិច្ចការដែលភ្ជាប់ជាមួយកំណែណាមួយនៃកម្រងសំណួរដែលបានជ្រើសរើស។</value>
+    </data>
+    <data name="ErrorToCreateAssignment" xml:space="preserve">
+        <value>កិច្ចការមិនអាចបង្កើតបានទេ។</value>
+    </data>
+    <data name="IsAudioRecordingEnabled" xml:space="preserve">
+        <value>ការថតសំឡេង</value>
+    </data>
+    <data name="Tooltip_Table_IsAudioRecordingEnabled" xml:space="preserve">
+        <value>កត់ត្រាដំណើរការសម្ភាសន៍</value>
+    </data>
+    <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
+        <value>ការកំណត់ការថតសំឡេងសម្រាប់កិច្ចការ {{id}}</value>
+    </data>
+    <data name="AudioRecordingEnable" xml:space="preserve">
+        <value>បើកការថតសំឡេង</value>
+    </data>
+    <data name="CawiModeEnable" xml:space="preserve">
+        <value>បើករបៀប CAWI</value>
+    </data>
+    <data name="AudioRecordingExplanation" xml:space="preserve">
+        <value>កម្មវិធីអ្នកសំភាសន៍នឹងថតសំឡេងនៃការសម្ភាសន៍ នៅពេលដែលសវនកម្មសំឡេងត្រូវបានបើក។ ចំណាំថាចំនួនទិន្នន័យនៃការធ្វើសមកាលកម្មនឹងមានទំហំធំជាង។</value>
+    </data>
+    <data name="NewAssignment" xml:space="preserve">
+        <value>កិច្ចការថ្មី។</value>
+    </data>
+    <data name="Email" xml:space="preserve">
+        <value>អ៊ីមែល</value>
+    </data>
+    <data name="EmailExplanation" xml:space="preserve">
+        <value>អ៊ីមែលនឹងត្រូវបានប្រើក្នុងការទំនាក់ទំនងជាមួយអ្នកទទួលកិច្ចការ</value>
+    </data>
+    <data name="Password" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់</value>
+    </data>
+    <data name="PasswordExplanation" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់នឹងត្រូវបានប្រើដើម្បីការពារកិច្ចការ</value>
+    </data>
+    <data name="WebMode" xml:space="preserve">
+        <value>របៀប</value>
+    </data>
+    <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
+        <value>កិច្ចការនេះនឹងត្រូវបានប្រើជាមួយមុខងារគេហទំព័រ</value>
+    </data>
+    <data name="Activated" xml:space="preserve">
+        <value>បានធ្វើឱ្យសកម្ម</value>
+    </data>
+    <data name="CawiActivated" xml:space="preserve">
+        <value>CAWI បានធ្វើឱ្យសកម្ម</value>
+    </data>
+    <data name="Tooltip_Table_WebMode" xml:space="preserve">
+        <value>របៀបកិច្ចការ</value>
+    </data>
+    <data name="Tooltip_Table_Email" xml:space="preserve">
+        <value>អ៊ីមែលសម្រាប់ការជូនដំណឹង</value>
+    </data>
+    <data name="Tooltip_Table_Password" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់ដើម្បីដាក់កម្រិតការចូលប្រើ</value>
+    </data>
+    <data name="PasswordInstructions" xml:space="preserve">
+        <value>យ៉ាងហោចណាស់ 6 លេខ និងអក្សរធំ ឬនិមិត្តសញ្ញាតែមួយ '?' ដើម្បីបង្កើតពាក្យសម្ងាត់</value>
+    </data>
+    <data name="EnterPassword" xml:space="preserve">
+        <value>បញ្ចូលពាក្យសម្ងាត់</value>
+    </data>
+    <data name="EnterEmail" xml:space="preserve">
+        <value>បញ្ចូលអ៊ីមែល</value>
+    </data>
+    <data name="ExpectedInstructions" xml:space="preserve">
+        <value>ត្រូវតែជាលេខ -1 សម្រាប់គ្មានដែនកំណត់ 1 ប្រសិនបើអ៊ីមែលត្រូវបានបញ្ជាក់</value>
+    </data>
+    <data name="InvalidEmail" xml:space="preserve">
+        <value>អ៊ីមែល​មិន​ត្រឹមត្រូវ។</value>
+    </data>
+    <data name="InvalidPassword" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់មិនត្រឹមត្រូវទេ។</value>
+    </data>
+    <data name="InvalidExpectedMessage" xml:space="preserve">
+        <value>តម្លៃរំពឹងទុកមិនត្រឹមត្រូវទេ។</value>
+    </data>
+    <data name="InvalidExpectedWithEmail" xml:space="preserve">
+        <value>សម្រាប់កិច្ចការដែលមានអ៊ីមែលត្រូវបានអនុញ្ញាត តម្លៃរំពឹងទុកគឺ 1</value>
+    </data>
+    <data name="ExpectedForWebMode" xml:space="preserve">
+        <value>ការចាត់តាំងជាមួយនឹងតម្លៃរំពឹងទុក 1 សម្រាប់របៀបគេហទំព័រគួរតែមានអ៊ីមែល ឬពាក្យសម្ងាត់ដែលបានផ្តល់ឱ្យ</value>
+    </data>
+    <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់តាមការកំណត់សម្រាប់របៀបគេហទំព័រដែលមានបរិមាណ 1 គួរតែមានតែមួយគត់</value>
+    </data>
+    <data name="QuestionnaireVersion" xml:space="preserve">
+        <value>ver. {{version}}</value>
+    </data>
+    <data name="AssignmentId" xml:space="preserve">
+        <value>លេខសម្គាល់កិច្ចការ</value>
+    </data>
+    <data name="MultipleAssignmentsClose" xml:space="preserve">
+        <value>កិច្ចការដែលបានជ្រើសរើស {{count}} នឹងកាត់បន្ថយទំហំ។ តម្លៃដែលរំពឹងទុកនឹងត្រូវបានកំណត់ទៅជាចំនួនសម្ភាសន៍ដែលប្រមូលបាននាពេលបច្ចុប្បន្ន។</value>
+    </data>
+    <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
+        <value>តម្លៃរំពឹងទុកនៃកិច្ចការដែលបានជ្រើសរើស {{id}} នឹងត្រូវបានផ្លាស់ប្តូរពី {{quantity}} ទៅ {{collected}} (ចំនួននៃការសម្ភាសន៍ដែលប្រមូលបាននាពេលបច្ចុប្បន្ន)</value>
+    </data>
+    <data name="Close" xml:space="preserve">
+        <value>បិទ</value>
+    </data>
+    <data name="AssignmentCloseWebMode" xml:space="preserve">
+        <value>Assignment {{id}} មិន​អាច​ចុះ​ទំហំ​បាន​ទេ ដោយសារ​វា​បាន​បើក​របៀប​បណ្ដាញ</value>
+    </data>
+    <data name="AssignmentInfo" xml:space="preserve">
+        <value>ព័ត៌មានលំអិតអំពីការងារ</value>
+    </data>
+    <data name="Action_Archived" xml:space="preserve">
+        <value>ទុកក្នុងប័ណ្ណសារ</value>
+    </data>
+    <data name="DetailsComments" xml:space="preserve">
+        <value>មតិយោបល់</value>
+    </data>
+    <data name="Comments" xml:space="preserve">
+        <value>មតិយោបល់</value>
+    </data>
+    <data name="Action_AudioRecordingChanged" xml:space="preserve">
+        <value>ការថតសំឡេងបានផ្លាស់ប្តូរ</value>
+    </data>
+    <data name="EnterComments" xml:space="preserve">
+        <value>បញ្ចូលមតិរបស់អ្នកនៅទីនេះ</value>
+    </data>
+    <data name="DateFromPast" xml:space="preserve">
+        <value>កាលបរិច្ឆេទដែលបានជ្រើសរើសគឺពីមុន</value>
+    </data>
+    <data name="Action_Created" xml:space="preserve">
+        <value>បានបង្កើត</value>
+    </data>
+    <data name="Action_Deleted" xml:space="preserve">
+        <value>បានលុប</value>
+    </data>
+    <data name="Action_ExpectedValueChanged" xml:space="preserve">
+        <value>តម្លៃរំពឹងទុកបានផ្លាស់ប្តូរ</value>
+    </data>
+    <data name="Action_ReceivedByTablet" xml:space="preserve">
+        <value>ទទួលបានដោយថេប្លេត</value>
+    </data>
+    <data name="Action_UnArchived" xml:space="preserve">
+        <value>មិនបានរក្សាទុកក្នុងប័ណ្ណសារ</value>
+    </data>
+    <data name="Action_Reassigned" xml:space="preserve">
+        <value>ចាត់តាំងឡើងវិញ</value>
+    </data>
+    <data name="Action_WebModeChanged" xml:space="preserve">
+        <value>របៀប​បណ្ដាញ​បាន​ផ្លាស់ប្ដូរ</value>
+    </data>
+    <data name="Action" xml:space="preserve">
+        <value>សកម្មភាព</value>
+    </data>
+    <data name="Actor" xml:space="preserve">
+        <value>ដោយ</value>
+    </data>
+    <data name="Date" xml:space="preserve">
+        <value>កាលបរិច្ឆេទ</value>
+    </data>
+    <data name="Action_AudioRecordingChanged_False" xml:space="preserve">
+        <value>បានបិទការថតសំឡេង</value>
+    </data>
+    <data name="Action_AudioRecordingChanged_True" xml:space="preserve">
+        <value>បានបើកការថតសំឡេង</value>
+    </data>
+    <data name="Action_WebModeChanged_False" xml:space="preserve">
+        <value>មុខងារបណ្តាញត្រូវបានបិទ</value>
+    </data>
+    <data name="Action_WebModeChanged_True" xml:space="preserve">
+        <value>បាន​បើក​មុខងារ​បណ្ដាញ</value>
+    </data>
+    <data name="Action_ExpectedValueChanged_To" xml:space="preserve">
+        <value>តម្លៃរំពឹងទុកបានប្តូរទៅ {{quantity}}</value>
+    </data>
+    <data name="Action_ExpectedValueChanged_To_Unlimited" xml:space="preserve">
+        <value>តម្លៃរំពឹងទុកបានផ្លាស់ប្តូរទៅជាគ្មានដែនកំណត់</value>
+    </data>
+    <data name="Action_Reassigned_To" xml:space="preserve">
+        <value>ចាត់តាំងឡើងវិញទៅ {{newResponsible}}</value>
+    </data>
+    <data name="Action_Reassigned_To_Comment" xml:space="preserve">
+        <value>មតិ៖ {{comment}}</value>
+    </data>
+    <data name="AssignmentHistory" xml:space="preserve">
+        <value>ប្រវត្តិសាស្ត្រ</value>
+    </data>
+    <data name="Details_Column" xml:space="preserve">
+        <value>ព័ត៌មានលម្អិត</value>
+    </data>
+    <data name="Action_Created_Comment" xml:space="preserve">
+        <value>មតិ៖ {{comment}}</value>
+    </data>
+    <data name="Action_Created_Responsible" xml:space="preserve">
+        <value>បានចាត់តាំងទៅ {{responsible}}</value>
+    </data>
+    <data name="StartWebInterview" xml:space="preserve">
+        <value>ចាប់ផ្តើមការសម្ភាសន៍តាមអ៊ីនធឺណិត</value>
+    </data>
+    <data name="WebModeEnabledWarning" xml:space="preserve">
+        <value>កិច្ចការមិនអាចបញ្ចប់បានទេ។ វាបានបើករបៀបគេហទំព័រ ខណៈពេលដែលកម្រងសំណួរត្រូវបានបិទរបៀបប្រមូលគេហទំព័រ</value>
+    </data>
+    <data name="NoComment" xml:space="preserve">
+        <value>(គ្មានយោបល់)</value>
+    </data>
+    <data name="LinkToWebInterviewExample" xml:space="preserve">
+        <value>ប្ដូរ​ទៅ​គំរូ​តំណ​សម្ភាសន៍​បណ្ដាញ</value>
+    </data>
+    <data name="Action_UpgradedFrom" xml:space="preserve">
+        <value>បានដំឡើងកំណែពីកិច្ចការ {{id}}</value>
+    </data>
+    <data name="Property" xml:space="preserve">
+        <value>ទ្រព្យសម្បត្តិ</value>
+    </data>
+    <data name="Value" xml:space="preserve">
+        <value>តម្លៃ</value>
+    </data>
+    <data name="Action_QuantityChanged" xml:space="preserve">
+        <value>តម្លៃរំពឹងទុកបានផ្លាស់ប្តូរ</value>
+    </data>
+    <data name="DetailsTargetAreaa" xml:space="preserve">
+        <value>តំបន់គោលដៅ</value>
+    </data>
+    <data name="DetailsGeoTracking" xml:space="preserve">
+        <value>ការតាមដានភូមិសាស្ត្រ</value>
+    </data>
+    <data name="ChangeTargetAreaModalTitle" xml:space="preserve">
+        <value>ផ្លាស់ប្តូរតំបន់គោលដៅសម្រាប់កិច្ចការ {{assignmentId}}</value>
+    </data>
+    <data name="Action_TargetAreaChanged" xml:space="preserve">
+        <value>តំបន់គោលដៅបានផ្លាស់ប្តូរ</value>
+    </data>
+    <data name="TargetArea" xml:space="preserve">
+        <value>កែសម្រួលតំបន់គោលដៅ</value>
+    </data>
+    <data name="TargetAreaExplanation" xml:space="preserve">
+        <value>បញ្ជាក់ឈ្មោះផែនទីតំបន់គោលដៅសម្រាប់កិច្ចការ</value>
+    </data>
+    <data name="EnterTargetArea" xml:space="preserve">
+        <value>បញ្ចូលតំបន់គោលដៅ</value>
+    </data>
+    <data name="Filter_ShowAll" xml:space="preserve">
+        <value>បង្ហាញទាំងអស់។</value>
+    </data>
+    <data name="Downsize" xml:space="preserve">
+        <value>បន្ថយទំហំ</value>
+    </data>
+    <data name="Status" xml:space="preserve">
+        <value>ស្ថានភាព</value>
+    </data>
+    <data name="StatusChangeComment" xml:space="preserve">
+        <value>ស្ថានភាពមតិ</value>
+    </data>
+    <data name="StatusOpen" xml:space="preserve">
+        <value>បើក</value>
+    </data>
+    <data name="StatusCompleted" xml:space="preserve">
+        <value>បានបញ្ចប់</value>
+    </data>
+    <data name="StatusClosed" xml:space="preserve">
+        <value>បិទ</value>
+    </data>
+    <data name="CompleteAssignmentTitle" xml:space="preserve">
+        <value>បំពេញកិច្ចការ</value>
+    </data>
+    <data name="CompleteAssignmentMessage" xml:space="preserve">
+        <value>តើ​អ្នក​ប្រាកដ​ថា​អ្នក​បាន​រាប់​គ្រឿង​មាន​សិទ្ធិ​ទាំងអស់​ហើយ​ឬ​នៅ?</value>
+    </data>
+    <data name="CloseAssignmentTitle" xml:space="preserve">
+        <value>បិទកិច្ចការ</value>
+    </data>
+    <data name="CloseAssignmentMessage" xml:space="preserve">
+        <value>អ្នកសម្ភាសន៍ដែលធ្វើការក្រៅបណ្តាញអាចបន្តការប្រមូលទិន្នន័យរហូតដល់ការធ្វើសមកាលកម្ម។ ការសម្ភាសន៍បែបនេះនឹងនៅតែត្រូវបានទទួលយក។</value>
+    </data>
+    <data name="ReopenAssignmentTitle" xml:space="preserve">
+        <value>បើកកិច្ចការឡើងវិញ</value>
+    </data>
+    <data name="ReopenAssignmentMessage" xml:space="preserve">
+        <value>កិច្ចការនឹងត្រូវបានកំណត់ត្រឡប់ទៅស្ថានភាពបើកវិញ ហើយអ្នកសម្ភាសន៍នឹងអាចបង្កើតការសម្ភាសន៍ថ្មី។</value>
+    </data>
+    <data name="Complete" xml:space="preserve">
+        <value>បញ្ចប់</value>
+    </data>
+    <data name="Reopen" xml:space="preserve">
+        <value>បើកឡើងវិញ</value>
+    </data>
+    <data name="Action_StatusChanged" xml:space="preserve">
+        <value>ស្ថានភាពបានផ្លាស់ប្តូរទៅ {{status}}</value>
+    </data>
+    <data name="Action_StatusChanged_Comment" xml:space="preserve">
+        <value>មតិ៖ {{comment}}</value>
+    </data>
+    <data name="Action_Completed" xml:space="preserve">
+        <value>បានបញ្ចប់</value>
+    </data>
+    <data name="Action_Closed" xml:space="preserve">
+        <value>បិទ</value>
+    </data>
+    <data name="Action_Reopened" xml:space="preserve">
+        <value>បានបើកឡើងវិញ</value>
+    </data>
+    <data name="AudioRecordingSelective" xml:space="preserve">
+        <value>ជ្រើសរើស</value>
+    </data>
+    <data name="AudioAuditScopeLabel" xml:space="preserve">
+        <value>វិសាលភាពសវនកម្មអូឌីយ៉ូ</value>
+    </data>
+    <data name="AudioRecordingScopeNotice" xml:space="preserve">
+        <value>កិច្ចការនេះមានវិសាលភាពសវនកម្មសំឡេងដែលបានជ្រើសរើស។ ការបើកការថតសំឡេងពេញលេញនឹងថតគ្រប់ផ្នែកទាំងអស់។ ការបិទវានឹងត្រឡប់ទៅថតតែផ្នែកដែលបានជ្រើសរើសប៉ុណ្ណោះ។</value>
+    </data>
+</root>

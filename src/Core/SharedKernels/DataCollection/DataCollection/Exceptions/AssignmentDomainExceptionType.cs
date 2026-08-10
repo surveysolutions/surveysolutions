@@ -5,6 +5,7 @@
         Undefined = 0,
         AssignmentDeleted = 1,
         InvalidResponsible = 2,
-        QuestionnaireDeleted = 3
+        QuestionnaireDeleted = 3,
+        InvalidStatusTransition = 4,
    }
 }

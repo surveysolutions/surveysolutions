@@ -382,13 +382,13 @@
     <value>Mezipaměť byla úspěšně vymazána</value>
   </data>
   <data name="EmailProvider_Smtp" xml:space="preserve">
-    <value>SMTP Server</value>
+    <value>SMTP server</value>
   </data>
   <data name="EmailProvider_SmtpDescription" xml:space="preserve">
     <value>Níže nakonfigurujte parametry pro přístup k SMTP serveru. Další informace o použití SMTP se Survey Solutions jsou k dispozici </value>
   </data>
   <data name="EmailProvider_SmtpHost" xml:space="preserve">
-    <value>Host</value>
+    <value>Hostitel</value>
   </data>
   <data name="EmailProvider_SmtpHostHelp" xml:space="preserve">
     <value>Adresa SMTP serveru</value>
@@ -397,7 +397,7 @@
     <value>Port</value>
   </data>
   <data name="EmailProvider_SmtpPortHelp" xml:space="preserve">
-    <value>SMTP port</value>
+    <value>Port SMTP</value>
   </data>
   <data name="EmailProvider_SmtpTlsEncryption" xml:space="preserve">
     <value>Použít TLS šifrování</value>
@@ -507,4 +507,37 @@
   <data name="SelectFileWarning" xml:space="preserve">
     <value>Vyberte prosím soubor k nahrání.</value>
 </data>
+  <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve">
+    <value>Povolit supervizorům měnit stavy žádanek</value>
+  </data>
+  <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>Pokud je povoleno, mohou supervizoři schvalovat a znovu otevírat žádanky ze svých tabletů</value>
+  </data>
+  <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve">
+    <value>Povolit tazatelům měnit stavy žádanek</value>
+  </data>
+  <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
+    <value>Pokud je povoleno, mohou tazatelé dokončovat a znovu otevírat žádanky ze svých tabletů (vyžaduje povolení nastavení supervizora)</value>
+  </data>
+  <data name="AudioRecordingQuality" xml:space="preserve">
+    <value>Kvalita nahrávání zvuku</value>
+  </data>
+  <data name="AudioRecordingQualityDescription" xml:space="preserve">
+    <value>Kvalita zvuku používaná aplikací tazatele při nahrávání zvuku (audit zvuku a zvukové otázky)</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono44kHz" xml:space="preserve">
+    <value>64 kbps, Mono, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve">
+    <value>64 kbps, Mono, 22.05 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Mono16kHz" xml:space="preserve">
+    <value>32 kbps, Mono, 16 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve">
+    <value>128 kbps, Stereo, 44.1 kHz</value>
+  </data>
+  <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
+    <value>128 kbps, Stereo, 48 kHz</value>
+  </data>
 </root>

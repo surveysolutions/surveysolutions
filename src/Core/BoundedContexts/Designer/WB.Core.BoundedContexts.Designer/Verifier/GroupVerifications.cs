@@ -144,8 +144,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                && !IsSection(entity)
                && !((IGroup) entity).IsRoster;
 
-        private static bool NotSingleSectionWithLessThan5Questions(IGroup group)
+        private static bool NotSingleSectionWithLessThan5Questions(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
             => IsSection(group)
+               && !questionnaire.Questionnaire.IsCoverPage(group.PublicKey)
                && (group.GetParent() ?? throw new InvalidOperationException("Parent was not found.")).Children.Count > 1
                && group.GetDescendants().Count(Question) < 5;
 
@@ -420,7 +421,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private static bool MatrixRosterHasMoreThanAllowedEntities(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-            => group.DisplayMode == RosterDisplayMode.Matrix && group.Children.Count() > MaxEntitiesInMatrixRoster;
+            => group.DisplayMode == RosterDisplayMode.Matrix && group.Children.Count(c => !(c is IVariable)) > MaxEntitiesInMatrixRoster;
 
         private static bool MatrixRosterContainsOnlyAllowedQuestionTypes(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
             => group.DisplayMode == RosterDisplayMode.Matrix && group.Children.Any(composite =>
@@ -435,6 +436,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                                    || (question as MultyOptionsQuestion)?.YesNoView == true;
                         default: return true;
                     }
+                if (composite is IVariable)
+                    return false;
                 return true;
             });
 

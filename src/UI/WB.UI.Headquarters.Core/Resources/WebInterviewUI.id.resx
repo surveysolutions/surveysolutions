@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="SlowConnection" xml:space="preserve">
+        <value>Koneksi jaringan lambat</value>
+    </data>
+    <data name="CloseInterviewTitle" xml:space="preserve">
+        <value>Wawancara ini dibuka di tab atau browser lain</value>
+    </data>
+    <data name="Network" xml:space="preserve">
+        <value>Jaringan</value>
+    </data>
+    <data name="Reload" xml:space="preserve">
+        <value>Muat ulang</value>
+    </data>
+    <data name="SessionTimeoutTitle" xml:space="preserve">
+        <value>Sesi Anda telah habis waktunya</value>
+    </data>
+    <data name="SessionTimeoutMessageTitle" xml:space="preserve">
+        <value>Sesi Anda telah habis waktunya karena Anda tidak melakukan tindakan apa pun selama 15 menit.</value>
+    </data>
+    <data name="SessionTimeoutMessage" xml:space="preserve">
+        <value>Silakan muat ulang halaman untuk melanjutkan wawancara ini.</value>
+    </data>
+    <data name="Disconnected" xml:space="preserve">
+        <value>Terputus</value>
+    </data>
+    <data name="InvalidServerResponseMessage" xml:space="preserve">
+        <value>Server tidak mengembalikan header identifikasi yang diharapkan. Anda mungkin terhubung ke proxy atau server yang salah. Silakan muat ulang halaman tersebut.</value>
+    </data>
+    <data name="InvalidServerResponseTitle" xml:space="preserve">
+        <value>Respons server tidak valid</value>
+    </data>
+    <data name="ConnectionLostTitle" xml:space="preserve">
+        <value>Koneksi ke server terputus.</value>
+    </data>
+    <data name="ConnectionLostMessage" xml:space="preserve">
+        <value>Silakan muat ulang halaman untuk memulihkan koneksi dan melanjutkan wawancara ini.</value>
+    </data>
+    <data name="CloseInterviewMessage" xml:space="preserve">
+        <value>&lt;p&gt;Wawancara Web hanya mendukung satu tab aktif dengan wawancara.&lt;/p&gt;&lt;p&gt;Harap muat ulang halaman ini untuk terus menggunakan tab ini atau tutup.&lt;/p&gt;</value>
+    </data>
+    <data name="Reconnecting" xml:space="preserve">
+        <value>Koneksi terputus. Mencoba menyambung kembali…</value>
+    </data>
+    <data name="ReconnectAttempt" xml:space="preserve">
+        <value>Coba {{count}}</value>
+    </data>
+    <data name="CommentAdd" xml:space="preserve">
+        <value>Tambahkan komentar</value>
+    </data>
+    <data name="CommentHide" xml:space="preserve">
+        <value>Sembunyikan komentar</value>
+    </data>
+    <data name="CommentEnter" xml:space="preserve">
+        <value>Masukkan komentar Anda</value>
+    </data>
+    <data name="CommentPost" xml:space="preserve">
+        <value>Pos</value>
+    </data>
+    <data name="CommentYours" xml:space="preserve">
+        <value>Komentar Anda</value>
+    </data>
+    <data name="CommentOnPreviousAnswer" xml:space="preserve">
+        <value>Pada jawaban sebelumnya</value>
+    </data>
+    <data name="CommentAdmin" xml:space="preserve">
+        <value>Komentar Admin</value>
+    </data>
+    <data name="CommentSupervisor" xml:space="preserve">
+        <value>Komentar pengawas</value>
+    </data>
+    <data name="CommentInterviewer" xml:space="preserve">
+        <value>Komentar pewawancara</value>
+    </data>
+    <data name="CommentHeadquarters" xml:space="preserve">
+        <value>Komentar markas besar</value>
+    </data>
+    <data name="Comment" xml:space="preserve">
+        <value>Komentar</value>
+    </data>
+    <data name="Instruction" xml:space="preserve">
+        <value>Petunjuk</value>
+    </data>
+    <data name="InstructionShow" xml:space="preserve">
+        <value>Tampilkan instruksi</value>
+    </data>
+    <data name="ProgressText" xml:space="preserve">
+        <value>{{progress}}% Selesai</value>
+    </data>
+    <data name="AnswerIsInvalid" xml:space="preserve">
+        <value>Jawaban tidak valid</value>
+    </data>
+    <data name="AnswerWasNotSaved" xml:space="preserve">
+        <value>Jawaban tidak disimpan</value>
+    </data>
+    <data name="NotCalculated" xml:space="preserve">
+        <value>Tidak dihitung</value>
+    </data>
+    <data name="ClickToAnswer" xml:space="preserve">
+        <value>Klik untuk menjawab</value>
+    </data>
+    <data name="Loading" xml:space="preserve">
+        <value>Memuat...</value>
+    </data>
+    <data name="NoResultsFound" xml:space="preserve">
+        <value>Tidak ada hasil yang ditemukan</value>
+    </data>
+    <data name="Done" xml:space="preserve">
+        <value>Selesai</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>Membatalkan</value>
+    </data>
+    <data name="AudioInitializationFailed" xml:space="preserve">
+        <value>Inisialisasi audio gagal</value>
+    </data>
+    <data name="AudioRecording" xml:space="preserve">
+        <value>Rekaman audio</value>
+    </data>
+    <data name="AudioClickRecord" xml:space="preserve">
+        <value>Klik untuk merekam audio</value>
+    </data>
+    <data name="AudioRecordNew" xml:space="preserve">
+        <value>Rekam baru</value>
+    </data>
+    <data name="AudioRecordingDuration" xml:space="preserve">
+        <value>{{humanizedLength}} ({{formattedLength}}) rekaman audio</value>
+    </data>
+    <data name="RecordCurrentTime" xml:space="preserve">
+        <value>Catat waktu saat ini</value>
+    </data>
+    <data name="EnterDate" xml:space="preserve">
+        <value>Masukkan tanggal</value>
+    </data>
+    <data name="DecimalTooBig" xml:space="preserve">
+        <value>Nilai yang dimasukkan terlalu besar. Kurang dari 15 digit diperbolehkan</value>
+    </data>
+    <data name="DecimalCannotParse" xml:space="preserve">
+        <value>Nilai yang dimasukkan tidak dapat diuraikan sebagai nilai desimal</value>
+    </data>
+    <data name="DecimalEnter" xml:space="preserve">
+        <value>Masukkan nomor</value>
+    </data>
+    <data name="OptionsAvailableAfterAnswer" xml:space="preserve">
+        <value>Kategori akan tersedia setelah menjawab pertanyaan yang direferensikan</value>
+    </data>
+    <data name="MaxAnswersCountSelected" xml:space="preserve">
+        <value>Jumlah pilihan maksimum ({{value}}) pada pertanyaan ini telah dibuat</value>
+    </data>
+    <data name="ConfirmRosterRemove" xml:space="preserve">
+        <value>Apakah Anda yakin ingin menghapus daftar nama terkait?</value>
+    </data>
+    <data name="GPSRecord" xml:space="preserve">
+        <value>Rekam GPS</value>
+    </data>
+    <data name="AreaRecord" xml:space="preserve">
+        <value>Sunting daerah</value>
+    </data>
+    <data name="GPSNotAvailable" xml:space="preserve">
+        <value>Browser Anda tidak mendukung penerimaan Geolokasi</value>
+    </data>
+    <data name="GPSPermissionDenied" xml:space="preserve">
+        <value>Situs web ini tidak memiliki izin untuk menggunakan API Geolokasi</value>
+    </data>
+    <data name="GPSPositionUnavailable" xml:space="preserve">
+        <value>Posisi saat ini tidak dapat ditentukan.</value>
+    </data>
+    <data name="GPSTimeout" xml:space="preserve">
+        <value>Posisi saat ini tidak dapat ditentukan dalam jangka waktu habis yang ditentukan.</value>
+    </data>
+    <data name="GPSError" xml:space="preserve">
+        <value>Posisi tidak dapat ditentukan karena kesalahan yang tidak diketahui (Kode: {{strErrorCode}}).</value>
+    </data>
+    <data name="NumberEnter" xml:space="preserve">
+        <value>Masukkan nomor</value>
+    </data>
+    <data name="NumberCannotParse" xml:space="preserve">
+        <value>Nilai yang dimasukkan tidak dapat diuraikan sebagai nilai integer</value>
+    </data>
+    <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
+        <value>Nilai yang dimasukkan tidak boleh kurang dari jawaban yang dilindungi</value>
+    </data>
+    <data name="NumberRosterError" xml:space="preserve">
+        <value>Jawaban '{{answer}}' salah karena pertanyaan digunakan sebagai ukuran daftar nama dan jawaban yang ditentukan negatif</value>
+    </data>
+    <data name="NumberRosterUpperBound" xml:space="preserve">
+        <value>Jawaban '{{answer}}' salah karena jawaban lebih besar dari batas atas Roster {{answerMaxValue}}.</value>
+    </data>
+    <data name="NumberRosterRemoveConfirm" xml:space="preserve">
+        <value>Apakah Anda yakin ingin menghapus baris {{amountOfRostersToRemove}} dari setiap daftar nama terkait?</value>
+    </data>
+    <data name="PhotoUpload" xml:space="preserve">
+        <value>Unggah foto</value>
+    </data>
+    <data name="PhotoTooBig" xml:space="preserve">
+        <value>Gambar terlalu besar untuk diunggah. Silakan pilih gambar kurang dari 30 Mb</value>
+    </data>
+    <data name="PhotoIsNotImage" xml:space="preserve">
+        <value>Hanya file gambar yang diperbolehkan untuk diunggah</value>
+    </data>
+    <data name="TextEnter" xml:space="preserve">
+        <value>Masukkan teks</value>
+    </data>
+    <data name="TextEnterMasked" xml:space="preserve">
+        <value>Masukkan teks {{userFriendlyMask}}</value>
+    </data>
+    <data name="TextEnterNewItem" xml:space="preserve">
+        <value>Masukkan item baru</value>
+    </data>
+    <data name="TextRequired" xml:space="preserve">
+        <value>Silakan isi semua nilai yang diperlukan</value>
+    </data>
+    <data name="QuestionUnsupported" xml:space="preserve">
+        <value>Jenis pertanyaan tidak didukung</value>
+    </data>
+    <data name="Complete" xml:space="preserve">
+        <value>Menyelesaikan</value>
+    </data>
+    <data name="CompleteReviewSubmit" xml:space="preserve">
+        <value>Tinjau &amp; Kirim</value>
+    </data>
+    <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
+        <value>&lt;br /&gt; Kritis
+Kesalahan</value>
+    </data>
+    <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
+        <value>Kesalahan</value>
+    </data>
+    <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
+        <value>Tidak terjawab &lt;br /&gt;
+Pertanyaan</value>
+    </data>
+    <data name="Complete_AllGood" xml:space="preserve">
+        <value>Semua pertanyaan wajib dijawab &lt;br /&gt;
+Tidak ada kesalahan yang terdeteksi</value>
+    </data>
+    <data name="Complete_AndMore" xml:space="preserve">
+        <value>dan {{count}} lainnya</value>
+    </data>
+    <data name="Complete_NoteIsRequired" xml:space="preserve">
+        <value>Catatan diperlukan untuk mengirimkan wawancara</value>
+    </data>
+    <data name="Complete_Required" xml:space="preserve">
+        <value>Diperlukan</value>
+    </data>
+    <data name="Complete_Error" xml:space="preserve">
+        <value>Kesalahan:</value>
+    </data>
+    <data name="Complete_LastComment" xml:space="preserve">
+        <value>Komentar Terakhir:</value>
+    </data>
+    <data name="Complete_SubmitInfo" xml:space="preserve">
+        <value>Setelah dikirimkan, wawancara ini akan dikunci dan tidak dapat diedit. &lt;br /&gt;
+Harap pastikan semua informasi sudah benar.</value>
+    </data>
+    <data name="CompleteQuestionsStatus" xml:space="preserve">
+        <value>Status pertanyaan:</value>
+    </data>
+    <data name="CompleteQuestionsAnswered" xml:space="preserve">
+        <value>Dijawab</value>
+    </data>
+    <data name="CompleteQuestionsUnanswered" xml:space="preserve">
+        <value>Tidak terjawab</value>
+    </data>
+    <data name="Error" xml:space="preserve">
+        <value>Kesalahan</value>
+    </data>
+    <data name="Error_other" xml:space="preserve">
+        <value>Kesalahan</value>
+    </data>
+    <data name="CompleteFirstErrors" xml:space="preserve">
+        <value>Pertanyaan {{count}} pertama dengan kesalahan:</value>
+    </data>
+    <data name="CompleteErrors" xml:space="preserve">
+        <value>Pertanyaan dengan kesalahan:</value>
+    </data>
+    <data name="CriticalQuestionErrors" xml:space="preserve">
+        <value>Memerlukan jawaban atas pertanyaan ini:</value>
+    </data>
+    <data name="CriticalityConditionsErrors" xml:space="preserve">
+        <value>Perlu untuk memperbaiki kesalahan ini:</value>
+    </data>
+    <data name="UnansweredQuestions" xml:space="preserve">
+        <value>Pertanyaan yang belum terjawab:</value>
+    </data>
+    <data name="CompleteNoteToSupervisor" xml:space="preserve">
+        <value>Komentar</value>
+    </data>
+    <data name="No" xml:space="preserve">
+        <value>TIDAK</value>
+    </data>
+    <data name="Cover" xml:space="preserve">
+        <value>Menutupi</value>
+    </data>
+    <data name="CoverSupervisorNote" xml:space="preserve">
+        <value>Catatan pengawas:</value>
+    </data>
+    <data name="CoverFirstComments" xml:space="preserve">
+        <value>Entitas {{count}} pertama dengan komentar:</value>
+    </data>
+    <data name="CoverComments" xml:space="preserve">
+        <value>Pertanyaan dengan komentar:</value>
+    </data>
+    <data name="CoverBrokenPackegeTitle" xml:space="preserve">
+        <value>Kesalahan: Wawancara ini rusak</value>
+    </data>
+    <data name="CoverBrokenPackegeText" xml:space="preserve">
+        <value>Perhatian! Wawancara ini telah merusak data, &lt;br /&gt;
+hanya versi wawancara sebelumnya yang tersedia. &lt;br /&gt;
+Hubungi dukungan untuk mendapatkan bantuan.</value>
+    </data>
+    <data name="LoadingWait" xml:space="preserve">
+        <value>Sedang memuat, harap tunggu</value>
+    </data>
+    <data name="Search" xml:space="preserve">
+        <value>Mencari</value>
+    </data>
+    <data name="ToggleNavigation" xml:space="preserve">
+        <value>Alihkan navigasi</value>
+    </data>
+    <data name="WebInterview" xml:space="preserve">
+        <value>Wawancara web</value>
+    </data>
+    <data name="Help" xml:space="preserve">
+        <value>Membantu</value>
+    </data>
+    <data name="SwitchingLanguage" xml:space="preserve">
+        <value>Beralih bahasa. Harap tunggu...</value>
+    </data>
+    <data name="Yes" xml:space="preserve">
+        <value>Ya</value>
+    </data>
+    <data name="CommentPosting" xml:space="preserve">
+        <value>Memposting...</value>
+    </data>
+    <data name="InterviewReceivedCantModify" xml:space="preserve">
+        <value>Wawancara diterima oleh pewawancara dan tidak dapat diubah</value>
+    </data>
+    <data name="ShowOnMap" xml:space="preserve">
+        <value>Tunjukkan di peta</value>
+    </data>
+    <data name="WebTesterSessionOver" xml:space="preserve">
+        <value>Sesi penguji selesai</value>
+    </data>
+    <data name="WebTesterSessionOverMessage" xml:space="preserve">
+        <value>Silakan tutup halaman ini. Anda dapat membuka yang baru dengan kembali ke situs Desainer</value>
+    </data>
+    <data name="CompleteCommentCriticalityLevelBlock" xml:space="preserve">
+        <value>Untuk mengaktifkan tombol, harap selesaikan masalah kritis</value>
+    </data>
+    <data name="CompleteCommentCriticalityLevelWarn" xml:space="preserve">
+        <value>Untuk mengaktifkan tombol tersebut, silakan selesaikan masalah kritis atau berikan penjelasan di kotak komentar di atas</value>
+    </data>
+    <data name="CompleteNoteCommentCriticality" xml:space="preserve">
+        <value>Harap selesaikan masalah dengan menjawab pertanyaan kritis dan memastikan jawabannya memenuhi aturan penting</value>
+    </data>
+    <data name="CompleteCriticalityWarnConfirmation" xml:space="preserve">
+        <value>Harap konfirmasikan bahwa Anda ingin mengirimkan wawancara ini dengan masalah kritis.</value>
+    </data>
+    <data name="ConfirmationNeededTitle" xml:space="preserve">
+        <value>Konfirmasi diperlukan</value>
+    </data>
+    <data name="LoadingQuestionnaire" xml:space="preserve">
+        <value>Memuat kuesioner. Harap tunggu...</value>
+    </data>
+    <data name="WarningsHeader" xml:space="preserve">
+        <value>Peringatan</value>
+    </data>
+    <data name="ReloadQuestionnaire" xml:space="preserve">
+        <value>Muat ulang kuesioner</value>
+    </data>
+    <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+        <value>Tidak dijawab</value>
+    </data>
+    <data name="Interview_Overview_NoValue" xml:space="preserve">
+        <value>Tidak ada nilai</value>
+    </data>
+    <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
+        <value>Informasi pertanyaan tambahan</value>
+    </data>
+    <data name="MultimediaNotSupported" xml:space="preserve">
+        <value>Pemutaran multimedia tidak didukung oleh browser Anda. Anda dapat mengunduhnya sebagai gantinya.</value>
+    </data>
+    <data name="EmailLink_Header" xml:space="preserve">
+        <value>Lanjutkan tautan</value>
+    </data>
+    <data name="EmailLink_Message" xml:space="preserve">
+        <value>Tautan ini untuk melanjutkan wawancara jika Anda perlu melanjutkannya nanti.</value>
+    </data>
+    <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
+        <value>Anda dapat membuat tautan untuk melanjutkan wawancara. Tautan permanen ini dapat disimpan dan digunakan nanti.</value>
+    </data>
+    <data name="EmailLink_Placeholder" xml:space="preserve">
+        <value>Masukkan email</value>
+    </data>
+    <data name="EmailLink_InvalidEmail" xml:space="preserve">
+        <value>{{email}} adalah alamat email yang tidak valid</value>
+    </data>
+    <data name="EmailLink_EmailResumeLink" xml:space="preserve">
+        <value>Lanjutkan tautan</value>
+    </data>
+    <data name="TurnOffDevMode" xml:space="preserve">
+        <value>Matikan Mode Pengembang</value>
+    </data>
+    <data name="TurnOnDevMode" xml:space="preserve">
+        <value>Aktifkan Mode Pengembang</value>
+    </data>
+    <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+        <value>Apakah Anda yakin ingin menghapus daftar nama terkait '{{rosterTitle}}'?</value>
+    </data>
+    <data name="SaveScenario" xml:space="preserve">
+        <value>Simpan skenario</value>
+    </data>
+    <data name="Resolve" xml:space="preserve">
+        <value>Menyelesaikan</value>
+    </data>
+    <data name="ResolveHint" xml:space="preserve">
+        <value>Komentar yang diselesaikan disembunyikan secara default, namun dapat ditinjau oleh semua peserta wawancara</value>
+    </data>
+    <data name="HideResolved" xml:space="preserve">
+        <value>Sembunyikan terselesaikan</value>
+    </data>
+    <data name="ShowResolved" xml:space="preserve">
+        <value>Pertunjukan terselesaikan</value>
+    </data>
+    <data name="SaveScenarioOptions" xml:space="preserve">
+        <value>Pilih skenario yang akan diganti</value>
+    </data>
+    <data name="SaveScenarioDesignerLogin" xml:space="preserve">
+        <value>Sesi pada aplikasi Desainer telah berakhir. Masuk pada aplikasi Designer untuk dapat menyimpan.</value>
+    </data>
+    <data name="SaveScenarioGoToDesigner" xml:space="preserve">
+        <value>Buka Desainer</value>
+    </data>
+    <data name="NoQuestionnaireAccess" xml:space="preserve">
+        <value>Anda tidak memiliki akses ke kuesioner</value>
+    </data>
+    <data name="SaveScenarioName" xml:space="preserve">
+        <value>Nama</value>
+    </data>
+    <data name="SaveScenarioOptions_ReplaceExisting" xml:space="preserve">
+        <value>Ganti yang sudah ada</value>
+    </data>
+    <data name="SaveScenarioOptions_SaveNew" xml:space="preserve">
+        <value>Simpan baru</value>
+    </data>
+    <data name="PickLocation" xml:space="preserve">
+        <value>Pilih dari peta</value>
+    </data>
+    <data name="EnterPassword" xml:space="preserve">
+        <value>Masukkan kata sandi</value>
+    </data>
+    <data name="Progress" xml:space="preserve">
+        <value>Kemajuan</value>
+    </data>
+    <data name="SwitchToWebMode" xml:space="preserve">
+        <value>Alihkan wawancara ke Mode Web</value>
+    </data>
+    <data name="SwitchToWebMode_LinkDescription" xml:space="preserve">
+        <value>Tautan berikut dapat digunakan untuk melanjutkan wawancara ini</value>
+    </data>
+    <data name="AssignmentLimitError" xml:space="preserve">
+        <value>Anda tidak dapat membuat wawancara lagi dari tugas ini</value>
+    </data>
+    <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
+        <value>Pertanyaan penting yang belum terjawab: {{count}}</value>
+    </data>
+    <data name="Complete_FailedCriticalRules" xml:space="preserve">
+        <value>Aturan kritis yang gagal: {{count}}</value>
+    </data>
+    <data name="Complete_UnansweredQuestions" xml:space="preserve">
+        <value>Pertanyaan yang belum terjawab: {{count}}</value>
+    </data>
+    <data name="Complete_QuestionsWithErrors" xml:space="preserve">
+        <value>Pertanyaan dengan kesalahan: {{count}}</value>
+    </data>
+    <data name="CompleteReviewSubmitInterview" xml:space="preserve">
+        <value>Wawancara {{key}}</value>
+    </data>
+</root>
