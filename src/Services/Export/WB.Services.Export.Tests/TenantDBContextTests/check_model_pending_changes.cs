@@ -1,88 +1,35 @@
-using System;
-using System.Configuration;
-using System.Data.Common;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
-using Moq;
-using Npgsql;
 using NUnit.Framework;
-using Polly;
-using WB.Services.Export.Infrastructure;
-using WB.Services.Infrastructure.Tenant;
+using NUnit.Framework.Legacy;
+using WB.Services.Export.Tests;
 
 namespace WB.Services.Scheduler.Tests.TenantDbContextTests;
 
 [TestFixture]
 public class check_model_pending_changes
 {
-    protected IConfiguration Configuration => new ConfigurationBuilder()
-        .AddJsonFile($@"appsettings.json", true)
-        .AddJsonFile($@"appsettings.DEV_DEFAULTS.json", true)
-        .AddJsonFile($@"appsettings.cloud.json", true)
-        .AddJsonFile($"appsettings.{Environment.MachineName}.json", true)
-        .Build();
-    
-    private IServiceProvider PrepareOneTime()
-    {
-        var connectionString = Configuration.GetConnectionString("DefaultConnection");
-        if (connectionString == null)
-            throw new ArgumentNullException(nameof(connectionString));
-        
-        var connectionStringBuilder = new NpgsqlConnectionStringBuilder();
-        connectionStringBuilder.ConnectionString = connectionString;
-        connectionStringBuilder.Database = "exports_service_tests_" + Guid.NewGuid();
-        connectionString = connectionStringBuilder.ToString();
-        
-        var services = new ServiceCollection()
-            .AddDbContext<TenantDbContext>(ops =>
-            {
-                ops.UseNpgsql(connectionString);
-                ops.ConfigureWarnings(w => w.Throw(RelationalEventId.PendingModelChangesWarning));
-            });
-            
-        
-        var tenantInfo = new TenantInfo
-        (
-            baseUrl:"",
-            id : TenantId.None,
-            shortName : ""
-        );
-        var tenantContext = new TenantContext(null, tenantInfo);
-        
-        var optionsConnectionsSettings = new Mock<IOptions<DbConnectionSettings>>();
-        DbConnectionSettings dbConnectionSettings = new DbConnectionSettings()
-        {
-            DefaultConnection = connectionString
-        };
-        optionsConnectionsSettings.Setup(m => m.Value).Returns(() => dbConnectionSettings);
-        
-        services.AddSingleton<ITenantContext>(tenantContext);
-        services.AddSingleton(optionsConnectionsSettings.Object);
-        services.AddTransient(typeof(ILogger<>), typeof(NullLogger<>));
-        services.AddTransient<DbContextOptions, DbContextOptions<TenantDbContext>>();
-        return services.BuildServiceProvider();
-    }
-
-    private async Task Init()
-    {
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-            
-        using var scope = PrepareOneTime().CreateScope();
-        var db = scope.ServiceProvider.GetService<TenantDbContext>();
-        
-        await db.Database.MigrateAsync();
-    }
-
     [Test]
-    [Ignore("This test is ignored because it is has to befixed first.")]
-    public void should_create_db_without_any_exceptions()
+    public void should_suppress_pending_model_changes_warning()
     {
-        Assert.DoesNotThrowAsync(async () => await Init());
+        var fakeConnectionString = "Host=localhost;Port=9999;Username=fake_user;Database=fake_db;";
+        var context = Create.NpgsqlTenantDbContext(fakeConnectionString, tenantName: "test");
+
+        // triggers OnConfiguring where the warning suppression is configured
+        var _ = context.ChangeTracker;
+
+        var warningsConfiguration = context
+            .GetService<IDbContextOptions>()
+            .FindExtension<CoreOptionsExtension>()!
+            .WarningsConfiguration;
+
+        var behavior = warningsConfiguration.GetBehavior(RelationalEventId.PendingModelChangesWarning);
+
+        ClassicAssert.AreEqual(WarningBehavior.Ignore, behavior,
+            "TenantDbContext maps each tenant to its own schema at runtime, so EF Core always reports "
+            + "pending model changes against the schema-agnostic snapshot. The PendingModelChangesWarning "
+            + "must be suppressed to avoid noise/exceptions when the export service runs migrations.");
     }
 }
