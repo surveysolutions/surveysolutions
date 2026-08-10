@@ -1,0 +1,790 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="WB0001_NoQuestions" xml:space="preserve">
+        <value>Kuesioner harus berisi setidaknya satu pertanyaan.</value>
+    </data>
+    <data name="WB0002_CustomValidationExpressionHasIncorrectSyntax" xml:space="preserve">
+        <value>Kondisi validasi mengalami kesalahan sintaksis.</value>
+    </data>
+    <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
+        <value>Kondisi pengaktifan mengalami kesalahan sintaksis.</value>
+    </data>
+    <data name="WB0004_VariableHasEmptyExpression" xml:space="preserve">
+        <value>Variabel tidak boleh memiliki ekspresi kosong.</value>
+    </data>
+    <data name="WB0005_VariableExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>Ekspresi variabel memiliki panjang lebih dari karakter {0}.</value>
+    </data>
+    <data name="WB0009_RosterSizeQuestionIsMissing" xml:space="preserve">
+        <value>Pertanyaan ukuran daftar nama tidak ada.</value>
+    </data>
+    <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
+        <value>Pertanyaan tertaut merujuk pada pertanyaan yang tidak ada.</value>
+    </data>
+    <data name="WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType" xml:space="preserve">
+        <value>Pertanyaan tertaut merujuk pada jenis pertanyaan yang tidak didukung.</value>
+    </data>
+    <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup" xml:space="preserve">
+        <value>Pertanyaan tertaut merujuk pada pertanyaan yang tidak ada dalam daftar.</value>
+    </data>
+    <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
+        <value>Pertanyaan dengan substitusi judul atau instruksi tidak dapat ditandai sebagai identifikasi.</value>
+    </data>
+    <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
+        <value>Substitusi merujuk pada pertanyaan atau variabel yang tidak ada.</value>
+    </data>
+    <data name="WB0018_SubstitutionReferencesUnsupportedEntity" xml:space="preserve">
+        <value>Substitusi merujuk pada item yang tidak didukung dalam substitusi.</value>
+    </data>
+    <data name="WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel" xml:space="preserve">
+        <value>Pergantian tidak dapat merujuk item dari level roster yang lebih dalam.</value>
+    </data>
+    <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
+        <value>Jumlah jawaban maksimal lebih besar dari jumlah pilihan jawaban.</value>
+    </data>
+    <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
+        <value>Pertanyaan jenis ini tidak dapat bersifat mengidentifikasi.</value>
+    </data>
+    <data name="WB0023_RosterSizeSourceQuestionTypeIsIncorrect" xml:space="preserve">
+        <value>Pertanyaan sumber ukuran daftar nama salah. Hanya pertanyaan numerik, kategorikal dengan banyak pilihan, atau daftar teks yang dapat digunakan.</value>
+    </data>
+    <data name="WB0027_VariableExpresssionHasIncorrectSyntax" xml:space="preserve">
+        <value>Ekspresi memiliki kesalahan sintaksis.</value>
+    </data>
+    <data name="WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>Ekspresi filter lebih dari {0} karakter.</value>
+    </data>
+    <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
+        <value>Mengidentifikasi pertanyaan tidak bisa berada di dalam daftar nama.</value>
+    </data>
+    <data name="WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles" xml:space="preserve">
+        <value>Daftar nama dengan pertanyaan sumber tidak boleh memiliki kumpulan item yang tetap.</value>
+    </data>
+    <data name="WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion" xml:space="preserve">
+        <value>Kumpulan item yang diperbaiki, daftar tidak boleh memiliki pertanyaan sumber daftar.</value>
+    </data>
+    <data name="WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion" xml:space="preserve">
+        <value>Kumpulan item yang diperbaiki, daftar nama tidak boleh memiliki pertanyaan judul daftar.</value>
+    </data>
+    <data name="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" xml:space="preserve">
+        <value>Daftar nama dengan sumber daftar pertanyaan memiliki pertanyaan sumber yang tidak valid untuk nama baris.</value>
+    </data>
+    <data name="WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion" xml:space="preserve">
+        <value>Daftar nama tidak boleh memiliki pertanyaan judul daftar nama ketika pertanyaan sumber daftar nama adalah pertanyaan multi-pilih atau daftar kategorikal.</value>
+    </data>
+    <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
+        <value>Daftar item tetap tidak boleh memiliki judul kosong atau kurang dari dua item.</value>
+    </data>
+    <data name="WB0038_RosterFixedTitlesHaveMoreThan200Items" xml:space="preserve">
+        <value>Daftar kumpulan item yang diperbaiki tidak boleh lebih dari baris {0}.</value>
+    </data>
+    <data name="WB0039_TextListQuestionCannotBePrefilled" xml:space="preserve">
+        <value>Pertanyaan daftar tidak dapat mengidentifikasi.</value>
+    </data>
+    <data name="WB0040_TextListQuestionCannotBeFilledBySupervisor" xml:space="preserve">
+        <value>Daftar pertanyaan tidak dapat diisi oleh dosen pembimbing.</value>
+    </data>
+    <data name="WB0042_TextListQuestionMaxAnswerInRange1And200" xml:space="preserve">
+        <value>Jumlah maksimum elemen daftar harus berada dalam rentang [{1}, {0}].</value>
+    </data>
+    <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
+        <value>Pertanyaan memiliki kategori dengan nilai kosong.</value>
+    </data>
+    <data name="WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
+        <value>Kondisi yang memungkinkan tidak dapat mengacu pada pertanyaan dari tingkat daftar nama yang lebih dalam.</value>
+    </data>
+    <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
+        <value>Sub-bagian tidak boleh memiliki kondisi pengaktifan yang merujuk pada pertanyaan anak.</value>
+    </data>
+    <data name="WB0049_QRBarcodeQuestionIsSupervisorQuestion" xml:space="preserve">
+        <value>Pertanyaan barcode tidak dapat diisi oleh supervisor.</value>
+    </data>
+    <data name="WB0050_QRBarcodeQuestionIsPreFilledQuestion" xml:space="preserve">
+        <value>Pertanyaan barcode tidak dapat mengidentifikasi.</value>
+    </data>
+    <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
+        <value>Roster harus memiliki level roster yang lebih dalam atau sama dengan pertanyaan ukuran rosternya.</value>
+    </data>
+    <data name="WB0055_RosterHasRosterLevelMoreThan4" xml:space="preserve">
+        <value>Daftar nama tidak boleh lebih dari daftar nama induk {0}.</value>
+    </data>
+    <data name="WB0056_EntityShouldNotHaveCircularReferences" xml:space="preserve">
+        <value>Referensi melingkar tidak diperbolehkan.</value>
+    </data>
+    <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
+        <value>Nama variabel atau ID daftar tidak boleh berupa kata khusus.</value>
+    </data>
+    <data name="WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster" xml:space="preserve">
+        <value>Jika item menggunakan substitusi %rostertitle% maka item tersebut harus ditempatkan di dalam daftar.</value>
+    </data>
+    <data name="WB0060_CategoricalQuestionHasLessThan2Options" xml:space="preserve">
+        <value>Pertanyaan memiliki kategori kurang dari {0}.</value>
+    </data>
+    <data name="WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2" xml:space="preserve">
+        <value>Pertanyaan memiliki jawaban maksimal yang diperbolehkan kurang dari {0}.</value>
+    </data>
+    <data name="WB0062_OptionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+        <value>Ekspresi filter opsi mengalami kesalahan sintaksis.</value>
+    </data>
+    <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
+        <value>Pertanyaan tertaut kategoris tidak dapat digunakan dalam kondisi validasi #{0}.</value>
+    </data>
+    <data name="WB0064_CategoricalLinkedQuestionUsedInEnablementCondition" xml:space="preserve">
+        <value>Pertanyaan tertaut kategoris tidak dapat digunakan dalam kondisi yang memungkinkan.</value>
+    </data>
+    <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
+        <value>Pertanyaan jenis ini tidak didukung.</value>
+    </data>
+    <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
+        <value>Nama variabel atau ID roster yang valid wajib diisi.</value>
+    </data>
+    <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
+        <value>Roster mempunyai ID roster yang sama dengan judul kuesioner.</value>
+    </data>
+    <data name="WB0071_StaticTextIsEmpty" xml:space="preserve">
+        <value>Teks statis tidak boleh kosong.</value>
+    </data>
+    <data name="WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+        <value>Judul kategori harus unik.</value>
+    </data>
+    <data name="WB0073_OptionValuesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+        <value>Nilai kategori harus unik.</value>
+    </data>
+    <data name="WB0074_CategoricalQuestionHasOptionsAndIsLinked" xml:space="preserve">
+        <value>Pertanyaan kategoris tidak boleh memiliki kategori dan dihubungkan dengan pertanyaan lain.</value>
+    </data>
+    <data name="WB0075_FilteredComboboxContainsMoreThan5000Options" xml:space="preserve">
+        <value>Berisi lebih dari kategori {0}.</value>
+    </data>
+    <data name="WB0076_CategoricalOptionsCountMoreThan200" xml:space="preserve">
+        <value>Berisi lebih dari kategori {0}.</value>
+    </data>
+    <data name="WB0077_QuestionHasInvalidVariableName" xml:space="preserve">
+        <value>Pertanyaan memiliki nama variabel yang tidak valid.</value>
+    </data>
+    <data name="WB0078_MultimediaQuestionIsInterviewersOnly" xml:space="preserve">
+        <value>Pertanyaan bergambar hanya dapat diajukan oleh pewawancara.</value>
+    </data>
+    <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
+        <value>Pertanyaan gambar tidak boleh memiliki kondisi validasi.</value>
+    </data>
+    <data name="WB0083_QuestionCannotBeUsedAsRosterTitle" xml:space="preserve">
+        <value>Pertanyaan dengan tipe saat ini tidak dapat digunakan sebagai judul roster.</value>
+    </data>
+    <data name="WB0084_CascadingOptionsShouldHaveParent" xml:space="preserve">
+        <value>Kategori dalam pertanyaan kotak kombo berjenjang anak harus merujuk hanya pada opsi yang ada di pertanyaan induk.</value>
+    </data>
+    <data name="WB0085_CascadingQuestionWrongParentLevel" xml:space="preserve">
+        <value>Pertanyaan harus memiliki tingkat yang lebih dalam atau sama dengan pertanyaan induknya.</value>
+    </data>
+    <data name="WB0086_ParentCascadingQuestionShouldExist" xml:space="preserve">
+        <value>Referensi pertanyaan kotak kombo berjenjang jenis pertanyaan tidak ada atau tidak didukung.</value>
+    </data>
+    <data name="WB0087_CascadingQuestionHasCicularReference" xml:space="preserve">
+        <value>Referensi melingkar dalam pertanyaan kotak kombo berjenjang tidak diperbolehkan.</value>
+    </data>
+    <data name="WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers" xml:space="preserve">
+        <value>Pertanyaan kotak kombo berjenjang harus memiliki kategori kurang dari {0}.</value>
+    </data>
+    <data name="WB0089_CascadingQuestionOptionWithParentShouldBeUnique" xml:space="preserve">
+        <value>Pertanyaan kotak kombo berjenjang harus memiliki nilai unik dan daftar kategori nilai induk.</value>
+    </data>
+    <data name="WB0090_LinkedQuestionIsInterviewersOnly" xml:space="preserve">
+        <value>Pertanyaan terkait hanya dapat ditujukan kepada pewawancara.</value>
+    </data>
+    <data name="WB0091_CascadingChildQuestionShouldNotContainCondition" xml:space="preserve">
+        <value>Pertanyaan kotak kombo berjenjang anak tidak boleh berisi kondisi pengaktifan.</value>
+    </data>
+    <data name="WB0092_CascadingChildQuesionShouldNotContainValidation" xml:space="preserve">
+        <value>Pertanyaan kotak kombo berjenjang anak tidak boleh berisi kondisi validasi.</value>
+    </data>
+    <data name="WB0093_RosterSizeListOptionQuestionShouldBeLimit" xml:space="preserve">
+        <value>Pertanyaan daftar sumber daftar nama harus memiliki jumlah elemen maksimum yang ditetapkan.</value>
+    </data>
+    <data name="WB0094_ConditionExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>Kondisi pengaktifan memiliki panjang lebih dari karakter {0}.</value>
+    </data>
+    <data name="WB0096_GeneralCompilationError" xml:space="preserve">
+        <value>Terjadi kesalahan pada saat penyusunan kuesioner.</value>
+    </data>
+    <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
+        <value>Hanya karakter berikut yang boleh digunakan dalam judul kuesioner: A..Z a..z 0..9 ( ) \ / _ - dan spasi.</value>
+    </data>
+    <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
+        <value>Ukuran kuesioner kira-kira {0:0.##}MB dan terlalu besar untuk berfungsi dengan baik dengan Survey Solutions. Cobalah untuk mengurangi jumlah data hingga setidaknya kurang dari {1}MB.</value>
+    </data>
+    <data name="WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues" xml:space="preserve">
+        <value>Nilai daftar item yang ditetapkan harus unik.</value>
+    </data>
+    <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200" xml:space="preserve">
+        <value>Jumlah maksimal jawaban untuk pertanyaan ukuran daftar nama tidak boleh lebih dari {0}.</value>
+    </data>
+    <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
+        <value>Subbagian tidak boleh lebih dari subbagian induk {0}.</value>
+    </data>
+    <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
+        <value>Hanya satu pertanyaan GPS yang boleh ditempatkan di bagian halaman sampul</value>
+    </data>
+    <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
+        <value>Pertanyaan multi pilih ya/tidak tidak dapat ditautkan</value>
+    </data>
+    <data name="WB0008_SubstitutionsInVariableLableAreProhibited" xml:space="preserve">
+        <value>Tidak diperbolehkan menggunakan substitusi pada label variabel</value>
+    </data>
+    <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
+        <value>Item kuesioner berikut (pertanyaan/grup/teks statis/dll.) menggunakan ID internal yang sama. Silakan hapus salah satunya.</value>
+    </data>
+    <data name="WB0010_MacroHasInvalidName" xml:space="preserve">
+        <value>Makro memiliki nama yang tidak valid.</value>
+    </data>
+    <data name="WB0020_NameForMacrosIsNotUnique" xml:space="preserve">
+        <value>Makro lain dengan nama yang sama sudah ada.</value>
+    </data>
+    <data name="WB0014_MacroHasEmptyName" xml:space="preserve">
+        <value>Makro tidak boleh memiliki nama kosong.</value>
+    </data>
+    <data name="WB0271_MacroHasEmptyContent" xml:space="preserve">
+        <value>Makro tidak boleh kosong.</value>
+    </data>
+    <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
+        <value>Sejumlah besar daftar nama dibuat. Mengekspor struktur ini ke dalam file data mungkin menimbulkan masalah. Pertimbangkan untuk mengurangi jumlah daftar nama.</value>
+    </data>
+    <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
+        <value>Pertanyaan dengan filter pilihan jawaban tidak dapat mengidentifikasi.</value>
+    </data>
+    <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
+        <value>Ditemukan item dengan nama yang sama.</value>
+    </data>
+    <data name="WB0024_LookupHasInvalidName" xml:space="preserve">
+        <value>Tabel pencarian memiliki nama yang tidak valid.</value>
+    </data>
+    <data name="WB0025_LookupHasEmptyName" xml:space="preserve">
+        <value>Tabel pencarian tidak boleh berisi nama kosong.</value>
+    </data>
+    <data name="WB0031_LookupTableHasInvalidHeaders" xml:space="preserve">
+        <value>Tabel pencarian memiliki header kolom yang tidak valid.</value>
+    </data>
+    <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
+        <value>Tabel pencarian memiliki terlalu banyak kolom</value>
+    </data>
+    <data name="WB0044_LookupTableMoreThan15000Rows" xml:space="preserve">
+        <value>Tabel pencarian memiliki terlalu banyak baris</value>
+    </data>
+    <data name="WB0047_LookupTableNotUniqueRowcodeValues" xml:space="preserve">
+        <value>Tabel pencarian tidak memiliki nilai kode baris yang unik</value>
+    </data>
+    <data name="WB0048_LookupHasEmptyContent" xml:space="preserve">
+        <value>Tabel pencarian tidak boleh kosong</value>
+    </data>
+    <data name="WB0052_LookupNameIsKeyword" xml:space="preserve">
+        <value>Nama tabel pencarian tidak boleh berupa kata khusus.</value>
+    </data>
+    <data name="WB0053_LinkedQuestionReferencesNotExistingRoster" xml:space="preserve">
+        <value>Roster yang menjadi sumber link harus ada.</value>
+    </data>
+    <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
+        <value>Roster yang menjadi sumber link adalah roster, bukan subbagian.</value>
+    </data>
+    <data name="WB0105_ValidationMessageIsTooLong" xml:space="preserve">
+        <value>Pesan kesalahan validasi #{0} terlalu panjang. Panjangnya tidak boleh lebih dari karakter {1}.</value>
+    </data>
+    <data name="WB0104_ValidationConditionIsTooLong" xml:space="preserve">
+        <value>Kondisi validasi #{0} terlalu lama. Panjangnya tidak boleh lebih dari karakter {1}.</value>
+    </data>
+    <data name="WB0106_ValidationConditionIsEmpty" xml:space="preserve">
+        <value>Kondisi validasi #{0} kosong.</value>
+    </data>
+    <data name="WB0107_ValidationMessageIsEmpty" xml:space="preserve">
+        <value>Pesan kesalahan validasi #{0} kosong.</value>
+    </data>
+    <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
+        <value>Bagian atau Daftar berisi lebih dari pertanyaan {0}, pertimbangkan untuk membaginya menjadi sub-bagian.</value>
+    </data>
+    <data name="WB0202_GroupWithoutQuestions" xml:space="preserve">
+        <value>Bagian tidak berisi pertanyaan. Pertimbangkan untuk menghapus bagian yang kosong.</value>
+    </data>
+    <data name="WB0203_RosterHasSingleQuestion" xml:space="preserve">
+        <value>Grup daftar nama hanya berisi satu pertanyaan. Pertimbangkan untuk mengelompokkan dengan daftar nama lainnya. Untuk daftar nama yang tetap, pertimbangkan untuk menyajikan sebagai serangkaian pertanyaan independen.</value>
+    </data>
+    <data name="WB0204_EmptyRoster" xml:space="preserve">
+        <value>Daftar kosong. Hapus jika tidak diperlukan.</value>
+    </data>
+    <data name="WB0205_TooManyQuestions" xml:space="preserve">
+        <value>Kuesioner memiliki lebih dari pertanyaan {0}. Mungkin sulit untuk mengelolanya.</value>
+    </data>
+    <data name="WB0209_LongEnablementCondition" xml:space="preserve">
+        <value>Kondisi pengaktifannya panjang. Dimungkinkan untuk memiliki kondisi yang lebih pendek dan lebih mudah dibaca dengan fungsi bawaan (yaitu, InList()).</value>
+    </data>
+    <data name="WB0210_CategoricalQuestionHasManyOptions" xml:space="preserve">
+        <value>Soal pilihan tunggal memiliki terlalu banyak kategori, pertimbangkan untuk mengubah ke kotak kombo.</value>
+    </data>
+    <data name="WB0211_QuestionnaireHasNoGpsQuestion" xml:space="preserve">
+        <value>Kuesioner tidak berisi pertanyaan GPS. Pertimbangkan untuk menambahkan pertanyaan GPS.</value>
+    </data>
+    <data name="WB0206_FewSectionsManyQuestions" xml:space="preserve">
+        <value>Kuesioner berisi lebih dari pertanyaan {0} tetapi hanya satu atau dua bagian. Kelompokkan pertanyaan menjadi beberapa bagian untuk menyederhanakan navigasi dan meningkatkan kinerja.</value>
+    </data>
+    <data name="WB0212_LongValidationCondition" xml:space="preserve">
+        <value>Kondisi validasi #{0} panjang. Dimungkinkan untuk memiliki kondisi yang lebih pendek dan lebih mudah dibaca dengan fungsi bawaan (yaitu, InList()).</value>
+    </data>
+    <data name="WB0207_FixedRosterContains3OrLessItems" xml:space="preserve">
+        <value>Daftar tetap berisi item {0} atau kurang. Pertimbangkan untuk menggunakan sub-bagian dan serangkaian pertanyaan. Daftar nama memperumit struktur data yang diekspor.</value>
+    </data>
+    <data name="WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions" xml:space="preserve">
+        <value>Lebih dari {0}% pertanyaan tidak mengandung ketentuan validasi. Tambahkan kondisi validasi untuk meningkatkan kualitas data.</value>
+    </data>
+    <data name="WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>Ekspresi filter pertanyaan tertaut lebih panjang dari karakter {0}.</value>
+    </data>
+    <data name="WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
+        <value>Pertanyaan tidak dapat digunakan dalam ekspresi filternya sendiri.</value>
+    </data>
+    <data name="WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+        <value>Ekspresi filter mengalami kesalahan sintaksis.</value>
+    </data>
+    <data name="WB0065_NameForAttachmentIsNotUnique" xml:space="preserve">
+        <value>Lampiran lain dengan nama yang sama sudah ada.</value>
+    </data>
+    <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
+        <value>Teks statis mengacu pada tidak adanya lampiran</value>
+    </data>
+    <data name="WB0111_AttachmentHasEmptyContent" xml:space="preserve">
+        <value>Lampiran tidak boleh kosong</value>
+    </data>
+    <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">
+        <value>Ukuran lampiran lebih dari {0}Mb</value>
+    </data>
+    <data name="WB0214_TotalAttachmentsSizeIsMoreThan50Mb" xml:space="preserve">
+        <value>Ukuran total lampiran lebih dari {0}Mb</value>
+    </data>
+    <data name="WB0215_UnusedAttachments" xml:space="preserve">
+        <value>Kuesioner berisi lampiran yang belum digunakan</value>
+    </data>
+    <data name="WB0112_VariableHasInvalidName" xml:space="preserve">
+        <value>Variabel memiliki nama yang tidak valid.</value>
+    </data>
+    <data name="WB0113_VariableHasEmptyVariableName" xml:space="preserve">
+        <value>Variabel tidak boleh memiliki nama kosong.</value>
+    </data>
+    <data name="WB0250_ValidationConditionRefersToAFutureQuestion" xml:space="preserve">
+        <value>Kondisi validasi #{0} merujuk pada pertanyaan mendatang. Pertimbangkan untuk membalikkan urutannya.</value>
+    </data>
+    <data name="WB0251_EnablementConditionRefersToAFutureQuestion" xml:space="preserve">
+        <value>Kondisi pemberdayaan mengacu pada pertanyaan di masa depan. Pertimbangkan untuk membalikkan urutannya.</value>
+    </data>
+    <data name="WB0253_TooFewVariableLabelsAreDefined" xml:space="preserve">
+        <value>Terlalu sedikit label variabel yang ditentukan. Tambahkan label variabel untuk meningkatkan kegunaan data yang diekspor dan untuk memberikan masukan ke dalam metadata untuk format Inisiatif Dokumentasi Data (DDI).</value>
+    </data>
+    <data name="WB0254_UseFunctionIsValidEmailToValidateEmailAddress" xml:space="preserve">
+        <value>Gunakan fungsi IsValidEmail() untuk memvalidasi alamat email.</value>
+    </data>
+    <data name="WB0255_QuestionIsTooShort" xml:space="preserve">
+        <value>Pertanyaannya terlalu singkat. Ini mungkin pertanyaan yang tidak lengkap.</value>
+    </data>
+    <data name="WB0114_CategoricalQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
+        <value>Pertanyaan kategoris hanya mendukung nilai integer dalam rentang dari {0} hingga {1}</value>
+    </data>
+    <data name="WB0115_FixRosterSupportsOnlyIntegerTitleValues" xml:space="preserve">
+        <value>Daftar nama yang diperbaiki hanya mendukung nilai integer.</value>
+    </data>
+    <data name="WB0256_TranslationNameIsInvalid" xml:space="preserve">
+        <value>Nama terjemahan tidak valid</value>
+    </data>
+    <data name="WB0257_TranslationHasEmptyContent" xml:space="preserve">
+        <value>Terjemahan memiliki konten kosong</value>
+    </data>
+    <data name="WB0258_TranslationsHaveDuplicatedNames" xml:space="preserve">
+        <value>Terjemahan memiliki nama duplikat</value>
+    </data>
+    <data name="WB0259_QuestionTitleIsTooLong" xml:space="preserve">
+        <value>Teks pertanyaan terlalu panjang. Panjangnya tidak boleh lebih dari karakter {0}.</value>
+    </data>
+    <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
+        <value>Judul terlalu panjang. Panjangnya tidak boleh lebih dari karakter {0}.</value>
+    </data>
+    <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
+        <value>Pertanyaan sumber daftar nama multi-pilih harus memiliki jumlah jawaban maksimum yang ditetapkan.</value>
+    </data>
+    <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
+        <value>Kuesioner berisi daftar nama dengan jumlah total contoh daftar {0} melebihi batas sistem {1}</value>
+    </data>
+    <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
+        <value>Daftar telah mencapai batas ukuran. Kurangi ukuran daftar atau kurangi sarang.</value>
+    </data>
+    <data name="WB0264_GpsQuestion" xml:space="preserve">
+        <value>Anda memiliki pertanyaan tentang GPS. Tablet harus mendukung geolokasi untuk dapat digunakan dengan kuesioner ini.</value>
+    </data>
+    <data name="WB0265_MoreThan30PercentQuestionsAreText" xml:space="preserve">
+        <value>Lebih dari {0}% pertanyaan adalah pertanyaan teks. Pertanyaan teks sulit dijawab di tablet. Pertimbangkan untuk menggunakan pertanyaan pilihan tunggal atau ganda.</value>
+    </data>
+    <data name="WB0266_SameTitle" xml:space="preserve">
+        <value>Pertanyaan duplikat. (Pertanyaan memiliki judul yang sama.)</value>
+    </data>
+    <data name="WB0267_QRBarcodeQuestion" xml:space="preserve">
+        <value>Anda memiliki pertanyaan tentang kode batang. Tablet harus mendukung fokus otomatis untuk digunakan dengan kuesioner ini.</value>
+    </data>
+    <data name="WB0216_NoPrefilledQuestions" xml:space="preserve">
+        <value>Tidak ada pertanyaan pengidentifikasi yang didefinisikan. Tentukan setidaknya satu pertanyaan identifikasi.</value>
+    </data>
+    <data name="WB0217_VariableLableMoreThan120Characters" xml:space="preserve">
+        <value>Label variabel terlalu panjang (lebih dari karakter {0}) dan akan terpotong dalam ekspor file SPSS.</value>
+    </data>
+    <data name="WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions" xml:space="preserve">
+        <value>Pertanyaan berturut-turut berisi kondisi pemberdayaan yang identik. Pertimbangkan untuk menempatkannya di sub-bagian dan tetapkan kondisi pada sub-bagian tersebut.</value>
+    </data>
+    <data name="WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options" xml:space="preserve">
+        <value>Beberapa pertanyaan pilihan tunggal tanpa syarat berturut-turut dengan kategori {0}. Pertimbangkan satu pertanyaan pilihan ganda.</value>
+    </data>
+    <data name="WB0220_RowIndexInMultiOptionBasedRoster" xml:space="preserve">
+        <value>Menggunakan @{0} dengan daftar pilihan ganda mungkin tidak stabil. Pertimbangkan untuk menggunakan @{1} sebagai gantinya.</value>
+    </data>
+    <data name="WB0221_NoCurrentTimeQuestions" xml:space="preserve">
+        <value>Tidak ada pertanyaan waktu saat ini yang ditemukan. Pertimbangkan untuk mencatat tanggal wawancara dalam kuesioner Anda.</value>
+    </data>
+    <data name="WB0222_SingleOptionPrefilled" xml:space="preserve">
+        <value>Pertanyaan pilihan tunggal ditandai sebagai identifikasi. Pertimbangkan untuk menggunakan pertanyaan teks.</value>
+    </data>
+    <data name="WB0223_SectionWithLessThan5Questions" xml:space="preserve">
+        <value>Bagian berisi kurang dari lima pertanyaan. Pertimbangkan untuk bergabung dengan bagian lain.</value>
+    </data>
+    <data name="WB0224_TooManySubsectionsAtOneLevel" xml:space="preserve">
+        <value>Terlalu banyak sub-bagian pada satu tingkat. Pertimbangkan tata letak hierarki.</value>
+    </data>
+    <data name="WB0225_ComboBoxWithLessThan10Elements" xml:space="preserve">
+        <value>Menu drop-down (kotak kombo) berisi kurang dari 10 elemen. Pertimbangkan untuk beralih ke representasi pilihan tunggal standar.</value>
+    </data>
+    <data name="WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope" xml:space="preserve">
+        <value>Pertanyaan tertaut merujuk pada pertanyaan daftar dari tingkat yang salah.</value>
+    </data>
+    <data name="WB0226_SameCascadingParentQuestion" xml:space="preserve">
+        <value>Pertanyaan kotak kombo berjenjang memiliki pertanyaan induk yang sama.</value>
+    </data>
+    <data name="WB0227_NotShared" xml:space="preserve">
+        <value>Kuesioner belum ditinjau. Pertimbangkan untuk membagikannya dengan pengguna lain untuk mendapatkan masukan.</value>
+    </data>
+    <data name="WB0228_OmittedOptions" xml:space="preserve">
+        <value>Pertanyaan kategoris memiliki kode kategori yang tidak berurutan. Periksa kategori yang dihilangkan.</value>
+    </data>
+    <data name="WB0229_SupervisorQuestionInValidation" xml:space="preserve">
+        <value>Pertanyaan supervisor digunakan dalam validasi. Periksa kondisi rekening supervisor non-respon atau instruksikan supervisor untuk selalu merespon.</value>
+    </data>
+    <data name="WB0230_NonconsecutiveCascadings" xml:space="preserve">
+        <value>Pertanyaan kaskade yang tidak berurutan. Pertimbangkan untuk menyusun pertanyaan berjenjang satu demi satu.</value>
+    </data>
+    <data name="WB0117_LinkedToTextListQuestionDoesNotSupportFilters" xml:space="preserve">
+        <value>Pertanyaan tertaut ke daftar tidak mendukung filter kategori</value>
+    </data>
+    <data name="WB0231_MultiOptionWithMoreThan20Options" xml:space="preserve">
+        <value>Pertanyaan multi pilih berisi terlalu banyak kategori (&gt;{0}). Akan sulit bernavigasi di tablet. Pertimbangkan untuk membagi menjadi dua pertanyaan pilihan ganda jika memungkinkan.</value>
+    </data>
+    <data name="WB0232_FiveOrMoreQuestionsWithSameEnabling" xml:space="preserve">
+        <value>Lima pertanyaan atau lebih memiliki kondisi pemungkin yang sama. Tempatkan pertanyaan dalam kelompok dan terapkan satu kondisi yang memungkinkan pada kelompok untuk meningkatkan efisiensi kuesioner.</value>
+    </data>
+    <data name="WB0233_NestedRosterDegree3OrMore" xml:space="preserve">
+        <value>Daftar bersarang dengan tiga derajat sarang atau lebih. Coba hindari struktur rumit yang mungkin menimbulkan masalah dalam pengumpulan data.</value>
+    </data>
+    <data name="WB0234_RosterInRosterWithSameSourceQuestion" xml:space="preserve">
+        <value>Tingkat bawahan dalam daftar nama bertingkat didasarkan pada pertanyaan induk yang sama. Coba revisi, daftar nama seperti itu mungkin menimbulkan masalah dalam pengumpulan data.</value>
+    </data>
+    <data name="WB0235_FewQuestionsWithSameLongEnablement" xml:space="preserve">
+        <value>Kondisi pemberdayaan panjang yang sama digunakan dalam beberapa pertanyaan. Anda mungkin ingin membuat variabel Boolean untuk menyederhanakan pengelolaan kode.</value>
+    </data>
+    <data name="WB0236_FewQuestionsWithSameLongValidation" xml:space="preserve">
+        <value>Kondisi validasi panjang yang sama digunakan dalam beberapa pertanyaan. Anda mungkin ingin membuat variabel Boolean untuk menyederhanakan pengelolaan kode.</value>
+    </data>
+    <data name="WB0237_BitwiseAnd" xml:space="preserve">
+        <value>&amp; digunakan dalam ekspresi. Pastikan Anda memahami perbedaan antara operator &amp; dan &amp;&amp;. Dalam kebanyakan kasus, gunakan &amp;&amp;.</value>
+    </data>
+    <data name="WB0238_BitwiseOr" xml:space="preserve">
+        <value>| digunakan dalam ekspresi. Pastikan Anda memahami perbedaan antara | dan || operator. Dalam kebanyakan kasus, gunakan ||.</value>
+    </data>
+    <data name="WB0118_ExpressionReferencingForbiddenDateTimeProperies" xml:space="preserve">
+        <value>Ekspresi yang mereferensikan properti DateTime terlarang: {0}, {1}, {2}. Pertimbangkan untuk menggunakan pertanyaan waktu saat ini.</value>
+    </data>
+    <data name="WB0268_DoesNotSupportSubstitution" xml:space="preserve">
+        <value>Anda mencoba menggunakan substitusi untuk entitas yang tidak didukung.</value>
+    </data>
+    <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
+        <value>Judul pertanyaan tidak boleh kosong.</value>
+    </data>
+    <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
+        <value>Bagian tidak boleh berisi lebih dari pertanyaan {0}.</value>
+    </data>
+    <data name="WB0119_QuestionnaireTitleTooLong" xml:space="preserve">
+        <value>Judul kuesioner tidak boleh lebih dari simbol {0}.</value>
+    </data>
+    <data name="WB0120_GroupTitleIsEmpty" xml:space="preserve">
+        <value>Judul bagian dan subbagian tidak boleh kosong atau hanya berisi spasi saja.</value>
+    </data>
+    <data name="WB0121_VariableNameTooLong" xml:space="preserve">
+        <value>Nama atau ID elemen ini tidak boleh lebih panjang dari karakter {0}.</value>
+    </data>
+    <data name="WB0122_VariableNameHasSpecialCharacters" xml:space="preserve">
+        <value>Nama variabel atau ID roster yang valid hanya boleh berisi huruf, angka, dan karakter garis bawah</value>
+    </data>
+    <data name="WB0123_VariableNameStartWithDigitOrUnderscore" xml:space="preserve">
+        <value>Nama variabel atau ID roster tidak boleh diawali dengan angka atau garis bawah</value>
+    </data>
+    <data name="WB0124_VariableNameEndWithUnderscore" xml:space="preserve">
+        <value>Nama variabel atau ID daftar nama tidak boleh diakhiri dengan garis bawah</value>
+    </data>
+    <data name="WB0125_VariableNameHasConsecutiveUnderscores" xml:space="preserve">
+        <value>Nama variabel atau ID daftar nama tidak boleh memiliki dua atau lebih karakter garis bawah yang berurutan.</value>
+    </data>
+    <data name="WB0126_VarialbeNameNotUnique" xml:space="preserve">
+        <value>Nama variabel atau ID daftar harus unik dalam cakupan kuesioner.</value>
+    </data>
+    <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+        <value>Setidaknya ada satu duplikat pasangan "Judul" dan "Nilai Induk". Daftar tersebut tidak boleh mengandung duplikat apa pun.</value>
+    </data>
+    <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
+        <value>Jumlah tempat desimal tidak berkisar dari {0} hingga {1}.</value>
+    </data>
+    <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
+        <value>Judul kategori kosong atau terlalu panjang. Panjang judul harus berkisar dari karakter {0} hingga {1}.</value>
+    </data>
+    <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
+        <value>Anda tidak dapat menggunakan entitas anak dalam kondisi pengaktifan untuk bagian, subbagian, dan daftar nama.</value>
+    </data>
+    <data name="WB0272_ConditionUsingForbiddenClasses" xml:space="preserve">
+        <value>Kondisi yang memungkinkan menggunakan tipe terlarang.</value>
+    </data>
+    <data name="WB0273_ValidationConditionUsingForbiddenClasses" xml:space="preserve">
+        <value>Kondisi validasi menggunakan tipe terlarang.</value>
+    </data>
+    <data name="WB0274_VariableUsingForbiddenClasses" xml:space="preserve">
+        <value>Variabel menggunakan tipe terlarang.</value>
+    </data>
+    <data name="WB0275_FilterExpressionIsUsingForbiddenClasses" xml:space="preserve">
+        <value>Ekspresi filter menggunakan tipe terlarang.</value>
+    </data>
+    <data name="WB0131_SpecialValuesHasNonIntegerOptionsValues" xml:space="preserve">
+        <value>Nilai khusus hanya mendukung nilai bilangan bulat dalam rentang dari {0} hingga {1}.</value>
+    </data>
+    <data name="WB0276_RownameIsNotSupported" xml:space="preserve">
+        <value>Variabel @rowname tidak didukung lagi.</value>
+    </data>
+    <data name="WB0132_SpecialValuesHasOptionsWithLongTexts" xml:space="preserve">
+        <value>Judul nilai khusus kosong atau terlalu panjang. Panjang judul harus berkisar dari karakter {0} hingga {1}.</value>
+    </data>
+    <data name="WB0133_SpecialValuesMustBeUniqueForNumericlQuestion" xml:space="preserve">
+        <value>Nilai khusus harus unik.</value>
+    </data>
+    <data name="WB0134_SpecialValuesCountMoreThanMaxOptionCount" xml:space="preserve">
+        <value>Berisi lebih dari nilai khusus {0}.</value>
+    </data>
+    <data name="WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit" xml:space="preserve">
+        <value>Pertanyaan mengandung nilai khusus, yang terlalu besar dan tidak dapat digunakan dalam pertanyaan ini karena menentukan ukuran daftar nama.</value>
+    </data>
+    <data name="WB0136_SpecialValuesHaveOptionsWithEmptyValue" xml:space="preserve">
+        <value>Pertanyaan mempunyai nilai khusus dengan nilai kosong.</value>
+    </data>
+    <data name="WB0137_SpecialValuesTitlesMustBeUnique" xml:space="preserve">
+        <value>Judul dengan nilai khusus harus unik.</value>
+    </data>
+    <data name="WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion" xml:space="preserve">
+        <value>Nama lampiran dengan nilai khusus harus unik.</value>
+    </data>
+    <data name="WB0139_SpecialValuesAttachmentsReferAbsentAttachment" xml:space="preserve">
+        <value>Keterikatan nilai khusus mengacu pada keterikatan yang tidak ada.</value>
+    </data>
+    <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
+        <value>Judul kuesioner tidak boleh mempunyai dua atau lebih karakter garis bawah yang berurutan.</value>
+    </data>
+    <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+        <value>Mode biasa hanya diperbolehkan untuk daftar nama dengan pertanyaan tidak lebih dari {0} atau teks statis.</value>
+    </data>
+    <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
+        <value>Mode biasa tidak mengizinkan penggunaan daftar nama yang disarangkan.</value>
+    </data>
+    <data name="WB0280_TextContainsLinkToUnknownQuestionOrGroup" xml:space="preserve">
+        <value>Teks berisi tautan ke pertanyaan, subbagian, daftar nama, atau lampiran pdf yang tidak diketahui.</value>
+    </data>
+    <data name="WB0057_LinksAreProhibitedOnNavigationElements" xml:space="preserve">
+        <value>Tautan dilarang pada elemen navigasi: bagian, subbagian, daftar nama</value>
+    </data>
+    <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
+        <value>Jumlah total elemen ({0}) melebihi batas sistem ({1}). Pertimbangkan untuk mengurangi jumlah pertanyaan, teks statis, variabel, atau item dalam daftar nama tetap.</value>
+    </data>
+    <data name="WB0282_IdentifyingQuestionInSectionWithCondition" xml:space="preserve">
+        <value>Pertanyaan pengidentifikasi tidak dapat ditempatkan di dalam bagian dengan kondisi yang memungkinkan.</value>
+    </data>
+    <data name="WB0282_TableRosterContainsNestedGroup" xml:space="preserve">
+        <value>Mode daftar nama tabel tidak mengizinkan penggunaan grup dan daftar nama yang disarangkan.</value>
+    </data>
+    <data name="WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+        <value>Mode tabel hanya diperbolehkan untuk daftar nama yang pertanyaannya tidak lebih dari {0}.</value>
+    </data>
+    <data name="WB0284_TableRosterCantContainsSupervisorQuestions" xml:space="preserve">
+        <value>Daftar tabel tidak mengizinkan penggunaan pertanyaan supervisor.</value>
+    </data>
+    <data name="WB0285_TableRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+        <value>Daftar tabel memungkinkan untuk hanya menggunakan pertanyaan teks dan numerik.</value>
+    </data>
+    <data name="WB0286_TableAndMatixRosterWorksOnlyInWebMode" xml:space="preserve">
+        <value>Mode daftar Tabel atau Matriks hanya berfungsi dalam survei web, pada tablet akan menjadi mode 'sub bagian'.</value>
+    </data>
+    <data name="WB0309_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
+        <value>Pertanyaan di bagian Sampul harus memiliki label variabel.</value>
+    </data>
+    <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
+        <value>Pertanyaan halaman sampul hanya boleh memiliki tipe yang diperbolehkan (Teks, Numerik, DateTime, GpsCoordinates, SingleOption)</value>
+    </data>
+    <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
+        <value>Label {1} untuk kode {0} merupakan angka yang berbeda dengan nilai yang diberi label.</value>
+    </data>
+    <data name="WB0289" xml:space="preserve">
+        <value>Nama kategori tidak boleh lebih panjang dari karakter {0}.</value>
+    </data>
+    <data name="WB0290" xml:space="preserve">
+        <value>Nama kategori tidak boleh diakhiri dengan garis bawah</value>
+    </data>
+    <data name="WB0291" xml:space="preserve">
+        <value>Nama kategori tidak boleh memiliki dua atau lebih karakter garis bawah yang berurutan.</value>
+    </data>
+    <data name="WB0292" xml:space="preserve">
+        <value>Nama kategori wajib diisi.</value>
+    </data>
+    <data name="WB0293" xml:space="preserve">
+        <value>Nama kategori tidak boleh berupa kata khusus.</value>
+    </data>
+    <data name="WB0294" xml:space="preserve">
+        <value>Nama kategori hanya boleh berisi huruf, angka, dan karakter garis bawah</value>
+    </data>
+    <data name="WB0295" xml:space="preserve">
+        <value>Nama kategori tidak boleh diawali dengan angka atau garis bawah</value>
+    </data>
+    <data name="WB0296" xml:space="preserve">
+        <value>Pertanyaan memiliki kategori yang sama. Gunakan kategori yang dapat digunakan kembali</value>
+    </data>
+    <data name="WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+        <value>Daftar matriks hanya memperbolehkan penggunaan pertanyaan kategoris sederhana: mode kotak kombo, berjenjang, atau ya/tidak tidak diperbolehkan.</value>
+    </data>
+    <data name="WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+        <value>Mode matriks hanya diperbolehkan untuk daftar nama yang pertanyaannya tidak lebih dari {0}.</value>
+    </data>
+    <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
+        <value>Daftar matriks tidak boleh berisi pertanyaan penyelia atau pengidentifikasi.</value>
+    </data>
+    <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
+        <value>Daftar matriks tidak boleh berisi pertanyaan terkait.</value>
+    </data>
+    <data name="WB0302" xml:space="preserve">
+        <value>Pergantian tidak dapat merujuk item dari level roster yang sama.</value>
+    </data>
+    <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
+        <value>Kategori yang dapat digunakan kembali tidak boleh memiliki baris dengan nilai Id dan ParentId yang sama</value>
+    </data>
+    <data name="WB0306_DuplicatedCategoryParentIdText" xml:space="preserve">
+        <value>Kategori yang dapat digunakan kembali tidak boleh memiliki baris dengan nilai ParentId dan Teks yang sama</value>
+    </data>
+    <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
+        <value>Referensi pertanyaan kategori yang dapat digunakan kembali tidak ada.</value>
+    </data>
+    <data name="WB0390_OnlyStringVariableAllowedAsAttachmentName" xml:space="preserve">
+        <value>Hanya tipe variabel string yang dapat digunakan sebagai sumber nama lampiran</value>
+    </data>
+    <data name="WB0391" xml:space="preserve">
+        <value>Teks statis tidak dapat mereferensikan variabel yang memiliki cakupan daftar lebih dalam dari dirinya sendiri</value>
+    </data>
+    <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
+        <value>Tautan ke pertanyaan tersembunyi tidak diperbolehkan</value>
+    </data>
+    <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
+        <value>Variabel di bagian Sampul harus memiliki label.</value>
+    </data>
+    <data name="WB0312" xml:space="preserve">
+        <value>Kategori harus memiliki setidaknya dua opsi</value>
+    </data>
+    <data name="WB0313_QuestionOptionReferenceToNonExistentAttachment" xml:space="preserve">
+        <value>Opsi pertanyaan mengacu pada lampiran yang tidak ada</value>
+    </data>
+    <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
+        <value>Pertanyaan berisi beberapa pilihan yang mengacu pada lampiran yang sama</value>
+    </data>
+    <data name="WB0315_AttachmentHasInvalidName" xml:space="preserve">
+        <value>Nama lampiran hanya boleh berisi huruf, angka, dan karakter garis bawah. Diawali dengan huruf, tidak ada garis bawah yang berurutan, tidak diakhiri dengan garis bawah dan bukan merupakan kata yang dilindungi undang-undang. Tidak kosong dan kurang dari 32 karakter.</value>
+    </data>
+    <data name="WB0316_QuestionnaireWithOldCoverPage" xml:space="preserve">
+        <value>Kuesioner dalam format lama. Silakan gunakan tautan "Buat sampul" di bagian Sampul.</value>
+    </data>
+    <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
+        <value>Cakupan pertanyaan kritis tidak boleh salah satu dari berikut ini: tersembunyi, penyelia.</value>
+    </data>
+    <data name="WB0318_CriticalityConditionExpressionHasIncorrectSyntax" xml:space="preserve">
+        <value>Kondisi kritis memiliki kesalahan sintaksis dalam ekspresi.</value>
+    </data>
+    <data name="WB0319_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+        <value>Kondisi kritis kosong.</value>
+    </data>
+    <data name="WB0320_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+        <value>Pesan dalam aturan kritis kosong.</value>
+    </data>
+    <data name="WB0321_CriticalityConditionUsingForbiddenClasses" xml:space="preserve">
+        <value>Kondisi kritis menggunakan tipe terlarang.</value>
+    </data>
+    <data name="WB0322_CriticalRuleExpressionIsTooLong" xml:space="preserve">
+        <value>Ekspresi aturan kritis memiliki lebih dari karakter {0}.</value>
+    </data>
+    <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
+        <value>Pesan kondisi kritis lebih dari karakter {0}.</value>
+    </data>
+</root>
