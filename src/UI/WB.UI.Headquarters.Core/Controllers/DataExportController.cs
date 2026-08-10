@@ -67,6 +67,7 @@ namespace WB.UI.Headquarters.Controllers
                     DataAvailabilityUrl = Url.Action("DataAvailability", "DataExportApi"),
                     WasExportFileRecreatedUrl = Url.Action("WasExportFileRecreated", "DataExportApi"),
                     DownloadDataUrl = Url.Action("DownloadData", "DataExportApi"),
+                    CreateExternalStorageStateUrl = Url.Action("CreateExternalStorageState", "DataExportApi"),
                     ExportToExternalStorageUrl = pathService.GetAbsolutePath(Url.Action("ExportToExternalStorage", "DataExportApi")),
                     CancelExportProcessUrl = Url.Action("DeleteDataExportProcess", "DataExportApi"),
                 }

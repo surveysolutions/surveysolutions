@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Refit;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
@@ -32,6 +35,9 @@ namespace WB.UI.Headquarters.Controllers.Api
     [ResponseCache(NoStore = true)]
     public class DataExportApiController : ControllerBase
     {
+        private const string ExternalStorageStateCachePrefix = "DataExportExternalStorageState";
+        private static readonly TimeSpan ExternalStorageStateLifetime = TimeSpan.FromMinutes(10);
+
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IDataExportStatusReader dataExportStatusReader;
         private readonly IExportFileNameService exportFileNameService;
@@ -41,6 +47,9 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly ISystemLog auditLog;
         private readonly ISerializer serializer;
         private readonly ExternalStoragesSettings externalStoragesSettings;
+        private readonly IAuthorizedUser authorizedUser;
+        private readonly IDataProtector externalStorageStateProtector;
+        private readonly IMemoryCache memoryCache;
         private readonly ILogger<DataExportApiController> logger;
 
         public DataExportApiController(
@@ -53,6 +62,9 @@ namespace WB.UI.Headquarters.Controllers.Api
             IExportServiceApi exportServiceApi,
             ISystemLog auditLog, 
             ExternalStoragesSettings externalStoragesSettings,
+            IAuthorizedUser authorizedUser,
+            IDataProtectionProvider dataProtectionProvider,
+            IMemoryCache memoryCache,
             ILogger<DataExportApiController> logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -64,6 +76,9 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.auditLog = auditLog;
             this.externalStoragesSettings = externalStoragesSettings;
             this.serializer = serializer;
+            this.authorizedUser = authorizedUser;
+            this.externalStorageStateProtector = dataProtectionProvider.CreateProtector("DataExport.ExternalStorageState");
+            this.memoryCache = memoryCache;
             this.logger = logger;
         }
 
@@ -293,10 +308,33 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpPost]
         [EnableCors("export")]
-        [AllowAnonymous]
+        [ObservingNotAllowed]
+        [ValidateAntiForgeryToken]
+        public ActionResult<string> CreateExternalStorageState([FromBody] ExternalStorageStateModel state)
+        {
+            if (state == null)
+                return BadRequest("Export parameters not found");
+
+            var payload = new ExternalStorageProtectedStateModel
+            {
+                UserId = this.authorizedUser.Id,
+                ExpiresAtUtc = DateTime.UtcNow.Add(ExternalStorageStateLifetime),
+                Nonce = Guid.NewGuid().ToString("N"),
+                ExportState = state
+            };
+
+            this.memoryCache.Set(GetExternalStorageStateCacheKey(payload.Nonce), true, payload.ExpiresAtUtc);
+
+            var protectedState = this.externalStorageStateProtector.Protect(this.serializer.Serialize(payload));
+            return Ok(protectedState);
+        }
+
+        [HttpPost]
+        [EnableCors("export")]
+        [ObservingNotAllowed]
         public async Task<ActionResult> ExportToExternalStorage(ExportToExternalStorageModel model)
         {
-            var state = this.serializer.DeserializeWithoutTypes<ExternalStorageStateModel>(model.State);
+            var state = this.TryRestoreExternalStorageState(model?.State);
             if (state == null)
                 return BadRequest("Export parameters not found");
 
@@ -338,6 +376,38 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return BadRequest($"Could not get access token for {state.Type} by code");
             }
         }
+
+        private ExternalStorageStateModel TryRestoreExternalStorageState(string protectedState)
+        {
+            if (string.IsNullOrWhiteSpace(protectedState))
+                return null;
+
+            ExternalStorageProtectedStateModel payload;
+            try
+            {
+                var stateJson = this.externalStorageStateProtector.Unprotect(protectedState);
+                payload = this.serializer.DeserializeWithoutTypes<ExternalStorageProtectedStateModel>(stateJson);
+            }
+            catch (CryptographicException)
+            {
+                return null;
+            }
+
+            if (payload == null
+                || payload.ExportState == null
+                || payload.ExpiresAtUtc < DateTime.UtcNow
+                || payload.UserId != this.authorizedUser.Id)
+                return null;
+
+            if (!this.memoryCache.TryGetValue(GetExternalStorageStateCacheKey(payload.Nonce), out _))
+                return null;
+
+            this.memoryCache.Remove(GetExternalStorageStateCacheKey(payload.Nonce));
+            return payload.ExportState;
+        }
+
+        private static string GetExternalStorageStateCacheKey(string nonce) =>
+            $"{ExternalStorageStateCachePrefix}:{nonce}";
 
         private Task<ApiResponse<ExternalStorageTokenResponse>> GetExternalStorageAuthTokenAsync(ExternalStorageStateModel state, string code)
         {
@@ -401,6 +471,14 @@ namespace WB.UI.Headquarters.Controllers.Api
             public DateTime? ToDate { get; set; }
             public DataExportFormat? Format { get; set; }
             public Guid? TranslationId { get; set; }
+        }
+
+        public class ExternalStorageProtectedStateModel
+        {
+            public Guid UserId { get; set; }
+            public DateTime ExpiresAtUtc { get; set; }
+            public string Nonce { get; set; }
+            public ExternalStorageStateModel ExportState { get; set; }
         }
     }
 
