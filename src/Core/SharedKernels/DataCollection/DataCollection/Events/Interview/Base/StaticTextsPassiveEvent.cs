@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
 {
-    public abstract class StaticTextsPassiveEvent : InterviewPassiveEvent
+    public abstract class StaticTextsPassiveEvent : InterviewPassiveEvent, IEventWithAffectedEntities
     {
         public Identity[] StaticTexts { get; private set; }
 
@@ -11,5 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
         {
             this.StaticTexts = staticTexts.ToArray();
         }
+
+        IReadOnlyCollection<Identity> IEventWithAffectedEntities.GetAffectedEntities() => StaticTexts;
     }
 }
