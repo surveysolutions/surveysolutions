@@ -19,7 +19,8 @@ export async function updateLookupTable(questionnaireId, lookupTable) {
         questionnaireId: questionnaireId,
         lookupTableId: lookupTable.itemId,
         lookupTableName: lookupTable.name,
-        lookupTableFileName: lookupTable.fileName
+        lookupTableFileName: lookupTable.fileName,
+        description: lookupTable.description || ''
     };
 
     command.oldLookupTableId = lookupTable.itemId;

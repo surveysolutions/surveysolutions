@@ -342,15 +342,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
-            AddOrUpdateCategoriesImpl(innerDocument, command.CategoriesId, command.OldCategoriesId, command.Name);
+            AddOrUpdateCategoriesImpl(innerDocument, command.CategoriesId, command.OldCategoriesId, command.Name, command.Description);
         }
 
-        private static void AddOrUpdateCategoriesImpl(QuestionnaireDocument document, Guid categoriesId, Guid? oldCategoriesId, string name)
+        private static void AddOrUpdateCategoriesImpl(QuestionnaireDocument document, Guid categoriesId, Guid? oldCategoriesId, string name, string description = "")
         {
             var categories = new Categories()
             {
                 Id = categoriesId,
                 Name = name,
+                Description = description,
             };
             document.Categories.RemoveAll(x => x.Id == categoriesId);
 
@@ -506,7 +507,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     });
                 }
                 
-                AddOrUpdateCategoriesImpl(clonedDocument, newCategoryId, categories.Id, categories.Name);
+                AddOrUpdateCategoriesImpl(clonedDocument, newCategoryId, categories.Id, categories.Name, categories.Description);
 
                 reusableCategoriesService.Store(clonedDocument.PublicKey, newCategoryId, newCategoryItems);
             }
@@ -569,7 +570,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             innerDocument.LookupTables[command.LookupTableId] = new LookupTable
             {
                 TableName = command.LookupTableName,
-                FileName = command.LookupTableFileName
+                FileName = command.LookupTableFileName,
+                Description = command.Description
             };
         }
 
