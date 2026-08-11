@@ -188,7 +188,6 @@ namespace WB.UI.Headquarters.Controllers.Api
                 settings.AllowSupervisorAudioAuditPlayback = message.AllowSupervisorAudioAuditPlayback;
                 if (message.AudioRecordingQuality.HasValue)
                     settings.AudioRecordingQuality = message.AudioRecordingQuality.Value;
-                settings.AllowSupervisorAudioAuditPlayback = message.AllowSupervisorAudioAuditPlayback;
             });
 
             return Ok(new {success = true});

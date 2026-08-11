@@ -50,7 +50,6 @@ namespace WB.UI.Headquarters
             registry.Bind<IWebNavigationService, WebNavigationService>();
             registry.Bind<IReviewAllowedService, ReviewAllowedService>();
             registry.Bind<IAudioAuditAccessService, AudioAuditAccessService>();
-            registry.Bind<IAudioAuditAccessService, AudioAuditAccessService>();
             registry.Bind<IQuestionnaireAssemblyAccessor, QuestionnaireAssemblyAccessor>();
             registry.Bind<IViewRenderService, ViewRenderService>();
             registry.Bind<IUploadPackageAnalyzer, UploadPackageAnalyzer>();

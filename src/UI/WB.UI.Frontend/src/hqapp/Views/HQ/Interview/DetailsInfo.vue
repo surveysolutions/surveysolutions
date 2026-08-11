@@ -662,8 +662,8 @@ export default {
                 if (!interviewId) return
 
                 const data = await this.$hq.AudioAudit.getInfo(interviewId)
-                this.audioAuditAvailable = data.hasAudioAudit
-                this.audioAuditSegments = data.segments || []
+                this.audioAuditAvailable = data.hasAudioAudit ? true : null
+                this.audioAuditSegments = data.hasAudioAudit ? (data.segments || []) : []
                 this.audioAuditTotalDuration = null
 
                 if (!data.hasAudioAudit) return
@@ -671,7 +671,9 @@ export default {
                 this.audioAuditDurationState = 'loading'
                 this.loadAudioDurations(this.audioAuditSegments)
             } catch {
-                this.audioAuditAvailable = false
+                this.audioAuditAvailable = null
+                this.audioAuditSegments = []
+                this.audioAuditTotalDuration = null
             }
         },
 
@@ -688,7 +690,7 @@ export default {
             segments.forEach((segment, idx) => {
                 const audio = new Audio()
                 audio.preload = 'metadata'
-                audio.src = this.$hq.AudioAudit.getSegmentUrl(this.$config.model.interviewId, segment.segmentId)
+                audio.src = this.$hq.AudioAudit.getSegmentUrl(this.$config.model.id, segment.segmentId)
                 audio.addEventListener('loadedmetadata', () => {
                     if (failed) return
 

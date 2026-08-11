@@ -3,12 +3,13 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
+using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Services.Impl;
+using WB.Enumerator.Native.WebInterview;
 
 namespace WB.Tests.Unit.Applications.Headquarters;
 
@@ -131,10 +132,27 @@ public class AudioAuditAccessServiceTests
         if (settings != null)
             settingsStorage.Store(settings, WB.Core.BoundedContexts.Headquarters.Views.AppSetting.InterviewerSettings);
 
+        var reviewAllowedService = new Mock<IReviewAllowedService>();
+        reviewAllowedService
+            .Setup(x => x.CheckIfAllowed(interviewId))
+            .Callback(() =>
+            {
+                if (interview == null)
+                    throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, string.Empty);
+
+                if (authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter)
+                    return;
+
+                if (authorizedUser.IsSupervisor && authorizedUser.Id == interview.SupervisorId)
+                    return;
+
+                throw new InterviewAccessException(InterviewAccessExceptionReason.UserNotAuthorised, string.Empty);
+            });
+
         return new AudioAuditAccessService(
-            Mock.Of<IStatefulInterviewRepository>(repository => repository.Get(interviewId.FormatGuid()) == interview),
             authorizedUser,
             Mock.Of<IAudioAuditFileStorage>(),
-            settingsStorage);
+            settingsStorage,
+            reviewAllowedService.Object);
     }
 }

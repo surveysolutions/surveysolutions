@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
+using WB.Enumerator.Native.WebInterview;
 
 namespace WB.UI.Headquarters.Services.Impl
 {
@@ -20,21 +20,21 @@ namespace WB.UI.Headquarters.Services.Impl
         private static readonly Regex TimestampPattern = new Regex(
             @"-audio-audit-(\d{8}_\d{9})\.", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
         private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
+        private readonly IReviewAllowedService reviewAllowedService;
 
         public AudioAuditAccessService(
-            IStatefulInterviewRepository statefulInterviewRepository,
             IAuthorizedUser authorizedUser,
             IAudioAuditFileStorage audioAuditFileStorage,
-            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage)
+            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage,
+            IReviewAllowedService reviewAllowedService)
         {
-            this.statefulInterviewRepository = statefulInterviewRepository;
             this.authorizedUser = authorizedUser;
             this.audioAuditFileStorage = audioAuditFileStorage;
             this.interviewerSettingsStorage = interviewerSettingsStorage;
+            this.reviewAllowedService = reviewAllowedService;
         }
 
         public bool CanAccessAudioAudit(Guid interviewId)
@@ -42,23 +42,22 @@ namespace WB.UI.Headquarters.Services.Impl
             if (!authorizedUser.IsAuthenticated) return false;
             if (authorizedUser.IsInterviewer) return false;
 
-            var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
-            if (interview == null) return false;
-
-            if (authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter)
-                return true;
-
-            if (authorizedUser.IsSupervisor)
+            try
             {
-                // Supervisor must be the current supervisor of this interview
-                if (authorizedUser.Id != interview.SupervisorId) return false;
-
-                // Workspace setting must allow supervisor playback (defaults to false)
-                var settings = interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
-                return settings.IsAllowSupervisorAudioAuditPlayback();
+                reviewAllowedService.CheckIfAllowed(interviewId);
+            }
+            catch (InterviewAccessException)
+            {
+                return false;
             }
 
-            return false;
+            if (!authorizedUser.IsSupervisor)
+                return true;
+
+            // Supervisor workspace setting must allow playback (defaults to false)
+            var settings = interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
+            return settings.IsAllowSupervisorAudioAuditPlayback();
+
         }
 
         public async Task<IReadOnlyList<AudioAuditSegmentInfo>> GetAudioAuditSegmentsAsync(Guid interviewId)
@@ -69,7 +68,8 @@ namespace WB.UI.Headquarters.Services.Impl
 
             var ordered = descriptors
                 .Select(d => (descriptor: d, timestamp: ParseTimestamp(d.FileName)))
-                .OrderBy(x => x.timestamp ?? string.Empty)
+                .OrderBy(x => x.timestamp == null)
+                .ThenBy(x => x.timestamp)
                 .ThenBy(x => x.descriptor.FileName)
                 .Select((x, index) => new AudioAuditSegmentInfo
                 {
