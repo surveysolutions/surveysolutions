@@ -334,10 +334,13 @@ namespace WB.UI.Headquarters.Controllers.Api
         [ObservingNotAllowed]
         public async Task<ActionResult> ExportToExternalStorage(ExportToExternalStorageModel model)
         {
+            logger.LogInformation($"Export to external storage requested");
             var state = this.TryRestoreExternalStorageState(model?.State);
             if (state == null)
                 return BadRequest("Export parameters not found");
-
+            
+            logger.LogInformation($"Export to external storage for {state.Type}");
+            
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(state.QuestionnaireIdentity);
             if (questionnaireBrowseItem == null || questionnaireBrowseItem.IsDeleted)
                 return NotFound("@Questionnaire not found");
@@ -369,10 +372,11 @@ namespace WB.UI.Headquarters.Controllers.Api
                     state.Type,
                     translation: state.TranslationId);
 
-                return Ok();
+                return Ok("Export Requested");
             }
             catch (ApiException)
             {
+                logger.LogInformation($"Could not get access token for {state.Type} by code");
                 return BadRequest($"Could not get access token for {state.Type} by code");
             }
         }
