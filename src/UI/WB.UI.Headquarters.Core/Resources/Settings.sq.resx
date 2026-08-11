@@ -611,9 +611,9 @@ Arsyet e mundshme:
     <value>128 kbps, Stereo, 48 kHz</value>
   </data>
   <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
-    <value>Allow Supervisors to play audio-audit recordings</value>
+    <value>Lejo supervizorët të luajnë regjistrimet e auditimit audio</value>
   </data>
   <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
-    <value>When enabled, Supervisors can access and play audio-audit recordings for their interviews.</value>
+    <value>Kur aktivizohet, supervizorët mund të aksesojnë dhe të luajnë regjistrimet e auditimit audio për intervistat e tyre.</value>
   </data>
 </root>

@@ -547,9 +547,9 @@ Posibles razones:
     <value>128 kbps, Estéreo, 48 kHz</value>
   </data>
   <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
-    <value>Allow Supervisors to play audio-audit recordings</value>
+    <value>Permitir a los supervisores reproducir grabaciones de auditoría de audio</value>
   </data>
   <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
-    <value>When enabled, Supervisors can access and play audio-audit recordings for their interviews.</value>
+    <value>Cuando está habilitado, los supervisores pueden acceder y reproducir grabaciones de auditoría de audio de sus entrevistas.</value>
   </data>
 </root>

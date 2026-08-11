@@ -297,9 +297,9 @@
         <value>128 กิโลบิตต่อวินาที สเตอริโอ 48 กิโลเฮิร์ตซ์</value>
     </data>
   <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
-    <value>Allow Supervisors to play audio-audit recordings</value>
+    <value>อนุญาตให้หัวหน้าทีมเล่นไฟล์บันทึกการตรวจสอบเสียง</value>
   </data>
   <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
-    <value>When enabled, Supervisors can access and play audio-audit recordings for their interviews.</value>
+    <value>เมื่อเปิดใช้งาน หัวหน้าทีมจะสามารถเข้าถึงและเล่นไฟล์บันทึกการตรวจสอบเสียงสำหรับการสัมภาษณ์ของตนได้</value>
   </data>
 </root>

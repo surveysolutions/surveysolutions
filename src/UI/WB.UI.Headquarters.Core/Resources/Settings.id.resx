@@ -146,9 +146,9 @@
   <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve"><value>Peringatan! Ini adalah tindakan kritis yang akan mempengaruhi file ekspor yang ada</value></data>
   <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve"><value>Apakah Anda yakin ingin memaksa menjalankan kebijakan retensi sekarang?</value></data>
   <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
-    <value>Allow Supervisors to play audio-audit recordings</value>
+    <value>Izinkan Supervisor memutar rekaman audit audio</value>
   </data>
   <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
-    <value>When enabled, Supervisors can access and play audio-audit recordings for their interviews.</value>
+    <value>Jika diaktifkan, Supervisor dapat mengakses dan memutar rekaman audit audio untuk wawancara mereka.</value>
   </data>
 </root>

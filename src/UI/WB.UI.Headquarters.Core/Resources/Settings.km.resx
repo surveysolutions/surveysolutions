@@ -297,9 +297,9 @@
         <value>128 kbps, ស្តេរ៉េអូ, 48 kHz</value>
     </data>
   <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
-    <value>Allow Supervisors to play audio-audit recordings</value>
+    <value>អនុញ្ញាតឱ្យអ្នកត្រួតពិនិត្យចាក់កំណត់ត្រាសវនកម្មសំឡេង</value>
   </data>
   <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
-    <value>When enabled, Supervisors can access and play audio-audit recordings for their interviews.</value>
+    <value>នៅពេលបើក អ្នកត្រួតពិនិត្យអាចចូលប្រើ និងចាក់កំណត់ត្រាសវនកម្មសំឡេងសម្រាប់សម្ភាសន៍របស់ពួកគេ។</value>
   </data>
 </root>

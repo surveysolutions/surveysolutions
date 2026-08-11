@@ -559,9 +559,9 @@
     <value>128 kbps, Стерео, 48 kHz</value>
   </data>
   <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
-    <value>Allow Supervisors to play audio-audit recordings</value>
+    <value>Разрешить супервайзерам воспроизводить записи аудиоаудита</value>
   </data>
   <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
-    <value>When enabled, Supervisors can access and play audio-audit recordings for their interviews.</value>
+    <value>Если включено, супервайзеры могут получать доступ и воспроизводить записи аудиоаудита для своих интервью.</value>
   </data>
 </root>

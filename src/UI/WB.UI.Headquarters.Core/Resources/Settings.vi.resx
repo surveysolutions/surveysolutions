@@ -297,9 +297,9 @@ Lý do có thể:
         <value>128 kbps, Âm thanh nổi, 48 kHz</value>
         </data>
   <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
-    <value>Allow Supervisors to play audio-audit recordings</value>
+    <value>Cho phép giám sát viên phát bản ghi kiểm toán âm thanh</value>
   </data>
   <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
-    <value>When enabled, Supervisors can access and play audio-audit recordings for their interviews.</value>
+    <value>Khi được bật, giám sát viên có thể truy cập và phát các bản ghi kiểm toán âm thanh cho các cuộc phỏng vấn của họ.</value>
   </data>
 </root>

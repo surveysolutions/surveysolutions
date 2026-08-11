@@ -49,13 +49,20 @@ namespace WB.UI.Headquarters.Controllers.Api
             var descriptor = await audioAuditAccessService.ResolveSegmentAsync(interviewId, segmentId);
             if (descriptor == null) return NotFound();
 
+            var stream = await descriptor.GetStream();
+            if (stream != null)
+            {
+                if (stream.CanSeek)
+                    return File(stream, GetSafeAudioMimeType(descriptor.ContentType), enableRangeProcessing: true);
+
+                return File(stream, GetSafeAudioMimeType(descriptor.ContentType));
+            }
+
             var data = await descriptor.GetData();
             if (data == null || data.Length == 0) return NotFound();
 
             var mimeType = GetSafeAudioMimeType(descriptor.ContentType);
 
-            // File() with enableRangeProcessing=true lets ASP.NET Core handle Range headers
-            // correctly for browser seeking without requiring true streaming.
             return File(data, mimeType, enableRangeProcessing: true);
         }
 

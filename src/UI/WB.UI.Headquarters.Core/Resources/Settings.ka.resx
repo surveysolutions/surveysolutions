@@ -653,9 +653,9 @@
     <value>128 kbps, სტერეო, 48 kHz</value>
   </data>
   <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
-    <value>Allow Supervisors to play audio-audit recordings</value>
+    <value>აუდიო აუდიტის ჩანაწერების დაკვრის უფლება სუპერვაიზორებისთვის</value>
   </data>
   <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
-    <value>When enabled, Supervisors can access and play audio-audit recordings for their interviews.</value>
+    <value>ჩართვის შემთხვევაში სუპერვაიზორებს შეუძლიათ თავიანთი ინტერვიუებისთვის აუდიო აუდიტის ჩანაწერებზე წვდომა და მათი დაკვრა.</value>
   </data>
 </root>

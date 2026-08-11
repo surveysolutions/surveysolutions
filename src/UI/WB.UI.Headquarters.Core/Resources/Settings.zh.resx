@@ -649,9 +649,9 @@
     <value>128 kbps, 立体声, 48 kHz</value>
   </data>
   <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
-    <value>Allow Supervisors to play audio-audit recordings</value>
+    <value>允许督导员播放音频审计录音</value>
   </data>
   <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
-    <value>When enabled, Supervisors can access and play audio-audit recordings for their interviews.</value>
+    <value>启用后，督导员可以访问并播放其访谈的音频审计录音。</value>
   </data>
 </root>

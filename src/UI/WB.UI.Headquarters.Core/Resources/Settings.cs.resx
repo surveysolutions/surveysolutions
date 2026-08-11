@@ -541,9 +541,9 @@
     <value>128 kbps, Stereo, 48 kHz</value>
   </data>
   <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
-    <value>Allow Supervisors to play audio-audit recordings</value>
+    <value>Povolit supervizorům přehrávat nahrávky zvukového auditu</value>
   </data>
   <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
-    <value>When enabled, Supervisors can access and play audio-audit recordings for their interviews.</value>
+    <value>Pokud je povoleno, supervizoři mohou přistupovat k nahrávkám zvukového auditu svých interview a přehrávat je.</value>
   </data>
 </root>

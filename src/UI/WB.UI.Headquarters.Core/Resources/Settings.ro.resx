@@ -602,9 +602,9 @@ Motive posibile:
     <value>128 kbps, Stereo, 48 kHz</value>
   </data>
   <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
-    <value>Allow Supervisors to play audio-audit recordings</value>
+    <value>Permiteți supervizorilor să redea înregistrările de audit audio</value>
   </data>
   <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
-    <value>When enabled, Supervisors can access and play audio-audit recordings for their interviews.</value>
+    <value>Când este activată, supervizorii pot accesa și reda înregistrările de audit audio pentru interviurile lor.</value>
   </data>
 </root>
