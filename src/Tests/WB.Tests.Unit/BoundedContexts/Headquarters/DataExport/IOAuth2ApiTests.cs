@@ -40,6 +40,20 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExport
 
             // assert
             Assert.That(handler.LastRequest?.RequestUri, Is.EqualTo(configuredTokenUri));
+            Assert.That(handler.LastRequest?.Method, Is.EqualTo(HttpMethod.Post));
+            Assert.That(handler.LastRequest?.Content?.Headers.ContentType?.MediaType,
+                Is.EqualTo("application/x-www-form-urlencoded"));
+
+            var requestBody = await handler.LastRequest!.Content!.ReadAsStringAsync();
+            Assert.Multiple(() =>
+            {
+                Assert.That(requestBody, Does.Contain("client_id=client-id"));
+                Assert.That(requestBody, Does.Contain("client_secret=client-secret"));
+                Assert.That(requestBody, Does.Contain("code=code"));
+                Assert.That(requestBody, Does.Contain("grant_type=authorization_code"));
+                Assert.That(requestBody, Does.Contain("redirect_uri=https%3A%2F%2Fexample.com%2Fredirect"));
+                Assert.That(requestBody, Does.Contain("scope=offline_access%20Files.ReadWrite"));
+            });
         }
 
         private class CapturingMessageHandler : HttpMessageHandler
