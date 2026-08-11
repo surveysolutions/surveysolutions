@@ -350,8 +350,9 @@ namespace WB.UI.Headquarters.Controllers.Api
                 if (!response.IsSuccessStatusCode)
                 {
                     logger.LogError(
-                        "Token retrieval failed for {ExternalStorageType}. Status: {StatusCode}; Reason: {ReasonPhrase}; Provider response: {ProviderResponse}",
+                        "Token retrieval failed for {ExternalStorageType} at {TokenUri}. Status: {StatusCode}; Reason: {ReasonPhrase}; Provider response: {ProviderResponse}",
                         state.Type,
+                        this.GetExternalStorageSettings(state.Type).TokenUri,
                         response.StatusCode,
                         response.ReasonPhrase,
                         response.Error?.Content);
@@ -376,9 +377,12 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 return Ok("Export Requested");
             }
-            catch (ApiException)
+            catch (ApiException exception)
             {
-                logger.LogInformation($"Could not get access token for {state.Type} by code");
+                logger.LogError(exception,
+                    "Could not get access token for {ExternalStorageType} at {TokenUri} by code",
+                    state.Type,
+                    this.GetExternalStorageSettings(state.Type).TokenUri);
                 return BadRequest($"Could not get access token for {state.Type} by code");
             }
         }
