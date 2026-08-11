@@ -1228,4 +1228,7 @@
   <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
       <value>អ្នកបានប្រើ Geo Tracking ឬ Geo Fencing នៅពេលបង្កើតការសម្ភាស។ សូមបើកវាម្ដងទៀត ប្រសិនបើអ្នកចង់ប្រើវា។</value>
   </data>
+  <data name="Downgrade_ErrorMessage" xml:space="preserve">
+    <value>This version of the application is older than the previously installed version. Please reinstall the latest version of the application.</value>
+  </data>
 </root>

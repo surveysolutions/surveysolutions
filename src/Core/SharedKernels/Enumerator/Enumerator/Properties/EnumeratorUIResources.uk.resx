@@ -1071,4 +1071,7 @@
   <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
     <value>Ви використовували геолокацію або геозону під час створення інтерв'ю. Будь ласка, увімкніть їх знову, якщо хочете використовувати.</value>
   </data>
+  <data name="Downgrade_ErrorMessage" xml:space="preserve">
+    <value>This version of the application is older than the previously installed version. Please reinstall the latest version of the application.</value>
+  </data>
 </root>

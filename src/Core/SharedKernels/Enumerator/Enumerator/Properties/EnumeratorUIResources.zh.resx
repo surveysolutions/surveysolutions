@@ -1067,4 +1067,7 @@
   <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
     <value>您在创建访谈时使用了地理追踪或地理围栏。如果想继续使用，请重新启用它。</value>
   </data>
+  <data name="Downgrade_ErrorMessage" xml:space="preserve">
+    <value>This version of the application is older than the previously installed version. Please reinstall the latest version of the application.</value>
+  </data>
 </root>
