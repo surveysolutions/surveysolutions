@@ -9,15 +9,9 @@
         </div>
 
         <div class="audio-audit-player" v-if="currentSegment">
-            <audio ref="audioPlayer"
-                :src="currentSegmentUrl"
-                controlsList="nodownload"
-                @loadedmetadata="onMetadataLoaded"
-                @error="onPlaybackError"
-                @timeupdate="onTimeUpdate"
-                @ended="onEnded"
-                preload="metadata"
-                style="display:none">
+            <audio ref="audioPlayer" :src="currentSegmentUrl" controlsList="nodownload"
+                @loadedmetadata="onMetadataLoaded" @error="onPlaybackError" @timeupdate="onTimeUpdate" @ended="onEnded"
+                preload="metadata" style="display:none">
             </audio>
 
             <div v-if="playbackError" class="alert alert-warning">
@@ -26,23 +20,20 @@
 
             <div class="player-controls">
                 <div class="time-display">
-                    {{ formatTime(currentTime) }} / {{ currentDuration !== null ? formatTime(currentDuration) : '--:--' }}
+                    {{ formatTime(currentTime) }} / {{ currentDuration !== null ? formatTime(currentDuration) : '--:--'
+                    }}
                 </div>
-                <input type="range" class="seek-bar form-range"
-                    :max="currentDuration || 0"
-                    :value="currentTime"
+                <input type="range" class="seek-bar form-range" :max="currentDuration || 0" :value="currentTime"
                     @input="seekTo($event.target.value)" />
                 <div class="control-buttons">
-                    <button type="button" class="btn btn-outline-secondary btn-sm"
-                        @click="skipBackward"
+                    <button type="button" class="btn btn-outline-secondary btn-sm" @click="skipBackward"
                         :aria-label="$t('ReviewInterview.AudioAudit_SkipBackward')">
                         -10s
                     </button>
                     <button type="button" class="btn btn-primary" @click="togglePlayPause">
                         {{ isPlaying ? '⏸' : '▶' }}
                     </button>
-                    <button type="button" class="btn btn-outline-secondary btn-sm"
-                        @click="skipForward"
+                    <button type="button" class="btn btn-outline-secondary btn-sm" @click="skipForward"
                         :aria-label="$t('ReviewInterview.AudioAudit_SkipForward')">
                         +10s
                     </button>
@@ -56,19 +47,18 @@
             </div>
 
             <ul class="list-unstyled">
-                <li v-for="segment in segments" :key="segment.segmentId"
-                    class="playlist-item"
-                    :class="{
-                        active: currentSegment && currentSegment.segmentId === segment.segmentId,
-                        unavailable: segment.unavailable,
-                    }"
-                    @click="!segment.unavailable && selectSegment(segment)">
+                <li v-for="segment in segments" :key="segment.segmentId" class="playlist-item" :class="{
+                    active: currentSegment && currentSegment.segmentId === segment.segmentId,
+                    unavailable: segment.unavailable,
+                }" @click="!segment.unavailable && selectSegment(segment)">
                     <div class="segment-info">
                         <span class="segment-label">
                             {{ $t('ReviewInterview.AudioAudit_SegmentLabel', { number: segment.sequenceNumber }) }}
                         </span>
                         <span v-if="segment.deviceLocalStartTime" class="segment-time text-muted">
-                            {{ $t('ReviewInterview.AudioAudit_DeviceTime', { time: formatDeviceTime(segment.deviceLocalStartTime) }) }}
+                            {{ $t('ReviewInterview.AudioAudit_DeviceTime', {
+                                time:
+                                    formatDeviceTime(segment.deviceLocalStartTime) }) }}
                         </span>
                         <span class="segment-duration text-muted">
                             <template v-if="segment.unavailable">
@@ -183,7 +173,7 @@ export default {
 
                 this.$refs.audioPlayer.load()
                 if (wasPlaying) {
-                    this.$refs.audioPlayer.play().catch(() => {})
+                    this.$refs.audioPlayer.play().catch(() => { })
                 }
             })
         },
@@ -285,6 +275,11 @@ export default {
 
 <style scoped>
 .audio-audit-panel {
+    position: fixed;
+    top: 70px;
+    right: 0;
+    bottom: 0;
+    z-index: 6;
     width: 340px;
     padding: 15px;
     border-left: 1px solid #d9d9d9;
