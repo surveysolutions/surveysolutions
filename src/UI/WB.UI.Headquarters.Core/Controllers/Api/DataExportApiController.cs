@@ -332,6 +332,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         [HttpPost]
         [EnableCors("export")]
         [ObservingNotAllowed]
+        [IgnoreAntiforgeryToken]
         public async Task<ActionResult> ExportToExternalStorage(ExportToExternalStorageModel model)
         {
             logger.LogInformation($"Export to external storage requested");
