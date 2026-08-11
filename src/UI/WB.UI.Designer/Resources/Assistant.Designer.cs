@@ -206,5 +206,11 @@ namespace WB.UI.Designer.Resources {
                 return ResourceManager.GetString("ServiceUnavailable", resourceCulture);
             }
         }
+        
+        public static string MessageTooLong {
+            get {
+                return ResourceManager.GetString("MessageTooLong", resourceCulture);
+            }
+        }
     }
 }
