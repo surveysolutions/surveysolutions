@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
         private class DownloadProgressState
         {
+            public readonly object SyncRoot = new object();
             public Stopwatch StopWatch;
             public int LastReportedProgressBucket = -1;
             public long NextUnknownLengthProgressReportAt;
@@ -142,27 +143,32 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
         private void UpdateProgress(TransferProgress downloadProgress, DownloadProgressState progressState)
         {
-            if (progressState.StopWatch == null) progressState.StopWatch = Stopwatch.StartNew();
-
-            if (!downloadProgress.TotalBytesToReceive.HasValue || downloadProgress.TotalBytesToReceive.Value <= 0)
+            Stopwatch stopWatch;
+            lock (progressState.SyncRoot)
             {
-                if (downloadProgress.BytesReceived < progressState.NextUnknownLengthProgressReportAt)
-                    return;
+                if (progressState.StopWatch == null) progressState.StopWatch = Stopwatch.StartNew();
+                stopWatch = progressState.StopWatch;
 
-                progressState.NextUnknownLengthProgressReportAt =
-                    downloadProgress.BytesReceived + UnknownLengthProgressStepBytes;
-            }
-            else
-            {
-                var currentProgressBucket = (int)(downloadProgress.ProgressPercentage / ProgressReportStepPercent);
-                if (currentProgressBucket <= progressState.LastReportedProgressBucket)
-                    return;
+                if (!downloadProgress.TotalBytesToReceive.HasValue || downloadProgress.TotalBytesToReceive.Value <= 0)
+                {
+                    if (downloadProgress.BytesReceived < progressState.NextUnknownLengthProgressReportAt)
+                        return;
 
-                progressState.LastReportedProgressBucket = currentProgressBucket;
+                    progressState.NextUnknownLengthProgressReportAt =
+                        downloadProgress.BytesReceived + UnknownLengthProgressStepBytes;
+                }
+                else
+                {
+                    var currentProgressBucket = (int)(downloadProgress.ProgressPercentage / ProgressReportStepPercent);
+                    if (currentProgressBucket <= progressState.LastReportedProgressBucket)
+                        return;
+
+                    progressState.LastReportedProgressBucket = currentProgressBucket;
+                }
             }
-            
+
             var receivedDataHumanized = NumericTextFormatter.FormatBytesHumanized(downloadProgress.BytesReceived);
-            var receivedSpeedHumanized = NumericTextFormatter.FormatSpeedHumanized(downloadProgress.BytesReceived, progressState.StopWatch.Elapsed);
+            var receivedSpeedHumanized = NumericTextFormatter.FormatSpeedHumanized(downloadProgress.BytesReceived, stopWatch.Elapsed);
             var hasKnownTotalLength = downloadProgress.TotalBytesToReceive.HasValue && downloadProgress.TotalBytesToReceive.Value > 0;
             var totalSizeHumanized = hasKnownTotalLength
                 ? NumericTextFormatter.FormatBytesHumanized(downloadProgress.TotalBytesToReceive.Value)
