@@ -1258,6 +1258,9 @@
     <value>场景标题</value>
   </data>
 
+  <data name="SideBarScenarioRecordNew" xml:space="preserve">
+    <value>Record New Scenario</value>
+  </data>
   <data name="SideBarDownload" xml:space="preserve">
     <value>下载：</value>
   </data>
@@ -1792,6 +1795,9 @@
     <value>网络错误</value>
   </data>
 
+  <data name="PopupBlocked" xml:space="preserve">
+    <value>Unable to open window. Please allow pop-ups in your browser and try again.</value>
+  </data>
   <data name="SideBarCategoriesAddNew" xml:space="preserve">
     <value>添加新类别</value>
   </data>

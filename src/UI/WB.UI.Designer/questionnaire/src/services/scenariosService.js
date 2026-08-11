@@ -27,20 +27,40 @@ export async function deleteScenario(questionnaireId, scenarioId) {
     return response;
 }
 
+export function isPopupBlockedError(error) {
+    return error === 'popup_blocked'
+        || error?.message === 'popup_blocked'
+        || error?.code === 'popup_blocked'
+        || error?.name === 'popup_blocked';
+}
+
 export async function runScenario(questionnaireId, scenarioId) {
-    var webTesterWindow = window.open('about:blank', '_blank');
+    var webTesterWindow = window.open('about:blank', '_blank', 'noopener,noreferrer');
 
-    // Designer returns the full redirect URL with ?code=<one-time-code> already embedded.
-    // JWT never appears in the browser — code is exchanged server-to-server by WebTester.
-    var webTestUrl = await get('/api/questionnaire/webTest/' + questionnaireId);
-
-    if (!isUndefined(scenarioId)) {
-        // The URL already contains ?code=..., so scenarioId must be appended with &, not ?.
-        const separator = webTestUrl.includes('?') ? '&' : '?';
-        webTestUrl += separator + 'scenarioId=' + scenarioId;
+    if (!webTesterWindow) {
+        const err = new Error('popup_blocked');
+        err.code = 'popup_blocked';
+        throw err;
     }
 
-    webTesterWindow.location.href = webTestUrl;
+    webTesterWindow.opener = null;
+
+    try {
+        // Designer returns the full redirect URL with ?code=<one-time-code> already embedded.
+        // JWT never appears in the browser — code is exchanged server-to-server by WebTester.
+        var webTestUrl = await get('/api/questionnaire/webTest/' + questionnaireId);
+
+        if (!isUndefined(scenarioId)) {
+            // The URL already contains ?code=..., so scenarioId must be appended with &, not ?.
+            const separator = webTestUrl.includes('?') ? '&' : '?';
+            webTestUrl += separator + 'scenarioId=' + scenarioId;
+        }
+
+        webTesterWindow.location.href = webTestUrl;
+    } catch (error) {
+        webTesterWindow.close();
+        throw error;
+    }
 }
 
 export async function getScenarioSteps(questionnaireId, scenarioId) {
