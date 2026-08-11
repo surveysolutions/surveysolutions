@@ -349,8 +349,12 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    logger.LogError($"Not successful attempt of tokens retrieving for {state.Type}. Status: {response.StatusCode}");
-                    logger.LogError($"Reason: {response.ReasonPhrase}");
+                    logger.LogError(
+                        "Token retrieval failed for {ExternalStorageType}. Status: {StatusCode}; Reason: {ReasonPhrase}; Provider response: {ProviderResponse}",
+                        state.Type,
+                        response.StatusCode,
+                        response.ReasonPhrase,
+                        response.Error?.Content);
                     return BadRequest($"Could not get tokens for {state.Type} by code. Result is empty.");
                 }
 
