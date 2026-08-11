@@ -489,8 +489,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
 
             profile.LastSuccessfulSync = new InterviewerProfileSyncStatistics
             {
-                SyncDate = lastSuccessDeviceInfo?.SyncDate,
-                HasStatistics = lastSuccessDeviceInfo != null,
+                SyncDate = lastSuccessDeviceInfo?.Statistics != null ? lastSuccessDeviceInfo.SyncDate : (DateTime?)null,
+                HasStatistics = lastSuccessDeviceInfo?.Statistics != null,
                 MobileOperator = lastSuccessDeviceInfo?.MobileOperator,
                 NetworkSubType = lastSuccessDeviceInfo?.NetworkSubType,
                 NetworkType = lastSuccessDeviceInfo?.NetworkType,
