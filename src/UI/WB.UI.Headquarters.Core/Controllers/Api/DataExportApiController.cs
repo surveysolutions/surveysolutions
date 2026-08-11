@@ -47,7 +47,6 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly ISystemLog auditLog;
         private readonly ISerializer serializer;
         private readonly ExternalStoragesSettings externalStoragesSettings;
-        private readonly IAuthorizedUser authorizedUser;
         private readonly IDataProtector externalStorageStateProtector;
         private readonly IMemoryCache memoryCache;
         private readonly ILogger<DataExportApiController> logger;
@@ -62,7 +61,6 @@ namespace WB.UI.Headquarters.Controllers.Api
             IExportServiceApi exportServiceApi,
             ISystemLog auditLog, 
             ExternalStoragesSettings externalStoragesSettings,
-            IAuthorizedUser authorizedUser,
             IDataProtectionProvider dataProtectionProvider,
             IMemoryCache memoryCache,
             ILogger<DataExportApiController> logger)
@@ -76,7 +74,6 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.auditLog = auditLog;
             this.externalStoragesSettings = externalStoragesSettings;
             this.serializer = serializer;
-            this.authorizedUser = authorizedUser;
             this.externalStorageStateProtector = dataProtectionProvider.CreateProtector("DataExport.ExternalStorageState");
             this.memoryCache = memoryCache;
             this.logger = logger;
@@ -317,7 +314,6 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             var payload = new ExternalStorageProtectedStateModel
             {
-                UserId = this.authorizedUser.Id,
                 ExpiresAtUtc = DateTime.UtcNow.Add(ExternalStorageStateLifetime),
                 Nonce = Guid.NewGuid().ToString("N"),
                 ExportState = state
@@ -333,6 +329,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         [EnableCors("export")]
         [ObservingNotAllowed]
         [IgnoreAntiforgeryToken]
+        [AllowAnonymous]
         public async Task<ActionResult> ExportToExternalStorage(ExportToExternalStorageModel model)
         {
             logger.LogInformation($"Export to external storage requested");
@@ -400,8 +397,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             if (payload == null
                 || payload.ExportState == null
-                || payload.ExpiresAtUtc < DateTime.UtcNow
-                || payload.UserId != this.authorizedUser.Id)
+                || payload.ExpiresAtUtc < DateTime.UtcNow)
                 return null;
 
             if (!this.memoryCache.TryGetValue(GetExternalStorageStateCacheKey(payload.Nonce), out _))
@@ -480,7 +476,6 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         public class ExternalStorageProtectedStateModel
         {
-            public Guid UserId { get; set; }
             public DateTime ExpiresAtUtc { get; set; }
             public string Nonce { get; set; }
             public ExternalStorageStateModel ExportState { get; set; }

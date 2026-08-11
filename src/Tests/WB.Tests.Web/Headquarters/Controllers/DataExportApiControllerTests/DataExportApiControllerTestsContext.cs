@@ -1,11 +1,9 @@
-using System;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -21,13 +19,10 @@ namespace WB.Tests.Web.Headquarters.Controllers.DataExportApiControllerTests
     internal class DataExportApiControllerTestsContext
     {
         protected static DataExportApiController CreateController(
-            Guid userId,
             IMemoryCache memoryCache,
             IDataProtectionProvider protectionProvider,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null)
         {
-            var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.Id == userId);
-
             return new DataExportApiController(
                 Mock.Of<IFileSystemAccessor>(),
                 Mock.Of<IDataExportStatusReader>(),
@@ -38,7 +33,6 @@ namespace WB.Tests.Web.Headquarters.Controllers.DataExportApiControllerTests
                 Mock.Of<IExportServiceApi>(),
                 Mock.Of<ISystemLog>(),
                 new ExternalStoragesSettings(),
-                authorizedUser,
                 protectionProvider,
                 memoryCache,
                 Mock.Of<ILogger<DataExportApiController>>());
