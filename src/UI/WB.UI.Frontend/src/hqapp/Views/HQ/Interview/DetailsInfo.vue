@@ -108,10 +108,12 @@
                                     <template v-else-if="audioAuditTotalDuration !== null">{{
                                         $t('ReviewInterview.AudioAudit_TotalDuration', {
                                             duration:
-                                        formatAuditDuration(audioAuditTotalDuration) }) }}</template>
+                                                formatAuditDuration(audioAuditTotalDuration)
+                                        }) }}</template>
                                 </span>
                                 <button type="button" class="btn btn-link gray-action-unit"
-                                    @click="$emit('toggleAudioPanel')">
+                                    @click="$emit('toggleAudioPanel')" :aria-expanded="audioAuditPanelOpen"
+                                    aria-controls="audio-audit-panel">
                                     {{ audioAuditPanelOpen ? $t('ReviewInterview.AudioAudit_CloseRecordings') :
                                         $t('ReviewInterview.AudioAudit_ViewRecordings') }}
                                 </button>
@@ -368,6 +370,7 @@ import OverviewModal from './OverviewModal'
 import { convertToLocal } from '~/shared/helpers'
 import moment from 'moment'
 import ChangeToCapi from '../Interviews/ChangeModeModal.vue'
+import { loadAudioMetadata } from './audioAuditMetadata'
 
 import { map, assign } from 'lodash-es'
 
@@ -696,13 +699,11 @@ export default {
             let failed = false
 
             segments.forEach((segment, idx) => {
-                const audio = new Audio()
-                audio.preload = 'metadata'
-                audio.src = this.$hq.AudioAudit.getSegmentUrl(this.$config.model.id, segment.segmentId)
-                audio.addEventListener('loadedmetadata', () => {
+                const url = this.$hq.AudioAudit.getSegmentUrl(this.$config.model.id, segment.segmentId)
+                loadAudioMetadata(url).then(metadata => {
                     if (failed) return
 
-                    durations[idx] = Number.isFinite(audio.duration) ? audio.duration : null
+                    durations[idx] = Number.isFinite(metadata.duration) ? metadata.duration : null
                     if (durations[idx] === null) {
                         failed = true
                         this.audioAuditDurationState = 'unavailable'
@@ -715,13 +716,6 @@ export default {
                         this.audioAuditTotalDuration = durations.reduce((total, value) => total + value, 0)
                         this.audioAuditDurationState = 'available'
                     }
-                })
-                audio.addEventListener('error', () => {
-                    if (failed) return
-
-                    failed = true
-                    this.audioAuditDurationState = 'unavailable'
-                    this.audioAuditTotalDuration = null
                 })
             })
         },

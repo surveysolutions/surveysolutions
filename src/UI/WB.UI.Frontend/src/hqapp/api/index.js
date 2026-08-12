@@ -761,10 +761,23 @@ class AudioAuditApi {
     constructor(http) {
         this.http = http
         this.base = 'api/audioaudit'
+        this.infoCache = new Map()
     }
 
     async getInfo(interviewId) {
-        return (await this.http.get(`${this.base}/${interviewId}/info`)).data
+        const cachedRequest = this.infoCache.get(interviewId)
+        if (cachedRequest) return cachedRequest
+
+        const request = this.http.get(`${this.base}/${interviewId}/info`)
+            .then(response => response.data)
+        this.infoCache.set(interviewId, request)
+
+        try {
+            return await request
+        } catch (error) {
+            this.infoCache.delete(interviewId)
+            throw error
+        }
     }
 
     getSegmentUrl(interviewId, segmentId) {
