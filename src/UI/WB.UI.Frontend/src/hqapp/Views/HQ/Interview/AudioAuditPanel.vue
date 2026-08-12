@@ -692,6 +692,7 @@ export default {
 
 .control-buttons {
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
     gap: 10px;
     margin-top: 10px;
