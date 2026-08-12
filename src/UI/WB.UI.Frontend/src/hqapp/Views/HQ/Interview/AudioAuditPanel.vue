@@ -1,78 +1,45 @@
 <template>
-    <aside id="audio-audit-panel"
-        ref="panel"
-        class="audio-audit-panel"
-        tabindex="-1"
-        aria-labelledby="audio-audit-panel-title"
-        @keydown.esc="closePanel">
+    <aside id="audio-audit-panel" ref="panel" class="audio-audit-panel" tabindex="-1"
+        aria-labelledby="audio-audit-panel-title" @keydown.esc="closePanel">
         <div class="audio-audit-header">
             <h4 id="audio-audit-panel-title">
                 Audio audit records
             </h4>
-            <button ref="closeButton"
-                type="button"
-                class="btn btn-link close-panel"
-                @click="closePanel"
+            <button ref="closeButton" type="button" class="btn btn-link close-panel" @click="closePanel"
                 :aria-label="$t('ReviewInterview.AudioAudit_CloseRecordings')">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
 
-        <div v-if="loadState === 'loading'"
-            class="audio-audit-state"
-            role="status">
+        <div v-if="loadState === 'loading'" class="audio-audit-state" role="status">
             Loading recordings...
         </div>
 
-        <div v-else-if="loadState === 'error'"
-            class="alert alert-warning"
-            role="alert">
+        <div v-else-if="loadState === 'error'" class="alert alert-warning" role="alert">
             <p>Unable to load audio audit recordings.</p>
-            <button type="button"
-                class="btn btn-outline-secondary btn-sm"
-                @click="loadSegments">
+            <button type="button" class="btn btn-outline-secondary btn-sm" @click="loadSegments">
                 Retry
             </button>
         </div>
 
-        <div v-else-if="loadState === 'empty'"
-            class="alert alert-info"
-            role="status">
+        <div v-else-if="loadState === 'empty'" class="alert alert-info" role="status">
             {{ $t('ReviewInterview.AudioAudit_NoRecordingsAvailable') }}
         </div>
 
         <template v-else>
-            <div v-if="currentSegment"
-                class="audio-audit-player"
-                :aria-busy="isBuffering">
-                <audio ref="audioPlayer"
-                    :src="currentSegmentUrl"
-                    controlsList="nodownload"
-                    preload="auto"
-                    style="display: none"
-                    @loadedmetadata="onMetadataLoaded"
-                    @canplay="onCanPlay"
-                    @play="onPlay"
-                    @pause="onPause"
-                    @waiting="onWaiting"
-                    @playing="onPlaying"
-                    @error="onPlaybackError"
-                    @timeupdate="onTimeUpdate"
-                    @ended="onEnded"></audio>
+            <div v-if="currentSegment" class="audio-audit-player" :aria-busy="isBuffering">
+                <audio ref="audioPlayer" :src="currentSegmentUrl" controlsList="nodownload" preload="auto"
+                    style="display: none" @loadedmetadata="onMetadataLoaded" @canplay="onCanPlay" @play="onPlay"
+                    @pause="onPause" @waiting="onWaiting" @playing="onPlaying" @error="onPlaybackError"
+                    @timeupdate="onTimeUpdate" @ended="onEnded"></audio>
 
-                <p class="sr-only"
-                    role="status"
-                    aria-live="polite">
+                <p class="sr-only" role="status" aria-live="polite">
                     {{ playbackAnnouncement }}
                 </p>
 
-                <div v-if="playbackError"
-                    class="alert alert-warning"
-                    role="alert">
+                <div v-if="playbackError" class="alert alert-warning" role="alert">
                     <p>{{ playbackError }}</p>
-                    <button v-if="!currentSegment.unavailable"
-                        type="button"
-                        class="btn btn-outline-secondary btn-sm"
+                    <button v-if="!currentSegment.unavailable" type="button" class="btn btn-outline-secondary btn-sm"
                         @click="retryCurrentSegment">
                         Retry playback
                     </button>
@@ -91,85 +58,52 @@
                                     : '--:--'
                             }}</span>
                     </div>
-                    <p v-if="isBuffering"
-                        class="player-buffering"
-                        role="status">
+                    <p class="player-buffering" :class="{ 'is-hidden': !isBuffering }" role="status"
+                        :aria-hidden="!isBuffering">
                         Loading audio...
                     </p>
-                    <label class="sr-only"
-                        for="audio-audit-seek">
+                    <label class="sr-only" for="audio-audit-seek">
                         Recording position
                     </label>
-                    <input id="audio-audit-seek"
-                        type="range"
-                        class="seek-bar form-range"
-                        :max="currentDuration || 0"
-                        :value="seekBarTime"
-                        :aria-valuemax="currentDuration || 0"
-                        :aria-valuenow="seekBarTime"
-                        :aria-valuetext="seekAriaValue"
-                        @pointerdown="beginSeeking"
-                        @input="previewSeek($event.target.value)"
-                        @change="commitSeek($event.target.value)"
+                    <input id="audio-audit-seek" type="range" class="seek-bar form-range" :max="currentDuration || 0"
+                        :value="seekBarTime" :aria-valuemax="currentDuration || 0" :aria-valuenow="seekBarTime"
+                        :aria-valuetext="seekAriaValue" @pointerdown="beginSeeking"
+                        @input="previewSeek($event.target.value)" @change="commitSeek($event.target.value)"
                         :disabled="!canSeek" />
                     <div class="control-buttons">
-                        <button type="button"
-                            class="btn btn-outline-secondary btn-sm"
-                            @click="goToPreviousSegment"
-                            :disabled="!previousSegment"
-                            aria-label="Go to previous segment">
-                            <span class="glyphicon glyphicon-step-backward"
-                                aria-hidden="true"></span>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" @click="goToPreviousSegment"
+                            :disabled="!previousSegment" aria-label="Go to previous segment">
+                            <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
                             <span class="sr-only">Go to previous segment</span>
                         </button>
-                        <button type="button"
-                            class="btn btn-outline-secondary btn-sm"
-                            @click="skipBy(-10)"
-                            :disabled="!canSeek"
-                            aria-label="Go back 10 seconds">
-                            <span class="glyphicon glyphicon-backward"
-                                aria-hidden="true"></span>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" @click="skipBy(-10)"
+                            :disabled="!canSeek" aria-label="Go back 10 seconds">
+                            <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
                             <span class="sr-only">Go back 10 seconds</span>
                         </button>
-                        <button type="button"
-                            class="btn btn-primary"
-                            @click="togglePlayPause"
-                            :aria-label="playPauseLabel"
-                            :aria-pressed="isPlaying"
+                        <button type="button" class="btn btn-primary" @click="togglePlayPause"
+                            :aria-label="playPauseLabel" :aria-pressed="isPlaying"
                             :disabled="currentSegment.unavailable">
-                            <span class="glyphicon"
-                                :class="isPlaying
-                                    ? 'glyphicon-pause'
-                                    : 'glyphicon-play'
-                                "
-                                aria-hidden="true"></span>
+                            <span class="glyphicon" :class="isPlaying
+                                ? 'glyphicon-pause'
+                                : 'glyphicon-play'
+                                " aria-hidden="true"></span>
                             <span class="sr-only">{{ playPauseLabel }}</span>
                         </button>
-                        <button type="button"
-                            class="btn btn-outline-secondary btn-sm"
-                            @click="skipBy(10)"
-                            :disabled="!canSeek"
-                            aria-label="Go forward 10 seconds">
-                            <span class="glyphicon glyphicon-forward"
-                                aria-hidden="true"></span>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" @click="skipBy(10)"
+                            :disabled="!canSeek" aria-label="Go forward 10 seconds">
+                            <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
                             <span class="sr-only">Go forward 10 seconds</span>
                         </button>
-                        <button type="button"
-                            class="btn btn-outline-secondary btn-sm"
-                            @click="goToNextSegment"
-                            :disabled="!nextSegment"
-                            aria-label="Go to next segment">
-                            <span class="glyphicon glyphicon-step-forward"
-                                aria-hidden="true"></span>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" @click="goToNextSegment"
+                            :disabled="!nextSegment" aria-label="Go to next segment">
+                            <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
                             <span class="sr-only">Go to next segment</span>
                         </button>
                     </div>
-                    <label class="playback-speed"
-                        for="audio-audit-speed">
+                    <label class="playback-speed" for="audio-audit-speed">
                         <span>Speed</span>
-                        <select id="audio-audit-speed"
-                            v-model.number="playbackRate"
-                            @change="setPlaybackRate">
+                        <select id="audio-audit-speed" v-model.number="playbackRate" @change="setPlaybackRate">
                             <option :value="0.75">
                                 0.75x
                             </option>
@@ -187,80 +121,57 @@
                             </option>
                         </select>
                     </label>
-                    <form class="position-jump"
-                        @submit.prevent="playAtPosition">
+                    <form class="position-jump" @submit.prevent="playAtPosition">
                         <label>
                             <span>#</span>
-                            <input v-model.number="targetSegmentNumber"
-                                type="number"
-                                min="1"
-                                step="1"
-                                aria-label="Record number"
-                                :aria-describedby="jumpError
+                            <input v-model.number="targetSegmentNumber" type="number" min="1" step="1"
+                                aria-label="Record number" :aria-describedby="jumpError
                                     ? 'audio-audit-position-error'
                                     : null
-                                " />
+                                    " />
                         </label>
                         <label>
                             <span>Offset</span>
-                            <input v-model="targetOffset"
-                                type="text"
-                                inputmode="text"
-                                autocomplete="off"
-                                placeholder="0:00"
-                                aria-label="Playback offset in minutes and seconds"
+                            <input v-model="targetOffset" type="text" inputmode="text" autocomplete="off"
+                                placeholder="0:00" aria-label="Playback offset in minutes and seconds"
                                 :aria-describedby="jumpError
                                     ? 'audio-audit-position-error'
                                     : null
-                                " />
+                                    " />
                         </label>
-                        <button type="submit"
-                            class="btn btn-outline-secondary btn-sm">
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">
                             Play
                         </button>
                     </form>
-                    <p v-if="jumpError"
-                        id="audio-audit-position-error"
-                        class="position-error"
-                        role="alert">
+                    <p v-if="jumpError" id="audio-audit-position-error" class="position-error" role="alert">
                         {{ jumpError }}
                     </p>
                 </div>
             </div>
 
             <div class="audio-audit-playlist">
-                <div v-if="allUnavailable"
-                    class="alert alert-info">
+                <div v-if="allUnavailable" class="alert alert-info">
                     {{ $t('ReviewInterview.AudioAudit_NoRecordingsAvailable') }}
                 </div>
 
-                <ul class="list-unstyled"
-                    aria-label="Audio audit recording list">
-                    <li v-for="(segment, index) in segments"
-                        :key="segment.segmentId">
-                        <div v-if="getGapText(index)"
-                            class="segment-gap">
+                <ul class="list-unstyled" aria-label="Audio audit recording list">
+                    <li v-for="(segment, index) in segments" :key="segment.segmentId">
+                        <div v-if="getGapText(index)" class="segment-gap">
                             {{ getGapText(index) }}
                         </div>
-                        <button type="button"
-                            class="playlist-item"
-                            :class="{
-                                active:
-                                    currentSegment &&
-                                    currentSegment.segmentId ===
-                                    segment.segmentId,
-                                unavailable: segment.unavailable,
-                            }"
-                            :disabled="segment.unavailable"
-                            :aria-current="currentSegment &&
+                        <button type="button" class="playlist-item" :class="{
+                            active:
+                                currentSegment &&
+                                currentSegment.segmentId ===
+                                segment.segmentId,
+                            unavailable: segment.unavailable,
+                        }" :disabled="segment.unavailable" :aria-current="currentSegment &&
                                 currentSegment.segmentId === segment.segmentId
-                            "
-                            @click="selectSegment(segment)">
+                                " @click="selectSegment(segment)">
                             <span class="segment-info">
                                 <span class="segment-start">
                                     <span class="segment-label"># {{ segment.sequenceNumber }}</span>
-                                    <span v-if="segment.deviceLocalStartTime"
-                                        class="segment-time text-muted">
+                                    <span v-if="segment.deviceLocalStartTime" class="segment-time text-muted">
                                         {{
                                             formatDeviceTime(
                                                 segment.deviceLocalStartTime,
@@ -543,7 +454,7 @@ export default {
                 offset >= segment.duration
             ) {
                 this.jumpError = `Record #${segment.sequenceNumber
-                } is ${this.formatCompactDuration(segment.duration)} long.`
+                    } is ${this.formatCompactDuration(segment.duration)} long.`
                 return
             }
 
@@ -682,9 +593,9 @@ export default {
                         this.currentTime = 0
                         this.pendingAutoplay = false
                         this.jumpError = `Record #${this.currentSegment.sequenceNumber
-                        } is ${this.formatCompactDuration(
-                            audio.duration
-                        )} long.`
+                            } is ${this.formatCompactDuration(
+                                audio.duration
+                            )} long.`
                         this.playbackAnnouncement = this.jumpError
                     } else {
                         audio.currentTime = this.pendingSeekTime
@@ -786,8 +697,8 @@ export default {
                 return `${hours}:${Math.floor((seconds % 3600) / 60)
                     .toString()
                     .padStart(2, '0')}:${remainingSeconds
-                    .toString()
-                    .padStart(2, '0')}`
+                        .toString()
+                        .padStart(2, '0')}`
             }
 
             return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
@@ -965,6 +876,10 @@ export default {
     margin: 0 0 8px;
     color: #777;
     font-size: 12px;
+}
+
+.player-buffering.is-hidden {
+    visibility: hidden;
 }
 
 .control-buttons {

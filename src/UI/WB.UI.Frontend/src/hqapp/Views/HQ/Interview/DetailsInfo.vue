@@ -106,10 +106,7 @@
                                     <template v-else-if="audioAuditDurationState === 'unavailable'">{{
                                         $t('ReviewInterview.AudioAudit_DurationUnavailable') }}</template>
                                     <template v-else-if="audioAuditTotalDuration !== null">{{
-                                        $t('ReviewInterview.AudioAudit_TotalDuration', {
-                                            duration:
-                                                formatAuditDuration(audioAuditTotalDuration)
-                                        }) }}</template>
+                                        formatAuditDuration(audioAuditTotalDuration) }}</template>
                                 </span>
                                 <button type="button" class="btn btn-link gray-action-unit"
                                     @click="$emit('toggleAudioPanel')" :aria-expanded="audioAuditPanelOpen"
@@ -694,27 +691,22 @@ export default {
                 return
             }
 
-            const durations = new Array(segments.length).fill(null)
             let loadedCount = 0
-            let failed = false
+            let validDurationCount = 0
+            let totalDuration = 0
 
-            segments.forEach((segment, idx) => {
+            segments.forEach(segment => {
                 const url = this.$hq.AudioAudit.getSegmentUrl(this.$config.model.id, segment.segmentId)
                 loadAudioMetadata(url).then(metadata => {
-                    if (failed) return
-
-                    durations[idx] = Number.isFinite(metadata.duration) ? metadata.duration : null
-                    if (durations[idx] === null) {
-                        failed = true
-                        this.audioAuditDurationState = 'unavailable'
-                        this.audioAuditTotalDuration = null
-                        return
+                    if (Number.isFinite(metadata.duration)) {
+                        validDurationCount++
+                        totalDuration += metadata.duration
                     }
 
                     loadedCount++
                     if (loadedCount === segments.length) {
-                        this.audioAuditTotalDuration = durations.reduce((total, value) => total + value, 0)
-                        this.audioAuditDurationState = 'available'
+                        this.audioAuditTotalDuration = validDurationCount > 0 ? totalDuration : null
+                        this.audioAuditDurationState = validDurationCount > 0 ? 'available' : 'unavailable'
                     }
                 })
             })

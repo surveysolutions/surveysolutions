@@ -121,7 +121,7 @@
   <value>{0} | Revisão</value>
 </data>
   <data name="AudioAudit_Available" xml:space="preserve">
-    <value>Audio audit: available</value>
+     <value>Audio audit:</value>
   </data>
   <data name="AudioAudit_ViewRecordings" xml:space="preserve">
     <value>View recordings</value>
