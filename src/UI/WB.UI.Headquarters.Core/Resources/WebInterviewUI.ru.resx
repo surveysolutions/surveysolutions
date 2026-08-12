@@ -269,7 +269,7 @@
     <value>Ответ '{{answer}}' неверный, поскольку он больше значения максимального количества элементов в списке: '{{answerMaxValue}}'.</value>
   </data>
   <data name="NumberNonNegativeError" xml:space="preserve">
-    <value>Negative values are not allowed for this question</value>
+    <value>Отрицательные значения недопустимы для этого вопроса</value>
   </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>Ответ '{{answer}}' неверный, поскольку нельзя задать отрицательное количество элементов в списке</value>

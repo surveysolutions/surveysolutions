@@ -278,7 +278,7 @@
     <value>វាយលេខ មិនអាចដកឃ្លាពីលេខគត់</value>
   </data>
   <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
-    <value>Negative values are not allowed for this question</value>
+    <value>មិនអនុញ្ញាតឱ្យមានតម្លៃអវិជ្ជមានសម្រាប់សំណួរនេះ</value>
   </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>ចំលើយ'{0}' មិនត្រឹមត្រូវ ពីព្រោះ ចំលើយធំជាង បញ្ជីរាយនាម តំឡើង '{1}'។​  </value>

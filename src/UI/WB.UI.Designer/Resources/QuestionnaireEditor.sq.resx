@@ -631,7 +631,7 @@
     <value>I plotë</value>
   </data>
   <data name="QuestionNonNegative" xml:space="preserve">
-    <value>Non-negative</value>
+    <value>Jo negativ</value>
   </data>
   <data name="QuestionIsLinked" xml:space="preserve">
     <value>Është lidhur</value>

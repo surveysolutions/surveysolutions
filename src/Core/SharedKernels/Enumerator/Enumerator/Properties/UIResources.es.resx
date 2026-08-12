@@ -271,7 +271,7 @@
     <value>Valor introducido no puede ser tratado como entero</value>
   </data>
     <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
-    <value>Negative values are not allowed for this question</value>
+    <value>No se permiten valores negativos para esta pregunta</value>
   </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>Respuesta '{0}' es incorrecta porque la respuesta es mayor que el límite superior de lista '{1}'.</value>

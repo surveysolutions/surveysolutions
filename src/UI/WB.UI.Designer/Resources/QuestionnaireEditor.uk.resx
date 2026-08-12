@@ -825,7 +825,7 @@
     <value>Ціле число</value>
   </data>
   <data name="QuestionNonNegative" xml:space="preserve">
-    <value>Non-negative</value>
+    <value>Невід'ємне</value>
   </data>
   <data name="QuestionIsLinked" xml:space="preserve">
     <value>пов'язане</value>

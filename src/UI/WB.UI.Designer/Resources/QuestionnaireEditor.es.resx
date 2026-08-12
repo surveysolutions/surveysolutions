@@ -514,7 +514,7 @@
     <value>Entero</value>
   </data>
   <data name="QuestionNonNegative" xml:space="preserve">
-    <value>Non-negative</value>
+    <value>No negativo</value>
   </data>
   <data name="QuestionIsLinked" xml:space="preserve">
     <value>Está enlazado</value>

@@ -318,7 +318,7 @@
     <value>Введене значення не може бути оброблено як ціле число</value>
   </data>
   <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
-    <value>Negative values are not allowed for this question</value>
+    <value>Від'ємні значення не дозволені для цього запитання</value>
   </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>Відповідь '{0}' некорректна, оскільки відповідь більша за верхню межу ростеру '{1}'..</value>

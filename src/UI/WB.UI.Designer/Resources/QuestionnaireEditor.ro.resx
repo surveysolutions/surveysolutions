@@ -714,7 +714,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
     <value>Întreg</value>
   </data>
   <data name="QuestionNonNegative" xml:space="preserve">
-    <value>Non-negative</value>
+    <value>Non-negativ</value>
   </data>
   <data name="QuestionIsLinked" xml:space="preserve">
     <value>Este legat</value>

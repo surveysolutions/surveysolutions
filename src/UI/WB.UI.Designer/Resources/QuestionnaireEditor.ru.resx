@@ -684,7 +684,7 @@
     <value>Целочисленный</value>
   </data>
   <data name="QuestionNonNegative" xml:space="preserve">
-    <value>Non-negative</value>
+    <value>Неотрицательное</value>
   </data>
   <data name="QuestionIsLinked" xml:space="preserve">
     <value>Связанный вопрос</value>

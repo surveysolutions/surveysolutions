@@ -574,7 +574,7 @@
     <value>整数</value>
   </data>
   <data name="QuestionNonNegative" xml:space="preserve">
-    <value>Non-negative</value>
+    <value>非负</value>
   </data>
   <data name="QuestionIsLinked" xml:space="preserve">
     <value>被关联</value>
