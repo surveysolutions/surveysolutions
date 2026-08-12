@@ -286,10 +286,7 @@ export default {
         },
 
         canSeek() {
-            return (
-                this.isCurrentSegmentReady &&
-                Number.isFinite(this.currentDuration)
-            )
+            return Number.isFinite(this.currentDuration)
         },
 
         playPauseLabel() {
@@ -886,6 +883,7 @@ export default {
 .control-buttons {
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 10px;
     margin-top: 10px;

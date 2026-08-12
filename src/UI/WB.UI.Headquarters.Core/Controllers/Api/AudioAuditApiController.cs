@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -55,7 +56,13 @@ namespace WB.UI.Headquarters.Controllers.Api
                 if (stream.CanSeek)
                     return File(stream, GetSafeAudioMimeType(descriptor.ContentType), enableRangeProcessing: true);
 
-                return File(stream, GetSafeAudioMimeType(descriptor.ContentType));
+                await using (stream)
+                {
+                    var seekableStream = new MemoryStream();
+                    await stream.CopyToAsync(seekableStream);
+                    seekableStream.Position = 0;
+                    return File(seekableStream, GetSafeAudioMimeType(descriptor.ContentType), enableRangeProcessing: true);
+                }
             }
 
             var data = await descriptor.GetData();
