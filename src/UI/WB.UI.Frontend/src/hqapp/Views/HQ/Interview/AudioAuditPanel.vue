@@ -28,7 +28,7 @@
 
         <template v-else>
             <div v-if="currentSegment" class="audio-audit-player" :aria-busy="isBuffering">
-                <audio ref="audioPlayer" :src="currentSegmentUrl" controlsList="nodownload" preload="metadata"
+                <audio ref="audioPlayer" :src="currentSegmentUrl" controlsList="nodownload" preload="auto"
                     style="display:none" @loadedmetadata="onMetadataLoaded" @canplay="onCanPlay" @play="onPlay"
                     @pause="onPause" @waiting="onWaiting" @playing="onPlaying" @error="onPlaybackError"
                     @timeupdate="onTimeUpdate" @ended="onEnded">
