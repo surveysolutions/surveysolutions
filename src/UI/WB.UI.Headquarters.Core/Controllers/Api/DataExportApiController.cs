@@ -352,7 +352,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                     logger.LogError(
                         "Token retrieval failed for {ExternalStorageType} at {TokenUri}. Status: {StatusCode}; Reason: {ReasonPhrase}; Provider response: {ProviderResponse}",
                         state.Type,
-                        this.GetExternalStorageSettings(state.Type).TokenUri,
+                        this.GetExternalStorageSettings(state.Type).GetTokenEndpointUri(),
                         response.StatusCode,
                         response.ReasonPhrase,
                         response.Error?.Content);
@@ -382,7 +382,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 logger.LogError(exception,
                     "Could not get access token for {ExternalStorageType} at {TokenUri} by code",
                     state.Type,
-                    this.GetExternalStorageSettings(state.Type).TokenUri);
+                    this.GetExternalStorageSettings(state.Type).GetTokenEndpointUri());
                 return BadRequest($"Could not get access token for {state.Type} by code");
             }
         }
@@ -424,7 +424,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             var client =  RestService.For<IOAuth2Api>(
                 new HttpClient()
                 {
-                    BaseAddress = new Uri(storageSettings.TokenUri)
+                    BaseAddress = storageSettings.GetTokenEndpointUri()
                 },
                 new RefitSettings
                 {

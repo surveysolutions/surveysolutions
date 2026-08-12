@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
             var client =  RestService.For<IOAuth2Api>(
                 new HttpClient()
                 {
-                    BaseAddress = new Uri(storageSettings.TokenUri)
+                    BaseAddress = storageSettings.GetTokenEndpointUri()
                 },
                 new RefitSettings
                 {
