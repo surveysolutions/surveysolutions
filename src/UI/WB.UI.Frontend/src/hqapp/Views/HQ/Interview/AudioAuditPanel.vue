@@ -81,9 +81,11 @@
                         :aria-current="currentSegment && currentSegment.segmentId === segment.segmentId"
                         @click="selectSegment(segment)">
                         <span class="segment-info">
-                            <span class="segment-label"># {{ segment.sequenceNumber }}</span>
-                            <span v-if="segment.deviceLocalStartTime" class="segment-time text-muted">
-                                {{ formatDeviceTime(segment.deviceLocalStartTime) }}
+                            <span class="segment-start">
+                                <span class="segment-label"># {{ segment.sequenceNumber }}</span>
+                                <span v-if="segment.deviceLocalStartTime" class="segment-time text-muted">
+                                    {{ formatDeviceTime(segment.deviceLocalStartTime) }}
+                                </span>
                             </span>
                             <span class="segment-duration text-muted">
                                 <template v-if="segment.unavailable">
@@ -93,7 +95,7 @@
                                     {{ $t('ReviewInterview.AudioAudit_DurationLoading') }}
                                 </template>
                                 <template v-else-if="segment.duration !== undefined">
-                                    Duration: {{ formatSegmentDuration(segment.duration) }}
+                                    {{ formatCompactDuration(segment.duration) }}
                                 </template>
                                 <template v-else>
                                     {{ $t('ReviewInterview.AudioAudit_DurationUnavailable') }}
@@ -367,6 +369,10 @@ export default {
             return parts.join(' ')
         },
 
+        formatCompactDuration(seconds) {
+            return this.formatTime(Math.round(seconds))
+        },
+
         getGapText(index) {
             if (index === 0) return null
 
@@ -446,6 +452,14 @@ export default {
     margin: 0;
 }
 
+.close-panel {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    font-size: 28px;
+    line-height: 1;
+}
+
 .audio-audit-player audio {
     width: 100%;
 }
@@ -503,8 +517,8 @@ export default {
 .playlist-item {
     display: block;
     width: 100%;
-    margin-bottom: 8px;
-    padding: 10px;
+    margin-bottom: 4px;
+    padding: 7px 10px;
     border: 1px solid #ededed;
     background: #fff;
     text-align: left;
@@ -534,9 +548,31 @@ export default {
 }
 
 .segment-info {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 8px;
+}
+
+.segment-start {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
+    align-items: center;
+    min-width: 0;
+    gap: 8px;
+}
+
+.segment-label {
+    white-space: nowrap;
+}
+
+.segment-time {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.segment-duration {
+    white-space: nowrap;
 }
 
 @media (max-width: 767px) {
