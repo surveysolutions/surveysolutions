@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="BeforeSignInToDesigner" xml:space="preserve"><value>Trước khi đăng nhập vào Designer</value></data>
+  <data name="LoginToDesignerError" xml:space="preserve"><value>Không thể kết nối với Designer. Vui lòng kiểm tra xem Designer có khả dụng và thử &lt;a href='{0}'&gt;lại&lt;/a&gt;</value></data>
+  <data name="SignInToDesigner" xml:space="preserve"><value>Đăng nhập vào Designer</value></data>
+  <data name="SignInToDesignerTitle" xml:space="preserve"><value>Đăng nhập vào Designer</value></data>
+  <data name="DesignerQuestionnaires" xml:space="preserve"><value>Bảng câu hỏi Designer</value></data>
+  <data name="ImportModeTitle" xml:space="preserve"><value>Chế độ nhập</value></data>
+  <data name="ImportModePageTitle" xml:space="preserve"><value>Nhập bảng câu hỏi</value></data>
+  <data name="ListOfMyQuestionnaires" xml:space="preserve"><value>Danh sách bảng câu hỏi của tôi</value></data>
+  <data name="Chapters" xml:space="preserve"><value>Chương</value></data>
+  <data name="CreatedAt" xml:space="preserve"><value>Tạo ngày</value></data>
+  <data name="Questions" xml:space="preserve"><value>Câu hỏi</value></data>
+  <data name="Importing" xml:space="preserve"><value>Đang nhập {{percent}}%</value></data>
+  <data name="Prepare" xml:space="preserve"><value>Đang nhận dữ liệu bảng câu hỏi</value></data>
+  <data name="Gropus" xml:space="preserve"><value>Nhóm</value></data>
+  <data name="LastModifiedAt" xml:space="preserve"><value>Sửa đổi lần cuối vào</value></data>
+  <data name="QuestionsWithConditions" xml:space="preserve"><value>{{count}} câu trong số đó có điều kiện</value></data>
+  <data name="Rosters" xml:space="preserve"><value>Danh sách</value></data>
+  <data name="QuestionnaireExists" xml:space="preserve"><value>Bảng câu hỏi đã tồn tại</value></data>
+  <data name="ImportAsNewVersion" xml:space="preserve"><value>Tạo phiên bản mới (#{{version}})</value></data>
+  <data name="RegularImportTitle" xml:space="preserve"><value>Nhập bảng câu hỏi</value></data>
+  <data name="RegularImportSubTitle" xml:space="preserve"><value>Chọn bảng câu hỏi để nhập</value></data>
+  <data name="MyQuestionnairesTitle" xml:space="preserve"><value>Bảng câu hỏi của tôi</value></data>
+  <data name="UpgradeAssignments" xml:space="preserve"><value>Nâng cấp nhiệm vụ</value></data>
+</root>
