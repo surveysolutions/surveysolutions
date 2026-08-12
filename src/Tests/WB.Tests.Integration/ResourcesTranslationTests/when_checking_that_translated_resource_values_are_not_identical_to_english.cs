@@ -52,6 +52,9 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             "Kb",
             "Tab",
             "Ping:",
+            "AI",
+            "ApiUser",
+            "ESRI API Key",
             // brand / product names
             "The World Bank Group",
             "Survey Solutions Interviewer",
@@ -138,7 +141,20 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 {
                     "Export", "Test", "Role", "Text", "Import", "Region", "Server URL:",
                     "Metadata",
-                    "AI",
+                },
+                ["id"] = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    "Admin", "Legal", "Status", "Total", "Edit",
+                },
+                ["ro"] = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    "Legal", "Admin", "Total", "Format", "Administrator", "Contact",
+                    "numeric:", "text", "numeric", "Designer", "Export", "Forum", "Manual",
+                    "Public", "format: {{- type}}", "Import",
+                },
+                ["sq"] = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    "Forum", "Metadata", "Designer", "roster:",
                 },
             };
 
@@ -148,17 +164,16 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         [TestCase("fr")]
         [TestCase("cs")]
         [TestCase("pt")]
-        //[TestCase ("uk")]
+        [TestCase("uk")]
         [TestCase("ar")]
-        //[TestCase ("id")]
-        //[TestCase ("ka")]
-        //[TestCase ("km")]
-
-        //[TestCase ("ro")]
-        //[TestCase ("th")]
-        //[TestCase ("sq")]
-        //[TestCase ("vi")]
-        //[TestCase ("zh")]
+        [TestCase("id")]
+        [TestCase("ka")]
+        [TestCase("km")]
+        [TestCase("ro")]
+        [TestCase("th")]
+        [TestCase("sq")]
+        [TestCase("vi")]
+        [TestCase("zh")]
         public void should_not_have_values_identical_to_english(string culture)
         {
             var translatedResourceFiles = TestEnvironment
