@@ -822,7 +822,7 @@
     <value>عدد صحيح</value>
   </data>
   <data name="QuestionNonNegative" xml:space="preserve">
-    <value>Non-negative</value>
+    <value>غير سالب</value>
   </data>
   <data name="QuestionIsLinked" xml:space="preserve">
     <value>مرتبط</value>
