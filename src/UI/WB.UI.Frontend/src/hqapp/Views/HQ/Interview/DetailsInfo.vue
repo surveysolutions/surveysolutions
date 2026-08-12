@@ -99,17 +99,25 @@
                         </li>
                         <li v-if="audioAuditAvailable !== null">
                             <template v-if="audioAuditAvailable">
-                                <span class="data">{{ $t('ReviewInterview.AudioAudit_Available') }}</span>
+                                <span class="data-label">{{ $t('ReviewInterview.AudioAudit_Available') }}</span>
                                 <span class="data">
-                                    <template v-if="audioAuditDurationState === 'loading'">{{ $t('ReviewInterview.AudioAudit_DurationLoading') }}</template>
-                                    <template v-else-if="audioAuditDurationState === 'unavailable'">{{ $t('ReviewInterview.AudioAudit_DurationUnavailable') }}</template>
-                                    <template v-else-if="audioAuditTotalDuration !== null">{{ $t('ReviewInterview.AudioAudit_TotalDuration', { duration: formatAuditDuration(audioAuditTotalDuration) }) }}</template>
+                                    <template v-if="audioAuditDurationState === 'loading'">{{
+                                        $t('ReviewInterview.AudioAudit_DurationLoading') }}</template>
+                                    <template v-else-if="audioAuditDurationState === 'unavailable'">{{
+                                        $t('ReviewInterview.AudioAudit_DurationUnavailable') }}</template>
+                                    <template v-else-if="audioAuditTotalDuration !== null">{{
+                                        $t('ReviewInterview.AudioAudit_TotalDuration', {
+                                            duration:
+                                        formatAuditDuration(audioAuditTotalDuration) }) }}</template>
                                 </span>
-                                <button type="button" class="btn btn-link gray-action-unit" @click="$emit('toggleAudioPanel')">
-                                    {{ audioAuditPanelOpen ? $t('ReviewInterview.AudioAudit_CloseRecordings') : $t('ReviewInterview.AudioAudit_ViewRecordings') }}
+                                <button type="button" class="btn btn-link gray-action-unit"
+                                    @click="$emit('toggleAudioPanel')">
+                                    {{ audioAuditPanelOpen ? $t('ReviewInterview.AudioAudit_CloseRecordings') :
+                                        $t('ReviewInterview.AudioAudit_ViewRecordings') }}
                                 </button>
                             </template>
-                            <span v-else class="data">{{ $t('ReviewInterview.AudioAudit_NoRecordingsAvailable') }}</span>
+                            <span v-else class="data">{{ $t('ReviewInterview.AudioAudit_NoRecordingsAvailable')
+                                }}</span>
                         </li>
                     </ul>
                 </div>
