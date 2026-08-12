@@ -30,16 +30,8 @@
                         :disabled="!previousSegment" aria-label="Go to previous segment">
                         Previous
                     </button>
-                    <button type="button" class="btn btn-outline-secondary btn-sm" @click="skipBackward"
-                        :aria-label="$t('ReviewInterview.AudioAudit_SkipBackward')">
-                        -10s
-                    </button>
                     <button type="button" class="btn btn-primary" @click="togglePlayPause">
                         {{ isPlaying ? '⏸' : '▶' }}
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary btn-sm" @click="skipForward"
-                        :aria-label="$t('ReviewInterview.AudioAudit_SkipForward')">
-                        +10s
                     </button>
                     <button type="button" class="btn btn-outline-secondary btn-sm" @click="goToNextSegment"
                         :disabled="!nextSegment" aria-label="Go to next segment">
@@ -275,19 +267,6 @@ export default {
                 this.$refs.audioPlayer.pause()
             }
             this.isPlaying = false
-        },
-
-        skipBackward() {
-            if (!this.$refs.audioPlayer) return
-            this.$refs.audioPlayer.currentTime = Math.max(0, this.$refs.audioPlayer.currentTime - 10)
-        },
-
-        skipForward() {
-            if (!this.$refs.audioPlayer) return
-
-            const duration = this.$refs.audioPlayer.duration
-            const safeMax = Number.isFinite(duration) ? duration : this.$refs.audioPlayer.currentTime
-            this.$refs.audioPlayer.currentTime = Math.min(safeMax, this.$refs.audioPlayer.currentTime + 10)
         },
 
         seekTo(value) {
