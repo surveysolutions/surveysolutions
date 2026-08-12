@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using WB.UI.Shared.Enumerator.Services.Internals;
 
 namespace WB.UI.Shared.Enumerator.Services;
 
@@ -141,6 +142,7 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
     {
 
         var dateTimeOffset = GetTimestamp(location).ToUniversalTime();
+        var isFromMockProvider = location.IsMockLocation();
         var gpsLocation = new GpsLocation(
             location.HasAccuracy ? location.Accuracy : null,
             location.HasAltitude ? location.Altitude : null,
@@ -148,9 +150,9 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
             location.Longitude,
             dateTimeOffset,
             location.Provider,
-            location.IsFromMockProvider);
+            isFromMockProvider);
 
-        OnGpsLocationChanged(gpsLocation, location.IsFromMockProvider);
+        OnGpsLocationChanged(gpsLocation, isFromMockProvider);
     }
 
     protected virtual void OnGpsLocationChanged(GpsLocation gpsLocation, bool isFromMockProvider = false)

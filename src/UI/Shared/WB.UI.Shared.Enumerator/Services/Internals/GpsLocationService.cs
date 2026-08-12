@@ -171,7 +171,8 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 // Enforce the workspace-configured acceptance criteria: reject fixes that do not
                 // come from the required provider, or that are mock when mock is not permitted.
                 bool isFromGpsProvider = location.Provider == LocationManager.GpsProvider;
-                if (!this.acceptableSource.IsLocationAcceptable(isFromGpsProvider, location.IsFromMockProvider))
+                bool isFromMockProvider = location.IsMockLocation();
+                if (!this.acceptableSource.IsLocationAcceptable(isFromGpsProvider, isFromMockProvider))
                     return;
 
                 // External GPS devices may emit valid fixes whose elapsedRealtime timestamp
@@ -181,11 +182,12 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 // waiting for a better satellite fix rather than accepting a coarse one.
                 // Non-positive desired accuracy means "accept the first fix" instead of
                 // rejecting every accurate reading and timing out.
-                // Skip this filter for mock locations (external GPS sensors via Developer
-                // Options → "Select mock location app"): they often report a fixed or
-                // vendor-specific accuracy value that does not reflect actual signal quality,
-                // and blocking on it causes every fix to be rejected until timeout.
-                if (!location.IsFromMockProvider)
+                // Apply this satellite-oriented threshold only to genuine built-in GPS-provider,
+                // non-mock fixes. Non-GPS providers (network/fused/WiFi — permitted in modes A/N)
+                // and external mock sensors report accuracy that does not reflect satellite signal
+                // quality; enforcing the GPS threshold on them causes every fix to be rejected until
+                // timeout, so those modes could never capture a coordinate.
+                if (isFromGpsProvider && !isFromMockProvider)
                 {
                     if (desiredAccuracy > 0 && location.HasAccuracy && location.Accuracy > desiredAccuracy)
                         return;
@@ -199,7 +201,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                     location.Longitude,
                     timestamp,
                     location.Provider,
-                    location.IsFromMockProvider);
+                    isFromMockProvider);
 
                 // Set result before removing updates so the task always completes even if
                 // RemoveUpdates throws (e.g. when called from a non-looper thread).

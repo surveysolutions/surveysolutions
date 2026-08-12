@@ -33,5 +33,52 @@ namespace WB.Tests.Android.Instrumentation.CustomServices
             Assert.That(gpsLocation.Provider, Is.EqualTo(LocationManager.GpsProvider));
             Assert.That(gpsLocation.IsFromMockProvider, Is.False);
         }
+
+        [Test]
+        public async Task when_non_gps_coarse_fix_received_in_any_non_mock_mode_should_capture_coordinates()
+        {
+            // Mode A (AnyNonMock) must accept WiFi/network/fused fixes even though their coarse
+            // accuracy does not meet the satellite-oriented desired accuracy threshold; otherwise
+            // the app can never capture a coordinate from those sources and times out.
+            var tcs = new TaskCompletionSource<GpsLocation>(TaskCreationOptions.RunContinuationsAsynchronously);
+            ILocationListener listener = new GpsLocationService.SingleShotLocationListener(
+                tcs, locationManager: null, desiredAccuracy: 10d, acceptableSource: AcceptableGpsLocationSource.AnyNonMock);
+
+            var androidLocation = new Location(LocationManager.NetworkProvider)
+            {
+                Latitude = 49.842957d,
+                Longitude = 24.031111d,
+                Accuracy = 250f,
+                Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+            };
+
+            listener.OnLocationChanged(androidLocation);
+
+            var gpsLocation = await tcs.Task.WaitAsync(TimeSpan.FromSeconds(1));
+
+            Assert.That(gpsLocation, Is.Not.Null);
+            Assert.That(gpsLocation!.Provider, Is.EqualTo(LocationManager.NetworkProvider));
+        }
+
+        [Test]
+        public void when_gps_fix_worse_than_desired_accuracy_should_not_capture_coordinates()
+        {
+            // Built-in GPS fixes are still held to the desired accuracy threshold.
+            var tcs = new TaskCompletionSource<GpsLocation>(TaskCreationOptions.RunContinuationsAsynchronously);
+            ILocationListener listener = new GpsLocationService.SingleShotLocationListener(
+                tcs, locationManager: null, desiredAccuracy: 10d, acceptableSource: AcceptableGpsLocationSource.BuiltInGpsOnly);
+
+            var androidLocation = new Location(LocationManager.GpsProvider)
+            {
+                Latitude = 49.842957d,
+                Longitude = 24.031111d,
+                Accuracy = 250f,
+                Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+            };
+
+            listener.OnLocationChanged(androidLocation);
+
+            Assert.That(tcs.Task.IsCompleted, Is.False);
+        }
     }
 }
