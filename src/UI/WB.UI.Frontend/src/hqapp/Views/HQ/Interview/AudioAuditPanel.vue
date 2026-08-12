@@ -818,7 +818,7 @@ export default {
     top: 70px;
     right: 0;
     bottom: 0;
-    z-index: 1050;
+    z-index: 1040;
     width: 340px;
     box-sizing: border-box;
     padding: 15px;
