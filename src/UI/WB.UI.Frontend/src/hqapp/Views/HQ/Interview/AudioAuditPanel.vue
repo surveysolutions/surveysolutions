@@ -68,8 +68,7 @@
                     <input id="audio-audit-seek" type="range" class="seek-bar form-range" :max="currentDuration || 0"
                         :value="seekBarTime" :aria-valuemax="currentDuration || 0" :aria-valuenow="seekBarTime"
                         :aria-valuetext="seekAriaValue" @pointerdown="beginSeeking"
-                        @input="previewSeek($event.target.value)" @change="commitSeek($event.target.value)"
-                        :disabled="!canSeek" />
+                        @input="commitSeek($event.target.value)" :disabled="!canSeek" />
                     <div class="control-buttons">
                         <button type="button" class="btn btn-outline-secondary btn-sm" @click="goToPreviousSegment"
                             :disabled="!previousSegment" aria-label="Go to previous segment">
