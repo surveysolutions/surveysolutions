@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="BackToQuestionnaires" xml:space="preserve">
+        <value>Kembali ke Pengaturan Survei</value>
+    </data>
+    <data name="Done" xml:space="preserve">
+        <value>Selesai</value>
+    </data>
+    <data name="SelectInterviwer" xml:space="preserve">
+        <value>Pilih pewawancara</value>
+    </data>
+    <data name="Start" xml:space="preserve">
+        <value>Awal</value>
+    </data>
+    <data name="Started_Title" xml:space="preserve">
+        <value>Wawancara web dimulai</value>
+    </data>
+    <data name="StartInfo" xml:space="preserve">
+        <value>Memulai wawancara web untuk {{name}}</value>
+    </data>
+    <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
+        <value>Pengaturan wawancara web</value>
+    </data>
+    <data name="WebInterviewSetup_Title" xml:space="preserve">
+        <value>Pengaturan wawancara web</value>
+    </data>
+    <data name="WebInterviewStarted" xml:space="preserve">
+        <value>Wawancara web untuk {{name}} dimulai</value>
+    </data>
+    <data name="UseCaptcha" xml:space="preserve">
+        <value>Gunakan CAPTCHA sebelum wawancara dimulai</value>
+    </data>
+    <data name="DownloadTitle" xml:space="preserve">
+        <value>Unduh ({{count}})</value>
+    </data>
+    <data name="ExportAssignmentsTitle" xml:space="preserve">
+        <value>Anda dapat mengunduh daftar tugas yang dibuat yang diberikan kepada pewawancara untuk mengirimkan tautan web kepada responden</value>
+    </data>
+    <data name="StopWebInterview" xml:space="preserve">
+        <value>Hentikan Wawancara Web</value>
+    </data>
+    <data name="WebInterviewUserMessages_FinishInterview_Descr" xml:space="preserve">
+        <value>Teks ditampilkan di halaman terakhir saat wawancara selesai</value>
+    </data>
+    <data name="WebInterviewUserMessages_Invitation_Descr" xml:space="preserve">
+        <value>Teks undangan disajikan kepada pengguna di halaman awal. %QUESTIONNAIRE% diganti dengan nama kuesioner</value>
+    </data>
+    <data name="WebInterviewUserMessages_ResumeInvitation_Descr" xml:space="preserve">
+        <value>Teks ditampilkan kepada pengguna yang kembali ketika wawancara dilanjutkan. %QUESTIONNAIRE% diganti dengan nama kuesioner</value>
+    </data>
+    <data name="WebInterviewUserMessages_ResumeWelcome_Descr" xml:space="preserve">
+        <value>Teks header ditampilkan kepada pengguna yang kembali sebelum melanjutkan wawancara</value>
+    </data>
+    <data name="WebInterviewUserMessages_SurveyName_Descr" xml:space="preserve">
+        <value>Nama survei yang dilakukan. %QUESTIONNAIRE% diganti dengan nama kuesioner</value>
+    </data>
+    <data name="WebInterviewUserMessages_WebSurveyHeader_Descr" xml:space="preserve">
+        <value>Teks header ditampilkan setelah wawancara selesai</value>
+    </data>
+    <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
+        <value>Teks selamat datang header di halaman awal</value>
+    </data>
+    <data name="CustomText" xml:space="preserve">
+        <value>Gunakan teks khusus</value>
+    </data>
+    <data name="TextsUpdated" xml:space="preserve">
+        <value>Teks diperbarui</value>
+    </data>
+    <data name="SaveAll" xml:space="preserve">
+        <value>Simpan semuanya</value>
+    </data>
+    <data name="TextCustomize" xml:space="preserve">
+        <value>Teks yang dikirimkan kepada responden dapat disesuaikan</value>
+    </data>
+    <data name="CustomMessageTooLong" xml:space="preserve">
+        <value>Pesan khusus tidak boleh berisi lebih dari karakter {0} (termasuk html)</value>
+    </data>
+    <data name="WebInterviewSetup_SendInvitationsTitle" xml:space="preserve">
+        <value>Kirim undangan</value>
+    </data>
+    <data name="Invitations" xml:space="preserve">
+        <value>Undangan</value>
+    </data>
+    <data name="Invitations_TotalInvitations" xml:space="preserve">
+        <value>{{count}} total undangan.</value>
+    </data>
+    <data name="Invitations_Sent" xml:space="preserve">
+        <value>Undangan {{count}} telah dikirim.</value>
+    </data>
+    <data name="Invitations_NothingSent" xml:space="preserve">
+        <value>Belum ada undangan yang dikirim.</value>
+    </data>
+    <data name="Invitations_ToSend" xml:space="preserve">
+        <value>{{count}} undangan untuk dikirim.</value>
+    </data>
+    <data name="Invitations_NothingToSend" xml:space="preserve">
+        <value>Tidak ada undangan untuk dikirim sampai sekarang.</value>
+    </data>
+    <data name="Invitations_SetupError" xml:space="preserve">
+        <value>Undangan tidak dapat dikirim.</value>
+    </data>
+    <data name="Invitations_EmailIsNotSetUp" xml:space="preserve">
+        <value>Penyedia email belum diatur.</value>
+    </data>
+    <data name="Invitations_ChangeEmailSettingsAdmin" xml:space="preserve">
+        <value>Anda dapat mengubah setelan ini di halaman &lt;a href="{{url}}"&gt;'Penyedia Email'&lt;/a&gt;.</value>
+    </data>
+    <data name="Invitations_ChangeEmailSettingsNotAdmin" xml:space="preserve">
+        <value>Beritahu pengguna admin Anda untuk mengubah pengaturan ini di halaman 'Penyedia Email'.</value>
+    </data>
+    <data name="Invitations_SurveyIsNotStarted" xml:space="preserve">
+        <value>Survei web belum dimulai. Siapkan dan &lt;a href="{{url}}"&gt;mulai survei web&lt;/a&gt; sebelum mengirim undangan.</value>
+    </data>
+    <data name="Invitations_SuccessfulSetup" xml:space="preserve">
+        <value>Survei web telah dimulai dan penyedia email telah dikonfigurasi dengan benar. Sistem siap mengirim undangan.</value>
+    </data>
+    <data name="Invitations_SendAction" xml:space="preserve">
+        <value>Kirim undangan {{count}}</value>
+    </data>
+    <data name="WebInterviewUserMessages_CompleteButton_Descr" xml:space="preserve">
+        <value>Menyelesaikan</value>
+    </data>
+    <data name="WebInterviewUserMessages_CompleteNoteToSupervisor_Descr" xml:space="preserve">
+        <value>Catatan untuk Pengawas</value>
+    </data>
+    <data name="SingleResponse" xml:space="preserve">
+        <value>Batasi satu wawancara per responden</value>
+    </data>
+    <data name="WebInterviewUserMessages_StartNewButton_Descr" xml:space="preserve">
+        <value>Mulai wawancara baru</value>
+    </data>
+    <data name="WebInterviewUserMessages_ResumeButton_Descr" xml:space="preserve">
+        <value>Melanjutkan</value>
+    </data>
+    <data name="EmailOnComplete" xml:space="preserve">
+        <value>Kirim email setelah wawancara web selesai</value>
+    </data>
+    <data name="AttachAnswersToCompleteEmail" xml:space="preserve">
+        <value>Lampirkan transkrip Pdf</value>
+    </data>
+    <data name="AllowSwitchToCawiForInterviewer" xml:space="preserve">
+        <value>Izinkan Pewawancara beralih ke mode CAWI</value>
+    </data>
+    <data name="WebInterviewUserMessages_LinkInvitation_Descr" xml:space="preserve">
+        <value>Teks yang ditampilkan kepada pengguna saat mereka menavigasi ke link ke wawancara yang belum disinkronkan ke server</value>
+    </data>
+    <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
+        <value>Teks sambutan tajuk di halaman arahan tautan wawancara web</value>
+    </data>
+    <data name="AllowTranscriptDownloading" xml:space="preserve">
+        <value>Izinkan mengunduh transkrip wawancara setelah penyerahan</value>
+    </data>
+</root>
