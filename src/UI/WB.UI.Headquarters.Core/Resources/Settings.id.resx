@@ -145,4 +145,10 @@
   <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve"><value>Kredensial yang digunakan selama proses autentikasi SMTP</value></data>
   <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve"><value>Peringatan! Ini adalah tindakan kritis yang akan mempengaruhi file ekspor yang ada</value></data>
   <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve"><value>Apakah Anda yakin ingin memaksa menjalankan kebijakan retensi sekarang?</value></data>
+  <data name="AcceptableGpsLocationSource" xml:space="preserve"><value>Sumber lokasi yang dapat diterima</value></data>
+  <data name="AcceptableGpsLocationSourceDescription" xml:space="preserve"><value>Mengontrol sumber lokasi terukur mana yang dapat diterima di Aplikasi Pewawancara saat menjawab pertanyaan GPS. Lokasi dari sumber yang tidak dapat diterima akan ditolak.</value></data>
+  <data name="AcceptableGpsLocationSource_Any" xml:space="preserve"><value>Sumber apa pun (termasuk lokasi tiruan)</value></data>
+  <data name="AcceptableGpsLocationSource_AnyNonMock" xml:space="preserve"><value>Sumber apa pun yang bukan lokasi tiruan</value></data>
+  <data name="AcceptableGpsLocationSource_BuiltInOrExternalGps" xml:space="preserve"><value>GPS bawaan atau eksternal (lokasi tiruan diizinkan)</value></data>
+  <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve"><value>Hanya GPS bawaan (tanpa eksternal, tanpa lokasi tiruan)</value></data>
 </root>
