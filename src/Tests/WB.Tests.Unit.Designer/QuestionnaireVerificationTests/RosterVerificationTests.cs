@@ -157,6 +157,45 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         [Test]
+        public void should_not_count_hidden_questions_toward_plain_roster_limit()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.NumericIntegerQuestion(id: Id.g1),
+                    Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Flat,
+                        children: new IComposite[]
+                        {
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            Create.Question(),
+                            // 5 hidden questions that should not count toward the limit
+                            Create.Question(scope: QuestionScope.Hidden),
+                            Create.Question(scope: QuestionScope.Hidden),
+                            Create.Question(scope: QuestionScope.Hidden),
+                            Create.Question(scope: QuestionScope.Hidden),
+                            Create.Question(scope: QuestionScope.Hidden),
+                        })
+                )
+                .ExpectNoError("WB0278");
+        }
+
+        [Test]
         public void should_reject_nested_roster_in_plain_roster()
         {
             Create.QuestionnaireDocumentWithOneChapter(
