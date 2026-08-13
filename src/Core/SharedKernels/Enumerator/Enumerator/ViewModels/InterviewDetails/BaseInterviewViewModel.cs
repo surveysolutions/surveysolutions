@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
@@ -66,6 +67,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.BreadCrumbs = breadCrumbsViewModel;
             this.Sections = sectionsViewModel;
         }
+
+        private CompleteInterviewViewModel subscribedCompleteViewModel;
 
         private bool isInProgress;
         public bool IsInProgress
@@ -273,14 +276,73 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
+        /// <summary>
+        /// Creates the <see cref="CompleteInterviewViewModel"/> to display on the Complete screen.
+        /// Override in a subclass to supply a more-derived view model type.
+        /// </summary>
+        protected virtual CompleteInterviewViewModel CreateCompleteScreenViewModel()
+            => this.interviewViewModelFactory.GetNew<CompleteInterviewViewModel>();
+
+        /// <summary>
+        /// Unsubscribes from the currently tracked Complete-screen view model's
+        /// <see cref="CompleteInterviewViewModel.IsLoading"/> change notification, then clears the
+        /// reference. Safe to call when no subscription is active.
+        /// </summary>
+        protected void UnsubscribeFromCompleteInterviewViewModel()
+        {
+            if (this.subscribedCompleteViewModel != null)
+            {
+                this.subscribedCompleteViewModel.PropertyChanged -= OnCompleteVmPropertyChanged;
+                this.subscribedCompleteViewModel = null;
+            }
+        }
+
+        private void OnCompleteVmPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(CompleteInterviewViewModel.IsLoading)) return;
+            var vm = (CompleteInterviewViewModel)sender;
+            if (!vm.IsLoading)
+                ApplyCompleteViewModelStatus(vm);
+        }
+
+        /// <summary>
+        /// Called on the Complete-screen view model once it finishes loading (IsLoading → false).
+        /// The default implementation guards against a stale subscription and, when the view model
+        /// is still the current one, copies its <see cref="CompleteInterviewViewModel.CompleteStatus"/>
+        /// into <see cref="Status"/> and unsubscribes.
+        /// Override in a subclass to marshal the update to the main thread before calling
+        /// <c>base.ApplyCompleteViewModelStatus</c>.
+        /// </summary>
+        protected virtual void ApplyCompleteViewModelStatus(CompleteInterviewViewModel vm)
+        {
+            // Guard against a stale subscription firing after the interviewer has already
+            // navigated away from the Complete screen.
+            if (ReferenceEquals(this.subscribedCompleteViewModel, vm))
+            {
+                UnsubscribeFromCompleteInterviewViewModel();
+                this.Status = vm.CompleteStatus;
+            }
+        }
+
         protected virtual BaseViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
         {
+            // Unsubscribe from a previous Complete screen so a late IsLoading change (its background
+            // CollectCriticalityInfo may still be running after the screen was navigated away/disposed)
+            // can no longer overwrite the status of the screen the interviewer has since navigated to.
+            this.UnsubscribeFromCompleteInterviewViewModel();
+
             switch (this.NavigationState.CurrentScreenType)
             {
                 case ScreenType.Complete:
-                    var completeInterviewViewModel = this.interviewViewModelFactory.GetNew<CompleteInterviewViewModel>();
-                    completeInterviewViewModel.Configure(this.InterviewId, this.NavigationState);
-                    return completeInterviewViewModel;
+                    // Keep a local reference: Configure() may synchronously raise IsLoading=false, which
+                    // triggers ApplyCompleteViewModelStatus -> UnsubscribeFromCompleteInterviewViewModel
+                    // and nulls out the field. Returning the field in that case would yield null and
+                    // crash the CurrentScreen binding, so the local is returned instead.
+                    var completeVm = this.CreateCompleteScreenViewModel();
+                    this.subscribedCompleteViewModel = completeVm;
+                    completeVm.PropertyChanged += OnCompleteVmPropertyChanged;
+                    completeVm.Configure(this.InterviewId, this.NavigationState);
+                    return completeVm;
                 case ScreenType.Cover:
                     var coverInterviewViewModel = this.interviewViewModelFactory.GetNew<CoverInterviewViewModel>();
                     coverInterviewViewModel.Configure(this.InterviewId, this.NavigationState, eventArgs.AnchoredElementIdentity);
@@ -397,6 +459,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.NavigationState.ScreenChanged -= this.OnScreenChanged;
             this.answerNotifier.QuestionAnswered -= this.AnswerNotifierOnQuestionAnswered;
+            this.UnsubscribeFromCompleteInterviewViewModel();
             this.CurrentStage.DisposeIfDisposable();
             this.answerNotifier.Dispose();
             this.BreadCrumbs.Dispose();
