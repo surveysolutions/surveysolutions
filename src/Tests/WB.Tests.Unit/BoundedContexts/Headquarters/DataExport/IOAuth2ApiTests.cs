@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExport
             Assert.That(handler.LastRequest?.Content?.Headers.ContentType?.MediaType,
                 Is.EqualTo("application/x-www-form-urlencoded"));
 
-            var requestBody = await handler.LastRequest!.Content!.ReadAsStringAsync();
+            var requestBody = handler.LastRequestBody;
             Assert.Multiple(() =>
             {
                 Assert.That(requestBody, Does.Contain("client_id=client-id"));
@@ -52,22 +52,27 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExport
                 Assert.That(requestBody, Does.Contain("code=code"));
                 Assert.That(requestBody, Does.Contain("grant_type=authorization_code"));
                 Assert.That(requestBody, Does.Contain("redirect_uri=https%3A%2F%2Fexample.com%2Fredirect"));
-                Assert.That(requestBody, Does.Contain("scope=offline_access%20Files.ReadWrite"));
+                Assert.That(requestBody, Does.Contain("scope=offline_access+Files.ReadWrite")
+                    .Or.Contain("scope=offline_access%20Files.ReadWrite"));
             });
         }
 
         private class CapturingMessageHandler : HttpMessageHandler
         {
             public HttpRequestMessage LastRequest { get; private set; }
+            public string LastRequestBody { get; private set; }
 
-            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
             {
                 this.LastRequest = request;
+                this.LastRequestBody = request.Content != null
+                    ? await request.Content.ReadAsStringAsync(cancellationToken)
+                    : null;
                 var response = new HttpResponseMessage(HttpStatusCode.OK)
                 {
                     Content = new StringContent("{\"access_token\":\"token\",\"expires_in\":3600,\"token_type\":\"Bearer\",\"scope\":\"offline_access Files.ReadWrite\",\"refresh_token\":\"refresh\"}", Encoding.UTF8, "application/json")
                 };
-                return Task.FromResult(response);
+                return response;
             }
         }
     }
