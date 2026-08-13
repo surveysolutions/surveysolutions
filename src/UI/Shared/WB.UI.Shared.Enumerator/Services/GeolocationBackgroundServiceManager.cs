@@ -85,11 +85,11 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
         if (!settings.AcceptableGpsLocationSource.IsLocationAcceptable(isFromGpsProvider, e.IsFromMockProvider))
             return;
 
-        // Apply the accuracy filter only to genuine built-in GPS-provider, non-mock fixes.
-        // Non-GPS providers (network/fused/WiFi — permitted in modes A/N) and external GPS
-        // sensors (mock provider) report accuracy that does not reflect satellite signal quality;
-        // enforcing the threshold on them would silently drop every fix until timeout.
-        if (isFromGpsProvider && !e.IsFromMockProvider)
+        // Keep the external GPS sensor exemption (mock provider): those adapters often report a
+        // fixed or vendor-specific accuracy value that does not reflect actual signal quality.
+        // For all other (non-mock) fixes, enforce the configured threshold before forwarding the
+        // coordinate to geo-tracking/geofencing listeners.
+        if (!e.IsFromMockProvider)
         {
             var accuracyInMeters = settings.GeographyQuestionAccuracyInMeters;
             if (e.Location.Accuracy > accuracyInMeters)
