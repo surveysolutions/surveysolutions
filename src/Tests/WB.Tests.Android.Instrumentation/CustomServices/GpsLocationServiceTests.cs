@@ -80,5 +80,29 @@ namespace WB.Tests.Android.Instrumentation.CustomServices
 
             Assert.That(tcs.Task.IsCompleted, Is.False);
         }
+
+        [Test]
+        public void when_only_restricted_fix_received_should_flag_rejected_restricted_fix()
+        {
+            // A mock fix in a mode that forbids mocks must be refused, and the listener must record
+            // that a fix was rejected so the caller can report a restricted-source error instead of
+            // a generic timeout when no acceptable fix ever arrives.
+            var tcs = new TaskCompletionSource<GpsLocation>(TaskCreationOptions.RunContinuationsAsynchronously);
+            var listener = new GpsLocationService.SingleShotLocationListener(
+                tcs, locationManager: null, desiredAccuracy: -1d, acceptableSource: AcceptableGpsLocationSource.AnyNonMock);
+
+            var androidLocation = new Location(LocationManager.GpsProvider)
+            {
+                Latitude = 49.842957d,
+                Longitude = 24.031111d,
+                Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                IsFromMockProvider = true,
+            };
+
+            ((ILocationListener)listener).OnLocationChanged(androidLocation);
+
+            Assert.That(tcs.Task.IsCompleted, Is.False);
+            Assert.That(listener.RejectedRestrictedFix, Is.True);
+        }
     }
 }

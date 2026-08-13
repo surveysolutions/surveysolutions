@@ -1082,4 +1082,7 @@
   <data name="Error_GpsProviderDisabled" xml:space="preserve">
     <value>مزوّد GPS معطّل</value>
   </data>
+  <data name="Error_RestrictedLocationSource" xml:space="preserve">
+    <value>تم رفض الموقع المستلَم لأنه لا يتطابق مع مصدر الموقع المقبول المُهيّأ لمساحة العمل هذه</value>
+  </data>
 </root>

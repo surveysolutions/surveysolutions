@@ -1075,4 +1075,7 @@
   <data name="Error_GpsProviderDisabled" xml:space="preserve">
     <value>GPS პროვაიდერი გამორთულია</value>
   </data>
+  <data name="Error_RestrictedLocationSource" xml:space="preserve">
+    <value>მიღებული მდებარეობა უარყოფილ იქნა, რადგან ის არ შეესაბამება ამ სამუშაო სივრცისთვის კონფიგურირებულ მდებარეობის დასაშვებ წყაროს</value>
+  </data>
 </root>

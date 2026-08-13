@@ -100,17 +100,28 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             using var registration = effectiveToken.Register(() =>
             {
                 try { locationManager.RemoveUpdates(listener); } catch { /* ignore – listener may already be unregistered */ }
-                tcs.TrySetResult(null);
+                CompleteWhenNoAcceptableFix();
             });
 
             // If cancellation happened between request and registration, complete deterministically.
             if (effectiveToken.IsCancellationRequested)
             {
                 try { locationManager.RemoveUpdates(listener); } catch { /* ignore */ }
-                tcs.TrySetResult(null);
+                CompleteWhenNoAcceptableFix();
             }
 
             return await tcs.Task.ConfigureAwait(false);
+
+            // When the wait ends without an acceptable fix, surface a restricted-source error if the
+            // only fixes seen were refused by the acceptance policy (e.g. mock locations); otherwise
+            // resolve as timeout/no-fix (null) to preserve the existing contract.
+            void CompleteWhenNoAcceptableFix()
+            {
+                if (listener.RejectedRestrictedFix)
+                    tcs.TrySetException(new RestrictedLocationSourceException());
+                else
+                    tcs.TrySetResult(null);
+            }
         }
 
         /// <summary>
@@ -154,6 +165,13 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             private readonly double desiredAccuracy;
             private readonly AcceptableGpsLocationSource acceptableSource;
 
+            // Set when a received fix was rejected because it violates the acceptance policy
+            // (e.g. a mock location, or a non-GPS provider in a GPS-only mode). Used to surface a
+            // restricted-source error instead of a generic timeout when no acceptable fix arrives.
+            private volatile bool rejectedRestrictedFix;
+
+            internal bool RejectedRestrictedFix => this.rejectedRestrictedFix;
+
             internal SingleShotLocationListener(
                 TaskCompletionSource<GpsLocation> tcs,
                 LocationManager locationManager,
@@ -173,7 +191,12 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 bool isFromGpsProvider = location.Provider == LocationManager.GpsProvider;
                 bool isFromMockProvider = location.IsMockLocation();
                 if (!this.acceptableSource.IsLocationAcceptable(isFromGpsProvider, isFromMockProvider))
+                {
+                    // Remember that a fix arrived but was refused by the acceptance policy so the
+                    // caller can report a restricted-source error rather than a plain timeout.
+                    this.rejectedRestrictedFix = true;
                     return;
+                }
 
                 // External GPS devices may emit valid fixes whose elapsedRealtime timestamp
                 // does not align with the device monotonic clock. Do not reject by age.

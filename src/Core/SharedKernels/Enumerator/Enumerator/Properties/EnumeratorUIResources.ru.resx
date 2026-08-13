@@ -1105,4 +1105,7 @@
   <data name="Error_GpsProviderDisabled" xml:space="preserve">
     <value>GPS-приёмник отключён</value>
   </data>
+  <data name="Error_RestrictedLocationSource" xml:space="preserve">
+    <value>Полученное местоположение отклонено, так как не соответствует допустимому источнику местоположения, настроенному для этого рабочего пространства</value>
+  </data>
 </root>

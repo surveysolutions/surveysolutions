@@ -1277,4 +1277,7 @@
   <data name="Error_GpsProviderDisabled" xml:space="preserve">
     <value>ผู้ให้บริการ GPS ถูกปิดใช้งาน</value>
   </data>
+  <data name="Error_RestrictedLocationSource" xml:space="preserve">
+    <value>ตำแหน่งที่ได้รับถูกปฏิเสธเนื่องจากไม่ตรงกับแหล่งที่มาของตำแหน่งที่ยอมรับได้ซึ่งกำหนดไว้สำหรับพื้นที่ทำงานนี้</value>
+  </data>
 </root>

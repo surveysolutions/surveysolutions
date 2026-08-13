@@ -1234,4 +1234,7 @@
   <data name="Error_GpsProviderDisabled" xml:space="preserve">
     <value>អ្នកផ្តល់សេវា GPS ត្រូវបានបិទ</value>
   </data>
+  <data name="Error_RestrictedLocationSource" xml:space="preserve">
+    <value>ទីតាំងដែលបានទទួលត្រូវបានបដិសេធ ដោយសារវាមិនត្រូវនឹងប្រភពទីតាំងដែលអាចទទួលយកបានដែលបានកំណត់សម្រាប់កន្លែងធ្វើការនេះ</value>
+  </data>
 </root>

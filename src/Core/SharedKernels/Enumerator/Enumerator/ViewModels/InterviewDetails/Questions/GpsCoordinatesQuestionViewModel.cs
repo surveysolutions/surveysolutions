@@ -186,6 +186,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(EnumeratorUIResources.Error_NoSuitableLocationProvider);
                 }
+                else if (gpsException is RestrictedLocationSourceException)
+                {
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(EnumeratorUIResources.Error_RestrictedLocationSource);
+                }
                 else if (gpsException is GpsProviderDisabledException)
                 {
                     await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(EnumeratorUIResources.Error_GpsProviderDisabled);

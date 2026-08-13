@@ -1911,6 +1911,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Error_RestrictedLocationSource {
+            get {
+                return ResourceManager.GetString("Error_RestrictedLocationSource", resourceCulture);
+            }
+        }
+        
         public static string Error_NoTargetAreaShapefile {
             get {
                 return ResourceManager.GetString("Error_NoTargetAreaShapefile", resourceCulture);

@@ -1073,4 +1073,7 @@
   <data name="Error_GpsProviderDisabled" xml:space="preserve">
     <value>GPS 提供程序已禁用</value>
   </data>
+  <data name="Error_RestrictedLocationSource" xml:space="preserve">
+    <value>接收到的位置被拒绝，因为它与为此工作区配置的可接受位置来源不匹配</value>
+  </data>
 </root>

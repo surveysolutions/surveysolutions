@@ -1079,4 +1079,7 @@ Aparecerá no dispositivo do entrevistador após a próxima sincronização</val
   <data name="Error_GpsProviderDisabled" xml:space="preserve">
     <value>O provedor de GPS está desativado</value>
   </data>
+  <data name="Error_RestrictedLocationSource" xml:space="preserve">
+    <value>A localização recebida foi rejeitada porque não corresponde à fonte de localização aceitável configurada para este espaço de trabalho</value>
+  </data>
 </root>

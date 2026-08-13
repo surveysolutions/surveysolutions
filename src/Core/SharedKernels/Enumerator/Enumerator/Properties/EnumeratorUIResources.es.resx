@@ -1069,4 +1069,7 @@
   <data name="Error_GpsProviderDisabled" xml:space="preserve">
     <value>El proveedor de GPS está deshabilitado</value>
   </data>
+  <data name="Error_RestrictedLocationSource" xml:space="preserve">
+    <value>La ubicación recibida fue rechazada porque no coincide con la fuente de ubicación aceptable configurada para este espacio de trabajo</value>
+  </data>
 </root>

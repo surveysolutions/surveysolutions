@@ -1068,4 +1068,7 @@
   <data name="Error_GpsProviderDisabled" xml:space="preserve">
     <value>Ofruesi GPS është i çaktivizuar</value>
   </data>
+  <data name="Error_RestrictedLocationSource" xml:space="preserve">
+    <value>Vendndodhja e marrë u refuzua sepse nuk përputhet me burimin e pranueshëm të vendndodhjes të konfiguruar për këtë hapësirë pune</value>
+  </data>
 </root>

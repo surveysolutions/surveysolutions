@@ -1021,4 +1021,7 @@ Il apparaîtra sur l'appareil de l'enquêteur après la prochaine synchronisatio
   <data name="Error_GpsProviderDisabled" xml:space="preserve">
     <value>Le fournisseur GPS est désactivé</value>
   </data>
+  <data name="Error_RestrictedLocationSource" xml:space="preserve">
+    <value>La position reçue a été refusée car elle ne correspond pas à la source de localisation acceptable configurée pour cet espace de travail</value>
+  </data>
 </root>
