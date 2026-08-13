@@ -271,4 +271,7 @@
     <data name="CloneDeletedWarning" xml:space="preserve">
         <value>Bạn đang tạo một bản sao của bảng câu hỏi đã bị xóa. Một số bộ phận có thể bị mất.</value>
         </data>
+    <data name="IncludeScenarios" xml:space="preserve">
+        <value>Bao gồm các tình huống</value>
+        </data>
 </root>
