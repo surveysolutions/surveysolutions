@@ -144,7 +144,10 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 },
                 ["id"] = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                 {
-                    "Admin", "Legal", "Status", "Total", "Edit",
+                    "Admin", "Legal", "Status", "Total", "Edit", "Forum", "Login",
+                    "Mode", "Log", "Format", "format", "Metadata", "Status: {{ name }}",
+                    "Administrator", "Supervisor", "link", "Label", "polyline", "Host",
+                    "Edit: {0}", "Edit Supervisor", "Valid", "format: {{- type}}",
                 },
                 ["ro"] = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                 {
@@ -154,7 +157,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 },
                 ["sq"] = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                 {
-                    "Forum", "Metadata", "Designer", "roster:",
+                    "Forum", "Metadata", "Designer", "roster:", "Administrator",
                 },
             };
 
