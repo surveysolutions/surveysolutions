@@ -65,7 +65,7 @@
   <data name="OrStartInterview" xml:space="preserve"><value>ან შეგიძლიათ დაიწყოთ ახალი გასაუბრება</value></data>
   <data name="PictureQuestionNotAPicture" xml:space="preserve"><value>მხოლოდ სურათის ფაილები მიიღება</value></data>
   <data name="PleaseFillCaptcha" xml:space="preserve"><value>გთხოვთ შეავსოთ captcha ველი</value></data>
-  <data name="PoweredBy" xml:space="preserve"><value>Powered by</value></data>
+  <data name="PoweredBy" xml:space="preserve"><value>მხარდაჭერით</value></data>
   <data name="RefreshPage" xml:space="preserve"><value>გვერდის განახლება</value></data>
   <data name="Resume_InvitationSmallText" xml:space="preserve"><value>გასაუბრების პროცესისთვის საჭიროა ინტერნეტ კავშირი, დამატებითი პროგრამა არ არის საჭირო</value></data>
   <data name="Resume_InvitationText" xml:space="preserve"><value>შეგიძლიათ გადახვიდეთ გასაუბრებაზე შემდეგ გამოკითხვაში: "%QUESTIONNAIRE%"</value></data>
