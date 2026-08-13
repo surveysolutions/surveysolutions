@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="reverted" xml:space="preserve">
+        <value>แบบสอบถาม "{0}" เปลี่ยนกลับแล้ว</value>
+    </data>
+    <data name="Edit" xml:space="preserve">
+        <value>แก้ไข</value>
+    </data>
+    <data name="QuestionnaireChangeHistory" xml:space="preserve">
+        <value>ประวัติการเปลี่ยนแปลงแบบสอบถาม</value>
+    </data>
+    <data name="ThisListDoesNotContainAnyRecords" xml:space="preserve">
+        <value>รายการนี้ไม่มีบันทึกใดๆ</value>
+    </data>
+    <data name="Timestamp" xml:space="preserve">
+        <value>การประทับเวลา</value>
+    </data>
+    <data name="UnknownUserName" xml:space="preserve">
+        <value>&lt;&lt;ไม่ทราบ&gt;&gt;</value>
+    </data>
+    <data name="UserName" xml:space="preserve">
+        <value>ชื่อผู้ใช้</value>
+    </data>
+    <data name="Change" xml:space="preserve">
+        <value>เปลี่ยน</value>
+    </data>
+    <data name="Macro_Delete" xml:space="preserve">
+        <value>ลบมาโคร {0} แล้ว</value>
+    </data>
+    <data name="Macro_Update" xml:space="preserve">
+        <value>อัปเดตมาโคร {0} แล้ว</value>
+    </data>
+    <data name="Macro_Add" xml:space="preserve">
+        <value>เพิ่มมาโคร {0} แล้ว</value>
+    </data>
+    <data name="LookupTable_Delete" xml:space="preserve">
+        <value>ลบตารางการค้นหา {0} แล้ว</value>
+    </data>
+    <data name="LookupTable_Update" xml:space="preserve">
+        <value>อัปเดตตารางค้นหา {0} แล้ว</value>
+    </data>
+    <data name="LookupTable_Add" xml:space="preserve">
+        <value>เพิ่มตารางการค้นหา {0} แล้ว</value>
+    </data>
+    <data name="Attachment_Delete" xml:space="preserve">
+        <value>ไฟล์แนบ {0} ถูกลบแล้ว</value>
+    </data>
+    <data name="Attachment_Update" xml:space="preserve">
+        <value>อัปเดตไฟล์แนบ {0} แล้ว</value>
+    </data>
+    <data name="Variable_Add" xml:space="preserve">
+        <value>เพิ่มตัวแปร {0} แล้ว</value>
+    </data>
+    <data name="Variable_Delete" xml:space="preserve">
+        <value>ลบตัวแปร {0} แล้ว</value>
+    </data>
+    <data name="Variable_Update" xml:space="preserve">
+        <value>อัปเดตตัวแปร {0} แล้ว</value>
+    </data>
+    <data name="Categories_Add" xml:space="preserve">
+        <value>เพิ่มหมวดหมู่ {0} แล้ว</value>
+    </data>
+    <data name="Categories_Delete" xml:space="preserve">
+        <value>ลบหมวดหมู่ {0} แล้ว</value>
+    </data>
+    <data name="Categories_Update" xml:space="preserve">
+        <value>อัปเดตหมวดหมู่ {0} แล้ว</value>
+    </data>
+    <data name="CriticalRule_Add" xml:space="preserve">
+        <value>เพิ่มกฎสำคัญ {0} แล้ว</value>
+    </data>
+    <data name="CriticalRule_Delete" xml:space="preserve">
+        <value>ลบกฎสำคัญ {0} แล้ว</value>
+    </data>
+    <data name="CriticalRule_Update" xml:space="preserve">
+        <value>อัปเดตกฎสำคัญ {0} แล้ว</value>
+    </data>
+    <data name="Translation_Delete" xml:space="preserve">
+        <value>ลบการแปล {0} แล้ว</value>
+    </data>
+    <data name="Translation_Update" xml:space="preserve">
+        <value>อัปเดตการแปล {0} แล้ว</value>
+    </data>
+    <data name="Translation_Replace" xml:space="preserve">
+        <value>เอกสารเปลี่ยนเป็นการแปล {0}</value>
+    </data>
+    <data name="TextsReplaced" xml:space="preserve">
+        <value>'{0}' ทั้งหมดถูกแทนที่ด้วย '{1}' รายการ {2} ได้รับผลกระทบ</value>
+    </data>
+    <data name="RevertToThisVersion" xml:space="preserve">
+        <value>เปลี่ยนกลับเป็นเวอร์ชันนี้</value>
+    </data>
+    <data name="Comment" xml:space="preserve">
+        <value>ความคิดเห็น</value>
+    </data>
+    <data name="LeaveComment" xml:space="preserve">
+        <value>แสดงความคิดเห็น</value>
+    </data>
+    <data name="ExtractAtRevision" xml:space="preserve">
+        <value>สารสกัดที่แก้ไข</value>
+    </data>
+    <data name="Save" xml:space="preserve">
+        <value>บันทึก</value>
+    </data>
+    <data name="Confirm" xml:space="preserve">
+        <value>ยืนยัน</value>
+    </data>
+    <data name="ResetQuestionnaireToThis" xml:space="preserve">
+        <value>รีเซ็ตแบบสอบถามเป็นเวอร์ชันที่ {0} หรือไม่</value>
+    </data>
+    <data name="reverted_to" xml:space="preserve">
+        <value>แบบสอบถาม "{0}" เปลี่ยนกลับเป็นเวอร์ชันจาก {1}</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>ยกเลิก</value>
+    </data>
+    <data name="Revert" xml:space="preserve">
+        <value>เปลี่ยนกลับ</value>
+    </data>
+    <data name="Section_Add" xml:space="preserve">
+        <value>เพิ่มส่วน {0} แล้ว</value>
+    </data>
+    <data name="Section_Delete" xml:space="preserve">
+        <value>ลบส่วน {0} แล้ว</value>
+    </data>
+    <data name="Section_Update" xml:space="preserve">
+        <value>อัปเดตส่วน {0} แล้ว</value>
+    </data>
+    <data name="Question_Add" xml:space="preserve">
+        <value>เพิ่มคำถาม {0} แล้ว</value>
+    </data>
+    <data name="Question_Delete" xml:space="preserve">
+        <value>ลบคำถาม {0} แล้ว</value>
+    </data>
+    <data name="Question_Update" xml:space="preserve">
+        <value>อัปเดตคำถาม {0} แล้ว</value>
+    </data>
+    <data name="Roster_Add" xml:space="preserve">
+        <value>เพิ่มบัญชีรายชื่อ {0} แล้ว</value>
+    </data>
+    <data name="Roster_Delete" xml:space="preserve">
+        <value>ลบบัญชีรายชื่อ {0} แล้ว</value>
+    </data>
+    <data name="Roster_Update" xml:space="preserve">
+        <value>อัปเดตบัญชีรายชื่อ {0} แล้ว</value>
+    </data>
+    <data name="StaticText_Add" xml:space="preserve">
+        <value>เพิ่มข้อความคงที่ {0} แล้ว</value>
+    </data>
+    <data name="StaticText_Delete" xml:space="preserve">
+        <value>ลบข้อความคงที่ {0} แล้ว</value>
+    </data>
+    <data name="StaticText_Update" xml:space="preserve">
+        <value>อัปเดตข้อความคงที่ {0} แล้ว</value>
+    </data>
+    <data name="NoTitle" xml:space="preserve">
+        <value>ไม่มีชื่อ</value>
+    </data>
+    <data name="StaticText_Clone" xml:space="preserve">
+        <value>ข้อความคงที่ {0} โคลนจากข้อความคงที่ {1}</value>
+    </data>
+    <data name="Variable_Clone" xml:space="preserve">
+        <value>ตัวแปร {0} คัดลอกมาจากตัวแปร {1}</value>
+    </data>
+    <data name="Question_Clone" xml:space="preserve">
+        <value>คำถาม {0} โคลนจากคำถาม {1}</value>
+    </data>
+    <data name="Section_Clone" xml:space="preserve">
+        <value>ส่วน {0} โคลนจากส่วน {1}</value>
+    </data>
+    <data name="Roster_Clone" xml:space="preserve">
+        <value>บัญชีรายชื่อ {0} โคลนจากบัญชีรายชื่อ {1}</value>
+    </data>
+    <data name="Questionnaire_Clone" xml:space="preserve">
+        <value>แบบสอบถาม {0} โคลนจากแบบสอบถาม {1}</value>
+    </data>
+    <data name="Questionnaire_Replace" xml:space="preserve">
+        <value>แบบสอบถาม {0} ถูกแทนที่</value>
+    </data>
+    <data name="Questionnaire_Import" xml:space="preserve">
+        <value>แบบสอบถาม {0} นำเข้า</value>
+    </data>
+    <data name="Section_GroupBecameARoster" xml:space="preserve">
+        <value>ส่วนย่อย {0} กลายเป็นบัญชีรายชื่อ</value>
+    </data>
+    <data name="Roster_RosterBecameAGroup" xml:space="preserve">
+        <value>บัญชีรายชื่อ {0} กลายเป็นส่วนย่อย</value>
+    </data>
+    <data name="Person_Add" xml:space="preserve">
+        <value>เพิ่มผู้ใช้ที่มีอีเมล {0} ให้กับบุคคลที่แชร์</value>
+    </data>
+    <data name="Questionnaire_Move" xml:space="preserve">
+        <value>โอนความเป็นเจ้าของแบบสอบถามไปยังผู้ใช้ด้วยอีเมล "{0}"</value>
+    </data>
+    <data name="Person_Delete" xml:space="preserve">
+        <value>ผู้ใช้ที่มีอีเมล {0} ถูกลบออกจากบุคคลที่แชร์</value>
+    </data>
+    <data name="Questionnaire_Add" xml:space="preserve">
+        <value>สร้างแบบสอบถาม {0} แล้ว</value>
+    </data>
+    <data name="Questionnaire_Update" xml:space="preserve">
+        <value>อัปเดตแบบสอบถาม {0} แล้ว</value>
+    </data>
+    <data name="Questionnaire_Delete" xml:space="preserve">
+        <value>ลบแบบสอบถาม {0} แล้ว</value>
+    </data>
+    <data name="Question_Move_To_Section" xml:space="preserve">
+        <value>คำถาม {0} ย้ายไปที่ส่วน {1}</value>
+    </data>
+    <data name="Question_Move_To_Roster" xml:space="preserve">
+        <value>คำถาม {0} ย้ายไปอยู่ในบัญชีรายชื่อ {1}</value>
+    </data>
+    <data name="StaticText_Move_To_Section" xml:space="preserve">
+        <value>ข้อความคงที่ {0} ย้ายไปที่ส่วน {1}</value>
+    </data>
+    <data name="StaticText_Move_To_Roster" xml:space="preserve">
+        <value>ข้อความคงที่ {0} ย้ายไปที่บัญชีรายชื่อ {1}</value>
+    </data>
+    <data name="Variable_Move_To_Section" xml:space="preserve">
+        <value>ตัวแปร {0} ย้ายไปที่ส่วน {1}</value>
+    </data>
+    <data name="Variable_Move_To_Roster" xml:space="preserve">
+        <value>ตัวแปร {0} ย้ายไปที่บัญชีรายชื่อ {1}</value>
+    </data>
+    <data name="Section_Move_To_Section" xml:space="preserve">
+        <value>ส่วน {0} ย้ายไปที่ส่วน {1}</value>
+    </data>
+    <data name="Section_Move_To_Roster" xml:space="preserve">
+        <value>ส่วน {0} ย้ายไปที่บัญชีรายชื่อ {1}</value>
+    </data>
+    <data name="Roster_Move_To_Section" xml:space="preserve">
+        <value>บัญชีรายชื่อ {0} ย้ายไปที่ส่วน {1}</value>
+    </data>
+    <data name="Roster_Move_To_Roster" xml:space="preserve">
+        <value>บัญชีรายชื่อ {0} ย้ายไปที่บัญชีรายชื่อ {1}</value>
+    </data>
+    <data name="Translation_Original" xml:space="preserve">
+        <value>ต้นฉบับ</value>
+    </data>
+    <data name="Translation_DefaultTranslationSet" xml:space="preserve">
+        <value>การแปลเริ่มต้นตั้งค่าเป็น {0}</value>
+    </data>
+    <data name="Metadata_Update" xml:space="preserve">
+        <value>อัปเดตข้อมูลเมตาของแบบสอบถาม {0} แล้ว</value>
+    </data>
+    <data name="Questionnaire_ImportToHq" xml:space="preserve">
+        <value>นำเข้าแบบสอบถามไปยังสำนักงานใหญ่ ({0}) เป็น {2} โดย {1}</value>
+    </data>
+    <data name="MigratedNewCoverSupport" xml:space="preserve">
+        <value>สร้างหน้าปกแล้ว</value>
+    </data>
+</root>

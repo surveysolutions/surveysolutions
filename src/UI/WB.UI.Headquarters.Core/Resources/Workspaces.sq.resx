@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Name" xml:space="preserve"><value>Emri</value></data>
+  <data name="DisplayName" xml:space="preserve"><value>Emri i shfaqur</value></data>
+  <data name="NameRequired" xml:space="preserve"><value>Emri është i detyrueshëm</value></data>
+  <data name="DisplayNameRequired" xml:space="preserve"><value>Emri i shfaqur është i detyrueshëm</value></data>
+  <data name="InvalidName" xml:space="preserve"><value>Lejohen vetëm shifrat dhe shkronjat e vogla</value></data>
+  <data name="NameShouldBeUnique" xml:space="preserve"><value>Emri duhet të jetë unik</value></data>
+  <data name="EditWorkspace" xml:space="preserve"><value>Modifiko hapësirën e punës "{{name}}"</value></data>
+  <data name="WorkspacesSubtitle" xml:space="preserve"><value>Çdo hapësirë pune ka pyetësorë, intervista dhe detyra të izoluara.</value></data>
+  <data name="AddNew" xml:space="preserve"><value>Krijo të re</value></data>
+  <data name="NameShouldNotBeOneOfForbidden" xml:space="preserve"><value>Emri i hapësirës së punës i dhënë nuk lejohet</value></data>
+  <data name="CurrentWorkspace" xml:space="preserve"><value>Hapësira aktuale e punës</value></data>
+  <data name="CreateWorkspace" xml:space="preserve"><value>Krijimi i hapësirës së punës</value></data>
+  <data name="CanNotBeChanged" xml:space="preserve"><value>Nuk mund të ndryshohet pas krijimit</value></data>
+  <data name="DisplayNameHelpText" xml:space="preserve"><value>Do të përdoret për të shfaqur hapësirën e punës në meny. Zgjidhni emra më të shkurtër</value></data>
+  <data name="WorkspaceSettings" xml:space="preserve"><value>Cilësimet</value></data>
+  <data name="Edit" xml:space="preserve"><value>Modifiko</value></data>
+  <data name="AssignedWorkspaces" xml:space="preserve"><value>Zgjidhni hapësirat e punës tek të cilat ka akses përdoruesi</value></data>
+  <data name="UserWorkspacesTab" xml:space="preserve"><value>Hapësirat e punës</value></data>
+  <data name="WorkspacesUpdated" xml:space="preserve"><value>Lista e hapësirave të punës u përditësua</value></data>
+  <data name="DisableWorkspacePopupTitle" xml:space="preserve"><value>Konfirmo çaktivizimin e "{{name}}"</value></data>
+  <data name="Disable" xml:space="preserve"><value>Çaktivizo</value></data>
+  <data name="DisableExplanation" xml:space="preserve"><value>Çaktivizimi i hapësirës së punës do të ndalojë aksesin e të gjithë përdoruesve. Do të ndalojë të gjithë grumbullimin e të dhënave që mund të jetë në vazhdim.</value></data>
+  <data name="Enable" xml:space="preserve"><value>Aktivo</value></data>
+  <data name="DeleteWorkspacePopupTitle" xml:space="preserve"><value>Fshi hapësirën e punës "{{name}}"</value></data>
+  <data name="DeleteExplanation" xml:space="preserve"><value>Jeni i sigurt që dëshironi të fshini hapësirën e punës &amp;lt;strong&amp;gt;{{name}}&amp;lt;/strong&amp;gt;?
+Të gjitha llogaritë e përdoruesve të lidhura me këtë hapësirë pune do të hiqen prej saj. Aplikacionet Survey Solutions Interviewer dhe Supervisor të instaluara në tabletat e këtyre përdoruesve nuk do të mund të komunikojnë më me këtë hapësirë pune dhe të dhënat e mbledhura në këtë hapësirë pune do të humbasin.
+
+Të dhënat e mëposhtme të lidhura me këtë hapësirë pune do të fshihen:</value></data>
+  <data name="CantDeleteExplanation" xml:space="preserve"><value>Hapësira e punës nuk mund të fshihet. Ka të paktën një pyetësor të lidhur me këtë hapësirë pune. Vetëm hapësirat e punës pa pyetësorë mund të fshihen.</value></data>
+  <data name="InterviewersCount" xml:space="preserve"><value>Anketues: {{count}}</value></data>
+  <data name="SupervisorsCount" xml:space="preserve"><value>Mbikëqyrës: {{count}}</value></data>
+  <data name="MapsCount" xml:space="preserve"><value>Harta të ngarkuara: {{count}}</value></data>
+  <data name="AgreeToDelete" xml:space="preserve"><value>Kuptoj se ky operacion nuk mund të kthehej mbrapsht</value></data>
+  <data name="WorkspaceDisabledReason" xml:space="preserve"><value>Hapësira e punës është çaktivizuar dhe nuk mund të aksesohet. Nëse mendoni se kjo është një gabim, ju lutemi kontaktoni administratorin e serverit tuaj.</value></data>
+  <data name="WorkspaceAccessDisabledReason" xml:space="preserve"><value>Llogaria juaj është në hapësirën e punës të çaktivizuar nga administratori i sistemit, dhe si rrjedhim nuk mund të përdorni funksionalitetin e këtij sajti. Nëse mendoni se kjo është një gabim, ju lutemi kontaktoni administratorin e serverit tuaj.</value></data>
+  <data name="WorkspaceCantBeRemoved" xml:space="preserve"><value>Hapësira e punës nuk mund të hiqet sepse përdoruesi ka punë të caktuar. Ricaktoni të gjitha detyrat (duke përfshirë ato të arkivuara), intervistat e pakompletuar dhe për Mbikëqyrësin lëvizni të gjithë anëtarët e ekipit te ekipi tjetër. Intervista: {0}, Detyra: {1}, Anëtarë të ekipit: {2}</value></data>
+  <data name="Open" xml:space="preserve"><value>Hap</value></data>
+  <data name="CreatedAt" xml:space="preserve"><value>Krijuar më</value></data>
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve"><value>Kur u krijua fillimisht hapësira e punës. Klikoni ikonën e renditjes për të renditur sipas kohës.</value></data>
+</root>

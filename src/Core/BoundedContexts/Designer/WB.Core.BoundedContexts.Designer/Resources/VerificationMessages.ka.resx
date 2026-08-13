@@ -1,0 +1,790 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="WB0001_NoQuestions" xml:space="preserve">
+        <value>კითხვარი უნდა შეიცავდეს მინიმუმ ერთ კითხვას.</value>
+        </data>
+    <data name="WB0002_CustomValidationExpressionHasIncorrectSyntax" xml:space="preserve">
+        <value>ვალიდაციის პირობას აქვს სინტაქსის შეცდომა.</value>
+        </data>
+    <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
+        <value>ჩართვის პირობას აქვს სინტაქსის შეცდომა.</value>
+        </data>
+    <data name="WB0004_VariableHasEmptyExpression" xml:space="preserve">
+        <value>ცვლადს არ შეიძლება ჰქონდეს ცარიელი გამოხატულება.</value>
+        </data>
+    <data name="WB0005_VariableExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>ცვლადის გამოსახულებას აქვს {0} სიმბოლოზე მეტი სიგრძე.</value>
+        </data>
+    <data name="WB0009_RosterSizeQuestionIsMissing" xml:space="preserve">
+        <value>სიის ზომის შეკითხვა აკლია.</value>
+        </data>
+    <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
+        <value>დაკავშირებული შეკითხვა მიუთითებს არარსებულ კითხვაზე.</value>
+        </data>
+    <data name="WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType" xml:space="preserve">
+        <value>დაკავშირებული შეკითხვა მიუთითებს კითხვის ტიპზე, რომელიც არ არის მხარდაჭერილი.</value>
+        </data>
+    <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup" xml:space="preserve">
+        <value>დაკავშირებული შეკითხვა მიუთითებს კითხვაზე, რომელიც არ არის სიაში.</value>
+        </data>
+    <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
+        <value>სათაურით ან ინსტრუქციის ჩანაცვლებით შეკითხვა არ შეიძლება მონიშნული იყოს როგორც იდენტიფიკატორი.</value>
+        </data>
+    <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
+        <value>ჩანაცვლება მიუთითებს არარსებულ კითხვაზე ან ცვლადზე.</value>
+        </data>
+    <data name="WB0018_SubstitutionReferencesUnsupportedEntity" xml:space="preserve">
+        <value>ჩანაცვლება მიუთითებს ერთეულზე, რომელიც არ არის მხარდაჭერილი ჩანაცვლებებში.</value>
+        </data>
+    <data name="WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel" xml:space="preserve">
+        <value>ჩანაცვლება არ შეიძლება მიუთითებდეს ელემენტებზე უფრო ღრმა დისკიდან.</value>
+        </data>
+    <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
+        <value>პასუხების მაქსიმალური რაოდენობა მეტია, ვიდრე პასუხის ვარიანტების რაოდენობა.</value>
+        </data>
+    <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
+        <value>ამ ტიპის კითხვა ვერ იდენტიფიცირებულია.</value>
+        </data>
+    <data name="WB0023_RosterSizeSourceQuestionTypeIsIncorrect" xml:space="preserve">
+        <value>ჩამონათვალის ზომის წყაროს შეკითხვა არასწორია. შეიძლება გამოყენებულ იქნას მხოლოდ რიცხვითი, კატეგორიული კითხვები მრავალ არჩევით ან ტექსტური სიით.</value>
+        </data>
+    <data name="WB0027_VariableExpresssionHasIncorrectSyntax" xml:space="preserve">
+        <value>გამოხატვას აქვს სინტაქსის შეცდომა.</value>
+        </data>
+    <data name="WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>ფილტრის გამოხატულება {0} სიმბოლოზე მეტია.</value>
+        </data>
+    <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
+        <value>საიდენტიფიკაციო კითხვები არ შეიძლება იყოს სიაში.</value>
+        </data>
+    <data name="WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles" xml:space="preserve">
+        <value>წყაროს კითხვის მქონე სიას არ შეიძლება ჰქონდეს ელემენტების ფიქსირებული ნაკრები.</value>
+        </data>
+    <data name="WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion" xml:space="preserve">
+        <value>ფიქსირებული ერთეულების სიას არ შეიძლება ჰქონდეს სიის წყაროს შეკითხვა.</value>
+        </data>
+    <data name="WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion" xml:space="preserve">
+        <value>ფიქსირებული კომპლექტი ერთეულების სიაში არ შეიძლება ჰქონდეს როსტერის სათაურის შეკითხვა.</value>
+        </data>
+    <data name="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" xml:space="preserve">
+        <value>სია კითხვის სიის წყაროს აქვს არასწორი წყაროს შეკითხვა მწკრივების სახელებისთვის.</value>
+        </data>
+    <data name="WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion" xml:space="preserve">
+        <value>სიას არ შეიძლება ჰქონდეს როსტერის სათაურის შეკითხვა, როდესაც ჩამონათვალის წყაროს შეკითხვა არის კატეგორიული მრავალ არჩევითი ან სიის შეკითხვა.</value>
+        </data>
+    <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
+        <value>ერთეულების ფიქსირებულ კომპლექტს არ შეიძლება ჰქონდეს ცარიელი სათაურები ან ორზე ნაკლები.</value>
+        </data>
+    <data name="WB0038_RosterFixedTitlesHaveMoreThan200Items" xml:space="preserve">
+        <value>ერთეულების ფიქსირებული ნაკრები არ შეიძლება ჰქონდეს {0} მწკრივზე მეტი.</value>
+        </data>
+    <data name="WB0039_TextListQuestionCannotBePrefilled" xml:space="preserve">
+        <value>სიის შეკითხვა არ შეიძლება იყოს იდენტიფიცირებული.</value>
+        </data>
+    <data name="WB0040_TextListQuestionCannotBeFilledBySupervisor" xml:space="preserve">
+        <value>სიის კითხვის შევსება არ შეიძლება ზედამხედველის მიერ.</value>
+        </data>
+    <data name="WB0042_TextListQuestionMaxAnswerInRange1And200" xml:space="preserve">
+        <value>სიის ელემენტების მაქსიმალური რაოდენობა უნდა იყოს [{1}, {0}] დიაპაზონში.</value>
+        </data>
+    <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
+        <value>კითხვას აქვს კატეგორიები ცარიელი მნიშვნელობებით.</value>
+        </data>
+    <data name="WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
+        <value>ჩართვის პირობა არ შეიძლება ეხებოდეს კითხვას უფრო ღრმა სიიდან.</value>
+        </data>
+    <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
+        <value>ქვესექციას არ შეიძლება ჰქონდეს ბავშვის კითხვაზე მითითების გამაძლიერებელი პირობა.</value>
+        </data>
+    <data name="WB0049_QRBarcodeQuestionIsSupervisorQuestion" xml:space="preserve">
+        <value>შტრიხკოდის შეკითხვის შევსება ზედამხედველის მიერ არ შეიძლება.</value>
+        </data>
+    <data name="WB0050_QRBarcodeQuestionIsPreFilledQuestion" xml:space="preserve">
+        <value>შტრიხკოდის კითხვის იდენტიფიკაცია შეუძლებელია.</value>
+        </data>
+    <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
+        <value>როსტერს უნდა ჰქონდეს უფრო ღრმა ან იგივე როსტერის დონე, როგორიც არის სიის ზომის კითხვა.</value>
+        </data>
+    <data name="WB0055_RosterHasRosterLevelMoreThan4" xml:space="preserve">
+        <value>სიას შეიძლება ჰქონდეს არაუმეტეს {0} მშობელთა სია.</value>
+        </data>
+    <data name="WB0056_EntityShouldNotHaveCircularReferences" xml:space="preserve">
+        <value>წრიული მითითებები დაუშვებელია.</value>
+        </data>
+    <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
+        <value>ცვლადის სახელი ან ჩამონათვალის ID არ შეიძლება იყოს რეზერვირებული სიტყვა.</value>
+        </data>
+    <data name="WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster" xml:space="preserve">
+        <value>თუ ელემენტი იყენებს %rostertitle% ჩანაცვლებას, ის უნდა განთავსდეს სიაში.</value>
+        </data>
+    <data name="WB0060_CategoricalQuestionHasLessThan2Options" xml:space="preserve">
+        <value>კითხვას აქვს {0}-ზე ნაკლები კატეგორია.</value>
+        </data>
+    <data name="WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2" xml:space="preserve">
+        <value>კითხვას აქვს მაქსიმუმ დაშვებული პასუხები {0}-ზე ნაკლები.</value>
+        </data>
+    <data name="WB0062_OptionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+        <value>ვარიანტის ფილტრის გამოხატულებას აქვს სინტაქსის შეცდომა.</value>
+        </data>
+    <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
+        <value>კატეგორიული დაკავშირებული კითხვა არ შეიძლება გამოყენებულ იქნას ვალიდაციის პირობაში #{0}.</value>
+        </data>
+    <data name="WB0064_CategoricalLinkedQuestionUsedInEnablementCondition" xml:space="preserve">
+        <value>კატეგორიული დაკავშირებული კითხვის გამოყენება არ შეიძლება ჩართულ მდგომარეობაში.</value>
+        </data>
+    <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
+        <value>ამ ტიპის შეკითხვა არ არის მხარდაჭერილი.</value>
+        </data>
+    <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
+        <value>მოქმედი ცვლადის ან რეესტრის ID სახელი არ უნდა იყოს ცარიელი.</value>
+        </data>
+    <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
+        <value>სიას აქვს როსტერის ID, რომელიც უდრის კითხვარის სათაურს.</value>
+        </data>
+    <data name="WB0071_StaticTextIsEmpty" xml:space="preserve">
+        <value>სტატიკური ტექსტი არ შეიძლება იყოს ცარიელი.</value>
+        </data>
+    <data name="WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+        <value>კატეგორიების სათაურები უნდა იყოს უნიკალური.</value>
+        </data>
+    <data name="WB0073_OptionValuesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+        <value>კატეგორიების მნიშვნელობები უნიკალური უნდა იყოს.</value>
+        </data>
+    <data name="WB0074_CategoricalQuestionHasOptionsAndIsLinked" xml:space="preserve">
+        <value>კატეგორიულ კითხვას არ შეიძლება ჰქონდეს კატეგორიები და სხვა კითხვასთან იყოს დაკავშირებული.</value>
+        </data>
+    <data name="WB0075_FilteredComboboxContainsMoreThan5000Options" xml:space="preserve">
+        <value>შეიცავს {0}-ზე მეტ კატეგორიას.</value>
+        </data>
+    <data name="WB0076_CategoricalOptionsCountMoreThan200" xml:space="preserve">
+        <value>შეიცავს {0}-ზე მეტ კატეგორიას.</value>
+        </data>
+    <data name="WB0077_QuestionHasInvalidVariableName" xml:space="preserve">
+        <value>შეკითხვას აქვს არასწორი ცვლადის სახელი.</value>
+        </data>
+    <data name="WB0078_MultimediaQuestionIsInterviewersOnly" xml:space="preserve">
+        <value>სურათის კითხვა შეიძლება იყოს მხოლოდ ინტერვიუერებისთვის.</value>
+        </data>
+    <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
+        <value>სურათის კითხვას არ შეიძლება ჰქონდეს ვალიდაციის პირობა.</value>
+        </data>
+    <data name="WB0083_QuestionCannotBeUsedAsRosterTitle" xml:space="preserve">
+        <value>ამჟამინდელი ტიპის შეკითხვა არ შეიძლება გამოყენებულ იქნას როგორც სათაური.</value>
+        </data>
+    <data name="WB0084_CascadingOptionsShouldHaveParent" xml:space="preserve">
+        <value>კატეგორიები ბავშვთა კასკადური კომბინირებული კითხვისას უნდა მიუთითებდეს მხოლოდ არსებულ ვარიანტს მშობლის შეკითხვაში.</value>
+        </data>
+    <data name="WB0085_CascadingQuestionWrongParentLevel" xml:space="preserve">
+        <value>კითხვას უნდა ჰქონდეს უფრო ღრმა ან იგივე დონე, როგორც მისი მშობლის შეკითხვა.</value>
+        </data>
+    <data name="WB0086_ParentCascadingQuestionShouldExist" xml:space="preserve">
+        <value>კასკადური კომბინირებული კითხვის მითითებები აკლია ან არ არის მხარდაჭერილი კითხვის ტიპი.</value>
+        </data>
+    <data name="WB0087_CascadingQuestionHasCicularReference" xml:space="preserve">
+        <value>მრგვალი მითითებები კასკადურ კომბინირებულ კითხვებში დაუშვებელია.</value>
+        </data>
+    <data name="WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers" xml:space="preserve">
+        <value>კასკადური კომბინირებული კითხვა უნდა შეიცავდეს {0}-ზე ნაკლებ კატეგორიას.</value>
+        </data>
+    <data name="WB0089_CascadingQuestionOptionWithParentShouldBeUnique" xml:space="preserve">
+        <value>კასკადურ კომბინირებულ კითხვას უნდა ჰქონდეს უნიკალური მნიშვნელობა და კატეგორიების მშობელი მნიშვნელობის სია.</value>
+        </data>
+    <data name="WB0090_LinkedQuestionIsInterviewersOnly" xml:space="preserve">
+        <value>დაკავშირებული კითხვა შეიძლება იყოს მხოლოდ ინტერვიუერებისთვის.</value>
+        </data>
+    <data name="WB0091_CascadingChildQuestionShouldNotContainCondition" xml:space="preserve">
+        <value>საბავშვო კასკადური კომბინირებული შეკითხვა არ უნდა შეიცავდეს ჩართვის პირობას.</value>
+        </data>
+    <data name="WB0092_CascadingChildQuesionShouldNotContainValidation" xml:space="preserve">
+        <value>საბავშვო კასკადური კომბინირებული შეკითხვა არ უნდა შეიცავდეს ვალიდაციის პირობას.</value>
+        </data>
+    <data name="WB0093_RosterSizeListOptionQuestionShouldBeLimit" xml:space="preserve">
+        <value>ჩამონათვალის წყაროს სიის კითხვას უნდა ჰქონდეს ელემენტების მაქსიმალური რაოდენობა.</value>
+        </data>
+    <data name="WB0094_ConditionExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>ჩართვის პირობას აქვს {0} სიმბოლოზე მეტი სიგრძე.</value>
+        </data>
+    <data name="WB0096_GeneralCompilationError" xml:space="preserve">
+        <value>კითხვარის შედგენისას მოხდა შეცდომა.</value>
+        </data>
+    <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
+        <value>კითხვარის სათაურში შეიძლება გამოყენებულ იქნას მხოლოდ შემდეგი სიმბოლოები: A..Z a..z 0..9 ( ) \ / _ - და სივრცე.</value>
+        </data>
+    <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
+        <value>კითხვარის ზომა არის დაახლოებით {0:0.##}მბაიტი და ძალიან დიდია Survey Solutions-თან სწორად მუშაობისთვის. შეეცადეთ შეამციროთ მონაცემთა რაოდენობა, სანამ ის არ იქნება მინიმუმ {1}MB-ზე ნაკლები.</value>
+        </data>
+    <data name="WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues" xml:space="preserve">
+        <value>ნივთების ჩამონათვალის ფიქსირებული ნაკრები უნდა იყოს უნიკალური.</value>
+        </data>
+    <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200" xml:space="preserve">
+        <value>კითხვებზე პასუხების მაქსიმალური რაოდენობა არ შეიძლება იყოს {0}-ზე მეტი.</value>
+        </data>
+    <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
+        <value>ქვეგანყოფილებას შეიძლება ჰქონდეს არაუმეტეს {0} ძირითადი ქვესექცია.</value>
+        </data>
+    <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
+        <value>მხოლოდ ერთი GPS შეკითხვა შეიძლება განთავსდეს ყდა გვერდის განყოფილებაში</value>
+        </data>
+    <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
+        <value>მრავალჯერადი შერჩევის დიახ/არა შეკითხვა არ შეიძლება იყოს დაკავშირებული</value>
+        </data>
+    <data name="WB0008_SubstitutionsInVariableLableAreProhibited" xml:space="preserve">
+        <value>დაუშვებელია ჩანაცვლების გამოყენება ცვლადის ეტიკეტში</value>
+        </data>
+    <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
+        <value>კითხვარის შემდეგი პუნქტები (კითხვა/ჯგუფი/სტატიკური ტექსტი/ა.შ.) გამოიყენეთ იგივე შიდა ID. გთხოვთ წაშალოთ ერთი მათგანი.</value>
+        </data>
+    <data name="WB0010_MacroHasInvalidName" xml:space="preserve">
+        <value>მაკროს არასწორი სახელი აქვს.</value>
+        </data>
+    <data name="WB0020_NameForMacrosIsNotUnique" xml:space="preserve">
+        <value>სხვა მაკრო იგივე სახელით უკვე არსებობს.</value>
+        </data>
+    <data name="WB0014_MacroHasEmptyName" xml:space="preserve">
+        <value>მაკროს არ შეიძლება ჰქონდეს ცარიელი სახელი.</value>
+        </data>
+    <data name="WB0271_MacroHasEmptyContent" xml:space="preserve">
+        <value>მაკრო არ შეიძლება იყოს ცარიელი.</value>
+        </data>
+    <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
+        <value>იქმნება დიდი რაოდენობით სია. ამ სტრუქტურების მონაცემთა ფაილებში ექსპორტი შეიძლება იყოს პრობლემური. იფიქრეთ სიების რაოდენობის შემცირებაზე.</value>
+        </data>
+    <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
+        <value>კითხვა პასუხის ოფციონის ფილტრით ვერ იდენტიფიცირებულია.</value>
+        </data>
+    <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
+        <value>ნაპოვნია იმავე სახელწოდების ნივთები.</value>
+        </data>
+    <data name="WB0024_LookupHasInvalidName" xml:space="preserve">
+        <value>საძიებო ცხრილს არასწორი სახელი აქვს.</value>
+        </data>
+    <data name="WB0025_LookupHasEmptyName" xml:space="preserve">
+        <value>საძიებო ცხრილს არ შეიძლება ჰქონდეს ცარიელი სახელი.</value>
+        </data>
+    <data name="WB0031_LookupTableHasInvalidHeaders" xml:space="preserve">
+        <value>საძიებო ცხრილს აქვს არასწორი სვეტის სათაურები.</value>
+        </data>
+    <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
+        <value>საძიებო ცხრილში ძალიან ბევრი სვეტია</value>
+        </data>
+    <data name="WB0044_LookupTableMoreThan15000Rows" xml:space="preserve">
+        <value>საძიებო ცხრილში ძალიან ბევრი მწკრივია</value>
+        </data>
+    <data name="WB0047_LookupTableNotUniqueRowcodeValues" xml:space="preserve">
+        <value>საძიებო ცხრილს არ აქვს რიგის კოდის უნიკალური მნიშვნელობები</value>
+        </data>
+    <data name="WB0048_LookupHasEmptyContent" xml:space="preserve">
+        <value>საძიებო ცხრილი არ შეიძლება იყოს ცარიელი</value>
+        </data>
+    <data name="WB0052_LookupNameIsKeyword" xml:space="preserve">
+        <value>საძიებო ცხრილის სახელი არ შეიძლება იყოს რეზერვირებული სიტყვა.</value>
+        </data>
+    <data name="WB0053_LinkedQuestionReferencesNotExistingRoster" xml:space="preserve">
+        <value>სია, რომელიც არის ბმულის წყარო, უნდა არსებობდეს.</value>
+        </data>
+    <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
+        <value>სია, რომელიც არის ბმულის წყარო, არის სია და არა ქვეგანყოფილება.</value>
+        </data>
+    <data name="WB0105_ValidationMessageIsTooLong" xml:space="preserve">
+        <value>ვალიდაციის შეცდომის შეტყობინება #{0} ძალიან გრძელია. ის არ უნდა აღემატებოდეს {1} სიმბოლოს.</value>
+        </data>
+    <data name="WB0104_ValidationConditionIsTooLong" xml:space="preserve">
+        <value>ვალიდაციის პირობა #{0} ძალიან გრძელია. ის არ უნდა აღემატებოდეს {1} სიმბოლოს.</value>
+        </data>
+    <data name="WB0106_ValidationConditionIsEmpty" xml:space="preserve">
+        <value>ვალიდაციის პირობა #{0} ცარიელია.</value>
+        </data>
+    <data name="WB0107_ValidationMessageIsEmpty" xml:space="preserve">
+        <value>ვალიდაციის შეცდომის შეტყობინება #{0} ცარიელია.</value>
+        </data>
+    <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
+        <value>განყოფილება ან სია შეიცავს {0}-ზე მეტ კითხვას, განიხილეთ ქვეთავებად დაყოფა.</value>
+        </data>
+    <data name="WB0202_GroupWithoutQuestions" xml:space="preserve">
+        <value>განყოფილება არ შეიცავს კითხვებს. განიხილეთ ცარიელი განყოფილების ამოღება.</value>
+        </data>
+    <data name="WB0203_RosterHasSingleQuestion" xml:space="preserve">
+        <value>როსტერის ჯგუფი შეიცავს მხოლოდ ერთ კითხვას. განიხილეთ სხვა სისტემებთან დაჯგუფება. ფიქსირებული ჩამონათვალისთვის განიხილეთ წარმოდგენა, როგორც დამოუკიდებელი კითხვების ნაკრები.</value>
+        </data>
+    <data name="WB0204_EmptyRoster" xml:space="preserve">
+        <value>სია ცარიელია. ამოიღეთ იგი, თუ ეს არ არის საჭირო.</value>
+        </data>
+    <data name="WB0205_TooManyQuestions" xml:space="preserve">
+        <value>კითხვარს აქვს {0}-ზე მეტი კითხვა. შეიძლება რთული იყოს მისი ადმინისტრირება.</value>
+        </data>
+    <data name="WB0209_LongEnablementCondition" xml:space="preserve">
+        <value>ჩართვის მდგომარეობა გრძელია. შეიძლება იყოს უფრო მოკლე, უფრო წასაკითხი პირობები ჩაშენებული ფუნქციებით (ანუ InList()).</value>
+        </data>
+    <data name="WB0210_CategoricalQuestionHasManyOptions" xml:space="preserve">
+        <value>ერთი არჩევანის კითხვას აქვს ძალიან ბევრი კატეგორია, იფიქრეთ კომბინირებულ ველზე გადასვლაზე.</value>
+        </data>
+    <data name="WB0211_QuestionnaireHasNoGpsQuestion" xml:space="preserve">
+        <value>კითხვარი არ შეიცავს GPS კითხვებს. განიხილეთ GPS შეკითხვის დამატება.</value>
+        </data>
+    <data name="WB0206_FewSectionsManyQuestions" xml:space="preserve">
+        <value>კითხვარი შეიცავს {0}-ზე მეტ კითხვას, მაგრამ მხოლოდ ერთ ან ორ განყოფილებას. დაჯგუფეთ კითხვები სექციებად ნავიგაციის გასამარტივებლად და მუშაობის გასაუმჯობესებლად.</value>
+        </data>
+    <data name="WB0212_LongValidationCondition" xml:space="preserve">
+        <value>ვალიდაციის პირობა #{0} გრძელია. შეიძლება იყოს უფრო მოკლე, უფრო წასაკითხი პირობები ჩაშენებული ფუნქციებით (ანუ InList()).</value>
+        </data>
+    <data name="WB0207_FixedRosterContains3OrLessItems" xml:space="preserve">
+        <value>ფიქსირებული სია შეიცავს {0} ან ნაკლებ ელემენტს. განიხილეთ ქვესექციებისა და კითხვების სერიის გამოყენება. სია ართულებს ექსპორტირებული მონაცემების სტრუქტურას.</value>
+        </data>
+    <data name="WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions" xml:space="preserve">
+        <value>კითხვების {0}%-ზე მეტი არ შეიცავს ვალიდაციის პირობებს. დაამატეთ ვალიდაციის პირობები მონაცემთა ხარისხის გასაუმჯობესებლად.</value>
+        </data>
+    <data name="WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>დაკავშირებული კითხვების ფილტრის გამოხატულება აღემატება {0} სიმბოლოს.</value>
+        </data>
+    <data name="WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
+        <value>კითხვა არ შეიძლება გამოყენებულ იქნას საკუთარი ფილტრის გამოხატულებაში.</value>
+        </data>
+    <data name="WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+        <value>ფილტრის გამოხატულებას აქვს სინტაქსის შეცდომა.</value>
+        </data>
+    <data name="WB0065_NameForAttachmentIsNotUnique" xml:space="preserve">
+        <value>სხვა დანართი იგივე სახელით უკვე არსებობს.</value>
+        </data>
+    <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
+        <value>სტატიკური ტექსტი მიუთითებს დანართის არარსებობაზე</value>
+        </data>
+    <data name="WB0111_AttachmentHasEmptyContent" xml:space="preserve">
+        <value>დანართი არ შეიძლება იყოს ცარიელი</value>
+        </data>
+    <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">
+        <value>დანართის ზომა არის {0}Mb-ზე მეტი</value>
+        </data>
+    <data name="WB0214_TotalAttachmentsSizeIsMoreThan50Mb" xml:space="preserve">
+        <value>დანართების საერთო ზომა არის {0}Mb-ზე მეტი</value>
+        </data>
+    <data name="WB0215_UnusedAttachments" xml:space="preserve">
+        <value>კითხვარი შეიცავს გამოუყენებელ დანართებს</value>
+        </data>
+    <data name="WB0112_VariableHasInvalidName" xml:space="preserve">
+        <value>ცვლადს არასწორი სახელი აქვს.</value>
+        </data>
+    <data name="WB0113_VariableHasEmptyVariableName" xml:space="preserve">
+        <value>ცვლადს არ შეიძლება ჰქონდეს ცარიელი სახელი.</value>
+        </data>
+    <data name="WB0250_ValidationConditionRefersToAFutureQuestion" xml:space="preserve">
+        <value>დადასტურების პირობა #{0} ეხება მომავალ კითხვას. განიხილეთ წესრიგის შეცვლა.</value>
+        </data>
+    <data name="WB0251_EnablementConditionRefersToAFutureQuestion" xml:space="preserve">
+        <value>ჩართვის პირობა ეხება მომავალ კითხვას. განიხილეთ წესრიგის შეცვლა.</value>
+        </data>
+    <data name="WB0253_TooFewVariableLabelsAreDefined" xml:space="preserve">
+        <value>ძალიან ცოტა ცვლადი ლეიბლია განსაზღვრული. დაამატეთ ცვლადი ლეიბლები ექსპორტირებული მონაცემების გამოყენებადობის გასაუმჯობესებლად და მონაცემთა დოკუმენტაციის ინიციატივის (DDI) ფორმატში მეტამონაცემებში შეყვანის უზრუნველსაყოფად.</value>
+        </data>
+    <data name="WB0254_UseFunctionIsValidEmailToValidateEmailAddress" xml:space="preserve">
+        <value>გამოიყენეთ ფუნქცია IsValidEmail() ელ.ფოსტის მისამართის დასადასტურებლად.</value>
+        </data>
+    <data name="WB0255_QuestionIsTooShort" xml:space="preserve">
+        <value>კითხვა ძალიან მოკლეა. ეს შეიძლება იყოს არასრული კითხვა.</value>
+        </data>
+    <data name="WB0114_CategoricalQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
+        <value>კატეგორიული შეკითხვა მხარს უჭერს მხოლოდ მთელ რიცხვებს {0}-დან {1}-მდე</value>
+        </data>
+    <data name="WB0115_FixRosterSupportsOnlyIntegerTitleValues" xml:space="preserve">
+        <value>ფიქსირებული სია მხარს უჭერს მხოლოდ მთელ რიცხვებს.</value>
+        </data>
+    <data name="WB0256_TranslationNameIsInvalid" xml:space="preserve">
+        <value>თარგმანის სახელი არასწორია</value>
+        </data>
+    <data name="WB0257_TranslationHasEmptyContent" xml:space="preserve">
+        <value>თარგმანს ცარიელი შინაარსი აქვს</value>
+        </data>
+    <data name="WB0258_TranslationsHaveDuplicatedNames" xml:space="preserve">
+        <value>თარგმანებს აქვთ დუბლიკატი სახელები</value>
+        </data>
+    <data name="WB0259_QuestionTitleIsTooLong" xml:space="preserve">
+        <value>შეკითხვის ტექსტი ძალიან გრძელია. ის არ უნდა აღემატებოდეს {0} სიმბოლოს.</value>
+        </data>
+    <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
+        <value>სათაური ძალიან გრძელია. ის არ უნდა აღემატებოდეს {0} სიმბოლოს.</value>
+        </data>
+    <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
+        <value>მრავალჯერად შერჩეული ჩამონათვალის წყაროს შეკითხვა უნდა შეიცავდეს პასუხების მაქსიმალურ რაოდენობას.</value>
+        </data>
+    <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
+        <value>კითხვარი შეიცავს სისტემებს, რომელთა საერთო რაოდენობა {0} აღემატება სისტემის ლიმიტებს {1}</value>
+        </data>
+    <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
+        <value>სია მიაღწია ზომის ლიმიტს. შეამცირეთ სიის ზომა ან შეამცირეთ ბუდე.</value>
+        </data>
+    <data name="WB0264_GpsQuestion" xml:space="preserve">
+        <value>თქვენ გაქვთ GPS შეკითხვა. ამ კითხვართან გამოსაყენებლად ტაბლეტებმა უნდა უზრუნველყოს გეოლოკაცია.</value>
+        </data>
+    <data name="WB0265_MoreThan30PercentQuestionsAreText" xml:space="preserve">
+        <value>კითხვების {0}%-ზე მეტი ტექსტური კითხვებია. ტექსტურ კითხვებზე პასუხის გაცემა რთულია ტაბლეტებზე. იფიქრეთ ერთჯერადი ან მრავალარჩევანი კითხვების ნაცვლად.</value>
+        </data>
+    <data name="WB0266_SameTitle" xml:space="preserve">
+        <value>დუბლიკატი კითხვები. (კითხვებს იგივე სათაური აქვს.)</value>
+        </data>
+    <data name="WB0267_QRBarcodeQuestion" xml:space="preserve">
+        <value>თქვენ გაქვთ შტრიხკოდის შეკითხვა. ამ კითხვართან გამოსაყენებლად ტაბლეტებს უნდა ჰქონდეს ავტოფოკუსის მხარდაჭერა.</value>
+        </data>
+    <data name="WB0216_NoPrefilledQuestions" xml:space="preserve">
+        <value>საიდენტიფიკაციო კითხვები არ არის განსაზღვრული. განსაზღვრეთ მინიმუმ ერთი საიდენტიფიკაციო შეკითხვა.</value>
+        </data>
+    <data name="WB0217_VariableLableMoreThan120Characters" xml:space="preserve">
+        <value>ცვლადის ლეიბლი ძალიან გრძელია ({0} სიმბოლოზე მეტი) და შეიკვეცება SPSS ფაილის ექსპორტში.</value>
+        </data>
+    <data name="WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions" xml:space="preserve">
+        <value>თანმიმდევრული კითხვები შეიცავს ჩართვის იდენტურ პირობებს. განიხილეთ ქვეგანყოფილებაში მოთავსება და ქვეგანყოფილებას პირობა მიანიჭეთ.</value>
+        </data>
+    <data name="WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options" xml:space="preserve">
+        <value>მრავალი ზედიზედ უპირობო ერთჯერადი შერჩევის შეკითხვა {0} კატეგორიებით. განიხილეთ ერთი მრავალჯერადი არჩევანის კითხვა.</value>
+        </data>
+    <data name="WB0220_RowIndexInMultiOptionBasedRoster" xml:space="preserve">
+        <value>@{0}-ის გამოყენება მრავალ არჩევან სიაში შეიძლება არასტაბილური იყოს. იფიქრეთ @{1}-ის ნაცვლად.</value>
+        </data>
+    <data name="WB0221_NoCurrentTimeQuestions" xml:space="preserve">
+        <value>მიმდინარე დროის კითხვა ვერ მოიძებნა. ჩაწერეთ ინტერვიუს თარიღი თქვენს კითხვარში.</value>
+        </data>
+    <data name="WB0222_SingleOptionPrefilled" xml:space="preserve">
+        <value>ერთჯერადი შერჩევის შეკითხვა მონიშნულია, როგორც საიდენტიფიკაციო. განიხილეთ ტექსტური შეკითხვის გამოყენება.</value>
+        </data>
+    <data name="WB0223_SectionWithLessThan5Questions" xml:space="preserve">
+        <value>განყოფილება შეიცავს ხუთზე ნაკლებ კითხვას. განიხილეთ სხვა სექციებთან შეერთება.</value>
+        </data>
+    <data name="WB0224_TooManySubsectionsAtOneLevel" xml:space="preserve">
+        <value>ძალიან ბევრი ქვესექცია ერთ დონეზე. განვიხილოთ იერარქიული განლაგება.</value>
+        </data>
+    <data name="WB0225_ComboBoxWithLessThan10Elements" xml:space="preserve">
+        <value>ჩამოსაშლელი მენიუ (კომბო ველი) შეიცავს 10-ზე ნაკლებ ელემენტს. განვიხილოთ სტანდარტული ერთი არჩევანის წარმოდგენაზე გადასვლა.</value>
+        </data>
+    <data name="WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope" xml:space="preserve">
+        <value>დაკავშირებული შეკითხვა მიუთითებს სიის კითხვაზე არასწორი დონიდან.</value>
+        </data>
+    <data name="WB0226_SameCascadingParentQuestion" xml:space="preserve">
+        <value>კასკადური კომბინირებული კითხვებს აქვთ იგივე მშობელი შეკითხვა.</value>
+        </data>
+    <data name="WB0227_NotShared" xml:space="preserve">
+        <value>კითხვარი არ არის განხილული. იფიქრეთ მისი სხვა მომხმარებელთან გამოხმაურებისთვის გაზიარებისთვის.</value>
+        </data>
+    <data name="WB0228_OmittedOptions" xml:space="preserve">
+        <value>კატეგორიულ კითხვას აქვს არათანმიმდევრული კატეგორიის კოდები. შეამოწმეთ გამოტოვებული კატეგორიები.</value>
+        </data>
+    <data name="WB0229_SupervisorQuestionInValidation" xml:space="preserve">
+        <value>ვალიდაციისას გამოიყენება ზედამხედველის შეკითხვა. შეამოწმეთ მდგომარეობის ანგარიშები ზედამხედველის უპასუხოდ ან დაავალეთ ზედამხედველებს ყოველთვის უპასუხონ.</value>
+        </data>
+    <data name="WB0230_NonconsecutiveCascadings" xml:space="preserve">
+        <value>არათანმიმდევრული კასკადური კითხვები. იფიქრეთ კასკადური კითხვების ერთმანეთის მიყოლებით.</value>
+        </data>
+    <data name="WB0117_LinkedToTextListQuestionDoesNotSupportFilters" xml:space="preserve">
+        <value>სიაში მიბმულ შეკითხვას არ აქვს კატეგორიების ფილტრის მხარდაჭერა</value>
+        </data>
+    <data name="WB0231_MultiOptionWithMoreThan20Options" xml:space="preserve">
+        <value>მრავალჯერადი შერჩევის შეკითხვა შეიცავს ძალიან ბევრ (&gt;{0}) კატეგორიას. ტაბლეტებზე ნავიგაცია რთული იქნება. იფიქრეთ ორ მრავალარჩევან კითხვად დაყოფაზე, თუ ეს შესაძლებელია.</value>
+        </data>
+    <data name="WB0232_FiveOrMoreQuestionsWithSameEnabling" xml:space="preserve">
+        <value>ხუთ ან მეტ კითხვას აქვს ერთი და იგივე გამაძლიერებელი პირობა. განათავსეთ კითხვები ჯგუფში და გამოიყენეთ ერთი გამაძლიერებელი პირობა ჯგუფში კითხვარის ეფექტურობის გასაუმჯობესებლად.</value>
+        </data>
+    <data name="WB0233_NestedRosterDegree3OrMore" xml:space="preserve">
+        <value>წყობილი სია სამი ან მეტი ხარისხის ბუდეებით. შეეცადეთ თავიდან აიცილოთ ისეთი რთული სტრუქტურები, რამაც შეიძლება გამოიწვიოს პრობლემები მონაცემთა შეგროვებაში.</value>
+        </data>
+    <data name="WB0234_RosterInRosterWithSameSourceQuestion" xml:space="preserve">
+        <value>დაქვემდებარებული დონეები წყობილ სიაში ეფუძნება იმავე მშობლის კითხვას. სცადეთ გადახედვა, ასეთმა ჩამონათვალმა შეიძლება გამოიწვიოს პრობლემები მონაცემთა შეგროვებაში.</value>
+        </data>
+    <data name="WB0235_FewQuestionsWithSameLongEnablement" xml:space="preserve">
+        <value>იგივე ხანგრძლივი ჩართვის პირობა გამოიყენება რამდენიმე კითხვაში. შეიძლება დაგჭირდეთ ლოგიკური ცვლადის შექმნა კოდების მართვის გასამარტივებლად.</value>
+        </data>
+    <data name="WB0236_FewQuestionsWithSameLongValidation" xml:space="preserve">
+        <value>იგივე ხანგრძლივი ვალიდაციის პირობა გამოიყენება რამდენიმე კითხვაში. შეიძლება დაგჭირდეთ ლოგიკური ცვლადის შექმნა კოდების მართვის გასამარტივებლად.</value>
+        </data>
+    <data name="WB0237_BitwiseAnd" xml:space="preserve">
+        <value>&amp; გამოიყენება გამოხატვაში. დარწმუნდით, რომ გესმით განსხვავება &amp; და &amp;&amp; ოპერატორებს შორის. უმეტეს შემთხვევაში გამოიყენეთ &amp;&amp;.</value>
+        </data>
+    <data name="WB0238_BitwiseOr" xml:space="preserve">
+        <value>| გამოიყენება გამოხატვისას. დარწმუნდით, რომ გესმით განსხვავება | და || ოპერატორები. უმეტეს შემთხვევაში გამოიყენეთ ||.</value>
+        </data>
+    <data name="WB0118_ExpressionReferencingForbiddenDateTimeProperies" xml:space="preserve">
+        <value>გამოხატვის მითითება აკრძალული DateTime თვისებები: {0}, {1}, {2}. იფიქრეთ ახლანდელი დროის კითხვის ნაცვლად.</value>
+        </data>
+    <data name="WB0268_DoesNotSupportSubstitution" xml:space="preserve">
+        <value>თქვენ ცდილობთ გამოიყენოთ ჩანაცვლება მხარდაუჭერელი ერთეულისთვის.</value>
+        </data>
+    <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
+        <value>კითხვას არ შეიძლება ჰქონდეს ცარიელი სათაური.</value>
+        </data>
+    <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
+        <value>განყოფილება არ უნდა შეიცავდეს {0}_ზე მეტ კითხვას.</value>
+        </data>
+    <data name="WB0119_QuestionnaireTitleTooLong" xml:space="preserve">
+        <value>კითხვარის სათაურს არ შეიძლება ჰქონდეს {0} სიმბოლოზე მეტი.</value>
+        </data>
+    <data name="WB0120_GroupTitleIsEmpty" xml:space="preserve">
+        <value>სექციებისა და ქვესექციების სათაურები არ შეიძლება იყოს ცარიელი ან შეიცავდეს მხოლოდ უფსკრული.</value>
+        </data>
+    <data name="WB0121_VariableNameTooLong" xml:space="preserve">
+        <value>ამ ელემენტის სახელი ან ID არ უნდა იყოს {0} სიმბოლოზე მეტი.</value>
+        </data>
+    <data name="WB0122_VariableNameHasSpecialCharacters" xml:space="preserve">
+        <value>მოქმედი ცვლადი ან ჩამონათვალის ID სახელი უნდა შეიცავდეს მხოლოდ ასოებს, ციფრებს და ხაზს</value>
+        </data>
+    <data name="WB0123_VariableNameStartWithDigitOrUnderscore" xml:space="preserve">
+        <value>ცვლადის სახელი ან ჩამონათვალის ID არ უნდა იწყებოდეს ციფრით ან ქვედა ხაზით</value>
+        </data>
+    <data name="WB0124_VariableNameEndWithUnderscore" xml:space="preserve">
+        <value>ცვლადის სახელი ან ჩამონათვალის ID არ უნდა მთავრდებოდეს ხაზგასმით</value>
+        </data>
+    <data name="WB0125_VariableNameHasConsecutiveUnderscores" xml:space="preserve">
+        <value>ცვლადის სახელი ან ჩამონათვალის ID არ უნდა შეიცავდეს ზედიზედ ორი ან მეტი ხაზგასმული სიმბოლოს.</value>
+        </data>
+    <data name="WB0126_VarialbeNameNotUnique" xml:space="preserve">
+        <value>ცვლადის სახელი ან ჩამონათვალის ID უნდა იყოს უნიკალური კითხვარის არეალში.</value>
+        </data>
+    <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+        <value>არსებობს მინიმუმ ერთი დუბლიკატი "სათაური" და "მშობლის ღირებულება" წყვილი. სია არ უნდა შეიცავდეს დუბლიკატებს.</value>
+        </data>
+    <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
+        <value>ათობითი ადგილების რაოდენობა არ არის {0}-დან {1}-მდე.</value>
+        </data>
+    <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
+        <value>კატეგორიის სათაური ცარიელი ან ძალიან გრძელია. სათაურის სიგრძე უნდა იყოს {0}-დან {1} სიმბოლომდე.</value>
+        </data>
+    <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
+        <value>თქვენ არ შეგიძლიათ გამოიყენოთ შვილობილი ერთეულები ჩართვის მდგომარეობაში სექციებისთვის, ქვეგანყოფილებებისთვის და სიებისთვის.</value>
+        </data>
+    <data name="WB0272_ConditionUsingForbiddenClasses" xml:space="preserve">
+        <value>ჩართვის პირობა არის აკრძალული ტიპის გამოყენება.</value>
+        </data>
+    <data name="WB0273_ValidationConditionUsingForbiddenClasses" xml:space="preserve">
+        <value>ვალიდაციის პირობა არის აკრძალული ტიპის გამოყენებით.</value>
+        </data>
+    <data name="WB0274_VariableUsingForbiddenClasses" xml:space="preserve">
+        <value>ცვლადი იყენებს აკრძალულ ტიპს.</value>
+        </data>
+    <data name="WB0275_FilterExpressionIsUsingForbiddenClasses" xml:space="preserve">
+        <value>ფილტრის გამოხატულება იყენებს აკრძალულ ტიპს.</value>
+        </data>
+    <data name="WB0131_SpecialValuesHasNonIntegerOptionsValues" xml:space="preserve">
+        <value>სპეციალური მნიშვნელობები მხარს უჭერს მხოლოდ მთელ რიცხვებს {0}-დან {1}-მდე.</value>
+        </data>
+    <data name="WB0276_RownameIsNotSupported" xml:space="preserve">
+        <value>@rowname ცვლადი აღარ არის მხარდაჭერილი.</value>
+        </data>
+    <data name="WB0132_SpecialValuesHasOptionsWithLongTexts" xml:space="preserve">
+        <value>სპეციალური მნიშვნელობის სათაური ცარიელი ან ძალიან გრძელია. სათაურის სიგრძე უნდა იყოს {0}-დან {1} სიმბოლომდე.</value>
+        </data>
+    <data name="WB0133_SpecialValuesMustBeUniqueForNumericlQuestion" xml:space="preserve">
+        <value>სპეციალური ღირებულებები უნდა იყოს უნიკალური.</value>
+        </data>
+    <data name="WB0134_SpecialValuesCountMoreThanMaxOptionCount" xml:space="preserve">
+        <value>შეიცავს {0}-ზე მეტ სპეციალურ მნიშვნელობას.</value>
+        </data>
+    <data name="WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit" xml:space="preserve">
+        <value>კითხვა შეიცავს სპეციალურ მნიშვნელობას, რომელიც ძალიან დიდია და არ შეიძლება გამოყენებულ იქნას ამ კითხვაში, რადგან ის განსაზღვრავს როსტერის ზომას.</value>
+        </data>
+    <data name="WB0136_SpecialValuesHaveOptionsWithEmptyValue" xml:space="preserve">
+        <value>შეკითხვას აქვს სპეციალური მნიშვნელობა(ები) ცარიელი მნიშვნელობით.</value>
+        </data>
+    <data name="WB0137_SpecialValuesTitlesMustBeUnique" xml:space="preserve">
+        <value>სპეციალური ღირებულებების სათაურები უნდა იყოს უნიკალური.</value>
+        </data>
+    <data name="WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion" xml:space="preserve">
+        <value>სპეციალური მნიშვნელობების დანართის სახელი უნდა იყოს უნიკალური.</value>
+        </data>
+    <data name="WB0139_SpecialValuesAttachmentsReferAbsentAttachment" xml:space="preserve">
+        <value>სპეციალური მნიშვნელობების მიმაგრება ეხება არარსებულ დანართს.</value>
+        </data>
+    <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
+        <value>კითხვარის სათაურს არ უნდა ჰქონდეს ორი ან მეტი თანმიმდევრული ხაზგასმული სიმბოლო.</value>
+        </data>
+    <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+        <value>მარტივი რეჟიმი ნებადართულია მხოლოდ სიებში არაუმეტეს {0} კითხვებით ან სტატიკური ტექსტებით.</value>
+        </data>
+    <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
+        <value>მარტივი რეჟიმი არ იძლევა წყობილი სიების გამოყენების საშუალებას.</value>
+        </data>
+    <data name="WB0280_TextContainsLinkToUnknownQuestionOrGroup" xml:space="preserve">
+        <value>ტექსტი შეიცავს ბმულს უცნობ კითხვაზე, ქვეგანყოფილებაზე, სიაზე ან pdf დანართზე.</value>
+        </data>
+    <data name="WB0057_LinksAreProhibitedOnNavigationElements" xml:space="preserve">
+        <value>ბმულები აკრძალულია ნავიგაციის ელემენტებზე: სექციები, ქვესექციები, სია</value>
+        </data>
+    <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
+        <value>ელემენტების მთლიანმა რაოდენობამ ({0}) გადააჭარბა სისტემის ლიმიტს ({1}). იფიქრეთ კითხვების, სტატიკური ტექსტების, ცვლადების ან ერთეულების რაოდენობის შემცირებაზე ფიქსირებულ სიაში.</value>
+        </data>
+    <data name="WB0282_IdentifyingQuestionInSectionWithCondition" xml:space="preserve">
+        <value>საიდენტიფიკაციო შეკითხვა არ შეიძლება განთავსდეს განყოფილების შიგნით ჩართვის პირობით.</value>
+        </data>
+    <data name="WB0282_TableRosterContainsNestedGroup" xml:space="preserve">
+        <value>ცხრილის რეესტრის რეჟიმი არ იძლევა წყობილი ჯგუფებისა და სიების გამოყენების საშუალებას.</value>
+        </data>
+    <data name="WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+        <value>ცხრილის რეჟიმი დასაშვებია მხოლოდ სიებისთვის არაუმეტეს {0} კითხვებით.</value>
+        </data>
+    <data name="WB0284_TableRosterCantContainsSupervisorQuestions" xml:space="preserve">
+        <value>ცხრილის სია არ იძლევა ზედამხედველის კითხვების გამოყენების საშუალებას.</value>
+        </data>
+    <data name="WB0285_TableRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+        <value>ცხრილის სია საშუალებას გაძლევთ გამოიყენოთ მხოლოდ ტექსტური და რიცხვითი კითხვები.</value>
+        </data>
+    <data name="WB0286_TableAndMatixRosterWorksOnlyInWebMode" xml:space="preserve">
+        <value>ცხრილის ან მატრიცული რეესტრის რეჟიმი მუშაობს მხოლოდ ვებ გამოკითხვაში, ტაბლეტებზე ეს იქნება "ქვეგანყოფილების" რეჟიმი.</value>
+        </data>
+    <data name="WB0309_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
+        <value>Сover განყოფილებაში შეკითხვებს უნდა ჰქონდეს ცვლადი ეტიკეტი.</value>
+        </data>
+    <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
+        <value>ყდაზე კითხვებს შეიძლება ჰქონდეს მხოლოდ დაშვებული ტიპები (ტექსტი, რიცხვითი, თარიღის დრო, GpsCoordinates, SingleOption)</value>
+        </data>
+    <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
+        <value>ეტიკეტი {1} კოდისთვის {0} არის რიცხვი, რომელიც განსხვავდება ეტიკეტირებული მნიშვნელობისგან.</value>
+        </data>
+    <data name="WB0289" xml:space="preserve">
+        <value>კატეგორიების სახელი არ უნდა იყოს {0} სიმბოლოზე მეტი.</value>
+        </data>
+    <data name="WB0290" xml:space="preserve">
+        <value>კატეგორიების სახელი არ უნდა დასრულდეს ხაზგასმით</value>
+        </data>
+    <data name="WB0291" xml:space="preserve">
+        <value>კატეგორიების სახელს არ უნდა ჰქონდეს ორი ან მეტი თანმიმდევრული ხაზგასმული სიმბოლო.</value>
+        </data>
+    <data name="WB0292" xml:space="preserve">
+        <value>კატეგორიების სახელი არ უნდა იყოს ცარიელი.</value>
+        </data>
+    <data name="WB0293" xml:space="preserve">
+        <value>კატეგორიების სახელი არ შეიძლება იყოს დაცული სიტყვა.</value>
+        </data>
+    <data name="WB0294" xml:space="preserve">
+        <value>კატეგორიების სახელი უნდა შეიცავდეს მხოლოდ ასოებს, ციფრებს და ხაზგასმას</value>
+        </data>
+    <data name="WB0295" xml:space="preserve">
+        <value>კატეგორიების სახელი არ უნდა იწყებოდეს ციფრით ან ქვედა ხაზით</value>
+        </data>
+    <data name="WB0296" xml:space="preserve">
+        <value>კითხვებს იგივე კატეგორიები აქვს. ამის ნაცვლად გამოიყენეთ მრავალჯერადი გამოყენების კატეგორიები</value>
+        </data>
+    <data name="WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+        <value>Matrix Roster საშუალებას გაძლევთ გამოიყენოთ მხოლოდ მარტივი კატეგორიული კითხვები: კომბობოქსი, კასკადური ან დიახ/არა რეჟიმები დაუშვებელია.</value>
+        </data>
+    <data name="WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+        <value>მატრიცის რეჟიმი დაშვებულია მხოლოდ სიებისთვის არაუმეტეს {0} კითხვა(ებ)ით.</value>
+        </data>
+    <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
+        <value>მატრიცის სია არ უნდა შეიცავდეს ზედამხედველს ან საიდენტიფიკაციო კითხვებს.</value>
+        </data>
+    <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
+        <value>მატრიცის სია არ უნდა შეიცავდეს დაკავშირებულ კითხვებს.</value>
+        </data>
+    <data name="WB0302" xml:space="preserve">
+        <value>ჩანაცვლება არ შეიძლება მიუთითებდეს ერთეულებზე ერთი და იმავე დონის დონისგან.</value>
+        </data>
+    <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
+        <value>მრავალჯერადი გამოყენების კატეგორიას არ შეიძლება ჰქონდეს მწკრივი იგივე Id და ParentId მნიშვნელობებით</value>
+        </data>
+    <data name="WB0306_DuplicatedCategoryParentIdText" xml:space="preserve">
+        <value>მრავალჯერადი გამოყენების კატეგორიას არ შეიძლება ჰქონდეს მწკრივი იგივე ParentId და ტექსტის მნიშვნელობებით</value>
+        </data>
+    <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
+        <value>კითხვა ეხება არარსებულ მრავალჯერადი გამოყენების კატეგორიას.</value>
+        </data>
+    <data name="WB0390_OnlyStringVariableAllowedAsAttachmentName" xml:space="preserve">
+        <value>მხოლოდ სიმებიანი ცვლადის ტიპი შეიძლება გამოყენებულ იქნას დანართის სახელის წყაროდ</value>
+        </data>
+    <data name="WB0391" xml:space="preserve">
+        <value>სტატიკურ ტექსტს არ შეუძლია მიმართოს ცვლადს, რომელსაც აქვს უფრო ღრმა ჩამონათვალი, ვიდრე თავად</value>
+        </data>
+    <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
+        <value>დამალული კითხვის ბმული დაუშვებელია</value>
+        </data>
+    <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
+        <value>Сover განყოფილებაში ცვლადებს უნდა ჰქონდეს ეტიკეტი.</value>
+        </data>
+    <data name="WB0312" xml:space="preserve">
+        <value>კატეგორიებს უნდა ჰქონდეს მინიმუმ ორი ვარიანტი</value>
+        </data>
+    <data name="WB0313_QuestionOptionReferenceToNonExistentAttachment" xml:space="preserve">
+        <value>კითხვის ვარიანტი ეხება არარსებულ დანართს</value>
+        </data>
+    <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
+        <value>კითხვა შეიცავს მრავალ ვარიანტს, რომლებიც ეხება იმავე დანართს</value>
+        </data>
+    <data name="WB0315_AttachmentHasInvalidName" xml:space="preserve">
+        <value>დანართის სახელი უნდა შეიცავდეს მხოლოდ ასოებს, ციფრებს და ხაზს. იწყება ასოთი, არ არის თანმიმდევრული ხაზგასმული, არ მთავრდება ხაზგასმული და არ არის დაცული სიტყვა. არ არის ცარიელი და 32 სიმბოლოზე ნაკლები.</value>
+        </data>
+    <data name="WB0316_QuestionnaireWithOldCoverPage" xml:space="preserve">
+        <value>კითხვარი ძველი ფორმატით. გთხოვთ, გამოიყენოთ "საფარის გენერირება" ბმული ყდის განყოფილებაში.</value>
+        </data>
+    <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
+        <value>კრიტიკული კითხვის ფარგლები არ შეიძლება იყოს შემდეგი: ფარული, ზედამხედველი.</value>
+        </data>
+    <data name="WB0318_CriticalityConditionExpressionHasIncorrectSyntax" xml:space="preserve">
+        <value>კრიტიკულ მდგომარეობას აქვს სინტაქსის შეცდომა გამოხატვისას.</value>
+        </data>
+    <data name="WB0319_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+        <value>კრიტიკული მდგომარეობა ცარიელია.</value>
+        </data>
+    <data name="WB0320_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+        <value>შეტყობინება კრიტიკულ წესში ცარიელია.</value>
+        </data>
+    <data name="WB0321_CriticalityConditionUsingForbiddenClasses" xml:space="preserve">
+        <value>კრიტიკულ მდგომარეობაშია აკრძალული ტიპის გამოყენება.</value>
+        </data>
+    <data name="WB0322_CriticalRuleExpressionIsTooLong" xml:space="preserve">
+        <value>კრიტიკული წესის გამოხატულებას აქვს {0}-ზე მეტი სიმბოლო.</value>
+        </data>
+    <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
+        <value>კრიტიკული მდგომარეობის შეტყობინება {0} სიმბოლოზე მეტი.</value>
+        </data>
+</root>

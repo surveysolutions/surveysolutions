@@ -501,6 +501,11 @@ namespace WB.UI.Designer
                     new CultureInfo("ro"),
                     new CultureInfo("cs"),
                     new CultureInfo("uk"),
+                    new CultureInfo("ka"),
+                    new CultureInfo("id"),
+                    new CultureInfo("km"),
+                    new CultureInfo("th"),
+                    new CultureInfo("vi")
                 };
             });
 
