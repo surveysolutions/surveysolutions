@@ -6,7 +6,6 @@ using Android.OS;
 using Android.Views;
 using AndroidX.AppCompat.App;
 using AndroidX.AppCompat.Widget;
-using AndroidX.DrawerLayout.Widget;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;

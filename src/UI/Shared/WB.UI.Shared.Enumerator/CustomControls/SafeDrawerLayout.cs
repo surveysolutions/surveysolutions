@@ -1,6 +1,7 @@
 using Android.Content;
 using Android.Runtime;
 using Android.Util;
+using Android.Views;
 using AndroidX.DrawerLayout.Widget;
 using WB.Core.GenericSubdomains.Portable.Services;
 using MvvmCross;
@@ -70,4 +71,3 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         }
     }
 }
-
