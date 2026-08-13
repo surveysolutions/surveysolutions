@@ -1,0 +1,388 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AppendixLink" xml:space="preserve">
+        <value>Và {0} ký hiệu khác [{1}]</value>
+        </data>
+    <data name="Appendix_Conditions" xml:space="preserve">
+        <value>Phụ lục {0} {1} điều kiện kích hoạt</value>
+        </data>
+    <data name="Appendix_Instructions" xml:space="preserve">
+        <value>Phụ lục {0} {1} hướng dẫn</value>
+        </data>
+    <data name="Appendix_OptionFilters" xml:space="preserve">
+        <value>Phụ lục {0} {1} bộ lọc danh mục</value>
+        </data>
+    <data name="Appendix_Options" xml:space="preserve">
+        <value>Phụ lục {0} {1} danh mục</value>
+        </data>
+    <data name="Appendix_SpecialValues" xml:space="preserve">
+        <value>Phụ lục {0} {1} giá trị đặc biệt</value>
+        </data>
+    <data name="Appendix_CriticalRules" xml:space="preserve">
+        <value>Phụ lục {0} {1} quy tắc quan trọng</value>
+        </data>
+    <data name="Appendix_Validations" xml:space="preserve">
+        <value>Phụ lục {0} {1} điều kiện và thông báo xác thực</value>
+        </data>
+    <data name="Appendix_Variables" xml:space="preserve">
+        <value>Phụ lục {0} {1} biến</value>
+        </data>
+    <data name="CreatedBy" xml:space="preserve">
+        <value>Bảng câu hỏi được tạo bởi {0}</value>
+        </data>
+    <data name="OwnedBy" xml:space="preserve">
+        <value>Bảng câu hỏi thuộc sở hữu của {0}</value>
+        </data>
+    <data name="EnablementCondition" xml:space="preserve">
+        <value>Điều kiện kích hoạt:</value>
+        </data>
+    <data name="CriticalityCondition" xml:space="preserve">
+        <value>Tình trạng nguy cấp:</value>
+        </data>
+    <data name="CriticalityMessage" xml:space="preserve">
+        <value>Tin nhắn:</value>
+        </data>
+    <data name="Description" xml:space="preserve">
+        <value>Sự miêu tả:</value>
+        </data>
+    <data name="GeneratedBy" xml:space="preserve">
+        <value>Được tạo bởi {0}</value>
+        </data>
+    <data name="LastEdited" xml:space="preserve">
+        <value>{0} chỉnh sửa lần cuối {1}</value>
+        </data>
+    <data name="LastModifiedBy" xml:space="preserve">
+        <value>Sửa đổi lần cuối bởi {0}</value>
+        </data>
+    <data name="Legend" xml:space="preserve">
+        <value>Huyền thoại</value>
+        </data>
+    <data name="NeverEdited" xml:space="preserve">
+        <value>{0} (chưa bao giờ chỉnh sửa)</value>
+        </data>
+    <data name="NotShared" xml:space="preserve">
+        <value>Không chia sẻ với bất cứ ai</value>
+        </data>
+    <data name="Options" xml:space="preserve">
+        <value>Thể loại:</value>
+        </data>
+    <data name="PdfLegend" xml:space="preserve">
+        <value>Chú giải và cấu trúc thông tin trong file này</value>
+        </data>
+    <data name="QuestionScope_Identifying" xml:space="preserve">
+        <value>xác định</value>
+        </data>
+    <data name="QuestionType_Area" xml:space="preserve">
+        <value>địa lý:</value>
+        </data>
+    <data name="QuestionType_Area_Polygon" xml:space="preserve">
+        <value>đa giác</value>
+        </data>
+    <data name="QuestionType_Area_Polyline" xml:space="preserve">
+        <value>đường đa tuyến</value>
+        </data>
+    <data name="QuestionType_Area_Multipoint" xml:space="preserve">
+        <value>đa điểm</value>
+        </data>
+    <data name="QuestionType_Area_Point" xml:space="preserve">
+        <value>điểm</value>
+        </data>
+    <data name="QuestionType_Audio" xml:space="preserve">
+        <value>âm thanh</value>
+        </data>
+    <data name="QuestionType_Barcode" xml:space="preserve">
+        <value>mã vạch</value>
+        </data>
+    <data name="QuestionType_Cascading" xml:space="preserve">
+        <value>đổ xuống</value>
+        </data>
+    <data name="QuestionType_Combobox" xml:space="preserve">
+        <value>hộp tổ hợp</value>
+        </data>
+    <data name="QuestionType_CurrentTime" xml:space="preserve">
+        <value>ngày: thời gian hiện tại</value>
+        </data>
+    <data name="QuestionType_Date" xml:space="preserve">
+        <value>ngày</value>
+        </data>
+    <data name="QuestionType_Decimal" xml:space="preserve">
+        <value>số thập phân</value>
+        </data>
+    <data name="QuestionType_GPS" xml:space="preserve">
+        <value>GPS</value>
+        </data>
+    <data name="QuestionType_Integer" xml:space="preserve">
+        <value>số nguyên</value>
+        </data>
+    <data name="QuestionType_Linked" xml:space="preserve">
+        <value>liên kết</value>
+        </data>
+    <data name="QuestionType_List" xml:space="preserve">
+        <value>danh sách</value>
+        </data>
+    <data name="QuestionType_MultiSelect" xml:space="preserve">
+        <value>chọn nhiều lần</value>
+        </data>
+    <data name="QuestionType_Numeric" xml:space="preserve">
+        <value>số:</value>
+        </data>
+    <data name="QuestionType_Ordered" xml:space="preserve">
+        <value>ra lệnh</value>
+        </data>
+    <data name="QuestionType_Picture" xml:space="preserve">
+        <value>hình ảnh</value>
+        </data>
+    <data name="QuestionType_SingleSelect" xml:space="preserve">
+        <value>chọn một lần</value>
+        </data>
+    <data name="QuestionType_Text" xml:space="preserve">
+        <value>chữ</value>
+        </data>
+    <data name="QuestionType_YesNo" xml:space="preserve">
+        <value>có/không</value>
+        </data>
+    <data name="Roster" xml:space="preserve">
+        <value>Danh sách:</value>
+        </data>
+    <data name="RosterType_List" xml:space="preserve">
+        <value>danh sách</value>
+        </data>
+    <data name="RosterType_Multi" xml:space="preserve">
+        <value>chọn nhiều lần</value>
+        </data>
+    <data name="RosterType_Numeric" xml:space="preserve">
+        <value>số</value>
+        </data>
+    <data name="Roster_GeneretedByFixedList" xml:space="preserve">
+        <value>được tạo bởi danh sách cố định</value>
+        </data>
+    <data name="Roster_GeneretedByQuestion" xml:space="preserve">
+        <value>được tạo bởi câu hỏi {0} {1}</value>
+        </data>
+    <data name="Scope" xml:space="preserve">
+        <value>Phạm vi: {0}</value>
+        </data>
+    <data name="SourceOfCategories" xml:space="preserve">
+        <value>Nguồn của danh mục:</value>
+        </data>
+    <data name="RosterSourceOfCategories" xml:space="preserve">
+        <value>Danh sách</value>
+        </data>
+    <data name="TextListSourceOfCategories" xml:space="preserve">
+        <value>Câu hỏi về danh sách văn bản</value>
+        </data>
+    <data name="QuestionInRosterSourceOfCategories" xml:space="preserve">
+        <value>Câu hỏi</value>
+        </data>
+    <data name="InRosterSourceOfCategories" xml:space="preserve">
+        <value>trong danh sách</value>
+        </data>
+    <data name="SharedWith" xml:space="preserve">
+        <value>Được chia sẻ với:</value>
+        </data>
+    <data name="SpecialValues" xml:space="preserve">
+        <value>Giá trị đặc biệt</value>
+        </data>
+    <data name="GeographyType" xml:space="preserve">
+        <value>Loại địa lý</value>
+        </data>
+    <data name="GeographyInputMode" xml:space="preserve">
+        <value>Chế độ đầu vào</value>
+        </data>
+    <data name="GeometryOverlapDetection" xml:space="preserve">
+        <value>Phát hiện chồng chéo</value>
+        </data>
+    <data name="StaticText" xml:space="preserve">
+        <value>Văn bản tĩnh</value>
+        </data>
+    <data name="Stat_NoQuestions" xml:space="preserve">
+        <value>Không có câu hỏi</value>
+        </data>
+    <data name="Stat_NoRosters" xml:space="preserve">
+        <value>Không có danh sách</value>
+        </data>
+    <data name="Stat_NoSubsections" xml:space="preserve">
+        <value>Không có tiểu mục</value>
+        </data>
+    <data name="Stat_Questions" xml:space="preserve">
+        <value>Câu hỏi: {0}</value>
+        </data>
+    <data name="Stat_QuestionsWithConditions" xml:space="preserve">
+        <value>Câu hỏi có điều kiện kích hoạt: {0}</value>
+        </data>
+    <data name="Stat_QuestionsWithValidation" xml:space="preserve">
+        <value>Câu hỏi có điều kiện xác nhận:{0}</value>
+        </data>
+    <data name="Stat_Rosters" xml:space="preserve">
+        <value>Danh sách: {0}</value>
+        </data>
+    <data name="Stat_Sections" xml:space="preserve">
+        <value>Phần: {0}</value>
+        </data>
+    <data name="Stat_StaticTexts" xml:space="preserve">
+        <value>Văn bản tĩnh: {0}</value>
+        </data>
+    <data name="Stat_Subsections" xml:space="preserve">
+        <value>Tiểu mục: {0}</value>
+        </data>
+    <data name="Stat_Variables" xml:space="preserve">
+        <value>Biến: {0}</value>
+        </data>
+    <data name="ValidationCondition" xml:space="preserve">
+        <value>Điều kiện xác thực:</value>
+        </data>
+    <data name="ValidationMessage" xml:space="preserve">
+        <value>Thông báo xác thực:</value>
+        </data>
+    <data name="Variable" xml:space="preserve">
+        <value>Biến</value>
+        </data>
+    <data name="QuestionScope_Hidden" xml:space="preserve">
+        <value>ẩn giấu</value>
+        </data>
+    <data name="QuestionScope_Supervisor" xml:space="preserve">
+        <value>người giám sát</value>
+        </data>
+    <data name="MetadataTitle" xml:space="preserve">
+        <value>Tiêu đề</value>
+        </data>
+    <data name="MetadataSubtitle" xml:space="preserve">
+        <value>Phụ đề</value>
+        </data>
+    <data name="MetadataVersionIdentificator" xml:space="preserve">
+        <value>Mã định danh phiên bản</value>
+        </data>
+    <data name="MetadataVersionNotes" xml:space="preserve">
+        <value>Ghi chú phiên bản</value>
+        </data>
+    <data name="MetadataStudyType" xml:space="preserve">
+        <value>Loại hình nghiên cứu</value>
+        </data>
+    <data name="MetadataKindOfData" xml:space="preserve">
+        <value>Loại dữ liệu</value>
+        </data>
+    <data name="MetadataModeOfDataCollection" xml:space="preserve">
+        <value>Phương thức thu thập dữ liệu</value>
+        </data>
+    <data name="MetadataCountry" xml:space="preserve">
+        <value>Quốc gia</value>
+        </data>
+    <data name="MetadataYear" xml:space="preserve">
+        <value>Năm</value>
+        </data>
+    <data name="MetadataLanguages" xml:space="preserve">
+        <value>Ngôn ngữ</value>
+        </data>
+    <data name="MetadataUnitOfAlalysis" xml:space="preserve">
+        <value>Đơn vị phân tích</value>
+        </data>
+    <data name="MetadataCoverage" xml:space="preserve">
+        <value>Bảo hiểm</value>
+        </data>
+    <data name="MetadataUniverse" xml:space="preserve">
+        <value>vũ trụ</value>
+        </data>
+    <data name="MetadataPrimaryInvestigator" xml:space="preserve">
+        <value>Điều tra viên sơ cấp</value>
+        </data>
+    <data name="MetadataConsultants" xml:space="preserve">
+        <value>Nhà tư vấn</value>
+        </data>
+    <data name="MetadataNotes" xml:space="preserve">
+        <value>Ghi chú</value>
+        </data>
+    <data name="MetadataKeywords" xml:space="preserve">
+        <value>Từ khóa</value>
+        </data>
+    <data name="MetadataFunding" xml:space="preserve">
+        <value>Tài trợ</value>
+        </data>
+    <data name="MetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+        <value>Đồng ý công khai bảng câu hỏi này</value>
+        </data>
+    <data name="MetadataSectionTitle" xml:space="preserve">
+        <value>Thông tin nhận dạng khảo sát</value>
+        </data>
+    <data name="MetadataSectionSubTitle" xml:space="preserve">
+        <value>mô tả câu hỏi</value>
+        </data>
+    <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+        <value>Thông tin cơ bản</value>
+        </data>
+    <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+        <value>Thông tin dữ liệu khảo sát</value>
+        </data>
+    <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+        <value>Thông tin khảo sát</value>
+        </data>
+    <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+        <value>Thông tin bổ sung</value>
+        </data>
+    <data name="VariableExcludedFromExport" xml:space="preserve">
+        <value>Biến này bị loại trừ khỏi dữ liệu được xuất</value>
+        </data>
+    <data name="On" xml:space="preserve">
+        <value>TRÊN</value>
+        </data>
+    <data name="Off" xml:space="preserve">
+        <value>TẮT</value>
+        </data>
+</root>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Generated" xml:space="preserve"><value>Dibuat</value></data>
+  <data name="PageOf" xml:space="preserve"><value> dari </value></data>
+  <data name="Comments" xml:space="preserve"><value>Komentar</value></data>
+  <data name="YesNo" xml:space="preserve"><value>Ya / Tidak</value></data>
+  <data name="TableOfContent" xml:space="preserve"><value>Daftar isi</value></data>
+  <data name="Error" xml:space="preserve"><value>Kesalahan</value></data>
+  <data name="Warning" xml:space="preserve"><value>Peringatan</value></data>
+  <data name="Version" xml:space="preserve"><value>versi {0}</value></data>
+  <data name="Started" xml:space="preserve"><value>Wawancara dimulai</value></data>
+  <data name="Completed" xml:space="preserve"><value>Wawancara selesai</value></data>
+  <data name="InterviewVolume" xml:space="preserve"><value>Volume Wawancara</value></data>
+  <data name="InterviewStatisticsSections" xml:space="preserve"><value>{0} bagian</value></data>
+  <data name="InterviewStatisticsAnswered" xml:space="preserve"><value>{0} pertanyaan dijawab</value></data>
+  <data name="InterviewStatisticsUnanswered" xml:space="preserve"><value>{0} pertanyaan tidak dijawab</value></data>
+  <data name="InterviewStatisticsErrors" xml:space="preserve"><value>{0} kesalahan</value></data>
+  <data name="InterviewStatisticsWarnings" xml:space="preserve"><value>{0} peringatan</value></data>
+  <data name="InterviewStatisticsCommented" xml:space="preserve"><value>{0} pertanyaan dengan komentar</value></data>
+  <data name="GeneratedBy" xml:space="preserve"><value>Dibuat oleh {0}</value></data>
+  <data name="GeneratedAt" xml:space="preserve"><value>pada {0}</value></data>
+  <data name="SurveySolutions" xml:space="preserve"><value>Survey Solutions</value></data>
+  <data name="InterviewTranscript" xml:space="preserve"><value>Transkrip Wawancara</value></data>
+  <data name="Cover" xml:space="preserve"><value>Sampul</value></data>
+  <data name="Questionnaire" xml:space="preserve"><value>Kuesioner</value></data>
+  <data name="Yes" xml:space="preserve"><value>Ya</value></data>
+  <data name="No" xml:space="preserve"><value>Tidak</value></data>
+  <data name="NotAnswered" xml:space="preserve"><value>Tidak dijawab</value></data>
+  <data name="NotCalculated" xml:space="preserve"><value>Tidak ada nilai</value></data>
+  <data name="InterviewKey" xml:space="preserve"><value>Kunci Wawancara</value></data>
+  <data name="UserRoles_Administrator" xml:space="preserve"><value>Administrator</value></data>
+  <data name="UserRoles_Headquarter" xml:space="preserve"><value>Kantor Pusat</value></data>
+  <data name="UserRoles_Supervisor" xml:space="preserve"><value>Supervisor</value></data>
+  <data name="UserRoles_Interviewer" xml:space="preserve"><value>Pewawancara</value></data>
+  <data name="UserRoles_Observer" xml:space="preserve"><value>Pengamat</value></data>
+  <data name="UserRoles_ApiUser" xml:space="preserve"><value>PenggunaAPI</value></data>
+  <data name="AreaQestion_Area" xml:space="preserve"><value>Luas</value></data>
+  <data name="AreaQestion_Length" xml:space="preserve"><value>Panjang</value></data>
+  <data name="AreaQestion_Points" xml:space="preserve"><value>Titik</value></data>
+  <data name="AreaQestion_RequestedAccuracy" xml:space="preserve"><value>Akurasi</value></data>
+  <data name="AreaQestion_RequestedFrequency" xml:space="preserve"><value>Frekuensi</value></data>
+  <data name="AreaQestion_AreaUnitMeter" xml:space="preserve"><value>meter persegi</value></data>
+  <data name="AreaQestion_AreaMeter" xml:space="preserve"><value>meter</value></data>
+</root>
