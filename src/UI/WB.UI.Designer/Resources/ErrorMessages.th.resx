@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ClientVersionIsNotSupported" xml:space="preserve">
+        <value>ไม่สามารถเปิดแบบสอบถามได้ เวอร์ชันของคุณคือ {0} โปรดอัปเดต</value>
+    </data>
+    <data name="TemplateNotFound" xml:space="preserve">
+        <value>ไม่พบแบบสอบถามที่มี id={0} โปรดตรวจสอบรายการแบบสอบถามที่มีอยู่ หรือติดต่อเพื่อนร่วมงานที่แชร์ลิงก์แบบสอบถามกับคุณ</value>
+    </data>
+    <data name="Questionnaire_verification_failed" xml:space="preserve">
+        <value>แบบสอบถามของคุณมีข้อผิดพลาด โปรดตรวจสอบแบบสอบถามใน Designer</value>
+    </data>
+    <data name="User_Not_authorized" xml:space="preserve">
+        <value>ผู้ใช้ไม่ได้รับอนุญาต กรุณาตรวจสอบข้อมูลเข้าสู่ระบบและรหัสผ่านของคุณ</value>
+    </data>
+    <data name="OldClientPleaseUpdate" xml:space="preserve">
+        <value>คุณมีแอปพลิเคชัน Headquarters เวอร์ชันล้าสมัย โปรดติดต่อผู้ดูแลระบบเซิร์ฟเวอร์ของคุณเพื่อขอการอัปเดต</value>
+    </data>
+    <data name="VersionParameterIsIncorrect" xml:space="preserve">
+        <value>เกิดปัญหากับเวอร์ชันของแบบสอบถามของคุณ โปรดติดต่อ support@mysurvey.solutions</value>
+    </data>
+    <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
+        <value>ไม่สามารถนำเข้าแบบสอบถาม แบบสอบถามของคุณ "{0}" มีเวอร์ชัน {1} แอปพลิเคชันสำนักงานใหญ่รองรับเฉพาะเวอร์ชัน {2} เท่านั้น</value>
+    </data>
+    <data name="UserLockedOut" xml:space="preserve">
+        <value>บัญชีของคุณถูกล็อค โปรดติดต่อ support@mysurvey.solutions เพื่อปลดล็อค</value>
+    </data>
+    <data name="ApplicationUpdateRequired" xml:space="preserve">
+        <value>จำเป็นต้องอัปเดตแอปพลิเคชัน</value>
+    </data>
+    <data name="ServerError" xml:space="preserve">
+        <value>เกิดข้อผิดพลาดของเซิร์ฟเวอร์ โปรดติดต่อ support@mysurvey.solutions</value>
+    </data>
+    <data name="The_user_name_or_password_provided_is_incorrect" xml:space="preserve">
+        <value>ชื่อผู้ใช้หรือรหัสผ่านที่ให้มาไม่ถูกต้อง กรุณาป้อนอีกครั้ง</value>
+    </data>
+    <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
+        <value>คำยืนยันไม่ถูกต้อง โปรดลองอีกครั้ง</value>
+    </data>
+    <data name="EmptyUserNameOrPassword" xml:space="preserve">
+        <value>ชื่อผู้ใช้หรือรหัสผ่านว่างเปล่า</value>
+    </data>
+    <data name="IncorrectUserNameOrPassword" xml:space="preserve">
+        <value>เข้าสู่ระบบหรือรหัสผ่านไม่ถูกต้อง โปรดลองอีกครั้ง</value>
+    </data>
+    <data name="AccountBlocked" xml:space="preserve">
+        <value>บัญชีของคุณถูกบล็อก ติดต่อผู้ดูแลระบบเพื่อปลดล็อคบัญชีของคุณ</value>
+    </data>
+    <data name="PasswordResetNotAllowed" xml:space="preserve">
+        <value>ไม่อนุญาตให้รีเซ็ตรหัสผ่าน</value>
+    </data>
+    <data name="ConfirmAccount" xml:space="preserve">
+        <value>กรุณายืนยันบัญชีของคุณก่อน เราได้ส่งลิงก์ยืนยันไปที่ {0} แล้ว ไม่เข้าใจเหรอ?</value>
+    </data>
+    <data name="RequestAnotherEmail" xml:space="preserve">
+        <value>ขออีกอัน.</value>
+    </data>
+    <data name="Your_email_is_verified" xml:space="preserve">
+        <value>ผู้ออกแบบยืนยันอีเมลของคุณสำเร็จแล้ว</value>
+    </data>
+    <data name="Unexpected_error_occurred_Please_try_again_later" xml:space="preserve">
+        <value>เกิดข้อผิดพลาดที่ไม่คาดคิด โปรดลองเข้าถึง Designer อีกครั้งในภายหลัง</value>
+    </data>
+    <data name="User_does_not_exist" xml:space="preserve">
+        <value>ไม่มีผู้ใช้ {0} กรุณากรอกชื่อผู้ใช้หรืออีเมลที่ถูกต้อง</value>
+    </data>
+    <data name="The_current_password_is_incorrect_or_the_new_password_is_invalid" xml:space="preserve">
+        <value>รหัสผ่านปัจจุบัน/ใหม่ไม่ถูกต้อง โปรดป้อนใหม่</value>
+    </data>
+    <data name="User_already_confirmed_in_system" xml:space="preserve">
+        <value>ผู้ใช้ {0} ได้รับการยืนยันในระบบแล้ว กรุณาป้อนข้อมูลเข้าสู่ระบบและรหัสผ่านของคุณเพื่อเริ่มใช้งาน Designer</value>
+    </data>
+    <data name="User_does_not_exist_Please_enter_a_valid_user_name" xml:space="preserve">
+        <value>ไม่มีผู้ใช้ {0} กรุณากรอกชื่อผู้ใช้หรืออีเมลที่ถูกต้อง</value>
+    </data>
+    <data name="Your_password_successfully_changed" xml:space="preserve">
+        <value>คุณเปลี่ยนรหัสผ่านสำเร็จแล้ว</value>
+    </data>
+    <data name="The_password_and_confirmation_password_do_not_match" xml:space="preserve">
+        <value>รหัสผ่านและรหัสผ่านยืนยันไม่ตรงกัน</value>
+    </data>
+    <data name="Password_must_be_at_least_characters_long" xml:space="preserve">
+        <value>รหัสผ่านต้องมีความยาวอย่างน้อย {2} ตัวอักษร</value>
+    </data>
+    <data name="Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character" xml:space="preserve">
+        <value>รหัสผ่านจะต้องมีตัวเลขอย่างน้อยหนึ่งตัว ตัวพิมพ์ใหญ่หนึ่งตัว และตัวพิมพ์เล็กหนึ่งตัว</value>
+    </data>
+    <data name="User_name_needs_to_be_between_3_and_15_characters" xml:space="preserve">
+        <value>ชื่อเข้าสู่ระบบต้องมีความยาวระหว่าง 3 ถึง 15 ตัวอักษร และต้องประกอบด้วยตัวอักษร ตัวเลข และสัญลักษณ์ขีดล่างเท่านั้น ตัวอักษรต้องมาจากตัวอักษรละติน (อังกฤษ) เท่านั้น: 'A'..'Z' หรือ 'a'..'z' ตัวอักษรอื่นๆ (ซีริลลิก อารบิก ฯลฯ) ไม่สามารถใช้ในชื่อล็อกอินได้</value>
+    </data>
+    <data name="Maintenance" xml:space="preserve">
+        <value>ขณะนี้เซิร์ฟเวอร์อยู่ในโหมดบำรุงรักษา ขออภัยในความไม่สะดวก กรุณาลองอีกครั้งในภายหลัง</value>
+    </data>
+    <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
+        <value>แบบสอบถามของคุณ "{0}" มีฟังก์ชันใหม่: {1} การติดตั้งของคุณไม่รองรับคุณสมบัติใหม่ โปรดอัปเดต</value>
+    </data>
+    <data name="UserNotApproved" xml:space="preserve">
+        <value>บัญชีของคุณไม่ได้รับการอนุมัติ กรุณายืนยันบัญชีของคุณก่อน เราได้ส่งลิงก์ยืนยันไปที่ {0} แล้ว</value>
+    </data>
+    <data name="RestorePassword_EmailSentInstructions" xml:space="preserve">
+        <value>ข้อความถูกส่งไปยังบัญชีอีเมลของคุณ โปรดปฏิบัติตามคำแนะนำในอีเมลเพื่อกู้คืนรหัสผ่าน</value>
+    </data>
+    <data name="EmptyTranslationFile" xml:space="preserve">
+        <value>ไฟล์การแปลที่เลือกว่างเปล่า</value>
+    </data>
+    <data name="NoAccessToQuestionnaire" xml:space="preserve">
+        <value>ผู้ใช้ไม่ได้รับอนุญาตให้เข้าถึงแบบสอบถามที่ร้องขอ</value>
+    </data>
+    <data name="UserNeedToContactSupportFormat" xml:space="preserve">
+        <value>คุณไม่ได้รับอนุญาตให้ดำเนินการนี้ โปรดติดต่อฝ่ายสนับสนุน IP:{0}</value>
+    </data>
+    <data name="Email_required" xml:space="preserve">
+        <value>จำเป็นต้องระบุอีเมล</value>
+    </data>
+    <data name="EmailOrLogin_required" xml:space="preserve">
+        <value>ต้องเข้าสู่ระบบหรืออีเมล</value>
+    </data>
+    <data name="InvalidEmailAddress" xml:space="preserve">
+        <value>ไม่ใช่ที่อยู่อีเมลที่ถูกต้อง</value>
+    </data>
+    <data name="OldPassword_required" xml:space="preserve">
+        <value>ต้องใช้รหัสผ่านปัจจุบัน</value>
+    </data>
+    <data name="Password_required" xml:space="preserve">
+        <value>ต้องใช้รหัสผ่าน</value>
+    </data>
+    <data name="UserName_required" xml:space="preserve">
+        <value>จำเป็นต้องเข้าสู่ระบบ</value>
+    </data>
+    <data name="QuestionnaireTitle_required" xml:space="preserve">
+        <value>ต้องระบุชื่อแบบสอบถาม</value>
+    </data>
+    <data name="NoQuestionnaireIdToValidatePremissions" xml:space="preserve">
+        <value>ไม่ได้ระบุรหัสแบบสอบถามเพื่อตรวจสอบสิทธิ์</value>
+    </data>
+    <data name="UnhandledExceptionDuringUpdateUserInfo" xml:space="preserve">
+        <value>ไม่สามารถอัปเดตข้อมูลผู้ใช้ได้ กรุณาลองอีกครั้งในภายหลัง</value>
+    </data>
+    <data name="FullNameMaxLengthError" xml:space="preserve">
+        <value>ชื่อเต็มไม่สามารถมีอักขระเกิน {1}</value>
+    </data>
+    <data name="QuestionnaireVariable_required" xml:space="preserve">
+        <value>จำเป็นต้องมีตัวแปรแบบสอบถาม</value>
+    </data>
+    <data name="QuestionnaireVariable_rules" xml:space="preserve">
+        <value>ตัวแปรแบบสอบถามถูกใช้เป็นคำนำหน้าในการสร้างชื่อไฟล์ส่งออก ชื่อตัวแปรและรหัสบัญชีรายชื่อต้องมีอักขระต่อไปนี้เท่านั้น: a-z, A-Z, _ หรือ 0-9 อักขระตัวแรกไม่สามารถเป็น 0-9 หรือ _ และอักขระตัวสุดท้ายไม่สามารถเป็น _</value>
+    </data>
+    <data name="QuestionnaireVariable_MaxLength" xml:space="preserve">
+        <value>ชื่อตัวแปรและ ID บัญชีรายชื่ออาจมีความยาวอักขระตั้งแต่ 1 ถึง {1}</value>
+    </data>
+    <data name="QuestionnaireTitle_rules" xml:space="preserve">
+        <value>ชื่อแบบสอบถามสามารถใช้ได้เฉพาะอักขระต่อไปนี้: A..Z a..z 0..9 ( ) \ / _ - และเว้นวรรค และไม่ควรมีอักขระขีดล่างสองตัวขึ้นไปติดกัน</value>
+    </data>
+    <data name="QuestionnaireTitle_MaxLength" xml:space="preserve">
+        <value>ชื่อแบบสอบถามมีสัญลักษณ์ได้ไม่เกิน {1}</value>
+    </data>
+    <data name="InvalidLoginAttempt" xml:space="preserve">
+        <value>ความพยายามในการเข้าสู่ระบบไม่ถูกต้อง</value>
+    </data>
+</root>

@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="ExportEncryption_Title" xml:space="preserve"><value>การเข้ารหัส</value></data>
+  <data name="GeographyExportFormat_Title" xml:space="preserve"><value>รูปแบบการส่งออกภูมิศาสตร์</value></data>
+  <data name="GeographyExportFormat_Wkt" xml:space="preserve"><value>WKT</value></data>
+  <data name="GeographyExportFormat_GeoJson" xml:space="preserve"><value>GeoJSON</value></data>
+  <data name="GeographyExportFormat_ArrayOfCoordinates" xml:space="preserve"><value>สตริงเรขาคณิตของ Survey Solutions</value></data>
+  <data name="ClearExportCache_Title" xml:space="preserve"><value>ล้างแคชการส่งออก</value></data>
+  <data name="RemoveExportCache" xml:space="preserve"><value>ล้างแคช</value></data>
+  <data name="RemoveExportCacheConfirm" xml:space="preserve"><value>คุณแน่ใจหรือไม่ว่าต้องการล้างแคชการส่งออก?</value></data>
+  <data name="RemoveExportCacheSuccess" xml:space="preserve"><value>ล้างแคชการส่งออกสำเร็จ</value></data>
+  <data name="RemoveExportCache_Warning" xml:space="preserve"><value>คำเตือน! นี่เป็นการดำเนินการที่ไม่สามารถย้อนกลับได้</value></data>
+  <data name="Settings_Title" xml:space="preserve"><value>การตั้งค่า</value></data>
+  <data name="EnableEncryption" xml:space="preserve"><value>เปิดใช้งานการเข้ารหัส</value></data>
+  <data name="Password" xml:space="preserve"><value>รหัสผ่าน</value></data>
+  <data name="GlobalNotice" xml:space="preserve"><value>หมายเหตุทั่วไป</value></data>
+  <data name="Logo" xml:space="preserve"><value>โลโก้บริษัท</value></data>
+  <data name="LogoUpdated" xml:space="preserve"><value>โลโก้บริษัทอัปเดตแล้ว</value></data>
+  <data name="UserProfileSettings_Title" xml:space="preserve"><value>โปรไฟล์ผู้ใช้</value></data>
+  <data name="WebInterviewEmailNotifications_Title" xml:space="preserve"><value>การสัมภาษณ์ทางเว็บ</value></data>
+  <data name="MobileAppSettings_Title" xml:space="preserve"><value>แอปพลิเคชันผู้สัมภาษณ์/หัวหน้างาน</value></data>
+  <data name="AllowInterviewerUpdateProfile" xml:space="preserve"><value>การแก้ไขโปรไฟล์ผู้รวบรวมข้อมูล</value></data>
+  <data name="AllowWebInterviewEmailNotifications" xml:space="preserve"><value>การแจ้งเตือนทางอีเมลการสัมภาษณ์เว็บ</value></data>
+  <data name="InterviewerAutoUpdate" xml:space="preserve"><value>เปิดใช้งานการอัปเดตอัตโนมัติ</value></data>
+  <data name="InterviewerAutoUpdateEnabled" xml:space="preserve"><value>เปิดใช้งานการอัปเดตอัตโนมัติของแอป Android แล้ว</value></data>
+  <data name="InterviewerAutoUpdateDisabled" xml:space="preserve"><value>ปิดใช้งานการอัปเดตอัตโนมัติของแอป Android แล้ว</value></data>
+  <data name="LogoNotUpdated" xml:space="preserve"><value>โลโก้บริษัทไม่ได้รับการอัปเดต</value></data>
+  <data name="GlobalNoteSettings" xml:space="preserve"><value>การตั้งค่าหมายเหตุทั่วไป</value></data>
+  <data name="LogoSettings" xml:space="preserve"><value>การตั้งค่าโลโก้</value></data>
+  <data name="RemoveLogo" xml:space="preserve"><value>ลบโลโก้</value></data>
+  <data name="GlobalNoteSaved" xml:space="preserve"><value>บันทึกหมายเหตุแล้ว</value></data>
+  <data name="CurrentLogo" xml:space="preserve"><value>โลโก้ปัจจุบัน</value></data>
+  <data name="GlobalNoteClearingConfirm" xml:space="preserve"><value>คุณแน่ใจหรือไม่ว่าต้องการลบหมายเหตุทั่วไป?</value></data>
+  <data name="InterviewerPartialSynchronization" xml:space="preserve"><value>เปิดใช้งานการซิงค์บางส่วน</value></data>
+  <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve"><value>ขีดจำกัดความแม่นยำตำแหน่ง</value></data>
+  <data name="InterviewerGeographyQuestionPeriodInSeconds" xml:space="preserve"><value>ช่วงเวลาคำถามภูมิศาสตร์</value></data>
+  <data name="EmailProvider_None" xml:space="preserve"><value>ไม่มี</value></data>
+  <data name="EmailProvider_SenderAddress" xml:space="preserve"><value>ที่อยู่อีเมลผู้ส่ง</value></data>
+  <data name="EmailProvider_SendTestEmail" xml:space="preserve"><value>ส่งอีเมล</value></data>
+  <data name="EmailProvider_SendTestEmailResult" xml:space="preserve"><value>ส่งอีเมลตัวอย่างสำเร็จ</value></data>
+  <data name="EmailProvider_SenderName" xml:space="preserve"><value>ชื่อผู้ส่ง</value></data>
+  <data name="EmailProvider_ReplyAddress" xml:space="preserve"><value>ที่อยู่ตอบกลับ</value></data>
+  <data name="EmailProvider_SettingsSavedSuccessfully" xml:space="preserve"><value>บันทึกการกำหนดค่าบริการอีเมลสำเร็จ</value></data>
+  <data name="DeviceNotifications" xml:space="preserve"><value>เปิดใช้งานการแจ้งเตือนบนอุปกรณ์</value></data>
+  <data name="EsriApiKey" xml:space="preserve"><value>คีย์ ESRI API</value></data>
+  <data name="WorkspaceSettings" xml:space="preserve"><value>การตั้งค่าพื้นที่ทำงาน</value></data>
+  <data name="Export" xml:space="preserve"><value>ส่งออก</value></data>
+  <data name="GlobalNote" xml:space="preserve"><value>หมายเหตุทั่วไป</value></data>
+  <data name="UserProfile" xml:space="preserve"><value>โปรไฟล์ผู้ใช้</value></data>
+  <data name="Devices" xml:space="preserve"><value>อุปกรณ์</value></data>
+  <data name="WebInterview" xml:space="preserve"><value>การสัมภาษณ์ทางเว็บ</value></data>
+  <data name="FileRetentionTitle" xml:space="preserve"><value>นโยบายการเก็บรักษา</value></data>
+  <data name="EnableFileRetention" xml:space="preserve"><value>เปิดใช้งานนโยบายการเก็บรักษา</value></data>
+  <data name="RetentionInDaysTitle" xml:space="preserve"><value>วันที่จะเก็บ</value></data>
+  <data name="RetentionInCountTitle" xml:space="preserve"><value>จำนวนไฟล์ที่จะเก็บ</value></data>
+  <data name="ExportEncryption_Warning" xml:space="preserve"><value>การแก้ไขการตั้งค่าการเข้ารหัสจะลบไฟล์ส่งออกที่สร้างไว้ก่อนหน้า</value></data>
+  <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve"><value>อนุญาตให้หัวหน้างานเปลี่ยนสถานะงาน</value></data>
+  <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve"><value>อนุญาตให้ผู้สัมภาษณ์เปลี่ยนสถานะงาน</value></data>
+  <data name="AudioRecordingQuality" xml:space="preserve"><value>คุณภาพการบันทึกเสียง</value></data>
+  <data name="LogoSizeLimit" xml:space="preserve"><value>ขนาดภาพโลโก้ต้องน้อยกว่า {{size}}</value></data>
+  <data name="LogoUploadSuccess" xml:space="preserve"><value>อัปโหลดโลโก้สำเร็จ</value></data>
+  <data name="LogoRemoveSuccess" xml:space="preserve"><value>ลบโลโก้สำเร็จ</value></data>
+  <data name="ChangeStateDisabledConfirm" xml:space="preserve"><value>คุณแน่ใจหรือไม่ว่าต้องการเปลี่ยนการตั้งค่าความปลอดภัย?</value></data>
+  <data name="LogoSettings_Description1" xml:space="preserve"><value>คลิกปุ่ม 'เลือกไฟล์' เพื่ออัปโหลดรูปภาพจากคอมพิวเตอร์ของคุณ</value></data>
+  <data name="EmailProvider_SmtpTlsEncryptionHelp" xml:space="preserve"><value>การเข้ารหัส TLS ทำให้การสื่อสารมีความปลอดภัย</value></data>
+  <data name="EmailProvider_SmtpAuthenticationHelp" xml:space="preserve"><value>การยืนยันตัวตน SMTP ตรวจสอบตัวตนก่อนอนุญาตให้ส่งอีเมล</value></data>
+  <data name="EmailProvider_SmtpUsernameHelp" xml:space="preserve"><value>ข้อมูลรับรองที่ใช้ระหว่างกระบวนการยืนยันตัวตน SMTP</value></data>
+  <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve"><value>ข้อมูลรับรองที่ใช้ระหว่างกระบวนการยืนยันตัวตน SMTP</value></data>
+  <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve"><value>คำเตือน! นี่เป็นการดำเนินการสำคัญที่จะส่งผลต่อไฟล์ส่งออกที่มีอยู่</value></data>
+  <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve"><value>คุณแน่ใจหรือไม่ว่าต้องการบังคับเรียกใช้นโยบายการเก็บรักษาตอนนี้?</value></data>
+    <data name="GeographyExportFormat_Description" xml:space="preserve">
+        <value>เลือกวิธีจัดรูปแบบคำตอบสำหรับคำถามเกี่ยวกับภูมิศาสตร์</value>
+    </data>
+    <data name="ClearExportCache_Description" xml:space="preserve">
+        <value>การดำเนินการนี้จะล้างข้อมูลแคชส่งออกทั้งหมด การส่งออกครั้งถัดไปจะใช้เวลานานกว่านี้</value>
+    </data>
+    <data name="RemovingExportCache" xml:space="preserve">
+        <value>กำลังล้างแคชการส่งออกอยู่</value>
+    </data>
+    <data name="RemoveExportCacheFail" xml:space="preserve">
+        <value>ไม่สามารถล้างแคชการส่งออกได้ในขณะนี้ โปรดลองอีกครั้งในภายหลัง
+เหตุผลที่เป็นไปได้:
+* กำลังสร้างไฟล์ส่งออก
+* กำลังดาวน์โหลดไฟล์ส่งออกที่สร้างขึ้น
+* การลบไฟล์ส่งออกที่สร้างขึ้นถูกบล็อกโดยโปรแกรมอื่น
+* ฯลฯ</value>
+    </data>
+    <data name="RemoveExportCacheGeneratingFail" xml:space="preserve">
+        <value>ไม่สามารถล้างแคชการส่งออกได้ในขณะนี้ กำลังสร้างไฟล์ส่งออก</value>
+    </data>
+    <data name="RegeneratePasswordConfirm" xml:space="preserve">
+        <value>คุณแน่ใจหรือไม่ว่าต้องการสร้างรหัสผ่านใหม่ รหัสผ่านใหม่จะถูกนำไปใช้กับไฟล์ข้อมูลที่ส่งออกทั้งหมดที่สร้างขึ้นนับจากนี้เป็นต้นไป</value>
+    </data>
+    <data name="ExportEncryptionSettings" xml:space="preserve">
+        <value>ส่งออกการตั้งค่าการเข้ารหัส</value>
+    </data>
+    <data name="MobileAppSettings_Description" xml:space="preserve">
+        <value>การตั้งค่าเฉพาะตามแอปพลิเคชันผู้สัมภาษณ์/หัวหน้างานเวอร์ชัน Android</value>
+    </data>
+    <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
+        <value>อนุญาตให้ผู้แจงนับอัปเดตข้อมูลติดต่อในโปรไฟล์บัญชีของตน</value>
+    </data>
+    <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve">
+        <value>อนุญาตให้ผู้ตอบการสัมภาษณ์ทางเว็บขออีเมลพร้อมลิงก์เพื่อเริ่มการสัมภาษณ์ต่อ (มีผลหากตั้งค่าผู้ให้บริการอีเมลจำนวนมาก)</value>
+    </data>
+    <data name="ChangeStateConfirm" xml:space="preserve">
+        <value>คุณแน่ใจหรือไม่ว่าต้องการเปลี่ยนการตั้งค่าความปลอดภัยของไฟล์ส่งออก ไฟล์ข้อมูลการส่งออกทั้งหมดจะได้รับการป้องกันด้วยรหัสผ่าน</value>
+    </data>
+    <data name="ExportEncryption_Description" xml:space="preserve">
+        <value>ทำเครื่องหมายที่ช่อง "เปิดใช้งานการเข้ารหัส" เพื่อปกป้องข้อมูลส่งออกที่เก็บไว้โดยการเข้ารหัสด้วยรหัสผ่านที่ให้ไว้ เปลี่ยนรหัสผ่านโดยกดปุ่มลูกศรวงกลม หลังจากการเข้ารหัส เฉพาะผู้ที่รู้รหัสผ่านเท่านั้นที่สามารถเปิดข้อมูลที่ส่งออกได้</value>
+    </data>
+    <data name="GlobalNoteSettings_Description" xml:space="preserve">
+        <value>ระบุข้อความในช่อง 'บันทึกทั่วโลก' ที่จะแสดงที่ด้านบนของทุกหน้าจอบนเซิร์ฟเวอร์</value>
+    </data>
+    <data name="LogoSettings_Description" xml:space="preserve">
+        <value>โลโก้บริษัทคือรูปภาพที่ปรากฏบนหน้าเข้าสู่ระบบเซิร์ฟเวอร์และบนหน้าเข้าสู่ระบบของแอปผู้สัมภาษณ์</value>
+    </data>
+    <data name="AutoUpdateDescription" xml:space="preserve">
+        <value>หากเลือกตัวเลือกนี้ เฉพาะแอปพลิเคชันผู้สัมภาษณ์/หัวหน้างานเวอร์ชันล่าสุดเท่านั้นที่สามารถซิงโครไนซ์กับสำนักงานใหญ่ได้</value>
+    </data>
+    <data name="PartialSynchronizationDescription" xml:space="preserve">
+        <value>เมื่อเปิดใช้งาน แท็บเล็ตของผู้สัมภาษณ์จะส่งคำตอบในการสัมภาษณ์ที่ยังไม่เสร็จสิ้นไปยังสำนักงานใหญ่</value>
+    </data>
+    <data name="GeographyQuestionAccuracyInMetersDescription" xml:space="preserve">
+        <value>ตั้งค่าความแม่นยำของเกณฑ์เป็นเมตรสำหรับพิกัดตำแหน่งที่ได้รับ</value>
+    </data>
+    <data name="GeographyQuestionPeriodInSecondsDescription" xml:space="preserve">
+        <value>กำหนดช่วงเวลาเป็นวินาทีสำหรับคำถามภูมิศาสตร์</value>
+    </data>
+    <data name="EmailProvider_Amazon" xml:space="preserve">
+        <value>Amazon Simple Email Service (SES)</value>
+    </data>
+    <data name="EmailProvider_Sendgrid" xml:space="preserve">
+        <value>บริการส่งอีเมล SendGrid</value>
+    </data>
+    <data name="EmailProvider_NoneDescription" xml:space="preserve">
+        <value>Survey Solutions จะไม่ส่งข้อความเชิญสำหรับการสัมภาษณ์ทางเว็บไปยังผู้ตอบแบบสอบถาม</value>
+    </data>
+    <data name="EmailProvider_AmazonDescription" xml:space="preserve">
+        <value>กำหนดค่าพารามิเตอร์เพื่อเข้าถึง Amazon SES ด้านล่าง มีข้อมูลเพิ่มเติมเกี่ยวกับการใช้งาน Amazon SES พร้อมโซลูชันแบบสำรวจ</value>
+    </data>
+    <data name="EmailProvider_SendgridDescription" xml:space="preserve">
+        <value>กำหนดค่าพารามิเตอร์เพื่อเข้าถึง SendGrid ด้านล่าง มีข้อมูลเพิ่มเติมเกี่ยวกับการใช้งาน SendGrid พร้อม Survey Solutions</value>
+    </data>
+    <data name="EmailProvider_SendGridApiKey" xml:space="preserve">
+        <value>คีย์เอพีไอ</value>
+    </data>
+    <data name="EmailProvider_AwsAccessKeyId" xml:space="preserve">
+        <value>รหัสคีย์การเข้าถึง</value>
+    </data>
+    <data name="EmailProvider_AwsSecretAccessKey" xml:space="preserve">
+        <value>รหัสการเข้าถึงความลับ</value>
+    </data>
+    <data name="EmailProvider_TestEmailAddress" xml:space="preserve">
+        <value>ที่อยู่อีเมล</value>
+    </data>
+    <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve">
+        <value>ส่งอีเมลทดสอบ</value>
+    </data>
+    <data name="EmailProvider_PageDesc" xml:space="preserve">
+        <value>ตั้งค่าผู้ให้บริการอีเมลจำนวนมาก กำหนดค่าวิธีการส่งคำเชิญสำหรับการสัมภาษณ์ทางเว็บ</value>
+    </data>
+    <data name="EmailProvider_SenderHeader" xml:space="preserve">
+        <value>ข้อมูลผู้ส่ง</value>
+    </data>
+    <data name="EmailProvider_SenderHelp" xml:space="preserve">
+        <value>ที่อยู่อีเมลของผู้ส่งที่จะปรากฏในช่อง FROM ของข้อความขาเข้า</value>
+    </data>
+    <data name="EmailProvider_ReplyAddressHelp" xml:space="preserve">
+        <value>ที่อยู่อีเมลที่สามารถส่งการตอบกลับจากผู้ได้รับเชิญ (ค่าเริ่มต้นคือที่อยู่อีเมลของผู้ส่ง)</value>
+    </data>
+    <data name="EmailProvider_SenderNameHelp" xml:space="preserve">
+        <value>ชื่อของผู้ส่งที่จะปรากฏในช่อง FROM ของข้อความขาเข้า</value>
+    </data>
+    <data name="EmailProvider_Address" xml:space="preserve">
+        <value>ที่อยู่ทางไปรษณีย์ของผู้ส่ง</value>
+    </data>
+    <data name="EmailProvider_AddressHelp" xml:space="preserve">
+        <value>ที่อยู่ทางไปรษณีย์ปัจจุบันของผู้ส่ง</value>
+    </data>
+    <data name="EmailProvider_ServiceProvideHeader" xml:space="preserve">
+        <value>ระบุผู้ให้บริการอีเมลจำนวนมาก</value>
+    </data>
+    <data name="EmailProvider_AwsAccessKeyIdHelp" xml:space="preserve">
+        <value>คุณสามารถค้นหา ID บัญชี AWS ได้จาก AWS Management Console</value>
+    </data>
+    <data name="EmailProvider_AwsSecretAccessKeyHelp" xml:space="preserve">
+        <value>พบได้ในข้อมูลรับรองความปลอดภัยที่ AWS Management Console</value>
+    </data>
+    <data name="EmailProvider_AwsRegion" xml:space="preserve">
+        <value>ภูมิภาค</value>
+    </data>
+    <data name="EmailProvider_AwsRegionHelp" xml:space="preserve">
+        <value>ภูมิภาคสำหรับ AWS Management Console</value>
+    </data>
+    <data name="EmailProvider_AwsRegion_Unknown" xml:space="preserve">
+        <value>เลือกภูมิภาคที่ไม่รู้จัก กรุณาตรวจสอบมัน.</value>
+    </data>
+    <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve">
+        <value>คุณสามารถค้นหาได้ในหน้าคีย์ API ใต้รายการเมนูการตั้งค่า SendGrid</value>
+    </data>
+    <data name="EmailProvider_GeneralError" xml:space="preserve">
+        <value>เกิดข้อผิดพลาดทั่วไป</value>
+    </data>
+    <data name="EmailProvider_HelpLinkText" xml:space="preserve">
+        <value>ที่นี่</value>
+    </data>
+    <data name="EmailProvider_SendTestEmailMessage" xml:space="preserve">
+        <value>ส่งข้อความอีเมลทดสอบถึงตัวคุณเองเพื่อตรวจสอบว่าบริการอีเมลจำนวนมากทำงานได้ และเพื่อดูตัวอย่างสิ่งที่ผู้ตอบจะได้รับ</value>
+    </data>
+    <data name="DeviceNotificationsDescription" xml:space="preserve">
+        <value>เมื่อเปิดใช้งานอุปกรณ์จะแจ้งให้เจ้าของทราบเกี่ยวกับการเปลี่ยนแปลงและการดำเนินการที่จะต้องดำเนินการ</value>
+    </data>
+    <data name="EsriApiKeyDescription" xml:space="preserve">
+        <value>คีย์นี้จะอนุญาตให้ใช้แผนที่ออนไลน์บนอุปกรณ์ได้ โปรดทราบว่าการใช้บริการนี้อาจทำให้คุณต้องเสียเงินเพิ่ม โปรดปรึกษากับผู้ให้บริการ</value>
+    </data>
+    <data name="EmailProvider_Smtp" xml:space="preserve">
+        <value>เซิร์ฟเวอร์ SMTP</value>
+    </data>
+    <data name="EmailProvider_SmtpDescription" xml:space="preserve">
+        <value>กำหนดค่าพารามิเตอร์เพื่อเข้าถึงเซิร์ฟเวอร์ SMTP ด้านล่าง มีข้อมูลเพิ่มเติมเกี่ยวกับการใช้งานเซิร์ฟเวอร์ SMTP พร้อม Survey Solutions</value>
+    </data>
+    <data name="EmailProvider_SmtpHost" xml:space="preserve">
+        <value>เจ้าภาพ</value>
+    </data>
+    <data name="EmailProvider_SmtpHostHelp" xml:space="preserve">
+        <value>ที่อยู่เซิร์ฟเวอร์ SMTP</value>
+    </data>
+    <data name="EmailProvider_SmtpPort" xml:space="preserve">
+        <value>ท่าเรือ</value>
+    </data>
+    <data name="EmailProvider_SmtpPortHelp" xml:space="preserve">
+        <value>พอร์ต SMTP</value>
+    </data>
+    <data name="EmailProvider_SmtpTlsEncryption" xml:space="preserve">
+        <value>ใช้การเข้ารหัส TLS</value>
+    </data>
+    <data name="EmailProvider_SmtpAuthentication" xml:space="preserve">
+        <value>ใช้การรับรองความถูกต้อง</value>
+    </data>
+    <data name="EmailProvider_SmtpUsername" xml:space="preserve">
+        <value>ชื่อผู้ใช้</value>
+    </data>
+    <data name="EmailProvider_SmtpPassword" xml:space="preserve">
+        <value>รหัสผ่าน</value>
+    </data>
+    <data name="FileRetentionDescription" xml:space="preserve">
+        <value>ไฟล์ส่งออกเก่าจะถูกลบเป็นระยะตามการตั้งค่าเหล่านี้</value>
+    </data>
+    <data name="RetentionInDaysDescription" xml:space="preserve">
+        <value>จำนวนวันที่ไฟล์ส่งออกจะยังคงอยู่</value>
+    </data>
+    <data name="RetentionInCountDescription" xml:space="preserve">
+        <value>จำนวนไฟล์ส่งออกสูงสุดที่จะเก็บไว้ในที่จัดเก็บข้อมูล</value>
+    </data>
+    <data name="RetentionPolicyEnablingConfirm" xml:space="preserve">
+        <value>คุณแน่ใจหรือไม่ว่าต้องการเปิดนโยบายการเก็บรักษา ไฟล์ข้อมูลการส่งออกสามารถลบได้</value>
+    </data>
+    <data name="ForceRunRetentionPolicy" xml:space="preserve">
+        <value>บังคับวิ่ง</value>
+    </data>
+    <data name="SelectFileWarning" xml:space="preserve">
+        <value>โปรดเลือกไฟล์ที่จะอัปโหลด</value>
+    </data>
+    <data name="LogoUploadError" xml:space="preserve">
+        <value>ไม่สามารถอัปโหลดโลโก้ โปรดลองอีกครั้ง</value>
+    </data>
+    <data name="LogoRemoveError" xml:space="preserve">
+        <value>ไม่สามารถลบโลโก้ได้ โปรดลองอีกครั้ง</value>
+    </data>
+    <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
+        <value>เมื่อเปิดใช้งาน ผู้บังคับบัญชาสามารถปิดและเปิดการมอบหมายใหม่ได้</value>
+    </data>
+    <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
+        <value>เมื่อเปิดใช้งาน ผู้สัมภาษณ์สามารถทำงานให้เสร็จสิ้นและเปิดการมอบหมายใหม่ได้ (ต้องเปิดใช้งานการตั้งค่าหัวหน้างาน)</value>
+    </data>
+    <data name="AudioRecordingQualityDescription" xml:space="preserve">
+        <value>คุณภาพเสียงที่ใช้โดยแอปพลิเคชันผู้สัมภาษณ์เมื่อบันทึกเสียง (การตรวจสอบเสียงและคำถามเกี่ยวกับเสียง)</value>
+    </data>
+    <data name="AudioRecordingQuality_Mono44kHz" xml:space="preserve">
+        <value>64 กิโลบิตต่อวินาที โมโน 44.1 กิโลเฮิรตซ์</value>
+    </data>
+    <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve">
+        <value>64 กิโลบิตต่อวินาที โมโน 22.05 กิโลเฮิร์ตซ์</value>
+    </data>
+    <data name="AudioRecordingQuality_Mono16kHz" xml:space="preserve">
+        <value>32 กิโลบิตต่อวินาที โมโน 16 กิโลเฮิร์ตซ์</value>
+    </data>
+    <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve">
+        <value>128 กิโลบิตต่อวินาที สเตอริโอ 44.1 กิโลเฮิรตซ์</value>
+    </data>
+    <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
+        <value>128 กิโลบิตต่อวินาที สเตอริโอ 48 กิโลเฮิร์ตซ์</value>
+    </data>
+</root>

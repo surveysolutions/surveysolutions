@@ -1,6 +1,12 @@
 <template>
-    <wb-question :question="$me" :questionDivCssClassName="titleClass" :questionCssClassName="statusClass"
-        noTitle="true" noValidation="true" noInstructions="true" noComments="true" noFlag="true">
+    <wb-question :question="$me"
+        :questionDivCssClassName="titleClass"
+        :questionCssClassName="statusClass"
+        noTitle="true"
+        noValidation="true"
+        noInstructions="true"
+        noComments="true"
+        noFlag="true">
         <span v-dompurify-html="$me.title"></span><span v-if="this.$me.isRoster && !this.$me.hasCustomRosterTitle"> -
             <i>{{ rosterTitle }}</i></span>
     </wb-question>
@@ -9,7 +15,7 @@
 <script lang="js">
 import { entityDetails } from '../mixins'
 import { GroupStatus } from './index'
-import { debounce } from 'lodash'
+import { debounce } from 'lodash-es'
 
 export default {
     name: 'GroupTitle',
@@ -55,9 +61,9 @@ export default {
                 'has-error': !this.$me.validity.isValid,
                 '': this.$me.validity.isValid && !this.isCompleted,
             },
-                {
-                    'answered': this.isCompleted,
-                }]
+            {
+                'answered': this.isCompleted,
+            }]
         },
     },
     methods: {
