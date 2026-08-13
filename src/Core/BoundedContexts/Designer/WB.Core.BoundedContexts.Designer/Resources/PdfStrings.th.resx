@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AppendixLink" xml:space="preserve">
+        <value>และสัญลักษณ์ {0} อื่นๆ [{1}]</value>
+    </data>
+    <data name="Appendix_Conditions" xml:space="preserve">
+        <value>ภาคผนวก {0} {1} เงื่อนไขการเปิดใช้งาน</value>
+    </data>
+    <data name="Appendix_Instructions" xml:space="preserve">
+        <value>ภาคผนวกคำแนะนำ {0} {1}</value>
+    </data>
+    <data name="Appendix_OptionFilters" xml:space="preserve">
+        <value>ภาคผนวก {0} {1} ตัวกรองหมวดหมู่</value>
+    </data>
+    <data name="Appendix_Options" xml:space="preserve">
+        <value>ภาคผนวกหมวดหมู่ {0} {1}</value>
+    </data>
+    <data name="Appendix_SpecialValues" xml:space="preserve">
+        <value>ภาคผนวก {0} {1} ค่าพิเศษ</value>
+    </data>
+    <data name="Appendix_CriticalRules" xml:space="preserve">
+        <value>ภาคผนวก {0} {1} กฎที่สำคัญ</value>
+    </data>
+    <data name="Appendix_Validations" xml:space="preserve">
+        <value>ภาคผนวก {0} {1} เงื่อนไขการตรวจสอบและข้อความ</value>
+    </data>
+    <data name="Appendix_Variables" xml:space="preserve">
+        <value>ภาคผนวกตัวแปร {0} {1}</value>
+    </data>
+    <data name="CreatedBy" xml:space="preserve">
+        <value>แบบสอบถามที่สร้างโดย {0}</value>
+    </data>
+    <data name="OwnedBy" xml:space="preserve">
+        <value>แบบสอบถามที่เป็นของ {0}</value>
+    </data>
+    <data name="EnablementCondition" xml:space="preserve">
+        <value>เงื่อนไขการเปิดใช้งาน:</value>
+    </data>
+    <data name="CriticalityCondition" xml:space="preserve">
+        <value>สภาพวิกฤติ:</value>
+    </data>
+    <data name="CriticalityMessage" xml:space="preserve">
+        <value>ข้อความ:</value>
+    </data>
+    <data name="Description" xml:space="preserve">
+        <value>คำอธิบาย:</value>
+    </data>
+    <data name="GeneratedBy" xml:space="preserve">
+        <value>สร้างโดย {0}</value>
+    </data>
+    <data name="LastEdited" xml:space="preserve">
+        <value>{0} แก้ไขล่าสุด {1}</value>
+    </data>
+    <data name="LastModifiedBy" xml:space="preserve">
+        <value>ปรับปรุงล่าสุดโดย {0}</value>
+    </data>
+    <data name="Legend" xml:space="preserve">
+        <value>ตำนาน</value>
+    </data>
+    <data name="NeverEdited" xml:space="preserve">
+        <value>{0} (ไม่เคยแก้ไข)</value>
+    </data>
+    <data name="NotShared" xml:space="preserve">
+        <value>ไม่แชร์กับใครเลย</value>
+    </data>
+    <data name="Options" xml:space="preserve">
+        <value>หมวดหมู่:</value>
+    </data>
+    <data name="PdfLegend" xml:space="preserve">
+        <value>คำอธิบายและโครงสร้างของข้อมูลในไฟล์นี้</value>
+    </data>
+    <data name="QuestionScope_Identifying" xml:space="preserve">
+        <value>การระบุ</value>
+    </data>
+    <data name="QuestionType_Area" xml:space="preserve">
+        <value>ภูมิศาสตร์:</value>
+    </data>
+    <data name="QuestionType_Area_Polygon" xml:space="preserve">
+        <value>รูปหลายเหลี่ยม</value>
+    </data>
+    <data name="QuestionType_Area_Polyline" xml:space="preserve">
+        <value>เส้นโพลีไลน์</value>
+    </data>
+    <data name="QuestionType_Area_Multipoint" xml:space="preserve">
+        <value>หลายจุด</value>
+    </data>
+    <data name="QuestionType_Area_Point" xml:space="preserve">
+        <value>จุด</value>
+    </data>
+    <data name="QuestionType_Audio" xml:space="preserve">
+        <value>เสียง</value>
+    </data>
+    <data name="QuestionType_Barcode" xml:space="preserve">
+        <value>บาร์โค้ด</value>
+    </data>
+    <data name="QuestionType_Cascading" xml:space="preserve">
+        <value>เรียงซ้อน</value>
+    </data>
+    <data name="QuestionType_Combobox" xml:space="preserve">
+        <value>กล่องคำสั่งผสม</value>
+    </data>
+    <data name="QuestionType_CurrentTime" xml:space="preserve">
+        <value>วันที่: เวลาปัจจุบัน</value>
+    </data>
+    <data name="QuestionType_Date" xml:space="preserve">
+        <value>วันที่</value>
+    </data>
+    <data name="QuestionType_Decimal" xml:space="preserve">
+        <value>ทศนิยม</value>
+    </data>
+    <data name="QuestionType_GPS" xml:space="preserve">
+        <value>จีพีเอส</value>
+    </data>
+    <data name="QuestionType_Integer" xml:space="preserve">
+        <value>จำนวนเต็ม</value>
+    </data>
+    <data name="QuestionType_Linked" xml:space="preserve">
+        <value>เชื่อมโยง</value>
+    </data>
+    <data name="QuestionType_List" xml:space="preserve">
+        <value>รายการ</value>
+    </data>
+    <data name="QuestionType_MultiSelect" xml:space="preserve">
+        <value>เลือกได้หลายรายการ</value>
+    </data>
+    <data name="QuestionType_Numeric" xml:space="preserve">
+        <value>ตัวเลข:</value>
+    </data>
+    <data name="QuestionType_Ordered" xml:space="preserve">
+        <value>สั่ง</value>
+    </data>
+    <data name="QuestionType_Picture" xml:space="preserve">
+        <value>รูปภาพ</value>
+    </data>
+    <data name="QuestionType_SingleSelect" xml:space="preserve">
+        <value>เลือกครั้งเดียว</value>
+    </data>
+    <data name="QuestionType_Text" xml:space="preserve">
+        <value>ข้อความ</value>
+    </data>
+    <data name="QuestionType_YesNo" xml:space="preserve">
+        <value>ใช่/ไม่ใช่</value>
+    </data>
+    <data name="Roster" xml:space="preserve">
+        <value>บัญชีรายชื่อ:</value>
+    </data>
+    <data name="RosterType_List" xml:space="preserve">
+        <value>รายการ</value>
+    </data>
+    <data name="RosterType_Multi" xml:space="preserve">
+        <value>เลือกได้หลายรายการ</value>
+    </data>
+    <data name="RosterType_Numeric" xml:space="preserve">
+        <value>ตัวเลข</value>
+    </data>
+    <data name="Roster_GeneretedByFixedList" xml:space="preserve">
+        <value>สร้างโดยรายการคงที่</value>
+    </data>
+    <data name="Roster_GeneretedByQuestion" xml:space="preserve">
+        <value>สร้างโดยคำถาม {0} {1}</value>
+    </data>
+    <data name="Scope" xml:space="preserve">
+        <value>ขอบเขต: {0}</value>
+    </data>
+    <data name="SourceOfCategories" xml:space="preserve">
+        <value>แหล่งที่มาของหมวดหมู่:</value>
+    </data>
+    <data name="RosterSourceOfCategories" xml:space="preserve">
+        <value>บัญชีรายชื่อ</value>
+    </data>
+    <data name="TextListSourceOfCategories" xml:space="preserve">
+        <value>คำถามรายการข้อความ</value>
+    </data>
+    <data name="QuestionInRosterSourceOfCategories" xml:space="preserve">
+        <value>คำถาม</value>
+    </data>
+    <data name="InRosterSourceOfCategories" xml:space="preserve">
+        <value>ในบัญชีรายชื่อ</value>
+    </data>
+    <data name="SharedWith" xml:space="preserve">
+        <value>แบ่งปันกับ:</value>
+    </data>
+    <data name="SpecialValues" xml:space="preserve">
+        <value>ค่าพิเศษ</value>
+    </data>
+    <data name="GeographyType" xml:space="preserve">
+        <value>ประเภทภูมิศาสตร์</value>
+    </data>
+    <data name="GeographyInputMode" xml:space="preserve">
+        <value>โหมดอินพุต</value>
+    </data>
+    <data name="GeometryOverlapDetection" xml:space="preserve">
+        <value>การตรวจจับการทับซ้อนกัน</value>
+    </data>
+    <data name="StaticText" xml:space="preserve">
+        <value>ข้อความคงที่</value>
+    </data>
+    <data name="Stat_NoQuestions" xml:space="preserve">
+        <value>ไม่มีคำถาม</value>
+    </data>
+    <data name="Stat_NoRosters" xml:space="preserve">
+        <value>ไม่มีบัญชีรายชื่อ</value>
+    </data>
+    <data name="Stat_NoSubsections" xml:space="preserve">
+        <value>ไม่มีส่วนย่อย</value>
+    </data>
+    <data name="Stat_Questions" xml:space="preserve">
+        <value>คำถาม: {0}</value>
+    </data>
+    <data name="Stat_QuestionsWithConditions" xml:space="preserve">
+        <value>คำถามเกี่ยวกับเงื่อนไขการเปิดใช้งาน: {0}</value>
+    </data>
+    <data name="Stat_QuestionsWithValidation" xml:space="preserve">
+        <value>คำถามที่มีเงื่อนไขการตรวจสอบ: {0}</value>
+    </data>
+    <data name="Stat_Rosters" xml:space="preserve">
+        <value>รายชื่อผู้เล่น: {0}</value>
+    </data>
+    <data name="Stat_Sections" xml:space="preserve">
+        <value>ส่วน: {0}</value>
+    </data>
+    <data name="Stat_StaticTexts" xml:space="preserve">
+        <value>ข้อความคงที่: {0}</value>
+    </data>
+    <data name="Stat_Subsections" xml:space="preserve">
+        <value>ส่วนย่อย: {0}</value>
+    </data>
+    <data name="Stat_Variables" xml:space="preserve">
+        <value>ตัวแปร: {0}</value>
+    </data>
+    <data name="ValidationCondition" xml:space="preserve">
+        <value>เงื่อนไขการตรวจสอบ:</value>
+    </data>
+    <data name="ValidationMessage" xml:space="preserve">
+        <value>ข้อความยืนยัน:</value>
+    </data>
+    <data name="Variable" xml:space="preserve">
+        <value>ตัวแปร</value>
+    </data>
+    <data name="QuestionScope_Hidden" xml:space="preserve">
+        <value>ที่ซ่อนอยู่</value>
+    </data>
+    <data name="QuestionScope_Supervisor" xml:space="preserve">
+        <value>หัวหน้างาน</value>
+    </data>
+    <data name="MetadataTitle" xml:space="preserve">
+        <value>ชื่อ</value>
+    </data>
+    <data name="MetadataSubtitle" xml:space="preserve">
+        <value>คำบรรยาย</value>
+    </data>
+    <data name="MetadataVersionIdentificator" xml:space="preserve">
+        <value>ตัวระบุเวอร์ชัน</value>
+    </data>
+    <data name="MetadataVersionNotes" xml:space="preserve">
+        <value>บันทึกเวอร์ชัน</value>
+    </data>
+    <data name="MetadataStudyType" xml:space="preserve">
+        <value>ประเภทการศึกษา</value>
+    </data>
+    <data name="MetadataKindOfData" xml:space="preserve">
+        <value>ประเภทของข้อมูล</value>
+    </data>
+    <data name="MetadataModeOfDataCollection" xml:space="preserve">
+        <value>โหมดการรวบรวมข้อมูล</value>
+    </data>
+    <data name="MetadataCountry" xml:space="preserve">
+        <value>ประเทศ</value>
+    </data>
+    <data name="MetadataYear" xml:space="preserve">
+        <value>ปี</value>
+    </data>
+    <data name="MetadataLanguages" xml:space="preserve">
+        <value>ภาษา</value>
+    </data>
+    <data name="MetadataUnitOfAlalysis" xml:space="preserve">
+        <value>หน่วยการวิเคราะห์</value>
+    </data>
+    <data name="MetadataCoverage" xml:space="preserve">
+        <value>ความคุ้มครอง</value>
+    </data>
+    <data name="MetadataUniverse" xml:space="preserve">
+        <value>จักรวาล</value>
+    </data>
+    <data name="MetadataPrimaryInvestigator" xml:space="preserve">
+        <value>นักสืบเบื้องต้น</value>
+    </data>
+    <data name="MetadataConsultants" xml:space="preserve">
+        <value>ที่ปรึกษา</value>
+    </data>
+    <data name="MetadataNotes" xml:space="preserve">
+        <value>หมายเหตุ</value>
+    </data>
+    <data name="MetadataKeywords" xml:space="preserve">
+        <value>คำหลัก</value>
+    </data>
+    <data name="MetadataFunding" xml:space="preserve">
+        <value>เงินทุน</value>
+    </data>
+    <data name="MetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+        <value>ตกลงที่จะเปิดเผยแบบสอบถามนี้ต่อสาธารณะ</value>
+    </data>
+    <data name="MetadataSectionTitle" xml:space="preserve">
+        <value>ข้อมูลการระบุการสำรวจ</value>
+    </data>
+    <data name="MetadataSectionSubTitle" xml:space="preserve">
+        <value>คำอธิบายแบบสอบถาม</value>
+    </data>
+    <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+        <value>ข้อมูลพื้นฐาน</value>
+    </data>
+    <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+        <value>ข้อมูลข้อมูลการสำรวจ</value>
+    </data>
+    <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+        <value>ข้อมูลการสำรวจ</value>
+    </data>
+    <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+        <value>ข้อมูลเพิ่มเติม</value>
+    </data>
+    <data name="VariableExcludedFromExport" xml:space="preserve">
+        <value>ตัวแปรนี้ถูกแยกออกจากข้อมูลที่ส่งออก</value>
+    </data>
+    <data name="On" xml:space="preserve">
+        <value>บน</value>
+    </data>
+    <data name="Off" xml:space="preserve">
+        <value>ปิด</value>
+    </data>
+</root>
