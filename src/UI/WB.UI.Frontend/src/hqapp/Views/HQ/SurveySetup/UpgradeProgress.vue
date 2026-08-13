@@ -1,5 +1,6 @@
 <template>
-    <HqLayout :hasFilter="false" :title="$t('Pages.UpgradeAssignmentsTitle')">
+    <HqLayout :hasFilter="false"
+        :title="$t('Pages.UpgradeAssignmentsTitle')">
         <template v-slot:headers>
             <div>
                 <ol class="breadcrumb">
@@ -15,10 +16,14 @@
                 </h1>
             </div>
         </template>
-        <div class="row-fluid" v-if="progress.progressDetails.status === 'Queued'">
-            <div class="col-sm-12 prefilled-data-info info-block">{{ $t('Assignments.UpgradePreparation') }}</div>
+        <div class="row-fluid"
+            v-if="progress.progressDetails.status === 'Queued'">
+            <div class="col-sm-12 prefilled-data-info info-block">
+                {{ $t('Assignments.UpgradePreparation') }}
+            </div>
         </div>
-        <div class="row-fluid" v-else-if="progress.progressDetails.status === 'InProgress'">
+        <div class="row-fluid"
+            v-else-if="progress.progressDetails.status === 'InProgress'">
             <div class="col-sm-7 col-xs-12 action-block uploading-verifying active-preloading">
                 <div class="import-progress">
                     <p>{{ $t('Assignments.UpgradeProgressNumbers', {
@@ -28,19 +33,31 @@
                 </div>
                 <div class="cancelable-progress">
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                            aria-valuemax="100" v-bind:style="{ width: overallProgressPercent + '%' }">
+                        <div class="progress-bar"
+                            role="progressbar"
+                            aria-valuenow="60"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            v-bind:style="{ width: overallProgressPercent + '%' }">
                             <span class="sr-only">{{ overallProgressPercent }}%</span>
                         </div>
                     </div>
-                    <button class="btn btn-link" type="button" @click="stop">{{ $t('Assignments.Stop') }}</button>
+                    <button class="btn btn-link"
+                        type="button"
+                        @click="stop">
+                        {{ $t('Assignments.Stop') }}
+                    </button>
                 </div>
             </div>
         </div>
-        <div class="row-fluid" v-else-if="progress.progressDetails.status === 'Cancelled'">
-            <div class="col-sm-12 prefilled-data-info info-block">{{ $t('Assignments.UpgradeCancelled') }}</div>
+        <div class="row-fluid"
+            v-else-if="progress.progressDetails.status === 'Cancelled'">
+            <div class="col-sm-12 prefilled-data-info info-block">
+                {{ $t('Assignments.UpgradeCancelled') }}
+            </div>
         </div>
-        <div class="row-fluid" v-else-if="progress.progressDetails.status === 'Done'">
+        <div class="row-fluid"
+            v-else-if="progress.progressDetails.status === 'Done'">
             <div class="col-sm-7 col-xs-12 action-block preloading-done active-preloading">
                 <div class="import-progress">
                     <p>{{ $t('Assignments.UpgradeProgressDoneCount', {
@@ -48,16 +65,23 @@
                             progress.progressDetails.assignmentsMigratedSuccessfully})}}</p>
                     <p v-if="errorsCount">
                         {{ $t('Assignments.UpgradeProgressErrorCount', { count: errorsCount }) }}
-                        <a :href="errorsExportUrl" target="_blank">({{ $t('Assignments.UpgradeDownloadFailed') }})</a>
+                        <a :href="errorsExportUrl"
+                            target="_blank">({{ $t('Assignments.UpgradeDownloadFailed') }})</a>
                     </p>
                 </div>
                 <div class="action-buttons">
-                    <a class="btn btn-primary" :href="$config.model.surveySetupUrl">{{ $t('MainMenu.SurveySetup') }}</a>
+                    <a class="btn btn-primary"
+                        :href="$config.model.surveySetupUrl">
+                        {{ $t('MainMenu.SurveySetup') }}
+                    </a>
                 </div>
             </div>
         </div>
-        <div class="row-fluid" v-else-if="progress.progressDetails.status === 'Error'">
-            <div class="col-sm-12 prefilled-data-info info-block">{{ $t('Assignments.UpgradeError') }}</div>
+        <div class="row-fluid"
+            v-else-if="progress.progressDetails.status === 'Error'">
+            <div class="col-sm-12 prefilled-data-info info-block">
+                {{ $t('Assignments.UpgradeError') }}
+            </div>
         </div>
     </HqLayout>
 </template>

@@ -116,6 +116,7 @@ export default {
                 title: this.$t('QuestionnaireEditor.DeleteCommentConfirm'),
                 okButtonTitle: this.$t('QuestionnaireEditor.Delete'),
                 cancelButtonTitle: this.$t('QuestionnaireEditor.Cancel'),
+                isDanger: true,
                 isReadOnly: this.questionnaire.isReadOnlyForUser,
                 callback: async confirm => {
                     if (confirm) {

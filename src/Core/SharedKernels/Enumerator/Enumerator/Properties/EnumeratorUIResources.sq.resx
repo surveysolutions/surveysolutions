@@ -304,7 +304,7 @@
     <value>Sfera:</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
-    <value>&lt;font color="red"&gt;No internet connection&lt;/font&gt;</value>
+    <value>&lt;font color="red"&gt;Nuk ka lidhje me internetin&lt;/font&gt;</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
     <value>Lidhja është &lt;font color="red"&gt;jo e mirë &lt;/font&gt;</value>
@@ -733,7 +733,7 @@
     <value>Aplikacioni i supervizorit duhet të sinkronizohet.</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>detyra të përfunduara</value>
+    <value>intervista të përfunduara</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} nga {1} {2} u kryen</value>
@@ -875,5 +875,191 @@
   </data>
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>Përgjigjja e marre duket të mos vijë nga shërbimi Survey Solutions. Kjo zakonisht shkaktohet nga një proxy rrjeti, firewall ose gateway sigurie që kap lidhjen. Ju lutemi kontrolloni lidhjen tuaj të rrjetit ose kontaktoni mbështetjen e TI.</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment" xml:space="preserve">
+    <value>Përfundo</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
+    <value>Përfundo detyrën</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
+    <value>Jeni i sigurt që keni numëruar të gjitha njësitë e pranueshme?</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
+    <value>Rihap detyrën</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Message" xml:space="preserve">
+    <value>Detyra do të rikthehet në statusin Hapur dhe intervistuesit do të mund të krijojnë intervista të reja.</value>
+  </data>
+  <data name="Dashboard_CloseAssignment" xml:space="preserve">
+    <value>Aprovo</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
+    <value>Mbyll detyrën</value>
+  </data>
+  <data name="Dashboard_CloseAssignment_Message" xml:space="preserve">
+    <value>Intervistuesit që punojnë jashtë linje mund të vazhdojnë mbledhjen e të dhënave deri në sinkronizim. Intervistat e tilla do të pranohen gjithsesi.</value>
+  </data>
+  <data name="Dashboard_Assignment_Comment" xml:space="preserve">
+    <value>Koment (opsional)</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
+    <value>Statusi: Përfunduar</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Closed" xml:space="preserve">
+    <value>Statusi: Aprovuar</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Open" xml:space="preserve">
+    <value>Statusi: Hapur</value>
+  </data>
+  <data name="Dashboard_WebInterviewsLinkText" xml:space="preserve">
+    <value>Intervimet Web ({0})</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspaces" xml:space="preserve">
+    <value>Po rifreskoj hapësirat e punës</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesFinished" xml:space="preserve">
+    <value>Lista e hapësirave të punës u përditësua</value>
+  </data>
+  <data name="Dashboard_RefreshWorkspacesError" xml:space="preserve">
+    <value>Gabim gjatë marrjes së listës së hapësirave të punës. Ju lutemi kontaktoni administratorin e sistemit. </value>
+  </data>
+  <data name="InvalidEndpointShort" xml:space="preserve">
+    <value>Adresa është e pavlefshme</value>
+  </data>
+  <data name="BluetoothPermissionRequired" xml:space="preserve">
+    <value>Leja e Bluetooth kërkohet për sinkronizimin offline</value>
+  </data>
+  <data name="NearbyPermissionRequired" xml:space="preserve">
+    <value>Leja e pajisjeve Wi-Fi afër kërkohet për sinkronizimin offline</value>
+  </data>
+  <data name="Synchronization_Download_CalendarEvents_Title" xml:space="preserve">
+    <value>Po përditësohen ngjarjet e kalendarit</value>
+  </data>
+  <data name="Synchronization_Update_Interviews_Title" xml:space="preserve">
+    <value>Po përditësohen intervimet lokale me ndryshimet nga serveri</value>
+  </data>
+  <data name="Synchronization_Fail_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>{0} nga {1} intervime të pjesshme u shkarkuan</value>
+  </data>
+  <data name="Synchronization_PartialInterviews" xml:space="preserve">
+    <value>ndryshimet e intervistave</value>
+  </data>
+  <data name="Synchronization_LinkToErrors" xml:space="preserve">
+    <value>Informacione shtesë mbi gabimet e sinkronizimit mund të gjenden në &lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems"&gt;faqen e mbështetjes&lt;/a&gt;</value>
+  </data>
+  <data name="TransferringCalendarEvents" xml:space="preserve">
+    <value>Po transferohen ngjarjet e kalendarit</value>
+  </data>
+  <data name="Synchronization_Success_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>{0} intervista u përditësuan</value>
+  </data>
+  <data name="Synchronization_Success_State_PartialUploadInterviews_Format" xml:space="preserve">
+    <value>{0} intervista u ngarkuan pjesërisht</value>
+  </data>
+  <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
+    <value>ngjarjet e kalendarit</value>
+  </data>
+  <data name="Synchronization_PasswordChangeRequired" xml:space="preserve">
+    <value>Fjalëkalimi juaj është rivendosur. Duhet ta ndryshoni për të fituar qasje në sit.</value>
+  </data>
+  <data name="YouChangeYouPasswordTryToLoginAgainWithNewPassword" xml:space="preserve">
+    <value>Ndryshuat fjalëkalimin tuaj aktual. Provoni të identifikoheni sërish me fjalëkalimin e ri.</value>
+  </data>
+  <data name="HeadquartersVersion" xml:space="preserve">
+    <value>Versioni i mbështetur i Selisë: {0}</value>
+  </data>
+  <data name="SupervisorVersion" xml:space="preserve">
+    <value>Versioni i mbikëqyrësit: {0}</value>
+  </data>
+  <data name="InterviewerVersion" xml:space="preserve">
+    <value>Versioni i intervistuesit: {0}</value>
+  </data>
+  <data name="MenuItem_Title_Return" xml:space="preserve">
+    <value>Kthehu</value>
+  </data>
+  <data name="MenuItem_Title_Map_Dashboard" xml:space="preserve">
+    <value>Paneli i hartave</value>
+  </data>
+  <data name="MenuItem_Title_Workspaces" xml:space="preserve">
+    <value>Hapësirat e punës</value>
+  </data>
+  <data name="MenuItem_Title_RefreshWorkspaces" xml:space="preserve">
+    <value>Rifresko hapësirat e punës</value>
+  </data>
+  <data name="Synchronization_UploadGeoTracking" xml:space="preserve">
+    <value>Po ngarkohet informacioni i gjurmimit gjeografik</value>
+  </data>
+  <data name="Synchronization_RemoveObsoleteGeoTracking" xml:space="preserve">
+    <value>Po hiqet informacioni i vjetëruar i gjurmimit gjeografik</value>
+  </data>
+  <data name="Dashboard_WebInterviewTabText" xml:space="preserve">
+    <value>Intervimet në mënyrën e intervistës web. Do të hiqen gjatë sinkronizimit kur intervista web të plotësohet nga i anketuari</value>
+  </data>
+  <data name="Dashboard_ShowAssignmentMap" xml:space="preserve">
+    <value>Shfaq zonën e synuar</value>
+  </data>
+  <data name="Dashboard_AddCalendarEvent" xml:space="preserve">
+    <value>Shto ngjarje kalendarike</value>
+  </data>
+  <data name="Dashboard_EditCalendarEvent" xml:space="preserve">
+    <value>Ndrysho ngjarjen kalendarike</value>
+  </data>
+  <data name="Dashboard_RemoveCalendarEvent" xml:space="preserve">
+    <value>Fshi ngjarjen kalendarike</value>
+  </data>
+  <data name="Dashboard_ShowCalendarEvent" xml:space="preserve">
+    <value>Kontakti i ardhshëm: {0}</value>
+  </data>
+  <data name="Dashboard_PastDateCalendarEvent" xml:space="preserve">
+    <value>Data e zgjedhur është në të kaluarën</value>
+  </data>
+  <data name="Dashboard_PastTimeCalendarEvent" xml:space="preserve">
+    <value>Ora e zgjedhur është në të kaluarën</value>
+  </data>
+  <data name="Dashboard_CantOpenCawi" xml:space="preserve">
+    <value>Nuk mund të hapni interviun në mënyrën CAWI. Do t'i dërgohet selisë pas sinkronizimit.</value>
+  </data>
+  <data name="Dashboard_CawiLabel" xml:space="preserve">
+    <value>{0} (CAWI)</value>
+  </data>
+  <data name="Diagnostics_SendLogs" xml:space="preserve">
+    <value>Dërgo regjistrat e gjurmimit</value>
+  </data>
+  <data name="Diagnostics_SendLogs_Description" xml:space="preserve">
+    <value>Dërgo regjistrat e detajuar në faqen e selisë për hetimin e problemeve</value>
+  </data>
+  <data name="Diagnostics_SendLogs_Success" xml:space="preserve">
+    <value>Regjistrat u dërguan në HQ</value>
+  </data>
+  <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
+    <value>Llogaria juaj nuk është më aktive në këtë server, sepse hapësira e punës ku është përcaktuar u çaktivizua nga administratori. Ju lutemi kontaktoni mbikëqyrësin tuaj.</value>
+  </data>
+  <data name="DashboardItem_QRCode" xml:space="preserve">
+    <value>Shfaq kodin QR</value>
+  </data>
+  <data name="Synchronization_WorkspaceAccessDisabledReason" xml:space="preserve">
+    <value>Llogaria juaj nuk është më aktive në hapësirën e punës. Ju lutemi kontaktoni administratorin e sistemit.</value>
+  </data>
+  <data name="Interview_Progress_Format" xml:space="preserve">
+    <value>Progresi: {0}/{1}</value>
+  </data>
+  <data name="Error_NoGpsProvider" xml:space="preserve">
+    <value>Nuk ka ofrues GPS në këtë pajisje</value>
+  </data>
+  <data name="Error_NoTargetAreaShapefile" xml:space="preserve">
+    <value>Nuk ka kufij për zonën e synuar</value>
+  </data>
+  <data name="Dashboard_CreateInterview_TargetArea_Warning" xml:space="preserve">
+    <value>Detyra kërkon që të krijoni një intervistë drejtpërdrejt nga harta e detyrave. Rekomandohet të përdorni mënyrën Geo Fencing. Dëshironi të vazhdoni?</value>
+  </data>
+  <data name="AssigmentMap_CreateInterview_OutTargetArea_Warning" xml:space="preserve">
+    <value>Po krijoni një intervistë jashtë zonës së synuar. Dëshironi të vazhdoni?</value>
+  </data>
+  <data name="AssigmentMap_CreateInterview_DisabledTargetArea_Warning" xml:space="preserve">
+    <value>Rekomandohet të aktivizoni geofencing-un për të kontrolluar zonën e synuar. Dëshironi të vazhdoni?</value>
+  </data>
+  <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
+    <value>Keni përdorur Gjurmimin Gjeografik ose Geo Fencing gjatë krijimit të një interviste. Ju lutemi aktivizojeni sërish nëse dëshironi ta përdorni.</value>
   </data>
 </root>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Levels" xml:space="preserve"><value>Cấp độ</value></data>
+  <data name="MapLoadingInvalidFilesError" xml:space="preserve"><value>Đã xảy ra lỗi. Các tệp sau bị bỏ qua:</value></data>
+  <data name="MapLoadingNotZipError" xml:space="preserve"><value>Đã xảy ra lỗi. Tệp không phải là tệp nén .zip</value></data>
+  <data name="MapsLoadingError" xml:space="preserve"><value>Đã xảy ra lỗi khi tải bản đồ</value></data>
+  <data name="MaxScale" xml:space="preserve"><value>Tỷ lệ tối đa</value></data>
+  <data name="MinScale" xml:space="preserve"><value>Tỷ lệ tối thiểu</value></data>
+  <data name="Name" xml:space="preserve"><value>Tên</value></data>
+  <data name="Size" xml:space="preserve"><value>Kích thước (MB)</value></data>
+  <data name="UpdateDate" xml:space="preserve"><value>Nhập ngày</value></data>
+  <data name="UploadMapsSummaryFormat" xml:space="preserve"><value>Đã xử lý {0} bản đồ với {1} tệp bản đồ không hợp lệ</value></data>
+  <data name="MapEngineIsNotInitialized" xml:space="preserve"><value>Thành phần bản đồ chưa được khởi tạo. Vui lòng liên hệ quản trị viên hệ thống.</value></data>
+  <data name="UploadMappingsSummaryFormat" xml:space="preserve"><value>liên kết cho {0} bản đồ đã được xử lý với {1} không hợp lệ</value></data>
+  <data name="FileLoadingNotTsvError" xml:space="preserve"><value>Đã xảy ra lỗi. Tệp không phải .tab</value></data>
+  <data name="MappingsLoadingError" xml:space="preserve"><value>Đã xảy ra lỗi khi tải liên kết bản đồ</value></data>
+  <data name="MapOverlapsWith" xml:space="preserve"><value>Chồng chéo với:</value></data>
+  <data name="MapOverlapsWithOther" xml:space="preserve"><value>và {0} bản đồ khác.</value></data>
+  <data name="MapLoadingNoMapsInArchive" xml:space="preserve"><value>Đã xảy ra lỗi. Tệp nén không chứa tệp bản đồ</value></data>
+  <data name="MapLoadingUnsupportedFilesInArchive" xml:space="preserve"><value>Đã xảy ra lỗi. Tệp nén chứa các tệp không phải bản đồ</value></data>
+  <data name="MapLoadingInvalidFile" xml:space="preserve"><value>Tệp '{0}' chứa dữ liệu mà hệ thống không thể xử lý. Lỗi: {1}</value></data>
+  <data name="ShpIsMissingInArchive" xml:space="preserve"><value>Tệp {0}.shp bị thiếu cho {0}</value></data>
+  <data name="ShxIsMissingInArchive" xml:space="preserve"><value>Tệp {0}.shx bị thiếu cho {0}.shp</value></data>
+  <data name="DbfIsMissingInArchive" xml:space="preserve"><value>Tệp {0}.dbf bị thiếu cho {0}.shp</value></data>
+  <data name="MapFileSizeLimit" xml:space="preserve"><value>Kích thước tệp {0} lớn hơn giới hạn cho phép {1}</value></data>
+  <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve"><value>Tên tệp {0} chứa ký tự không phải UTF-8.</value></data>
+  <data name="MapFileNameHasInvalidChars" xml:space="preserve"><value>Tên tệp {0} chứa ký tự không hợp lệ.</value></data>
+</root>
