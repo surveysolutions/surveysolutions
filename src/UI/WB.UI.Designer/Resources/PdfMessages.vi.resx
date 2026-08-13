@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="FailedToGenerate" xml:space="preserve">
+        <value>Không thể tạo tệp PDF.
+Vui lòng tải lại trang và thử lại hoặc liên hệ support@mysurvey.solutions</value>
+    </data>
+    <data name="Generate" xml:space="preserve">
+        <value>Tài liệu PDF đã được tạo cách đây {0} phút.
+Kích thước: {1}Kb</value>
+    </data>
+    <data name="GenerateLessMinute" xml:space="preserve">
+        <value>Tài liệu PDF đã được tạo cách đây chưa đến một phút.
+Kích thước: {0}Kb</value>
+    </data>
+    <data name="GeneratingSuccess" xml:space="preserve">
+        <value>Tệp PDF của bạn đang được tạo.
+Kích thước: {0}Kb</value>
+    </data>
+    <data name="PreparingToGenerate" xml:space="preserve">
+        <value>Đang chuẩn bị tạo tệp PDF của bạn.
+Vui lòng chờ...</value>
+    </data>
+    <data name="Retry" xml:space="preserve">
+        <value>Đang thử xuất lại dưới dạng PDF.</value>
+    </data>
+    <data name="NotFound" xml:space="preserve">
+        <value>Không tìm thấy tác vụ được yêu cầu. 
+Vui lòng thử lại.</value>
+    </data>
+    <data name="PdfLimitReached" xml:space="preserve">
+        <value>Bạn đã gửi {0} yêu cầu tạo tài liệu PDF cho các bảng câu hỏi của mình.
+Vui lòng thử lại sau.</value>
+    </data>
+</root>
