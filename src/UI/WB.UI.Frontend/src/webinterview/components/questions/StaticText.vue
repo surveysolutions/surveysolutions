@@ -56,7 +56,6 @@ export default {
 
         scroll() {
             if(this.$store && this.$store.state.route.hash === '#' + this.id) {
-                this.$store.dispatch('sectionRequireScroll', { id: this.$store.state.route.hash })
                 this.doScroll()
             }
         },
