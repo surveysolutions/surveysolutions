@@ -12,6 +12,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
+    [NUnit.Framework.NonParallelizable]
     public class when_executing_command_on_event_sources_ar_having_postprocessor
     {
         public class CommandWithPostProcessor : ICommand

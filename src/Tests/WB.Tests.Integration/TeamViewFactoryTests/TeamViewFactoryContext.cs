@@ -38,6 +38,7 @@ using WB.Tests.Integration.PostgreSQLEventStoreTests;
 
 namespace WB.Tests.Integration.TeamViewFactoryTests
 {
+    [NonParallelizable]
     class TeamViewFactoryContext
     {
         private string connectionString;

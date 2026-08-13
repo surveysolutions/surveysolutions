@@ -4,6 +4,7 @@ using WB.Core.SharedKernels.DataCollection;
 namespace WB.Tests.Integration.UtilsTest
 {
     [TestFixture]
+    [Parallelizable]
     public class MinusDelimitedIntArrayParserTest
     { 
         [TestCase("1-2-3", 1, 2, 3)]

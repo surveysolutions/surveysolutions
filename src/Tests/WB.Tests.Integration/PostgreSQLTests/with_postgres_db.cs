@@ -9,6 +9,7 @@ using WB.Tests.Integration.PostgreSQLEventStoreTests;
 
 namespace WB.Tests.Integration.PostgreSQLTests
 {
+    [NonParallelizable]
     public class with_postgres_db
     {
         [OneTimeSetUp]

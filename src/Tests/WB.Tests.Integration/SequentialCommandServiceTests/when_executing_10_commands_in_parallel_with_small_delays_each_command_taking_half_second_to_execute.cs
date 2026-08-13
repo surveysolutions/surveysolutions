@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.CommandBus.Implementation;
 
 namespace WB.Tests.Integration.SequentialCommandServiceTests
 {
+    [NUnit.Framework.NonParallelizable]
     internal class when_executing_10_commands_in_parallel_with_small_delays_each_command_taking_half_second_to_execute
     {
         private class WorkAboutHalfSecond : ICommand

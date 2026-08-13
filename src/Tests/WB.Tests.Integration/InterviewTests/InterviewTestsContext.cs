@@ -11,6 +11,7 @@ using Moq;
 using MvvmCross.Tests;
 using Ncqrs.Eventing;
 using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -31,6 +32,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Integration.InterviewTests
 {
+    [NonParallelizable]
     public class InterviewTestsContext : MvxIoCSupportingTest
     {
         internal static AnsweredYesNoOption Yes(decimal value)

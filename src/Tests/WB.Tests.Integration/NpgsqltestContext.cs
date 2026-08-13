@@ -7,6 +7,7 @@ using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Tests.Integration
 {
+    [NonParallelizable]
     internal abstract class NpgsqlTestContext
     {
         protected static NpgsqlConnectionStringBuilder connectionStringBuilder;

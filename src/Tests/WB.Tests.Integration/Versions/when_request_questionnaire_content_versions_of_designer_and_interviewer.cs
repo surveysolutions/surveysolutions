@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
@@ -7,6 +8,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
 namespace WB.Tests.Integration.Versions
 {
+    [Parallelizable]
     internal class when_request_questionnaire_content_versions_of_designer_and_interviewer
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {

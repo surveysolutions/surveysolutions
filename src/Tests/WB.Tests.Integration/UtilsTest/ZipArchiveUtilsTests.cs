@@ -11,6 +11,7 @@ namespace WB.Tests.Integration.UtilsTest
 {
     [TestOf(typeof(ZipArchiveUtils))]
     [TestFixture]
+    [Parallelizable]
     internal class ZipArchiveUtilsTests
     {
         private ZipArchiveUtils zipArchiveUtils;

@@ -15,6 +15,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
+    [NUnit.Framework.NonParallelizable]
     internal class when_executing_not_constructing_command_and_aggregate_root_does_exist_in_repository
     {
         private class Update2 : ICommand { public Guid CommandIdentifier { get; private set; } }

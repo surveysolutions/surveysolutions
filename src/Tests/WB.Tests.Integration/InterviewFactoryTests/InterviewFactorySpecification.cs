@@ -34,6 +34,7 @@ using WB.Tests.Integration.PostgreSQLEventStoreTests;
 
 namespace WB.Tests.Integration.InterviewFactoryTests
 {
+    [NonParallelizable]
     internal class InterviewFactorySpecification
     {
         private string connectionString;

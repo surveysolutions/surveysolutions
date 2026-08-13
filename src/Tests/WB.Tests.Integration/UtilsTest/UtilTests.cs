@@ -5,6 +5,7 @@ using WB.Core.SharedKernels.DataCollection;
 namespace WB.Tests.Integration.UtilsTest
 {
     [TestOf(typeof(Util))]
+    [Parallelizable]
     public class UtilTests
     {
         [Test]

@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.CommandBus.Implementation;
 
 namespace WB.Tests.Integration.SequentialCommandServiceTests
 {
+    [NUnit.Framework.NonParallelizable]
     internal class when_canceling_2_commands_after_1_second_of_their_execution_in_parallel_and_each_command_takes_5_seconds_to_execute
     {
         private class StoreNameFor5Seconds : ICommand

@@ -4,6 +4,7 @@ using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.Tests.Integration.FileSystemIOAccessorTests
 {
+    [NonParallelizable]
     internal class when_creating_not_existing_folder_and_it_s_parent_folders_also_do_not_exist
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {

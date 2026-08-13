@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.He
 
 namespace WB.Tests.Integration.UtilsTest
 {
+    [Parallelizable]
     public class GuidExtensionsTests
     {
         [Test]

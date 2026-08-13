@@ -13,6 +13,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
+    [NUnit.Framework.NonParallelizable]
     internal class when_executing_command_and_aggregate_root_raised_no_events
     {
         private class DoNothing : ICommand { public Guid CommandIdentifier { get; private set; } }

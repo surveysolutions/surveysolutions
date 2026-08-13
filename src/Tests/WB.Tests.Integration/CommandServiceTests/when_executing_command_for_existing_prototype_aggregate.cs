@@ -15,6 +15,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
+    [NUnit.Framework.NonParallelizable]
     internal class when_executing_command_for_existing_prototype_aggregate
     {
         private class Update : ICommand { public Guid CommandIdentifier { get; private set; } }

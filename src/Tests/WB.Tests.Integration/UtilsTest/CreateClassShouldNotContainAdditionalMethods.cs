@@ -6,6 +6,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Integration.UtilsTest
 {
     [TestOf(typeof(Create))]
+    [Parallelizable]
     public class CreateClassShouldNotContainAdditionalMethods
     {
         [Test]

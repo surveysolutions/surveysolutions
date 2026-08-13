@@ -11,6 +11,7 @@ using WB.Persistence.Headquarters.Migrations.Events;
 
 namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 {
+    [NonParallelizable]
     public class with_postgres_db
     {
         protected class AccountRegistered : IEvent

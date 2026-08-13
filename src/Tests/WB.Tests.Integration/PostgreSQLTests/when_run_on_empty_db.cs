@@ -17,6 +17,7 @@ using WB.Tests.Integration.PostgreSQLEventStoreTests;
 
 namespace WB.Tests.Integration.PostgreSQLTests
 {
+    [Parallelizable]
     public class when_run_on_empty_db
     {
         private string connectionString;

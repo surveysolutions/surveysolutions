@@ -9,6 +9,7 @@ using WB.Infrastructure.Native.Storage;
 namespace WB.Tests.Integration.ZipUtilsTests
 {
     [TestFixture]
+    [Parallelizable]
     public class ZipUtilsTestsFixture
     {
         [Test]

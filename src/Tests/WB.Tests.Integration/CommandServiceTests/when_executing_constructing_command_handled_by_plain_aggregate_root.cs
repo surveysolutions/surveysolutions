@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.CommandBus.Implementation;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
+    [NUnit.Framework.NonParallelizable]
     internal class when_executing_constructing_command_handled_by_plain_aggregate_root
     {
         private class PlainConstructingCommand : ICommand { public Guid CommandIdentifier { get; private set; } }

@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.Services;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
+    [NUnit.Framework.NonParallelizable]
     internal class when_executing_command_for_new_prototype_aggregate
     {
         private class Create : ICommand { public Guid CommandIdentifier { get; private set; } }

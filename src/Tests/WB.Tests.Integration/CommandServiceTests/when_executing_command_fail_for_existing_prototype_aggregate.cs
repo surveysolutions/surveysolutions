@@ -10,6 +10,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
+    [NUnit.Framework.NonParallelizable]
     internal class when_executing_command_fail_for_existing_prototype_aggregate
     {
         private class ThisCommandWillFail : ICommand { public Guid CommandIdentifier => default; }

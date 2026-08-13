@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.CommandBus.Implementation;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
+    [NUnit.Framework.NonParallelizable]
     internal class when_executing_stateless_command_and_aggregate_root_raised_events
     {
         private class DoNothingCommand : ICommand { public Guid CommandIdentifier { get; private set; } }

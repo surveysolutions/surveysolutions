@@ -8,6 +8,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
+    [NUnit.Framework.NonParallelizable]
     public class when_executing_command_handled_by_plain_aggregate_with_post_processor
     {
         public class PlainCommandWithPostProcesor : ICommand { public Guid CommandIdentifier => Guid.Empty; }

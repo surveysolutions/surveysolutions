@@ -10,6 +10,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
+    [NUnit.Framework.NonParallelizable]
     internal class when_executing_command_handled_by_event_sourced_aggregate_and_validator_throws_exception
     {
         private class InvalidEventSourcedCommand : ICommand { public Guid CommandIdentifier => Guid.Empty; }
