@@ -271,4 +271,7 @@
     <data name="CloneDeletedWarning" xml:space="preserve">
         <value>អ្នកកំពុងបង្កើតច្បាប់ចម្លងនៃកម្រងសំណួរដែលបានលុប។ ផ្នែកខ្លះអាចនឹងបាត់បង់។</value>
     </data>
+    <data name="IncludeScenarios" xml:space="preserve">
+        <value>រួមបញ្ចូលសេណារីយ៉ូ</value>
+    </data>
 </root>
