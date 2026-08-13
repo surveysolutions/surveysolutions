@@ -67,7 +67,8 @@ namespace WB.UI.Supervisor
                 {typeof(SupervisorResolveInterviewViewModel), typeof (SupervisorCompleteFragment)},
                 {typeof(MapsViewModel), typeof (MapsActivity)},
                 {typeof(PhotoViewViewModel), typeof(PhotoViewActivity) },
-                {typeof(SearchViewModel), typeof(SupervisorSearchActivity)}
+                {typeof(SearchViewModel), typeof(SupervisorSearchActivity)},
+                {typeof(RelinkDeviceViewModel), typeof(RelinkDeviceActivity)}
 #if !EXCLUDEEXTENSIONS
                 ,{typeof (Shared.Extensions.ViewModels.GeographyEditorViewModel), typeof (Shared.Extensions.Activities.GeographyEditorActivity)}
                 ,{typeof (Shared.Extensions.ViewModels.SupervisorMapDashboardViewModel), typeof (Shared.Extensions.Activities.SupervisorMapDashboardActivity)}
