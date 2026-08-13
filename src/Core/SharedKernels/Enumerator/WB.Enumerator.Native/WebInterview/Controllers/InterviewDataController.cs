@@ -341,7 +341,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         public virtual SectionData GetFullSectionInfo(Guid interviewId, string sectionId)
         {
             var entities = GetSectionEntities(interviewId, sectionId);
-            if (entities == null) return new SectionData { Entities = Array.Empty<InterviewEntityWithType>(), Details = Array.Empty<InterviewEntity>() };
+            if (entities == null) return new SectionData { Entities = Array.Empty<InterviewEntityWithType>(), Details = Array.Empty<InterviewEntity>() };
+
 
             var details = GetEntitiesDetails(interviewId, entities.Select(e => e.Identity).ToArray(), sectionId);
 
@@ -470,23 +471,14 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                     // but they still contribute a coordinate to the roster vector of their descendants
                     if (questionnaire.IsCustomViewRoster(parentId))
                         continue;
-
-var itemRosterVector = groupId.RosterVector.Shrink(metRosters);
-
-var itemIdentity = new Identity(parentId, itemRosterVector);
-
-var treeGroup = statefulInterview.GetGroup(itemIdentity);
-
-if (treeGroup == null)
-
-{
-
-    this.webInterviewNotificationService.ReloadInterview(interviewId);
-
-    return new BreadcrumbInfo();
-
-}
-
+                    var itemRosterVector = groupId.RosterVector.Shrink(metRosters);
+                    var itemIdentity = new Identity(parentId, itemRosterVector);
+                    var treeGroup = statefulInterview.GetGroup(itemIdentity);
+                    if (treeGroup == null)
+                    {
+                        this.webInterviewNotificationService.ReloadInterview(interviewId);
+                        return new BreadcrumbInfo();
+                    }
                     var breadCrumb = new Breadcrumb
                     {
                         Title = treeGroup.Title.BrowserReadyText,
