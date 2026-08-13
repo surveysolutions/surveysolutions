@@ -387,7 +387,7 @@ $width-right-menu-small: 380px;
     }
 }
 
-@media (max-width: $screen-lg-min) {
+@media (max-width: $screen-md-max) {
     .navbar {
 
         .container,
@@ -575,7 +575,7 @@ $width-right-menu-small: 380px;
     }
 }
 
-@media (max-width: $screen-lg-min) {
+@media (max-width: $screen-md-max) {
     .wide-navbar {
         .navbar-header {
             float: none;
