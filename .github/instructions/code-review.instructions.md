@@ -1,5 +1,6 @@
 ---
 applyTo: "**"
+excludeAgent: "cloud-agent"
 ---
 
 # Code Review Instructions — Survey Solutions
