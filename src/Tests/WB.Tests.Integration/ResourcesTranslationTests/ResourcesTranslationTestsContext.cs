@@ -66,7 +66,6 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             {
                 throw new Exception($"Resouce loading error for file {fullPathToResX}", exc);
             }
-            
         }
 
         protected static string GetUiStringFormatEntriesAsString(string value)
@@ -117,6 +116,11 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         private static string TrimEndAfterLastDot(string value)
         {
             return value.Substring(0, value.LastIndexOf('.'));
+        }
+
+        protected static bool IsNotPluralForm(string resourceName)
+        {
+            return !(resourceName.EndsWith("_other") || resourceName.EndsWith("_plural"));
         }
 
         protected IEnumerable<string> GetAllLinkedResourceFiles(IEnumerable<string> csprojFiles)
