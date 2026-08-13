@@ -674,7 +674,7 @@
         <value>წყაროს შეკითხვა (პასუხი განსაზღვრავს სტრიქონების რიცხვს და სახელს):</value>
         </data>
     <data name="RosterVariableName" xml:space="preserve">
-        <value>Roster ID</value>
+        <value>სიის ID</value>
         </data>
     <data name="SectionVariableName" xml:space="preserve">
         <value>ცვლადის სახელი</value>
