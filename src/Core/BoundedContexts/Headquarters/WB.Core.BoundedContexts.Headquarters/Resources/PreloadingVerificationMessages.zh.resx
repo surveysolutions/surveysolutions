@@ -225,47 +225,47 @@
 
 
   <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
-    <value>User is not Headquarters, Supervisor or Interviewer for 1 or more observations.</value>
+    <value>一个或多个观测值中的用户不是总部用户、主管或访问员。</value>
   </data>
 
   <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
-    <value>Max quantity shouldn't be more than {0}.</value>
+    <value>最大数量不能超过 {0}。</value>
   </data>
 
   <data name="PL0055_InvalidEmail" xml:space="preserve">
-    <value>Email is not valid</value>
+    <value>电子邮件地址无效</value>
   </data>
 
   <data name="PL0056_InvalidPassword" xml:space="preserve">
-    <value>Invalid Password. At least 6 numbers and upper case letters or single symbol '?' to generate password</value>
+    <value>密码无效。密码至少应包含 6 个数字和大写字母，或者使用单个符号“?”生成密码</value>
   </data>
 
   <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
-    <value>For assignments with provided email allowed quantity is 1</value>
+    <value>提供了电子邮件地址的任务，其允许数量为 1</value>
   </data>
 
   <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
-    <value>Web Mode has to be activated for assignments having Email</value>
+    <value>包含电子邮件地址的任务必须启用网络模式</value>
   </data>
 
   <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
-    <value>Web Mode has to be activated for assignments having Password</value>
+    <value>包含密码的任务必须启用网络模式</value>
   </data>
 
   <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
-    <value>Assignment with size 1 for web mode should have either email or password provided</value>
+    <value>网络模式下大小为 1 的任务必须提供电子邮件地址或密码</value>
   </data>
 
   <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
-    <value>Password is not unique. Password by assignment for web mode with quantity 1 should be unique</value>
+    <value>密码不唯一。网络模式下数量为 1 的任务必须使用唯一密码</value>
   </data>
 
   <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
-    <value>All assignments for web interviews must be made to an interviewer</value>
+    <value>所有网络访谈任务都必须分配给访问员</value>
   </data>
 
   <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
-    <value>Answer to question with variable name {0} can't be preloaded, since it is of unsupported type. Refer to the following support article https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type for details of what can be preloaded in the current version.</value>
+    <value>变量名为 {0} 的问题答案无法预加载，因为该问题类型不受支持。有关当前版本中可预加载内容的详细信息，请参阅以下支持文章：https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type。</value>
   </data>
   <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
     <value>音频审核范围变量名称 '{0}' 无效。它必须引用现有的章节、组或滚动表（不允许使用问题和平面滚动表）。</value>
