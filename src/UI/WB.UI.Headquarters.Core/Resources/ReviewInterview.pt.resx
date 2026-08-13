@@ -121,45 +121,45 @@
   <value>{0} | Revisão</value>
 </data>
   <data name="AudioAudit_Available" xml:space="preserve">
-     <value>Audio audit:</value>
+     <value>Auditoria de áudio:</value>
   </data>
   <data name="AudioAudit_ViewRecordings" xml:space="preserve">
-    <value>View recordings</value>
+    <value>Ver gravações</value>
   </data>
   <data name="AudioAudit_CloseRecordings" xml:space="preserve">
-    <value>Close recordings</value>
+    <value>Fechar gravações</value>
   </data>
   <data name="AudioAudit_DurationLoading" xml:space="preserve">
-    <value>Duration: loading…</value>
+    <value>Duração: carregando…</value>
   </data>
   <data name="AudioAudit_DurationUnavailable" xml:space="preserve">
-    <value>Duration: unavailable</value>
+    <value>Duração: indisponível</value>
   </data>
   <data name="AudioAudit_TotalDuration" xml:space="preserve">
-    <value>Total duration: {{ duration }}</value>
+    <value>Duração total: {{ duration }}</value>
   </data>
   <data name="AudioAudit_SegmentLabel" xml:space="preserve">
-    <value>Recording {{ number }}</value>
+    <value>Gravação {{ number }}</value>
   </data>
   <data name="AudioAudit_DeviceTime" xml:space="preserve">
-    <value>Device time: {{ time }}</value>
+    <value>Hora do dispositivo: {{ time }}</value>
   </data>
   <data name="AudioAudit_SegmentUnavailable" xml:space="preserve">
-    <value>Recording unavailable</value>
+    <value>Gravação indisponível</value>
   </data>
   <data name="AudioAudit_PlaybackFailed" xml:space="preserve">
-    <value>Playback failed</value>
+    <value>Falha na reprodução</value>
   </data>
   <data name="AudioAudit_UnsupportedFormat" xml:space="preserve">
-    <value>Format not supported by browser</value>
+    <value>Formato não suportado pelo navegador</value>
   </data>
   <data name="AudioAudit_SkipBackward" xml:space="preserve">
-    <value>Skip backward 10 seconds</value>
+    <value>Voltar 10 segundos</value>
   </data>
   <data name="AudioAudit_SkipForward" xml:space="preserve">
-    <value>Skip forward 10 seconds</value>
+    <value>Avançar 10 segundos</value>
   </data>
   <data name="AudioAudit_NoRecordingsAvailable" xml:space="preserve">
-    <value>No recordings can currently be played</value>
+    <value>No momento, não há gravações disponíveis para reprodução</value>
   </data>
 </root>

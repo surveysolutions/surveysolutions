@@ -121,45 +121,45 @@
     <value>{0} | Відгук</value>
   </data>
   <data name="AudioAudit_Available" xml:space="preserve">
-     <value>Audio audit:</value>
+     <value>Аудіоаудит:</value>
   </data>
   <data name="AudioAudit_ViewRecordings" xml:space="preserve">
-    <value>View recordings</value>
+    <value>Переглянути записи</value>
   </data>
   <data name="AudioAudit_CloseRecordings" xml:space="preserve">
-    <value>Close recordings</value>
+    <value>Закрити записи</value>
   </data>
   <data name="AudioAudit_DurationLoading" xml:space="preserve">
-    <value>Duration: loading…</value>
+    <value>Тривалість: завантаження…</value>
   </data>
   <data name="AudioAudit_DurationUnavailable" xml:space="preserve">
-    <value>Duration: unavailable</value>
+    <value>Тривалість: недоступна</value>
   </data>
   <data name="AudioAudit_TotalDuration" xml:space="preserve">
-    <value>Total duration: {{ duration }}</value>
+    <value>Загальна тривалість: {{ duration }}</value>
   </data>
   <data name="AudioAudit_SegmentLabel" xml:space="preserve">
-    <value>Recording {{ number }}</value>
+    <value>Запис {{ number }}</value>
   </data>
   <data name="AudioAudit_DeviceTime" xml:space="preserve">
-    <value>Device time: {{ time }}</value>
+    <value>Час пристрою: {{ time }}</value>
   </data>
   <data name="AudioAudit_SegmentUnavailable" xml:space="preserve">
-    <value>Recording unavailable</value>
+    <value>Запис недоступний</value>
   </data>
   <data name="AudioAudit_PlaybackFailed" xml:space="preserve">
-    <value>Playback failed</value>
+    <value>Помилка відтворення</value>
   </data>
   <data name="AudioAudit_UnsupportedFormat" xml:space="preserve">
-    <value>Format not supported by browser</value>
+    <value>Формат не підтримується браузером</value>
   </data>
   <data name="AudioAudit_SkipBackward" xml:space="preserve">
-    <value>Skip backward 10 seconds</value>
+    <value>Перемотати назад на 10 секунд</value>
   </data>
   <data name="AudioAudit_SkipForward" xml:space="preserve">
-    <value>Skip forward 10 seconds</value>
+    <value>Перемотати вперед на 10 секунд</value>
   </data>
   <data name="AudioAudit_NoRecordingsAvailable" xml:space="preserve">
-    <value>No recordings can currently be played</value>
+    <value>Наразі немає доступних для відтворення записів</value>
   </data>
 </root>

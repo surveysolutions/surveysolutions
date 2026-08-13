@@ -6,45 +6,45 @@
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <data name="PageTitle" xml:space="preserve"><value>{0} | Xem xét</value></data>
   <data name="AudioAudit_Available" xml:space="preserve">
-     <value>Audio audit:</value>
+     <value>Kiểm tra âm thanh:</value>
   </data>
   <data name="AudioAudit_ViewRecordings" xml:space="preserve">
-    <value>View recordings</value>
+    <value>Xem bản ghi</value>
   </data>
   <data name="AudioAudit_CloseRecordings" xml:space="preserve">
-    <value>Close recordings</value>
+    <value>Đóng bản ghi</value>
   </data>
   <data name="AudioAudit_DurationLoading" xml:space="preserve">
-    <value>Duration: loading…</value>
+    <value>Thời lượng: đang tải…</value>
   </data>
   <data name="AudioAudit_DurationUnavailable" xml:space="preserve">
-    <value>Duration: unavailable</value>
+    <value>Thời lượng: không khả dụng</value>
   </data>
   <data name="AudioAudit_TotalDuration" xml:space="preserve">
-    <value>Total duration: {{ duration }}</value>
+    <value>Tổng thời lượng: {{ duration }}</value>
   </data>
   <data name="AudioAudit_SegmentLabel" xml:space="preserve">
-    <value>Recording {{ number }}</value>
+    <value>Bản ghi {{ number }}</value>
   </data>
   <data name="AudioAudit_DeviceTime" xml:space="preserve">
-    <value>Device time: {{ time }}</value>
+    <value>Thời gian thiết bị: {{ time }}</value>
   </data>
   <data name="AudioAudit_SegmentUnavailable" xml:space="preserve">
-    <value>Recording unavailable</value>
+    <value>Bản ghi không khả dụng</value>
   </data>
   <data name="AudioAudit_PlaybackFailed" xml:space="preserve">
-    <value>Playback failed</value>
+    <value>Phát lại thất bại</value>
   </data>
   <data name="AudioAudit_UnsupportedFormat" xml:space="preserve">
-    <value>Format not supported by browser</value>
+    <value>Định dạng không được trình duyệt hỗ trợ</value>
   </data>
   <data name="AudioAudit_SkipBackward" xml:space="preserve">
-    <value>Skip backward 10 seconds</value>
+    <value>Tua lùi 10 giây</value>
   </data>
   <data name="AudioAudit_SkipForward" xml:space="preserve">
-    <value>Skip forward 10 seconds</value>
+    <value>Tua tới 10 giây</value>
   </data>
   <data name="AudioAudit_NoRecordingsAvailable" xml:space="preserve">
-    <value>No recordings can currently be played</value>
+    <value>Hiện không có bản ghi nào có thể phát</value>
   </data>
 </root>

@@ -6,45 +6,45 @@
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <data name="PageTitle" xml:space="preserve"><value>{0} | ทบทวน</value></data>
   <data name="AudioAudit_Available" xml:space="preserve">
-     <value>Audio audit:</value>
+     <value>การตรวจสอบเสียง:</value>
   </data>
   <data name="AudioAudit_ViewRecordings" xml:space="preserve">
-    <value>View recordings</value>
+    <value>ดูไฟล์บันทึกเสียง</value>
   </data>
   <data name="AudioAudit_CloseRecordings" xml:space="preserve">
-    <value>Close recordings</value>
+    <value>ปิดไฟล์บันทึกเสียง</value>
   </data>
   <data name="AudioAudit_DurationLoading" xml:space="preserve">
-    <value>Duration: loading…</value>
+    <value>ระยะเวลา: กำลังโหลด…</value>
   </data>
   <data name="AudioAudit_DurationUnavailable" xml:space="preserve">
-    <value>Duration: unavailable</value>
+    <value>ระยะเวลา: ไม่พร้อมใช้งาน</value>
   </data>
   <data name="AudioAudit_TotalDuration" xml:space="preserve">
-    <value>Total duration: {{ duration }}</value>
+    <value>ระยะเวลารวม: {{ duration }}</value>
   </data>
   <data name="AudioAudit_SegmentLabel" xml:space="preserve">
-    <value>Recording {{ number }}</value>
+    <value>ไฟล์บันทึกเสียง {{ number }}</value>
   </data>
   <data name="AudioAudit_DeviceTime" xml:space="preserve">
-    <value>Device time: {{ time }}</value>
+    <value>เวลาของอุปกรณ์: {{ time }}</value>
   </data>
   <data name="AudioAudit_SegmentUnavailable" xml:space="preserve">
-    <value>Recording unavailable</value>
+    <value>ไฟล์บันทึกเสียงไม่พร้อมใช้งาน</value>
   </data>
   <data name="AudioAudit_PlaybackFailed" xml:space="preserve">
-    <value>Playback failed</value>
+    <value>การเล่นล้มเหลว</value>
   </data>
   <data name="AudioAudit_UnsupportedFormat" xml:space="preserve">
-    <value>Format not supported by browser</value>
+    <value>รูปแบบไฟล์ไม่รองรับโดยเบราว์เซอร์</value>
   </data>
   <data name="AudioAudit_SkipBackward" xml:space="preserve">
-    <value>Skip backward 10 seconds</value>
+    <value>ข้ามย้อนกลับ 10 วินาที</value>
   </data>
   <data name="AudioAudit_SkipForward" xml:space="preserve">
-    <value>Skip forward 10 seconds</value>
+    <value>ข้ามไปข้างหน้า 10 วินาที</value>
   </data>
   <data name="AudioAudit_NoRecordingsAvailable" xml:space="preserve">
-    <value>No recordings can currently be played</value>
+    <value>ขณะนี้ไม่มีไฟล์บันทึกเสียงที่สามารถเล่นได้</value>
   </data>
 </root>
