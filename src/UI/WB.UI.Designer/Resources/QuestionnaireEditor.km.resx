@@ -1,0 +1,1622 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AddNewSection" xml:space="preserve">
+        <value>បន្ថែមផ្នែកថ្មី។</value>
+    </data>
+    <data name="Backup" xml:space="preserve">
+        <value>បម្រុងទុក</value>
+    </data>
+    <data name="SaveAs" xml:space="preserve">
+        <value>រក្សាទុកជា</value>
+    </data>
+    <data name="CopyTo" xml:space="preserve">
+        <value>ចម្លងទៅ</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>បោះបង់</value>
+    </data>
+    <data name="ChangePassword" xml:space="preserve">
+        <value>ផ្លាស់ប្តូរពាក្យសម្ងាត់</value>
+    </data>
+    <data name="ClickHere" xml:space="preserve">
+        <value>ចុចទីនេះ</value>
+    </data>
+    <data name="Compile" xml:space="preserve">
+        <value>ចងក្រង</value>
+    </data>
+    <data name="Copy" xml:space="preserve">
+        <value>ចម្លង</value>
+    </data>
+    <data name="Delete" xml:space="preserve">
+        <value>លុប</value>
+    </data>
+    <data name="Download" xml:space="preserve">
+        <value>ទាញយក</value>
+    </data>
+    <data name="ErrorsCounter" xml:space="preserve">
+        <value>កំហុស {{count}}</value>
+    </data>
+    <data name="ErrorsCounter_plural" xml:space="preserve">
+        <value>កំហុស {{count}}</value>
+    </data>
+    <data name="HellowMessageBtn" xml:space="preserve">
+        <value>សួស្តី {{currentUserName}}</value>
+    </data>
+    <data name="Help" xml:space="preserve">
+        <value>ជំនួយ</value>
+    </data>
+    <data name="History" xml:space="preserve">
+        <value>ប្រវត្តិសាស្ត្រ</value>
+    </data>
+    <data name="LogOut" xml:space="preserve">
+        <value>ចេញ</value>
+    </data>
+    <data name="Ok" xml:space="preserve">
+        <value>យល់ព្រម</value>
+    </data>
+    <data name="Open" xml:space="preserve">
+        <value>បើក</value>
+    </data>
+    <data name="PasteAfter" xml:space="preserve">
+        <value>បិទភ្ជាប់បន្ទាប់ពី</value>
+    </data>
+    <data name="QuestionnaireSummary" xml:space="preserve">
+        <value>({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)</value>
+    </data>
+    <data name="ReadOnly" xml:space="preserve">
+        <value>អានតែប៉ុណ្ណោះ</value>
+    </data>
+    <data name="ReadOnlyQuestion" xml:space="preserve">
+        <value>វាជាសំណួរដែលបានអានតែប៉ុណ្ណោះ។ អ្នកមិនអាចកែសម្រួលវាបានទេ។</value>
+    </data>
+    <data name="Save" xml:space="preserve">
+        <value>រក្សាទុក</value>
+    </data>
+    <data name="SavedAtTimestamp" xml:space="preserve">
+        <value>បានរក្សាទុកនៅ {{dateTime, H:mm}}</value>
+    </data>
+    <data name="Settings" xml:space="preserve">
+        <value>ការកំណត់</value>
+    </data>
+    <data name="SideBarAddMacro" xml:space="preserve">
+        <value>បន្ថែមម៉ាក្រូថ្មី។</value>
+    </data>
+    <data name="SideBarAttachmentName" xml:space="preserve">
+        <value>ឈ្មោះឯកសារភ្ជាប់</value>
+    </data>
+    <data name="SideBarAttachmentsCounter" xml:space="preserve">
+        <value>ឯកសារភ្ជាប់ {{count}} (សរុប {{bytes}})</value>
+    </data>
+    <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
+        <value>ឯកសារភ្ជាប់ {{count}} (សរុប {{bytes}})</value>
+    </data>
+    <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
+        <value>ប្រើផ្ទាំងនេះដើម្បីផ្ទុកឡើងឯកសារពហុមេឌៀដែលអាចត្រូវបានយោងនៅក្នុងកម្រងសំណួរ។</value>
+    </data>
+    <data name="SideBarAttachmentsEmptyLine2" xml:space="preserve">
+        <value>ដើម្បីជៀសវាងការធ្វើសមកាលកម្មយឺត យើងសូមណែនាំទំហំរួមនៃឯកសារដែលបានភ្ជាប់ទាំងអស់មិនត្រូវលើសពី 2MB ។ សម្រាប់ប្រភេទឯកសារ ទ្រង់ទ្រាយ និងទំហំដែលគាំទ្រ</value>
+    </data>
+    <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
+        <value>ដើម្បីយោងទៅឯកសារភ្ជាប់នៅក្នុងកម្រងសំណួរ បន្ថែមធាតុអត្ថបទឋិតិវន្ត និងបញ្ជាក់ឯកសារភ្ជាប់ {{-name}} នៅក្នុងលក្ខណសម្បត្តិឯកសារភ្ជាប់របស់វា</value>
+    </data>
+    <data name="SideBarAttachmentsEstimate" xml:space="preserve">
+        <value>ប៉ាន់ស្មាន ពេលវេលាផ្ទុក៖ {{timeString}} នៅ {{downloadSpeed}}Kb/s (EDGE)</value>
+    </data>
+    <data name="SideBarAttachmentsUpload" xml:space="preserve">
+        <value>បង្ហោះថ្មី។</value>
+    </data>
+    <data name="SideBarLookupEmptyLine1" xml:space="preserve">
+        <value>ប្រើផ្ទាំងនេះដើម្បីកំណត់តារាងរកមើល។</value>
+    </data>
+    <data name="SideBarLookupEmptyLine2" xml:space="preserve">
+        <value>តារាងរកមើលផ្តល់នូវព័ត៌មានយោងដែលអាចត្រូវបានសួរដោយសោ និងប្រើក្នុងការបើកលក្ខខណ្ឌ និងកន្សោមសុពលភាព។</value>
+    </data>
+    <data name="SideBarLookupEmptyLine3" xml:space="preserve">
+        <value>តារាងរកមើលមានឈ្មោះមួយ និងឯកសាររកមើល ដែលអាចមានជួរឈរជាច្រើនដែលកំណត់ដោយផ្ទាំងកំណត់នៃតម្លៃលេខ។</value>
+    </data>
+    <data name="SideBarLookupTableAdd" xml:space="preserve">
+        <value>បន្ថែមតារាងរកមើលថ្មី។</value>
+    </data>
+    <data name="SideBarLookupTableDropFile" xml:space="preserve">
+        <value>ទម្លាក់ឯកសារនៅទីនេះ</value>
+    </data>
+    <data name="SideBarEditCategories" xml:space="preserve">
+        <value>កែសម្រួល​ប្រភេទ</value>
+    </data>
+    <data name="SideBarLookupTableFileName" xml:space="preserve">
+        <value>ឈ្មោះឯកសារ</value>
+    </data>
+    <data name="SideBarLookupTableName" xml:space="preserve">
+        <value>ឈ្មោះតារាង</value>
+    </data>
+    <data name="SideBarLookupTablesCounter" xml:space="preserve">
+        <value>តារាងរកមើល {{count}}៖</value>
+    </data>
+    <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
+        <value>តារាងរកមើល {{count}}៖</value>
+    </data>
+    <data name="SideBarLookupTableSelectFile" xml:space="preserve">
+        <value>ជ្រើសរើសឯកសារ</value>
+    </data>
+    <data name="SideBarLookupTableUpdateFile" xml:space="preserve">
+        <value>ធ្វើបច្ចុប្បន្នភាពឯកសារ</value>
+    </data>
+    <data name="SideBarMacroContent" xml:space="preserve">
+        <value>មាតិកា</value>
+    </data>
+    <data name="SideBarMacroCounter" xml:space="preserve">
+        <value>ម៉ាក្រូ {{count}}៖</value>
+    </data>
+    <data name="SideBarMacroCounter_plural" xml:space="preserve">
+        <value>ម៉ាក្រូ {{count}}៖</value>
+    </data>
+    <data name="SideBarMacroDescription" xml:space="preserve">
+        <value>ការពិពណ៌នា</value>
+    </data>
+    <data name="SideBarMacroEmptyLine1" xml:space="preserve">
+        <value>ប្រើផ្ទាំងនេះដើម្បីកំណត់ការជំនួសម៉ាក្រូ។</value>
+    </data>
+    <data name="SideBarMacroEmptyLine2" xml:space="preserve">
+        <value>ម៉ាក្រូគឺជាកន្សោមដែលមានឈ្មោះដែលអាចប្រើក្នុងការបើកលក្ខខណ្ឌ និងកន្សោមសុពលភាព។ ម៉ាក្រូ​មាន​ឈ្មោះ និង​ខ្លឹមសារ។</value>
+    </data>
+    <data name="SideBarMacroEmptyLine3" xml:space="preserve">
+        <value>អាច​ត្រូវ​បាន​ប្រើ​ក្នុង​កន្សោម ដើម្បី​យោង​ទៅ​ម៉ាក្រូ។</value>
+    </data>
+    <data name="SideBarMacroHideDescription" xml:space="preserve">
+        <value>លាក់ការពិពណ៌នា</value>
+    </data>
+    <data name="SideBarMacroName" xml:space="preserve">
+        <value>ឈ្មោះម៉ាក្រូ</value>
+    </data>
+    <data name="SideBarMacroShowDescription" xml:space="preserve">
+        <value>បន្ថែមការពិពណ៌នា</value>
+    </data>
+    <data name="SideBarCriticalityConditionExpression" xml:space="preserve">
+        <value>លក្ខខណ្ឌសំខាន់</value>
+    </data>
+    <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
+        <value>ច្បាប់សំខាន់ {{count}}៖</value>
+    </data>
+    <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
+        <value>ច្បាប់សំខាន់ៗ {{count}}៖</value>
+    </data>
+    <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
+        <value>ការពិពណ៌នា</value>
+    </data>
+    <data name="SideBarCriticalityConditionsEmptyLine1" xml:space="preserve">
+        <value>ប្រើផ្ទាំងនេះដើម្បីកំណត់ច្បាប់សំខាន់ៗ។</value>
+    </data>
+    <data name="SideBarCriticalityConditionsEmptyLine2" xml:space="preserve">
+        <value>ច្បាប់សំខាន់នីមួយៗមានលក្ខខណ្ឌ និងសារ។ លក្ខខណ្ឌសំខាន់អាចសំដៅទៅលើសំណួរ ឬអថេរណាមួយ ហើយត្រូវតែពេញចិត្ត (វាយតម្លៃទៅពិត)។ ការព្យាបាលការសំភាសន៍ជាមួយនឹងលក្ខខណ្ឌសំខាន់ដែលមិនពេញចិត្តត្រូវបានកំណត់កំឡុងពេលនាំចូលកម្រងសំណួរទៅកាន់ម៉ាស៊ីនមេទិន្នន័យ។</value>
+    </data>
+    <data name="SideBarCriticalityConditionsEmptyLine3" xml:space="preserve">
+        <value>រួមបញ្ចូលសារមួយសម្រាប់អ្នកសម្ភាសន៍ (អ្នកឆ្លើយសំណួរ) ដើម្បីពន្យល់ពីអ្វីដែលត្រូវផ្លាស់ប្តូរនៅក្នុងការសម្ភាសន៍ (សារត្រូវបានបង្ហាញនៅពេលដែលលក្ខខណ្ឌសំខាន់មិនពេញចិត្ត)។ ការរួមបញ្ចូលតំណខ្ពស់ទៅនឹងសំណួរនៅក្នុងសារគឺមានប្រយោជន៍សម្រាប់ការរុករក។</value>
+    </data>
+    <data name="SideBarHideDescription" xml:space="preserve">
+        <value>លាក់ការពិពណ៌នា</value>
+    </data>
+    <data name="SideBarCriticalityConditionMessage" xml:space="preserve">
+        <value>សារ</value>
+    </data>
+    <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
+        <value>ច្បាប់សំខាន់ដោយគ្មានសារ</value>
+    </data>
+    <data name="SideBarShowDescription" xml:space="preserve">
+        <value>បន្ថែមការពិពណ៌នា</value>
+    </data>
+    <data name="SideBarAddCriticalityCondition" xml:space="preserve">
+        <value>បន្ថែមច្បាប់សំខាន់ថ្មី។</value>
+    </data>
+    <data name="SideBarScenarioCounter" xml:space="preserve">
+        <value>សេណារីយ៉ូ {{count}}៖</value>
+    </data>
+    <data name="SideBarScenarioCounter_plural" xml:space="preserve">
+        <value>សេណារីយ៉ូ {{count}}៖</value>
+    </data>
+    <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
+        <value>ប្រើផ្ទាំងនេះដើម្បីមើលសេណារីយ៉ូរបស់អ្នក។</value>
+    </data>
+    <data name="SideBarScenarioEmptyLine2" xml:space="preserve">
+        <value>សេណារីយ៉ូគឺជារូបថតនៃស្ថានភាពអ្នកសាកល្បង អ្នកអាចរក្សាទុកវានៅលើអ្នកសាកល្បងដោយចុចលើប៊ូតុង "រក្សាទុកសេណារីយ៉ូ" ។</value>
+    </data>
+    <data name="SideBarScenarioName" xml:space="preserve">
+        <value>ចំណងជើងសេណារីយ៉ូ</value>
+    </data>
+    <data name="SideBarSectionsCounter" xml:space="preserve">
+        <value>ផ្នែក {{count}}៖</value>
+    </data>
+    <data name="SideBarSectionsCounter_plural" xml:space="preserve">
+        <value>ផ្នែក {{count}}៖</value>
+    </data>
+    <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
+        <value>ទាញយក xlsx</value>
+    </data>
+    <data name="SideBarDownload" xml:space="preserve">
+        <value>ទាញយក៖</value>
+    </data>
+    <data name="SideBarXlsx" xml:space="preserve">
+        <value>Xlsx</value>
+    </data>
+    <data name="SideBarTab" xml:space="preserve">
+        <value>ផ្ទាំង</value>
+    </data>
+    <data name="SideBarTranslationGetTemplate" xml:space="preserve">
+        <value>ទទួលបានគំរូសម្រាប់</value>
+    </data>
+    <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
+        <value>Excel (xlsx)</value>
+    </data>
+    <data name="SideBarTranslationGetTemplateLinkTextCsv" xml:space="preserve">
+        <value>ផ្ទាំង (txt)</value>
+    </data>
+    <data name="SideBarTranslationName" xml:space="preserve">
+        <value>ឈ្មោះបកប្រែ</value>
+    </data>
+    <data name="SideBarCategoriesName" xml:space="preserve">
+        <value>ឈ្មោះនៃប្រភេទ</value>
+    </data>
+    <data name="SideBarTranslationsCounter" xml:space="preserve">
+        <value>ការបកប្រែ {{count}}</value>
+    </data>
+    <data name="SideBarCategoriesCounter" xml:space="preserve">
+        <value>ប្រភេទ {{count}}</value>
+    </data>
+    <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
+        <value>ការបកប្រែ {{count}}</value>
+    </data>
+    <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
+        <value>ប្រើផ្ទាំងនេះដើម្បីគ្រប់គ្រងការបកប្រែកម្រងសំណួរ។</value>
+    </data>
+    <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
+        <value>ប្រើផ្ទាំងនេះដើម្បីគ្រប់គ្រងប្រភេទដែលអាចប្រើឡើងវិញបាន។</value>
+    </data>
+    <data name="SideBarTranslationsEmptyLine2" xml:space="preserve">
+        <value>អ្នកអាចទាញយក និងធ្វើបច្ចុប្បន្នភាពការបកប្រែទៅជាភាសាផ្សេងៗ។</value>
+    </data>
+    <data name="SideBarCategoriesEmptyLine2" xml:space="preserve">
+        <value>អ្នកអាចទាញយក និងធ្វើបច្ចុប្បន្នភាពប្រភេទ។</value>
+    </data>
+    <data name="SideBarTranslationsEmptyLine3" xml:space="preserve">
+        <value>ការបកប្រែនឹងត្រូវបានអនុវត្តលើអត្ថបទដើម និងតម្លៃបដិសេធ។ អ្នក​អាច​ទុក​អត្ថបទ​ខ្លះ​ឱ្យ​នៅ​ទទេ ដើម្បី​ប្រើ​ការ​បកប្រែ​ដើម​លំនាំដើម។</value>
+    </data>
+    <data name="SideBarCategoriesEmptyLine3" xml:space="preserve">
+        <value>នឹងត្រូវបានបន្ថែមទៅក្នុងបញ្ជីនៃប្រភេទដែលអាចប្រើឡើងវិញបានសម្រាប់ប្រភេទនៃសំណួរប្រភេទណាមួយ។</value>
+    </data>
+    <data name="ToggleDropdown" xml:space="preserve">
+        <value>បិទ/បើក ទម្លាក់ចុះ</value>
+    </data>
+    <data name="Update" xml:space="preserve">
+        <value>ធ្វើបច្ចុប្បន្នភាព</value>
+    </data>
+    <data name="VariableName" xml:space="preserve">
+        <value>ឈ្មោះ</value>
+    </data>
+    <data name="WarningsCounter" xml:space="preserve">
+        <value>ការព្រមាន {{count}}</value>
+    </data>
+    <data name="WarningsCounter_plural" xml:space="preserve">
+        <value>ការព្រមាន {{count}}</value>
+    </data>
+    <data name="Close" xml:space="preserve">
+        <value>បិទ</value>
+    </data>
+    <data name="CompilationErrorsCounter" xml:space="preserve">
+        <value>បានរកឃើញកំហុស {{count}}</value>
+    </data>
+    <data name="CompilationErrorsCounter_plural" xml:space="preserve">
+        <value>បានរកឃើញកំហុស {{count}}</value>
+    </data>
+    <data name="CompilationLabel" xml:space="preserve">
+        <value>ការចងក្រង៖</value>
+    </data>
+    <data name="CompilationWarningsCounter" xml:space="preserve">
+        <value>ការព្រមាន {{count}} បានរកឃើញ</value>
+    </data>
+    <data name="CompilationWarningsCounter_plural" xml:space="preserve">
+        <value>ការព្រមាន {{count}} បានរកឃើញ</value>
+    </data>
+    <data name="MoveTo" xml:space="preserve">
+        <value>ផ្លាស់ទីទៅ</value>
+    </data>
+    <data name="Recompile" xml:space="preserve">
+        <value>ចងក្រងឡើងវិញ</value>
+    </data>
+    <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
+        <value>ទម្រង់៖ {{- type}}</value>
+    </data>
+    <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
+        <value>{{width}} × {{height}}px</value>
+    </data>
+    <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
+        <value>ទំហំ៖ {{size}}</value>
+    </data>
+    <data name="AttachmentSizeIsTooBig" xml:space="preserve">
+        <value>ទំហំឯកសារភ្ជាប់គឺធំពេក។ ទំហំអតិបរមា៖ {{size}}</value>
+    </data>
+    <data name="SideBarAttachmentsTitle" xml:space="preserve">
+        <value>ឯកសារភ្ជាប់</value>
+    </data>
+    <data name="SideBarCommentsTitle" xml:space="preserve">
+        <value>មតិយោបល់</value>
+    </data>
+    <data name="SideBarCriticalityConditionsTitle" xml:space="preserve">
+        <value>ច្បាប់សំខាន់</value>
+    </data>
+    <data name="SideBarMetadataHeader" xml:space="preserve">
+        <value>ការពិពណ៌នាអំពីកម្រងសំណួរ និងព័ត៌មានស្ទង់មតិ</value>
+    </data>
+    <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+        <value>ព័ត៌មានមូលដ្ឋាន</value>
+    </data>
+    <data name="SideBarMetadataTitle" xml:space="preserve">
+        <value>ចំណងជើងកម្រងសំណួរ</value>
+    </data>
+    <data name="SideBarMetadataSubtitle" xml:space="preserve">
+        <value>ចំណងជើងរង៖</value>
+    </data>
+    <data name="SideBarMetadataVersionIdentificator" xml:space="preserve">
+        <value>កម្មវិធីកំណត់អត្តសញ្ញាណកំណែ៖</value>
+    </data>
+    <data name="SideBarMetadataVersionNotes" xml:space="preserve">
+        <value>កំណត់ចំណាំកំណែ៖</value>
+    </data>
+    <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+        <value>ទិន្នន័យស្ទង់មតិ</value>
+    </data>
+    <data name="SideBarMetadataStudyTypes" xml:space="preserve">
+        <value>ប្រភេទសិក្សា៖</value>
+    </data>
+    <data name="SideBarMetadataKindOfData" xml:space="preserve">
+        <value>ប្រភេទទិន្នន័យ៖</value>
+    </data>
+    <data name="SideBarMetadataModeOfDataCollection" xml:space="preserve">
+        <value>របៀបនៃការប្រមូលទិន្នន័យ៖</value>
+    </data>
+    <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+        <value>ព័ត៌មានស្ទង់មតិ</value>
+    </data>
+    <data name="SideBarMetadataCountry" xml:space="preserve">
+        <value>ប្រទេស៖</value>
+    </data>
+    <data name="SideBarMetadataYear" xml:space="preserve">
+        <value>ឆ្នាំ៖</value>
+    </data>
+    <data name="SideBarMetadataLanguages" xml:space="preserve">
+        <value>ភាសា៖</value>
+    </data>
+    <data name="SideBarMetadataUnitOfAlalysis" xml:space="preserve">
+        <value>ឯកតានៃការវិភាគ៖</value>
+    </data>
+    <data name="SideBarMetadataCoverage" xml:space="preserve">
+        <value>គ្របដណ្តប់៖</value>
+    </data>
+    <data name="SideBarMetadataUniverse" xml:space="preserve">
+        <value>សកលលោក៖</value>
+    </data>
+    <data name="SideBarMetadataPrimaryInvestigator" xml:space="preserve">
+        <value>អ្នកស៊ើបអង្កេតបឋម៖</value>
+    </data>
+    <data name="SideBarMetadataConsultants" xml:space="preserve">
+        <value>អ្នកប្រឹក្សា៖</value>
+    </data>
+    <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+        <value>ព័ត៌មានបន្ថែម</value>
+    </data>
+    <data name="SideBarMetadataNotes" xml:space="preserve">
+        <value>កំណត់ចំណាំ៖</value>
+    </data>
+    <data name="SideBarMetadataKeywords" xml:space="preserve">
+        <value>ពាក្យគន្លឹះ៖</value>
+    </data>
+    <data name="SideBarMetadataFunding" xml:space="preserve">
+        <value>មូលនិធិ៖</value>
+    </data>
+    <data name="SideBarMetadataQuestionnaireAccess" xml:space="preserve">
+        <value>ការចូលប្រើកម្រងសំណួរ</value>
+    </data>
+    <data name="SideBarMetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+        <value>យល់ព្រមធ្វើឱ្យកម្រងសំណួរនេះជាសាធារណៈ</value>
+    </data>
+    <data name="SideBarAttachmentUploaded" xml:space="preserve">
+        <value>អាប់ឡូត៖ {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
+    </data>
+    <data name="SideBarLookupTitle" xml:space="preserve">
+        <value>រកមើលតារាង</value>
+    </data>
+    <data name="SideBarMacroTitle" xml:space="preserve">
+        <value>ម៉ាក្រូ</value>
+    </data>
+    <data name="SideBarScenarioTitle" xml:space="preserve">
+        <value>សេណារីយ៉ូ</value>
+    </data>
+    <data name="SideBarSectionsTitle" xml:space="preserve">
+        <value>ផ្នែក</value>
+    </data>
+    <data name="SideBarTranslationsTitle" xml:space="preserve">
+        <value>ការបកប្រែ</value>
+    </data>
+    <data name="SideBarCategoriesTitle" xml:space="preserve">
+        <value>ប្រភេទ</value>
+    </data>
+    <data name="SideBarTranslationsUploadNew" xml:space="preserve">
+        <value>បង្ហោះការបកប្រែថ្មី។</value>
+    </data>
+    <data name="SideBarCategoriesUploadNew" xml:space="preserve">
+        <value>បង្ហោះប្រភេទថ្មី។</value>
+    </data>
+    <data name="AttachmentPreview" xml:space="preserve">
+        <value>ការមើលឯកសារភ្ជាប់ជាមុន</value>
+    </data>
+    <data name="FindReplaceFindWhat" xml:space="preserve">
+        <value>ស្វែងរកអ្វី៖</value>
+    </data>
+    <data name="FindReplaceMatchCase" xml:space="preserve">
+        <value>ករណីផ្គូផ្គង</value>
+    </data>
+    <data name="FindReplaceMatchWord" xml:space="preserve">
+        <value>ផ្គូផ្គងពាក្យទាំងមូល</value>
+    </data>
+    <data name="FindReplaceReplaceWith" xml:space="preserve">
+        <value>ជំនួសដោយ៖</value>
+    </data>
+    <data name="FindReplaceTitle" xml:space="preserve">
+        <value>ស្វែងរកនិងជំនួស</value>
+    </data>
+    <data name="FindReplaceUseRegex" xml:space="preserve">
+        <value>ប្រើកន្សោមធម្មតា។</value>
+    </data>
+    <data name="FindReplaceСonfirm" xml:space="preserve">
+        <value>សូមបញ្ជាក់សកម្មភាព។</value>
+    </data>
+    <data name="ModalConfirm" xml:space="preserve">
+        <value>ការបញ្ជាក់</value>
+    </data>
+    <data name="ModalInfo" xml:space="preserve">
+        <value>ព័ត៌មាន</value>
+    </data>
+    <data name="MoveToAnotherSubSection" xml:space="preserve">
+        <value>ផ្លាស់ទីទៅផ្នែកផ្សេងទៀត៖</value>
+    </data>
+    <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
+        <value>ជំនួសទាំងអស់។</value>
+    </data>
+    <data name="FindReplaceBackToSearch" xml:space="preserve">
+        <value>ត្រលប់ទៅការស្វែងរក</value>
+    </data>
+    <data name="FindReplaceDone" xml:space="preserve">
+        <value>រួចរាល់</value>
+    </data>
+    <data name="FindReplaceFindAll" xml:space="preserve">
+        <value>ស្វែងរកទាំងអស់។</value>
+    </data>
+    <data name="FindReplaceInAll" xml:space="preserve">
+        <value>ទាំងអស់។</value>
+    </data>
+    <data name="FindReplaceInAllFound" xml:space="preserve">
+        <value>នៅក្នុង {{count}} បានរកឃើញអង្គភាព?</value>
+    </data>
+    <data name="FindReplaceInAllFound_plural" xml:space="preserve">
+        <value>នៅក្នុង {{count}} បានរកឃើញអង្គភាព?</value>
+    </data>
+    <data name="FindReplaceMatchingLines" xml:space="preserve">
+        <value>បន្ទាត់ដែលត្រូវគ្នា៖ {{count}}</value>
+    </data>
+    <data name="FindReplaceCurrentMatch" xml:space="preserve">
+        <value>{{current}} / {{count}}</value>
+    </data>
+    <data name="FindReplaceNext" xml:space="preserve">
+        <value>បន្ទាប់</value>
+    </data>
+    <data name="FindReplacePrevious" xml:space="preserve">
+        <value>មុន</value>
+    </data>
+    <data name="FindReplaceReplaceAll" xml:space="preserve">
+        <value>ជំនួសទាំងអស់ ({{count}})</value>
+    </data>
+    <data name="FindReplaceReplaceAllConfirmWith" xml:space="preserve">
+        <value>ជាមួយ</value>
+    </data>
+    <data name="FindReplaceWereReplaced" xml:space="preserve">
+        <value>ត្រូវបានជំនួសដោយ</value>
+    </data>
+    <data name="EnablingCondition" xml:space="preserve">
+        <value>លក្ខខណ្ឌអនុញ្ញាត</value>
+    </data>
+    <data name="GroupTitle" xml:space="preserve">
+        <value>ចំណងជើង</value>
+    </data>
+    <data name="HideIfDisabled" xml:space="preserve">
+        <value>លាក់ប្រសិនបើត្រូវបានបិទ</value>
+    </data>
+    <data name="FlatRoster" xml:space="preserve">
+        <value>របៀបផ្ទះល្វែង</value>
+    </data>
+    <data name="AddValidationRule" xml:space="preserve">
+        <value>បន្ថែមលក្ខខណ្ឌសុពលភាពថ្មី។</value>
+    </data>
+    <data name="EnteredMoreThanAllowed" xml:space="preserve">
+        <value>អ្នកបានបញ្ចូលច្រើនជាងអតិបរមាដែលអនុញ្ញាត {{max}}</value>
+    </data>
+    <data name="ErrorMessage" xml:space="preserve">
+        <value>កំហុស ឬសារព្រមាន</value>
+    </data>
+    <data name="OptionsListError" xml:space="preserve">
+        <value>អ្នកបានបញ្ចូលការបញ្ចូលមិនត្រឹមត្រូវ។ បន្ទាត់នីមួយៗគួរតែធ្វើតាមទម្រង់៖ 'ចំណងជើង...តម្លៃ[...ឈ្មោះឯកសារភ្ជាប់]'។ 'តម្លៃ' ត្រូវតែជាចំនួនគត់។ 'ចំណងជើង' ត្រូវតែជាខ្សែអក្សរអាល់ហ្វា។ 'ឈ្មោះឯកសារភ្ជាប់' គឺស្រេចចិត្ត។ គ្មានបន្ទាត់ទទេត្រូវបានអនុញ្ញាត។</value>
+    </data>
+    <data name="QuestionAddInstruction" xml:space="preserve">
+        <value>បន្ថែមការណែនាំអ្នកសម្ភាសន៍</value>
+    </data>
+    <data name="QuestionClickReload" xml:space="preserve">
+        <value>ចុចផ្ទុកឡើងវិញ</value>
+    </data>
+    <data name="QuestionFilter" xml:space="preserve">
+        <value>តម្រង</value>
+    </data>
+    <data name="QuestionGpsNavigation" xml:space="preserve">
+        <value>សំណួរនេះនឹងត្រូវបានចាត់ទុកជាសំណួររុករក GPS សម្រាប់អ្នកសម្ភាសន៍</value>
+    </data>
+    <data name="QuestionHideInstruction" xml:space="preserve">
+        <value>លាក់ការណែនាំ</value>
+    </data>
+    <data name="QuestionInstruction" xml:space="preserve">
+        <value>ការណែនាំ</value>
+    </data>
+    <data name="QuestionLinkedDescr" xml:space="preserve">
+        <value>ចងដើម្បីរាយសំណួរ ឬសំណួរពីក្រុមបញ្ជីឈ្មោះ</value>
+    </data>
+    <data name="QuestionMustBeBound" xml:space="preserve">
+        <value>អ្នកត្រូវតែចងសំណួរនេះ។</value>
+    </data>
+    <data name="QuestionQuestionType" xml:space="preserve">
+        <value>ប្រភេទសំណួរ</value>
+    </data>
+    <data name="QuestionDisplayMode" xml:space="preserve">
+        <value>របៀបបង្ហាញ</value>
+    </data>
+    <data name="BindToReusableCategories" xml:space="preserve">
+        <value>ភ្ជាប់ទៅប្រភេទដែលអាចប្រើឡើងវិញបាន។</value>
+    </data>
+    <data name="SelectCategories" xml:space="preserve">
+        <value>ជ្រើសរើសប្រភេទ</value>
+    </data>
+    <data name="QuestionScope" xml:space="preserve">
+        <value>វិសាលភាពសំណួរ</value>
+    </data>
+    <data name="QuestionText" xml:space="preserve">
+        <value>អត្ថបទសំណួរ</value>
+    </data>
+    <data name="QuestionToUpdateOptions" xml:space="preserve">
+        <value>ដើម្បីធ្វើបច្ចុប្បន្នភាពប្រភេទ</value>
+    </data>
+    <data name="QuestionVariableLabel" xml:space="preserve">
+        <value>ស្លាកអថេរ</value>
+    </data>
+    <data name="QuestionVariableName" xml:space="preserve">
+        <value>ឈ្មោះអថេរ</value>
+    </data>
+    <data name="RosterAddItem" xml:space="preserve">
+        <value>បន្ថែមធាតុ</value>
+    </data>
+    <data name="RosterName" xml:space="preserve">
+        <value>ឈ្មោះបញ្ជីឈ្មោះ</value>
+    </data>
+    <data name="RosterSource" xml:space="preserve">
+        <value>ប្រភពបញ្ជីឈ្មោះ</value>
+    </data>
+    <data name="RosterSourceFixed" xml:space="preserve">
+        <value>សំណុំធាតុថេរ៖</value>
+    </data>
+    <data name="RosterSourceNumericQuestion" xml:space="preserve">
+        <value>សំណួរប្រភពសម្រាប់ចំនួនជួរ៖</value>
+    </data>
+    <data name="RosterSourceNumericTitles" xml:space="preserve">
+        <value>ប្រភពសំណួរសម្រាប់ឈ្មោះជួរ៖</value>
+    </data>
+    <data name="RosterSourceQuestion" xml:space="preserve">
+        <value>សំណួរប្រភព (ចម្លើយកំណត់ទាំងលេខ និងឈ្មោះជួរបញ្ជី)៖</value>
+    </data>
+    <data name="RosterVariableName" xml:space="preserve">
+        <value>លេខសម្គាល់បញ្ជីឈ្មោះ</value>
+    </data>
+    <data name="SectionVariableName" xml:space="preserve">
+        <value>ឈ្មោះអថេរ</value>
+    </data>
+    <data name="SelectQuestion" xml:space="preserve">
+        <value>ជ្រើសរើសសំណួរ</value>
+    </data>
+    <data name="AddFilter" xml:space="preserve">
+        <value>បន្ថែមតម្រង</value>
+    </data>
+    <data name="SettingsCan" xml:space="preserve">
+        <value>អាច</value>
+    </data>
+    <data name="SettingsInviteCollaborators" xml:space="preserve">
+        <value>អញ្ជើញអ្នកប្រើប្រាស់បន្ថែមដោយការចូល ឬអ៊ីមែលដែលបានចុះឈ្មោះ</value>
+    </data>
+    <data name="SettingsOwner" xml:space="preserve">
+        <value>ម្ចាស់</value>
+    </data>
+    <data name="SettingsPrivate" xml:space="preserve">
+        <value>ឯកជន</value>
+    </data>
+    <data name="SettingsPublic" xml:space="preserve">
+        <value>សាធារណៈ</value>
+    </data>
+    <data name="SettingsAnonymous" xml:space="preserve">
+        <value>អនាមិក</value>
+    </data>
+    <data name="RegenerateQuestionnaireSharingLink" xml:space="preserve">
+        <value>បង្កើតតំណឡើងវិញ</value>
+    </data>
+    <data name="AnonymousQuestionnaireGeneratedDate" xml:space="preserve">
+        <value>តំណភ្ជាប់ដែលបានបង្កើត៖ {{datetime}}</value>
+    </data>
+    <data name="SettingsQuestionnaireName" xml:space="preserve">
+        <value>ចំណងជើងកម្រងសំណួរ</value>
+    </data>
+    <data name="SettingsQuestionnaireSharing" xml:space="preserve">
+        <value>ធ្វើកម្រងសំណួរនេះ។</value>
+    </data>
+    <data name="SettingsRevokeAccess" xml:space="preserve">
+        <value>ដកហូតសិទ្ធិចូលប្រើ</value>
+    </data>
+    <data name="SettingsTitle" xml:space="preserve">
+        <value>ការកំណត់</value>
+    </data>
+    <data name="SettingsVisibleToEveryone" xml:space="preserve">
+        <value>អាច​មើល​ឃើញ​ដោយ​អ្នក​រាល់​គ្នា​ក្នុង​របៀប​បាន​តែ​អាន</value>
+    </data>
+    <data name="SettingsAccessibleToEveryone" xml:space="preserve">
+        <value>អាចចូលប្រើបានក្នុងរបៀបបានតែអានសម្រាប់នរណាម្នាក់ដែលមានតំណ</value>
+    </data>
+    <data name="SettingsStatusAllowAnonymousAccess" xml:space="preserve">
+        <value>បច្ចុប្បន្នការចែករំលែកអនាមិកត្រូវបានបើក។</value>
+    </data>
+    <data name="SettingsStatusDontAllowAnonymousAccess" xml:space="preserve">
+        <value>ការចែករំលែកអនាមិកបច្ចុប្បន្នត្រូវបានបិទ។</value>
+    </data>
+    <data name="SettingsTurnOnAnonymousAccess" xml:space="preserve">
+        <value>បើកការចែករំលែកអនាមិក។</value>
+    </data>
+    <data name="SettingsTurnOffAnonymousAccess" xml:space="preserve">
+        <value>បិទការចែករំលែកអនាមិក។</value>
+    </data>
+    <data name="SettingsVisibleToOwner" xml:space="preserve">
+        <value>អាចមើលឃើញដោយម្ចាស់តែប៉ុណ្ណោះ</value>
+    </data>
+    <data name="SettingsWhoHasAccess" xml:space="preserve">
+        <value>ដែលមានសិទ្ធិចូលប្រើប្រាស់</value>
+    </data>
+    <data name="ValidationCondition" xml:space="preserve">
+        <value>លក្ខខណ្ឌសុពលភាព</value>
+    </data>
+    <data name="AddQuestion" xml:space="preserve">
+        <value>បន្ថែមសំណួរ</value>
+    </data>
+    <data name="AddRoster" xml:space="preserve">
+        <value>បន្ថែមបញ្ជីឈ្មោះ</value>
+    </data>
+    <data name="AddStaticText" xml:space="preserve">
+        <value>បន្ថែមអត្ថបទឋិតិវន្ត</value>
+    </data>
+    <data name="AddSubsection" xml:space="preserve">
+        <value>បន្ថែមផ្នែករង</value>
+    </data>
+    <data name="VirtualCoverPage" xml:space="preserve">
+        <value>ទំព័រគម្របនិម្មិត</value>
+    </data>
+    <data name="MigrateToNewCover" xml:space="preserve">
+        <value>បង្កើតគម្រប</value>
+    </data>
+    <data name="AddVariable" xml:space="preserve">
+        <value>បន្ថែមអថេរ</value>
+    </data>
+    <data name="EmptySectionLine1" xml:space="preserve">
+        <value>ផ្នែកនេះគឺទទេ។</value>
+    </data>
+    <data name="EmptySectionLine2" xml:space="preserve">
+        <value>អ្នកអាចចាប់ផ្តើមដោយប្រើប៊ូតុង {{-addQuestionBtn}} និង {{-addSubsectionBtn}}</value>
+    </data>
+    <data name="EmptySectionLine3" xml:space="preserve">
+        <value>នៅផ្នែកខាងលើនៃប្លុកនេះ ឬគ្រប់គ្រងផ្នែកដោយប្រើបន្ទះខាងឆ្វេង {{-panel}}</value>
+    </data>
+    <data name="EmptySectionLine4" xml:space="preserve">
+        <value>ឈ្មោះកម្រងសំណួរ អថេរ សហការ និងជម្រើសផ្សេងទៀត។</value>
+    </data>
+    <data name="EmptySectionLine5" xml:space="preserve">
+        <value>អាចរកបាននៅបន្ទះ {{-settingsBtn}} (ជ្រុងខាងស្តាំខាងលើ)</value>
+    </data>
+    <data name="NothingFound" xml:space="preserve">
+        <value>រកមិនឃើញអ្វីទេ។</value>
+    </data>
+    <data name="Paste" xml:space="preserve">
+        <value>បិទភ្ជាប់</value>
+    </data>
+    <data name="QuestionAddOption" xml:space="preserve">
+        <value>បន្ថែមប្រភេទ</value>
+    </data>
+    <data name="QuestionCascading" xml:space="preserve">
+        <value>ប្រអប់បន្សំល្បាក់</value>
+    </data>
+    <data name="QuestionComboBox" xml:space="preserve">
+        <value>ប្រអប់បន្សំ</value>
+    </data>
+    <data name="QuestionCheckboxes" xml:space="preserve">
+        <value>ប្រអប់ធីក</value>
+    </data>
+    <data name="QuestionCurrentTime" xml:space="preserve">
+        <value>ត្រាពេលវេលាបច្ចុប្បន្ន (កាលបរិច្ឆេទ និងពេលវេលា)</value>
+    </data>
+    <data name="QuestionDefaultDate" xml:space="preserve">
+        <value>កាលបរិច្ឆេទលំនាំដើម</value>
+    </data>
+    <data name="GeometryType" xml:space="preserve">
+        <value>ប្រភេទធរណីមាត្រ</value>
+    </data>
+    <data name="GeometryInputMode" xml:space="preserve">
+        <value>របៀបបញ្ចូល</value>
+    </data>
+    <data name="GeometryOverlapDetection" xml:space="preserve">
+        <value>ការរកឃើញត្រួតស៊ីគ្នា។</value>
+    </data>
+    <data name="QuestionDecimalPlaces" xml:space="preserve">
+        <value>ចំនួនខ្ទង់ទសភាគ</value>
+    </data>
+    <data name="QuestionInteger" xml:space="preserve">
+        <value>ចំនួនគត់</value>
+    </data>
+    <data name="QuestionIsLinked" xml:space="preserve">
+        <value>ត្រូវបានភ្ជាប់</value>
+    </data>
+    <data name="QuestionMaxListCount" xml:space="preserve">
+        <value>ចំនួនអតិបរមានៃធាតុបញ្ជី</value>
+    </data>
+    <data name="QuestionMaxNumberOfAnswers" xml:space="preserve">
+        <value>ចំនួនចម្លើយអតិបរមា</value>
+    </data>
+    <data name="QuestionOnlyInts" xml:space="preserve">
+        <value>មានតែចំនួនគត់ត្រូវបានអនុញ្ញាត</value>
+    </data>
+    <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
+        <value>ចំនួនគត់ចន្លោះពី 1 ដល់ 50 ត្រូវបានអនុញ្ញាត</value>
+    </data>
+    <data name="QuestionOptionsCut" xml:space="preserve">
+        <value>សំណួរត្រូវបានសម្គាល់ថាជា "ប្រអប់បន្សំ" ឬ "ប្រអប់បន្សំល្បាក់" ខណៈពេលដែលផ្ទុកព័ត៌មានលំអិតនៃសំណួរ ហើយមានប្រភេទច្រើនពេក ចំនួនរបស់ពួកគេត្រូវបានកាត់បន្ថយរហូតដល់ {{count}}</value>
+    </data>
+    <data name="QuestionOrdered" xml:space="preserve">
+        <value>កត់ត្រាលំដាប់ចម្លើយ</value>
+    </data>
+    <data name="QuestionPattern" xml:space="preserve">
+        <value>លំនាំ</value>
+    </data>
+    <data name="QuestionUploadOptions" xml:space="preserve">
+        <value>បង្ហោះប្រភេទថ្មី។</value>
+    </data>
+    <data name="QuestionUseSeparator" xml:space="preserve">
+        <value>ប្រើសញ្ញាបំបែក 1000</value>
+    </data>
+    <data name="QuestionYesNoMode" xml:space="preserve">
+        <value>ប៊ូតុងបាទ/ចាស</value>
+    </data>
+    <data name="GeographyInputModeManual" xml:space="preserve">
+        <value>សៀវភៅដៃ</value>
+    </data>
+    <data name="GeographyInputModeAutomatic" xml:space="preserve">
+        <value>ស្វ័យប្រវត្តិ</value>
+    </data>
+    <data name="GeographyInputModeSemiautomatic" xml:space="preserve">
+        <value>ពាក់កណ្តាលស្វ័យប្រវត្តិ</value>
+    </data>
+    <data name="Search" xml:space="preserve">
+        <value>ស្វែងរក</value>
+    </data>
+    <data name="Filter" xml:space="preserve">
+        <value>តម្រង</value>
+    </data>
+    <data name="SelectParentQuestion" xml:space="preserve">
+        <value>ជ្រើសរើសសំណួរមាតាបិតា</value>
+    </data>
+    <data name="SelectParentQuestionError" xml:space="preserve">
+        <value>អ្នកត្រូវតែជ្រើសរើសសំណួរមេ</value>
+    </data>
+    <data name="UserDefinedCategories" xml:space="preserve">
+        <value>ប្រភេទដែលបានកំណត់ដោយអ្នកប្រើប្រាស់</value>
+    </data>
+    <data name="ReusableCategories" xml:space="preserve">
+        <value>ប្រភេទដែលអាចប្រើឡើងវិញបាន។</value>
+    </data>
+    <data name="SourceOfCategories" xml:space="preserve">
+        <value>ប្រភពនៃប្រភេទ</value>
+    </data>
+    <data name="RostersQuestion" xml:space="preserve">
+        <value>រាយសំណួរ ឬសំណួរពីក្រុមបញ្ជីឈ្មោះ</value>
+    </data>
+    <data name="QuestionRadioButtonList" xml:space="preserve">
+        <value>បញ្ជីប៊ូតុងវិទ្យុ</value>
+    </data>
+    <data name="SettingsInvite" xml:space="preserve">
+        <value>អញ្ជើញ</value>
+    </data>
+    <data name="SettingsProvideExistingEmail" xml:space="preserve">
+        <value>ផ្តល់អ៊ីមែល ឬការចូលរបស់អ្នកប្រើប្រាស់ដែលមានស្រាប់</value>
+    </data>
+    <data name="SettingsProvideValidEmail" xml:space="preserve">
+        <value>ផ្តល់អ៊ីមែលត្រឹមត្រូវ។</value>
+    </data>
+    <data name="StaticText" xml:space="preserve">
+        <value>អត្ថបទឋិតិវន្ត</value>
+    </data>
+    <data name="StaticTextAttachmentName" xml:space="preserve">
+        <value>ឈ្មោះឯកសារភ្ជាប់</value>
+    </data>
+    <data name="ToggleSearch" xml:space="preserve">
+        <value>បិទបើកការស្វែងរក</value>
+    </data>
+    <data name="TreeAddQuestion" xml:space="preserve">
+        <value>បន្ថែមសំណួរ</value>
+    </data>
+    <data name="TreeAddQuestionAfter" xml:space="preserve">
+        <value>បន្ថែមសំណួរបន្ទាប់ពី</value>
+    </data>
+    <data name="TreeAddRoster" xml:space="preserve">
+        <value>បន្ថែមបញ្ជីឈ្មោះ</value>
+    </data>
+    <data name="TreeAddRosterAfter" xml:space="preserve">
+        <value>បន្ថែមបញ្ជីឈ្មោះបន្ទាប់ពី</value>
+    </data>
+    <data name="TreeAddSection" xml:space="preserve">
+        <value>បន្ថែមផ្នែករង</value>
+    </data>
+    <data name="TreeAddSectionAfter" xml:space="preserve">
+        <value>បន្ថែមផ្នែករងបន្ទាប់</value>
+    </data>
+    <data name="TreeAddStaticText" xml:space="preserve">
+        <value>បន្ថែមអត្ថបទឋិតិវន្ត</value>
+    </data>
+    <data name="TreeAddStaticTextAfter" xml:space="preserve">
+        <value>បន្ថែមអត្ថបទឋិតិវន្តបន្ទាប់ពី</value>
+    </data>
+    <data name="TreeAddVariable" xml:space="preserve">
+        <value>បន្ថែមអថេរ</value>
+    </data>
+    <data name="TreeAddVariableAfter" xml:space="preserve">
+        <value>បន្ថែមអថេរបន្ទាប់ពី</value>
+    </data>
+    <data name="TreeRoster" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះ៖</value>
+    </data>
+    <data name="VariableExpression" xml:space="preserve">
+        <value>កន្សោម</value>
+    </data>
+    <data name="VariableLabel" xml:space="preserve">
+        <value>ស្លាកអថេរ</value>
+    </data>
+    <data name="VariableType" xml:space="preserve">
+        <value>ប្រភេទអថេរ</value>
+    </data>
+    <data name="HelpConditionExpression" xml:space="preserve">
+        <value>កន្សោមឡូជីខលដែលធ្វើឱ្យសកម្ម (ធ្វើឱ្យអសកម្ម) ធាតុបច្ចុប្បន្នអាស្រ័យលើចម្លើយចំពោះសំណួរផ្សេងទៀត។</value>
+    </data>
+    <data name="HelpExpression" xml:space="preserve">
+        <value>កន្សោមឡូជីខលដែលត្រូវបានគណនាអាស្រ័យលើចម្លើយលើសំណួរផ្សេងទៀត។</value>
+    </data>
+    <data name="HelpFixedTitles" xml:space="preserve">
+        <value>ចំនួនធាតុកំណត់ទំហំបញ្ជីឈ្មោះ។ ធាតុនីមួយៗនៃបញ្ជីត្រូវគ្នាទៅនឹងចំណងជើងនៃជួរបញ្ជី។ ធាតុនីមួយៗនៃបញ្ជីគួរតែត្រូវបានដាក់នៅលើបន្ទាត់ដាច់ដោយឡែកមួយ។</value>
+    </data>
+    <data name="HelpHideIfDisabled" xml:space="preserve">
+        <value>តាមលំនាំដើម ធាតុដែលបិទដំណើរការមានពណ៌ប្រផេះ។ ការពិនិត្យមើលជម្រើសនេះនឹងលាក់សំណួរ ឬផ្នែកដែលបិទនៅលើកុំព្យូទ័របន្ទះ។</value>
+    </data>
+    <data name="HelpRosterDisplayMode" xml:space="preserve">
+        <value>ផ្នែករង - សំណួរនៃបញ្ជីឈ្មោះត្រូវបានបង្ហាញនៅពីក្រោយប៊ូតុងដែលត្រូវគ្នាទៅនឹងករណីបញ្ជីឈ្មោះ។
+ផ្ទះល្វែង - សំណួរនៃបញ្ជីឈ្មោះត្រូវបានបង្ហាញក្នុងកម្រិតដូចគ្នាដែលបំបែកដោយបឋមកថាដែលត្រូវគ្នានឹងករណីបញ្ជីឈ្មោះ។
+តារាង - សំណួរនៃបញ្ជីឈ្មោះត្រូវបានបង្ហាញក្នុងកម្រិតដូចគ្នាទៅនឹងជួរ និងជួរនៃតារាង។ 
+ម៉ាទ្រីស - សំណួរជាក្រុមនៃបញ្ជីឈ្មោះត្រូវបានបង្ហាញជាម៉ាទ្រីស។ 
+ទិដ្ឋភាពតារាង និងម៉ាទ្រីសត្រូវបានគាំទ្រតែនៅក្នុងការស្ទង់មតិលើបណ្តាញ ថេប្លេតត្រឡប់ទៅរបៀប 'ផ្នែករង' វិញ។</value>
+    </data>
+    <data name="HelpHideInstructions" xml:space="preserve">
+        <value>តាមលំនាំដើម អត្ថបទការណែនាំត្រូវបានបង្ហាញនៅលើកុំព្យូទ័របន្ទះ។ ការពិនិត្យមើលជម្រើសនេះនឹងបង្ហាញតែបន្ទាត់ដំបូងនៃការណែនាំប៉ុណ្ណោះ។ ការចុចលើបន្ទាត់នោះនឹងបង្ហាញអត្ថបទពេញលេញ។</value>
+    </data>
+    <data name="HelpInstruction" xml:space="preserve">
+        <value>អត្ថបទណែនាំដែលនឹងភ្ជាប់ជាមួយសំណួរ។</value>
+    </data>
+    <data name="HelpIsTimestamp" xml:space="preserve">
+        <value>ជម្រើសនេះអនុញ្ញាតឱ្យអ្នកប្រើបោះត្រាពេលវេលាបច្ចុប្បន្ននៅលើកុំព្យូទ័របន្ទះ</value>
+    </data>
+    <data name="HelpDefaultDate" xml:space="preserve">
+        <value>កាលបរិច្ឆេទនេះនឹងត្រូវបានបង្ហាញជាកាលបរិច្ឆេទចាប់ផ្តើមសម្រាប់ការជ្រើសរើសនៅលើកុំព្យូទ័របន្ទះ</value>
+    </data>
+    <data name="HelpDoNotExport" xml:space="preserve">
+        <value>សម្គាល់អថេរនេះ ដើម្បីដកវាចេញពីការនាំចេញ</value>
+    </data>
+    <data name="VariableNoExport" xml:space="preserve">
+        <value>កុំនាំចេញ</value>
+    </data>
+    <data name="HelpMask" xml:space="preserve">
+        <value>ធាតុដែលបានធ្វើទ្រង់ទ្រាយសម្រាប់តម្លៃអក្សរក្រមលេខ៖ លេខទូរសព្ទ លេខសម្គាល់។ "##/##/####" - កាលបរិច្ឆេទ "(###) ###-####" - លេខទូរស័ព្ទ "AA####" - លេខជើងហោះហើរដែលដំណើរការដោយ American AirLines ឬ "~*-###-~###"</value>
+    </data>
+    <data name="HelpSourceQuestion" xml:space="preserve">
+        <value>សំណួរប្រភព (ចម្លើយបង្កើតចំនួនជួរ)</value>
+    </data>
+    <data name="HelpTitles" xml:space="preserve">
+        <value>ចំណងជើងនៃជួរ។</value>
+    </data>
+    <data name="HelpUseFormatting" xml:space="preserve">
+        <value>នៅពេលគូសធីក ប្រអប់លេខនៅលើថេប្លេតនឹងត្រូវបានធ្វើទ្រង់ទ្រាយជា៖ d,ddd,ddd.dd, “d” តំណាងឱ្យខ្ទង់ (0-9), “,”(សញ្ញាក្បៀស) គឺជាសញ្ញាបំបែកមួយពាន់ និង “”។ (dot) ជា​និមិត្ត​សញ្ញា​ចំណុច​ទសភាគ។  សញ្ញាបំបែកមួយពាន់ និងនិមិត្តសញ្ញាចំណុចទសភាគអាចប្រែប្រួលសម្រាប់ថេប្លេតដែលមានវប្បធម៌ខុសៗគ្នា។</value>
+    </data>
+    <data name="HelpValidationExpression" xml:space="preserve">
+        <value>កន្សោមឡូជីខលដែលបញ្ជាក់ចម្លើយចំពោះសំណួរបច្ចុប្បន្ន។ អាចរួមបញ្ចូលតម្លៃនៃសំណួរផ្សេងទៀត។</value>
+    </data>
+    <data name="HelpValidationMessage" xml:space="preserve">
+        <value>កំហុស ឬសារព្រមានត្រូវបានបង្ហាញនៅពេលលក្ខខណ្ឌសុពលភាពវាយតម្លៃទៅជា "មិនពិត" ឬកំហុសកើតឡើងកំឡុងពេលវាយតម្លៃការបញ្ចេញមតិ។</value>
+    </data>
+    <data name="HelpVariableDescription" xml:space="preserve">
+        <value>អត្ថបទដែលនឹងត្រូវបានបង្ហាញនៅជាប់នឹងអថេរសម្រាប់គោលបំណងសាកល្បង</value>
+    </data>
+    <data name="HelpVariableLabel" xml:space="preserve">
+        <value>អត្ថបទរហូតដល់តួអក្សរ {{maxLength}} ដែលនឹងត្រូវបានភ្ជាប់ទៅនឹងអថេរដែលបាននាំចេញ។</value>
+    </data>
+    <data name="HelpVariableName" xml:space="preserve">
+        <value>ឈ្មោះអថេរ និងលេខសម្គាល់បញ្ជីឈ្មោះអាចមានចាប់ពី {{minLength}} ដល់ {{maxLength}} តួអក្សរវែង ហើយត្រូវតែមានតួអក្សរដូចខាងក្រោម៖ a-z, A-Z, _, ឬ 0-9។ តួអក្សរទីមួយមិនអាចជា 0-9 ឬ _ ហើយតួអក្សរចុងក្រោយមិនអាចជា _ ។</value>
+    </data>
+    <data name="HelpAttachmentName" xml:space="preserve">
+        <value>ឈ្មោះឯកសារភ្ជាប់ដែលនឹងត្រូវបានបង្ហាញ។</value>
+    </data>
+    <data name="HelpCoverPage" xml:space="preserve">
+        <value>ផ្នែកដំបូងនៃកម្រងសំណួរនីមួយៗមានសំណួរកំណត់អត្តសញ្ញាណដែលត្រូវបានបង្ហាញផងដែរនៅផ្ទាំងគ្រប់គ្រងរបស់អ្នកសម្ភាសន៍ និងអ្នកគ្រប់គ្រង។</value>
+    </data>
+    <data name="HelpVirtualCoverPage" xml:space="preserve">
+        <value>គម្របគឺជាផ្នែកនិម្មិតដែលបង្ហាញសំណួរកំណត់អត្តសញ្ញាណទាំងអស់។
+    សំណួរមិនអាចផ្លាស់ប្តូរនៅក្នុងផ្នែកនេះបានទេ។</value>
+    </data>
+    <data name="ConditionMightBeBroken" xml:space="preserve">
+        <value>ស្ថានភាព ឬធាតុដែលអាស្រ័យដោយល្បាក់អាចខូច</value>
+    </data>
+    <data name="HotkeysCloseLookup" xml:space="preserve">
+        <value>បិទបន្ទះតារាងរកមើល</value>
+    </data>
+    <data name="HotkeysCloseMacros" xml:space="preserve">
+        <value>បិទបន្ទះម៉ាក្រូ</value>
+    </data>
+    <data name="HotkeysCloseMetadata" xml:space="preserve">
+        <value>បិទផ្ទាំងទិន្នន័យមេតា</value>
+    </data>
+    <data name="HotkeysCloseScenarios" xml:space="preserve">
+        <value>បិទផ្ទាំងសេណារីយ៉ូ</value>
+    </data>
+    <data name="HotkeysCloseTranslations" xml:space="preserve">
+        <value>បិទផ្ទាំងបកប្រែ</value>
+    </data>
+    <data name="HotkeysCloseCategories" xml:space="preserve">
+        <value>បិទបន្ទះប្រភេទ</value>
+    </data>
+    <data name="HotkeysCloseComments" xml:space="preserve">
+        <value>បិទបន្ទះមតិយោបល់</value>
+    </data>
+    <data name="HotkeysFocusTitle" xml:space="preserve">
+        <value>ផ្តោតលើវាលចំណងជើងនៅក្នុងកម្មវិធីនិពន្ធ</value>
+    </data>
+    <data name="HotkeysFocusTree" xml:space="preserve">
+        <value>ផ្តោតលើកម្រងសំណួរ</value>
+    </data>
+    <data name="HotkeysHideAttachments" xml:space="preserve">
+        <value>បិទបន្ទះឯកសារភ្ជាប់</value>
+    </data>
+    <data name="HotkeysHideSections" xml:space="preserve">
+        <value>បិទផ្នែក</value>
+    </data>
+    <data name="HotkeysNavigateToPrevSibling" xml:space="preserve">
+        <value>រុករកទៅបងប្អូនបង្កើតពីមុន</value>
+    </data>
+    <data name="HotkeysNavigateToSibling" xml:space="preserve">
+        <value>រុករកទៅបងប្អូនបន្ទាប់</value>
+    </data>
+    <data name="HotkeysOpenItem" xml:space="preserve">
+        <value>បើកធាតុនៅក្នុងកម្មវិធីនិពន្ធ</value>
+    </data>
+    <data name="HotkeysOpenSection" xml:space="preserve">
+        <value>បើកផ្នែក</value>
+    </data>
+    <data name="HotkeysPrint" xml:space="preserve">
+        <value>បោះពុម្ព</value>
+    </data>
+    <data name="HotkeysSearch" xml:space="preserve">
+        <value>ស្វែងរកផ្នែករង និងសំណួរនៅក្នុងផ្នែក</value>
+    </data>
+    <data name="HotkeysTest" xml:space="preserve">
+        <value>កម្រងសំណួរសាកល្បងនៅក្នុង WebTester</value>
+    </data>
+    <data name="MultipleDependencies" xml:space="preserve">
+        <value>សំណួរ/ផ្នែករងមួយ ឬច្រើនអាស្រ័យទៅលើ</value>
+    </data>
+    <data name="NoPermissions" xml:space="preserve">
+        <value>អ្នកមិនមានការអនុញ្ញាតសម្រាប់ការផ្លាស់ប្តូរកម្រងសំណួរនេះទេ។</value>
+    </data>
+    <data name="NotAnImage" xml:space="preserve">
+        <value>ឯកសារដែលបានជ្រើសរើសមិនមែនជារូបភាពទេ។</value>
+    </data>
+    <data name="QuestionOpenEditorConfirm" xml:space="preserve">
+        <value>ដើម្បីបើកកម្មវិធីកែសម្រួលរាល់ការផ្លាស់ប្តូរដែលមិនបានរក្សាទុកត្រូវតែរក្សាទុក។ តើយើងគួរសង្គ្រោះពួកគេឥឡូវនេះទេ?</value>
+    </data>
+    <data name="QuestionOpenEditorSaved" xml:space="preserve">
+        <value>វាត្រូវបានរក្សាទុកដោយជោគជ័យ។ បង្អួចសម្រាប់ការផ្ទុកឡើងឯកសារនឹងត្រូវបានបើក។</value>
+    </data>
+    <data name="SettingsShareEdit" xml:space="preserve">
+        <value>កែសម្រួល</value>
+    </data>
+    <data name="SettingsShareView" xml:space="preserve">
+        <value>មើល</value>
+    </data>
+    <data name="DeleteConfirmQuestion" xml:space="preserve">
+        <value>តើអ្នកប្រាកដថាចង់លុប "{{trimmedTitle}}" មែនទេ?</value>
+    </data>
+    <data name="DeleteConfirmCategories" xml:space="preserve">
+        <value>តើអ្នកប្រាកដថាចង់លុបសំណុំនៃប្រភេទ "{{trimmedTitle}}"? ប្រភព​នៃ​ប្រភេទ​សម្រាប់​សំណួរ​ប្រភេទ​ដែល​អាស្រ័យ​លើ​វា​នឹង​ត្រូវ​បាន​ផ្លាស់ប្ដូរ​ទៅ​ជា​ប្រភេទ​ដែល​បាន​កំណត់​ដោយ​អ្នក​ប្រើ</value>
+    </data>
+    <data name="UntitledQuestion" xml:space="preserve">
+        <value>សំណួរគ្មានចំណងជើង</value>
+    </data>
+    <data name="TranslationsObtained" xml:space="preserve">
+        <value>ទទួលបានជួរ {0} ពីឯកសារបកប្រែ</value>
+    </data>
+    <data name="TranslationsObtained_plural" xml:space="preserve">
+        <value>ទទួលបានជួរ {0} ពីឯកសារបកប្រែ</value>
+    </data>
+    <data name="CategoriesObtained" xml:space="preserve">
+        <value>ទទួលបានជួរ {0} ពីឯកសារប្រភេទ</value>
+    </data>
+    <data name="CategoriesObtained_plural" xml:space="preserve">
+        <value>ទទួលបានជួរ {0} ពីឯកសារប្រភេទ</value>
+    </data>
+    <data name="UnsavedChangesLeave" xml:space="preserve">
+        <value>អ្នកនឹងបាត់បង់ការផ្លាស់ប្តូរដែលមិនបានរក្សាទុក ប្រសិនបើអ្នកចាកចេញពីទំព័រនេះ។</value>
+    </data>
+    <data name="UnsavedChangesReload" xml:space="preserve">
+        <value>អ្នកនឹងបាត់បង់ការផ្លាស់ប្តូរដែលមិនបានរក្សាទុក ប្រសិនបើអ្នកផ្ទុកទំព័រនេះឡើងវិញ</value>
+    </data>
+    <data name="Export" xml:space="preserve">
+        <value>នាំចេញ</value>
+    </data>
+    <data name="OptionsCloseWindow" xml:space="preserve">
+        <value>បិទបង្អួច?</value>
+    </data>
+    <data name="OptionsUploadApply" xml:space="preserve">
+        <value>អនុវត្តការផ្លាស់ប្តូរ</value>
+    </data>
+    <data name="OptionsUploadRevert" xml:space="preserve">
+        <value>ត្រឡប់ការផ្លាស់ប្តូរ</value>
+    </data>
+    <data name="OptionsWindowTitle" xml:space="preserve">
+        <value>កែសម្រួលប្រភេទ</value>
+    </data>
+    <data name="CascadingOptionsWindowTitle" xml:space="preserve">
+        <value>កែសម្រួល​ប្រភេទ​ល្បាក់</value>
+    </data>
+    <data name="OptionsUploadLimit" xml:space="preserve">
+        <value>មិនមានប្រភេទទេ។ ជ្រើសរើសឯកសារដែលបំបែកដោយផ្ទាំង។ ឯកសារអាចមានរហូតដល់ {limit} ប្រភេទ។</value>
+    </data>
+    <data name="OptionsUploadTitle" xml:space="preserve">
+        <value>ចំណងជើង</value>
+    </data>
+    <data name="OptionsUploadValue" xml:space="preserve">
+        <value>តម្លៃ</value>
+    </data>
+    <data name="AttachmentName" xml:space="preserve">
+        <value>ឈ្មោះឯកសារភ្ជាប់</value>
+    </data>
+    <data name="OptionsUploadParent" xml:space="preserve">
+        <value>តម្លៃមាតាបិតា</value>
+    </data>
+    <data name="SideBarMacroNoName" xml:space="preserve">
+        <value>ម៉ាក្រូដោយគ្មានឈ្មោះ</value>
+    </data>
+    <data name="Upload" xml:space="preserve">
+        <value>ផ្ទុកឡើង</value>
+    </data>
+    <data name="SideBarLookupTableNoName" xml:space="preserve">
+        <value>រកមើលតារាងដោយគ្មានឈ្មោះ</value>
+    </data>
+    <data name="SideBarTranslationNoName" xml:space="preserve">
+        <value>ការបកប្រែដោយគ្មានឈ្មោះ</value>
+    </data>
+    <data name="SideBarCategoriesNoName" xml:space="preserve">
+        <value>ប្រភេទដែលគ្មានឈ្មោះ</value>
+    </data>
+    <data name="SideBarAttachmentNoName" xml:space="preserve">
+        <value>ឯកសារភ្ជាប់ដោយគ្មានឈ្មោះ</value>
+    </data>
+    <data name="DefaultNewRoster" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះថ្មី។</value>
+    </data>
+    <data name="DefaultNewSection" xml:space="preserve">
+        <value>ផ្នែកថ្មី។</value>
+    </data>
+    <data name="DefaultNewStaticText" xml:space="preserve">
+        <value>អត្ថបទឋិតិវន្តថ្មី។</value>
+    </data>
+    <data name="DefaultNewSubsection" xml:space="preserve">
+        <value>ផ្នែករងថ្មី។</value>
+    </data>
+    <data name="HotkeysShortcuts" xml:space="preserve">
+        <value>ផ្លូវកាត់ក្តារចុច</value>
+    </data>
+    <data name="HotkeysShowHideHelp" xml:space="preserve">
+        <value>បង្ហាញ / លាក់ម៉ឺនុយជំនួយនេះ។</value>
+    </data>
+    <data name="MarkAsDefault" xml:space="preserve">
+        <value>កំណត់ជាលំនាំដើម</value>
+    </data>
+    <data name="UnMarkAsDefault" xml:space="preserve">
+        <value>កុំប្រើជាលំនាំដើម</value>
+    </data>
+    <data name="Default" xml:space="preserve">
+        <value>លំនាំដើម</value>
+    </data>
+    <data name="Reset" xml:space="preserve">
+        <value>កំណត់ឡើងវិញ</value>
+    </data>
+    <data name="PleaseWait" xml:space="preserve">
+        <value>សូមរង់ចាំ...</value>
+    </data>
+    <data name="EntryWasNotFound" xml:space="preserve">
+        <value>រកមិនឃើញធាតុនៅក្នុងកម្រងសំណួរទេ សូមជ្រើសរើសផ្សេងទៀត។</value>
+    </data>
+    <data name="RequestFailedUnexpectedly" xml:space="preserve">
+        <value>សំណើបានបរាជ័យដោយមិនបានរំពឹងទុក។</value>
+    </data>
+    <data name="ApplicationNotAvailable" xml:space="preserve">
+        <value>មិនអាចបំពេញសំណើបានទេ។ ការ​ឆ្លើយតប​ដែល​ទទួល​បាន​ទំនង​ជា​មិន​បាន​មក​ពី​ម៉ាស៊ីន​មេ​ដំណោះស្រាយ​ការ​ស្ទង់​មតិ​ទេ។
+ជាធម្មតាវាបណ្តាលមកពីប្រូកស៊ីបណ្តាញ ជញ្ជាំងភ្លើង ឬច្រកសុវត្ថិភាពដែលស្ទាក់ចាប់ការតភ្ជាប់។
+សូមពិនិត្យមើលការតភ្ជាប់បណ្តាញរបស់អ្នក ឬទាក់ទងផ្នែកជំនួយផ្នែកព័ត៌មានវិទ្យារបស់អ្នក។</value>
+    </data>
+    <data name="IncorrectRosterTitle" xml:space="preserve">
+        <value>សំណួរចំណងជើងបញ្ជីឈ្មោះមិនត្រឹមត្រូវ</value>
+    </data>
+    <data name="SelectedInvalidItem" xml:space="preserve">
+        <value>បានជ្រើសរើសធាតុមិនត្រឹមត្រូវ។ ជួសជុលវា។</value>
+    </data>
+    <data name="SelectItemFromTheList" xml:space="preserve">
+        <value>ជ្រើសរើសធាតុពីបញ្ជី</value>
+    </data>
+    <data name="UntitledGroupOrRoster" xml:space="preserve">
+        <value>ផ្នែករងគ្មានចំណងជើង ឬបញ្ជីឈ្មោះ</value>
+    </data>
+    <data name="UntitledVariable" xml:space="preserve">
+        <value>អថេរគ្មានចំណងជើង</value>
+    </data>
+    <data name="UntitledSection" xml:space="preserve">
+        <value>ផ្នែកគ្មានចំណងជើង</value>
+    </data>
+    <data name="UntitledRoster" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះគ្មានចំណងជើង</value>
+    </data>
+    <data name="UntitledStaticText" xml:space="preserve">
+        <value>អត្ថបទឋិតិវន្តគ្មានចំណងជើង</value>
+    </data>
+    <data name="SelectModeOfDataCollection" xml:space="preserve">
+        <value>ជ្រើសរើសរបៀបនៃការប្រមូលទិន្នន័យ</value>
+    </data>
+    <data name="SelectCountry" xml:space="preserve">
+        <value>ជ្រើសរើសប្រទេស</value>
+    </data>
+    <data name="SelectStudyType" xml:space="preserve">
+        <value>ជ្រើសរើសប្រភេទសិក្សា</value>
+    </data>
+    <data name="SelectKindOfData" xml:space="preserve">
+        <value>ជ្រើសរើសប្រភេទទិន្នន័យ</value>
+    </data>
+    <data name="Test" xml:space="preserve">
+        <value>សាកល្បង</value>
+    </data>
+    <data name="QuestionAddSpecialValues" xml:space="preserve">
+        <value>បន្ថែមតម្លៃពិសេស</value>
+    </data>
+    <data name="EntityComment" xml:space="preserve">
+        <value>មតិថ្មី។</value>
+    </data>
+    <data name="IsSignature" xml:space="preserve">
+        <value>ប្រើបន្ទះហត្ថលេខា</value>
+    </data>
+    <data name="HelpNewComment" xml:space="preserve">
+        <value>បន្ថែមមតិ</value>
+    </data>
+    <data name="VariableVariableName" xml:space="preserve">
+        <value>ឈ្មោះអថេរ</value>
+    </data>
+    <data name="SideBarCommentsCounter" xml:space="preserve">
+        <value>{{count}} ខ្សែស្រឡាយមតិយោបល់៖</value>
+    </data>
+    <data name="SideBarCommentsCounter_plural" xml:space="preserve">
+        <value>{{count}} ខ្សែស្រឡាយមតិយោបល់៖</value>
+    </data>
+    <data name="SideBarEmptyCommentsLine" xml:space="preserve">
+        <value>អ្នកនឹងឃើញមតិយោបល់នៅទីនេះ</value>
+    </data>
+    <data name="ViewResolvedCommentsCounter" xml:space="preserve">
+        <value>មើលរាល់មតិយោបល់ដែលបានដោះស្រាយ {{count}}</value>
+    </data>
+    <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
+        <value>មើលរាល់មតិយោបល់ដែលបានដោះស្រាយ {{count}}</value>
+    </data>
+    <data name="HideResolvedComments" xml:space="preserve">
+        <value>លាក់មតិយោបល់ដែលបានដោះស្រាយ</value>
+    </data>
+    <data name="EditorAddComment" xml:space="preserve">
+        <value>បន្ថែមមតិ</value>
+    </data>
+    <data name="EditorShowComments" xml:space="preserve">
+        <value>បង្ហាញមតិ ({{count}})</value>
+    </data>
+    <data name="JumpToEdit" xml:space="preserve">
+        <value>លោតដើម្បីកែសម្រួល</value>
+    </data>
+    <data name="CommentEditorResolve" xml:space="preserve">
+        <value>ដោះស្រាយ</value>
+    </data>
+    <data name="EditorHideComment" xml:space="preserve">
+        <value>លាក់មតិ</value>
+    </data>
+    <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
+        <value>មតិយោបល់មិនអាចមានតួអក្សរច្រើនជាង {1} ទេ។</value>
+    </data>
+    <data name="IsWarning" xml:space="preserve">
+        <value>ការព្រមាន</value>
+    </data>
+    <data name="SettingsQuestionnaireVariable" xml:space="preserve">
+        <value>អថេរកម្រងសំណួរ</value>
+    </data>
+    <data name="CollaboratorsSettings" xml:space="preserve">
+        <value>អ្នកសហការ</value>
+    </data>
+    <data name="CollaboratorsDescriptionSettings" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់ខាងក្រោមមានសិទ្ធិចូលប្រើកម្រងសំណួរនេះ។</value>
+    </data>
+    <data name="AccessSettings" xml:space="preserve">
+        <value>ការចូលប្រើ</value>
+    </data>
+    <data name="PublicAccessSettings" xml:space="preserve">
+        <value>ការចូលប្រើជាសាធារណៈ</value>
+    </data>
+    <data name="PublicAccessDescriptionSettings" xml:space="preserve">
+        <value>កម្រងសំណួរសាធារណៈអាចមើលឃើញដោយអ្នកប្រើប្រាស់ទាំងអស់ដែលមានគណនីនៅក្នុងប្រព័ន្ធនេះក្នុងទម្រង់បានតែអាន។</value>
+    </data>
+    <data name="PublicAccessSettingsStatusOn" xml:space="preserve">
+        <value>បច្ចុប្បន្ន កម្រងសំណួរត្រូវបានចែករំលែកជាសាធារណៈ។</value>
+    </data>
+    <data name="PublicAccessSettingsStatusOff" xml:space="preserve">
+        <value>បច្ចុប្បន្ន កម្រងសំណួរមិនត្រូវបានចែករំលែកជាសាធារណៈទេ។</value>
+    </data>
+    <data name="PublicAccessSettingsOn" xml:space="preserve">
+        <value>បើកការចូលប្រើជាសាធារណៈ។</value>
+    </data>
+    <data name="PublicAccessSettingsOff" xml:space="preserve">
+        <value>បិទការចូលប្រើជាសាធារណៈ។</value>
+    </data>
+    <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
+        <value>ការចែករំលែកតំណ</value>
+    </data>
+    <data name="AnonymousLink" xml:space="preserve">
+        <value>តំណអនាមិក៖</value>
+    </data>
+    <data name="CopyLink" xml:space="preserve">
+        <value>ចម្លងតំណ</value>
+    </data>
+    <data name="AnonymousQuestionnaireDescriptionSettings" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់ដែលមានតំណនេះនឹងអាចបើកកម្រងសំណួរនេះបាន</value>
+    </data>
+    <data name="QuestionnaireSettings" xml:space="preserve">
+        <value>ការកំណត់កម្រងសំណួរ</value>
+    </data>
+    <data name="HelpCombobox" xml:space="preserve">
+        <value>ប្រអប់បន្សំគឺជាការរួមបញ្ចូលគ្នានៃបញ្ជីទម្លាក់ចុះ និងប្រអប់អត្ថបទដែលអាចកែសម្រួលបានតែមួយជួរ។ ប្រភេទអាចត្រូវបានជ្រើសរើសដោយវាយបញ្ចូលតម្លៃ ឬផ្នែករបស់វា ឬជ្រើសរើសតម្លៃពីបញ្ជី</value>
+    </data>
+    <data name="HelpQuestionnaireVarible" xml:space="preserve">
+        <value>អថេរកម្រងសំណួរត្រូវបានប្រើជាបុព្វបទក្នុងការបង្កើតឈ្មោះសម្រាប់ឯកសារនាំចេញ។ ឈ្មោះអថេរ និងលេខសម្គាល់បញ្ជីឈ្មោះអាចមានចាប់ពី {{minLength}} ដល់ {{maxLength}} តួអក្សរវែង ហើយត្រូវតែមានតួអក្សរដូចខាងក្រោម៖ a-z, A-Z, _, ឬ 0-9។ តួអក្សរទីមួយមិនអាចជា 0-9 ឬ _ ហើយតួអក្សរចុងក្រោយមិនអាចជា _ ។</value>
+    </data>
+    <data name="DeleteCommentConfirm" xml:space="preserve">
+        <value>តើអ្នកប្រាកដថាចង់លុបមតិយោបល់ទេ?</value>
+    </data>
+    <data name="RefreshPageConfirm" xml:space="preserve">
+        <value>យើងបានធ្វើបច្ចុប្បន្នភាពគេហទំព័រនេះ សូមធ្វើបច្ចុប្បន្នភាពទំព័រឡើងវិញ ឬអ្នកអាចជួបប្រទះនឹងអាកប្បកិរិយាដែលមិននឹកស្មានដល់</value>
+    </data>
+    <data name="Refresh" xml:space="preserve">
+        <value>ធ្វើឱ្យស្រស់</value>
+    </data>
+    <data name="NotSupportedAttachment" xml:space="preserve">
+        <value>ឯកសារដែលបានជ្រើសរើសមិនត្រូវបានគាំទ្រជាឯកសារភ្ជាប់ទេ។</value>
+    </data>
+    <data name="AttachmentDimensionsAreTooBig" xml:space="preserve">
+        <value>វិមាត្រធំពេក</value>
+    </data>
+    <data name="SettingsHideIfDisabled" xml:space="preserve">
+        <value>លាក់ធាតុនៅពេលវាត្រូវបានបិទ</value>
+    </data>
+    <data name="HideIfDisabledNested" xml:space="preserve">
+        <value>លាក់ពីកម្រងសំណួរ</value>
+    </data>
+    <data name="Add" xml:space="preserve">
+        <value>បន្ថែម</value>
+    </data>
+    <data name="AllClassifications" xml:space="preserve">
+        <value>ការចាត់ថ្នាក់ទាំងអស់។</value>
+    </data>
+    <data name="ClassificationShowCategories" xml:space="preserve">
+        <value>បង្ហាញប្រភេទ</value>
+    </data>
+    <data name="ClassificationsTitle" xml:space="preserve">
+        <value>ធនាគារសំណួរ។ ចំណាត់ថ្នាក់</value>
+    </data>
+    <data name="QuestionAddClassification" xml:space="preserve">
+        <value>ស្វែងរកចំណាត់ថ្នាក់</value>
+    </data>
+    <data name="SearchClassification" xml:space="preserve">
+        <value>ស្វែងរកចំណាត់ថ្នាក់</value>
+    </data>
+    <data name="ReplaceOptionsConfirmation" xml:space="preserve">
+        <value>តើអ្នកប្រាកដថាចង់ជំនួសប្រភេទដែលមានស្រាប់សម្រាប់សំណួរ "{{trimmedTitle}}"?</value>
+    </data>
+    <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
+        <value>មានតែប្រភេទ {{count}} ដំបូងប៉ុណ្ណោះនឹងត្រូវបានយកសម្រាប់សំណួរ "{{trimmedTitle}}"?</value>
+    </data>
+    <data name="MyClassifications" xml:space="preserve">
+        <value>ចំណាត់ថ្នាក់របស់ខ្ញុំ</value>
+    </data>
+    <data name="ClassificationAdd" xml:space="preserve">
+        <value>បន្ថែមការចាត់ថ្នាក់</value>
+    </data>
+    <data name="ClassificationAddGroup" xml:space="preserve">
+        <value>បន្ថែមក្រុម</value>
+    </data>
+    <data name="ClassificationGroupBreadcrumbs" xml:space="preserve">
+        <value>ក្រុម</value>
+    </data>
+    <data name="ClassificationGroupTitle" xml:space="preserve">
+        <value>ចំណងជើងក្រុម</value>
+    </data>
+    <data name="ClassificationsStringOptionsEditorPlaceholder" xml:space="preserve">
+        <value>បញ្ចូល​ប្រភេទ</value>
+    </data>
+    <data name="ClassificationTitle" xml:space="preserve">
+        <value>ចំណងជើងចំណាត់ថ្នាក់</value>
+    </data>
+    <data name="SearchForQuestion" xml:space="preserve">
+        <value>ស្វែងរកសំណួរ</value>
+    </data>
+    <data name="AllFolders" xml:space="preserve">
+        <value>ថតឯកសារទាំងអស់។</value>
+    </data>
+    <data name="SearchQuestionPlaceholder" xml:space="preserve">
+        <value>ស្វែងរកសំណួរ</value>
+    </data>
+    <data name="QuestionsSearchTitle" xml:space="preserve">
+        <value>ធនាគារសំណួរ</value>
+    </data>
+    <data name="QuestionsSearchEntities" xml:space="preserve">
+        <value>លទ្ធផលស្វែងរក</value>
+    </data>
+    <data name="ClassificationsSearchEntities" xml:space="preserve">
+        <value>ការចាត់ថ្នាក់</value>
+    </data>
+    <data name="ShowAsList" xml:space="preserve">
+        <value>បង្ហាញជាបញ្ជីនៃប្រភេទ</value>
+    </data>
+    <data name="QuestionShowListLimit" xml:space="preserve">
+        <value>ប្រសិនបើមិនលើសពី</value>
+    </data>
+    <data name="RosterDisplayMode_SubSection" xml:space="preserve">
+        <value>ផ្នែករង</value>
+    </data>
+    <data name="RosterDisplayMode_Flat" xml:space="preserve">
+        <value>ផ្ទះល្វែង</value>
+    </data>
+    <data name="RosterDisplayMode_Table" xml:space="preserve">
+        <value>តុ</value>
+    </data>
+    <data name="RosterDisplayMode_Matrix" xml:space="preserve">
+        <value>ម៉ាទ្រីស</value>
+    </data>
+    <data name="RosterDisplayMode" xml:space="preserve">
+        <value>របៀបបង្ហាញ៖</value>
+    </data>
+    <data name="AreYouSure" xml:space="preserve">
+        <value>តើអ្នកប្រាកដទេ?</value>
+    </data>
+    <data name="MakeOwnerConfirmationMessage" xml:space="preserve">
+        <value>ប្រសិនបើអ្នកផ្ទេរកម្មសិទ្ធិ ម្ចាស់ថ្មីនឹងត្រូវបានជូនដំណឹង។ អ្នកប្រហែលជាមិនអាចផ្លាស់ប្តូរការកំណត់កម្មសិទ្ធិបានទៀតទេ ហើយម្ចាស់ថ្មីក៏អាចដកសិទ្ធិចូលប្រើរបស់អ្នកបានដែរ។</value>
+    </data>
+    <data name="SettingsMakeOwner" xml:space="preserve">
+        <value>ធ្វើជាម្ចាស់</value>
+    </data>
+    <data name="Yes" xml:space="preserve">
+        <value>បាទ</value>
+    </data>
+    <data name="Run" xml:space="preserve">
+        <value>រត់</value>
+    </data>
+    <data name="View" xml:space="preserve">
+        <value>មើល</value>
+    </data>
+    <data name="ScenarioDetails" xml:space="preserve">
+        <value>សេណារីយ៉ូ</value>
+    </data>
+    <data name="DownloadPdf" xml:space="preserve">
+        <value>ទាញយក PDF</value>
+    </data>
+    <data name="GeneratePdf" xml:space="preserve">
+        <value>បង្កើត pdf</value>
+    </data>
+    <data name="ChooseLanguageTitle" xml:space="preserve">
+        <value>សូមជ្រើសរើសការបកប្រែ</value>
+    </data>
+    <data name="Initializing" xml:space="preserve">
+        <value>ការចាប់ផ្តើម</value>
+    </data>
+    <data name="RetryExportPDF" xml:space="preserve">
+        <value>ព្យាយាមនាំចេញជា PDF ម្តងទៀត</value>
+    </data>
+    <data name="Translation_Original" xml:space="preserve">
+        <value>ដើម</value>
+    </data>
+    <data name="Preview" xml:space="preserve">
+        <value>មើលការកែប្រែជាមុន #{{revision}}</value>
+    </data>
+    <data name="CustomRosterTitle" xml:space="preserve">
+        <value>ចំណងជើងផ្ទាល់ខ្លួន</value>
+    </data>
+    <data name="HelpOptionValue" xml:space="preserve">
+        <value>លេខ​កូដ​ចំនួន​គត់​នៃ​ប្រភេទ (មិន​អាច​មើល​ឃើញ​ដោយ​អ្នក​សម្ភាសន៍)</value>
+    </data>
+    <data name="HelpOptionTitle" xml:space="preserve">
+        <value>ស្លាកអត្ថបទសម្រាប់ប្រភេទ (អាចមើលឃើញដោយអ្នកសម្ភាសន៍)</value>
+    </data>
+    <data name="HelpOverlapDetection" xml:space="preserve">
+        <value>បង្ហាញ និងរំលេចការត្រួតគ្នានៃចម្លើយសំណួរនេះ ជាមួយនឹងចម្លើយចំពោះសំណួរដូចគ្នានៅក្នុងឧទាហរណ៍បញ្ជីឈ្មោះបងប្អូនបង្កើត</value>
+    </data>
+    <data name="NewItem" xml:space="preserve">
+        <value>ធាតុថ្មី។</value>
+    </data>
+    <data name="EditItem" xml:space="preserve">
+        <value>កែសម្រួលធាតុ</value>
+    </data>
+    <data name="DeleteItemCofirm" xml:space="preserve">
+        <value>តើអ្នកប្រាកដថាចង់លុបធាតុនេះទេ?</value>
+    </data>
+    <data name="Forum" xml:space="preserve">
+        <value>វេទិកា</value>
+    </data>
+    <data name="TableView" xml:space="preserve">
+        <value>ទិដ្ឋភាពតារាង</value>
+    </data>
+    <data name="StringsView" xml:space="preserve">
+        <value>ទិដ្ឋភាពអត្ថបទ</value>
+    </data>
+    <data name="ValidationIntValue" xml:space="preserve">
+        <value>តម្លៃគឺធំពេក</value>
+    </data>
+    <data name="RequiredField" xml:space="preserve">
+        <value>វាលដែលត្រូវការ</value>
+    </data>
+    <data name="FileUploaded" xml:space="preserve">
+        <value>ឯកសារដែលបានផ្ទុកឡើង</value>
+    </data>
+    <data name="DataChangesReverted" xml:space="preserve">
+        <value>ការផ្លាស់ប្តូរទិន្នន័យបានត្រលប់មកវិញ</value>
+    </data>
+    <data name="OptionsSizeLimit" xml:space="preserve">
+        <value>ជួរអតិបរមា {max_rows} ត្រូវបានអនុញ្ញាត</value>
+    </data>
+    <data name="CommunicationError" xml:space="preserve">
+        <value>កំហុសបណ្តាញ</value>
+    </data>
+    <data name="SideBarCategoriesAddNew" xml:space="preserve">
+        <value>បន្ថែមប្រភេទថ្មី។</value>
+    </data>
+    <data name="RowAdded" xml:space="preserve">
+        <value>ជួរដេកត្រូវបានបន្ថែម</value>
+    </data>
+    <data name="OptionsCascadingListError" xml:space="preserve">
+        <value>អ្នកបានបញ្ចូលការបញ្ចូលមិនត្រឹមត្រូវ។ បន្ទាត់នីមួយៗគួរតែធ្វើតាមទម្រង់៖ "ចំណងជើង...ParentValue/Value[...Attachment name]"។ 'តម្លៃ' និង 'ParentValue' ត្រូវតែជាចំនួនគត់។ 'ចំណងជើង' ត្រូវតែជាខ្សែអក្សរអាល់ហ្វា។ 'ឈ្មោះឯកសារភ្ជាប់' គឺស្រេចចិត្ត។ គ្មានបន្ទាត់ទទេត្រូវបានអនុញ្ញាត។</value>
+    </data>
+    <data name="ShowParentValues" xml:space="preserve">
+        <value>បង្ហាញតម្លៃមាតាបិតា</value>
+    </data>
+    <data name="HideParentValues" xml:space="preserve">
+        <value>លាក់តម្លៃមាតាបិតា</value>
+    </data>
+    <data name="AddEnablingCondition" xml:space="preserve">
+        <value>បន្ថែមលក្ខខណ្ឌអនុញ្ញាត</value>
+    </data>
+    <data name="ManageAccount" xml:space="preserve">
+        <value>គ្រប់គ្រងគណនី</value>
+    </data>
+    <data name="ShowList" xml:space="preserve">
+        <value>បង្ហាញបញ្ជី</value>
+    </data>
+    <data name="Login" xml:space="preserve">
+        <value>ចូល</value>
+    </data>
+    <data name="Register" xml:space="preserve">
+        <value>ចុះឈ្មោះ</value>
+    </data>
+    <data name="No" xml:space="preserve">
+        <value>ទេ</value>
+    </data>
+    <data name="QuestionIsCritical" xml:space="preserve">
+        <value>នេះគឺជាសំណួររិះគន់</value>
+    </data>
+    <data name="HelpIsCritical" xml:space="preserve">
+        <value>អ្នកនិពន្ធកម្រងសំណួរអាចបង្ហាញថា ចម្លើយចំពោះសំណួរគឺមានសារៈសំខាន់សម្រាប់ការដាក់ស្នើសម្ភាសន៍។</value>
+    </data>
+    <data name="HelpCriticalityConditionExpression" xml:space="preserve">
+        <value>កន្សោមឡូជីខលដែលវាយតម្លៃការសម្ភាសន៍ទាំងមូលដើម្បីកំណត់ថាតើវាពេញចិត្តនឹងច្បាប់សំខាន់ៗដែរឬទេ (នៅពេលដែលកន្សោមនេះវាយតម្លៃទៅ "ពិត")។ វាអាចសំដៅទៅលើសំណួរ ឬអថេរណាមួយ។</value>
+    </data>
+    <data name="HelpCriticalityConditionMessage" xml:space="preserve">
+        <value>សារនេះត្រូវបានបង្ហាញនៅពេលដែលលក្ខខណ្ឌសំខាន់វាយតម្លៃទៅជា "មិនពិត" ឬការលើកលែងកើតឡើងកំឡុងពេលវាយតម្លៃការបញ្ចេញមតិ។ សារនេះអាចប្រើប្រាស់តំណខ្ពស់ និងការជំនួសអត្ថបទ។</value>
+    </data>
+    <data name="SwitchTo" xml:space="preserve">
+        <value>ប្តូរទៅ</value>
+    </data>
+    <data name="SwitchToTranslationConfirm" xml:space="preserve">
+        <value>Switch To នឹងផ្លាស់ប្តូរភាសាបង្ហាញនៃកម្រងសំណួរ។ ការបកប្រែត្រូវតែរួមបញ្ចូលអត្ថបទសម្រាប់ធាតុទាំងអស់។</value>
+    </data>
+    <data name="AIAssistant" xml:space="preserve">
+        <value>អាយ</value>
+    </data>
+</root>
