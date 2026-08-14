@@ -11,7 +11,7 @@
 import SectionProgress from './SectionLoadProgress'
 import Breadcrumbs from './Breadcrumbs.vue'
 
-import { GroupStatus } from './questions'
+import { GroupStatus } from './questionConstants'
 
 // import Vue from 'vue'
 

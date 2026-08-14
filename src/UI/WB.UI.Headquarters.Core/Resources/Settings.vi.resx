@@ -1,0 +1,299 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="ExportEncryption_Title" xml:space="preserve"><value>Mã hóa</value></data>
+  <data name="GeographyExportFormat_Title" xml:space="preserve"><value>Định dạng xuất địa lý</value></data>
+  <data name="GeographyExportFormat_Wkt" xml:space="preserve"><value>WKT</value></data>
+  <data name="GeographyExportFormat_GeoJson" xml:space="preserve"><value>GeoJSON</value></data>
+  <data name="GeographyExportFormat_ArrayOfCoordinates" xml:space="preserve"><value>Chuỗi hình học Survey Solutions</value></data>
+  <data name="ClearExportCache_Title" xml:space="preserve"><value>Xóa bộ nhớ đệm xuất</value></data>
+  <data name="RemoveExportCache" xml:space="preserve"><value>Xóa bộ nhớ đệm</value></data>
+  <data name="RemoveExportCacheConfirm" xml:space="preserve"><value>Bạn có chắc muốn xóa bộ nhớ đệm xuất không?</value></data>
+  <data name="RemoveExportCacheSuccess" xml:space="preserve"><value>Bộ nhớ đệm xuất đã được xóa thành công</value></data>
+  <data name="RemoveExportCache_Warning" xml:space="preserve"><value>Cảnh báo! Đây là hành động không thể đảo ngược</value></data>
+  <data name="Settings_Title" xml:space="preserve"><value>Cài đặt</value></data>
+  <data name="EnableEncryption" xml:space="preserve"><value>Bật mã hóa</value></data>
+  <data name="Password" xml:space="preserve"><value>Mật khẩu</value></data>
+  <data name="GlobalNotice" xml:space="preserve"><value>Ghi chú toàn cục</value></data>
+  <data name="Logo" xml:space="preserve"><value>Logo công ty</value></data>
+  <data name="LogoUpdated" xml:space="preserve"><value>Logo công ty đã được cập nhật</value></data>
+  <data name="UserProfileSettings_Title" xml:space="preserve"><value>Hồ sơ người dùng</value></data>
+  <data name="WebInterviewEmailNotifications_Title" xml:space="preserve"><value>Phỏng vấn web</value></data>
+  <data name="MobileAppSettings_Title" xml:space="preserve"><value>Ứng dụng Phỏng vấn viên/Giám sát viên</value></data>
+  <data name="AllowInterviewerUpdateProfile" xml:space="preserve"><value>Chỉnh sửa hồ sơ điều tra viên</value></data>
+  <data name="AllowWebInterviewEmailNotifications" xml:space="preserve"><value>Thông báo email phỏng vấn web</value></data>
+  <data name="InterviewerAutoUpdate" xml:space="preserve"><value>Bật cập nhật tự động</value></data>
+  <data name="InterviewerAutoUpdateEnabled" xml:space="preserve"><value>Đã bật cập nhật tự động cho ứng dụng Android</value></data>
+  <data name="InterviewerAutoUpdateDisabled" xml:space="preserve"><value>Đã tắt cập nhật tự động cho ứng dụng Android</value></data>
+  <data name="LogoNotUpdated" xml:space="preserve"><value>Logo công ty không được cập nhật</value></data>
+  <data name="GlobalNoteSettings" xml:space="preserve"><value>Cài đặt ghi chú toàn cục</value></data>
+  <data name="LogoSettings" xml:space="preserve"><value>Cài đặt logo</value></data>
+  <data name="RemoveLogo" xml:space="preserve"><value>Xóa logo</value></data>
+  <data name="GlobalNoteSaved" xml:space="preserve"><value>Đã lưu ghi chú</value></data>
+  <data name="CurrentLogo" xml:space="preserve"><value>Logo hiện tại</value></data>
+  <data name="GlobalNoteClearingConfirm" xml:space="preserve"><value>Bạn có chắc muốn xóa ghi chú toàn cục không?</value></data>
+  <data name="InterviewerPartialSynchronization" xml:space="preserve"><value>Bật đồng bộ một phần</value></data>
+  <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve"><value>Giới hạn độ chính xác vị trí</value></data>
+  <data name="InterviewerGeographyQuestionPeriodInSeconds" xml:space="preserve"><value>Chu kỳ câu hỏi địa lý</value></data>
+  <data name="EmailProvider_None" xml:space="preserve"><value>Không có</value></data>
+  <data name="EmailProvider_SenderAddress" xml:space="preserve"><value>Địa chỉ email người gửi</value></data>
+  <data name="EmailProvider_SendTestEmail" xml:space="preserve"><value>Gửi email</value></data>
+  <data name="EmailProvider_SendTestEmailResult" xml:space="preserve"><value>Email mẫu đã được gửi thành công</value></data>
+  <data name="EmailProvider_SenderName" xml:space="preserve"><value>Tên người gửi</value></data>
+  <data name="EmailProvider_ReplyAddress" xml:space="preserve"><value>Địa chỉ trả lời</value></data>
+  <data name="EmailProvider_SettingsSavedSuccessfully" xml:space="preserve"><value>Cấu hình dịch vụ email đã được lưu thành công.</value></data>
+  <data name="DeviceNotifications" xml:space="preserve"><value>Bật thông báo trên thiết bị</value></data>
+  <data name="EsriApiKey" xml:space="preserve"><value>Khóa ESRI API</value></data>
+  <data name="WorkspaceSettings" xml:space="preserve"><value>Cài đặt không gian làm việc</value></data>
+  <data name="Export" xml:space="preserve"><value>Xuất</value></data>
+  <data name="GlobalNote" xml:space="preserve"><value>Ghi chú toàn cục</value></data>
+  <data name="UserProfile" xml:space="preserve"><value>Hồ sơ người dùng</value></data>
+  <data name="Devices" xml:space="preserve"><value>Thiết bị</value></data>
+  <data name="WebInterview" xml:space="preserve"><value>Phỏng vấn web</value></data>
+  <data name="FileRetentionTitle" xml:space="preserve"><value>Chính sách lưu giữ</value></data>
+  <data name="EnableFileRetention" xml:space="preserve"><value>Bật chính sách lưu giữ</value></data>
+  <data name="RetentionInDaysTitle" xml:space="preserve"><value>Số ngày lưu giữ</value></data>
+  <data name="RetentionInCountTitle" xml:space="preserve"><value>Số tệp cần lưu giữ</value></data>
+  <data name="ExportEncryption_Warning" xml:space="preserve"><value>Sửa đổi cài đặt mã hóa sẽ xóa tất cả tệp xuất đã tạo trước đó</value></data>
+  <data name="AllowSupervisorChangeAssignmentStatus" xml:space="preserve"><value>Cho phép giám sát viên thay đổi trạng thái nhiệm vụ</value></data>
+  <data name="AllowInterviewerChangeAssignmentStatus" xml:space="preserve"><value>Cho phép phỏng vấn viên thay đổi trạng thái nhiệm vụ</value></data>
+  <data name="AudioRecordingQuality" xml:space="preserve"><value>Chất lượng ghi âm</value></data>
+  <data name="LogoSizeLimit" xml:space="preserve"><value>Kích thước hình ảnh logo phải nhỏ hơn {{size}}</value></data>
+  <data name="LogoUploadSuccess" xml:space="preserve"><value>Tải lên logo thành công.</value></data>
+  <data name="LogoRemoveSuccess" xml:space="preserve"><value>Đã xóa logo thành công.</value></data>
+  <data name="ChangeStateDisabledConfirm" xml:space="preserve"><value>Bạn có chắc muốn thay đổi cài đặt bảo mật không?</value></data>
+  <data name="LogoSettings_Description1" xml:space="preserve"><value>Nhấp vào nút 'Chọn tệp' để tải lên hình ảnh từ máy tính của bạn</value></data>
+  <data name="EmailProvider_SmtpTlsEncryptionHelp" xml:space="preserve"><value>Mã hóa TLS bảo vệ thông tin liên lạc</value></data>
+  <data name="EmailProvider_SmtpAuthenticationHelp" xml:space="preserve"><value>Xác thực SMTP xác minh danh tính trước khi cho phép gửi email</value></data>
+  <data name="EmailProvider_SmtpUsernameHelp" xml:space="preserve"><value>Thông tin xác thực được sử dụng trong quá trình xác thực SMTP</value></data>
+  <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve"><value>Thông tin xác thực được sử dụng trong quá trình xác thực SMTP</value></data>
+  <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve"><value>Cảnh báo! Đây là hành động quan trọng sẽ ảnh hưởng đến các tệp xuất hiện có</value></data>
+  <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve"><value>Bạn có chắc muốn bắt buộc chạy chính sách lưu giữ ngay bây giờ không?</value></data>
+    <data name="GeographyExportFormat_Description" xml:space="preserve">
+        <value>Chọn cách định dạng câu trả lời cho các câu hỏi địa lý.</value>
+        </data>
+    <data name="ClearExportCache_Description" xml:space="preserve">
+        <value>Thao tác này sẽ xóa tất cả dữ liệu bộ đệm xuất. Lần xuất khẩu tiếp theo sẽ mất nhiều thời gian hơn.</value>
+        </data>
+    <data name="RemovingExportCache" xml:space="preserve">
+        <value>Xóa bộ đệm xuất đang chạy</value>
+        </data>
+    <data name="RemoveExportCacheFail" xml:space="preserve">
+        <value>Không thể xóa bộ nhớ đệm xuất vào lúc này. Vui lòng thử lại sau.
+Lý do có thể:
+* Một tệp xuất đang được tạo.
+* Tệp xuất đã tạo đang được tải xuống.
+* Việc xóa tệp xuất đã tạo bị chặn bởi chương trình khác.
+* vân vân.</value>
+        </data>
+    <data name="RemoveExportCacheGeneratingFail" xml:space="preserve">
+        <value>Không thể xóa bộ nhớ đệm xuất ở thời điểm hiện tại. Một tập tin xuất đang được tạo.</value>
+        </data>
+    <data name="RegeneratePasswordConfirm" xml:space="preserve">
+        <value>Bạn có chắc chắn muốn tạo mật khẩu mới không? Mật khẩu mới sẽ được áp dụng cho tất cả các tệp dữ liệu đã xuất được tạo từ bây giờ trở đi.</value>
+        </data>
+    <data name="ExportEncryptionSettings" xml:space="preserve">
+        <value>Xuất cài đặt mã hóa</value>
+        </data>
+    <data name="MobileAppSettings_Description" xml:space="preserve">
+        <value>Cài đặt cụ thể theo phiên bản Android của ứng dụng Người phỏng vấn/Giám sát</value>
+        </data>
+    <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
+        <value>Cho phép điều tra viên cập nhật thông tin liên hệ trong hồ sơ tài khoản của họ</value>
+        </data>
+    <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve">
+        <value>Cho phép người trả lời phỏng vấn trên web yêu cầu email có liên kết để tiếp tục các cuộc phỏng vấn đã bắt đầu (hiệu quả nếu nhà cung cấp dịch vụ email hàng loạt được thiết lập)</value>
+        </data>
+    <data name="ChangeStateConfirm" xml:space="preserve">
+        <value>Bạn có chắc chắn muốn thay đổi cài đặt bảo mật tệp xuất không? Tất cả các tập tin dữ liệu xuất sẽ được bảo vệ bằng mật khẩu.</value>
+        </data>
+    <data name="ExportEncryption_Description" xml:space="preserve">
+        <value>Chọn hộp kiểm 'Bật mã hóa' để bảo vệ kho lưu trữ dữ liệu xuất bằng cách mã hóa chúng bằng mật khẩu được cung cấp. Thay đổi mật khẩu bằng cách nhấn nút mũi tên tròn. Sau khi mã hóa, chỉ những người biết mật khẩu mới có thể mở dữ liệu đã xuất.</value>
+        </data>
+    <data name="GlobalNoteSettings_Description" xml:space="preserve">
+        <value>Chỉ định văn bản trong trường 'Ghi chú chung' sẽ được hiển thị ở đầu mỗi màn hình trên máy chủ.</value>
+        </data>
+    <data name="LogoSettings_Description" xml:space="preserve">
+        <value>Logo công ty là hình ảnh xuất hiện trên trang đăng nhập máy chủ và trên trang đăng nhập của ứng dụng Người phỏng vấn.</value>
+        </data>
+    <data name="AutoUpdateDescription" xml:space="preserve">
+        <value>Nếu được chọn thì chỉ phiên bản mới nhất của ứng dụng Người phỏng vấn/Giám sát mới có thể đồng bộ hóa với Trụ sở chính</value>
+        </data>
+    <data name="PartialSynchronizationDescription" xml:space="preserve">
+        <value>Khi được bật, máy tính bảng của người phỏng vấn sẽ gửi câu trả lời trong các cuộc phỏng vấn chưa hoàn thành tới Trụ sở chính</value>
+        </data>
+    <data name="GeographyQuestionAccuracyInMetersDescription" xml:space="preserve">
+        <value>Đặt độ chính xác ngưỡng tính bằng mét cho tọa độ vị trí thu được</value>
+        </data>
+    <data name="GeographyQuestionPeriodInSecondsDescription" xml:space="preserve">
+        <value>Đặt khoảng thời gian tính bằng giây cho câu hỏi địa lý</value>
+        </data>
+    <data name="EmailProvider_Amazon" xml:space="preserve">
+        <value>Dịch vụ email đơn giản của Amazon (SES)</value>
+        </data>
+    <data name="EmailProvider_Sendgrid" xml:space="preserve">
+        <value>Dịch vụ gửi email SendGrid</value>
+        </data>
+    <data name="EmailProvider_NoneDescription" xml:space="preserve">
+        <value>Tin nhắn mời phỏng vấn trên web không được Survey Solutions gửi đến người trả lời.</value>
+        </data>
+    <data name="EmailProvider_AmazonDescription" xml:space="preserve">
+        <value>Cấu hình các thông số để truy cập Amazon SES bên dưới. Hiện có thêm thông tin về việc sử dụng Amazon SES với Survey Solutions</value>
+        </data>
+    <data name="EmailProvider_SendgridDescription" xml:space="preserve">
+        <value>Cấu hình các thông số truy cập SendGrid bên dưới. Hiện có thêm thông tin về cách sử dụng SendGrid với Giải pháp khảo sát</value>
+        </data>
+    <data name="EmailProvider_SendGridApiKey" xml:space="preserve">
+        <value>Khóa API</value>
+        </data>
+    <data name="EmailProvider_AwsAccessKeyId" xml:space="preserve">
+        <value>ID khóa truy cập</value>
+        </data>
+    <data name="EmailProvider_AwsSecretAccessKey" xml:space="preserve">
+        <value>Khóa truy cập bí mật</value>
+        </data>
+    <data name="EmailProvider_TestEmailAddress" xml:space="preserve">
+        <value>Địa chỉ email</value>
+        </data>
+    <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve">
+        <value>Gửi email kiểm tra</value>
+        </data>
+    <data name="EmailProvider_PageDesc" xml:space="preserve">
+        <value>Thiết lập nhà cung cấp dịch vụ email hàng loạt. Định cấu hình cách gửi lời mời phỏng vấn trên web.</value>
+        </data>
+    <data name="EmailProvider_SenderHeader" xml:space="preserve">
+        <value>Thông tin người gửi</value>
+        </data>
+    <data name="EmailProvider_SenderHelp" xml:space="preserve">
+        <value>Địa chỉ email của người gửi sẽ xuất hiện trong trường TỪ của thư đến.</value>
+        </data>
+    <data name="EmailProvider_ReplyAddressHelp" xml:space="preserve">
+        <value>Địa chỉ email nơi có thể gửi trả lời từ những người được mời (mặc định là địa chỉ email của người gửi.)</value>
+        </data>
+    <data name="EmailProvider_SenderNameHelp" xml:space="preserve">
+        <value>Tên của người gửi sẽ xuất hiện trong trường TỪ của thư đến.</value>
+        </data>
+    <data name="EmailProvider_Address" xml:space="preserve">
+        <value>Địa chỉ bưu chính của người gửi</value>
+        </data>
+    <data name="EmailProvider_AddressHelp" xml:space="preserve">
+        <value>Địa chỉ bưu điện hiện tại của người gửi.</value>
+        </data>
+    <data name="EmailProvider_ServiceProvideHeader" xml:space="preserve">
+        <value>Chỉ định nhà cung cấp dịch vụ email hàng loạt</value>
+        </data>
+    <data name="EmailProvider_AwsAccessKeyIdHelp" xml:space="preserve">
+        <value>Bạn có thể tìm thấy ID tài khoản AWS từ Bảng điều khiển quản lý AWS</value>
+        </data>
+    <data name="EmailProvider_AwsSecretAccessKeyHelp" xml:space="preserve">
+        <value>Được tìm thấy trong Thông tin xác thực bảo mật tại Bảng điều khiển quản lý AWS</value>
+        </data>
+    <data name="EmailProvider_AwsRegion" xml:space="preserve">
+        <value>Vùng đất</value>
+        </data>
+    <data name="EmailProvider_AwsRegionHelp" xml:space="preserve">
+        <value>Khu vực dành cho Bảng điều khiển quản lý AWS</value>
+        </data>
+    <data name="EmailProvider_AwsRegion_Unknown" xml:space="preserve">
+        <value>Đã chọn vùng không xác định. Vui lòng kiểm tra nó.</value>
+        </data>
+    <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve">
+        <value>Bạn có thể tìm thấy nó trên trang Khóa API trong mục menu cài đặt SendGrid</value>
+        </data>
+    <data name="EmailProvider_GeneralError" xml:space="preserve">
+        <value>Đã xảy ra lỗi chung</value>
+        </data>
+    <data name="EmailProvider_HelpLinkText" xml:space="preserve">
+        <value>đây</value>
+        </data>
+    <data name="EmailProvider_SendTestEmailMessage" xml:space="preserve">
+        <value>Hãy gửi cho chính bạn một email kiểm tra để xác minh rằng dịch vụ email hàng loạt đang hoạt động và để xem trước những gì người trả lời sẽ nhận được.</value>
+        </data>
+    <data name="DeviceNotificationsDescription" xml:space="preserve">
+        <value>Khi được kích hoạt, thiết bị sẽ thông báo cho chủ sở hữu về những thay đổi và hành động cần thực hiện</value>
+        </data>
+    <data name="EsriApiKeyDescription" xml:space="preserve">
+        <value>Phím này sẽ cho phép sử dụng bản đồ trực tuyến trên thiết bị. Xin lưu ý rằng việc sử dụng dịch vụ này có thể khiến bạn tốn thêm tiền. Hãy tham khảo ý kiến ​​của nhà cung cấp dịch vụ</value>
+        </data>
+    <data name="EmailProvider_Smtp" xml:space="preserve">
+        <value>Máy chủ SMTP</value>
+        </data>
+    <data name="EmailProvider_SmtpDescription" xml:space="preserve">
+        <value>Cấu hình các thông số truy cập vào máy chủ SMTP bên dưới. Hiện có thêm thông tin về việc sử dụng máy chủ SMTP với Giải pháp khảo sát</value>
+        </data>
+    <data name="EmailProvider_SmtpHost" xml:space="preserve">
+        <value>Chủ nhà</value>
+        </data>
+    <data name="EmailProvider_SmtpHostHelp" xml:space="preserve">
+        <value>Địa chỉ máy chủ SMTP</value>
+        </data>
+    <data name="EmailProvider_SmtpPort" xml:space="preserve">
+        <value>Cảng</value>
+        </data>
+    <data name="EmailProvider_SmtpPortHelp" xml:space="preserve">
+        <value>Cổng SMTP</value>
+        </data>
+    <data name="EmailProvider_SmtpTlsEncryption" xml:space="preserve">
+        <value>Sử dụng mã hóa TLS</value>
+        </data>
+    <data name="EmailProvider_SmtpAuthentication" xml:space="preserve">
+        <value>Sử dụng xác thực</value>
+        </data>
+    <data name="EmailProvider_SmtpUsername" xml:space="preserve">
+        <value>Tên người dùng</value>
+        </data>
+    <data name="EmailProvider_SmtpPassword" xml:space="preserve">
+        <value>Mật khẩu</value>
+        </data>
+    <data name="FileRetentionDescription" xml:space="preserve">
+        <value>Các tệp xuất cũ hơn sẽ bị xóa định kỳ theo các cài đặt này</value>
+        </data>
+    <data name="RetentionInDaysDescription" xml:space="preserve">
+        <value>Số ngày file xuất sẽ được giữ nguyên</value>
+        </data>
+    <data name="RetentionInCountDescription" xml:space="preserve">
+        <value>Số lượng tệp xuất tối đa cần lưu trong bộ lưu trữ</value>
+        </data>
+    <data name="RetentionPolicyEnablingConfirm" xml:space="preserve">
+        <value>Bạn có chắc chắn muốn bật chính sách lưu giữ không? Các tập tin dữ liệu xuất có thể bị xóa.</value>
+        </data>
+    <data name="ForceRunRetentionPolicy" xml:space="preserve">
+        <value>Buộc chạy</value>
+        </data>
+    <data name="SelectFileWarning" xml:space="preserve">
+        <value>Vui lòng chọn một tập tin để tải lên.</value>
+        </data>
+    <data name="LogoUploadError" xml:space="preserve">
+        <value>Không thể tải lên biểu tượng. Vui lòng thử lại.</value>
+        </data>
+    <data name="LogoRemoveError" xml:space="preserve">
+        <value>Không thể xóa biểu trưng. Vui lòng thử lại.</value>
+        </data>
+    <data name="AllowSupervisorChangeAssignmentStatusDescription" xml:space="preserve">
+        <value>Khi được bật, người giám sát có thể đóng và mở lại nhiệm vụ</value>
+        </data>
+    <data name="AllowInterviewerChangeAssignmentStatusDescription" xml:space="preserve">
+        <value>Khi được bật, người phỏng vấn có thể hoàn thành và mở lại bài tập (yêu cầu bật cài đặt người giám sát)</value>
+        </data>
+    <data name="AudioRecordingQualityDescription" xml:space="preserve">
+        <value>Chất lượng âm thanh được ứng dụng người phỏng vấn sử dụng khi ghi âm (kiểm tra âm thanh và câu hỏi âm thanh)</value>
+        </data>
+    <data name="AudioRecordingQuality_Mono44kHz" xml:space="preserve">
+        <value>64 kbps, Mono, 44,1 kHz</value>
+        </data>
+    <data name="AudioRecordingQuality_Mono22kHz" xml:space="preserve">
+        <value>64 kbps, Mono, 22,05 kHz</value>
+        </data>
+    <data name="AudioRecordingQuality_Mono16kHz" xml:space="preserve">
+        <value>32 kbps, Đơn âm, 16 kHz</value>
+        </data>
+    <data name="AudioRecordingQuality_Stereo44kHz" xml:space="preserve">
+        <value>128 kbps, Âm thanh nổi, 44,1 kHz</value>
+        </data>
+    <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
+        <value>128 kbps, Âm thanh nổi, 48 kHz</value>
+        </data>
+</root>
