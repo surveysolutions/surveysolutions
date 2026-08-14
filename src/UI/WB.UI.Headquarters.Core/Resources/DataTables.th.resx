@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Aria_SortAscending" xml:space="preserve">
+        <value>: เปิดใช้งานเพื่อเรียงลำดับคอลัมน์จากน้อยไปหามาก</value>
+    </data>
+    <data name="Aria_SortDescending" xml:space="preserve">
+        <value>: เปิดใช้งานเพื่อจัดเรียงคอลัมน์จากมากไปน้อย</value>
+    </data>
+    <data name="EmptyTable" xml:space="preserve">
+        <value>ไม่มีข้อมูลในตาราง</value>
+    </data>
+    <data name="Info" xml:space="preserve">
+        <value>กำลังแสดงรายการ _START_ ถึง _END_ จาก _TOTAL_ รายการ</value>
+    </data>
+    <data name="InfoEmpty" xml:space="preserve">
+        <value>กำลังแสดง 0 ถึง 0 จาก 0 รายการ</value>
+    </data>
+    <data name="InfoFiltered" xml:space="preserve">
+        <value>(กรองจากรายการทั้งหมด _MAX_ รายการ)</value>
+    </data>
+    <data name="InfoPostFix" xml:space="preserve">
+        <value></value>
+    </data>
+    <data name="InfoThousands" xml:space="preserve">
+        <value>,</value>
+    </data>
+    <data name="LengthMenu" xml:space="preserve">
+        <value>แสดง _MENU_ รายการ</value>
+    </data>
+    <data name="LoadingRecords" xml:space="preserve">
+        <value>กำลังโหลด...</value>
+    </data>
+    <data name="Paginate_First" xml:space="preserve">
+        <value>อันดับแรก</value>
+    </data>
+    <data name="Paginate_Last" xml:space="preserve">
+        <value>ล่าสุด</value>
+    </data>
+    <data name="Paginate_Next" xml:space="preserve">
+        <value>ต่อไป</value>
+    </data>
+    <data name="Paginate_Previous" xml:space="preserve">
+        <value>ก่อนหน้า</value>
+    </data>
+    <data name="Processing" xml:space="preserve">
+        <value>กำลังประมวลผล...</value>
+    </data>
+    <data name="Search" xml:space="preserve">
+        <value>ค้นหา:</value>
+    </data>
+    <data name="SearchPlaceholder" xml:space="preserve">
+        <value>ค้นหา...</value>
+    </data>
+    <data name="ZeroRecords" xml:space="preserve">
+        <value>ไม่พบบันทึกที่ตรงกัน</value>
+    </data>
+</root>
