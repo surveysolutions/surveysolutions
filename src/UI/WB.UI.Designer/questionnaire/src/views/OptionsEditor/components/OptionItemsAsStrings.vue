@@ -1,7 +1,7 @@
 <template>
     <v-container fluid class="categories-strings pa-4">
         <v-textarea ref="strings" v-model="categoriesAsText" rows="15" variant="outlined" spellcheck="false"
-            wrap="off" autocorrect="off" hide-details="auto" :error="!validity" :disabled="loading || convert"
+            wrap="off" autocorrect="off" :hide-details="!validationMessage" :error="!validity" :disabled="loading || convert"
             :loading="loading || convert" :readonly="readonly" class="categories-strings__textarea"
             style="font-family: monospace, monospace" @change="change" @focus="onFocus" @blur="onBlur">
             <template #prepend-inner>
