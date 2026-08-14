@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AllData" xml:space="preserve"><value>Tất cả dữ liệu</value></data>
+  <data name="AllDataSpss" xml:space="preserve"><value>Tất cả dữ liệu Spss</value></data>
+  <data name="AllDataStata" xml:space="preserve"><value>Tất cả dữ liệu Stata</value></data>
+  <data name="ApprovedData" xml:space="preserve"><value>Dữ liệu đã phê duyệt</value></data>
+  <data name="ApprovedDataSpss" xml:space="preserve"><value>Dữ liệu đã phê duyệt Spss</value></data>
+  <data name="ApprovedDataStata" xml:space="preserve"><value>Dữ liệu đã phê duyệt Stata</value></data>
+  <data name="BinaryData" xml:space="preserve"><value>Dữ liệu nhị phân</value></data>
+  <data name="CloneQuestionnaire" xml:space="preserve"><value>Sao chép bảng câu hỏi</value></data>
+  <data name="CreationDate" xml:space="preserve"><value>Tạo ngày</value></data>
+  <data name="History" xml:space="preserve"><value>Lịch sử</value></data>
+  <data name="ImportTemplate" xml:space="preserve"><value>Nhập bảng câu hỏi</value></data>
+  <data name="LastEntryDate" xml:space="preserve"><value>Sửa đổi ngày</value></data>
+  <data name="NewAssignment" xml:space="preserve"><value>Nhiệm vụ mới</value></data>
+  <data name="Questionnaires" xml:space="preserve"><value>Bảng câu hỏi</value></data>
+  <data name="Maps" xml:space="preserve"><value>Bản đồ</value></data>
+  <data name="Title" xml:space="preserve"><value>Tiêu đề</value></data>
+  <data name="Version" xml:space="preserve"><value>Phiên bản</value></data>
+  <data name="MapDashboard" xml:space="preserve"><value>Bảng điều khiển bản đồ</value></data>
+  <data name="ImportDate" xml:space="preserve"><value>Nhập ngày</value></data>
+  <data name="Actions" xml:space="preserve"><value>Hành động</value></data>
+  <data name="DeleteQuestionnaire" xml:space="preserve"><value>Xóa bảng câu hỏi</value></data>
+  <data name="ExportQuestionnaire" xml:space="preserve"><value>Xuất bảng câu hỏi</value></data>
+  <data name="SaveQuestionnaire" xml:space="preserve"><value>Lưu tài liệu bảng câu hỏi</value></data>
+  <data name="Questionnaire" xml:space="preserve"><value>Bảng câu hỏi</value></data>
+  <data name="SurveySetupIntroMessage1" xml:space="preserve"><value>Nhấn nút Nhập bảng câu hỏi để tải bảng câu hỏi từ Designer</value></data>
+  <data name="SurveySetupIntroMessage2" xml:space="preserve"><value>Nhấp vào bảng câu hỏi từ danh sách để tạo nhiệm vụ phỏng vấn</value></data>
+  <data name="WebInterviewSetup" xml:space="preserve"><value>Thiết lập phỏng vấn web</value></data>
+  <data name="RecordAudio" xml:space="preserve"><value>Ghi âm</value></data>
+  <data name="QuestionnairePreview" xml:space="preserve"><value>Xem trước bảng câu hỏi</value></data>
+  <data name="UploadAssignments" xml:space="preserve"><value>Tải lên nhiệm vụ</value></data>
+  <data name="DeleteMap" xml:space="preserve"><value>Xóa bản đồ</value></data>
+  <data name="DeleteMapUser" xml:space="preserve"><value>Xóa người dùng bản đồ</value></data>
+  <data name="UpgradeAssignments" xml:space="preserve"><value>Nâng cấp nhiệm vụ</value></data>
+  <data name="RecordAudioTitle" xml:space="preserve"><value>Ứng dụng Phỏng vấn viên sẽ ghi âm cuộc phỏng vấn khi tính năng này được kích hoạt</value></data>
+  <data name="SendInvitations" xml:space="preserve"><value>Gửi lời mời</value></data>
+  <data name="DownloadLinks" xml:space="preserve"><value>Tải xuống liên kết web</value></data>
+  <data name="WebMode" xml:space="preserve"><value>Chế độ</value></data>
+  <data name="Details" xml:space="preserve"><value>Chi tiết</value></data>
+  <data name="ShowOnDesigner" xml:space="preserve"><value>Hiển thị trên Designer</value></data>
+  <data name="ImportedBy" xml:space="preserve"><value>Nhập bởi</value></data>
+  <data name="ImportedByText" xml:space="preserve"><value>Người dùng {{role}} {{name}}</value></data>
+  <data name="QuestionnaireDeleteWarn" xml:space="preserve"><value>{{receivedInterviews}} phỏng vấn và {{receivedAssignments}} nhiệm vụ sẽ bị xóa</value></data>
+  <data name="TypeQuestionnaireName" xml:space="preserve"><value>Vui lòng nhập '{{questionnaireTitle}}' để xác nhận</value></data>
+  <data name="UsersManagement" xml:space="preserve"><value>Quản lý người dùng</value></data>
+  <data name="CreateUser" xml:space="preserve"><value>Tạo người dùng</value></data>
+  <data name="ExposedVariables" xml:space="preserve"><value>Biến được hiển thị</value></data>
+  <data name="Edit" xml:space="preserve"><value>Chỉnh sửa</value></data>
+</root>
