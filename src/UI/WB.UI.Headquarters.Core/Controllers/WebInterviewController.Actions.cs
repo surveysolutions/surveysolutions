@@ -117,6 +117,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             string filename = null;
+            string previousFilename = null;
 
             try
             {
@@ -130,10 +131,16 @@ namespace WB.UI.Headquarters.Controllers
                 filename = AnswerUtils.GetPictureFileName(question.VariableName, questionIdentity.RosterVector, extension);
                 var responsibleId = interview.CurrentResponsibleId;
 
+                if (question.IsAnswered())
+                    previousFilename = question.GetAsInterviewTreeMultimediaQuestion().GetAnswer()?.FileName;
+
                 this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
 
                 this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
                     responsibleId, questionIdentity.Id, questionIdentity.RosterVector, filename));
+
+                if (previousFilename != null && previousFilename != filename)
+                    await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, previousFilename);
             }
             catch (Exception e)
             {
