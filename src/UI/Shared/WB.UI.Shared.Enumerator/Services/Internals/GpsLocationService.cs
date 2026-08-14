@@ -112,12 +112,17 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
             return await tcs.Task.ConfigureAwait(false);
 
-            // When the wait ends without an acceptable fix, surface a restricted-source error if the
-            // only fixes seen were refused by the acceptance policy (e.g. mock locations); otherwise
+            // When the wait ends without a preferred (GPS-provider) fix, fall back to the best
+            // acceptable lower-priority fix seen (e.g. a fast network/fused fix) so a coordinate is
+            // still captured with its true source. If the only fixes seen were refused by the
+            // acceptance policy (e.g. mock locations), surface a restricted-source error; otherwise
             // resolve as timeout/no-fix (null) to preserve the existing contract.
             void CompleteWhenNoAcceptableFix()
             {
-                if (listener.RejectedRestrictedFix)
+                var fallback = listener.BestFallbackLocation;
+                if (fallback != null)
+                    tcs.TrySetResult(fallback);
+                else if (listener.RejectedRestrictedFix)
                     tcs.TrySetException(new RestrictedLocationSourceException());
                 else
                     tcs.TrySetResult(null);
@@ -172,6 +177,18 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
             internal bool RejectedRestrictedFix => this.rejectedRestrictedFix;
 
+            // Best acceptable but lower-priority fix seen so far (e.g. a fast network/fused fix, or a
+            // coarse GPS fix). A preferred GPS-provider fix wins immediately; otherwise this fallback
+            // is returned on timeout so a coordinate is still captured with its true source instead of
+            // a fast-but-coarse provider being reported when a better GPS fix would have arrived.
+            private readonly object fallbackSync = new object();
+            private GpsLocation bestFallbackLocation;
+
+            internal GpsLocation BestFallbackLocation
+            {
+                get { lock (this.fallbackSync) return this.bestFallbackLocation; }
+            }
+
             internal SingleShotLocationListener(
                 TaskCompletionSource<GpsLocation> tcs,
                 LocationManager locationManager,
@@ -201,21 +218,6 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 // External GPS devices may emit valid fixes whose elapsedRealtime timestamp
                 // does not align with the device monotonic clock. Do not reject by age.
 
-                // Skip fixes that don't meet the configured accuracy threshold — keep
-                // waiting for a better satellite fix rather than accepting a coarse one.
-                // Non-positive desired accuracy means "accept the first fix" instead of
-                // rejecting every accurate reading and timing out.
-                // Apply this satellite-oriented threshold only to genuine built-in GPS-provider,
-                // non-mock fixes. Non-GPS providers (network/fused/WiFi — permitted in modes A/N)
-                // and external mock sensors report accuracy that does not reflect satellite signal
-                // quality; enforcing the GPS threshold on them causes every fix to be rejected until
-                // timeout, so those modes could never capture a coordinate.
-                if (isFromGpsProvider && !isFromMockProvider)
-                {
-                    if (desiredAccuracy > 0 && location.HasAccuracy && location.Accuracy > desiredAccuracy)
-                        return;
-                }
-
                 var timestamp = GetTimestamp(location);
                 var gpsLocation = new GpsLocation(
                     location.HasAccuracy ? location.Accuracy : null,
@@ -226,12 +228,50 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                     location.Provider,
                     isFromMockProvider);
 
+                // A "preferred" fix comes from the GPS provider (built-in, or an external GPS sensor
+                // injecting under the gps provider) — the correct, high-quality source. Built-in GPS
+                // fixes must also meet the desired accuracy; external (mock) GPS accuracy is not
+                // satellite-comparable, so it is exempt from that satellite-oriented threshold.
+                // Return a preferred fix immediately.
+                bool meetsDesiredAccuracy =
+                    !(this.desiredAccuracy > 0 && location.HasAccuracy && location.Accuracy > this.desiredAccuracy);
+                bool isPreferred = isFromGpsProvider && (isFromMockProvider || meetsDesiredAccuracy);
+
+                if (!isPreferred)
+                {
+                    // Lower-priority acceptable fixes (non-GPS providers such as network/fused/WiFi,
+                    // permitted in modes A/N) are captured but do not complete the request immediately:
+                    // keep waiting so a subsequent GPS-provider fix — the correct source — can win and
+                    // be shown in the result. Retain the most accurate such fix as a fallback so a
+                    // coordinate is still returned on timeout. Coarse built-in GPS fixes keep waiting
+                    // for a better satellite fix and are not recorded as a fallback.
+                    if (!isFromGpsProvider)
+                        RecordFallback(gpsLocation);
+                    return;
+                }
+
                 // Set result before removing updates so the task always completes even if
                 // RemoveUpdates throws (e.g. when called from a non-looper thread).
                 tcs.TrySetResult(gpsLocation);
 
                 // Unregister so we act as a one-shot listener.
                 try { locationManager.RemoveUpdates(this); } catch { /* ignore – result already set */ }
+            }
+
+            // Keep the most accurate acceptable lower-priority fix. Fixes without a reported accuracy
+            // rank worst, so a fix that reports accuracy is always preferred over one that does not.
+            private void RecordFallback(GpsLocation candidate)
+            {
+                lock (this.fallbackSync)
+                {
+                    if (this.bestFallbackLocation == null
+                        || (candidate.Accuracy.HasValue
+                            && (!this.bestFallbackLocation.Accuracy.HasValue
+                                || candidate.Accuracy.Value < this.bestFallbackLocation.Accuracy.Value)))
+                    {
+                        this.bestFallbackLocation = candidate;
+                    }
+                }
             }
 
             public void OnProviderDisabled(string provider) { }
