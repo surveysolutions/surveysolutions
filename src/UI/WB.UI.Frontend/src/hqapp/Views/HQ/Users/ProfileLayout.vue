@@ -2,17 +2,25 @@
     <HqLayout :hasFilter="false">
         <template v-slot:filters>
             <div>
-                <div v-if="isRestricted" id="restricted" class="alerts">
+                <div v-if="isRestricted"
+                    id="restricted"
+                    class="alerts">
                     <div class="alert alert-warning">
-                        <button class="close" data-bs-dismiss="alert" aria-hidden="true">
+                        <button class="close"
+                            data-bs-dismiss="alert"
+                            aria-hidden="true">
                             ×
                         </button>
                         {{ $t('FieldsAndValidations.RestrictedAccount') }}
                     </div>
                 </div>
-                <div v-if="successMessage != null" id="alerts" class="alerts">
+                <div v-if="successMessage != null"
+                    id="alerts"
+                    class="alerts">
                     <div class="alert alert-success">
-                        <button class="close" data-bs-dismiss="alert" aria-hidden="true">
+                        <button class="close"
+                            data-bs-dismiss="alert"
+                            aria-hidden="true">
                             ×
                         </button>
                         {{ successMessage }}
@@ -22,42 +30,53 @@
         </template>
         <template v-slot:headers>
             <div>
-                <ol class="breadcrumb" v-if="!isOwnProfile">
-                    <li>
-                        <a v-bind:href="referrerUrl">{{ referrerTitle }}</a>
-                    </li>
-                </ol>
                 <h1>{{ $t('Strings.HQ_Views_Manage_Title') }}<b v-if="!isOwnProfile">
-                        : {{ userName }}
-                    </b></h1>
+                    : {{ userName }}
+                </b></h1>
             </div>
         </template>
         <div class="extra-margin-bottom">
             <div class="profile">
                 <ul class="nav nav-tabs extra-margin-bottom">
-                    <li class="nav-item" v-if="!forceChangePassword"
+                    <li class="nav-item"
+                        v-if="!forceChangePassword"
                         v-bind:class="{ 'active': currentTab == 'account' }">
-                        <a class="nav-link" id="profile" v-bind:href="getUrl('Manage')">{{
+                        <a class="nav-link"
+                            id="profile"
+                            v-bind:href="getUrl('Manage')">{{
                             $t('Pages.AccountManage_Profile')
                         }}</a>
                     </li>
-                    <li class="nav-item" v-if="showWorkspaces && !forceChangePassword"
+                    <li class="nav-item"
+                        v-if="showWorkspaces && !forceChangePassword"
                         v-bind:class="{ 'active': currentTab == 'workspaces' }">
-                        <a class="nav-link" id="profile" v-bind:href="getUrl(`Workspaces`)">{{
+                        <a class="nav-link"
+                            id="profile"
+                            v-bind:href="getUrl(`Workspaces`)">{{
                             $t('Workspaces.UserWorkspacesTab') }}</a>
                     </li>
-                    <li class="nav-item" v-if="canChangePassword" v-bind:class="{ 'active': currentTab == 'password' }">
-                        <a class="nav-link" id="password" v-bind:href="getUrl('ChangePassword')">{{
+                    <li class="nav-item"
+                        v-if="canChangePassword"
+                        v-bind:class="{ 'active': currentTab == 'password' }">
+                        <a class="nav-link"
+                            id="password"
+                            v-bind:href="getUrl('ChangePassword')">{{
                             $t('Pages.AccountManage_ChangePassword') }}</a>
                     </li>
-                    <li class="nav-item" v-if="userInfo.canSetupTwoFactorAuthentication && !forceChangePassword"
+                    <li class="nav-item"
+                        v-if="userInfo.canSetupTwoFactorAuthentication && !forceChangePassword"
                         v-bind:class="{ 'active': currentTab == 'two-factor' }">
-                        <a class="nav-link" id="two-factor" v-bind:href="getUrl('TwoFactorAuthentication')">{{
+                        <a class="nav-link"
+                            id="two-factor"
+                            v-bind:href="getUrl('TwoFactorAuthentication')">{{
                             $t('Pages.AccountManage_TwoFactorAuth') }}</a>
                     </li>
-                    <li class="nav-item" v-if="canGenerateToken && !forceChangePassword"
+                    <li class="nav-item"
+                        v-if="canGenerateToken && !forceChangePassword"
                         v-bind:class="{ 'active': currentTab == 'api-token' }">
-                        <a class="nav-link" id="two-factor" v-bind:href="getUrl('ApiTokens')">{{
+                        <a class="nav-link"
+                            id="two-factor"
+                            v-bind:href="getUrl('ApiTokens')">{{
                             $t('Pages.AccountManage_ApiTokens') }}</a>
                     </li>
                 </ul>
@@ -131,21 +150,9 @@ export default {
         canLockBySupervisor() {
             return this.isInterviewer
         },
-        referrerTitle() {
-            return this.$t('Dashboard.UsersManagement')
-        },
         showWorkspaces() {
             return this.$config.model.userInfo.canChangeWorkspacesList
         },
-        referrerUrl() {
-            const returnUrl = this.$route.query['returnUrl']
-            if (returnUrl != null && returnUrl.startsWith('/')) {
-                return returnUrl
-            }
-
-            return '/users/UsersManagement'
-        },
-
     },
     methods: {
         getUrl: function (baseUrl) {

@@ -20,7 +20,7 @@ using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
+    [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
     public class UsersManagementController : Controller
     {
         private readonly IMediator mediator;

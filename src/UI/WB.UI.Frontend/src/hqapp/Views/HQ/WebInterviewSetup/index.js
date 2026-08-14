@@ -1,6 +1,6 @@
-import Settings from './Settings'
-import SendInvitations from './SendInvitations'
-import SendInvitationsProgress from './SendInvitationsProgress'
+const Settings = () => import('./Settings')
+const SendInvitations = () => import('./SendInvitations')
+const SendInvitationsProgress = () => import('./SendInvitationsProgress')
 
 export default class WebInterviewSetupComponent {
     get routes() {

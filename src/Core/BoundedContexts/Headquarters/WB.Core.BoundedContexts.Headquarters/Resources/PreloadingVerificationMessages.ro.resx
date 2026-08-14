@@ -255,4 +255,10 @@
   <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
     <value>Răspunsul la întrebarea cu numele variabilei {0} nu poate fi preîncărcat, deoarece este de tip neacceptat. Pentru detalii despre ceea ce poate fi preîncărcat în versiunea curentă consultați următorul articol de asistență https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type.</value>
   </data>
+  <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+    <value>Numele variabilei domeniului de audit audio '{0}' este invalid. Trebuie să facă referire la o secțiune, un grup sau un roster existent (întrebările și rosterele plate nu sunt permise).</value>
+  </data>
+  <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+    <value>Sarcina nu a fost migrată deoarece utilizează un audit audio selectiv (domeniul de înregistrare audio), care nu poate fi migrat automat la o versiune nouă a chestionarului. Recreați sarcina manual și configurați din nou domeniul auditului audio.</value>
+  </data>
 </root>
