@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AdministrativeRecords" xml:space="preserve">
+        <value>ადმინისტრაციული ჩანაწერები</value>
+        </data>
+    <data name="AgriculturalCensus" xml:space="preserve">
+        <value>სოფლის მეურნეობის აღწერა</value>
+        </data>
+    <data name="AgriculturalSurvey" xml:space="preserve">
+        <value>სოფლის მეურნეობის კვლევა</value>
+        </data>
+    <data name="ChildLaborSurvey" xml:space="preserve">
+        <value>ბავშვთა შრომის კვლევა</value>
+        </data>
+    <data name="CoreWelfareIndicatorsQuestionnaire" xml:space="preserve">
+        <value>ძირითადი კეთილდღეობის ინდიკატორების კითხვარი</value>
+        </data>
+    <data name="DemographicAndHealthSurvey" xml:space="preserve">
+        <value>დემოგრაფიული და ჯანმრთელობის კვლევა</value>
+        </data>
+    <data name="EnterpriseCensus" xml:space="preserve">
+        <value>საწარმოთა აღწერა</value>
+        </data>
+    <data name="EnterpriseSurvey" xml:space="preserve">
+        <value>საწარმოთა გამოკითხვა</value>
+        </data>
+    <data name="HouseholdHealthSurvey" xml:space="preserve">
+        <value>შინამეურნეობის ჯანმრთელობის კვლევა</value>
+        </data>
+    <data name="HouseholdSurvey" xml:space="preserve">
+        <value>შინამეურნეობების გამოკითხვა</value>
+        </data>
+    <data name="InformalSectorSurvey" xml:space="preserve">
+        <value>არაფორმალური სექტორის კვლევა</value>
+        </data>
+    <data name="IntegratedSurvey" xml:space="preserve">
+        <value>ინტეგრირებული გამოკითხვა</value>
+        </data>
+    <data name="LaborForceSurvey" xml:space="preserve">
+        <value>სამუშაო ძალის კვლევა</value>
+        </data>
+    <data name="LivingStandardsMeasurementStudy" xml:space="preserve">
+        <value>ცხოვრების დონის შეფასების კვლევა</value>
+        </data>
+    <data name="MultipleIndicatorClusterSurvey" xml:space="preserve">
+        <value>მრავალი ინდიკატორის კლასტერული კვლევა</value>
+        </data>
+    <data name="PopulationAndHousingCensus" xml:space="preserve">
+        <value>მოსახლეობისა და საცხოვრებელი სახლების აღწერა</value>
+        </data>
+    <data name="PriceSurvey" xml:space="preserve">
+        <value>ფასების კვლევა</value>
+        </data>
+    <data name="PrioritySurvey" xml:space="preserve">
+        <value>პრიორიტეტული კვლევა</value>
+        </data>
+    <data name="SampleFrame" xml:space="preserve">
+        <value>ნიმუში ჩარჩო</value>
+        </data>
+    <data name="ServiceProvisionAssessments" xml:space="preserve">
+        <value>მომსახურების მიწოდების შეფასებები</value>
+        </data>
+    <data name="SocioEconomicMonitoringSurvey" xml:space="preserve">
+        <value>სოციოეკონომიკური/მონიტორინგის კვლევა</value>
+        </data>
+    <data name="StatisticalInfoAndMonitoringProg" xml:space="preserve">
+        <value>სტატისტიკური ინფორმაცია და მონიტორინგის პროგ.</value>
+        </data>
+    <data name="WorldFertilitySurvey" xml:space="preserve">
+        <value>ნაყოფიერების მსოფლიო კვლევა</value>
+        </data>
+    <data name="WorldHealthSurvey" xml:space="preserve">
+        <value>მსოფლიო ჯანდაცვის კვლევა</value>
+        </data>
+</root>
