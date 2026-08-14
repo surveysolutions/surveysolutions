@@ -25,6 +25,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 
 namespace WB.UI.Headquarters.Controllers.Api
@@ -312,14 +313,19 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (state == null)
                 return BadRequest("Export parameters not found");
 
+            var requesterUserId = User.UserId();
+            if (requesterUserId == null)
+                return Unauthorized();
+
             var payload = new ExternalStorageProtectedStateModel
             {
                 ExpiresAtUtc = DateTime.UtcNow.Add(ExternalStorageStateLifetime),
                 Nonce = Guid.NewGuid().ToString("N"),
+                RequesterUserId = requesterUserId.Value,
                 ExportState = state
             };
 
-            this.memoryCache.Set(GetExternalStorageStateCacheKey(payload.Nonce), true, payload.ExpiresAtUtc);
+            this.memoryCache.Set(GetExternalStorageStateCacheKey(payload.Nonce), requesterUserId.Value, payload.ExpiresAtUtc);
 
             var protectedState = this.externalStorageStateProtector.Protect(this.serializer.Serialize(payload));
             return Ok(protectedState);
@@ -329,11 +335,14 @@ namespace WB.UI.Headquarters.Controllers.Api
         [EnableCors("export")]
         [ObservingNotAllowed]
         [IgnoreAntiforgeryToken]
-        [AllowAnonymous]
         public async Task<ActionResult> ExportToExternalStorage(ExportToExternalStorageModel model)
         {
+            var currentUserId = User.UserId();
+            if (currentUserId == null)
+                return Unauthorized();
+
             logger.LogInformation($"Export to external storage requested");
-            var state = this.TryRestoreExternalStorageState(model?.State);
+            var state = this.TryRestoreExternalStorageState(model?.State, currentUserId.Value);
             if (state == null)
                 return BadRequest("Export parameters not found");
             
@@ -387,7 +396,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
         }
 
-        private ExternalStorageStateModel TryRestoreExternalStorageState(string protectedState)
+        private ExternalStorageStateModel TryRestoreExternalStorageState(string protectedState, Guid requesterUserId)
         {
             if (string.IsNullOrWhiteSpace(protectedState))
                 return null;
@@ -408,7 +417,10 @@ namespace WB.UI.Headquarters.Controllers.Api
                 || payload.ExpiresAtUtc < DateTime.UtcNow)
                 return null;
 
-            if (!this.memoryCache.TryGetValue(GetExternalStorageStateCacheKey(payload.Nonce), out _))
+            if (!this.memoryCache.TryGetValue(GetExternalStorageStateCacheKey(payload.Nonce), out Guid storedUserId))
+                return null;
+
+            if (storedUserId != requesterUserId || payload.RequesterUserId != requesterUserId)
                 return null;
 
             this.memoryCache.Remove(GetExternalStorageStateCacheKey(payload.Nonce));
@@ -486,6 +498,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             public DateTime ExpiresAtUtc { get; set; }
             public string Nonce { get; set; }
+            public Guid RequesterUserId { get; set; }
             public ExternalStorageStateModel ExportState { get; set; }
         }
     }

@@ -1,4 +1,8 @@
+using System;
+using System.Security.Claims;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -37,6 +41,17 @@ namespace WB.Tests.Web.Headquarters.Controllers.DataExportApiControllerTests
                 protectionProvider,
                 memoryCache,
                 Mock.Of<ILogger<DataExportApiController>>());
+        }
+
+        protected static void SetAuthenticatedUser(ControllerBase controller, Guid userId)
+        {
+            var claims = new[] { new Claim(ClaimTypes.NameIdentifier, userId.ToString()) };
+            var identity = new ClaimsIdentity(claims, "test");
+            var principal = new ClaimsPrincipal(identity);
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext { User = principal }
+            };
         }
 
         protected static IQuestionnaireBrowseViewFactory CreateQuestionnaireBrowseViewFactoryReturningNull()
