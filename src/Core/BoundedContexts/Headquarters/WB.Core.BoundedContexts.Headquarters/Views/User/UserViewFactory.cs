@@ -132,9 +132,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 }).ToArray();
         }
 
-        public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool? archived, UserRoles role, string? workspace = null)
+        public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool? archived, UserRoles role, string? workspace = null, bool acrossAllWorkspaces = false)
         {
-            var allUsers = ApplyFilter(this.userRepository.Users, searchBy, QueryFilterRule.Contains, archived, workspace, role)
+            var allUsers = ApplyFilter(this.userRepository.Users, searchBy, QueryFilterRule.Contains, archived, workspace, acrossAllWorkspaces, role)
                 .Select(x => new InterviewersItem
                 {
                     UserId = x.Id,
@@ -161,47 +161,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 PageSize = pageSize,
                 TotalCount = allUsers.Count(),
                 Items = filteredUsers.ToList()
-            };
-        }
-
-        public UserListView GetUsersByRoleAcrossWorkspaces(int pageIndex, int pageSize, string searchBy, UserRoles role)
-        {
-            var selectedRoleId = role.ToUserId();
-            var allUsers = this.userRepository.Users
-                .Where(x => x.Roles.Any(r => r.Id == selectedRoleId))
-                .Where(x => !x.IsArchived);
-
-            if (!string.IsNullOrWhiteSpace(searchBy))
-            {
-                var searchByToLower = searchBy.ToLower();
-                allUsers = allUsers.Where(x =>
-                    (x.UserName != null && x.UserName.ToLower().Contains(searchByToLower))
-                    || (x.Email != null && x.Email.ToLower().Contains(searchByToLower)));
-            }
-
-            var filteredUsers = allUsers
-                .OrderBy(x => x.UserName)
-                .Skip((pageIndex - 1) * pageSize).Take(pageSize)
-                .Select(x => new InterviewersItem
-                {
-                    UserId = x.Id,
-                    UserName = x.UserName,
-                    Email = x.Email,
-                    CreationDate = x.CreationDate,
-                    IsArchived = x.IsArchived,
-                    IsLockedBySupervisor = x.IsLockedBySupervisor,
-                    IsLockedByHQ = x.IsLockedByHeadquaters,
-                    FullName = x.FullName,
-                    DeviceId = x.Profile.DeviceId
-                })
-                .ToList();
-
-            return new UserListView
-            {
-                Page = pageIndex,
-                PageSize = pageSize,
-                TotalCount = allUsers.Count(),
-                Items = filteredUsers
             };
         }
 
@@ -502,18 +461,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         }
 
         private IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string? searchBy, QueryFilterRule filterRule, bool? archived, params UserRoles[] role)
-            => ApplyFilter(_, searchBy, filterRule, archived, null, role);
+            => ApplyFilter(_, searchBy, filterRule, archived, null, false, role);
         
-        private IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string? searchBy, QueryFilterRule filterRule, bool? archived, string? workspace = null, params UserRoles[] role)
+        private IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string? searchBy, QueryFilterRule filterRule, bool? archived, string? workspace = null, bool acrossAllWorkspaces = false, params UserRoles[] role)
         {
             var selectedRoleId = role.Select(x => x.ToUserId()).ToArray();
             
-            var currentWorkspace = workspace ??
-                                   workspaceContextAccessor.CurrentWorkspace()?.Name ?? 
-                                   throw new MissingWorkspaceException();
-            
-            var allUsers = _.Where(x => x.Roles.Any(r => selectedRoleId.Contains(r.Id)))
-                .Where(u => u.Workspaces.Any(w => w.Workspace.Name == currentWorkspace));
+            var allUsers = _.Where(x => x.Roles.Any(r => selectedRoleId.Contains(r.Id)));
+
+            if (!acrossAllWorkspaces)
+            {
+                var currentWorkspace = workspace ??
+                                       workspaceContextAccessor.CurrentWorkspace()?.Name ?? 
+                                       throw new MissingWorkspaceException();
+
+                allUsers = allUsers.Where(u => u.Workspaces.Any(w => w.Workspace.Name == currentWorkspace));
+            }
 
             if (archived.HasValue)
                 allUsers = allUsers.Where(x => x.IsArchived == archived.Value);
@@ -526,12 +489,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 {
                     allUsers = allUsers.Where(x =>  
                         (x.UserName != null && x.UserName.ToLower().Contains(searchByToLower)) 
+                        || (x.FullName != null && x.FullName.ToLower().Contains(searchByToLower))
                         || (x.Email != null && x.Email.ToLower().Contains(searchByToLower)));
                 }
                 else if (filterRule == QueryFilterRule.Equals)
                 {
                     allUsers = allUsers.Where(x =>  
                         (x.UserName != null && x.UserName.ToLower() == searchByToLower) 
+                        || (x.FullName != null && x.FullName.ToLower() == searchByToLower)
                         || (x.Email != null && x.Email.ToLower() == searchByToLower));
                 }
             }

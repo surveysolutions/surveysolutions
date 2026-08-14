@@ -11,9 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
     public interface IUserViewFactory
     {
-        UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool? archived, UserRoles role, string? workspace = null);
-
-        UserListView GetUsersByRoleAcrossWorkspaces(int pageIndex, int pageSize, string searchBy, UserRoles role);
+        UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool? archived, UserRoles role, string? workspace = null, bool acrossAllWorkspaces = false);
 
         InterviewersView GetInterviewers(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived, int? apkBuildVersion, Guid? supervisorId, InterviewerFacet facet = InterviewerFacet.None);
         UsersView GetTeamResponsibles(int pageSize, string searchBy, Guid? supervisorId, bool showLocked = false, bool? archived = false, QueryFilterRule filterRule = QueryFilterRule.Contains);

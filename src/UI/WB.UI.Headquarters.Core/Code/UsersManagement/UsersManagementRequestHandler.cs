@@ -211,7 +211,9 @@ namespace WB.UI.Headquarters.Code.UsersManagement
 
             if (request.SupervisorId != null)
             {
-                query = query.Where(x => x.Workspaces.Any(s => s.Supervisor.Id == request.SupervisorId));
+                query = request.WorkspaceName == null
+                    ? query.Where(x => x.Workspaces.Any(s => s.Supervisor.Id == request.SupervisorId))
+                    : query.Where(x => x.Workspaces.Any(s => s.Workspace.Name == request.WorkspaceName && s.Supervisor.Id == request.SupervisorId));
             }
 
             query = query.Where(u => u.IsArchived == request.Archive);

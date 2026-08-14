@@ -155,6 +155,35 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
         }
 
         [Test]
+        public async Task should_require_supervisor_assignment_in_selected_workspace()
+        {
+            var supervisorId = Id.gA;
+            var crossWorkspaceUser = Create.Entity.HqUser(Id.g3, supervisorId: Id.gB, userName: "int3", workspaces: new[] { "alpha", "beta" });
+            crossWorkspaceUser.Workspaces.Add(new Core.BoundedContexts.Headquarters.Workspaces.WorkspacesUsers(
+                new Core.BoundedContexts.Headquarters.Workspaces.Workspace("gamma", "gamma", DateTime.UtcNow),
+                crossWorkspaceUser,
+                new Core.BoundedContexts.Headquarters.Views.User.HqUser { Id = supervisorId }));
+
+            Users = new[]
+            {
+                Create.Entity.HqUser(supervisorId, role: UserRoles.Supervisor, workspaces: new[] { "alpha", "beta", "gamma" }),
+                Create.Entity.HqUser(Id.g1, supervisorId: supervisorId, userName: "int1", workspaces: new[] { "beta" }),
+                Create.Entity.HqUser(Id.g2, supervisorId: Id.gB, userName: "int2", workspaces: new[] { "beta" }),
+                crossWorkspaceUser,
+            };
+
+            var response = await Subject.Handle(new UsersManagementRequest
+            {
+                SupervisorId = supervisorId,
+                WorkspaceName = "beta",
+                Length = 10
+            });
+
+            Assert.That(response.RecordsFiltered, Is.EqualTo(1));
+            Assert.That(response.Data.Single().UserId, Is.EqualTo(Id.g1));
+        }
+
+        [Test]
         public async Task should_ignore_role_filter_and_return_interviewers_when_supervisor_is_selected()
         {
             var supervisorId = Id.gA;
