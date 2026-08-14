@@ -471,6 +471,11 @@ namespace WB.UI.Headquarters
                     new CultureInfo("ro"),
                     new CultureInfo("cs"),
                     new CultureInfo("uk"),
+                    new CultureInfo("ka"),
+                    new CultureInfo("km"),
+                    new CultureInfo("th"),
+                    new CultureInfo("vi"),
+                    new CultureInfo("sq")
                 };
             });
 

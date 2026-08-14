@@ -1,0 +1,310 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="reverted" xml:space="preserve">
+        <value>Bảng câu hỏi "{0}" được hoàn nguyên</value>
+        </data>
+    <data name="Edit" xml:space="preserve">
+        <value>Biên tập</value>
+        </data>
+    <data name="QuestionnaireChangeHistory" xml:space="preserve">
+        <value>Lịch sử thay đổi bảng câu hỏi</value>
+        </data>
+    <data name="ThisListDoesNotContainAnyRecords" xml:space="preserve">
+        <value>Danh sách này không chứa bất kỳ bản ghi nào</value>
+        </data>
+    <data name="Timestamp" xml:space="preserve">
+        <value>Dấu thời gian</value>
+        </data>
+    <data name="UnknownUserName" xml:space="preserve">
+        <value>&lt;&lt; CHƯA BIẾT&gt;&gt;</value>
+        </data>
+    <data name="UserName" xml:space="preserve">
+        <value>Tên người dùng</value>
+        </data>
+    <data name="Change" xml:space="preserve">
+        <value>Thay đổi</value>
+        </data>
+    <data name="Macro_Delete" xml:space="preserve">
+        <value>Macro {0} đã xóa</value>
+        </data>
+    <data name="Macro_Update" xml:space="preserve">
+        <value>Vĩ mô {0} đã cập nhật</value>
+        </data>
+    <data name="Macro_Add" xml:space="preserve">
+        <value>Đã thêm macro {0}</value>
+        </data>
+    <data name="LookupTable_Delete" xml:space="preserve">
+        <value>Bảng tra cứu {0} đã bị xóa</value>
+        </data>
+    <data name="LookupTable_Update" xml:space="preserve">
+        <value>Bảng tra cứu {0} đã cập nhật</value>
+        </data>
+    <data name="LookupTable_Add" xml:space="preserve">
+        <value>Đã thêm bảng tra cứu {0}</value>
+        </data>
+    <data name="Attachment_Delete" xml:space="preserve">
+        <value>Đã xóa tệp đính kèm {0}</value>
+        </data>
+    <data name="Attachment_Update" xml:space="preserve">
+        <value>Đã cập nhật tệp đính kèm {0}</value>
+        </data>
+    <data name="Variable_Add" xml:space="preserve">
+        <value>Đã thêm biến {0}</value>
+        </data>
+    <data name="Variable_Delete" xml:space="preserve">
+        <value>Biến {0} đã bị xóa</value>
+        </data>
+    <data name="Variable_Update" xml:space="preserve">
+        <value>Đã cập nhật biến {0}</value>
+        </data>
+    <data name="Categories_Add" xml:space="preserve">
+        <value>Danh mục {0} đã thêm</value>
+        </data>
+    <data name="Categories_Delete" xml:space="preserve">
+        <value>Danh mục {0} đã bị xóa</value>
+        </data>
+    <data name="Categories_Update" xml:space="preserve">
+        <value>Danh mục {0} đã cập nhật</value>
+        </data>
+    <data name="CriticalRule_Add" xml:space="preserve">
+        <value>Đã thêm quy tắc quan trọng {0}</value>
+        </data>
+    <data name="CriticalRule_Delete" xml:space="preserve">
+        <value>Quy tắc quan trọng {0} đã bị xóa</value>
+        </data>
+    <data name="CriticalRule_Update" xml:space="preserve">
+        <value>Đã cập nhật quy tắc quan trọng {0}</value>
+        </data>
+    <data name="Translation_Delete" xml:space="preserve">
+        <value>Bản dịch {0} đã xóa</value>
+        </data>
+    <data name="Translation_Update" xml:space="preserve">
+        <value>Bản dịch {0} đã cập nhật</value>
+        </data>
+    <data name="Translation_Replace" xml:space="preserve">
+        <value>Tài liệu đã chuyển sang bản dịch {0}</value>
+        </data>
+    <data name="TextsReplaced" xml:space="preserve">
+        <value>Tất cả '{0}' đã được thay thế bằng '{1}'. {2} mục bị ảnh hưởng</value>
+        </data>
+    <data name="RevertToThisVersion" xml:space="preserve">
+        <value>Hoàn nguyên về phiên bản này</value>
+        </data>
+    <data name="Comment" xml:space="preserve">
+        <value>Bình luận</value>
+        </data>
+    <data name="LeaveComment" xml:space="preserve">
+        <value>Để lại một bình luận</value>
+        </data>
+    <data name="ExtractAtRevision" xml:space="preserve">
+        <value>Trích xuất lúc sửa đổi</value>
+        </data>
+    <data name="Save" xml:space="preserve">
+        <value>Cứu</value>
+        </data>
+    <data name="Confirm" xml:space="preserve">
+        <value>Xác nhận</value>
+        </data>
+    <data name="ResetQuestionnaireToThis" xml:space="preserve">
+        <value>Đặt lại bảng câu hỏi về phiên bản tại {0}?</value>
+        </data>
+    <data name="reverted_to" xml:space="preserve">
+        <value>Bảng câu hỏi "{0}" được hoàn nguyên về phiên bản từ {1}</value>
+        </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>Hủy bỏ</value>
+        </data>
+    <data name="Revert" xml:space="preserve">
+        <value>Hoàn nguyên</value>
+        </data>
+    <data name="Section_Add" xml:space="preserve">
+        <value>Đã thêm phần {0}</value>
+        </data>
+    <data name="Section_Delete" xml:space="preserve">
+        <value>Phần {0} đã bị xóa</value>
+        </data>
+    <data name="Section_Update" xml:space="preserve">
+        <value>Phần {0} đã cập nhật</value>
+        </data>
+    <data name="Question_Add" xml:space="preserve">
+        <value>Đã thêm câu hỏi {0}</value>
+        </data>
+    <data name="Question_Delete" xml:space="preserve">
+        <value>Câu hỏi {0} đã bị xóa</value>
+        </data>
+    <data name="Question_Update" xml:space="preserve">
+        <value>Câu hỏi {0} đã cập nhật</value>
+        </data>
+    <data name="Roster_Add" xml:space="preserve">
+        <value>Danh sách {0} đã thêm</value>
+        </data>
+    <data name="Roster_Delete" xml:space="preserve">
+        <value>Danh sách {0} đã bị xóa</value>
+        </data>
+    <data name="Roster_Update" xml:space="preserve">
+        <value>Danh sách {0} đã cập nhật</value>
+        </data>
+    <data name="StaticText_Add" xml:space="preserve">
+        <value>Đã thêm văn bản tĩnh {0}</value>
+        </data>
+    <data name="StaticText_Delete" xml:space="preserve">
+        <value>Văn bản tĩnh {0} đã bị xóa</value>
+        </data>
+    <data name="StaticText_Update" xml:space="preserve">
+        <value>Văn bản tĩnh {0} đã cập nhật</value>
+        </data>
+    <data name="NoTitle" xml:space="preserve">
+        <value>Không có tiêu đề</value>
+        </data>
+    <data name="StaticText_Clone" xml:space="preserve">
+        <value>Văn bản tĩnh {0} được sao chép từ văn bản tĩnh {1}</value>
+        </data>
+    <data name="Variable_Clone" xml:space="preserve">
+        <value>Biến {0} được sao chép từ biến {1}</value>
+        </data>
+    <data name="Question_Clone" xml:space="preserve">
+        <value>Câu hỏi {0} nhân bản từ câu hỏi {1}</value>
+        </data>
+    <data name="Section_Clone" xml:space="preserve">
+        <value>Phần {0} được sao chép từ phần {1}</value>
+        </data>
+    <data name="Roster_Clone" xml:space="preserve">
+        <value>Danh sách {0} sao chép từ danh sách {1}</value>
+        </data>
+    <data name="Questionnaire_Clone" xml:space="preserve">
+        <value>Bảng câu hỏi {0} sao chép từ bảng câu hỏi {1}</value>
+        </data>
+    <data name="Questionnaire_Replace" xml:space="preserve">
+        <value>Bảng câu hỏi {0} được thay thế</value>
+        </data>
+    <data name="Questionnaire_Import" xml:space="preserve">
+        <value>Bảng câu hỏi {0} đã được nhập</value>
+        </data>
+    <data name="Section_GroupBecameARoster" xml:space="preserve">
+        <value>Tiểu mục {0} đã trở thành danh sách</value>
+        </data>
+    <data name="Roster_RosterBecameAGroup" xml:space="preserve">
+        <value>Danh sách {0} đã trở thành một phần phụ</value>
+        </data>
+    <data name="Person_Add" xml:space="preserve">
+        <value>Người dùng có email {0} đã được thêm vào danh sách người được chia sẻ</value>
+        </data>
+    <data name="Questionnaire_Move" xml:space="preserve">
+        <value>Quyền sở hữu bảng câu hỏi đã được chuyển cho người dùng có email "{0}"</value>
+        </data>
+    <data name="Person_Delete" xml:space="preserve">
+        <value>Người dùng có email {0} đã bị xóa khỏi những người được chia sẻ</value>
+        </data>
+    <data name="Questionnaire_Add" xml:space="preserve">
+        <value>Đã tạo bảng câu hỏi {0}</value>
+        </data>
+    <data name="Questionnaire_Update" xml:space="preserve">
+        <value>Bảng câu hỏi {0} đã cập nhật</value>
+        </data>
+    <data name="Questionnaire_Delete" xml:space="preserve">
+        <value>Bảng câu hỏi {0} đã bị xóa</value>
+        </data>
+    <data name="Question_Move_To_Section" xml:space="preserve">
+        <value>Câu hỏi {0} được chuyển sang phần {1}</value>
+        </data>
+    <data name="Question_Move_To_Roster" xml:space="preserve">
+        <value>Câu hỏi {0} đã chuyển sang danh sách {1}</value>
+        </data>
+    <data name="StaticText_Move_To_Section" xml:space="preserve">
+        <value>Văn bản tĩnh {0} được chuyển đến phần {1}</value>
+        </data>
+    <data name="StaticText_Move_To_Roster" xml:space="preserve">
+        <value>Văn bản tĩnh {0} đã được chuyển sang danh sách {1}</value>
+        </data>
+    <data name="Variable_Move_To_Section" xml:space="preserve">
+        <value>Biến {0} được chuyển sang phần {1}</value>
+        </data>
+    <data name="Variable_Move_To_Roster" xml:space="preserve">
+        <value>Biến {0} đã được chuyển sang danh sách {1}</value>
+        </data>
+    <data name="Section_Move_To_Section" xml:space="preserve">
+        <value>Mục {0} được chuyển sang mục {1}</value>
+        </data>
+    <data name="Section_Move_To_Roster" xml:space="preserve">
+        <value>Phần {0} đã chuyển sang danh sách {1}</value>
+        </data>
+    <data name="Roster_Move_To_Section" xml:space="preserve">
+        <value>Danh sách {0} đã chuyển sang phần {1}</value>
+        </data>
+    <data name="Roster_Move_To_Roster" xml:space="preserve">
+        <value>Danh sách {0} đã chuyển sang danh sách {1}</value>
+        </data>
+    <data name="Translation_Original" xml:space="preserve">
+        <value>Nguyên bản</value>
+        </data>
+    <data name="Translation_DefaultTranslationSet" xml:space="preserve">
+        <value>Bản dịch mặc định được đặt thành {0}</value>
+        </data>
+    <data name="Metadata_Update" xml:space="preserve">
+        <value>Đã cập nhật siêu dữ liệu của bảng câu hỏi {0}</value>
+        </data>
+    <data name="Questionnaire_ImportToHq" xml:space="preserve">
+        <value>Nhập bảng câu hỏi về Trụ sở chính ({0}) dưới dạng {2} bởi {1}</value>
+        </data>
+    <data name="MigratedNewCoverSupport" xml:space="preserve">
+        <value>Trang bìa được tạo</value>
+        </data>
+</root>
