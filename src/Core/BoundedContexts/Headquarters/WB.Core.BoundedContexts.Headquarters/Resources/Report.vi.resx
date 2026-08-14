@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="COLUMN_TEAM_MEMBER" xml:space="preserve">
+        <value>THÀNH VIÊN ĐỘI</value>
+        </data>
+    <data name="COLUMN_SUPERVISOR_ASSIGNED" xml:space="preserve">
+        <value>GIÁM SÁT GIÁM SÁT ĐƯỢC CHỈ ĐỊNH</value>
+        </data>
+    <data name="COLUMN_INTERVIEWER_ASSIGNED" xml:space="preserve">
+        <value>NGƯỜI PHỎNG VẤN ĐƯỢC CHỈ ĐỊNH</value>
+        </data>
+    <data name="COLUMN_COMPLETED" xml:space="preserve">
+        <value>HOÀN THÀNH</value>
+        </data>
+    <data name="COLUMN_REJECTED_BY_SUPERVISOR" xml:space="preserve">
+        <value>BỞI NGƯỜI GIÁM SÁT TỪ CHỐI</value>
+        </data>
+    <data name="COLUMN_APPROVED_BY_SUPERVISOR" xml:space="preserve">
+        <value>ĐƯỢC PHÊ DUYỆT BỞI GIÁM SÁT VIÊN</value>
+        </data>
+    <data name="COLUMN_REJECTED_BY_HQ" xml:space="preserve">
+        <value>BỞI HQ TỪ CHỐI</value>
+        </data>
+    <data name="COLUMN_APPROVED_BY_HQ" xml:space="preserve">
+        <value>ĐƯỢC HQ PHÊ DUYỆT</value>
+        </data>
+    <data name="COLUMN_TOTAL" xml:space="preserve">
+        <value>TỔNG CỘNG</value>
+        </data>
+    <data name="TOTAL" xml:space="preserve">
+        <value>Tổng cộng</value>
+        </data>
+    <data name="COLUMN_AVERAGE" xml:space="preserve">
+        <value>TRUNG BÌNH</value>
+        </data>
+    <data name="COLUMN_TEMPLATE_VERSION" xml:space="preserve">
+        <value>PHIÊN BẢN BẢNG CÂU HỎI</value>
+        </data>
+    <data name="COLUMN_QUESTIONNAIRE_TEMPLATE" xml:space="preserve">
+        <value>TIÊU ĐỀ CỦA BẢNG CÂU HỎI</value>
+        </data>
+    <data name="COLUMN_TEAMS" xml:space="preserve">
+        <value>ĐỘI</value>
+        </data>
+    <data name="COLUMN_NEVER_SYNCHED" xml:space="preserve">
+        <value>KHÔNG BAO GIỜ ĐƯỢC ĐỒNG BỘ</value>
+        </data>
+    <data name="COLUMN_OLD_VERSION" xml:space="preserve">
+        <value>ỨNG DỤNG NGƯỜI PHỎNG VẤN CŨ</value>
+        </data>
+    <data name="COLUMN_LESS_THAN_100MB_FREE_SPACE" xml:space="preserve">
+        <value>DUNG LƯỢNG MIỄN PHÍ DƯỚI 100 MB</value>
+        </data>
+    <data name="COLUMN_WRONG_TIME_ON_TABLET" xml:space="preserve">
+        <value>SAI THỜI GIAN TRÊN MÁY TÍNH BẢNG</value>
+        </data>
+    <data name="COLUMN_ANDROID_4_4_OR_LOWER" xml:space="preserve">
+        <value>ANDROID 4.4 HOẶC Thấp hơn</value>
+        </data>
+    <data name="COLUMN_NO_ASSIGNMENTS_RECEIVED" xml:space="preserve">
+        <value>KHÔNG BAO GIỜ NHẬN</value>
+        </data>
+    <data name="COLUMN_NEVER_UPLOADED" xml:space="preserve">
+        <value>KHÔNG BAO GIỜ GỬI</value>
+        </data>
+    <data name="COLUMN_TABLET_REASSIGNED" xml:space="preserve">
+        <value>MÁY TÍNH BẢNG ĐƯỢC ĐỔI LẠI</value>
+        </data>
+    <data name="COLUMN_DAYS" xml:space="preserve">
+        <value>NGÀY</value>
+        </data>
+    <data name="COLUMN_TEAM_SIZE" xml:space="preserve">
+        <value>KÍCH THƯỚC ĐỘI</value>
+        </data>
+    <data name="TimeLeft" xml:space="preserve">
+        <value>Thời gian còn lại</value>
+        </data>
+</root>

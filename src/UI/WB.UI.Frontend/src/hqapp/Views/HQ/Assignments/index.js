@@ -1,14 +1,15 @@
-import Layout from './Layout'
-import Assignments from './HqAssignments'
-import Details from './Details'
-import AssignmentMap from './AssignmentMap.vue'
-import Upload from './Upload/Index'
-import UploadErrors from './Upload/Errors'
-import UploadVerification from './Upload/Verification'
-import UploadProgress from './Upload/Progress'
 import assignmentsStore from './store'
 import config from '~/shared/config'
 import axios from 'axios'
+
+const Layout = () => import('./Layout')
+const Assignments = () => import('./HqAssignments')
+const Details = () => import('./Details')
+const AssignmentMap = () => import('./AssignmentMap.vue')
+const Upload = () => import('./Upload/Index')
+const UploadErrors = () => import('./Upload/Errors')
+const UploadVerification = () => import('./Upload/Verification')
+const UploadProgress = () => import('./Upload/Progress')
 
 export default class AssignmentsComponent {
     constructor(rootStore) {

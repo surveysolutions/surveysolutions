@@ -1,6 +1,7 @@
 <template>
     <div class="cell-unit">
-        <span class="cell-content" v-dompurify-html="roster?.rosterTitle"></span>
+        <span class="cell-content"
+            v-dompurify-html="roster?.rosterTitle"></span>
     </div>
 </template>
 

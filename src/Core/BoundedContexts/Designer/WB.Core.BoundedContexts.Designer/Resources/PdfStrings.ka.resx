@@ -1,0 +1,388 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AppendixLink" xml:space="preserve">
+        <value>და {0} სხვა სიმბოლოები [{1}]</value>
+        </data>
+    <data name="Appendix_Conditions" xml:space="preserve">
+        <value>დანართი {0} {1} გამაძლიერებელი პირობები</value>
+        </data>
+    <data name="Appendix_Instructions" xml:space="preserve">
+        <value>დანართი {0} {1} ინსტრუქციები</value>
+        </data>
+    <data name="Appendix_OptionFilters" xml:space="preserve">
+        <value>დანართი {0} {1} კატეგორიების ფილტრები</value>
+        </data>
+    <data name="Appendix_Options" xml:space="preserve">
+        <value>დანართი {0} {1} კატეგორიები</value>
+        </data>
+    <data name="Appendix_SpecialValues" xml:space="preserve">
+        <value>დანართი {0} {1} სპეციალური მნიშვნელობები</value>
+        </data>
+    <data name="Appendix_CriticalRules" xml:space="preserve">
+        <value>დანართი {0} {1} კრიტიკული წესები</value>
+        </data>
+    <data name="Appendix_Validations" xml:space="preserve">
+        <value>დანართი {0} {1} ვალიდაციის პირობები და შეტყობინებები</value>
+        </data>
+    <data name="Appendix_Variables" xml:space="preserve">
+        <value>დანართი {0} {1} ცვლადები</value>
+        </data>
+    <data name="CreatedBy" xml:space="preserve">
+        <value>კითხვარი შექმნილი {0}-ის მიერ</value>
+        </data>
+    <data name="OwnedBy" xml:space="preserve">
+        <value>კითხვარი, რომელსაც ეკუთვნის {0}</value>
+        </data>
+    <data name="EnablementCondition" xml:space="preserve">
+        <value>ჩართვის პირობა:</value>
+        </data>
+    <data name="CriticalityCondition" xml:space="preserve">
+        <value>კრიტიკული მდგომარეობა:</value>
+        </data>
+    <data name="CriticalityMessage" xml:space="preserve">
+        <value>შეტყობინება:</value>
+        </data>
+    <data name="Description" xml:space="preserve">
+        <value>აღწერა:</value>
+        </data>
+    <data name="GeneratedBy" xml:space="preserve">
+        <value>გენერირებული {0}</value>
+        </data>
+    <data name="LastEdited" xml:space="preserve">
+        <value>{0} ბოლო რედაქტირებული {1}</value>
+        </data>
+    <data name="LastModifiedBy" xml:space="preserve">
+        <value>ბოლოს შეცვლილია {0}-ის მიერ</value>
+        </data>
+    <data name="Legend" xml:space="preserve">
+        <value>ლეგენდა</value>
+        </data>
+    <data name="NeverEdited" xml:space="preserve">
+        <value>{0} (არასოდეს რედაქტირებული)</value>
+        </data>
+    <data name="NotShared" xml:space="preserve">
+        <value>არავისთან გაზიარებული</value>
+        </data>
+    <data name="Options" xml:space="preserve">
+        <value>კატეგორიები:</value>
+        </data>
+    <data name="PdfLegend" xml:space="preserve">
+        <value>ამ ფაილში არსებული ინფორმაციის ლეგენდა და სტრუქტურა</value>
+        </data>
+    <data name="QuestionScope_Identifying" xml:space="preserve">
+        <value>იდენტიფიცირება</value>
+        </data>
+    <data name="QuestionType_Area" xml:space="preserve">
+        <value>გეოგრაფია:</value>
+        </data>
+    <data name="QuestionType_Area_Polygon" xml:space="preserve">
+        <value>მრავალკუთხედი</value>
+        </data>
+    <data name="QuestionType_Area_Polyline" xml:space="preserve">
+        <value>პოლილაინი</value>
+        </data>
+    <data name="QuestionType_Area_Multipoint" xml:space="preserve">
+        <value>მრავალპუნქტიანი</value>
+        </data>
+    <data name="QuestionType_Area_Point" xml:space="preserve">
+        <value>წერტილი</value>
+        </data>
+    <data name="QuestionType_Audio" xml:space="preserve">
+        <value>აუდიო</value>
+        </data>
+    <data name="QuestionType_Barcode" xml:space="preserve">
+        <value>შტრიხკოდი</value>
+        </data>
+    <data name="QuestionType_Cascading" xml:space="preserve">
+        <value>კასკადური</value>
+        </data>
+    <data name="QuestionType_Combobox" xml:space="preserve">
+        <value>კომბინირებული ყუთი</value>
+        </data>
+    <data name="QuestionType_CurrentTime" xml:space="preserve">
+        <value>თარიღი: მიმდინარე დრო</value>
+        </data>
+    <data name="QuestionType_Date" xml:space="preserve">
+        <value>თარიღი</value>
+        </data>
+    <data name="QuestionType_Decimal" xml:space="preserve">
+        <value>ათობითი</value>
+        </data>
+    <data name="QuestionType_GPS" xml:space="preserve">
+        <value>GPS</value>
+        </data>
+    <data name="QuestionType_Integer" xml:space="preserve">
+        <value>მთელი რიცხვი</value>
+        </data>
+    <data name="QuestionType_Linked" xml:space="preserve">
+        <value>დაკავშირებულია</value>
+        </data>
+    <data name="QuestionType_List" xml:space="preserve">
+        <value>სია</value>
+        </data>
+    <data name="QuestionType_MultiSelect" xml:space="preserve">
+        <value>მრავალჯერადი შერჩევა</value>
+        </data>
+    <data name="QuestionType_Numeric" xml:space="preserve">
+        <value>რიცხვითი:</value>
+        </data>
+    <data name="QuestionType_Ordered" xml:space="preserve">
+        <value>უბრძანა</value>
+        </data>
+    <data name="QuestionType_Picture" xml:space="preserve">
+        <value>სურათი</value>
+        </data>
+    <data name="QuestionType_SingleSelect" xml:space="preserve">
+        <value>ერთჯერადი არჩევა</value>
+        </data>
+    <data name="QuestionType_Text" xml:space="preserve">
+        <value>ტექსტი</value>
+        </data>
+    <data name="QuestionType_YesNo" xml:space="preserve">
+        <value>დიახ/არა</value>
+        </data>
+    <data name="Roster" xml:space="preserve">
+        <value>სია:</value>
+        </data>
+    <data name="RosterType_List" xml:space="preserve">
+        <value>სია</value>
+        </data>
+    <data name="RosterType_Multi" xml:space="preserve">
+        <value>მრავალჯერადი შერჩევა</value>
+        </data>
+    <data name="RosterType_Numeric" xml:space="preserve">
+        <value>რიცხვითი</value>
+        </data>
+    <data name="Roster_GeneretedByFixedList" xml:space="preserve">
+        <value>გენერირებული ფიქსირებული სიით</value>
+        </data>
+    <data name="Roster_GeneretedByQuestion" xml:space="preserve">
+        <value>გენერირებული {0} კითხვით {1}</value>
+        </data>
+    <data name="Scope" xml:space="preserve">
+        <value>სფერო: {0}</value>
+        </data>
+    <data name="SourceOfCategories" xml:space="preserve">
+        <value>კატეგორიების წყარო:</value>
+        </data>
+    <data name="RosterSourceOfCategories" xml:space="preserve">
+        <value>სია</value>
+        </data>
+    <data name="TextListSourceOfCategories" xml:space="preserve">
+        <value>ტექსტური სიის კითხვა</value>
+        </data>
+    <data name="QuestionInRosterSourceOfCategories" xml:space="preserve">
+        <value>კითხვა</value>
+        </data>
+    <data name="InRosterSourceOfCategories" xml:space="preserve">
+        <value>სიაში</value>
+        </data>
+    <data name="SharedWith" xml:space="preserve">
+        <value>გაზიარებული:</value>
+        </data>
+    <data name="SpecialValues" xml:space="preserve">
+        <value>განსაკუთრებული ღირებულებები</value>
+        </data>
+    <data name="GeographyType" xml:space="preserve">
+        <value>გეოგრაფიის ტიპი</value>
+        </data>
+    <data name="GeographyInputMode" xml:space="preserve">
+        <value>შეყვანის რეჟიმი</value>
+        </data>
+    <data name="GeometryOverlapDetection" xml:space="preserve">
+        <value>გადახურვის გამოვლენა</value>
+        </data>
+    <data name="StaticText" xml:space="preserve">
+        <value>სტატიკური ტექსტი</value>
+        </data>
+    <data name="Stat_NoQuestions" xml:space="preserve">
+        <value>კითხვები არ არის</value>
+        </data>
+    <data name="Stat_NoRosters" xml:space="preserve">
+        <value>არავითარი სია</value>
+        </data>
+    <data name="Stat_NoSubsections" xml:space="preserve">
+        <value>არ არის ქვესექციები</value>
+        </data>
+    <data name="Stat_Questions" xml:space="preserve">
+        <value>კითხვები: {0}</value>
+        </data>
+    <data name="Stat_QuestionsWithConditions" xml:space="preserve">
+        <value>კითხვები გამაძლიერებელი პირობებით: {0}</value>
+        </data>
+    <data name="Stat_QuestionsWithValidation" xml:space="preserve">
+        <value>კითხვები ვალიდაციის პირობებით:{0}</value>
+        </data>
+    <data name="Stat_Rosters" xml:space="preserve">
+        <value>სია: {0}</value>
+        </data>
+    <data name="Stat_Sections" xml:space="preserve">
+        <value>სექციები: {0}</value>
+        </data>
+    <data name="Stat_StaticTexts" xml:space="preserve">
+        <value>სტატიკური ტექსტები: {0}</value>
+        </data>
+    <data name="Stat_Subsections" xml:space="preserve">
+        <value>ქვესექციები: {0}</value>
+        </data>
+    <data name="Stat_Variables" xml:space="preserve">
+        <value>ცვლადები: {0}</value>
+        </data>
+    <data name="ValidationCondition" xml:space="preserve">
+        <value>ვალიდაციის პირობა:</value>
+        </data>
+    <data name="ValidationMessage" xml:space="preserve">
+        <value>დადასტურების შეტყობინება:</value>
+        </data>
+    <data name="Variable" xml:space="preserve">
+        <value>ცვლადი</value>
+        </data>
+    <data name="QuestionScope_Hidden" xml:space="preserve">
+        <value>დამალული</value>
+        </data>
+    <data name="QuestionScope_Supervisor" xml:space="preserve">
+        <value>ზედამხედველი</value>
+        </data>
+    <data name="MetadataTitle" xml:space="preserve">
+        <value>სათაური</value>
+        </data>
+    <data name="MetadataSubtitle" xml:space="preserve">
+        <value>სუბტიტრები</value>
+        </data>
+    <data name="MetadataVersionIdentificator" xml:space="preserve">
+        <value>ვერსიის იდენტიფიკატორი</value>
+        </data>
+    <data name="MetadataVersionNotes" xml:space="preserve">
+        <value>ვერსიის შენიშვნები</value>
+        </data>
+    <data name="MetadataStudyType" xml:space="preserve">
+        <value>სწავლის ტიპი</value>
+        </data>
+    <data name="MetadataKindOfData" xml:space="preserve">
+        <value>სახის მონაცემები</value>
+        </data>
+    <data name="MetadataModeOfDataCollection" xml:space="preserve">
+        <value>მონაცემთა შეგროვების რეჟიმი</value>
+        </data>
+    <data name="MetadataCountry" xml:space="preserve">
+        <value>ქვეყანა</value>
+        </data>
+    <data name="MetadataYear" xml:space="preserve">
+        <value>წელიწადი</value>
+        </data>
+    <data name="MetadataLanguages" xml:space="preserve">
+        <value>ენები</value>
+        </data>
+    <data name="MetadataUnitOfAlalysis" xml:space="preserve">
+        <value>ანალიზის ერთეული</value>
+        </data>
+    <data name="MetadataCoverage" xml:space="preserve">
+        <value>გაშუქება</value>
+        </data>
+    <data name="MetadataUniverse" xml:space="preserve">
+        <value>სამყარო</value>
+        </data>
+    <data name="MetadataPrimaryInvestigator" xml:space="preserve">
+        <value>პირველადი გამომძიებელი</value>
+        </data>
+    <data name="MetadataConsultants" xml:space="preserve">
+        <value>კონსულტანტები</value>
+        </data>
+    <data name="MetadataNotes" xml:space="preserve">
+        <value>შენიშვნები</value>
+        </data>
+    <data name="MetadataKeywords" xml:space="preserve">
+        <value>საკვანძო სიტყვები</value>
+        </data>
+    <data name="MetadataFunding" xml:space="preserve">
+        <value>დაფინანსება</value>
+        </data>
+    <data name="MetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+        <value>დაეთანხმეთ ამ კითხვარის გასაჯაროებას</value>
+        </data>
+    <data name="MetadataSectionTitle" xml:space="preserve">
+        <value>გამოკითხვის საიდენტიფიკაციო ინფორმაცია</value>
+        </data>
+    <data name="MetadataSectionSubTitle" xml:space="preserve">
+        <value>კითხვარის აღწერა</value>
+        </data>
+    <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+        <value>ძირითადი ინფორმაცია</value>
+        </data>
+    <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+        <value>კვლევის მონაცემების ინფორმაცია</value>
+        </data>
+    <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+        <value>გამოკითხვის ინფორმაცია</value>
+        </data>
+    <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+        <value>დამატებითი ინფორმაცია</value>
+        </data>
+    <data name="VariableExcludedFromExport" xml:space="preserve">
+        <value>ეს ცვლადი გამორიცხულია ექსპორტირებული მონაცემებიდან</value>
+        </data>
+    <data name="On" xml:space="preserve">
+        <value>ჩართულია</value>
+        </data>
+    <data name="Off" xml:space="preserve">
+        <value>გამორთულია</value>
+        </data>
+</root>

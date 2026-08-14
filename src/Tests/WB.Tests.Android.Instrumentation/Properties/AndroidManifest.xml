@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="wb.tests.android.instrumentation"
+          android:versionCode="1"
+          android:versionName="1.0">
+  <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="35" />
+
+  <uses-permission android:name="android.permission.VIBRATE" />
+
+  <application android:label="WB.Tests.Android.Instrumentation" android:allowBackup="true">
+  </application>
+
+  <instrumentation android:name="wb.tests.android.instrumentation.NUnitInstrumentation"
+                    android:targetPackage="wb.tests.android.instrumentation"
+                    android:label="WB.Tests.Android.Instrumentation" />
+</manifest>
+

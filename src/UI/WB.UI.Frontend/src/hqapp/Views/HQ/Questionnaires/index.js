@@ -1,6 +1,6 @@
-import Details from './Details'
-import Clone from './Clone'
-import ExposedVariables from './ExposedVariables'
+const Details = () => import('./Details')
+const Clone = () => import('./Clone')
+const ExposedVariables = () => import('./ExposedVariables')
 
 export default class MapComponent {
     get routes() {
