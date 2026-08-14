@@ -122,31 +122,6 @@
                             </option>
                         </select>
                     </label>
-                    <form class="position-jump" @submit.prevent="playAtPosition">
-                        <label>
-                            <span>#</span>
-                            <input v-model.number="targetSegmentNumber" type="number" min="1" step="1"
-                                aria-label="Record number" :aria-describedby="jumpError
-                                    ? 'audio-audit-position-error'
-                                    : null
-                                    " />
-                        </label>
-                        <label>
-                            <span>Offset</span>
-                            <input v-model="targetOffset" type="text" inputmode="text" autocomplete="off"
-                                placeholder="0:00" aria-label="Playback offset in minutes and seconds"
-                                :aria-describedby="jumpError
-                                    ? 'audio-audit-position-error'
-                                    : null
-                                    " />
-                        </label>
-                        <button type="submit" class="btn btn-outline-secondary btn-sm">
-                            Play
-                        </button>
-                    </form>
-                    <p v-if="jumpError" id="audio-audit-position-error" class="position-error" role="alert">
-                        {{ jumpError }}
-                    </p>
                 </div>
             </div>
 
@@ -253,9 +228,6 @@ export default {
             pendingAutoplay: false,
             isSeeking: false,
             seekPreviewTime: null,
-            targetSegmentNumber: null,
-            targetOffset: '0:00',
-            jumpError: null,
             playbackRate: 1,
             previouslyFocusedElement: null,
         }
@@ -326,7 +298,6 @@ export default {
         async loadSegments() {
             this.loadState = 'loading'
             this.playbackError = null
-            this.jumpError = null
             this.currentSegment = null
             this.segments = []
 
@@ -394,10 +365,8 @@ export default {
             this.seekPreviewTime = null
             this.currentDuration = null
             this.playbackError = null
-            this.jumpError = null
             this.isBuffering = shouldPlay
             this.isCurrentSegmentReady = false
-            this.targetSegmentNumber = segment.sequenceNumber
             this.playbackAnnouncement = `Record #${segment.sequenceNumber} selected.`
 
             this.$nextTick(() => {
@@ -431,36 +400,6 @@ export default {
 
         goToNextSegment() {
             if (this.nextSegment) this.selectSegment(this.nextSegment)
-        },
-
-        playAtPosition() {
-            const segment = this.segments.find(
-                (item) =>
-                    String(item.sequenceNumber) ===
-                    String(this.targetSegmentNumber)
-            )
-            const offset = this.parseOffset(this.targetOffset)
-
-            if (!segment || segment.unavailable || offset === null) {
-                this.jumpError =
-                    'Enter an available record number and a valid offset.'
-                return
-            }
-
-            if (
-                Number.isFinite(segment.duration) &&
-                offset >= segment.duration
-            ) {
-                this.jumpError = `Record #${segment.sequenceNumber
-                    } is ${this.formatCompactDuration(segment.duration)} long.`
-                return
-            }
-
-            this.selectSegment(segment, {
-                autoplay: true,
-                offset,
-                validateOffset: true,
-            })
         },
 
         togglePlayPause() {
@@ -590,11 +529,10 @@ export default {
                         audio.currentTime = 0
                         this.currentTime = 0
                         this.pendingAutoplay = false
-                        this.jumpError = `Record #${this.currentSegment.sequenceNumber
+                        this.playbackAnnouncement = `Record #${this.currentSegment.sequenceNumber
                             } is ${this.formatCompactDuration(
                                 audio.duration
                             )} long.`
-                        this.playbackAnnouncement = this.jumpError
                     } else {
                         audio.currentTime = this.pendingSeekTime
                         this.currentTime = audio.currentTime
@@ -756,26 +694,6 @@ export default {
                 : null
         },
 
-        parseOffset(value) {
-            const parts = String(value).trim().split(':')
-            if (
-                !parts.length ||
-                parts.length > 3 ||
-                parts.some((part) => !/^\d+$/.test(part))
-            )
-                return null
-
-            const values = parts.map(Number)
-            if (values.length > 1 && values[values.length - 1] >= 60)
-                return null
-            if (values.length === 3 && values[1] >= 60) return null
-
-            if (values.length === 3)
-                return values[0] * 3600 + values[1] * 60 + values[2]
-            if (values.length === 2) return values[0] * 60 + values[1]
-            return values[0]
-        },
-
         parseDeviceTimestamp(timestamp) {
             if (!timestamp) return null
 
@@ -902,36 +820,6 @@ export default {
     height: 30px;
     padding: 4px 6px;
     border: 1px solid #ccc;
-}
-
-.position-jump {
-    display: grid;
-    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1fr) auto;
-    gap: 8px;
-    align-items: end;
-    margin-top: 12px;
-}
-
-.position-jump label {
-    display: block;
-    margin: 0;
-    font-size: 12px;
-    font-weight: normal;
-}
-
-.position-jump input {
-    display: block;
-    width: 100%;
-    min-width: 0;
-    height: 30px;
-    padding: 4px 6px;
-    border: 1px solid #ccc;
-}
-
-.position-error {
-    margin: 8px 0 0;
-    color: #a94442;
-    font-size: 12px;
 }
 
 .audio-audit-playlist {
