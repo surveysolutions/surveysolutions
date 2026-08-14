@@ -327,4 +327,7 @@
     <data name="SaveAs" xml:space="preserve">
   <value>Guardar como</value>
 </data>
+    <data name="IncludeScenarios" xml:space="preserve">
+  <value>Incluir escenarios</value>
+</data>
 </root>

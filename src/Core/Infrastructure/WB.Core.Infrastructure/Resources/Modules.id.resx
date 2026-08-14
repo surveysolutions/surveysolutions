@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="ErrorConnectingToDatabase" xml:space="preserve"><value>Aplikasi tidak dapat terhubung ke basis data menggunakan string koneksi yang diberikan. Periksa file log aplikasi untuk detailnya</value></data>
+  <data name="ErrorDuringRunningMigrations" xml:space="preserve"><value>Terjadi kesalahan saat migrasi basis data. Periksa file log aplikasi untuk detailnya</value></data>
+  <data name="ErrorDuringSiteInitialization" xml:space="preserve"><value>Terjadi kesalahan saat inisialisasi situs. Periksa file log aplikasi untuk detailnya</value></data>
+  <data name="InitializingDb" xml:space="preserve"><value>Basis data sedang diinisialisasi</value></data>
+  <data name="MigrateDb" xml:space="preserve"><value>Migrasi basis data sedang berlangsung</value></data>
+  <data name="ErrorDatabaseUnauthorized" xml:space="preserve"><value>Aplikasi tidak diotorisasi untuk terhubung ke basis data. Periksa file log aplikasi untuk detailnya</value></data>
+</root>
+

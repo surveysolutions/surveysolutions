@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="CollectedInterviews" xml:space="preserve"><value>Intervistat e mbledhura</value></data>
+  <data name="Outbox" xml:space="preserve"><value>Kutia dalëse</value></data>
+  <data name="OutboxSubtitle" xml:space="preserve"><value>Intervistat dhe detyrat që do të dërgohen nga pajisja juaj gjatë sinkronizimit të ardhshëm</value></data>
+  <data name="SentToInterviewer" xml:space="preserve"><value>Dërguar tek ankuesi</value></data>
+  <data name="SentToInterviewerSubtitle" xml:space="preserve"><value>Detyrat dhe intervistat që janë në pajisjet e anketuesve</value></data>
+  <data name="ToBeAssigned" xml:space="preserve"><value>Detyrat për t'u caktuar</value></data>
+  <data name="ToBeAssignedListSubtitle" xml:space="preserve"><value>Detyrat që duhet të caktohen tek anëtarët e ekipit tuaj</value></data>
+  <data name="WaitingForAction" xml:space="preserve"><value>Duke pritur veprimin tuaj</value></data>
+  <data name="WaitingForSupervisorActionSubtitle" xml:space="preserve"><value>Intervistat që kërkojnë veprimin tuaj për t'u zgjidhur</value></data>
+  <data name="YourTeam" xml:space="preserve"><value>Ekipi juaj</value></data>
+</root>
