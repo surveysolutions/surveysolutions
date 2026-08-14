@@ -45,6 +45,9 @@ export default {
         cache() {
             return this.$me.answerTimeUtc == null ? null : new Date(this.$me.answerTimeUtc).getTime()
         },
+        errorMessage() {
+            return this.$me.validity.errorMessage
+        },
         answerVisible() {
             if(this.$me.answer){
                 return true
@@ -60,14 +63,14 @@ export default {
         '$me.answer'() {
             this.uploadingImage = null
         },
-        '$me.validity.errorMessage'(val) {
+        errorMessage(val) {
             if (val) {
                 this.uploadingImage = null
-                const uploader = this.$refs.uploader
-                if (uploader) {
-                    uploader.type = ''
-                    uploader.type = 'file'
-                }
+                const uploader = this.$refs.uploader
+                if (uploader) {
+                    uploader.type = ''
+                    uploader.type = 'file'
+                }
             }
         },
     },
