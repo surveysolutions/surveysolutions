@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Active" xml:space="preserve">
+        <value>Aktif</value>
+    </data>
+    <data name="Archive" xml:space="preserve">
+        <value>Arsip</value>
+    </data>
+    <data name="Archived" xml:space="preserve">
+        <value>Diarsipkan</value>
+    </data>
+    <data name="AssignmentsHeader" xml:space="preserve">
+        <value>Tugas</value>
+    </data>
+    <data name="AssignmentsSelected" xml:space="preserve">
+        <value>{{count}} Tugas dipilih</value>
+    </data>
+    <data name="AssignmentsSelected_other" xml:space="preserve">
+        <value>{{count}} Tugas dipilih</value>
+    </data>
+    <data name="ExpectedExplanation" xml:space="preserve">
+        <value>Tentukan jumlah maksimum wawancara yang akan dihasilkan untuk tugas itu. Nilai yang diizinkan: -1 untuk tugas Tidak Terbatas, 0 untuk tugas Kosong, angka untuk nilai tugas yang diharapkan</value>
+    </data>
+    <data name="ChangeExpectedModalTitle" xml:space="preserve">
+        <value>Edit Nilai yang diharapkan untuk tugas {{assignmentId}}</value>
+    </data>
+    <data name="ChangeModeModalTitle" xml:space="preserve">
+        <value>Ubah mode untuk penugasan {{assignmentId}}</value>
+    </data>
+    <data name="ModeExplanation" xml:space="preserve">
+        <value>Mode CAWI memungkinkan pengumpulan data dari responden secara langsung</value>
+    </data>
+    <data name="CreatedAt" xml:space="preserve">
+        <value>Dibuat pada</value>
+    </data>
+    <data name="IdentifyingQuestions" xml:space="preserve">
+        <value>Mengidentifikasi Pertanyaan</value>
+    </data>
+    <data name="Count" xml:space="preserve">
+        <value>Dikumpulkan</value>
+    </data>
+    <data name="NumberOfAssignmentsAffected" xml:space="preserve">
+        <value>{{count}} Penugasan akan diubah</value>
+    </data>
+    <data name="NumberOfAssignmentsAffected_other" xml:space="preserve">
+        <value>{{count}} Tugas akan diubah</value>
+    </data>
+    <data name="Expected" xml:space="preserve">
+        <value>Mengharapkan</value>
+    </data>
+    <data name="SelectResponsible" xml:space="preserve">
+        <value>Pilih yang bertanggung jawab</value>
+    </data>
+    <data name="ResponsibleRequired" xml:space="preserve">
+        <value>Diperlukan tanggung jawab</value>
+    </data>
+    <data name="WebModeNonInterviewer" xml:space="preserve">
+        <value>Semua tugas untuk wawancara web harus diberikan kepada pewawancara</value>
+    </data>
+    <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
+        <value>Anda menugaskan ulang tugas web ke pengguna yang bukan PEWAWANCARA. Jika Anda sudah mengirimkan tautan untuk tugas ini, responden tidak akan dapat merespons survei Anda hingga tugas tersebut dikembalikan ke pengguna yang berperan sebagai PEWAWANCARA.</value>
+    </data>
+    <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
+        <value>Anda menugaskan ulang tugas web ke pengguna yang bukan PEWAWANCARA. Jika Anda sudah mengirimkan tautan untuk tugas ini, responden tidak akan dapat merespons survei Anda sampai tugas tersebut dikembalikan ke pengguna yang berperan sebagai PEWAWANCARA.</value>
+    </data>
+    <data name="ShowArchived" xml:space="preserve">
+        <value>Status yang diarsipkan</value>
+    </data>
+    <data name="Unarchive" xml:space="preserve">
+        <value>Batalkan pengarsipan</value>
+    </data>
+    <data name="Unlimited" xml:space="preserve">
+        <value>Tak terbatas</value>
+    </data>
+    <data name="InterviewsNeeded" xml:space="preserve">
+        <value>Wawancara diperlukan</value>
+    </data>
+    <data name="CreateInterview" xml:space="preserve">
+        <value>Mulai wawancara baru</value>
+    </data>
+    <data name="UpdatedAt" xml:space="preserve">
+        <value>Diperbarui pada</value>
+    </data>
+    <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
+        <value>Isi semua atau beberapa bidang identifikasi</value>
+    </data>
+    <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+        <value>Pilih yang bertanggung jawab (Kantor Pusat atau Supervisor atau Pewawancara) untuk tugas ini</value>
+    </data>
+    <data name="Questionnaire" xml:space="preserve">
+        <value>Daftar pertanyaan</value>
+    </data>
+    <data name="AllAssignments" xml:space="preserve">
+        <value>Semua tugas</value>
+    </data>
+    <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
+        <value>Indikator apakah tugas masih aktif atau sudah diarsipkan.</value>
+    </data>
+    <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+        <value>Pilih kuesioner untuk melihat tugas terkait. Pilih “Semua kuesioner” untuk melihat tugas yang terkait dengan kuesioner apa pun.</value>
+    </data>
+    <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+        <value>Pengguna bertanggung jawab. Klik pada kolom untuk memilih nama pengguna baik dengan memilihnya secara langsung atau mengetik untuk memfilter daftar nama pengguna lebih lanjut.</value>
+    </data>
+    <data name="Tooltip_Table_Count" xml:space="preserve">
+        <value>Jumlah wawancara yang saat ini diserahkan untuk tugas ini. Lebih banyak wawancara mungkin telah dibuat tetapi tidak disinkronkan. Klik di sel mana pun untuk melihat wawancara terkait. Klik pada ikon urutkan untuk mengurutkan berdasarkan hitungan.</value>
+    </data>
+    <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+        <value>Saat tugas pertama kali dibuat. Klik pada ikon pengurutan untuk mengurutkan berdasarkan waktu.</value>
+    </data>
+    <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+        <value>Informasi yang mengidentifikasi setiap tugas. Ini adalah jawaban atas pertanyaan yang ditandai sebagai pengidentifikasi di Desainer.</value>
+    </data>
+    <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">
+        <value>Jumlah wawancara yang diperlukan untuk menyelesaikan tugas ini.</value>
+    </data>
+    <data name="Tooltip_Table_Responsible" xml:space="preserve">
+        <value>Pengguna saat ini bertanggung jawab atas tugas tersebut. Klik ikon urutkan untuk mengurutkan nama pengguna.</value>
+    </data>
+    <data name="Tooltip_Table_ExpectedValue" xml:space="preserve">
+        <value>Jumlah maksimum wawancara yang dapat dilakukan untuk tugas ini. Klik pada sel mana saja untuk mengubah nomor ini. Klik ikon pengurutan untuk mengurutkan berdasarkan nilai yang diharapkan.</value>
+    </data>
+    <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
+        <value>Kapan tugas terakhir diperbarui. Klik pada ikon pengurutan untuk mengurutkan berdasarkan waktu.</value>
+    </data>
+    <data name="Tooltip_Table_ReceivedByTablet" xml:space="preserve">
+        <value>Indikator apakah tugas telah diunduh ke tablet. Klik ikon pengurutan untuk mengurutkan berdasarkan waktu penerimaan.</value>
+    </data>
+    <data name="InvalidExpected" xml:space="preserve">
+        <value>Bidang yang Diharapkan harus -1 atau lebih.</value>
+    </data>
+    <data name="AssignmentExpectedInWebMode" xml:space="preserve">
+        <value>Nilai yang diharapkan tidak dapat diubah untuk Penetapan mode Web.</value>
+    </data>
+    <data name="SelectQuestionnaire" xml:space="preserve">
+        <value>Pilih kuesioner yang ada untuk meningkatkan tugas</value>
+    </data>
+    <data name="UpgradeDescription" xml:space="preserve">
+        <value>Saat tugas ditingkatkan, semua tugas yang belum diselesaikan akan ditingkatkan.</value>
+    </data>
+    <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
+        <value>Pilih kuesioner untuk ditingkatkan</value>
+    </data>
+    <data name="UpgradeBtn" xml:space="preserve">
+        <value>Meningkatkan</value>
+    </data>
+    <data name="UpgradeProgressTitle" xml:space="preserve">
+        <value>Meningkatkan tugas dari {{from}} ke {{to}}</value>
+    </data>
+    <data name="UpgradeProgressNumbers" xml:space="preserve">
+        <value>Meningkatkan {{processed}} dari {{totalCount}}</value>
+    </data>
+    <data name="UpgradeProgressErrors" xml:space="preserve">
+        <value>Dengan kesalahan {{errorCount}}</value>
+    </data>
+    <data name="Stop" xml:space="preserve">
+        <value>Berhenti</value>
+    </data>
+    <data name="UpgradePreparation" xml:space="preserve">
+        <value>Menunggu peningkatan lainnya selesai</value>
+    </data>
+    <data name="UpgradeCancelled" xml:space="preserve">
+        <value>Peningkatan dihentikan</value>
+    </data>
+    <data name="UpgradeError" xml:space="preserve">
+        <value>Terjadi kesalahan. Coba lagi nanti.</value>
+    </data>
+    <data name="UpgradeProgressDone" xml:space="preserve">
+        <value>Selesai</value>
+    </data>
+    <data name="UpgradeProgressDoneCount" xml:space="preserve">
+        <value>Berhasil ditingkatkan: {{processed}}</value>
+    </data>
+    <data name="UpgradeProgressErrorCount" xml:space="preserve">
+        <value>Tidak ditingkatkan: {{count}}</value>
+    </data>
+    <data name="UpgradeDownloadFailed" xml:space="preserve">
+        <value>Daftar unduhan</value>
+    </data>
+    <data name="UpgradeProgressDoneTitle" xml:space="preserve">
+        <value>Peningkatan dari {{from}} ke {{to}} selesai</value>
+    </data>
+    <data name="ReceivedByTablet_All" xml:space="preserve">
+        <value>Tunjukkan semuanya</value>
+    </data>
+    <data name="ReceivedByTablet_Received" xml:space="preserve">
+        <value>Diterima melalui tablet</value>
+    </data>
+    <data name="ReceivedByTablet_NotReceived" xml:space="preserve">
+        <value>Tidak diterima melalui tablet</value>
+    </data>
+    <data name="Tooltip_Filter_Received" xml:space="preserve">
+        <value>Indikator apakah tugas telah diterima atau belum</value>
+    </data>
+    <data name="ReceivedByTablet" xml:space="preserve">
+        <value>Diterima melalui tablet</value>
+    </data>
+    <data name="CreatingNewAssignment" xml:space="preserve">
+        <value>Buat tugas baru untuk kuesioner {{questionnaire}}</value>
+    </data>
+    <data name="AssignTo" xml:space="preserve">
+        <value>Tetapkan ke</value>
+    </data>
+    <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
+        <value>Pilih versi kuesioner untuk melihat tugas terkait. Pilih “Semua versi” untuk melihat tugas yang terkait dengan versi mana pun dari kuesioner yang dipilih.</value>
+    </data>
+    <data name="ErrorToCreateAssignment" xml:space="preserve">
+        <value>Tugas tidak dapat dibuat.</value>
+    </data>
+    <data name="IsAudioRecordingEnabled" xml:space="preserve">
+        <value>Rekaman audio</value>
+    </data>
+    <data name="Tooltip_Table_IsAudioRecordingEnabled" xml:space="preserve">
+        <value>Rekam proses wawancara</value>
+    </data>
+    <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
+        <value>Pengaturan perekaman audio untuk penugasan {{id}}</value>
+    </data>
+    <data name="AudioRecordingEnable" xml:space="preserve">
+        <value>Aktifkan rekaman audio</value>
+    </data>
+    <data name="CawiModeEnable" xml:space="preserve">
+        <value>Aktifkan mode CAWI</value>
+    </data>
+    <data name="AudioRecordingExplanation" xml:space="preserve">
+        <value>Aplikasi Pewawancara akan merekam audio wawancara ketika audit audio diaktifkan. Perhatikan bahwa jumlah data sinkronisasi akan jauh lebih besar.</value>
+    </data>
+    <data name="NewAssignment" xml:space="preserve">
+        <value>Tugas Baru</value>
+    </data>
+    <data name="Email" xml:space="preserve">
+        <value>E-mail</value>
+    </data>
+    <data name="EmailExplanation" xml:space="preserve">
+        <value>Email akan digunakan dalam komunikasi dengan penerima tugas</value>
+    </data>
+    <data name="Password" xml:space="preserve">
+        <value>Kata sandi</value>
+    </data>
+    <data name="PasswordExplanation" xml:space="preserve">
+        <value>Kata sandi akan digunakan untuk melindungi tugas</value>
+    </data>
+    <data name="WebMode" xml:space="preserve">
+        <value>Mode</value>
+    </data>
+    <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
+        <value>Tugas ini akan digunakan dengan Mode Web</value>
+    </data>
+    <data name="Activated" xml:space="preserve">
+        <value>Diaktifkan</value>
+    </data>
+    <data name="CawiActivated" xml:space="preserve">
+        <value>CAWI Diaktifkan</value>
+    </data>
+    <data name="Tooltip_Table_WebMode" xml:space="preserve">
+        <value>Modus Penugasan</value>
+    </data>
+    <data name="Tooltip_Table_Email" xml:space="preserve">
+        <value>Email untuk pemberitahuan</value>
+    </data>
+    <data name="Tooltip_Table_Password" xml:space="preserve">
+        <value>Kata sandi untuk membatasi akses</value>
+    </data>
+    <data name="PasswordInstructions" xml:space="preserve">
+        <value>Minimal 6 angka dan huruf besar atau simbol tunggal '?' untuk menghasilkan kata sandi</value>
+    </data>
+    <data name="EnterPassword" xml:space="preserve">
+        <value>Masukkan kata sandi</value>
+    </data>
+    <data name="EnterEmail" xml:space="preserve">
+        <value>Masukkan Email</value>
+    </data>
+    <data name="ExpectedInstructions" xml:space="preserve">
+        <value>Harus berupa angka, -1 untuk tidak terbatas, 1 jika email ditentukan</value>
+    </data>
+    <data name="InvalidEmail" xml:space="preserve">
+        <value>Email tidak valid</value>
+    </data>
+    <data name="InvalidPassword" xml:space="preserve">
+        <value>Kata sandi tidak valid</value>
+    </data>
+    <data name="InvalidExpectedMessage" xml:space="preserve">
+        <value>Nilai yang diharapkan tidak valid</value>
+    </data>
+    <data name="InvalidExpectedWithEmail" xml:space="preserve">
+        <value>Untuk tugas dengan email yang diberikan diperbolehkan Nilai yang diharapkan adalah 1</value>
+    </data>
+    <data name="ExpectedForWebMode" xml:space="preserve">
+        <value>Tugas dengan nilai yang diharapkan 1 untuk mode web harus menyediakan email atau kata sandi</value>
+    </data>
+    <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
+        <value>Kata sandi berdasarkan tugas untuk mode web dengan nomor 1 harus unik</value>
+    </data>
+    <data name="QuestionnaireVersion" xml:space="preserve">
+        <value>ver. {{version}}</value>
+    </data>
+    <data name="AssignmentId" xml:space="preserve">
+        <value>ID Penugasan</value>
+    </data>
+    <data name="MultipleAssignmentsClose" xml:space="preserve">
+        <value>{{count}} tugas yang dipilih akan diperkecil. Nilai yang diharapkan akan ditetapkan ke jumlah wawancara yang dikumpulkan saat ini.</value>
+    </data>
+    <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
+        <value>Nilai yang diharapkan dari tugas yang dipilih {{id}} akan diubah dari {{quantity}} menjadi {{collected}} (jumlah wawancara yang dikumpulkan saat ini)</value>
+    </data>
+    <data name="Close" xml:space="preserve">
+        <value>Menutup</value>
+    </data>
+    <data name="AssignmentCloseWebMode" xml:space="preserve">
+        <value>Tugas {{id}} tidak dapat diperkecil karena mode web diaktifkan</value>
+    </data>
+    <data name="AssignmentInfo" xml:space="preserve">
+        <value>Info detail tugas</value>
+    </data>
+    <data name="Action_Archived" xml:space="preserve">
+        <value>Diarsipkan</value>
+    </data>
+    <data name="DetailsComments" xml:space="preserve">
+        <value>Komentar</value>
+    </data>
+    <data name="Comments" xml:space="preserve">
+        <value>Komentar</value>
+    </data>
+    <data name="Action_AudioRecordingChanged" xml:space="preserve">
+        <value>Rekaman audio berubah</value>
+    </data>
+    <data name="EnterComments" xml:space="preserve">
+        <value>Masukkan komentar Anda di sini</value>
+    </data>
+    <data name="DateFromPast" xml:space="preserve">
+        <value>Tanggal yang dipilih sudah lewat</value>
+    </data>
+    <data name="Action_Created" xml:space="preserve">
+        <value>Dibuat</value>
+    </data>
+    <data name="Action_Deleted" xml:space="preserve">
+        <value>Dihapus</value>
+    </data>
+    <data name="Action_ExpectedValueChanged" xml:space="preserve">
+        <value>Nilai yang diharapkan berubah</value>
+    </data>
+    <data name="Action_ReceivedByTablet" xml:space="preserve">
+        <value>Diterima melalui tablet</value>
+    </data>
+    <data name="Action_UnArchived" xml:space="preserve">
+        <value>Tidak diarsipkan</value>
+    </data>
+    <data name="Action_Reassigned" xml:space="preserve">
+        <value>Ditugaskan kembali</value>
+    </data>
+    <data name="Action_WebModeChanged" xml:space="preserve">
+        <value>Mode web berubah</value>
+    </data>
+    <data name="Action" xml:space="preserve">
+        <value>Tindakan</value>
+    </data>
+    <data name="Actor" xml:space="preserve">
+        <value>Oleh</value>
+    </data>
+    <data name="Date" xml:space="preserve">
+        <value>Tanggal</value>
+    </data>
+    <data name="Action_AudioRecordingChanged_False" xml:space="preserve">
+        <value>Perekaman audio dinonaktifkan</value>
+    </data>
+    <data name="Action_AudioRecordingChanged_True" xml:space="preserve">
+        <value>Perekaman audio diaktifkan</value>
+    </data>
+    <data name="Action_WebModeChanged_False" xml:space="preserve">
+        <value>Mode Web dinonaktifkan</value>
+    </data>
+    <data name="Action_WebModeChanged_True" xml:space="preserve">
+        <value>Mode Web diaktifkan</value>
+    </data>
+    <data name="Action_ExpectedValueChanged_To" xml:space="preserve">
+        <value>Nilai yang diharapkan diubah menjadi {{quantity}}</value>
+    </data>
+    <data name="Action_ExpectedValueChanged_To_Unlimited" xml:space="preserve">
+        <value>Nilai yang diharapkan diubah menjadi Tidak Terbatas</value>
+    </data>
+    <data name="Action_Reassigned_To" xml:space="preserve">
+        <value>Ditugaskan kembali ke {{newResponsible}}</value>
+    </data>
+    <data name="Action_Reassigned_To_Comment" xml:space="preserve">
+        <value>Komentar: {{comment}}</value>
+    </data>
+    <data name="AssignmentHistory" xml:space="preserve">
+        <value>Sejarah</value>
+    </data>
+    <data name="Details_Column" xml:space="preserve">
+        <value>Detail</value>
+    </data>
+    <data name="Action_Created_Comment" xml:space="preserve">
+        <value>Komentar: {{comment}}</value>
+    </data>
+    <data name="Action_Created_Responsible" xml:space="preserve">
+        <value>Ditugaskan ke {{responsible}}</value>
+    </data>
+    <data name="StartWebInterview" xml:space="preserve">
+        <value>Mulai wawancara web</value>
+    </data>
+    <data name="WebModeEnabledWarning" xml:space="preserve">
+        <value>Tugas tidak dapat diselesaikan. Ini mengaktifkan mode web, sedangkan kuesioner menonaktifkan mode pengumpulan web</value>
+    </data>
+    <data name="NoComment" xml:space="preserve">
+        <value>(tidak ada komentar)</value>
+    </data>
+    <data name="LinkToWebInterviewExample" xml:space="preserve">
+        <value>Beralih ke contoh tautan Wawancara Web</value>
+    </data>
+    <data name="Action_UpgradedFrom" xml:space="preserve">
+        <value>Ditingkatkan dari tugas {{id}}</value>
+    </data>
+    <data name="Property" xml:space="preserve">
+        <value>Milik</value>
+    </data>
+    <data name="Value" xml:space="preserve">
+        <value>Nilai</value>
+    </data>
+    <data name="Action_QuantityChanged" xml:space="preserve">
+        <value>Nilai yang diharapkan berubah</value>
+    </data>
+    <data name="DetailsTargetAreaa" xml:space="preserve">
+        <value>Daerah Sasaran</value>
+    </data>
+    <data name="DetailsGeoTracking" xml:space="preserve">
+        <value>Pelacakan Geografis</value>
+    </data>
+    <data name="ChangeTargetAreaModalTitle" xml:space="preserve">
+        <value>Ubah Area Target untuk penugasan {{assignmentId}}</value>
+    </data>
+    <data name="Action_TargetAreaChanged" xml:space="preserve">
+        <value>Area Sasaran berubah</value>
+    </data>
+    <data name="TargetArea" xml:space="preserve">
+        <value>Edit Area sasaran</value>
+    </data>
+    <data name="TargetAreaExplanation" xml:space="preserve">
+        <value>Tentukan nama peta Area Target untuk penugasan</value>
+    </data>
+    <data name="EnterTargetArea" xml:space="preserve">
+        <value>Masuk ke area Sasaran</value>
+    </data>
+    <data name="Filter_ShowAll" xml:space="preserve">
+        <value>Tunjukkan semuanya</value>
+    </data>
+    <data name="Downsize" xml:space="preserve">
+        <value>Perampingan</value>
+    </data>
+    <data name="Status" xml:space="preserve">
+        <value>Status</value>
+    </data>
+    <data name="StatusChangeComment" xml:space="preserve">
+        <value>Komentar status</value>
+    </data>
+    <data name="StatusOpen" xml:space="preserve">
+        <value>Membuka</value>
+    </data>
+    <data name="StatusCompleted" xml:space="preserve">
+        <value>Selesai</value>
+    </data>
+    <data name="StatusClosed" xml:space="preserve">
+        <value>Tertutup</value>
+    </data>
+    <data name="CompleteAssignmentTitle" xml:space="preserve">
+        <value>Selesaikan tugas</value>
+    </data>
+    <data name="CompleteAssignmentMessage" xml:space="preserve">
+        <value>Apakah Anda yakin telah menghitung semua unit yang memenuhi syarat?</value>
+    </data>
+    <data name="CloseAssignmentTitle" xml:space="preserve">
+        <value>Tutup tugas</value>
+    </data>
+    <data name="CloseAssignmentMessage" xml:space="preserve">
+        <value>Pewawancara yang bekerja secara offline masih dapat melanjutkan pengumpulan data hingga sinkronisasi. Wawancara seperti itu akan tetap diterima.</value>
+    </data>
+    <data name="ReopenAssignmentTitle" xml:space="preserve">
+        <value>Buka kembali tugas</value>
+    </data>
+    <data name="ReopenAssignmentMessage" xml:space="preserve">
+        <value>Penugasan akan diatur kembali ke status Terbuka dan pewawancara akan dapat membuat wawancara baru.</value>
+    </data>
+    <data name="Complete" xml:space="preserve">
+        <value>Menyelesaikan</value>
+    </data>
+    <data name="Reopen" xml:space="preserve">
+        <value>Buka kembali</value>
+    </data>
+    <data name="Action_StatusChanged" xml:space="preserve">
+        <value>Statusnya berubah menjadi {{status}}</value>
+    </data>
+    <data name="Action_StatusChanged_Comment" xml:space="preserve">
+        <value>Komentar: {{comment}}</value>
+    </data>
+    <data name="Action_Completed" xml:space="preserve">
+        <value>Selesai</value>
+    </data>
+    <data name="Action_Closed" xml:space="preserve">
+        <value>Tertutup</value>
+    </data>
+    <data name="Action_Reopened" xml:space="preserve">
+        <value>Dibuka kembali</value>
+    </data>
+    <data name="AudioRecordingSelective" xml:space="preserve">
+        <value>Selektif</value>
+    </data>
+    <data name="AudioAuditScopeLabel" xml:space="preserve">
+        <value>Ruang lingkup audit audio</value>
+    </data>
+    <data name="AudioRecordingScopeNotice" xml:space="preserve">
+        <value>Penugasan ini memiliki cakupan audit audio selektif. Mengaktifkan perekaman audio penuh akan merekam semua bagian. Menonaktifkannya akan kembali merekam hanya bagian yang dipilih.</value>
+    </data>
+</root>
