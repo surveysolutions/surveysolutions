@@ -1,8 +1,8 @@
 <template>
 
     <v-card-title class="d-flex">
-        <v-text-field v-model="search" append-icon="mdi-magnify" :label="$t('QuestionnaireEditor.Filter')" single-line
-            clearable hide-details></v-text-field>
+        <v-text-field v-model="search" append-icon="mdi-magnify" :label="$t('QuestionnaireEditor.Filter')"
+            variant="outlined" single-line clearable hide-details class="option-items-table__filter"></v-text-field>
         <v-spacer></v-spacer>
         <v-btn v-if="!readonly" class="ma-2" color="primary" @click="newRow">
             <v-icon left>mdi-plus</v-icon>{{ $t('QuestionnaireEditor.NewItem') }}
@@ -204,3 +204,13 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+.option-items-table__filter :deep(.v-field) {
+    background: transparent;
+}
+
+.option-items-table__filter :deep(.v-field__overlay) {
+    display: none;
+}
+</style>
