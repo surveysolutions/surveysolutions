@@ -27,6 +27,13 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
         var locationManager = (LocationManager)Application.Context.GetSystemService(Context.LocationService);
         if (locationManager == null) return false;
 
+        // In BuiltInGpsOnly mode only fixes from the hardware GPS provider are acceptable, so the
+        // GPS provider itself must be enabled. On API 28+ the broader IsLocationEnabled toggle can be
+        // on while the GPS provider is off, which would let tracking start but then reject every
+        // (network/fused) fix and silently record no points.
+        if (settings.AcceptableGpsLocationSource.RequiresEnabledGpsProvider())
+            return locationManager.IsProviderEnabled(LocationManager.GpsProvider);
+
         // On API 28+, location is a single on/off toggle. IsLocationEnabled is the
         // correct check — IsProviderEnabled("gps") only reflects hardware GPS state and
         // returns false when hardware GPS is off but an external sensor (mock location app)
