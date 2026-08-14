@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             var webInterviewUriTemplate = supervisorSettings.WebInterviewUriTemplate;
             var notificationsEnabled = supervisorSettings.NotificationsEnabled;
             var esriApiKey = supervisorSettings.EsriApiKey;
+            var audioRecordingQuality = supervisorSettings.AudioRecordingQuality;
 
             var response = new RemoteTabletSettingsResponse
             {
@@ -42,7 +43,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     GeographyQuestionPeriodInSeconds = geographyQuestionPeriodInSeconds,
                     WebInterviewUrlTemplate = webInterviewUriTemplate,
                     NotificationsEnabled = notificationsEnabled,
-                    EsriApiKey = esriApiKey
+                    EsriApiKey = esriApiKey,
+                    AudioRecordingQuality = audioRecordingQuality
                 }
             };
             return Task.FromResult(response);

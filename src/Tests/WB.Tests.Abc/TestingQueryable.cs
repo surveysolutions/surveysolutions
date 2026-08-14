@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace WB.Tests.Abc
 {
-    public class TestingQueryable<T> : IQueryable<T>
+    public class TestingQueryable<T> : IOrderedQueryable<T>
     {
         private readonly IQueryable<T> _queryable;
 

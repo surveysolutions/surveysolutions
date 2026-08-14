@@ -885,7 +885,10 @@
     <value>criação em lote de usuários</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>Detalhes das informações pessoais (opcional) &lt;br&gt; serão visíveis apenas para usuários da sede</value>
+    <value>Detalhes das informações pessoais</value>
+  </data>
+  <data name="PublicSectionDescription" xml:space="preserve">
+    <value>(opcional, será visível apenas para usuários autenticados).</value>
   </data>
   <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
     <value>Data em que a conta do entrevistador foi criada</value>
@@ -1659,7 +1662,13 @@
     <value>Entrevista reavaliada com sucesso</value>
   </data>
   <data name="CreateUser" xml:space="preserve">
-    <value>Criar usuário</value>
+    <value>Criar conta de usuário</value>
+  </data>
+  <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+    <value>Acesso ao espaço de trabalho</value>
+  </data>
+  <data name="CreateUser_RoleLabel" xml:space="preserve">
+    <value>Função do usuário</value>
   </data>
   <data name="GenerateRecoveryCodes" xml:space="preserve">
     <value>Gerar códigos de recuperação</value>

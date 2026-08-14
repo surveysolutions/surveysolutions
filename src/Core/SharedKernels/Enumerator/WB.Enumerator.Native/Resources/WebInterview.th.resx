@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve"><value>หัวข้อเสร็จสมบูรณ์: {{value}}</value></data>
+  <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve"><value>{{value}} คำตอบ</value></data>
+  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve"><value>{{value}} หัวข้อย่อย</value></data>
+  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve"><value>ไม่มีหัวข้อย่อย</value></data>
+  <data name="Interview_Group_Status_NotStarted" xml:space="preserve"><value>หัวข้อยังไม่เริ่ม</value></data>
+  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve"><value>หนึ่งคำตอบ</value></data>
+  <data name="Interview_Group_Subgroups_One" xml:space="preserve"><value>หนึ่งหัวข้อย่อย</value></data>
+  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve"><value>หัวข้อเริ่มต้นแล้ว: {{value}}</value></data>
+  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve"><value>{{value}} ข้อผิดพลาด</value></data>
+  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve"><value>หนึ่งข้อผิดพลาด</value></data>
+  <data name="ServerUnderLoad" xml:space="preserve"><value>ขออภัย มีผู้เข้าใช้งานเว็บไซต์นี้พร้อมกันมากเกินไป เรากำลังแก้ไขปัญหานี้อยู่ กรุณาลองใหม่อีกครั้งในภายหลัง</value></data>
+  <data name="RefreshPage" xml:space="preserve"><value>รีเฟรชหน้า</value></data>
+  <data name="InvitationSmallText" xml:space="preserve"><value>กระบวนการสัมภาษณ์ต้องการการเชื่อมต่ออินเทอร์เน็ต ไม่จำเป็นต้องใช้ซอฟต์แวร์เพิ่มเติม</value></data>
+  <data name="InvitationText" xml:space="preserve"><value>คุณได้รับเชิญให้มีส่วนร่วมในการสำรวจต่อไปนี้: "%QUESTIONNAIRE%"</value></data>
+  <data name="WelcomeText" xml:space="preserve"><value>สวัสดีและยินดีต้อนรับสู่การสำรวจทางเว็บของ Survey Solutions</value></data>
+  <data name="WebSurvey" xml:space="preserve"><value>การสำรวจทางเว็บของ Survey Solutions</value></data>
+  <data name="CompletionText" xml:space="preserve"><value>การสัมภาษณ์นี้เสร็จสมบูรณ์แล้ว</value></data>
+  <data name="InProgressText" xml:space="preserve"><value>กำลังดำเนินการ</value></data>
+  <data name="NotStartedText" xml:space="preserve"><value>ยังไม่เริ่ม</value></data>
+  <data name="FinishInterviewText" xml:space="preserve"><value>การสัมภาษณ์นี้เสร็จสมบูรณ์แล้ว</value></data>
+  <data name="StartedInterviewText" xml:space="preserve"><value>การสัมภาษณ์นี้ยังไม่เสร็จสมบูรณ์</value></data>
+  <data name="SurveyFormatText" xml:space="preserve"><value>การสำรวจ: "%QUESTIONNAIRE%"</value></data>
+  <data name="InterviewIdFormatText" xml:space="preserve"><value>ID การสัมภาษณ์: {0}</value></data>
+  <data name="InterviewStartDateFormatText" xml:space="preserve"><value>วันที่เริ่มต้นการสัมภาษณ์: </value></data>
+  <data name="InterviewCompletionDateFormatText" xml:space="preserve"><value>วันที่เสร็จสิ้นการสัมภาษณ์: </value></data>
+  <data name="DownloadAnswers" xml:space="preserve"><value>ดาวน์โหลดการถอดความการสัมภาษณ์</value></data>
+  <data name="DownloadAnswersHint" xml:space="preserve"><value>ดาวน์โหลดคำตอบการสัมภาษณ์เป็นไฟล์ pdf</value></data>
+  <data name="Start" xml:space="preserve"><value>เริ่มการสัมภาษณ์ใหม่</value></data>
+  <data name="StartPageTitle" xml:space="preserve"><value>การสำรวจทางเว็บ</value></data>
+  <data name="PleaseFillCaptcha" xml:space="preserve"><value>กรุณากรอกช่อง captcha</value></data>
+  <data name="InvalidPassword" xml:space="preserve"><value>รหัสผ่านไม่ถูกต้อง</value></data>
+  <data name="Original_Language" xml:space="preserve"><value>ต้นฉบับ</value></data>
+  <data name="ToInterview" xml:space="preserve"><value>ไปยังการสัมภาษณ์</value></data>
+  <data name="ResumeInterview" xml:space="preserve"><value>ดำเนินการสัมภาษณ์ต่อ</value></data>
+  <data name="DiscardAndStart" xml:space="preserve"><value>เปิดใหม่อีกครั้ง</value></data>
+  <data name="OrStartInterview" xml:space="preserve"><value>หรือคุณสามารถเริ่มการสัมภาษณ์ใหม่</value></data>
+  <data name="HasPreviousStartedInterview" xml:space="preserve"><value>คุณเริ่มการสัมภาษณ์แล้ว</value></data>
+  <data name="Resume_InvitationSmallText" xml:space="preserve"><value>กระบวนการสัมภาษณ์ต้องการการเชื่อมต่ออินเทอร์เน็ต ไม่จำเป็นต้องใช้ซอฟต์แวร์เพิ่มเติม</value></data>
+  <data name="Resume_InvitationText" xml:space="preserve"><value>คุณสามารถนำทางไปยังการสัมภาษณ์ในการสำรวจต่อไปนี้: "%QUESTIONNAIRE%"</value></data>
+  <data name="Resume_WelcomeText" xml:space="preserve"><value>สวัสดีและยินดีต้อนรับสู่การสำรวจทางเว็บของ Survey Solutions</value></data>
+  <data name="Error_InterviewExpired" xml:space="preserve"><value>ลิงก์หมดอายุแล้ว</value></data>
+  <data name="Error_NoActionsNeeded" xml:space="preserve"><value>ข้อมูลเกี่ยวกับการสัมภาษณ์นั้นได้รับการบันทึกแล้ว ไม่จำเป็นต้องดำเนินการเพิ่มเติม</value></data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve"><value>ไม่สามารถแก้ไขการสัมภาษณ์ที่ได้รับโดยอุปกรณ์</value></data>
+  <data name="Error_NotFound" xml:space="preserve"><value>ไม่พบการสัมภาษณ์หรือไม่จำเป็นต้องมีการสัมภาษณ์ใหม่</value></data>
+  <data name="EnterPasswordText" xml:space="preserve"><value>ลิงก์นี้ได้รับการป้องกันด้วยรหัสผ่านที่แจกจ่ายพร้อมลิงก์ กรุณากรอกที่นี่</value></data>
+  <data name="PictureQuestionNotAPicture" xml:space="preserve"><value>รับเฉพาะไฟล์รูปภาพเท่านั้น</value></data>
+  <data name="Error_CookiesTurnedOff" xml:space="preserve"><value>คุกกี้ไม่ได้เปิดใช้งานในเบราว์เซอร์ของคุณ กรุณาเปิดใช้งานคุกกี้ในการตั้งค่าเบราว์เซอร์ของคุณเพื่อดำเนินการต่อ</value></data>
+  <data name="Error_Forbidden" xml:space="preserve"><value>ถูกปฏิเสธ</value></data>
+  <data name="Error_UserNotAuthorised" xml:space="preserve"><value>ผู้ใช้ไม่ได้รับอนุญาต</value></data>
+  <data name="CompleteInterview" xml:space="preserve"><value>เสร็จสิ้นการสัมภาษณ์</value></data>
+  <data name="Filters_Title" xml:space="preserve"><value>กรองคำถาม</value></data>
+  <data name="Filters_Flagged" xml:space="preserve"><value>ถูกตั้งสถานะ</value></data>
+  <data name="Filters_WithComments" xml:space="preserve"><value>มีความคิดเห็น</value></data>
+  <data name="Filters_Invalid" xml:space="preserve"><value>ไม่ถูกต้อง</value></data>
+  <data name="Filters_Valid" xml:space="preserve"><value>ถูกต้อง</value></data>
+  <data name="Filters_Answered" xml:space="preserve"><value>ตอบแล้ว</value></data>
+  <data name="Filters_NotAnswered" xml:space="preserve"><value>ยังไม่ตอบ</value></data>
+  <data name="Filters_ForSupervisor" xml:space="preserve"><value>สำหรับหัวหน้างาน</value></data>
+  <data name="Filters_ForInterviewer" xml:space="preserve"><value>สำหรับผู้สัมภาษณ์</value></data>
+  <data name="Filters_NotFlagged" xml:space="preserve"><value>ไม่มีสถานะ</value></data>
+  <data name="Filters_CriticalQuestions" xml:space="preserve"><value>คำถามสำคัญ</value></data>
+  <data name="Filters_CriticalRules" xml:space="preserve"><value>กฎสำคัญ</value></data>
+  <data name="PoweredBy" xml:space="preserve"><value>ขับเคลื่อนโดย</value></data>
+  <data name="Filters_ClearSelection" xml:space="preserve"><value>ล้างตัวกรองทั้งหมด</value></data>
+  <data name="Error" xml:space="preserve"><value>ข้อผิดพลาด</value></data>
+  <data name="Warning" xml:space="preserve"><value>คำเตือน</value></data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve"><value>{0} (เวอร์. {1})</value></data>
+  <data name="InterviewSizeLimitReached" xml:space="preserve"><value>การสัมภาษณ์มีจำนวนรายการและคำถามรวมที่เกินขีดจำกัดของระบบ</value></data>
+  <data name="AssignmentLimitReached" xml:space="preserve"><value>เรารวบรวมการสัมภาษณ์ทั้งหมดในการสำรวจนี้</value></data>
+  <data name="InterviewNotFound" xml:space="preserve"><value>ไม่พบการสัมภาษณ์</value></data>
+  <data name="Email_InvitationTemplate_Subject" xml:space="preserve"><value>คำเชิญให้มีส่วนร่วมใน %SURVEYNAME%</value></data>
+  <data name="Email_InvitationTemplate_Message" xml:space="preserve"><value>ยินดีต้อนรับสู่ %SURVEYNAME%!</value></data>
+  <data name="Email_NoResponse_Subject" xml:space="preserve"><value>เตือนความจำ อย่าลืมมีส่วนร่วมใน %SURVEYNAME%</value></data>
+  <data name="Email_NoResponse_Message" xml:space="preserve"><value>คุณได้รับการแจ้งเตือนนี้เนื่องจากคุณยังไม่ได้เริ่มตอบ %SURVEYNAME%!</value></data>
+  <data name="Email_PartialResponse_Subject" xml:space="preserve"><value>เตือนความจำ กรุณาตอบให้ครบถ้วนสำหรับ %SURVEYNAME%</value></data>
+  <data name="Email_PartialResponse_Message" xml:space="preserve"><value>คุณได้รับการแจ้งเตือนนี้เนื่องจากคุณเริ่มตอบ %SURVEYNAME% แล้ว แต่ยังไม่เสร็จสิ้นกระบวนการ</value></data>
+  <data name="Email_RejectEmail_Subject" xml:space="preserve"><value>ต้องการการดำเนินการของคุณใน %SURVEYNAME%</value></data>
+  <data name="Email_RejectEmail_Message" xml:space="preserve"><value>ขอบคุณสำหรับการมีส่วนร่วมใน %SURVEYNAME%!</value></data>
+  <data name="NoteForSupervisor" xml:space="preserve"><value>ความคิดเห็น</value></data>
+  <data name="Complete" xml:space="preserve"><value>เสร็จสิ้น</value></data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve"><value>ตัวอย่างลิงก์ไปยังหน้า Landing ของการสัมภาษณ์ทางเว็บ</value></data>
+</root>
