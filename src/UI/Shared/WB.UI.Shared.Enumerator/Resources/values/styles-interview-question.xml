@@ -336,6 +336,11 @@
     <item name="android:textStyle">bold</item>
   </style>
 
+  <style name="Interview_Question_Answer_ComboBox_SelectedOption" parent="Interview_Question_Answer_Text_Editor">
+    <item name="android:singleLine">false</item>
+    <item name="android:maxLines">100</item>
+  </style>
+
   <style name="Interview_Question_Answer_List_NewItem_Editor" parent="Interview_Question_TextEditor">
     <item name="android:maxLines">1</item>
     <item name="android:singleLine">true</item>
