@@ -171,6 +171,36 @@ namespace WB.UI.Shared.Enumerator.Services
             return this.fileSystemAccessor.IsFileExists(filenameInCommonFolder);
         }
 
+        public long GetTempMapOffset(string mapName)
+        {
+            var tempFileName = GetTempFileName(mapName);
+            if (this.fileSystemAccessor.IsFileExists(tempFileName))
+                return this.fileSystemAccessor.GetFileSize(tempFileName);
+            return 0;
+        }
+
+        public void SaveTempMapETag(string mapName, string? etag)
+        {
+            var etagFileName = GetTempETagFileName(mapName);
+            if (etag == null)
+            {
+                if (this.fileSystemAccessor.IsFileExists(etagFileName))
+                    this.fileSystemAccessor.DeleteFile(etagFileName);
+            }
+            else
+            {
+                this.fileSystemAccessor.WriteAllText(etagFileName, etag);
+            }
+        }
+
+        public string? GetTempMapETag(string mapName)
+        {
+            var etagFileName = GetTempETagFileName(mapName);
+            if (this.fileSystemAccessor.IsFileExists(etagFileName))
+                return this.fileSystemAccessor.ReadAllText(etagFileName);
+            return null;
+        }
+
         public Stream GetTempMapSaveStream(string mapName)
         {
             if (!this.fileSystemAccessor.IsDirectoryExists(GetMapsLocationOrThrow()))
@@ -178,10 +208,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
             var tempFileName = GetTempFileName(mapName);
 
-            if (this.fileSystemAccessor.IsFileExists(tempFileName))
-                this.fileSystemAccessor.DeleteFile(tempFileName);
-
-            return this.fileSystemAccessor.OpenOrCreateFile(tempFileName, false);
+            return this.fileSystemAccessor.OpenOrCreateFile(tempFileName, true);
         }
 
         public void MoveTempMapToPermanent(string mapName)
@@ -214,7 +241,9 @@ namespace WB.UI.Shared.Enumerator.Services
             {
                 var newName = this.fileSystemAccessor.ChangeExtension(tempFileName, null);
                 this.fileSystemAccessor.MoveFile(tempFileName, newName);
-            }            
+            }
+
+            SaveTempMapETag(mapName, null);
         }
 
         private bool IsShapeFile(string mapName)
@@ -286,5 +315,7 @@ namespace WB.UI.Shared.Enumerator.Services
             var tempFileName = fileName + tempSuffix;
             return tempFileName;
         }
+
+        private string GetTempETagFileName(string mapName) => GetTempFileName(mapName) + ".etag";
     }
 }
