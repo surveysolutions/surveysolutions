@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
         private class DownloadProgressState
         {
+            public readonly object SyncRoot = new object();
             public Stopwatch StopWatch;
             public int LastReportedProgressBucket = -1;
             public long NextUnknownLengthProgressReportAt;
@@ -142,23 +143,31 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
         private void UpdateProgress(TransferProgress downloadProgress, DownloadProgressState progressState)
         {
-            if (progressState.StopWatch == null) progressState.StopWatch = Stopwatch.StartNew();
-
-            if (!downloadProgress.TotalBytesToReceive.HasValue || downloadProgress.TotalBytesToReceive.Value <= 0)
+            // Progress<T>.Report dispatches through SynchronizationContext.Post, which - in the
+            // absence of a captured context (e.g. unit tests, background threads) - runs the
+            // callback on the ThreadPool without any ordering guarantees. Multiple callbacks can
+            // therefore execute concurrently, so the check-and-update of the shared throttling
+            // state must be atomic to avoid emitting extra reports.
+            lock (progressState.SyncRoot)
             {
-                if (downloadProgress.BytesReceived < progressState.NextUnknownLengthProgressReportAt)
-                    return;
+                if (progressState.StopWatch == null) progressState.StopWatch = Stopwatch.StartNew();
 
-                progressState.NextUnknownLengthProgressReportAt =
-                    downloadProgress.BytesReceived + UnknownLengthProgressStepBytes;
-            }
-            else
-            {
-                var currentProgressBucket = (int)(downloadProgress.ProgressPercentage / ProgressReportStepPercent);
-                if (currentProgressBucket <= progressState.LastReportedProgressBucket)
-                    return;
+                if (!downloadProgress.TotalBytesToReceive.HasValue || downloadProgress.TotalBytesToReceive.Value <= 0)
+                {
+                    if (downloadProgress.BytesReceived < progressState.NextUnknownLengthProgressReportAt)
+                        return;
 
-                progressState.LastReportedProgressBucket = currentProgressBucket;
+                    progressState.NextUnknownLengthProgressReportAt =
+                        downloadProgress.BytesReceived + UnknownLengthProgressStepBytes;
+                }
+                else
+                {
+                    var currentProgressBucket = (int)(downloadProgress.ProgressPercentage / ProgressReportStepPercent);
+                    if (currentProgressBucket <= progressState.LastReportedProgressBucket)
+                        return;
+
+                    progressState.LastReportedProgressBucket = currentProgressBucket;
+                }
             }
             
             var receivedDataHumanized = NumericTextFormatter.FormatBytesHumanized(downloadProgress.BytesReceived);
