@@ -66,6 +66,17 @@
       </RegistrySearch>
     </Property>
 
+    <!-- Detect previous installation via registry (no default value).
+         When set, indicates an upgrade rather than a fresh install. -->
+    <Property Id="PREVIOUSINSTALL">
+      <RegistrySearch Id="PreviousInstallSearch"
+                      Type="raw"
+                      Root="HKLM"
+                      Key="SOFTWARE\World Bank\Survey Solutions"
+                      Name="Install Path"
+                      Win64='yes' />
+    </Property>
+
     <UI>
       <UIRef Id="WixUI_Common" />
 
@@ -96,11 +107,11 @@
       <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
 
 
-      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg" >NOT Installed</Publish>
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg" >NOT Installed AND NOT WIX_UPGRADE_DETECTED AND NOT PREVIOUSINSTALL</Publish>
       <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">Installed AND PATCH</Publish>
 
       <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="20">
-        ( Installed AND (PATCH OR REINSTALL ) ) OR WIX_UPGRADE_DETECTED
+        ( Installed AND (PATCH OR REINSTALL ) ) OR WIX_UPGRADE_DETECTED OR (NOT Installed AND PREVIOUSINSTALL)
       </Publish>
 
 
@@ -119,8 +130,8 @@
       <Publish Dialog="ConnectionStringDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
 
 
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="ConnectionStringDlg" Order="1">NOT Installed</Publish>
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="1">REINSTALL OR WIX_UPGRADE_DETECTED</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="ConnectionStringDlg" Order="1">NOT Installed AND NOT WIX_UPGRADE_DETECTED AND NOT PREVIOUSINSTALL</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="1">REINSTALL OR WIX_UPGRADE_DETECTED OR (NOT Installed AND PREVIOUSINSTALL)</Publish>
       <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="2">Installed AND NOT PATCH</Publish>
       <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="2">Installed AND PATCH</Publish>
 
@@ -168,7 +179,7 @@
     <CustomAction Id="SetSiteSettingsDataValue"
                   Return="check"
                   Property="WriteSiteSettings"
-                  Value="TargetFile=[INSTALLSITEFOLDER]appsettings.production.ini;SitePort=[SITEPORT];SourceFile=[INSTALLFOLDER]\site\Configuration\Headquarters.Web.Config;CONNECTIONSTRING=Persist Security Info=true;;Server=[CONNSERVER];;Port=[CONNPORT];;User Id=[CONNUSERNAME];;Password=[CONNPASSWORD];;Database=SurveySolutions" />
+                  Value="TargetFile=[INSTALLSITEFOLDER]appsettings.production.ini;SitePort=[SITEPORT];SourceFile=[INSTALLFOLDER]\site\Configuration\Headquarters.Web.Config;SourceIniFile=[INSTALLSITEFOLDER]appsettings.production.ini;CONNECTIONSTRING=Persist Security Info=true;;Server=[CONNSERVER];;Port=[CONNPORT];;User Id=[CONNUSERNAME];;Password=[CONNPASSWORD];;Database=SurveySolutions" />
 
     <CustomAction Id="WriteSiteSettings"
                   BinaryKey="CustomActionBinary"
