@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { getGroup } from '../services/groupService';
 import emitter from '../services/emitter';
-import _ from 'lodash';
+import { cloneDeep, isEqual } from 'lodash';
 
 export const useGroupStore = defineStore('group', {
     state: () => ({
@@ -13,7 +13,7 @@ export const useGroupStore = defineStore('group', {
         getGroup: state => state.group,
         getBreadcrumbs: state => state.breadcrumbs,
         getInitialGroup: state => state.initialGroup,
-        getIsDirty: state => !_.isEqual(state.group, state.initialGroup)
+        getIsDirty: state => !isEqual(state.group, state.initialGroup)
     },
     actions: {
         setupListeners() {
@@ -38,12 +38,12 @@ export const useGroupStore = defineStore('group', {
         //TODO: change service to return group and breadcrumbs in one oject
         setGroupAndBreadcrumbsData(data) {
             this.setGroupData(data.group);
-            this.breadcrumbs = _.cloneDeep(data.breadcrumbs);
+            this.breadcrumbs = cloneDeep(data.breadcrumbs);
         },
 
         setGroupData(groupData) {
-            this.initialGroup = _.cloneDeep(groupData);
-            this.group = _.cloneDeep(this.initialGroup);
+            this.initialGroup = cloneDeep(groupData);
+            this.group = cloneDeep(this.initialGroup);
         },
 
         clear() {
@@ -53,7 +53,7 @@ export const useGroupStore = defineStore('group', {
         },
 
         discardChanges() {
-            this.group = _.cloneDeep(this.initialGroup);
+            this.group = cloneDeep(this.initialGroup);
         }
     }
 });

@@ -53,7 +53,7 @@
 
             <div class="form-group">
                 <label for="edit-question-title-highlight" class="wb-label">{{ $t('QuestionnaireEditor.QuestionText')
-                }}</label><br>
+                    }}</label><br>
 
                 <ExpressionEditor id="edit-question-title-highlight" v-model="activeQuestion.title"></ExpressionEditor>
 
@@ -85,7 +85,7 @@
                     <input id="cb-hide-instructions" type="checkbox" class="wb-checkbox"
                         v-model="activeQuestion.hideInstructions" />
                     <label for="cb-hide-instructions"><span></span>{{ $t('QuestionnaireEditor.QuestionHideInstruction')
-                    }}
+                        }}
                         <help link="hideInstructions" />
                     </label>
 
@@ -167,7 +167,7 @@
                     <input id="cb-is-critical" type="checkbox" class="wb-checkbox"
                         v-model="activeQuestion.isCritical" />
                     <label for="cb-is-critical"><span></span>{{ $t('QuestionnaireEditor.QuestionIsCritical')
-                    }} <help link="isCritical"></help></label>
+                        }} <help link="isCritical"></help></label>
 
                 </div>
                 <div class="form-group pull-right" v-if="doesQuestionSupportQuestionScope()">
@@ -243,7 +243,7 @@ import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
 import Help from './Help.vue'
-import _ from 'lodash'
+import { find, indexOf, isNull, isUndefined } from 'lodash'
 import { deleteQuestion } from '../../../services/questionService';
 import { answerTypeClass, geometryInputModeOptions, questionsWithOnlyInterviewerScope, questionTypesDoesNotSupportValidations } from '../../../helpers/question'
 import { createQuestionForDeleteConfirmationPopup, scrollToValidationCondition, scrollToElement, setFocusIn } from '../../../services/utilityService'
@@ -373,7 +373,7 @@ export default {
         activeQuestionType() {
             if (!this.activeQuestion.questionTypeOptions) return null;
 
-            const option = _.find(this.activeQuestion.questionTypeOptions,
+            const option = find(this.activeQuestion.questionTypeOptions,
                 p => p.value == this.activeQuestion.type
             );
             return option != null ? option.text : null;
@@ -467,7 +467,7 @@ export default {
         },
         doesQuestionSupportValidations() {
             return this.activeQuestion &&
-                _.indexOf(questionTypesDoesNotSupportValidations, this.activeQuestion.type) < 0;
+                indexOf(questionTypesDoesNotSupportValidations, this.activeQuestion.type) < 0;
         },
         doesQuestionSupportQuestionScope() {
             return this.activeQuestion &&
@@ -506,14 +506,14 @@ export default {
 
             var allScopes = this.activeQuestion.allQuestionScopeOptions;
 
-            if (_.indexOf(questionsWithOnlyInterviewerScope, this.activeQuestion.type) >= 0) {
+            if (indexOf(questionsWithOnlyInterviewerScope, this.activeQuestion.type) >= 0) {
                 return allScopes.filter(function (o) {
                     return o.value === 'Interviewer';
                 });
             }
 
             if (this.activeQuestion.linkedToEntityId == null &&
-                _.indexOf(['TextList', 'GpsCoordinates', 'MultyOption', 'DateTime'], this.activeQuestion.type) < 0)
+                indexOf(['TextList', 'GpsCoordinates', 'MultyOption', 'DateTime'], this.activeQuestion.type) < 0)
                 return allScopes;
 
             return allScopes.filter(o => {
@@ -531,7 +531,7 @@ export default {
         },
         setQuestionType(type) {
             this.activeQuestion.type = type;
-            this.activeQuestion.typeName = _.find(this.activeQuestion.questionTypeOptions, { value: type }).text;
+            this.activeQuestion.typeName = find(this.activeQuestion.questionTypeOptions, { value: type }).text;
 
             const isQuestionScopeSupervisorOrPrefilled = this.activeQuestion.questionScope === 'Supervisor' || this.activeQuestion.questionScope === 'Identifying';
             if (type === 'TextList' && isQuestionScopeSupervisorOrPrefilled) {
@@ -544,7 +544,7 @@ export default {
                 }
             }
 
-            if (_.indexOf(questionsWithOnlyInterviewerScope, type) >= 0) {
+            if (indexOf(questionsWithOnlyInterviewerScope, type) >= 0) {
                 this.changeQuestionScope(this.getQuestionScopeByValue('Interviewer'));
             }
 
@@ -569,7 +569,7 @@ export default {
             }
 
             if (type === 'Numeric') {
-                if (_.isNull(this.activeQuestion.isInteger) || _.isUndefined(this.activeQuestion.isInteger)) {
+                if (isNull(this.activeQuestion.isInteger) || isUndefined(this.activeQuestion.isInteger)) {
                     this.activeQuestion.isInteger = true;
                 }
 
@@ -603,7 +603,7 @@ export default {
         },
 
         getQuestionScopeByValue(value) {
-            return _.find(this.activeQuestion.allQuestionScopeOptions, { value: value });
+            return find(this.activeQuestion.allQuestionScopeOptions, { value: value });
         },
 
         changeQuestionScope(scope) {
@@ -661,7 +661,7 @@ export default {
                     break;
             }
 
-            if (!_.isNull((state || {}).indexOfEntityInProperty))
+            if (!isNull((state || {}).indexOfEntityInProperty))
                 scrollToValidationCondition(state.indexOfEntityInProperty);
             else {
                 scrollToElement(".question-editor .form-holder", "#" + focusId);

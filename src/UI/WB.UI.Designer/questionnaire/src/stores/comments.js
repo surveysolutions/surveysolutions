@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import _ from 'lodash';
+import { findIndex, remove, forEach, isNull } from 'lodash';
 import { getComments, postComment } from '../services/commentsService';
 import emitter from '../services/emitter';
 import dayjs from 'dayjs';
@@ -24,7 +24,7 @@ export const useCommentsStore = defineStore('comments', {
             emitter.on('commentAdded', this.commentAdded);
         },
         commentResolved(payload) {
-            const index = _.findIndex(this.comments, function(i) {
+            const index = findIndex(this.comments, function(i) {
                 return i.id === payload.id;
             });
             if (index !== -1) {
@@ -32,7 +32,7 @@ export const useCommentsStore = defineStore('comments', {
             }
         },
         commentDeleted(payload) {
-            _.remove(
+            remove(
                 this.$state.comments,
                 comment => comment.id === payload.id
             );
@@ -46,9 +46,9 @@ export const useCommentsStore = defineStore('comments', {
             this.questionnaireId = questionnaireId;
             this.entityId = entityId;
 
-            _.forEach(data, function(comment) {
+            forEach(data, function(comment) {
                 comment.date = dayjs.utc(comment.date);
-                comment.isResolved = !_.isNull(comment.resolveDate || null);
+                comment.isResolved = !isNull(comment.resolveDate || null);
             });
 
             this.setComments(data);

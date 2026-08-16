@@ -1,6 +1,6 @@
 import { get, commandCall } from '../services/apiService';
 import emitter from './emitter';
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
 import dayjs from 'dayjs';
 import { getItemIndexByIdFromParentItemsList } from './utilityService';
 import { newGuid } from '../helpers/guid';
@@ -74,8 +74,8 @@ export function updateQuestion(
                 : command.validationMessage;
             if (
                 shouldGetOptionsOnServer ||
-                !_.isEmpty(command.linkedToEntityId) ||
-                !_.isEmpty(command.categoriesId)
+                !isEmpty(command.linkedToEntityId) ||
+                !isEmpty(command.categoriesId)
             ) {
                 command.options = null;
             } else {
@@ -95,8 +95,8 @@ export function updateQuestion(
 
             if (
                 shouldGetOptionsOnServer ||
-                !_.isEmpty(command.linkedToEntityId) ||
-                !_.isEmpty(command.categoriesId) ||
+                !isEmpty(command.linkedToEntityId) ||
+                !isEmpty(command.categoriesId) ||
                 command.isFilteredCombobox
             ) {
                 command.options = null;

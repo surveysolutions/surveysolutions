@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { getStaticText } from '../services/staticTextService';
 import emitter from '../services/emitter';
-import _ from 'lodash';
+import { cloneDeep, isEqual } from 'lodash';
 
 export const useStaticTextStore = defineStore('staticText', {
     state: () => ({
@@ -12,7 +12,7 @@ export const useStaticTextStore = defineStore('staticText', {
         getStaticText: state => state.staticText,
         getInitialStaticText: state => state.initialStaticText,
         getIsDirty: state =>
-            !_.isEqual(state.staticText, state.initialStaticText)
+            !isEqual(state.staticText, state.initialStaticText)
     },
     actions: {
         setupListeners() {
@@ -34,15 +34,15 @@ export const useStaticTextStore = defineStore('staticText', {
             this.setStaticTextData(data);
         },
         setStaticTextData(data) {
-            this.initialStaticText = _.cloneDeep(data);
-            this.staticText = _.cloneDeep(this.initialStaticText);
+            this.initialStaticText = cloneDeep(data);
+            this.staticText = cloneDeep(this.initialStaticText);
         },
         clear() {
             this.staticText = {};
             this.initialStaticText = {};
         },
         discardChanges() {
-            this.staticText = _.cloneDeep(this.initialStaticText);
+            this.staticText = cloneDeep(this.initialStaticText);
         }
     }
 });

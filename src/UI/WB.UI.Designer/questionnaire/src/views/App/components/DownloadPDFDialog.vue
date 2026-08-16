@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import { map, clone } from 'lodash';
 import Help from './Help.vue';
 import { retryExportPdf, updateExportPdfStatus, generateExportPdfStatus } from '../../../services/pdfService'
 
@@ -86,7 +86,7 @@ export default {
     },
     computed: {
         translations() {
-            const translationsView = _.map(this.questionnaire.translations, _.clone);
+            const translationsView = map(this.questionnaire.translations, clone);
             translationsView.splice(0, 0, {
                 translationId: null,
                 name: !this.questionnaire.defaultLanguageName ? this.$t("QuestionnaireEditor.Translation_Original") : this.questionnaire.defaultLanguageName

@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xs-12">
             <label class="wb-label" for="cb-categorical-kind">{{ $t('QuestionnaireEditor.QuestionDisplayMode')
-                }}</label>
+            }}</label>
         </div>
     </div>
     <div class="row">
@@ -171,7 +171,7 @@ import CascadingComboBoxTemplate from './CascadingComboBoxTemplate.vue'
 import LinkTemplate from './LinkTemplate.vue'
 import AddClassification from './AddClassification.vue';
 import FilteredComboboxOptionsTemplate from './FilteredComboboxOptionsTemplate.vue'
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
 
 export default {
     name: 'SingleOptionQuestion',
@@ -254,9 +254,9 @@ export default {
     },
     methods: {
         reset(question) {
-            this.isLinkedToReusableCategories = !_.isEmpty(question.categoriesId);
-            this.isCascade = !_.isEmpty(question.cascadeFromQuestionId);
-            this.isLinked = !_.isEmpty(question.linkedToEntityId);
+            this.isLinkedToReusableCategories = !isEmpty(question.categoriesId);
+            this.isCascade = !isEmpty(question.cascadeFromQuestionId);
+            this.isLinked = !isEmpty(question.linkedToEntityId);
         },
         questionChangesDiscarded(question) {
             this.reset(question)
