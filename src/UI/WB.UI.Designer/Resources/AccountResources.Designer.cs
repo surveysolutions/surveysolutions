@@ -187,6 +187,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email could not be sent. Please try again later or contact the administrator.
+        /// </summary>
+        public static string EmailSendFailed {
+            get {
+                return ResourceManager.GetString("EmailSendFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The external login was removed..
         /// </summary>
         public static string ExternalLoginRemoved {
