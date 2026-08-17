@@ -181,7 +181,7 @@
     <value>تسجيل الدخول أو كلمة المرور غير صحيحة</value>
 </data>
     <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
-    <value>اضغط لتسجيل GPS</value>
+    <value>تسجيل GPS</value>
 </data>
     <data name="Interview_Questions_Audio_SaveAnswer" xml:space="preserve">
     <value>اضغط لتسجيل الصوت</value>

@@ -289,7 +289,7 @@
     <value>กรุณาป้อนข้อมูลให้ครบทุกคำถาม</value>
   </data>
   <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
-    <value>แตะเพื่อบันทึก GPS</value>
+    <value>บันทึก GPS</value>
   </data>
   <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
     <value>แตะเพื่อถ่ายรูป</value>

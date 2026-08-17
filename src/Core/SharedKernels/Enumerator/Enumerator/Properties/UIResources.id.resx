@@ -285,7 +285,7 @@ Anda dapat membuat atau menyunting kuesioner Anda pada Desainer Survey Solutions
     <value>Silahkan mengisi semua nilai-nilai yang diperlukan</value>
   </data>
   <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
-    <value>Tekan untuk merekam GPS</value>
+    <value>Rekam GPS</value>
   </data>
   <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
     <value>Tekan untuk mengambil foto</value>

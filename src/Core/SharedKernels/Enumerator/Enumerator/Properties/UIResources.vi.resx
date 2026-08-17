@@ -122,7 +122,7 @@
     <value>Tên đăng nhập hoặc mật khẩu của bạn không chính xác</value>
 </data>
 <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
-    <value>Nhấn để ghi GPS</value>
+    <value>Ghi GPS</value>
 </data>
 <data name="Interview_Questions_Audio_SaveAnswer" xml:space="preserve">
     <value>Nhấn để ghi âm</value>

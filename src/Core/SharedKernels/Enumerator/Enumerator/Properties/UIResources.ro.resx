@@ -408,7 +408,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Apăsați pentru a înregistra sunetul</value>
   </data>
   <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
-    <value>Apăsați pentru a înregistra localizarea GPS</value>
+    <value>Înregistrați GPS</value>
   </data>
   <data name="Interview_Questions_Integer_ProtectedValue" xml:space="preserve">
     <value>Un răspuns nou la o întrebare protejată ar trebui să fie mai mare sau egal cu {0}</value>

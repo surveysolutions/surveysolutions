@@ -282,7 +282,7 @@
     <value>Примітка: {0} запитань без відповіді</value>
   </data>
   <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
-    <value>Натисніть, щоб записати GPS</value>
+    <value>Записати GPS</value>
   </data>
   <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
     <value>Натисніть, щоб зробити фото</value>
