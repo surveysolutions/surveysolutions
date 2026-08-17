@@ -1,0 +1,790 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="WB0001_NoQuestions" xml:space="preserve">
+        <value>แบบสอบถามจะต้องมีอย่างน้อยหนึ่งคำถาม</value>
+    </data>
+    <data name="WB0002_CustomValidationExpressionHasIncorrectSyntax" xml:space="preserve">
+        <value>เงื่อนไขการตรวจสอบมีข้อผิดพลาดทางไวยากรณ์</value>
+    </data>
+    <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
+        <value>เงื่อนไขการเปิดใช้งานมีข้อผิดพลาดทางไวยากรณ์</value>
+    </data>
+    <data name="WB0004_VariableHasEmptyExpression" xml:space="preserve">
+        <value>ตัวแปรไม่สามารถมีนิพจน์ว่างได้</value>
+    </data>
+    <data name="WB0005_VariableExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>นิพจน์ตัวแปรมีความยาวมากกว่าอักขระ {0}</value>
+    </data>
+    <data name="WB0009_RosterSizeQuestionIsMissing" xml:space="preserve">
+        <value>ไม่มีคำถามเกี่ยวกับขนาดบัญชีรายชื่อ</value>
+    </data>
+    <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
+        <value>คำถามที่เชื่อมโยงอ้างอิงถึงคำถามที่ไม่มีอยู่</value>
+    </data>
+    <data name="WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType" xml:space="preserve">
+        <value>คำถามที่เชื่อมโยงอ้างอิงถึงประเภทคำถามที่ไม่รองรับ</value>
+    </data>
+    <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup" xml:space="preserve">
+        <value>คำถามที่เชื่อมโยงอ้างอิงถึงคำถามที่ไม่อยู่ในบัญชีรายชื่อ</value>
+    </data>
+    <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
+        <value>คำถามที่มีชื่อเรื่องหรือคำทดแทนคำสั่งไม่สามารถทำเครื่องหมายว่าเป็นการระบุตัวตนได้</value>
+    </data>
+    <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
+        <value>การทดแทนอ้างอิงถึงคำถามหรือตัวแปรที่ไม่มีอยู่จริง</value>
+    </data>
+    <data name="WB0018_SubstitutionReferencesUnsupportedEntity" xml:space="preserve">
+        <value>การทดแทนอ้างอิงถึงรายการที่ไม่ได้รับการสนับสนุนในการทดแทน</value>
+    </data>
+    <data name="WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel" xml:space="preserve">
+        <value>การทดแทนไม่สามารถอ้างอิงรายการจากระดับบัญชีรายชื่อที่ลึกกว่าได้</value>
+    </data>
+    <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
+        <value>จำนวนคำตอบสูงสุดมากกว่าจำนวนตัวเลือกคำตอบ</value>
+    </data>
+    <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
+        <value>ไม่สามารถระบุคำถามประเภทนี้ได้</value>
+    </data>
+    <data name="WB0023_RosterSizeSourceQuestionTypeIsIncorrect" xml:space="preserve">
+        <value>คำถามแหล่งที่มาของขนาดบัญชีรายชื่อไม่ถูกต้อง สามารถใช้ได้เฉพาะคำถามที่เป็นตัวเลข หมวดหมู่ที่มีการเลือกหลายรายการหรือรายการข้อความเท่านั้น</value>
+    </data>
+    <data name="WB0027_VariableExpresssionHasIncorrectSyntax" xml:space="preserve">
+        <value>นิพจน์มีข้อผิดพลาดทางไวยากรณ์</value>
+    </data>
+    <data name="WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>นิพจน์ตัวกรองมีความยาวมากกว่าอักขระ {0}</value>
+    </data>
+    <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
+        <value>การระบุคำถามไม่สามารถอยู่ในบัญชีรายชื่อได้</value>
+    </data>
+    <data name="WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles" xml:space="preserve">
+        <value>บัญชีรายชื่อที่มีคำถามแหล่งที่มาไม่สามารถมีชุดรายการคงที่ได้</value>
+    </data>
+    <data name="WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion" xml:space="preserve">
+        <value>ชุดคงที่ของบัญชีรายชื่อรายการไม่สามารถมีคำถามแหล่งที่มาของบัญชีรายชื่อ</value>
+    </data>
+    <data name="WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion" xml:space="preserve">
+        <value>ชุดบัญชีรายชื่อคงที่ไม่สามารถมีคำถามชื่อบัญชีรายชื่อได้</value>
+    </data>
+    <data name="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" xml:space="preserve">
+        <value>บัญชีรายชื่อที่มีคำถาม แหล่งที่มาของบัญชีรายชื่อมีคำถามที่ไม่ถูกต้องสำหรับชื่อของแถว</value>
+    </data>
+    <data name="WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion" xml:space="preserve">
+        <value>บัญชีรายชื่อไม่สามารถมีคำถามเกี่ยวกับชื่อบัญชีรายชื่อได้ เมื่อคำถามแหล่งที่มาของบัญชีรายชื่อเป็นคำถามแบบเลือกหลายรายการหรือแบบรายการตามหมวดหมู่</value>
+    </data>
+    <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
+        <value>บัญชีรายชื่อชุดรายการคงที่ต้องไม่มีชื่อว่างเปล่าหรือน้อยกว่าสองรายการ</value>
+    </data>
+    <data name="WB0038_RosterFixedTitlesHaveMoreThan200Items" xml:space="preserve">
+        <value>ชุดรายการคงที่ต้องมีแถว {0} ไม่เกินแถว</value>
+    </data>
+    <data name="WB0039_TextListQuestionCannotBePrefilled" xml:space="preserve">
+        <value>รายการคำถามไม่สามารถระบุได้</value>
+    </data>
+    <data name="WB0040_TextListQuestionCannotBeFilledBySupervisor" xml:space="preserve">
+        <value>หัวหน้างานไม่สามารถกรอกคำถามแบบรายการได้</value>
+    </data>
+    <data name="WB0042_TextListQuestionMaxAnswerInRange1And200" xml:space="preserve">
+        <value>จำนวนองค์ประกอบรายการสูงสุดต้องอยู่ในช่วง [{1}, {0}]</value>
+    </data>
+    <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
+        <value>คำถามมีหมวดหมู่ที่มีค่าว่าง</value>
+    </data>
+    <data name="WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
+        <value>เงื่อนไขการเปิดใช้งานไม่สามารถอ้างอิงถึงคำถามจากระดับบัญชีรายชื่อที่ลึกกว่าได้</value>
+    </data>
+    <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
+        <value>ส่วนย่อยไม่สามารถมีเงื่อนไขการเปิดใช้งานที่อ้างอิงคำถามย่อยได้</value>
+    </data>
+    <data name="WB0049_QRBarcodeQuestionIsSupervisorQuestion" xml:space="preserve">
+        <value>หัวหน้างานไม่สามารถกรอกคำถามเกี่ยวกับบาร์โค้ดได้</value>
+    </data>
+    <data name="WB0050_QRBarcodeQuestionIsPreFilledQuestion" xml:space="preserve">
+        <value>ไม่สามารถระบุคำถามเกี่ยวกับบาร์โค้ดได้</value>
+    </data>
+    <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
+        <value>บัญชีรายชื่อควรมีระดับบัญชีรายชื่อที่ลึกกว่าหรือเท่ากันกับคำถามเกี่ยวกับขนาดบัญชีรายชื่อ</value>
+    </data>
+    <data name="WB0055_RosterHasRosterLevelMoreThan4" xml:space="preserve">
+        <value>บัญชีรายชื่อสามารถมีบัญชีรายชื่อหลักได้ไม่เกิน {0}</value>
+    </data>
+    <data name="WB0056_EntityShouldNotHaveCircularReferences" xml:space="preserve">
+        <value>ไม่อนุญาตให้ใช้การอ้างอิงแบบวงกลม</value>
+    </data>
+    <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
+        <value>ชื่อตัวแปรหรือ ID บัญชีรายชื่อไม่สามารถเป็นคำสงวนได้</value>
+    </data>
+    <data name="WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster" xml:space="preserve">
+        <value>หากรายการใช้การทดแทน %rostertitle% จะต้องวางไว้ในบัญชีรายชื่อ</value>
+    </data>
+    <data name="WB0060_CategoricalQuestionHasLessThan2Options" xml:space="preserve">
+        <value>คำถามมีหมวดหมู่น้อยกว่า {0}</value>
+    </data>
+    <data name="WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2" xml:space="preserve">
+        <value>คำถามมีคำตอบสูงสุดที่อนุญาตน้อยกว่า {0}</value>
+    </data>
+    <data name="WB0062_OptionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+        <value>นิพจน์ตัวกรองตัวเลือกมีข้อผิดพลาดทางไวยากรณ์</value>
+    </data>
+    <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
+        <value>คำถามที่เชื่อมโยงตามหมวดหมู่ไม่สามารถใช้ในเงื่อนไขการตรวจสอบ #{0}</value>
+    </data>
+    <data name="WB0064_CategoricalLinkedQuestionUsedInEnablementCondition" xml:space="preserve">
+        <value>ไม่สามารถใช้คำถามที่เชื่อมโยงตามหมวดหมู่ในเงื่อนไขการเปิดใช้งาน</value>
+    </data>
+    <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
+        <value>ไม่รองรับคำถามประเภทนี้</value>
+    </data>
+    <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
+        <value>ชื่อตัวแปรหรือรหัสบัญชีรายชื่อที่ถูกต้องไม่ควรเว้นว่าง</value>
+    </data>
+    <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
+        <value>บัญชีรายชื่อมีรหัสบัญชีรายชื่อเท่ากับชื่อแบบสอบถาม</value>
+    </data>
+    <data name="WB0071_StaticTextIsEmpty" xml:space="preserve">
+        <value>ข้อความคงที่ไม่สามารถเว้นว่างได้</value>
+    </data>
+    <data name="WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+        <value>ชื่อหมวดหมู่ต้องไม่ซ้ำกัน</value>
+    </data>
+    <data name="WB0073_OptionValuesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+        <value>ค่าหมวดหมู่ต้องไม่ซ้ำกัน</value>
+    </data>
+    <data name="WB0074_CategoricalQuestionHasOptionsAndIsLinked" xml:space="preserve">
+        <value>คำถามตามหมวดหมู่ไม่สามารถมีหมวดหมู่และเชื่อมโยงกับคำถามอื่นได้</value>
+    </data>
+    <data name="WB0075_FilteredComboboxContainsMoreThan5000Options" xml:space="preserve">
+        <value>มีหมวดหมู่มากกว่า {0}</value>
+    </data>
+    <data name="WB0076_CategoricalOptionsCountMoreThan200" xml:space="preserve">
+        <value>มีหมวดหมู่มากกว่า {0}</value>
+    </data>
+    <data name="WB0077_QuestionHasInvalidVariableName" xml:space="preserve">
+        <value>คำถามมีชื่อตัวแปรที่ไม่ถูกต้อง</value>
+    </data>
+    <data name="WB0078_MultimediaQuestionIsInterviewersOnly" xml:space="preserve">
+        <value>คำถามรูปภาพต้องเป็นผู้สัมภาษณ์เท่านั้น</value>
+    </data>
+    <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
+        <value>คำถามรูปภาพไม่สามารถมีเงื่อนไขการตรวจสอบได้</value>
+    </data>
+    <data name="WB0083_QuestionCannotBeUsedAsRosterTitle" xml:space="preserve">
+        <value>คำถามประเภทปัจจุบันไม่สามารถใช้เป็นชื่อบัญชีรายชื่อได้</value>
+    </data>
+    <data name="WB0084_CascadingOptionsShouldHaveParent" xml:space="preserve">
+        <value>หมวดหมู่ในคำถามกล่องคำสั่งผสมแบบเรียงซ้อนย่อยควรอ้างอิงเฉพาะตัวเลือกที่มีอยู่ในคำถามหลักเท่านั้น</value>
+    </data>
+    <data name="WB0085_CascadingQuestionWrongParentLevel" xml:space="preserve">
+        <value>คำถามควรมีความลึกหรือระดับเดียวกับคำถามของผู้ปกครอง</value>
+    </data>
+    <data name="WB0086_ParentCascadingQuestionShouldExist" xml:space="preserve">
+        <value>คำถามกล่องคำสั่งผสมแบบเรียงซ้อนการอ้างอิงประเภทคำถามหายไปหรือไม่ได้รับการสนับสนุน</value>
+    </data>
+    <data name="WB0087_CascadingQuestionHasCicularReference" xml:space="preserve">
+        <value>ไม่อนุญาตให้ใช้การอ้างอิงแบบวงกลมในคำถามกล่องคำสั่งผสมแบบเรียงซ้อน</value>
+    </data>
+    <data name="WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers" xml:space="preserve">
+        <value>คำถามกล่องคำสั่งผสมแบบเรียงซ้อนควรมีหมวดหมู่น้อยกว่า {0}</value>
+    </data>
+    <data name="WB0089_CascadingQuestionOptionWithParentShouldBeUnique" xml:space="preserve">
+        <value>คำถามกล่องคำสั่งผสมแบบเรียงซ้อนควรมีค่าไม่ซ้ำกันและรายการค่าหลักของหมวดหมู่</value>
+    </data>
+    <data name="WB0090_LinkedQuestionIsInterviewersOnly" xml:space="preserve">
+        <value>คำถามที่เชื่อมโยงสามารถเป็นผู้สัมภาษณ์ได้เท่านั้น</value>
+    </data>
+    <data name="WB0091_CascadingChildQuestionShouldNotContainCondition" xml:space="preserve">
+        <value>คำถามกล่องคำสั่งผสมแบบเรียงซ้อนย่อยไม่ควรมีเงื่อนไขการเปิดใช้งาน</value>
+    </data>
+    <data name="WB0092_CascadingChildQuesionShouldNotContainValidation" xml:space="preserve">
+        <value>คำถามกล่องคำสั่งผสมแบบเรียงซ้อนย่อยไม่ควรมีเงื่อนไขการตรวจสอบ</value>
+    </data>
+    <data name="WB0093_RosterSizeListOptionQuestionShouldBeLimit" xml:space="preserve">
+        <value>คำถามเกี่ยวกับรายการแหล่งที่มาของบัญชีรายชื่อควรมีการตั้งค่าองค์ประกอบจำนวนสูงสุด</value>
+    </data>
+    <data name="WB0094_ConditionExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>เงื่อนไขการเปิดใช้งานมีความยาวมากกว่าอักขระ {0}</value>
+    </data>
+    <data name="WB0096_GeneralCompilationError" xml:space="preserve">
+        <value>เกิดข้อผิดพลาดระหว่างการรวบรวมแบบสอบถาม</value>
+    </data>
+    <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
+        <value>ชื่อแบบสอบถามสามารถใช้ได้เฉพาะอักขระต่อไปนี้: A..Z a..z 0..9 ( ) \ / _ - และช่องว่าง</value>
+    </data>
+    <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
+        <value>ขนาดของแบบสอบถามอยู่ที่ประมาณ {0:0.##}MB และใหญ่เกินกว่าที่จะทำงานกับ Survey Solutions ได้อย่างถูกต้อง พยายามลดจำนวนข้อมูลลงจนกว่าจะน้อยกว่า {1}MB เป็นอย่างน้อย</value>
+    </data>
+    <data name="WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues" xml:space="preserve">
+        <value>ค่าบัญชีรายชื่อชุดคงที่จะต้องไม่ซ้ำกัน</value>
+    </data>
+    <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200" xml:space="preserve">
+        <value>จำนวนคำตอบสูงสุดสำหรับคำถามเกี่ยวกับขนาดบัญชีรายชื่อต้องไม่มากกว่า {0}</value>
+    </data>
+    <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
+        <value>ส่วนย่อยสามารถมีส่วนย่อยพาเรนต์ได้ไม่เกิน {0}</value>
+    </data>
+    <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
+        <value>สามารถใส่คำถาม GPS ได้เพียงคำถามเดียวในส่วนหน้าปก</value>
+    </data>
+    <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
+        <value>ไม่สามารถเชื่อมโยงคำถามใช่/ไม่ใช่แบบเลือกได้หลายข้อ</value>
+    </data>
+    <data name="WB0008_SubstitutionsInVariableLableAreProhibited" xml:space="preserve">
+        <value>ไม่อนุญาตให้ใช้การทดแทนในฉลากตัวแปร</value>
+    </data>
+    <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
+        <value>รายการแบบสอบถามต่อไปนี้ (คำถาม/กลุ่ม/ข้อความคงที่/อื่นๆ) ใช้รหัสภายในเดียวกัน โปรดลบหนึ่งในนั้น</value>
+    </data>
+    <data name="WB0010_MacroHasInvalidName" xml:space="preserve">
+        <value>มาโครมีชื่อที่ไม่ถูกต้อง</value>
+    </data>
+    <data name="WB0020_NameForMacrosIsNotUnique" xml:space="preserve">
+        <value>มีมาโครอื่นที่ใช้ชื่อเดียวกันนี้อยู่แล้ว</value>
+    </data>
+    <data name="WB0014_MacroHasEmptyName" xml:space="preserve">
+        <value>มาโครไม่สามารถมีชื่อว่างได้</value>
+    </data>
+    <data name="WB0271_MacroHasEmptyContent" xml:space="preserve">
+        <value>ต้องระบุมาโคร</value>
+    </data>
+    <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
+        <value>มีการสร้างบัญชีรายชื่อจำนวนมาก การส่งออกโครงสร้างนี้เป็นไฟล์ข้อมูลอาจเป็นปัญหาได้ พิจารณาลดจำนวนบัญชีรายชื่อ</value>
+    </data>
+    <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
+        <value>ไม่สามารถระบุคำถามพร้อมตัวกรองตัวเลือกคำตอบได้</value>
+    </data>
+    <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
+        <value>พบรายการที่มีชื่อเดียวกัน</value>
+    </data>
+    <data name="WB0024_LookupHasInvalidName" xml:space="preserve">
+        <value>ตารางตรวจสอบมีชื่อที่ไม่ถูกต้อง</value>
+    </data>
+    <data name="WB0025_LookupHasEmptyName" xml:space="preserve">
+        <value>ตารางการค้นหาต้องไม่มีชื่อว่าง</value>
+    </data>
+    <data name="WB0031_LookupTableHasInvalidHeaders" xml:space="preserve">
+        <value>ตารางตรวจสอบมีส่วนหัวของคอลัมน์ที่ไม่ถูกต้อง</value>
+    </data>
+    <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
+        <value>ตารางตรวจสอบมีคอลัมน์มากเกินไป</value>
+    </data>
+    <data name="WB0044_LookupTableMoreThan15000Rows" xml:space="preserve">
+        <value>ตารางตรวจสอบมีแถวมากเกินไป</value>
+    </data>
+    <data name="WB0047_LookupTableNotUniqueRowcodeValues" xml:space="preserve">
+        <value>ตารางค้นหาไม่มีค่ารหัสแถวที่ไม่ซ้ำกัน</value>
+    </data>
+    <data name="WB0048_LookupHasEmptyContent" xml:space="preserve">
+        <value>ตารางการค้นหาต้องไม่ว่างเปล่า</value>
+    </data>
+    <data name="WB0052_LookupNameIsKeyword" xml:space="preserve">
+        <value>ชื่อตารางการค้นหาไม่สามารถเป็นคำสงวนได้</value>
+    </data>
+    <data name="WB0053_LinkedQuestionReferencesNotExistingRoster" xml:space="preserve">
+        <value>บัญชีรายชื่อที่เป็นที่มาของลิงค์ควรมีอยู่</value>
+    </data>
+    <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
+        <value>บัญชีรายชื่อที่เป็นแหล่งที่มาของลิงก์นั้นเป็นบัญชีรายชื่อ ไม่ใช่ส่วนย่อย</value>
+    </data>
+    <data name="WB0105_ValidationMessageIsTooLong" xml:space="preserve">
+        <value>ข้อความแสดงข้อผิดพลาดในการตรวจสอบความถูกต้อง #{0} ยาวเกินไป ไม่ควรยาวเกินอักขระ {1}</value>
+    </data>
+    <data name="WB0104_ValidationConditionIsTooLong" xml:space="preserve">
+        <value>เงื่อนไขการตรวจสอบ #{0} ยาวเกินไป ไม่ควรยาวเกินอักขระ {1}</value>
+    </data>
+    <data name="WB0106_ValidationConditionIsEmpty" xml:space="preserve">
+        <value>เงื่อนไขการตรวจสอบ #{0} ว่างเปล่า</value>
+    </data>
+    <data name="WB0107_ValidationMessageIsEmpty" xml:space="preserve">
+        <value>ข้อความแสดงข้อผิดพลาดในการตรวจสอบ #{0} ว่างเปล่า</value>
+    </data>
+    <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
+        <value>ส่วนหรือบัญชีรายชื่อมีคำถามมากกว่า {0} โปรดพิจารณาแยกออกเป็นส่วนย่อย</value>
+    </data>
+    <data name="WB0202_GroupWithoutQuestions" xml:space="preserve">
+        <value>มาตราไม่มีคำถาม พิจารณาลบส่วนที่ว่างออก</value>
+    </data>
+    <data name="WB0203_RosterHasSingleQuestion" xml:space="preserve">
+        <value>กลุ่มบัญชีรายชื่อมีเพียงคำถามเดียวเท่านั้น พิจารณาจัดกลุ่มกับบัญชีรายชื่ออื่นๆ สำหรับบัญชีรายชื่อคงที่ ให้พิจารณานำเสนอเป็นชุดคำถามอิสระ</value>
+    </data>
+    <data name="WB0204_EmptyRoster" xml:space="preserve">
+        <value>บัญชีรายชื่อว่างเปล่า ลบออกหากไม่จำเป็น</value>
+    </data>
+    <data name="WB0205_TooManyQuestions" xml:space="preserve">
+        <value>แบบสอบถามมีคำถามมากกว่า {0} มันอาจจะเป็นเรื่องยากที่จะจัดการมัน</value>
+    </data>
+    <data name="WB0209_LongEnablementCondition" xml:space="preserve">
+        <value>เงื่อนไขการเปิดใช้งานมีความยาว อาจเป็นไปได้ที่จะมีเงื่อนไขที่สั้นลงและอ่านง่ายขึ้นด้วยฟังก์ชันในตัว (เช่น InList())</value>
+    </data>
+    <data name="WB0210_CategoricalQuestionHasManyOptions" xml:space="preserve">
+        <value>คำถามแบบตัวเลือกเดียวมีหมวดหมู่มากเกินไป โปรดพิจารณาเปลี่ยนเป็นกล่องคำสั่งผสม</value>
+    </data>
+    <data name="WB0211_QuestionnaireHasNoGpsQuestion" xml:space="preserve">
+        <value>แบบสอบถามไม่มีคำถาม GPS ลองเพิ่มคำถามเกี่ยวกับ GPS</value>
+    </data>
+    <data name="WB0206_FewSectionsManyQuestions" xml:space="preserve">
+        <value>แบบสอบถามมีคำถามมากกว่า {0} แต่มีเพียงหนึ่งหรือสองส่วนเท่านั้น จัดกลุ่มคำถามเป็นส่วนๆ เพื่อทำให้การนำทางง่ายขึ้นและปรับปรุงประสิทธิภาพ</value>
+    </data>
+    <data name="WB0212_LongValidationCondition" xml:space="preserve">
+        <value>เงื่อนไขการตรวจสอบ #{0} ยาว อาจเป็นไปได้ที่จะมีเงื่อนไขที่สั้นลงและอ่านง่ายขึ้นด้วยฟังก์ชันในตัว (เช่น InList())</value>
+    </data>
+    <data name="WB0207_FixedRosterContains3OrLessItems" xml:space="preserve">
+        <value>บัญชีรายชื่อคงที่มีรายการ {0} หรือน้อยกว่า พิจารณาใช้ส่วนย่อยและชุดคำถาม บัญชีรายชื่อจะทำให้โครงสร้างของข้อมูลที่ส่งออกมีความซับซ้อน</value>
+    </data>
+    <data name="WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions" xml:space="preserve">
+        <value>คำถามมากกว่า {0}% ไม่มีเงื่อนไขในการตรวจสอบ เพิ่มเงื่อนไขการตรวจสอบเพื่อปรับปรุงคุณภาพข้อมูล</value>
+    </data>
+    <data name="WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+        <value>นิพจน์ตัวกรองคำถามที่เชื่อมโยงยาวกว่าอักขระ {0}</value>
+    </data>
+    <data name="WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
+        <value>ไม่สามารถใช้คำถามในนิพจน์ตัวกรองของตัวเองได้</value>
+    </data>
+    <data name="WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+        <value>นิพจน์ตัวกรองมีข้อผิดพลาดทางไวยากรณ์</value>
+    </data>
+    <data name="WB0065_NameForAttachmentIsNotUnique" xml:space="preserve">
+        <value>มีไฟล์แนบอื่นที่มีชื่อเดียวกันนี้อยู่แล้ว</value>
+    </data>
+    <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
+        <value>ข้อความคงที่หมายถึงไฟล์แนบที่ไม่มีอยู่</value>
+    </data>
+    <data name="WB0111_AttachmentHasEmptyContent" xml:space="preserve">
+        <value>ไฟล์แนบไม่สามารถเว้นว่างได้</value>
+    </data>
+    <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">
+        <value>ขนาดไฟล์แนบมากกว่า {0}Mb</value>
+    </data>
+    <data name="WB0214_TotalAttachmentsSizeIsMoreThan50Mb" xml:space="preserve">
+        <value>ขนาดรวมของไฟล์แนบมากกว่า {0}Mb</value>
+    </data>
+    <data name="WB0215_UnusedAttachments" xml:space="preserve">
+        <value>แบบสอบถามมีไฟล์แนบที่ไม่ได้ใช้</value>
+    </data>
+    <data name="WB0112_VariableHasInvalidName" xml:space="preserve">
+        <value>ตัวแปรมีชื่อที่ไม่ถูกต้อง</value>
+    </data>
+    <data name="WB0113_VariableHasEmptyVariableName" xml:space="preserve">
+        <value>ตัวแปรไม่สามารถมีชื่อว่างได้</value>
+    </data>
+    <data name="WB0250_ValidationConditionRefersToAFutureQuestion" xml:space="preserve">
+        <value>เงื่อนไขการตรวจสอบ #{0} อ้างถึงคำถามในอนาคต พิจารณากลับคำสั่ง</value>
+    </data>
+    <data name="WB0251_EnablementConditionRefersToAFutureQuestion" xml:space="preserve">
+        <value>เงื่อนไขการเปิดใช้งานหมายถึงคำถามในอนาคต พิจารณากลับคำสั่ง</value>
+    </data>
+    <data name="WB0253_TooFewVariableLabelsAreDefined" xml:space="preserve">
+        <value>มีการกำหนดป้ายกำกับตัวแปรน้อยเกินไป เพิ่มป้ายกำกับตัวแปรเพื่อปรับปรุงการใช้งานข้อมูลที่ส่งออก และเพื่อให้ป้อนข้อมูลในเมตาดาต้าสำหรับรูปแบบ Data Documentation Initiative (DDI)</value>
+    </data>
+    <data name="WB0254_UseFunctionIsValidEmailToValidateEmailAddress" xml:space="preserve">
+        <value>ใช้ฟังก์ชัน IsValidEmail() เพื่อตรวจสอบที่อยู่อีเมล</value>
+    </data>
+    <data name="WB0255_QuestionIsTooShort" xml:space="preserve">
+        <value>คำถามสั้นเกินไป นี่อาจเป็นคำถามที่ไม่สมบูรณ์</value>
+    </data>
+    <data name="WB0114_CategoricalQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
+        <value>คำถามเชิงหมวดหมู่รองรับเฉพาะค่าจำนวนเต็มในช่วงตั้งแต่ {0} ถึง {1}</value>
+    </data>
+    <data name="WB0115_FixRosterSupportsOnlyIntegerTitleValues" xml:space="preserve">
+        <value>บัญชีรายชื่อคงที่รองรับเฉพาะค่าจำนวนเต็มเท่านั้น</value>
+    </data>
+    <data name="WB0256_TranslationNameIsInvalid" xml:space="preserve">
+        <value>ชื่อคำแปลไม่ถูกต้อง</value>
+    </data>
+    <data name="WB0257_TranslationHasEmptyContent" xml:space="preserve">
+        <value>การแปลมีเนื้อหาว่างเปล่า</value>
+    </data>
+    <data name="WB0258_TranslationsHaveDuplicatedNames" xml:space="preserve">
+        <value>คำแปลมีชื่อซ้ำกัน</value>
+    </data>
+    <data name="WB0259_QuestionTitleIsTooLong" xml:space="preserve">
+        <value>ข้อความคำถามยาวเกินไป ไม่ควรยาวเกินอักขระ {0}</value>
+    </data>
+    <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
+        <value>ชื่อเรื่องยาวเกินไป ไม่ควรยาวเกินอักขระ {0}</value>
+    </data>
+    <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
+        <value>คำถามแหล่งที่มาของบัญชีรายชื่อแบบเลือกหลายรายการควรมีการกำหนดจำนวนคำตอบสูงสุด</value>
+    </data>
+    <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
+        <value>แบบสอบถามประกอบด้วยบัญชีรายชื่อที่มีจำนวนอินสแตนซ์บัญชีรายชื่อทั้งหมด {0} เกินขีดจำกัดของระบบ {1}</value>
+    </data>
+    <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
+        <value>บัญชีรายชื่อมีขนาดถึงขีดจำกัดแล้ว ลดขนาดบัญชีรายชื่อหรือลดการซ้อน</value>
+    </data>
+    <data name="WB0264_GpsQuestion" xml:space="preserve">
+        <value>คุณมีคำถามเกี่ยวกับ GPS แท็บเล็ตต้องรองรับการระบุตำแหน่งทางภูมิศาสตร์จึงจะใช้กับแบบสอบถามนี้ได้</value>
+    </data>
+    <data name="WB0265_MoreThan30PercentQuestionsAreText" xml:space="preserve">
+        <value>คำถามมากกว่า {0}% เป็นคำถามแบบข้อความ คำถามแบบข้อความตอบยากบนแท็บเล็ต พิจารณาใช้คำถามแบบตัวเลือกเดียวหรือหลายตัวเลือกแทน</value>
+    </data>
+    <data name="WB0266_SameTitle" xml:space="preserve">
+        <value>คำถามที่ซ้ำกัน (คำถามมีชื่อเดียวกัน)</value>
+    </data>
+    <data name="WB0267_QRBarcodeQuestion" xml:space="preserve">
+        <value>คุณมีคำถามเกี่ยวกับบาร์โค้ด แท็บเล็ตต้องรองรับการโฟกัสอัตโนมัติจึงจะใช้ร่วมกับแบบสอบถามนี้ได้</value>
+    </data>
+    <data name="WB0216_NoPrefilledQuestions" xml:space="preserve">
+        <value>ไม่มีการกำหนดคำถามที่ระบุ กำหนดคำถามระบุอย่างน้อยหนึ่งคำถาม</value>
+    </data>
+    <data name="WB0217_VariableLableMoreThan120Characters" xml:space="preserve">
+        <value>ป้ายกำกับตัวแปรยาวเกินไป (มากกว่าอักขระ {0}) และจะถูกตัดทอนในการส่งออกไฟล์ SPSS</value>
+    </data>
+    <data name="WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions" xml:space="preserve">
+        <value>คำถามต่อเนื่องมีเงื่อนไขการเปิดใช้งานเหมือนกัน พิจารณาวางในส่วนย่อยและกำหนดเงื่อนไขให้กับส่วนย่อย</value>
+    </data>
+    <data name="WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options" xml:space="preserve">
+        <value>คำถามแบบเลือกครั้งเดียวแบบไม่มีเงื่อนไขต่อเนื่องกันหลายคำถามพร้อมหมวดหมู่ {0} พิจารณาคำถามแบบเลือกตอบหนึ่งข้อ</value>
+    </data>
+    <data name="WB0220_RowIndexInMultiOptionBasedRoster" xml:space="preserve">
+        <value>การใช้ @{0} กับบัญชีรายชื่อแบบหลายตัวเลือกอาจไม่เสถียร พิจารณาใช้ @{1} แทน</value>
+    </data>
+    <data name="WB0221_NoCurrentTimeQuestions" xml:space="preserve">
+        <value>ไม่พบคำถามเกี่ยวกับเวลาปัจจุบัน ลองบันทึกวันสัมภาษณ์ลงในแบบสอบถามของคุณ</value>
+    </data>
+    <data name="WB0222_SingleOptionPrefilled" xml:space="preserve">
+        <value>คำถามแบบเลือกครั้งเดียวถูกทำเครื่องหมายว่าเป็นการระบุตัวตน พิจารณาใช้คำถามแบบข้อความ</value>
+    </data>
+    <data name="WB0223_SectionWithLessThan5Questions" xml:space="preserve">
+        <value>ส่วนมีคำถามน้อยกว่าห้าข้อ พิจารณาเข้าร่วมกับส่วนอื่นๆ</value>
+    </data>
+    <data name="WB0224_TooManySubsectionsAtOneLevel" xml:space="preserve">
+        <value>มีส่วนย่อยมากเกินไปในระดับเดียว พิจารณาเค้าโครงแบบลำดับชั้น</value>
+    </data>
+    <data name="WB0225_ComboBoxWithLessThan10Elements" xml:space="preserve">
+        <value>เมนูแบบเลื่อนลง (กล่องคำสั่งผสม) มีองค์ประกอบน้อยกว่า 10 รายการ พิจารณาเปลี่ยนไปใช้การนำเสนอตัวเลือกเดียวแบบมาตรฐาน</value>
+    </data>
+    <data name="WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope" xml:space="preserve">
+        <value>คำถามที่เชื่อมโยงอ้างอิงถึงคำถามรายการจากระดับที่ไม่ถูกต้อง</value>
+    </data>
+    <data name="WB0226_SameCascadingParentQuestion" xml:space="preserve">
+        <value>คำถามกล่องคำสั่งผสมแบบเรียงซ้อนมีคำถามหลักเดียวกัน</value>
+    </data>
+    <data name="WB0227_NotShared" xml:space="preserve">
+        <value>แบบสอบถามยังไม่ได้รับการตรวจสอบ ลองแชร์กับผู้ใช้รายอื่นเพื่อรับคำติชม</value>
+    </data>
+    <data name="WB0228_OmittedOptions" xml:space="preserve">
+        <value>คำถามเชิงหมวดหมู่มีรหัสหมวดหมู่ที่ไม่ต่อเนื่องกัน ตรวจสอบหมวดหมู่ที่ถูกละเว้น</value>
+    </data>
+    <data name="WB0229_SupervisorQuestionInValidation" xml:space="preserve">
+        <value>คำถามของผู้บังคับบัญชาใช้ในการตรวจสอบ ตรวจสอบเงื่อนไขว่าหัวหน้างานไม่ตอบสนองหรือสั่งให้หัวหน้างานตอบกลับอยู่เสมอ</value>
+    </data>
+    <data name="WB0230_NonconsecutiveCascadings" xml:space="preserve">
+        <value>คำถามน้ำตกที่ไม่ต่อเนื่องกัน ท่านอาจถามคำถามต่อเนื่องกัน</value>
+    </data>
+    <data name="WB0117_LinkedToTextListQuestionDoesNotSupportFilters" xml:space="preserve">
+        <value>คำถามที่เชื่อมโยงกับรายการไม่รองรับตัวกรองหมวดหมู่</value>
+    </data>
+    <data name="WB0231_MultiOptionWithMoreThan20Options" xml:space="preserve">
+        <value>คำถามแบบเลือกหลายรายการมีหมวดหมู่ (&gt;{0}) มากเกินไป การนำทางบนแท็บเล็ตจะเป็นเรื่องยาก ลองแยกคำถามออกเป็นสองคำถามแบบเลือกตอบหากเป็นไปได้</value>
+    </data>
+    <data name="WB0232_FiveOrMoreQuestionsWithSameEnabling" xml:space="preserve">
+        <value>คำถามห้าข้อขึ้นไปมีเงื่อนไขการเปิดใช้งานเหมือนกัน ตั้งคำถามในกลุ่มและใช้เงื่อนไขการเปิดใช้งานเดียวกับกลุ่มเพื่อปรับปรุงประสิทธิภาพของแบบสอบถาม</value>
+    </data>
+    <data name="WB0233_NestedRosterDegree3OrMore" xml:space="preserve">
+        <value>บัญชีรายชื่อแบบซ้อนที่มีการซ้อนตั้งแต่สามระดับขึ้นไป พยายามหลีกเลี่ยงโครงสร้างที่ซับซ้อนซึ่งอาจนำไปสู่ปัญหาในการรวบรวมข้อมูล</value>
+    </data>
+    <data name="WB0234_RosterInRosterWithSameSourceQuestion" xml:space="preserve">
+        <value>ระดับผู้ใต้บังคับบัญชาในบัญชีรายชื่อที่ซ้อนกันจะขึ้นอยู่กับคำถามหลักเดียวกัน ลองแก้ไข บัญชีรายชื่อดังกล่าวอาจทำให้เกิดปัญหาในการรวบรวมข้อมูลได้</value>
+    </data>
+    <data name="WB0235_FewQuestionsWithSameLongEnablement" xml:space="preserve">
+        <value>เงื่อนไขการเปิดใช้งานแบบยาวเดียวกันนี้ถูกใช้ในหลายคำถาม คุณอาจต้องการสร้างตัวแปรบูลีนเพื่อทำให้การจัดการโค้ดง่ายขึ้น</value>
+    </data>
+    <data name="WB0236_FewQuestionsWithSameLongValidation" xml:space="preserve">
+        <value>เงื่อนไขการตรวจสอบความถูกต้องแบบยาวเดียวกันนี้ถูกใช้ในหลายคำถาม คุณอาจต้องการสร้างตัวแปรบูลีนเพื่อทำให้การจัดการโค้ดง่ายขึ้น</value>
+    </data>
+    <data name="WB0237_BitwiseAnd" xml:space="preserve">
+        <value>&amp; ใช้ในการแสดงออก ตรวจสอบให้แน่ใจว่าคุณเข้าใจความแตกต่างระหว่างตัวดำเนินการ &amp; และ &amp;&amp; ในกรณีส่วนใหญ่ ให้ใช้ &amp;&amp;</value>
+    </data>
+    <data name="WB0238_BitwiseOr" xml:space="preserve">
+        <value>| ถูกนำมาใช้ในการแสดงออก ตรวจสอบให้แน่ใจว่าคุณเข้าใจความแตกต่างระหว่าง | และ || ตัวดำเนินการ ในกรณีส่วนใหญ่ ให้ใช้ ||</value>
+    </data>
+    <data name="WB0118_ExpressionReferencingForbiddenDateTimeProperies" xml:space="preserve">
+        <value>นิพจน์ที่อ้างอิงถึงคุณสมบัติ DateTime ที่ต้องห้าม: {0}, {1}, {2} พิจารณาใช้คำถามเวลาปัจจุบันแทน</value>
+    </data>
+    <data name="WB0268_DoesNotSupportSubstitution" xml:space="preserve">
+        <value>คุณพยายามที่จะใช้การทดแทนสำหรับเอนทิตีที่ไม่ได้รับการสนับสนุน</value>
+    </data>
+    <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
+        <value>คำถามต้องไม่มีชื่อว่างเปล่า</value>
+    </data>
+    <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
+        <value>ส่วนไม่ควรมีคำถามมากกว่า {0}</value>
+    </data>
+    <data name="WB0119_QuestionnaireTitleTooLong" xml:space="preserve">
+        <value>ชื่อแบบสอบถามมีสัญลักษณ์ได้ไม่เกิน {0}</value>
+    </data>
+    <data name="WB0120_GroupTitleIsEmpty" xml:space="preserve">
+        <value>ชื่อเรื่องของส่วนและส่วนย่อยต้องไม่ว่างเปล่าหรือมีเฉพาะช่องว่าง</value>
+    </data>
+    <data name="WB0121_VariableNameTooLong" xml:space="preserve">
+        <value>ชื่อหรือรหัสขององค์ประกอบนี้ไม่ควรยาวเกินอักขระ {0}</value>
+    </data>
+    <data name="WB0122_VariableNameHasSpecialCharacters" xml:space="preserve">
+        <value>ชื่อตัวแปรหรือรหัสบัญชีรายชื่อที่ถูกต้องควรมีเฉพาะตัวอักษร ตัวเลข และขีดล่างเท่านั้น</value>
+    </data>
+    <data name="WB0123_VariableNameStartWithDigitOrUnderscore" xml:space="preserve">
+        <value>ชื่อตัวแปรหรือรหัสบัญชีรายชื่อไม่ควรขึ้นต้นด้วยตัวเลขหรือขีดล่าง</value>
+    </data>
+    <data name="WB0124_VariableNameEndWithUnderscore" xml:space="preserve">
+        <value>ชื่อตัวแปรหรือรหัสบัญชีรายชื่อไม่ควรลงท้ายด้วยขีดล่าง</value>
+    </data>
+    <data name="WB0125_VariableNameHasConsecutiveUnderscores" xml:space="preserve">
+        <value>ชื่อตัวแปรหรือรหัสบัญชีรายชื่อไม่ควรมีอักขระขีดล่างสองตัวขึ้นไปติดกัน</value>
+    </data>
+    <data name="WB0126_VarialbeNameNotUnique" xml:space="preserve">
+        <value>ชื่อตัวแปรหรือรหัสบัญชีรายชื่อไม่ควรซ้ำกันในขอบเขตของแบบสอบถาม</value>
+    </data>
+    <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+        <value>มีคู่ "Title" และ "Parent Value" อย่างน้อย 1 คู่ รายการไม่ควรมีรายการที่ซ้ำกัน</value>
+    </data>
+    <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
+        <value>จำนวนตำแหน่งทศนิยมไม่อยู่ในช่วงตั้งแต่ {0} ถึง {1}</value>
+    </data>
+    <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
+        <value>ชื่อหมวดหมู่ว่างเปล่าหรือยาวเกินไป ความยาวของชื่อเรื่องควรอยู่ในช่วงตั้งแต่อักขระ {0} ถึง {1}</value>
+    </data>
+    <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
+        <value>คุณไม่สามารถใช้เอนทิตีลูกในเงื่อนไขการเปิดใช้งานสำหรับส่วน ส่วนย่อย และบัญชีรายชื่อ</value>
+    </data>
+    <data name="WB0272_ConditionUsingForbiddenClasses" xml:space="preserve">
+        <value>เงื่อนไขการเปิดใช้งานเป็นประเภทที่ต้องห้าม</value>
+    </data>
+    <data name="WB0273_ValidationConditionUsingForbiddenClasses" xml:space="preserve">
+        <value>เงื่อนไขการตรวจสอบใช้ประเภทที่ต้องห้าม</value>
+    </data>
+    <data name="WB0274_VariableUsingForbiddenClasses" xml:space="preserve">
+        <value>ตัวแปรใช้ประเภทที่ต้องห้าม</value>
+    </data>
+    <data name="WB0275_FilterExpressionIsUsingForbiddenClasses" xml:space="preserve">
+        <value>นิพจน์ตัวกรองใช้ประเภทที่ต้องห้าม</value>
+    </data>
+    <data name="WB0131_SpecialValuesHasNonIntegerOptionsValues" xml:space="preserve">
+        <value>ค่าพิเศษรองรับเฉพาะค่าจำนวนเต็มในช่วงตั้งแต่ {0} ถึง {1}</value>
+    </data>
+    <data name="WB0276_RownameIsNotSupported" xml:space="preserve">
+        <value>ไม่รองรับตัวแปร @rowname อีกต่อไป</value>
+    </data>
+    <data name="WB0132_SpecialValuesHasOptionsWithLongTexts" xml:space="preserve">
+        <value>ชื่อค่าพิเศษว่างเปล่าหรือยาวเกินไป ความยาวของชื่อเรื่องควรอยู่ในช่วงตั้งแต่อักขระ {0} ถึง {1}</value>
+    </data>
+    <data name="WB0133_SpecialValuesMustBeUniqueForNumericlQuestion" xml:space="preserve">
+        <value>ค่าพิเศษต้องไม่ซ้ำกัน</value>
+    </data>
+    <data name="WB0134_SpecialValuesCountMoreThanMaxOptionCount" xml:space="preserve">
+        <value>มีค่าพิเศษมากกว่า {0}</value>
+    </data>
+    <data name="WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit" xml:space="preserve">
+        <value>คำถามมีค่าพิเศษซึ่งใหญ่เกินไปและไม่สามารถนำมาใช้กับคำถามนี้ได้เนื่องจากจะเป็นตัวกำหนดขนาดของบัญชีรายชื่อ</value>
+    </data>
+    <data name="WB0136_SpecialValuesHaveOptionsWithEmptyValue" xml:space="preserve">
+        <value>คำถามมีค่าพิเศษแต่มีค่าว่าง</value>
+    </data>
+    <data name="WB0137_SpecialValuesTitlesMustBeUnique" xml:space="preserve">
+        <value>ชื่อค่าพิเศษต้องไม่ซ้ำกัน</value>
+    </data>
+    <data name="WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion" xml:space="preserve">
+        <value>ชื่อไฟล์แนบค่าพิเศษต้องไม่ซ้ำกัน</value>
+    </data>
+    <data name="WB0139_SpecialValuesAttachmentsReferAbsentAttachment" xml:space="preserve">
+        <value>ไฟล์แนบค่าพิเศษหมายถึงไฟล์แนบที่ไม่มีอยู่</value>
+    </data>
+    <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
+        <value>ชื่อแบบสอบถามไม่ควรมีอักขระขีดล่างสองตัวขึ้นไปติดกัน</value>
+    </data>
+    <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+        <value>โหมดธรรมดาอนุญาตเฉพาะกับบัญชีรายชื่อที่มีคำถามหรือข้อความคงที่ไม่เกิน {0}</value>
+    </data>
+    <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
+        <value>โหมดธรรมดาไม่อนุญาตให้ใช้บัญชีรายชื่อที่ซ้อนกัน</value>
+    </data>
+    <data name="WB0280_TextContainsLinkToUnknownQuestionOrGroup" xml:space="preserve">
+        <value>ข้อความมีลิงก์ไปยังคำถามที่ไม่รู้จัก ส่วนย่อย บัญชีรายชื่อ หรือไฟล์แนบ PDF</value>
+    </data>
+    <data name="WB0057_LinksAreProhibitedOnNavigationElements" xml:space="preserve">
+        <value>ห้ามใช้ลิงก์ในองค์ประกอบการนำทาง: ส่วน ส่วนย่อย บัญชีรายชื่อ</value>
+    </data>
+    <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
+        <value>จำนวนองค์ประกอบทั้งหมด ({0}) เกินขีดจำกัดของระบบ ({1}) พิจารณาลดจำนวนคำถาม ข้อความคงที่ ตัวแปร หรือรายการในบัญชีรายชื่อคงที่</value>
+    </data>
+    <data name="WB0282_IdentifyingQuestionInSectionWithCondition" xml:space="preserve">
+        <value>ไม่สามารถระบุคำถามภายในส่วนที่มีเงื่อนไขการเปิดใช้งานได้</value>
+    </data>
+    <data name="WB0282_TableRosterContainsNestedGroup" xml:space="preserve">
+        <value>โหมดบัญชีรายชื่อตารางไม่อนุญาตให้ใช้กลุ่มและบัญชีรายชื่อที่ซ้อนกัน</value>
+    </data>
+    <data name="WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+        <value>โหมดตารางอนุญาตเฉพาะกับบัญชีรายชื่อที่มีคำถามไม่เกิน {0}</value>
+    </data>
+    <data name="WB0284_TableRosterCantContainsSupervisorQuestions" xml:space="preserve">
+        <value>บัญชีรายชื่อตารางไม่อนุญาตให้ใช้คำถามของผู้บังคับบัญชา</value>
+    </data>
+    <data name="WB0285_TableRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+        <value>บัญชีรายชื่อตารางอนุญาตให้ใช้เฉพาะคำถามที่เป็นข้อความและตัวเลขเท่านั้น</value>
+    </data>
+    <data name="WB0286_TableAndMatixRosterWorksOnlyInWebMode" xml:space="preserve">
+        <value>โหมดตารางหรือบัญชีรายชื่อเมทริกซ์ใช้งานได้เฉพาะในแบบสำรวจเว็บเท่านั้น บนแท็บเล็ตจะเป็นโหมด 'ส่วนย่อย'</value>
+    </data>
+    <data name="WB0309_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
+        <value>คำถามในส่วนโอเวอร์จะต้องมีป้ายกำกับตัวแปร</value>
+    </data>
+    <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
+        <value>คำถามหน้าปกสามารถใช้ได้เฉพาะประเภทที่อนุญาตเท่านั้น (ข้อความ, ตัวเลข, DateTime, GpsCoordinates, SingleOption)</value>
+    </data>
+    <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
+        <value>ป้ายกำกับ {1} สำหรับโค้ด {0} เป็นตัวเลขที่แตกต่างจากค่าที่ติดป้ายกำกับ</value>
+    </data>
+    <data name="WB0289" xml:space="preserve">
+        <value>ชื่อหมวดหมู่ไม่ควรยาวเกินอักขระ {0}</value>
+    </data>
+    <data name="WB0290" xml:space="preserve">
+        <value>ชื่อหมวดหมู่ไม่ควรลงท้ายด้วยขีดล่าง</value>
+    </data>
+    <data name="WB0291" xml:space="preserve">
+        <value>ชื่อหมวดหมู่ไม่ควรมีอักขระขีดล่างสองตัวขึ้นไปติดกัน</value>
+    </data>
+    <data name="WB0292" xml:space="preserve">
+        <value>ชื่อหมวดหมู่ไม่ควรเว้นว่าง</value>
+    </data>
+    <data name="WB0293" xml:space="preserve">
+        <value>ชื่อหมวดหมู่ไม่สามารถเป็นคำสงวนได้</value>
+    </data>
+    <data name="WB0294" xml:space="preserve">
+        <value>ชื่อหมวดหมู่ควรมีเฉพาะตัวอักษร ตัวเลข และขีดล่างเท่านั้น</value>
+    </data>
+    <data name="WB0295" xml:space="preserve">
+        <value>ชื่อหมวดหมู่ไม่ควรขึ้นต้นด้วยตัวเลขหรือขีดล่าง</value>
+    </data>
+    <data name="WB0296" xml:space="preserve">
+        <value>คำถามมีหมวดหมู่เดียวกัน ใช้หมวดหมู่ที่นำมาใช้ซ้ำแทน</value>
+    </data>
+    <data name="WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+        <value>บัญชีรายชื่อเมทริกซ์อนุญาตให้ใช้เฉพาะคำถามเชิงหมวดหมู่ง่ายๆ เท่านั้น: ไม่อนุญาตให้ใช้โหมดคอมโบบ็อกซ์ การเรียงซ้อน หรือใช่/ไม่ใช่</value>
+    </data>
+    <data name="WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+        <value>โหมดเมทริกซ์อนุญาตสำหรับบัญชีรายชื่อที่มีคำถามไม่เกิน {0} เท่านั้น</value>
+    </data>
+    <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
+        <value>บัญชีรายชื่อเมทริกซ์จะต้องไม่มีหัวหน้างานหรือระบุคำถาม</value>
+    </data>
+    <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
+        <value>บัญชีรายชื่อเมทริกซ์ต้องไม่มีคำถามที่เชื่อมโยง</value>
+    </data>
+    <data name="WB0302" xml:space="preserve">
+        <value>การเปลี่ยนตัวไม่สามารถอ้างอิงรายการจากบัญชีรายชื่อเดียวกันได้</value>
+    </data>
+    <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
+        <value>หมวดหมู่ที่นำมาใช้ใหม่ไม่สามารถมีแถวที่มีค่า Id และ ParentId เหมือนกัน</value>
+    </data>
+    <data name="WB0306_DuplicatedCategoryParentIdText" xml:space="preserve">
+        <value>หมวดหมู่ที่นำมาใช้ใหม่ไม่สามารถมีแถวที่มีค่า ParentId และข้อความเหมือนกัน</value>
+    </data>
+    <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
+        <value>คำถามอ้างอิงถึงหมวดหมู่ที่ใช้ซ้ำได้ซึ่งไม่มีอยู่จริง</value>
+    </data>
+    <data name="WB0390_OnlyStringVariableAllowedAsAttachmentName" xml:space="preserve">
+        <value>เฉพาะประเภทตัวแปรสตริงเท่านั้นที่สามารถใช้เป็นแหล่งที่มาของชื่อไฟล์แนบได้</value>
+    </data>
+    <data name="WB0391" xml:space="preserve">
+        <value>ข้อความคงที่ไม่สามารถอ้างอิงตัวแปรที่มีขอบเขตบัญชีรายชื่อที่ลึกกว่านั้นเองได้</value>
+    </data>
+    <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
+        <value>ไม่อนุญาตให้ลิงก์ไปยังคำถามที่ซ่อนอยู่</value>
+    </data>
+    <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
+        <value>ตัวแปรในส่วน Сover ต้องมีป้ายกำกับ</value>
+    </data>
+    <data name="WB0312" xml:space="preserve">
+        <value>หมวดหมู่จะต้องมีอย่างน้อยสองตัวเลือก</value>
+    </data>
+    <data name="WB0313_QuestionOptionReferenceToNonExistentAttachment" xml:space="preserve">
+        <value>ตัวเลือกคำถามหมายถึงไฟล์แนบที่ไม่มีอยู่</value>
+    </data>
+    <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
+        <value>คำถามมีหลายตัวเลือกที่อ้างถึงไฟล์แนบเดียวกัน</value>
+    </data>
+    <data name="WB0315_AttachmentHasInvalidName" xml:space="preserve">
+        <value>ชื่อไฟล์แนบควรมีเฉพาะตัวอักษร ตัวเลข และขีดล่างเท่านั้น ขึ้นต้นด้วยตัวอักษร ไม่มีขีดล่างติดกัน ไม่ลงท้ายด้วยขีดล่าง และไม่ใช่คำสงวน ไม่เว้นว่างและมีความยาวน้อยกว่า 32 ตัวอักษร</value>
+    </data>
+    <data name="WB0316_QuestionnaireWithOldCoverPage" xml:space="preserve">
+        <value>แบบสอบถามในรูปแบบเก่า โปรดใช้ลิงก์ "สร้างหน้าปก" ในส่วนหน้าปก</value>
+    </data>
+    <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
+        <value>ขอบเขตของคำถามเชิงวิพากษ์ต้องไม่อยู่ในขอบเขตใด ๆ ต่อไปนี้: ซ่อนเร้น, หัวหน้างาน</value>
+    </data>
+    <data name="WB0318_CriticalityConditionExpressionHasIncorrectSyntax" xml:space="preserve">
+        <value>สภาวะวิกฤติมีข้อผิดพลาดทางไวยากรณ์ในนิพจน์</value>
+    </data>
+    <data name="WB0319_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+        <value>สภาวะวิกฤตว่างเปล่า</value>
+    </data>
+    <data name="WB0320_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+        <value>ข้อความในกฎวิกฤติว่างเปล่า</value>
+    </data>
+    <data name="WB0321_CriticalityConditionUsingForbiddenClasses" xml:space="preserve">
+        <value>ภาวะวิกฤตใช้แบบต้องห้าม</value>
+    </data>
+    <data name="WB0322_CriticalRuleExpressionIsTooLong" xml:space="preserve">
+        <value>นิพจน์กฎที่สำคัญมีอักขระมากกว่า {0}</value>
+    </data>
+    <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
+        <value>ข้อความเงื่อนไขวิกฤติมากกว่าอักขระ {0}</value>
+    </data>
+</root>

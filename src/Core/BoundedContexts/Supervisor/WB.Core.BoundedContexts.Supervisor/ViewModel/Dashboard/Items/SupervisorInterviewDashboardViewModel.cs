@@ -5,6 +5,7 @@ using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -114,7 +115,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
             this.isInterviewReadyToLoad = false;
             try
             {
-                Logger.Warn($"Open Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now}");
+                Logger.Warn($"Open Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now.ToString(DateTimeFormat.DateWithTimeFormat, System.Globalization.CultureInfo.InvariantCulture)}");
                 await viewModelNavigationService.NavigateToAsync<LoadingInterviewViewModel, LoadingViewModelArg>(
                     new LoadingViewModelArg
                     {
