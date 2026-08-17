@@ -238,6 +238,20 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             foreach (var error in this.AudioAuditScope_InvalidEntities(assignmentRow, questionnaire))
                 yield return error;
+
+            foreach (var error in this.TargetArea_TooLong(assignmentRow))
+                yield return error;
+        }
+
+        private IEnumerable<PanelImportVerificationError> TargetArea_TooLong(PreloadingAssignmentRow assignmentRow)
+        {
+            var targetArea = assignmentRow.TargetArea;
+            if (targetArea?.Value == null || targetArea.Value.Length <= AssignmentConstants.TargetAreaLengthLimit)
+                yield break;
+
+            yield return ToCellError("PL0065",
+                string.Format(messages.PL0065_TargetAreaTooLong, AssignmentConstants.TargetAreaLengthLimit),
+                assignmentRow, targetArea);
         }
 
         private IEnumerable<PanelImportVerificationError> AudioAuditScope_InvalidEntities(

@@ -258,6 +258,9 @@
   <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
     <value>Numele variabilei domeniului de audit audio '{0}' este invalid. Trebuie să facă referire la o secțiune, un grup sau un roster existent (întrebările și rosterele plate nu sunt permise).</value>
   </data>
+  <data name="PL0065_TargetAreaTooLong" xml:space="preserve">
+    <value>Target area is too long. It must be {0} characters or fewer.</value>
+  </data>
   <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
     <value>Sarcina nu a fost migrată deoarece utilizează un audit audio selectiv (domeniul de înregistrare audio), care nu poate fi migrat automat la o versiune nouă a chestionarului. Recreați sarcina manual și configurați din nou domeniul auditului audio.</value>
   </data>

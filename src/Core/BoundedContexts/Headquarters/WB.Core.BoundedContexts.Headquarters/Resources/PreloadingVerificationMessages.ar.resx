@@ -259,6 +259,9 @@
   <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
     <value>اسم متغير نطاق التدقيق الصوتي '{0}' غير صالح. يجب أن يشير إلى قسم أو مجموعة أو سجل موجود (الأسئلة والسجلات المسطحة (flat roster) غير مسموح بها).</value>
   </data>
+  <data name="PL0065_TargetAreaTooLong" xml:space="preserve">
+    <value>Target area is too long. It must be {0} characters or fewer.</value>
+  </data>
   <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
     <value>لم يتم ترحيل التكليف لأنه يستخدم تدقيقًا صوتيًا انتقائيًا (نطاق التسجيل الصوتي)، والذي لا يمكن ترحيله تلقائيًا إلى إصدار جديد من الاستبيان. أعد إنشاء التكليف يدويًا وقم بتكوين نطاق التدقيق الصوتي مرة أخرى.</value>
   </data>

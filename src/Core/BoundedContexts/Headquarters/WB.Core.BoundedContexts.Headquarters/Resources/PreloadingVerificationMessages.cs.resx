@@ -258,6 +258,9 @@
   <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
     <value>Název proměnné rozsahu zvukového auditu '{0}' je neplatný. Musí odkazovat na existující sekci, skupinu nebo seznam (roster) (otázky a ploché seznamy (flat roster) nejsou povoleny).</value>
   </data>
+  <data name="PL0065_TargetAreaTooLong" xml:space="preserve">
+    <value>Target area is too long. It must be {0} characters or fewer.</value>
+  </data>
   <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
     <value>Úkol nebyl migrován, protože používá selektivní zvukový audit (rozsah nahrávání zvuku), který nelze automaticky migrovat na novou verzi dotazníku. Vytvořte úkol znovu ručně a znovu nakonfigurujte rozsah zvukového auditu.</value>
   </data>

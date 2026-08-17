@@ -258,6 +258,9 @@
   <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
     <value>Ім'я змінної області аудіоконтролю '{0}' недійсне. Воно повинно посилатися на наявний розділ, групу або ростер (запитання та плоскі ростери (flat roster) не дозволяються).</value>
   </data>
+  <data name="PL0065_TargetAreaTooLong" xml:space="preserve">
+    <value>Target area is too long. It must be {0} characters or fewer.</value>
+  </data>
   <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
     <value>Завдання не було перенесено, оскільки в ньому використовується вибірковий аудіоконтроль (область аудіозапису), який неможливо автоматично перенести на нову версію опитувального листа. Створіть завдання заново вручну та знову налаштуйте область аудіоконтролю.</value>
   </data>

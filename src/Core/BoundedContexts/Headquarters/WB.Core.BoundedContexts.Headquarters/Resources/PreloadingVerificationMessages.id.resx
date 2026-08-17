@@ -199,6 +199,9 @@
     <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
         <value>Nama variabel cakupan audit audio '{0}' tidak valid. Itu harus merujuk pada bagian, grup, atau daftar nama yang ada (pertanyaan dan daftar nama datar tidak diperbolehkan).</value>
     </data>
+  <data name="PL0065_TargetAreaTooLong" xml:space="preserve">
+    <value>Target area is too long. It must be {0} characters or fewer.</value>
+  </data>
     <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
         <value>Penugasan tidak dimigrasi karena menggunakan Audit Audio selektif (cakupan rekaman audio), yang tidak dapat dimigrasi secara otomatis ke versi kuesioner baru. Buat ulang penugasan secara manual dan konfigurasikan kembali cakupan audit audio.</value>
     </data>

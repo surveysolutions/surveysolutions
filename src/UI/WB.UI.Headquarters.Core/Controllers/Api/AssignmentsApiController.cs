@@ -228,6 +228,12 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (request == null)
                 return this.BadRequest();
 
+            if (request.TargetArea != null && request.TargetArea.Length > AssignmentConstants.TargetAreaLengthLimit)
+            {
+                var truncatedName = request.TargetArea.Length > 100 ? request.TargetArea.Substring(0, 100) + "…" : request.TargetArea;
+                return this.BadRequest(new {Message = string.Format(Maps.MapFileNameTooLong, truncatedName, AssignmentConstants.TargetAreaLengthLimit)});
+            }
+
             var interview = this.interviews.Get(request.InterviewId);
             if (interview == null)
                 return this.NotFound();
