@@ -271,7 +271,7 @@ export default {
 
         if (!this.questionnaire.isReadOnlyForUser) {
             this.commentThreadsStore.initializeCount(this.questionnaireId);
-            this.commentThreadsStore.setupListeners();
+            this.commentThreadsStore.setupListeners(this.questionnaireId);
         }
     },
     unmounted() {

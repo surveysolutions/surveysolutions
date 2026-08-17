@@ -86,15 +86,16 @@ export default {
         }
     },
     computed: {
-        unresolvedCount() {
-            return this.commentThreads.reduce(
-                (sum, thread) => sum + thread.comments.filter(c => !c.resolveDate).length, 0
-            );
+        unresolvedCommentIds() {
+            return this.commentThreads.flatMap(thread => thread.comments.map(comment => comment.id));
         }
     },
     watch: {
-        unresolvedCount(value) {
-            this.commentThreadsStore.setUnresolvedCount(value);
+        unresolvedCommentIds: {
+            handler(value) {
+                this.commentThreadsStore.setUnresolvedCommentIds(value);
+            },
+            immediate: true,
         }
     },
     async beforeMount() {
