@@ -172,11 +172,11 @@ jobs:
             /o:"surveysolutions" \
             /v:"$(cat ./src/.version)" \
             /d:sonar.host.url="https://sonarcloud.io" \
-            /d:sonar.login="${{ secrets.SONAR_TOKEN }}" \
+            /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
             /d:sonar.exclusions="**/migrations/**" \
             /d:sonar.cs.opencover.reportsPaths="${{ steps.test-results.outputs.download-path }}/**/*.xml"
           dotnet build './src/WB without Xamarin.sln'
-          dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
