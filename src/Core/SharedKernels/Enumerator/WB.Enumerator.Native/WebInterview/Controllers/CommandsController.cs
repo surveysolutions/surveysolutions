@@ -265,8 +265,12 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
                 if (questionType == QuestionType.Multimedia)
                 {
-                    var fileName = $@"{questionnaire.GetQuestionVariableName(identity.Id)}{string.Join(@"-", identity.RosterVector.Select(rv => rv))}.jpg";
-                    this.imageFileStorage.RemoveInterviewBinaryData(interviewId, fileName);
+                    var question = interview.GetQuestion(identity);
+                    var fileName = question.IsAnswered()
+                        ? question.GetAsInterviewTreeMultimediaQuestion().GetAnswer()?.FileName
+                        : null;
+                    if (fileName != null)
+                        this.imageFileStorage.RemoveInterviewBinaryData(interviewId, fileName);
                 }
                 else if (questionType == QuestionType.Audio)
                 {

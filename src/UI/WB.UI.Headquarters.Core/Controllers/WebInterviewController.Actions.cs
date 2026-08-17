@@ -118,6 +118,7 @@ namespace WB.UI.Headquarters.Controllers
 
             string filename = null;
             string previousFilename = null;
+            bool answerCommandSucceeded = false;
 
             try
             {
@@ -139,16 +140,27 @@ namespace WB.UI.Headquarters.Controllers
                 this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
                     responsibleId, questionIdentity.Id, questionIdentity.RosterVector, filename));
 
-                if (previousFilename != null && previousFilename != filename)
-                    await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, previousFilename);
+                answerCommandSucceeded = true;
             }
             catch (Exception e)
             {
-                if (filename != null)
+                if (filename != null && !answerCommandSucceeded)
                     await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
 
                 webInterviewNotificationService.MarkAnswerAsNotSaved(id, questionIdentity, e);
                 throw;
+            }
+
+            if (previousFilename != null && previousFilename != filename)
+            {
+                try
+                {
+                    await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, previousFilename);
+                }
+                catch
+                {
+                    // best-effort: failure to remove the obsolete file does not affect the committed answer
+                }
             }
             return this.Json("ok");
         }

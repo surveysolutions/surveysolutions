@@ -123,6 +123,37 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             imageFileStorage.Verify(s => s.RemoveInterviewBinaryData(interview.Id, filename), Times.Once);
         }
 
+        [Test]
+        public async Task Image_when_old_file_removal_throws_does_not_delete_new_file()
+        {
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.MultimediaQuestion(questionId: QuestionId, variable: "photo"));
+            var interview = SetUp.StatefulInterview(questionnaire);
+
+            var existingFilename = AnswerUtils.GetPictureFileName("photo", RosterVector.Empty, ".jpg");
+            interview.AnswerPictureQuestion(UserId, QuestionId, RosterVector.Empty, DateTimeOffset.UtcNow, existingFilename);
+
+            var imageFileStorage = new Mock<IImageFileStorage>();
+            imageFileStorage
+                .Setup(s => s.RemoveInterviewBinaryData(It.IsAny<Guid>(), existingFilename))
+                .ThrowsAsync(new Exception("storage failure"));
+
+            var commandService = new Mock<ICommandService>();
+            var controller = CreateController(interview, imageFileStorage.Object, commandService.Object);
+
+            var questionIdentity = Identity.Create(QuestionId, RosterVector.Empty);
+            var file = CreateFormFile("photo.png", "image/png");
+
+            // should not throw — old-file removal is best-effort
+            var result = await controller.Image(interview.Id, questionIdentity.ToString(), file);
+
+            Assert.That(result, Is.InstanceOf<JsonResult>());
+            var newFilename = AnswerUtils.GetPictureFileName("photo", RosterVector.Empty, ".png");
+            // new file must NOT be removed
+            imageFileStorage.Verify(s => s.RemoveInterviewBinaryData(interview.Id, newFilename), Times.Never);
+        }
+
+
         private static WebInterviewBinaryController CreateController(
             StatefulInterview interview,
             IImageFileStorage imageFileStorage = null,
