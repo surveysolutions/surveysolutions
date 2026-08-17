@@ -66,14 +66,34 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             this.IsIndeterminate = false;
         }
 
-        public override Task Initialize()
+        public override async Task Initialize()
         {
-            if (InterviewId == Guid.Empty) throw new ArgumentException(nameof(InterviewId));
+            // InterviewId can be missing/empty if the OS recreated this Activity from a
+            // saved state without properly restoring the ViewModel arguments (e.g. after
+            // the process was killed in background). Previously this threw an
+            // ArgumentException here, which MvvmCross wraps into a fatal, unhandled
+            // "Failed to construct and initialize ViewModel" crash with no usable
+            // InnerException in Crashlytics. Fail gracefully instead of crashing.
+            if (InterviewId == Guid.Empty)
+            {
+                this.logger.Warn($"{nameof(LoadingInterviewViewModel)}.{nameof(Initialize)} was called without a valid InterviewId. Navigating to dashboard instead of crashing.");
+                await this.ViewModelNavigationService.NavigateToDashboardAsync().ConfigureAwait(false);
+                return;
+            }
 
-            var interview = this.interviewsRepository.GetById(this.InterviewId.FormatGuid());
-            this.QuestionnaireTitle = interview?.QuestionnaireTitle;
-
-            return Task.CompletedTask;
+            try
+            {
+                var interview = this.interviewsRepository.GetById(this.InterviewId.FormatGuid());
+                this.QuestionnaireTitle = interview?.QuestionnaireTitle;
+            }
+            catch (Exception exception)
+            {
+                // interviewsRepository.GetById reads from local plain storage and can throw
+                // (e.g. corrupted storage, IO error). This used to be unhandled and would
+                // crash the app during ViewModel construction. Log and continue - the title
+                // is not critical for the loading screen to keep working.
+                this.logger.Error($"Failed to read interview view for {InterviewId} during {nameof(Initialize)}.", exception);
+            }
         }
 
         public override void ViewAppeared()
