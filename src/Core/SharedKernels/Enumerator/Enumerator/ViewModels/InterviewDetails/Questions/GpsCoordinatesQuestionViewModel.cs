@@ -150,10 +150,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private CancellationTokenSource cts;
+        // Canceled when the view model is disposed (navigation away / user leaving the question).
+        // Kept separate from the acquisition timeout: a timeout may still yield an acceptable
+        // fallback location, while disposal must abort without persisting any answer.
+        private readonly CancellationTokenSource disposeCts = new CancellationTokenSource();
 
         private async Task SaveAnswerAsync()
         {
+            if (this.isDisposed)
+                return;
+
             this.Answering.StartInProgressIndicator();
             this.userInterfaceStateService.NotifyRefreshStarted();
 
@@ -166,9 +172,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             try
             {
-                cts = new CancellationTokenSource(TimeSpan.FromSeconds(this.settings.GpsReceiveTimeoutSec));
+                using var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(this.settings.GpsReceiveTimeoutSec));
+                using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(timeoutCts.Token, this.disposeCts.Token);
                 mvxGeoLocation = await this.locationService.GetLocation(
-                    this.settings.GpsDesiredAccuracy, this.settings.AcceptableGpsLocationSource, cts.Token).ConfigureAwait(false);
+                    this.settings.GpsDesiredAccuracy, this.settings.AcceptableGpsLocationSource, linkedCts.Token).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -182,6 +189,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             try
             {
+                // The question was disposed while waiting for a fix: do not persist anything,
+                // not even an acceptable fallback location.
+                if (this.isDisposed)
+                    return;
+
                 if (gpsException is NoSuitableLocationProviderException)
                 {
                     await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(EnumeratorUIResources.Error_NoSuitableLocationProvider);
@@ -269,8 +281,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             isDisposed = true;
             
-            cts?.Cancel();
-            cts?.Dispose();
+            this.disposeCts.Cancel();
+            this.disposeCts.Dispose();
 
             this.Answering.PropertyChanged -= this.OnAnsweringPropertyChanged;
             
