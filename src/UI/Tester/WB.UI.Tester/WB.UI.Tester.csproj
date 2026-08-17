@@ -57,7 +57,7 @@
     <Debugger>.Net (Xamarin)</Debugger>
     <AndroidTlsProvider>btls</AndroidTlsProvider>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
-    <RuntimeIdentifiers>android-arm;android-arm64;android-x86</RuntimeIdentifiers>
+    <RuntimeIdentifiers>android-arm;android-arm64</RuntimeIdentifiers>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
