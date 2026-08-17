@@ -132,9 +132,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 }).ToArray();
         }
 
-        public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool? archived, UserRoles role, string? workspace = null, bool acrossAllWorkspaces = false)
+        public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool? archived, UserRoles role, string? workspace = null, bool acrossAllWorkspaces = false, IEnumerable<string>? allowedWorkspaces = null)
         {
-            var allUsers = ApplyFilter(this.userRepository.Users, searchBy, QueryFilterRule.Contains, archived, workspace, acrossAllWorkspaces, role)
+            var allUsers = ApplyFilter(this.userRepository.Users, searchBy, QueryFilterRule.Contains, archived, workspace, acrossAllWorkspaces, allowedWorkspaces, role)
                 .Select(x => new InterviewersItem
                 {
                     UserId = x.Id,
@@ -461,15 +461,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         }
 
         private IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string? searchBy, QueryFilterRule filterRule, bool? archived, params UserRoles[] role)
-            => ApplyFilter(_, searchBy, filterRule, archived, null, false, role);
+            => ApplyFilter(_, searchBy, filterRule, archived, null, false, null, role);
         
-        private IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string? searchBy, QueryFilterRule filterRule, bool? archived, string? workspace = null, bool acrossAllWorkspaces = false, params UserRoles[] role)
+        private IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string? searchBy, QueryFilterRule filterRule, bool? archived, string? workspace = null, bool acrossAllWorkspaces = false, IEnumerable<string>? allowedWorkspaces = null, params UserRoles[] role)
         {
             var selectedRoleId = role.Select(x => x.ToUserId()).ToArray();
             
             var allUsers = _.Where(x => x.Roles.Any(r => selectedRoleId.Contains(r.Id)));
 
-            if (!acrossAllWorkspaces)
+            if (allowedWorkspaces != null)
+            {
+                var workspaceList = allowedWorkspaces.ToList();
+                allUsers = allUsers.Where(u => u.Workspaces.Any(w => workspaceList.Contains(w.Workspace.Name)));
+            }
+            else if (!acrossAllWorkspaces)
             {
                 var currentWorkspace = workspace ??
                                        workspaceContextAccessor.CurrentWorkspace()?.Name ?? 

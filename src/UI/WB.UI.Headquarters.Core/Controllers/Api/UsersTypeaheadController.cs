@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,7 +38,14 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [Route("allSupervisors")]
         public TypeaheadApiView AllSupervisors(string query, int limit = 10, int offset = 1)
-            => ToTypeaheadModel(this.usersFactory.GetUsersByRole(offset, limit, null, query, false, UserRoles.Supervisor, acrossAllWorkspaces: true));
+        {
+            var allowedWorkspaces = this.authorizedUser.IsAdministrator
+                ? null
+                : this.authorizedUser.Workspaces.ToList();
+            return ToTypeaheadModel(this.usersFactory.GetUsersByRole(offset, limit, null, query, false,
+                UserRoles.Supervisor, acrossAllWorkspaces: this.authorizedUser.IsAdministrator,
+                allowedWorkspaces: allowedWorkspaces));
+        }
 
         [HttpGet]
         [Route("workspaceSupervisors")]
