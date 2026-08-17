@@ -109,6 +109,20 @@ public class AudioAuditAccessServiceTests
     }
 
     [Test]
+    public void when_user_is_observer_should_block_access()
+    {
+        var interviewId = Guid.NewGuid();
+        var interview = Create.AggregateRoot.StatefulInterview(interviewId: interviewId);
+
+        var subject = CreateSubject(
+            interviewId,
+            interview,
+            Mock.Of<IAuthorizedUser>(user => user.IsAuthenticated && user.IsObserver));
+
+        Assert.That(subject.CanAccessAudioAudit(interviewId), Is.False);
+    }
+
+    [Test]
     public void when_user_is_anonymous_should_block_access()
     {
         var interviewId = Guid.NewGuid();

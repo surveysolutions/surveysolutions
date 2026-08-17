@@ -162,4 +162,70 @@
   <data name="AudioAudit_NoRecordingsAvailable" xml:space="preserve">
     <value>Aktualisht nuk ka regjistrime që mund të luhen</value>
   </data>
+  <data name="AudioAudit_Title" xml:space="preserve">
+    <value>Regjistrimet e auditimit audio</value>
+  </data>
+  <data name="AudioAudit_LoadingRecordings" xml:space="preserve">
+    <value>Po ngarkohen regjistrimet...</value>
+  </data>
+  <data name="AudioAudit_LoadingAudio" xml:space="preserve">
+    <value>Po ngarkohet audio...</value>
+  </data>
+  <data name="AudioAudit_LoadFailed" xml:space="preserve">
+    <value>Nuk u ngarkuan regjistrimet e auditimit audio.</value>
+  </data>
+  <data name="AudioAudit_Retry" xml:space="preserve">
+    <value>Provo sërish</value>
+  </data>
+  <data name="AudioAudit_NowPlaying" xml:space="preserve">
+    <value>Po luhet tani: {{ segment }}</value>
+  </data>
+  <data name="AudioAudit_PositionValue" xml:space="preserve">
+    <value>Pozicioni: {{ position }}</value>
+  </data>
+  <data name="AudioAudit_DurationValue" xml:space="preserve">
+    <value>Kohëzgjatja: {{ duration }}</value>
+  </data>
+  <data name="AudioAudit_RecordingPosition" xml:space="preserve">
+    <value>Pozicioni i regjistrimit</value>
+  </data>
+  <data name="AudioAudit_GoToPreviousSegment" xml:space="preserve">
+    <value>Kalo te regjistrimi i mëparshëm</value>
+  </data>
+  <data name="AudioAudit_PlayRecording" xml:space="preserve">
+    <value>Luaj regjistrimin</value>
+  </data>
+  <data name="AudioAudit_PauseRecording" xml:space="preserve">
+    <value>Ndalo përkohësisht regjistrimin</value>
+  </data>
+  <data name="AudioAudit_GoToNextSegment" xml:space="preserve">
+    <value>Kalo te regjistrimi tjetër</value>
+  </data>
+  <data name="AudioAudit_PlaylistLabel" xml:space="preserve">
+    <value>Lista e regjistrimeve të auditimit audio</value>
+  </data>
+  <data name="AudioAudit_UnknownDuration" xml:space="preserve">
+    <value>kohëzgjatje e panjohur</value>
+  </data>
+  <data name="AudioAudit_SeekPosition" xml:space="preserve">
+    <value>{{ current }} nga {{ total }}</value>
+  </data>
+  <data name="AudioAudit_PlaybackSpeedAnnouncement" xml:space="preserve">
+    <value>Shpejtësia e luajtjes {{ rate }}x.</value>
+  </data>
+  <data name="AudioAudit_SegmentSelected" xml:space="preserve">
+    <value>U zgjodh {{ segment }}.</value>
+  </data>
+  <data name="AudioAudit_SegmentDurationAnnouncement" xml:space="preserve">
+    <value>{{ segment }} zgjat {{ duration }}.</value>
+  </data>
+  <data name="AudioAudit_PlayingAnnouncement" xml:space="preserve">
+    <value>Po luhet {{ segment }}.</value>
+  </data>
+  <data name="AudioAudit_PausedAnnouncement" xml:space="preserve">
+    <value>{{ segment }} është në pauzë.</value>
+  </data>
+  <data name="AudioAudit_FinishedAnnouncement" xml:space="preserve">
+    <value>{{ segment }} përfundoi.</value>
+  </data>
 </root>

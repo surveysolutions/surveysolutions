@@ -13,12 +13,37 @@ namespace WB.Core.SharedKernels.DataCollection.Views.BinaryData
 
         public InterviewBinaryDataDescriptor(Guid interviewId, string fileName, string contentType, Func<Task<byte[]>> getData, string md5, Func<Task<Stream>> getStream)
         {
+            Func<Task<Stream>> streamAccessor = getStream;
+            if (streamAccessor == null)
+            {
+                streamAccessor = async () =>
+                {
+                    var data = await getData();
+                    return data == null ? null : new MemoryStream(data, writable: false);
+                };
+            }
+
+            Func<Task<byte[]>> dataAccessor = getData;
+            if (dataAccessor == null)
+            {
+                dataAccessor = async () =>
+                {
+                    using var stream = await streamAccessor();
+                    if (stream == null)
+                        return null;
+
+                    using var memoryStream = new MemoryStream();
+                    await stream.CopyToAsync(memoryStream);
+                    return memoryStream.ToArray();
+                };
+            }
+
             this.InterviewId = interviewId;
             this.FileName = fileName;
-            this.getData = getData;
+            this.getData = dataAccessor;
             this.ContentType = contentType;
             this.Md5 = md5;
-            this.getStream = getStream;
+            this.getStream = streamAccessor;
         }
 
         public Guid InterviewId { get; private set; }
@@ -33,11 +58,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.BinaryData
 
         public async Task<Stream> GetStream()
         {
-            if (this.getStream != null)
-                return await this.getStream();
-
-            var data = await this.getData();
-            return data == null ? null : new MemoryStream(data, writable: false);
+            return await this.getStream();
         }
 
         private readonly Func<Task<byte[]>> getData;

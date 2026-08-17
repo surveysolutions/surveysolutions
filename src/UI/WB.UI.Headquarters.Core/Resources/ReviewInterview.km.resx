@@ -47,4 +47,70 @@
   <data name="AudioAudit_NoRecordingsAvailable" xml:space="preserve">
     <value>បច្ចុប្បន្នមិនមានការថតសំឡេងដែលអាចចាក់បានទេ</value>
   </data>
+  <data name="AudioAudit_Title" xml:space="preserve">
+    <value>កំណត់ត្រាសវនកម្មសំឡេង</value>
+  </data>
+  <data name="AudioAudit_LoadingRecordings" xml:space="preserve">
+    <value>កំពុងផ្ទុកការថត...</value>
+  </data>
+  <data name="AudioAudit_LoadingAudio" xml:space="preserve">
+    <value>កំពុងផ្ទុកសំឡេង...</value>
+  </data>
+  <data name="AudioAudit_LoadFailed" xml:space="preserve">
+    <value>មិនអាចផ្ទុកកំណត់ត្រាសវនកម្មសំឡេងបានទេ។</value>
+  </data>
+  <data name="AudioAudit_Retry" xml:space="preserve">
+    <value>សាកល្បងម្តងទៀត</value>
+  </data>
+  <data name="AudioAudit_NowPlaying" xml:space="preserve">
+    <value>កំពុងចាក់៖ {{ segment }}</value>
+  </data>
+  <data name="AudioAudit_PositionValue" xml:space="preserve">
+    <value>ទីតាំង៖ {{ position }}</value>
+  </data>
+  <data name="AudioAudit_DurationValue" xml:space="preserve">
+    <value>រយៈពេល៖ {{ duration }}</value>
+  </data>
+  <data name="AudioAudit_RecordingPosition" xml:space="preserve">
+    <value>ទីតាំងការថត</value>
+  </data>
+  <data name="AudioAudit_GoToPreviousSegment" xml:space="preserve">
+    <value>ទៅកាន់ការថតមុន</value>
+  </data>
+  <data name="AudioAudit_PlayRecording" xml:space="preserve">
+    <value>ចាក់ការថត</value>
+  </data>
+  <data name="AudioAudit_PauseRecording" xml:space="preserve">
+    <value>ផ្អាកការថត</value>
+  </data>
+  <data name="AudioAudit_GoToNextSegment" xml:space="preserve">
+    <value>ទៅកាន់ការថតបន្ទាប់</value>
+  </data>
+  <data name="AudioAudit_PlaylistLabel" xml:space="preserve">
+    <value>បញ្ជីកំណត់ត្រាសវនកម្មសំឡេង</value>
+  </data>
+  <data name="AudioAudit_UnknownDuration" xml:space="preserve">
+    <value>មិនស្គាល់រយៈពេល</value>
+  </data>
+  <data name="AudioAudit_SeekPosition" xml:space="preserve">
+    <value>{{ current }} នៃ {{ total }}</value>
+  </data>
+  <data name="AudioAudit_PlaybackSpeedAnnouncement" xml:space="preserve">
+    <value>ល្បឿនចាក់ {{ rate }}x។</value>
+  </data>
+  <data name="AudioAudit_SegmentSelected" xml:space="preserve">
+    <value>បានជ្រើសរើស {{ segment }}។</value>
+  </data>
+  <data name="AudioAudit_SegmentDurationAnnouncement" xml:space="preserve">
+    <value>{{ segment }} មានរយៈពេល {{ duration }}។</value>
+  </data>
+  <data name="AudioAudit_PlayingAnnouncement" xml:space="preserve">
+    <value>កំពុងចាក់ {{ segment }}។</value>
+  </data>
+  <data name="AudioAudit_PausedAnnouncement" xml:space="preserve">
+    <value>{{ segment }} កំពុងផ្អាក។</value>
+  </data>
+  <data name="AudioAudit_FinishedAnnouncement" xml:space="preserve">
+    <value>{{ segment }} បានបញ្ចប់។</value>
+  </data>
 </root>

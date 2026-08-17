@@ -1,110 +1,174 @@
 <template>
-    <aside id="audio-audit-panel" ref="panel" class="audio-audit-panel" tabindex="-1"
-        aria-labelledby="audio-audit-panel-title" @keydown.esc="closePanel">
+    <aside id="audio-audit-panel"
+        ref="panel"
+        class="audio-audit-panel"
+        tabindex="-1"
+        aria-labelledby="audio-audit-panel-title"
+        @keydown.esc="closePanel">
         <div class="audio-audit-header">
             <h4 id="audio-audit-panel-title">
-                Audio audit records
+                {{ $t('ReviewInterview.AudioAudit_Title') }}
             </h4>
-            <button ref="closeButton" type="button" class="btn btn-link close-panel" @click="closePanel"
-                :aria-label="$t('ReviewInterview.AudioAudit_CloseRecordings')">
-                <span aria-hidden="true">&times;</span>
+            <button ref="closeButton"
+                type="button"
+                class="close close-panel"
+                @click="closePanel"
+                :aria-label="$t('Pages.CloseLabel')">
+                <span aria-hidden="true"></span>
             </button>
         </div>
 
-        <div v-if="loadState === 'loading'" class="audio-audit-state" role="status">
-            Loading recordings...
+        <div v-if="loadState === 'loading'"
+            class="audio-audit-state"
+            role="status">
+            {{ $t('ReviewInterview.AudioAudit_LoadingRecordings') }}
         </div>
 
-        <div v-else-if="loadState === 'error'" class="alert alert-warning" role="alert">
-            <p>Unable to load audio audit recordings.</p>
-            <button type="button" class="btn btn-outline-secondary btn-sm" @click="loadSegments">
-                Retry
+        <div v-else-if="loadState === 'error'"
+            class="alert alert-warning"
+            role="alert">
+            <p>{{ $t('ReviewInterview.AudioAudit_LoadFailed') }}</p>
+            <button type="button"
+                class="btn btn-outline-secondary btn-sm"
+                @click="loadSegments">
+                {{ $t('ReviewInterview.AudioAudit_Retry') }}
             </button>
         </div>
 
-        <div v-else-if="loadState === 'empty'" class="alert alert-info" role="status">
+        <div v-else-if="loadState === 'empty'"
+            class="alert alert-info"
+            role="status">
             {{ $t('ReviewInterview.AudioAudit_NoRecordingsAvailable') }}
         </div>
 
-        <template v-else>
-            <div v-if="currentSegment" class="audio-audit-player" :aria-busy="isBuffering">
-                <audio ref="audioPlayer" :src="currentSegmentUrl" controlsList="nodownload" preload="auto"
-                    style="display: none" @loadedmetadata="onMetadataLoaded" @canplay="onCanPlay" @play="onPlay"
-                    @pause="onPause" @waiting="onWaiting" @playing="onPlaying" @error="onPlaybackError"
-                    @timeupdate="onTimeUpdate" @ended="onEnded"></audio>
+        <div v-else
+            class="audio-audit-content">
+            <div v-if="currentSegment"
+                class="audio-audit-player"
+                :aria-busy="isBuffering">
+                <audio ref="audioPlayer"
+                    :src="currentSegmentUrl"
+                    controlsList="nodownload"
+                    preload="auto"
+                    style="display: none"
+                    @loadedmetadata="onMetadataLoaded"
+                    @canplay="onCanPlay"
+                    @play="onPlay"
+                    @pause="onPause"
+                    @waiting="onWaiting"
+                    @playing="onPlaying"
+                    @error="onPlaybackError"
+                    @timeupdate="onTimeUpdate"
+                    @ended="onEnded"></audio>
 
-                <p class="sr-only" role="status" aria-live="polite">
+                <p class="sr-only"
+                    role="status"
+                    aria-live="polite">
                     {{ playbackAnnouncement }}
                 </p>
 
-                <div v-if="playbackError" class="alert alert-warning" role="alert">
+                <div v-if="playbackError"
+                    class="alert alert-warning"
+                    role="alert">
                     <p>{{ playbackError }}</p>
-                    <button v-if="!currentSegment.unavailable" type="button" class="btn btn-outline-secondary btn-sm"
+                    <button v-if="!currentSegment.unavailable"
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm"
                         @click="retryCurrentSegment">
-                        Retry playback
+                        {{ $t('ReviewInterview.AudioAudit_Retry') }}
                     </button>
                 </div>
 
                 <div class="player-controls">
                     <p class="now-playing">
-                        Now playing: Record #{{ currentSegment.sequenceNumber }}
+                        {{ nowPlayingText }}
                     </p>
                     <div class="player-status">
-                        <span>Position: {{ formatTime(currentTime) }}</span>
-                        <span>Duration:
-                            {{
-                                currentDuration !== null
-                                    ? formatTime(currentDuration)
-                                    : '--:--'
-                            }}</span>
+                        <span>{{ positionText }}</span>
+                        <span>{{ durationText }}</span>
                     </div>
-                    <p class="player-buffering" :class="{ 'is-hidden': !isBuffering }" role="status"
+                    <p class="player-buffering"
+                        :class="{ 'is-hidden': !isBuffering }"
+                        role="status"
                         :aria-hidden="!isBuffering">
-                        Loading audio...
+                        {{ $t('ReviewInterview.AudioAudit_LoadingAudio') }}
                     </p>
-                    <label class="sr-only" for="audio-audit-seek">
-                        Recording position
+                    <label class="sr-only"
+                        for="audio-audit-seek">
+                        {{ $t('ReviewInterview.AudioAudit_RecordingPosition') }}
                     </label>
-                    <input id="audio-audit-seek" type="range" class="seek-bar form-range" :max="currentDuration || 0"
-                        :value="seekBarTime" :aria-valuemax="currentDuration || 0" :aria-valuenow="seekBarTime"
-                        :aria-valuetext="seekAriaValue" @pointerdown="beginSeeking"
-                        @pointerup="commitSeek($event.currentTarget.value)" @keydown="beginSeeking"
-                        @keyup="commitSeek($event.currentTarget.value)" @input="previewSeek($event.target.value)"
+                    <input id="audio-audit-seek"
+                        type="range"
+                        class="seek-bar form-range"
+                        :max="currentDuration || 0"
+                        :value="seekBarTime"
+                        :aria-valuemax="currentDuration || 0"
+                        :aria-valuenow="seekBarTime"
+                        :aria-valuetext="seekAriaValue"
+                        @pointerdown="beginSeeking"
+                        @pointerup="commitSeek($event.currentTarget.value)"
+                        @keydown="beginSeeking"
+                        @keyup="commitSeek($event.currentTarget.value)"
+                        @input="previewSeek($event.target.value)"
                         :disabled="!canSeek" />
                     <div class="control-buttons">
-                        <button type="button" class="btn btn-outline-secondary btn-sm" @click="goToPreviousSegment"
-                            :disabled="!previousSegment" aria-label="Go to previous segment">
-                            <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
-                            <span class="sr-only">Go to previous segment</span>
+                        <button type="button"
+                            class="btn btn-outline-secondary btn-sm"
+                            @click="goToPreviousSegment"
+                            :disabled="!previousSegment"
+                            :aria-label="$t('ReviewInterview.AudioAudit_GoToPreviousSegment')">
+                            <span class="glyphicon glyphicon-step-backward"
+                                aria-hidden="true"></span>
+                            <span class="sr-only">{{ $t('ReviewInterview.AudioAudit_GoToPreviousSegment') }}</span>
                         </button>
-                        <button type="button" class="btn btn-outline-secondary btn-sm" @click="skipBy(-10)"
-                            :disabled="!canSeek" aria-label="Go back 10 seconds">
-                            <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
-                            <span class="sr-only">Go back 10 seconds</span>
+                        <button type="button"
+                            class="btn btn-outline-secondary btn-sm"
+                            @click="skipBy(-10)"
+                            :disabled="!canSeek"
+                            :aria-label="$t('ReviewInterview.AudioAudit_SkipBackward')">
+                            <span class="glyphicon glyphicon-backward"
+                                aria-hidden="true"></span>
+                            <span class="sr-only">{{ $t('ReviewInterview.AudioAudit_SkipBackward') }}</span>
                         </button>
-                        <button type="button" class="btn btn-primary" @click="togglePlayPause"
-                            :aria-label="playPauseLabel" :aria-pressed="isPlaying"
+                        <button type="button"
+                            class="btn btn-primary"
+                            @click="togglePlayPause"
+                            :aria-label="playPauseLabel"
+                            :aria-pressed="isPlaying"
                             :disabled="currentSegment.unavailable">
-                            <span class="glyphicon" :class="isPlaying
-                                ? 'glyphicon-pause'
-                                : 'glyphicon-play'
-                                " aria-hidden="true"></span>
+                            <span class="glyphicon"
+                                :class="isPlaying
+                                    ? 'glyphicon-pause'
+                                    : 'glyphicon-play'
+                                "
+                                aria-hidden="true"></span>
                             <span class="sr-only">{{ playPauseLabel }}</span>
                         </button>
-                        <button type="button" class="btn btn-outline-secondary btn-sm" @click="skipBy(10)"
-                            :disabled="!canSeek" aria-label="Go forward 10 seconds">
-                            <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
-                            <span class="sr-only">Go forward 10 seconds</span>
+                        <button type="button"
+                            class="btn btn-outline-secondary btn-sm"
+                            @click="skipBy(10)"
+                            :disabled="!canSeek"
+                            :aria-label="$t('ReviewInterview.AudioAudit_SkipForward')">
+                            <span class="glyphicon glyphicon-forward"
+                                aria-hidden="true"></span>
+                            <span class="sr-only">{{ $t('ReviewInterview.AudioAudit_SkipForward') }}</span>
                         </button>
-                        <button type="button" class="btn btn-outline-secondary btn-sm" @click="goToNextSegment"
-                            :disabled="!nextSegment" aria-label="Go to next segment">
-                            <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
-                            <span class="sr-only">Go to next segment</span>
+                        <button type="button"
+                            class="btn btn-outline-secondary btn-sm"
+                            @click="goToNextSegment"
+                            :disabled="!nextSegment"
+                            :aria-label="$t('ReviewInterview.AudioAudit_GoToNextSegment')">
+                            <span class="glyphicon glyphicon-step-forward"
+                                aria-hidden="true"></span>
+                            <span class="sr-only">{{ $t('ReviewInterview.AudioAudit_GoToNextSegment') }}</span>
                         </button>
                     </div>
-                    <label class="playback-speed" for="audio-audit-speed">
-                        <span>Speed</span>
-                        <select id="audio-audit-speed" v-model.number="playbackRate" @change="setPlaybackRate">
+                    <label class="playback-speed"
+                        for="audio-audit-speed">
+                        <span>{{ $t('MainMenu.Speed') }}</span>
+                        <select id="audio-audit-speed"
+                            v-model.number="playbackRate"
+                            @change="setPlaybackRate">
                             <option :value="0.75">
                                 0.75x
                             </option>
@@ -126,28 +190,39 @@
             </div>
 
             <div class="audio-audit-playlist">
-                <div v-if="allUnavailable" class="alert alert-info">
+                <div v-if="allUnavailable"
+                    class="alert alert-info">
                     {{ $t('ReviewInterview.AudioAudit_NoRecordingsAvailable') }}
                 </div>
 
-                <ul class="list-unstyled" aria-label="Audio audit recording list">
-                    <li v-for="(segment, index) in segments" :key="segment.segmentId">
-                        <div v-if="getGapText(index)" class="segment-gap">
+                <ul class="list-unstyled"
+                    :aria-label="$t('ReviewInterview.AudioAudit_PlaylistLabel')">
+                    <li v-for="(segment, index) in segments"
+                        :key="segment.segmentId">
+                        <div v-if="getGapText(index)"
+                            class="segment-gap">
                             {{ getGapText(index) }}
                         </div>
-                        <button type="button" class="playlist-item" :class="{
-                            active:
-                                currentSegment &&
-                                currentSegment.segmentId ===
-                                segment.segmentId,
-                            unavailable: segment.unavailable,
-                        }" :disabled="segment.unavailable" :aria-current="currentSegment &&
+                        <button type="button"
+                            class="playlist-item"
+                            :class="{
+                                active:
+                                    currentSegment &&
+                                    currentSegment.segmentId ===
+                                    segment.segmentId,
+                                unavailable: segment.unavailable,
+                            }"
+                            :disabled="segment.unavailable"
+                            :aria-current="currentSegment &&
                                 currentSegment.segmentId === segment.segmentId
-                                " @click="selectSegment(segment)">
+                            "
+                            @click="handleSegmentClick(segment)"
+                            @dblclick="handleSegmentDoubleClick(segment)">
                             <span class="segment-info">
                                 <span class="segment-start">
-                                    <span class="segment-label"># {{ segment.sequenceNumber }}</span>
-                                    <span v-if="segment.deviceLocalStartTime" class="segment-time text-muted">
+                                    <span class="segment-label">{{ getSegmentLabel(segment) }}</span>
+                                    <span v-if="segment.deviceLocalStartTime"
+                                        class="segment-time text-muted">
                                         {{
                                             formatDeviceTime(
                                                 segment.deviceLocalStartTime,
@@ -192,7 +267,7 @@
                     </li>
                 </ul>
             </div>
-        </template>
+        </div>
     </aside>
 </template>
 
@@ -262,19 +337,49 @@ export default {
         },
 
         playPauseLabel() {
-            return this.isPlaying ? 'Pause recording' : 'Play recording'
+            return this.$t(
+                this.isPlaying
+                    ? 'ReviewInterview.AudioAudit_PauseRecording'
+                    : 'ReviewInterview.AudioAudit_PlayRecording'
+            )
         },
 
         seekAriaValue() {
             const duration =
                 this.currentDuration === null
-                    ? 'unknown duration'
-                    : this.formatTime(this.currentDuration)
-            return `${this.formatTime(this.seekBarTime)} of ${duration}`
+                    ? this.$t('ReviewInterview.AudioAudit_UnknownDuration')
+                    : this.formatCompactDuration(this.currentDuration)
+            return this.$t('ReviewInterview.AudioAudit_SeekPosition', {
+                current: this.formatTime(this.seekBarTime),
+                total: duration,
+            })
         },
 
         seekBarTime() {
             return this.isSeeking ? this.seekPreviewTime : this.currentTime
+        },
+
+        nowPlayingText() {
+            if (!this.currentSegment) return ''
+
+            return this.$t('ReviewInterview.AudioAudit_NowPlaying', {
+                segment: this.getSegmentLabel(this.currentSegment),
+            })
+        },
+
+        positionText() {
+            return this.$t('ReviewInterview.AudioAudit_PositionValue', {
+                position: this.formatTime(this.currentTime),
+            })
+        },
+
+        durationText() {
+            return this.$t('ReviewInterview.AudioAudit_DurationValue', {
+                duration:
+                    this.currentDuration !== null
+                        ? this.formatCompactDuration(this.currentDuration)
+                        : '--:--',
+            })
         },
     },
 
@@ -367,13 +472,26 @@ export default {
             this.playbackError = null
             this.isBuffering = shouldPlay
             this.isCurrentSegmentReady = false
-            this.playbackAnnouncement = `Record #${segment.sequenceNumber} selected.`
+            this.playbackAnnouncement = this.$t(
+                'ReviewInterview.AudioAudit_SegmentSelected',
+                { segment: this.getSegmentLabel(segment) }
+            )
 
             this.$nextTick(() => {
                 if (!this.$refs.audioPlayer) return
 
                 this.$refs.audioPlayer.load()
             })
+        },
+
+        handleSegmentClick(segment) {
+            if (this.isPlaying) return
+
+            this.selectSegment(segment)
+        },
+
+        handleSegmentDoubleClick(segment) {
+            this.selectSegment(segment, { autoplay: true })
         },
 
         findAdjacentSegment(direction) {
@@ -420,7 +538,9 @@ export default {
             if (!this.isCurrentSegmentReady) {
                 this.pendingAutoplay = true
                 this.isBuffering = true
-                this.playbackAnnouncement = 'Loading recording.'
+                this.playbackAnnouncement = this.$t(
+                    'ReviewInterview.AudioAudit_LoadingAudio'
+                )
                 return
             }
 
@@ -495,7 +615,10 @@ export default {
             if (this.$refs.audioPlayer) {
                 this.$refs.audioPlayer.playbackRate = this.playbackRate
             }
-            this.playbackAnnouncement = `Playback speed ${this.playbackRate}x.`
+            this.playbackAnnouncement = this.$t(
+                'ReviewInterview.AudioAudit_PlaybackSpeedAnnouncement',
+                { rate: this.playbackRate }
+            )
         },
 
         retryCurrentSegment() {
@@ -529,10 +652,13 @@ export default {
                         audio.currentTime = 0
                         this.currentTime = 0
                         this.pendingAutoplay = false
-                        this.playbackAnnouncement = `Record #${this.currentSegment.sequenceNumber
-                            } is ${this.formatCompactDuration(
-                                audio.duration
-                            )} long.`
+                        this.playbackAnnouncement = this.$t(
+                            'ReviewInterview.AudioAudit_SegmentDurationAnnouncement',
+                            {
+                                segment: this.getSegmentLabel(this.currentSegment),
+                                duration: this.formatCompactDuration(audio.duration),
+                            }
+                        )
                     } else {
                         audio.currentTime = this.pendingSeekTime
                         this.currentTime = audio.currentTime
@@ -558,20 +684,28 @@ export default {
         onPlay() {
             this.isPlaying = true
             this.isBuffering = false
-            this.playbackAnnouncement = `Playing record #${this.currentSegment?.sequenceNumber}.`
+            this.playbackAnnouncement = this.$t(
+                'ReviewInterview.AudioAudit_PlayingAnnouncement',
+                { segment: this.getSegmentLabel(this.currentSegment) }
+            )
         },
 
         onPause() {
             this.isPlaying = false
             if (!this.$refs.audioPlayer?.ended) {
-                this.playbackAnnouncement = `Paused record #${this.currentSegment?.sequenceNumber}.`
+                this.playbackAnnouncement = this.$t(
+                    'ReviewInterview.AudioAudit_PausedAnnouncement',
+                    { segment: this.getSegmentLabel(this.currentSegment) }
+                )
             }
         },
 
         onWaiting() {
             if (!this.$refs.audioPlayer?.paused) {
                 this.isBuffering = true
-                this.playbackAnnouncement = 'Loading audio.'
+                this.playbackAnnouncement = this.$t(
+                    'ReviewInterview.AudioAudit_LoadingAudio'
+                )
             }
         },
 
@@ -616,7 +750,10 @@ export default {
 
             this.isPlaying = false
             this.isBuffering = false
-            this.playbackAnnouncement = `Record #${this.currentSegment?.sequenceNumber} finished.`
+            this.playbackAnnouncement = this.$t(
+                'ReviewInterview.AudioAudit_FinishedAnnouncement',
+                { segment: this.getSegmentLabel(this.currentSegment) }
+            )
         },
 
         isUnsupportedAudio(errorCode) {
@@ -626,39 +763,19 @@ export default {
         formatTime(seconds) {
             if (!Number.isFinite(seconds)) return '--:--'
 
-            const hours = Math.floor(seconds / 3600)
-            const minutes = Math.floor(seconds / 60)
-            const remainingSeconds = Math.floor(seconds % 60)
+            const totalSeconds = Math.max(0, Math.floor(seconds))
+            const hours = Math.floor(totalSeconds / 3600)
+            const minutes = Math.floor((totalSeconds % 3600) / 60)
+            const remainingSeconds = totalSeconds % 60
             if (hours > 0) {
-                return `${hours}:${Math.floor((seconds % 3600) / 60)
+                return `${hours}:${minutes.toString().padStart(2, '0')}:${remainingSeconds
                     .toString()
-                    .padStart(2, '0')}:${remainingSeconds
-                        .toString()
-                        .padStart(2, '0')}`
+                    .padStart(2, '0')}`
             }
 
-            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
-        },
-
-        formatSegmentDuration(seconds) {
-            const roundedSeconds = Math.round(seconds)
-            const hours = Math.floor(roundedSeconds / 3600)
-            const minutes = Math.floor((roundedSeconds % 3600) / 60)
-            const remainingSeconds = roundedSeconds % 60
-            const parts = []
-
-            if (hours > 0)
-                parts.push(`${hours} ${hours === 1 ? 'hour' : 'hours'}`)
-            if (minutes > 0)
-                parts.push(`${minutes} ${minutes === 1 ? 'minute' : 'minutes'}`)
-            if (remainingSeconds > 0 || parts.length === 0) {
-                parts.push(
-                    `${remainingSeconds} ${remainingSeconds === 1 ? 'second' : 'seconds'
-                    }`
-                )
-            }
-
-            return parts.join(' ')
+            return `${Math.floor(totalSeconds / 60)}:${remainingSeconds
+                .toString()
+                .padStart(2, '0')}`
         },
 
         formatCompactDuration(seconds) {
@@ -690,8 +807,14 @@ export default {
                 previousSegment.duration
             )
             return gapSeconds > 0
-                ? `${this.formatSegmentDuration(gapSeconds)} later`
+                ? `+ ${this.formatCompactDuration(gapSeconds)}`
                 : null
+        },
+
+        getSegmentLabel(segment) {
+            return this.$t('ReviewInterview.AudioAudit_SegmentLabel', {
+                number: segment?.sequenceNumber,
+            })
         },
 
         parseDeviceTimestamp(timestamp) {
@@ -741,7 +864,9 @@ export default {
     padding: 15px;
     border-left: 1px solid #d9d9d9;
     background: #fff;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .audio-audit-header {
@@ -754,18 +879,22 @@ export default {
 .audio-audit-header h4 {
     font-family: 'RobotoRegular';
     margin: 0;
+    font-weight: 700;
 }
 
 .audio-audit-state {
     padding: 10px 0;
 }
 
+.audio-audit-content {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+}
+
 .close-panel {
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    font-size: 28px;
-    line-height: 1;
+    float: none;
 }
 
 .audio-audit-player audio {
@@ -823,7 +952,11 @@ export default {
 }
 
 .audio-audit-playlist {
+    flex: 1 1 auto;
     margin-top: 15px;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 2px;
 }
 
 .audio-audit-playlist h5 {

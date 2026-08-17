@@ -41,6 +41,7 @@ namespace WB.UI.Headquarters.Services.Impl
         {
             if (!authorizedUser.IsAuthenticated) return false;
             if (authorizedUser.IsInterviewer) return false;
+            if (authorizedUser.IsObserver) return false;
 
             try
             {
