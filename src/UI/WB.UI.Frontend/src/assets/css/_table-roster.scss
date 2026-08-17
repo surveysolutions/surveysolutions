@@ -158,6 +158,10 @@
                 color: inherit;
                 overflow: hidden;
                 text-overflow: ellipsis;
+
+                &.has-tooltip {
+                    white-space: nowrap;
+                }
             }
 
             .popover {
