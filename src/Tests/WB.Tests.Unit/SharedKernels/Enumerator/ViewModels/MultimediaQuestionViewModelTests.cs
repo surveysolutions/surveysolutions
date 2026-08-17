@@ -134,7 +134,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             await viewModel.RequestAnswerCommand.ExecuteAsync();
 
             userInteractionService.Verify(
-                u => u.ShowToast(expectedMessage, It.IsAny<bool>()),
+                u => u.ShowToast(expectedMessage, It.IsAny<bool>(), It.IsAny<bool>()),
                 Times.Once,
                 "ShowToast should be called when retake fails but answer already exists");
             validityViewModel.Verify(
