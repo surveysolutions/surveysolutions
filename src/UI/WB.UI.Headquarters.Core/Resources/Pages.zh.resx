@@ -835,7 +835,19 @@
     <value>督导员</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>个人详细信息（可选）&lt;br&gt;将仅对总部账户可见</value>
+    <value>个人详细信息</value>
+  </data>
+  <data name="PublicSectionDescription" xml:space="preserve">
+    <value>（可选，仅对已认证用户可见）。</value>
+  </data>
+  <data name="CreateUser" xml:space="preserve">
+    <value>创建用户账户</value>
+  </data>
+  <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+    <value>访问工作区</value>
+  </data>
+  <data name="CreateUser_RoleLabel" xml:space="preserve">
+    <value>用户角色</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
       <value>{{name}}(版本：{{version}})</value>
@@ -1652,9 +1664,6 @@
   </data>
   <data name="Admin_Reevaluate_Success" xml:space="preserve">
     <value>访谈重新评估成功</value>
-  </data>
-  <data name="CreateUser" xml:space="preserve">
-    <value>创建用户</value>
   </data>
   <data name="GenerateRecoveryCodes" xml:space="preserve">
     <value>生成恢复代码</value>

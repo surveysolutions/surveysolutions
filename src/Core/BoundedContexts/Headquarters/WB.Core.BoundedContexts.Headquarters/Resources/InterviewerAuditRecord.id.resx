@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="CloseInterview" xml:space="preserve"><value>Tutup wawancara {0}</value></data>
+  <data name="CompleteInterview" xml:space="preserve"><value>Selesaikan wawancara {0}</value></data>
+  <data name="RestartInterview" xml:space="preserve"><value>Mulai ulang wawancara {0}</value></data>
+  <data name="ApproveInterview" xml:space="preserve"><value>Setujui wawancara {0}</value></data>
+  <data name="RejectInterview" xml:space="preserve"><value>Tolak wawancara {0}</value></data>
+  <data name="RejectInterviewToInterviewer" xml:space="preserve"><value>Kembalikan wawancara ke pewawancara {0} {1}</value></data>
+  <data name="CreateInterviewFromAssignment" xml:space="preserve"><value>Buat wawancara dari tugas {0} {1}</value></data>
+  <data name="DeleteInterview" xml:space="preserve"><value>Hapus wawancara {0}</value></data>
+  <data name="DetailedActionLog" xml:space="preserve"><value>Log tindakan terperinci</value></data>
+  <data name="PageTitle" xml:space="preserve"><value>Log tindakan pewawancara</value></data>
+  <data name="OpenInterview" xml:space="preserve"><value>Buka wawancara {0}</value></data>
+  <data name="SynchronizationCompleted" xml:space="preserve"><value>Sinkronisasi selesai</value></data>
+  <data name="SynchronizationFailed" xml:space="preserve"><value>Sinkronisasi gagal</value></data>
+  <data name="SynchronizationCanceled" xml:space="preserve"><value>Sinkronisasi dibatalkan</value></data>
+  <data name="SynchronizationStarted" xml:space="preserve"><value>Sinkronisasi dimulai {0}</value></data>
+  <data name="Login" xml:space="preserve"><value>Masuk {0}</value></data>
+  <data name="Logout" xml:space="preserve"><value>Keluar {0}</value></data>
+  <data name="Relink" xml:space="preserve"><value>Sambungkan ulang</value></data>
+
+
+
+
+
+
+
+
+
+  <data name="DownloadTabLog" xml:space="preserve"><value>Unduh log lengkap dalam format Tab</value></data>
+  <data name="RecordsMissing" xml:space="preserve"><value>Belum ada catatan</value></data>
+  <data name="OpenApplication" xml:space="preserve"><value>Aplikasi dibuka</value></data>
+  <data name="AssignResponsibleToInterview" xml:space="preserve"><value>Menetapkan penanggung jawab {0} ke wawancara {1}</value></data>
+  <data name="AssignResponsibleToAssignment" xml:space="preserve"><value>Menetapkan penanggung jawab {0} ke tugas #{1}</value></data>
+  <data name="FinishInstallation" xml:space="preserve"><value>Instalasi selesai</value></data>
+  <data name="ShowPrevious7Days" xml:space="preserve"><value>Tampilkan 7 hari aktif sebelumnya</value></data>
+  <data name="SynchronizationCompleted_InterviewsUploaded" xml:space="preserve"><value>{0} wawancara diunggah</value></data>
+  <data name="SynchronizationCompleted_InterviewsRemoved" xml:space="preserve"><value>{0} wawancara dihapus</value></data>
+  <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve"><value>{0} wawancara diunduh sebagian</value></data>
+  <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve"><value>{0} wawancara diunggah sebagian</value></data>
+  <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve"><value>{0} wawancara dibuka kembali setelah menerima komentar</value></data>
+  <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve"><value>{0} wawancara ditolak</value></data>
+
+
+  <data name="SynchronizationCompleted_AssignmentsRemoved" xml:space="preserve"><value>{0} tugas dihapus</value></data>
+  <data name="SynchronizationCompleted_NothingToSync" xml:space="preserve"><value>tidak ada yang perlu disinkronkan</value></data>
+
+  <data name="SynchronizationCompleted_InterviewsDownloaded" xml:space="preserve"><value>{0} wawancara baru diunduh</value></data>
+  <data name="SynchronizationCompleted_AssignmentsDownloaded" xml:space="preserve"><value>{0} tugas baru diunduh</value></data>
+  <data name="SwitchInterviewMode" xml:space="preserve"><value>Wawancara {0} beralih ke mode {1}</value></data>
+</root>
