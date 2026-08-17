@@ -1,0 +1,1622 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AddNewSection" xml:space="preserve">
+        <value>დაამატეთ ახალი განყოფილება</value>
+        </data>
+    <data name="Backup" xml:space="preserve">
+        <value>სარეზერვო</value>
+        </data>
+    <data name="SaveAs" xml:space="preserve">
+        <value>შენახვა როგორც</value>
+        </data>
+    <data name="CopyTo" xml:space="preserve">
+        <value>დააკოპირეთ</value>
+        </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>გაუქმება</value>
+        </data>
+    <data name="ChangePassword" xml:space="preserve">
+        <value>პაროლის შეცვლა</value>
+        </data>
+    <data name="ClickHere" xml:space="preserve">
+        <value>დააწკაპუნეთ აქ</value>
+        </data>
+    <data name="Compile" xml:space="preserve">
+        <value>შედგენა</value>
+        </data>
+    <data name="Copy" xml:space="preserve">
+        <value>კოპირება</value>
+        </data>
+    <data name="Delete" xml:space="preserve">
+        <value>წაშლა</value>
+        </data>
+    <data name="Download" xml:space="preserve">
+        <value>ჩამოტვირთვა</value>
+        </data>
+    <data name="ErrorsCounter" xml:space="preserve">
+        <value>{{count}} შეცდომა</value>
+        </data>
+    <data name="ErrorsCounter_plural" xml:space="preserve">
+        <value>{{count}} შეცდომები</value>
+        </data>
+    <data name="HellowMessageBtn" xml:space="preserve">
+        <value>გამარჯობა, {{currentUserName}}</value>
+        </data>
+    <data name="Help" xml:space="preserve">
+        <value>დახმარება</value>
+        </data>
+    <data name="History" xml:space="preserve">
+        <value>ისტორია</value>
+        </data>
+    <data name="LogOut" xml:space="preserve">
+        <value>გასვლა</value>
+        </data>
+    <data name="Ok" xml:space="preserve">
+        <value>OK</value>
+        </data>
+    <data name="Open" xml:space="preserve">
+        <value>გახსენით</value>
+        </data>
+    <data name="PasteAfter" xml:space="preserve">
+        <value>ჩასვით შემდეგ</value>
+        </data>
+    <data name="QuestionnaireSummary" xml:space="preserve">
+        <value>({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)</value>
+        </data>
+    <data name="ReadOnly" xml:space="preserve">
+        <value>წაკითხული მხოლოდ</value>
+        </data>
+    <data name="ReadOnlyQuestion" xml:space="preserve">
+        <value>ეს მხოლოდ კითხვაა. თქვენ არ შეგიძლიათ მისი რედაქტირება.</value>
+        </data>
+    <data name="Save" xml:space="preserve">
+        <value>შენახვა</value>
+        </data>
+    <data name="SavedAtTimestamp" xml:space="preserve">
+        <value>შენახულია {{dateTime, H:mm}}-ზე</value>
+        </data>
+    <data name="Settings" xml:space="preserve">
+        <value>პარამეტრები</value>
+        </data>
+    <data name="SideBarAddMacro" xml:space="preserve">
+        <value>დაამატეთ ახალი მაკრო</value>
+        </data>
+    <data name="SideBarAttachmentName" xml:space="preserve">
+        <value>დანართის სახელი</value>
+        </data>
+    <data name="SideBarAttachmentsCounter" xml:space="preserve">
+        <value>{{count}} ფაილის დანართი ({{bytes}} სულ)</value>
+        </data>
+    <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
+        <value>{{count}} ფაილების დანართები ({{bytes}} სულ)</value>
+        </data>
+    <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
+        <value>გამოიყენეთ ეს ჩანართი მულტიმედიური ფაილების ასატვირთად, რომლებიც შეიძლება მითითებული იყოს კითხვარში.</value>
+        </data>
+    <data name="SideBarAttachmentsEmptyLine2" xml:space="preserve">
+        <value>ნელი სინქრონიზაციის თავიდან ასაცილებლად, ჩვენ გირჩევთ, რომ ყველა თანდართული ფაილის კომბინირებული ზომა არ აღემატებოდეს 2 მბ-ს. მხარდაჭერილი ფაილის ტიპებისთვის, ფორმატებისთვის და ზომებისთვის</value>
+        </data>
+    <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
+        <value>კითხვარში დანართზე მითითებისთვის დაამატეთ სტატიკური ტექსტის ელემენტი და მიუთითეთ დანართი {{-name}} მის დანართის თვისებაში</value>
+        </data>
+    <data name="SideBarAttachmentsEstimate" xml:space="preserve">
+        <value>ეს ჩატვირთვის დრო: {{timeString}} {{downloadSpeed}}Kb/s (EDGE)</value>
+        </data>
+    <data name="SideBarAttachmentsUpload" xml:space="preserve">
+        <value>ატვირთე ახალი</value>
+        </data>
+    <data name="SideBarLookupEmptyLine1" xml:space="preserve">
+        <value>გამოიყენეთ ეს ჩანართი საძიებო ცხრილების დასადგენად.</value>
+        </data>
+    <data name="SideBarLookupEmptyLine2" xml:space="preserve">
+        <value>საძიებო ცხრილი გვაწვდის საცნობარო ინფორმაციას, რომელიც შეიძლება მოთხოვნილი იყოს გასაღებით და გამოყენებული იქნას პირობების გასააქტიურებლად და ვალიდაციის გამონათქვამებში.</value>
+        </data>
+    <data name="SideBarLookupEmptyLine3" xml:space="preserve">
+        <value>საძიებო ცხრილი შედგება სახელისა და საძიებო ფაილისგან, რომელიც შეიძლება შეიცავდეს რიცხვითი მნიშვნელობების მრავალ ჩანართებით გამოყოფილ სვეტებს.</value>
+        </data>
+    <data name="SideBarLookupTableAdd" xml:space="preserve">
+        <value>ახალი საძიებო ცხრილის დამატება</value>
+        </data>
+    <data name="SideBarLookupTableDropFile" xml:space="preserve">
+        <value>ჩამოაგდეთ ფაილი აქ</value>
+        </data>
+    <data name="SideBarEditCategories" xml:space="preserve">
+        <value>კატეგორიების რედაქტირება</value>
+        </data>
+    <data name="SideBarLookupTableFileName" xml:space="preserve">
+        <value>ფაილის სახელი</value>
+        </data>
+    <data name="SideBarLookupTableName" xml:space="preserve">
+        <value>მაგიდის სახელი</value>
+        </data>
+    <data name="SideBarLookupTablesCounter" xml:space="preserve">
+        <value>{{count}} საძიებო ცხრილი:</value>
+        </data>
+    <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
+        <value>{{count}} საძიებო ცხრილები:</value>
+        </data>
+    <data name="SideBarLookupTableSelectFile" xml:space="preserve">
+        <value>აირჩიეთ ფაილი</value>
+        </data>
+    <data name="SideBarLookupTableUpdateFile" xml:space="preserve">
+        <value>ფაილის განახლება</value>
+        </data>
+    <data name="SideBarMacroContent" xml:space="preserve">
+        <value>შინაარსი</value>
+        </data>
+    <data name="SideBarMacroCounter" xml:space="preserve">
+        <value>{{count}} მაკრო:</value>
+        </data>
+    <data name="SideBarMacroCounter_plural" xml:space="preserve">
+        <value>{{count}} მაკროები:</value>
+        </data>
+    <data name="SideBarMacroDescription" xml:space="preserve">
+        <value>აღწერა</value>
+        </data>
+    <data name="SideBarMacroEmptyLine1" xml:space="preserve">
+        <value>გამოიყენეთ ეს ჩანართი მაკრო ჩანაცვლების დასადგენად.</value>
+        </data>
+    <data name="SideBarMacroEmptyLine2" xml:space="preserve">
+        <value>მაკრო არის დასახელებული გამოხატულება, რომელიც შეიძლება გამოყენებულ იქნას ჩართვის პირობებში და ვალიდაციის გამონათქვამებში. მაკრო შედგება სახელისა და შინაარსისგან.</value>
+        </data>
+    <data name="SideBarMacroEmptyLine3" xml:space="preserve">
+        <value>შეიძლება გამოყენებულ იქნას გამოხატულებაში, მაკროზე მითითებისთვის.</value>
+        </data>
+    <data name="SideBarMacroHideDescription" xml:space="preserve">
+        <value>აღწერილობის დამალვა</value>
+        </data>
+    <data name="SideBarMacroName" xml:space="preserve">
+        <value>მაკრო სახელი</value>
+        </data>
+    <data name="SideBarMacroShowDescription" xml:space="preserve">
+        <value>დაამატე აღწერა</value>
+        </data>
+    <data name="SideBarCriticalityConditionExpression" xml:space="preserve">
+        <value>კრიტიკული მდგომარეობა</value>
+        </data>
+    <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
+        <value>{{count}} კრიტიკული წესი:</value>
+        </data>
+    <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
+        <value>{{count}} კრიტიკული წესები:</value>
+        </data>
+    <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
+        <value>აღწერა</value>
+        </data>
+    <data name="SideBarCriticalityConditionsEmptyLine1" xml:space="preserve">
+        <value>გამოიყენეთ ეს ჩანართი კრიტიკული წესების დასადგენად.</value>
+        </data>
+    <data name="SideBarCriticalityConditionsEmptyLine2" xml:space="preserve">
+        <value>თითოეული კრიტიკული წესი შედგება პირობისა და შეტყობინებისგან. კრიტიკული პირობები შეიძლება ეხებოდეს ნებისმიერ კითხვას ან ცვლადს და უნდა დაკმაყოფილდეს (შეაფასეთ ჭეშმარიტად). ინტერვიუების მკურნალობა დაუკმაყოფილებელი კრიტიკული პირობებით განისაზღვრება კითხვარის მონაცემთა სერვერზე იმპორტის დროს.</value>
+        </data>
+    <data name="SideBarCriticalityConditionsEmptyLine3" xml:space="preserve">
+        <value>ჩართეთ შეტყობინება ინტერვიუერისთვის (რესპონდენტი), რათა ახსნას, თუ რა უნდა შეიცვალოს ინტერვიუში (მესიჯი გამოჩნდება, როდესაც კრიტიკული მდგომარეობა არ არის დაკმაყოფილებული). შეტყობინებაში კითხვების ჰიპერბმულების ჩართვა სასარგებლოა ნავიგაციისთვის.</value>
+        </data>
+    <data name="SideBarHideDescription" xml:space="preserve">
+        <value>აღწერილობის დამალვა</value>
+        </data>
+    <data name="SideBarCriticalityConditionMessage" xml:space="preserve">
+        <value>შეტყობინება</value>
+        </data>
+    <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
+        <value>კრიტიკული წესი მესიჯის გარეშე</value>
+        </data>
+    <data name="SideBarShowDescription" xml:space="preserve">
+        <value>დაამატე აღწერა</value>
+        </data>
+    <data name="SideBarAddCriticalityCondition" xml:space="preserve">
+        <value>ახალი კრიტიკული წესის დამატება</value>
+        </data>
+    <data name="SideBarScenarioCounter" xml:space="preserve">
+        <value>{{count}} სცენარი:</value>
+        </data>
+    <data name="SideBarScenarioCounter_plural" xml:space="preserve">
+        <value>{{count}} სცენარები:</value>
+        </data>
+    <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
+        <value>გამოიყენეთ ეს ჩანართი თქვენი სცენარის სანახავად.</value>
+        </data>
+    <data name="SideBarScenarioEmptyLine2" xml:space="preserve">
+        <value>სცენარი არის ტესტერის მდგომარეობის სურათი, შეგიძლიათ შეინახოთ იგი ტესტერზე ღილაკზე "Save Scenario" დაწკაპუნებით.</value>
+        </data>
+    <data name="SideBarScenarioName" xml:space="preserve">
+        <value>სცენარის სათაური</value>
+        </data>
+    <data name="SideBarSectionsCounter" xml:space="preserve">
+        <value>{{count}} განყოფილება:</value>
+        </data>
+    <data name="SideBarSectionsCounter_plural" xml:space="preserve">
+        <value>{{count}} სექციები:</value>
+        </data>
+    <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
+        <value>ჩამოტვირთეთ xlsx</value>
+        </data>
+    <data name="SideBarDownload" xml:space="preserve">
+        <value>ჩამოტვირთვა:</value>
+        </data>
+    <data name="SideBarXlsx" xml:space="preserve">
+        <value>Xlsx</value>
+        </data>
+    <data name="SideBarTab" xml:space="preserve">
+        <value>ჩანართი</value>
+        </data>
+    <data name="SideBarTranslationGetTemplate" xml:space="preserve">
+        <value>მიიღეთ შაბლონი ამისთვის</value>
+        </data>
+    <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
+        <value>Excel (xlsx)</value>
+        </data>
+    <data name="SideBarTranslationGetTemplateLinkTextCsv" xml:space="preserve">
+        <value>ჩანართი (txt)</value>
+        </data>
+    <data name="SideBarTranslationName" xml:space="preserve">
+        <value>თარგმანის სახელი</value>
+        </data>
+    <data name="SideBarCategoriesName" xml:space="preserve">
+        <value>კატეგორიების დასახელება</value>
+        </data>
+    <data name="SideBarTranslationsCounter" xml:space="preserve">
+        <value>{{count}} თარგმანი</value>
+        </data>
+    <data name="SideBarCategoriesCounter" xml:space="preserve">
+        <value>{{count}} კატეგორიები</value>
+        </data>
+    <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
+        <value>{{count}} თარგმანები</value>
+        </data>
+    <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
+        <value>გამოიყენეთ ეს ჩანართი კითხვარების თარგმანის სამართავად.</value>
+        </data>
+    <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
+        <value>გამოიყენეთ ეს ჩანართი მრავალჯერადი გამოყენების კატეგორიების სამართავად.</value>
+        </data>
+    <data name="SideBarTranslationsEmptyLine2" xml:space="preserve">
+        <value>შეგიძლიათ ჩამოტვირთოთ და განაახლოთ თარგმანები სხვადასხვა ენაზე.</value>
+        </data>
+    <data name="SideBarCategoriesEmptyLine2" xml:space="preserve">
+        <value>შეგიძლიათ ჩამოტვირთოთ და განაახლოთ კატეგორიები.</value>
+        </data>
+    <data name="SideBarTranslationsEmptyLine3" xml:space="preserve">
+        <value>თარგმანი გამოყენებული იქნება ორიგინალურ ტექსტებზე და უგულებელყოფს მნიშვნელობებს. თქვენ შეგიძლიათ დატოვოთ რამდენიმე ტექსტი ცარიელი, რათა გამოიყენოთ ნაგულისხმევი ორიგინალური თარგმანი.</value>
+        </data>
+    <data name="SideBarCategoriesEmptyLine3" xml:space="preserve">
+        <value>დაემატება მრავალჯერადი გამოყენების კატეგორიების სიას ნებისმიერი ტიპის კატეგორიული კითხვებისთვის</value>
+        </data>
+    <data name="ToggleDropdown" xml:space="preserve">
+        <value>ჩამოსაშლელი მენიუს გადართვა</value>
+        </data>
+    <data name="Update" xml:space="preserve">
+        <value>განახლება</value>
+        </data>
+    <data name="VariableName" xml:space="preserve">
+        <value>სახელი</value>
+        </data>
+    <data name="WarningsCounter" xml:space="preserve">
+        <value>{{count}} გაფრთხილება</value>
+        </data>
+    <data name="WarningsCounter_plural" xml:space="preserve">
+        <value>{{count}} გაფრთხილებები</value>
+        </data>
+    <data name="Close" xml:space="preserve">
+        <value>დახურვა</value>
+        </data>
+    <data name="CompilationErrorsCounter" xml:space="preserve">
+        <value>ნაპოვნია {{count}} შეცდომა</value>
+        </data>
+    <data name="CompilationErrorsCounter_plural" xml:space="preserve">
+        <value>ნაპოვნია {{count}} შეცდომები</value>
+        </data>
+    <data name="CompilationLabel" xml:space="preserve">
+        <value>კომპილაცია:</value>
+        </data>
+    <data name="CompilationWarningsCounter" xml:space="preserve">
+        <value>ნაპოვნია {{count}} გაფრთხილება</value>
+        </data>
+    <data name="CompilationWarningsCounter_plural" xml:space="preserve">
+        <value>ნაპოვნია {{count}} გაფრთხილებები</value>
+        </data>
+    <data name="MoveTo" xml:space="preserve">
+        <value>გადატანა</value>
+        </data>
+    <data name="Recompile" xml:space="preserve">
+        <value>ხელახლა შედგენა</value>
+        </data>
+    <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
+        <value>ფორმატი: {{- type}}</value>
+        </data>
+    <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
+        <value>{{width}} × {{height}}px</value>
+        </data>
+    <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
+        <value>ზომა: {{size}}</value>
+        </data>
+    <data name="AttachmentSizeIsTooBig" xml:space="preserve">
+        <value>დანართის ზომა ძალიან დიდია. მაქსიმალური ზომა: {{size}}</value>
+        </data>
+    <data name="SideBarAttachmentsTitle" xml:space="preserve">
+        <value>დანართები</value>
+        </data>
+    <data name="SideBarCommentsTitle" xml:space="preserve">
+        <value>კომენტარები</value>
+        </data>
+    <data name="SideBarCriticalityConditionsTitle" xml:space="preserve">
+        <value>კრიტიკული წესები</value>
+        </data>
+    <data name="SideBarMetadataHeader" xml:space="preserve">
+        <value>კითხვარის აღწერა და გამოკითხვის ინფორმაცია</value>
+        </data>
+    <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+        <value>ძირითადი ინფორმაცია</value>
+        </data>
+    <data name="SideBarMetadataTitle" xml:space="preserve">
+        <value>კითხვარის სათაური</value>
+        </data>
+    <data name="SideBarMetadataSubtitle" xml:space="preserve">
+        <value>სუბტიტრები:</value>
+        </data>
+    <data name="SideBarMetadataVersionIdentificator" xml:space="preserve">
+        <value>ვერსიის იდენტიფიკატორი:</value>
+        </data>
+    <data name="SideBarMetadataVersionNotes" xml:space="preserve">
+        <value>ვერსიის შენიშვნები:</value>
+        </data>
+    <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+        <value>კვლევის მონაცემების ინფორმაცია</value>
+        </data>
+    <data name="SideBarMetadataStudyTypes" xml:space="preserve">
+        <value>სწავლის ტიპები:</value>
+        </data>
+    <data name="SideBarMetadataKindOfData" xml:space="preserve">
+        <value>სახის მონაცემები:</value>
+        </data>
+    <data name="SideBarMetadataModeOfDataCollection" xml:space="preserve">
+        <value>მონაცემთა შეგროვების რეჟიმი:</value>
+        </data>
+    <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+        <value>გამოკითხვის ინფორმაცია</value>
+        </data>
+    <data name="SideBarMetadataCountry" xml:space="preserve">
+        <value>ქვეყანა:</value>
+        </data>
+    <data name="SideBarMetadataYear" xml:space="preserve">
+        <value>წელი:</value>
+        </data>
+    <data name="SideBarMetadataLanguages" xml:space="preserve">
+        <value>ენები:</value>
+        </data>
+    <data name="SideBarMetadataUnitOfAlalysis" xml:space="preserve">
+        <value>ანალიზის ერთეული:</value>
+        </data>
+    <data name="SideBarMetadataCoverage" xml:space="preserve">
+        <value>გაშუქება:</value>
+        </data>
+    <data name="SideBarMetadataUniverse" xml:space="preserve">
+        <value>სამყარო:</value>
+        </data>
+    <data name="SideBarMetadataPrimaryInvestigator" xml:space="preserve">
+        <value>პირველადი გამომძიებელი:</value>
+        </data>
+    <data name="SideBarMetadataConsultants" xml:space="preserve">
+        <value>კონსულტანტები:</value>
+        </data>
+    <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+        <value>დამატებითი ინფორმაცია</value>
+        </data>
+    <data name="SideBarMetadataNotes" xml:space="preserve">
+        <value>შენიშვნები:</value>
+        </data>
+    <data name="SideBarMetadataKeywords" xml:space="preserve">
+        <value>საკვანძო სიტყვები:</value>
+        </data>
+    <data name="SideBarMetadataFunding" xml:space="preserve">
+        <value>დაფინანსება:</value>
+        </data>
+    <data name="SideBarMetadataQuestionnaireAccess" xml:space="preserve">
+        <value>კითხვარის ხელმისაწვდომობა</value>
+        </data>
+    <data name="SideBarMetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+        <value>დაეთანხმეთ ამ კითხვარის გასაჯაროებას</value>
+        </data>
+    <data name="SideBarAttachmentUploaded" xml:space="preserve">
+        <value>ატვირთულია: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
+        </data>
+    <data name="SideBarLookupTitle" xml:space="preserve">
+        <value>ცხრილების ძებნა</value>
+        </data>
+    <data name="SideBarMacroTitle" xml:space="preserve">
+        <value>მაკროები</value>
+        </data>
+    <data name="SideBarScenarioTitle" xml:space="preserve">
+        <value>სცენარები</value>
+        </data>
+    <data name="SideBarSectionsTitle" xml:space="preserve">
+        <value>სექციები</value>
+        </data>
+    <data name="SideBarTranslationsTitle" xml:space="preserve">
+        <value>თარგმანები</value>
+        </data>
+    <data name="SideBarCategoriesTitle" xml:space="preserve">
+        <value>კატეგორიები</value>
+        </data>
+    <data name="SideBarTranslationsUploadNew" xml:space="preserve">
+        <value>ატვირთეთ ახალი თარგმანი</value>
+        </data>
+    <data name="SideBarCategoriesUploadNew" xml:space="preserve">
+        <value>ატვირთეთ ახალი კატეგორიები</value>
+        </data>
+    <data name="AttachmentPreview" xml:space="preserve">
+        <value>დანართის გადახედვა</value>
+        </data>
+    <data name="FindReplaceFindWhat" xml:space="preserve">
+        <value>იპოვე რა:</value>
+        </data>
+    <data name="FindReplaceMatchCase" xml:space="preserve">
+        <value>მატჩის საქმე</value>
+        </data>
+    <data name="FindReplaceMatchWord" xml:space="preserve">
+        <value>შეადარეთ მთელი სიტყვა</value>
+        </data>
+    <data name="FindReplaceReplaceWith" xml:space="preserve">
+        <value>ჩანაცვლება:</value>
+        </data>
+    <data name="FindReplaceTitle" xml:space="preserve">
+        <value>იპოვნეთ და შეცვალეთ</value>
+        </data>
+    <data name="FindReplaceUseRegex" xml:space="preserve">
+        <value>გამოიყენეთ რეგულარული გამოხატულება</value>
+        </data>
+    <data name="FindReplaceСonfirm" xml:space="preserve">
+        <value>გთხოვთ, დაადასტუროთ მოქმედება.</value>
+        </data>
+    <data name="ModalConfirm" xml:space="preserve">
+        <value>დადასტურება</value>
+        </data>
+    <data name="ModalInfo" xml:space="preserve">
+        <value>ინფორმაცია</value>
+        </data>
+    <data name="MoveToAnotherSubSection" xml:space="preserve">
+        <value>სხვა განყოფილებაში გადასვლა:</value>
+        </data>
+    <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
+        <value>შეცვალეთ ყველა</value>
+        </data>
+    <data name="FindReplaceBackToSearch" xml:space="preserve">
+        <value>დაბრუნება ძიებაში</value>
+        </data>
+    <data name="FindReplaceDone" xml:space="preserve">
+        <value>შესრულებულია</value>
+        </data>
+    <data name="FindReplaceFindAll" xml:space="preserve">
+        <value>იპოვე ყველა</value>
+        </data>
+    <data name="FindReplaceInAll" xml:space="preserve">
+        <value>ყველა</value>
+        </data>
+    <data name="FindReplaceInAllFound" xml:space="preserve">
+        <value>{{count}} ნაპოვნი ერთეულში?</value>
+        </data>
+    <data name="FindReplaceInAllFound_plural" xml:space="preserve">
+        <value>{{count}} ნაპოვნი ერთეულებში?</value>
+        </data>
+    <data name="FindReplaceMatchingLines" xml:space="preserve">
+        <value>შესატყვისი ხაზები: {{count}}</value>
+        </data>
+    <data name="FindReplaceCurrentMatch" xml:space="preserve">
+        <value>{{current}} / {{count}}</value>
+        </data>
+    <data name="FindReplaceNext" xml:space="preserve">
+        <value>შემდეგი</value>
+        </data>
+    <data name="FindReplacePrevious" xml:space="preserve">
+        <value>წინა</value>
+        </data>
+    <data name="FindReplaceReplaceAll" xml:space="preserve">
+        <value>ჩანაცვლება ყველა ({{count}})</value>
+        </data>
+    <data name="FindReplaceReplaceAllConfirmWith" xml:space="preserve">
+        <value>თან</value>
+        </data>
+    <data name="FindReplaceWereReplaced" xml:space="preserve">
+        <value>შეცვალეს</value>
+        </data>
+    <data name="EnablingCondition" xml:space="preserve">
+        <value>ჩართვის მდგომარეობა</value>
+        </data>
+    <data name="GroupTitle" xml:space="preserve">
+        <value>სათაური</value>
+        </data>
+    <data name="HideIfDisabled" xml:space="preserve">
+        <value>დამალვა, თუ გამორთულია</value>
+        </data>
+    <data name="FlatRoster" xml:space="preserve">
+        <value>ბრტყელი რეჟიმი</value>
+        </data>
+    <data name="AddValidationRule" xml:space="preserve">
+        <value>დაამატეთ ახალი ვალიდაციის პირობა</value>
+        </data>
+    <data name="EnteredMoreThanAllowed" xml:space="preserve">
+        <value>თქვენ შეიყვანეთ მაქსიმუმზე მეტი {{max}}</value>
+        </data>
+    <data name="ErrorMessage" xml:space="preserve">
+        <value>შეცდომის ან გამაფრთხილებელი შეტყობინება</value>
+        </data>
+    <data name="OptionsListError" xml:space="preserve">
+        <value>თქვენ შეიყვანეთ არასწორი შენატანი. თითოეული ხაზი უნდა შეესაბამებოდეს ფორმატს: „სათაური...მნიშვნელობა[...დანართის სახელი]“. "მნიშვნელობა" უნდა იყოს მთელი რიცხვი. „სათაური“ უნდა იყოს ალფა-ციფრული სტრიქონი. „დანართის სახელი“ არჩევითია. დაუშვებელია ცარიელი ხაზები.</value>
+        </data>
+    <data name="QuestionAddInstruction" xml:space="preserve">
+        <value>ინტერვიუერის ინსტრუქციის დამატება</value>
+        </data>
+    <data name="QuestionClickReload" xml:space="preserve">
+        <value>დააჭირეთ გადატვირთვას</value>
+        </data>
+    <data name="QuestionFilter" xml:space="preserve">
+        <value>ფილტრი</value>
+        </data>
+    <data name="QuestionGpsNavigation" xml:space="preserve">
+        <value>ეს კითხვა განიხილება როგორც GPS ნავიგაციის შეკითხვა ინტერვიუერისთვის</value>
+        </data>
+    <data name="QuestionHideInstruction" xml:space="preserve">
+        <value>ინსტრუქციის დამალვა</value>
+        </data>
+    <data name="QuestionInstruction" xml:space="preserve">
+        <value>ინსტრუქცია</value>
+        </data>
+    <data name="QuestionLinkedDescr" xml:space="preserve">
+        <value>შეაერთეთ შეკითხვის ან შეკითხვის ჩამონათვალის ჯგუფიდან</value>
+        </data>
+    <data name="QuestionMustBeBound" xml:space="preserve">
+        <value>თქვენ უნდა დააკავშიროთ ეს კითხვა</value>
+        </data>
+    <data name="QuestionQuestionType" xml:space="preserve">
+        <value>კითხვის ტიპი</value>
+        </data>
+    <data name="QuestionDisplayMode" xml:space="preserve">
+        <value>ჩვენების რეჟიმი</value>
+        </data>
+    <data name="BindToReusableCategories" xml:space="preserve">
+        <value>დაკავშირება მრავალჯერადი გამოყენების კატეგორიებთან</value>
+        </data>
+    <data name="SelectCategories" xml:space="preserve">
+        <value>აირჩიეთ კატეგორიები</value>
+        </data>
+    <data name="QuestionScope" xml:space="preserve">
+        <value>კითხვის ფარგლები</value>
+        </data>
+    <data name="QuestionText" xml:space="preserve">
+        <value>კითხვის ტექსტი</value>
+        </data>
+    <data name="QuestionToUpdateOptions" xml:space="preserve">
+        <value>კატეგორიების განახლებისთვის</value>
+        </data>
+    <data name="QuestionVariableLabel" xml:space="preserve">
+        <value>ცვლადი ეტიკეტი</value>
+        </data>
+    <data name="QuestionVariableName" xml:space="preserve">
+        <value>ცვლადის სახელი</value>
+        </data>
+    <data name="RosterAddItem" xml:space="preserve">
+        <value>ელემენტის დამატება</value>
+        </data>
+    <data name="RosterName" xml:space="preserve">
+        <value>როსტერის სახელი</value>
+        </data>
+    <data name="RosterSource" xml:space="preserve">
+        <value>როსტერის წყარო</value>
+        </data>
+    <data name="RosterSourceFixed" xml:space="preserve">
+        <value>ნივთების ფიქსირებული ნაკრები:</value>
+        </data>
+    <data name="RosterSourceNumericQuestion" xml:space="preserve">
+        <value>წყაროს შეკითხვა რიგების რაოდენობისთვის:</value>
+        </data>
+    <data name="RosterSourceNumericTitles" xml:space="preserve">
+        <value>წყაროს შეკითხვა რიგების სახელებისთვის:</value>
+        </data>
+    <data name="RosterSourceQuestion" xml:space="preserve">
+        <value>წყაროს შეკითხვა (პასუხი განსაზღვრავს სტრიქონების რიცხვს და სახელს):</value>
+        </data>
+    <data name="RosterVariableName" xml:space="preserve">
+        <value>სიის ID</value>
+        </data>
+    <data name="SectionVariableName" xml:space="preserve">
+        <value>ცვლადის სახელი</value>
+        </data>
+    <data name="SelectQuestion" xml:space="preserve">
+        <value>აირჩიეთ შეკითხვა</value>
+        </data>
+    <data name="AddFilter" xml:space="preserve">
+        <value>ფილტრის დამატება</value>
+        </data>
+    <data name="SettingsCan" xml:space="preserve">
+        <value>შეუძლია</value>
+        </data>
+    <data name="SettingsInviteCollaborators" xml:space="preserve">
+        <value>მოიწვიე მეტი მომხმარებელი შესვლის ან რეგისტრირებული ელ.ფოსტის საშუალებით</value>
+        </data>
+    <data name="SettingsOwner" xml:space="preserve">
+        <value>მფლობელი</value>
+        </data>
+    <data name="SettingsPrivate" xml:space="preserve">
+        <value>პირადი</value>
+        </data>
+    <data name="SettingsPublic" xml:space="preserve">
+        <value>საჯარო</value>
+        </data>
+    <data name="SettingsAnonymous" xml:space="preserve">
+        <value>ანონიმური</value>
+        </data>
+    <data name="RegenerateQuestionnaireSharingLink" xml:space="preserve">
+        <value>ბმულის რეგენერაცია</value>
+        </data>
+    <data name="AnonymousQuestionnaireGeneratedDate" xml:space="preserve">
+        <value>გენერირებული ბმული: {{datetime}}</value>
+        </data>
+    <data name="SettingsQuestionnaireName" xml:space="preserve">
+        <value>კითხვარის სათაური</value>
+        </data>
+    <data name="SettingsQuestionnaireSharing" xml:space="preserve">
+        <value>შეადგინეთ ეს კითხვარი</value>
+        </data>
+    <data name="SettingsRevokeAccess" xml:space="preserve">
+        <value>წვდომის გაუქმება</value>
+        </data>
+    <data name="SettingsTitle" xml:space="preserve">
+        <value>პარამეტრები</value>
+        </data>
+    <data name="SettingsVisibleToEveryone" xml:space="preserve">
+        <value>ყველასთვის ხილული მხოლოდ წაკითხვის რეჟიმში</value>
+        </data>
+    <data name="SettingsAccessibleToEveryone" xml:space="preserve">
+        <value>ხელმისაწვდომია მხოლოდ წაკითხვის რეჟიმში ყველასთვის, ვისაც აქვს ბმული</value>
+        </data>
+    <data name="SettingsStatusAllowAnonymousAccess" xml:space="preserve">
+        <value>ანონიმური გაზიარება ამჟამად ჩართულია.</value>
+        </data>
+    <data name="SettingsStatusDontAllowAnonymousAccess" xml:space="preserve">
+        <value>ანონიმური გაზიარება ამჟამად გამორთულია.</value>
+        </data>
+    <data name="SettingsTurnOnAnonymousAccess" xml:space="preserve">
+        <value>ჩართეთ ანონიმური გაზიარება.</value>
+        </data>
+    <data name="SettingsTurnOffAnonymousAccess" xml:space="preserve">
+        <value>გამორთეთ ანონიმური გაზიარება.</value>
+        </data>
+    <data name="SettingsVisibleToOwner" xml:space="preserve">
+        <value>ჩანს მხოლოდ მფლობელისთვის</value>
+        </data>
+    <data name="SettingsWhoHasAccess" xml:space="preserve">
+        <value>ვისაც აქვს წვდომა</value>
+        </data>
+    <data name="ValidationCondition" xml:space="preserve">
+        <value>ვალიდაციის პირობა</value>
+        </data>
+    <data name="AddQuestion" xml:space="preserve">
+        <value>დაამატეთ შეკითხვა</value>
+        </data>
+    <data name="AddRoster" xml:space="preserve">
+        <value>დაამატეთ სია</value>
+        </data>
+    <data name="AddStaticText" xml:space="preserve">
+        <value>დაამატეთ სტატიკური ტექსტი</value>
+        </data>
+    <data name="AddSubsection" xml:space="preserve">
+        <value>დაამატეთ ქვეგანყოფილება</value>
+        </data>
+    <data name="VirtualCoverPage" xml:space="preserve">
+        <value>ვირტუალური ყდა გვერდი</value>
+        </data>
+    <data name="MigrateToNewCover" xml:space="preserve">
+        <value>საფარის გენერირება</value>
+        </data>
+    <data name="AddVariable" xml:space="preserve">
+        <value>ცვლადის დამატება</value>
+        </data>
+    <data name="EmptySectionLine1" xml:space="preserve">
+        <value>ეს განყოფილება ცარიელია.</value>
+        </data>
+    <data name="EmptySectionLine2" xml:space="preserve">
+        <value>შეგიძლიათ დაიწყოთ {{-addQuestionBtn}} და {{-addSubsectionBtn}} ღილაკების გამოყენებით</value>
+        </data>
+    <data name="EmptySectionLine3" xml:space="preserve">
+        <value>ამ ბლოკის თავზე ან მართეთ სექციები {{-panel}} მარცხენა პანელით</value>
+        </data>
+    <data name="EmptySectionLine4" xml:space="preserve">
+        <value>კითხვარის სახელი, ცვლადი, თანამშრომლობა და სხვა ვარიანტები</value>
+        </data>
+    <data name="EmptySectionLine5" xml:space="preserve">
+        <value>შეგიძლიათ იხილოთ {{-settingsBtn}} პანელზე (ზედა მარჯვენა კუთხე)</value>
+        </data>
+    <data name="NothingFound" xml:space="preserve">
+        <value>ვერაფერი მოიძებნა</value>
+        </data>
+    <data name="Paste" xml:space="preserve">
+        <value>პასტა</value>
+        </data>
+    <data name="QuestionAddOption" xml:space="preserve">
+        <value>კატეგორიის დამატება</value>
+        </data>
+    <data name="QuestionCascading" xml:space="preserve">
+        <value>კასკადური კომბინირებული ყუთი</value>
+        </data>
+    <data name="QuestionComboBox" xml:space="preserve">
+        <value>კომბინირებული ყუთი</value>
+        </data>
+    <data name="QuestionCheckboxes" xml:space="preserve">
+        <value>მოსანიშნი ველები</value>
+        </data>
+    <data name="QuestionCurrentTime" xml:space="preserve">
+        <value>ამჟამინდელი დროის შტამპი (თარიღი და დრო)</value>
+        </data>
+    <data name="QuestionDefaultDate" xml:space="preserve">
+        <value>ნაგულისხმევი თარიღი</value>
+        </data>
+    <data name="GeometryType" xml:space="preserve">
+        <value>გეომეტრიის ტიპი</value>
+        </data>
+    <data name="GeometryInputMode" xml:space="preserve">
+        <value>შეყვანის რეჟიმი</value>
+        </data>
+    <data name="GeometryOverlapDetection" xml:space="preserve">
+        <value>გადახურვის გამოვლენა</value>
+        </data>
+    <data name="QuestionDecimalPlaces" xml:space="preserve">
+        <value>ათობითი ადგილების რაოდენობა</value>
+        </data>
+    <data name="QuestionInteger" xml:space="preserve">
+        <value>მთელი რიცხვი</value>
+        </data>
+    <data name="QuestionIsLinked" xml:space="preserve">
+        <value>დაკავშირებულია</value>
+        </data>
+    <data name="QuestionMaxListCount" xml:space="preserve">
+        <value>სიის ელემენტების მაქსიმალური რაოდენობა</value>
+        </data>
+    <data name="QuestionMaxNumberOfAnswers" xml:space="preserve">
+        <value>პასუხების მაქსიმალური რაოდენობა</value>
+        </data>
+    <data name="QuestionOnlyInts" xml:space="preserve">
+        <value>დასაშვებია მხოლოდ მთელი რიცხვები</value>
+        </data>
+    <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
+        <value>ნებადართულია მთელი რიცხვები 1-დან 50-მდე</value>
+        </data>
+    <data name="QuestionOptionsCut" xml:space="preserve">
+        <value>შეკითხვა მონიშნული იყო, როგორც „კომბო ველი“ ან „კასკადური კომბინირებული ყუთი“ კითხვის დეტალების ატვირთვისას და შეიცავდა ძალიან ბევრ კატეგორიას, მათი რაოდენობა შემცირდა {{count}}-მდე</value>
+        </data>
+    <data name="QuestionOrdered" xml:space="preserve">
+        <value>ჩაწერეთ პასუხის ბრძანება</value>
+        </data>
+    <data name="QuestionPattern" xml:space="preserve">
+        <value>ნიმუში</value>
+        </data>
+    <data name="QuestionUploadOptions" xml:space="preserve">
+        <value>ატვირთეთ ახალი კატეგორიები</value>
+        </data>
+    <data name="QuestionUseSeparator" xml:space="preserve">
+        <value>გამოიყენეთ 1000 გამყოფი</value>
+        </data>
+    <data name="QuestionYesNoMode" xml:space="preserve">
+        <value>დიახ/არა ღილაკები</value>
+        </data>
+    <data name="GeographyInputModeManual" xml:space="preserve">
+        <value>სახელმძღვანელო</value>
+        </data>
+    <data name="GeographyInputModeAutomatic" xml:space="preserve">
+        <value>ავტომატური</value>
+        </data>
+    <data name="GeographyInputModeSemiautomatic" xml:space="preserve">
+        <value>ნახევრად ავტომატური</value>
+        </data>
+    <data name="Search" xml:space="preserve">
+        <value>ძიება</value>
+        </data>
+    <data name="Filter" xml:space="preserve">
+        <value>ფილტრი</value>
+        </data>
+    <data name="SelectParentQuestion" xml:space="preserve">
+        <value>აირჩიეთ მშობლის შეკითხვა</value>
+        </data>
+    <data name="SelectParentQuestionError" xml:space="preserve">
+        <value>თქვენ უნდა აირჩიოთ მშობლის შეკითხვა</value>
+        </data>
+    <data name="UserDefinedCategories" xml:space="preserve">
+        <value>მომხმარებლის განსაზღვრული კატეგორიები</value>
+        </data>
+    <data name="ReusableCategories" xml:space="preserve">
+        <value>მრავალჯერადი გამოყენების კატეგორიები</value>
+        </data>
+    <data name="SourceOfCategories" xml:space="preserve">
+        <value>კატეგორიების წყარო</value>
+        </data>
+    <data name="RostersQuestion" xml:space="preserve">
+        <value>ჩამოთვალეთ კითხვა ან შეკითხვა ჩამონათვალის ჯგუფიდან</value>
+        </data>
+    <data name="QuestionRadioButtonList" xml:space="preserve">
+        <value>რადიოს ღილაკების სია</value>
+        </data>
+    <data name="SettingsInvite" xml:space="preserve">
+        <value>მოიწვიე</value>
+        </data>
+    <data name="SettingsProvideExistingEmail" xml:space="preserve">
+        <value>მიაწოდეთ არსებული მომხმარებლის ელ.წერილი ან შესვლა</value>
+        </data>
+    <data name="SettingsProvideValidEmail" xml:space="preserve">
+        <value>მიაწოდეთ მოქმედი ელფოსტა</value>
+        </data>
+    <data name="StaticText" xml:space="preserve">
+        <value>სტატიკური ტექსტი</value>
+        </data>
+    <data name="StaticTextAttachmentName" xml:space="preserve">
+        <value>დანართის სახელი</value>
+        </data>
+    <data name="ToggleSearch" xml:space="preserve">
+        <value>გადართეთ ძებნა</value>
+        </data>
+    <data name="TreeAddQuestion" xml:space="preserve">
+        <value>დაამატეთ შეკითხვა</value>
+        </data>
+    <data name="TreeAddQuestionAfter" xml:space="preserve">
+        <value>დაამატეთ შეკითხვა შემდეგ</value>
+        </data>
+    <data name="TreeAddRoster" xml:space="preserve">
+        <value>დაამატეთ სია</value>
+        </data>
+    <data name="TreeAddRosterAfter" xml:space="preserve">
+        <value>შემდეგ დაამატეთ სია</value>
+        </data>
+    <data name="TreeAddSection" xml:space="preserve">
+        <value>დაამატეთ ქვეგანყოფილება</value>
+        </data>
+    <data name="TreeAddSectionAfter" xml:space="preserve">
+        <value>შემდეგ დაამატეთ ქვეგანყოფილება</value>
+        </data>
+    <data name="TreeAddStaticText" xml:space="preserve">
+        <value>დაამატეთ სტატიკური ტექსტი</value>
+        </data>
+    <data name="TreeAddStaticTextAfter" xml:space="preserve">
+        <value>შემდეგ დაამატეთ სტატიკური ტექსტი</value>
+        </data>
+    <data name="TreeAddVariable" xml:space="preserve">
+        <value>ცვლადის დამატება</value>
+        </data>
+    <data name="TreeAddVariableAfter" xml:space="preserve">
+        <value>შემდეგ დაამატეთ ცვლადი</value>
+        </data>
+    <data name="TreeRoster" xml:space="preserve">
+        <value>სია:</value>
+        </data>
+    <data name="VariableExpression" xml:space="preserve">
+        <value>გამოხატულება</value>
+        </data>
+    <data name="VariableLabel" xml:space="preserve">
+        <value>ცვლადი ეტიკეტი</value>
+        </data>
+    <data name="VariableType" xml:space="preserve">
+        <value>ცვლადი ტიპი</value>
+        </data>
+    <data name="HelpConditionExpression" xml:space="preserve">
+        <value>ლოგიკური გამონათქვამი, რომელიც ააქტიურებს (აუქმებს) მიმდინარე ერთეულს სხვა კითხვებზე პასუხების მიხედვით.</value>
+        </data>
+    <data name="HelpExpression" xml:space="preserve">
+        <value>ლოგიკური გამოხატულება, რომელიც გამოითვლება სხვა კითხვებზე პასუხების მიხედვით.</value>
+        </data>
+    <data name="HelpFixedTitles" xml:space="preserve">
+        <value>ნივთების რაოდენობა განსაზღვრავს როსტერის ზომას. სიის თითოეული ელემენტი შეესაბამება სიის მწკრივის სათაურს. სიის თითოეული ელემენტი უნდა განთავსდეს ცალკეულ ხაზზე.</value>
+        </data>
+    <data name="HelpHideIfDisabled" xml:space="preserve">
+        <value>ნაგულისხმევად, გამორთული ელემენტი ნაცრისფერია. ამ პარამეტრის მონიშვნა დაიმალება გამორთული შეკითხვა ან სექცია ტაბლეტზე.</value>
+        </data>
+    <data name="HelpRosterDisplayMode" xml:space="preserve">
+        <value>ქვეგანყოფილება - ჩამონათვალის კითხვები ნაჩვენებია ღილაკების მიღმა, რომლებიც შეესაბამება სიას.
+ბინა - როსტერის კითხვები ნაჩვენებია იმავე დონეზე, გამოყოფილი სათაურებით, რომლებიც შეესაბამება სიის შემთხვევებს.
+ცხრილი - ჩამონათვალის კითხვები ნაჩვენებია იმავე დონეზე, როგორც ცხრილის სტრიქონები და სვეტები. 
+მატრიცა - კატეგორიული შეკითხვა გამოსახულია მატრიცის სახით. 
+ცხრილისა და მატრიცის ხედები მხარდაჭერილია მხოლოდ ვებ გამოკითხვაში, ტაბლეტი ბრუნდება "ქვესექციის" რეჟიმში.</value>
+        </data>
+    <data name="HelpHideInstructions" xml:space="preserve">
+        <value>ნაგულისხმევად, ტაბლეტზე ნაჩვენებია ინსტრუქციის ტექსტი. ამ პარამეტრის შემოწმებით გამოჩნდება ინსტრუქციების მხოლოდ პირველი ხაზი. ამ ხაზზე დაჭერით გამოჩნდება სრული ტექსტი.</value>
+        </data>
+    <data name="HelpInstruction" xml:space="preserve">
+        <value>ინსტრუქციის ტექსტი, რომელიც დაერთვება კითხვას.</value>
+        </data>
+    <data name="HelpIsTimestamp" xml:space="preserve">
+        <value>ეს პარამეტრი მომხმარებელს საშუალებას აძლევს, დააფიქსიროს მიმდინარე დრო ტაბლეტზე</value>
+        </data>
+    <data name="HelpDefaultDate" xml:space="preserve">
+        <value>ეს თარიღი გამოჩნდება ტაბლეტზე შერჩევის დაწყების თარიღად</value>
+        </data>
+    <data name="HelpDoNotExport" xml:space="preserve">
+        <value>მონიშნეთ ეს ცვლადი ექსპორტიდან გამოსარიცხად</value>
+        </data>
+    <data name="VariableNoExport" xml:space="preserve">
+        <value>ნუ გაიტანთ ექსპორტს</value>
+        </data>
+    <data name="HelpMask" xml:space="preserve">
+        <value>ფორმატირებული ჩანაწერი ალფა-ციფრული მნიშვნელობებისთვის: ტელეფონის ნომრები, ID კოდები და ა.შ. მაგალითები:"~" - წარმოადგენს ალფა სიმბოლოს (A-Z,a-z), "#" - წარმოადგენს ციფრულ სიმბოლოს (0-9), "*" - წარმოადგენს ანბანურ სიმბოლოს (A-Z,a-z,0-9). "##/##/####" - თარიღი, "(###) ###-####" - ტელეფონის ნომერი, "AA####" - ფრენის ნომერი, რომელსაც ახორციელებს American AirLines ან "~*-###-~###"</value>
+        </data>
+    <data name="HelpSourceQuestion" xml:space="preserve">
+        <value>წყაროს შეკითხვა (პასუხი ქმნის მწკრივების რაოდენობას)</value>
+        </data>
+    <data name="HelpTitles" xml:space="preserve">
+        <value>რიგების სათაურები.</value>
+        </data>
+    <data name="HelpUseFormatting" xml:space="preserve">
+        <value>მოწმობისას, ტაბლეტზე ციფრული ველი დაფორმატდება, როგორც: d,ddd,ddd.dd, "d" წარმოადგენს ციფრებს (0-9), ",""(მძიმით) არის ათასი გამყოფი და "." (წერტილი) არის ათობითი წერტილის სიმბოლო.  ათასი გამყოფი და ათობითი წერტილის სიმბოლო შეიძლება განსხვავდებოდეს სხვადასხვა კულტურის მქონე ტაბლეტებისთვის.</value>
+        </data>
+    <data name="HelpValidationExpression" xml:space="preserve">
+        <value>ლოგიკური გამოთქმა, რომელიც ადასტურებს პასუხს მიმდინარე კითხვაზე. შეიძლება შეიცავდეს სხვა კითხვების მნიშვნელობებს.</value>
+        </data>
+    <data name="HelpValidationMessage" xml:space="preserve">
+        <value>შეცდომის ან გამაფრთხილებელი შეტყობინება ნაჩვენებია, როდესაც ვალიდაციის პირობა ფასდება "მცდარი" ან შეცდომა წარმოიქმნება გამოხატვის შეფასებისას.</value>
+        </data>
+    <data name="HelpVariableDescription" xml:space="preserve">
+        <value>ტექსტი, რომელიც ნაჩვენები იქნება ცვლადის გვერდით ტესტირების მიზნით</value>
+        </data>
+    <data name="HelpVariableLabel" xml:space="preserve">
+        <value>ტექსტი {{maxLength}}-მდე სიმბოლომდე, რომელიც დაერთვება ექსპორტირებულ ცვლადს.</value>
+        </data>
+    <data name="HelpVariableName" xml:space="preserve">
+        <value>ცვლადის სახელები და ჩამონათვალის ID შეიძლება იყოს {{minLength}}-დან {{maxLength}} სიმბოლომდე და უნდა შეიცავდეს მხოლოდ შემდეგ სიმბოლოებს: a-z, A-Z, _, ან 0-9. პირველი სიმბოლო არ შეიძლება იყოს 0-9 ან _ და ბოლო არ შეიძლება იყოს _.</value>
+        </data>
+    <data name="HelpAttachmentName" xml:space="preserve">
+        <value>დანართის ფაილის სახელი, რომელიც გამოჩნდება.</value>
+        </data>
+    <data name="HelpCoverPage" xml:space="preserve">
+        <value>ყველა კითხვარის პირველი ნაწილი შეიცავს საიდენტიფიკაციო კითხვებს, რომლებიც ასევე ნაჩვენებია ინტერვიუერებისა და ზედამხედველების დაფებზე.</value>
+        </data>
+    <data name="HelpVirtualCoverPage" xml:space="preserve">
+        <value>ყდა არის ვირტუალური განყოფილება, რომელიც აჩვენებს ყველა საიდენტიფიკაციო კითხვას.
+    ამ განყოფილებაში კითხვების შეცვლა შეუძლებელია</value>
+        </data>
+    <data name="ConditionMightBeBroken" xml:space="preserve">
+        <value>მდგომარეობა ან კასკადზე დამოკიდებული ნივთები შეიძლება დაირღვეს</value>
+        </data>
+    <data name="HotkeysCloseLookup" xml:space="preserve">
+        <value>საძიებო ცხრილების პანელის დახურვა</value>
+        </data>
+    <data name="HotkeysCloseMacros" xml:space="preserve">
+        <value>დახურეთ მაკრო პანელი</value>
+        </data>
+    <data name="HotkeysCloseMetadata" xml:space="preserve">
+        <value>მეტამონაცემების პანელის დახურვა</value>
+        </data>
+    <data name="HotkeysCloseScenarios" xml:space="preserve">
+        <value>სცენარების პანელის დახურვა</value>
+        </data>
+    <data name="HotkeysCloseTranslations" xml:space="preserve">
+        <value>თარგმანების პანელის დახურვა</value>
+        </data>
+    <data name="HotkeysCloseCategories" xml:space="preserve">
+        <value>კატეგორიების პანელის დახურვა</value>
+        </data>
+    <data name="HotkeysCloseComments" xml:space="preserve">
+        <value>კომენტარების პანელის დახურვა</value>
+        </data>
+    <data name="HotkeysFocusTitle" xml:space="preserve">
+        <value>სათაურის ველის ფოკუსირება რედაქტორში</value>
+        </data>
+    <data name="HotkeysFocusTree" xml:space="preserve">
+        <value>ფოკუსის კითხვარის ხე</value>
+        </data>
+    <data name="HotkeysHideAttachments" xml:space="preserve">
+        <value>დახურეთ დანართების პანელი</value>
+        </data>
+    <data name="HotkeysHideSections" xml:space="preserve">
+        <value>დახურეთ სექციები</value>
+        </data>
+    <data name="HotkeysNavigateToPrevSibling" xml:space="preserve">
+        <value>ნავიგაცია წინა ძმაზე</value>
+        </data>
+    <data name="HotkeysNavigateToSibling" xml:space="preserve">
+        <value>გადადით შემდეგ და-ძმაზე</value>
+        </data>
+    <data name="HotkeysOpenItem" xml:space="preserve">
+        <value>გახსენით ელემენტი რედაქტორში</value>
+        </data>
+    <data name="HotkeysOpenSection" xml:space="preserve">
+        <value>გახსენით განყოფილება</value>
+        </data>
+    <data name="HotkeysPrint" xml:space="preserve">
+        <value>ბეჭდვა</value>
+        </data>
+    <data name="HotkeysSearch" xml:space="preserve">
+        <value>მოძებნეთ ქვესექციები და კითხვები განყოფილებაში</value>
+        </data>
+    <data name="HotkeysTest" xml:space="preserve">
+        <value>ტესტის კითხვარი WebTester-ში</value>
+        </data>
+    <data name="MultipleDependencies" xml:space="preserve">
+        <value>ერთი ან მეტი კითხვა/ქვეთავი დამოკიდებულია</value>
+        </data>
+    <data name="NoPermissions" xml:space="preserve">
+        <value>თქვენ არ გაქვთ ამ კითხვარის შეცვლის უფლება</value>
+        </data>
+    <data name="NotAnImage" xml:space="preserve">
+        <value>არჩეული ფაილი არ არის სურათი</value>
+        </data>
+    <data name="QuestionOpenEditorConfirm" xml:space="preserve">
+        <value>რედაქტორის გასახსნელად ყველა შენახული ცვლილება უნდა იყოს შენახული. ახლა უნდა გადავარჩინოთ ისინი?</value>
+        </data>
+    <data name="QuestionOpenEditorSaved" xml:space="preserve">
+        <value>ის წარმატებით იქნა შენახული. გაიხსნება ფაილის ატვირთვის ფანჯარა.</value>
+        </data>
+    <data name="SettingsShareEdit" xml:space="preserve">
+        <value>რედაქტირება</value>
+        </data>
+    <data name="SettingsShareView" xml:space="preserve">
+        <value>ხედი</value>
+        </data>
+    <data name="DeleteConfirmQuestion" xml:space="preserve">
+        <value>დარწმუნებული ხართ, რომ გსურთ წაშალოთ "{{trimmedTitle}}"?</value>
+        </data>
+    <data name="DeleteConfirmCategories" xml:space="preserve">
+        <value>დარწმუნებული ხართ, რომ გსურთ წაშალოთ კატეგორიების ნაკრები "{{trimmedTitle}}"? მასზე დამოკიდებული კატეგორიული კითხვების კატეგორიების წყარო შეიცვლება მომხმარებლის განსაზღვრულ კატეგორიებად</value>
+        </data>
+    <data name="UntitledQuestion" xml:space="preserve">
+        <value>უსათაურო კითხვა</value>
+        </data>
+    <data name="TranslationsObtained" xml:space="preserve">
+        <value>მიღებულია {0} მწკრივი თარგმანის ფაილიდან</value>
+        </data>
+    <data name="TranslationsObtained_plural" xml:space="preserve">
+        <value>მიღებულია {0} სტრიქონები თარგმანის ფაილიდან</value>
+        </data>
+    <data name="CategoriesObtained" xml:space="preserve">
+        <value>მიღებულია {0} მწკრივი კატეგორიების ფაილიდან</value>
+        </data>
+    <data name="CategoriesObtained_plural" xml:space="preserve">
+        <value>მიღებულია {0} რიგები კატეგორიების ფაილიდან</value>
+        </data>
+    <data name="UnsavedChangesLeave" xml:space="preserve">
+        <value>თქვენ დაკარგავთ შენახულ ცვლილებებს, თუ ამ გვერდის დატოვებთ</value>
+        </data>
+    <data name="UnsavedChangesReload" xml:space="preserve">
+        <value>თქვენ დაკარგავთ შენახულ ცვლილებებს, თუ გადატვირთავთ ამ გვერდს</value>
+        </data>
+    <data name="Export" xml:space="preserve">
+        <value>ექსპორტი</value>
+        </data>
+    <data name="OptionsCloseWindow" xml:space="preserve">
+        <value>ფანჯრის დახურვა?</value>
+        </data>
+    <data name="OptionsUploadApply" xml:space="preserve">
+        <value>ცვლილებების გამოყენება</value>
+        </data>
+    <data name="OptionsUploadRevert" xml:space="preserve">
+        <value>ცვლილებების დაბრუნება</value>
+        </data>
+    <data name="OptionsWindowTitle" xml:space="preserve">
+        <value>კატეგორიების რედაქტირება</value>
+        </data>
+    <data name="CascadingOptionsWindowTitle" xml:space="preserve">
+        <value>კასკადური კატეგორიების რედაქტირება</value>
+        </data>
+    <data name="OptionsUploadLimit" xml:space="preserve">
+        <value>კატეგორიები არ არის. აირჩიეთ ჩანართებით გამოყოფილი ფაილი. ფაილი შეიძლება შეიცავდეს მაქსიმუმ {limit} კატეგორიას.</value>
+        </data>
+    <data name="OptionsUploadTitle" xml:space="preserve">
+        <value>სათაური</value>
+        </data>
+    <data name="OptionsUploadValue" xml:space="preserve">
+        <value>ღირებულება</value>
+        </data>
+    <data name="AttachmentName" xml:space="preserve">
+        <value>დანართის სახელი</value>
+        </data>
+    <data name="OptionsUploadParent" xml:space="preserve">
+        <value>მშობლის ღირებულება</value>
+        </data>
+    <data name="SideBarMacroNoName" xml:space="preserve">
+        <value>მაკრო სახელის გარეშე</value>
+        </data>
+    <data name="Upload" xml:space="preserve">
+        <value>ატვირთვა</value>
+        </data>
+    <data name="SideBarLookupTableNoName" xml:space="preserve">
+        <value>საძიებო ცხრილი სახელის გარეშე</value>
+        </data>
+    <data name="SideBarTranslationNoName" xml:space="preserve">
+        <value>თარგმანი სახელის გარეშე</value>
+        </data>
+    <data name="SideBarCategoriesNoName" xml:space="preserve">
+        <value>კატეგორიები სახელის გარეშე</value>
+        </data>
+    <data name="SideBarAttachmentNoName" xml:space="preserve">
+        <value>დანართი სახელის გარეშე</value>
+        </data>
+    <data name="DefaultNewRoster" xml:space="preserve">
+        <value>ახალი სია</value>
+        </data>
+    <data name="DefaultNewSection" xml:space="preserve">
+        <value>ახალი განყოფილება</value>
+        </data>
+    <data name="DefaultNewStaticText" xml:space="preserve">
+        <value>ახალი სტატიკური ტექსტი</value>
+        </data>
+    <data name="DefaultNewSubsection" xml:space="preserve">
+        <value>ახალი ქვეგანყოფილება</value>
+        </data>
+    <data name="HotkeysShortcuts" xml:space="preserve">
+        <value>კლავიატურის მალსახმობები</value>
+        </data>
+    <data name="HotkeysShowHideHelp" xml:space="preserve">
+        <value>ამ დახმარების მენიუს ჩვენება/დამალვა</value>
+        </data>
+    <data name="MarkAsDefault" xml:space="preserve">
+        <value>ნაგულისხმევად დაყენება</value>
+        </data>
+    <data name="UnMarkAsDefault" xml:space="preserve">
+        <value>არ გამოიყენოთ როგორც ნაგულისხმევი</value>
+        </data>
+    <data name="Default" xml:space="preserve">
+        <value>ნაგულისხმევი</value>
+        </data>
+    <data name="Reset" xml:space="preserve">
+        <value>გადატვირთვა</value>
+        </data>
+    <data name="PleaseWait" xml:space="preserve">
+        <value>გთხოვთ დაელოდოთ...</value>
+        </data>
+    <data name="EntryWasNotFound" xml:space="preserve">
+        <value>ჩანაწერი კითხვარში ვერ მოიძებნა, გთხოვთ აირჩიოთ სხვა.</value>
+        </data>
+    <data name="RequestFailedUnexpectedly" xml:space="preserve">
+        <value>მოთხოვნა მოულოდნელად ვერ მოხერხდა.</value>
+        </data>
+    <data name="ApplicationNotAvailable" xml:space="preserve">
+        <value>მოთხოვნის დასრულება შეუძლებელია. მიღებული პასუხი არ ჩანს Survey Solutions სერვერიდან.
+ეს ჩვეულებრივ გამოწვეულია ქსელის მარიონეტული პროქსის, ფაივერულის ან უსაფრთხოების კარიბჭის მიერ, რომელიც წყვეტს კავშირს.
+გთხოვთ, შეამოწმოთ თქვენი ქსელის კავშირი ან დაუკავშირდით თქვენს IT მხარდაჭერას.</value>
+        </data>
+    <data name="IncorrectRosterTitle" xml:space="preserve">
+        <value>არასწორი ჩამონათვალის სათაურის შეკითხვა</value>
+        </data>
+    <data name="SelectedInvalidItem" xml:space="preserve">
+        <value>არჩეულია არასწორი ელემენტი. გაასწორე.</value>
+        </data>
+    <data name="SelectItemFromTheList" xml:space="preserve">
+        <value>აირჩიეთ ელემენტი სიიდან</value>
+        </data>
+    <data name="UntitledGroupOrRoster" xml:space="preserve">
+        <value>უსათაურო ქვეგანყოფილება ან სია</value>
+        </data>
+    <data name="UntitledVariable" xml:space="preserve">
+        <value>უსათაურო ცვლადი</value>
+        </data>
+    <data name="UntitledSection" xml:space="preserve">
+        <value>უსათაურო განყოფილება</value>
+        </data>
+    <data name="UntitledRoster" xml:space="preserve">
+        <value>უსათაურო სია</value>
+        </data>
+    <data name="UntitledStaticText" xml:space="preserve">
+        <value>უსათაურო სტატიკური ტექსტი</value>
+        </data>
+    <data name="SelectModeOfDataCollection" xml:space="preserve">
+        <value>აირჩიეთ მონაცემთა შეგროვების რეჟიმი</value>
+        </data>
+    <data name="SelectCountry" xml:space="preserve">
+        <value>აირჩიეთ ქვეყანა</value>
+        </data>
+    <data name="SelectStudyType" xml:space="preserve">
+        <value>აირჩიეთ კვლევის ტიპი</value>
+        </data>
+    <data name="SelectKindOfData" xml:space="preserve">
+        <value>აირჩიეთ სახის მონაცემები</value>
+        </data>
+    <data name="Test" xml:space="preserve">
+        <value>ტესტი</value>
+        </data>
+    <data name="QuestionAddSpecialValues" xml:space="preserve">
+        <value>დაამატეთ სპეციალური ღირებულება</value>
+        </data>
+    <data name="EntityComment" xml:space="preserve">
+        <value>ახალი კომენტარი</value>
+        </data>
+    <data name="IsSignature" xml:space="preserve">
+        <value>გამოიყენეთ ხელმოწერის პანელი</value>
+        </data>
+    <data name="HelpNewComment" xml:space="preserve">
+        <value>კომენტარის დამატება</value>
+        </data>
+    <data name="VariableVariableName" xml:space="preserve">
+        <value>ცვლადის სახელი</value>
+        </data>
+    <data name="SideBarCommentsCounter" xml:space="preserve">
+        <value>{{count}} კომენტარის თემა:</value>
+        </data>
+    <data name="SideBarCommentsCounter_plural" xml:space="preserve">
+        <value>{{count}} კომენტარების თემები:</value>
+        </data>
+    <data name="SideBarEmptyCommentsLine" xml:space="preserve">
+        <value>აქ ნახავთ კომენტარებს</value>
+        </data>
+    <data name="ViewResolvedCommentsCounter" xml:space="preserve">
+        <value>ყველა {{count}} მოგვარებული კომენტარის ნახვა</value>
+        </data>
+    <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
+        <value>ყველა {{count}} გადაჭრილი კომენტარის ნახვა</value>
+        </data>
+    <data name="HideResolvedComments" xml:space="preserve">
+        <value>გადაჭრილი კომენტარების დამალვა</value>
+        </data>
+    <data name="EditorAddComment" xml:space="preserve">
+        <value>კომენტარის დამატება</value>
+        </data>
+    <data name="EditorShowComments" xml:space="preserve">
+        <value>კომენტარების ჩვენება ({{count}})</value>
+        </data>
+    <data name="JumpToEdit" xml:space="preserve">
+        <value>გადადით რედაქტირებაზე</value>
+        </data>
+    <data name="CommentEditorResolve" xml:space="preserve">
+        <value>გადაჭრა</value>
+        </data>
+    <data name="EditorHideComment" xml:space="preserve">
+        <value>კომენტარების დამალვა</value>
+        </data>
+    <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
+        <value>კომენტარი არ შეიძლება შეიცავდეს {1} სიმბოლოზე მეტს</value>
+        </data>
+    <data name="IsWarning" xml:space="preserve">
+        <value>გაფრთხილება</value>
+        </data>
+    <data name="SettingsQuestionnaireVariable" xml:space="preserve">
+        <value>კითხვარის ცვლადი</value>
+        </data>
+    <data name="CollaboratorsSettings" xml:space="preserve">
+        <value>თანამშრომლები</value>
+        </data>
+    <data name="CollaboratorsDescriptionSettings" xml:space="preserve">
+        <value>შემდეგ მომხმარებლებს აქვთ წვდომა ამ კითხვარზე</value>
+        </data>
+    <data name="AccessSettings" xml:space="preserve">
+        <value>წვდომა</value>
+        </data>
+    <data name="PublicAccessSettings" xml:space="preserve">
+        <value>საჯარო წვდომა</value>
+        </data>
+    <data name="PublicAccessDescriptionSettings" xml:space="preserve">
+        <value>საჯარო კითხვარები ხილულია ყველა მომხმარებლისთვის, რომელსაც აქვს ანგარიში ამ სისტემაში მხოლოდ წაკითხვის რეჟიმში.</value>
+        </data>
+    <data name="PublicAccessSettingsStatusOn" xml:space="preserve">
+        <value>კითხვარი ამჟამად გაზიარებულია როგორც საჯარო.</value>
+        </data>
+    <data name="PublicAccessSettingsStatusOff" xml:space="preserve">
+        <value>კითხვარი ამჟამად არ არის გაზიარებული საჯაროდ.</value>
+        </data>
+    <data name="PublicAccessSettingsOn" xml:space="preserve">
+        <value>ჩართეთ საჯარო წვდომა.</value>
+        </data>
+    <data name="PublicAccessSettingsOff" xml:space="preserve">
+        <value>გამორთეთ საჯარო წვდომა.</value>
+        </data>
+    <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
+        <value>ბმულის გაზიარება</value>
+        </data>
+    <data name="AnonymousLink" xml:space="preserve">
+        <value>ანონიმური ბმული:</value>
+        </data>
+    <data name="CopyLink" xml:space="preserve">
+        <value>დააკოპირეთ ბმული</value>
+        </data>
+    <data name="AnonymousQuestionnaireDescriptionSettings" xml:space="preserve">
+        <value>მომხმარებლები, რომლებსაც აქვთ ეს ბმული, შეძლებენ ამ კითხვარის გახსნას</value>
+        </data>
+    <data name="QuestionnaireSettings" xml:space="preserve">
+        <value>კითხვარის პარამეტრები</value>
+        </data>
+    <data name="HelpCombobox" xml:space="preserve">
+        <value>კომბინირებული ყუთი არის ჩამოსაშლელი სიისა და ერთი ხაზის რედაქტირებადი ტექსტური ყუთის კომბინაცია. კატეგორიების შერჩევა შესაძლებელია მნიშვნელობის ან მისი ნაწილის აკრეფით ან სიიდან მნიშვნელობის არჩევით</value>
+        </data>
+    <data name="HelpQuestionnaireVarible" xml:space="preserve">
+        <value>კითხვარის ცვლადი გამოიყენება როგორც პრეფიქსი ექსპორტის ფაილების სახელების ფორმირებისთვის. ცვლადის სახელები და ჩამონათვალის ID შეიძლება იყოს {{minLength}}-დან {{maxLength}} სიმბოლომდე და უნდა შეიცავდეს მხოლოდ შემდეგ სიმბოლოებს: a-z, A-Z, _, ან 0-9. პირველი სიმბოლო არ შეიძლება იყოს 0-9 ან _ და ბოლო არ შეიძლება იყოს _.</value>
+        </data>
+    <data name="DeleteCommentConfirm" xml:space="preserve">
+        <value>დარწმუნებული ხართ, რომ გსურთ წაშალოთ კომენტარი?</value>
+        </data>
+    <data name="RefreshPageConfirm" xml:space="preserve">
+        <value>ჩვენ განვაახლეთ ეს საიტი, გთხოვთ, განაახლოთ გვერდი, წინააღმდეგ შემთხვევაში შეიძლება მოულოდნელი ქცევა განიცადოთ</value>
+        </data>
+    <data name="Refresh" xml:space="preserve">
+        <value>განაახლეთ</value>
+        </data>
+    <data name="NotSupportedAttachment" xml:space="preserve">
+        <value>არჩეული ფაილი არ არის მხარდაჭერილი, როგორც დანართი</value>
+        </data>
+    <data name="AttachmentDimensionsAreTooBig" xml:space="preserve">
+        <value>ზომები ძალიან დიდია</value>
+        </data>
+    <data name="SettingsHideIfDisabled" xml:space="preserve">
+        <value>ელემენტის დამალვა, როდესაც ის გამორთულია</value>
+        </data>
+    <data name="HideIfDisabledNested" xml:space="preserve">
+        <value>ჩადებული კითხვარიდან</value>
+        </data>
+    <data name="Add" xml:space="preserve">
+        <value>დამატება</value>
+        </data>
+    <data name="AllClassifications" xml:space="preserve">
+        <value>ყველა კლასიფიკაცია</value>
+        </data>
+    <data name="ClassificationShowCategories" xml:space="preserve">
+        <value>კატეგორიების ჩვენება</value>
+        </data>
+    <data name="ClassificationsTitle" xml:space="preserve">
+        <value>კითხვების ბანკი. კლასიფიკაციები</value>
+        </data>
+    <data name="QuestionAddClassification" xml:space="preserve">
+        <value>მოძებნეთ კლასიფიკაცია</value>
+        </data>
+    <data name="SearchClassification" xml:space="preserve">
+        <value>ძებნის კლასიფიკაცია</value>
+        </data>
+    <data name="ReplaceOptionsConfirmation" xml:space="preserve">
+        <value>დარწმუნებული ხართ, რომ გსურთ შეცვალოთ არსებული კატეგორიები შეკითხვისთვის "{{trimmedTitle}}"?</value>
+        </data>
+    <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
+        <value>მხოლოდ პირველი {{count}} კატეგორიები მიიღება კითხვაზე "{{trimmedTitle}}"?</value>
+        </data>
+    <data name="MyClassifications" xml:space="preserve">
+        <value>ჩემი კლასიფიკაციები</value>
+        </data>
+    <data name="ClassificationAdd" xml:space="preserve">
+        <value>დაამატეთ კლასიფიკაცია</value>
+        </data>
+    <data name="ClassificationAddGroup" xml:space="preserve">
+        <value>ჯგუფის დამატება</value>
+        </data>
+    <data name="ClassificationGroupBreadcrumbs" xml:space="preserve">
+        <value>ჯგუფები</value>
+        </data>
+    <data name="ClassificationGroupTitle" xml:space="preserve">
+        <value>ჯგუფის სათაური</value>
+        </data>
+    <data name="ClassificationsStringOptionsEditorPlaceholder" xml:space="preserve">
+        <value>შეიყვანეთ კატეგორიები</value>
+        </data>
+    <data name="ClassificationTitle" xml:space="preserve">
+        <value>კლასიფიკაციის სათაური</value>
+        </data>
+    <data name="SearchForQuestion" xml:space="preserve">
+        <value>მოძებნეთ კითხვა</value>
+        </data>
+    <data name="AllFolders" xml:space="preserve">
+        <value>ყველა საქაღალდე</value>
+        </data>
+    <data name="SearchQuestionPlaceholder" xml:space="preserve">
+        <value>მოძებნეთ კითხვა</value>
+        </data>
+    <data name="QuestionsSearchTitle" xml:space="preserve">
+        <value>კითხვების ბანკი</value>
+        </data>
+    <data name="QuestionsSearchEntities" xml:space="preserve">
+        <value>ძიების შედეგები</value>
+        </data>
+    <data name="ClassificationsSearchEntities" xml:space="preserve">
+        <value>კლასიფიკაციები</value>
+        </data>
+    <data name="ShowAsList" xml:space="preserve">
+        <value>კატეგორიების სიის სახით ჩვენება</value>
+        </data>
+    <data name="QuestionShowListLimit" xml:space="preserve">
+        <value>თუ არა მეტი</value>
+        </data>
+    <data name="RosterDisplayMode_SubSection" xml:space="preserve">
+        <value>ქვეგანყოფილება</value>
+        </data>
+    <data name="RosterDisplayMode_Flat" xml:space="preserve">
+        <value>ბინა</value>
+        </data>
+    <data name="RosterDisplayMode_Table" xml:space="preserve">
+        <value>მაგიდა</value>
+        </data>
+    <data name="RosterDisplayMode_Matrix" xml:space="preserve">
+        <value>მატრიცა</value>
+        </data>
+    <data name="RosterDisplayMode" xml:space="preserve">
+        <value>ჩვენების რეჟიმი:</value>
+        </data>
+    <data name="AreYouSure" xml:space="preserve">
+        <value>დარწმუნებული ხარ?</value>
+        </data>
+    <data name="MakeOwnerConfirmationMessage" xml:space="preserve">
+        <value>მფლობელობის გადაცემის შემთხვევაში, ახალი მფლობელი ეცნობება. თქვენ შესაძლოა ვეღარ შეცვალოთ მფლობელობის პარამეტრები და ახალმა მფლობელმა შეიძლება ასევე გააუქმოს თქვენი წვდომა.</value>
+        </data>
+    <data name="SettingsMakeOwner" xml:space="preserve">
+        <value>გახადე მფლობელი</value>
+        </data>
+    <data name="Yes" xml:space="preserve">
+        <value>დიახ</value>
+        </data>
+    <data name="Run" xml:space="preserve">
+        <value>გაიქეცი</value>
+        </data>
+    <data name="View" xml:space="preserve">
+        <value>ხედი</value>
+        </data>
+    <data name="ScenarioDetails" xml:space="preserve">
+        <value>სცენარი</value>
+        </data>
+    <data name="DownloadPdf" xml:space="preserve">
+        <value>ჩამოტვირთეთ PDF</value>
+        </data>
+    <data name="GeneratePdf" xml:space="preserve">
+        <value>pdf-ის გენერირება</value>
+        </data>
+    <data name="ChooseLanguageTitle" xml:space="preserve">
+        <value>გთხოვთ, აირჩიოთ თარგმანი</value>
+        </data>
+    <data name="Initializing" xml:space="preserve">
+        <value>ინიციალიზაცია</value>
+        </data>
+    <data name="RetryExportPDF" xml:space="preserve">
+        <value>ხელახლა სცადეთ ექსპორტი PDF სახით</value>
+        </data>
+    <data name="Translation_Original" xml:space="preserve">
+        <value>ორიგინალი</value>
+        </data>
+    <data name="Preview" xml:space="preserve">
+        <value>გადახედვის გადახედვა #{{revision}}</value>
+        </data>
+    <data name="CustomRosterTitle" xml:space="preserve">
+        <value>მორგებული სათაური</value>
+        </data>
+    <data name="HelpOptionValue" xml:space="preserve">
+        <value>კატეგორიის რიცხვითი რიცხვითი კოდი (ინტერვიუერისთვის არ ჩანს)</value>
+        </data>
+    <data name="HelpOptionTitle" xml:space="preserve">
+        <value>ტექსტური ეტიკეტი კატეგორიისთვის (ხილული ინტერვიუერისთვის)</value>
+        </data>
+    <data name="HelpOverlapDetection" xml:space="preserve">
+        <value>აჩვენეთ და მონიშნეთ ამ კითხვაზე პასუხის გადაფარვა ერთსა და იმავე კითხვებზე პასუხებით და-ძმების სიაში</value>
+        </data>
+    <data name="NewItem" xml:space="preserve">
+        <value>ახალი ნივთი</value>
+        </data>
+    <data name="EditItem" xml:space="preserve">
+        <value>ელემენტის რედაქტირება</value>
+        </data>
+    <data name="DeleteItemCofirm" xml:space="preserve">
+        <value>დარწმუნებული ხართ, რომ გსურთ ამ ელემენტის წაშლა?</value>
+        </data>
+    <data name="Forum" xml:space="preserve">
+        <value>ფორუმი</value>
+        </data>
+    <data name="TableView" xml:space="preserve">
+        <value>მაგიდის ხედი</value>
+        </data>
+    <data name="StringsView" xml:space="preserve">
+        <value>ტექსტის ხედი</value>
+        </data>
+    <data name="ValidationIntValue" xml:space="preserve">
+        <value>ღირებულება ძალიან დიდია</value>
+        </data>
+    <data name="RequiredField" xml:space="preserve">
+        <value>აუცილებელი ველი</value>
+        </data>
+    <data name="FileUploaded" xml:space="preserve">
+        <value>ფაილი აიტვირთა</value>
+        </data>
+    <data name="DataChangesReverted" xml:space="preserve">
+        <value>მონაცემთა ცვლილებები დაბრუნდა</value>
+        </data>
+    <data name="OptionsSizeLimit" xml:space="preserve">
+        <value>დასაშვებია მაქსიმუმ {max_rows} მწკრივი</value>
+        </data>
+    <data name="CommunicationError" xml:space="preserve">
+        <value>ქსელის შეცდომა</value>
+        </data>
+    <data name="SideBarCategoriesAddNew" xml:space="preserve">
+        <value>დაამატეთ ახალი კატეგორიები</value>
+        </data>
+    <data name="RowAdded" xml:space="preserve">
+        <value>მწკრივი დამატებულია</value>
+        </data>
+    <data name="OptionsCascadingListError" xml:space="preserve">
+        <value>თქვენ შეიყვანეთ არასწორი შენატანი. თითოეული ხაზი უნდა შეესაბამებოდეს ფორმატს: "სათაური... ParentValue/Value[...დანართის სახელი]". „Value“ და „ParentValue“ უნდა იყოს მთელი რიცხვი. „სათაური“ უნდა იყოს ალფა-ციფრული სტრიქონი. „დანართის სახელი“ არჩევითია. დაუშვებელია ცარიელი ხაზები.</value>
+        </data>
+    <data name="ShowParentValues" xml:space="preserve">
+        <value>მშობლის მნიშვნელობების ჩვენება</value>
+        </data>
+    <data name="HideParentValues" xml:space="preserve">
+        <value>მშობლის მნიშვნელობების დამალვა</value>
+        </data>
+    <data name="AddEnablingCondition" xml:space="preserve">
+        <value>ჩართვის პირობის დამატება</value>
+        </data>
+    <data name="ManageAccount" xml:space="preserve">
+        <value>ანგარიშის მართვა</value>
+        </data>
+    <data name="ShowList" xml:space="preserve">
+        <value>სიის ჩვენება</value>
+        </data>
+    <data name="Login" xml:space="preserve">
+        <value>შესვლა</value>
+        </data>
+    <data name="Register" xml:space="preserve">
+        <value>რეგისტრაცია</value>
+        </data>
+    <data name="No" xml:space="preserve">
+        <value>არა</value>
+        </data>
+    <data name="QuestionIsCritical" xml:space="preserve">
+        <value>ეს კრიტიკული კითხვაა</value>
+        </data>
+    <data name="HelpIsCritical" xml:space="preserve">
+        <value>კითხვარის ავტორებმა შეიძლება მიუთითონ, რომ კითხვაზე პასუხი კრიტიკულია ინტერვიუს წარდგენისთვის.</value>
+        </data>
+    <data name="HelpCriticalityConditionExpression" xml:space="preserve">
+        <value>ლოგიკური გამოთქმა, რომელიც აფასებს ინტერვიუს მთლიანობაში, რათა დადგინდეს, აკმაყოფილებს თუ არა ის კრიტიკულ წესებს (როდესაც ეს გამოთქმა ფასდება "ჭეშმარიტად"). ის შეიძლება ეხებოდეს ნებისმიერ კითხვას ან ცვლადს.</value>
+        </data>
+    <data name="HelpCriticalityConditionMessage" xml:space="preserve">
+        <value>ეს შეტყობინება ნაჩვენებია, როდესაც კრიტიკული მდგომარეობა ფასდება "მცდარი" ან გამონაკლისი ხდება გამოხატვის შეფასებისას. შეტყობინებამ შეიძლება გამოიყენოს ჰიპერბმულები და ტექსტის ჩანაცვლება.</value>
+        </data>
+    <data name="SwitchTo" xml:space="preserve">
+        <value>გადართვა</value>
+        </data>
+    <data name="SwitchToTranslationConfirm" xml:space="preserve">
+        <value>Switch To შეცვლის კითხვარის ჩვენების ენას. თარგმანი უნდა შეიცავდეს ტექსტს ყველა ელემენტისთვის.</value>
+        </data>
+    <data name="AIAssistant" xml:space="preserve">
+        <value>AI</value>
+        </data>
+</root>
