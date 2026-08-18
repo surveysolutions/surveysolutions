@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="ErrorConnectingToDatabase" xml:space="preserve"><value>Aplikacioni nuk mund të lidhet me bazën e të dhënave duke përdorur vargun e dhënë të lidhjes. Kontrolloni skedarin e regjistrit të aplikacionit për detaje</value></data>
+  <data name="ErrorDuringRunningMigrations" xml:space="preserve"><value>Gabim gjatë migrimit të bazës së të dhënave. Kontrolloni skedarin e regjistrit të aplikacionit për detaje</value></data>
+  <data name="ErrorDuringSiteInitialization" xml:space="preserve"><value>Gabim gjatë inicializimit të sajtit. Kontrolloni skedarin e regjistrit të aplikacionit për detaje</value></data>
+  <data name="InitializingDb" xml:space="preserve"><value>Baza e të dhënave po inicializohet</value></data>
+  <data name="MigrateDb" xml:space="preserve"><value>Migrimi i bazës së të dhënave në progres</value></data>
+  <data name="ErrorDatabaseUnauthorized" xml:space="preserve"><value>Aplikacioni nuk është i autorizuar të lidhet me bazën e të dhënave. Kontrolloni skedarin e regjistrit të aplikacionit për detaje</value></data>
+</root>
+
