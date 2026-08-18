@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Principal;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -14,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 {
@@ -36,7 +38,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             this.questionnaireViewFactory = questionnaireViewFactory;
         }
 
-        public async Task<QuestionnaireChangeHistory?> LoadAsync(Guid questionnaireId, int page, int pageSize, IPrincipal user, string? search = null)
+        public async Task<QuestionnaireChangeHistory?> LoadAsync(Guid questionnaireId, int page, int pageSize, IPrincipal user,
+            string? search = null, bool searchIdsOnly = false, bool searchWholeWord = false)
         {
             var questionnaire = questionnaireDocumentStorage.GetById(questionnaireId.FormatGuid());
 
@@ -59,28 +62,94 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 query = query.Where(h => !(h.ActionType == QuestionnaireActionType.ImportToHq && adminUsers.Contains(h.UserId)));
             }
 
+            var questionnaireHistory = await query
+                .OrderByDescending(h => h.Sequence)
+                .ToArrayAsync();
+
             if (!string.IsNullOrWhiteSpace(search))
             {
-                var searchLower = search.Trim().ToLowerInvariant();
-                query = query.Where(h =>
-                    (h.TargetItemTitle != null && h.TargetItemTitle.ToLower().Contains(searchLower)) ||
-                    (h.TargetItemNewTitle != null && h.TargetItemNewTitle.ToLower().Contains(searchLower)) ||
-                    h.References.Any(r => r.ReferenceTitle != null && r.ReferenceTitle.ToLower().Contains(searchLower)));
+                var matcher = CreateMatcher(search.Trim(), searchWholeWord);
+                questionnaireHistory = questionnaireHistory
+                    .Where(h => MatchesRecord(questionnaire, h, matcher, searchIdsOnly))
+                    .ToArray();
             }
 
-            var count = await query.CountAsync();
-
-            var questionnaireHistory = await query
-                    .OrderByDescending(h => h.Sequence)
-                    .Skip((page - 1) * pageSize)
-                    .Take(pageSize)
-                    .ToArrayAsync();
+            var count = questionnaireHistory.Length;
+            questionnaireHistory = questionnaireHistory
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToArray();
             var userId = user.GetId();
 
             return new QuestionnaireChangeHistory(questionnaireId, questionnaire.Title,
                 questionnaireHistory.Select(h => 
                     CreateQuestionnaireChangeHistoryWebItem(questionnaire, h, userId))
-                    .ToList(), page, count, pageSize, search);
+                    .ToList(), page, count, pageSize, search, searchIdsOnly, searchWholeWord);
+        }
+
+        private static Func<string?, bool> CreateMatcher(string search, bool wholeWord)
+        {
+            if (!wholeWord)
+                return value => !string.IsNullOrWhiteSpace(value)
+                    && value.IndexOf(search, System.StringComparison.OrdinalIgnoreCase) >= 0;
+
+            var pattern = $@"\b{Regex.Escape(search)}\b";
+            return value => !string.IsNullOrWhiteSpace(value)
+                && Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        }
+
+        private static bool MatchesRecord(QuestionnaireDocument questionnaire, QuestionnaireChangeRecord record,
+            Func<string?, bool> matcher, bool searchIdsOnly)
+        {
+            var targetMatch = searchIdsOnly
+                ? MatchEntityId(questionnaire, record.TargetItemId, record.TargetItemType, record.TargetItemTitle, matcher)
+                : MatchEntityText(questionnaire, record.TargetItemId, record.TargetItemType, record.TargetItemTitle, matcher)
+                    || matcher(record.TargetItemNewTitle);
+
+            if (targetMatch)
+                return true;
+
+            return record.References.Any(reference => searchIdsOnly
+                ? MatchEntityId(questionnaire, reference.ReferenceId, reference.ReferenceType, reference.ReferenceTitle, matcher)
+                : MatchEntityText(questionnaire, reference.ReferenceId, reference.ReferenceType, reference.ReferenceTitle, matcher));
+        }
+
+        private static bool MatchEntityId(QuestionnaireDocument questionnaire, Guid entityId, QuestionnaireItemType entityType,
+            string? fallbackValue, Func<string?, bool> matcher)
+        {
+            var candidate = ResolveEntityId(questionnaire, entityId, entityType) ?? fallbackValue;
+            return matcher(candidate);
+        }
+
+        private static bool MatchEntityText(QuestionnaireDocument questionnaire, Guid entityId, QuestionnaireItemType entityType,
+            string? fallbackValue, Func<string?, bool> matcher)
+        {
+            var resolvedText = ResolveEntityText(questionnaire, entityId, entityType);
+            if (!string.IsNullOrWhiteSpace(resolvedText))
+                return matcher(resolvedText);
+
+            if (entityType == QuestionnaireItemType.Variable)
+                return false;
+
+            return matcher(fallbackValue);
+        }
+
+        private static string? ResolveEntityId(QuestionnaireDocument questionnaire, Guid entityId, QuestionnaireItemType entityType)
+        {
+            if (entityType == QuestionnaireItemType.Questionnaire)
+                return questionnaire.VariableName;
+
+            var entity = questionnaire.FirstOrDefault<IComposite>(item => item.PublicKey == entityId) as IQuestionnaireEntity;
+            return entity?.GetVariable();
+        }
+
+        private static string? ResolveEntityText(QuestionnaireDocument questionnaire, Guid entityId, QuestionnaireItemType entityType)
+        {
+            if (entityType == QuestionnaireItemType.Questionnaire)
+                return questionnaire.Title;
+
+            var entity = questionnaire.FirstOrDefault<IComposite>(item => item.PublicKey == entityId) as IQuestionnaireEntity;
+            return entity?.GetTitle();
         }
 
         private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(

@@ -24,9 +24,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
         {
             var questionnaireDocument = Create.QuestionnaireDocument(children: new[]
             {
-                Create.Group(children: new[]
+                Create.Group(groupId: sectionId, title: "Household members", variable: "hh_members", children: new[]
                 {
-                    Create.Question(questionId: questionId)
+                    Create.Question(questionId: questionId, variable: "respondent_age", title: "Age of respondent")
                 })
             });
 
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
                 targetId: questionId,
                 targetType: QuestionnaireItemType.Question,
                 action: QuestionnaireActionType.Update,
-                targetTitle: "myvar"));
+                targetTitle: "respondent_age"));
 
             db.Add(Create.QuestionnaireChangeRecord(
                 questionnaireId: questionnaireId.FormatGuid(),
@@ -48,11 +48,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
 
             db.Add(Create.QuestionnaireChangeRecord(
                 questionnaireId: questionnaireId.FormatGuid(),
-                targetId: Guid.NewGuid(),
+                targetId: sectionId,
                 targetType: QuestionnaireItemType.Section,
                 action: QuestionnaireActionType.Add,
-                targetTitle: "section1",
-                reference: new[] { Create.QuestionnaireChangeReference(referenceTitle: "myvar") }));
+                targetTitle: "Household members",
+                reference: new[] { Create.QuestionnaireChangeReference(referenceId: questionId, referenceType: QuestionnaireItemType.Question, referenceTitle: "respondent_age") }));
 
             db.SaveChanges();
 
@@ -76,17 +76,31 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
         }
 
         [Test]
-        public async Task should_filter_by_target_title()
+        public async Task should_filter_by_target_text()
         {
-            var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "myvar");
+            var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "respondent");
             result.ChangeHistory.Count.Should().Be(2);
         }
 
         [Test]
-        public async Task should_filter_by_reference_title()
+        public async Task should_filter_by_reference_text()
         {
-            var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "section1");
+            var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "household");
             result.ChangeHistory.Count.Should().Be(1);
+        }
+
+        [Test]
+        public async Task should_filter_by_entity_id_when_requested()
+        {
+            var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "respondent_age", searchIdsOnly: true);
+            result.ChangeHistory.Count.Should().Be(2);
+        }
+
+        [Test]
+        public async Task should_not_match_entity_id_when_searching_text()
+        {
+            var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "respondent_age");
+            result.ChangeHistory.Count.Should().Be(0);
         }
 
         [Test]
@@ -99,21 +113,34 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
         [Test]
         public async Task should_search_case_insensitively()
         {
-            var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "MYVAR");
+            var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "RESPONDENT");
             result.ChangeHistory.Count.Should().Be(2);
         }
 
         [Test]
-        public async Task should_preserve_search_on_result()
+        public async Task should_match_whole_words_only()
         {
-            var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "myvar");
-            result.Search.Should().Be("myvar");
+            var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "age", searchWholeWord: true);
+            result.ChangeHistory.Count.Should().Be(2);
+
+            result = await factory.LoadAsync(questionnaireId, 1, 20, user, "pond", searchWholeWord: true);
+            result.ChangeHistory.Count.Should().Be(0);
+        }
+
+        [Test]
+        public async Task should_preserve_search_options_on_result()
+        {
+            var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "respondent", searchIdsOnly: true, searchWholeWord: true);
+            result.Search.Should().Be("respondent");
+            result.SearchIdsOnly.Should().BeTrue();
+            result.SearchWholeWord.Should().BeTrue();
         }
 
         private QuestionnaireChangeHistoryFactory factory;
         private DesignerDbContext db;
         private readonly Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
         private readonly Guid questionId = Guid.Parse("33333333333333333333333333333333");
+        private readonly Guid sectionId = Guid.Parse("44444444444444444444444444444444");
 
         private readonly ClaimsPrincipal user = new ClaimsPrincipal(new List<ClaimsIdentity>
         {
