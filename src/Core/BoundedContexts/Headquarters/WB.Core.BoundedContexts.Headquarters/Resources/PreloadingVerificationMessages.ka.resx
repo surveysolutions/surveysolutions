@@ -282,7 +282,7 @@
     <value>აუდიო აუდიტის არეალის ცვლადის სახელი '{0}' არასწორია. ის უნდა მიუთითებდეს არსებულ სექციაზე, ჯგუფზე ან როსტერზე (კითხვები და ბრტყელი როსტერები (flat roster) დაუშვებელია).</value>
   </data>
   <data name="PL0065_TargetAreaTooLong" xml:space="preserve">
-    <value>Target area is too long. It must be {0} characters or fewer.</value>
+    <value>სამიზნე ზონა ძალიან გრძელია. მან უნდა შეადგინოს {0} სიმბოლო ან ნაკლები.</value>
   </data>
   <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
     <value>დავალება არ გადავიდა, რადგან ის იყენებს შერჩევით აუდიო აუდიტს (აუდიოჩაწერის არეალი), რომლის ავტომატურად გადატანა კითხვარის ახალ ვერსიაზე შეუძლებელია. ხელახლა შექმენით დავალება ხელით და კვლავ დააკონფიგურირეთ აუდიო აუდიტის არეალი.</value>

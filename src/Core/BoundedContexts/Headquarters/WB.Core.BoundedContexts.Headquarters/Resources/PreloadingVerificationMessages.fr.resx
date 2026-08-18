@@ -259,7 +259,7 @@
     <value>Le nom de la variable de la portée de l'audit audio '{0}' n'est pas valide. Il doit faire référence à une section, un groupe ou un roster existant (les questions et les rosters plats ne sont pas autorisés).</value>
   </data>
   <data name="PL0065_TargetAreaTooLong" xml:space="preserve">
-    <value>Target area is too long. It must be {0} characters or fewer.</value>
+    <value>La zone cible est trop longue. Elle doit comporter {0} caractères ou moins.</value>
   </data>
   <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
     <value>L'affectation n'a pas été migrée car elle utilise un audit audio sélectif (portée d'enregistrement audio), qui ne peut pas être migré automatiquement vers une nouvelle version du questionnaire. Recréez l'affectation manuellement et configurez à nouveau la portée de l'audit audio.</value>
