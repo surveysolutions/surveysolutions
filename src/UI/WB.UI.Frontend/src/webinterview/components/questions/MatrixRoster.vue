@@ -178,6 +178,7 @@ export default {
                 cellStyle: { minHeight: '40px' },
                 cellRenderer: 'MatrixRoster_RosterTitle',
                 cellRendererParams: {},
+                valueFormatter: () => '',
             })
             this.columnDefs = columnsFromQuestions
         },

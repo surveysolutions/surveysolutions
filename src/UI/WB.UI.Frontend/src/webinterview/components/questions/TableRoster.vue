@@ -142,6 +142,7 @@ export default {
                 cellStyle: { minHeight: '40px' },
                 cellRenderer: 'TableRoster_RosterTitle',
                 cellRendererParams: {},
+                valueFormatter: () => '',
             })
             this.columnDefs = columnsFromQuestions
         },
