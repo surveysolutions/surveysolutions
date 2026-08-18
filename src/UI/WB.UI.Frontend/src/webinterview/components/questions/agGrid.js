@@ -6,7 +6,6 @@
 // grids rely on and keep this list in sync with their grid options and column defs.
 import {
     CellStyleModule,
-    ClientSideRowModelApiModule,
     ClientSideRowModelModule,
     ColumnAutoSizeModule,
     CustomEditorModule,
@@ -21,7 +20,6 @@ import 'ag-grid-community/styles/ag-theme-quartz.css'
 
 const modules = [
     ClientSideRowModelModule, // rowData based row model
-    ClientSideRowModelApiModule, // api.resetRowHeights
     CellStyleModule, // colDef.cellStyle
     ColumnAutoSizeModule, // resizable columns
     CustomEditorModule, // custom vue cell editor components

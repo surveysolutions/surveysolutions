@@ -240,9 +240,6 @@ export default {
 
                 // set header height to calculated height + padding (top: 8px, bottom: 8px)
                 this.gridApi.setGridOption('headerHeight', minHeight)
-
-                // set all rows height to auto
-                this.gridApi.resetRowHeights()
             }
         },
 

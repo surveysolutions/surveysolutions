@@ -200,9 +200,6 @@ export default {
 
                 // set header height to calculated height + padding (top: 8px, bottom: 8px)
                 event.api.setGridOption('headerHeight', minHeight)
-
-                // set all rows height to auto
-                event.api.resetRowHeights()
             }
         },
 
@@ -231,9 +228,7 @@ export default {
             }
         },
 
-        endCellEditting(event) {
-            event.api.resetRowHeights()
-        },
+        endCellEditting(event) {},
     },
 }
 </script>
