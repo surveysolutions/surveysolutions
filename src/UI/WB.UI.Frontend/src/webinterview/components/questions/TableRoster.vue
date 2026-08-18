@@ -127,6 +127,7 @@ export default {
                             value: question,
                         },
                         valueFormatter: () => '',
+                        cellDataType: false,
                     }
                 }
             )
@@ -144,6 +145,7 @@ export default {
                 cellRenderer: 'TableRoster_RosterTitle',
                 cellRendererParams: {},
                 valueFormatter: () => '',
+                cellDataType: false,
             })
             this.columnDefs = columnsFromQuestions
         },

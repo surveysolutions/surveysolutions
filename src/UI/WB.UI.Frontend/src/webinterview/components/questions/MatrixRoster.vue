@@ -162,6 +162,7 @@ export default {
                             value: question,
                         },
                         valueFormatter: () => '',
+                        cellDataType: false,
                         //cellEditor: 'MatrixRoster_QuestionEditor',
                         //cellEditorParams: {
                         //    id: question.id,
@@ -180,6 +181,7 @@ export default {
                 cellRenderer: 'MatrixRoster_RosterTitle',
                 cellRendererParams: {},
                 valueFormatter: () => '',
+                cellDataType: false,
             })
             this.columnDefs = columnsFromQuestions
         },
