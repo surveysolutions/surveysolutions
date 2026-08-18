@@ -86,7 +86,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     "Source questionnaire was not found and might be deleted.");
             }
 
-            if (questionnaire.IsPublic || questionnaire.CreatedBy == this.user.Id ||
+            // When a specific revision is requested, authorization must be evaluated against the
+            // current (base) questionnaire so that visibility/ownership changes that occurred after
+            // the snapshot was taken are honoured rather than bypassed.
+            var currentQuestionnaire = questionnaireRevision.Revision.HasValue
+                ? this.questionnaireDocumentReader.GetById(questionnaireRevision.QuestionnaireId.FormatGuid())
+                  ?? questionnaire
+                : questionnaire;
+
+            if (currentQuestionnaire.IsPublic || currentQuestionnaire.CreatedBy == this.user.Id ||
                 this.user.IsAdmin)
                 return questionnaire;
 
