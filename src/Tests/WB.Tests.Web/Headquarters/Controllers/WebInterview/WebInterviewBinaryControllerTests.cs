@@ -153,6 +153,37 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             imageFileStorage.Verify(s => s.RemoveInterviewBinaryData(interview.Id, newFilename), Times.Never);
         }
 
+        [Test]
+        public async Task Image_after_answer_was_cleared_stores_new_file_without_removing_previous()
+        {
+            // Covers the clear-then-upload flow: RemoveAnswer was called first (which deleted
+            // the old storage entry), so IsAnswered() is false when Image() runs.
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.MultimediaQuestion(questionId: QuestionId, variable: "photo"));
+            var interview = SetUp.StatefulInterview(questionnaire);
+
+            // Simulate state after RemoveAnswer: answer the question then clear it so IsAnswered() == false.
+            interview.AnswerPictureQuestion(UserId, QuestionId, RosterVector.Empty, DateTimeOffset.UtcNow,
+                AnswerUtils.GetPictureFileName("photo", RosterVector.Empty, ".jpg"));
+            interview.RemoveAnswer(QuestionId, RosterVector.Empty, UserId, DateTimeOffset.UtcNow);
+
+            var imageFileStorage = new Mock<IImageFileStorage>();
+            var commandService = new Mock<ICommandService>();
+            var controller = CreateController(interview, imageFileStorage.Object, commandService.Object);
+
+            var questionIdentity = Identity.Create(QuestionId, RosterVector.Empty);
+            var file = CreateFormFile("photo.jpg", "image/jpeg");
+
+            var result = await controller.Image(interview.Id, questionIdentity.ToString(), file);
+
+            Assert.That(result, Is.InstanceOf<JsonResult>());
+            var newFilename = AnswerUtils.GetPictureFileName("photo", RosterVector.Empty, ".jpg");
+            imageFileStorage.Verify(s => s.StoreInterviewBinaryData(interview.Id, newFilename, It.IsAny<byte[]>(), "image/jpeg"), Times.Once);
+            commandService.Verify(s => s.Execute(It.Is<AnswerPictureQuestionCommand>(c => c.PictureFileName == newFilename), null), Times.Once);
+            // RemoveAnswer already cleaned up the old file; Image() must not attempt a second removal.
+            imageFileStorage.Verify(s => s.RemoveInterviewBinaryData(It.IsAny<Guid>(), It.IsAny<string>()), Times.Never);
+        }
+
 
         private static WebInterviewBinaryController CreateController(
             StatefulInterview interview,
