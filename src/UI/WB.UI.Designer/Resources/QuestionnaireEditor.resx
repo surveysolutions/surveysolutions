@@ -1681,4 +1681,10 @@ You entered an invalid input. Each line should follow the format: "Title...Paren
   <data name="AIAssistant" xml:space="preserve">
       <value>AI</value>
   </data>
+  <data name="QuestionIndent" xml:space="preserve">
+      <value>Indent</value>
+  </data>
+  <data name="HelpQuestionIndent" xml:space="preserve">
+      <value>Specify the indentation level of the question (0 to 3). Indented questions appear shifted to the right, allowing visual grouping of related questions.</value>
+  </data>
 </root>

@@ -44,7 +44,8 @@ export function updateQuestion(
             geometryType: question.geometryType,
             geometryInputMode: question.geometryInputMode,
             geometryOverlapDetection: question.geometryOverlapDetection,
-            isCritical: question.isCritical
+            isCritical: question.isCritical,
+            indent: question.indent || 0
         }
     };
 

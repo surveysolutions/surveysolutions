@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
                 GeometryInputMode = commonQuestionParameters.GeometryInputMode,
                 GeometryOverlapDetection = commonQuestionParameters.GeometryOverlapDetection,
                 IsCritical = commonQuestionParameters.IsCritical,
+                Indent = commonQuestionParameters.Indent,
             };
         }
 
