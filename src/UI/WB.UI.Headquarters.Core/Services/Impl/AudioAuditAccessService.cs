@@ -18,7 +18,8 @@ namespace WB.UI.Headquarters.Services.Impl
     {
         // Filename pattern: {interviewId}-audio-audit-yyyyMMdd_HHmmssfff.m4a
         private static readonly Regex TimestampPattern = new Regex(
-            @"-audio-audit-(\d{8}_\d{9})\.", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            @"-audio-audit-(\d{8}_\d{9})\.", RegexOptions.Compiled | RegexOptions.IgnoreCase,
+            matchTimeout: TimeSpan.FromSeconds(1));
 
         private readonly IAuthorizedUser authorizedUser;
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
@@ -102,8 +103,15 @@ namespace WB.UI.Headquarters.Services.Impl
         /// </summary>
         private static string ParseTimestamp(string fileName)
         {
-            var match = TimestampPattern.Match(fileName);
-            return match.Success ? match.Groups[1].Value : null;
+            try
+            {
+                var match = TimestampPattern.Match(fileName);
+                return match.Success ? match.Groups[1].Value : null;
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return null;
+            }
         }
 
         private static string BuildOpaqueId(string fileName)
