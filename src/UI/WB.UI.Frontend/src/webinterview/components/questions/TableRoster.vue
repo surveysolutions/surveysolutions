@@ -5,15 +5,14 @@
         <ag-grid-vue ref="tableRoster"
             class="ag-theme-customStyles roster-table"
             domLayout="autoHeight"
-            rowHeight="40"
-            headerHeight="50"
+            :rowHeight="40"
+            :headerHeight="50"
             :defaultColDef="defaultColDef"
             :columnDefs="columnDefs"
             :rowData="rowData"
             :grid-options="gridOptions"
             @grid-ready="onGridReady"
             @column-resized="autosizeHeaders"
-            :modules="gridModules"
             @cell-editing-stopped="endCellEditting"></ag-grid-vue>
     </div>
 </template>
@@ -21,13 +20,9 @@
 <script lang="js">
 /* eslint-disable vue/no-unused-components */
 
-import '@ag-grid-community/styles/ag-grid.css'
-import '@ag-grid-community/styles/ag-theme-quartz.css'
-
 import { entityDetails } from '../mixins'
 import { debounce, every, some, map } from 'lodash-es'
-import { AgGridVue } from '@ag-grid-community/vue3'
-import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model'
+import { AgGridVue, agGridTheme } from './agGrid'
 
 import TableRoster_QuestionEditor from './TableRoster.QuestionEditor'
 import TableRoster_ViewAnswer from './TableRoster.ViewAnswer'
@@ -95,6 +90,7 @@ export default {
     computed: {
         gridOptions() {
             return {
+                theme: agGridTheme,
                 stopEditingWhenCellsLoseFocus: true,
                 suppressMovableColumns: true,
                 singleClickEdit: true,
@@ -102,9 +98,6 @@ export default {
                     componentParent: this,
                 },
             }
-        },
-        gridModules() {
-            return [ClientSideRowModelModule]
         },
     },
     methods: {

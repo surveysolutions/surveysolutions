@@ -21,13 +21,12 @@
         <ag-grid-vue ref="matrixRoster"
             class="ag-theme-customStyles roster-matrix"
             domLayout="autoHeight"
-            rowHeight="40"
-            headerHeight="50"
+            :rowHeight="40"
+            :headerHeight="50"
             :defaultColDef="defaultColDef"
             :columnDefs="columnDefs"
             :rowData="rowData"
             :grid-options="gridOptions"
-            :modules="gridModules"
             @grid-ready="onGridReady"
             @column-resized="autosizeHeaders"></ag-grid-vue>
     </div>
@@ -35,13 +34,9 @@
 
 <script lang="js">
 /* eslint-disable vue/no-unused-components */
-import '@ag-grid-community/styles/ag-grid.css'
-import '@ag-grid-community/styles/ag-theme-quartz.css'
-
 import { entityDetails } from '../mixins'
 import { debounce, map } from 'lodash-es'
-import { AgGridVue } from '@ag-grid-community/vue3'
-import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model'
+import { AgGridVue, agGridTheme } from './agGrid'
 
 import MatrixRoster_QuestionEditor from './MatrixRoster.QuestionEditor'
 import MatrixRoster_RosterTitle from './MatrixRoster.RosterTitle'
@@ -132,6 +127,7 @@ export default {
     computed: {
         gridOptions() {
             return {
+                theme: agGridTheme,
                 suppressClickEdit: true,
                 suppressCellFocus: true,
                 suppressMovableColumns: true,
@@ -139,9 +135,6 @@ export default {
                     componentParent: this,
                 },
             }
-        },
-        gridModules() {
-            return [ClientSideRowModelModule]
         },
     },
     methods: {
