@@ -8,6 +8,7 @@ import {
     CellStyleModule,
     ClientSideRowModelApiModule,
     ClientSideRowModelModule,
+    ColumnSizeModule,
     CustomEditorModule,
     ModuleRegistry,
     RowAutoHeightModule,
@@ -22,6 +23,7 @@ const modules = [
     ClientSideRowModelModule, // rowData based row model
     ClientSideRowModelApiModule, // api.resetRowHeights
     CellStyleModule, // colDef.cellStyle
+    ColumnSizeModule, // resizable columns
     CustomEditorModule, // custom vue cell editor components
     RowAutoHeightModule, // colDef.autoHeight
     TextEditorModule, // default editor of editable columns without a custom editor
