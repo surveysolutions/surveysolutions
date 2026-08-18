@@ -161,6 +161,7 @@ export default {
                             question: question,
                             value: question,
                         },
+                        valueFormatter: () => '',
                         //cellEditor: 'MatrixRoster_QuestionEditor',
                         //cellEditorParams: {
                         //    id: question.id,

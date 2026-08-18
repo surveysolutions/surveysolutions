@@ -126,6 +126,7 @@ export default {
                             id: question.id,
                             value: question,
                         },
+                        valueFormatter: () => '',
                     }
                 }
             )
