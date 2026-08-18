@@ -5,6 +5,8 @@ using Android.OS;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Enumerator.Utils;
@@ -139,7 +141,7 @@ namespace WB.UI.Shared.Enumerator.Services
                                                          $"AcceptUnsignedSslCertificate: {this.AcceptUnsignedSslCertificate} {Environment.NewLine}" +
                                                          $"BufferSize: {this.BufferSize} {Environment.NewLine}" +
                                                          $"Timeout: {this.Timeout} {Environment.NewLine}" +
-                                                         $"CurrentDateTime: {DateTime.Now} {Environment.NewLine}" +
+                                                         $"CurrentDateTime: {DateTime.Now.ToString(DateTimeFormat.DateWithTimeFormat, System.Globalization.CultureInfo.InvariantCulture)} {Environment.NewLine}" +
                                                          $"EventChunkSize: {this.EventChunkSize} {Environment.NewLine}" +
                                                          this.GetExternalInformation();
 
@@ -288,6 +290,14 @@ namespace WB.UI.Shared.Enumerator.Services
         public void SetAllowInterviewerChangeAssignmentStatus(bool allow)
         {
             this.SaveCurrentSettings(settings => settings.AllowInterviewerChangeAssignmentStatus = allow);
+        }
+
+        public AudioRecordingQuality AudioRecordingQuality =>
+            this.CurrentWorkspaceSettings?.AudioRecordingQuality ?? AudioRecordingQuality.Mono44kHz;
+
+        public void SetAudioRecordingQuality(AudioRecordingQuality quality)
+        {
+            this.SaveCurrentSettings(settings => settings.AudioRecordingQuality = quality);
         }
 
         public bool SupportOfflineMaps => true;
