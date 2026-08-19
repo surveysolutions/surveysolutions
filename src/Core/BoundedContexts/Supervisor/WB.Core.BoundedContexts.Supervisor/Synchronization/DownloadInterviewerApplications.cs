@@ -143,6 +143,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
         private void UpdateProgress(TransferProgress downloadProgress, DownloadProgressState progressState)
         {
+            // Progress<T>.Report dispatches through SynchronizationContext.Post, which - in the
+            // absence of a captured context (e.g. unit tests, background threads) - runs the
+            // callback on the ThreadPool without any ordering guarantees. Multiple callbacks can
+            // therefore execute concurrently, so the check-and-update of the shared throttling
+            // state must be atomic to avoid emitting extra reports.
             Stopwatch stopWatch;
             lock (progressState.SyncRoot)
             {
