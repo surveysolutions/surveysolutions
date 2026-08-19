@@ -329,12 +329,13 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             var protectedState = this.externalStorageStateProtector.Protect(this.serializer.Serialize(payload));
             return Ok(protectedState);
-        }
+        }        
 
         [HttpPost]
         [EnableCors("export")]
         [ObservingNotAllowed]
         [IgnoreAntiforgeryToken]
+        [AllowAnonymous]
         public async Task<ActionResult> ExportToExternalStorage(ExportToExternalStorageModel model)
         {
             var currentUserId = User.UserId();
