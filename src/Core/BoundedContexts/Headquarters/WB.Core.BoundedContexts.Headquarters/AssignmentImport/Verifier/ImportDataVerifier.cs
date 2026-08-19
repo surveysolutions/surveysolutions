@@ -195,10 +195,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             foreach (var batchOfPrivatePasswordProtectedWebAssignments in privatePasswordProtectedWebAssignments.Batch(1000))
             {
+                // NOTE: List<T> is used on purpose. For an array the C# 14+ compiler binds Contains
+                // to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an op_Implicit call
+                // into the expression tree that NHibernate cannot translate.
                 var expectedUniquePasswords = batchOfPrivatePasswordProtectedWebAssignments
                     .Select(x => x.Password.Value)
                     .Where(x => x != AssignmentConstants.PasswordSpecialValue)
-                    .ToArray();
+                    .ToList();
 
                 var passwordsByWebAssignmentsInDb = this.assignmentsRepository.Query(x => x
                     .Where(y => y.Quantity == 1 && 
