@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout
+<WB.UI.Shared.Enumerator.CustomControls.SafeDrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
@@ -72,4 +72,4 @@
         android:layout_width="wrap_content"
         android:layout_gravity="left|start" />
     
-</androidx.drawerlayout.widget.DrawerLayout>
+</WB.UI.Shared.Enumerator.CustomControls.SafeDrawerLayout>

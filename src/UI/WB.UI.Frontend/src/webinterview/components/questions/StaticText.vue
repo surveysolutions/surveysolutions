@@ -48,7 +48,8 @@ export default {
             if(this.$store.getters.scrollState == '#' + this.id){
                 const el = document.getElementById(this.hash)
                 if (el) {
-                    window.scroll({ top: el.offsetTop, behavior: 'smooth' })
+                    const navbarHeight = document.querySelector('.navbar-fixed-top')?.offsetHeight || 0
+                    window.scroll({ top: el.offsetTop - navbarHeight, behavior: 'smooth' })
                     this.$store.dispatch('resetScroll')
                 }
             }
