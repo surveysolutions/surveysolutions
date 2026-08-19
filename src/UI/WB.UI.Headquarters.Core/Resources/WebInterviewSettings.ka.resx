@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType><xsd:choice maxOccurs="unbounded">
+        <xsd:element name="data"><xsd:complexType><xsd:sequence>
+          <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+          <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+        </xsd:sequence>
+        <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+        <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+        <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+        <xsd:attribute ref="xml:space" /></xsd:complexType></xsd:element>
+        <xsd:element name="resheader"><xsd:complexType><xsd:sequence>
+          <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+        </xsd:sequence><xsd:attribute name="name" type="xsd:string" use="required" /></xsd:complexType></xsd:element>
+      </xsd:choice></xsd:complexType></xsd:element></xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="CustomizeDisplayedText" xml:space="preserve"><value>რესპოდენტებისთვის ნაჩვენები ტექსტის მორგება</value></data>
+  <data name="WebInterviewSetupFor_Title" xml:space="preserve"><value>ვებ გასაუბრების პარამეტრები: </value></data>
+  <data name="ExampleWelcomePage" xml:space="preserve"><value>მისალმების გვერდის მაგალითი</value></data>
+  <data name="ExampleResumePage" xml:space="preserve"><value>გასაგრძელებელი გვერდის მაგალითი</value></data>
+  <data name="ExampleFinishPage" xml:space="preserve"><value>დასასრულის გვერდის მაგალითი</value></data>
+  <data name="CustomizeEmailsText" xml:space="preserve"><value>ელ-ფოსტის ტექსტის მორგება</value></data>
+  <data name="Invitation" xml:space="preserve"><value>მოწვევა</value></data>
+  <data name="Reminder" xml:space="preserve"><value>შეხსენება</value></data>
+  <data name="Reject" xml:space="preserve"><value>უარყოფა</value></data>
+  <data name="ExampleInvitationEmailMessage" xml:space="preserve"><value>მოწვევის ელ-ფოსტის შეტყობინების მაგალითი</value></data>
+  <data name="EmailMessage" xml:space="preserve"><value>შეტყობინება:</value></data>
+  <data name="EmailSubject" xml:space="preserve"><value>თემა:</value></data>
+  <data name="MainText" xml:space="preserve"><value>ძირითადი ტექსტი:</value></data>
+  <data name="DescriptionForPassword" xml:space="preserve"><value>პაროლის აღწერა:</value></data>
+  <data name="StartInterviewButton" xml:space="preserve"><value>"გასაუბრების დაწყება" ღილაკი</value></data>
+  <data name="ShownPasswordIsRequired" xml:space="preserve"><value>ნაჩვენებია მხოლოდ თუ პაროლი საჭიროა და დაყენებულია</value></data>
+  <data name="ExampleReminderEmailMessage" xml:space="preserve"><value>შეხსენების ელ-ფოსტის შეტყობინების მაგალითი</value></data>
+  <data name="ExampleRejectEmailMessage" xml:space="preserve"><value>უარყოფის ელ-ფოსტის შეტყობინების მაგალითი</value></data>
+  <data name="ReminderSetting" xml:space="preserve"><value>შეხსენების პარამეტრი</value></data>
+  <data name="WelcomePage" xml:space="preserve"><value>მისალმების გვერდი</value></data>
+  <data name="ResumePage" xml:space="preserve"><value>გასაგრძელებელი გვერდი</value></data>
+  <data name="FinishPage" xml:space="preserve"><value>დასასრულის გვერდი</value></data>
+  <data name="LinkToInterviewPage" xml:space="preserve"><value>ვებ გასაუბრების სადესანტო გვერდი</value></data>
+  <data name="Save" xml:space="preserve"><value>შენახვა</value></data>
+  <data name="Cancel" xml:space="preserve"><value>გაუქმება</value></data>
+  <data name="RejectEmailMessage" xml:space="preserve"><value>უარყოფა</value></data>
+  <data name="CompleteEmailMessage" xml:space="preserve"><value>დასრულება</value></data>
+  <data name="InvitationEmailMessage" xml:space="preserve"><value>მოწვევა</value></data>
+  <data name="ResumeEmailMessage" xml:space="preserve"><value>გაგრძელება</value></data>
+  <data name="ReminderNoResponseEmailMessage" xml:space="preserve"><value>პასუხი არ არის</value></data>
+  <data name="ReminderPartialResponseEmailMessage" xml:space="preserve"><value>ნაწილობრივი პასუხი</value></data>
+  <data name="AdditionalSettings" xml:space="preserve"><value>დამატებითი პარამეტრები</value></data>
+  <data name="SendWithNoResponse" xml:space="preserve"><value>გაუგზავნე შეხსენება უპასუხო ადამიანებს</value></data>
+  <data name="SendWithPartialResponse" xml:space="preserve"><value>გაუგზავნე შეხსენება ნაწილობრივ პასუხ მიმცემ ადამიანებს</value></data>
+  <data name="DoNotSend" xml:space="preserve"><value>არ გაგზავნო</value></data>
+  <data name="AfterXDay" xml:space="preserve"><value>{{count}} დღის შემდეგ</value></data>
+  <data name="AfterXDay_other" xml:space="preserve"><value>{{count}} დღის შემდეგ</value></data>
+  <data name="AfterXWeek" xml:space="preserve"><value>{{count}} კვირის შემდეგ</value></data>
+  <data name="AfterXWeek_other" xml:space="preserve"><value>{{count}} კვირის შემდეგ</value></data>
+  <data name="Description" xml:space="preserve"><value>აღწერა:</value></data>
+  <data name="FieldRequired" xml:space="preserve"><value>ველი სავალდებულოა.</value></data>
+  <data name="Title" xml:space="preserve"><value>სათაური:</value></data>
+  <data name="EmailTemplateDescription" xml:space="preserve"><value>ტექსტში შეგიძლიათ გამოიყენოთ %SURVEYNAME% შაბლონი გამოკითხვის სახელად</value></data>
+  <data name="InterviewDataInsertInTextDescription" xml:space="preserve"><value>ამ ელ-ფოსტის შაბლონში შეგიძლიათ ტექსტში გამოიყენოთ %question_variable% შაბლონი გასაუბრების კითხვაზე პასუხად. კითხვა უნდა იყოს კითხვარის ზედა დონეზე (არა სიებში).</value></data>
+  <data name="InterviewDataInsertBarcodeDescription" xml:space="preserve"><value>%question_variable:barcode% - პასუხის ბარკოდ Code 128-ად ჩვენება</value></data>
+  <data name="InterviewDataInsertQrCodeDescription" xml:space="preserve"><value>%question_variable:qrcode% - პასუხის QR კოდად ჩვენება</value></data>
+  <data name="AnswerOn" xml:space="preserve"><value>{{variable}}-ის პასუხი</value></data>
+  <data name="CompletePage" xml:space="preserve"><value>დასრულება</value></data>
+  <data name="Complete" xml:space="preserve"><value>დასრულება</value></data>
+  <data name="NoteToSupervisor" xml:space="preserve"><value>სუპერვაიზორისთვის შენიშვნა</value></data>
+  <data name="Resume" xml:space="preserve"><value>გაგრძელება</value></data>
+  <data name="StartNew" xml:space="preserve"><value>ახალი გასაუბრების დაწყება</value></data>
+  <data name="Sending" xml:space="preserve"><value>გაგზავნა</value></data>
+  <data name="NoErrors" xml:space="preserve"><value>შეცდომები არ არის</value></data>
+  <data name="NothingWasSent" xml:space="preserve"><value>არაფერი გაგზავნილა</value></data>
+  <data name="ProcessCancelled" xml:space="preserve"><value>პროცესი გაუქმდა</value></data>
+  <data name="DownloadErrors" xml:space="preserve"><value>შეცდომიანი დავალებების სიის ჩამოტვირთვა</value></data>
+  <data name="SendingFailed" xml:space="preserve"><value>მოწვევების გაგზავნა ვერ შესრულდა. გთხოვთ დაუკავშირდეთ სერვერის ადმინისტრატორს ელ-ფოსტის პროვაიდერის პარამეტრების შესამოწმებლად</value></data>
+  <data name="TotalSent" xml:space="preserve"><value>{{ totalCount }} მოწვევა გასაგზავნი</value></data>
+  <data name="TotalProcessed" xml:space="preserve"><value>{{ processedCount }} წარმატებით გაიგზავნა</value></data>
+  <data name="TotalWithErrors" xml:space="preserve"><value>{{ withErrorsCount }} ვერ გაიგზავნა შეცდომების გამო.</value></data>
+</root>
