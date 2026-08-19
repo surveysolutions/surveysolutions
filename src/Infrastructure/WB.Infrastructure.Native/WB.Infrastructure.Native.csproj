@@ -40,7 +40,6 @@
     <PackageReference Include="Npgsql" Version="10.0.3" />
     <PackageReference Include="prometheus-net" Version="8.2.1" />
     <PackageReference Include="SixLabors.Fonts" Version="2.1.2" />
-    <PackageReference Include="SkiaSharp" Version="3.116.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.22.0" />
     <PackageReference Include="System.IO.Packaging" Version="10.0.11" />
   </ItemGroup>

@@ -441,7 +441,7 @@ namespace WB.UI.Headquarters
                 {
                     if (!env.IsDevelopment())
                     {
-                        ctx.Context.Response.Headers.Add("Cache-Control", "public, max-age=31536000");
+                        ctx.Context.Response.Headers.Append("Cache-Control", "public, max-age=31536000");
                     }
                 }
             });

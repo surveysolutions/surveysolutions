@@ -22,8 +22,7 @@
   <ItemGroup>
     <PackageReference Include="FluentMigrator" Version="8.0.1" />
     <PackageReference Include="FluentMigrator.Runner" Version="8.0.1" />
-    <PackageReference Include="FluentMigrator.Runner.Core" Version="8.0.1" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="FluentMigrator.Runner.Core" Version="8.0.1" />    
   </ItemGroup>
 
 </Project>

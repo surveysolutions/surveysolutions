@@ -33,11 +33,9 @@ namespace WB.Tests.Unit.Designer.Services
             // Arrange
             var key = "test_key";
             var userId = Id.g1;
-            var taskExecuted = false;
             
             Func<PdfGenerationProgress, CancellationToken, Task> runGeneration = async (progress, token) => 
             {
-                taskExecuted = true;
                 await Task.Delay(10, token);
             };
             

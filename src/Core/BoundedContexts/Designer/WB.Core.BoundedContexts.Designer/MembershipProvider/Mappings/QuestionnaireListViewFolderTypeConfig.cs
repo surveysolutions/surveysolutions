@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
 
             builder.HasKey(x => x.PublicId);
             builder.HasIndex(e => e.Path)
-                .HasName("path_questionnairelistviewfolders_idx");
+                .HasDatabaseName("path_questionnairelistviewfolders_idx");
 
             builder.Property(e => e.PublicId)
                 .HasColumnName("id")
