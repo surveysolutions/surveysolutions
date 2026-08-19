@@ -4,7 +4,6 @@
     <TargetFramework>net9.0</TargetFramework>
     <AssemblyName>WB.UI.WebTester</AssemblyName>
     <RootNamespace>WB.UI.WebTester</RootNamespace>
-    <LangVersion>latest</LangVersion>
     <PublishSingleFile>false</PublishSingleFile>
     <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
     <Nullable>enable</Nullable>
