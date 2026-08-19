@@ -59,7 +59,7 @@
         <PackageReference Include="Microsoft.Graph" Version="6.0.3" />
         <PackageReference Include="Microsoft.Graph.Core" Version="4.0.1" />
         <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.22.0" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
         <PackageReference Include="Npgsql" Version="10.0.3" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
         <PackageReference Include="Refit" Version="8.0.0" />
