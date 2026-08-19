@@ -346,13 +346,17 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         public int GetMaxSequenceForAnyEvent(Guid eventSourceId, params string[] typeNames)
         {
+            // NOTE: List<T> is used on purpose. For an array the C# 14+ compiler binds Contains
+            // to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an op_Implicit call
+            // into the expression tree that sqlite-net cannot translate ("no such table: op_implicit").
+            var eventTypes = typeNames.ToList();
             var connection = this.GetOrCreateConnection(eventSourceId);
             using (connection.Lock())
             {
                 var sequence = connection
                     .Table<EventView>()
                     .Where(ev => ev.EventSourceId == eventSourceId
-                                 && typeNames.Contains(ev.EventType))
+                                 && eventTypes.Contains(ev.EventType))
                     .Max(ev => ev.EventSequence);
                 return sequence;
             }

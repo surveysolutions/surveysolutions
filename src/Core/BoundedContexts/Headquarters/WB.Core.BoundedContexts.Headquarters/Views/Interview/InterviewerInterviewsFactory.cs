@@ -195,8 +195,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public IEnumerable<InterviewInformation> GetInterviewsByIds(Guid[] interviewIds)
         {
+            // NOTE: List<T> is used on purpose. For an array the C# 14+ compiler binds Contains
+            // to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an op_Implicit call
+            // into the expression tree that NHibernate cannot translate.
+            var ids = interviewIds.ToList();
             var filteredinterviews = this.reader.Query(
-                interviews => interviews.Where(interview => interviewIds.Contains(interview.InterviewId)).ToList());
+                interviews => interviews.Where(interview => ids.Contains(interview.InterviewId)).ToList());
 
             return filteredinterviews.Select(interview => new InterviewInformation
             {
