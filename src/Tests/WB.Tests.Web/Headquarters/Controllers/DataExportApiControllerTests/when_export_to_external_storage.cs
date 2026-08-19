@@ -16,13 +16,13 @@ namespace WB.Tests.Web.Headquarters.Controllers.DataExportApiControllerTests
     internal class when_export_to_external_storage : DataExportApiControllerTestsContext
     {
         [NUnit.Framework.Test]
-        public void should_not_allow_anonymous_oauth_callback()
+        public void should_allow_anonymous_oauth_callback()
         {
             var callback = typeof(DataExportApiController)
                 .GetMethod(nameof(DataExportApiController.ExportToExternalStorage));
 
             callback.Should().NotBeNull();
-            callback!.GetCustomAttribute<AllowAnonymousAttribute>().Should().BeNull();
+            callback!.GetCustomAttribute<AllowAnonymousAttribute>().Should().NotBeNull();
         }
 
         [NUnit.Framework.Test]
