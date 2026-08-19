@@ -225,7 +225,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         
         
         private static bool installed = false;
-        private static readonly object lockInstalled = new object();
+        private static readonly Lock lockInstalled = new Lock();
         
         [Authorize(Roles = "Administrator")]
         [ResponseCache(Duration = 0, NoStore = true)]
