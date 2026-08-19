@@ -15,6 +15,15 @@ $width-right-menu-small: 380px;
     min-height: 70px;
     margin-bottom: 0;
 
+    @media (min-width: ($screen-sm + 1)) {
+        overflow-x: auto;
+
+        .container,
+        .container-fluid {
+            min-width: max-content;
+        }
+    }
+
     .navbar-header .navbar-brand {
         position: relative;
         margin-left: 0;
