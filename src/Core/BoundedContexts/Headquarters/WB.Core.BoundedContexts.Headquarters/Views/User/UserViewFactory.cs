@@ -121,8 +121,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             var supervisorRoleId = UserRoles.Supervisor.ToUserId();
             var hqRoleId = UserRoles.Headquarter.ToUserId();
 
+            // NOTE: List<T> is used on purpose. For an array the C# 14+ compiler binds Contains
+            // to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an op_Implicit call
+            // into the expression tree that NHibernate cannot translate.
+            var names = userNames.ToList();
+
             return this.userRepository.Users
-                .Where(x => userNames.Contains(x.UserName) && !x.IsArchived)
+                .Where(x => names.Contains(x.UserName!) && !x.IsArchived)
                 .Select(x => new UserToVerify
                 {
                     IsLocked = x.IsLockedByHeadquaters || x.IsLockedBySupervisor,
@@ -468,7 +473,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         
         private IQueryable<HqUser> ApplyFilter(IQueryable<HqUser> _, string? searchBy, QueryFilterRule filterRule, bool? archived, string? workspace = null, params UserRoles[] role)
         {
-            var selectedRoleId = role.Select(x => x.ToUserId()).ToArray();
+            var selectedRoleId = role.Select(x => x.ToUserId()).ToList();
             
             var currentWorkspace = workspace ??
                                    workspaceContextAccessor.CurrentWorkspace()?.Name ?? 
