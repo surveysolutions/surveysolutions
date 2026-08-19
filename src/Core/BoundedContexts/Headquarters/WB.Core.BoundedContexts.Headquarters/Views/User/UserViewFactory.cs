@@ -263,8 +263,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 .Skip((pageIndex - 1) * pageSize).Take(pageSize)
                 .ToList();
 
-            var interviewersIds = filteredUsers.Select(x => x.UserId).ToArray();
-            var supervisorIds = filteredUsers.Select(x => x.SupervisorId).ToArray();
+            // NOTE: List<T> is used in LINQ expression trees on purpose. For an array the C# compiler
+            // (C# 14+) binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an
+            // op_Implicit call into the expression tree that NHibernate cannot evaluate.
+            var interviewersIds = filteredUsers.Select(x => x.UserId).ToList();
+            var supervisorIds = filteredUsers.Select(x => x.SupervisorId).ToList();
 
             var deviceSyncInfos = this.devicesSyncInfos.Query(_ => _
                 .Where(d => interviewersIds.Contains(d.InterviewerId) && d.Statistics != null)
