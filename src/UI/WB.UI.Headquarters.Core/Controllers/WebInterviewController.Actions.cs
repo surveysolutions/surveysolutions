@@ -128,7 +128,7 @@ namespace WB.UI.Headquarters.Controllers
 
                 this.imageProcessingService.Validate(ms.ToArray());
 
-                var extension = Path.GetExtension(file.FileName);
+                var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
                 filename = AnswerUtils.GetPictureFileName(question.VariableName, questionIdentity.RosterVector, extension);
                 var responsibleId = interview.CurrentResponsibleId;
 
@@ -151,7 +151,7 @@ namespace WB.UI.Headquarters.Controllers
                 throw;
             }
 
-            if (previousFilename != null && previousFilename != filename)
+            if (previousFilename != null && !string.Equals(previousFilename, filename, StringComparison.OrdinalIgnoreCase))
             {
                 try
                 {

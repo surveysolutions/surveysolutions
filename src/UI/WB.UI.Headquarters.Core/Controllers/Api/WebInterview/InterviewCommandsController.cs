@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -133,7 +134,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
         [HttpPost]
         [Route("removeAnswer")]
-        public override IActionResult RemoveAnswer(Guid interviewId, [FromBody]RemoveAnswerRequest request) => base.RemoveAnswer(interviewId, request);
+        public override Task<IActionResult> RemoveAnswer(Guid interviewId, [FromBody]RemoveAnswerRequest request) => base.RemoveAnswer(interviewId, request);
 
         [HttpPost]
         [Route("sendNewComment")]

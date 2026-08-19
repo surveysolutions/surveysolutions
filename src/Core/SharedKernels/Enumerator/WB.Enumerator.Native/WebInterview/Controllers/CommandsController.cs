@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.GenericSubdomains.Portable;
@@ -251,31 +252,31 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         }
 
         [ObservingNotAllowed]
-        public virtual IActionResult RemoveAnswer(Guid interviewId, RemoveAnswerRequest request)
+        public virtual async Task<IActionResult> RemoveAnswer(Guid interviewId, RemoveAnswerRequest request)
         {
             if (!ModelState.IsValid) return BadRequest(new { errorMessage = InvalidRequestMessage });
             if (!TryGetIdentity(request, out var identity)) 
                 return BadRequest(new { errorMessage = InvalidRequestMessage });
 
+            QuestionType? questionType = null;
+            string fileName = null;
+
             try
             {
                 var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
                 var questionnaire = questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, null);
-                var questionType = questionnaire.GetQuestionType(identity.Id);
+                questionType = questionnaire.GetQuestionType(identity.Id);
 
                 if (questionType == QuestionType.Multimedia)
                 {
                     var question = interview.GetQuestion(identity);
-                    var fileName = question.IsAnswered()
+                    fileName = question.IsAnswered()
                         ? question.GetAsInterviewTreeMultimediaQuestion().GetAnswer()?.FileName
                         : null;
-                    if (fileName != null)
-                        this.imageFileStorage.RemoveInterviewBinaryData(interviewId, fileName);
                 }
                 else if (questionType == QuestionType.Audio)
                 {
-                    var fileName = $@"{questionnaire.GetQuestionVariableName(identity.Id)}__{identity.RosterVector}.m4a";
-                    this.audioFileStorage.RemoveInterviewBinaryData(interviewId, fileName);
+                    fileName = $@"{questionnaire.GetQuestionVariableName(identity.Id)}__{identity.RosterVector}.m4a";
                 }
             }
             catch (Exception e)
@@ -284,6 +285,22 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             }
 
             this.ExecuteQuestionCommand(new RemoveAnswerCommand(interviewId, GetCommandResponsibleId(interviewId), identity));
+
+            try
+            {
+                if (fileName != null)
+                {
+                    if (questionType == QuestionType.Multimedia)
+                        await this.imageFileStorage.RemoveInterviewBinaryData(interviewId, fileName);
+                    else if (questionType == QuestionType.Audio)
+                        await this.audioFileStorage.RemoveInterviewBinaryData(interviewId, fileName);
+                }
+            }
+            catch (Exception e)
+            {
+                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, identity, e);
+            }
+
             return Ok();
         }
 

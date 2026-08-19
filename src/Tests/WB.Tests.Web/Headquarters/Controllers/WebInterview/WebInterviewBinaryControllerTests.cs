@@ -76,6 +76,27 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         }
 
         [Test]
+        public async Task Image_when_previous_answer_differs_only_by_extension_case_does_not_remove_old_file()
+        {
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.MultimediaQuestion(questionId: QuestionId, variable: "photo"));
+            var interview = SetUp.StatefulInterview(questionnaire);
+
+            interview.AnswerPictureQuestion(UserId, QuestionId, RosterVector.Empty, DateTimeOffset.UtcNow, "photo__.JPG");
+
+            var imageFileStorage = new Mock<IImageFileStorage>();
+            var commandService = new Mock<ICommandService>();
+            var controller = CreateController(interview, imageFileStorage.Object, commandService.Object);
+
+            var questionIdentity = Identity.Create(QuestionId, RosterVector.Empty);
+            var file = CreateFormFile("newphoto.jpg", "image/jpeg");
+
+            await controller.Image(interview.Id, questionIdentity.ToString(), file);
+
+            imageFileStorage.Verify(s => s.RemoveInterviewBinaryData(It.IsAny<Guid>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Test]
         public async Task Image_when_previous_answer_has_different_extension_removes_old_file()
         {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
