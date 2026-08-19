@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var usersCount = users.Count();
 
             // NOTE: List<Guid> is used in the LINQ expression tree on purpose. For an array the C# compiler
-            // (C# 13+/net9) binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an
+            // (C# 14+) binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an
             // op_Implicit call into the expression tree that NHibernate cannot evaluate
             // ("Evaluation failure on op_Implicit(value(System.Guid[]))").
             var userIds = users.Skip((page - 1) * pageSize)

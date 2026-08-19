@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         public Dictionary<Guid, long> GetInterviewersTrafficUsage(Guid[] interviewersIds)
         {
             // NOTE: List<Guid> is used in LINQ expression trees on purpose. For an array the C# compiler
-            // (C# 13+/net9) binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an
+            // (C# 14+) binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an
             // op_Implicit call into the expression tree that NHibernate cannot evaluate.
             var ids = interviewersIds.ToList();
 

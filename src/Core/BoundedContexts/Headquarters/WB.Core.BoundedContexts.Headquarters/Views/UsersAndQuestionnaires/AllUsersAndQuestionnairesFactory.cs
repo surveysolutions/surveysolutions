@@ -125,7 +125,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
                     .ToList());
 
             // NOTE: List<T> is used in LINQ expression trees on purpose. For an array the C# compiler
-            // (C# 13+/net9) binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an
+            // (C# 14+) binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an
             // op_Implicit call into the expression tree that NHibernate cannot evaluate.
             var questionnaireGuids = questionnaireIdentities.Select(x => x.QuestionnaireId).ToList();
             var questionnaireVersions = questionnaireIdentities.Select(x => x.Version).ToList();

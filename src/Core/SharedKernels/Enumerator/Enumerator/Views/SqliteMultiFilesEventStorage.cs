@@ -312,7 +312,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public bool HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(long sequence, Guid eventSourceId,
             params string[] typeNames)
         {
-            // NOTE: List<string> is used here on purpose. For a string[] the C# compiler (C# 13+/net9)
+            // NOTE: List<string> is used here on purpose. For a string[] the C# compiler (C# 14+)
             // binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T) which adds an
             // op_Implicit call into the expression tree and sqlite-net translates it
             // into invalid SQL ("... in op_implicit(...)" => "no such table: op_implicit").
