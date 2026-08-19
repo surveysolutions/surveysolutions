@@ -85,7 +85,7 @@ namespace WB.UI.Headquarters.Code.UsersManagement
                 .Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
                 .ToListAsync(cancellationToken);
 
-            var userIds = list.Select(l => l.UserId).ToArray();
+            var userIds = list.Select(l => l.UserId).ToList();
 
             var workspaces = (await this.userRepository.Users
                 .Where(u => userIds.Contains(u.Id))
