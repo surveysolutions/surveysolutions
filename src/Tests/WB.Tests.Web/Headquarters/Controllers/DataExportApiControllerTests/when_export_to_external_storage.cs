@@ -58,10 +58,9 @@ namespace WB.Tests.Web.Headquarters.Controllers.DataExportApiControllerTests
         }
 
         [NUnit.Framework.Test]
-        public async Task when_different_user_redeems_state_should_return_bad_request()
+        public async Task when_anonymous_callback_redeems_state_should_not_return_unauthorized()
         {
             var ownerUserId = Guid.NewGuid();
-            var attackerUserId = Guid.NewGuid();
             var memoryCache = new MemoryCache(new MemoryCacheOptions());
             var protectionProvider = new EphemeralDataProtectionProvider();
             var questionnaireBrowseViewFactory = CreateQuestionnaireBrowseViewFactoryReturningNull();
@@ -76,15 +75,14 @@ namespace WB.Tests.Web.Headquarters.Controllers.DataExportApiControllerTests
 
             var protectedState = createStateResponse?.Value as string;
 
-            var attackerController = CreateController(memoryCache, protectionProvider, questionnaireBrowseViewFactory);
-            SetAuthenticatedUser(attackerController, attackerUserId);
+            var callbackController = CreateController(memoryCache, protectionProvider, questionnaireBrowseViewFactory);
 
-            var result = await attackerController.ExportToExternalStorage(new DataExportApiController.ExportToExternalStorageModel
+            var result = await callbackController.ExportToExternalStorage(new DataExportApiController.ExportToExternalStorageModel
             {
                 Code = "code",
                 State = protectedState
             });
-            result.Should().BeOfType<BadRequestObjectResult>();
+            result.Should().BeOfType<NotFoundObjectResult>();
         }
     }
 }
