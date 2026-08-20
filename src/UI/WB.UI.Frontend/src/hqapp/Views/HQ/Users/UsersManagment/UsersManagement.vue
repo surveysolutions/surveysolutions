@@ -26,13 +26,16 @@
                 <FilterBlock :title="$t('Pages.AccountManage_Role')" v-if="$config.model.roles.length > 0">
                     <Typeahead no-search control-id="roleSelector"
                         :placeholder="$t('Pages.UsersManage_RoleFilterPlaceholder')" :value="selectedRole"
-                        :values="$config.model.roles" v-on:selected="onRoleSelected" />
+                        :values="$config.model.roles" :disabled="selectedSupervisor != null"
+                        v-on:selected="onRoleSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Pages.UsersManage_SupervisorFilterTitle')">
                     <Typeahead control-id="supervisorSelector"
                         :placeholder="$t('Pages.UsersManage_SupervisorFilterPlaceholder')"
-                        :value="selectedSupervisor" :fetch-url="supervisorsUri" v-on:selected="onSupervisorSelected" />
+                        :value="selectedSupervisor" :fetch-url="model.supervisorsUrl"
+                        :disabled="selectedRole != null && selectedRole.key !== 'Interviewer'"
+                        v-on:selected="onSupervisorSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Pages.UsersManage_TeamFilter')" v-if="selectedWorkspace">
@@ -475,8 +478,8 @@ export default {
         },
 
         onRoleSelected(role) {
-            if (this.selectedSupervisor && role != null && role.key !== 'Interviewer') {
-                role = find(this.$config.model.roles, { key: 'Interviewer' })
+            if (this.selectedSupervisor != null) {
+                return
             }
 
             this.selectedRole = role
