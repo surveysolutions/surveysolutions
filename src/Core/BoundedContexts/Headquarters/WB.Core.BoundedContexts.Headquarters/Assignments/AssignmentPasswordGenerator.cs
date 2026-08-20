@@ -25,10 +25,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public string GenerateUnique(int length)
         {
+            // NOTE: List<string> is used in LINQ expression trees on purpose. For an array the C# compiler
+            // (C# 14+) binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an
+            // op_Implicit call into the expression tree that NHibernate cannot evaluate.
             var passwords = Enumerable.Range(1, 20)
                 .Select(_ => GetRandomString(length, Encode_32_Chars))
                 .Distinct()
-                .ToArray();
+                .ToList();
 
             List<string> usedPasswordsInAssignments = this.assignments.Query(_ => _
                 .Where(x => passwords.Contains(x.Password))
@@ -64,7 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             var passwords = Enumerable.Range(1, upperBound)
                 .Select(_ => GetRandomString(DefaultPasswordLength, Encode_32_Chars))
                 .Distinct()
-                .ToArray();
+                .ToList();
             
             List<string> usedPasswordsInAssignments = this.assignments.Query(_ => _
                 .Where(x => passwords.Contains(x.Password))
