@@ -213,16 +213,19 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
             public void OnLocationChanged(AndroidLocation location)
             {
-                // Ignore fixes cached by the provider before this request started: they report the
-                // source that produced them earlier (e.g. a stored built-in GPS fix) and would be
-                // captured and labelled in paradata instead of the location source in use now.
-                if (IsCachedFromBeforeRequest(location))
-                    return;
-
                 // Enforce the workspace-configured acceptance criteria: reject fixes that do not
                 // come from the required provider, or that are mock when mock is not permitted.
                 bool isFromGpsProvider = location.Provider == LocationManager.GpsProvider;
                 bool isFromMockProvider = location.IsMockLocation();
+
+                // Ignore fixes cached by the provider before this request started: they report the
+                // source that produced them earlier (e.g. a stored built-in GPS fix) and would be
+                // captured and labelled in paradata instead of the location source in use now.
+                // Mock fixes are exempt: external GPS sensors inject under the gps provider as mock
+                // fixes and their ElapsedRealtimeNanos may not align with the device clock, so the
+                // age filter must not be applied to them.
+                if (!isFromMockProvider && IsCachedFromBeforeRequest(location))
+                    return;
                 if (!this.acceptableSource.IsLocationAcceptable(isFromGpsProvider, isFromMockProvider))
                 {
                     // Remember that a fix arrived but was refused by the acceptance policy so the
