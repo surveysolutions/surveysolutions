@@ -73,7 +73,7 @@ export default {
         },
         isNonNegativeValue: {
             get() {
-                return this.activeQuestion.isNonNegative === true;
+                return this.activeQuestion.isNonNegative !== false;
             },
             set(value) {
                 this.activeQuestion.isNonNegative = value;

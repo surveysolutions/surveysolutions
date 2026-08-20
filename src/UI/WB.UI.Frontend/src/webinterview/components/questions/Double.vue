@@ -21,7 +21,7 @@
                             :class="{ 'special-value-selected': isSpecialValueSelected }"
                             v-numericFormatting="{
 
-                                minimumValue: $me.isNonNegative ? '0' : '-999999999999999.99999999999999',
+                                minimumValue: minimumValue,
                                 maximumValue: '999999999999999.99999999999999',
 
                                 digitGroupSeparator: groupSeparator,
@@ -94,6 +94,20 @@ export default {
         },
         decimalPlacesCount() {
             return getDecimalPlacesCount(this.$me)
+        },
+        hasNegativeSpecialValues() {
+            return (this.$me.options || []).some(o => o.value < 0)
+        },
+        hasNegativeCurrentNonSpecialAnswer() {
+            return this.$me.answer < 0 && !this.isSpecialValue(this.$me.answer)
+        },
+        minimumValue() {
+            if (!this.$me.isNonNegative)
+                return '-999999999999999.99999999999999'
+
+            return (this.hasNegativeSpecialValues || this.hasNegativeCurrentNonSpecialAnswer)
+                ? '-999999999999999.99999999999999'
+                : '0'
         },
         specialValue: {
             get() {
