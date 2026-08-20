@@ -229,16 +229,11 @@ export default {
             openPanel: null,//'categories',
         };
     },
-    setup(props) {
-
-        const keys = useMagicKeys();
-        const arrowLeft = keys['arrowleft'];
-        const arrowRight = keys['arrowright'];
-
+    setup() {
         const commentThreadsStore = useCommentThreadsStore();
 
         return {
-            arrowLeft, arrowRight, commentThreadsStore
+            commentThreadsStore
         };
     },
     mounted() {
