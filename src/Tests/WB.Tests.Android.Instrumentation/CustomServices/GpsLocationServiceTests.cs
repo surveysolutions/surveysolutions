@@ -1,4 +1,5 @@
 using Android.Locations;
+using Android.OS;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -137,6 +138,42 @@ namespace WB.Tests.Android.Instrumentation.CustomServices
 
             Assert.That(tcs.Task.IsCompleted, Is.False);
             Assert.That(listener.RejectedRestrictedFix, Is.True);
+        }
+
+        [Test]
+        public async Task when_cached_fix_from_before_request_received_should_wait_for_current_fix()
+        {
+            // A provider may deliver a fix cached before the request. Such a fix reports the source
+            // that produced it earlier (an older built-in GPS fix) and must not be captured instead of
+            // the location source producing fixes now.
+            var tcs = new TaskCompletionSource<GpsLocation>(TaskCreationOptions.RunContinuationsAsynchronously);
+            ILocationListener listener = new GpsLocationService.SingleShotLocationListener(
+                tcs, locationManager: null, desiredAccuracy: -1d, acceptableSource: AcceptableGpsLocationSource.Any);
+
+            listener.OnLocationChanged(new Location(LocationManager.GpsProvider)
+            {
+                Latitude = 1d,
+                Longitude = 2d,
+                Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                ElapsedRealtimeNanos = 1L,
+            });
+
+            Assert.That(tcs.Task.IsCompleted, Is.False);
+
+            listener.OnLocationChanged(new Location(LocationManager.GpsProvider)
+            {
+                Latitude = 49.842957d,
+                Longitude = 24.031111d,
+                Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                ElapsedRealtimeNanos = SystemClock.ElapsedRealtimeNanos(),
+                IsFromMockProvider = true,
+            });
+
+            var gpsLocation = await tcs.Task.WaitAsync(TimeSpan.FromSeconds(1));
+
+            Assert.That(gpsLocation, Is.Not.Null);
+            Assert.That(gpsLocation!.Latitude, Is.EqualTo(49.842957d));
+            Assert.That(gpsLocation.IsFromMockProvider, Is.True);
         }
     }
 }

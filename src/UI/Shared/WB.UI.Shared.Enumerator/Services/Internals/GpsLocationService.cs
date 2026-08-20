@@ -184,6 +184,14 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             private readonly object fallbackSync = new object();
             private GpsLocation bestFallbackLocation;
 
+            // Monotonic clock reading taken when the request started. Location providers may deliver a
+            // cached fix obtained before the request; such a fix describes an earlier source (typically
+            // an older built-in GPS fix) and would mask the source actually in use now.
+            private readonly long requestStartElapsedRealtimeNanos = SystemClock.ElapsedRealtimeNanos();
+
+            // Cached fixes acquired shortly before the request are still current, so allow a small margin.
+            private const long AcceptableFixAgeNanos = 5L * 1000 * 1000 * 1000;
+
             internal GpsLocation BestFallbackLocation
             {
                 get { lock (this.fallbackSync) return this.bestFallbackLocation; }
@@ -203,6 +211,12 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
             public void OnLocationChanged(AndroidLocation location)
             {
+                // Ignore fixes cached by the provider before this request started: they report the
+                // source that produced them earlier (e.g. a stored built-in GPS fix) and would be
+                // captured and labelled in paradata instead of the location source in use now.
+                if (IsCachedFromBeforeRequest(location))
+                    return;
+
                 // Enforce the workspace-configured acceptance criteria: reject fixes that do not
                 // come from the required provider, or that are mock when mock is not permitted.
                 bool isFromGpsProvider = location.Provider == LocationManager.GpsProvider;
@@ -215,8 +229,8 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                     return;
                 }
 
-                // External GPS devices may emit valid fixes whose elapsedRealtime timestamp
-                // does not align with the device monotonic clock. Do not reject by age.
+                // External GPS devices may emit valid fixes whose Time (wall clock) does not align
+                // with the device clock. Do not reject by that timestamp.
 
                 var timestamp = GetTimestamp(location);
                 var gpsLocation = new GpsLocation(
@@ -256,6 +270,19 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
                 // Unregister so we act as a one-shot listener.
                 try { locationManager.RemoveUpdates(this); } catch { /* ignore – result already set */ }
+            }
+
+            // A fix stamped on the device monotonic clock before this request started was cached by the
+            // provider and does not describe the location source currently producing fixes. External
+            // GPS sensors may inject fixes without a usable monotonic timestamp (zero or negative);
+            // those are treated as current so that external sensors keep working.
+            private bool IsCachedFromBeforeRequest(AndroidLocation location)
+            {
+                var fixElapsedRealtimeNanos = location.ElapsedRealtimeNanos;
+                if (fixElapsedRealtimeNanos <= 0)
+                    return false;
+
+                return fixElapsedRealtimeNanos + AcceptableFixAgeNanos < this.requestStartElapsedRealtimeNanos;
             }
 
             // Keep the most accurate acceptable lower-priority fix. Fixes without a reported accuracy
