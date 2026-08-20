@@ -190,6 +190,8 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             private readonly long requestStartElapsedRealtimeNanos = SystemClock.ElapsedRealtimeNanos();
 
             // Cached fixes acquired shortly before the request are still current, so allow a small margin.
+            // Five seconds covers a fix captured while the interviewer was opening the question (the
+            // typical provider update interval is one second) without admitting older stored fixes.
             private const long AcceptableFixAgeNanos = 5L * 1000 * 1000 * 1000;
 
             internal GpsLocation BestFallbackLocation
