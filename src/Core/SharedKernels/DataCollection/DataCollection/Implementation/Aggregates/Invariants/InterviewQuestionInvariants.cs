@@ -684,7 +684,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
             if (answer < 0)
             {
-                if (this.Questionnaire.GetOptionForQuestionByOptionValue(this.QuestionId, (decimal)answer, null) == null)
+                bool isSpecialValue = false;
+                try
+                {
+                    isSpecialValue = this.Questionnaire.GetOptionForQuestionByOptionValue(this.QuestionId, (decimal)answer, null) != null;
+                }
+                catch (OverflowException)
+                {
+                    // value is outside decimal range, so it cannot be a special value
+                }
+
+                if (!isSpecialValue)
                 {
                     throw new AnswerNotAcceptedException(
                         $"Answer '{answer}' is not allowed because the question is set as non-negative")
