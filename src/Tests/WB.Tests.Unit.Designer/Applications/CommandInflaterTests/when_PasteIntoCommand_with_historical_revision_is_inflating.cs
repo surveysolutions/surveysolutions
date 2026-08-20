@@ -6,8 +6,8 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
-using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 {
@@ -26,20 +26,28 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 
             var questionnaire = CreateQuestionnaireDocument(questionnaireId, questionnaireTitle, ownerId);
             var sourceQuestionnaireRevision = new QuestionnaireRevision(questionnaireId, revisionId);
-            var expectedQuestionnaireIdentity = sourceQuestionnaireRevision.ToString();
-            var documentStorage = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            documentStorage.Setup(storage => storage.GetById(expectedQuestionnaireIdentity))
+
+            var questionnaireStorageMock = new Mock<IDesignerQuestionnaireStorage>();
+            // Revision-qualified lookup: used to retrieve the historical snapshot
+            questionnaireStorageMock
+                .Setup(s => s.Get(It.Is<QuestionnaireRevision>(r => r.Revision == revisionId)))
+                .Returns(questionnaire);
+            // Current-base lookup: used for authorization when a revision is requested
+            questionnaireStorageMock
+                .Setup(s => s.Get(questionnaireId))
                 .Returns(questionnaire);
 
             command = new PasteInto(questionnaireId, entityId, questionnaireId, entityId, questionnaireId, ownerId, revisionId);
 
-            commandInflater = CreateCommandInflater(dbContext: dbContext, storage: documentStorage.Object);
+            commandInflater = CreateCommandInflater(dbContext: dbContext, questionnaireStorage: questionnaireStorageMock.Object);
 
             commandInflater.PrepareDeserializedCommandForExecution(command);
 
             command.SourceDocument.Should().NotBeNull();
             command.SourceDocument!.PublicKey.Should().Be(questionnaireId);
-            documentStorage.Verify(storage => storage.GetById(expectedQuestionnaireIdentity), Times.Once);
+            questionnaireStorageMock.Verify(
+                s => s.Get(It.Is<QuestionnaireRevision>(r => r.Revision == revisionId)),
+                Times.Once);
         }
 
         private static CommandInflater commandInflater;

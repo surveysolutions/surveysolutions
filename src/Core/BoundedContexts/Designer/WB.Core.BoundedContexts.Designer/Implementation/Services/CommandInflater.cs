@@ -10,28 +10,28 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Designer.Code.Implementation;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     public class CommandInflater : ICommandInflater
     {
-        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
+        private readonly IDesignerQuestionnaireStorage questionnaireStorage;
         private readonly DesignerDbContext dbContext;
         private readonly IClassificationsStorage classificationsStorage;
         private readonly ILoggedInUser user;
 
         public CommandInflater(
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
+            IDesignerQuestionnaireStorage questionnaireStorage,
             DesignerDbContext dbContext,
             IClassificationsStorage classificationsStorage,
             ILoggedInUser user)
         {
-            this.questionnaireDocumentReader = questionnaireDocumentReader;
+            this.questionnaireStorage = questionnaireStorage;
             this.dbContext = dbContext;
             this.classificationsStorage = classificationsStorage;
             this.user = user ?? throw new ArgumentNullException(nameof(user));
@@ -78,7 +78,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private QuestionnaireDocument GetQuestionnaire(QuestionnaireRevision questionnaireRevision)
         {
-            var questionnaire = this.questionnaireDocumentReader.GetById(questionnaireRevision.ToString());
+            var questionnaire = this.questionnaireStorage.Get(questionnaireRevision);
 
             if (questionnaire == null)
             {
@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             // current (base) questionnaire so that visibility/ownership changes that occurred after
             // the snapshot was taken are honoured rather than bypassed.
             var currentQuestionnaire = questionnaireRevision.Revision.HasValue
-                ? this.questionnaireDocumentReader.GetById(questionnaireRevision.QuestionnaireId.FormatGuid())
+                ? this.questionnaireStorage.Get(questionnaireRevision.QuestionnaireId)
                   ?? questionnaire
                 : questionnaire;
 

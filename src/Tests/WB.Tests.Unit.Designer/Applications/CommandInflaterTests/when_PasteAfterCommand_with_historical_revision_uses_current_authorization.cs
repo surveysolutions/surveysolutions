@@ -3,12 +3,12 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.BoundedContexts.Designer.Commands;
 using WB.UI.Designer.Code.Implementation;
 
 namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
@@ -22,18 +22,19 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
             var historicalSnapshot = CreateQuestionnaireDocument(questionnaireId, title, ownerId, isPublic: true);
             var currentSnapshot    = CreateQuestionnaireDocument(questionnaireId, title, ownerId, isPublic: false);
 
-            var revision = new QuestionnaireRevision(questionnaireId, revisionId);
-            var baseKey  = questionnaireId.ToString("N");
-
-            var documentStorage = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            documentStorage.Setup(s => s.GetById(revision.ToString())).Returns(historicalSnapshot);
-            documentStorage.Setup(s => s.GetById(baseKey)).Returns(currentSnapshot);
+            var questionnaireStorageMock = new Mock<IDesignerQuestionnaireStorage>();
+            questionnaireStorageMock
+                .Setup(s => s.Get(It.Is<QuestionnaireRevision>(r => r.Revision == revisionId)))
+                .Returns(historicalSnapshot);
+            questionnaireStorageMock
+                .Setup(s => s.Get(questionnaireId))
+                .Returns(currentSnapshot);
 
             var dbContext = Create.InMemoryDbContext();
             var loggedInUser = Mock.Of<ILoggedInUser>(u => u.Id == requestingUserId && u.IsAdmin == false);
 
             var commandInflater = CreateCommandInflater(
-                storage: documentStorage.Object,
+                questionnaireStorage: questionnaireStorageMock.Object,
                 dbContext: dbContext,
                 loggedInUser: loggedInUser);
 
@@ -52,18 +53,19 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
             var historicalSnapshot = CreateQuestionnaireDocument(questionnaireId, title, requestingUserId, isPublic: false);
             var currentSnapshot    = CreateQuestionnaireDocument(questionnaireId, title, newOwnerId,       isPublic: false);
 
-            var revision = new QuestionnaireRevision(questionnaireId, revisionId);
-            var baseKey  = questionnaireId.ToString("N");
-
-            var documentStorage = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
-            documentStorage.Setup(s => s.GetById(revision.ToString())).Returns(historicalSnapshot);
-            documentStorage.Setup(s => s.GetById(baseKey)).Returns(currentSnapshot);
+            var questionnaireStorageMock = new Mock<IDesignerQuestionnaireStorage>();
+            questionnaireStorageMock
+                .Setup(s => s.Get(It.Is<QuestionnaireRevision>(r => r.Revision == revisionId)))
+                .Returns(historicalSnapshot);
+            questionnaireStorageMock
+                .Setup(s => s.Get(questionnaireId))
+                .Returns(currentSnapshot);
 
             var dbContext = Create.InMemoryDbContext();
             var loggedInUser = Mock.Of<ILoggedInUser>(u => u.Id == requestingUserId && u.IsAdmin == false);
 
             var commandInflater = CreateCommandInflater(
-                storage: documentStorage.Object,
+                questionnaireStorage: questionnaireStorageMock.Object,
                 dbContext: dbContext,
                 loggedInUser: loggedInUser);
 
