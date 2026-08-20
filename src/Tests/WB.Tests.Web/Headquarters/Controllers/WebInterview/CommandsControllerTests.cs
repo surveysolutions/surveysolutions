@@ -27,13 +27,13 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         private static readonly Guid UserId = Id.gA;
 
         [Test]
-        public async Task RemoveAnswer_when_multimedia_answer_exists_awaits_binary_cleanup_before_returning()
+        public async Task RemoveAnswer_when_multimedia_answer_exists_deletes_exact_stored_file_before_returning()
         {
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.MultimediaQuestion(questionId: QuestionId, variable: "photo"));
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
             var interview = SetUp.StatefulInterview(questionnaireDocument);
-            var existingFilename = "photo__.jpg";
+            var existingFilename = "photo__.png";
             interview.AnswerPictureQuestion(UserId, QuestionId, RosterVector.Empty, DateTimeOffset.UtcNow, existingFilename);
 
             var commandService = new Mock<ICommandService>();
@@ -55,6 +55,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             Assert.That(resultTask.IsCompleted, Is.False);
             commandService.Verify(s => s.Execute(It.IsAny<RemoveAnswerCommand>(), null), Times.Once);
             imageFileStorage.Verify(s => s.RemoveInterviewBinaryData(interview.Id, existingFilename), Times.Once);
+            imageFileStorage.Verify(s => s.RemoveInterviewBinaryData(interview.Id, "photo__.jpg"), Times.Never);
 
             deleteCompletion.SetResult(true);
 
