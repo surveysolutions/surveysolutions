@@ -407,10 +407,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile
                 .Where(x => x!= null)
                 .ToList();
 
+            // NOTE: List<T> is used on purpose. For an array the C# 14+ compiler binds Contains
+            // to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an op_Implicit call
+            // into the expression tree that NHibernate cannot translate.
             var supervisorIds = interviewerProfiles
                 .Where(x => x.WorkspaceProfile.SupervisorId.HasValue)
                 .Select(x => x.WorkspaceProfile.SupervisorId.Value)
-                .ToArray();
+                .ToList();
             
             var supervisorsProfiles = this.userManager.Users.Where(x => supervisorIds.Contains(x.Id))
                 .Where(x => x != null)
