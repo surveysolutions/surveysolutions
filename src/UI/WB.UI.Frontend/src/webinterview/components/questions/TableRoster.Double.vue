@@ -9,7 +9,7 @@
         :value="$me.answer"
         :disabled="!$me.acceptAnswer"
         v-numericFormatting="{
-            minimumValue: ($me.isNonNegative && !hasNegativeSpecialValues) ? '0' : '-99999999999999.99999999999999',
+            minimumValue: minimumValue,
             maximumValue: '99999999999999.99999999999999',
             digitGroupSeparator: groupSeparator,
             decimalCharacter: decimalSeparator,
@@ -51,6 +51,17 @@ export default {
         },
         hasNegativeSpecialValues() {
             return (this.$me.options || []).some(o => o.value < 0)
+        },
+        hasNegativeCurrentNonSpecialAnswer() {
+            return this.$me.answer < 0 && !this.isSpecialValue(this.$me.answer)
+        },
+        minimumValue() {
+            if (!this.$me.isNonNegative)
+                return '-99999999999999.99999999999999'
+
+            return (this.hasNegativeSpecialValues || this.hasNegativeCurrentNonSpecialAnswer)
+                ? '-99999999999999.99999999999999'
+                : '0'
         },
     },
     methods: {

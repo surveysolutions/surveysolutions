@@ -9,7 +9,7 @@
             digitGroupSeparator: groupSeparator,
             decimalCharacter: decimalSeparator,
             decimalPlaces: 0,
-            minimumValue: ($me.isNonNegative && !hasNegativeSpecialValues) ? '0' : '-2147483648',
+            minimumValue: minimumValue,
             maximumValue: '2147483647'
         }" />
 </template>
@@ -42,6 +42,17 @@ export default {
         },
         hasNegativeSpecialValues() {
             return (this.$me.options || []).some(o => o.value < 0)
+        },
+        hasNegativeCurrentNonSpecialAnswer() {
+            return this.$me.answer < 0 && !this.isSpecialValue(this.$me.answer)
+        },
+        minimumValue() {
+            if (!this.$me.isNonNegative)
+                return '-2147483648'
+
+            return (this.hasNegativeSpecialValues || this.hasNegativeCurrentNonSpecialAnswer)
+                ? '-2147483648'
+                : '0'
         },
     },
     methods: {
