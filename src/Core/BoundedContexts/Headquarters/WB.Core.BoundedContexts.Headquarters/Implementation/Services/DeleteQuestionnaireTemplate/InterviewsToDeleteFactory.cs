@@ -145,6 +145,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 interviewIds = this.interviewsReader.Query(_ => _.Where(interview => 
                         interview.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
                         interview.QuestionnaireVersion == questionnaireIdentity.Version)
+                    .OrderBy(summary => summary.InterviewId)
                     .Select(summary => summary.InterviewId)
                     .Skip(skip)
                     .Take(BatchSize)
