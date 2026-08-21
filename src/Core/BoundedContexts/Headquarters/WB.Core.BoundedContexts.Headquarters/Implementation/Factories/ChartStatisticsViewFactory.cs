@@ -66,7 +66,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 .Select(id => id.ToString()).ToList();
 
             // ReSharper disable StringLiteralTypo
-            var dates = this.unitOfWork.Session.Connection.QuerySingle<(DateTime? min, DateTime? max)>(
+            // Npgsql 10+ maps PostgreSQL `date` columns to DateOnly; use DateOnly for Dapper value-tuple mapping.
+            var dates = this.unitOfWork.Session.Connection.QuerySingle<(DateOnly? min, DateOnly? max)>(
                 $@"with dates as (
                     select date from cumulativereportstatuschanges
                     where questionnaireidentity = any(@questionnairesList) and status = any(@allowedStatuses)
@@ -78,15 +79,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 return new ChartStatisticsView();
             }
 
-            var leftEdge = new[] { input.From ?? dates.min?.AddDays(-1), input.To ?? dates.min?.AddDays(-1) }.Min() ?? DateTime.MinValue;
-            var rightEdge = new[] {input.From ?? dates.min ?? DateTime.MinValue, input.To ?? DateTime.UtcNow}.Max();
+            var minDateTime = dates.min?.ToDateTime(TimeOnly.MinValue);
+            var maxDateTime = dates.max?.ToDateTime(TimeOnly.MinValue);
+
+            var leftEdge = new[] { input.From ?? minDateTime?.AddDays(-1), input.To ?? minDateTime?.AddDays(-1) }.Min() ?? DateTime.MinValue;
+            var rightEdge = new[] {input.From ?? minDateTime ?? DateTime.MinValue, input.To ?? DateTime.UtcNow}.Max();
             
             var queryParams = new
             {
                 questionnairesList,
                 AllowedStatuses,
                 // we should always build report from the very beginning, this param will ensure that data accumulated correctly
-                minDateQuery = FormatDate(new[] { input.From ?? dates.min?.AddDays(-1), dates.min }.Min() ?? DateTime.MinValue),
+                minDateQuery = FormatDate(new[] { input.From ?? minDateTime?.AddDays(-1), minDateTime }.Min() ?? DateTime.MinValue),
                 minDate = FormatDate(leftEdge),
                 maxDate = FormatDate(rightEdge)
             };
@@ -95,7 +99,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             // timespan CTE will produce cross product of dates and available statuses
             // report CTE will produce report over all data
             // do not move date filtering inside report CTE as it will affect partition query
-            var rawData = this.unitOfWork.Session.Connection.Query<(DateTime date, InterviewStatus status, long count)>(
+            var rawData = this.unitOfWork.Session.Connection.Query<(DateOnly date, InterviewStatus status, long count)>(
                 $@"with 
                         dates as (select generate_series(@minDateQuery::date, @maxDate::date, interval '1 day')::date as date),
                         timespan as (select date, status from dates as date, unnest(@AllowedStatuses) as status),
@@ -125,14 +129,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 }
 
                 var dataSet = statusMap[row.status];
-                dataSet.AddOrReplaceLast(FormatDate(row.date), row.count);
+                dataSet.AddOrReplaceLast(FormatDate(row.date.ToDateTime(TimeOnly.MinValue)), row.count);
             }
 
             view.DataSets = view.DataSets.Where(ds => ds.AllZeros == false).ToList();
             view.From = FormatDate(leftEdge);
             view.To = FormatDate(rightEdge);
-            view.MaxDate = FormatDate(dates.max.Value);
-            view.MinDate = FormatDate(dates.min.Value);
+            view.MaxDate = FormatDate(maxDateTime!.Value);
+            view.MinDate = FormatDate(minDateTime!.Value);
 
             return view;
         }
