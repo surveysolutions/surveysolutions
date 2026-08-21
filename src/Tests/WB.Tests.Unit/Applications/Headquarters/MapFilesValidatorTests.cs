@@ -168,6 +168,57 @@ public class MapFilesValidatorTests
         Assert.That(validatorErrors, Is.Empty);
     }
 
+    [Test]
+    public void when_validate_shapefile_name_at_61_chars_should_fail_because_shp_extension_makes_it_65()
+    {
+        var mapName = new string('a', 61); // "a"*61 + ".shp" = 65 chars > 64
+        var analyzeResults = new AnalyzeResult()
+        {
+            IsValid = true,
+            Maps = new List<MapFiles>()
+            {
+                new MapFiles()
+                {
+                    IsShapeFile = true,
+                    Name = mapName,
+                    Files = new List<MapFile>() { MapFile(mapName + ".shp"), MapFile(mapName + ".shx"), MapFile(mapName + ".dbf") }
+                },
+            }
+        };
+
+        var service = CreateMapFilesValidator();
+
+        var validatorErrors = service.Verify(analyzeResults).ToList();
+
+        Assert.That(validatorErrors.Any(), Is.True);
+        Assert.That(validatorErrors.Any(e => e.Message.Contains(MapFilesValidator.MapFileNameLengthLimit.ToString())), Is.True);
+    }
+
+    [Test]
+    public void when_validate_shapefile_name_at_60_chars_should_pass_because_shp_extension_makes_it_64()
+    {
+        var mapName = new string('a', 60); // "a"*60 + ".shp" = 64 chars == limit
+        var analyzeResults = new AnalyzeResult()
+        {
+            IsValid = true,
+            Maps = new List<MapFiles>()
+            {
+                new MapFiles()
+                {
+                    IsShapeFile = true,
+                    Name = mapName,
+                    Files = new List<MapFile>() { MapFile(mapName + ".shp"), MapFile(mapName + ".shx"), MapFile(mapName + ".dbf") }
+                },
+            }
+        };
+
+        var service = CreateMapFilesValidator();
+
+        var validatorErrors = service.Verify(analyzeResults).ToList();
+
+        Assert.That(validatorErrors, Is.Empty);
+    }
+
     private MapFile MapFile(string name, int size = 5000) => new MapFile() { Name = name, Size = size };
 
     private MapFilesValidator CreateMapFilesValidator()

@@ -88,9 +88,10 @@ public class MapFilesValidator : IMapFilesValidator
     {
         foreach (var map in analyzeResults.Maps)
         {
-            if (map.Name.Length > MapFileNameLengthLimit)
+            var effectiveName = map.IsShapeFile ? map.Name + ".shp" : map.Name;
+            if (effectiveName.Length > MapFileNameLengthLimit)
             {
-                var truncatedName = map.Name.Length > 100 ? map.Name.Substring(0, 100) + "…" : map.Name;
+                var truncatedName = effectiveName.Length > 100 ? effectiveName.Substring(0, 100) + "…" : effectiveName;
                 yield return new ValidatorError(string.Format(Resources.Maps.MapFileNameTooLong, truncatedName, MapFileNameLengthLimit));
             }
         }
