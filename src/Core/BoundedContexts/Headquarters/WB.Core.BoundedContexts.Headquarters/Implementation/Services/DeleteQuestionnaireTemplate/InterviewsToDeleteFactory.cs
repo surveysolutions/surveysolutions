@@ -23,21 +23,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
     {
         private readonly IUnitOfWork sessionFactory;
         private readonly IImageFileStorage imageFileStorage;
+        private readonly IAudioAuditFileStorage audioAuditFileStorage;
+        private readonly IBrokenImageFileStorage brokenImageFileStorage;
+        private readonly IBrokenAudioFileStorage brokenAudioFileStorage;
+        private readonly IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader;
-        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ILogger<InterviewsToDeleteFactory> logger;
 
         private const int BatchSize = 100;
 
         public InterviewsToDeleteFactory(IUnitOfWork sessionFactory, IImageFileStorage imageFileStorage,
+            IAudioAuditFileStorage audioAuditFileStorage,
+            IBrokenImageFileStorage brokenImageFileStorage,
+            IBrokenAudioFileStorage brokenAudioFileStorage,
+            IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader,
-            IQuestionnaireStorage questionnaireStorage,
             ILogger<InterviewsToDeleteFactory> logger)
         {
             this.sessionFactory = sessionFactory;
             this.imageFileStorage = imageFileStorage;
+            this.audioAuditFileStorage = audioAuditFileStorage;
+            this.brokenImageFileStorage = brokenImageFileStorage;
+            this.brokenAudioFileStorage = brokenAudioFileStorage;
+            this.brokenAudioAuditFileStorage = brokenAudioAuditFileStorage;
             this.interviewsReader = interviewsReader;
-            this.questionnaireStorage = questionnaireStorage;
             this.logger = logger;
         }
 
@@ -125,17 +134,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         */
         }
 
-        private async Task RemoveInterviewsImagesAsync(QuestionnaireIdentity questionnaireIdentity)
+        private async Task RemoveInterviewsBinaryDataAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            var questionnaire = questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
-            if (questionnaire == null)
-                return;
-            
-            var hasImageQuestions = questionnaire.Find<IMultimediaQuestion>().Any();
-            
-            if (!hasImageQuestions)
-                return;
-            
             var pageIndex = 0;
             List<Guid> interviewIds;
             
@@ -151,15 +151,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                     .Take(BatchSize)
                     .ToList());
 
+                if (interviewIds.Count == 0)
+                    break;
+
                 await imageFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
+                await audioAuditFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
+                await brokenImageFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
+                await brokenAudioFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
+                await brokenAudioAuditFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
 
                 pageIndex++;
-            } while (interviewIds.Count > 0 && interviewIds.Count == BatchSize);
+            } while (interviewIds.Count == BatchSize);
         }
 
         public async Task RemoveAllInterviewsDataAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            await logger.LogExecuteTimeAsync(() => RemoveInterviewsImagesAsync(questionnaireIdentity), "removing interview's images");
+            await logger.LogExecuteTimeAsync(() => RemoveInterviewsBinaryDataAsync(questionnaireIdentity), "removing interview's binary data");
             await logger.LogExecuteTimeAsync(() => RemoveAudioForInterviewsAsync(questionnaireIdentity), "removing interview's audio");
             await logger.LogExecuteTimeAsync(() => RemoveAudioAuditForInterviewsAsync(questionnaireIdentity), "removing interview's audio audit");
             await logger.LogExecuteTimeAsync(() => RemoveAllEventsForInterviewsAsync(questionnaireIdentity), "removing interview's events");

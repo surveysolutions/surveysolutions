@@ -10,8 +10,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 
 public abstract class InterviewS3FileStorage : IInterviewFileStorage
 {
-    private const int MaxDeletionBatchesPerInterview = 100;
-
     private readonly IExternalFileStorage externalFileStorage;
     private readonly IFileSystemAccessor fileSystemAccessor;
 
@@ -48,22 +46,9 @@ public abstract class InterviewS3FileStorage : IInterviewFileStorage
     
     public async Task RemoveAllBinaryDataForInterviewsAsync(List<Guid> interviewIds)
     {
-        if (!interviewIds.Any()) return;
-
-        // there are no directories in S3, so all objects stored under the interview prefix
-        // have to be listed and removed by their own keys
         foreach (var interviewId in interviewIds)
         {
-            var prefix = GetPath(interviewId);
-
-            for (var batch = 0; batch < MaxDeletionBatchesPerInterview; batch++)
-            {
-                var files = await externalFileStorage.ListAsync(prefix).ConfigureAwait(false);
-
-                if (files == null || !files.Any()) break;
-
-                await externalFileStorage.RemoveAsync(files.Select(file => file.Path)).ConfigureAwait(false);
-            }
+            await externalFileStorage.RemoveAllUnderPrefixAsync(GetPath(interviewId)).ConfigureAwait(false);
         }
     }
 

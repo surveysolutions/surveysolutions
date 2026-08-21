@@ -268,8 +268,12 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
         {
             var interviewsToDeleteFactory = new InterviewsToDeleteFactory(unitOfWork,
                 Mock.Of<IImageFileStorage>(),
-                Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                Mock.Of<IQuestionnaireStorage>(),
+                Mock.Of<IAudioAuditFileStorage>(),
+                Mock.Of<IBrokenImageFileStorage>(),
+                Mock.Of<IBrokenAudioFileStorage>(),
+                Mock.Of<IBrokenAudioAuditFileStorage>(),
+                Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(r =>
+                    r.Query(It.IsAny<Func<IQueryable<InterviewSummary>, List<Guid>>>()) == new List<Guid>()),
                 Mock.Of<ILogger<InterviewsToDeleteFactory>>());
 
             IPlainStorageAccessor<TranslationInstance> translations =
