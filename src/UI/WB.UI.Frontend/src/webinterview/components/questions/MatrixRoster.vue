@@ -21,13 +21,12 @@
         <ag-grid-vue ref="matrixRoster"
             class="ag-theme-customStyles roster-matrix"
             domLayout="autoHeight"
-            rowHeight="40"
-            headerHeight="50"
+            :rowHeight="40"
+            :headerHeight="50"
             :defaultColDef="defaultColDef"
             :columnDefs="columnDefs"
             :rowData="rowData"
             :grid-options="gridOptions"
-            :modules="gridModules"
             @grid-ready="onGridReady"
             @column-resized="autosizeHeaders"></ag-grid-vue>
     </div>
@@ -35,13 +34,9 @@
 
 <script lang="js">
 /* eslint-disable vue/no-unused-components */
-import '@ag-grid-community/styles/ag-grid.css'
-import '@ag-grid-community/styles/ag-theme-quartz.css'
-
 import { entityDetails } from '../mixins'
 import { debounce, map } from 'lodash-es'
-import { AgGridVue } from '@ag-grid-community/vue3'
-import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model'
+import { AgGridVue, agGridTheme } from './agGrid'
 
 import MatrixRoster_QuestionEditor from './MatrixRoster.QuestionEditor'
 import MatrixRoster_RosterTitle from './MatrixRoster.RosterTitle'
@@ -132,6 +127,7 @@ export default {
     computed: {
         gridOptions() {
             return {
+                theme: agGridTheme,
                 suppressClickEdit: true,
                 suppressCellFocus: true,
                 suppressMovableColumns: true,
@@ -139,9 +135,6 @@ export default {
                     componentParent: this,
                 },
             }
-        },
-        gridModules() {
-            return [ClientSideRowModelModule]
         },
     },
     methods: {
@@ -168,6 +161,8 @@ export default {
                             question: question,
                             value: question,
                         },
+                        valueFormatter: () => '',
+                        cellDataType: false,
                         //cellEditor: 'MatrixRoster_QuestionEditor',
                         //cellEditorParams: {
                         //    id: question.id,
@@ -185,6 +180,8 @@ export default {
                 cellStyle: { minHeight: '40px' },
                 cellRenderer: 'MatrixRoster_RosterTitle',
                 cellRendererParams: {},
+                valueFormatter: () => '',
+                cellDataType: false,
             })
             this.columnDefs = columnsFromQuestions
         },
@@ -245,9 +242,6 @@ export default {
 
                 // set header height to calculated height + padding (top: 8px, bottom: 8px)
                 this.gridApi.setGridOption('headerHeight', minHeight)
-
-                // set all rows height to auto
-                this.gridApi.resetRowHeights()
             }
         },
 
@@ -265,7 +259,8 @@ export default {
 
         doScroll: debounce(function () {
             if (this.$store.getters.scrollState == '#' + this.id) {
-                window.scroll({ top: this.$el.offsetTop, behavior: 'smooth' })
+                const navbarHeight = document.querySelector('.navbar-fixed-top')?.offsetHeight || 0
+                window.scroll({ top: this.$el.offsetTop - navbarHeight, behavior: 'smooth' })
                 this.$store.dispatch('resetScroll')
             }
         }, 200),
