@@ -66,12 +66,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 .Select(id => id.ToString()).ToList();
 
             // ReSharper disable StringLiteralTypo
-            // Npgsql 10+ maps PostgreSQL `date` columns to DateOnly; use DateOnly for Dapper value-tuple mapping.
-            var dates = this.unitOfWork.Session.Connection.QuerySingle<(DateOnly? min, DateOnly? max)>(
+            // Cast date columns to timestamp so Dapper always maps them to DateTime regardless of Npgsql version
+            // (Npgsql 6+ maps PostgreSQL `date` to DateOnly, while older versions map to DateTime;
+            // Dapper value-tuple mapping uses Convert.ChangeType which requires IConvertible).
+            var dates = this.unitOfWork.Session.Connection.QuerySingle<(DateTime? min, DateTime? max)>(
                 $@"with dates as (
                     select date from cumulativereportstatuschanges
                     where questionnaireidentity = any(@questionnairesList) and status = any(@allowedStatuses)
-                  ) select min(date), max(date) from dates", 
+                  ) select min(date)::timestamp, max(date)::timestamp from dates", 
                  new { questionnairesList, AllowedStatuses });
 
             if (dates.min == null && dates.max == null) // we have no data at all
@@ -79,18 +81,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 return new ChartStatisticsView();
             }
 
-            var minDateTime = dates.min?.ToDateTime(TimeOnly.MinValue);
-            var maxDateTime = dates.max?.ToDateTime(TimeOnly.MinValue);
-
-            var leftEdge = new[] { input.From ?? minDateTime?.AddDays(-1), input.To ?? minDateTime?.AddDays(-1) }.Min() ?? DateTime.MinValue;
-            var rightEdge = new[] {input.From ?? minDateTime ?? DateTime.MinValue, input.To ?? DateTime.UtcNow}.Max();
+            var leftEdge = new[] { input.From ?? dates.min?.AddDays(-1), input.To ?? dates.min?.AddDays(-1) }.Min() ?? DateTime.MinValue;
+            var rightEdge = new[] {input.From ?? dates.min ?? DateTime.MinValue, input.To ?? DateTime.UtcNow}.Max();
             
             var queryParams = new
             {
                 questionnairesList,
                 AllowedStatuses,
                 // we should always build report from the very beginning, this param will ensure that data accumulated correctly
-                minDateQuery = FormatDate(new[] { input.From ?? minDateTime?.AddDays(-1), minDateTime }.Min() ?? DateTime.MinValue),
+                minDateQuery = FormatDate(new[] { input.From ?? dates.min?.AddDays(-1), dates.min }.Min() ?? DateTime.MinValue),
                 minDate = FormatDate(leftEdge),
                 maxDate = FormatDate(rightEdge)
             };
@@ -99,16 +98,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             // timespan CTE will produce cross product of dates and available statuses
             // report CTE will produce report over all data
             // do not move date filtering inside report CTE as it will affect partition query
-            var rawData = this.unitOfWork.Session.Connection.Query<(DateOnly date, InterviewStatus status, long count)>(
+            var rawData = this.unitOfWork.Session.Connection.Query<(DateTime date, InterviewStatus status, long count)>(
                 $@"with 
-                        dates as (select generate_series(@minDateQuery::date, @maxDate::date, interval '1 day')::date as date),
+                        dates as (select generate_series(@minDateQuery::date, @maxDate::date, interval '1 day')::timestamp as date),
                         timespan as (select date, status from dates as date, unnest(@AllowedStatuses) as status),
                         report as 
                         (
                             select span.date, span.status, 
                                     sum(sum(coalesce(cum.changevalue, 0))) over (partition by span.status order by span.date) as count
                             from timespan as span  
-                            left join cumulativereportstatuschanges cum on cum.date = span.date and cum.status = span.status
+                            left join cumulativereportstatuschanges cum on cum.date = span.date::date and cum.status = span.status
                                 and cum.questionnaireidentity = any(@questionnairesList)
                             group by 1,2 order by 1
                         )
@@ -129,14 +128,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 }
 
                 var dataSet = statusMap[row.status];
-                dataSet.AddOrReplaceLast(FormatDate(row.date.ToDateTime(TimeOnly.MinValue)), row.count);
+                dataSet.AddOrReplaceLast(FormatDate(row.date), row.count);
             }
 
             view.DataSets = view.DataSets.Where(ds => ds.AllZeros == false).ToList();
             view.From = FormatDate(leftEdge);
             view.To = FormatDate(rightEdge);
-            view.MaxDate = FormatDate(maxDateTime!.Value);
-            view.MinDate = FormatDate(minDateTime!.Value);
+            view.MaxDate = FormatDate(dates.max!.Value);
+            view.MinDate = FormatDate(dates.min!.Value);
 
             return view;
         }
