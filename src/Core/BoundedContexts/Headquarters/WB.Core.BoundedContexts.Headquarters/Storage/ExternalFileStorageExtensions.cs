@@ -26,6 +26,9 @@ public static class ExternalFileStorageExtensions
             await externalFileStorage.RemoveAsync(files.Select(file => file.Path)).ConfigureAwait(false);
         }
 
-        throw new InvalidOperationException($"Unable to remove all files stored under '{prefix}'.");
+        var leftovers = await externalFileStorage.ListAsync(prefix).ConfigureAwait(false);
+
+        if (leftovers != null && leftovers.Count > 0)
+            throw new InvalidOperationException($"Unable to remove all files stored under '{prefix}'.");
     }
 }
