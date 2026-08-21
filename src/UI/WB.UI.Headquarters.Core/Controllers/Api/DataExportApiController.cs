@@ -313,7 +313,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (state == null)
                 return BadRequest("Export parameters not found");
 
-            var requesterUserId = User.UserId();
+            var requesterUserId = this.User?.UserId();
             if (requesterUserId == null)
                 return Unauthorized();
 
@@ -335,11 +335,14 @@ namespace WB.UI.Headquarters.Controllers.Api
         [EnableCors("export")]
         [ObservingNotAllowed]
         [IgnoreAntiforgeryToken]
-        [AllowAnonymous]
         public async Task<ActionResult> ExportToExternalStorage(ExportToExternalStorageModel model)
         {
             logger.LogInformation($"Export to external storage requested");
-            var state = this.TryRestoreExternalStorageState(model?.State);
+            var requesterUserId = this.User?.UserId();
+            if (requesterUserId == null)
+                return Unauthorized();
+
+            var state = this.TryRestoreExternalStorageState(model?.State, requesterUserId.Value);
             if (state == null)
                 return BadRequest("Export parameters not found");
             
@@ -393,7 +396,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
         }
 
-        private ExternalStorageStateModel TryRestoreExternalStorageState(string protectedState)
+        private ExternalStorageStateModel TryRestoreExternalStorageState(string protectedState, Guid requesterUserId)
         {
             if (string.IsNullOrWhiteSpace(protectedState))
                 return null;
@@ -417,7 +420,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (!this.memoryCache.TryGetValue(GetExternalStorageStateCacheKey(payload.Nonce), out Guid storedUserId))
                 return null;
 
-            if (storedUserId != payload.RequesterUserId)
+            if (storedUserId != payload.RequesterUserId || storedUserId != requesterUserId)
                 return null;
 
             this.memoryCache.Remove(GetExternalStorageStateCacheKey(payload.Nonce));
