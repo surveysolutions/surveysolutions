@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="TemplateNotFound" xml:space="preserve">
+        <value>កម្រងសំណួរ "{0}" មិនអាចរកឃើញទេ។ សូម​ធ្វើ​បញ្ជី​សំណួរ​ឡើងវិញ។</value>
+    </data>
+    <data name="Questionnaire_verification_failed" xml:space="preserve">
+        <value>កម្រងសំណួរ "{0}" មានកំហុសក្នុងការចងក្រង។ សូមកែតម្រូវពួកវានៅក្នុង Designer។</value>
+    </data>
+    <data name="ServerError" xml:space="preserve">
+        <value>កំហុសម៉ាស៊ីនមេខាងក្នុងបានកើតឡើង។ សូមទាក់ទងក្រុមគាំទ្ររបស់អ្នក។</value>
+    </data>
+    <data name="RequestTimeout" xml:space="preserve">
+        <value>អស់ពេលនៅពេលព្យាយាមភ្ជាប់ទៅអ្នករចនា។ សូមពិនិត្យមើលការតភ្ជាប់អ៊ីនធឺណិតរបស់អ្នក។</value>
+    </data>
+    <data name="ServiceUnavailable" xml:space="preserve">
+        <value>អ្នករចនាមិនអាចប្រើបានទេ។  សូមប្រាកដថា អ្នករចនាមិនស្ថិតនៅក្នុងរបៀបថែទាំទេ។</value>
+    </data>
+    <data name="IncorrectUserNameOrPassword" xml:space="preserve">
+        <value>ឈ្មោះអ្នកប្រើ ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ។</value>
+    </data>
+    <data name="InvalidAuthenticatorCode" xml:space="preserve">
+        <value>លេខកូដផ្ទៀងផ្ទាត់មិនត្រឹមត្រូវ។</value>
+    </data>
+    <data name="InvalidRecoveryCode" xml:space="preserve">
+        <value>បានបញ្ចូលលេខកូដសង្គ្រោះមិនត្រឹមត្រូវ។</value>
+    </data>
+    <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
+        <value>កម្រងសំណួរមួយទៀតកំពុងត្រូវបាននាំចូលមកការិយាល័យកណ្តាលឥឡូវនេះ។</value>
+    </data>
+    <data name="SiteAccessNotAllowed" xml:space="preserve">
+        <value>អ្នកមិនមានសិទ្ធិចូលប្រើគេហទំព័រនេះទេ។ ទាក់ទងអ្នកគ្រប់គ្រងរបស់អ្នក។</value>
+    </data>
+    <data name="PleaseFillCaptcha" xml:space="preserve">
+        <value>សូមបំពេញក្នុងវាល captcha</value>
+    </data>
+    <data name="ApiUserIsNotAllowedToSignIn" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់ Api មិនត្រូវបានអនុញ្ញាតឱ្យចូលដោយប្រើចំណុចប្រទាក់អ្នកប្រើទេ។</value>
+    </data>
+</root>
