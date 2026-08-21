@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Controllers;
 using WB.Enumerator.Native.WebInterview.Models;
@@ -37,27 +39,29 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             interview.AnswerPictureQuestion(UserId, QuestionId, RosterVector.Empty, DateTimeOffset.UtcNow, existingFilename);
 
             var commandService = new Mock<ICommandService>();
-            var imageFileStorage = new Mock<IImageFileStorage>();
-            var deleteCompletion = new TaskCompletionSource<bool>();
+            var imageFileStorage = new BlockingImageFileStorage();
+            var commandExecuted = new TaskCompletionSource<bool>();
 
-            imageFileStorage
-                .Setup(s => s.RemoveInterviewBinaryData(interview.Id, existingFilename))
-                .Returns(deleteCompletion.Task);
+            commandService
+                .Setup(s => s.Execute(It.IsAny<ICommand>(), null))
+                .Callback(() => commandExecuted.SetResult(true));
 
-            var controller = CreateController(interview, questionnaire, commandService.Object, imageFileStorage.Object);
+            var controller = CreateController(interview, questionnaire, commandService.Object, imageFileStorage);
             var request = new CommandsController.RemoveAnswerRequest
             {
                 Identity = Identity.Create(QuestionId, RosterVector.Empty).ToString()
             };
 
-            var resultTask = controller.RemoveAnswer(interview.Id, request);
+            var resultTask = Task.Run(async () => await controller.RemoveAnswer(interview.Id, request));
+            await commandExecuted.Task;
+            await imageFileStorage.RemoveStarted.Task;
 
             Assert.That(resultTask.IsCompleted, Is.False);
             commandService.Verify(s => s.Execute(It.IsAny<RemoveAnswerCommand>(), null), Times.Once);
-            imageFileStorage.Verify(s => s.RemoveInterviewBinaryData(interview.Id, existingFilename), Times.Once);
-            imageFileStorage.Verify(s => s.RemoveInterviewBinaryData(interview.Id, "photo__.jpg"), Times.Never);
+            Assert.That(imageFileStorage.RemovedInterviewId, Is.EqualTo(interview.Id));
+            Assert.That(imageFileStorage.RemovedFileName, Is.EqualTo(existingFilename));
 
-            deleteCompletion.SetResult(true);
+            imageFileStorage.RemoveCompletion.SetResult(true);
 
             var result = await resultTask;
 
@@ -86,7 +90,39 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 Mock.Of<IAudioFileStorage>(),
                 questionnaireRepository.Object,
                 statefulInterviewRepository.Object,
-                Mock.Of<IWebInterviewNotificationService>());
+                Mock.Of<IWebInterviewNotificationService>(),
+                Stub.Lock());
+        }
+
+        private class BlockingImageFileStorage : IImageFileStorage
+        {
+            public Guid? RemovedInterviewId { get; private set; }
+            public string RemovedFileName { get; private set; }
+            public TaskCompletionSource<bool> RemoveStarted { get; } = new();
+            public TaskCompletionSource<bool> RemoveCompletion { get; } = new();
+
+            public Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string fileName) => Task.FromResult<byte[]>(null);
+
+            public byte[] GetInterviewBinaryData(Guid interviewId, string fileName) => null;
+
+            public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId) =>
+                Task.FromResult(new List<InterviewBinaryDataDescriptor>());
+
+            public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
+            {
+            }
+
+            public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
+            {
+                this.RemovedInterviewId = interviewId;
+                this.RemovedFileName = fileName;
+                this.RemoveStarted.SetResult(true);
+                return this.RemoveCompletion.Task;
+            }
+
+            public string GetPath(Guid interviewId, string filename = null) => filename;
+
+            public Task RemoveAllBinaryDataForInterviewsAsync(List<Guid> interviewIds) => Task.CompletedTask;
         }
 
         private class TestCommandsController : CommandsController
@@ -97,8 +133,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 IAudioFileStorage audioFileStorage,
                 IQuestionnaireStorage questionnaireRepository,
                 IStatefulInterviewRepository statefulInterviewRepository,
-                IWebInterviewNotificationService webInterviewNotificationService)
-                : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService)
+                IWebInterviewNotificationService webInterviewNotificationService,
+                WB.Core.Infrastructure.Aggregates.IAggregateLock aggregateLock)
+                : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService, aggregateLock)
             {
             }
 

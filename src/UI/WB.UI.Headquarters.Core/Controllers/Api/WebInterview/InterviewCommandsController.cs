@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -48,6 +49,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository statefulInterviewRepository, 
             IWebInterviewNotificationService webInterviewNotificationService, 
+            IAggregateLock aggregateLock,
             IAuthorizedUser authorizedUser, 
             IInterviewFactory interviewFactory,
             IUserViewFactory userViewFactory, 
@@ -56,7 +58,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage,
             IHttpContextAccessor contextAccessor
             ) 
-            : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService)
+            : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService, aggregateLock)
         {
             this.authorizedUser = authorizedUser;
             this.interviewFactory = interviewFactory;

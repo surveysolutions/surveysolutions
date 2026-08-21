@@ -76,13 +76,14 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         }
 
         [Test]
-        public async Task Image_when_previous_answer_differs_only_by_extension_case_does_not_remove_old_file()
+        public async Task Image_when_previous_answer_differs_only_by_extension_case_reuses_exact_stored_key()
         {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.MultimediaQuestion(questionId: QuestionId, variable: "photo"));
             var interview = SetUp.StatefulInterview(questionnaire);
 
-            interview.AnswerPictureQuestion(UserId, QuestionId, RosterVector.Empty, DateTimeOffset.UtcNow, "photo__.JPG");
+            const string existingFilename = "photo__.JPG";
+            interview.AnswerPictureQuestion(UserId, QuestionId, RosterVector.Empty, DateTimeOffset.UtcNow, existingFilename);
 
             var imageFileStorage = new Mock<IImageFileStorage>();
             var commandService = new Mock<ICommandService>();
@@ -93,6 +94,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 
             await controller.Image(interview.Id, questionIdentity.ToString(), file);
 
+            imageFileStorage.Verify(s => s.StoreInterviewBinaryData(interview.Id, existingFilename, It.IsAny<byte[]>(), "image/jpeg"), Times.Once);
+            commandService.Verify(s => s.Execute(It.Is<AnswerPictureQuestionCommand>(c => c.PictureFileName == existingFilename), null), Times.Once);
             imageFileStorage.Verify(s => s.RemoveInterviewBinaryData(It.IsAny<Guid>(), It.IsAny<string>()), Times.Never);
         }
 
@@ -221,7 +224,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 webInterviewNotificationService: Mock.Of<IWebInterviewNotificationService>(),
                 audioFileStorage: Mock.Of<IAudioFileStorage>(),
                 audioProcessingService: Mock.Of<IAudioProcessingService>(),
-                imageFileStorage: imageFileStorage ?? Mock.Of<IImageFileStorage>());
+                imageFileStorage: imageFileStorage ?? Mock.Of<IImageFileStorage>(),
+                aggregateLock: Stub.Lock());
 
             controller.ControllerContext = new ControllerContext
             {
