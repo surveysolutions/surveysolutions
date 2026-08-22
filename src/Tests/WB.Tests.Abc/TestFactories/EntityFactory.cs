@@ -663,7 +663,8 @@ namespace WB.Tests.Abc.TestFactories
             string questionText = null,
             IEnumerable<ValidationCondition> validationConditions = null, 
             Guid? linkedToRosterId = null,
-            IEnumerable<Answer> specialValues = null)
+            IEnumerable<Answer> specialValues = null,
+            bool isNonNegative = false)
             => new NumericQuestion
             {
                 QuestionText = questionText ?? "text",
@@ -678,7 +679,8 @@ namespace WB.Tests.Abc.TestFactories
                 UseFormatting = useFormatting,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 LinkedToRosterId = linkedToRosterId,
-                Answers = new List<Answer>(specialValues ?? new Answer[] { })
+                Answers = new List<Answer>(specialValues ?? new Answer[] { }),
+                IsNonNegative = isNonNegative
             };
 
         public NumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -705,7 +707,8 @@ namespace WB.Tests.Abc.TestFactories
             IEnumerable<ValidationCondition> validationConditions = null,
             int? countOfDecimalPlaces = null,
             IEnumerable<Answer> specialValues = null, 
-            bool preFilled = false)
+            bool preFilled = false,
+            bool isNonNegative = false)
             => new NumericQuestion
             {
                 PublicKey = id ?? Guid.NewGuid(),
@@ -718,6 +721,7 @@ namespace WB.Tests.Abc.TestFactories
                 CountOfDecimalPlaces = countOfDecimalPlaces,
                 Answers = new List<Answer>(specialValues ?? new Answer[] { }),
                 Featured = preFilled,
+                IsNonNegative = isNonNegative,
             };
 
         public Answer Option(string value = null, string text = null, string parentValue = null, Guid? id = null)
