@@ -13,6 +13,7 @@ using NUnit.Framework;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.UI.Designer.Areas.Identity.Pages.Account;
+using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.Tests.Unit.Designer.Areas.Identity.Pages.Account
@@ -88,8 +89,35 @@ namespace WB.Tests.Unit.Designer.Areas.Identity.Pages.Account
             Assert.That(user.LastLoginAtUtc, Is.Null);
         }
 
+        [Test]
+        public async Task when_recaptcha_v3_action_does_not_match_should_return_page_with_error()
+        {
+            var userManagerMock = CreateUserManager();
+            var signInManagerMock = CreateSignInManager(userManagerMock.Object);
+
+            var model = CreateLoginModel(
+                signInManagerMock.Object,
+                userManagerMock.Object,
+                shouldShowCaptcha: true,
+                captchaType: CaptchaProviderType.RecaptchaV3,
+                recaptchaResponse: new RecaptchaResponse { success = true, score = 0.9, action = "other" });
+
+            var result = await model.OnPostAsync("/manage");
+
+            Assert.That(result, Is.InstanceOf<PageResult>());
+            Assert.That(model.ErrorMessage, Is.EqualTo(ErrorMessages.You_did_not_type_the_verification_word_correctly));
+            signInManagerMock.Verify(x => x.PasswordSignInAsync(
+                It.IsAny<DesignerIdentityUser>(),
+                It.IsAny<string>(),
+                It.IsAny<bool>(),
+                It.IsAny<bool>()), Times.Never);
+        }
+
         private static LoginModel CreateLoginModel(SignInManager<DesignerIdentityUser> signInManager,
-            UserManager<DesignerIdentityUser> userManager)
+            UserManager<DesignerIdentityUser> userManager,
+            bool shouldShowCaptcha = false,
+            CaptchaProviderType captchaType = CaptchaProviderType.None,
+            RecaptchaResponse recaptchaResponse = null)
         {
             var urlHelper = new Mock<IUrlHelper>();
             urlHelper.Setup(x => x.IsLocalUrl(It.IsAny<string>()))
@@ -99,14 +127,18 @@ namespace WB.Tests.Unit.Designer.Areas.Identity.Pages.Account
 
             var captchaService = new Mock<ICaptchaService>();
             captchaService.Setup(x => x.ShouldShowCaptcha(It.IsAny<string>()))
-                .Returns(false);
+                .Returns(shouldShowCaptcha);
+            var recaptchaService = new Mock<IRecaptchaService>();
+            recaptchaService.Setup(x => x.Validate(It.IsAny<HttpRequest>(), It.IsAny<bool>()))
+                .ReturnsAsync(recaptchaResponse ?? new RecaptchaResponse { success = true, score = 0.9, action = "login" });
 
             var model = new LoginModel(
                 signInManager,
                 userManager,
                 Mock.Of<ILogger<LoginModel>>(),
                 captchaService.Object,
-                Mock.Of<IRecaptchaService>())
+                recaptchaService.Object,
+                Options.Create(new CaptchaConfig { CaptchaType = captchaType, RecaptchaV3MinimumScore = 0.5 }))
             {
                 Input = new LoginModel.InputModel
                 {
