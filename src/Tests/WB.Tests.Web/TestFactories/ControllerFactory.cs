@@ -26,6 +26,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -35,6 +36,7 @@ using WB.Tests.Abc.Storage;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer;
+using WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1;
 using WB.UI.Headquarters.Controllers.Services.Export;
 using WB.UI.Headquarters.Services;
 using AssignmentsController = WB.UI.Headquarters.Controllers.Api.PublicApi.AssignmentsController;
@@ -70,7 +72,8 @@ namespace WB.Tests.Web.TestFactories
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettings = null,
             IPlainStorageAccessor<ServerSettings> tenantSettings = null,
             IInterviewerVersionReader interviewerVersionReader = null,
-            IUserToDeviceService userToDeviceService = null)
+            IUserToDeviceService userToDeviceService = null,
+            IProductVersion productVersion = null)
         {
             var result = new InterviewerControllerBase(
                 tabletInformationService ?? Mock.Of<ITabletInformationService>(),
@@ -85,7 +88,36 @@ namespace WB.Tests.Web.TestFactories
                 Mock.Of<IOptions<HeadquartersConfig>>(c => c.Value == new HeadquartersConfig()
                 {
                     IgnoreCompatibility = false
-                })
+                }),
+                productVersion ?? Mock.Of<IProductVersion>()
+            );
+
+            result.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext()
+            };
+            return result;
+        }
+
+        public SupervisorControllerBase SupervisorApiController(
+            ISupervisorSyncProtocolVersionProvider syncVersionProvider = null,
+            IAuthorizedUser authorizedUser = null,
+            IPlainKeyValueStorage<InterviewerSettings> interviewerSettings = null,
+            IPlainStorageAccessor<ServerSettings> tenantSettings = null,
+            IInterviewerVersionReader interviewerVersionReader = null,
+            IProductVersion productVersion = null)
+        {
+            var result = new SupervisorControllerBase(
+                Mock.Of<ITabletInformationService>(),
+                syncVersionProvider ?? new SupervisorSyncProtocolVersionProvider(),
+                Mock.Of<IUserViewFactory>(),
+                interviewerSettings ?? Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(),
+                tenantSettings ?? new TestPlainStorage<ServerSettings>(),
+                Mock.Of<IClientApkProvider>(),
+                authorizedUser ?? Mock.Of<IAuthorizedUser>(),
+                Mock.Of<IInterviewInformationFactory>(),
+                interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
+                productVersion ?? Mock.Of<IProductVersion>()
             );
 
             result.ControllerContext = new ControllerContext
