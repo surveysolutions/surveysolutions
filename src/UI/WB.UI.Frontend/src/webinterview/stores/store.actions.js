@@ -359,6 +359,9 @@ export default {
     changeSection({ commit, rootState }, { to, from }) {
         const interviewId = rootState.route.params.interviewId
         commit('CURRENT_SECTION', { interviewId: interviewId, sectionId: to })
+        if (to !== from) {
+            commit('CLEAR_BREADCRUMBS')
+        }
         return hubApi.changeSection(to, from)
     },
 
