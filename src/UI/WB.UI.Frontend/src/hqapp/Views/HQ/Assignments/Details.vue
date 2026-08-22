@@ -656,28 +656,24 @@ export default {
             return false
         },
         async updateTargetArea() {
-            const self = this
-
             const validationResult = await this.$refs.targetAreaForm.validate()
             if (validationResult.valid != true) {
                 return false
             }
 
-            this.$hq.Assignments.changeTargetArea(this.model.id, this.editedTargetAreaName)
-                .then(() => {
-
-                    window.location.reload(true)
+            try {
+                await this.$hq.Assignments.changeTargetArea(this.model.id, this.editedTargetAreaName)
+                window.location.reload(true)
+                return true
+            } catch (error) {
+                const msg = error?.response?.data?.message
+                    || error?.response?.data
+                    || error?.message
+                this.$refs.targetAreaForm.setErrors({
+                    editedTargetAreaName: msg,
                 })
-                .catch(error => {
-                    const msg = error?.response?.data?.message
-                        || error?.response?.data
-                        || error?.message
-                    self.$refs.targetAreaForm.setErrors({
-                        editedTargetAreaName: msg,
-                    })
-                })
-
-            return false
+                return false
+            }
         },
 
         openCloseModal() {
