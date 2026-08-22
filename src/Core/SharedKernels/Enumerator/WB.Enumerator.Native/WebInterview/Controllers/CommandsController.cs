@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -26,10 +28,11 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         protected readonly IQuestionnaireStorage questionnaireRepository;
         protected readonly IStatefulInterviewRepository statefulInterviewRepository;
         protected readonly IWebInterviewNotificationService webInterviewNotificationService;
+        protected readonly IAggregateLock aggregateLock;
 
         public CommandsController(ICommandService commandService, IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage,
             IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository statefulInterviewRepository,
-            IWebInterviewNotificationService webInterviewNotificationService)
+            IWebInterviewNotificationService webInterviewNotificationService, IAggregateLock aggregateLock)
         {
             this.commandService = commandService;
             this.imageFileStorage = imageFileStorage;
@@ -37,6 +40,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             this.questionnaireRepository = questionnaireRepository;
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.webInterviewNotificationService = webInterviewNotificationService;
+            this.aggregateLock = aggregateLock;
         }
 
         protected virtual Guid GetCommandResponsibleId(Guid interviewId)
@@ -251,36 +255,62 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         }
 
         [ObservingNotAllowed]
-        public virtual IActionResult RemoveAnswer(Guid interviewId, RemoveAnswerRequest request)
+        public virtual Task<IActionResult> RemoveAnswer(Guid interviewId, RemoveAnswerRequest request)
         {
-            if (!ModelState.IsValid) return BadRequest(new { errorMessage = InvalidRequestMessage });
+            if (!ModelState.IsValid) return Task.FromResult<IActionResult>(BadRequest(new { errorMessage = InvalidRequestMessage }));
             if (!TryGetIdentity(request, out var identity)) 
-                return BadRequest(new { errorMessage = InvalidRequestMessage });
+                return Task.FromResult<IActionResult>(BadRequest(new { errorMessage = InvalidRequestMessage }));
 
-            try
+            this.aggregateLock.RunWithLock(interviewId.FormatGuid(), () =>
             {
-                var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
-                var questionnaire = questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, null);
-                var questionType = questionnaire.GetQuestionType(identity.Id);
+                QuestionType? questionType = null;
+                string fileName = null;
 
-                if (questionType == QuestionType.Multimedia)
+                try
                 {
-                    var fileName = $@"{questionnaire.GetQuestionVariableName(identity.Id)}{string.Join(@"-", identity.RosterVector.Select(rv => rv))}.jpg";
-                    this.imageFileStorage.RemoveInterviewBinaryData(interviewId, fileName);
-                }
-                else if (questionType == QuestionType.Audio)
-                {
-                    var fileName = $@"{questionnaire.GetQuestionVariableName(identity.Id)}__{identity.RosterVector}.m4a";
-                    this.audioFileStorage.RemoveInterviewBinaryData(interviewId, fileName);
-                }
-            }
-            catch (Exception e)
-            {
-                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, identity, e);
-            }
+                    var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
+                    var question = interview.GetQuestion(identity);
 
-            this.ExecuteQuestionCommand(new RemoveAnswerCommand(interviewId, GetCommandResponsibleId(interviewId), identity));
-            return Ok();
+                    if (question.IsMultimedia)
+                    {
+                        questionType = QuestionType.Multimedia;
+                        fileName = question.IsAnswered()
+                            ? question.GetAsInterviewTreeMultimediaQuestion().GetAnswer()?.FileName
+                            : null;
+                    }
+                    else if (question.IsAudio)
+                    {
+                        questionType = QuestionType.Audio;
+                        fileName = question.IsAnswered()
+                            ? question.GetAsInterviewTreeAudioQuestion().GetAnswer()?.FileName
+                            : null;
+                    }
+                }
+                catch (Exception e)
+                {
+                    webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, identity, e);
+                }
+
+                if (!this.TryExecuteQuestionCommand(new RemoveAnswerCommand(interviewId, GetCommandResponsibleId(interviewId), identity)))
+                    return;
+
+                try
+                {
+                    if (fileName != null)
+                    {
+                        if (questionType == QuestionType.Multimedia)
+                            this.imageFileStorage.RemoveInterviewBinaryData(interviewId, fileName).GetAwaiter().GetResult();
+                        else if (questionType == QuestionType.Audio)
+                            this.audioFileStorage.RemoveInterviewBinaryData(interviewId, fileName).GetAwaiter().GetResult();
+                    }
+                }
+                catch (Exception e)
+                {
+                    webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, identity, e);
+                }
+            });
+
+            return Task.FromResult<IActionResult>(Ok());
         }
 
         [ObservingNotAllowed]
@@ -310,10 +340,14 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         [ObservingNotAllowed]
         protected void ExecuteQuestionCommand(QuestionCommand command)
+            => this.TryExecuteQuestionCommand(command);
+
+        protected bool TryExecuteQuestionCommand(QuestionCommand command)
         {
             try
             {
                 commandService.Execute(command);
+                return true;
             }
             catch (InterviewException ie) when (ie.ExceptionType == InterviewDomainExceptionType.AssignmentLimitReached)
             {
@@ -323,6 +357,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             {
                 webInterviewNotificationService.MarkAnswerAsNotSaved(command.InterviewId, command.Question, e);
             }
+
+            return false;
         }
     }
 }

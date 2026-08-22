@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -47,6 +49,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository statefulInterviewRepository, 
             IWebInterviewNotificationService webInterviewNotificationService, 
+            IAggregateLock aggregateLock,
             IAuthorizedUser authorizedUser, 
             IInterviewFactory interviewFactory,
             IUserViewFactory userViewFactory, 
@@ -55,7 +58,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage,
             IHttpContextAccessor contextAccessor
             ) 
-            : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService)
+            : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService, aggregateLock)
         {
             this.authorizedUser = authorizedUser;
             this.interviewFactory = interviewFactory;
@@ -133,7 +136,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
         [HttpPost]
         [Route("removeAnswer")]
-        public override IActionResult RemoveAnswer(Guid interviewId, [FromBody]RemoveAnswerRequest request) => base.RemoveAnswer(interviewId, request);
+        public override Task<IActionResult> RemoveAnswer(Guid interviewId, [FromBody]RemoveAnswerRequest request) => base.RemoveAnswer(interviewId, request);
 
         [HttpPost]
         [Route("sendNewComment")]

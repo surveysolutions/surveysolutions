@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
@@ -17,8 +19,8 @@ namespace WB.UI.WebTester.Controllers
 
         public InterviewCommandsController(ICommandService commandService, IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, 
             IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository statefulInterviewRepository, 
-            IWebInterviewNotificationService webInterviewNotificationService, IEvictionNotifier evictionNotify) 
-            : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService)
+            IWebInterviewNotificationService webInterviewNotificationService, IAggregateLock aggregateLock, IEvictionNotifier evictionNotify) 
+            : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService, aggregateLock)
         {
             this.evictionNotify = evictionNotify;
         }
@@ -77,7 +79,7 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpPost]
         [Route("removeAnswer")]
-        public override IActionResult RemoveAnswer(Guid interviewId, [FromBody]RemoveAnswerRequest request) => base.RemoveAnswer(interviewId, request);
+        public override Task<IActionResult> RemoveAnswer(Guid interviewId, [FromBody]RemoveAnswerRequest request) => base.RemoveAnswer(interviewId, request);
 
         [HttpPost]
         [Route("sendNewComment")]
