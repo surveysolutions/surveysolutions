@@ -534,7 +534,11 @@ export default {
 
         async queueExport() {
             if (this.dataDestination != 'zip') {
-                this.redirectToExternalStorage()
+                try {
+                    await this.redirectToExternalStorage()
+                } catch (error) {
+                    this.$errorHandler(error, this)
+                }
                 return
             }
 
@@ -588,7 +592,7 @@ export default {
             }
         },
 
-        redirectToExternalStorage() {
+        async redirectToExternalStorage() {
             const exportParams = this.getExportParams(
                 this.questionnaireId.key,
                 this.questionnaireVersion.key,
@@ -617,7 +621,17 @@ export default {
 
             let storageSettings = this.externalStoragesSettings[this.dataDestination]
 
-            const jsonState = JSON.stringify(state)
+            const stateResponse = await this.$http.post(
+                window.CONFIG.model.api.createExternalStorageStateUrl,
+                state,
+                {
+                    headers: {
+                        'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
+                    },
+                }
+            )
+
+            const protectedState = stateResponse.data
 
             var request = {
                 response_type: this.externalStoragesSettings.responseType,
@@ -630,7 +644,7 @@ export default {
                     ';' +
                     window.CONFIG.model.api.exportToExternalStorageUrl +
                     ';' +
-                    jsonState
+                    protectedState
                 ),
                 scope: storageSettings.scope,
             }
