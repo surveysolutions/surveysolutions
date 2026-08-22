@@ -171,6 +171,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
           InterviewExportedAction[] beginStatuses,
           InterviewExportedAction[] endStatuses)
         {
+            // Use List<> to avoid C# 14+ compiling Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T)
+            // which puts an op_Implicit call into the expression tree that NHibernate cannot evaluate.
+            var beginList = beginStatuses.ToList();
+            var endList = endStatuses.ToList();
             return this.interviewStatusesStorage.Query(_ =>
             {
                 var query = _;
@@ -189,8 +193,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     .Where(ics =>
                         ics.EndStatusTimestamp >= @from &&
                         ics.EndStatusTimestamp < to &&
-                        endStatuses.Contains(ics.EndStatus) &&
-                        beginStatuses.Contains(ics.BeginStatus));
+                        endList.Contains(ics.EndStatus) &&
+                        beginList.Contains(ics.BeginStatus));
             });
         }
 
@@ -201,6 +205,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             DateTime to,
             InterviewExportedAction[] statuses)
         {
+            // Use List<> to avoid C# 14+ compiling Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T)
+            // which puts an op_Implicit call into the expression tree that NHibernate cannot evaluate.
+            var statusList = statuses.ToList();
             return this.interviewStatusesStorage.Query(_ =>
             {
                 var query = _;
@@ -219,7 +226,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     .Where(ics =>
                         ics.Timestamp >= fromDate &&
                         ics.Timestamp < to &&
-                        statuses.Contains(ics.Status) &&
+                        statusList.Contains(ics.Status) &&
                         ics.TimespanWithPreviousStatusLong.HasValue);
             });
         }

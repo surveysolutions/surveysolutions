@@ -1,9 +1,13 @@
 ﻿using System;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using SixLabors.ImageSharp;
@@ -28,12 +32,16 @@ namespace WB.UI.Designer.Code
             else
             {
                 var urlHelperFactory = htmlHelper.ViewContext.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>();
-                var actionContextAccessor = htmlHelper.ViewContext.HttpContext.RequestServices.GetRequiredService<IActionContextAccessor>();
+                var actionContextAccessor = htmlHelper.ViewContext.HttpContext.RequestServices.GetRequiredService<IHttpContextAccessor>();
                 
-                if (actionContextAccessor?.ActionContext == null)
+                if (actionContextAccessor.HttpContext == null)
                     throw new Exception("Invalid context");
                 
-                var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
+                var actionContext = new ActionContext(
+                    actionContextAccessor.HttpContext,
+                    actionContextAccessor.HttpContext.GetRouteData(),
+                    new ActionDescriptor());
+                var urlHelper = urlHelperFactory.GetUrlHelper(actionContext);
                 root = urlHelper.Content("~")!;
             }
             return ConvertToAbsoluteUrl(root, contentPath);
