@@ -6,6 +6,7 @@ namespace WB.UI.WebTester.Controllers
     {
         public IActionResult QuestionnaireWithErrors() => View();
 
-        public new IActionResult NotFound() => View();   
+        [HttpGet("error/404")]
+        public IActionResult Error404() => View("NotFound");
     }
 }
