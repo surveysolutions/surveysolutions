@@ -228,9 +228,11 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (request == null)
                 return this.BadRequest();
 
-            if (request.TargetArea != null && request.TargetArea.Length > AssignmentConstants.TargetAreaLengthLimit)
+            var normalizedTargetArea = string.IsNullOrWhiteSpace(request.TargetArea) ? null : request.TargetArea.Trim();
+
+            if (normalizedTargetArea != null && normalizedTargetArea.Length > AssignmentConstants.TargetAreaLengthLimit)
             {
-                var truncatedName = request.TargetArea.Length > 100 ? request.TargetArea.Substring(0, 100) + "…" : request.TargetArea;
+                var truncatedName = normalizedTargetArea.Length > 100 ? normalizedTargetArea.Substring(0, 100) + "…" : normalizedTargetArea;
                 return this.BadRequest(new {Message = string.Format(Maps.MapFileNameTooLong, truncatedName, AssignmentConstants.TargetAreaLengthLimit)});
             }
 
@@ -302,7 +304,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 answers,
                 null,
                 request.Comments,
-                string.IsNullOrWhiteSpace(request.TargetArea) ? null : request.TargetArea.Trim());
+                normalizedTargetArea);
                 
                 this.invitationService.CreateInvitationForWebInterview(assignment);
                 
