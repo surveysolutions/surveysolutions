@@ -296,4 +296,22 @@ Lý do có thể:
     <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
         <value>128 kbps, Âm thanh nổi, 48 kHz</value>
         </data>
+    <data name="AcceptableGpsLocationSource" xml:space="preserve">
+        <value>Nguồn vị trí được chấp nhận</value>
+        </data>
+    <data name="AcceptableGpsLocationSourceDescription" xml:space="preserve">
+        <value>Kiểm soát nguồn vị trí đo được nào được chấp nhận trong Ứng dụng Phỏng vấn khi trả lời câu hỏi GPS. Vị trí từ các nguồn không được chấp nhận sẽ bị từ chối.</value>
+        </data>
+    <data name="AcceptableGpsLocationSource_Any" xml:space="preserve">
+        <value>Bất kỳ nguồn nào (bao gồm cả vị trí giả lập)</value>
+        </data>
+    <data name="AcceptableGpsLocationSource_AnyNonMock" xml:space="preserve">
+        <value>Bất kỳ nguồn nào không phải là vị trí giả lập</value>
+        </data>
+    <data name="AcceptableGpsLocationSource_BuiltInOrExternalGps" xml:space="preserve">
+        <value>GPS tích hợp hoặc bên ngoài (cho phép vị trí giả lập)</value>
+        </data>
+    <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
+        <value>Chỉ GPS tích hợp (không bên ngoài, không vị trí giả lập)</value>
+        </data>
 </root>
