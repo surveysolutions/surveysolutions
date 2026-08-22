@@ -415,7 +415,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Klepnutím nahrajte zvuk</value>
   </data>
   <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
-    <value>Klepnutím zadejte GPS souřadnice</value>
+    <value>Zaznamenat GPS</value>
   </data>
   <data name="Interview_Questions_Integer_ProtectedValue" xml:space="preserve">
     <value>Odpověď na otázku by měla být větší nebo rovna {0}</value>

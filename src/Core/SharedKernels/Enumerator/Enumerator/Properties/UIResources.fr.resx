@@ -181,7 +181,7 @@
     <value>Votre identifiant ou mot de passe est incorrect</value>
   </data>
   <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
-    <value>Appuyez pour enregistrer le GPS</value>
+    <value>Enregistrer le GPS</value>
   </data>
   <data name="Interview_Questions_Audio_SaveAnswer" xml:space="preserve">
     <value>Appuyez pour enregistrer l'audio</value>
