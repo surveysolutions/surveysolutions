@@ -1,36 +1,16 @@
 <template>
-    <wb-question :question="$me"
-        questionCssClassName="text-question"
-        :no-comments="noComments">
+    <wb-question :question="$me" questionCssClassName="text-question" :no-comments="noComments">
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group">
-                    <div class="field"
-                        :class="{ answered: $me.isAnswered }">
-                        <input v-if="hasMask"
-                            ref="input"
-                            autocomplete="off"
-                            type="text"
-                            class="field-to-fill"
-                            :placeholder="noAnswerWatermark"
-                            :value="$me.answer"
-                            :disabled="!$me.acceptAnswer"
-                            v-blurOnEnterKey
-                            @blur="answerTextQuestion"
-                            v-maskedText="$me.mask"
+                    <div class="field" :class="{ answered: $me.isAnswered }">
+                        <input v-if="hasMask" ref="input" autocomplete="off" type="text" class="field-to-fill"
+                            :placeholder="noAnswerWatermark" :value="$me.answer" :disabled="!$me.acceptAnswer"
+                            v-blurOnEnterKey @blur="answerTextQuestion" v-maskedText="$me.mask"
                             :data-mask-completed="$me.isAnswered" />
-                        <textarea v-else
-                            v-autosize
-                            ref="inputTextArea"
-                            autocomplete="off"
-                            rows="1"
-                            :maxlength="$me.maxLength"
-                            class="field-to-fill"
-                            :placeholder="noAnswerWatermark"
-                            :value="$me.answer"
-                            :important="true"
-                            :disabled="!$me.acceptAnswer"
-                            v-blurOnEnterKey
+                        <textarea v-else v-autosize ref="inputTextArea" autocomplete="off" rows="1"
+                            :maxlength="$me.maxLength" class="field-to-fill" :placeholder="noAnswerWatermark"
+                            :value="$me.answer" :important="true" :disabled="!$me.acceptAnswer" v-blurOnEnterKey
                             @blur="answerTextQuestion"></textarea>
                         <wb-remove-answer />
                     </div>
