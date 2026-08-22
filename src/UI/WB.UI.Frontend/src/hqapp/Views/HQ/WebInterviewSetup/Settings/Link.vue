@@ -1,41 +1,24 @@
 <template>
-    <div role="tabpanel"
-        class="tab-pane page-preview-block"
-        id="link">
-        <Form v-slot="{ errors, meta }"
-            ref="linkPage"
-            class=""
-            :data-vv-scope="'linkPage'"
-            @submit="dummy">
+    <div role="tabpanel" class="tab-pane page-preview-block" id="link">
+        <Form v-slot="{ errors, meta }" ref="linkPage" class="" :data-vv-scope="'linkPage'" @submit="dummy">
             <div class="d-flex f-row">
                 <div class="costomization-block">
                     <div class="row-element mb-30">
                         <div class="h5">
                             {{ $t('WebInterviewSettings.Title') }}
                         </div>
-                        <div class="form-group"
-                            :class="{ 'has-error': errors.linkWelcome }">
-                            <div class="field"
-                                :class="{ 'answered': webInterviewPageMessages['linkWelcome'].text }">
-                                <Field as="textarea"
-                                    v-autosize
-                                    v-model="webInterviewPageMessages['linkWelcome'].text"
-                                    rules="required"
-                                    name="linkWelcome"
-                                    data-vv-name="linkWelcome"
-                                    ref="linkWelcome"
-                                    :min-height="77"
-                                    maxlength="200"
-                                    class="form-control js-elasticArea font-bold"
+                        <div class="form-group" :class="{ 'has-error': errors.linkWelcome }">
+                            <div class="field" :class="{ 'answered': webInterviewPageMessages['linkWelcome'].text }">
+                                <Field as="textarea" v-autosize v-model="webInterviewPageMessages['linkWelcome'].text"
+                                    rules="required" name="linkWelcome" data-vv-name="linkWelcome" ref="linkWelcome"
+                                    :min-height="77" maxlength="200" class="form-control js-elasticArea font-bold"
                                     placeholder="Please enter the main text">
                                 </Field>
-                                <button type="button"
-                                    @click="webInterviewPageMessages['linkWelcome'].text = ''"
+                                <button type="button" @click="webInterviewPageMessages['linkWelcome'].text = ''"
                                     class="btn btn-link btn-clear">
                                     <span></span>
                                 </button>
-                                <span class="help-block"
-                                    v-if="errors.linkWelcome">{{
+                                <span class="help-block" v-if="errors.linkWelcome">{{
                                     $t('WebInterviewSettings.FieldRequired') }}</span>
                             </div>
                         </div>
@@ -44,13 +27,10 @@
                         <div class="h5">
                             {{ $t('WebInterviewSettings.Description') }}
                         </div>
-                        <Field v-slot="{ field }"
-                            name="linkInvitationDescription"
+                        <Field v-slot="{ field }" name="linkInvitationDescription"
                             :value="webInterviewPageMessages['linkInvitation'].text">
 
-                            <md-editor ref="linkInvitation"
-                                v-bind="field"
-                                data-vv-name="linkInvitation"
+                            <md-editor ref="linkInvitation" v-bind="field" data-vv-name="linkInvitation"
                                 v-model="webInterviewPageMessages['linkInvitation'].text">
                             </md-editor>
 
@@ -59,14 +39,12 @@
                     </div>
 
                     <div class="">
-                        <button type="submit"
-                            :disabled="!meta.dirty ? 'disabled' : null"
+                        <button type="submit" :disabled="!meta.dirty ? 'disabled' : null"
                             @click="savePageTextEditMode($refs.linkPage, 'linkWelcome', 'linkInvitation')"
                             class="btn btn-md btn-success">
                             {{ $t('WebInterviewSettings.Save') }}
                         </button>
-                        <button type="submit"
-                            :disabled="!meta.dirty ? 'disabled' : null"
+                        <button type="submit" :disabled="!meta.dirty ? 'disabled' : null"
                             @click="cancelPageTextEditMode($refs.linkPage, 'linkWelcome', 'linkInvitation')"
                             class="btn btn-md btn-link">
                             {{ $t('WebInterviewSettings.Cancel') }}
@@ -80,8 +58,7 @@
 
                             <div class="text-example">
                                 <div class="row-element mb-30">
-                                    <Logo :hasLogo="hasLogo"
-                                        :logoUrl="logoUrl" />
+                                    <Logo :hasLogo="hasLogo" :logoUrl="logoUrl" />
                                 </div>
                                 <div class="row-element mb-20">
                                     <div class="h2">

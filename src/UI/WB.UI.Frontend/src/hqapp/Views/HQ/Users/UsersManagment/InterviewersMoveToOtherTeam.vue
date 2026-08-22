@@ -1,18 +1,12 @@
 <template>
     <div>
-        <Confirm id="move-interviewer-confirmation"
-            ref="move"
+        <Confirm id="move-interviewer-confirmation" ref="move"
             :title="$t('Pages.Interviewers_MoveInterviewerPopupTitle', { names: this.formatNames(this.interviewers) })"
             :disableOk="!whatToDoWithAssignments || !supervisor">
             <div class="alert">
-                <Typeahead ref="supervisorControl"
-                    control-id="supervisorToAssign"
-                    data-vv-name="supervisor"
-                    data-vv-as="supervisor"
-                    :placeholder="$t('Common.AllSupervisors')"
-                    :value="supervisor"
-                    :ajax-params="{ workspace: this.workspace }"
-                    :fetch-url="$config.model.supervisorWorkspaceUrl"
+                <Typeahead ref="supervisorControl" control-id="supervisorToAssign" data-vv-name="supervisor"
+                    data-vv-as="supervisor" :placeholder="$t('Common.AllSupervisors')" :value="supervisor"
+                    :ajax-params="{ workspace: this.workspace }" :fetch-url="$config.model.supervisorWorkspaceUrl"
                     v-on:selected="supervisorSelected" />
 
                 <br />
@@ -28,27 +22,18 @@
                     </p>
                 </div>
 
-                <div class="radio"
-                    v-if="supervisor && interviewersToMove.length > 0">
-                    <input id="reassignToOriginalSupervisor"
-                        v-model="whatToDoWithAssignments"
-                        name="whatToDoWithAssignments"
-                        value="ReassignToOriginalSupervisor"
-                        type="radio"
+                <div class="radio" v-if="supervisor && interviewersToMove.length > 0">
+                    <input id="reassignToOriginalSupervisor" v-model="whatToDoWithAssignments"
+                        name="whatToDoWithAssignments" value="ReassignToOriginalSupervisor" type="radio"
                         class="wb-radio" />
                     <label for="reassignToOriginalSupervisor">
                         <span class="tick"></span>
                         {{ $t('Pages.Interviewers_ReassignToOriginalSupervisor') }}
                     </label>
                 </div>
-                <div class="radio"
-                    v-if="supervisor && interviewersToMove.length > 0">
-                    <input id="moveAllToNewTeam"
-                        type="radio"
-                        v-model="whatToDoWithAssignments"
-                        name="whatToDoWithAssignments"
-                        value="MoveAllToNewTeam"
-                        class="wb-radio" />
+                <div class="radio" v-if="supervisor && interviewersToMove.length > 0">
+                    <input id="moveAllToNewTeam" type="radio" v-model="whatToDoWithAssignments"
+                        name="whatToDoWithAssignments" value="MoveAllToNewTeam" class="wb-radio" />
                     <label for="moveAllToNewTeam">
                         <span class="tick"></span>
                         <span
@@ -56,16 +41,13 @@
                     </label>
                 </div>
 
-                <span class="text-warning"
-                    v-if="showWebModeReassignWarning">
+                <span class="text-warning" v-if="showWebModeReassignWarning">
                     {{ $t('Pages.Interviewers_MoveWebAssigment') }}
                 </span>
             </div>
         </Confirm>
 
-        <ModalFrame ref="progress"
-            id="move-interviewer-progress-template"
-            :title="movingDialogTitle">
+        <ModalFrame ref="progress" id="move-interviewer-progress-template" :title="movingDialogTitle">
             <div class="max-height-in-popup">
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
@@ -75,16 +57,14 @@
                             <th>{{ $t('MainMenu.Assignments') }}</th>
                         </tr>
                     </thead>
-                    <tbody v-for="interviewer in progressInterviewers"
-                        v-bind:key="interviewer.userId">
+                    <tbody v-for="interviewer in progressInterviewers" v-bind:key="interviewer.userId">
                         <tr>
                             <td>
                                 <span class="interviewer">
-                                    <a target="_blank"
-                                        :href="$config.basePath + 'Manage/' + interviewer.userId"
+                                    <a target="_blank" :href="$config.basePath + 'Manage/' + interviewer.userId"
                                         :v-text="interviewer.userName"
                                         :class="{ 'text-danger': interviewer.inProgress }">{{ interviewer.userName
-                                    }}</a>
+                                        }}</a>
                                 </span>
                             </td>
                             <td v-text="interviewer.interviewsProcessed"></td>
@@ -93,8 +73,7 @@
                         <tr v-if="interviewer.errors.length > 0">
                             <td colspan="5">
                                 <p>{{ $t('Pages.Interviewers_FinishedWithErrors') }}</p>
-                                <ul v-for="error in interviewer.errors"
-                                    v-bind:key="error">
+                                <ul v-for="error in interviewer.errors" v-bind:key="error">
                                     <li :v-text="error">{{ error }}</li>
                                 </ul>
                             </td>

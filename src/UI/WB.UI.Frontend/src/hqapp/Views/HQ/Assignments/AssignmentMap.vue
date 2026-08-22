@@ -1,51 +1,31 @@
 <template>
-    <HqLayout :hasFilter="true"
-        :hasHeader="false">
+    <HqLayout :hasFilter="true" :hasHeader="false">
         <template v-slot:filters>
             <Filters>
                 <FilterBlock :title="$t('Common.GeoTrackNumber')">
-                    <Typeahead control-id="trackId"
-                        :placeholder="$t('Common.AllGeoTracks')"
-                        :value="selectedGeoTrackingId"
-                        :ajax-params="trackParams"
-                        :selectedValue="query.track"
-                        v-on:selected="selectedGeoTracking"
-                        :fetch-url="model.api.getTracks"
-                        noSearch="true">
+                    <Typeahead control-id="trackId" :placeholder="$t('Common.AllGeoTracks')"
+                        :value="selectedGeoTrackingId" :ajax-params="trackParams" :selectedValue="query.track"
+                        v-on:selected="selectedGeoTracking" :fetch-url="model.api.getTracks" noSearch="true">
                     </Typeahead>
                 </FilterBlock>
                 <FilterBlock :title="$t('Common.Responsible')">
-                    <Typeahead control-id="responsibleId"
-                        :placeholder="$t('Common.AllResponsible')"
-                        :value="responsibleId"
-                        :ajax-params="responsibleParams"
-                        :selectedValue="query.responsible"
-                        v-on:selected="selectResponsible"
-                        :fetch-url="model.api.interviewers"></Typeahead>
+                    <Typeahead control-id="responsibleId" :placeholder="$t('Common.AllResponsible')"
+                        :value="responsibleId" :ajax-params="responsibleParams" :selectedValue="query.responsible"
+                        v-on:selected="selectResponsible" :fetch-url="model.api.interviewers"></Typeahead>
                 </FilterBlock>
                 <FilterBlock :title="$t('Common.DateRange')">
-                    <DatePicker :config="datePickerConfig"
-                        :value="selectedDateRange"
-                        :withClear="true"
+                    <DatePicker :config="datePickerConfig" :value="selectedDateRange" :withClear="true"
                         v-on:clear="clearDateRange"></DatePicker>
                 </FilterBlock>
-                <FilterBlock v-if="isLoading"
-                    :title="$t('Reports.MapDataLoading')">
+                <FilterBlock v-if="isLoading" :title="$t('Reports.MapDataLoading')">
                     <div class="progress">
-                        <div class="progress-bar progress-bar-striped active"
-                            role="progressbar"
-                            aria-valuenow="100"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                            style="width: 100%"></div>
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100"
+                            aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
                     </div>
                 </FilterBlock>
                 <div class="preset-filters-container">
-                    <div class="center-block"
-                        style="margin-left: 0">
-                        <button class="btn btn-default btn-lg"
-                            id="refreshGeoTrackingHistory"
-                            v-if="readyToUpdate"
+                    <div class="center-block" style="margin-left: 0">
+                        <button class="btn btn-default btn-lg" id="refreshGeoTrackingHistory" v-if="readyToUpdate"
                             @click="refreshGeoTrackingHistory">
                             {{ $t('MapReport.ReloadGeoTacking') }}
                         </button>
@@ -55,9 +35,7 @@
         </template>
 
 
-        <google-map ref="mapWithMarkers"
-            :shapefile="shapefileName"
-            :getMarkersParams="getMarkersParams"
+        <google-map ref="mapWithMarkers" :shapefile="shapefileName" :getMarkersParams="getMarkersParams"
             @initialized="mapInitialized"></google-map>
 
     </HqLayout>

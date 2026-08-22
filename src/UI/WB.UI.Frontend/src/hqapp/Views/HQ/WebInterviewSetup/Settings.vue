@@ -20,11 +20,8 @@
                         <div class="questionnaire-details-actions clearfix">
                             <div class="buttons-container">
                                 <div class="dropdown aside-menu">
-                                    <button type="button"
-                                        data-bs-toggle="dropdown"
-                                        aria-haspopup="true"
-                                        aria-expanded="false"
-                                        class="btn btn-link">
+                                    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false" class="btn btn-link">
                                         <span></span>
                                     </button>
                                     <ul class="dropdown-menu">
@@ -32,7 +29,7 @@
                                             <a :href="config.downloadLinksUrl +
                                                 '/' +
                                                 config.questionnaireIdentity.id
-                                            ">
+                                                ">
                                                 {{ $t('Dashboard.DownloadLinks') }}
                                             </a>
                                         </li>
@@ -40,7 +37,7 @@
                                             <a :href="config.sendInvitationsUrl +
                                                 '/' +
                                                 config.questionnaireIdentity.id
-                                            ">
+                                                ">
                                                 {{ $t('Dashboard.SendInvitations') }}
                                             </a>
                                         </li>
@@ -53,87 +50,58 @@
 
                 <!--  -->
 
-                <div class="col-md-12"
-                    style="padding-top: 30px">
+                <div class="col-md-12" style="padding-top: 30px">
                     <h3>
                         {{ $t('WebInterviewSettings.CustomizeDisplayedText') }}
                     </h3>
                     <div class="welcome-page">
-                        <ul class="nav nav-tabs"
-                            role="tablist"
-                            id="start-screen-example">
+                        <ul class="nav nav-tabs" role="tablist" id="start-screen-example">
                             <li role="presentation">
-                                <a href="#welcome"
-                                    @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
-                                    aria-controls="welcome"
-                                    role="tab"
-                                    data-bs-toggle="tab"
-                                    class="active">
+                                <a href="#welcome" @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
+                                    aria-controls="welcome" role="tab" data-bs-toggle="tab" class="active">
                                     {{ $t('WebInterviewSettings.WelcomePage') }}
                                 </a>
                             </li>
                             <li role="presentation">
-                                <a href="#resume"
-                                    @click="setPageActive('resumeWelcome', 'resumeInvitation')"
-                                    aria-controls="resume"
-                                    role="tab"
-                                    data-bs-toggle="tab">
+                                <a href="#resume" @click="setPageActive('resumeWelcome', 'resumeInvitation')"
+                                    aria-controls="resume" role="tab" data-bs-toggle="tab">
                                     {{ $t('WebInterviewSettings.ResumePage') }}
                                 </a>
                             </li>
                             <li role="presentation">
-                                <a href="#complete"
-                                    @click="setPageActive('completeNoteToSupervisor')"
-                                    aria-controls="complete"
-                                    role="tab"
-                                    data-bs-toggle="tab">
+                                <a href="#complete" @click="setPageActive('completeNoteToSupervisor')"
+                                    aria-controls="complete" role="tab" data-bs-toggle="tab">
                                     {{ $t('WebInterviewSettings.CompletePage') }}
                                 </a>
                             </li>
                             <li role="presentation">
-                                <a href="#finish"
-                                    @click="setPageActive('webSurveyHeader', 'finishInterview')"
-                                    aria-controls="finish"
-                                    role="tab"
-                                    data-bs-toggle="tab">
+                                <a href="#finish" @click="setPageActive('webSurveyHeader', 'finishInterview')"
+                                    aria-controls="finish" role="tab" data-bs-toggle="tab">
                                     {{ $t('WebInterviewSettings.FinishPage') }}
                                 </a>
                             </li>
                             <li role="presentation">
-                                <a href="#link"
-                                    @click="setPageActive('linkWelcome', 'linkInvitation')"
-                                    aria-controls="link"
-                                    role="tab"
-                                    data-bs-toggle="tab">
+                                <a href="#link" @click="setPageActive('linkWelcome', 'linkInvitation')"
+                                    aria-controls="link" role="tab" data-bs-toggle="tab">
                                     {{ $t('WebInterviewSettings.LinkToInterviewPage') }}
                                 </a>
                             </li>
                         </ul>
                         <div class="tab-content">
-                            <Welcome :webInterviewPageMessages="webInterviewPageMessages"
-                                :hasLogo="hasLogo"
-                                :logoUrl="logoUrl"
-                                :questionnaireId="questionnaireId"
+                            <Welcome :webInterviewPageMessages="webInterviewPageMessages" :hasLogo="hasLogo"
+                                :logoUrl="logoUrl" :questionnaireId="questionnaireId"
                                 :questionnaireTitle="questionnaireTitle" />
-                            <Resume :webInterviewPageMessages="webInterviewPageMessages"
-                                :hasLogo="hasLogo"
-                                :logoUrl="logoUrl"
-                                :questionnaireId="questionnaireId"
+                            <Resume :webInterviewPageMessages="webInterviewPageMessages" :hasLogo="hasLogo"
+                                :logoUrl="logoUrl" :questionnaireId="questionnaireId"
                                 :questionnaireTitle="questionnaireTitle" />
-                            <Complete :webInterviewPageMessages="webInterviewPageMessages"
-                                :hasLogo="hasLogo"
-                                :logoUrl="logoUrl"
-                                :questionnaireId="questionnaireId"
+                            <Complete :webInterviewPageMessages="webInterviewPageMessages" :hasLogo="hasLogo"
+                                :logoUrl="logoUrl" :questionnaireId="questionnaireId"
                                 :questionnaireTitle="questionnaireTitle" />
-                            <Finish :webInterviewPageMessages="webInterviewPageMessages"
-                                :hasLogo="hasLogo"
-                                :logoUrl="logoUrl"
-                                :questionnaireId="questionnaireId"
+                            <Finish :webInterviewPageMessages="webInterviewPageMessages" :hasLogo="hasLogo"
+                                :logoUrl="logoUrl" :questionnaireId="questionnaireId"
                                 :questionnaireTitle="questionnaireTitle" />
-                            <LinkInterview :webInterviewPageMessages="webInterviewPageMessages"
-                                :hasLogo="hasLogo"
-                                :logoUrl="logoUrl"
-                                :questionnaireId="questionnaireId"
+                            <LinkInterview :webInterviewPageMessages="webInterviewPageMessages" :hasLogo="hasLogo"
+                                :logoUrl="logoUrl" :questionnaireId="questionnaireId"
                                 :questionnaireTitle="questionnaireTitle" />
                         </div>
                     </div>
@@ -146,29 +114,21 @@
                         {{ $t('WebInterviewSettings.CustomizeEmailsText') }}
                     </h3>
                     <div>
-                        <ul class="nav nav-tabs"
-                            role="tablist">
-                            <li v-for="emailTemplate in emailTemplates"
-                                :key="emailTemplate.value"
-                                :class="{ active: emailTemplate.isActive }"
-                                role="presentation">
-                                <a href="javascript:void(0);"
-                                    role="tab"
-                                    data-bs-toggle="tab"
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li v-for="emailTemplate in emailTemplates" :key="emailTemplate.value"
+                                :class="{ active: emailTemplate.isActive }" role="presentation">
+                                <a href="javascript:void(0);" role="tab" data-bs-toggle="tab"
                                     @click.stop="setActive(emailTemplate)">{{ emailTemplate.buttonTitle }}
                                 </a>
                             </li>
                         </ul>
 
                         <div class="tab-content">
-                            <div v-for="emailTemplate in emailTemplates"
-                                :key="emailTemplate.type"
-                                :class="{ active: emailTemplate.isActive }"
-                                role="tabpanel"
+                            <div v-for="emailTemplate in emailTemplates" :key="emailTemplate.type"
+                                :class="{ active: emailTemplate.isActive }" role="tabpanel"
                                 class="tab-pane email-section">
                                 <Form :ref="el => { emailTemplateData[emailTemplate.value] = el }"
-                                    v-slot="{ errors, meta }"
-                                    v-on:submit="dummy"
+                                    v-slot="{ errors, meta }" v-on:submit="dummy"
                                     :name="'emailTemplateData' + emailTemplate.value"
                                     :data-vv-scope="'emailTemplateData' + emailTemplate.value">
                                     <div class="email-block d-flex mb-30">
@@ -185,15 +145,10 @@
                                                     </div>
                                                     <div class="form-group mb-30"
                                                         :class="{ 'has-error': errors.subject }">
-                                                        <div class="field"
-                                                            :class="{ answered: emailTemplate.subject }">
-                                                            <Field type="text"
-                                                                v-model="emailTemplate.subject"
-                                                                data-vv-as="Please enter the subject"
-                                                                rules="required"
-                                                                name="subject"
-                                                                data-vv-name="subject"
-                                                                maxlength="200"
+                                                        <div class="field" :class="{ answered: emailTemplate.subject }">
+                                                            <Field type="text" v-model="emailTemplate.subject"
+                                                                data-vv-as="Please enter the subject" rules="required"
+                                                                name="subject" data-vv-name="subject" maxlength="200"
                                                                 class="form-control with-clear-btn"
                                                                 placeholder="Please enter the subject" />
                                                             <button type="button"
@@ -201,8 +156,7 @@
                                                                 class="btn btn-link btn-clear">
                                                                 <span></span>
                                                             </button>
-                                                            <span class="help-block"
-                                                                v-if="errors.subject">
+                                                            <span class="help-block" v-if="errors.subject">
                                                                 {{ $t('WebInterviewSettings.FieldRequired') }}
                                                             </span>
                                                         </div>
@@ -232,35 +186,26 @@
                                                     </div>
                                                     <div class="form-group mb-30"
                                                         :class="{ 'has-error': errors.message }">
-                                                        <div class="field"
-                                                            :class="{ answered: emailTemplate.message }">
-                                                            <Field as="textarea"
-                                                                v-autosize
+                                                        <div class="field" :class="{ answered: emailTemplate.message }">
+                                                            <Field as="textarea" v-autosize
                                                                 v-model="emailTemplate.message"
-                                                                data-vv-as="Please enter the main text"
-                                                                rules="required"
-                                                                name="message"
-                                                                data-vv-name="message"
-                                                                :ref="'message' + emailTemplate.value"
-                                                                maxlength="3000"
-                                                                :min-height="79"
-                                                                class="form-control js-elasticArea"
+                                                                data-vv-as="Please enter the main text" rules="required"
+                                                                name="message" data-vv-name="message"
+                                                                :ref="'message' + emailTemplate.value" maxlength="3000"
+                                                                :min-height="79" class="form-control js-elasticArea"
                                                                 placeholder="Please enter the main text">
                                                             </Field>
-                                                            <button type="button"
-                                                                @click="emailTemplate.message = null"
+                                                            <button type="button" @click="emailTemplate.message = null"
                                                                 class="btn btn-link btn-clear">
                                                                 <span></span>
                                                             </button>
-                                                            <span class="help-block"
-                                                                v-if="errors.message">
+                                                            <span class="help-block" v-if="errors.message">
                                                                 {{ $t('WebInterviewSettings.FieldRequired') }}
                                                             </span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row-element"
-                                                    v-if="isPasswordSupported(emailTemplate)">
+                                                <div class="row-element" v-if="isPasswordSupported(emailTemplate)">
                                                     <div class="h5 mb-0">
                                                         {{
                                                             $t('WebInterviewSettings.DescriptionForPassword')
@@ -280,8 +225,7 @@
                                                                 name="passwordDescription"
                                                                 data-vv-name="passwordDescription"
                                                                 data-vv-as="Please enter password description"
-                                                                rules="required"
-                                                                maxlength="500"
+                                                                rules="required" maxlength="500"
                                                                 class="form-control with-clear-btn"
                                                                 placeholder="Please enter password description" />
                                                             <button type="button"
@@ -289,15 +233,13 @@
                                                                 class="btn btn-link btn-clear">
                                                                 <span></span>
                                                             </button>
-                                                            <span class="help-block"
-                                                                v-if="errors.passwordDescription">
+                                                            <span class="help-block" v-if="errors.passwordDescription">
                                                                 {{ $t('WebInterviewSettings.FieldRequired') }}
                                                             </span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row-element"
-                                                    v-if="isButtonSupported(emailTemplate)">
+                                                <div class="row-element" v-if="isButtonSupported(emailTemplate)">
                                                     <div class="h5">
                                                         {{ $t('WebInterviewSettings.StartInterviewButton') }}
                                                     </div>
@@ -306,12 +248,9 @@
                                                         <div class="field"
                                                             :class="{ answered: emailTemplate.linkText }">
                                                             <span class="wrapper-dynamic">
-                                                                <Field type="text"
-                                                                    v-model="emailTemplate.linkText"
-                                                                    rules="required"
-                                                                    name="linkText"
-                                                                    data-vv-name="linkText"
-                                                                    maxlength="200"
+                                                                <Field type="text" v-model="emailTemplate.linkText"
+                                                                    rules="required" name="linkText"
+                                                                    data-vv-name="linkText" maxlength="200"
                                                                     class="form-control with-clear-btn width-dynamic"
                                                                     placeholder="Please enter the text" />
                                                                 <button type="button"
@@ -319,8 +258,7 @@
                                                                     class="btn btn-link btn-clear">
                                                                     <span></span>
                                                                 </button>
-                                                                <span class="help-block"
-                                                                    v-if="errors.linkText">
+                                                                <span class="help-block" v-if="errors.linkText">
                                                                     {{ $t('WebInterviewSettings.FieldRequired') }}
                                                                 </span>
                                                             </span>
@@ -328,14 +266,12 @@
                                                     </div>
                                                 </div>
                                                 <div class="">
-                                                    <button type="submit"
-                                                        :disabled="!meta.dirty ? 'disabled' : null"
+                                                    <button type="submit" :disabled="!meta.dirty ? 'disabled' : null"
                                                         @click="saveEmailTemplate(emailTemplate)"
                                                         class="btn btn-md btn-success">
                                                         {{ $t('WebInterviewSettings.Save') }}
                                                     </button>
-                                                    <button type="button"
-                                                        :disabled="!meta.dirty ? 'disabled' : null"
+                                                    <button type="button" :disabled="!meta.dirty ? 'disabled' : null"
                                                         @click="cancelEditEmailTemplate(emailTemplate)"
                                                         class="btn btn-md btn-link">
                                                         {{ $t('WebInterviewSettings.Cancel') }}
@@ -347,26 +283,18 @@
                                         <div class="preview email-block-unit">
                                             <div class="browser-mockup">
                                                 <div class="email-example">
-                                                    <table class="em-table email-example-table"
-                                                        align="center"
-                                                        border="0"
-                                                        cellspacing="0"
-                                                        cellpadding="0">
+                                                    <table class="em-table email-example-table" align="center"
+                                                        border="0" cellspacing="0" cellpadding="0">
                                                         <tr>
                                                             <td
                                                                 style="border: 6px solid #e5e5e5;padding: 50px 55px 115px;box-sizing: border-box;">
-                                                                <table border="0"
-                                                                    width="100%"
-                                                                    cellpadding="0"
+                                                                <table border="0" width="100%" cellpadding="0"
                                                                     cellspacing="0">
                                                                     <tr>
                                                                         <td style="padding-bottom: 80px">
-                                                                            <div v-if="!hasLogo"
-                                                                                class="default-icon">
-                                                                                <svg width="178"
-                                                                                    height="83"
-                                                                                    viewBox="0 0 178 83"
-                                                                                    fill="none"
+                                                                            <div v-if="!hasLogo" class="default-icon">
+                                                                                <svg width="178" height="83"
+                                                                                    viewBox="0 0 178 83" fill="none"
                                                                                     xmlns="http://www.w3.org/2000/svg">
                                                                                     <path fill-rule="evenodd"
                                                                                         clip-rule="evenodd"
@@ -423,15 +351,12 @@
                                                                                         fill="#303030" />
                                                                                 </svg>
                                                                             </div>
-                                                                            <img :src="logoUrl"
-                                                                                v-if="hasLogo"
-                                                                                alt="Custom logo"
-                                                                                style="
+                                                                            <img :src="logoUrl" v-if="hasLogo"
+                                                                                alt="Custom logo" style="
                                           display: block;
                                           max-height: 170px;
                                           width: auto;
-                                        "
-                                                                                class="em-img" />
+                                        " class="em-img" />
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -451,8 +376,7 @@
                                         font-size: 16px;
                                         line-height: 20px;
                                         white-space: pre-line;
-                                      "
-                                                                            v-dompurify-html="previewMessage(emailTemplate)"></td>
+                                      " v-dompurify-html="previewMessage(emailTemplate)"></td>
                                                                     </tr>
                                                                     <tr v-if="isPasswordSupported(emailTemplate)">
                                                                         <td style="
@@ -482,8 +406,7 @@
                                                                     <tr v-if="isButtonSupported(emailTemplate)">
                                                                         <td style="padding-top: 20px">
                                                                             <a href="javascript:void(0);"
-                                                                                class="btn-success"
-                                                                                style="
+                                                                                class="btn-success" style="
                                           text-decoration: none;
                                           background: #368e19;
                                           padding: 10px 12px;
@@ -509,14 +432,9 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td width="100%"
-                                                                align="center">
-                                                                <table align="center"
-                                                                    width="80%"
-                                                                    cellpadding="0"
-                                                                    cellspacing="0"
-                                                                    border="0"
-                                                                    style="color: #808080">
+                                                            <td width="100%" align="center">
+                                                                <table align="center" width="80%" cellpadding="0"
+                                                                    cellspacing="0" border="0" style="color: #808080">
                                                                     <!-- <tr>
                                                                     <td align="center" style="padding: 15px 0;">
                                                                         <ul>
@@ -527,8 +445,7 @@
                                                                     </td>
                                                                 </tr> -->
                                                                     <tr>
-                                                                        <td align="center"
-                                                                            style="
+                                                                        <td align="center" style="
                                         padding: 15px 0;
                                         white-space: pre-line;
                                       ">
@@ -558,38 +475,23 @@
                 <div class="col-md-12">
                     <h3>{{ $t('WebInterviewSettings.AdditionalSettings') }}</h3>
                     <div style="padding-bottom: 20px">
-                        <Form v-slot="{ errors, meta }"
-                            ref="additionalSettings"
-                            v-on:submit="dummy"
+                        <Form v-slot="{ errors, meta }" ref="additionalSettings" v-on:submit="dummy"
                             :data-vv-scope="'additionalSettings'">
                             <div class="form-group mb-20">
-                                <Field v-slot="{ field }"
-                                    name="spamProtectionIsEnabled"
+                                <Field v-slot="{ field }" name="spamProtectionIsEnabled"
                                     :value="spamProtectionIsEnabled">
-                                    <input class="checkbox-filter"
-                                        v-bind="field"
-                                        v-validate="''"
-                                        v-model="spamProtectionIsEnabled"
-                                        name="spamProtectionIsEnabled"
-                                        data-vv-name="spamProtectionIsEnabled"
-                                        id="Captcha"
-                                        type="checkbox" />
+                                    <input class="checkbox-filter" v-bind="field" v-validate="''"
+                                        v-model="spamProtectionIsEnabled" name="spamProtectionIsEnabled"
+                                        data-vv-name="spamProtectionIsEnabled" id="Captcha" type="checkbox" />
                                     <label for="Captcha">
                                         <span class="tick"></span>{{ $t('WebInterviewSetup.UseCaptcha') }}
                                     </label>
                                 </Field>
                             </div>
                             <div class="form-group mb-20">
-                                <Field v-slot="{ field }"
-                                    name="singleResponse"
-                                    :value="singleResponseIsEnabled">
-                                    <input class="checkbox-filter"
-                                        v-bind="field"
-                                        v-validate="''"
-                                        name="singleResponse"
-                                        data-vv-name="singleResponse"
-                                        id="singleResponse"
-                                        type="checkbox"
+                                <Field v-slot="{ field }" name="singleResponse" :value="singleResponseIsEnabled">
+                                    <input class="checkbox-filter" v-bind="field" v-validate="''" name="singleResponse"
+                                        data-vv-name="singleResponse" id="singleResponse" type="checkbox"
                                         v-model="singleResponseIsEnabled" />
                                     <label for="singleResponse">
                                         <span class="tick"></span>{{ $t('WebInterviewSetup.SingleResponse') }}
@@ -597,16 +499,9 @@
                                 </Field>
                             </div>
                             <div class="form-group mb-20">
-                                <Field v-slot="{ field }"
-                                    name="emailOnComplete"
-                                    :value="emailOnCompleteIsEnabled">
-                                    <input class="checkbox-filter"
-                                        v-bind="field"
-                                        v-validate="''"
-                                        name="emailOnComplete"
-                                        data-vv-name="emailOnComplete"
-                                        id="emailOnComplete"
-                                        type="checkbox"
+                                <Field v-slot="{ field }" name="emailOnComplete" :value="emailOnCompleteIsEnabled">
+                                    <input class="checkbox-filter" v-bind="field" v-validate="''" name="emailOnComplete"
+                                        data-vv-name="emailOnComplete" id="emailOnComplete" type="checkbox"
                                         v-model="emailOnCompleteIsEnabled"
                                         @change="attachAnswersInEmailIsEnabled = attachAnswersInEmailIsEnabled && emailOnCompleteIsEnabled" />
                                     <label for="emailOnComplete">
@@ -615,17 +510,11 @@
                                 </Field>
                             </div>
                             <div class="form-group mb-20">
-                                <Field v-slot="{ field }"
-                                    name="attachAnswersInEmail"
+                                <Field v-slot="{ field }" name="attachAnswersInEmail"
                                     :value="attachAnswersInEmailIsEnabled">
-                                    <input class="checkbox-filter"
-                                        v-bind="field"
-                                        v-validate="''"
-                                        name="attachAnswersInEmail"
-                                        data-vv-name="attachAnswersInEmail"
-                                        id="attachAnswersInEmail"
-                                        type="checkbox"
-                                        :disabled="!emailOnCompleteIsEnabled"
+                                    <input class="checkbox-filter" v-bind="field" v-validate="''"
+                                        name="attachAnswersInEmail" data-vv-name="attachAnswersInEmail"
+                                        id="attachAnswersInEmail" type="checkbox" :disabled="!emailOnCompleteIsEnabled"
                                         v-model="attachAnswersInEmailIsEnabled" />
                                     <label for="attachAnswersInEmail">
                                         <span class="tick"></span>{{
@@ -634,16 +523,12 @@
                                 </Field>
                             </div>
                             <div class="form-group mb-20">
-                                <Field v-slot="{ field }"
-                                    name="allowSwitchToCawiForInterviewer"
+                                <Field v-slot="{ field }" name="allowSwitchToCawiForInterviewer"
                                     :value="allowSwitchToCawiForInterviewerEnabled">
-                                    <input class="checkbox-filter"
-                                        v-bind="field"
-                                        v-validate="''"
+                                    <input class="checkbox-filter" v-bind="field" v-validate="''"
                                         name="allowSwitchToCawiForInterviewer"
                                         data-vv-name="allowSwitchToCawiForInterviewer"
-                                        id="allowSwitchToCawiForInterviewer"
-                                        type="checkbox"
+                                        id="allowSwitchToCawiForInterviewer" type="checkbox"
                                         v-model="allowSwitchToCawiForInterviewerEnabled" />
                                     <label for="allowSwitchToCawiForInterviewer">
                                         <span class="tick"></span>{{
@@ -653,16 +538,11 @@
                                 </Field>
                             </div>
                             <div class="form-group mb-20">
-                                <Field v-slot="{ field }"
-                                    name="allowTranscriptDownloading"
+                                <Field v-slot="{ field }" name="allowTranscriptDownloading"
                                     :value="allowTranscriptDownloadingEnabled">
-                                    <input class="checkbox-filter"
-                                        v-bind="field"
-                                        v-validate="''"
-                                        name="allowTranscriptDownloading"
-                                        data-vv-name="allowTranscriptDownloading"
-                                        id="allowTranscriptDownloading"
-                                        type="checkbox"
+                                    <input class="checkbox-filter" v-bind="field" v-validate="''"
+                                        name="allowTranscriptDownloading" data-vv-name="allowTranscriptDownloading"
+                                        id="allowTranscriptDownloading" type="checkbox"
                                         v-model="allowTranscriptDownloadingEnabled" />
                                     <label for="allowTranscriptDownloading">
                                         <span class="tick"></span>{{
@@ -672,58 +552,46 @@
                                 </Field>
                             </div>
                             <div class="notification-block mb-20">
-                                <Field v-slot="{ field }"
-                                    name="reminderAfterDaysIfNoResponse"
-                                    :value="reminderAfterDaysIfNoResponse"
-                                    rules="required">
+                                <Field v-slot="{ field }" name="reminderAfterDaysIfNoResponse"
+                                    :value="reminderAfterDaysIfNoResponse" rules="required">
                                     <div class="mb-1">
                                         {{ $t('WebInterviewSettings.SendWithNoResponse') }}
                                     </div>
-                                    <Select v-bind="field"
-                                        v-model="reminderAfterDaysIfNoResponse"
-                                        :options="[
-                                            { id: null, value: $t('WebInterviewSettings.DoNotSend') },
-                                            { id: 1, value: $t('WebInterviewSettings.AfterXDay', { count: 1 }) },
-                                            { id: 2, value: $t('WebInterviewSettings.AfterXDay', { count: 2 }) },
-                                            { id: 3, value: $t('WebInterviewSettings.AfterXDay', { count: 3 }) },
-                                            { id: 5, value: $t('WebInterviewSettings.AfterXDay', { count: 5 }) },
-                                            { id: 7, value: $t('WebInterviewSettings.AfterXWeek', { count: 1 }) },
-                                            { id: 14, value: $t('WebInterviewSettings.AfterXWeek', { count: 2 }) },
-                                        ]" />
+                                    <Select v-bind="field" v-model="reminderAfterDaysIfNoResponse" :options="[
+                                        { id: null, value: $t('WebInterviewSettings.DoNotSend') },
+                                        { id: 1, value: $t('WebInterviewSettings.AfterXDay', { count: 1 }) },
+                                        { id: 2, value: $t('WebInterviewSettings.AfterXDay', { count: 2 }) },
+                                        { id: 3, value: $t('WebInterviewSettings.AfterXDay', { count: 3 }) },
+                                        { id: 5, value: $t('WebInterviewSettings.AfterXDay', { count: 5 }) },
+                                        { id: 7, value: $t('WebInterviewSettings.AfterXWeek', { count: 1 }) },
+                                        { id: 14, value: $t('WebInterviewSettings.AfterXWeek', { count: 2 }) },
+                                    ]" />
                                 </Field>
                             </div>
                             <div class="notification-block mb-30">
-                                <Field v-slot="{ field }"
-                                    name="reminderAfterDaysIfPartialResponse"
-                                    :value="reminderAfterDaysIfPartialResponse"
-                                    rules="required">
+                                <Field v-slot="{ field }" name="reminderAfterDaysIfPartialResponse"
+                                    :value="reminderAfterDaysIfPartialResponse" rules="required">
                                     <div class="mb-1">
                                         {{ $t('WebInterviewSettings.SendWithPartialResponse') }}
                                     </div>
-                                    <Select v-bind="field"
-                                        v-model="reminderAfterDaysIfPartialResponse"
-                                        :options="[
-                                            { id: null, value: $t('WebInterviewSettings.DoNotSend') },
-                                            { id: 1, value: $t('WebInterviewSettings.AfterXDay', { count: 1 }) },
-                                            { id: 2, value: $t('WebInterviewSettings.AfterXDay', { count: 2 }) },
-                                            { id: 3, value: $t('WebInterviewSettings.AfterXDay', { count: 3 }) },
-                                            { id: 5, value: $t('WebInterviewSettings.AfterXDay', { count: 5 }) },
-                                            { id: 7, value: $t('WebInterviewSettings.AfterXWeek', { count: 1 }) },
-                                            { id: 14, value: $t('WebInterviewSettings.AfterXWeek', { count: 2 }) },
-                                        ]" />
+                                    <Select v-bind="field" v-model="reminderAfterDaysIfPartialResponse" :options="[
+                                        { id: null, value: $t('WebInterviewSettings.DoNotSend') },
+                                        { id: 1, value: $t('WebInterviewSettings.AfterXDay', { count: 1 }) },
+                                        { id: 2, value: $t('WebInterviewSettings.AfterXDay', { count: 2 }) },
+                                        { id: 3, value: $t('WebInterviewSettings.AfterXDay', { count: 3 }) },
+                                        { id: 5, value: $t('WebInterviewSettings.AfterXDay', { count: 5 }) },
+                                        { id: 7, value: $t('WebInterviewSettings.AfterXWeek', { count: 1 }) },
+                                        { id: 14, value: $t('WebInterviewSettings.AfterXWeek', { count: 2 }) },
+                                    ]" />
                                 </Field>
                             </div>
                             <div class="">
-                                <button type="submit"
-                                    :disabled="!meta.dirty ? 'disabled' : null"
-                                    @click="saveAdditionalSettings()"
-                                    class="btn btn-md btn-success">
+                                <button type="submit" :disabled="!meta.dirty ? 'disabled' : null"
+                                    @click="saveAdditionalSettings()" class="btn btn-md btn-success">
                                     {{ $t('WebInterviewSettings.Save') }}
                                 </button>
-                                <button type="submit"
-                                    :disabled="!meta.dirty ? 'disabled' : null"
-                                    @click="cancelAdditionalSettings()"
-                                    class="btn btn-md btn-link">
+                                <button type="submit" :disabled="!meta.dirty ? 'disabled' : null"
+                                    @click="cancelAdditionalSettings()" class="btn btn-md btn-link">
                                     {{ $t('WebInterviewSettings.Cancel') }}
                                 </button>
                             </div>
@@ -733,23 +601,15 @@
                 <hr style="padding: 20px" />
                 <div class="col-md-12">
                     <div class="">
-                        <a href="javascript:void(0);"
-                            @click="startWebInterview"
-                            v-if="!started"
-                            class="btn btn-lg btn-success mb-1"
-                            role="button">
+                        <a href="javascript:void(0);" @click="startWebInterview" v-if="!started"
+                            class="btn btn-lg btn-success mb-1" role="button">
                             {{ $t('WebInterviewSetup.Start') }}
                         </a>
-                        <a href="javascript:void(0);"
-                            @click="stopWebInterview"
-                            v-if="started"
-                            class="btn btn-lg btn-danger mb-1"
-                            role="button">
+                        <a href="javascript:void(0);" @click="stopWebInterview" v-if="started"
+                            class="btn btn-lg btn-danger mb-1" role="button">
                             {{ $t('WebInterviewSetup.StopWebInterview') }}
                         </a>
-                        <a :href="this.$config.model.surveySetupUrl"
-                            class="btn btn-lg back-link mb-1"
-                            role="button">
+                        <a :href="this.$config.model.surveySetupUrl" class="btn btn-lg back-link mb-1" role="button">
                             {{ $t('WebInterviewSetup.BackToQuestionnaires') }}
                         </a>
                     </div>

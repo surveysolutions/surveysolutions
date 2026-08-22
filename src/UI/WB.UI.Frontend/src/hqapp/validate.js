@@ -60,8 +60,8 @@ const localeImports = {
 }
 
     ; (localeImports[lang] || localeImports['en'])().then((messages) => {
-    configure({
-        generateMessage: localize({ [lang]: messages.default }),
+        configure({
+            generateMessage: localize({ [lang]: messages.default }),
+        })
+        setLocale(lang)
     })
-    setLocale(lang)
-})

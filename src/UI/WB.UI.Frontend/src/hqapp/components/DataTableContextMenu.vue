@@ -1,21 +1,12 @@
 <template>
     <Teleport to="body">
-        <ul v-if="visible"
-            ref="menuEl"
-            class="context-menu-list"
-            :style="menuStyle"
-            role="menu">
-            <template v-for="(item, i) in items"
-                :key="i">
-                <li v-if="isSeparator(item)"
-                    class="context-menu-separator context-menu-not-selectable"
+        <ul v-if="visible" ref="menuEl" class="context-menu-list" :style="menuStyle" role="menu">
+            <template v-for="(item, i) in items" :key="i">
+                <li v-if="isSeparator(item)" class="context-menu-separator context-menu-not-selectable"
                     role="separator"></li>
-                <li v-else
-                    class="context-menu-item"
+                <li v-else class="context-menu-item"
                     :class="[item.className, { 'context-menu-disabled': item.disabled, 'context-menu-hover': hoveredIndex === i }]"
-                    role="menuitem"
-                    @mouseenter="hoveredIndex = i"
-                    @mouseleave="hoveredIndex = -1"
+                    role="menuitem" @mouseenter="hoveredIndex = i" @mouseleave="hoveredIndex = -1"
                     @click="onItemClick(item)">
                     {{ item.name }}
                 </li>
