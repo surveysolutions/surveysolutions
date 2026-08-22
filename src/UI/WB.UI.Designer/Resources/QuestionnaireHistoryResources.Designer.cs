@@ -542,5 +542,17 @@ namespace WB.UI.Designer.Resources {
                 return ResourceManager.GetString("MigratedNewCoverSupport", resourceCulture);
             }
         }
+        
+        public static string AnonymousSharingEnabled {
+            get {
+                return ResourceManager.GetString("AnonymousSharingEnabled", resourceCulture);
+            }
+        }
+        
+        public static string AnonymousSharingDisabled {
+            get {
+                return ResourceManager.GetString("AnonymousSharingDisabled", resourceCulture);
+            }
+        }
     }
 }

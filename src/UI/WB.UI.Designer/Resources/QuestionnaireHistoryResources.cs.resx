@@ -366,4 +366,10 @@
   <data name="Translation_Replace" xml:space="preserve">
     <value>Dokument byl přepnut na překlad {0}</value>
   </data>
+  <data name="AnonymousSharingEnabled" xml:space="preserve">
+    <value>Anonymní sdílení bylo zapnuto pro {0}</value>
+  </data>
+  <data name="AnonymousSharingDisabled" xml:space="preserve">
+    <value>Anonymní sdílení bylo vypnuto pro {0}</value>
+  </data>
 </root>
