@@ -343,6 +343,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInvitationMailingService, InvitationMailingService>();
             registry.Bind<IInvitationsDeletionService, InvitationsDeletionService>();
             registry.Bind<IWebInterviewLinkProvider, WebInterviewLinkProvider>();
+            registry.Bind<IReminderEmailSender, ReminderEmailSender>();
             registry.Bind<IUserImportService, UserImportService>();
 
             registry.BindInPerLifetimeScope<IWorkspaceContextHolder, WorkspaceContextHolder>();

@@ -135,6 +135,15 @@
   <data name="CustomizeEmailsText" xml:space="preserve">
     <value>Customize emails text</value>
   </data>
+  <data name="CustomizeAndSendEmailsText" xml:space="preserve">
+    <value>Customize and send emails text</value>
+  </data>
+  <data name="SendNow" xml:space="preserve">
+    <value>SEND NOW</value>
+  </data>
+  <data name="SendNowTooltip" xml:space="preserve">
+    <value>{{reminderType}} reminders for all assignments and interviews will be sent right now with no waiting period.</value>
+  </data>
   <data name="Invitation" xml:space="preserve">
     <value>Invitation</value>
   </data>
