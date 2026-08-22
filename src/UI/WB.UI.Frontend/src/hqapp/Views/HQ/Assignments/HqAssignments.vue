@@ -290,7 +290,8 @@
         <ModalFrame ref="editAudioEnabledModal"
             :title="$t('Assignments.ChangeAudioRecordingModalTitle', { id: editedRowId })">
             <p>{{ $t("Assignments.AudioRecordingExplanation") }}</p>
-            <p v-if="editedHasAudioAuditScope" class="text-info">
+            <p v-if="editedHasAudioAuditScope"
+                class="text-info">
                 {{ $t("Assignments.AudioRecordingScopeNotice") }}
             </p>
             <form onsubmit="return false;">

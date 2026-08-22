@@ -73,7 +73,7 @@ export default {
     beforeMount() {
         this.countOfInstances = this.$me.instances.length
         this.title =
-            this.$me.questions.length > 0 ? this.$me.questions[0].title : null
+            this.$me.questions.length > 0 ? this.$me.questions[0].title ?? '' : ''
         this.instructions =
             this.$me.questions.length > 0
                 ? this.$me.questions[0].instruction
@@ -113,7 +113,7 @@ export default {
             this.name = this.$me.questions.length > 0 ? this.$me.questions[0].name : null
         },
         ['$me.title']() {
-            this.title = this.$me.title
+            this.title = this.$me.title ?? ''
         },
         ['$config.inWebTesterMode']() {
             this.name = this.$me.questions.length > 0 ? this.$me.questions[0].name : null

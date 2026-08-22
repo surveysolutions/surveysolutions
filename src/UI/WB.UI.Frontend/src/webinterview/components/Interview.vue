@@ -1,6 +1,8 @@
 <template>
     <div>
-        <signalr @connected="connected" :interviewId="interviewId" :mode="mode" />
+        <signalr @connected="connected"
+            :interviewId="interviewId"
+            :mode="mode" />
         <reconnecting-banner />
         <router-view v-if="questionComponentsReady" />
     </div>

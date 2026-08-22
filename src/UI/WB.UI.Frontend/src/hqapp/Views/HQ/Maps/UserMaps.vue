@@ -13,9 +13,11 @@
                 </p>
             </div>
         </template>
-        <DataTables ref="table" :tableOptions="tableOptions"></DataTables>
+        <DataTables ref="table"
+            :tableOptions="tableOptions"></DataTables>
         <template v-slot:models>
-            <Confirm ref="confirmDiscard" id="discardConfirm">
+            <Confirm ref="confirmDiscard"
+                id="discardConfirm">
                 {{ $t("Pages.Map_DiscardConfirm") }}
             </Confirm>
         </template>

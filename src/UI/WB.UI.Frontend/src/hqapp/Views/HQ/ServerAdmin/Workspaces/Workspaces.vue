@@ -1,11 +1,15 @@
 <template>
-    <HqLayout :hasFilter="false" tag="workspaces-page">
+    <HqLayout :hasFilter="false"
+        tag="workspaces-page">
         <template v-slot:headers>
             <div>
                 <div class="topic-with-button">
                     <h1 v-dompurify-html="$t('MainMenu.Workspaces')"></h1>
-                    <button type="button" v-if="$config.model.canManage" class="btn btn-success"
-                        data-suso="create-new-workspace" @click="createNewWorkspace">
+                    <button type="button"
+                        v-if="$config.model.canManage"
+                        class="btn btn-success"
+                        data-suso="create-new-workspace"
+                        @click="createNewWorkspace">
                         {{ $t('Workspaces.AddNew') }}
                     </button>
                 </div>
@@ -13,87 +17,88 @@
                 <div class="search-pusher"></div>
             </div>
         </template>
-        <DataTables ref="table" data-suso="workspaces-list" :tableOptions="tableOptions" noSelect :noPaging="false"
-            :contextMenuItems="contextMenuItems" :supportContextMenu="$config.model.canManage">
+        <DataTables ref="table"
+            data-suso="workspaces-list"
+            :tableOptions="tableOptions"
+            noSelect
+            :noPaging="false"
+            :contextMenuItems="contextMenuItems"
+            :supportContextMenu="$config.model.canManage">
         </DataTables>
 
-        <ModalFrame ref="createWorkspaceModal" :title="$t('Workspaces.CreateWorkspace')">
+        <ModalFrame ref="createWorkspaceModal"
+            :title="$t('Workspaces.CreateWorkspace')">
             <template v-slot:form>
-                <Form @submit="createWorkspace" ref="createWorkspaceForm" data-suso="workspaces-create-dialog"
+                <Form @submit="createWorkspace"
+                    ref="createWorkspaceForm"
+                    data-suso="workspaces-create-dialog"
                     v-slot="{ errors }">
                     <div class="modal-body">
-                        <div class="form-group" v-bind:class="{ 'has-error': errors.Name }">
-                            <label class="control-label" for="newWorkspaceName">
+                        <div class="form-group"
+                            v-bind:class="{ 'has-error': errors.Name }">
+                            <label class="control-label"
+                                for="newWorkspaceName">
                                 {{ $t("Workspaces.Name") }}
                             </label>
-                            <Field type="text" class="form-control" v-model.trim="newWorkspaceName" name="Name"
-                                :label="$t('Workspaces.Name')" :rules="{
+                            <Field type="text"
+                                class="form-control"
+                                v-model.trim="newWorkspaceName"
+                                name="Name"
+                                :label="$t('Workspaces.Name')"
+                                :rules="{
                                     required: true,
                                     max: 12,
                                     regex: /^[0-9,a-z]+$/,
                                     not_one_of: ['users', 'administration', 'api', 'apidocs', 'graphql', 'css', 'js', 'img', 'locale', 'fonts', '.vite', '@vite']
-                                }" autocomplete="off" @keyup.enter="createWorkspace" id="newWorkspaceName" />
+                                }"
+                                autocomplete="off"
+                                @keyup.enter="createWorkspace"
+                                id="newWorkspaceName" />
 
-                            <p class="help-block" v-if="!errors.Name">
+                            <p class="help-block"
+                                v-if="!errors.Name">
                                 {{ $t('Workspaces.CanNotBeChanged') }}
                             </p>
-                            <span v-else class="text-danger">
+                            <span v-else
+                                class="text-danger">
                                 {{ errors.Name }}
                             </span>
                         </div>
 
-                        <div class="form-group" v-bind:class="{ 'has-error': errors.DisplayName }">
-                            <label class="control-label" for="newDescription">
+                        <div class="form-group"
+                            v-bind:class="{ 'has-error': errors.DisplayName }">
+                            <label class="control-label"
+                                for="newDescription">
                                 {{ $t("Workspaces.DisplayName") }}
                             </label>
-                            <Field type="text" class="form-control" v-model.trim="editedDisplayName" name="DisplayName"
-                                :rules="{ required: true, max: 300 }" maxlength="300"
-                                :label="$t('Workspaces.DisplayName')" autocomplete="off" @keyup.enter="createWorkspace"
+                            <Field type="text"
+                                class="form-control"
+                                v-model.trim="editedDisplayName"
+                                name="DisplayName"
+                                :rules="{ required: true, max: 300 }"
+                                maxlength="300"
+                                :label="$t('Workspaces.DisplayName')"
+                                autocomplete="off"
+                                @keyup.enter="createWorkspace"
                                 id="newDescription" />
-                            <p class="help-block" v-if="!errors.workspaceDisplayName">
+                            <p class="help-block"
+                                v-if="!errors.workspaceDisplayName">
                                 {{ $t('Workspaces.DisplayNameHelpText') }}
                             </p>
-                            <span v-else class="text-danger">{{ errors.DisplayName }}</span>
+                            <span v-else
+                                class="text-danger">{{ errors.DisplayName }}</span>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <div>
-                            <button data-suso="workspace-create-save" v-bind:disabled="inProgress"
-                                class="btn btn-primary" type="submit">
+                            <button data-suso="workspace-create-save"
+                                v-bind:disabled="inProgress"
+                                class="btn btn-primary"
+                                type="submit">
                                 {{ $t("Common.Create") }}
                             </button>
-                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">
-                                {{ $t("Common.Cancel") }}
-                            </button>
-                        </div>
-                    </div>
-                </Form>
-            </template>
-        </ModalFrame>
-
-        <ModalFrame ref="editWorkspaceModal" data-suso="workspaces-edit-dialog"
-            :title="$t('Workspaces.EditWorkspace', { name: editedRowId })">
-            <template v-slot:form>
-                <Form @submit="updateWorkspace" ref="editWorkspaceForm" v-slot="{ meta, errors }">
-                    <div class="modal-body">
-                        <div class="form-group" v-bind:class="{ 'has-error': meta.valid == false }">
-                            <label class="control-label" for="editDescription">
-                                {{ $t("Workspaces.DisplayName") }}
-                            </label>
-                            <Field type="text" class="form-control" v-model.trim="editedDisplayName" name="DisplayName"
-                                :data-vv-as="$t('Workspaces.DisplayName')" :rules="{ required: true, max: 300 }"
-                                maxlength="300" autocomplete="off" @keyup.enter="updateWorkspace"
-                                id="editDescription" />
-                            <span class="text-danger">{{ errors.DisplayName }}</span>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <div>
-                            <button type="submit" data-suso="workspace-edit-save" class="btn btn-primary"
-                                v-bind:disabled="inProgress">
-                                {{ $t("Common.Save") }}
-                            </button>
-                            <button type="button" class="btn btn-link" data-suso="workspace-cancel"
+                            <button type="button"
+                                class="btn btn-link"
                                 data-bs-dismiss="modal">
                                 {{ $t("Common.Cancel") }}
                             </button>
@@ -103,24 +108,79 @@
             </template>
         </ModalFrame>
 
-        <ModalFrame ref="disableWorkspaceModal" data-suso="workspaces-disable-dialog"
+        <ModalFrame ref="editWorkspaceModal"
+            data-suso="workspaces-edit-dialog"
+            :title="$t('Workspaces.EditWorkspace', { name: editedRowId })">
+            <template v-slot:form>
+                <Form @submit="updateWorkspace"
+                    ref="editWorkspaceForm"
+                    v-slot="{ meta, errors }">
+                    <div class="modal-body">
+                        <div class="form-group"
+                            v-bind:class="{ 'has-error': meta.valid == false }">
+                            <label class="control-label"
+                                for="editDescription">
+                                {{ $t("Workspaces.DisplayName") }}
+                            </label>
+                            <Field type="text"
+                                class="form-control"
+                                v-model.trim="editedDisplayName"
+                                name="DisplayName"
+                                :data-vv-as="$t('Workspaces.DisplayName')"
+                                :rules="{ required: true, max: 300 }"
+                                maxlength="300"
+                                autocomplete="off"
+                                @keyup.enter="updateWorkspace"
+                                id="editDescription" />
+                            <span class="text-danger">{{ errors.DisplayName }}</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div>
+                            <button type="submit"
+                                data-suso="workspace-edit-save"
+                                class="btn btn-primary"
+                                v-bind:disabled="inProgress">
+                                {{ $t("Common.Save") }}
+                            </button>
+                            <button type="button"
+                                class="btn btn-link"
+                                data-suso="workspace-cancel"
+                                data-bs-dismiss="modal">
+                                {{ $t("Common.Cancel") }}
+                            </button>
+                        </div>
+                    </div>
+                </Form>
+            </template>
+        </ModalFrame>
+
+        <ModalFrame ref="disableWorkspaceModal"
+            data-suso="workspaces-disable-dialog"
             :title="$t('Workspaces.DisableWorkspacePopupTitle', { name: editedRowId })">
             <form onsubmit="return false;">
                 <p>{{ $t("Workspaces.DisableExplanation") }}</p>
             </form>
             <template v-slot:actions>
                 <div>
-                    <button type="button" data-suso="workspace-disable-ok" class="btn btn-danger"
-                        v-bind:disabled="inProgress" @click="disableWorkspace">
+                    <button type="button"
+                        data-suso="workspace-disable-ok"
+                        class="btn btn-danger"
+                        v-bind:disabled="inProgress"
+                        @click="disableWorkspace">
                         {{ $t("Common.Ok") }}
                     </button>
-                    <button type="button" class="btn btn-link" data-suso="workspace-cancel" data-bs-dismiss="modal">
+                    <button type="button"
+                        class="btn btn-link"
+                        data-suso="workspace-cancel"
+                        data-bs-dismiss="modal">
                         {{ $t("Common.Cancel") }}
                     </button>
                 </div>
             </template>
         </ModalFrame>
-        <DeleteWorkspaceModal ref="deleteWorkspaceModal" @workspace:deleted="loadData"></DeleteWorkspaceModal>
+        <DeleteWorkspaceModal ref="deleteWorkspaceModal"
+            @workspace:deleted="loadData"></DeleteWorkspaceModal>
     </HqLayout>
 </template>
 
@@ -256,16 +316,16 @@ export default {
                             })
                     },
                 },
-                    {
-                        name: this.$t('Common.Delete'),
-                        className: 'suso-delete',
-                        callback: (_, opt) => {
-                            const parsedRowId = rowData.Name
-                            this.editedRowId = parsedRowId
+                {
+                    name: this.$t('Common.Delete'),
+                    className: 'suso-delete',
+                    callback: (_, opt) => {
+                        const parsedRowId = rowData.Name
+                        this.editedRowId = parsedRowId
 
-                            this.$refs.deleteWorkspaceModal.showModal(rowData.Name)
-                        },
-                    })
+                        this.$refs.deleteWorkspaceModal.showModal(rowData.Name)
+                    },
+                })
             }
             else {
                 items.push(

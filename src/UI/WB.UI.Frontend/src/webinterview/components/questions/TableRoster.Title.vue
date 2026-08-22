@@ -17,11 +17,11 @@ export default {
         }
     },
     created() {
-        this.title = this.params.title
+        this.title = this.params.title ?? ''
     },
     watch: {
         ['params.context.componentParent.$me.title']() {
-            this.title = this.params.context.componentParent.$me.title
+            this.title = this.params.context.componentParent.$me.title ?? ''
         },
     },
 }

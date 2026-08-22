@@ -21,65 +21,87 @@
                 <strong>{{ $t('Reports.LastUpdatedDate') }}:</strong>
                 &nbsp;{{ selectedTooltip.lastUpdatedDate }}
             </div>
-            <div class="row-fluid" v-for="answer in selectedTooltip.identifyingData">
+            <div class="row-fluid"
+                v-for="answer in selectedTooltip.identifyingData">
                 <strong>{{ answer.title }}:</strong>
                 &nbsp;{{ answer.answer || $t('Details.NoAnswer') }}
             </div>
 
-            <div class="row-fluid" v-if="model.userRole != 'Interviewer'" style="white-space: nowrap">
+            <div class="row-fluid"
+                v-if="model.userRole != 'Interviewer'"
+                style="white-space: nowrap">
                 <strong>{{ $t('MapReport.ViewInterviewContent') }}:</strong>&nbsp;
                 <a v-bind:href="api.GetInterviewDetailsUrl(
-                    selectedTooltip.interviewId
-                )
-                    " target="_blank">{{ $t('MapReport.details') }}</a>
+                       selectedTooltip.interviewId
+                   )
+                   "
+                    target="_blank">{{ $t('MapReport.details') }}</a>
             </div>
-            <div class="row-fluid tooltip-buttons" style="white-space: nowrap" v-if="!model.isObserving">
-                <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Interviewer' &&
-                    (selectedTooltip.status == 'InterviewerAssigned' ||
-                        selectedTooltip.status ==
-                        'RejectedBySupervisor')
-                " click-method="openInterview">
+            <div class="row-fluid tooltip-buttons"
+                style="white-space: nowrap"
+                v-if="!model.isObserving">
+                <button class="btn btn-sm btn-primary"
+                    v-if="model.userRole == 'Interviewer' &&
+                        (selectedTooltip.status == 'InterviewerAssigned' ||
+                            selectedTooltip.status ==
+                            'RejectedBySupervisor')
+                    "
+                    click-method="openInterview">
                     {{ $t('Common.Open') }}
                 </button>
-                <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Interviewer' &&
-                    selectedTooltip.status == 'Completed'
-                " click-method="reopenInterview">
+                <button class="btn btn-sm btn-primary"
+                    v-if="model.userRole == 'Interviewer' &&
+                        selectedTooltip.status == 'Completed'
+                    "
+                    click-method="reopenInterview">
                     {{ $t('Pages.InterviewerHq_RestartInterview') }}
                 </button>
-                <button class="btn btn-sm btn-primary" v-if="canAssign" click-method="assignInterview">
+                <button class="btn btn-sm btn-primary"
+                    v-if="canAssign"
+                    click-method="assignInterview">
                     {{ $t('Common.Assign') }}
                 </button>
-                <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Supervisor' &&
-                    (selectedTooltip.status == 'Completed' ||
-                        selectedTooltip.status ==
-                        'RejectedByHeadquarters')
-                " click-method="approveSvInterview">
+                <button class="btn btn-sm btn-primary"
+                    v-if="model.userRole == 'Supervisor' &&
+                        (selectedTooltip.status == 'Completed' ||
+                            selectedTooltip.status ==
+                            'RejectedByHeadquarters')
+                    "
+                    click-method="approveSvInterview">
                     {{ $t('Common.Approve') }}
                 </button>
-                <button class="btn btn-sm reject" v-if="model.userRole == 'Supervisor' &&
-                    (selectedTooltip.status == 'Completed' ||
-                        selectedTooltip.status ==
-                        'RejectedByHeadquarters')
-                " click-method="rejectSvInterview">
+                <button class="btn btn-sm reject"
+                    v-if="model.userRole == 'Supervisor' &&
+                        (selectedTooltip.status == 'Completed' ||
+                            selectedTooltip.status ==
+                            'RejectedByHeadquarters')
+                    "
+                    click-method="rejectSvInterview">
                     {{ $t('Common.Reject') }}
                 </button>
-                <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Headquarter' &&
-                    (selectedTooltip.status == 'Completed' ||
-                        selectedTooltip.status ==
-                        'ApprovedBySupervisor')
-                " click-method="approveHqInterview">
+                <button class="btn btn-sm btn-primary"
+                    v-if="model.userRole == 'Headquarter' &&
+                        (selectedTooltip.status == 'Completed' ||
+                            selectedTooltip.status ==
+                            'ApprovedBySupervisor')
+                    "
+                    click-method="approveHqInterview">
                     {{ $t('Common.Approve') }}
                 </button>
-                <button class="btn btn-sm reject" v-if="model.userRole == 'Headquarter' &&
-                    (selectedTooltip.status == 'Completed' ||
-                        selectedTooltip.status ==
-                        'ApprovedBySupervisor')
-                " click-method="rejectHqInterview">
+                <button class="btn btn-sm reject"
+                    v-if="model.userRole == 'Headquarter' &&
+                        (selectedTooltip.status == 'Completed' ||
+                            selectedTooltip.status ==
+                            'ApprovedBySupervisor')
+                    "
+                    click-method="rejectHqInterview">
                     {{ $t('Common.Reject') }}
                 </button>
-                <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Headquarter' &&
-                    selectedTooltip.status == 'ApprovedByHeadquarters'
-                " click-method="unapproveInterview">
+                <button class="btn btn-sm btn-primary"
+                    v-if="model.userRole == 'Headquarter' &&
+                        selectedTooltip.status == 'ApprovedByHeadquarters'
+                    "
+                    click-method="unapproveInterview">
                     {{ $t('Common.Unapprove') }}
                 </button>
             </div>
@@ -102,26 +124,35 @@
                 <strong>{{ $t('Common.Status') }}:</strong>
                 &nbsp;{{ assignmentStatusLabel }}
             </div>
-            <div class="row-fluid" v-if="selectedTooltip.statusComment">
+            <div class="row-fluid"
+                v-if="selectedTooltip.statusComment">
                 <strong>{{ $t('Assignments.StatusChangeComment') }}:</strong>
                 &nbsp;{{ selectedTooltip.statusComment }}
             </div>
-            <div class="row-fluid" v-for="answer in selectedTooltip.identifyingData">
+            <div class="row-fluid"
+                v-for="answer in selectedTooltip.identifyingData">
                 <strong>{{ answer.title }}:</strong>
                 &nbsp;{{ answer.answer || $t('Details.NoAnswer') }}
             </div>
 
-            <div class="row-fluid" v-if="model.userRole != 'Interviewer'" style="white-space: nowrap">
+            <div class="row-fluid"
+                v-if="model.userRole != 'Interviewer'"
+                style="white-space: nowrap">
                 <strong>{{ $t('Common.ViewAssignmentDetails') }}:</strong>&nbsp;
                 <a v-bind:href="api.GetAssignmentDetailsUrl(
-                    selectedTooltip.assignmentId
-                )
-                    " target="_blank">{{ $t('MapReport.details') }}</a>
+                       selectedTooltip.assignmentId
+                   )
+                   "
+                    target="_blank">{{ $t('MapReport.details') }}</a>
             </div>
-            <div class="row-fluid tooltip-buttons" style="white-space: nowrap" v-if="!model.isObserving">
-                <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Supervisor' ||
-                    model.userRole == 'Headquarter'
-                " click-method="assignAssignment">
+            <div class="row-fluid tooltip-buttons"
+                style="white-space: nowrap"
+                v-if="!model.isObserving">
+                <button class="btn btn-sm btn-primary"
+                    v-if="model.userRole == 'Supervisor' ||
+                        model.userRole == 'Headquarter'
+                    "
+                    click-method="assignAssignment">
                     {{ $t('Common.Assign') }}
                 </button>
 
@@ -131,15 +162,21 @@
                     {{ $t('Common.Create') }}
                 </button>
 
-                <button class="btn btn-sm btn-primary" v-if="canCompleteAssignment" click-method="completeAssignment">
+                <button class="btn btn-sm btn-primary"
+                    v-if="canCompleteAssignment"
+                    click-method="completeAssignment">
                     {{ $t('Assignments.Complete') }}
                 </button>
 
-                <button class="btn btn-sm btn-success" v-if="canCloseAssignment" click-method="closeAssignment">
+                <button class="btn btn-sm btn-success"
+                    v-if="canCloseAssignment"
+                    click-method="closeAssignment">
                     {{ $t('Assignments.Close') }}
                 </button>
 
-                <button class="btn btn-sm btn-default" v-if="canReopenAssignment" click-method="reopenAssignment">
+                <button class="btn btn-sm btn-default"
+                    v-if="canReopenAssignment"
+                    click-method="reopenAssignment">
                     {{ $t('Assignments.Reopen') }}
                 </button>
             </div>
@@ -149,11 +186,13 @@
             <div class="row-fluid">
                 <strong>{{ $t('Reports.ClusterInfo') }}</strong>
             </div>
-            <div class="row-fluid" v-if="selectedTooltip.interviewsCount > 0">
+            <div class="row-fluid"
+                v-if="selectedTooltip.interviewsCount > 0">
                 <strong>{{ $t('Common.Interviews') }}:</strong>
                 &nbsp;{{ selectedTooltip.interviewsCount }}
             </div>
-            <div class="row-fluid" v-if="selectedTooltip.assignmentsCount > 0">
+            <div class="row-fluid"
+                v-if="selectedTooltip.assignmentsCount > 0">
                 <strong>{{ $t('Common.Assignments') }}:</strong>
                 &nbsp;{{ selectedTooltip.assignmentsCount }}
             </div>
@@ -161,119 +200,172 @@
     </div>
     <div id="map-canvas"></div>
 
-    <ModalFrame ref="completeAssignmentModal" :title="$t('Assignments.CompleteAssignmentTitle')">
+    <ModalFrame ref="completeAssignmentModal"
+        :title="$t('Assignments.CompleteAssignmentTitle')">
         <p>{{ $t('Assignments.CompleteAssignmentMessage') }}</p>
         <form onsubmit="return false;">
             <div class="form-group">
-                <label class="control-label" for="completeCommentId">
+                <label class="control-label"
+                    for="completeCommentId">
                     {{ $t('Assignments.Comments') }}
                 </label>
-                <textarea control-id="completeCommentId" v-model="statusChangeComment"
-                    :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
-                    autocomplete="off" class="form-control" />
+                <textarea control-id="completeCommentId"
+                    v-model="statusChangeComment"
+                    :placeholder="$t('Assignments.EnterComments')"
+                    name="comments"
+                    rows="4"
+                    maxlength="500"
+                    autocomplete="off"
+                    class="form-control" />
             </div>
         </form>
         <template v-slot:actions>
             <div>
-                <button type="button" class="btn btn-primary" @click="confirmCompleteAssignment">{{
-                    $t('Assignments.Complete') }}</button>
-                <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                <button type="button"
+                    class="btn btn-primary"
+                    @click="confirmCompleteAssignment">{{
+                        $t('Assignments.Complete') }}</button>
+                <button type="button"
+                    class="btn btn-link"
+                    data-bs-dismiss="modal">
                     {{ $t('Common.Cancel') }}
                 </button>
             </div>
         </template>
     </ModalFrame>
 
-    <ModalFrame ref="reopenAssignmentModal" :title="$t('Assignments.ReopenAssignmentTitle')">
+    <ModalFrame ref="reopenAssignmentModal"
+        :title="$t('Assignments.ReopenAssignmentTitle')">
         <p>{{ $t('Assignments.ReopenAssignmentMessage') }}</p>
         <form onsubmit="return false;">
             <div class="form-group">
-                <label class="control-label" for="reopenCommentId">
+                <label class="control-label"
+                    for="reopenCommentId">
                     {{ $t('Assignments.Comments') }}
                 </label>
-                <textarea control-id="reopenCommentId" v-model="statusChangeComment"
-                    :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
-                    autocomplete="off" class="form-control" />
+                <textarea control-id="reopenCommentId"
+                    v-model="statusChangeComment"
+                    :placeholder="$t('Assignments.EnterComments')"
+                    name="comments"
+                    rows="4"
+                    maxlength="500"
+                    autocomplete="off"
+                    class="form-control" />
             </div>
         </form>
         <template v-slot:actions>
             <div>
-                <button type="button" class="btn btn-primary" @click="confirmReopenAssignment">{{
-                    $t('Assignments.Reopen') }}</button>
-                <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                <button type="button"
+                    class="btn btn-primary"
+                    @click="confirmReopenAssignment">{{
+                        $t('Assignments.Reopen') }}</button>
+                <button type="button"
+                    class="btn btn-link"
+                    data-bs-dismiss="modal">
                     {{ $t('Common.Cancel') }}
                 </button>
             </div>
         </template>
     </ModalFrame>
 
-    <ModalFrame ref="closeAssignmentModal" :title="$t('Assignments.CloseAssignmentTitle')">
+    <ModalFrame ref="closeAssignmentModal"
+        :title="$t('Assignments.CloseAssignmentTitle')">
         <p>{{ $t('Assignments.CloseAssignmentMessage') }}</p>
         <form onsubmit="return false;">
             <div class="form-group">
-                <label class="control-label" for="closeCommentId">
+                <label class="control-label"
+                    for="closeCommentId">
                     {{ $t('Assignments.Comments') }}
                 </label>
-                <textarea control-id="closeCommentId" v-model="statusChangeComment"
-                    :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
-                    autocomplete="off" class="form-control" />
+                <textarea control-id="closeCommentId"
+                    v-model="statusChangeComment"
+                    :placeholder="$t('Assignments.EnterComments')"
+                    name="comments"
+                    rows="4"
+                    maxlength="500"
+                    autocomplete="off"
+                    class="form-control" />
             </div>
         </form>
         <template v-slot:actions>
             <div>
-                <button type="button" class="btn btn-primary" @click="confirmCloseAssignment">{{
-                    $t('Assignments.Close') }}</button>
-                <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                <button type="button"
+                    class="btn btn-primary"
+                    @click="confirmCloseAssignment">{{
+                        $t('Assignments.Close') }}</button>
+                <button type="button"
+                    class="btn btn-link"
+                    data-bs-dismiss="modal">
                     {{ $t('Common.Cancel') }}
                 </button>
             </div>
         </template>
     </ModalFrame>
 
-    <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
+    <ModalFrame ref="assignModal"
+        :title="$t('Common.Assign')">
         <form onsubmit="return false;">
             <div class="form-group">
-                <label class="control-label" for="newResponsibleId">{{
-                    $t('Assignments.SelectResponsible')
-                }}</label>
-                <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
-                    :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
+                <label class="control-label"
+                    for="newResponsibleId">{{
+                        $t('Assignments.SelectResponsible')
+                    }}</label>
+                <Typeahead control-id="newResponsibleId"
+                    :placeholder="$t('Common.Responsible')"
+                    :value="newResponsibleId"
+                    :ajax-params="{}"
+                    @selected="newResponsibleSelected"
                     :fetch-url="model.responsible"></Typeahead>
             </div>
             <div v-if="selectedTooltip.isReceivedByTablet">
                 <br />
-                <input type="checkbox" id="reassignReceivedByTablet" v-model="isReassignReceivedByTablet"
+                <input type="checkbox"
+                    id="reassignReceivedByTablet"
+                    v-model="isReassignReceivedByTablet"
                     class="checkbox-filter" />
-                <label for="reassignReceivedByTablet" style="font-weight: normal">
+                <label for="reassignReceivedByTablet"
+                    style="font-weight: normal">
                     <span class="tick"></span>
                     {{ $t('Reports.AssignReceivedConfirm', 1) }}
                 </label>
                 <br />
-                <span v-if="isReassignReceivedByTablet" class="text-danger">
+                <span v-if="isReassignReceivedByTablet"
+                    class="text-danger">
                     {{ $t('Reports.AssignReceivedWarning') }}
                 </span>
             </div>
         </form>
         <template v-slot:actions>
             <div>
-                <button type="button" class="btn btn-primary" role="confirm" @click="assign"
+                <button type="button"
+                    class="btn btn-primary"
+                    role="confirm"
+                    @click="assign"
                     :disabled="!canClickAssign">
                     {{ $t('Common.Assign') }}
                 </button>
-                <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">
+                <button type="button"
+                    class="btn btn-link"
+                    data-bs-dismiss="modal"
+                    role="cancel">
                     {{ $t('Common.Cancel') }}
                 </button>
             </div>
         </template>
     </ModalFrame>
 
-    <Confirm ref="reopenModal" id="reopenModal">
+    <Confirm ref="reopenModal"
+        id="reopenModal">
         <div>
             <label for="reopenInterviewComment">
                 {{ $t('Pages.InterviewerHq_RestartConfirm') }}:
             </label>
-            <textarea class="form-control" rows="5" maxlength="200" name="reopenInterviewComment"
-                id="reopenInterviewComment" v-model="restart_comment"></textarea>
+            <textarea class="form-control"
+                rows="5"
+                maxlength="200"
+                name="reopenInterviewComment"
+                id="reopenInterviewComment"
+                v-model="restart_comment"></textarea>
         </div>
     </Confirm>
 </template>

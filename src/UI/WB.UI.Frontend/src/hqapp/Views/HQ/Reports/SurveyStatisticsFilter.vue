@@ -1,59 +1,100 @@
 <template>
     <div>
         <FilterBlock :title="$t('Reports.Questionnaire')">
-            <Typeahead control-id="questionnaire" :placeholder="selectedQuestionnairePlaceholder" noClear
-                :values="questionnaireList" :value="selectedQuestionnaire" :forceLoadingState="loading.questionnaire"
+            <Typeahead control-id="questionnaire"
+                :placeholder="selectedQuestionnairePlaceholder"
+                noClear
+                :values="questionnaireList"
+                :value="selectedQuestionnaire"
+                :forceLoadingState="loading.questionnaire"
                 @selected="selectQuestionnaire" />
         </FilterBlock>
 
         <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-            <Typeahead control-id="version" :placeholder="$t('Common.AllVersions')" noSearch
-                :values="questionnaireVersionsList" :value="selectedQuestionnaireVersion"
-                :forceLoadingState="loading.questionnaire" :disabled="selectedQuestionnaire == null"
+            <Typeahead control-id="version"
+                :placeholder="$t('Common.AllVersions')"
+                noSearch
+                :values="questionnaireVersionsList"
+                :value="selectedQuestionnaireVersion"
+                :forceLoadingState="loading.questionnaire"
+                :disabled="selectedQuestionnaire == null"
                 @selected="selectQuestionnaireVersion" />
         </FilterBlock>
 
         <FilterBlock :title="$t('Common.Status')">
-            <Typeahead control-id="status" :selectedKey="selectedStatus" data-vv-name="status" data-vv-as="status"
-                :placeholder="$t('Common.AllStatuses')" :value="status" :values="statuses"
+            <Typeahead control-id="status"
+                :selectedKey="selectedStatus"
+                data-vv-name="status"
+                data-vv-as="status"
+                :placeholder="$t('Common.AllStatuses')"
+                :value="status"
+                :values="statuses"
                 v-on:selected="statusSelected" />
         </FilterBlock>
 
         <FilterBlock :title="$t('Reports.Question')">
-            <Typeahead control-id="question" :placeholder="selectedQuestionPlaceholder" noClear
-                :forceLoadingState="loading.questions" :values="questionsList" :value="selectedQuestion"
+            <Typeahead control-id="question"
+                :placeholder="selectedQuestionPlaceholder"
+                noClear
+                :forceLoadingState="loading.questions"
+                :values="questionsList"
+                :value="selectedQuestion"
                 @selected="selectQuestion" />
         </FilterBlock>
 
-        <FilterBlock :title="$t('Reports.ViewOptions')" v-if="!isSupervisor && this.question != null">
+        <FilterBlock :title="$t('Reports.ViewOptions')"
+            v-if="!isSupervisor && this.question != null">
             <div class="options-group">
-                <Radio :label="$t('Reports.TeamLeadsOnly')" :radioGroup="false" name="expandTeams" :value="expandTeams"
+                <Radio :label="$t('Reports.TeamLeadsOnly')"
+                    :radioGroup="false"
+                    name="expandTeams"
+                    :value="expandTeams"
                     @input="radioChanged" />
-                <Radio :label="$t('Reports.WithInterviewers')" :radioGroup="true" name="expandTeams"
-                    :value="expandTeams" @input="radioChanged" />
+                <Radio :label="$t('Reports.WithInterviewers')"
+                    :radioGroup="true"
+                    name="expandTeams"
+                    :value="expandTeams"
+                    @input="radioChanged" />
             </div>
         </FilterBlock>
 
-        <FilterBlock :title="$t('Reports.ByAnswerValue')" v-if="question && question.Type == 'Numeric'">
-            <Form as="div" v-slot="{ errors, meta }" class="row">
+        <FilterBlock :title="$t('Reports.ByAnswerValue')"
+            v-if="question && question.Type == 'Numeric'">
+            <Form as="div"
+                v-slot="{ errors, meta }"
+                class="row">
                 <div class="col-xs-6">
-                    <div class="form-group" v-bind:class="{ 'has-error': errors.min }" :title="errors.min">
+                    <div class="form-group"
+                        v-bind:class="{ 'has-error': errors.min }"
+                        :title="errors.min">
                         <label for="min">
                             {{ $t("Reports.Min") }}
                         </label>
-                        <Field type="number" class="form-control input-sm" name="min" :placeholder="$t('Reports.Min')"
-                            v-number="/^([-]?\d*)$/" @input="inputChange" :rules="{ max_value: max || 2147483647 }"
+                        <Field type="number"
+                            class="form-control input-sm"
+                            name="min"
+                            :placeholder="$t('Reports.Min')"
+                            v-number="/^([-]?\d*)$/"
+                            @input="inputChange"
+                            :rules="{ max_value: max || 2147483647 }"
                             :value="min" />
                     </div>
                 </div>
                 <div class="col-xs-6">
-                    <div class="form-group" :class="{ 'has-error': errors.max }" :title="errors.max">
+                    <div class="form-group"
+                        :class="{ 'has-error': errors.max }"
+                        :title="errors.max">
                         <label for="max">
                             {{ $t("Reports.Max") }}
                         </label>
-                        <Field type="number" class="form-control input-sm" :placeholder="$t('Reports.Max')"
-                            v-number="/^([-]?\d*)$/" :rules="{ min_value: min == 0 ? Number(0) : (min || -2147483648) }"
-                            name="max" @input="inputChange" :value="max" />
+                        <Field type="number"
+                            class="form-control input-sm"
+                            :placeholder="$t('Reports.Max')"
+                            v-number="/^([-]?\d*)$/"
+                            :rules="{ min_value: min == 0 ? Number(0) : (min || -2147483648) }"
+                            name="max"
+                            @input="inputChange"
+                            :value="max" />
                     </div>
                 </div>
             </Form>
@@ -61,14 +102,23 @@
 
         <template v-if="question != null && question.SupportConditions">
             <FilterBlock :title="$t('Reports.ConditionQuestion')">
-                <Typeahead control-id="condition" :placeholder="$t('Reports.SelectConditionQuestion')"
-                    :values="conditionVariablesList" :value="selectedCondition" @selected="selectCondition" />
+                <Typeahead control-id="condition"
+                    :placeholder="$t('Reports.SelectConditionQuestion')"
+                    :values="conditionVariablesList"
+                    :value="selectedCondition"
+                    @selected="selectCondition" />
             </FilterBlock>
             <template v-if="condition != null">
-                <Checkbox :label="$t('Reports.PivotView')" name="pivot" :value="isPivotChecked" @input="pivotChanged" />
+                <Checkbox :label="$t('Reports.PivotView')"
+                    name="pivot"
+                    :value="isPivotChecked"
+                    @input="pivotChanged" />
 
-                <ul class="list-group small" v-if="!isPivotChecked">
-                    <li class="list-group-item pointer" v-for="answer in condition.Answers" :key="answer.Answer"
+                <ul class="list-group small"
+                    v-if="!isPivotChecked">
+                    <li class="list-group-item pointer"
+                        v-for="answer in condition.Answers"
+                        :key="answer.Answer"
                         :class="{ 'list-group-item-success': isSelectedAnswer(answer.Answer) }"
                         @click="selectConditionAnswer(answer.Answer)">{{ answer.Answer }}. {{ answer.Text }}</li>
                 </ul>

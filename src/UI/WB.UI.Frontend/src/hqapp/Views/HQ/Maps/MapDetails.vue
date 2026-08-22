@@ -1,10 +1,13 @@
 <template>
-    <HqLayout :hasFilter="true" :hasHeader="true" :fixedWidth="false">
+    <HqLayout :hasFilter="true"
+        :hasHeader="true"
+        :fixedWidth="false">
         <template v-slot:filters>
 
             <Filters :title="$t('Common.Properties')">
                 <FilterBlock>
-                    <ul class="list-group small" style="list-style: none;">
+                    <ul class="list-group small"
+                        style="list-style: none;">
                         <li v-if="!$config.model.shapeType"><strong>{{
                             $t("Pages.MapDetails_MaxScale") }}:</strong> <span>{{ $config.model.maxScale }}</span>
                         </li>
@@ -16,7 +19,7 @@
                         </li>
                         <li v-if="$config.model.shapesCount"><strong>{{
                             $t("Pages.MapDetails_ShapesCount") }}:</strong> <span>{{ $config.model.shapesCount
-                                }}</span>
+                        }}</span>
                         </li>
                         <li><strong>{{ $t("Pages.MapDetails_Size") }}:</strong> <span>{{
                             $config.model.size }}</span>
@@ -26,10 +29,11 @@
                             importDate }}</span>
                         </li>
                         <li v-if="$config.model.uploadedBy"><strong>
-                                {{ $t("Pages.MapDetails_UploadedBy") }}:</strong> <span>{{ $config.model.uploadedBy
-                                }}</span>
+                            {{ $t("Pages.MapDetails_UploadedBy") }}:</strong> <span>{{ $config.model.uploadedBy
+                        }}</span>
                         </li>
-                        <li v-if="$config.model.showDuplicateLabelsWarning" class="text-danger">
+                        <li v-if="$config.model.showDuplicateLabelsWarning"
+                            class="text-danger">
                             <strong>{{ $t("Pages.MapList_HasDuplicateLabels") }}: </strong>
                             <span>{{ $t("Common.Yes") }}</span>
                         </li>
@@ -37,7 +41,8 @@
                 </FilterBlock>
 
                 <template v-slot:additional>
-                    <div class="filters-container" id="linkedUsers">
+                    <div class="filters-container"
+                        id="linkedUsers">
                         <h4>
                             {{ $t('Common.LinkedUsers') }}
                         </h4>
@@ -45,23 +50,32 @@
 
                             <h5>{{ $t("Pages.MapDetails_SelectUser") }}</h5>
                             <div class="input-group">
-                                <Typeahead control-id="newLikedUserId" :placeholder="$t('Common.LinkUser')"
-                                    :value="newLikedUserId" :ajax-params="{}" @selected="newLinkedUserSelected"
-                                    :fetch-url="config.api.users" class="with-extra-btn">
+                                <Typeahead control-id="newLikedUserId"
+                                    :placeholder="$t('Common.LinkUser')"
+                                    :value="newLikedUserId"
+                                    :ajax-params="{}"
+                                    @selected="newLinkedUserSelected"
+                                    :fetch-url="config.api.users"
+                                    class="with-extra-btn">
                                 </Typeahead>
 
                                 <div class="input-group-btn">
-                                    <button class="btn btn-success" @click="linkUserToMap"
+                                    <button class="btn btn-success"
+                                        @click="linkUserToMap"
                                         :disabled="!newLikedUserId || config.isObserving">
-                                        <span aria-hidden="true" class="glyphicon add"></span>
+                                        <span aria-hidden="true"
+                                            class="glyphicon add"></span>
                                     </button>
                                 </div>
 
                             </div>
 
-                            <DataTables ref="table" :tableOptions="tableOptions"
-                                :addParamsToRequest="addParamsToRequest" :contextMenuItems="contextMenuItems"
-                                :supportContextMenu="!config.isObserving" style="margin-left: 0px;">
+                            <DataTables ref="table"
+                                :tableOptions="tableOptions"
+                                :addParamsToRequest="addParamsToRequest"
+                                :contextMenuItems="contextMenuItems"
+                                :supportContextMenu="!config.isObserving"
+                                style="margin-left: 0px;">
                             </DataTables>
                         </div>
                     </div>
@@ -70,7 +84,10 @@
         </template>
 
 
-        <Confirm ref="confirmDiscard" id="discardConfirm" :okTitle="$t('Pages.MapDetails_Unlink')" okClass="btn-danger">
+        <Confirm ref="confirmDiscard"
+            id="discardConfirm"
+            :okTitle="$t('Pages.MapDetails_Unlink')"
+            okClass="btn-danger">
             <p>{{ $t("Pages.MapUserLink_DiscardConfirm") }} </p>
             <p class="text-danger">{{ $t("Pages.MapUserLink_DiscardConfirm1") }} </p>
         </Confirm>
@@ -86,8 +103,10 @@
             </div>
         </template>
         <div style="display: flex; width: 100%; height: 100%; flex-direction: column;">
-            <iframe title="Map preview" style="flex-grow: 1; border: none; margin: 0; padding: 0; min-height: 550px;"
-                id="map-iframe" :src="$config.model.mapPreviewUrl"></iframe>
+            <iframe title="Map preview"
+                style="flex-grow: 1; border: none; margin: 0; padding: 0; min-height: 550px;"
+                id="map-iframe"
+                :src="$config.model.mapPreviewUrl"></iframe>
             <p> {{ mapDisclaimer }} </p>
         </div>
 
@@ -149,7 +168,7 @@ export default {
                             'fileName': fileName,
                             'userName': userName,
                             workspace: self.$store.getters.workspace,
-                        },
+                        }
                     ).then(response => {
                         self.$refs.table.reload()
                     }).catch(err => {
@@ -182,7 +201,7 @@ export default {
                         'fileName': fileName,
                         'userName': userName,
                         workspace: self.$store.getters.workspace,
-                    },
+                    }
                 ).then(response => {
                     self.$refs.table.reload()
                 }).catch(err => {

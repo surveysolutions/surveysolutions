@@ -1,6 +1,9 @@
 <template>
     <div class="interviewChart">
-        <LineChart :data="renderData" ref="chart" dataset-id-key="status" :options="chartOptions" />
+        <LineChart :data="renderData"
+            ref="chart"
+            dataset-id-key="status"
+            :options="chartOptions" />
     </div>
 </template>
 
