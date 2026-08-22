@@ -27,7 +27,7 @@
                                 digitGroupSeparator: groupSeparator,
                                 decimalCharacter: decimalSeparator,
                                 decimalPlaces: decimalPlacesCount,
-                                allowDecimalPadding: false
+                                allowDecimalPadding: 'floats'
                             }" />
                         <wb-remove-answer v-if="!isSpecialValueSelected"
                             :on-remove="removeAnswer" />
