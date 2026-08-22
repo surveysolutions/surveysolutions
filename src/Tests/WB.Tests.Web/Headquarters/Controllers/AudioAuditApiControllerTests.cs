@@ -1,7 +1,9 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
@@ -15,6 +17,16 @@ namespace WB.Tests.Web.Headquarters.Controllers;
 [TestOf(typeof(AudioAuditApiController))]
 public class AudioAuditApiControllerTests
 {
+    [Test]
+    public void controller_should_not_require_authorization_attribute()
+    {
+        var hasAuthorize = typeof(AudioAuditApiController)
+            .GetCustomAttributes(typeof(AuthorizeAttribute), inherit: true)
+            .Any();
+
+        Assert.That(hasAuthorize, Is.False);
+    }
+
     [Test]
     public async Task GetAudioAuditSegment_should_enable_ranges_for_non_seekable_storage_stream()
     {

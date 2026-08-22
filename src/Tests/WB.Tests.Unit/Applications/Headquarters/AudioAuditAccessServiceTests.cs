@@ -1,4 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -6,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Services.Impl;
@@ -136,11 +143,52 @@ public class AudioAuditAccessServiceTests
         Assert.That(subject.CanAccessAudioAudit(interviewId), Is.False);
     }
 
+    [Test]
+    public async Task when_segments_have_no_timestamp_should_order_by_filename_ordinally()
+    {
+        var interviewId = Guid.NewGuid();
+        var interview = Create.AggregateRoot.StatefulInterview(interviewId: interviewId);
+        var audioStorage = new Mock<IAudioAuditFileStorage>();
+        var descriptors = new List<InterviewBinaryDataDescriptor>
+        {
+            CreateDescriptor(interviewId, "ä-segment.m4a"),
+            CreateDescriptor(interviewId, "z-segment.m4a"),
+        };
+        audioStorage.Setup(x => x.GetBinaryFilesForInterview(interviewId)).ReturnsAsync(descriptors);
+
+        var previousCulture = CultureInfo.CurrentCulture;
+        var previousUiCulture = CultureInfo.CurrentUICulture;
+        CultureInfo.CurrentCulture = new CultureInfo("de-DE");
+        CultureInfo.CurrentUICulture = new CultureInfo("de-DE");
+        try
+        {
+            var subject = CreateSubject(
+                interviewId,
+                interview,
+                Mock.Of<IAuthorizedUser>(user => user.IsAuthenticated && user.IsAdministrator),
+                audioAuditFileStorage: audioStorage.Object);
+
+            var orderedSegments = await subject.GetAudioAuditSegmentsAsync(interviewId);
+
+            var orderedFileNames = orderedSegments
+                .Select(segment => DecodeOpaqueId(segment.SegmentId))
+                .ToArray();
+
+            Assert.That(orderedFileNames, Is.EqualTo(new[] { "z-segment.m4a", "ä-segment.m4a" }));
+        }
+        finally
+        {
+            CultureInfo.CurrentCulture = previousCulture;
+            CultureInfo.CurrentUICulture = previousUiCulture;
+        }
+    }
+
     private static AudioAuditAccessService CreateSubject(
         Guid interviewId,
         StatefulInterview interview,
         IAuthorizedUser authorizedUser,
-        InterviewerSettings settings = null)
+        InterviewerSettings settings = null,
+        IAudioAuditFileStorage audioAuditFileStorage = null)
     {
         var settingsStorage = new InMemoryPlainStorageAccessor<InterviewerSettings>();
         if (settings != null)
@@ -165,8 +213,29 @@ public class AudioAuditAccessServiceTests
 
         return new AudioAuditAccessService(
             authorizedUser,
-            Mock.Of<IAudioAuditFileStorage>(),
+            audioAuditFileStorage ?? Mock.Of<IAudioAuditFileStorage>(),
             settingsStorage,
             reviewAllowedService.Object);
+    }
+
+    private static InterviewBinaryDataDescriptor CreateDescriptor(Guid interviewId, string fileName)
+        => new InterviewBinaryDataDescriptor(
+            interviewId,
+            fileName,
+            "audio/mp4",
+            () => Task.FromResult(Array.Empty<byte>()),
+            null,
+            null);
+
+    private static string DecodeOpaqueId(string opaqueId)
+    {
+        var padded = opaqueId.Replace('-', '+').Replace('_', '/');
+        switch (padded.Length % 4)
+        {
+            case 2: padded += "=="; break;
+            case 3: padded += "="; break;
+        }
+
+        return Encoding.UTF8.GetString(Convert.FromBase64String(padded));
     }
 }

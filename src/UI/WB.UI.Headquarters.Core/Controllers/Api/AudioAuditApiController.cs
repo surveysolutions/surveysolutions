@@ -2,13 +2,11 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Controllers.Api
 {
-    [Authorize]
     [Route("api/audioaudit")]
     public class AudioAuditApiController : ControllerBase
     {

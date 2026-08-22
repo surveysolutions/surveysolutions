@@ -72,7 +72,7 @@ namespace WB.UI.Headquarters.Services.Impl
                 .Select(d => (descriptor: d, timestamp: ParseTimestamp(d.FileName)))
                 .OrderBy(x => x.timestamp == null)
                 .ThenBy(x => x.timestamp)
-                .ThenBy(x => x.descriptor.FileName)
+                .ThenBy(x => x.descriptor.FileName, StringComparer.Ordinal)
                 .Select((x, index) => new AudioAuditSegmentInfo
                 {
                     SegmentId = BuildOpaqueId(x.descriptor.FileName),
