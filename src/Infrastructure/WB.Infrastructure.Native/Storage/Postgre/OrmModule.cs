@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using NHibernate;
 using Npgsql;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -208,6 +209,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 externallyOwned: true);
 
             registry.BindInPerLifetimeScope<IUnitOfWork, UnitOfWork>();
+
+            // Override the in-memory AggregateLock from InfrastructureModule with a PostgreSQL advisory
+            // lock implementation that supports farm mode (multi-server deployments).
+            registry.BindAsSingleton<IAggregateLock, PostgresAggregateLock>();
 
             registry.Bind(typeof(IQueryableReadSideRepositoryReader<>), typeof(PostgreReadSideStorage<>));
             registry.Bind(typeof(IQueryableReadSideRepositoryReader<,>), typeof(PostgreReadSideStorage<,>));
