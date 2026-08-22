@@ -27,6 +27,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
         public bool? AllowInterviewerChangeAssignmentStatus { get; set; }
 
         public AudioRecordingQuality? AudioRecordingQuality { get; set; }
+
+        public bool? AllowSupervisorAudioAuditPlayback { get; set; }
     }
 
     public static class InterviewerSettingsExtensions
@@ -104,6 +106,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
                 return InterviewerSettings.AudioRecordingQualityDefault;
 
             return settings.AudioRecordingQuality.Value;
+        }
+
+        public static bool IsAllowSupervisorAudioAuditPlayback(this InterviewerSettings settings)
+        {
+            // Explicit false default - this setting must never default to true
+            return settings?.AllowSupervisorAudioAuditPlayback == true;
         }
     }
 }
