@@ -46,10 +46,10 @@ public abstract class InterviewS3FileStorage : IInterviewFileStorage
     
     public async Task RemoveAllBinaryDataForInterviewsAsync(List<Guid> interviewIds)
     {
-        if (!interviewIds.Any()) return;
-
-        var paths = interviewIds.Select(id => GetInterviewDirectoryPath(id));
-        await externalFileStorage.RemoveAsync(paths).ConfigureAwait(false);
+        foreach (var interviewId in interviewIds)
+        {
+            await externalFileStorage.RemoveAllUnderPrefixAsync(GetPath(interviewId)).ConfigureAwait(false);
+        }
     }
 
     public async Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
