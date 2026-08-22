@@ -325,6 +325,9 @@
   <data name="NumberEnter" xml:space="preserve">
     <value>输入数字</value>
   </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>此问题不允许负值</value>
+  </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>答案 '{{answer}}' 出错，因为此答案被当成二维表的大小且该答案被驳回</value>
   </data>

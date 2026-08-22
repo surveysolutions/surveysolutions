@@ -316,6 +316,9 @@
   <data name="NumberEnter" xml:space="preserve">
     <value>შეიყვანეთ ნომერი</value>
   </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>ამ კითხვისთვის უარყოფითი მნიშვნელობები არ არის დაშვებული</value>
+  </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>პასუხი "{{answer}}" არასწორია, რადგან კითხვა გამოიყენება როგორც როსტერის სიდიდის მაჩვენებელი და განსაზღვრული პასუხი უარყოფითია</value>
   </data>

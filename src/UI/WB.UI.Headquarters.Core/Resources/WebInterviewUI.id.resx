@@ -238,6 +238,9 @@
     <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
         <value>Nilai yang dimasukkan tidak boleh kurang dari jawaban yang dilindungi</value>
     </data>
+    <data name="NumberNonNegativeError" xml:space="preserve">
+        <value>Nilai negatif tidak diperbolehkan untuk pertanyaan ini</value>
+    </data>
     <data name="NumberRosterError" xml:space="preserve">
         <value>Jawaban '{{answer}}' salah karena pertanyaan digunakan sebagai ukuran daftar nama dan jawaban yang ditentukan negatif</value>
     </data>

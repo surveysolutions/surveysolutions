@@ -238,6 +238,9 @@
     <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
         <value>ค่าที่ป้อนต้องไม่น้อยกว่าคำตอบที่ได้รับการป้องกัน</value>
     </data>
+    <data name="NumberNonNegativeError" xml:space="preserve">
+        <value>ไม่อนุญาตให้ใช้ค่าติดลบสำหรับคำถามนี้</value>
+    </data>
     <data name="NumberRosterError" xml:space="preserve">
         <value>คำตอบ '{{answer}}' ไม่ถูกต้องเนื่องจากคำถามถูกใช้เป็นขนาดของบัญชีรายชื่อและคำตอบที่ระบุเป็นค่าลบ</value>
     </data>

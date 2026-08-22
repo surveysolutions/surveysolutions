@@ -102,6 +102,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireQuestionExists(QuestionType.Numeric)
                 .RequireNumericIntegerQuestionDeclared()
                 .RequireRosterSizeAnswerNotNegative(answer)
+                .RequireNonNegativeIntegerAnswer(answer)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answer);
 
         public void RequireNumericIntegerAnswerAllowed(int answer, int? protectedAnswer)
@@ -110,6 +111,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireNumericIntegerQuestionDeclared()
                 .RequireRosterSizeAnswerNotNegative(answer)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answer)
+                .RequireNonNegativeIntegerAnswer(answer)
                 .RequireQuestionIsEnabledAndNotReadOnly()
                 .RequireProtectedAnswersNotReduced(answer, protectedAnswer);
 
@@ -133,16 +135,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             }
         }
 
-        public void RequireNumericRealPreloadValueAllowed()
+        public void RequireNumericRealPreloadValueAllowed(double answer)
             => this
                 .RequireQuestionExists(QuestionType.Numeric)
-                .RequireNumericRealQuestionDeclared();
+                .RequireNumericRealQuestionDeclared()
+                .RequireNonNegativeRealAnswer(answer);
 
         public void RequireNumericRealAnswerAllowed(double answer)
             => this
                 .RequireQuestionExists(QuestionType.Numeric)
                 .RequireNumericRealQuestionDeclared()
                 .RequireAllowedDecimalPlaces(answer)
+                .RequireNonNegativeRealAnswer(answer)
                 .RequireQuestionIsEnabledAndNotReadOnly();
 
         public void RequireDateTimePreloadValueAllowed()
@@ -636,6 +640,66 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 {
                     throw new AnswerNotAcceptedException(
                         $"Answer is incorrect because question is used as size of roster and specified answer is negative")
+                    {
+                        Data =
+                        {
+                            {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                            {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
+                            {ExceptionKeys.ProvidedAnswerValue, answer}
+                        }
+                    };
+                }
+            }
+
+            return this;
+        }
+
+        private InterviewQuestionInvariants RequireNonNegativeIntegerAnswer(int answer)
+        {
+            if (!this.Questionnaire.IsQuestionNonNegative(this.QuestionId))
+                return this;
+
+            if (answer < 0)
+            {
+                if (this.Questionnaire.GetOptionForQuestionByOptionValue(this.QuestionId, answer, null) == null)
+                {
+                    throw new AnswerNotAcceptedException(
+                        $"Answer '{answer}' is not allowed because the question is set as non-negative")
+                    {
+                        Data =
+                        {
+                            {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                            {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
+                            {ExceptionKeys.ProvidedAnswerValue, answer}
+                        }
+                    };
+                }
+            }
+
+            return this;
+        }
+
+        private InterviewQuestionInvariants RequireNonNegativeRealAnswer(double answer)
+        {
+            if (!this.Questionnaire.IsQuestionNonNegative(this.QuestionId))
+                return this;
+
+            if (answer < 0)
+            {
+                bool isSpecialValue = false;
+                try
+                {
+                    isSpecialValue = this.Questionnaire.GetOptionForQuestionByOptionValue(this.QuestionId, (decimal)answer, null) != null;
+                }
+                catch (OverflowException)
+                {
+                    // value is outside decimal range, so it cannot be a special value
+                }
+
+                if (!isSpecialValue)
+                {
+                    throw new AnswerNotAcceptedException(
+                        $"Answer '{answer}' is not allowed because the question is set as non-negative")
                     {
                         Data =
                         {

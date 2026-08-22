@@ -364,6 +364,9 @@
   <data name="NumberEnter" xml:space="preserve">
     <value>Vendosni numrin</value>
   </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Vlerat negative nuk lejohen për këtë pyetje</value>
+  </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>Përgjigjja '{{answer}}' është e pasaktë, pasi pyetja është përdorur si madhësi e rosterit dhe përgjigjja e specifikuar është negative </value>
   </data>
