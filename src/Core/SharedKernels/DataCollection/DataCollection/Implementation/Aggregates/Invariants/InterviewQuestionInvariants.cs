@@ -102,6 +102,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireQuestionExists(QuestionType.Numeric)
                 .RequireNumericIntegerQuestionDeclared()
                 .RequireRosterSizeAnswerNotNegative(answer)
+                .RequireNonNegativeIntegerAnswer(answer)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answer);
 
         public void RequireNumericIntegerAnswerAllowed(int answer, int? protectedAnswer)
@@ -134,10 +135,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             }
         }
 
-        public void RequireNumericRealPreloadValueAllowed()
+        public void RequireNumericRealPreloadValueAllowed(double answer)
             => this
                 .RequireQuestionExists(QuestionType.Numeric)
-                .RequireNumericRealQuestionDeclared();
+                .RequireNumericRealQuestionDeclared()
+                .RequireNonNegativeRealAnswer(answer);
 
         public void RequireNumericRealAnswerAllowed(double answer)
             => this
