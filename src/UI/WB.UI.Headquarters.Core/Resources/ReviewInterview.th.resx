@@ -24,7 +24,7 @@
     <value>ระยะเวลารวม: {{ duration }}</value>
   </data>
   <data name="AudioAudit_SegmentLabel" xml:space="preserve">
-    <value>ไฟล์บันทึกเสียง {{ number }}</value>
+    <value>{{ number }}</value>
   </data>
   <data name="AudioAudit_DeviceTime" xml:space="preserve">
     <value>เวลาของอุปกรณ์: {{ time }}</value>

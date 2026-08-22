@@ -14,7 +14,7 @@
                 class="close close-panel"
                 @click="closePanel"
                 :aria-label="$t('Pages.CloseLabel')">
-                <span aria-hidden="true"></span>
+                <span aria-hidden="true">&times;</span>
             </button>
         </div>
 

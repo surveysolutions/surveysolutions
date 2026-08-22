@@ -139,7 +139,7 @@
     <value>Общая длительность: {{ duration }}</value>
   </data>
   <data name="AudioAudit_SegmentLabel" xml:space="preserve">
-    <value>Запись {{ number }}</value>
+    <value>{{ number }}</value>
   </data>
   <data name="AudioAudit_DeviceTime" xml:space="preserve">
     <value>Время устройства: {{ time }}</value>
