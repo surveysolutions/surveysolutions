@@ -121,7 +121,8 @@ namespace WB.UI.Headquarters.Controllers
             var model = await this.GetImportModel(id);
             var result = await this.importService.ImportAndMigrateAssignments(id, model.QuestionnaireInfo?.Name,
                 false, request.Comment, Request.GetDisplayUrl(), true, 
-                request.ShouldMigrateAssignments, migrateFrom, request.CriticalityLevel);
+                request.ShouldMigrateAssignments, migrateFrom, request.CriticalityLevel,
+                request.CopyWebInterviewSettings);
 
             return ImportStatusImpl(result);
         }
@@ -285,7 +286,7 @@ namespace WB.UI.Headquarters.Controllers
         public bool ShouldMigrateAssignments { get; set; }
         public string MigrateFrom { get; set; }
         public string Comment { get; set; }
-
+        public bool CopyWebInterviewSettings { get; set; }
         public CriticalityLevel? CriticalityLevel { set; get; }
     }
 }
