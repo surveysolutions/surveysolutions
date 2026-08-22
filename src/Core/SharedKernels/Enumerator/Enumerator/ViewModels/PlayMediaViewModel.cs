@@ -16,7 +16,7 @@ public abstract class PlayMediaViewModel: BaseViewModel<PlayMediaViewModelArgs>
     private readonly IQuestionnaireStorage questionnaireRepository;
     private readonly IStatefulInterviewRepository interviewRepository;
 
-    private PlayMediaViewModelArgs? initValues;
+    protected PlayMediaViewModelArgs? InitValues { get; private set; }
     
     public PlayMediaViewModel(
         IPrincipal principal,
@@ -39,7 +39,7 @@ public abstract class PlayMediaViewModel: BaseViewModel<PlayMediaViewModelArgs>
     {
         base.Prepare();
 
-        initValues = param;
+        InitValues = param;
         
         var interview = this.interviewRepository.GetOrThrow(param.InterviewId);
         IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
