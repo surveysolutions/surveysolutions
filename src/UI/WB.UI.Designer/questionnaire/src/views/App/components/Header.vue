@@ -163,11 +163,15 @@ import { useKeyShortcut } from '../../../composables/useKeyShortcut';
 
 import { useVerificationStore } from '../../../stores/verification';
 import { useChatStore } from '../../../stores/chat';
+import { useProgressStore } from '../../../stores/progress';
 import WebTesterApi from '../../../api/webTester';
 import { ref, computed, inject } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { sanitizeUrl } from '../../../utils/sanitizeUrl';
+
+const pendingSaveWaitRetries = 50;
+const pendingSaveWaitDelayMs = 100;
 
 export default {
     name: 'QuestionnaireHeader',
@@ -186,6 +190,7 @@ export default {
     setup(props) {
         const verificationStore = useVerificationStore();
         const chatStore = useChatStore();
+        const progressStore = useProgressStore();
         const route = useRoute();
         const questionnaire = inject('questionnaire');
 
@@ -200,6 +205,7 @@ export default {
         return {
             verificationStore,
             chatStore,
+            progressStore,
             verificationDialog,
             sharedInfoDialog,
             downloadPDFDialog,
@@ -246,8 +252,31 @@ export default {
         }
     },
     methods: {
-        webTest() {
-            WebTesterApi.run(this.questionnaireId);
+        async webTest() {
+            const webTesterWindow = WebTesterApi.openWindow();
+            try {
+                await this.savePendingChangesBeforeWebTest();
+                await WebTesterApi.run(this.questionnaireId, null, webTesterWindow);
+            } catch (e) {
+                webTesterWindow?.close();
+                throw e;
+            }
+        },
+        async savePendingChangesBeforeWebTest() {
+            this.$emitter.emit('saveCurrentEntityRequested');
+            await this.waitForPendingSaves();
+        },
+        async waitForPendingSaves() {
+            for (let i = 0; i < pendingSaveWaitRetries; i++) {
+                if (!this.progressStore.getIsRunning) return;
+                await new Promise(resolve =>
+                    setTimeout(resolve, pendingSaveWaitDelayMs)
+                );
+            }
+
+            throw new Error(
+                'Saving questionnaire changes timed out before launching test. Please save manually and try again.'
+            );
         },
         showDownloadPdf() {
             this.downloadPDFDialog.open();
