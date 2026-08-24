@@ -199,6 +199,9 @@
     <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
         <value>Tên biến phạm vi kiểm tra âm thanh '{0}' không hợp lệ. Nó phải tham chiếu đến một phần, nhóm hoặc danh sách hiện có (không được phép đặt câu hỏi và bảng phân công phẳng).</value>
         </data>
+  <data name="PL0065_TargetAreaTooLong" xml:space="preserve">
+    <value>Vùng mục tiêu quá dài. Nó phải có {0} ký tự hoặc ít hơn.</value>
+  </data>
     <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
         <value>Bài tập không được di chuyển vì nó sử dụng Kiểm tra âm thanh chọn lọc (phạm vi ghi âm), không thể tự động di chuyển sang phiên bản bảng câu hỏi mới. Tạo lại nhiệm vụ theo cách thủ công và đặt cấu hình lại phạm vi kiểm tra âm thanh.</value>
         </data>
