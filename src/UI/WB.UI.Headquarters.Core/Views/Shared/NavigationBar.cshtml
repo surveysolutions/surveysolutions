@@ -72,3 +72,31 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
+<script type="text/javascript">
+    (function () {
+        function updateNavigationOffset() {
+            var navbar = document.querySelector('header .navbar.navbar-fixed-top');
+            if (!navbar || !document.body) return;
+
+            var navbarHeight = Math.ceil(navbar.getBoundingClientRect().height);
+            if (navbarHeight <= 0) return;
+
+            var offset = navbarHeight + 'px';
+            document.body.style.paddingTop = offset;
+
+            var viewModes = document.querySelectorAll('.view-mode');
+            for (var i = 0; i < viewModes.length; i++) {
+                viewModes[i].style.top = offset;
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', updateNavigationOffset);
+        } else {
+            updateNavigationOffset();
+        }
+
+        window.addEventListener('load', updateNavigationOffset);
+        window.addEventListener('resize', updateNavigationOffset);
+    })();
+</script>
