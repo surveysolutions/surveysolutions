@@ -29,4 +29,5 @@
   <data name="MapFileSizeLimit" xml:space="preserve"><value>ទំហំឯកសារ {0} ធំជាងដែនកំណត់ {1}</value></data>
   <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve"><value>ឈ្មោះឯកសារ {0} មានអក្សរ non-UTF-8</value></data>
   <data name="MapFileNameHasInvalidChars" xml:space="preserve"><value>ឈ្មោះឯកសារ {0} មានអក្សរមិនត្រឹមត្រូវ</value></data>
+  <data name="MapFileNameTooLong" xml:space="preserve"><value>ឈ្មោះឯកសារ '{0}' វែងលើសប្រវែងអតិបរមាដែលអនុញ្ញាត {1} តួអក្សរ។</value></data>
 </root>
