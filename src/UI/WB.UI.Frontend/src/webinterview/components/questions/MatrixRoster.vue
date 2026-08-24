@@ -113,7 +113,10 @@ export default {
             this.name = this.$me.questions.length > 0 ? this.$me.questions[0].name : null
         },
         ['$me.title']() {
-            this.title = this.$me.title ?? ''
+            this.title =
+                this.$me.title ??
+                (this.$me.questions.length > 0 ? this.$me.questions[0].title : null) ??
+                ''
         },
         ['$config.inWebTesterMode']() {
             this.name = this.$me.questions.length > 0 ? this.$me.questions[0].name : null
