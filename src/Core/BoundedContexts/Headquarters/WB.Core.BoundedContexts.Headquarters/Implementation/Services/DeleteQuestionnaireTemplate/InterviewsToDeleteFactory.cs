@@ -168,6 +168,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             do
             {
                 var skip = brokenPageIndex * BatchSize;
+                // BrokenInterviewPackage does not implement IReadSideRepositoryEntity, so
+                // IQueryableReadSideRepositoryReader cannot be used here; direct session access is justified.
                 brokenOnlyIds = this.sessionFactory.Session.Query<BrokenInterviewPackage>()
                     .Where(p => p.QuestionnaireId == questionnaireIdentity.QuestionnaireId
                                 && p.QuestionnaireVersion == questionnaireIdentity.Version)
