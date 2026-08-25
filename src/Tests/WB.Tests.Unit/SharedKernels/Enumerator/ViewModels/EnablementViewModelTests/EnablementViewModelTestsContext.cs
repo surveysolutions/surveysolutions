@@ -14,14 +14,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnablementViewModelT
     {
         public static EnablementViewModel CreateViewModel(IQuestionnaireStorage questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
-            IViewModelEventRegistry registry = null)
+            IViewModelEventRegistry registry = null,
+            IViewModelNavigationService viewModelNavigationService = null,
+            ILogger logger = null)
         {
             return new EnablementViewModel(
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(), 
                 registry ?? Create.Service.LiteEventRegistry(), 
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                Mock.Of<IViewModelNavigationService>(),
-                Mock.Of<ILogger>());
+                viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
+                logger ?? Mock.Of<ILogger>());
         }
     }
 }
