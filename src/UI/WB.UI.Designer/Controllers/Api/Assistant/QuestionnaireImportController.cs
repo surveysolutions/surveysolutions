@@ -108,7 +108,8 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
                     new ValidateAndImportResponse
                     {
                         SchemaVersion = schemaProvider.GetSchemaVersion(),
-                        Errors = { "Questionnaire could not be imported because of an unexpected Designer error." }
+                        // Admin-only back channel: the message is needed to diagnose a failed import.
+                        Errors = { $"Designer failed to import the questionnaire: {exception.GetType().Name}: {exception.Message}" }
                     });
             }
         }

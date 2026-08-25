@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ImportExport;
@@ -110,10 +111,21 @@ namespace WB.UI.Designer.Code.ImportExport
             questionnaireDocument.CreationDate = DateTime.UtcNow;
             questionnaireDocument.CreatedBy = responsibleId;
 
-            var verificationErrors = new ImportQuestionnaireVerifier()
-                .Verify(questionnaireDocument.AsReadOnly())
-                .Where(m => m.MessageLevel >= VerificationMessageLevel.General)
-                .ToList();
+            List<QuestionnaireVerificationMessage> verificationErrors;
+            try
+            {
+                verificationErrors = new ImportQuestionnaireVerifier()
+                    .Verify(questionnaireDocument.AsReadOnly())
+                    .Where(m => m.MessageLevel >= VerificationMessageLevel.General)
+                    .ToList();
+            }
+            catch (Exception exception)
+            {
+                // A generated questionnaire can be schema-valid yet malformed enough to break a verifier.
+                logger.LogWarning(exception, "Verification of an imported questionnaire threw.");
+                result.Errors.Add($"Questionnaire could not be verified: {exception.Message}");
+                return result;
+            }
 
             if (verificationErrors.Any())
             {
@@ -123,7 +135,16 @@ namespace WB.UI.Designer.Code.ImportExport
                 return result;
             }
 
-            commandService.Execute(new ImportQuestionnaire(responsibleId, questionnaireDocument));
+            try
+            {
+                commandService.Execute(new ImportQuestionnaire(responsibleId, questionnaireDocument));
+            }
+            catch (QuestionnaireException exception)
+            {
+                logger.LogWarning(exception, "Imported questionnaire was rejected by a domain rule.");
+                result.Errors.Add(exception.Message);
+                return result;
+            }
 
             result.Succeeded = true;
             result.QuestionnaireId = questionnaireDocument.PublicKey;
