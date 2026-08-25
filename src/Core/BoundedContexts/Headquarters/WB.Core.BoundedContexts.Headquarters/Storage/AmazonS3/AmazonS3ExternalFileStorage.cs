@@ -230,7 +230,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 
                 if (deleteRequest.Objects.Any())
                 {
-                    await client.DeleteObjectsAsync(deleteRequest).ConfigureAwait(false);
+                    var response = await client.DeleteObjectsAsync(deleteRequest).ConfigureAwait(false);
+                    if (response.DeleteErrors.Count > 0)
+                    {
+                        foreach (var error in response.DeleteErrors)
+                            logger.LogError("S3 delete error for key {Key}: {Code} {Message}", error.Key, error.Code, error.Message);
+
+                        throw new InvalidOperationException(
+                            $"Failed to delete {response.DeleteErrors.Count} object(s) from S3. " +
+                            $"First error: {response.DeleteErrors[0].Key}: {response.DeleteErrors[0].Code} {response.DeleteErrors[0].Message}");
+                    }
+
                     var objects = string.Join(", ", deleteRequest.Objects.Select(kl => kl.Key));
                     logger.LogTrace("Deleted object from S3. [{objects}]", objects);
                 }
