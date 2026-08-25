@@ -78,8 +78,14 @@ namespace WB.UI.Designer.Code.ImportExport
             {
                 questionnaire = questionnaireSerializer.Deserialize(questionnaireJson);
             }
-            catch (JsonException exception)
+            catch (Exception exception)
             {
+                // The entity converter reports a missing "Type" discriminator as InvalidOperationException,
+                // so anything the schema failed to constrain surfaces here rather than as a server error.
+                logger.LogWarning(exception,
+                    "Imported questionnaire JSON could not be deserialized. Document: {Document}",
+                    Truncate(questionnaireJson));
+
                 result.Errors.Add($"Questionnaire cannot be processed: {exception.Message}");
                 return result;
             }
@@ -157,6 +163,9 @@ namespace WB.UI.Designer.Code.ImportExport
             var reference = message.References.FirstOrDefault();
             return reference?.Id == null ? string.Empty : $" ({reference.Id})";
         }
+
+        private static string Truncate(string json)
+            => json.Length <= 4000 ? json : json.Substring(0, 4000) + "…";
 
         /// <summary>
         /// The JSON-only contract carries no attachment binaries, lookup table content, translation
