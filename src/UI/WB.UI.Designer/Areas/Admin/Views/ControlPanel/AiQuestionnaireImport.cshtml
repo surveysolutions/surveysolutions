@@ -51,7 +51,8 @@
 
 @section scripts {
     <script type="text/javascript">
-        (function () {
+        // jQuery arrives with the deferred sharedLayout module bundle, so binding has to wait for it.
+        document.addEventListener('DOMContentLoaded', function () {
             var apiUrl = '/api/ai-questionnaire-import';
             var maxFileSize = 50 * 1024 * 1024;
             var pollIntervalMs = 2000;
@@ -203,6 +204,6 @@
 
                 return false;
             });
-        })();
+        });
     </script>
 }
