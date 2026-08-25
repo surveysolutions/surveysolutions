@@ -56,33 +56,49 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             if (isAdmin == false)
             {
+                // NOTE: List<T> is used on purpose. For an array the C# 14+ compiler binds Contains
+                // to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an op_Implicit call
+                // into the expression tree that the ORM cannot translate.
                 var adminUsers = (await userManager.GetUsersInRoleAsync(SimpleRoleEnum.Administrator))
-                    .Select(u => u.Id).ToArray();
+                    .Select(u => u.Id).ToList();
 
                 query = query.Where(h => !(h.ActionType == QuestionnaireActionType.ImportToHq && adminUsers.Contains(h.UserId)));
             }
 
-            var questionnaireHistory = await query
-                .OrderByDescending(h => h.Sequence)
-                .ToArrayAsync();
+            QuestionnaireChangeRecord[] questionnaireHistory;
+            int count;
 
-            if (!string.IsNullOrWhiteSpace(search))
+            if (string.IsNullOrWhiteSpace(search))
+            {
+                count = await query.CountAsync();
+                questionnaireHistory = await query
+                    .OrderByDescending(h => h.Sequence)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToArrayAsync();
+            }
+            else
             {
                 var matcher = CreateMatcher(search.Trim(), searchWholeWord);
+                questionnaireHistory = await query
+                    .OrderByDescending(h => h.Sequence)
+                    .ToArrayAsync();
+
                 questionnaireHistory = questionnaireHistory
                     .Where(h => MatchesRecord(questionnaire, h, matcher, searchIdsOnly))
                     .ToArray();
+
+                count = questionnaireHistory.Length;
+                questionnaireHistory = questionnaireHistory
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToArray();
             }
 
-            var count = questionnaireHistory.Length;
-            questionnaireHistory = questionnaireHistory
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToArray();
             var userId = user.GetId();
 
             return new QuestionnaireChangeHistory(questionnaireId, questionnaire.Title,
-                questionnaireHistory.Select(h => 
+                questionnaireHistory.Select(h =>
                     CreateQuestionnaireChangeHistoryWebItem(questionnaire, h, userId))
                     .ToList(), page, count, pageSize, search, searchIdsOnly, searchWholeWord);
         }
@@ -91,7 +107,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         {
             if (!wholeWord)
                 return value => !string.IsNullOrWhiteSpace(value)
-                    && value.IndexOf(search, System.StringComparison.OrdinalIgnoreCase) >= 0;
+                    && value.IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0;
 
             var pattern = $@"\b{Regex.Escape(search)}\b";
             return value => !string.IsNullOrWhiteSpace(value)
