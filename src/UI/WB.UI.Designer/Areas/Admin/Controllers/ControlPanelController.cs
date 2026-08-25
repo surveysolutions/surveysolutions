@@ -34,15 +34,17 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         private readonly IProductVersionHistory productVersionHistory;
         private readonly IPlainKeyValueStorage<AssistantSettings> appSettingsStorage;
         private readonly DesignerDbContext dbContext;
+        private readonly IQuestionnaireSchemaProvider schemaProvider;
 
         public ControlPanelController(
             UserManager<DesignerIdentityUser> users,
-            IConfiguration configuration, 
+            IConfiguration configuration,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
             IProductVersion productVersion,
             IProductVersionHistory productVersionHistory,
             IPlainKeyValueStorage<AssistantSettings> appSettingsStorage,
-            DesignerDbContext dbContext)
+            DesignerDbContext dbContext,
+            IQuestionnaireSchemaProvider schemaProvider)
         {
             this.users = users;
             this.configuration = configuration;
@@ -51,6 +53,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
             this.productVersionHistory = productVersionHistory;
             this.appSettingsStorage = appSettingsStorage;
             this.dbContext = dbContext;
+            this.schemaProvider = schemaProvider;
         }
 
         public ActionResult Settings()
@@ -61,7 +64,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         public ActionResult Versions() => this.View();
 
         public ActionResult MakeAdmin() => this.View();
-        
+
         [AntiForgeryFilter]
         public ActionResult AssistantSettings()
         {
@@ -82,7 +85,10 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
 
         public ActionResult DocumentSchema() => this.View();
 
-        public ActionResult CompilationVersions() 
+        [AntiForgeryFilter]
+        public ActionResult AiQuestionnaireImport() => this.View();
+
+        public ActionResult CompilationVersions()
             => this.View("CompilationVersionsViews/CompilationVersions", this.questionnaireCompilationVersionService.GetCompilationVersions());
 
         [HttpPost]
@@ -105,7 +111,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
                 {
                     QuestionnaireId = model.QuestionnaireId,
                     Description = model.Description,
-                    Version= model.Version
+                    Version = model.Version
                 });
                 return RedirectToAction("CompilationVersions");
             }
@@ -160,7 +166,7 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
                 dbContext.SaveChanges();
                 this.Success("Assistant settings successfully updated");
             }
-            
+
             return this.RedirectToAction("AssistantSettings");
         }
 
@@ -216,10 +222,10 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
                     change => change.ProductVersion)));
 
         private static string? questionnaireDocumentSchema = null;
-        
-        public IActionResult GetSchema([FromQuery]bool? getFile = null)
+
+        public IActionResult GetSchema([FromQuery] bool? getFile = null)
         {
-            questionnaireDocumentSchema ??= ReadSchema();
+            questionnaireDocumentSchema ??= this.schemaProvider.GetSchema();
 
             if (getFile == true)
                 return new FileStreamResult(new MemoryStream(
@@ -231,19 +237,6 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
                 return this.Json(questionnaireDocumentSchema);
         }
 
-        private string ReadSchema()
-        {
-            var testType = typeof(QuestionnaireImportService);
-            var readResourceFile = $"{testType.Namespace}.QuestionnaireSchema.json";
-
-            using Stream? stream = testType.Assembly.GetManifestResourceStream(readResourceFile);
-            if (stream == null)
-                throw new ArgumentException("Can't find json schema for questionnaire");
-            using StreamReader reader = new StreamReader(stream);
-            string schemaText = reader.ReadToEnd();
-            return schemaText;
-        }
-        
         public class VersionsInfo
         {
             public VersionsInfo(string product, Dictionary<DateTime, string> history)

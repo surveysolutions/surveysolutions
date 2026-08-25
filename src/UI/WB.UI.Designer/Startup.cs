@@ -81,17 +81,17 @@ namespace WB.UI.Designer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDistributedMemoryCache();
-            
-            #if DEBUG
+
+#if DEBUG
             //hot reload on global level brakes other pars of application
             services.AddViteHelper(options =>
             {
                 options.Entry = "src/main.js";
             });
-            #endif
-            
+#endif
+
             services.AddMemoryCache();
-            
+
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
@@ -122,11 +122,11 @@ namespace WB.UI.Designer
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             if (connectionString == null)
                 throw new InvalidOperationException("Connection string was not found");
-            
-            
+
+
             services.AddDbContext<DesignerDbContext>(options =>
                 options.UseNpgsql(connectionString));
-            
+
             services.AddScoped<AntiForgeryFilter>();
             services.AddScoped<IPasswordHasher<DesignerIdentityUser>, PasswordHasher>();
             services
@@ -233,14 +233,14 @@ namespace WB.UI.Designer
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer           = true,
-                        ValidateAudience         = true,
-                        ValidateLifetime         = true,
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer              = jwtIssuer,
-                        ValidAudience            = assistantAudience,
-                        IssuerSigningKey         = assistantSigningKey,
-                        ClockSkew                = TimeSpan.FromMinutes(5)
+                        ValidIssuer = jwtIssuer,
+                        ValidAudience = assistantAudience,
+                        IssuerSigningKey = assistantSigningKey,
+                        ClockSkew = TimeSpan.FromMinutes(5)
                     };
 
                     options.Events = new JwtBearerEvents
@@ -271,7 +271,7 @@ namespace WB.UI.Designer
                         OnChallenge = context =>
                         {
                             context.HandleResponse();
-                            context.Response.StatusCode  = StatusCodes.Status401Unauthorized;
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                             context.Response.ContentType = "application/json";
 
                             var errorMessage = context.AuthenticateFailure?.Message ?? "Unauthorized";
@@ -282,8 +282,8 @@ namespace WB.UI.Designer
 
                             var result = JsonSerializer.Serialize(new
                             {
-                                error     = "Unauthorized",
-                                message   = errorMessage,
+                                error = "Unauthorized",
+                                message = errorMessage,
                                 timestamp = DateTime.UtcNow
                             });
                             return context.Response.WriteAsync(result);
@@ -299,14 +299,14 @@ namespace WB.UI.Designer
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer           = true,
-                    ValidateAudience         = true,
-                    ValidateLifetime         = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer              = jwtIssuer,
-                    ValidAudience            = DelegatedTokenService.DelegatedAudience,
-                    IssuerSigningKeys         = delegatedSigningKeys,
-                    ClockSkew                = TimeSpan.FromMinutes(5)
+                    ValidIssuer = jwtIssuer,
+                    ValidAudience = DelegatedTokenService.DelegatedAudience,
+                    IssuerSigningKeys = delegatedSigningKeys,
+                    ClockSkew = TimeSpan.FromMinutes(5)
                 };
 
                 options.Events = new JwtBearerEvents
@@ -320,17 +320,17 @@ namespace WB.UI.Designer
                     }
                 };
             });
-            
+
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("AuthorizeOrAnonymousQuestionnaire", 
+                options.AddPolicy("AuthorizeOrAnonymousQuestionnaire",
                     policy => policy.Requirements.Add(new AuthorizeOrAnonymousQuestionnaireRequirement()));
             });
 
 
             services.ConfigureApplicationCookie(options =>
             {
-		options.Cookie.Name = ".AspNetCore.Identity.Designer";
+                options.Cookie.Name = ".AspNetCore.Identity.Designer";
                 options.Events.OnRedirectToLogin = context =>
                     HandleCookieAuthRedirect(context.HttpContext, context.RedirectUri, StatusCodes.Status401Unauthorized);
                 options.Events.OnRedirectToAccessDenied = context =>
@@ -338,7 +338,7 @@ namespace WB.UI.Designer
             });
 
             services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
-            
+
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc()
                 //.SetCompatibilityVersion(CompatibilityVersion.Latest)
@@ -356,8 +356,8 @@ namespace WB.UI.Designer
                     var baseUrl = Configuration.GetSection("WebTester").GetValue<string>("BaseUri");
                     if (baseUrl == null)
                         throw new InvalidOperationException("BaseUrl was not set");
-                    
-                    
+
+
                     Uri uri = new Uri(baseUrl);
                     var webTesterOrigin = uri.Scheme + Uri.SchemeDelimiter + uri.Host;
                     if (Regex.IsMatch(baseUrl, ":\\d+", RegexOptions.None, TimeSpan.FromMilliseconds(1000)))
@@ -377,6 +377,8 @@ namespace WB.UI.Designer
             services.AddTransient<IQuestionnaireRestoreService, QuestionnaireRestoreService>();
             services.AddTransient<IQuestionnaireImportService, QuestionnaireImportService>();
             services.AddTransient<IQuestionnaireExportService, QuestionnaireExportService>();
+            services.AddSingleton<IQuestionnaireSchemaProvider, QuestionnaireSchemaProvider>();
+            services.AddTransient<IQuestionnaireJsonImportService, QuestionnaireJsonImportService>();
             services.AddTransient<ICaptchaService, WebCacheBasedCaptchaService>();
             services.AddSingleton<IProductVersion, ProductVersion>();
             services.AddTransient<IProductVersionHistory, ProductVersionHistory>();
@@ -445,7 +447,7 @@ namespace WB.UI.Designer
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             app.UseIntegrityHelper();
-            
+
             app.UseViteForwarder();
             app.UseExceptional();
 
@@ -475,7 +477,7 @@ namespace WB.UI.Designer
                     }
                 }
             });
-            
+
             app.UseCookiePolicy();
             app.UseSession();
             app.UseAuthentication();
@@ -513,7 +515,7 @@ namespace WB.UI.Designer
 
             app.UseRouting();
             app.UseAuthorization();
-            
+
             app.Use((context, next) =>
             {
                 var endpoint = context.GetEndpoint();
@@ -526,7 +528,7 @@ namespace WB.UI.Designer
                 context.SetEndpoint(null);
                 return next();
             });
-            
+
             app.UseEndpoints(routes =>
             {
                 routes.MapVersionEndpoint();
@@ -539,10 +541,10 @@ namespace WB.UI.Designer
                 routes.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=QuestionnaireList}/{action=Index}/{id?}");
-               
+
                 routes.MapRazorPages();
             });
-            
+
             if (aspCoreKernel == null) return;
 
             var initTask = aspCoreKernel.InitAsync(serviceProvider);

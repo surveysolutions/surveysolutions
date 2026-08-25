@@ -1,0 +1,208 @@
+@{
+    Layout = "Layout.ControlPanel";
+    ViewBag.Title = "Control Panel: Import questionnaire with AI";
+}
+
+<h1 class="page-header">Import questionnaire with AI</h1>
+
+<p>
+    Upload a questionnaire from any external source &mdash; a PDF, a document, an export of another
+    survey system or any other file the AI model is able to analyse. The maximum file size is 50&nbsp;MB.
+</p>
+
+<div id="ai-import">
+    <form id="ai-import-form" enctype="multipart/form-data" onsubmit="return false;">
+        <div class="form-group">
+            <input class="form-control" type="file" id="ai-import-file" name="file" />
+        </div>
+        <div class="form-actions">
+            <button type="submit" id="ai-import-submit" class="btn btn-success btn-lg">Import</button>
+            <a class="btn" asp-controller="ControlPanel" asp-action="Index">Cancel</a>
+        </div>
+    </form>
+
+    <div id="ai-import-progress" class="alert alert-info" style="display: none; margin-top: 20px;">
+        <strong>Status:</strong> <span id="ai-import-status"></span>
+    </div>
+
+    <div id="ai-import-error" class="alert alert-danger" style="display: none; margin-top: 20px;"></div>
+
+    <div id="ai-import-success" class="alert alert-success" style="display: none; margin-top: 20px;"></div>
+
+    <div id="ai-import-warnings" style="display: none; margin-top: 20px;">
+        <h4>Warnings</h4>
+        <table class="table table-condensed table-striped">
+            <thead>
+                <tr>
+                    <th>Source</th>
+                    <th>Description</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody id="ai-import-warnings-body"></tbody>
+        </table>
+    </div>
+
+    <div id="ai-import-actions" style="display: none; margin-top: 20px;">
+        <a id="ai-import-open" class="btn btn-primary" target="_blank">Open questionnaire</a>
+        <a id="ai-import-report" class="btn btn-default" target="_blank">Download import report</a>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        (function () {
+            var apiUrl = '/api/ai-questionnaire-import';
+            var maxFileSize = 50 * 1024 * 1024;
+            var pollIntervalMs = 2000;
+            var pollTimer = null;
+
+            var statusLabels = {
+                Preparing: 'Preparing',
+                AnalyzingFile: 'Analyzing the uploaded file',
+                ExtractingQuestionnaire: 'Extracting the questionnaire',
+                GeneratingQuestionnaire: 'Generating the Survey Solutions questionnaire',
+                Validating: 'Validating the generated questionnaire',
+                Correcting: 'Correcting the generated questionnaire',
+                DesignerValidation: 'Validating against Survey Solutions rules',
+                Importing: 'Creating the questionnaire',
+                Completed: 'Completed',
+                CompletedWithWarnings: 'Completed with warnings',
+                Failed: 'Failed'
+            };
+
+            function readCookie(name) {
+                var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+                return match ? decodeURIComponent(match[2]) : '';
+            }
+
+            function hideAll() {
+                $('#ai-import-error').hide().text('');
+                $('#ai-import-success').hide().text('');
+                $('#ai-import-warnings').hide();
+                $('#ai-import-warnings-body').empty();
+                $('#ai-import-actions').hide();
+            }
+
+            function showError(message) {
+                $('#ai-import-progress').hide();
+                $('#ai-import-error').text(message).show();
+                $('#ai-import-submit').prop('disabled', false);
+            }
+
+            function renderWarnings(warnings) {
+                if (!warnings || warnings.length === 0) return;
+
+                var body = $('#ai-import-warnings-body');
+                warnings.forEach(function (warning) {
+                    $('<tr>')
+                        .append($('<td>').text(warning.source || ''))
+                        .append($('<td>').text(warning.description || ''))
+                        .append($('<td>').text(warning.action || ''))
+                        .appendTo(body);
+                });
+                $('#ai-import-warnings').show();
+            }
+
+            function renderResult(state) {
+                $('#ai-import-progress').hide();
+                $('#ai-import-submit').prop('disabled', false);
+
+                renderWarnings(state.warnings);
+
+                if (state.status === 'Failed') {
+                    var messages = [];
+                    if (state.error) messages.push(state.error);
+                    if (state.designerValidationErrors) {
+                        messages = messages.concat(state.designerValidationErrors);
+                    }
+                    $('#ai-import-error').text('').show();
+                    $('#ai-import-error').append($('<p>').text('Import failed.'));
+                    messages.forEach(function (message) {
+                        $('#ai-import-error').append($('<p>').text(message));
+                    });
+                } else {
+                    var text = state.status === 'CompletedWithWarnings'
+                        ? 'Import completed with warnings. The questionnaire was successfully created.'
+                        : 'Import completed. The questionnaire was successfully created.';
+                    $('#ai-import-success').text(text).show();
+
+                    if (state.questionnaireId) {
+                        $('#ai-import-open')
+                            .attr('href', '/questionnaire/details/' + state.questionnaireId)
+                            .show();
+                    } else {
+                        $('#ai-import-open').hide();
+                    }
+                }
+
+                $('#ai-import-report').attr('href', apiUrl + '/' + state.operationId + '/report');
+                $('#ai-import-actions').show();
+            }
+
+            function poll(operationId) {
+                $.ajax({ url: apiUrl + '/' + operationId, method: 'GET', dataType: 'json' })
+                    .done(function (state) {
+                        var label = statusLabels[state.status] || state.status;
+                        $('#ai-import-status').text(label);
+
+                        var isFinished = state.status === 'Completed'
+                            || state.status === 'CompletedWithWarnings'
+                            || state.status === 'Failed';
+
+                        if (isFinished) {
+                            window.clearInterval(pollTimer);
+                            pollTimer = null;
+                            renderResult(state);
+                        }
+                    })
+                    .fail(function (xhr) {
+                        window.clearInterval(pollTimer);
+                        pollTimer = null;
+                        showError(((xhr.responseJSON || {}).message) || 'Unable to read the import operation status.');
+                    });
+            }
+
+            $('#ai-import-form').on('submit', function () {
+                hideAll();
+
+                var input = document.getElementById('ai-import-file');
+                if (!input.files || input.files.length === 0) {
+                    showError('Please select a questionnaire file to import.');
+                    return false;
+                }
+
+                if (input.files[0].size > maxFileSize) {
+                    showError('The file exceeds the maximum allowed size of 50 MB.');
+                    return false;
+                }
+
+                var formData = new FormData();
+                formData.append('file', input.files[0]);
+
+                $('#ai-import-submit').prop('disabled', true);
+                $('#ai-import-status').text(statusLabels.Preparing);
+                $('#ai-import-progress').show();
+
+                $.ajax({
+                    url: apiUrl,
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    headers: { 'X-CSRF-TOKEN': readCookie('CSRF-TOKEN-D') }
+                })
+                    .done(function (response) {
+                        pollTimer = window.setInterval(function () { poll(response.operationId); }, pollIntervalMs);
+                        poll(response.operationId);
+                    })
+                    .fail(function (xhr) {
+                        showError(((xhr.responseJSON || {}).message) || 'The import operation could not be started.');
+                    });
+
+                return false;
+            });
+        })();
+    </script>
+}
