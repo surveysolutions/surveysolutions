@@ -29,6 +29,8 @@
 
     <div id="ai-import-success" class="alert alert-success" style="display: none; margin-top: 20px;"></div>
 
+    <p id="ai-import-usage" class="text-muted" style="display: none; margin-top: 20px;"></p>
+
     <div id="ai-import-warnings" style="display: none; margin-top: 20px;">
         <h4>Warnings</h4>
         <table class="table table-condensed table-striped">
@@ -58,6 +60,9 @@
             var pollIntervalMs = 2000;
             var pollTimer = null;
 
+            // Set to false to stop reporting AI token consumption to the user.
+            var showTokenUsage = true;
+
             var statusLabels = {
                 Preparing: 'Preparing',
                 AnalyzingFile: 'Analyzing the uploaded file',
@@ -80,9 +85,25 @@
             function hideAll() {
                 $('#ai-import-error').hide().text('');
                 $('#ai-import-success').hide().text('');
+                $('#ai-import-usage').hide().text('');
                 $('#ai-import-warnings').hide();
                 $('#ai-import-warnings-body').empty();
                 $('#ai-import-actions').hide();
+            }
+
+            function renderTokenUsage(usage) {
+                if (!showTokenUsage || !usage || !usage.aiCallCount) return;
+
+                var text = 'AI usage: ' + usage.totalTokens.toLocaleString() + ' tokens'
+                    + ' (prompt ' + usage.promptTokens.toLocaleString()
+                    + ', completion ' + usage.completionTokens.toLocaleString() + ')'
+                    + ' over ' + usage.aiCallCount + ' request(s).';
+
+                if (usage.isIncomplete) {
+                    text += ' Some responses reported no usage, so the real total is higher.';
+                }
+
+                $('#ai-import-usage').text(text).show();
             }
 
             function showError(message) {
@@ -109,6 +130,7 @@
                 $('#ai-import-progress').hide();
                 $('#ai-import-submit').prop('disabled', false);
 
+                renderTokenUsage(state.tokenUsage);
                 renderWarnings(state.warnings);
 
                 if (state.status === 'Failed') {
