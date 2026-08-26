@@ -304,9 +304,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                             this.audioFileStorage.RemoveInterviewBinaryData(interviewId, fileName).GetAwaiter().GetResult();
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, identity, e);
                 }
             });
 

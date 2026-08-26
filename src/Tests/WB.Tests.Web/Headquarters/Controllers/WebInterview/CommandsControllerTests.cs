@@ -68,11 +68,48 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             Assert.That(result, Is.InstanceOf<OkResult>());
         }
 
+        [Test]
+        public async Task RemoveAnswer_when_binary_cleanup_fails_does_not_mark_answer_as_not_saved()
+        {
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.MultimediaQuestion(questionId: QuestionId, variable: "photo"));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = SetUp.StatefulInterview(questionnaireDocument);
+            var existingFilename = "photo__.png";
+            interview.AnswerPictureQuestion(UserId, QuestionId, RosterVector.Empty, DateTimeOffset.UtcNow, existingFilename);
+
+            var imageFileStorage = new Mock<IImageFileStorage>();
+            imageFileStorage
+                .Setup(x => x.RemoveInterviewBinaryData(interview.Id, existingFilename))
+                .ThrowsAsync(new Exception("storage failure"));
+
+            var notificationService = new Mock<IWebInterviewNotificationService>();
+
+            var controller = CreateController(
+                interview,
+                questionnaire,
+                imageFileStorage: imageFileStorage.Object,
+                webInterviewNotificationService: notificationService.Object);
+
+            var request = new CommandsController.RemoveAnswerRequest
+            {
+                Identity = Identity.Create(QuestionId, RosterVector.Empty).ToString()
+            };
+
+            var result = await controller.RemoveAnswer(interview.Id, request);
+
+            Assert.That(result, Is.InstanceOf<OkResult>());
+            imageFileStorage.Verify(x => x.RemoveInterviewBinaryData(interview.Id, existingFilename), Times.Once);
+            notificationService.Verify(x => x.MarkAnswerAsNotSaved(It.IsAny<Guid>(), It.IsAny<Identity>(), It.IsAny<Exception>()), Times.Never);
+            notificationService.Verify(x => x.MarkAnswerAsNotSaved(It.IsAny<Guid>(), It.IsAny<Identity>(), It.IsAny<string>()), Times.Never);
+        }
+
         private static TestCommandsController CreateController(
             StatefulInterview interview,
             IQuestionnaire questionnaire,
             ICommandService commandService = null,
-            IImageFileStorage imageFileStorage = null)
+            IImageFileStorage imageFileStorage = null,
+            IWebInterviewNotificationService webInterviewNotificationService = null)
         {
             var questionnaireRepository = new Mock<IQuestionnaireStorage>();
             questionnaireRepository
@@ -90,7 +127,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 Mock.Of<IAudioFileStorage>(),
                 questionnaireRepository.Object,
                 statefulInterviewRepository.Object,
-                Mock.Of<IWebInterviewNotificationService>(),
+                webInterviewNotificationService ?? Mock.Of<IWebInterviewNotificationService>(),
                 Stub.Lock());
         }
 
