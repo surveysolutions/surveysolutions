@@ -387,7 +387,7 @@
     },
 
     "PictureQuestion": {
-      "Type": "object",
+            "type": "object",
       "properties": {
         "Type": { "const": "PictureQuestion" },
         "ConditionExpression": { "type": "string" },
