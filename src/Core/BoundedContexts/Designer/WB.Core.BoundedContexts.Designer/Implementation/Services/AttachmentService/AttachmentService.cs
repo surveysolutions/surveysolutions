@@ -173,8 +173,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
         private AttachmentDetails GetAttachmentDetails(byte[] binaryContent, string contentType)
         {
-            if (contentType.StartsWith("image/"))
+            if (contentType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+            {
+                if (contentType.Equals("image/heic", StringComparison.OrdinalIgnoreCase) ||
+                    contentType.Equals("image/heif", StringComparison.OrdinalIgnoreCase) ||
+                    contentType.Equals("image/heic-sequence", StringComparison.OrdinalIgnoreCase) ||
+                    contentType.Equals("image/heif-sequence", StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new FormatException(ExceptionMessages.Attachments_Unsupported_content);
+                }
+
                 return GetImageAttachmentDetails(binaryContent);
+            }
 
             if (contentType.StartsWith("audio/"))
                 return new AttachmentDetails();

@@ -514,6 +514,7 @@
     "SideBarTranslationGetTemplateLinkTextCsv": "Tab (txt)",
     "SideBarTab": "Tab",
     "AttachmentSizeIsTooBig": "El tamaño del archivo adjunto es demasiado grande. Tamaño máximo: {{size}}",
+    "AttachmentTypeIsNotSupported": "El tipo de archivo adjunto no es compatible.",
     "SwitchTo": "Cambiar a",
     "SwitchToTranslationConfirm": "Cambiar a modificará el idioma de visualización del cuestionario. La traducción debe incluir texto para todos los elementos.",
     "AIAssistant": "IA"
