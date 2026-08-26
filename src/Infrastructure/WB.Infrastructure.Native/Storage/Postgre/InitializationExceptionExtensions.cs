@@ -26,14 +26,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 };
             }
             
-            if (e is PostgresException pe)
+            if (e is PostgresException || e is NpgsqlException)
             {
-                // assume all other errors as transient
-                return NewDbException(pe.Message, true);
-            }
-
-            if (e is NpgsqlException)
-            {
+                // Use a generic message to avoid exposing internal database details (e.g. usernames, SQL state) to users.
+                // Full error details are preserved in the inner exception for logging.
                 return NewDbException(Modules.ErrorConnectingToDatabase, true);
             }
 

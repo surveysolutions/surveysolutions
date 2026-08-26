@@ -167,7 +167,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             }
             catch (Exception exc)
             {
-                status.Error(Modules.ErrorDuringRunningMigrations, exc);
                 serviceLocator.GetInstance<ILogger<OrmModule>>().LogCritical(exc, "Error during db initialization.");
                 throw exc.AsInitializationException(connectionSettings.ConnectionString);
             }
