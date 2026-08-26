@@ -664,6 +664,7 @@
     "Variable": {
       "type": "object",
       "properties": {
+                "Type": { "const": "Variable" },
         "Label": { "type": "string" },
         "VariableType": {
           "type": "string",
@@ -678,10 +679,11 @@
         },
         "Expression": { "type": "string" },
         "DoNotExport": { "type": "boolean", "default": false },
-        "VariableName": { "$ref": "#/definitions/VariableName" }
+                "VariableName": { "$ref": "#/definitions/VariableName" },
+                "Id": { "$ref": "#/definitions/GUID" }
       },
-      "additionalOptions": false,
-      "required": ["VariableName", "Expression"]
+            "additionalProperties": false,
+            "required": ["Type", "VariableName", "Expression"]
     },
 
     "VariableLabel": { "type": "string", "maxLength": 80 },
