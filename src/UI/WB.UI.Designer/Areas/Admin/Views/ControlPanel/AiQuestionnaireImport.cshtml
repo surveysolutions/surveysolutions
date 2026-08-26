@@ -140,7 +140,12 @@
                         messages = messages.concat(state.designerValidationErrors);
                     }
                     $('#ai-import-error').text('').show();
-                    $('#ai-import-error').append($('<p>').text('Import failed.'));
+
+                    var headline = state.failedAtStage
+                        ? 'Import failed at: ' + (statusLabels[state.failedAtStage] || state.failedAtStage)
+                        : 'Import failed.';
+                    $('#ai-import-error').append($('<p>').text(headline));
+
                     messages.forEach(function (message) {
                         $('#ai-import-error').append($('<p>').text(message));
                     });
