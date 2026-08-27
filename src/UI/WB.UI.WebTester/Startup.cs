@@ -187,6 +187,10 @@ namespace WB.UI.WebTester
             {
                 endpoints.MapVersionEndpoint();
                 endpoints.MapHealthChecks(".hc");
+                endpoints.MapControllerRoute(
+                    name: "error-pages",
+                    pattern: "error/{statusCode:int}",
+                    defaults: new { controller = "Error", action = "Error" });
 
                 endpoints.MapDefaultControllerRoute();
 

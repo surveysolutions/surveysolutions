@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace WB.UI.WebTester.Controllers
 {
@@ -6,7 +7,12 @@ namespace WB.UI.WebTester.Controllers
     {
         public IActionResult QuestionnaireWithErrors() => View();
 
-        [HttpGet("error/404")]
-        public IActionResult Error404() => View("NotFound");
+        public IActionResult Error(int statusCode)
+        {
+            if (statusCode == StatusCodes.Status404NotFound)
+                return View("NotFound");
+
+            return StatusCode(statusCode);
+        }
     }
 }
