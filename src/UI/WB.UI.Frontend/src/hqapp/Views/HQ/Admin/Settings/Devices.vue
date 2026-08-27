@@ -276,14 +276,8 @@
 }
 
 :deep(#acceptableGpsLocationSource) {
-    width: 100%;
-    max-width: 640px;
-}
-
-:deep(#acceptableGpsLocationSource) .btn-input,
-:deep(#acceptableGpsLocationSource) .dropdown-toggle,
-:deep(#acceptableGpsLocationSource) .dropdown-menu {
-    width: 100%;
+    width: 450px;
+    max-width: 100%;
 }
 </style>
 
