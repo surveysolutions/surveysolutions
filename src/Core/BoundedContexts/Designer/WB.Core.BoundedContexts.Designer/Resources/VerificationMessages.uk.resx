@@ -854,7 +854,4 @@
   <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
     <value>Повідомлення критичної умови містить понад {0} символів.</value>
   </data>
-  <data name="WB0324_NegativeSpecialValuesNotAllowedForNonNegativeNumericQuestion" xml:space="preserve">
-    <value>Від'ємні спеціальні значення не дозволені для невід'ємних числових питань.</value>
-  </data>
 </root>

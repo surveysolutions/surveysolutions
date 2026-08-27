@@ -787,7 +787,4 @@
     <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
         <value>კრიტიკული მდგომარეობის შეტყობინება {0} სიმბოლოზე მეტი.</value>
         </data>
-  <data name="WB0324_NegativeSpecialValuesNotAllowedForNonNegativeNumericQuestion" xml:space="preserve">
-    <value>უარყოფითი სპეციალური მნიშვნელობები არ არის დაშვებული არაუარყოფითი რიცხვითი კითხვებისთვის.</value>
-  </data>
 </root>

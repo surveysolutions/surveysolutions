@@ -113,35 +113,5 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 )
                 .ExpectError("WB0137");
         }
-        [Test]
-        public void special_values_has_negative_value_for_non_negative_integer_question()
-        {
-            Create.QuestionnaireDocumentWithOneChapter(
-                Create.NumericIntegerQuestion(Id.g1, isNonNegative: true, options: Create.Options(
-                    Create.Option(-1, "Missing")
-                )))
-                .ExpectError("WB0324");
-        }
-
-        [Test]
-        public void special_values_has_negative_value_for_non_negative_real_question()
-        {
-            Create.QuestionnaireDocumentWithOneChapter(
-                Create.NumericRealQuestion(Id.g1, isNonNegative: true, specialValues: Create.Options(
-                    Create.Option("-1.5", "Missing")
-                )))
-                .ExpectError("WB0324");
-        }
-
-        [Test]
-        public void special_values_has_negative_value_for_signed_numeric_question()
-        {
-            Create.QuestionnaireDocumentWithOneChapter(
-                Create.NumericIntegerQuestion(Id.g1, isNonNegative: false, options: Create.Options(
-                    Create.Option(-1, "Missing")
-                )))
-                .ExpectNoError("WB0324");
-        }
-
     }
 }

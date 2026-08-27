@@ -847,7 +847,4 @@
     <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
       <value>Zpráva kritické podmínky má více než {0} znaků.</value>
     </data>
-  <data name="WB0324_NegativeSpecialValuesNotAllowedForNonNegativeNumericQuestion" xml:space="preserve">
-    <value>Záporné speciální hodnoty nejsou pro nezáporné numerické otázky povoleny.</value>
-  </data>
 </root>

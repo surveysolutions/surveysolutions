@@ -787,7 +787,4 @@
     <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
         <value>ข้อความเงื่อนไขวิกฤติมากกว่าอักขระ {0}</value>
     </data>
-  <data name="WB0324_NegativeSpecialValuesNotAllowedForNonNegativeNumericQuestion" xml:space="preserve">
-    <value>ไม่อนุญาตให้ใช้ค่าพิเศษติดลบสำหรับคำถามเชิงตัวเลขที่เป็นค่าที่ไม่ติดลบ</value>
-  </data>
 </root>

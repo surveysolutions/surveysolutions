@@ -247,6 +247,23 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         }
 
         [Test]
+        public void Map_NonNegativeNumericQuestion_roundtrip_preserves_IsNonNegative()
+        {
+            var qId = Id.g3;
+            var doc = Create.QuestionnaireDocumentWithEmptyCoverPage(Id.g1,
+                Create.Chapter(children: new IComposite[]
+                {
+                    Create.NumericIntegerQuestion(id: qId, variable: "num", isNonNegative: true)
+                }));
+
+            var result = RoundTrip(doc);
+            var q = result.Find<Main.Core.Entities.SubEntities.Question.NumericQuestion>(qId);
+
+            Assert.That(q, Is.Not.Null);
+            Assert.That(q.IsNonNegative, Is.True);
+        }
+
+        [Test]
         public void Map_SingleOptionQuestion_produces_correct_export_model_type()
         {
             var qId = Id.g3;

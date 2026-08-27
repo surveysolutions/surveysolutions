@@ -896,7 +896,4 @@
   <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
     <value>关键条件消息超过 {0} 个字符。</value>
   </data>
-  <data name="WB0324_NegativeSpecialValuesNotAllowedForNonNegativeNumericQuestion" xml:space="preserve">
-    <value>非负数值题不允许使用负的特殊值。</value>
-  </data>
 </root>

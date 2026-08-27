@@ -846,7 +846,4 @@
     <data name="WB0139_SpecialValuesAttachmentsReferAbsentAttachment" xml:space="preserve">
   <value>El archivo adjunto de valores especiales hace referencia a un archivo adjunto inexistente.</value>
 </data>
-  <data name="WB0324_NegativeSpecialValuesNotAllowedForNonNegativeNumericQuestion" xml:space="preserve">
-    <value>Los valores especiales negativos no están permitidos para las preguntas numéricas no negativas.</value>
-  </data>
 </root>

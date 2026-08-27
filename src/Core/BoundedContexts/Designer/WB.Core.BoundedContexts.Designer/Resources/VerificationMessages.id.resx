@@ -787,7 +787,4 @@
     <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
         <value>Pesan kondisi kritis lebih dari karakter {0}.</value>
     </data>
-  <data name="WB0324_NegativeSpecialValuesNotAllowedForNonNegativeNumericQuestion" xml:space="preserve">
-    <value>Nilai khusus negatif tidak diizinkan untuk pertanyaan numerik non-negatif.</value>
-  </data>
 </root>

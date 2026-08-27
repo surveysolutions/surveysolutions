@@ -1504,10 +1504,5 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
             }
         }
 
-        public static string WB0324_NegativeSpecialValuesNotAllowedForNonNegativeNumericQuestion {
-            get {
-                return ResourceManager.GetString("WB0324_NegativeSpecialValuesNotAllowedForNonNegativeNumericQuestion", resourceCulture);
-            }
-        }
     }
 }
