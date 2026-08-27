@@ -1623,6 +1623,10 @@ namespace WB.Tests.Abc.TestFactories
             => Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
                     .NumericIntegerAnswer.FromInt(i);
 
+        public NumericRealAnswer NumericRealAnswer(double d)
+            => Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
+                    .NumericRealAnswer.FromDouble(d);
+
         public YesNoAnswer YesNoAnswer(IEnumerable<AnsweredYesNoOption> answer)
             => Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
                     .YesNoAnswer.FromAnsweredYesNoOptions(answer);
