@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Controllers;
@@ -84,12 +85,14 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 .ThrowsAsync(new Exception("storage failure"));
 
             var notificationService = new Mock<IWebInterviewNotificationService>();
+            var cleanupService = new Mock<IInterviewBinaryCleanupService>();
 
             var controller = CreateController(
                 interview,
                 questionnaire,
                 imageFileStorage: imageFileStorage.Object,
-                webInterviewNotificationService: notificationService.Object);
+                webInterviewNotificationService: notificationService.Object,
+                interviewBinaryCleanupService: cleanupService.Object);
 
             var request = new CommandsController.RemoveAnswerRequest
             {
@@ -102,6 +105,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             imageFileStorage.Verify(x => x.RemoveInterviewBinaryData(interview.Id, existingFilename), Times.Once);
             notificationService.Verify(x => x.MarkAnswerAsNotSaved(It.IsAny<Guid>(), It.IsAny<Identity>(), It.IsAny<Exception>()), Times.Never);
             notificationService.Verify(x => x.MarkAnswerAsNotSaved(It.IsAny<Guid>(), It.IsAny<Identity>(), It.IsAny<string>()), Times.Never);
+            cleanupService.Verify(x => x.EnqueueImageCleanup(interview.Id, existingFilename, It.IsAny<Exception>()), Times.Once);
         }
 
         private static TestCommandsController CreateController(
@@ -109,7 +113,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             IQuestionnaire questionnaire,
             ICommandService commandService = null,
             IImageFileStorage imageFileStorage = null,
-            IWebInterviewNotificationService webInterviewNotificationService = null)
+            IWebInterviewNotificationService webInterviewNotificationService = null,
+            IInterviewBinaryCleanupService interviewBinaryCleanupService = null)
         {
             var questionnaireRepository = new Mock<IQuestionnaireStorage>();
             questionnaireRepository
@@ -128,6 +133,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 questionnaireRepository.Object,
                 statefulInterviewRepository.Object,
                 webInterviewNotificationService ?? Mock.Of<IWebInterviewNotificationService>(),
+                interviewBinaryCleanupService ?? Mock.Of<IInterviewBinaryCleanupService>(),
                 Stub.Lock());
         }
 
@@ -171,8 +177,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 IQuestionnaireStorage questionnaireRepository,
                 IStatefulInterviewRepository statefulInterviewRepository,
                 IWebInterviewNotificationService webInterviewNotificationService,
+                IInterviewBinaryCleanupService interviewBinaryCleanupService,
                 WB.Core.Infrastructure.Aggregates.IAggregateLock aggregateLock)
-                : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService, aggregateLock)
+                : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService, interviewBinaryCleanupService, aggregateLock)
             {
             }
 

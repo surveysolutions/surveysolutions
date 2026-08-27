@@ -309,6 +309,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IMetaInfoBuilder, MetaInfoBuilder>();
             registry.Bind<IAssignmentsImportReader, AssignmentsImportReader>();
             registry.Bind<ICompletedEmailsQueue , CompletedEmailsQueue >();
+            registry.Bind<IInterviewBinaryCleanupService, InterviewBinaryCleanupService>();
 
             registry.Bind<ICalendarEventService, CalendarEventService>();
             

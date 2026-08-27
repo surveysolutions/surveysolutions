@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
@@ -163,7 +165,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 .ThrowsAsync(new Exception("storage failure"));
 
             var commandService = new Mock<ICommandService>();
-            var controller = CreateController(interview, imageFileStorage.Object, commandService.Object);
+            var cleanupService = new Mock<IInterviewBinaryCleanupService>();
+            var controller = CreateController(interview, imageFileStorage.Object, commandService.Object, cleanupService.Object);
 
             var questionIdentity = Identity.Create(QuestionId, RosterVector.Empty);
             var file = CreateFormFile("photo.png", "image/png");
@@ -175,6 +178,42 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var newFilename = AnswerUtils.GetPictureFileName("photo", RosterVector.Empty, ".png");
             // new file must NOT be removed
             imageFileStorage.Verify(s => s.RemoveInterviewBinaryData(interview.Id, newFilename), Times.Never);
+            cleanupService.Verify(s => s.EnqueueImageCleanup(interview.Id, existingFilename, It.IsAny<Exception>()), Times.Once);
+        }
+
+        [Test]
+        public async Task Image_when_reusing_existing_storage_key_and_command_throws_restores_previous_file()
+        {
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.MultimediaQuestion(questionId: QuestionId, variable: "photo"));
+            var interview = SetUp.StatefulInterview(questionnaire);
+
+            const string existingFilename = "photo__.JPG";
+            interview.AnswerPictureQuestion(UserId, QuestionId, RosterVector.Empty, DateTimeOffset.UtcNow, existingFilename);
+
+            var previousBytes = Encoding.UTF8.GetBytes("previous-image");
+            var newBytes = Encoding.UTF8.GetBytes("new-image");
+
+            var imageFileStorage = new Mock<IImageFileStorage>();
+            imageFileStorage.Setup(s => s.GetInterviewBinaryData(interview.Id, existingFilename)).Returns(previousBytes);
+
+            var commandService = new Mock<ICommandService>();
+            commandService
+                .Setup(s => s.Execute(It.IsAny<ICommand>(), null))
+                .Throws(new Exception("command failure"));
+
+            var controller = CreateController(interview, imageFileStorage.Object, commandService.Object);
+
+            var questionIdentity = Identity.Create(QuestionId, RosterVector.Empty);
+            var file = CreateFormFile("newphoto.jpg", "image/jpeg", newBytes);
+
+            Assert.ThrowsAsync<Exception>(() => controller.Image(interview.Id, questionIdentity.ToString(), file));
+
+            imageFileStorage.Verify(s => s.StoreInterviewBinaryData(interview.Id, existingFilename,
+                It.Is<byte[]>(bytes => bytes.SequenceEqual(newBytes)), "image/jpeg"), Times.Once);
+            imageFileStorage.Verify(s => s.StoreInterviewBinaryData(interview.Id, existingFilename,
+                It.Is<byte[]>(bytes => bytes.SequenceEqual(previousBytes)), "image/jpeg"), Times.Once);
+            imageFileStorage.Verify(s => s.RemoveInterviewBinaryData(interview.Id, existingFilename), Times.Never);
         }
 
         [Test]
@@ -212,7 +251,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         private static WebInterviewBinaryController CreateController(
             StatefulInterview interview,
             IImageFileStorage imageFileStorage = null,
-            ICommandService commandService = null)
+            ICommandService commandService = null,
+            IInterviewBinaryCleanupService interviewBinaryCleanupService = null)
         {
             var repo = Mock.Of<IStatefulInterviewRepository>(r =>
                 r.Get(interview.Id.FormatGuid()) == interview);
@@ -225,6 +265,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 audioFileStorage: Mock.Of<IAudioFileStorage>(),
                 audioProcessingService: Mock.Of<IAudioProcessingService>(),
                 imageFileStorage: imageFileStorage ?? Mock.Of<IImageFileStorage>(),
+                interviewBinaryCleanupService: interviewBinaryCleanupService ?? Mock.Of<IInterviewBinaryCleanupService>(),
                 aggregateLock: Stub.Lock());
 
             controller.ControllerContext = new ControllerContext
@@ -235,9 +276,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             return controller;
         }
 
-        private static IFormFile CreateFormFile(string fileName, string contentType)
+        private static IFormFile CreateFormFile(string fileName, string contentType, byte[] content = null)
         {
-            var content = Encoding.UTF8.GetBytes("fake-image-bytes");
+            content ??= Encoding.UTF8.GetBytes("fake-image-bytes");
             var stream = new MemoryStream(content);
             var file = new Mock<IFormFile>();
             file.Setup(f => f.FileName).Returns(fileName);

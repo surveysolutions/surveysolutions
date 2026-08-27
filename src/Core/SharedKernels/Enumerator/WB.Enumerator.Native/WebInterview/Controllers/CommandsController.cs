@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Enumerator.Native.WebInterview.Models;
 
 namespace WB.Enumerator.Native.WebInterview.Controllers
@@ -28,11 +29,13 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         protected readonly IQuestionnaireStorage questionnaireRepository;
         protected readonly IStatefulInterviewRepository statefulInterviewRepository;
         protected readonly IWebInterviewNotificationService webInterviewNotificationService;
+        protected readonly IInterviewBinaryCleanupService interviewBinaryCleanupService;
         protected readonly IAggregateLock aggregateLock;
 
         public CommandsController(ICommandService commandService, IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage,
             IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository statefulInterviewRepository,
-            IWebInterviewNotificationService webInterviewNotificationService, IAggregateLock aggregateLock)
+            IWebInterviewNotificationService webInterviewNotificationService, IInterviewBinaryCleanupService interviewBinaryCleanupService,
+            IAggregateLock aggregateLock)
         {
             this.commandService = commandService;
             this.imageFileStorage = imageFileStorage;
@@ -40,6 +43,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             this.questionnaireRepository = questionnaireRepository;
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.webInterviewNotificationService = webInterviewNotificationService;
+            this.interviewBinaryCleanupService = interviewBinaryCleanupService;
             this.aggregateLock = aggregateLock;
         }
 
@@ -304,9 +308,18 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                             this.audioFileStorage.RemoveInterviewBinaryData(interviewId, fileName).GetAwaiter().GetResult();
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    if (fileName != null)
+                    {
+                        if (questionType == QuestionType.Multimedia)
+                            this.interviewBinaryCleanupService.EnqueueImageCleanup(interviewId, fileName, e);
+                        else if (questionType == QuestionType.Audio)
+                            this.interviewBinaryCleanupService.EnqueueAudioCleanup(interviewId, fileName, e);
+                    }
                 }
+
+                this.interviewBinaryCleanupService.ProcessPending(interviewId);
             });
 
             return Task.FromResult<IActionResult>(Ok());

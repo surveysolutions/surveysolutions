@@ -67,6 +67,7 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
             registry.Bind<IAggregateRootCache, WebTesterAggregateCache>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
+            registry.BindAsSingleton<IInterviewBinaryCleanupService, NullInterviewBinaryCleanupService>();
             registry.BindAsSingleton<ICommandService, WebTesterCommandService>();
             registry.Bind<IWebTesterTranslationService, WebTesterTranslationService>();
             registry.BindAsSingleton<IWebTesterTranslationStorage, WebTesterTranslationStorage>();

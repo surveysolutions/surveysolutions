@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Controllers;
 using WB.Enumerator.Native.WebInterview.Models;
@@ -19,8 +20,9 @@ namespace WB.UI.WebTester.Controllers
 
         public InterviewCommandsController(ICommandService commandService, IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, 
             IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository statefulInterviewRepository, 
-            IWebInterviewNotificationService webInterviewNotificationService, IAggregateLock aggregateLock, IEvictionNotifier evictionNotify) 
-            : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService, aggregateLock)
+            IWebInterviewNotificationService webInterviewNotificationService, IInterviewBinaryCleanupService interviewBinaryCleanupService,
+            IAggregateLock aggregateLock, IEvictionNotifier evictionNotify) 
+            : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService, interviewBinaryCleanupService, aggregateLock)
         {
             this.evictionNotify = evictionNotify;
         }

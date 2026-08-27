@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Controllers;
@@ -49,6 +50,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository statefulInterviewRepository, 
             IWebInterviewNotificationService webInterviewNotificationService, 
+            IInterviewBinaryCleanupService interviewBinaryCleanupService,
             IAggregateLock aggregateLock,
             IAuthorizedUser authorizedUser, 
             IInterviewFactory interviewFactory,
@@ -58,7 +60,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage,
             IHttpContextAccessor contextAccessor
             ) 
-            : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService, aggregateLock)
+            : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService, interviewBinaryCleanupService, aggregateLock)
         {
             this.authorizedUser = authorizedUser;
             this.interviewFactory = interviewFactory;

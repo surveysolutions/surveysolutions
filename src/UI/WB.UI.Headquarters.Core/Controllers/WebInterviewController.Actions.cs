@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
@@ -12,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
@@ -31,6 +33,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioProcessingService audioProcessingService;
         private readonly IImageFileStorage imageFileStorage;
+        private readonly IInterviewBinaryCleanupService interviewBinaryCleanupService;
         private readonly IAggregateLock aggregateLock;
 
         public WebInterviewBinaryController(
@@ -41,6 +44,7 @@ namespace WB.UI.Headquarters.Controllers
             IAudioFileStorage audioFileStorage, 
             IAudioProcessingService audioProcessingService, 
             IImageFileStorage imageFileStorage,
+            IInterviewBinaryCleanupService interviewBinaryCleanupService,
             IAggregateLock aggregateLock)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
@@ -50,6 +54,7 @@ namespace WB.UI.Headquarters.Controllers
             this.audioFileStorage = audioFileStorage;
             this.audioProcessingService = audioProcessingService;
             this.imageFileStorage = imageFileStorage;
+            this.interviewBinaryCleanupService = interviewBinaryCleanupService;
             this.aggregateLock = aggregateLock;
         }
 
@@ -128,6 +133,8 @@ namespace WB.UI.Headquarters.Controllers
 
             string filename = null;
             string previousFilename = null;
+            byte[] previousFileContent = null;
+            string previousFileContentType = null;
             bool answerCommandSucceeded = false;
 
             try
@@ -156,6 +163,12 @@ namespace WB.UI.Headquarters.Controllers
                         ? previousFilename
                         : generatedFilename;
 
+                    if (previousFilename != null && string.Equals(previousFilename, filename, StringComparison.Ordinal))
+                    {
+                        previousFileContent = this.imageFileStorage.GetInterviewBinaryData(lockedInterview.Id, previousFilename);
+                        previousFileContentType = ContentTypeHelper.GetImageContentType(previousFilename);
+                    }
+
                     this.imageFileStorage.StoreInterviewBinaryData(lockedInterview.Id, filename, bytes, file.ContentType);
 
                     this.commandService.Execute(new AnswerPictureQuestionCommand(lockedInterview.Id,
@@ -169,17 +182,24 @@ namespace WB.UI.Headquarters.Controllers
                         {
                             this.imageFileStorage.RemoveInterviewBinaryData(lockedInterview.Id, previousFilename).GetAwaiter().GetResult();
                         }
-                        catch
+                        catch (Exception e)
                         {
-                            // best-effort: failure to remove the obsolete file does not affect the committed answer
+                            this.interviewBinaryCleanupService.EnqueueImageCleanup(lockedInterview.Id, previousFilename, e);
                         }
                     }
+
+                    this.interviewBinaryCleanupService.ProcessPending(lockedInterview.Id);
                 });
             }
             catch (Exception e)
             {
                 if (filename != null && !answerCommandSucceeded)
-                    await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
+                {
+                    if (previousFileContent != null && string.Equals(previousFilename, filename, StringComparison.Ordinal))
+                        this.imageFileStorage.StoreInterviewBinaryData(interview.Id, previousFilename, previousFileContent, previousFileContentType);
+                    else
+                        await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
+                }
 
                 webInterviewNotificationService.MarkAnswerAsNotSaved(id, questionIdentity, e);
                 throw;
