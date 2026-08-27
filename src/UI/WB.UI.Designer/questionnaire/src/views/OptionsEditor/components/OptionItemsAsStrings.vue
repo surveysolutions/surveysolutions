@@ -3,7 +3,7 @@
         <v-textarea ref="strings" v-model="categoriesAsText" rows="15" variant="outlined" spellcheck="false"
             wrap="off" autocorrect="off" :hide-details="!validationMessage" :error="!validity" :disabled="loading || convert"
             :loading="loading || convert" :readonly="readonly" class="categories-strings__textarea"
-            style="font-family: monospace, monospace" @change="change" @focus="onFocus" @blur="onBlur">
+            style="font-family: monospace, monospace; font-size: 1rem; line-height: 1.5" @change="change" @focus="onFocus" @blur="onBlur">
             <template #prepend-inner>
                 <div ref="lineNumbers" class="categories-strings__line-numbers" :style="lineNumbersStyle"
                     aria-hidden="true">{{ lineNumbersText }}</div>
@@ -281,11 +281,13 @@ export default {
     width: var(--categories-strings-line-numbers-width);
     min-width: var(--categories-strings-line-numbers-width);
     height: 100%;
-    padding: 16px 8px 16px 0;
+    padding: 16px 8px 16px 4px;
+    background: rgba(0, 0, 0, 0.04);
     border-right: 1px solid rgba(0, 0, 0, 0.12);
     overflow: hidden;
     color: rgba(0, 0, 0, 0.6);
     font-family: monospace, monospace;
+    font-size: 1rem;
     line-height: 1.5;
     text-align: right;
     white-space: pre;
@@ -296,6 +298,7 @@ export default {
     width: 100%;
     padding-top: 4px;
     white-space: normal;
+    color: rgb(var(--v-theme-error));
 }
 
 .categories-strings__validation-summary {
