@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -68,7 +67,45 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             QuestionnaireChangeRecord[] questionnaireHistory;
             int count;
 
-            if (string.IsNullOrWhiteSpace(search))
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var normalizedSearch = search.Trim().ToLowerInvariant();
+
+                if (!searchIdsOnly && !searchWholeWord)
+                {
+                    // Apply filtering server-side using persisted titles via EF Core
+                    query = query.Where(h =>
+                        (h.TargetItemTitle != null && h.TargetItemTitle.ToLower().Contains(normalizedSearch)) ||
+                        (h.TargetItemNewTitle != null && h.TargetItemNewTitle.ToLower().Contains(normalizedSearch)) ||
+                        h.References.Any(r => r.ReferenceTitle != null && r.ReferenceTitle.ToLower().Contains(normalizedSearch)));
+
+                    count = await query.CountAsync();
+                    questionnaireHistory = await query
+                        .OrderByDescending(h => h.Sequence)
+                        .Skip((page - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToArrayAsync();
+                }
+                else
+                {
+                    // For ID-only or whole-word modes, resolve against the live questionnaire document in memory
+                    var matcher = CreateMatcher(search.Trim(), searchWholeWord);
+                    var allHistory = await query
+                        .OrderByDescending(h => h.Sequence)
+                        .ToArrayAsync();
+
+                    questionnaireHistory = allHistory
+                        .Where(h => MatchesRecord(questionnaire, h, matcher, searchIdsOnly))
+                        .ToArray();
+
+                    count = questionnaireHistory.Length;
+                    questionnaireHistory = questionnaireHistory
+                        .Skip((page - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToArray();
+                }
+            }
+            else
             {
                 count = await query.CountAsync();
                 questionnaireHistory = await query
@@ -76,23 +113,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
                     .ToArrayAsync();
-            }
-            else
-            {
-                var matcher = CreateMatcher(search.Trim(), searchWholeWord);
-                questionnaireHistory = await query
-                    .OrderByDescending(h => h.Sequence)
-                    .ToArrayAsync();
-
-                questionnaireHistory = questionnaireHistory
-                    .Where(h => MatchesRecord(questionnaire, h, matcher, searchIdsOnly))
-                    .ToArray();
-
-                count = questionnaireHistory.Length;
-                questionnaireHistory = questionnaireHistory
-                    .Skip((page - 1) * pageSize)
-                    .Take(pageSize)
-                    .ToArray();
             }
 
             var userId = user.GetId();

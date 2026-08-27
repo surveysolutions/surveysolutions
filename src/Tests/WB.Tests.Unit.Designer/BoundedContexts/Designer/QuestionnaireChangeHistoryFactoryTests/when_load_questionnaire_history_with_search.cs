@@ -97,10 +97,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
         }
 
         [Test]
-        public async Task should_not_match_entity_id_when_searching_text()
+        public async Task should_match_persisted_title_in_text_mode()
         {
+            // With EF-level filtering on persisted titles, a value that was stored as TargetItemTitle
+            // is matched even when it looks like a variable name.
             var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "respondent_age");
-            result.ChangeHistory.Count.Should().Be(0);
+            result.ChangeHistory.Count.Should().Be(2);
         }
 
         [Test]
