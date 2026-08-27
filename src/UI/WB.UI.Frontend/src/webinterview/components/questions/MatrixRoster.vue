@@ -1,47 +1,27 @@
 <template>
-    <div class="question table-view scroller"
-        :id="hash"
-        v-if="rowData.length > 0">
+    <div class="question table-view scroller" :id="hash" v-if="rowData.length > 0">
         <div class="question-editor">
             <h5>
-                <a class="open-designer"
-                    v-if="this.$config.inWebTesterMode && name"
-                    href="javascript:void(0);"
-                    @click="openDesigner($me.id)"
-                    v-dompurify-html="'[' + name + ']'"></a>
-                <span v-dateTimeFormatting
-                    v-dompurify-html="title"></span>
+                <a class="open-designer" v-if="this.$config.inWebTesterMode && name" href="javascript:void(0);"
+                    @click="openDesigner($me.id)" v-dompurify-html="'[' + name + ']'"></a>
+                <span v-dateTimeFormatting v-dompurify-html="title"></span>
             </h5>
-            <div class="information-block instruction"
-                v-if="instructions">
-                <p v-dateTimeFormatting
-                    v-dompurify-html="instructions"></p>
+            <div class="information-block instruction" v-if="instructions">
+                <p v-dateTimeFormatting v-dompurify-html="instructions"></p>
             </div>
         </div>
-        <ag-grid-vue ref="matrixRoster"
-            class="ag-theme-customStyles roster-matrix"
-            domLayout="autoHeight"
-            rowHeight="40"
-            headerHeight="50"
-            :defaultColDef="defaultColDef"
-            :columnDefs="columnDefs"
-            :rowData="rowData"
-            :grid-options="gridOptions"
-            :modules="gridModules"
-            @grid-ready="onGridReady"
+        <ag-grid-vue ref="matrixRoster" class="ag-theme-customStyles roster-matrix" domLayout="autoHeight"
+            :rowHeight="40" :headerHeight="50" :defaultColDef="defaultColDef" :columnDefs="columnDefs"
+            :rowData="rowData" :grid-options="gridOptions" @grid-ready="onGridReady"
             @column-resized="autosizeHeaders"></ag-grid-vue>
     </div>
 </template>
 
 <script lang="js">
 /* eslint-disable vue/no-unused-components */
-import '@ag-grid-community/styles/ag-grid.css'
-import '@ag-grid-community/styles/ag-theme-quartz.css'
-
 import { entityDetails } from '../mixins'
 import { debounce, map } from 'lodash-es'
-import { AgGridVue } from '@ag-grid-community/vue3'
-import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model'
+import { AgGridVue, agGridTheme } from './agGrid'
 
 import MatrixRoster_QuestionEditor from './MatrixRoster.QuestionEditor'
 import MatrixRoster_RosterTitle from './MatrixRoster.RosterTitle'
@@ -78,7 +58,9 @@ export default {
     beforeMount() {
         this.countOfInstances = this.$me.instances.length
         this.title =
-            this.$me.questions.length > 0 ? this.$me.questions[0].title : null
+            this.$me.title ??
+            (this.$me.questions.length > 0 ? this.$me.questions[0].title : null) ??
+            ''
         this.instructions =
             this.$me.questions.length > 0
                 ? this.$me.questions[0].instruction
@@ -118,7 +100,10 @@ export default {
             this.name = this.$me.questions.length > 0 ? this.$me.questions[0].name : null
         },
         ['$me.title']() {
-            this.title = this.$me.title
+            this.title =
+                this.$me.title ??
+                (this.$me.questions.length > 0 ? this.$me.questions[0].title : null) ??
+                ''
         },
         ['$config.inWebTesterMode']() {
             this.name = this.$me.questions.length > 0 ? this.$me.questions[0].name : null
@@ -132,6 +117,7 @@ export default {
     computed: {
         gridOptions() {
             return {
+                theme: agGridTheme,
                 suppressClickEdit: true,
                 suppressCellFocus: true,
                 suppressMovableColumns: true,
@@ -139,9 +125,6 @@ export default {
                     componentParent: this,
                 },
             }
-        },
-        gridModules() {
-            return [ClientSideRowModelModule]
         },
     },
     methods: {
@@ -168,6 +151,8 @@ export default {
                             question: question,
                             value: question,
                         },
+                        valueFormatter: () => '',
+                        cellDataType: false,
                         //cellEditor: 'MatrixRoster_QuestionEditor',
                         //cellEditorParams: {
                         //    id: question.id,
@@ -185,6 +170,8 @@ export default {
                 cellStyle: { minHeight: '40px' },
                 cellRenderer: 'MatrixRoster_RosterTitle',
                 cellRendererParams: {},
+                valueFormatter: () => '',
+                cellDataType: false,
             })
             this.columnDefs = columnsFromQuestions
         },
@@ -245,9 +232,6 @@ export default {
 
                 // set header height to calculated height + padding (top: 8px, bottom: 8px)
                 this.gridApi.setGridOption('headerHeight', minHeight)
-
-                // set all rows height to auto
-                this.gridApi.resetRowHeights()
             }
         },
 
