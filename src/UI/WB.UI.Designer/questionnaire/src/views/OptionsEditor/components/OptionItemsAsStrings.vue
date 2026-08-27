@@ -1,9 +1,9 @@
 <template>
     <v-container fluid class="categories-strings pa-4">
-        <v-textarea ref="strings" v-model="categoriesAsText" rows="15" variant="outlined" spellcheck="false"
-            wrap="off" autocorrect="off" :hide-details="!validationMessage" :error="!validity" :disabled="loading || convert"
-            :loading="loading || convert" :readonly="readonly" class="categories-strings__textarea"
-            style="font-family: monospace, monospace; font-size: 1rem; line-height: 1.5" @change="change" @focus="onFocus" @blur="onBlur">
+        <v-textarea ref="strings" v-model="categoriesAsText" rows="15" variant="outlined" spellcheck="false" wrap="off"
+            autocorrect="off" :hide-details="!validationMessage" :error="!validity" :disabled="loading || convert"
+            :loading="loading || convert" :readonly="readonly" class="categories-strings__textarea" @change="change"
+            @focus="onFocus" @blur="onBlur">
             <template #prepend-inner>
                 <div ref="lineNumbers" class="categories-strings__line-numbers" :style="lineNumbersStyle"
                     aria-hidden="true">{{ lineNumbersText }}</div>
@@ -259,36 +259,53 @@ export default {
 </script>
 
 <style scoped>
+.categories-strings__textarea {
+    --categories-strings-font-family: Menlo, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --categories-strings-font-size: 16px;
+    --categories-strings-line-height: 24px;
+    --categories-strings-padding-y: 16px;
+}
+
 .categories-strings__textarea :deep(.v-field__overlay) {
     display: none;
 }
 
 .categories-strings__textarea :deep(.v-field__prepend-inner) {
     align-self: stretch;
-    padding-top: 0;
+    padding: 0;
     margin-inline-end: 0;
 }
 
 .categories-strings__textarea :deep(.v-field__input) {
-    padding-top: 0;
+    padding: 0;
+    padding-left: 8px;
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
 }
 
 .categories-strings__textarea :deep(textarea) {
-    padding-top: 16px;
+    box-sizing: border-box;
+    padding-top: var(--categories-strings-padding-y);
+    padding-bottom: var(--categories-strings-padding-y);
+    resize: none;
+    font-family: var(--categories-strings-font-family);
+    font-size: var(--categories-strings-font-size);
+    line-height: var(--categories-strings-line-height);
 }
 
 .categories-strings__line-numbers {
     width: var(--categories-strings-line-numbers-width);
     min-width: var(--categories-strings-line-numbers-width);
     height: 100%;
-    padding: 16px 8px 16px 4px;
+    box-sizing: border-box;
+    padding: 0px 8px var(--categories-strings-padding-y) 4px;
     background: rgba(0, 0, 0, 0.04);
     border-right: 1px solid rgba(0, 0, 0, 0.12);
     overflow: hidden;
     color: rgba(0, 0, 0, 0.6);
-    font-family: monospace, monospace;
-    font-size: 1rem;
-    line-height: 1.5;
+    font-family: var(--categories-strings-font-family);
+    font-size: var(--categories-strings-font-size);
+    line-height: var(--categories-strings-line-height);
     text-align: right;
     white-space: pre;
     user-select: none;

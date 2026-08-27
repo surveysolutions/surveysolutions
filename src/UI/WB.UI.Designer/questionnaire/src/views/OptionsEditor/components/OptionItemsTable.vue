@@ -17,8 +17,8 @@
         :shown="dialog" :show-parent-value="isCascading" @cancel="dialog = false" @saveCategory="save" />
 
     <v-snackbar v-model="snacks.rowAdded" location='top' color="success">{{
-            $t('QuestionnaireEditor.RowAdded')
-        }}</v-snackbar>
+        $t('QuestionnaireEditor.RowAdded')
+    }}</v-snackbar>
 
     <v-data-table ref="table" :headers="headers" :items="categoriesLocal" :search="search" :items-per-page="10"
         :footer-props="{ 'items-per-page-options': [10, 20, 50, 100] }" :loading="loading"
@@ -32,8 +32,8 @@
                 {{ props.item.parentValue }}
                 <span v-if="parentCategories && parentCategories.length > 0"
                     class="caption v-field--disabled .d-none .d-md-flex .d-lg-none">{{
-            captionForParentValue(props.item.parentValue)
-        }}</span>
+                        captionForParentValue(props.item.parentValue)
+                    }}</span>
             </div>
         </template>
 
@@ -212,5 +212,9 @@ export default {
 
 .option-items-table__filter :deep(.v-field__overlay) {
     display: none;
+}
+
+.option-items-table__filter :deep(.v-field--appended) {
+    padding-inline-end: 0px !important;
 }
 </style>
