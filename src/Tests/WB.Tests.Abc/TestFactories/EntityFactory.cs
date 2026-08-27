@@ -2117,6 +2117,7 @@ namespace WB.Tests.Abc.TestFactories
             AssignmentEmail assignmentEmail = null,
             AssignmentPassword assignmentPassword = null,
             AssignmentWebMode assignmentWebMode = null,
+            AssignmentTargetArea targetArea = null,
             params BaseAssignmentValue[] answers) => new PreloadingAssignmentRow
         {
             FileName = fileName,
@@ -2128,7 +2129,8 @@ namespace WB.Tests.Abc.TestFactories
             Answers = answers,
             Email = assignmentEmail,
             Password = assignmentPassword,
-            WebMode = assignmentWebMode
+            WebMode = assignmentWebMode,
+            TargetArea = targetArea
             };
 
         public AssignmentResponsible AssignmentResponsible(string responsibleName, UserToVerify userInfo = null) => new AssignmentResponsible
@@ -2142,6 +2144,12 @@ namespace WB.Tests.Abc.TestFactories
         {
             Value = email,
             Column = ServiceColumns.EmailColumnName
+        };
+
+        public AssignmentTargetArea AssignmentTargetArea(string targetArea) => new AssignmentTargetArea
+        {
+            Value = targetArea,
+            Column = ServiceColumns.TargetAreaColumnName
         };
 
         public AssignmentWebMode AssignmentWebMode(bool? webMode) => new AssignmentWebMode
