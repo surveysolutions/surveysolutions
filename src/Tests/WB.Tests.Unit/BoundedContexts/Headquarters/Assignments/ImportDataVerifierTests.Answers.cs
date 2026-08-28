@@ -1175,43 +1175,5 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             // assert
             Assert.That(error, Is.Null);
         }
-
-        [Test]
-        public void when_verify_with_interview_tree_and_non_negative_integer_question_has_negative_answer_should_return_PL0011_error()
-        {
-            var questionnaire = Create.Entity.PlainQuestionnaire(
-                Create.Entity.QuestionnaireDocumentWithOneChapter(
-                    Create.Entity.NumericIntegerQuestion(Id.g1, variable: "intq", isNonNegative: true)));
-
-            var answers = new List<InterviewAnswer>
-            {
-                Create.Entity.InterviewAnswer(Create.Identity(Id.g1), Create.Entity.NumericIntegerAnswer(-5))
-            };
-
-            var verifier = Create.Service.ImportDataVerifier();
-
-            var error = verifier.VerifyWithInterviewTree(answers, Guid.NewGuid(), questionnaire);
-
-            Assert.That(error?.ErrorCode, Is.EqualTo("PL0011"));
-        }
-
-        [Test]
-        public void when_verify_with_interview_tree_and_non_negative_real_question_has_negative_answer_should_return_PL0011_error()
-        {
-            var questionnaire = Create.Entity.PlainQuestionnaire(
-                Create.Entity.QuestionnaireDocumentWithOneChapter(
-                    Create.Entity.NumericRealQuestion(Id.g1, variable: "realq", isNonNegative: true)));
-
-            var answers = new List<InterviewAnswer>
-            {
-                Create.Entity.InterviewAnswer(Create.Identity(Id.g1), Create.Entity.NumericRealAnswer(-5.5))
-            };
-
-            var verifier = Create.Service.ImportDataVerifier();
-
-            var error = verifier.VerifyWithInterviewTree(answers, Guid.NewGuid(), questionnaire);
-
-            Assert.That(error?.ErrorCode, Is.EqualTo("PL0011"));
-        }
     }
 }

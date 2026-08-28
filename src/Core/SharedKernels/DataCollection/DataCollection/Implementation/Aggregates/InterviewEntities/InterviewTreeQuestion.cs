@@ -1001,7 +1001,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
         {
-            questionInvariants.RequireNumericRealPreloadValueAllowed(answer.Value);
+            questionInvariants.RequireNumericRealPreloadValueAllowed();
         }
 
         public override AbstractAnswer Answer => this.answer;

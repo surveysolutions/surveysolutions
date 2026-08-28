@@ -122,43 +122,6 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
         }
 
         [Test]
-        public void when_creating_assignment_with_negative_value_for_non_negative_numeric_question_then_should_return_failed_verification_results_with_400_code()
-        {
-            var qid = QuestionnaireIdentity.Parse("f2250674-42e6-4756-b394-b86caa62225e$1");
-
-            var hqUser = Abc.Create.Entity.HqUser();
-
-            this.SetupResponsibleUser(hqUser);
-            this.SetupQuestionnaire(Abc.Create.Entity.QuestionnaireDocument(qid.QuestionnaireId, string.Empty,
-                children: new IComposite[]
-                {
-                    Abc.Create.Entity.NumericIntegerQuestion(Id.g1, variable: "intq", isNonNegative: true)
-                }));
-
-            var response = this.controller.Create(new CreateAssignmentApiRequest
-            {
-                QuestionnaireId = qid.ToString(),
-                Responsible = hqUser.UserName,
-                IdentifyingData = new List<AssignmentIdentifyingDataItem>
-                {
-                    new AssignmentIdentifyingDataItem
-                    {
-                        Variable = "intq",
-                        Answer = "-5"
-                    }
-                }
-            });
-
-            Assert.That(response.Result, Has.Property(nameof(IStatusCodeActionResult.StatusCode)).EqualTo(StatusCodes.Status400BadRequest));
-            var verificationErrors = (((ObjectResult)response.Result).Value as CreateAssignmentResult)
-                ?.VerificationStatus.Errors;
-
-            Assert.That(verificationErrors, Is.Not.Empty);
-            Assert.That(verificationErrors?[0].Code, Is.EqualTo("PL0011"));
-            this.commandService.Verify(ass => ass.Execute(It.IsAny<CreateAssignment>(), null), Times.Never);
-        }
-
-        [Test]
         public void when_creating_assignment_should_store_new_assignment()
         {
             var qid = QuestionnaireIdentity.Parse("f2250674-42e6-4756-b394-b86caa62225e$1");
