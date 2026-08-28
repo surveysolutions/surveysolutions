@@ -1683,7 +1683,7 @@
     <value>Access to workspace</value>
   </data>
   <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
-    <value>Supervisor (Interviewers will be added to his team)</value>
+    <value>Supervisor</value>
 
   </data>
   <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">

@@ -1715,7 +1715,7 @@
     <value>Виберіть супервізора</value>
   </data>
   <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
-    <value>Супервізор (до його команди будуть додані інтерв'юери)</value>
+    <value>Супервізор</value>
   </data>
   <data name="UsersManage_TeamFilter" xml:space="preserve">
     <value>Команда</value>
