@@ -264,7 +264,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                     // be shown in the result. Retain the most accurate such fix as a fallback so a
                     // coordinate is still returned on timeout. Coarse built-in GPS fixes keep waiting
                     // for a better satellite fix and are not recorded as a fallback.
-                    if (!isFromGpsProvider)
+                    if (!isFromGpsProvider && (isFromMockProvider || meetsDesiredAccuracy))
                         RecordFallback(gpsLocation);
                     return;
                 }

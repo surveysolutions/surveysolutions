@@ -42,9 +42,35 @@ namespace WB.Tests.Android.Instrumentation.CustomServices
             // reported immediately as the result — it is retained as a fallback so a subsequent
             // GPS-provider fix (the correct source) can win. The fallback is returned on timeout so a
             // coordinate is still captured when no GPS fix arrives.
+            // A non-GPS fix is only captured as a fallback when it meets the desired accuracy.
             var tcs = new TaskCompletionSource<GpsLocation>(TaskCreationOptions.RunContinuationsAsynchronously);
             var listener = new GpsLocationService.SingleShotLocationListener(
                 tcs, locationManager: null, desiredAccuracy: 10d, acceptableSource: AcceptableGpsLocationSource.AnyNonMock);
+
+            var androidLocation = new Location(LocationManager.NetworkProvider)
+            {
+                Latitude = 49.842957d,
+                Longitude = 24.031111d,
+                Accuracy = 250f,
+                Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+            };
+
+            ((ILocationListener)listener).OnLocationChanged(androidLocation);
+
+            await Task.Yield();
+
+            Assert.That(tcs.Task.IsCompleted, Is.False);
+            Assert.That(listener.BestFallbackLocation, Is.Null,
+                "A coarse non-GPS fix (250 m) exceeding desired accuracy (10 m) must not be captured as a fallback.");
+        }
+
+        [Test]
+        public async Task when_accurate_non_gps_fix_received_in_any_non_mock_mode_should_capture_as_fallback()
+        {
+            // A non-GPS fix that meets the desired accuracy should be captured as a fallback.
+            var tcs = new TaskCompletionSource<GpsLocation>(TaskCreationOptions.RunContinuationsAsynchronously);
+            var listener = new GpsLocationService.SingleShotLocationListener(
+                tcs, locationManager: null, desiredAccuracy: 300d, acceptableSource: AcceptableGpsLocationSource.AnyNonMock);
 
             var androidLocation = new Location(LocationManager.NetworkProvider)
             {
