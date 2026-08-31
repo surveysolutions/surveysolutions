@@ -48,6 +48,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
 
             db.Add(Create.QuestionnaireChangeRecord(
                 questionnaireId: questionnaireId.FormatGuid(),
+                targetId: Guid.NewGuid(),
+                targetType: QuestionnaireItemType.Question,
+                action: QuestionnaireActionType.Update,
+                targetTitle: "legacy_var_marker"));
+
+            db.Add(Create.QuestionnaireChangeRecord(
+                questionnaireId: questionnaireId.FormatGuid(),
                 targetId: sectionId,
                 targetType: QuestionnaireItemType.Section,
                 action: QuestionnaireActionType.Add,
@@ -72,7 +79,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
         public async Task should_return_all_records_when_no_search()
         {
             var result = await factory.LoadAsync(questionnaireId, 1, 20, user);
-            result.ChangeHistory.Count.Should().Be(3);
+            result.ChangeHistory.Count.Should().Be(4);
         }
 
         [Test]
@@ -94,6 +101,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
         {
             var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "respondent_age", searchIdsOnly: true);
             result.ChangeHistory.Count.Should().Be(2);
+        }
+
+        [Test]
+        public async Task should_not_match_persisted_title_when_searching_by_entity_id()
+        {
+            var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "legacy_var_marker", searchIdsOnly: true);
+            result.ChangeHistory.Count.Should().Be(0);
         }
 
         [Test]

@@ -50,6 +50,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             var isAdmin = user.IsAdmin();
 
             IQueryable<QuestionnaireChangeRecord> query = this.dbContext.QuestionnaireChangeRecords
+                .AsNoTracking()
                 .Include(r => r.References)
                 .Where(h => h.QuestionnaireId == sQuestionnaireId);
 
@@ -90,19 +91,42 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 {
                     // For ID-only or whole-word modes, resolve against the live questionnaire document in memory
                     var matcher = CreateMatcher(search.Trim(), searchWholeWord);
-                    var allHistory = await query
+                    var allSearchableHistory = await query
                         .OrderByDescending(h => h.Sequence)
+                        .Select(h => new SearchableChangeRecord
+                        {
+                            QuestionnaireChangeRecordId = h.QuestionnaireChangeRecordId,
+                            Sequence = h.Sequence,
+                            TargetItemId = h.TargetItemId,
+                            TargetItemType = h.TargetItemType,
+                            TargetItemTitle = h.TargetItemTitle,
+                            TargetItemNewTitle = h.TargetItemNewTitle,
+                            References = h.References.Select(r => new SearchableChangeReference
+                            {
+                                ReferenceId = r.ReferenceId,
+                                ReferenceType = r.ReferenceType,
+                                ReferenceTitle = r.ReferenceTitle
+                            }).ToArray()
+                        })
                         .ToArrayAsync();
 
-                    questionnaireHistory = allHistory
+                    var matchedHistoryIds = allSearchableHistory
                         .Where(h => MatchesRecord(questionnaire, h, matcher, searchIdsOnly))
+                        .Select(x => x.QuestionnaireChangeRecordId)
                         .ToArray();
 
-                    count = questionnaireHistory.Length;
-                    questionnaireHistory = questionnaireHistory
+                    count = matchedHistoryIds.Length;
+                    var pageHistoryIds = matchedHistoryIds
                         .Skip((page - 1) * pageSize)
                         .Take(pageSize)
                         .ToArray();
+
+                    questionnaireHistory = pageHistoryIds.Length == 0
+                        ? Array.Empty<QuestionnaireChangeRecord>()
+                        : await query
+                            .Where(h => pageHistoryIds.Contains(h.QuestionnaireChangeRecordId))
+                            .OrderByDescending(h => h.Sequence)
+                            .ToArrayAsync();
                 }
             }
             else
@@ -134,11 +158,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 && Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         }
 
-        private static bool MatchesRecord(QuestionnaireDocument questionnaire, QuestionnaireChangeRecord record,
+        private static bool MatchesRecord(QuestionnaireDocument questionnaire, SearchableChangeRecord record,
             Func<string?, bool> matcher, bool searchIdsOnly)
         {
             var targetMatch = searchIdsOnly
-                ? MatchEntityId(questionnaire, record.TargetItemId, record.TargetItemType, record.TargetItemTitle, matcher)
+                ? MatchEntityId(questionnaire, record.TargetItemId, record.TargetItemType, matcher)
                 : MatchEntityText(questionnaire, record.TargetItemId, record.TargetItemType, record.TargetItemTitle, matcher)
                     || matcher(record.TargetItemNewTitle);
 
@@ -146,15 +170,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 return true;
 
             return record.References.Any(reference => searchIdsOnly
-                ? MatchEntityId(questionnaire, reference.ReferenceId, reference.ReferenceType, reference.ReferenceTitle, matcher)
+                ? MatchEntityId(questionnaire, reference.ReferenceId, reference.ReferenceType, matcher)
                 : MatchEntityText(questionnaire, reference.ReferenceId, reference.ReferenceType, reference.ReferenceTitle, matcher));
         }
 
         private static bool MatchEntityId(QuestionnaireDocument questionnaire, Guid entityId, QuestionnaireItemType entityType,
-            string? fallbackValue, Func<string?, bool> matcher)
+            Func<string?, bool> matcher)
         {
-            var candidate = ResolveEntityId(questionnaire, entityId, entityType) ?? fallbackValue;
-            return matcher(candidate);
+            return matcher(ResolveEntityId(questionnaire, entityId, entityType));
         }
 
         private static bool MatchEntityText(QuestionnaireDocument questionnaire, Guid entityId, QuestionnaireItemType entityType,
@@ -186,6 +209,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             var entity = questionnaire.FirstOrDefault<IComposite>(item => item.PublicKey == entityId) as IQuestionnaireEntity;
             return entity?.GetTitle();
+        }
+
+        private sealed class SearchableChangeRecord
+        {
+            public string QuestionnaireChangeRecordId { get; init; } = string.Empty;
+            public long Sequence { get; init; }
+            public Guid TargetItemId { get; init; }
+            public QuestionnaireItemType TargetItemType { get; init; }
+            public string? TargetItemTitle { get; init; }
+            public string? TargetItemNewTitle { get; init; }
+            public SearchableChangeReference[] References { get; init; } = Array.Empty<SearchableChangeReference>();
+        }
+
+        private sealed class SearchableChangeReference
+        {
+            public Guid ReferenceId { get; init; }
+            public QuestionnaireItemType ReferenceType { get; init; }
+            public string? ReferenceTitle { get; init; }
         }
 
         private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(
