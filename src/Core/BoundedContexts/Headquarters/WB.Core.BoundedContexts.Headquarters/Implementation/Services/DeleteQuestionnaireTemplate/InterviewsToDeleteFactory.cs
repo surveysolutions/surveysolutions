@@ -162,39 +162,43 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
             // Also clean up binary data for broken-only interviews (those with a BrokenInterviewPackage
             // but no InterviewSummary, which the paged summary loop above would miss).
-            var brokenPageIndex = 0;
-            List<Guid> brokenOnlyIds;
+            // BrokenInterviewPackage does not implement IReadSideRepositoryEntity, so
+            // IQueryableReadSideRepositoryReader cannot be used here; direct session access is justified.
+            // Page by the row's primary key (Id) to avoid DISTINCT + ORDER BY translation issues in LINQ.
+            var lastBrokenId = 0;
+            int brokenBatchCount;
 
             do
             {
-                var skip = brokenPageIndex * BatchSize;
-                // BrokenInterviewPackage does not implement IReadSideRepositoryEntity, so
-                // IQueryableReadSideRepositoryReader cannot be used here; direct session access is justified.
-                brokenOnlyIds = this.sessionFactory.Session.Query<BrokenInterviewPackage>()
+                var capturedLastId = lastBrokenId;
+                var batch = this.sessionFactory.Session.Query<BrokenInterviewPackage>()
                     .Where(p => p.QuestionnaireId == questionnaireIdentity.QuestionnaireId
-                                && p.QuestionnaireVersion == questionnaireIdentity.Version)
-                    .Select(p => p.InterviewId)
-                    .Distinct()
-                    .OrderBy(id => id)
-                    .Skip(skip)
+                                && p.QuestionnaireVersion == questionnaireIdentity.Version
+                                && p.Id > capturedLastId)
+                    .OrderBy(p => p.Id)
+                    .Select(p => new { p.Id, p.InterviewId })
                     .Take(BatchSize)
                     .ToList();
 
-                if (brokenOnlyIds.Count == 0)
+                brokenBatchCount = batch.Count;
+                if (brokenBatchCount == 0)
                     break;
+
+                lastBrokenId = batch[brokenBatchCount - 1].Id;
+
+                // Deduplicate in memory; multiple packages can reference the same interview.
+                var brokenBatchIds = batch.Select(b => b.InterviewId).Distinct().ToList();
 
                 // Exclude IDs already covered by the InterviewSummary loop above.
                 var summaryIds = this.interviewsReader.Query(_ => _.Where(s =>
-                        brokenOnlyIds.Contains(s.InterviewId))
+                        brokenBatchIds.Contains(s.InterviewId))
                     .Select(s => s.InterviewId)
                     .ToList());
 
-                var onlyBrokenIds = brokenOnlyIds.Except(summaryIds).ToList();
+                var onlyBrokenIds = brokenBatchIds.Except(summaryIds).ToList();
                 if (onlyBrokenIds.Count > 0)
                     await RemoveBinaryDataForBatchAsync(onlyBrokenIds);
-
-                brokenPageIndex++;
-            } while (brokenOnlyIds.Count == BatchSize);
+            } while (brokenBatchCount == BatchSize);
         }
 
         private async Task RemoveBinaryDataForBatchAsync(List<Guid> interviewIds)
