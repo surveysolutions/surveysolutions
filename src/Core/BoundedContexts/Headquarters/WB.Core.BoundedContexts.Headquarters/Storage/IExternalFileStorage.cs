@@ -23,6 +23,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
             throw new NotImplementedException();
         }
 
+        public Task<Stream> GetStreamAsync(string key)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<List<FileObject>> ListAsync(string prefix)
         {
             throw new NotImplementedException();

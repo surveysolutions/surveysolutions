@@ -1620,7 +1620,7 @@
         <value>Akses ke ruang kerja</value>
     </data>
     <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
-        <value>Supervisor (Pewawancara akan ditambahkan ke timnya)</value>
+        <value>Supervisor</value>
     </data>
     <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
         <value>Pilih pengawas</value>
