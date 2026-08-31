@@ -49,6 +49,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             public bool AllowSupervisorChangeAssignmentStatus { get; set; }
             public bool AllowInterviewerChangeAssignmentStatus { get; set; }
             public AudioRecordingQuality? AudioRecordingQuality { get; set; }
+            [EnumDataType(typeof(AcceptableGpsLocationSource))]
             public AcceptableGpsLocationSource? AcceptableGpsLocationSource { get; set; }
         }
 
