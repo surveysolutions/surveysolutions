@@ -12,9 +12,11 @@
 <style>
     .questionnaire-history-header {
         margin: 0;
+        min-height: 45px;
+        padding: 7px 15px;
         display: flex;
         align-items: center;
-        gap: 1em;
+        gap: 15px;
         white-space: nowrap;
         overflow: hidden;
     }
@@ -23,17 +25,33 @@
         flex: 1;
         overflow: hidden;
         text-overflow: ellipsis;
+        font-size: 24px;
+        line-height: 30px;
+        font-weight: normal;
     }
 
     .questionnaire-history-search-form {
         display: flex;
         align-items: center;
-        gap: 0.5em;
+        gap: 8px;
         flex-shrink: 0;
+        font-size: 14px;
     }
 
     .questionnaire-history-search-form .input-group {
         width: 200px;
+    }
+
+    .questionnaire-history-search-form .control-label,
+    .questionnaire-history-search-form .checkbox label {
+        margin: 0;
+        font-size: 14px;
+        line-height: 30px;
+    }
+
+    .questionnaire-history-search-form .form-control,
+    .questionnaire-history-search-form .input-group-btn .btn {
+        height: 30px;
     }
 
     .questionnaire-history-search-form .clear-search {
@@ -51,11 +69,20 @@
 
     .questionnaire-history-search-form .checkbox {
         margin: 0;
+        height: 30px;
+        display: flex;
+        align-items: center;
     }
 
     .questionnaire-history-search-form .checkbox label {
-        padding-left: 4px;
-        font-weight: normal;
+        display: flex;
+        align-items: center;
+        padding-left: 0;
+    }
+
+    .questionnaire-history-search-form .checkbox input[type="checkbox"] {
+        position: static;
+        margin: 0 6px 0 0;
     }
 
     .questionnaire-history-search-form .search-id-option {
@@ -65,7 +92,7 @@
 </style>
 
 <div id="edit-form" style="position: static;">
-    <h3 class="questionnaire-history-header">
+    <div class="questionnaire-history-header">
         <a href='@($"/q/details/{Model!.Id.FormatGuid()}")' class="btn btn-default">@QuestionnaireHistoryResources.Edit</a>
         <span class="questionnaire-history-title">@Model.Title</span>
         <form method="get" action="@Url.Action(ViewContext.CurrentAction(), ViewContext.CurrentController())" class="questionnaire-history-search-form">
@@ -96,7 +123,7 @@
                 </label>
             </div>
         </form>
-    </h3>
+    </div>
 </div>
 <table id="questionnaire-table-header" class="table  table-header">
     <thead>
