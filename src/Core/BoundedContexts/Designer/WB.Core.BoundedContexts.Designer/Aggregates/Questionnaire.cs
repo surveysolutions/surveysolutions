@@ -508,6 +508,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 
                 AddOrUpdateCategoriesImpl(clonedDocument, newCategoryId, categories.Id, categories.Name);
 
+                designerTranslationService.CopyCategoriesTranslations(
+                    clonedDocument.PublicKey, categories.Id, newCategoryId);
                 reusableCategoriesService.Store(clonedDocument.PublicKey, newCategoryId, newCategoryItems);
             }
             
