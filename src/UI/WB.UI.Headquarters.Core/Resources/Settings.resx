@@ -563,4 +563,10 @@ Possible reasons:
   <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
     <value>Built-in GPS only (no external, no mock locations)</value>
   </data>
+  <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
+    <value>Allow Supervisors to play audio-audit recordings</value>
+  </data>
+  <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
+    <value>When enabled, Supervisors can access and play audio-audit recordings for their interviews.</value>
+  </data>
 </root>

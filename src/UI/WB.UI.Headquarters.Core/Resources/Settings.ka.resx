@@ -670,4 +670,10 @@
   <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
     <value>მხოლოდ ჩაშენებული GPS (გარე GPS-ის გარეშე, მოჩვენებითი მდებარეობების გარეშე)</value>
   </data>
+  <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
+    <value>აუდიო აუდიტის ჩანაწერების დაკვრის უფლება სუპერვაიზორებისთვის</value>
+  </data>
+  <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
+    <value>ჩართვის შემთხვევაში სუპერვაიზორებს შეუძლიათ თავიანთი ინტერვიუებისთვის აუდიო აუდიტის ჩანაწერებზე წვდომა და მათი დაკვრა.</value>
+  </data>
 </root>

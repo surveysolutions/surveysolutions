@@ -619,4 +619,10 @@ Motive posibile:
   <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
     <value>Doar GPS integrat (fără extern, fără locații simulate)</value>
   </data>
+  <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
+    <value>Permiteți supervizorilor să redea înregistrările de audit audio</value>
+  </data>
+  <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
+    <value>Când este activată, supervizorii pot accesa și reda înregistrările de audit audio pentru interviurile lor.</value>
+  </data>
 </root>

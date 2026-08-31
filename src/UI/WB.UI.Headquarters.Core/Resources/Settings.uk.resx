@@ -607,4 +607,10 @@
   <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
     <value>Лише вбудований GPS (без зовнішнього, без імітації місцезнаходження)</value>
   </data>
+  <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
+    <value>Дозволити супервайзерам відтворювати записи аудіоаудиту</value>
+  </data>
+  <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
+    <value>Якщо увімкнено, супервайзери можуть отримувати доступ і відтворювати записи аудіоаудиту для своїх інтерв’ю.</value>
+  </data>
 </root>

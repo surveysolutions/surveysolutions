@@ -628,4 +628,10 @@ Arsyet e mundshme:
   <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
     <value>Vetëm GPS i brendshëm (pa të jashtëm, pa vendndodhje të simuluara)</value>
   </data>
+  <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
+    <value>Lejo supervizorët të luajnë regjistrimet e auditimit audio</value>
+  </data>
+  <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
+    <value>Kur aktivizohet, supervizorët mund të aksesojnë dhe të luajnë regjistrimet e auditimit audio për intervistat e tyre.</value>
+  </data>
 </root>

@@ -563,4 +563,10 @@
   <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
     <value>GPS المدمج فقط (بدون خارجي، بدون مواقع وهمية)</value>
   </data>
+  <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
+    <value>السماح للمشرفين بتشغيل تسجيلات التدقيق الصوتي</value>
+  </data>
+  <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
+    <value>عند التمكين، يمكن للمشرفين الوصول إلى تسجيلات التدقيق الصوتي وتشغيلها للمقابلات الخاصة بهم.</value>
+  </data>
 </root>

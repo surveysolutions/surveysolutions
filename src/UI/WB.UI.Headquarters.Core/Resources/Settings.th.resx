@@ -314,4 +314,10 @@
     <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
         <value>GPS ในตัวเท่านั้น (ไม่มีภายนอก ไม่มีตำแหน่งจำลอง)</value>
     </data>
+  <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
+    <value>อนุญาตให้หัวหน้าทีมเล่นไฟล์บันทึกการตรวจสอบเสียง</value>
+  </data>
+  <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
+    <value>เมื่อเปิดใช้งาน หัวหน้าทีมจะสามารถเข้าถึงและเล่นไฟล์บันทึกการตรวจสอบเสียงสำหรับการสัมภาษณ์ของตนได้</value>
+  </data>
 </root>

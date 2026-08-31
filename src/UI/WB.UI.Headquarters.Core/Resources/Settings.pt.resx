@@ -564,4 +564,10 @@ Possíveis razões:
   <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
     <value>Apenas GPS integrado (sem externo, sem localizações simuladas)</value>
   </data>
+  <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
+    <value>Permitir que supervisores reproduzam gravações de auditoria de áudio</value>
+  </data>
+  <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
+    <value>Quando habilitado, os supervisores podem acessar e reproduzir gravações de auditoria de áudio de suas entrevistas.</value>
+  </data>
 </root>

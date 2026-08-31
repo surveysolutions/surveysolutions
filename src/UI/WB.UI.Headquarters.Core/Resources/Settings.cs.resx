@@ -558,4 +558,10 @@
   <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
     <value>Pouze vestavěné GPS (bez externího, bez fiktivních poloh)</value>
   </data>
+  <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
+    <value>Povolit supervizorům přehrávat nahrávky zvukového auditu</value>
+  </data>
+  <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
+    <value>Pokud je povoleno, supervizoři mohou přistupovat k nahrávkám zvukového auditu svých interview a přehrávat je.</value>
+  </data>
 </root>

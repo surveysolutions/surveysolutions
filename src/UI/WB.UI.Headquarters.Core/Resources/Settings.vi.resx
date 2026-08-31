@@ -314,4 +314,10 @@ Lý do có thể:
     <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
         <value>Chỉ GPS tích hợp (không bên ngoài, không vị trí giả lập)</value>
         </data>
+  <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
+    <value>Cho phép giám sát viên phát bản ghi kiểm toán âm thanh</value>
+  </data>
+  <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
+    <value>Khi được bật, giám sát viên có thể truy cập và phát các bản ghi kiểm toán âm thanh cho các cuộc phỏng vấn của họ.</value>
+  </data>
 </root>

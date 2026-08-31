@@ -314,4 +314,10 @@
     <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
         <value>តែ GPS ដែលភ្ជាប់មកជាមួយប៉ុណ្ណោះ (គ្មានខាងក្រៅ គ្មានទីតាំងក្លែងក្លាយ)</value>
     </data>
+  <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
+    <value>អនុញ្ញាតឱ្យអ្នកត្រួតពិនិត្យចាក់កំណត់ត្រាសវនកម្មសំឡេង</value>
+  </data>
+  <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
+    <value>នៅពេលបើក អ្នកត្រួតពិនិត្យអាចចូលប្រើ និងចាក់កំណត់ត្រាសវនកម្មសំឡេងសម្រាប់សម្ភាសន៍របស់ពួកគេ។</value>
+  </data>
 </root>

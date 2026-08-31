@@ -666,4 +666,10 @@
   <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
     <value>仅内置 GPS（无外部，无模拟位置）</value>
   </data>
+  <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
+    <value>允许督导员播放音频审计录音</value>
+  </data>
+  <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
+    <value>启用后，督导员可以访问并播放其访谈的音频审计录音。</value>
+  </data>
 </root>
