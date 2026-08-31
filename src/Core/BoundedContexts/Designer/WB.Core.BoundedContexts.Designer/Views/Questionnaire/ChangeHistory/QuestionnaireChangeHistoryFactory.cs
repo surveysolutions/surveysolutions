@@ -87,9 +87,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                             (r.ReferenceType == QuestionnaireItemType.Questionnaire && questionnaireIdMatched && r.ReferenceId == questionnaire.PublicKey)
                             || (r.ReferenceType != QuestionnaireItemType.Questionnaire && matchedNonQuestionnaireEntityIds.Contains(r.ReferenceId))) ||
                         (!searchIdsOnly &&
-                         ((h.TargetItemTitle != null && Regex.IsMatch(h.TargetItemTitle, $@"\m{Regex.Escape(normalizedSearch)}\M", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)) ||
-                          (h.TargetItemNewTitle != null && Regex.IsMatch(h.TargetItemNewTitle, $@"\m{Regex.Escape(normalizedSearch)}\M", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)) ||
-                          h.References.Any(r => r.ReferenceTitle != null && Regex.IsMatch(r.ReferenceTitle, $@"\m{Regex.Escape(normalizedSearch)}\M", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)))));
+                         ((h.TargetItemTitle != null && Regex.IsMatch(h.TargetItemTitle, $@"(^|\W){Regex.Escape(normalizedSearch)}(\W|$)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)) ||
+                          (h.TargetItemNewTitle != null && Regex.IsMatch(h.TargetItemNewTitle, $@"(^|\W){Regex.Escape(normalizedSearch)}(\W|$)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)) ||
+                          h.References.Any(r => r.ReferenceTitle != null && Regex.IsMatch(r.ReferenceTitle, $@"(^|\W){Regex.Escape(normalizedSearch)}(\W|$)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)))));
                 }
                 else
                 {
