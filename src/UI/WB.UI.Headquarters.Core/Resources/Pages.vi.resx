@@ -1620,7 +1620,7 @@
         <value>Truy cập vào không gian làm việc</value>
         </data>
     <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
-        <value>Người giám sát (Người phỏng vấn sẽ được thêm vào nhóm của anh ấy)</value>
+        <value>Người giám sát</value>
         </data>
     <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
         <value>Chọn người giám sát</value>

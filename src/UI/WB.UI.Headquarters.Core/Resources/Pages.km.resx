@@ -1620,7 +1620,7 @@
         <value>ការចូលទៅកាន់កន្លែងធ្វើការ</value>
     </data>
     <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
-        <value>អ្នកគ្រប់គ្រង (អ្នកសម្ភាសន៍នឹងត្រូវបានបញ្ចូលទៅក្នុងក្រុមរបស់គាត់)</value>
+        <value>អ្នកគ្រប់គ្រង</value>
     </data>
     <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
         <value>ជ្រើសរើសអ្នកគ្រប់គ្រង</value>

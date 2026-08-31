@@ -558,4 +558,10 @@
   <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
     <value>128 kbps, Стерео, 48 kHz</value>
   </data>
+  <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
+    <value>Разрешить супервайзерам воспроизводить записи аудиоаудита</value>
+  </data>
+  <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
+    <value>Если включено, супервайзеры могут получать доступ и воспроизводить записи аудиоаудита для своих интервью.</value>
+  </data>
 </root>
