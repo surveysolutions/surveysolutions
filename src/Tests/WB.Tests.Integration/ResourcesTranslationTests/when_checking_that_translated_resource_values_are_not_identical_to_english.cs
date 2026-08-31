@@ -81,6 +81,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             "Excel (xlsx)",
             "Tab (txt)",
             "{{current}} / {{count}}",
+            "{{ number }}",
             "{{width}} × {{height}}px",
             "({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)",
             "E-mail: {{email}}",
