@@ -276,11 +276,19 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             this.dbContext.SaveChanges();
         }
 
-        public void CopyCategoriesTranslations(Guid questionnaireId, Guid oldCategoriesId, Guid newCategoriesId)
+        public void CopyCategoriesTranslations(Guid questionnaireId, Guid oldCategoriesId, Guid newCategoriesId,
+            IEnumerable<Guid> translationIds)
         {
+            if (translationIds == null) throw new ArgumentNullException(nameof(translationIds));
+
+            var translationIdsToCopy = translationIds.Distinct().ToArray();
+            if (!translationIdsToCopy.Any())
+                return;
+
             var storedTranslations = this.dbContext.TranslationInstances
                 .Where(x => x.QuestionnaireId == questionnaireId
                     && x.QuestionnaireEntityId == oldCategoriesId
+                    && translationIdsToCopy.Contains(x.TranslationId)
                     && x.Type == TranslationType.Categories)
                 .ToList();
 

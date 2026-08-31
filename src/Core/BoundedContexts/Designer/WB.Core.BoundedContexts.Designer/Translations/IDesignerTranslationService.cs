@@ -16,7 +16,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         IEnumerable<TranslationInstance> GetFromQuestionnaire(QuestionnaireDocument questionnaire);
         bool IsFullTranslated(QuestionnaireDocument questionnaire, ITranslation translation);
-        void CopyCategoriesTranslations(Guid questionnaireId, Guid oldCategoriesId, Guid newCategoriesId);
+        void CopyCategoriesTranslations(Guid questionnaireId, Guid oldCategoriesId, Guid newCategoriesId,
+            IEnumerable<Guid> translationIds);
         void Store(IEnumerable<TranslationInstance> translationInstances);
     }
 }

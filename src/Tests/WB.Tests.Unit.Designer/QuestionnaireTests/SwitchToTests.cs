@@ -96,6 +96,7 @@ internal class SwitchToTests : QuestionnaireTestsContext
         var responsibleId = Guid.NewGuid();
         var questionnaireId = Guid.NewGuid();
         var translationId = Guid.NewGuid();
+        var remainingTranslationId = Guid.NewGuid();
         var categoriesId = Guid.NewGuid();
 
         var questionnaireDocument = CreateQuestionnaireDocument(createdBy: responsibleId);
@@ -105,7 +106,8 @@ internal class SwitchToTests : QuestionnaireTestsContext
         };
         questionnaireDocument.Translations = new List<Translation>
         {
-            Create.Translation(translationId: translationId, name: "Translation")
+            Create.Translation(translationId: translationId, name: "Translation"),
+            Create.Translation(translationId: remainingTranslationId, name: "Other translation")
         };
 
         var translation = new Mock<ITranslation>();
@@ -140,6 +142,7 @@ internal class SwitchToTests : QuestionnaireTestsContext
         var newCategoriesId = questionnaire.QuestionnaireDocument.Categories.Single().Id;
         Assert.That(newCategoriesId, Is.Not.EqualTo(categoriesId));
         designerTranslationService.Verify(x => x.CopyCategoriesTranslations(
-            questionnaireDocument.PublicKey, categoriesId, newCategoriesId), Times.Once);
+            questionnaireDocument.PublicKey, categoriesId, newCategoriesId,
+            It.Is<IEnumerable<Guid>>(ids => ids.SequenceEqual(new[] { remainingTranslationId }))), Times.Once);
     }
 }

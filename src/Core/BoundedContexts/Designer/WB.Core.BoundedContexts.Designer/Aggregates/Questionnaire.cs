@@ -472,6 +472,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var documentTranslations = designerTranslationService
                 .GetFromQuestionnaire(clonedDocument)
                 .ToList();
+            var translationIdsToCopy = clonedDocument.Translations
+                .Where(t => t.Id != translationInfo.Id)
+                .Select(t => t.Id)
+                .ToList();
             
             var newTranslationId = Guid.NewGuid();
 
@@ -509,7 +513,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 AddOrUpdateCategoriesImpl(clonedDocument, newCategoryId, categories.Id, categories.Name);
 
                 designerTranslationService.CopyCategoriesTranslations(
-                    clonedDocument.PublicKey, categories.Id, newCategoryId);
+                    clonedDocument.PublicKey, categories.Id, newCategoryId, translationIdsToCopy);
                 reusableCategoriesService.Store(clonedDocument.PublicKey, newCategoryId, newCategoryItems);
             }
             
