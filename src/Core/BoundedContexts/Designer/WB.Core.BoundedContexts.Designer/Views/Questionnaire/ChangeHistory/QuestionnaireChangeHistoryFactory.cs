@@ -67,67 +67,50 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             QuestionnaireChangeRecord[] questionnaireHistory;
             int count;
+            var normalizedSearch = NormalizeSearch(search);
 
-            if (!string.IsNullOrWhiteSpace(search))
+            if (normalizedSearch != null)
             {
-                var normalizedSearch = search.Trim().ToLowerInvariant();
+                var matcher = CreateMatcher(normalizedSearch, searchWholeWord);
+                var matchedEntityIds = ResolveMatchingEntityIds(questionnaire, matcher, searchIdsOnly);
+                var questionnaireIdMatched = matchedEntityIds.Contains(questionnaire.PublicKey);
+                var matchedNonQuestionnaireEntityIds = matchedEntityIds
+                    .Where(x => x != questionnaire.PublicKey)
+                    .ToList();
 
-                if (!searchIdsOnly && !searchWholeWord)
+                if (searchWholeWord)
                 {
-                    // Apply filtering server-side using persisted titles via EF Core
                     query = query.Where(h =>
-                        (h.TargetItemTitle != null && h.TargetItemTitle.ToLower().Contains(normalizedSearch)) ||
-                        (h.TargetItemNewTitle != null && h.TargetItemNewTitle.ToLower().Contains(normalizedSearch)) ||
-                        h.References.Any(r => r.ReferenceTitle != null && r.ReferenceTitle.ToLower().Contains(normalizedSearch)));
-
-                    count = await query.CountAsync();
-                    questionnaireHistory = await query
-                        .OrderByDescending(h => h.Sequence)
-                        .Skip((page - 1) * pageSize)
-                        .Take(pageSize)
-                        .ToArrayAsync();
+                        ((h.TargetItemType == QuestionnaireItemType.Questionnaire && questionnaireIdMatched && h.TargetItemId == questionnaire.PublicKey)
+                         || (h.TargetItemType != QuestionnaireItemType.Questionnaire && matchedNonQuestionnaireEntityIds.Contains(h.TargetItemId))) ||
+                        h.References.Any(r =>
+                            (r.ReferenceType == QuestionnaireItemType.Questionnaire && questionnaireIdMatched && r.ReferenceId == questionnaire.PublicKey)
+                            || (r.ReferenceType != QuestionnaireItemType.Questionnaire && matchedNonQuestionnaireEntityIds.Contains(r.ReferenceId))) ||
+                        (!searchIdsOnly &&
+                         ((h.TargetItemTitle != null && Regex.IsMatch(h.TargetItemTitle, $@"\b{Regex.Escape(normalizedSearch)}\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)) ||
+                          (h.TargetItemNewTitle != null && Regex.IsMatch(h.TargetItemNewTitle, $@"\b{Regex.Escape(normalizedSearch)}\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)) ||
+                          h.References.Any(r => r.ReferenceTitle != null && Regex.IsMatch(r.ReferenceTitle, $@"\b{Regex.Escape(normalizedSearch)}\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)))));
                 }
                 else
                 {
-                    // For ID-only or whole-word modes, resolve against the live questionnaire document in memory
-                    var matcher = CreateMatcher(search.Trim(), searchWholeWord);
-                    var allSearchableHistory = await query
-                        .OrderByDescending(h => h.Sequence)
-                        .Select(h => new SearchableChangeRecord
-                        {
-                            QuestionnaireChangeRecordId = h.QuestionnaireChangeRecordId,
-                            Sequence = h.Sequence,
-                            TargetItemId = h.TargetItemId,
-                            TargetItemType = h.TargetItemType,
-                            TargetItemTitle = h.TargetItemTitle,
-                            TargetItemNewTitle = h.TargetItemNewTitle,
-                            References = h.References.Select(r => new SearchableChangeReference
-                            {
-                                ReferenceId = r.ReferenceId,
-                                ReferenceType = r.ReferenceType,
-                                ReferenceTitle = r.ReferenceTitle
-                            }).ToArray()
-                        })
-                        .ToArrayAsync();
-
-                    var matchedHistoryIds = allSearchableHistory
-                        .Where(h => MatchesRecord(questionnaire, h, matcher, searchIdsOnly))
-                        .Select(x => x.QuestionnaireChangeRecordId)
-                        .ToArray();
-
-                    count = matchedHistoryIds.Length;
-                    var pageHistoryIds = matchedHistoryIds
-                        .Skip((page - 1) * pageSize)
-                        .Take(pageSize)
-                        .ToArray();
-
-                    questionnaireHistory = pageHistoryIds.Length == 0
-                        ? Array.Empty<QuestionnaireChangeRecord>()
-                        : await query
-                            .Where(h => pageHistoryIds.Contains(h.QuestionnaireChangeRecordId))
-                            .OrderByDescending(h => h.Sequence)
-                            .ToArrayAsync();
+                    query = query.Where(h =>
+                        ((h.TargetItemType == QuestionnaireItemType.Questionnaire && questionnaireIdMatched && h.TargetItemId == questionnaire.PublicKey)
+                         || (h.TargetItemType != QuestionnaireItemType.Questionnaire && matchedNonQuestionnaireEntityIds.Contains(h.TargetItemId))) ||
+                        h.References.Any(r =>
+                            (r.ReferenceType == QuestionnaireItemType.Questionnaire && questionnaireIdMatched && r.ReferenceId == questionnaire.PublicKey)
+                            || (r.ReferenceType != QuestionnaireItemType.Questionnaire && matchedNonQuestionnaireEntityIds.Contains(r.ReferenceId))) ||
+                        (!searchIdsOnly &&
+                         ((h.TargetItemTitle != null && h.TargetItemTitle.ToLower().Contains(normalizedSearch)) ||
+                          (h.TargetItemNewTitle != null && h.TargetItemNewTitle.ToLower().Contains(normalizedSearch)) ||
+                          h.References.Any(r => r.ReferenceTitle != null && r.ReferenceTitle.ToLower().Contains(normalizedSearch)))));
                 }
+
+                count = await query.CountAsync();
+                questionnaireHistory = await query
+                    .OrderByDescending(h => h.Sequence)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToArrayAsync();
             }
             else
             {
@@ -144,7 +127,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             return new QuestionnaireChangeHistory(questionnaireId, questionnaire.Title,
                 questionnaireHistory.Select(h =>
                     CreateQuestionnaireChangeHistoryWebItem(questionnaire, h, userId))
-                    .ToList(), page, count, pageSize, search, searchIdsOnly, searchWholeWord);
+                    .ToList(), page, count, pageSize, normalizedSearch, searchIdsOnly, searchWholeWord);
         }
 
         private static Func<string?, bool> CreateMatcher(string search, bool wholeWord)
@@ -158,75 +141,26 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 && Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         }
 
-        private static bool MatchesRecord(QuestionnaireDocument questionnaire, SearchableChangeRecord record,
+        private static string? NormalizeSearch(string? search)
+        {
+            return string.IsNullOrWhiteSpace(search)
+                ? null
+                : search.Trim().ToLowerInvariant();
+        }
+
+        private static List<Guid> ResolveMatchingEntityIds(QuestionnaireDocument questionnaire,
             Func<string?, bool> matcher, bool searchIdsOnly)
         {
-            var targetMatch = searchIdsOnly
-                ? MatchEntityId(questionnaire, record.TargetItemId, record.TargetItemType, matcher)
-                : MatchEntityText(questionnaire, record.TargetItemId, record.TargetItemType, record.TargetItemTitle, matcher)
-                    || matcher(record.TargetItemNewTitle);
+            var matchedEntityIds = questionnaire.Find<IQuestionnaireEntity>()
+                .Where(entity => matcher(searchIdsOnly ? entity.GetVariable() : entity.GetTitle()))
+                .Select(entity => entity.PublicKey)
+                .ToList();
 
-            if (targetMatch)
-                return true;
+            var questionnaireValue = searchIdsOnly ? questionnaire.VariableName : questionnaire.Title;
+            if (matcher(questionnaireValue))
+                matchedEntityIds.Add(questionnaire.PublicKey);
 
-            return record.References.Any(reference => searchIdsOnly
-                ? MatchEntityId(questionnaire, reference.ReferenceId, reference.ReferenceType, matcher)
-                : MatchEntityText(questionnaire, reference.ReferenceId, reference.ReferenceType, reference.ReferenceTitle, matcher));
-        }
-
-        private static bool MatchEntityId(QuestionnaireDocument questionnaire, Guid entityId, QuestionnaireItemType entityType,
-            Func<string?, bool> matcher)
-        {
-            return matcher(ResolveEntityId(questionnaire, entityId, entityType));
-        }
-
-        private static bool MatchEntityText(QuestionnaireDocument questionnaire, Guid entityId, QuestionnaireItemType entityType,
-            string? fallbackValue, Func<string?, bool> matcher)
-        {
-            var resolvedText = ResolveEntityText(questionnaire, entityId, entityType);
-            if (!string.IsNullOrWhiteSpace(resolvedText))
-                return matcher(resolvedText);
-
-            if (entityType == QuestionnaireItemType.Variable)
-                return false;
-
-            return matcher(fallbackValue);
-        }
-
-        private static string? ResolveEntityId(QuestionnaireDocument questionnaire, Guid entityId, QuestionnaireItemType entityType)
-        {
-            if (entityType == QuestionnaireItemType.Questionnaire)
-                return questionnaire.VariableName;
-
-            var entity = questionnaire.FirstOrDefault<IComposite>(item => item.PublicKey == entityId) as IQuestionnaireEntity;
-            return entity?.GetVariable();
-        }
-
-        private static string? ResolveEntityText(QuestionnaireDocument questionnaire, Guid entityId, QuestionnaireItemType entityType)
-        {
-            if (entityType == QuestionnaireItemType.Questionnaire)
-                return questionnaire.Title;
-
-            var entity = questionnaire.FirstOrDefault<IComposite>(item => item.PublicKey == entityId) as IQuestionnaireEntity;
-            return entity?.GetTitle();
-        }
-
-        private sealed class SearchableChangeRecord
-        {
-            public string QuestionnaireChangeRecordId { get; init; } = string.Empty;
-            public long Sequence { get; init; }
-            public Guid TargetItemId { get; init; }
-            public QuestionnaireItemType TargetItemType { get; init; }
-            public string? TargetItemTitle { get; init; }
-            public string? TargetItemNewTitle { get; init; }
-            public SearchableChangeReference[] References { get; init; } = Array.Empty<SearchableChangeReference>();
-        }
-
-        private sealed class SearchableChangeReference
-        {
-            public Guid ReferenceId { get; init; }
-            public QuestionnaireItemType ReferenceType { get; init; }
-            public string? ReferenceTitle { get; init; }
+            return matchedEntityIds;
         }
 
         private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(

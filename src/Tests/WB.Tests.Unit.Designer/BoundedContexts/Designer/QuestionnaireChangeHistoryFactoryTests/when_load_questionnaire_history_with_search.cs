@@ -29,6 +29,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
                     Create.Question(questionId: questionId, variable: "respondent_age", title: "Age of respondent")
                 })
             });
+            questionnaireDocument.Title = "Current questionnaire title";
+            questionnaireDocument.VariableName = "current_questionnaire";
 
             db = Create.InMemoryDbContext();
 
@@ -61,6 +63,36 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
                 targetTitle: "Household members",
                 reference: new[] { Create.QuestionnaireChangeReference(referenceId: questionId, referenceType: QuestionnaireItemType.Question, referenceTitle: "respondent_age") }));
 
+            db.Add(Create.QuestionnaireChangeRecord(
+                questionnaireId: questionnaireId.FormatGuid(),
+                targetId: sectionId,
+                targetType: QuestionnaireItemType.Section,
+                action: QuestionnaireActionType.Update,
+                targetTitle: "Legacy chapter label"));
+
+            db.Add(Create.QuestionnaireChangeRecord(
+                questionnaireId: questionnaireId.FormatGuid(),
+                targetId: sectionId,
+                targetType: QuestionnaireItemType.Section,
+                action: QuestionnaireActionType.Clone,
+                reference: new[]
+                {
+                    Create.QuestionnaireChangeReference(referenceId: sourceQuestionnaireId,
+                        referenceType: QuestionnaireItemType.Questionnaire, referenceTitle: "Source questionnaire title")
+                }));
+
+            db.Add(Create.QuestionnaireChangeRecord(
+                questionnaireId: questionnaireId.FormatGuid(),
+                targetId: Guid.NewGuid(),
+                targetType: QuestionnaireItemType.Question,
+                action: QuestionnaireActionType.Update,
+                targetTitle: "another_var",
+                reference: new[]
+                {
+                    Create.QuestionnaireChangeReference(referenceId: Guid.NewGuid(), referenceType: QuestionnaireItemType.Question,
+                        referenceTitle: "reference_only_marker")
+                }));
+
             db.SaveChanges();
 
             var userManagerMock = new Mock<IUserManager>();
@@ -79,7 +111,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
         public async Task should_return_all_records_when_no_search()
         {
             var result = await factory.LoadAsync(questionnaireId, 1, 20, user);
-            result.ChangeHistory.Count.Should().Be(4);
+            result.ChangeHistory.Count.Should().Be(7);
         }
 
         [Test]
@@ -92,7 +124,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
         [Test]
         public async Task should_filter_by_reference_text()
         {
-            var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "household");
+            var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "reference_only_marker");
             result.ChangeHistory.Count.Should().Be(1);
         }
 
@@ -144,6 +176,27 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
         }
 
         [Test]
+        public async Task should_match_current_entity_title_in_text_mode()
+        {
+            var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "Age of respondent");
+            result.ChangeHistory.Count.Should().Be(2);
+        }
+
+        [Test]
+        public async Task should_match_historical_title_in_whole_word_mode()
+        {
+            var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "legacy", searchWholeWord: true);
+            result.ChangeHistory.Count.Should().Be(1);
+        }
+
+        [Test]
+        public async Task should_not_match_source_questionnaire_reference_by_current_questionnaire_title()
+        {
+            var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "Current questionnaire title");
+            result.ChangeHistory.Count.Should().Be(0);
+        }
+
+        [Test]
         public async Task should_preserve_search_options_on_result()
         {
             var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "respondent", searchIdsOnly: true, searchWholeWord: true);
@@ -157,6 +210,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
         private readonly Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
         private readonly Guid questionId = Guid.Parse("33333333333333333333333333333333");
         private readonly Guid sectionId = Guid.Parse("44444444444444444444444444444444");
+        private readonly Guid sourceQuestionnaireId = Guid.Parse("55555555555555555555555555555555");
 
         private readonly ClaimsPrincipal user = new ClaimsPrincipal(new List<ClaimsIdentity>
         {
