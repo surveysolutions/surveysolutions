@@ -519,6 +519,9 @@
     <data name="Multimedia_PictureSource" xml:space="preserve">
     <value>Seleccione una opción</value>
   </data>
+    <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+      <value>The photo cannot be processed because its format is not supported. Please take the photo again.</value>
+    </data>
     <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Tome la foto</value>
   </data>

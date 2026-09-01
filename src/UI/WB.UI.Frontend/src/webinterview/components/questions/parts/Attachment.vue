@@ -4,11 +4,22 @@
             class="image-zoom-box image-wrapper"
             :class="customCssClass">
             <img :src="thumbPath"
+                v-show="!imageLoadFailed"
                 alt="custom photo"
                 class="zoomImg"
                 @load="imageLoaded"
+                @error="imageLoadFailed = true"
                 @click="showModal(true)"
                 :style="previewStyle" />
+            <div v-if="imageLoadFailed"
+                class="instructions-wrapper">
+                <span>{{ $t("WebInterviewUI.ImageFormatNotSupported") }}</span>
+                <a class="btn btn-link"
+                    :href="fullPath"
+                    target="_blank">
+                    {{ $t("Common.Download") }}
+                </a>
+            </div>
             <Teleport to="body">
                 <div class="modal-img"
                     v-if="modal"
@@ -80,6 +91,7 @@ export default {
         return {
             modal: false,
             contentType: '',
+            imageLoadFailed: false,
             onEscape: null,
         }
     },
@@ -134,6 +146,9 @@ export default {
         document.removeEventListener('keydown', this.onEscape)
     },
     watch: {
+        thumbPath() {
+            this.imageLoadFailed = false
+        },
         contentId() {
             this.fetchContentType()
         },

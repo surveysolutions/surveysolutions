@@ -468,6 +468,9 @@ Entre em contato com o suporte para obter assistência.</value>
   <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
     <value>Informações adicionais da pergunta</value>
   </data>
+  <data name="ImageFormatNotSupported" xml:space="preserve">
+    <value>The image format is not supported by your browser. You can download it instead.</value>
+  </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>A reprodução de multimídia não é suportada pelo seu navegador. Você pode baixá-lo em vez disso.</value>
   </data>

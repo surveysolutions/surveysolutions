@@ -1,7 +1,10 @@
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using SixLabors.ImageSharp;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -25,6 +28,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
         private readonly IImageProcessingService imageProcessingService;
         private readonly IPlainStorageAccessor<AttachmentContent> attachmentStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly ILogger<WebInterviewResourcesController> logger;
 
         public WebInterviewResourcesController(
             IAuthorizedUser authorizedUser,
@@ -32,7 +36,8 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
             IStatefulInterviewRepository statefulInterviewRepository,
             IImageProcessingService imageProcessingService,
             IPlainStorageAccessor<AttachmentContent> attachmentStorage,
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage,
+            ILogger<WebInterviewResourcesController> logger)
         {
             this.authorizedUser = authorizedUser;
             this.imageFileStorage = imageFileStorage;
@@ -40,6 +45,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
             this.imageProcessingService = imageProcessingService;
             this.attachmentStorage = attachmentStorage;
             this.questionnaireStorage = questionnaireStorage;
+            this.logger = logger;
         }
 
         [HttpHead]
@@ -102,9 +108,10 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
 
                 var resultFile = fullSize
                     ? attachment.Content
-                    : this.imageProcessingService.ResizeImage(attachment.Content, thumbSize, 1920);
+                    : CreateThumbnailOrNull(attachment.Content, thumbSize);
 
-                return this.BinaryResponseMessageWithEtag(resultFile);
+                if (resultFile != null)
+                    return this.BinaryResponseMessageWithEtag(resultFile);
             }
 
             return File(attachment.Content, attachment.ContentType, enableRangeProcessing: true);
@@ -142,7 +149,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
             var fullSize = GetQueryStringValue("fullSize") != null;
             var resultFile = fullSize
                 ? file
-                : this.imageProcessingService.ResizeImage(file, 200, 1920);
+                : CreateThumbnailOrNull(file, 200) ?? file;
             var contentType = ContentTypeHelper.GetImageContentType(fileName);
 
             return this.BinaryResponseMessageWithEtag(resultFile, contentType);
@@ -182,6 +189,20 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
             if (GetAttachmentById(interviewId, attachment, out var attachmentObj) && attachmentObj != null)
                 return ContentHead(interviewId, attachmentObj.ContentId);
             return NotFound();
+        }
+
+        private byte[] CreateThumbnailOrNull(byte[] content, int thumbSize)
+        {
+            try
+            {
+                return this.imageProcessingService.ResizeImage(content, thumbSize, 1920);
+            }
+            catch (Exception exception) when (exception is ImageFormatException || exception is NotSupportedException)
+            {
+                this.logger.LogWarning(exception,
+                    "Thumbnail cannot be created because image format is not supported. Original file is returned");
+                return null;
+            }
         }
 
         private string GetQueryStringValue(string key)
