@@ -358,7 +358,7 @@
     <value>У цьому питанні було зроблено максимальну кількість виборів ({{value}})</value>
   </data>
   <data name="ImageFormatNotSupported" xml:space="preserve">
-    <value>The image format is not supported by your browser. You can download it instead.</value>
+    <value>Формат зображення не підтримується вашим браузером. Замість цього ви можете завантажити його.</value>
   </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>Відтворення мультимедіа не підтримується вашим браузером. Замість цього ви можете завантажити його.</value>

@@ -425,7 +425,7 @@
     <value>تحميل الاستبيان. ارجوك انتظر...</value>
   </data>
   <data name="ImageFormatNotSupported" xml:space="preserve">
-    <value>The image format is not supported by your browser. You can download it instead.</value>
+    <value>تنسيق الصورة غير مدعوم من متصفحك. يمكنك تنزيلها بدلاً من ذلك.</value>
   </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>لا يدعم متصفحك تشغيل الوسائط المتعددة. يمكنك تنزيله بدلاً من ذلك.</value>

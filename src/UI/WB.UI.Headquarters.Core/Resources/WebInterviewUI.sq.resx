@@ -341,7 +341,7 @@
     <value>Po ngarkohet, ju lutemi, pritni</value>
   </data>
   <data name="ImageFormatNotSupported" xml:space="preserve">
-    <value>The image format is not supported by your browser. You can download it instead.</value>
+    <value>Formati i imazhit nuk mbështetet nga shfletuesi juaj. Në vend të kësaj, ju mund ta shkarkoni.</value>
   </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>Shfletuesi juaj nuk e mbështet përsëritjen në multimedia. Në vend të kësaj, ju mund ta shkarkoni.</value>

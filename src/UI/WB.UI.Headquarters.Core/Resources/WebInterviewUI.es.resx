@@ -467,7 +467,7 @@
     <value>Información adicional de la pregunta</value>
   </data>
   <data name="ImageFormatNotSupported" xml:space="preserve">
-    <value>The image format is not supported by your browser. You can download it instead.</value>
+    <value>El formato de la imagen no es compatible con su navegador. Puede descargarla en su lugar.</value>
   </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>La reproducción de multimedia no es compatible con su navegador. Puede descargarlo en su lugar.</value>

@@ -571,7 +571,7 @@
     <value>Zgjidh një opsion</value>
   </data>
   <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
-    <value>The photo cannot be processed because its format is not supported. Please take the photo again.</value>
+    <value>Fotografia nuk mund të përpunohet sepse formati i saj nuk mbështetet. Ju lutemi, bëni përsëri foton.</value>
   </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Bëj foto</value>

@@ -562,7 +562,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
     <value>Vyberte jednu možnost</value>
   </data>
   <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
-    <value>The photo cannot be processed because its format is not supported. Please take the photo again.</value>
+    <value>Fotografii nelze zpracovat, protože její formát není podporován. Vyfoťte ji prosím znovu.</value>
   </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Vyfotit</value>

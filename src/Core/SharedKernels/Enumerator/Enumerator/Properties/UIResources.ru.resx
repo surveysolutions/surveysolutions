@@ -531,7 +531,7 @@
     <value>Выберите опцию</value>
   </data>
   <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
-    <value>The photo cannot be processed because its format is not supported. Please take the photo again.</value>
+    <value>Фотографию не удалось обработать, так как её формат не поддерживается. Пожалуйста, сделайте фото ещё раз.</value>
   </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Сделать фото</value>

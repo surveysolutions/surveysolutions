@@ -591,7 +591,7 @@ Vous pouvez créer ou modifier vos questionnaires dans Survey Solutions Designer
     <value>Sélectionnez une option</value>
   </data>
   <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
-    <value>The photo cannot be processed because its format is not supported. Please take the photo again.</value>
+    <value>La photo ne peut pas être traitée car son format n'est pas pris en charge. Veuillez reprendre la photo.</value>
   </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Prendre une photo</value>

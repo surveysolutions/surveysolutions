@@ -510,7 +510,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Selectați o opțiune</value>
   </data>
   <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
-    <value>The photo cannot be processed because its format is not supported. Please take the photo again.</value>
+    <value>Fotografia nu poate fi procesată deoarece formatul său nu este acceptat. Vă rugăm să faceți din nou fotografia.</value>
   </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Faceți o fotografie</value>

@@ -520,7 +520,7 @@
     <value>Seleccione una opción</value>
   </data>
     <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
-      <value>The photo cannot be processed because its format is not supported. Please take the photo again.</value>
+      <value>No se puede procesar la foto porque su formato no es compatible. Por favor, tome la foto de nuevo.</value>
     </data>
     <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Tome la foto</value>

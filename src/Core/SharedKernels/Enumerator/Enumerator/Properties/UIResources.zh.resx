@@ -484,7 +484,7 @@
     <value>选择一个选项</value>
   </data>
   <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
-    <value>The photo cannot be processed because its format is not supported. Please take the photo again.</value>
+    <value>照片格式不受支持，无法处理。请重新拍照。</value>
   </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>拍照</value>

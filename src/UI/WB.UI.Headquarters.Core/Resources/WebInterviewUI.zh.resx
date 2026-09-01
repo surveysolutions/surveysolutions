@@ -430,7 +430,7 @@
     <value>未回答</value>
   </data>
   <data name="ImageFormatNotSupported" xml:space="preserve">
-    <value>The image format is not supported by your browser. You can download it instead.</value>
+    <value>您的浏览器不支持该图片格式。您可以下载后查看。</value>
   </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value> 多媒体文件回放不被您的浏览器支持。您可以下载后观看。</value>
