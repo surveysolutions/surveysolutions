@@ -762,7 +762,8 @@ namespace WB.Tests.Unit.Designer
             IFindReplaceService findReplaceService = null, 
             IQuestionnaireTranslator questionnaireTranslator = null,
             ITranslationsService translationsService = null,
-            IDesignerTranslationService designerTranslationService = null)
+            IDesignerTranslationService designerTranslationService = null,
+            IReusableCategoriesService reusableCategoriesService = null)
         {
             return new Questionnaire(
                 Mock.Of<IClock>(),
@@ -770,7 +771,7 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<IAttachmentService>(),
                 designerTranslationService ?? Mock.Of<IDesignerTranslationService>(),
                 historyVersionsService ?? Mock.Of<IQuestionnaireHistoryVersionsService>(),
-                Mock.Of<IReusableCategoriesService>(),
+                reusableCategoriesService ?? Mock.Of<IReusableCategoriesService>(),
                 findReplaceService ?? Mock.Of<IFindReplaceService>(),
                 questionnaireTranslator ?? Mock.Of<IQuestionnaireTranslator>(),
                 translationsService ?? Mock.Of<ITranslationsService>());
