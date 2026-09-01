@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using SixLabors.ImageSharp;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -155,7 +156,18 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 return BadRequest("Request is null");
             
             var bytes = Convert.FromBase64String(request.Data);
-            this.imageProcessingService.Validate(bytes);
+            try
+            {
+                this.imageProcessingService.Validate(bytes);
+            }
+            catch (UnknownImageFormatException)
+            {
+                return StatusCode(StatusCodes.Status415UnsupportedMediaType);
+            }
+            catch (InvalidImageContentException)
+            {
+                return StatusCode(StatusCodes.Status415UnsupportedMediaType);
+            }
             
             if (AllowWorkWithInterview(request.InterviewId))
                 this.imageFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, bytes, null);
