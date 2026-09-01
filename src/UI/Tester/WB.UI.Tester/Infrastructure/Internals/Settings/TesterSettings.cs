@@ -213,5 +213,8 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         {
             throw new NotImplementedException();
         }
+        public int? GetLastKnownAppVersionCode() => null;
+
+        public void SetLastKnownAppVersionCode(int code) {}
     }
 }
