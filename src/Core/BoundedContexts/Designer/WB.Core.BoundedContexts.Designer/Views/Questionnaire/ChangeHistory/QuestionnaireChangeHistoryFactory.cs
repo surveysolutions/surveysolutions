@@ -80,6 +80,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
                 if (searchWholeWord)
                 {
+                    var wholeWordPattern = $@"(^|\W){Regex.Escape(normalizedSearch)}(\W|$)";
                     query = query.Where(h =>
                         ((h.TargetItemType == QuestionnaireItemType.Questionnaire && questionnaireIdMatched && h.TargetItemId == questionnaire.PublicKey)
                          || (h.TargetItemType != QuestionnaireItemType.Questionnaire && matchedNonQuestionnaireEntityIds.Contains(h.TargetItemId))) ||
@@ -87,9 +88,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                             (r.ReferenceType == QuestionnaireItemType.Questionnaire && questionnaireIdMatched && r.ReferenceId == questionnaire.PublicKey)
                             || (r.ReferenceType != QuestionnaireItemType.Questionnaire && matchedNonQuestionnaireEntityIds.Contains(r.ReferenceId))) ||
                         (!searchIdsOnly &&
-                         ((h.TargetItemTitle != null && Regex.IsMatch(h.TargetItemTitle, $@"(^|\W){Regex.Escape(normalizedSearch)}(\W|$)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)) ||
-                          (h.TargetItemNewTitle != null && Regex.IsMatch(h.TargetItemNewTitle, $@"(^|\W){Regex.Escape(normalizedSearch)}(\W|$)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)) ||
-                          h.References.Any(r => r.ReferenceTitle != null && Regex.IsMatch(r.ReferenceTitle, $@"(^|\W){Regex.Escape(normalizedSearch)}(\W|$)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)))));
+                         ((h.TargetItemTitle != null && Regex.IsMatch(h.TargetItemTitle, wholeWordPattern, RegexOptions.IgnoreCase)) ||
+                          (h.TargetItemNewTitle != null && Regex.IsMatch(h.TargetItemNewTitle, wholeWordPattern, RegexOptions.IgnoreCase)) ||
+                          h.References.Any(r => r.ReferenceTitle != null && Regex.IsMatch(r.ReferenceTitle, wholeWordPattern, RegexOptions.IgnoreCase)))));
                 }
                 else
                 {

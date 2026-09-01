@@ -308,12 +308,12 @@
         <value>Trang bìa được tạo</value>
         </data>
   <data name="Search" xml:space="preserve">
-    <value>Search</value>
+    <value>Tìm kiếm</value>
   </data>
   <data name="SearchButton" xml:space="preserve">
-    <value>Search</value>
+    <value>Tìm kiếm</value>
   </data>
   <data name="SearchClear" xml:space="preserve">
-    <value>Clear</value>
+    <value>Xóa</value>
   </data>
 </root>

@@ -308,12 +308,12 @@
         <value>สร้างหน้าปกแล้ว</value>
     </data>
   <data name="Search" xml:space="preserve">
-    <value>Search</value>
+    <value>ค้นหา</value>
   </data>
   <data name="SearchButton" xml:space="preserve">
-    <value>Search</value>
+    <value>ค้นหา</value>
   </data>
   <data name="SearchClear" xml:space="preserve">
-    <value>Clear</value>
+    <value>ล้าง</value>
   </data>
 </root>
