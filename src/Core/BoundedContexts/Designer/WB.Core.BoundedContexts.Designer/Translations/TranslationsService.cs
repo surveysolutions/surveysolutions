@@ -276,6 +276,31 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             this.dbContext.SaveChanges();
         }
 
+        public void CopyCategoriesTranslations(Guid questionnaireId, Guid oldCategoriesId, Guid newCategoriesId,
+            IEnumerable<Guid> translationIds)
+        {
+            if (translationIds == null) throw new ArgumentNullException(nameof(translationIds));
+
+            var translationIdsToCopy = translationIds.Distinct().ToArray();
+            if (!translationIdsToCopy.Any())
+                return;
+
+            var storedTranslations = this.dbContext.TranslationInstances
+                .Where(x => x.QuestionnaireId == questionnaireId
+                    && x.QuestionnaireEntityId == oldCategoriesId
+                    && translationIdsToCopy.Contains(x.TranslationId)
+                    && x.Type == TranslationType.Categories)
+                .ToList();
+
+            foreach (var storedTranslation in storedTranslations)
+            {
+                var translationCopy = storedTranslation.Clone();
+                translationCopy.Id = Guid.NewGuid();
+                translationCopy.QuestionnaireEntityId = newCategoriesId;
+                this.dbContext.TranslationInstances.Add(translationCopy);
+            }
+        }
+
         private IEnumerable<TranslationInstance> GetWorksheetTranslations(
             TranslationsWithHeaderMap translationWithHeaderMap, QuestionnaireDocument questionnaire,
             Dictionary<Guid, bool> idsOfAllQuestionnaireEntities, Guid questionnaireId, Guid translationId,

@@ -225,6 +225,22 @@
                     </label>
                 </div>
             </div>
+            <div class="col-sm-9">
+                <div class="block-filter">
+                    <div class="form-group">
+                        <input class="checkbox-filter single-checkbox"
+                            v-model="allowSupervisorAudioAuditPlaybackModel" @change="updateDeviceSettings"
+                            id="allowSupervisorAudioAuditPlayback" type="checkbox" />
+                        <label for="allowSupervisorAudioAuditPlayback" style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{ $t('Settings.AllowSupervisorAudioAuditPlayback') }}
+                            <p style="font-weight: normal">
+                                {{ $t('Settings.AllowSupervisorAudioAuditPlaybackDescription') }}
+                            </p>
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -276,6 +292,7 @@ export default {
         allowSupervisorChangeAssignmentStatus: Boolean,
         allowInterviewerChangeAssignmentStatus: Boolean,
         audioRecordingQuality: String,
+        allowSupervisorAudioAuditPlayback: Boolean,
     },
     emits: ['update:isInterviewerAutomaticUpdatesEnabled',
         'update:isDeviceNotificationsEnabled',
@@ -289,6 +306,7 @@ export default {
         'update:allowSupervisorChangeAssignmentStatus',
         'update:allowInterviewerChangeAssignmentStatus',
         'update:audioRecordingQuality',
+        'update:allowSupervisorAudioAuditPlayback',
     ],
     computed: {
         isInterviewerAutomaticUpdatesEnabledModel: {
@@ -389,6 +407,14 @@ export default {
                 this.$emit('update:audioRecordingQuality', value)
             },
         },
+        allowSupervisorAudioAuditPlaybackModel: {
+            get() {
+                return this.allowSupervisorAudioAuditPlayback
+            },
+            set(value) {
+                this.$emit('update:allowSupervisorAudioAuditPlayback', value)
+            },
+        },
         audioRecordingQualityOptions() {
             return [
                 { key: 'Mono16kHz', value: this.$t('Settings.AudioRecordingQuality_Mono16kHz') },
@@ -419,7 +445,8 @@ export default {
                     this.isPartialSynchronizationEnabledModel,
                     this.allowSupervisorChangeAssignmentStatusModel,
                     this.allowInterviewerChangeAssignmentStatusModel,
-                    this.audioRecordingQualityModel
+                    this.audioRecordingQualityModel,
+                    this.allowSupervisorAudioAuditPlaybackModel
                 )
             })
         },
