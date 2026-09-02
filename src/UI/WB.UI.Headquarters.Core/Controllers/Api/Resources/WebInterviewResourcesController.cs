@@ -104,6 +104,9 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
 
             if (attachment.IsImage())
             {
+                if (!CanDetectImageFormat(attachment.Content))
+                    return DownloadBinaryFile(attachment.Content, attachment.FileName);
+
                 var fullSize = GetQueryStringValue("fullSize") != null;
 
                 var resultFile = fullSize
@@ -112,6 +115,8 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
 
                 if (resultFile != null)
                     return this.BinaryResponseMessageWithEtag(resultFile);
+
+                return DownloadBinaryFile(attachment.Content, attachment.FileName);
             }
 
             return File(attachment.Content, attachment.ContentType, enableRangeProcessing: true);
@@ -206,6 +211,20 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
                 this.logger.LogWarning(exception,
                     "Thumbnail cannot be created because image format is not supported. Original file is returned");
                 return null;
+            }
+        }
+
+        private bool CanDetectImageFormat(byte[] content)
+        {
+            try
+            {
+                return SixLabors.ImageSharp.Image.DetectFormat(content) != null;
+            }
+            catch (Exception exception) when (exception is ImageFormatException || exception is NotSupportedException)
+            {
+                this.logger.LogWarning(exception,
+                    "Image cannot be served inline because image format is not supported. Original file is returned as download");
+                return false;
             }
         }
 

@@ -25,13 +25,14 @@ namespace WB.Tests.Web.Headquarters.Controllers
     internal class WebInterviewResourcesControllerTests
     {
         [Test]
-        public void when_thumbnail_cannot_be_created_should_return_original_attachment_content()
+        public void when_unsupported_attachment_thumbnail_is_requested_should_return_binary_download()
         {
             var attachment = new AttachmentContent
             {
                 Content = new byte[] { 1, 234, 21, 0, 54, 1, 66, 78 },
                 ContentType = "image/heic",
-                ContentHash = contentId
+                ContentHash = contentId,
+                FileName = "attachment.heic"
             };
 
             var attachmentStorage = new Mock<IPlainStorageAccessor<AttachmentContent>>();
@@ -47,8 +48,38 @@ namespace WB.Tests.Web.Headquarters.Controllers
             var result = controller.Content(interviewId, contentId) as FileContentResult;
 
             result.Should().NotBeNull();
-            result.FileContents.Should().BeEquivalentTo(attachment.Content);
-            result.ContentType.Should().Be(attachment.ContentType);
+            result!.FileContents.Should().BeEquivalentTo(attachment.Content);
+            result.ContentType.Should().Be("application/octet-stream");
+            result.FileDownloadName.Should().Be(attachment.FileName);
+            controller.Response.Headers["X-Content-Type-Options"].ToString().Should().Be("nosniff");
+        }
+
+        [Test]
+        public void when_full_size_unsupported_attachment_is_requested_should_return_binary_download()
+        {
+            var attachment = new AttachmentContent
+            {
+                Content = new byte[] { 1, 234, 21, 0, 54, 1, 66, 78 },
+                ContentType = "image/heic",
+                ContentHash = contentId,
+                FileName = "attachment.heic"
+            };
+
+            var attachmentStorage = new Mock<IPlainStorageAccessor<AttachmentContent>>();
+            attachmentStorage.Setup(x => x.GetById(contentId)).Returns(attachment);
+
+            var imageProcessingService = new Mock<IImageProcessingService>();
+
+            var controller = CreateController(imageProcessingService.Object, attachmentStorage.Object);
+            controller.ControllerContext.HttpContext.Request.QueryString = new QueryString("?fullSize=1");
+
+            var result = controller.Content(interviewId, contentId) as FileContentResult;
+
+            result.Should().NotBeNull();
+            result!.FileContents.Should().BeEquivalentTo(attachment.Content);
+            result.ContentType.Should().Be("application/octet-stream");
+            result.FileDownloadName.Should().Be(attachment.FileName);
+            controller.Response.Headers["X-Content-Type-Options"].ToString().Should().Be("nosniff");
         }
 
         [Test]
