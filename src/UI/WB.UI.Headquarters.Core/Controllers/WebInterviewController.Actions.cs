@@ -120,6 +120,8 @@ namespace WB.UI.Headquarters.Controllers
 
             try
             {
+                var oldFileName = interview.GetMultimediaQuestion(questionIdentity)?.GetAnswer()?.FileName;
+
                 await using var ms = new MemoryStream();
 
                 await file.CopyToAsync(ms);
@@ -134,6 +136,11 @@ namespace WB.UI.Headquarters.Controllers
 
                 this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
                     responsibleId, questionIdentity.Id, questionIdentity.RosterVector, filename));
+
+                if (!string.IsNullOrEmpty(oldFileName) && oldFileName != filename)
+                {
+                    await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, oldFileName);
+                }
             }
             catch (Exception e)
             {

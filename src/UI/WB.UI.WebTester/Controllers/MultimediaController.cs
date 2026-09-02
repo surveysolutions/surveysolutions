@@ -148,6 +148,8 @@ namespace WB.UI.WebTester.Controllers
 
             try
             {
+                var oldFileName = interview.GetMultimediaQuestion(questionIdentity)?.GetAnswer()?.FileName;
+
                 await using var ms = new MemoryStream();
                 await file.CopyToAsync(ms);
 
@@ -164,6 +166,11 @@ namespace WB.UI.WebTester.Controllers
 
                 this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
                     responsibleId, questionIdentity.Id, questionIdentity.RosterVector, fileName));
+
+                if (!string.IsNullOrEmpty(oldFileName) && oldFileName != fileName)
+                {
+                    this.mediaStorage.Remove(oldFileName, interview.Id);
+                }
             }
             catch (Exception e)
             {

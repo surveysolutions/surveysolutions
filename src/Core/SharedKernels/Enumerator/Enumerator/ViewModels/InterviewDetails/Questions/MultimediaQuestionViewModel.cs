@@ -140,6 +140,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 if (this.Answer?.Length > 0)
                 {
+                    var oldFileName = this.AnswerFileName;
+
                     this.StorePictureFile(new MemoryStream(this.Answer), pictureFileName);
 
                     var command = new AnswerPictureQuestionCommand(
@@ -152,6 +154,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     try
                     {
                         await this.Answering.SendQuestionCommandAsync(command);
+                        if (!string.IsNullOrEmpty(oldFileName) && oldFileName != pictureFileName)
+                        {
+                            await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, oldFileName);
+                        }
+                        this.AnswerFileName = pictureFileName;
                         await this.QuestionState.Validity.ExecutedWithoutExceptions();
                     }
                     catch (InterviewException ex)
@@ -192,6 +199,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     {
                         using (pictureStream)
                         {
+                            var oldFileName = this.AnswerFileName;
+
                             this.StorePictureFile(pictureStream, pictureFileName);
 
                             var command = new AnswerPictureQuestionCommand(
@@ -204,6 +213,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                             try
                             {
                                 await this.Answering.SendQuestionCommandAsync(command);
+                                if (!string.IsNullOrEmpty(oldFileName) && oldFileName != pictureFileName)
+                                {
+                                    await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, oldFileName);
+                                }
                                 this.Answer =
                                     await this.imageFileStorage.GetInterviewBinaryDataAsync(this.interviewId,
                                         pictureFileName);
