@@ -103,6 +103,9 @@
     <data name="ReconnectAttempt" xml:space="preserve">
         <value>ព្យាយាម {{count}}</value>
     </data>
+    <data name="CommunicationError" xml:space="preserve">
+        <value>កំហុសទំនាក់ទំនង</value>
+    </data>
     <data name="CommentAdd" xml:space="preserve">
         <value>បន្ថែមមតិ</value>
     </data>
