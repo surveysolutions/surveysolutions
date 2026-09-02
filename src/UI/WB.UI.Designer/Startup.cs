@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -19,6 +20,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
@@ -465,6 +467,7 @@ namespace WB.UI.Designer
             }
 
             app.UseResponseCompression();
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
@@ -475,7 +478,20 @@ namespace WB.UI.Designer
                     }
                 }
             });
-            
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Content")),
+                RequestPath = "/Content",
+                OnPrepareResponse = ctx =>
+                {
+                    if (!env.IsDevelopment())
+                    {
+                        ctx.Context.Response.Headers.Append("Cache-Control", "public, max-age=31536000");
+                    }
+                }
+            });
+             
             app.UseCookiePolicy();
             app.UseSession();
             app.UseAuthentication();
