@@ -386,7 +386,7 @@ namespace WB.UI.Designer
             services.Configure<RecaptchaSettings>(Configuration.GetSection("Captcha"));
             services.AddTransient<IRecaptchaService, RecaptchaService>();
             services.AddTransient<IRecipientNotifier, MailNotifier>();
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.Configure<UiConfig>(Configuration.GetSection("UI"));
             services.Configure<IntegrationsConfig>(Configuration.GetSection("Integrations"));
 
