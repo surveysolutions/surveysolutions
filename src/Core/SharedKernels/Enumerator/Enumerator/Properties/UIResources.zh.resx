@@ -394,7 +394,7 @@
     <value>点击记录语音</value>
   </data>
   <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
-    <value>点击记录GPS</value>
+    <value>记录GPS</value>
   </data>
   <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
     <value>点击拍照</value>

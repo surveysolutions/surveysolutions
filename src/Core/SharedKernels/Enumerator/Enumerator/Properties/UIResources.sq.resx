@@ -457,7 +457,7 @@
     <value>Trokit për të regjistruar audion</value>
   </data>
   <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
-    <value>Trokit për të regjistruar GPS-në</value>
+    <value>Regjistroni GPS</value>
   </data>
   <data name="Interview_Questions_Integer_ProtectedValue" xml:space="preserve">
     <value>Përgjigjja e re për një pyetje të mbrojtur duhet të jetë më e gjatë ose e barabartë me {0}</value>
