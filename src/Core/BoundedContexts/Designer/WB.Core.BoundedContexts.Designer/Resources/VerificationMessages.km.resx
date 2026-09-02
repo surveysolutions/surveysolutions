@@ -788,6 +788,6 @@
         <value>សារលក្ខខណ្ឌសំខាន់ច្រើនជាងតួអក្សរ {0} ។</value>
     </data>
   <data name="WB0324_NegativeSpecialValuesNotAllowedForNonNegativeNumericQuestion" xml:space="preserve">
-    <value>Negative special values are not allowed for non-negative numeric questions.</value>
+    <value>តម្លៃពិសេសអវិជ្ជមានមិនត្រូវបានអនុញ្ញាតសម្រាប់សំណួរលេខដែលមិនអវិជ្ជមានទេ។</value>
   </data>
 </root>
