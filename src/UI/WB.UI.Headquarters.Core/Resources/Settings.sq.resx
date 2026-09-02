@@ -610,4 +610,10 @@ Arsyet e mundshme:
   <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
     <value>128 kbps, Stereo, 48 kHz</value>
   </data>
+  <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
+    <value>Lejo supervizorët të luajnë regjistrimet e auditimit audio</value>
+  </data>
+  <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
+    <value>Kur aktivizohet, supervizorët mund të aksesojnë dhe të luajnë regjistrimet e auditimit audio për intervistat e tyre.</value>
+  </data>
 </root>
