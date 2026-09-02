@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -90,6 +91,52 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
                 this.storage.RemoveAllBinaryDataForInterviewsAsync(new List<Guid> { interviewId }));
         }
 
+        [Test]
+        public async Task should_remove_interview_prefixes_with_bounded_concurrency()
+        {
+            const int interviewsCount = 20;
+            var interviewIds = Enumerable.Range(0, interviewsCount).Select(_ => Guid.NewGuid()).ToList();
+            var running = 0;
+            var maxRunning = 0;
+            var allowToComplete = new TaskCompletionSource<bool>();
+
+            this.externalFileStorage.Setup(s => s.ListAsync(It.IsAny<string>()))
+                .Returns(async () =>
+                {
+                    var current = Interlocked.Increment(ref running);
+                    InterlockedExtensions.SetMax(ref maxRunning, current);
+
+                    if (current >= MaxParallelPrefixDeletions)
+                        allowToComplete.TrySetResult(true);
+
+                    await Task.WhenAny(allowToComplete.Task, Task.Delay(TimeSpan.FromSeconds(5)));
+
+                    Interlocked.Decrement(ref running);
+
+                    return new List<FileObject>();
+                });
+
+            await this.storage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
+
+            Assert.That(maxRunning, Is.EqualTo(MaxParallelPrefixDeletions));
+            this.externalFileStorage.Verify(s => s.ListAsync(It.IsAny<string>()), Times.Exactly(interviewsCount));
+        }
+
         private const int MaxDeletionBatches = 1000;
+        private const int MaxParallelPrefixDeletions = 8;
+
+        private static class InterlockedExtensions
+        {
+            public static void SetMax(ref int target, int value)
+            {
+                int current;
+
+                while (value > (current = Volatile.Read(ref target)))
+                {
+                    if (Interlocked.CompareExchange(ref target, value, current) == current)
+                        return;
+                }
+            }
+        }
     }
 }

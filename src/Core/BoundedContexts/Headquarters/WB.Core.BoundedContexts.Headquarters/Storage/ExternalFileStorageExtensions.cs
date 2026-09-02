@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
@@ -10,6 +12,9 @@ public static class ExternalFileStorageExtensions
     // single list/delete request is limited to 1000 objects, so removal is done in a loop
     // until there is nothing left under the prefix
     private const int MaxDeletionBatches = 1000;
+
+    // prefixes are removed with bounded concurrency to keep the request rate to the storage under control
+    private const int MaxParallelPrefixDeletions = 8;
 
     /// <summary>
     /// There are no directories in S3, so all objects stored under the prefix
@@ -30,5 +35,31 @@ public static class ExternalFileStorageExtensions
 
         if (leftovers != null && leftovers.Count > 0)
             throw new InvalidOperationException($"Unable to remove all files stored under '{prefix}'.");
+    }
+
+    /// <summary>
+    /// Removes all objects stored under the given prefixes, processing several prefixes at once
+    /// to avoid a single network round trip per prefix.
+    /// </summary>
+    public static async Task RemoveAllUnderPrefixesAsync(this IExternalFileStorage externalFileStorage,
+        IEnumerable<string> prefixes)
+    {
+        using var throttle = new SemaphoreSlim(MaxParallelPrefixDeletions);
+
+        var deletions = prefixes.Select(async prefix =>
+        {
+            await throttle.WaitAsync().ConfigureAwait(false);
+
+            try
+            {
+                await externalFileStorage.RemoveAllUnderPrefixAsync(prefix).ConfigureAwait(false);
+            }
+            finally
+            {
+                throttle.Release();
+            }
+        }).ToList();
+
+        await Task.WhenAll(deletions).ConfigureAwait(false);
     }
 }

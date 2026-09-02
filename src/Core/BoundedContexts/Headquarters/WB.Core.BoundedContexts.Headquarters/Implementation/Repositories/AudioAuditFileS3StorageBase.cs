@@ -83,11 +83,9 @@ public abstract class AudioAuditFileS3StorageBase<T> : AudioAuditStorageBase
 
     public override async Task RemoveAllBinaryDataForInterviewsAsync(List<Guid> interviewIds)
     {
-        foreach (var interviewId in interviewIds)
-        {
-            var prefix = AudioAuditS3Folder + GetFileId(interviewId, string.Empty);
-            await externalFileStorage.RemoveAllUnderPrefixAsync(prefix).ConfigureAwait(false);
-        }
+        await externalFileStorage.RemoveAllUnderPrefixesAsync(
+            interviewIds.Select(interviewId => AudioAuditS3Folder + GetFileId(interviewId, string.Empty)))
+            .ConfigureAwait(false);
 
         filePlainStorageAccessor.Remove(q => q.Where(f => interviewIds.Contains(f.InterviewId)));
     }
