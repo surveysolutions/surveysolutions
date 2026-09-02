@@ -787,4 +787,7 @@
   <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
     <value>A mensagem da condição crítica tem mais de {0} caracteres.</value>
   </data>
+  <data name="WB0324_NegativeSpecialValuesNotAllowedForNonNegativeNumericQuestion" xml:space="preserve">
+    <value>Valores especiais negativos não são permitidos para perguntas numéricas não negativas.</value>
+  </data>
 </root>

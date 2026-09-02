@@ -50,6 +50,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<INumericQuestion>("WB0133", SpecialValuesMustBeUniqueForNumericQuestion, VerificationMessages.WB0133_SpecialValuesMustBeUniqueForNumericlQuestion),
             Error<INumericQuestion>("WB0134", SpecialValuesCountMoreThanMaxOptionCount, string.Format(VerificationMessages.WB0134_SpecialValuesCountMoreThanMaxOptionCount, MaxOptionsCountInCategoricalOptionQuestion)),
             Error<INumericQuestion>("WB0135", SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit, VerificationMessages.WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit),
+            Error<INumericQuestion>("WB0324", NegativeSpecialValuesAreNotAllowedForNonNegativeNumericQuestion, VerificationMessages.WB0324_NegativeSpecialValuesNotAllowedForNonNegativeNumericQuestion),
             Error<INumericQuestion>("WB0138", SpecialValuesAttachmentsMustBeUniqueForNumericQuestion, VerificationMessages.WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion),
             Error<INumericQuestion>("WB0139", SpecialValuesAttachmentsReferAbsentAttachment, VerificationMessages.WB0139_SpecialValuesAttachmentsReferAbsentAttachment),
 
@@ -1079,6 +1080,16 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static bool QuestionHasSpecialValuesWithEmptyValue(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return HasEmptyOptionValues(question.Answers);
+        }
+
+        private static bool NegativeSpecialValuesAreNotAllowedForNonNegativeNumericQuestion(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (!question.IsNonNegative || question.Answers == null)
+                return false;
+
+            return question.Answers.Any(answer =>
+                decimal.TryParse(answer.AnswerValue, System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out var value)
+                && value < 0);
         }
 
         private static bool QuestionHasOptionsWithEmptyValue(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)

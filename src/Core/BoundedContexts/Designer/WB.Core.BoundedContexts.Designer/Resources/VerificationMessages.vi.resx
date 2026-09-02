@@ -787,4 +787,7 @@
     <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
         <value>Thông báo tình trạng nghiêm trọng có nhiều hơn {0} ký tự.</value>
         </data>
+  <data name="WB0324_NegativeSpecialValuesNotAllowedForNonNegativeNumericQuestion" xml:space="preserve">
+    <value>Không cho phép các giá trị đặc biệt âm đối với câu hỏi số không âm.</value>
+  </data>
 </root>

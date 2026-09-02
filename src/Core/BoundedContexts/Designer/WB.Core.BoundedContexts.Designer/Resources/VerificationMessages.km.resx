@@ -787,4 +787,7 @@
     <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
         <value>សារលក្ខខណ្ឌសំខាន់ច្រើនជាងតួអក្សរ {0} ។</value>
     </data>
+  <data name="WB0324_NegativeSpecialValuesNotAllowedForNonNegativeNumericQuestion" xml:space="preserve">
+    <value>Negative special values are not allowed for non-negative numeric questions.</value>
+  </data>
 </root>
