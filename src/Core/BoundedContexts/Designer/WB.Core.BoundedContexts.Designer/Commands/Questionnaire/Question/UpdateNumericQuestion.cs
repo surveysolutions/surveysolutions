@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             int? countOfDecimalPlaces,
             List<ValidationCondition> validationConditions,
             Option[] options,
-            bool isNonNegative = false)
+            bool isNonNegative = true)
             : base(
                  responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
                  commonQuestionParameters: commonQuestionParameters,

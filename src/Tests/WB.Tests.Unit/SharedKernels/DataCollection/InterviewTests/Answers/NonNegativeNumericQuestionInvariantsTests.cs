@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
@@ -126,6 +128,74 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
             TestDelegate act = () => interview.AnswerNumericRealQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, -1e100);
 
             Assert.That(act, Throws.TypeOf<AnswerNotAcceptedException>());
+        }
+
+        [Test]
+        public void when_preloading_non_negative_integer_question_with_negative_value_should_throw()
+        {
+            TestDelegate act = () =>
+                Create.AggregateRoot.StatefulInterview(
+                    shouldBeInitialized: true,
+                    questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter(
+                        Create.Entity.NumericIntegerQuestion(questionId, isNonNegative: true)),
+                    answers: new List<InterviewAnswer>
+                    {
+                        Create.Entity.InterviewAnswer(
+                            Create.Entity.Identity(questionId, RosterVector.Empty),
+                            NumericIntegerAnswer.FromInt(-5))
+                    });
+
+            Assert.That(act, Throws.TypeOf<AnswerNotAcceptedException>());
+        }
+
+        [Test]
+        public void when_preloading_non_negative_integer_question_with_negative_special_value_should_not_throw()
+        {
+            Assert.DoesNotThrow(() =>
+                Create.AggregateRoot.StatefulInterview(
+                    shouldBeInitialized: true,
+                    questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter(
+                        Create.Entity.NumericIntegerQuestion(questionId, isNonNegative: true, specialValues: Create.Entity.Options(-1))),
+                    answers: new List<InterviewAnswer>
+                    {
+                        Create.Entity.InterviewAnswer(
+                            Create.Entity.Identity(questionId, RosterVector.Empty),
+                            NumericIntegerAnswer.FromInt(-1))
+                    }));
+        }
+
+        [Test]
+        public void when_preloading_non_negative_real_question_with_negative_value_should_throw()
+        {
+            TestDelegate act = () =>
+                Create.AggregateRoot.StatefulInterview(
+                    shouldBeInitialized: true,
+                    questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter(
+                        Create.Entity.NumericRealQuestion(questionId, isNonNegative: true)),
+                    answers: new List<InterviewAnswer>
+                    {
+                        Create.Entity.InterviewAnswer(
+                            Create.Entity.Identity(questionId, RosterVector.Empty),
+                            NumericRealAnswer.FromDouble(-2.5))
+                    });
+
+            Assert.That(act, Throws.TypeOf<AnswerNotAcceptedException>());
+        }
+
+        [Test]
+        public void when_preloading_non_negative_real_question_with_negative_special_value_should_not_throw()
+        {
+            Assert.DoesNotThrow(() =>
+                Create.AggregateRoot.StatefulInterview(
+                    shouldBeInitialized: true,
+                    questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter(
+                        Create.Entity.NumericRealQuestion(questionId, isNonNegative: true, specialValues: Create.Entity.Options(-1))),
+                    answers: new List<InterviewAnswer>
+                    {
+                        Create.Entity.InterviewAnswer(
+                            Create.Entity.Identity(questionId, RosterVector.Empty),
+                            NumericRealAnswer.FromDouble(-1.0))
+                    }));
         }
     }
 }
