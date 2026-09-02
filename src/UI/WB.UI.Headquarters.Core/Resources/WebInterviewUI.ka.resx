@@ -547,7 +547,7 @@
   </data>
 
   <data name="ImageFormatNotSupported" xml:space="preserve">
-    <value>სურათის ფორმატს თქვენი ბრაუზერი მხარს არ უჭერს. შეგიძლიათ ამის ნაცვლად ჩამოტვირთოთ.</value>
+    <value>სურათის ფორმატს თქვენი ბრაუზერი მხარს არ უჭერს.</value>
   </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>თქვენი ბრაუზერი არ უჭერს მხარს მულტიმედიის დაკვრას. შეგიძლიათ ამის ნაცვლად ჩამოტვირთოთ.</value>

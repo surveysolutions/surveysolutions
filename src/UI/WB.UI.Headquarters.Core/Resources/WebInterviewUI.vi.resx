@@ -437,7 +437,7 @@ Liên hệ hỗ trợ để được hỗ trợ.</value>
         <value>Thông tin câu hỏi bổ sung</value>
         </data>
     <data name="ImageFormatNotSupported" xml:space="preserve">
-        <value>Định dạng hình ảnh không được trình duyệt của bạn hỗ trợ. Bạn có thể tải xuống thay thế.</value>
+        <value>Định dạng hình ảnh không được trình duyệt của bạn hỗ trợ.</value>
     </data>
     <data name="MultimediaNotSupported" xml:space="preserve">
         <value>Phát lại đa phương tiện không được trình duyệt của bạn hỗ trợ. Bạn có thể tải xuống thay thế.</value>

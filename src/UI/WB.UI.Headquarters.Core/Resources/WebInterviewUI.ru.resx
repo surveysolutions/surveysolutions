@@ -457,7 +457,7 @@ Oбратитесь в тех. поддержку за помощью</value>
     <value>Дополнительная информация о вопросе</value>
   </data>
   <data name="ImageFormatNotSupported" xml:space="preserve">
-    <value>Формат изображения не поддерживается вашим браузером. Вы можете скачать файл.</value>
+    <value>Формат изображения не поддерживается вашим браузером.</value>
   </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>Воспроизведение мультимедиа не поддерживается вашим браузером. Вы можете скачать файл.</value>

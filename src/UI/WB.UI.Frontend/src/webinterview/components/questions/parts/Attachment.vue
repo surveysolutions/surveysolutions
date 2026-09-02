@@ -14,11 +14,6 @@
             <div v-if="imageLoadFailed"
                 class="instructions-wrapper">
                 <span>{{ $t("WebInterviewUI.ImageFormatNotSupported") }}</span>
-                <a class="btn btn-link"
-                    :href="fullPath"
-                    target="_blank">
-                    {{ $t("Common.Download") }}
-                </a>
             </div>
             <Teleport to="body">
                 <div class="modal-img"

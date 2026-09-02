@@ -469,7 +469,7 @@ Entre em contato com o suporte para obter assistência.</value>
     <value>Informações adicionais da pergunta</value>
   </data>
   <data name="ImageFormatNotSupported" xml:space="preserve">
-    <value>O formato da imagem não é suportado pelo seu navegador. Você pode baixá-la em vez disso.</value>
+    <value>O formato da imagem não é suportado pelo seu navegador.</value>
   </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>A reprodução de multimídia não é suportada pelo seu navegador. Você pode baixá-lo em vez disso.</value>
