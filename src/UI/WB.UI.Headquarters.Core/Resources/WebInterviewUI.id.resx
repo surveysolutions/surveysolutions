@@ -103,6 +103,9 @@
     <data name="ReconnectAttempt" xml:space="preserve">
         <value>Coba {{count}}</value>
     </data>
+    <data name="CommunicationError" xml:space="preserve">
+        <value>Kesalahan komunikasi</value>
+    </data>
     <data name="CommentAdd" xml:space="preserve">
         <value>Tambahkan komentar</value>
     </data>
