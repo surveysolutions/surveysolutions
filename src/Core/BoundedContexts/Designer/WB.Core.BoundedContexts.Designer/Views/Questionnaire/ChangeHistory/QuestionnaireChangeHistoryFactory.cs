@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
@@ -37,6 +38,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             this.questionnaireViewFactory = questionnaireViewFactory;
         }
 
+        [SuppressMessage("Sonar", "S6444:Regular expressions should be executed with a timeout",
+            Justification = "These calls are translated to PostgreSQL regex predicates; timeout overloads cannot be translated.")]
         public async Task<QuestionnaireChangeHistory?> LoadAsync(Guid questionnaireId, int page, int pageSize, IPrincipal user,
             string? search = null, bool searchIdsOnly = false, bool searchWholeWord = false)
         {
@@ -92,6 +95,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                           (h.TargetItemNewTitle != null && Regex.IsMatch(h.TargetItemNewTitle, wholeWordPattern, RegexOptions.IgnoreCase)) ||
                           h.References.Any(r => r.ReferenceTitle != null && Regex.IsMatch(r.ReferenceTitle, wholeWordPattern, RegexOptions.IgnoreCase)))));
                 }
+                else if (this.dbContext.Database.IsNpgsql())
+                {
+                    var searchPattern = $"%{EscapeLikePattern(normalizedSearch)}%";
+                    query = query.Where(h =>
+                        ((h.TargetItemType == QuestionnaireItemType.Questionnaire && questionnaireIdMatched && h.TargetItemId == questionnaire.PublicKey)
+                         || (h.TargetItemType != QuestionnaireItemType.Questionnaire && matchedNonQuestionnaireEntityIds.Contains(h.TargetItemId))) ||
+                        h.References.Any(r =>
+                            (r.ReferenceType == QuestionnaireItemType.Questionnaire && questionnaireIdMatched && r.ReferenceId == questionnaire.PublicKey)
+                            || (r.ReferenceType != QuestionnaireItemType.Questionnaire && matchedNonQuestionnaireEntityIds.Contains(r.ReferenceId))) ||
+                        (!searchIdsOnly &&
+                         ((h.TargetItemTitle != null && EF.Functions.ILike(h.TargetItemTitle, searchPattern, "\\"))
+                          || (h.TargetItemNewTitle != null && EF.Functions.ILike(h.TargetItemNewTitle, searchPattern, "\\"))
+                          || h.References.Any(r => r.ReferenceTitle != null && EF.Functions.ILike(r.ReferenceTitle, searchPattern, "\\")))));
+                }
                 else
                 {
                     query = query.Where(h =>
@@ -139,8 +156,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             var pattern = $@"\b{Regex.Escape(search)}\b";
             return value => !string.IsNullOrWhiteSpace(value)
-                && Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+                && Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant,
+                    TimeSpan.FromSeconds(1));
         }
+
+        private static string EscapeLikePattern(string value) => value.Replace("\\", "\\\\").Replace("%", "\\%").Replace("_", "\\_");
 
         private static string? NormalizeSearch(string? search)
         {

@@ -30,8 +30,9 @@
                     </button>
                 </span>
             </div>
-            <button type="button" title="@QuestionnaireHistoryResources.SearchClear" class="btn clear-search"
-                    onclick="document.getElementById('search-input').value = ''; document.getElementById('search-ids-only').checked = false; document.getElementById('search-whole-word').checked = false; this.form.submit();"></button>
+            <a href="@Url.Action(ViewContext.CurrentAction(), ViewContext.CurrentController(), new { id = Model.Id })"
+               title="@QuestionnaireHistoryResources.SearchClear" aria-label="@QuestionnaireHistoryResources.SearchClear"
+               class="btn clear-search"></a>
             <div class="checkbox">
                 <label for="search-ids-only" class="search-id-option">
                     <input type="checkbox" id="search-ids-only" name="searchIdsOnly" value="true" checked="@Model.SearchIdsOnly" />

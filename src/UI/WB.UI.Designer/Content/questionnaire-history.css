@@ -48,7 +48,7 @@
     border: none;
     padding: 0;
     display: inline-block;
-    background: transparent url(/i/cross.png) -5px -5px;
+    background: transparent url(../i/cross.png) -5px -5px;
 }
 
 .questionnaire-history-search-form .clear-search:hover {
