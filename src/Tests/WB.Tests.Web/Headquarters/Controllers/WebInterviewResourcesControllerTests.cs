@@ -69,6 +69,9 @@ namespace WB.Tests.Web.Headquarters.Controllers
             attachmentStorage.Setup(x => x.GetById(contentId)).Returns(attachment);
 
             var imageProcessingService = new Mock<IImageProcessingService>();
+            imageProcessingService
+                .Setup(x => x.Validate(It.IsAny<byte[]>()))
+                .Throws(new UnknownImageFormatException("Unsupported image format"));
 
             var controller = CreateController(imageProcessingService.Object, attachmentStorage.Object);
             controller.ControllerContext.HttpContext.Request.QueryString = new QueryString("?fullSize=1");
@@ -120,7 +123,7 @@ namespace WB.Tests.Web.Headquarters.Controllers
 
             var imageProcessingService = new Mock<IImageProcessingService>();
             imageProcessingService
-                .Setup(x => x.ResizeImage(It.IsAny<byte[]>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Setup(x => x.Validate(It.IsAny<byte[]>()))
                 .Throws(new UnknownImageFormatException("Unsupported image format"));
 
             var controller = CreateController(
@@ -140,6 +143,35 @@ namespace WB.Tests.Web.Headquarters.Controllers
             imageProcessingService.Verify(
                 x => x.ResizeImage(It.IsAny<byte[]>(), It.IsAny<int>(), It.IsAny<int>()),
                 Times.Never);
+        }
+
+        [Test]
+        public async Task when_full_size_image_content_is_corrupted_should_return_binary_download()
+        {
+            var imageFileStorage = new Mock<IImageFileStorage>();
+            imageFileStorage
+                .Setup(x => x.GetInterviewBinaryDataAsync(interviewGuid, imageFileName))
+                .ReturnsAsync(imageContent);
+
+            var imageProcessingService = new Mock<IImageProcessingService>();
+            imageProcessingService
+                .Setup(x => x.Validate(It.IsAny<byte[]>()))
+                .Throws(new InvalidImageContentException("Image content is corrupted"));
+
+            var controller = CreateController(
+                imageProcessingService.Object,
+                Mock.Of<IPlainStorageAccessor<AttachmentContent>>(),
+                imageFileStorage.Object,
+                new InterviewTreeMultimediaQuestion(imageFileName, null));
+            controller.ControllerContext.HttpContext.Request.QueryString = new QueryString("?fullSize=1");
+
+            var result = await controller.Image(interviewId, questionId) as FileContentResult;
+
+            result.Should().NotBeNull();
+            result!.FileContents.Should().BeEquivalentTo(imageContent);
+            result.ContentType.Should().Be("application/octet-stream");
+            result.FileDownloadName.Should().Be(imageFileName);
+            controller.Response.Headers["X-Content-Type-Options"].ToString().Should().Be("nosniff");
         }
 
         private static WebInterviewResourcesController CreateController(

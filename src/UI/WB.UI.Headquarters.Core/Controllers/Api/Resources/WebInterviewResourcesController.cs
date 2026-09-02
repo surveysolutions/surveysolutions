@@ -104,14 +104,15 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
 
             if (attachment.IsImage())
             {
-                if (!CanDetectImageFormat(attachment.Content))
-                    return DownloadBinaryFile(attachment.Content, attachment.FileName);
-
                 var fullSize = GetQueryStringValue("fullSize") != null;
 
-                var resultFile = fullSize
-                    ? attachment.Content
-                    : CreateThumbnailOrNull(attachment.Content, thumbSize);
+                byte[] resultFile;
+                if (fullSize)
+                    resultFile = IsSupportedImage(attachment.Content, interviewId, contentId, attachment.FileName)
+                        ? attachment.Content
+                        : null;
+                else
+                    resultFile = CreateThumbnailOrNull(attachment.Content, thumbSize, interviewId, contentId, attachment.FileName);
 
                 if (resultFile != null)
                     return this.BinaryResponseMessageWithEtag(resultFile);
@@ -154,14 +155,14 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
             var fullSize = GetQueryStringValue("fullSize") != null;
             if (fullSize)
             {
-                if (!CanDetectImageFormat(file))
+                if (!IsSupportedImage(file, interviewId, questionId, fileName))
                     return DownloadBinaryFile(file, fileName);
 
                 var fullSizeContentType = ContentTypeHelper.GetImageContentType(fileName);
                 return this.BinaryResponseMessageWithEtag(file, fullSizeContentType);
             }
 
-            var thumbnail = CreateThumbnailOrNull(file, 200);
+            var thumbnail = CreateThumbnailOrNull(file, 200, interviewId, questionId, fileName);
             if (thumbnail == null)
                 return DownloadBinaryFile(file, fileName);
 
@@ -205,7 +206,8 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
             return NotFound();
         }
 
-        private byte[] CreateThumbnailOrNull(byte[] content, int thumbSize)
+        private byte[] CreateThumbnailOrNull(byte[] content, int thumbSize,
+            string interviewId, string resourceId, string fileName)
         {
             try
             {
@@ -214,21 +216,24 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
             catch (Exception exception) when (exception is ImageFormatException || exception is NotSupportedException)
             {
                 this.logger.LogWarning(exception,
-                    "Thumbnail cannot be created because image format is not supported. Original file is returned");
+                    "Thumbnail cannot be created because image format is not supported. Original file is returned as download. Interview: {interviewId}, resource: {resourceId}, file: {fileName}",
+                    interviewId, resourceId, fileName);
                 return null;
             }
         }
 
-        private bool CanDetectImageFormat(byte[] content)
+        private bool IsSupportedImage(byte[] content, string interviewId, string resourceId, string fileName)
         {
             try
             {
-                return SixLabors.ImageSharp.Image.DetectFormat(content) != null;
+                this.imageProcessingService.Validate(content);
+                return true;
             }
             catch (Exception exception) when (exception is ImageFormatException || exception is NotSupportedException)
             {
                 this.logger.LogWarning(exception,
-                    "Image cannot be served inline because image format is not supported. Original file is returned as download");
+                    "Image cannot be served inline because image format is not supported. Original file is returned as download. Interview: {interviewId}, resource: {resourceId}, file: {fileName}",
+                    interviewId, resourceId, fileName);
                 return false;
             }
         }

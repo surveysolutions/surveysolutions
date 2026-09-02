@@ -22,8 +22,14 @@
                     @click="showModal(false)">
                     <span class="close-zoomming-img">×</span>
                     <img class="modal-img-content"
+                        v-show="!fullImageLoadFailed"
                         :src="fullPath"
+                        @error="fullImageLoadFailed = true"
                         alt />
+                    <div v-if="fullImageLoadFailed"
+                        class="instructions-wrapper">
+                        <span>{{ $t("WebInterviewUI.ImageFormatNotSupported") }}</span>
+                    </div>
                     <span class="caption"></span>
                 </div>
             </Teleport>
@@ -87,6 +93,7 @@ export default {
             modal: false,
             contentType: '',
             imageLoadFailed: false,
+            fullImageLoadFailed: false,
             onEscape: null,
         }
     },
@@ -143,6 +150,9 @@ export default {
     watch: {
         thumbPath() {
             this.imageLoadFailed = false
+        },
+        fullPath() {
+            this.fullImageLoadFailed = false
         },
         contentId() {
             this.fetchContentType()
@@ -224,6 +234,8 @@ export default {
         showModal(show) {
             if (this.previewOnly)
                 return
+            if (show)
+                this.fullImageLoadFailed = false
             this.modal = show
         },
         imageLoaded() {
