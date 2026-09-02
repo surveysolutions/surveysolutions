@@ -56,6 +56,7 @@ using WB.Persistence.Headquarters.Migrations.Users;
 using WB.Persistence.Headquarters.Migrations.Workspaces;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Authentication;
+using WB.UI.Headquarters.Code.Authentication.OpenIddict;
 using WB.UI.Headquarters.Code.ResetPassword;
 using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Headquarters.Configs;
@@ -310,6 +311,7 @@ namespace WB.UI.Headquarters
             services.AddRazorPages();
 
             services.AddHqAuthorization(Configuration);
+            services.AddHqOpenIddict(Configuration, environment);
             services.AddDatabaseStoredExceptional(environment, Configuration);
 
             services.AddScoped<UnitOfWorkActionFilter>();
