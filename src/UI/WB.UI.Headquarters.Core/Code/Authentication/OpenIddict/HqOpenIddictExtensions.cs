@@ -1,4 +1,5 @@
 using System;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +30,9 @@ namespace WB.UI.Headquarters.Code.Authentication.OpenIddict
             var certificate = new X509Certificate2(settings.SigningCertificatePath, settings.SigningCertificatePassword);
             if (!certificate.HasPrivateKey)
                 throw new InvalidOperationException("OpenIddict signing certificate must contain a private key.");
+            using var rsa = certificate.GetRSAPrivateKey();
+            if (rsa is null)
+                throw new InvalidOperationException("OpenIddict signing certificate must contain an RSA private key.");
 
             services.AddOpenIddict()
                 .AddServer(options =>
@@ -46,6 +50,7 @@ namespace WB.UI.Headquarters.Code.Authentication.OpenIddict
                     options.SetIdentityTokenLifetime(settings.IdentityTokenLifetime);
                     options.SetAccessTokenLifetime(settings.AccessTokenLifetime);
                     options.AddSigningCertificate(certificate);
+                    options.AddEncryptionCertificate(certificate);
                     options.UseAspNetCore()
                         .EnableAuthorizationEndpointPassthrough()
                         .EnableEndSessionEndpointPassthrough()
