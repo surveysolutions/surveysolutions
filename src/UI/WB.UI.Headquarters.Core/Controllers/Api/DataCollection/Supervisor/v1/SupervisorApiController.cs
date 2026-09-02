@@ -109,7 +109,13 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 
             var serverApkBuildNumber = await interviewerVersionReader.SupervisorBuildNumber();
             var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
-            
+
+            var effectiveServerBuildNumber = serverApkBuildNumber ?? productVersion.GetBuildNumber();
+            if (clientApkBuildNumber != null && clientApkBuildNumber > effectiveServerBuildNumber)
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable);
+            }
+
             if (IsNeedUpdateAppBySettings(clientApkBuildNumber, serverApkBuildNumber))
             {
                 return StatusCode(StatusCodes.Status426UpgradeRequired);
@@ -118,12 +124,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             if (clientApkBuildNumber != null && this.syncVersionProvider.GetBlackListedBuildNumbers().Contains(clientApkBuildNumber.Value))
             {
                 return StatusCode(StatusCodes.Status426UpgradeRequired);
-            }
-
-            var effectiveServerBuildNumber = serverApkBuildNumber ?? productVersion.GetBuildNumber();
-            if (clientApkBuildNumber != null && clientApkBuildNumber > effectiveServerBuildNumber)
-            {
-                return StatusCode(StatusCodes.Status406NotAcceptable);
             }
 
             if (deviceSyncProtocolVersion == SupervisorSyncProtocolVersionProvider.V1_BeforeResolvedCommentsIntroduced) 

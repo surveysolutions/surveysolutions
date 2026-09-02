@@ -96,7 +96,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         private void ThrowIfServerVersionIsIncompatible(int? serverVersion)
         {
-            if (serverVersion.HasValue && serverVersion < GetApplicationVersionCode())
+            if (!serverVersion.HasValue || serverVersion < GetApplicationVersionCode())
                 throw new SynchronizationException(SynchronizationExceptionType.NotSupportedServerSyncProtocolVersion,
                     EnumeratorUIResources.NotSupportedServerSyncProtocolVersion);
         }

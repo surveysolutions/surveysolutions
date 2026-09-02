@@ -79,7 +79,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services.Synchronization
         }
 
         [Test]
-        public async Task when_server_version_is_null_should_not_throw()
+        public async Task when_server_version_is_null_should_throw_incompatible_version()
         {
             // arrange
             const int appVersion = 38141;
@@ -93,8 +93,9 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services.Synchronization
 
             var step = CreateSupervisorUpdateApplication(settings: settings, synchronizationService: synchronizationService.Object);
 
-            // act & assert - should not throw when server version is unknown
-            await step.ExecuteAsync();
+            // act & assert - a legacy server without a stored APK must be treated as incompatible
+            var ex = Assert.ThrowsAsync<SynchronizationException>(async () => await step.ExecuteAsync());
+            Assert.That(ex.Type, Is.EqualTo(SynchronizationExceptionType.NotSupportedServerSyncProtocolVersion));
         }
 
         private static SupervisorUpdateApplication CreateSupervisorUpdateApplication(
