@@ -199,6 +199,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     throw new SynchronizationException(SynchronizationExceptionType.Unauthorized, EnumeratorUIResources.Login_WrongPassword);
                 }
 
+                var serverVersion = await this.synchronizationService
+                    .GetLatestApplicationVersionAsync(cancellationTokenSource.Token).ConfigureAwait(false);
+                if (serverVersion.HasValue && serverVersion < this.deviceSettings.GetApplicationVersionCode())
+                    throw new SynchronizationException(
+                        SynchronizationExceptionType.NotSupportedServerSyncProtocolVersion,
+                        EnumeratorUIResources.NotSupportedServerSyncProtocolVersion);
+
                 var authToken = token;
                 if (authToken == null)
                     authToken = await this.synchronizationService.LoginAsync(new LogonInfo
