@@ -146,10 +146,14 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
             if (file == null || file.Length == 0)
                 return NoContent();
 
+            var thumbnail = CreateThumbnailOrNull(file, 200);
+            if (thumbnail == null)
+                return DownloadBinaryFile(file, fileName);
+
             var fullSize = GetQueryStringValue("fullSize") != null;
             var resultFile = fullSize
                 ? file
-                : CreateThumbnailOrNull(file, 200) ?? file;
+                : thumbnail;
             var contentType = ContentTypeHelper.GetImageContentType(fileName);
 
             return this.BinaryResponseMessageWithEtag(resultFile, contentType);
@@ -203,6 +207,12 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
                     "Thumbnail cannot be created because image format is not supported. Original file is returned");
                 return null;
             }
+        }
+
+        private FileContentResult DownloadBinaryFile(byte[] content, string fileName)
+        {
+            this.Response.Headers["X-Content-Type-Options"] = "nosniff";
+            return File(content, "application/octet-stream", fileName);
         }
 
         private string GetQueryStringValue(string key)
