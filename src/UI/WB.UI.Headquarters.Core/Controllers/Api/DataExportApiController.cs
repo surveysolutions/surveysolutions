@@ -305,27 +305,24 @@ namespace WB.UI.Headquarters.Controllers.Api
                 toDate: to?.ToUniversalTime());
 
         [HttpPost]
-        [EnableCors("export")]
-        [ObservingNotAllowed]
-        [ValidateAntiForgeryToken]
+        [EnableCors("export")]        
+        [AllowAnonymous]
         public ActionResult<string> CreateExternalStorageState([FromBody] ExternalStorageStateModel state)
         {
             if (state == null)
                 return BadRequest("Export parameters not found");
 
             var requesterUserId = this.User?.UserId();
-            if (requesterUserId == null)
-                return Unauthorized();
 
             var payload = new ExternalStorageProtectedStateModel
             {
                 ExpiresAtUtc = DateTime.UtcNow.Add(ExternalStorageStateLifetime),
                 Nonce = Guid.NewGuid().ToString("N"),
-                RequesterUserId = requesterUserId.Value,
+                RequesterUserId = requesterUserId,
                 ExportState = state
             };
 
-            this.memoryCache.Set(GetExternalStorageStateCacheKey(payload.Nonce), requesterUserId.Value, payload.ExpiresAtUtc);
+            this.memoryCache.Set(GetExternalStorageStateCacheKey(payload.Nonce), true, payload.ExpiresAtUtc);
 
             var protectedState = this.externalStorageStateProtector.Protect(this.serializer.Serialize(payload));
             return Ok(protectedState);
@@ -417,10 +414,10 @@ namespace WB.UI.Headquarters.Controllers.Api
                 || payload.ExpiresAtUtc < DateTime.UtcNow)
                 return null;
 
-            if (!this.memoryCache.TryGetValue(GetExternalStorageStateCacheKey(payload.Nonce), out Guid storedUserId))
+            if (!this.memoryCache.TryGetValue(GetExternalStorageStateCacheKey(payload.Nonce), out bool _))
                 return null;
 
-            if (storedUserId != payload.RequesterUserId || storedUserId != requesterUserId)
+            if (payload.RequesterUserId.HasValue && payload.RequesterUserId.Value != requesterUserId)
                 return null;
 
             this.memoryCache.Remove(GetExternalStorageStateCacheKey(payload.Nonce));
@@ -498,7 +495,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             public DateTime ExpiresAtUtc { get; set; }
             public string Nonce { get; set; }
-            public Guid RequesterUserId { get; set; }
+            public Guid? RequesterUserId { get; set; }
             public ExternalStorageStateModel ExportState { get; set; }
         }
     }

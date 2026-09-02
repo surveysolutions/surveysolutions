@@ -26,6 +26,32 @@ namespace WB.Tests.Web.Headquarters.Controllers.DataExportApiControllerTests
         }
 
         [NUnit.Framework.Test]
+        public void should_allow_anonymous_state_creation()
+        {
+            var action = typeof(DataExportApiController)
+                .GetMethod(nameof(DataExportApiController.CreateExternalStorageState));
+
+            action.Should().NotBeNull();
+            action!.GetCustomAttribute<AllowAnonymousAttribute>().Should().NotBeNull();
+        }
+
+        [NUnit.Framework.Test]
+        public void when_anonymous_user_creates_state_should_return_protected_state()
+        {
+            var controller = CreateController(
+                new MemoryCache(new MemoryCacheOptions()),
+                new EphemeralDataProtectionProvider());
+
+            var result = controller.CreateExternalStorageState(new DataExportApiController.ExternalStorageStateModel
+            {
+                Type = ExternalStorageType.OneDrive,
+            }).Result;
+
+            var response = result.Should().BeOfType<OkObjectResult>().Subject;
+            response.Value.Should().BeOfType<string>().Which.Should().NotBeNullOrWhiteSpace();
+        }
+
+        [NUnit.Framework.Test]
         public async Task when_state_is_reused_should_return_bad_request()
         {
             var userId = Guid.NewGuid();
