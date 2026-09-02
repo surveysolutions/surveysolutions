@@ -151,6 +151,7 @@
     "QuestionHideInstruction": "隐藏说明",
     "QuestionInstruction": "说明",
     "QuestionInteger": "整数",
+    "QuestionNonNegative": "Non-negative",
     "QuestionIsLinked": "被关联",
     "QuestionLinkedDescr": "捆绑至列表型问题或来自二维表组的问题",
     "QuestionMaxListCount": "列表元素数量的最大值",
