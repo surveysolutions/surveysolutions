@@ -63,7 +63,8 @@
             <div v-else
                 class="row-element mb-20">
                 <button class="btn btn-success btn-lg"
-                    type="submit">
+                    type="submit"
+                    :disabled="model.useCaptcha && model.useRecaptchaV3 && !model.serverUnderLoad && !recaptchaV3Token">
                     {{ buttonTitle }}
                 </button>
             </div>
@@ -72,7 +73,8 @@
                 name="resume"
                 class="btn btn-success btn-lg"
                 type="submit"
-                :value="resumeButtonTitle" />
+                :value="resumeButtonTitle"
+                :disabled="model.useCaptcha && model.useRecaptchaV3 && !model.serverUnderLoad && !recaptchaV3Token" />
         </form>
     </div>
 </template>
