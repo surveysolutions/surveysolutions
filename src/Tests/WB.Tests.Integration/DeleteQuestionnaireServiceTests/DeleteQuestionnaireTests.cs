@@ -28,6 +28,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Users.Providers;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -128,6 +129,51 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
             var assignmentEvents = eventStore.Read(assignmentId, 0);
             Assert.That(assignmentEvents.Count(), Is.EqualTo(0));
         }
+        
+        [Test]
+        public async Task when_remove_questionnaire_binary_data_then_should_include_broken_packages_without_summary()
+        {
+            var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 5);
+            var brokenOnlyInterviewId = Guid.NewGuid();
+            CreateBrokenInterviewPackage(questionnaireIdentity, brokenOnlyInterviewId);
+
+            using var unitOfWork = IntegrationCreate.UnitOfWork(factory);
+            var imageFileStorage = new Mock<IImageFileStorage>();
+            var audioAuditFileStorage = new Mock<IAudioAuditFileStorage>();
+            var brokenImageFileStorage = new Mock<IBrokenImageFileStorage>();
+            var brokenAudioFileStorage = new Mock<IBrokenAudioFileStorage>();
+            var brokenAudioAuditFileStorage = new Mock<IBrokenAudioAuditFileStorage>();
+
+            imageFileStorage.Setup(x => x.RemoveAllBinaryDataForInterviewsAsync(It.IsAny<List<Guid>>())).Returns(Task.CompletedTask);
+            audioAuditFileStorage.Setup(x => x.RemoveAllBinaryDataForInterviewsAsync(It.IsAny<List<Guid>>())).Returns(Task.CompletedTask);
+            brokenImageFileStorage.Setup(x => x.RemoveAllBinaryDataForInterviewsAsync(It.IsAny<List<Guid>>())).Returns(Task.CompletedTask);
+            brokenAudioFileStorage.Setup(x => x.RemoveAllBinaryDataForInterviewsAsync(It.IsAny<List<Guid>>())).Returns(Task.CompletedTask);
+            brokenAudioAuditFileStorage.Setup(x => x.RemoveAllBinaryDataForInterviewsAsync(It.IsAny<List<Guid>>())).Returns(Task.CompletedTask);
+
+            var interviewsReader = new PostgreReadSideStorage<InterviewSummary>(unitOfWork, memoryCache);
+            var interviewsToDeleteFactory = new InterviewsToDeleteFactory(
+                unitOfWork,
+                imageFileStorage.Object,
+                audioAuditFileStorage.Object,
+                brokenImageFileStorage.Object,
+                brokenAudioFileStorage.Object,
+                brokenAudioAuditFileStorage.Object,
+                interviewsReader,
+                Mock.Of<ILogger<InterviewsToDeleteFactory>>());
+
+            await interviewsToDeleteFactory.RemoveAllInterviewsDataAsync(questionnaireIdentity);
+
+            imageFileStorage.Verify(x => x.RemoveAllBinaryDataForInterviewsAsync(It.Is<List<Guid>>(ids =>
+                ids.Count == 1 && ids[0] == brokenOnlyInterviewId)), Times.Once);
+            audioAuditFileStorage.Verify(x => x.RemoveAllBinaryDataForInterviewsAsync(It.Is<List<Guid>>(ids =>
+                ids.Count == 1 && ids[0] == brokenOnlyInterviewId)), Times.Once);
+            brokenImageFileStorage.Verify(x => x.RemoveAllBinaryDataForInterviewsAsync(It.Is<List<Guid>>(ids =>
+                ids.Count == 1 && ids[0] == brokenOnlyInterviewId)), Times.Once);
+            brokenAudioFileStorage.Verify(x => x.RemoveAllBinaryDataForInterviewsAsync(It.Is<List<Guid>>(ids =>
+                ids.Count == 1 && ids[0] == brokenOnlyInterviewId)), Times.Once);
+            brokenAudioAuditFileStorage.Verify(x => x.RemoveAllBinaryDataForInterviewsAsync(It.Is<List<Guid>>(ids =>
+                ids.Count == 1 && ids[0] == brokenOnlyInterviewId)), Times.Once);
+        }
 
         private void CreateEvents(Guid eventSourceId)
         {
@@ -178,6 +224,29 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
                 Data = new byte[] { 1 },
                 FileName = "test"
             }, fileId);
+            unitOfWork.AcceptChanges();
+        }
+        
+        private void CreateBrokenInterviewPackage(QuestionnaireIdentity questionnaireIdentity, Guid interviewId)
+        {
+            using var unitOfWork = IntegrationCreate.UnitOfWork(factory);
+
+            var storage = new PostgresPlainStorageRepository<BrokenInterviewPackage>(unitOfWork);
+            storage.Store(new BrokenInterviewPackage
+            {
+                InterviewId = interviewId,
+                QuestionnaireId = questionnaireIdentity.QuestionnaireId,
+                QuestionnaireVersion = questionnaireIdentity.Version,
+                IncomingDate = DateTime.UtcNow,
+                ProcessingDate = DateTime.UtcNow,
+                ResponsibleId = Guid.NewGuid(),
+                InterviewStatus = InterviewStatus.Completed,
+                Events = "[]",
+                ExceptionType = "TestException",
+                ExceptionMessage = "test",
+                ExceptionStackTrace = "test"
+            }, null);
+
             unitOfWork.AcceptChanges();
         }
 
