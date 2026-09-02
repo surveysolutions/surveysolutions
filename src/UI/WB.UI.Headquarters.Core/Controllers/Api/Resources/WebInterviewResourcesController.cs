@@ -151,17 +151,22 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
             if (file == null || file.Length == 0)
                 return NoContent();
 
+            var fullSize = GetQueryStringValue("fullSize") != null;
+            if (fullSize)
+            {
+                if (!CanDetectImageFormat(file))
+                    return DownloadBinaryFile(file, fileName);
+
+                var fullSizeContentType = ContentTypeHelper.GetImageContentType(fileName);
+                return this.BinaryResponseMessageWithEtag(file, fullSizeContentType);
+            }
+
             var thumbnail = CreateThumbnailOrNull(file, 200);
             if (thumbnail == null)
                 return DownloadBinaryFile(file, fileName);
 
-            var fullSize = GetQueryStringValue("fullSize") != null;
-            var resultFile = fullSize
-                ? file
-                : thumbnail;
             var contentType = ContentTypeHelper.GetImageContentType(fileName);
-
-            return this.BinaryResponseMessageWithEtag(resultFile, contentType);
+            return this.BinaryResponseMessageWithEtag(thumbnail, contentType);
         }
         
         [HttpGet]

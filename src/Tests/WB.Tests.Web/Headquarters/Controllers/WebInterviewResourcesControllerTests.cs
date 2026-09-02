@@ -137,6 +137,9 @@ namespace WB.Tests.Web.Headquarters.Controllers
             result.ContentType.Should().Be("application/octet-stream");
             result.FileDownloadName.Should().Be(imageFileName);
             controller.Response.Headers["X-Content-Type-Options"].ToString().Should().Be("nosniff");
+            imageProcessingService.Verify(
+                x => x.ResizeImage(It.IsAny<byte[]>(), It.IsAny<int>(), It.IsAny<int>()),
+                Times.Never);
         }
 
         private static WebInterviewResourcesController CreateController(
