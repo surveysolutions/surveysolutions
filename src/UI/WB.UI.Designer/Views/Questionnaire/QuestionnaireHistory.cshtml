@@ -9,10 +9,6 @@
     ViewBag.HideMenu = true;
 }
 
-@section Styles {
-    <link rel="stylesheet" href="@Url.Content("~/Content/questionnaire-history.css")" />
-}
-
 <div id="edit-form" style="position: static;">
     <div class="questionnaire-history-header">
         <a href='@($"/q/details/{Model!.Id.FormatGuid()}")' class="btn btn-default">@QuestionnaireHistoryResources.Edit</a>
