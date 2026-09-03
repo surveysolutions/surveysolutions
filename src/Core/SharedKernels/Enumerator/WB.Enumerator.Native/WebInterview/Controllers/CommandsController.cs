@@ -260,48 +260,57 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
             string fileName = null;
             QuestionType? questionType = null;
+            var operationLock = InterviewFileOperationLocks.Get(interviewId);
+            await operationLock.WaitAsync();
 
             try
             {
-                var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
-                var questionnaire = questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, null);
-                questionType = questionnaire.GetQuestionType(identity.Id);
+                try
+                {
+                    var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
+                    var questionnaire = questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, null);
+                    questionType = questionnaire.GetQuestionType(identity.Id);
 
-                if (questionType == QuestionType.Multimedia)
-                {
-                    fileName = interview.GetMultimediaQuestion(identity)?.GetAnswer()?.FileName;
-                }
-                else if (questionType == QuestionType.Audio)
-                {
-                    fileName = $@"{questionnaire.GetQuestionVariableName(identity.Id)}__{identity.RosterVector}.m4a";
-                }
-            }
-            catch (Exception e)
-            {
-                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, identity, e);
-            }
-
-            var command = new RemoveAnswerCommand(interviewId, GetCommandResponsibleId(interviewId), identity);
-            if (this.ExecuteQuestionCommand(command))
-            {
-                if (!string.IsNullOrEmpty(fileName))
-                {
-                    try
+                    if (questionType == QuestionType.Multimedia)
                     {
-                        if (questionType == QuestionType.Multimedia)
-                        {
-                            await this.imageFileStorage.RemoveInterviewBinaryData(interviewId, fileName);
-                        }
-                        else if (questionType == QuestionType.Audio)
-                        {
-                            await this.audioFileStorage.RemoveInterviewBinaryData(interviewId, fileName);
-                        }
+                        fileName = interview.GetMultimediaQuestion(identity)?.GetAnswer()?.FileName;
                     }
-                    catch (Exception e)
+                    else if (questionType == QuestionType.Audio)
                     {
-                        webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, identity, e);
+                        fileName = $@"{questionnaire.GetQuestionVariableName(identity.Id)}__{identity.RosterVector}.m4a";
                     }
                 }
+                catch (Exception e)
+                {
+                    webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, identity, e);
+                }
+
+                var command = new RemoveAnswerCommand(interviewId, GetCommandResponsibleId(interviewId), identity);
+                if (this.ExecuteQuestionCommand(command))
+                {
+                    if (!string.IsNullOrEmpty(fileName))
+                    {
+                        try
+                        {
+                            if (questionType == QuestionType.Multimedia)
+                            {
+                                await this.imageFileStorage.RemoveInterviewBinaryData(interviewId, fileName);
+                            }
+                            else if (questionType == QuestionType.Audio)
+                            {
+                                await this.audioFileStorage.RemoveInterviewBinaryData(interviewId, fileName);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, identity, e);
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                operationLock.Release();
             }
 
             return Ok();
