@@ -540,4 +540,10 @@
   <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
     <value>128 kbps, Stereo, 48 kHz</value>
   </data>
+  <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
+    <value>Povolit supervizorům přehrávat nahrávky zvukového auditu</value>
+  </data>
+  <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
+    <value>Pokud je povoleno, supervizoři mohou přistupovat k nahrávkám zvukového auditu svých interview a přehrávat je.</value>
+  </data>
 </root>

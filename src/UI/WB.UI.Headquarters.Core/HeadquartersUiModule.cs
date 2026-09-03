@@ -49,6 +49,7 @@ namespace WB.UI.Headquarters
             registry.Bind<IWebInterviewInterviewEntityFactory, HqWebInterviewInterviewEntityFactory>();
             registry.Bind<IWebNavigationService, WebNavigationService>();
             registry.Bind<IReviewAllowedService, ReviewAllowedService>();
+            registry.Bind<IAudioAuditAccessService, AudioAuditAccessService>();
             registry.Bind<IQuestionnaireAssemblyAccessor, QuestionnaireAssemblyAccessor>();
             registry.Bind<IViewRenderService, ViewRenderService>();
             registry.Bind<IUploadPackageAnalyzer, UploadPackageAnalyzer>();
