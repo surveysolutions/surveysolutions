@@ -123,6 +123,9 @@
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>Răspunsul nu a fost salvat</value>
   </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Eroare de comunicare</value>
+  </data>
   <data name="AreaRecord" xml:space="preserve">
     <value>Editaƫi zona</value>
   </data>

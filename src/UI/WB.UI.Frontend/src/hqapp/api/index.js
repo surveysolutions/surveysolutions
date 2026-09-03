@@ -702,7 +702,7 @@ class AdminSettings {
             data: { allowInterviewerUpdateProfile: allowInterviewerUpdateProfile },
         })
     }
-    setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled, isPartialSynchronizationEnabled, allowSupervisorChangeAssignmentStatus, allowInterviewerChangeAssignmentStatus, audioRecordingQuality) {
+    setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled, isPartialSynchronizationEnabled, allowSupervisorChangeAssignmentStatus, allowInterviewerChangeAssignmentStatus, audioRecordingQuality, allowSupervisorAudioAuditPlayback) {
         return this.http({
             method: 'post',
             url: `${this.base}/InterviewerSettings`,
@@ -714,6 +714,7 @@ class AdminSettings {
                 allowSupervisorChangeAssignmentStatus: allowSupervisorChangeAssignmentStatus,
                 allowInterviewerChangeAssignmentStatus: allowInterviewerChangeAssignmentStatus,
                 audioRecordingQuality: audioRecordingQuality,
+                allowSupervisorAudioAuditPlayback: allowSupervisorAudioAuditPlayback,
             },
         })
     }
@@ -753,6 +754,35 @@ class AdminSettings {
             headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             data: { allowEmails: allowEmails },
         })
+    }
+}
+
+class AudioAuditApi {
+    constructor(http) {
+        this.http = http
+        this.base = 'api/audioaudit'
+        this.infoCache = new Map()
+    }
+
+    async getInfo(interviewId) {
+        const cachedRequest = this.infoCache.get(interviewId)
+        if (cachedRequest) return cachedRequest
+
+        const request = this.http.get(`${this.base}/${interviewId}/info`)
+            .then(response => response.data)
+        this.infoCache.set(interviewId, request)
+
+        try {
+            return await request
+        } catch (error) {
+            this.infoCache.delete(interviewId)
+            throw error
+        }
+    }
+
+    getSegmentUrl(interviewId, segmentId) {
+        const basePath = (this.http.defaults.baseURL || '/').replace(/\/?$/, '/')
+        return `${basePath}${this.base}/${interviewId}/segment/${segmentId}`
     }
 }
 
@@ -820,6 +850,10 @@ class HqApiClient {
 
     get AdminSettings() {
         return new AdminSettings(this.http)
+    }
+
+    get AudioAudit() {
+        return new AudioAuditApi(this.http)
     }
 
     get ControlPanel() {

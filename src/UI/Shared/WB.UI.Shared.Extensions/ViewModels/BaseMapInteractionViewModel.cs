@@ -365,7 +365,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     this.MapView.ViewpointChanged += MapViewPointChanged;
                 }
                 
-                if (this.MapView?.VisibleArea != null)
+                if (this.MapView?.VisibleArea != null
+                    && this.Map.Basemap?.BaseLayers[0]?.SpatialReference != null)
                 {
                     logger.Debug("projecting areas" );
                     await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>
