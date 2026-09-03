@@ -145,9 +145,14 @@ namespace WB.UI.WebTester.Controllers
             }
 
             string? fileName = null;
+            var operationLock = InterviewFileOperationLocks.Get(interview.Id);
+            await operationLock.WaitAsync();
 
             try
             {
+                interview = this.statefulInterviewRepository.Get(id) ??
+                    throw new InvalidOperationException("Interview must not be null.");
+                question = interview.GetQuestion(questionIdentity)!;
                 var oldFileName = interview.GetMultimediaQuestion(questionIdentity)?.GetAnswer()?.FileName;
 
                 await using var ms = new MemoryStream();
@@ -169,6 +174,8 @@ namespace WB.UI.WebTester.Controllers
 
                 if (!string.IsNullOrEmpty(oldFileName) && oldFileName != fileName)
                 {
+                    operationLock.Release();
+                    operationLock.Dispose();
                     this.mediaStorage.Remove(oldFileName, interview.Id);
                 }
             }

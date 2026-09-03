@@ -119,6 +119,7 @@ namespace WB.UI.Headquarters.Controllers
 
             string filename = null;
             var answerSaved = false;
+            byte[] oldFileData = null;
             var uploadLock = InterviewFileOperationLocks.Get(interview.Id);
             await uploadLock.WaitAsync();
 
@@ -134,6 +135,9 @@ namespace WB.UI.Headquarters.Controllers
                 var extension = Path.GetExtension(file.FileName);
                 filename = AnswerUtils.GetPictureFileName(question.VariableName, questionIdentity.RosterVector, extension);
                 var responsibleId = interview.CurrentResponsibleId;
+
+                if (string.Equals(oldFileName, filename, StringComparison.Ordinal))
+                    oldFileData = await this.imageFileStorage.GetInterviewBinaryDataAsync(interview.Id, oldFileName);
 
                 this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
                 this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
@@ -158,7 +162,12 @@ namespace WB.UI.Headquarters.Controllers
             catch (Exception e)
             {
                 if (filename != null && !answerSaved)
-                    await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
+                {
+                    if (oldFileData != null)
+                        this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, oldFileData, file.ContentType);
+                    else
+                        await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
+                }
 
                 webInterviewNotificationService.MarkAnswerAsNotSaved(id, questionIdentity, e);
                 throw;
@@ -166,6 +175,7 @@ namespace WB.UI.Headquarters.Controllers
             finally
             {
                 uploadLock.Release();
+                uploadLock.Dispose();
             }
             return this.Json("ok");
         }
