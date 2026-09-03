@@ -10,7 +10,7 @@
                   android:layout_height="wrap_content"
                   android:orientation="horizontal">
 
-        <TextView style="@style/Interview_Question_Answer_Text_Editor"
+        <TextView style="@style/Interview_Question_Answer_ComboBox_SelectedOption"
                   local:MvxBind="Text Title; Tag ItemTag" />
 
         <ImageButton style="@style/Interview_Question_OptionRemoveAnswer"
