@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
