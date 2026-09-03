@@ -118,15 +118,18 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             string filename = null;
+            string oldFileName = null;
             var answerSaved = false;
             byte[] oldFileData = null;
+            string backupFileName = null;
+            var sameLogicalFileName = false;
             var uploadLock = InterviewFileOperationLocks.Get(interview.Id);
             await uploadLock.WaitAsync();
 
             try
             {
                 interview = this.statefulInterviewRepository.Get(id.FormatGuid());
-                var oldFileName = interview.GetMultimediaQuestion(questionIdentity)?.GetAnswer()?.FileName;
+                oldFileName = interview.GetMultimediaQuestion(questionIdentity)?.GetAnswer()?.FileName;
 
                 await using var ms = new MemoryStream();
                 await file.CopyToAsync(ms);
@@ -136,8 +139,18 @@ namespace WB.UI.Headquarters.Controllers
                 filename = AnswerUtils.GetPictureFileName(question.VariableName, questionIdentity.RosterVector, extension);
                 var responsibleId = interview.CurrentResponsibleId;
 
-                if (string.Equals(oldFileName, filename, StringComparison.Ordinal))
+                sameLogicalFileName = !string.IsNullOrEmpty(oldFileName) &&
+                    this.imageFileStorage.IsEquivalentFileName(oldFileName, filename);
+                if (sameLogicalFileName)
+                {
                     oldFileData = await this.imageFileStorage.GetInterviewBinaryDataAsync(interview.Id, oldFileName);
+                    if (oldFileData != null)
+                    {
+                        backupFileName = $"{Guid.NewGuid():N}_{Path.GetFileName(oldFileName)}";
+                        this.imageFileStorage.StoreInterviewBinaryData(interview.Id, backupFileName, oldFileData, file.ContentType);
+                        await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, oldFileName);
+                    }
+                }
 
                 this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
                 this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
@@ -147,11 +160,10 @@ namespace WB.UI.Headquarters.Controllers
                 if (!string.IsNullOrEmpty(oldFileName) &&
                     !string.Equals(oldFileName, filename, StringComparison.Ordinal))
                 {
-                    if (string.Equals(oldFileName, filename, StringComparison.OrdinalIgnoreCase))
+                    if (sameLogicalFileName)
                     {
-                        var files = await this.imageFileStorage.GetBinaryFilesForInterview(interview.Id);
-                        if (files?.Any(x => x.FileName == oldFileName) == true)
-                            await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, oldFileName);
+                        if (!string.IsNullOrEmpty(backupFileName))
+                            await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, backupFileName);
                     }
                     else
                     {
@@ -163,10 +175,23 @@ namespace WB.UI.Headquarters.Controllers
             {
                 if (filename != null && !answerSaved)
                 {
-                    if (oldFileData != null)
+                    if (sameLogicalFileName)
+                    {
+                        if (!string.IsNullOrEmpty(backupFileName) && oldFileData != null)
+                        {
+                            await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
+                            this.imageFileStorage.StoreInterviewBinaryData(interview.Id, oldFileName, oldFileData, file.ContentType);
+                            await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, backupFileName);
+                        }
+                    }
+                    else if (oldFileData != null)
+                    {
                         this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, oldFileData, file.ContentType);
+                    }
                     else
+                    {
                         await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
+                    }
                 }
 
                 webInterviewNotificationService.MarkAnswerAsNotSaved(id, questionIdentity, e);

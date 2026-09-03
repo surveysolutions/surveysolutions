@@ -13,6 +13,9 @@ public abstract class InterviewS3FileStorage : IInterviewFileStorage
     private readonly IExternalFileStorage externalFileStorage;
     private readonly IFileSystemAccessor fileSystemAccessor;
 
+    public bool IsEquivalentFileName(string fileName, string otherFileName) =>
+        string.Equals(fileName, otherFileName, StringComparison.Ordinal);
+
     public InterviewS3FileStorage(IExternalFileStorage externalFileStorage, IFileSystemAccessor fileSystemAccessor)
     {
         this.externalFileStorage = externalFileStorage;
