@@ -82,6 +82,9 @@ export default {
     },
     methods: {
         async prepareToSave() {
+            if (this.activeQuestion.isNonNegative === undefined) {
+                this.activeQuestion.isNonNegative = true;
+            }
             await this.$refs.options.showOptionsInList();
         },
         isIntegerChange(event) {
