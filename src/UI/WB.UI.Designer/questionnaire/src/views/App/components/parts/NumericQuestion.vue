@@ -65,6 +65,11 @@ export default {
     data() {
         return {}
     },
+    mounted() {
+        if (this.activeQuestion.isNonNegative == null) {
+            this.activeQuestion.isNonNegative = true;
+        }
+    },
     computed: {
         isValidCountOfDecimalPlaces() {
             if (!this.activeQuestion.countOfDecimalPlaces)
@@ -82,7 +87,7 @@ export default {
     },
     methods: {
         async prepareToSave() {
-            if (this.activeQuestion.isNonNegative === undefined) {
+            if (this.activeQuestion.isNonNegative == null) {
                 this.activeQuestion.isNonNegative = true;
             }
             await this.$refs.options.showOptionsInList();
