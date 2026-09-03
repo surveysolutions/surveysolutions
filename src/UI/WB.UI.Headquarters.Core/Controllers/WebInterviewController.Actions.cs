@@ -117,6 +117,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             string filename = null;
+            var answerSaved = false;
 
             try
             {
@@ -136,15 +137,17 @@ namespace WB.UI.Headquarters.Controllers
 
                 this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
                     responsibleId, questionIdentity.Id, questionIdentity.RosterVector, filename));
+                answerSaved = true;
 
-                if (!string.IsNullOrEmpty(oldFileName) && oldFileName != filename)
+                if (!string.IsNullOrEmpty(oldFileName) &&
+                    !string.Equals(oldFileName, filename, StringComparison.OrdinalIgnoreCase))
                 {
                     await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, oldFileName);
                 }
             }
             catch (Exception e)
             {
-                if (filename != null)
+                if (filename != null && !answerSaved)
                     await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
 
                 webInterviewNotificationService.MarkAnswerAsNotSaved(id, questionIdentity, e);

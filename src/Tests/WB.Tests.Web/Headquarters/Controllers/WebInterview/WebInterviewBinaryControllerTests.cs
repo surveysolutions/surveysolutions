@@ -81,7 +81,7 @@ public class WebInterviewBinaryControllerTests
     {
         var interviewId = Guid.NewGuid();
         var questionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
-        var oldFileName = "photo__.png";
+        var oldFileName = "photo__.PNG";
 
         var question = new InterviewTreeQuestion(
             questionIdentity,
