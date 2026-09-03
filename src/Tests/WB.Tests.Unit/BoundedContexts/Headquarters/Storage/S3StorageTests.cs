@@ -160,6 +160,21 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
         }
 
         [Test]
+        public void should_throw_when_s3_delete_objects_returns_errors()
+        {
+            client.Setup(c => c.DeleteObjectsAsync(It.IsAny<DeleteObjectsRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new DeleteObjectsResponse
+                {
+                    DeleteErrors = new List<DeleteError>
+                    {
+                        new() { Key = "base/fiji/somePath", Code = "AccessDenied", Message = "Denied" }
+                    }
+                });
+
+            Assert.ThrowsAsync<InvalidOperationException>(() => this.storage.RemoveAsync(new[] { "somePath" }));
+        }
+
+        [Test]
         public void should_properly_generate_pathTo_key_and_normalize_slashes()
         {
             Assert.That(bucketInfo.PathTo("/path"), Is.EqualTo("base/fiji/path"));
