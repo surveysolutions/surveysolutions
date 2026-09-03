@@ -333,16 +333,13 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpPost]
         [EnableCors("export")]
-        [ObservingNotAllowed]
-        [IgnoreAntiforgeryToken]
+        [AllowAnonymous]
         public async Task<ActionResult> ExportToExternalStorage(ExportToExternalStorageModel model)
         {
             logger.LogInformation($"Export to external storage requested");
-            var requesterUserId = this.User?.UserId();
-            if (requesterUserId == null)
-                return Unauthorized();
+            
 
-            var state = this.TryRestoreExternalStorageState(model?.State, requesterUserId.Value);
+            var state = this.TryRestoreExternalStorageState(model?.State);
             if (state == null)
                 return BadRequest("Export parameters not found");
             
@@ -396,7 +393,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
         }
 
-        private ExternalStorageStateModel TryRestoreExternalStorageState(string protectedState, Guid requesterUserId)
+        private ExternalStorageStateModel TryRestoreExternalStorageState(string protectedState)
         {
             if (string.IsNullOrWhiteSpace(protectedState))
                 return null;
@@ -417,12 +414,9 @@ namespace WB.UI.Headquarters.Controllers.Api
                 || payload.ExpiresAtUtc < DateTime.UtcNow)
                 return null;
 
-            if (!this.memoryCache.TryGetValue(GetExternalStorageStateCacheKey(payload.Nonce), out Guid storedUserId))
+            if (!this.memoryCache.TryGetValue(GetExternalStorageStateCacheKey(payload.Nonce), out _))
                 return null;
-
-            if (storedUserId != payload.RequesterUserId || storedUserId != requesterUserId)
-                return null;
-
+            
             this.memoryCache.Remove(GetExternalStorageStateCacheKey(payload.Nonce));
             return payload.ExportState;
         }

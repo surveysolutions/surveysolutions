@@ -16,13 +16,13 @@ namespace WB.Tests.Web.Headquarters.Controllers.DataExportApiControllerTests
     internal class when_export_to_external_storage : DataExportApiControllerTestsContext
     {
         [NUnit.Framework.Test]
-        public void should_require_authenticated_oauth_callback()
+        public void should_allow_anonymous_oauth_callback()
         {
             var callback = typeof(DataExportApiController)
                 .GetMethod(nameof(DataExportApiController.ExportToExternalStorage));
 
             callback.Should().NotBeNull();
-            callback!.GetCustomAttribute<AllowAnonymousAttribute>().Should().BeNull();
+            callback!.GetCustomAttribute<AllowAnonymousAttribute>().Should().NotBeNull();
         }
 
         [NUnit.Framework.Test]
@@ -58,7 +58,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.DataExportApiControllerTests
         }
 
         [NUnit.Framework.Test]
-        public async Task when_anonymous_callback_redeems_state_should_return_unauthorized()
+        public async Task when_anonymous_callback_redeems_state_should_process_state()
         {
             var ownerUserId = Guid.NewGuid();
             var memoryCache = new MemoryCache(new MemoryCacheOptions());
@@ -82,11 +82,11 @@ namespace WB.Tests.Web.Headquarters.Controllers.DataExportApiControllerTests
                 Code = "code",
                 State = protectedState
             });
-            result.Should().BeOfType<UnauthorizedResult>();
+            result.Should().BeOfType<NotFoundObjectResult>();
         }
 
         [NUnit.Framework.Test]
-        public async Task when_different_user_redeems_state_should_return_bad_request()
+        public async Task when_different_user_redeems_state_should_process_state()
         {
             var ownerUserId = Guid.NewGuid();
             var differentUserId = Guid.NewGuid();
@@ -112,7 +112,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.DataExportApiControllerTests
                 Code = "code",
                 State = protectedState
             });
-            result.Should().BeOfType<BadRequestObjectResult>();
+            result.Should().BeOfType<NotFoundObjectResult>();
         }
     }
 }
