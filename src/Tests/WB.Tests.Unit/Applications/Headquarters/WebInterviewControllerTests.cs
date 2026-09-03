@@ -1,13 +1,16 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Primitives;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using reCAPTCHA.AspNetCore;
+using WB.Enumerator.Native.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -26,6 +29,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.Code;
@@ -64,15 +68,78 @@ namespace WB.Tests.Unit.Applications.Headquarters
             Assert.That(controller.HttpContext.Session.Get<bool>($"WebInterview-{interviewId}"), Is.EqualTo(true));
         }
 
-        private WebInterviewController CreateController(int quantity, string interviewId)
+        [Test]
+        public void when_starting_closed_assignment_should_throw_expired_for_stale_cached_invitation()
         {
-            var assignment = Mock.Of<Assignment>(a =>
-                a.Id == 3
-                && a.WebMode == true
-                && a.Quantity == quantity);
+            var controller = CreateController(100, null,
+                invitationAssignmentStatus: AssignmentStatus.Open,
+                currentAssignmentStatus: AssignmentStatus.Closed);
 
-            var invitation = Mock.Of<Invitation>(i =>
+            var exception = Assert.Throws<InterviewAccessException>(() => controller.Start("invitation"));
+
+            Assert.That(exception?.Reason, Is.EqualTo(InterviewAccessExceptionReason.InterviewExpired));
+        }
+
+        [Test]
+        public void when_posting_start_for_closed_assignment_should_throw_expired_for_stale_cached_invitation()
+        {
+            var controller = CreateController(100, null,
+                invitationAssignmentStatus: AssignmentStatus.Open,
+                currentAssignmentStatus: AssignmentStatus.Closed);
+
+            var exception = Assert.ThrowsAsync<InterviewAccessException>(() => controller.StartPost("invitation", string.Empty));
+
+            Assert.That(exception?.Reason, Is.EqualTo(InterviewAccessExceptionReason.InterviewExpired));
+        }
+
+        [Test]
+        public void when_posting_start_and_password_resolved_invitation_is_missing_should_throw_not_found()
+        {
+            var controller = CreateController(100, null, returnNullInvitationByPassword: true);
+
+            var exception = Assert.ThrowsAsync<InterviewAccessException>(() => controller.StartPost("invitation", string.Empty));
+
+            Assert.That(exception?.Reason, Is.EqualTo(InterviewAccessExceptionReason.InterviewNotFound));
+        }
+
+        [Test]
+        public void when_posting_start_and_live_and_cached_assignment_are_missing_should_throw_not_found()
+        {
+            var controller = CreateController(100, null,
+                includeInvitationAssignment: false,
+                includeCurrentAssignment: false);
+
+            var exception = Assert.ThrowsAsync<InterviewAccessException>(() => controller.StartPost("invitation", string.Empty));
+
+            Assert.That(exception?.Reason, Is.EqualTo(InterviewAccessExceptionReason.InterviewNotFound));
+        }
+
+        private WebInterviewController CreateController(int quantity, string interviewId,
+            AssignmentStatus invitationAssignmentStatus = AssignmentStatus.Open,
+            AssignmentStatus currentAssignmentStatus = AssignmentStatus.Open,
+            bool returnNullInvitationByPassword = false,
+            bool includeInvitationAssignment = true,
+            bool includeCurrentAssignment = true)
+        {
+            var invitationAssignment = includeInvitationAssignment
+                ? Mock.Of<Assignment>(a =>
+                    a.Id == 3
+                    && a.WebMode == true
+                    && a.Quantity == quantity
+                    && a.Status == invitationAssignmentStatus)
+                : null;
+
+            var currentAssignment = includeCurrentAssignment
+                ? Mock.Of<Assignment>(a =>
+                    a.Id == 3
+                    && a.WebMode == true
+                    && a.Quantity == quantity
+                    && a.Status == currentAssignmentStatus)
+                : null;
+
+            Invitation CreateInvitation(Assignment assignment) => Mock.Of<Invitation>(i =>
                 i.InterviewId == interviewId
+                && i.AssignmentId == 3
                 && i.Assignment == assignment
                 && i.IsWithAssignmentResolvedByPassword() == true
 
@@ -83,6 +150,9 @@ namespace WB.Tests.Unit.Applications.Headquarters
                         Status = InterviewStatus.InterviewerAssigned
                     }
                 && s.Status == InterviewStatus.InterviewerAssigned));
+
+            var invitation = CreateInvitation(invitationAssignment);
+            var invitationByTokenAndPassword = returnNullInvitationByPassword ? null : invitation;
 
             var o = (object)invitation;
 
@@ -97,6 +167,10 @@ namespace WB.Tests.Unit.Applications.Headquarters
             
             var user = Mock.Of<UserViewLite>();
             var usersRepository = Mock.Of<IUserViewFactory>(u => u.GetUser(It.IsAny<Guid>()) == user);
+
+            var assignmentsService = Mock.Of<IAssignmentsService>(a => a.GetAssignment(invitation.AssignmentId) == currentAssignment);
+            var invitationService = Mock.Of<IInvitationService>(i =>
+                i.GetInvitationByTokenAndPassword(It.IsAny<string>(), It.IsAny<string>()) == invitationByTokenAndPassword);
             
             var statefulInterviewRepository = Mock.Of<IStatefulInterviewRepository>(r => r.Get(interviewId) == Mock.Of<IStatefulInterview>());
 
@@ -107,8 +181,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 usersRepository,
                 Mock.Of<IInterviewUniqueKeyGenerator>(),
                 Mock.Of<ICaptchaProvider>(),
-                Mock.Of<IAssignmentsService>(),
-                Mock.Of<IInvitationService>(),
+                assignmentsService,
+                invitationService,
                 Mock.Of<INativeReadSideStorage<InterviewSummary>>(),
                 Mock.Of<IInvitationMailingService>(),
                 Mock.Of<IPlainKeyValueStorage<EmailProviderSettings>>(),
@@ -121,14 +195,22 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 calendarEventService: Mock.Of<ICalendarEventService>(),
                 webInterviewConfigProvider: Mock.Of<IWebInterviewConfigProvider>() ,
                 webInterviewLinkProvider: Mock.Of<IWebInterviewLinkProvider>());
-            controller.ControllerContext.HttpContext = Mock.Of<HttpContext>(c => 
+            var request = new Mock<HttpRequest>();
+            request.SetupGet(r => r.Cookies).Returns(Mock.Of<IRequestCookieCollection>());
+            request.SetupGet(r => r.Form).Returns(new FormCollection(new Dictionary<string, StringValues>()));
+
+            var response = new Mock<HttpResponse>();
+            response.SetupGet(r => r.Cookies).Returns(Mock.Of<IResponseCookies>());
+
+            controller.ControllerContext.HttpContext = Mock.Of<HttpContext>(c =>
                 c.Session == new MockHttpSession()
-                && c.Request == Mock.Of<HttpRequest>(r => r.Cookies == Mock.Of<IRequestCookieCollection>())
-                && c.Response == Mock.Of<HttpResponse>(r => r.Cookies == Mock.Of<IResponseCookies>()));
+                && c.Request == request.Object
+                && c.Response == response.Object);
             if (interviewId != null)
             {
-                Mock.Get(controller.ControllerContext.HttpContext.Request.Cookies)
-                    .Setup(c => c[$"InterviewId-{assignment.Id}"])
+                var cookieAssignmentId = invitationAssignment != null ? invitationAssignment.Id : 3;
+                Mock.Get(request.Object.Cookies)
+                    .Setup(c => c[$"InterviewId-{cookieAssignmentId}"])
                     .Returns(interviewId);
             }
             controller.Url = Mock.Of<IUrlHelper>(x => x.Action(It.IsAny<UrlActionContext>()) == "url");

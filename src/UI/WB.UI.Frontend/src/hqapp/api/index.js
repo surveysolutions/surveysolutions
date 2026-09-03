@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { map } from 'lodash'
+import { map } from 'lodash-es'
 import { installAxiosInterceptors } from '~/shared/serverValidator'
 
 class QuestionnaireApi {
@@ -429,6 +429,15 @@ class AssignmentsApi {
             responsible: responsible,
         })
     }
+
+    changeStatus(assignmentId, status, comment) {
+        var url = `${this.base}/${assignmentId}/changeStatus`
+
+        return this.http.post(url, {
+            status: status,
+            comment: comment || null,
+        })
+    }
 }
 
 class WebInterviewSettingsApi {
@@ -457,7 +466,7 @@ class WebInterviewSettingsApi {
                     subject: subject,
                     message: message,
                     passwordDescription: passwordDescription,
-                    linkText: linkText
+                    linkText: linkText,
                 },
                 headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             })
@@ -475,7 +484,7 @@ class WebInterviewSettingsApi {
                     messageType: messageType,
                     messageText: messageText,
                     buttonType: buttonType,
-                    buttonText: buttonText
+                    buttonText: buttonText,
                 },
                 headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             })
@@ -513,7 +522,7 @@ class WebInterviewSettingsApi {
                     emailOnComplete: emailOnComplete,
                     attachAnswersInEmail: attachAnswersInEmail,
                     allowSwitchToCawiForInterviewer: allowSwitchToCawiForInterviewer,
-                    allowTranscriptDownloading: allowTranscriptDownloading
+                    allowTranscriptDownloading: allowTranscriptDownloading,
                 },
                 headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             })
@@ -590,7 +599,7 @@ class ExportSettings {
     statusDropExportCache() {
         return this.http({
             method: 'get',
-            url: `${this.base}/StatusExportCache`
+            url: `${this.base}/StatusExportCache`,
         })
     }
 
@@ -599,7 +608,7 @@ class ExportSettings {
             method: 'post',
             url: `${this.base}/SetRetentionLimitCount`,
             headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
-            data: { retentionLimitCount: retentionLimitCount }
+            data: { retentionLimitCount: retentionLimitCount },
         })
     }
 
@@ -608,7 +617,7 @@ class ExportSettings {
             method: 'post',
             url: `${this.base}/SetRetentionLimitInDays`,
             headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
-            data: { retentionLimitInDays: retentionLimitInDays }
+            data: { retentionLimitInDays: retentionLimitInDays },
         })
     }
 
@@ -628,7 +637,7 @@ class ExportSettings {
             method: 'post',
             url: `${this.base}/SetGeographyExportFormat`,
             headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
-            data: { geographyExportFormat: geographyExportFormat }
+            data: { geographyExportFormat: geographyExportFormat },
         })
     }
 }
@@ -681,7 +690,7 @@ class AdminSettings {
             method: 'post',
             url: `${this.base}/GlobalNoticeSettings`,
             headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
-            data: { GlobalNotice: newNotice }
+            data: { GlobalNotice: newNotice },
         })
     }
 
@@ -690,10 +699,10 @@ class AdminSettings {
             method: 'post',
             url: `${this.base}/ProfileSettings`,
             headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
-            data: { allowInterviewerUpdateProfile: allowInterviewerUpdateProfile }
+            data: { allowInterviewerUpdateProfile: allowInterviewerUpdateProfile },
         })
     }
-    setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled, isPartialSynchronizationEnabled) {
+    setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled, isPartialSynchronizationEnabled, allowSupervisorChangeAssignmentStatus, allowInterviewerChangeAssignmentStatus, audioRecordingQuality, allowSupervisorAudioAuditPlayback) {
         return this.http({
             method: 'post',
             url: `${this.base}/InterviewerSettings`,
@@ -702,7 +711,11 @@ class AdminSettings {
                 interviewerAutoUpdatesEnabled: isInterviewerAutomaticUpdatesEnabled,
                 notificationsEnabled: isDeviceNotificationsEnabled,
                 partialSynchronizationEnabled: isPartialSynchronizationEnabled,
-            }
+                allowSupervisorChangeAssignmentStatus: allowSupervisorChangeAssignmentStatus,
+                allowInterviewerChangeAssignmentStatus: allowInterviewerChangeAssignmentStatus,
+                audioRecordingQuality: audioRecordingQuality,
+                allowSupervisorAudioAuditPlayback: allowSupervisorAudioAuditPlayback,
+            },
         })
     }
     setGeographyQuestionAccuracyInMeters(geographyQuestionAccuracyInMeters) {
@@ -710,7 +723,7 @@ class AdminSettings {
             method: 'post',
             url: `${this.base}/InterviewerGeographyQuestionAccuracyInMeters`,
             headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
-            data: { geographyQuestionAccuracyInMeters: geographyQuestionAccuracyInMeters }
+            data: { geographyQuestionAccuracyInMeters: geographyQuestionAccuracyInMeters },
         })
     }
     setGeographyQuestionPeriodInSeconds(geographyQuestionPeriodInSeconds) {
@@ -718,7 +731,7 @@ class AdminSettings {
             method: 'post',
             url: `${this.base}/InterviewerGeographyQuestionPeriodInSeconds`,
             headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
-            data: { geographyQuestionPeriodInSeconds: geographyQuestionPeriodInSeconds }
+            data: { geographyQuestionPeriodInSeconds: geographyQuestionPeriodInSeconds },
         })
     }
     setEsriApiKey(esriApiKey) {
@@ -726,7 +739,7 @@ class AdminSettings {
             method: 'post',
             url: `${this.base}/UpdateEsriApiKey`,
             headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
-            data: { esriApiKey: esriApiKey }
+            data: { esriApiKey: esriApiKey },
         })
     }
 
@@ -739,8 +752,37 @@ class AdminSettings {
             method: 'post',
             url: `${this.base}/WebInterviewSettings`,
             headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
-            data: { allowEmails: allowEmails }
+            data: { allowEmails: allowEmails },
         })
+    }
+}
+
+class AudioAuditApi {
+    constructor(http) {
+        this.http = http
+        this.base = 'api/audioaudit'
+        this.infoCache = new Map()
+    }
+
+    async getInfo(interviewId) {
+        const cachedRequest = this.infoCache.get(interviewId)
+        if (cachedRequest) return cachedRequest
+
+        const request = this.http.get(`${this.base}/${interviewId}/info`)
+            .then(response => response.data)
+        this.infoCache.set(interviewId, request)
+
+        try {
+            return await request
+        } catch (error) {
+            this.infoCache.delete(interviewId)
+            throw error
+        }
+    }
+
+    getSegmentUrl(interviewId, segmentId) {
+        const basePath = (this.http.defaults.baseURL || '/').replace(/\/?$/, '/')
+        return `${basePath}${this.base}/${interviewId}/segment/${segmentId}`
     }
 }
 
@@ -808,6 +850,10 @@ class HqApiClient {
 
     get AdminSettings() {
         return new AdminSettings(this.http)
+    }
+
+    get AudioAudit() {
+        return new AudioAuditApi(this.http)
     }
 
     get ControlPanel() {

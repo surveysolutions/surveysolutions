@@ -1,0 +1,208 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
+        <value>[PL0002] Không áp dụng. Liên hệ với bộ phận hỗ trợ máy chủ của bạn.</value>
+        </data>
+    <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
+        <value>Cột không thể được ánh xạ tới bất kỳ câu hỏi nào trong bảng câu hỏi.</value>
+        </data>
+    <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
+        <value>Không thể ánh xạ tệp tới bất kỳ danh sách nào trong bảng câu hỏi.</value>
+        </data>
+    <data name="PL0006_IdDublication" xml:space="preserve">
+        <value>Đã tìm thấy giá trị Id trùng lặp.</value>
+        </data>
+    <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
+        <value>Thiếu một hoặc nhiều cột Id gốc.</value>
+        </data>
+    <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
+        <value>Bản ghi danh sách không có cha mẹ.</value>
+        </data>
+    <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
+        <value>Id danh sách không nhất quán với quy mô danh sách.</value>
+        </data>
+    <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+        <value>Giá trị câu hỏi không được phép.</value>
+        </data>
+    <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+        <value>Giá trị Ngày hoặc Giờ không hợp lệ được nhập vào câu hỏi về ngày.</value>
+        </data>
+    <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
+        <value>Giá trị GPS không hợp lệ.</value>
+        </data>
+    <data name="PL0018_ExpectedIntNotParsed" xml:space="preserve">
+        <value>Chỉ cho phép các giá trị số nguyên.</value>
+        </data>
+    <data name="PL0019_ExpectedDecimalNotParsed" xml:space="preserve">
+        <value>Chỉ cho phép giá trị thực.</value>
+        </data>
+    <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
+        <value>Câu hỏi về kích thước danh sách không được có giá trị âm.</value>
+        </data>
+    <data name="PL0024_DataWasNotFound" xml:space="preserve">
+        <value>Không tìm thấy dữ liệu tải trước.</value>
+        </data>
+    <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+        <value>Trách nhiệm không tồn tại đối với 1 hoặc nhiều quan sát.</value>
+        </data>
+    <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
+        <value>Chịu trách nhiệm là người dùng bị khóa đối với 1 hoặc nhiều quan sát.</value>
+        </data>
+    <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
+        <value>Người dùng không phải là Trụ sở chính, Người giám sát hoặc Người phỏng vấn cho 1 hoặc nhiều quan sát.</value>
+        </data>
+    <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
+        <value>Câu trả lời cho câu hỏi về quy mô danh sách không được lớn hơn {0}.</value>
+        </data>
+    <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
+        <value>Các câu hỏi về GPS yêu cầu các cột riêng biệt cho Vĩ độ và Kinh độ</value>
+        </data>
+    <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
+        <value>Câu hỏi về GPS yêu cầu phải đặt Vĩ độ và Kinh độ.</value>
+        </data>
+    <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
+        <value>Hai hoặc nhiều cột có cùng tên.</value>
+        </data>
+    <data name="PL0032_LatitudeMustBeGeaterThenN90AndLessThen90" xml:space="preserve">
+        <value>Vĩ độ phải lớn hơn -90° và nhỏ hơn 90°.</value>
+        </data>
+    <data name="PL0033_LongitudeMustBeGeaterThenN180AndLessThen180" xml:space="preserve">
+        <value>Kinh độ phải lớn hơn -180° và nhỏ hơn 180°.</value>
+        </data>
+    <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
+        <value>Dấu phân cách thập phân không hợp lệ. Ký hiệu "," không được phép trong câu trả lời bằng số. Vui lòng sử dụng "." thay vì.</value>
+        </data>
+    <data name="PL0035_QuantityNotParsed" xml:space="preserve">
+        <value>Chỉ cho phép các giá trị số nguyên.</value>
+        </data>
+    <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
+        <value>Số lượng phải lớn hơn hoặc bằng -1.</value>
+        </data>
+    <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+        <value>Thiếu tệp chứa dữ liệu ở cấp độ câu hỏi.</value>
+        </data>
+    <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+        <value>Số tùy chọn đã trả lời cho câu hỏi trắc nghiệm không được nhiều hơn số câu trả lời tối đa được phép.</value>
+        </data>
+    <data name="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
+        <value>Giá trị âm không được phép cho câu hỏi Nhiều lựa chọn phân loại.</value>
+        </data>
+    <data name="PL0042_IdIsEmpty" xml:space="preserve">
+        <value>Cột id không có giá trị nào.</value>
+        </data>
+    <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+        <value>Lưu trữ được bảo vệ bằng mật khẩu không được hỗ trợ</value>
+        </data>
+    <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
+        <value>Danh sách danh sách phải có một cột cho câu trả lời trong danh sách văn bản</value>
+        </data>
+    <data name="PL0047_ProtectedVariables_MissingColumn" xml:space="preserve">
+        <value>Cột bắt buộc {0} bị thiếu.</value>
+        </data>
+    <data name="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" xml:space="preserve">
+        <value>Biến được bảo vệ không được tìm thấy trong bảng câu hỏi được cung cấp.</value>
+        </data>
+    <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
+        <value>Loại biến không thể được bảo vệ.</value>
+        </data>
+    <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
+        <value>Mã danh sách không nhất quán cho danh sách số. Trình tự mã danh sách phải là 0, 1, ... để đếm các phiên bản danh sách</value>
+        </data>
+    <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
+        <value>Số lượng tối đa không được nhiều hơn {0}.</value>
+        </data>
+    <data name="PL0055_InvalidEmail" xml:space="preserve">
+        <value>Email không hợp lệ</value>
+        </data>
+    <data name="PL0056_InvalidPassword" xml:space="preserve">
+        <value>Mật khẩu không hợp lệ. Ít nhất 6 số và chữ in hoa hoặc ký hiệu đơn '?' để tạo mật khẩu</value>
+        </data>
+    <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
+        <value>Đối với các bài tập có email được cung cấp, số lượng cho phép là 1</value>
+        </data>
+    <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
+        <value>Chế độ Web phải được kích hoạt cho các bài tập có Email</value>
+        </data>
+    <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
+        <value>Chế độ Web phải được kích hoạt cho các bài tập có Mật khẩu</value>
+        </data>
+    <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
+        <value>Bài tập có kích thước 1 cho chế độ web phải được cung cấp email hoặc mật khẩu</value>
+        </data>
+    <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
+        <value>Mật khẩu không phải là duy nhất. Mật khẩu được gán cho chế độ web với số lượng 1 phải là duy nhất</value>
+        </data>
+    <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
+        <value>Tất cả các bài tập phỏng vấn trên web phải được giao cho người phỏng vấn</value>
+        </data>
+    <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
+        <value>Không thể tải trước câu trả lời cho câu hỏi có tên biến {0} vì đây là loại không được hỗ trợ. Tham khảo bài viết hỗ trợ sau https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type để biết chi tiết về những nội dung có thể tải trước trong phiên bản hiện tại.</value>
+        </data>
+    <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+        <value>Tên biến phạm vi kiểm tra âm thanh '{0}' không hợp lệ. Nó phải tham chiếu đến một phần, nhóm hoặc danh sách hiện có (không được phép đặt câu hỏi và bảng phân công phẳng).</value>
+        </data>
+  <data name="PL0065_TargetAreaTooLong" xml:space="preserve">
+    <value>Vùng mục tiêu quá dài. Nó phải có {0} ký tự hoặc ít hơn.</value>
+  </data>
+    <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+        <value>Bài tập không được di chuyển vì nó sử dụng Kiểm tra âm thanh chọn lọc (phạm vi ghi âm), không thể tự động di chuyển sang phiên bản bảng câu hỏi mới. Tạo lại nhiệm vụ theo cách thủ công và đặt cấu hình lại phạm vi kiểm tra âm thanh.</value>
+        </data>
+</root>

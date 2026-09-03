@@ -213,6 +213,14 @@
              }
 
              var viewPagerCurrentItem = viewPager.CurrentItem;
+             var itemCount = this.fragmentStateAdapter.ItemCount;
+
+             if (viewPagerCurrentItem >= itemCount && itemCount > 0)
+             {
+                 viewPagerCurrentItem = itemCount - 1;
+                 viewPager.SetCurrentItem(viewPagerCurrentItem, false);
+             }
+
              if (viewPagerCurrentItem > 0)
              {
                  UpdateTypeOfInterviewsViewModelProperty(viewPagerCurrentItem);
@@ -231,10 +239,11 @@
              RunOnUiThread(() =>
              {
                  if (this.fragmentStateAdapter == null || this.viewPager == null) return;
-                 for (int i = 0; i < this.fragmentStateAdapter.ItemCount; i++)
+                 for (var i = 0;; i++)
                  {
                      var vm = this.fragmentStateAdapter.GetViewModelForPosition(i) as ListViewModel;
-                     if (vm?.DashboardType == dashboardGroupType)
+                     if (vm == null) return;
+                     if (vm.DashboardType == dashboardGroupType)
                      {
                          if (this.viewPager.CurrentItem != i)
                              this.viewPager.SetCurrentItem(i, true);

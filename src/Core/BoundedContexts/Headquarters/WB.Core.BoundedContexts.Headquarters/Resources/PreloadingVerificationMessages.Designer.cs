@@ -320,5 +320,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("PL0063_NoPermittedQuestion", resourceCulture);
             }
         }
+        
+        public static string PL0064_AudioAuditScopeInvalidEntity {
+            get {
+                return ResourceManager.GetString("PL0064_AudioAuditScopeInvalidEntity", resourceCulture);
+            }
+        }
+        
+        public static string PL0065_TargetAreaTooLong {
+            get {
+                return ResourceManager.GetString("PL0065_TargetAreaTooLong", resourceCulture);
+            }
+        }
+        
+        public static string AssignmentUpgrade_SelectiveAudioAuditNotMigrated {
+            get {
+                return ResourceManager.GetString("AssignmentUpgrade_SelectiveAudioAuditNotMigrated", resourceCulture);
+            }
+        }
     }
 }

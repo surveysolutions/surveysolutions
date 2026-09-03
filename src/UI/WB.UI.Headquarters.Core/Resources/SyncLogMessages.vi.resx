@@ -1,0 +1,217 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="CanSynchronize" xml:space="preserve">
+        <value>Bắt đầu đồng bộ hóa</value>
+        </data>
+    <data name="GetCensusQuestionnaires" xml:space="preserve">
+        <value>Tải xuống danh sách bảng câu hỏi điều tra dân số: &lt;br/&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+        </data>
+    <data name="GetInterviewer" xml:space="preserve">
+        <value>Tải thông tin người phỏng vấn. &lt;br/&gt;Người giám sát: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+        </data>
+    <data name="GetInterviewPackage" xml:space="preserve">
+        <value>Tải gói phỏng vấn: &lt;b&gt;{0}&lt;/b&gt;</value>
+        </data>
+    <data name="GetInterviewPackages" xml:space="preserve">
+        <value>Tải danh sách các gói phỏng vấn. &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;Gói đồng bộ hóa lần cuối: &lt;b&gt;{0}&lt;/b&gt;</value>
+        </data>
+    <data name="GetQuestionnaire" xml:space="preserve">
+        <value>Tải bảng câu hỏi: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+        </data>
+    <data name="GetQuestionnaireAssembly" xml:space="preserve">
+        <value>Tải tập câu hỏi: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+        </data>
+    <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
+        <value>Thiết bị có thể được chỉ định cho người phỏng vấn</value>
+        </data>
+    <data name="InterviewPackageProcessed" xml:space="preserve">
+        <value>&lt;font color="green"&gt;Gói phỏng vấn &lt;b&gt;{0}&lt;/b&gt; đã được xử lý thành công&lt;/font&gt;</value>
+        </data>
+    <data name="LinkToDevice" xml:space="preserve">
+        <value>Liên kết người phỏng vấn với thiết bị</value>
+        </data>
+    <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
+        <value>&lt;font color="green"&gt;Bộ câu hỏi &lt;b&gt;{0}&lt;/b&gt; [{1}] được xử lý thành công&lt;/font&gt;</value>
+        </data>
+    <data name="QuestionnaireProcessed" xml:space="preserve">
+        <value>&lt;font color="green"&gt;Bảng câu hỏi &lt;b&gt;{0}&lt;/b&gt; [{1}] đã được xử lý thành công&lt;/font&gt;</value>
+        </data>
+    <data name="CensusQuestionnaire" xml:space="preserve">
+        <value>&lt;li&gt;&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/li&gt;</value>
+        </data>
+    <data name="DeleteInterviewPackage" xml:space="preserve">
+        <value>&lt;li&gt;Xóa cuộc phỏng vấn: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, Gói: {1}, Chỉ mục sắp xếp: {2}&lt;/li&gt;</value>
+        </data>
+    <data name="DeviceRelinkRequired" xml:space="preserve">
+        <value>&lt;font color="orange"&gt;Yêu cầu liên kết lại&lt;/font&gt;</value>
+        </data>
+    <data name="DeviceUpdateRequired" xml:space="preserve">
+        <value>&lt;font color="red"&gt;Yêu cầu cập nhật. Phiên bản công cụ phỏng vấn - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+        </data>
+    <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
+        <value>Không có gói phỏng vấn mới để tải xuống</value>
+        </data>
+    <data name="NoMapsForUser" xml:space="preserve">
+        <value>Không có bản đồ để tải xuống</value>
+        </data>
+    <data name="UpdateInterviewPackage" xml:space="preserve">
+        <value>&lt;li&gt;Cập nhật cuộc phỏng vấn: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, Gói: {1}, Chỉ mục sắp xếp: {2}&lt;/li&gt;</value>
+        </data>
+    <data name="InterviewerHasDevice" xml:space="preserve">
+        <value>Người phỏng vấn đã có thiết bị rồi</value>
+        </data>
+    <data name="EmptyDevice" xml:space="preserve">
+        <value>&lt;b&gt;[THIẾT BỊ TRỐNG]&lt;/b&gt;</value>
+        </data>
+    <data name="GetInterview" xml:space="preserve">
+        <value>Tải bài phỏng vấn: &lt;b&gt;{0}&lt;/b&gt;</value>
+        </data>
+    <data name="GetInterviews" xml:space="preserve">
+        <value>Tải danh sách phỏng vấn. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
+        </data>
+    <data name="GetMaps" xml:space="preserve">
+        <value>Danh sách tải xuống của Maps. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
+        </data>
+    <data name="GetAssignmentsFormat" xml:space="preserve">
+        <value>Tải danh sách bài tập ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
+        </data>
+    <data name="GetAssignmentFormat" xml:space="preserve">
+        <value>Tải bài tập xuống ({0})&lt;/br&gt;</value>
+        </data>
+    <data name="InterviewProcessed" xml:space="preserve">
+        <value>&lt;font color="green"&gt;Đã xử lý thành công cuộc phỏng vấn &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+        </data>
+    <data name="GetAttachmentContent" xml:space="preserve">
+        <value>Tải nội dung đính kèm: {0}</value>
+        </data>
+    <data name="GetMap" xml:space="preserve">
+        <value>Tải bản đồ: {0}</value>
+        </data>
+    <data name="GetQuestionnaireAttachments" xml:space="preserve">
+        <value>Tải file đính kèm bảng câu hỏi: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+        </data>
+    <data name="PostPackage" xml:space="preserve">
+        <value>Tải lên cuộc phỏng vấn: {0}</value>
+        </data>
+    <data name="GetTranslations" xml:space="preserve">
+        <value>Tải xuống bản dịch cho bảng câu hỏi &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+        </data>
+    <data name="InterviewerLoggedIn" xml:space="preserve">
+        <value>Người phỏng vấn đã đăng nhập và nhận được AuthToken</value>
+        </data>
+    <data name="InterviewerFailedToLogin" xml:space="preserve">
+        <value>Người phỏng vấn không đăng nhập được</value>
+        </data>
+    <data name="PasswordChanged" xml:space="preserve">
+        <value>Đã thay đổi mật khẩu và lấy được AuthToken</value>
+        </data>
+    <data name="FailToChangePassword" xml:space="preserve">
+        <value>Người dùng không thể thay đổi mật khẩu</value>
+        </data>
+    <data name="ApkRequested" xml:space="preserve">
+        <value>Đã yêu cầu tệp ứng dụng mới</value>
+        </data>
+    <data name="SupervisorApkRequested" xml:space="preserve">
+        <value>Đã yêu cầu hồ sơ ứng tuyển Giám sát viên mới</value>
+        </data>
+    <data name="ExtendedApkRequested" xml:space="preserve">
+        <value>Đã yêu cầu tệp ứng dụng mở rộng mới</value>
+        </data>
+    <data name="ExtendedPatchRequestedFormat" xml:space="preserve">
+        <value>Tệp bản vá được yêu cầu cho phiên bản mở rộng {0}</value>
+        </data>
+    <data name="PatchRequestedFormat" xml:space="preserve">
+        <value>Tệp bản vá được yêu cầu cho phiên bản {0}</value>
+        </data>
+    <data name="SupervisorPatchRequestedFormat" xml:space="preserve">
+        <value>Tệp bản vá giám sát được yêu cầu cho phiên bản {0}</value>
+        </data>
+    <data name="GetInterviewPackageV3" xml:space="preserve">
+        <value>&lt;b&gt;V3&lt;/b&gt; Tải gói phỏng vấn: {0}</value>
+        </data>
+    <data name="GetInterviewPatch" xml:space="preserve">
+        <value>Tải các thay đổi phỏng vấn từ HQ: {0}</value>
+        </data>
+    <data name="PostPackageV3" xml:space="preserve">
+        <value>&lt;b&gt;V3&lt;/b&gt; Tải lên cuộc phỏng vấn: {0}</value>
+        </data>
+    <data name="CheckObsoleteInterviews" xml:space="preserve">
+        <value>Kiểm tra các cuộc phỏng vấn lỗi thời. Yêu cầu: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+        </data>
+    <data name="CheckIsPackageDuplicatedFormat" xml:space="preserve">
+        <value>Kiểm tra các cuộc phỏng vấn trùng lặp. Phỏng vấn: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+        </data>
+    <data name="AssignmentReceivedByTablet" xml:space="preserve">
+        <value>Bài tập &lt;b&gt;{0}&lt;/b&gt; đã được thiết bị nhận và lưu trữ</value>
+        </data>
+    <data name="DownloadReusableCategories" xml:space="preserve">
+        <value>Danh mục có thể tái sử dụng {0} đang tải xuống</value>
+        </data>
+    <data name="PostCalendarEventPackage" xml:space="preserve">
+        <value>Tải lên sự kiện lịch: {0}</value>
+        </data>
+    <data name="GetCalendarEventPackage" xml:space="preserve">
+        <value>Tải gói sự kiện lịch: {0}</value>
+        </data>
+    <data name="CalendarEventsListFormat" xml:space="preserve">
+        <value>Tải xuống danh sách sự kiện lịch ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
+        </data>
+</root>

@@ -27,6 +27,74 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
     internal class TranslationsServiceTests : TranslationsServiceTestsContext
     {
         [Test]
+        public void when_copying_categories_translations_should_copy_only_requested_languages_to_new_categories_id()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var oldCategoriesId = Guid.NewGuid();
+            var newCategoriesId = Guid.NewGuid();
+            var firstTranslationId = Guid.NewGuid();
+            var secondTranslationId = Guid.NewGuid();
+            var orphanedTranslationId = Guid.NewGuid();
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.TranslationInstances.AddRange(
+                new TranslationInstance
+                {
+                    Id = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionnaireEntityId = oldCategoriesId,
+                    TranslationId = firstTranslationId,
+                    TranslationIndex = "1",
+                    Type = TranslationType.Categories,
+                    Value = "first"
+                },
+                new TranslationInstance
+                {
+                    Id = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionnaireEntityId = oldCategoriesId,
+                    TranslationId = secondTranslationId,
+                    TranslationIndex = "1",
+                    Type = TranslationType.Categories,
+                    Value = "second"
+                },
+                new TranslationInstance
+                {
+                    Id = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionnaireEntityId = oldCategoriesId,
+                    TranslationId = orphanedTranslationId,
+                    TranslationIndex = "1",
+                    Type = TranslationType.Categories,
+                    Value = "orphaned"
+                },
+                new TranslationInstance
+                {
+                    Id = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionnaireEntityId = oldCategoriesId,
+                    TranslationId = firstTranslationId,
+                    Type = TranslationType.Title,
+                    Value = "not a category"
+                });
+            dbContext.SaveChanges();
+            var service = Create.TranslationsService(dbContext, Mock.Of<IQuestionnaireViewFactory>());
+
+            service.CopyCategoriesTranslations(questionnaireId, oldCategoriesId, newCategoriesId,
+                new[] { firstTranslationId, secondTranslationId });
+            dbContext.SaveChanges();
+
+            var copies = dbContext.TranslationInstances
+                .Where(x => x.QuestionnaireEntityId == newCategoriesId)
+                .OrderBy(x => x.Value)
+                .ToList();
+            Assert.That(copies, Has.Count.EqualTo(2));
+            Assert.That(copies.Select(x => x.TranslationId),
+                Is.EquivalentTo(new[] { firstTranslationId, secondTranslationId }));
+            Assert.That(copies.Select(x => x.Value), Is.EqualTo(new[] { "first", "second" }));
+            Assert.That(copies.All(x => x.Type == TranslationType.Categories), Is.True);
+        }
+
+        [Test]
         public void when_storing_translations_with_html_from_excel_file()
         {
             //assert
@@ -613,6 +681,92 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             Assert.That(translationInstance2.Type, Is.EqualTo(TranslationType.Categories));
             Assert.That(translationInstance2.QuestionnaireId, Is.EqualTo(questionnaireId));
             Assert.That(translationInstance2.TranslationIndex, Is.EqualTo("1$1"));
+        }
+
+        [Test]
+        public void when_storing_translations_from_main_sheet_with_trailing_rows_having_empty_translation_should_not_throw()
+        {
+            // Rows with an empty Translation cell must be silently skipped (not validated),
+            // consistent with how GetWorksheetTranslations skips them.
+            Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            Guid translationId   = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            Guid sectionId       = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            // Row 3 has a non-empty EntityId/Type but an empty Translation – before the fix
+            // Verify() would still validate it and could raise an error for an invalid EntityId.
+            byte[] fileStream = CreateExcel(new Dictionary<string, string[][]>
+            {
+                {
+                    "Translations", new[]
+                    {
+                        new[] { "Entity Id", "Variable", "Type", "Index", "Original text", "Translation" },
+                        new[] { sectionId.ToString("N"), "", "Title", "", "New Section", "Translated Section" },
+                        // trailing row: empty translation → must be skipped, not validated
+                        new[] { "not-a-guid", "", "Title", "", "original", "" }
+                    }
+                }
+            });
+
+            var plainStorageAccessor = Create.InMemoryDbContext();
+            var questionnaire = Create.QuestionnaireDocument(questionnaireId, Create.Group(sectionId));
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
+
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+
+            // act & assert — must not throw InvalidFileException
+            Assert.That(() => service.Store(questionnaireId, translationId, fileStream), Throws.Nothing);
+
+            // only the row with an actual translation should have been stored
+            Assert.That(plainStorageAccessor.TranslationInstances.Count(), Is.EqualTo(1));
+            Assert.That(plainStorageAccessor.TranslationInstances.First().Value, Is.EqualTo("Translated Section"));
+        }
+
+        [Test]
+        public void when_storing_translations_from_categories_sheet_with_trailing_rows_having_empty_translation_should_not_throw()
+        {
+            // Same as above but for a categories worksheet: rows with empty Translation must
+            // be skipped, even when the Index cell is also empty (previously triggered validation error).
+            Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            Guid translationId   = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var categoriesId     = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+            var categoriesName   = "mycat";
+
+            byte[] fileStream = CreateExcel(new Dictionary<string, string[][]>
+            {
+                {
+                    $"@@@_{categoriesName}", new[]
+                    {
+                        new[] { "Index", "Original text", "Translation" },
+                        new[] { "1",     "one",           "один"        },
+                        // trailing row: empty Index AND empty Translation → must be skipped
+                        new[] { "",      "unused",        ""            }
+                    }
+                }
+            });
+
+            var plainStorageAccessor = Create.InMemoryDbContext();
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId);
+            questionnaire.Categories = new List<Categories>
+            {
+                new Categories { Id = categoriesId, Name = categoriesName }
+            };
+
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
+
+            var categories = new Mock<IReusableCategoriesService>();
+            categories.Setup(x => x.GetCategoriesById(questionnaire.PublicKey, categoriesId))
+                .Returns(new List<CategoriesItem> { new CategoriesItem { Id = 1, Text = "one" } }.AsQueryable);
+
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object,
+                reusableCategoriesService: categories.Object);
+
+            // act & assert — must not throw InvalidFileException
+            Assert.That(() => service.Store(questionnaireId, translationId, fileStream), Throws.Nothing);
+
+            Assert.That(plainStorageAccessor.TranslationInstances.Count(), Is.EqualTo(1));
+            Assert.That(plainStorageAccessor.TranslationInstances.First().Value, Is.EqualTo("один"));
         }
 
         private byte[] GetEmbendedFileContent(string fileName)

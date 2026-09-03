@@ -10,7 +10,7 @@
         <div class="panel-body clearfix">
             <div class="about-questionnaire clearfix">
                 <div class="about-questionnaire-details clearfix">
-                    <ul class="main-info-column list-unstyled pull-left">
+                    <ul class="main-info-column list-unstyled">
                         <li id="detailsInfo_interviewKeyListItem">
                             {{ $t('Common.InterviewKey') }}:
                             {{ $config.model.key }}({{
@@ -35,12 +35,12 @@
                             <span v-else>{{ $t('Common.Capi') }}</span>
                         </li>
                     </ul>
-                    <ul class="list-unstyled pull-left table-info">
+                    <ul class="list-unstyled table-info">
                         <li id="detailsInfo_interviewDurationListItem" v-if="this.$config.model.interviewDuration">
                             <span class="data-label">{{ $t('Details.Duration') }}:</span>
                             <span class="data">{{
                                 this.$config.model.interviewDuration
-                            }}</span>
+                                }}</span>
                         </li>
                         <li id="detailsInfo_responsibleListItem">
                             <span class="data-label">{{ $t('Details.Responsible') }}:
@@ -51,24 +51,24 @@
                             </span>
                             <span v-else class="data supervisor">{{
                                 this.$config.model.responsible
-                            }}</span>
+                                }}</span>
                         </li>
                         <li id="detailsInfo_supervisorListItem">
                             <span class="data-label">{{ $t('Users.Supervisor') }}:
                             </span>
                             <span class="data supervisor">{{
                                 this.$config.model.supervisor
-                            }}</span>
+                                }}</span>
                         </li>
                     </ul>
-                    <ul class="list-unstyled pull-left table-info">
+                    <ul class="list-unstyled table-info">
                         <li id="detailsInfo_StatusListItem">
                             <span class="data-label">{{
                                 this.$t('Details.Status')
-                            }}</span>
+                                }}</span>
                             <span class="data">{{
                                 this.$config.model.statusName
-                            }}</span>
+                                }}</span>
                             <button type="button" class="btn btn-link gray-action-unit" @click="showStatusesHistory">
                                 {{ $t('Common.ShowStatusHistory') }}
                             </button>
@@ -96,6 +96,27 @@
                                 v-bind:href="this.$config.model.pdfUrl" target="_blank"
                                 :title="$t('WebInterview.DownloadAnswersHint')" download>{{
                                     $t('WebInterview.DownloadAnswers') }}</a>
+                        </li>
+                        <li v-if="audioAuditAvailable !== null">
+                            <template v-if="audioAuditAvailable">
+                                <span class="data-label">{{ $t('ReviewInterview.AudioAudit_Available') }}</span>
+                                <span class="data">
+                                    <template v-if="audioAuditDurationState === 'loading'">{{
+                                        $t('ReviewInterview.AudioAudit_DurationLoading') }}</template>
+                                    <template v-else-if="audioAuditDurationState === 'unavailable'">{{
+                                        $t('ReviewInterview.AudioAudit_DurationUnavailable') }}</template>
+                                    <template v-else-if="audioAuditTotalDuration !== null">{{
+                                        formatAuditDuration(audioAuditTotalDuration) }}</template>
+                                </span>
+                                <button type="button" class="btn btn-link gray-action-unit"
+                                    @click="$emit('toggleAudioPanel')" :aria-expanded="audioAuditPanelOpen"
+                                    aria-controls="audio-audit-panel">
+                                    {{ audioAuditPanelOpen ? $t('ReviewInterview.AudioAudit_CloseRecordings') :
+                                        $t('ReviewInterview.AudioAudit_ViewRecordings') }}
+                                </button>
+                            </template>
+                            <span v-else class="data">{{ $t('ReviewInterview.AudioAudit_NoRecordingsAvailable')
+                                }}</span>
                         </li>
                     </ul>
                 </div>
@@ -155,10 +176,10 @@
                 </div>
             </div>
         </div>
-        <OverviewModal ref="overview" id="overview" slot="modals" class="overviewModal" />
-        <StatusesHistory ref="statusesHistory" id="statusesHistory" slot="modals" class="statusHistoryModal" />
-        <Confirm ref="confirmApprove" id="confirmApprove" slot="modals"
-            :title="$t('Pages.ApproveRejectPartialView_ApproveLabel')" :okTitle="$t('Common.Approve')" :disableOk="receivedByInterviewer && !doApproveReceivedByInterviewer
+        <OverviewModal ref="overview" id="overview" class="overviewModal" />
+        <StatusesHistory ref="statusesHistory" id="statusesHistory" class="statusHistoryModal" />
+        <Confirm ref="confirmApprove" id="confirmApprove" :title="$t('Pages.ApproveRejectPartialView_ApproveLabel')"
+            :okTitle="$t('Common.Approve')" :disableOk="receivedByInterviewer && !doApproveReceivedByInterviewer
                 ">
             <div class="form-group" v-if="receivedByInterviewer">
                 <input type="checkbox" id="approveReceivedByInterviewer" v-model="doApproveReceivedByInterviewer"
@@ -190,15 +211,15 @@
             <span class="countDown">{{ approveCharsLeft }}</span>
         </Confirm>
 
-        <Confirm ref="rejectConfirm" id="rejectConfirm" slot="modals" :title="showUnapproveButton
+        <Confirm ref="rejectConfirm" id="rejectConfirm" :title="showUnapproveButton
             ? $t('Pages.ApproveRejectPartialView_UnapproveLabel')
             : $t('Pages.ApproveRejectPartialView_RejectLAbel')
             " :disableOk="(interviewerShouldbeSelected || rejectToNewResponsible) &&
                 newResponsibleId == null
                 " :okTitle="showUnapproveButton
-                    ? $t('Common.Unapprove')
-                    : $t('Common.Reject')
-                    " :okClass="btn - danger">
+                ? $t('Common.Unapprove')
+                : $t('Common.Reject')
+                " :okClass="btn - danger">
             <form v-if="!showUnapproveButton" onsubmit="return false;">
                 <div class="form-group">
                     <Radio v-if="!interviewerShouldbeSelected" :label="$t('Interviews.RejectToOriginal')"
@@ -335,7 +356,7 @@
                 count: 1,
             })
                 " :filteredCount="1" :receivedByInterviewerItemsCount="isReceivedByInterviewerAtUtc ? 1 : 0
-                    " @confirm="changeInterviewModeToCapi" />
+                " @confirm="changeInterviewModeToCapi" />
     </div>
 </template>
 
@@ -344,12 +365,20 @@ import SwitchLanguage from './SwitchLanguage'
 import StatusesHistory from './StatusesHistory'
 import OverviewModal from './OverviewModal'
 import { convertToLocal } from '~/shared/helpers'
-import moment from 'moment-timezone'
+import moment from 'moment'
 import ChangeToCapi from '../Interviews/ChangeModeModal.vue'
+import { loadAudioMetadata } from './audioAuditMetadata'
 
-import { map, assign } from 'lodash'
+import { map, assign } from 'lodash-es'
 
 export default {
+    props: {
+        audioAuditPanelOpen: {
+            type: Boolean,
+            default: false,
+        },
+    },
+    emits: ['toggleAudioPanel'],
     data() {
         return {
             approveComment: '',
@@ -359,7 +388,14 @@ export default {
             rejectToNewResponsible: false,
             doApproveReceivedByInterviewer: false,
             isReassignReceivedByInterviewer: false,
+            audioAuditAvailable: null,
+            audioAuditDurationState: 'loading',
+            audioAuditTotalDuration: null,
+            audioAuditSegments: [],
         }
+    },
+    async mounted() {
+        await this.loadAudioAuditInfo()
     },
     methods: {
         assignSelected() {
@@ -405,7 +441,7 @@ export default {
                     filteredItems,
                     function (item) {
                         return item.receivedByInterviewerAtUtc === null
-                    },
+                    }
                 )
             }
 
@@ -431,7 +467,7 @@ export default {
                                 : null,
                     }
                     return JSON.stringify(item)
-                },
+                }
             )
 
             var command = {
@@ -450,7 +486,7 @@ export default {
                     self.$refs.assignModal.hide()
                     self.newResponsibleId = null
                     window.location.reload(true)
-                },
+                }
             )
         },
 
@@ -482,7 +518,7 @@ export default {
                 'DeleteInterviewCommand',
                 map(filteredItems, (interview) => {
                     return interview.id
-                }),
+                })
             )
 
             this.$store.dispatch('stop')
@@ -492,7 +528,7 @@ export default {
                 function () {
                     self.$refs.deleteModal.hide()
                     window.location = self.$config.model.interviewsUrl
-                },
+                }
             )
         },
 
@@ -548,7 +584,7 @@ export default {
                     },
                 ],
                 'CAWI',
-                confirmReceivedByInterviewer,
+                confirmReceivedByInterviewer
             )
         },
         changeInterviewModeToCapi(confirmReceivedByInterviewer) {
@@ -561,7 +597,7 @@ export default {
                     },
                 ],
                 'CAPI',
-                confirmReceivedByInterviewer,
+                confirmReceivedByInterviewer
             )
         },
 
@@ -573,7 +609,7 @@ export default {
                     filteredItems,
                     function (item) {
                         return item.receivedByInterviewerAtUtc === null
-                    },
+                    }
                 )
             }
 
@@ -598,7 +634,7 @@ export default {
                 function () { },
                 function () {
                     window.location.reload(true)
-                },
+                }
             )
         },
 
@@ -626,6 +662,63 @@ export default {
                 .always(function () {
                     if (onDone !== undefined) onDone()
                 })
+        },
+
+        async loadAudioAuditInfo() {
+            try {
+                const interviewId = this.$config.model.id
+                if (!interviewId) return
+
+                const data = await this.$hq.AudioAudit.getInfo(interviewId)
+                this.audioAuditAvailable = data.hasAudioAudit ? true : null
+                this.audioAuditSegments = data.hasAudioAudit ? (data.segments || []) : []
+                this.audioAuditTotalDuration = null
+
+                if (!data.hasAudioAudit) return
+
+                this.audioAuditDurationState = 'loading'
+                this.loadAudioDurations(this.audioAuditSegments)
+            } catch {
+                this.audioAuditAvailable = null
+                this.audioAuditSegments = []
+                this.audioAuditTotalDuration = null
+            }
+        },
+
+        loadAudioDurations(segments) {
+            if (segments.length === 0) {
+                this.audioAuditDurationState = 'unavailable'
+                return
+            }
+
+            let loadedCount = 0
+            let validDurationCount = 0
+            let totalDuration = 0
+
+            segments.forEach(segment => {
+                const url = this.$hq.AudioAudit.getSegmentUrl(this.$config.model.id, segment.segmentId)
+                loadAudioMetadata(url).then(metadata => {
+                    if (Number.isFinite(metadata.duration)) {
+                        validDurationCount++
+                        totalDuration += metadata.duration
+                    }
+
+                    loadedCount++
+                    if (loadedCount === segments.length) {
+                        this.audioAuditTotalDuration = validDurationCount > 0 ? totalDuration : null
+                        this.audioAuditDurationState = validDurationCount > 0 ? 'available' : 'unavailable'
+                    }
+                })
+            })
+        },
+
+        formatAuditDuration(seconds) {
+            const hours = Math.floor(seconds / 3600)
+            const minutes = Math.floor((seconds % 3600) / 60)
+            const remainingSeconds = Math.floor(seconds % 60)
+
+            if (hours > 0) return `${hours}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
+            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
         },
     },
 
@@ -720,7 +813,7 @@ export default {
             return this.calendarEvent != null
                 ? convertToLocal(
                     this.calendarEvent.startUtc,
-                    this.calendarEvent.startTimezone,
+                    this.calendarEvent.startTimezone
                 )
                 : ''
         },

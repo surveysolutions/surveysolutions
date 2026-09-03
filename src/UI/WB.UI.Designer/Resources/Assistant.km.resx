@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ClearHistory" xml:space="preserve">
+        <value>ជម្រះប្រវត្តិ</value>
+    </data>
+    <data name="NotHelpful" xml:space="preserve">
+        <value>មិនធ្វើវិញ</value>
+    </data>
+    <data name="Helpful" xml:space="preserve">
+        <value>មានប្រយោជន៍</value>
+    </data>
+    <data name="Dislike" xml:space="preserve">
+        <value>មិនចូលចិត្ត</value>
+    </data>
+    <data name="Unhelpful" xml:space="preserve">
+        <value>គ្មានប្រយោជន៍</value>
+    </data>
+    <data name="NotUnhelpful" xml:space="preserve">
+        <value>មិនធ្វើវិញ</value>
+    </data>
+    <data name="UnhelpfulCommentTitle" xml:space="preserve">
+        <value>បន្ថែមមតិយោបល់</value>
+    </data>
+    <data name="UnhelpfulCommentPlaceholder" xml:space="preserve">
+        <value>សរសេរមតិយោបល់ខ្លីៗ (ជាជម្រើស)</value>
+    </data>
+    <data name="UnhelpfulCommentHint" xml:space="preserve">
+        <value>តើមានអ្វីខុសជាមួយចម្លើយនេះ?</value>
+    </data>
+    <data name="Send" xml:space="preserve">
+        <value>ផ្ញើ</value>
+    </data>
+    <data name="SendFeedback" xml:space="preserve">
+        <value>ផ្ញើមតិកែលម្អ</value>
+    </data>
+    <data name="NotHelpfulCommentTitle" xml:space="preserve">
+        <value>បន្ថែមមតិយោបល់</value>
+    </data>
+    <data name="NotHelpfulCommentPlaceholder" xml:space="preserve">
+        <value>សរសេរមតិយោបល់ខ្លីៗ (ជាជម្រើស)</value>
+    </data>
+    <data name="TypeMessage" xml:space="preserve">
+        <value>វាយបញ្ចូលសាររបស់អ្នក...</value>
+    </data>
+    <data name="Title" xml:space="preserve">
+        <value>ជំនួយការ AI</value>
+    </data>
+    <data name="WelcomeMessage" xml:space="preserve">
+        <value>ចាប់ផ្តើមការសន្ទនាជាមួយជំនួយការ AI ។ សាររបស់អ្នកអាចត្រូវបានប្រើប្រាស់ដើម្បីកែលម្អផលិតផល។ កុំចែករំលែកព័ត៌មានរសើប ឬព័ត៌មានផ្ទាល់ខ្លួននៅក្នុងការជជែកនេះ។</value>
+    </data>
+    <data name="Disclaimer" xml:space="preserve">
+        <value>ខ្លឹមសារនេះត្រូវបានផលិតដោយប្រព័ន្ធ AI ស្វ័យប្រវត្តិ ហើយមិនបង្កើតជាព័ត៌មានដែលអនុញ្ញាត ឬផ្ទៀងផ្ទាត់នោះទេ។ វាអាចមានកំហុស ឬការខកខាន។ អ្នក​ប្រើ​ត្រូវ​ទទួល​ខុស​ត្រូវ​ក្នុង​ការ​ពិនិត្យ ផ្ទៀងផ្ទាត់ និង​អនុវត្ត​ការ​វិនិច្ឆ័យ​មុន​ពេល​ប្រើ។</value>
+    </data>
+    <data name="DisclaimerLabel" xml:space="preserve">
+        <value>មាតិកាបង្កើតដោយ AI</value>
+    </data>
+    <data name="ConnectionError" xml:space="preserve">
+        <value>បរាជ័យក្នុងការតភ្ជាប់ទៅជំនួយការ។</value>
+    </data>
+    <data name="RateLimitExceeded" xml:space="preserve">
+        <value>លើសដែនកំណត់អត្រា។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។</value>
+    </data>
+    <data name="StopRequest" xml:space="preserve">
+        <value>ឈប់</value>
+    </data>
+    <data name="Copy" xml:space="preserve">
+        <value>ចម្លង</value>
+    </data>
+    <data name="CopyCode" xml:space="preserve">
+        <value>ចម្លងកូដ</value>
+    </data>
+    <data name="NotAuthorized" xml:space="preserve">
+        <value>មិនត្រូវបានអនុញ្ញាត។</value>
+    </data>
+    <data name="InvalidRequest" xml:space="preserve">
+        <value>សំណើមិនត្រឹមត្រូវ។ សូមពិនិត្យមើលទម្រង់សាររបស់អ្នក។</value>
+    </data>
+    <data name="AccessDenied" xml:space="preserve">
+        <value>ការចូលប្រើត្រូវបានបដិសេធ។ សោ API របស់អ្នកប្រហែលជាមិនមានការអនុញ្ញាតដែលត្រូវការទេ។</value>
+    </data>
+    <data name="ModelNotFound" xml:space="preserve">
+        <value>រកមិនឃើញម៉ូដែលជំនួយការទេ។ សូមពិនិត្យមើលថាតើអ្នកមានសិទ្ធិចូលប្រើម៉ូដែលដែលបានកំណត់រចនាសម្ព័ន្ធដែរឬទេ។</value>
+    </data>
+    <data name="ServiceUnavailable" xml:space="preserve">
+        <value>សេវាកម្មជំនួយការមិនមានជាបណ្តោះអាសន្នទេ។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។</value>
+    </data>
+</root>

@@ -123,4 +123,21 @@
 <data name="FileColumnsMissingFormat" xml:space="preserve">
     <value>ფაილი '{0}' არ შეიცავს შემდეგ საჭირო სვეტებს: {1}</value>
   </data>
-  </root>
+  
+
+  <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
+    <value>ჩანაწერების მაქსიმალურად დასაშვები რაოდენობა არის {0}</value>
+  </data>
+
+  <data name="HasUsersToImport" xml:space="preserve">
+    <value>გთხოვთ, დაელოდოთ, სანამ მომხმარებლების წინა იმპორტი დასრულდება</value>
+  </data>
+
+  <data name="CannotParseIncomingFile" xml:space="preserve">
+    <value>მოწოდებულ ფაილში შეცდომაა {0}-ე სტრიქონში და მისი დამუშავება ვერ ხერხდება</value>
+  </data>
+
+  <data name="FileDoesNotContainAnyData" xml:space="preserve">
+    <value>ფაილი '{0}' არ შეიცავს მომხმარებლის მონაცემებს</value>
+  </data>
+</root>
