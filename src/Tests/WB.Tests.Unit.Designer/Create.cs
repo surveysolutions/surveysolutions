@@ -1474,10 +1474,11 @@ namespace WB.Tests.Unit.Designer
             public static UpdateNumericQuestion UpdateNumericQuestion(Guid questionnaireId, Guid questionId, Guid responsibleId, 
                 string title, bool isPreFilled = false, QuestionScope scope = QuestionScope.Interviewer, bool isInteger = false, 
                 bool useFormatting = false, int? countOfDecimalPlaces = null, List<ValidationCondition> validationConditions = null,
-                Option[] options = null)
+                Option[] options = null, bool isNonNegative = false)
             {
                 return new UpdateNumericQuestion(questionnaireId, questionId, responsibleId, new CommonQuestionParameters {Title = title}, isPreFilled, scope, 
-                    isInteger, useFormatting, countOfDecimalPlaces, validationConditions ?? new List<ValidationCondition>(), options: options);
+                    isInteger, useFormatting, countOfDecimalPlaces, validationConditions ?? new List<ValidationCondition>(), options: options,
+                    isNonNegative: isNonNegative);
             }
 
             public static AddVariable AddVariable(Guid questionnaireId, Guid entityId, Guid parentId, 
