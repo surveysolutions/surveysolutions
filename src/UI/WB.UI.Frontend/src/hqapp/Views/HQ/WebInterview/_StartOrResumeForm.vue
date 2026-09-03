@@ -96,6 +96,8 @@ export default {
             recaptchaV3Token: '',
             recaptchaV3IntervalId: null,
             recaptchaV3ExpiryTimeoutId: null,
+            recaptchaV3RetryIntervalId: null,
+            recaptchaV3RetryAttempts: 0,
         }
     },
     mounted() {
@@ -112,6 +114,10 @@ export default {
             clearTimeout(this.recaptchaV3ExpiryTimeoutId)
             this.recaptchaV3ExpiryTimeoutId = null
         }
+        if (this.recaptchaV3RetryIntervalId !== null) {
+            clearInterval(this.recaptchaV3RetryIntervalId)
+            this.recaptchaV3RetryIntervalId = null
+        }
     },
     computed: {
         model() {
@@ -126,14 +132,30 @@ export default {
                 const script = document.createElement('script')
                 script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`
                 script.onload = () => this.executeRecaptchaV3(siteKey)
-                script.onerror = () => { /* Script failed to load — the form remains submittable without a token; the server will reject the request */ }
+                script.onerror = () => {
+                    script.remove()
+                }
+                script.dataset.recaptchaHandlerAttached = 'true'
                 document.head.appendChild(script)
             } else {
                 if (window.grecaptcha) {
                     this.executeRecaptchaV3(siteKey)
-                } else {
+                } else if (!existingScript.dataset.recaptchaHandlerAttached) {
                     existingScript.addEventListener('load', () => this.executeRecaptchaV3(siteKey), { once: true })
+                    existingScript.dataset.recaptchaHandlerAttached = 'true'
                 }
+            }
+            if (this.recaptchaV3RetryIntervalId === null) {
+                this.recaptchaV3RetryAttempts = 0
+                this.recaptchaV3RetryIntervalId = setInterval(() => {
+                    this.recaptchaV3RetryAttempts++
+                    if (this.recaptchaV3RetryAttempts > 12) {
+                        clearInterval(this.recaptchaV3RetryIntervalId)
+                        this.recaptchaV3RetryIntervalId = null
+                        return
+                    }
+                    this.loadRecaptchaV3()
+                }, 5000)
             }
         },
         executeRecaptchaV3(siteKey) {
@@ -141,6 +163,10 @@ export default {
             window.grecaptcha.ready(() => {
                 window.grecaptcha.execute(siteKey, { action: 'start' }).then(token => {
                     this.recaptchaV3Token = token
+                    if (this.recaptchaV3RetryIntervalId !== null) {
+                        clearInterval(this.recaptchaV3RetryIntervalId)
+                        this.recaptchaV3RetryIntervalId = null
+                    }
                     this.recaptchaV3ExpiryTimeoutId = setTimeout(() => {
                         this.recaptchaV3Token = ''
                         this.recaptchaV3ExpiryTimeoutId = null
