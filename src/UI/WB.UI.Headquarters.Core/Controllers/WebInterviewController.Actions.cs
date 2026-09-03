@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
@@ -32,14 +33,16 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioProcessingService audioProcessingService;
         private readonly IImageFileStorage imageFileStorage;
+        private readonly ILogger<WebInterviewBinaryController> logger;
         public WebInterviewBinaryController(
             IStatefulInterviewRepository statefulInterviewRepository, 
             ICommandService commandService,
             IImageProcessingService imageProcessingService, 
             IWebInterviewNotificationService webInterviewNotificationService, 
             IAudioFileStorage audioFileStorage, 
-            IAudioProcessingService audioProcessingService, 
-            IImageFileStorage imageFileStorage)
+            IAudioProcessingService audioProcessingService,
+            IImageFileStorage imageFileStorage,
+            ILogger<WebInterviewBinaryController> logger)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.commandService = commandService;
@@ -48,6 +51,7 @@ namespace WB.UI.Headquarters.Controllers
             this.audioFileStorage = audioFileStorage;
             this.audioProcessingService = audioProcessingService;
             this.imageFileStorage = imageFileStorage;
+            this.logger = logger;
         }
 
         [HttpPost]
@@ -157,18 +161,24 @@ namespace WB.UI.Headquarters.Controllers
                     responsibleId, questionIdentity.Id, questionIdentity.RosterVector, filename));
                 answerSaved = true;
 
-                if (!string.IsNullOrEmpty(oldFileName) &&
-                    !string.Equals(oldFileName, filename, StringComparison.Ordinal))
+                try
                 {
-                    if (sameLogicalFileName)
+                    if (!string.IsNullOrEmpty(backupFileName))
                     {
-                        if (!string.IsNullOrEmpty(backupFileName))
-                            await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, backupFileName);
+                        await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, backupFileName);
                     }
-                    else
+
+                    if (!string.IsNullOrEmpty(oldFileName) &&
+                        !string.Equals(oldFileName, filename, StringComparison.Ordinal) &&
+                        !sameLogicalFileName)
                     {
                         await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, oldFileName);
                     }
+                }
+                catch (Exception cleanupException)
+                {
+                    this.logger.LogError(cleanupException,
+                        "Failed to clean up replaced picture files for interview {InterviewId}", interview.Id);
                 }
             }
             catch (Exception e)

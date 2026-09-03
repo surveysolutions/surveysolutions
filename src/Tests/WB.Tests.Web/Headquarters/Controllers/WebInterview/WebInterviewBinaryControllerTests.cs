@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using WB.Core.Infrastructure.CommandBus;
@@ -61,7 +62,8 @@ public class WebInterviewBinaryControllerTests
             Mock.Of<IWebInterviewNotificationService>(),
             Mock.Of<IAudioFileStorage>(),
             Mock.Of<IAudioProcessingService>(),
-            imageFileStorage.Object);
+            imageFileStorage.Object,
+            Mock.Of<ILogger<WebInterviewBinaryController>>());
 
         var bytes = new byte[] { 1, 2, 3 };
         var formFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "file", "newphoto.png")
@@ -108,6 +110,8 @@ public class WebInterviewBinaryControllerTests
 
         var imageFileStorage = new Mock<IImageFileStorage>();
         imageFileStorage.Setup(x => x.IsEquivalentFileName(oldFileName, "photo__.png")).Returns(true);
+        imageFileStorage.Setup(x => x.GetInterviewBinaryDataAsync(interviewId, oldFileName))
+            .ReturnsAsync(new byte[] { 7, 8, 9 });
         var controller = new WebInterviewBinaryController(
             statefulInterviewRepository.Object,
             Mock.Of<ICommandService>(),
@@ -115,7 +119,8 @@ public class WebInterviewBinaryControllerTests
             Mock.Of<IWebInterviewNotificationService>(),
             Mock.Of<IAudioFileStorage>(),
             Mock.Of<IAudioProcessingService>(),
-            imageFileStorage.Object);
+            imageFileStorage.Object,
+            Mock.Of<ILogger<WebInterviewBinaryController>>());
 
         var bytes = new byte[] { 1, 2, 3 };
         var formFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "file", "newphoto.png")
@@ -177,7 +182,8 @@ public class WebInterviewBinaryControllerTests
             Mock.Of<IWebInterviewNotificationService>(),
             Mock.Of<IAudioFileStorage>(),
             Mock.Of<IAudioProcessingService>(),
-            imageFileStorage.Object);
+            imageFileStorage.Object,
+            Mock.Of<ILogger<WebInterviewBinaryController>>());
 
         var bytes = new byte[] { 1, 2, 3 };
         var formFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "file", "newphoto.png")
