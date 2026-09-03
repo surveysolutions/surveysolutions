@@ -264,6 +264,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                 cancellationToken.ThrowIfCancellationRequested();
 
+                var updateAppStep = this.serviceLocator.GetInstance<IUpdateApplicationSynchronizationStep>();
+                await updateAppStep.CheckServerVersionAsync(cancellationToken).ConfigureAwait(false);
+
                 if (SendStatistics)
                 {
                     try
