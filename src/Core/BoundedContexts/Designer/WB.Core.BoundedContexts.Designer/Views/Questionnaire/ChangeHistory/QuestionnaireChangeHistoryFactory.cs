@@ -145,7 +145,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             return new QuestionnaireChangeHistory(questionnaireId, questionnaire.Title,
                 questionnaireHistory.Select(h =>
                     CreateQuestionnaireChangeHistoryWebItem(questionnaire, h, userId))
-                    .ToList(), page, count, pageSize, normalizedSearch, searchIdsOnly, searchWholeWord);
+                    .ToList(), page, count, pageSize, search?.Trim(), searchIdsOnly, searchWholeWord);
         }
 
         private static Func<string?, bool> CreateMatcher(string search, bool wholeWord)
@@ -180,6 +180,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             var questionnaireValue = searchIdsOnly ? questionnaire.VariableName : questionnaire.Title;
             if (matcher(questionnaireValue))
                 matchedEntityIds.Add(questionnaire.PublicKey);
+
+            if (searchIdsOnly)
+            {
+                matchedEntityIds.AddRange(questionnaire.LookupTables
+                    .Where(table => matcher(table.Value.TableName))
+                    .Select(table => table.Key));
+                matchedEntityIds.AddRange(questionnaire.Macros
+                    .Where(macro => matcher(macro.Value.Name))
+                    .Select(macro => macro.Key));
+                matchedEntityIds.AddRange(questionnaire.Attachments
+                    .Where(attachment => matcher(attachment.Name))
+                    .Select(attachment => attachment.AttachmentId));
+                matchedEntityIds.AddRange(questionnaire.Translations
+                    .Where(translation => matcher(translation.Name))
+                    .Select(translation => translation.Id));
+                matchedEntityIds.AddRange(questionnaire.Categories
+                    .Where(category => matcher(category.Name))
+                    .Select(category => category.Id));
+            }
 
             return matchedEntityIds;
         }

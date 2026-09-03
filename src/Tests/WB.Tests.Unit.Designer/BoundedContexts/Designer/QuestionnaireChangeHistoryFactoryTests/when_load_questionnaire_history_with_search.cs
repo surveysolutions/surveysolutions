@@ -31,6 +31,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
             });
             questionnaireDocument.Title = "Current questionnaire title";
             questionnaireDocument.VariableName = "current_questionnaire";
+            questionnaireDocument.LookupTables.Add(lookupTableId,
+                new WB.Core.SharedKernels.SurveySolutions.Documents.LookupTable { TableName = "lookup_table" });
+            questionnaireDocument.Attachments.Add(new WB.Core.SharedKernels.SurveySolutions.Documents.Attachment
+            {
+                AttachmentId = attachmentId,
+                Name = "attachment_name"
+            });
 
             db = Create.InMemoryDbContext();
 
@@ -93,6 +100,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
                         referenceTitle: "reference_only_marker")
                 }));
 
+            db.Add(Create.QuestionnaireChangeRecord(
+                questionnaireId: questionnaireId.FormatGuid(),
+                targetId: lookupTableId,
+                targetType: QuestionnaireItemType.LookupTable,
+                action: QuestionnaireActionType.Update));
+            db.Add(Create.QuestionnaireChangeRecord(
+                questionnaireId: questionnaireId.FormatGuid(),
+                targetId: attachmentId,
+                targetType: QuestionnaireItemType.Attachment,
+                action: QuestionnaireActionType.Update));
+
             db.SaveChanges();
 
             var userManagerMock = new Mock<IUserManager>();
@@ -111,7 +129,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
         public async Task should_return_all_records_when_no_search()
         {
             var result = await factory.LoadAsync(questionnaireId, 1, 20, user);
-            result.ChangeHistory.Count.Should().Be(7);
+            result.ChangeHistory.Count.Should().Be(9);
         }
 
         [Test]
@@ -163,6 +181,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
         {
             var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "RESPONDENT");
             result.ChangeHistory.Count.Should().Be(2);
+            result.Search.Should().Be("RESPONDENT");
+        }
+
+        [Test]
+        public async Task should_filter_by_lookup_table_name_when_requested()
+        {
+            var result = await factory.LoadAsync(questionnaireId, 1, 20, user, "lookup_table", searchIdsOnly: true);
+            result.ChangeHistory.Count.Should().Be(1);
+
+            result = await factory.LoadAsync(questionnaireId, 1, 20, user, "attachment_name", searchIdsOnly: true);
+            result.ChangeHistory.Count.Should().Be(1);
         }
 
         [Test]
@@ -211,6 +240,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
         private readonly Guid questionId = Guid.Parse("33333333333333333333333333333333");
         private readonly Guid sectionId = Guid.Parse("44444444444444444444444444444444");
         private readonly Guid sourceQuestionnaireId = Guid.Parse("55555555555555555555555555555555");
+        private readonly Guid lookupTableId = Guid.Parse("66666666666666666666666666666666");
+        private readonly Guid attachmentId = Guid.Parse("77777777777777777777777777777777");
 
         private readonly ClaimsPrincipal user = new ClaimsPrincipal(new List<ClaimsIdentity>
         {
