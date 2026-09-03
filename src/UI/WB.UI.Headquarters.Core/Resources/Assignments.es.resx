@@ -549,6 +549,9 @@
     <data name="TargetAreaExplanation" xml:space="preserve">
     <value>Especificar el nombre del mapa del área objetivo para la asignación</value>
 </data>
+    <data name="TargetAreaNameTooLong" xml:space="preserve">
+        <value>El nombre del mapa del área objetivo es demasiado largo. La longitud máxima permitida es de {{limit}} caracteres.</value>
+    </data>
     <data name="Action_TargetAreaChanged" xml:space="preserve">
     <value>Área objetivo cambiada</value>
 </data>
