@@ -546,4 +546,10 @@ Posibles razones:
   <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
     <value>128 kbps, Estéreo, 48 kHz</value>
   </data>
+  <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
+    <value>Permitir a los supervisores reproducir grabaciones de auditoría de audio</value>
+  </data>
+  <data name="AllowSupervisorAudioAuditPlaybackDescription" xml:space="preserve">
+    <value>Cuando está habilitado, los supervisores pueden acceder y reproducir grabaciones de auditoría de audio de sus entrevistas.</value>
+  </data>
 </root>

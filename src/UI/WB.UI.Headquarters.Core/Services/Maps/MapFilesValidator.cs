@@ -24,6 +24,7 @@ public class MapFilesValidator : IMapFilesValidator
 {
     private readonly IFileSystemAccessor fileSystemAccessor;
     private const int MapFileSizeLimit = 512 * 1024 * 1024;
+    public const int MapFileNameLengthLimit = 64;
 
     public MapFilesValidator(IFileSystemAccessor fileSystemAccessor)
     {
@@ -35,6 +36,7 @@ public class MapFilesValidator : IMapFilesValidator
         (Func<AnalyzeResult, IEnumerable<ValidatorError>>)CheckFileStructureForShapeFile,
         CheckFileSizeLimitForEachFile,
         CheckFileNamesOnInvalidChars,
+        CheckMapNameLength,
     };
     
     private static IEnumerable<ValidatorError> CheckFileStructureForShapeFile(AnalyzeResult analyzeResults)
@@ -78,6 +80,19 @@ public class MapFilesValidator : IMapFilesValidator
                 var hasInvalidChar = string.CompareOrdinal(validFileName, mapFile.Name) != 0;
                 if (hasInvalidChar)
                     yield return new ValidatorError(string.Format(Resources.Maps.MapFileNameHasInvalidChars, mapFile.Name));
+            }
+        }
+    }
+
+    private static IEnumerable<ValidatorError> CheckMapNameLength(AnalyzeResult analyzeResults)
+    {
+        foreach (var map in analyzeResults.Maps)
+        {
+            var effectiveName = map.IsShapeFile ? map.Name + ".shp" : map.Name;
+            if (effectiveName.Length > MapFileNameLengthLimit)
+            {
+                var truncatedName = effectiveName.Length > 100 ? effectiveName.Substring(0, 100) + "…" : effectiveName;
+                yield return new ValidatorError(string.Format(Resources.Maps.MapFileNameTooLong, truncatedName, MapFileNameLengthLimit));
             }
         }
     }

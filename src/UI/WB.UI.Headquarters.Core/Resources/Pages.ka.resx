@@ -1685,7 +1685,7 @@
     <value>ყველა სამუშაო სივრცე</value>
   </data>
   <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
-    <value>სუპერვაიზერი (ინტერვიუერები დაემატება მის გუნდს)</value>
+    <value>სუპერვაიზერი</value>
   </data>
   <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
     <value>სუპერვაიზერის არჩევა</value>
