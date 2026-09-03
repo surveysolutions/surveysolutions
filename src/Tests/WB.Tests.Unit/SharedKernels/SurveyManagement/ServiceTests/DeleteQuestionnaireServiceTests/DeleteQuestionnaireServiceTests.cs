@@ -186,5 +186,49 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                         _.QuestionnaireId == questionnaireId && _.QuestionnaireVersion == questionnaireVersion &&
                         _.ResponsibleId == userId), Arg.Any<string>());
         }
+
+        [Test]
+        public void when_interview_data_cleanup_fails_should_propagate_exception_to_the_job()
+        {
+            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            long questionnaireVersion = 5;
+            Guid userId = Guid.Parse("22222222222222222222222222222222");
+
+            var questionnaire = Create.Entity.QuestionnaireDocument();
+            questionnaire.LookupTables = new Dictionary<Guid, LookupTable>();
+
+            var plainQuestionnaireRepository = Mock.Of<IQuestionnaireStorage>(s => s.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaire);
+            SetUp.InstanceToMockedServiceLocator(plainQuestionnaireRepository);
+
+            var interviewsToDeleteFactoryMock = new Mock<IInterviewsToDeleteFactory>();
+            interviewsToDeleteFactoryMock.Setup(f => f.RemoveAllInterviewsDataAsync(It.IsAny<QuestionnaireIdentity>()))
+                .ThrowsAsync(new InvalidOperationException("Unable to remove all files stored under 'images/'."));
+
+            var commandServiceMock = Substitute.For<ICommandService>();
+
+            var deleteQuestionnaireService = CreateDeleteQuestionnaireService(commandService: commandServiceMock,
+                interviewsToDeleteFactory: interviewsToDeleteFactoryMock.Object,
+                questionnaireStorage: plainQuestionnaireRepository,
+                questionnaireBrowseItemStorage:
+                    Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(
+                        _ =>
+                            _.GetById(It.IsAny<string>()) ==
+                            new QuestionnaireBrowseItem
+                            {
+                                Disabled = false,
+                                QuestionnaireId = questionnaireId,
+                                Version = questionnaireVersion
+                            }));
+
+            Assert.ThrowsAsync<InvalidOperationException>(() =>
+                deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfterAsync(questionnaireId, questionnaireVersion, userId));
+
+            // the failed deletion should not stay registered as in progress, otherwise the retry would be skipped
+            Assert.ThrowsAsync<InvalidOperationException>(() =>
+                deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfterAsync(questionnaireId, questionnaireVersion, userId));
+
+            commandServiceMock.DidNotReceive()
+                .Execute(Arg.Any<DeleteQuestionnaire>(), Arg.Any<string>());
+        }
     }
 }
