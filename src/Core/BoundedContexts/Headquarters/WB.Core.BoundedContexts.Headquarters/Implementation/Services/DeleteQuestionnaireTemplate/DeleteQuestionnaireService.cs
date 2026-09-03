@@ -125,6 +125,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
             var sw = Stopwatch.StartNew();
             string? title = null;
+            var isInterviewsDataCleanupFailed = false;
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
 
             try
@@ -139,7 +140,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 this.logger.LogWarning("Deletion of questionnaire {title} {id} started",
                     title, questionnaireIdentity);
 
-                await this.DeleteInterviewsAsync(questionnaireIdentity);
+                try
+                {
+                    await this.DeleteInterviewsAsync(questionnaireIdentity);
+                }
+                catch
+                {
+                    isInterviewsDataCleanupFailed = true;
+                    throw;
+                }
+
                 this.DeleteTranslations(questionnaireId, questionnaireVersion);
                 this.DeleteLookupTables(questionnaireIdentity, questionnaireDocument);
                 this.DeleteReusableCategories(questionnaireIdentity, questionnaireDocument);
@@ -164,17 +174,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             catch (Exception e)
             {
                 this.logger.LogError(e, e.Message);
+
+                // interview data is only partially removed, so the failure has to reach the job
+                // in order to be scheduled for a retry
+                if (isInterviewsDataCleanupFailed)
+                    throw;
             }
             finally
             {
                 sw.Stop();
                 this.logger.LogInformation("Questionnaire {title} {id} deleted in {seconds:0.00}s",
                     title ?? string.Empty, questionnaireIdentity, sw.Elapsed.TotalSeconds);
-            }
 
-            lock (DeleteInProcessLockObject)
-            {
-                DeleteInProcess.Remove(questionnaireKey);
+                lock (DeleteInProcessLockObject)
+                {
+                    DeleteInProcess.Remove(questionnaireKey);
+                }
             }
         }
 
