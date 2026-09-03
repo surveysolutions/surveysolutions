@@ -286,25 +286,22 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 }
 
                 var command = new RemoveAnswerCommand(interviewId, GetCommandResponsibleId(interviewId), identity);
-                if (this.ExecuteQuestionCommand(command))
+                if (this.ExecuteQuestionCommand(command) && !string.IsNullOrEmpty(fileName))
                 {
-                    if (!string.IsNullOrEmpty(fileName))
+                    try
                     {
-                        try
+                        if (questionType == QuestionType.Multimedia)
                         {
-                            if (questionType == QuestionType.Multimedia)
-                            {
-                                await this.imageFileStorage.RemoveInterviewBinaryData(interviewId, fileName);
-                            }
-                            else if (questionType == QuestionType.Audio)
-                            {
-                                await this.audioFileStorage.RemoveInterviewBinaryData(interviewId, fileName);
-                            }
+                            await this.imageFileStorage.RemoveInterviewBinaryData(interviewId, fileName);
                         }
-                        catch (Exception e)
+                        else if (questionType == QuestionType.Audio)
                         {
-                            webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, identity, e);
+                            await this.audioFileStorage.RemoveInterviewBinaryData(interviewId, fileName);
                         }
+                    }
+                    catch (Exception e)
+                    {
+                        webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, identity, e);
                     }
                 }
             }
