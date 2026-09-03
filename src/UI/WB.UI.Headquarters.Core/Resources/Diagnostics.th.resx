@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="WaitForHealthcheck" xml:space="preserve"><value>รอผลการตรวจสอบสุขภาพ</value></data>
+  <data name="HealthCheckStatus" xml:space="preserve"><value>สถานะสุขภาพ: {{status}}</value></data>
+  <data name="ServerMetrics" xml:space="preserve"><value>เมตริกเซิร์ฟเวอร์</value></data>
+  <data name="WaitingForMetrics" xml:space="preserve"><value>กำลังคำนวณเมตริก</value></data>
+  <data name="hq_baseurl_check" xml:space="preserve"><value>การตรวจสอบการกำหนดค่า BaseUrl</value></data>
+  <data name="export_service_check" xml:space="preserve"><value>การตรวจสอบบริการส่งออก</value></data>
+  <data name="export_service_connectivity_check" xml:space="preserve"><value>การตรวจสอบการเชื่อมต่อบริการส่งออก</value></data>
+  <data name="broken_packages_check" xml:space="preserve"><value>การตรวจสอบแพ็กเกจที่เสียหาย</value></data>
+  <data name="database_connection_check" xml:space="preserve"><value>การตรวจสอบการเชื่อมต่อฐานข้อมูล</value></data>
+  <data name="designer_check" xml:space="preserve"><value>การตรวจสอบการเชื่อมต่อ Designer</value></data>
+  <data name="temp_folder_permissions" xml:space="preserve"><value>การตรวจสอบสิทธิ์โฟลเดอร์ชั่วคราว</value></data>
+  <data name="temp_folder_permissions_Healthy" xml:space="preserve"><value>เข้าถึงโฟลเดอร์ชั่วคราวสำเร็จ</value></data>
+  <data name="temp_folder_permissions_Unhealty_without_permissions" xml:space="preserve"><value>แอปพลิเคชันไม่สามารถเขียนไฟล์ชั่วคราวไปยัง: {0}</value></data>
+  <data name="temp_folder_permissions_Unhealty_can_not_check" xml:space="preserve"><value>ไม่สามารถตรวจสอบสิทธิ์โฟลเดอร์ชั่วคราว {0} ข้อผิดพลาด: {1}</value></data>
+  <data name="temp_folder_permissions_Degraded_without_permissions" xml:space="preserve"><value>แอปพลิเคชันไม่มีสิทธิ์ตรวจสอบโฟลเดอร์ {0}</value></data>
+  <data name="temp_folder_permissions_Windows_check" xml:space="preserve"><value>ระบบไม่ใช่ Windows</value></data>
+  <data name="UnexpectedBrokenPackages" xml:space="preserve"><value>ตรวจพบ {0} แพ็กเกจที่เสียหายโดยไม่คาดคิด</value></data>
+  <data name="database_connection_check_Healthy" xml:space="preserve"><value>เชื่อมต่อฐานข้อมูลสำเร็จ</value></data>
+  <data name="database_connection_check_Unhealty" xml:space="preserve"><value>ข้อผิดพลาดการเชื่อมต่อฐานข้อมูล: {0}</value></data>
+  <data name="export_service_connectivity_check_Healthy" xml:space="preserve"><value>บริการส่งออกที่ {0} ตอบสนองด้วยสถานะ {1}</value></data>
+  <data name="export_service_connectivity_check_Degraded" xml:space="preserve"><value>ไม่มีการเชื่อมต่อกับบริการส่งออกที่ {0}</value></data>
+  <data name="designer_connectivity_check_Degraded" xml:space="preserve"><value>ไม่มีการเชื่อมต่อกับ Designer ที่ {0}</value></data>
+  <data name="export_service_connectivity_check_Unhealthy" xml:space="preserve"><value>บริการส่งออกที่ {0} ตอบสนองด้วยสถานะ {1}</value></data>
+  <data name="export_service_check_Healthy" xml:space="preserve"><value>บริการส่งออกที่ {0} ตอบสนองด้วยเวอร์ชัน: v{1}</value></data>
+  <data name="designer_service_check_Healthy" xml:space="preserve"><value>Designer ที่ {0} ตอบสนองด้วยเวอร์ชัน: v{1}</value></data>
+  <data name="hq_baseurl_check_Healthy" xml:space="preserve"><value>Headquarters กำหนดค่าด้วย Headquarters:BaseUrl: {0} ตรงกับ URL ปัจจุบันในแถบที่อยู่เบราว์เซอร์</value></data>
+  <data name="hq_baseurl_check_Degraded" xml:space="preserve"><value>Headquarters กำหนดค่าด้วย Headquarters:BaseUrl: {0} แตกต่างจาก URL ปัจจุบัน</value></data>
+  <data name="embedded_export_service_check" xml:space="preserve"><value>โฮสต์บริการส่งออกแบบฝังตัว</value></data>
+  <data name="embedded_export_service_check_Healty" xml:space="preserve"><value>บริการส่งออกกำลังทำงาน</value></data>
+  <data name="embedded_export_service_check_Degraded" xml:space="preserve"><value>บริการส่งออกไม่ทำงาน</value></data>
+  <data name="Connectivity" xml:space="preserve"><value>การเชื่อมต่อ Web socket</value></data>
+  <data name="ServerStatuses" xml:space="preserve"><value>สถานะการตอบสนอง</value></data>
+</root>

@@ -201,6 +201,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             if (!string.IsNullOrWhiteSpace(assignment.TargetArea) && productVersion <= new Version(24, 6))
                 return true;
 
+            if (assignment.AudioAuditScope != null && assignment.AudioAuditScope.Count > 0 && productVersion <= new Version(26, 6))
+                return true;
+
             #endif
 
             return false;

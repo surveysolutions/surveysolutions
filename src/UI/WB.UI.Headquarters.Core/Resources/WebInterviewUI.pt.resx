@@ -212,6 +212,9 @@
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>A resposta não foi salva</value>
   </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Erro de comunicação</value>
+  </data>
   <data name="NotCalculated" xml:space="preserve">
     <value>Não calculado</value>
   </data>

@@ -181,7 +181,7 @@ export default {
         },
 
         copyRef(chapter) {
-            copyItem(this.questionnaireId, chapter);
+            copyItem(this.questionnaire, chapter);
         },
 
         deleteChapter(chapter, stat) {

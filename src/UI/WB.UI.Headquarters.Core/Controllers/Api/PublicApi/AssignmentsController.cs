@@ -479,6 +479,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NotFound();
             }
 
+            if (targetArea != null && targetArea.Length > AssignmentConstants.TargetAreaLengthLimit)
+            {
+                var truncatedName = targetArea.Length > 100 ? targetArea.Substring(0, 100) + "…" : targetArea;
+                return StatusCode(StatusCodes.Status406NotAcceptable,
+                    string.Format(WB.UI.Headquarters.Resources.Maps.MapFileNameTooLong, truncatedName, AssignmentConstants.TargetAreaLengthLimit));
+            }
+
             commandService.Execute(
                 new UpdateAssignmentTargetArea(assignment.PublicKey, authorizedUser.Id, targetArea, assignment.QuestionnaireId));
             this.auditLog.AssignmentTargetAreaChanged(id, targetArea);
@@ -555,7 +562,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             return new AudioRecordingEnabled
             {
-                Enabled = assignment.AudioRecording
+                Enabled = assignment.AudioRecording,
+                AudioAuditScope = assignment.AudioAuditScope ?? new List<string>()
             };
         }
 
@@ -584,11 +592,23 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (assignment == null || assignment.Archived)
                 return NotFound();
 
+            if (request.AudioAuditScope != null &&
+                !AreAudioAuditScopesEqual(request.AudioAuditScope, assignment.AudioAuditScope))
+                return StatusCode(StatusCodes.Status400BadRequest,
+                    "Audio audit scope cannot be changed through this endpoint.");
+
             commandService.Execute(
                 new UpdateAssignmentAudioRecording(assignment.PublicKey, authorizedUser.Id, 
                     request.Enabled, assignment.QuestionnaireId));
 
             return NoContent();
+        }
+
+        private static bool AreAudioAuditScopesEqual(List<string> requested, List<string> current)
+        {
+            var requestedScope = requested ?? new List<string>();
+            var currentScope = current ?? new List<string>();
+            return new HashSet<string>(requestedScope).SetEquals(currentScope);
         }
 
         /// <summary>
@@ -868,6 +888,12 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     {Value = assignmentInfo.Comments, Column = nameof(assignmentInfo.Comments)}.ToAssignmentComments(),
                 TargetArea = new PreloadingValue
                     {Value = assignmentInfo.TargetArea, Column = nameof(assignmentInfo.TargetArea)}.ToAssignmentTargetArea(),
+                AudioAuditScope = new AssignmentAudioAuditScope
+                {
+                    Column = ServiceColumns.AudioAuditScopeColumnName,
+                    Value = assignmentInfo.AudioAuditScope == null ? null : string.Join(",", assignmentInfo.AudioAuditScope),
+                    VariableNames = assignmentInfo.AudioAuditScope?.ToArray() ?? Array.Empty<string>()
+                },
             };
 
             var rosterRows = rosterAnswers
