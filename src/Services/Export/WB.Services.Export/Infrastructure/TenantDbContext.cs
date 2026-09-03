@@ -88,11 +88,11 @@ namespace WB.Services.Export.Infrastructure
 
             // Each tenant is mapped to its own PostgreSQL schema at runtime (see OnModelCreating),
             // while the migrations and the model snapshot are schema-agnostic. As a result EF Core
-            // always detects a difference between the runtime model (which has a per-tenant default
-            // schema) and the snapshot, and raises PendingModelChangesWarning even though there are
-            // no real schema changes to apply. This is an unavoidable consequence of the dynamic
-            // schema-per-tenant design, so the warning is suppressed here.
-            optionsBuilder.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
+            // detects a difference between the runtime model (which has a per-tenant default schema)
+            // and the snapshot only for real tenant contexts. That difference is an unavoidable
+            // consequence of the dynamic schema-per-tenant design, so suppress the warning only there.
+            if (!this.TenantContext.Tenant.Id.Equals(TenantId.None))
+                optionsBuilder.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
 
             if (!optionsBuilder.IsConfigured)
             {
