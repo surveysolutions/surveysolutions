@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
@@ -282,7 +283,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 }
                 catch (Exception e)
                 {
-                    webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, identity, e);
+                    Trace.TraceError("Failed to clean up removed answer binary for interview {0}: {1}",
+                        interviewId, e);
                 }
 
                 var command = new RemoveAnswerCommand(interviewId, GetCommandResponsibleId(interviewId), identity);

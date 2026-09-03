@@ -127,6 +127,8 @@ namespace WB.UI.Headquarters.Controllers
             byte[] oldFileData = null;
             string backupFileName = null;
             var sameLogicalFileName = false;
+            var oldFileDataRead = false;
+            var fileStored = false;
             var uploadLock = InterviewFileOperationLocks.Get(interview.Id);
             await uploadLock.WaitAsync();
 
@@ -148,6 +150,7 @@ namespace WB.UI.Headquarters.Controllers
                 if (sameLogicalFileName)
                 {
                     oldFileData = await this.imageFileStorage.GetInterviewBinaryDataAsync(interview.Id, oldFileName);
+                    oldFileDataRead = true;
                     if (oldFileData != null)
                     {
                         backupFileName = $"{Guid.NewGuid():N}_{Path.GetFileName(oldFileName)}";
@@ -157,6 +160,7 @@ namespace WB.UI.Headquarters.Controllers
                 }
 
                 this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
+                fileStored = true;
                 this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
                     responsibleId, questionIdentity.Id, questionIdentity.RosterVector, filename));
                 answerSaved = true;
@@ -192,6 +196,10 @@ namespace WB.UI.Headquarters.Controllers
                             await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
                             this.imageFileStorage.StoreInterviewBinaryData(interview.Id, oldFileName, oldFileData, file.ContentType);
                             await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, backupFileName);
+                        }
+                        else if (fileStored && oldFileDataRead)
+                        {
+                            await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
                         }
                     }
                     else if (oldFileData != null)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -174,7 +175,15 @@ namespace WB.UI.WebTester.Controllers
 
                 if (!string.IsNullOrEmpty(oldFileName) && oldFileName != fileName)
                 {
-                    this.mediaStorage.Remove(oldFileName, interview.Id);
+                    try
+                    {
+                        this.mediaStorage.Remove(oldFileName, interview.Id);
+                    }
+                    catch (Exception cleanupException)
+                    {
+                        Trace.TraceError("Failed to clean up replaced picture file for interview {0}: {1}",
+                            interview.Id, cleanupException);
+                    }
                 }
             }
             catch (Exception e)

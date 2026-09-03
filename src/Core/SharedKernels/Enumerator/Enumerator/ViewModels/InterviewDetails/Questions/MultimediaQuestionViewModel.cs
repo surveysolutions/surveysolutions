@@ -141,6 +141,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (this.Answer?.Length > 0)
                 {
                     var oldFileName = this.AnswerFileName;
+                    var oldFileData = !string.IsNullOrEmpty(oldFileName) &&
+                                      oldFileName == pictureFileName
+                        ? this.imageFileStorage.GetInterviewBinaryData(this.interviewId, oldFileName)
+                        : null;
 
                     this.StorePictureFile(new MemoryStream(this.Answer), pictureFileName);
 
@@ -155,7 +159,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     {
                         if (!await this.Answering.SendQuestionCommandAndGetResultAsync(command))
                         {
-                            await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                            await this.RestorePictureAfterFailedAnswerAsync(pictureFileName, oldFileName, oldFileData);
                             return;
                         }
                         if (!string.IsNullOrEmpty(oldFileName) && oldFileName != pictureFileName)
@@ -167,7 +171,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     }
                     catch (InterviewException ex)
                     {
-                        await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                        await this.RestorePictureAfterFailedAnswerAsync(pictureFileName, oldFileName, oldFileData);
                         await this.QuestionState.Validity.ProcessException(ex);
                     }
                 }
@@ -204,6 +208,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         using (pictureStream)
                         {
                             var oldFileName = this.AnswerFileName;
+                            var oldFileData = !string.IsNullOrEmpty(oldFileName) &&
+                                              oldFileName == pictureFileName
+                                ? this.imageFileStorage.GetInterviewBinaryData(this.interviewId, oldFileName)
+                                : null;
 
                             this.StorePictureFile(pictureStream, pictureFileName);
 
@@ -218,7 +226,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                             {
                                 if (!await this.Answering.SendQuestionCommandAndGetResultAsync(command))
                                 {
-                                    await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                                    await this.RestorePictureAfterFailedAnswerAsync(pictureFileName, oldFileName, oldFileData);
                                     return;
                                 }
                                 if (!string.IsNullOrEmpty(oldFileName) && oldFileName != pictureFileName)
@@ -233,7 +241,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                             }
                             catch (InterviewException ex)
                             {
-                                await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                                await this.RestorePictureAfterFailedAnswerAsync(pictureFileName, oldFileName, oldFileData);
                                 await this.QuestionState.Validity.ProcessException(ex);
                             }
                         }
@@ -284,6 +292,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.Answer = null;
                     this.AnswerFileName = null;
                 }
+            }
+        }
+
+        private async Task RestorePictureAfterFailedAnswerAsync(
+            string pictureFileName, string oldFileName, byte[] oldFileData)
+        {
+            if (oldFileName == pictureFileName && oldFileData != null)
+            {
+                await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                this.imageFileStorage.StoreInterviewBinaryData(this.interviewId, oldFileName, oldFileData, null);
+            }
+            else
+            {
+                await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
             }
         }
 
