@@ -92,7 +92,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 this.StartInProgressIndicator();
 
-                await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync();
+                await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync(cancellationTokenSource.Token);
 
                 lock (this.cancellationLockObject)
                 {
