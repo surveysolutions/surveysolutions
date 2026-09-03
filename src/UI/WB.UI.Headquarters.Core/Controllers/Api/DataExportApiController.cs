@@ -38,6 +38,7 @@ namespace WB.UI.Headquarters.Controllers.Api
     {
         private const string ExternalStorageStateCachePrefix = "DataExportExternalStorageState";
         private static readonly TimeSpan ExternalStorageStateLifetime = TimeSpan.FromMinutes(10);
+        private static readonly object ExternalStorageStateCacheLock = new object();
 
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IDataExportStatusReader dataExportStatusReader;
@@ -414,11 +415,15 @@ namespace WB.UI.Headquarters.Controllers.Api
                 || payload.ExpiresAtUtc < DateTime.UtcNow)
                 return null;
 
-            if (!this.memoryCache.TryGetValue(GetExternalStorageStateCacheKey(payload.Nonce), out _))
-                return null;
-            
-            this.memoryCache.Remove(GetExternalStorageStateCacheKey(payload.Nonce));
-            return payload.ExportState;
+            var cacheKey = GetExternalStorageStateCacheKey(payload.Nonce);
+            lock (ExternalStorageStateCacheLock)
+            {
+                if (!this.memoryCache.TryGetValue(cacheKey, out _))
+                    return null;
+
+                this.memoryCache.Remove(cacheKey);
+                return payload.ExportState;
+            }
         }
 
         private static string GetExternalStorageStateCacheKey(string nonce) =>

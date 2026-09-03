@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -55,6 +56,35 @@ namespace WB.Tests.Web.Headquarters.Controllers.DataExportApiControllerTests
                 State = protectedState
             });
             secondCallResult.Should().BeOfType<BadRequestObjectResult>();
+        }
+
+        [NUnit.Framework.Test]
+        public async Task when_state_is_redeemed_concurrently_should_only_process_once()
+        {
+            var memoryCache = new MemoryCache(new MemoryCacheOptions());
+            var protectionProvider = new EphemeralDataProtectionProvider();
+            var questionnaireBrowseViewFactory = CreateQuestionnaireBrowseViewFactoryReturningNull();
+            var controller = CreateController(memoryCache, protectionProvider, questionnaireBrowseViewFactory);
+            SetAuthenticatedUser(controller, Guid.NewGuid());
+
+            var createStateResponse = controller.CreateExternalStorageState(new DataExportApiController.ExternalStorageStateModel
+            {
+                Type = ExternalStorageType.OneDrive,
+            }).Result as OkObjectResult;
+
+            var protectedState = createStateResponse?.Value as string;
+            var callbackModel = new DataExportApiController.ExportToExternalStorageModel
+            {
+                Code = "code",
+                State = protectedState
+            };
+
+            var results = await Task.WhenAll(
+                controller.ExportToExternalStorage(callbackModel),
+                controller.ExportToExternalStorage(callbackModel));
+
+            results.Count(x => x is NotFoundObjectResult).Should().Be(1);
+            results.Count(x => x is BadRequestObjectResult).Should().Be(1);
         }
 
         [NUnit.Framework.Test]
