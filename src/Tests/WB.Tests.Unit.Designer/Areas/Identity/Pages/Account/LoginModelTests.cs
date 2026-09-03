@@ -113,6 +113,57 @@ namespace WB.Tests.Unit.Designer.Areas.Identity.Pages.Account
                 It.IsAny<bool>()), Times.Never);
         }
 
+        [Test]
+        public async Task when_recaptcha_v3_score_is_at_threshold_should_allow_login()
+        {
+            var user = new DesignerIdentityUser { EmailConfirmed = true, UserName = "tester" };
+            var userManagerMock = CreateUserManager();
+            userManagerMock.Setup(x => x.FindByNameAsync("tester")).ReturnsAsync(user);
+            var signInManagerMock = CreateSignInManager(userManagerMock.Object);
+            signInManagerMock.Setup(x => x.PasswordSignInAsync(user, "pwd", false, false))
+                .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
+            var model = CreateLoginModel(signInManagerMock.Object, userManagerMock.Object,
+                shouldShowCaptcha: true,
+                captchaType: CaptchaProviderType.RecaptchaV3,
+                recaptchaResponse: new RecaptchaResponse { success = true, score = 0.5, action = "login" });
+
+            await model.OnPostAsync("/manage");
+
+            signInManagerMock.Verify(x => x.PasswordSignInAsync(user, "pwd", false, false), Times.Once);
+        }
+
+        [Test]
+        public async Task when_recaptcha_v3_score_is_below_threshold_should_reject_login()
+        {
+            var signInManagerMock = CreateSignInManager(CreateUserManager().Object);
+            var model = CreateLoginModel(signInManagerMock.Object, CreateUserManager().Object,
+                shouldShowCaptcha: true,
+                captchaType: CaptchaProviderType.RecaptchaV3,
+                recaptchaResponse: new RecaptchaResponse { success = true, score = 0.4, action = "login" });
+
+            var result = await model.OnPostAsync("/manage");
+
+            Assert.That(result, Is.InstanceOf<PageResult>());
+            signInManagerMock.Verify(x => x.PasswordSignInAsync(
+                It.IsAny<DesignerIdentityUser>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>()), Times.Never);
+        }
+
+        [Test]
+        public async Task when_recaptcha_v3_response_is_unsuccessful_should_reject_login()
+        {
+            var signInManagerMock = CreateSignInManager(CreateUserManager().Object);
+            var model = CreateLoginModel(signInManagerMock.Object, CreateUserManager().Object,
+                shouldShowCaptcha: true,
+                captchaType: CaptchaProviderType.RecaptchaV3,
+                recaptchaResponse: new RecaptchaResponse { success = false, score = 1, action = "login" });
+
+            var result = await model.OnPostAsync("/manage");
+
+            Assert.That(result, Is.InstanceOf<PageResult>());
+            signInManagerMock.Verify(x => x.PasswordSignInAsync(
+                It.IsAny<DesignerIdentityUser>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>()), Times.Never);
+        }
+
         private static LoginModel CreateLoginModel(SignInManager<DesignerIdentityUser> signInManager,
             UserManager<DesignerIdentityUser> userManager,
             bool shouldShowCaptcha = false,
