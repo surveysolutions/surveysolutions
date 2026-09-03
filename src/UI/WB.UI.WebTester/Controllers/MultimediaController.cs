@@ -174,8 +174,6 @@ namespace WB.UI.WebTester.Controllers
 
                 if (!string.IsNullOrEmpty(oldFileName) && oldFileName != fileName)
                 {
-                    operationLock.Release();
-                    operationLock.Dispose();
                     this.mediaStorage.Remove(oldFileName, interview.Id);
                 }
             }
@@ -184,6 +182,10 @@ namespace WB.UI.WebTester.Controllers
                 if (fileName != null)
                     webInterviewNotificationService.MarkAnswerAsNotSaved(Guid.Parse(id), questionIdentity, e);
                 throw;
+            }
+            finally
+            {
+                operationLock.Dispose();
             }
 
             return this.Json("ok");

@@ -307,7 +307,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             }
             finally
             {
-                operationLock.Release();
+                operationLock.Dispose();
             }
 
             return Ok();
