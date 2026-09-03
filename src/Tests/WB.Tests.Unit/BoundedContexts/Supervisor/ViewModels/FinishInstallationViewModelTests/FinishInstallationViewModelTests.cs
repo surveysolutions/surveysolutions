@@ -1,11 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
-using WB.Core.Infrastructure.HttpServices.HttpClient;
-using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -96,31 +92,6 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels.FinishInstallation
 
             Assert.That(viewModel.Endpoint, Is.EqualTo(endpoint));
             Assert.That(viewModel.UserName, Is.EqualTo(login));
-        }
-
-        [Test]
-        public async Task when_signing_in_and_server_version_is_older_then_should_show_incompatible_version_and_not_check_credentials()
-        {
-            var synchronizationService = new Mock<ISupervisorSynchronizationService>();
-            synchronizationService
-                .Setup(x => x.GetLatestApplicationVersionAsync(It.IsAny<System.Threading.CancellationToken>()))
-                .ReturnsAsync(100);
-
-            var deviceSettings = new Mock<IDeviceSettings>();
-            deviceSettings.Setup(x => x.GetApplicationVersionCode()).Returns(101);
-
-            var viewModel = Create.ViewModel.FinishInstallationViewModel(
-                synchronizationService: synchronizationService.Object,
-                deviceSettings: deviceSettings.Object);
-            viewModel.Endpoint = "https://example.com";
-            viewModel.UserName = "user";
-            viewModel.Password = "wrong-password";
-
-            await viewModel.SignInCommand.ExecuteAsync();
-
-            Assert.That(viewModel.ErrorMessage, Is.EqualTo(EnumeratorUIResources.NotSupportedServerSyncProtocolVersion));
-            synchronizationService.Verify(x => x.LoginAsync(It.IsAny<LogonInfo>(), It.IsAny<RestCredentials>(),
-                It.IsAny<System.Threading.CancellationToken>()), Times.Never);
         }
     }
 }

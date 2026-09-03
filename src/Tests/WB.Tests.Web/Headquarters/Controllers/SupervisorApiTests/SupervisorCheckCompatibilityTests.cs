@@ -25,9 +25,8 @@ namespace WB.Tests.Web.Headquarters.Controllers.SupervisorApiTests
         private const string SupervisorUserAgent = "org.worldbank.solutions.supervisor/{0} (QuestionnaireVersion/27.0.0)";
 
         [Test]
-        public async Task when_apk_not_stored_on_server_and_client_is_newer_than_server_build_should_return_406()
+        public async Task when_apk_not_stored_on_server_and_auto_update_disabled_should_not_return_406()
         {
-            const int serverHqBuildNumber = 35000;
             const int clientBuildNumber = 38141;
             var supervisorUserAgent = string.Format(SupervisorUserAgent, $"25.06.0 (build {clientBuildNumber})");
 
@@ -35,9 +34,8 @@ namespace WB.Tests.Web.Headquarters.Controllers.SupervisorApiTests
             interviewerVersionReader.Setup(x => x.SupervisorBuildNumber())
                 .ReturnsAsync((int?)null);
 
-            var productVersion = Mock.Of<IProductVersion>(x => x.GetBuildNumber() == serverHqBuildNumber);
+            var productVersion = Mock.Of<IProductVersion>();
 
-            // Auto-update disabled — client with recent build that exceeds server HQ version should be rejected
             var interviewerSettings = Abc.Create.Entity.InterviewerSettings(autoUpdateEnabled: false);
             var interviewerSettingsStorage = Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(m =>
                 m.GetById(AppSetting.InterviewerSettings) == interviewerSettings);
@@ -53,13 +51,12 @@ namespace WB.Tests.Web.Headquarters.Controllers.SupervisorApiTests
             IActionResult result = await controller.CheckCompatibility("device", SupervisorSyncProtocolVersionProvider.V4_MultiWorkspacesIntroduced);
 
             // Assert
-            Assert.That(((IStatusCodeActionResult)result).StatusCode, Is.EqualTo(StatusCodes.Status406NotAcceptable));
+            Assert.That(((IStatusCodeActionResult)result).StatusCode, Is.Not.EqualTo(StatusCodes.Status406NotAcceptable));
         }
 
         [Test]
-        public async Task when_apk_not_stored_on_server_and_auto_update_enabled_and_client_is_newer_than_server_build_should_return_406()
+        public async Task when_apk_not_stored_on_server_and_auto_update_enabled_should_return_426()
         {
-            const int serverHqBuildNumber = 35000;
             const int clientBuildNumber = 38141;
             var supervisorUserAgent = string.Format(SupervisorUserAgent, $"25.06.0 (build {clientBuildNumber})");
 
@@ -67,7 +64,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.SupervisorApiTests
             interviewerVersionReader.Setup(x => x.SupervisorBuildNumber())
                 .ReturnsAsync((int?)null);
 
-            var productVersion = Mock.Of<IProductVersion>(x => x.GetBuildNumber() == serverHqBuildNumber);
+            var productVersion = Mock.Of<IProductVersion>();
 
             var interviewerSettings = Abc.Create.Entity.InterviewerSettings(autoUpdateEnabled: true);
             var interviewerSettingsStorage = Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(m =>
@@ -84,37 +81,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.SupervisorApiTests
             IActionResult result = await controller.CheckCompatibility("device", SupervisorSyncProtocolVersionProvider.V4_MultiWorkspacesIntroduced);
 
             // Assert
-            Assert.That(((IStatusCodeActionResult)result).StatusCode, Is.EqualTo(StatusCodes.Status406NotAcceptable));
-        }
-
-        [Test]
-        public async Task when_apk_not_stored_on_server_and_client_matches_server_build_should_allow_sync()
-        {
-            const int serverHqBuildNumber = 35000;
-            var supervisorUserAgent = string.Format(SupervisorUserAgent, $"25.06.0 (build {serverHqBuildNumber})");
-
-            var interviewerVersionReader = new Mock<IInterviewerVersionReader>();
-            interviewerVersionReader.Setup(x => x.SupervisorBuildNumber())
-                .ReturnsAsync((int?)null);
-
-            var productVersion = Mock.Of<IProductVersion>(x => x.GetBuildNumber() == serverHqBuildNumber);
-
-            var interviewerSettings = Abc.Create.Entity.InterviewerSettings(autoUpdateEnabled: false);
-            var interviewerSettingsStorage = Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(m =>
-                m.GetById(AppSetting.InterviewerSettings) == interviewerSettings);
-
-            var controller = Web.Create.Controller.SupervisorApiController(
-                interviewerVersionReader: interviewerVersionReader.Object,
-                productVersion: productVersion,
-                interviewerSettings: interviewerSettingsStorage);
-
-            controller.Request.Headers[HeaderNames.UserAgent] = supervisorUserAgent;
-
-            // Act
-            IActionResult result = await controller.CheckCompatibility("device", SupervisorSyncProtocolVersionProvider.V4_MultiWorkspacesIntroduced);
-
-            // Assert - should not be 406 (client matches server version)
-            Assert.That(((IStatusCodeActionResult)result).StatusCode, Is.Not.EqualTo(StatusCodes.Status406NotAcceptable));
+            Assert.That(((IStatusCodeActionResult)result).StatusCode, Is.EqualTo(StatusCodes.Status426UpgradeRequired));
         }
 
         [Test]

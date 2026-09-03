@@ -110,8 +110,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             var serverApkBuildNumber = await interviewerVersionReader.SupervisorBuildNumber();
             var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
 
-            var effectiveServerBuildNumber = serverApkBuildNumber ?? productVersion.GetBuildNumber();
-            if (clientApkBuildNumber != null && clientApkBuildNumber > effectiveServerBuildNumber)
+            if (clientApkBuildNumber != null
+                && serverApkBuildNumber.HasValue
+                && clientApkBuildNumber > serverApkBuildNumber.Value)
             {
                 return StatusCode(StatusCodes.Status406NotAcceptable);
             }

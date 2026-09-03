@@ -165,8 +165,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             var serverApkBuildNumber = await interviewerVersionReader.InterviewerBuildNumber();
             var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
 
-            var effectiveServerBuildNumber = serverApkBuildNumber ?? productVersion.GetBuildNumber();
-            if (clientApkBuildNumber != null && clientApkBuildNumber > effectiveServerBuildNumber)
+            if (clientApkBuildNumber != null
+                && serverApkBuildNumber.HasValue
+                && clientApkBuildNumber > serverApkBuildNumber.Value)
             {
                 return StatusCode(StatusCodes.Status406NotAcceptable);
             }

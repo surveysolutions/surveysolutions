@@ -60,8 +60,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             this.navigationService = navigationService;
         }
 
-        protected override bool ShouldCheckVersionBeforeAuthentication => true;
-
         protected override Task CheckAfterStartSynchronization(CancellationToken cancellationToken)
         {
             return Task.CompletedTask;
