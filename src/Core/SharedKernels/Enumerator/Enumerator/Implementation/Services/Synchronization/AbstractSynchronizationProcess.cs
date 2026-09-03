@@ -264,8 +264,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var updateAppStep = this.serviceLocator.GetInstance<IUpdateApplicationSynchronizationStep>();
-                await updateAppStep.CheckServerVersionAsync(cancellationToken).ConfigureAwait(false);
+                if (this.ShouldCheckServerVersionBeforeSynchronization)
+                {
+                    var updateAppStep = this.serviceLocator.GetInstance<IUpdateApplicationSynchronizationStep>();
+                    await updateAppStep.CheckServerVersionAsync(cancellationToken).ConfigureAwait(false);
+                }
 
                 if (SendStatistics)
                 {
@@ -601,6 +604,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             }
         }
         
+        protected virtual bool ShouldCheckServerVersionBeforeSynchronization => false;
+
         protected virtual void OnSuccessfulSynchronization() { }
 
         protected abstract Task RefreshUserInfo(CancellationToken cancellationToken);
