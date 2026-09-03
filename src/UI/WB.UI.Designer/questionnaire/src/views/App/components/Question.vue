@@ -192,6 +192,17 @@
                     </div>
                 </div>
             </div>
+            <div class="form-group">
+                <label for="edit-question-indent">{{ $t('QuestionnaireEditor.QuestionIndent') }}
+                    <help link="questionIndent" />
+                </label>
+                <select id="edit-question-indent" class="form-control" v-model.number="activeQuestion.indent" style="width: auto; display: inline-block;">
+                    <option :value="0">0</option>
+                    <option :value="1">1</option>
+                    <option :value="2">2</option>
+                    <option :value="3">3</option>
+                </select>
+            </div>
         </div>
         <div class="form-buttons-holder">
             <div class="pull-left">

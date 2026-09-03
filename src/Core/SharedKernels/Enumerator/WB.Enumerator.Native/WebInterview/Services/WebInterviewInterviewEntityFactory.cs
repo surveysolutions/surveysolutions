@@ -516,6 +516,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
         private void PutHideInstructions(GenericQuestion result, Identity id, IQuestionnaire questionnaire)
         {
             result.HideInstructions = questionnaire.GetHideInstructions(id.Id);
+            result.Indent = questionnaire.GetQuestionIndent(id.Id);
         }
 
         private static IEnumerable<LinkedOption> GetLinkedOptionsForLinkedQuestion(IStatefulInterview callerInterview,
