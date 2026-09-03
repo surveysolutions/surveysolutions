@@ -73,6 +73,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
+        public virtual async Task<bool> SendQuestionCommandAndGetResultAsync(QuestionCommand answerCommand)
+        {
+            var commandAccepted = false;
+            await this.ExecuteActionAsync(async token =>
+            {
+                await this.commandService.ExecuteAsync(answerCommand, cancellationToken: token);
+                commandAccepted = true;
+            });
+            return commandAccepted;
+        }
+
         private async Task ExecuteActionAsync(Func<CancellationToken, Task> action, CancellationToken cancellationToken = default)
         {
             CancellationTokenSource cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);

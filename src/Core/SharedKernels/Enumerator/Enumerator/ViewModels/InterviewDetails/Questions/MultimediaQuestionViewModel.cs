@@ -153,7 +153,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                     try
                     {
-                        await this.Answering.SendQuestionCommandAsync(command);
+                        if (!await this.Answering.SendQuestionCommandAndGetResultAsync(command))
+                        {
+                            await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                            return;
+                        }
                         if (!string.IsNullOrEmpty(oldFileName) && oldFileName != pictureFileName)
                         {
                             await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, oldFileName);
@@ -212,7 +216,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                             try
                             {
-                                await this.Answering.SendQuestionCommandAsync(command);
+                                if (!await this.Answering.SendQuestionCommandAndGetResultAsync(command))
+                                {
+                                    await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                                    return;
+                                }
                                 if (!string.IsNullOrEmpty(oldFileName) && oldFileName != pictureFileName)
                                 {
                                     await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, oldFileName);
