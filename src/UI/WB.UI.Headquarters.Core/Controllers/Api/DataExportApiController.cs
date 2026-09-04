@@ -341,7 +341,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             
 
             var state = this.TryRestoreExternalStorageState(model?.State);
-            if (state == null)
+            var authorizationCode = model?.Code;
+            if (state == null || string.IsNullOrWhiteSpace(authorizationCode))
                 return BadRequest("Export parameters not found");
             
             logger.LogInformation($"Export to external storage for {state.Type}");
@@ -352,7 +353,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             try
             {
-                var response = await GetExternalStorageAuthTokenAsync(state, model.Code);
+                var response = await GetExternalStorageAuthTokenAsync(state, authorizationCode);
 
                 if (!response.IsSuccessStatusCode)
                 {
