@@ -14,3 +14,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
+[assembly: InternalsVisibleTo("WB.Tests.Android.Instrumentation")]
