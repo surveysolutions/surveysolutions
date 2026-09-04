@@ -676,6 +676,9 @@
     <value>เลือกตัวเลือก</value>
   </data>
 
+  <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+    <value>ไม่สามารถประมวลผลภาพถ่ายได้เนื่องจากไม่รองรับรูปแบบไฟล์นี้ กรุณาถ่ายภาพใหม่อีกครั้ง</value>
+  </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>ถ่ายภาพ</value>
   </data>

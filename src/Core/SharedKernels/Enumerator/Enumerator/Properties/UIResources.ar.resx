@@ -590,6 +590,9 @@
     <data name="Multimedia_PictureSource" xml:space="preserve">
   <value>اختر خيارًا</value>
 </data>
+    <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+      <value>تعذرت معالجة الصورة لأن تنسيقها غير مدعوم. يرجى التقاط الصورة مرة أخرى.</value>
+    </data>
     <data name="Multimedia_TakePhoto" xml:space="preserve">
   <value>التقط صورة</value>
 </data>

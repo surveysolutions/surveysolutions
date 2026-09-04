@@ -581,6 +581,9 @@ Você pode criar ou editar seus questionários no Survey Solutions Designer</val
   <data name="Multimedia_PictureSource" xml:space="preserve">
     <value>Selecione uma opção</value>
   </data>
+  <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+    <value>Não é possível processar a foto porque o seu formato não é suportado. Por favor, tire a foto novamente.</value>
+  </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Tirar foto</value>
   </data>

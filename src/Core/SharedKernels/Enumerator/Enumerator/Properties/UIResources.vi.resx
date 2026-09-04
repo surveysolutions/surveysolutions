@@ -525,6 +525,9 @@
   <data name="Multimedia_PictureSource" xml:space="preserve">
     <value>Chọn một tùy chọn</value>
   </data>
+  <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+    <value>Không thể xử lý ảnh vì định dạng của ảnh không được hỗ trợ. Vui lòng chụp lại ảnh.</value>
+  </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Chụp ảnh</value>
   </data>

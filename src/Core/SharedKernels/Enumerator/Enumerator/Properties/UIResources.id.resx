@@ -676,6 +676,9 @@ Anda dapat membuat atau menyunting kuesioner Anda pada Desainer Survey Solutions
     <value>Pilih opsi</value>
   </data>
 
+  <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+    <value>Foto tidak dapat diproses karena formatnya tidak didukung. Silakan ambil foto lagi.</value>
+  </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Ambil foto</value>
   </data>

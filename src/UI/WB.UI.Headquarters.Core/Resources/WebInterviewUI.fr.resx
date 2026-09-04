@@ -471,6 +471,9 @@ Veuillez contacter l'équipe de support pour obtenir de l'aide.</value>
   <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
     <value>Informations supplémentaires sur la question</value>
   </data>
+  <data name="ImageFormatNotSupported" xml:space="preserve">
+    <value>Le format de l'image n'est pas pris en charge par votre navigateur.</value>
+  </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>La lecture multimédia n'est pas prise en charge par votre navigateur. Vous pouvez le télécharger à la place.</value>
   </data>

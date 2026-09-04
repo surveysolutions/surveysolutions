@@ -439,6 +439,9 @@
     <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
         <value>ข้อมูลคำถามเพิ่มเติม</value>
     </data>
+    <data name="ImageFormatNotSupported" xml:space="preserve">
+        <value>เบราว์เซอร์ของคุณไม่รองรับรูปแบบของภาพนี้</value>
+    </data>
     <data name="MultimediaNotSupported" xml:space="preserve">
         <value>เบราว์เซอร์ของคุณไม่รองรับการเล่นมัลติมีเดีย คุณสามารถดาวน์โหลดแทนได้</value>
     </data>

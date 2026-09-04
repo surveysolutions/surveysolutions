@@ -483,6 +483,9 @@
   <data name="Multimedia_PictureSource" xml:space="preserve">
     <value>选择一个选项</value>
   </data>
+  <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+    <value>照片格式不受支持，无法处理。请重新拍照。</value>
+  </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>拍照</value>
   </data>

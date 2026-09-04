@@ -993,6 +993,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Multimedia_PhotoProcessingFailed {
+            get {
+                return ResourceManager.GetString("Multimedia_PhotoProcessingFailed", resourceCulture);
+            }
+        }
+        
         public static string Multimedia_TakePhoto {
             get {
                 return ResourceManager.GetString("Multimedia_TakePhoto", resourceCulture);

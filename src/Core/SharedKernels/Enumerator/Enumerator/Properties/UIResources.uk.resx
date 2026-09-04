@@ -783,6 +783,9 @@
   <data name="Multimedia_PictureSource" xml:space="preserve">
     <value>Виберіть опцію</value>
   </data>
+  <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+    <value>Не вдалося обробити фотографію, оскільки її формат не підтримується. Будь ласка, сфотографуйте ще раз.</value>
+  </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Сфотографуйте</value>
   </data>

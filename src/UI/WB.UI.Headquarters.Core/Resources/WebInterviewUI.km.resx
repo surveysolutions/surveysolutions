@@ -439,6 +439,9 @@
     <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
         <value>ព័ត៌មាន​សំណួរ​បន្ថែម</value>
     </data>
+    <data name="ImageFormatNotSupported" xml:space="preserve">
+        <value>ទម្រង់រូបភាពមិនត្រូវបានគាំទ្រដោយកម្មវិធីរុករករបស់អ្នកទេ។</value>
+    </data>
     <data name="MultimediaNotSupported" xml:space="preserve">
         <value>ការចាក់សារថ្មីពហុមេឌៀមិនត្រូវបានគាំទ្រដោយកម្មវិធីរុករករបស់អ្នកទេ។ អ្នកអាចទាញយកវាជំនួសវិញ។</value>
     </data>

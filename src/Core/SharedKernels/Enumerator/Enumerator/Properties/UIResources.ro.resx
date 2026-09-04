@@ -509,6 +509,9 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
   <data name="Multimedia_PictureSource" xml:space="preserve">
     <value>Selectați o opțiune</value>
   </data>
+  <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+    <value>Fotografia nu poate fi procesată deoarece formatul său nu este acceptat. Vă rugăm să faceți din nou fotografia.</value>
+  </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Faceți o fotografie</value>
   </data>

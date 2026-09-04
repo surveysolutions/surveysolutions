@@ -439,6 +439,9 @@ Hubungi dukungan untuk mendapatkan bantuan.</value>
     <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
         <value>Informasi pertanyaan tambahan</value>
     </data>
+    <data name="ImageFormatNotSupported" xml:space="preserve">
+        <value>Format gambar tidak didukung oleh browser Anda.</value>
+    </data>
     <data name="MultimediaNotSupported" xml:space="preserve">
         <value>Pemutaran multimedia tidak didukung oleh browser Anda. Anda dapat mengunduhnya sebagai gantinya.</value>
     </data>

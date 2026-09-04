@@ -670,6 +670,9 @@
     <value>ជ្រើសរើសជម្រើស</value>
   </data>
 
+  <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+    <value>មិនអាចដំណើរការរូបថតបានទេ ព្រោះទម្រង់របស់វាមិនត្រូវបានគាំទ្រ។ សូមថតរូបម្តងទៀត។</value>
+  </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>ថតរូប</value>
   </data>
