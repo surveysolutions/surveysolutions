@@ -172,7 +172,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             => diff != null && diff.IsFailedErrorValidationIndexChanged;
 
         private bool IsFailedWarningValidationIndexChanged(InterviewTreeValidateableDiff diff) 
-            => diff != null && diff.IsFailedErrorValidationIndexChanged;
+            => diff != null && diff.IsFailedWarningValidationIndexChanged;
 
         private bool WereSubstitutableChanged(InterviewTreeNodeDiff interviewTreeNodeDiff)
         {
