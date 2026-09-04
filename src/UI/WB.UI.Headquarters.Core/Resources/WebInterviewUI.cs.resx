@@ -340,6 +340,9 @@ Požádejte o pomoc svého garanta.</value>
   <data name="NumberEnter" xml:space="preserve">
     <value>Vložit číslo</value>
   </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Záporné hodnoty nejsou pro tuto otázku povoleny</value>
+  </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>Odpověď '{{answer}}' je chybná, protože otázka je využívá velikost seznamu (rosteru) a zadaná odpověď je záporná</value>
   </data>

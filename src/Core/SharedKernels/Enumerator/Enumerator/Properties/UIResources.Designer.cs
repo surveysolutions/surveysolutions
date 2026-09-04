@@ -495,6 +495,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Interview_Question_Integer_NegativeAnswer {
+            get {
+                return ResourceManager.GetString("Interview_Question_Integer_NegativeAnswer", resourceCulture);
+            }
+        }
+        
         public static string Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue {
             get {
                 return ResourceManager.GetString("Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue", resourceCulture);

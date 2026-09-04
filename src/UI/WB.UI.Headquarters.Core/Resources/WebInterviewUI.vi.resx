@@ -241,6 +241,9 @@
     <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
         <value>Giá trị đã nhập không được nhỏ hơn câu trả lời được bảo vệ</value>
         </data>
+    <data name="NumberNonNegativeError" xml:space="preserve">
+        <value>Không cho phép giá trị âm cho câu hỏi này</value>
+        </data>
     <data name="NumberRosterError" xml:space="preserve">
         <value>Câu trả lời '{{answer}}' không chính xác vì câu hỏi được sử dụng làm quy mô của danh sách và câu trả lời được chỉ định là phủ định</value>
         </data>
