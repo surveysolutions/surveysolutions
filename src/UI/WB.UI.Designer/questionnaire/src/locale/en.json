@@ -74,6 +74,7 @@
     "SideBarScenarioEmptyLine1": "Use this tab to view your scenarios.",
     "SideBarScenarioEmptyLine2": "A scenario is a snapshot of tester state, you can save it on tester by click on button \"Save Scenario\".",
     "SideBarScenarioName": "scenario title",
+    "SideBarScenarioRecordNew": "Record New Scenario",
     "SideBarSectionsCounter": "{{count}} Section:",
     "SideBarSectionsCounter_other": "{{count}} Sections:",
     "SideBarTranslationDownloadXlsx": "Download xlsx",
@@ -167,6 +168,7 @@
     "FindReplaceInAllFound": "in {{count}} found entity?",
     "FindReplaceInAllFound_other": "in {{count}} found entities?",
     "FindReplaceMatchingLines": "Matching lines: {{count}}",
+    "FindReplaceCurrentMatch": "{{current}} / {{count}}",
     "FindReplaceNext": "Next",
     "FindReplacePrevious": "Previous",
     "FindReplaceReplaceAll": "Replace all ({{count}})",
@@ -499,6 +501,7 @@
     "DataChangesReverted": "Data changes reverted",
     "OptionsSizeLimit": "Maximum {max_rows} rows allowed",
     "CommunicationError": "Network error",
+    "PopupBlocked": "Unable to open window. Please allow pop-ups in your browser and try again.",
     "SideBarCategoriesAddNew": "Add new categories",
     "RowAdded": "Row added",
     "OptionsCascadingListError": "\r\nYou entered an invalid input. Each line should follow the format: \"Title...ParentValue/Value[...Attachment name]\". 'Value' and 'ParentValue' must be an integer number. 'Title' must be an alpha-numeric string. 'Attachment name' is optional. No empty lines are allowed.",
@@ -580,7 +583,7 @@
     "PasswordEmailSent": "Please check your email to reset your password.",
     "EmailChangeShouldBeConfirmed": "Please follow instructions sent to provided email ({0}) to confirm email change.",
     "PendingEmailUpdate": "Pending update to {0}",
-    "LastLoginDate": "Last login date"
+    "LastLoginDate": "Last login"
   },
   "QuestionnaireController": {
     "Action": "Action",
