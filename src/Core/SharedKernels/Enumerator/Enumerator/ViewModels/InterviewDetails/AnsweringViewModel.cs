@@ -50,10 +50,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public virtual async Task SendQuestionCommandAsync(QuestionCommand answerCommand)
         {
-            Stopwatch commandTime = Stopwatch.StartNew();
             try
             {
-                await this.ExecuteCommandAsync(answerCommand);
+                await this.ExecuteCommandAndGetResultAsync(answerCommand);
             }
             catch (Exception e)
             {
@@ -61,6 +60,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 e.Data.Add("CommandType", answerCommand.GetType());
                 e.Data.Add("Interview Id", answerCommand.InterviewId.ToString());
                 throw;
+            }
+        }
+
+        public virtual async Task<bool> SendQuestionCommandAndGetResultAsync(QuestionCommand answerCommand)
+        {
+            return await this.ExecuteCommandAndGetResultAsync(answerCommand);
+        }
+
+        private async Task<bool> ExecuteCommandAndGetResultAsync(QuestionCommand answerCommand)
+        {
+            Stopwatch commandTime = Stopwatch.StartNew();
+            var commandAccepted = false;
+            try
+            {
+                await this.ExecuteActionAsync(async token =>
+                {
+                    await this.commandService.ExecuteAsync(answerCommand, cancellationToken: token);
+                    commandAccepted = true;
+                });
             }
             finally
             {
@@ -71,6 +89,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 }
                 messenger.Publish(new AnswerAcceptedMessage(this, commandTime.Elapsed));
             }
+
+            return commandAccepted;
         }
 
         private async Task ExecuteActionAsync(Func<CancellationToken, Task> action, CancellationToken cancellationToken = default)
@@ -81,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 this.StartInProgressIndicator();
 
-                await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync();
+                await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync(cancellationTokenSource.Token);
 
                 lock (this.cancellationLockObject)
                 {
@@ -103,11 +123,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 this.FinishInProgressIndicator();
             }
-        }
-
-        private Task ExecuteCommandAsync(ICommand answerCommand)
-        {
-            return ExecuteActionAsync(async token => await this.commandService.ExecuteAsync(answerCommand, cancellationToken: token));
         }
 
         private void TryCancelLastExecutedCommand()

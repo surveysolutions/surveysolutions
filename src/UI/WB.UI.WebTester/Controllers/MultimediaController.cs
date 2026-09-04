@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -145,9 +146,16 @@ namespace WB.UI.WebTester.Controllers
             }
 
             string? fileName = null;
+            var operationLock = InterviewFileOperationLocks.Get(interview.Id);
+            await operationLock.WaitAsync();
 
             try
             {
+                interview = this.statefulInterviewRepository.Get(id) ??
+                    throw new InvalidOperationException("Interview must not be null.");
+                question = interview.GetQuestion(questionIdentity)!;
+                var oldFileName = interview.GetMultimediaQuestion(questionIdentity)?.GetAnswer()?.FileName;
+
                 await using var ms = new MemoryStream();
                 await file.CopyToAsync(ms);
 
@@ -164,12 +172,29 @@ namespace WB.UI.WebTester.Controllers
 
                 this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
                     responsibleId, questionIdentity.Id, questionIdentity.RosterVector, fileName));
+
+                if (!string.IsNullOrEmpty(oldFileName) && oldFileName != fileName)
+                {
+                    try
+                    {
+                        this.mediaStorage.Remove(oldFileName, interview.Id);
+                    }
+                    catch (Exception cleanupException)
+                    {
+                        Trace.TraceError("Failed to clean up replaced picture file for interview {0}: {1}",
+                            interview.Id, cleanupException);
+                    }
+                }
             }
             catch (Exception e)
             {
                 if (fileName != null)
                     webInterviewNotificationService.MarkAnswerAsNotSaved(Guid.Parse(id), questionIdentity, e);
                 throw;
+            }
+            finally
+            {
+                operationLock.Dispose();
             }
 
             return this.Json("ok");

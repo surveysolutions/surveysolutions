@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using Xamarin.Essentials;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -36,6 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IInterviewFileStorage imageFileStorage;
         private readonly IViewModelEventRegistry eventRegistry;
         private readonly IViewModelNavigationService viewModelNavigationService;
+        private readonly ILogger logger;
         private Guid interviewId;
         private Identity questionIdentity;
         private string variableName;
@@ -53,7 +55,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<PictureQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering,
-            IFileSystemAccessor fileSystemAccessor
+            IFileSystemAccessor fileSystemAccessor,
+            ILogger logger
             )
         {
             this.userId = principal.CurrentUserIdentity.UserId;
@@ -68,6 +71,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
             this.viewModelNavigationService = viewModelNavigationService;
+            this.logger = logger;
         }
 
         public AnsweringViewModel Answering { get; }
@@ -140,6 +144,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 if (this.Answer?.Length > 0)
                 {
+                    var oldFileName = this.AnswerFileName;
+                    var oldFileData = !string.IsNullOrEmpty(oldFileName) &&
+                                      oldFileName == pictureFileName
+                        ? this.imageFileStorage.GetInterviewBinaryData(this.interviewId, oldFileName)
+                        : null;
+
                     this.StorePictureFile(new MemoryStream(this.Answer), pictureFileName);
 
                     var command = new AnswerPictureQuestionCommand(
@@ -151,12 +161,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                     try
                     {
-                        await this.Answering.SendQuestionCommandAsync(command);
+                        if (!await this.Answering.SendQuestionCommandAndGetResultAsync(command))
+                        {
+                            await this.RestorePictureAfterFailedAnswerAsync(pictureFileName, oldFileName, oldFileData);
+                            return;
+                        }
+                        this.AnswerFileName = pictureFileName;
                         await this.QuestionState.Validity.ExecutedWithoutExceptions();
+                        await this.RemoveOldPictureAsync(oldFileName, pictureFileName);
                     }
                     catch (InterviewException ex)
                     {
-                        await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                        await this.RestorePictureAfterFailedAnswerAsync(pictureFileName, oldFileName, oldFileData);
                         await this.QuestionState.Validity.ProcessException(ex);
                     }
                 }
@@ -192,6 +208,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     {
                         using (pictureStream)
                         {
+                            var oldFileName = this.AnswerFileName;
+                            var oldFileData = !string.IsNullOrEmpty(oldFileName) &&
+                                              oldFileName == pictureFileName
+                                ? this.imageFileStorage.GetInterviewBinaryData(this.interviewId, oldFileName)
+                                : null;
+
                             this.StorePictureFile(pictureStream, pictureFileName);
 
                             var command = new AnswerPictureQuestionCommand(
@@ -203,16 +225,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                             try
                             {
-                                await this.Answering.SendQuestionCommandAsync(command);
+                                if (!await this.Answering.SendQuestionCommandAndGetResultAsync(command))
+                                {
+                                    await this.RestorePictureAfterFailedAnswerAsync(pictureFileName, oldFileName, oldFileData);
+                                    return;
+                                }
                                 this.Answer =
                                     await this.imageFileStorage.GetInterviewBinaryDataAsync(this.interviewId,
                                         pictureFileName);
                                 this.AnswerFileName = pictureFileName;
                                 await this.QuestionState.Validity.ExecutedWithoutExceptions();
+                                await this.RemoveOldPictureAsync(oldFileName, pictureFileName);
                             }
                             catch (InterviewException ex)
                             {
-                                await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                                await this.RestorePictureAfterFailedAnswerAsync(pictureFileName, oldFileName, oldFileData);
                                 await this.QuestionState.Validity.ProcessException(ex);
                             }
                         }
@@ -263,6 +290,35 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.Answer = null;
                     this.AnswerFileName = null;
                 }
+            }
+        }
+
+        private async Task RestorePictureAfterFailedAnswerAsync(
+            string pictureFileName, string oldFileName, byte[] oldFileData)
+        {
+            if (oldFileName == pictureFileName && oldFileData != null)
+            {
+                await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                this.imageFileStorage.StoreInterviewBinaryData(this.interviewId, oldFileName, oldFileData, null);
+            }
+            else
+            {
+                await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+            }
+        }
+
+        private async Task RemoveOldPictureAsync(string oldFileName, string pictureFileName)
+        {
+            if (string.IsNullOrEmpty(oldFileName) || oldFileName == pictureFileName)
+                return;
+
+            try
+            {
+                await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, oldFileName);
+            }
+            catch (Exception exception)
+            {
+                this.logger.Error($"Failed to remove old picture {oldFileName} for interview {this.interviewId}.", exception);
             }
         }
 

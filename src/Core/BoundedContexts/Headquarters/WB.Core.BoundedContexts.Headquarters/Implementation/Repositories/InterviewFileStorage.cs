@@ -15,6 +15,16 @@ public abstract class InterviewFileStorage: IInterviewFileStorage
     protected readonly IFileSystemAccessor fileSystemAccessor;
     private readonly string basePath;
 
+    public virtual bool IsEquivalentFileName(string fileName, string otherFileName)
+    {
+        if (string.IsNullOrEmpty(fileName) || string.IsNullOrEmpty(otherFileName))
+            return string.Equals(fileName, otherFileName, StringComparison.Ordinal);
+
+        return string.Equals(fileName, otherFileName, StringComparison.Ordinal) ||
+               (OperatingSystem.IsWindows() &&
+                string.Equals(fileName, otherFileName, StringComparison.OrdinalIgnoreCase));
+    }
+
     public InterviewFileStorage(IFileSystemAccessor fileSystemAccessor, IOptions<FileStorageConfig> rootDirectoryPath)
     {
         this.fileSystemAccessor = fileSystemAccessor;

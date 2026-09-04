@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
@@ -8,7 +9,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 
         void NotifyRefreshFinished();
 
-        Task WaitWhileUserInterfaceIsRefreshingAsync();
+        Task WaitWhileUserInterfaceIsRefreshingAsync(CancellationToken cancellationToken);
 
         bool IsUserInterfaceLocked { get; }
 
