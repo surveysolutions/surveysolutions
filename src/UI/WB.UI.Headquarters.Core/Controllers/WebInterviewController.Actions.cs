@@ -129,6 +129,7 @@ namespace WB.UI.Headquarters.Controllers
             var sameLogicalFileName = false;
             var oldFileDataRead = false;
             var fileStored = false;
+            var backupStored = false;
             var uploadLock = InterviewFileOperationLocks.Get(interview.Id);
             await uploadLock.WaitAsync();
 
@@ -155,6 +156,7 @@ namespace WB.UI.Headquarters.Controllers
                     {
                         backupFileName = $"{Guid.NewGuid():N}_{Path.GetFileName(oldFileName)}";
                         this.imageFileStorage.StoreInterviewBinaryData(interview.Id, backupFileName, oldFileData, file.ContentType);
+                        backupStored = true;
                         await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, oldFileName);
                     }
                 }
@@ -167,7 +169,7 @@ namespace WB.UI.Headquarters.Controllers
 
                 try
                 {
-                    if (!string.IsNullOrEmpty(backupFileName))
+                    if (backupStored)
                     {
                         await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, backupFileName);
                     }
@@ -191,7 +193,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     if (sameLogicalFileName)
                     {
-                        if (!string.IsNullOrEmpty(backupFileName) && oldFileData != null)
+                        if (backupStored && oldFileData != null)
                         {
                             await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
                             this.imageFileStorage.StoreInterviewBinaryData(interview.Id, oldFileName, oldFileData, file.ContentType);
