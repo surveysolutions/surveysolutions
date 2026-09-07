@@ -287,9 +287,9 @@ namespace WB.UI.Headquarters.Controllers
             return View(model);
         }
 
-        public IActionResult LogOff()
+        public async Task<IActionResult> LogOff()
         {
-            this.signInManager.SignOutAsync();
+            await this.signInManager.SignOutAsync();
             return this.Redirect("~/");
         }
 
