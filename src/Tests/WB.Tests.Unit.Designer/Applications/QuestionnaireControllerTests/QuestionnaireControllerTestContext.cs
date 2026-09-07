@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor.TagHelpers;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -43,7 +45,10 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             ILogger<QuestionnaireController> logger = null,
             IQuestionnaireInfoFactory questionnaireInfoFactory = null,
             ICategoricalOptionsImportService categoricalOptionsImportService = null,
-            DesignerDbContext dbContext = null)
+            DesignerDbContext dbContext = null,
+            IEmailSender emailSender = null,
+            IViewRenderService viewRenderService = null,
+            UserManager<DesignerIdentityUser> userManager = null)
         {
             var questionnaireController = new QuestionnaireController(
                 questionnaireViewFactory ?? Mock.Of<IQuestionnaireViewFactory>(),
@@ -58,9 +63,9 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 commandService ?? Mock.Of<ICommandService>(),
                 dbContext ?? Create.InMemoryDbContext(),
                 reusableCategoriesService: Mock.Of<IReusableCategoriesService>(),
-                Mock.Of<IEmailSender>(),
-                Mock.Of<IViewRenderService>(),
-                null!,
+                emailSender ?? Mock.Of<IEmailSender>(),
+                viewRenderService ?? Mock.Of<IViewRenderService>(),
+                userManager ?? CreateUserManager(),
                 Mock.Of<ITagHelperComponentManager>(),
                 Mock.Of<IWebHostEnvironment>(),
                 Mock.Of<IOptions<ViteTagOptions>>(),
@@ -69,12 +74,44 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             {
                 HttpContext = new DefaultHttpContext
                 {
-                    Session = new MockHttpSession()
+                    Session = new MockHttpSession(),
+                    User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                    {
+                        new Claim(ClaimTypes.Name, "testuser")
+                    }))
                 }
             };
 
             questionnaireController.TempData = new TempDataDictionary(questionnaireController.ControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
             return questionnaireController;
+        }
+
+        internal static IUrlHelper CreateUrlHelper(string returnUrl = "https://example.com/share")
+        {
+            var urlHelper = new Mock<IUrlHelper>();
+            urlHelper.Setup(u => u.Action(It.IsAny<UrlActionContext>())).Returns(returnUrl);
+            return urlHelper.Object;
+        }
+
+        internal static IQuestionnaireViewFactory CreateQuestionnaireViewFactory()
+        {
+            var factory = new Mock<IQuestionnaireViewFactory>();
+            factory.Setup(f => f.Load(It.IsAny<QuestionnaireViewInputModel>()))
+                   .Returns(Create.QuestionnaireView());
+            factory.Setup(f => f.Load(It.IsAny<QuestionnaireRevision>()))
+                   .Returns(Create.QuestionnaireView());
+            return factory.Object;
+        }
+
+        internal static UserManager<DesignerIdentityUser> CreateUserManager(DesignerIdentityUser returnUser = null)
+        {
+            var store = new Mock<IUserStore<DesignerIdentityUser>>();
+            var userManagerMock = new Mock<UserManager<DesignerIdentityUser>>(
+                store.Object, null, null, null, null, null, null, null, null);
+            userManagerMock
+                .Setup(m => m.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+                .ReturnsAsync(returnUser);
+            return userManagerMock.Object;
         }
 
         protected static Stream GenerateStreamFromString(string s)
