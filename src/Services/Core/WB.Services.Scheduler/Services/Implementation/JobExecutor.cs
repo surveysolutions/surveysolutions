@@ -35,15 +35,15 @@ namespace WB.Services.Scheduler.Services.Implementation
         {
             using (LoggingHelpers.LogContext(("jobId", job.Id), ("jobTag", job.Tag), ("tenantName", job.TenantName)))
             {
-                logger.LogInformation("Start job execution [{tenantName} {jobArgs}]", job.TenantName, job.Args);
+                logger.LogInformation("Start job execution for tenant {tenantName}", job.TenantName);
                 var linkedCancellation = CancellationTokenSource.CreateLinkedTokenSource(token);
 
                 using var sub = jobCancellation.Subscribe(cancelled =>
                 {
                     if (job.Id == cancelled)
                     {
-                        logger.LogInformation("Job cancellation requested #{jobId} - {jobTag} {tenantName} [{jobArgs}]",
-                            job.Id, job.Tag, job.TenantName, job.Args);
+                        logger.LogInformation("Job cancellation requested #{jobId} - {jobTag} {tenantName}",
+                            job.Id, job.Tag, job.TenantName);
                         linkedCancellation.Cancel(true);
                     }
                 });
@@ -75,11 +75,11 @@ namespace WB.Services.Scheduler.Services.Implementation
                 }
                 catch (OperationCanceledException)
                 {
-                    logger.LogWarning("Job cancelled [ {jobArgs} ]", job.Args);
+                    logger.LogWarning("Job cancelled");
                 }
                 catch (Exception e)
                 {
-                    logger.LogError(e, "Error during job run [ {jobArgs} ]", job.Args);
+                    logger.LogError(e, "Error during job run");
                     progressReporter.FailJob(job.Id, e);
                 }
             }

@@ -25,9 +25,9 @@
                     window.location = redirectUrl;
                 };
                 
-                var request ='state=' + dataExportState;
-                if(qs.code) request += '&code=' + qs.code;
-                else if(qs.access_token) request += '&access_token=' + qs.access_token;
+                var request ='state=' + encodeURIComponent(dataExportState);
+                if(qs.code) request += '&code=' + encodeURIComponent(qs.code);
+                else if(qs.access_token) request += '&access_token=' + encodeURIComponent(qs.access_token);
                 
                 xhr.send(request);
             }

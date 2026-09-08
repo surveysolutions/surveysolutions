@@ -67,4 +67,10 @@ public abstract class AudioAuditFileStorageBase<T> : AudioAuditStorageBase
         filePlainStorageAccessor.Remove(fileId);
         return Task.CompletedTask;
     }
+
+    public override Task RemoveAllBinaryDataForInterviewsAsync(List<Guid> interviewIds)
+    {
+        filePlainStorageAccessor.Remove(q => q.Where(f => interviewIds.Contains(f.InterviewId)));
+        return Task.CompletedTask;
+    }
 }
