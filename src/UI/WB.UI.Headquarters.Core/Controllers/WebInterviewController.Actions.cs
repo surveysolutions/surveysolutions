@@ -125,11 +125,9 @@ namespace WB.UI.Headquarters.Controllers
             string oldFileName = null;
             var answerSaved = false;
             byte[] oldFileData = null;
-            string backupFileName = null;
             var sameLogicalFileName = false;
             var oldFileDataRead = false;
             var fileStored = false;
-            var backupStored = false;
             var uploadLock = InterviewFileOperationLocks.Get(interview.Id);
             await uploadLock.WaitAsync();
 
@@ -154,9 +152,6 @@ namespace WB.UI.Headquarters.Controllers
                     oldFileDataRead = true;
                     if (oldFileData != null)
                     {
-                        backupFileName = $"{Guid.NewGuid():N}_{Path.GetFileName(oldFileName)}";
-                        this.imageFileStorage.StoreInterviewBinaryData(interview.Id, backupFileName, oldFileData, file.ContentType);
-                        backupStored = true;
                         await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, oldFileName);
                     }
                 }
@@ -169,11 +164,6 @@ namespace WB.UI.Headquarters.Controllers
 
                 try
                 {
-                    if (backupStored)
-                    {
-                        await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, backupFileName);
-                    }
-
                     if (!string.IsNullOrEmpty(oldFileName) &&
                         !string.Equals(oldFileName, filename, StringComparison.Ordinal) &&
                         !sameLogicalFileName)
@@ -193,11 +183,10 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     if (sameLogicalFileName)
                     {
-                        if (backupStored && oldFileData != null)
+                        if (oldFileData != null)
                         {
                             await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
                             this.imageFileStorage.StoreInterviewBinaryData(interview.Id, oldFileName, oldFileData, file.ContentType);
-                            await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, backupFileName);
                         }
                         else if (fileStored && oldFileDataRead)
                         {

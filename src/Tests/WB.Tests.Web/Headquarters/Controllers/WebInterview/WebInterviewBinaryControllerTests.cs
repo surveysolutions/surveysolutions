@@ -132,6 +132,7 @@ public class WebInterviewBinaryControllerTests
         await controller.Image(interviewId, questionIdentity.ToString(), formFile);
 
         imageFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, "photo__.png", It.IsAny<byte[]>(), "image/png"), Times.Once);
+        imageFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, It.IsAny<string>(), It.IsAny<byte[]>(), "image/png"), Times.Once);
         imageFileStorage.Verify(x => x.RemoveInterviewBinaryData(interviewId, "photo__.png"), Times.Never);
         imageFileStorage.Verify(x => x.RemoveInterviewBinaryData(interviewId, oldFileName), Times.Once);
     }
@@ -197,5 +198,6 @@ public class WebInterviewBinaryControllerTests
 
         imageFileStorage.Verify(x => x.RemoveInterviewBinaryData(interviewId, newFileName), Times.Once);
         imageFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, oldFileName, oldData, "image/png"), Times.Once);
+        imageFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, It.IsAny<string>(), It.IsAny<byte[]>(), "image/png"), Times.Exactly(2));
     }
 }
