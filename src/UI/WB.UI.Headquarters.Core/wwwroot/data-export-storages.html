@@ -11,9 +11,11 @@
             if (qs.state) {
                 var state = window.atob(qs.state).split(';');
 
-                var redirectUrl = decodeURIComponent(state[0]);
-                var processingUrl = decodeURIComponent(state[1]);
+                var redirectUrl = toSameOriginUrl(decodeURIComponent(state[0]));
+                var processingUrl = toSameOriginUrl(decodeURIComponent(state[1]));
                 var dataExportState = state[2];
+
+                if (!redirectUrl || !processingUrl) return;
 
                 var xhr = new XMLHttpRequest();
 
@@ -33,15 +35,30 @@
             }
         }
 
+        // Resolves a candidate URL against the current origin and returns a rebuilt
+        // same-origin relative path. Returns null for cross-site, javascript: or data: URLs
+        // so requests and redirects can never target an attacker-controlled host.
+        function toSameOriginUrl(candidate) {
+            try {
+                var resolved = new URL(candidate, window.location.href);
+                if (resolved.origin !== window.location.origin) return null;
+                return resolved.pathname + resolved.search + resolved.hash;
+            } catch (e) {
+                return null;
+            }
+        }
+
         function getHashQueryString() {
-            var qsObject = {};
+            var qsObject = Object.create(null);
             var query = window.location.hash;
             if(query === '') query = window.location.search;
             
             var vars = query.substr(1).split('&');
             for (var i = 0; i < vars.length; i++) {
                 var pair = vars[i].split('=');
-                qsObject[pair[0]] = decodeURIComponent(pair[1]);
+                var key = pair[0];
+                if (key === '__proto__' || key === 'constructor' || key === 'prototype') continue;
+                qsObject[key] = decodeURIComponent(pair[1]);
             }
             return qsObject;
         }
