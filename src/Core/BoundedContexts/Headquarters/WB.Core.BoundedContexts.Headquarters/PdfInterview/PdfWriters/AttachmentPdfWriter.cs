@@ -52,7 +52,7 @@ public class AttachmentPdfWriter : IPdfWriter
                 image.Width = Unit.FromPoint(300);
                 image.Height = Unit.FromPoint(300);
             }
-            catch (Exception exception) when (exception is ImageFormatException || exception is NotSupportedException || exception is NullReferenceException)
+            catch (Exception exception) when (exception is ImageFormatException || exception is NotSupportedException)
             {
                 paragraph.AddWrapFormattedText($"{attachment.FileName}", PdfStyles.QuestionAnswer);
             }
