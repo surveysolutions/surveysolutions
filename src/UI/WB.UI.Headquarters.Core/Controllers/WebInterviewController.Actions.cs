@@ -191,7 +191,6 @@ namespace WB.UI.Headquarters.Controllers
             }
             finally
             {
-                uploadLock.Release();
                 uploadLock.Dispose();
             }
             return this.Json("ok");
