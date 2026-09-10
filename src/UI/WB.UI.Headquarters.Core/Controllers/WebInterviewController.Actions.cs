@@ -56,12 +56,12 @@ namespace WB.UI.Headquarters.Controllers
                 return this.Json("fail");
             }
             
+            AnswerAudioQuestionCommand command = null;
             var uploadLock = InterviewFileOperationLocks.Get(interview.Id);
             await uploadLock.WaitAsync();
             string fileName = null;
             string previousFileName = null;
             byte[] previousFileData = null;
-            TimeSpan? previousFileDuration = null;
             var hadPreviousFile = false;
             var fileWriteAttempted = false;
             var commandExecutionStarted = false;
@@ -79,7 +79,6 @@ namespace WB.UI.Headquarters.Controllers
                 
                 fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.aac";
                 previousFileName = interview.GetAudioQuestion(questionIdentity)?.GetAnswer()?.FileName;
-                previousFileDuration = interview.GetAudioQuestion(questionIdentity)?.GetAnswer()?.Length;
                 hadPreviousFile = !string.IsNullOrEmpty(previousFileName);
                 if (hadPreviousFile)
                 {
@@ -103,7 +102,7 @@ namespace WB.UI.Headquarters.Controllers
                         ? TimeSpan.FromSeconds(dur)
                         : TimeSpan.Zero);
                 }
-                var command = new AnswerAudioQuestionCommand(interview.Id,
+                command = new AnswerAudioQuestionCommand(interview.Id,
                     interview.CurrentResponsibleId, questionIdentity.Id, questionIdentity.RosterVector,
                     fileName, 
                     audioDuration);
@@ -128,16 +127,15 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (Exception e)
             {
-                var savedAnswer = commandExecutionStarted
-                    ? this.statefulInterviewRepository.Get(id.FormatGuid())?.GetAudioQuestion(questionIdentity)?.GetAnswer()
+                var savedQuestion = commandExecutionStarted
+                    ? this.statefulInterviewRepository.Get(id.FormatGuid())?.GetAudioQuestion(questionIdentity)
                     : null;
+                var savedAnswer = savedQuestion?.GetAnswer();
 
                 var answerSaved = savedAnswer != null
                     && string.Equals(savedAnswer.FileName, fileName, StringComparison.Ordinal)
-                    && savedAnswer.Length == audioDuration
-                    && (!hadPreviousFile
-                        || !string.Equals(previousFileName, fileName, StringComparison.Ordinal)
-                        || previousFileDuration != audioDuration);
+                    && command != null
+                    && savedQuestion.AnswerTime?.UtcDateTime == command.OriginDate.UtcDateTime;
 
                 if (fileWriteAttempted && !answerSaved)
                 {

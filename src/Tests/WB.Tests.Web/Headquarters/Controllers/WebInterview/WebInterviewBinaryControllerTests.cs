@@ -512,6 +512,7 @@ public class WebInterviewBinaryControllerTests
         var questionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
         var fileName = "audio__.aac";
         var previousData = new byte[] { 9, 8, 7 };
+        DateTimeOffset? committedAnswerTime = null;
 
         var question = new InterviewTreeQuestion(
             questionIdentity,
@@ -537,7 +538,12 @@ public class WebInterviewBinaryControllerTests
         afterCommitInterview.SetupGet(x => x.Id).Returns(interviewId);
         afterCommitInterview.Setup(x => x.GetQuestion(questionIdentity)).Returns(question);
         afterCommitInterview.Setup(x => x.GetAudioQuestion(questionIdentity))
-            .Returns(new InterviewTreeAudioQuestion(fileName, TimeSpan.FromSeconds(1)));
+            .Returns(() =>
+            {
+                var committedQuestion = new InterviewTreeAudioQuestion(fileName, TimeSpan.FromSeconds(1));
+                committedQuestion.SetAnswerTime(committedAnswerTime);
+                return committedQuestion;
+            });
 
         var statefulInterviewRepository = new Mock<IStatefulInterviewRepository>();
         statefulInterviewRepository.SetupSequence(x => x.Get(It.IsAny<string>()))
@@ -549,7 +555,87 @@ public class WebInterviewBinaryControllerTests
         audioFileStorage.Setup(x => x.GetInterviewBinaryDataAsync(interviewId, fileName)).ReturnsAsync(previousData);
 
         var commandService = new Mock<ICommandService>();
-        commandService.Setup(x => x.Execute(It.IsAny<ICommand>(), It.IsAny<string>())).Throws(new InvalidOperationException("boom"));
+        commandService.Setup(x => x.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
+            .Callback<ICommand, string>((command, _) => committedAnswerTime = ((AnswerAudioQuestionCommand)command).OriginDate)
+            .Throws(new InvalidOperationException("boom"));
+
+        var webInterviewNotificationService = new Mock<IWebInterviewNotificationService>();
+        var controller = new WebInterviewBinaryController(
+            statefulInterviewRepository.Object,
+            commandService.Object,
+            webInterviewNotificationService.Object,
+            CreateBinaryServices(Mock.Of<IImageFileStorage>(), audioFileStorage.Object),
+            Mock.Of<ILogger<WebInterviewBinaryController>>());
+
+        var bytes = new byte[] { 1, 2, 3 };
+        var formFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "file", "audio.aac")
+        {
+            Headers = new HeaderDictionary(),
+            ContentType = "audio/aac"
+        };
+
+        var exception = Assert.ThrowsAsync<InvalidOperationException>(async () => await controller.Audio(interviewId, questionIdentity.ToString(), "1", formFile));
+        Assert.That(exception, Is.Not.Null);
+
+        audioFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, fileName, It.IsAny<byte[]>(), "audio/aac"), Times.Once);
+        audioFileStorage.Verify(x => x.RemoveInterviewBinaryData(interviewId, fileName), Times.Never);
+        audioFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, fileName, previousData, ContentTypeHelper.GetAudioContentType(fileName)), Times.Never);
+        webInterviewNotificationService.Verify(x => x.MarkAnswerAsNotSaved(interviewId, questionIdentity, It.IsAny<Exception>()), Times.Never);
+    }
+
+    [Test]
+    public void when_uploading_audio_and_post_commit_exception_occurs_with_same_duration_should_not_rollback_committed_file()
+    {
+        var interviewId = Guid.NewGuid();
+        var questionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
+        var fileName = "audio__.aac";
+        var previousData = new byte[] { 9, 8, 7 };
+        DateTimeOffset? committedAnswerTime = null;
+
+        var question = new InterviewTreeQuestion(
+            questionIdentity,
+            null,
+            null,
+            "audio",
+            QuestionType.Audio,
+            null,
+            null,
+            null,
+            false,
+            false,
+            false);
+
+        var beforeUploadInterview = new Mock<IStatefulInterview>();
+        beforeUploadInterview.SetupGet(x => x.Id).Returns(interviewId);
+        beforeUploadInterview.Setup(x => x.AcceptsInterviewerAnswers()).Returns(true);
+        beforeUploadInterview.Setup(x => x.GetQuestion(questionIdentity)).Returns(question);
+        beforeUploadInterview.Setup(x => x.GetAudioQuestion(questionIdentity))
+            .Returns(new InterviewTreeAudioQuestion(fileName, TimeSpan.FromSeconds(1)));
+
+        var afterCommitInterview = new Mock<IStatefulInterview>();
+        afterCommitInterview.SetupGet(x => x.Id).Returns(interviewId);
+        afterCommitInterview.Setup(x => x.GetQuestion(questionIdentity)).Returns(question);
+        afterCommitInterview.Setup(x => x.GetAudioQuestion(questionIdentity))
+            .Returns(() =>
+            {
+                var committedQuestion = new InterviewTreeAudioQuestion(fileName, TimeSpan.FromSeconds(1));
+                committedQuestion.SetAnswerTime(committedAnswerTime);
+                return committedQuestion;
+            });
+
+        var statefulInterviewRepository = new Mock<IStatefulInterviewRepository>();
+        statefulInterviewRepository.SetupSequence(x => x.Get(It.IsAny<string>()))
+            .Returns(beforeUploadInterview.Object)
+            .Returns(beforeUploadInterview.Object)
+            .Returns(afterCommitInterview.Object);
+
+        var audioFileStorage = new Mock<IAudioFileStorage>();
+        audioFileStorage.Setup(x => x.GetInterviewBinaryDataAsync(interviewId, fileName)).ReturnsAsync(previousData);
+
+        var commandService = new Mock<ICommandService>();
+        commandService.Setup(x => x.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
+            .Callback<ICommand, string>((command, _) => committedAnswerTime = ((AnswerAudioQuestionCommand)command).OriginDate)
+            .Throws(new InvalidOperationException("boom"));
 
         var webInterviewNotificationService = new Mock<IWebInterviewNotificationService>();
         var controller = new WebInterviewBinaryController(
