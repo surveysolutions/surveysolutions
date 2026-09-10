@@ -19,12 +19,14 @@
                 </p>
             </div>
 
-            <div v-if="model.useCaptcha && model.recaptchaSiteKey && !model.serverUnderLoad"
+            <div v-if="model.useCaptcha && model.recaptchaSiteKey && !model.useRecaptchaV3 && !model.serverUnderLoad"
                 class="form-group">
                 <vue-recaptcha v-if="model.useCaptcha"
                     :sitekey="model.recaptchaSiteKey"
                     :loadRecaptchaScript="true"></vue-recaptcha>
             </div>
+            <input v-if="model.useCaptcha && model.useRecaptchaV3 && !model.serverUnderLoad"
+                name="g-recaptcha-response" type="hidden" :value="recaptchaV3Token" />
             <div v-if="model.useCaptcha && model.hostedCaptchaHtml && !model.serverUnderLoad"
                 v-dompurify-html="model.hostedCaptchaHtml"
                 class="form-group">
@@ -61,7 +63,8 @@
             <div v-else
                 class="row-element mb-20">
                 <button class="btn btn-success btn-lg"
-                    type="submit">
+                    type="submit"
+                    :disabled="model.useCaptcha && model.useRecaptchaV3 && !model.serverUnderLoad && !recaptchaV3Token">
                     {{ buttonTitle }}
                 </button>
             </div>
@@ -70,7 +73,8 @@
                 name="resume"
                 class="btn btn-success btn-lg"
                 type="submit"
-                :value="resumeButtonTitle" />
+                :value="resumeButtonTitle"
+                :disabled="model.useCaptcha && model.useRecaptchaV3 && !model.serverUnderLoad && !recaptchaV3Token" />
         </form>
     </div>
 </template>
@@ -87,9 +91,122 @@ export default {
         buttonTitle: null,
         resumeButtonTitle: null,
     },
+    data() {
+        return {
+            recaptchaV3Token: '',
+            recaptchaV3IntervalId: null,
+            recaptchaV3ExpiryTimeoutId: null,
+            recaptchaV3RetryIntervalId: null,
+            recaptchaV3RetryAttempts: 0,
+        }
+    },
+    mounted() {
+        if (this.model.useCaptcha && this.model.useRecaptchaV3 && this.model.recaptchaSiteKey) {
+            this.loadRecaptchaV3()
+        }
+    },
+    beforeUnmount() {
+        if (this.recaptchaV3IntervalId !== null) {
+            clearInterval(this.recaptchaV3IntervalId)
+            this.recaptchaV3IntervalId = null
+        }
+        if (this.recaptchaV3ExpiryTimeoutId !== null) {
+            clearTimeout(this.recaptchaV3ExpiryTimeoutId)
+            this.recaptchaV3ExpiryTimeoutId = null
+        }
+        if (this.recaptchaV3RetryIntervalId !== null) {
+            clearInterval(this.recaptchaV3RetryIntervalId)
+            this.recaptchaV3RetryIntervalId = null
+        }
+    },
     computed: {
         model() {
             return this.$config.model
+        },
+    },
+    methods: {
+        loadRecaptchaV3() {
+            const siteKey = this.model.recaptchaSiteKey
+            const existingScript = document.querySelector(`script[src*="recaptcha/api.js?render=${siteKey}"]`)
+            if (!existingScript) {
+                const script = document.createElement('script')
+                script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`
+                script.onload = () => this.executeRecaptchaV3(siteKey)
+                script.onerror = () => {
+                    script.remove()
+                }
+                script.dataset.recaptchaHandlerAttached = 'true'
+                document.head.appendChild(script)
+            } else {
+                if (window.grecaptcha) {
+                    this.executeRecaptchaV3(siteKey)
+                } else if (!existingScript.dataset.recaptchaHandlerAttached) {
+                    existingScript.addEventListener('load', () => this.executeRecaptchaV3(siteKey), { once: true })
+                    existingScript.dataset.recaptchaHandlerAttached = 'true'
+                }
+            }
+            if (this.recaptchaV3RetryIntervalId === null) {
+                this.recaptchaV3RetryAttempts = 0
+                this.recaptchaV3RetryIntervalId = setInterval(() => {
+                    this.recaptchaV3RetryAttempts++
+                    if (this.recaptchaV3RetryAttempts > 12) {
+                        clearInterval(this.recaptchaV3RetryIntervalId)
+                        this.recaptchaV3RetryIntervalId = null
+                        return
+                    }
+                    this.loadRecaptchaV3()
+                }, 5000)
+            }
+        },
+        executeRecaptchaV3(siteKey) {
+            if (!window.grecaptcha) return
+            window.grecaptcha.ready(() => {
+                window.grecaptcha.execute(siteKey, { action: 'start' }).then(token => {
+                    this.recaptchaV3Token = token
+                    if (this.recaptchaV3RetryIntervalId !== null) {
+                        clearInterval(this.recaptchaV3RetryIntervalId)
+                        this.recaptchaV3RetryIntervalId = null
+                    }
+                    this.recaptchaV3ExpiryTimeoutId = setTimeout(() => {
+                        this.recaptchaV3Token = ''
+                        this.recaptchaV3ExpiryTimeoutId = null
+                    }, 120000)
+                    // Refresh the token every 90 seconds (v3 tokens expire after 2 minutes)
+                    if (this.recaptchaV3IntervalId !== null) {
+                        clearInterval(this.recaptchaV3IntervalId)
+                    }
+                    this.recaptchaV3IntervalId = setInterval(() => {
+                        if (!window.grecaptcha) {
+                            this.recaptchaV3Token = ''
+                            if (this.recaptchaV3ExpiryTimeoutId !== null) {
+                                clearTimeout(this.recaptchaV3ExpiryTimeoutId)
+                                this.recaptchaV3ExpiryTimeoutId = null
+                            }
+                            clearInterval(this.recaptchaV3IntervalId)
+                            this.recaptchaV3IntervalId = null
+                            return
+                        }
+                        window.grecaptcha.execute(siteKey, { action: 'start' }).then(t => {
+                            this.recaptchaV3Token = t
+                            if (this.recaptchaV3ExpiryTimeoutId !== null) {
+                                clearTimeout(this.recaptchaV3ExpiryTimeoutId)
+                            }
+                            this.recaptchaV3ExpiryTimeoutId = setTimeout(() => {
+                                this.recaptchaV3Token = ''
+                                this.recaptchaV3ExpiryTimeoutId = null
+                            }, 120000)
+                        }).catch(() => {
+                            this.recaptchaV3Token = ''
+                            if (this.recaptchaV3ExpiryTimeoutId !== null) {
+                                clearTimeout(this.recaptchaV3ExpiryTimeoutId)
+                                this.recaptchaV3ExpiryTimeoutId = null
+                            }
+                        })
+                    }, 90000)
+                }).catch(() => {
+                    this.recaptchaV3Token = ''
+                })
+            })
         },
     },
 }

@@ -241,6 +241,9 @@
     <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
         <value>តម្លៃដែលបានបញ្ចូលមិនអាចតិចជាងចម្លើយដែលត្រូវបានការពារទេ។</value>
     </data>
+    <data name="NumberNonNegativeError" xml:space="preserve">
+        <value>មិនអនុញ្ញាតឱ្យមានតម្លៃអវិជ្ជមានសម្រាប់សំណួរនេះ</value>
+    </data>
     <data name="NumberRosterError" xml:space="preserve">
         <value>ចម្លើយ '{{answer}}' មិនត្រឹមត្រូវទេ ព្រោះសំណួរត្រូវបានប្រើជាទំហំបញ្ជីឈ្មោះ ហើយចម្លើយដែលបានបញ្ជាក់គឺអវិជ្ជមាន</value>
     </data>

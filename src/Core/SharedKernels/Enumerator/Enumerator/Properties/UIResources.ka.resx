@@ -371,6 +371,9 @@
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>შეყვანილი მნიშვნელობა არ შეიძლება დაყოფილი იქნეს როგორც მთელი მნიშვნელობა</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>ამ კითხვისთვის უარყოფითი მნიშვნელობები არ არის დაშვებული</value>
+  </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>პასუხი '{0}' არასწორია, რადგანაც იგი მეტია როსტერის ზედა ზღვარზე '{1}' </value>
   </data>

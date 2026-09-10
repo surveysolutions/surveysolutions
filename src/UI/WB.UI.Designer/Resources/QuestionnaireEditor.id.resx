@@ -823,6 +823,9 @@
     <data name="QuestionInteger" xml:space="preserve">
         <value>Bilangan bulat</value>
     </data>
+    <data name="QuestionNonNegative" xml:space="preserve">
+        <value>Non-negatif</value>
+    </data>
     <data name="QuestionIsLinked" xml:space="preserve">
         <value>Terhubung</value>
     </data>

@@ -821,6 +821,9 @@
   <data name="QuestionInteger" xml:space="preserve">
     <value>عدد صحيح</value>
   </data>
+  <data name="QuestionNonNegative" xml:space="preserve">
+    <value>غير سالب</value>
+  </data>
   <data name="QuestionIsLinked" xml:space="preserve">
     <value>مرتبط</value>
   </data>
