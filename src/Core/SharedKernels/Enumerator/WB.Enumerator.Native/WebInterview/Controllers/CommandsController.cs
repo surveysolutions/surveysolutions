@@ -278,7 +278,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                     }
                     else if (questionType == QuestionType.Audio)
                     {
-                        fileName = $@"{questionnaire.GetQuestionVariableName(identity.Id)}__{identity.RosterVector}.m4a";
+                        fileName = interview.GetAudioQuestion(identity)?.GetAnswer()?.FileName;
                     }
                 }
                 catch (Exception e)

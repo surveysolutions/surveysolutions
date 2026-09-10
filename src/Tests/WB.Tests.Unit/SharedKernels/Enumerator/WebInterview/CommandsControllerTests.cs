@@ -87,6 +87,36 @@ public class CommandsControllerTests
         notificationService.Verify(x => x.MarkAnswerAsNotSaved(interviewId, questionIdentity, It.IsAny<Exception>()), Times.Once);
     }
 
+    [Test]
+    public async Task when_removing_audio_answer_should_remove_the_stored_file_with_its_original_filename()
+    {
+        var interviewId = Guid.NewGuid();
+        var questionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
+        var fileName = "myfile.aac";
+        var interview = new Mock<IStatefulInterview>();
+        interview.SetupGet(x => x.QuestionnaireIdentity).Returns(new QuestionnaireIdentity(Guid.NewGuid(), 1));
+        interview.Setup(x => x.GetAudioQuestion(questionIdentity))
+            .Returns(new InterviewTreeAudioQuestion(fileName, TimeSpan.FromSeconds(5)));
+
+        var questionnaire = Mock.Of<IQuestionnaire>(x => x.GetQuestionType(questionIdentity.Id) == QuestionType.Audio);
+        var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(x =>
+            x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+        var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x =>
+            x.Get(It.IsAny<string>()) == interview.Object);
+        var audioFileStorage = new Mock<IAudioFileStorage>();
+        var controller = new TestCommandsController(
+            Mock.Of<ICommandService>(),
+            Mock.Of<IImageFileStorage>(),
+            audioFileStorage.Object,
+            questionnaireStorage,
+            interviewRepository,
+            Mock.Of<IWebInterviewNotificationService>());
+
+        await controller.RemoveAnswer(interviewId, new CommandsController.RemoveAnswerRequest { Identity = questionIdentity.ToString() });
+
+        audioFileStorage.Verify(x => x.RemoveInterviewBinaryData(interviewId, fileName), Times.Once);
+    }
+
     private sealed class TestCommandsController : CommandsController
     {
         public TestCommandsController(
