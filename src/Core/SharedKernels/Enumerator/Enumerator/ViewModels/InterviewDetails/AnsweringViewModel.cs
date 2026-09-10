@@ -162,7 +162,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             if (Delay != TimeSpan.Zero && useDelay && this.inProgress == false && this.inProgressDepth > 0)
             {
-                this.throttler.RunDelayed(() => this.InProgress = this.inProgressDepth > 0, Delay).ConfigureAwait(false);
+                this.throttler.RunDelayed(() => this.InProgress = this.inProgressDepth > 0, Delay, CancellationToken.None)
+                    .ConfigureAwait(false);
             }
             else
             {

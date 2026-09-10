@@ -147,7 +147,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     var oldFileName = this.AnswerFileName;
                     var oldFileData = !string.IsNullOrEmpty(oldFileName) &&
                                       oldFileName == pictureFileName
-                        ? this.imageFileStorage.GetInterviewBinaryData(this.interviewId, oldFileName)
+                        ? await this.imageFileStorage.GetInterviewBinaryData(this.interviewId, oldFileName)
                         : null;
 
                     this.StorePictureFile(new MemoryStream(this.Answer), pictureFileName);
@@ -211,7 +211,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                             var oldFileName = this.AnswerFileName;
                             var oldFileData = !string.IsNullOrEmpty(oldFileName) &&
                                               oldFileName == pictureFileName
-                                ? this.imageFileStorage.GetInterviewBinaryData(this.interviewId, oldFileName)
+                                ? await this.imageFileStorage.GetInterviewBinaryData(this.interviewId, oldFileName)
                                 : null;
 
                             this.StorePictureFile(pictureStream, pictureFileName);

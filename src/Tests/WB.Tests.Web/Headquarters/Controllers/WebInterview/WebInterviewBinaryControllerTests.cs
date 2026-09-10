@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.Tests.Web.Headquarters.Controllers.WebInterview;
@@ -59,11 +60,8 @@ public class WebInterviewBinaryControllerTests
         var controller = new WebInterviewBinaryController(
             statefulInterviewRepository.Object,
             Mock.Of<ICommandService>(),
-            Mock.Of<IImageProcessingService>(),
             Mock.Of<IWebInterviewNotificationService>(),
-            Mock.Of<IAudioFileStorage>(),
-            Mock.Of<IAudioProcessingService>(),
-            imageFileStorage.Object,
+            CreateBinaryServices(imageFileStorage.Object),
             Mock.Of<ILogger<WebInterviewBinaryController>>());
 
         var bytes = new byte[] { 1, 2, 3 };
@@ -116,11 +114,8 @@ public class WebInterviewBinaryControllerTests
         var controller = new WebInterviewBinaryController(
             statefulInterviewRepository.Object,
             Mock.Of<ICommandService>(),
-            Mock.Of<IImageProcessingService>(),
             Mock.Of<IWebInterviewNotificationService>(),
-            Mock.Of<IAudioFileStorage>(),
-            Mock.Of<IAudioProcessingService>(),
-            imageFileStorage.Object,
+            CreateBinaryServices(imageFileStorage.Object),
             Mock.Of<ILogger<WebInterviewBinaryController>>());
 
         var bytes = new byte[] { 1, 2, 3 };
@@ -139,7 +134,7 @@ public class WebInterviewBinaryControllerTests
     }
 
     [Test]
-    public async Task when_uploading_picture_with_case_only_extension_change_and_command_fails_should_restore_original_file()
+    public void when_uploading_picture_with_case_only_extension_change_and_command_fails_should_restore_original_file()
     {
         var interviewId = Guid.NewGuid();
         var questionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
@@ -181,11 +176,8 @@ public class WebInterviewBinaryControllerTests
         var controller = new WebInterviewBinaryController(
             statefulInterviewRepository.Object,
             commandService.Object,
-            Mock.Of<IImageProcessingService>(),
             Mock.Of<IWebInterviewNotificationService>(),
-            Mock.Of<IAudioFileStorage>(),
-            Mock.Of<IAudioProcessingService>(),
-            imageFileStorage.Object,
+            CreateBinaryServices(imageFileStorage.Object),
             Mock.Of<ILogger<WebInterviewBinaryController>>());
 
         var bytes = new byte[] { 1, 2, 3 };
@@ -205,7 +197,7 @@ public class WebInterviewBinaryControllerTests
     }
 
     [Test]
-    public async Task when_uploading_picture_with_case_only_extension_change_and_missing_old_file_and_command_fails_should_remove_new_file()
+    public void when_uploading_picture_with_case_only_extension_change_and_missing_old_file_and_command_fails_should_remove_new_file()
     {
         var interviewId = Guid.NewGuid();
         var questionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
@@ -245,11 +237,8 @@ public class WebInterviewBinaryControllerTests
         var controller = new WebInterviewBinaryController(
             statefulInterviewRepository.Object,
             commandService.Object,
-            Mock.Of<IImageProcessingService>(),
             Mock.Of<IWebInterviewNotificationService>(),
-            Mock.Of<IAudioFileStorage>(),
-            Mock.Of<IAudioProcessingService>(),
-            imageFileStorage.Object,
+            CreateBinaryServices(imageFileStorage.Object),
             Mock.Of<ILogger<WebInterviewBinaryController>>());
 
         var bytes = new byte[] { 1, 2, 3 };
@@ -265,4 +254,11 @@ public class WebInterviewBinaryControllerTests
         imageFileStorage.Verify(x => x.RemoveInterviewBinaryData(interviewId, newFileName), Times.Once);
         imageFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, oldFileName, It.IsAny<byte[]>(), It.IsAny<string>()), Times.Never);
     }
+
+    private static WebInterviewBinaryServices CreateBinaryServices(IImageFileStorage imageFileStorage) =>
+        new WebInterviewBinaryServices(
+            Mock.Of<IImageProcessingService>(),
+            Mock.Of<IAudioFileStorage>(),
+            Mock.Of<IAudioProcessingService>(),
+            imageFileStorage);
 }

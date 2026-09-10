@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers
@@ -29,29 +30,20 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly ICommandService commandService;
-        private readonly IImageProcessingService imageProcessingService;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
-        private readonly IAudioFileStorage audioFileStorage;
-        private readonly IAudioProcessingService audioProcessingService;
-        private readonly IImageFileStorage imageFileStorage;
+        private readonly WebInterviewBinaryServices binaryServices;
         private readonly ILogger<WebInterviewBinaryController> logger;
         public WebInterviewBinaryController(
             IStatefulInterviewRepository statefulInterviewRepository, 
             ICommandService commandService,
-            IImageProcessingService imageProcessingService, 
             IWebInterviewNotificationService webInterviewNotificationService, 
-            IAudioFileStorage audioFileStorage, 
-            IAudioProcessingService audioProcessingService,
-            IImageFileStorage imageFileStorage,
+            WebInterviewBinaryServices binaryServices,
             ILogger<WebInterviewBinaryController> logger)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.commandService = commandService;
-            this.imageProcessingService = imageProcessingService;
             this.webInterviewNotificationService = webInterviewNotificationService;
-            this.audioFileStorage = audioFileStorage;
-            this.audioProcessingService = audioProcessingService;
-            this.imageFileStorage = imageFileStorage;
+            this.binaryServices = binaryServices;
             this.logger = logger;
         }
 
@@ -81,15 +73,15 @@ namespace WB.UI.Headquarters.Controllers
                 var audioDuration = TimeSpan.Zero;
                 if(contentType is "audio/wav" or "audio/x-wav")
                 {
-                    var audioInfo = await this.audioProcessingService.CompressAudioFileAsync(bytes, contentType);
-                    audioFileStorage.StoreInterviewBinaryData(id, fileName, audioInfo.Binary, audioInfo.MimeType); 
+                    var audioInfo = await this.binaryServices.AudioProcessingService.CompressAudioFileAsync(bytes, contentType);
+                    binaryServices.AudioFileStorage.StoreInterviewBinaryData(id, fileName, audioInfo.Binary, audioInfo.MimeType);
                     audioDuration = audioInfo.Duration == TimeSpan.Zero 
                         ? (Double.TryParse(duration, out var dur) ? TimeSpan.FromSeconds(dur) : TimeSpan.Zero)
                         : audioInfo.Duration;
                 }
                 else
                 {
-                    audioFileStorage.StoreInterviewBinaryData(id, fileName, bytes, file.ContentType);
+                    binaryServices.AudioFileStorage.StoreInterviewBinaryData(id, fileName, bytes, file.ContentType);
                     audioDuration = (Double.TryParse(duration, out var dur)
                         ? TimeSpan.FromSeconds(dur)
                         : TimeSpan.Zero);
@@ -138,20 +130,20 @@ namespace WB.UI.Headquarters.Controllers
 
                 await using var ms = new MemoryStream();
                 await file.CopyToAsync(ms);
-                this.imageProcessingService.Validate(ms.ToArray());
+                this.binaryServices.ImageProcessingService.Validate(ms.ToArray());
 
                 var extension = Path.GetExtension(file.FileName);
                 filename = AnswerUtils.GetPictureFileName(question.VariableName, questionIdentity.RosterVector, extension);
                 var responsibleId = interview.CurrentResponsibleId;
 
                 sameLogicalFileName = !string.IsNullOrEmpty(oldFileName) &&
-                    this.imageFileStorage.IsEquivalentFileName(oldFileName, filename);
+                    this.binaryServices.ImageFileStorage.IsEquivalentFileName(oldFileName, filename);
                 if (sameLogicalFileName)
                 {
-                    oldFileData = await this.imageFileStorage.GetInterviewBinaryDataAsync(interview.Id, oldFileName);
+                    oldFileData = await this.binaryServices.ImageFileStorage.GetInterviewBinaryDataAsync(interview.Id, oldFileName);
                 }
 
-                this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
+                this.binaryServices.ImageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
                 fileStored = true;
                 this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
                     responsibleId, questionIdentity.Id, questionIdentity.RosterVector, filename));
@@ -160,9 +152,9 @@ namespace WB.UI.Headquarters.Controllers
                 try
                 {
                     if (!string.IsNullOrEmpty(oldFileName) &&
-                        !this.imageFileStorage.IsEquivalentFileName(oldFileName, filename))
+                        !this.binaryServices.ImageFileStorage.IsEquivalentFileName(oldFileName, filename))
                     {
-                        await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, oldFileName);
+                        await this.binaryServices.ImageFileStorage.RemoveInterviewBinaryData(interview.Id, oldFileName);
                     }
                 }
                 catch (Exception cleanupException)
@@ -179,23 +171,18 @@ namespace WB.UI.Headquarters.Controllers
                     {
                         if (oldFileData != null)
                         {
-                            await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
-                            this.imageFileStorage.StoreInterviewBinaryData(interview.Id, oldFileName, oldFileData,
+                            await this.binaryServices.ImageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
+                            this.binaryServices.ImageFileStorage.StoreInterviewBinaryData(interview.Id, oldFileName, oldFileData,
                                 ContentTypeHelper.GetImageContentType(oldFileName));
                         }
                         else if (fileStored)
                         {
-                            await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
+                            await this.binaryServices.ImageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
                         }
-                    }
-                    else if (oldFileData != null)
-                    {
-                        this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, oldFileData,
-                            ContentTypeHelper.GetImageContentType(oldFileName));
                     }
                     else
                     {
-                        await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
+                        await this.binaryServices.ImageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
                     }
                 }
 
