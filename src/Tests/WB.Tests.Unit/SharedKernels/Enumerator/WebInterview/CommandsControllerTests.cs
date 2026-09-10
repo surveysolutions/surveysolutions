@@ -110,6 +110,7 @@ public class CommandsControllerTests
         var interviewRepository = new Mock<IStatefulInterviewRepository>();
         interviewRepository.SetupSequence(x => x.Get(It.IsAny<string>()))
             .Returns(initialInterview.Object)
+            .Returns(initialInterview.Object)
             .Returns(updatedInterview.Object);
 
         var imageFileStorage = new Mock<IImageFileStorage>();
