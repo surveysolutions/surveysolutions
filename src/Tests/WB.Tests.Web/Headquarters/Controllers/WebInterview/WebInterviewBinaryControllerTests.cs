@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Headquarters.Controllers;
@@ -134,7 +135,7 @@ public class WebInterviewBinaryControllerTests
         imageFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, "photo__.png", It.IsAny<byte[]>(), "image/png"), Times.Once);
         imageFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, It.IsAny<string>(), It.IsAny<byte[]>(), "image/png"), Times.Once);
         imageFileStorage.Verify(x => x.RemoveInterviewBinaryData(interviewId, "photo__.png"), Times.Never);
-        imageFileStorage.Verify(x => x.RemoveInterviewBinaryData(interviewId, oldFileName), Times.Once);
+        imageFileStorage.Verify(x => x.RemoveInterviewBinaryData(interviewId, oldFileName), Times.Never);
     }
 
     [Test]
@@ -145,6 +146,7 @@ public class WebInterviewBinaryControllerTests
         var oldFileName = "photo__.PNG";
         var newFileName = "photo__.png";
         var oldData = new byte[] { 7, 8, 9 };
+        var oldFileContentType = ContentTypeHelper.GetImageContentType(oldFileName);
 
         var question = new InterviewTreeQuestion(
             questionIdentity,
@@ -197,7 +199,8 @@ public class WebInterviewBinaryControllerTests
         Assert.That(exception, Is.Not.Null);
 
         imageFileStorage.Verify(x => x.RemoveInterviewBinaryData(interviewId, newFileName), Times.Once);
-        imageFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, oldFileName, oldData, "image/png"), Times.Once);
-        imageFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, It.IsAny<string>(), It.IsAny<byte[]>(), "image/png"), Times.Exactly(2));
+        imageFileStorage.Verify(x => x.RemoveInterviewBinaryData(interviewId, oldFileName), Times.Never);
+        imageFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, oldFileName, oldData, oldFileContentType), Times.Once);
+        imageFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, It.IsAny<string>(), It.IsAny<byte[]>(), It.IsAny<string>()), Times.Exactly(2));
     }
 }

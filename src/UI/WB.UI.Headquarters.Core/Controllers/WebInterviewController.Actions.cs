@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -123,6 +124,7 @@ namespace WB.UI.Headquarters.Controllers
 
             string filename = null;
             string oldFileName = null;
+            string oldFileContentType = null;
             var answerSaved = false;
             byte[] oldFileData = null;
             var sameLogicalFileName = false;
@@ -135,6 +137,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 interview = this.statefulInterviewRepository.Get(id.FormatGuid());
                 oldFileName = interview.GetMultimediaQuestion(questionIdentity)?.GetAnswer()?.FileName;
+                oldFileContentType = ContentTypeHelper.GetImageContentType(oldFileName);
 
                 await using var ms = new MemoryStream();
                 await file.CopyToAsync(ms);
@@ -150,10 +153,6 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     oldFileData = await this.imageFileStorage.GetInterviewBinaryDataAsync(interview.Id, oldFileName);
                     oldFileDataRead = true;
-                    if (oldFileData != null)
-                    {
-                        await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, oldFileName);
-                    }
                 }
 
                 this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
@@ -165,8 +164,7 @@ namespace WB.UI.Headquarters.Controllers
                 try
                 {
                     if (!string.IsNullOrEmpty(oldFileName) &&
-                        !string.Equals(oldFileName, filename, StringComparison.Ordinal) &&
-                        !sameLogicalFileName)
+                        !this.imageFileStorage.IsEquivalentFileName(oldFileName, filename))
                     {
                         await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, oldFileName);
                     }
@@ -186,7 +184,7 @@ namespace WB.UI.Headquarters.Controllers
                         if (oldFileData != null)
                         {
                             await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
-                            this.imageFileStorage.StoreInterviewBinaryData(interview.Id, oldFileName, oldFileData, file.ContentType);
+                            this.imageFileStorage.StoreInterviewBinaryData(interview.Id, oldFileName, oldFileData, oldFileContentType);
                         }
                         else if (fileStored && oldFileDataRead)
                         {
@@ -195,7 +193,7 @@ namespace WB.UI.Headquarters.Controllers
                     }
                     else if (oldFileData != null)
                     {
-                        this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, oldFileData, file.ContentType);
+                        this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, oldFileData, oldFileContentType);
                     }
                     else
                     {
