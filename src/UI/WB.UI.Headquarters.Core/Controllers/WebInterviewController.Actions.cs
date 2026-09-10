@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
@@ -60,8 +61,11 @@ namespace WB.UI.Headquarters.Controllers
             string fileName = null;
             string previousFileName = null;
             byte[] previousFileData = null;
+            TimeSpan? previousFileDuration = null;
             var hadPreviousFile = false;
-            var fileStored = false;
+            var fileWriteAttempted = false;
+            var commandExecutionStarted = false;
+            var audioDuration = TimeSpan.Zero;
             try
             {
                 interview = this.statefulInterviewRepository.Get(id.FormatGuid());
@@ -75,26 +79,26 @@ namespace WB.UI.Headquarters.Controllers
                 
                 fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.aac";
                 previousFileName = interview.GetAudioQuestion(questionIdentity)?.GetAnswer()?.FileName;
+                previousFileDuration = interview.GetAudioQuestion(questionIdentity)?.GetAnswer()?.Length;
                 hadPreviousFile = !string.IsNullOrEmpty(previousFileName);
                 if (hadPreviousFile)
                 {
                     previousFileData = await this.binaryServices.AudioFileStorage.GetInterviewBinaryDataAsync(id, previousFileName);
                 }
-                
-                var audioDuration = TimeSpan.Zero;
+
                 if(contentType is "audio/wav" or "audio/x-wav")
                 {
                     var audioInfo = await this.binaryServices.AudioProcessingService.CompressAudioFileAsync(bytes, contentType);
+                    fileWriteAttempted = true;
                     binaryServices.AudioFileStorage.StoreInterviewBinaryData(id, fileName, audioInfo.Binary, audioInfo.MimeType);
-                    fileStored = true;
                     audioDuration = audioInfo.Duration == TimeSpan.Zero 
                         ? (Double.TryParse(duration, out var dur) ? TimeSpan.FromSeconds(dur) : TimeSpan.Zero)
                         : audioInfo.Duration;
                 }
                 else
                 {
+                    fileWriteAttempted = true;
                     binaryServices.AudioFileStorage.StoreInterviewBinaryData(id, fileName, bytes, file.ContentType);
-                    fileStored = true;
                     audioDuration = (Double.TryParse(duration, out var dur)
                         ? TimeSpan.FromSeconds(dur)
                         : TimeSpan.Zero);
@@ -104,11 +108,12 @@ namespace WB.UI.Headquarters.Controllers
                     fileName, 
                     audioDuration);
 
+                commandExecutionStarted = true;
                 this.commandService.Execute(command);
             }
-            catch (Exception e)
+            catch (InterviewException e)
             {
-                if (fileStored)
+                if (fileWriteAttempted)
                 {
                     await this.binaryServices.AudioFileStorage.RemoveInterviewBinaryData(id, fileName);
                     if (hadPreviousFile && previousFileData != null && previousFileName != null)
@@ -119,6 +124,33 @@ namespace WB.UI.Headquarters.Controllers
                 }
 
                 webInterviewNotificationService.MarkAnswerAsNotSaved(id, questionIdentity, e);
+                throw;
+            }
+            catch (Exception e)
+            {
+                var savedAnswer = commandExecutionStarted
+                    ? this.statefulInterviewRepository.Get(id.FormatGuid())?.GetAudioQuestion(questionIdentity)?.GetAnswer()
+                    : null;
+
+                var answerSaved = savedAnswer != null
+                    && string.Equals(savedAnswer.FileName, fileName, StringComparison.Ordinal)
+                    && savedAnswer.Length == audioDuration
+                    && (!hadPreviousFile
+                        || !string.Equals(previousFileName, fileName, StringComparison.Ordinal)
+                        || previousFileDuration != audioDuration);
+
+                if (fileWriteAttempted && !answerSaved)
+                {
+                    await this.binaryServices.AudioFileStorage.RemoveInterviewBinaryData(id, fileName);
+                    if (hadPreviousFile && previousFileData != null && previousFileName != null)
+                    {
+                        this.binaryServices.AudioFileStorage.StoreInterviewBinaryData(id, previousFileName, previousFileData,
+                            ContentTypeHelper.GetAudioContentType(previousFileName));
+                    }
+                }
+
+                if (!answerSaved)
+                    webInterviewNotificationService.MarkAnswerAsNotSaved(id, questionIdentity, e);
                 throw;
             }
             finally
