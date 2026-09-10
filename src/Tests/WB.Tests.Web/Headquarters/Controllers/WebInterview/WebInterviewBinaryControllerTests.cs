@@ -203,4 +203,66 @@ public class WebInterviewBinaryControllerTests
         imageFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, oldFileName, oldData, oldFileContentType), Times.Once);
         imageFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, It.IsAny<string>(), It.IsAny<byte[]>(), It.IsAny<string>()), Times.Exactly(2));
     }
+
+    [Test]
+    public async Task when_uploading_picture_with_case_only_extension_change_and_missing_old_file_and_command_fails_should_remove_new_file()
+    {
+        var interviewId = Guid.NewGuid();
+        var questionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
+        var oldFileName = "photo__.PNG";
+        var newFileName = "photo__.png";
+
+        var question = new InterviewTreeQuestion(
+            questionIdentity,
+            null,
+            null,
+            "photo",
+            QuestionType.Multimedia,
+            null,
+            null,
+            null,
+            false,
+            false,
+            false);
+
+        var interview = new Mock<IStatefulInterview>();
+        interview.SetupGet(x => x.Id).Returns(interviewId);
+        interview.Setup(x => x.AcceptsInterviewerAnswers()).Returns(true);
+        interview.Setup(x => x.GetQuestion(questionIdentity)).Returns(question);
+        interview.Setup(x => x.GetMultimediaQuestion(questionIdentity))
+            .Returns(new InterviewTreeMultimediaQuestion(oldFileName, null));
+
+        var statefulInterviewRepository = new Mock<IStatefulInterviewRepository>();
+        statefulInterviewRepository.Setup(x => x.Get(It.IsAny<string>())).Returns(interview.Object);
+
+        var imageFileStorage = new Mock<IImageFileStorage>();
+        imageFileStorage.Setup(x => x.IsEquivalentFileName(oldFileName, newFileName)).Returns(true);
+        imageFileStorage.Setup(x => x.GetInterviewBinaryDataAsync(interviewId, oldFileName)).ReturnsAsync((byte[])null);
+
+        var commandService = new Mock<ICommandService>();
+        commandService.Setup(x => x.Execute(It.IsAny<ICommand>(), It.IsAny<string>())).Throws(new InvalidOperationException("boom"));
+
+        var controller = new WebInterviewBinaryController(
+            statefulInterviewRepository.Object,
+            commandService.Object,
+            Mock.Of<IImageProcessingService>(),
+            Mock.Of<IWebInterviewNotificationService>(),
+            Mock.Of<IAudioFileStorage>(),
+            Mock.Of<IAudioProcessingService>(),
+            imageFileStorage.Object,
+            Mock.Of<ILogger<WebInterviewBinaryController>>());
+
+        var bytes = new byte[] { 1, 2, 3 };
+        var formFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "file", "newphoto.png")
+        {
+            Headers = new HeaderDictionary(),
+            ContentType = "image/png"
+        };
+
+        var exception = Assert.ThrowsAsync<InvalidOperationException>(async () => await controller.Image(interviewId, questionIdentity.ToString(), formFile));
+        Assert.That(exception, Is.Not.Null);
+
+        imageFileStorage.Verify(x => x.RemoveInterviewBinaryData(interviewId, newFileName), Times.Once);
+        imageFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, oldFileName, It.IsAny<byte[]>(), It.IsAny<string>()), Times.Never);
+    }
 }

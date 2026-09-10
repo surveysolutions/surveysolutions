@@ -128,7 +128,6 @@ namespace WB.UI.Headquarters.Controllers
             var answerSaved = false;
             byte[] oldFileData = null;
             var sameLogicalFileName = false;
-            var oldFileDataRead = false;
             var fileStored = false;
             var uploadLock = InterviewFileOperationLocks.Get(interview.Id);
             await uploadLock.WaitAsync();
@@ -152,7 +151,6 @@ namespace WB.UI.Headquarters.Controllers
                 if (sameLogicalFileName)
                 {
                     oldFileData = await this.imageFileStorage.GetInterviewBinaryDataAsync(interview.Id, oldFileName);
-                    oldFileDataRead = true;
                 }
 
                 this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
@@ -186,7 +184,7 @@ namespace WB.UI.Headquarters.Controllers
                             await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
                             this.imageFileStorage.StoreInterviewBinaryData(interview.Id, oldFileName, oldFileData, oldFileContentType);
                         }
-                        else if (fileStored && oldFileDataRead)
+                        else if (fileStored)
                         {
                             await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
                         }
