@@ -73,7 +73,7 @@ jobs:
       if: matrix.language == 'csharp'
       uses: android-actions/setup-android@v3
       with:
-        packages: 'platform-tools platforms;android-34 build-tools;34.0.0'
+        packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
 
     # Build C# explicitly so build failures fail the job (autobuild is best-effort and swallows errors).
     - name: Build C#
