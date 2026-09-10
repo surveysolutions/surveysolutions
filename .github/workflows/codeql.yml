@@ -48,7 +48,7 @@ jobs:
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
+      uses: github/codeql-action/init@v4
       with:
         languages: ${{ matrix.language }}
         # If you wish to specify custom queries, you can do so here or in a config file.
@@ -63,21 +63,21 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
   
-    # Restore workload to build android
-    - name: Install android workload
-      run: dotnet workload install android
+    # Restore workloads to build android
+    - name: Restore android workload
+      run: dotnet workload restore "src/WB.sln"
 
     - name: Install Android SDK
       run: |
         sudo apt-get update
-        sudo apt-get install -y openjdk-11-jdk
+        sudo apt-get install -y openjdk-17-jdk
         mkdir -p ~/Android/Sdk/cmdline-tools
         curl -o tools.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
         unzip tools.zip -d ~/Android/Sdk/cmdline-tools
         mv ~/Android/Sdk/cmdline-tools/cmdline-tools ~/Android/Sdk/cmdline-tools/latest
         export PATH=$PATH:~/Android/Sdk/cmdline-tools/latest/bin
         yes | sdkmanager --licenses
-        sdkmanager "platforms;android-34" "platform-tools" "build-tools;35.0.0"
+        sdkmanager "platforms;android-34" "platform-tools" "build-tools;34.0.0"
 
     - name: Export Android SDK Path
       run: echo "ANDROID_SDK_ROOT=$HOME/Android/Sdk" >> $GITHUB_ENV
@@ -85,7 +85,7 @@ jobs:
     # Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
     - name: Autobuild
-      uses: github/codeql-action/autobuild@v3
+      uses: github/codeql-action/autobuild@v4
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
@@ -98,6 +98,6 @@ jobs:
     #     ./location_of_script_within_repo/buildscript.sh
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+      uses: github/codeql-action/analyze@v4
       with:
         category: "/language:${{matrix.language}}"
