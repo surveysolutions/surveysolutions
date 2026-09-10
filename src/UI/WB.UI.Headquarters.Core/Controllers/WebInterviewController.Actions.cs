@@ -124,7 +124,6 @@ namespace WB.UI.Headquarters.Controllers
 
             string filename = null;
             string oldFileName = null;
-            string oldFileContentType = null;
             var answerSaved = false;
             byte[] oldFileData = null;
             var sameLogicalFileName = false;
@@ -136,7 +135,6 @@ namespace WB.UI.Headquarters.Controllers
             {
                 interview = this.statefulInterviewRepository.Get(id.FormatGuid());
                 oldFileName = interview.GetMultimediaQuestion(questionIdentity)?.GetAnswer()?.FileName;
-                oldFileContentType = ContentTypeHelper.GetImageContentType(oldFileName);
 
                 await using var ms = new MemoryStream();
                 await file.CopyToAsync(ms);
@@ -182,7 +180,8 @@ namespace WB.UI.Headquarters.Controllers
                         if (oldFileData != null)
                         {
                             await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
-                            this.imageFileStorage.StoreInterviewBinaryData(interview.Id, oldFileName, oldFileData, oldFileContentType);
+                            this.imageFileStorage.StoreInterviewBinaryData(interview.Id, oldFileName, oldFileData,
+                                ContentTypeHelper.GetImageContentType(oldFileName));
                         }
                         else if (fileStored)
                         {
@@ -191,7 +190,8 @@ namespace WB.UI.Headquarters.Controllers
                     }
                     else if (oldFileData != null)
                     {
-                        this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, oldFileData, oldFileContentType);
+                        this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, oldFileData,
+                            ContentTypeHelper.GetImageContentType(oldFileName));
                     }
                     else
                     {
