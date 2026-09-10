@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -147,7 +146,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     var oldFileName = this.AnswerFileName;
                     var oldFileData = !string.IsNullOrEmpty(oldFileName) &&
                                       oldFileName == pictureFileName
-                        ? await this.imageFileStorage.GetInterviewBinaryData(this.interviewId, oldFileName)
+                        ? await this.imageFileStorage.GetInterviewBinaryDataAsync(this.interviewId, oldFileName)
                         : null;
 
                     this.StorePictureFile(new MemoryStream(this.Answer), pictureFileName);
@@ -211,7 +210,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                             var oldFileName = this.AnswerFileName;
                             var oldFileData = !string.IsNullOrEmpty(oldFileName) &&
                                               oldFileName == pictureFileName
-                                ? await this.imageFileStorage.GetInterviewBinaryData(this.interviewId, oldFileName)
+                                ? await this.imageFileStorage.GetInterviewBinaryDataAsync(this.interviewId, oldFileName)
                                 : null;
 
                             this.StorePictureFile(pictureStream, pictureFileName);
