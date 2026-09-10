@@ -23,7 +23,6 @@ on:
 
 env:
   DOTNET_VERSION: '9.0.x'
-  ANDROID_CMDLINE_TOOLS_VERSION: '11076708'
 
 jobs:
   analyze:
@@ -72,20 +71,9 @@ jobs:
 
     - name: Install Android SDK
       if: matrix.language == 'csharp'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y openjdk-17-jdk
-        mkdir -p ~/Android/Sdk/cmdline-tools
-        curl -o tools.zip https://dl.google.com/android/repository/commandlinetools-linux-${{ env.ANDROID_CMDLINE_TOOLS_VERSION }}_latest.zip
-        unzip tools.zip -d ~/Android/Sdk/cmdline-tools
-        mv ~/Android/Sdk/cmdline-tools/cmdline-tools ~/Android/Sdk/cmdline-tools/latest
-        export PATH=$PATH:~/Android/Sdk/cmdline-tools/latest/bin
-        yes | sdkmanager --licenses
-        sdkmanager "platforms;android-34" "platform-tools" "build-tools;34.0.0"
-
-    - name: Export Android SDK Path
-      if: matrix.language == 'csharp'
-      run: echo "ANDROID_SDK_ROOT=$HOME/Android/Sdk" >> $GITHUB_ENV
+      uses: android-actions/setup-android@v3
+      with:
+        packages: 'platform-tools platforms;android-34 build-tools;34.0.0'
 
     # Build C# explicitly so build failures fail the job (autobuild is best-effort and swallows errors).
     - name: Build C#
