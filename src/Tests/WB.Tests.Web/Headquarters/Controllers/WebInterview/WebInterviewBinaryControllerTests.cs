@@ -733,7 +733,7 @@ public class WebInterviewBinaryControllerTests
         webInterviewNotificationService.Verify(x => x.MarkAnswerAsNotSaved(interviewId, questionIdentity, It.IsAny<Exception>()), Times.Never);
     }
 
-    private static WebInterviewBinaryServices CreateBinaryServices(IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage = null) =>
+    private static IWebInterviewBinaryServices CreateBinaryServices(IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage = null) =>
         new WebInterviewBinaryServices(
             Mock.Of<IImageProcessingService>(),
             audioFileStorage ?? Mock.Of<IAudioFileStorage>(),

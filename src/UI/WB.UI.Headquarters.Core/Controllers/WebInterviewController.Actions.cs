@@ -27,13 +27,13 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly ICommandService commandService;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
-        private readonly WebInterviewBinaryServices binaryServices;
+        private readonly IWebInterviewBinaryServices binaryServices;
         private readonly ILogger<WebInterviewBinaryController> logger;
         public WebInterviewBinaryController(
             IStatefulInterviewRepository statefulInterviewRepository, 
             ICommandService commandService,
             IWebInterviewNotificationService webInterviewNotificationService, 
-            WebInterviewBinaryServices binaryServices,
+            IWebInterviewBinaryServices binaryServices,
             ILogger<WebInterviewBinaryController> logger)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;

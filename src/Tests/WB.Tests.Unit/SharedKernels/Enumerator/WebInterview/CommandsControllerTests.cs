@@ -131,7 +131,7 @@ public class CommandsControllerTests
         await controller.RemoveAnswer(interviewId, new CommandsController.RemoveAnswerRequest { Identity = questionIdentity.ToString() });
 
         imageFileStorage.Verify(x => x.RemoveInterviewBinaryData(interviewId, fileName), Times.Once);
-        notificationService.Verify(x => x.MarkAnswerAsNotSaved(interviewId, questionIdentity, It.IsAny<Exception>()), Times.Once);
+        notificationService.Verify(x => x.MarkAnswerAsNotSaved(interviewId, questionIdentity, It.IsAny<Exception>()), Times.Never);
     }
 
     [Test]

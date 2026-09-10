@@ -5,7 +5,15 @@ using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Services
 {
-    public class WebInterviewBinaryServices
+    public interface IWebInterviewBinaryServices
+    {
+        IImageProcessingService ImageProcessingService { get; }
+        IAudioFileStorage AudioFileStorage { get; }
+        IAudioProcessingService AudioProcessingService { get; }
+        IImageFileStorage ImageFileStorage { get; }
+    }
+
+    public class WebInterviewBinaryServices : IWebInterviewBinaryServices
     {
         public WebInterviewBinaryServices(
             IImageProcessingService imageProcessingService,
@@ -25,4 +33,3 @@ namespace WB.UI.Headquarters.Services
         public IImageFileStorage ImageFileStorage { get; }
     }
 }
-
