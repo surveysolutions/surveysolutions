@@ -288,7 +288,13 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 }
 
                 var command = new RemoveAnswerCommand(interviewId, GetCommandResponsibleId(interviewId), identity);
-                if (this.ExecuteQuestionCommand(command) && !string.IsNullOrEmpty(fileName))
+                var answerRemoved = this.ExecuteQuestionCommand(command);
+                if (!answerRemoved && !string.IsNullOrEmpty(fileName))
+                {
+                    answerRemoved = this.GetStoredBinaryFileName(interviewId, identity, questionType) == null;
+                }
+
+                if (answerRemoved && !string.IsNullOrEmpty(fileName))
                 {
                     try
                     {
@@ -359,6 +365,20 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 webInterviewNotificationService.MarkAnswerAsNotSaved(command.InterviewId, command.Question, e);
                 return false;
             }
+        }
+
+        private string GetStoredBinaryFileName(Guid interviewId, Identity identity, QuestionType? questionType)
+        {
+            if (questionType == null)
+                return null;
+
+            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
+            return questionType switch
+            {
+                QuestionType.Multimedia => interview.GetMultimediaQuestion(identity)?.GetAnswer()?.FileName,
+                QuestionType.Audio => interview.GetAudioQuestion(identity)?.GetAnswer()?.FileName,
+                _ => null
+            };
         }
     }
 }

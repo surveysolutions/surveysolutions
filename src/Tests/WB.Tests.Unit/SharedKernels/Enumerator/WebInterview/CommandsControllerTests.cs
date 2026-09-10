@@ -88,6 +88,52 @@ public class CommandsControllerTests
     }
 
     [Test]
+    public async Task when_removing_picture_answer_and_post_commit_command_failure_occurs_should_remove_the_stored_file()
+    {
+        var interviewId = Guid.NewGuid();
+        var questionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
+        var fileName = "myfile.png";
+        var initialInterview = new Mock<IStatefulInterview>();
+        initialInterview.SetupGet(x => x.QuestionnaireIdentity).Returns(new QuestionnaireIdentity(Guid.NewGuid(), 1));
+        initialInterview.Setup(x => x.GetMultimediaQuestion(questionIdentity))
+            .Returns(new InterviewTreeMultimediaQuestion(fileName, null));
+
+        var updatedInterview = new Mock<IStatefulInterview>();
+        updatedInterview.SetupGet(x => x.QuestionnaireIdentity).Returns(initialInterview.Object.QuestionnaireIdentity);
+        updatedInterview.Setup(x => x.GetMultimediaQuestion(questionIdentity))
+            .Returns(new InterviewTreeMultimediaQuestion(null, null));
+
+        var questionnaire = Mock.Of<IQuestionnaire>(x => x.GetQuestionType(questionIdentity.Id) == QuestionType.Multimedia);
+        var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(x =>
+            x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+
+        var interviewRepository = new Mock<IStatefulInterviewRepository>();
+        interviewRepository.SetupSequence(x => x.Get(It.IsAny<string>()))
+            .Returns(initialInterview.Object)
+            .Returns(updatedInterview.Object);
+
+        var imageFileStorage = new Mock<IImageFileStorage>();
+        var commandService = new Mock<ICommandService>();
+        commandService.Setup(x => x.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
+            .Throws(new InvalidOperationException("Post-commit failure"));
+
+        var notificationService = new Mock<IWebInterviewNotificationService>();
+
+        var controller = new TestCommandsController(
+            commandService.Object,
+            imageFileStorage.Object,
+            Mock.Of<IAudioFileStorage>(),
+            questionnaireStorage,
+            interviewRepository.Object,
+            notificationService.Object);
+
+        await controller.RemoveAnswer(interviewId, new CommandsController.RemoveAnswerRequest { Identity = questionIdentity.ToString() });
+
+        imageFileStorage.Verify(x => x.RemoveInterviewBinaryData(interviewId, fileName), Times.Once);
+        notificationService.Verify(x => x.MarkAnswerAsNotSaved(interviewId, questionIdentity, It.IsAny<Exception>()), Times.Once);
+    }
+
+    [Test]
     public async Task when_removing_audio_answer_should_remove_the_stored_file_with_its_original_filename()
     {
         var interviewId = Guid.NewGuid();

@@ -60,7 +60,6 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
                         ReferenceEquals(currentEntry, entry))
                     {
                         locks.TryRemove(interviewId, out _);
-                        entry.Semaphore.Dispose();
                     }
                 }
             }
