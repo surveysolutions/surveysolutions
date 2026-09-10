@@ -108,6 +108,9 @@ public abstract class InterviewFileStorage: IInterviewFileStorage
 
     private string GetPathToFile(Guid interviewId, string fileName)
     {
+        if (fileSystemAccessor.IsInvalidFileName(fileName))
+            throw new ArgumentException("Invalid file name", nameof(fileName));
+
         return fileSystemAccessor.CombinePath(GetPathToInterviewDirectory(interviewId, basePath), fileName);
     }
 
