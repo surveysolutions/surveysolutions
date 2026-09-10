@@ -165,14 +165,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                             await this.RestorePictureAfterFailedAnswerAsync(pictureFileName, oldFileName, oldFileData);
                             return;
                         }
-                        this.AnswerFileName = pictureFileName;
-                        await this.QuestionState.Validity.ExecutedWithoutExceptions();
-                        await this.RemoveOldPictureAsync(oldFileName, pictureFileName);
+                        await this.ApplyCommittedPictureAnswerAsync(oldFileName, pictureFileName);
                     }
-                    catch (InterviewException ex)
+                    catch (Exception ex)
                     {
+                        if (await this.TryHandleCommittedPictureAnswerAsync(command, oldFileName, pictureFileName))
+                            return;
+
                         await this.RestorePictureAfterFailedAnswerAsync(pictureFileName, oldFileName, oldFileData);
-                        await this.QuestionState.Validity.ProcessException(ex);
+                        if (ex is InterviewException interviewException)
+                        {
+                            await this.QuestionState.Validity.ProcessException(interviewException);
+                            return;
+                        }
+
+                        throw;
                     }
                 }
             }
@@ -229,17 +236,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                                     await this.RestorePictureAfterFailedAnswerAsync(pictureFileName, oldFileName, oldFileData);
                                     return;
                                 }
-                                this.Answer =
-                                    await this.imageFileStorage.GetInterviewBinaryDataAsync(this.interviewId,
-                                        pictureFileName);
-                                this.AnswerFileName = pictureFileName;
-                                await this.QuestionState.Validity.ExecutedWithoutExceptions();
-                                await this.RemoveOldPictureAsync(oldFileName, pictureFileName);
+                                await this.ApplyCommittedPictureAnswerAsync(oldFileName, pictureFileName,
+                                    async () => this.Answer =
+                                        await this.imageFileStorage.GetInterviewBinaryDataAsync(this.interviewId,
+                                            pictureFileName));
                             }
-                            catch (InterviewException ex)
+                            catch (Exception ex)
                             {
+                                if (await this.TryHandleCommittedPictureAnswerAsync(command, oldFileName, pictureFileName,
+                                        async () => this.Answer =
+                                            await this.imageFileStorage.GetInterviewBinaryDataAsync(this.interviewId,
+                                                pictureFileName)))
+                                    return;
+
                                 await this.RestorePictureAfterFailedAnswerAsync(pictureFileName, oldFileName, oldFileData);
-                                await this.QuestionState.Validity.ProcessException(ex);
+                                if (ex is InterviewException interviewException)
+                                {
+                                    await this.QuestionState.Validity.ProcessException(interviewException);
+                                    return;
+                                }
+
+                                throw;
                             }
                         }
                     }
@@ -319,6 +336,38 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.logger.Error($"Failed to remove old picture {oldFileName} for interview {this.interviewId}.", exception);
             }
+        }
+
+        private async Task<bool> TryHandleCommittedPictureAnswerAsync(
+            AnswerPictureQuestionCommand command,
+            string oldFileName,
+            string pictureFileName,
+            Func<Task> onAnswerCommitted = null)
+        {
+            var savedAnswer = this.interviewRepository.Get(this.interviewId.ToString("N"))
+                ?.GetMultimediaQuestion(this.questionIdentity)
+                ?.GetAnswer();
+
+            if (savedAnswer == null
+                || !string.Equals(savedAnswer.FileName, pictureFileName, StringComparison.Ordinal)
+                || savedAnswer.AnswerTimeUtc != command.OriginDate.UtcDateTime)
+                return false;
+
+            await this.ApplyCommittedPictureAnswerAsync(oldFileName, pictureFileName, onAnswerCommitted);
+            return true;
+        }
+
+        private async Task ApplyCommittedPictureAnswerAsync(
+            string oldFileName,
+            string pictureFileName,
+            Func<Task> onAnswerCommitted = null)
+        {
+            if (onAnswerCommitted != null)
+                await onAnswerCommitted();
+
+            this.AnswerFileName = pictureFileName;
+            await this.QuestionState.Validity.ExecutedWithoutExceptions();
+            await this.RemoveOldPictureAsync(oldFileName, pictureFileName);
         }
 
         private void StorePictureFile(Stream pictureStream, string pictureFileName)

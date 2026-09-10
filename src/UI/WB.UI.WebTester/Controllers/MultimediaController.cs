@@ -176,6 +176,8 @@ namespace WB.UI.WebTester.Controllers
 
             var questionIdentity = Identity.Parse(questionId);
             var question = interview.GetQuestion(questionIdentity);
+            string? oldFileName = null;
+            AnswerPictureQuestionCommand? command = null;
 
             if (!interview.AcceptsInterviewerAnswers() && question.IsMultimedia)
             {
@@ -191,7 +193,7 @@ namespace WB.UI.WebTester.Controllers
                 interview = this.statefulInterviewRepository.Get(id) ??
                     throw new InvalidOperationException("Interview must not be null.");
                 question = interview.GetQuestion(questionIdentity)!;
-                var oldFileName = interview.GetMultimediaQuestion(questionIdentity)?.GetAnswer()?.FileName;
+                oldFileName = interview.GetMultimediaQuestion(questionIdentity)?.GetAnswer()?.FileName;
 
                 await using var ms = new MemoryStream();
                 await file.CopyToAsync(ms);
@@ -207,8 +209,9 @@ namespace WB.UI.WebTester.Controllers
                 var entity = new MultimediaFile(fileName, fileContent, null,file.ContentType);
                 this.mediaStorage.Store(entity, fileName, interview.Id);
 
-                this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
-                    responsibleId, questionIdentity.Id, questionIdentity.RosterVector, fileName));
+                command = new AnswerPictureQuestionCommand(interview.Id,
+                    responsibleId, questionIdentity.Id, questionIdentity.RosterVector, fileName);
+                this.commandService.Execute(command);
 
                 if (!string.IsNullOrEmpty(oldFileName) && oldFileName != fileName)
                 {
@@ -225,7 +228,28 @@ namespace WB.UI.WebTester.Controllers
             }
             catch (Exception e)
             {
-                if (fileName != null)
+                var savedAnswer = command != null
+                    ? this.statefulInterviewRepository.Get(id)?.GetMultimediaQuestion(questionIdentity)?.GetAnswer()
+                    : null;
+
+                var answerSaved = savedAnswer != null
+                    && string.Equals(savedAnswer.FileName, fileName, StringComparison.Ordinal)
+                    && command != null
+                    && savedAnswer.AnswerTimeUtc == command.OriginDate.UtcDateTime;
+
+                if (answerSaved && !string.IsNullOrEmpty(oldFileName) && oldFileName != fileName)
+                {
+                    try
+                    {
+                        this.mediaStorage.Remove(oldFileName, interview.Id);
+                    }
+                    catch (Exception cleanupException)
+                    {
+                        Trace.TraceError("Failed to clean up replaced picture file for interview {0}: {1}",
+                            interview.Id, cleanupException);
+                    }
+                }
+                else if (fileName != null)
                     webInterviewNotificationService.MarkAnswerAsNotSaved(Guid.Parse(id), questionIdentity, e);
                 throw;
             }
