@@ -28,7 +28,7 @@
         "datatables.net-select": "2.1.0",
         "datatables.net-vue3": "3.0.4",
         "dayjs": "^1.11.13",
-        "dompurify": "^3.4.13",
+        "dompurify": "^3.4.14",
         "flatpickr": "^4.6.9",
         "graphql-request": "^7.4.0",
         "i18next": "^24.2.1",

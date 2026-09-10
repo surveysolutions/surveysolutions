@@ -21,9 +21,13 @@ jobs:
     outputs:
       build_number: ${{ steps.vars.outputs.build_number }}
       environment: ${{ steps.vars.outputs.environment }}
+      pg_password: ${{ steps.gen.outputs.pg_password }}
 
     steps:
       - uses: actions/checkout@v6
+      - name: Generate temp data
+        id: gen
+        run: echo "pg_password=$(openssl rand -hex 24)" >> "$GITHUB_OUTPUT"
       - name: Define build number and version strings
         id: vars
         run: |
@@ -67,11 +71,12 @@ jobs:
   tests-integration:
     name: Integration tests
     runs-on: ubuntu-latest
+    needs: prepare
     strategy:
       fail-fast: false
     env:
       PG_USER: postgres
-      PG_PASSWORD: Password1111
+      PG_PASSWORD: ${{ needs.prepare.outputs.pg_password }}
 
     services:
       postgres:
