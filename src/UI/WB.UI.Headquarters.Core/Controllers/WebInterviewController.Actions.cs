@@ -210,19 +210,7 @@ namespace WB.UI.Headquarters.Controllers
                 this.commandService.Execute(command);
                 answerSaved = true;
 
-                try
-                {
-                    if (!string.IsNullOrEmpty(oldFileName) &&
-                        !this.binaryServices.ImageFileStorage.IsEquivalentFileName(oldFileName, filename))
-                    {
-                        await this.binaryServices.ImageFileStorage.RemoveInterviewBinaryData(interview.Id, oldFileName);
-                    }
-                }
-                catch (Exception cleanupException)
-                {
-                    this.logger.LogError(cleanupException,
-                        "Failed to clean up replaced picture files for interview {InterviewId}", interview.Id);
-                }
+                await this.TryCleanupReplacedPictureFile(interview.Id, oldFileName, filename);
             }
             catch (Exception e)
             {
@@ -235,7 +223,11 @@ namespace WB.UI.Headquarters.Controllers
                     && command != null
                     && savedAnswer.AnswerTimeUtc == command.OriginDate.UtcDateTime;
 
-                if (filename != null && !answerSaved)
+                if (answerSaved)
+                {
+                    await this.TryCleanupReplacedPictureFile(interview.Id, oldFileName, filename);
+                }
+                else if (filename != null)
                 {
                     if (sameLogicalFileName)
                     {
@@ -265,6 +257,24 @@ namespace WB.UI.Headquarters.Controllers
                 uploadLock.Dispose();
             }
             return this.Json("ok");
+        }
+
+        private async Task TryCleanupReplacedPictureFile(Guid interviewId, string oldFileName, string fileName)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(oldFileName) &&
+                    !string.Equals(oldFileName, fileName, StringComparison.Ordinal) &&
+                    !this.binaryServices.ImageFileStorage.IsEquivalentFileName(oldFileName, fileName))
+                {
+                    await this.binaryServices.ImageFileStorage.RemoveInterviewBinaryData(interviewId, oldFileName);
+                }
+            }
+            catch (Exception cleanupException)
+            {
+                this.logger.LogError(cleanupException,
+                    "Failed to clean up replaced picture files for interview {InterviewId}", interviewId);
+            }
         }
     }
 }

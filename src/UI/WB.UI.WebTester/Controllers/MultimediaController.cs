@@ -87,7 +87,9 @@ namespace WB.UI.WebTester.Controllers
             await uploadLock.WaitAsync();
             MultimediaFile? previousFile = null;
             string? fileName = null;
-            var fileStored = false;
+            var fileWriteAttempted = false;
+            var commandExecutionStarted = false;
+            AnswerAudioQuestionCommand? command = null;
             try
             {
                 interview = this.statefulInterviewRepository.Get(id) ??
@@ -110,27 +112,39 @@ namespace WB.UI.WebTester.Controllers
                         : audioFile.Duration;
                     
                     var entity = new  MultimediaFile(fileName, audioFile.Binary, audioDuration, audioFile.MimeType);
+                    fileWriteAttempted = true;
                     mediaStorage.Store(entity, fileName, interview.Id);
-                    fileStored = true;
                 }
                 else
                 {
                     audioDuration = (Double.TryParse(duration, out var dur)
                         ? TimeSpan.FromSeconds(dur)
                         : TimeSpan.Zero);
+                    fileWriteAttempted = true;
                     mediaStorage.Store(new  MultimediaFile(fileName, bytes, audioDuration, contentType), fileName, interview.Id);
-                    fileStored = true;
                 }
 
-                var command = new AnswerAudioQuestionCommand(interview.Id,
+                command = new AnswerAudioQuestionCommand(interview.Id,
                     interview.CurrentResponsibleId, questionIdentity.Id, questionIdentity.RosterVector,
                     fileName, audioDuration);
 
+                commandExecutionStarted = true;
                 this.commandService.Execute(command);
             }
             catch (Exception e)
             {
-                if (fileStored && fileName != null)
+                var savedQuestion = commandExecutionStarted
+                    ? this.statefulInterviewRepository.Get(id)?.GetAudioQuestion(questionIdentity)
+                    : null;
+                var savedAnswer = savedQuestion?.GetAnswer();
+
+                var answerSaved = savedAnswer != null
+                    && string.Equals(savedAnswer.FileName, fileName, StringComparison.Ordinal)
+                    && savedQuestion != null
+                    && command != null
+                    && savedQuestion.AnswerTime?.UtcDateTime == command.OriginDate.UtcDateTime;
+
+                if (fileWriteAttempted && fileName != null && !answerSaved)
                 {
                     if (previousFile != null)
                         this.mediaStorage.Store(previousFile, fileName, interview.Id);
@@ -138,8 +152,8 @@ namespace WB.UI.WebTester.Controllers
                         this.mediaStorage.Remove(fileName, interview.Id);
                 }
 
-                webInterviewNotificationService.MarkAnswerAsNotSaved(Guid.Parse(id), questionIdentity, e);
-                //webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId, WebInterview.GetUiMessageFromException(e));
+                if (!answerSaved)
+                    webInterviewNotificationService.MarkAnswerAsNotSaved(Guid.Parse(id), questionIdentity, e);
                 throw;
             }
             finally
