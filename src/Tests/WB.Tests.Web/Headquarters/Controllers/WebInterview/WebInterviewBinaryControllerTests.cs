@@ -315,6 +315,79 @@ public class WebInterviewBinaryControllerTests
     }
 
     [Test]
+    public void when_uploading_picture_and_post_commit_exception_occurs_should_not_rollback_committed_file()
+    {
+        var interviewId = Guid.NewGuid();
+        var questionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
+        var fileName = "photo__.png";
+        var previousData = new byte[] { 9, 8, 7 };
+        DateTime? committedAnswerTimeUtc = null;
+
+        var question = new InterviewTreeQuestion(
+            questionIdentity,
+            null,
+            null,
+            "photo",
+            QuestionType.Multimedia,
+            null,
+            null,
+            null,
+            false,
+            false,
+            false);
+
+        var beforeUploadInterview = new Mock<IStatefulInterview>();
+        beforeUploadInterview.SetupGet(x => x.Id).Returns(interviewId);
+        beforeUploadInterview.Setup(x => x.AcceptsInterviewerAnswers()).Returns(true);
+        beforeUploadInterview.Setup(x => x.GetQuestion(questionIdentity)).Returns(question);
+        beforeUploadInterview.Setup(x => x.GetMultimediaQuestion(questionIdentity))
+            .Returns(new InterviewTreeMultimediaQuestion(fileName, DateTime.UtcNow.AddMinutes(-1)));
+
+        var afterCommitInterview = new Mock<IStatefulInterview>();
+        afterCommitInterview.SetupGet(x => x.Id).Returns(interviewId);
+        afterCommitInterview.Setup(x => x.GetQuestion(questionIdentity)).Returns(question);
+        afterCommitInterview.Setup(x => x.GetMultimediaQuestion(questionIdentity))
+            .Returns(() => new InterviewTreeMultimediaQuestion(fileName, committedAnswerTimeUtc));
+
+        var statefulInterviewRepository = new Mock<IStatefulInterviewRepository>();
+        statefulInterviewRepository.SetupSequence(x => x.Get(It.IsAny<string>()))
+            .Returns(beforeUploadInterview.Object)
+            .Returns(beforeUploadInterview.Object)
+            .Returns(afterCommitInterview.Object);
+
+        var imageFileStorage = new Mock<IImageFileStorage>();
+        imageFileStorage.Setup(x => x.GetInterviewBinaryDataAsync(interviewId, fileName)).ReturnsAsync(previousData);
+
+        var commandService = new Mock<ICommandService>();
+        commandService.Setup(x => x.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
+            .Callback<ICommand, string>((command, _) => committedAnswerTimeUtc = ((AnswerPictureQuestionCommand)command).OriginDate.UtcDateTime)
+            .Throws(new InvalidOperationException("boom"));
+
+        var webInterviewNotificationService = new Mock<IWebInterviewNotificationService>();
+        var controller = new WebInterviewBinaryController(
+            statefulInterviewRepository.Object,
+            commandService.Object,
+            webInterviewNotificationService.Object,
+            CreateBinaryServices(imageFileStorage.Object),
+            Mock.Of<ILogger<WebInterviewBinaryController>>());
+
+        var bytes = new byte[] { 1, 2, 3 };
+        var formFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "file", "newphoto.png")
+        {
+            Headers = new HeaderDictionary(),
+            ContentType = "image/png"
+        };
+
+        var exception = Assert.ThrowsAsync<InvalidOperationException>(async () => await controller.Image(interviewId, questionIdentity.ToString(), formFile));
+        Assert.That(exception, Is.Not.Null);
+
+        imageFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, fileName, It.IsAny<byte[]>(), "image/png"), Times.Once);
+        imageFileStorage.Verify(x => x.RemoveInterviewBinaryData(interviewId, fileName), Times.Never);
+        imageFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, fileName, previousData, ContentTypeHelper.GetImageContentType(fileName)), Times.Never);
+        webInterviewNotificationService.Verify(x => x.MarkAnswerAsNotSaved(interviewId, questionIdentity, It.IsAny<Exception>()), Times.Never);
+    }
+
+    [Test]
     public void when_uploading_audio_and_command_fails_should_restore_previous_file()
     {
         var interviewId = Guid.NewGuid();

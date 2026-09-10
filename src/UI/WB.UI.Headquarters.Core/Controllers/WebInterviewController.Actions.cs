@@ -175,10 +175,12 @@ namespace WB.UI.Headquarters.Controllers
 
             string filename = null;
             string oldFileName = null;
+            AnswerPictureQuestionCommand command = null;
             var answerSaved = false;
             byte[] oldFileData = null;
             var sameLogicalFileName = false;
             var fileWriteAttempted = false;
+            var commandExecutionStarted = false;
             var uploadLock = InterviewFileOperationLocks.Get(interview.Id);
             await uploadLock.WaitAsync();
 
@@ -204,8 +206,10 @@ namespace WB.UI.Headquarters.Controllers
 
                 fileWriteAttempted = true;
                 this.binaryServices.ImageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
-                this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
-                    responsibleId, questionIdentity.Id, questionIdentity.RosterVector, filename));
+                command = new AnswerPictureQuestionCommand(interview.Id,
+                    responsibleId, questionIdentity.Id, questionIdentity.RosterVector, filename);
+                commandExecutionStarted = true;
+                this.commandService.Execute(command);
                 answerSaved = true;
 
                 try
@@ -224,6 +228,15 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (Exception e)
             {
+                var savedAnswer = commandExecutionStarted
+                    ? this.statefulInterviewRepository.Get(id.FormatGuid())?.GetMultimediaQuestion(questionIdentity)?.GetAnswer()
+                    : null;
+
+                answerSaved = savedAnswer != null
+                    && string.Equals(savedAnswer.FileName, filename, StringComparison.Ordinal)
+                    && command != null
+                    && savedAnswer.AnswerTimeUtc == command.OriginDate.UtcDateTime;
+
                 if (filename != null && !answerSaved)
                 {
                     if (sameLogicalFileName)
@@ -245,7 +258,8 @@ namespace WB.UI.Headquarters.Controllers
                     }
                 }
 
-                webInterviewNotificationService.MarkAnswerAsNotSaved(id, questionIdentity, e);
+                if (!answerSaved)
+                    webInterviewNotificationService.MarkAnswerAsNotSaved(id, questionIdentity, e);
                 throw;
             }
             finally
