@@ -313,10 +313,69 @@ public class WebInterviewBinaryControllerTests
         imageFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, oldFileName, It.IsAny<byte[]>(), It.IsAny<string>()), Times.Never);
     }
 
-    private static WebInterviewBinaryServices CreateBinaryServices(IImageFileStorage imageFileStorage) =>
+    [Test]
+    public void when_uploading_audio_and_command_fails_should_restore_previous_file()
+    {
+        var interviewId = Guid.NewGuid();
+        var questionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
+        var fileName = "audio__.aac";
+        var previousData = new byte[] { 9, 8, 7 };
+
+        var question = new InterviewTreeQuestion(
+            questionIdentity,
+            null,
+            null,
+            "audio",
+            QuestionType.Audio,
+            null,
+            null,
+            null,
+            false,
+            false,
+            false);
+
+        var interview = new Mock<IStatefulInterview>();
+        interview.SetupGet(x => x.Id).Returns(interviewId);
+        interview.Setup(x => x.AcceptsInterviewerAnswers()).Returns(true);
+        interview.Setup(x => x.GetQuestion(questionIdentity)).Returns(question);
+        interview.Setup(x => x.GetAudioQuestion(questionIdentity))
+            .Returns(new InterviewTreeAudioQuestion(fileName, TimeSpan.FromSeconds(1)));
+
+        var statefulInterviewRepository = new Mock<IStatefulInterviewRepository>();
+        statefulInterviewRepository.Setup(x => x.Get(It.IsAny<string>())).Returns(interview.Object);
+
+        var audioFileStorage = new Mock<IAudioFileStorage>();
+        audioFileStorage.Setup(x => x.GetInterviewBinaryDataAsync(interviewId, fileName)).ReturnsAsync(previousData);
+
+        var commandService = new Mock<ICommandService>();
+        commandService.Setup(x => x.Execute(It.IsAny<ICommand>(), It.IsAny<string>())).Throws(new InvalidOperationException("boom"));
+
+        var controller = new WebInterviewBinaryController(
+            statefulInterviewRepository.Object,
+            commandService.Object,
+            Mock.Of<IWebInterviewNotificationService>(),
+            CreateBinaryServices(Mock.Of<IImageFileStorage>(), audioFileStorage.Object),
+            Mock.Of<ILogger<WebInterviewBinaryController>>());
+
+        var bytes = new byte[] { 1, 2, 3 };
+        var formFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "file", "audio.aac")
+        {
+            Headers = new HeaderDictionary(),
+            ContentType = "audio/aac"
+        };
+
+        var exception = Assert.ThrowsAsync<InvalidOperationException>(async () => await controller.Audio(interviewId, questionIdentity.ToString(), "1", formFile));
+        Assert.That(exception, Is.Not.Null);
+
+        audioFileStorage.Verify(x => x.RemoveInterviewBinaryData(interviewId, fileName), Times.Once);
+        audioFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, fileName, previousData, ContentTypeHelper.GetAudioContentType(fileName)), Times.Once);
+        statefulInterviewRepository.Verify(x => x.Get(It.IsAny<string>()), Times.Exactly(2));
+    }
+
+    private static WebInterviewBinaryServices CreateBinaryServices(IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage = null) =>
         new WebInterviewBinaryServices(
             Mock.Of<IImageProcessingService>(),
-            Mock.Of<IAudioFileStorage>(),
+            audioFileStorage ?? Mock.Of<IAudioFileStorage>(),
             Mock.Of<IAudioProcessingService>(),
             imageFileStorage);
 }

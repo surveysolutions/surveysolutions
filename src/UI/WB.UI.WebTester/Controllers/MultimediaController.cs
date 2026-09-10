@@ -83,13 +83,22 @@ namespace WB.UI.WebTester.Controllers
                 return this.Json("fail");
             }
 
+            var uploadLock = InterviewFileOperationLocks.Get(interview.Id);
+            await uploadLock.WaitAsync();
+            MultimediaFile? previousFile = null;
+            string? fileName = null;
+            var fileStored = false;
             try
             {
+                interview = this.statefulInterviewRepository.Get(id) ??
+                    throw new InvalidOperationException("Interview must not be null.");
+                question = interview.GetQuestion(questionIdentity)!;
                 await using var ms = new MemoryStream();
                 await file.CopyToAsync(ms);
                 byte[] bytes = ms.ToArray();
                 string contentType = file.ContentType;
-                var fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.aac";
+                fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.aac";
+                previousFile = this.mediaStorage.Get(fileName, interview.Id);
                 
                 var audioDuration = TimeSpan.Zero;
                 if(contentType is "audio/wav" or "audio/x-wav")
@@ -102,6 +111,7 @@ namespace WB.UI.WebTester.Controllers
                     
                     var entity = new  MultimediaFile(fileName, audioFile.Binary, audioDuration, audioFile.MimeType);
                     mediaStorage.Store(entity, fileName, interview.Id);
+                    fileStored = true;
                 }
                 else
                 {
@@ -109,6 +119,7 @@ namespace WB.UI.WebTester.Controllers
                         ? TimeSpan.FromSeconds(dur)
                         : TimeSpan.Zero);
                     mediaStorage.Store(new  MultimediaFile(fileName, bytes, audioDuration, contentType), fileName, interview.Id);
+                    fileStored = true;
                 }
 
                 var command = new AnswerAudioQuestionCommand(interview.Id,
@@ -119,9 +130,21 @@ namespace WB.UI.WebTester.Controllers
             }
             catch (Exception e)
             {
+                if (fileStored && fileName != null)
+                {
+                    if (previousFile != null)
+                        this.mediaStorage.Store(previousFile, fileName, interview.Id);
+                    else
+                        this.mediaStorage.Remove(fileName, interview.Id);
+                }
+
                 webInterviewNotificationService.MarkAnswerAsNotSaved(Guid.Parse(id), questionIdentity, e);
                 //webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId, WebInterview.GetUiMessageFromException(e));
                 throw;
+            }
+            finally
+            {
+                uploadLock.Dispose();
             }
 
             return this.Json("ok");
