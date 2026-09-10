@@ -119,7 +119,7 @@ namespace WB.UI.Headquarters.Controllers
             var answerSaved = false;
             byte[] oldFileData = null;
             var sameLogicalFileName = false;
-            var fileStored = false;
+            var fileWriteAttempted = false;
             var uploadLock = InterviewFileOperationLocks.Get(interview.Id);
             await uploadLock.WaitAsync();
 
@@ -143,8 +143,8 @@ namespace WB.UI.Headquarters.Controllers
                     oldFileData = await this.binaryServices.ImageFileStorage.GetInterviewBinaryDataAsync(interview.Id, oldFileName);
                 }
 
+                fileWriteAttempted = true;
                 this.binaryServices.ImageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
-                fileStored = true;
                 this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
                     responsibleId, questionIdentity.Id, questionIdentity.RosterVector, filename));
                 answerSaved = true;
@@ -175,7 +175,7 @@ namespace WB.UI.Headquarters.Controllers
                             this.binaryServices.ImageFileStorage.StoreInterviewBinaryData(interview.Id, oldFileName, oldFileData,
                                 ContentTypeHelper.GetImageContentType(oldFileName));
                         }
-                        else if (fileStored)
+                        else if (fileWriteAttempted)
                         {
                             await this.binaryServices.ImageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
                         }
