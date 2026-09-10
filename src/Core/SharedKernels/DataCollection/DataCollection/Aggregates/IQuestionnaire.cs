@@ -191,6 +191,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsQuestionYesNo(Guid questionId);
 
+        bool IsQuestionNonNegative(Guid questionId);
+
         int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId);
 
         FixedRosterTitle[] GetFixedRosterTitles(Guid groupId);
