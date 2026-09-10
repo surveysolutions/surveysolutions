@@ -387,6 +387,9 @@
   <data name="NumberEnter" xml:space="preserve">
     <value>Введіть номер</value>
   </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Від'ємні значення не дозволені для цього запитання</value>
+  </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>Відповідь '{{answer}}' є неправильною, оскільки питання використовується як розмір списку, а вказана відповідь є негативною</value>
   </data>
