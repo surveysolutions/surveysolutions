@@ -396,7 +396,7 @@ export default {
                 window.location.origin +
                 '/q/details/' +
                 this.questionnaire.anonymousQuestionnaireId;
-            navigator.clipboard.writeText(link);
+            navigator.clipboard.writeText(link).catch(() => {});
         },
         updateAnonymousQuestionnaireSettings() {
             updateAnonymousQuestionnaireSettings(
