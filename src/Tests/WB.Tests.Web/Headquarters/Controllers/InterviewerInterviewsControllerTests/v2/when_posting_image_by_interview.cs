@@ -14,8 +14,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
         public void context()
         {
             controller = CreateInterviewerInterviewsController(
-                imageFileStorage: mockOflainInterviewFileStorage.Object,
-                imageProcessingService: imageProcessingService.Object);
+                imageFileStorage: mockOflainInterviewFileStorage.Object);
             result = BecauseOf();
         }
 
@@ -28,10 +27,6 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
                 x => x.StoreInterviewBinaryData(interviewId, imageFileName, imageBytes, null), Times.Once);
 
         [NUnit.Framework.Test]
-        public void should_validate_image_once() =>
-            imageProcessingService.Verify(x => x.Validate(imageBytes), Times.Once);
-
-        [NUnit.Framework.Test]
         public void should_return_no_content() =>
             NUnit.Framework.Assert.That(((StatusCodeResult)result).StatusCode, NUnit.Framework.Is.EqualTo(StatusCodes.Status204NoContent));
 
@@ -42,6 +37,5 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
         private static readonly byte[] imageBytes = {1, 234, 21, 0, 54, 1, 66, 78};
         private static readonly string imageAsBase64String = Convert.ToBase64String(imageBytes);
         private static readonly Mock<IImageFileStorage> mockOflainInterviewFileStorage = new Mock<IImageFileStorage>();
-        private static readonly Mock<WB.UI.Shared.Web.Services.IImageProcessingService> imageProcessingService = new Mock<WB.UI.Shared.Web.Services.IImageProcessingService>();
     }
 }
