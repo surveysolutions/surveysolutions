@@ -1,10 +1,15 @@
 using System;
 using System.Threading.Tasks;
 using Moq;
+using MvvmCross.Base;
+using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
+using MvvmCross.Views;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -21,7 +26,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
     public class MultimediaQuestionViewModelTests : MvxIoCSupportingTest
     {
         [OneTimeSetUp]
-        public void OneTimeSetUp() => base.Setup();
+        public void OneTimeSetUp()
+        {
+            base.Setup();
+
+            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
+            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
+        }
 
         [Test]
         public async Task when_photo_capture_is_cancelled_should_return_to_picture_question()
