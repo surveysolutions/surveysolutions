@@ -336,6 +336,9 @@ Contactați echipa de suport pentru asistență.</value>
   <data name="NumberEnter" xml:space="preserve">
     <value>Introducere număr</value>
   </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Valorile negative nu sunt permise pentru această întrebare</value>
+  </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>Răspunsul '{{answer}}' este incorect deoarece întrebarea este utilizată ca dimensiune a listei, iar răspunsul dat este negativ</value>
   </data>
@@ -458,6 +461,9 @@ Contactați echipa de suport pentru asistență.</value>
   </data>
   <data name="MaxAnswersCountSelected" xml:space="preserve">
     <value>S-a făcut numărul maxim de selecții ({{value}}) în această întrebare</value>
+  </data>
+  <data name="ImageFormatNotSupported" xml:space="preserve">
+    <value>Formatul imaginii nu este acceptat de browserul dvs.</value>
   </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>Redarea multimedia nu este acceptată de browserul dvs. Dar puteți descărca multimedia, în schimb.</value>

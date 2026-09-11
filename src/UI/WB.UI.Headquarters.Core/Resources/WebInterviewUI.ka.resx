@@ -319,6 +319,9 @@
   <data name="NumberEnter" xml:space="preserve">
     <value>შეიყვანეთ ნომერი</value>
   </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>ამ კითხვისთვის უარყოფითი მნიშვნელობები არ არის დაშვებული</value>
+  </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>პასუხი "{{answer}}" არასწორია, რადგან კითხვა გამოიყენება როგორც როსტერის სიდიდის მაჩვენებელი და განსაზღვრული პასუხი უარყოფითია</value>
   </data>
@@ -549,6 +552,9 @@
     <value>დამატებითი ინფორმაცია კითხვაზე</value>
   </data>
 
+  <data name="ImageFormatNotSupported" xml:space="preserve">
+    <value>სურათის ფორმატს თქვენი ბრაუზერი მხარს არ უჭერს.</value>
+  </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>თქვენი ბრაუზერი არ უჭერს მხარს მულტიმედიის დაკვრას. შეგიძლიათ ამის ნაცვლად ჩამოტვირთოთ.</value>
   </data>

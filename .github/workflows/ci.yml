@@ -16,6 +16,15 @@ env:
   DOTNET_VERSION: '9.0.x'
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      pg_password: ${{ steps.gen.outputs.pg_password }}
+    steps:
+      - name: Generate temp data
+        id: gen
+        run: echo "pg_password=$(openssl rand -hex 24)" >> "$GITHUB_OUTPUT"
+
   unit-web:
     runs-on: ubuntu-latest
     strategy:
@@ -55,11 +64,12 @@ jobs:
 
   integration:
     runs-on: ubuntu-latest
+    needs: setup
     strategy:
       fail-fast: false
     env:
       PG_USER: postgres
-      PG_PASSWORD: PasswordForTests123
+      PG_PASSWORD: ${{ needs.setup.outputs.pg_password }}
 
     services:
       postgres:

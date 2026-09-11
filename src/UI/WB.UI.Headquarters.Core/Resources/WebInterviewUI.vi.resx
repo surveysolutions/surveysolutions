@@ -241,6 +241,9 @@
     <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
         <value>Giá trị đã nhập không được nhỏ hơn câu trả lời được bảo vệ</value>
         </data>
+    <data name="NumberNonNegativeError" xml:space="preserve">
+        <value>Không cho phép giá trị âm cho câu hỏi này</value>
+        </data>
     <data name="NumberRosterError" xml:space="preserve">
         <value>Câu trả lời '{{answer}}' không chính xác vì câu hỏi được sử dụng làm quy mô của danh sách và câu trả lời được chỉ định là phủ định</value>
         </data>
@@ -439,6 +442,9 @@ Liên hệ hỗ trợ để được hỗ trợ.</value>
     <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
         <value>Thông tin câu hỏi bổ sung</value>
         </data>
+    <data name="ImageFormatNotSupported" xml:space="preserve">
+        <value>Định dạng hình ảnh không được trình duyệt của bạn hỗ trợ.</value>
+    </data>
     <data name="MultimediaNotSupported" xml:space="preserve">
         <value>Phát lại đa phương tiện không được trình duyệt của bạn hỗ trợ. Bạn có thể tải xuống thay thế.</value>
         </data>

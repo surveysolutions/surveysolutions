@@ -241,6 +241,9 @@
     <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
         <value>Nilai yang dimasukkan tidak boleh kurang dari jawaban yang dilindungi</value>
     </data>
+    <data name="NumberNonNegativeError" xml:space="preserve">
+        <value>Nilai negatif tidak diperbolehkan untuk pertanyaan ini</value>
+    </data>
     <data name="NumberRosterError" xml:space="preserve">
         <value>Jawaban '{{answer}}' salah karena pertanyaan digunakan sebagai ukuran daftar nama dan jawaban yang ditentukan negatif</value>
     </data>
@@ -438,6 +441,9 @@ Hubungi dukungan untuk mendapatkan bantuan.</value>
     </data>
     <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
         <value>Informasi pertanyaan tambahan</value>
+    </data>
+    <data name="ImageFormatNotSupported" xml:space="preserve">
+        <value>Format gambar tidak didukung oleh browser Anda.</value>
     </data>
     <data name="MultimediaNotSupported" xml:space="preserve">
         <value>Pemutaran multimedia tidak didukung oleh browser Anda. Anda dapat mengunduhnya sebagai gantinya.</value>

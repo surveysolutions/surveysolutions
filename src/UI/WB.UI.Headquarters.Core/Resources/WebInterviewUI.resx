@@ -307,6 +307,9 @@
   <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
     <value>Entered value cannot be less than protected answer</value>
   </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Negative values are not allowed for this question</value>
+  </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>Answer '{{answer}}' is incorrect because question is used as size of roster and specified answer is negative</value>
     <comment>Do not translate parts inside {{}}: {{answer}}</comment>
@@ -510,6 +513,9 @@ Contact support for assistance.</value>
   </data>
   <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
     <value>Additional question information</value>
+  </data>
+  <data name="ImageFormatNotSupported" xml:space="preserve">
+    <value>The image format is not supported by your browser.</value>
   </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>Multimedia playback is not supported by your browser. You can download it instead.</value>

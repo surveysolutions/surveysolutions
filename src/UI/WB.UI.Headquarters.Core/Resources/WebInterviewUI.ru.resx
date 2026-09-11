@@ -271,6 +271,9 @@
   <data name="NumberRosterUpperBound" xml:space="preserve">
     <value>Ответ '{{answer}}' неверный, поскольку он больше значения максимального количества элементов в списке: '{{answerMaxValue}}'.</value>
   </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Отрицательные значения недопустимы для этого вопроса</value>
+  </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>Ответ '{{answer}}' неверный, поскольку нельзя задать отрицательное количество элементов в списке</value>
   </data>
@@ -458,6 +461,9 @@ Oбратитесь в тех. поддержку за помощью</value>
   </data>
   <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
     <value>Дополнительная информация о вопросе</value>
+  </data>
+  <data name="ImageFormatNotSupported" xml:space="preserve">
+    <value>Формат изображения не поддерживается вашим браузером.</value>
   </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>Воспроизведение мультимедиа не поддерживается вашим браузером. Вы можете скачать файл.</value>
