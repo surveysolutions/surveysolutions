@@ -1,5 +1,6 @@
 using Android.Locations;
 using Android.OS;
+using AndroidX.Core.Location;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -157,8 +158,8 @@ namespace WB.Tests.Android.Instrumentation.CustomServices
                 Latitude = 49.842957d,
                 Longitude = 24.031111d,
                 Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-                IsFromMockProvider = true,
             };
+            LocationCompat.SetMock(androidLocation, true);
 
             ((ILocationListener)listener).OnLocationChanged(androidLocation);
 
@@ -186,14 +187,16 @@ namespace WB.Tests.Android.Instrumentation.CustomServices
 
             Assert.That(tcs.Task.IsCompleted, Is.False);
 
-            listener.OnLocationChanged(new Location(LocationManager.GpsProvider)
+            var currentFix = new Location(LocationManager.GpsProvider)
             {
                 Latitude = 49.842957d,
                 Longitude = 24.031111d,
                 Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
                 ElapsedRealtimeNanos = SystemClock.ElapsedRealtimeNanos(),
-                IsFromMockProvider = true,
-            });
+            };
+            LocationCompat.SetMock(currentFix, true);
+
+            listener.OnLocationChanged(currentFix);
 
             var gpsLocation = await tcs.Task.WaitAsync(TimeSpan.FromSeconds(1));
 
