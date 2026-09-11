@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
 using Microsoft.Graph.Drives.Item.Items.Item.CreateUploadSession;
 using Microsoft.Graph.Models;
+using Microsoft.Kiota.Abstractions;
 using Microsoft.Kiota.Abstractions.Authentication;
 using Polly;
 using Polly.Retry;
@@ -43,10 +42,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             this.logger = logger;
             this.tenantContext = tenantContext;
 
-            this.retry = Policy.Handle<ServiceException>(e => e.ResponseStatusCode == StatusCodes.Status401Unauthorized)
-                .RetryAsync(2, async (exception, span) =>
+            this.retry = Policy.Handle<ApiException>(e => e.ResponseStatusCode == StatusCodes.Status401Unauthorized)
+                .RetryAsync(2, async (exception, _) =>
                 {
-                    this.logger.LogError(exception, $"Unauthorized exception during request to OneDrive");
+                    this.logger.LogError(exception, "Unauthorized exception during request to OneDrive");
 
                     var newAccessToken = await this.tenantContext.Api
                         .GetExternalStorageAccessTokenByRefreshTokenAsync(ExternalStorageType.OneDrive,
@@ -68,9 +67,19 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
         {
             logger.LogTrace("Creating Microsoft.Graph.Client for OneDrive file upload");
 
-            this.GraphServiceClient = new GraphServiceClient(
-                new ApiKeyAuthenticationProvider(accessToken, "bearer", ApiKeyAuthenticationProvider.KeyLocation.Header)            
-            );
+            this.GraphServiceClient = new GraphServiceClient(CreateAuthenticationProvider(accessToken));
+        }
+
+        internal static IAuthenticationProvider CreateAuthenticationProvider(string accessToken)
+        {
+            if (string.IsNullOrWhiteSpace(accessToken))
+                throw new ArgumentException("OneDrive access token cannot be empty.", nameof(accessToken));
+
+            return new ApiKeyAuthenticationProvider(
+                $"Bearer {accessToken}",
+                "Authorization",
+                ApiKeyAuthenticationProvider.KeyLocation.Header,
+                ["graph.microsoft.com"]);
         }
 
         private string Join(params string[] path) 
