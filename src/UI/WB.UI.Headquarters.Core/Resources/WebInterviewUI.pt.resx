@@ -227,6 +227,9 @@
   <data name="NoResultsFound" xml:space="preserve">
     <value>Nenhum resultado encontrado</value>
   </data>
+  <data name="TypeToFilterForMore" xml:space="preserve">
+    <value>Mostrando as primeiras {{count}} opções. Digite para pesquisar mais.</value>
+  </data>
   <data name="Done" xml:space="preserve">
     <value>Feito</value>
   </data>
