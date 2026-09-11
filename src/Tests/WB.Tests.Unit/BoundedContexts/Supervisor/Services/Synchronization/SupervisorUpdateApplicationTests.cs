@@ -98,6 +98,39 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services.Synchronization
             Assert.That(ex.Type, Is.EqualTo(SynchronizationExceptionType.NotSupportedServerSyncProtocolVersion));
         }
 
+        [Test]
+        public async Task when_checking_server_version_and_server_version_is_lower_should_throw_incompatible_version()
+        {
+            const int appVersion = 38141;
+            const int serverVersion = 32228;
+
+            var settings = Mock.Of<ISupervisorSettings>(x => x.GetApplicationVersionCode() == appVersion);
+            var synchronizationService = new Mock<ISynchronizationService>();
+            synchronizationService.Setup(x => x.GetLatestApplicationVersionAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync((int?)serverVersion);
+
+            var step = CreateSupervisorUpdateApplication(settings: settings, synchronizationService: synchronizationService.Object);
+
+            var ex = Assert.ThrowsAsync<SynchronizationException>(async () =>
+                await step.CheckServerVersionAsync(CancellationToken.None));
+            Assert.That(ex.Type, Is.EqualTo(SynchronizationExceptionType.NotSupportedServerSyncProtocolVersion));
+        }
+
+        [Test]
+        public async Task when_checking_server_version_and_server_version_equals_app_version_should_not_throw()
+        {
+            const int appVersion = 38141;
+
+            var settings = Mock.Of<ISupervisorSettings>(x => x.GetApplicationVersionCode() == appVersion);
+            var synchronizationService = new Mock<ISynchronizationService>();
+            synchronizationService.Setup(x => x.GetLatestApplicationVersionAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync((int?)appVersion);
+
+            var step = CreateSupervisorUpdateApplication(settings: settings, synchronizationService: synchronizationService.Object);
+
+            await step.CheckServerVersionAsync(CancellationToken.None);
+        }
+
         private static SupervisorUpdateApplication CreateSupervisorUpdateApplication(
             ISupervisorSettings settings = null,
             ISynchronizationService synchronizationService = null)
