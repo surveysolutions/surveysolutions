@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -33,6 +34,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 Context.Statistics.NewVersionExists = 
                     versionFromServerCheck.HasValue && versionFromServerCheck > GetApplicationVersionCode();
 
+                ThrowIfServerVersionIsIncompatible(versionFromServerCheck);
+
                 return;
             }
 
@@ -45,6 +48,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             var versionFromServer = await
                 this.synchronizationService.GetLatestApplicationVersionAsync(Context.CancellationToken).ConfigureAwait(false);
+
+            ThrowIfServerVersionIsIncompatible(versionFromServer);
 
             if (versionFromServer.HasValue && versionFromServer > GetApplicationVersionCode())
             {
@@ -88,6 +93,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             }
         }
 
+        public async Task CheckServerVersionAsync(CancellationToken cancellationToken)
+        {
+            var serverVersion = await this.synchronizationService
+                .GetLatestApplicationVersionAsync(cancellationToken).ConfigureAwait(false);
+
+            ThrowIfServerVersionIsIncompatible(serverVersion);
+        }
+
         protected abstract int GetApplicationVersionCode();
+
+        private void ThrowIfServerVersionIsIncompatible(int? serverVersion)
+        {
+            if (!serverVersion.HasValue || serverVersion < GetApplicationVersionCode())
+                throw new SynchronizationException(SynchronizationExceptionType.NotSupportedServerSyncProtocolVersion,
+                    EnumeratorUIResources.NotSupportedServerSyncProtocolVersion);
+        }
     }
 }

@@ -32,6 +32,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         private readonly IAuthorizedUser authorizedUser;
         private readonly IInterviewInformationFactory interviewFactory;
         private readonly IInterviewerVersionReader interviewerVersionReader;
+        private readonly IProductVersion productVersion;
 
         public SupervisorControllerBase(ITabletInformationService tabletInformationService, 
             ISupervisorSyncProtocolVersionProvider syncVersionProvider,
@@ -41,7 +42,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             IClientApkProvider clientApkProvider,
             IAuthorizedUser authorizedUser,
             IInterviewInformationFactory interviewFactory,
-            IInterviewerVersionReader interviewerVersionReader)
+            IInterviewerVersionReader interviewerVersionReader,
+            IProductVersion productVersion)
             : base(settingsStorage, tenantSettings, userViewFactory, tabletInformationService)
         {
             this.tabletInformationService = tabletInformationService;
@@ -51,6 +53,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             this.authorizedUser = authorizedUser;
             this.interviewFactory = interviewFactory;
             this.interviewerVersionReader = interviewerVersionReader;
+            this.productVersion = productVersion;
         }
 
         [HttpGet]
@@ -106,7 +109,14 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 
             var serverApkBuildNumber = await interviewerVersionReader.SupervisorBuildNumber();
             var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
-            
+
+            if (clientApkBuildNumber != null
+                && serverApkBuildNumber.HasValue
+                && clientApkBuildNumber > serverApkBuildNumber.Value)
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable);
+            }
+
             if (IsNeedUpdateAppBySettings(clientApkBuildNumber, serverApkBuildNumber))
             {
                 return StatusCode(StatusCodes.Status426UpgradeRequired);
@@ -115,11 +125,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             if (clientApkBuildNumber != null && this.syncVersionProvider.GetBlackListedBuildNumbers().Contains(clientApkBuildNumber.Value))
             {
                 return StatusCode(StatusCodes.Status426UpgradeRequired);
-            }
-
-            if (clientApkBuildNumber != null && clientApkBuildNumber > serverApkBuildNumber)
-            {
-                return StatusCode(StatusCodes.Status406NotAcceptable);
             }
 
             if (deviceSyncProtocolVersion == SupervisorSyncProtocolVersionProvider.V1_BeforeResolvedCommentsIntroduced) 
