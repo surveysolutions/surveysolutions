@@ -153,6 +153,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId, @event.QuestionnaireVersion);
             this.properties.AssignmentId = @event.AssignmentId;
             this.properties.IsAudioRecordingEnabled = @event.IsAudioRecordingEnabled;
+            this.properties.AudioAuditScope = @event.AudioAuditScope ?? Array.Empty<string>();
             this.properties.WasCreated = true;
         }
 
@@ -992,8 +993,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvents(treeDifference, userId, originDate);
         }
 
+#nullable enable annotations
         public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTimeOffset originDate, double latitude, double longitude,
-            double? accuracy, double? altitude, DateTimeOffset timestamp)
+            double? accuracy, double? altitude, DateTimeOffset timestamp, string? gpsProvider = null, bool isFromMockProvider = false)
+#nullable restore
         {
             new InterviewPropertiesInvariants(this.properties)
                 .RequireAnswerCanBeChanged();
@@ -1008,7 +1011,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = GetChangedTree();
 
-            var answer = new GeoPosition(latitude, longitude, accuracy, altitude, timestamp);
+            var answer = new GeoPosition(latitude, longitude, accuracy, altitude, timestamp, gpsProvider, isFromMockProvider);
             changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(GpsAnswer.FromGeoPosition(answer), originDate);
 
             this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, originDate);
@@ -1239,7 +1242,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.AssignmentId,
                 command.IsAudioRecordingEnabled,
                 command.OriginDate,
-                questionnaire.IsUsingExpressionStorage()));
+                questionnaire.IsUsingExpressionStorage(),
+                command.AudioAuditScope));
 
 
             this.ApplyEvent(new SupervisorAssigned(command.UserId, command.SupervisorId, command.OriginDate));
@@ -2168,7 +2172,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     var gpsAnswer = changedQuestion.GetAsInterviewTreeGpsQuestion().GetAnswer().Value;
                     this.ApplyEvent(new GeoLocationQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
                         changedQuestion.Identity.RosterVector, now, gpsAnswer.Latitude, gpsAnswer.Longitude,
-                        gpsAnswer.Accuracy, gpsAnswer.Altitude, gpsAnswer.Timestamp));
+                        gpsAnswer.Accuracy, gpsAnswer.Altitude, gpsAnswer.Timestamp,
+                        gpsAnswer.Provider, gpsAnswer.IsFromMockProvider));
                 }
 
                 else if (changedQuestion.IsQRBarcode)

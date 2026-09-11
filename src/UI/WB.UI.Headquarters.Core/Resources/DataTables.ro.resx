@@ -168,4 +168,9 @@
   <data name="ZeroRecords" xml:space="preserve">
     <value>Nu au fost găsite înregistrări care să se potrivească</value>
   </data>
+
+
+  <data name="InfoPostFix" xml:space="preserve">
+    <value />
+  </data>
 </root>

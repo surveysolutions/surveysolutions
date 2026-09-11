@@ -213,4 +213,45 @@
   <data name="ReloadInterviewErrorMessage" xml:space="preserve">
     <value>კითხვარის ახალ ვერსიას ვერ მიესადაგება ინტერვიუს მონაცემები. ჩვენ გავხსნით ცარიელ ინტერვიუს</value>
   </data>
+
+
+  <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
+    <value>ანონიმური კითხვარის URL</value>
+  </data>
+
+  <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
+    <value>გახსნა</value>
+  </data>
+
+  <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
+    <value>კითხვარის გახსნა შეუძლებელია. კითხვარი ვერ მოიძებნა.</value>
+  </data>
+
+  <data name="AnonymousQuestionnaires_Error_Confirm" xml:space="preserve">
+    <value>კითხვარის გახსნა შეუძლებელია. წავშალოთ ის სიიდან?</value>
+  </data>
+
+  <data name="Login_Error_EmptyName" xml:space="preserve">
+    <value>გთხოვთ, შეიყვანოთ სწორი მომხმარებლის სახელი</value>
+  </data>
+
+  <data name="TesterLoginAccountHintText" xml:space="preserve">
+    <value>ამ აპლიკაციაში შედით იმ ანგარიშის მონაცემებით, რომლებიც შექმენით https://designer.mysurvey.solutions-ზე. ახალი ანგარიშის დასარეგისტრირებლად ეწვიეთ იმავე საიტს.</value>
+  </data>
+
+  <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
+    <value>ანონიმური კითხვარები</value>
+  </data>
+
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>შესვლა</value>
+  </data>
+
+  <data name="Prefs_ShowAnswerTime" xml:space="preserve">
+    <value>თითო პასუხზე გასული დროის ჩვენება</value>
+  </data>
+
+  <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
+    <value>იზომება ჩართვის, ვალიდაციისა და როსტერის გავრცელების დრო. GPS მონაცემების მიღების ან სურათის გადაღების დრო არ შედის.</value>
+  </data>
 </root>

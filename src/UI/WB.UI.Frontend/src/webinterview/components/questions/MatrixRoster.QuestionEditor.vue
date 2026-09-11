@@ -1,7 +1,11 @@
 <template>
-    <div class="ag-input-text-wrapper" :id="hash">
-        <component ref='editQuestionComponent' :key="question.identity"
-            v-bind:is="'MatrixRoster_' + question.entityType" v-bind:id="question.identity" :editorParams="params">
+    <div class="ag-input-text-wrapper"
+        :id="hash">
+        <component ref='editQuestionComponent'
+            :key="question.identity"
+            v-bind:is="'MatrixRoster_' + question.entityType"
+            v-bind:id="question.identity"
+            :editorParams="params">
         </component>
         <wb-progress :visible="isFetchInProgress" />
     </div>
@@ -9,7 +13,7 @@
 
 <script lang="js">
 import { getLocationHash } from '~/shared/helpers'
-import { debounce } from 'lodash'
+import { debounce } from 'lodash-es'
 
 export default {
     name: 'MatrixRoster_QuestionEditor',
@@ -66,7 +70,8 @@ export default {
         },
         doScroll: debounce(function () {
             if (this.$store.getters.scrollState == '#' + this.id) {
-                window.scroll({ top: this.$parent.$parent.$el.offsetTop, behavior: 'smooth' })
+                const navbarHeight = document.querySelector('.navbar-fixed-top')?.offsetHeight || 0
+                window.scroll({ top: this.$parent.$parent.$el.offsetTop - navbarHeight, behavior: 'smooth' })
                 this.$store.dispatch('resetScroll')
             }
         }, 200),

@@ -94,7 +94,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                         MeasureSpec.MakeMeasureSpec(sizeHeight, (MeasureSpecMode)modeHeight == MeasureSpecMode.Exactly ? MeasureSpecMode.AtMost : (MeasureSpecMode)modeHeight)
                 );
 
-                var lp = (LayoutParams)child.LayoutParameters;
+                var lp = this.EnsureFlowLayoutLayoutParams(child);
 
                 var hSpacing = this.GetHorizontalSpacing(lp);
                 var vSpacing = this.GetVerticalSpacing(lp);
@@ -195,13 +195,28 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             return hSpacing;
         }
 
+        private LayoutParams EnsureFlowLayoutLayoutParams(View child)
+        {
+            var lp = child.LayoutParameters as LayoutParams;
+            if (lp != null)
+            {
+                return lp;
+            }
+
+            lp = child.LayoutParameters != null
+                ? new LayoutParams(child.LayoutParameters)
+                : new LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
+            child.LayoutParameters = lp;
+            return lp;
+        }
+
         protected override void OnLayout(bool changed, int l, int t, int r, int b)
         {
             var count = this.ChildCount;
             for (var i = 0; i < count; i++)
             {
                 var child = this.GetChildAt(i);
-                var lp = (LayoutParams)child.LayoutParameters;
+                var lp = this.EnsureFlowLayoutLayoutParams(child);
                 child.Layout(lp.X, lp.Y, lp.X + child.MeasuredWidth, lp.Y + child.MeasuredHeight);
             }
         }

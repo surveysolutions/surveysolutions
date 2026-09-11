@@ -195,10 +195,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             foreach (var batchOfPrivatePasswordProtectedWebAssignments in privatePasswordProtectedWebAssignments.Batch(1000))
             {
+                // NOTE: List<T> is used on purpose. For an array the C# 14+ compiler binds Contains
+                // to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an op_Implicit call
+                // into the expression tree that NHibernate cannot translate.
                 var expectedUniquePasswords = batchOfPrivatePasswordProtectedWebAssignments
                     .Select(x => x.Password.Value)
                     .Where(x => x != AssignmentConstants.PasswordSpecialValue)
-                    .ToArray();
+                    .ToList();
 
                 var passwordsByWebAssignmentsInDb = this.assignmentsRepository.Query(x => x
                     .Where(y => y.Quantity == 1 && 
@@ -234,6 +237,45 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
                 foreach (var error in this.RowValuesVerifiers.SelectMany(x => x.Invoke(assignmentRow, serviceValue, questionnaire)))
                     if (error != null) yield return error;
+            }
+
+            foreach (var error in this.AudioAuditScope_InvalidEntities(assignmentRow, questionnaire))
+                yield return error;
+
+            foreach (var error in this.TargetArea_TooLong(assignmentRow))
+                yield return error;
+        }
+
+        private IEnumerable<PanelImportVerificationError> TargetArea_TooLong(PreloadingAssignmentRow assignmentRow)
+        {
+            var targetArea = assignmentRow.TargetArea;
+            if (targetArea?.Value == null || targetArea.Value.Length <= AssignmentConstants.TargetAreaLengthLimit)
+                yield break;
+
+            yield return ToCellError("PL0065",
+                string.Format(messages.PL0065_TargetAreaTooLong, AssignmentConstants.TargetAreaLengthLimit),
+                assignmentRow, targetArea);
+        }
+
+        private IEnumerable<PanelImportVerificationError> AudioAuditScope_InvalidEntities(
+            PreloadingAssignmentRow assignmentRow, IQuestionnaire questionnaire)
+        {
+            var scope = assignmentRow.AudioAuditScope;
+            if (scope?.VariableNames == null || scope.VariableNames.Length == 0)
+                yield break;
+
+            var resolution = AudioAuditScopeResolver.Resolve(questionnaire, scope.VariableNames);
+            foreach (var invalidName in resolution.InvalidVariableNames)
+            {
+                yield return new PanelImportVerificationError(
+                    "PL0064",
+                    string.Format(messages.PL0064_AudioAuditScopeInvalidEntity, invalidName),
+                    new InterviewImportReference(
+                        scope.Column,
+                        assignmentRow.Row,
+                        PreloadedDataVerificationReferenceType.Cell,
+                        invalidName,
+                        assignmentRow.FileName));
             }
         }
 
@@ -654,6 +696,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                     or ServiceColumns.WebModeColumnName 
                     or ServiceColumns.RecordAudioColumnName 
                     or ServiceColumns.CommentsColumnName  
+                    or ServiceColumns.AudioAuditScopeColumnName  
                     or ServiceColumns.TargetAreaColumnName && 
                 IsQuestionnaireFile(file.QuestionnaireOrRosterName, questionnaire)) return false;
 

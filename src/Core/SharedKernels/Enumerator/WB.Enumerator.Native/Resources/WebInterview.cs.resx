@@ -368,7 +368,7 @@ Děkujeme za spolupráci!</value>
     <value>Odkaz na vstupní stránku webového dotazníku</value>
   </data>
   <data name="PoweredBy" xml:space="preserve">
-    <value>Powered by</value>
+    <value>Používá technologii</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
     <value>{0} (ver. {1})</value>

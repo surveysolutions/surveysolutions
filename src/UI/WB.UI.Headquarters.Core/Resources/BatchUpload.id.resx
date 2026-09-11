@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AdvancedMode" xml:space="preserve">
+        <value>Mode unggah data tingkat lanjut</value>
+    </data>
+    <data name="AdvancedModeDescription" xml:space="preserve">
+        <value>Untuk memuat data terlebih dahulu ke lebih banyak bagian dan variabel, Anda dapat menyiapkan sekumpulan file .tab yang sesuai dengan struktur kuesioner Anda dan memasukkannya ke dalam arsip .zip. Silakan gunakan arsip template di bawah ini. Anda hanya dapat memasukkan file dan kolom yang ingin Anda unggah. Kolom apa pun yang tidak ada atau judulnya tidak sesuai dengan variabel yang ada dalam kuesioner akan diabaikan.</value>
+    </data>
+    <data name="All" xml:space="preserve">
+        <value>Semua</value>
+    </data>
+    <data name="BrowseTeams" xml:space="preserve">
+        <value>Telusuri tim</value>
+    </data>
+    <data name="Code" xml:space="preserve">
+        <value>Kode</value>
+    </data>
+    <data name="CreateUsers" xml:space="preserve">
+        <value>Buat pengguna</value>
+    </data>
+    <data name="CreatingUsers" xml:space="preserve">
+        <value>Membuat pengguna</value>
+    </data>
+    <data name="DataIsValid" xml:space="preserve">
+        <value>Datanya valid</value>
+    </data>
+    <data name="Delete" xml:space="preserve">
+        <value>Menghapus</value>
+    </data>
+    <data name="Details" xml:space="preserve">
+        <value>Detail</value>
+    </data>
+    <data name="DownloadTemplateArchive" xml:space="preserve">
+        <value>Unduh template .zip untuk kuesioner ini</value>
+    </data>
+    <data name="FileName" xml:space="preserve">
+        <value>Nama berkas</value>
+    </data>
+    <data name="FileSize" xml:space="preserve">
+        <value>Ukuran berkas</value>
+    </data>
+    <data name="Finished" xml:space="preserve">
+        <value>Selesai</value>
+    </data>
+    <data name="FinishedWithError" xml:space="preserve">
+        <value>Selesai dengan kesalahan</value>
+    </data>
+    <data name="FinishedWithErrorMessage" xml:space="preserve">
+        <value>Selesai dengan kesalahan. Alasan:</value>
+    </data>
+    <data name="InVerificationProcess" xml:space="preserve">
+        <value>sedang dalam proses verifikasi, terverifikasi</value>
+    </data>
+    <data name="IsInvalid" xml:space="preserve">
+        <value>tidak valid. Harap perbaiki kesalahan di bawah dan unggah lagi.</value>
+    </data>
+    <data name="LastUpdateDate" xml:space="preserve">
+        <value>Tanggal terakhir diperbarui</value>
+    </data>
+    <data name="Message" xml:space="preserve">
+        <value>Pesan</value>
+    </data>
+    <data name="OutOf" xml:space="preserve">
+        <value>dari</value>
+    </data>
+    <data name="PleaseWait" xml:space="preserve">
+        <value>Mohon tunggu, filenya</value>
+    </data>
+    <data name="ReadyForUserCreation" xml:space="preserve">
+        <value>Siap untuk pembuatan pengguna</value>
+    </data>
+    <data name="ReadyForValidation" xml:space="preserve">
+        <value>Siap untuk validasi</value>
+    </data>
+    <data name="RecordsCount" xml:space="preserve">
+        <value>Catatan penting</value>
+    </data>
+    <data name="Status" xml:space="preserve">
+        <value>Status</value>
+    </data>
+    <data name="Upload" xml:space="preserve">
+        <value>Mengunggah</value>
+    </data>
+    <data name="UploadDate" xml:space="preserve">
+        <value>Tanggal unggah</value>
+    </data>
+    <data name="Uploaded" xml:space="preserve">
+        <value>Diunggah</value>
+    </data>
+    <data name="UploadNewFile" xml:space="preserve">
+        <value>Unggah file baru</value>
+    </data>
+    <data name="UploadSample" xml:space="preserve">
+        <value>Unggah sampel</value>
+    </data>
+    <data name="UploadSampleDescription" xml:space="preserve">
+        <value>Untuk mengunggah sampel yang akan diwawancarai, harap siapkan file (ukuran hingga 300MB) dengan nilai yang dipisahkan tab (file .tab) sesuai dengan templat di bawah ini, yang berisi nilai variabel dari kuesioner Anda yang ditandai sebagai pengidentifikasi.</value>
+    </data>
+    <data name="UploadUsers" xml:space="preserve">
+        <value>Unggahan Pengguna Batch</value>
+    </data>
+    <data name="UploadUsersDescription" xml:space="preserve">
+        <value>Siapkan file dengan nilai yang dipisahkan tab (file .tab) yang sesuai dengan templat di bawah ini. Kolom yang diberi tanda (*) wajib diisi. Hanya 'Supervisor' atau 'Interviewer' yang diperbolehkan di kolom 'role'.</value>
+    </data>
+    <data name="UserBatchUploads" xml:space="preserve">
+        <value>Unggahan Pengguna Batch</value>
+    </data>
+    <data name="UsersHaveBeenCreated" xml:space="preserve">
+        <value>pengguna telah dibuat</value>
+    </data>
+    <data name="Validated" xml:space="preserve">
+        <value>Divalidasi</value>
+    </data>
+    <data name="Validating" xml:space="preserve">
+        <value>Memvalidasi</value>
+    </data>
+    <data name="ValidationFinishedWithError" xml:space="preserve">
+        <value>Divalidasi</value>
+    </data>
+    <data name="Verify" xml:space="preserve">
+        <value>Memeriksa</value>
+    </data>
+    <data name="AreYouSureYouWantToDeleteFormat" xml:space="preserve">
+        <value>Apakah Anda yakin ingin menghapus berkas ini?</value>
+    </data>
+    <data name="UserPreloadingProcessIsMissing" xml:space="preserve">
+        <value>Proses pramuat pengguna tidak ada</value>
+    </data>
+    <data name="UploadUsers_Title" xml:space="preserve">
+        <value>Daftar file dengan pengguna yang dimuat sebelumnya</value>
+    </data>
+    <data name="RefreshActionOnUserUpload" xml:space="preserve">
+        <value>Menyegarkan</value>
+    </data>
+    <data name="BatchUpload_Title" xml:space="preserve">
+        <value>Unggahan massal</value>
+    </data>
+    <data name="PrefilledQuestionsRequired" xml:space="preserve">
+        <value>File tidak berisi kolom untuk pertanyaan identifikasi yang diperlukan: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;</value>
+    </data>
+    <data name="ImportInterviews_ChooseFile" xml:space="preserve">
+        <value>Pilih file untuk diunggah</value>
+    </data>
+    <data name="ImportInterviews_SelectResponsible" xml:space="preserve">
+        <value>Pilih yang bertanggung jawab</value>
+    </data>
+    <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
+        <value>Memilih</value>
+    </data>
+    <data name="FileSizeLimit" xml:space="preserve">
+        <value>Ukuran file tidak boleh melebihi 300 MB.</value>
+    </data>
+    <data name="ImportSample" xml:space="preserve">
+        <value>Impor sampel</value>
+    </data>
+    <data name="FileNotParsed" xml:space="preserve">
+        <value>File tidak diuraikan. Hanya file dengan batas tab yang diperbolehkan.</value>
+    </data>
+    <data name="FormatNotSupported" xml:space="preserve">
+        <value>Format file tidak didukung. Data di dalam file akan diabaikan</value>
+    </data>
+    <data name="SampleCreationResult" xml:space="preserve">
+        <value>Hasil Pembuatan Wawancara</value>
+    </data>
+    <data name="Processing" xml:space="preserve">
+        <value>Pengolahan...</value>
+    </data>
+    <data name="SampleCreationCompleted" xml:space="preserve">
+        <value>Pembuatan wawancara berhasil diselesaikan.</value>
+    </data>
+    <data name="UploadNewData" xml:space="preserve">
+        <value>Unggah data baru</value>
+    </data>
+    <data name="Column" xml:space="preserve">
+        <value>Kolom</value>
+    </data>
+    <data name="Row" xml:space="preserve">
+        <value>Baris</value>
+    </data>
+    <data name="VerifySampleData" xml:space="preserve">
+        <value>Verifikasi data</value>
+    </data>
+    <data name="ImportInProgress" xml:space="preserve">
+        <value>Proses impor tugas lainnya sedang berjalan. Hanya satu proses impor penugasan dalam satu waktu yang diperbolehkan. Tunggu hingga proses selesai lalu upload file contoh baru. Ikuti tautan tersebut jika Anda ingin mendapatkan informasi kemajuan lebih detail tentang proses impor lainnya.</value>
+    </data>
+    <data name="CreateSample" xml:space="preserve">
+        <value>Buat wawancara dari data ini</value>
+    </data>
+    <data name="SampleSuccess" xml:space="preserve">
+        <value>Impor wawancara berhasil diselesaikan</value>
+    </data>
+    <data name="SampleImportWithErrors" xml:space="preserve">
+        <value>Impor wawancara selesai dengan kesalahan</value>
+    </data>
+    <data name="ImportStatus" xml:space="preserve">
+        <value>Status impor</value>
+    </data>
+    <data name="NumberInterviewCreated" xml:space="preserve">
+        <value>Wawancara dibuat</value>
+    </data>
+    <data name="EstimatedTime" xml:space="preserve">
+        <value>Perkiraan Waktu</value>
+    </data>
+    <data name="DownloadInvalidInterviews" xml:space="preserve">
+        <value>Unduh wawancara tidak valid</value>
+    </data>
+    <data name="DownloadInvalidAssignments" xml:space="preserve">
+        <value>Unduh tugas yang tidak valid</value>
+    </data>
+    <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
+        <value>Pengguna yang bertanggung jawab akan ditetapkan secara otomatis</value>
+    </data>
+    <data name="VerifyPanelData" xml:space="preserve">
+        <value>Verifikasi data panel</value>
+    </data>
+    <data name="RunningInterviewImportProcess" xml:space="preserve">
+        <value>Lanjutkan untuk menjalankan proses impor tugas</value>
+    </data>
+    <data name="BatchDescription" xml:space="preserve">
+        <value>Unggah arsip zip dengan satu atau lebih file yang dipisahkan tab sesuai dengan tingkat wawancara utama dan daftar nama bawahan. Mengizinkan memuat variabel terlebih dahulu di tingkat wawancara mana pun.&lt;br/&gt;
+Semua file data harus berisi variabel interview__id dengan string unik atau pengidentifikasi numerik wawancara. Tautan dalam daftar nama dan daftar nama yang disarangkan dibuat dengan cara yang sama seperti pada data yang diekspor.&lt;br/&gt;</value>
+    </data>
+    <data name="BatchTitle" xml:space="preserve">
+        <value>Mengidentifikasi dan mengumpulkan data (arsip)</value>
+    </data>
+    <data name="BatchColumnsTitle" xml:space="preserve">
+        <value>Secara opsional, Anda dapat menentukan kolom berikut di file tingkat wawancara utama:</value>
+    </data>
+    <data name="CreatingMultipleInterviews" xml:space="preserve">
+        <value>Membuat banyak wawancara</value>
+    </data>
+    <data name="CreatingMultipleAssignments" xml:space="preserve">
+        <value>Membuat banyak tugas</value>
+    </data>
+    <data name="EmptySupervisorDescription" xml:space="preserve">
+        <value>Jika nama pengguna tidak ditentukan di kolom "_responsible", Anda perlu menugaskan supervisor untuk semua tugas di langkah selanjutnya.</value>
+    </data>
+    <data name="ManualModeDescription" xml:space="preserve">
+        <value>Anda dapat membuat tugas individu dengan memasukkan semua data yang diperlukan di {{url}}</value>
+    </data>
+    <data name="ManualModeLinkTitle" xml:space="preserve">
+        <value>modus manual</value>
+    </data>
+    <data name="SimpleDescription" xml:space="preserve">
+        <value>Unggah file yang dipisahkan tab dengan nilai untuk pertanyaan di tingkat wawancara saja. Sertakan nilai untuk mengidentifikasi pertanyaan dan pertanyaan lain di tingkat wawancara utama. Tidak mengizinkan pramuat nilai di dalam daftar nama.</value>
+    </data>
+    <data name="SimpleTitle" xml:space="preserve">
+        <value>Mengidentifikasi data saja</value>
+    </data>
+    <data name="SimpleColumnsTitle" xml:space="preserve">
+        <value>Secara opsional dapat menentukan kolom berikut:</value>
+    </data>
+    <data name="ColumnsDescription" xml:space="preserve">
+        <value>&lt;b&gt;_responsible&lt;/b&gt; - nama pengguna kantor pusat, supervisor, atau pewawancara yang akan bertanggung jawab atas penugasan;&lt;br/&gt;
+&lt;b&gt;_quantity&lt;/b&gt; - kapasitas penugasan;&lt;br/&gt;
+&lt;b&gt;_email&lt;/b&gt; - email responden (hanya untuk wawancara web);&lt;br/&gt;
+&lt;b&gt;_password&lt;/b&gt; - kata sandi untuk memulai wawancara (hanya untuk wawancara web);&lt;br/&gt;
+&lt;b&gt;_webmode&lt;/b&gt; - mode untuk penugasan (1 untuk CAWI, 0 atau kosong untuk CAPI);&lt;br/&gt;
+&lt;b&gt;_record_audio&lt;/b&gt; - rekaman audio diaktifkan untuk wawancara (1 - diaktifkan, 0 - dinonaktifkan, kosong - dapatkan nilai ini dari kuesioner);&lt;br/&gt;
+&lt;b&gt;_aascope&lt;/b&gt; - nama variabel bagian, grup, atau daftar nama yang dipisahkan koma untuk merekam audio ketika _record_audio tidak aktif (cakupan audit audio selektif);&lt;br/&gt;
+&lt;b&gt;_comment&lt;/b&gt; - komentar untuk tugas;&lt;br/&gt;
+&lt;b&gt;_target_area&lt;/b&gt; - area target untuk tugas</value>
+    </data>
+    <data name="UploadDescription" xml:space="preserve">
+        <value>Unggah file dengan data pengenal untuk membuat tugas baru.
+Tentukan nama pengguna untuk kantor pusat, penyelia, atau pewawancara untuk membuat tugas batch.</value>
+    </data>
+    <data name="FileTypeDescription" xml:space="preserve">
+        <value>Simpan file dalam pengkodean UTF8 untuk mendukung teks khusus bahasa.</value>
+    </data>
+    <data name="UploadTabFile" xml:space="preserve">
+        <value>Unggah file .tab</value>
+    </data>
+    <data name="UploadZipFile" xml:space="preserve">
+        <value>Unggah file .zip</value>
+    </data>
+    <data name="ViewListPrefilledData" xml:space="preserve">
+        <value>Lihat daftar data identifikasi yang diperlukan</value>
+    </data>
+    <data name="ViewListPreloadedData" xml:space="preserve">
+        <value>Lihat daftar nilai yang dimuat sebelumnya</value>
+    </data>
+    <data name="DownloadTabTemplate" xml:space="preserve">
+        <value>Unduh templat .tab untuk kuesioner ini</value>
+    </data>
+    <data name="DownloadDescListRequiredPreffiledData" xml:space="preserve">
+        <value>Variabel ditandai sebagai Mengidentifikasi di Desainer. Unduh a</value>
+    </data>
+    <data name="DownloadLinkTitleListRequiredPreffiledData" xml:space="preserve">
+        <value>templat .tab.</value>
+    </data>
+    <data name="HideListPrefilledData" xml:space="preserve">
+        <value>Sembunyikan daftar data identifikasi yang diperlukan</value>
+    </data>
+    <data name="PrefilledRequiredData" xml:space="preserve">
+        <value>Data identifikasi yang diperlukan</value>
+    </data>
+    <data name="IdentifyingQuestions" xml:space="preserve">
+        <value>Mengidentifikasi pertanyaan</value>
+    </data>
+    <data name="BatchFileVerificationFailed" xml:space="preserve">
+        <value>Verifikasi file yang diunggah gagal</value>
+    </data>
+    <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve">
+        <value>membuat banyak tugas</value>
+    </data>
+    <data name="ImportFrom" xml:space="preserve">
+        <value>Mengimpor informasi dari {{fileName}} untuk {{title}}</value>
+    </data>
+    <data name="ImportInterviews_PageTitle" xml:space="preserve">
+        <value>Membuat beberapa wawancara dengan unggahan batch</value>
+    </data>
+    <data name="ImportAssignments_PageTitle" xml:space="preserve">
+        <value>Membuat banyak tugas dengan unggahan batch</value>
+    </data>
+    <data name="InterviewsAreNotCreated" xml:space="preserve">
+        <value>Tidak ada wawancara yang dibuat</value>
+    </data>
+    <data name="MultipleErrorsWereFound" xml:space="preserve">
+        <value>Kesalahan {{count}} ditemukan</value>
+    </data>
+    <data name="SingleErrorFound" xml:space="preserve">
+        <value>1 kesalahan ditemukan</value>
+    </data>
+    <data name="BackToImport" xml:space="preserve">
+        <value>Kembali ke impor</value>
+    </data>
+    <data name="AssignedToMultipleEnumerators" xml:space="preserve">
+        <value>Ditugaskan untuk pewawancara {0}</value>
+    </data>
+    <data name="AssignedToMultipleSupervisors" xml:space="preserve">
+        <value>Ditugaskan ke supervisor {0}</value>
+    </data>
+    <data name="AssignedToSingleEnumerator" xml:space="preserve">
+        <value>Ditugaskan untuk 1 pewawancara</value>
+    </data>
+    <data name="AssignedToSingleSupervisor" xml:space="preserve">
+        <value>Ditugaskan kepada 1 penyelia</value>
+    </data>
+    <data name="CreateInterviews" xml:space="preserve">
+        <value>Buat wawancara</value>
+    </data>
+    <data name="CreateAssignments" xml:space="preserve">
+        <value>Buat tugas</value>
+    </data>
+    <data name="DataForMultipleInterviewsFound" xml:space="preserve">
+        <value>Data untuk wawancara {0} ditemukan</value>
+    </data>
+    <data name="DataForMultipleAssignmentsFound" xml:space="preserve">
+        <value>Data untuk tugas {0} ditemukan</value>
+    </data>
+    <data name="DataForSingleInterviewFound" xml:space="preserve">
+        <value>Data untuk 1 wawancara ditemukan</value>
+    </data>
+    <data name="DataForSingleAssignmentFound" xml:space="preserve">
+        <value>Data untuk 1 tugas ditemukan</value>
+    </data>
+    <data name="Importing" xml:space="preserve">
+        <value>Pengimporan</value>
+    </data>
+    <data name="ImportInterviewsFor" xml:space="preserve">
+        <value>Mengimpor wawancara untuk {0}</value>
+    </data>
+    <data name="ImportAssignmentsFor" xml:space="preserve">
+        <value>Mengimpor tugas untuk {{title}}</value>
+    </data>
+    <data name="ImportInterviews_Done" xml:space="preserve">
+        <value>Selesai:</value>
+    </data>
+    <data name="ImportInterviews_NoneFailed" xml:space="preserve">
+        <value>Tidak ada yang gagal</value>
+    </data>
+    <data name="ImportProgressFormat" xml:space="preserve">
+        <value>{{createdCount}} dari {{totalCount}}</value>
+    </data>
+    <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
+        <value>Mengimpor tugas</value>
+    </data>
+    <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
+        <value>Wawancara {0} gagal dibuat</value>
+    </data>
+    <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
+        <value>Penugasan {{count}} gagal dibuat</value>
+    </data>
+    <data name="MultipleInterviewsCreated" xml:space="preserve">
+        <value>Wawancara {0} dibuat</value>
+    </data>
+    <data name="MultipleAssignmentsCreated" xml:space="preserve">
+        <value>Penugasan {{count}} dibuat</value>
+    </data>
+    <data name="SelectResponsibleToAssign" xml:space="preserve">
+        <value>Pilih orang yang bertanggung jawab untuk batch ini</value>
+    </data>
+    <data name="SingleInterviewCreated" xml:space="preserve">
+        <value>1 wawancara dibuat</value>
+    </data>
+    <data name="SingleAssignmentCreated" xml:space="preserve">
+        <value>1 tugas dibuat</value>
+    </data>
+    <data name="SingleInterviewFailedToBeCreated" xml:space="preserve">
+        <value>1 wawancara gagal dibuat</value>
+    </data>
+    <data name="SingleAssignmentFailedToBeCreated" xml:space="preserve">
+        <value>1 tugas gagal dibuat</value>
+    </data>
+    <data name="VerificationCompleted" xml:space="preserve">
+        <value>Verifikasi selesai</value>
+    </data>
+    <data name="SupervisorMustBeSelected" xml:space="preserve">
+        <value>Supervisor atau pewawancara harus dipilih</value>
+    </data>
+    <data name="Cell" xml:space="preserve">
+        <value>Sel</value>
+    </data>
+    <data name="File" xml:space="preserve">
+        <value>Mengajukan</value>
+    </data>
+    <data name="UploadUsers_NotAllowedExtension" xml:space="preserve">
+        <value>Hanya file dengan ekstensi {0} dan {1} yang diperbolehkan untuk diunggah.</value>
+    </data>
+    <data name="Prerequisite_FileOpen" xml:space="preserve">
+        <value>File yang diunggah tidak dapat dibuka. Harap periksa apakah formatnya benar.</value>
+    </data>
+    <data name="Prerequisite_TabOrTxtFile" xml:space="preserve">
+        <value>Hanya file .tab dan .txt yang diperbolehkan untuk diunggah.</value>
+    </data>
+    <data name="Prerequisite_UnsupportedFiles" xml:space="preserve">
+        <value>File berikut tidak didukung: {0}.</value>
+    </data>
+    <data name="Prerequisite_ZipFile" xml:space="preserve">
+        <value>Hanya file .zip yang diperbolehkan untuk diunggah.</value>
+    </data>
+    <data name="AssignmentsAreNotCreated" xml:space="preserve">
+        <value>Tidak ada tugas yang dibuat</value>
+    </data>
+    <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
+        <value>Verifikasi data tugas</value>
+    </data>
+    <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
+        <value>Verifikasi tugas untuk kuesioner {{title}}</value>
+    </data>
+    <data name="Import_VerificationOfDataFile" xml:space="preserve">
+        <value>Verifikasi file data</value>
+    </data>
+    <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
+        <value>langkah {{verifiedCount}} dari {{totalCount}}</value>
+    </data>
+    <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
+        <value>Verifikasi file data berhasil</value>
+    </data>
+    <data name="Import_Verification_1_AssignmentVerified" xml:space="preserve">
+        <value>1 tugas berhasil diverifikasi</value>
+    </data>
+    <data name="Import_Verification_1_Error" xml:space="preserve">
+        <value>1 kesalahan</value>
+    </data>
+    <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
+        <value>Penugasan {{count}} berhasil diverifikasi</value>
+    </data>
+    <data name="Import_Verification_Errors" xml:space="preserve">
+        <value>Kesalahan {{count}}</value>
+    </data>
+    <data name="Prerequisite_Questionnaire" xml:space="preserve">
+        <value>Kuesioner tidak dapat digunakan untuk pramuat</value>
+    </data>
+    <data name="HiddenQuestions" xml:space="preserve">
+        <value>Pertanyaan tersembunyi</value>
+    </data>
+    <data name="RosterSizeQuestions" xml:space="preserve">
+        <value>Pertanyaan sumber daftar nama</value>
+    </data>
+    <data name="Select_Responsible" xml:space="preserve">
+        <value>Pilih tanggung jawab default (wajib)</value>
+    </data>
+    <data name="Select_Responsible_Description" xml:space="preserve">
+        <value>Jika tidak ada penanggung jawab yang ditugaskan dalam file batch, gunakan akun kantor pusat/supervisor/pewawancara ini:</value>
+    </data>
+    <data name="RequiredField" xml:space="preserve">
+        <value>Bidang ini wajib diisi</value>
+    </data>
+</root>

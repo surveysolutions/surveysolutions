@@ -123,6 +123,9 @@
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>لم يتم حفظ الإجابة</value>
   </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>خطأ في الاتصال</value>
+  </data>
   <data name="AudioClickRecord" xml:space="preserve">
     <value>أنقر للقيام بتسجيل صوتي</value>
   </data>
@@ -303,6 +306,9 @@
   </data>
   <data name="NumberEnter" xml:space="preserve">
     <value>أدخل رقماً</value>
+  </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>القيم السالبة غير مسموح بها لهذا السؤال</value>
   </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>الإجابة '{{answer}}' غير صحيحة لأن السؤال مستخدم كحجم الجدول والإجابة المحددة سلبية</value>

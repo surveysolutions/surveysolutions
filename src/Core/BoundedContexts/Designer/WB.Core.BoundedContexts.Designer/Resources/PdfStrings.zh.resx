@@ -384,4 +384,85 @@
   <data name="SpecialValues" xml:space="preserve">
     <value>特殊值</value>
   </data>
+
+
+  <data name="Appendix_CriticalRules" xml:space="preserve">
+    <value>附录 {0} {1} 的关键规则</value>
+  </data>
+
+  <data name="OwnedBy" xml:space="preserve">
+    <value>问卷归 {0} 所有</value>
+  </data>
+
+  <data name="CriticalityCondition" xml:space="preserve">
+    <value>关键条件：</value>
+  </data>
+
+  <data name="CriticalityMessage" xml:space="preserve">
+    <value>消息：</value>
+  </data>
+
+  <data name="Description" xml:space="preserve">
+    <value>说明：</value>
+  </data>
+
+  <data name="QuestionType_Area_Polygon" xml:space="preserve">
+    <value>多边形</value>
+  </data>
+
+  <data name="QuestionType_Area_Polyline" xml:space="preserve">
+    <value>折线</value>
+  </data>
+
+  <data name="QuestionType_Area_Multipoint" xml:space="preserve">
+    <value>多点</value>
+  </data>
+
+  <data name="QuestionType_Area_Point" xml:space="preserve">
+    <value>点</value>
+  </data>
+
+  <data name="SourceOfCategories" xml:space="preserve">
+    <value>类别来源：</value>
+  </data>
+
+  <data name="RosterSourceOfCategories" xml:space="preserve">
+    <value>二维表</value>
+  </data>
+
+  <data name="TextListSourceOfCategories" xml:space="preserve">
+    <value>文本列表问题</value>
+  </data>
+
+  <data name="QuestionInRosterSourceOfCategories" xml:space="preserve">
+    <value>问题</value>
+  </data>
+
+  <data name="InRosterSourceOfCategories" xml:space="preserve">
+    <value>在二维表中</value>
+  </data>
+  
+  <data name="GeographyType" xml:space="preserve">
+    <value>地理类型</value>
+  </data>
+
+  <data name="GeographyInputMode" xml:space="preserve">
+    <value>输入模式</value>
+  </data>
+
+  <data name="GeometryOverlapDetection" xml:space="preserve">
+    <value>重叠检测</value>
+  </data>
+
+  <data name="VariableExcludedFromExport" xml:space="preserve">
+    <value>该变量已从导出数据中排除</value>
+  </data>
+
+  <data name="On" xml:space="preserve">
+    <value>ON</value>
+  </data>
+
+  <data name="Off" xml:space="preserve">
+    <value>OFF</value>
+  </data>
 </root>

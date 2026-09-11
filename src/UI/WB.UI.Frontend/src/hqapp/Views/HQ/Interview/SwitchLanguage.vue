@@ -1,9 +1,11 @@
 <template>
-    <Select v-model="currentLanguage" :options="languages" :isDisabled="isDisabled" />
+    <Select v-model="currentLanguage"
+        :options="languages"
+        :isDisabled="isDisabled" />
 </template>
 <script>
 
-import Select from '../../../components/Select.vue';
+import Select from '../../../components/Select.vue'
 
 export default {
     props: {
@@ -19,9 +21,9 @@ export default {
         languages() {
             const langs = this.$store.state.webinterview.languages.map(element => {
                 return { id: element, value: element }
-            });
+            })
             return [{ id: null, value: this.$store.state.webinterview.originalLanguageName }].concat(langs)
-        }
+        },
     },
     methods: {
         changeLanguage(language) {

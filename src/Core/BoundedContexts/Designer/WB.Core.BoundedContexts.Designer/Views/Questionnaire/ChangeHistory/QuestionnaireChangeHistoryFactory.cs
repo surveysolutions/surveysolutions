@@ -53,8 +53,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             if (isAdmin == false)
             {
+                // NOTE: List<T> is used on purpose. For an array the C# 14+ compiler binds Contains
+                // to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an op_Implicit call
+                // into the expression tree that the ORM cannot translate.
                 var adminUsers = (await userManager.GetUsersInRoleAsync(SimpleRoleEnum.Administrator))
-                    .Select(u => u.Id).ToArray();
+                    .Select(u => u.Id).ToList();
 
                 query = query.Where(h => !(h.ActionType == QuestionnaireActionType.ImportToHq && adminUsers.Contains(h.UserId)));
             }

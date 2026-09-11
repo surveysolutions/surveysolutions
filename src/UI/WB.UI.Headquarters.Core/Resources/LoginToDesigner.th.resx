@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AccessForbidden" xml:space="preserve"><value>เซิร์ฟเวอร์ไม่ได้ลงทะเบียนกับ Questionnaire Designer</value></data>
+  <data name="DesignerAppDescription" xml:space="preserve"><value>นี่คือเครื่องมือฟรีสำหรับสร้างแบบสอบถาม</value></data>
+  <data name="InvalidCredentials" xml:space="preserve"><value>ผู้ใช้ไม่ได้รับอนุญาต กรุณาตรวจสอบชื่อเข้าใช้และรหัสผ่านของคุณ</value></data>
+  <data name="LoginWatermark" xml:space="preserve"><value>ชื่อเข้าใช้หรืออีเมล</value></data>
+  <data name="PageHeader" xml:space="preserve"><value>ใช้ข้อมูลรับรอง Survey Solutions Designer ของคุณ</value></data>
+  <data name="Questionnaire" xml:space="preserve"><value>แบบสอบถาม</value></data>
+  <data name="SessionExpired" xml:space="preserve"><value>เซสชันหมดอายุแล้ว กรุณาเข้าสู่ระบบอีกครั้ง</value></data>
+  <data name="UnableToImportNewQuestionnaire" xml:space="preserve"><value>ไม่สามารถนำเข้าแบบสอบถามใหม่:</value></data>
+  <data name="UserDesignerCredentials" xml:space="preserve"><value>กรุณาเข้าสู่ระบบด้วยข้อมูลรับรองที่คุณใช้โดยทั่วไปเพื่อเข้าถึงแบบสอบถามของคุณใน Designer</value></data>
+</root>

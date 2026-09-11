@@ -267,4 +267,13 @@
   <data name="PostCalendarEventPackage" xml:space="preserve">
     <value>}ncarcare eveniment calendar: {0}</value>
   </data>
+
+
+    <data name="PasswordChanged" xml:space="preserve">
+    <value>Parola a fost schimbată și s-a obținut AuthToken</value>
+  </data>
+
+    <data name="FailToChangePassword" xml:space="preserve">
+    <value>Utilizatorul nu a reușit să schimbe parola</value>
+  </data>
 </root>

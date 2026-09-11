@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="TemplateNotFound" xml:space="preserve">
+        <value>Không tìm thấy bảng câu hỏi "{0}". Vui lòng làm mới danh sách bảng câu hỏi.</value>
+    </data>
+    <data name="Questionnaire_verification_failed" xml:space="preserve">
+        <value>Bảng câu hỏi "{0}" có lỗi biên dịch. Vui lòng sửa trong Designer.</value>
+    </data>
+    <data name="ServerError" xml:space="preserve">
+        <value>Đã xảy ra lỗi máy chủ nội bộ. Vui lòng liên hệ nhóm hỗ trợ.</value>
+    </data>
+    <data name="RequestTimeout" xml:space="preserve">
+        <value>Hết thời gian khi cố gắng kết nối tới Designer. Vui lòng kiểm tra kết nối internet của bạn.</value>
+    </data>
+    <data name="ServiceUnavailable" xml:space="preserve">
+        <value>Designer hiện không khả dụng. Vui lòng đảm bảo Designer không ở chế độ bảo trì.</value>
+    </data>
+    <data name="IncorrectUserNameOrPassword" xml:space="preserve">
+        <value>Tên người dùng hoặc mật khẩu không đúng.</value>
+    </data>
+    <data name="InvalidAuthenticatorCode" xml:space="preserve">
+        <value>Mã xác thực không hợp lệ.</value>
+    </data>
+    <data name="InvalidRecoveryCode" xml:space="preserve">
+        <value>Mã khôi phục đã nhập không hợp lệ.</value>
+    </data>
+    <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
+        <value>Một bảng câu hỏi khác đang được nhập vào Headquarters.</value>
+    </data>
+    <data name="SiteAccessNotAllowed" xml:space="preserve">
+        <value>Bạn không có quyền truy cập trang này. Vui lòng liên hệ quản trị viên.</value>
+    </data>
+    <data name="PleaseFillCaptcha" xml:space="preserve">
+        <value>Vui lòng điền vào trường captcha</value>
+    </data>
+    <data name="ApiUserIsNotAllowedToSignIn" xml:space="preserve">
+        <value>Người dùng API không được phép đăng nhập bằng giao diện người dùng</value>
+    </data>
+</root>

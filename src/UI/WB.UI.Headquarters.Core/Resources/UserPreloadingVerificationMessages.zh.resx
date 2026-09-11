@@ -168,25 +168,25 @@
   <data name="PLU0003Description" xml:space="preserve">
     <value>用户“{0}”已归档并属于另一个团队</value>
   </data>
-  <data name="PLU0003Recomendation" xml:space="preserve">
+  <data name="PLU0003Recommendation" xml:space="preserve">
     <value>已归档的用户不能被再次使用因为它属于另一个团队</value>
   </data>
   <data name="PLU0004Description" xml:space="preserve">
     <value>用户“{0}”已归档并具有其他角色</value>
   </data>
-  <data name="PLU0004Recomendation" xml:space="preserve">
+  <data name="PLU0004Recommendation" xml:space="preserve">
     <value>已归档的用户不能被再次使用因为它存在于另外一个角色中</value>
   </data>
   <data name="PLU0005Description" xml:space="preserve">
     <value>用户名“{0}”的格式错误</value>
   </data>
-  <data name="PLU0005Recomendation" xml:space="preserve">
+  <data name="PLU0005Recommendation" xml:space="preserve">
     <value>应该在3到15个字符之间，并且只能包含字母，数字和下划线符号</value>
   </data>
   <data name="PLU0006Description" xml:space="preserve">
     <value>密码“{0}”的格式错误</value>
   </data>
-  <data name="PLU0006Recomendation" xml:space="preserve">
+  <data name="PLU0006Recommendation" xml:space="preserve">
     <value>必须包含至少一个数字，一个大写字符和一个小写字符。 长度应该在10到100个字符之间</value>
   </data>
   <data name="PLU0007Description" xml:space="preserve">
@@ -198,7 +198,7 @@
   <data name="PLU0009Description" xml:space="preserve">
     <value>角色‘{0}’无效</value>
   </data>
-  <data name="PLU0009Recomendation" xml:space="preserve">
+  <data name="PLU0009Recommendation" xml:space="preserve">
     <value>只允许“supervisor”或“interviewer”</value>
   </data>
   <data name="PLU0010Description" xml:space="preserve">
@@ -207,25 +207,142 @@
   <data name="PLU0011Description" xml:space="preserve">
     <value>督导员角色的Supervisor一列应为空</value>
   </data>
-  <data name="PLU0011Recomendation" xml:space="preserve">
+  <data name="PLU0011Recommendation" xml:space="preserve">
       <value>删除 'supervisor' 的值</value>
   </data>
   <data name="PLU0012Description" xml:space="preserve">
     <value>全名“{0}”的格式错误</value>
   </data>
-  <data name="PLU0012Recomendation" xml:space="preserve">
+  <data name="PLU0012Recommendation" xml:space="preserve">
     <value>不应该包含超过100个字符</value>
   </data>
   <data name="PLU0013Description" xml:space="preserve">
     <value>电话号码‘{0}’的格式错误</value>
   </data>
-  <data name="PLU0013Recomendation" xml:space="preserve">
+  <data name="PLU0013Recommendation" xml:space="preserve">
     <value>不应该包含超过15个字符</value>
   </data>
   <data name="PLU0014Description" xml:space="preserve">
     <value>全名‘{0}’包含无效字符</value>
   </data>
-  <data name="PLU0014Recomendation" xml:space="preserve">
+  <data name="PLU0014Recommendation" xml:space="preserve">
     <value>只允许使用字母、点、空格和撇号</value>
+  </data>
+
+
+  <data name="PLU0001Recommendation" xml:space="preserve">
+      <value>用户必须唯一</value>
+  </data>
+
+  <data name="PLU0002Recommendation" xml:space="preserve">
+      <value>解决重复项</value>
+  </data>
+
+  <data name="PLU0007Recommendation" xml:space="preserve">
+      <value>修正电子邮件</value>
+  </data>
+
+  <data name="PLU0008Recommendation" xml:space="preserve">
+      <value>修正电话号码</value>
+  </data>
+
+  <data name="PLU0010Recommendation" xml:space="preserve">
+      <value>核实督导员的值</value>
+  </data>
+
+  <data name="PLU0015" xml:space="preserve">
+    <value>密码过短</value>
+  </data>
+
+  <data name="PLU0015Description" xml:space="preserve">
+    <value>密码 '{0}' 太短</value>
+  </data>
+
+  <data name="PLU0015Recommendation" xml:space="preserve">
+    <value>密码长度必须至少为 10 个字符</value>
+  </data>
+
+  <data name="PLU0016" xml:space="preserve">
+    <value>简单密码</value>
+  </data>
+
+  <data name="PLU0016Description" xml:space="preserve">
+    <value>密码 '{0}' 不包含非字母数字字符</value>
+  </data>
+
+  <data name="PLU0016Recommendation" xml:space="preserve">
+    <value>至少添加一个非字母数字字符</value>
+  </data>
+
+  <data name="PLU0017" xml:space="preserve">
+    <value>简单密码</value>
+  </data>
+
+  <data name="PLU0017Description" xml:space="preserve">
+    <value>密码 '{0}' 不包含数字</value>
+  </data>
+
+  <data name="PLU0017Recommendation" xml:space="preserve">
+    <value>至少添加一个数字 ('0'-'9').</value>
+  </data>
+
+  <data name="PLU0018" xml:space="preserve">
+    <value>简单密码</value>
+  </data>
+
+  <data name="PLU0018Description" xml:space="preserve">
+    <value>密码 '{0}' 不包含小写字母</value>
+  </data>
+
+  <data name="PLU0018Recommendation" xml:space="preserve">
+    <value>至少添加一个小写字母 ('a'-'z').</value>
+  </data>
+
+  <data name="PLU0019" xml:space="preserve">
+    <value>简单密码</value>
+  </data>
+
+  <data name="PLU0019Description" xml:space="preserve">
+    <value>密码 '{0}' 不包含大写字母</value>
+  </data>
+
+  <data name="PLU0019Recommendation" xml:space="preserve">
+    <value>至少添加一个大写字母 ('A'-'Z').</value>
+  </data>
+
+  <data name="PLU0020" xml:space="preserve">
+    <value>简单密码</value>
+  </data>
+
+  <data name="PLU0020Description" xml:space="preserve">
+    <value>密码 '{0}' 不包含足够多的唯一字符</value>
+  </data>
+
+  <data name="PLU0020Recommendation" xml:space="preserve">
+      <value>添加不同的字符。</value>
+  </data>
+
+  <data name="PLU0021" xml:space="preserve">
+    <value>需要密码</value>
+  </data>
+
+  <data name="PLU0021Description" xml:space="preserve">
+    <value>必须提供密码</value>
+  </data>
+
+  <data name="PLU0021Recommendation" xml:space="preserve">
+    <value>添加密码</value>
+  </data>
+
+  <data name="PLU0022" xml:space="preserve">
+    <value>找不到工作区</value>
+  </data>
+
+  <data name="PLU0022Description" xml:space="preserve">
+    <value>工作区必须存在且已启用</value>
+  </data>
+
+  <data name="PLU0022Recommendation" xml:space="preserve">
+    <value>检查工作区名称</value>
   </data>
 </root>

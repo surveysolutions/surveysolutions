@@ -273,4 +273,62 @@
   <data name="UserName" xml:space="preserve">
     <value>შესასვლელი სახელი</value>
   </data>
+
+
+  <data name="CreateAdministrator" xml:space="preserve">
+    <value>ადმინისტრატორის შექმნა</value>
+  </data>
+
+  <data name="ResetPassword" xml:space="preserve">
+    <value>პაროლის განულება</value>
+  </data>
+
+  <data name="ResetPasswordTitle" xml:space="preserve">
+    <value>მომხმარებლის პაროლის განულება</value>
+  </data>
+
+  <data name="UserNotFound" xml:space="preserve">
+    <value>მომხმარებელი ვერ მოიძებნა</value>
+  </data>
+
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>მომხმარებლის {0} პაროლი შეიცვალა</value>
+  </data>
+
+
+  <data name="Filter_AllUsers" xml:space="preserve">
+    <value>ყველა მომხმარებელი</value>
+  </data>
+
+  <data name="Filter_WithMissingWorkspace" xml:space="preserve">
+    <value>სამუშაო სივრცის გარეშე</value>
+  </data>
+
+  <data name="Filter_WithDisabledWorkspaces" xml:space="preserve">
+    <value>მხოლოდ გამორთული სამუშაო სივრცეებით</value>
+  </data>
+
+  <data name="Filter_Locked" xml:space="preserve">
+    <value>დაბლოკილი მომხმარებლები</value>
+  </data>
+
+  <data name="Filter_Archived" xml:space="preserve">
+    <value>დაარქივებული მომხმარებლები</value>
+  </data>
+
+  <data name="UsersTitle" xml:space="preserve">
+    <value>მომხმარებლები</value>
+  </data>
+
+  <data name="AddUser" xml:space="preserve">
+    <value>მომხმარებლის დამატება</value>
+  </data>
+
+  <data name="UploadUsers" xml:space="preserve">
+    <value>მომხმარებლების ატვირთვა</value>
+  </data>
+
+  <data name="ApiTokenTitle" xml:space="preserve">
+      <value>მომხმარებლის API Token</value>
+  </data>
 </root>

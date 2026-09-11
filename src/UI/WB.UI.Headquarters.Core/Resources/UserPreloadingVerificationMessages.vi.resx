@@ -1,0 +1,259 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="PLU0001Description" xml:space="preserve">
+        <value>Người dùng '{0}' đã tồn tại</value>
+        </data>
+    <data name="PLU0002Description" xml:space="preserve">
+        <value>Có những người dùng trùng lặp có thông tin đăng nhập '{0}' trong tệp</value>
+        </data>
+    <data name="PLU0003Description" xml:space="preserve">
+        <value>Người dùng '{0}' được lưu trữ và thuộc về một nhóm khác</value>
+        </data>
+    <data name="PLU0004Description" xml:space="preserve">
+        <value>Người dùng '{0}' đã được lưu trữ và có vai trò khác</value>
+        </data>
+    <data name="PLU0005Description" xml:space="preserve">
+        <value>Đăng nhập '{0}' sai định dạng</value>
+        </data>
+    <data name="PLU0006Description" xml:space="preserve">
+        <value>Mật khẩu '{0}' sai định dạng</value>
+        </data>
+    <data name="PLU0007Description" xml:space="preserve">
+        <value>Email '{0}' có định dạng sai</value>
+        </data>
+    <data name="PLU0008Description" xml:space="preserve">
+        <value>Số điện thoại '{0}' sai định dạng</value>
+        </data>
+    <data name="PLU0009Description" xml:space="preserve">
+        <value>Vai trò '{0}' không hợp lệ</value>
+        </data>
+    <data name="PLU0010Description" xml:space="preserve">
+        <value>Không tìm thấy người giám sát '{0}' trong không gian làm việc</value>
+        </data>
+    <data name="PLU0011Description" xml:space="preserve">
+        <value>Cột giám sát phải trống cho vai trò giám sát</value>
+        </data>
+    <data name="PLU0012Description" xml:space="preserve">
+        <value>Tên đầy đủ '{0}' có định dạng sai</value>
+        </data>
+    <data name="PLU0013Description" xml:space="preserve">
+        <value>Số điện thoại '{0}' sai định dạng</value>
+        </data>
+    <data name="PLU0014Description" xml:space="preserve">
+        <value>Tên đầy đủ '{0}' có ký tự không hợp lệ</value>
+        </data>
+    <data name="PLU0001" xml:space="preserve">
+        <value>Đăng nhập không phải là duy nhất</value>
+        </data>
+    <data name="PLU0002" xml:space="preserve">
+        <value>Nhân bản</value>
+        </data>
+    <data name="PLU0003" xml:space="preserve">
+        <value>Đội sai</value>
+        </data>
+    <data name="PLU0004" xml:space="preserve">
+        <value>Vai trò sai</value>
+        </data>
+    <data name="PLU0005" xml:space="preserve">
+        <value>Định dạng đăng nhập sai</value>
+        </data>
+    <data name="PLU0006" xml:space="preserve">
+        <value>Định dạng mật khẩu sai</value>
+        </data>
+    <data name="PLU0007" xml:space="preserve">
+        <value>Định dạng email sai</value>
+        </data>
+    <data name="PLU0008" xml:space="preserve">
+        <value>Định dạng số điện thoại sai</value>
+        </data>
+    <data name="PLU0009" xml:space="preserve">
+        <value>Vai trò không hợp lệ</value>
+        </data>
+    <data name="PLU0010" xml:space="preserve">
+        <value>Lỗi phụ thuộc</value>
+        </data>
+    <data name="PLU0011" xml:space="preserve">
+        <value>Lỗi phụ thuộc</value>
+        </data>
+    <data name="PLU0012" xml:space="preserve">
+        <value>Độ dài tên đầy đủ sai</value>
+        </data>
+    <data name="PLU0013" xml:space="preserve">
+        <value>Độ dài số điện thoại sai</value>
+        </data>
+    <data name="PLU0014" xml:space="preserve">
+        <value>Định dạng tên đầy đủ sai</value>
+        </data>
+    <data name="PLU0001Recommendation" xml:space="preserve">
+        <value>Người dùng phải là duy nhất</value>
+        </data>
+    <data name="PLU0002Recommendation" xml:space="preserve">
+        <value>Giải quyết trùng lặp</value>
+        </data>
+    <data name="PLU0003Recommendation" xml:space="preserve">
+        <value>Người dùng đã lưu trữ không thể được sử dụng lại vì nó thuộc về một nhóm khác</value>
+        </data>
+    <data name="PLU0004Recommendation" xml:space="preserve">
+        <value>Người dùng đã lưu trữ không thể được sử dụng lại vì nó tồn tại ở một vai trò khác</value>
+        </data>
+    <data name="PLU0005Recommendation" xml:space="preserve">
+        <value>Tên đăng nhập phải dài từ 3 đến 15 ký tự và chỉ được chứa các chữ cái, chữ số và ký hiệu gạch dưới. Các chữ cái chỉ được lấy từ bảng chữ cái Latinh (tiếng Anh): 'A'..'Z' hoặc 'a'..'z'. Các chữ cái khác (Cyrillic, Ả Rập, v.v.) không hợp lệ để sử dụng trong tên đăng nhập.</value>
+        </data>
+    <data name="PLU0006Recommendation" xml:space="preserve">
+        <value>Nó phải chứa ít nhất một số, một ký tự chữ hoa và một ký tự chữ thường. Độ dài phải từ 10 đến 100 ký tự</value>
+        </data>
+    <data name="PLU0007Recommendation" xml:space="preserve">
+        <value>Sửa email</value>
+        </data>
+    <data name="PLU0008Recommendation" xml:space="preserve">
+        <value>Sửa số điện thoại</value>
+        </data>
+    <data name="PLU0009Recommendation" xml:space="preserve">
+        <value>Chỉ cho phép "người giám sát" hoặc "người phỏng vấn"</value>
+        </data>
+    <data name="PLU0010Recommendation" xml:space="preserve">
+        <value>Xác minh giá trị cho người giám sát</value>
+        </data>
+    <data name="PLU0011Recommendation" xml:space="preserve">
+        <value>Xóa giá trị giám sát</value>
+        </data>
+    <data name="PLU0012Recommendation" xml:space="preserve">
+        <value>Nó không được chứa nhiều hơn 100 ký tự</value>
+        </data>
+    <data name="PLU0013Recommendation" xml:space="preserve">
+        <value>Nó không được chứa nhiều hơn 15 ký tự</value>
+        </data>
+    <data name="PLU0014Recommendation" xml:space="preserve">
+        <value>Chỉ cho phép các chữ cái, dấu chấm, dấu cách và dấu nháy đơn</value>
+        </data>
+    <data name="PLU0015" xml:space="preserve">
+        <value>Mật khẩu quá ngắn</value>
+        </data>
+    <data name="PLU0015Description" xml:space="preserve">
+        <value>Mật khẩu '{0}' quá ngắn</value>
+        </data>
+    <data name="PLU0015Recommendation" xml:space="preserve">
+        <value>Mật khẩu phải dài ít nhất 10 ký tự</value>
+        </data>
+    <data name="PLU0016" xml:space="preserve">
+        <value>Mật khẩu đơn giản</value>
+        </data>
+    <data name="PLU0016Description" xml:space="preserve">
+        <value>Mật khẩu '{0}' không chứa ký tự không phải chữ và số</value>
+        </data>
+    <data name="PLU0016Recommendation" xml:space="preserve">
+        <value>Thêm ít nhất một ký tự không phải chữ và số</value>
+        </data>
+    <data name="PLU0017" xml:space="preserve">
+        <value>Mật khẩu đơn giản</value>
+        </data>
+    <data name="PLU0017Description" xml:space="preserve">
+        <value>Mật khẩu '{0}' không chứa chữ số</value>
+        </data>
+    <data name="PLU0017Recommendation" xml:space="preserve">
+        <value>Thêm ít nhất một chữ số ('0'-'9').</value>
+        </data>
+    <data name="PLU0018" xml:space="preserve">
+        <value>Mật khẩu đơn giản</value>
+        </data>
+    <data name="PLU0018Description" xml:space="preserve">
+        <value>Mật khẩu '{0}' không chứa ký tự chữ thường</value>
+        </data>
+    <data name="PLU0018Recommendation" xml:space="preserve">
+        <value>Thêm ít nhất một ký tự chữ thường ('a'-'z').</value>
+        </data>
+    <data name="PLU0019" xml:space="preserve">
+        <value>Mật khẩu đơn giản</value>
+        </data>
+    <data name="PLU0019Description" xml:space="preserve">
+        <value>Mật khẩu '{0}' không chứa ký tự viết hoa</value>
+        </data>
+    <data name="PLU0019Recommendation" xml:space="preserve">
+        <value>Thêm ít nhất một chữ hoa ('A'-'Z').</value>
+        </data>
+    <data name="PLU0020" xml:space="preserve">
+        <value>Mật khẩu đơn giản</value>
+        </data>
+    <data name="PLU0020Description" xml:space="preserve">
+        <value>Mật khẩu '{0}' không chứa đủ ký tự duy nhất</value>
+        </data>
+    <data name="PLU0020Recommendation" xml:space="preserve">
+        <value>Thêm các ký tự khác nhau.</value>
+        </data>
+    <data name="PLU0021" xml:space="preserve">
+        <value>Yêu cầu mật khẩu</value>
+        </data>
+    <data name="PLU0021Description" xml:space="preserve">
+        <value>Cần có mật khẩu</value>
+        </data>
+    <data name="PLU0021Recommendation" xml:space="preserve">
+        <value>Thêm mật khẩu</value>
+        </data>
+    <data name="PLU0022" xml:space="preserve">
+        <value>Không tìm thấy không gian làm việc</value>
+        </data>
+    <data name="PLU0022Description" xml:space="preserve">
+        <value>Không gian làm việc phải tồn tại và được bật</value>
+        </data>
+    <data name="PLU0022Recommendation" xml:space="preserve">
+        <value>Kiểm tra tên không gian làm việc</value>
+        </data>
+</root>

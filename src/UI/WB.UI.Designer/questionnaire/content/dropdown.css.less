@@ -1,4 +1,53 @@
-﻿/* chapter dropdown menu */
+﻿.bootstrap-select:not([class*="span"]):not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+    width: 100%;
+    margin-top: 3px;
+}
+
+.bootstrap-select>.btn {
+    background-color: #fff;
+    width: 100%;
+    text-align: left;
+    font-family: "Lucida Console", Monaco, monospace;
+    font-size: 14px;
+    font-weight: normal;
+    color: @light-grey;
+    border: none;
+}
+
+.bootstrap-select.btn-group .btn .caret {
+    background: url('./i/dropdown-arrow.png') center center no-repeat;
+    width: 19px;
+    height: 12px;
+    margin: 0;
+    border: none;
+    margin-top: -6px;
+}
+
+.dropup.bootstrap-select.btn-group .btn .caret {
+    background: url('./i/dropup-arrow.png') center center no-repeat;
+}
+
+
+.bootstrap-select .dropdown-menu {
+    border: 2px solid @designer-editor-lightblue-bg-color;
+    top: -4px;
+}
+
+.bootstrap-select.btn-group .dropdown-menu dt {
+    font-family: "Lucida Console", Monaco, monospace;
+    color: @light-grey;
+    font-weight: normal;
+}
+
+.bootstrap-select.btn-group .dropdown-menu li small {
+    display: none;
+}
+
+.bootstrap-select.btn-group .btn .filter-option small {
+    display: block;
+}
+
+/* chapter dropdown menu */
 .chapter-menu.dropdown-menu {
     padding: 15px;
     min-width: 320px;
@@ -10,7 +59,7 @@
         font-weight: bold;
         text-transform: uppercase;
         letter-spacing: 0.1em;
-        color: #949da3;
+        color: @designer-dropdown-heading-color;
     }
 
     >ul {
@@ -32,7 +81,7 @@
 
                 .arial-font();
                 font-size: 16px;
-                color: #3f3f3f;
+                color: @designer-editor-title-color;
 
                 &[disabled] {
                     color: #bbb;
@@ -42,14 +91,14 @@
                     text-decoration: none;
 
                     &:not([disabled]) {
-                        color: #2a81cb;
+                        color: @primary-link-color;
                     }
                 }
 
                 >small {
                     .trebuchet-font();
                     font-size: 12px;
-                    color: #9ca4aa;
+                    color: @designer-editor-title-span-dark-color;
                 }
             }
         }
@@ -57,7 +106,7 @@
 }
 
 .dropdown-menu>li>a:hover {
-    color: #2a81cb;
+    color: @primary-link-color;
     text-decoration: none;
     outline: 0;
     background-color: #ffffff;

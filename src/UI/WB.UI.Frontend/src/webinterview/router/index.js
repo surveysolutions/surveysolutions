@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Complete from '../components/Complete'
-import Cover from '../components/Cover'
-import Section from '../components/Section'
-import SideBar from '../components/Sidebar'
-import Splash from '../components/Splash'
 import { config } from '../../shared/config'
 
+const Complete = () => import('../components/Complete')
+const Cover = () => import('../components/Cover')
+const Section = () => import('../components/Section')
+const SideBar = () => import('../components/Sidebar')
+const Splash = () => import('../components/Splash')
 const Interview = () => import('~/webinterview/components/Interview.vue')
 
 function NewRouter(store) {
@@ -86,7 +86,7 @@ function NewRouter(store) {
 
     // tslint:disable:no-string-literal
     router.beforeEach(async (to, from, next) => {
-        store.commit('SET_ROUTE', to);
+        store.commit('SET_ROUTE', to)
 
         if (config.splashScreen) { next(); return }
         next()

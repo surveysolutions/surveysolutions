@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Cancel" xml:space="preserve">
+        <value>Membatalkan</value>
+    </data>
+    <data name="Total" xml:space="preserve">
+        <value>Total</value>
+    </data>
+    <data name="WithErrors" xml:space="preserve">
+        <value>Dengan kesalahan</value>
+    </data>
+    <data name="Average" xml:space="preserve">
+        <value>Rata-rata</value>
+    </data>
+    <data name="HQ_AccountController_AccountUpdatedSuccessfully" xml:space="preserve">
+        <value>Informasi akun berhasil diperbarui</value>
+    </data>
+    <data name="HQ_AccountController_AccountUpdatedSuccessfullyFormat" xml:space="preserve">
+        <value>Informasi tentang &lt;b&gt;{0}&lt;/b&gt; berhasil diperbarui</value>
+    </data>
+    <data name="HQ_AccountController_AccountPasswordChangedSuccessfully" xml:space="preserve">
+        <value>Kata sandi akun berhasil diperbarui</value>
+    </data>
+    <data name="HQ_AccountController_AccountPasswordChangedSuccessfullyFormat" xml:space="preserve">
+        <value>Kata sandi untuk akun &lt;b&gt;{0}&lt;/b&gt; berhasil diperbarui</value>
+    </data>
+    <data name="HQ_Views_Manage_Title" xml:space="preserve">
+        <value>Kelola akun</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Title" xml:space="preserve">
+        <value>Otentikasi dua faktor</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Description" xml:space="preserve">
+        <value>Otentikasi dua faktor adalah fitur keamanan tingkat lanjut yang mempersulit peretas untuk masuk ke akun Anda hanya dengan kata sandi yang dicuri.</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Enabled" xml:space="preserve">
+        <value>diaktifkan</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Disabled" xml:space="preserve">
+        <value>dengan disabilitas</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description" xml:space="preserve">
+        <value>Siapkan perangkat baru untuk autentikasi dua faktor. Anda dapat mengatur beberapa perangkat secara bersamaan.</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description" xml:space="preserve">
+        <value>Reset ke kode rahasia baru jika salah satu perangkat Anda yang digunakan untuk autentikasi dua faktor hilang atau dicuri.</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description" xml:space="preserve">
+        <value>Batalkan validasi kode pemulihan yang tidak digunakan dan buat 10 kode baru.</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Disable2fa_Description" xml:space="preserve">
+        <value>Matikan otentikasi dua faktor dan biarkan akun hanya dilindungi oleh kata sandi.</value>
+    </data>
+    <data name="HQ_Views_EnableAuthenticator_Title" xml:space="preserve">
+        <value>Siapkan aplikasi autentikator</value>
+    </data>
+    <data name="HQ_Views_ResetAuthenticator_Title" xml:space="preserve">
+        <value>Setel ulang kunci autentikator</value>
+    </data>
+    <data name="HQ_Views_ShowRecoveryCodes_Title" xml:space="preserve">
+        <value>Kode pemulihan</value>
+    </data>
+    <data name="HQ_Views_DisableTwoFactorAuth_Title" xml:space="preserve">
+        <value>Nonaktifkan otentikasi dua faktor</value>
+    </data>
+    <data name="HQ_Views_ResetRecoveryCodes_Title" xml:space="preserve">
+        <value>Setel ulang kode pemulihan</value>
+    </data>
+    <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+        <value>Disetujui oleh Markas Besar</value>
+    </data>
+    <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+        <value>Disetujui oleh Pengawas</value>
+    </data>
+    <data name="InterviewStatus_Completed" xml:space="preserve">
+        <value>Selesai</value>
+    </data>
+    <data name="InterviewStatus_Created" xml:space="preserve">
+        <value>Dibuat</value>
+    </data>
+    <data name="InterviewStatus_Deleted" xml:space="preserve">
+        <value>Dihapus</value>
+    </data>
+    <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+        <value>Pewawancara ditugaskan</value>
+    </data>
+    <data name="InterviewStatus_ReadyForInterview" xml:space="preserve">
+        <value>Siap untuk wawancara</value>
+    </data>
+    <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+        <value>Ditolak oleh Markas Besar</value>
+    </data>
+    <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+        <value>Ditolak oleh Supervisor</value>
+    </data>
+    <data name="InterviewStatus_Restarted" xml:space="preserve">
+        <value>Dimulai ulang</value>
+    </data>
+    <data name="InterviewStatus_Restored" xml:space="preserve">
+        <value>Pulih</value>
+    </data>
+    <data name="InterviewStatus_SentToCapi" xml:space="preserve">
+        <value>Dikirim ke Kapi</value>
+    </data>
+    <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+        <value>Penyelia ditugaskan</value>
+    </data>
+    <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
+        <value>Kelola akun</value>
+    </data>
+    <data name="SurverManagement_MainMenu_ChangePassword" xml:space="preserve">
+        <value>Ubah kata sandi</value>
+    </data>
+    <data name="ViewHelpers_Invalid_property" xml:space="preserve">
+        <value>Properti tidak valid</value>
+    </data>
+    <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
+        <value>Tidak dapat menguraikan respons pertanyaan</value>
+    </data>
+    <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
+        <value>Status ditetapkan oleh tim dukungan Solusi Survei</value>
+    </data>
+    <data name="ObserverNotAllowed" xml:space="preserve">
+        <value>Pengamat tidak diperbolehkan melakukan tindakan ini</value>
+    </data>
+    <data name="UnexpectedErrorOccurred" xml:space="preserve">
+        <value>Terjadi kesalahan yang tidak terduga</value>
+    </data>
+    <data name="Error" xml:space="preserve">
+        <value>Kesalahan</value>
+    </data>
+    <data name="AnyHeadquarters" xml:space="preserve">
+        <value>markas mana pun</value>
+    </data>
+    <data name="Days" xml:space="preserve">
+        <value>hari</value>
+    </data>
+    <data name="Assignments" xml:space="preserve">
+        <value>Tugas</value>
+    </data>
+    <data name="Interviews" xml:space="preserve">
+        <value>Wawancara</value>
+    </data>
+    <data name="AllTeams" xml:space="preserve">
+        <value>Semua tim</value>
+    </data>
+    <data name="Teams" xml:space="preserve">
+        <value>Tim</value>
+    </data>
+    <data name="AllPeriods" xml:space="preserve">
+        <value>Semua periode</value>
+    </data>
+    <data name="AllQuestionnaires" xml:space="preserve">
+        <value>Semua kuesioner</value>
+    </data>
+    <data name="AllInterviewers" xml:space="preserve">
+        <value>Semua pewawancara</value>
+    </data>
+    <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
+        <value>Tidak disetujui oleh Markas Besar</value>
+    </data>
+    <data name="AllInterviewersExceptAssignedToInterviewer" xml:space="preserve">
+        <value>Tidak Ditugaskan ke Pewawancara</value>
+    </data>
+    <data name="NoPermissionsToExecute" xml:space="preserve">
+        <value>Pengguna tidak berwenang untuk melakukan tindakan yang disediakan</value>
+    </data>
+    <data name="HQ_Views_ApiTokens_Title" xml:space="preserve">
+        <value>akses API</value>
+    </data>
+    <data name="HQ_Views_Api_Token_Description" xml:space="preserve">
+        <value>Token API digunakan untuk melakukan panggilan API ke sistem</value>
+    </data>
+    <data name="HQ_Views_Api_Token_Issued" xml:space="preserve">
+        <value>diaktifkan</value>
+    </data>
+    <data name="HQ_Views_Api_Token_Not_Issued" xml:space="preserve">
+        <value>dengan disabilitas</value>
+    </data>
+    <data name="HQ_Views_Api_Token_Generate_Description" xml:space="preserve">
+        <value>Silakan simpan tokennya sekarang. Anda hanya dapat melihatnya sekali!</value>
+    </data>
+</root>

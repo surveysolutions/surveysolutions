@@ -1,6 +1,13 @@
 <template>
-    <input ref="input" autocomplete="off" type="text" class="ag-cell-edit-input" :maxlength="$me.maxLength"
-        :placeholder="noAnswerWatermark" :value="$me.answer" :disabled="!$me.acceptAnswer" v-maskedText="$me.mask"
+    <input ref="input"
+        autocomplete="off"
+        type="text"
+        class="ag-cell-edit-input"
+        :maxlength="$me.maxLength"
+        :placeholder="noAnswerWatermark"
+        :value="$me.answer"
+        :disabled="!$me.acceptAnswer"
+        v-maskedText="$me.mask"
         :data-mask-completed="$me.isAnswered" />
 </template>
 

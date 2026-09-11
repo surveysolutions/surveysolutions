@@ -1,11 +1,16 @@
 <template>
-    <div v-if="isReconnecting" class="reconnecting-banner">
-        <span class="reconnecting-banner__spinner" aria-hidden="true"></span>
+    <div v-if="isReconnecting"
+        class="reconnecting-banner">
+        <span class="reconnecting-banner__spinner"
+            aria-hidden="true"></span>
         <span class="reconnecting-banner__text">{{ $t('WebInterviewUI.Reconnecting') }}</span>
-        <span v-if="attemptCount > 0" class="reconnecting-banner__attempt">
+        <span v-if="attemptCount > 0"
+            class="reconnecting-banner__attempt">
             {{ $t('WebInterviewUI.ReconnectAttempt', { count: attemptCount }) }}
         </span>
-        <button type="button" class="reconnecting-banner__reload" @click="reload">
+        <button type="button"
+            class="reconnecting-banner__reload"
+            @click="reload">
             {{ $t('WebInterviewUI.Reload') }}
         </button>
     </div>

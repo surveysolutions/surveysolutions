@@ -1,6 +1,7 @@
 using Android.Content;
 using Android.Locations;
 using Android.OS;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
@@ -24,7 +25,33 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
     public bool HasGpsProvider()
     {
         var locationManager = (LocationManager)Application.Context.GetSystemService(Context.LocationService);
-        return locationManager.IsProviderEnabled(LocationManager.GpsProvider);
+        if (locationManager == null) return false;
+
+        // In BuiltInGpsOnly mode only fixes from the hardware GPS provider are acceptable, so the
+        // GPS provider itself must be enabled. On API 28+ the broader IsLocationEnabled toggle can be
+        // on while the GPS provider is off, which would let tracking start but then reject every
+        // (network/fused) fix and silently record no points.
+        if (settings.AcceptableGpsLocationSource.RequiresEnabledGpsProvider())
+            return locationManager.IsProviderEnabled(LocationManager.GpsProvider);
+
+        // On API 28+, location is a single on/off toggle. IsLocationEnabled is the
+        // correct check — IsProviderEnabled("gps") only reflects hardware GPS state and
+        // returns false when hardware GPS is off but an external sensor (mock location app)
+        // is actively injecting fixes.
+        if (Build.VERSION.SdkInt >= BuildVersionCodes.P)
+            return locationManager.IsLocationEnabled;
+
+        // API < 28: check GPS provider specifically, or any enabled provider as fallback.
+        if (locationManager.IsProviderEnabled(LocationManager.GpsProvider))
+            return true;
+        try
+        {
+            return locationManager.GetProviders(enabledOnly: true).Count > 0;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     public IGeolocationListener GetListen(IGeolocationListener geolocationListener)
@@ -57,9 +84,24 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
 
     private async void ServiceOnLocationReceived(object sender, LocationReceivedEventArgs e)
     {
-        var accuracyInMeters = settings.GeographyQuestionAccuracyInMeters;
-        if (e.Location.Accuracy > accuracyInMeters)
+        // Enforce the workspace-configured acceptable location source for geo-tracking and
+        // geofencing, mirroring the enforcement applied when answering GPS questions: reject
+        // fixes that do not come from the required provider, or that are mock when mock is not
+        // permitted, so background tracking cannot be spoofed with mock/non-GPS locations.
+        bool isFromGpsProvider = e.Location.Provider == LocationManager.GpsProvider;
+        if (!settings.AcceptableGpsLocationSource.IsLocationAcceptable(isFromGpsProvider, e.IsFromMockProvider))
             return;
+
+        // Keep the external GPS sensor exemption (mock provider): those adapters often report a
+        // fixed or vendor-specific accuracy value that does not reflect actual signal quality.
+        // For all other (non-mock) fixes, enforce the configured threshold before forwarding the
+        // coordinate to geo-tracking/geofencing listeners.
+        if (!e.IsFromMockProvider)
+        {
+            var accuracyInMeters = settings.GeographyQuestionAccuracyInMeters;
+            if (e.Location.Accuracy > accuracyInMeters)
+                return;
+        }
 
         // Create a snapshot to avoid collection modification during enumeration
         var listenersCopy = listeners.Values.ToArray();

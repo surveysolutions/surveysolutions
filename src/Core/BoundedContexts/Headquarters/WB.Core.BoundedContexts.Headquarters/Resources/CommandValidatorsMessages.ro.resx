@@ -129,4 +129,17 @@
   <data name="WebModeAssignmentShouldBeOnInterviewer" xml:space="preserve">
     <value>O sarcină pentru interviul web trebuie să aibă un anchetator responsabil</value>
   </data>
+
+
+  <data name="AssignmentResponsibleNotFound" xml:space="preserve">
+    <value>Responsabilul nu a fost găsit</value>
+  </data>
+
+ <data name="QuestionnaireWasDeleted" xml:space="preserve">
+    <value>Chestionarul a fost șters</value>
+  </data>
+
+ <data name="AssignmentLimitReached" xml:space="preserve">
+    <value>Limita de atribuire a fost atinsă</value>
+  </data>
 </root>

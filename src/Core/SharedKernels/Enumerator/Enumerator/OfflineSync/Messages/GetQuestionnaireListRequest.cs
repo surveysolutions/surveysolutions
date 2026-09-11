@@ -132,6 +132,12 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
         public int Id { get; set; }
     }
 
+    public class ChangeAssignmentStatusRequest : ICommunicationMessage
+    {
+        public int Id { get; set; }
+        public AssignmentStatusChangeApiView StatusChange { get; set; }
+    }
+
     public class GetPublicKeyForEncryptionRequest: ICommunicationMessage { }
 
     public class GetPublicKeyForEncryptionResponse : ICommunicationMessage

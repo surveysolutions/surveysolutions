@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Supervisor
             registry.BindWithConstructorArgument<ISynchronizationStep, UploadCalendarEvents>("sortOrder", 3);
             registry.BindWithConstructorArgument<ISynchronizationStep, UploadGeoTrackingSynchronizationStep>("sortOrder", 4);
             registry.BindWithConstructorArgument<ISynchronizationStep, SupervisorUploadInterviews>("sortOrder", 5);
+            registry.BindWithConstructorArgument<ISynchronizationStep, UploadAssignmentStatusChanges>("sortOrder", 6);
             registry.BindWithConstructorArgument<ISynchronizationStep, UpdateEncryptionKey>("sortOrder", 7);
             registry.BindWithConstructorArgument<ISynchronizationStep, SyncronizeInterviewers>("sortOrder", 10);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeSupervisor>("sortOrder", 20);

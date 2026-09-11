@@ -132,4 +132,18 @@
   <data name="ViewInterviewContent" xml:space="preserve">
     <value>ინტერვიუს კონტენტის(შინაარსის) ნახვა</value>
   </data>
+
+
+  <data name="NoGpsQuestionsByQuestionnaire" xml:space="preserve">
+    <value>არჩეულ კითხვარში GPS ტიპის კითხვები არ არის</value>
+    <comment>d</comment>
+  </data>
+
+  <data name="Assignment" xml:space="preserve">
+    <value>დავალება</value>
+  </data>
+
+  <data name="ReloadGeoTacking" xml:space="preserve">
+      <value>ტრეკების თავიდან ჩატვირთვა</value>
+  </data>
 </root>

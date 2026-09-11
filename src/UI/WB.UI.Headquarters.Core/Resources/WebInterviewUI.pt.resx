@@ -212,6 +212,9 @@
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>A resposta não foi salva</value>
   </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Erro de comunicação</value>
+  </data>
   <data name="NotCalculated" xml:space="preserve">
     <value>Não calculado</value>
   </data>
@@ -300,6 +303,9 @@
   </data>
   <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
     <value>O valor inserido não pode ser menor que a resposta protegida</value>
+  </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Valores negativos não são permitidos para esta pergunta</value>
   </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>A resposta '{{answer}}' está incorreta porque a pergunta é usada como tamanho do roster e a resposta especificada é negativa</value>

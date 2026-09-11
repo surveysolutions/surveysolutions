@@ -1,37 +1,57 @@
 <template>
-    <wb-question :question="$me" questionCssClassName="numeric-question" :no-comments="noComments">
+    <wb-question :question="$me"
+        questionCssClassName="numeric-question"
+        :no-comments="noComments">
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group">
-                    <div class="field" :class="{ answered: $me.isAnswered }">
-                        <input type="text" autocomplete="off" inputmode="decimal" class="field-to-fill"
-                            ref="inputDouble" :placeholder="noAnswerWatermark" :title="noAnswerWatermark"
-                            :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion"
+                    <div class="field"
+                        :class="{ answered: $me.isAnswered }">
+                        <input type="text"
+                            autocomplete="off"
+                            inputmode="decimal"
+                            class="field-to-fill"
+                            ref="inputDouble"
+                            :placeholder="noAnswerWatermark"
+                            :title="noAnswerWatermark"
+                            :value="$me.answer"
+                            v-blurOnEnterKey
+                            @blur="answerDoubleQuestion"
                             :disabled="isSpecialValueSelected || !$me.acceptAnswer"
-                            :class="{ 'special-value-selected': isSpecialValueSelected }" v-numericFormatting="{
+                            :class="{ 'special-value-selected': isSpecialValueSelected }"
+                            v-numericFormatting="{
 
-                                minimumValue: '-999999999999999.99999999999999',
+                                minimumValue: minimumValue,
                                 maximumValue: '999999999999999.99999999999999',
 
                                 digitGroupSeparator: groupSeparator,
                                 decimalCharacter: decimalSeparator,
                                 decimalPlaces: decimalPlacesCount,
-                                allowDecimalPadding: false
+                                allowDecimalPadding: 'floats'
                             }" />
-                        <wb-remove-answer v-if="!isSpecialValueSelected" :on-remove="removeAnswer" />
+                        <wb-remove-answer v-if="!isSpecialValueSelected"
+                            :on-remove="removeAnswer" />
                     </div>
                 </div>
                 <template v-if="isSpecialValueSelected != false">
-                    <div class="radio" v-for="option in $me.options" :key="$me.id + '_' + option.value">
+                    <div class="radio"
+                        v-for="option in $me.options"
+                        :key="$me.id + '_' + option.value">
                         <div class="field">
-                            <input class="wb-radio" type="radio" :id="$me.id + '_' + option.value" :name="$me.id"
-                                :value="option.value" :disabled="!$me.acceptAnswer" v-model="specialValue" />
+                            <input class="wb-radio"
+                                type="radio"
+                                :id="$me.id + '_' + option.value"
+                                :name="$me.id"
+                                :value="option.value"
+                                :disabled="!$me.acceptAnswer"
+                                v-model="specialValue" />
                             <label :for="$me.id + '_' + option.value">
                                 <span class="tick"></span>
                                 {{ option.title }}
                             </label>
                             <wb-remove-answer :on-remove="removeAnswer" />
-                            <wb-attachment :attachmentName="option.attachmentName" :interviewId="interviewId"
+                            <wb-attachment :attachmentName="option.attachmentName"
+                                :interviewId="interviewId"
                                 v-if="option.attachmentName" />
                         </div>
                     </div>
@@ -75,6 +95,20 @@ export default {
         decimalPlacesCount() {
             return getDecimalPlacesCount(this.$me)
         },
+        hasNegativeSpecialValues() {
+            return (this.$me.options || []).some(o => o.value < 0)
+        },
+        hasNegativeCurrentNonSpecialAnswer() {
+            return this.$me.answer < 0 && !this.isSpecialValue(this.$me.answer)
+        },
+        minimumValue() {
+            if (!this.$me.isNonNegative)
+                return '-999999999999999.99999999999999'
+
+            return (this.hasNegativeSpecialValues || this.hasNegativeCurrentNonSpecialAnswer)
+                ? '-999999999999999.99999999999999'
+                : '0'
+        },
         specialValue: {
             get() {
                 return this.$me.answer
@@ -109,6 +143,11 @@ export default {
                     return
                 }
 
+                if (this.$me.isNonNegative && answer < 0 && !isSpecialValue) {
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberNonNegativeError'), answer)
+                    return
+                }
+
                 this.$store.dispatch('answerDoubleQuestion', { identity: this.id, answer: answer })
             })
         },
@@ -130,7 +169,7 @@ export default {
             return
         },
     },
-    beforeDestroy() {
+    beforeUnmount() {
         if (this.autoNumericElement) {
             this.autoNumericElement.remove()
         }

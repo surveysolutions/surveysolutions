@@ -1,5 +1,6 @@
 using System;
 using HotChocolate.Data.Filters;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments
 {
@@ -17,6 +18,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments
             descriptor.Field(x => x.WebMode);
             descriptor.Field(x => x.ReceivedByTabletAtUtc);
             descriptor.Field(x => x.TargetArea);
+            descriptor.Field(x => x.Status);
         }
     }
 }

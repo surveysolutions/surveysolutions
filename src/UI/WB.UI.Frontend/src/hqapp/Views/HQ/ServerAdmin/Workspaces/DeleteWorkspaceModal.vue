@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import { disableExperimentalFragmentVariables } from 'graphql-tag'
 export default {
 
     data() {

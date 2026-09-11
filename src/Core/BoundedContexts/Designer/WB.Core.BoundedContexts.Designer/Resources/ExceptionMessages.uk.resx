@@ -408,4 +408,21 @@
   <data name="VariableWithIdWasNotFound" xml:space="preserve">
     <value>Змінну з ідентифікатором {0} не було знайдено в анкеті {1}</value>
   </data>
+
+
+  <data name="CriticalRuleAlreadyExist" xml:space="preserve">
+    <value>Критичне правило вже існує.</value>
+  </data>
+
+  <data name="CriticalRuleIsAbsent" xml:space="preserve">
+    <value>Критичне правило відсутнє.</value>
+  </data>
+
+  <data name="TranslationIsNotFull" xml:space="preserve">
+    <value>Переклад неповний і не містить усіх обов'язкових текстів для кожного елемента</value>
+  </data>
+
+  <data name="CategoryTranslationIsNotFull" xml:space="preserve">
+    <value>Переклад категорії "{0}" є неповним і не містить текстів усіх варіантів</value>
+  </data>
 </root>

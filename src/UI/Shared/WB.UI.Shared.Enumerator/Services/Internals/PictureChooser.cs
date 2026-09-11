@@ -3,7 +3,6 @@ using Android.Media;
 using MvvmCross.Base;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -55,8 +54,11 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             MediaImplementation androidMedia = new MediaImplementation();
             using (var originalMetadata = new ExifInterface(photo.FullPath))
             {
-                androidMedia.FixOrientationAndResizeAsync(photo.FullPath, storeCameraMediaOptions, originalMetadata)
-                    .WaitAndUnwrapException();    
+                var isProcessed = await androidMedia.FixOrientationAndResizeAsync(photo.FullPath, storeCameraMediaOptions, originalMetadata)
+                    .ConfigureAwait(false);
+
+                if (!isProcessed)
+                    return null;
             }
 
             return await photo.OpenReadAsync();

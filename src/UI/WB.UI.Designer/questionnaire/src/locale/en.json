@@ -338,6 +338,7 @@
     "HotkeysOpenSection": "Open section",
     "HotkeysPrint": "Print",
     "HotkeysSearch": "Search for sub-sections and questions in section",
+    "HotkeysTest": "Test questionnaire in WebTester",
     "MultipleDependencies": "One or more questions/sub-sections depend on",
     "NoPermissions": "You don't have permissions for changing this questionnaire",
     "NotAnImage": "Chosen file is not image",
@@ -578,7 +579,8 @@
     "LockedOutText": "Your account is locked. Contact the administrator to unlock your account",
     "PasswordEmailSent": "Please check your email to reset your password.",
     "EmailChangeShouldBeConfirmed": "Please follow instructions sent to provided email ({0}) to confirm email change.",
-    "PendingEmailUpdate": "Pending update to {0}"
+    "PendingEmailUpdate": "Pending update to {0}",
+    "LastLoginDate": "Last login date"
   },
   "QuestionnaireController": {
     "Action": "Action",

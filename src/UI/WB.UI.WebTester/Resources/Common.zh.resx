@@ -144,4 +144,9 @@
   <data name="TheWorldBankGroup" xml:space="preserve">
     <value>世界银行集团</value>
   </data>
+
+
+  <data name="ReloadPartialInterviewErrorMessage" xml:space="preserve">
+    <value>访谈数据无法应用到新版本的问卷。我们仅应用了部分数据。</value>
+  </data>
 </root>

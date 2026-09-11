@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="QuestionnaireNameUniqueFormat" xml:space="preserve">
+        <value>កម្រងសំណួរ '{0}' មានរួចហើយ។ សូមជ្រើសរើសឈ្មោះផ្សេងទៀត។</value>
+    </data>
+    <data name="QuestionnaireVariableUniqueFormat" xml:space="preserve">
+        <value>អ្នក​បាន​នាំចូល​កម្រង​សំណួរ​មួយ​ទៀត​រួច​ហើយ​ជាមួយ​នឹង​អថេរ​កម្រង​សំណួរ '{0}' ពី​អ្នក​រចនា។ ប្រសិនបើ​អ្នក​នៅតែ​ចង់​នាំចូល​ព័ត៌មាន​ជាក់លាក់​នេះ សូម​ផ្តល់​ឱ្យ​វា​នូវ​កម្រង​សំណួរ​ផ្សេង​គ្នា​នៅក្នុង​អ្នក​រចនា។</value>
+    </data>
+    <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
+        <value>មានតែអ្នកគ្រប់គ្រងដែលទទួលខុសត្រូវលើកិច្ចការនេះទេដែលអាចឆ្លើយសំណួររបស់អ្នកគ្រប់គ្រងបាន។</value>
+    </data>
+    <data name="WebModeAssignmentShouldBeOnInterviewer" xml:space="preserve">
+        <value>កិច្ចការសម្រាប់ការសម្ភាសន៍តាមគេហទំព័រត្រូវតែមានអ្នកសម្ភាសន៍ជាអ្នកទទួលខុសត្រូវ</value>
+    </data>
+    <data name="AssignmentResponsibleNotFound" xml:space="preserve">
+        <value>រកមិនឃើញអ្នកទទួលខុសត្រូវទេ។</value>
+    </data>
+    <data name="QuestionnaireWasDeleted" xml:space="preserve">
+        <value>កម្រងសំណួរត្រូវបានលុប</value>
+    </data>
+    <data name="AssignmentLimitReached" xml:space="preserve">
+        <value>បានដល់ដែនកំណត់នៃកិច្ចការ</value>
+    </data>
+</root>

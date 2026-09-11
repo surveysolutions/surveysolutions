@@ -36,7 +36,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'csharp', 'javascript' ]
+        include:
+          - language: csharp
+            build-mode: manual
+          - language: javascript
+            build-mode: none
         # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
         # Use only 'java' to analyze code written in Java, Kotlin or both
         # Use only 'javascript' to analyze code written in JavaScript, TypeScript or both
@@ -44,13 +48,14 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
+      uses: github/codeql-action/init@v4
       with:
         languages: ${{ matrix.language }}
+        build-mode: ${{ matrix.build-mode }}
         # If you wish to specify custom queries, you can do so here or in a config file.
         # By default, queries listed here will override any specified in a config file.
         # Prefix the list here with "+" to use these queries and those in the config file.
@@ -59,45 +64,28 @@ jobs:
         # queries: security-extended,security-and-quality
 
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v3
+      if: matrix.language == 'csharp'
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
   
-    # Restore workload to build android
-    - name: Install android workload
-      run: dotnet workload install android
+    # Restore workloads to build android
+    - name: Restore android workload
+      if: matrix.language == 'csharp'
+      run: dotnet workload restore "src/WB.sln"
 
     - name: Install Android SDK
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y openjdk-11-jdk
-        mkdir -p ~/Android/Sdk/cmdline-tools
-        curl -o tools.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-        unzip tools.zip -d ~/Android/Sdk/cmdline-tools
-        mv ~/Android/Sdk/cmdline-tools/cmdline-tools ~/Android/Sdk/cmdline-tools/latest
-        export PATH=$PATH:~/Android/Sdk/cmdline-tools/latest/bin
-        yes | sdkmanager --licenses
-        sdkmanager "platforms;android-34" "platform-tools" "build-tools;35.0.0"
+      if: matrix.language == 'csharp'
+      uses: android-actions/setup-android@v4
+      with:
+        packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
 
-    - name: Export Android SDK Path
-      run: echo "ANDROID_SDK_ROOT=$HOME/Android/Sdk" >> $GITHUB_ENV
-
-    # Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
-    # If this step fails, then you should remove it and run the build manually (see below)
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v3
-
-    # ℹ️ Command-line programs to run using the OS shell.
-    # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
-
-    #   If the Autobuild fails above, remove it and uncomment the following three lines.
-    #   modify them (or add more) to build your code if your project, please refer to the EXAMPLE below for guidance.
-
-    # - run: |
-    #     echo "Run, Build Application using script"
-    #     ./location_of_script_within_repo/buildscript.sh
+    # Build C# explicitly so build failures fail the job.
+    - name: Build C#
+      if: matrix.language == 'csharp'
+      run: dotnet build "src/WB.sln" --configuration Release
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+      uses: github/codeql-action/analyze@v4
       with:
         category: "/language:${{matrix.language}}"

@@ -189,4 +189,77 @@
   <data name="Prefs_VersionTitle" xml:space="preserve">
     <value>Versi aplikasi</value>
   </data>
+
+
+  <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
+    <value>Mengunduh lampiran kuesioner -  {0}%</value>
+  </data>
+
+  <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
+    <value>URL kuesioner anonim</value>
+  </data>
+
+  <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
+    <value>Buka</value>
+  </data>
+
+  <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
+    <value>Tidak dapat membuka kuesioner. Kuesioner tidak dapat ditemukan.</value>
+  </data>
+
+  <data name="AnonymousQuestionnaires_Error_Confirm" xml:space="preserve">
+    <value>Tidak dapat membuka kuesioner. Hapus dari daftar?</value>
+  </data>
+
+  <data name="Login_Error_EmptyName" xml:space="preserve">
+    <value>Silakan masukkan login yang benar</value>
+  </data>
+
+  <data name="TesterLoginAccountHintText" xml:space="preserve">
+    <value>Masuk ke aplikasi ini menggunakan kredensial yang Anda buat di https://designer.mysurvey.solutions. Untuk mendaftarkan akun baru, kunjungi situs yang sama.</value>
+  </data>
+
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>Bahasa</value>
+  </data>
+
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>Asli</value>
+  </data>
+
+  <data name="MenuItem_Title_Reload" xml:space="preserve">
+    <value>Muat ulang kuesioner</value>
+  </data>
+
+  <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
+    <value>Kuesioner Anonim</value>
+  </data>
+
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>Masuk</value>
+  </data>
+
+  <data name="Prefs_ShowAnswerTime" xml:space="preserve">
+    <value>Tampilkan waktu berlalu per jawaban</value>
+  </data>
+
+  <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
+    <value>Mengukur waktu pengaktifan, validasi, dan propagasi roster. Waktu penerimaan data GPS atau pengambilan gambar tidak disertakan.</value>
+  </data>
+
+  <data name="Prefs_ShowVariables" xml:space="preserve">
+    <value>Tampilkan variabel</value>
+  </data>
+
+  <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
+    <value>Variabel ditampilkan dalam wawancara dengan nilai dan deskripsi</value>
+  </data>
+
+  <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
+    <value>Variabel disembunyikan</value>
+  </data>
+
+  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
+    <value>Data wawancara tidak dapat diterapkan ke versi baru kuesioner. Kami akan membuka wawancara kosong</value>
+  </data>
 </root>

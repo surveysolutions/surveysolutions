@@ -302,7 +302,7 @@ Vă mulțumim pentru cooperare!</value>
     <value>Nu a fost început</value>
   </data>
   <data name="Original_Language" xml:space="preserve">
-    <value>Original</value>
+    <value>Originală</value>
   </data>
   <data name="OrStartInterview" xml:space="preserve">
     <value>Sau puteți începe un nou interviu</value>
@@ -356,9 +356,30 @@ Vă mulțumim pentru cooperare!</value>
     <value>Avertizare</value>
   </data>
   <data name="WebSurvey" xml:space="preserve">
-    <value>Survey Solutions Web Survey</value>
+    <value>Sondaj web Survey Solutions</value>
   </data>
   <data name="WelcomeText" xml:space="preserve">
     <value>Bună ziua și Bine ați venit la Survey Solutions Web Survey</value>
+  </data>
+
+
+  <data name="Filters_CriticalQuestions" xml:space="preserve">
+    <value>Întrebări critice</value>
+  </data>
+
+  <data name="Filters_CriticalRules" xml:space="preserve">
+    <value>Reguli critice</value>
+  </data>
+
+  <data name="AssignmentLimitReached" xml:space="preserve">
+    <value>Am colectat deja toate interviurile din acest sondaj.</value>
+  </data>
+
+  <data name="InterviewNotFound" xml:space="preserve">
+    <value>Interviul nu a fost găsit.</value>
+  </data>
+
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+    <value>Exemplu de link către pagina de destinație a interviului web</value>
   </data>
 </root>

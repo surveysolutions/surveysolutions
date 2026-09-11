@@ -24,6 +24,7 @@ using WB.Core.BoundedContexts.Designer.AnonymousQuestionnaires;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Scenarios;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
@@ -59,6 +60,8 @@ namespace WB.UI.Designer.Controllers
             public string? Title { get; set; }
 
             public bool IsDeleted { get; set; }
+
+            public bool IncludeScenarios { get; set; } = true;
         }
 
         public class QuestionnaireViewModel
@@ -227,6 +230,22 @@ namespace WB.UI.Designer.Controllers
                         false, sourceModel.Source);
 
                     this.commandService.Execute(command);
+
+                    if (model.IncludeScenarios)
+                    {
+                        var sourceScenarios = await dbContext.Scenarios
+                            .AsNoTracking()
+                            .Where(s => s.QuestionnaireId == model.QuestionnaireId)
+                            .Select(s => new StoredScenario
+                            {
+                                QuestionnaireId = questionnaireId,
+                                Title = s.Title,
+                                Steps = s.Steps
+                            })
+                            .ToListAsync();
+
+                        dbContext.Scenarios.AddRange(sourceScenarios);
+                    }
 
                     await dbContext.SaveChangesAsync();
 

@@ -14,6 +14,7 @@ using WB.UI.Designer.Models;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
+    [Authorize]
     [ResponseCache(NoStore = true)]
     [Route("api/questionnaire/{questionnaireId:Guid}/scenarios")]
     public class ScenariosController : ControllerBase

@@ -354,4 +354,21 @@
   <data name="Variable_Update" xml:space="preserve">
     <value>Оновлено змінну {0}</value>
   </data>
+
+
+  <data name="CriticalRule_Add" xml:space="preserve">
+    <value>Критичне правило {0} додано</value>
+  </data>
+
+  <data name="CriticalRule_Delete" xml:space="preserve">
+    <value>Критичне правило {0} видалено</value>
+  </data>
+
+  <data name="CriticalRule_Update" xml:space="preserve">
+    <value>Критичне правило {0} оновлено</value>
+  </data>
+
+  <data name="Translation_Replace" xml:space="preserve">
+    <value>Документ переключено на переклад {0}</value>
+  </data>
 </root>

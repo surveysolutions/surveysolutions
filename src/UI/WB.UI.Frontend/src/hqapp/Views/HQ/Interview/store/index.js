@@ -10,7 +10,7 @@ const store = {
         filters,
         flags,
         overview,
-        route: storeRouteParams
+        route: storeRouteParams,
     },
 
     actions: {

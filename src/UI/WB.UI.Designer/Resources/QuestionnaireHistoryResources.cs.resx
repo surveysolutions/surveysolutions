@@ -331,7 +331,7 @@
     <value>Překlad {0} aktualizován</value>
   </data>
   <data name="UnknownUserName" xml:space="preserve">
-    <value>&lt;&lt;UNKNOWN&gt;&gt;</value>
+    <value>&lt;&lt;NEZNÁMÝ&gt;&gt;</value>
   </data>
   <data name="UserName" xml:space="preserve">
     <value>Uživatelské jméno</value>

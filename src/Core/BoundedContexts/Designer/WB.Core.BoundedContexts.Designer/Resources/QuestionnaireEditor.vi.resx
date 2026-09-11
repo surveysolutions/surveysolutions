@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="NewSection" xml:space="preserve">
+        <value>Phần mới</value>
+        </data>
+    <data name="CoverPageSection" xml:space="preserve">
+        <value>Che phủ</value>
+        </data>
+    <data name="QuestionScopeHidden" xml:space="preserve">
+        <value>Ẩn giấu</value>
+        </data>
+    <data name="QuestionScopeIdentifying" xml:space="preserve">
+        <value>Nhận dạng</value>
+        </data>
+    <data name="QuestionScopeInterviewer" xml:space="preserve">
+        <value>Người phỏng vấn</value>
+        </data>
+    <data name="QuestionScopeSupervisor" xml:space="preserve">
+        <value>Người giám sát</value>
+        </data>
+    <data name="QuestionTypeArea" xml:space="preserve">
+        <value>Khu vực</value>
+        </data>
+    <data name="QuestionTypeGeography" xml:space="preserve">
+        <value>Địa lý</value>
+        </data>
+    <data name="QuestionTypeAudio" xml:space="preserve">
+        <value>Âm thanh</value>
+        </data>
+    <data name="QuestionTypeBarcode" xml:space="preserve">
+        <value>Mã vạch</value>
+        </data>
+    <data name="QuestionTypeDate" xml:space="preserve">
+        <value>Ngày</value>
+        </data>
+    <data name="QuestionTypeGPS" xml:space="preserve">
+        <value>GPS</value>
+        </data>
+    <data name="QuestionTypeList" xml:space="preserve">
+        <value>Danh sách</value>
+        </data>
+    <data name="QuestionTypeMultiSelect" xml:space="preserve">
+        <value>Phân loại: Nhiều lựa chọn</value>
+        </data>
+    <data name="QuestionTypeNumeric" xml:space="preserve">
+        <value>số</value>
+        </data>
+    <data name="QuestionTypePicture" xml:space="preserve">
+        <value>Hình ảnh</value>
+        </data>
+    <data name="QuestionTypeSingleSelect" xml:space="preserve">
+        <value>Phân loại: Chọn một lần</value>
+        </data>
+    <data name="QuestionTypeText" xml:space="preserve">
+        <value>Chữ</value>
+        </data>
+    <data name="GeometryTypePolygon" xml:space="preserve">
+        <value>Đa giác</value>
+        </data>
+    <data name="GeometryTypePolyline" xml:space="preserve">
+        <value>Đa tuyến</value>
+        </data>
+    <data name="GeometryTypePoint" xml:space="preserve">
+        <value>Điểm</value>
+        </data>
+    <data name="GeometryTypeMultipoint" xml:space="preserve">
+        <value>Đa điểm</value>
+        </data>
+</root>

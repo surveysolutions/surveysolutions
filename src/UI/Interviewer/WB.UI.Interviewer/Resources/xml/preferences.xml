@@ -1,25 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <PreferenceCategory android:key="interview_settings_category">
-    <EditTextPreference android:key="GpsReceiveTimeoutSec" />
-    <EditTextPreference android:key="GpsDesiredAccuracy" />
-    <CheckBoxPreference android:key="ShowLocationOnMap" />
-    <CheckBoxPreference android:key="VibrateOnError" />
-    <CheckBoxPreference android:key="CommunicationIntegrityValidationIgnore" />
+    <EditTextPreference android:key="GpsReceiveTimeoutSec" app:singleLineTitle="false" />
+    <EditTextPreference android:key="GpsDesiredAccuracy" app:singleLineTitle="false" />
+    <CheckBoxPreference android:key="ShowLocationOnMap" app:singleLineTitle="false" />
+    <CheckBoxPreference android:key="VibrateOnError" app:singleLineTitle="false" />
+    <CheckBoxPreference android:key="CommunicationIntegrityValidationIgnore" app:singleLineTitle="false" />
   </PreferenceCategory>
 
   <PreferenceCategory android:key="connection_settings_category">
-    <CheckBoxPreference android:key="AllowSyncWithHq" />
-    <EditTextPreference android:key="SyncAddress"/>
-    <EditTextPreference android:key="HttpResponseTimeout" />
-    <EditTextPreference android:key="BufferSize" />
-    <EditTextPreference android:key="EventChunkSize" />
+    <CheckBoxPreference android:key="AllowSyncWithHq" app:singleLineTitle="false" />
+    <EditTextPreference android:key="SyncAddress" app:singleLineTitle="false" />
+    <EditTextPreference android:key="HttpResponseTimeout" app:singleLineTitle="false" />
+    <EditTextPreference android:key="BufferSize" app:singleLineTitle="false" />
+    <EditTextPreference android:key="EventChunkSize" app:singleLineTitle="false" />
   </PreferenceCategory>
 
   <PreferenceCategory android:key="about_category">
-    <Preference android:key="deviceid" />
-    <Preference android:key="version" />
+    <Preference android:key="deviceid" app:singleLineTitle="false" />
+    <Preference android:key="version" app:singleLineTitle="false" />
   </PreferenceCategory>
 </androidx.preference.PreferenceScreen>  
 

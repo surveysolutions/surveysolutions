@@ -65,7 +65,7 @@
       <value>Voltar para a Lista</value>
   </data>
   <data name="Backup" xml:space="preserve">
-      <value>Backup</value>
+      <value>Cópia de segurança</value>
   </data>
   <data name="Cancel" xml:space="preserve">
       <value>Cancelar</value>
@@ -270,5 +270,8 @@
   </data>
   <data name="CloneDeletedWarning" xml:space="preserve">
       <value>Você está criando uma cópia de um questionário excluído. Algumas partes podem ser perdidas.</value>
+  </data>
+  <data name="IncludeScenarios" xml:space="preserve">
+      <value>Incluir cenários</value>
   </data>
 </root>

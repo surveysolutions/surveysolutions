@@ -1,13 +1,20 @@
 <template>
-    <input type="text" autocomplete="off" inputmode="decimal" class="ag-cell-edit-input" ref="inputDouble"
-        :placeholder="noAnswerWatermark" :title="noAnswerWatermark" :value="$me.answer" :disabled="!$me.acceptAnswer"
+    <input type="text"
+        autocomplete="off"
+        inputmode="decimal"
+        class="ag-cell-edit-input"
+        ref="inputDouble"
+        :placeholder="noAnswerWatermark"
+        :title="noAnswerWatermark"
+        :value="$me.answer"
+        :disabled="!$me.acceptAnswer"
         v-numericFormatting="{
-            minimumValue: '-99999999999999.99999999999999',
+            minimumValue: minimumValue,
             maximumValue: '99999999999999.99999999999999',
             digitGroupSeparator: groupSeparator,
             decimalCharacter: decimalSeparator,
             decimalPlaces: decimalPlacesCount,
-            allowDecimalPadding: false
+            allowDecimalPadding: 'floats'
         }" />
 </template>
 
@@ -42,6 +49,20 @@ export default {
         decimalPlacesCount() {
             return getDecimalPlacesCount(this.$me)
         },
+        hasNegativeSpecialValues() {
+            return (this.$me.options || []).some(o => o.value < 0)
+        },
+        hasNegativeCurrentNonSpecialAnswer() {
+            return this.$me.answer < 0 && !this.isSpecialValue(this.$me.answer)
+        },
+        minimumValue() {
+            if (!this.$me.isNonNegative)
+                return '-99999999999999.99999999999999'
+
+            return (this.hasNegativeSpecialValues || this.hasNegativeCurrentNonSpecialAnswer)
+                ? '-99999999999999.99999999999999'
+                : '0'
+        },
     },
     methods: {
         saveAnswer() {
@@ -51,7 +72,7 @@ export default {
         answerDoubleQuestion(evnt) {
             const answerString = this.autoNumericElement.getNumericString()
             if (answerString.replace(/[^0-9]/g, '').length > 15) {
-                this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalTooBig') + " '" + answerString + "'")
+                this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalTooBig') + ' \'' + answerString + '\'')
                 return
             }
 
@@ -68,12 +89,23 @@ export default {
                 }
 
                 if (answer > 999999999999999 || answer < -999999999999999) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalCannotParse') + " '" + answer + "'")
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalCannotParse') + ' \'' + answer + '\'')
+                    return
+                }
+
+                if (this.$me.isNonNegative && answer < 0 && !this.isSpecialValue(answer)) {
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberNonNegativeError'), answer)
                     return
                 }
 
                 this.$store.dispatch('answerDoubleQuestion', { identity: this.id, answer: answer })
             })
+        },
+
+        isSpecialValue(value) {
+            const options = this.$me.options || []
+            if (options.length === 0) return false
+            return options.some(o => o.value === value)
         },
 
         isCancelBeforeStart() {
@@ -98,7 +130,7 @@ export default {
             }
         })
     },
-    beforeDestroy() {
+    beforeUnmount() {
         this.destroy()
     },
 }

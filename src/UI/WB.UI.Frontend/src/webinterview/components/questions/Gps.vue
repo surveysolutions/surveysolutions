@@ -1,24 +1,37 @@
 <template>
-    <wb-question :question="$me" questionCssClassName="gps-question" :no-comments="noComments">
+    <wb-question :question="$me"
+        questionCssClassName="gps-question"
+        :no-comments="noComments">
         <div class="question-unit">
             <div class="options-group">
-                <div class="field" :class="{ answered: $me.isAnswered }" v-if="$me.isAnswered">
+                <div class="field"
+                    :class="{ answered: $me.isAnswered }"
+                    v-if="$me.isAnswered">
                     <div class="block-with-data">
-                        <a v-bind:href="goolgeMapUrl" :title="$t('WebInterviewUI.ShowOnMap')" target="_blank">
+                        <a v-bind:href="goolgeMapUrl"
+                            :title="$t('WebInterviewUI.ShowOnMap')"
+                            target="_blank">
                             {{ $me.answer.latitude }}, {{ $me.answer.longitude }}
                         </a>
                     </div>
-                    <button type="submit" v-if="$me.acceptAnswer" class="btn btn-link btn-clear" @click="removeAnswer">
+                    <button type="submit"
+                        v-if="$me.acceptAnswer"
+                        class="btn btn-link btn-clear"
+                        @click="removeAnswer">
                         <span></span>
                     </button>
                 </div>
                 <div class="action-btn-holder gps-question">
-                    <button type="button" :disabled="!$me.acceptAnswer"
-                        class="btn btn-default btn-lg btn-action-questionnaire" @click="answerGpsQuestion">
+                    <button type="button"
+                        :disabled="!$me.acceptAnswer"
+                        class="btn btn-default btn-lg btn-action-questionnaire"
+                        @click="answerGpsQuestion">
                         {{ $t('WebInterviewUI.GPSRecord') }}
                     </button>
 
-                    <button type="button" v-if="$store.getters.pickLocationAllowed" :disabled="!$me.acceptAnswer"
+                    <button type="button"
+                        v-if="$store.getters.pickLocationAllowed"
+                        :disabled="!$me.acceptAnswer"
                         class="btn btn-default btn-lg btn-action-questionnaire pick-location marl"
                         @click="pickLocation">
                         {{ $t('WebInterviewUI.PickLocation') }}
@@ -149,13 +162,13 @@ export default {
                         ...(hasMapId ? { mapId: self.$config.googleMapsMapId } : {}),
                     }
 
-                    var canvas = document.getElementById('map_canvas');
-                    canvas.style.height = '400px';
+                    var canvas = document.getElementById('map_canvas')
+                    canvas.style.height = '400px'
 
-                    const { Map } = await google.maps.importLibrary("maps")
+                    const { Map } = await google.maps.importLibrary('maps')
                     let AdvancedMarkerElement = null
                     if (hasMapId) {
-                        const markerLib = await google.maps.importLibrary("marker")
+                        const markerLib = await google.maps.importLibrary('marker')
                         AdvancedMarkerElement = markerLib.AdvancedMarkerElement
                     }
                     const map = new Map(canvas, mapOptions)

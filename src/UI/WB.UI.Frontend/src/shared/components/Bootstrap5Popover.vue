@@ -1,11 +1,21 @@
 <template>
-    <div :class="wrapperClasses" ref="triggerElement" @mouseenter="onTriggerMouseEnter"
-        @mouseleave="onTriggerMouseLeave" @focusin="onTriggerFocus" @focusout="onTriggerBlur" @click="onTriggerClick">
+    <div :class="wrapperClasses"
+        ref="triggerElement"
+        @mouseenter="onTriggerMouseEnter"
+        @mouseleave="onTriggerMouseLeave"
+        @focusin="onTriggerFocus"
+        @focusout="onTriggerBlur"
+        @click="onTriggerClick">
         <slot></slot>
-        <Teleport v-if="enable && isVisible" :to="teleportTarget">
-            <div class="popover bs5-popover show" :style="popoverStyle" @mouseenter="onPopoverMouseEnter"
-                @mouseleave="onPopoverMouseLeave" ref="popoverElement">
-                <div :class="`popover-arrow arrow-${placement}`" :style="arrowStyle"></div>
+        <Teleport v-if="enable && isVisible"
+            :to="teleportTarget">
+            <div class="popover bs5-popover show"
+                :style="popoverStyle"
+                @mouseenter="onPopoverMouseEnter"
+                @mouseleave="onPopoverMouseLeave"
+                ref="popoverElement">
+                <div :class="`popover-arrow arrow-${placement}`"
+                    :style="arrowStyle"></div>
                 <div class="popover-body">
                     <slot name="popover"></slot>
                 </div>
@@ -21,20 +31,20 @@ export default {
     props: {
         trigger: {
             type: String,
-            default: 'hover'
+            default: 'hover',
         },
         enable: {
             type: Boolean,
-            default: true
+            default: true,
         },
         appendTo: {
             type: String,
-            default: 'body'
+            default: 'body',
         },
         placement: {
             type: String,
-            default: 'top'
-        }
+            default: 'top',
+        },
     },
     data() {
         return {
@@ -44,7 +54,7 @@ export default {
             popoverStyle: {},
             arrowStyle: {},
             hasPositionListeners: false,
-            hideTimeoutId: null
+            hideTimeoutId: null,
         }
     },
     computed: {
@@ -68,14 +78,14 @@ export default {
         },
         hasClickTrigger() {
             return this.triggerTokens.includes('click')
-        }
+        },
     },
     watch: {
         enable(newVal) {
             if (!newVal) {
                 this.hidePopover()
             }
-        }
+        },
     },
     beforeUnmount() {
         this.clearHideTimer()
@@ -202,10 +212,10 @@ export default {
                 position: 'fixed',
                 top: top + 'px',
                 left: left + 'px',
-                zIndex: 1070
+                zIndex: 1070,
             }
-        }
-    }
+        },
+    },
 }
 </script>
 

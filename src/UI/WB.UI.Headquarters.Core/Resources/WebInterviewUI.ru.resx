@@ -208,6 +208,9 @@
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>Ответ не сохранен</value>
   </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Ошибка связи</value>
+  </data>
   <data name="NotCalculated" xml:space="preserve">
     <value>Не посчитано</value>
   </data>
@@ -267,6 +270,9 @@
   </data>
   <data name="NumberRosterUpperBound" xml:space="preserve">
     <value>Ответ '{{answer}}' неверный, поскольку он больше значения максимального количества элементов в списке: '{{answerMaxValue}}'.</value>
+  </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Отрицательные значения недопустимы для этого вопроса</value>
   </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>Ответ '{{answer}}' неверный, поскольку нельзя задать отрицательное количество элементов в списке</value>

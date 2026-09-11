@@ -6,15 +6,21 @@
 
                     <select v-model="selectedRule"
                         class="form-control mr-2 mb-5 query-builder-group-slot__rule-selection">
-                        <option v-for="rule in groupCtrl.rules" :key="rule.identifier" :value="rule.identifier"
+                        <option v-for="rule in groupCtrl.rules"
+                            :key="rule.identifier"
+                            :value="rule.identifier"
                             v-text="rule.name" />
                     </select>
 
-                    <button type="button" class="btn btn-secondary mr-2 mb-5" @click="groupCtrl.addRule(selectedRule)">
+                    <button type="button"
+                        class="btn btn-secondary mr-2 mb-5"
+                        @click="groupCtrl.addRule(selectedRule)">
                         {{ labels.addRule }}
                     </button>
 
-                    <button v-if="!groupCtrl.maxDepthExeeded" type="button" class="btn btn-secondary mb-5"
+                    <button v-if="!groupCtrl.maxDepthExeeded"
+                        type="button"
+                        class="btn btn-secondary mb-5"
                         @click="groupCtrl.newGroup">
                         {{ labels.addGroup }}
                     </button>
@@ -35,22 +41,22 @@ export default {
         },
         labels: {
             required: true,
-        }
+        },
     },
     data() {
         return {
             selectedRule: null,
-        };
+        }
     },
     mounted() {
         this.setDefaultOptionIfNeed()
     },
     watch: {
-        "groupCtrl": {
+        'groupCtrl': {
             handler(newVal, oldVal) {
                 this.setDefaultOptionIfNeed()
             },
-            deep: false
+            deep: false,
         },
     },
     methods: {
@@ -58,8 +64,8 @@ export default {
             if (!this.selectedRule && this.groupCtrl.rules && this.groupCtrl.rules.length > 0) {
                 this.selectedRule = this.groupCtrl.rules[0].identifier
             }
-        }
-    }
+        },
+    },
 
 }
 </script>

@@ -20,7 +20,7 @@ using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
+    [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter)]
     public class UsersManagementController : Controller
     {
         private readonly IMediator mediator;
@@ -37,6 +37,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             CreateUrl = Url.Action("Create", "Users"),
             WorkspacesUrl = Url.Action("Workspaces", "WorkspaceTypeahead"),
+            SupervisorsUrl = Url.Action("AllSupervisors", "UsersTypeahead"),
             SupervisorWorkspaceUrl = Url.Action("WorkspaceSupervisors", "UsersTypeahead"),
             ArchiveUsersUrl = Url.Action("ArchiveUsers", "UsersApi"),
             MoveUserToAnotherTeamUrl = Url.ActionAtWorkspace(WorkspaceContext.Users, "MoveUserToAnotherTeam", "UsersApi"),

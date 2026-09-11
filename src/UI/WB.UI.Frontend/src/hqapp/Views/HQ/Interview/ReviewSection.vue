@@ -5,6 +5,6 @@
 import Section from '~/webinterview/components/Section'
 
 export default {
-    components: { Section }
+    components: { Section },
 }
 </script>

@@ -82,7 +82,8 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             Dictionary<string, string> customHeaders = null,
             CancellationToken? userCancellationToken = null)
         {
-            if (!this.IsValidHostAddress(this.restServiceSettings.Endpoint))
+            var endpoint = this.restServiceSettings.Endpoint?.Trim();
+            if (!this.IsValidHostAddress(endpoint))
                 throw new RestException("Invalid URL", type: RestExceptionType.InvalidUrl);
 
             if (this.networkService != null)
@@ -95,7 +96,8 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             var linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(requestTimeoutToken,
                 userCancellationToken ?? default);
 
-            var fullUrl = new Url(this.restServiceSettings.Endpoint, (credentials?.Workspace ?? "") + "/" + url, queryString);
+            var requestPath = new Url(credentials?.Workspace ?? string.Empty, url, null).ToString();
+            var fullUrl = new Url(endpoint, requestPath, queryString);
 
             var request = new HttpRequestMessage()
             {
@@ -531,7 +533,7 @@ namespace WB.Core.Infrastructure.HttpServices.Services
         }
 
         public bool IsValidHostAddress(string url)
-            => Uri.TryCreate(url, UriKind.Absolute, out var uriResult) &&
+            => Uri.TryCreate(url?.Trim(), UriKind.Absolute, out var uriResult) &&
                (uriResult.Scheme == "http" || uriResult.Scheme == "https");
 
         internal class RestResponse

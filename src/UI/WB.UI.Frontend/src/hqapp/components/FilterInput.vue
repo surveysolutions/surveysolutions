@@ -1,10 +1,15 @@
 <template>
     <div class="input-group">
-        <input class="form-control with-clear-btn" :placeholder="placeholder" :type="type" :value="modelValue || value"
+        <input class="form-control with-clear-btn"
+            :placeholder="placeholder"
+            :type="type"
+            :value="modelValue || value"
             @input.self="input" />
-        <div class="input-group-btn" @click="remove">
+        <div class="input-group-btn"
+            @click="remove">
             <div class="btn btn-default">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-remove"
+                    aria-hidden="true"></span>
             </div>
         </div>
     </div>

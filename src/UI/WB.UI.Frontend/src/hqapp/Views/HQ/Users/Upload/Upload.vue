@@ -45,9 +45,14 @@
                 <h3>{{ $t('UploadUsers.SelectWorkspace') }}</h3>
                 <p>{{ $t('UploadUsers.SelectWorkspaceDescription') }}</p>
                 <form-group :error="errorByWorkspace">
-                    <div class="field form-control" :class="{ answered: workspace != null }" style="padding:0">
-                        <Typeahead control-id="workspace" :value="workspace" :ajax-params="{}"
-                            :fetch-url="config.api.workspacesUrl" @selected="workspaceSelected"></Typeahead>
+                    <div class="field form-control"
+                        :class="{ answered: workspace != null }"
+                        style="padding:0">
+                        <Typeahead control-id="workspace"
+                            :value="workspace"
+                            :ajax-params="{}"
+                            :fetch-url="config.api.workspacesUrl"
+                            @selected="workspaceSelected"></Typeahead>
                     </div>
                 </form-group>
             </div>
@@ -55,25 +60,39 @@
 
         <div class="row">
             <div class="col-sm-7 col-xs-10 prefilled-data-info info-block">
-                <a v-bind:href="config.api.importUsersTemplateUrl" target="_blank" class="btn btn-link">
+                <a v-bind:href="config.api.importUsersTemplateUrl"
+                    target="_blank"
+                    class="btn btn-link">
                     {{ $t('UploadUsers.DownloadTemplateLink') }}
                 </a>
-                <div class="progress-wrapper-block" v-if="isInProgress">
+                <div class="progress-wrapper-block"
+                    v-if="isInProgress">
                     <p class="warning-message">{{ $t('UploadUsers.UploadInProgress', { userName: responsible }) }}
                         <br>{{ $t('UploadUsers.UploadInProgressDescription') }}</p>
                     <div class="progress">
-                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="5"
-                            aria-valuemin="0" aria-valuemax="11"
+                        <div class="progress-bar progress-bar-info"
+                            role="progressbar"
+                            aria-valuenow="5"
+                            aria-valuemin="0"
+                            aria-valuemax="11"
                             v-bind:style="{ width: importedUsersInPercents + '%' }">
                             <span class="sr-only">{{ importedUsersInPercents }}%</span>
                         </div>
                     </div>
                     <span>{{ $t('UploadUsers.EstimatedTime', { estimatedTime: estimatedTime }) }}</span>
                 </div>
-                <div class="action-buttons" v-else>
-                    <input name="file" ref="uploader" v-show="false" :accept="allowedFileExtensions" type="file"
-                        @change="onFileChange" class="btn btn-default btn-lg btn-action-questionnaire" />
-                    <button type="button" class="btn btn-success" @click="upload">
+                <div class="action-buttons"
+                    v-else>
+                    <input name="file"
+                        ref="uploader"
+                        v-show="false"
+                        :accept="allowedFileExtensions"
+                        type="file"
+                        @change="onFileChange"
+                        class="btn btn-default btn-lg btn-action-questionnaire" />
+                    <button type="button"
+                        class="btn btn-success"
+                        @click="upload">
                         {{ $t('UploadUsers.UploadBtn') }}
                     </button>
                 </div>

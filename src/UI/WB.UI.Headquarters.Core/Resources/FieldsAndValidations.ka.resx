@@ -243,4 +243,69 @@
   <data name="UserNameFieldName" xml:space="preserve">
     <value>მომხმარებლის სახელი</value>
   </data>
+
+
+  <data name="AllowRelinkTablet" xml:space="preserve">
+    <value>დაუშვებს სხვა მოწყობილობასთან ხელახლა დაკავშირებას ორიგინალ მოწყობილობაზე მონაცემების დაკარგვით.</value>
+  </data>
+
+  <data name="VerificationCodeFieldName" xml:space="preserve">
+    <value>ვერიფიკაციის კოდი</value>
+  </data>
+
+  <data name="RestrictedAccountMessage" xml:space="preserve">
+    <value>ეს ანგარიში შეზღუდულია ამ მოქმედების შესასრულებლად</value>
+  </data>
+
+  <data name="RestrictedAccount" xml:space="preserve">
+    <value>ეს ანგარიში შეზღუდულია</value>
+  </data>
+
+  <data name="WorkspaceRequired" xml:space="preserve">
+    <value>სამუშაო სივრცე სავალდებულოა</value>
+  </data>
+
+  <data name="WorkspaceMissing" xml:space="preserve">
+    <value>სამუშაო სივრცე ვერ მოიძებნა</value>
+  </data>
+
+  <data name="UserRoleRequired" xml:space="preserve">
+    <value>მომხმარებლის როლი სავალდებულოა</value>
+  </data>
+
+  <data name="UserIsLockedByHq" xml:space="preserve">
+    <value>მომხმარებელი შტაბის მიერ დაბლოკილია</value>
+  </data>
+
+  <data name="MandatoryField" xml:space="preserve">
+    <value>ეს ველი სავალდებულოა</value>
+  </data>
+
+  <data name="PasswordRequiresDigit" xml:space="preserve">
+      <value>პაროლი უნდა შეიცავდეს მინიმუმ ერთ ციფრს ('0'-'9').</value>
+  </data>
+
+  <data name="PasswordRequiresLower" xml:space="preserve">
+      <value>პაროლი უნდა შეიცავდეს მინიმუმ ერთ მცირე ასოს ('a'-'z').</value>
+  </data>
+
+  <data name="PasswordRequiresNonAlphanumeric" xml:space="preserve">
+      <value>პაროლი უნდა შეიცავდეს მინიმუმ ერთ არაალფანუმერულ სიმბოლოს.</value>
+  </data>
+
+  <data name="PasswordRequiresUniqueChars" xml:space="preserve">
+      <value>პაროლი უნდა იყენებდეს მინიმუმ {0} განსხვავებულ სიმბოლოს.</value>
+  </data>
+
+  <data name="PasswordRequiresUpper" xml:space="preserve">
+      <value>პაროლი უნდა შეიცავდეს მინიმუმ ერთ დიდ ასოს ('A'-'Z').</value>
+  </data>
+
+  <data name="PasswordTooShort" xml:space="preserve">
+      <value>პაროლი უნდა შეიცავდეს მინიმუმ {0} სიმბოლოს.</value>
+  </data>
+
+  <data name="PasswordChangeRequired" xml:space="preserve">
+    <value>თქვენი პაროლი განახლდა. საიტზე წვდომის მისაღებად უნდა შეცვალოთ იგი.</value>
+  </data>
 </root>

@@ -202,7 +202,7 @@
     <value>Chef d'Equipe dans votre équipe</value>
   </data>
   <data name="Admin" xml:space="preserve">
-    <value>Admin</value>
+    <value>Administrateur</value>
   </data>
   <data name="CreateAndTryLogin" xml:space="preserve">
     <value>Créez et essayez de vous connecter</value>
@@ -217,7 +217,7 @@
     <value>Modifier: {0}</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>E-mail</value>
   </data>
   <data name="Interviewer" xml:space="preserve">
     <value>Enquêteur</value>

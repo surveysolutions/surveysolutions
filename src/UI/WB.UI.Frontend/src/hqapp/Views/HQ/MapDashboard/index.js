@@ -1,4 +1,4 @@
-import MapDashboard from './MapDashboard'
+const MapDashboard = () => import('./MapDashboard')
 
 export default class MapDashboardComponent {
     constructor(rootStore) {

@@ -2,6 +2,7 @@
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -26,6 +27,13 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
         InterviewStatus.RejectedByHeadquarters,
         InterviewStatus.RejectedBySupervisor,
         InterviewStatus.SupervisorAssigned,
+    };
+
+    protected override AssignmentStatus[] AssignmentStatusFilters { get; } =
+    {
+        AssignmentStatus.Open,
+        AssignmentStatus.Completed,
+        AssignmentStatus.Closed,
     };
 
     public SupervisorMapDashboardViewModel(IPrincipal principal, 

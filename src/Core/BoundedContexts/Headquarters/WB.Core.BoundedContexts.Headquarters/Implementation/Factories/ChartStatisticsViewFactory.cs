@@ -34,14 +34,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             this.questionnaireRepository = questionnaireRepository;
         }
 
-        private static readonly int[] AllowedStatuses =
-        {
-            (int) InterviewStatus.Completed,
-            (int) InterviewStatus.RejectedBySupervisor,
-            (int) InterviewStatus.ApprovedBySupervisor,
-            (int) InterviewStatus.RejectedByHeadquarters,
-            (int) InterviewStatus.ApprovedByHeadquarters
-        };
+        // NOTE: List<int> is used in LINQ expression trees on purpose. For an array the C# compiler
+        // (C# 14+) binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an
+        // op_Implicit call into the expression tree that NHibernate cannot evaluate
+        // ("Evaluation failure on op_Implicit(value(System.Int32[]))").
+        private static readonly List<int> AllowedStatuses =
+        [
+            (int)InterviewStatus.Completed,
+            (int)InterviewStatus.RejectedBySupervisor,
+            (int)InterviewStatus.ApprovedBySupervisor,
+            (int)InterviewStatus.RejectedByHeadquarters,
+            (int)InterviewStatus.ApprovedByHeadquarters
+        ];
+
 
         public List<QuestionnaireVersionsComboboxViewItem> GetQuestionnaireListWithData()
         {

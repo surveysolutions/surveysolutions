@@ -325,11 +325,11 @@ h5,
     color: $gray_light;
 }
 
-.primary-text {
+.primary-text:not(.context-menu-disabled):not(.context-menu-hover) {
     color: $blue !important;
 }
 
-.assignment-create {
+.assignment-create:not(.context-menu-disabled):not(.context-menu-hover) {
     color: $assignment-color !important;
 }
 

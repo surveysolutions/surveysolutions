@@ -96,11 +96,11 @@
 
 <script>
 
-import { orderBy } from 'lodash'
+import { orderBy } from 'lodash-es'
 import * as toastr from 'toastr'
-import gql from 'graphql-tag'
+import { gql, gqlRequest } from '~/hqapp/api/graphql'
 import { DateFormats } from '~/shared/helpers'
-import moment from 'moment-timezone'
+import moment from 'moment'
 import FilterBlock from '../../../components/FilterBlock.vue'
 
 export default {
@@ -110,113 +110,113 @@ export default {
         }
     },
     mounted() {
-        this.reload();
+        this.reload()
     },
     methods: {
         reload() {
             if (this.$refs.table) {
-                this.$refs.table.reload();
+                this.$refs.table.reload()
             }
         },
         addParamsToRequest(requestData) {
-            requestData.mapName = this.$config.model.fileName;
+            requestData.mapName = this.$config.model.fileName
         },
         contextMenuItems({ rowData }) {
             if (this.config.isObserving)
-                return null;
+                return null
 
             return [{
-                name: this.$t("Pages.MapDetails_DelinkUser"),
+                name: this.$t('Pages.MapDetails_DelinkUser'),
                 callback: () => {
-                    if (this.config.isObserving) return;
+                    if (this.config.isObserving) return
 
-                    this.delinkUserFromMap(rowData.userName, this.$config.model.fileName);
+                    this.delinkUserFromMap(rowData.userName, this.$config.model.fileName)
                 },
-            }];
+            }]
         },
         delinkUserFromMap(userName, fileName) {
-            const self = this;
+            const self = this
             this.$refs.confirmDiscard.promt(ok => {
                 if (ok) {
-                    self.$apollo.mutate({
-                        mutation: gql`
+                    gqlRequest(
+                        gql`
                                 mutation deleteUserFromMap($workspace: String!, $fileName: String!, $userName: String!) {
                                     deleteUserFromMap(workspace: $workspace, fileName: $fileName, userName: $userName) {
                                         fileName
                                     }
                                 }`,
-                        variables: {
-                            "fileName": fileName,
-                            "userName": userName,
+                        {
+                            'fileName': fileName,
+                            'userName': userName,
                             workspace: self.$store.getters.workspace,
                         },
-                    }).then(response => {
-                        self.$refs.table.reload();
+                    ).then(response => {
+                        self.$refs.table.reload()
                     }).catch(err => {
-                        console.error(err);
-                        toastr.error(err.message.toString());
-                    });
+                        console.error(err)
+                        toastr.error(err.message.toString())
+                    })
                 }
-            });
+            })
         },
         newLinkedUserSelected(newValue) {
             this.newLikedUserId = newValue
         },
         linkUserToMap() {
 
-            if (this.config.isObserving) return;
+            if (this.config.isObserving) return
 
             if (this.newLikedUserId) {
-                const self = this;
-                const fileName = this.$config.model.fileName;
-                const userName = this.newLikedUserId.value;
+                const self = this
+                const fileName = this.$config.model.fileName
+                const userName = this.newLikedUserId.value
 
-                self.$apollo.mutate({
-                    mutation: gql`
+                gqlRequest(
+                    gql`
                                 mutation AddUserToMap($workspace: String!, $fileName: String!, $userName: String!) {
                                     addUserToMap(workspace: $workspace, fileName: $fileName, userName: $userName) {
                                         fileName
                                     }
                                 }`,
-                    variables: {
-                        "fileName": fileName,
-                        "userName": userName,
+                    {
+                        'fileName': fileName,
+                        'userName': userName,
                         workspace: self.$store.getters.workspace,
                     },
-                }).then(response => {
-                    self.$refs.table.reload();
+                ).then(response => {
+                    self.$refs.table.reload()
                 }).catch(err => {
-                    console.error(err);
-                    toastr.error(err.message.toString());
-                });
+                    console.error(err)
+                    toastr.error(err.message.toString())
+                })
 
-                this.newLikedUserId = null;
+                this.newLikedUserId = null
             }
-        }
+        },
     },
     computed: {
         config() {
-            return this.$config.model;
+            return this.$config.model
         },
         tableOptions() {
-            var self = this;
+            var self = this
             return {
                 deferLoading: 0,
                 language: {
-                    emptyTable: this.$t("Pages.Map_NoUsers"),
+                    emptyTable: this.$t('Pages.Map_NoUsers'),
                 },
                 columns: [
                     {
-                        data: "userName",
-                        name: "UserName",
-                        "class": "title",
-                        title: this.$t("Pages.MapDetails_InterviewerName"),
+                        data: 'userName',
+                        name: 'UserName',
+                        'class': 'title',
+                        title: this.$t('Pages.MapDetails_InterviewerName'),
                         orderable: true,
                     },
                 ],
                 ajax(data, callback, settings) {
-                    const order_col = data.order[0];
-                    const column = data.columns[order_col.column];
+                    const order_col = data.order[0]
+                    const column = data.columns[order_col.column]
                     const query = gql`query MapDetailsQuery($workspace: String!,  $fileName: String!) {
                                         maps(workspace: $workspace, where: {
                                                 fileName: {
@@ -229,61 +229,57 @@ export default {
                                                 }
                                             }
                                         }
-                                    }`;
-                    self.$apollo.query({
-                        query,
-                        variables: {
-                            "fileName": self.$config.model.fileName,
-                            workspace: self.$store.getters.workspace,
-                        },
-                        fetchPolicy: "network-only",
+                                    }`
+                    gqlRequest(query, {
+                        'fileName': self.$config.model.fileName,
+                        workspace: self.$store.getters.workspace,
                     }).then(response => {
 
-                        if (response.data.maps.nodes == 0) {
-                            window.location.href = self.$config.model.mapsUrl;
+                        if (response.maps.nodes == 0) {
+                            window.location.href = self.$config.model.mapsUrl
                         }
 
-                        const users = response.data.maps.nodes[0].users;
-                        const orderedUsers = orderBy(users, [column.data], [order_col.dir]);
-                        self.totalRows = users.length;
-                        self.filteredCount = users.length;
+                        const users = response.maps.nodes[0].users
+                        const orderedUsers = orderBy(users, [column.data], [order_col.dir])
+                        self.totalRows = users.length
+                        self.filteredCount = users.length
                         callback({
                             recordsTotal: self.totalRows,
                             recordsFiltered: self.filteredCount,
                             draw: ++this.draw,
                             data: orderedUsers,
-                        });
+                        })
                     }).catch(err => {
                         callback({
                             recordsTotal: 0,
                             recordsFiltered: 0,
                             data: [],
                             error: err.toString(),
-                        });
-                        console.error(err);
-                        toastr.error(err.message.toString());
-                    });
+                        })
+                        console.error(err)
+                        toastr.error(err.message.toString())
+                    })
                 },
                 responsive: false,
                 filter: false,
                 searching: false,
-                order: [[0, "asc"]],
-                sDom: "rf<\"table-with-scroll\"t>ip",
-            };
+                order: [[0, 'asc']],
+                sDom: 'rf<"table-with-scroll"t>ip',
+            }
         },
         mapDisclaimer() {
             if (this.$config.model.shapesCount) {
                 return this.$config.model.isPreviewGeoJson
-                    ? this.$t("Pages.MapDetails_SimplifiedShapefilesDisclaimer")
-                    : this.$t("Pages.MapDetails_FullShapefilesDisclaimer");
+                    ? this.$t('Pages.MapDetails_SimplifiedShapefilesDisclaimer')
+                    : this.$t('Pages.MapDetails_FullShapefilesDisclaimer')
             }
-            return this.$t("Pages.MapDetails_MapDisclaimer");
+            return this.$t('Pages.MapDetails_MapDisclaimer')
         },
         importDate() {
-            var date = moment.utc(this.$config.model.importDate);
-            return date.local().format(DateFormats.dateTime);
+            var date = moment.utc(this.$config.model.importDate)
+            return date.local().format(DateFormats.dateTime)
         },
     },
-    components: { FilterBlock }
+    components: { FilterBlock },
 }
 </script>

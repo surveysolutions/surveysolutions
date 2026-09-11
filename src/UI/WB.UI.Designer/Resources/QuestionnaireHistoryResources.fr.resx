@@ -349,7 +349,7 @@
     <value>Roster {0} déplacé vers le roster {1}</value>
   </data>
   <data name="Translation_Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Originale</value>
   </data>
   <data name="Translation_DefaultTranslationSet" xml:space="preserve">
     <value>La traduction par défaut est définie sur {0}</value>

@@ -11,21 +11,17 @@
             </div>
         </div>
         <ag-grid-vue ref="matrixRoster" class="ag-theme-customStyles roster-matrix" domLayout="autoHeight"
-            rowHeight="40" headerHeight="50" :defaultColDef="defaultColDef" :columnDefs="columnDefs" :rowData="rowData"
-            :grid-options="gridOptions" :modules="gridModules" @grid-ready="onGridReady"
+            :rowHeight="40" :headerHeight="50" :defaultColDef="defaultColDef" :columnDefs="columnDefs"
+            :rowData="rowData" :grid-options="gridOptions" @grid-ready="onGridReady"
             @column-resized="autosizeHeaders"></ag-grid-vue>
     </div>
 </template>
 
 <script lang="js">
 /* eslint-disable vue/no-unused-components */
-import "@ag-grid-community/styles/ag-grid.css";
-import "@ag-grid-community/styles/ag-theme-quartz.css";
-
 import { entityDetails } from '../mixins'
-import { debounce, map } from 'lodash'
-import { AgGridVue } from '@ag-grid-community/vue3'
-import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
+import { debounce, map } from 'lodash-es'
+import { AgGridVue, agGridTheme } from './agGrid'
 
 import MatrixRoster_QuestionEditor from './MatrixRoster.QuestionEditor'
 import MatrixRoster_RosterTitle from './MatrixRoster.RosterTitle'
@@ -62,7 +58,9 @@ export default {
     beforeMount() {
         this.countOfInstances = this.$me.instances.length
         this.title =
-            this.$me.questions.length > 0 ? this.$me.questions[0].title : null
+            this.$me.title ??
+            (this.$me.questions.length > 0 ? this.$me.questions[0].title : null) ??
+            ''
         this.instructions =
             this.$me.questions.length > 0
                 ? this.$me.questions[0].instruction
@@ -102,7 +100,10 @@ export default {
             this.name = this.$me.questions.length > 0 ? this.$me.questions[0].name : null
         },
         ['$me.title']() {
-            this.title = this.$me.title
+            this.title =
+                this.$me.title ??
+                (this.$me.questions.length > 0 ? this.$me.questions[0].title : null) ??
+                ''
         },
         ['$config.inWebTesterMode']() {
             this.name = this.$me.questions.length > 0 ? this.$me.questions[0].name : null
@@ -116,6 +117,7 @@ export default {
     computed: {
         gridOptions() {
             return {
+                theme: agGridTheme,
                 suppressClickEdit: true,
                 suppressCellFocus: true,
                 suppressMovableColumns: true,
@@ -124,9 +126,6 @@ export default {
                 },
             }
         },
-        gridModules() {
-            return [ClientSideRowModelModule]
-        }
     },
     methods: {
         initQuestionAsColumns() {
@@ -152,13 +151,15 @@ export default {
                             question: question,
                             value: question,
                         },
+                        valueFormatter: () => '',
+                        cellDataType: false,
                         //cellEditor: 'MatrixRoster_QuestionEditor',
                         //cellEditorParams: {
                         //    id: question.id,
                         //    value: question,
                         //},
                     }
-                },
+                }
             )
             columnsFromQuestions.unshift({
                 headerName: '', //this.$me.title,
@@ -169,6 +170,8 @@ export default {
                 cellStyle: { minHeight: '40px' },
                 cellRenderer: 'MatrixRoster_RosterTitle',
                 cellRendererParams: {},
+                valueFormatter: () => '',
+                cellDataType: false,
             })
             this.columnDefs = columnsFromQuestions
         },
@@ -196,7 +199,7 @@ export default {
                     })
 
                     return instanceAsRow
-                },
+                }
             )
             this.rowData = rosterInstancesWithQuestionsAsRows
         },
@@ -219,7 +222,7 @@ export default {
                 const MIN_HEIGHT = 16
                 this.gridApi.setGridOption('headerHeight', MIN_HEIGHT)
                 const headerCells = $(this.$refs.matrixRoster.$el).find(
-                    '.ag-header-cell-label',
+                    '.ag-header-cell-label'
                 )
                 let minHeight = MIN_HEIGHT
                 for (let index = 0; index < headerCells.length; index++) {
@@ -229,9 +232,6 @@ export default {
 
                 // set header height to calculated height + padding (top: 8px, bottom: 8px)
                 this.gridApi.setGridOption('headerHeight', minHeight)
-
-                // set all rows height to auto
-                this.gridApi.resetRowHeights()
             }
         },
 
@@ -249,7 +249,8 @@ export default {
 
         doScroll: debounce(function () {
             if (this.$store.getters.scrollState == '#' + this.id) {
-                window.scroll({ top: this.$el.offsetTop, behavior: 'smooth' })
+                const navbarHeight = document.querySelector('.navbar-fixed-top')?.offsetHeight || 0
+                window.scroll({ top: this.$el.offsetTop - navbarHeight, behavior: 'smooth' })
                 this.$store.dispatch('resetScroll')
             }
         }, 200),

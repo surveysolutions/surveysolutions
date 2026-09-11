@@ -1,5 +1,6 @@
 using System;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
 {
@@ -10,6 +11,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
         public const bool PartialSynchronizationEnabledDefault = false;
         public const int GeographyQuestionAccuracyInMetersDefault = 10;
         public const int GeographyQuestionPeriodInSecondsDefault = 10;
+        public const bool AllowSupervisorChangeAssignmentStatusDefault = true;
+        public const bool AllowInterviewerChangeAssignmentStatusDefault = true;
+        public const AudioRecordingQuality AudioRecordingQualityDefault = WB.Core.SharedKernels.DataCollection.ValueObjects.AudioRecordingQuality.Mono44kHz;
+        public const AcceptableGpsLocationSource AcceptableGpsLocationSourceDefault = WB.Core.SharedKernels.DataCollection.ValueObjects.AcceptableGpsLocationSource.BuiltInGpsOnly;
 
         public bool AutoUpdateEnabled { get; set; }
         public bool? DeviceNotificationsEnabled { get; set; }
@@ -18,6 +23,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
         public int? GeographyQuestionPeriodInSeconds { get; set; }
         
         public string EsriApiKey { get; set; }
+
+        public bool? AllowSupervisorChangeAssignmentStatus { get; set; }
+        public bool? AllowInterviewerChangeAssignmentStatus { get; set; }
+
+        public AudioRecordingQuality? AudioRecordingQuality { get; set; }
+        public AcceptableGpsLocationSource? AcceptableGpsLocationSource { get; set; }
+        public bool? AllowSupervisorAudioAuditPlayback { get; set; }
     }
 
     public static class InterviewerSettingsExtensions
@@ -67,6 +79,48 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
                 return String.Empty;
 
             return settings.EsriApiKey;
+        }
+
+        public static bool IsAllowSupervisorChangeAssignmentStatus(this InterviewerSettings settings)
+        {
+            if (settings?.AllowSupervisorChangeAssignmentStatus == null)
+                return InterviewerSettings.AllowSupervisorChangeAssignmentStatusDefault;
+
+            return settings.AllowSupervisorChangeAssignmentStatus.Value;
+        }
+
+        public static bool IsAllowInterviewerChangeAssignmentStatus(this InterviewerSettings settings)
+        {
+            if (settings?.AllowInterviewerChangeAssignmentStatus == null)
+                return InterviewerSettings.AllowInterviewerChangeAssignmentStatusDefault;
+
+            // Interviewer setting is only meaningful when supervisor setting is also on
+            if (settings.AllowSupervisorChangeAssignmentStatus == false)
+                return false;
+
+            return settings.AllowInterviewerChangeAssignmentStatus.Value;
+        }
+
+        public static AudioRecordingQuality GetAudioRecordingQuality(this InterviewerSettings settings)
+        {
+            if (settings?.AudioRecordingQuality == null)
+                return InterviewerSettings.AudioRecordingQualityDefault;
+
+            return settings.AudioRecordingQuality.Value;
+        }
+
+        public static AcceptableGpsLocationSource GetAcceptableGpsLocationSource(this InterviewerSettings settings)
+        {
+            if (settings?.AcceptableGpsLocationSource == null)
+                return InterviewerSettings.AcceptableGpsLocationSourceDefault;
+
+            return settings.AcceptableGpsLocationSource.Value;
+        }
+
+        public static bool IsAllowSupervisorAudioAuditPlayback(this InterviewerSettings settings)
+        {
+            // Explicit false default - this setting must never default to true
+            return settings?.AllowSupervisorAudioAuditPlayback == true;
         }
     }
 }

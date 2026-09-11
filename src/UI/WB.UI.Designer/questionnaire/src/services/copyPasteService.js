@@ -5,6 +5,14 @@ import { ref, computed } from 'vue';
 import { getCookie, setCookie, removeCookie, hasCookie } from '../helpers/cookies';
 const readyToPaste = ref(null);
 
+function createSourceQuestionnaireRevision(questionnaireId, questionnaireRevision) {
+    if (!questionnaireId) return null;
+
+    return questionnaireRevision
+        ? { questionnaireId, revision: questionnaireRevision }
+        : { questionnaireId };
+}
+
 export const canPaste = computed(() => {
     //console.log('canPaste: ' + readyToPaste.value);
     if (readyToPaste.value !== null) {
@@ -15,13 +23,17 @@ export const canPaste = computed(() => {
     return readyToPaste.value;
 });
 
-export function copyItem(questionnaireId, item) {
+export function copyItem(questionnaire, item) {
     var itemIdToCopy = item.itemId;
 
     var itemToCopyType = (item.itemType === 'Group' && item.isRoster === true) ? 'Roster' : item.itemType;
 
     var itemToCopy = {
-        questionnaireId: questionnaireId,
+        questionnaireId: questionnaire.questionnaireId,
+        questionnaireRevision: createSourceQuestionnaireRevision(
+            questionnaire.questionnaireId,
+            questionnaire.questionnaireRevision
+        ),
         itemId: itemIdToCopy,
         itemType: itemToCopyType
     };
@@ -43,7 +55,8 @@ export async function pasteItemInto(questionnaireId, parentId) {
         parentId,
         itemToCopy.questionnaireId,
         itemToCopy.itemId,
-        newId
+        newId,
+        itemToCopy.questionnaireRevision
     );
 
     return {
@@ -60,6 +73,7 @@ export async function pasteItemAfter(questionnaireId, afterNodeId) {
 
     var command = {
         sourceQuestionnaireId: itemToCopy.questionnaireId,
+        sourceQuestionnaireRevision: itemToCopy.questionnaireRevision,
         sourceItemId: itemToCopy.itemId,
         entityId: newId,
         questionnaireId: questionnaireId,
@@ -84,10 +98,12 @@ export function pasteItemIntoDetailed(
     parentId,
     sourceQuestionnaireId,
     sourceItemId,
-    newId
+    newId,
+    sourceQuestionnaireRevision = null
 ) {
     var command = {
         sourceQuestionnaireId: sourceQuestionnaireId,
+        sourceQuestionnaireRevision: sourceQuestionnaireRevision,
         sourceItemId: sourceItemId,
         parentId: parentId,
         entityId: newId,

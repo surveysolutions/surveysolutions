@@ -1,4 +1,5 @@
-﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+﻿@using WB.Core.BoundedContexts.Headquarters.Resources
+@using WB.Core.SharedKernels.SurveyManagement.Web.Models
 @using WB.Infrastructure.Native.Workspaces
 @using WB.UI.Headquarters.Services
 @inject IWorkspaceContextAccessor workspaceContext
@@ -24,9 +25,8 @@
     <li class="dropdown">
         <a href="javascript:void(0);" class="dropdown-toggle toggle-sized" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="@User.Identity.Name">@User.Identity.Name<span class="caret"></span></a>
         <ul class="dropdown-menu">
-            <li>
-                @Html.MainMenuItem(workspace, @"Profile", @"Interviewer", Pages.Profile_InterviewerProfile, MenuItem.UsersManagement)
-            </li>
+            @Html.MainMenuItem(workspace, @"Profile", @"Interviewer", Pages.Profile_InterviewerProfile, MenuItem.UsersManagement)
+            @Html.MainMenuItem(workspace, "Manage", "Users", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
             <li>
                 <a href="/Account/LogOff">@Common.Logoff</a>
             </li>

@@ -20,6 +20,7 @@ using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Attributes;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -383,6 +384,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     private bool CanCreateInterview()
     {
         return AllowCreateInterview && 
+               assignment.Status == AssignmentStatus.Open &&
                (!assignment.Quantity.HasValue || Math.Max(val1: 0, val2: InterviewsLeftByAssignmentCount) > 0);
     }
     

@@ -177,4 +177,17 @@
   <data name="SignInToDesignerTitle" xml:space="preserve">
     <value>შედით დიზაინერზე</value>
   </data>
+
+
+  <data name="UpgradeAssignments" xml:space="preserve">
+    <value>დავალებების განახლება</value>
+  </data>
+
+  <data name="Importing" xml:space="preserve">
+    <value>იმპორტი {{percent}}%</value>
+  </data>
+
+  <data name="Prepare" xml:space="preserve">
+    <value>კითხვარის მონაცემების მიღება</value>
+  </data>
 </root>

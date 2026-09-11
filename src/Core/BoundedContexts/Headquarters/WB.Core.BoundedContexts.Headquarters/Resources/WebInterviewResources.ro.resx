@@ -153,4 +153,17 @@
   <data name="WelcomeText" xml:space="preserve">
     <value>Bună ziua și Bine ați venit la Survey Solutions Web Survey</value>
   </data>
+
+
+  <data name="LinkInvitation" xml:space="preserve">
+    <value>Ați fost invitat să participați la următorul sondaj: "%QUESTIONNAIRE%". Interviul dvs. nu este încă pregătit.</value>
+  </data>
+
+  <data name="LinkToInterviewPage" xml:space="preserve">
+    <value>Interviu web</value>
+  </data>
+
+  <data name="LinkWelcome" xml:space="preserve">
+    <value>Bună ziua și bine ați venit la sondajul web Survey Solutions</value>
+  </data>
 </root>

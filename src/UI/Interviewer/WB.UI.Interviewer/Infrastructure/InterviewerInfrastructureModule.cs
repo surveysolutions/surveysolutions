@@ -4,6 +4,7 @@ using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Interviewer.Implementation;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -66,6 +67,7 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.Bind<IQuestionnaireSettings, EnumeratorQuestionnaireSettings>();
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
             registry.Bind<IAudioAuditService, AudioAuditService>();
+            registry.Bind<IAudioAuditRecordingExecutor, AudioAuditRecordingExecutor>();
             
             registry.BindAsSingleton<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
             registry.BindToRegisteredInterface<IEventStore, IEnumeratorEventStorage>();

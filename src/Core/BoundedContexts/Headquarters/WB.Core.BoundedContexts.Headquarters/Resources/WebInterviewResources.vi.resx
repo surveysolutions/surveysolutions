@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Complete" xml:space="preserve"><value>Hoàn thành</value></data>
+  <data name="FinishInterviewText" xml:space="preserve"><value>Cuộc phỏng vấn này đã hoàn thành</value></data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve"><value>Không thể sửa đổi cuộc phỏng vấn đã được thiết bị nhận</value></data>
+  <data name="InvitationText" xml:space="preserve"><value>Bạn được mời tham gia cuộc khảo sát sau: "%QUESTIONNAIRE%"</value></data>
+  <data name="NoteForSupervisor" xml:space="preserve"><value>Nhận xét</value></data>
+  <data name="Resume_InvitationText" xml:space="preserve"><value>Bạn có thể điều hướng đến cuộc phỏng vấn trong khảo sát sau: "%QUESTIONNAIRE%"</value></data>
+  <data name="Resume_WelcomeText" xml:space="preserve"><value>Xin chào và Chào mừng đến với Khảo sát Web của Survey Solutions</value></data>
+  <data name="SurveyFormatText" xml:space="preserve"><value>Khảo sát: "%QUESTIONNAIRE%"</value></data>
+  <data name="WebSurvey" xml:space="preserve"><value>Khảo sát Web của Survey Solutions</value></data>
+  <data name="WelcomeText" xml:space="preserve"><value>Xin chào và Chào mừng đến với Khảo sát Web của Survey Solutions</value></data>
+  <data name="StartNewInterview" xml:space="preserve"><value>Bắt đầu phỏng vấn mới</value></data>
+  <data name="ResumeInterview" xml:space="preserve"><value>Tiếp tục phỏng vấn</value></data>
+  <data name="LinkInvitation" xml:space="preserve"><value>Bạn được mời tham gia cuộc khảo sát sau: "%QUESTIONNAIRE%". Cuộc phỏng vấn của bạn chưa sẵn sàng.</value></data>
+  <data name="LinkToInterviewPage" xml:space="preserve"><value>Phỏng vấn Web</value></data>
+  <data name="LinkWelcome" xml:space="preserve"><value>Xin chào và Chào mừng đến với Khảo sát Web của Survey Solutions</value></data>
+</root>

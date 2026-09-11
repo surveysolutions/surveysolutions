@@ -121,7 +121,7 @@
     <value>Aruba</value>
   </data>
   <data name="AFG" xml:space="preserve">
-    <value>Afghanistan</value>
+    <value>Afganistan</value>
   </data>
   <data name="AFR" xml:space="preserve">
     <value>Africa</value>
@@ -154,7 +154,7 @@
     <value>Samoa Americană</value>
   </data>
   <data name="ATA" xml:space="preserve">
-    <value>Antartica</value>
+    <value>Antarctica</value>
   </data>
   <data name="ATF" xml:space="preserve">
     <value>Teritoriile australe și antarctice franceze</value>
@@ -169,7 +169,7 @@
     <value>Austria</value>
   </data>
   <data name="AZE" xml:space="preserve">
-    <value>Azerbaijan</value>
+    <value>Azerbaidjan</value>
   </data>
   <data name="BDI" xml:space="preserve">
     <value>Burundi</value>
@@ -292,7 +292,7 @@
     <value>Germania</value>
   </data>
   <data name="DJI" xml:space="preserve">
-    <value>Djibouti</value>
+    <value>Jibuti</value>
   </data>
   <data name="DMA" xml:space="preserve">
     <value>Dominica</value>
@@ -316,7 +316,7 @@
     <value>Republica Arabă Egipt</value>
   </data>
   <data name="ERI" xml:space="preserve">
-    <value>Eritrea</value>
+    <value>Eritreea</value>
   </data>
   <data name="ESH" xml:space="preserve">
     <value>Sahara de Vest</value>
@@ -346,7 +346,7 @@
     <value>Insulele Faeroe</value>
   </data>
   <data name="FSM" xml:space="preserve">
-    <value>Micronesia</value>
+    <value>Micronezia</value>
   </data>
   <data name="FXX" xml:space="preserve">
     <value>Franța (metropolitană)</value>
@@ -367,7 +367,7 @@
     <value>Gibraltar</value>
   </data>
   <data name="GIN" xml:space="preserve">
-    <value>Guinea</value>
+    <value>Guineea</value>
   </data>
   <data name="GLP" xml:space="preserve">
     <value>Guadelupa</value>
@@ -376,7 +376,7 @@
     <value>Gambia</value>
   </data>
   <data name="GNB" xml:space="preserve">
-    <value>Guinea-Bissau</value>
+    <value>Guineea-Bissau</value>
   </data>
   <data name="GNQ" xml:space="preserve">
     <value>Guinea Ecuatorială</value>
@@ -460,7 +460,7 @@
     <value>Japonia</value>
   </data>
   <data name="KAZ" xml:space="preserve">
-    <value>Kazakhstan</value>
+    <value>Kazahstan</value>
   </data>
   <data name="KEN" xml:space="preserve">
     <value>Kenya</value>
@@ -484,7 +484,7 @@
     <value>Kosovo</value>
   </data>
   <data name="KWT" xml:space="preserve">
-    <value>Kuwait</value>
+    <value>Kuweit</value>
   </data>
   <data name="LAC" xml:space="preserve">
     <value>America Latină și Caraibele</value>
@@ -517,7 +517,7 @@
     <value>Lituania</value>
   </data>
   <data name="LUX" xml:space="preserve">
-    <value>Luxembourg</value>
+    <value>Luxemburg</value>
   </data>
   <data name="LVA" xml:space="preserve">
     <value>Letonia</value>
@@ -829,7 +829,7 @@
     <value>Republica Bolivariană a Venezuelei</value>
   </data>
   <data name="VGB" xml:space="preserve">
-    <value>British Virgin Islands</value>
+    <value>Insulele Virgine Britanice</value>
   </data>
   <data name="VGB1" xml:space="preserve">
     <value>Insulele Virgine Britanice</value>

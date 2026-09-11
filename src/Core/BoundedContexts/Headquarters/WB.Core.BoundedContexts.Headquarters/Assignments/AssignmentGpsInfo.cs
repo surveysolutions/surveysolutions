@@ -1,4 +1,5 @@
 using System;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
@@ -8,6 +9,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public Guid ResponsibleRoleId { get; set; }
+        public AssignmentStatus Status { get; set; }
 
         public override bool Equals(object obj)
         {

@@ -59,7 +59,7 @@
 
 <script lang="js">
 import isEmpty from 'lodash/isEmpty'
-import { GroupStatus } from './questions'
+import { GroupStatus } from './questionConstants'
 
 export default {
     name: 'cover-readonly-view',
@@ -128,7 +128,7 @@ export default {
         hasSupervisorComment() {
             return !isEmpty(
                 this.$store.state.webinterview.coverInfo
-                    .supervisorRejectComment,
+                    .supervisorRejectComment
             )
         },
         hasBrokenPackage() {

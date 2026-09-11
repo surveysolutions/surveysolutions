@@ -18,6 +18,12 @@
     <div class="form-group">
         <b>Full name:</b> @Model.Account.FullName
     </div>
+    @if (!string.IsNullOrEmpty(Model.Account.LastLoginDate))
+    {
+        <div class="form-group">
+            <b>Last login date:</b> @Model.Account.LastLoginDate
+        </div>
+    }
     <div class="form-group">
         <input type="checkbox" asp-for="Account.IsApproved" id="is-approved" disabled class="wb-checkbox" />
         <label for="is-approved">

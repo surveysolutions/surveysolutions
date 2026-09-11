@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="COLUMN_ANDROID_4_4_OR_LOWER" xml:space="preserve">
-    <value>ANDROID 4.4 OR LOWER</value>
+    <value>ANDROID 4.4 ან უფრო დაბალი</value>
   </data>
   <data name="COLUMN_APPROVED_BY_HQ" xml:space="preserve">
     <value>დამტკიცებულია სათაო ოფისის მიერ</value>
@@ -185,5 +185,14 @@
   </data>
   <data name="TOTAL" xml:space="preserve">
     <value>სულ</value>
+  </data>
+
+
+  <data name="COLUMN_TEAM_SIZE" xml:space="preserve">
+    <value>გუნდის ზომა</value>
+  </data>
+
+  <data name="TimeLeft" xml:space="preserve">
+    <value>დარჩენილი დრო</value>
   </data>
 </root>

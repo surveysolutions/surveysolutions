@@ -228,4 +228,17 @@
   <data name="VerificationFailed" xml:space="preserve">
     <value>验证失败</value>
   </data>
+
+
+  <data name="Workspace" xml:space="preserve">
+    <value>工作区</value>
+  </data>
+
+  <data name="SelectWorkspace" xml:space="preserve">
+    <value>选择工作区</value>
+  </data>
+
+  <data name="SelectWorkspaceDescription" xml:space="preserve">
+    <value>如果批处理文件中未分配工作区，则默认使用此工作区</value>
+  </data>
 </root>

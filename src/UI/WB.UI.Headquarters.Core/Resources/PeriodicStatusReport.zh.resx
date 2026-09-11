@@ -240,4 +240,17 @@
   <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
     <value>从调查员在平板电脑上记录第一个答案到点击“完成”按钮的平均时间。</value>
   </data>
+
+
+  <data name="BackToTeams" xml:space="preserve">
+    <value>返回团队</value>
+  </data>
+
+  <data name="NumberOfCompletedInterviewsDescriptionPerInterviewer" xml:space="preserve">
+    <value>访问员完成访谈的次数。被驳回后再次完成的访谈会被计为单独的完成事件。</value>
+  </data>
+
+  <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer" xml:space="preserve">
+    <value>督导对访问员收集的访谈进行通过审核和驳回操作的次数</value>
+  </data>
 </root>

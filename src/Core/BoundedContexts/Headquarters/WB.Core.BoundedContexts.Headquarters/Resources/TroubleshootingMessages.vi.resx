@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="NoData_ContactSupport" xml:space="preserve">
+        <value>Dữ liệu từ phỏng vấn {0} đã bị hỏng. Vui lòng liên hệ hỗ trợ để khôi phục phỏng vấn đó</value>
+    </data>
+    <data name="NoData_ContactSupportWithMoreDetails" xml:space="preserve">
+        <value>Vui lòng liên hệ hỗ trợ để cung cấp thêm chi tiết</value>
+    </data>
+    <data name="NoData_InterveiwWasNotUploadedYet" xml:space="preserve">
+        <value>Phỏng vấn {0} vẫn chưa được đồng bộ</value>
+    </data>
+    <data name="NoData_InterviewDeleted" xml:space="preserve">
+        <value>Phỏng vấn {0} đã bị HQ hoặc Quản trị viên xóa, vì vậy không thể khôi phục</value>
+    </data>
+    <data name="NoData_InterviewerChangedDevice" xml:space="preserve">
+        <value>Phỏng vấn viên đã đổi máy tính bảng. Dữ liệu của phỏng vấn {0} có thể bị mất vì dữ liệu sẽ bị xóa khi phỏng vấn viên chuyển từ máy tính bảng này sang máy tính bảng khác. Nếu đúng như vậy, phỏng vấn đó không thể được khôi phục</value>
+    </data>
+    <data name="NoData_InterviewWasNotReceived" xml:space="preserve">
+        <value>Phỏng vấn {0} vẫn chưa được phỏng vấn viên {1} nhận.</value>
+    </data>
+    <data name="NoData_InterviewWasReassigned" xml:space="preserve">
+        <value>Phỏng vấn {0} đã được phân lại cho một phỏng vấn viên khác. Hiện tại phỏng vấn đang nằm trên máy tính bảng của phỏng vấn viên đó.</value>
+    </data>
+    <data name="NoData_NoIssuesInterviewOnServer" xml:space="preserve">
+        <value>Phỏng vấn {0} không có vấn đề nào được ghi nhận trên máy chủ.&lt;br /&gt;Vui lòng lấy thêm thông tin từ người hiện đang phụ trách phỏng vấn đó.&lt;br /&gt;Nếu sự cố vẫn tiếp diễn, hãy liên hệ hỗ trợ để cung cấp thêm chi tiết</value>
+    </data>
+    <data name="NoData_NotFound" xml:space="preserve">
+        <value>Không thể tìm thấy phỏng vấn {0}</value>
+    </data>
+    <data name="NoData_QuestionnaireDeleted" xml:space="preserve">
+        <value>Quản trị viên máy chủ đã xóa bảng câu hỏi của phỏng vấn {0}. Do đó, tất cả các phỏng vấn liên quan đến bảng câu hỏi này đã bị xóa và không thể khôi phục</value>
+    </data>
+    <data name="MissingCensusInterviews_NoBrokenPackages_Message" xml:space="preserve">
+        <value>Nếu phỏng vấn bạn đang tìm không có trong danh sách, vui lòng hướng dẫn phỏng vấn viên hoàn tất phỏng vấn và đồng bộ lại.</value>
+    </data>
+    <data name="MissingCensusInterviews_SomeBrokenPackages_Message" xml:space="preserve">
+        <value>Nếu phỏng vấn bạn đang tìm không có trong danh sách, vui lòng hướng dẫn phỏng vấn viên hoàn tất phỏng vấn và đồng bộ lại. Sau đó, tìm lại phỏng vấn một lần nữa. Nếu vẫn không tìm thấy sau lần tìm thứ hai, hãy liên hệ nhóm hỗ trợ.</value>
+    </data>
+</root>
