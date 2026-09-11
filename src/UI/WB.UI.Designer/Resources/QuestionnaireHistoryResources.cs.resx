@@ -366,4 +366,13 @@
   <data name="Translation_Replace" xml:space="preserve">
     <value>Dokument byl přepnut na překlad {0}</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Hledat</value>
+  </data>
+  <data name="SearchButton" xml:space="preserve">
+    <value>Hledat</value>
+  </data>
+  <data name="SearchClear" xml:space="preserve">
+    <value>Vymazat</value>
+  </data>
 </root>

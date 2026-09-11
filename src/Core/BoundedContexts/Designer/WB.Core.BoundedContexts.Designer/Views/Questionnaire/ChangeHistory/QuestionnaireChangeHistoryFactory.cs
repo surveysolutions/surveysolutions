@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Security.Principal;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -14,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 {
@@ -36,7 +38,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             this.questionnaireViewFactory = questionnaireViewFactory;
         }
 
-        public async Task<QuestionnaireChangeHistory?> LoadAsync(Guid questionnaireId, int page, int pageSize, IPrincipal user)
+        [SuppressMessage("Sonar", "S6444:Regular expressions should be executed with a timeout",
+            Justification = "These calls are translated to PostgreSQL regex predicates; timeout overloads cannot be translated.")]
+        public async Task<QuestionnaireChangeHistory?> LoadAsync(Guid questionnaireId, int page, int pageSize, IPrincipal user,
+            string? search = null, bool searchIdsOnly = false, bool searchWholeWord = false)
         {
             var questionnaire = questionnaireDocumentStorage.GetById(questionnaireId.FormatGuid());
 
@@ -48,6 +53,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             var isAdmin = user.IsAdmin();
 
             IQueryable<QuestionnaireChangeRecord> query = this.dbContext.QuestionnaireChangeRecords
+                .AsNoTracking()
                 .Include(r => r.References)
                 .Where(h => h.QuestionnaireId == sQuestionnaireId);
 
@@ -62,19 +68,139 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 query = query.Where(h => !(h.ActionType == QuestionnaireActionType.ImportToHq && adminUsers.Contains(h.UserId)));
             }
 
-            var count = await query.CountAsync();
+            QuestionnaireChangeRecord[] questionnaireHistory;
+            int count;
+            var normalizedSearch = NormalizeSearch(search);
 
-            var questionnaireHistory = await query
+            if (normalizedSearch != null)
+            {
+                var matcher = CreateMatcher(normalizedSearch, searchWholeWord);
+                var matchedEntityIds = ResolveMatchingEntityIds(questionnaire, matcher, searchIdsOnly);
+                var questionnaireIdMatched = matchedEntityIds.Contains(questionnaire.PublicKey);
+                var matchedNonQuestionnaireEntityIds = matchedEntityIds
+                    .Where(x => x != questionnaire.PublicKey)
+                    .ToList();
+
+                if (searchWholeWord)
+                {
+                    var wholeWordPattern = $@"(^|\W){Regex.Escape(normalizedSearch)}(\W|$)";
+                    query = query.Where(h =>
+                        ((h.TargetItemType == QuestionnaireItemType.Questionnaire && questionnaireIdMatched && h.TargetItemId == questionnaire.PublicKey)
+                         || (h.TargetItemType != QuestionnaireItemType.Questionnaire && matchedNonQuestionnaireEntityIds.Contains(h.TargetItemId))) ||
+                        h.References.Any(r =>
+                            (r.ReferenceType == QuestionnaireItemType.Questionnaire && questionnaireIdMatched && r.ReferenceId == questionnaire.PublicKey)
+                            || (r.ReferenceType != QuestionnaireItemType.Questionnaire && matchedNonQuestionnaireEntityIds.Contains(r.ReferenceId))) ||
+                        (!searchIdsOnly &&
+                         ((h.TargetItemTitle != null && Regex.IsMatch(h.TargetItemTitle, wholeWordPattern, RegexOptions.IgnoreCase)) ||
+                          (h.TargetItemNewTitle != null && Regex.IsMatch(h.TargetItemNewTitle, wholeWordPattern, RegexOptions.IgnoreCase)) ||
+                          h.References.Any(r => r.ReferenceTitle != null && Regex.IsMatch(r.ReferenceTitle, wholeWordPattern, RegexOptions.IgnoreCase)))));
+                }
+                else if (this.dbContext.Database.IsNpgsql())
+                {
+                    var searchPattern = $"%{EscapeLikePattern(normalizedSearch)}%";
+                    query = query.Where(h =>
+                        ((h.TargetItemType == QuestionnaireItemType.Questionnaire && questionnaireIdMatched && h.TargetItemId == questionnaire.PublicKey)
+                         || (h.TargetItemType != QuestionnaireItemType.Questionnaire && matchedNonQuestionnaireEntityIds.Contains(h.TargetItemId))) ||
+                        h.References.Any(r =>
+                            (r.ReferenceType == QuestionnaireItemType.Questionnaire && questionnaireIdMatched && r.ReferenceId == questionnaire.PublicKey)
+                            || (r.ReferenceType != QuestionnaireItemType.Questionnaire && matchedNonQuestionnaireEntityIds.Contains(r.ReferenceId))) ||
+                        (!searchIdsOnly &&
+                         ((h.TargetItemTitle != null && EF.Functions.ILike(h.TargetItemTitle, searchPattern, "\\"))
+                          || (h.TargetItemNewTitle != null && EF.Functions.ILike(h.TargetItemNewTitle, searchPattern, "\\"))
+                          || h.References.Any(r => r.ReferenceTitle != null && EF.Functions.ILike(r.ReferenceTitle, searchPattern, "\\")))));
+                }
+                else
+                {
+                    query = query.Where(h =>
+                        ((h.TargetItemType == QuestionnaireItemType.Questionnaire && questionnaireIdMatched && h.TargetItemId == questionnaire.PublicKey)
+                         || (h.TargetItemType != QuestionnaireItemType.Questionnaire && matchedNonQuestionnaireEntityIds.Contains(h.TargetItemId))) ||
+                        h.References.Any(r =>
+                            (r.ReferenceType == QuestionnaireItemType.Questionnaire && questionnaireIdMatched && r.ReferenceId == questionnaire.PublicKey)
+                            || (r.ReferenceType != QuestionnaireItemType.Questionnaire && matchedNonQuestionnaireEntityIds.Contains(r.ReferenceId))) ||
+                        (!searchIdsOnly &&
+                         ((h.TargetItemTitle != null && h.TargetItemTitle.ToLower().Contains(normalizedSearch)) ||
+                          (h.TargetItemNewTitle != null && h.TargetItemNewTitle.ToLower().Contains(normalizedSearch)) ||
+                          h.References.Any(r => r.ReferenceTitle != null && r.ReferenceTitle.ToLower().Contains(normalizedSearch)))));
+                }
+
+                count = await query.CountAsync();
+                questionnaireHistory = await query
                     .OrderByDescending(h => h.Sequence)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
                     .ToArrayAsync();
+            }
+            else
+            {
+                count = await query.CountAsync();
+                questionnaireHistory = await query
+                    .OrderByDescending(h => h.Sequence)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToArrayAsync();
+            }
+
             var userId = user.GetId();
 
             return new QuestionnaireChangeHistory(questionnaireId, questionnaire.Title,
-                questionnaireHistory.Select(h => 
+                questionnaireHistory.Select(h =>
                     CreateQuestionnaireChangeHistoryWebItem(questionnaire, h, userId))
-                    .ToList(), page, count, pageSize);
+                    .ToList(), page, count, pageSize, search?.Trim(), searchIdsOnly, searchWholeWord);
+        }
+
+        private static Func<string?, bool> CreateMatcher(string search, bool wholeWord)
+        {
+            if (!wholeWord)
+                return value => !string.IsNullOrWhiteSpace(value)
+                    && value.IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0;
+
+            var pattern = $@"\b{Regex.Escape(search)}\b";
+            return value => !string.IsNullOrWhiteSpace(value)
+                && Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant,
+                    TimeSpan.FromSeconds(1));
+        }
+
+        private static string EscapeLikePattern(string value) => value.Replace("\\", "\\\\").Replace("%", "\\%").Replace("_", "\\_");
+
+        private static string? NormalizeSearch(string? search)
+        {
+            return string.IsNullOrWhiteSpace(search)
+                ? null
+                : search.Trim().ToLowerInvariant();
+        }
+
+        private static List<Guid> ResolveMatchingEntityIds(QuestionnaireDocument questionnaire,
+            Func<string?, bool> matcher, bool searchIdsOnly)
+        {
+            var matchedEntityIds = questionnaire.Find<IQuestionnaireEntity>()
+                .Where(entity => matcher(searchIdsOnly ? entity.GetVariable() : entity.GetTitle()))
+                .Select(entity => entity.PublicKey)
+                .ToList();
+
+            var questionnaireValue = searchIdsOnly ? questionnaire.VariableName : questionnaire.Title;
+            if (matcher(questionnaireValue))
+                matchedEntityIds.Add(questionnaire.PublicKey);
+
+            if (searchIdsOnly)
+            {
+                matchedEntityIds.AddRange(questionnaire.LookupTables
+                    .Where(table => matcher(table.Value.TableName))
+                    .Select(table => table.Key));
+                matchedEntityIds.AddRange(questionnaire.Macros
+                    .Where(macro => matcher(macro.Value.Name))
+                    .Select(macro => macro.Key));
+                matchedEntityIds.AddRange(questionnaire.Attachments
+                    .Where(attachment => matcher(attachment.Name))
+                    .Select(attachment => attachment.AttachmentId));
+                matchedEntityIds.AddRange(questionnaire.Translations
+                    .Where(translation => matcher(translation.Name))
+                    .Select(translation => translation.Id));
+                matchedEntityIds.AddRange(questionnaire.Categories
+                    .Where(category => matcher(category.Name))
+                    .Select(category => category.Id));
+            }
+
+            return matchedEntityIds;
         }
 
         private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(

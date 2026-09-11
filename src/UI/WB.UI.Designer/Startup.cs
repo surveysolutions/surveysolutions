@@ -464,6 +464,7 @@ namespace WB.UI.Designer
             }
 
             app.UseResponseCompression();
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
@@ -474,7 +475,7 @@ namespace WB.UI.Designer
                     }
                 }
             });
-            
+
             app.UseCookiePolicy();
             app.UseSession();
             app.UseAuthentication();
