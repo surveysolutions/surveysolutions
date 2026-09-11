@@ -29,7 +29,10 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
 
         public sealed class InterviewFileOperationLock : IDisposable
         {
+            // Keep the durable cross-process lock set bounded while preserving enough stripes to avoid frequent collisions.
             private const int CrossProcessLockStripeCount = 256;
+            private const int InitialCrossProcessLockRetryDelayMs = 25;
+            private const int MaxCrossProcessLockRetryDelayMs = 250;
             private static readonly string lockDirectoryPath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "WB",
@@ -96,6 +99,7 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
                 Directory.CreateDirectory(lockDirectoryPath);
 
                 var lockPath = Path.Combine(lockDirectoryPath, GetCrossProcessLockKey());
+                var retryDelayMs = InitialCrossProcessLockRetryDelayMs;
                 while (true)
                 {
                     try
@@ -104,7 +108,8 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
                     }
                     catch (IOException)
                     {
-                        await Task.Delay(25).ConfigureAwait(false);
+                        await Task.Delay(retryDelayMs).ConfigureAwait(false);
+                        retryDelayMs = Math.Min(retryDelayMs * 2, MaxCrossProcessLockRetryDelayMs);
                     }
                 }
             }
