@@ -110,7 +110,19 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
             }
 
             private string GetCrossProcessLockKey() =>
-                $"{this.interviewId.ToByteArray()[0] % CrossProcessLockStripeCount:x2}.lck";
+                $"{GetStableStripeIndex(this.interviewId):x2}.lck";
+
+            private static int GetStableStripeIndex(Guid interviewId)
+            {
+                unchecked
+                {
+                    uint hash = 2166136261;
+                    foreach (var value in interviewId.ToByteArray())
+                        hash = (hash ^ value) * 16777619;
+
+                    return (int)(hash % CrossProcessLockStripeCount);
+                }
+            }
         }
     }
 }
