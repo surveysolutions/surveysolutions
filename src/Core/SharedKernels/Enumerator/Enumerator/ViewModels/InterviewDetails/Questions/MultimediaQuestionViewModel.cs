@@ -134,12 +134,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task RequestAnswerAsync()
         {
-            var pictureFileName = this.GetPictureFileName();
-
             if (this.IsSignature)
             {
                 if (this.Answer?.Length > 0)
                 {
+                    var pictureFileName = this.GetPictureFileName();
                     this.StorePictureFile(new MemoryStream(this.Answer), pictureFileName);
 
                     var command = new AnswerPictureQuestionCommand(
@@ -172,10 +171,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 try
                 {
+                    string pictureFileName = null;
                     Stream pictureStream = null;
                     if (choosen == UIResources.Multimedia_TakePhoto)
                     {
                         pictureStream = await this.pictureChooser.TakePicture();
+                        if (pictureStream != null)
+                            pictureFileName = this.GetPictureFileName();
                     }
                     else if (choosen == UIResources.Multimedia_PickFromGallery)
                     {
@@ -235,6 +237,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 catch (MissingPermissionsException mpe)
                 {
                     await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(mpe.Message);
+                }
+                catch (OperationCanceledException)
+                {
                 }
             }
         }
