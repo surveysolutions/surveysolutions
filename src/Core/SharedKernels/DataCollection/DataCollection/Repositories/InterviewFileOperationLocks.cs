@@ -29,8 +29,11 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
 
         public sealed class InterviewFileOperationLock : IDisposable
         {
-            private static readonly string lockDirectoryPath =
-                Path.Combine(Path.GetTempPath(), "WB.InterviewFileOperationLocks");
+            private const int CrossProcessLockStripeCount = 256;
+            private static readonly string lockDirectoryPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "WB",
+                "InterviewFileOperationLocks");
             private readonly Guid interviewId;
             private readonly LockEntry entry;
             private FileStream crossProcessLockStream;
@@ -64,7 +67,6 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
                 released = true;
                 this.crossProcessLockStream?.Dispose();
                 this.crossProcessLockStream = null;
-
                 this.entry.Semaphore.Release();
             }
 
@@ -93,7 +95,7 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
             {
                 Directory.CreateDirectory(lockDirectoryPath);
 
-                var lockPath = Path.Combine(lockDirectoryPath, $"{this.interviewId:N}.lck");
+                var lockPath = Path.Combine(lockDirectoryPath, GetCrossProcessLockKey());
                 while (true)
                 {
                     try
@@ -106,6 +108,9 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
                     }
                 }
             }
+
+            private string GetCrossProcessLockKey() =>
+                $"{this.interviewId.ToByteArray()[0] % CrossProcessLockStripeCount:x2}.lck";
         }
     }
 }

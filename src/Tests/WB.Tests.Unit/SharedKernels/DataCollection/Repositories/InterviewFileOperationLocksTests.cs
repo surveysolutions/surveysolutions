@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -55,6 +56,21 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Repositories
 
             Assert.That(await CompletesWithin(secondWaitTask, TimeSpan.FromSeconds(1)), Is.True);
             second.Dispose();
+        }
+
+        [Test]
+        public async Task when_lock_is_acquired_should_not_create_temp_lock_file()
+        {
+            var interviewId = Guid.NewGuid();
+            var lockFilePath = Path.Combine(Path.GetTempPath(), "WB.InterviewFileOperationLocks", $"{interviewId:N}.lck");
+            if (File.Exists(lockFilePath))
+                File.Delete(lockFilePath);
+
+            var operationLock = InterviewFileOperationLocks.Get(interviewId);
+            await operationLock.WaitAsync();
+            operationLock.Dispose();
+
+            Assert.That(File.Exists(lockFilePath), Is.False);
         }
 
         private static async Task<bool> CompletesWithin(Task task, TimeSpan timeout)
