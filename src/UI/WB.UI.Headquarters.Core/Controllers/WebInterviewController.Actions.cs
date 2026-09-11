@@ -3,19 +3,20 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WB.Core.BoundedContexts.Headquarters.EmailProviders;
+using Microsoft.Extensions.Logging;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Enumerator.Native.WebInterview;
-using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Shared.Web.Services;
+using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -26,24 +27,20 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly ICommandService commandService;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
-        private readonly IAudioFileStorage audioFileStorage;
-        private readonly IAudioProcessingService audioProcessingService;
-        private readonly IImageFileStorage imageFileStorage;
-
+        private readonly IWebInterviewBinaryServices binaryServices;
+        private readonly ILogger<WebInterviewBinaryController> logger;
         public WebInterviewBinaryController(
             IStatefulInterviewRepository statefulInterviewRepository, 
             ICommandService commandService,
             IWebInterviewNotificationService webInterviewNotificationService, 
-            IAudioFileStorage audioFileStorage, 
-            IAudioProcessingService audioProcessingService, 
-            IImageFileStorage imageFileStorage)
+            IWebInterviewBinaryServices binaryServices,
+            ILogger<WebInterviewBinaryController> logger)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.commandService = commandService;
             this.webInterviewNotificationService = webInterviewNotificationService;
-            this.audioFileStorage = audioFileStorage;
-            this.audioProcessingService = audioProcessingService;
-            this.imageFileStorage = imageFileStorage;
+            this.binaryServices = binaryServices;
+            this.logger = logger;
         }
 
         [HttpPost]
@@ -58,8 +55,21 @@ namespace WB.UI.Headquarters.Controllers
             {
                 return this.Json("fail");
             }
+            
+            AnswerAudioQuestionCommand command = null;
+            var uploadLock = InterviewFileOperationLocks.Get(interview.Id);
+            await uploadLock.WaitAsync();
+            string fileName = null;
+            string previousFileName = null;
+            byte[] previousFileData = null;
+            var hadPreviousFile = false;
+            var fileWriteAttempted = false;
+            var commandExecutionStarted = false;
+            var audioDuration = TimeSpan.Zero;
             try
             {
+                interview = this.statefulInterviewRepository.Get(id.FormatGuid());
+                question = interview.GetQuestion(questionIdentity);
                 await using var ms = new MemoryStream();
 
                 await file.CopyToAsync(ms);
@@ -67,35 +77,83 @@ namespace WB.UI.Headquarters.Controllers
 
                 string contentType = file.ContentType;
                 
-                var fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.aac";
-                
-                var audioDuration = TimeSpan.Zero;
+                fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.aac";
+                previousFileName = interview.GetAudioQuestion(questionIdentity)?.GetAnswer()?.FileName;
+                hadPreviousFile = !string.IsNullOrEmpty(previousFileName);
+                if (hadPreviousFile)
+                {
+                    previousFileData = await this.binaryServices.AudioFileStorage.GetInterviewBinaryDataAsync(id, previousFileName);
+                }
+
                 if(contentType is "audio/wav" or "audio/x-wav")
                 {
-                    var audioInfo = await this.audioProcessingService.CompressAudioFileAsync(bytes, contentType);
-                    audioFileStorage.StoreInterviewBinaryData(id, fileName, audioInfo.Binary, audioInfo.MimeType); 
+                    var audioInfo = await this.binaryServices.AudioProcessingService.CompressAudioFileAsync(bytes, contentType);
+                    fileWriteAttempted = true;
+                    binaryServices.AudioFileStorage.StoreInterviewBinaryData(id, fileName, audioInfo.Binary, audioInfo.MimeType);
                     audioDuration = audioInfo.Duration == TimeSpan.Zero 
                         ? (Double.TryParse(duration, out var dur) ? TimeSpan.FromSeconds(dur) : TimeSpan.Zero)
                         : audioInfo.Duration;
                 }
                 else
                 {
-                    audioFileStorage.StoreInterviewBinaryData(id, fileName, bytes, file.ContentType);
+                    fileWriteAttempted = true;
+                    binaryServices.AudioFileStorage.StoreInterviewBinaryData(id, fileName, bytes, file.ContentType);
                     audioDuration = (Double.TryParse(duration, out var dur)
                         ? TimeSpan.FromSeconds(dur)
                         : TimeSpan.Zero);
                 }
-                var command = new AnswerAudioQuestionCommand(interview.Id,
+                command = new AnswerAudioQuestionCommand(interview.Id,
                     interview.CurrentResponsibleId, questionIdentity.Id, questionIdentity.RosterVector,
                     fileName, 
                     audioDuration);
 
+                commandExecutionStarted = true;
                 this.commandService.Execute(command);
+            }
+            catch (InterviewException e)
+            {
+                if (fileWriteAttempted)
+                {
+                    await this.binaryServices.AudioFileStorage.RemoveInterviewBinaryData(id, fileName);
+                    if (hadPreviousFile && previousFileData != null && previousFileName != null)
+                    {
+                        this.binaryServices.AudioFileStorage.StoreInterviewBinaryData(id, previousFileName, previousFileData,
+                            ContentTypeHelper.GetAudioContentType(previousFileName));
+                    }
+                }
+
+                webInterviewNotificationService.MarkAnswerAsNotSaved(id, questionIdentity, e);
+                throw;
             }
             catch (Exception e)
             {
-                webInterviewNotificationService.MarkAnswerAsNotSaved(id, questionIdentity, e);
+                var savedQuestion = commandExecutionStarted
+                    ? this.statefulInterviewRepository.Get(id.FormatGuid())?.GetAudioQuestion(questionIdentity)
+                    : null;
+                var savedAnswer = savedQuestion?.GetAnswer();
+
+                var answerSaved = savedAnswer != null
+                    && string.Equals(savedAnswer.FileName, fileName, StringComparison.Ordinal)
+                    && command != null
+                    && savedQuestion.AnswerTime?.UtcDateTime == command.OriginDate.UtcDateTime;
+
+                if (fileWriteAttempted && !answerSaved)
+                {
+                    await this.binaryServices.AudioFileStorage.RemoveInterviewBinaryData(id, fileName);
+                    if (hadPreviousFile && previousFileData != null && previousFileName != null)
+                    {
+                        this.binaryServices.AudioFileStorage.StoreInterviewBinaryData(id, previousFileName, previousFileData,
+                            ContentTypeHelper.GetAudioContentType(previousFileName));
+                    }
+                }
+
+                if (!answerSaved)
+                    webInterviewNotificationService.MarkAnswerAsNotSaved(id, questionIdentity, e);
                 throw;
+            }
+            finally
+            {
+                uploadLock.Dispose();
             }
             return this.Json("ok");
         }
@@ -114,31 +172,109 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             string filename = null;
+            string oldFileName = null;
+            AnswerPictureQuestionCommand command = null;
+            var answerSaved = false;
+            byte[] oldFileData = null;
+            var sameLogicalFileName = false;
+            var fileWriteAttempted = false;
+            var commandExecutionStarted = false;
+            var uploadLock = InterviewFileOperationLocks.Get(interview.Id);
+            await uploadLock.WaitAsync();
 
             try
             {
-                await using var ms = new MemoryStream();
+                interview = this.statefulInterviewRepository.Get(id.FormatGuid());
+                oldFileName = interview.GetMultimediaQuestion(questionIdentity)?.GetAnswer()?.FileName;
 
+                await using var ms = new MemoryStream();
                 await file.CopyToAsync(ms);
+                this.binaryServices.ImageProcessingService.Validate(ms.ToArray());
 
                 var extension = Path.GetExtension(file.FileName);
                 filename = AnswerUtils.GetPictureFileName(question.VariableName, questionIdentity.RosterVector, extension);
                 var responsibleId = interview.CurrentResponsibleId;
 
-                this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
+                sameLogicalFileName = !string.IsNullOrEmpty(oldFileName) &&
+                    this.binaryServices.ImageFileStorage.IsEquivalentFileName(oldFileName, filename);
+                if (sameLogicalFileName)
+                {
+                    oldFileData = await this.binaryServices.ImageFileStorage.GetInterviewBinaryDataAsync(interview.Id, oldFileName);
+                }
 
-                this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
-                    responsibleId, questionIdentity.Id, questionIdentity.RosterVector, filename));
+                fileWriteAttempted = true;
+                this.binaryServices.ImageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
+                command = new AnswerPictureQuestionCommand(interview.Id,
+                    responsibleId, questionIdentity.Id, questionIdentity.RosterVector, filename);
+                commandExecutionStarted = true;
+                this.commandService.Execute(command);
+                answerSaved = true;
+
+                await this.TryCleanupReplacedPictureFile(interview.Id, oldFileName, filename);
             }
             catch (Exception e)
             {
-                if (filename != null)
-                    await this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
+                var savedAnswer = commandExecutionStarted
+                    ? this.statefulInterviewRepository.Get(id.FormatGuid())?.GetMultimediaQuestion(questionIdentity)?.GetAnswer()
+                    : null;
 
-                webInterviewNotificationService.MarkAnswerAsNotSaved(id, questionIdentity, e);
+                answerSaved = savedAnswer != null
+                    && string.Equals(savedAnswer.FileName, filename, StringComparison.Ordinal)
+                    && command != null
+                    && savedAnswer.AnswerTimeUtc == command.OriginDate.UtcDateTime;
+
+                if (answerSaved)
+                {
+                    await this.TryCleanupReplacedPictureFile(interview.Id, oldFileName, filename);
+                }
+                else if (filename != null)
+                {
+                    if (sameLogicalFileName)
+                    {
+                        if (oldFileData != null)
+                        {
+                            await this.binaryServices.ImageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
+                            this.binaryServices.ImageFileStorage.StoreInterviewBinaryData(interview.Id, oldFileName, oldFileData,
+                                ContentTypeHelper.GetImageContentType(oldFileName));
+                        }
+                        else if (fileWriteAttempted)
+                        {
+                            await this.binaryServices.ImageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
+                        }
+                    }
+                    else
+                    {
+                        await this.binaryServices.ImageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
+                    }
+                }
+
+                if (!answerSaved)
+                    webInterviewNotificationService.MarkAnswerAsNotSaved(id, questionIdentity, e);
                 throw;
             }
+            finally
+            {
+                uploadLock.Dispose();
+            }
             return this.Json("ok");
+        }
+
+        private async Task TryCleanupReplacedPictureFile(Guid interviewId, string oldFileName, string fileName)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(oldFileName) &&
+                    !string.Equals(oldFileName, fileName, StringComparison.Ordinal) &&
+                    !this.binaryServices.ImageFileStorage.IsEquivalentFileName(oldFileName, fileName))
+                {
+                    await this.binaryServices.ImageFileStorage.RemoveInterviewBinaryData(interviewId, oldFileName);
+                }
+            }
+            catch (Exception cleanupException)
+            {
+                this.logger.LogError(cleanupException,
+                    "Failed to clean up replaced picture files for interview {InterviewId}", interviewId);
+            }
         }
     }
 }

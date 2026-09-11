@@ -5,6 +5,7 @@ using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
@@ -18,6 +19,8 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Services;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.Tests.Web.Headquarters.Controllers
 {
@@ -45,14 +48,18 @@ namespace WB.Tests.Web.Headquarters.Controllers
             var commandService = new Mock<ICommandService>();
             var imageStorage = new Mock<IImageFileStorage>();
             var notificationService = new Mock<IWebInterviewNotificationService>();
+            var binaryServices = new Mock<IWebInterviewBinaryServices>();
+            binaryServices.Setup(x => x.ImageFileStorage).Returns(imageStorage.Object);
+            binaryServices.Setup(x => x.AudioFileStorage).Returns(Mock.Of<IAudioFileStorage>());
+            binaryServices.Setup(x => x.AudioProcessingService).Returns(Mock.Of<IAudioProcessingService>());
+            binaryServices.Setup(x => x.ImageProcessingService).Returns(Mock.Of<IImageProcessingService>());
 
             var controller = new WebInterviewBinaryController(
                 interviewRepository.Object,
                 commandService.Object,
                 notificationService.Object,
-                Mock.Of<IAudioFileStorage>(),
-                Mock.Of<IAudioProcessingService>(),
-                imageStorage.Object);
+                binaryServices.Object,
+                NullLogger<WebInterviewBinaryController>.Instance);
 
             var file = CreateFormFile(uploadedBytes, "photo.heic", "image/heic");
 

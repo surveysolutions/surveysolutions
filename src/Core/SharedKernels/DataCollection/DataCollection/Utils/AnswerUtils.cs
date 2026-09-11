@@ -135,6 +135,6 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                 ?.ToCategoricalOption();
 
         public static string GetPictureFileName(string variableName, RosterVector rosterVector, string extension = ".jpg") 
-            => $"{variableName}__{rosterVector}{extension}";
+            => $"{variableName}__{rosterVector}{extension.ToLowerInvariant()}";
     }
 }
