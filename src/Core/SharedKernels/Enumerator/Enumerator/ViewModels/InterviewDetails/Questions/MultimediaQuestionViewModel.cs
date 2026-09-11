@@ -325,6 +325,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 await this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
             }
+
+            if (!string.IsNullOrEmpty(oldFileName))
+            {
+                this.Answer = await this.imageFileStorage.GetInterviewBinaryDataAsync(this.interviewId, oldFileName);
+                this.AnswerFileName = oldFileName;
+            }
+            else
+            {
+                this.Answer = null;
+                this.AnswerFileName = null;
+            }
         }
 
         private async Task RemoveOldPictureAsync(string oldFileName, string pictureFileName)
