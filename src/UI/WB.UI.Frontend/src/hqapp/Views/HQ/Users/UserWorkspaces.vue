@@ -37,13 +37,8 @@
                     @click="save"
                     v-bind:disabled="userInfo.isObserving || userInfo.isRestricted || inProgress">{{ $t('Pages.Update')
                     }}</button>
-<<<<<<< HEAD
                 <span class="text-success marl" v-if="updated">{{ $t('Workspaces.WorkspacesUpdated') }}</span>
                 <span class="text-danger marl" v-if="errorMessage">{{ errorMessage }}</span>
-=======
-                <span class="text-success marl"
-                    v-if="updated">{{ $t('Workspaces.WorkspacesUpdated') }}</span>
->>>>>>> origin/master
             </div>
         </div>
 
