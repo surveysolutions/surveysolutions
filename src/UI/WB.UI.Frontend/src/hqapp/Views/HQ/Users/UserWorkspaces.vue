@@ -37,8 +37,8 @@
                     @click="save"
                     v-bind:disabled="userInfo.isObserving || userInfo.isRestricted || inProgress">{{ $t('Pages.Update')
                     }}</button>
-                <span class="text-success marl"
-                    v-if="updated">{{ $t('Workspaces.WorkspacesUpdated') }}</span>
+                <span class="text-success marl" v-if="updated">{{ $t('Workspaces.WorkspacesUpdated') }}</span>
+                <span class="text-danger marl" v-if="errorMessage">{{ errorMessage }}</span>
             </div>
         </div>
 
@@ -46,7 +46,6 @@
 </template>
 
 <script>
-import AssignmentsVue from '../../Interviewer/Assignments.vue'
 export default {
     data() {
         return {
@@ -54,29 +53,11 @@ export default {
             userWorkspaces: [],
             inProgress: false,
             updated: false,
+            errorMessage: null,
         }
     },
     mounted() {
-        this.$hq.Workspaces.List(null, true).then((data) => {
-            this.allWorkspaces = data.Workspaces.map(w => {
-                return {
-                    ...w,
-                    Assigned: false,
-                }
-            })
-
-            this.$hq.Workspaces.List(this.userInfo.userId, true).then((data) => {
-                this.userWorkspaces = data.Workspaces
-                this.allWorkspaces.forEach(w => {
-                    if (this.userWorkspaces.findIndex(uw => uw.Name === w.Name) >= 0) {
-                        w.Assigned = true
-                    }
-                    else {
-                        w.Assigned = false
-                    }
-                })
-            })
-        })
+        this.loadWorkspaces()
     },
     computed: {
         currentTab() {
@@ -90,8 +71,25 @@ export default {
         },
     },
     methods: {
+        async loadWorkspaces() {
+            const allData = await this.$hq.Workspaces.List(null, true)
+            this.allWorkspaces = allData.Workspaces.map(w => {
+                return {
+                    ...w,
+                    Assigned: false,
+                }
+            })
+
+            const userData = await this.$hq.Workspaces.List(this.userInfo.userId, true)
+            this.userWorkspaces = userData.Workspaces
+            this.allWorkspaces.forEach(w => {
+                w.Assigned = this.userWorkspaces.findIndex(uw => uw.Name === w.Name) >= 0
+            })
+        },
         async save() {
             this.inProgress = true
+            this.updated = false
+            this.errorMessage = null
             try {
                 const response = await this.$hq.Workspaces.Assign([this.userInfo.userId],
                     this.allWorkspaces.filter(w => w.Assigned === true)
@@ -100,12 +98,24 @@ export default {
                 if (response.status === 204) {
                     this.updated = true
                 }
-            }
-            finally {
+            } catch (error) {
+                const errors = error?.response?.data?.errors
+                if (errors) {
+                    const messages = []
+                    Object.values(errors).forEach(fieldErrors => {
+                        if (Array.isArray(fieldErrors)) {
+                            messages.push(...fieldErrors)
+                        }
+                    })
+                    this.errorMessage = messages.join('; ')
+                } else {
+                    this.errorMessage = error?.response?.data?.title || error?.message
+                }
+                await this.loadWorkspaces()
+            } finally {
                 this.inProgress = false
             }
         },
     },
 }
 </script>
->
