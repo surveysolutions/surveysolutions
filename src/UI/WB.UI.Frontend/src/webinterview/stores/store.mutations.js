@@ -55,6 +55,9 @@ export default {
     SET_BREADCRUMPS(state, crumbs) {
         state['breadcrumbs'] = crumbs
     },
+    CLEAR_BREADCRUMBS(state) {
+        state.breadcrumbs = { breadcrumbs: [] }
+    },
     SET_LANGUAGE_INFO(state, languageInfo) {
         if (languageInfo == null) return
 
