@@ -12,18 +12,26 @@ namespace Main.Core.Entities.SubEntities
         public double? Altitude { get; set; }
         public DateTimeOffset Timestamp { get; set; }
 
+        /// <summary>Name of the location provider that produced this fix (e.g. "gps", "network", "fused").</summary>
+        public string? Provider { get; set; }
+
+        /// <summary>True when the fix was produced by a mock/injected location provider rather than the device hardware.</summary>
+        public bool IsFromMockProvider { get; set; }
+
         public GeoPosition()
         {
         }
 
         public GeoPosition(double latitude, double longitude, double? accuracy, double? altitude,
-            DateTimeOffset timestamp)
+            DateTimeOffset timestamp, string? provider = null, bool isFromMockProvider = false)
         {
             this.Latitude = latitude;
             this.Longitude = longitude;
             this.Accuracy = accuracy;
             this.Timestamp = timestamp;
             this.Altitude = altitude;
+            this.Provider = provider;
+            this.IsFromMockProvider = isFromMockProvider;
         }
 
         public override string ToString()
@@ -66,7 +74,9 @@ namespace Main.Core.Entities.SubEntities
         {
             if (other == null)
                 return false;
-            
+
+            // Equality intentionally ignores Provider and IsFromMockProvider: they are capture metadata,
+            // not part of the geographic value identity.
             return this.Latitude.Equals(other.Latitude) &&
                 this.Longitude.Equals(other.Longitude) &&
                 this.Accuracy.Equals(other.Accuracy) &&
@@ -101,7 +111,7 @@ namespace Main.Core.Entities.SubEntities
 
         public GeoPosition Clone()
         {
-            return new GeoPosition(Latitude, Longitude, Accuracy, Altitude, Timestamp);
+            return new GeoPosition(Latitude, Longitude, Accuracy, Altitude, Timestamp, Provider, IsFromMockProvider);
         }
     }
 }
