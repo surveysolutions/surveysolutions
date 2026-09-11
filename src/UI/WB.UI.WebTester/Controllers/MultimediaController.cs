@@ -203,8 +203,9 @@ namespace WB.UI.WebTester.Controllers
                 this.imageProcessingService.Validate(fileContent);
 
                 var extension = Path.GetExtension(file.FileName);
-                fileName = GetPictureFileName(question.VariableName, questionIdentity.RosterVector, extension);
-                previousFileByNewName = this.mediaStorage.Get(fileName, interview.Id);
+                var candidateFileName = GetPictureFileName(question.VariableName, questionIdentity.RosterVector, extension);
+                previousFileByNewName = this.mediaStorage.Get(candidateFileName, interview.Id);
+                fileName = candidateFileName;
 
                 var responsibleId = interview.CurrentResponsibleId;
 
