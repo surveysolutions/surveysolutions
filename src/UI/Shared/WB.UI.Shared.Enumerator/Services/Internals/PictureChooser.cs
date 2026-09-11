@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using Android.Media;
 using MvvmCross.Base;
 using Plugin.Media;
@@ -47,7 +48,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 throw new MissingPermissionsException(e.Message, e);
             }
 
-            if (photo == null)
+            if (photo == null || string.IsNullOrEmpty(photo.FullPath) || !File.Exists(photo.FullPath))
                 return null;
             
             //process image
