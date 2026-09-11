@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 .ReturnsAsync(WB.Core.SharedKernels.Enumerator.Properties.UIResources.Multimedia_TakePhoto);
 
             var viewModel = new MultimediaQuestionViewModel(
-                Mock.Of<IPrincipal>(),
+                Create.Service.Principal(Guid.NewGuid()),
                 Mock.Of<IStatefulInterviewRepository>(),
                 Mock.Of<IImageFileStorage>(),
                 Create.Service.LiteEventRegistry(),
