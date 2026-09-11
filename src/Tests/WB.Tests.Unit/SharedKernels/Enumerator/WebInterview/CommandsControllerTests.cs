@@ -88,6 +88,34 @@ public class CommandsControllerTests
     }
 
     [Test]
+    public async Task when_loading_answer_metadata_fails_should_not_remove_the_answer()
+    {
+        var interviewId = Guid.NewGuid();
+        var questionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
+        var interviewRepository = new Mock<IStatefulInterviewRepository>();
+        interviewRepository.Setup(x => x.Get(It.IsAny<string>()))
+            .Throws(new InvalidOperationException("Metadata load failed"));
+
+        var commandService = new Mock<ICommandService>();
+        var imageFileStorage = new Mock<IImageFileStorage>();
+        var notificationService = new Mock<IWebInterviewNotificationService>();
+
+        var controller = new TestCommandsController(
+            commandService.Object,
+            imageFileStorage.Object,
+            Mock.Of<IAudioFileStorage>(),
+            Mock.Of<IQuestionnaireStorage>(),
+            interviewRepository.Object,
+            notificationService.Object);
+
+        await controller.RemoveAnswer(interviewId, new CommandsController.RemoveAnswerRequest { Identity = questionIdentity.ToString() });
+
+        commandService.Verify(x => x.Execute(It.IsAny<ICommand>(), It.IsAny<string>()), Times.Never);
+        imageFileStorage.Verify(x => x.RemoveInterviewBinaryData(It.IsAny<Guid>(), It.IsAny<string>()), Times.Never);
+        notificationService.Verify(x => x.MarkAnswerAsNotSaved(interviewId, questionIdentity, It.IsAny<Exception>()), Times.Once);
+    }
+
+    [Test]
     public async Task when_removing_picture_answer_and_post_commit_command_failure_occurs_should_remove_the_stored_file()
     {
         var interviewId = Guid.NewGuid();

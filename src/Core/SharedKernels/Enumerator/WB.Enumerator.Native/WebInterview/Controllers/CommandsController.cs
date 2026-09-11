@@ -285,6 +285,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 {
                     Trace.TraceError("Failed to clean up removed answer binary for interview {0}: {1}",
                         interviewId, e);
+                    webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, identity, e);
+                    return Ok();
                 }
 
                 var command = new RemoveAnswerCommand(interviewId, GetCommandResponsibleId(interviewId), identity);
