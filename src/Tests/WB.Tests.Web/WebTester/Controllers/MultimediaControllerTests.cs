@@ -172,9 +172,82 @@ public class MultimediaControllerTests
         var exception = Assert.ThrowsAsync<InvalidOperationException>(async () => await controller.Image(interviewIdString, questionIdentity.ToString(), formFile));
         Assert.That(exception, Is.Not.Null);
 
-        mediaStorage.Verify(x => x.Store(It.Is<MultimediaFile>(file => file.Filename == newFileName && file.MimeType == "image/png"), newFileName, interviewId), Times.Once);
+        mediaStorage.Verify(x => x.Store(It.Is<MultimediaFile>(file =>
+            file.Filename == newFileName
+            && file.MimeType == "image/png"
+            && file.Data.Length == bytes.Length
+            && file.Data[0] == bytes[0]), newFileName, interviewId), Times.Once);
         mediaStorage.Verify(x => x.Remove(oldFileName, interviewId), Times.Once);
         mediaStorage.Verify(x => x.Remove(newFileName, interviewId), Times.Never);
         webInterviewNotificationService.Verify(x => x.MarkAnswerAsNotSaved(interviewId, questionIdentity, It.IsAny<Exception>()), Times.Never);
+    }
+
+    [Test]
+    public void when_uploading_picture_and_command_is_not_committed_should_restore_previous_file_by_new_name_and_mark_unsaved()
+    {
+        var interviewId = Guid.NewGuid();
+        var interviewIdString = interviewId.FormatGuid();
+        var questionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
+        var oldFileName = "photo__.jpg";
+        var newFileName = "photo__.png";
+        var previousFileByNewName = new MultimediaFile(newFileName, new byte[] { 7, 8, 9 }, null, "image/png");
+
+        var question = new InterviewTreeQuestion(
+            questionIdentity,
+            null,
+            null,
+            "photo",
+            QuestionType.Multimedia,
+            null,
+            null,
+            null,
+            false,
+            false,
+            false);
+
+        var interview = new Mock<IStatefulInterview>();
+        interview.SetupGet(x => x.Id).Returns(interviewId);
+        interview.Setup(x => x.AcceptsInterviewerAnswers()).Returns(true);
+        interview.Setup(x => x.GetQuestion(questionIdentity)).Returns(question);
+        interview.Setup(x => x.GetMultimediaQuestion(questionIdentity))
+            .Returns(new InterviewTreeMultimediaQuestion(oldFileName, DateTime.UtcNow.AddMinutes(-1)));
+
+        var statefulInterviewRepository = new Mock<IStatefulInterviewRepository>();
+        statefulInterviewRepository.Setup(x => x.Get(interviewIdString)).Returns(interview.Object);
+
+        var mediaStorage = new Mock<ICacheStorage<MultimediaFile, string>>();
+        mediaStorage.Setup(x => x.Get(newFileName, interviewId)).Returns(previousFileByNewName);
+
+        var commandService = new Mock<ICommandService>();
+        commandService.Setup(x => x.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
+            .Throws(new InvalidOperationException("boom"));
+
+        var webInterviewNotificationService = new Mock<IWebInterviewNotificationService>();
+        var controller = new MultimediaController(
+            commandService.Object,
+            statefulInterviewRepository.Object,
+            webInterviewNotificationService.Object,
+            mediaStorage.Object,
+            Mock.Of<IAudioProcessingService>(),
+            Mock.Of<IImageProcessingService>());
+
+        var bytes = new byte[] { 1, 2, 3 };
+        var formFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "file", "newphoto.png")
+        {
+            Headers = new HeaderDictionary(),
+            ContentType = "image/png"
+        };
+
+        var exception = Assert.ThrowsAsync<InvalidOperationException>(async () => await controller.Image(interviewIdString, questionIdentity.ToString(), formFile));
+        Assert.That(exception, Is.Not.Null);
+
+        mediaStorage.Verify(x => x.Store(It.Is<MultimediaFile>(file =>
+            file.Filename == newFileName
+            && file.MimeType == "image/png"
+            && file.Data.Length == bytes.Length
+            && file.Data[0] == bytes[0]), newFileName, interviewId), Times.Once);
+        mediaStorage.Verify(x => x.Store(previousFileByNewName, newFileName, interviewId), Times.Once);
+        mediaStorage.Verify(x => x.Remove(newFileName, interviewId), Times.Never);
+        webInterviewNotificationService.Verify(x => x.MarkAnswerAsNotSaved(interviewId, questionIdentity, It.IsAny<Exception>()), Times.Once);
     }
 }

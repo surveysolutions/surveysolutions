@@ -177,6 +177,7 @@ namespace WB.UI.WebTester.Controllers
             var questionIdentity = Identity.Parse(questionId);
             var question = interview.GetQuestion(questionIdentity);
             string? oldFileName = null;
+            MultimediaFile? previousFileByNewName = null;
             AnswerPictureQuestionCommand? command = null;
 
             if (!interview.AcceptsInterviewerAnswers() && question.IsMultimedia)
@@ -203,6 +204,7 @@ namespace WB.UI.WebTester.Controllers
 
                 var extension = Path.GetExtension(file.FileName);
                 fileName = GetPictureFileName(question.VariableName, questionIdentity.RosterVector, extension);
+                previousFileByNewName = this.mediaStorage.Get(fileName, interview.Id);
 
                 var responsibleId = interview.CurrentResponsibleId;
 
@@ -250,7 +252,14 @@ namespace WB.UI.WebTester.Controllers
                     }
                 }
                 else if (fileName != null)
+                {
+                    if (previousFileByNewName != null)
+                        this.mediaStorage.Store(previousFileByNewName, fileName, interview.Id);
+                    else
+                        this.mediaStorage.Remove(fileName, interview.Id);
+
                     webInterviewNotificationService.MarkAnswerAsNotSaved(Guid.Parse(id), questionIdentity, e);
+                }
                 throw;
             }
             finally
