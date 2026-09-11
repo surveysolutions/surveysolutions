@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,8 +29,11 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
 
         public sealed class InterviewFileOperationLock : IDisposable
         {
+            private static readonly string lockDirectoryPath =
+                Path.Combine(Path.GetTempPath(), "WB.InterviewFileOperationLocks");
             private readonly Guid interviewId;
             private readonly LockEntry entry;
+            private FileStream crossProcessLockStream;
             private bool released;
 
             internal InterviewFileOperationLock(Guid interviewId, LockEntry entry)
@@ -38,7 +42,19 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
                 this.entry = entry;
             }
 
-            public Task WaitAsync() => entry.Semaphore.WaitAsync();
+            public async Task WaitAsync()
+            {
+                await this.entry.Semaphore.WaitAsync().ConfigureAwait(false);
+                try
+                {
+                    this.crossProcessLockStream = await AcquireCrossProcessLockStream().ConfigureAwait(false);
+                }
+                catch
+                {
+                    this.entry.Semaphore.Release();
+                    throw;
+                }
+            }
 
             public void Release()
             {
@@ -46,20 +62,47 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
                     return;
 
                 released = true;
-                entry.Semaphore.Release();
+                this.crossProcessLockStream?.Dispose();
+                this.crossProcessLockStream = null;
+
+                this.entry.Semaphore.Release();
             }
 
             public void Dispose()
             {
-                Release();
-                lock (sync)
+                try
                 {
-                    entry.References--;
-                    if (entry.References == 0 &&
-                        locks.TryGetValue(interviewId, out var currentEntry) &&
-                        ReferenceEquals(currentEntry, entry))
+                    Release();
+                }
+                finally
+                {
+                    lock (sync)
                     {
-                        locks.TryRemove(interviewId, out _);
+                        entry.References--;
+                        if (entry.References == 0 &&
+                            locks.TryGetValue(interviewId, out var currentEntry) &&
+                            ReferenceEquals(currentEntry, entry))
+                        {
+                            locks.TryRemove(interviewId, out _);
+                        }
+                    }
+                }
+            }
+
+            private async Task<FileStream> AcquireCrossProcessLockStream()
+            {
+                Directory.CreateDirectory(lockDirectoryPath);
+
+                var lockPath = Path.Combine(lockDirectoryPath, $"{this.interviewId:N}.lck");
+                while (true)
+                {
+                    try
+                    {
+                        return new FileStream(lockPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                    }
+                    catch (IOException)
+                    {
+                        await Task.Delay(25).ConfigureAwait(false);
                     }
                 }
             }
