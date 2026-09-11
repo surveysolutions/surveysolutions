@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+
+
+
+
+  <data name="ApprovedByHQ" xml:space="preserve"><value>อนุมัติโดยสำนักงานใหญ่</value></data>
+  <data name="ApprovedBySupervisor" xml:space="preserve"><value>อนุมัติโดยหัวหน้างาน</value></data>
+
+
+
+  <data name="Completed" xml:space="preserve"><value>เสร็จสมบูรณ์</value></data>
+
+
+
+
+
+  <data name="Interviewers" xml:space="preserve"><value>ผู้สัมภาษณ์</value></data>
+
+
+
+
+
+  <data name="StatusDuration" xml:space="preserve"><value>ระยะเวลาสถานะ</value></data>
+  <data name="Supervisor" xml:space="preserve"><value>หัวหน้างาน</value></data>
+  <data name="Version" xml:space="preserve"><value>เวอร์ชัน</value></data>
+    <data name="CumulativeInterviewChart" xml:space="preserve">
+        <value>แผนภูมิการสัมภาษณ์สะสม</value>
+    </data>
+    <data name="CumulativeInterviewChartSubtitle" xml:space="preserve">
+        <value>แผนภูมิการสัมภาษณ์สะสมแสดงวิวัฒนาการของจำนวนการสัมภาษณ์ในแต่ละสถานะในช่วงเวลาหนึ่ง</value>
+    </data>
+    <data name="InterviewChart" xml:space="preserve">
+        <value>แผนภูมิการสัมภาษณ์</value>
+    </data>
+    <data name="ImportUsersTemplate" xml:space="preserve">
+        <value>นำเข้าเทมเพลตผู้ใช้</value>
+    </data>
+    <data name="DatesRange" xml:space="preserve">
+        <value>ช่วงวันที่</value>
+    </data>
+    <data name="SupervisorsAndSurveys" xml:space="preserve">
+        <value>หัวหน้างานและการสำรวจ</value>
+    </data>
+    <data name="SurveysAndStatuses" xml:space="preserve">
+        <value>แบบสำรวจและสถานะ</value>
+    </data>
+    <data name="TeamsAndStatuses" xml:space="preserve">
+        <value>ทีมและสถานะ</value>
+    </data>
+    <data name="TeamsAndStatuses_SupervisorSubtitle" xml:space="preserve">
+        <value>รายงานทีมและสถานะจะแสดงจำนวนการสัมภาษณ์ในแต่ละสถานะตามผู้สัมภาษณ์</value>
+    </data>
+    <data name="TeamsAndStatuses_HeadquartersSubtitle" xml:space="preserve">
+        <value>รายงานทีมและสถานะจะแสดงจำนวนการสัมภาษณ์ในแต่ละสถานะแยกตามทีม</value>
+    </data>
+    <data name="SurveyName" xml:space="preserve">
+        <value>ชื่อแบบสอบถาม</value>
+    </data>
+    <data name="TemplateVersion" xml:space="preserve">
+        <value>เวอร์ชันแบบสอบถาม</value>
+    </data>
+    <data name="SupervisorAssigned" xml:space="preserve">
+        <value>หัวหน้างานที่ได้รับมอบหมาย</value>
+    </data>
+    <data name="InterviewerAssigned" xml:space="preserve">
+        <value>ผู้สัมภาษณ์ที่ได้รับมอบหมาย</value>
+    </data>
+    <data name="RejectedBySupervisor" xml:space="preserve">
+        <value>ถูกปฏิเสธโดยหัวหน้างาน</value>
+    </data>
+    <data name="Restarted" xml:space="preserve">
+        <value>รีสตาร์ทแล้ว</value>
+    </data>
+    <data name="RejectedByHQ" xml:space="preserve">
+        <value>ถูกปฏิเสธโดย HQ</value>
+    </data>
+    <data name="CompletionDate" xml:space="preserve">
+        <value>วันที่เสร็จสมบูรณ์</value>
+    </data>
+    <data name="Questionnaire" xml:space="preserve">
+        <value>แบบสอบถาม</value>
+    </data>
+    <data name="Variables" xml:space="preserve">
+        <value>ตัวแปร</value>
+    </data>
+    <data name="Report_Surveys_and_Statuses" xml:space="preserve">
+        <value>แบบสำรวจและสถานะ</value>
+    </data>
+    <data name="Report_Teams_and_Statuses" xml:space="preserve">
+        <value>ทีมและสถานะ</value>
+    </data>
+    <data name="Report_Quantity_By_Interviewers" xml:space="preserve">
+        <value>ปริมาณโดยผู้สัมภาษณ์</value>
+    </data>
+    <data name="Report_Quantity_By_Supervisors" xml:space="preserve">
+        <value>ปริมาณโดยหัวหน้างาน</value>
+    </data>
+    <data name="Report_Speed_By_Interviewers" xml:space="preserve">
+        <value>ความเร็วโดยผู้สัมภาษณ์</value>
+    </data>
+    <data name="Report_Speed_Between_Statuses_By_Supervisors" xml:space="preserve">
+        <value>ความเร็วระหว่างสถานะโดยหัวหน้างาน</value>
+    </data>
+    <data name="Report_Speed_Between_Statuses_By_Interviewers" xml:space="preserve">
+        <value>ความเร็วระหว่างสถานะโดยผู้สัมภาษณ์</value>
+    </data>
+    <data name="Report_Speed_By_Supervisors" xml:space="preserve">
+        <value>ความเร็วโดยหัวหน้างาน</value>
+    </data>
+    <data name="Report_Supervisors_And_Statuses" xml:space="preserve">
+        <value>ผู้บังคับบัญชาและสถานะ</value>
+    </data>
+    <data name="Report_Devices_and_Interviewers" xml:space="preserve">
+        <value>อุปกรณ์และผู้สัมภาษณ์</value>
+    </data>
+    <data name="Report_Days_by_Interview_Status" xml:space="preserve">
+        <value>วันตามสถานะการสัมภาษณ์</value>
+    </data>
+    <data name="Report_Average_Interview_Duration" xml:space="preserve">
+        <value>ระยะเวลาการสัมภาษณ์โดยเฉลี่ย</value>
+    </data>
+    <data name="Report_Number_of_Completed_Interviews" xml:space="preserve">
+        <value>จำนวนการสัมภาษณ์ที่เสร็จสิ้น</value>
+    </data>
+    <data name="Report_Status_Duration" xml:space="preserve">
+        <value>ระยะเวลาสถานะ</value>
+    </data>
+    <data name="Report_Team_Members_and_Statuses" xml:space="preserve">
+        <value>สมาชิกในทีมและสถานะ</value>
+    </data>
+    <data name="Report_Average_case_assignment_duration" xml:space="preserve">
+        <value>ระยะเวลาการมอบหมายกรณีและปัญหาโดยเฉลี่ย</value>
+    </data>
+    <data name="Report_Average_HQ_processing_time" xml:space="preserve">
+        <value>เวลาประมวลผลเฉลี่ยของ HQ</value>
+    </data>
+    <data name="Report_Average_overall_case_processing_time" xml:space="preserve">
+        <value>เวลาประมวลผลเคสโดยรวมโดยเฉลี่ย</value>
+    </data>
+    <data name="Report_Average_supervisor_processing_time" xml:space="preserve">
+        <value>ระยะเวลาดำเนินการโดยเฉลี่ยของหัวหน้างาน</value>
+    </data>
+    <data name="Report_Number_of_interviews_approved_by_HQ" xml:space="preserve">
+        <value>จำนวนการสัมภาษณ์ที่ได้รับอนุมัติจากสำนักงานใหญ่</value>
+    </data>
+    <data name="Report_Number_of_interview_transactions_by_HQ" xml:space="preserve">
+        <value>จำนวนธุรกรรมการสัมภาษณ์ตามสำนักงานใหญ่</value>
+    </data>
+    <data name="Report_Number_of_interview_transactions_by_Supervisor" xml:space="preserve">
+        <value>จำนวนรายการสัมภาษณ์โดยหัวหน้างาน</value>
+    </data>
+    <data name="LastUpdatedDate" xml:space="preserve">
+        <value>อัปเดตเมื่อ</value>
+    </data>
+    <data name="Updated" xml:space="preserve">
+        <value>อัปเดต {0} แล้ว</value>
+    </data>
+    <data name="Updating" xml:space="preserve">
+        <value>อยู่ระหว่างการปรับปรุง</value>
+    </data>
+    <data name="UpdateNow" xml:space="preserve">
+        <value>อัปเดตตอนนี้</value>
+    </data>
+    <data name="Question" xml:space="preserve">
+        <value>คำถาม</value>
+    </data>
+    <data name="SelectQuestion" xml:space="preserve">
+        <value>เลือกคำถาม</value>
+    </data>
+    <data name="ConditionQuestion" xml:space="preserve">
+        <value>คำถามเกี่ยวกับเงื่อนไข</value>
+    </data>
+    <data name="TeamLeadsOnly" xml:space="preserve">
+        <value>โดยทีม</value>
+    </data>
+    <data name="WithInterviewers" xml:space="preserve">
+        <value>โดยสมาชิกในทีม</value>
+    </data>
+    <data name="PivotView" xml:space="preserve">
+        <value>ตารางเดือย</value>
+    </data>
+    <data name="QuestionText" xml:space="preserve">
+        <value>ข้อความคำถาม</value>
+    </data>
+    <data name="Average" xml:space="preserve">
+        <value>เฉลี่ย</value>
+    </data>
+    <data name="ByAnswerValue" xml:space="preserve">
+        <value>กรองตามค่าตัวเลข</value>
+    </data>
+    <data name="Count" xml:space="preserve">
+        <value>นับ</value>
+    </data>
+    <data name="Max" xml:space="preserve">
+        <value>สูงสุด</value>
+    </data>
+    <data name="Min" xml:space="preserve">
+        <value>นาที</value>
+    </data>
+    <data name="Percentile05" xml:space="preserve">
+        <value>เปอร์เซ็นต์ไทล์ 05</value>
+    </data>
+    <data name="Percentile50" xml:space="preserve">
+        <value>เปอร์เซ็นต์ไทล์ 50</value>
+    </data>
+    <data name="Percentile95" xml:space="preserve">
+        <value>เปอร์เซ็นต์ไทล์ 95</value>
+    </data>
+    <data name="SelectConditionQuestion" xml:space="preserve">
+        <value>เลือกคำถามตามเงื่อนไข</value>
+    </data>
+    <data name="Sum" xml:space="preserve">
+        <value>ผลรวม</value>
+    </data>
+    <data name="ViewOptions" xml:space="preserve">
+        <value>ดูตัวเลือก</value>
+    </data>
+    <data name="QuestionLabel" xml:space="preserve">
+        <value>ป้ายกำกับคำถาม</value>
+    </data>
+    <data name="Median" xml:space="preserve">
+        <value>ค่ามัธยฐาน</value>
+    </data>
+    <data name="HeatMapView" xml:space="preserve">
+        <value>แสดงการซ้อนทับแผนที่ความร้อน</value>
+    </data>
+    <data name="HeatRadius" xml:space="preserve">
+        <value>รัศมีความร้อน</value>
+    </data>
+    <data name="MapDataLoading" xml:space="preserve">
+        <value>กำลังโหลดข้อมูลแผนที่</value>
+    </data>
+    <data name="ClusterInfo" xml:space="preserve">
+        <value>บริเวณนี้ประกอบด้วย</value>
+    </data>
+    <data name="AssignReceivedConfirm" xml:space="preserve">
+        <value>ฉันเข้าใจว่าการสัมภาษณ์นี้ได้รับทางแท็บเล็ตแล้ว</value>
+    </data>
+    <data name="AssignReceivedWarning" xml:space="preserve">
+        <value>ผู้สัมภาษณ์ที่รับผิดชอบในปัจจุบันจะไม่ได้รับแจ้งเกี่ยวกับการมอบหมายใหม่จนกว่าจะมีการซิงโครไนซ์ครั้งถัดไป หากเขาเริ่มทำงานในการสัมภาษณ์แล้ว ข้อมูลทั้งหมดที่เขาป้อนก่อนการซิงโครไนซ์ครั้งถัดไปจะถูกยกเลิก!</value>
+    </data>
+    <data name="QuestionnaireCompatibilityIssues_UnknownAnswer" xml:space="preserve">
+        <value>มีปัญหาความเข้ากันได้ระหว่างเวอร์ชันของแบบสอบถาม คำตอบในแบบสอบถามเวอร์ชันก่อนหน้าที่ไม่มีอยู่ในแบบสอบถามเวอร์ชันล่าสุดอีกต่อไปจะถูกละเว้น</value>
+    </data>
+    <data name="ToAllQuestionnaires" xml:space="preserve">
+        <value>กลับไปที่แบบสอบถาม</value>
+    </data>
+    <data name="SaveAsImage" xml:space="preserve">
+        <value>บันทึกเป็นภาพ</value>
+    </data>
+    <data name="ThisWeek" xml:space="preserve">
+        <value>สัปดาห์นี้</value>
+    </data>
+    <data name="LastWeek" xml:space="preserve">
+        <value>สัปดาห์ที่แล้ว</value>
+    </data>
+    <data name="ThisMonth" xml:space="preserve">
+        <value>เดือนนี้</value>
+    </data>
+    <data name="LastMonth" xml:space="preserve">
+        <value>เดือนที่แล้ว</value>
+    </data>
+    <data name="PreviousWeek" xml:space="preserve">
+        <value>สัปดาห์ก่อน</value>
+    </data>
+    <data name="PreviousMonth" xml:space="preserve">
+        <value>เดือนที่แล้ว</value>
+    </data>
+    <data name="LastNDays" xml:space="preserve">
+        <value>{{days}} วันที่ผ่านมา</value>
+    </data>
+    <data name="QuickRanges" xml:space="preserve">
+        <value>ช่วงวันที่ด่วน</value>
+    </data>
+    <data name="RangeRelativeToData" xml:space="preserve">
+        <value>ช่วงที่สัมพันธ์กับข้อมูล</value>
+    </data>
+    <data name="AllData" xml:space="preserve">
+        <value>ข้อมูลทั้งหมด</value>
+    </data>
+</root>

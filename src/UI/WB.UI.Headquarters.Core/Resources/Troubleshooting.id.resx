@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Title" xml:space="preserve">
+        <value>Pemecahan masalah</value>
+    </data>
+    <data name="InterviewDataIsMissingDescription" xml:space="preserve">
+        <value>Tentukan kunci wawancara atau id wawancara yang akan dicari.</value>
+    </data>
+    <data name="InterviewDataIsMissingTitle" xml:space="preserve">
+        <value>Pewawancara mengklaim wawancara telah selesai dan disinkronkan, tapi saya tidak melihat data untuk wawancara itu di server</value>
+    </data>
+    <data name="MissingCensusInterviewsDescription" xml:space="preserve">
+        <value>Berikan nama login pewawancara, nama kuesioner, dan rentang tanggal</value>
+    </data>
+    <data name="MissingCensusInterviewsTitle" xml:space="preserve">
+        <value>Saya perlu mencari wawancara</value>
+    </data>
+    <data name="SupportSite" xml:space="preserve">
+        <value>Klik tautan masalah yang ingin Anda selesaikan. Untuk masalah yang tidak tercantum di bawah, kunjungi &lt;a href="{0}" target="_blank"&gt;situs dukungan&lt;/a&gt; Solusi Survei.</value>
+    </data>
+    <data name="MissingCensusInterviews_FiltersTitle" xml:space="preserve">
+        <value>Kondisi Penyaring</value>
+    </data>
+    <data name="MissingCensusInterviews_Filters_Dates" xml:space="preserve">
+        <value>Wawancara pencarian disinkronkan antara dua tanggal</value>
+    </data>
+    <data name="MissingCensusInterviews_Filters_DatesPlaceholder" xml:space="preserve">
+        <value>Pilih tanggal</value>
+    </data>
+    <data name="MissingCensusInterviews_Filters_Interviewer" xml:space="preserve">
+        <value>Pewawancara</value>
+    </data>
+    <data name="MissingCensusInterviews_Filters_InterviewerPlaceholder" xml:space="preserve">
+        <value>Pilih pewawancara</value>
+    </data>
+    <data name="MissingCensusInterviews_Filters_Questionnaire" xml:space="preserve">
+        <value>Daftar pertanyaan</value>
+    </data>
+    <data name="MissingCensusInterviews_Filters_QuestionnairePlaceholder" xml:space="preserve">
+        <value>Pilih kuesioner</value>
+    </data>
+    <data name="MissingCensusInterviews_Filters_Search" xml:space="preserve">
+        <value>Mencari</value>
+    </data>
+    <data name="MissingCensusInterviews_Instructions" xml:space="preserve">
+        <value>Untuk menemukan wawancara, harap berikan nama kuesioner.&lt;br/&gt;
+Pilih pewawancara dan jangka waktu untuk mempersempit hasil pencarian Anda</value>
+    </data>
+    <data name="MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format" xml:space="preserve">
+        <value>Wawancara {0} memenuhi kondisi filter</value>
+    </data>
+    <data name="MissingCensusInterviews_NothingFound_Message" xml:space="preserve">
+        <value>Tidak ada wawancara yang memenuhi kondisi filter</value>
+    </data>
+    <data name="MissingCensusInterviews_OneInterviewFound_Message" xml:space="preserve">
+        <value>Satu wawancara memenuhi kondisi filter</value>
+    </data>
+    <data name="MissingCensusInterviews_PageHeader" xml:space="preserve">
+        <value>Menemukan wawancara spesifik</value>
+    </data>
+    <data name="TableTitle_Enumerator" xml:space="preserve">
+        <value>Pencacah</value>
+    </data>
+    <data name="TableTitle_InterviewId" xml:space="preserve">
+        <value>Identitas wawancara</value>
+    </data>
+    <data name="TableTitle_LastUpdate" xml:space="preserve">
+        <value>Pembaruan terakhir</value>
+    </data>
+    <data name="TableTitle_Status" xml:space="preserve">
+        <value>Status</value>
+    </data>
+    <data name="NoData_Description" xml:space="preserve">
+        <value>Tentukan kunci wawancara (XX-XX-XX-XX) atau id wawancara yang akan dicari.</value>
+    </data>
+    <data name="NoData_Filters_InterviewKey" xml:space="preserve">
+        <value>Kunci wawancara atau id wawancara</value>
+    </data>
+    <data name="NoData_Filters_InterviewKeyPlaceholder" xml:space="preserve">
+        <value>Masukkan kunci wawancara atau id</value>
+    </data>
+    <data name="NoData_Title" xml:space="preserve">
+        <value>Saya tidak melihat data untuk wawancara tersinkronisasi di server</value>
+    </data>
+</root>

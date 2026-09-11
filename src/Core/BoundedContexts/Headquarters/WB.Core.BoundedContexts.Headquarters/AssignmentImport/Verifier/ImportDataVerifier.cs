@@ -195,10 +195,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             foreach (var batchOfPrivatePasswordProtectedWebAssignments in privatePasswordProtectedWebAssignments.Batch(1000))
             {
+                // NOTE: List<T> is used on purpose. For an array the C# 14+ compiler binds Contains
+                // to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an op_Implicit call
+                // into the expression tree that NHibernate cannot translate.
                 var expectedUniquePasswords = batchOfPrivatePasswordProtectedWebAssignments
                     .Select(x => x.Password.Value)
                     .Where(x => x != AssignmentConstants.PasswordSpecialValue)
-                    .ToArray();
+                    .ToList();
 
                 var passwordsByWebAssignmentsInDb = this.assignmentsRepository.Query(x => x
                     .Where(y => y.Quantity == 1 && 
@@ -238,6 +241,20 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             foreach (var error in this.AudioAuditScope_InvalidEntities(assignmentRow, questionnaire))
                 yield return error;
+
+            foreach (var error in this.TargetArea_TooLong(assignmentRow))
+                yield return error;
+        }
+
+        private IEnumerable<PanelImportVerificationError> TargetArea_TooLong(PreloadingAssignmentRow assignmentRow)
+        {
+            var targetArea = assignmentRow.TargetArea;
+            if (targetArea?.Value == null || targetArea.Value.Length <= AssignmentConstants.TargetAreaLengthLimit)
+                yield break;
+
+            yield return ToCellError("PL0065",
+                string.Format(messages.PL0065_TargetAreaTooLong, AssignmentConstants.TargetAreaLengthLimit),
+                assignmentRow, targetArea);
         }
 
         private IEnumerable<PanelImportVerificationError> AudioAuditScope_InvalidEntities(

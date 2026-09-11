@@ -50,7 +50,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
 
         public async Task ArchiveUsersAsync(Guid[] userIds)
         {
-            var usersToArhive = this.userRepository.Users.Where(user => userIds.Contains(user.Id)).ToList();
+            // NOTE: List<T> is used on purpose. For an array the C# 14+ compiler binds Contains
+            // to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an op_Implicit call
+            // into the expression tree that NHibernate cannot translate.
+            var ids = userIds.ToList();
+            var usersToArhive = this.userRepository.Users.Where(user => ids.Contains(user.Id)).ToList();
             foreach (HqUser userToArchive in usersToArhive)
             {
                 if (userToArchive.IsInRole(UserRoles.Interviewer))
@@ -66,7 +70,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
 
         public async Task UnarchiveUsersAsync(Guid[] userIds)
         {
-            var usersToUnarhive = this.userRepository.Users.Where(user => userIds.Contains(user.Id)).ToList();
+            // NOTE: see the comment in ArchiveUsersAsync about List<T> vs array in expression trees.
+            var ids = userIds.ToList();
+            var usersToUnarhive = this.userRepository.Users.Where(user => ids.Contains(user.Id)).ToList();
             foreach (var userToUnarchive in usersToUnarhive)
             {
                 await this.UnarchiveUserAsync(userToUnarchive);

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using FluentAssertions;
 using NUnit.Framework;
@@ -12,8 +11,6 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
     {
         private static readonly Regex PluralizationRegex = new Regex(@"(_plural|_\d+)$", RegexOptions.Compiled);
 
-        private static readonly List<string> fileNamesToExculde = new List<string>();
-
         [OneTimeSetUp]
         public void Context()
         {
@@ -21,7 +18,6 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
 
             translatedResourceFiles = GetAllLinkedResourceFiles(projects)
                 .Where(file => Path.GetFileNameWithoutExtension(file).Contains("."))
-                .Where(file => !fileNamesToExculde.Any(x => Path.GetFileName(file).Contains(x)))
                 .ToList();
 
             this.Because();
@@ -35,12 +31,12 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
 
         [Test]
         public void should_find_translated_resource_files() => translatedResourceFiles.Should().NotBeEmpty();
-        
+
         [Test]
-        public void should_find_no_inconsistencies ()
+        public void should_find_no_inconsistencies()
         {
             var translations = translatedResourceStringsNotCorrespondingToOriginal.ToList();
-            
+
             Assert.That(translations, Has.Count.EqualTo(0), string.Join("\r\n", translations));
         }
 

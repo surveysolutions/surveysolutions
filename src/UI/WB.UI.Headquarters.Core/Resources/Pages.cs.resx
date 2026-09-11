@@ -1652,7 +1652,7 @@
     <value>Vyberte garanta</value>
   </data>
   <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
-    <value>Garant (do jeho týmu budou přidáni tazatelé)</value>
+    <value>Garant</value>
   </data>
   <data name="UsersManage_TeamFilter" xml:space="preserve">
     <value>Tým</value>

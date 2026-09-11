@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AdvancedMode" xml:space="preserve">
+        <value>របៀបផ្ទុកទិន្នន័យកម្រិតខ្ពស់</value>
+    </data>
+    <data name="AdvancedModeDescription" xml:space="preserve">
+        <value>ដើម្បីផ្ទុកទិន្នន័យជាមុនទៅកាន់ផ្នែក និងអថេរច្រើនទៀត អ្នកអាចរៀបចំសំណុំឯកសារ .tab ដែលត្រូវនឹងរចនាសម្ព័ន្ធនៃកម្រងសំណួររបស់អ្នក ហើយដាក់ក្នុងប័ណ្ណសារ .zip ។ សូមប្រើបណ្ណសារគំរូខាងក្រោម។ អ្នកអាចដាក់តែឯកសារ និងជួរឈរទាំងនោះដែលអ្នកចង់បង្ហោះ។ ជួរឈរទាំងឡាយដែលទុកចោល ឬមានចំណងជើងដែលមិនត្រូវគ្នានឹងអថេរដែលមានស្រាប់នៅក្នុងកម្រងសំណួរនឹងត្រូវមិនអើពើ។</value>
+    </data>
+    <data name="All" xml:space="preserve">
+        <value>ទាំងអស់។</value>
+    </data>
+    <data name="BrowseTeams" xml:space="preserve">
+        <value>រុករកក្រុម</value>
+    </data>
+    <data name="Code" xml:space="preserve">
+        <value>កូដ</value>
+    </data>
+    <data name="CreateUsers" xml:space="preserve">
+        <value>បង្កើតអ្នកប្រើប្រាស់</value>
+    </data>
+    <data name="CreatingUsers" xml:space="preserve">
+        <value>ការបង្កើតអ្នកប្រើប្រាស់</value>
+    </data>
+    <data name="DataIsValid" xml:space="preserve">
+        <value>ទិន្នន័យមានសុពលភាព</value>
+    </data>
+    <data name="Delete" xml:space="preserve">
+        <value>លុប</value>
+    </data>
+    <data name="Details" xml:space="preserve">
+        <value>ព័ត៌មានលម្អិត</value>
+    </data>
+    <data name="DownloadTemplateArchive" xml:space="preserve">
+        <value>ទាញយកគំរូ .zip សម្រាប់កម្រងសំណួរនេះ។</value>
+    </data>
+    <data name="FileName" xml:space="preserve">
+        <value>ឈ្មោះឯកសារ</value>
+    </data>
+    <data name="FileSize" xml:space="preserve">
+        <value>ទំហំឯកសារ</value>
+    </data>
+    <data name="Finished" xml:space="preserve">
+        <value>ចប់</value>
+    </data>
+    <data name="FinishedWithError" xml:space="preserve">
+        <value>បាន​បញ្ចប់​ដោយ​មាន​កំហុស</value>
+    </data>
+    <data name="FinishedWithErrorMessage" xml:space="preserve">
+        <value>បាន​បញ្ចប់​ដោយ​មាន​កំហុស។ ហេតុផល៖</value>
+    </data>
+    <data name="InVerificationProcess" xml:space="preserve">
+        <value>កំពុងស្ថិតក្នុងដំណើរការផ្ទៀងផ្ទាត់ ផ្ទៀងផ្ទាត់</value>
+    </data>
+    <data name="IsInvalid" xml:space="preserve">
+        <value>មិន​ត្រឹមត្រូវ សូមជួសជុលកំហុសខាងក្រោម ហើយបង្ហោះម្តងទៀត។</value>
+    </data>
+    <data name="LastUpdateDate" xml:space="preserve">
+        <value>បានធ្វើបច្ចុប្បន្នភាពកាលបរិច្ឆេទចុងក្រោយ</value>
+    </data>
+    <data name="Message" xml:space="preserve">
+        <value>សារ</value>
+    </data>
+    <data name="OutOf" xml:space="preserve">
+        <value>ចេញពី</value>
+    </data>
+    <data name="PleaseWait" xml:space="preserve">
+        <value>សូមរង់ចាំឯកសារ</value>
+    </data>
+    <data name="ReadyForUserCreation" xml:space="preserve">
+        <value>រួចរាល់សម្រាប់ការបង្កើតអ្នកប្រើប្រាស់</value>
+    </data>
+    <data name="ReadyForValidation" xml:space="preserve">
+        <value>រួចរាល់សម្រាប់ការបញ្ជាក់</value>
+    </data>
+    <data name="RecordsCount" xml:space="preserve">
+        <value>ចំនួនកំណត់ត្រា</value>
+    </data>
+    <data name="Status" xml:space="preserve">
+        <value>ស្ថានភាព</value>
+    </data>
+    <data name="Upload" xml:space="preserve">
+        <value>ផ្ទុកឡើង</value>
+    </data>
+    <data name="UploadDate" xml:space="preserve">
+        <value>កាលបរិច្ឆេទបង្ហោះ</value>
+    </data>
+    <data name="Uploaded" xml:space="preserve">
+        <value>បង្ហោះ</value>
+    </data>
+    <data name="UploadNewFile" xml:space="preserve">
+        <value>បង្ហោះឯកសារថ្មី។</value>
+    </data>
+    <data name="UploadSample" xml:space="preserve">
+        <value>បង្ហោះគំរូ</value>
+    </data>
+    <data name="UploadSampleDescription" xml:space="preserve">
+        <value>ដើម្បីបង្ហោះគំរូដែលត្រូវសម្ភាសន៍ សូមរៀបចំឯកសារមួយ (ទំហំរហូតដល់ 300MB) ដែលមានតម្លៃបំបែកផ្ទាំង (.tab file) ដែលត្រូវគ្នាទៅនឹងគំរូខាងក្រោម ដែលមានតម្លៃនៃអថេរទាំងនោះពីកម្រងសំណួររបស់អ្នកដែលត្រូវបានសម្គាល់ថាជាការកំណត់អត្តសញ្ញាណ។</value>
+    </data>
+    <data name="UploadUsers" xml:space="preserve">
+        <value>បណ្តុំអ្នកប្រើប្រាស់ផ្ទុកឡើង</value>
+    </data>
+    <data name="UploadUsersDescription" xml:space="preserve">
+        <value>រៀបចំឯកសារដែលមានតម្លៃបំបែកផ្ទាំង (.tab file) ដែលត្រូវគ្នានឹងគំរូខាងក្រោម។ ជួរឈរដែលសម្គាល់ដោយ (*) ត្រូវបានទាមទារ។ មានតែ 'អ្នកគ្រប់គ្រង' ឬ 'អ្នកសម្ភាសន៍' ត្រូវបានអនុញ្ញាតនៅក្នុងជួរ 'តួនាទី' ។</value>
+    </data>
+    <data name="UserBatchUploads" xml:space="preserve">
+        <value>បណ្តុំអ្នកប្រើប្រាស់ផ្ទុកឡើង</value>
+    </data>
+    <data name="UsersHaveBeenCreated" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់ត្រូវបានបង្កើត</value>
+    </data>
+    <data name="Validated" xml:space="preserve">
+        <value>មានសុពលភាព</value>
+    </data>
+    <data name="Validating" xml:space="preserve">
+        <value>បញ្ជាក់</value>
+    </data>
+    <data name="ValidationFinishedWithError" xml:space="preserve">
+        <value>មានសុពលភាព</value>
+    </data>
+    <data name="Verify" xml:space="preserve">
+        <value>ផ្ទៀងផ្ទាត់</value>
+    </data>
+    <data name="AreYouSureYouWantToDeleteFormat" xml:space="preserve">
+        <value>តើអ្នកប្រាកដថាចង់លុបឯកសារនេះទេ?</value>
+    </data>
+    <data name="UserPreloadingProcessIsMissing" xml:space="preserve">
+        <value>ដំណើរការផ្ទុកជាមុនរបស់អ្នកប្រើប្រាស់បានបាត់</value>
+    </data>
+    <data name="UploadUsers_Title" xml:space="preserve">
+        <value>បញ្ជីឯកសារដែលមានអ្នកប្រើប្រាស់ដែលបានផ្ទុកជាមុន</value>
+    </data>
+    <data name="RefreshActionOnUserUpload" xml:space="preserve">
+        <value>ធ្វើឱ្យស្រស់</value>
+    </data>
+    <data name="BatchUpload_Title" xml:space="preserve">
+        <value>បណ្តុំផ្ទុកឡើង</value>
+    </data>
+    <data name="PrefilledQuestionsRequired" xml:space="preserve">
+        <value>ឯកសារមិនមានជួរឈរសម្រាប់សំណួរកំណត់អត្តសញ្ញាណដែលត្រូវការ៖ &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;</value>
+    </data>
+    <data name="ImportInterviews_ChooseFile" xml:space="preserve">
+        <value>ជ្រើសរើសឯកសារដើម្បីផ្ទុកឡើង</value>
+    </data>
+    <data name="ImportInterviews_SelectResponsible" xml:space="preserve">
+        <value>ជ្រើសរើសអ្នកទទួលខុសត្រូវ</value>
+    </data>
+    <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
+        <value>ជ្រើសរើស</value>
+    </data>
+    <data name="FileSizeLimit" xml:space="preserve">
+        <value>ទំហំឯកសារមិនអាចលើសពី 300MB បានទេ។</value>
+    </data>
+    <data name="ImportSample" xml:space="preserve">
+        <value>នាំចូលគំរូ</value>
+    </data>
+    <data name="FileNotParsed" xml:space="preserve">
+        <value>ឯកសារមិនត្រូវបានញែកទេ។ អនុញ្ញាត​ឱ្យ​មាន​តែ​ឯកសារ​ដែល​កំណត់​ព្រំដែន​ក្នុង​ផ្ទាំង។</value>
+    </data>
+    <data name="FormatNotSupported" xml:space="preserve">
+        <value>ទម្រង់ឯកសារមិនត្រូវបានគាំទ្រទេ។ ទិន្នន័យនៅក្នុងឯកសារនឹងត្រូវបានមិនអើពើ</value>
+    </data>
+    <data name="SampleCreationResult" xml:space="preserve">
+        <value>សំភាសន៍លទ្ធផលនៃការបង្កើត</value>
+    </data>
+    <data name="Processing" xml:space="preserve">
+        <value>កំពុងដំណើរការ...</value>
+    </data>
+    <data name="SampleCreationCompleted" xml:space="preserve">
+        <value>ការបង្កើតបទសម្ភាសន៍បានបញ្ចប់ដោយជោគជ័យ។</value>
+    </data>
+    <data name="UploadNewData" xml:space="preserve">
+        <value>ផ្ទុកទិន្នន័យថ្មី។</value>
+    </data>
+    <data name="Column" xml:space="preserve">
+        <value>ជួរឈរ</value>
+    </data>
+    <data name="Row" xml:space="preserve">
+        <value>ជួរ</value>
+    </data>
+    <data name="VerifySampleData" xml:space="preserve">
+        <value>ផ្ទៀងផ្ទាត់ទិន្នន័យ</value>
+    </data>
+    <data name="ImportInProgress" xml:space="preserve">
+        <value>ដំណើរការនាំចូលកិច្ចការផ្សេងទៀតកំពុងដំណើរការ។ មានតែដំណើរការនាំចូលការចាត់តាំងមួយក្នុងពេលតែមួយប៉ុណ្ណោះដែលត្រូវបានអនុញ្ញាត។ រង់ចាំរហូតដល់ដំណើរការនេះត្រូវបានបញ្ចប់ ហើយបន្ទាប់មកបង្ហោះឯកសារគំរូថ្មីមួយ។ ធ្វើតាមតំណ ប្រសិនបើអ្នកចង់ទទួលបានព័ត៌មានដំណើរការលម្អិតបន្ថែមទៀតអំពីដំណើរការនាំចូលផ្សេងទៀត។</value>
+    </data>
+    <data name="CreateSample" xml:space="preserve">
+        <value>បង្កើតការសម្ភាសន៍ពីទិន្នន័យនេះ។</value>
+    </data>
+    <data name="SampleSuccess" xml:space="preserve">
+        <value>ការនាំចូលការសម្ភាសន៍បានបញ្ចប់ដោយជោគជ័យ</value>
+    </data>
+    <data name="SampleImportWithErrors" xml:space="preserve">
+        <value>ការនាំចូលការសម្ភាសន៍បានបញ្ចប់ដោយមានកំហុស</value>
+    </data>
+    <data name="ImportStatus" xml:space="preserve">
+        <value>ស្ថានភាពនាំចូល</value>
+    </data>
+    <data name="NumberInterviewCreated" xml:space="preserve">
+        <value>សំភាសន៍ត្រូវបានបង្កើតឡើង</value>
+    </data>
+    <data name="EstimatedTime" xml:space="preserve">
+        <value>ពេលវេលាប៉ាន់ស្មាន</value>
+    </data>
+    <data name="DownloadInvalidInterviews" xml:space="preserve">
+        <value>ទាញយកការសម្ភាសន៍មិនត្រឹមត្រូវ</value>
+    </data>
+    <data name="DownloadInvalidAssignments" xml:space="preserve">
+        <value>ទាញយកកិច្ចការមិនត្រឹមត្រូវ</value>
+    </data>
+    <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់ដែលទទួលខុសត្រូវនឹងត្រូវបានចាត់តាំងដោយស្វ័យប្រវត្តិ</value>
+    </data>
+    <data name="VerifyPanelData" xml:space="preserve">
+        <value>ផ្ទៀងផ្ទាត់ទិន្នន័យបន្ទះ</value>
+    </data>
+    <data name="RunningInterviewImportProcess" xml:space="preserve">
+        <value>ចូលទៅកាន់ដំណើរការនាំចូលកិច្ចការដែលកំពុងដំណើរការ</value>
+    </data>
+    <data name="BatchDescription" xml:space="preserve">
+        <value>បង្ហោះឯកសារ zip-archive ជាមួយនឹងផ្ទាំងមួយ ឬច្រើនដែលបំបែកដោយឯកសារដែលត្រូវគ្នាទៅនឹងកម្រិតសម្ភាសន៍សំខាន់ និងបញ្ជីឈ្មោះអ្នកក្រោមបង្គាប់។ អនុញ្ញាតឱ្យផ្ទុកអថេរជាមុននៅកម្រិតណាមួយនៃការសម្ភាសន៍។&lt;br/&gt;
+ឯកសារទិន្នន័យទាំងអស់ត្រូវតែមានអថេរ interview__id ជាមួយនឹងខ្សែអក្សរ ឬលេខសម្គាល់នៃការសម្ភាសន៍។ តំណ​ក្នុង​បញ្ជី​ឈ្មោះ និង​បញ្ជី​រាយ​នាម​ដែល​បាន​បង្កប់​បាន​បង្កើត​វិធី​ដូច​គ្នា​នឹង​ទិន្នន័យ​ដែល​បាន​នាំចេញ។&lt;br/&gt;</value>
+    </data>
+    <data name="BatchTitle" xml:space="preserve">
+        <value>កំណត់អត្តសញ្ញាណ និងប្រមូលទិន្នន័យ (បណ្ណសារ)</value>
+    </data>
+    <data name="BatchColumnsTitle" xml:space="preserve">
+        <value>ជាជម្រើសអាចបញ្ជាក់ជួរខាងក្រោមនៅក្នុងឯកសារកម្រិតសម្ភាសន៍សំខាន់៖</value>
+    </data>
+    <data name="CreatingMultipleInterviews" xml:space="preserve">
+        <value>បង្កើតការសម្ភាសន៍ច្រើន។</value>
+    </data>
+    <data name="CreatingMultipleAssignments" xml:space="preserve">
+        <value>ការបង្កើតកិច្ចការជាច្រើន។</value>
+    </data>
+    <data name="EmptySupervisorDescription" xml:space="preserve">
+        <value>ប្រសិនបើ​ឈ្មោះ​អ្នក​ប្រើ​មិន​ត្រូវ​បាន​បញ្ជាក់​នៅ​ក្នុង​ជួរ​ឈរ "_responsible" អ្នក​នឹង​ត្រូវ​ចាត់តាំង​អ្នក​គ្រប់​គ្រង​លើ​កិច្ចការ​ទាំងអស់​ក្នុង​ជំហាន​បន្ទាប់។</value>
+    </data>
+    <data name="ManualModeDescription" xml:space="preserve">
+        <value>អ្នកអាចបង្កើតកិច្ចការនីមួយៗដោយបញ្ចូលទិន្នន័យដែលត្រូវការទាំងអស់នៅក្នុង {{url}}</value>
+    </data>
+    <data name="ManualModeLinkTitle" xml:space="preserve">
+        <value>របៀបដោយដៃ</value>
+    </data>
+    <data name="SimpleDescription" xml:space="preserve">
+        <value>ផ្ទុកឡើងឯកសារដាច់ដោយឡែកពីគ្នាជាមួយតម្លៃសម្រាប់សំណួរនៅក្នុងកម្រិតសម្ភាសន៍តែប៉ុណ្ណោះ។ រួមបញ្ចូលតម្លៃសម្រាប់កំណត់អត្តសញ្ញាណសំណួរ និងសំណួរផ្សេងទៀតនៅកម្រិតសម្ភាសន៍សំខាន់។ មិនអនុញ្ញាតឱ្យតម្លៃផ្ទុកជាមុននៅក្នុងបញ្ជីឈ្មោះទេ។</value>
+    </data>
+    <data name="SimpleTitle" xml:space="preserve">
+        <value>កំណត់អត្តសញ្ញាណទិន្នន័យតែប៉ុណ្ណោះ</value>
+    </data>
+    <data name="SimpleColumnsTitle" xml:space="preserve">
+        <value>ជាជម្រើសអាចបញ្ជាក់ជួរខាងក្រោម៖</value>
+    </data>
+    <data name="ColumnsDescription" xml:space="preserve">
+        <value>&lt;b&gt;_responsible&lt;/b&gt; - ឈ្មោះអ្នកប្រើប្រាស់នៃទីស្នាក់ការកណ្តាល អ្នកគ្រប់គ្រង ឬអ្នកសម្ភាសន៍ដែលនឹងទទួលខុសត្រូវចំពោះកិច្ចការនេះ។&lt;br/&gt;
+&lt;b&gt;_quantity&lt;/b&gt; - សមត្ថភាពនៃកិច្ចការ;&lt;br/&gt;
+&lt;b&gt;_email&lt;/b&gt; - អ៊ីមែលរបស់អ្នកឆ្លើយតប (សម្រាប់តែការសម្ភាសន៍តាមអ៊ីនធឺណិតប៉ុណ្ណោះ);&lt;br/&gt;
+&lt;b&gt;_password&lt;/b&gt; - ពាក្យសម្ងាត់ដើម្បីចាប់ផ្តើមការសម្ភាសន៍ (សម្រាប់ការសម្ភាសន៍តាមគេហទំព័រតែប៉ុណ្ណោះ);&lt;br/&gt;
+&lt;b&gt;_webmode&lt;/b&gt; - របៀបសម្រាប់កិច្ចការ (1 សម្រាប់ CAWI, 0 ឬទទេសម្រាប់ CAPI);&lt;br/&gt;
+&lt;b&gt;_record_audio&lt;/b&gt; - ការថតសំឡេងត្រូវបានបើកសម្រាប់ការសម្ភាសន៍ (1 - បានបើក, 0 - បិទ, ទទេ - ទទួលបានតម្លៃនេះពីកម្រងសំណួរ);&lt;br/&gt;
+&lt;b&gt;_aascope&lt;/b&gt; - ឈ្មោះអថេរដែលបំបែកដោយសញ្ញាក្បៀសនៃផ្នែក ក្រុម ឬបញ្ជីឈ្មោះដើម្បីថតសំឡេងសម្រាប់ពេលដែល _record_audio បិទ (វិសាលភាពសវនកម្មសំឡេងជ្រើសរើស);&lt;br/&gt;
+&lt;b&gt;_comment&lt;/b&gt; - មតិ​សម្រាប់​កិច្ចការ;&lt;br/&gt;
+&lt;b&gt;_target_area&lt;/b&gt; - តំបន់គោលដៅសម្រាប់កិច្ចការ</value>
+    </data>
+    <data name="UploadDescription" xml:space="preserve">
+        <value>ផ្ទុកឡើងឯកសារដែលមានទិន្នន័យកំណត់អត្តសញ្ញាណដើម្បីបង្កើតកិច្ចការថ្មី។
+បញ្ជាក់ឈ្មោះអ្នកប្រើប្រាស់សម្រាប់ការិយាល័យកណ្តាល អ្នកគ្រប់គ្រង ឬអ្នកសម្ភាសន៍ ដើម្បីធ្វើកិច្ចការជាក្រុម។</value>
+    </data>
+    <data name="FileTypeDescription" xml:space="preserve">
+        <value>រក្សាទុកឯកសារនៅក្នុងការអ៊ិនកូដ UTF8 សម្រាប់គាំទ្រអត្ថបទជាក់លាក់នៃភាសា។</value>
+    </data>
+    <data name="UploadTabFile" xml:space="preserve">
+        <value>ផ្ទុកឡើងឯកសារ .tab</value>
+    </data>
+    <data name="UploadZipFile" xml:space="preserve">
+        <value>ផ្ទុកឡើងឯកសារ .zip</value>
+    </data>
+    <data name="ViewListPrefilledData" xml:space="preserve">
+        <value>មើលបញ្ជីទិន្នន័យកំណត់អត្តសញ្ញាណដែលត្រូវការ</value>
+    </data>
+    <data name="ViewListPreloadedData" xml:space="preserve">
+        <value>មើលបញ្ជីតម្លៃដែលបានផ្ទុកជាមុន</value>
+    </data>
+    <data name="DownloadTabTemplate" xml:space="preserve">
+        <value>ទាញយកគំរូ .tab សម្រាប់កម្រងសំណួរនេះ។</value>
+    </data>
+    <data name="DownloadDescListRequiredPreffiledData" xml:space="preserve">
+        <value>អថេរត្រូវបានសម្គាល់ថាជាការកំណត់អត្តសញ្ញាណនៅក្នុងអ្នករចនា។ ទាញយក ក</value>
+    </data>
+    <data name="DownloadLinkTitleListRequiredPreffiledData" xml:space="preserve">
+        <value>គំរូ .tab ។</value>
+    </data>
+    <data name="HideListPrefilledData" xml:space="preserve">
+        <value>លាក់បញ្ជីទិន្នន័យកំណត់អត្តសញ្ញាណដែលត្រូវការ</value>
+    </data>
+    <data name="PrefilledRequiredData" xml:space="preserve">
+        <value>ទិន្នន័យកំណត់អត្តសញ្ញាណដែលត្រូវការ</value>
+    </data>
+    <data name="IdentifyingQuestions" xml:space="preserve">
+        <value>កំណត់អត្តសញ្ញាណសំណួរ</value>
+    </data>
+    <data name="BatchFileVerificationFailed" xml:space="preserve">
+        <value>ការផ្ទៀងផ្ទាត់ឯកសារដែលបានបង្ហោះបានបរាជ័យ</value>
+    </data>
+    <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve">
+        <value>បង្កើតកិច្ចការជាច្រើន។</value>
+    </data>
+    <data name="ImportFrom" xml:space="preserve">
+        <value>ការនាំចូលព័ត៌មានពី {{fileName}} សម្រាប់ {{title}}</value>
+    </data>
+    <data name="ImportInterviews_PageTitle" xml:space="preserve">
+        <value>បង្កើតការសម្ភាសន៍ជាច្រើនជាមួយនឹងការផ្ទុកឡើងជាបាច់</value>
+    </data>
+    <data name="ImportAssignments_PageTitle" xml:space="preserve">
+        <value>ការបង្កើតកិច្ចការច្រើនជាមួយនឹងការផ្ទុកឡើងជាបាច់</value>
+    </data>
+    <data name="InterviewsAreNotCreated" xml:space="preserve">
+        <value>គ្មានការសម្ភាសន៍ត្រូវបានបង្កើតឡើងទេ។</value>
+    </data>
+    <data name="MultipleErrorsWereFound" xml:space="preserve">
+        <value>បានរកឃើញកំហុស {{count}}</value>
+    </data>
+    <data name="SingleErrorFound" xml:space="preserve">
+        <value>រកឃើញកំហុស 1</value>
+    </data>
+    <data name="BackToImport" xml:space="preserve">
+        <value>ត្រលប់ទៅការនាំចូល</value>
+    </data>
+    <data name="AssignedToMultipleEnumerators" xml:space="preserve">
+        <value>ចាត់តាំងឱ្យអ្នកសម្ភាសន៍ {0}</value>
+    </data>
+    <data name="AssignedToMultipleSupervisors" xml:space="preserve">
+        <value>ចាត់តាំងឱ្យអ្នកគ្រប់គ្រង {0}</value>
+    </data>
+    <data name="AssignedToSingleEnumerator" xml:space="preserve">
+        <value>ចាត់តាំងឱ្យអ្នកសម្ភាសន៍ 1 នាក់។</value>
+    </data>
+    <data name="AssignedToSingleSupervisor" xml:space="preserve">
+        <value>ចាត់តាំងឱ្យអ្នកគ្រប់គ្រង 1 នាក់។</value>
+    </data>
+    <data name="CreateInterviews" xml:space="preserve">
+        <value>បង្កើតការសម្ភាសន៍</value>
+    </data>
+    <data name="CreateAssignments" xml:space="preserve">
+        <value>បង្កើតកិច្ចការ</value>
+    </data>
+    <data name="DataForMultipleInterviewsFound" xml:space="preserve">
+        <value>ទិន្នន័យសម្រាប់ការសម្ភាសន៍ {0} បានរកឃើញ</value>
+    </data>
+    <data name="DataForMultipleAssignmentsFound" xml:space="preserve">
+        <value>ទិន្នន័យសម្រាប់កិច្ចការ {0} បានរកឃើញ</value>
+    </data>
+    <data name="DataForSingleInterviewFound" xml:space="preserve">
+        <value>បានរកឃើញទិន្នន័យសម្រាប់ការសម្ភាសន៍ 1</value>
+    </data>
+    <data name="DataForSingleAssignmentFound" xml:space="preserve">
+        <value>បានរកឃើញទិន្នន័យសម្រាប់កិច្ចការ 1</value>
+    </data>
+    <data name="Importing" xml:space="preserve">
+        <value>ការនាំចូល</value>
+    </data>
+    <data name="ImportInterviewsFor" xml:space="preserve">
+        <value>កំពុងនាំចូលការសម្ភាសន៍សម្រាប់ {0}</value>
+    </data>
+    <data name="ImportAssignmentsFor" xml:space="preserve">
+        <value>កំពុងនាំចូលកិច្ចការសម្រាប់ {{title}}</value>
+    </data>
+    <data name="ImportInterviews_Done" xml:space="preserve">
+        <value>រួចរាល់៖</value>
+    </data>
+    <data name="ImportInterviews_NoneFailed" xml:space="preserve">
+        <value>គ្មាន​ការ​បរាជ័យ​ទេ។</value>
+    </data>
+    <data name="ImportProgressFormat" xml:space="preserve">
+        <value>{{createdCount}} នៃ {{totalCount}}</value>
+    </data>
+    <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
+        <value>ការនាំចូលកិច្ចការ</value>
+    </data>
+    <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
+        <value>ការសម្ភាសន៍ {0} បរាជ័យក្នុងការបង្កើត</value>
+    </data>
+    <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
+        <value>កិច្ចការ {{count}} បរាជ័យក្នុងការបង្កើត</value>
+    </data>
+    <data name="MultipleInterviewsCreated" xml:space="preserve">
+        <value>ការសម្ភាសន៍ {0} ត្រូវបានបង្កើតឡើង</value>
+    </data>
+    <data name="MultipleAssignmentsCreated" xml:space="preserve">
+        <value>កិច្ចការ {{count}} ត្រូវបានបង្កើតឡើង</value>
+    </data>
+    <data name="SelectResponsibleToAssign" xml:space="preserve">
+        <value>ជ្រើសរើសអ្នកទទួលខុសត្រូវសម្រាប់បាច់នេះ។</value>
+    </data>
+    <data name="SingleInterviewCreated" xml:space="preserve">
+        <value>ការសម្ភាសន៍ 1 ត្រូវបានបង្កើតឡើង</value>
+    </data>
+    <data name="SingleAssignmentCreated" xml:space="preserve">
+        <value>កិច្ចការ 1 ត្រូវបានបង្កើតឡើង</value>
+    </data>
+    <data name="SingleInterviewFailedToBeCreated" xml:space="preserve">
+        <value>ការសម្ភាសន៍ 1 បានបរាជ័យក្នុងការបង្កើត</value>
+    </data>
+    <data name="SingleAssignmentFailedToBeCreated" xml:space="preserve">
+        <value>កិច្ចការ 1 បានបរាជ័យក្នុងការបង្កើត</value>
+    </data>
+    <data name="VerificationCompleted" xml:space="preserve">
+        <value>ការផ្ទៀងផ្ទាត់បានបញ្ចប់</value>
+    </data>
+    <data name="SupervisorMustBeSelected" xml:space="preserve">
+        <value>អ្នកគ្រប់គ្រង ឬអ្នកសម្ភាសន៍ត្រូវតែជ្រើសរើស</value>
+    </data>
+    <data name="Cell" xml:space="preserve">
+        <value>ក្រឡា</value>
+    </data>
+    <data name="File" xml:space="preserve">
+        <value>ឯកសារ</value>
+    </data>
+    <data name="UploadUsers_NotAllowedExtension" xml:space="preserve">
+        <value>មានតែឯកសារដែលមានផ្នែកបន្ថែម {0} និង {1} ប៉ុណ្ណោះដែលត្រូវបានអនុញ្ញាតសម្រាប់ការបង្ហោះ។</value>
+    </data>
+    <data name="Prerequisite_FileOpen" xml:space="preserve">
+        <value>ឯកសារដែលបានផ្ទុកឡើងមិនអាចបើកបានទេ។ សូមពិនិត្យមើលថាវាជាទម្រង់ត្រឹមត្រូវ។</value>
+    </data>
+    <data name="Prerequisite_TabOrTxtFile" xml:space="preserve">
+        <value>មានតែឯកសារ .tab និង .txt ប៉ុណ្ណោះដែលត្រូវបានអនុញ្ញាតសម្រាប់ការបង្ហោះ។</value>
+    </data>
+    <data name="Prerequisite_UnsupportedFiles" xml:space="preserve">
+        <value>ឯកសារខាងក្រោមមិនត្រូវបានគាំទ្រ៖ {0} ។</value>
+    </data>
+    <data name="Prerequisite_ZipFile" xml:space="preserve">
+        <value>មានតែឯកសារ .zip ប៉ុណ្ណោះដែលត្រូវបានអនុញ្ញាតសម្រាប់ការបង្ហោះ។</value>
+    </data>
+    <data name="AssignmentsAreNotCreated" xml:space="preserve">
+        <value>គ្មានកិច្ចការត្រូវបានបង្កើតទេ។</value>
+    </data>
+    <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
+        <value>ការផ្ទៀងផ្ទាត់ទិន្នន័យការងារ</value>
+    </data>
+    <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
+        <value>ការផ្ទៀងផ្ទាត់កិច្ចការសម្រាប់កម្រងសំណួរ {{title}}</value>
+    </data>
+    <data name="Import_VerificationOfDataFile" xml:space="preserve">
+        <value>ការផ្ទៀងផ្ទាត់ឯកសារទិន្នន័យ</value>
+    </data>
+    <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
+        <value>ជំហាន {{verifiedCount}} នៃ {{totalCount}}</value>
+    </data>
+    <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
+        <value>ការផ្ទៀងផ្ទាត់ឯកសារទិន្នន័យបានជោគជ័យ</value>
+    </data>
+    <data name="Import_Verification_1_AssignmentVerified" xml:space="preserve">
+        <value>កិច្ចការ 1 ត្រូវបានផ្ទៀងផ្ទាត់ដោយជោគជ័យ</value>
+    </data>
+    <data name="Import_Verification_1_Error" xml:space="preserve">
+        <value>1 កំហុស</value>
+    </data>
+    <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
+        <value>កិច្ចការ {{count}} ត្រូវបានផ្ទៀងផ្ទាត់ដោយជោគជ័យ</value>
+    </data>
+    <data name="Import_Verification_Errors" xml:space="preserve">
+        <value>កំហុស {{count}}</value>
+    </data>
+    <data name="Prerequisite_Questionnaire" xml:space="preserve">
+        <value>កម្រងសំណួរមិនអាចប្រើសម្រាប់ការផ្ទុកជាមុនបានទេ។</value>
+    </data>
+    <data name="HiddenQuestions" xml:space="preserve">
+        <value>សំណួរដែលលាក់</value>
+    </data>
+    <data name="RosterSizeQuestions" xml:space="preserve">
+        <value>សំណួរប្រភពបញ្ជីឈ្មោះ</value>
+    </data>
+    <data name="Select_Responsible" xml:space="preserve">
+        <value>ជ្រើសរើសការទទួលខុសត្រូវលំនាំដើម (ទាមទារ)</value>
+    </data>
+    <data name="Select_Responsible_Description" xml:space="preserve">
+        <value>ប្រសិនបើគ្មានទំនួលខុសត្រូវដែលបានកំណត់ក្នុងឯកសារជាបាច់ សូមប្រើគណនីការិយាល័យកណ្តាល/អ្នកគ្រប់គ្រង/អ្នកសម្ភាសន៍នេះ៖</value>
+    </data>
+    <data name="RequiredField" xml:space="preserve">
+        <value>វាលនេះគឺចាំបាច់</value>
+    </data>
+</root>

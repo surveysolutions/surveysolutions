@@ -75,6 +75,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             try
             {
                 var interview = this.interviewRepository.Get(this.InterviewId);
+                if (interview == null)
+                {
+                    await this.ViewModelNavigationService.NavigateToDashboardAsync();
+                    this.Dispose();
+                    return;
+                }
+
                 string questionnaireId = interview.QuestionnaireIdentity.QuestionnaireId.FormatGuid();
 
                 bool succeeded = await this.QuestionnaireDownloader.ReloadQuestionnaireAsync(

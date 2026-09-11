@@ -5,7 +5,8 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
-using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 
 namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 {
@@ -24,12 +25,13 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 
             var questionnaire = CreateQuestionnaireDocument(questionnaireId, questionnaiteTitle, ownerId);
 
-            var documentStorage = Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(storage
-                    => storage.GetById(It.IsAny<string>()) == questionnaire);
+            var questionnaireStorage = Mock.Of<IDesignerQuestionnaireStorage>(s =>
+                s.Get(It.IsAny<QuestionnaireRevision>()) == questionnaire &&
+                s.Get(It.IsAny<Guid>()) == questionnaire);
 
             command = new PasteAfter(questionnaireId, entityId, pasteAfterId, questionnaireId, entityId, ownerId);
 
-            commandInflater = CreateCommandInflater(dbContext: dbContext, storage: documentStorage);
+            commandInflater = CreateCommandInflater(dbContext: dbContext, questionnaireStorage: questionnaireStorage);
 
             BecauseOf();
 

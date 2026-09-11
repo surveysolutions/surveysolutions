@@ -192,4 +192,7 @@
   <data name="ShxIsMissingInArchive" xml:space="preserve">
     <value>Soubor {0}.shx chybí pro {0}.shp</value>
   </data>
+  <data name="MapFileNameTooLong" xml:space="preserve">
+    <value>Název souboru '{0}' překračuje maximální povolenou délku {1} znaků.</value>
+  </data>
 </root>

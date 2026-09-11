@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Title" xml:space="preserve">
+        <value>การแก้ไขปัญหา</value>
+    </data>
+    <data name="InterviewDataIsMissingDescription" xml:space="preserve">
+        <value>ระบุคีย์การสัมภาษณ์หรือรหัสการสัมภาษณ์เพื่อค้นหา</value>
+    </data>
+    <data name="InterviewDataIsMissingTitle" xml:space="preserve">
+        <value>ผู้สัมภาษณ์อ้างว่าการสัมภาษณ์เสร็จสิ้นและซิงโครไนซ์แล้ว แต่ฉันไม่เห็นข้อมูลสำหรับการสัมภาษณ์นั้นบนเซิร์ฟเวอร์</value>
+    </data>
+    <data name="MissingCensusInterviewsDescription" xml:space="preserve">
+        <value>ระบุชื่อเข้าสู่ระบบของผู้สัมภาษณ์ ชื่อของแบบสอบถาม และช่วงวันที่</value>
+    </data>
+    <data name="MissingCensusInterviewsTitle" xml:space="preserve">
+        <value>ฉันต้องหาสถานที่สัมภาษณ์</value>
+    </data>
+    <data name="SupportSite" xml:space="preserve">
+        <value>คลิกลิงก์ของปัญหาที่คุณต้องการแก้ไข สำหรับปัญหาที่ไม่ได้ระบุไว้ด้านล่าง โปรดไปที่&lt;a href="{0}" target="_blank"&gt;ไซต์สนับสนุน&lt;/a&gt; Survey Solutions</value>
+    </data>
+    <data name="MissingCensusInterviews_FiltersTitle" xml:space="preserve">
+        <value>เงื่อนไขการกรอง</value>
+    </data>
+    <data name="MissingCensusInterviews_Filters_Dates" xml:space="preserve">
+        <value>ค้นหาการสัมภาษณ์ที่ซิงโครไนซ์ระหว่างวันที่สองวัน</value>
+    </data>
+    <data name="MissingCensusInterviews_Filters_DatesPlaceholder" xml:space="preserve">
+        <value>เลือกวันที่</value>
+    </data>
+    <data name="MissingCensusInterviews_Filters_Interviewer" xml:space="preserve">
+        <value>ผู้สัมภาษณ์</value>
+    </data>
+    <data name="MissingCensusInterviews_Filters_InterviewerPlaceholder" xml:space="preserve">
+        <value>เลือกผู้สัมภาษณ์</value>
+    </data>
+    <data name="MissingCensusInterviews_Filters_Questionnaire" xml:space="preserve">
+        <value>แบบสอบถาม</value>
+    </data>
+    <data name="MissingCensusInterviews_Filters_QuestionnairePlaceholder" xml:space="preserve">
+        <value>เลือกแบบสอบถาม</value>
+    </data>
+    <data name="MissingCensusInterviews_Filters_Search" xml:space="preserve">
+        <value>ค้นหา</value>
+    </data>
+    <data name="MissingCensusInterviews_Instructions" xml:space="preserve">
+        <value>หากต้องการค้นหาการสัมภาษณ์ โปรดระบุชื่อแบบสอบถาม&lt;br/&gt;
+เลือกผู้สัมภาษณ์และกรอบเวลาเพื่อจำกัดผลการค้นหาของคุณให้แคบลง</value>
+    </data>
+    <data name="MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format" xml:space="preserve">
+        <value>การสัมภาษณ์ {0} เป็นไปตามเงื่อนไขตัวกรอง</value>
+    </data>
+    <data name="MissingCensusInterviews_NothingFound_Message" xml:space="preserve">
+        <value>ไม่มีการสัมภาษณ์ที่ตรงตามเงื่อนไขตัวกรอง</value>
+    </data>
+    <data name="MissingCensusInterviews_OneInterviewFound_Message" xml:space="preserve">
+        <value>การสัมภาษณ์หนึ่งครั้งเป็นไปตามเงื่อนไขตัวกรอง</value>
+    </data>
+    <data name="MissingCensusInterviews_PageHeader" xml:space="preserve">
+        <value>การค้นหาการสัมภาษณ์ที่เฉพาะเจาะจง</value>
+    </data>
+    <data name="TableTitle_Enumerator" xml:space="preserve">
+        <value>ตัวแจงนับ</value>
+    </data>
+    <data name="TableTitle_InterviewId" xml:space="preserve">
+        <value>รหัสสัมภาษณ์</value>
+    </data>
+    <data name="TableTitle_LastUpdate" xml:space="preserve">
+        <value>อัปเดตล่าสุด</value>
+    </data>
+    <data name="TableTitle_Status" xml:space="preserve">
+        <value>สถานะ</value>
+    </data>
+    <data name="NoData_Description" xml:space="preserve">
+        <value>ระบุรหัสการสัมภาษณ์ (XX-XX-XX-XX) หรือรหัสการสัมภาษณ์เพื่อค้นหา</value>
+    </data>
+    <data name="NoData_Filters_InterviewKey" xml:space="preserve">
+        <value>รหัสสัมภาษณ์หรือรหัสสัมภาษณ์</value>
+    </data>
+    <data name="NoData_Filters_InterviewKeyPlaceholder" xml:space="preserve">
+        <value>กรอกรหัสสัมภาษณ์หรือรหัส</value>
+    </data>
+    <data name="NoData_Title" xml:space="preserve">
+        <value>ฉันไม่เห็นข้อมูลสำหรับการสัมภาษณ์แบบซิงโครไนซ์บนเซิร์ฟเวอร์</value>
+    </data>
+</root>

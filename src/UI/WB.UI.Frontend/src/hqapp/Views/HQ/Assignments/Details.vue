@@ -377,14 +377,16 @@
                     :title="$t('Assignments.ChangeTargetAreaModalTitle', { assignmentId: model.id })">
                     <p>{{ $t("Assignments.TargetAreaExplanation") }}</p>
 
-                    <Form ref="quantityForm" onsubmit="return false;" v-slot="{ meta }">
+                    <Form ref="targetAreaForm" onsubmit="return false;" v-slot="{ meta }">
                         <div class="form-group" v-bind:class="{ 'has-error': meta.valid == false }">
                             <label class="control-label" for="newTargetArea">
                                 {{ $t("Assignments.TargetArea") }}
                             </label>
                             <Field type="text" class="form-control" v-model.trim="editedTargetAreaName"
-                                name="editedTargetAreaName" :data-vv-as="$t('Assignments.TargetArea')"
-                                autocomplete="off" @keyup.enter="updateTargetArea" id="newTargetArea" />
+                                name="editedTargetAreaName" :rules="validateTargetArea"
+                                :data-vv-as="$t('Assignments.TargetArea')"
+                                autocomplete="off" @keyup.enter="updateTargetArea" id="newTargetArea"
+                                :validateOnBlur="true" :validateOnChange="true" :validateOnInput="true" />
                             <span class="text-danger">
                                 <ErrorMessage name="editedTargetAreaName" />
                             </span>
@@ -392,7 +394,7 @@
                     </Form>
                     <template v-slot:actions>
                         <div>
-                            <button type="button" class="btn btn-primary" :disabled="!showSelectors"
+                            <button type="button" class="btn btn-primary" :disabled="!showSelectors || !targetAreaValid"
                                 @click="updateTargetArea">{{ $t("Common.Save") }}</button>
                             <button type="button" class="btn btn-link" data-bs-dismiss="modal">
                                 {{ $t("Common.Cancel") }}
@@ -475,6 +477,7 @@ export default {
             reassignComment: null,
             editedQuantity: null,
             editedTargetAreaName: null,
+            mapFileNameLengthLimit: 64,
 
             canEditQuantity: true,
 
@@ -512,6 +515,16 @@ export default {
                 this.editedTargetAreaName = this.model.targetArea
                 this.$refs.editTargetAreaModal.modal()
             }
+        },
+
+        validateTargetArea(value) {
+            if (value != null && value.length > this.mapFileNameLengthLimit) {
+                return this.$t('Assignments.TargetAreaNameTooLong', {
+                    limit: this.mapFileNameLengthLimit,
+                })
+            }
+
+            return true
         },
 
         upateAudioRecording() {
@@ -643,23 +656,24 @@ export default {
             return false
         },
         async updateTargetArea() {
-            const self = this
+            const validationResult = await this.$refs.targetAreaForm.validate()
+            if (validationResult.valid != true) {
+                return false
+            }
 
-            this.$hq.Assignments.changeTargetArea(this.model.id, this.editedTargetAreaName)
-                .then(() => {
-
-                    window.location.reload(true)
+            try {
+                await this.$hq.Assignments.changeTargetArea(this.model.id, this.editedTargetAreaName)
+                window.location.reload(true)
+                return true
+            } catch (error) {
+                const msg = error?.response?.data?.message
+                    || error?.response?.data
+                    || error?.message
+                this.$refs.targetAreaForm.setErrors({
+                    editedTargetAreaName: msg,
                 })
-                .catch(error => {
-                    self.errors.clear()
-                    self.errors.add({
-                        field: 'editedQuantity',
-                        msg: error.response.data.message,
-                        id: error.toString(),
-                    })
-                })
-
-            return false
+                return false
+            }
         },
 
         openCloseModal() {
@@ -696,6 +710,10 @@ export default {
     computed: {
         showSelectors() {
             return !this.config.isObserver && !this.config.isObserving
+        },
+        targetAreaValid() {
+            return this.editedTargetAreaName == null
+                || this.editedTargetAreaName.length <= this.mapFileNameLengthLimit
         },
         singleCloseMessage() {
             if (this.isWebModeAssignmentSelected) {

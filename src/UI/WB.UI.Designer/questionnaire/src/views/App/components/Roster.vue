@@ -440,8 +440,10 @@ export default {
     },
     mounted() {
         this.scrollTo();
+        this.$emitter.on('saveCurrentEntityRequested', this.saveRoster);
     },
     beforeUnmount() {
+        this.$emitter.off('saveCurrentEntityRequested', this.saveRoster);
         this.rosterStore.clear();
     },
     computed: {

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Cancel" xml:space="preserve">
+        <value>ยกเลิก</value>
+    </data>
+    <data name="Total" xml:space="preserve">
+        <value>ทั้งหมด</value>
+    </data>
+    <data name="WithErrors" xml:space="preserve">
+        <value>มีข้อผิดพลาด</value>
+    </data>
+    <data name="Average" xml:space="preserve">
+        <value>เฉลี่ย</value>
+    </data>
+    <data name="HQ_AccountController_AccountUpdatedSuccessfully" xml:space="preserve">
+        <value>อัปเดตข้อมูลบัญชีสำเร็จแล้ว</value>
+    </data>
+    <data name="HQ_AccountController_AccountUpdatedSuccessfullyFormat" xml:space="preserve">
+        <value>ข้อมูลเกี่ยวกับ &lt;b&gt;{0}&lt;/b&gt; อัปเดตสำเร็จแล้ว</value>
+    </data>
+    <data name="HQ_AccountController_AccountPasswordChangedSuccessfully" xml:space="preserve">
+        <value>อัปเดตรหัสผ่านบัญชีเรียบร้อยแล้ว</value>
+    </data>
+    <data name="HQ_AccountController_AccountPasswordChangedSuccessfullyFormat" xml:space="preserve">
+        <value>อัปเดตรหัสผ่านสำหรับบัญชี &lt;b&gt;{0}&lt;/b&gt; สำเร็จแล้ว</value>
+    </data>
+    <data name="HQ_Views_Manage_Title" xml:space="preserve">
+        <value>จัดการบัญชี</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Title" xml:space="preserve">
+        <value>การรับรองความถูกต้องด้วยสองปัจจัย</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Description" xml:space="preserve">
+        <value>การตรวจสอบสิทธิ์แบบสองปัจจัยเป็นคุณสมบัติความปลอดภัยขั้นสูงที่ทำให้แฮกเกอร์ลงชื่อเข้าใช้บัญชีของคุณได้ยากขึ้นด้วยรหัสผ่านที่ถูกขโมยไป</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Enabled" xml:space="preserve">
+        <value>เปิดใช้งาน</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Disabled" xml:space="preserve">
+        <value>พิการ</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description" xml:space="preserve">
+        <value>ตั้งค่าอุปกรณ์ใหม่สำหรับการตรวจสอบสิทธิ์แบบสองปัจจัย คุณสามารถตั้งค่าอุปกรณ์หลายเครื่องพร้อมกันได้</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description" xml:space="preserve">
+        <value>รีเซ็ตเป็นรหัสลับใหม่หากอุปกรณ์ใดของคุณที่ใช้ในการตรวจสอบสิทธิ์แบบสองปัจจัยสูญหายหรือถูกขโมย</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description" xml:space="preserve">
+        <value>ทำให้รหัสกู้คืนที่ไม่ได้ใช้เป็นโมฆะ และสร้างรหัสใหม่ 10 รหัส</value>
+    </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Disable2fa_Description" xml:space="preserve">
+        <value>ปิดการตรวจสอบสิทธิ์แบบสองปัจจัยโดยปล่อยให้บัญชีได้รับการปกป้องด้วยรหัสผ่านเท่านั้น</value>
+    </data>
+    <data name="HQ_Views_EnableAuthenticator_Title" xml:space="preserve">
+        <value>ตั้งค่าแอปยืนยันตัวตน</value>
+    </data>
+    <data name="HQ_Views_ResetAuthenticator_Title" xml:space="preserve">
+        <value>รีเซ็ตคีย์ตัวตรวจสอบความถูกต้อง</value>
+    </data>
+    <data name="HQ_Views_ShowRecoveryCodes_Title" xml:space="preserve">
+        <value>รหัสการกู้คืน</value>
+    </data>
+    <data name="HQ_Views_DisableTwoFactorAuth_Title" xml:space="preserve">
+        <value>ปิดใช้งานการรับรองความถูกต้องด้วยสองปัจจัย</value>
+    </data>
+    <data name="HQ_Views_ResetRecoveryCodes_Title" xml:space="preserve">
+        <value>รีเซ็ตรหัสกู้คืน</value>
+    </data>
+    <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+        <value>ได้รับการอนุมัติจากสำนักงานใหญ่</value>
+    </data>
+    <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+        <value>ได้รับการอนุมัติจากหัวหน้างาน</value>
+    </data>
+    <data name="InterviewStatus_Completed" xml:space="preserve">
+        <value>สมบูรณ์</value>
+    </data>
+    <data name="InterviewStatus_Created" xml:space="preserve">
+        <value>สร้าง</value>
+    </data>
+    <data name="InterviewStatus_Deleted" xml:space="preserve">
+        <value>ลบแล้ว</value>
+    </data>
+    <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+        <value>ผู้สัมภาษณ์ที่ได้รับมอบหมาย</value>
+    </data>
+    <data name="InterviewStatus_ReadyForInterview" xml:space="preserve">
+        <value>พร้อมสัมภาษณ์</value>
+    </data>
+    <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+        <value>ถูกปฏิเสธโดยสำนักงานใหญ่</value>
+    </data>
+    <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+        <value>ถูกปฏิเสธโดยหัวหน้างาน</value>
+    </data>
+    <data name="InterviewStatus_Restarted" xml:space="preserve">
+        <value>รีสตาร์ทแล้ว</value>
+    </data>
+    <data name="InterviewStatus_Restored" xml:space="preserve">
+        <value>คืนค่า</value>
+    </data>
+    <data name="InterviewStatus_SentToCapi" xml:space="preserve">
+        <value>ส่งไปแคปแล้ว</value>
+    </data>
+    <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+        <value>หัวหน้างานที่ได้รับมอบหมาย</value>
+    </data>
+    <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
+        <value>จัดการบัญชี</value>
+    </data>
+    <data name="SurverManagement_MainMenu_ChangePassword" xml:space="preserve">
+        <value>เปลี่ยนรหัสผ่าน</value>
+    </data>
+    <data name="ViewHelpers_Invalid_property" xml:space="preserve">
+        <value>คุณสมบัติไม่ถูกต้อง</value>
+    </data>
+    <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
+        <value>ไม่สามารถแยกวิเคราะห์คำตอบของคำถามได้</value>
+    </data>
+    <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
+        <value>สถานะที่กำหนดโดยทีมสนับสนุน Survey Solutions</value>
+    </data>
+    <data name="ObserverNotAllowed" xml:space="preserve">
+        <value>ผู้สังเกตการณ์ไม่ได้รับอนุญาตให้ดำเนินการนี้</value>
+    </data>
+    <data name="UnexpectedErrorOccurred" xml:space="preserve">
+        <value>เกิดข้อผิดพลาดที่ไม่คาดคิด</value>
+    </data>
+    <data name="Error" xml:space="preserve">
+        <value>ข้อผิดพลาด</value>
+    </data>
+    <data name="AnyHeadquarters" xml:space="preserve">
+        <value>สำนักงานใหญ่ใดๆ</value>
+    </data>
+    <data name="Days" xml:space="preserve">
+        <value>วัน</value>
+    </data>
+    <data name="Assignments" xml:space="preserve">
+        <value>การมอบหมายงาน</value>
+    </data>
+    <data name="Interviews" xml:space="preserve">
+        <value>สัมภาษณ์</value>
+    </data>
+    <data name="AllTeams" xml:space="preserve">
+        <value>ทุกทีม</value>
+    </data>
+    <data name="Teams" xml:space="preserve">
+        <value>ทีม</value>
+    </data>
+    <data name="AllPeriods" xml:space="preserve">
+        <value>ทุกช่วงเวลา</value>
+    </data>
+    <data name="AllQuestionnaires" xml:space="preserve">
+        <value>แบบสอบถามทั้งหมด</value>
+    </data>
+    <data name="AllInterviewers" xml:space="preserve">
+        <value>ผู้สัมภาษณ์ทุกท่าน</value>
+    </data>
+    <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
+        <value>ไม่ได้รับการอนุมัติจากสำนักงานใหญ่</value>
+    </data>
+    <data name="AllInterviewersExceptAssignedToInterviewer" xml:space="preserve">
+        <value>ไม่ได้รับมอบหมายให้เป็นผู้สัมภาษณ์</value>
+    </data>
+    <data name="NoPermissionsToExecute" xml:space="preserve">
+        <value>ผู้ใช้ไม่ได้รับอนุญาตให้ดำเนินการตามที่ให้ไว้</value>
+    </data>
+    <data name="HQ_Views_ApiTokens_Title" xml:space="preserve">
+        <value>การเข้าถึง API</value>
+    </data>
+    <data name="HQ_Views_Api_Token_Description" xml:space="preserve">
+        <value>โทเค็น API ใช้เพื่อทำการเรียก API ไปยังระบบ</value>
+    </data>
+    <data name="HQ_Views_Api_Token_Issued" xml:space="preserve">
+        <value>เปิดใช้งาน</value>
+    </data>
+    <data name="HQ_Views_Api_Token_Not_Issued" xml:space="preserve">
+        <value>พิการ</value>
+    </data>
+    <data name="HQ_Views_Api_Token_Generate_Description" xml:space="preserve">
+        <value>โปรดบันทึกโทเค็นทันที คุณจะสามารถดูได้เพียงครั้งเดียวเท่านั้น!</value>
+    </data>
+</root>

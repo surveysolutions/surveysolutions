@@ -63,7 +63,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
         {
             var potentialRandomKeys = this.GetRandomSequence();
 
-            string[] stringKeys = potentialRandomKeys.Select(x => x.ToString()).ToArray();
+            // NOTE: List<string> is used on purpose. For an array the C# compiler (C# 14+) binds Contains to
+            // MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an op_Implicit call into the expression
+            // tree that NHibernate cannot evaluate ("Evaluation failure on op_Implicit(...)").
+            List<string> stringKeys = potentialRandomKeys.Select(x => x.ToString()).ToList();
             List<string> usedIds = this.summaries.Query(_ => _.Where(x => stringKeys.Contains(x.Key))
                 .Select(x => x.Key)
                 .ToList());

@@ -1,5 +1,7 @@
 # Copilot Instructions — Survey Solutions
 
+This file is the canonical repository-wide guidance for GitHub Copilot. `AGENTS.md` is a concise compatibility entry point for other agents.
+
 ## Repository Overview
 
 **Survey Solutions** is a large-scale, production-grade survey management and data collection platform developed by the World Bank. The repository contains multiple .NET backend projects, two Vue 3 frontends, export/scheduler microservices, integration and unit tests, database migrations, and deployment tooling.
@@ -166,15 +168,21 @@ src/
 
 - **UnitOfWork in root scope:** Resolving `IUnitOfWork` as a singleton causes `ObjectDisposedException` — always resolve it in a request or job scope.
 - **NHibernate L1 cache vs. locking:** Before acquiring a row-level lock with `LockMode.Upgrade`, bypass the L1 cache by querying via `IQueryable` (not `GetById`). See `AssignmentsService.GetAssignmentWithUpgradeLock`.
-- **Vite output files are committed:** The Vite build in `WB.UI.Frontend` writes asset-hashed filenames directly into `.cshtml` Razor templates inside `WB.UI.Headquarters.Core/Views`. These generated files **must** be committed.
+- **Some Vite outputs are tracked:** The Vite build in `WB.UI.Frontend` writes asset-hashed filenames into generated `.cshtml` files. Edit the corresponding `*.Template.cshtml` source, then commit a generated target only when it is tracked and the intentional source change requires updating it.
 - **Integration tests need config:** Set `appsettings.cloud.ini` / `appsettings.cloud.json` with PostgreSQL credentials before running integration tests locally (mirrors CI environment variables).
 - **Designer uses Vuetify 3:** Do not import Vuetify 2 components or use Vuetify 2 API (`v-data-table` slot names differ between versions, etc.).
 - **Workspace schema isolation:** Running ad-hoc SQL against a specific workspace requires prefixing table names with the workspace schema (e.g., `ws_primary."interviews"`).
 
 ## Very Important:  
-- **Localization resources reside only in *.resx files:** Even for frontend, .json files are derivatives. Any change in resouces must affect all existing cultures.
-- **Building of the apps makes changes:** package-lock.json, other locale/[culture].json and *.cshtml files. These changes must not be committed.
+- **Localization resources reside only in `*.resx` files:** Even for frontend, JSON files are derivatives. Resource changes must be made in the applicable `*.resx` files for all existing cultures.
+- **Building the apps produces generated changes:** Do not commit incidental changes to `package-lock.json`, locale JSON, or generated `.cshtml` files. Commit a tracked generated target only when an intentional source change requires its update.
 - **Most meaningful C# code changes require new unit tests:** Especially if changed classes (or neighbouring classes) already have them.
 - **Only meaningful changes are allowed:** Do not change other lines for formatting or unrelated reasons. Move code only when it provides substantial value.
 - **Follow existing line endings and rely on `.gitattributes`:** Do not rewrite files just to change line endings;
 - **Preserve line ending in files:** keep original line endings in files, if mixed LF is a priority. keep `*.sln` files as CRLF where required.
+
+## Copilot Code Review
+
+When performing a pull request review, use the `.github/skills/code-review` skill.
+If the diff changes a command, aggregate, domain event, event handler, projection, or denormalizer, also use the `.github/skills/cqrs-event-flow-review` skill.
+Include the token `repository-wide` in the `Instruction trace:` line at the end of every finding comment.

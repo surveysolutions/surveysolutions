@@ -5,6 +5,30 @@ const EXPECTED_HEADER_VALUE = '773994826649214'
 
 let shownOnce = false
 
+function getValidatedSameOriginUrl(rawUrl) {
+    if (!rawUrl) return null
+
+    try {
+        const parsed = new URL(String(rawUrl), window.location.href)
+        const isHttp = parsed.protocol === 'http:' || parsed.protocol === 'https:'
+        if (!isHttp) return null
+        if (parsed.origin !== window.location.origin) return null
+
+        return parsed
+    } catch {
+        return null
+    }
+}
+
+function getValidatedRequestUrl(rawUrl) {
+    const parsed = getValidatedSameOriginUrl(rawUrl)
+    return parsed ? parsed.toString() : null
+}
+
+function getValidatedHeaderValue(rawHeaderValue) {
+    return typeof rawHeaderValue === 'string' ? rawHeaderValue : null
+}
+
 function validateHeaderValues(headerValue, url) {
     const urlStr = url && String(url)
     if (urlStr && urlStr.includes('/error/report')) return
@@ -45,24 +69,39 @@ function validateHeaderValues(headerValue, url) {
 }
 
 export function validateServerHeader(response) {
-    if (!response) return
+    if (!response || typeof response !== 'object') return
 
     // Avoid recursive modal when the error-reporting endpoint itself fails validation
-    const url = response.config && response.config.url
-    const actual = response.headers && response.headers['x-survey-solutions']
+    const rawUrl = response.config && response.config.url
+    const url = getValidatedRequestUrl(rawUrl)
+    const rawHeader = response.headers && response.headers['x-survey-solutions']
+    const actual = getValidatedHeaderValue(rawHeader)
+
+    if (!url) return
     validateHeaderValues(actual, url)
 }
 
 export function validateJQueryXhr(jqXHR, settings) {
     if (!jqXHR) return
 
-    const url = settings && settings.url
-    const actual = jqXHR.getResponseHeader('x-survey-solutions')
+    // Skip validation when the request was aborted or a network error occurred
+    // (status 0 means no HTTP response was received from the server).
+    if (jqXHR.status === 0) return
+
+    const rawUrl = settings && settings.url
+    const url = getValidatedRequestUrl(rawUrl)
+    const actual = getValidatedHeaderValue(jqXHR.getResponseHeader('x-survey-solutions'))
+
+    if (!url) return
     validateHeaderValues(actual, url)
 }
 
 export function validatePageLoad() {
-    const url = window.location.href
+    const validatedUrl = getValidatedSameOriginUrl(window.location.href)
+    if (!validatedUrl) return
+
+    const url = validatedUrl.toString()
+
     fetch(url, { method: 'HEAD' })
         .then(response => {
             if (!response.ok) {
@@ -101,5 +140,4 @@ export function validateFetchResponse(response) {
     const actual = response.headers.get('x-survey-solutions')
     validateHeaderValues(actual, url)
 }
-
 

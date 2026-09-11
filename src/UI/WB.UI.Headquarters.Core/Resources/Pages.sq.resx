@@ -1681,7 +1681,7 @@
     <value>Të gjitha hapësirat e punës</value>
   </data>
   <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
-    <value>Mbikëqyrësi (Anketuesit do të shtohen në ekipin e tij)</value>
+    <value>Mbikëqyrësi</value>
   </data>
   <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
     <value>Zgjidh mbikëqyrësin</value>

@@ -285,6 +285,9 @@
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
       <value>Câu trả lời '{0}' không chính xác vì câu hỏi là câu hỏi nguồn của danh sách và câu trả lời được chỉ định là số âm</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>Không cho phép giá trị âm cho câu hỏi này</value>
+  </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
       <value>Câu trả lời '{0}' không chính xác vì câu trả lời lớn hơn giới hạn trên của danh sách '{1}'.</value>
   </data>
@@ -524,6 +527,9 @@
   </data>
   <data name="Multimedia_PictureSource" xml:space="preserve">
     <value>Chọn một tùy chọn</value>
+  </data>
+  <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+    <value>Không thể xử lý ảnh vì định dạng của ảnh không được hỗ trợ. Vui lòng chụp lại ảnh.</value>
   </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Chụp ảnh</value>

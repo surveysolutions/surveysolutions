@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="ActiveInterviewers" xml:space="preserve"><value>Pewawancara aktif</value></data>
+  <data name="ActiveSupervisors" xml:space="preserve"><value>Supervisor aktif</value></data>
+  <data name="ArchivedInterviewers" xml:space="preserve"><value>Pewawancara yang diarsipkan</value></data>
+  <data name="ArchivedSupervisors" xml:space="preserve"><value>Supervisor yang diarsipkan</value></data>
+  <data name="CreationDate" xml:space="preserve"><value>Tanggal pembuatan</value></data>
+  <data name="DoYouWantToContinue" xml:space="preserve"><value>Apakah Anda ingin melanjutkan?</value></data>
+  <data name="Email" xml:space="preserve"><value>Email</value></data>
+  <data name="Interviewers" xml:space="preserve"><value>Pewawancara</value></data>
+  <data name="Name" xml:space="preserve"><value>Nama</value></data>
+  <data name="Unarchive" xml:space="preserve"><value>Batalkan pengarsipan</value></data>
+  <data name="UnarchiveInterviewerWarning" xml:space="preserve"><value>Pewawancara akan dibatalkan pengarsipannya.</value></data>
+  <data name="UnarchiveSupervisorWarning" xml:space="preserve"><value>Supervisor akan dibatalkan pengarsipannya.</value></data>
+</root>

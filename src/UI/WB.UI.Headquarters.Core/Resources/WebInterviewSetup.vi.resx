@@ -1,0 +1,211 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="BackToQuestionnaires" xml:space="preserve">
+        <value>Quay lại thiết lập khảo sát</value>
+        </data>
+    <data name="Done" xml:space="preserve">
+        <value>Xong</value>
+        </data>
+    <data name="SelectInterviwer" xml:space="preserve">
+        <value>Chọn người phỏng vấn</value>
+        </data>
+    <data name="Start" xml:space="preserve">
+        <value>Bắt đầu</value>
+        </data>
+    <data name="Started_Title" xml:space="preserve">
+        <value>Cuộc phỏng vấn trên web đã bắt đầu</value>
+        </data>
+    <data name="StartInfo" xml:space="preserve">
+        <value>Bắt đầu cuộc phỏng vấn trên web cho {{name}}</value>
+        </data>
+    <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
+        <value>Thiết lập cuộc phỏng vấn trên web</value>
+        </data>
+    <data name="WebInterviewSetup_Title" xml:space="preserve">
+        <value>Thiết lập cuộc phỏng vấn trên web</value>
+        </data>
+    <data name="WebInterviewStarted" xml:space="preserve">
+        <value>Cuộc phỏng vấn trên web cho {{name}} đã bắt đầu</value>
+        </data>
+    <data name="UseCaptcha" xml:space="preserve">
+        <value>Sử dụng CAPTCHA trước khi bắt đầu cuộc phỏng vấn</value>
+        </data>
+    <data name="DownloadTitle" xml:space="preserve">
+        <value>Tải xuống ({{count}})</value>
+        </data>
+    <data name="ExportAssignmentsTitle" xml:space="preserve">
+        <value>Bạn có thể tải xuống danh sách các bài tập đã tạo được giao cho người phỏng vấn để cung cấp liên kết web cho người trả lời</value>
+        </data>
+    <data name="StopWebInterview" xml:space="preserve">
+        <value>Dừng cuộc phỏng vấn trên web</value>
+        </data>
+    <data name="WebInterviewUserMessages_FinishInterview_Descr" xml:space="preserve">
+        <value>Văn bản hiển thị ở trang cuối cùng khi cuộc phỏng vấn hoàn tất</value>
+        </data>
+    <data name="WebInterviewUserMessages_Invitation_Descr" xml:space="preserve">
+        <value>Văn bản lời mời được trình bày cho người dùng trên trang đầu tiên. %QUESTIONNAIRE% được thay thế bằng tên bảng câu hỏi</value>
+        </data>
+    <data name="WebInterviewUserMessages_ResumeInvitation_Descr" xml:space="preserve">
+        <value>Văn bản hiển thị cho người dùng quay lại khi cuộc phỏng vấn được tiếp tục. %QUESTIONNAIRE% được thay thế bằng tên bảng câu hỏi</value>
+        </data>
+    <data name="WebInterviewUserMessages_ResumeWelcome_Descr" xml:space="preserve">
+        <value>Văn bản tiêu đề được hiển thị cho người dùng quay lại trước khi tiếp tục cuộc phỏng vấn</value>
+        </data>
+    <data name="WebInterviewUserMessages_SurveyName_Descr" xml:space="preserve">
+        <value>Tên cuộc khảo sát được thực hiện %QUESTIONNAIRE% được thay thế bằng tên bảng câu hỏi</value>
+        </data>
+    <data name="WebInterviewUserMessages_WebSurveyHeader_Descr" xml:space="preserve">
+        <value>Văn bản tiêu đề hiển thị sau khi hoàn thành cuộc phỏng vấn</value>
+        </data>
+    <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
+        <value>Tiêu đề văn bản chào mừng trên trang đầu tiên</value>
+        </data>
+    <data name="CustomText" xml:space="preserve">
+        <value>Sử dụng văn bản tùy chỉnh</value>
+        </data>
+    <data name="TextsUpdated" xml:space="preserve">
+        <value>Đã cập nhật văn bản</value>
+        </data>
+    <data name="SaveAll" xml:space="preserve">
+        <value>Lưu tất cả</value>
+        </data>
+    <data name="TextCustomize" xml:space="preserve">
+        <value>Văn bản gửi tới người trả lời có thể được tùy chỉnh</value>
+        </data>
+    <data name="CustomMessageTooLong" xml:space="preserve">
+        <value>Tin nhắn tùy chỉnh không được chứa nhiều hơn {0} ký tự (bao gồm cả html)</value>
+        </data>
+    <data name="WebInterviewSetup_SendInvitationsTitle" xml:space="preserve">
+        <value>Gửi lời mời</value>
+        </data>
+    <data name="Invitations" xml:space="preserve">
+        <value>Lời mời</value>
+        </data>
+    <data name="Invitations_TotalInvitations" xml:space="preserve">
+        <value>{{count}} tổng số lời mời.</value>
+        </data>
+    <data name="Invitations_Sent" xml:space="preserve">
+        <value>{{count}} lời mời đã được gửi đi.</value>
+        </data>
+    <data name="Invitations_NothingSent" xml:space="preserve">
+        <value>Chưa có lời mời nào được gửi.</value>
+        </data>
+    <data name="Invitations_ToSend" xml:space="preserve">
+        <value>{{count}} lời mời gửi.</value>
+        </data>
+    <data name="Invitations_NothingToSend" xml:space="preserve">
+        <value>Hiện tại không có lời mời nào để gửi.</value>
+        </data>
+    <data name="Invitations_SetupError" xml:space="preserve">
+        <value>Không thể gửi lời mời.</value>
+        </data>
+    <data name="Invitations_EmailIsNotSetUp" xml:space="preserve">
+        <value>Nhà cung cấp email chưa được thiết lập.</value>
+        </data>
+    <data name="Invitations_ChangeEmailSettingsAdmin" xml:space="preserve">
+        <value>Bạn có thể thay đổi các cài đặt này tại trang &lt;a href="{{url}}"&gt;'Nhà cung cấp email'&lt;/a&gt;.</value>
+        </data>
+    <data name="Invitations_ChangeEmailSettingsNotAdmin" xml:space="preserve">
+        <value>Yêu cầu người dùng quản trị của bạn thay đổi các cài đặt này tại trang 'Nhà cung cấp email'.</value>
+        </data>
+    <data name="Invitations_SurveyIsNotStarted" xml:space="preserve">
+        <value>Khảo sát trên web chưa được bắt đầu. Thiết lập và &lt;a href="{{url}}"&gt;bắt đầu khảo sát trên web&lt;/a&gt; trước khi gửi lời mời.</value>
+        </data>
+    <data name="Invitations_SuccessfulSetup" xml:space="preserve">
+        <value>Khảo sát trên web đã được bắt đầu và nhà cung cấp email đã được thiết lập đúng cách. Hệ thống đã sẵn sàng gửi lời mời.</value>
+        </data>
+    <data name="Invitations_SendAction" xml:space="preserve">
+        <value>Gửi {{count}} lời mời</value>
+        </data>
+    <data name="WebInterviewUserMessages_CompleteButton_Descr" xml:space="preserve">
+        <value>Hoàn thành</value>
+        </data>
+    <data name="WebInterviewUserMessages_CompleteNoteToSupervisor_Descr" xml:space="preserve">
+        <value>Lưu ý dành cho Giám sát viên</value>
+        </data>
+    <data name="SingleResponse" xml:space="preserve">
+        <value>Giới hạn một cuộc phỏng vấn cho mỗi người trả lời</value>
+        </data>
+    <data name="WebInterviewUserMessages_StartNewButton_Descr" xml:space="preserve">
+        <value>Bắt đầu cuộc phỏng vấn mới</value>
+        </data>
+    <data name="WebInterviewUserMessages_ResumeButton_Descr" xml:space="preserve">
+        <value>Bản tóm tắt</value>
+        </data>
+    <data name="EmailOnComplete" xml:space="preserve">
+        <value>Gửi email sau khi hoàn thành cuộc phỏng vấn trên web</value>
+        </data>
+    <data name="AttachAnswersToCompleteEmail" xml:space="preserve">
+        <value>Đính kèm bảng điểm Pdf</value>
+        </data>
+    <data name="AllowSwitchToCawiForInterviewer" xml:space="preserve">
+        <value>Cho phép Người phỏng vấn chuyển sang chế độ CAWI</value>
+        </data>
+    <data name="WebInterviewUserMessages_LinkInvitation_Descr" xml:space="preserve">
+        <value>Văn bản hiển thị cho người dùng khi họ điều hướng đến liên kết tới cuộc phỏng vấn chưa được đồng bộ hóa với máy chủ</value>
+        </data>
+    <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
+        <value>Tiêu đề văn bản chào mừng trên trang đích liên kết phỏng vấn trên web</value>
+        </data>
+    <data name="AllowTranscriptDownloading" xml:space="preserve">
+        <value>Cho phép tải bảng điểm phỏng vấn sau khi nộp</value>
+        </data>
+</root>

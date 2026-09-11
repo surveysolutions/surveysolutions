@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
             var client =  RestService.For<IOAuth2Api>(
                 new HttpClient()
                 {
-                    BaseAddress = new Uri(storageSettings.TokenUri)
+                    BaseAddress = storageSettings.GetTokenEndpointUri()
                 },
                 new RefitSettings
                 {
@@ -53,7 +53,8 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
                 RefreshToken = refreshToken,
                 ClientId = storageSettings.ClientId,
                 ClientSecret = storageSettings.ClientSecret,
-                GrantType = "refresh_token"
+                GrantType = "refresh_token",
+                Scope = storageSettings.Scope
             };
 
             return await client.GetAccessTokenByRefreshTokenAsync(request);

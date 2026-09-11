@@ -16,6 +16,15 @@ env:
   DOTNET_VERSION: '9.0.x'
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      pg_password: ${{ steps.gen.outputs.pg_password }}
+    steps:
+      - name: Generate temp data
+        id: gen
+        run: echo "pg_password=$(openssl rand -hex 24)" >> "$GITHUB_OUTPUT"
+
   unit-web:
     runs-on: ubuntu-latest
     strategy:
@@ -55,11 +64,12 @@ jobs:
 
   integration:
     runs-on: ubuntu-latest
+    needs: setup
     strategy:
       fail-fast: false
     env:
       PG_USER: postgres
-      PG_PASSWORD: PasswordForTests123
+      PG_PASSWORD: ${{ needs.setup.outputs.pg_password }}
 
     services:
       postgres:
@@ -172,11 +182,11 @@ jobs:
             /o:"surveysolutions" \
             /v:"$(cat ./src/.version)" \
             /d:sonar.host.url="https://sonarcloud.io" \
-            /d:sonar.login="${{ secrets.SONAR_TOKEN }}" \
+            /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
             /d:sonar.exclusions="**/migrations/**" \
             /d:sonar.cs.opencover.reportsPaths="${{ steps.test-results.outputs.download-path }}/**/*.xml"
           dotnet build './src/WB without Xamarin.sln'
-          dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

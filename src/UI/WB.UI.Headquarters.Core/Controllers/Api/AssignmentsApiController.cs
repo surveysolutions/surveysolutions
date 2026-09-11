@@ -228,6 +228,14 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (request == null)
                 return this.BadRequest();
 
+            var normalizedTargetArea = string.IsNullOrWhiteSpace(request.TargetArea) ? null : request.TargetArea.Trim();
+
+            if (normalizedTargetArea != null && normalizedTargetArea.Length > AssignmentConstants.TargetAreaLengthLimit)
+            {
+                var truncatedName = normalizedTargetArea.Length > 100 ? normalizedTargetArea.Substring(0, 100) + "…" : normalizedTargetArea;
+                return this.BadRequest(new {Message = string.Format(Maps.MapFileNameTooLong, truncatedName, AssignmentConstants.TargetAreaLengthLimit)});
+            }
+
             var interview = this.interviews.Get(request.InterviewId);
             if (interview == null)
                 return this.NotFound();
@@ -296,7 +304,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 answers,
                 null,
                 request.Comments,
-                string.IsNullOrWhiteSpace(request.TargetArea) ? null : request.TargetArea.Trim());
+                normalizedTargetArea);
                 
                 this.invitationService.CreateInvitationForWebInterview(assignment);
                 

@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AppendixLink" xml:space="preserve">
+        <value>Dan {0} simbol lainnya [{1}]</value>
+    </data>
+    <data name="Appendix_Conditions" xml:space="preserve">
+        <value>Lampiran {0} {1} kondisi yang memungkinkan</value>
+    </data>
+    <data name="Appendix_Instructions" xml:space="preserve">
+        <value>Lampiran instruksi {0} {1}</value>
+    </data>
+    <data name="Appendix_OptionFilters" xml:space="preserve">
+        <value>Lampiran filter kategori {0} {1}</value>
+    </data>
+    <data name="Appendix_Options" xml:space="preserve">
+        <value>Lampiran kategori {0} {1}</value>
+    </data>
+    <data name="Appendix_SpecialValues" xml:space="preserve">
+        <value>Lampiran {0} {1} nilai khusus</value>
+    </data>
+    <data name="Appendix_CriticalRules" xml:space="preserve">
+        <value>Lampiran {0} {1} aturan penting</value>
+    </data>
+    <data name="Appendix_Validations" xml:space="preserve">
+        <value>Lampiran {0} {1} kondisi dan pesan validasi</value>
+    </data>
+    <data name="Appendix_Variables" xml:space="preserve">
+        <value>Lampiran variabel {0} {1}</value>
+    </data>
+    <data name="CreatedBy" xml:space="preserve">
+        <value>Kuesioner dibuat oleh {0}</value>
+    </data>
+    <data name="OwnedBy" xml:space="preserve">
+        <value>Kuesioner milik {0}</value>
+    </data>
+    <data name="EnablementCondition" xml:space="preserve">
+        <value>Kondisi Pemberdayaan:</value>
+    </data>
+    <data name="CriticalityCondition" xml:space="preserve">
+        <value>Kondisi Kritis:</value>
+    </data>
+    <data name="CriticalityMessage" xml:space="preserve">
+        <value>Pesan:</value>
+    </data>
+    <data name="Description" xml:space="preserve">
+        <value>Keterangan:</value>
+    </data>
+    <data name="GeneratedBy" xml:space="preserve">
+        <value>Dihasilkan oleh {0}</value>
+    </data>
+    <data name="LastEdited" xml:space="preserve">
+        <value>{0} terakhir diedit {1}</value>
+    </data>
+    <data name="LastModifiedBy" xml:space="preserve">
+        <value>Terakhir diubah oleh {0}</value>
+    </data>
+    <data name="Legend" xml:space="preserve">
+        <value>Legenda</value>
+    </data>
+    <data name="NeverEdited" xml:space="preserve">
+        <value>{0} (tidak pernah diedit)</value>
+    </data>
+    <data name="NotShared" xml:space="preserve">
+        <value>Tidak dibagikan kepada siapa pun</value>
+    </data>
+    <data name="Options" xml:space="preserve">
+        <value>Kategori:</value>
+    </data>
+    <data name="PdfLegend" xml:space="preserve">
+        <value>Legenda dan struktur informasi dalam file ini</value>
+    </data>
+    <data name="QuestionScope_Identifying" xml:space="preserve">
+        <value>mengidentifikasi</value>
+    </data>
+    <data name="QuestionType_Area" xml:space="preserve">
+        <value>geografi:</value>
+    </data>
+    <data name="QuestionType_Area_Polygon" xml:space="preserve">
+        <value>poligon</value>
+    </data>
+    <data name="QuestionType_Area_Polyline" xml:space="preserve">
+        <value>polyline</value>
+    </data>
+    <data name="QuestionType_Area_Multipoint" xml:space="preserve">
+        <value>banyak titik</value>
+    </data>
+    <data name="QuestionType_Area_Point" xml:space="preserve">
+        <value>titik</value>
+    </data>
+    <data name="QuestionType_Audio" xml:space="preserve">
+        <value>audio</value>
+    </data>
+    <data name="QuestionType_Barcode" xml:space="preserve">
+        <value>kode batang</value>
+    </data>
+    <data name="QuestionType_Cascading" xml:space="preserve">
+        <value>mengalir</value>
+    </data>
+    <data name="QuestionType_Combobox" xml:space="preserve">
+        <value>kotak kombo</value>
+    </data>
+    <data name="QuestionType_CurrentTime" xml:space="preserve">
+        <value>tanggal: waktu saat ini</value>
+    </data>
+    <data name="QuestionType_Date" xml:space="preserve">
+        <value>tanggal</value>
+    </data>
+    <data name="QuestionType_Decimal" xml:space="preserve">
+        <value>desimal</value>
+    </data>
+    <data name="QuestionType_GPS" xml:space="preserve">
+        <value>GPS</value>
+    </data>
+    <data name="QuestionType_Integer" xml:space="preserve">
+        <value>bilangan bulat</value>
+    </data>
+    <data name="QuestionType_Linked" xml:space="preserve">
+        <value>terhubung</value>
+    </data>
+    <data name="QuestionType_List" xml:space="preserve">
+        <value>daftar</value>
+    </data>
+    <data name="QuestionType_MultiSelect" xml:space="preserve">
+        <value>multi-pilih</value>
+    </data>
+    <data name="QuestionType_Numeric" xml:space="preserve">
+        <value>numerik:</value>
+    </data>
+    <data name="QuestionType_Ordered" xml:space="preserve">
+        <value>dipesan</value>
+    </data>
+    <data name="QuestionType_Picture" xml:space="preserve">
+        <value>gambar</value>
+    </data>
+    <data name="QuestionType_SingleSelect" xml:space="preserve">
+        <value>pilih tunggal</value>
+    </data>
+    <data name="QuestionType_Text" xml:space="preserve">
+        <value>teks</value>
+    </data>
+    <data name="QuestionType_YesNo" xml:space="preserve">
+        <value>ya / tidak</value>
+    </data>
+    <data name="Roster" xml:space="preserve">
+        <value>Daftar:</value>
+    </data>
+    <data name="RosterType_List" xml:space="preserve">
+        <value>daftar</value>
+    </data>
+    <data name="RosterType_Multi" xml:space="preserve">
+        <value>multi-pilih</value>
+    </data>
+    <data name="RosterType_Numeric" xml:space="preserve">
+        <value>numerik</value>
+    </data>
+    <data name="Roster_GeneretedByFixedList" xml:space="preserve">
+        <value>dihasilkan oleh daftar tetap</value>
+    </data>
+    <data name="Roster_GeneretedByQuestion" xml:space="preserve">
+        <value>dihasilkan oleh pertanyaan {0} {1}</value>
+    </data>
+    <data name="Scope" xml:space="preserve">
+        <value>Cakupan: {0}</value>
+    </data>
+    <data name="SourceOfCategories" xml:space="preserve">
+        <value>Sumber kategori:</value>
+    </data>
+    <data name="RosterSourceOfCategories" xml:space="preserve">
+        <value>Daftar</value>
+    </data>
+    <data name="TextListSourceOfCategories" xml:space="preserve">
+        <value>Pertanyaan daftar teks</value>
+    </data>
+    <data name="QuestionInRosterSourceOfCategories" xml:space="preserve">
+        <value>Pertanyaan</value>
+    </data>
+    <data name="InRosterSourceOfCategories" xml:space="preserve">
+        <value>dalam daftar</value>
+    </data>
+    <data name="SharedWith" xml:space="preserve">
+        <value>Dibagikan dengan:</value>
+    </data>
+    <data name="SpecialValues" xml:space="preserve">
+        <value>Nilai-nilai khusus</value>
+    </data>
+    <data name="GeographyType" xml:space="preserve">
+        <value>Tipe geografi</value>
+    </data>
+    <data name="GeographyInputMode" xml:space="preserve">
+        <value>Modus masukan</value>
+    </data>
+    <data name="GeometryOverlapDetection" xml:space="preserve">
+        <value>Deteksi tumpang tindih</value>
+    </data>
+    <data name="StaticText" xml:space="preserve">
+        <value>Teks statis</value>
+    </data>
+    <data name="Stat_NoQuestions" xml:space="preserve">
+        <value>Tidak ada pertanyaan</value>
+    </data>
+    <data name="Stat_NoRosters" xml:space="preserve">
+        <value>Tidak ada daftar nama</value>
+    </data>
+    <data name="Stat_NoSubsections" xml:space="preserve">
+        <value>Tidak ada sub-bagian</value>
+    </data>
+    <data name="Stat_Questions" xml:space="preserve">
+        <value>Pertanyaan: {0}</value>
+    </data>
+    <data name="Stat_QuestionsWithConditions" xml:space="preserve">
+        <value>Pertanyaan dengan kondisi yang memungkinkan: {0}</value>
+    </data>
+    <data name="Stat_QuestionsWithValidation" xml:space="preserve">
+        <value>Pertanyaan dengan kondisi validasi:{0}</value>
+    </data>
+    <data name="Stat_Rosters" xml:space="preserve">
+        <value>Daftar nama: {0}</value>
+    </data>
+    <data name="Stat_Sections" xml:space="preserve">
+        <value>Bagian: {0}</value>
+    </data>
+    <data name="Stat_StaticTexts" xml:space="preserve">
+        <value>Teks statis: {0}</value>
+    </data>
+    <data name="Stat_Subsections" xml:space="preserve">
+        <value>Sub-bagian: {0}</value>
+    </data>
+    <data name="Stat_Variables" xml:space="preserve">
+        <value>Variabel: {0}</value>
+    </data>
+    <data name="ValidationCondition" xml:space="preserve">
+        <value>Kondisi Validasi:</value>
+    </data>
+    <data name="ValidationMessage" xml:space="preserve">
+        <value>Pesan Validasi:</value>
+    </data>
+    <data name="Variable" xml:space="preserve">
+        <value>Variabel</value>
+    </data>
+    <data name="QuestionScope_Hidden" xml:space="preserve">
+        <value>tersembunyi</value>
+    </data>
+    <data name="QuestionScope_Supervisor" xml:space="preserve">
+        <value>pengawas</value>
+    </data>
+    <data name="MetadataTitle" xml:space="preserve">
+        <value>Judul</value>
+    </data>
+    <data name="MetadataSubtitle" xml:space="preserve">
+        <value>Subjudul</value>
+    </data>
+    <data name="MetadataVersionIdentificator" xml:space="preserve">
+        <value>Pengidentifikasi versi</value>
+    </data>
+    <data name="MetadataVersionNotes" xml:space="preserve">
+        <value>Catatan versi</value>
+    </data>
+    <data name="MetadataStudyType" xml:space="preserve">
+        <value>Jenis studi</value>
+    </data>
+    <data name="MetadataKindOfData" xml:space="preserve">
+        <value>Jenis data</value>
+    </data>
+    <data name="MetadataModeOfDataCollection" xml:space="preserve">
+        <value>Cara Pengumpulan Data</value>
+    </data>
+    <data name="MetadataCountry" xml:space="preserve">
+        <value>Negara</value>
+    </data>
+    <data name="MetadataYear" xml:space="preserve">
+        <value>Tahun</value>
+    </data>
+    <data name="MetadataLanguages" xml:space="preserve">
+        <value>Bahasa</value>
+    </data>
+    <data name="MetadataUnitOfAlalysis" xml:space="preserve">
+        <value>Unit analisis</value>
+    </data>
+    <data name="MetadataCoverage" xml:space="preserve">
+        <value>Cakupan</value>
+    </data>
+    <data name="MetadataUniverse" xml:space="preserve">
+        <value>Semesta</value>
+    </data>
+    <data name="MetadataPrimaryInvestigator" xml:space="preserve">
+        <value>Penyelidik Utama</value>
+    </data>
+    <data name="MetadataConsultants" xml:space="preserve">
+        <value>Konsultan</value>
+    </data>
+    <data name="MetadataNotes" xml:space="preserve">
+        <value>Catatan</value>
+    </data>
+    <data name="MetadataKeywords" xml:space="preserve">
+        <value>Kata kunci</value>
+    </data>
+    <data name="MetadataFunding" xml:space="preserve">
+        <value>Pendanaan</value>
+    </data>
+    <data name="MetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+        <value>Setuju untuk mempublikasikan kuesioner ini</value>
+    </data>
+    <data name="MetadataSectionTitle" xml:space="preserve">
+        <value>Informasi identifikasi survei</value>
+    </data>
+    <data name="MetadataSectionSubTitle" xml:space="preserve">
+        <value>deskripsi kuesioner</value>
+    </data>
+    <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+        <value>Informasi dasar</value>
+    </data>
+    <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+        <value>Informasi data survei</value>
+    </data>
+    <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+        <value>Informasi survei</value>
+    </data>
+    <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+        <value>Informasi tambahan</value>
+    </data>
+    <data name="VariableExcludedFromExport" xml:space="preserve">
+        <value>Variabel ini dikecualikan dari data yang diekspor</value>
+    </data>
+    <data name="On" xml:space="preserve">
+        <value>PADA</value>
+    </data>
+    <data name="Off" xml:space="preserve">
+        <value>MATI</value>
+    </data>
+</root>

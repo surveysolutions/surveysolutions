@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="PageTitle" xml:space="preserve"><value>{0} | Xem xét</value></data>
+  <data name="AudioAudit_Available" xml:space="preserve">
+     <value>Kiểm tra âm thanh:</value>
+  </data>
+  <data name="AudioAudit_ViewRecordings" xml:space="preserve">
+    <value>Xem bản ghi</value>
+  </data>
+  <data name="AudioAudit_CloseRecordings" xml:space="preserve">
+    <value>Đóng bản ghi</value>
+  </data>
+  <data name="AudioAudit_DurationLoading" xml:space="preserve">
+    <value>Thời lượng: đang tải…</value>
+  </data>
+  <data name="AudioAudit_DurationUnavailable" xml:space="preserve">
+    <value>Thời lượng: không khả dụng</value>
+  </data>
+  <data name="AudioAudit_TotalDuration" xml:space="preserve">
+    <value>Tổng thời lượng: {{ duration }}</value>
+  </data>
+  <data name="AudioAudit_SegmentLabel" xml:space="preserve">
+    <value>{{ number }}</value>
+  </data>
+  <data name="AudioAudit_DeviceTime" xml:space="preserve">
+    <value>Thời gian thiết bị: {{ time }}</value>
+  </data>
+  <data name="AudioAudit_SegmentUnavailable" xml:space="preserve">
+    <value>Bản ghi không khả dụng</value>
+  </data>
+  <data name="AudioAudit_PlaybackFailed" xml:space="preserve">
+    <value>Phát lại thất bại</value>
+  </data>
+  <data name="AudioAudit_UnsupportedFormat" xml:space="preserve">
+    <value>Định dạng không được trình duyệt hỗ trợ</value>
+  </data>
+  <data name="AudioAudit_SkipBackward" xml:space="preserve">
+    <value>Tua lùi 10 giây</value>
+  </data>
+  <data name="AudioAudit_SkipForward" xml:space="preserve">
+    <value>Tua tới 10 giây</value>
+  </data>
+  <data name="AudioAudit_NoRecordingsAvailable" xml:space="preserve">
+    <value>Hiện không có bản ghi nào có thể phát</value>
+  </data>
+  <data name="AudioAudit_Title" xml:space="preserve">
+    <value>Bản ghi kiểm tra âm thanh</value>
+  </data>
+  <data name="AudioAudit_LoadingRecordings" xml:space="preserve">
+    <value>Đang tải bản ghi...</value>
+  </data>
+  <data name="AudioAudit_LoadingAudio" xml:space="preserve">
+    <value>Đang tải âm thanh...</value>
+  </data>
+  <data name="AudioAudit_LoadFailed" xml:space="preserve">
+    <value>Không thể tải các bản ghi kiểm tra âm thanh.</value>
+  </data>
+  <data name="AudioAudit_Retry" xml:space="preserve">
+    <value>Thử lại</value>
+  </data>
+  <data name="AudioAudit_NowPlaying" xml:space="preserve">
+    <value>Đang phát: {{ segment }}</value>
+  </data>
+  <data name="AudioAudit_PositionValue" xml:space="preserve">
+    <value>Vị trí: {{ position }}</value>
+  </data>
+  <data name="AudioAudit_DurationValue" xml:space="preserve">
+    <value>Thời lượng: {{ duration }}</value>
+  </data>
+  <data name="AudioAudit_RecordingPosition" xml:space="preserve">
+    <value>Vị trí bản ghi</value>
+  </data>
+  <data name="AudioAudit_GoToPreviousSegment" xml:space="preserve">
+    <value>Chuyển đến bản ghi trước</value>
+  </data>
+  <data name="AudioAudit_PlayRecording" xml:space="preserve">
+    <value>Phát bản ghi</value>
+  </data>
+  <data name="AudioAudit_PauseRecording" xml:space="preserve">
+    <value>Tạm dừng bản ghi</value>
+  </data>
+  <data name="AudioAudit_GoToNextSegment" xml:space="preserve">
+    <value>Chuyển đến bản ghi tiếp theo</value>
+  </data>
+  <data name="AudioAudit_PlaylistLabel" xml:space="preserve">
+    <value>Danh sách bản ghi kiểm tra âm thanh</value>
+  </data>
+  <data name="AudioAudit_UnknownDuration" xml:space="preserve">
+    <value>không rõ thời lượng</value>
+  </data>
+  <data name="AudioAudit_SeekPosition" xml:space="preserve">
+    <value>{{ current }} trên {{ total }}</value>
+  </data>
+  <data name="AudioAudit_PlaybackSpeedAnnouncement" xml:space="preserve">
+    <value>Tốc độ phát {{ rate }}x.</value>
+  </data>
+  <data name="AudioAudit_SegmentSelected" xml:space="preserve">
+    <value>Đã chọn {{ segment }}.</value>
+  </data>
+  <data name="AudioAudit_SegmentDurationAnnouncement" xml:space="preserve">
+    <value>{{ segment }} dài {{ duration }}.</value>
+  </data>
+  <data name="AudioAudit_PlayingAnnouncement" xml:space="preserve">
+    <value>Đang phát {{ segment }}.</value>
+  </data>
+  <data name="AudioAudit_PausedAnnouncement" xml:space="preserve">
+    <value>{{ segment }} đang tạm dừng.</value>
+  </data>
+  <data name="AudioAudit_FinishedAnnouncement" xml:space="preserve">
+    <value>{{ segment }} đã phát xong.</value>
+  </data>
+</root>

@@ -22,7 +22,7 @@ namespace WB.UI.Shared.Web.UnderConstruction
             && !context.Request.Path.StartsWithSegments("/.hc"))
             {
                 context.Response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
-                context.Response.Headers.Add("Retry-After", "30");
+                context.Response.Headers.Append("Retry-After", "30");
                 context.Request.Path = "/UnderConstruction";
             }
 

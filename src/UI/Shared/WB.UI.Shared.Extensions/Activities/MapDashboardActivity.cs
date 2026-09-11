@@ -13,6 +13,7 @@ using MvvmCross.WeakSubscription;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.CustomControls;
 using WB.UI.Shared.Extensions.Activities.Carousel;
 using WB.UI.Shared.Extensions.ViewModels;
 using Math = Java.Lang.Math;
@@ -24,7 +25,7 @@ namespace WB.UI.Shared.Extensions.Activities
     {
         protected override int ViewResourceId => Resource.Layout.map_dashboard;
 
-        private DrawerLayout drawerLayout;
+        private SafeDrawerLayout drawerLayout;
 
         private IDisposable onDrawerOpenedSubscription;
         private IDisposable onImageButtonDrawerOpenSubscription;
@@ -40,7 +41,7 @@ namespace WB.UI.Shared.Extensions.Activities
         {
             base.OnCreate(bundle);
             
-            this.drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.rootLayout);
+            this.drawerLayout = this.FindViewById<SafeDrawerLayout>(Resource.Id.rootLayout);
             ImageButton openDrawerButton = this.FindViewById<ImageButton>(Resource.Id.butBurger);
 
             onImageButtonDrawerOpenSubscription =
