@@ -266,5 +266,14 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("UpgradeAssignments", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy Web Interview settings from the previous version.
+        /// </summary>
+        public static string CopyWebInterviewSettings {
+            get {
+                return ResourceManager.GetString("CopyWebInterviewSettings", resourceCulture);
+            }
+        }
     }
 }
