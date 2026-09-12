@@ -102,4 +102,7 @@
     <data name="ServiceUnavailable" xml:space="preserve">
         <value>Сервис ассистента временно недоступен. Пожалуйста, попробуйте позже.</value>
     </data>
+    <data name="MessageTooLong" xml:space="preserve">
+        <value>Сообщение слишком длинное и было обрезано. Пожалуйста, сократите его перед отправкой.</value>
+    </data>
 </root>
