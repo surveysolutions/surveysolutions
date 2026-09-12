@@ -297,6 +297,9 @@
   <data name="EmailChangeShouldBeConfirmed" xml:space="preserve">
     <value>Please follow instructions sent to provided email ({0}) to confirm email change.</value>
   </data>
+  <data name="EmailSendFailed" xml:space="preserve">
+    <value>Email could not be sent. Please try again later or contact the administrator.</value>
+  </data>
   <data name="PendingEmailUpdate" xml:space="preserve">
     <value>Pending update to {0}</value>
   </data>
