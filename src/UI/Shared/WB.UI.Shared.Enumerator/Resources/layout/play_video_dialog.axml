@@ -23,6 +23,14 @@
                    android:layout_height="wrap_content"
                    android:orientation="horizontal"
                    android:layout_marginTop="@dimen/calendar_event_dialog_margin">
+        <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/default_input_button"
+                android:padding="8dp"
+                local:srcCompat="@drawable/fullscreen_icon"
+                local:MvxBind="Click OpenFullScreenCommand;" />
         <View
                 android:layout_width="@dimen/calendar_event_buttons_space"
                 android:layout_height="0dp"
