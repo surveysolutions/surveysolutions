@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
@@ -74,7 +75,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 return NotFound();
 
             Stream exportFileStream = new MemoryStream(mapContent);
-            var result = new FileStreamResult(exportFileStream, "application/octet-stream") { };
+            var result = new FileStreamResult(exportFileStream, "application/octet-stream")
+            {
+                EnableRangeProcessing = true,
+                EntityTag = new EntityTagHeaderValue($"\"{map.Id}-{map.Size}-{map.ImportDate?.Ticks ?? 0}\"")
+            };
             return result;
         }
     }

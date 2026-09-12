@@ -370,6 +370,8 @@ namespace WB.Core.Infrastructure.HttpServices.Services
                 .ConfigureAwait(false);
 
             var contentLength = response.Content.Headers.ContentLength;
+            var isPartialContent = response.StatusCode == System.Net.HttpStatusCode.PartialContent;
+            var eTag = response.Headers.ETag?.Tag;
 
             var contentCompressionType = this.GetContentCompressionType(response.Content.Headers);
 
@@ -381,20 +383,26 @@ namespace WB.Core.Infrastructure.HttpServices.Services
                     return new RestStreamResult
                     {
                         Stream = this.stringCompressor.GetDecompressingGZipStream(responseStream),
-                        ContentLength = contentLength
+                        ContentLength = contentLength,
+                        IsPartialContent = isPartialContent,
+                        ETag = eTag
                     };
 
                 case RestContentCompressionType.Deflate:
                     return new RestStreamResult
                     {
                         Stream = this.stringCompressor.GetDecompressingDeflateStream(responseStream),
-                        ContentLength = contentLength
+                        ContentLength = contentLength,
+                        IsPartialContent = isPartialContent,
+                        ETag = eTag
                     };
                 default:
                     return new RestStreamResult
                     {
                         Stream = responseStream,
-                        ContentLength = contentLength
+                        ContentLength = contentLength,
+                        IsPartialContent = isPartialContent,
+                        ETag = eTag
                     };
             }
         }
