@@ -64,6 +64,9 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         [JsonProperty("area")]
         public string TargetArea { get; set; }
 
+        [JsonProperty("comment")]
+        public string Comments { get; set; }
+
         [JsonProperty("status")]
         public AssignmentStatus Status { get; set; }
 
@@ -80,7 +83,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public AssignmentStatus Status { get; set; }
 
         [JsonProperty("comment")]
-        [System.ComponentModel.DataAnnotations.MaxLength(500)]
+        [System.ComponentModel.DataAnnotations.MaxLength(500)]
         public string Comment { get; set; }
     }
 }

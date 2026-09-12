@@ -84,6 +84,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                     ResponsibleName = assignment.Responsible.Name,
                     IsAudioRecordingEnabled = assignment.AudioRecording,
                     TargetArea = assignment.TargetArea,
+                    Comments = assignment.Comments,
                     Status = assignment.Status,
                     StatusComment = assignment.StatusComment,
                     UpdatedAtUtc = assignment.UpdatedAtUtc

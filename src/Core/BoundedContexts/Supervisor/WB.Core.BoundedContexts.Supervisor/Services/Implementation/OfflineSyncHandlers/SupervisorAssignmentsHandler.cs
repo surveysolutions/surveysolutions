@@ -81,6 +81,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                         QuestionnaireId = QuestionnaireIdentity.Parse(assignmentDocument.QuestionnaireId),
                         IsAudioRecordingEnabled = assignmentDocument.IsAudioRecordingEnabled,
                         TargetArea = assignmentDocument.TargetArea,
+                        Comments = assignmentDocument.Comments,
                         Status = assignmentDocument.Status,
                         StatusComment = assignmentDocument.StatusComment
                     }).ToList()
