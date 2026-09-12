@@ -120,4 +120,112 @@
   <data name="PageTitle" xml:space="preserve">
     <value>{0} | revisión</value>
   </data>
+  <data name="AudioAudit_Available" xml:space="preserve">
+     <value>Auditoría de audio:</value>
+  </data>
+  <data name="AudioAudit_ViewRecordings" xml:space="preserve">
+    <value>Ver grabaciones</value>
+  </data>
+  <data name="AudioAudit_CloseRecordings" xml:space="preserve">
+    <value>Cerrar grabaciones</value>
+  </data>
+  <data name="AudioAudit_DurationLoading" xml:space="preserve">
+    <value>Duración: cargando…</value>
+  </data>
+  <data name="AudioAudit_DurationUnavailable" xml:space="preserve">
+    <value>Duración: no disponible</value>
+  </data>
+  <data name="AudioAudit_TotalDuration" xml:space="preserve">
+    <value>Duración total: {{ duration }}</value>
+  </data>
+  <data name="AudioAudit_SegmentLabel" xml:space="preserve">
+    <value>{{ number }}</value>
+  </data>
+  <data name="AudioAudit_DeviceTime" xml:space="preserve">
+    <value>Hora del dispositivo: {{ time }}</value>
+  </data>
+  <data name="AudioAudit_SegmentUnavailable" xml:space="preserve">
+    <value>Grabación no disponible</value>
+  </data>
+  <data name="AudioAudit_PlaybackFailed" xml:space="preserve">
+    <value>Error de reproducción</value>
+  </data>
+  <data name="AudioAudit_UnsupportedFormat" xml:space="preserve">
+    <value>Formato no compatible con el navegador</value>
+  </data>
+  <data name="AudioAudit_SkipBackward" xml:space="preserve">
+    <value>Retroceder 10 segundos</value>
+  </data>
+  <data name="AudioAudit_SkipForward" xml:space="preserve">
+    <value>Avanzar 10 segundos</value>
+  </data>
+  <data name="AudioAudit_NoRecordingsAvailable" xml:space="preserve">
+    <value>No hay grabaciones disponibles para reproducir en este momento</value>
+  </data>
+  <data name="AudioAudit_Title" xml:space="preserve">
+    <value>Registros de auditoría de audio</value>
+  </data>
+  <data name="AudioAudit_LoadingRecordings" xml:space="preserve">
+    <value>Cargando grabaciones...</value>
+  </data>
+  <data name="AudioAudit_LoadingAudio" xml:space="preserve">
+    <value>Cargando audio...</value>
+  </data>
+  <data name="AudioAudit_LoadFailed" xml:space="preserve">
+    <value>No se pudieron cargar las grabaciones de auditoría de audio.</value>
+  </data>
+  <data name="AudioAudit_Retry" xml:space="preserve">
+    <value>Reintentar</value>
+  </data>
+  <data name="AudioAudit_NowPlaying" xml:space="preserve">
+    <value>Reproduciendo ahora: {{ segment }}</value>
+  </data>
+  <data name="AudioAudit_PositionValue" xml:space="preserve">
+    <value>Posición: {{ position }}</value>
+  </data>
+  <data name="AudioAudit_DurationValue" xml:space="preserve">
+    <value>Duración: {{ duration }}</value>
+  </data>
+  <data name="AudioAudit_RecordingPosition" xml:space="preserve">
+    <value>Posición de la grabación</value>
+  </data>
+  <data name="AudioAudit_GoToPreviousSegment" xml:space="preserve">
+    <value>Ir a la grabación anterior</value>
+  </data>
+  <data name="AudioAudit_PlayRecording" xml:space="preserve">
+    <value>Reproducir grabación</value>
+  </data>
+  <data name="AudioAudit_PauseRecording" xml:space="preserve">
+    <value>Pausar grabación</value>
+  </data>
+  <data name="AudioAudit_GoToNextSegment" xml:space="preserve">
+    <value>Ir a la siguiente grabación</value>
+  </data>
+  <data name="AudioAudit_PlaylistLabel" xml:space="preserve">
+    <value>Lista de grabaciones de auditoría de audio</value>
+  </data>
+  <data name="AudioAudit_UnknownDuration" xml:space="preserve">
+    <value>duración desconocida</value>
+  </data>
+  <data name="AudioAudit_SeekPosition" xml:space="preserve">
+    <value>{{ current }} de {{ total }}</value>
+  </data>
+  <data name="AudioAudit_PlaybackSpeedAnnouncement" xml:space="preserve">
+    <value>Velocidad de reproducción {{ rate }}x.</value>
+  </data>
+  <data name="AudioAudit_SegmentSelected" xml:space="preserve">
+    <value>{{ segment }} seleccionada.</value>
+  </data>
+  <data name="AudioAudit_SegmentDurationAnnouncement" xml:space="preserve">
+    <value>{{ segment }} dura {{ duration }}.</value>
+  </data>
+  <data name="AudioAudit_PlayingAnnouncement" xml:space="preserve">
+    <value>Reproduciendo {{ segment }}.</value>
+  </data>
+  <data name="AudioAudit_PausedAnnouncement" xml:space="preserve">
+    <value>{{ segment }} en pausa.</value>
+  </data>
+  <data name="AudioAudit_FinishedAnnouncement" xml:space="preserve">
+    <value>{{ segment }} finalizada.</value>
+  </data>
 </root>

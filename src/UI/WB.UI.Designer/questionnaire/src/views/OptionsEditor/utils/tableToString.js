@@ -110,7 +110,7 @@ export function convertToTable(stringified, isCascading) {
     return options;
 }
 
-export function validateText(value, isCascading) {
+export function getValidationErrors(value, isCascading) {
     if (value == null || value === '') return [];
     var options = (value || '').split(/\r\n|\r|\n/);
 
@@ -125,9 +125,17 @@ export function validateText(value, isCascading) {
         if (option == '' || option == '...') continue;
 
         if (regex.test(option) === false) {
-            diff.push(`  ${i + 1}: ${options[i]}`);
+            diff.push({
+                lineNumber: i + 1,
+                line: options[i]
+            });
         }
     }
 
     return diff;
+}
+
+export function validateText(value, isCascading) {
+    return getValidationErrors(value, isCascading)
+        .map(error => `  ${error.lineNumber}: ${error.line}`);
 }

@@ -13,6 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
         string GetDirectLink(string path, TimeSpan expiration);
 
         Task<byte[]?> GetBinaryAsync(string key);
+        Task<Stream?> GetStreamAsync(string key);
 
         Task<List<FileObject>?> ListAsync(string prefix);
 

@@ -1,0 +1,1730 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="LogOn_Title" xml:space="preserve">
+        <value>เข้าสู่ระบบ</value>
+    </data>
+    <data name="AccountManage_Title" xml:space="preserve">
+        <value>แก้ไขโปรไฟล์ {0}</value>
+    </data>
+    <data name="AccountManage_EditPublicInformation" xml:space="preserve">
+        <value>แก้ไขรายละเอียดข้อมูลสาธารณะของโปรไฟล์</value>
+    </data>
+    <data name="AccountManage_Login" xml:space="preserve">
+        <value>เข้าสู่ระบบ</value>
+    </data>
+    <data name="AccountManage_Role" xml:space="preserve">
+        <value>บทบาท</value>
+    </data>
+    <data name="AccountManage_ShowUsers" xml:space="preserve">
+        <value>แสดงผู้ใช้</value>
+    </data>
+    <data name="AccountManage_ChangePassword" xml:space="preserve">
+        <value>เปลี่ยนรหัสผ่าน</value>
+    </data>
+    <data name="AccountManage_Profile" xml:space="preserve">
+        <value>ติดต่อ</value>
+    </data>
+    <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
+        <value>การรับรองความถูกต้องด้วยสองปัจจัย</value>
+    </data>
+    <data name="AccountManage_AuthenticatorApp" xml:space="preserve">
+        <value>แอปตรวจสอบสิทธิ์</value>
+    </data>
+    <data name="AccountManage_ChangePasswordHelp" xml:space="preserve">
+        <value>ใช้แบบฟอร์มด้านล่างเพื่อเปลี่ยนรหัสผ่านสำหรับบัญชี</value>
+    </data>
+    <data name="LogOn_UnsuccessfulLogin" xml:space="preserve">
+        <value>เข้าสู่ระบบไม่สำเร็จ โปรดแก้ไขข้อผิดพลาดแล้วลองอีกครั้ง</value>
+    </data>
+    <data name="SurveysStatuses_ApprovedByHQ" xml:space="preserve">
+        <value>ได้รับการอนุมัติจากสำนักงานใหญ่</value>
+    </data>
+    <data name="SurveysStatuses_ApprovedBySupervisor" xml:space="preserve">
+        <value>ได้รับการอนุมัติจากหัวหน้างาน</value>
+    </data>
+    <data name="SurveysStatuses_Completed" xml:space="preserve">
+        <value>สมบูรณ์</value>
+    </data>
+    <data name="SurveysStatuses_InterviewerAssigned" xml:space="preserve">
+        <value>ผู้สัมภาษณ์ที่ได้รับมอบหมาย</value>
+    </data>
+    <data name="SurveysStatuses_RejectedByHQ" xml:space="preserve">
+        <value>ถูกปฏิเสธโดย HQ</value>
+    </data>
+    <data name="SurveysStatuses_RejectedBySupervisor" xml:space="preserve">
+        <value>ถูกปฏิเสธโดยหัวหน้างาน</value>
+    </data>
+    <data name="SurveysStatuses_SupervisorAssigned" xml:space="preserve">
+        <value>หัวหน้างานที่ได้รับมอบหมาย</value>
+    </data>
+    <data name="SurveysStatuses_SurveyName" xml:space="preserve">
+        <value>ชื่อแบบสำรวจ</value>
+    </data>
+    <data name="SurveysStatuses_Title" xml:space="preserve">
+        <value>แบบสำรวจและสถานะ</value>
+    </data>
+    <data name="SurveysStatuses_Total" xml:space="preserve">
+        <value>ทั้งหมด</value>
+    </data>
+    <data name="SurveysStatuses_TeamMembersHeader" xml:space="preserve">
+        <value>สมาชิกในทีม</value>
+    </data>
+    <data name="Survey_Header" xml:space="preserve">
+        <value>สัมภาษณ์</value>
+    </data>
+    <data name="Survey_Status_Title" xml:space="preserve">
+        <value>สถานะ</value>
+    </data>
+    <data name="Survey_Status_Header" xml:space="preserve">
+        <value>ผู้สัมภาษณ์และการสำรวจ</value>
+    </data>
+    <data name="PackagesInfo_Title" xml:space="preserve">
+        <value>ดัชนี</value>
+    </data>
+    <data name="PackagesInfo_Header" xml:space="preserve">
+        <value>แพคเกจข้อมูลแท็บเล็ต</value>
+    </data>
+    <data name="PackagesInfo_DeviceId" xml:space="preserve">
+        <value>รหัสอุปกรณ์</value>
+    </data>
+    <data name="PackagesInfo_UploadDate" xml:space="preserve">
+        <value>วันที่อัพโหลด</value>
+    </data>
+    <data name="PackagesInfo_UserName" xml:space="preserve">
+        <value>ชื่อผู้ใช้</value>
+    </data>
+    <data name="PackagesInfo_UserId" xml:space="preserve">
+        <value>รหัสผู้ใช้</value>
+    </data>
+    <data name="PackagesInfo_Size" xml:space="preserve">
+        <value>ขนาด(ไบต์)</value>
+    </data>
+    <data name="InterviewerController_InterviewerCreationSuccess" xml:space="preserve">
+        <value>สร้างผู้สัมภาษณ์สำเร็จแล้ว</value>
+    </data>
+    <data name="InterviewerController_UpdateUseFailure" xml:space="preserve">
+        <value>ไม่สามารถอัปเดตข้อมูลผู้ใช้ได้เนื่องจากไม่มีผู้ใช้ปัจจุบัน</value>
+    </data>
+    <data name="InterviewerController_EditSuccess" xml:space="preserve">
+        <value>ข้อมูลเกี่ยวกับ {0} อัปเดตสำเร็จแล้ว</value>
+    </data>
+    <data name="Backup_IndexTitle" xml:space="preserve">
+        <value>ดัชนี</value>
+    </data>
+    <data name="ApproveRejectPartialView_ApproveLabel" xml:space="preserve">
+        <value>อนุมัติการสัมภาษณ์</value>
+    </data>
+    <data name="ApproveRejectPartialView_ApproveReceivedWarning" xml:space="preserve">
+        <value>ผู้สัมภาษณ์ที่รับผิดชอบในปัจจุบันจะไม่ได้รับแจ้งเกี่ยวกับการอนุมัติการสัมภาษณ์จนกว่าจะมีการซิงโครไนซ์ครั้งถัดไป หากผู้สัมภาษณ์เริ่มทำงานในการสัมภาษณ์แล้ว ข้อมูลทั้งหมดที่ผู้สัมภาษณ์ได้ป้อนก่อนการซิงโครไนซ์ครั้งถัดไปจะถูกยกเลิก!</value>
+    </data>
+    <data name="ApproveRejectPartialView_ApproveReceivedConfirm" xml:space="preserve">
+        <value>สมัครสัมภาษณ์ที่ผู้สัมภาษณ์ได้รับแล้ว</value>
+    </data>
+    <data name="ApproveRejectPartialView_CommentLabel" xml:space="preserve">
+        <value>ความคิดเห็น</value>
+    </data>
+    <data name="CloseLabel" xml:space="preserve">
+        <value>ปิด</value>
+    </data>
+    <data name="Print" xml:space="preserve">
+        <value>พิมพ์</value>
+    </data>
+    <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
+        <value>อนุมัติ</value>
+    </data>
+    <data name="ApproveRejectPartialView_RejectAction" xml:space="preserve">
+        <value>ปฏิเสธ</value>
+    </data>
+    <data name="ApproveRejectPartialView_UnapproveAction" xml:space="preserve">
+        <value>ไม่อนุมัติ</value>
+    </data>
+    <data name="ApproveRejectPartialView_UnapproveLabel" xml:space="preserve">
+        <value>ไม่อนุมัติการสัมภาษณ์</value>
+    </data>
+    <data name="ApproveRejectPartialView_RejectLAbel" xml:space="preserve">
+        <value>ปฏิเสธการสัมภาษณ์</value>
+    </data>
+    <data name="InterviewDetails_GroupsLabel" xml:space="preserve">
+        <value>กลุ่ม</value>
+    </data>
+    <data name="InterviewDetails_HideGroupsLAbel" xml:space="preserve">
+        <value>ซ่อนกลุ่ม</value>
+    </data>
+    <data name="InterviewDetails_StatusLabel" xml:space="preserve">
+        <value>สถานะ</value>
+    </data>
+    <data name="InterviewDetails_ResponsibleLabel" xml:space="preserve">
+        <value>รับผิดชอบ</value>
+    </data>
+    <data name="InterviewDetails_PendingPackageLabel" xml:space="preserve">
+        <value>การสัมภาษณ์มีแพ็คเกจการซิงโครไนซ์ที่ค้างอยู่ในคิว</value>
+    </data>
+    <data name="InterviewDetails_ShowGroupsLabel" xml:space="preserve">
+        <value>แสดงกลุ่ม</value>
+    </data>
+    <data name="InterviewDetails_AllButtonLabel" xml:space="preserve">
+        <value>ทั้งหมด</value>
+    </data>
+    <data name="InterviewDetails_EnabledButtonLabel" xml:space="preserve">
+        <value>เปิดใช้งาน</value>
+    </data>
+    <data name="InterviewDetails_AnsweredButtonLabel" xml:space="preserve">
+        <value>ตอบ</value>
+    </data>
+    <data name="InterviewDetails_UnansweredButtonLabel" xml:space="preserve">
+        <value>ยังไม่ได้ตอบ</value>
+    </data>
+    <data name="InterviewDetails_InvalidButtonLabel" xml:space="preserve">
+        <value>ไม่ถูกต้อง</value>
+    </data>
+    <data name="InterviewDetails_CommentedButtonLabel" xml:space="preserve">
+        <value>แสดงความคิดเห็น</value>
+    </data>
+    <data name="InterviewDetails_FlaggedButtonLabel" xml:space="preserve">
+        <value>ติดธง</value>
+    </data>
+    <data name="InterviewDetails_SupervisorsButtonLabel" xml:space="preserve">
+        <value>ของผู้บังคับบัญชา</value>
+    </data>
+    <data name="InterviewDetails_HiddenButtonLabel" xml:space="preserve">
+        <value>ที่ซ่อนอยู่</value>
+    </data>
+    <data name="DetailsQuestionPartialView_WriteCommentPlaceholder" xml:space="preserve">
+        <value>เขียนความคิดเห็น...</value>
+    </data>
+    <data name="EditQuestion_Save" xml:space="preserve">
+        <value>บันทึก</value>
+    </data>
+    <data name="YesNoQuestion_Yes" xml:space="preserve">
+        <value>ใช่</value>
+    </data>
+    <data name="YesNoQuestion_No" xml:space="preserve">
+        <value>เลขที่</value>
+    </data>
+    <data name="HistoryOfStatuses_Title" xml:space="preserve">
+        <value>ประวัติสถานะการสัมภาษณ์</value>
+    </data>
+    <data name="HistoryOfStatuses_State" xml:space="preserve">
+        <value>สถานะ</value>
+    </data>
+    <data name="HistoryOfStatuses_Comment" xml:space="preserve">
+        <value>ความคิดเห็น</value>
+    </data>
+    <data name="HistoryOfStatuses_On" xml:space="preserve">
+        <value>เปลี่ยนแล้ว</value>
+    </data>
+    <data name="HistoryOfStatuses_By" xml:space="preserve">
+        <value>โดย</value>
+    </data>
+    <data name="InterviewHistory_Header" xml:space="preserve">
+        <value>ประวัติการสัมภาษณ์</value>
+    </data>
+    <data name="GPS_latitude" xml:space="preserve">
+        <value>ละติจูด</value>
+    </data>
+    <data name="GPS_longitude" xml:space="preserve">
+        <value>ลองจิจูด</value>
+    </data>
+    <data name="GPS_accuracy" xml:space="preserve">
+        <value>ความแม่นยำ</value>
+    </data>
+    <data name="GPS_altitude" xml:space="preserve">
+        <value>ระดับความสูง</value>
+    </data>
+    <data name="InterviewController_RevalidationFailed" xml:space="preserve">
+        <value>การตรวจสอบซ้ำไม่สำเร็จ</value>
+    </data>
+    <data name="InterviewController_RepeatLastStatus" xml:space="preserve">
+        <value>สถานะที่กำหนดโดยทีมสนับสนุน Survey Solutions</value>
+    </data>
+    <data name="InterviewController_RepeatLastStatusFailed" xml:space="preserve">
+        <value>การทำซ้ำสถานะล่าสุดไม่สำเร็จ</value>
+    </data>
+    <data name="LogOn_LogIn" xml:space="preserve">
+        <value>เข้าสู่ระบบ</value>
+    </data>
+    <data name="LogOn_TwoFactor" xml:space="preserve">
+        <value>การเข้าสู่ระบบของคุณได้รับการปกป้องด้วยแอปตรวจสอบความถูกต้อง ป้อนรหัสยืนยันตัวตนของคุณด้านล่าง</value>
+    </data>
+    <data name="LogOn_LoginWithRecoveryCode" xml:space="preserve">
+        <value>คุณได้ขอเข้าสู่ระบบด้วยรหัสกู้คืน</value>
+    </data>
+    <data name="LogOn_NoAccessToDevice" xml:space="preserve">
+        <value>ไม่สามารถเข้าถึงอุปกรณ์ยืนยันตัวตนของคุณได้? คุณสามารถ</value>
+    </data>
+    <data name="LogOn_LoginWithRecoveryLink" xml:space="preserve">
+        <value>เข้าสู่ระบบด้วยรหัสกู้คืน</value>
+    </data>
+    <data name="LogOn_Legend" xml:space="preserve">
+        <value>กรุณาเข้าสู่ระบบ</value>
+    </data>
+    <data name="AccountManage_SaveChanges" xml:space="preserve">
+        <value>บันทึกการเปลี่ยนแปลง</value>
+    </data>
+    <data name="AccessDenied_Title" xml:space="preserve">
+        <value>การเข้าถึงถูกปฏิเสธ</value>
+    </data>
+    <data name="Forbidden_Title" xml:space="preserve">
+        <value>ต้องห้าม</value>
+    </data>
+    <data name="AntiForgeryError_Title" xml:space="preserve">
+        <value>ข้อมูลคำขอไม่ถูกต้อง</value>
+    </data>
+    <data name="ErrorIndex_Title" xml:space="preserve">
+        <value>ข้อผิดพลาด</value>
+    </data>
+    <data name="NotFound_Title" xml:space="preserve">
+        <value>ไม่พบ</value>
+    </data>
+    <data name="WebsitePathIsTooLong_Title" xml:space="preserve">
+        <value>โฟลเดอร์ที่มีเว็บไซต์มีชื่อเส้นทางที่ยาวเกินไป กรุณาย้ายเว็บไซต์ไปยังโฟลเดอร์อื่นที่มีชื่อสั้นกว่า</value>
+    </data>
+    <data name="HealthCheck_Header" xml:space="preserve">
+        <value>เครื่องตรวจสุขภาพ</value>
+    </data>
+    <data name="InterviewerCreate_Title" xml:space="preserve">
+        <value>สร้าง</value>
+    </data>
+    <data name="InterviewerCreate_CreateIn" xml:space="preserve">
+        <value>สร้างผู้สัมภาษณ์ใน</value>
+    </data>
+    <data name="InterviewerCreate_Team" xml:space="preserve">
+        <value>ทีม</value>
+    </data>
+    <data name="InterviewerProfile_TitleFormat" xml:space="preserve">
+        <value>ผู้สัมภาษณ์: {0}</value>
+    </data>
+    <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
+        <value>{{interviewer}} (หัวหน้างาน: {{supervisor}})</value>
+    </data>
+    <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
+        <value>อีเมล์: {{email}}</value>
+    </data>
+    <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
+        <value>ชื่อเต็ม: {{fullName}}</value>
+    </data>
+    <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
+        <value>หมายเลขโทรศัพท์: {{phone}}</value>
+    </data>
+    <data name="InterviewerProfile_Info" xml:space="preserve">
+        <value>แก้ไขข้อมูลส่วนบุคคล</value>
+    </data>
+    <data name="InterviewerProfile_ShowAuditLog" xml:space="preserve">
+        <value>แสดงบันทึกการดำเนินการ</value>
+    </data>
+    <data name="InterviewerProfile_Interviewers" xml:space="preserve">
+        <value>ผู้สัมภาษณ์</value>
+    </data>
+    <data name="InterviewerProfile_NewOnDevice" xml:space="preserve">
+        <value>ใหม่บนอุปกรณ์</value>
+    </data>
+    <data name="InterviewerProfile_Rejected" xml:space="preserve">
+        <value>ถูกปฏิเสธอีกครั้งบนอุปกรณ์</value>
+    </data>
+    <data name="InterviewerProfile_WaitingForApproval" xml:space="preserve">
+        <value>รอการอนุมัติ</value>
+    </data>
+    <data name="InterviewerProfile_Approved" xml:space="preserve">
+        <value>สัมภาษณ์เสร็จแล้ว (เสร็จสิ้นและอนุมัติโดย hq)</value>
+    </data>
+    <data name="InterviewerProfile_StartedAssignments" xml:space="preserve">
+        <value>งานที่ได้รับมอบหมายแต่ยังไม่เสร็จสิ้น</value>
+    </data>
+    <data name="InterviewerProfile_StorageInfo" xml:space="preserve">
+        <value>พื้นที่เก็บข้อมูล (ว่าง/ทั้งหมด)</value>
+    </data>
+    <data name="InterviewerProfile_MemoryInfo" xml:space="preserve">
+        <value>หน่วยความจำ (ว่าง/ทั้งหมด)</value>
+    </data>
+    <data name="InterviewerProfile_StorageSizeInfo" xml:space="preserve">
+        <value>ข้อมูลระบบและข้อมูลการสัมภาษณ์ที่ไม่ซิงโครไนซ์</value>
+    </data>
+    <data name="InterviewerProfile_BatteryStatus" xml:space="preserve">
+        <value>สถานะแบตเตอรี่ (%)</value>
+    </data>
+    <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
+        <value>{{percent}}%, แหล่งพลังงาน: {{power}}, ประหยัดแบตเตอรี่คือ {{powerSaver}}</value>
+    </data>
+    <data name="InterviewerProfile_BatteryStatus_SaverIsOn" xml:space="preserve">
+        <value>บน</value>
+    </data>
+    <data name="InterviewerProfile_BatteryStatus_SaverIsOff" xml:space="preserve">
+        <value>ปิด</value>
+    </data>
+    <data name="InterviewerProfile_InterviewerVersion" xml:space="preserve">
+        <value>เวอร์ชันโซลูชันแบบสำรวจ</value>
+    </data>
+    <data name="InterviewerProfile_AndroidVersion" xml:space="preserve">
+        <value>เวอร์ชัน Android</value>
+    </data>
+    <data name="InterviewerProfile_DeviceModel" xml:space="preserve">
+        <value>รุ่นอุปกรณ์</value>
+    </data>
+    <data name="InterviewerProfile_DeviceId" xml:space="preserve">
+        <value>รหัสอุปกรณ์</value>
+    </data>
+    <data name="InterviewerProfile_DeviceAssignmentDate" xml:space="preserve">
+        <value>วันที่กำหนดอุปกรณ์</value>
+    </data>
+    <data name="InterviewerProfile_DeviceSerial" xml:space="preserve">
+        <value>หมายเลขซีเรียลของอุปกรณ์</value>
+    </data>
+    <data name="InterviewerProfile_DeviceLanguage" xml:space="preserve">
+        <value>ภาษาของอุปกรณ์</value>
+    </data>
+    <data name="InterviewerProfile_DeviceInfo" xml:space="preserve">
+        <value>ข้อมูลอุปกรณ์โดยละเอียด</value>
+    </data>
+    <data name="InterviewerProfile_InterviewerAppVersion" xml:space="preserve">
+        <value>เวอร์ชันแอปผู้สัมภาษณ์</value>
+    </data>
+    <data name="InterviewerProfile_InterviewerUpToDate" xml:space="preserve">
+        <value>ถึงวันที่</value>
+    </data>
+    <data name="InterviewerProfile_InterviewerCanBeUpdated" xml:space="preserve">
+        <value>สามารถอัพเดตได้</value>
+    </data>
+    <data name="InterviewerProfile_InterviewerUpdatedDate" xml:space="preserve">
+        <value>วันที่อัปเดตโซลูชั่นแบบสำรวจล่าสุด</value>
+    </data>
+    <data name="InterviewerProfile_NumberOfSuccessSynchronizations" xml:space="preserve">
+        <value>จำนวนการซิงโครไนซ์ที่สำเร็จทั้งหมด</value>
+    </data>
+    <data name="InterviewerProfile_NumberOfFailedSynchronizations" xml:space="preserve">
+        <value>จำนวนการซิงโครไนซ์ที่ล้มเหลวทั้งหมด</value>
+    </data>
+    <data name="InterviewerProfile_LastSuccessSync" xml:space="preserve">
+        <value>การซิงค์สำเร็จครั้งล่าสุด</value>
+    </data>
+    <data name="InterviewerProfile_LastFailedSync" xml:space="preserve">
+        <value>การซิงค์ล้มเหลวครั้งล่าสุด</value>
+    </data>
+    <data name="InterviewerProfile_LastSyncronizationDate" xml:space="preserve">
+        <value>วันที่ติดต่อล่าสุด</value>
+    </data>
+    <data name="InterviewerProfile_Relinked" xml:space="preserve">
+        <value>เชื่อมโยงใหม่แล้ว</value>
+    </data>
+    <data name="InterviewerProfile_TotalSyncTime" xml:space="preserve">
+        <value>ระยะเวลาการซิงโครไนซ์</value>
+    </data>
+    <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
+        <value>ประเภท: {{networkType}} {{networkSubType}} ตัวดำเนินการ: {{operator}}</value>
+    </data>
+    <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
+        <value>ประเภท: {{networkType}}</value>
+    </data>
+    <data name="InterviewerProfile_ConnectionType" xml:space="preserve">
+        <value>ประเภทการเชื่อมต่อ</value>
+    </data>
+    <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
+        <value>ความเร็วในการเชื่อมต่อ</value>
+    </data>
+    <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
+        <value>อัปโหลด {{uploaded}} แล้ว ดาวน์โหลด {{downloaded}} แล้ว</value>
+    </data>
+    <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
+        <value>ความเร็วในการซิงค์โดยเฉลี่ย</value>
+    </data>
+    <data name="InterviewerProfile_SignalStrength" xml:space="preserve">
+        <value>ความแรงของสัญญาณ</value>
+    </data>
+    <data name="InterviewerProfile_DeviceLocation" xml:space="preserve">
+        <value>ตำแหน่งอุปกรณ์หรือตำแหน่งที่ทราบล่าสุด</value>
+    </data>
+    <data name="InterviewerProfile_DeviceOrientation" xml:space="preserve">
+        <value>การวางแนวอุปกรณ์</value>
+    </data>
+    <data name="InterviewerProfile_DeviceDate" xml:space="preserve">
+        <value>เวลาแท็บเล็ตเมื่อเริ่มต้นการซิงโครไนซ์</value>
+    </data>
+    <data name="InterviewerProfile_ServerDate" xml:space="preserve">
+        <value>เวลาเซิร์ฟเวอร์เมื่อเริ่มต้นการซิงโครไนซ์</value>
+    </data>
+    <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
+        <value>สถิติอุปกรณ์และการเชื่อมต่อ</value>
+    </data>
+    <data name="InterviewerProfile_Sync_Activity_Downloaded_Assignments_Desc" xml:space="preserve">
+        <value>ดาวน์โหลดงานแล้ว</value>
+    </data>
+    <data name="InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc" xml:space="preserve">
+        <value>อัปโหลดไปยังเซิร์ฟเวอร์เพื่อขออนุมัติ</value>
+    </data>
+    <data name="InterviewerProfile_Sync_Activity_Nothing_To_Sync" xml:space="preserve">
+        <value>การเชื่อมต่อสำเร็จ ไม่มีอะไรจะซิงค์</value>
+    </data>
+    <data name="InterviewerProfile_Sync_Activity_Failed_Sync" xml:space="preserve">
+        <value>ความพยายามในการซิงโครไนซ์ล้มเหลว</value>
+    </data>
+    <data name="InterviewerProfile_Sync_Activity_All_Assignments_Desc" xml:space="preserve">
+        <value>จำนวนงานที่ยังไม่เสร็จหรืองานที่ซิงโครไนซ์บนอุปกรณ์ในแต่ละช่วงเวลา</value>
+    </data>
+    <data name="InterviewerProfile_Sync_Activity_Title" xml:space="preserve">
+        <value>กิจกรรมการซิงโครไนซ์ล่าสุด</value>
+    </data>
+    <data name="InterviewerProfile_LastConnectionStatistics" xml:space="preserve">
+        <value>สถิติการเชื่อมต่อล่าสุด</value>
+    </data>
+    <data name="InterviewerProfile_DownloadedQuestionnairesCount" xml:space="preserve">
+        <value>แบบสอบถามที่ผู้สัมภาษณ์ได้รับ</value>
+    </data>
+    <data name="InterviewerProfile_DownloadedAssignmentsCount" xml:space="preserve">
+        <value>งานที่ได้รับจากผู้สัมภาษณ์</value>
+    </data>
+    <data name="InterviewerProfile_UploadedInterviewsCount" xml:space="preserve">
+        <value>สัมภาษณ์เสร็จที่ได้รับจากผู้สัมภาษณ์</value>
+    </data>
+    <data name="InterviewerEdit_TitleFormat" xml:space="preserve">
+        <value>ผู้สัมภาษณ์: {0}</value>
+    </data>
+    <data name="InterviewerEdit_NoDeviceHistory" xml:space="preserve">
+        <value>ผู้สัมภาษณ์ยังไม่ซิงโครไนซ์ ไม่มีข้อมูลเกี่ยวกับอุปกรณ์ของเขา/เธอ</value>
+    </data>
+    <data name="InterviewerEdit_DeviceIdTitle" xml:space="preserve">
+        <value>รหัสอุปกรณ์</value>
+    </data>
+    <data name="InterviewerEdit_StartUsingDateTitle" xml:space="preserve">
+        <value>เริ่มใช้วันที่</value>
+    </data>
+    <data name="Interviewers_Title" xml:space="preserve">
+        <value>ผู้สัมภาษณ์</value>
+    </data>
+    <data name="Interviewers_Header" xml:space="preserve">
+        <value>ผู้สัมภาษณ์</value>
+    </data>
+    <data name="Interviewers_MoveWebAssigment" xml:space="preserve">
+        <value>คุณกำลังย้ายผู้สัมภาษณ์ที่ได้รับมอบหมายให้สัมภาษณ์ทางเว็บไปยังทีมอื่น งานเหล่านี้จะถูกมอบหมายให้กับหัวหน้างานเดิม หากคุณได้ส่งลิงก์สำหรับการมอบหมายงานเหล่านี้ไปแล้ว ผู้ตอบจะไม่สามารถตอบแบบสำรวจของคุณได้จนกว่าการมอบหมายงานจะถูกมอบหมายใหม่ให้กับผู้ใช้ในบทบาทผู้สัมภาษณ์</value>
+    </data>
+    <data name="Create" xml:space="preserve">
+        <value>สร้าง</value>
+    </data>
+    <data name="Search" xml:space="preserve">
+        <value>ค้นหา</value>
+    </data>
+    <data name="Interviewers_SupervisorTitle" xml:space="preserve">
+        <value>หัวหน้างาน</value>
+    </data>
+    <data name="SurveysAndStatuses_SupervisorTitle" xml:space="preserve">
+        <value>หัวหน้างาน (ทีม)</value>
+    </data>
+    <data name="SurveysAndStatuses_InterviewerTitle" xml:space="preserve">
+        <value>ผู้สัมภาษณ์ (ทีมงาน)</value>
+    </data>
+    <data name="SurveysAndStatuses_Overview" xml:space="preserve">
+        <value>แบบสำรวจและสถานะ</value>
+    </data>
+    <data name="SurveysAndStatuses_HeadquartersDescription" xml:space="preserve">
+        <value>แสดงจำนวนการสัมภาษณ์ในแต่ละสถานะ (คอลัมน์) สำหรับแต่ละเครื่องมือสำรวจ (แถว)</value>
+    </data>
+    <data name="SurveysAndStatuses_SupervisorDescription" xml:space="preserve">
+        <value>รายงานแบบสำรวจและสถานะจะแสดงจำนวนการสัมภาษณ์ในแต่ละสถานะสำหรับแบบสำรวจที่หัวหน้างานรายนี้เกี่ยวข้อง</value>
+    </data>
+    <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
+        <value>บทสัมภาษณ์ {0}</value>
+    </data>
+    <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
+        <value>เชื่อมต่อกับเซิร์ฟเวอร์แล้ว</value>
+    </data>
+    <data name="Interviewers_InterviewerVersion" xml:space="preserve">
+        <value>เวอร์ชันของแอป</value>
+    </data>
+    <data name="Interviewers_ArchiveStatusTitle" xml:space="preserve">
+        <value>สถานะการเก็บถาวร</value>
+    </data>
+    <data name="Supervisors_ArchiveStatusTitle" xml:space="preserve">
+        <value>สถานะการเก็บถาวร</value>
+    </data>
+    <data name="Interviewers_UserNameTitle" xml:space="preserve">
+        <value>ชื่อเข้าสู่ระบบ</value>
+    </data>
+    <data name="Interviewers_FullNameTitle" xml:space="preserve">
+        <value>ชื่อเต็ม</value>
+    </data>
+    <data name="Interviewers_CreationDateTitle" xml:space="preserve">
+        <value>บัญชีที่สร้างเมื่อ</value>
+    </data>
+    <data name="Interviewers_LastLoginDateTitle" xml:space="preserve">
+        <value>เข้าสู่ระบบครั้งล่าสุด</value>
+    </data>
+    <data name="Interviewers_EmailTitle" xml:space="preserve">
+        <value>อีเมล์ของผู้สัมภาษณ์</value>
+    </data>
+    <data name="Interviewers_ArchiveInterviewers" xml:space="preserve">
+        <value>ผู้สัมภาษณ์จะถูกเก็บถาวร</value>
+    </data>
+    <data name="Interviewers_ArchiveInterviewersConfirmMessage" xml:space="preserve">
+        <value>หากผู้สัมภาษณ์เสร็จสิ้นการสัมภาษณ์บนแท็บเล็ตแล้ว ข้อมูลจะสูญหาย</value>
+    </data>
+    <data name="Index_cshtml_Execute_Do_you_want_to_continue_" xml:space="preserve">
+        <value>คุณต้องการดำเนินการต่อหรือไม่?</value>
+    </data>
+    <data name="Interviewers_ArchiveInterviewersConfirm" xml:space="preserve">
+        <value>คุณต้องการดำเนินการต่อหรือไม่?</value>
+    </data>
+    <data name="Maintenance_Title" xml:space="preserve">
+        <value>การซ่อมบำรุง</value>
+    </data>
+    <data name="Maintenance_Description" xml:space="preserve">
+        <value>ขณะนี้แอปพลิเคชันกำลังได้รับการอัปเกรดเป็นเวอร์ชันที่ใหม่กว่า นี่เป็นการดำเนินการด้วยตนเองและอาจต้องใช้เวลาพอสมควร ขออภัยในความไม่สะดวก หลังจากกระบวนการเสร็จสิ้น คุณจะถูกนำไปยังหน้าที่คุณร้องขอโดยอัตโนมัติ</value>
+    </data>
+    <data name="MaintenanceReadSide_Header" xml:space="preserve">
+        <value>อยู่ระหว่างการบำรุงรักษา...</value>
+    </data>
+    <data name="MaintenanceRebuild_Header" xml:space="preserve">
+        <value>กำลังรีบูต...</value>
+    </data>
+    <data name="Maintenance_RebuildDescription" xml:space="preserve">
+        <value>ขณะนี้แอปพลิเคชันกำลังรีบูตและอาจใช้เวลานานถึง 10 นาทีหรือมากกว่านั้น ขออภัยในความไม่สะดวก หลังจากกระบวนการเสร็จสิ้น คุณจะถูกนำไปยังหน้าที่คุณร้องขอโดยอัตโนมัติ</value>
+    </data>
+    <data name="Survey_ResponsibleTitle" xml:space="preserve">
+        <value>รับผิดชอบ</value>
+    </data>
+    <data name="Survey_LastUpdateTitle" xml:space="preserve">
+        <value>อัปเดตล่าสุด</value>
+    </data>
+    <data name="Survey_HasErrorsTitle" xml:space="preserve">
+        <value>มีข้อผิดพลาด</value>
+    </data>
+    <data name="Survey_StatusTitle" xml:space="preserve">
+        <value>สถานะ</value>
+    </data>
+    <data name="Survey_ReceivedByInterviewerTitle" xml:space="preserve">
+        <value>รับโดยผู้สัมภาษณ์</value>
+    </data>
+    <data name="Survey_CreatedOnClientTitle" xml:space="preserve">
+        <value>สร้างบนไคลเอนต์</value>
+    </data>
+    <data name="Layout_Filter" xml:space="preserve">
+        <value>กรอง</value>
+    </data>
+    <data name="NoResults" xml:space="preserve">
+        <value>ไม่พบผลลัพธ์</value>
+    </data>
+    <data name="Layout_WorldBank" xml:space="preserve">
+        <value>กลุ่มธนาคารโลก</value>
+    </data>
+    <data name="Layout_RightsReserved" xml:space="preserve">
+        <value>สงวนลิขสิทธิ์.</value>
+    </data>
+    <data name="Layout_Legal" xml:space="preserve">
+        <value>ถูกกฎหมาย</value>
+    </data>
+    <data name="Error_Title" xml:space="preserve">
+        <value>ข้อผิดพลาด</value>
+    </data>
+    <data name="Error_Description" xml:space="preserve">
+        <value>เกิดข้อผิดพลาดขณะประมวลผลคำขอของคุณ</value>
+    </data>
+    <data name="GlobalSettings_ForbiddenMessage" xml:space="preserve">
+        <value>คุณไม่ได้รับอนุญาตให้ดำเนินการนี้</value>
+    </data>
+    <data name="GlobalSettings_DeleteQuestionnaireConfirmation" xml:space="preserve">
+        <value>คุณแน่ใจหรือไม่ว่าต้องการลบแบบสอบถาม? การสัมภาษณ์ทั้งหมดที่ดำเนินการโดยแบบสอบถามปัจจุบัน รวมถึงการสัมภาษณ์ที่รวบรวมบนแท็บเล็ต แม้แต่การสัมภาษณ์ที่คุณไม่เห็นบนเซิร์ฟเวอร์ในปัจจุบันก็จะสูญหายไป</value>
+    </data>
+    <data name="GlobalSettings_DeleteQuestionnaireWarning" xml:space="preserve">
+        <value>คำเตือน! นี่เป็นการกระทำที่ไม่อาจย้อนกลับได้</value>
+    </data>
+    <data name="GlobalSettings_NotifyDialogText" xml:space="preserve">
+        <value>คำขอก่อนหน้าของคุณไม่สมบูรณ์ โปรดรอให้เสร็จสิ้นและทำซ้ำการดำเนินการของคุณ</value>
+    </data>
+    <data name="GlobalSettings_NotifyDialogTitle" xml:space="preserve">
+        <value>โปรดรอ</value>
+    </data>
+    <data name="GlobalSettings_NotifyMarkersLimitReachedText" xml:space="preserve">
+        <value>สำหรับระดับการซูมนี้ถึงจำนวนคะแนนแล้ว โปรดเพิ่มระดับและอัปเดตคะแนน</value>
+    </data>
+    <data name="GlobalSettings_NotifyMarkersLimitReachedTitle" xml:space="preserve">
+        <value>โหลดไม่ครบทุกจุด</value>
+    </data>
+    <data name="GlobalSettings_NotifyNoMarkersDialogText" xml:space="preserve">
+        <value>แบบสอบถามนี้ไม่มีพิกัด GPS ที่จะแสดงบนแผนที่สำหรับตัวแปรที่เลือก</value>
+    </data>
+    <data name="GlobalSettings_NotifyNoMarkersDialogTitle" xml:space="preserve">
+        <value>ไม่มีการเพิ่มเครื่องหมาย</value>
+    </data>
+    <data name="GlobalSettings_UnhandledExceptionMessage" xml:space="preserve">
+        <value>เกิดข้อผิดพลาดที่ไม่คาดคิด ขออภัยในความไม่สะดวก</value>
+    </data>
+    <data name="GlobalSettings_TurningAudioAuditOn" xml:space="preserve">
+        <value>เมื่อการตรวจสอบเสียงอยู่ในปริมาณข้อมูลการซิงโครไนซ์จะมีขนาดใหญ่ขึ้นอย่างมาก คุณต้องการดำเนินการต่อหรือไม่?</value>
+    </data>
+    <data name="AnyOption" xml:space="preserve">
+        <value>ใดๆ</value>
+    </data>
+    <data name="Interviewers_NotSyncedOption" xml:space="preserve">
+        <value>ไม่เคยเชื่อมต่อ</value>
+    </data>
+    <data name="Interviewers_UpToDateOption" xml:space="preserve">
+        <value>ถึงวันที่</value>
+    </data>
+    <data name="Interviewers_OutdatedOption" xml:space="preserve">
+        <value>ล้าสมัย</value>
+    </data>
+    <data name="Upload_Upload" xml:space="preserve">
+        <value>อัปโหลด</value>
+    </data>
+    <data name="HideFilter" xml:space="preserve">
+        <value>ซ่อนตัวกรอง</value>
+    </data>
+    <data name="ShowFilter" xml:space="preserve">
+        <value>แสดงตัวกรอง</value>
+    </data>
+    <data name="Interviewers_Archive" xml:space="preserve">
+        <value>คลังเก็บเอกสารสำคัญ</value>
+    </data>
+    <data name="Interviewers_Unarchive" xml:space="preserve">
+        <value>ยกเลิกการเก็บถาวร</value>
+    </data>
+    <data name="Interviewers_ActiveUsers" xml:space="preserve">
+        <value>ผู้สัมภาษณ์ที่กระตือรือร้น</value>
+    </data>
+    <data name="Interviewers_ArchivedUsers" xml:space="preserve">
+        <value>ผู้สัมภาษณ์ที่เก็บถาวร</value>
+    </data>
+    <data name="Supervisors_ActiveUsers" xml:space="preserve">
+        <value>ผู้บังคับบัญชาที่ใช้งานอยู่</value>
+    </data>
+    <data name="Supervisors_ArchivedUsers" xml:space="preserve">
+        <value>ผู้บังคับบัญชาที่เก็บถาวร</value>
+    </data>
+    <data name="Users_ActiveUsers" xml:space="preserve">
+        <value>ผู้ใช้ที่ใช้งานอยู่</value>
+    </data>
+    <data name="Users_ArchivedUsers" xml:space="preserve">
+        <value>ผู้ใช้เก่า</value>
+    </data>
+    <data name="Interviewers_Connected" xml:space="preserve">
+        <value>เชื่อมต่อแล้ว</value>
+    </data>
+    <data name="Interviewers_NotConnected" xml:space="preserve">
+        <value>ไม่ได้เชื่อมต่อ</value>
+    </data>
+    <data name="Status" xml:space="preserve">
+        <value>สถานะ</value>
+    </data>
+    <data name="Template" xml:space="preserve">
+        <value>แม่แบบ</value>
+    </data>
+    <data name="TeamMember" xml:space="preserve">
+        <value>สมาชิกในทีม</value>
+    </data>
+    <data name="SupervisorAssigned" xml:space="preserve">
+        <value>หัวหน้างานที่ได้รับมอบหมาย</value>
+    </data>
+    <data name="InterviewerAssigned" xml:space="preserve">
+        <value>ผู้สัมภาษณ์ที่ได้รับมอบหมาย</value>
+    </data>
+    <data name="Completed" xml:space="preserve">
+        <value>สมบูรณ์</value>
+    </data>
+    <data name="RejectedBySupervisor" xml:space="preserve">
+        <value>ถูกปฏิเสธโดยหัวหน้างาน</value>
+    </data>
+    <data name="ApprovedBySupervisor" xml:space="preserve">
+        <value>ได้รับการอนุมัติจากหัวหน้างาน</value>
+    </data>
+    <data name="RejectedByHeadquarters" xml:space="preserve">
+        <value>ถูกปฏิเสธโดยสำนักงานใหญ่</value>
+    </data>
+    <data name="ApprovedByHeadquarters" xml:space="preserve">
+        <value>ได้รับการอนุมัติจากสำนักงานใหญ่</value>
+    </data>
+    <data name="Total" xml:space="preserve">
+        <value>ทั้งหมด</value>
+    </data>
+    <data name="TeamMembersAndStatuses" xml:space="preserve">
+        <value>สมาชิกในทีมและสถานะ</value>
+    </data>
+    <data name="Attention" xml:space="preserve">
+        <value>ความสนใจ!</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>ยกเลิก</value>
+    </data>
+    <data name="Update" xml:space="preserve">
+        <value>อัปเดต</value>
+    </data>
+    <data name="Unlock" xml:space="preserve">
+        <value>ปลดล็อค</value>
+    </data>
+    <data name="Verify" xml:space="preserve">
+        <value>ตรวจสอบ</value>
+    </data>
+    <data name="AutolockDescription" xml:space="preserve">
+        <value>บัญชีถูกล็อคอัตโนมัติ</value>
+    </data>
+    <data name="Supervisor_CreateText" xml:space="preserve">
+        <value>การดำเนินการนี้จะสร้างผู้ใช้แต่ละรายที่มีสิทธิ์ของหัวหน้างาน
+        &lt;br&gt;หากต้องการสร้างผู้ใช้หลายราย คุณสามารถใช้&lt;a href="{{link}}" target="_blank"&gt;การสร้างกลุ่มผู้ใช้&lt;/a&gt;</value>
+    </data>
+    <data name="User_CreateText1" xml:space="preserve">
+        <value>การดำเนินการนี้จะสร้างผู้ใช้แต่ละราย</value>
+    </data>
+    <data name="User_CreateText2" xml:space="preserve">
+        <value>เพื่อสร้างผู้สัมภาษณ์และหัวหน้างานหลายคน คุณสามารถใช้ {{link}} ได้</value>
+    </data>
+    <data name="User_CreateText_UserBatchUploadLinkText" xml:space="preserve">
+        <value>การสร้างแบทช์ผู้ใช้</value>
+    </data>
+    <data name="PublicSection" xml:space="preserve">
+        <value>รายละเอียดข้อมูลส่วนบุคคล</value>
+    </data>
+    <data name="PublicSectionDescription" xml:space="preserve">
+        <value>(ไม่บังคับ จะมองเห็นได้เฉพาะผู้ใช้ที่ได้รับการรับรองความถูกต้อง)</value>
+    </data>
+    <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
+        <value>วันที่สร้างบัญชีผู้สัมภาษณ์</value>
+    </data>
+    <data name="Interviewers_LastLoginDateTooltip" xml:space="preserve">
+        <value>วันที่ผู้สัมภาษณ์เข้าสู่ระบบเว็บไซต์ครั้งล่าสุด</value>
+    </data>
+    <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
+        <value>ชื่อเข้าสู่ระบบของหัวหน้าผู้สัมภาษณ์</value>
+    </data>
+    <data name="Interviewers_InterviewerVersionTooltip" xml:space="preserve">
+        <value>เวอร์ชันของแอปผู้สัมภาษณ์รายงานระหว่างการซิงโครไนซ์แท็บเล็ตของเขา/เธอกับเซิร์ฟเวอร์ครั้งล่าสุด</value>
+    </data>
+    <data name="Interviewers_InterviewerNeverConnected" xml:space="preserve">
+        <value>ไม่เคยเชื่อมต่อ</value>
+    </data>
+    <data name="InterviewDetails_TranslationLabel" xml:space="preserve">
+        <value>ภาษา</value>
+    </data>
+    <data name="InterviewDetails_DefaultTranslation" xml:space="preserve">
+        <value>ต้นฉบับ</value>
+    </data>
+    <data name="Login" xml:space="preserve">
+        <value>เข้าสู่ระบบ</value>
+    </data>
+    <data name="Password" xml:space="preserve">
+        <value>รหัสผ่าน</value>
+    </data>
+    <data name="ShowPassword" xml:space="preserve">
+        <value>แสดงรหัสผ่าน</value>
+    </data>
+    <data name="AuthenticatorCode" xml:space="preserve">
+        <value>รหัสยืนยันตัวตน</value>
+    </data>
+    <data name="RecoveryCode" xml:space="preserve">
+        <value>รหัสการกู้คืน</value>
+    </data>
+    <data name="QuestionnaireNameFormat" xml:space="preserve">
+        <value>{{name}} (เวอร์ชั่น {{version}})</value>
+    </data>
+    <data name="GetLatestApp" xml:space="preserve">
+        <value>ดาวน์โหลดแอพสัมภาษณ์ล่าสุด</value>
+    </data>
+    <data name="GetInterviewerApp" xml:space="preserve">
+        <value>ดาวน์โหลดแอพสัมภาษณ์</value>
+    </data>
+    <data name="GetLatestSupervisorApp" xml:space="preserve">
+        <value>ดาวน์โหลดแอพ Supervisor ล่าสุด</value>
+    </data>
+    <data name="InstallationInstruction" xml:space="preserve">
+        <value>คำแนะนำในการติดตั้ง</value>
+    </data>
+    <data name="ConfirmationNeededTitle" xml:space="preserve">
+        <value>จำเป็นต้องมีการยืนยัน</value>
+    </data>
+    <data name="FilterTitle" xml:space="preserve">
+        <value>ตัวกรอง</value>
+    </data>
+    <data name="Interviewers_Selected" xml:space="preserve">
+        <value>ผู้สัมภาษณ์ถูกเลือก</value>
+    </data>
+    <data name="OperationFailedDescription" xml:space="preserve">
+        <value>เกิดข้อผิดพลาด โปรดลองอีกครั้งในภายหลัง</value>
+    </data>
+    <data name="OperationFailedTitle" xml:space="preserve">
+        <value>การดำเนินการล้มเหลว</value>
+    </data>
+    <data name="InterviewDetails_NoItems" xml:space="preserve">
+        <value>ไม่มีรายการที่ตรงกับตัวกรองที่เลือก</value>
+    </data>
+    <data name="Supervisors_Archive" xml:space="preserve">
+        <value>คลังเก็บเอกสารสำคัญ</value>
+    </data>
+    <data name="Supervisors_UnarchiveSupervisorsConfirm" xml:space="preserve">
+        <value>คุณต้องการดำเนินการต่อหรือไม่?</value>
+    </data>
+    <data name="Users_UsersConfirm" xml:space="preserve">
+        <value>คุณต้องการดำเนินการต่อหรือไม่?</value>
+    </data>
+    <data name="Users_UnarchiveUsersWarning" xml:space="preserve">
+        <value>ผู้ใช้จะถูกยกเลิกการเก็บถาวร</value>
+    </data>
+    <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
+        <value>หากผู้สัมภาษณ์เสร็จสิ้นการสัมภาษณ์บนแท็บเล็ตแล้ว ข้อมูลจะสูญหาย</value>
+    </data>
+    <data name="Users_ArchiveUsersConfirmMessage" xml:space="preserve">
+        <value>คุณจะเก็บข้อมูลหัวหน้างานและผู้สัมภาษณ์ไว้ภายในทีมของพวกเขา ผู้สัมภาษณ์ที่ได้รับมอบหมายให้เป็นหัวหน้างานที่ถูกเก็บถาวรจะถูกเก็บถาวรในพื้นที่ทำงานทั้งหมด ข้อมูลที่ไม่ได้ซิงโครไนซ์ที่เหลืออยู่ในอุปกรณ์ของผู้ใช้เก่า (ผู้สัมภาษณ์หรือหัวหน้างาน) จะไม่ถูกส่งไปยังเซิร์ฟเวอร์</value>
+    </data>
+    <data name="Supervisors_Selected" xml:space="preserve">
+        <value>ผู้บังคับบัญชาที่เลือก</value>
+    </data>
+    <data name="Interviews_Selected" xml:space="preserve">
+        <value>สัมภาษณ์ที่เลือก</value>
+    </data>
+    <data name="Supervisors_Unarchive" xml:space="preserve">
+        <value>ยกเลิกการเก็บถาวร</value>
+    </data>
+    <data name="Profile_InterviewerEditFormat" xml:space="preserve">
+        <value>แก้ไขโปรไฟล์ผู้สัมภาษณ์: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    </data>
+    <data name="Profile_InterviewerCreate" xml:space="preserve">
+        <value>สร้างโปรไฟล์ผู้สัมภาษณ์</value>
+    </data>
+    <data name="Profile_InterviewersList" xml:space="preserve">
+        <value>ผู้สัมภาษณ์</value>
+    </data>
+    <data name="Profile_InterviewerProfile" xml:space="preserve">
+        <value>รายละเอียดผู้สัมภาษณ์</value>
+    </data>
+    <data name="Profile_ObserverEditFormat" xml:space="preserve">
+        <value>แก้ไขโปรไฟล์ผู้สังเกตการณ์: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    </data>
+    <data name="Profile_ObserverCreate" xml:space="preserve">
+        <value>สร้างผู้สังเกตการณ์</value>
+    </data>
+    <data name="Profile_ObserversList" xml:space="preserve">
+        <value>ผู้สังเกตการณ์</value>
+    </data>
+    <data name="Profile_HeadquartersEditFormat" xml:space="preserve">
+        <value>แก้ไขโปรไฟล์สำนักงานใหญ่: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    </data>
+    <data name="Profile_HeadquartersCreate" xml:space="preserve">
+        <value>สร้างสำนักงานใหญ่</value>
+    </data>
+    <data name="Profile_HeadquartersList" xml:space="preserve">
+        <value>สำนักงานใหญ่</value>
+    </data>
+    <data name="Profile_SupervisorEditFormat" xml:space="preserve">
+        <value>แก้ไขโปรไฟล์หัวหน้างาน: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    </data>
+    <data name="Profile_SupervisorCreate" xml:space="preserve">
+        <value>สร้างหัวหน้างาน</value>
+    </data>
+    <data name="Profile_SupervisorsList" xml:space="preserve">
+        <value>หัวหน้างาน</value>
+    </data>
+    <data name="Profile_ApiUserEditFormat" xml:space="preserve">
+        <value>แก้ไขโปรไฟล์ผู้ใช้ API: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+    </data>
+    <data name="Profile_ApiUserCreate" xml:space="preserve">
+        <value>สร้างผู้ใช้ API</value>
+    </data>
+    <data name="Profile_ApiUserWasCreated" xml:space="preserve">
+        <value>สร้างผู้ใช้ API &lt;b&gt;{0}&lt;/b&gt; สำเร็จแล้ว</value>
+    </data>
+    <data name="CreateAdmin" xml:space="preserve">
+        <value>สร้างผู้ดูแลระบบ</value>
+    </data>
+    <data name="ChangePassword" xml:space="preserve">
+        <value>รีเซ็ตรหัสผ่านผู้ใช้</value>
+    </data>
+    <data name="ResetAuthenticator" xml:space="preserve">
+        <value>รีเซ็ตตัวตรวจสอบสิทธิ์</value>
+    </data>
+    <data name="SetupAuthenticator" xml:space="preserve">
+        <value>ตั้งค่าตัวตรวจสอบสิทธิ์</value>
+    </data>
+    <data name="AddAuthenticator" xml:space="preserve">
+        <value>เพิ่มตัวตรวจสอบสิทธิ์</value>
+    </data>
+    <data name="ResetRecoveryCodes" xml:space="preserve">
+        <value>รีเซ็ตรหัสกู้คืน</value>
+    </data>
+    <data name="RecoveryCodesLeft" xml:space="preserve">
+        <value>เหลือรหัสกู้คืน:</value>
+    </data>
+    <data name="RecoveryCodesYouCan" xml:space="preserve">
+        <value>คุณสามารถ</value>
+    </data>
+    <data name="GenerateRecoveryCodesLink" xml:space="preserve">
+        <value>สร้างรหัสกู้คืนชุดใหม่</value>
+    </data>
+    <data name="Disable2fa" xml:space="preserve">
+        <value>ปิดการใช้งาน 2FA</value>
+    </data>
+    <data name="RecoveryCodesInfo" xml:space="preserve">
+        <value>วางรหัสเหล่านี้ไว้ในที่ปลอดภัย</value>
+    </data>
+    <data name="RecoveryCodesDescription" xml:space="preserve">
+        <value>หากคุณทำอุปกรณ์หายและไม่มีรหัสกู้คืน คุณจะสูญเสียการเข้าถึงบัญชีของคุณ</value>
+    </data>
+    <data name="RecoveryCodesDescriptionLine1" xml:space="preserve">
+        <value>การสร้างรหัสกู้คืนใหม่จะไม่เปลี่ยนคีย์ที่ใช้ในแอปตรวจสอบความถูกต้อง</value>
+    </data>
+    <data name="EnableAuthenticatorLine1" xml:space="preserve">
+        <value>หากต้องการใช้แอปตรวจสอบสิทธิ์ ให้ทำตามขั้นตอนต่อไปนี้:</value>
+    </data>
+    <data name="EnableAuthenticatorLine2" xml:space="preserve">
+        <value>ดาวน์โหลดแอปตรวจสอบสิทธิ์แบบสองปัจจัย เช่น Microsoft Authenticator</value>
+    </data>
+    <data name="EnableAuthenticatorLine3" xml:space="preserve">
+        <value>หรือ Google Authenticator สำหรับ</value>
+    </data>
+    <data name="EnableAuthenticatorLine4" xml:space="preserve">
+        <value>สแกนรหัส QR หรือป้อนรหัสที่ใช้ร่วมกันลงในแอปตรวจสอบสิทธิ์แบบสองปัจจัยของคุณ ช่องว่างและปลอกไม่สำคัญ</value>
+    </data>
+    <data name="EnableAuthenticatorLine5" xml:space="preserve">
+        <value>เมื่อคุณสแกนรหัส QR หรือป้อนรหัสที่ใช้ร่วมกันด้านบนแล้ว แอปตรวจสอบสิทธิ์แบบสองปัจจัยจะให้รหัสยืนยันแก่คุณ ป้อนด้านล่างแล้วคลิก 'ยืนยัน'</value>
+    </data>
+    <data name="EnableAuthenticatorSharedKey" xml:space="preserve">
+        <value>รหัสที่ใช้ร่วมกัน:</value>
+    </data>
+    <data name="ResetAuthenticatorLine1" xml:space="preserve">
+        <value>หากคุณรีเซ็ตรหัสยืนยันตัวตน แอปยืนยันตัวตนของคุณจะไม่อนุญาตให้เข้าสู่ระบบจนกว่าคุณจะกำหนดค่าใหม่</value>
+    </data>
+    <data name="ResetAuthenticatorLine2" xml:space="preserve">
+        <value>กระบวนการนี้จะปิดใช้งานการรับรองความถูกต้องด้วยสองปัจจัยจนกว่าคุณจะยืนยันแอปตรวจสอบความถูกต้องของคุณ หากคุณไม่กำหนดค่าแอปตรวจสอบความถูกต้องให้เสร็จสิ้น บัญชีของคุณจะถูกทิ้งไว้โดยไม่มีการตรวจสอบสิทธิ์แบบสองปัจจัย</value>
+    </data>
+    <data name="Disable2faLine1" xml:space="preserve">
+        <value>การดำเนินการนี้จะปิดใช้งาน 2FA เท่านั้น</value>
+    </data>
+    <data name="Disable2faLine2" xml:space="preserve">
+        <value>การปิดใช้งาน 2FA จะไม่เปลี่ยนคีย์ที่ใช้ในแอปตรวจสอบความถูกต้อง</value>
+    </data>
+    <data name="ChandgeKeyLine1" xml:space="preserve">
+        <value>หากคุณต้องการเปลี่ยนรหัสที่ใช้ในแอปตรวจสอบสิทธิ์ คุณก็ควรทำ</value>
+    </data>
+    <data name="ChandgeKeyLine2" xml:space="preserve">
+        <value>รีเซ็ตคีย์ตัวตรวจสอบความถูกต้องของคุณ</value>
+    </data>
+    <data name="Profile_ApiUsersList" xml:space="preserve">
+        <value>ผู้ใช้ API</value>
+    </data>
+    <data name="Assignments_PageTitle" xml:space="preserve">
+        <value>การมอบหมายงาน</value>
+    </data>
+    <data name="AssignmentDetails_PageTitle" xml:space="preserve">
+        <value>การมอบหมาย {0}</value>
+    </data>
+    <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
+        <value>[เวอร์ชั่น {{version}}] {{name}}</value>
+    </data>
+    <data name="HQ_LockWarning" xml:space="preserve">
+        <value>สำนักงานใหญ่ที่ถูกล็อค (ทำเครื่องหมายในช่อง) ไม่สามารถเข้าสู่ระบบและดำเนินการใดๆ บนเซิร์ฟเวอร์ได้</value>
+    </data>
+    <data name="Interviewer_LockWarning" xml:space="preserve">
+        <value>ผู้สัมภาษณ์ที่ถูกล็อคไม่สามารถเชื่อมต่อแท็บเล็ตกับเซิร์ฟเวอร์และส่งการสัมภาษณ์ได้</value>
+    </data>
+    <data name="Tablet_RelinkMessage" xml:space="preserve">
+        <value>มีอุปกรณ์เครื่องเดียวเชื่อมโยงกับบัญชีนี้</value>
+    </data>
+    <data name="Supervisor_LockWarning" xml:space="preserve">
+        <value>ผู้ดูแลที่ถูกล็อค (ทำเครื่องหมายในช่อง) ไม่สามารถเข้าสู่ระบบและดำเนินการใดๆ บนเซิร์ฟเวอร์ได้</value>
+    </data>
+    <data name="Users_API_Instruction1" xml:space="preserve">
+        <value>กดปุ่มเพิ่ม API เพื่อสร้างผู้ใช้ API ใหม่</value>
+    </data>
+    <data name="Users_API_Instruction2" xml:space="preserve">
+        <value>คลิกที่ชื่อเข้าสู่ระบบเพื่อแก้ไขโปรไฟล์ของผู้ใช้ API ที่มีอยู่</value>
+    </data>
+    <data name="Users_Headquarters_Instruction1" xml:space="preserve">
+        <value>กดปุ่มเพิ่มสำนักงานใหญ่เพื่อสร้างผู้ใช้ HQ ใหม่</value>
+    </data>
+    <data name="Users_Headquarters_Instruction2" xml:space="preserve">
+        <value>คลิกที่ชื่อเข้าสู่ระบบเพื่อแก้ไขโปรไฟล์ของผู้ใช้ HQ ที่มีอยู่</value>
+    </data>
+    <data name="Users_Interviewers_Instruction1" xml:space="preserve">
+        <value>กดปุ่มเพิ่มผู้สัมภาษณ์เพื่อสร้างผู้สัมภาษณ์ใหม่</value>
+    </data>
+    <data name="Users_Interviewers_Instruction2" xml:space="preserve">
+        <value>คลิกที่ชื่อเข้าสู่ระบบเพื่อดูข้อมูลเกี่ยวกับผู้สัมภาษณ์และแก้ไขโปรไฟล์ผู้สัมภาษณ์</value>
+    </data>
+    <data name="Users_Observers_Instruction1" xml:space="preserve">
+        <value>กดปุ่มเพิ่มผู้สังเกตการณ์เพื่อสร้างผู้สังเกตการณ์ใหม่</value>
+    </data>
+    <data name="Users_Observers_Instruction2" xml:space="preserve">
+        <value>คลิกที่ชื่อเข้าสู่ระบบเพื่อแก้ไขโปรไฟล์ของผู้ใช้ Observer ที่มีอยู่</value>
+    </data>
+    <data name="Users_Supervisors_Instruction1" xml:space="preserve">
+        <value>กดปุ่มเพิ่มหัวหน้างานเพื่อสร้างหัวหน้างานใหม่</value>
+    </data>
+    <data name="Users_Supervisors_Instruction2" xml:space="preserve">
+        <value>คลิกที่ชื่อเข้าสู่ระบบเพื่อแก้ไขโปรไฟล์ของหัวหน้างานที่มีอยู่</value>
+    </data>
+    <data name="InterviewDetails_MoreDetails" xml:space="preserve">
+        <value>รายละเอียด</value>
+    </data>
+    <data name="GetLatestAppDescription" xml:space="preserve">
+        <value>ดาวน์โหลดและติดตั้งแอป Interviewer เวอร์ชันนี้สำหรับแบบสำรวจที่ไม่มีฟังก์ชัน ESRI GIS APK นี้ไม่มี ESRI SDK ดังนั้นจึงมีขนาดเล็กกว่ามากและดาวน์โหลดได้เร็วกว่าเมื่อเทียบกับเวอร์ชันที่มี SDK</value>
+    </data>
+    <data name="GetLatestAppExtendedDescription" xml:space="preserve">
+        <value>ดาวน์โหลดและติดตั้งแอปผู้สัมภาษณ์เวอร์ชันนี้เฉพาะเมื่อคุณใช้ฟังก์ชัน ESRI GIS ขั้นสูงเท่านั้น APK นี้มี ESRI SDK ขนาดใหญ่ มีขนาดใหญ่และอาจใช้เวลานานในการดาวน์โหลด</value>
+    </data>
+    <data name="DownloadPage_Instructions" xml:space="preserve">
+        <value>คำแนะนำในการติดตั้ง</value>
+    </data>
+    <data name="DownloadPage_Title" xml:space="preserve">
+        <value>เทคโนโลยีการสัมภาษณ์ส่วนตัวโดยใช้คอมพิวเตอร์ช่วย พัฒนาโดยธนาคารโลก</value>
+    </data>
+    <data name="DownloadPage_Welcome" xml:space="preserve">
+        <value>ยินดีต้อนรับสู่หน้าดาวน์โหลด Survey Solutions Interviewer</value>
+    </data>
+    <data name="DownloadSupervisorPage_Welcome" xml:space="preserve">
+        <value>ยินดีต้อนรับสู่หน้าดาวน์โหลด Survey Solutions Supervisor</value>
+    </data>
+    <data name="DownloadPage_PageTitle" xml:space="preserve">
+        <value>ดาวน์โหลดแอพ ผู้สัมภาษณ์</value>
+    </data>
+    <data name="DownloadSupervisorPage_PageTitle" xml:space="preserve">
+        <value>ดาวน์โหลดแอพ Supervisor</value>
+    </data>
+    <data name="DownloadPage_Version" xml:space="preserve">
+        <value>เวอร์ชัน</value>
+    </data>
+    <data name="DownloadPage_Size" xml:space="preserve">
+        <value>ขนาด</value>
+    </data>
+    <data name="AreaQestion_Area" xml:space="preserve">
+        <value>พื้นที่</value>
+    </data>
+    <data name="AreaQestion_Length" xml:space="preserve">
+        <value>ความยาว</value>
+    </data>
+    <data name="AreaQestion_Points" xml:space="preserve">
+        <value>คะแนน</value>
+    </data>
+    <data name="AreaQuestion_RequestedAccuracy" xml:space="preserve">
+        <value>ความแม่นยำ</value>
+    </data>
+    <data name="AreaQuestion_RequestedFrequency" xml:space="preserve">
+        <value>ความถี่</value>
+    </data>
+    <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
+        <value>ตารางเมตร</value>
+    </data>
+    <data name="AreaQestion_AreaMeter" xml:space="preserve">
+        <value>เมตร</value>
+    </data>
+    <data name="Unarchive" xml:space="preserve">
+        <value>ยกเลิกการเก็บถาวร</value>
+    </data>
+    <data name="InterviewerIsArchived" xml:space="preserve">
+        <value>ผู้สัมภาษณ์ถูกเก็บถาวรแล้ว</value>
+    </data>
+    <data name="InterviewerHq_DiscardInterview" xml:space="preserve">
+        <value>ทิ้ง</value>
+    </data>
+    <data name="InterviewerHq_OpenInterview" xml:space="preserve">
+        <value>เปิด</value>
+    </data>
+    <data name="InterviewerHq_RestartInterview" xml:space="preserve">
+        <value>เปิดใหม่อีกครั้ง</value>
+    </data>
+    <data name="InterviewerHq_RestartConfirm" xml:space="preserve">
+        <value>โปรดแสดงความคิดเห็นหากจำเป็นเพื่อเปิดการสัมภาษณ์อีกครั้ง</value>
+    </data>
+    <data name="InterviewerHq_DiscardConfirm" xml:space="preserve">
+        <value>คุณแน่ใจหรือไม่ว่าต้องการยกเลิกข้อมูลการสัมภาษณ์</value>
+    </data>
+    <data name="Map_DiscardConfirm" xml:space="preserve">
+        <value>คุณแน่ใจหรือไม่ว่าต้องการลบแผนที่ "{{map}}"?</value>
+    </data>
+    <data name="MapUserLink_DiscardConfirm" xml:space="preserve">
+        <value>คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการเชื่อมโยงผู้ใช้จากแผนที่</value>
+    </data>
+    <data name="CautionTitle" xml:space="preserve">
+        <value>คำเตือน:</value>
+    </data>
+    <data name="ExcludeEsriTitle" xml:space="preserve">
+        <value>ไม่รวมการสนับสนุนแผนที่ ESRI</value>
+    </data>
+    <data name="IncludeEsriTitle" xml:space="preserve">
+        <value>รวมฟังก์ชันการทำแผนที่</value>
+    </data>
+    <data name="GetEsriExtraDescription" xml:space="preserve">
+        <value>ฟังก์ชันการทำแผนที่จะเพิ่มขนาดแอปพลิเคชันและเวลาในการดาวน์โหลดอย่างมาก ปฏิบัติตามคำแนะนำของหัวหน้างานของคุณว่าแอปพลิเคชันผู้สัมภาษณ์เวอร์ชันใด (มีหรือไม่มีแผนที่) ที่จำเป็นสำหรับงานของคุณ</value>
+    </data>
+    <data name="Filters_Assignment" xml:space="preserve">
+        <value>งานที่มอบหมาย</value>
+    </data>
+    <data name="Filters_Shapefiles" xml:space="preserve">
+        <value>เชพไฟล์</value>
+    </data>
+    <data name="Filters_None" xml:space="preserve">
+        <value>ไม่มี</value>
+    </data>
+    <data name="InterviewersAndDevicesTitle" xml:space="preserve">
+        <value>อุปกรณ์/ผู้สัมภาษณ์</value>
+    </data>
+    <data name="InterviewersAndDevicesSubtitle" xml:space="preserve">
+        <value>ประเด็นสำหรับผู้สัมภาษณ์แต่ละคน</value>
+    </data>
+    <data name="StatusDuration" xml:space="preserve">
+        <value>ระยะเวลาสถานะ</value>
+    </data>
+    <data name="StatusDurationDescription" xml:space="preserve">
+        <value>จำนวนวันที่การมอบหมายงานและการสัมภาษณ์ยังคงอยู่ในสถานะปัจจุบัน</value>
+    </data>
+    <data name="SurveyStatisticsDescription" xml:space="preserve">
+        <value>รายงานนำเสนอสถิติพื้นฐาน ตารางทางเดียว และสองทาง ที่คำนวณจากข้อมูลการสำรวจ</value>
+    </data>
+    <data name="HistoryOfStatuses_AssignedTo" xml:space="preserve">
+        <value>มอบหมายให้</value>
+    </data>
+    <data name="HistoryOfStatuses_Interview" xml:space="preserve">
+        <value>สัมภาษณ์</value>
+    </data>
+    <data name="HistoryOfStatuses_ViewInterview" xml:space="preserve">
+        <value>ชมการสัมภาษณ์</value>
+    </data>
+    <data name="DownloadReport" xml:space="preserve">
+        <value>ดาวน์โหลดรายงานเป็น</value>
+    </data>
+    <data name="Or" xml:space="preserve">
+        <value>หรือ</value>
+    </data>
+    <data name="GlobalSettings_DeleteMapConfirmation" xml:space="preserve">
+        <value>คุณต้องการลบแผนที่หรือไม่?</value>
+    </data>
+    <data name="MapDetails_InterviewerName" xml:space="preserve">
+        <value>ชื่อผู้ใช้</value>
+    </data>
+    <data name="MapDetails_DelinkUser" xml:space="preserve">
+        <value>ยกเลิกการเชื่อมโยงผู้ใช้จากแผนที่</value>
+    </data>
+    <data name="MapDetails_Unlink" xml:space="preserve">
+        <value>ยกเลิกการเชื่อมโยง</value>
+    </data>
+    <data name="MapDetails_MapDisclaimer" xml:space="preserve">
+        <value>ภาพตัวอย่างนี้แสดงแผนที่ที่โหลดซ้อนทับบนแผนที่โลก</value>
+    </data>
+    <data name="MapDetails_FullShapefilesDisclaimer" xml:space="preserve">
+        <value>ภาพตัวอย่างนี้แสดงเชปไฟล์ที่อัปโหลดซ้อนทับบนเลเยอร์ฐานภาพดาวเทียม</value>
+    </data>
+    <data name="MapDetails_SimplifiedShapefilesDisclaimer" xml:space="preserve">
+        <value>ภาพตัวอย่างนี้แสดงเชปไฟล์ที่อัปโหลดในเวอร์ชันย่อซึ่งซ้อนทับบนเลเยอร์ฐานภาพดาวเทียม เชปไฟล์ต้นฉบับที่อัปโหลดไม่แสดงในหน้าตัวอย่างนี้เนื่องจากมีขนาดใหญ่</value>
+    </data>
+    <data name="MapDetails_DuplicateLabelsWarning" xml:space="preserve">
+        <value>คำเตือน! Shapefile มีป้ายกำกับที่ซ้ำกัน</value>
+    </data>
+    <data name="MapDetails_MapTitle" xml:space="preserve">
+        <value>แผนที่</value>
+    </data>
+    <data name="MapDetails_ImportedOn" xml:space="preserve">
+        <value>นำเข้าเมื่อ</value>
+    </data>
+    <data name="MapDetails_UploadedBy" xml:space="preserve">
+        <value>อัปโหลดโดย</value>
+    </data>
+    <data name="MapDetails_SelectUser" xml:space="preserve">
+        <value>เลือกผู้ใช้</value>
+    </data>
+    <data name="MapDetails_Size" xml:space="preserve">
+        <value>ขนาด(เมกะไบต์)</value>
+    </data>
+    <data name="MapDetails_EmptyMapData" xml:space="preserve">
+        <value>ข้อมูลตัวอย่างหายไปสำหรับแผนที่นี้</value>
+    </data>
+    <data name="MapDetails_MinScale" xml:space="preserve">
+        <value>สเกลขั้นต่ำ</value>
+    </data>
+    <data name="MapDetails_MaxScale" xml:space="preserve">
+        <value>สเกลสูงสุด</value>
+    </data>
+    <data name="MapDetails_ShapeType" xml:space="preserve">
+        <value>ประเภทรูปร่าง</value>
+    </data>
+    <data name="MapDetails_ShapesCount" xml:space="preserve">
+        <value>รูปร่างนับ</value>
+    </data>
+    <data name="MapList_Title" xml:space="preserve">
+        <value>ไฟล์แผนที่</value>
+    </data>
+    <data name="MapList_Upload" xml:space="preserve">
+        <value>อัปโหลดไฟล์ .zip</value>
+    </data>
+    <data name="MapList_UploadDescription" xml:space="preserve">
+        <value>อัปโหลดไฟล์ zip ที่มีแผนที่</value>
+    </data>
+    <data name="MapList_UploadDescriptionExtra" xml:space="preserve">
+        <value>หมายเหตุ: ไฟล์ที่มีชื่อเดียวกันจะถูกเขียนทับ</value>
+    </data>
+    <data name="MapList_UserLinking" xml:space="preserve">
+        <value>อัปเดตการเชื่อมโยงระหว่างผู้ใช้กับแผนที่</value>
+    </data>
+    <data name="MapList_DeleteMap" xml:space="preserve">
+        <value>ลบแผนที่</value>
+    </data>
+    <data name="MapList_MapName" xml:space="preserve">
+        <value>ไฟล์แผนที่</value>
+    </data>
+    <data name="MapList_MapType" xml:space="preserve">
+        <value>พิมพ์</value>
+    </data>
+    <data name="MapList_Name" xml:space="preserve">
+        <value>ชื่อ</value>
+    </data>
+    <data name="MapList_Size" xml:space="preserve">
+        <value>ขนาด (เมกะไบต์)</value>
+    </data>
+    <data name="MapList_Updated" xml:space="preserve">
+        <value>อัปเดตเมื่อ</value>
+    </data>
+    <data name="MapList_HasDuplicateLabels" xml:space="preserve">
+        <value>มีป้ายกำกับที่ซ้ำกัน</value>
+    </data>
+    <data name="MapLinking_DescriptionTitle" xml:space="preserve">
+        <value>จัดการลิงก์แผนที่ผู้ใช้</value>
+    </data>
+    <data name="MapLinking_Description" xml:space="preserve">
+        <value>อัปโหลดไฟล์ที่มีการโต้ตอบระหว่างแผนที่และผู้ใช้</value>
+    </data>
+    <data name="MapLinking_UploadDescriptionTitle" xml:space="preserve">
+        <value>อัปโหลดการแมปผู้ใช้</value>
+    </data>
+    <data name="MapLinking_UploadDescription" xml:space="preserve">
+        <value>สิ่งนี้จะช่วยให้คุณสร้างแผนที่ตามการโต้ตอบของผู้ใช้</value>
+    </data>
+    <data name="MapLinking_DownloadExisting" xml:space="preserve">
+        <value>ดาวน์โหลดลิงค์ที่มีอยู่</value>
+    </data>
+    <data name="MapLinking_UploadFile" xml:space="preserve">
+        <value>อัปโหลดไฟล์ .tab</value>
+    </data>
+    <data name="MapLinking_UploadFileDescription" xml:space="preserve">
+        <value>อัปโหลดไฟล์ .tab พร้อมการแมปไฟล์</value>
+    </data>
+    <data name="MapLinking_UploadFileDescription1" xml:space="preserve">
+        <value>ชื่อและชื่อผู้ใช้ที่ไม่ถูกต้องจะถูกละเว้น</value>
+    </data>
+    <data name="Map_Status" xml:space="preserve">
+        <value>สถานะ</value>
+    </data>
+    <data name="Map_NoUsers" xml:space="preserve">
+        <value>แผนที่ไม่ได้ถูกกำหนดให้กับผู้ใช้คนใด</value>
+    </data>
+    <data name="Map_Uploaded" xml:space="preserve">
+        <value>อัปโหลดไฟล์แล้ว กำลังประมวลผล.</value>
+    </data>
+    <data name="Map_Uploading" xml:space="preserve">
+        <value>กำลังอัพโหลด</value>
+    </data>
+    <data name="Map_UploadingError" xml:space="preserve">
+        <value>เกิดข้อผิดพลาดระหว่างการอัปโหลด</value>
+    </data>
+    <data name="Map_UploadingFileTooBig" xml:space="preserve">
+        <value>ไฟล์มีขนาดใหญ่เกินไป</value>
+    </data>
+    <data name="Map_UploadingSuccess" xml:space="preserve">
+        <value>อัปโหลดแผนที่สำเร็จแล้ว</value>
+    </data>
+    <data name="Interviewers_MoveToAnotherTeam" xml:space="preserve">
+        <value>ย้ายไปทีมอื่น</value>
+    </data>
+    <data name="Interviewers_InterviewersToMove" xml:space="preserve">
+        <value>ผู้สัมภาษณ์ {{interviewers}} จะถูกย้ายไปยังทีมหัวหน้างาน {{supervisor}}</value>
+    </data>
+    <data name="Interviewers_InterviewersToStay" xml:space="preserve">
+        <value>ผู้สัมภาษณ์ {{interviewers}} อยู่ในทีมหัวหน้างาน {{supervisor}} และจะไม่มีการดำเนินการใดๆ</value>
+    </data>
+    <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
+        <value>ย้ายผู้สัมภาษณ์ที่ได้รับมอบหมายงานและการสัมภาษณ์ไปยังทีมหัวหน้างาน {{supervisor}}</value>
+    </data>
+    <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
+        <value>เลือกทีมที่จะย้าย {{names}}</value>
+    </data>
+    <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
+        <value>{{names}} และ {{lastname}}</value>
+    </data>
+    <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
+        <value>{{names}} และ {{more}} เพิ่มเติม</value>
+    </data>
+    <data name="Interviewers_ReassignToOriginalSupervisor" xml:space="preserve">
+        <value>กำหนดให้หัวหน้างานเดิมรับผิดชอบงานที่ได้รับมอบหมายและการสัมภาษณ์ที่มีอยู่ของผู้สัมภาษณ์ที่ถูกย้าย</value>
+    </data>
+    <data name="Interviewers_MovingCompleted" xml:space="preserve">
+        <value>การย้ายผู้ใช้เสร็จสมบูรณ์</value>
+    </data>
+    <data name="Interviewers_MovingIsInProgress" xml:space="preserve">
+        <value>อยู่ระหว่างดำเนินการย้าย</value>
+    </data>
+    <data name="Interviewers_FinishedWithErrors" xml:space="preserve">
+        <value>จบแล้วมีข้อผิดพลาด โปรดทำซ้ำการกระทำในภายหลัง เขียนเพื่อสนับสนุนหากปัญหาจะเกิดขึ้นซ้ำอีกในอนาคต</value>
+    </data>
+    <data name="MapList_UserMapsLink" xml:space="preserve">
+        <value>แผนที่ผู้ใช้</value>
+    </data>
+    <data name="MapList_UserMapsTitle" xml:space="preserve">
+        <value>แผนที่ผู้ใช้</value>
+    </data>
+    <data name="UpgradeAssignmentsTitle" xml:space="preserve">
+        <value>อัปเกรดการมอบหมายงาน</value>
+    </data>
+    <data name="InterviewOverview" xml:space="preserve">
+        <value>ภาพรวมการสัมภาษณ์</value>
+    </data>
+    <data name="InterviewerProfile_TrafficUsageHeader" xml:space="preserve">
+        <value>การใช้งานด้านการจราจร</value>
+    </data>
+    <data name="InterviewerProfile_IncomingTraffic" xml:space="preserve">
+        <value>การจราจรที่เข้ามา</value>
+    </data>
+    <data name="InterviewerProfile_OutgoingTraffic" xml:space="preserve">
+        <value>การจราจรขาออก</value>
+    </data>
+    <data name="InterviewerProfile_TotalTrafficUsed" xml:space="preserve">
+        <value>ปริมาณการใช้งานทั้งหมดที่ใช้</value>
+    </data>
+    <data name="InterviewerProfile_TotalTrafficUsedTooltip" xml:space="preserve">
+        <value>ผลรวมการรับส่งข้อมูลขาเข้าและขาออกของผู้ใช้บนอุปกรณ์ทั้งหมด</value>
+    </data>
+    <data name="Kb" xml:space="preserve">
+        <value>กิโลไบต์</value>
+    </data>
+    <data name="EmailProviders" xml:space="preserve">
+        <value>การตั้งค่าผู้ให้บริการอีเมล</value>
+    </data>
+    <data name="EmailProvidersTitle" xml:space="preserve">
+        <value>ผู้ให้บริการอีเมล์</value>
+    </data>
+    <data name="InterviewerProfile_QrCodeAlt" xml:space="preserve">
+        <value>รหัส Qr ที่ทำให้การตั้งค่าแอปพลิเคชันผู้สัมภาษณ์ง่ายขึ้น</value>
+    </data>
+    <data name="InterviewerProfile_NoMarkers" xml:space="preserve">
+        <value>สถานที่ของผู้สัมภาษณ์ไม่เคยถูกบันทึกไว้ในการสัมภาษณ์ใด ๆ ที่เขา/เธอได้ส่งมา</value>
+    </data>
+    <data name="Questionnaire_Info" xml:space="preserve">
+        <value>รายละเอียดแบบสอบถาม</value>
+    </data>
+    <data name="Questionnaire_Exposed_Variables" xml:space="preserve">
+        <value>แบบสอบถามเปิดเผยตัวแปร</value>
+    </data>
+    <data name="Exposed_Variables_Description" xml:space="preserve">
+        <value>การเลือกตัวแปรเหล่านี้จะอนุญาตให้ใช้ในการรายงานได้ บทสัมภาษณ์ที่สร้างขึ้นใหม่จะพร้อมใช้งานทันที การสัมภาษณ์ที่รวบรวมไว้ก่อนหน้านี้จะได้รับการดำเนินการและจะใช้เวลาสักระยะ คุณสามารถเลือกได้ถึง 15 ตัวแปร</value>
+    </data>
+    <data name="Exposed_Variables_AvailableVariablesTitle" xml:space="preserve">
+        <value>ตัวแปรที่มีอยู่</value>
+    </data>
+    <data name="Exposed_Variables_SelectedVariablesTitle" xml:space="preserve">
+        <value>ตัวแปรที่เปิดเผย</value>
+    </data>
+    <data name="ExposedVariables_RemoveMessage" xml:space="preserve">
+        <value>คุณต้องการลบตัวแปรออกจากรายการหรือไม่?</value>
+    </data>
+    <data name="Questionnaire_Stats" xml:space="preserve">
+        <value>ข้อมูลแบบสอบถาม</value>
+    </data>
+    <data name="Questionnaire_QuestionsCount" xml:space="preserve">
+        <value>คำถาม</value>
+    </data>
+    <data name="Questionnaire_QuestionsCountWithCond" xml:space="preserve">
+        <value>คำถามแบบมีเงื่อนไข</value>
+    </data>
+    <data name="Questionnaire_RostersCount" xml:space="preserve">
+        <value>จำนวนบัญชีรายชื่อ</value>
+    </data>
+    <data name="Questionnaire_SectionsCount" xml:space="preserve">
+        <value>จำนวนส่วน</value>
+    </data>
+    <data name="Questionnaire_SubSectionsCount" xml:space="preserve">
+        <value>จำนวนส่วนย่อย</value>
+    </data>
+    <data name="Questionnaire_Variable" xml:space="preserve">
+        <value>ชื่อตัวแปร</value>
+    </data>
+    <data name="Home" xml:space="preserve">
+        <value>บ้าน</value>
+    </data>
+    <data name="Configuration" xml:space="preserve">
+        <value>การกำหนดค่า</value>
+    </data>
+    <data name="Diagnostics" xml:space="preserve">
+        <value>การวินิจฉัย</value>
+    </data>
+    <data name="AppUpdates" xml:space="preserve">
+        <value>ข้อมูลเอพีเค</value>
+    </data>
+    <data name="InterviewPackages" xml:space="preserve">
+        <value>แพ็คเกจสัมภาษณ์</value>
+    </data>
+    <data name="Exceptions" xml:space="preserve">
+        <value>ข้อยกเว้น</value>
+    </data>
+    <data name="Admin_InterviewPackages_Exception" xml:space="preserve">
+        <value>ข้อยกเว้น</value>
+    </data>
+    <data name="Admin_InterviewPackages_InterviewKey" xml:space="preserve">
+        <value>สำคัญ</value>
+    </data>
+    <data name="Admin_InterviewPackages_InterviewId" xml:space="preserve">
+        <value>รหัสสัมภาษณ์</value>
+    </data>
+    <data name="Admin_InterviewPackages_IncomingDate" xml:space="preserve">
+        <value>วันที่เข้ามา</value>
+    </data>
+    <data name="Admin_InterviewPackages_ProcessingDate" xml:space="preserve">
+        <value>วันที่ดำเนินการ</value>
+    </data>
+    <data name="Admin_InterviewPackages_PackageSize" xml:space="preserve">
+        <value>ขนาด</value>
+    </data>
+    <data name="Admin_InterviewPackages_SelectInterviewer" xml:space="preserve">
+        <value>เลือกผู้สัมภาษณ์</value>
+    </data>
+    <data name="Admin_InterviewPackages_Interviewer" xml:space="preserve">
+        <value>ผู้สัมภาษณ์</value>
+    </data>
+    <data name="Admin_InterviewPackages_SelectQuestionnaire" xml:space="preserve">
+        <value>เลือกแบบสอบถาม</value>
+    </data>
+    <data name="Admin_InterviewPackages_Questionnaire" xml:space="preserve">
+        <value>แบบสอบถาม</value>
+    </data>
+    <data name="Admin_InterviewPackages_ExceptionType" xml:space="preserve">
+        <value>ประเภทข้อยกเว้น</value>
+    </data>
+    <data name="Admin_InterviewPackages_SelectExceptionType" xml:space="preserve">
+        <value>เลือกประเภทข้อยกเว้น</value>
+    </data>
+    <data name="Admin_InterviewPackages_Type" xml:space="preserve">
+        <value>ประเภทของข้อยกเว้น</value>
+    </data>
+    <data name="Admin_InterviewPackages_Broken" xml:space="preserve">
+        <value>แตกหัก</value>
+    </data>
+    <data name="Admin_InterviewPackages_Rejected" xml:space="preserve">
+        <value>ถูกปฏิเสธ</value>
+    </data>
+    <data name="Admin_InterviewPackages_Period" xml:space="preserve">
+        <value>ระยะเวลา</value>
+    </data>
+    <data name="Admin_InterviewPackages_ReprocessSelectedConfirmation" xml:space="preserve">
+        <value>คุณแน่ใจหรือไม่ว่าต้องการประมวลผลแพ็กเกจที่เสียหายที่เลือกอีกครั้ง</value>
+    </data>
+    <data name="Admin_InterviewPackages_SelectedPackagesCount" xml:space="preserve">
+        <value>เลือกแพ็คเกจ {{count}} แล้ว</value>
+    </data>
+    <data name="Admin_InterviewPackages_Reprocess" xml:space="preserve">
+        <value>ประมวลผลใหม่</value>
+    </data>
+    <data name="Admin_InterviewPackages_PutReason" xml:space="preserve">
+        <value>ใส่เหตุผล</value>
+    </data>
+    <data name="Admin_InterviewPackages_Title" xml:space="preserve">
+        <value>แพ็คเกจสัมภาษณ์({{count}})</value>
+    </data>
+    <data name="Admin_InterviewPackages_Subtitle" xml:space="preserve">
+        <value>หากคุณแพ้การสัมภาษณ์หรือได้รับข้อความว่าการสัมภาษณ์เสียหาย &lt;br/&gt; คุณสามารถดูข้อมูลการสัมภาษณ์นั้นได้ที่นี่</value>
+    </data>
+    <data name="Admin_InterviewPackages_NumberOfPackagesAffected" xml:space="preserve">
+        <value>แพ็คเกจ {{count}} กำลังจะมีการเปลี่ยนแปลง</value>
+    </data>
+    <data name="Admin_InterviewPackages_SelectReason" xml:space="preserve">
+        <value>เลือกเหตุผล</value>
+    </data>
+    <data name="Admin_InterviewPackages_Reason" xml:space="preserve">
+        <value>เหตุผล</value>
+    </data>
+    <data name="ReevaluateInterview" xml:space="preserve">
+        <value>ประเมินการสัมภาษณ์อีกครั้ง</value>
+    </data>
+    <data name="Admin_ControlPanelLinkTitle" xml:space="preserve">
+        <value>แผงควบคุม</value>
+    </data>
+    <data name="Admin_ReevaluateInterview_InterviewId" xml:space="preserve">
+        <value>รหัสสัมภาษณ์</value>
+    </data>
+    <data name="Admin_Reevaluate" xml:space="preserve">
+        <value>ประเมินใหม่</value>
+    </data>
+    <data name="Admin_Reevaluate_InterviewId_Required" xml:space="preserve">
+        <value>ต้องมีรหัสการสัมภาษณ์</value>
+    </data>
+    <data name="Admin_Reevaluate_InterviewId_Invalid" xml:space="preserve">
+        <value>ป้อนค่า GUID ที่ถูกต้อง</value>
+    </data>
+    <data name="Admin_Reevaluate_Success" xml:space="preserve">
+        <value>การสัมภาษณ์ได้รับการประเมินใหม่เรียบร้อยแล้ว</value>
+    </data>
+    <data name="CreateUser" xml:space="preserve">
+        <value>สร้างบัญชีผู้ใช้</value>
+    </data>
+    <data name="GenerateRecoveryCodes" xml:space="preserve">
+        <value>สร้างรหัสกู้คืน</value>
+    </data>
+    <data name="AccountManage_Status2fa" xml:space="preserve">
+        <value>การรับรองความถูกต้องด้วยสองปัจจัยอยู่ในขณะนี้</value>
+    </data>
+    <data name="AccountManage_StatusApiToken" xml:space="preserve">
+        <value>การเข้าถึงจุดสิ้นสุด REST และ GraphQL API อยู่ในขณะนี้</value>
+    </data>
+    <data name="UsersManage_WorkspacesFilterTitle" xml:space="preserve">
+        <value>พื้นที่ทำงาน</value>
+    </data>
+    <data name="UsersManage_WorkspacesFilterPlaceholder" xml:space="preserve">
+        <value>พื้นที่ทำงานทั้งหมด</value>
+    </data>
+    <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+        <value>การเข้าถึงพื้นที่ทำงาน</value>
+    </data>
+    <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
+        <value>หัวหน้างาน</value>
+    </data>
+    <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
+        <value>เลือกหัวหน้างาน</value>
+    </data>
+    <data name="UsersManage_RoleFilterPlaceholder" xml:space="preserve">
+        <value>ทุกบทบาท</value>
+    </data>
+    <data name="CreateUser_RoleLabel" xml:space="preserve">
+        <value>บทบาทของผู้ใช้</value>
+    </data>
+    <data name="UsersManage_ShowUsersFilterPlaceholder" xml:space="preserve">
+        <value>ผู้ใช้บริการทุกคน</value>
+    </data>
+    <data name="UserManagement_SubtitleAdd" xml:space="preserve">
+        <value>เลือกพื้นที่ทำงานที่ต้องเพิ่มให้กับผู้ใช้ที่เลือก</value>
+    </data>
+    <data name="UserManagement_SubtitleAddInterviewer" xml:space="preserve">
+        <value>เลือกพื้นที่ทำงานและหัวหน้างานที่ต้องการสร้างผู้สัมภาษณ์</value>
+    </data>
+    <data name="UserManagement_SubtitleRemove" xml:space="preserve">
+        <value>เลือกพื้นที่ทำงานที่ต้องการลบออกจากผู้ใช้ที่เลือก</value>
+    </data>
+    <data name="UserManagement_ManageWorkspacesTitle" xml:space="preserve">
+        <value>จัดการพื้นที่ทำงาน</value>
+    </data>
+    <data name="UserManagement_AddToWorkspace" xml:space="preserve">
+        <value>เพิ่มลงในพื้นที่ทำงาน</value>
+    </data>
+    <data name="UserManagement_RemoveFromWorkspace" xml:space="preserve">
+        <value>ลบออกจากพื้นที่ทำงาน</value>
+    </data>
+    <data name="UserManagement_UsersSelected" xml:space="preserve">
+        <value>เลือกผู้ใช้แล้ว</value>
+    </data>
+    <data name="Interviewer_CreateText" xml:space="preserve">
+        <value>การดำเนินการนี้จะสร้างผู้ใช้แต่ละรายที่มีสิทธิ์ของผู้สัมภาษณ์&lt;br&gt; เพื่อสร้างผู้ใช้หลายราย คุณสามารถใช้&lt;a href="{{link}}" target="_blank"&gt;การสร้างกลุ่มผู้ใช้&lt;/a&gt;ได้</value>
+    </data>
+    <data name="UsersManage_TeamFilterPlaceHolder" xml:space="preserve">
+        <value>ทีม</value>
+    </data>
+    <data name="UsersManage_TeamFilter" xml:space="preserve">
+        <value>ทีม</value>
+    </data>
+    <data name="ExposedVariables_VariableName" xml:space="preserve">
+        <value>ชื่อตัวแปร</value>
+    </data>
+    <data name="ExposedVariables_VariableTitle" xml:space="preserve">
+        <value>ชื่อ</value>
+    </data>
+    <data name="ExposedVariables_VariableDisplayTitle" xml:space="preserve">
+        <value>ชื่อที่แสดง</value>
+    </data>
+    <data name="ExposedVariables_VariableLabel" xml:space="preserve">
+        <value>ฉลาก</value>
+    </data>
+    <data name="ExposedVariables_ChangeMessage" xml:space="preserve">
+        <value>คุณกำลังเปลี่ยนชุดของตัวแปรที่เปิดเผย จะใช้เวลาสักครู่ในการอัปเดตรายงาน</value>
+    </data>
+    <data name="Filters_InterviewMode" xml:space="preserve">
+        <value>โหมดสัมภาษณ์</value>
+    </data>
+    <data name="Filters_InterviewModePlaceHolder" xml:space="preserve">
+        <value>ทุกโหมดการสัมภาษณ์</value>
+    </data>
+    <data name="AccountManage_ApiTokens" xml:space="preserve">
+        <value>โทเค็น API</value>
+    </data>
+    <data name="Profile_IssueApiToken" xml:space="preserve">
+        <value>ปัญหา</value>
+    </data>
+    <data name="MapUserLink_DiscardConfirm1" xml:space="preserve">
+        <value>หากนี่คือผู้ใช้คนสุดท้ายในทีมที่เชื่อมโยงกับแผนที่ หัวหน้าทีมจะสูญเสียการเข้าถึงแผนที่</value>
+    </data>
+    <data name="QuestionnaireVersionAndName" xml:space="preserve">
+        <value>[เวอร์ชั่น {1}] {0}</value>
+    </data>
+    <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
+        <value>การตรวจสอบที่สำคัญ</value>
+    </data>
+    <data name="Questionnaire_CriticalVerificationLevel" xml:space="preserve">
+        <value>การดำเนินการเมื่อยื่น</value>
+    </data>
+    <data name="Questionnaire_ChangeCriticalVerificationLevelTitle" xml:space="preserve">
+        <value>กำหนดการดำเนินการเมื่อส่ง</value>
+    </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanation" xml:space="preserve">
+        <value>เลือกสิ่งที่ควรทำก่อนส่งการสัมภาษณ์</value>
+    </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationIgnore" xml:space="preserve">
+        <value>เพิกเฉย - อย่าตรวจสอบกฎที่สำคัญใดๆ แม้ว่าจะมีอยู่ก็ตาม</value>
+    </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationWarn" xml:space="preserve">
+        <value>คำเตือน - ตรวจสอบกฎเกณฑ์ที่สำคัญและเตือนผู้ใช้ก่อนส่งการสัมภาษณ์</value>
+    </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationBlock" xml:space="preserve">
+        <value>BLOCK - ตรวจสอบกฎเกณฑ์ที่สำคัญและห้ามส่งการสัมภาษณ์เมื่อมีปัญหาร้ายแรง</value>
+    </data>
+    <data name="ShowKey" xml:space="preserve">
+        <value>แสดงกุญแจ</value>
+    </data>
+    <data name="Observer_Memo1" xml:space="preserve">
+        <value>ผู้สังเกตการณ์สามารถตรวจสอบการรวบรวมข้อมูลแต่ไม่สามารถเปลี่ยนแปลงได้ ปลอมตัวเป็นผู้ใช้รายอื่น (หัวหน้างานหรือสำนักงานใหญ่) เพื่อเข้าถึงการสัมภาษณ์ การมอบหมาย รายงาน และข้อมูลอื่น ๆ ผู้สังเกตการณ์ไม่สามารถสร้างการมอบหมายงาน กำหนดคำตอบ แสดงความคิดเห็น อนุมัติ/ปฏิเสธการสัมภาษณ์ ส่งออกข้อมูล หรือแก้ไขข้อมูลเซิร์ฟเวอร์</value>
+    </data>
+    <data name="Observer_Memo2" xml:space="preserve">
+        <value>คลิกบัญชีและเลือก 'ดูในฐานะผู้ใช้รายนี้ในโหมดอ่านอย่างเดียว' เพื่อเริ่มต้น ใช้ลิงก์สีเหลืองที่ด้านบนเพื่อกลับไปยังบัญชีของคุณ</value>
+    </data>
+</root>

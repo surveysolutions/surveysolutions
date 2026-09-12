@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="UserWasCreatedFormat" xml:space="preserve"><value>អ្នកប្រើប្រាស់ទីស្នាក់ការ {0} ត្រូវបានបង្កើតដោយជោគជ័យ។</value></data>
+  <data name="UserNotExists" xml:space="preserve"><value>មិនអាចធ្វើបច្ចុប្បន្នភាពព័ត៌មានអ្នកប្រើប្រាស់ ពីព្រោះអ្នកប្រើប្រាស់មិនមាន</value></data>
+  <data name="SupervisorNotFound" xml:space="preserve"><value>មិនអាចបង្កើតអ្នកសំភាសន៍ អ្នកត្រួតពិនិត្យដែលបានជ្រើសរើសមិនមាន ត្រូវបានចាក់សោ ឬត្រូវបានបណ្ណសារ</value></data>
+  <data name="NoPermission" xml:space="preserve"><value>មិនអាចធ្វើបច្ចុប្បន្នភាពព័ត៌មានអ្នកប្រើប្រាស់ ពីព្រោះអ្នកមិនមានការអនុញ្ញាត</value></data>
+  <data name="UserWasUpdatedFormat" xml:space="preserve"><value>ព័ត៌មានអំពី &lt;b&gt;{0}&lt;/b&gt; ត្រូវបានធ្វើបច្ចុប្បន្នភាពដោយជោគជ័យ</value></data>
+  <data name="InterviewWasCreated" xml:space="preserve"><value>ការសំភាសន៍ត្រូវបានបង្កើតដោយជោគជ័យ។</value></data>
+  <data name="CreateOneMore" xml:space="preserve"><value>បង្កើតមួយទៀត?</value></data>
+  <data name="QuestionnaireNotFoundFormat" xml:space="preserve"><value>រកមិនឃើញកម្រងសំណួរដែលមាន id {0} និងកំណែ {1}</value></data>
+  <data name="QuestionnaireClonedFormat" xml:space="preserve"><value>កម្រងសំណួរ '{0}' ត្រូវបានចម្លងដោយជោគជ័យ</value></data>
+  <data name="QuestionnaireClonedAndRenamedFormat" xml:space="preserve"><value>កម្រងសំណួរ '{0}' ត្រូវបានចម្លងដោយជោគជ័យជាមួយចំណងជើងថ្មី '{1}'</value></data>
+  <data name="ObserverCreatedFormat" xml:space="preserve"><value>អ្នកប្រើប្រាស់អ្នកសង្កេតការណ៍ &lt;b&gt;{0}&lt;/b&gt; ត្រូវបានបង្កើតដោយជោគជ័យ</value></data>
+  <data name="SuccessfullyCreatedFormat" xml:space="preserve"><value>អ្នកត្រួតពិនិត្យ &lt;b&gt;{0}&lt;/b&gt; ត្រូវបានបង្កើតដោយជោគជ័យ</value></data>
+</root>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="NoData_ContactSupport" xml:space="preserve">
+        <value>ข้อมูลจากการสัมภาษณ์ {0} เสียหาย ติดต่อฝ่ายสนับสนุนเพื่อกู้คืนการสัมภาษณ์นั้น</value>
+    </data>
+    <data name="NoData_ContactSupportWithMoreDetails" xml:space="preserve">
+        <value>โปรดติดต่อฝ่ายสนับสนุนเพื่อให้รายละเอียดเพิ่มเติม</value>
+    </data>
+    <data name="NoData_InterveiwWasNotUploadedYet" xml:space="preserve">
+        <value>บทสัมภาษณ์ {0} ยังไม่ได้ซิงค์</value>
+    </data>
+    <data name="NoData_InterviewDeleted" xml:space="preserve">
+        <value>บทสัมภาษณ์ {0} ถูกลบโดย HQ หรือ Administrator และไม่สามารถกู้คืนได้</value>
+    </data>
+    <data name="NoData_InterviewerChangedDevice" xml:space="preserve">
+        <value>ผู้สัมภาษณ์เปลี่ยนแท็บเล็ต ข้อมูลสำหรับการสัมภาษณ์ {0} อาจสูญหายเนื่องจากข้อมูลถูกลบเมื่อผู้สัมภาษณ์ย้ายจากแท็บเล็ตเครื่องหนึ่งไปยังอีกแท็บเล็ตหนึ่ง หากเป็นกรณีนี้ การสัมภาษณ์นั้นจะไม่สามารถกู้คืนได้</value>
+    </data>
+    <data name="NoData_InterviewWasNotReceived" xml:space="preserve">
+        <value>ยังไม่ได้รับบทสัมภาษณ์ {0} จากผู้สัมภาษณ์ {1}</value>
+    </data>
+    <data name="NoData_InterviewWasReassigned" xml:space="preserve">
+        <value>การสัมภาษณ์ {0} ถูกกำหนดใหม่ให้กับผู้สัมภาษณ์รายอื่น การสัมภาษณ์ขณะนี้อยู่บนแท็บเล็ตของผู้สัมภาษณ์คนหลังนั้น</value>
+    </data>
+    <data name="NoData_NoIssuesInterviewOnServer" xml:space="preserve">
+        <value>การสัมภาษณ์ {0} ไม่มีปัญหาที่บันทึกไว้บนเซิร์ฟเวอร์&lt;br /&gt;โปรดรับข้อมูลเพิ่มเติมจากบุคคลที่รับผิดชอบในการสัมภาษณ์นั้นในปัจจุบัน&lt;br /&gt;หากปัญหายังคงมีอยู่ โปรดติดต่อฝ่ายสนับสนุนเพื่อให้รายละเอียดเพิ่มเติม</value>
+    </data>
+    <data name="NoData_NotFound" xml:space="preserve">
+        <value>ไม่พบบทสัมภาษณ์ {0}</value>
+    </data>
+    <data name="NoData_QuestionnaireDeleted" xml:space="preserve">
+        <value>ผู้ดูแลเซิร์ฟเวอร์ลบแบบสอบถามเพื่อสัมภาษณ์ {0} ด้วยเหตุนี้ การสัมภาษณ์ทั้งหมดที่เกี่ยวข้องกับแบบสอบถามนี้จึงถูกลบและไม่สามารถกู้คืนได้</value>
+    </data>
+    <data name="MissingCensusInterviews_NoBrokenPackages_Message" xml:space="preserve">
+        <value>หากการสัมภาษณ์ที่คุณพยายามค้นหาไม่อยู่ในรายการ โปรดสั่งให้ผู้สัมภาษณ์ทำการสัมภาษณ์ให้เสร็จสิ้นและประสานข้อมูลอีกครั้ง</value>
+    </data>
+    <data name="MissingCensusInterviews_SomeBrokenPackages_Message" xml:space="preserve">
+        <value>หากการสัมภาษณ์ที่คุณพยายามค้นหาไม่อยู่ในรายการ โปรดสั่งให้ผู้สัมภาษณ์ทำการสัมภาษณ์ให้เสร็จสิ้นและประสานข้อมูลอีกครั้ง จากนั้นค้นหาบทสัมภาษณ์อีกครั้ง หากการสัมภาษณ์ไม่อยู่ในการค้นหาครั้งที่สอง โปรดติดต่อทีมสนับสนุน</value>
+    </data>
+</root>

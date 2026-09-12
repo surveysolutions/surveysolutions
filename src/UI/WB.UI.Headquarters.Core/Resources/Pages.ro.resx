@@ -1709,7 +1709,7 @@
     <value>Accesul la punctele finale REST și GraphQL API este în prezent </value>
   </data>
   <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
-    <value>Supervizor (Operatorii de interviu vor fi adăugați în echipa sa)</value>
+    <value>Supervizor</value>
   </data>
   <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
     <value>Selectați supervizorul</value>

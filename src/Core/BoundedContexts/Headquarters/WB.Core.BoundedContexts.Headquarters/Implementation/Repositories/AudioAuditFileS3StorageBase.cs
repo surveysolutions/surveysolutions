@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
@@ -28,10 +30,11 @@ public abstract class AudioAuditFileS3StorageBase<T> : AudioAuditStorageBase
     {
         string fileId = GetFileId(interviewId, fileName);
         var audioAuditData = filePlainStorageAccessor.GetById(fileId);
-        if (audioAuditData.Data == null)
+        if (audioAuditData?.Data == null)
         {
             return await externalFileStorage.GetBinaryAsync(AudioAuditS3Folder + fileId);
         }
+
         return audioAuditData.Data;
     }
 
@@ -50,7 +53,8 @@ public abstract class AudioAuditFileS3StorageBase<T> : AudioAuditStorageBase
                 file.FileName,
                 file.ContentType,
                 () => GetInterviewBinaryDataAsync(interviewId, file.FileName),
-                null
+                null,
+                () => GetInterviewBinaryDataStreamAsync(interviewId, file.FileName)
             )).ToList();
         return Task.FromResult(interviewBinaryDataDescriptors);
     }
@@ -75,5 +79,25 @@ public abstract class AudioAuditFileS3StorageBase<T> : AudioAuditStorageBase
         var fileId = GetFileId(interviewId, fileName);
         filePlainStorageAccessor.Remove(fileId);
         await externalFileStorage.RemoveAsync(AudioAuditS3Folder + fileId);
+    }
+
+    public override async Task RemoveAllBinaryDataForInterviewsAsync(List<Guid> interviewIds)
+    {
+        await externalFileStorage.RemoveAllUnderPrefixesAsync(
+            interviewIds.Select(interviewId => AudioAuditS3Folder + GetFileId(interviewId, string.Empty)))
+            .ConfigureAwait(false);
+
+        filePlainStorageAccessor.Remove(q => q.Where(f => interviewIds.Contains(f.InterviewId)));
+    }
+
+    private async Task<Stream> GetInterviewBinaryDataStreamAsync(Guid interviewId, string fileName)
+    {
+        var fileId = GetFileId(interviewId, fileName);
+        var audioAuditData = filePlainStorageAccessor.GetById(fileId);
+
+        if (audioAuditData?.Data == null)
+            return await externalFileStorage.GetStreamAsync(AudioAuditS3Folder + fileId).ConfigureAwait(false);
+
+        return new MemoryStream(audioAuditData.Data, writable: false);
     }
 }

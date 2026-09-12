@@ -317,6 +317,9 @@
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
     <value>Ответ '{0}' неверный, поскольку нельзя задать отрицательное количество элементов в списке</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>Отрицательные значения недопустимы для этого вопроса</value>
+  </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>Ответ '{0}' неверный, поскольку он больше значения максимального количества элементов в списке: '{1}'.</value>
   </data>
@@ -529,6 +532,9 @@
   </data>
   <data name="Multimedia_PictureSource" xml:space="preserve">
     <value>Выберите опцию</value>
+  </data>
+  <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+    <value>Фотографию не удалось обработать, так как её формат не поддерживается. Пожалуйста, сделайте фото ещё раз.</value>
   </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Сделать фото</value>

@@ -67,7 +67,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             filter = (filter ?? String.Empty).ToLower();
             decimal? parentValueAsDecimal = parentValue;
-            decimal[] excludedOptionIdsAsDecimal = excludedOptionIds?.Select(x => (decimal) x)?.ToArray() ?? Array.Empty<decimal>();
+            // NOTE: List<decimal> is used here on purpose. For an array the C# compiler (C# 14+)
+            // binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T) which puts an op_Implicit
+            // call into the expression tree and sqlite-net translates it into invalid SQL
+            // ("... in op_implicit(...)").
+            List<decimal> excludedOptionIdsAsDecimal = excludedOptionIds?.Select(x => (decimal) x).ToList() ?? new List<decimal>();
 
             int take = 50;
             int skip = 0;

@@ -74,8 +74,12 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         [ApiNoCache]
         public ActionResult<List<InterviewCommentariesDto>> GetInterviewCommentariesBatch([FromQuery(Name = "id")] Guid[] id)
         {
+            // NOTE: List<T> is used on purpose. For an array the C# 14+ compiler binds Contains
+            // to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an op_Implicit call
+            // into the expression tree that NHibernate cannot translate.
+            var ids = id.ToList();
             var keys = this.interviewStatuses.Query(_ => _
-                    .Where(x => id.Contains(x.InterviewId))
+                    .Where(x => ids.Contains(x.InterviewId))
                     .Select(x => new { x.InterviewId, x.Key }).ToList())
                 .ToDictionary(x => x.InterviewId.FormatGuid(), x => x.Key);
 
@@ -112,9 +116,11 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         [ApiNoCache]
         public ActionResult<List<InterviewSummariesDto>> GetInterviewSummariesBatch([FromQuery(Name = "id")] Guid[] id)
         {
+            // NOTE: see the comment in GetInterviewCommentariesBatch about List<T> vs array in expression trees.
+            var ids = id.ToList();
             var interviews =
                 this.interviewStatuses.Query(_ => _
-                    .Where(i => id.Contains(i.InterviewId))
+                    .Where(i => ids.Contains(i.InterviewId))
                     .SelectMany(summary => summary.InterviewCommentedStatuses,
                         (interview, status) => new { interview.InterviewId, interview.Key, StatusHistory = status })
                     .Where(s=> s.StatusHistory.Status != InterviewExportedAction.Paused 

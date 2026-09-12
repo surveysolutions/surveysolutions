@@ -63,6 +63,32 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             }
         }
 
+        public async Task<Stream?> GetStreamAsync(string key)
+        {
+            var getObject = new GetObjectRequest
+            {
+                BucketName = BucketInfo.BucketName,
+                Key = BucketInfo.PathTo(key)
+            };
+
+            try
+            {
+                var response = await client.GetObjectAsync(getObject).ConfigureAwait(false);
+                logger.LogTrace("Opened object stream from S3. [{key}] {request_key}", key, getObject.Key);
+                return new S3ObjectResponseStream(response);
+            }
+            catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
+            {
+                logger.LogTrace("Cannot open object stream from S3: {statusCode} [{key}] {request_key}", e.StatusCode, key, getObject.Key);
+                return null;
+            }
+            catch (Exception e)
+            {
+                LogError("Unable to open stream from ]{key}] {request_key}", e, key, getObject.Key);
+                throw;
+            }
+        }
+
         public async Task<List<FileObject>?> ListAsync(string prefix)
         {
             var listObjects = new ListObjectsV2Request
@@ -230,7 +256,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 
                 if (deleteRequest.Objects.Any())
                 {
-                    await client.DeleteObjectsAsync(deleteRequest).ConfigureAwait(false);
+                    var response = await client.DeleteObjectsAsync(deleteRequest).ConfigureAwait(false);
+                    if (response.DeleteErrors.Count > 0)
+                    {
+                        foreach (var error in response.DeleteErrors)
+                            logger.LogError("S3 delete error for key {Key}: {Code} {Message}", error.Key, error.Code, error.Message);
+
+                        throw new InvalidOperationException(
+                            $"Failed to delete {response.DeleteErrors.Count} object(s) from S3. " +
+                            $"First error: {response.DeleteErrors[0].Key}: {response.DeleteErrors[0].Code} {response.DeleteErrors[0].Message}");
+                    }
+
                     var objects = string.Join(", ", deleteRequest.Objects.Select(kl => kl.Key));
                     logger.LogTrace("Deleted object from S3. [{objects}]", objects);
                 }
@@ -245,6 +281,52 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             {
                 LogError($"Unable to remove object in S3. Paths: {paths}", e);
                 throw;
+            }
+        }
+
+        private sealed class S3ObjectResponseStream : Stream
+        {
+            private readonly GetObjectResponse response;
+            private readonly Stream stream;
+
+            public S3ObjectResponseStream(GetObjectResponse response)
+            {
+                this.response = response;
+                this.stream = response.ResponseStream;
+            }
+
+            public override bool CanRead => stream.CanRead;
+            public override bool CanSeek => stream.CanSeek;
+            public override bool CanWrite => stream.CanWrite;
+            public override long Length => stream.Length;
+            public override long Position
+            {
+                get => stream.Position;
+                set => stream.Position = value;
+            }
+
+            public override void Flush() => stream.Flush();
+            public override int Read(byte[] buffer, int offset, int count) => stream.Read(buffer, offset, count);
+            public override long Seek(long offset, SeekOrigin origin) => stream.Seek(offset, origin);
+            public override void SetLength(long value) => stream.SetLength(value);
+            public override void Write(byte[] buffer, int offset, int count) => stream.Write(buffer, offset, count);
+
+            public override async ValueTask DisposeAsync()
+            {
+                await stream.DisposeAsync().ConfigureAwait(false);
+                response.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    stream.Dispose();
+                    response.Dispose();
+                }
+
+                base.Dispose(disposing);
             }
         }
     }

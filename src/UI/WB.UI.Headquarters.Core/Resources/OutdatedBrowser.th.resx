@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="HellowText" xml:space="preserve"><value>น่าเสียดาย เบราว์เซอร์ของคุณล้าสมัย</value></data>
+  <data name="LinkToUpdate" xml:space="preserve"><value>คุณสามารถค้นหาเวอร์ชันล่าสุดได้โดยใช้หน้านี้:</value></data>
+  <data name="PleaseUpdate" xml:space="preserve"><value>เพื่อดำเนินการต่อ กรุณาอัปเดตเบราว์เซอร์ของคุณ</value></data>
+</root>

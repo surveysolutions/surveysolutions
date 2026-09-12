@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using FluentAssertions;
 using Moq;
 using MvvmCross.Base;
 using MvvmCross.Plugin.Messenger;
@@ -8,8 +9,12 @@ using MvvmCross.Views;
 using NSubstitute;
 using NUnit.Framework;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -95,6 +100,107 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             viewModel.Dispose();
 
             audioService.DidNotReceive().Dispose();
+        }
+
+        [Test]
+        public void when_init_with_answered_question_should_can_be_played_use_stored_filename()
+        {
+            // arrange
+            var interviewId = Guid.NewGuid();
+            var questionIdentity = Create.Entity.Identity();
+            const string storedFileName = "old_variable__.m4a";
+
+            var audioQuestion = new InterviewTreeAudioQuestion(storedFileName, TimeSpan.FromSeconds(8));
+
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
+            var interviewMock = new Mock<IStatefulInterview>();
+            interviewMock.Setup(x => x.Id).Returns(interviewId);
+            interviewMock.Setup(x => x.QuestionnaireIdentity).Returns(questionnaireIdentity);
+            interviewMock.Setup(x => x.Language).Returns((string)null);
+            interviewMock.Setup(x => x.GetAudioQuestion(questionIdentity)).Returns(audioQuestion);
+
+            var questionnaire = Mock.Of<IQuestionnaire>(x =>
+                x.GetQuestionVariableName(questionIdentity.Id) == "new_variable");
+
+            var questionnaireStorageMock = new Mock<IQuestionnaireStorage>();
+            questionnaireStorageMock
+                .Setup(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()))
+                .Returns(questionnaire);
+
+            var interviewRepositoryMock = new Mock<IStatefulInterviewRepository>();
+            interviewRepositoryMock.Setup(x => x.Get(It.IsAny<string>())).Returns(interviewMock.Object);
+
+            var audioFileStorageMock = new Mock<IAudioFileStorage>();
+            audioFileStorageMock
+                .Setup(x => x.GetInterviewBinaryData(interviewId, storedFileName))
+                .Returns(new byte[] { 1, 2, 3 });
+
+            var audioService = Substitute.For<IAudioService>();
+            audioService.GetAudioType().Returns("m4a");
+
+            var viewModel = CreateAudioQuestionViewModel(
+                interviewRepository: interviewRepositoryMock.Object,
+                questionnaireStorage: questionnaireStorageMock.Object,
+                audioFileStorage: audioFileStorageMock.Object,
+                audioService: audioService);
+
+            // act
+            viewModel.Init(interviewId.ToString("N"), questionIdentity, Create.Other.NavigationState());
+
+            // assert
+            viewModel.CanBePlayed.Should().BeTrue();
+        }
+
+        [Test]
+        public void when_answers_removed_event_handled_should_set_can_be_played_to_false()
+        {
+            // arrange
+            var interviewId = Guid.NewGuid();
+            var questionIdentity = Create.Entity.Identity();
+            const string storedFileName = "stored_variable__.m4a";
+
+            var audioQuestion = new InterviewTreeAudioQuestion(storedFileName, TimeSpan.FromSeconds(5));
+
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
+            var interviewMock = new Mock<IStatefulInterview>();
+            interviewMock.Setup(x => x.Id).Returns(interviewId);
+            interviewMock.Setup(x => x.QuestionnaireIdentity).Returns(questionnaireIdentity);
+            interviewMock.Setup(x => x.Language).Returns((string)null);
+            interviewMock.Setup(x => x.GetAudioQuestion(questionIdentity)).Returns(audioQuestion);
+
+            var questionnaire = Mock.Of<IQuestionnaire>(x =>
+                x.GetQuestionVariableName(questionIdentity.Id) == "stored_variable");
+
+            var questionnaireStorageMock = new Mock<IQuestionnaireStorage>();
+            questionnaireStorageMock
+                .Setup(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()))
+                .Returns(questionnaire);
+
+            var interviewRepositoryMock = new Mock<IStatefulInterviewRepository>();
+            interviewRepositoryMock.Setup(x => x.Get(It.IsAny<string>())).Returns(interviewMock.Object);
+
+            var audioFileStorageMock = new Mock<IAudioFileStorage>();
+            audioFileStorageMock
+                .Setup(x => x.GetInterviewBinaryData(interviewId, storedFileName))
+                .Returns(new byte[] { 1, 2, 3 });
+
+            var audioService = Substitute.For<IAudioService>();
+            audioService.GetAudioType().Returns("m4a");
+
+            var viewModel = CreateAudioQuestionViewModel(
+                interviewRepository: interviewRepositoryMock.Object,
+                questionnaireStorage: questionnaireStorageMock.Object,
+                audioFileStorage: audioFileStorageMock.Object,
+                audioService: audioService);
+
+            viewModel.Init(interviewId.ToString("N"), questionIdentity, Create.Other.NavigationState());
+
+            // act
+            var @event = new AnswersRemoved(null, new[] { questionIdentity }, DateTimeOffset.UtcNow);
+            viewModel.Handle(@event);
+
+            // assert
+            viewModel.CanBePlayed.Should().BeFalse();
         }
     }
 }

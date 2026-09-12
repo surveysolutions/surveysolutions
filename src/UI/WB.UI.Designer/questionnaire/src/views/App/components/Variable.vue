@@ -160,6 +160,10 @@ export default {
     },
     mounted() {
         this.scrollTo();
+        this.$emitter.on('saveCurrentEntityRequested', this.saveVariable);
+    },
+    unmounted() {
+        this.$emitter.off('saveCurrentEntityRequested', this.saveVariable);
     },
     computed: {
         activeVariable() {

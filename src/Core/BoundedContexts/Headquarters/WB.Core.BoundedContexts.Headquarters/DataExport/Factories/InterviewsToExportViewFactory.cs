@@ -17,8 +17,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 
         public List<Views.InterviewApiComment> GetInterviewComments(params Guid[] interviewIds)
         {
+           // NOTE: List<T> is used on purpose. For an array the C# 14+ compiler binds Contains
+           // to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an op_Implicit call
+           // into the expression tree that NHibernate cannot translate.
+           var ids = interviewIds.ToList();
            var result = this.comments.Query(_ =>
-                        _.Where(x => interviewIds.Contains(x.InterviewCommentaries.InterviewId))
+                        _.Where(x => ids.Contains(x.InterviewCommentaries.InterviewId))
                             .Select(i => new Views.InterviewApiComment
                                 {
                                     InterviewId = i.InterviewCommentaries.SummaryId,

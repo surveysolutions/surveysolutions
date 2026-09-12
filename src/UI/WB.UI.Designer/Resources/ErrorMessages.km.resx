@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ClientVersionIsNotSupported" xml:space="preserve">
+        <value>បរាជ័យក្នុងការបើកកម្រងសំណួរ។ កំណែរបស់អ្នកគឺ {0} ។ សូមធ្វើបច្ចុប្បន្នភាព។</value>
+    </data>
+    <data name="TemplateNotFound" xml:space="preserve">
+        <value>កម្រងសំណួរដែលមានលេខសម្គាល់={0} មិនអាចរកឃើញទេ។ សូមពិនិត្យមើលបញ្ជីកម្រងសំណួរដែលមាន ឬទាក់ទងសហសេវិកដែលបានចែករំលែកកម្រងសំណួរជាមួយអ្នក។</value>
+    </data>
+    <data name="Questionnaire_verification_failed" xml:space="preserve">
+        <value>កម្រងសំណួររបស់អ្នកមានកំហុស។ សូមផ្ទៀងផ្ទាត់កម្រងសំណួរលើអ្នករចនា។</value>
+    </data>
+    <data name="User_Not_authorized" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់មិនត្រូវបានអនុញ្ញាតទេ។ សូមពិនិត្យមើលការចូល និងពាក្យសម្ងាត់របស់អ្នក។</value>
+    </data>
+    <data name="OldClientPleaseUpdate" xml:space="preserve">
+        <value>អ្នកមានកំណែដែលលែងប្រើសម្រាប់កម្មវិធីការិយាល័យកណ្តាល។ សូមទាក់ទងអ្នកគ្រប់គ្រងម៉ាស៊ីនមេរបស់អ្នក ដើម្បីស្នើសុំការធ្វើបច្ចុប្បន្នភាព។</value>
+    </data>
+    <data name="VersionParameterIsIncorrect" xml:space="preserve">
+        <value>មានបញ្ហាជាមួយកំណែនៃកម្រងសំណួររបស់អ្នក។ សូមទាក់ទង support@mysurvey.solutions ។</value>
+    </data>
+    <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
+        <value>បរាជ័យក្នុងការនាំចូលកម្រងសំណួរ។ កម្រងសំណួររបស់អ្នក "{0}" មានកំណែ {1} ។ កម្មវិធីការិយាល័យកណ្តាលគាំទ្រតែកំណែ {2} ប៉ុណ្ណោះ។</value>
+    </data>
+    <data name="UserLockedOut" xml:space="preserve">
+        <value>គណនីរបស់អ្នកត្រូវបានចាក់សោ។ សូមទាក់ទង support@mysurvey.solutions ដើម្បីដោះសោវា។</value>
+    </data>
+    <data name="ApplicationUpdateRequired" xml:space="preserve">
+        <value>តម្រូវឱ្យធ្វើបច្ចុប្បន្នភាពកម្មវិធី។</value>
+    </data>
+    <data name="ServerError" xml:space="preserve">
+        <value>កំហុសម៉ាស៊ីនមេបានកើតឡើង។ សូមទាក់ទង support@mysurvey.solutions ។</value>
+    </data>
+    <data name="The_user_name_or_password_provided_is_incorrect" xml:space="preserve">
+        <value>ឈ្មោះ​អ្នក​ប្រើ ឬ​ពាក្យ​សម្ងាត់​ដែល​បាន​ផ្ដល់​គឺ​មិន​ត្រឹមត្រូវ។ សូមបញ្ចូលម្តងទៀត។</value>
+    </data>
+    <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
+        <value>ពាក្យ​ផ្ទៀងផ្ទាត់​មិន​ត្រឹមត្រូវ។ សូមព្យាយាមម្តងទៀត។</value>
+    </data>
+    <data name="EmptyUserNameOrPassword" xml:space="preserve">
+        <value>ឈ្មោះអ្នកប្រើ ឬពាក្យសម្ងាត់គឺទទេ។</value>
+    </data>
+    <data name="IncorrectUserNameOrPassword" xml:space="preserve">
+        <value>ការចូល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ។ សូមព្យាយាមម្តងទៀត។</value>
+    </data>
+    <data name="AccountBlocked" xml:space="preserve">
+        <value>គណនីរបស់អ្នកត្រូវបានរារាំង។ ទាក់ទងអ្នកគ្រប់គ្រងដើម្បីបិទគណនីរបស់អ្នក។</value>
+    </data>
+    <data name="PasswordResetNotAllowed" xml:space="preserve">
+        <value>ការកំណត់ពាក្យសម្ងាត់ឡើងវិញមិនត្រូវបានអនុញ្ញាតទេ។</value>
+    </data>
+    <data name="ConfirmAccount" xml:space="preserve">
+        <value>សូមបញ្ជាក់គណនីរបស់អ្នកជាមុនសិន។ យើងបានផ្ញើតំណបញ្ជាក់ទៅ {0} ។ មិនបានទទួលវាទេ?</value>
+    </data>
+    <data name="RequestAnotherEmail" xml:space="preserve">
+        <value>ស្នើសុំមួយទៀត។</value>
+    </data>
+    <data name="Your_email_is_verified" xml:space="preserve">
+        <value>អ្នករចនាបានផ្ទៀងផ្ទាត់អ៊ីមែលរបស់អ្នកដោយជោគជ័យ។</value>
+    </data>
+    <data name="Unexpected_error_occurred_Please_try_again_later" xml:space="preserve">
+        <value>កំហុសដែលមិនបានរំពឹងទុកបានកើតឡើង។ សូមព្យាយាមចូលប្រើ Designer ម្តងទៀតនៅពេលក្រោយ។</value>
+    </data>
+    <data name="User_does_not_exist" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់ {0} មិនមានទេ។ សូមបញ្ចូលឈ្មោះអ្នកប្រើប្រាស់ត្រឹមត្រូវ ឬអ៊ីមែល។</value>
+    </data>
+    <data name="The_current_password_is_incorrect_or_the_new_password_is_invalid" xml:space="preserve">
+        <value>ការរួមបញ្ចូលពាក្យសម្ងាត់បច្ចុប្បន្ន/ថ្មីមិនត្រឹមត្រូវទេ សូមបញ្ចូលម្តងទៀត។</value>
+    </data>
+    <data name="User_already_confirmed_in_system" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់ {0} បានបញ្ជាក់រួចហើយនៅក្នុងប្រព័ន្ធ។ សូមបញ្ចូលការចូល និងពាក្យសម្ងាត់របស់អ្នក ដើម្បីចាប់ផ្តើមប្រើប្រាស់អ្នករចនា។</value>
+    </data>
+    <data name="User_does_not_exist_Please_enter_a_valid_user_name" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់ {0} មិនមានទេ។ សូមបញ្ចូលឈ្មោះអ្នកប្រើប្រាស់ត្រឹមត្រូវ ឬអ៊ីមែល។</value>
+    </data>
+    <data name="Your_password_successfully_changed" xml:space="preserve">
+        <value>អ្នកបានផ្លាស់ប្តូរពាក្យសម្ងាត់របស់អ្នកដោយជោគជ័យ។</value>
+    </data>
+    <data name="The_password_and_confirmation_password_do_not_match" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់ និងពាក្យសម្ងាត់បញ្ជាក់មិនត្រូវគ្នាទេ។</value>
+    </data>
+    <data name="Password_must_be_at_least_characters_long" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់ត្រូវតែមានយ៉ាងហោចណាស់តួអក្សរ {2} ។</value>
+    </data>
+    <data name="Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character" xml:space="preserve">
+        <value>ពាក្យសម្ងាត់ត្រូវតែមានយ៉ាងហោចណាស់លេខមួយ តួអក្សរធំមួយ និងតួអក្សរតូចមួយ។</value>
+    </data>
+    <data name="User_name_needs_to_be_between_3_and_15_characters" xml:space="preserve">
+        <value>ឈ្មោះចូលត្រូវតែមានចន្លោះពី 3 ទៅ 15 តួអក្សរ ហើយអាចមានតែអក្សរ លេខ និងនិមិត្តសញ្ញាគូសក្រោមប៉ុណ្ណោះ។ អក្សរត្រូវតែមកពីអក្សរឡាតាំង (អង់គ្លេស) តែប៉ុណ្ណោះ៖ 'A'..'Z' ឬ 'a'..'z'។ អក្សរផ្សេងទៀត (Cyrillic, Arabic ។ល។) មិនមានសុពលភាពសម្រាប់ការប្រើប្រាស់ក្នុងឈ្មោះចូលទេ។</value>
+    </data>
+    <data name="Maintenance" xml:space="preserve">
+        <value>ម៉ាស៊ីនមេស្ថិតនៅក្នុងរបៀបថែទាំឥឡូវនេះ។ សូមអភ័យទោសចំពោះការរអាក់រអួល។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។</value>
+    </data>
+    <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
+        <value>កម្រងសំណួររបស់អ្នក "{0}" មានមុខងារថ្មី៖ {1} ។ មុខងារថ្មីមិនត្រូវបានគាំទ្រដោយការដំឡើងរបស់អ្នកទេ។ សូមធ្វើបច្ចុប្បន្នភាព។</value>
+    </data>
+    <data name="UserNotApproved" xml:space="preserve">
+        <value>គណនីរបស់អ្នកមិនត្រូវបានអនុម័តទេ។ សូមបញ្ជាក់គណនីរបស់អ្នកជាមុនសិន។ យើងបានផ្ញើតំណបញ្ជាក់ទៅ {0} ។</value>
+    </data>
+    <data name="RestorePassword_EmailSentInstructions" xml:space="preserve">
+        <value>សារមួយត្រូវបានផ្ញើទៅកាន់គណនីអ៊ីមែលរបស់អ្នក។ សូមធ្វើតាមការណែនាំនៅក្នុងអ៊ីមែល ដើម្បីស្ដារពាក្យសម្ងាត់។</value>
+    </data>
+    <data name="EmptyTranslationFile" xml:space="preserve">
+        <value>ឯកសារបកប្រែដែលបានជ្រើសរើសគឺទទេ</value>
+    </data>
+    <data name="NoAccessToQuestionnaire" xml:space="preserve">
+        <value>អ្នកប្រើប្រាស់មិនមានសិទ្ធិចូលប្រើកម្រងសំណួរដែលបានស្នើសុំទេ។</value>
+    </data>
+    <data name="UserNeedToContactSupportFormat" xml:space="preserve">
+        <value>អ្នកមិនត្រូវបានអនុញ្ញាតឱ្យអនុវត្តសកម្មភាពនេះទេ។ សូមទាក់ទងផ្នែកជំនួយ។ IP: {0}</value>
+    </data>
+    <data name="Email_required" xml:space="preserve">
+        <value>អ៊ីមែលត្រូវបានទាមទារ</value>
+    </data>
+    <data name="EmailOrLogin_required" xml:space="preserve">
+        <value>តម្រូវឱ្យចូល ឬអ៊ីមែល</value>
+    </data>
+    <data name="InvalidEmailAddress" xml:space="preserve">
+        <value>មិនមែនជាអាសយដ្ឋានអ៊ីមែលត្រឹមត្រូវទេ។</value>
+    </data>
+    <data name="OldPassword_required" xml:space="preserve">
+        <value>ត្រូវការពាក្យសម្ងាត់បច្ចុប្បន្ន</value>
+    </data>
+    <data name="Password_required" xml:space="preserve">
+        <value>ទាមទារពាក្យសម្ងាត់</value>
+    </data>
+    <data name="UserName_required" xml:space="preserve">
+        <value>តម្រូវឱ្យចូល</value>
+    </data>
+    <data name="QuestionnaireTitle_required" xml:space="preserve">
+        <value>ចំណងជើងកម្រងសំណួរត្រូវបានទាមទារ</value>
+    </data>
+    <data name="NoQuestionnaireIdToValidatePremissions" xml:space="preserve">
+        <value>លេខសម្គាល់កម្រងសំណួរមិនត្រូវបានផ្តល់ឱ្យដើម្បីបញ្ជាក់ការអនុញ្ញាតទេ។</value>
+    </data>
+    <data name="UnhandledExceptionDuringUpdateUserInfo" xml:space="preserve">
+        <value>មិនអាចធ្វើបច្ចុប្បន្នភាពព័ត៌មានអ្នកប្រើប្រាស់បានទេ។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។</value>
+    </data>
+    <data name="FullNameMaxLengthError" xml:space="preserve">
+        <value>ឈ្មោះពេញមិនអាចមានតួអក្សរច្រើនជាង {1} ទេ។</value>
+    </data>
+    <data name="QuestionnaireVariable_required" xml:space="preserve">
+        <value>អថេរកម្រងសំណួរត្រូវបានទាមទារ</value>
+    </data>
+    <data name="QuestionnaireVariable_rules" xml:space="preserve">
+        <value>អថេរកម្រងសំណួរត្រូវបានប្រើជាបុព្វបទក្នុងការបង្កើតឈ្មោះសម្រាប់ឯកសារនាំចេញ។ ឈ្មោះអថេរ និងលេខសម្គាល់បញ្ជីឈ្មោះត្រូវតែមានតួអក្សរដូចខាងក្រោមៈ a-z, A-Z, _ ឬ 0-9 ។ តួអក្សរទីមួយមិនអាចជា 0-9 ឬ _ ហើយតួអក្សរចុងក្រោយមិនអាចជា _ ។</value>
+    </data>
+    <data name="QuestionnaireVariable_MaxLength" xml:space="preserve">
+        <value>ឈ្មោះអថេរ និងលេខសម្គាល់បញ្ជីឈ្មោះអាចមានប្រវែងពី 1 ដល់ {1} តួអក្សរ</value>
+    </data>
+    <data name="QuestionnaireTitle_rules" xml:space="preserve">
+        <value>មានតែតួអក្សរខាងក្រោមប៉ុណ្ណោះដែលអាចប្រើក្នុងចំណងជើងកម្រងសំណួរ៖ A..Z a..z 0..9 ( ) \ / _ - និងដកឃ្លា ហើយមិនគួរមានតួអក្សរគូសក្រោមពីរ និងច្រើនជាប់គ្នា។</value>
+    </data>
+    <data name="QuestionnaireTitle_MaxLength" xml:space="preserve">
+        <value>ចំណងជើងនៃកម្រងសំណួរមិនអាចមានច្រើនជាងនិមិត្តសញ្ញា {1} ទេ។</value>
+    </data>
+    <data name="InvalidLoginAttempt" xml:space="preserve">
+        <value>ការប៉ុនប៉ងចូលមិនត្រឹមត្រូវ</value>
+    </data>
+</root>

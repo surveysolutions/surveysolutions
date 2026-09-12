@@ -606,6 +606,9 @@
   <data name="TargetAreaExplanation" xml:space="preserve">
     <value>Specificați numele hărții zonei țintă pentru sarcină</value>
   </data>
+  <data name="TargetAreaNameTooLong" xml:space="preserve">
+      <value>Numele hărții zonei țintă este prea lung. Lungimea maximă permisă este de {{limit}} caractere.</value>
+  </data>
   <data name="Tooltip_Table_Email" xml:space="preserve">
     <value>Email pentru notificări</value>
   </data>

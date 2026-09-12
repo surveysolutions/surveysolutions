@@ -540,6 +540,9 @@
   <data name="TargetAreaExplanation" xml:space="preserve">
     <value>Especifique o nome do mapa da área alvo para a atribuição</value>
   </data>
+  <data name="TargetAreaNameTooLong" xml:space="preserve">
+      <value>O nome do mapa da área alvo é muito longo. O comprimento máximo permitido é de {{limit}} caracteres.</value>
+  </data>
   <data name="EnterTargetArea" xml:space="preserve">
     <value>Digite a área alvo</value>
   </data>

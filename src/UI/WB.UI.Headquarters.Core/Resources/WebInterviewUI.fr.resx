@@ -212,6 +212,9 @@
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>La réponse n'a pas été enregistrée</value>
   </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Erreur de communication</value>
+  </data>
   <data name="NotCalculated" xml:space="preserve">
     <value>Non calculé</value>
   </data>
@@ -300,6 +303,9 @@
   </data>
   <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
     <value>La valeur saisie ne peut pas être inférieure à la réponse protégée</value>
+  </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Les valeurs négatives ne sont pas autorisées pour cette question</value>
   </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>La réponse '{{answer}}' est incorrecte car la question est utilisée comme taille de la liste et la réponse spécifiée est négative</value>
@@ -467,6 +473,9 @@ Veuillez contacter l'équipe de support pour obtenir de l'aide.</value>
   </data>
   <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
     <value>Informations supplémentaires sur la question</value>
+  </data>
+  <data name="ImageFormatNotSupported" xml:space="preserve">
+    <value>Le format de l'image n'est pas pris en charge par votre navigateur.</value>
   </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>La lecture multimédia n'est pas prise en charge par votre navigateur. Vous pouvez le télécharger à la place.</value>

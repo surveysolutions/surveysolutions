@@ -565,6 +565,9 @@
   <data name="Filter_ShowAll" xml:space="preserve">
     <value>Zobrazit vše</value>
   </data>
+    <data name="TargetAreaNameTooLong" xml:space="preserve">
+        <value>Název mapy cílové oblasti je příliš dlouhý. Maximální povolená délka je {{limit}} znaků.</value>
+    </data>
   <data name="Downsize" xml:space="preserve">
     <value>Zmenšit</value>
   </data>

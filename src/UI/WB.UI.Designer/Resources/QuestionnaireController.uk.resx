@@ -332,4 +332,7 @@
   <data name="CloneDeletedWarning" xml:space="preserve">
       <value>Ви створюєте копію видаленої анкети. Деякі частини можуть бути втрачені.</value>
   </data>
+  <data name="IncludeScenarios" xml:space="preserve">
+    <value>Включити сценарії</value>
+  </data>
 </root>

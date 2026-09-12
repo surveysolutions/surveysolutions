@@ -113,6 +113,34 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
             await navigationServiceMock.ReceivedWithAnyArgs().NavigateToDashboardAsync();
         }
 
+        [Test]
+        public async Task LoadingViewModel_when_InterviewId_is_empty_should_navigate_to_dashboard()
+        {
+            var navigationServiceMock = Substitute.For<IViewModelNavigationService>();
+            var loadingViewModel = CreateLoadingViewModel(viewModelNavigationService: navigationServiceMock);
+
+            await loadingViewModel.Initialize();
+
+            await navigationServiceMock.Received().NavigateToDashboardAsync();
+        }
+
+        [Test]
+        public async Task LoadingViewModel_when_interviewsRepository_throws_during_Initialize_should_complete_without_navigating_to_dashboard()
+        {
+            var navigationServiceMock = Substitute.For<IViewModelNavigationService>();
+            var interviewsRepositoryMock = new Mock<IPlainStorage<InterviewView>>();
+            interviewsRepositoryMock.Setup(r => r.GetById(It.IsAny<string>())).Throws(new Exception("storage error"));
+
+            var loadingViewModel = CreateLoadingViewModel(
+                viewModelNavigationService: navigationServiceMock,
+                interviewsRepository: interviewsRepositoryMock.Object);
+            loadingViewModel.Prepare(new LoadingViewModelArg { InterviewId = Guid.NewGuid() });
+
+            await loadingViewModel.Initialize();
+
+            await navigationServiceMock.DidNotReceive().NavigateToDashboardAsync();
+        }
+
         protected static LoadingInterviewViewModel CreateLoadingViewModel(
           IViewModelNavigationService viewModelNavigationService = null,
           IStatefulInterviewRepository interviewRepository = null,
