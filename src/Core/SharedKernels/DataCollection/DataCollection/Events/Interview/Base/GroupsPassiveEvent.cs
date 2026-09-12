@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
 {
-    public abstract class GroupsPassiveEvent : InterviewPassiveEvent
+    public abstract class GroupsPassiveEvent : InterviewPassiveEvent, IEventWithAffectedEntities
     {
         public Identity[] Groups { get; private set; }
 
@@ -11,5 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
         {
             this.Groups = groups.ToArray();
         }
+
+        IReadOnlyCollection<Identity> IEventWithAffectedEntities.GetAffectedEntities() => Groups;
     }
 }
