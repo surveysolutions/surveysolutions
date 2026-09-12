@@ -1259,6 +1259,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.innerDocument.Translations.SingleOrDefault(t =>
                 t.Id == this.innerDocument.DefaultTranslation)?.Name;
         }
+
+        public Guid? GetDefaultTranslationId()
+        {
+            return this.innerDocument.DefaultTranslation;
+        }
         
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
         {
