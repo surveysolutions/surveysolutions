@@ -7,10 +7,11 @@
                 <div class="form-group">
                     <div class="field"
                         :class="{ answered: $me.isAnswered }">
-                        <wb-typeahead :questionId="$me.id"
+                <wb-typeahead :questionId="$me.id"
                             :value="$me.answer"
                             :disabled="!$me.acceptAnswer"
                             :optionsSource="optionsSource"
+                            :showValueCode="isDevMode"
                             @input="answerComboboxQuestion"
                             :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null" />
                         <wb-remove-answer />

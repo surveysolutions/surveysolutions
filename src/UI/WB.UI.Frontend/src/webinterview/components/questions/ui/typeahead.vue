@@ -11,7 +11,9 @@
             </li>
             <li v-for="option in options" :key="option.value">
                 <a href="javascript:void(0);" @click="selectOption(option.value)"
-                    v-dompurify-html="highlight(option.title, searchTerm)" @keydown.up="onOptionUpKey"></a>
+                    @keydown.up="onOptionUpKey">
+                    <span v-if="showValueCode" class="option-value-code">[{{ option.value }}]</span><span v-dompurify-html="highlight(option.title, searchTerm)"></span>
+                </a>
             </li>
             <li v-if="isLoading" id="th_LoadingOptions">
                 <a>{{ $t("WebInterviewUI.Loading") }}</a>
@@ -50,6 +52,11 @@ export default {
             required: false,
             type: String,
             default: null,
+        },
+        showValueCode: {
+            required: false,
+            type: Boolean,
+            default: false,
         },
     },
     computed: {
