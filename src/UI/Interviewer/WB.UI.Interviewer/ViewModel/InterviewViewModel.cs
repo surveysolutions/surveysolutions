@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Base;
@@ -38,7 +37,6 @@ namespace WB.UI.Interviewer.ViewModel
         private readonly IMvxMainThreadAsyncDispatcher asyncDispatcher;
         private readonly IAudioAuditRecordingExecutor audioRecordingExecutor;
         private readonly ILogger logger;
-        private InterviewerCompleteInterviewViewModel completeInterviewViewModel;
         private int viewAppearedInProgress;
 
         public InterviewViewModel(
@@ -102,51 +100,16 @@ namespace WB.UI.Interviewer.ViewModel
             return base.GetDefaultScreenToNavigate(interview, questionnaire);
         }
 
-        protected override BaseViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
-        {
-            // Unsubscribe from a previous Complete screen so a late IsLoading change (its background
-            // CollectCriticalityInfo may still be running after the screen was navigated away/disposed)
-            // can no longer overwrite the status of the screen the interviewer has since navigated to.
-            this.UnsubscribeFromCompleteInterviewViewModel();
+        protected override CompleteInterviewViewModel CreateCompleteScreenViewModel()
+            => this.interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
 
-            switch (this.NavigationState.CurrentScreenType)
-            {
-                case ScreenType.Complete:
-                    // Keep a local reference: Configure() may synchronously raise IsLoading=false, which
-                    // triggers ChangeInterviewStatus -> UnsubscribeFromCompleteInterviewViewModel and nulls
-                    // out the field. Returning the field in that case would yield a null screen and crash
-                    // the CurrentScreen binding, so the local is returned instead.
-                    var completeViewModel =
-                        this.interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
-                    this.completeInterviewViewModel = completeViewModel;
-                    completeViewModel.PropertyChanged += ChangeInterviewStatus;
-                    completeViewModel.Configure(this.InterviewId, this.NavigationState);
-                    return completeViewModel;
-                default:
-                    return base.UpdateCurrentScreenViewModel(eventArgs);
-            }
-        }
-
-        private void UnsubscribeFromCompleteInterviewViewModel()
+        protected override void ApplyCompleteViewModelStatus(CompleteInterviewViewModel vm)
         {
-            if (this.completeInterviewViewModel != null)
-            {
-                this.completeInterviewViewModel.PropertyChanged -= ChangeInterviewStatus;
-                this.completeInterviewViewModel = null;
-            }
-        }
-
-        private void ChangeInterviewStatus(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName != nameof(InterviewerCompleteInterviewViewModel.IsLoading))
-                return;
-            
-            var completeViewModel = (InterviewerCompleteInterviewViewModel)sender;
-            if (!completeViewModel.IsLoading)
-            {
-                this.UnsubscribeFromCompleteInterviewViewModel();
-                Status = completeViewModel.CompleteStatus;
-            }
+            // Marshal state reads and UI update to the main thread: OnCompleteVmPropertyChanged can be
+            // raised from the Task.Run path in InterviewerCompleteInterviewViewModel.Configure, and
+            // accessing subscribedCompleteViewModel or assigning Status off the UI thread causes
+            // cross-thread UI updates and racey state.
+            asyncDispatcher.ExecuteOnMainThreadAsync(() => base.ApplyCompleteViewModelStatus(vm));
         }
 
         public override void ViewAppeared()
@@ -400,7 +363,6 @@ namespace WB.UI.Interviewer.ViewModel
         public override void Dispose()
         {
             this.NavigationState.ScreenChanged -= this.OnScreenChanged;
-            this.UnsubscribeFromCompleteInterviewViewModel();
 
             // Defensive stop: ViewDisappearing() normally stops any active recording, but if the
             // OS/Mvx lifecycle skipped it (headless navigation, tests, a future refactor) an active
