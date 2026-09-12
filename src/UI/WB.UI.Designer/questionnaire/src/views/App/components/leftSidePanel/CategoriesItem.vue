@@ -10,6 +10,12 @@
                 <input focus-on-out="focusCategories{{categories.categoriesId}}" required=""
                     :placeholder="$t('QuestionnaireEditor.SideBarCategoriesName')" maxlength="32" spellcheck="false"
                     v-model="categories.name" name="name" class="form-control table-name" type="text" />
+                <div v-if="isDescriptionVisible">
+                    <div class="divider"></div>
+                    <textarea :placeholder="$t('QuestionnaireEditor.SideBarCategoriesDescription')" type="text"
+                        v-model="categories.description" class="form-control macros-description"
+                        v-autosize></textarea>
+                </div>
                 <div class="drop-box">
                     {{ $t('QuestionnaireEditor.SideBarLookupTableDropFile') }}
                 </div>
@@ -21,6 +27,11 @@
                         </button>
                         <button type="button" class="btn lighter-hover" @click.stop="cancel()">{{
                             $t('QuestionnaireEditor.Cancel') }}</button>
+                        <button class="btn btn-default pull-right" v-if="isDescriptionEmpty" type="button"
+                            @click.stop="toggleDescription()">
+                            {{ isDescriptionVisible ? $t('QuestionnaireEditor.SideBarMacroHideDescription') :
+                            $t('QuestionnaireEditor.SideBarMacroShowDescription') }}
+                        </button>
                     </div>
                     <div class="permanent-actions pull-right">
                         <a href="javascript:void(0);" class="btn btn-link" @click="editCategories()">{{
@@ -52,7 +63,7 @@
 
 <script>
 
-import { isNull, isUndefined, cloneDeep } from 'lodash'
+import { isNull, isUndefined, cloneDeep, isEmpty } from 'lodash'
 import { updateCategories, deleteCategories } from '../../../../services/categoriesService';
 import { trimText } from '../../../../services/utilityService'
 import { notice } from '../../../../services/notificationService';
@@ -76,15 +87,27 @@ export default {
             return this.categoriesItem.editCategories;
         },
         isDirty() {
-            return this.categories.name != this.categoriesItem.name || (this.categories.file !== null && this.categories.file !== undefined);
+            return this.categories.name != this.categoriesItem.name
+                || this.categories.description != this.categoriesItem.description
+                || (this.categories.file !== null && this.categories.file !== undefined);
         },
         isInvalid() {
             return (this.categories.name) ? false : true;
+        },
+        isDescriptionEmpty() {
+            return !this.categories.description || this.categories.description.trim().length === 0;
+        },
+        isDescriptionVisible() {
+            return this.categories.isDescriptionVisible || !isEmpty(this.categories.description);
         },
     },
     methods: {
         hasPatternError() {
             return (this.categories.name) ? false : true;
+        },
+
+        toggleDescription() {
+            this.categories.isDescriptionVisible = !this.categories.isDescriptionVisible;
         },
 
         deleteCategories(event) {

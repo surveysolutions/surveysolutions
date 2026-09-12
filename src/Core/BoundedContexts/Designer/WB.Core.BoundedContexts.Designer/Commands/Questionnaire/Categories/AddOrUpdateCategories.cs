@@ -11,16 +11,19 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories
             Guid responsibleId,
             Guid categoriesId,
             string name,
-            Guid? oldCategoriesId)
+            Guid? oldCategoriesId,
+            string description = "")
             : base(responsibleId: responsibleId, questionnaireId: questionnaireId)
         {
             this.CategoriesId = categoriesId;
             this.Name = name;
             this.OldCategoriesId = oldCategoriesId;
+            this.Description = description;
         }
 
         public Guid? OldCategoriesId { get; set; }
         public Guid CategoriesId { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
     }
 }
