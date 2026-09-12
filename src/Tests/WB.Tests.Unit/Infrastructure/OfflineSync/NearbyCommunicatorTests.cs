@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
 using WB.Tests.Abc;
@@ -102,6 +103,21 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
             Assert.ThrowsAsync<CommunicationException>(async () => await client.SendAsync<PingMessage, PongMessage>(clientCommunicator, "server",
                 new PingMessage { Id = id }, null, CancellationToken.None));
 
+        }
+
+        [Test]
+        public void should_ignore_transfer_update_when_payload_is_unknown()
+        {
+            var communicator = Create.Service.NearbyConnectionManager();
+            var connection = Create.Fake.GoogleConnection();
+
+            Assert.DoesNotThrow(() => communicator.ReceivePayloadTransferUpdate(connection, "server",
+                new NearbyPayloadTransferUpdate
+                {
+                    Id = long.MaxValue,
+                    Status = TransferStatus.InProgress,
+                    BytesTransferred = 10
+                }));
         }
     }
 }
