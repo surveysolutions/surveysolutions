@@ -62,6 +62,7 @@ namespace WB.UI.Headquarters.Controllers
             string fileName = null;
             string previousFileName = null;
             byte[] previousFileData = null;
+            string previousFileContentType = null;
             var hadPreviousFile = false;
             var fileWriteAttempted = false;
             var commandExecutionStarted = false;
@@ -82,7 +83,13 @@ namespace WB.UI.Headquarters.Controllers
                 hadPreviousFile = !string.IsNullOrEmpty(previousFileName);
                 if (hadPreviousFile)
                 {
-                    previousFileData = await this.binaryServices.AudioFileStorage.GetInterviewBinaryDataAsync(id, previousFileName);
+                    var previousFile = (await this.binaryServices.AudioFileStorage.GetBinaryFilesForInterview(id))
+                        ?.Find(x => this.binaryServices.AudioFileStorage.IsEquivalentFileName(x.FileName, previousFileName));
+                    if (previousFile != null)
+                    {
+                        previousFileData = await previousFile.GetData();
+                        previousFileContentType = previousFile.ContentType;
+                    }
                 }
 
                 if(contentType is "audio/wav" or "audio/x-wav")
@@ -115,10 +122,10 @@ namespace WB.UI.Headquarters.Controllers
                 if (fileWriteAttempted)
                 {
                     await this.binaryServices.AudioFileStorage.RemoveInterviewBinaryData(id, fileName);
-                    if (hadPreviousFile && previousFileData != null && previousFileName != null)
+                    if (hadPreviousFile && previousFileData != null && previousFileName != null && previousFileContentType != null)
                     {
                         this.binaryServices.AudioFileStorage.StoreInterviewBinaryData(id, previousFileName, previousFileData,
-                            ContentTypeHelper.GetAudioContentType(previousFileName));
+                            previousFileContentType);
                     }
                 }
 
@@ -140,10 +147,10 @@ namespace WB.UI.Headquarters.Controllers
                 if (fileWriteAttempted && !answerSaved)
                 {
                     await this.binaryServices.AudioFileStorage.RemoveInterviewBinaryData(id, fileName);
-                    if (hadPreviousFile && previousFileData != null && previousFileName != null)
+                    if (hadPreviousFile && previousFileData != null && previousFileName != null && previousFileContentType != null)
                     {
                         this.binaryServices.AudioFileStorage.StoreInterviewBinaryData(id, previousFileName, previousFileData,
-                            ContentTypeHelper.GetAudioContentType(previousFileName));
+                            previousFileContentType);
                     }
                 }
 

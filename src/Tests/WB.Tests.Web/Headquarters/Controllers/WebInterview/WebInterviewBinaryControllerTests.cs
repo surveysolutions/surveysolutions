@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
@@ -13,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Enumerator.Native.WebInterview;
@@ -466,6 +468,7 @@ public class WebInterviewBinaryControllerTests
         var questionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
         var fileName = "audio__.aac";
         var previousData = new byte[] { 9, 8, 7 };
+        const string previousContentType = "audio/webm";
 
         var question = new InterviewTreeQuestion(
             questionIdentity,
@@ -491,7 +494,13 @@ public class WebInterviewBinaryControllerTests
         statefulInterviewRepository.Setup(x => x.Get(It.IsAny<string>())).Returns(interview.Object);
 
         var audioFileStorage = new Mock<IAudioFileStorage>();
-        audioFileStorage.Setup(x => x.GetInterviewBinaryDataAsync(interviewId, fileName)).ReturnsAsync(previousData);
+        audioFileStorage.Setup(x => x.IsEquivalentFileName(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns<string, string>((left, right) => string.Equals(left, right, StringComparison.Ordinal));
+        audioFileStorage.Setup(x => x.GetBinaryFilesForInterview(interviewId))
+            .ReturnsAsync(new List<InterviewBinaryDataDescriptor>
+            {
+                new InterviewBinaryDataDescriptor(interviewId, fileName, previousContentType, () => Task.FromResult(previousData), "md5")
+            });
 
         var commandService = new Mock<ICommandService>();
         commandService.Setup(x => x.Execute(It.IsAny<ICommand>(), It.IsAny<string>())).Throws(new InterviewException("boom"));
@@ -514,7 +523,7 @@ public class WebInterviewBinaryControllerTests
         Assert.That(exception, Is.Not.Null);
 
         audioFileStorage.Verify(x => x.RemoveInterviewBinaryData(interviewId, fileName), Times.Once);
-        audioFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, fileName, previousData, ContentTypeHelper.GetAudioContentType(fileName)), Times.Once);
+        audioFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, fileName, previousData, previousContentType), Times.Once);
         statefulInterviewRepository.Verify(x => x.Get(It.IsAny<string>()), Times.Exactly(2));
     }
 
@@ -525,6 +534,7 @@ public class WebInterviewBinaryControllerTests
         var questionIdentity = new Identity(Guid.NewGuid(), RosterVector.Empty);
         var fileName = "audio__.aac";
         var previousData = new byte[] { 9, 8, 7 };
+        const string previousContentType = "audio/webm";
 
         var question = new InterviewTreeQuestion(
             questionIdentity,
@@ -550,7 +560,13 @@ public class WebInterviewBinaryControllerTests
         statefulInterviewRepository.Setup(x => x.Get(It.IsAny<string>())).Returns(interview.Object);
 
         var audioFileStorage = new Mock<IAudioFileStorage>();
-        audioFileStorage.Setup(x => x.GetInterviewBinaryDataAsync(interviewId, fileName)).ReturnsAsync(previousData);
+        audioFileStorage.Setup(x => x.IsEquivalentFileName(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns<string, string>((left, right) => string.Equals(left, right, StringComparison.Ordinal));
+        audioFileStorage.Setup(x => x.GetBinaryFilesForInterview(interviewId))
+            .ReturnsAsync(new List<InterviewBinaryDataDescriptor>
+            {
+                new InterviewBinaryDataDescriptor(interviewId, fileName, previousContentType, () => Task.FromResult(previousData), "md5")
+            });
         audioFileStorage.SetupSequence(x => x.StoreInterviewBinaryData(interviewId, fileName, It.IsAny<byte[]>(), "audio/aac"))
             .Throws(new InvalidOperationException("boom"));
 
@@ -573,7 +589,7 @@ public class WebInterviewBinaryControllerTests
         Assert.That(exception, Is.Not.Null);
 
         audioFileStorage.Verify(x => x.RemoveInterviewBinaryData(interviewId, fileName), Times.Once);
-        audioFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, fileName, previousData, ContentTypeHelper.GetAudioContentType(fileName)), Times.Once);
+        audioFileStorage.Verify(x => x.StoreInterviewBinaryData(interviewId, fileName, previousData, previousContentType), Times.Once);
         webInterviewNotificationService.Verify(x => x.MarkAnswerAsNotSaved(interviewId, questionIdentity, It.IsAny<Exception>()), Times.Once);
     }
 

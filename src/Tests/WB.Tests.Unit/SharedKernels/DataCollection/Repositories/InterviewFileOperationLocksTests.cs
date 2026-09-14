@@ -31,10 +31,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Repositories
         [Test]
         public async Task when_locks_are_for_different_interviews_should_not_block_each_other()
         {
-            var first = InterviewFileOperationLocks.Get(Guid.NewGuid());
+            var first = InterviewFileOperationLocks.Get(Guid.Parse("00000000-0000-0000-0000-000000000000"));
             await first.WaitAsync();
 
-            var second = InterviewFileOperationLocks.Get(Guid.NewGuid());
+            var second = InterviewFileOperationLocks.Get(Guid.Parse("00000000-0000-0000-0000-000000000001"));
             var secondWaitTask = second.WaitAsync();
 
             Assert.That(await CompletesWithin(secondWaitTask, TimeSpan.FromSeconds(1)), Is.True);
