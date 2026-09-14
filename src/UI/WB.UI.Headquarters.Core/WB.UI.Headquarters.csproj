@@ -7,12 +7,18 @@
     <RootNamespace>WB.UI.Headquarters</RootNamespace>
     <AssemblyName>WB.UI.Headquarters</AssemblyName>
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <LangVersion>latest</LangVersion>
     <PublishSingleFile>false</PublishSingleFile>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
+  <ItemGroup>
+    <!-- Transitive pin: the legacy NETStandard.Library 1.6.1 / System.Net.Http 4.3.4 closure drags in the
+         vulnerable System.Private.Uri 4.3.0 (GHSA, fixed in 4.3.2). On .NET 9 the assembly is framework-provided,
+         so nothing ships, but a RID-specific publish records the package in deps.json and SCA scanners flag it.
+         Pinning to the fixed version keeps deps.json clean. -->
+    <PackageReference Include="System.Private.Uri" Version="4.3.2" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Anemonis.AspNetCore.RequestDecompression" Version="1.14.0" />
     <PackageReference Include="AntiXSS.NetStandard" Version="0.2.1" />
@@ -44,7 +50,7 @@
     <PackageReference Include="Quartz.AspNetCore" Version="3.13.1" />
     <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.13.1" />
     <PackageReference Include="Quartz.Serialization.Json" Version="3.13.1" />
-    <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.5" />
+    <PackageReference Include="reCAPTCHA.AspNetCore" Version="3.0.10" />
     <PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
     <PackageReference Include="Refit.Newtonsoft.Json" Version="8.0.0" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.116.1" />
@@ -55,7 +61,7 @@
     <PackageReference Include="System.Drawing.Common" Version="9.0.5" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.10.0" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.15" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.18" />
     <!--needed for eppplus https://github.com/JanKallman/EPPlus/issues/31 -->
     <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.5" />

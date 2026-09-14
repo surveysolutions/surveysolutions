@@ -80,6 +80,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         
         public bool UseFormatting { get; set; }
         public int? CountOfDecimalPlaces { get; private set; }
+        private bool isNonNegativeQuestion;
+        public bool IsNonNegative => this.isNonNegativeQuestion;
 
         public RealQuestionViewModel(
             IPrincipal principal,
@@ -121,6 +123,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.UseFormatting = questionnaire.ShouldUseFormatting(entityIdentity.Id);
             this.CountOfDecimalPlaces = questionnaire.GetCountOfDecimalPlacesAllowedByQuestion(entityIdentity.Id);
+            this.isNonNegativeQuestion = questionnaire.IsQuestionNonNegative(entityIdentity.Id);
 
             var doubleQuestion = interview.GetDoubleQuestion(entityIdentity);
             if (doubleQuestion.IsAnswered())
@@ -176,7 +179,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
 
             var answeredOrSelectedValue = Convert.ToDecimal(this.Answer.Value);
-            await EnqueueSaveAnswer(answeredOrSelectedValue, specialValues.IsSpecialValueSelected(answeredOrSelectedValue));
+            var isSpecialValue = specialValues.IsSpecialValueSelected(answeredOrSelectedValue);
+
+            if (this.isNonNegativeQuestion && this.Answer < 0 && !isSpecialValue)
+            {
+                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Integer_NegativeAnswer);
+                return;
+            }
+
+            await EnqueueSaveAnswer(answeredOrSelectedValue, isSpecialValue);
         }
 
         private async Task EnqueueSaveAnswer(decimal answeredOrSelectedValue, bool isSpecialValueSelected)

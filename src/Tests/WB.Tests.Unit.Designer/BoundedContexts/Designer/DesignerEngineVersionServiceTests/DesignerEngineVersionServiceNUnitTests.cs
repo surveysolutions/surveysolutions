@@ -323,5 +323,32 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             
             Assert.That(contentVersion, Is.EqualTo(36));
         }
+
+        [Test]
+        public void should_return_37_when_numeric_question_is_non_negative()
+        {
+            var numericQuestion = Create.NumericIntegerQuestion(Id.g1);
+            numericQuestion.IsNonNegative = true;
+
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(numericQuestion);
+
+            var service = CreateDesignerEngineVersionService();
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+
+            Assert.That(contentVersion, Is.EqualTo(37));
+        }
+
+        [Test]
+        public void should_not_return_37_when_numeric_question_is_not_non_negative()
+        {
+            var numericQuestion = Create.NumericIntegerQuestion(Id.g1);
+
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(numericQuestion);
+
+            var service = CreateDesignerEngineVersionService();
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+
+            Assert.That(contentVersion, Is.LessThan(37));
+        }
     }
 }

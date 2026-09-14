@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType><xsd:choice maxOccurs="unbounded">
+        <xsd:element name="data"><xsd:complexType><xsd:sequence>
+          <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+          <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+        </xsd:sequence>
+        <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+        <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+        <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+        <xsd:attribute ref="xml:space" /></xsd:complexType></xsd:element>
+        <xsd:element name="resheader"><xsd:complexType><xsd:sequence>
+          <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+        </xsd:sequence><xsd:attribute name="name" type="xsd:string" use="required" /></xsd:complexType></xsd:element>
+      </xsd:choice></xsd:complexType></xsd:element></xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Name" xml:space="preserve"><value>სახელი</value></data>
+  <data name="DisplayName" xml:space="preserve"><value>საჩვენებელი სახელი</value></data>
+  <data name="NameRequired" xml:space="preserve"><value>სახელი სავალდებულოა</value></data>
+  <data name="DisplayNameRequired" xml:space="preserve"><value>საჩვენებელი სახელი სავალდებულოა</value></data>
+  <data name="InvalidName" xml:space="preserve"><value>დასაშვებია მხოლოდ ციფრები და პატარა ასოები</value></data>
+  <data name="NameShouldBeUnique" xml:space="preserve"><value>სახელი უნიკალური უნდა იყოს</value></data>
+  <data name="EditWorkspace" xml:space="preserve"><value>სამუშაო სივრცის რედაქტირება "{{name}}"</value></data>
+  <data name="WorkspacesSubtitle" xml:space="preserve"><value>თითოეულ სამუშაო სივრცეს აქვს იზოლირებული კითხვარები, გასაუბრებები და დავალებები.</value></data>
+  <data name="AddNew" xml:space="preserve"><value>ახლის შექმნა</value></data>
+  <data name="NameShouldNotBeOneOfForbidden" xml:space="preserve"><value>მოწოდებული სამუშაო სივრცის სახელი დაუშვებელია</value></data>
+  <data name="CurrentWorkspace" xml:space="preserve"><value>მიმდინარე სამუშაო სივრცე</value></data>
+  <data name="CreateWorkspace" xml:space="preserve"><value>სამუშაო სივრცის შექმნა</value></data>
+  <data name="CanNotBeChanged" xml:space="preserve"><value>შექმნის შემდეგ შეცვლა შეუძლებელია</value></data>
+  <data name="DisplayNameHelpText" xml:space="preserve"><value>გამოყენებული იქნება სამუშაო სივრცის მენიუებში საჩვენებლად. სცადეთ მოკლე სახელების არჩევა</value></data>
+  <data name="WorkspaceSettings" xml:space="preserve"><value>პარამეტრები</value></data>
+  <data name="Edit" xml:space="preserve"><value>რედაქტირება</value></data>
+  <data name="AssignedWorkspaces" xml:space="preserve"><value>აირჩიეთ სამუშაო სივრცეები, რომლებზეც მომხმარებელს აქვს წვდომა</value></data>
+  <data name="UserWorkspacesTab" xml:space="preserve"><value>სამუშაო სივრცეები</value></data>
+  <data name="WorkspacesUpdated" xml:space="preserve"><value>სამუშაო სივრცეების სია განახლდა</value></data>
+  <data name="DisableWorkspacePopupTitle" xml:space="preserve"><value>"{{name}}"-ის გამორთვის დადასტურება</value></data>
+  <data name="Disable" xml:space="preserve"><value>გამორთვა</value></data>
+  <data name="DisableExplanation" xml:space="preserve"><value>სამუშაო სივრცის გამორთვა შეზღუდავს ყველა მომხმარებლის წვდომას და შეაჩერებს მიმდინარე მონაცემთა შეგროვებას.</value></data>
+  <data name="Enable" xml:space="preserve"><value>ჩართვა</value></data>
+  <data name="DeleteWorkspacePopupTitle" xml:space="preserve"><value>სამუშაო სივრცის წაშლა "{{name}}"</value></data>
+  <data name="DeleteExplanation" xml:space="preserve"><value>დარწმუნებული ხართ, რომ გსურთ წაშალოთ სამუშაო სივრცე &amp;lt;strong&amp;gt;{{name}}&amp;lt;/strong&amp;gt;?
+ამ სამუშაო სივრცესთან დაკავშირებული ყველა მომხმარებლის ანგარიში წაიშლება მისგან. ამ მომხმარებელთა პლანშეტებზე დაინსტალირებული Survey Solutions ინტერვიუერისა და სუპერვაიზორის აპლიკაციები ვეღარ შეძლებენ ამ სამუშაო სივრცესთან კომუნიკაციას და მასში შეგროვებული მონაცემები დაიკარგება.
+
+ამ სამუშაო სივრცესთან დაკავშირებული შემდეგი მონაცემები წაიშლება:</value></data>
+  <data name="CantDeleteExplanation" xml:space="preserve"><value>სამუშაო სივრცის წაშლა შეუძლებელია. ამ სამუშაო სივრცეს მინიმუმ ერთი კითხვარი უკავშირდება. მხოლოდ კითხვარების გარეშე სამუშაო სივრცეების წაშლა შეიძლება.</value></data>
+  <data name="InterviewersCount" xml:space="preserve"><value>ინტერვიუერები: {{count}}</value></data>
+  <data name="SupervisorsCount" xml:space="preserve"><value>სუპერვაიზორები: {{count}}</value></data>
+  <data name="MapsCount" xml:space="preserve"><value>ატვირთული რუქები: {{count}}</value></data>
+  <data name="AgreeToDelete" xml:space="preserve"><value>მესმის, რომ ეს ოპერაცია შეუქცევადია</value></data>
+  <data name="WorkspaceDisabledReason" xml:space="preserve"><value>სამუშაო სივრცე გამორთულია და მასზე წვდომა შეუძლებელია. თუ ეს შეცდომაა, გთხოვთ დაუკავშირდეთ სერვერის ადმინისტრატორს.</value></data>
+  <data name="WorkspaceAccessDisabledReason" xml:space="preserve"><value>თქვენი ანგარიში სისტემის ადმინისტრატორის მიერ გამორთულ სამუშაო სივრცეშია, ამიტომ ვერ გამოიყენებთ ამ საიტის ფუნქციონალობას. თუ ეს შეცდომაა, გთხოვთ დაუკავშირდეთ სერვერის ადმინისტრატორს.</value></data>
+  <data name="WorkspaceCantBeRemoved" xml:space="preserve"><value>სამუშაო სივრცის წაშლა შეუძლებელია, რადგან მომხმარებელს დაკისრებული სამუშაო აქვს. ხელახლა დაანიშნეთ ყველა დავალება (მათ შორის არქივირებული), დაუსრულებელი გასაუბრებები და სუპერვაიზორისთვის გადაიყვანეთ გუნდის ყველა წევრი სხვა გუნდში. გასაუბრებები: {0}, დავალებები: {1}, გუნდის წევრები: {2}</value></data>
+  <data name="Open" xml:space="preserve"><value>გახსნა</value></data>
+  <data name="CreatedAt" xml:space="preserve"><value>შექმნილია</value></data>
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve"><value>სამუშაო სივრცის პირველი შექმნის დრო. დააჭირეთ დალაგების ხატულას დროის მიხედვით დასალაგებლად.</value></data>
+</root>

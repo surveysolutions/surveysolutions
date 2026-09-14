@@ -1627,7 +1627,7 @@
     <value>جميع مساحات العمل</value>
   </data>
   <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
-    <value>المشرف (سيتم إضافة المحاورين إلى فريقه)</value>
+    <value>المشرف</value>
   </data>
   <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
     <value>اختر المشرف</value>
