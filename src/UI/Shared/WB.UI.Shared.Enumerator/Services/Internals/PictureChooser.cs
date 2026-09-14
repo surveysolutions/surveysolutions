@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Android.Media;
 using MvvmCross.Base;
@@ -16,14 +17,21 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
     internal class PictureChooser : IPictureChooser
     {
         private readonly IMedia media;
+        private readonly IMediaPicker mediaPicker;
         private readonly IPermissionsService permissions;
         private readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
 
         public PictureChooser(IMedia media, IPermissionsService permissions, IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher)
+            : this(media, permissions, mainThreadAsyncDispatcher, new EssentialsMediaPicker())
+        {
+        }
+
+        internal PictureChooser(IMedia media, IPermissionsService permissions, IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher, IMediaPicker mediaPicker)
         {
             this.media = media;
             this.permissions = permissions;
             this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
+            this.mediaPicker = mediaPicker;
         }
 
         public async Task<Stream> TakePicture()
@@ -36,12 +44,12 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 MaxWidthHeight = 1024
             };
 
-            FileResult photo = null;
+            MediaFile photo = null;
             try
             {
                 await this.permissions.AssureHasPermissionOrThrow<Permissions.Camera>();
                 await this.permissions.AssureHasExternalStoragePermissionOrThrow();
-                photo = await MediaPicker.CapturePhotoAsync().ConfigureAwait(false);
+                photo = await this.mediaPicker.CapturePhotoAsync().ConfigureAwait(false);
             }
             catch (PermissionException e)
             {
@@ -70,12 +78,12 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
         {
             await this.media.Initialize().ConfigureAwait(false);
 
-            FileResult photo = null;
+            MediaFile photo = null;
             
             try
             {
                 await this.permissions.AssureHasExternalStoragePermissionOrThrow();
-                photo = await MediaPicker.PickPhotoAsync().ConfigureAwait(false);
+                photo = await this.mediaPicker.PickPhotoAsync().ConfigureAwait(false);
             }
             catch (PermissionException e)
             {
@@ -86,5 +94,48 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 ? null 
                 : new ChoosePictureResult(photo.FileName, await photo.OpenReadAsync());
         }
+    }
+
+    internal interface IMediaPicker
+    {
+        Task<MediaFile> CapturePhotoAsync();
+        Task<MediaFile> PickPhotoAsync();
+    }
+
+    internal class EssentialsMediaPicker : IMediaPicker
+    {
+        public async Task<MediaFile> CapturePhotoAsync()
+        {
+            var result = await MediaPicker.CapturePhotoAsync().ConfigureAwait(false);
+            return MediaFile.From(result);
+        }
+
+        public async Task<MediaFile> PickPhotoAsync()
+        {
+            var result = await MediaPicker.PickPhotoAsync().ConfigureAwait(false);
+            return MediaFile.From(result);
+        }
+    }
+
+    internal class MediaFile
+    {
+        private readonly Func<Task<Stream>> openReadAsync;
+
+        public MediaFile(string fullPath, string fileName, Func<Task<Stream>> openReadAsync)
+        {
+            this.FullPath = fullPath;
+            this.FileName = fileName;
+            this.openReadAsync = openReadAsync;
+        }
+
+        public string FullPath { get; }
+        public string FileName { get; }
+
+        public Task<Stream> OpenReadAsync() => this.openReadAsync();
+
+        public static MediaFile From(FileResult fileResult)
+            => fileResult == null
+                ? null
+                : new MediaFile(fileResult.FullPath, fileResult.FileName, fileResult.OpenReadAsync);
     }
 }
