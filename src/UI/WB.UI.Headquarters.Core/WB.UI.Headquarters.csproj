@@ -13,6 +13,13 @@
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
   <ItemGroup>
+    <!-- Transitive pin: the legacy NETStandard.Library 1.6.1 / System.Net.Http 4.3.4 closure drags in the
+         vulnerable System.Private.Uri 4.3.0 (GHSA, fixed in 4.3.2). On .NET 9 the assembly is framework-provided,
+         so nothing ships, but a RID-specific publish records the package in deps.json and SCA scanners flag it.
+         Pinning to the fixed version keeps deps.json clean. -->
+    <PackageReference Include="System.Private.Uri" Version="4.3.2" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Anemonis.AspNetCore.RequestDecompression" Version="1.14.0" />
     <PackageReference Include="AntiXSS.NetStandard" Version="0.2.1" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
