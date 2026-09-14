@@ -73,6 +73,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             return !string.IsNullOrEmpty(user.WorkspaceProfile?.DeviceId);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("login")]
         public async Task<ActionResult<string>> Login([FromBody]LogonInfo userLogin)
@@ -97,6 +98,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             return Unauthorized();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("changePassword")]
         [WriteToSyncLog(SynchronizationLogType.ChangePassword)]

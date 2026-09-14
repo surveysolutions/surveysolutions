@@ -35,7 +35,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
     [RequestSizeLimit(1 * 1024 * 1024 * 1024)]
     [RequestFormLimits(MultipartBodyLengthLimit = 1 * 1024 * 1024 * 1024)]
-    public abstract class InterviewsControllerBase : ControllerBase
+    public abstract class InterviewsControllerBase : DataCollectionControllerBase
     {
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAudioFileStorage audioFileStorage;

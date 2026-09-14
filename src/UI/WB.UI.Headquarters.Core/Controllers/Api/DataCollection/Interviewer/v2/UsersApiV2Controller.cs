@@ -70,6 +70,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         [Route("hasdevice")]
         public override ActionResult<bool> HasDevice() => base.HasDevice();
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("login")]
         [WriteToSyncLog(SynchronizationLogType.InterviewerLogin)]
@@ -98,6 +99,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
             return Unauthorized();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("changePassword")]
         [WriteToSyncLog(SynchronizationLogType.ChangePassword)]

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,7 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
-    public abstract class UsersApiControllerBase: ControllerBase
+    public abstract class UsersApiControllerBase: DataCollectionControllerBase
     {
         private readonly HqUserManager userManager;
         private readonly SignInManager<HqUser> signInManager;
@@ -27,6 +28,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             this.apiAuthTokenProvider = apiAuthTokenProvider;
         }
 
+        // Verifies the *old* credentials in the request body itself, so it must be reachable
+        // without a pre-existing Basic/AuthToken session (used for forced password resets).
+        [AllowAnonymous]
         public async Task<ActionResult<string>> ChangePassword(ChangePasswordInfo userChangePassword)
         {
             var user = await this.userManager.FindByNameAsync(userChangePassword.Username);
