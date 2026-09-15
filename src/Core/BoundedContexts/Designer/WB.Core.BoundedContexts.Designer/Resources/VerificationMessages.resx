@@ -659,7 +659,7 @@
     <value>There is at least one duplicate of "Title" and "Parent Value" pairs. The list should not contain any duplicates.</value>
   </data>
   <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
-    <value>Number of decimal places is not in range from {0} to {1}.</value>
+    <value>Number of decimal places is not in the range from {0} to {1}.</value>
   </data>
   <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
     <value>Category title is empty or too long. Title's length should be in range from {0} to {1} characters.</value>
