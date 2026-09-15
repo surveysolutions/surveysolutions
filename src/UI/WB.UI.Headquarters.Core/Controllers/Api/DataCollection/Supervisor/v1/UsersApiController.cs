@@ -94,6 +94,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         }
         
         [HttpPost]
+        [AllowAnonymous]
         [Route("changePassword")]
         [WriteToSyncLog(SynchronizationLogType.ChangePassword)]
         public Task<ActionResult<string>> ChangePassword([FromBody] ChangePasswordInfo userChangePassword)

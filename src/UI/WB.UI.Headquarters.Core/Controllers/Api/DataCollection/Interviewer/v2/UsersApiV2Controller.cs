@@ -85,6 +85,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [Route("changePassword")]
         [WriteToSyncLog(SynchronizationLogType.ChangePassword)]
         public Task<ActionResult<string>> ChangePassword([FromBody] ChangePasswordInfo userChangePassword)
