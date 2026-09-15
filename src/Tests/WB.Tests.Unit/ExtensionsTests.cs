@@ -22,7 +22,7 @@ namespace WB.Tests.Unit
         public void when_get_user_agent_with_version(int major, int minor, int? build, string userAgent)
         {
             IHeaderDictionary headers = new HeaderDictionary();
-            headers.Add("User-Agent", userAgent);
+            headers.Append("User-Agent", userAgent);
             var httpRequest = Mock.Of<HttpRequest>(r => r.Headers == headers);
             var version = WB.UI.Headquarters.Code.Extensions.GetProductVersionFromUserAgent(httpRequest, "");
 
