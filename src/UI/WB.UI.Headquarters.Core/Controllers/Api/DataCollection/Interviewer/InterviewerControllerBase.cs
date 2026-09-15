@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.API;
@@ -34,6 +35,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         private readonly IInterviewerVersionReader interviewerVersionReader;
         private readonly IUserToDeviceService userToDeviceService;
         private readonly IOptions<HeadquartersConfig> hqConfig;
+        private readonly IProductVersion productVersion;
 
         public enum ClientVersionFromUserAgent
         {
@@ -51,7 +53,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             IPlainStorageAccessor<ServerSettings> tenantSettings,
             IInterviewerVersionReader interviewerVersionReader,
             IUserToDeviceService userToDeviceService,
-            IOptions<HeadquartersConfig> hqConfig)
+            IOptions<HeadquartersConfig> hqConfig,
+            IProductVersion productVersion)
             : base(interviewerSettingsStorage, tenantSettings, userViewFactory, tabletInformationService)
         {
             this.syncVersionProvider = syncVersionProvider;
@@ -60,6 +63,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             this.interviewerVersionReader = interviewerVersionReader;
             this.userToDeviceService = userToDeviceService;
             this.hqConfig = hqConfig;
+            this.productVersion = productVersion;
         }
 
         [HttpGet]
@@ -112,24 +116,32 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 
         [HttpGet]
         [Route("latestversion")]
-        public virtual Task<int?> GetLatestVersion()
+        public virtual async Task<int?> GetLatestVersion()
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithMaps)
-                return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
+            {
+                var buildNumber = await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
+                return buildNumber ?? this.productVersion.GetBuildNumber();
+            }
 
-            return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
+            var regularBuildNumber = await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
+            return regularBuildNumber ?? this.productVersion.GetBuildNumber();
         }
 
         [HttpGet]
         [Route("extended/latestversion")]
-        public virtual Task<int?> GetLatestExtendedVersion()
+        public virtual async Task<int?> GetLatestExtendedVersion()
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
-                return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
+            {
+                var buildNumber = await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
+                return buildNumber ?? this.productVersion.GetBuildNumber();
+            }
 
-            return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
+            var extendedBuildNumber = await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
+            return extendedBuildNumber ?? this.productVersion.GetBuildNumber();
         }
 
         [HttpPost]
@@ -161,7 +173,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             var serverApkBuildNumber = await interviewerVersionReader.InterviewerBuildNumber();
             var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
 
-            if (clientApkBuildNumber != null && clientApkBuildNumber > serverApkBuildNumber)
+            if (clientApkBuildNumber != null
+                && serverApkBuildNumber.HasValue
+                && clientApkBuildNumber > serverApkBuildNumber.Value)
             {
                 return StatusCode(StatusCodes.Status406NotAcceptable);
             }
