@@ -1,15 +1,12 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Users;
-using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
@@ -27,11 +24,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             this.signInManager = signInManager;
             this.apiAuthTokenProvider = apiAuthTokenProvider;
         }
-
-        // Verifies the *old* credentials in the request body itself, so it must be reachable
-        // without a pre-existing Basic/AuthToken session (used for forced password resets).
-        [AllowAnonymous]
-        public async Task<ActionResult<string>> ChangePassword(ChangePasswordInfo userChangePassword)
+        
+        protected async Task<ActionResult<string>> ChangePasswordImplAsync(ChangePasswordInfo userChangePassword)
         {
             var user = await this.userManager.FindByNameAsync(userChangePassword.Username);
 
@@ -44,39 +38,32 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 return Unauthorized(new {Message = "User is locked"});
             }
 
-            if (signInResult.Succeeded)
-            {
-                if (!user.PasswordChangeRequired)
-                    return Forbid();
+            if (!signInResult.Succeeded) 
+                return Unauthorized();
+            if (!user.PasswordChangeRequired)
+                return Forbid();
 
-                var resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
-                var result = await userManager.ResetPasswordAsync(user, resetToken, userChangePassword.NewPassword);
+            var resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await userManager.ResetPasswordAsync(user, resetToken, userChangePassword.NewPassword);
 
-                if (result.Succeeded)
-                {
-                    user.PasswordChangeRequired = false;
-                    var updateResult = await userManager.UpdateAsync(user);
-
-                    if (updateResult.Succeeded)
-                    {
-                        var authToken = await this.apiAuthTokenProvider.GenerateTokenAsync(user.Id);
-                        return new JsonResult(authToken);
-                    }
-                    return this.StatusCode(StatusCodes.Status403Forbidden, new ServerError()
-                    {
-                        Code = ServerErrorCodes.ChangePasswordError,
-                        Message = string.Join("\r\n", updateResult.Errors.Select(e => e.Description))
-                    });
-                }
-
+            if (!result.Succeeded)
                 return this.StatusCode(StatusCodes.Status403Forbidden, new ServerError()
                 {
                     Code = ServerErrorCodes.ChangePasswordError,
                     Message = string.Join("\r\n", result.Errors.Select(e => e.Description))
                 });
-            }
+            
+            user.PasswordChangeRequired = false;
+            var updateResult = await userManager.UpdateAsync(user);
 
-            return Unauthorized();
+            if (!updateResult.Succeeded)
+                return this.StatusCode(StatusCodes.Status403Forbidden, new ServerError()
+                    {
+                        Code = ServerErrorCodes.ChangePasswordError,
+                        Message = string.Join("\r\n", updateResult.Errors.Select(e => e.Description))
+                    });
+            var authToken = await this.apiAuthTokenProvider.GenerateTokenAsync(user.Id);
+            return new JsonResult(authToken);
         }
     }
 }

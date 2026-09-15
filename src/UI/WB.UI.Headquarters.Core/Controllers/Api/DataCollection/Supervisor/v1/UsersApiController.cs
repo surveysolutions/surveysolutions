@@ -1,15 +1,12 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Workspaces;
@@ -89,20 +86,17 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
                 return Unauthorized(new {Message = "User is locked"});
             }
 
-            if (signInResult.Succeeded)
-            {
-                var authToken = await this.apiAuthTokenProvider.GenerateTokenAsync(user.Id);
-                return new JsonResult(authToken);
-            }
-
-            return Unauthorized();
+            if (!signInResult.Succeeded) 
+                return Unauthorized();
+            
+            var authToken = await this.apiAuthTokenProvider.GenerateTokenAsync(user.Id);
+            return new JsonResult(authToken);
         }
-
-        [AllowAnonymous]
+        
         [HttpPost]
         [Route("changePassword")]
         [WriteToSyncLog(SynchronizationLogType.ChangePassword)]
         public Task<ActionResult<string>> ChangePassword([FromBody] ChangePasswordInfo userChangePassword)
-            => base.ChangePassword(userChangePassword);
+            => base.ChangePasswordImplAsync(userChangePassword);
     }
 }

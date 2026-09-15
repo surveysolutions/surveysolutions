@@ -1,20 +1,13 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Amazon.SimpleEmail.Model;
-using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.BoundedContexts.Headquarters.Workspaces;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Shared.Web.Attributes;
@@ -51,10 +44,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         public Guid Supervisor()
         {
             var user = userViewFactory.FindById(this.authorizedUser.Id);
-            if (!user.WorkspaceProfile.SupervisorId.HasValue)
-                throw new ArgumentException("SupervisorId must be set for interviewer");
-
-            return user.WorkspaceProfile.SupervisorId.Value;
+            return user.WorkspaceProfile.SupervisorId 
+                   ?? throw new ArgumentException("SupervisorId must be set for interviewer");
         }
 
         [HttpGet]
@@ -78,32 +69,25 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         {
             var user = await this.userManager.FindByNameAsync(userLogin.Username);
 
-            if (user == null)
+            if (user == null || String.IsNullOrEmpty(userLogin.Password))
                 return Unauthorized();
 
-            if (String.IsNullOrEmpty(userLogin.Password))
-                return Unauthorized();
-            
             var signInResult = await this.signInManager.CheckPasswordSignInAsync(user, userLogin.Password, true);
             if (signInResult.IsLockedOut)
             {
                 return Unauthorized(new {Message = "User is locked"});
             }
 
-            if (signInResult.Succeeded)
-            {
-                var authToken = await this.apiAuthTokenProvider.GenerateTokenAsync(user.Id);
-                return new JsonResult(authToken);
-            }
-
-            return Unauthorized();
+            if (!signInResult.Succeeded) 
+                return Unauthorized();
+            var authToken = await this.apiAuthTokenProvider.GenerateTokenAsync(user.Id);
+            return new JsonResult(authToken);
         }
 
-        [AllowAnonymous]
         [HttpPost]
         [Route("changePassword")]
         [WriteToSyncLog(SynchronizationLogType.ChangePassword)]
         public Task<ActionResult<string>> ChangePassword([FromBody] ChangePasswordInfo userChangePassword)
-            => base.ChangePassword(userChangePassword);
+            => base.ChangePasswordImplAsync(userChangePassword);
     }
 }
