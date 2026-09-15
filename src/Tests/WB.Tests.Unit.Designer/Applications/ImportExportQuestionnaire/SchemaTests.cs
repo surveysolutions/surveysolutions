@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
 using ApprovalTests;
 using ApprovalTests.Namers;
@@ -10,11 +9,11 @@ using Main.Core.Documents;
 using NJsonSchema;
 using NJsonSchema.Generation;
 using NJsonSchema.Validation;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.ImportExport;
 using WB.Core.BoundedContexts.Designer.ImportExport.Models;
-using WB.Infrastructure.Native.Storage;
-using WB.UI.Designer.Code.ImportExport;
 
 namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 {
@@ -31,7 +30,13 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             {
                 FlattenInheritanceHierarchy = false,
             };
-            settings.DefaultEnumHandling = EnumHandling.String;
+            settings.SerializerSettings = new JsonSerializerSettings
+            {
+                Converters = new List<JsonConverter>
+                {
+                    new StringEnumConverter()
+                }
+            };
             var jsonSchema = JsonSchema.FromType<Questionnaire>(settings);
             var json = jsonSchema.ToJson();
             
