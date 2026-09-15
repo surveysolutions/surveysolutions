@@ -116,24 +116,32 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 
         [HttpGet]
         [Route("latestversion")]
-        public virtual Task<int?> GetLatestVersion()
+        public virtual async Task<int?> GetLatestVersion()
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithMaps)
-                return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
+            {
+                var buildNumber = await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
+                return buildNumber ?? this.productVersion.GetBuildNumber();
+            }
 
-            return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
+            var regularBuildNumber = await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
+            return regularBuildNumber ?? this.productVersion.GetBuildNumber();
         }
 
         [HttpGet]
         [Route("extended/latestversion")]
-        public virtual Task<int?> GetLatestExtendedVersion()
+        public virtual async Task<int?> GetLatestExtendedVersion()
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
-                return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
+            {
+                var buildNumber = await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
+                return buildNumber ?? this.productVersion.GetBuildNumber();
+            }
 
-            return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
+            var extendedBuildNumber = await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
+            return extendedBuildNumber ?? this.productVersion.GetBuildNumber();
         }
 
         [HttpPost]

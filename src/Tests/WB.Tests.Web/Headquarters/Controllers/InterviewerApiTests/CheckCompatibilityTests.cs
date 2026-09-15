@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
@@ -15,12 +17,15 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
+using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer;
+using WB.UI.Headquarters.Services;
 
 namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
 {
@@ -28,6 +33,81 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
     public class CheckCompatibilityTests
     {
         private const string InterviewerUserAgent = "org.worldbank.solutions.interviewer/{0} (QuestionnaireVersion/27.0.0)";
+
+        [Test]
+        public async Task when_interviewer_apk_is_not_stored_should_return_current_server_build_for_latest_version()
+        {
+            const int currentServerBuildNumber = 38141;
+            var interviewerUserAgent = string.Format(InterviewerUserAgent, "25.06.0 (build 38141)");
+
+            var clientApkProvider = new Mock<IClientApkProvider>();
+            clientApkProvider.Setup(x => x.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName))
+                .ReturnsAsync((int?)null);
+
+            var interviewerApiController = new InterviewerControllerBase(
+                Mock.Of<ITabletInformationService>(),
+                Mock.Of<IUserViewFactory>(),
+                new InterviewerSyncProtocolVersionProvider(),
+                Mock.Of<IAuthorizedUser>(),
+                clientApkProvider.Object,
+                Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(),
+                new TestPlainStorage<ServerSettings>(),
+                Mock.Of<IInterviewerVersionReader>(),
+                Mock.Of<IUserToDeviceService>(),
+                Mock.Of<IOptions<HeadquartersConfig>>(c => c.Value == new HeadquartersConfig
+                {
+                    IgnoreCompatibility = false
+                }),
+                Mock.Of<IProductVersion>(x => x.GetBuildNumber() == currentServerBuildNumber));
+
+            interviewerApiController.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext()
+            };
+            interviewerApiController.Request.Headers[HeaderNames.UserAgent] = interviewerUserAgent;
+
+            var latestVersion = await interviewerApiController.GetLatestVersion();
+
+            Assert.That(latestVersion, Is.EqualTo(currentServerBuildNumber));
+        }
+
+        [Test]
+        public async Task when_extended_interviewer_apk_is_not_stored_should_return_current_server_build_for_latest_version()
+        {
+            const int currentServerBuildNumber = 38141;
+            var interviewerUserAgent = string.Format(InterviewerUserAgent, "25.06.0 (build 38141)");
+
+            var clientApkProvider = new Mock<IClientApkProvider>();
+            clientApkProvider.Setup(x => x.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName))
+                .ReturnsAsync((int?)null);
+
+            var interviewerApiController = new InterviewerControllerBase(
+                Mock.Of<ITabletInformationService>(),
+                Mock.Of<IUserViewFactory>(),
+                new InterviewerSyncProtocolVersionProvider(),
+                Mock.Of<IAuthorizedUser>(),
+                clientApkProvider.Object,
+                Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(),
+                new TestPlainStorage<ServerSettings>(),
+                Mock.Of<IInterviewerVersionReader>(),
+                Mock.Of<IUserToDeviceService>(),
+                Mock.Of<IOptions<HeadquartersConfig>>(c => c.Value == new HeadquartersConfig
+                {
+                    IgnoreCompatibility = false
+                }),
+                Mock.Of<IProductVersion>(x => x.GetBuildNumber() == currentServerBuildNumber));
+
+            interviewerApiController.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext()
+            };
+            interviewerApiController.Request.Headers[HeaderNames.UserAgent] =
+                string.Format(InterviewerUserAgent, "25.06.0 (build 38141) Maps");
+
+            var latestVersion = await interviewerApiController.GetLatestExtendedVersion();
+
+            Assert.That(latestVersion, Is.EqualTo(currentServerBuildNumber));
+        }
 
         [Test]
         public async Task when_user_is_linked_to_another_server_should_not_allow_to_synchronize()
