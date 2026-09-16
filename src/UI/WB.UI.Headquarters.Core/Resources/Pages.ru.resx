@@ -1853,4 +1853,10 @@
   <data name="Observer_Memo2" xml:space="preserve">
     <value>Нажмите на учетную запись и выберите "Просмотр от имени этого пользователя в режиме только для чтения", чтобы начать. Используйте желтую ссылку вверху, чтобы вернуться к своей учетной записи.</value>
 </data>
+  <data name="Successful" xml:space="preserve">
+      <value>Успешно</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+      <value>Неуспешно</value>
+  </data>
 </root>

@@ -1786,4 +1786,10 @@
   <data name="Observer_Memo2" xml:space="preserve">
     <value>Faceți clic pe un cont și selectați 'Vizualizați ca acest utilizator în modul doar citire' pentru a începe. Folosiți linkul galben din partea de sus pentru a reveni la contul dvs.</value>
   </data>
+  <data name="Successful" xml:space="preserve">
+      <value>Reușit</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+      <value>Eșuat</value>
+  </data>
 </root>

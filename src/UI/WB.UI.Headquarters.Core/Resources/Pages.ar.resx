@@ -1731,4 +1731,10 @@
     <data name="Observer_Memo2" xml:space="preserve">
     <value>انقر على حساب واختر "عرض كمستخدم في وضع القراءة فقط" للبدء. استخدم الرابط الأصفر في الأعلى للعودة إلى حسابك.</value>
 </data>
+    <data name="Successful" xml:space="preserve">
+      <value>ناجح</value>
+  </data>
+    <data name="Failed" xml:space="preserve">
+      <value>فشل</value>
+  </data>
 </root>

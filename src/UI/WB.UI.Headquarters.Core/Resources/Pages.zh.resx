@@ -1785,4 +1785,10 @@
   <data name="Observer_Memo2" xml:space="preserve">
     <value>点击账户并选择"以只读模式查看此用户"开始。使用顶部的黄色链接返回您的账户。</value>
   </data>
+  <data name="Successful" xml:space="preserve">
+      <value>成功</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+      <value>失败</value>
+  </data>
 </root>

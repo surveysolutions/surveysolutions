@@ -1786,4 +1786,10 @@
   <data name="Observer_Memo2" xml:space="preserve">
     <value>Klikněte na účet a vyberte "Zobrazit jako tento uživatel v režimu pouze pro čtení" pro začátek. Použijte žlutý odkaz nahoře pro návrat k vašemu účtu.</value>
 </data>
+  <data name="Successful" xml:space="preserve">
+      <value>Úspěšné</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+      <value>Neúspěšné</value>
+  </data>
 </root>

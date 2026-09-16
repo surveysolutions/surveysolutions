@@ -644,4 +644,10 @@
   <data name="Complete_QuestionsWithErrors" xml:space="preserve">
       <value>有错误的问题：{{count}}</value>
   </data>
+  <data name="GeographyPreview" xml:space="preserve">
+      <value>地理预览</value>
+  </data>
+  <data name="RealQuestion_Hint" xml:space="preserve">
+      <value>点击输入数字</value>
+  </data>
 </root>

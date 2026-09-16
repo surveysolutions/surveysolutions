@@ -1786,4 +1786,10 @@
   <data name="Observer_Memo2" xml:space="preserve">
     <value>Натисніть на обліковий запис і виберіть «Переглянути як цей користувач у режимі тільки для читання», щоб почати. Використовуйте жовте посилання вгорі, щоб повернутися до свого облікового запису.</value>
   </data>
+  <data name="Successful" xml:space="preserve">
+      <value>Успішно</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+      <value>Не вдалося</value>
+  </data>
 </root>

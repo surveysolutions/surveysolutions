@@ -1789,4 +1789,10 @@
   <data name="Observer_Memo2" xml:space="preserve">
     <value>დასაწყებად დააჭირეთ ანგარიშს და აირჩიეთ 'ნახვა, როგორც ეს მომხმარებელი მხოლოდ წასაკითხ რეჟიმში'. ანგარიშზე დასაბრუნებლად გამოიყენეთ ზედა ყვითელი ბმული.</value>
   </data>
+  <data name="Successful" xml:space="preserve">
+      <value>წარმატებული</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+      <value>წარუმატებელი</value>
+  </data>
 </root>

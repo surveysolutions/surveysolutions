@@ -1727,4 +1727,10 @@
     <data name="Observer_Memo2" xml:space="preserve">
         <value>คลิกบัญชีและเลือก 'ดูในฐานะผู้ใช้รายนี้ในโหมดอ่านอย่างเดียว' เพื่อเริ่มต้น ใช้ลิงก์สีเหลืองที่ด้านบนเพื่อกลับไปยังบัญชีของคุณ</value>
     </data>
+    <data name="Successful" xml:space="preserve">
+      <value>สำเร็จ</value>
+  </data>
+    <data name="Failed" xml:space="preserve">
+      <value>ล้มเหลว</value>
+  </data>
 </root>

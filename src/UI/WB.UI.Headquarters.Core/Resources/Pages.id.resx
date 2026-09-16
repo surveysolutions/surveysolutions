@@ -1727,4 +1727,10 @@
     <data name="Observer_Memo2" xml:space="preserve">
         <value>Klik akun dan pilih 'Lihat sebagai pengguna ini dalam mode hanya baca' untuk memulai. Gunakan tautan kuning di bagian atas untuk kembali ke akun Anda.</value>
     </data>
+    <data name="Successful" xml:space="preserve">
+      <value>Berhasil</value>
+  </data>
+    <data name="Failed" xml:space="preserve">
+      <value>Gagal</value>
+  </data>
 </root>

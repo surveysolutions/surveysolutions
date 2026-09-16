@@ -604,4 +604,10 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="CompleteReviewSubmitInterview" xml:space="preserve">
       <value>Интервью {{key}}</value>
   </data>
+  <data name="GeographyPreview" xml:space="preserve">
+      <value>Предварительный просмотр географии</value>
+  </data>
+  <data name="RealQuestion_Hint" xml:space="preserve">
+      <value>Нажмите, чтобы ввести число</value>
+  </data>
 </root>
