@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using MvvmCross.Base;
@@ -53,6 +54,44 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             }
 
             Assert.Fail("Should throw InterviewException");
+        }
+
+        [Test]
+        public async Task when_command_is_accepted_should_return_true()
+        {
+            var commandServiceMock = new Mock<ICommandService>();
+            commandServiceMock
+                .Setup(cs => cs.ExecuteAsync(It.IsAny<ICommand>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+
+            var answering = new AnsweringViewModel(
+                commandServiceMock.Object,
+                Mock.Of<IUserInterfaceStateService>(),
+                Mock.Of<ILogger>());
+
+            var commandAccepted = await answering.SendQuestionCommandAndGetResultAsync(
+                Create.Command.AnswerNumericRealQuestionCommand(Id.g1, Id.g2, 1));
+
+            Assert.That(commandAccepted, Is.True);
+        }
+
+        [Test]
+        public async Task when_command_is_canceled_should_return_false()
+        {
+            var commandServiceMock = new Mock<ICommandService>();
+            commandServiceMock
+                .Setup(cs => cs.ExecuteAsync(It.IsAny<ICommand>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new OperationCanceledException());
+
+            var answering = new AnsweringViewModel(
+                commandServiceMock.Object,
+                Mock.Of<IUserInterfaceStateService>(),
+                Mock.Of<ILogger>());
+
+            var commandAccepted = await answering.SendQuestionCommandAndGetResultAsync(
+                Create.Command.AnswerNumericRealQuestionCommand(Id.g1, Id.g2, 1));
+
+            Assert.That(commandAccepted, Is.False);
         }
     }
 }
