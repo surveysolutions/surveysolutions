@@ -36,7 +36,6 @@ namespace WB.Tests.Web.Headquarters.AuthenticationTests
                 CreateOptionsMonitor(new WB.UI.Shared.Web.Authentication.BasicAuthenticationSchemeOptions()),
                 LoggerFactory,
                 UrlEncoder.Default,
-                Mock.Of<ISystemClock>(),
                 Mock.Of<IUserClaimsPrincipalFactory<HqUser>>(),
                 executor.Object);
 
@@ -56,7 +55,6 @@ namespace WB.Tests.Web.Headquarters.AuthenticationTests
                 CreateOptionsMonitor(new AuthTokenAuthenticationSchemeOptions()),
                 LoggerFactory,
                 UrlEncoder.Default,
-                Mock.Of<ISystemClock>(),
                 userRepository.Object,
                 Mock.Of<IUserClaimsPrincipalFactory<HqUser>>(),
                 Mock.Of<IApiTokenProvider>(),
