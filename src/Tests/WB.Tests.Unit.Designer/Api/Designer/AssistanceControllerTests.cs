@@ -1,5 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Security.Claims;
+using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +17,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers.Api.Designer;
@@ -37,16 +43,19 @@ namespace WB.Tests.Unit.Designer.Api.Designer
         private static AssistanceController CreateController(
             IPlainKeyValueStorage<AssistantSettings> appSettingsStorage = null,
             UserManager<DesignerIdentityUser> userManager = null,
-            IConfiguration configuration = null)
+            IConfiguration configuration = null,
+            IQuestionnaireHelper questionnaireHelper = null,
+            IJwtTokenService jwtTokenService = null,
+            IHttpClientFactory httpClientFactory = null)
         {
             var controller = new AssistanceController(
                 configuration: configuration ?? Mock.Of<IConfiguration>(),
                 logger: Mock.Of<ILogger<AssistanceController>>(),
                 appSettingsStorage: appSettingsStorage ?? Mock.Of<IPlainKeyValueStorage<AssistantSettings>>(),
                 userManager: userManager ?? CreateUserManager(),
-                questionnaireHelper: Mock.Of<IQuestionnaireHelper>(),
-                jwtTokenService: Mock.Of<IJwtTokenService>(),
-                httpClientFactory: Mock.Of<System.Net.Http.IHttpClientFactory>());
+                questionnaireHelper: questionnaireHelper ?? Mock.Of<IQuestionnaireHelper>(),
+                jwtTokenService: jwtTokenService ?? Mock.Of<IJwtTokenService>(),
+                httpClientFactory: httpClientFactory ?? Mock.Of<IHttpClientFactory>());
 
             controller.ControllerContext = new ControllerContext
             {
@@ -164,6 +173,68 @@ namespace WB.Tests.Unit.Designer.Api.Designer
         }
 
         [Test]
+        public async Task Post_when_conversationId_is_supplied_should_forward_it_and_not_send_messages()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var entityId = Guid.NewGuid();
+            var conversationId = Guid.NewGuid();
+            var assistantAddress = "https://assistant.example/api/assist";
+
+            var questionnaireHelper = new Mock<IQuestionnaireHelper>();
+            questionnaireHelper
+                .Setup(x => x.GetLastRevision(questionnaireId))
+                .Returns(new QuestionnaireRevision(questionnaireId, version: 7));
+
+            var messageHandler = new CapturingMessageHandler(new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent("{}", Encoding.UTF8, "application/json")
+            });
+
+            var httpClientFactory = new Mock<IHttpClientFactory>();
+            httpClientFactory
+                .Setup(x => x.CreateClient("AssistantProvider"))
+                .Returns(new HttpClient(messageHandler));
+
+            var configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>
+                {
+                    ["Providers:Assistant:AssistantAddress"] = assistantAddress
+                })
+                .Build();
+
+            var controller = CreateController(
+                appSettingsStorage: StorageWithSettings(
+                    new AssistantSettings { IsEnabled = true, IsAvailableToAllUsers = true }),
+                configuration: configuration,
+                questionnaireHelper: questionnaireHelper.Object,
+                httpClientFactory: httpClientFactory.Object);
+
+            var result = await controller.Post(
+                questionnaireId,
+                new AssistanceController.AssistanceRequest
+                {
+                    EntityId = entityId,
+                    Prompt = "continue from earlier",
+                    ConversationId = conversationId
+                },
+                CancellationToken.None) as OkObjectResult;
+
+            using var requestBody = JsonDocument.Parse(messageHandler.LastRequestBody);
+            var payload = requestBody.RootElement;
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.Not.Null);
+                Assert.That(messageHandler.LastRequest, Is.Not.Null);
+                Assert.That(messageHandler.LastRequest!.RequestUri, Is.EqualTo(new Uri(assistantAddress)));
+                Assert.That(payload.GetProperty("Prompt").GetString(), Is.EqualTo("continue from earlier"));
+                Assert.That(payload.GetProperty("conversationId").GetGuid(), Is.EqualTo(conversationId));
+                Assert.That(payload.TryGetProperty("Messages", out _), Is.False);
+                Assert.That(payload.TryGetProperty("messages", out _), Is.False);
+            });
+        }
+
+        [Test]
         public async Task Reaction_when_settings_are_null_should_return_406()
         {
             var controller = CreateController(appSettingsStorage: new TestPlainStorage<AssistantSettings>());
@@ -220,6 +291,27 @@ namespace WB.Tests.Unit.Designer.Api.Designer
             Assert.That(result, Is.Not.Null);
             Assert.That(result.StatusCode, Is.EqualTo(400));
         }
+
+        private class CapturingMessageHandler : HttpMessageHandler
+        {
+            private readonly HttpResponseMessage response;
+
+            public CapturingMessageHandler(HttpResponseMessage response)
+            {
+                this.response = response;
+            }
+
+            public HttpRequestMessage LastRequest { get; private set; }
+            public string LastRequestBody { get; private set; }
+
+            protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            {
+                this.LastRequest = request;
+                this.LastRequestBody = request.Content != null
+                    ? await request.Content.ReadAsStringAsync(cancellationToken)
+                    : null;
+                return this.response;
+            }
+        }
     }
 }
-
