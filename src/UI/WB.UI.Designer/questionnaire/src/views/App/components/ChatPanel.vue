@@ -569,20 +569,9 @@ export default {
         };
 
         const callAssistant = async (userMessage, questionnaireId, entityId, area, signal) => {
-            const conversationHistory = [];
-
-            // Add previous messages from the current conversation (exclude error messages)
-            messages.value.forEach(msg => {
-                if (!msg.isError) {
-                    conversationHistory.push({
-                        role: msg.role,
-                        content: msg.content
-                    });
-                }
-            });
-
-            // Call Assistant API with userMessage as a separate parameter
-            return await sendToAssistant(userMessage, conversationHistory, {
+            // The server rebuilds the dialog history from the stored conversation,
+            // so only the new prompt is sent.
+            return await sendToAssistant(userMessage, {
                 questionnaireId: questionnaireId,
                 entityId: entityId,
                 area: area,
