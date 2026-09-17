@@ -903,6 +903,9 @@
   <data name="MapDetails_MapTitle" xml:space="preserve">
     <value>Hartë</value>
   </data>
+  <data name="MapPreview" xml:space="preserve">
+      <value>Parapamja e hartës</value>
+  </data>
   <data name="MapDetails_MaxScale" xml:space="preserve">
     <value>Shkalla maksimale</value>
   </data>

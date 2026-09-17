@@ -846,6 +846,9 @@
   <data name="MapDetails_MapTitle" xml:space="preserve">
     <value>Hartă</value>
   </data>
+  <data name="MapPreview" xml:space="preserve">
+      <value>Previzualizare hartă</value>
+  </data>
   <data name="MapDetails_MaxScale" xml:space="preserve">
     <value>Dimensionare la scară maximă</value>
   </data>

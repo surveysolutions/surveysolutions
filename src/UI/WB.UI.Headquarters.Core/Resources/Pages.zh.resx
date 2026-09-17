@@ -1026,6 +1026,9 @@
   <data name="MapDetails_MapTitle" xml:space="preserve">
     <value>地图</value>
   </data>
+  <data name="MapPreview" xml:space="preserve">
+      <value>地图预览</value>
+  </data>
   <data name="MapDetails_MaxScale" xml:space="preserve">
     <value>最大比例尺</value>
   </data>

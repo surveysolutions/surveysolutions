@@ -1191,6 +1191,9 @@
   <data name="MapDetails_MapTitle" xml:space="preserve">
     <value>Карта</value>
   </data>
+  <data name="MapPreview" xml:space="preserve">
+      <value>Попередній перегляд карти</value>
+  </data>
   <data name="MapDetails_MaxScale" xml:space="preserve">
     <value>Максимальний масштаб</value>
   </data>

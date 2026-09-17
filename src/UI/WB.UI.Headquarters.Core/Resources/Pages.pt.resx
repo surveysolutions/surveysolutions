@@ -1321,6 +1321,9 @@
   <data name="MapDetails_MapTitle" xml:space="preserve">
     <value>Mapa</value>
   </data>
+  <data name="MapPreview" xml:space="preserve">
+      <value>Pré-visualização do mapa</value>
+  </data>
   <data name="MapDetails_ImportedOn" xml:space="preserve">
     <value>Importado em</value>
   </data>
