@@ -29,4 +29,5 @@
   <data name="MapFileSizeLimit" xml:space="preserve"><value>Ukuran file {0} lebih besar dari batas yang berlaku {1}</value></data>
   <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve"><value>Nama file {0} berisi karakter non-UTF-8.</value></data>
   <data name="MapFileNameHasInvalidChars" xml:space="preserve"><value>Nama file {0} berisi karakter yang tidak valid.</value></data>
+  <data name="MapFileNameTooLong" xml:space="preserve"><value>Nama file '{0}' melebihi panjang maksimum yang diizinkan yaitu {1} karakter.</value></data>
 </root>

@@ -1,8 +1,116 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <data name="PageTitle" xml:space="preserve"><value>{0} | Ulasan</value></data>
+  <data name="AudioAudit_Available" xml:space="preserve">
+     <value>Audit audio:</value>
+  </data>
+  <data name="AudioAudit_ViewRecordings" xml:space="preserve">
+    <value>Lihat rekaman</value>
+  </data>
+  <data name="AudioAudit_CloseRecordings" xml:space="preserve">
+    <value>Tutup rekaman</value>
+  </data>
+  <data name="AudioAudit_DurationLoading" xml:space="preserve">
+    <value>Durasi: memuat…</value>
+  </data>
+  <data name="AudioAudit_DurationUnavailable" xml:space="preserve">
+    <value>Durasi: tidak tersedia</value>
+  </data>
+  <data name="AudioAudit_TotalDuration" xml:space="preserve">
+    <value>Total durasi: {{ duration }}</value>
+  </data>
+  <data name="AudioAudit_SegmentLabel" xml:space="preserve">
+    <value>{{ number }}</value>
+  </data>
+  <data name="AudioAudit_DeviceTime" xml:space="preserve">
+    <value>Waktu perangkat: {{ time }}</value>
+  </data>
+  <data name="AudioAudit_SegmentUnavailable" xml:space="preserve">
+    <value>Rekaman tidak tersedia</value>
+  </data>
+  <data name="AudioAudit_PlaybackFailed" xml:space="preserve">
+    <value>Pemutaran gagal</value>
+  </data>
+  <data name="AudioAudit_UnsupportedFormat" xml:space="preserve">
+    <value>Format tidak didukung oleh browser</value>
+  </data>
+  <data name="AudioAudit_SkipBackward" xml:space="preserve">
+    <value>Lewati mundur 10 detik</value>
+  </data>
+  <data name="AudioAudit_SkipForward" xml:space="preserve">
+    <value>Lewati maju 10 detik</value>
+  </data>
+  <data name="AudioAudit_NoRecordingsAvailable" xml:space="preserve">
+    <value>Saat ini tidak ada rekaman yang dapat diputar</value>
+  </data>
+  <data name="AudioAudit_Title" xml:space="preserve">
+    <value>Rekaman audit audio</value>
+  </data>
+  <data name="AudioAudit_LoadingRecordings" xml:space="preserve">
+    <value>Memuat rekaman...</value>
+  </data>
+  <data name="AudioAudit_LoadingAudio" xml:space="preserve">
+    <value>Memuat audio...</value>
+  </data>
+  <data name="AudioAudit_LoadFailed" xml:space="preserve">
+    <value>Tidak dapat memuat rekaman audit audio.</value>
+  </data>
+  <data name="AudioAudit_Retry" xml:space="preserve">
+    <value>Coba lagi</value>
+  </data>
+  <data name="AudioAudit_NowPlaying" xml:space="preserve">
+    <value>Sedang diputar: {{ segment }}</value>
+  </data>
+  <data name="AudioAudit_PositionValue" xml:space="preserve">
+    <value>Posisi: {{ position }}</value>
+  </data>
+  <data name="AudioAudit_DurationValue" xml:space="preserve">
+    <value>Durasi: {{ duration }}</value>
+  </data>
+  <data name="AudioAudit_RecordingPosition" xml:space="preserve">
+    <value>Posisi rekaman</value>
+  </data>
+  <data name="AudioAudit_GoToPreviousSegment" xml:space="preserve">
+    <value>Pindah ke rekaman sebelumnya</value>
+  </data>
+  <data name="AudioAudit_PlayRecording" xml:space="preserve">
+    <value>Putar rekaman</value>
+  </data>
+  <data name="AudioAudit_PauseRecording" xml:space="preserve">
+    <value>Jeda rekaman</value>
+  </data>
+  <data name="AudioAudit_GoToNextSegment" xml:space="preserve">
+    <value>Pindah ke rekaman berikutnya</value>
+  </data>
+  <data name="AudioAudit_PlaylistLabel" xml:space="preserve">
+    <value>Daftar rekaman audit audio</value>
+  </data>
+  <data name="AudioAudit_UnknownDuration" xml:space="preserve">
+    <value>durasi tidak diketahui</value>
+  </data>
+  <data name="AudioAudit_SeekPosition" xml:space="preserve">
+    <value>{{ current }} dari {{ total }}</value>
+  </data>
+  <data name="AudioAudit_PlaybackSpeedAnnouncement" xml:space="preserve">
+    <value>Kecepatan pemutaran {{ rate }}x.</value>
+  </data>
+  <data name="AudioAudit_SegmentSelected" xml:space="preserve">
+    <value>{{ segment }} dipilih.</value>
+  </data>
+  <data name="AudioAudit_SegmentDurationAnnouncement" xml:space="preserve">
+    <value>Durasi {{ segment }} adalah {{ duration }}.</value>
+  </data>
+  <data name="AudioAudit_PlayingAnnouncement" xml:space="preserve">
+    <value>Memutar {{ segment }}.</value>
+  </data>
+  <data name="AudioAudit_PausedAnnouncement" xml:space="preserve">
+    <value>{{ segment }} dijeda.</value>
+  </data>
+  <data name="AudioAudit_FinishedAnnouncement" xml:space="preserve">
+    <value>{{ segment }} selesai.</value>
+  </data>
 </root>

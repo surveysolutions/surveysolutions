@@ -62,7 +62,8 @@ export default {
     methods: {
         doScroll: debounce(function () {
             if (this.$store.getters.scrollState == '#' + this.id) {
-                window.scroll({ top: this.$el.offsetTop, behavior: 'smooth' })
+                const navbarHeight = document.querySelector('.navbar-fixed-top')?.offsetHeight || 0
+                window.scroll({ top: this.$el.offsetTop - navbarHeight, behavior: 'smooth' })
                 this.$store.dispatch('resetScroll')
             }
         }, 200),
