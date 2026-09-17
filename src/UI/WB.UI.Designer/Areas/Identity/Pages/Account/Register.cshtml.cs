@@ -23,6 +23,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
+        private const string RecaptchaV3RegisterAction = "register";
         public IOptions<CaptchaConfig> CaptchaOptions { get; }
 
         private readonly UserManager<DesignerIdentityUser> userManager;
@@ -91,10 +92,16 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                 : null;
             if (Input != null && ModelState.IsValid)
             {
-                if (this.CaptchaOptions.Value.CaptchaType == CaptchaProviderType.Recaptcha)
+                if (this.CaptchaOptions.Value.CaptchaType == CaptchaProviderType.Recaptcha
+                    || this.CaptchaOptions.Value.CaptchaType == CaptchaProviderType.RecaptchaV3)
                 {
                     var recaptcha = await this.recaptchaService.Validate(Request);
-                    if (!recaptcha.success)
+                    var isValid = recaptcha.success;
+                    if (isValid && this.CaptchaOptions.Value.CaptchaType == CaptchaProviderType.RecaptchaV3)
+                        isValid = recaptcha.score >= this.CaptchaOptions.Value.RecaptchaV3MinimumScore
+                            && string.Equals(recaptcha.action, RecaptchaV3RegisterAction, StringComparison.Ordinal);
+
+                    if (!isValid)
                     {
                         this.ErrorMessage = ErrorMessages.You_did_not_type_the_verification_word_correctly;
                         return Page();

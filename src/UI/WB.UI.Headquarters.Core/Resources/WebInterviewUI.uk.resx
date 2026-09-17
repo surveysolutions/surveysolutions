@@ -360,6 +360,9 @@
   <data name="MaxAnswersCountSelected" xml:space="preserve">
     <value>У цьому питанні було зроблено максимальну кількість виборів ({{value}})</value>
   </data>
+  <data name="ImageFormatNotSupported" xml:space="preserve">
+    <value>Формат зображення не підтримується вашим браузером.</value>
+  </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>Відтворення мультимедіа не підтримується вашим браузером. Замість цього ви можете завантажити його.</value>
   </data>
@@ -386,6 +389,9 @@
   </data>
   <data name="NumberEnter" xml:space="preserve">
     <value>Введіть номер</value>
+  </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Від'ємні значення не дозволені для цього запитання</value>
   </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>Відповідь '{{answer}}' є неправильною, оскільки питання використовується як розмір списку, а вказана відповідь є негативною</value>
