@@ -823,6 +823,9 @@
     <data name="QuestionInteger" xml:space="preserve">
         <value>ចំនួនគត់</value>
     </data>
+    <data name="QuestionNonNegative" xml:space="preserve">
+        <value>មិនអវិជ្ជមាន</value>
+    </data>
     <data name="QuestionIsLinked" xml:space="preserve">
         <value>ត្រូវបានភ្ជាប់</value>
     </data>

@@ -51,7 +51,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public Dictionary<Guid, long> GetInterviewersTrafficUsage(Guid[] interviewersIds)
         {
-            var trafficUsage = this.dbContext.Query(devices => devices.Where(x => interviewersIds.Contains(x.InterviewerId))
+            // NOTE: List<Guid> is used in LINQ expression trees on purpose. For an array the C# compiler
+            // (C# 14+) binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an
+            // op_Implicit call into the expression tree that NHibernate cannot evaluate.
+            var ids = interviewersIds.ToList();
+
+            var trafficUsage = this.dbContext.Query(devices => devices.Where(x => ids.Contains(x.InterviewerId))
                 .Select(x => new {x.InterviewerId, Traffic = x.Statistics.TotalDownloadedBytes + x.Statistics.TotalUploadedBytes})
                 .GroupBy(x => x.InterviewerId)
                 .Select(x => new {InterviewerId = x.Key, Traffic = x.Sum(s => (long?)s.Traffic) ?? 0})
@@ -62,9 +67,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public Dictionary<Guid, SyncStats> GetSynchronizationsStats(Guid[] interviewerIds)
         {
+            var ids = interviewerIds.ToList();
+
             var syncStat = this.dbContext.Query(devices =>
                 (from device in devices
-                    where interviewerIds.Contains(device.InterviewerId)
+                    where ids.Contains(device.InterviewerId)
                     group device by device.InterviewerId
                     into grouping
                     select new
@@ -81,9 +88,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public IEnumerable<DeviceSyncInfo> GetLastSyncByInterviewersList(Guid[] interviewerIds)
         {
+            var ids = interviewerIds.ToList();
+
             var syncWithNotEmptyStat = this.dbContext.Query(devices => 
                 (from device in devices
-                where interviewerIds.Contains(device.InterviewerId)
+                where ids.Contains(device.InterviewerId)
                       && (device.Statistics != null &&
                           device.Statistics.DownloadedInterviewsCount +
                           device.Statistics.UploadedInterviewsCount +
@@ -100,7 +109,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                 }).ToList());
 
             var lastSync = this.dbContext.Query(devices => (from device in devices
-                where interviewerIds.Contains(device.InterviewerId)
+                where ids.Contains(device.InterviewerId)
                 group device by device.InterviewerId
                 into grouping
                 select new
@@ -189,9 +198,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public Dictionary<Guid, double> GetAverageSynchronizationSpeedInBytesPerSeconds(Guid[] interviewerIds)
         {
+            var ids = interviewerIds.ToList();
+
             var syncWithEmptyStat = this.dbContext.Query(devices =>
                 (from device in devices
-                    where interviewerIds.Contains(device.InterviewerId)
+                    where ids.Contains(device.InterviewerId)
                           && device.Statistics != null
                     group device by device.InterviewerId
                     into grouping
@@ -207,9 +218,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public IEnumerable<DeviceSyncInfo> GetLastFailedByInterviewerIds(Guid[] interviewerIds)
         {
+            var ids = interviewerIds.ToList();
+
             var syncWithEmptyStat = this.dbContext.Query(devices =>
                 (from device in devices
-                    where interviewerIds.Contains(device.InterviewerId)
+                    where ids.Contains(device.InterviewerId)
                           && device.Statistics == null
                     group device by device.InterviewerId
                     into grouping

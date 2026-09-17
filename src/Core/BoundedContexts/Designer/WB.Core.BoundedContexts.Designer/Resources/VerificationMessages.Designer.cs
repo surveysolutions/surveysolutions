@@ -1503,5 +1503,12 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0323_CriticalRuleMessageIsTooLong", resourceCulture);
             }
         }
+
+        public static string WB0324_NegativeSpecialValuesNotAllowedForNonNegativeNumericQuestion {
+            get {
+                return ResourceManager.GetString("WB0324_NegativeSpecialValuesNotAllowedForNonNegativeNumericQuestion", resourceCulture);
+            }
+        }
+
     }
 }

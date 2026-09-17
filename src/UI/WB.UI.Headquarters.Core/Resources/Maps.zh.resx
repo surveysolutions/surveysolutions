@@ -201,4 +201,7 @@
   <data name="MapFileNameHasInvalidChars" xml:space="preserve">
     <value>文件 {0} 的名称包含无效字符。</value>
   </data>
+  <data name="MapFileNameTooLong" xml:space="preserve">
+    <value>文件名"{0}"超过了允许的最大长度 {1} 个字符。</value>
+  </data>
 </root>

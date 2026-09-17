@@ -568,4 +568,7 @@
     <data name="AudioRecordingScopeNotice" xml:space="preserve">
         <value>Penugasan ini memiliki cakupan audit audio selektif. Mengaktifkan perekaman audio penuh akan merekam semua bagian. Menonaktifkannya akan kembali merekam hanya bagian yang dipilih.</value>
     </data>
+    <data name="TargetAreaNameTooLong" xml:space="preserve">
+        <value>Nama peta area target terlalu panjang. Panjang maksimum yang diizinkan adalah {{limit}} karakter.</value>
+    </data>
 </root>
