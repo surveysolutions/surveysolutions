@@ -1262,6 +1262,9 @@
     <data name="MapDetails_MapTitle" xml:space="preserve">
         <value>ផែនទី</value>
     </data>
+    <data name="MapPreview" xml:space="preserve">
+        <value>ការមើលជាមុននៃផែនទី</value>
+    </data>
     <data name="MapDetails_ImportedOn" xml:space="preserve">
         <value>បាននាំចូលនៅលើ</value>
     </data>
@@ -1727,4 +1730,10 @@
     <data name="Observer_Memo2" xml:space="preserve">
         <value>ចុចគណនីមួយ ហើយជ្រើសរើស 'មើលជាអ្នកប្រើប្រាស់នេះក្នុងរបៀបបានតែអាន' ដើម្បីចាប់ផ្តើម។ ប្រើតំណពណ៌លឿងនៅផ្នែកខាងលើ ដើម្បីត្រឡប់ទៅគណនីរបស់អ្នក។</value>
     </data>
+    <data name="Successful" xml:space="preserve">
+      <value>ជោគជ័យ</value>
+  </data>
+    <data name="Failed" xml:space="preserve">
+      <value>បរាជ័យ</value>
+  </data>
 </root>

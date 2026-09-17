@@ -1324,6 +1324,9 @@
   <data name="MapDetails_MapTitle" xml:space="preserve">
     <value>რუქა</value>
   </data>
+  <data name="MapPreview" xml:space="preserve">
+      <value>რუკის წინასწარი ნახვა</value>
+  </data>
   <data name="MapDetails_ImportedOn" xml:space="preserve">
     <value>იმპორტირებულია</value>
   </data>
@@ -1788,5 +1791,11 @@
   </data>
   <data name="Observer_Memo2" xml:space="preserve">
     <value>დასაწყებად დააჭირეთ ანგარიშს და აირჩიეთ 'ნახვა, როგორც ეს მომხმარებელი მხოლოდ წასაკითხ რეჟიმში'. ანგარიშზე დასაბრუნებლად გამოიყენეთ ზედა ყვითელი ბმული.</value>
+  </data>
+  <data name="Successful" xml:space="preserve">
+      <value>წარმატებული</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+      <value>წარუმატებელი</value>
   </data>
 </root>

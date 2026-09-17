@@ -142,7 +142,8 @@
                                         min_value: 1,
                                         max_value: 1000,
                                     }" :validateOnChange="true" :validateOnInput="true" name="accuracy"
-                                    label="Accuracy" id="interviewerGeographyQuestionAccuracyInMeters" type="number"
+                                    :label="$t('Settings.InterviewerGeographyQuestionAccuracyInMeters')"
+                                    id="interviewerGeographyQuestionAccuracyInMeters" type="number"
                                     onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" />
                             </div>
                             <button type="button" class="btn btn-success" :disabled="geographyQuestionAccuracyInMetersModel ==
@@ -185,7 +186,8 @@
                                         required: true,
                                         min_value: 5,
                                         max_value: 1000,
-                                    }" :validateOnChange="true" :validateOnInput="true" label="Period"
+                                    }" :validateOnChange="true" :validateOnInput="true"
+                                    :label="$t('Settings.InterviewerGeographyQuestionPeriodInSeconds')"
                                     id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number"
                                     onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" />
                             </div>
@@ -246,9 +248,8 @@
             <div class="col-sm-9">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input class="checkbox-filter single-checkbox"
-                            v-model="allowSupervisorAudioAuditPlaybackModel" @change="updateDeviceSettings"
-                            id="allowSupervisorAudioAuditPlayback" type="checkbox" />
+                        <input class="checkbox-filter single-checkbox" v-model="allowSupervisorAudioAuditPlaybackModel"
+                            @change="updateDeviceSettings" id="allowSupervisorAudioAuditPlayback" type="checkbox" />
                         <label for="allowSupervisorAudioAuditPlayback" style="font-weight: bold">
                             <span class="tick"></span>
                             {{ $t('Settings.AllowSupervisorAudioAuditPlayback') }}

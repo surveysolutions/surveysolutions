@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -1492,8 +1492,8 @@ Ju lutemi kontrolloni lidhjen tuaj të rrjetit ose kontaktoni mbështetjen tuaj 
   <data name="HelpRosterDisplayMode" xml:space="preserve">
     <value>Nënseksion - pyetjet e rosterit shfaqen pas butonave që korrespondojnë me instancat e rosterit.
 E sheshtë - pyetjet e rosterit shfaqen në të njëjtin nivel të ndara me tituj që korrespondojnë me instancat e rosterit.
-Tabelë - pyetjet e rosterit shfaqen në të njëjtin nivel si rreshta dhe kolona të tabelës. 
-Matricë - një pyetje kategorike e rosterit shfaqet si matricë. 
+Tabelë - pyetjet e rosterit shfaqen në të njëjtin nivel si rreshta dhe kolona të tabelës.
+Matricë - një pyetje kategorike e rosterit shfaqet si matricë.
 Pamijet Tabelë dhe Matricë mbështeten vetëm në sondazhin në internet, tableti kalon te modaliteti 'Nënseksion'.</value>
   </data>
 
@@ -1569,11 +1569,11 @@ Pamijet Tabelë dhe Matricë mbështeten vetëm në sondazhin në internet, tabl
   <data name="JumpToEdit" xml:space="preserve">
     <value>Kalo te redaktimi</value>
   </data>
-  
+
   <data name="CollaboratorsDescriptionSettings" xml:space="preserve">
     <value>përdoruesit e mëposhtëm kanë akses në këtë pyetësor</value>
   </data>
-  
+
   <data name="AccessSettings" xml:space="preserve">
     <value>Akses</value>
   </data>
@@ -1581,7 +1581,7 @@ Pamijet Tabelë dhe Matricë mbështeten vetëm në sondazhin në internet, tabl
   <data name="PublicAccessDescriptionSettings" xml:space="preserve">
     <value>Pyetësorët publik janë të dukshëm për të gjithë përdoruesit me llogari në këtë sistem vetëm për lexim.</value>
   </data>
-  
+
   <data name="PublicAccessSettingsStatusOn" xml:space="preserve">
     <value>Pyetësori aktualisht ndahet si publik.</value>
   </data>
@@ -1589,7 +1589,7 @@ Pamijet Tabelë dhe Matricë mbështeten vetëm në sondazhin në internet, tabl
   <data name="PublicAccessSettingsStatusOff" xml:space="preserve">
     <value>Pyetësori aktualisht nuk ndahet si publik.</value>
   </data>
-  
+
   <data name="PublicAccessSettingsOn" xml:space="preserve">
     <value>Aktivizo aksesin publik.</value>
   </data>
@@ -1601,11 +1601,11 @@ Pamijet Tabelë dhe Matricë mbështeten vetëm në sondazhin në internet, tabl
   <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
     <value>Ndajeja e adresës</value>
   </data>
-  
+
   <data name="AnonymousLink" xml:space="preserve">
     <value>Adresë anonime:</value>
   </data>
-  
+
   <data name="CopyLink" xml:space="preserve">
     <value>Kopjo adresën</value>
   </data>
@@ -1828,5 +1828,11 @@ Pamijet Tabelë dhe Matricë mbështeten vetëm në sondazhin në internet, tabl
 
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>Kalimi do të ndryshojë gjuhën e shfaqjes të pyetësorit. Përkthimi duhet të përfshijë tekst për të gjithë elementët.</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+      <value>Ndrysho</value>
+  </data>
+  <data name="Stick" xml:space="preserve">
+      <value>Bashkëngjit</value>
   </data>
 </root>

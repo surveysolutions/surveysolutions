@@ -13,7 +13,7 @@
                                     v-model="webInterviewPageMessages['welcomeText'].text" rules="required"
                                     data-vv-name="welcomeTextTitle" ref="welcomeTextTitle" :min-height="77"
                                     maxlength="200" class="form-control js-elasticArea font-bold"
-                                    placeholder="Please enter the main text">
+                                    :placeholder="$t('WebInterviewSettings.EnterText')">
                                 </Field>
                                 <button type="button" @click="webInterviewPageMessages['welcomeText'].text = ''"
                                     class="btn btn-link btn-clear">
