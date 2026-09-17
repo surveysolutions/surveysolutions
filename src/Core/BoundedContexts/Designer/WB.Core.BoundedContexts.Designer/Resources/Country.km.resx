@@ -209,7 +209,7 @@
         <value>កូម៉ូរ៉ូ</value>
     </data>
     <data name="CPV" xml:space="preserve">
-        <value>សាធារណរដ្ឋ Cabo Verde</value>
+        <value>Cabo Verde</value>
     </data>
     <data name="CRI" xml:space="preserve">
         <value>កូស្តារីកា</value>
@@ -227,7 +227,7 @@
         <value>ស៊ីប</value>
     </data>
     <data name="CZE" xml:space="preserve">
-        <value>សាធារណរដ្ឋឆេក</value>
+        <value>ឆេក</value>
     </data>
     <data name="DEU" xml:space="preserve">
         <value>អាល្លឺម៉ង់</value>
@@ -488,7 +488,7 @@
         <value>កោះ Marshall ។</value>
     </data>
     <data name="MKD" xml:space="preserve">
-        <value>ម៉ាសេដូនៀ, FYR</value>
+        <value>ម៉ាសេដូនៀខាងជើង</value>
     </data>
     <data name="MLI" xml:space="preserve">
         <value>ម៉ាលី</value>
@@ -662,7 +662,7 @@
         <value>សាន់ម៉ារីណូ</value>
     </data>
     <data name="SOM" xml:space="preserve">
-        <value>សូម៉ាលី</value>
+        <value>សាធារណរដ្ឋសហព័ន្ធសូម៉ាលី</value>
     </data>
     <data name="SPM" xml:space="preserve">
         <value>សាំង Pierre និង Miquelon</value>

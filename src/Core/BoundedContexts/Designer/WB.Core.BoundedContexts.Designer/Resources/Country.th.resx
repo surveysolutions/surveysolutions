@@ -209,7 +209,7 @@
         <value>คอโมโรส</value>
     </data>
     <data name="CPV" xml:space="preserve">
-        <value>สาธารณรัฐกาโบเวิร์ด</value>
+        <value>กาโบเวิร์ด</value>
     </data>
     <data name="CRI" xml:space="preserve">
         <value>คอสตาริกา</value>
@@ -227,7 +227,7 @@
         <value>ไซปรัส</value>
     </data>
     <data name="CZE" xml:space="preserve">
-        <value>สาธารณรัฐเช็ก</value>
+        <value>เช็ก</value>
     </data>
     <data name="DEU" xml:space="preserve">
         <value>เยอรมนี</value>
@@ -488,7 +488,7 @@
         <value>เกาะมาร์แชล</value>
     </data>
     <data name="MKD" xml:space="preserve">
-        <value>มาซิโดเนีย, FYR</value>
+        <value>มาซิโดเนียเหนือ</value>
     </data>
     <data name="MLI" xml:space="preserve">
         <value>มาลี</value>
@@ -662,7 +662,7 @@
         <value>ซานมารีโน</value>
     </data>
     <data name="SOM" xml:space="preserve">
-        <value>โซมาเลีย</value>
+        <value>สหพันธ์สาธารณรัฐโซมาเลีย</value>
     </data>
     <data name="SPM" xml:space="preserve">
         <value>นักบุญปิแอร์และมีเกอลง</value>
