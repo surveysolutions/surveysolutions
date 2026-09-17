@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+﻿<?xml version='1.0' encoding='utf-8'?>
 <root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:schema id="root">
         <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -970,8 +970,8 @@
     <data name="HelpRosterDisplayMode" xml:space="preserve">
         <value>Phần phụ - các câu hỏi của danh sách được hiển thị phía sau các nút tương ứng với các phiên bản danh sách.
 Căn hộ - các câu hỏi của danh sách được hiển thị ở cùng cấp độ, được phân tách bằng các tiêu đề tương ứng với các phiên bản danh sách.
-Bảng - các câu hỏi của danh sách được hiển thị ở cùng cấp độ với các hàng và cột của bảng. 
-Ma trận - một câu hỏi phân loại của danh sách được hiển thị dưới dạng ma trận. 
+Bảng - các câu hỏi của danh sách được hiển thị ở cùng cấp độ với các hàng và cột của bảng.
+Ma trận - một câu hỏi phân loại của danh sách được hiển thị dưới dạng ma trận.
 Chế độ xem Bảng và Ma trận chỉ được hỗ trợ trong khảo sát trên Web, máy tính bảng sẽ quay lại chế độ 'Phần phụ'.</value>
         </data>
     <data name="HelpHideInstructions" xml:space="preserve">
@@ -1622,4 +1622,10 @@ Vui lòng kiểm tra kết nối mạng của bạn hoặc liên hệ với bộ
     <data name="AIAssistant" xml:space="preserve">
         <value>trí tuệ nhân tạo</value>
         </data>
+    <data name="Edit" xml:space="preserve">
+        <value>Chỉnh sửa</value>
+    </data>
+    <data name="Stick" xml:space="preserve">
+        <value>Đính kèm</value>
+    </data>
 </root>

@@ -18,13 +18,12 @@
             </form>
             <div class="button-holder">
                 <input type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
-                    :value="$t('QuestionnaireEditor.SideBarLookupTableAdd')" value="Add new Lookup table"
-                    @click="addNewLookupTable()">
+                    :value="$t('QuestionnaireEditor.SideBarLookupTableAdd')" @click="addNewLookupTable()">
             </div>
         </perfect-scrollbar>
     </div>
 </template>
-  
+
 <script>
 
 import LookupTableItem from './LookupTableItem.vue';
@@ -57,4 +56,3 @@ export default {
     }
 }
 </script>
-  

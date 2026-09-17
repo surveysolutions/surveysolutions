@@ -1684,4 +1684,10 @@ You entered an invalid input. Each line should follow the format: "Title...Paren
   <data name="AIAssistant" xml:space="preserve">
       <value>AI</value>
   </data>
+  <data name="Edit" xml:space="preserve">
+      <value>Edit</value>
+  </data>
+  <data name="Stick" xml:space="preserve">
+      <value>Stick</value>
+  </data>
 </root>

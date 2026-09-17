@@ -17,9 +17,8 @@
                     </p>
                 </div>
                 <input type="button" :value="$t('QuestionnaireEditor.SideBarAttachmentsUpload')"
-                    @click.stop="openFileDialog()" value="Upload new attachment"
-                    class="btn btn-default btn-lg pull-left" :class="{ 'btn-primary': !isReadOnlyForUser }"
-                    v-if="!isReadOnlyForUser" capture />
+                    @click.stop="openFileDialog()" class="btn btn-default btn-lg pull-left"
+                    :class="{ 'btn-primary': !isReadOnlyForUser }" v-if="!isReadOnlyForUser" capture />
 
                 <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfunew'" v-model="file"
                     :size="maxFileSize" :drop="false" :drop-directory="false" @input-file="createAndUploadFile"
