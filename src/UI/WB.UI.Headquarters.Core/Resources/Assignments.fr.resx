@@ -499,6 +499,9 @@
     <data name="TargetAreaExplanation" xml:space="preserve">
     <value>Spécifiez le nom de la carte de la zone cible pour l'affectation</value>
 </data>
+    <data name="TargetAreaNameTooLong" xml:space="preserve">
+        <value>Le nom de la carte de la zone cible est trop long. La longueur maximale autorisée est de {{limit}} caractères.</value>
+    </data>
   <data name="Filter_ShowAll" xml:space="preserve">
     <value>Afficher tout</value>
   </data>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Generated" xml:space="preserve"><value>Gjeneruar</value></data>
+  <data name="PageOf" xml:space="preserve"><value> nga </value></data>
+  <data name="Comments" xml:space="preserve"><value>Komentet</value></data>
+  <data name="YesNo" xml:space="preserve"><value>Po / Jo</value></data>
+  <data name="TableOfContent" xml:space="preserve"><value>Tabela e përmbajtjes</value></data>
+  <data name="Error" xml:space="preserve"><value>Gabim</value></data>
+  <data name="Warning" xml:space="preserve"><value>Paralajmërim</value></data>
+  <data name="Version" xml:space="preserve"><value>versioni {0}</value></data>
+  <data name="Started" xml:space="preserve"><value>Intervista filloi</value></data>
+  <data name="Completed" xml:space="preserve"><value>Intervista u kompletua</value></data>
+  <data name="InterviewVolume" xml:space="preserve"><value>Vëllimi i Intervistës</value></data>
+  <data name="InterviewStatisticsSections" xml:space="preserve"><value>{0} seksione</value></data>
+  <data name="InterviewStatisticsAnswered" xml:space="preserve"><value>{0} pyetje të përgjigJura</value></data>
+  <data name="InterviewStatisticsUnanswered" xml:space="preserve"><value>{0} pyetje të paiu përgjigJura</value></data>
+  <data name="InterviewStatisticsErrors" xml:space="preserve"><value>{0} gabime</value></data>
+  <data name="InterviewStatisticsWarnings" xml:space="preserve"><value>{0} paralajmërime</value></data>
+  <data name="InterviewStatisticsCommented" xml:space="preserve"><value>{0} pyetje me komente</value></data>
+  <data name="GeneratedBy" xml:space="preserve"><value>Gjeneruar nga {0}</value></data>
+  <data name="GeneratedAt" xml:space="preserve"><value>në {0}</value></data>
+  <data name="SurveySolutions" xml:space="preserve"><value>Survey Solutions</value></data>
+  <data name="InterviewTranscript" xml:space="preserve"><value>Transkript i Intervistës</value></data>
+  <data name="Cover" xml:space="preserve"><value>Kopertina</value></data>
+  <data name="Questionnaire" xml:space="preserve"><value>Pyetësor</value></data>
+  <data name="Yes" xml:space="preserve"><value>Po</value></data>
+  <data name="No" xml:space="preserve"><value>Jo</value></data>
+  <data name="NotAnswered" xml:space="preserve"><value>Pa përgjigje</value></data>
+  <data name="NotCalculated" xml:space="preserve"><value>Pa vlerë</value></data>
+  <data name="InterviewKey" xml:space="preserve"><value>Çelësi i Intervistës</value></data>
+  <data name="UserRoles_Administrator" xml:space="preserve"><value>Administrator</value></data>
+  <data name="UserRoles_Headquarter" xml:space="preserve"><value>Selia Qendrore</value></data>
+  <data name="UserRoles_Supervisor" xml:space="preserve"><value>Mbikëqyrës</value></data>
+  <data name="UserRoles_Interviewer" xml:space="preserve"><value>Anketues</value></data>
+  <data name="UserRoles_Observer" xml:space="preserve"><value>Vëzhgues</value></data>
+  <data name="UserRoles_ApiUser" xml:space="preserve"><value>PërdoruesAPI</value></data>
+  <data name="AreaQestion_Area" xml:space="preserve"><value>Sipërfaqja</value></data>
+  <data name="AreaQestion_Length" xml:space="preserve"><value>Gjatësia</value></data>
+  <data name="AreaQestion_Points" xml:space="preserve"><value>Pikat</value></data>
+  <data name="AreaQestion_RequestedAccuracy" xml:space="preserve"><value>Saktësia</value></data>
+  <data name="AreaQestion_RequestedFrequency" xml:space="preserve"><value>Frekuenca</value></data>
+  <data name="AreaQestion_AreaUnitMeter" xml:space="preserve"><value>metra katrorë</value></data>
+  <data name="AreaQestion_AreaMeter" xml:space="preserve"><value>metra</value></data>
+</root>

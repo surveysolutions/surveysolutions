@@ -51,8 +51,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             var responsibleUsersCount = userIdsOfAllResponsibleForTheInterviews.Count();
 
+            // NOTE: List<T> is used on purpose. For an array the C# 14+ compiler binds Contains
+            // to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an op_Implicit call
+            // into the expression tree that NHibernate cannot translate.
             var responsibleUserIdsForOnePage = userIdsOfAllResponsibleForTheInterviews.Skip((page - 1) * pageSize)
-                .Take(pageSize).ToArray();
+                .Take(pageSize).ToList();
 
             var interviewStatusChangeDateWithResponsible = queryInterviewStatusesByDateRange(ranges.FromUtc, ranges.ToUtc)
                     .Select(selectUserAndTimestamp)

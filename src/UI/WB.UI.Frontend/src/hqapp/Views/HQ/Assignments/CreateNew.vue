@@ -172,13 +172,14 @@
                                         <Field v-model="targetAreaQuestion.answer"
                                             :title="this.$t('Assignments.TargetAreaExplanation')"
                                             :placeholder="$t('Assignments.EnterTargetArea')" name="targetArea"
-                                            type="text" autocomplete="off" class="field-to-fill" />
+                                           type="text" autocomplete="off" class="field-to-fill"
+                                           :rules="validateTargetArea" />
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="information-block text-danger" v-if="!targetAreaQuestion.validity.isValid">
-                            <p>{{ this.$t("Assignments.InvalidTargetArea") }}</p>
+                            <p>{{ errors.targetArea }}</p>
                         </div>
                     </wb-question>
 
@@ -348,6 +349,7 @@ export default {
                     isValid: true,
                 },
             },
+            mapFileNameLengthLimit: 64,
         }
     },
     computed: {
@@ -424,14 +426,32 @@ export default {
             this.assignToQuestion.isAnswered = this.newResponsibleId != null
             this.assignToQuestion.validity.isValid = this.newResponsibleId != null
         },
+        normalizeTargetArea(value) {
+            if (value == null)
+                return null
+
+            const normalizedValue = value.trim()
+            return normalizedValue.length > 0 ? normalizedValue : null
+        },
+        validateTargetArea(value) {
+            const normalizedTargetArea = this.normalizeTargetArea(value)
+            if (normalizedTargetArea != null && normalizedTargetArea.length > this.mapFileNameLengthLimit) {
+                return this.$t('Assignments.TargetAreaNameTooLong', {
+                    limit: this.mapFileNameLengthLimit,
+                })
+            }
+            return true
+        },
         async create(evnt) {
             evnt.target.disabled = true
             const validationResult = await this.$refs.createForm.validate()
+            const normalizedTargetArea = this.normalizeTargetArea(this.targetAreaQuestion.answer)
             const self = this
             this.sizeQuestion.validity.isValid = !validationResult.errors.size
             this.emailQuestion.validity.isValid = !validationResult.errors.email
             this.passwordQuestion.validity.isValid = !validationResult.errors.password
             this.assignToQuestion.validity.isValid = !validationResult.errors.newResponsibleId
+            this.targetAreaQuestion.validity.isValid = !validationResult.errors.targetArea
 
             const submitAllowed = validationResult.valid
             if (submitAllowed) {
@@ -445,7 +465,7 @@ export default {
                         webMode: this.webMode.answer,
                         isAudioRecordingEnabled: this.isAudioRecordingEnabled.answer,
                         comments: this.commentsQuestion.answer,
-                        targetArea: this.targetAreaQuestion.answer,
+                        targetArea: normalizedTargetArea,
                     })
                     .then(response => {
                         window.location.href = self.config.assignmentsUrl

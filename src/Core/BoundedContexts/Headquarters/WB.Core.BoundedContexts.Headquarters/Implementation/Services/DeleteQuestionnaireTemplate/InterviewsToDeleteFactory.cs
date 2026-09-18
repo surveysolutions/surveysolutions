@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -23,21 +24,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
     {
         private readonly IUnitOfWork sessionFactory;
         private readonly IImageFileStorage imageFileStorage;
+        private readonly IAudioAuditFileStorage audioAuditFileStorage;
+        private readonly IBrokenImageFileStorage brokenImageFileStorage;
+        private readonly IBrokenAudioFileStorage brokenAudioFileStorage;
+        private readonly IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader;
-        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ILogger<InterviewsToDeleteFactory> logger;
 
         private const int BatchSize = 100;
 
         public InterviewsToDeleteFactory(IUnitOfWork sessionFactory, IImageFileStorage imageFileStorage,
+            IAudioAuditFileStorage audioAuditFileStorage,
+            IBrokenImageFileStorage brokenImageFileStorage,
+            IBrokenAudioFileStorage brokenAudioFileStorage,
+            IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader,
-            IQuestionnaireStorage questionnaireStorage,
             ILogger<InterviewsToDeleteFactory> logger)
         {
             this.sessionFactory = sessionFactory;
             this.imageFileStorage = imageFileStorage;
+            this.audioAuditFileStorage = audioAuditFileStorage;
+            this.brokenImageFileStorage = brokenImageFileStorage;
+            this.brokenAudioFileStorage = brokenAudioFileStorage;
+            this.brokenAudioAuditFileStorage = brokenAudioAuditFileStorage;
             this.interviewsReader = interviewsReader;
-            this.questionnaireStorage = questionnaireStorage;
             this.logger = logger;
         }
 
@@ -125,17 +135,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         */
         }
 
-        private async Task RemoveInterviewsImagesAsync(QuestionnaireIdentity questionnaireIdentity)
+        private async Task RemoveInterviewsBinaryDataAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            var questionnaire = questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
-            if (questionnaire == null)
-                return;
-            
-            var hasImageQuestions = questionnaire.Find<IMultimediaQuestion>().Any();
-            
-            if (!hasImageQuestions)
-                return;
-            
             var pageIndex = 0;
             List<Guid> interviewIds;
             
@@ -145,20 +146,73 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 interviewIds = this.interviewsReader.Query(_ => _.Where(interview => 
                         interview.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
                         interview.QuestionnaireVersion == questionnaireIdentity.Version)
+                    .OrderBy(summary => summary.InterviewId)
                     .Select(summary => summary.InterviewId)
                     .Skip(skip)
                     .Take(BatchSize)
                     .ToList());
 
-                await imageFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
+                if (interviewIds.Count == 0)
+                    break;
+
+                await RemoveBinaryDataForBatchAsync(interviewIds);
 
                 pageIndex++;
-            } while (interviewIds.Count > 0 && interviewIds.Count == BatchSize);
+            } while (interviewIds.Count == BatchSize);
+
+            // Also clean up binary data for broken-only interviews (those with a BrokenInterviewPackage
+            // but no InterviewSummary, which the paged summary loop above would miss).
+            // BrokenInterviewPackage does not implement IReadSideRepositoryEntity, so
+            // IQueryableReadSideRepositoryReader cannot be used here; direct session access is justified.
+            // Page by the row's primary key (Id) to avoid DISTINCT + ORDER BY translation issues in LINQ.
+            var lastBrokenId = 0;
+            int brokenBatchCount;
+
+            do
+            {
+                var capturedLastId = lastBrokenId;
+                var batch = this.sessionFactory.Session.Query<BrokenInterviewPackage>()
+                    .Where(p => p.QuestionnaireId == questionnaireIdentity.QuestionnaireId
+                                && p.QuestionnaireVersion == questionnaireIdentity.Version
+                                && p.Id > capturedLastId)
+                    .OrderBy(p => p.Id)
+                    .Select(p => new { p.Id, p.InterviewId })
+                    .Take(BatchSize)
+                    .ToList();
+
+                brokenBatchCount = batch.Count;
+                if (brokenBatchCount == 0)
+                    break;
+
+                lastBrokenId = batch[brokenBatchCount - 1].Id;
+
+                // Deduplicate in memory; multiple packages can reference the same interview.
+                var brokenBatchIds = batch.Select(b => b.InterviewId).Distinct().ToList();
+
+                // Exclude IDs already covered by the InterviewSummary loop above.
+                var summaryIds = this.interviewsReader.Query(_ => _.Where(s =>
+                        brokenBatchIds.Contains(s.InterviewId))
+                    .Select(s => s.InterviewId)
+                    .ToList());
+
+                var onlyBrokenIds = brokenBatchIds.Except(summaryIds).ToList();
+                if (onlyBrokenIds.Count > 0)
+                    await RemoveBinaryDataForBatchAsync(onlyBrokenIds);
+            } while (brokenBatchCount == BatchSize);
+        }
+
+        private async Task RemoveBinaryDataForBatchAsync(List<Guid> interviewIds)
+        {
+            await imageFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
+            await audioAuditFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
+            await brokenImageFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
+            await brokenAudioFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
+            await brokenAudioAuditFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
         }
 
         public async Task RemoveAllInterviewsDataAsync(QuestionnaireIdentity questionnaireIdentity)
         {
-            await logger.LogExecuteTimeAsync(() => RemoveInterviewsImagesAsync(questionnaireIdentity), "removing interview's images");
+            await logger.LogExecuteTimeAsync(() => RemoveInterviewsBinaryDataAsync(questionnaireIdentity), "removing interview's binary data");
             await logger.LogExecuteTimeAsync(() => RemoveAudioForInterviewsAsync(questionnaireIdentity), "removing interview's audio");
             await logger.LogExecuteTimeAsync(() => RemoveAudioAuditForInterviewsAsync(questionnaireIdentity), "removing interview's audio audit");
             await logger.LogExecuteTimeAsync(() => RemoveAllEventsForInterviewsAsync(questionnaireIdentity), "removing interview's events");

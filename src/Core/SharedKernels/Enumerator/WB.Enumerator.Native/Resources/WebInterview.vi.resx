@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve"><value>Phần đã hoàn thành: {{value}}</value></data>
+  <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve"><value>{{value}} câu trả lời</value></data>
+  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve"><value>{{value}} phần phụ</value></data>
+  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve"><value>không có phần phụ</value></data>
+  <data name="Interview_Group_Status_NotStarted" xml:space="preserve"><value>Phần chưa bắt đầu</value></data>
+  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve"><value>một câu trả lời</value></data>
+  <data name="Interview_Group_Subgroups_One" xml:space="preserve"><value>một phần phụ</value></data>
+  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve"><value>Phần đã bắt đầu: {{value}}</value></data>
+  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve"><value>{{value}} lỗi</value></data>
+  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve"><value>một lỗi</value></data>
+  <data name="ServerUnderLoad" xml:space="preserve"><value>Xin lỗi, có quá nhiều người đang truy cập trang web này cùng lúc. Chúng tôi đang giải quyết vấn đề này. Vui lòng thử lại sau.</value></data>
+  <data name="RefreshPage" xml:space="preserve"><value>Làm mới trang</value></data>
+  <data name="InvitationSmallText" xml:space="preserve"><value>Quá trình phỏng vấn yêu cầu kết nối internet. Không cần phần mềm bổ sung.</value></data>
+  <data name="InvitationText" xml:space="preserve"><value>Bạn được mời tham gia cuộc khảo sát sau: "%QUESTIONNAIRE%"</value></data>
+  <data name="WelcomeText" xml:space="preserve"><value>Xin chào và Chào mừng đến với Khảo sát Web của Survey Solutions</value></data>
+  <data name="WebSurvey" xml:space="preserve"><value>Khảo sát Web của Survey Solutions</value></data>
+  <data name="CompletionText" xml:space="preserve"><value>Cuộc phỏng vấn này đã hoàn thành</value></data>
+  <data name="InProgressText" xml:space="preserve"><value>Đang tiến hành</value></data>
+  <data name="NotStartedText" xml:space="preserve"><value>Chưa bắt đầu</value></data>
+  <data name="FinishInterviewText" xml:space="preserve"><value>Cuộc phỏng vấn này đã hoàn thành</value></data>
+  <data name="StartedInterviewText" xml:space="preserve"><value>Cuộc phỏng vấn này chưa hoàn thành</value></data>
+  <data name="SurveyFormatText" xml:space="preserve"><value>Khảo sát: "%QUESTIONNAIRE%"</value></data>
+  <data name="InterviewIdFormatText" xml:space="preserve"><value>ID Phỏng vấn: {0}</value></data>
+  <data name="InterviewStartDateFormatText" xml:space="preserve"><value>Ngày bắt đầu phỏng vấn: </value></data>
+  <data name="InterviewCompletionDateFormatText" xml:space="preserve"><value>Ngày hoàn thành phỏng vấn: </value></data>
+  <data name="DownloadAnswers" xml:space="preserve"><value>Tải xuống bản ghi phỏng vấn</value></data>
+  <data name="DownloadAnswersHint" xml:space="preserve"><value>Tải xuống câu trả lời phỏng vấn dưới dạng tệp pdf</value></data>
+  <data name="Start" xml:space="preserve"><value>Bắt đầu phỏng vấn mới</value></data>
+  <data name="StartPageTitle" xml:space="preserve"><value>Khảo sát Web</value></data>
+  <data name="PleaseFillCaptcha" xml:space="preserve"><value>Vui lòng điền vào trường captcha</value></data>
+  <data name="InvalidPassword" xml:space="preserve"><value>Mật khẩu sai</value></data>
+  <data name="Original_Language" xml:space="preserve"><value>Gốc</value></data>
+  <data name="ToInterview" xml:space="preserve"><value>Đến phỏng vấn</value></data>
+  <data name="ResumeInterview" xml:space="preserve"><value>Tiếp tục phỏng vấn</value></data>
+  <data name="DiscardAndStart" xml:space="preserve"><value>Mở lại</value></data>
+  <data name="OrStartInterview" xml:space="preserve"><value>Hoặc bạn có thể bắt đầu một cuộc phỏng vấn mới</value></data>
+  <data name="HasPreviousStartedInterview" xml:space="preserve"><value>Bạn đã bắt đầu một cuộc phỏng vấn</value></data>
+  <data name="Resume_InvitationSmallText" xml:space="preserve"><value>Quá trình phỏng vấn yêu cầu kết nối internet, không cần phần mềm bổ sung</value></data>
+  <data name="Resume_InvitationText" xml:space="preserve"><value>Bạn có thể điều hướng đến cuộc phỏng vấn trong khảo sát sau: "%QUESTIONNAIRE%"</value></data>
+  <data name="Resume_WelcomeText" xml:space="preserve"><value>Xin chào và Chào mừng đến với Khảo sát Web của Survey Solutions</value></data>
+  <data name="Error_InterviewExpired" xml:space="preserve"><value>Liên kết đã hết hạn</value></data>
+  <data name="Error_NoActionsNeeded" xml:space="preserve"><value>Thông tin về cuộc phỏng vấn đó đã được ghi lại. Không cần hành động thêm</value></data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve"><value>Không thể sửa đổi cuộc phỏng vấn đã được thiết bị nhận</value></data>
+  <data name="Error_NotFound" xml:space="preserve"><value>Không tìm thấy cuộc phỏng vấn hoặc không cần phỏng vấn mới</value></data>
+  <data name="EnterPasswordText" xml:space="preserve"><value>Liên kết này được bảo vệ bằng mật khẩu được phân phối cùng với liên kết. Vui lòng nhập tại đây</value></data>
+  <data name="PictureQuestionNotAPicture" xml:space="preserve"><value>Chỉ chấp nhận tệp hình ảnh</value></data>
+  <data name="Error_CookiesTurnedOff" xml:space="preserve"><value>Cookie không được bật trong trình duyệt của bạn. Vui lòng bật cookie trong tùy chọn trình duyệt của bạn để tiếp tục</value></data>
+  <data name="Error_Forbidden" xml:space="preserve"><value>Bị cấm</value></data>
+  <data name="Error_UserNotAuthorised" xml:space="preserve"><value>Người dùng không được phép</value></data>
+  <data name="CompleteInterview" xml:space="preserve"><value>Hoàn thành phỏng vấn</value></data>
+  <data name="Filters_Title" xml:space="preserve"><value>Lọc Câu hỏi</value></data>
+  <data name="Filters_Flagged" xml:space="preserve"><value>Đã đánh dấu</value></data>
+  <data name="Filters_WithComments" xml:space="preserve"><value>Có nhận xét</value></data>
+  <data name="Filters_Invalid" xml:space="preserve"><value>Không hợp lệ</value></data>
+  <data name="Filters_Valid" xml:space="preserve"><value>Hợp lệ</value></data>
+  <data name="Filters_Answered" xml:space="preserve"><value>Đã trả lời</value></data>
+  <data name="Filters_NotAnswered" xml:space="preserve"><value>Chưa trả lời</value></data>
+  <data name="Filters_ForSupervisor" xml:space="preserve"><value>Cho giám sát viên</value></data>
+  <data name="Filters_ForInterviewer" xml:space="preserve"><value>Cho phỏng vấn viên</value></data>
+  <data name="Filters_NotFlagged" xml:space="preserve"><value>Không đánh dấu</value></data>
+  <data name="Filters_CriticalQuestions" xml:space="preserve"><value>Câu hỏi quan trọng</value></data>
+  <data name="Filters_CriticalRules" xml:space="preserve"><value>Quy tắc quan trọng</value></data>
+  <data name="PoweredBy" xml:space="preserve"><value>Được cung cấp bởi</value></data>
+  <data name="Filters_ClearSelection" xml:space="preserve"><value>Xóa tất cả bộ lọc</value></data>
+  <data name="Error" xml:space="preserve"><value>Lỗi</value></data>
+  <data name="Warning" xml:space="preserve"><value>Cảnh báo</value></data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve"><value>{0} (phiên bản {1})</value></data>
+  <data name="InterviewSizeLimitReached" xml:space="preserve"><value>Cuộc phỏng vấn chứa tổng số phiên bản danh sách và câu hỏi vượt quá giới hạn hệ thống.</value></data>
+  <data name="AssignmentLimitReached" xml:space="preserve"><value>Chúng tôi thu thập tất cả các cuộc phỏng vấn trong khảo sát này.</value></data>
+  <data name="InterviewNotFound" xml:space="preserve"><value>Không tìm thấy cuộc phỏng vấn.</value></data>
+  <data name="Email_InvitationTemplate_Subject" xml:space="preserve"><value>Lời mời tham gia %SURVEYNAME%</value></data>
+  <data name="Email_InvitationTemplate_Message" xml:space="preserve"><value>Chào mừng đến với %SURVEYNAME%!</value></data>
+  <data name="Email_NoResponse_Subject" xml:space="preserve"><value>Nhắc nhở, đừng quên tham gia %SURVEYNAME%</value></data>
+  <data name="Email_NoResponse_Message" xml:space="preserve"><value>Bạn nhận được lời nhắc này vì bạn chưa bắt đầu trả lời %SURVEYNAME%!</value></data>
+  <data name="Email_PartialResponse_Subject" xml:space="preserve"><value>Nhắc nhở, vui lòng hoàn thành phản hồi của bạn cho %SURVEYNAME%</value></data>
+  <data name="Email_PartialResponse_Message" xml:space="preserve"><value>Bạn nhận được lời nhắc này vì bạn đã bắt đầu trả lời %SURVEYNAME%, nhưng chưa hoàn thành quá trình.</value></data>
+  <data name="Email_RejectEmail_Subject" xml:space="preserve"><value>Cần hành động của bạn trong %SURVEYNAME%</value></data>
+  <data name="Email_RejectEmail_Message" xml:space="preserve"><value>Cảm ơn bạn đã tham gia %SURVEYNAME%!</value></data>
+  <data name="NoteForSupervisor" xml:space="preserve"><value>Nhận xét</value></data>
+  <data name="Complete" xml:space="preserve"><value>Hoàn thành</value></data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve"><value>Ví dụ liên kết đến trang đích phỏng vấn web</value></data>
+</root>
