@@ -10,35 +10,21 @@ import { i18n } from '../plugins/localization';
 const DYNAMIC_IMPORT_RETRY_KEY = 'dynamic-import-retry-count';
 const MAX_DYNAMIC_IMPORT_RETRIES = 2;
 const dynamicImportErrorPatterns = [
-    'Failed to fetch dynamically imported module',
+    'failed to fetch dynamically imported module',
     'error loading dynamically imported module',
-    'Importing a module script failed',
-    'Unable to preload CSS for'
+    'importing a module script failed',
+    'unable to preload css for'
 ];
 let recoveryScheduled = false;
 
 function isDynamicImportError(error) {
-    const message = error instanceof Error ? error.message : String(error);
+    const message = (error instanceof Error ? error.message : String(error)).toLowerCase();
     return dynamicImportErrorPatterns.some(pattern => message.includes(pattern));
 }
 
 function delayDynamicImportRetry(retryCount) {
     const delay = 300 * 2 ** retryCount + Math.floor(Math.random() * 200);
     return new Promise(resolve => window.setTimeout(resolve, delay));
-}
-
-async function loadRouteComponent(loader) {
-    for (let retryCount = 0; retryCount <= MAX_DYNAMIC_IMPORT_RETRIES; retryCount++) {
-        try {
-            return await loader();
-        } catch (error) {
-            if (!isDynamicImportError(error) || retryCount === MAX_DYNAMIC_IMPORT_RETRIES) {
-                throw error;
-            }
-
-            await delayDynamicImportRetry(retryCount);
-        }
-    }
 }
 
 function getRetryCount() {
@@ -120,25 +106,23 @@ function retryDynamicImport(error) {
     delayDynamicImportRetry(retryCount).then(() => window.location.reload());
 }
 
-const OptionsEditor = () =>
-    loadRouteComponent(() => import('../views/OptionsEditor/OptionsEditor.vue'));
+const OptionsEditor = () => import('../views/OptionsEditor/OptionsEditor.vue');
 
-const Questionnaire = () => loadRouteComponent(() => import('../views/Questionnaire.vue'));
-const LeftSidePanel = () => loadRouteComponent(() => import('../views/App/components/LeftSidePanel.vue'));
-const Panels = () => loadRouteComponent(() => import('../views/App/components/Panels.vue'));
-const RightPanel = () => loadRouteComponent(() => import('../views/App/components/RightPanel.vue'));
-const Tree = () => loadRouteComponent(() => import('../views/App/components/Tree.vue'));
-const Variable = () => loadRouteComponent(() => import('../views/App/components/Variable.vue'));
-const Question = () => loadRouteComponent(() => import('../views/App/components/Question.vue'));
-const StaticText = () => loadRouteComponent(() => import('../views/App/components/StaticText.vue'));
-const Group = () => loadRouteComponent(() => import('../views/App/components/Group.vue'));
-const Roster = () => loadRouteComponent(() => import('../views/App/components/Roster.vue'));
-const QuestionnaireHeader = () => loadRouteComponent(() => import('../views/App/components/Header.vue'));
-const Comments = () => loadRouteComponent(() => import('../views/App/components/Comments.vue'));
+const Questionnaire = () => import('../views/Questionnaire.vue');
+const LeftSidePanel = () => import('../views/App/components/LeftSidePanel.vue');
+const Panels = () => import('../views/App/components/Panels.vue');
+const RightPanel = () => import('../views/App/components/RightPanel.vue');
+const Tree = () => import('../views/App/components/Tree.vue');
+const Variable = () => import('../views/App/components/Variable.vue');
+const Question = () => import('../views/App/components/Question.vue');
+const StaticText = () => import('../views/App/components/StaticText.vue');
+const Group = () => import('../views/App/components/Group.vue');
+const Roster = () => import('../views/App/components/Roster.vue');
+const QuestionnaireHeader = () => import('../views/App/components/Header.vue');
+const Comments = () => import('../views/App/components/Comments.vue');
 
-const DesignerLayout = () => loadRouteComponent(() => import('../views/Designer/Layout.vue'));
-const Classifications = () =>
-    loadRouteComponent(() => import('../views/Designer/pages/Classifications.vue'));
+const DesignerLayout = () => import('../views/Designer/Layout.vue');
+const Classifications = () => import('../views/Designer/pages/Classifications.vue');
 
 import { useUnsavedChanges } from '../stores/unsavedChanges';
 
