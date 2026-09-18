@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.Designer.Services
             var key = "test_key";
             var userId = Id.g1;
             
-            Func<PdfGenerationProgress, CancellationToken, Task> runGeneration = async (progress, token) => 
+            Func<PdfGenerationProgress, CancellationToken, Task> runGeneration = async (progress, token) =>
             {
                 await Task.Delay(10, token);
             };
@@ -48,7 +48,8 @@ namespace WB.Tests.Unit.Designer.Services
             // Assert
             Assert.That(progress1, Is.Not.Null);
             Assert.That(progress2, Is.Not.Null);
-            Assert.That(progress2, Is.SameAs(progress1), "Should return the same progress object for the same key");
+            Assert.That(progress2, Is.SameAs(progress1), 
+                "Should return the same progress object for the same key");
         }
 
         [Test]
@@ -78,7 +79,7 @@ namespace WB.Tests.Unit.Designer.Services
             // Arrange
             var userId = Id.g1;
             var user2Id = Id.g2;
-            var key = "test_key";
+            
             Func<PdfGenerationProgress, CancellationToken, Task> runGeneration = async (progress, token) =>  await Task.Delay(10, token);
             
             // Act - add maximum allowed jobs

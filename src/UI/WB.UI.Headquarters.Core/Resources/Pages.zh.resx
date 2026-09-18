@@ -1681,7 +1681,7 @@
     <value>所有工作区</value>
   </data>
   <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
-    <value>督导（访谈员将被添加到其团队）</value>
+    <value>督导</value>
   </data>
   <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
     <value>选择督导</value>

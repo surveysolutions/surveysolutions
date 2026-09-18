@@ -49,8 +49,7 @@
     <ErrorReport>prompt</ErrorReport>
     <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
-    <EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>    
     <BundleAssemblies>false</BundleAssemblies>
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
     <MandroidI18n>CJK,Mideast,Rare,West,Other</MandroidI18n>

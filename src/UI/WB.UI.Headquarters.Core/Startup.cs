@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO.Compression;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,10 +22,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Refit;
 using Serilog;
+using Serilog.Events;
+using WB.Core.Infrastructure.Modularity;
 using Vite.Extensions.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
@@ -335,6 +339,13 @@ namespace WB.UI.Headquarters
                 DesignerRestServiceHandler>(new RefitSettings
                 {
                     ContentSerializer = new DesignerContentSerializer()
+                }, (handler, serviceProvider) =>
+                {
+                    if (serviceProvider.GetRequiredService<IOptions<DesignerConfig>>().Value.AcceptUnsignedCertificate)
+                    {
+                        handler.ServerCertificateCustomValidationCallback =
+                            HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                    }
                 });
             
 
@@ -479,9 +490,40 @@ namespace WB.UI.Headquarters
                 };
             });
 
-            app.UseUnderConstruction();
+            var underConstructionInfo = app.ApplicationServices.GetRequiredService<UnderConstructionInfo>();
 
-            app.UseSerilogRequestLogging(o => o.Logger = app.ApplicationServices.GetService<ILogger>());
+            // Capture under-construction status at the start of each request so logging
+            // can use the per-request value instead of reading mutable global state.
+            // Must run before UseUnderConstruction() so the captured status matches the
+            // decision made by UnderConstructionMiddleware for this request.
+            app.Use(async (context, next) =>
+            {
+                context.Items["UnderConstructionStatusAtRequestStart"] = underConstructionInfo.Status;
+                await next();
+            });
+
+            app.UseSerilogRequestLogging(o =>
+            {
+                o.Logger = app.ApplicationServices.GetService<ILogger>();
+                o.GetLevel = (ctx, elapsed, ex) =>
+                {
+                    if (ex == null
+                        && ctx.Response.StatusCode == StatusCodes.Status503ServiceUnavailable
+                        && ctx.Items.TryGetValue("UnderConstructionStatusAtRequestStart", out var statusObj)
+                        && statusObj is UnderConstructionStatus statusAtRequestStart
+                        && statusAtRequestStart != UnderConstructionStatus.Finished
+                        && statusAtRequestStart != UnderConstructionStatus.Error)
+                    {
+                        return LogEventLevel.Warning;
+                    }
+
+                    return ex != null || ctx.Response.StatusCode > 499
+                        ? LogEventLevel.Error
+                        : LogEventLevel.Information;
+                };
+            });
+
+            app.UseUnderConstruction();
             
             app.UseWorkspaces();
 

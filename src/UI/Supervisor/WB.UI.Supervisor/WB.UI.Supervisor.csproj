@@ -53,7 +53,6 @@
     <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
     <EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <BundleAssemblies>false</BundleAssemblies>
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
     <MandroidI18n>CJK,Mideast,Rare,West,Other</MandroidI18n>
@@ -71,8 +70,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>$(Constants)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>    
     <AndroidLinkSkip>mscorlib;System.Runtime;System.Runtime.Extensions;System.Linq;System.Collections;System.Text.RegularExpressions;netstandard</AndroidLinkSkip>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <MandroidI18n>CJK,Mideast,Rare,West,Other</MandroidI18n>
