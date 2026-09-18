@@ -35,22 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             };
 
             var principalMock = Mock.Get(SetUp.InterviewerPrincipal(interviewerIdentity));
-            var synchronizationServiceMock = new Mock<IOnlineSynchronizationService>();
-            synchronizationServiceMock
-                .Setup(x => x.CanSynchronizeAsync(It.IsAny<RestCredentials>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.CompletedTask);
-            synchronizationServiceMock
-                .Setup(x => x.GetInterviewerAsync(It.IsAny<RestCredentials>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new InterviewerApiView
-                {
-                    Workspaces = new List<UserWorkspaceApiView>
-                    {
-                        new UserWorkspaceApiView { Name = "primary" }
-                    }
-                });
-            synchronizationServiceMock
-                .Setup(x => x.GetCurrentSupervisor(It.IsAny<RestCredentials>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(Id.g1);
+            var synchronizationServiceMock = new Mock<IOnlineSynchronizationService>(MockBehavior.Strict);
 
             var workspaceService = Mock.Of<IWorkspaceService>(w =>
                 w.GetAll() == new[] { new WorkspaceView { Id = "primary" } });
@@ -64,6 +49,21 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             updateApplicationStep.InSequence(callSequence)
                 .Setup(x => x.CheckServerVersionAsync(It.IsAny<CancellationToken>()))
                 .Returns(Task.CompletedTask);
+            synchronizationServiceMock.InSequence(callSequence)
+                .Setup(x => x.GetInterviewerAsync(It.IsAny<RestCredentials>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new InterviewerApiView
+                {
+                    Workspaces = new List<UserWorkspaceApiView>
+                    {
+                        new UserWorkspaceApiView { Name = "primary" }
+                    }
+                });
+            synchronizationServiceMock.InSequence(callSequence)
+                .Setup(x => x.CanSynchronizeAsync(It.IsAny<RestCredentials>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+            synchronizationServiceMock.InSequence(callSequence)
+                .Setup(x => x.GetCurrentSupervisor(It.IsAny<RestCredentials>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(Id.g1);
             synchronizationStep.InSequence(callSequence)
                 .Setup(x => x.ExecuteAsync())
                 .Returns(Task.CompletedTask);
@@ -85,6 +85,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             await synchronizationProcess.SynchronizeAsync(new Progress<SyncProgressInfo>(), CancellationToken.None);
 
             updateApplicationStep.Verify(x => x.CheckServerVersionAsync(It.IsAny<CancellationToken>()), Times.Once);
+            synchronizationServiceMock.Verify(x => x.GetInterviewerAsync(It.IsAny<RestCredentials>(), It.IsAny<CancellationToken>()), Times.Once);
+            synchronizationServiceMock.Verify(x => x.CanSynchronizeAsync(It.IsAny<RestCredentials>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+            synchronizationServiceMock.Verify(x => x.GetCurrentSupervisor(It.IsAny<RestCredentials>(), It.IsAny<CancellationToken>()), Times.Once);
             synchronizationStep.Verify(x => x.ExecuteAsync(), Times.Once);
         }
     }

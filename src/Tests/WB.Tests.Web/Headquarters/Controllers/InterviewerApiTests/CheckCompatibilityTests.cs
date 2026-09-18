@@ -35,7 +35,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
         private const string InterviewerUserAgent = "org.worldbank.solutions.interviewer/{0} (QuestionnaireVersion/27.0.0)";
 
         [Test]
-        public async Task when_interviewer_apk_is_not_stored_should_return_current_server_build_for_latest_version()
+        public async Task when_interviewer_apk_is_not_stored_should_return_null_for_latest_version()
         {
             const int currentServerBuildNumber = 38141;
             var interviewerUserAgent = string.Format(InterviewerUserAgent, "25.06.0 (build 38141)");
@@ -68,11 +68,11 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
 
             var latestVersion = await interviewerApiController.GetLatestVersion();
 
-            Assert.That(latestVersion, Is.EqualTo(currentServerBuildNumber));
+            Assert.That(latestVersion, Is.Null);
         }
 
         [Test]
-        public async Task when_extended_interviewer_apk_is_not_stored_should_return_current_server_build_for_latest_version()
+        public async Task when_extended_interviewer_apk_is_not_stored_should_return_null_for_latest_version()
         {
             const int currentServerBuildNumber = 38141;
             var interviewerUserAgent = string.Format(InterviewerUserAgent, "25.06.0 (build 38141)");
@@ -106,7 +106,31 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
 
             var latestVersion = await interviewerApiController.GetLatestExtendedVersion();
 
-            Assert.That(latestVersion, Is.EqualTo(currentServerBuildNumber));
+            Assert.That(latestVersion, Is.Null);
+        }
+
+        [Test]
+        public void when_server_build_is_requested_should_return_current_server_build()
+        {
+            const int currentServerBuildNumber = 38141;
+
+            var interviewerApiController = new InterviewerControllerBase(
+                Mock.Of<ITabletInformationService>(),
+                Mock.Of<IUserViewFactory>(),
+                new InterviewerSyncProtocolVersionProvider(),
+                Mock.Of<IAuthorizedUser>(),
+                Mock.Of<IClientApkProvider>(),
+                Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(),
+                new TestPlainStorage<ServerSettings>(),
+                Mock.Of<IInterviewerVersionReader>(),
+                Mock.Of<IUserToDeviceService>(),
+                Mock.Of<IOptions<HeadquartersConfig>>(c => c.Value == new HeadquartersConfig
+                {
+                    IgnoreCompatibility = false
+                }),
+                Mock.Of<IProductVersion>(x => x.GetBuildNumber() == currentServerBuildNumber));
+
+            Assert.That(interviewerApiController.GetServerVersion(), Is.EqualTo(currentServerBuildNumber));
         }
 
         [Test]

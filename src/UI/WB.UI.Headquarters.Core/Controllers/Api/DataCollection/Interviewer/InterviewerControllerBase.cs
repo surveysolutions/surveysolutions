@@ -127,12 +127,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithMaps)
             {
-                var buildNumber = await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
-                return buildNumber ?? this.productVersion.GetBuildNumber();
+                return await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
             }
 
-            var regularBuildNumber = await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
-            return regularBuildNumber ?? this.productVersion.GetBuildNumber();
+            return await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
         }
 
         [AllowAnonymous]
@@ -143,12 +141,19 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
             {
-                var buildNumber = await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
-                return buildNumber ?? this.productVersion.GetBuildNumber();
+                return await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
             }
 
-            var extendedBuildNumber = await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
-            return extendedBuildNumber ?? this.productVersion.GetBuildNumber();
+            return await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("serverversion")]
+        [Route("extended/serverversion")]
+        public virtual int GetServerVersion()
+        {
+            return this.productVersion.GetBuildNumber();
         }
 
         [AllowAnonymous]

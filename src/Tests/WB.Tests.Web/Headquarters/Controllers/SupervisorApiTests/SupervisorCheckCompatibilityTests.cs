@@ -29,7 +29,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.SupervisorApiTests
         private const string SupervisorUserAgent = "org.worldbank.solutions.supervisor/{0} (QuestionnaireVersion/27.0.0)";
 
         [Test]
-        public async Task when_supervisor_apk_is_not_stored_should_return_current_server_build_for_latest_version()
+        public async Task when_supervisor_apk_is_not_stored_should_return_null_for_latest_version()
         {
             const int currentServerBuildNumber = 38141;
 
@@ -56,7 +56,27 @@ namespace WB.Tests.Web.Headquarters.Controllers.SupervisorApiTests
 
             var latestVersion = await controller.GetLatestVersion();
 
-            Assert.That(latestVersion, Is.EqualTo(currentServerBuildNumber));
+            Assert.That(latestVersion, Is.Null);
+        }
+
+        [Test]
+        public void when_server_build_is_requested_should_return_current_server_build()
+        {
+            const int currentServerBuildNumber = 38141;
+
+            var controller = new SupervisorControllerBase(
+                Mock.Of<ITabletInformationService>(),
+                new SupervisorSyncProtocolVersionProvider(),
+                Mock.Of<IUserViewFactory>(),
+                Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(),
+                new TestPlainStorage<ServerSettings>(),
+                Mock.Of<IClientApkProvider>(),
+                Mock.Of<IAuthorizedUser>(),
+                Mock.Of<IInterviewInformationFactory>(),
+                Mock.Of<IInterviewerVersionReader>(),
+                Mock.Of<IProductVersion>(x => x.GetBuildNumber() == currentServerBuildNumber));
+
+            Assert.That(controller.GetServerVersion(), Is.EqualTo(currentServerBuildNumber));
         }
 
         [Test]

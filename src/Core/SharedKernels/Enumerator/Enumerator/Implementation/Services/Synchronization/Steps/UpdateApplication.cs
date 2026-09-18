@@ -96,7 +96,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         public async Task CheckServerVersionAsync(CancellationToken cancellationToken)
         {
             var serverVersion = await this.synchronizationService
-                .GetLatestApplicationVersionAsync(cancellationToken).ConfigureAwait(false);
+                .GetServerBuildNumberAsync(cancellationToken).ConfigureAwait(false);
 
             ThrowIfServerVersionIsIncompatible(serverVersion);
         }

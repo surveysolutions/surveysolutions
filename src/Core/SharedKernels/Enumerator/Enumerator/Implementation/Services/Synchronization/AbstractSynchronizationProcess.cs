@@ -256,6 +256,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     this.UpdatePasswordOfResponsible(this.RestCredentials);
                 }
 
+                if (this.ShouldCheckServerVersionBeforeSynchronization)
+                {
+                    var updateAppStep = this.serviceLocator.GetInstance<IUpdateApplicationSynchronizationStep>();
+                    await updateAppStep.CheckServerVersionAsync(cancellationToken).ConfigureAwait(false);
+                }
+
                 await RefreshUserInfo(cancellationToken).ConfigureAwait(false);
 
                 await CanSynchronizeAsync(progress, cancellationToken, statistics).ConfigureAwait(false);
@@ -263,12 +269,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 await CheckAfterStartSynchronization(cancellationToken).ConfigureAwait(false);
 
                 cancellationToken.ThrowIfCancellationRequested();
-
-                if (this.ShouldCheckServerVersionBeforeSynchronization)
-                {
-                    var updateAppStep = this.serviceLocator.GetInstance<IUpdateApplicationSynchronizationStep>();
-                    await updateAppStep.CheckServerVersionAsync(cancellationToken).ConfigureAwait(false);
-                }
 
                 if (SendStatistics)
                 {

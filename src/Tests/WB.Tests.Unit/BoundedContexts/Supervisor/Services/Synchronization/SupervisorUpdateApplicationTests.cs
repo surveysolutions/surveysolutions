@@ -106,7 +106,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services.Synchronization
 
             var settings = Mock.Of<ISupervisorSettings>(x => x.GetApplicationVersionCode() == appVersion);
             var synchronizationService = new Mock<ISynchronizationService>();
-            synchronizationService.Setup(x => x.GetLatestApplicationVersionAsync(It.IsAny<CancellationToken>()))
+            synchronizationService.Setup(x => x.GetServerBuildNumberAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync((int?)serverVersion);
 
             var step = CreateSupervisorUpdateApplication(settings: settings, synchronizationService: synchronizationService.Object);
@@ -123,12 +123,29 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services.Synchronization
 
             var settings = Mock.Of<ISupervisorSettings>(x => x.GetApplicationVersionCode() == appVersion);
             var synchronizationService = new Mock<ISynchronizationService>();
-            synchronizationService.Setup(x => x.GetLatestApplicationVersionAsync(It.IsAny<CancellationToken>()))
+            synchronizationService.Setup(x => x.GetServerBuildNumberAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync((int?)appVersion);
 
             var step = CreateSupervisorUpdateApplication(settings: settings, synchronizationService: synchronizationService.Object);
 
             await step.CheckServerVersionAsync(CancellationToken.None);
+        }
+
+        [Test]
+        public async Task when_checking_server_version_and_server_version_is_unknown_should_throw_incompatible_version()
+        {
+            const int appVersion = 38141;
+
+            var settings = Mock.Of<ISupervisorSettings>(x => x.GetApplicationVersionCode() == appVersion);
+            var synchronizationService = new Mock<ISynchronizationService>();
+            synchronizationService.Setup(x => x.GetServerBuildNumberAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync((int?)null);
+
+            var step = CreateSupervisorUpdateApplication(settings: settings, synchronizationService: synchronizationService.Object);
+
+            var ex = Assert.ThrowsAsync<SynchronizationException>(async () =>
+                await step.CheckServerVersionAsync(CancellationToken.None));
+            Assert.That(ex.Type, Is.EqualTo(SynchronizationExceptionType.NotSupportedServerSyncProtocolVersion));
         }
 
         private static SupervisorUpdateApplication CreateSupervisorUpdateApplication(

@@ -82,8 +82,15 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [Route("v1/extended/latestversion")]
         public virtual async Task<int?> GetLatestVersion()
         {
-            var buildNumber = await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.SupervisorFileName);
-            return buildNumber ?? this.productVersion.GetBuildNumber();
+            return await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.SupervisorFileName);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("v1/extended/serverversion")]
+        public virtual int GetServerVersion()
+        {
+            return this.productVersion.GetBuildNumber();
         }
 
         [Authorize(Roles = "Supervisor")]
