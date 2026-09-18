@@ -66,6 +66,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             this.productVersion = productVersion;
         }
 
+        // APK bootstrap endpoints must remain reachable before a device has any credentials.
+        [AllowAnonymous]
         [HttpGet]
         [Route("")]
         [WriteToSyncLog(SynchronizationLogType.GetApk)]
@@ -78,6 +80,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             return this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerFileName, ClientApkInfo.InterviewerResponseFileName);
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("extended")]
         [WriteToSyncLog(SynchronizationLogType.GetExtendedApk)]
@@ -90,6 +93,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             return this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerExtendedFileName, ClientApkInfo.InterviewerResponseFileName);
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("patch/{deviceVersion:int}")]
         [WriteToSyncLog(SynchronizationLogType.GetApkPatch)]
@@ -102,6 +106,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             return this.clientApkProvider.GetPatchFileAsHttpResponse(Request, $@"WBCapi.{deviceVersion}.delta");
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("extended/patch/{deviceVersion:int}")]
         [WriteToSyncLog(SynchronizationLogType.GetExtendedApkPatch)]
@@ -114,6 +119,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             return this.clientApkProvider.GetPatchFileAsHttpResponse(Request, $@"WBCapi.{deviceVersion}.Ext.delta");
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("latestversion")]
         public virtual async Task<int?> GetLatestVersion()
@@ -129,6 +135,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             return regularBuildNumber ?? this.productVersion.GetBuildNumber();
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("extended/latestversion")]
         public virtual async Task<int?> GetLatestExtendedVersion()
@@ -144,6 +151,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             return extendedBuildNumber ?? this.productVersion.GetBuildNumber();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("v2/tabletInfo")]
         public override Task<IActionResult> PostTabletInformation()
