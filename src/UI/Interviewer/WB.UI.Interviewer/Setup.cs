@@ -38,7 +38,6 @@ using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Autofac.MvvmCross;
 using WB.UI.Shared.Enumerator.Services.Logging;
-using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Interviewer
 {
@@ -103,7 +102,7 @@ namespace WB.UI.Interviewer
         {
             base.InitializeApp(app);
 
-            string arcgisruntimeKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_key);
+            string arcgisruntimeKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_key_300);
             if (!string.IsNullOrEmpty(arcgisruntimeKey))
             {
                 ServiceLocator.Current.GetInstance<IMapInteractionService>().SetLicenseKey(arcgisruntimeKey);
