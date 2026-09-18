@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable
         {
             this.VariableData = variableData;
             this.VariableData.Label = CommandUtils.SanitizeHtml(variableData.Label);
+            this.VariableData.Name = this.VariableData.Name?.Trim() ?? string.Empty;
         }
 
         public VariableData VariableData { get; private set; }
