@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
@@ -19,6 +20,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             logger)
         {
             this.interviewerSettings = interviewerSettings ?? throw new ArgumentNullException(nameof(interviewerSettings));
+        }
+
+        public override Task ExecuteAsync()
+        {
+            if (!this.interviewerSettings.AllowSyncWithHq)
+                return Task.CompletedTask;
+
+            return base.ExecuteAsync();
         }
 
         protected override int GetApplicationVersionCode()

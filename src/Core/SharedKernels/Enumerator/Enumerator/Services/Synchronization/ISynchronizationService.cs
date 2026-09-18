@@ -32,6 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task<byte[]> GetApplicationAsync(IProgress<TransferProgress> transferProgress = null, CancellationToken token = default);
         Task<byte[]> GetApplicationPatchAsync(IProgress<TransferProgress> transferProgress = null, CancellationToken token = default);
         Task<int?> GetLatestApplicationVersionAsync(CancellationToken token = default);
+        Task<int?> GetServerBuildNumberAsync(CancellationToken token = default);
 
         Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token = default);
 

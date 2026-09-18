@@ -623,6 +623,23 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             });
         }
 
+        public Task<int?> GetServerBuildNumberAsync(CancellationToken token = default)
+        {
+            return this.TryGetRestResponseOrThrowAsync(async () =>
+            {
+                try
+                {
+                    return await this.restService.GetAsync<int?>(
+                        url: string.Concat(this.checkVersionUriProvider.CheckVersionUrl, "serverversion"),
+                        credentials: this.restCredentials, token: token).ConfigureAwait(false);
+                }
+                catch (RestException rest) when (rest.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+            });
+        }
+
         #endregion
 
         #region [CalendarEvent API]
