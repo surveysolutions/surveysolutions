@@ -165,8 +165,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
 
             imageFileStorage.Verify(x => x.RemoveAllBinaryDataForInterviewsAsync(It.Is<List<Guid>>(ids =>
                 ids.Count == 1 && ids[0] == brokenOnlyInterviewId)), Times.Once);
-            audioAuditFileStorage.Verify(x => x.RemoveAllBinaryDataForInterviewsAsync(It.Is<List<Guid>>(ids =>
-                ids.Count == 1 && ids[0] == brokenOnlyInterviewId)), Times.Once);
+            audioAuditFileStorage.Verify(x => x.RemoveAllBinaryDataForInterviewsAsync(It.IsAny<List<Guid>>()), Times.Never);
             brokenImageFileStorage.Verify(x => x.RemoveAllBinaryDataForInterviewsAsync(It.Is<List<Guid>>(ids =>
                 ids.Count == 1 && ids[0] == brokenOnlyInterviewId)), Times.Once);
             brokenAudioFileStorage.Verify(x => x.RemoveAllBinaryDataForInterviewsAsync(It.Is<List<Guid>>(ids =>

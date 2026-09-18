@@ -204,7 +204,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private async Task RemoveBinaryDataForBatchAsync(List<Guid> interviewIds)
         {
             await imageFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
-            await audioAuditFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
             await brokenImageFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
             await brokenAudioFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
             await brokenAudioAuditFileStorage.RemoveAllBinaryDataForInterviewsAsync(interviewIds);
