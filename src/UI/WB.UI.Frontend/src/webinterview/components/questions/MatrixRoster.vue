@@ -57,10 +57,7 @@ export default {
 
     beforeMount() {
         this.countOfInstances = this.$me.instances.length
-        this.title =
-            this.$me.title ??
-            (this.$me.questions.length > 0 ? this.$me.questions[0].title : null) ??
-            ''
+        this.title = this.getTitle()
         this.instructions =
             this.$me.questions.length > 0
                 ? this.$me.questions[0].instruction
@@ -98,12 +95,10 @@ export default {
                     ? this.$me.questions[0].instruction
                     : null
             this.name = this.$me.questions.length > 0 ? this.$me.questions[0].name : null
+            this.title = this.getTitle()
         },
         ['$me.title']() {
-            this.title =
-                this.$me.title ??
-                (this.$me.questions.length > 0 ? this.$me.questions[0].title : null) ??
-                ''
+            this.title = this.getTitle()
         },
         ['$config.inWebTesterMode']() {
             this.name = this.$me.questions.length > 0 ? this.$me.questions[0].name : null
@@ -128,6 +123,17 @@ export default {
         },
     },
     methods: {
+        getTitle() {
+            // when the roster contains a single question, show that question's own
+            // title above the matrix instead of the roster's title, since the
+            // question's title is not shown anywhere else in that case
+            return (
+                (this.$me.questions.length === 1
+                    ? this.$me.questions[0].title
+                    : this.$me.title) ?? ''
+            )
+        },
+
         initQuestionAsColumns() {
             var self = this
             var columnsFromQuestions = map(
