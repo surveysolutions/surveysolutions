@@ -347,7 +347,11 @@ namespace WB.UI.Designer
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                     options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
                 })
-                .AddMvcOptions(options => options.ModelBinderProviders.Insert(0, new QuestionnaireRevisionBinderProvider()));
+                .AddMvcOptions(options =>
+                {
+                    options.ModelBinderProviders.Insert(0, new QuestionnaireRevisionBinderProvider());
+                    options.Filters.Add<TransactionFilter>();
+                });
 
             services.AddCors(corsOpt =>
             {
