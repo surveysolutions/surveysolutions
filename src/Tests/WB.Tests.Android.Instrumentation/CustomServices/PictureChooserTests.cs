@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Moq;
 using MvvmCross.Base;
 using NUnit.Framework;
-using Plugin.Media.Abstractions;
+using IMedia = Plugin.Media.Abstractions.IMedia;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using Xamarin.Essentials;
