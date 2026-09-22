@@ -9,7 +9,7 @@ using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql;
 
 namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
 {
-    [UseReporter(typeof(DiffReporter), typeof(NUnitReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(NUnit4Reporter))]
     [IgnoreLineEndings(true)]
     public class SchemaTest
     {
