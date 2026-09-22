@@ -5,7 +5,11 @@ ARG INFO_VERSION=21.01
 
 ARG NODE=22
 
-FROM node:${NODE} as designer_js
+# Build stages run on the native builder platform ($BUILDPLATFORM) and produce
+# portable output (static frontend assets and framework-dependent .NET binaries),
+# so only the final runtime stage targets the requested platform. This keeps
+# multi-arch (linux/amd64, linux/arm64) builds fast and avoids emulation.
+FROM --platform=$BUILDPLATFORM node:${NODE} as designer_js
 WORKDIR /app
 COPY src/UI/WB.UI.Designer/package*.json .
 RUN npm ci
@@ -16,9 +20,10 @@ RUN mkdir -p /dist/Views && cp -r Views /dist/
 RUN mkdir -p /dist/wwwroot && cp -r wwwroot /dist/
 RUN mkdir -p /dist/questionnaire
 
-FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}${DOTNET_CA_PATCH} as builder
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}${DOTNET_CA_PATCH} as builder
 ARG VERSION
 ARG INFO_VERSION
+ARG TARGETARCH
 
 COPY src/Directory.Build.props src/Directory.Build.props
 
@@ -77,10 +82,16 @@ COPY [ "src/UI/WB.UI.Designer",\
 COPY --from=designer_js /dist src/UI/WB.UI.Designer
 # COPY --from=questionnaire /app/wwwroot/assets src/UI/WB.UI.Designer/wwwroot/assets
 
-RUN dotnet publish src/UI/WB.UI.Designer --no-restore \
-    -c Release -o /designer -p:SkipSpaBuild=True -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
+# Publish framework-dependent but with an explicit RID derived from TARGETARCH so the
+# correct per-architecture native assets (e.g. SkiaSharp) are included in the output.
+# The runtime image is Debian (glibc), so glibc RIDs (linux-x64/linux-arm64) are used.
+# Restore runs as part of publish (no --no-restore) so the runtime-specific assets are restored.
+RUN RID="linux-$(case "${TARGETARCH}" in arm64) echo arm64;; *) echo x64;; esac)" && \
+    dotnet publish src/UI/WB.UI.Designer \
+    -c Release -o /designer -r "${RID}" --no-self-contained \
+    -p:SkipSpaBuild=True -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
-FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} as fonts
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} as fonts
 RUN apt-get update && apt-get install unzip -y --no-install-recommends
 
 FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}

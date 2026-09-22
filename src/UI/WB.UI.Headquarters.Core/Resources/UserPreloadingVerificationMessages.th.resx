@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="PLU0001Description" xml:space="preserve">
+        <value>มีผู้ใช้ '{0}' อยู่แล้ว</value>
+    </data>
+    <data name="PLU0002Description" xml:space="preserve">
+        <value>มีผู้ใช้ซ้ำที่มีการเข้าสู่ระบบ '{0}' ในไฟล์</value>
+    </data>
+    <data name="PLU0003Description" xml:space="preserve">
+        <value>ผู้ใช้ '{0}' ถูกเก็บถาวรและเป็นของทีมอื่น</value>
+    </data>
+    <data name="PLU0004Description" xml:space="preserve">
+        <value>ผู้ใช้ '{0}' ถูกเก็บถาวรแล้วและมีบทบาทอื่น</value>
+    </data>
+    <data name="PLU0005Description" xml:space="preserve">
+        <value>การเข้าสู่ระบบ '{0}' อยู่ในรูปแบบที่ไม่ถูกต้อง</value>
+    </data>
+    <data name="PLU0006Description" xml:space="preserve">
+        <value>รหัสผ่าน '{0}' อยู่ในรูปแบบที่ไม่ถูกต้อง</value>
+    </data>
+    <data name="PLU0007Description" xml:space="preserve">
+        <value>อีเมล '{0}' อยู่ในรูปแบบที่ไม่ถูกต้อง</value>
+    </data>
+    <data name="PLU0008Description" xml:space="preserve">
+        <value>หมายเลขโทรศัพท์ '{0}' อยู่ในรูปแบบที่ไม่ถูกต้อง</value>
+    </data>
+    <data name="PLU0009Description" xml:space="preserve">
+        <value>บทบาท '{0}' ไม่ถูกต้อง</value>
+    </data>
+    <data name="PLU0010Description" xml:space="preserve">
+        <value>ไม่พบหัวหน้างาน '{0}' ในพื้นที่ทำงาน</value>
+    </data>
+    <data name="PLU0011Description" xml:space="preserve">
+        <value>คอลัมน์หัวหน้างานควรเว้นว่างไว้สำหรับบทบาทหัวหน้างาน</value>
+    </data>
+    <data name="PLU0012Description" xml:space="preserve">
+        <value>ชื่อเต็ม '{0}' อยู่ในรูปแบบที่ไม่ถูกต้อง</value>
+    </data>
+    <data name="PLU0013Description" xml:space="preserve">
+        <value>หมายเลขโทรศัพท์ '{0}' อยู่ในรูปแบบที่ไม่ถูกต้อง</value>
+    </data>
+    <data name="PLU0014Description" xml:space="preserve">
+        <value>ชื่อเต็ม '{0}' มีอักขระที่ไม่ถูกต้อง</value>
+    </data>
+    <data name="PLU0001" xml:space="preserve">
+        <value>การเข้าสู่ระบบไม่ซ้ำกัน</value>
+    </data>
+    <data name="PLU0002" xml:space="preserve">
+        <value>ทำซ้ำ</value>
+    </data>
+    <data name="PLU0003" xml:space="preserve">
+        <value>ผิดทีม.</value>
+    </data>
+    <data name="PLU0004" xml:space="preserve">
+        <value>บทบาทที่ผิด</value>
+    </data>
+    <data name="PLU0005" xml:space="preserve">
+        <value>รูปแบบการเข้าสู่ระบบไม่ถูกต้อง</value>
+    </data>
+    <data name="PLU0006" xml:space="preserve">
+        <value>รูปแบบรหัสผ่านไม่ถูกต้อง</value>
+    </data>
+    <data name="PLU0007" xml:space="preserve">
+        <value>รูปแบบอีเมลไม่ถูกต้อง</value>
+    </data>
+    <data name="PLU0008" xml:space="preserve">
+        <value>รูปแบบหมายเลขโทรศัพท์ไม่ถูกต้อง</value>
+    </data>
+    <data name="PLU0009" xml:space="preserve">
+        <value>บทบาทไม่ถูกต้อง</value>
+    </data>
+    <data name="PLU0010" xml:space="preserve">
+        <value>ข้อผิดพลาดในการพึ่งพา</value>
+    </data>
+    <data name="PLU0011" xml:space="preserve">
+        <value>ข้อผิดพลาดในการพึ่งพา</value>
+    </data>
+    <data name="PLU0012" xml:space="preserve">
+        <value>ชื่อเต็มยาวผิด</value>
+    </data>
+    <data name="PLU0013" xml:space="preserve">
+        <value>หมายเลขโทรศัพท์มีความยาวไม่ถูกต้อง</value>
+    </data>
+    <data name="PLU0014" xml:space="preserve">
+        <value>รูปแบบชื่อเต็มไม่ถูกต้อง</value>
+    </data>
+    <data name="PLU0001Recommendation" xml:space="preserve">
+        <value>ผู้ใช้จะต้องไม่ซ้ำกัน</value>
+    </data>
+    <data name="PLU0002Recommendation" xml:space="preserve">
+        <value>แก้ไขรายการที่ซ้ำกัน</value>
+    </data>
+    <data name="PLU0003Recommendation" xml:space="preserve">
+        <value>ผู้ใช้เก่าไม่สามารถนำมาใช้ซ้ำได้เนื่องจากเป็นของทีมอื่น</value>
+    </data>
+    <data name="PLU0004Recommendation" xml:space="preserve">
+        <value>ผู้ใช้เก่าไม่สามารถนำมาใช้ซ้ำได้เนื่องจากมีอยู่ในบทบาทอื่น</value>
+    </data>
+    <data name="PLU0005Recommendation" xml:space="preserve">
+        <value>ชื่อเข้าสู่ระบบต้องมีความยาวระหว่าง 3 ถึง 15 ตัวอักษร และต้องประกอบด้วยตัวอักษร ตัวเลข และสัญลักษณ์ขีดล่างเท่านั้น ตัวอักษรต้องมาจากตัวอักษรละติน (อังกฤษ) เท่านั้น: 'A'..'Z' หรือ 'a'..'z' ตัวอักษรอื่นๆ (ซีริลลิก อารบิก ฯลฯ) ไม่สามารถใช้ในชื่อล็อกอินได้</value>
+    </data>
+    <data name="PLU0006Recommendation" xml:space="preserve">
+        <value>จะต้องมีตัวเลขอย่างน้อยหนึ่งตัว อักขระตัวพิมพ์ใหญ่หนึ่งตัว และอักขระตัวพิมพ์เล็กหนึ่งตัว ความยาวควรอยู่ระหว่าง 10 ถึง 100 อักขระ</value>
+    </data>
+    <data name="PLU0007Recommendation" xml:space="preserve">
+        <value>แก้ไขอีเมล์</value>
+    </data>
+    <data name="PLU0008Recommendation" xml:space="preserve">
+        <value>แก้เบอร์โทรศัพท์</value>
+    </data>
+    <data name="PLU0009Recommendation" xml:space="preserve">
+        <value>อนุญาตให้ใช้เฉพาะ "หัวหน้างาน" หรือ "ผู้สัมภาษณ์" เท่านั้น</value>
+    </data>
+    <data name="PLU0010Recommendation" xml:space="preserve">
+        <value>ตรวจสอบค่าสำหรับหัวหน้างาน</value>
+    </data>
+    <data name="PLU0011Recommendation" xml:space="preserve">
+        <value>ลบค่าหัวหน้างาน</value>
+    </data>
+    <data name="PLU0012Recommendation" xml:space="preserve">
+        <value>ไม่ควรมีความยาวเกิน 100 ตัวอักษร</value>
+    </data>
+    <data name="PLU0013Recommendation" xml:space="preserve">
+        <value>ไม่ควรมีความยาวเกิน 15 ตัวอักษร</value>
+    </data>
+    <data name="PLU0014Recommendation" xml:space="preserve">
+        <value>อนุญาตให้ใช้เฉพาะตัวอักษร จุด ช่องว่าง และเครื่องหมายอะพอสทรอฟี</value>
+    </data>
+    <data name="PLU0015" xml:space="preserve">
+        <value>รหัสผ่านสั้นเกินไป</value>
+    </data>
+    <data name="PLU0015Description" xml:space="preserve">
+        <value>รหัสผ่าน '{0}' สั้นเกินไป</value>
+    </data>
+    <data name="PLU0015Recommendation" xml:space="preserve">
+        <value>รหัสผ่านต้องมีความยาวอย่างน้อย 10 ตัวอักษร</value>
+    </data>
+    <data name="PLU0016" xml:space="preserve">
+        <value>รหัสผ่านง่ายๆ</value>
+    </data>
+    <data name="PLU0016Description" xml:space="preserve">
+        <value>รหัสผ่าน '{0}' ไม่มีอักขระที่ไม่ใช่ตัวอักษรและตัวเลข</value>
+    </data>
+    <data name="PLU0016Recommendation" xml:space="preserve">
+        <value>เพิ่มอักขระที่ไม่ใช่ตัวอักษรและตัวเลขอย่างน้อยหนึ่งตัว</value>
+    </data>
+    <data name="PLU0017" xml:space="preserve">
+        <value>รหัสผ่านง่ายๆ</value>
+    </data>
+    <data name="PLU0017Description" xml:space="preserve">
+        <value>รหัสผ่าน '{0}' ไม่มีตัวเลข</value>
+    </data>
+    <data name="PLU0017Recommendation" xml:space="preserve">
+        <value>เพิ่มอย่างน้อยหนึ่งหลัก ('0'-'9')</value>
+    </data>
+    <data name="PLU0018" xml:space="preserve">
+        <value>รหัสผ่านง่ายๆ</value>
+    </data>
+    <data name="PLU0018Description" xml:space="preserve">
+        <value>รหัสผ่าน '{0}' ไม่มีอักขระตัวพิมพ์เล็ก</value>
+    </data>
+    <data name="PLU0018Recommendation" xml:space="preserve">
+        <value>เพิ่มอักขระตัวพิมพ์เล็กอย่างน้อยหนึ่งตัว ('a'-'z')</value>
+    </data>
+    <data name="PLU0019" xml:space="preserve">
+        <value>รหัสผ่านง่ายๆ</value>
+    </data>
+    <data name="PLU0019Description" xml:space="preserve">
+        <value>รหัสผ่าน '{0}' ไม่มีอักขระตัวพิมพ์ใหญ่</value>
+    </data>
+    <data name="PLU0019Recommendation" xml:space="preserve">
+        <value>เพิ่มตัวพิมพ์ใหญ่อย่างน้อยหนึ่งตัว ('A'-'Z')</value>
+    </data>
+    <data name="PLU0020" xml:space="preserve">
+        <value>รหัสผ่านง่ายๆ</value>
+    </data>
+    <data name="PLU0020Description" xml:space="preserve">
+        <value>รหัสผ่าน '{0}' มีอักขระไม่ซ้ำกันเพียงพอ</value>
+    </data>
+    <data name="PLU0020Recommendation" xml:space="preserve">
+        <value>เพิ่มอักขระที่แตกต่างกัน</value>
+    </data>
+    <data name="PLU0021" xml:space="preserve">
+        <value>ต้องใช้รหัสผ่าน</value>
+    </data>
+    <data name="PLU0021Description" xml:space="preserve">
+        <value>ต้องใช้รหัสผ่าน</value>
+    </data>
+    <data name="PLU0021Recommendation" xml:space="preserve">
+        <value>เพิ่มรหัสผ่าน</value>
+    </data>
+    <data name="PLU0022" xml:space="preserve">
+        <value>ไม่พบพื้นที่ทำงาน</value>
+    </data>
+    <data name="PLU0022Description" xml:space="preserve">
+        <value>ต้องมีพื้นที่ทำงานและเปิดใช้งานอยู่</value>
+    </data>
+    <data name="PLU0022Recommendation" xml:space="preserve">
+        <value>ตรวจสอบชื่อพื้นที่ทำงาน</value>
+    </data>
+</root>

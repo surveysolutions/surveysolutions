@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
     [TestFixture]
     [UseApprovalSubdirectory("SchemaTests-approved")]
     [IgnoreLineEndings(true)]
-    [UseReporter(typeof(DiffReporter), typeof(NUnitReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(NUnit4Reporter))]
     public class SchemaTests
     {
         [Test]

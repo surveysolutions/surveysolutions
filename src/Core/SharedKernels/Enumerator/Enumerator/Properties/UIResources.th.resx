@@ -276,6 +276,9 @@
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>ค่าที่ป้อนต้องเป็นจำนวนเต็มเท่านั้น</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>ไม่อนุญาตให้ใช้ค่าติดลบสำหรับคำถามนี้</value>
+  </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>{0} จำนวนสมาชิกที่ใส่มากกว่าที่กำหนด {1}</value>
   </data>
@@ -676,6 +679,9 @@
     <value>เลือกตัวเลือก</value>
   </data>
 
+  <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+    <value>ไม่สามารถประมวลผลภาพถ่ายได้เนื่องจากไม่รองรับรูปแบบไฟล์นี้ กรุณาถ่ายภาพใหม่อีกครั้ง</value>
+  </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>ถ่ายภาพ</value>
   </data>
