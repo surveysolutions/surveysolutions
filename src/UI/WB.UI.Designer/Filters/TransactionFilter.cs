@@ -10,8 +10,9 @@ using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Designer.Filters
 {
-    // Wraps each state-changing web request in a single DesignerDbContext transaction so that all
-    // writes (change history, questionnaire list, state tracker snapshot) commit or roll back atomically.
+    // Wraps each web request in a single DesignerDbContext transaction so that all writes
+    // (change history, questionnaire list, state tracker snapshot) commit or roll back atomically.
+    // Safe (read-only) requests are always rolled back so accidental writes never persist.
     public class TransactionFilter : IAsyncActionFilter, IAsyncPageFilter
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -23,7 +24,7 @@ namespace WB.UI.Designer.Filters
             }
 
             var dbContext = context.HttpContext.RequestServices.GetRequiredService<DesignerDbContext>();
-            await ExecuteInTransactionAsync(dbContext, async () => (await next()).Exception == null);
+            await ExecuteInTransactionAsync(context.HttpContext, dbContext, async () => (await next()).Exception == null);
         }
 
         public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context) => Task.CompletedTask;
@@ -37,22 +38,19 @@ namespace WB.UI.Designer.Filters
             }
 
             var dbContext = context.HttpContext.RequestServices.GetRequiredService<DesignerDbContext>();
-            await ExecuteInTransactionAsync(dbContext, async () => (await next()).Exception == null);
+            await ExecuteInTransactionAsync(context.HttpContext, dbContext, async () => (await next()).Exception == null);
         }
 
         private static bool SkipTransaction(FilterContext context)
-        {
-            if (context.Filters.OfType<NoTransactionAttribute>().Any())
-                return true;
+            => context.Filters.OfType<NoTransactionAttribute>().Any();
 
-            var method = context.HttpContext.Request.Method;
-            return HttpMethods.IsGet(method)
-                || HttpMethods.IsHead(method)
-                || HttpMethods.IsOptions(method)
-                || HttpMethods.IsTrace(method);
-        }
+        private static bool IsReadOnlyMethod(string method)
+            => HttpMethods.IsGet(method)
+               || HttpMethods.IsHead(method)
+               || HttpMethods.IsOptions(method)
+               || HttpMethods.IsTrace(method);
 
-        private static async Task ExecuteInTransactionAsync(DesignerDbContext dbContext, Func<Task<bool>> action)
+        private static async Task ExecuteInTransactionAsync(HttpContext httpContext, DesignerDbContext dbContext, Func<Task<bool>> action)
         {
             // An endpoint may already own a transaction (e.g. the command API); don't nest.
             if (dbContext.Database.CurrentTransaction != null)
@@ -61,8 +59,11 @@ namespace WB.UI.Designer.Filters
                 return;
             }
 
+            var isReadOnly = IsReadOnlyMethod(httpContext.Request.Method);
+
             await using var transaction = await dbContext.Database.BeginTransactionAsync();
-            if (await action())
+            var succeeded = await action();
+            if (succeeded && !isReadOnly)
             {
                 await dbContext.SaveChangesAsync();
                 await transaction.CommitAsync();
