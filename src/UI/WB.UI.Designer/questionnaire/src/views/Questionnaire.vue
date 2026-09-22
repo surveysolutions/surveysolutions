@@ -26,7 +26,7 @@
                         :title="$t('QuestionnaireEditor.Close')" @click="props.close" style="cursor: pointer;">
                         <span class="glyphicon glyphicon-remove"></span>
                     </div>
-                    <div class="ui-pnotify-sticker" aria-role="button" aria-pressed="false" tabindex="0" title="Stick"
+                    <div class="ui-pnotify-sticker" aria-role="button" aria-pressed="false" tabindex="0" :title="$t('QuestionnaireEditor.Stick')"
                         style="cursor: pointer; visibility: hidden;">
                         <span class="glyphicon glyphicon-pause" aria-pressed="false"></span>
                     </div>

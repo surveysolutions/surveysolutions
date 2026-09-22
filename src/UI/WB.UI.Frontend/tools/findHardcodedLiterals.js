@@ -60,6 +60,7 @@ function walk(node, ctx, results) {
                 const attrName = prop.name
                 if (IGNORED_ATTRS.has(attrName)) continue
                 if (attrName.startsWith('on') || attrName.startsWith('data-')) continue
+                const value = prop.value.content
                 const isTextAttribute = TEXT_ATTRS.has(attrName)
                 if (isTextAttribute ? !/\p{L}/u.test(value) : !looksLikeText(value)) continue
                 results.push({
