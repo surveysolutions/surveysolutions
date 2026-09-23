@@ -44,11 +44,11 @@ namespace WB.UI.Designer.Filters
         private static bool SkipTransaction(FilterContext context)
             => context.Filters.OfType<NoTransactionAttribute>().Any();
 
-        private static bool IsReadOnlyMethod(string method)
-            => HttpMethods.IsGet(method)
-               || HttpMethods.IsHead(method)
-               || HttpMethods.IsOptions(method)
-               || HttpMethods.IsTrace(method);
+        private static bool IsWriteMethod(string method)
+            => HttpMethods.IsPost(method)
+               || HttpMethods.IsPut(method)
+               || HttpMethods.IsPatch(method)
+               || HttpMethods.IsDelete(method);
 
         private static async Task ExecuteInTransactionAsync(HttpContext httpContext, DesignerDbContext dbContext, Func<Task<bool>> action)
         {
@@ -59,11 +59,11 @@ namespace WB.UI.Designer.Filters
                 return;
             }
 
-            var isReadOnly = IsReadOnlyMethod(httpContext.Request.Method);
+            var isWrite = IsWriteMethod(httpContext.Request.Method);
 
             await using var transaction = await dbContext.Database.BeginTransactionAsync();
             var succeeded = await action();
-            if (succeeded && !isReadOnly)
+            if (succeeded && isWrite)
             {
                 await dbContext.SaveChangesAsync();
                 await transaction.CommitAsync();
