@@ -39,7 +39,6 @@ using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
-using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Controllers
@@ -315,7 +314,6 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [NoTransaction]
         public IActionResult Delete(Guid id)
         {
             QuestionnaireView? model = this.GetQuestionnaireView(id);
