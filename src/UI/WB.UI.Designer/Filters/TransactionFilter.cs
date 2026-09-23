@@ -1,8 +1,9 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using WB.Core.BoundedContexts.Designer.DataAccess;
@@ -12,7 +13,9 @@ namespace WB.UI.Designer.Filters
 {
     // Wraps each web request in a single DesignerDbContext transaction so that all writes
     // (change history, questionnaire list, state tracker snapshot) commit or roll back atomically.
-    // Safe (read-only) requests are always rolled back so accidental writes never persist.
+    // The transaction outcome follows the action outcome, not the HTTP verb: it commits only when
+    // the action completes without an exception and does not return an error (>= 400) result, so a
+    // failed command rolls back while a write performed from a GET handler still commits.
     public class TransactionFilter : IAsyncActionFilter, IAsyncPageFilter
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -24,7 +27,11 @@ namespace WB.UI.Designer.Filters
             }
 
             var dbContext = context.HttpContext.RequestServices.GetRequiredService<DesignerDbContext>();
-            await ExecuteInTransactionAsync(context.HttpContext, dbContext, async () => (await next()).Exception == null);
+            await ExecuteInTransactionAsync(dbContext, async () =>
+            {
+                var executed = await next();
+                return IsSuccessfulOutcome(executed.Exception, executed.Result);
+            });
         }
 
         public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context) => Task.CompletedTask;
@@ -38,19 +45,21 @@ namespace WB.UI.Designer.Filters
             }
 
             var dbContext = context.HttpContext.RequestServices.GetRequiredService<DesignerDbContext>();
-            await ExecuteInTransactionAsync(context.HttpContext, dbContext, async () => (await next()).Exception == null);
+            await ExecuteInTransactionAsync(dbContext, async () =>
+            {
+                var executed = await next();
+                return IsSuccessfulOutcome(executed.Exception, executed.Result);
+            });
         }
 
         private static bool SkipTransaction(FilterContext context)
             => context.Filters.OfType<NoTransactionAttribute>().Any();
 
-        private static bool IsWriteMethod(string method)
-            => HttpMethods.IsPost(method)
-               || HttpMethods.IsPut(method)
-               || HttpMethods.IsPatch(method)
-               || HttpMethods.IsDelete(method);
+        private static bool IsSuccessfulOutcome(Exception? exception, IActionResult? result)
+            => exception == null
+               && !(result is IStatusCodeActionResult { StatusCode: >= 400 });
 
-        private static async Task ExecuteInTransactionAsync(HttpContext httpContext, DesignerDbContext dbContext, Func<Task<bool>> action)
+        private static async Task ExecuteInTransactionAsync(DesignerDbContext dbContext, Func<Task<bool>> action)
         {
             // An endpoint may already own a transaction (e.g. the command API); don't nest.
             if (dbContext.Database.CurrentTransaction != null)
@@ -59,11 +68,9 @@ namespace WB.UI.Designer.Filters
                 return;
             }
 
-            var isWrite = IsWriteMethod(httpContext.Request.Method);
-
             await using var transaction = await dbContext.Database.BeginTransactionAsync();
             var succeeded = await action();
-            if (succeeded && isWrite)
+            if (succeeded)
             {
                 await dbContext.SaveChangesAsync();
                 await transaction.CommitAsync();
