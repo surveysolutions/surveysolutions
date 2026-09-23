@@ -384,14 +384,17 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
         private IDeleteQuestionnaireService CreateDeleteQuestionnaireService(IUnitOfWork unitOfWork, 
             QuestionnaireDocument questionnaire, QuestionnaireIdentity questionnaireIdentity)
         {
+            var audioAuditFileStorage = new AudioAuditFileStorage(
+                new PostgresPlainStorageRepository<AudioAuditFile>(unitOfWork), unitOfWork);
+            var interviewsReader = new PostgreReadSideStorage<InterviewSummary>(unitOfWork, memoryCache);
+
             var interviewsToDeleteFactory = new InterviewsToDeleteFactory(unitOfWork,
                 Mock.Of<IImageFileStorage>(),
-                Mock.Of<IAudioAuditFileStorage>(),
+                audioAuditFileStorage,
                 Mock.Of<IBrokenImageFileStorage>(),
                 Mock.Of<IBrokenAudioFileStorage>(),
                 Mock.Of<IBrokenAudioAuditFileStorage>(),
-                Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(r =>
-                    r.Query(It.IsAny<Func<IQueryable<InterviewSummary>, List<Guid>>>()) == new List<Guid>()),
+                interviewsReader,
                 Mock.Of<ILogger<InterviewsToDeleteFactory>>());
 
             IPlainStorageAccessor<TranslationInstance> translations =
