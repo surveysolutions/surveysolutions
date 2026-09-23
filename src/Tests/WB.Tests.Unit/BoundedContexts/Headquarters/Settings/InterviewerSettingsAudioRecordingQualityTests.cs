@@ -8,11 +8,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Settings
     public class InterviewerSettingsAudioRecordingQualityTests
     {
         [Test]
-        [Ignore("Hangs on CI and consumes all resources (previously caused OS restart). Do not run explicitly until fixed.")]
         public void when_settings_null_should_return_default_quality()
         {
-            InterviewerSettings settings = null;
-
+            InterviewerSettings settings = new InterviewerSettings();
+            
             Assert.That(settings.GetAudioRecordingQuality(), Is.EqualTo(InterviewerSettings.AudioRecordingQualityDefault));
             Assert.That(InterviewerSettings.AudioRecordingQualityDefault, Is.EqualTo(AudioRecordingQuality.Mono44kHz));
         }
