@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -82,16 +83,16 @@ namespace WB.UI.Designer.Filters
 
             var isWrite = IsWriteMethod(httpContext.Request.Method);
 
-            await using var transaction = await dbContext.Database.BeginTransactionAsync();
+            await using var transaction = await dbContext.Database.BeginTransactionAsync(CancellationToken.None);
             var succeeded = await action();
             if (succeeded && isWrite)
             {
-                await dbContext.SaveChangesAsync();
-                await transaction.CommitAsync();
+                await dbContext.SaveChangesAsync(CancellationToken.None);
+                await transaction.CommitAsync(CancellationToken.None);
             }
             else
             {
-                await transaction.RollbackAsync();
+                await transaction.RollbackAsync(CancellationToken.None);
             }
         }
     }
