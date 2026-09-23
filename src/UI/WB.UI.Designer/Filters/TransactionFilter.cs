@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +26,11 @@ namespace WB.UI.Designer.Filters
             }
 
             var dbContext = context.HttpContext.RequestServices.GetRequiredService<DesignerDbContext>();
-            await ExecuteInTransactionAsync(context.HttpContext, dbContext, async () => (await next()).Exception == null);
+            await ExecuteInTransactionAsync(context.HttpContext, dbContext, async () =>
+            {
+                var executedContext = await next();
+                return ShouldCommit(executedContext.Exception, executedContext.Result, context.HttpContext.Response.StatusCode);
+            });
         }
 
         public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context) => Task.CompletedTask;
@@ -38,7 +44,11 @@ namespace WB.UI.Designer.Filters
             }
 
             var dbContext = context.HttpContext.RequestServices.GetRequiredService<DesignerDbContext>();
-            await ExecuteInTransactionAsync(context.HttpContext, dbContext, async () => (await next()).Exception == null);
+            await ExecuteInTransactionAsync(context.HttpContext, dbContext, async () =>
+            {
+                var executedContext = await next();
+                return ShouldCommit(executedContext.Exception, executedContext.Result, context.HttpContext.Response.StatusCode);
+            });
         }
 
         private static bool SkipTransaction(FilterContext context)
@@ -49,6 +59,17 @@ namespace WB.UI.Designer.Filters
                || HttpMethods.IsPut(method)
                || HttpMethods.IsPatch(method)
                || HttpMethods.IsDelete(method);
+
+        private static bool ShouldCommit(Exception? exception, IActionResult? result, int responseStatusCode)
+            => exception == null && !HasErrorStatus(result, responseStatusCode);
+
+        private static bool HasErrorStatus(IActionResult? result, int responseStatusCode)
+        {
+            if (result is IStatusCodeActionResult { StatusCode: >= StatusCodes.Status400BadRequest })
+                return true;
+
+            return responseStatusCode >= StatusCodes.Status400BadRequest;
+        }
 
         private static async Task ExecuteInTransactionAsync(HttpContext httpContext, DesignerDbContext dbContext, Func<Task<bool>> action)
         {
