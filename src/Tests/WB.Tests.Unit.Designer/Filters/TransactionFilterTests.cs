@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -34,49 +33,6 @@ namespace WB.Tests.Unit.Designer.Filters;
 [TestOf(typeof(TransactionFilter))]
 public class TransactionFilterTests
 {
-    private static readonly MethodInfo ShouldCommitMethod =
-        typeof(TransactionFilter).GetMethod("ShouldCommit", BindingFlags.NonPublic | BindingFlags.Static)
-        ?? throw new InvalidOperationException("TransactionFilter.ShouldCommit was not found.");
-
-    // ---- ShouldCommit decision table ----------------------------------------------------------------
-
-    [Test]
-    public void when_exception_exists_should_not_commit()
-        => InvokeShouldCommit(new Exception(), new OkResult(), StatusCodes.Status200OK).Should().BeFalse();
-
-    [Test]
-    public void when_result_has_client_error_status_should_not_commit()
-        => InvokeShouldCommit(null, new NotFoundResult(), StatusCodes.Status200OK).Should().BeFalse();
-
-    [Test]
-    public void when_result_is_json_error_should_not_commit()
-        => InvokeShouldCommit(null, new JsonResult("nope") { StatusCode = StatusCodes.Status403Forbidden }, StatusCodes.Status200OK)
-            .Should().BeFalse();
-
-    [Test]
-    public void when_result_is_forbid_should_not_commit()
-        => InvokeShouldCommit(null, new ForbidResult(), StatusCodes.Status200OK).Should().BeFalse();
-
-    [Test]
-    public void when_result_is_challenge_should_not_commit()
-        => InvokeShouldCommit(null, new ChallengeResult(), StatusCodes.Status200OK).Should().BeFalse();
-
-    [Test]
-    public void when_response_status_is_server_error_should_not_commit()
-        => InvokeShouldCommit(null, result: null, StatusCodes.Status500InternalServerError).Should().BeFalse();
-
-    [Test]
-    public void when_result_is_successful_should_commit()
-        => InvokeShouldCommit(null, new OkResult(), StatusCodes.Status200OK).Should().BeTrue();
-
-    [Test]
-    public void when_result_is_redirect_should_commit()
-        => InvokeShouldCommit(null, new RedirectResult("/somewhere"), StatusCodes.Status200OK).Should().BeTrue();
-
-    [Test]
-    public void when_result_is_null_and_status_ok_should_commit()
-        => InvokeShouldCommit(null, result: null, StatusCodes.Status200OK).Should().BeTrue();
-
     // ---- Public MVC action filter -------------------------------------------------------------------
 
     [Test]
@@ -108,8 +64,9 @@ public class TransactionFilterTests
     }
 
     [Test]
-    public async Task when_write_request_returns_error_status_it_rolls_back()
+    public async Task when_write_request_returns_error_status_it_still_commits()
     {
+        // The filter no longer inspects the HTTP result/status: only an unhandled exception (or a safe method) rolls back.
         var db = NewDatabase();
         var invalidation = new Mock<ITransactionalMemoryCacheInvalidation>();
         var id = Guid.NewGuid().ToString("N");
@@ -117,21 +74,7 @@ public class TransactionFilterTests
         await InvokeActionAsync(db, invalidation.Object, HttpMethods.Post, new NotFoundResult(),
             throwInHandler: false, stageItemId: id);
 
-        StoredIds(db).Should().NotContain(id);
-        invalidation.Verify(x => x.Flush(), Times.Once);
-    }
-
-    [Test]
-    public async Task when_write_request_returns_forbid_it_rolls_back()
-    {
-        var db = NewDatabase();
-        var invalidation = new Mock<ITransactionalMemoryCacheInvalidation>();
-        var id = Guid.NewGuid().ToString("N");
-
-        await InvokeActionAsync(db, invalidation.Object, HttpMethods.Post, new ForbidResult(),
-            throwInHandler: false, stageItemId: id);
-
-        StoredIds(db).Should().NotContain(id);
+        StoredIds(db).Should().Contain(id);
         invalidation.Verify(x => x.Flush(), Times.Once);
     }
 
@@ -290,8 +233,4 @@ public class TransactionFilterTests
 
         await new TransactionFilter().OnPageHandlerExecutionAsync(executing, next);
     }
-
-    private static bool InvokeShouldCommit(Exception? exception, IActionResult? result, int responseStatusCode)
-        => (bool)(ShouldCommitMethod.Invoke(null, new object?[] { exception, result, responseStatusCode })
-                  ?? throw new InvalidOperationException("TransactionFilter.ShouldCommit returned null."));
 }
