@@ -84,15 +84,23 @@ namespace WB.UI.Designer.Filters
             var isWrite = IsWriteMethod(httpContext.Request.Method);
 
             await using var transaction = await dbContext.Database.BeginTransactionAsync(CancellationToken.None);
-            var succeeded = await action();
-            if (succeeded && isWrite)
+            try
             {
-                await dbContext.SaveChangesAsync(CancellationToken.None);
-                await transaction.CommitAsync(CancellationToken.None);
+                var succeeded = await action();
+                if (succeeded && isWrite)
+                {
+                    await dbContext.SaveChangesAsync(CancellationToken.None);
+                    await transaction.CommitAsync(CancellationToken.None);
+                }
+                else
+                {
+                    await transaction.RollbackAsync(CancellationToken.None);
+                }
             }
-            else
+            finally
             {
-                await transaction.RollbackAsync(CancellationToken.None);
+                // Publish cache invalidations only once the transaction has settled, so no rolled-back state remains cached.
+                httpContext.RequestServices.GetRequiredService<ITransactionalMemoryCacheInvalidation>().Flush();
             }
         }
     }

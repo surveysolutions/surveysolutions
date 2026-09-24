@@ -3,6 +3,7 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.CriticalRules;
@@ -101,6 +102,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IQuestionnaireCodeGenerationPackageFactory, QuestionnaireCodeGenerationPackageFactory>();
             registry.Bind(typeof(ITopologicalSorter<>), typeof(TopologicalSorter<>));
             
+            registry.BindAsScoped<ITransactionalMemoryCacheInvalidation, TransactionalMemoryCacheInvalidation>();
             registry.Bind(typeof(IPlainKeyValueStorage<>), typeof(DesignerKeyValueStorage<>));
             registry.Bind(typeof(IEntitySerializer<>), typeof(EntitySerializer<>));
             registry.Bind(typeof(IPlainAggregateRootRepository), typeof(QuestionnaireRepository));

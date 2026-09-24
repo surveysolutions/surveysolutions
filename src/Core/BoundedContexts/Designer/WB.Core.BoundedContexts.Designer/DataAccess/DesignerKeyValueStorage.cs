@@ -16,37 +16,61 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
         private readonly DesignerDbContext dbContext;
         private readonly IMemoryCache memoryCache;
         private readonly IEntitySerializer<T> serializer;
+        private readonly ITransactionalMemoryCacheInvalidation cacheInvalidation;
 
         public DesignerKeyValueStorage(
             DesignerDbContext dbContext,
             IMemoryCache memoryCache,
-            IEntitySerializer<T> serializer)
+            IEntitySerializer<T> serializer,
+            ITransactionalMemoryCacheInvalidation cacheInvalidation)
         {
             this.dbContext = dbContext;
             this.memoryCache = memoryCache;
             this.serializer = serializer;
+            this.cacheInvalidation = cacheInvalidation;
         }
 
         public T? GetById(string id)
         {
-            return memoryCache.GetOrCreate(CacheKey(id), cache =>
+            var pending = FindPendingChange(id);
+            if (pending != null)
+            {
+                // Uncommitted changes stay request-local and are never published to the shared cache.
+                return pending.State == EntityState.Deleted
+                    ? null
+                    : this.serializer.Deserialize(pending.Entity.Value);
+            }
+
+            var storedValue = memoryCache.GetOrCreate(CacheKey(id), cache =>
             {
                 cache.SetSlidingExpiration(TimeSpan.FromMinutes(5));
 
                 var entry = FindEntry(id);
-
-                if (entry != null)
+                if (entry == null || entry.State == EntityState.Deleted)
                 {
-                    if (entry.State == EntityState.Deleted)
-                    {
-                        return null;
-                    }
-
-                    return this.serializer.Deserialize(entry.Entity.Value);
+                    return null;
                 }
 
-                return null;
-            });            
+                return entry.Entity.Value;
+            });
+
+            // Deserialize a fresh instance per call so callers never mutate the shared cached value.
+            return storedValue == null ? null : this.serializer.Deserialize(storedValue);
+        }
+
+        // Looks only at the change tracker (no DB query) so uncommitted writes made in this request are visible locally.
+        private EntityEntry<KeyValueEntity>? FindPendingChange(string id)
+        {
+            foreach (var entry in dbContext.ChangeTracker.Entries<KeyValueEntity>())
+            {
+                if (entry.State == EntityState.Unchanged || entry.State == EntityState.Detached)
+                    continue;
+
+                if (entry.Entity.GetType() == QueryType && entry.Entity.Id == id)
+                    return entry;
+            }
+
+            return null;
         }
 
         public bool HasNotEmptyValue(string id)
@@ -62,8 +86,8 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 
             if(entity != null && entity.State != EntityState.Deleted)
             {
-                this.memoryCache.Remove(CacheKey(id));
                 this.dbContext.Remove(entity.Entity);
+                InvalidateCache(id);
             }
         }
 
@@ -92,8 +116,16 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
                 dbContext.Add(instance);
             }
 
-            memoryCache.Remove(CacheKey(id));
-            GetById(id);
+            InvalidateCache(id);
+        }
+
+        // Defer invalidation to transaction completion so a rolled-back write never leaves stale state in the shared cache.
+        private void InvalidateCache(string id)
+        {
+            if (dbContext.Database.CurrentTransaction != null)
+                cacheInvalidation.Enqueue(CacheKey(id));
+            else
+                memoryCache.Remove(CacheKey(id));
         }
 
         private string CacheKey(string id) => QueryType.Name + id;
