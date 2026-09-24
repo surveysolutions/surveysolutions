@@ -26,5 +26,37 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             questionniare.ExpectNoError("WB0059");
         }
+
+        [TestCase("%@rowcode%")]
+        [TestCase("%rowcode%")]
+        [TestCase("%@rowindex%")]
+        [TestCase("%rowindex%")]
+        [TestCase("%@rowname%")]
+        [TestCase("%rowname%")]
+        public void should_not_produce_WB0017_for_roster_service_variables_inside_roster(string substitution)
+        {
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+                Create.Roster(
+                    children: new[] { Create.Question(title: $"Row info: {substitution}") }
+                )
+            );
+
+            questionnaire.ExpectNoError("WB0017");
+        }
+
+        [TestCase("%@rowcode%")]
+        [TestCase("%rowcode%")]
+        [TestCase("%@rowindex%")]
+        [TestCase("%rowindex%")]
+        [TestCase("%@rowname%")]
+        [TestCase("%rowname%")]
+        public void should_produce_WB0059_for_roster_service_variables_outside_roster(string substitution)
+        {
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+                Create.Question(title: $"Row info: {substitution}")
+            );
+
+            questionnaire.ExpectError("WB0059");
+        }
     }
 }
