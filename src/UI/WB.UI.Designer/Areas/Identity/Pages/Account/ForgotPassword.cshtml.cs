@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
@@ -20,14 +22,17 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
         private readonly UserManager<DesignerIdentityUser> userManager;
         private readonly IEmailSender emailSender;
         private readonly IViewRenderService viewRenderingService;
+        private readonly ILogger<ForgotPasswordModel> logger;
 
         public ForgotPasswordModel(UserManager<DesignerIdentityUser> userManager, 
             IEmailSender emailSender, 
-            IViewRenderService viewRenderingService)
+            IViewRenderService viewRenderingService,
+            ILogger<ForgotPasswordModel> logger)
         {
             this.userManager = userManager;
             this.emailSender = emailSender;
             this.viewRenderingService = viewRenderingService;
+            this.logger = logger;
         }
 
         [BindProperty]
@@ -71,10 +76,17 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
 
                 if (user.Email != null)
                 {
-                    await emailSender.SendEmailAsync(
-                        user.Email,
-                        AccountResources.PasswordReset,
-                        body);
+                    try
+                    {
+                        await emailSender.SendEmailAsync(
+                            user.Email,
+                            AccountResources.PasswordReset,
+                            body);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogError(ex, "Failed to send password reset email to user {UserId}", user.Id);
+                    }
                 }
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
