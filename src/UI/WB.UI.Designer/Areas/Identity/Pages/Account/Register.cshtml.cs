@@ -16,11 +16,14 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
+    // Sends an email as a side effect, so its writes must commit immediately rather than in the deferred filter transaction.
+    [NoTransaction]
     public class RegisterModel : PageModel
     {
         private const string RecaptchaV3RegisterAction = "register";

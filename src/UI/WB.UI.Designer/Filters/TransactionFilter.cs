@@ -65,7 +65,7 @@ namespace WB.UI.Designer.Filters
 
         private static async Task ExecuteInTransactionAsync(HttpContext httpContext, DesignerDbContext dbContext, Func<Task<bool>> action)
         {
-            // An endpoint may already own a transaction (e.g. the command API); don't nest.
+            // If a transaction is already open on this context, its opener owns commit/rollback; just run inside it.
             if (dbContext.Database.CurrentTransaction != null)
             {
                 await action();
