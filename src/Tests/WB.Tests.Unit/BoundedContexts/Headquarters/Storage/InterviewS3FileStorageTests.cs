@@ -79,6 +79,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
         }
 
         [Test]
+        [CancelAfter(2000)]
         public void should_fail_when_objects_are_still_stored_under_prefix_after_all_batches()
         {
             var interviewId = Guid.NewGuid();
