@@ -61,9 +61,10 @@ function walk(node, ctx, results) {
                 if (IGNORED_ATTRS.has(attrName)) continue
                 if (attrName.startsWith('on') || attrName.startsWith('data-')) continue
                 const value = prop.value.content
-                if (!looksLikeText(value)) continue
+                const isTextAttribute = TEXT_ATTRS.has(attrName)
+                if (isTextAttribute ? !/\p{L}/u.test(value) : !looksLikeText(value)) continue
                 results.push({
-                    kind: TEXT_ATTRS.has(attrName) ? `attr:${attrName}` : `attr?:${attrName}`,
+                    kind: isTextAttribute ? `attr:${attrName}` : `attr?:${attrName}`,
                     line: lineOf(prop.loc, ctx.lineOffset),
                     snippet: value.trim().slice(0, 80),
                 })
