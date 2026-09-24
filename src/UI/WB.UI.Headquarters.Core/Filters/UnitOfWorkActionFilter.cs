@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -12,19 +11,33 @@ namespace WB.UI.Headquarters.Filters
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var executedContext = await next.Invoke();
-
-            var doesMarkAsNoTransaction = DoesMarkAsNoTransaction(context);
-            if (doesMarkAsNoTransaction)
+            if (DoesMarkAsNoTransaction(context))
+            {
+                await next.Invoke();
                 return;
+            }
 
             var unitOfWork = context.HttpContext.RequestServices.GetRequiredService<IUnitOfWork>();
+            ActionExecutedContext executedContext;
+            try
+            {
+                executedContext = await next.Invoke();
+            }
+            catch
+            {
+                unitOfWork.DiscardChanges();
+                throw;
+            }
+
             if (executedContext.Exception == null)
             {
                 unitOfWork.AcceptChanges();
+                // Action filters finish before MVC executes/serializes the result.
+                unitOfWork.Complete();
             }
             else
             {
+                unitOfWork.DiscardChanges();
                 unitOfWork.Dispose();
             }
         }
