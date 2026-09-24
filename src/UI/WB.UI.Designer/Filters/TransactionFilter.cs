@@ -3,8 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,7 +32,7 @@ namespace WB.UI.Designer.Filters
             await ExecuteInTransactionAsync(context.HttpContext, dbContext, async () =>
             {
                 var executedContext = await next();
-                return ShouldCommit(executedContext.Exception, executedContext.Result, context.HttpContext.Response.StatusCode);
+                return executedContext.Exception == null;
             });
         }
 
@@ -52,7 +50,7 @@ namespace WB.UI.Designer.Filters
             await ExecuteInTransactionAsync(context.HttpContext, dbContext, async () =>
             {
                 var executedContext = await next();
-                return ShouldCommit(executedContext.Exception, executedContext.Result, context.HttpContext.Response.StatusCode);
+                return executedContext.Exception == null;
             });
         }
 
@@ -64,22 +62,6 @@ namespace WB.UI.Designer.Filters
                || HttpMethods.IsPut(method)
                || HttpMethods.IsPatch(method)
                || HttpMethods.IsDelete(method);
-
-        private static bool ShouldCommit(Exception? exception, IActionResult? result, int responseStatusCode)
-            => exception == null && !HasErrorStatus(result, responseStatusCode);
-
-        private static bool HasErrorStatus(IActionResult? result, int responseStatusCode)
-        {
-            // Forbid/Challenge set their 401/403 status only during result execution, after this filter runs,
-            // so they never surface as an IStatusCodeActionResult or a >=400 response here; treat them as failures.
-            if (result is ForbidResult or ChallengeResult)
-                return true;
-
-            if (result is IStatusCodeActionResult { StatusCode: >= StatusCodes.Status400BadRequest })
-                return true;
-
-            return responseStatusCode >= StatusCodes.Status400BadRequest;
-        }
 
         private static async Task ExecuteInTransactionAsync(HttpContext httpContext, DesignerDbContext dbContext, Func<Task<bool>> action)
         {
