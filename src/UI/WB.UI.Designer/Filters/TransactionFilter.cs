@@ -13,9 +13,13 @@ using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Designer.Filters
 {
-    // Wraps each web request in a single DesignerDbContext transaction so that all writes
-    // (change history, questionnaire list, state tracker snapshot) commit or roll back atomically.
-    // Safe (read-only) requests are always rolled back so accidental writes never persist.
+    // Wraps the MVC action / Razor page handler in a single DesignerDbContext transaction so that the
+    // writes of one business operation (change history, questionnaire list, state tracker snapshot) commit
+    // or roll back atomically. The boundary is handler completion, NOT the whole request: commit happens
+    // after the handler returns but BEFORE result execution, so view rendering, JSON serialization, result
+    // filters, and any writes/errors produced while the result executes are outside this transaction.
+    // It also starts after authentication, authorization, and model binding. Safe (read-only) requests are
+    // always rolled back so accidental writes never persist.
     public class TransactionFilter : IAsyncActionFilter, IAsyncPageFilter
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
