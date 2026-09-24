@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -102,14 +103,29 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             return Ok(questionnaires);
         }
 
-        // Legacy import endpoint: the download also records import history, so it opts out of the request transaction to keep that write.
+        // Legacy import endpoint: the download also records import history. The request filter rolls back GETs, so
+        // run the write in its own committed transaction - which also lets the advisory history lock engage (it is a no-op
+        // without an ambient transaction), serializing sequence allocation through commit across concurrent imports.
         [HttpGet]
         [Route("{id:Guid}")]
         [NoTransaction]
-        public Task<IActionResult> Get(Guid id, int clientQuestionnaireContentVersion, 
+        public async Task<IActionResult> Get(Guid id, int clientQuestionnaireContentVersion, 
             [FromQuery]int? minSupportedQuestionnaireVersion = null,
             [FromQuery]string? instanceId = null)
-            => this.GetForImport(id, clientQuestionnaireContentVersion, minSupportedQuestionnaireVersion, instanceId);
+        {
+            await using var transaction = await this.listItemStorage.Database.BeginTransactionAsync();
+            try
+            {
+                var result = await this.GetForImport(id, clientQuestionnaireContentVersion, minSupportedQuestionnaireVersion, instanceId);
+                await transaction.CommitAsync();
+                return result;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
 
         [HttpPost]
         [Route("{id:Guid}")]
