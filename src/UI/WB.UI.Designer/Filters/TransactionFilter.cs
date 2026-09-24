@@ -66,6 +66,11 @@ namespace WB.UI.Designer.Filters
 
         private static bool HasErrorStatus(IActionResult? result, int responseStatusCode)
         {
+            // Forbid/Challenge set their 401/403 status only during result execution, after this filter runs,
+            // so they never surface as an IStatusCodeActionResult or a >=400 response here; treat them as failures.
+            if (result is ForbidResult or ChallengeResult)
+                return true;
+
             if (result is IStatusCodeActionResult { StatusCode: >= StatusCodes.Status400BadRequest })
                 return true;
 
