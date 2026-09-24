@@ -8,6 +8,8 @@ import modal from '@/shared/modal'
 
 import { $t } from '~/shared/plugins/locale'
 
+let breadcrumbsRequestGeneration = 0
+
 function getAnswer(state, identity) {
     const question = state.entityDetails[identity]
     if (question == null) return null
@@ -291,8 +293,12 @@ export default {
     }, 200),
 
     fetchBreadcrumbs: debounce(async ({ commit, rootState }) => {
+        const requestGeneration = ++breadcrumbsRequestGeneration
         const sectionId = rootState.route.params.sectionId
         const crumps = await api.get('getBreadcrumbs', { sectionId })
+        if (requestGeneration !== breadcrumbsRequestGeneration || rootState.route.params.sectionId !== sectionId)
+            return
+
         commit('SET_BREADCRUMPS', crumps)
     }, 200),
 
@@ -359,6 +365,10 @@ export default {
     changeSection({ commit, rootState }, { to, from }) {
         const interviewId = rootState.route.params.interviewId
         commit('CURRENT_SECTION', { interviewId: interviewId, sectionId: to })
+        if (to !== from) {
+            breadcrumbsRequestGeneration++
+            commit('CLEAR_BREADCRUMBS')
+        }
         return hubApi.changeSection(to, from)
     },
 
