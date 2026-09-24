@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace WB.Core.BoundedContexts.Designer.DataAccess
@@ -9,16 +10,17 @@ namespace WB.Core.BoundedContexts.Designer.DataAccess
     // This closes the race where a read begun before invalidation repopulates the shared cache afterwards.
     public interface IKeyValueCacheEvictionTokens
     {
-        CancellationToken Acquire(string cacheKey);
+        CancellationTokenSource Acquire(string cacheKey);
         void Invalidate(string cacheKey);
+        void Release(string cacheKey, CancellationTokenSource source);
     }
 
     public class KeyValueCacheEvictionTokens : IKeyValueCacheEvictionTokens
     {
         private readonly ConcurrentDictionary<string, CancellationTokenSource> sources = new();
 
-        public CancellationToken Acquire(string cacheKey)
-            => this.sources.GetOrAdd(cacheKey, _ => new CancellationTokenSource()).Token;
+        public CancellationTokenSource Acquire(string cacheKey)
+            => this.sources.GetOrAdd(cacheKey, _ => new CancellationTokenSource());
 
         public void Invalidate(string cacheKey)
         {
@@ -30,5 +32,10 @@ namespace WB.Core.BoundedContexts.Designer.DataAccess
                 source.Cancel();
             }
         }
+
+        // Called when the key's cache entry is evicted, so read-only keys don't stay rooted for the process lifetime.
+        // Compare-and-remove: only this exact generation is dropped, never a newer source a concurrent reader installed.
+        public void Release(string cacheKey, CancellationTokenSource source)
+            => this.sources.TryRemove(new KeyValuePair<string, CancellationTokenSource>(cacheKey, source));
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Main.Core.Documents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -47,9 +48,14 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 
             var storedValue = memoryCache.GetOrCreate(CacheKey(id), cache =>
             {
-                // Capture the eviction token before reading the store: if a concurrent commit invalidates this
+                // Capture the eviction source before reading the store: if a concurrent commit invalidates this
                 // key while FindEntry runs, the token cancels and this entry is evicted instead of caching stale data.
-                cache.AddExpirationToken(new CancellationChangeToken(evictionTokens.Acquire(CacheKey(id))));
+                var evictionSource = evictionTokens.Acquire(CacheKey(id));
+                cache.AddExpirationToken(new CancellationChangeToken(evictionSource.Token));
+                // Release the source once its entry is evicted so read-only keys don't stay rooted forever.
+                cache.RegisterPostEvictionCallback(
+                    (key, _, _, state) => evictionTokens.Release((string)key, (CancellationTokenSource)state!),
+                    evictionSource);
                 cache.SetSlidingExpiration(TimeSpan.FromMinutes(5));
 
                 var entry = FindEntry(id);
