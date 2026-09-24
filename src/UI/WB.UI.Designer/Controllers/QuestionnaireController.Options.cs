@@ -293,7 +293,7 @@ namespace WB.UI.Designer.Controllers
             [FromBody] UpdateCategoriesModel? categoriesModel)
         {
             if (categoriesModel?.Categories == null)
-                return Json(GetNotFoundResponseObject());
+                return CommandJsonResult(GetNotFoundResponseObject());
 
             if (isCategory)
             {
@@ -321,7 +321,7 @@ namespace WB.UI.Designer.Controllers
                     commandResult.IsSuccess = false;
                     commandResult.Error = "Error occurred: " + e.Message;
 
-                    return Json(commandResult);
+                    return CommandJsonResult((object)commandResult);
                 }
 
                 var model = this.GetCategoryOptions(id, entityId);
@@ -350,7 +350,7 @@ namespace WB.UI.Designer.Controllers
                     }
                 }
 
-                return Json(categoriesCommandResult);
+                return CommandJsonResult(categoriesCommandResult);
             }
             else
             {
@@ -376,7 +376,7 @@ namespace WB.UI.Designer.Controllers
 
                 var commandResult = await this.ExecuteCommand(command);
 
-                return Json(commandResult);
+                return CommandJsonResult(commandResult);
             }
         }
 
@@ -412,6 +412,23 @@ namespace WB.UI.Designer.Controllers
                 commandResult.Error = domainEx != null ? domainEx.Message : "Something went wrong";
             }
             return commandResult;
+        }
+
+        private JsonResult CommandJsonResult(object commandResult)
+        {
+            var jsonResult = Json(commandResult);
+
+            // A failed command returns a 200 IsSuccess=false envelope; give it an error status so
+            // TransactionFilter rolls back the command's tracked changes instead of committing them.
+            if (commandResult is IDictionary<string, object?> result
+                && result.TryGetValue("IsSuccess", out var isSuccessObj)
+                && isSuccessObj is bool isSuccess
+                && !isSuccess)
+            {
+                jsonResult.StatusCode = StatusCodes.Status400BadRequest;
+            }
+
+            return jsonResult;
         }
 
         public IActionResult ExportLookupTable(QuestionnaireRevision id, Guid lookupTableId)
