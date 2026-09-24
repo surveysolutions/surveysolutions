@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using Main.Core.Documents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -48,23 +47,30 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 
             var storedValue = memoryCache.GetOrCreate(CacheKey(id), cache =>
             {
-                // Capture the eviction source before reading the store: if a concurrent commit invalidates this
-                // key while FindEntry runs, the token cancels and this entry is evicted instead of caching stale data.
-                var evictionSource = evictionTokens.Acquire(CacheKey(id));
-                cache.AddExpirationToken(new CancellationChangeToken(evictionSource.Token));
-                // Release the source once its entry is evicted so read-only keys don't stay rooted forever.
-                cache.RegisterPostEvictionCallback(
-                    (key, _, _, state) => evictionTokens.Release((string)key, (CancellationTokenSource)state!),
-                    evictionSource);
-                cache.SetSlidingExpiration(TimeSpan.FromMinutes(5));
-
-                var entry = FindEntry(id);
-                if (entry == null || entry.State == EntityState.Deleted)
+                // Lease the eviction source before reading the store: a concurrent commit that invalidates this key
+                // while FindEntry runs cancels the token, so this entry is evicted instead of caching stale data.
+                var lease = evictionTokens.Acquire(CacheKey(id));
+                try
                 {
-                    return null;
-                }
+                    cache.AddExpirationToken(new CancellationChangeToken(lease.Token));
+                    // Release the lease when the entry is evicted so a generation is unmapped once no entry uses it.
+                    cache.RegisterPostEvictionCallback((_, _, _, state) => ((ICacheEvictionLease)state!).Release(), lease);
+                    cache.SetSlidingExpiration(TimeSpan.FromMinutes(5));
 
-                return entry.Entity.Value;
+                    var entry = FindEntry(id);
+                    if (entry == null || entry.State == EntityState.Deleted)
+                    {
+                        return null;
+                    }
+
+                    return entry.Entity.Value;
+                }
+                catch
+                {
+                    // The entry is never committed, so its eviction callback won't run; release the lease here.
+                    lease.Release();
+                    throw;
+                }
             });
 
             // Deserialize a fresh instance per call so callers never mutate the shared cached value.
@@ -97,7 +103,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
         {
             var entity = FindEntry(id);
 
-            if(entity != null && entity.State != EntityState.Deleted)
+            if (entity != null && entity.State != EntityState.Deleted)
             {
                 this.dbContext.Remove(entity.Entity);
                 InvalidateCache(id);
@@ -106,14 +112,14 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 
         private EntityEntry<KeyValueEntity>? FindEntry(string id)
         {
-            var entity = this.dbContext.Find(QueryType, id) as KeyValueEntity;            
+            var entity = this.dbContext.Find(QueryType, id) as KeyValueEntity;
             return entity == null ? null : this.dbContext.Entry(entity);
         }
 
         public void Store(T entity, string id)
         {
             var entry = FindEntry(id);
-            
+
             if (entry != null && entry.State != EntityState.Deleted)
             {
                 entry.Entity.Value = this.serializer.Serialize(entity);
@@ -122,7 +128,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             {
                 var instance = Activator.CreateInstance(QueryType);
                 if (instance == null) throw new Exception($"Activation error of {QueryType}");
-                
+
                 var store = (KeyValueEntity)instance;
                 store.Id = id;
                 store.Value = this.serializer.Serialize(entity);
@@ -160,7 +166,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
                     {
                         throw new Exception($"Attribute for storage was not found for type {typeof(T).Name}");
                     }
-                    
+
                     StoredInAttribute storedInAttribute = (StoredInAttribute)attribute;
                     queryType = storedInAttribute.StoredIn;
                 }
