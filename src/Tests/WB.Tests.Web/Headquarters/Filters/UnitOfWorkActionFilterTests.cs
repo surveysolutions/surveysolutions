@@ -81,7 +81,7 @@ namespace WB.Tests.Web.Headquarters.Filters
         }
 
         [Test]
-        public async Task should_discard_and_dispose_on_action_exception()
+        public async Task should_discard_but_leave_disposal_to_scope_on_action_exception()
         {
             var unitOfWork = new Mock<IUnitOfWork>();
             using var services = new ServiceCollection().AddSingleton(unitOfWork.Object).BuildServiceProvider();
@@ -94,7 +94,7 @@ namespace WB.Tests.Web.Headquarters.Filters
                 }));
 
             unitOfWork.Verify(x => x.DiscardChanges(), Times.Once);
-            unitOfWork.Verify(x => x.Dispose(), Times.Once);
+            unitOfWork.Verify(x => x.Dispose(), Times.Never);
             unitOfWork.Verify(x => x.AcceptChanges(), Times.Never);
             unitOfWork.Verify(x => x.Complete(), Times.Never);
         }
@@ -112,6 +112,7 @@ namespace WB.Tests.Web.Headquarters.Filters
 
             Assert.That(thrown, Is.SameAs(failure));
             unitOfWork.Verify(x => x.DiscardChanges(), Times.Once);
+            unitOfWork.Verify(x => x.Dispose(), Times.Never);
             unitOfWork.Verify(x => x.Complete(), Times.Never);
         }
 

@@ -37,8 +37,8 @@ namespace WB.UI.Headquarters.Filters
             }
             else
             {
+                // The request scope owns disposal. Other filters may still need its services.
                 unitOfWork.DiscardChanges();
-                unitOfWork.Dispose();
             }
         }
 
