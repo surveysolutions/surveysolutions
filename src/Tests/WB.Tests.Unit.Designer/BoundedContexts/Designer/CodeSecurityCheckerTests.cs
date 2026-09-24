@@ -54,6 +54,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         [TestCase("System.IO.Path.Combine(\"test\", \"test\")", "System.IO.Path")]
         [TestCase("System.Reflection.Assembly.GetExecutingAssembly()", "System.Reflection.Assembly")]
         [TestCase("dynamic t = new object()", "dynamic")]
+        [TestCase("new Random().Next() > 0", "System.Random")]
+        [TestCase("new Random(42).Next() > 0", "System.Random")]
+        [TestCase("new System.Random().NextDouble() > 0", "System.Random")]
+        [TestCase("Random.Shared.Next() > 0", "System.Random")]
         public void should_not_allow_usage_of_dangerous_classes(string codeToCheck, string expectedClassName)
         {
             string code = string.Format(TestClassToCompile, codeToCheck);
