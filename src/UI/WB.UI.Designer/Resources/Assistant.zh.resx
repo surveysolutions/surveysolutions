@@ -102,4 +102,7 @@
     <data name="ServiceUnavailable" xml:space="preserve">
         <value>助手服务暂时不可用。请稍后重试。</value>
     </data>
+    <data name="MessageTooLong" xml:space="preserve">
+        <value>消息太长已被截断。发送前请缩短内容。</value>
+    </data>
 </root>

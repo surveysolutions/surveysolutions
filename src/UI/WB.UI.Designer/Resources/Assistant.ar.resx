@@ -102,4 +102,7 @@
     <data name="ServiceUnavailable" xml:space="preserve">
         <value>خدمة المساعد غير متاحة مؤقتًا. يرجى المحاولة مرة أخرى لاحقًا.</value>
     </data>
+    <data name="MessageTooLong" xml:space="preserve">
+        <value>الرسالة طويلة جداً وتم اقتطاعها. يرجى اختصارها قبل الإرسال.</value>
+    </data>
 </root>

@@ -102,4 +102,7 @@
     <data name="ServiceUnavailable" xml:space="preserve">
         <value>Služba asistenta je dočasně nedostupná. Zkuste to prosím znovu později.</value>
     </data>
+    <data name="MessageTooLong" xml:space="preserve">
+        <value>Zpráva je příliš dlouhá a byla zkrácena. Před odesláním ji prosím zkraťte.</value>
+    </data>
 </root>
