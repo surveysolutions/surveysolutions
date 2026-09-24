@@ -14,7 +14,7 @@ param(
     [string] $KeystorePassword = $ENV:ANDROID_SIGNING_KEY_PASS,
     [string] $KeystoreAlias = $ENV:ANDROID_KEY_ALIAS,
     [string] $GoogleMapKey = $NULL,
-    [string] $ArcGisKey300 = $NULL,
+    [string] $NewArcGisKey300 = $NULL,
     [string] $dockerRegistry = $ENV:DOCKER_REGISTRY,
     [string] $releaseBranch = 'release', # Docker builds will push to release 
     [switch] $noDockerPush,
@@ -219,7 +219,7 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
     Set-AndroidXmlResourceValue $CapiProject "com_crashlytics_android_active" "true" "bool"
 
     Set-AndroidXmlResourceValue $CapiProject "google_maps_api_key" $GoogleMapKey
-    Set-AndroidXmlResourceValue $CapiProject "arcgisruntime_key_300" $ArcGisKey300
+    Set-AndroidXmlResourceValue $CapiProject "arcgisruntime_key_300" $NewArcGisKey300
     
 
     $keyStore = [System.IO.Path]::GetTempFileName()
