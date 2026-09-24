@@ -2,7 +2,7 @@ param([string]$VersionName = $null,
 [INT]$VersionCode,
 [string]$BuildConfiguration='Release',
 [string]$KeystorePassword = $null,
-[string]$ArcGisKey300 = $NULL,
+[string]$NewArcGisKey300 = $NULL,
 [string]$branch = "master",
 [string]$GoogleMapKey,
 [string]$AppCenterKey,
@@ -24,7 +24,7 @@ Log-Block "Update project version" {
 }
 
 Set-AndroidXmlResourceValue $AndroidProject "google_maps_api_key" $GoogleMapKey
-Set-AndroidXmlResourceValue $AndroidProject "arcgisruntime_key_300" $ArcGisKey300
+Set-AndroidXmlResourceValue $AndroidProject "arcgisruntime_key_300" $NewArcGisKey300
 
 Set-AndroidXmlResourceValue $AndroidProject "com_crashlytics_android_active" 'true'
 
