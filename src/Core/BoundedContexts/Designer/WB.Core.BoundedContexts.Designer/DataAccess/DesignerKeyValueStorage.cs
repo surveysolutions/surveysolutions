@@ -3,6 +3,7 @@ using Main.Core.Documents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Primitives;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Implementation;
@@ -17,17 +18,20 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
         private readonly IMemoryCache memoryCache;
         private readonly IEntitySerializer<T> serializer;
         private readonly ITransactionalMemoryCacheInvalidation cacheInvalidation;
+        private readonly IKeyValueCacheEvictionTokens evictionTokens;
 
         public DesignerKeyValueStorage(
             DesignerDbContext dbContext,
             IMemoryCache memoryCache,
             IEntitySerializer<T> serializer,
-            ITransactionalMemoryCacheInvalidation cacheInvalidation)
+            ITransactionalMemoryCacheInvalidation cacheInvalidation,
+            IKeyValueCacheEvictionTokens evictionTokens)
         {
             this.dbContext = dbContext;
             this.memoryCache = memoryCache;
             this.serializer = serializer;
             this.cacheInvalidation = cacheInvalidation;
+            this.evictionTokens = evictionTokens;
         }
 
         public T? GetById(string id)
@@ -43,6 +47,9 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 
             var storedValue = memoryCache.GetOrCreate(CacheKey(id), cache =>
             {
+                // Capture the eviction token before reading the store: if a concurrent commit invalidates this
+                // key while FindEntry runs, the token cancels and this entry is evicted instead of caching stale data.
+                cache.AddExpirationToken(new CancellationChangeToken(evictionTokens.Acquire(CacheKey(id))));
                 cache.SetSlidingExpiration(TimeSpan.FromMinutes(5));
 
                 var entry = FindEntry(id);
@@ -125,7 +132,10 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             if (dbContext.Database.CurrentTransaction != null)
                 cacheInvalidation.Enqueue(CacheKey(id));
             else
+            {
+                evictionTokens.Invalidate(CacheKey(id));
                 memoryCache.Remove(CacheKey(id));
+            }
         }
 
         private string CacheKey(string id) => QueryType.Name + id;

@@ -102,6 +102,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IQuestionnaireCodeGenerationPackageFactory, QuestionnaireCodeGenerationPackageFactory>();
             registry.Bind(typeof(ITopologicalSorter<>), typeof(TopologicalSorter<>));
             
+            registry.BindAsSingleton<IKeyValueCacheEvictionTokens, KeyValueCacheEvictionTokens>();
             registry.BindAsScoped<ITransactionalMemoryCacheInvalidation, TransactionalMemoryCacheInvalidation>();
             registry.Bind(typeof(IPlainKeyValueStorage<>), typeof(DesignerKeyValueStorage<>));
             registry.Bind(typeof(IEntitySerializer<>), typeof(EntitySerializer<>));

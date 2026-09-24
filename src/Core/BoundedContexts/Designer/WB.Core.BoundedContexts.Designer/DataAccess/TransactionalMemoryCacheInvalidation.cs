@@ -14,11 +14,13 @@ namespace WB.Core.BoundedContexts.Designer.DataAccess
     public class TransactionalMemoryCacheInvalidation : ITransactionalMemoryCacheInvalidation
     {
         private readonly IMemoryCache memoryCache;
+        private readonly IKeyValueCacheEvictionTokens evictionTokens;
         private readonly HashSet<string> pendingKeys = new();
 
-        public TransactionalMemoryCacheInvalidation(IMemoryCache memoryCache)
+        public TransactionalMemoryCacheInvalidation(IMemoryCache memoryCache, IKeyValueCacheEvictionTokens evictionTokens)
         {
             this.memoryCache = memoryCache;
+            this.evictionTokens = evictionTokens;
         }
 
         public void Enqueue(string cacheKey) => this.pendingKeys.Add(cacheKey);
@@ -27,6 +29,9 @@ namespace WB.Core.BoundedContexts.Designer.DataAccess
         {
             foreach (var key in this.pendingKeys)
             {
+                // Runs after the transaction has committed, so cancelling the key's eviction token here evicts any
+                // entry a concurrent reader populated from pre-commit data during the transaction.
+                this.evictionTokens.Invalidate(key);
                 this.memoryCache.Remove(key);
             }
 
