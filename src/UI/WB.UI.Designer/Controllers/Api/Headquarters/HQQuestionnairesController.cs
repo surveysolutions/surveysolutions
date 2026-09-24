@@ -19,6 +19,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
@@ -101,11 +102,25 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             return Ok(questionnaires);
         }
 
+        // Legacy import endpoint: the download also records import history, so it opts out of the request transaction to keep that write.
         [HttpGet]
         [Route("{id:Guid}")]
-        public async Task<IActionResult> Get(Guid id, int clientQuestionnaireContentVersion, 
+        [NoTransaction]
+        public Task<IActionResult> Get(Guid id, int clientQuestionnaireContentVersion, 
             [FromQuery]int? minSupportedQuestionnaireVersion = null,
             [FromQuery]string? instanceId = null)
+            => this.GetForImport(id, clientQuestionnaireContentVersion, minSupportedQuestionnaireVersion, instanceId);
+
+        [HttpPost]
+        [Route("{id:Guid}")]
+        public Task<IActionResult> Post(Guid id, int clientQuestionnaireContentVersion, 
+            [FromQuery]int? minSupportedQuestionnaireVersion = null,
+            [FromQuery]string? instanceId = null)
+            => this.GetForImport(id, clientQuestionnaireContentVersion, minSupportedQuestionnaireVersion, instanceId);
+
+        private async Task<IActionResult> GetForImport(Guid id, int clientQuestionnaireContentVersion, 
+            int? minSupportedQuestionnaireVersion,
+            string? instanceId)
         {
             QuestionnaireView? questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
 
