@@ -111,6 +111,7 @@
     "SideBarAttachmentDetailsResolution": "{{width}} × {{height}}px",
     "SideBarAttachmentDetailsSize": "size: {{size}}",
     "AttachmentSizeIsTooBig": "Attachment size is too big. Max size: {{size}}",
+    "AttachmentTypeIsNotSupported": "Attachment type is not supported.",
     "SideBarAttachmentsTitle": "Attachments",
     "SideBarCommentsTitle": "Comments",
     "SideBarCriticalityConditionsTitle": "Critical rules",
