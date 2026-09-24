@@ -86,7 +86,14 @@ namespace WB.UI.Designer.Filters
                 else
                 {
                     await transaction.RollbackAsync(CancellationToken.None);
+                    // Rollback reverts the database but not the change tracker; detach so downstream reuse of the scoped context is clean.
+                    dbContext.ChangeTracker.Clear();
                 }
+            }
+            catch
+            {
+                dbContext.ChangeTracker.Clear();
+                throw;
             }
             finally
             {
