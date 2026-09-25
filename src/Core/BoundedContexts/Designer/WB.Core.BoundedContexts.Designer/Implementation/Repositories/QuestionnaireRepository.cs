@@ -15,6 +15,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
 {
     internal class QuestionnaireRepository : IPlainAggregateRootRepository<Questionnaire>, IPlainAggregateRootRepository
     {
+        private const int AggregateLockClass = 20501;
+
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly IServiceProvider locator;
         private readonly DesignerDbContext dbContext;
@@ -30,6 +32,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
 
         public Questionnaire? Get(Guid aggregateId)
         {
+            // Serialize the whole read-modify-write: the in-process aggregate lock releases before the request commits,
+            // so without a DB lock held to commit a concurrent writer could read this document and overwrite the edit.
+            this.LockQuestionnaireForUpdate(aggregateId);
+
             var questionnaireDocument = this.questionnaireStorage.GetById(aggregateId.FormatGuid());
 
             if (questionnaireDocument == null)
@@ -56,7 +62,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
 
         public IPlainAggregateRoot? Get(Type aggregateRootType, Guid aggregateId)
         {
-            if(aggregateRootType != typeof(Questionnaire))
+            if (aggregateRootType != typeof(Questionnaire))
                 throw new InvalidOperationException();
             var questionnaire = this.Get(aggregateId);
             return questionnaire;
@@ -65,6 +71,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
         public void Save(IPlainAggregateRoot aggregateRoot)
         {
             this.Save((Questionnaire)aggregateRoot);
+        }
+
+        // Transaction-scoped advisory lock keyed by the questionnaire id; no-op outside a Npgsql transaction
+        // (read requests and in-memory tests), so it only engages for the ambient write transaction.
+        private void LockQuestionnaireForUpdate(Guid aggregateId)
+        {
+            if (!this.dbContext.Database.IsNpgsql() || this.dbContext.Database.CurrentTransaction == null)
+                return;
+
+            var bytes = aggregateId.ToByteArray();
+            var key = BitConverter.ToInt32(bytes, 0) ^ BitConverter.ToInt32(bytes, 4)
+                    ^ BitConverter.ToInt32(bytes, 8) ^ BitConverter.ToInt32(bytes, 12);
+
+            this.dbContext.Database.ExecuteSqlInterpolated(
+                $"SELECT pg_advisory_xact_lock({AggregateLockClass}, {key})");
         }
     }
 }
