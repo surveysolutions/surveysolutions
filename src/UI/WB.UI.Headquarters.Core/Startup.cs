@@ -74,6 +74,7 @@ using WB.UI.Headquarters.Models.Users;
 using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Headquarters.Services.Quartz;
+using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Integrity;
@@ -534,7 +535,7 @@ namespace WB.UI.Headquarters
                 {
                     context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                     context.Response.ContentType = "text/plain; charset=utf-8";
-                    await context.Response.WriteAsync("An unexpected error occurred.");
+                    await context.Response.WriteAsync(Pages.GlobalSettings_UnhandledExceptionMessage);
                 }));
             }
 

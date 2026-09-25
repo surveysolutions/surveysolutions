@@ -65,6 +65,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
             {
                 using (var dbConnection = session.Connection)
                 {
+                    dbConnection.Execute("DROP TABLE if exists testclass_uow_deferred;");
                     dbConnection.Execute("DROP TABLE if exists testclass_timespan_uow;");
                     dbConnection.Execute(@"CREATE TABLE testclass_timespan_uow (
 	                id uuid NOT NULL,
