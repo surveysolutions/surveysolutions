@@ -45,6 +45,17 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
                     : this.serializer.Deserialize(pending.Entity.Value);
             }
 
+            if (dbContext.Database.CurrentTransaction != null)
+            {
+                // Inside a write transaction the read-modify-write must see freshly committed state: a prior writer
+                // releases its advisory lock at commit but flushes the shared-cache invalidation only afterwards, so
+                // the cache can still hold that writer's pre-commit document. Read the store directly, bypassing it.
+                var current = FindEntry(id);
+                return current == null || current.State == EntityState.Deleted
+                    ? null
+                    : this.serializer.Deserialize(current.Entity.Value);
+            }
+
             var storedValue = memoryCache.GetOrCreate(CacheKey(id), cache =>
             {
                 // Lease the eviction source before reading the store: a concurrent commit that invalidates this key
