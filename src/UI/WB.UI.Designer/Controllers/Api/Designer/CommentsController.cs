@@ -28,7 +28,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly UserManager<DesignerIdentityUser> users;
 
         public CommentsController(
-            ICommentsService commentsService, 
+            ICommentsService commentsService,
             IQuestionnaireViewFactory questionnaireViewFactory,
             DesignerDbContext dbContext,
             UserManager<DesignerIdentityUser> users)
@@ -45,8 +45,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         {
             if (!User.Identity?.IsAuthenticated ?? true)
                 return new List<CommentThread>();
-            
-            bool hasAccess = User.IsAdmin() || 
+
+            bool hasAccess = User.IsAdmin() ||
                              this.questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(id.QuestionnaireId, this.User.GetId());
 
             return hasAccess ? this.commentsService.LoadCommentThreads(id.QuestionnaireId) : new List<CommentThread>();
@@ -59,11 +59,11 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if (!User.Identity?.IsAuthenticated ?? true)
                 return new List<CommentView>();
 
-            bool hasAccess = User.IsAdmin() 
+            bool hasAccess = User.IsAdmin()
                              || this.questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(id.QuestionnaireId, User.GetId());
 
-            return hasAccess 
-                ? await this.commentsService.LoadCommentsForEntity(id.QuestionnaireId, itemId) 
+            return hasAccess
+                ? await this.commentsService.LoadCommentsForEntity(id.QuestionnaireId, itemId)
                 : new List<CommentView>();
         }
 
@@ -71,17 +71,17 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [HttpPost]
         [Route("entity/addComment")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PostComment(QuestionnaireRevision id, [FromBody]AddCommentModel commentModel)
+        public async Task<IActionResult> PostComment(QuestionnaireRevision id, [FromBody] AddCommentModel commentModel)
         {
             if (!ModelState.IsValid)
             {
                 return Json(new
                 {
-                    Error = string.Join(", ", 
+                    Error = string.Join(", ",
                         ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage))
                 });
             }
-            bool hasAccess = User.IsAdmin() 
+            bool hasAccess = User.IsAdmin()
                 || this.questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(id.QuestionnaireId, User.GetId());
 
             hasAccess = hasAccess && id.Revision == null;
@@ -103,14 +103,13 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 });
             }
 
-            commentsService.PostComment(commentModel.Id, 
+            commentsService.PostComment(commentModel.Id,
                 commentModel.QuestionnaireId,
-                commentModel.EntityId, 
-                commentModel.Comment ?? "", 
+                commentModel.EntityId,
+                commentModel.Comment ?? "",
                 user.UserName,
                 user.Email ?? string.Empty);
 
-            await dbContext.SaveChangesAsync();
             return Ok();
         }
 
@@ -129,7 +128,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             {
                 return NotFound();
             }
-            await dbContext.SaveChangesAsync();
             return Ok();
         }
 
@@ -141,7 +139,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         public async Task<IActionResult> DeleteComment(Guid id, Guid commentId)
         {
             await commentsService.DeleteCommentAsync(commentId, id);
-            await dbContext.SaveChangesAsync();
             return Ok();
         }
     }

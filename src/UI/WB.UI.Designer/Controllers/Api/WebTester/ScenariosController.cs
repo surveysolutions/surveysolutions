@@ -26,7 +26,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         [Route("{id:Guid}")]
         [QuestionnairePermissions(write: true)]
         [HttpPost]
-        public async Task<IActionResult> Post(Guid id, [FromBody]PostScenarioModel model)
+        public async Task<IActionResult> Post(Guid id, [FromBody] PostScenarioModel model)
         {
             if (!User.HasMatchingQuestionnaireId(id))
                 return Forbid();
@@ -62,8 +62,6 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
 
                 existingScenario.Steps = model.ScenarioText ?? "";
             }
-
-            await this.dbContext.SaveChangesAsync();
 
             return Ok();
         }

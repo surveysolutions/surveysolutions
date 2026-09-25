@@ -103,7 +103,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [HttpPost]
         public async Task<IActionResult> UpdateAttachment(AttachmentModel model)
         {
-            if(model?.Command == null)
+            if (model?.Command == null)
                 return this.Error((int)HttpStatusCode.NotAcceptable, "Invalid command");
 
             var commandType = typeof(AddOrUpdateAttachment).Name;
@@ -131,16 +131,16 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 {
                     if (!command.OldAttachmentId.HasValue)
                         throw new ArgumentException(string.Format(ExceptionMessages.OldAttachmentIdIsEmpty, command.AttachmentId, command.QuestionnaireId));
-                    
-                    command.AttachmentContentId = 
-                        this.attachmentService.GetAttachmentContentId(command.OldAttachmentId.Value) 
+
+                    command.AttachmentContentId =
+                        this.attachmentService.GetAttachmentContentId(command.OldAttachmentId.Value)
                         ?? throw new ArgumentException(string.Format(ExceptionMessages.OldAttachmentIdIsEmpty, command.AttachmentId, command.QuestionnaireId));
                 }
 
                 this.attachmentService.SaveMeta(
                     attachmentId: command.AttachmentId,
                     questionnaireId: command.QuestionnaireId,
-                    attachmentContentId: command.AttachmentContentId, 
+                    attachmentContentId: command.AttachmentContentId,
                     fileName: model.File?.FileName ?? model.FileName);
             }
             catch (FormatException e)
@@ -163,7 +163,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
 
             var updateAttachment = this.ProcessCommand(command).Response;
-            await dbContext.SaveChangesAsync();
             return updateAttachment;
         }
 
@@ -212,7 +211,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 if (string.IsNullOrWhiteSpace(fileStreamContent) && updateLookupTableCommand.OldLookupTableId.HasValue)
                 {
                     var lookupContent = this.lookupTableService.GetLookupTableContentFile(
-                        new QuestionnaireRevision(updateLookupTableCommand.QuestionnaireId), 
+                        new QuestionnaireRevision(updateLookupTableCommand.QuestionnaireId),
                         updateLookupTableCommand.OldLookupTableId.Value);
 
                     if (lookupContent != null)
@@ -249,13 +248,11 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             var updateLookupTable = this.ProcessCommand(updateLookupTableCommand).Response;
 
-            await dbContext.SaveChangesAsync();
-
             return updateLookupTable;
         }
 
         [Route("~/api/command")]
-        public IActionResult Post([FromBody]CommandExecutionModel model)
+        public IActionResult Post([FromBody] CommandExecutionModel model)
         {
             if (model?.Command == null || model?.Type == null)
                 throw new InvalidOperationException("Invalid command");
@@ -355,7 +352,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             if (commandResponse.HasErrors || model.File == null)
             {
-                await dbContext.SaveChangesAsync();
                 return commandResponse.Response;
             }
 
@@ -364,8 +360,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             var resultMessage = storedTranslationsCount == 1
                 ? string.Format(QuestionnaireEditor.TranslationsObtained, storedTranslationsCount)
                 : string.Format(QuestionnaireEditor.TranslationsObtained_plural, storedTranslationsCount);
-
-            await dbContext.SaveChangesAsync();
 
             return Ok(resultMessage);
         }
@@ -386,10 +380,10 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 {
                     var extension = this.fileSystemAccessor.GetFileExtension(model.File.FileName);
 
-                    var excelExtensions = new[] {".xlsx", ".ods", ".xls"};
-                    var tsvExtensions = new[] {".txt", ".tab", ".tsv"};
+                    var excelExtensions = new[] { ".xlsx", ".ods", ".xls" };
+                    var tsvExtensions = new[] { ".txt", ".tab", ".tsv" };
 
-                    if(!excelExtensions.Union(tsvExtensions).Contains(extension))
+                    if (!excelExtensions.Union(tsvExtensions).Contains(extension))
                         throw new ArgumentException(ExceptionMessages.ImportOptions_Tab_Or_Excel_Only);
 
                     var fileType = excelExtensions.Contains(extension)
@@ -621,5 +615,5 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         public IActionResult Response { get; set; }
     }
 
-  
+
 }
