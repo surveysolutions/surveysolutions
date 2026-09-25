@@ -163,6 +163,14 @@ namespace WB.UI.WebTester.Controllers
                     questionnaireId,
                     interviewId,
                     HttpContext.TraceIdentifier);
+
+                // Strip the single-use code from the browser URL via Post/Redirect/Get.
+                // The code is consumed by the exchange above, so a page refresh or back/forward
+                // navigation that re-submits the same code would fail the second exchange
+                // (Designer returns 400) and bounce the user to the error page despite holding a
+                // valid session. Redirecting to the same action without ?code= routes refreshes
+                // through the session-based path and starts the import there.
+                return this.RedirectToAction("Run", "WebTester", new { questionnaireId, sid, scenarioId });
             }
             else
             {
