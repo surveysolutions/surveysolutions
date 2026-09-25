@@ -207,8 +207,7 @@ jobs:
         -androidKeyStore "${{ secrets.INTERVIEWER_KEYSTORE }}" `
         -KeystorePassword "${{ secrets.INTERVIEWER_KEYSTORE_PASSWORD }}" `
         -GoogleMapKey "${{ secrets.GOOGLEMAPS_KEY }}" `
-        -ArcGisKey "${{ secrets.ARCGIS_KEY }}"
-        -ArcGisApiKey "${{ secrets.ARCGIS_API_KEY }}"
+        -ArcGisKey300 "${{ secrets.ARCGIS_KEY_300 }}"
 
     - name: Publish
       uses: actions/upload-artifact@v6
