@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -862,5 +862,8 @@
   </data>
     <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
     <value>Сообщение критического правила содержит более {0} символов.</value>
+  </data>
+  <data name="WB0324_NegativeSpecialValuesNotAllowedForNonNegativeNumericQuestion" xml:space="preserve">
+    <value>Отрицательные специальные значения не разрешены для неотрицательных числовых вопросов.</value>
   </data>
 </root>

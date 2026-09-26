@@ -10,8 +10,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Settings
         [Test]
         public void when_settings_null_should_return_default_quality()
         {
-            InterviewerSettings settings = null;
-
+            InterviewerSettings settings = new InterviewerSettings();
+            
             Assert.That(settings.GetAudioRecordingQuality(), Is.EqualTo(InterviewerSettings.AudioRecordingQualityDefault));
             Assert.That(InterviewerSettings.AudioRecordingQualityDefault, Is.EqualTo(AudioRecordingQuality.Mono44kHz));
         }

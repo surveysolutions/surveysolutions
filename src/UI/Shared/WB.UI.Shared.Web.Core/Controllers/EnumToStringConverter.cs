@@ -5,7 +5,7 @@ namespace WB.UI.Shared.Web.Controllers
 {
     public class EnumToStringConverter : Newtonsoft.Json.Converters.StringEnumConverter
     {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
             if (value is Action)
             {
