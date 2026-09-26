@@ -337,15 +337,24 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
         private async Task<bool> ReplayDeferredTransferUpdatesAsync(INearbyConnection connection, string endpoint, long payloadId)
         {
-            if (!deferredTransferUpdates.TryRemove((endpoint, payloadId), out var deferredUpdates))
-                return false;
+            var key = (endpoint, payloadId);
+            var handledDeferredUpdate = false;
 
-            while (deferredUpdates.TryDequeue(out var deferredUpdate))
+            while (deferredTransferUpdates.TryGetValue(key, out var deferredUpdates))
             {
-                await ReceivePayloadTransferUpdateInternal(connection, endpoint, deferredUpdate, allowDeferral: false);
+                while (deferredUpdates.TryDequeue(out var deferredUpdate))
+                {
+                    handledDeferredUpdate = true;
+                    await ReceivePayloadTransferUpdateInternal(connection, endpoint, deferredUpdate, allowDeferral: false);
+                }
+
+                if (deferredUpdates.IsEmpty)
+                {
+                    deferredTransferUpdates.TryRemove(key, out _);
+                }
             }
 
-            return true;
+            return handledDeferredUpdate;
         }
 
         private async Task HandlePayloadContent(INearbyConnection nearbyConnection, string endpoint,
