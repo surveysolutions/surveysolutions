@@ -1,6 +1,8 @@
+import { isEqual } from 'lodash';
 import { useRosterStore } from '../stores/roster';
 import { useGroupStore } from '../stores/group';
 import { useQuestionStore } from '../stores/question';
+import { useQuestionnaireStore } from '../stores/questionnaire';
 import { useStaticTextStore } from '../stores/staticText';
 import { useVariableStore } from '../stores/variable';
 import { i18n } from '../plugins/localization';
@@ -84,6 +86,16 @@ export function setActiveDynamicImportRouteName(routeName) {
     activeRouteName = routeName ?? null;
 }
 
+export function hasUnsavedQuestionnaireCategoryChanges() {
+    const questionnaireStore = useQuestionnaireStore();
+    return questionnaireStore.getInfo.categories?.some(category => {
+        if (!category?.editCategories) return false;
+
+        const { editCategories, ...savedCategory } = category;
+        return !isEqual(editCategories, savedCategory);
+    }) ?? false;
+}
+
 function confirmDynamicImportRecovery(routeName, requireReloadConfirmation, hasUnsavedChangesCallback) {
     const hasPendingChanges = hasUnsavedChanges(routeName)
         || hasUnsavedChangesCallback?.() === true;
@@ -121,7 +133,6 @@ export function scheduleDynamicImportRecovery(error, options = {}) {
     }
 
     if (retryCount >= MAX_DYNAMIC_IMPORT_RETRIES) {
-        clearRetryCount(scope);
         console.error('Dynamic import retry budget exhausted:', error);
         return;
     }
