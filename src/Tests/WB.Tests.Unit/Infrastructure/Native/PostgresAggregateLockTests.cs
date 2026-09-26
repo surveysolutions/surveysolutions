@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using Moq;
 using NHibernate;
 using NUnit.Framework;
@@ -122,8 +123,9 @@ namespace WB.Tests.Unit.Infrastructure.Native
 
             var ambientUnitOfWorkAccessor = new AmbientUnitOfWorkAccessor();
             var aggregateLock = new PostgresAggregateLock(
-                new UnitOfWorkConnectionSettings { ConnectionString = "Host=localhost;Database=test;Username=test;******" },
-                ambientUnitOfWorkAccessor);
+                ambientUnitOfWorkAccessor,
+                () => throw new InvalidOperationException("Fallback connection should not be used when an ambient unit of work is present."),
+                (connection, transaction, lockKey) => { });
 
             using (ambientUnitOfWorkAccessor.Use(unitOfWork.Object))
             {
@@ -133,6 +135,30 @@ namespace WB.Tests.Unit.Infrastructure.Native
             session.Verify(x => x.CreateSQLQuery("SELECT pg_advisory_xact_lock(:key)"), Times.Once);
             sqlQuery.Verify(x => x.SetInt64("key", expectedKey), Times.Once);
             sqlQuery.Verify(x => x.UniqueResult(), Times.Once);
+        }
+
+        [Test]
+        public void when_running_with_lock_without_unit_of_work_scope_should_commit_fallback_transaction()
+        {
+            var connection = new Mock<IDbConnection>();
+            var transaction = new Mock<IDbTransaction>();
+            connection.Setup(x => x.BeginTransaction()).Returns(transaction.Object);
+
+            var acquireCount = 0;
+            var ambientUnitOfWorkAccessor = new AmbientUnitOfWorkAccessor();
+            var aggregateLock = new PostgresAggregateLock(
+                ambientUnitOfWorkAccessor,
+                () => connection.Object,
+                (_, _, _) => acquireCount++);
+
+            aggregateLock.RunWithLock("12345678-1234-1234-1234-123456789abc", () => { });
+
+            connection.Verify(x => x.Open(), Times.Once);
+            connection.Verify(x => x.BeginTransaction(), Times.Once);
+            transaction.Verify(x => x.Commit(), Times.Once);
+            transaction.Verify(x => x.Dispose(), Times.Once);
+            connection.Verify(x => x.Dispose(), Times.Once);
+            Assert.That(acquireCount, Is.EqualTo(1));
         }
     }
 }

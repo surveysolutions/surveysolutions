@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Buffers.Binary;
+using System.Data;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -20,16 +21,30 @@ namespace WB.Infrastructure.Native.Storage.Postgre
     /// </summary>
     public class PostgresAggregateLock : IAggregateLock
     {
-        private readonly string connectionString;
         private readonly AmbientUnitOfWorkAccessor ambientUnitOfWorkAccessor;
+        private readonly Func<IDbConnection> connectionFactory;
+        private readonly Action<IDbConnection, IDbTransaction, long> acquireTransactionScopedAdvisoryLock;
         private readonly NamedLocker localLocker = new NamedLocker();
 
         public PostgresAggregateLock(
             UnitOfWorkConnectionSettings connectionSettings,
             AmbientUnitOfWorkAccessor ambientUnitOfWorkAccessor)
+            : this(
+                ambientUnitOfWorkAccessor,
+                () => new NpgsqlConnection(connectionSettings.ConnectionString),
+                (connection, transaction, lockKey) =>
+                    connection.Execute("SELECT pg_advisory_xact_lock(@key)", new { key = lockKey }, transaction))
         {
-            this.connectionString = connectionSettings.ConnectionString;
+        }
+
+        internal PostgresAggregateLock(
+            AmbientUnitOfWorkAccessor ambientUnitOfWorkAccessor,
+            Func<IDbConnection> connectionFactory,
+            Action<IDbConnection, IDbTransaction, long> acquireTransactionScopedAdvisoryLock)
+        {
             this.ambientUnitOfWorkAccessor = ambientUnitOfWorkAccessor;
+            this.connectionFactory = connectionFactory;
+            this.acquireTransactionScopedAdvisoryLock = acquireTransactionScopedAdvisoryLock;
         }
 
         public T RunWithLock<T>(string aggregateGuid, Func<T> run)
@@ -51,18 +66,20 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     return run();
                 }
 
-                var connection = new NpgsqlConnection(connectionString);
+                var connection = this.connectionFactory();
                 try
                 {
                     connection.Open();
 
-                    using var transaction = connection.BeginTransaction();
+                    var transaction = connection.BeginTransaction();
                     Exception? executionException = null;
 
                     try
                     {
-                        connection.Execute("SELECT pg_advisory_xact_lock(@key)", new { key = lockKey }, transaction);
-                        return run();
+                        this.acquireTransactionScopedAdvisoryLock(connection, transaction, lockKey);
+                        var result = run();
+                        transaction.Commit();
+                        return result;
                     }
                     catch (Exception ex)
                     {
@@ -77,7 +94,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                         }
                         catch when (executionException != null)
                         {
-                            NpgsqlConnection.ClearPool(connection);
+                            ClearPool(connection);
                         }
                     }
                 }
@@ -117,6 +134,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private static long ReadInt64LittleEndian(byte[] bytes, int offset)
         {
             return BinaryPrimitives.ReadInt64LittleEndian(bytes.AsSpan(offset, sizeof(long)));
+        }
+
+        private static void ClearPool(IDbConnection connection)
+        {
+            if (connection is NpgsqlConnection npgsqlConnection)
+                NpgsqlConnection.ClearPool(npgsqlConnection);
         }
     }
 
