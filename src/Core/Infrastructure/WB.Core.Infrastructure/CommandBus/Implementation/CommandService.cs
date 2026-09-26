@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.Domain;
 
 namespace WB.Core.Infrastructure.CommandBus.Implementation
 {
@@ -126,11 +125,11 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             Func<ICommand, Guid> aggregateRootIdResolver = CommandRegistry.GetAggregateRootIdResolver(command);
             Guid aggregateId = aggregateRootIdResolver.Invoke(command);
 
-            serviceLocator.GetInstance<IInScopeExecutor>().Execute(scope =>
+            serviceLocator.ExecuteInScope<ICommandExecutor>(commandExecutor =>
             {
                 this.aggregateLock.RunWithLock(aggregateId.FormatGuid(), () =>
                 {
-                    scope.GetInstance<ICommandExecutor>().ExecuteCommand(command, origin, cancellationToken, aggregateId);
+                    commandExecutor.ExecuteCommand(command, origin, cancellationToken, aggregateId);
                 });
             });
         }
