@@ -41,6 +41,11 @@
                 " click-method="openInterview">
                     {{ $t('Common.Open') }}
                 </button>
+                <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Interviewer' &&
+                    selectedTooltip.status == 'Completed'
+                " click-method="reopenInterview">
+                    {{ $t('Pages.InterviewerHq_RestartInterview') }}
+                </button>
                 <button class="btn btn-sm btn-primary" v-if="canAssign" click-method="assignInterview">
                     {{ $t('Common.Assign') }}
                 </button>
@@ -172,7 +177,9 @@
             <div>
                 <button type="button" class="btn btn-primary" @click="confirmCompleteAssignment">{{
                     $t('Assignments.Complete') }}</button>
-                <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t('Common.Cancel') }}</button>
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                    {{ $t('Common.Cancel') }}
+                </button>
             </div>
         </template>
     </ModalFrame>
@@ -193,7 +200,9 @@
             <div>
                 <button type="button" class="btn btn-primary" @click="confirmReopenAssignment">{{
                     $t('Assignments.Reopen') }}</button>
-                <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t('Common.Cancel') }}</button>
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                    {{ $t('Common.Cancel') }}
+                </button>
             </div>
         </template>
     </ModalFrame>
@@ -214,7 +223,9 @@
             <div>
                 <button type="button" class="btn btn-primary" @click="confirmCloseAssignment">{{
                     $t('Assignments.Close') }}</button>
-                <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t('Common.Cancel') }}</button>
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                    {{ $t('Common.Cancel') }}
+                </button>
             </div>
         </template>
     </ModalFrame>
@@ -224,7 +235,7 @@
             <div class="form-group">
                 <label class="control-label" for="newResponsibleId">{{
                     $t('Assignments.SelectResponsible')
-                    }}</label>
+                }}</label>
                 <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                     :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                     :fetch-url="model.responsible"></Typeahead>
@@ -255,6 +266,16 @@
             </div>
         </template>
     </ModalFrame>
+
+    <Confirm ref="reopenModal" id="reopenModal">
+        <div>
+            <label for="reopenInterviewComment">
+                {{ $t('Pages.InterviewerHq_RestartConfirm') }}:
+            </label>
+            <textarea class="form-control" rows="5" maxlength="200" name="reopenInterviewComment"
+                id="reopenInterviewComment" v-model="restart_comment"></textarea>
+        </div>
+    </Confirm>
 </template>
 
 <style scoped>
@@ -274,17 +295,15 @@
 
 <script>
 import { nextTick } from 'vue'
-import { debounce, delay, forEach, find } from 'lodash'
+import { debounce, delay, forEach, find } from 'lodash-es'
 import routeSync from '~/shared/routeSync'
-import { Form, Field } from 'vee-validate'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
+import * as toastr from 'toastr'
 
 export default {
-    name: "MapWithMarkers",
+    name: 'MapWithMarkers',
     mixins: [routeSync],
-
-    components: { Form, Field },
 
     props: {
         shapefile: { type: String, default: null },
@@ -307,6 +326,7 @@ export default {
             newResponsibleId: null,
             isReassignReceivedByTablet: false,
             geoJsonFeatures: null,
+            restart_comment: '',
             statusChangeComment: null,
         }
     },
@@ -328,7 +348,7 @@ export default {
         },
 
         shapefileName() {
-            return this.shapefile;
+            return this.shapefile
         },
 
         canAssign() {
@@ -407,11 +427,11 @@ export default {
         async init() {
             this.setMapCanvasStyle()
             await this.initializeMap()
-            await this.displayShapefileName();
+            await this.displayShapefileName()
 
             this.showPointsOnMap(180, 180, -180, -180, false)
 
-            this.$emit('initialized');
+            this.$emit('initialized')
         },
 
         openInterview() {
@@ -421,6 +441,36 @@ export default {
                 this.selectedTooltip.interviewId,
                 '_blank'
             )
+        },
+
+        reopenInterview() {
+            const self = this
+            self.$refs.reopenModal.promt(ok => {
+                if (ok) {
+                    const interviewId = self.selectedTooltip.interviewId
+                    const newTab = window.open('', '_blank')
+                    $.post({
+                        url: self.$hq.basePath + 'InterviewerHq/RestartInterview/' + interviewId,
+                        data: { comment: self.restart_comment },
+                        headers: {
+                            'X-CSRF-TOKEN': self.$hq.Util.getCsrfCookie(),
+                        },
+                    }).done(function () {
+                        self.restart_comment = ''
+                        if (newTab) {
+                            newTab.location =
+                                self.$hq.basePath + 'InterviewerHq/OpenInterview/' + interviewId
+                        }
+                        self.reloadMarkersInBounds()
+                    }).fail(function (err) {
+                        if (newTab) newTab.close()
+                        toastr.error(
+                            (err && err.responseJSON && err.responseJSON.message) ||
+                                self.$t('Pages.GlobalSettings_UnhandledExceptionMessage')
+                        )
+                    })
+                }
+            })
         },
 
         createInterview() {
@@ -675,7 +725,7 @@ export default {
         async initializeMap() {
             const self = this
 
-            const { Map } = await google.maps.importLibrary("maps");
+            const { Map } = await google.maps.importLibrary('maps')
             //const { Marker } = await google.maps.importLibrary("marker");
             //const { AdvancedMarkerElement } = await google.maps.importLibrary("marker")
 

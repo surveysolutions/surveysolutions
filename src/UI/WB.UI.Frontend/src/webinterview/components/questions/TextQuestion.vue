@@ -11,7 +11,7 @@
                         <textarea v-else v-autosize ref="inputTextArea" autocomplete="off" rows="1"
                             :maxlength="$me.maxLength" class="field-to-fill" :placeholder="noAnswerWatermark"
                             :value="$me.answer" :important="true" :disabled="!$me.acceptAnswer" v-blurOnEnterKey
-                            @blur.native="answerTextQuestion" @blur="answerTextQuestion"></textarea>
+                            @blur="answerTextQuestion"></textarea>
                         <wb-remove-answer />
                     </div>
                 </div>
@@ -48,7 +48,7 @@ export default {
     methods: {
         answerTextQuestion() {
             this.sendAnswer(() => {
-                const target = this.$refs.input || this.$refs.inputTextArea;
+                const target = this.$refs.input || this.$refs.inputTextArea
                 const answer = target.value?.trim()
 
                 if (this.handleEmptyAnswer(answer)) {

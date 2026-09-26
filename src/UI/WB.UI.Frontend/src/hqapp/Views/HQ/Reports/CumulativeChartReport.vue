@@ -37,8 +37,8 @@
                 </h2>
             </div>
         </div>
-        <CumulativeLineChart ref="chartView" id="interviewChart" :chartData="chartDataForRender"
-            :options="{ title: { display: true, text: this.chartTitle } }" @ready="chartUpdated" @mounted="refreshData">
+        <CumulativeLineChart ref="chartView" id="interviewChart" :key="chartKey" :chartData="chartDataForRender"
+            :options="chartOptions" @ready="chartUpdated" @mounted="refreshData">
         </CumulativeLineChart>
         <div v-if="base64Encoded != null && hasData">
             <a id="link" :download="$t('Reports.CumulativeInterviewChart') + ' (' + chartTitle + ').png'"
@@ -50,7 +50,7 @@
 <script>
 import routeSync from '~/shared/routeSync'
 import moment from 'moment'
-import { forEach, findIndex, assign, sortBy, find } from 'lodash'
+import { forEach, findIndex, assign, sortBy, find } from 'lodash-es'
 import CumulativeLineChart from './CumulativeChart'
 
 export default {
@@ -72,7 +72,7 @@ export default {
                 { status: 'ApprovedBySupervisor', label: this.$t('Strings.InterviewStatus_ApprovedBySupervisor'), backgroundColor: '#13A388' },
                 { status: 'RejectedByHeadquarters', label: this.$t('Strings.InterviewStatus_RejectedByHeadquarters'), backgroundColor: '#E06B5C' },
                 { status: 'ApprovedByHeadquarters', label: this.$t('Strings.InterviewStatus_ApprovedByHeadquarters'), backgroundColor: '#00647F' },
-            ]
+            ],
         }
     },
 
@@ -80,7 +80,19 @@ export default {
         chartDataForRender() {
             return this.chartData || {
                 labels: [],
-                datasets: []
+                datasets: [],
+            }
+        },
+        chartKey() {
+            const { from, to } = this.chartDataForRender
+            return `${from || ''}:${to || ''}`
+        },
+        chartOptions() {
+            return {
+                title: {
+                    display: true,
+                    text: this.chartTitle,
+                },
             }
         },
         model() {
@@ -283,19 +295,28 @@ export default {
             this.$hq.Report.Chart(queryString)
                 .then(response => {
                     const datasets = []
+                    const datasetsByStatus = Object.create(null)
 
                     forEach(response.data.dataSets, set => {
+                        const existingDataset = datasetsByStatus[set.status]
+
+                        if (existingDataset != null) {
+                            existingDataset.data.push(...set.data)
+                            return
+                        }
+
                         const infoIndex = findIndex(this.dataSetInfo, { status: set.status })
                         const info = this.dataSetInfo[infoIndex]
 
-                        datasets.push(
-                            assign(info, {
-                                data: set.data,
-                                index: infoIndex,
-                                borderColor: info.backgroundColor,
-                                fill: true,
-                            })
-                        )
+                        const dataset = assign({}, info, {
+                            data: [...set.data],
+                            index: infoIndex,
+                            borderColor: info.backgroundColor,
+                            fill: true,
+                        })
+
+                        datasetsByStatus[set.status] = dataset
+                        datasets.push(dataset)
                     })
 
                     const chartData = {
@@ -478,7 +499,7 @@ export default {
     },
 
     mounted() {
-        this.refreshData();
+        this.refreshData()
     },
 }
 </script>

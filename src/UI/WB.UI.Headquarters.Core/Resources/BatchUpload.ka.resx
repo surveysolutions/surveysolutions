@@ -565,6 +565,7 @@
 &lt;b&gt;_password&lt;/b&gt; - ინტერვიუს დასაწყებად პაროლი (მხოლოდ ვებ-ინტერვიუებისთვის);&lt;br/&gt;
 &lt;b&gt;_webmode&lt;/b&gt; - დავალების რეჟიმი (1 - CAWI, 0 ან ცარიელი - CAPI);&lt;br/&gt;
 &lt;b&gt;_record_audio&lt;/b&gt; - ინტერვიუებისთვის აუდიოჩაწერა ჩართულია (1 - ჩართულია, 0 - გამორთულია, ცარიელი - ეს მნიშვნელობა კითხვარიდან აიღება);&lt;br/&gt;
+&lt;b&gt;_aascope&lt;/b&gt; - სექციების, ჯგუფების ან როსტერების ცვლადების სახელები (მძიმით გამოყოფილი) აუდიოს ჩასაწერად, როდესაც _record_audio გამორთულია (შერჩევითი აუდიო აუდიტის არეალი);&lt;br/&gt;
 &lt;b&gt;_comment&lt;/b&gt; - კომენტარები დავალებისთვის;&lt;br/&gt;
 &lt;b&gt;_target_area&lt;/b&gt; - დავალების სამიზნე არეალი</value>
     <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>

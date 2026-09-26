@@ -847,4 +847,7 @@
     <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
       <value>رسالة الشرط الحرج تحتوي على أكثر من {0} حرف.</value>
     </data>
+  <data name="WB0324_NegativeSpecialValuesNotAllowedForNonNegativeNumericQuestion" xml:space="preserve">
+    <value>القيم الخاصة السالبة غير مسموح بها للأسئلة الرقمية غير السالبة.</value>
+  </data>
 </root>

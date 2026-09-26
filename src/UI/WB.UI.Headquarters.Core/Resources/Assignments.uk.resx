@@ -612,10 +612,22 @@
   <data name="TargetAreaExplanation" xml:space="preserve">
     <value>Вкажіть назву карти цільової зони для призначення</value>
   </data>
+  <data name="TargetAreaNameTooLong" xml:space="preserve">
+      <value>Назва карти цільової зони занадто довга. Максимально допустима довжина — {{limit}} символів.</value>
+  </data>
   <data name="Tooltip_Table_ReceivedByTablet" xml:space="preserve">
     <value>Індикатор того, чи було завантажено призначення на планшет. Натисніть на значок сортування, щоб відсортувати за часом отримання.</value>
   </data>
   <data name="Value" xml:space="preserve">
     <value>Значення</value>
+  </data>
+  <data name="AudioRecordingSelective" xml:space="preserve">
+      <value>Вибірково</value>
+  </data>
+  <data name="AudioAuditScopeLabel" xml:space="preserve">
+      <value>Область аудіоконтролю</value>
+  </data>
+  <data name="AudioRecordingScopeNotice" xml:space="preserve">
+      <value>Це призначення має вибіркову область аудіоконтролю. Увімкнення повного аудіозапису записуватиме всі розділи. Вимкнення повернеться до запису лише вибраних розділів.</value>
   </data>
 </root>

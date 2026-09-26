@@ -1,5 +1,7 @@
 <template>
-    <HqLayout :hasFilter="false" :fixedWidth="true" :hasRow="false">
+    <HqLayout :hasFilter="false"
+        :fixedWidth="true"
+        :hasRow="false">
         <template v-slot:headers>
             <ol class="breadcrumb">
                 <li>
@@ -7,17 +9,19 @@
                 </li>
                 <li>
                     <a :href="$config.model.listOfMyQuestionnaires">{{
-        $t('QuestionnaireImport.ListOfMyQuestionnaires') }}</a>
+                        $t('QuestionnaireImport.ListOfMyQuestionnaires') }}</a>
                 </li>
             </ol>
             <h1>{{ $t('QuestionnaireImport.ImportModePageTitle') }}</h1>
         </template>
-        <div class="row" v-if="hasQuestionnaireInfo">
+        <div class="row"
+            v-if="hasQuestionnaireInfo">
             <div class="col-sm-8">
                 <h2>{{ $config.model.questionnaireInfo.name }}</h2>
             </div>
         </div>
-        <div class="row questionnaire-statistics" v-if="hasQuestionnaireInfo">
+        <div class="row questionnaire-statistics"
+            v-if="hasQuestionnaireInfo">
             <div class="col-md-4 col-sm-5">
                 <ul>
                     <li>
@@ -52,16 +56,21 @@
                         {{ $t('QuestionnaireImport.Questions') }}:
                         <span>{{ $config.model.questionnaireInfo.questionsCount }}</span>
                         ({{ $t('QuestionnaireImport.QuestionsWithConditions', {
-        count:
-            $config.model.questionnaireInfo.questionsWithConditionsCount
-    }) }})
+                            count:
+                                $config.model.questionnaireInfo.questionsWithConditionsCount
+                        }) }})
                     </li>
                 </ul>
             </div>
         </div>
-        <form method="post" ref="importingForm" @submit.prevent="startImport" class="import-questionnaire-form"
+        <form method="post"
+            ref="importingForm"
+            @submit.prevent="startImport"
+            class="import-questionnaire-form"
             v-if="hasQuestionnaireInfo">
-            <input name="__RequestVerificationToken" type="hidden" :value="this.$hq.Util.getCsrfCookie()" />
+            <input name="__RequestVerificationToken"
+                type="hidden"
+                :value="this.$hq.Util.getCsrfCookie()" />
             <div v-if="$config.model.newVersionNumber > 1">
                 <div class="row">
                     <div class="col-sm-8">
@@ -72,15 +81,19 @@
                     <div class="col-sm-8">
                         <div class="form-group">
                             <div class="radio">
-                                <input class="wb-radio" type="radio" name="optionsRadios" id="imortAsNewVersion"
-                                    value="new-version" checked />
+                                <input class="wb-radio"
+                                    type="radio"
+                                    name="optionsRadios"
+                                    id="imortAsNewVersion"
+                                    value="new-version"
+                                    checked />
                                 <label for="imortAsNewVersion">
                                     <span class="tick"></span>
                                     {{ $t('QuestionnaireImport.ImportAsNewVersion',
-        {
-            version:
-                $config.model.newVersionNumber
-        }) }}
+                                          {
+                                              version:
+                                                  $config.model.newVersionNumber
+                                          }) }}
                                 </label>
                             </div>
                         </div>
@@ -88,8 +101,11 @@
                     <div v-if="$config.model.questionnairesToUpgradeFrom.length">
                         <div class="col-sm-8">
                             <div class="form-group">
-                                <input class="checkbox-filter single-checkbox" id="ckbUpgradeAssignments"
-                                    type="checkbox" value="True" name="ShouldMigrateAssignments"
+                                <input class="checkbox-filter single-checkbox"
+                                    id="ckbUpgradeAssignments"
+                                    type="checkbox"
+                                    value="True"
+                                    name="ShouldMigrateAssignments"
                                     v-model="shouldMigrateAssignments" />
                                 <label for="ckbUpgradeAssignments">
                                     <span class="tick"></span>
@@ -98,12 +114,19 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-8" id="templateSelectorBlock" v-if="shouldMigrateAssignments">
-                            <input type="hidden" name="migrateFrom" :value="(questionnaireId || {}).key">
+                        <div class="col-sm-8"
+                            id="templateSelectorBlock"
+                            v-if="shouldMigrateAssignments">
+                            <input type="hidden"
+                                name="migrateFrom"
+                                :value="(questionnaireId || {}).key">
                             <div class="form-group">
-                                <Typeahead control-id="questionnaire" noSearch noClear
+                                <Typeahead control-id="questionnaire"
+                                    noSearch
+                                    noClear
                                     :placeholder="$t('Common.Questionnaire')"
-                                    :values="$config.model.questionnairesToUpgradeFrom" :value="questionnaireId"
+                                    :values="$config.model.questionnairesToUpgradeFrom"
+                                    :value="questionnaireId"
                                     @selected="selectQuestionnaire" />
                             </div>
                         </div>
@@ -117,9 +140,15 @@
                     <h3>{{ $t('Pages.Questionnaire_CriticalVerificationLevel') }}</h3>
 
                     <div class="form-group">
-                        <input type="hidden" name="criticalityLevel" :value="(criticalityLevel || {}).key">
-                        <Typeahead control-id="criticalityLevel" no-clear no-search @selected="criticalityLevelSelected"
-                            :value="criticalityLevel" :values="$config.model.criticalityLevels">
+                        <input type="hidden"
+                            name="criticalityLevel"
+                            :value="(criticalityLevel || {}).key">
+                        <Typeahead control-id="criticalityLevel"
+                            no-clear
+                            no-search
+                            @selected="criticalityLevelSelected"
+                            :value="criticalityLevel"
+                            :values="$config.model.criticalityLevels">
                         </Typeahead>
                     </div>
                 </div>
@@ -136,19 +165,26 @@
                         <div class="block">
                             <h3>{{ $t('Assignments.DetailsComments') }}</h3>
                             <p>
-                                <textarea name="Comment" class="form-control" rows="5" maxlength="500"></textarea>
+                                <textarea name="Comment"
+                                    class="form-control"
+                                    rows="5"
+                                    maxlength="500"></textarea>
                             </p>
                         </div>
                         <div>
-                            <button v-if="!isImporting" type="submit" class="btn btn-primary">{{
-                                $t('QuestionnaireImport.RegularImportTitle') }}</button>
-                            <span v-if="isImporting" v-text="progressText"></span>
+                            <button v-if="!isImporting"
+                                type="submit"
+                                class="btn btn-primary">{{
+                                    $t('QuestionnaireImport.RegularImportTitle') }}</button>
+                            <span v-if="isImporting"
+                                v-text="progressText"></span>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
-        <div class="row col-sm-12" v-if="errorMessage">
+        <div class="row col-sm-12"
+            v-if="errorMessage">
             <div class="alert alert-danger">
                 {{ errorMessage }}
             </div>

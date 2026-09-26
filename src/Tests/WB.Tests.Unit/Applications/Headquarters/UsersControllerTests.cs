@@ -20,6 +20,7 @@ using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Infrastructure.Native.Workspaces;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.Code.Authentication;
 using WB.UI.Headquarters.Code.UsersManagement;
@@ -1268,6 +1269,80 @@ namespace WB.Tests.Unit.Applications.Headquarters
             Assert.That(result, Is.InstanceOf<ForbidResult>());
         }
 
+        [Test]
+        public async Task UpdateUser_WhenInterviewerIsInUsersWorkspaceAndAllowProfileUpdateEnabled_ShouldReturnForbidden()
+        {
+            // Even when AllowInterviewerUpdateProfile is enabled, the users workspace should block own-profile updates.
+            var userId = Guid.NewGuid();
+            var user = Mock.Of<HqUser>(u => u.Id == userId);
+            var authorizedUser = Mock.Of<IAuthorizedUser>(u =>
+                u.Id == userId &&
+                u.IsInterviewer == true &&
+                u.IsAdministrator == false &&
+                u.IsHeadquarter == false &&
+                u.UserName == "interviewer");
+
+            var profileSettings = new ProfileSettings { AllowInterviewerUpdateProfile = true };
+            var profileSettingsStorage = Mock.Of<IPlainKeyValueStorage<ProfileSettings>>(s =>
+                s.GetById(AppSetting.ProfileSettings) == profileSettings);
+
+            var workspaceContextAccessor = Mock.Of<IWorkspaceContextAccessor>(w =>
+                w.CurrentWorkspace() == WorkspaceContext.Users);
+
+            var userManagerStore = CreateUserManagerMockForUpdateUser(userToFind: user);
+            var userManager = CreateHqUserManager(userManagerStore);
+            var controller = CreateControllerForUpdateUser(
+                userManager: userManager,
+                authorizedUser: authorizedUser,
+                profileSettingsStorage: profileSettingsStorage,
+                workspaceContextAccessor: workspaceContextAccessor);
+
+            var model = new EditUserModel { UserId = userId };
+
+            // Act
+            var result = await controller.UpdateUser(model);
+
+            // Assert: users workspace blocks update regardless of AllowInterviewerUpdateProfile
+            Assert.That(result, Is.InstanceOf<ForbidResult>());
+        }
+
+        [Test]
+        public async Task UpdateUser_WhenInterviewerIsInNonUsersWorkspaceAndAllowProfileUpdateEnabled_ShouldNotReturnForbidden()
+        {
+            // Outside the users workspace with AllowInterviewerUpdateProfile enabled, own-profile update is allowed.
+            var userId = Guid.NewGuid();
+            var user = Mock.Of<HqUser>(u => u.Id == userId);
+            var authorizedUser = Mock.Of<IAuthorizedUser>(u =>
+                u.Id == userId &&
+                u.IsInterviewer == true &&
+                u.IsAdministrator == false &&
+                u.IsHeadquarter == false &&
+                u.UserName == "interviewer");
+
+            var profileSettings = new ProfileSettings { AllowInterviewerUpdateProfile = true };
+            var profileSettingsStorage = Mock.Of<IPlainKeyValueStorage<ProfileSettings>>(s =>
+                s.GetById(AppSetting.ProfileSettings) == profileSettings);
+
+            var workspaceContextAccessor = Mock.Of<IWorkspaceContextAccessor>(w =>
+                w.CurrentWorkspace() == WorkspaceContext.Default);
+
+            var userManagerStore = CreateUserManagerMockForUpdateUser(userToFind: user);
+            var userManager = CreateHqUserManager(userManagerStore);
+            var controller = CreateControllerForUpdateUser(
+                userManager: userManager,
+                authorizedUser: authorizedUser,
+                profileSettingsStorage: profileSettingsStorage,
+                workspaceContextAccessor: workspaceContextAccessor);
+
+            var model = new EditUserModel { UserId = userId };
+
+            // Act
+            var result = await controller.UpdateUser(model);
+
+            // Assert: profile update guard passed; result is not Forbid
+            Assert.That(result, Is.Not.InstanceOf<ForbidResult>());
+        }
+
         #endregion
 
         #region Helper Methods for UpdateUser Tests
@@ -1275,7 +1350,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
         private UsersController CreateControllerForUpdateUser(
             HqUserManager userManager = null,
             IAuthorizedUser authorizedUser = null,
-            IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage = null)
+            IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage = null,
+            IWorkspaceContextAccessor workspaceContextAccessor = null)
         {
             var controller = new UsersController(
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(u => u.IsAdministrator == true),
@@ -1285,7 +1361,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IOptions<HeadquartersConfig>>(),
                 Mock.Of<IWorkspacesStorage>(),
                 Mock.Of<ITokenProvider>(),
-                new UsersManagementSettings(null));
+                new UsersManagementSettings(null),
+                workspaceContextAccessor ?? Mock.Of<IWorkspaceContextAccessor>());
             controller.ControllerContext.HttpContext = Mock.Of<HttpContext>(c =>
                 c.Session == new MockHttpSession()
                 && c.Request == Mock.Of<HttpRequest>(r => r.Cookies == Mock.Of<IRequestCookieCollection>())
@@ -1316,7 +1393,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
         private UsersController CreateControllerForCreateUser(
             HqUserManager userManager = null,
             IAuthorizedUser authorizedUser = null,
-            IWorkspacesStorage workspacesStorage = null)
+            IWorkspacesStorage workspacesStorage = null,
+            IWorkspaceContextAccessor workspaceContextAccessor = null)
         {
             var controller = new UsersController(
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(u => u.IsAdministrator == true),
@@ -1326,7 +1404,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IOptions<HeadquartersConfig>>(),
                 workspacesStorage ?? CreateWorkspacesStorage("primary", new Workspace("primary", "Primary", DateTime.UtcNow)),
                 Mock.Of<ITokenProvider>(),
-                new UsersManagementSettings(null));
+                new UsersManagementSettings(null),
+                workspaceContextAccessor ?? Mock.Of<IWorkspaceContextAccessor>());
             controller.ControllerContext.HttpContext = Mock.Of<HttpContext>(c => 
                 c.Session == new MockHttpSession()
                 && c.Request == Mock.Of<HttpRequest>(r => r.Cookies == Mock.Of<IRequestCookieCollection>())
@@ -1396,7 +1475,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
         private UsersController CreateControllerForUpdatePassword(
             HqUserManager userManager = null,
             IAuthorizedUser authorizedUser = null,
-            UsersManagementSettings usersManagementSettings = null)
+            UsersManagementSettings usersManagementSettings = null,
+            IWorkspaceContextAccessor workspaceContextAccessor = null)
         {
             var controller = new UsersController(
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(u => u.IsAdministrator == true),
@@ -1406,7 +1486,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IOptions<HeadquartersConfig>>(),
                 Mock.Of<IWorkspacesStorage>(),
                 Mock.Of<ITokenProvider>(),
-                usersManagementSettings ?? new UsersManagementSettings(null));
+                usersManagementSettings ?? new UsersManagementSettings(null),
+                workspaceContextAccessor ?? Mock.Of<IWorkspaceContextAccessor>());
             controller.ControllerContext.HttpContext = Mock.Of<HttpContext>(c => 
                 c.Session == new MockHttpSession()
                 && c.Request == Mock.Of<HttpRequest>(r => r.Cookies == Mock.Of<IRequestCookieCollection>())
@@ -1440,7 +1521,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
         private UsersController CreateController(
             IUserStore<HqUser> userManager = null,
-            IAuthorizedUser authorizedUser = null)
+            IAuthorizedUser authorizedUser = null,
+            IWorkspaceContextAccessor workspaceContextAccessor = null)
         {
             var controller = new UsersController(
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
@@ -1450,7 +1532,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IOptions<HeadquartersConfig>>(),
                 null,
                 null,
-                new UsersManagementSettings(null));
+                new UsersManagementSettings(null),
+                workspaceContextAccessor ?? Mock.Of<IWorkspaceContextAccessor>());
             controller.ControllerContext.HttpContext = Mock.Of<HttpContext>(c => 
                 c.Session == new MockHttpSession()
                 && c.Request == Mock.Of<HttpRequest>(r => r.Cookies == Mock.Of<IRequestCookieCollection>())
