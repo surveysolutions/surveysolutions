@@ -16,6 +16,7 @@ using NetTopologySuite.IO.Esri;
 using NetTopologySuite.Operation.Union;
 using NetTopologySuite.Simplify;
 using NHibernate.Linq;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -711,8 +712,31 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (!this.fileSystemAccessor.IsFileExists(filePath))
                 return null;
 
-            var hash = this.fileSystemAccessor.ReadHash(filePath);
+            var hash = this.TryReadCachedHash(filePath) ?? this.fileSystemAccessor.ReadHash(filePath);
             return hash == null ? null : Convert.ToBase64String(hash);
+        }
+
+        private byte[] TryReadCachedHash(string filePath)
+        {
+            var hashFilePath = filePath + ".md5";
+            if (!this.fileSystemAccessor.IsFileExists(hashFilePath))
+                return null;
+
+            try
+            {
+                var cachedHash = JsonConvert.DeserializeObject<CachedFileHash>(this.fileSystemAccessor.ReadAllText(hashFilePath));
+                return cachedHash?.MD5;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private sealed class CachedFileHash
+        {
+            public long LastWriteTime { get; set; }
+            public byte[] MD5 { get; set; }
         }
     }
 }

@@ -10,6 +10,7 @@ using Moq;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Esri;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Maps;
@@ -277,6 +278,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
                 var mapContent = new byte[] { 1, 2, 3, 4 };
                 var mapPath = Path.Combine(mapsFolder, mapName);
                 await File.WriteAllBytesAsync(mapPath, mapContent);
+                await File.WriteAllTextAsync(mapPath + ".md5", JsonConvert.SerializeObject(new
+                {
+                    MD5 = MD5.HashData(mapContent),
+                    LastWriteTime = new DateTimeOffset(File.GetLastWriteTimeUtc(mapPath)).ToUnixTimeMilliseconds()
+                }));
 
                 var mapStorage = new TestPlainStorage<MapBrowseItem>();
                 mapStorage.Store(Create.Entity.MapBrowseItem(mapName), mapName);
