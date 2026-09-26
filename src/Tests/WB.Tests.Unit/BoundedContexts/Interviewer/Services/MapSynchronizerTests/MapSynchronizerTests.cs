@@ -167,7 +167,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
             mapService.Setup(x => x.DoesMapExist("range-fallback-map.tpk")).Returns(false);
             mapService.Setup(x => x.GetTempMapOffset("range-fallback-map.tpk")).Returns(3);
             mapService.Setup(x => x.GetTempMapETag("range-fallback-map.tpk")).Returns("etag-1");
-            mapService.Setup(x => x.GetTempMapSaveStream("range-fallback-map.tpk", true)).Returns(tempStream);
+            mapService.Setup(x => x.GetTempMapSaveStream("range-fallback-map.tpk", false)).Returns(() =>
+            {
+                tempStream.Position = 0;
+                tempStream.SetLength(0);
+                return tempStream;
+            });
 
             var service = Create.Service.MapSyncProvider(
                 synchronizationService: synchronizationService.Object,

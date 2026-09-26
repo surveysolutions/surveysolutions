@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
@@ -76,11 +74,13 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             if (mapContent == null)
                 return NotFound();
 
+            var mapContentHash = await this.mapRepository.GetMapContentHashAsync(map.FileName);
+
             Stream exportFileStream = new MemoryStream(mapContent);
             var result = new FileStreamResult(exportFileStream, "application/octet-stream")
             {
                 EnableRangeProcessing = true,
-                EntityTag = new EntityTagHeaderValue($"\"{Convert.ToHexString(SHA256.HashData(mapContent))}\"")
+                EntityTag = mapContentHash == null ? null : new EntityTagHeaderValue($"\"{mapContentHash}\"")
             };
             return result;
         }

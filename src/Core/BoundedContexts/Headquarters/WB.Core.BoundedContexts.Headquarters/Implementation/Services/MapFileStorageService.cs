@@ -81,6 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         }
 
         public string GetExternalStoragePath(string name) => $"maps/" + name;
+        private string GetExternalStorageHashPath(string name) => GetExternalStoragePath(name) + ".md5";
 
         public async Task<MapBrowseItem> SaveOrUpdateMapAsync(MapFiles mapFiles, string mapsDirectory)
         {
@@ -105,15 +106,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 var mapName = mapFiles.IsShapeFile ? mapFiles.Name + ".shp" : mapFiles.Name; 
                 if (externalFileStorage.IsEnabled())
                 {
+                    var mapHash = Convert.ToBase64String(this.fileSystemAccessor.ReadHash(tempFile));
                     await using FileStream file = File.OpenRead(tempFile);
                     var name = this.fileSystemAccessor.GetFileName(mapName);
                     await this.externalFileStorage.StoreAsync(GetExternalStoragePath(name), file, "application/zip")
+                        .ConfigureAwait(false);
+                    await using var hashStream = new MemoryStream(Encoding.UTF8.GetBytes(mapHash));
+                    await this.externalFileStorage.StoreAsync(GetExternalStorageHashPath(name), hashStream, "text/plain")
                         .ConfigureAwait(false);
                 }
                 else
                 {
                     var targetFile = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapName);
                     fileSystemAccessor.MoveFile(tempFile, targetFile);
+                    this.fileSystemAccessor.ReadHash(targetFile);
                 }
                 
                 this.mapPlainStorageAccessor.Store(mapItem, mapItem.Id);
@@ -409,7 +415,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (externalFileStorage.IsEnabled())
             {
                 this.logger.LogWarning("Deleting map: '{map}' from external storage", map.FileName);
-                await this.externalFileStorage.RemoveAsync(GetExternalStoragePath(map.FileName));
+                await this.externalFileStorage.RemoveAsync(new[]
+                {
+                    GetExternalStoragePath(map.FileName),
+                    GetExternalStorageHashPath(map.FileName)
+                });
             }
             else
             {
@@ -418,6 +428,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 if (this.fileSystemAccessor.IsFileExists(filePath))
                     fileSystemAccessor.DeleteFile(filePath);
+
+                var hashFilePath = filePath + ".md5";
+                if (this.fileSystemAccessor.IsFileExists(hashFilePath))
+                    this.fileSystemAccessor.DeleteFile(hashFilePath);
             }
 
             return map;
@@ -678,6 +692,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 return null;
 
             return this.fileSystemAccessor.ReadAllBytes(filePath);
+        }
+
+        public async Task<string> GetMapContentHashAsync(string mapName)
+        {
+            var fileName = fileSystemAccessor.GetFileName(mapName);
+            var map = await this.mapPlainStorageAccessor.GetByIdAsync(fileName);
+            if (map == null)
+                throw new InvalidOperationException(@"Map was not found.");
+
+            if (externalFileStorage.IsEnabled())
+            {
+                var storedHash = await this.externalFileStorage.GetBinaryAsync(GetExternalStorageHashPath(map.FileName));
+                return storedHash == null ? null : Encoding.UTF8.GetString(storedHash);
+            }
+
+            var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, map.FileName);
+            if (!this.fileSystemAccessor.IsFileExists(filePath))
+                return null;
+
+            var hash = this.fileSystemAccessor.ReadHash(filePath);
+            return hash == null ? null : Convert.ToBase64String(hash);
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Options;
@@ -255,6 +256,39 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
                 Assert.That(result.XMaxVal, Is.EqualTo(0));
                 Assert.That(result.YMaxVal, Is.EqualTo(0));
                 Assert.That(mapStorage.GetById(mapName), Is.Not.Null);
+            }
+            finally
+            {
+                Directory.Delete(tempBase, true);
+            }
+        }
+
+        [Test]
+        public async Task GetMapContentHashAsync_should_return_cached_hash_for_local_map()
+        {
+            var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            var storageDirectory = Path.Combine(tempBase, "storage");
+            var mapsFolder = Path.Combine(storageDirectory, "MapsData");
+            Directory.CreateDirectory(mapsFolder);
+
+            try
+            {
+                const string mapName = "map.tif";
+                var mapContent = new byte[] { 1, 2, 3, 4 };
+                var mapPath = Path.Combine(mapsFolder, mapName);
+                await File.WriteAllBytesAsync(mapPath, mapContent);
+
+                var mapStorage = new TestPlainStorage<MapBrowseItem>();
+                mapStorage.Store(Create.Entity.MapBrowseItem(mapName), mapName);
+
+                var service = Create.Service.MapFileStorageService(
+                    mapsStorage: mapStorage,
+                    fileStorageConfig: Options.Create(new FileStorageConfig { TempData = storageDirectory }),
+                    geospatialConfig: Options.Create(new GeospatialConfig()));
+
+                var result = await service.GetMapContentHashAsync(mapName);
+
+                Assert.That(result, Is.EqualTo(Convert.ToBase64String(MD5.HashData(mapContent))));
             }
             finally
             {

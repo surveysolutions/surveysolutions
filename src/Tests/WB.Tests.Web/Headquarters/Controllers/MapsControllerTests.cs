@@ -1,5 +1,4 @@
 using System;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Mvc;
@@ -53,13 +52,14 @@ public class MapsControllerTests
     public async Task GetMapContent_should_use_content_hash_as_etag()
     {
         var mapContent = new byte[] { 1, 2, 3, 4 };
-        var controller = CreateApiController(mapContent);
+        const string mapHash = "stored-hash";
+        var controller = CreateApiController(mapContent, mapHash);
 
         var result = await controller.GetMapContent("map.tif") as FileStreamResult;
 
         Assert.That(result, Is.Not.Null);
         Assert.That(result!.EnableRangeProcessing, Is.True);
-        Assert.That(result.EntityTag?.Tag, Is.EqualTo($"\"{Convert.ToHexString(SHA256.HashData(mapContent))}\""));
+        Assert.That(result.EntityTag?.Tag, Is.EqualTo($"\"{mapHash}\""));
     }
 
     private static MapsController CreateController(Guid uploaderId, UserRoles uploaderRole, out string uploaderName)
@@ -101,7 +101,7 @@ public class MapsControllerTests
         return controller;
     }
 
-    private static MapsApiV2Controller CreateApiController(byte[] mapContent)
+    private static MapsApiV2Controller CreateApiController(byte[] mapContent, string mapHash)
     {
         var map = new MapBrowseItem
         {
@@ -117,6 +117,7 @@ public class MapsControllerTests
 
         var mapRepository = new Mock<IMapStorageService>();
         mapRepository.Setup(x => x.GetMapContentAsync("map.tif")).ReturnsAsync(mapContent);
+        mapRepository.Setup(x => x.GetMapContentHashAsync("map.tif")).ReturnsAsync(mapHash);
 
         var authorizedUser = Mock.Of<IAuthorizedUser>(u => u.UserName == "interviewer" && u.IsSupervisor == false);
 
