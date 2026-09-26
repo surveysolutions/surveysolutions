@@ -240,9 +240,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     return;
                 }
 
-                logger.Warn(
-                    $"Ignoring payload transfer update for unknown payload. Endpoint: {endpoint}, PayloadId: {update.Id}, Status: {update.Status}");
-                return;
+                throw new InvalidOperationException(
+                    $"Receive payload transfer update before ReceivePayload call. Endpoint: {endpoint}, PayloadId: {update.Id}, Status: {update.Status}");
             }
 
             PayloadHeader header;
