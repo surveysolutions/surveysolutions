@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Threading.Tasks;
 using Moq;
 using NHibernate;
 using NUnit.Framework;
@@ -182,6 +183,31 @@ namespace WB.Tests.Unit.Infrastructure.Native
             transaction.Verify(x => x.Commit(), Times.Never);
             transaction.Verify(x => x.Dispose(), Times.Once);
             connection.Verify(x => x.Dispose(), Times.Once);
+        }
+
+        [Test]
+        public async Task when_using_ambient_unit_of_work_accessor_across_async_flow_should_restore_previous_value()
+        {
+            var firstUnitOfWork = new Mock<IUnitOfWork>();
+            var secondUnitOfWork = new Mock<IUnitOfWork>();
+            var ambientUnitOfWorkAccessor = new AmbientUnitOfWorkAccessor();
+
+            using (ambientUnitOfWorkAccessor.Use(firstUnitOfWork.Object))
+            {
+                await Task.Yield();
+                Assert.That(ambientUnitOfWorkAccessor.Current, Is.SameAs(firstUnitOfWork.Object));
+
+                using (ambientUnitOfWorkAccessor.Use(secondUnitOfWork.Object))
+                {
+                    await Task.Yield();
+                    Assert.That(ambientUnitOfWorkAccessor.Current, Is.SameAs(secondUnitOfWork.Object));
+                }
+
+                await Task.Yield();
+                Assert.That(ambientUnitOfWorkAccessor.Current, Is.SameAs(firstUnitOfWork.Object));
+            }
+
+            Assert.That(ambientUnitOfWorkAccessor.Current, Is.Null);
         }
     }
 }
