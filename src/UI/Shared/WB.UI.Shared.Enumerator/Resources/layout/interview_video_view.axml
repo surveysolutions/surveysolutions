@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:local="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/exo_video_bar_background"
@@ -15,4 +14,14 @@
             local:controller_layout_id="@layout/simple_video_controls"
             local:MvxBind="Video PathToFile; 
                             Tag Tag;" />
-</LinearLayout>
+
+    <ImageButton
+            android:id="@+id/btn_close_fullscreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:padding="12dp"
+            android:background="@android:color/transparent"
+            local:srcCompat="@drawable/back_arrow_white"
+            local:MvxBind="Click CloseCommand;" />
+</FrameLayout>
