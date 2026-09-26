@@ -173,10 +173,14 @@ const router = createRouter({
     routes
 });
 
+let pendingDynamicImportRouteName = null;
+
 router.beforeEach((to, from, next) => {
     const { getUnsavedChanges, confirmLeave } = useUnsavedChanges();
+    pendingDynamicImportRouteName = to.name;
 
     if (getUnsavedChanges(from.name) && !confirmLeave()) {
+        pendingDynamicImportRouteName = null;
         next(false);
     } else {
         next();
@@ -186,8 +190,8 @@ router.beforeEach((to, from, next) => {
 router.onError(error => {
     if (isDynamicImportError(error)) {
         scheduleDynamicImportRecovery(error, {
-            routeName: router.currentRoute.value.name,
-            recoveryScope: getRouteDynamicImportRecoveryScope(router.currentRoute.value.name)
+            routeName: pendingDynamicImportRouteName,
+            recoveryScope: getRouteDynamicImportRecoveryScope(pendingDynamicImportRouteName)
         });
         return;
     }
@@ -200,6 +204,8 @@ router.afterEach((to, from, failure) => {
         setActiveDynamicImportRouteName(to.name);
         clearDynamicImportRecovery(getRouteDynamicImportRecoveryScope(to.name));
     }
+
+    pendingDynamicImportRouteName = null;
 });
 
 export default router;
