@@ -279,7 +279,7 @@ namespace WB.UI.Headquarters.Controllers
                     return this.RedirectToAction("Resume", routeValues: new { id = invitation.InterviewId });
             }
 
-            var assignment = invitation.Assignment;
+            var assignment = this.GetCurrentAssignment(invitation);
 
             if (!invitation.IsWithAssignmentResolvedByPassword() && assignment.Archived)
             {
@@ -343,6 +343,10 @@ namespace WB.UI.Headquarters.Controllers
                         Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
             }
 
+            if (assignment.Status != AssignmentStatus.Open)
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
+                    Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
+
             var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
             model.ServerUnderLoad = false;
 
@@ -394,7 +398,7 @@ namespace WB.UI.Headquarters.Controllers
             if (invitation == null)
                 return NotFound();
             
-            var assignment = invitation.Assignment;
+            var assignment = this.GetCurrentAssignment(invitation);
 
             var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
             if (!webInterviewConfig.Started)
@@ -429,7 +433,7 @@ namespace WB.UI.Headquarters.Controllers
             if (invitation.IsWithAssignmentResolvedByPassword())
             {
                 invitation = invitationService.GetInvitationByTokenAndPassword(invitationId, password);
-                assignment = invitation.Assignment;
+                assignment = this.GetCurrentAssignment(invitation);
             }
             
             if (assignment.Archived)
@@ -464,7 +468,7 @@ namespace WB.UI.Headquarters.Controllers
                 }
             }
 
-            if (assignment.IsCompleted)
+            if (assignment.Status != AssignmentStatus.Open || assignment.IsCompleted)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
                     Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
@@ -911,6 +915,7 @@ namespace WB.UI.Headquarters.Controllers
                 StartedDate = interview.StartedDate?.UtcDateTime.ToString("o"),
                 QuestionnaireTitle = model.QuestionnaireTitle,
                 UseCaptcha = model.UseCaptcha,
+                UseRecaptchaV3 = model.UseRecaptchaV3,
                 HostedCaptchaHtml = model.HostedCaptchaHtml,
                 RecaptchaSiteKey = model.RecaptchaSiteKey,
                 HasPassword = model.HasPassword,
@@ -964,7 +969,8 @@ namespace WB.UI.Headquarters.Controllers
                 IsPasswordInvalid = ViewData.ModelState.TryGetValue("InvalidPassword", out var invalidPassword) && invalidPassword.Errors.Any(),
                 SubmitUrl = Url.Action("Start", "WebInterview"),
                 UseCaptcha = webInterviewConfig.UseCaptcha,
-                RecaptchaSiteKey = webInterviewConfig.UseCaptcha && captchaConfig.Value.CaptchaType == CaptchaProviderType.Recaptcha ? recaptchaSettings.Value.SiteKey : null,
+                RecaptchaSiteKey = webInterviewConfig.UseCaptcha && (captchaConfig.Value.CaptchaType == CaptchaProviderType.Recaptcha || captchaConfig.Value.CaptchaType == CaptchaProviderType.RecaptchaV3) ? recaptchaSettings.Value.SiteKey : null,
+                UseRecaptchaV3 = captchaConfig.Value.CaptchaType == CaptchaProviderType.RecaptchaV3,
                 HostedCaptchaHtml = webInterviewConfig.UseCaptcha && captchaConfig.Value.CaptchaType == CaptchaProviderType.Hosted ? serviceLocator.GetInstance<IHostedCaptcha>().Render().Value : null,
             };
 
@@ -1083,6 +1089,19 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             return invitation;
+        }
+
+        private Assignment GetCurrentAssignment(Invitation? invitation)
+        {
+            var assignment = invitation == null
+                ? null
+                : this.assignments.GetAssignment(invitation.AssignmentId) ?? invitation.Assignment;
+
+            if (assignment == null)
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound,
+                    Enumerator.Native.Resources.WebInterview.Error_NotFound);
+
+            return assignment;
         }
     }
 }

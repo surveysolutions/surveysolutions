@@ -204,6 +204,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             var callerQuestionnaire = questionnaire;
 
                             interviewIntegerQuestion.UseFormatting = callerQuestionnaire.ShouldUseFormatting(identity.Id);
+                            interviewIntegerQuestion.IsNonNegative = callerQuestionnaire.IsQuestionNonNegative(identity.Id);
                             var isRosterSize = callerQuestionnaire.IsRosterSizeQuestion(identity.Id);
                             interviewIntegerQuestion.IsRosterSize = isRosterSize;
 
@@ -231,6 +232,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             var callerQuestionnaire = questionnaire;
                             interviewDoubleQuestion.CountOfDecimalPlaces = callerQuestionnaire.GetCountOfDecimalPlacesAllowedByQuestion(identity.Id);
                             interviewDoubleQuestion.UseFormatting = callerQuestionnaire.ShouldUseFormatting(identity.Id);
+                            interviewDoubleQuestion.IsNonNegative = callerQuestionnaire.IsQuestionNonNegative(identity.Id);
                             interviewDoubleQuestion.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200, null);
                             result = interviewDoubleQuestion;
                         }

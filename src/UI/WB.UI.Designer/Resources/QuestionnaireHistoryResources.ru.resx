@@ -377,7 +377,18 @@
   <data name="AnonymousSharingEnabled" xml:space="preserve">
     <value>Анонимный доступ включён для {0}</value>
   </data>
+
   <data name="AnonymousSharingDisabled" xml:space="preserve">
     <value>Анонимный доступ выключен для {0}</value>
+  </data>
+
+  <data name="Search" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="SearchButton" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="SearchClear" xml:space="preserve">
+    <value>Очистить</value>
   </data>
 </root>

@@ -384,7 +384,18 @@
   <data name="AnonymousSharingEnabled" xml:space="preserve">
     <value>已为 {0} 启用匿名分享</value>
   </data>
+
   <data name="AnonymousSharingDisabled" xml:space="preserve">
     <value>已为 {0} 禁用匿名分享</value>
+  </data>
+
+  <data name="Search" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="SearchButton" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="SearchClear" xml:space="preserve">
+    <value>清除</value>
   </data>
 </root>

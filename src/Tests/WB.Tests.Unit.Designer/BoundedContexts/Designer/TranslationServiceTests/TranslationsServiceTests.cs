@@ -27,6 +27,74 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
     internal class TranslationsServiceTests : TranslationsServiceTestsContext
     {
         [Test]
+        public void when_copying_categories_translations_should_copy_only_requested_languages_to_new_categories_id()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var oldCategoriesId = Guid.NewGuid();
+            var newCategoriesId = Guid.NewGuid();
+            var firstTranslationId = Guid.NewGuid();
+            var secondTranslationId = Guid.NewGuid();
+            var orphanedTranslationId = Guid.NewGuid();
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.TranslationInstances.AddRange(
+                new TranslationInstance
+                {
+                    Id = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionnaireEntityId = oldCategoriesId,
+                    TranslationId = firstTranslationId,
+                    TranslationIndex = "1",
+                    Type = TranslationType.Categories,
+                    Value = "first"
+                },
+                new TranslationInstance
+                {
+                    Id = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionnaireEntityId = oldCategoriesId,
+                    TranslationId = secondTranslationId,
+                    TranslationIndex = "1",
+                    Type = TranslationType.Categories,
+                    Value = "second"
+                },
+                new TranslationInstance
+                {
+                    Id = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionnaireEntityId = oldCategoriesId,
+                    TranslationId = orphanedTranslationId,
+                    TranslationIndex = "1",
+                    Type = TranslationType.Categories,
+                    Value = "orphaned"
+                },
+                new TranslationInstance
+                {
+                    Id = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionnaireEntityId = oldCategoriesId,
+                    TranslationId = firstTranslationId,
+                    Type = TranslationType.Title,
+                    Value = "not a category"
+                });
+            dbContext.SaveChanges();
+            var service = Create.TranslationsService(dbContext, Mock.Of<IQuestionnaireViewFactory>());
+
+            service.CopyCategoriesTranslations(questionnaireId, oldCategoriesId, newCategoriesId,
+                new[] { firstTranslationId, secondTranslationId });
+            dbContext.SaveChanges();
+
+            var copies = dbContext.TranslationInstances
+                .Where(x => x.QuestionnaireEntityId == newCategoriesId)
+                .OrderBy(x => x.Value)
+                .ToList();
+            Assert.That(copies, Has.Count.EqualTo(2));
+            Assert.That(copies.Select(x => x.TranslationId),
+                Is.EquivalentTo(new[] { firstTranslationId, secondTranslationId }));
+            Assert.That(copies.Select(x => x.Value), Is.EqualTo(new[] { "first", "second" }));
+            Assert.That(copies.All(x => x.Type == TranslationType.Categories), Is.True);
+        }
+
+        [Test]
         public void when_storing_translations_with_html_from_excel_file()
         {
             //assert

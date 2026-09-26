@@ -384,7 +384,18 @@
   <data name="AnonymousSharingEnabled" xml:space="preserve">
     <value>Ndarja anonime është aktivizuar për {0}</value>
   </data>
+
   <data name="AnonymousSharingDisabled" xml:space="preserve">
     <value>Ndarja anonime është çaktivizuar për {0}</value>
+  </data>
+
+  <data name="Search" xml:space="preserve">
+    <value>Kërko</value>
+  </data>
+  <data name="SearchButton" xml:space="preserve">
+    <value>Kërko</value>
+  </data>
+  <data name="SearchClear" xml:space="preserve">
+    <value>Pastro</value>
   </data>
 </root>

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0-android</TargetFramework>
+    <TargetFramework>net10.0-android</TargetFramework>
     <SupportedOSPlatformVersion>23.0</SupportedOSPlatformVersion>
     <OutputType>Library</OutputType>
     <Nullable>disable</Nullable>
@@ -82,13 +82,7 @@
     <PackageReference Include="Esri.ArcGISRuntime.Android" Version="200.8.2" />
     <PackageReference Include="Plugin.CurrentActivity">
       <Version>2.1.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="System.Collections.Immutable">
-      <Version>9.0.5</Version>
-    </PackageReference>
-    <PackageReference Include="System.Net.Http">
-      <Version>4.3.4</Version>
-    </PackageReference>
+    </PackageReference>    
     <PackageReference Include="Xamarin.AndroidX.ConstraintLayout">
       <Version>2.2.1.3</Version>
     </PackageReference>
@@ -96,7 +90,7 @@
       <Version>1.8.1.1</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.DroidX.RecyclerView">
-      <Version>9.4.0</Version>
+      <Version>10.1.2</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.AsyncLayoutInflater">
       <Version>1.1.0.3</Version>

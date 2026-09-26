@@ -354,6 +354,8 @@
   <data name="Variable_Update" xml:space="preserve">
     <value>Variabila {0} a fost actualizată</value>
   </data>
+
+
   <data name="CriticalRule_Add" xml:space="preserve">
     <value>Regula critică {0} a fost adăugată</value>
   </data>
@@ -372,7 +374,18 @@
   <data name="AnonymousSharingEnabled" xml:space="preserve">
     <value>Partajarea anonimă a fost activată pentru {0}</value>
   </data>
+
   <data name="AnonymousSharingDisabled" xml:space="preserve">
     <value>Partajarea anonimă a fost dezactivată pentru {0}</value>
+  </data>
+
+  <data name="Search" xml:space="preserve">
+    <value>Căutare</value>
+  </data>
+  <data name="SearchButton" xml:space="preserve">
+    <value>Căutare</value>
+  </data>
+  <data name="SearchClear" xml:space="preserve">
+    <value>Șterge</value>
   </data>
 </root>

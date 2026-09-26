@@ -370,7 +370,18 @@
   <data name="AnonymousSharingEnabled" xml:space="preserve">
     <value>El uso compartido anónimo está activado para {0}</value>
   </data>
+
   <data name="AnonymousSharingDisabled" xml:space="preserve">
     <value>El uso compartido anónimo está desactivado para {0}</value>
+  </data>
+
+  <data name="Search" xml:space="preserve">
+    <value>Buscar</value>
+  </data>
+  <data name="SearchButton" xml:space="preserve">
+    <value>Buscar</value>
+  </data>
+  <data name="SearchClear" xml:space="preserve">
+    <value>Borrar</value>
   </data>
 </root>

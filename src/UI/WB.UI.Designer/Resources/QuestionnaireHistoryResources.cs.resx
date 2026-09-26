@@ -369,7 +369,18 @@
   <data name="AnonymousSharingEnabled" xml:space="preserve">
     <value>Anonymní sdílení bylo zapnuto pro {0}</value>
   </data>
+
   <data name="AnonymousSharingDisabled" xml:space="preserve">
     <value>Anonymní sdílení bylo vypnuto pro {0}</value>
+  </data>
+
+  <data name="Search" xml:space="preserve">
+    <value>Hledat</value>
+  </data>
+  <data name="SearchButton" xml:space="preserve">
+    <value>Hledat</value>
+  </data>
+  <data name="SearchClear" xml:space="preserve">
+    <value>Vymazat</value>
   </data>
 </root>
