@@ -49,6 +49,9 @@ namespace WB.UI.Headquarters.Controllers.Api
             public bool AllowSupervisorChangeAssignmentStatus { get; set; }
             public bool AllowInterviewerChangeAssignmentStatus { get; set; }
             public AudioRecordingQuality? AudioRecordingQuality { get; set; }
+            [EnumDataType(typeof(AcceptableGpsLocationSource))]
+            public AcceptableGpsLocationSource? AcceptableGpsLocationSource { get; set; }
+            public bool AllowSupervisorAudioAuditPlayback { get; set; }
         }
 
         public class InterviewerGeographyQuestionAccuracyInMetersModel
@@ -162,7 +165,9 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 AllowSupervisorChangeAssignmentStatus = interviewerSettings.IsAllowSupervisorChangeAssignmentStatus(),
                 AllowInterviewerChangeAssignmentStatus = interviewerSettings.IsAllowInterviewerChangeAssignmentStatus(),
-                AudioRecordingQuality = interviewerSettings.GetAudioRecordingQuality()
+                AudioRecordingQuality = interviewerSettings.GetAudioRecordingQuality(),
+                AllowSupervisorAudioAuditPlayback = interviewerSettings.IsAllowSupervisorAudioAuditPlayback(),
+                AcceptableGpsLocationSource = interviewerSettings.GetAcceptableGpsLocationSource()
             };
         }
 
@@ -183,8 +188,11 @@ namespace WB.UI.Headquarters.Controllers.Api
                 settings.AllowInterviewerChangeAssignmentStatus = message.AllowSupervisorChangeAssignmentStatus
                     ? message.AllowInterviewerChangeAssignmentStatus
                     : false;
+                settings.AllowSupervisorAudioAuditPlayback = message.AllowSupervisorAudioAuditPlayback;
                 if (message.AudioRecordingQuality.HasValue)
                     settings.AudioRecordingQuality = message.AudioRecordingQuality.Value;
+                if (message.AcceptableGpsLocationSource.HasValue)
+                    settings.AcceptableGpsLocationSource = message.AcceptableGpsLocationSource.Value;
             });
 
             return Ok(new {success = true});

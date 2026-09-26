@@ -144,18 +144,18 @@
 
 
   <data name="InvalidAuthenticatorCode" xml:space="preserve">
-    <value>Invalid authenticator code.</value>
+    <value>身份验证器代码无效。</value>
   </data>
 
   <data name="InvalidRecoveryCode" xml:space="preserve">
-    <value>Invalid recovery code entered.</value>
+    <value>输入的恢复代码无效。</value>
   </data>
 
   <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
-      <value>Another questionnaire is being imported to Headquarters now.</value>
+      <value>当前正在将另一份问卷导入总部。</value>
   </data>
 
   <data name="ApiUserIsNotAllowedToSignIn" xml:space="preserve">
-      <value>Api user is not allowed to signin with user interface</value>
+      <value>不允许 API 用户通过用户界面登录</value>
   </data>
 </root>

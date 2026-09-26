@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AccessForbidden" xml:space="preserve"><value>Máy chủ không được đăng ký với Questionnaire Designer.</value></data>
+  <data name="DesignerAppDescription" xml:space="preserve"><value>Đây là công cụ miễn phí để tạo bảng câu hỏi.</value></data>
+  <data name="InvalidCredentials" xml:space="preserve"><value>Người dùng không được phép. Vui lòng kiểm tra thông tin đăng nhập và mật khẩu của bạn.</value></data>
+  <data name="LoginWatermark" xml:space="preserve"><value>Đăng nhập hoặc email</value></data>
+  <data name="PageHeader" xml:space="preserve"><value>Sử dụng thông tin đăng nhập Survey Solutions Designer của bạn</value></data>
+  <data name="Questionnaire" xml:space="preserve"><value>Bảng câu hỏi</value></data>
+  <data name="SessionExpired" xml:space="preserve"><value>Phiên đã hết hạn, vui lòng đăng nhập lại</value></data>
+  <data name="UnableToImportNewQuestionnaire" xml:space="preserve"><value>Không thể nhập bảng câu hỏi mới:</value></data>
+  <data name="UserDesignerCredentials" xml:space="preserve"><value>Vui lòng đăng nhập bằng thông tin đăng nhập mà bạn thường dùng để truy cập bảng câu hỏi của bạn trong Designer</value></data>
+</root>

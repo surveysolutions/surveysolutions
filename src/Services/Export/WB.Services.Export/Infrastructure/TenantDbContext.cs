@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Options;
 using Npgsql;
 using WB.Services.Export.Assignment;
@@ -84,6 +85,14 @@ namespace WB.Services.Export.Infrastructure
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
+
+            // Each tenant is mapped to its own PostgreSQL schema at runtime (see OnModelCreating),
+            // while the migrations and the model snapshot are schema-agnostic. As a result EF Core
+            // detects a difference between the runtime model (which has a per-tenant default schema)
+            // and the snapshot only for real tenant contexts. That difference is an unavoidable
+            // consequence of the dynamic schema-per-tenant design, so suppress the warning only there.
+            if (!this.TenantContext.Tenant.Id.Equals(TenantId.None))
+                optionsBuilder.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
 
             if (!optionsBuilder.IsConfigured)
             {

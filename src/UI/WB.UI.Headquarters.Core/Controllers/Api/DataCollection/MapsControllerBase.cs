@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
-    public abstract class MapsControllerBase : ControllerBase
+    public abstract class MapsControllerBase : DataCollectionControllerBase
     {
         protected readonly IMapStorageService mapRepository;
         protected readonly IAuthorizedUser authorizedUser;
