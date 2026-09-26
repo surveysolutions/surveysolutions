@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Linq;
@@ -38,8 +39,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         private readonly ConcurrentDictionary<long, IPayload> outgoingPayloads =
             new ConcurrentDictionary<long, IPayload>();
 
-        private readonly ConcurrentDictionary<(string Endpoint, long PayloadId), ConcurrentQueue<NearbyPayloadTransferUpdate>> deferredTransferUpdates =
-            new ConcurrentDictionary<(string Endpoint, long PayloadId), ConcurrentQueue<NearbyPayloadTransferUpdate>>();
+        private readonly ConcurrentDictionary<(string Endpoint, long PayloadId), DeferredTransferUpdatesQueue> deferredTransferUpdates =
+            new ConcurrentDictionary<(string Endpoint, long PayloadId), DeferredTransferUpdatesQueue>();
 
         private readonly IRequestHandler requestHandler;
 
@@ -231,10 +232,17 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 if (allowDeferral && (update.Status == TransferStatus.Success || update.Status == TransferStatus.Failure))
                 {
                     var key = (endpoint, update.Id);
-                    var deferredUpdates = deferredTransferUpdates.GetOrAdd(key,
-                        _ => new ConcurrentQueue<NearbyPayloadTransferUpdate>());
+                    var deferredUpdates = deferredTransferUpdates.GetOrAdd(key, _ => new DeferredTransferUpdatesQueue());
+                    await deferredUpdates.Gate.WaitAsync();
+                    try
+                    {
+                        deferredUpdates.Updates.Enqueue(update);
+                    }
+                    finally
+                    {
+                        deferredUpdates.Gate.Release();
+                    }
 
-                    deferredUpdates.Enqueue(update);
                     logger.Warn(
                         $"Deferring payload transfer update until payload is registered. Endpoint: {endpoint}, PayloadId: {update.Id}, Status: {update.Status}");
                     return;
@@ -340,16 +348,33 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             var key = (endpoint, payloadId);
             var handledDeferredUpdate = false;
 
-            while (deferredTransferUpdates.TryRemove(key, out var deferredUpdates))
+            if (!deferredTransferUpdates.TryGetValue(key, out var deferredUpdates))
+                return false;
+
+            await deferredUpdates.Gate.WaitAsync();
+            try
             {
-                while (deferredUpdates.TryDequeue(out var deferredUpdate))
+                while (deferredUpdates.Updates.Count > 0)
                 {
                     handledDeferredUpdate = true;
+                    var deferredUpdate = deferredUpdates.Updates.Dequeue();
                     await ReceivePayloadTransferUpdateInternal(connection, endpoint, deferredUpdate, allowDeferral: false);
                 }
+
+                deferredTransferUpdates.TryRemove(new KeyValuePair<(string Endpoint, long PayloadId), DeferredTransferUpdatesQueue>(key, deferredUpdates));
+            }
+            finally
+            {
+                deferredUpdates.Gate.Release();
             }
 
             return handledDeferredUpdate;
+        }
+
+        private sealed class DeferredTransferUpdatesQueue
+        {
+            public Queue<NearbyPayloadTransferUpdate> Updates { get; } = new Queue<NearbyPayloadTransferUpdate>();
+            public SemaphoreSlim Gate { get; } = new SemaphoreSlim(1, 1);
         }
 
         private async Task HandlePayloadContent(INearbyConnection nearbyConnection, string endpoint,
