@@ -207,32 +207,32 @@
 
 
   <data name="RestartInterview" xml:space="preserve">
-    <value>Interview {0} restarted</value>
+    <value>访谈 {0} 已重新启动</value>
   </data>
 
   <data name="RejectInterviewToInterviewer" xml:space="preserve">
-    <value>Interview {0} rejected to interviewer {1}</value>
+    <value>访谈 {0} 已退回给访问员 {1}</value>
   </data>
 
   <data name="FinishInstallation" xml:space="preserve">
-      <value>Installation finished</value>
+      <value>安装完成</value>
   </data>
 
   <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve">
-    <value>{0} interview(s) updated from Headquarters</value>
+    <value>已从总部更新 {0} 个访谈</value>
   </data>
 
   <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve">
-    <value>{0} interview(s) partially uploaded</value>
+    <value>已部分上传 {0} 个访谈</value>
 
   </data>
 
   <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve">
-    <value>{0} interview(s) were reopened after receiving comments</value>
+    <value>收到评论后已重新打开 {0} 个访谈</value>
 
   </data>
 
   <data name="SwitchInterviewMode" xml:space="preserve">
-    <value>Interview {0} switched to {1} mode</value>
+    <value>访谈 {0} 已切换到 {1} 模式</value>
   </data>
 </root>

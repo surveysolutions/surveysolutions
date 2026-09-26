@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ using WB.UI.Shared.Web.Controllers;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Enumerator
 {
-    public class LogsControllerBase : ControllerBase
+    public class LogsControllerBase : DataCollectionControllerBase
     {
         private readonly SignInManager<HqUser> signInManager;
         private readonly IUserViewFactory userViewFactory;
@@ -32,6 +33,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Enumerator
             this.logs = logs;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("api/enumerator/logs")]
         public async Task<IActionResult> Post()

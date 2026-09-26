@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="LookupTableAlreadyExist" xml:space="preserve">
+        <value>Tabel pencarian dengan id tersebut sudah ada.</value>
+    </data>
+    <data name="LookupTableIsAbsent" xml:space="preserve">
+        <value>Tabel pencarian dengan id seperti itu tidak ada.</value>
+    </data>
+    <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
+        <value>File tanpa data tidak dapat dimuat</value>
+    </data>
+    <data name="LookupTables_data_value_cannot_be_parsed" xml:space="preserve">
+        <value>Nilai {0} tidak dapat diuraikan sebagai angka desimal. Kolom {1}, baris {2}.</value>
+    </data>
+    <data name="LookupTables_empty_or_invalid_header_are_not_allowed" xml:space="preserve">
+        <value>Header yang kosong atau tidak valid tidak diperbolehkan</value>
+    </data>
+    <data name="LookupTables_rowcode_column_is_mandatory" xml:space="preserve">
+        <value>Kolom kode baris wajib tidak ada</value>
+    </data>
+    <data name="LookupTables_rowcode_values_must_be_unique" xml:space="preserve">
+        <value>Nilai kode baris harus unik</value>
+    </data>
+    <data name="LookupTables_rowcode_value_cannot_be_parsed" xml:space="preserve">
+        <value>Nilai {0} tidak dapat diuraikan sebagai bilangan bulat panjang. Kolom {1}, baris {2}.</value>
+    </data>
+    <data name="LookupTables_too_many_columns" xml:space="preserve">
+        <value>Terlalu banyak kolom dalam file yang diunggah. Jumlah kolom maksimal adalah {0}</value>
+    </data>
+    <data name="LookupTables_too_many_rows" xml:space="preserve">
+        <value>Tabel pencarian berisi baris {1}, yang melebihi batas jumlah baris dalam tabel pencarian (baris {0}).</value>
+    </data>
+    <data name="MacroAlreadyExist" xml:space="preserve">
+        <value>Makro sudah ada.</value>
+    </data>
+    <data name="MacroIsAbsent" xml:space="preserve">
+        <value>Makro tidak ada.</value>
+    </data>
+    <data name="CriticalRuleAlreadyExist" xml:space="preserve">
+        <value>Aturan kritis sudah ada.</value>
+    </data>
+    <data name="CriticalRuleIsAbsent" xml:space="preserve">
+        <value>Aturan kritis tidak ada.</value>
+    </data>
+    <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
+        <value>Header dengan nama yang sama tidak diperbolehkan</value>
+    </data>
+    <data name="Attachments_uploaded_file_is_not_image" xml:space="preserve">
+        <value>File yang diupload bukan berupa gambar</value>
+    </data>
+    <data name="Attachments_uploaded_file_image_is_too_big" xml:space="preserve">
+        <value>Dimensi gambar terlalu besar</value>
+    </data>
+    <data name="Attachments_Unsupported_content" xml:space="preserve">
+        <value>Konten yang diunggah tidak didukung</value>
+    </data>
+    <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
+        <value>Anda tidak dapat berpindah ke sub-bagian {0} karena posisi {1} tidak dapat diterima.</value>
+    </data>
+    <data name="ComboboxCannotBeFound" xml:space="preserve">
+        <value>Pertanyaan kotak kombo dengan kunci publik {0} tidak dapat ditemukan</value>
+    </data>
+    <data name="ItemWithIdExistsAlready" xml:space="preserve">
+        <value>Satu atau lebih item kuesioner dengan ID yang sama {0} sudah ada.</value>
+    </data>
+    <data name="MoreThanOneSubSectionWithSameId" xml:space="preserve">
+        <value>Satu atau lebih sub-bagian dengan ID yang sama {0} sudah ada:{1}{2}.</value>
+    </data>
+    <data name="NoPremissionsToEditQuestionnaire" xml:space="preserve">
+        <value>Anda tidak memiliki izin untuk mengubah kuesioner ini</value>
+    </data>
+    <data name="TranslationIsNotFull" xml:space="preserve">
+        <value>Terjemahannya tidak lengkap dan tidak mencakup semua teks yang diperlukan untuk setiap elemen</value>
+    </data>
+    <data name="CategoryTranslationIsNotFull" xml:space="preserve">
+        <value>Terjemahan kategori "{0}" tidak lengkap dan tidak mencakup semua teks opsi</value>
+    </data>
+    <data name="QuestionCannotBeFound" xml:space="preserve">
+        <value>Pertanyaan dengan kunci publik {0} tidak dapat ditemukan.</value>
+    </data>
+    <data name="QuestionIsNotCombobox" xml:space="preserve">
+        <value>Pertanyaan {0} bukan kotak kombo</value>
+    </data>
+    <data name="QuestionnaireCantBeFound" xml:space="preserve">
+        <value>Item kuesioner dengan id {0} tidak dapat ditemukan.</value>
+    </data>
+    <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
+        <value>Judul kuesioner tidak boleh kosong atau hanya berisi spasi saja.</value>
+    </data>
+    <data name="QuestionnaireSuportedNewCover" xml:space="preserve">
+        <value>Kuesioner sudah mendukung halaman sampul.</value>
+    </data>
+    <data name="SubSectionCantBeFound" xml:space="preserve">
+        <value>Subbagian dengan kunci publik {0} tidak dapat ditemukan.</value>
+    </data>
+    <data name="SubSectionDepthLimit" xml:space="preserve">
+        <value>Kedalaman sub-bagian atau daftar tidak boleh lebih tinggi dari {0}.</value>
+    </data>
+    <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
+        <value>Bagian tidak boleh memiliki lebih dari item turunan {0}</value>
+    </data>
+    <data name="SubsectionCantHaveMoreThan_DirectChildren" xml:space="preserve">
+        <value>Bagian atau subbagian tidak boleh memiliki lebih dari {0} item turunan langsung</value>
+    </data>
+    <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
+        <value>Satu atau lebih pertanyaan dengan ID yang sama {0} sudah ada:{1}{2}.</value>
+    </data>
+    <data name="CantPasteQuestion" xml:space="preserve">
+        <value>Pertanyaan tidak dapat ditempel di sini.</value>
+    </data>
+    <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
+        <value>Bagian terakhir yang ada tidak dapat dihapus dari kuesioner</value>
+    </data>
+    <data name="CantRemoveCoverPageInQuestionnaire" xml:space="preserve">
+        <value>Bagian sampul tidak dapat dihapus dari kuesioner</value>
+    </data>
+    <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
+        <value>Bagian sampul harus menjadi bagian pertama dalam kuesioner</value>
+    </data>
+    <data name="CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables" xml:space="preserve">
+        <value>Bagian sampul hanya boleh berisi pertanyaan, teks statis, dan variabel</value>
+    </data>
+    <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
+        <value>Ini adalah bagian Sampul yang hanya bisa dibaca. Anda tidak dapat mengedit atau menyusun ulang pertanyaan di dalamnya.</value>
+    </data>
+    <data name="CantRemoveUserFromTheList" xml:space="preserve">
+        <value>Tidak dapat menghapus pengguna karena tidak ada dalam daftar berbagi</value>
+    </data>
+    <data name="FailedToAddGroup" xml:space="preserve">
+        <value>Gagal mencoba menambahkan grup {0} ke grup {1}. Tetapi grup {1} tidak ada di dokumen {2}</value>
+    </data>
+    <data name="ImportOfDeletedQuestionnaire" xml:space="preserve">
+        <value>Mencoba mengimpor template kuesioner yang dihapus</value>
+    </data>
+    <data name="InvalidFixedTitle" xml:space="preserve">
+        <value>Daftar judul tidak valid</value>
+    </data>
+    <data name="InvalidValueOfFixedTitle" xml:space="preserve">
+        <value>Nilai yang tidak kosong untuk judul daftar tetap diperlukan</value>
+    </data>
+    <data name="OnlyQuestionnaireDocumentsAreSupported" xml:space="preserve">
+        <value>Hanya Dokumen Kuesioner yang didukung untuk saat ini</value>
+    </data>
+    <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
+        <value>Kuesioner {0} versi {1} tidak dapat ditemukan</value>
+    </data>
+    <data name="QuestionTypeIsNotSupported" xml:space="preserve">
+        <value>Jenis pertanyaan tidak didukung: {0}</value>
+    </data>
+    <data name="RosterCantBePaste" xml:space="preserve">
+        <value>Daftar nama tidak dapat ditempel di sini.</value>
+    </data>
+    <data name="StaticTextCantBePaste" xml:space="preserve">
+        <value>Teks Statis tidak dapat ditempel di sini.</value>
+    </data>
+    <data name="UnknownTypeCantBePaste" xml:space="preserve">
+        <value>Jenis item tidak diketahui. Gagal menempel.</value>
+    </data>
+    <data name="UserIsInTheList" xml:space="preserve">
+        <value>Pengguna {0} sudah ada di daftar share.</value>
+    </data>
+    <data name="InvalidUserInfo" xml:space="preserve">
+        <value>Info pengguna tidak valid.</value>
+    </data>
+    <data name="UserIsOwner" xml:space="preserve">
+        <value>Pengguna {0} adalah pemilik kuesioner ini. Silakan masukkan email lain.</value>
+    </data>
+    <data name="ValueOfFixedTitleCantBeParsed" xml:space="preserve">
+        <value>Nilai daftar item tetap hanya boleh memiliki karakter numerik</value>
+    </data>
+    <data name="VariableCantBePaste" xml:space="preserve">
+        <value>Variabel tidak dapat ditempel di sini.</value>
+    </data>
+    <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
+        <value>Kategori dalam pertanyaan berjenjang tidak boleh memiliki kolom ParentValue yang kosong.</value>
+    </data>
+    <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
+        <value>Kategori dalam pertanyaan berjenjang tidak boleh memiliki nilai selain numerik di kolom ParentValue.</value>
+    </data>
+    <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+        <value>Setidaknya ada satu duplikat pasangan "Judul" dan "Nilai Induk". Daftar tersebut tidak boleh mengandung duplikat apa pun.</value>
+    </data>
+    <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
+        <value>Nilai kategori hanya boleh memiliki karakter numerik</value>
+    </data>
+    <data name="AttachmentIdIsMissing" xml:space="preserve">
+        <value>Lampiran dengan id {0} tidak ada</value>
+    </data>
+    <data name="LookupTableHasEmptyContent" xml:space="preserve">
+        <value>Tabel pencarian dengan id {0} tidak memiliki konten</value>
+    </data>
+    <data name="LookupTableIsMissing" xml:space="preserve">
+        <value>Tabel pencarian dengan id {0} tidak ada</value>
+    </data>
+    <data name="OldAttachmentIdIsEmpty" xml:space="preserve">
+        <value>Id lampiran lama kosong dan file tidak ada untuk lampiran {0} di kuesioner {1}</value>
+    </data>
+    <data name="ProvidedFileHasErrors" xml:space="preserve">
+        <value>Ditemukan kesalahan dalam file yang disediakan</value>
+    </data>
+    <data name="TranlationExcelFileHasErrors" xml:space="preserve">
+        <value>Menemukan kesalahan dalam file excel</value>
+    </data>
+    <data name="TranslationCellIndexIsInvalid" xml:space="preserve">
+        <value>{0} memiliki indeks yang tidak valid di [{1}]</value>
+    </data>
+    <data name="TranslationCellTypeIsInvalid" xml:space="preserve">
+        <value>{0} memiliki tipe yang tidak valid [{1}]</value>
+    </data>
+    <data name="TranslationCel_A_lIsInvalid" xml:space="preserve">
+        <value>{0} memiliki id yang tidak valid di [{1}]</value>
+    </data>
+    <data name="TranslationFileIsEmpty" xml:space="preserve">
+        <value>File Excel kosong - tidak berisi lembar kerja</value>
+    </data>
+    <data name="TranslationsCantBeExtracted" xml:space="preserve">
+        <value>Gagal mengekstrak terjemahan dari file yang diunggah</value>
+    </data>
+    <data name="CategoriesCantBeExtracted" xml:space="preserve">
+        <value>Gagal mengekstrak kategori dari file yang diunggah</value>
+    </data>
+    <data name="TranslationWorksheetIsMissing" xml:space="preserve">
+        <value>Lembar kerja dengan terjemahan tidak ditemukan</value>
+    </data>
+    <data name="VariableWithIdWasNotFound" xml:space="preserve">
+        <value>Variabel dengan id {0} tidak ditemukan dalam kuesioner {1}</value>
+    </data>
+    <data name="RequiredHeaderWasNotFound" xml:space="preserve">
+        <value>Header {0} tidak ditemukan di file excel</value>
+    </data>
+    <data name="HeaderWasNotFound" xml:space="preserve">
+        <value>Header tidak ditemukan dalam file</value>
+    </data>
+    <data name="NoParentCascadingOptions" xml:space="preserve">
+        <value>Tidak ditemukan kategori untuk pertanyaan berjenjang induk '{0}'</value>
+    </data>
+    <data name="Column" xml:space="preserve">
+        <value>kolom</value>
+    </data>
+    <data name="Row" xml:space="preserve">
+        <value>baris</value>
+    </data>
+    <data name="ImportOptions_MissingRequiredColumns" xml:space="preserve">
+        <value>Beberapa kolom hilang. Pastikan Anda mengunggah file dengan kolom yang wajib diisi</value>
+    </data>
+    <data name="ImportOptions_EmptyValue" xml:space="preserve">
+        <value>Nilai kosong</value>
+    </data>
+    <data name="ImportOptions_NotNumber" xml:space="preserve">
+        <value>Nilai bilangan bulat 32 bit '{0}' tidak valid. Nilainya harus antara -2147483647 dan 2147483647</value>
+    </data>
+    <data name="ImportOptions_ParentValueNotFound" xml:space="preserve">
+        <value>Pertanyaan orang tua tidak memiliki kategori dengan nilai '{0}'</value>
+    </data>
+    <data name="ImportOptions_DuplicateByTitleAndParentIds" xml:space="preserve">
+        <value>Kategori duplikat '{0}' dengan nilai induk '{1}'</value>
+    </data>
+    <data name="ImportOptions_DuplicatedParentValues" xml:space="preserve">
+        <value>Pertanyaan induk '{0}' memiliki kategori {1} dengan nilai '{2}'</value>
+    </data>
+    <data name="ImportOptions_TitleTooLong" xml:space="preserve">
+        <value>Judul terlalu panjang. Panjang judul harus kurang dari {0}</value>
+    </data>
+    <data name="ImportOptions_AttachmentNameTooLong" xml:space="preserve">
+        <value>Nama lampiran terlalu panjang. Nama lampiran harus kurang dari {0}</value>
+    </data>
+    <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
+        <value>Kategori duplikat '{0}' dengan nilai '{1}'</value>
+    </data>
+    <data name="Excel_Categories_Int_Invalid" xml:space="preserve">
+        <value>[{0}] Nilai numerik tidak valid</value>
+    </data>
+    <data name="Excel_Categories_Empty_Text" xml:space="preserve">
+        <value>[{0}] Judul kosong</value>
+    </data>
+    <data name="Excel_Categories_Empty_Value" xml:space="preserve">
+        <value>[{0}] Nilai kosong</value>
+    </data>
+    <data name="Excel_Categories_Duplicated" xml:space="preserve">
+        <value>Kategori duplikat dalam baris: {0}</value>
+    </data>
+    <data name="Excel_Categories_Empty_ParentId" xml:space="preserve">
+        <value>Beberapa kategori tidak memiliki ID induk</value>
+    </data>
+    <data name="Excel_Categories_More_Than_Limit" xml:space="preserve">
+        <value>Kumpulan kategori memiliki lebih dari kategori {0}</value>
+    </data>
+    <data name="Excel_NoCategories" xml:space="preserve">
+        <value>Tidak ada kategori dalam file</value>
+    </data>
+    <data name="Excel_Categories_Less_2_Options" xml:space="preserve">
+        <value>Kumpulan kategori harus memiliki setidaknya 2 kategori</value>
+    </data>
+    <data name="Excel_Categories_Text_More_Than_250" xml:space="preserve">
+        <value>[{0}] Teks kategori harus kurang dari 250 karakter</value>
+    </data>
+    <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
+        <value>Hanya file nilai yang dipisahkan tab (*.tab, *.txt, *.tsv) atau excel (*.xslx, *.xls, *.ods) yang diterima</value>
+    </data>
+    <data name="QuestionnaireAlreadySupportedCover" xml:space="preserve">
+        <value>Kuesioner sudah mendukung cover</value>
+    </data>
+    <data name="Questionnaire_CategoriesWereNotFound" xml:space="preserve">
+        <value>Kategori tidak ditemukan</value>
+    </data>
+</root>

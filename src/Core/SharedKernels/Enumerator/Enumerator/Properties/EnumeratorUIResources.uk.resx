@@ -1071,4 +1071,13 @@
   <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
     <value>Ви використовували геолокацію або геозону під час створення інтерв'ю. Будь ласка, увімкніть їх знову, якщо хочете використовувати.</value>
   </data>
+  <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
+    <value>Немає відповідного джерела для визначення місцезнаходження</value>
+  </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>GPS-приймач вимкнено</value>
+  </data>
+  <data name="Error_RestrictedLocationSource" xml:space="preserve">
+    <value>Отримане місцезнаходження відхилено, оскільки воно не відповідає допустимому джерелу місцезнаходження, налаштованому для цього робочого простору</value>
+  </data>
 </root>

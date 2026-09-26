@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="CanSynchronize" xml:space="preserve">
+        <value>Mulai sinkronisasi</value>
+    </data>
+    <data name="GetCensusQuestionnaires" xml:space="preserve">
+        <value>Unduh daftar kuesioner sensus: &lt;br/&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+    </data>
+    <data name="GetInterviewer" xml:space="preserve">
+        <value>Unduh informasi pewawancara. &lt;br/&gt;Pengawas: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    </data>
+    <data name="GetInterviewPackage" xml:space="preserve">
+        <value>Unduh paket wawancara: &lt;b&gt;{0}&lt;/b&gt;</value>
+    </data>
+    <data name="GetInterviewPackages" xml:space="preserve">
+        <value>Unduh daftar paket wawancara. &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;Paket sinkronisasi terakhir: &lt;b&gt;{0}&lt;/b&gt;</value>
+    </data>
+    <data name="GetQuestionnaire" xml:space="preserve">
+        <value>Unduh kuesioner: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    </data>
+    <data name="GetQuestionnaireAssembly" xml:space="preserve">
+        <value>Unduh kumpulan kuesioner: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    </data>
+    <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
+        <value>Perangkat dapat ditugaskan ke pewawancara</value>
+    </data>
+    <data name="InterviewPackageProcessed" xml:space="preserve">
+        <value>&lt;font color="green"&gt;Paket wawancara &lt;b&gt;{0}&lt;/b&gt; berhasil diproses&lt;/font&gt;</value>
+    </data>
+    <data name="LinkToDevice" xml:space="preserve">
+        <value>Tautkan pewawancara ke perangkat</value>
+    </data>
+    <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
+        <value>&lt;font color="green"&gt;Perakitan kuesioner &lt;b&gt;{0}&lt;/b&gt; [{1}] berhasil diproses&lt;/font&gt;</value>
+    </data>
+    <data name="QuestionnaireProcessed" xml:space="preserve">
+        <value>&lt;font color="green"&gt;Kuesioner &lt;b&gt;{0}&lt;/b&gt; [{1}] berhasil diproses&lt;/font&gt;</value>
+    </data>
+    <data name="CensusQuestionnaire" xml:space="preserve">
+        <value>&lt;li&gt;&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/li&gt;</value>
+    </data>
+    <data name="DeleteInterviewPackage" xml:space="preserve">
+        <value>&lt;li&gt;Hapus wawancara: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, Paket: {1}, Urutkan indeks: {2}&lt;/li&gt;</value>
+    </data>
+    <data name="DeviceRelinkRequired" xml:space="preserve">
+        <value>&lt;font color="orange"&gt;Diperlukan penautan ulang&lt;/font&gt;</value>
+    </data>
+    <data name="DeviceUpdateRequired" xml:space="preserve">
+        <value>&lt;font color="red"&gt;Pembaruan diperlukan. Versi mesin pewawancara - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+    </data>
+    <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
+        <value>Tidak ada paket wawancara baru untuk diunduh</value>
+    </data>
+    <data name="NoMapsForUser" xml:space="preserve">
+        <value>Tidak ada peta untuk diunduh</value>
+    </data>
+    <data name="UpdateInterviewPackage" xml:space="preserve">
+        <value>&lt;li&gt;Perbarui wawancara: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, Paket: {1}, Indeks pengurutan: {2}&lt;/li&gt;</value>
+    </data>
+    <data name="InterviewerHasDevice" xml:space="preserve">
+        <value>Pewawancara sudah memiliki perangkat</value>
+    </data>
+    <data name="EmptyDevice" xml:space="preserve">
+        <value>&lt;b&gt;[PERANGKAT KOSONG]&lt;/b&gt;</value>
+    </data>
+    <data name="GetInterview" xml:space="preserve">
+        <value>Unduh wawancara: &lt;b&gt;{0}&lt;/b&gt;</value>
+    </data>
+    <data name="GetInterviews" xml:space="preserve">
+        <value>Unduh daftar wawancara. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
+    </data>
+    <data name="GetMaps" xml:space="preserve">
+        <value>Unduh daftar Maps. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
+    </data>
+    <data name="GetAssignmentsFormat" xml:space="preserve">
+        <value>Unduh daftar tugas ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
+    </data>
+    <data name="GetAssignmentFormat" xml:space="preserve">
+        <value>Unduh tugas ({0})&lt;/br&gt;</value>
+    </data>
+    <data name="InterviewProcessed" xml:space="preserve">
+        <value>&lt;font color="green"&gt;Wawancara &lt;b&gt;{0}&lt;/b&gt; berhasil diproses&lt;/font&gt;</value>
+    </data>
+    <data name="GetAttachmentContent" xml:space="preserve">
+        <value>Unduh konten lampiran: {0}</value>
+    </data>
+    <data name="GetMap" xml:space="preserve">
+        <value>Unduh peta: {0}</value>
+    </data>
+    <data name="GetQuestionnaireAttachments" xml:space="preserve">
+        <value>Unduh lampiran kuesioner: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    </data>
+    <data name="PostPackage" xml:space="preserve">
+        <value>Unggah wawancara: {0}</value>
+    </data>
+    <data name="GetTranslations" xml:space="preserve">
+        <value>Unduh terjemahan untuk kuesioner &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    </data>
+    <data name="InterviewerLoggedIn" xml:space="preserve">
+        <value>Pewawancara masuk dan memperoleh AuthToken</value>
+    </data>
+    <data name="InterviewerFailedToLogin" xml:space="preserve">
+        <value>Pewawancara gagal login</value>
+    </data>
+    <data name="PasswordChanged" xml:space="preserve">
+        <value>Kata sandi diubah dan memperoleh AuthToken</value>
+    </data>
+    <data name="FailToChangePassword" xml:space="preserve">
+        <value>Pengguna gagal mengubah kata sandi</value>
+    </data>
+    <data name="ApkRequested" xml:space="preserve">
+        <value>File aplikasi baru diminta</value>
+    </data>
+    <data name="SupervisorApkRequested" xml:space="preserve">
+        <value>File aplikasi Supervisor baru diminta</value>
+    </data>
+    <data name="ExtendedApkRequested" xml:space="preserve">
+        <value>File aplikasi baru yang diperluas diminta</value>
+    </data>
+    <data name="ExtendedPatchRequestedFormat" xml:space="preserve">
+        <value>File patch diminta untuk versi diperpanjang {0}</value>
+    </data>
+    <data name="PatchRequestedFormat" xml:space="preserve">
+        <value>File patch diminta untuk versi {0}</value>
+    </data>
+    <data name="SupervisorPatchRequestedFormat" xml:space="preserve">
+        <value>File patch supervisor diminta untuk versi {0}</value>
+    </data>
+    <data name="GetInterviewPackageV3" xml:space="preserve">
+        <value>&lt;b&gt;V3&lt;/b&gt; Unduh paket wawancara: {0}</value>
+    </data>
+    <data name="GetInterviewPatch" xml:space="preserve">
+        <value>Unduh perubahan wawancara dari HQ: {0}</value>
+    </data>
+    <data name="PostPackageV3" xml:space="preserve">
+        <value>&lt;b&gt;V3&lt;/b&gt; Unggah wawancara: {0}</value>
+    </data>
+    <data name="CheckObsoleteInterviews" xml:space="preserve">
+        <value>Periksa wawancara yang sudah usang. Permintaan: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+    </data>
+    <data name="CheckIsPackageDuplicatedFormat" xml:space="preserve">
+        <value>Periksa wawancara duplikat. Wawancara: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+    </data>
+    <data name="AssignmentReceivedByTablet" xml:space="preserve">
+        <value>Tugas &lt;b&gt;{0}&lt;/b&gt; diterima dan disimpan oleh perangkat</value>
+    </data>
+    <data name="DownloadReusableCategories" xml:space="preserve">
+        <value>Pengunduhan kategori {0} yang dapat digunakan kembali</value>
+    </data>
+    <data name="PostCalendarEventPackage" xml:space="preserve">
+        <value>Unggah acara kalender: {0}</value>
+    </data>
+    <data name="GetCalendarEventPackage" xml:space="preserve">
+        <value>Unduh paket acara kalender: {0}</value>
+    </data>
+    <data name="CalendarEventsListFormat" xml:space="preserve">
+        <value>Unduh daftar acara kalender ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
+    </data>
+</root>
