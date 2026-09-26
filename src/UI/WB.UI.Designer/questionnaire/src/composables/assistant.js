@@ -66,7 +66,7 @@ export const useAssistant = () => {
         };
     };
 
-    const sendMessage = async (prompt, messages, options = {}) => {
+    const sendMessage = async (prompt, options = {}) => {
         const retries = 3;
 
         // Rate limiting: Ensure minimum interval between requests
@@ -87,10 +87,6 @@ export const useAssistant = () => {
                 const data = await api.post(
                     `/api/assistance/${questionnaireId}`,
                     {
-                        messages: messages.map((msg) => ({
-                            role: msg.role,
-                            content: msg.content,
-                        })),
                         prompt: prompt,
                         entityId: options.entityId || null,
                         conversationId: options.conversationId || null,

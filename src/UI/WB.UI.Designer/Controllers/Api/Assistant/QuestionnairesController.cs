@@ -26,6 +26,7 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IQuestionnaireDocumentTransformer questionnaireDocumentTransformer;
         private readonly IReusableCategoriesService reusableCategoriesService;
+        private readonly ILookupTableService lookupTableService;
         
         private readonly ISerializer serializer;
 
@@ -33,12 +34,14 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
             IQuestionnaireViewFactory questionnaireViewFactory,
             IQuestionnaireDocumentTransformer questionnaireDocumentTransformer, 
             IReusableCategoriesService reusableCategoriesService,
+            ILookupTableService lookupTableService,
             ISerializer serializer)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.questionnaireDocumentTransformer = questionnaireDocumentTransformer;
             this.serializer = serializer;
             this.reusableCategoriesService = reusableCategoriesService;
+            this.lookupTableService = lookupTableService;
         }
         
         [HttpGet]
@@ -76,6 +79,34 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
             });
 
             return Content(result, "application/json", Encoding.UTF8);
+        }
+        
+        [HttpGet]
+        [Route("{id}/lookup/{lookupTableId}/headers")]
+        public IActionResult GetLookupTableHeaders(QuestionnaireRevision id, Guid lookupTableId)
+        {
+            var lookupTableContentFile = this.lookupTableService.GetLookupTableContentFile(id, lookupTableId);
+            if (lookupTableContentFile?.Content == null)
+                return NotFound();
+
+            var content = Encoding.UTF8.GetString(lookupTableContentFile.Content);
+            var headerLine = content
+                .Split('\n')
+                .Select(line => line.Trim('\r', ' '))
+                .FirstOrDefault(line => line.Length > 0);
+
+            if (string.IsNullOrEmpty(headerLine))
+                return Ok(Array.Empty<string>());
+
+            // Lookup tables are tab-separated; fall back to comma for legacy CSV content.
+            var separator = headerLine.Contains('\t') ? '\t' : ',';
+            var headers = headerLine
+                .Split(separator)
+                .Select(header => header.Trim())
+                .Where(header => header.Length > 0)
+                .ToArray();
+
+            return Ok(headers);
         }
         
         [HttpGet]
