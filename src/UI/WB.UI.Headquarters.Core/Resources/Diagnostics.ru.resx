@@ -139,7 +139,7 @@
     <value>Проверка доступности Headquarters Экспорт сервисом</value>
   </data>
   <data name="broken_packages_check" xml:space="preserve">
-    <value>Broken packages check</value>
+    <value>Проверка поврежденных пакетов</value>
   </data>
   <data name="database_connection_check" xml:space="preserve">
     <value>Проверка соединения с базой данных</value>

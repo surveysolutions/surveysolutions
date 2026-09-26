@@ -7,6 +7,7 @@
                         {{ $t("WebInterviewUI.LoadingWait") }}
                     </div>
                 </div>
+
                 <Form as="div" v-slot="{ errors, meta }" ref="createForm" class="unit-section complete-section" v-else>
                     <div class="wrapper-info error">
                         <div class="container-info">
@@ -171,13 +172,14 @@
                                         <Field v-model="targetAreaQuestion.answer"
                                             :title="this.$t('Assignments.TargetAreaExplanation')"
                                             :placeholder="$t('Assignments.EnterTargetArea')" name="targetArea"
-                                            type="text" autocomplete="off" class="field-to-fill" />
+                                           type="text" autocomplete="off" class="field-to-fill"
+                                           :rules="validateTargetArea" />
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="information-block text-danger" v-if="!targetAreaQuestion.validity.isValid">
-                            <p>{{ this.$t("Assignments.InvalidTargetArea") }}</p>
+                            <p>{{ errors.targetArea }}</p>
                         </div>
                     </wb-question>
 
@@ -246,10 +248,11 @@ import { nextTick } from 'vue'
 import * as toastr from 'toastr'
 import http from '~/webinterview/api/http'
 import { RoleNames } from '~/shared/constants'
-import { filter } from 'lodash'
+import { filter } from 'lodash-es'
 import '@/assets/css/markup-web-interview.scss'
-import { defineAsyncComponent } from 'vue';
+import { defineAsyncComponent } from 'vue'
 import { Form, Field, ErrorMessage } from 'vee-validate'
+import { ensureQuestionGlobalComponents } from '~/webinterview/componentsQuestionRegistry'
 
 const validationTranslations = {
     custom: {
@@ -260,6 +263,10 @@ const validationTranslations = {
 }
 
 export default {
+    async beforeCreate() {
+        ensureQuestionGlobalComponents(this.$.appContext.app)
+    },
+
     components: {
         Form,
         Field,
@@ -342,31 +349,32 @@ export default {
                     isValid: true,
                 },
             },
+            mapFileNameLengthLimit: 64,
         }
     },
     computed: {
         sizeValidations() {
             let validations = {
                 regex: {
-                    regex: /^-?([0-9]+)$/
+                    regex: /^-?([0-9]+)$/,
                 },
                 min_value: {
-                    min: -1
+                    min: -1,
                 },
                 max_value: {
-                    max: this.config.maxInterviewsByAssignment
-                }
-            };
+                    max: this.config.maxInterviewsByAssignment,
+                },
+            }
 
             if (this.webMode.answer) {
                 if (this.sizeQuestion.answer === '1') {
                     validations.callLocalMethod = {
-                        method: this.emailOrPasswordRequired
-                    };
+                        method: this.emailOrPasswordRequired,
+                    }
                 } else {
                     validations.callLocalMethod = {
-                        method: this.emailShouldBeEmpty
-                    };
+                        method: this.emailShouldBeEmpty,
+                    }
                 }
             }
 
@@ -418,14 +426,32 @@ export default {
             this.assignToQuestion.isAnswered = this.newResponsibleId != null
             this.assignToQuestion.validity.isValid = this.newResponsibleId != null
         },
+        normalizeTargetArea(value) {
+            if (value == null)
+                return null
+
+            const normalizedValue = value.trim()
+            return normalizedValue.length > 0 ? normalizedValue : null
+        },
+        validateTargetArea(value) {
+            const normalizedTargetArea = this.normalizeTargetArea(value)
+            if (normalizedTargetArea != null && normalizedTargetArea.length > this.mapFileNameLengthLimit) {
+                return this.$t('Assignments.TargetAreaNameTooLong', {
+                    limit: this.mapFileNameLengthLimit,
+                })
+            }
+            return true
+        },
         async create(evnt) {
             evnt.target.disabled = true
             const validationResult = await this.$refs.createForm.validate()
+            const normalizedTargetArea = this.normalizeTargetArea(this.targetAreaQuestion.answer)
             const self = this
             this.sizeQuestion.validity.isValid = !validationResult.errors.size
             this.emailQuestion.validity.isValid = !validationResult.errors.email
             this.passwordQuestion.validity.isValid = !validationResult.errors.password
             this.assignToQuestion.validity.isValid = !validationResult.errors.newResponsibleId
+            this.targetAreaQuestion.validity.isValid = !validationResult.errors.targetArea
 
             const submitAllowed = validationResult.valid
             if (submitAllowed) {
@@ -439,7 +465,7 @@ export default {
                         webMode: this.webMode.answer,
                         isAudioRecordingEnabled: this.isAudioRecordingEnabled.answer,
                         comments: this.commentsQuestion.answer,
-                        targetArea: this.targetAreaQuestion.answer,
+                        targetArea: normalizedTargetArea,
                     })
                     .then(response => {
                         window.location.href = self.config.assignmentsUrl
@@ -486,22 +512,22 @@ export default {
         },
 
         emailOrPasswordRequired() {
-            const email = this.emailQuestion.answer;
-            const password = this.passwordQuestion.answer;
+            const email = this.emailQuestion.answer
+            const password = this.passwordQuestion.answer
             const isValid = (email !== null && email !== '') || (password !== null && password !== '')
 
             if (isValid)
-                return true;
+                return true
 
             return this.$t('Assignments.ExpectedForWebMode')
         },
 
         emailShouldBeEmpty() {
-            const email = this.emailQuestion.answer;
+            const email = this.emailQuestion.answer
             const isValid = email === null || email === ''
 
             if (isValid)
-                return true;
+                return true
 
             return this.$t('Assignments.InvalidExpectedWithEmail')
         },
@@ -513,7 +539,7 @@ export default {
             const value = this.newResponsibleId
             const isValid = value.iconClass.toLowerCase() == RoleNames.INTERVIEWER.toLowerCase()
             if (isValid)
-                return true;
+                return true
             return this.$t('Assignments.WebModeNonInterviewer')
         },
     },
