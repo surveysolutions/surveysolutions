@@ -345,6 +345,9 @@
   <data name="FindReplaceMatchingLines" xml:space="preserve">
     <value>Au fost găsite {{count}} linii</value>
   </data>
+  <data name="FindReplaceCurrentMatch" xml:space="preserve">
+    <value>{{current}} / {{count}}</value>
+  </data>
   <data name="FindReplaceMatchWord" xml:space="preserve">
     <value>Potrivește cuvântul întreg</value>
   </data>
@@ -709,6 +712,9 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   </data>
   <data name="QuestionInteger" xml:space="preserve">
     <value>Întreg</value>
+  </data>
+  <data name="QuestionNonNegative" xml:space="preserve">
+    <value>Non-negativ</value>
   </data>
   <data name="QuestionIsLinked" xml:space="preserve">
     <value>Este legat</value>

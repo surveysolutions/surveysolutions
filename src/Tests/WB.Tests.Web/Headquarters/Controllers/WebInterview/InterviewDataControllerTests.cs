@@ -53,6 +53,21 @@ namespace WB.Tests.Web.Headquarters.Controllers.WebInterview
             Assert.That(navigationButtonState.Type, Is.EqualTo(ButtonType.Complete));
         }
 
+        [TestCase("not-a-guid")]
+        [TestCase("00000000-0000-0000-0000-000000000000")]
+        public void GetFullSectionInfo_returns_empty_section_data_when_section_id_is_not_a_valid_identity(string invalidSectionId)
+        {
+            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocument();
+            var statefulInterview = SetUp.StatefulInterview(questionnaireDocument);
+            var controller = CreateInterviewDataController(statefulInterview, questionnaireDocument);
+
+            var section = controller.GetFullSectionInfo(statefulInterview.Id, invalidSectionId);
+
+            Assert.That(section, Is.Not.Null);
+            Assert.That(section.Entities, Is.Empty);
+            Assert.That(section.Details, Is.Empty);
+        }
+
         [Test]
         public void GetFullSectionInfo_should_extract_variable_names_and_clear_names_in_details()
         {
@@ -97,6 +112,18 @@ namespace WB.Tests.Web.Headquarters.Controllers.WebInterview
             Assert.That(result.VariableNames[variableId1], Is.EqualTo("first_var"));
             Assert.That(result.VariableNames[variableId2], Is.EqualTo("second_var"));
             Assert.That(result.Details.All(x => x.Name == null), Is.True);
+        }
+
+        [Test]
+        public void GetSectionEntities_returns_null_when_section_id_is_not_a_valid_identity()
+        {
+            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocument();
+            var statefulInterview = SetUp.StatefulInterview(questionnaireDocument);
+            var controller = CreateInterviewDataController(statefulInterview, questionnaireDocument);
+
+            var entities = controller.GetSectionEntities(statefulInterview.Id, "not-a-guid");
+
+            Assert.That(entities, Is.Null);
         }
         
         

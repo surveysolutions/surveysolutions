@@ -272,11 +272,12 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         {
             if (sectionId == null) throw new ArgumentNullException(nameof(sectionId));
 
+            if (!Identity.TryParse(sectionId, out var sectionIdentity)) return null;
+
             var statefulInterview = GetCallerInterview(interviewId);
             if (statefulInterview == null) return null;
 
             var questionnaire = this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity);
-            var sectionIdentity = Identity.Parse(sectionId);
 
             if (questionnaire.IsCoverPage(sectionIdentity.Id))
             {
@@ -286,6 +287,13 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                     .Concat(ActionButtonsDefinition)
                     .ToArray();
             }
+
+            // sectionId may be a well-formed identity that does not correspond to any
+            // existing entity in the interview tree (e.g. stale link, removed question, wrong id).
+            // Without this check, GetUnderlyingInterviewerEntities/GetUnderlyingEntitiesForReview
+            // would throw (NullReferenceException/ArgumentException) resulting in a 500 error.
+            if (statefulInterview.GetGroup(sectionIdentity) == null)
+                return null;
 
             var ids = GetGroupEntitiesIds(sectionIdentity);
 
@@ -333,13 +341,17 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         public virtual SectionData GetFullSectionInfo(Guid interviewId, string sectionId)
         {
             var entities = GetSectionEntities(interviewId, sectionId);
+            if (entities == null)
+                return new SectionData
+                {
+                    Entities = Array.Empty<InterviewEntityWithType>(),
+                    Details = Array.Empty<InterviewEntity>(),
+                    VariableNames = new Dictionary<string, string>()
+                };
+
 
             var details = GetEntitiesDetails(interviewId, entities.Select(e => e.Identity).ToArray(), sectionId);
 
-            // Extract variable names into a separate dictionary so they are not
-            // re-transmitted on every subsequent entity-detail refresh request.
-            // Name is cleared on each detail object because it is now managed via
-            // the returned VariableNames map on the client side.
             var variableNames = new Dictionary<string, string>();
             foreach (var detail in details)
             {
@@ -405,7 +417,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 }, firstSection);
             }
 
-            Identity sectionIdentity = Identity.Parse(sectionId);
+            if (!Identity.TryParse(sectionId, out var sectionIdentity)) return null;
 
             var parent = interviewEntityFactory.GetUIParent(statefulInterview, questionnaire, sectionIdentity);
             if (parent != null)
@@ -446,15 +458,21 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         {
             if (sectionId == null) return new BreadcrumbInfo();
 
-            Identity groupId = Identity.Parse(sectionId);
+            if (!Identity.TryParse(sectionId, out var groupId)) return new BreadcrumbInfo();
 
             var statefulInterview = this.GetCallerInterview(interviewId);
             if (statefulInterview == null) return null;
             var questionnaire = this.GetCallerQuestionnaire(statefulInterview.QuestionnaireIdentity);
             if (questionnaire == null) return null;
 
+            // sectionId may be a well-formed identity that does not correspond to any
+            // existing entity in the interview tree/questionnaire (e.g. stale link, removed
+            // question, wrong id). Without this check, GetParentsStartingFromTop would throw
+            // (QuestionnaireException) resulting in a 500 error.
+            if (statefulInterview.GetGroup(groupId) == null)
+                return new BreadcrumbInfo();
+
             ReadOnlyCollection<Guid> parentIds = questionnaire.GetParentsStartingFromTop(groupId.Id)
-                .Except(id => questionnaire.IsCustomViewRoster(id))
                 .ToReadOnlyCollection();
 
             var breadCrumbs = new List<Breadcrumb>();
@@ -465,9 +483,19 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 if (questionnaire.IsRosterGroup(parentId))
                 {
                     metRosters++;
+
+                    // custom view rosters (flat/table/matrix) are not shown as breadcrumbs,
+                    // but they still contribute a coordinate to the roster vector of their descendants
+                    if (questionnaire.IsCustomViewRoster(parentId))
+                        continue;
                     var itemRosterVector = groupId.RosterVector.Shrink(metRosters);
                     var itemIdentity = new Identity(parentId, itemRosterVector);
                     var treeGroup = statefulInterview.GetGroup(itemIdentity);
+                    if (treeGroup == null)
+                    {
+                        this.webInterviewNotificationService.ReloadInterview(interviewId);
+                        return new BreadcrumbInfo();
+                    }
                     var breadCrumb = new Breadcrumb
                     {
                         Title = treeGroup.Title.BrowserReadyText,

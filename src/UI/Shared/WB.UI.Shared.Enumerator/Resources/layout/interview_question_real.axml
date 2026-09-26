@@ -8,6 +8,7 @@
     <NumericEditText style="@style/Interview_Question_Answer_Text_Editor"
                      local:MvxBind="UseGroupSeparator UseFormatting;
                                     MaxDigitsAfterDecimal CountOfDecimalPlaces; 
+                                    IsNonNegative IsNonNegative;
                                     Value Answer; 
                                     FocusValueChanged ValueChangeCommand; 
                                     Watermark Localization('RealQuestion_Hint');

@@ -371,6 +371,9 @@
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>შეყვანილი მნიშვნელობა არ შეიძლება დაყოფილი იქნეს როგორც მთელი მნიშვნელობა</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>ამ კითხვისთვის უარყოფითი მნიშვნელობები არ არის დაშვებული</value>
+  </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>პასუხი '{0}' არასწორია, რადგანაც იგი მეტია როსტერის ზედა ზღვარზე '{1}' </value>
   </data>
@@ -484,6 +487,9 @@
   </data>
   <data name="Multimedia_PictureSource" xml:space="preserve">
     <value>აირჩიეთ მნიშვნელობა</value>
+  </data>
+  <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+    <value>ფოტოს დამუშავება ვერ მოხერხდა, რადგან მისი ფორმატი მხარდაჭერილი არ არის. გთხოვთ, ხელახლა გადაიღოთ ფოტო.</value>
   </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>გადაიღეთ ფოტო</value>
@@ -1152,5 +1158,8 @@
   <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
     <value>უპასუხოდ დარჩენილი
 კითხვები</value>
+  </data>
+  <data name="MissingPermissions_Microphone_Interview" xml:space="preserve">
+    <value>ინტერვიუს ჩასატარებლად საჭიროა მიკროფონზე წვდომა. ინტერვიუს დაწყება შეუძლებელია, სანამ წვდომა არ იქნება მინიჭებული.</value>
   </data>
 </root>

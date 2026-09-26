@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="CollectedInterviews" xml:space="preserve"><value>Wawancara yang dikumpulkan</value></data>
+  <data name="Outbox" xml:space="preserve"><value>Kotak keluar</value></data>
+  <data name="OutboxSubtitle" xml:space="preserve"><value>Wawancara dan tugas yang akan dikirim dari perangkat Anda saat sinkronisasi berikutnya</value></data>
+  <data name="SentToInterviewer" xml:space="preserve"><value>Dikirim ke pewawancara</value></data>
+  <data name="SentToInterviewerSubtitle" xml:space="preserve"><value>Tugas dan wawancara yang ada di perangkat pewawancara</value></data>
+  <data name="ToBeAssigned" xml:space="preserve"><value>Tugas yang akan ditugaskan</value></data>
+  <data name="ToBeAssignedListSubtitle" xml:space="preserve"><value>Tugas yang harus ditugaskan ke anggota tim Anda</value></data>
+  <data name="WaitingForAction" xml:space="preserve"><value>Menunggu tindakan Anda</value></data>
+  <data name="WaitingForSupervisorActionSubtitle" xml:space="preserve"><value>Wawancara yang memerlukan tindakan Anda untuk diselesaikan</value></data>
+  <data name="YourTeam" xml:space="preserve"><value>Tim Anda</value></data>
+</root>
