@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.MapService
         List<MapDescription> GetAvailableMaps(bool includeOnline = false);
         bool DoesMapExist(string mapName);
         MapDescription? PrepareAndGetDefaultMapOrNull();
-        Stream GetTempMapSaveStream(string mapName);
+        Stream GetTempMapSaveStream(string mapName, bool append = true);
         long GetTempMapOffset(string mapName);
         void SaveTempMapETag(string mapName, string? etag);
         string? GetTempMapETag(string mapName);

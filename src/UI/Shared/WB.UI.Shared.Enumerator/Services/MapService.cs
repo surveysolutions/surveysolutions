@@ -201,14 +201,14 @@ namespace WB.UI.Shared.Enumerator.Services
             return null;
         }
 
-        public Stream GetTempMapSaveStream(string mapName)
+        public Stream GetTempMapSaveStream(string mapName, bool append = true)
         {
             if (!this.fileSystemAccessor.IsDirectoryExists(GetMapsLocationOrThrow()))
                 this.fileSystemAccessor.CreateDirectory(GetMapsLocationOrThrow());
 
             var tempFileName = GetTempFileName(mapName);
 
-            return this.fileSystemAccessor.OpenOrCreateFile(tempFileName, true);
+            return this.fileSystemAccessor.OpenOrCreateFile(tempFileName, append);
         }
 
         public void MoveTempMapToPermanent(string mapName)

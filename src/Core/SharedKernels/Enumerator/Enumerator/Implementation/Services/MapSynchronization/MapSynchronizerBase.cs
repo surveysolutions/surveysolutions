@@ -153,68 +153,75 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                     }
 
                     long downloaded = offset;
-                    using (var streamToSave = this.mapService.GetTempMapSaveStream(mapDescription.MapName))
-                    using (var contentStreamResult = await this.synchronizationService
-                        .GetMapContentStream(mapDescription.MapName, cancellationToken, offset, storedETag)
-                        .ConfigureAwait(false))
+                    var appendToTempFile = offset > 0;
+                    var streamToSave = this.mapService.GetTempMapSaveStream(mapDescription.MapName, appendToTempFile);
+                    try
                     {
-                        if (restartDownloadFromBeginning && streamToSave.CanSeek)
-                        {
-                            streamToSave.Seek(0, SeekOrigin.Begin);
-                            streamToSave.SetLength(0);
-                        }
-
-                        if (cancellationToken.IsCancellationRequested)
-                        {
-                            cancellationToken.ThrowIfCancellationRequested();
-                        }
-
-                        // If we requested a range but server returned full content (200 OK),
-                        // either range requests are unsupported or the file has changed on the server.
-                        // Reset and download from scratch.
-                        if (offset > 0 && !contentStreamResult.IsPartialContent)
-                        {
-                            logger.Info($"Server returned full content for map '{mapDescription.MapName}' (range not satisfied or file changed). Restarting download from the beginning.");
-                            if (streamToSave.CanSeek)
-                            {
-                                streamToSave.Seek(0, SeekOrigin.Begin);
-                                streamToSave.SetLength(0);
-                            }
-                            offset = 0;
-                            downloaded = 0;
-                        }
-
-                        // Store ETag from the (first or resumed) response so the next resume
-                        // can use If-Range to detect server-side file changes.
-                        if (contentStreamResult.ETag != null)
-                            this.mapService.SaveTempMapETag(mapDescription.MapName, contentStreamResult.ETag);
-                        
-                        var buffer = new byte[DownloadBufferSize];
-                        var downloadProgressChangedEventArgs = new TransferProgress()
-                        {
-                            TotalBytesToReceive = contentStreamResult.ContentLength + offset
-                        };
-
-                        int read;
-                        while ((read = await contentStreamResult.Stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken)
-                                   .ConfigureAwait(false)) > 0)
+                        using (var contentStreamResult = await this.synchronizationService
+                            .GetMapContentStream(mapDescription.MapName, cancellationToken, offset, storedETag)
+                            .ConfigureAwait(false))
                         {
                             if (cancellationToken.IsCancellationRequested)
                             {
                                 cancellationToken.ThrowIfCancellationRequested();
                             }
 
-                            downloaded += read;
+                            // If we requested a range but server returned full content (200 OK),
+                            // either range requests are unsupported or the file has changed on the server.
+                            // Reset and download from scratch.
+                            if (offset > 0 && !contentStreamResult.IsPartialContent)
+                            {
+                                logger.Info($"Server returned full content for map '{mapDescription.MapName}' (range not satisfied or file changed). Restarting download from the beginning.");
+                                if (streamToSave.CanSeek)
+                                {
+                                    streamToSave.Seek(0, SeekOrigin.Begin);
+                                    streamToSave.SetLength(0);
+                                }
+                                else
+                                {
+                                    streamToSave.Dispose();
+                                    streamToSave = this.mapService.GetTempMapSaveStream(mapDescription.MapName, append: false);
+                                }
 
-                            await streamToSave.WriteAsync(buffer, 0, read, cancellationToken).ConfigureAwait(false);
+                                offset = 0;
+                                downloaded = 0;
+                            }
 
-                            if (contentStreamResult.ContentLength != null)
-                                downloadProgressChangedEventArgs.ProgressPercentage =
-                                    Math.Min(Math.Round((decimal)(100 * downloaded) / (contentStreamResult.ContentLength.Value + offset)), 100);
+                            // Store ETag from the (first or resumed) response so the next resume
+                            // can use If-Range to detect server-side file changes.
+                            this.mapService.SaveTempMapETag(mapDescription.MapName, contentStreamResult.ETag);
+                         
+                            var buffer = new byte[DownloadBufferSize];
+                            var downloadProgressChangedEventArgs = new TransferProgress()
+                            {
+                                TotalBytesToReceive = contentStreamResult.ContentLength + offset
+                            };
 
-                            downloadProgressChangedEventArgs.BytesReceived = downloaded;
-                            OnDownloadProgressChanged(downloadProgressChangedEventArgs);
+                            int read;
+                            while ((read = await contentStreamResult.Stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken)
+                                       .ConfigureAwait(false)) > 0)
+                            {
+                                if (cancellationToken.IsCancellationRequested)
+                                {
+                                    cancellationToken.ThrowIfCancellationRequested();
+                                }
+
+                                downloaded += read;
+
+                                await streamToSave.WriteAsync(buffer, 0, read, cancellationToken).ConfigureAwait(false);
+
+                                if (contentStreamResult.ContentLength != null)
+                                    downloadProgressChangedEventArgs.ProgressPercentage =
+                                        Math.Min(Math.Round((decimal)(100 * downloaded) / (contentStreamResult.ContentLength.Value + offset)), 100);
+
+                                downloadProgressChangedEventArgs.BytesReceived = downloaded;
+                                OnDownloadProgressChanged(downloadProgressChangedEventArgs);
+                            }
                         }
+                    }
+                    finally
+                    {
+                        streamToSave.Dispose();
                     }
                     
                     this.mapService.MoveTempMapToPermanent(mapDescription.MapName);
