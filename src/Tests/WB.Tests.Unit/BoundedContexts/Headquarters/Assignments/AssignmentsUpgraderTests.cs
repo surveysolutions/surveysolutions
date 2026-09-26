@@ -413,5 +413,43 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                      p.AssignmentsMigratedWithErrorCount == 1
             )));
         }
+
+        [Test]
+        public void when_assignment_upgrade_throws_non_responsible_assignment_exception_Should_report_process_error_and_rethrow()
+        {
+            var migrateFrom = Create.Entity.QuestionnaireIdentity(Id.g1, 1);
+            var migrateTo = Create.Entity.QuestionnaireIdentity(Id.g2, 2);
+            var migratedAssignmentId = 45;
+
+            var assignmentsStorage = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
+            var assignmentToMigrate = Create.Entity.Assignment(id: migratedAssignmentId,
+                publicKey: Id.g7,
+                quantity: 1,
+                questionnaireIdentity: migrateFrom);
+            assignmentsStorage.Store(assignmentToMigrate, Id.g7);
+
+            var questionnaires = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(migrateTo.QuestionnaireId,
+                questionnaireVersion: migrateTo.Version);
+
+            var commandService = new Mock<ICommandService>();
+            commandService.Setup(cs => cs.Execute(It.IsAny<CreateAssignment>(), null))
+                .Throws(new AssignmentException("Questionnaire was deleted", AssignmentDomainExceptionType.QuestionnaireDeleted));
+
+            var upgradeServiceMock = new Mock<IAssignmentsUpgradeService>();
+            var assignmentsService = Create.Service.AssignmentsService(assignmentsStorage);
+            var service = Create.Service.AssignmentsUpgrader(
+                assignments: assignmentsService,
+                questionnaireStorage: questionnaires,
+                commandService: commandService.Object,
+                upgradeService: upgradeServiceMock.Object);
+
+            Assert.Throws<AssignmentException>(() =>
+                service.Upgrade(new AssignmentsUpgradeProcess(Id.g1, Guid.NewGuid(), migrateFrom, migrateTo)));
+
+            upgradeServiceMock.Verify(x => x.ReportProgress(Id.g1, It.Is<AssignmentUpgradeProgressDetails>(
+                p => p.Status == AssignmentUpgradeStatus.Error &&
+                     p.AssignmentsMigratedWithErrorCount == 0
+            )));
+        }
     }
 }
