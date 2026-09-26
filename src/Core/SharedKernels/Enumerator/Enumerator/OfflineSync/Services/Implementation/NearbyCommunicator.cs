@@ -165,6 +165,13 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         {
             incomingPayloads.GetOrAdd(payload.Id, payload);
 
+            if (payload.Type == PayloadType.Stream &&
+                deferredTransferUpdates.TryRemove((endpoint, payload.Id), out var deferredStreamUpdate))
+            {
+                await ReceivePayloadTransferUpdateInternal(nearbyConnection, endpoint, deferredStreamUpdate);
+                return;
+            }
+
             switch (payload.Type)
             {
                 case PayloadType.Bytes:
@@ -190,7 +197,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     break;
                 case PayloadType.Stream:
                     this.logger.Verbose($"Got stream");
-                    payload.ReadStream();
                     break;
                 case PayloadType.File:
                     break;
@@ -248,6 +254,12 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     if (isIncoming)
                     {
                         var bytes = payload.BytesFromStream;
+                        if (bytes == null)
+                        {
+                            payload.ReadStream();
+                            bytes = payload.BytesFromStream;
+                        }
+
                         var payloadContent = payloadSerializer.FromPayload<PayloadContent>(bytes);
                         await HandlePayloadContent(connection, endpoint, payloadContent);
                         //logger.Verbose(

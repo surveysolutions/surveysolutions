@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
@@ -163,6 +164,9 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
                 var from = connectionMap[to];
                 var toClient = clientsMap[to];
                 var fromClient = clientsMap[from];
+                var payloadForReceiver = payload.Type == PayloadType.Bytes
+                    ? payload
+                    : new PayloadThatMustBeReadBeforeReceiveReturns(payload);
 
                 if (payload.Type != PayloadType.Bytes)
                 {
@@ -191,7 +195,12 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
                     });
                 }
 
-                await toClient.ReceivePayloadAsync(this, from, payload);
+                await toClient.ReceivePayloadAsync(this, from, payloadForReceiver);
+
+                if (payloadForReceiver is PayloadThatMustBeReadBeforeReceiveReturns guardedPayload)
+                {
+                    guardedPayload.MarkReceiveCompleted();
+                }
 
                 return NearbyStatus.Ok;
             }
@@ -222,6 +231,39 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
 
             public void StopAll()
                 => throw new NotImplementedException();
+        }
+
+        private sealed class PayloadThatMustBeReadBeforeReceiveReturns : IPayload
+        {
+            private readonly byte[] streamBytes;
+            private bool canRead = true;
+
+            public PayloadThatMustBeReadBeforeReceiveReturns(IPayload payload)
+            {
+                Endpoint = payload.Endpoint;
+                Bytes = payload.Bytes;
+                Id = payload.Id;
+                Type = payload.Type;
+                streamBytes = ((MemoryStream)payload.Stream).ToArray();
+                Stream = new MemoryStream(streamBytes);
+            }
+
+            public string Endpoint { get; }
+            public byte[] Bytes { get; }
+            public long Id { get; }
+            public Stream Stream { get; }
+            public PayloadType Type { get; }
+            public byte[] BytesFromStream { get; private set; }
+
+            public void MarkReceiveCompleted() => canRead = false;
+
+            public void ReadStream()
+            {
+                if (!canRead)
+                    throw new InvalidOperationException("The stream must be read before ReceivePayloadAsync returns.");
+
+                BytesFromStream = streamBytes;
+            }
         }
     }
 }
