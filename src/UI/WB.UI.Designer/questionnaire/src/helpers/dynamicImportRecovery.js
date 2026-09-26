@@ -84,8 +84,11 @@ export function setActiveDynamicImportRouteName(routeName) {
     activeRouteName = routeName ?? null;
 }
 
-function confirmDynamicImportRecovery(routeName, requireReloadConfirmation) {
-    if (hasUnsavedChanges(routeName)) {
+function confirmDynamicImportRecovery(routeName, requireReloadConfirmation, hasUnsavedChangesCallback) {
+    const hasPendingChanges = hasUnsavedChanges(routeName)
+        || hasUnsavedChangesCallback?.() === true;
+
+    if (hasPendingChanges) {
         return window.confirm(
             i18n.t('QuestionnaireEditor.UnsavedChangesReload')
         );
@@ -101,7 +104,12 @@ function confirmDynamicImportRecovery(routeName, requireReloadConfirmation) {
 }
 
 export function scheduleDynamicImportRecovery(error, options = {}) {
-    const { recoveryScope, routeName, requireReloadConfirmation = false } = options;
+    const {
+        recoveryScope,
+        routeName,
+        requireReloadConfirmation = false,
+        hasUnsavedChanges: hasUnsavedChangesCallback
+    } = options;
     const scope = getDynamicImportRecoveryScope(recoveryScope);
     if (recoveryTimeoutIds.has(scope)) return;
 
@@ -117,7 +125,7 @@ export function scheduleDynamicImportRecovery(error, options = {}) {
         return;
     }
 
-    if (!confirmDynamicImportRecovery(routeName, requireReloadConfirmation)) {
+    if (!confirmDynamicImportRecovery(routeName, requireReloadConfirmation, hasUnsavedChangesCallback)) {
         return;
     }
 

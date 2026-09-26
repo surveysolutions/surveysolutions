@@ -56,16 +56,28 @@
 import { defineAsyncComponent } from 'vue';
 
 import CategoriesItem from './CategoriesItem.vue';
+import { useQuestionnaireStore } from '../../../../stores/questionnaire';
 import { newGuid } from '../../../../helpers/guid';
-import { isNull, isUndefined } from 'lodash'
+import { isEqual, isNull, isUndefined } from 'lodash'
 import { updateCategories } from '../../../../services/categoriesService'
 import { notice } from '../../../../services/notificationService';
 import dayjs from 'dayjs';
 import { wrapDynamicImport } from '../../../../helpers/dynamicImportRecovery';
 
+const hasUnsavedCategoryChanges = () => {
+    const questionnaireStore = useQuestionnaireStore();
+    return questionnaireStore.getInfo.categories?.some(category => {
+        if (!category?.editCategories) return false;
+
+        const { editCategories, ...savedCategory } = category;
+        return !isEqual(editCategories, savedCategory);
+    }) ?? false;
+};
+
 const loadOptionsEditorModal = wrapDynamicImport(
     () => import('./CategoriesEditorModal.vue'),
     {
+        hasUnsavedChanges: hasUnsavedCategoryChanges,
         recoveryScope: 'categories-editor-modal',
         requireReloadConfirmation: true
     }

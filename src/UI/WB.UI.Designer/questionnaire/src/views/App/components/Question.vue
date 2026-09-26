@@ -239,6 +239,7 @@
 import { defineAsyncComponent } from 'vue';
 import { useQuestionStore } from '../../../stores/question';
 import { useCommentsStore } from '../../../stores/comments';
+import { useQuestionnaireStore } from '../../../stores/questionnaire';
 import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
@@ -262,9 +263,20 @@ import TextQuestion from './parts/TextQuestion.vue'
 import { useKeyShortcut } from '../../../composables/useKeyShortcut';
 import emitter from '../../../services/emitter';
 
+const hasUnsavedCategoryChanges = () => {
+    const questionnaireStore = useQuestionnaireStore();
+    return questionnaireStore.getInfo.categories?.some(category => {
+        if (!category?.editCategories) return false;
+
+        const { editCategories, ...savedCategory } = category;
+        return !_.isEqual(editCategories, savedCategory);
+    }) ?? false;
+};
+
 const loadOptionsEditorModal = wrapDynamicImport(
     () => import('./leftSidePanel/CategoriesEditorModal.vue'),
     {
+        hasUnsavedChanges: hasUnsavedCategoryChanges,
         recoveryScope: 'categories-editor-modal',
         requireReloadConfirmation: true
     }
