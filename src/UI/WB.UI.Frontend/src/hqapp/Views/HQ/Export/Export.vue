@@ -783,6 +783,7 @@ export default {
           questionnaires(workspace: $workspace, id: $id, version: $version) {
             nodes {
               defaultLanguageName
+              defaultTranslationId
               translations {
                 id
                 name
@@ -809,6 +810,13 @@ export default {
                         data.defaultLanguageName ||
                         this.$t('WebInterview.Original_Language'),
                 })
+            }
+            if (data.defaultTranslationId) {
+                this.questionnaireTranslation = this.translations.find(
+                    (t) => t.key === data.defaultTranslationId
+                ) || null
+            } else {
+                this.questionnaireTranslation = this.translations.find((t) => t.key === null) || null
             }
         },
         resetDataAvalability() {
