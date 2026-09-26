@@ -160,5 +160,28 @@ namespace WB.Tests.Unit.Infrastructure.Native
             connection.Verify(x => x.Dispose(), Times.Once);
             Assert.That(acquireCount, Is.EqualTo(1));
         }
+
+        [Test]
+        public void when_running_with_lock_without_unit_of_work_scope_and_delegate_throws_should_rollback_fallback_transaction()
+        {
+            var connection = new Mock<IDbConnection>();
+            var transaction = new Mock<IDbTransaction>();
+            connection.Setup(x => x.BeginTransaction()).Returns(transaction.Object);
+
+            var ambientUnitOfWorkAccessor = new AmbientUnitOfWorkAccessor();
+            var aggregateLock = new PostgresAggregateLock(
+                ambientUnitOfWorkAccessor,
+                () => connection.Object,
+                (_, _, _) => { });
+
+            Assert.That(
+                () => aggregateLock.RunWithLock("12345678-1234-1234-1234-123456789abc", () => throw new InvalidOperationException("boom")),
+                Throws.InvalidOperationException.With.Message.EqualTo("boom"));
+
+            transaction.Verify(x => x.Rollback(), Times.Once);
+            transaction.Verify(x => x.Commit(), Times.Never);
+            transaction.Verify(x => x.Dispose(), Times.Once);
+            connection.Verify(x => x.Dispose(), Times.Once);
+        }
     }
 }

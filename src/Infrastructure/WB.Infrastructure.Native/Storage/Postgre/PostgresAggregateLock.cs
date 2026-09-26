@@ -84,6 +84,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     catch (Exception ex)
                     {
                         executionException = ex;
+                        Rollback(connection, transaction, executionException);
                         throw;
                     }
                     finally
@@ -140,6 +141,18 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             if (connection is NpgsqlConnection npgsqlConnection)
                 NpgsqlConnection.ClearPool(npgsqlConnection);
+        }
+
+        private static void Rollback(IDbConnection connection, IDbTransaction transaction, Exception executionException)
+        {
+            try
+            {
+                transaction.Rollback();
+            }
+            catch when (executionException != null)
+            {
+                ClearPool(connection);
+            }
         }
     }
 
