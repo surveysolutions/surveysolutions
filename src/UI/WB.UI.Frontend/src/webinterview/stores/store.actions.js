@@ -257,6 +257,7 @@ export default {
                 }
 
                 commit('SET_SECTION_DATA', section.entities)
+                commit('SET_VARIABLE_NAMES', section.variableNames)
                 commit('SET_ENTITIES_DETAILS', {
                     entities: section.details,
                     lastActivityTimestamp: new Date(),

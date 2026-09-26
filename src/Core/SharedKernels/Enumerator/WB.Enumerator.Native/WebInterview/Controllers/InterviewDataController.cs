@@ -341,15 +341,32 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         public virtual SectionData GetFullSectionInfo(Guid interviewId, string sectionId)
         {
             var entities = GetSectionEntities(interviewId, sectionId);
-            if (entities == null) return new SectionData { Entities = Array.Empty<InterviewEntityWithType>(), Details = Array.Empty<InterviewEntity>() };
+            if (entities == null)
+                return new SectionData
+                {
+                    Entities = Array.Empty<InterviewEntityWithType>(),
+                    Details = Array.Empty<InterviewEntity>(),
+                    VariableNames = new Dictionary<string, string>()
+                };
 
 
             var details = GetEntitiesDetails(interviewId, entities.Select(e => e.Identity).ToArray(), sectionId);
 
+            var variableNames = new Dictionary<string, string>();
+            foreach (var detail in details)
+            {
+                if (detail?.Id != null && detail.Name != null)
+                {
+                    variableNames[detail.Id] = detail.Name;
+                    detail.Name = null;
+                }
+            }
+
             var section = new SectionData
             {
                 Entities = entities,
-                Details = details
+                Details = details,
+                VariableNames = variableNames
             };
 
             return section;
