@@ -340,17 +340,12 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             var key = (endpoint, payloadId);
             var handledDeferredUpdate = false;
 
-            while (deferredTransferUpdates.TryGetValue(key, out var deferredUpdates))
+            while (deferredTransferUpdates.TryRemove(key, out var deferredUpdates))
             {
                 while (deferredUpdates.TryDequeue(out var deferredUpdate))
                 {
                     handledDeferredUpdate = true;
                     await ReceivePayloadTransferUpdateInternal(connection, endpoint, deferredUpdate, allowDeferral: false);
-                }
-
-                if (deferredUpdates.IsEmpty)
-                {
-                    deferredTransferUpdates.TryRemove(key, out _);
                 }
             }
 
