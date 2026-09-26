@@ -20,5 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
         public bool? GeometryOverlapDetection { get; set; }
         
         public bool IsCritical { get; set; }
+
+        public int Indent { get; set; }
     }
 }

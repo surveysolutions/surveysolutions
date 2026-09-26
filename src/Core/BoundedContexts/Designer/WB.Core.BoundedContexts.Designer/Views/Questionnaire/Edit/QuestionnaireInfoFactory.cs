@@ -568,7 +568,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 geometryType : question.Properties?.GeometryType ?? GeometryType.Polygon,
                 geometryInputMode: question.Properties?.GeometryInputMode ?? GeometryInputMode.Manual,
                 geometryOverlapDetection: question.Properties?.GeometryOverlapDetection,
-                isCritical: question.Properties?.IsCritical
+                isCritical: question.Properties?.IsCritical,
+                indent: question.Properties?.Indent ?? 0
             );
             questionView.ValidationConditions.AddRange(question.ValidationConditions);
 

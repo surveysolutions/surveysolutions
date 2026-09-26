@@ -2,6 +2,7 @@
     <div class="question"
         v-if="isVisible"
         :class="questionClass"
+        :style="questionStyle"
         :id="hash">
         <button class="section-blocker"
             disabled="disabled"
@@ -130,6 +131,11 @@ export default {
                 'with-flag': this.hasFlag,
                 'supervisor-question': this.question.isForSupervisor,
             }, this.questionDivCssClassName]
+        },
+        questionStyle() {
+            const indent = this.question.indent || 0
+            if (indent <= 0) return null
+            return { paddingLeft: (indent * 24) + 'px' }
         },
         questionEditorClass() {
             return [{

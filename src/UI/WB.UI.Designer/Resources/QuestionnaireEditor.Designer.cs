@@ -3134,5 +3134,17 @@ namespace WB.UI.Designer.Resources {
                 return ResourceManager.GetString("AIAssistant", resourceCulture);
             }
         }
+        
+        public static string QuestionIndent {
+            get {
+                return ResourceManager.GetString("QuestionIndent", resourceCulture);
+            }
+        }
+        
+        public static string HelpQuestionIndent {
+            get {
+                return ResourceManager.GetString("HelpQuestionIndent", resourceCulture);
+            }
+        }
     }
 }

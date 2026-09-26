@@ -100,5 +100,6 @@
 
   <dimen name="Interview_Question_Answer_Option_Attachment_max_height">200dp</dimen>
   <dimen name="Interview_Attachment_max_height">400dp</dimen>
+  <dimen name="Interview_Question_indent_step">28dp</dimen>
 
 </resources>

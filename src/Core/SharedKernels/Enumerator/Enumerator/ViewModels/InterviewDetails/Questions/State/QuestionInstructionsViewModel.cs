@@ -48,6 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             this.IsInstructionsHidden = questionnaire.GetHideInstructions(questionIdentity.Id);
+            this.Indent = questionnaire.GetQuestionIndent(questionIdentity.Id);
             this.Identity = questionIdentity;
 
             this.Instruction.InitAsInstructions(interviewId, questionIdentity);
@@ -58,6 +59,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public NavigationState NavigationState { get; private set; }
 
         public ICommand ShowInstructions => new MvxCommand(() => this.IsInstructionsHidden = false);
+
+        public int Indent { get; private set; }
 
         public void Dispose()
         {

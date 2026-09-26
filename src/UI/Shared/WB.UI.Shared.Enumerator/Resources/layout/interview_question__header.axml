@@ -7,4 +7,5 @@
   local:MvxBind="HtmlWithLinks MakeMarkdownLinksExecutable(Title.HtmlText, .); 
                  HideKeyboardOnClick .; 
                  Tag Format('tv_Title_{0}', Identity);
-                 LongClick ShowCommentEditorCommand" />
+                 LongClick ShowCommentEditorCommand;
+                 MarginLeftIndent Enablement.Indent" />
