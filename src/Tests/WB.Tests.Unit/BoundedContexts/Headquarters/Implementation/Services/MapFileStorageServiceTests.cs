@@ -303,6 +303,44 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
         }
 
         [Test]
+        public async Task GetMapContentHashAsync_should_ignore_stale_cached_hash_for_local_map()
+        {
+            var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            var storageDirectory = Path.Combine(tempBase, "storage");
+            var mapsFolder = Path.Combine(storageDirectory, "MapsData");
+            Directory.CreateDirectory(mapsFolder);
+
+            try
+            {
+                const string mapName = "map.tif";
+                var mapContent = new byte[] { 1, 2, 3, 4 };
+                var mapPath = Path.Combine(mapsFolder, mapName);
+                await File.WriteAllBytesAsync(mapPath, mapContent);
+                await File.WriteAllTextAsync(mapPath + ".md5", JsonConvert.SerializeObject(new
+                {
+                    MD5 = new byte[] { 9, 9, 9, 9 },
+                    LastWriteTime = 0L
+                }));
+
+                var mapStorage = new TestPlainStorage<MapBrowseItem>();
+                mapStorage.Store(Create.Entity.MapBrowseItem(mapName), mapName);
+
+                var service = Create.Service.MapFileStorageService(
+                    mapsStorage: mapStorage,
+                    fileStorageConfig: Options.Create(new FileStorageConfig { TempData = storageDirectory }),
+                    geospatialConfig: Options.Create(new GeospatialConfig()));
+
+                var result = await service.GetMapContentHashAsync(mapName);
+
+                Assert.That(result, Is.EqualTo(Convert.ToBase64String(MD5.HashData(mapContent))));
+            }
+            finally
+            {
+                Directory.Delete(tempBase, true);
+            }
+        }
+
+        [Test]
         public void SaveOrUpdateMapAsync_when_tif_file_is_not_a_valid_tiff_throws()
         {
             var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));

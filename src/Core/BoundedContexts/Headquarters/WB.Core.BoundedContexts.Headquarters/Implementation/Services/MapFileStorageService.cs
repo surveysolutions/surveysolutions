@@ -105,14 +105,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 }
 
                 var mapName = mapFiles.IsShapeFile ? mapFiles.Name + ".shp" : mapFiles.Name; 
+                byte[] mapHash;
+                using (var hashStream = File.OpenRead(tempFile))
+                {
+                    mapHash = this.fileSystemAccessor.ReadHash(hashStream);
+                }
+
                 if (externalFileStorage.IsEnabled())
                 {
-                    var mapHash = Convert.ToBase64String(this.fileSystemAccessor.ReadHash(tempFile));
                     await using FileStream file = File.OpenRead(tempFile);
                     var name = this.fileSystemAccessor.GetFileName(mapName);
                     await this.externalFileStorage.StoreAsync(GetExternalStoragePath(name), file, "application/zip")
                         .ConfigureAwait(false);
-                    await using var hashStream = new MemoryStream(Encoding.UTF8.GetBytes(mapHash));
+                    var mapHashBase64 = Convert.ToBase64String(mapHash);
+                    await using var hashStream = new MemoryStream(Encoding.UTF8.GetBytes(mapHashBase64));
                     await this.externalFileStorage.StoreAsync(GetExternalStorageHashPath(name), hashStream, "text/plain")
                         .ConfigureAwait(false);
                 }
@@ -120,7 +126,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 {
                     var targetFile = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapName);
                     fileSystemAccessor.MoveFile(tempFile, targetFile);
-                    this.fileSystemAccessor.ReadHash(targetFile);
+                    this.PersistCachedHash(targetFile, mapHash);
                 }
                 
                 this.mapPlainStorageAccessor.Store(mapItem, mapItem.Id);
@@ -725,12 +731,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             try
             {
                 var cachedHash = JsonConvert.DeserializeObject<CachedFileHash>(this.fileSystemAccessor.ReadAllText(hashFilePath));
-                return cachedHash?.MD5;
+                var lastWriteTime = new DateTimeOffset(this.fileSystemAccessor.GetModificationTime(filePath).ToUniversalTime()).ToUnixTimeMilliseconds();
+                return cachedHash?.LastWriteTime == lastWriteTime ? cachedHash.MD5 : null;
             }
             catch
             {
                 return null;
             }
+        }
+
+        private void PersistCachedHash(string filePath, byte[] hash)
+        {
+            if (hash == null)
+                return;
+
+            var lastWriteTime = new DateTimeOffset(this.fileSystemAccessor.GetModificationTime(filePath).ToUniversalTime()).ToUnixTimeMilliseconds();
+            var hashFilePath = filePath + ".md5";
+            var cachedHash = new CachedFileHash
+            {
+                LastWriteTime = lastWriteTime,
+                MD5 = hash
+            };
+
+            this.fileSystemAccessor.WriteAllText(hashFilePath, JsonConvert.SerializeObject(cachedHash));
         }
 
         private sealed class CachedFileHash
