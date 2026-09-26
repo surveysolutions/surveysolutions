@@ -272,6 +272,9 @@ Anda dapat membuat atau menyunting kuesioner Anda pada Desainer Survey Solutions
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>Nilai yang dimasukkan tidak bisa diurai sebagai nilai integer</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>Nilai negatif tidak diperbolehkan untuk pertanyaan ini</value>
+  </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>Jawaban '{0}' tidak benar karena jawabannya lebih besar dari batas atas daftar '{1}'.</value>
   </data>
@@ -676,6 +679,9 @@ Anda dapat membuat atau menyunting kuesioner Anda pada Desainer Survey Solutions
     <value>Pilih opsi</value>
   </data>
 
+  <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+    <value>Foto tidak dapat diproses karena formatnya tidak didukung. Silakan ambil foto lagi.</value>
+  </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Ambil foto</value>
   </data>

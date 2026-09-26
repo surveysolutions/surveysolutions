@@ -307,6 +307,9 @@
   <data name="NumberEnter" xml:space="preserve">
     <value>أدخل رقماً</value>
   </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>القيم السالبة غير مسموح بها لهذا السؤال</value>
+  </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>الإجابة '{{answer}}' غير صحيحة لأن السؤال مستخدم كحجم الجدول والإجابة المحددة سلبية</value>
   </data>
@@ -426,6 +429,9 @@
   </data>
   <data name="LoadingQuestionnaire" xml:space="preserve">
     <value>تحميل الاستبيان. ارجوك انتظر...</value>
+  </data>
+  <data name="ImageFormatNotSupported" xml:space="preserve">
+    <value>تنسيق الصورة غير مدعوم من متصفحك.</value>
   </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>لا يدعم متصفحك تشغيل الوسائط المتعددة. يمكنك تنزيله بدلاً من ذلك.</value>
