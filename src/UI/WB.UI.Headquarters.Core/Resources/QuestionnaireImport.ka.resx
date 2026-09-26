@@ -182,6 +182,9 @@
   <data name="UpgradeAssignments" xml:space="preserve">
     <value>დავალებების განახლება</value>
   </data>
+  <data name="CopyWebInterviewSettings" xml:space="preserve">
+    <value>Copy Web Interview settings from the previous version (including email templates and screen texts)</value>
+  </data>
 
   <data name="Importing" xml:space="preserve">
     <value>იმპორტი {{percent}}%</value>
