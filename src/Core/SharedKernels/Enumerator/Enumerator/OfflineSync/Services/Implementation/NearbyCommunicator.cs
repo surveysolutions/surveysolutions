@@ -235,14 +235,24 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     while (true)
                     {
                         var deferredUpdates = deferredTransferUpdates.GetOrAdd(key, _ => new DeferredTransferUpdatesQueue());
+                        var shouldRetryWithNewQueue = false;
+
                         lock (deferredUpdates.SyncRoot)
                         {
                             if (deferredUpdates.IsDetached)
-                                continue;
-
-                            deferredUpdates.Updates.Enqueue(update);
-                            break;
+                            {
+                                shouldRetryWithNewQueue = true;
+                            }
+                            else
+                            {
+                                deferredUpdates.Updates.Enqueue(update);
+                            }
                         }
+
+                        if (shouldRetryWithNewQueue)
+                            continue;
+
+                        break;
                     }
 
                     logger.Warn(
