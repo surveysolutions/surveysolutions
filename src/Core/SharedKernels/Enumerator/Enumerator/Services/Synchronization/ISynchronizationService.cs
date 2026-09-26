@@ -55,10 +55,12 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken);
         Task<long?> SendSyncStatisticsAsync(SyncStatisticsApiView statistics, RestCredentials credentials, CancellationToken token = default);
         Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token);
-
+ 
         Task<List<MapView>> GetMapList(CancellationToken cancellationToken);
-        Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken, long offset = 0, string ifRangeETag = null);
-
+#nullable enable
+        Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken, long offset = 0, string? ifRangeETag = null);
+#nullable restore
+ 
         Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token);
         Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView auditLogEntity, CancellationToken cancellationToken);
         Task<List<Guid>> CheckObsoleteInterviewsAsync(List<ObsoletePackageCheck> checks, CancellationToken cancellationToken);

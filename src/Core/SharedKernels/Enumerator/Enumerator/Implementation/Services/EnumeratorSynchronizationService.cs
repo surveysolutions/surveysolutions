@@ -326,7 +326,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 url: this.MapsController, token: cancellationToken, credentials: this.restCredentials));
         }
         
-        public Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken, long offset = 0, string ifRangeETag = null)
+#nullable enable
+        public Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken, long offset = 0, string? ifRangeETag = null)
+#nullable restore
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
             {
