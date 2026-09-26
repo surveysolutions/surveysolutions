@@ -24,6 +24,42 @@ namespace UnitTests
         }
 
         [Test]
+        public void WhenGettingSettingsFromIniConfig()
+        {
+            ISettingsExtractor extractor = new SettingsExtractor();
+
+            const string iniContent =
+                "[Headquarters]\r\n" +
+                "BaseUrl=https://armbn.mysurvey.solutions\r\n" +
+                "TenantName=armbn\r\n" +
+                "[Apks]\r\n" +
+                "ClientApkPath=Client\r\n" +
+                "[Designer]\r\n" +
+                "DesignerAddress=https://designer.mysurvey.solutions\r\n" +
+                "[FileStorage]\r\n" +
+                "AppData=..\\Data_Site\r\n" +
+                "TempData=..\\Data_Site\r\n" +
+                "[ConnectionStrings]\r\n" +
+                "DefaultConnection=Persist Security Info=true;Server=prod2.db.mysurvey.solutions;Port=5432;User Id=armbn;Password=aaa;Database=armbn\r\n";
+
+            var iniPath = Path.Combine(Path.GetTempPath(), "test.appsettings.production.ini");
+            File.WriteAllText(iniPath, iniContent);
+            try
+            {
+                var config = extractor.GetIniConfig(iniPath);
+                Assert.That(config.BaseURL, Is.EqualTo("https://armbn.mysurvey.solutions"));
+                Assert.That(config.TenantName, Is.EqualTo("armbn"));
+                Assert.That(config.DesignerAddress, Is.EqualTo("https://designer.mysurvey.solutions"));
+                Assert.That(config.ConnectionString, Is.EqualTo("Persist Security Info=true;Server=prod2.db.mysurvey.solutions;Port=5432;User Id=armbn;Password=aaa;Database=armbn"));
+            }
+            finally
+            {
+                if (File.Exists(iniPath))
+                    File.Delete(iniPath);
+            }
+        }
+
+        [Test]
         public void CanUpdateBundlePathConfig()
         {
             File.WriteAllText("sample.xml", @"<?xml version=""1.0"" encoding=""utf-8""?>

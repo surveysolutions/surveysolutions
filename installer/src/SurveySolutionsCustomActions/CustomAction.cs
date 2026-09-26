@@ -20,7 +20,7 @@ namespace SurveySolutionsCustomActions
             {
                 var filePath = ValidateTargetFileAndGetFilePath(session, "TargetFile");
                 if (string.IsNullOrEmpty(filePath))
-                    return ActionResult.SkipRemainingActions;
+                    return ActionResult.Success;
 
                 var config = new SettingsExtractor().GetPreviousConfiguration(session);
 
