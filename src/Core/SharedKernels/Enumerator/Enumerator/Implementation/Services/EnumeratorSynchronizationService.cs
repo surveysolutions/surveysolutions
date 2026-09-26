@@ -332,10 +332,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
             {
-                Dictionary<string, string> headers = null;
+                Dictionary<string, string> headers = new Dictionary<string, string>
+                {
+                    ["Accept-Encoding"] = "identity"
+                };
                 if (offset > 0)
                 {
-                    headers = new Dictionary<string, string> { ["Range"] = $"bytes={offset}-" };
+                    headers["Range"] = $"bytes={offset}-";
                     if (ifRangeETag != null)
                         headers["If-Range"] = ifRangeETag;
                 }

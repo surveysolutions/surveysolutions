@@ -107,8 +107,11 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             };
 
             request.Headers.UserAgent.ParseAdd(this.restServiceSettings.UserAgent);
-            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
-            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
+            if (customHeaders == null || !customHeaders.ContainsKey("Accept-Encoding"))
+            {
+                request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+                request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
+            }
 
             try
             {
