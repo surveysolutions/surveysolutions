@@ -16,6 +16,7 @@ using NetTopologySuite.IO.Esri;
 using NetTopologySuite.Operation.Union;
 using NetTopologySuite.Simplify;
 using NHibernate.Linq;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -81,6 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         }
 
         public string GetExternalStoragePath(string name) => $"maps/" + name;
+        private string GetExternalStorageHashPath(string name) => GetExternalStoragePath(name) + ".md5";
 
         public async Task<MapBrowseItem> SaveOrUpdateMapAsync(MapFiles mapFiles, string mapsDirectory)
         {
@@ -103,17 +105,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 }
 
                 var mapName = mapFiles.IsShapeFile ? mapFiles.Name + ".shp" : mapFiles.Name; 
+                byte[] mapHash;
+                using (var hashStream = File.OpenRead(tempFile))
+                {
+                    mapHash = this.fileSystemAccessor.ReadHash(hashStream);
+                }
+
                 if (externalFileStorage.IsEnabled())
                 {
                     await using FileStream file = File.OpenRead(tempFile);
                     var name = this.fileSystemAccessor.GetFileName(mapName);
                     await this.externalFileStorage.StoreAsync(GetExternalStoragePath(name), file, "application/zip")
                         .ConfigureAwait(false);
+                    var mapHashBase64 = Convert.ToBase64String(mapHash);
+                    await using var hashStream = new MemoryStream(Encoding.UTF8.GetBytes(mapHashBase64));
+                    await this.externalFileStorage.StoreAsync(GetExternalStorageHashPath(name), hashStream, "text/plain")
+                        .ConfigureAwait(false);
                 }
                 else
                 {
                     var targetFile = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapName);
                     fileSystemAccessor.MoveFile(tempFile, targetFile);
+                    this.PersistCachedHash(targetFile, mapHash);
                 }
                 
                 this.mapPlainStorageAccessor.Store(mapItem, mapItem.Id);
@@ -409,7 +422,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (externalFileStorage.IsEnabled())
             {
                 this.logger.LogWarning("Deleting map: '{map}' from external storage", map.FileName);
-                await this.externalFileStorage.RemoveAsync(GetExternalStoragePath(map.FileName));
+                await this.externalFileStorage.RemoveAsync(new[]
+                {
+                    GetExternalStoragePath(map.FileName),
+                    GetExternalStorageHashPath(map.FileName)
+                });
             }
             else
             {
@@ -418,6 +435,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 if (this.fileSystemAccessor.IsFileExists(filePath))
                     fileSystemAccessor.DeleteFile(filePath);
+
+                var hashFilePath = filePath + ".md5";
+                if (this.fileSystemAccessor.IsFileExists(hashFilePath))
+                    this.fileSystemAccessor.DeleteFile(hashFilePath);
             }
 
             return map;
@@ -678,6 +699,85 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 return null;
 
             return this.fileSystemAccessor.ReadAllBytes(filePath);
+        }
+
+#nullable enable
+        public async Task<string?> GetMapContentHashAsync(string mapName)
+#nullable restore
+        {
+            var fileName = fileSystemAccessor.GetFileName(mapName);
+            var map = await this.mapPlainStorageAccessor.GetByIdAsync(fileName);
+            if (map == null)
+                throw new InvalidOperationException(@"Map was not found.");
+
+            if (externalFileStorage.IsEnabled())
+            {
+                var storedHash = await this.externalFileStorage.GetBinaryAsync(GetExternalStorageHashPath(map.FileName));
+                if (storedHash != null)
+                    return Encoding.UTF8.GetString(storedHash);
+
+                var mapContent = await this.externalFileStorage.GetBinaryAsync(GetExternalStoragePath(map.FileName));
+                if (mapContent == null)
+                    return null;
+
+                var computedHash = Convert.ToBase64String(this.fileSystemAccessor.ReadHash(new MemoryStream(mapContent)));
+                await using var hashStream = new MemoryStream(Encoding.UTF8.GetBytes(computedHash));
+                await this.externalFileStorage.StoreAsync(GetExternalStorageHashPath(map.FileName), hashStream, "text/plain");
+                return computedHash;
+            }
+
+            var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, map.FileName);
+            if (!this.fileSystemAccessor.IsFileExists(filePath))
+                return null;
+
+            var hash = this.TryReadCachedHash(filePath);
+            if (hash == null)
+            {
+                hash = this.fileSystemAccessor.ReadHash(filePath);
+                this.PersistCachedHash(filePath, hash);
+            }
+
+            return hash == null ? null : Convert.ToBase64String(hash);
+        }
+
+        private byte[] TryReadCachedHash(string filePath)
+        {
+            var hashFilePath = filePath + ".md5";
+            if (!this.fileSystemAccessor.IsFileExists(hashFilePath))
+                return null;
+
+            try
+            {
+                var cachedHash = JsonConvert.DeserializeObject<CachedFileHash>(this.fileSystemAccessor.ReadAllText(hashFilePath));
+                var lastWriteTime = new DateTimeOffset(this.fileSystemAccessor.GetModificationTime(filePath).ToUniversalTime()).ToUnixTimeMilliseconds();
+                return cachedHash?.LastWriteTime == lastWriteTime ? cachedHash.MD5 : null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private void PersistCachedHash(string filePath, byte[] hash)
+        {
+            if (hash == null)
+                return;
+
+            var lastWriteTime = new DateTimeOffset(this.fileSystemAccessor.GetModificationTime(filePath).ToUniversalTime()).ToUnixTimeMilliseconds();
+            var hashFilePath = filePath + ".md5";
+            var cachedHash = new CachedFileHash
+            {
+                LastWriteTime = lastWriteTime,
+                MD5 = hash
+            };
+
+            this.fileSystemAccessor.WriteAllText(hashFilePath, JsonConvert.SerializeObject(cachedHash));
+        }
+
+        private sealed class CachedFileHash
+        {
+            public long LastWriteTime { get; set; }
+            public byte[] MD5 { get; set; }
         }
     }
 }
