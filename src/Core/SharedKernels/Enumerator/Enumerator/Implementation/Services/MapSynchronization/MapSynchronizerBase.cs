@@ -185,7 +185,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                                 && !contentStreamResult.ETag.StartsWith("W/", StringComparison.Ordinal))
                             {
                                 if (!hadPartialTempFile || contentStreamResult.IsPartialContent)
-                                    this.mapService.SaveTempMapETag(mapDescription.MapName, contentStreamResult.ETag);
+                                    this.mapService.SaveTempMapETag(mapDescription.MapName, NormalizeStrongETag(contentStreamResult.ETag));
                             }
 
                             var buffer = new byte[DownloadBufferSize];
@@ -250,5 +250,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
         
         protected override Task ChangeWorkspaceAndNavigateToItAsync()
             => throw new NotImplementedException("Remove workspace by offline synchronization no supported");
+
+        private static string NormalizeStrongETag(string etag)
+        {
+            if (etag.Length > 1 && etag[0] == '"' && etag[etag.Length - 1] == '"')
+                return etag.Substring(1, etag.Length - 2);
+
+            return etag;
+        }
     }
 }

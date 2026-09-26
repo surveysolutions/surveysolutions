@@ -340,7 +340,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 {
                     headers["Range"] = $"bytes={offset}-";
                     if (ifRangeETag != null)
-                        headers["If-Range"] = ifRangeETag;
+                        headers["If-Range"] = ifRangeETag.Length > 1 && ifRangeETag[0] == '"' && ifRangeETag[ifRangeETag.Length - 1] == '"'
+                            ? ifRangeETag
+                            : $@"""{ifRangeETag}""";
                 }
                 return await this.restService.GetResponseStreamAsync(
                     url: $"{this.MapsController}/details",
