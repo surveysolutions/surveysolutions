@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import PageNotFound from '../views/PageNotFound.vue';
-import { clearDynamicImportRecovery, isDynamicImportError, scheduleDynamicImportRecovery, setActiveDynamicImportRouteName } from '../helpers/dynamicImportRecovery';
+import { clearDynamicImportRecovery, getRouteDynamicImportRecoveryScope, isDynamicImportError, scheduleDynamicImportRecovery, setActiveDynamicImportRouteName } from '../helpers/dynamicImportRecovery';
 
 const OptionsEditor = () => import('../views/OptionsEditor/OptionsEditor.vue');
 
@@ -185,7 +185,10 @@ router.beforeEach((to, from, next) => {
 
 router.onError(error => {
     if (isDynamicImportError(error)) {
-        scheduleDynamicImportRecovery(error, router.currentRoute.value.name);
+        scheduleDynamicImportRecovery(error, {
+            routeName: router.currentRoute.value.name,
+            recoveryScope: getRouteDynamicImportRecoveryScope(router.currentRoute.value.name)
+        });
         return;
     }
 
@@ -195,7 +198,7 @@ router.onError(error => {
 router.afterEach((to, from, failure) => {
     if (!failure) {
         setActiveDynamicImportRouteName(to.name);
-        clearDynamicImportRecovery();
+        clearDynamicImportRecovery(getRouteDynamicImportRecoveryScope(to.name));
     }
 });
 

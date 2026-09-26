@@ -263,7 +263,11 @@ import { useKeyShortcut } from '../../../composables/useKeyShortcut';
 import emitter from '../../../services/emitter';
 
 const loadOptionsEditorModal = wrapDynamicImport(
-    () => import('./leftSidePanel/CategoriesEditorModal.vue')
+    () => import('./leftSidePanel/CategoriesEditorModal.vue'),
+    {
+        recoveryScope: 'categories-editor-modal',
+        requireReloadConfirmation: true
+    }
 );
 const OptionsEditorModal = defineAsyncComponent(loadOptionsEditorModal);
 

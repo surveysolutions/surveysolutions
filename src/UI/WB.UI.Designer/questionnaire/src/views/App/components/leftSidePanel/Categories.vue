@@ -64,7 +64,11 @@ import dayjs from 'dayjs';
 import { wrapDynamicImport } from '../../../../helpers/dynamicImportRecovery';
 
 const loadOptionsEditorModal = wrapDynamicImport(
-    () => import('./CategoriesEditorModal.vue')
+    () => import('./CategoriesEditorModal.vue'),
+    {
+        recoveryScope: 'categories-editor-modal',
+        requireReloadConfirmation: true
+    }
 );
 const OptionsEditorModal = defineAsyncComponent(loadOptionsEditorModal);
 
