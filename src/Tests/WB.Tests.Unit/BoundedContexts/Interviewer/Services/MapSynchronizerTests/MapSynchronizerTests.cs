@@ -181,7 +181,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
             await service.Synchronize(new Progress<SyncProgressInfo>(), CancellationToken.None, new SynchronizationStatistics());
 
             synchronizationService.Verify(x => x.GetMapContentStream("range-fallback-map.tpk", It.IsAny<CancellationToken>(), 3, "etag-1"), Times.Once);
-            mapService.Verify(x => x.SaveTempMapETag("range-fallback-map.tpk", It.IsAny<string>()), Times.Never);
+            mapService.Verify(x => x.SaveTempMapETag("range-fallback-map.tpk", null), Times.Once);
             Assert.That(tempStream.ToArray(), Is.EqualTo(sourceBytes));
             mapService.Verify(x => x.MoveTempMapToPermanent("range-fallback-map.tpk"), Times.Once);
         }
