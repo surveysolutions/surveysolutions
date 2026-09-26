@@ -138,6 +138,12 @@
   <data name="SessionTimeoutMessage" xml:space="preserve">
     <value>Пожалуйста перегрузите страницу чтобы продолжить интервью.</value>
   </data>
+  <data name="InvalidServerResponseMessage" xml:space="preserve">
+    <value>Сервер не вернул ожидаемый идентификационный заголовок. Возможно, вы подключены через прокси-сервер или к неверному серверу. Пожалуйста, перезагрузите страницу.</value>
+  </data>
+  <data name="InvalidServerResponseTitle" xml:space="preserve">
+    <value>Неверный ответ сервера</value>
+  </data>
   <data name="Disconnected" xml:space="preserve">
     <value>Разъеденены</value>
   </data>
@@ -146,6 +152,13 @@
   </data>
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>Пожалуйста перегрузите страницу чтобы восстановить соединение с сервером и продолжить интервью.</value>
+  </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>Соединение потеряно. Выполняется попытка переподключения…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>Попытка {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
   </data>
   <data name="CloseInterviewMessage" xml:space="preserve">
     <value>&lt;p&gt;Веб Интервью поддерживается только в одной активной вкладке&lt;/p&gt;&lt;p&gt;Пожалуйста перегрузите эту страницу если хотите продолжить интервью или закройте окно&lt;/p&gt;</value>
@@ -194,6 +207,9 @@
   </data>
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>Ответ не сохранен</value>
+  </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Ошибка связи</value>
   </data>
   <data name="NotCalculated" xml:space="preserve">
     <value>Не посчитано</value>
@@ -254,6 +270,9 @@
   </data>
   <data name="NumberRosterUpperBound" xml:space="preserve">
     <value>Ответ '{{answer}}' неверный, поскольку он больше значения максимального количества элементов в списке: '{{answerMaxValue}}'.</value>
+  </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Отрицательные значения недопустимы для этого вопроса</value>
   </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>Ответ '{{answer}}' неверный, поскольку нельзя задать отрицательное количество элементов в списке</value>
@@ -442,6 +461,9 @@ Oбратитесь в тех. поддержку за помощью</value>
   </data>
   <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
     <value>Дополнительная информация о вопросе</value>
+  </data>
+  <data name="ImageFormatNotSupported" xml:space="preserve">
+    <value>Формат изображения не поддерживается вашим браузером.</value>
   </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>Воспроизведение мультимедиа не поддерживается вашим браузером. Вы можете скачать файл.</value>

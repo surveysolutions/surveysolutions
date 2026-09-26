@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using ApprovalUtilities.Utilities;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using WB.Services.Export.CsvExport.Exporters;
@@ -24,7 +25,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
                 VariableType = variableType,
             };
 
-            var exportService = new ExportQuestionService();
+            var exportService = new ExportQuestionService(new GeographySerializer(NullLogger<GeographySerializer>.Instance));
 
             var exportedVariable = exportService.GetExportedVariable(variable, headerItem, false);
 
@@ -44,7 +45,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
                 VariableType = variableType,
             };
 
-            var exportService = new ExportQuestionService();
+            var exportService = new ExportQuestionService(new GeographySerializer(NullLogger<GeographySerializer>.Instance));
 
             var exportedVariable = exportService.GetExportedVariable(variable, headerItem, true);
 
@@ -62,7 +63,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
                 VariableType = VariableType.Double
             };
 
-            var exportService = new ExportQuestionService();
+            var exportService = new ExportQuestionService(new GeographySerializer(NullLogger<GeographySerializer>.Instance));
 
             var exportedVariable = exportService.GetExportedVariable(variable, headerItem, false);
 
@@ -79,7 +80,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
                 VariableType = VariableType.DateTime
             };
 
-            var exportService = new ExportQuestionService();
+            var exportService = new ExportQuestionService(new GeographySerializer(NullLogger<GeographySerializer>.Instance));
 
             var exportedVariable = exportService.GetExportedVariable(dateTime, headerItem, false);
 
@@ -100,7 +101,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
                 VariableType = variableType,
             };
 
-            var exportService = new ExportQuestionService();
+            var exportService = new ExportQuestionService(new GeographySerializer(NullLogger<GeographySerializer>.Instance));
 
             var exportedVariable = exportService.GetExportedVariable(variable, headerItem, false);
 

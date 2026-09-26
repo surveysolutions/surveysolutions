@@ -337,6 +337,7 @@
     "HotkeysOpenSection": "Ouvrir la section",
     "HotkeysPrint": "Imprimer",
     "HotkeysSearch": "Rechercher des sous-sections et des questions dans la section",
+    "HotkeysTest": "Tester le questionnaire dans WebTester",
     "MultipleDependencies": "Une ou plusieurs questions/sous-sections dépendent de",
     "NoPermissions": "Vous n'avez pas les permissions pour modifier ce questionnaire",
     "NotAnImage": "Le fichier choisi n'est pas une image",
@@ -383,6 +384,7 @@
     "PleaseWait": "Veuillez patienter...",
     "EntryWasNotFound": "L'entrée n'a pas été trouvée dans le questionnaire, veuillez en sélectionner une autre.",
     "RequestFailedUnexpectedly": "La demande a échoué de manière inattendue.",
+    "ApplicationNotAvailable": "Impossible de compléter la demande. La réponse reçue ne semble pas provenir du serveur Survey Solutions.\r\nCela est généralement causé par un proxy réseau, un pare-feu ou une passerelle de sécurité qui intercepte la connexion.\r\nVeuillez vérifier votre connexion réseau ou contacter votre support informatique.",
     "IncorrectRosterTitle": "Titre de liste incorrect",
     "SelectedInvalidItem": "Élément sélectionné invalide. Corrigez-le.",
     "SelectItemFromTheList": "Sélectionnez un élément dans la liste",
@@ -463,7 +465,7 @@
     "QuestionShowListLimit": "Si pas plus de",
     "RosterDisplayMode_SubSection": "Sous-section",
     "RosterDisplayMode_Flat": "Plat",
-    "RosterDisplayMode_Table": "Table",
+    "RosterDisplayMode_Table": "Tableau",
     "RosterDisplayMode_Matrix": "Matrice",
     "RosterDisplayMode": "Mode d'affichage :",
     "AreYouSure": "Êtes-vous sûr ?",
@@ -513,12 +515,13 @@
     "HelpCriticalityConditionMessage": "Ce message est affiché lorsque la condition critique est évaluée à \"Faux\" ou qu'une exception se produit lors de l'évaluation de l'expression. Le message peut utiliser des hyperliens et la substitution de texte.",
     "AttachmentSizeIsTooBig": "La taille de la pièce jointe est trop grande. Taille maximale : {{size}}",
     "SwitchTo": "Passer à",
-    "SwitchToTranslationConfirm": "Passer à changera la langue d’affichage du questionnaire. La traduction doit inclure un texte pour tous les éléments."
+    "SwitchToTranslationConfirm": "Passer à changera la langue d’affichage du questionnaire. La traduction doit inclure un texte pour tous les éléments.",
+    "AIAssistant": "IA"
   },
   "AccountResources": {
     "AllRights": "Tout droit reservé",
     "AppDescription": "Ceci est un instrument pour la conception d'enquête pour la plateforme CAPI de la Banque Mondiale, doté de fonctionnalité de collaboration et d'exportation vers PDF",
-    "AppName": "Questionnaire Designer",
+    "AppName": "Concepteur de questionnaire",
     "BackToLogin": "Retour au login",
     "Change": "Changer",
     "ChangePassword": "Changer de mot de passe",
@@ -576,7 +579,8 @@
     "LockedOutText": "Votre compte est verrouillé. Contactez l'administrateur pour déverrouiller votre compte",
     "PasswordEmailSent": "Veuillez vérifier votre e-mail pour réinitialiser votre mot de passe.",
     "EmailChangeShouldBeConfirmed": "Veuillez suivre les instructions envoyées à l'e-mail fourni ({0}) pour confirmer le changement d'e-mail.",
-    "PendingEmailUpdate": "Mise à jour en attente vers {0}"
+    "PendingEmailUpdate": "Mise à jour en attente vers {0}",
+    "LastLoginDate": "Date de dernière connexion"
   },
   "QuestionnaireController": {
     "Action": "Action",
@@ -649,5 +653,35 @@
     "Classifications": "Classifications",
     "SaveAs": "Enregistrer sous",
     "CloneDeletedWarning": "Vous créez une copie d'un questionnaire supprimé. Certaines parties pourraient être perdues."
+  },
+  "Assistant": {
+    "ClearHistory": "Effacer l'historique",
+    "NotHelpful": "Annuler",
+    "Helpful": "J'aime",
+    "Dislike": "Je n'aime pas",
+    "Unhelpful": "Peu utile",
+    "NotUnhelpful": "Annuler",
+    "UnhelpfulCommentTitle": "Ajouter un commentaire",
+    "UnhelpfulCommentPlaceholder": "Écrivez un court commentaire (facultatif)",
+    "UnhelpfulCommentHint": "Qu'est-ce qui n'allait pas dans cette réponse ?",
+    "Send": "Envoyer",
+    "SendFeedback": "Envoyer un retour",
+    "NotHelpfulCommentTitle": "Ajouter un commentaire",
+    "NotHelpfulCommentPlaceholder": "Écrivez un court commentaire (facultatif)",
+    "TypeMessage": "Tapez votre message...",
+    "Title": "Assistant IA",
+    "WelcomeMessage": "Commencez une conversation avec l'assistant IA. Vos messages peuvent être utilisés pour améliorer le produit. Ne partagez pas d'informations sensibles ou personnelles dans ce chat.",
+    "Disclaimer": "Ce contenu a été produit par un système d'IA automatisé et ne constitue pas une information faisant autorité ou vérifiée. Il peut contenir des erreurs ou des omissions. Les utilisateurs sont responsables de l'examen, de la validation et du jugement avant utilisation.",
+    "DisclaimerLabel": "Contenu généré par l'IA",
+    "ConnectionError": "Impossible de se connecter à l'assistant.",
+    "RateLimitExceeded": "Limite de requêtes dépassée. Veuillez réessayer plus tard.",
+    "StopRequest": "Arrêter",
+    "Copy": "Copier",
+    "CopyCode": "Copier le code",
+    "NotAuthorized": "Non autorisé.",
+    "InvalidRequest": "Requête invalide. Veuillez vérifier le format de votre message.",
+    "AccessDenied": "Accès refusé. Votre clé API n'a peut-être pas les autorisations requises.",
+    "ModelNotFound": "Modèle d'assistant introuvable. Veuillez vérifier si vous avez accès au modèle configuré.",
+    "ServiceUnavailable": "Le service d'assistant est temporairement indisponible. Veuillez réessayer plus tard."
   }
 }

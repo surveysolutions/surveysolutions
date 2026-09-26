@@ -61,6 +61,7 @@ namespace WB.UI.Supervisor.Services.Implementation
             CommunicationBufferSize = Application.Context.Resources?.GetInteger(Resource.Integer.BufferSize) ?? 4096,
             ShowLocationOnMap = Application.Context.Resources?.GetBoolean(Resource.Boolean.ShowLocationOnMap) ?? true,
             DownloadUpdatesForInterviewerApp = Application.Context.Resources?.GetBoolean(Resource.Boolean.DownloadUpdatesForInterviewerApp),
+            CommunicationIntegrityValidationIgnore = Application.Context.Resources?.GetBoolean(Resource.Boolean.CommunicationIntegrityValidationIgnore) ?? false,
         };
 
         private ApplicationWorkspaceSettingsView? currentWorkspaceSettings
@@ -83,12 +84,15 @@ namespace WB.UI.Supervisor.Services.Implementation
         public override int EventChunkSize => this.CurrentSettings.EventChunkSize.GetValueOrDefault(Application.Context.Resources?.GetInteger(Resource.Integer.EventChunkSize) ?? 1000);
         public override double GpsDesiredAccuracy => throw new NotImplementedException();
         public override bool VibrateOnError => false;
+        public override bool CommunicationIntegrityValidationIgnore => this.currentSettings.CommunicationIntegrityValidationIgnore ?? Application.Context.Resources?.GetBoolean(Resource.Boolean.CommunicationIntegrityValidationIgnore) ?? false;
         public override bool ShowLocationOnMap => this.currentSettings.ShowLocationOnMap;
 
         public override int GpsReceiveTimeoutSec => throw new NotImplementedException();
         public void SetGpsResponseTimeout(int timeout) => throw new NotImplementedException();
         public void SetGpsDesiredAccuracy(double value) => throw new NotImplementedException();
         public void SetShowLocationOnMap(bool showLocationOnMap) => this.SaveCurrentSettings(settings => settings.ShowLocationOnMap = showLocationOnMap);
+
+        public void SetCommunicationIntegrityValidationIgnore(bool ignore) => this.SaveCurrentSettings(settings => settings.CommunicationIntegrityValidationIgnore = ignore);
 
         public override void SetNotifications(bool notificationsEnabled) =>
             this.SaveCurrentSettings(settings => settings.NotificationsEnabled = notificationsEnabled);

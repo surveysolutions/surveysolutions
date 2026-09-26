@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Scenarios;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
@@ -69,6 +70,8 @@ namespace WB.Core.BoundedContexts.Designer.DataAccess
         public DbSet<StoredScenario> Scenarios { get; set; }
         
         public DbSet<AnonymousQuestionnaire> AnonymousQuestionnaires { get; set; }
+        
+        public DbSet<StoredAppSetting> StoredAppSettings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -76,9 +79,10 @@ namespace WB.Core.BoundedContexts.Designer.DataAccess
             builder.HasDefaultSchema("plainstore");
 
             builder.Entity<DesignerIdentityUser>(x => x.Property(p => p.PasswordSalt).HasColumnName("PasswordSalt"));
-            builder.Entity<DesignerIdentityUser>(x => x.Property(p => p.CanImportOnHq).HasColumnName("CanImportOnHq"));
+            
             builder.Entity<DesignerIdentityUser>(x => x.Property(p => p.CreatedAtUtc).HasColumnName("CreatedAtUtc"));
-
+            builder.Entity<DesignerIdentityUser>(x => x.Property(p => p.AssistantEnabled).HasColumnName("AssistantEnabled"));
+            
             builder.ApplyConfiguration(new QuestionnaireListViewItemTypeConfig());
             builder.ApplyConfiguration(new QuestionnaireListViewFolderTypeConfig());
             builder.ApplyConfiguration(new SharedPersonsTypeConfig());
@@ -99,6 +103,7 @@ namespace WB.Core.BoundedContexts.Designer.DataAccess
             builder.ApplyConfiguration(new KeyValueTableTypeConfig<StoredLookupTable>("lookuptablecontents"));
             builder.ApplyConfiguration(new KeyValueTableTypeConfig<StoredQuestionnaireDocument>("questionnairedocuments"));
             builder.ApplyConfiguration(new KeyValueTableTypeConfig<StoredQuestionnaireStateTracker>("questionnairestatetrackers"));
+            builder.ApplyConfiguration(new KeyValueTableTypeConfig<StoredAppSetting>("appsettings"));
         }
     }
 }

@@ -138,6 +138,12 @@
   <data name="SessionTimeoutMessage" xml:space="preserve">
     <value>Por favor, vuelva a cargar la página para continuar con esta entrevista.</value>
   </data>
+  <data name="InvalidServerResponseMessage" xml:space="preserve">
+    <value>El servidor no devolvió el encabezado de identificación esperado. Es posible que esté conectado a un proxy o a un servidor incorrecto. Por favor, recargue la página.</value>
+  </data>
+  <data name="InvalidServerResponseTitle" xml:space="preserve">
+    <value>Respuesta del servidor no válida</value>
+  </data>
   <data name="Disconnected" xml:space="preserve">
     <value>Desconectado</value>
   </data>
@@ -146,6 +152,13 @@
   </data>
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>Vuelva a cargar la página para restaurar la conexión y continuar con esta entrevista.</value>
+  </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>Conexión perdida. Intentando reconectar…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>Intento {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
   </data>
   <data name="CloseInterviewMessage" xml:space="preserve">
     <value>&lt;p&gt;La Entrevista Web sólo admite una pestaña activa con la entrevista. &lt;/p&gt;&lt;p&gt; Recargue esta página para continuar usando esta pestaña o cerrarla.&lt;/p&gt;</value>
@@ -198,6 +211,9 @@
   </data>
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>La respuesta no se guardó</value>
+  </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Error de comunicación</value>
   </data>
   <data name="NotCalculated" xml:space="preserve">
     <value>No calculado</value>
@@ -287,6 +303,9 @@
   </data>
   <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
     <value>El valor ingresado no puede ser menor que la respuesta protegida</value>
+  </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>No se permiten valores negativos para esta pregunta</value>
   </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>La respuesta '{{answer}}' es incorrecta porque la pregunta se utiliza como el tamaño de la lista y la respuesta especificada es negativa</value>
@@ -452,6 +471,9 @@
   </data>
   <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
     <value>Información adicional de la pregunta</value>
+  </data>
+  <data name="ImageFormatNotSupported" xml:space="preserve">
+    <value>El formato de la imagen no es compatible con su navegador.</value>
   </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>La reproducción de multimedia no es compatible con su navegador. Puede descargarlo en su lugar.</value>

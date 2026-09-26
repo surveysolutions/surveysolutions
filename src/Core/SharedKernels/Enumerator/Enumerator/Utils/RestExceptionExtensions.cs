@@ -65,6 +65,10 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                             break;
                     }
                     break;
+                case RestExceptionType.CommunicationIntegrityValidationFailed:
+                    exceptionMessage = EnumeratorUIResources.CommunicationIntegrityFailed;
+                    exceptionType = SynchronizationExceptionType.CommunicationIntegrityValidationFailed;
+                    break;
                 case RestExceptionType.Unexpected:
                     switch (restException.StatusCode)
                     {

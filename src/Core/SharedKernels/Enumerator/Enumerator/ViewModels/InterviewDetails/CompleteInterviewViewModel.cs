@@ -131,7 +131,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.CommentLabel = UIResources.Interview_Complete_Note_For_Supervisor;
         }
         
-        public List<TabViewModel> Tabs { get; set; }
+        public List<TabViewModel> Tabs { get; set; } = new();
         
         public int AnsweredCount { get; set; }
 

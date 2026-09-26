@@ -119,7 +119,11 @@ export default {
             var confirmParams = {
                 noControls: true,
                 header: this.$t('QuestionnaireEditor.AttachmentPreview'),
-                title: `<img class="attachment-preview-img" size="{width: 568, height: 568}" src="${srcImage}">`,
+                title: `<img class="attachment-preview-img" src="${srcImage}" alt="${this.$t('QuestionnaireEditor.AttachmentPreview')}">`,
+                sanitizeOptions: {
+                    ALLOWED_TAGS: ['img'],
+                    ALLOWED_ATTR: ['alt', 'class', 'src']
+                }
             }
 
             this.$confirm(confirmParams);

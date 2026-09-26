@@ -113,7 +113,7 @@ import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Breadcrumbs from './Breadcrumbs.vue'
 import Help from './Help.vue'
-import { useMagicKeys } from '@vueuse/core';
+import { useKeyShortcut } from '../../../composables/useKeyShortcut';
 
 export default {
     name: 'Group',
@@ -159,13 +159,7 @@ export default {
             };
         });
 
-        const { ctrl_s } = useMagicKeys({
-            passive: false,
-            onEventFired(e) {
-                if (e.ctrlKey && e.key === 's' && e.type === 'keydown')
-                    e.preventDefault()
-            },
-        });
+        const ctrl_s = useKeyShortcut(e => e.ctrlKey && e.key === 's');
 
         return {
             groupStore, commentsStore, ctrl_s
@@ -176,6 +170,10 @@ export default {
     },
     mounted() {
         this.scrollTo();
+        this.$emitter.on('saveCurrentEntityRequested', this.saveGroup);
+    },
+    unmounted() {
+        this.$emitter.off('saveCurrentEntityRequested', this.saveGroup);
     },
     computed: {
         activeGroup() {

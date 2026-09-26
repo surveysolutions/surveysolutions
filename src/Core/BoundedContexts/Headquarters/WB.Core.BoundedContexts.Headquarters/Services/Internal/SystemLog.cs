@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Views.SystemLog;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 {
@@ -136,6 +138,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             this.Append(LogEntryType.RetentionPolicyDaysToKeepChanged, "Retention policy days to keep", "changed",
                 $"{(count == null ? "empty" : count)}");
         }
+
+        public void GeographyExportFormatChanged(GeographyExportFormat format)
+        {
+            this.Append(LogEntryType.GeographyExportFormatChanged, "Geography export format", "changed",
+                format.ToString());
+        }
         
         public void UserMovedToAnotherTeam(string interviewerName, string newSupervisorName,
             string previousSupervisorName)
@@ -161,12 +169,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 
         public void WorkspaceEnabled(string workspaceName)
         {
-            this.Append(LogEntryType.WorkspaceEnabled, "workspace", workspaceName);
+            this.Append(LogEntryType.WorkspaceEnabled, "workspace", workspaceName,
+                workspace: WorkspaceConstants.WorkspaceNames.AdminWorkspaceName);
         }
 
         public void WorkspaceDisabled(string workspaceName)
         {
-            this.Append(LogEntryType.WorkspaceDisabled, "workspace", workspaceName);
+            this.Append(LogEntryType.WorkspaceDisabled, "workspace", workspaceName,
+                workspace: WorkspaceConstants.WorkspaceNames.AdminWorkspaceName);
         }
 
         public void WorkspaceUserAssigned(string userName, ICollection<string> workspaces)
@@ -192,15 +202,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
                     "action type on submission changed", level.ToString()); 
         }
         private void Append(LogEntryType type, string target, string action, string args = null,
-                string responsibleName = null, Guid? responsibleUserId = null) 
+                string responsibleName = null, Guid? responsibleUserId = null, string workspace = null) 
         {
                 AppendLogEntry(responsibleUserId ?? this.authorizedUser.Id,
                     responsibleName ?? this.authorizedUser.UserName,
                     type,
-                    $"{target}: {action}" + (args != null ? $"; {args}" : ""));
+                    $"{target}: {action}" + (args != null ? $"; {args}" : ""),
+                    workspace);
         }
 
-        private void AppendLogEntry(Guid? userid, string userName, LogEntryType type, string log)
+        private void AppendLogEntry(Guid? userid, string userName, LogEntryType type, string log, string workspace = null)
         {
                 inScopeExecutor.Execute(systemLogStorage =>
                 {
@@ -221,7 +232,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
                     {
                         logger.Error("Error on system log writing", e);
                     }
-                });
+                }, workspace);
         }
         
     }

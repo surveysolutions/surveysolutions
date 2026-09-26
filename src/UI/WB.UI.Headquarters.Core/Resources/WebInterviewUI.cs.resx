@@ -73,6 +73,9 @@
   <data name="Error" xml:space="preserve">
     <value>Chyba</value>
   </data>
+  <data name="ImageFormatNotSupported" xml:space="preserve">
+    <value>Formát obrázku není podporován vaším prohlížečem.</value>
+  </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>Váš prohlížeč nepodporuje přehrávání multimédií. Je možné si jej stáhnout.</value>
   </data>
@@ -102,6 +105,9 @@
   </data>
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>Odpověď nebyla uložena</value>
+  </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Chyba komunikace</value>
   </data>
   <data name="AreaRecord" xml:space="preserve">
     <value>Upravit oblast</value>
@@ -184,6 +190,13 @@
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>Znovu načtěte stránku pro obnovení připojení a pokračování v tomto rozhovoru.</value>
   </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>Spojení ztraceno. Probíhá pokus o opětovné připojení…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>Pokus {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
+  </data>
   <data name="ConnectionLostTitle" xml:space="preserve">
     <value>Připojení k serveru je ztraceno.</value>
   </data>
@@ -212,6 +225,12 @@ Požádejte o pomoc svého garanta.</value>
   </data>
   <data name="DecimalTooBig" xml:space="preserve">
     <value>Zadaná hodnota je příliš velká. Je povoleno méně než 15 číslic</value>
+  </data>
+  <data name="InvalidServerResponseMessage" xml:space="preserve">
+    <value>Server nevrátil očekávanou identifikační hlavičku. Možná jste připojeni přes proxy nebo na nesprávný server. Prosím, znovu načtěte stránku.</value>
+  </data>
+  <data name="InvalidServerResponseTitle" xml:space="preserve">
+    <value>Neplatná odpověď serveru</value>
   </data>
   <data name="Disconnected" xml:space="preserve">
     <value>Odpojeno</value>
@@ -323,6 +342,9 @@ Požádejte o pomoc svého garanta.</value>
   </data>
   <data name="NumberEnter" xml:space="preserve">
     <value>Vložit číslo</value>
+  </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Záporné hodnoty nejsou pro tuto otázku povoleny</value>
   </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>Odpověď '{{answer}}' je chybná, protože otázka je využívá velikost seznamu (rosteru) a zadaná odpověď je záporná</value>

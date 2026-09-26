@@ -8,11 +8,11 @@ namespace WB.Core.BoundedContexts.Designer.Comments
     {
         Task<List<CommentView>> LoadCommentsForEntity(Guid questionnaireId, Guid entityId);
         void PostComment(Guid commentId, Guid questionnaireId, Guid entityId, string commentComment, string userName, string userEmail);
-        Task ResolveCommentAsync(Guid commentId);
+        Task ResolveCommentAsync(Guid commentId, Guid questionnaireId);
         List<CommentThread> LoadCommentThreads(Guid questionnaireId);
 
         void RemoveAllCommentsByEntity(Guid questionnaireId, Guid entityId);
         void DeleteAllByQuestionnaireId(Guid questionnaireId);
-        Task DeleteCommentAsync(Guid id);
+        Task DeleteCommentAsync(Guid id, Guid questionnaireId);
     }
 }

@@ -14,6 +14,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public event EventHandler AnswerRemoved;
         public EnablementViewModel Enablement => QuestionState?.Enablement;
 
+        public AttachmentViewModel Attachment => null;
+
         public decimal[] RosterVector { get; set; }
 
         private string title;

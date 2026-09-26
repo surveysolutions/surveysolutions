@@ -28,7 +28,6 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.DataAccess;
-using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
@@ -36,10 +35,9 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.Questionnaire.Categories;
-using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
+using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Controllers;
 using QuestionnaireEditor = WB.UI.Designer.Resources.QuestionnaireEditor;
 
@@ -68,6 +66,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         // Get the default form options so that we can use them to set the default limits for
         // request body data
         private static readonly FormOptions defaultFormOptions = new FormOptions();
+
+        // Message to return to client when an ArgumentException occurs (do not expose internal exception messages)
+        private const string ArgumentExceptionClientMessage = "Invalid command";
 
         public CommandController(
             ICommandService commandService,
@@ -146,8 +147,17 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             {
                 return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
+            catch (CommandDeserializationException e)
+            {
+                // Internal deserialization failures should not expose details to client
+                this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
+                return this.Error((int)HttpStatusCode.NotAcceptable, ArgumentExceptionClientMessage);
+            }
             catch (ArgumentException e)
             {
+                // This ArgumentException represents a user-actionable validation error
+                // (for example: invalid file extension). Return the original message
+                // so the UI can display a helpful error to the user.
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
                 return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
@@ -225,8 +235,14 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return this.Error((int)HttpStatusCode.NotAcceptable,
                     Resources.QuestionnaireController.SelectTabFile);
             }
+            catch (CommandDeserializationException e)
+            {
+                this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
+                return this.Error((int)HttpStatusCode.NotAcceptable, ArgumentExceptionClientMessage);
+            }
             catch (ArgumentException e)
             {
+                // Preserve user-visible validation messages (e.g. wrong file format)
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
                 return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
@@ -270,6 +286,18 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             {
                 this.logger.LogError(exc, $"Error on command of type ({model.Type.Replace('\n', '_').Replace('\r', '_')}) handling ");
                 return this.Error((int)HttpStatusCode.NotAcceptable, $"{exc.Message} Please reload page.");
+            }
+            catch (CommandDeserializationException e)
+            {
+                // Internal deserialization failures should not expose details to client
+                this.logger.LogError(e, $"Error on command of type ({model.Type.Replace('\n', '_').Replace('\r', '_')}) handling ");
+                return this.Error((int)HttpStatusCode.NotAcceptable, ArgumentExceptionClientMessage);
+            }
+            catch (ArgumentException e)
+            {
+                // This represents a user-actionable validation error; surface message to UI
+                this.logger.LogError(e, $"Error on command of type ({model.Type.Replace('\n', '_').Replace('\r', '_')}) handling ");
+                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
             catch (Exception e)
             {
@@ -315,8 +343,15 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             {
                 return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
+            catch (CommandDeserializationException e)
+            {
+                // Internal deserialization failures should not expose details to client
+                this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
+                return this.Error((int)HttpStatusCode.NotAcceptable, ArgumentExceptionClientMessage);
+            }
             catch (ArgumentException e)
             {
+                // Validation errors from user input should surface their message to the client
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
                 return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
@@ -383,8 +418,15 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             {
                 return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
+            catch (CommandDeserializationException e)
+            {
+                // Internal deserialization failures should not expose details to client
+                this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
+                return this.Error((int)HttpStatusCode.NotAcceptable, ArgumentExceptionClientMessage);
+            }
             catch (ArgumentException e)
             {
+                // Preserve validation error messages for the client UI
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
                 return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
@@ -420,13 +462,43 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             try
             {
                 Type resultCommandType = GetTypeOfResultCommandOrThrowArgumentException(commandType);
-                return JsonConvert.DeserializeObject(serializedCommand, resultCommandType) as ICommand 
-                       ?? throw new ArgumentException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", commandType, serializedCommand));
+                ICommand? deserialized;
+                try
+                {
+                    deserialized = JsonConvert.DeserializeObject(serializedCommand, resultCommandType) as ICommand;
+                }
+                catch (ArgumentException ae)
+                {
+                    // Wrap any ArgumentException thrown by Json.NET to avoid leaking
+                    // implementation details to callers.
+                    logger.LogError(ae, "ArgumentException during JSON deserialization.");
+                    throw new CommandDeserializationException(
+                        $"Failed to deserialize command of type '{commandType}':\r\n{serializedCommand}", ae);
+                }
+                if (deserialized == null)
+                    throw new CommandDeserializationException(
+                        $"Failed to deserialize command of type '{commandType}':\r\n{serializedCommand}");
+
+                return deserialized;
+            }
+            catch (ArgumentException e)
+            {
+                // Wrap ArgumentException occurred during deserialization to avoid leaking
+                // internal details and to ensure callers can distinguish user validation
+                // errors from deserialization failures.
+                logger.LogError(e, "ArgumentException during command deserialization.");
+                throw new CommandDeserializationException(
+                    $"Failed to deserialize command of type '{commandType}':\r\n{serializedCommand}", e);
             }
             catch (Exception e)
             {
                 logger.LogError(e, "Error on command deserialization.");
-                throw new ArgumentException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", commandType, serializedCommand));
+                // Throw a dedicated exception so callers can distinguish between
+                // user-actionable ArgumentExceptions (validation errors) and
+                // internal deserialization failures that should not leak details
+                // to the client.
+                throw new CommandDeserializationException(
+                    $"Failed to deserialize command of type '{commandType}':\r\n{serializedCommand}", e);
             }
         }
 
@@ -504,7 +576,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private Type GetTypeOfResultCommandOrThrowArgumentException(string commandType)
         {
             if (!KnownCommandTypes.ContainsKey(commandType))
-                throw new Exception(string.Format("Command type '{0}' is not supported.", commandType));
+                throw new CommandDeserializationException(string.Format("Command type '{0}' is not supported.", commandType));
 
             return KnownCommandTypes[commandType];
         }

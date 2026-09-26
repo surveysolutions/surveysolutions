@@ -1095,7 +1095,8 @@ namespace WB.Tests.Abc.TestFactories
             IJsonAllTypesSerializer synchronizationSerializer = null,
             IStringCompressor stringCompressor = null,
             IHttpStatistician httpStatistician = null,
-            IHttpClientFactory httpClientFactory = null)
+            IHttpClientFactory httpClientFactory = null,
+            IIntegrityService integrityService = null)
         {
             return new RestService(
                 restServiceSettings ?? Mock.Of<IRestServiceSettings>(x => x.Endpoint == "http://localhost"),
@@ -1105,7 +1106,8 @@ namespace WB.Tests.Abc.TestFactories
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
                 httpClientFactory ?? Mock.Of<IHttpClientFactory>(),
                 new SimpleFileHandler(),
-                Mock.Of<ILogger>()
+                Mock.Of<ILogger>(),
+                integrityService ?? Mock.Of<IIntegrityService>()
             );
         }
 
@@ -1293,8 +1295,8 @@ namespace WB.Tests.Abc.TestFactories
              externalFileStorage ?? Mock.Of<IExternalFileStorage>(),
              geospatialConfig ?? Mock.Of<IOptions<GeospatialConfig>>(),
              authorizedUser ?? Mock.Of<IAuthorizedUser>(),
-             Mock.Of<ILogger<MapFileStorageService>>(),
-             Mock.Of<IPlainStorageAccessor<DuplicateMapLabel>>()); 
+             Mock.Of<ILogger<MapFileStorageService>>()
+             ); 
         }
 
         public ResponsibleAssignmentValidator WebModeResponsibleAssignmentValidator(IUserViewFactory userViewFactory = null)

@@ -64,18 +64,22 @@ import GroupEditor from './classifications/components/GroupEditor.vue'
 import '../../../../../Content/classifications.css';
 import '../../../../../Content/plugins/jquery.contextMenu.min.css';
 
+import { useClassificationsStore } from './classifications/store';
 
 export default {
     name: 'Classifications',
     components: { CategoriesEditor, ClassificationEditor, GroupEditor },
+    setup() {
+        return { store: useClassificationsStore() };
+    },
     data() {
         return {
 
         }
     },
     created() {
-        this.$store.dispatch('getUserInfo');
-        this.$store.dispatch('loadGroups');
+        this.store.getUserInfo().catch(console.error);
+        this.store.loadGroups().catch(console.error);
     },
     watch: {
         activeGroup: function (val) {
@@ -86,34 +90,34 @@ export default {
     },
     computed: {
         isAdmin() {
-            return this.$store.state.isAdmin;
+            return this.store.isAdmin;
         },
         isLoading() {
-            return this.$store.state.isLoading;
+            return this.store.isLoading;
         },
         groups() {
-            return this.$store.state.groups;
+            return this.store.groups;
         },
         classifications() {
-            return this.$store.state.classifications;
+            return this.store.classifications;
         },
         categories() {
-            return this.$store.state.categories;
+            return this.store.categories;
         },
         activeGroup() {
-            return this.$store.state.activeGroup;
+            return this.store.activeGroup;
         },
         activeClassification() {
-            return this.$store.state.activeClassification;
+            return this.store.activeClassification;
         }
     },
     methods: {
         addGroup() {
-            this.$store.dispatch('addGroup', { id: newGuid(), isNew: true, title: '', count: 0 });
+            this.store.addGroup({ id: newGuid(), isNew: true, title: '', count: 0 });
         },
         addClassification() {
-            this.$store.dispatch('addClassification',
-                { id: newGuid(), isNew: true, title: '', parent: this.activeGroup.id, userId: this.$store.state.userId, count: 0 });
+            this.store.addClassification(
+                { id: newGuid(), isNew: true, title: '', parent: this.activeGroup.id, userId: this.store.userId, count: 0 });
         }
     }
 };

@@ -108,9 +108,14 @@ namespace WB.UI.Headquarters.Controllers
                     return Forbid(); 
             }
 
-            var uploadedBy = map.UploadedBy.HasValue
-                ? userViewFactory.GetUser(map.UploadedBy.Value)?.UserName
-                : (string)null;
+            string uploadedBy = null;
+            if (map.UploadedBy.HasValue)
+            {
+                var uploader = userViewFactory.GetUser(map.UploadedBy.Value);
+                // Administrators are hidden as uploaders on the map details page.
+                if (uploader != null && !uploader.Roles.Contains(UserRoles.Administrator))
+                    uploadedBy = uploader.UserName;
+            }
             var model=
                 new MapDetailsModel
                 {
@@ -127,11 +132,7 @@ namespace WB.UI.Headquarters.Controllers
                     ShapeType = map.ShapeType,
                     ShapesCount = map.ShapesCount,
                     DeleteMapUserLinkUrl = Url.Action("DeleteMapUser", "MapsApi"),
-                    DuplicateMapLabels = map.DuplicateLabels?.Select(l => new DuplicateLabelModel()
-                    {
-                        Label = l.Label,
-                        Count = l.Count
-                    }).ToArray() ?? Array.Empty<DuplicateLabelModel>(),
+                    ShowDuplicateLabelsWarning = map.HasDuplicateLabels ?? false,
                     IsPreviewGeoJson = map.IsPreviewGeoJson,
                     IsObserving = authorizedUser.IsObserving,
                 };

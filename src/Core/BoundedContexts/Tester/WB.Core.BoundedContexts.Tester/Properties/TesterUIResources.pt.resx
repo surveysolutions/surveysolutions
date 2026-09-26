@@ -107,6 +107,9 @@
   <data name="Login_Error_EmptyName" xml:space="preserve">
     <value>Por favor, insira um login correto</value>
   </data>
+  <data name="TesterLoginAccountHintText" xml:space="preserve">
+    <value>Faça login neste aplicativo usando as credenciais que você criou em https://designer.mysurvey.solutions. Para registrar uma nova conta, visite o mesmo site.</value>
+  </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Questionários</value>
   </data>
@@ -114,7 +117,7 @@
     <value>Idioma</value>
   </data>
   <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Idioma original</value>
   </data>
   <data name="MenuItem_Title_Reload" xml:space="preserve">
     <value>Recarregar questionário</value>
@@ -129,7 +132,7 @@
     <value>Sair</value>
   </data>
   <data name="MenuItem_Title_Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Iniciar sessão</value>
   </data>
   <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
     <value>Desativar validação de certificado SSL</value>

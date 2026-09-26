@@ -5,10 +5,8 @@ using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using ApprovalTests.Reporters.TestFrameworks;
-using AutoMapper;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
-using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.DataAccess;
@@ -21,7 +19,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 {
     [UseApprovalSubdirectory("TranslationImportExportService-approved")]
     [IgnoreLineEndings(true)]
-    [UseReporter(typeof(DiffReporter), typeof(NUnitReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(NUnit4Reporter))]
     [TestOf(typeof(TranslationImportExportService))]
     public class TranslationImportExportServiceTests
     {
@@ -106,14 +104,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
         private ITranslationImportExportService CreateTranslationsService(DesignerDbContext dbContext)
         {
-            var mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new QuestionnaireAutoMapperProfile());
-            }).CreateMapper();
-
             return new TranslationImportExportService(
                 dbContext,
-                mapper,
                 new QuestionnaireSerializer());
         }
     }

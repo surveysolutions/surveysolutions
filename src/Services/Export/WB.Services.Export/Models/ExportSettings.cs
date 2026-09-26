@@ -19,7 +19,8 @@ namespace WB.Services.Export.Models
             Guid? translation = null, 
             bool? includeMeta = null,
             bool? paradataReduced = null,
-            long? jobId = null)
+            long? jobId = null,
+            GeographyExportFormat? geographyExportFormat = null)
         {
             JobId = jobId;
             ExportFormat = exportFormat;
@@ -31,6 +32,7 @@ namespace WB.Services.Export.Models
             Translation = translation;
             IncludeMeta = includeMeta;
             ParadataReduced = paradataReduced;
+            GeographyExportFormat = geographyExportFormat ?? GeographyExportFormat.Wkt;
         }
 
         public long? JobId { get; set; }
@@ -45,6 +47,7 @@ namespace WB.Services.Export.Models
 
         public bool? IncludeMeta { get; set; }
         public bool? ParadataReduced { get; set; }
+        public GeographyExportFormat GeographyExportFormat { get; set; } = GeographyExportFormat.Wkt;
 
         public string NaturalId => $"{Tenant}${InterviewStatusString()}${ExportFormat}${this.QuestionnaireId}" +
                                    $"${this.FromDate?.ToString(@"YYYYMMDD") ?? "EMPTY FROM DATE"}" +

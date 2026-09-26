@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -43,5 +44,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         
         void RetentionPolicyFilesToKeepChanged(int? count);
         void RetentionPolicyDaysToKeepChanged(int? count);
+        void GeographyExportFormatChanged(GeographyExportFormat format);
     }
 }

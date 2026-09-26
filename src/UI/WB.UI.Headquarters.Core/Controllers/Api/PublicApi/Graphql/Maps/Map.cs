@@ -68,6 +68,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
             descriptor.Field(x => x.MinScale).Type<NonNullType<FloatType>>();
             descriptor.Field(x => x.ShapeType).Type<StringType>();
             descriptor.Field(x => x.ShapesCount).Type<IntType>();
+            
+            descriptor.Field(x => x.HasDuplicateLabels).Type<BooleanType>();
         }
     }
 }
