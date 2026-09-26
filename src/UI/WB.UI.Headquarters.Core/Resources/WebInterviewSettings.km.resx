@@ -184,4 +184,10 @@
     <data name="TotalWithErrors" xml:space="preserve">
         <value>{{ withErrorsCount }} មិនត្រូវបានផ្ញើដោយសារតែមានកំហុស។</value>
     </data>
+    <data name="EnterText" xml:space="preserve">
+      <value>សូមបញ្ចូលអត្ថបទ</value>
+  </data>
+    <data name="AddressDescription" xml:space="preserve">
+      <value>នៅទីនេះអាសយដ្ឋានរបស់អង្គភាពរបស់អ្នកនឹងបង្ហាញដូចដែលបានបញ្ជាក់នៅក្នុងគណនីរបស់អ្នកនៅលើម៉ាស៊ីនមេផ្ញើសំបុត្រច្រើន។</value>
+  </data>
 </root>

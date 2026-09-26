@@ -22,11 +22,11 @@
                     'alert-warning': props.item.type != 'error',
                     'alert-danger': props.item.type == 'error'
                 }" role="alert" style="min-height: 16px;">
-                    <div class="ui-pnotify-closer" aria-role="button" tabindex="0" title="Close" @click="props.close"
-                        style="cursor: pointer;">
+                    <div class="ui-pnotify-closer" aria-role="button" tabindex="0"
+                        :title="$t('QuestionnaireEditor.Close')" @click="props.close" style="cursor: pointer;">
                         <span class="glyphicon glyphicon-remove"></span>
                     </div>
-                    <div class="ui-pnotify-sticker" aria-role="button" aria-pressed="false" tabindex="0" title="Stick"
+                    <div class="ui-pnotify-sticker" aria-role="button" aria-pressed="false" tabindex="0" :title="$t('QuestionnaireEditor.Stick')"
                         style="cursor: pointer; visibility: hidden;">
                         <span class="glyphicon glyphicon-pause" aria-pressed="false"></span>
                     </div>
@@ -46,7 +46,7 @@
     <div v-if="isBlocked" block-ui-container="" class="block-ui-container ng-scope">
         <div class="block-ui-overlay"></div>
         <div class="block-ui-message-container" aria-live="assertive" aria-atomic="true">
-            <div class="block-ui-message ng-binding">Please wait...</div>
+            <div class="block-ui-message ng-binding">{{ $t('QuestionnaireEditor.PleaseWait') }}</div>
         </div>
     </div>
     <div class="cfp-hotkeys-container fade" :class="{ 'in': cheatSheetVisible }" v-if="cheatSheetVisible"

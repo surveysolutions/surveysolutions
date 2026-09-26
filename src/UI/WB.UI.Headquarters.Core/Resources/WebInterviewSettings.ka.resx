@@ -81,4 +81,10 @@
   <data name="TotalSent" xml:space="preserve"><value>{{ totalCount }} მოწვევა გასაგზავნი</value></data>
   <data name="TotalProcessed" xml:space="preserve"><value>{{ processedCount }} წარმატებით გაიგზავნა</value></data>
   <data name="TotalWithErrors" xml:space="preserve"><value>{{ withErrorsCount }} ვერ გაიგზავნა შეცდომების გამო.</value></data>
+    <data name="EnterText" xml:space="preserve">
+      <value>გთხოვთ, შეიყვანოთ ტექსტი</value>
+  </data>
+    <data name="AddressDescription" xml:space="preserve">
+      <value>აქ გამოჩნდება თქვენი ორგანიზაციის მისამართი, როგორც ეს მითითებულია თქვენს ანგარიშში მასობრივი გზავნილების სერვერზე.</value>
+  </data>
 </root>

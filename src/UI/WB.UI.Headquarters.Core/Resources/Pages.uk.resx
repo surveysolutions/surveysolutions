@@ -1191,6 +1191,9 @@
   <data name="MapDetails_MapTitle" xml:space="preserve">
     <value>Карта</value>
   </data>
+  <data name="MapPreview" xml:space="preserve">
+      <value>Попередній перегляд карти</value>
+  </data>
   <data name="MapDetails_MaxScale" xml:space="preserve">
     <value>Максимальний масштаб</value>
   </data>
@@ -1785,5 +1788,11 @@
   </data>
   <data name="Observer_Memo2" xml:space="preserve">
     <value>Натисніть на обліковий запис і виберіть «Переглянути як цей користувач у режимі тільки для читання», щоб почати. Використовуйте жовте посилання вгорі, щоб повернутися до свого облікового запису.</value>
+  </data>
+  <data name="Successful" xml:space="preserve">
+      <value>Успішно</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+      <value>Не вдалося</value>
   </data>
 </root>

@@ -617,4 +617,10 @@
   <data name="Complete_QuestionsWithErrors" xml:space="preserve">
       <value>Питання з помилками: {{count}}</value>
   </data>
+  <data name="GeographyPreview" xml:space="preserve">
+      <value>Попередній перегляд географії</value>
+  </data>
+  <data name="RealQuestion_Hint" xml:space="preserve">
+      <value>Торкніться, щоб ввести число</value>
+  </data>
 </root>

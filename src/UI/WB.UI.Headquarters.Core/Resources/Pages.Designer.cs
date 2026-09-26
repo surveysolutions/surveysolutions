@@ -1581,6 +1581,12 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string PublicSectionDescription {
+            get {
+                return ResourceManager.GetString("PublicSectionDescription", resourceCulture);
+            }
+        }
+        
         public static string Interviewers_CreationDateTooltip {
             get {
                 return ResourceManager.GetString("Interviewers_CreationDateTooltip", resourceCulture);
@@ -2274,6 +2280,12 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewerHq_DiscardConfirm {
             get {
                 return ResourceManager.GetString("InterviewerHq_DiscardConfirm", resourceCulture);
+            }
+        }
+        
+        public static string MapPreview {
+            get {
+                return ResourceManager.GetString("MapPreview", resourceCulture);
             }
         }
         
@@ -3153,6 +3165,12 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string CreateUser_WorkspaceLabel {
+            get {
+                return ResourceManager.GetString("CreateUser_WorkspaceLabel", resourceCulture);
+            }
+        }
+        
         public static string UsersManage_SupervisorFilterTitle {
             get {
                 return ResourceManager.GetString("UsersManage_SupervisorFilterTitle", resourceCulture);
@@ -3168,6 +3186,12 @@ namespace WB.UI.Headquarters.Resources {
         public static string UsersManage_RoleFilterPlaceholder {
             get {
                 return ResourceManager.GetString("UsersManage_RoleFilterPlaceholder", resourceCulture);
+            }
+        }
+        
+        public static string CreateUser_RoleLabel {
+            get {
+                return ResourceManager.GetString("CreateUser_RoleLabel", resourceCulture);
             }
         }
         
@@ -3360,6 +3384,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string Observer_Memo2 {
             get {
                 return ResourceManager.GetString("Observer_Memo2", resourceCulture);
+            }
+        }
+        
+        public static string Successful {
+            get {
+                return ResourceManager.GetString("Successful", resourceCulture);
+            }
+        }
+        
+        public static string Failed {
+            get {
+                return ResourceManager.GetString("Failed", resourceCulture);
+            }
+        }
+        
+        public static string EnterText {
+            get {
+                return ResourceManager.GetString("EnterText", resourceCulture);
             }
         }
     }

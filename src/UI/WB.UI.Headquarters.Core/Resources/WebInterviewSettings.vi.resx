@@ -161,4 +161,10 @@
     <data name="TotalWithErrors" xml:space="preserve">
         <value>{{ withErrorsCount }} không được gửi do lỗi.</value>
     </data>
+    <data name="EnterText" xml:space="preserve">
+      <value>Vui lòng nhập văn bản</value>
+  </data>
+    <data name="AddressDescription" xml:space="preserve">
+      <value>Tại đây, địa chỉ tổ chức của bạn sẽ hiển thị theo như đã được chỉ định trong tài khoản của bạn trên máy chủ gửi thư hàng loạt.</value>
+  </data>
 </root>
