@@ -171,7 +171,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 await InvokeOnMainThreadAsync(() =>
                 {
                     if (ShouldSkipLoadUpdate(loadVersion, cancellationToken)) return;
-                    LoadingErrorMessage = EnumeratorUIResources.UnexpectedException;
+                    LoadingErrorMessage = $"{UIResources.Interview_Complete_Screen_Title}: {EnumeratorUIResources.UnexpectedException}";
                     HasLoadingError = true;
                     IsCompletionAllowed = false;
                     IsLoading = false;

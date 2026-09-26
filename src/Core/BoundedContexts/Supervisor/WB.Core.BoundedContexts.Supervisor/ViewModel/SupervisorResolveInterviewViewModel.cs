@@ -138,6 +138,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                         var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
                         var takeCount = Math.Max(0, entitiesListViewModelFactory.MaxNumberOfEntities - tabViewModel.Items.Count);
                         tabViewModel.Items.AddRange(topFailedCriticalRules.Take(takeCount));
+                        topFailedCriticalRules.Skip(takeCount).ToList().ForEach(vm => vm.DisposeIfDisposable());
                         tabViewModel.Total += topFailedCriticalRulesFromState.Total;
                     }
 
@@ -146,11 +147,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                         var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
                         var takeCount = Math.Max(0, entitiesListViewModelFactory.MaxNumberOfEntities - tabViewModel.Items.Count);
                         tabViewModel.Items.AddRange(topUnansweredCriticalQuestions.Take(takeCount));
+                        topUnansweredCriticalQuestions.Skip(takeCount).ToList().ForEach(vm => vm.DisposeIfDisposable());
                         tabViewModel.Total += topUnansweredCriticalQuestionsInfo.Total;
                     }
 
                     criticalItemsTransferred = true;
 
+                    IsCompletionAllowed = CalculateIsCompletionAllowed();
                     IsLoading = false;
                     RaisePropertyChanged(nameof(IsAllOk));
                 });
