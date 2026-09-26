@@ -100,6 +100,43 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
         }
 
         [Test]
+        public async Task when_partial_map_has_no_stored_etag_should_restart_download_from_beginning()
+        {
+            var synchronizationService = new Mock<IOnlineSynchronizationService>();
+            synchronizationService.Setup(x => x.GetMapList(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<MapView> { new MapView { MapName = "resume-map.tpk" } });
+
+            var sourceBytes = new byte[] { 4, 5, 6 };
+            synchronizationService.Setup(x => x.GetMapContentStream("resume-map.tpk", It.IsAny<CancellationToken>(), 0, null))
+                .ReturnsAsync(new RestStreamResult
+                {
+                    ContentLength = sourceBytes.Length,
+                    Stream = new MemoryStream(sourceBytes)
+                });
+
+            var tempStream = new NonDisposingMemoryStream();
+            tempStream.Write(new byte[] { 1, 2, 3 }, 0, 3);
+
+            var mapService = new Mock<IMapService>();
+            mapService.Setup(x => x.GetAvailableMaps(false)).Returns(new List<MapDescription>());
+            mapService.Setup(x => x.GetAvailableShapefiles()).Returns(new List<ShapefileDescription>());
+            mapService.Setup(x => x.DoesMapExist("resume-map.tpk")).Returns(false);
+            mapService.Setup(x => x.GetTempMapOffset("resume-map.tpk")).Returns(3);
+            mapService.Setup(x => x.GetTempMapETag("resume-map.tpk")).Returns((string)null);
+            mapService.Setup(x => x.GetTempMapSaveStream("resume-map.tpk")).Returns(tempStream);
+
+            var service = Create.Service.MapSyncProvider(
+                synchronizationService: synchronizationService.Object,
+                mapService: mapService.Object);
+
+            await service.Synchronize(new Progress<SyncProgressInfo>(), CancellationToken.None, new SynchronizationStatistics());
+
+            synchronizationService.Verify(x => x.GetMapContentStream("resume-map.tpk", It.IsAny<CancellationToken>(), 0, null), Times.Once);
+            Assert.That(tempStream.ToArray(), Is.EqualTo(sourceBytes));
+            mapService.Verify(x => x.MoveTempMapToPermanent("resume-map.tpk"), Times.Once);
+        }
+
+        [Test]
         public async Task should_report_download_progress_for_unknown_content_length_without_spam()
         {
             var synchronizationService = new Mock<IOnlineSynchronizationService>();
@@ -184,6 +221,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
                     this.inner.Dispose();
 
                 base.Dispose(disposing);
+            }
+        }
+
+        private sealed class NonDisposingMemoryStream : MemoryStream
+        {
+            protected override void Dispose(bool disposing)
+            {
             }
         }
     }

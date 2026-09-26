@@ -144,12 +144,26 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                 {
                     var offset = this.mapService.GetTempMapOffset(mapDescription.MapName);
                     var storedETag = offset > 0 ? this.mapService.GetTempMapETag(mapDescription.MapName) : null;
+                    var restartDownloadFromBeginning = offset > 0 && string.IsNullOrWhiteSpace(storedETag);
+                    if (restartDownloadFromBeginning)
+                    {
+                        logger.Info($"Partial download for map '{mapDescription.MapName}' has no stored ETag. Restarting download from the beginning.");
+                        offset = 0;
+                        storedETag = null;
+                    }
+
                     long downloaded = offset;
                     using (var streamToSave = this.mapService.GetTempMapSaveStream(mapDescription.MapName))
                     using (var contentStreamResult = await this.synchronizationService
                         .GetMapContentStream(mapDescription.MapName, cancellationToken, offset, storedETag)
                         .ConfigureAwait(false))
                     {
+                        if (restartDownloadFromBeginning && streamToSave.CanSeek)
+                        {
+                            streamToSave.Seek(0, SeekOrigin.Begin);
+                            streamToSave.SetLength(0);
+                        }
+
                         if (cancellationToken.IsCancellationRequested)
                         {
                             cancellationToken.ThrowIfCancellationRequested();

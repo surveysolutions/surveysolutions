@@ -1,14 +1,15 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.IO;
 
 namespace WB.Core.Infrastructure.HttpServices.HttpClient
 {
     public class RestStreamResult : IDisposable
     {
-        public Stream Stream { set; get; }
+        public Stream Stream { set; get; } = Stream.Null;
         public long? ContentLength { set; get; }
         public bool IsPartialContent { get; set; }
-        public string ETag { get; set; }
+        public string? ETag { get; set; }
 
         public void Dispose()
         {
