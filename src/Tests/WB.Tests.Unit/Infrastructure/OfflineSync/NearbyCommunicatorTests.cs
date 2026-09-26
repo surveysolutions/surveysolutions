@@ -1,10 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
+using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 using WB.Tests.Abc.TestFactories;
 
@@ -102,6 +113,336 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
             Assert.ThrowsAsync<CommunicationException>(async () => await client.SendAsync<PingMessage, PongMessage>(clientCommunicator, "server",
                 new PingMessage { Id = id }, null, CancellationToken.None));
 
+        }
+
+        [Test]
+        public async Task should_process_stream_payload_when_success_update_arrives_before_payload_registration()
+        {
+            using (new CommunicationSession())
+            using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(1)))
+            {
+                var serverhandler = Create.Service.GoogleConnectionsRequestHandler()
+                    .WithSampleEchoHandler();
+
+                var server = Create.Service.NearbyConnectionManager(serverhandler, maxBytesLength: 0);
+                var client = Create.Service.NearbyConnectionManager(maxBytesLength: 0);
+
+                var clientCommunicator = new OutOfOrderPayloadTransferConnection((from, _, payload) =>
+                    payload.Type == PayloadType.Bytes ? (TransferStatus?)null : TransferStatus.Success)
+                    .WithTwoWayClientServerConnectionMap(server, client);
+
+                var id = Guid.NewGuid();
+
+                var response = await client.SendAsync<PingMessage, PongMessage>(clientCommunicator, "server",
+                    new PingMessage { Id = id }, null, cts.Token);
+
+                Assert.That(response.Id, Is.EqualTo(id));
+            }
+        }
+
+        [Test]
+        public void should_cancel_pending_response_when_failure_update_arrives_before_payload_registration()
+        {
+            using (new CommunicationSession())
+            using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5)))
+            {
+                var serverhandler = Create.Service.GoogleConnectionsRequestHandler()
+                    .WithSampleEchoHandler();
+
+                var server = Create.Service.NearbyConnectionManager(serverhandler, maxBytesLength: 0);
+                var client = Create.Service.NearbyConnectionManager(maxBytesLength: 0);
+
+                var clientCommunicator = new OutOfOrderPayloadTransferConnection((from, _, payload) =>
+                    payload.Type != PayloadType.Bytes && from == "server"
+                        ? TransferStatus.Failure
+                        : (TransferStatus?)null)
+                    .WithTwoWayClientServerConnectionMap(server, client);
+
+                var id = Guid.NewGuid();
+
+                Assert.CatchAsync<OperationCanceledException>(async () => await client.SendAsync<PingMessage, PongMessage>(
+                    clientCommunicator, "server", new PingMessage { Id = id }, null, cts.Token));
+                Assert.That(cts.IsCancellationRequested, Is.False);
+            }
+        }
+
+        [Test]
+        public async Task should_replay_deferred_update_only_for_matching_endpoint()
+        {
+            using (new CommunicationSession())
+            {
+                var handledRequests = 0;
+                var requestHandler = new Mock<IRequestHandler>();
+                requestHandler.Setup(x => x.Handle(It.IsAny<ICommunicationMessage>()))
+                    .ReturnsAsync(() =>
+                    {
+                        handledRequests++;
+                        return (ICommunicationMessage)new PongMessage();
+                    });
+
+                var sender = new NearbyCommunicator(
+                    Mock.Of<IRequestHandler>(),
+                    new FixedIdPayloadProvider(42, 100, 42, 101),
+                    new PayloadSerializer(new JsonAllTypesSerializer()),
+                    Mock.Of<IConnectionsApiLimits>(c => c.MaxBytesLength == 0),
+                    Mock.Of<ILogger>());
+
+                var receiver = new NearbyCommunicator(
+                    requestHandler.Object,
+                    Create.Fake.PayloadProvider(),
+                    new PayloadSerializer(new JsonAllTypesSerializer()),
+                    Mock.Of<IConnectionsApiLimits>(c => c.MaxBytesLength == 0),
+                    Mock.Of<ILogger>());
+
+                var packageForEndpointA = PreparePackage(sender, "endpoint-a", Guid.NewGuid(), new PingMessage { Id = Guid.NewGuid() });
+                var packageForEndpointB = PreparePackage(sender, "endpoint-b", Guid.NewGuid(), new PingMessage { Id = Guid.NewGuid() });
+
+                var headerA = GetPackagePayload(packageForEndpointA, "Header");
+                var contentA = GetPackagePayload(packageForEndpointA, "Content");
+                var headerB = GetPackagePayload(packageForEndpointB, "Header");
+                var contentB = GetPackagePayload(packageForEndpointB, "Content");
+
+                var connection = new NoopNearbyConnection();
+
+                await receiver.ReceivePayloadTransferUpdate(connection, "endpoint-a", new NearbyPayloadTransferUpdate
+                {
+                    Id = contentA.Id,
+                    Status = TransferStatus.Success,
+                    BytesTransferred = 100
+                });
+
+                await receiver.ReceivePayloadAsync(connection, "endpoint-b", headerB);
+                await receiver.ReceivePayloadAsync(connection, "endpoint-b", contentB);
+
+                Assert.That(handledRequests, Is.EqualTo(0));
+
+                await receiver.ReceivePayloadAsync(connection, "endpoint-a", headerA);
+                await receiver.ReceivePayloadAsync(connection, "endpoint-a", contentA);
+
+                Assert.That(handledRequests, Is.EqualTo(1));
+            }
+        }
+
+        private sealed class OutOfOrderPayloadTransferConnection : INearbyConnection
+        {
+            private readonly IDictionary<string, INearbyCommunicator> clientsMap = new Dictionary<string, INearbyCommunicator>();
+            private readonly IDictionary<string, string> connectionMap = new Dictionary<string, string>();
+            private readonly Func<string, string, IPayload, TransferStatus?> receiverTerminalStatusSelector;
+
+            public OutOfOrderPayloadTransferConnection(Func<string, string, IPayload, TransferStatus?> receiverTerminalStatusSelector)
+            {
+                this.receiverTerminalStatusSelector = receiverTerminalStatusSelector;
+            }
+
+            public OutOfOrderPayloadTransferConnection WithTwoWayClientServerConnectionMap(INearbyCommunicator server,
+                INearbyCommunicator client)
+            {
+                return SetConnectionManager("server", server)
+                    .SetConnectionManager("client", client)
+                    .MapConnection("server", "client")
+                    .MapConnection("client", "server");
+            }
+
+            public OutOfOrderPayloadTransferConnection SetConnectionManager(string endpoint, INearbyCommunicator manager)
+            {
+                clientsMap.Add(endpoint, manager);
+                return this;
+            }
+
+            public OutOfOrderPayloadTransferConnection MapConnection(string fromEndpoint, string toEndpoint)
+            {
+                connectionMap.Add(fromEndpoint, toEndpoint);
+                return this;
+            }
+
+            public async Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload)
+            {
+                var from = connectionMap[to];
+                var toClient = clientsMap[to];
+                var fromClient = clientsMap[from];
+                var payloadForReceiver = payload.Type == PayloadType.Bytes
+                    ? payload
+                    : new PayloadThatMustBeReadBeforeReceiveReturns(payload);
+                var receiverTerminalStatus = receiverTerminalStatusSelector(from, to, payload);
+
+                if (payload.Type != PayloadType.Bytes)
+                {
+                    await fromClient.ReceivePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
+                    {
+                        Status = TransferStatus.InProgress,
+                        BytesTransferred = 0,
+                        Id = payload.Id
+                    });
+                }
+
+                await fromClient.ReceivePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
+                {
+                    Status = TransferStatus.Success,
+                    BytesTransferred = 100,
+                    Id = payload.Id
+                });
+
+                if (payload.Type != PayloadType.Bytes && receiverTerminalStatus.HasValue)
+                {
+                    await toClient.ReceivePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
+                    {
+                        Status = receiverTerminalStatus.Value,
+                        BytesTransferred = 100,
+                        Id = payload.Id
+                    });
+                }
+
+                await toClient.ReceivePayloadAsync(this, from, payloadForReceiver);
+
+                if (payload.Type != PayloadType.Bytes && !receiverTerminalStatus.HasValue)
+                {
+                    await toClient.ReceivePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
+                    {
+                        Status = TransferStatus.Success,
+                        BytesTransferred = 100,
+                        Id = payload.Id
+                    });
+                }
+
+                if (payloadForReceiver is PayloadThatMustBeReadBeforeReceiveReturns guardedPayload)
+                {
+                    guardedPayload.MarkReceiveCompleted();
+                }
+
+                return NearbyStatus.Ok;
+            }
+
+            public Task<NearbyStatus> StartDiscoveryAsync(string serviceName, CancellationToken cancellationToken)
+                => throw new NotImplementedException();
+
+            public Task<string> StartAdvertisingAsync(string serviceName, string name, CancellationToken cancellationToken)
+                => throw new NotImplementedException();
+
+            public Task<NearbyStatus> RequestConnectionAsync(string name, string endpoint, CancellationToken cancellationToken)
+                => throw new NotImplementedException();
+
+            public Task<NearbyStatus> AcceptConnectionAsync(string endpoint)
+                => throw new NotImplementedException();
+
+            public void StopAllEndpoint()
+                => throw new NotImplementedException();
+
+            public IObservable<INearbyEvent> Events { get; } = new Subject<INearbyEvent>();
+            public ObservableCollection<RemoteEndpoint> RemoteEndpoints { get; } = new ObservableCollection<RemoteEndpoint>();
+
+            public void StopDiscovery()
+                => throw new NotImplementedException();
+
+            public void StopAdvertising()
+                => throw new NotImplementedException();
+
+            public void StopAll()
+                => throw new NotImplementedException();
+        }
+
+        private sealed class PayloadThatMustBeReadBeforeReceiveReturns : IPayload
+        {
+            private readonly byte[] streamBytes;
+            private bool canRead = true;
+
+            public PayloadThatMustBeReadBeforeReceiveReturns(IPayload payload)
+            {
+                Endpoint = payload.Endpoint;
+                Bytes = payload.Bytes;
+                Id = payload.Id;
+                Type = payload.Type;
+                streamBytes = ((MemoryStream)payload.Stream).ToArray();
+                Stream = new MemoryStream(streamBytes);
+            }
+
+            public string Endpoint { get; }
+            public byte[] Bytes { get; }
+            public long Id { get; }
+            public Stream Stream { get; }
+            public PayloadType Type { get; }
+            public byte[] BytesFromStream { get; private set; }
+
+            public void MarkReceiveCompleted() => canRead = false;
+
+            public void ReadStream()
+            {
+                if (!canRead)
+                    throw new InvalidOperationException("The stream must be read before ReceivePayloadAsync returns.");
+
+                BytesFromStream = streamBytes;
+            }
+        }
+
+        private static object PreparePackage(NearbyCommunicator communicator, string endpoint, Guid correlationId, ICommunicationMessage payload)
+        {
+            var method = typeof(NearbyCommunicator).GetMethod("PreparePayload", BindingFlags.Instance | BindingFlags.NonPublic);
+            return method.Invoke(communicator, new object[] { endpoint, correlationId, payload, true, null });
+        }
+
+        private static IPayload GetPackagePayload(object package, string propertyName)
+        {
+            return (IPayload)package.GetType()
+                .GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                .GetValue(package);
+        }
+
+        private sealed class FixedIdPayloadProvider : IPayloadProvider
+        {
+            private readonly Queue<long> ids;
+
+            public FixedIdPayloadProvider(params long[] ids)
+            {
+                this.ids = new Queue<long>(ids);
+            }
+
+            public IPayload AsBytes(byte[] bytes, string endpoint) =>
+                new TestPayload
+                {
+                    Bytes = bytes,
+                    Endpoint = endpoint,
+                    Id = ids.Dequeue(),
+                    Type = PayloadType.Bytes
+                };
+
+            public IPayload AsStream(byte[] bytes, string endpoint) =>
+                new TestPayload
+                {
+                    Endpoint = endpoint,
+                    Id = ids.Dequeue(),
+                    Stream = new MemoryStream(bytes),
+                    Type = PayloadType.Stream
+                };
+        }
+
+        private sealed class TestPayload : IPayload
+        {
+            public string Endpoint { get; set; }
+            public byte[] Bytes { get; set; }
+            public long Id { get; set; }
+            public Stream Stream { get; set; }
+            public PayloadType Type { get; set; }
+            public byte[] BytesFromStream { get; private set; }
+
+            public void ReadStream()
+            {
+                if (Type == PayloadType.Stream)
+                    BytesFromStream = ((MemoryStream)Stream).ToArray();
+            }
+        }
+
+        private sealed class NoopNearbyConnection : INearbyConnection
+        {
+            public Task<NearbyStatus> StartDiscoveryAsync(string serviceName, CancellationToken cancellationToken) => throw new NotImplementedException();
+            public Task<string> StartAdvertisingAsync(string serviceName, string name, CancellationToken cancellationToken) => throw new NotImplementedException();
+            public Task<NearbyStatus> RequestConnectionAsync(string name, string endpoint, CancellationToken cancellationToken) => throw new NotImplementedException();
+            public Task<NearbyStatus> AcceptConnectionAsync(string endpoint) => throw new NotImplementedException();
+            public Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload) => Task.FromResult(NearbyStatus.Ok);
+            public void StopAllEndpoint() => throw new NotImplementedException();
+            public IObservable<INearbyEvent> Events { get; } = new Subject<INearbyEvent>();
+            public ObservableCollection<RemoteEndpoint> RemoteEndpoints { get; } = new ObservableCollection<RemoteEndpoint>();
+            public void StopDiscovery() => throw new NotImplementedException();
+            public void StopAdvertising() => throw new NotImplementedException();
+            public void StopAll() => throw new NotImplementedException();
         }
     }
 }
