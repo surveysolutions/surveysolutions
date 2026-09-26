@@ -104,7 +104,7 @@
     <value>Přidat</value>
   </data>
   <data name="Admin" xml:space="preserve">
-    <value>Admin</value>
+    <value>Správce</value>
   </data>
   <data name="AllAssignments" xml:space="preserve">
     <value>Všechny žádanky</value>
@@ -212,7 +212,7 @@
     <value>Upraveno dne</value>
   </data>
   <data name="Legal" xml:space="preserve">
-    <value>Legal</value>
+    <value>Právní informace</value>
   </data>
   <data name="Loading" xml:space="preserve">
     <value>Načítání. Prosím, čekejte</value>
@@ -269,7 +269,7 @@
     <value>Odstranit</value>
   </data>
   <data name="Reset" xml:space="preserve">
-    <value>Reset</value>
+    <value>Resetovat</value>
   </data>
   <data name="Responsible" xml:space="preserve">
     <value>Zodpovědný uživatel</value>
@@ -299,7 +299,7 @@
     <value>Začíná na</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status</value>
+    <value>Stav</value>
   </data>
   <data name="Template" xml:space="preserve">
     <value>Šablona</value>

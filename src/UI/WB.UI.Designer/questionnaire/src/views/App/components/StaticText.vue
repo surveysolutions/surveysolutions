@@ -159,7 +159,7 @@ import Breadcrumbs from './Breadcrumbs.vue';
 import ExpressionEditor from './ExpressionEditor.vue';
 import Help from './Help.vue';
 import MoveToChapterSnippet from './MoveToChapterSnippet.vue';
-import { useMagicKeys } from '@vueuse/core';
+import { useKeyShortcut } from '../../../composables/useKeyShortcut';
 
 export default {
     name: 'StaticText',
@@ -211,13 +211,7 @@ export default {
             };
         });
 
-        const { ctrl_s } = useMagicKeys({
-            passive: false,
-            onEventFired(e) {
-                if (e.ctrlKey && e.key === 's' && e.type === 'keydown')
-                    e.preventDefault()
-            },
-        });
+        const ctrl_s = useKeyShortcut(e => e.ctrlKey && e.key === 's');
 
         return {
             staticTextStore,
@@ -230,6 +224,10 @@ export default {
     },
     mounted() {
         this.scrollTo();
+        this.$emitter.on('saveCurrentEntityRequested', this.saveStaticText);
+    },
+    unmounted() {
+        this.$emitter.off('saveCurrentEntityRequested', this.saveStaticText);
     },
     computed: {
         commentsCount() {

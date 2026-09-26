@@ -34,14 +34,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             this.questionnaireRepository = questionnaireRepository;
         }
 
-        private static readonly int[] AllowedStatuses =
-        {
-            (int) InterviewStatus.Completed,
-            (int) InterviewStatus.RejectedBySupervisor,
-            (int) InterviewStatus.ApprovedBySupervisor,
-            (int) InterviewStatus.RejectedByHeadquarters,
-            (int) InterviewStatus.ApprovedByHeadquarters
-        };
+        // NOTE: List<int> is used in LINQ expression trees on purpose. For an array the C# compiler
+        // (C# 14+) binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an
+        // op_Implicit call into the expression tree that NHibernate cannot evaluate
+        // ("Evaluation failure on op_Implicit(value(System.Int32[]))").
+        private static readonly List<int> AllowedStatuses =
+        [
+            (int)InterviewStatus.Completed,
+            (int)InterviewStatus.RejectedBySupervisor,
+            (int)InterviewStatus.ApprovedBySupervisor,
+            (int)InterviewStatus.RejectedByHeadquarters,
+            (int)InterviewStatus.ApprovedByHeadquarters
+        ];
+
 
         public List<QuestionnaireVersionsComboboxViewItem> GetQuestionnaireListWithData()
         {
@@ -61,11 +66,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 .Select(id => id.ToString()).ToList();
 
             // ReSharper disable StringLiteralTypo
+            // Cast date columns to timestamp so Dapper always maps them to DateTime regardless of Npgsql version
+            // (Npgsql 6+ maps PostgreSQL `date` to DateOnly, while older versions map to DateTime;
+            // Dapper value-tuple mapping uses Convert.ChangeType which requires IConvertible).
             var dates = this.unitOfWork.Session.Connection.QuerySingle<(DateTime? min, DateTime? max)>(
                 $@"with dates as (
                     select date from cumulativereportstatuschanges
                     where questionnaireidentity = any(@questionnairesList) and status = any(@allowedStatuses)
-                  ) select min(date), max(date) from dates", 
+                  ) select min(date)::timestamp, max(date)::timestamp from dates", 
                  new { questionnairesList, AllowedStatuses });
 
             if (dates.min == null && dates.max == null) // we have no data at all
@@ -92,14 +100,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             // do not move date filtering inside report CTE as it will affect partition query
             var rawData = this.unitOfWork.Session.Connection.Query<(DateTime date, InterviewStatus status, long count)>(
                 $@"with 
-                        dates as (select generate_series(@minDateQuery::date, @maxDate::date, interval '1 day')::date as date),
+                        dates as (select generate_series(@minDateQuery::date, @maxDate::date, interval '1 day')::timestamp as date),
                         timespan as (select date, status from dates as date, unnest(@AllowedStatuses) as status),
                         report as 
                         (
                             select span.date, span.status, 
                                     sum(sum(coalesce(cum.changevalue, 0))) over (partition by span.status order by span.date) as count
                             from timespan as span  
-                            left join cumulativereportstatuschanges cum on cum.date = span.date and cum.status = span.status
+                            left join cumulativereportstatuschanges cum on cum.date = span.date::date and cum.status = span.status
                                 and cum.questionnaireidentity = any(@questionnairesList)
                             group by 1,2 order by 1
                         )
@@ -126,8 +134,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             view.DataSets = view.DataSets.Where(ds => ds.AllZeros == false).ToList();
             view.From = FormatDate(leftEdge);
             view.To = FormatDate(rightEdge);
-            view.MaxDate = FormatDate(dates.max.Value);
-            view.MinDate = FormatDate(dates.min.Value);
+            view.MaxDate = FormatDate(dates.max!.Value);
+            view.MinDate = FormatDate(dates.min!.Value);
 
             return view;
         }

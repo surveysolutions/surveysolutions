@@ -36,7 +36,7 @@
                     </a>
                 </p>
                 <p
-                    v-dompurify-html="$t('QuestionnaireEditor.SideBarAttachmentsEmptyLine3', { name: variableNameHtml })" />
+                    v-html="sanitizeMarkup($t('QuestionnaireEditor.SideBarAttachmentsEmptyLine3', { name: variableNameHtml }))" />
             </div>
             <form role="form" name="attachmentsForm" novalidate>
                 <div class="attachment-list">
@@ -52,11 +52,11 @@
 <script>
 
 import _ from 'lodash';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { newGuid } from '../../../../helpers/guid';
 import { notice } from '../../../../services/notificationService';
 import AttachmentItem from './AttachmentItem.vue';
-import { formatBytes } from '../../../../services/utilityService';
+import { formatBytes, sanitizeMarkup } from '../../../../services/utilityService';
 import { updateAttachment } from '../../../../services/attachmentsService';
 
 export default {
@@ -83,6 +83,9 @@ export default {
         },
     },
     methods: {
+        sanitizeMarkup(input) {
+            return sanitizeMarkup(input);
+        },
         openFileDialog() {
             const fu = this.$refs.upload
             fu.$el.querySelector("#" + fu.inputId).click()
@@ -91,7 +94,7 @@ export default {
             return formatBytes(bytes);
         },
         formatSeconds(seconds) {
-            return moment.duration(seconds).humanize();
+            return dayjs.duration(seconds).humanize();
         },
         estimatedLoadingTime() {
             return Math.floor(this.totalSize() / this.benchmarkDownloadSpeed);

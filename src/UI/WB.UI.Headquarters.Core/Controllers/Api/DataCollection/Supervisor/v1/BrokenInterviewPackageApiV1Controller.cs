@@ -12,7 +12,7 @@ using WB.UI.Headquarters.Code;
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 {
     [Authorize(Roles = "Supervisor")]
-    public class BrokenInterviewPackageApiV1Controller : ControllerBase
+    public class BrokenInterviewPackageApiV1Controller : DataCollectionControllerBase
     {
         private readonly IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage;
         private readonly IBrokenImageFileStorage brokenImageFileStorage;

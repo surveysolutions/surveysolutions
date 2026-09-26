@@ -43,7 +43,7 @@
 <script>
 
 import { reactive } from 'vue';
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { isUndefined, isNull, some, cloneDeep } from 'lodash'
 import TranslationItem from './TranslationItem.vue';
 
@@ -126,7 +126,7 @@ export default {
 
             translation.meta = {};
             translation.meta.fileName = file.name;
-            translation.meta.lastUpdated = moment();
+            translation.meta.lastUpdated = dayjs();
 
             var match = this.matchFirstBalancedBraces(translation.meta.fileName);
             if (match && match.length > 1) {

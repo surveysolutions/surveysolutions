@@ -15,7 +15,7 @@
                         </h3>
                     </div>
                     <div class="modal-body">
-                        <div v-dompurify-html="title" style="display: contents;"></div>
+                        <div v-sanitize-html="title" style="display: contents;"></div>
 
                         <div class="form-group" style="margin-top: 10px;">
                             <label v-if="inputLabel" class="control-label">{{ inputLabel }}</label>

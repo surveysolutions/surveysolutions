@@ -34,7 +34,7 @@
                             role="menuitem" tabindex="-1" class="linked-roster-source" href="javascript:void(0);">
                             <div>
                                 <i class="dropdown-icon" :class="['icon-' + breadCrumb.questionType || 'none']"></i>
-                                <span v-dompurify-html="breadCrumb.title"></span>
+                                <span v-sanitize-html="breadCrumb.title"></span>
                             </div>
                             <div class="var-block">
                                 <span class="var-name" v-text="breadCrumb.varName"></span>
@@ -46,7 +46,7 @@
                             role="menuitem" tabindex="-1" class="linked-question-source" href="javascript:void(0);">
                             <div>
                                 <i class="dropdown-icon" :class="['icon-' + breadCrumb.type]"></i>
-                                <span v-dompurify-html="breadCrumb.title"></span>
+                                <span v-sanitize-html="breadCrumb.title"></span>
                             </div>
                             <div class="var-block">
                                 <span class="var-name" v-text="breadCrumb.varName"></span>

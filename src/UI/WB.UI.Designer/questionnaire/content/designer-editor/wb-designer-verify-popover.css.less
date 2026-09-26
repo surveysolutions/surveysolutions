@@ -47,7 +47,7 @@
 
         .modal-body {
             padding: 0px;
-            height: ~"calc(100% - 115px)";
+            height: ~"calc(100% - 71px)";
 
             .error-message {
                 .georgia-font();
@@ -77,10 +77,10 @@
                     border-radius: 0 4px 4px 0;
                     padding-left: 18px;
                     white-space: nowrap;
-                    height: @verification-item-height;
+                    height: @questionnaire-tree-item-height;
                     .arial-font();
                     font-size: 16px;
-                    background: @verification-item-bg-color;
+                    background: @panel-light-bg-color;
                     position: relative;
                     display: block;
                     color: @verify-popup-error-color;
@@ -98,7 +98,7 @@
                     .title {
                         display: block;
                         padding-left: 29px;
-                        line-height: @verification-item-height - 2px;
+                        line-height: @questionnaire-tree-item-height - 2px;
                         overflow: hidden;
                     }
 
@@ -107,7 +107,7 @@
                         right: 0;
                         padding-right: 16px;
                         top: 6px;
-                        background: @verification-item-bg-color;
+                        background: @panel-light-bg-color;
                     }
 
                     .variable {
@@ -117,7 +117,7 @@
                         padding-left: 8px;
                         top: 6px;
                         color: @qname-color;
-                        background: @verification-item-bg-color;
+                        background: @panel-light-bg-color;
                         max-width: 240px;
                         overflow: hidden; 
                         text-overflow: ellipsis; 
@@ -147,7 +147,7 @@
         }
 
         .modal-footer {
-            border-top: 2px solid @verification-modal-content-border-color;
+            border-top: 2px solid @neutral-button-bg-color;
             position: absolute;
             bottom: 0;
             width: 100%;
@@ -165,7 +165,7 @@
     &.error{
         .modal-content {
             .modal-header {
-                border-bottom: 2px solid @verification-modal-content-border-color;
+                border-bottom: 2px solid @neutral-button-bg-color;
                 border-top-color: @verification-modal-error-color;
                 h3 {
                     span {
@@ -179,21 +179,21 @@
     &.warning{
         .modal-content {
             .modal-header {
-                border-top-color: @verification-modal-warning-color;
+                border-top-color: @questionnaire-tree-roster-color;
                 h3 {
                     span {
-                        color: @verification-modal-warning-color;
+                        color: @questionnaire-tree-roster-color;
                     }
                 }
             }
             .modal-body{
                  .verification-items .verification-item {
                      &, .title{
-                         color: @verification-modal-neutral-color;
+                         color: @designer-editor-breadcrumbs-color-gray;
                      }
 
                      &:hover, &:hover .title{
-                         color: @verification-modal-warning-color;
+                         color: @questionnaire-tree-roster-color;
                      }
                  }
             } 

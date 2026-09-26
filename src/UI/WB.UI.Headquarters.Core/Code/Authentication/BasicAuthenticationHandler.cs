@@ -26,9 +26,8 @@ namespace WB.UI.Headquarters.Code.Authentication
             IOptionsMonitor<BasicAuthenticationSchemeOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
-            ISystemClock clock,
             IUserClaimsPrincipalFactory<HqUser> claimFactory,
-            IInScopeExecutor executor) : base(options, logger, encoder, clock)
+            IInScopeExecutor executor) : base(options, logger, encoder)
         {
             this.claimFactory = claimFactory;
             this.executor = executor;
@@ -41,7 +40,7 @@ namespace WB.UI.Headquarters.Code.Authentication
 
             try
             {
-                var credentials = Request.Headers.ParseBasicCredentials();
+                var credentials = Request.Headers.ParseBasicCredentials(AuthType.Basic);
                 if (credentials == null)
                     return AuthenticateResult.NoResult();
 

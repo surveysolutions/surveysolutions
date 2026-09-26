@@ -1,29 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
 using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using ApprovalTests.Reporters.TestFrameworks;
-using AutoMapper;
 using Main.Core.Documents;
-using Microsoft.Extensions.Logging.Abstractions;
 using NJsonSchema;
 using NJsonSchema.Generation;
 using NJsonSchema.Validation;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.ImportExport;
 using WB.Core.BoundedContexts.Designer.ImportExport.Models;
-using WB.Infrastructure.Native.Storage;
-using WB.UI.Designer.Code.ImportExport;
 
 namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 {
     [TestFixture]
     [UseApprovalSubdirectory("SchemaTests-approved")]
     [IgnoreLineEndings(true)]
-    [UseReporter(typeof(DiffReporter), typeof(NUnitReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(NUnit4Reporter))]
     public class SchemaTests
     {
         [Test]
@@ -33,7 +30,13 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             {
                 FlattenInheritanceHierarchy = false,
             };
-            settings.DefaultEnumHandling = EnumHandling.String;
+            settings.SerializerSettings = new JsonSerializerSettings
+            {
+                Converters = new List<JsonConverter>
+                {
+                    new StringEnumConverter()
+                }
+            };
             var jsonSchema = JsonSchema.FromType<Questionnaire>(settings);
             var json = jsonSchema.ToJson();
             
@@ -55,12 +58,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
         private static async Task<ICollection<ValidationError>> Validate(QuestionnaireDocument questionnaireDocument)
         {
-            var mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new QuestionnaireAutoMapperProfile());
-            }).CreateMapper();
-
-            var importExportQuestionnaireService = new ImportExportQuestionnaireMapper(mapper);
+            var importExportQuestionnaireService = new ImportExportQuestionnaireMapper();
             var questionnaire = importExportQuestionnaireService.Map(questionnaireDocument);
             var json = new QuestionnaireSerializer().Serialize(questionnaire);
 

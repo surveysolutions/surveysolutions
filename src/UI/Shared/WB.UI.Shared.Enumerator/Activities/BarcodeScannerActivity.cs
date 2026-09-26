@@ -68,6 +68,10 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             if (cameraProvider == null) return;
             
+            // Unbind all existing use cases before binding new ones to avoid
+            // "too many use cases" / "No supported surface combination" errors on resume
+            SafeUnbindAll();
+            
             // Select back camera
             cameraSelector = new CameraSelector.Builder()
                 .RequireLensFacing(CameraSelector.LensFacingBack)
@@ -131,7 +135,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             base.OnPause();
             // Stop scanning when going to background
             isScanning = false;
-            cameraProvider?.UnbindAll();
+            SafeUnbindAll();
         }
 
         protected override void OnResume()
@@ -140,8 +144,34 @@ namespace WB.UI.Shared.Enumerator.Activities
             // Resume scanning when coming back
             if (cameraProvider != null && !IsFinishing && !IsDestroyed)
             {
-                isScanning = true;
-                BindCameraUseCases();
+                try
+                {
+                    isScanning = true;
+                    BindCameraUseCases();
+                }
+                catch (ObjectDisposedException)
+                {
+                    // The cached ProcessCameraProvider singleton peer is no longer valid
+                    // (can happen if a previous activity instance disposed it). Re-fetch it.
+                    cameraProvider = null;
+                    StartCamera();
+                }
+            }
+        }
+
+        // ProcessCameraProvider is a process-wide singleton returned by GetInstance().
+        // It must never be Dispose()'d by us - only UnbindAll() and drop the reference,
+        // otherwise the shared managed peer becomes unusable for any future activity
+        // instance that calls GetInstance() again, leading to ObjectDisposedException.
+        private void SafeUnbindAll()
+        {
+            try
+            {
+                cameraProvider?.UnbindAll();
+            }
+            catch (ObjectDisposedException)
+            {
+                // Singleton peer already disposed elsewhere - nothing to unbind.
             }
         }
         
@@ -156,7 +186,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             isScanning = false;
 
             imageAnalysis?.ClearAnalyzer();
-            cameraProvider?.UnbindAll();
+            SafeUnbindAll();
 
             analyzer?.Dispose();
             analyzer = null;
@@ -180,7 +210,11 @@ namespace WB.UI.Shared.Enumerator.Activities
             cameraSelector?.Dispose();
             cameraSelector = null;
 
-            cameraProvider?.Dispose();
+            // Do NOT Dispose() cameraProvider - it is a process-wide singleton owned by
+            // CameraX (returned from ProcessCameraProvider.GetInstance()). Disposing it
+            // here would invalidate the shared managed peer for any future activity that
+            // calls GetInstance() again, causing ObjectDisposedException on later use
+            // (e.g. UnbindAll() in OnPause of a subsequently created instance).
             cameraProvider = null;
 
             preview?.Dispose();
@@ -191,6 +225,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             base.OnDestroy();
         }
+
 
         private class BarcodeAnalyzer : Java.Lang.Object, ImageAnalysis.IAnalyzer
         {
