@@ -9,12 +9,15 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
@@ -50,6 +53,35 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 x => x.SaveInterviewer(It.Is<InterviewerIdentity>(i => i.SupervisorId == Id.gA)), Times.Once);
 
             PrincipalMock.Verify(x => x.SignInWithHash("name", "hash", true), Times.Once);
+        }
+
+        [Test]
+        public async Task when_synchronize_in_offline_mode_should_not_check_server_version_before_sync()
+        {
+            var interviewerIdentity = new InterviewerIdentity { Name = "name", Token = "token", SupervisorId = Id.g1 };
+            var principalMock = Mock.Get(SetUp.InterviewerPrincipal(interviewerIdentity));
+            var synchronizationServiceMock = new Mock<IOfflineSynchronizationService>();
+            var updateApplicationStepMock = new Mock<IUpdateApplicationSynchronizationStep>();
+            var serviceLocatorMock = new Mock<IServiceLocator>();
+
+            synchronizationServiceMock
+                .Setup(x => x.CanSynchronizeAsync(It.IsAny<RestCredentials>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+            synchronizationServiceMock
+                .Setup(x => x.GetCurrentSupervisor(It.IsAny<RestCredentials>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(Id.gA);
+            serviceLocatorMock
+                .Setup(x => x.GetInstance<IUpdateApplicationSynchronizationStep>())
+                .Returns(updateApplicationStepMock.Object);
+
+            var syncProcess = Create.Service.OfflineSynchronizationProcess(
+                principal: principalMock.Object,
+                synchronizationService: synchronizationServiceMock.Object,
+                serviceLocator: serviceLocatorMock.Object);
+
+            await syncProcess.SynchronizeAsync(new Progress<SyncProgressInfo>(), CancellationToken.None);
+
+            updateApplicationStepMock.Verify(x => x.CheckServerVersionAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Test]
