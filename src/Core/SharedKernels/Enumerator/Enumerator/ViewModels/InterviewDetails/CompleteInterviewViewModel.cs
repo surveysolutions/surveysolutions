@@ -145,12 +145,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             _loadingCts?.Cancel();
             _loadingCts?.Dispose();
             _loadingCts = new CancellationTokenSource();
+            var loadVersion = Interlocked.Increment(ref this.activeLoadVersion);
             var cancellationToken = _loadingCts.Token;
             _ = Task.Run(async () =>
             {
                 try
                 {
-                    await LoadDataForDisplayAsync(interviewId, navigationState, forSupervisor, cancellationToken);
+                    await LoadDataForDisplayAsync(interviewId, navigationState, forSupervisor, loadVersion, cancellationToken);
                 }
                 catch (OperationCanceledException)
                 {
@@ -161,7 +162,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     Logger.Error("Failed to load complete screen data", ex);
                     await InvokeOnMainThreadAsync(() =>
                     {
-                        if (isDisposed || cancellationToken.IsCancellationRequested) return;
+                        if (ShouldSkipLoadUpdate(loadVersion, cancellationToken)) return;
                         LoadingErrorMessage = EnumeratorUIResources.UnexpectedException;
                         HasLoadingError = true;
                         IsCompletionAllowed = false;
@@ -177,7 +178,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         /// then pushes UI updates onto the main thread.
         /// Subclasses can override to add extra loading steps (e.g. supervisor counts, criticality).
         /// </summary>
-        protected virtual async Task LoadDataForDisplayAsync(string interviewId, NavigationState navigationState, bool forSupervisor = false, CancellationToken cancellationToken = default)
+        protected virtual async Task LoadDataForDisplayAsync(string interviewId, NavigationState navigationState, bool forSupervisor = false, int loadVersion = 0, CancellationToken cancellationToken = default)
         {
             List<EntityWithErrorsViewModel> unansweredQuestions = null;
             List<EntityWithErrorsViewModel> entitiesWithErrors = null;
@@ -186,7 +187,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             try
             {
                 // --- Heavy work on background thread ---
-                if (isDisposed) return;
+                if (ShouldSkipLoadUpdate(loadVersion, cancellationToken)) return;
                 cancellationToken.ThrowIfCancellationRequested();
                 this.InterviewState.Init(interviewId, null);
                 var status = InterviewState.Status;
@@ -209,7 +210,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 // --- Marshal UI updates to main thread ---
                 await InvokeOnMainThreadAsync(() =>
                 {
-                    if (isDisposed || cancellationToken.IsCancellationRequested)
+                    if (ShouldSkipLoadUpdate(loadVersion, cancellationToken))
                         return;
 
                     this.CompleteStatus = status;
@@ -237,8 +238,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 });
 
                 cancellationToken.ThrowIfCancellationRequested();
-                if (isDisposed) return;
-                await OnTabDataLoadedAsync(interviewId, navigationState, cancellationToken);
+                if (ShouldSkipLoadUpdate(loadVersion, cancellationToken)) return;
+                await OnTabDataLoadedAsync(interviewId, navigationState, loadVersion, cancellationToken);
             }
             finally
             {
@@ -255,11 +256,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         /// Base implementation marks loading complete and computes completion eligibility.
         /// Subclasses override to add criticality, supervisor-specific counts, etc.
         /// </summary>
-        protected virtual async Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState, CancellationToken cancellationToken)
+        protected virtual async Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState, int loadVersion, CancellationToken cancellationToken)
         {
             await InvokeOnMainThreadAsync(() =>
             {
-                if (isDisposed || cancellationToken.IsCancellationRequested) return;
+                if (ShouldSkipLoadUpdate(loadVersion, cancellationToken)) return;
 
                 IsCompletionAllowed = CalculateIsCompletionAllowed();
                 IsLoading = false;
@@ -400,6 +401,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private CancellationTokenSource _loadingCts;
         private string currentInterviewId;
         private NavigationState currentNavigationState;
+        private int activeLoadVersion;
         protected bool isDisposed;
         private bool isCompletionAllowed;
         private bool hasLoadingError;
@@ -420,7 +422,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             return true;
         }
 
-        protected async Task CollectCriticalityInfo(string interviewId, NavigationState navigationState, CancellationToken cancellationToken)
+        protected bool ShouldSkipLoadUpdate(int loadVersion, CancellationToken cancellationToken) =>
+            isDisposed || cancellationToken.IsCancellationRequested || loadVersion != this.activeLoadVersion;
+
+        protected async Task CollectCriticalityInfo(string interviewId, NavigationState navigationState, int loadVersion, CancellationToken cancellationToken)
         {
             List<EntityWithErrorsViewModel> topFailedCriticalRules = null;
             List<EntityWithErrorsViewModel> topUnansweredCriticalQuestions = null;
@@ -439,7 +444,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 await InvokeOnMainThreadAsync(() =>
                 {
-                    if (isDisposed || cancellationToken.IsCancellationRequested)
+                    if (ShouldSkipLoadUpdate(loadVersion, cancellationToken))
                         return;
 
                     var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);

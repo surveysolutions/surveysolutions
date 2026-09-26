@@ -91,11 +91,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 : string.Format(UIResources.Interview_Complete_Screen_DescriptionWithInterviewKey, interviewKey);
 
             var interviewView = this.interviews.GetById(interviewId);
-            this.receivedByInterviewerTabletAt = interviewView.ReceivedByInterviewerAtUtc;
+            this.receivedByInterviewerTabletAt = interviewView?.ReceivedByInterviewerAtUtc;
 
             // IsLoading stays true; OnTabDataLoadedAsync loads supervisor-specific counts and clears it.
         }
-        protected override async Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState, CancellationToken cancellationToken)
+        protected override async Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState, int loadVersion, CancellationToken cancellationToken)
         {
             List<EntityWithErrorsViewModel> topFailedCriticalRules = null;
             List<EntityWithErrorsViewModel> topUnansweredCriticalQuestions = null;
@@ -121,7 +121,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
                 await InvokeOnMainThreadAsync(() =>
                 {
-                    if (isDisposed || cancellationToken.IsCancellationRequested)
+                    if (ShouldSkipLoadUpdate(loadVersion, cancellationToken))
                         return;
 
                     base.AnsweredCount = answeredCount;
@@ -136,14 +136,16 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                     if (topFailedCriticalRules.Count > 0)
                     {
                         var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
-                        tabViewModel.Items.AddRange(topFailedCriticalRules);
+                        var takeCount = Math.Max(0, entitiesListViewModelFactory.MaxNumberOfEntities - tabViewModel.Items.Count);
+                        tabViewModel.Items.AddRange(topFailedCriticalRules.Take(takeCount));
                         tabViewModel.Total += topFailedCriticalRulesFromState.Total;
                     }
 
                     if (topUnansweredCriticalQuestions.Count > 0)
                     {
                         var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
-                        tabViewModel.Items.AddRange(topUnansweredCriticalQuestions);
+                        var takeCount = Math.Max(0, entitiesListViewModelFactory.MaxNumberOfEntities - tabViewModel.Items.Count);
+                        tabViewModel.Items.AddRange(topUnansweredCriticalQuestions.Take(takeCount));
                         tabViewModel.Total += topUnansweredCriticalQuestionsInfo.Total;
                     }
 
@@ -161,7 +163,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 }
             }
             
-            await base.OnTabDataLoadedAsync(interviewId, navigationState, cancellationToken);
+            await base.OnTabDataLoadedAsync(interviewId, navigationState, loadVersion, cancellationToken);
         }
 
         public IMvxAsyncCommand Approve => new MvxAsyncCommand(async () =>

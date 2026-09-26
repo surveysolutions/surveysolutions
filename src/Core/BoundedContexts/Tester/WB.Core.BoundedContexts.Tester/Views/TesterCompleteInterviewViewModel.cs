@@ -33,15 +33,15 @@ public class TesterCompleteInterviewViewModel : CompleteInterviewViewModel
         // IsLoading stays true; OnTabDataLoadedAsync handles criticality and clears it.
     }
 
-    protected override async Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState, CancellationToken cancellationToken)
+    protected override async Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState, int loadVersion, CancellationToken cancellationToken)
     {
         if (!this.HasCriticalFeature(interviewId))
         {
-            await base.OnTabDataLoadedAsync(interviewId, navigationState, cancellationToken);
+            await base.OnTabDataLoadedAsync(interviewId, navigationState, loadVersion, cancellationToken);
         }
         else
         {
-            await CollectCriticalityInfo(interviewId, navigationState, cancellationToken);
+            await CollectCriticalityInfo(interviewId, navigationState, loadVersion, cancellationToken);
         }
     }
     
