@@ -13,6 +13,13 @@ namespace WB.Enumerator.Native.WebInterview
     public class WebInterview : Hub
     {
         private const string SectionId = "sectionId";
+        private static readonly object WorkspaceContextKey = new object();
+        private readonly IServiceProvider serviceProvider;
+
+        public WebInterview(IServiceProvider serviceProvider)
+        {
+            this.serviceProvider = serviceProvider;
+        }
         
         private string CallerInterviewId
         {
@@ -35,6 +42,9 @@ namespace WB.Enumerator.Native.WebInterview
         public override async Task OnConnectedAsync()
         {
             var ctx = this.Context.GetHttpContext();
+            // Hub instances are transient; retain the workspace for the disconnect callback.
+            this.Context.Items[WorkspaceContextKey] = ctx.RequestServices
+                .GetService<IWorkspaceContextAccessor>()?.CurrentWorkspace();
             var hubPipelineModules = ctx.RequestServices.GetServices<IPipelineModule>();
 
             await RegisterClient();
@@ -49,8 +59,10 @@ namespace WB.Enumerator.Native.WebInterview
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            var ctx = this.Context.GetHttpContext();
-            var hubPipelineModules = ctx.RequestServices.GetServices<IPipelineModule>();
+            // The transport's HTTP request scope may already have been disposed.
+            this.Context.Items.TryGetValue(WorkspaceContextKey, out var workspace);
+            using var scope = this.serviceProvider.CreateWorkspaceScope(workspace as WorkspaceContext);
+            var hubPipelineModules = scope.ServiceProvider.GetServices<IPipelineModule>();
 
             foreach (var pipelineModule in hubPipelineModules)
             {
