@@ -327,6 +327,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
             }
         }
         
+        public static string PL0065_TargetAreaTooLong {
+            get {
+                return ResourceManager.GetString("PL0065_TargetAreaTooLong", resourceCulture);
+            }
+        }
+        
         public static string AssignmentUpgrade_SelectiveAudioAuditNotMigrated {
             get {
                 return ResourceManager.GetString("AssignmentUpgrade_SelectiveAudioAuditNotMigrated", resourceCulture);

@@ -374,4 +374,13 @@
   <data name="Translation_Replace" xml:space="preserve">
     <value>Документ переключён на перевод {0}</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="SearchButton" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="SearchClear" xml:space="preserve">
+    <value>Очистить</value>
+  </data>
 </root>

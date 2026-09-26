@@ -181,6 +181,8 @@ src/
 - **Follow existing line endings and rely on `.gitattributes`:** Do not rewrite files just to change line endings;
 - **Preserve line ending in files:** keep original line endings in files, if mixed LF is a priority. keep `*.sln` files as CRLF where required.
 
-## Copilot Code Review Trace
+## Copilot Code Review
 
-When performing a pull request review, include the token `repository-wide` in the `Instruction trace:` line at the end of every finding comment.
+When performing a pull request review, use the `.github/skills/code-review` skill.
+If the diff changes a command, aggregate, domain event, event handler, projection, or denormalizer, also use the `.github/skills/cqrs-event-flow-review` skill.
+Include the token `repository-wide` in the `Instruction trace:` line at the end of every finding comment.

@@ -46,7 +46,10 @@ namespace WB.UI.Headquarters.Code.UsersManagement
 
             if (authorizedUser.IsHeadquarter)
             {
-                var hqAllowedRoles = new[] {UserRoles.Supervisor.ToUserId(), UserRoles.Interviewer.ToUserId()};
+                // NOTE: List<Guid> is used in the LINQ expression tree on purpose. For an array the C# compiler
+                // (C# 14+) binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an
+                // op_Implicit call into the expression tree that NHibernate cannot evaluate.
+                var hqAllowedRoles = new List<Guid> {UserRoles.Supervisor.ToUserId(), UserRoles.Interviewer.ToUserId()};
                 query = query.Where(u => u.Roles.Any(r => hqAllowedRoles.Contains(r.Id)));
             }
 
@@ -82,7 +85,7 @@ namespace WB.UI.Headquarters.Code.UsersManagement
                 .Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
                 .ToListAsync(cancellationToken);
 
-            var userIds = list.Select(l => l.UserId).ToArray();
+            var userIds = list.Select(l => l.UserId).ToList();
 
             var workspaces = (await this.userRepository.Users
                 .Where(u => userIds.Contains(u.Id))
@@ -177,7 +180,12 @@ namespace WB.UI.Headquarters.Code.UsersManagement
                                              => (w.Workspace.Name.ToLower() + w.Workspace.DisplayName.ToLower()).Contains(search)));
             }
 
-            if (request.Role != null)
+            if (request.SupervisorId != null)
+            {
+                var interviewerRoleId = UserRoles.Interviewer.ToUserId();
+                query = query.Where(u => u.Roles.Any(r => r.Id == interviewerRoleId));
+            }
+            else if (request.Role != null)
             {
                 var roleId = request.Role.Value.ToUserId();
                 query = query.Where(u => u.Roles.Any(r => r.Id == roleId));
@@ -202,6 +210,13 @@ namespace WB.UI.Headquarters.Code.UsersManagement
             if (request.TeamId != null)
             {
                 query = query.Where(x => x.Workspaces.Any(s => s.Supervisor.Id == request.TeamId));
+            }
+
+            if (request.SupervisorId != null)
+            {
+                query = request.WorkspaceName == null
+                    ? query.Where(x => x.Workspaces.Any(s => s.Supervisor.Id == request.SupervisorId))
+                    : query.Where(x => x.Workspaces.Any(s => s.Workspace.Name == request.WorkspaceName && s.Supervisor.Id == request.SupervisorId));
             }
 
             query = query.Where(u => u.IsArchived == request.Archive);

@@ -84,6 +84,10 @@ export function validateServerHeader(response) {
 export function validateJQueryXhr(jqXHR, settings) {
     if (!jqXHR) return
 
+    // Skip validation when the request was aborted or a network error occurred
+    // (status 0 means no HTTP response was received from the server).
+    if (jqXHR.status === 0) return
+
     const rawUrl = settings && settings.url
     const url = getValidatedRequestUrl(rawUrl)
     const actual = getValidatedHeaderValue(jqXHR.getResponseHeader('x-survey-solutions'))
@@ -136,5 +140,4 @@ export function validateFetchResponse(response) {
     const actual = response.headers.get('x-survey-solutions')
     validateHeaderValues(actual, url)
 }
-
 

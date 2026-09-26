@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0-android</TargetFramework>
+    <TargetFramework>net10.0-android</TargetFramework>
     <SupportedOSPlatformVersion>23.0</SupportedOSPlatformVersion>
     <OutputType>Exe</OutputType>
     <Nullable>disable</Nullable>
@@ -26,7 +26,7 @@
     <Optimize>false</Optimize>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <RuntimeIdentifiers>android-arm;android-arm64;android-x86;android-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>android-arm;android-arm64;android-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -49,7 +49,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NUnit" Version="4.3.2" />
+    <PackageReference Include="NUnit" Version="4.6.1" />
     <PackageReference Include="NUnitLite" Version="4.3.2" />
   </ItemGroup>
 </Project>
