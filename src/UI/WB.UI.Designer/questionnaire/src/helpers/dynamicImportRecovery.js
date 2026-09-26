@@ -15,15 +15,15 @@ const dynamicImportErrorPatterns = [
 ];
 let recoveryScheduled = false;
 let activeRouteName = null;
+let recoveryTimeoutId = null;
 
 export function isDynamicImportError(error) {
     const message = (error instanceof Error ? error.message : String(error)).toLowerCase();
     return dynamicImportErrorPatterns.some(pattern => message.includes(pattern));
 }
 
-function delayDynamicImportRetry(retryCount) {
-    const delay = 300 * 2 ** retryCount + Math.floor(Math.random() * 200);
-    return new Promise(resolve => window.setTimeout(resolve, delay));
+function getDynamicImportRetryDelay(retryCount) {
+    return 300 * 2 ** retryCount + Math.floor(Math.random() * 200);
 }
 
 function getRetryCount() {
@@ -106,10 +106,18 @@ export function scheduleDynamicImportRecovery(error, routeName) {
         return;
     }
 
-    delayDynamicImportRetry(retryCount).then(() => window.location.reload());
+    recoveryTimeoutId = window.setTimeout(() => {
+        recoveryTimeoutId = null;
+        window.location.reload();
+    }, getDynamicImportRetryDelay(retryCount));
 }
 
 export function clearDynamicImportRecovery() {
+    if (recoveryTimeoutId !== null) {
+        window.clearTimeout(recoveryTimeoutId);
+        recoveryTimeoutId = null;
+    }
+
     clearRetryCount();
     recoveryScheduled = false;
 }
