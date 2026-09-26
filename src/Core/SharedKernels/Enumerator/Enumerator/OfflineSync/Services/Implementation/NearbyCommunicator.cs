@@ -38,6 +38,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         private readonly ConcurrentDictionary<long, IPayload> outgoingPayloads =
             new ConcurrentDictionary<long, IPayload>();
 
+        private readonly ConcurrentDictionary<long, NearbyPayloadTransferUpdate> deferredTransferUpdates =
+            new ConcurrentDictionary<long, NearbyPayloadTransferUpdate>();
+
         private readonly IRequestHandler requestHandler;
 
         private readonly Subject<IncomingDataInfo> incomingDataInfo = new Subject<IncomingDataInfo>();
@@ -194,9 +197,20 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            if (deferredTransferUpdates.TryRemove(payload.Id, out var deferredUpdate))
+            {
+                await ReceivePayloadTransferUpdateInternal(nearbyConnection, endpoint, deferredUpdate);
+            }
         }
 
         public async void ReceivePayloadTransferUpdate(INearbyConnection connection, string endpoint,
+            NearbyPayloadTransferUpdate update)
+        {
+            await ReceivePayloadTransferUpdateInternal(connection, endpoint, update);
+        }
+
+        private async Task ReceivePayloadTransferUpdateInternal(INearbyConnection connection, string endpoint,
             NearbyPayloadTransferUpdate update)
         {
             var isIncoming = false;
@@ -211,6 +225,14 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
             else
             {
+                if (update.Status == TransferStatus.Success || update.Status == TransferStatus.Failure)
+                {
+                    deferredTransferUpdates.AddOrUpdate(update.Id, update, (_, _) => update);
+                    logger.Warn(
+                        $"Deferring payload transfer update until payload is registered. Endpoint: {endpoint}, PayloadId: {update.Id}, Status: {update.Status}");
+                    return;
+                }
+
                 logger.Warn(
                     $"Ignoring payload transfer update for unknown payload. Endpoint: {endpoint}, PayloadId: {update.Id}, Status: {update.Status}");
                 return;

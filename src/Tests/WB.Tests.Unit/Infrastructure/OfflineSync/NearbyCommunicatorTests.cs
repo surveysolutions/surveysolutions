@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -106,18 +109,119 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
         }
 
         [Test]
-        public void should_ignore_transfer_update_when_payload_is_unknown()
+        public async Task should_process_stream_payload_when_success_update_arrives_before_payload_registration()
         {
-            var communicator = Create.Service.NearbyConnectionManager();
-            var connection = Create.Fake.GoogleConnection();
+            using (new CommunicationSession())
+            using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(1)))
+            {
+                var serverhandler = Create.Service.GoogleConnectionsRequestHandler()
+                    .WithSampleEchoHandler();
 
-            Assert.DoesNotThrow(() => communicator.ReceivePayloadTransferUpdate(connection, "server",
-                new NearbyPayloadTransferUpdate
+                var server = Create.Service.NearbyConnectionManager(serverhandler, maxBytesLength: 0);
+                var client = Create.Service.NearbyConnectionManager(maxBytesLength: 0);
+
+                var clientCommunicator = new OutOfOrderPayloadTransferConnection()
+                    .WithTwoWayClientServerConnectionMap(server, client);
+
+                var id = Guid.NewGuid();
+
+                var response = await client.SendAsync<PingMessage, PongMessage>(clientCommunicator, "server",
+                    new PingMessage { Id = id }, null, cts.Token);
+
+                Assert.That(response.Id, Is.EqualTo(id));
+            }
+        }
+
+        private sealed class OutOfOrderPayloadTransferConnection : INearbyConnection
+        {
+            private readonly IDictionary<string, INearbyCommunicator> clientsMap = new Dictionary<string, INearbyCommunicator>();
+            private readonly IDictionary<string, string> connectionMap = new Dictionary<string, string>();
+
+            public OutOfOrderPayloadTransferConnection WithTwoWayClientServerConnectionMap(INearbyCommunicator server,
+                INearbyCommunicator client)
+            {
+                return SetConnectionManager("server", server)
+                    .SetConnectionManager("client", client)
+                    .MapConnection("server", "client")
+                    .MapConnection("client", "server");
+            }
+
+            public OutOfOrderPayloadTransferConnection SetConnectionManager(string endpoint, INearbyCommunicator manager)
+            {
+                clientsMap.Add(endpoint, manager);
+                return this;
+            }
+
+            public OutOfOrderPayloadTransferConnection MapConnection(string fromEndpoint, string toEndpoint)
+            {
+                connectionMap.Add(fromEndpoint, toEndpoint);
+                return this;
+            }
+
+            public async Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload)
+            {
+                var from = connectionMap[to];
+                var toClient = clientsMap[to];
+                var fromClient = clientsMap[from];
+
+                if (payload.Type != PayloadType.Bytes)
                 {
-                    Id = long.MaxValue,
-                    Status = TransferStatus.InProgress,
-                    BytesTransferred = 10
-                }));
+                    fromClient.ReceivePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
+                    {
+                        Status = TransferStatus.InProgress,
+                        BytesTransferred = 0,
+                        Id = payload.Id
+                    });
+                }
+
+                fromClient.ReceivePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
+                {
+                    Status = TransferStatus.Success,
+                    BytesTransferred = 100,
+                    Id = payload.Id
+                });
+
+                if (payload.Type != PayloadType.Bytes)
+                {
+                    toClient.ReceivePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
+                    {
+                        Status = TransferStatus.Success,
+                        BytesTransferred = 100,
+                        Id = payload.Id
+                    });
+                }
+
+                await toClient.ReceivePayloadAsync(this, from, payload);
+
+                return NearbyStatus.Ok;
+            }
+
+            public Task<NearbyStatus> StartDiscoveryAsync(string serviceName, CancellationToken cancellationToken)
+                => throw new NotImplementedException();
+
+            public Task<string> StartAdvertisingAsync(string serviceName, string name, CancellationToken cancellationToken)
+                => throw new NotImplementedException();
+
+            public Task<NearbyStatus> RequestConnectionAsync(string name, string endpoint, CancellationToken cancellationToken)
+                => throw new NotImplementedException();
+
+            public Task<NearbyStatus> AcceptConnectionAsync(string endpoint)
+                => throw new NotImplementedException();
+
+            public void StopAllEndpoint()
+                => throw new NotImplementedException();
+
+            public IObservable<INearbyEvent> Events { get; } = new Subject<INearbyEvent>();
+            public ObservableCollection<RemoteEndpoint> RemoteEndpoints { get; } = new ObservableCollection<RemoteEndpoint>();
+
+            public void StopDiscovery()
+                => throw new NotImplementedException();
+
+            public void StopAdvertising()
+                => throw new NotImplementedException();
+
+            public void StopAll()
+                => throw new NotImplementedException();
         }
     }
 }
