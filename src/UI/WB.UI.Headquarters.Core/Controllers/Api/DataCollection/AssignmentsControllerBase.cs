@@ -18,7 +18,7 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
-    public abstract class AssignmentsControllerBase : ControllerBase
+    public abstract class AssignmentsControllerBase : DataCollectionControllerBase
     {
         protected readonly IAuthorizedUser authorizedUser;
         private readonly IAssignmentsService assignmentsService;
@@ -199,6 +199,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 return true;
 
             if (!string.IsNullOrWhiteSpace(assignment.TargetArea) && productVersion <= new Version(24, 6))
+                return true;
+
+            if (assignment.AudioAuditScope != null && assignment.AudioAuditScope.Count > 0 && productVersion <= new Version(26, 6))
                 return true;
 
             #endif

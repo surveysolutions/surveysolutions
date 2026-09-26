@@ -124,7 +124,7 @@
     <value>Додати</value>
   </data>
   <data name="AddEnablingCondition" xml:space="preserve">
-    <value>Додайте умову включення</value>
+    <value>Додати умову включення</value>
   </data>
   <data name="AddFilter" xml:space="preserve">
     <value>Додати фільтр</value>
@@ -401,6 +401,9 @@
   </data>
   <data name="FindReplaceMatchingLines" xml:space="preserve">
     <value>Збігаються рядкі: {{count}}</value>
+  </data>
+  <data name="FindReplaceCurrentMatch" xml:space="preserve">
+    <value>{{current}} / {{count}}</value>
   </data>
   <data name="FindReplaceMatchWord" xml:space="preserve">
     <value>Збіг цілого слова</value>
@@ -820,6 +823,9 @@
   </data>
   <data name="QuestionInteger" xml:space="preserve">
     <value>Ціле число</value>
+  </data>
+  <data name="QuestionNonNegative" xml:space="preserve">
+    <value>Невід'ємне</value>
   </data>
   <data name="QuestionIsLinked" xml:space="preserve">
     <value>пов'язане</value>

@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AppendixLink" xml:space="preserve">
+        <value>និង {0} និមិត្តសញ្ញាផ្សេងទៀត [{1}]</value>
+    </data>
+    <data name="Appendix_Conditions" xml:space="preserve">
+        <value>ឧបសម្ព័ន្ធ {0} {1} លក្ខខណ្ឌអនុញ្ញាត</value>
+    </data>
+    <data name="Appendix_Instructions" xml:space="preserve">
+        <value>ឧបសម្ព័ន្ធ {0} សេចក្តីណែនាំ {1}</value>
+    </data>
+    <data name="Appendix_OptionFilters" xml:space="preserve">
+        <value>ឧបសម្ព័ន្ធ {0} {1} តម្រងប្រភេទ</value>
+    </data>
+    <data name="Appendix_Options" xml:space="preserve">
+        <value>ឧបសម្ព័ន្ធ {0} ប្រភេទ {1}</value>
+    </data>
+    <data name="Appendix_SpecialValues" xml:space="preserve">
+        <value>ឧបសម្ព័ន្ធ {0} {1} តម្លៃពិសេស</value>
+    </data>
+    <data name="Appendix_CriticalRules" xml:space="preserve">
+        <value>ឧបសម្ព័ន្ធ {0} {1} ច្បាប់សំខាន់ៗ</value>
+    </data>
+    <data name="Appendix_Validations" xml:space="preserve">
+        <value>ឧបសម្ព័ន្ធ {0} {1} លក្ខខណ្ឌសុពលភាព និងសារ</value>
+    </data>
+    <data name="Appendix_Variables" xml:space="preserve">
+        <value>ឧបសម្ព័ន្ធ {0} {1} អថេរ</value>
+    </data>
+    <data name="CreatedBy" xml:space="preserve">
+        <value>កម្រងសំណួរបង្កើតដោយ {0}</value>
+    </data>
+    <data name="OwnedBy" xml:space="preserve">
+        <value>កម្រងសំណួរជាកម្មសិទ្ធិរបស់ {0}</value>
+    </data>
+    <data name="EnablementCondition" xml:space="preserve">
+        <value>លក្ខខណ្ឌនៃការបើកដំណើរការ៖</value>
+    </data>
+    <data name="CriticalityCondition" xml:space="preserve">
+        <value>លក្ខខណ្ឌសំខាន់៖</value>
+    </data>
+    <data name="CriticalityMessage" xml:space="preserve">
+        <value>សារ៖</value>
+    </data>
+    <data name="Description" xml:space="preserve">
+        <value>ការពិពណ៌នា៖</value>
+    </data>
+    <data name="GeneratedBy" xml:space="preserve">
+        <value>បង្កើតឡើងដោយ {0}</value>
+    </data>
+    <data name="LastEdited" xml:space="preserve">
+        <value>{0} កែប្រែចុងក្រោយ {1}</value>
+    </data>
+    <data name="LastModifiedBy" xml:space="preserve">
+        <value>កែប្រែចុងក្រោយដោយ {0}</value>
+    </data>
+    <data name="Legend" xml:space="preserve">
+        <value>រឿងព្រេង</value>
+    </data>
+    <data name="NeverEdited" xml:space="preserve">
+        <value>{0} (មិនដែលបានកែសម្រួល)</value>
+    </data>
+    <data name="NotShared" xml:space="preserve">
+        <value>មិនបានចែករំលែកជាមួយនរណាម្នាក់ទេ។</value>
+    </data>
+    <data name="Options" xml:space="preserve">
+        <value>ប្រភេទ៖</value>
+    </data>
+    <data name="PdfLegend" xml:space="preserve">
+        <value>រឿងព្រេង និងរចនាសម្ព័ន្ធនៃព័ត៌មាននៅក្នុងឯកសារនេះ។</value>
+    </data>
+    <data name="QuestionScope_Identifying" xml:space="preserve">
+        <value>កំណត់អត្តសញ្ញាណ</value>
+    </data>
+    <data name="QuestionType_Area" xml:space="preserve">
+        <value>ភូមិសាស្ត្រ៖</value>
+    </data>
+    <data name="QuestionType_Area_Polygon" xml:space="preserve">
+        <value>ពហុកោណ</value>
+    </data>
+    <data name="QuestionType_Area_Polyline" xml:space="preserve">
+        <value>ប៉ូលីលីន</value>
+    </data>
+    <data name="QuestionType_Area_Multipoint" xml:space="preserve">
+        <value>ពហុចំណុច</value>
+    </data>
+    <data name="QuestionType_Area_Point" xml:space="preserve">
+        <value>ចំណុច</value>
+    </data>
+    <data name="QuestionType_Audio" xml:space="preserve">
+        <value>អូឌីយ៉ូ</value>
+    </data>
+    <data name="QuestionType_Barcode" xml:space="preserve">
+        <value>បាកូដ</value>
+    </data>
+    <data name="QuestionType_Cascading" xml:space="preserve">
+        <value>ល្បាក់</value>
+    </data>
+    <data name="QuestionType_Combobox" xml:space="preserve">
+        <value>ប្រអប់បន្សំ</value>
+    </data>
+    <data name="QuestionType_CurrentTime" xml:space="preserve">
+        <value>កាលបរិច្ឆេទ៖ ពេលបច្ចុប្បន្ន</value>
+    </data>
+    <data name="QuestionType_Date" xml:space="preserve">
+        <value>កាលបរិច្ឆេទ</value>
+    </data>
+    <data name="QuestionType_Decimal" xml:space="preserve">
+        <value>ទសភាគ</value>
+    </data>
+    <data name="QuestionType_GPS" xml:space="preserve">
+        <value>ជីភីអេស</value>
+    </data>
+    <data name="QuestionType_Integer" xml:space="preserve">
+        <value>ចំនួនគត់</value>
+    </data>
+    <data name="QuestionType_Linked" xml:space="preserve">
+        <value>បានភ្ជាប់</value>
+    </data>
+    <data name="QuestionType_List" xml:space="preserve">
+        <value>បញ្ជី</value>
+    </data>
+    <data name="QuestionType_MultiSelect" xml:space="preserve">
+        <value>ពហុជ្រើសរើស</value>
+    </data>
+    <data name="QuestionType_Numeric" xml:space="preserve">
+        <value>លេខ៖</value>
+    </data>
+    <data name="QuestionType_Ordered" xml:space="preserve">
+        <value>បានបញ្ជា</value>
+    </data>
+    <data name="QuestionType_Picture" xml:space="preserve">
+        <value>រូបភាព</value>
+    </data>
+    <data name="QuestionType_SingleSelect" xml:space="preserve">
+        <value>ជ្រើសរើសតែមួយ</value>
+    </data>
+    <data name="QuestionType_Text" xml:space="preserve">
+        <value>អត្ថបទ</value>
+    </data>
+    <data name="QuestionType_YesNo" xml:space="preserve">
+        <value>បាទ/ចាស</value>
+    </data>
+    <data name="Roster" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះ៖</value>
+    </data>
+    <data name="RosterType_List" xml:space="preserve">
+        <value>បញ្ជី</value>
+    </data>
+    <data name="RosterType_Multi" xml:space="preserve">
+        <value>ពហុជ្រើសរើស</value>
+    </data>
+    <data name="RosterType_Numeric" xml:space="preserve">
+        <value>លេខ</value>
+    </data>
+    <data name="Roster_GeneretedByFixedList" xml:space="preserve">
+        <value>បង្កើតដោយបញ្ជីថេរ</value>
+    </data>
+    <data name="Roster_GeneretedByQuestion" xml:space="preserve">
+        <value>បង្កើតឡើងដោយសំណួរ {0} {1}</value>
+    </data>
+    <data name="Scope" xml:space="preserve">
+        <value>វិសាលភាព៖ {0}</value>
+    </data>
+    <data name="SourceOfCategories" xml:space="preserve">
+        <value>ប្រភពនៃប្រភេទ៖</value>
+    </data>
+    <data name="RosterSourceOfCategories" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះ</value>
+    </data>
+    <data name="TextListSourceOfCategories" xml:space="preserve">
+        <value>សំណួរបញ្ជីអត្ថបទ</value>
+    </data>
+    <data name="QuestionInRosterSourceOfCategories" xml:space="preserve">
+        <value>សំណួរ</value>
+    </data>
+    <data name="InRosterSourceOfCategories" xml:space="preserve">
+        <value>នៅក្នុងបញ្ជីឈ្មោះ</value>
+    </data>
+    <data name="SharedWith" xml:space="preserve">
+        <value>ចែករំលែកជាមួយ៖</value>
+    </data>
+    <data name="SpecialValues" xml:space="preserve">
+        <value>តម្លៃពិសេស</value>
+    </data>
+    <data name="GeographyType" xml:space="preserve">
+        <value>ប្រភេទភូមិសាស្ត្រ</value>
+    </data>
+    <data name="GeographyInputMode" xml:space="preserve">
+        <value>របៀបបញ្ចូល</value>
+    </data>
+    <data name="GeometryOverlapDetection" xml:space="preserve">
+        <value>ការរកឃើញត្រួតស៊ីគ្នា។</value>
+    </data>
+    <data name="StaticText" xml:space="preserve">
+        <value>អត្ថបទឋិតិវន្ត</value>
+    </data>
+    <data name="Stat_NoQuestions" xml:space="preserve">
+        <value>គ្មានសំណួរទេ។</value>
+    </data>
+    <data name="Stat_NoRosters" xml:space="preserve">
+        <value>មិនមានបញ្ជីឈ្មោះទេ។</value>
+    </data>
+    <data name="Stat_NoSubsections" xml:space="preserve">
+        <value>មិនមានផ្នែករងទេ។</value>
+    </data>
+    <data name="Stat_Questions" xml:space="preserve">
+        <value>សំណួរ៖ {0}</value>
+    </data>
+    <data name="Stat_QuestionsWithConditions" xml:space="preserve">
+        <value>សំណួរដែលមានលក្ខខណ្ឌអនុញ្ញាត៖ {0}</value>
+    </data>
+    <data name="Stat_QuestionsWithValidation" xml:space="preserve">
+        <value>សំណួរដែលមានលក្ខខណ្ឌសុពលភាព៖ {0}</value>
+    </data>
+    <data name="Stat_Rosters" xml:space="preserve">
+        <value>បញ្ជីឈ្មោះ៖ {0}</value>
+    </data>
+    <data name="Stat_Sections" xml:space="preserve">
+        <value>ផ្នែក៖ {0}</value>
+    </data>
+    <data name="Stat_StaticTexts" xml:space="preserve">
+        <value>អត្ថបទឋិតិវន្ត៖ {0}</value>
+    </data>
+    <data name="Stat_Subsections" xml:space="preserve">
+        <value>ផ្នែករង៖ {0}</value>
+    </data>
+    <data name="Stat_Variables" xml:space="preserve">
+        <value>អថេរ៖ {0}</value>
+    </data>
+    <data name="ValidationCondition" xml:space="preserve">
+        <value>លក្ខខណ្ឌសុពលភាព៖</value>
+    </data>
+    <data name="ValidationMessage" xml:space="preserve">
+        <value>សារសុពលភាព៖</value>
+    </data>
+    <data name="Variable" xml:space="preserve">
+        <value>អថេរ</value>
+    </data>
+    <data name="QuestionScope_Hidden" xml:space="preserve">
+        <value>លាក់</value>
+    </data>
+    <data name="QuestionScope_Supervisor" xml:space="preserve">
+        <value>អ្នកគ្រប់គ្រង</value>
+    </data>
+    <data name="MetadataTitle" xml:space="preserve">
+        <value>ចំណងជើង</value>
+    </data>
+    <data name="MetadataSubtitle" xml:space="preserve">
+        <value>ចំណងជើងរង</value>
+    </data>
+    <data name="MetadataVersionIdentificator" xml:space="preserve">
+        <value>កម្មវិធីកំណត់អត្តសញ្ញាណកំណែ</value>
+    </data>
+    <data name="MetadataVersionNotes" xml:space="preserve">
+        <value>កំណត់ចំណាំកំណែ</value>
+    </data>
+    <data name="MetadataStudyType" xml:space="preserve">
+        <value>ប្រភេទសិក្សា</value>
+    </data>
+    <data name="MetadataKindOfData" xml:space="preserve">
+        <value>ប្រភេទទិន្នន័យ</value>
+    </data>
+    <data name="MetadataModeOfDataCollection" xml:space="preserve">
+        <value>របៀបនៃការប្រមូលទិន្នន័យ</value>
+    </data>
+    <data name="MetadataCountry" xml:space="preserve">
+        <value>ប្រទេស</value>
+    </data>
+    <data name="MetadataYear" xml:space="preserve">
+        <value>ឆ្នាំ</value>
+    </data>
+    <data name="MetadataLanguages" xml:space="preserve">
+        <value>ភាសា</value>
+    </data>
+    <data name="MetadataUnitOfAlalysis" xml:space="preserve">
+        <value>ឯកតានៃការវិភាគ</value>
+    </data>
+    <data name="MetadataCoverage" xml:space="preserve">
+        <value>គ្របដណ្តប់</value>
+    </data>
+    <data name="MetadataUniverse" xml:space="preserve">
+        <value>សកលលោក</value>
+    </data>
+    <data name="MetadataPrimaryInvestigator" xml:space="preserve">
+        <value>អ្នកស៊ើបអង្កេតបឋម</value>
+    </data>
+    <data name="MetadataConsultants" xml:space="preserve">
+        <value>ទីប្រឹក្សា</value>
+    </data>
+    <data name="MetadataNotes" xml:space="preserve">
+        <value>កំណត់ចំណាំ</value>
+    </data>
+    <data name="MetadataKeywords" xml:space="preserve">
+        <value>ពាក្យគន្លឹះ</value>
+    </data>
+    <data name="MetadataFunding" xml:space="preserve">
+        <value>មូលនិធិ</value>
+    </data>
+    <data name="MetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+        <value>យល់ព្រមធ្វើឱ្យកម្រងសំណួរនេះជាសាធារណៈ</value>
+    </data>
+    <data name="MetadataSectionTitle" xml:space="preserve">
+        <value>ព័ត៌មានអំពីអត្តសញ្ញាណនៃការស្ទង់មតិ</value>
+    </data>
+    <data name="MetadataSectionSubTitle" xml:space="preserve">
+        <value>ការពិពណ៌នាកម្រងសំណួរ</value>
+    </data>
+    <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+        <value>ព័ត៌មានមូលដ្ឋាន</value>
+    </data>
+    <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+        <value>ទិន្នន័យស្ទង់មតិ</value>
+    </data>
+    <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+        <value>ព័ត៌មានស្ទង់មតិ</value>
+    </data>
+    <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+        <value>ព័ត៌មានបន្ថែម</value>
+    </data>
+    <data name="VariableExcludedFromExport" xml:space="preserve">
+        <value>អថេរនេះត្រូវបានដកចេញពីទិន្នន័យដែលបាននាំចេញ</value>
+    </data>
+    <data name="On" xml:space="preserve">
+        <value>បើក</value>
+    </data>
+    <data name="Off" xml:space="preserve">
+        <value>បិទ</value>
+    </data>
+</root>

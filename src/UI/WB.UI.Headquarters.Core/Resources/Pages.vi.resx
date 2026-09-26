@@ -1,0 +1,1730 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="LogOn_Title" xml:space="preserve">
+        <value>Đăng nhập</value>
+        </data>
+    <data name="AccountManage_Title" xml:space="preserve">
+        <value>Chỉnh sửa hồ sơ {0}</value>
+        </data>
+    <data name="AccountManage_EditPublicInformation" xml:space="preserve">
+        <value>Chỉnh sửa chi tiết thông tin công khai hồ sơ</value>
+        </data>
+    <data name="AccountManage_Login" xml:space="preserve">
+        <value>Đăng nhập</value>
+        </data>
+    <data name="AccountManage_Role" xml:space="preserve">
+        <value>Vai trò</value>
+        </data>
+    <data name="AccountManage_ShowUsers" xml:space="preserve">
+        <value>Hiển thị người dùng</value>
+        </data>
+    <data name="AccountManage_ChangePassword" xml:space="preserve">
+        <value>Thay đổi mật khẩu</value>
+        </data>
+    <data name="AccountManage_Profile" xml:space="preserve">
+        <value>Liên hệ</value>
+        </data>
+    <data name="AccountManage_TwoFactorAuth" xml:space="preserve">
+        <value>Xác thực hai yếu tố</value>
+        </data>
+    <data name="AccountManage_AuthenticatorApp" xml:space="preserve">
+        <value>Ứng dụng xác thực</value>
+        </data>
+    <data name="AccountManage_ChangePasswordHelp" xml:space="preserve">
+        <value>Sử dụng mẫu dưới đây để thay đổi mật khẩu cho tài khoản</value>
+        </data>
+    <data name="LogOn_UnsuccessfulLogin" xml:space="preserve">
+        <value>Đăng nhập không thành công. Vui lòng sửa lỗi và thử lại.</value>
+        </data>
+    <data name="SurveysStatuses_ApprovedByHQ" xml:space="preserve">
+        <value>Được phê duyệt bởi trụ sở chính</value>
+        </data>
+    <data name="SurveysStatuses_ApprovedBySupervisor" xml:space="preserve">
+        <value>Đã được người giám sát phê duyệt</value>
+        </data>
+    <data name="SurveysStatuses_Completed" xml:space="preserve">
+        <value>Hoàn thành</value>
+        </data>
+    <data name="SurveysStatuses_InterviewerAssigned" xml:space="preserve">
+        <value>Người phỏng vấn được chỉ định</value>
+        </data>
+    <data name="SurveysStatuses_RejectedByHQ" xml:space="preserve">
+        <value>Bị từ chối bởi trụ sở chính</value>
+        </data>
+    <data name="SurveysStatuses_RejectedBySupervisor" xml:space="preserve">
+        <value>Bị người giám sát từ chối</value>
+        </data>
+    <data name="SurveysStatuses_SupervisorAssigned" xml:space="preserve">
+        <value>Giám sát viên được giao</value>
+        </data>
+    <data name="SurveysStatuses_SurveyName" xml:space="preserve">
+        <value>Tên khảo sát</value>
+        </data>
+    <data name="SurveysStatuses_Title" xml:space="preserve">
+        <value>Khảo sát và trạng thái</value>
+        </data>
+    <data name="SurveysStatuses_Total" xml:space="preserve">
+        <value>Tổng cộng</value>
+        </data>
+    <data name="SurveysStatuses_TeamMembersHeader" xml:space="preserve">
+        <value>Thành viên nhóm</value>
+        </data>
+    <data name="Survey_Header" xml:space="preserve">
+        <value>Phỏng vấn</value>
+        </data>
+    <data name="Survey_Status_Title" xml:space="preserve">
+        <value>Trạng thái</value>
+        </data>
+    <data name="Survey_Status_Header" xml:space="preserve">
+        <value>Người phỏng vấn và khảo sát</value>
+        </data>
+    <data name="PackagesInfo_Title" xml:space="preserve">
+        <value>chỉ mục</value>
+        </data>
+    <data name="PackagesInfo_Header" xml:space="preserve">
+        <value>Gói thông tin máy tính bảng</value>
+        </data>
+    <data name="PackagesInfo_DeviceId" xml:space="preserve">
+        <value>Id thiết bị</value>
+        </data>
+    <data name="PackagesInfo_UploadDate" xml:space="preserve">
+        <value>Ngày tải lên</value>
+        </data>
+    <data name="PackagesInfo_UserName" xml:space="preserve">
+        <value>Tên người dùng</value>
+        </data>
+    <data name="PackagesInfo_UserId" xml:space="preserve">
+        <value>Mã người dùng</value>
+        </data>
+    <data name="PackagesInfo_Size" xml:space="preserve">
+        <value>Kích thước (byte)</value>
+        </data>
+    <data name="InterviewerController_InterviewerCreationSuccess" xml:space="preserve">
+        <value>Người phỏng vấn đã được tạo thành công</value>
+        </data>
+    <data name="InterviewerController_UpdateUseFailure" xml:space="preserve">
+        <value>Không thể cập nhật thông tin người dùng vì người dùng hiện tại không tồn tại</value>
+        </data>
+    <data name="InterviewerController_EditSuccess" xml:space="preserve">
+        <value>Thông tin về {0} được cập nhật thành công</value>
+        </data>
+    <data name="Backup_IndexTitle" xml:space="preserve">
+        <value>chỉ mục</value>
+        </data>
+    <data name="ApproveRejectPartialView_ApproveLabel" xml:space="preserve">
+        <value>Phê duyệt cuộc phỏng vấn</value>
+        </data>
+    <data name="ApproveRejectPartialView_ApproveReceivedWarning" xml:space="preserve">
+        <value>Người phỏng vấn chịu trách nhiệm hiện tại sẽ không được thông báo về việc phê duyệt cuộc phỏng vấn cho đến lần đồng bộ hóa tiếp theo. Nếu người phỏng vấn đã bắt đầu thực hiện cuộc phỏng vấn, tất cả dữ liệu mà người phỏng vấn đã nhập trước lần đồng bộ hóa tiếp theo sẽ bị BỎ QUA!</value>
+        </data>
+    <data name="ApproveRejectPartialView_ApproveReceivedConfirm" xml:space="preserve">
+        <value>Nộp đơn vào cuộc phỏng vấn mà Người phỏng vấn đã nhận được</value>
+        </data>
+    <data name="ApproveRejectPartialView_CommentLabel" xml:space="preserve">
+        <value>Bình luận</value>
+        </data>
+    <data name="CloseLabel" xml:space="preserve">
+        <value>Đóng</value>
+        </data>
+    <data name="Print" xml:space="preserve">
+        <value>In</value>
+        </data>
+    <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
+        <value>Chấp thuận</value>
+        </data>
+    <data name="ApproveRejectPartialView_RejectAction" xml:space="preserve">
+        <value>Từ chối</value>
+        </data>
+    <data name="ApproveRejectPartialView_UnapproveAction" xml:space="preserve">
+        <value>Không chấp thuận</value>
+        </data>
+    <data name="ApproveRejectPartialView_UnapproveLabel" xml:space="preserve">
+        <value>Không chấp thuận cuộc phỏng vấn</value>
+        </data>
+    <data name="ApproveRejectPartialView_RejectLAbel" xml:space="preserve">
+        <value>Từ chối cuộc phỏng vấn</value>
+        </data>
+    <data name="InterviewDetails_GroupsLabel" xml:space="preserve">
+        <value>Nhóm</value>
+        </data>
+    <data name="InterviewDetails_HideGroupsLAbel" xml:space="preserve">
+        <value>Ẩn nhóm</value>
+        </data>
+    <data name="InterviewDetails_StatusLabel" xml:space="preserve">
+        <value>Trạng thái</value>
+        </data>
+    <data name="InterviewDetails_ResponsibleLabel" xml:space="preserve">
+        <value>Chịu trách nhiệm</value>
+        </data>
+    <data name="InterviewDetails_PendingPackageLabel" xml:space="preserve">
+        <value>Cuộc phỏng vấn có các gói đồng bộ hóa đang chờ xử lý</value>
+        </data>
+    <data name="InterviewDetails_ShowGroupsLabel" xml:space="preserve">
+        <value>Hiển thị nhóm</value>
+        </data>
+    <data name="InterviewDetails_AllButtonLabel" xml:space="preserve">
+        <value>tất cả</value>
+        </data>
+    <data name="InterviewDetails_EnabledButtonLabel" xml:space="preserve">
+        <value>đã bật</value>
+        </data>
+    <data name="InterviewDetails_AnsweredButtonLabel" xml:space="preserve">
+        <value>đã trả lời</value>
+        </data>
+    <data name="InterviewDetails_UnansweredButtonLabel" xml:space="preserve">
+        <value>chưa được trả lời</value>
+        </data>
+    <data name="InterviewDetails_InvalidButtonLabel" xml:space="preserve">
+        <value>không hợp lệ</value>
+        </data>
+    <data name="InterviewDetails_CommentedButtonLabel" xml:space="preserve">
+        <value>đã bình luận</value>
+        </data>
+    <data name="InterviewDetails_FlaggedButtonLabel" xml:space="preserve">
+        <value>bị gắn cờ</value>
+        </data>
+    <data name="InterviewDetails_SupervisorsButtonLabel" xml:space="preserve">
+        <value>người giám sát</value>
+        </data>
+    <data name="InterviewDetails_HiddenButtonLabel" xml:space="preserve">
+        <value>ẩn giấu</value>
+        </data>
+    <data name="DetailsQuestionPartialView_WriteCommentPlaceholder" xml:space="preserve">
+        <value>Viết bình luận...</value>
+        </data>
+    <data name="EditQuestion_Save" xml:space="preserve">
+        <value>Cứu</value>
+        </data>
+    <data name="YesNoQuestion_Yes" xml:space="preserve">
+        <value>Đúng</value>
+        </data>
+    <data name="YesNoQuestion_No" xml:space="preserve">
+        <value>KHÔNG</value>
+        </data>
+    <data name="HistoryOfStatuses_Title" xml:space="preserve">
+        <value>Lịch sử trạng thái phỏng vấn</value>
+        </data>
+    <data name="HistoryOfStatuses_State" xml:space="preserve">
+        <value>Tình trạng</value>
+        </data>
+    <data name="HistoryOfStatuses_Comment" xml:space="preserve">
+        <value>Bình luận</value>
+        </data>
+    <data name="HistoryOfStatuses_On" xml:space="preserve">
+        <value>Đã thay đổi</value>
+        </data>
+    <data name="HistoryOfStatuses_By" xml:space="preserve">
+        <value>Qua</value>
+        </data>
+    <data name="InterviewHistory_Header" xml:space="preserve">
+        <value>Lịch sử phỏng vấn</value>
+        </data>
+    <data name="GPS_latitude" xml:space="preserve">
+        <value>vĩ độ</value>
+        </data>
+    <data name="GPS_longitude" xml:space="preserve">
+        <value>kinh độ</value>
+        </data>
+    <data name="GPS_accuracy" xml:space="preserve">
+        <value>sự chính xác</value>
+        </data>
+    <data name="GPS_altitude" xml:space="preserve">
+        <value>độ cao</value>
+        </data>
+    <data name="InterviewController_RevalidationFailed" xml:space="preserve">
+        <value>Việc xác nhận lại không thành công.</value>
+        </data>
+    <data name="InterviewController_RepeatLastStatus" xml:space="preserve">
+        <value>Trạng thái do nhóm hỗ trợ Giải pháp khảo sát đặt ra</value>
+        </data>
+    <data name="InterviewController_RepeatLastStatusFailed" xml:space="preserve">
+        <value>Việc lặp lại trạng thái cuối cùng không thành công.</value>
+        </data>
+    <data name="LogOn_LogIn" xml:space="preserve">
+        <value>Đăng nhập</value>
+        </data>
+    <data name="LogOn_TwoFactor" xml:space="preserve">
+        <value>Thông tin đăng nhập của bạn được bảo vệ bằng ứng dụng xác thực. Nhập mã xác thực của bạn bên dưới.</value>
+        </data>
+    <data name="LogOn_LoginWithRecoveryCode" xml:space="preserve">
+        <value>Bạn đã yêu cầu đăng nhập bằng mã khôi phục.</value>
+        </data>
+    <data name="LogOn_NoAccessToDevice" xml:space="preserve">
+        <value>Bạn không có quyền truy cập vào thiết bị xác thực của mình? bạn có thể</value>
+        </data>
+    <data name="LogOn_LoginWithRecoveryLink" xml:space="preserve">
+        <value>đăng nhập bằng mã khôi phục</value>
+        </data>
+    <data name="LogOn_Legend" xml:space="preserve">
+        <value>Vui lòng đăng nhập</value>
+        </data>
+    <data name="AccountManage_SaveChanges" xml:space="preserve">
+        <value>Lưu thay đổi</value>
+        </data>
+    <data name="AccessDenied_Title" xml:space="preserve">
+        <value>Truy cập bị từ chối</value>
+        </data>
+    <data name="Forbidden_Title" xml:space="preserve">
+        <value>Cấm</value>
+        </data>
+    <data name="AntiForgeryError_Title" xml:space="preserve">
+        <value>Dữ liệu yêu cầu không hợp lệ.</value>
+        </data>
+    <data name="ErrorIndex_Title" xml:space="preserve">
+        <value>Lỗi</value>
+        </data>
+    <data name="NotFound_Title" xml:space="preserve">
+        <value>Không tìm thấy</value>
+        </data>
+    <data name="WebsitePathIsTooLong_Title" xml:space="preserve">
+        <value>Thư mục chứa trang web có tên đường dẫn quá dài. Vui lòng di chuyển trang web sang thư mục khác có tên ngắn hơn.</value>
+        </data>
+    <data name="HealthCheck_Header" xml:space="preserve">
+        <value>Máy theo dõi sức khỏe</value>
+        </data>
+    <data name="InterviewerCreate_Title" xml:space="preserve">
+        <value>Tạo nên</value>
+        </data>
+    <data name="InterviewerCreate_CreateIn" xml:space="preserve">
+        <value>Tạo người phỏng vấn trong</value>
+        </data>
+    <data name="InterviewerCreate_Team" xml:space="preserve">
+        <value>đội</value>
+        </data>
+    <data name="InterviewerProfile_TitleFormat" xml:space="preserve">
+        <value>Người phỏng vấn: {0}</value>
+        </data>
+    <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
+        <value>{{interviewer}} (giám sát viên: {{supervisor}})</value>
+        </data>
+    <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
+        <value>Email: {{email}}</value>
+        </data>
+    <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
+        <value>Họ và tên: {{fullName}}</value>
+        </data>
+    <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
+        <value>Số điện thoại: {{phone}}</value>
+        </data>
+    <data name="InterviewerProfile_Info" xml:space="preserve">
+        <value>Chỉnh sửa thông tin cá nhân</value>
+        </data>
+    <data name="InterviewerProfile_ShowAuditLog" xml:space="preserve">
+        <value>Hiển thị nhật ký hành động</value>
+        </data>
+    <data name="InterviewerProfile_Interviewers" xml:space="preserve">
+        <value>Người phỏng vấn</value>
+        </data>
+    <data name="InterviewerProfile_NewOnDevice" xml:space="preserve">
+        <value>mới trên thiết bị</value>
+        </data>
+    <data name="InterviewerProfile_Rejected" xml:space="preserve">
+        <value>lại bị từ chối trên thiết bị</value>
+        </data>
+    <data name="InterviewerProfile_WaitingForApproval" xml:space="preserve">
+        <value>đang chờ phê duyệt</value>
+        </data>
+    <data name="InterviewerProfile_Approved" xml:space="preserve">
+        <value>thực hiện phỏng vấn (hoàn thành và được phê duyệt bởi hq)</value>
+        </data>
+    <data name="InterviewerProfile_StartedAssignments" xml:space="preserve">
+        <value>Nhiệm vụ đã được bắt đầu nhưng chưa hoàn thành</value>
+        </data>
+    <data name="InterviewerProfile_StorageInfo" xml:space="preserve">
+        <value>Dung lượng lưu trữ (có sẵn/tổng ​​cộng)</value>
+        </data>
+    <data name="InterviewerProfile_MemoryInfo" xml:space="preserve">
+        <value>Bộ nhớ (có sẵn/tổng ​​cộng)</value>
+        </data>
+    <data name="InterviewerProfile_StorageSizeInfo" xml:space="preserve">
+        <value>Thông tin hệ thống và dữ liệu phỏng vấn không đồng bộ</value>
+        </data>
+    <data name="InterviewerProfile_BatteryStatus" xml:space="preserve">
+        <value>Trạng thái pin (%)</value>
+        </data>
+    <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
+        <value>{{percent}}%, nguồn điện: {{power}}, tiết kiệm pin là {{powerSaver}}</value>
+        </data>
+    <data name="InterviewerProfile_BatteryStatus_SaverIsOn" xml:space="preserve">
+        <value>TRÊN</value>
+        </data>
+    <data name="InterviewerProfile_BatteryStatus_SaverIsOff" xml:space="preserve">
+        <value>tắt</value>
+        </data>
+    <data name="InterviewerProfile_InterviewerVersion" xml:space="preserve">
+        <value>Phiên bản Giải pháp khảo sát</value>
+        </data>
+    <data name="InterviewerProfile_AndroidVersion" xml:space="preserve">
+        <value>Phiên bản Android</value>
+        </data>
+    <data name="InterviewerProfile_DeviceModel" xml:space="preserve">
+        <value>Mẫu thiết bị</value>
+        </data>
+    <data name="InterviewerProfile_DeviceId" xml:space="preserve">
+        <value>ID thiết bị</value>
+        </data>
+    <data name="InterviewerProfile_DeviceAssignmentDate" xml:space="preserve">
+        <value>Ngày cấp phát thiết bị</value>
+        </data>
+    <data name="InterviewerProfile_DeviceSerial" xml:space="preserve">
+        <value>Số sê-ri thiết bị</value>
+        </data>
+    <data name="InterviewerProfile_DeviceLanguage" xml:space="preserve">
+        <value>Ngôn ngữ thiết bị</value>
+        </data>
+    <data name="InterviewerProfile_DeviceInfo" xml:space="preserve">
+        <value>Thông tin chi tiết về thiết bị</value>
+        </data>
+    <data name="InterviewerProfile_InterviewerAppVersion" xml:space="preserve">
+        <value>Phiên bản ứng dụng Người phỏng vấn</value>
+        </data>
+    <data name="InterviewerProfile_InterviewerUpToDate" xml:space="preserve">
+        <value>Cập nhật</value>
+        </data>
+    <data name="InterviewerProfile_InterviewerCanBeUpdated" xml:space="preserve">
+        <value>Có thể được cập nhật</value>
+        </data>
+    <data name="InterviewerProfile_InterviewerUpdatedDate" xml:space="preserve">
+        <value>Ngày cập nhật Giải pháp khảo sát lần cuối</value>
+        </data>
+    <data name="InterviewerProfile_NumberOfSuccessSynchronizations" xml:space="preserve">
+        <value>Tổng số lần đồng bộ hóa thành công</value>
+        </data>
+    <data name="InterviewerProfile_NumberOfFailedSynchronizations" xml:space="preserve">
+        <value>Tổng số lần đồng bộ hóa không thành công</value>
+        </data>
+    <data name="InterviewerProfile_LastSuccessSync" xml:space="preserve">
+        <value>Đồng bộ hóa thành công lần cuối</value>
+        </data>
+    <data name="InterviewerProfile_LastFailedSync" xml:space="preserve">
+        <value>Đồng bộ hóa lần cuối không thành công</value>
+        </data>
+    <data name="InterviewerProfile_LastSyncronizationDate" xml:space="preserve">
+        <value>Ngày liên lạc cuối cùng</value>
+        </data>
+    <data name="InterviewerProfile_Relinked" xml:space="preserve">
+        <value>Đã liên kết lại</value>
+        </data>
+    <data name="InterviewerProfile_TotalSyncTime" xml:space="preserve">
+        <value>Thời lượng đồng bộ hóa</value>
+        </data>
+    <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
+        <value>Loại: {{networkType}} {{networkSubType}}, Người vận hành: {{operator}}</value>
+        </data>
+    <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
+        <value>Loại: {{networkType}}</value>
+        </data>
+    <data name="InterviewerProfile_ConnectionType" xml:space="preserve">
+        <value>Kiểu kết nối</value>
+        </data>
+    <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
+        <value>Tốc độ kết nối</value>
+        </data>
+    <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
+        <value>{{uploaded}} đã tải lên, {{downloaded}} đã tải xuống</value>
+        </data>
+    <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
+        <value>Tốc độ đồng bộ trung bình</value>
+        </data>
+    <data name="InterviewerProfile_SignalStrength" xml:space="preserve">
+        <value>Cường độ tín hiệu</value>
+        </data>
+    <data name="InterviewerProfile_DeviceLocation" xml:space="preserve">
+        <value>Vị trí thiết bị hoặc vị trí được biết đến gần đây nhất</value>
+        </data>
+    <data name="InterviewerProfile_DeviceOrientation" xml:space="preserve">
+        <value>Định hướng thiết bị</value>
+        </data>
+    <data name="InterviewerProfile_DeviceDate" xml:space="preserve">
+        <value>Thời gian của máy tính bảng khi bắt đầu đồng bộ hóa</value>
+        </data>
+    <data name="InterviewerProfile_ServerDate" xml:space="preserve">
+        <value>Thời gian máy chủ khi bắt đầu đồng bộ hóa</value>
+        </data>
+    <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
+        <value>Thống kê thiết bị và kết nối</value>
+        </data>
+    <data name="InterviewerProfile_Sync_Activity_Downloaded_Assignments_Desc" xml:space="preserve">
+        <value>Bài tập đã tải xuống</value>
+        </data>
+    <data name="InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc" xml:space="preserve">
+        <value>Đã tải lên máy chủ để phê duyệt</value>
+        </data>
+    <data name="InterviewerProfile_Sync_Activity_Nothing_To_Sync" xml:space="preserve">
+        <value>Kết nối thành công, không có gì để đồng bộ</value>
+        </data>
+    <data name="InterviewerProfile_Sync_Activity_Failed_Sync" xml:space="preserve">
+        <value>Nỗ lực đồng bộ hóa không thành công</value>
+        </data>
+    <data name="InterviewerProfile_Sync_Activity_All_Assignments_Desc" xml:space="preserve">
+        <value>Số lượng bài tập chưa hoàn thành hoặc chưa được đồng bộ hóa trên thiết bị trong từng thời điểm nhất định</value>
+        </data>
+    <data name="InterviewerProfile_Sync_Activity_Title" xml:space="preserve">
+        <value>Hoạt động đồng bộ hóa gần đây</value>
+        </data>
+    <data name="InterviewerProfile_LastConnectionStatistics" xml:space="preserve">
+        <value>Thống kê kết nối lần cuối</value>
+        </data>
+    <data name="InterviewerProfile_DownloadedQuestionnairesCount" xml:space="preserve">
+        <value>Người phỏng vấn nhận được bảng câu hỏi</value>
+        </data>
+    <data name="InterviewerProfile_DownloadedAssignmentsCount" xml:space="preserve">
+        <value>Bài tập mà Người phỏng vấn nhận được</value>
+        </data>
+    <data name="InterviewerProfile_UploadedInterviewsCount" xml:space="preserve">
+        <value>Các cuộc phỏng vấn đã hoàn thành nhận được từ Người phỏng vấn</value>
+        </data>
+    <data name="InterviewerEdit_TitleFormat" xml:space="preserve">
+        <value>Người phỏng vấn: {0}</value>
+        </data>
+    <data name="InterviewerEdit_NoDeviceHistory" xml:space="preserve">
+        <value>Người phỏng vấn chưa được đồng bộ hóa. Không có thông tin về thiết bị của anh ấy/cô ấy.</value>
+        </data>
+    <data name="InterviewerEdit_DeviceIdTitle" xml:space="preserve">
+        <value>Id thiết bị</value>
+        </data>
+    <data name="InterviewerEdit_StartUsingDateTitle" xml:space="preserve">
+        <value>Bắt đầu sử dụng ngày</value>
+        </data>
+    <data name="Interviewers_Title" xml:space="preserve">
+        <value>Người phỏng vấn</value>
+        </data>
+    <data name="Interviewers_Header" xml:space="preserve">
+        <value>Người phỏng vấn</value>
+        </data>
+    <data name="Interviewers_MoveWebAssigment" xml:space="preserve">
+        <value>Bạn đang chuyển một người phỏng vấn đang được giao nhiệm vụ phỏng vấn trên web sang một nhóm khác. Những nhiệm vụ này sẽ được giao cho người giám sát ban đầu. Nếu bạn đã gửi các liên kết cho các bài tập này, người trả lời sẽ không thể trả lời khảo sát của bạn cho đến khi bài tập được giao lại cho người dùng trong vai trò NGƯỜI PHỎNG VẤN.</value>
+        </data>
+    <data name="Create" xml:space="preserve">
+        <value>Tạo nên</value>
+        </data>
+    <data name="Search" xml:space="preserve">
+        <value>Tìm kiếm</value>
+        </data>
+    <data name="Interviewers_SupervisorTitle" xml:space="preserve">
+        <value>Người giám sát</value>
+        </data>
+    <data name="SurveysAndStatuses_SupervisorTitle" xml:space="preserve">
+        <value>Người giám sát (nhóm)</value>
+        </data>
+    <data name="SurveysAndStatuses_InterviewerTitle" xml:space="preserve">
+        <value>Người phỏng vấn (nhóm)</value>
+        </data>
+    <data name="SurveysAndStatuses_Overview" xml:space="preserve">
+        <value>Khảo sát và trạng thái</value>
+        </data>
+    <data name="SurveysAndStatuses_HeadquartersDescription" xml:space="preserve">
+        <value>Hiển thị số lượng cuộc phỏng vấn ở từng trạng thái (cột) cho từng công cụ khảo sát (hàng)</value>
+        </data>
+    <data name="SurveysAndStatuses_SupervisorDescription" xml:space="preserve">
+        <value>Báo cáo Khảo sát và Trạng thái hiển thị số lượng cuộc phỏng vấn ở từng trạng thái đối với các cuộc khảo sát mà người giám sát này tham gia</value>
+        </data>
+    <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
+        <value>{0} phỏng vấn</value>
+        </data>
+    <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
+        <value>Đã kết nối với máy chủ</value>
+        </data>
+    <data name="Interviewers_InterviewerVersion" xml:space="preserve">
+        <value>Phiên bản ứng dụng</value>
+        </data>
+    <data name="Interviewers_ArchiveStatusTitle" xml:space="preserve">
+        <value>Trạng thái lưu trữ</value>
+        </data>
+    <data name="Supervisors_ArchiveStatusTitle" xml:space="preserve">
+        <value>Trạng thái lưu trữ</value>
+        </data>
+    <data name="Interviewers_UserNameTitle" xml:space="preserve">
+        <value>Tên đăng nhập</value>
+        </data>
+    <data name="Interviewers_FullNameTitle" xml:space="preserve">
+        <value>Tên đầy đủ</value>
+        </data>
+    <data name="Interviewers_CreationDateTitle" xml:space="preserve">
+        <value>Tài khoản được tạo vào</value>
+        </data>
+    <data name="Interviewers_LastLoginDateTitle" xml:space="preserve">
+        <value>Đăng nhập lần cuối</value>
+        </data>
+    <data name="Interviewers_EmailTitle" xml:space="preserve">
+        <value>Email của người phỏng vấn</value>
+        </data>
+    <data name="Interviewers_ArchiveInterviewers" xml:space="preserve">
+        <value>(Những) người phỏng vấn sẽ được lưu trữ.</value>
+        </data>
+    <data name="Interviewers_ArchiveInterviewersConfirmMessage" xml:space="preserve">
+        <value>Nếu người phỏng vấn đã hoàn thành cuộc phỏng vấn trên máy tính bảng của mình thì dữ liệu sẽ bị mất.</value>
+        </data>
+    <data name="Index_cshtml_Execute_Do_you_want_to_continue_" xml:space="preserve">
+        <value>Bạn có muốn tiếp tục không?</value>
+        </data>
+    <data name="Interviewers_ArchiveInterviewersConfirm" xml:space="preserve">
+        <value>Bạn có muốn tiếp tục không?</value>
+        </data>
+    <data name="Maintenance_Title" xml:space="preserve">
+        <value>BẢO TRÌ</value>
+        </data>
+    <data name="Maintenance_Description" xml:space="preserve">
+        <value>Ứng dụng hiện đang được nâng cấp lên phiên bản mới hơn. Đây là một thao tác thủ công và có thể cần một khoảng thời gian đáng chú ý. Xin lỗi vì sự bất tiện này. Sau khi quá trình hoàn tất, bạn sẽ được tự động chuyển hướng đến trang bạn yêu cầu.</value>
+        </data>
+    <data name="MaintenanceReadSide_Header" xml:space="preserve">
+        <value>Đang bảo trì...</value>
+        </data>
+    <data name="MaintenanceRebuild_Header" xml:space="preserve">
+        <value>Đang khởi động lại...</value>
+        </data>
+    <data name="Maintenance_RebuildDescription" xml:space="preserve">
+        <value>Ứng dụng hiện đang khởi động lại và quá trình này có thể mất tới 10 phút hoặc hơn. Xin lỗi vì sự bất tiện này. Sau khi quá trình hoàn tất, bạn sẽ được tự động chuyển hướng đến trang bạn yêu cầu.</value>
+        </data>
+    <data name="Survey_ResponsibleTitle" xml:space="preserve">
+        <value>Chịu trách nhiệm</value>
+        </data>
+    <data name="Survey_LastUpdateTitle" xml:space="preserve">
+        <value>Cập nhật lần cuối</value>
+        </data>
+    <data name="Survey_HasErrorsTitle" xml:space="preserve">
+        <value>Có lỗi</value>
+        </data>
+    <data name="Survey_StatusTitle" xml:space="preserve">
+        <value>Trạng thái</value>
+        </data>
+    <data name="Survey_ReceivedByInterviewerTitle" xml:space="preserve">
+        <value>Người phỏng vấn nhận được</value>
+        </data>
+    <data name="Survey_CreatedOnClientTitle" xml:space="preserve">
+        <value>Được tạo trên máy khách</value>
+        </data>
+    <data name="Layout_Filter" xml:space="preserve">
+        <value>Lọc</value>
+        </data>
+    <data name="NoResults" xml:space="preserve">
+        <value>Không tìm thấy kết quả nào</value>
+        </data>
+    <data name="Layout_WorldBank" xml:space="preserve">
+        <value>Nhóm Ngân hàng Thế giới</value>
+        </data>
+    <data name="Layout_RightsReserved" xml:space="preserve">
+        <value>Mọi quyền được bảo lưu.</value>
+        </data>
+    <data name="Layout_Legal" xml:space="preserve">
+        <value>Hợp pháp</value>
+        </data>
+    <data name="Error_Title" xml:space="preserve">
+        <value>Lỗi</value>
+        </data>
+    <data name="Error_Description" xml:space="preserve">
+        <value>Đã xảy ra lỗi khi xử lý yêu cầu của bạn.</value>
+        </data>
+    <data name="GlobalSettings_ForbiddenMessage" xml:space="preserve">
+        <value>Bạn không có quyền thực hiện hành động này.</value>
+        </data>
+    <data name="GlobalSettings_DeleteQuestionnaireConfirmation" xml:space="preserve">
+        <value>Bạn có chắc chắn muốn xóa bảng câu hỏi? Tất cả các cuộc phỏng vấn được thực hiện bằng bảng câu hỏi hiện tại, bao gồm cả các cuộc phỏng vấn được thu thập trên máy tính bảng, ngay cả những cuộc phỏng vấn mà bạn hiện không thấy trên máy chủ sẽ bị mất.</value>
+        </data>
+    <data name="GlobalSettings_DeleteQuestionnaireWarning" xml:space="preserve">
+        <value>Cảnh báo! Đây là một hành động không thể đảo ngược</value>
+        </data>
+    <data name="GlobalSettings_NotifyDialogText" xml:space="preserve">
+        <value>Yêu cầu trước đó của bạn chưa hoàn tất. Vui lòng đợi cho đến khi nó hoàn tất và lặp lại thao tác của bạn.</value>
+        </data>
+    <data name="GlobalSettings_NotifyDialogTitle" xml:space="preserve">
+        <value>Vui lòng chờ</value>
+        </data>
+    <data name="GlobalSettings_NotifyMarkersLimitReachedText" xml:space="preserve">
+        <value>Đối với mức thu phóng này, số điểm đã đạt được. Vui lòng tăng cấp độ và cập nhật điểm.</value>
+        </data>
+    <data name="GlobalSettings_NotifyMarkersLimitReachedTitle" xml:space="preserve">
+        <value>Không phải tất cả các điểm đã được tải</value>
+        </data>
+    <data name="GlobalSettings_NotifyNoMarkersDialogText" xml:space="preserve">
+        <value>Bảng câu hỏi này không chứa tọa độ GPS để hiển thị trên bản đồ cho biến đã chọn.</value>
+        </data>
+    <data name="GlobalSettings_NotifyNoMarkersDialogTitle" xml:space="preserve">
+        <value>Không có điểm đánh dấu nào được thêm vào</value>
+        </data>
+    <data name="GlobalSettings_UnhandledExceptionMessage" xml:space="preserve">
+        <value>Đã xảy ra lỗi không mong muốn. Chúng tôi xin lỗi vì sự bất tiện này.</value>
+        </data>
+    <data name="GlobalSettings_TurningAudioAuditOn" xml:space="preserve">
+        <value>Khi kiểm tra âm thanh, lượng dữ liệu đồng bộ hóa sẽ lớn hơn đáng kể. Bạn có muốn tiếp tục không?</value>
+        </data>
+    <data name="AnyOption" xml:space="preserve">
+        <value>Bất kì</value>
+        </data>
+    <data name="Interviewers_NotSyncedOption" xml:space="preserve">
+        <value>Không bao giờ kết nối</value>
+        </data>
+    <data name="Interviewers_UpToDateOption" xml:space="preserve">
+        <value>Cập nhật</value>
+        </data>
+    <data name="Interviewers_OutdatedOption" xml:space="preserve">
+        <value>lỗi thời</value>
+        </data>
+    <data name="Upload_Upload" xml:space="preserve">
+        <value>Tải lên</value>
+        </data>
+    <data name="HideFilter" xml:space="preserve">
+        <value>Ẩn bộ lọc</value>
+        </data>
+    <data name="ShowFilter" xml:space="preserve">
+        <value>Hiển thị bộ lọc</value>
+        </data>
+    <data name="Interviewers_Archive" xml:space="preserve">
+        <value>Lưu trữ</value>
+        </data>
+    <data name="Interviewers_Unarchive" xml:space="preserve">
+        <value>Hủy lưu trữ</value>
+        </data>
+    <data name="Interviewers_ActiveUsers" xml:space="preserve">
+        <value>Người phỏng vấn tích cực</value>
+        </data>
+    <data name="Interviewers_ArchivedUsers" xml:space="preserve">
+        <value>Người phỏng vấn đã lưu trữ</value>
+        </data>
+    <data name="Supervisors_ActiveUsers" xml:space="preserve">
+        <value>Người giám sát tích cực</value>
+        </data>
+    <data name="Supervisors_ArchivedUsers" xml:space="preserve">
+        <value>Người giám sát đã lưu trữ</value>
+        </data>
+    <data name="Users_ActiveUsers" xml:space="preserve">
+        <value>Người dùng đang hoạt động</value>
+        </data>
+    <data name="Users_ArchivedUsers" xml:space="preserve">
+        <value>Người dùng đã lưu trữ</value>
+        </data>
+    <data name="Interviewers_Connected" xml:space="preserve">
+        <value>Đã kết nối</value>
+        </data>
+    <data name="Interviewers_NotConnected" xml:space="preserve">
+        <value>Không được kết nối</value>
+        </data>
+    <data name="Status" xml:space="preserve">
+        <value>Trạng thái</value>
+        </data>
+    <data name="Template" xml:space="preserve">
+        <value>Bản mẫu</value>
+        </data>
+    <data name="TeamMember" xml:space="preserve">
+        <value>Thành viên nhóm</value>
+        </data>
+    <data name="SupervisorAssigned" xml:space="preserve">
+        <value>Giám sát viên được giao</value>
+        </data>
+    <data name="InterviewerAssigned" xml:space="preserve">
+        <value>Người phỏng vấn được chỉ định</value>
+        </data>
+    <data name="Completed" xml:space="preserve">
+        <value>Hoàn thành</value>
+        </data>
+    <data name="RejectedBySupervisor" xml:space="preserve">
+        <value>Bị người giám sát từ chối</value>
+        </data>
+    <data name="ApprovedBySupervisor" xml:space="preserve">
+        <value>Đã được người giám sát phê duyệt</value>
+        </data>
+    <data name="RejectedByHeadquarters" xml:space="preserve">
+        <value>Bị trụ sở chính từ chối</value>
+        </data>
+    <data name="ApprovedByHeadquarters" xml:space="preserve">
+        <value>Trụ sở chính phê duyệt</value>
+        </data>
+    <data name="Total" xml:space="preserve">
+        <value>Tổng cộng</value>
+        </data>
+    <data name="TeamMembersAndStatuses" xml:space="preserve">
+        <value>Thành viên nhóm và trạng thái</value>
+        </data>
+    <data name="Attention" xml:space="preserve">
+        <value>Chú ý!</value>
+        </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>Hủy bỏ</value>
+        </data>
+    <data name="Update" xml:space="preserve">
+        <value>Cập nhật</value>
+        </data>
+    <data name="Unlock" xml:space="preserve">
+        <value>Mở khóa</value>
+        </data>
+    <data name="Verify" xml:space="preserve">
+        <value>Xác minh</value>
+        </data>
+    <data name="AutolockDescription" xml:space="preserve">
+        <value>Tài khoản bị tự động khóa</value>
+        </data>
+    <data name="Supervisor_CreateText" xml:space="preserve">
+        <value>Hành động này sẽ tạo ra người dùng cá nhân có quyền giám sát,
+        &lt;br&gt;để tạo nhiều người dùng, bạn có thể sử dụng &lt;a href="{{link}}" target="_blank"&gt;tạo hàng loạt người dùng&lt;/a&gt;</value>
+        </data>
+    <data name="User_CreateText1" xml:space="preserve">
+        <value>Hành động này sẽ tạo người dùng cá nhân,</value>
+        </data>
+    <data name="User_CreateText2" xml:space="preserve">
+        <value>để tạo một số người phỏng vấn và người giám sát, bạn có thể sử dụng {{link}}</value>
+        </data>
+    <data name="User_CreateText_UserBatchUploadLinkText" xml:space="preserve">
+        <value>tạo hàng loạt người dùng</value>
+        </data>
+    <data name="PublicSection" xml:space="preserve">
+        <value>Chi tiết thông tin cá nhân</value>
+        </data>
+    <data name="PublicSectionDescription" xml:space="preserve">
+        <value>(tùy chọn, sẽ chỉ hiển thị với người dùng đã được xác thực).</value>
+        </data>
+    <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
+        <value>Ngày tạo tài khoản người phỏng vấn</value>
+        </data>
+    <data name="Interviewers_LastLoginDateTooltip" xml:space="preserve">
+        <value>Ngày người phỏng vấn đăng nhập vào trang web lần cuối</value>
+        </data>
+    <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
+        <value>Tên đăng nhập của người giám sát người phỏng vấn</value>
+        </data>
+    <data name="Interviewers_InterviewerVersionTooltip" xml:space="preserve">
+        <value>Phiên bản Ứng dụng Người phỏng vấn được báo cáo trong lần đồng bộ hóa cuối cùng của máy tính bảng của họ với máy chủ</value>
+        </data>
+    <data name="Interviewers_InterviewerNeverConnected" xml:space="preserve">
+        <value>Không bao giờ kết nối</value>
+        </data>
+    <data name="InterviewDetails_TranslationLabel" xml:space="preserve">
+        <value>Ngôn ngữ</value>
+        </data>
+    <data name="InterviewDetails_DefaultTranslation" xml:space="preserve">
+        <value>nguyên bản</value>
+        </data>
+    <data name="Login" xml:space="preserve">
+        <value>Đăng nhập</value>
+        </data>
+    <data name="Password" xml:space="preserve">
+        <value>Mật khẩu</value>
+        </data>
+    <data name="ShowPassword" xml:space="preserve">
+        <value>Hiển thị mật khẩu</value>
+        </data>
+    <data name="AuthenticatorCode" xml:space="preserve">
+        <value>Mã xác thực</value>
+        </data>
+    <data name="RecoveryCode" xml:space="preserve">
+        <value>Mã khôi phục</value>
+        </data>
+    <data name="QuestionnaireNameFormat" xml:space="preserve">
+        <value>{{name}} (phiên bản {{version}})</value>
+        </data>
+    <data name="GetLatestApp" xml:space="preserve">
+        <value>Tải ứng dụng phỏng vấn mới nhất</value>
+        </data>
+    <data name="GetInterviewerApp" xml:space="preserve">
+        <value>Tải ứng dụng phỏng vấn</value>
+        </data>
+    <data name="GetLatestSupervisorApp" xml:space="preserve">
+        <value>Tải xuống ứng dụng Giám sát mới nhất</value>
+        </data>
+    <data name="InstallationInstruction" xml:space="preserve">
+        <value>Hướng dẫn cài đặt</value>
+        </data>
+    <data name="ConfirmationNeededTitle" xml:space="preserve">
+        <value>Cần xác nhận</value>
+        </data>
+    <data name="FilterTitle" xml:space="preserve">
+        <value>Bộ lọc</value>
+        </data>
+    <data name="Interviewers_Selected" xml:space="preserve">
+        <value>(những) người phỏng vấn đã được chọn</value>
+        </data>
+    <data name="OperationFailedDescription" xml:space="preserve">
+        <value>Đã xảy ra lỗi, vui lòng thử lại sau.</value>
+        </data>
+    <data name="OperationFailedTitle" xml:space="preserve">
+        <value>Thao tác không thành công</value>
+        </data>
+    <data name="InterviewDetails_NoItems" xml:space="preserve">
+        <value>Không có mục nào thỏa mãn bộ lọc đã chọn</value>
+        </data>
+    <data name="Supervisors_Archive" xml:space="preserve">
+        <value>Lưu trữ</value>
+        </data>
+    <data name="Supervisors_UnarchiveSupervisorsConfirm" xml:space="preserve">
+        <value>Bạn có muốn tiếp tục không?</value>
+        </data>
+    <data name="Users_UsersConfirm" xml:space="preserve">
+        <value>Bạn có muốn tiếp tục không?</value>
+        </data>
+    <data name="Users_UnarchiveUsersWarning" xml:space="preserve">
+        <value>(Những) người dùng sẽ không được lưu trữ.</value>
+        </data>
+    <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
+        <value>Nếu người phỏng vấn đã hoàn thành cuộc phỏng vấn trên máy tính bảng của mình thì dữ liệu sẽ bị mất.</value>
+        </data>
+    <data name="Users_ArchiveUsersConfirmMessage" xml:space="preserve">
+        <value>Bạn sẽ lưu trữ những người giám sát và người phỏng vấn trong nhóm của họ. Những người phỏng vấn được chỉ định làm người giám sát đã lưu trữ sẽ được lưu trữ trong TẤT CẢ các không gian làm việc. Mọi dữ liệu chưa được đồng bộ còn sót lại trên thiết bị của người dùng đã lưu trữ (người phỏng vấn hoặc người giám sát) sẽ không được truyền đến máy chủ.</value>
+        </data>
+    <data name="Supervisors_Selected" xml:space="preserve">
+        <value>(những) người giám sát đã được chọn</value>
+        </data>
+    <data name="Interviews_Selected" xml:space="preserve">
+        <value>(các) cuộc phỏng vấn đã chọn</value>
+        </data>
+    <data name="Supervisors_Unarchive" xml:space="preserve">
+        <value>Hủy lưu trữ</value>
+        </data>
+    <data name="Profile_InterviewerEditFormat" xml:space="preserve">
+        <value>Chỉnh sửa hồ sơ người phỏng vấn: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+        </data>
+    <data name="Profile_InterviewerCreate" xml:space="preserve">
+        <value>Tạo hồ sơ người phỏng vấn</value>
+        </data>
+    <data name="Profile_InterviewersList" xml:space="preserve">
+        <value>Người phỏng vấn</value>
+        </data>
+    <data name="Profile_InterviewerProfile" xml:space="preserve">
+        <value>Hồ sơ người phỏng vấn</value>
+        </data>
+    <data name="Profile_ObserverEditFormat" xml:space="preserve">
+        <value>Chỉnh sửa hồ sơ người quan sát: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+        </data>
+    <data name="Profile_ObserverCreate" xml:space="preserve">
+        <value>Tạo người quan sát</value>
+        </data>
+    <data name="Profile_ObserversList" xml:space="preserve">
+        <value>Người quan sát</value>
+        </data>
+    <data name="Profile_HeadquartersEditFormat" xml:space="preserve">
+        <value>Chỉnh sửa hồ sơ trụ sở chính: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+        </data>
+    <data name="Profile_HeadquartersCreate" xml:space="preserve">
+        <value>Tạo trụ sở chính</value>
+        </data>
+    <data name="Profile_HeadquartersList" xml:space="preserve">
+        <value>Trụ sở chính</value>
+        </data>
+    <data name="Profile_SupervisorEditFormat" xml:space="preserve">
+        <value>Chỉnh sửa hồ sơ người giám sát: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+        </data>
+    <data name="Profile_SupervisorCreate" xml:space="preserve">
+        <value>Tạo người giám sát</value>
+        </data>
+    <data name="Profile_SupervisorsList" xml:space="preserve">
+        <value>Giám sát viên</value>
+        </data>
+    <data name="Profile_ApiUserEditFormat" xml:space="preserve">
+        <value>Chỉnh sửa hồ sơ người dùng API: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+        </data>
+    <data name="Profile_ApiUserCreate" xml:space="preserve">
+        <value>Tạo người dùng API</value>
+        </data>
+    <data name="Profile_ApiUserWasCreated" xml:space="preserve">
+        <value>Người dùng API &lt;b&gt;{0}&lt;/b&gt; đã được tạo thành công</value>
+        </data>
+    <data name="CreateAdmin" xml:space="preserve">
+        <value>Tạo quản trị viên</value>
+        </data>
+    <data name="ChangePassword" xml:space="preserve">
+        <value>Đặt lại mật khẩu người dùng</value>
+        </data>
+    <data name="ResetAuthenticator" xml:space="preserve">
+        <value>Đặt lại trình xác thực</value>
+        </data>
+    <data name="SetupAuthenticator" xml:space="preserve">
+        <value>Thiết lập trình xác thực</value>
+        </data>
+    <data name="AddAuthenticator" xml:space="preserve">
+        <value>Thêm trình xác thực</value>
+        </data>
+    <data name="ResetRecoveryCodes" xml:space="preserve">
+        <value>Đặt lại mã khôi phục</value>
+        </data>
+    <data name="RecoveryCodesLeft" xml:space="preserve">
+        <value>Mã khôi phục còn lại:</value>
+        </data>
+    <data name="RecoveryCodesYouCan" xml:space="preserve">
+        <value>bạn có thể</value>
+        </data>
+    <data name="GenerateRecoveryCodesLink" xml:space="preserve">
+        <value>tạo một bộ mã khôi phục mới</value>
+        </data>
+    <data name="Disable2fa" xml:space="preserve">
+        <value>Vô hiệu hóa 2FA</value>
+        </data>
+    <data name="RecoveryCodesInfo" xml:space="preserve">
+        <value>Hãy đặt những mã này ở nơi an toàn.</value>
+        </data>
+    <data name="RecoveryCodesDescription" xml:space="preserve">
+        <value>Nếu bạn mất thiết bị và không có mã khôi phục, bạn sẽ mất quyền truy cập vào tài khoản của mình.</value>
+        </data>
+    <data name="RecoveryCodesDescriptionLine1" xml:space="preserve">
+        <value>Việc tạo mã khôi phục mới không làm thay đổi khóa được sử dụng trong ứng dụng xác thực.</value>
+        </data>
+    <data name="EnableAuthenticatorLine1" xml:space="preserve">
+        <value>Để sử dụng ứng dụng xác thực, hãy thực hiện các bước sau:</value>
+        </data>
+    <data name="EnableAuthenticatorLine2" xml:space="preserve">
+        <value>Tải xuống ứng dụng xác thực hai yếu tố như Microsoft Authenticator cho</value>
+        </data>
+    <data name="EnableAuthenticatorLine3" xml:space="preserve">
+        <value>hoặc Google Authenticator cho</value>
+        </data>
+    <data name="EnableAuthenticatorLine4" xml:space="preserve">
+        <value>Quét Mã QR hoặc nhập khóa dùng chung vào ứng dụng xác thực hai yếu tố của bạn. Không gian và vỏ không quan trọng.</value>
+        </data>
+    <data name="EnableAuthenticatorLine5" xml:space="preserve">
+        <value>Sau khi bạn quét mã QR hoặc nhập khóa chia sẻ ở trên, ứng dụng xác thực hai yếu tố sẽ cung cấp cho bạn mã xác minh. Nhập nó vào bên dưới và nhấp vào 'Xác minh'.</value>
+        </data>
+    <data name="EnableAuthenticatorSharedKey" xml:space="preserve">
+        <value>Khóa chia sẻ:</value>
+        </data>
+    <data name="ResetAuthenticatorLine1" xml:space="preserve">
+        <value>Nếu bạn đặt lại khóa xác thực, ứng dụng xác thực của bạn sẽ không cho phép đăng nhập cho đến khi bạn định cấu hình lại nó.</value>
+        </data>
+    <data name="ResetAuthenticatorLine2" xml:space="preserve">
+        <value>Quá trình này vô hiệu hóa xác thực hai yếu tố cho đến khi bạn xác minh ứng dụng xác thực của mình. Nếu bạn không hoàn tất cấu hình ứng dụng xác thực, tài khoản của bạn sẽ không được xác thực hai yếu tố.</value>
+        </data>
+    <data name="Disable2faLine1" xml:space="preserve">
+        <value>Hành động này chỉ vô hiệu hóa 2FA</value>
+        </data>
+    <data name="Disable2faLine2" xml:space="preserve">
+        <value>Việc tắt 2FA không làm thay đổi các khóa được sử dụng trong ứng dụng xác thực.</value>
+        </data>
+    <data name="ChandgeKeyLine1" xml:space="preserve">
+        <value>Nếu bạn muốn thay đổi khóa được sử dụng trong ứng dụng xác thực, bạn nên</value>
+        </data>
+    <data name="ChandgeKeyLine2" xml:space="preserve">
+        <value>đặt lại khóa xác thực của bạn.</value>
+        </data>
+    <data name="Profile_ApiUsersList" xml:space="preserve">
+        <value>Người dùng API</value>
+        </data>
+    <data name="Assignments_PageTitle" xml:space="preserve">
+        <value>Bài tập</value>
+        </data>
+    <data name="AssignmentDetails_PageTitle" xml:space="preserve">
+        <value>Bài tập {0}</value>
+        </data>
+    <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
+        <value>[phiên bản. {{version}}] {{name}}</value>
+        </data>
+    <data name="HQ_LockWarning" xml:space="preserve">
+        <value>Trụ sở chính bị khóa (ô đã chọn) không thể đăng nhập và thực hiện bất kỳ hành động nào trên máy chủ.</value>
+        </data>
+    <data name="Interviewer_LockWarning" xml:space="preserve">
+        <value>Người phỏng vấn bị khóa không thể kết nối máy tính bảng của họ với máy chủ và gửi cuộc phỏng vấn.</value>
+        </data>
+    <data name="Tablet_RelinkMessage" xml:space="preserve">
+        <value>Một thiết bị duy nhất được liên kết với tài khoản này.</value>
+        </data>
+    <data name="Supervisor_LockWarning" xml:space="preserve">
+        <value>Người giám sát bị khóa (hộp đã chọn) không thể đăng nhập và thực hiện bất kỳ hành động nào trên máy chủ.</value>
+        </data>
+    <data name="Users_API_Instruction1" xml:space="preserve">
+        <value>Nhấn nút Thêm API để tạo người dùng API mới.</value>
+        </data>
+    <data name="Users_API_Instruction2" xml:space="preserve">
+        <value>Nhấp vào Tên đăng nhập để sửa đổi hồ sơ của người dùng API hiện có.</value>
+        </data>
+    <data name="Users_Headquarters_Instruction1" xml:space="preserve">
+        <value>Nhấn nút Thêm trụ sở chính để tạo người dùng HQ mới.</value>
+        </data>
+    <data name="Users_Headquarters_Instruction2" xml:space="preserve">
+        <value>Nhấp vào Tên đăng nhập để sửa đổi hồ sơ của người dùng HQ hiện có.</value>
+        </data>
+    <data name="Users_Interviewers_Instruction1" xml:space="preserve">
+        <value>Nhấn nút Thêm người phỏng vấn để tạo Người phỏng vấn mới.</value>
+        </data>
+    <data name="Users_Interviewers_Instruction2" xml:space="preserve">
+        <value>Nhấp vào Tên đăng nhập để xem thông tin về người phỏng vấn và sửa đổi hồ sơ Người phỏng vấn.</value>
+        </data>
+    <data name="Users_Observers_Instruction1" xml:space="preserve">
+        <value>Nhấn nút Thêm Người quan sát để tạo Người quan sát mới.</value>
+        </data>
+    <data name="Users_Observers_Instruction2" xml:space="preserve">
+        <value>Nhấp vào Tên đăng nhập để sửa đổi hồ sơ của người dùng Observer hiện có.</value>
+        </data>
+    <data name="Users_Supervisors_Instruction1" xml:space="preserve">
+        <value>Nhấn nút Thêm người giám sát để tạo người giám sát mới.</value>
+        </data>
+    <data name="Users_Supervisors_Instruction2" xml:space="preserve">
+        <value>Nhấp vào Tên đăng nhập để sửa đổi hồ sơ của Giám sát viên hiện có.</value>
+        </data>
+    <data name="InterviewDetails_MoreDetails" xml:space="preserve">
+        <value>Chi tiết</value>
+        </data>
+    <data name="GetLatestAppDescription" xml:space="preserve">
+        <value>Tải xuống và cài đặt phiên bản ứng dụng Người phỏng vấn này cho các cuộc khảo sát không sử dụng chức năng ESRI GIS. Apk này không bao gồm SDK ESRI và do đó có kích thước nhỏ hơn nhiều và tải xuống nhanh hơn so với phiên bản có SDK.</value>
+        </data>
+    <data name="GetLatestAppExtendedDescription" xml:space="preserve">
+        <value>Chỉ tải xuống và cài đặt phiên bản ứng dụng phỏng vấn này nếu bạn sử dụng chức năng ESRI GIS nâng cao. Apk này chứa SDK ESRI lớn, có kích thước lớn và có thể mất nhiều thời gian để tải xuống.</value>
+        </data>
+    <data name="DownloadPage_Instructions" xml:space="preserve">
+        <value>Hướng dẫn cài đặt</value>
+        </data>
+    <data name="DownloadPage_Title" xml:space="preserve">
+        <value>Công nghệ Phỏng vấn Cá nhân có sự hỗ trợ của Máy tính do Ngân hàng Thế giới phát triển.</value>
+        </data>
+    <data name="DownloadPage_Welcome" xml:space="preserve">
+        <value>Chào mừng bạn đến với trang tải xuống Người phỏng vấn Giải pháp Khảo sát</value>
+        </data>
+    <data name="DownloadSupervisorPage_Welcome" xml:space="preserve">
+        <value>Chào mừng bạn đến với trang tải xuống Giám sát giải pháp khảo sát</value>
+        </data>
+    <data name="DownloadPage_PageTitle" xml:space="preserve">
+        <value>Tải ứng dụng Người phỏng vấn</value>
+        </data>
+    <data name="DownloadSupervisorPage_PageTitle" xml:space="preserve">
+        <value>Tải xuống ứng dụng Giám sát</value>
+        </data>
+    <data name="DownloadPage_Version" xml:space="preserve">
+        <value>Phiên bản</value>
+        </data>
+    <data name="DownloadPage_Size" xml:space="preserve">
+        <value>Kích cỡ</value>
+        </data>
+    <data name="AreaQestion_Area" xml:space="preserve">
+        <value>Khu vực</value>
+        </data>
+    <data name="AreaQestion_Length" xml:space="preserve">
+        <value>Chiều dài</value>
+        </data>
+    <data name="AreaQestion_Points" xml:space="preserve">
+        <value>Điểm</value>
+        </data>
+    <data name="AreaQuestion_RequestedAccuracy" xml:space="preserve">
+        <value>Sự chính xác</value>
+        </data>
+    <data name="AreaQuestion_RequestedFrequency" xml:space="preserve">
+        <value>Tính thường xuyên</value>
+        </data>
+    <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
+        <value>mét vuông</value>
+        </data>
+    <data name="AreaQestion_AreaMeter" xml:space="preserve">
+        <value>mét</value>
+        </data>
+    <data name="Unarchive" xml:space="preserve">
+        <value>Hủy lưu trữ</value>
+        </data>
+    <data name="InterviewerIsArchived" xml:space="preserve">
+        <value>Người phỏng vấn được lưu trữ</value>
+        </data>
+    <data name="InterviewerHq_DiscardInterview" xml:space="preserve">
+        <value>Loại bỏ</value>
+        </data>
+    <data name="InterviewerHq_OpenInterview" xml:space="preserve">
+        <value>Mở</value>
+        </data>
+    <data name="InterviewerHq_RestartInterview" xml:space="preserve">
+        <value>Mở lại</value>
+        </data>
+    <data name="InterviewerHq_RestartConfirm" xml:space="preserve">
+        <value>Vui lòng đưa ra nhận xét nếu cần để mở lại cuộc phỏng vấn</value>
+        </data>
+    <data name="InterviewerHq_DiscardConfirm" xml:space="preserve">
+        <value>Bạn có chắc chắn muốn loại bỏ dữ liệu phỏng vấn không?</value>
+        </data>
+    <data name="Map_DiscardConfirm" xml:space="preserve">
+        <value>Bạn có chắc chắn muốn xóa bản đồ "{{map}}" không?</value>
+        </data>
+    <data name="MapUserLink_DiscardConfirm" xml:space="preserve">
+        <value>Bạn có chắc chắn muốn hủy liên kết người dùng khỏi bản đồ không?</value>
+        </data>
+    <data name="CautionTitle" xml:space="preserve">
+        <value>Thận trọng:</value>
+        </data>
+    <data name="ExcludeEsriTitle" xml:space="preserve">
+        <value>Loại trừ hỗ trợ Bản đồ ESRI</value>
+        </data>
+    <data name="IncludeEsriTitle" xml:space="preserve">
+        <value>Bao gồm chức năng lập bản đồ</value>
+        </data>
+    <data name="GetEsriExtraDescription" xml:space="preserve">
+        <value>Chức năng ánh xạ sẽ tăng đáng kể kích thước ứng dụng và thời gian tải xuống. Hãy làm theo hướng dẫn của người giám sát về phiên bản ứng dụng Người phỏng vấn (có hoặc không có bản đồ) cần thiết cho nhiệm vụ của bạn.</value>
+        </data>
+    <data name="Filters_Assignment" xml:space="preserve">
+        <value>Phân công</value>
+        </data>
+    <data name="Filters_Shapefiles" xml:space="preserve">
+        <value>Shapefiles</value>
+        </data>
+    <data name="Filters_None" xml:space="preserve">
+        <value>Không có</value>
+        </data>
+    <data name="InterviewersAndDevicesTitle" xml:space="preserve">
+        <value>Thiết bị/Người phỏng vấn</value>
+        </data>
+    <data name="InterviewersAndDevicesSubtitle" xml:space="preserve">
+        <value>Các vấn đề đối với mỗi người phỏng vấn</value>
+        </data>
+    <data name="StatusDuration" xml:space="preserve">
+        <value>Thời lượng trạng thái</value>
+        </data>
+    <data name="StatusDurationDescription" xml:space="preserve">
+        <value>Số ngày mà bài tập và cuộc phỏng vấn vẫn ở trạng thái hiện tại</value>
+        </data>
+    <data name="SurveyStatisticsDescription" xml:space="preserve">
+        <value>Báo cáo trình bày các số liệu thống kê cơ bản, bảng một chiều và hai chiều tính toán trên số liệu khảo sát</value>
+        </data>
+    <data name="HistoryOfStatuses_AssignedTo" xml:space="preserve">
+        <value>Được giao cho</value>
+        </data>
+    <data name="HistoryOfStatuses_Interview" xml:space="preserve">
+        <value>Phỏng vấn</value>
+        </data>
+    <data name="HistoryOfStatuses_ViewInterview" xml:space="preserve">
+        <value>Xem cuộc phỏng vấn</value>
+        </data>
+    <data name="DownloadReport" xml:space="preserve">
+        <value>Tải xuống báo cáo dưới dạng</value>
+        </data>
+    <data name="Or" xml:space="preserve">
+        <value>hoặc</value>
+        </data>
+    <data name="GlobalSettings_DeleteMapConfirmation" xml:space="preserve">
+        <value>Bạn có muốn xóa bản đồ?</value>
+        </data>
+    <data name="MapDetails_InterviewerName" xml:space="preserve">
+        <value>Tên người dùng</value>
+        </data>
+    <data name="MapDetails_DelinkUser" xml:space="preserve">
+        <value>Hủy liên kết người dùng khỏi bản đồ</value>
+        </data>
+    <data name="MapDetails_Unlink" xml:space="preserve">
+        <value>Hủy liên kết</value>
+        </data>
+    <data name="MapDetails_MapDisclaimer" xml:space="preserve">
+        <value>Bản xem trước này hiển thị bản đồ đã tải được xếp chồng lên bản đồ thế giới.</value>
+        </data>
+    <data name="MapDetails_FullShapefilesDisclaimer" xml:space="preserve">
+        <value>Bản xem trước này hiển thị tệp hình dạng được tải lên được đặt chồng lên lớp cơ sở hình ảnh vệ tinh.</value>
+        </data>
+    <data name="MapDetails_SimplifiedShapefilesDisclaimer" xml:space="preserve">
+        <value>Bản xem trước này hiển thị phiên bản rút gọn của tệp hình dạng đã tải lên được đặt chồng lên lớp cơ sở hình ảnh vệ tinh. Shapefile được tải lên ban đầu không được hiển thị trong bản xem trước này do kích thước lớn của nó.</value>
+        </data>
+    <data name="MapDetails_DuplicateLabelsWarning" xml:space="preserve">
+        <value>Cảnh báo! Shapefile chứa các nhãn trùng lặp</value>
+        </data>
+    <data name="MapDetails_MapTitle" xml:space="preserve">
+        <value>Bản đồ</value>
+        </data>
+    <data name="MapDetails_ImportedOn" xml:space="preserve">
+        <value>Đã nhập vào</value>
+        </data>
+    <data name="MapDetails_UploadedBy" xml:space="preserve">
+        <value>Tải lên bởi</value>
+        </data>
+    <data name="MapDetails_SelectUser" xml:space="preserve">
+        <value>Chọn người dùng</value>
+        </data>
+    <data name="MapDetails_Size" xml:space="preserve">
+        <value>Kích thước (MB)</value>
+        </data>
+    <data name="MapDetails_EmptyMapData" xml:space="preserve">
+        <value>Bản đồ này thiếu dữ liệu xem trước</value>
+        </data>
+    <data name="MapDetails_MinScale" xml:space="preserve">
+        <value>Quy mô tối thiểu</value>
+        </data>
+    <data name="MapDetails_MaxScale" xml:space="preserve">
+        <value>Tỷ lệ tối đa</value>
+        </data>
+    <data name="MapDetails_ShapeType" xml:space="preserve">
+        <value>Kiểu hình dạng</value>
+        </data>
+    <data name="MapDetails_ShapesCount" xml:space="preserve">
+        <value>Số lượng hình dạng</value>
+        </data>
+    <data name="MapList_Title" xml:space="preserve">
+        <value>Tệp bản đồ</value>
+        </data>
+    <data name="MapList_Upload" xml:space="preserve">
+        <value>Tải lên tệp .zip</value>
+        </data>
+    <data name="MapList_UploadDescription" xml:space="preserve">
+        <value>Tải lên kho lưu trữ zip chứa bản đồ.</value>
+        </data>
+    <data name="MapList_UploadDescriptionExtra" xml:space="preserve">
+        <value>Lưu ý: File trùng tên sẽ bị ghi đè.</value>
+        </data>
+    <data name="MapList_UserLinking" xml:space="preserve">
+        <value>Cập nhật liên kết người dùng với bản đồ</value>
+        </data>
+    <data name="MapList_DeleteMap" xml:space="preserve">
+        <value>Xóa bản đồ</value>
+        </data>
+    <data name="MapList_MapName" xml:space="preserve">
+        <value>Tệp bản đồ</value>
+        </data>
+    <data name="MapList_MapType" xml:space="preserve">
+        <value>Kiểu</value>
+        </data>
+    <data name="MapList_Name" xml:space="preserve">
+        <value>Tên</value>
+        </data>
+    <data name="MapList_Size" xml:space="preserve">
+        <value>Kích thước (MB)</value>
+        </data>
+    <data name="MapList_Updated" xml:space="preserve">
+        <value>Đã cập nhật vào</value>
+        </data>
+    <data name="MapList_HasDuplicateLabels" xml:space="preserve">
+        <value>Có nhãn trùng lặp</value>
+        </data>
+    <data name="MapLinking_DescriptionTitle" xml:space="preserve">
+        <value>Quản lý liên kết bản đồ người dùng</value>
+        </data>
+    <data name="MapLinking_Description" xml:space="preserve">
+        <value>Tải lên tệp chứa thư từ giữa bản đồ và người dùng</value>
+        </data>
+    <data name="MapLinking_UploadDescriptionTitle" xml:space="preserve">
+        <value>Tải lên ánh xạ người dùng</value>
+        </data>
+    <data name="MapLinking_UploadDescription" xml:space="preserve">
+        <value>Điều này sẽ cho phép bạn tạo bản đồ tới thư từ của người dùng.</value>
+        </data>
+    <data name="MapLinking_DownloadExisting" xml:space="preserve">
+        <value>Tải xuống các liên kết hiện có</value>
+        </data>
+    <data name="MapLinking_UploadFile" xml:space="preserve">
+        <value>Tải lên tệp .tab</value>
+        </data>
+    <data name="MapLinking_UploadFileDescription" xml:space="preserve">
+        <value>Tải lên tệp .tab có ánh xạ tệp</value>
+        </data>
+    <data name="MapLinking_UploadFileDescription1" xml:space="preserve">
+        <value>Tên và tên người dùng không hợp lệ sẽ bị bỏ qua.</value>
+        </data>
+    <data name="Map_Status" xml:space="preserve">
+        <value>Trạng thái</value>
+        </data>
+    <data name="Map_NoUsers" xml:space="preserve">
+        <value>Bản đồ không được gán cho bất kỳ người dùng nào</value>
+        </data>
+    <data name="Map_Uploaded" xml:space="preserve">
+        <value>Tập tin đã được tải lên. Xử lý.</value>
+        </data>
+    <data name="Map_Uploading" xml:space="preserve">
+        <value>Đang tải lên</value>
+        </data>
+    <data name="Map_UploadingError" xml:space="preserve">
+        <value>Đã xảy ra lỗi trong quá trình tải lên</value>
+        </data>
+    <data name="Map_UploadingFileTooBig" xml:space="preserve">
+        <value>Tệp quá lớn</value>
+        </data>
+    <data name="Map_UploadingSuccess" xml:space="preserve">
+        <value>Bản đồ đã được tải lên thành công</value>
+        </data>
+    <data name="Interviewers_MoveToAnotherTeam" xml:space="preserve">
+        <value>Chuyển sang đội khác</value>
+        </data>
+    <data name="Interviewers_InterviewersToMove" xml:space="preserve">
+        <value>(Những) Người phỏng vấn {{interviewers}} sẽ được chuyển sang nhóm giám sát {{supervisor}}.</value>
+        </data>
+    <data name="Interviewers_InterviewersToStay" xml:space="preserve">
+        <value>(Những) Người phỏng vấn {{interviewers}} thuộc nhóm giám sát {{supervisor}} và sẽ không có hành động nào được thực hiện.</value>
+        </data>
+    <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
+        <value>Chuyển (những) người phỏng vấn cùng với nhiệm vụ và cuộc phỏng vấn của họ sang nhóm giám sát {{supervisor}}.</value>
+        </data>
+    <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
+        <value>Chọn đội để di chuyển {{names}}</value>
+        </data>
+    <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
+        <value>{{names}} và {{lastname}}</value>
+        </data>
+    <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
+        <value>{{names}} và {{more}} thêm</value>
+        </data>
+    <data name="Interviewers_ReassignToOriginalSupervisor" xml:space="preserve">
+        <value>Yêu cầu người giám sát ban đầu chịu trách nhiệm về các nhiệm vụ hiện có và các cuộc phỏng vấn của (những) người phỏng vấn đã chuyển đi.</value>
+        </data>
+    <data name="Interviewers_MovingCompleted" xml:space="preserve">
+        <value>Việc di chuyển người dùng đã hoàn tất</value>
+        </data>
+    <data name="Interviewers_MovingIsInProgress" xml:space="preserve">
+        <value>Đang di chuyển</value>
+        </data>
+    <data name="Interviewers_FinishedWithErrors" xml:space="preserve">
+        <value>Đã kết thúc với lỗi. Vui lòng lặp lại hành động sau. Viết thư để hỗ trợ nếu vấn đề sẽ lặp lại trong tương lai.</value>
+        </data>
+    <data name="MapList_UserMapsLink" xml:space="preserve">
+        <value>Bản đồ người dùng</value>
+        </data>
+    <data name="MapList_UserMapsTitle" xml:space="preserve">
+        <value>Bản đồ người dùng</value>
+        </data>
+    <data name="UpgradeAssignmentsTitle" xml:space="preserve">
+        <value>Nâng cấp bài tập</value>
+        </data>
+    <data name="InterviewOverview" xml:space="preserve">
+        <value>Tổng quan về phỏng vấn</value>
+        </data>
+    <data name="InterviewerProfile_TrafficUsageHeader" xml:space="preserve">
+        <value>Sử dụng lưu lượng truy cập</value>
+        </data>
+    <data name="InterviewerProfile_IncomingTraffic" xml:space="preserve">
+        <value>Lưu lượng truy cập đến</value>
+        </data>
+    <data name="InterviewerProfile_OutgoingTraffic" xml:space="preserve">
+        <value>Lưu lượng đi</value>
+        </data>
+    <data name="InterviewerProfile_TotalTrafficUsed" xml:space="preserve">
+        <value>Tổng lưu lượng truy cập đã sử dụng</value>
+        </data>
+    <data name="InterviewerProfile_TotalTrafficUsedTooltip" xml:space="preserve">
+        <value>Tổng lưu lượng truy cập vào và ra của người dùng trên tất cả các thiết bị</value>
+        </data>
+    <data name="Kb" xml:space="preserve">
+        <value>Kb</value>
+        </data>
+    <data name="EmailProviders" xml:space="preserve">
+        <value>Cài đặt nhà cung cấp email</value>
+        </data>
+    <data name="EmailProvidersTitle" xml:space="preserve">
+        <value>Nhà cung cấp email</value>
+        </data>
+    <data name="InterviewerProfile_QrCodeAlt" xml:space="preserve">
+        <value>Mã Qr giúp đơn giản hóa việc thiết lập ứng dụng người phỏng vấn</value>
+        </data>
+    <data name="InterviewerProfile_NoMarkers" xml:space="preserve">
+        <value>Vị trí của người phỏng vấn chưa bao giờ được ghi lại trong bất kỳ cuộc phỏng vấn nào mà người đó đã gửi</value>
+        </data>
+    <data name="Questionnaire_Info" xml:space="preserve">
+        <value>Chi tiết bảng câu hỏi</value>
+        </data>
+    <data name="Questionnaire_Exposed_Variables" xml:space="preserve">
+        <value>Bảng câu hỏi tiếp xúc với các biến</value>
+        </data>
+    <data name="Exposed_Variables_Description" xml:space="preserve">
+        <value>Việc chọn các biến này sẽ cho phép sử dụng chúng trong báo cáo. Các cuộc phỏng vấn mới được tạo sẽ có sẵn ngay lập tức. Các cuộc phỏng vấn được thu thập trước đó sẽ được xử lý và sẽ mất một thời gian. Bạn có thể chọn tối đa 15 biến.</value>
+        </data>
+    <data name="Exposed_Variables_AvailableVariablesTitle" xml:space="preserve">
+        <value>Các biến có sẵn</value>
+        </data>
+    <data name="Exposed_Variables_SelectedVariablesTitle" xml:space="preserve">
+        <value>Biến tiếp xúc</value>
+        </data>
+    <data name="ExposedVariables_RemoveMessage" xml:space="preserve">
+        <value>Bạn có muốn xóa biến khỏi danh sách không?</value>
+        </data>
+    <data name="Questionnaire_Stats" xml:space="preserve">
+        <value>Thông tin bảng câu hỏi</value>
+        </data>
+    <data name="Questionnaire_QuestionsCount" xml:space="preserve">
+        <value>Câu hỏi</value>
+        </data>
+    <data name="Questionnaire_QuestionsCountWithCond" xml:space="preserve">
+        <value>Câu hỏi có điều kiện</value>
+        </data>
+    <data name="Questionnaire_RostersCount" xml:space="preserve">
+        <value>Số lượng danh sách</value>
+        </data>
+    <data name="Questionnaire_SectionsCount" xml:space="preserve">
+        <value>Số phần</value>
+        </data>
+    <data name="Questionnaire_SubSectionsCount" xml:space="preserve">
+        <value>Số lượng tiểu mục</value>
+        </data>
+    <data name="Questionnaire_Variable" xml:space="preserve">
+        <value>Tên biến</value>
+        </data>
+    <data name="Home" xml:space="preserve">
+        <value>Trang chủ</value>
+        </data>
+    <data name="Configuration" xml:space="preserve">
+        <value>Cấu hình</value>
+        </data>
+    <data name="Diagnostics" xml:space="preserve">
+        <value>Chẩn đoán</value>
+        </data>
+    <data name="AppUpdates" xml:space="preserve">
+        <value>Thông tin Apk</value>
+        </data>
+    <data name="InterviewPackages" xml:space="preserve">
+        <value>Gói phỏng vấn</value>
+        </data>
+    <data name="Exceptions" xml:space="preserve">
+        <value>Ngoại lệ</value>
+        </data>
+    <data name="Admin_InterviewPackages_Exception" xml:space="preserve">
+        <value>Ngoại lệ</value>
+        </data>
+    <data name="Admin_InterviewPackages_InterviewKey" xml:space="preserve">
+        <value>Chìa khóa</value>
+        </data>
+    <data name="Admin_InterviewPackages_InterviewId" xml:space="preserve">
+        <value>Id cuộc phỏng vấn</value>
+        </data>
+    <data name="Admin_InterviewPackages_IncomingDate" xml:space="preserve">
+        <value>Ngày đến</value>
+        </data>
+    <data name="Admin_InterviewPackages_ProcessingDate" xml:space="preserve">
+        <value>Ngày xử lý</value>
+        </data>
+    <data name="Admin_InterviewPackages_PackageSize" xml:space="preserve">
+        <value>Kích cỡ</value>
+        </data>
+    <data name="Admin_InterviewPackages_SelectInterviewer" xml:space="preserve">
+        <value>Chọn người phỏng vấn</value>
+        </data>
+    <data name="Admin_InterviewPackages_Interviewer" xml:space="preserve">
+        <value>Người phỏng vấn</value>
+        </data>
+    <data name="Admin_InterviewPackages_SelectQuestionnaire" xml:space="preserve">
+        <value>Chọn bảng câu hỏi</value>
+        </data>
+    <data name="Admin_InterviewPackages_Questionnaire" xml:space="preserve">
+        <value>Bảng câu hỏi</value>
+        </data>
+    <data name="Admin_InterviewPackages_ExceptionType" xml:space="preserve">
+        <value>Loại ngoại lệ</value>
+        </data>
+    <data name="Admin_InterviewPackages_SelectExceptionType" xml:space="preserve">
+        <value>Chọn loại ngoại lệ</value>
+        </data>
+    <data name="Admin_InterviewPackages_Type" xml:space="preserve">
+        <value>Loại ngoại lệ</value>
+        </data>
+    <data name="Admin_InterviewPackages_Broken" xml:space="preserve">
+        <value>Vỡ</value>
+        </data>
+    <data name="Admin_InterviewPackages_Rejected" xml:space="preserve">
+        <value>Vật bị loại bỏ</value>
+        </data>
+    <data name="Admin_InterviewPackages_Period" xml:space="preserve">
+        <value>Giai đoạn</value>
+        </data>
+    <data name="Admin_InterviewPackages_ReprocessSelectedConfirmation" xml:space="preserve">
+        <value>Bạn có chắc chắn muốn xử lý lại các gói bị hỏng đã chọn không?</value>
+        </data>
+    <data name="Admin_InterviewPackages_SelectedPackagesCount" xml:space="preserve">
+        <value>{{count}} gói đã chọn</value>
+        </data>
+    <data name="Admin_InterviewPackages_Reprocess" xml:space="preserve">
+        <value>Tái chế</value>
+        </data>
+    <data name="Admin_InterviewPackages_PutReason" xml:space="preserve">
+        <value>Đặt lý do</value>
+        </data>
+    <data name="Admin_InterviewPackages_Title" xml:space="preserve">
+        <value>Gói phỏng vấn({{count}})</value>
+        </data>
+    <data name="Admin_InterviewPackages_Subtitle" xml:space="preserve">
+        <value>Nếu bạn thất bại trong cuộc phỏng vấn hoặc nhận được thông báo rằng cuộc phỏng vấn bị hỏng, &lt;br/&gt; bạn có thể tìm thấy dữ liệu về cuộc phỏng vấn đó tại đây</value>
+        </data>
+    <data name="Admin_InterviewPackages_NumberOfPackagesAffected" xml:space="preserve">
+        <value>Các gói {{count}} sẽ được thay đổi</value>
+        </data>
+    <data name="Admin_InterviewPackages_SelectReason" xml:space="preserve">
+        <value>Chọn lý do</value>
+        </data>
+    <data name="Admin_InterviewPackages_Reason" xml:space="preserve">
+        <value>Lý do</value>
+        </data>
+    <data name="ReevaluateInterview" xml:space="preserve">
+        <value>Đánh giá lại cuộc phỏng vấn</value>
+        </data>
+    <data name="Admin_ControlPanelLinkTitle" xml:space="preserve">
+        <value>Bảng điều khiển</value>
+        </data>
+    <data name="Admin_ReevaluateInterview_InterviewId" xml:space="preserve">
+        <value>Id cuộc phỏng vấn</value>
+        </data>
+    <data name="Admin_Reevaluate" xml:space="preserve">
+        <value>Đánh giá lại</value>
+        </data>
+    <data name="Admin_Reevaluate_InterviewId_Required" xml:space="preserve">
+        <value>Cần có id cuộc phỏng vấn</value>
+        </data>
+    <data name="Admin_Reevaluate_InterviewId_Invalid" xml:space="preserve">
+        <value>Nhập giá trị GUID hợp lệ</value>
+        </data>
+    <data name="Admin_Reevaluate_Success" xml:space="preserve">
+        <value>Cuộc phỏng vấn được đánh giá lại thành công</value>
+        </data>
+    <data name="CreateUser" xml:space="preserve">
+        <value>Tạo tài khoản người dùng</value>
+        </data>
+    <data name="GenerateRecoveryCodes" xml:space="preserve">
+        <value>Tạo mã khôi phục</value>
+        </data>
+    <data name="AccountManage_Status2fa" xml:space="preserve">
+        <value>Xác thực hai yếu tố hiện đang được áp dụng</value>
+        </data>
+    <data name="AccountManage_StatusApiToken" xml:space="preserve">
+        <value>Hiện tại, quyền truy cập vào các điểm cuối API REST và GraphQL</value>
+        </data>
+    <data name="UsersManage_WorkspacesFilterTitle" xml:space="preserve">
+        <value>Không gian làm việc</value>
+        </data>
+    <data name="UsersManage_WorkspacesFilterPlaceholder" xml:space="preserve">
+        <value>Tất cả không gian làm việc</value>
+        </data>
+    <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+        <value>Truy cập vào không gian làm việc</value>
+        </data>
+    <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
+        <value>Người giám sát</value>
+        </data>
+    <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
+        <value>Chọn người giám sát</value>
+        </data>
+    <data name="UsersManage_RoleFilterPlaceholder" xml:space="preserve">
+        <value>Tất cả vai trò</value>
+        </data>
+    <data name="CreateUser_RoleLabel" xml:space="preserve">
+        <value>Vai trò người dùng</value>
+        </data>
+    <data name="UsersManage_ShowUsersFilterPlaceholder" xml:space="preserve">
+        <value>Tất cả người dùng</value>
+        </data>
+    <data name="UserManagement_SubtitleAdd" xml:space="preserve">
+        <value>Chọn không gian làm việc cần thêm cho người dùng đã chọn</value>
+        </data>
+    <data name="UserManagement_SubtitleAddInterviewer" xml:space="preserve">
+        <value>Chọn không gian làm việc và người giám sát cần tạo người phỏng vấn</value>
+        </data>
+    <data name="UserManagement_SubtitleRemove" xml:space="preserve">
+        <value>Chọn không gian làm việc cần xóa khỏi những người dùng đã chọn</value>
+        </data>
+    <data name="UserManagement_ManageWorkspacesTitle" xml:space="preserve">
+        <value>Quản lý không gian làm việc</value>
+        </data>
+    <data name="UserManagement_AddToWorkspace" xml:space="preserve">
+        <value>Thêm vào không gian làm việc</value>
+        </data>
+    <data name="UserManagement_RemoveFromWorkspace" xml:space="preserve">
+        <value>Xóa khỏi không gian làm việc</value>
+        </data>
+    <data name="UserManagement_UsersSelected" xml:space="preserve">
+        <value>(Những) người dùng đã chọn</value>
+        </data>
+    <data name="Interviewer_CreateText" xml:space="preserve">
+        <value>Hành động này sẽ tạo người dùng cá nhân có quyền của người phỏng vấn,&lt;br&gt; để tạo nhiều người dùng, bạn có thể sử dụng &lt;a href="{{link}}" target="_blank"&gt;tạo hàng loạt người dùng&lt;/a&gt;.</value>
+        </data>
+    <data name="UsersManage_TeamFilterPlaceHolder" xml:space="preserve">
+        <value>Đội</value>
+        </data>
+    <data name="UsersManage_TeamFilter" xml:space="preserve">
+        <value>Đội</value>
+        </data>
+    <data name="ExposedVariables_VariableName" xml:space="preserve">
+        <value>Tên biến</value>
+        </data>
+    <data name="ExposedVariables_VariableTitle" xml:space="preserve">
+        <value>Tiêu đề</value>
+        </data>
+    <data name="ExposedVariables_VariableDisplayTitle" xml:space="preserve">
+        <value>Tiêu đề hiển thị</value>
+        </data>
+    <data name="ExposedVariables_VariableLabel" xml:space="preserve">
+        <value>Nhãn</value>
+        </data>
+    <data name="ExposedVariables_ChangeMessage" xml:space="preserve">
+        <value>Bạn đang thay đổi tập hợp các biến được hiển thị. Sẽ mất một thời gian để cập nhật các báo cáo.</value>
+        </data>
+    <data name="Filters_InterviewMode" xml:space="preserve">
+        <value>Chế độ phỏng vấn</value>
+        </data>
+    <data name="Filters_InterviewModePlaceHolder" xml:space="preserve">
+        <value>Tất cả các chế độ phỏng vấn</value>
+        </data>
+    <data name="AccountManage_ApiTokens" xml:space="preserve">
+        <value>Mã thông báo API</value>
+        </data>
+    <data name="Profile_IssueApiToken" xml:space="preserve">
+        <value>Vấn đề</value>
+        </data>
+    <data name="MapUserLink_DiscardConfirm1" xml:space="preserve">
+        <value>Nếu đây là người dùng cuối cùng trong nhóm được liên kết với bản đồ thì người giám sát của nhóm sẽ mất quyền truy cập vào bản đồ.</value>
+        </data>
+    <data name="QuestionnaireVersionAndName" xml:space="preserve">
+        <value>[phiên bản. {1}] {0}</value>
+        </data>
+    <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
+        <value>Xác minh quan trọng</value>
+        </data>
+    <data name="Questionnaire_CriticalVerificationLevel" xml:space="preserve">
+        <value>Hành động khi gửi</value>
+        </data>
+    <data name="Questionnaire_ChangeCriticalVerificationLevelTitle" xml:space="preserve">
+        <value>Đặt hành động khi gửi</value>
+        </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanation" xml:space="preserve">
+        <value>Chọn hành động cần thực hiện trước khi gửi cuộc phỏng vấn</value>
+        </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationIgnore" xml:space="preserve">
+        <value>BỎ QUA - không kiểm tra bất kỳ quy tắc quan trọng nào ngay cả khi chúng hiện diện.</value>
+        </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationWarn" xml:space="preserve">
+        <value>CẢNH BÁO - kiểm tra các quy tắc quan trọng và cảnh báo người dùng trước khi gửi cuộc phỏng vấn.</value>
+        </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationBlock" xml:space="preserve">
+        <value>CHẶN - kiểm tra các quy tắc quan trọng và cấm gửi cuộc phỏng vấn khi có vấn đề quan trọng.</value>
+        </data>
+    <data name="ShowKey" xml:space="preserve">
+        <value>Hiển thị phím</value>
+        </data>
+    <data name="Observer_Memo1" xml:space="preserve">
+        <value>Người quan sát có thể theo dõi việc thu thập dữ liệu nhưng không thể thực hiện thay đổi. Mạo danh người dùng khác (người giám sát hoặc trụ sở chính) để truy cập các cuộc phỏng vấn, bài tập, báo cáo và dữ liệu khác. Người quan sát không thể tạo bài tập, đặt câu trả lời, nhận xét, phê duyệt/từ chối cuộc phỏng vấn, xuất dữ liệu hoặc sửa đổi dữ liệu máy chủ.</value>
+        </data>
+    <data name="Observer_Memo2" xml:space="preserve">
+        <value>Nhấp vào một tài khoản và chọn 'Xem với tư cách người dùng này ở chế độ chỉ đọc' để bắt đầu. Sử dụng liên kết màu vàng ở trên cùng để quay lại tài khoản của bạn.</value>
+        </data>
+</root>

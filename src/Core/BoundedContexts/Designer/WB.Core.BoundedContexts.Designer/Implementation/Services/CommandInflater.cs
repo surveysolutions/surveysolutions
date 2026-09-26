@@ -10,27 +10,28 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Designer.Code.Implementation;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     public class CommandInflater : ICommandInflater
     {
-        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
+        private readonly IDesignerQuestionnaireStorage questionnaireStorage;
         private readonly DesignerDbContext dbContext;
         private readonly IClassificationsStorage classificationsStorage;
         private readonly ILoggedInUser user;
 
         public CommandInflater(
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
+            IDesignerQuestionnaireStorage questionnaireStorage,
             DesignerDbContext dbContext,
             IClassificationsStorage classificationsStorage,
             ILoggedInUser user)
         {
-            this.questionnaireDocumentReader = questionnaireDocumentReader;
+            this.questionnaireStorage = questionnaireStorage;
             this.dbContext = dbContext;
             this.classificationsStorage = classificationsStorage;
             this.user = user ?? throw new ArgumentNullException(nameof(user));
@@ -63,19 +64,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (command is PasteAfter currentPasteItemAfterCommand)
             {
                 currentPasteItemAfterCommand.SourceDocument =
-                    GetQuestionnaire(currentPasteItemAfterCommand.SourceQuestionnaireId);
+                    GetQuestionnaire(currentPasteItemAfterCommand.SourceQuestionnaireRevision ??
+                        new QuestionnaireRevision(currentPasteItemAfterCommand.SourceQuestionnaireId));
             }
 
             if (command is PasteInto currentPasteItemIntoCommand)
             {
                 currentPasteItemIntoCommand.SourceDocument =
-                    GetQuestionnaire(currentPasteItemIntoCommand.SourceQuestionnaireId);
+                    GetQuestionnaire(currentPasteItemIntoCommand.SourceQuestionnaireRevision ??
+                        new QuestionnaireRevision(currentPasteItemIntoCommand.SourceQuestionnaireId));
             }
         }
 
-        private QuestionnaireDocument GetQuestionnaire(Guid id)
+        private QuestionnaireDocument GetQuestionnaire(QuestionnaireRevision questionnaireRevision)
         {
-            var questionnaire = this.questionnaireDocumentReader.GetById(id.FormatGuid());
+            var questionnaire = this.questionnaireStorage.Get(questionnaireRevision);
 
             if (questionnaire == null)
             {
@@ -83,11 +86,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     "Source questionnaire was not found and might be deleted.");
             }
 
-            if (questionnaire.IsPublic || questionnaire.CreatedBy == this.user.Id ||
+            // When a specific revision is requested, authorization must be evaluated against the
+            // current (base) questionnaire so that visibility/ownership changes that occurred after
+            // the snapshot was taken are honoured rather than bypassed.
+            var currentQuestionnaire = questionnaireRevision.Revision.HasValue
+                ? this.questionnaireStorage.Get(questionnaireRevision.QuestionnaireId)
+                  ?? questionnaire
+                : questionnaire;
+
+            if (currentQuestionnaire.IsPublic || currentQuestionnaire.CreatedBy == this.user.Id ||
                 this.user.IsAdmin)
                 return questionnaire;
 
-            var questionnaireListItem = this.dbContext.Questionnaires.Include(x => x.SharedPersons).FirstOrDefault(x => x.QuestionnaireId == id.FormatGuid());
+            var questionnaireListItem = this.dbContext.Questionnaires.Include(x => x.SharedPersons)
+                .FirstOrDefault(x => x.QuestionnaireId == questionnaireRevision.QuestionnaireId.FormatGuid());
             if (questionnaireListItem == null ||
                 questionnaireListItem.SharedPersons.All(x => x.UserId != this.user.Id))
             {

@@ -230,12 +230,12 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             return tcs.Task;
         }
 
-        public void ShowToast(string message, bool isTop = false)
+        public void ShowToast(string message, bool isTop = false, bool isLong = false)
         {
             var activity = this.mvxCurrentTopActivity.Activity; //sometime activity is null
             activity?.RunOnUiThread(() =>
             {
-                var toast = Toast.MakeText(activity, message, ToastLength.Short);
+                var toast = Toast.MakeText(activity, message, isLong ? ToastLength.Long : ToastLength.Short);
                 if (isTop)
                     toast.SetGravity(GravityFlags.CenterHorizontal | GravityFlags.Top, toast.XOffset, toast.YOffset);
 

@@ -1,5 +1,5 @@
 import { nextTick } from 'vue'
-import { isEqual, isNaN, clone, assign } from 'lodash'
+import { isEqual, isNaN, clone, assign } from 'lodash-es'
 
 export default {
     data() {

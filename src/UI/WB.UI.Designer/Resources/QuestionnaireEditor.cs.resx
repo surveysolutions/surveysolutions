@@ -402,6 +402,9 @@
   <data name="FindReplaceMatchingLines" xml:space="preserve">
     <value>Odpovídající řádky: {{count}}</value>
   </data>
+  <data name="FindReplaceCurrentMatch" xml:space="preserve">
+    <value>{{current}} / {{count}}</value>
+  </data>
   <data name="FindReplaceMatchWord" xml:space="preserve">
     <value>Shoda celého slova</value>
   </data>
@@ -821,6 +824,9 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
   </data>
   <data name="QuestionInteger" xml:space="preserve">
     <value>Celé číslo</value>
+  </data>
+  <data name="QuestionNonNegative" xml:space="preserve">
+    <value>Nezáporné</value>
   </data>
   <data name="QuestionIsLinked" xml:space="preserve">
     <value>Je propojen</value>

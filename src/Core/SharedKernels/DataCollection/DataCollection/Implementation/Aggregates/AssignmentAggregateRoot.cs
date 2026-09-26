@@ -39,6 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.properties.Answers = @event.Answers;
             this.properties.ProtectedVariables = @event.ProtectedVariables;
             this.properties.Comment = @event.Comment;
+            this.properties.AudioAuditScope = @event.AudioAuditScope ?? Array.Empty<string>();
 
             this.properties.CreatedAt = @event.OriginDate;
             this.properties.UpdatedAt = @event.OriginDate;
@@ -138,7 +139,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.ProtectedVariables.ToArray(),
                 command.Comment,
                 command.TargetArea,
-                command.UpgradedFromId));
+                command.UpgradedFromId,
+                command.AudioAuditScope));
         }
 
         public void DeleteAssignment(DeleteAssignment command)

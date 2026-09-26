@@ -557,6 +557,9 @@
   <data name="FindReplaceMatchingLines" xml:space="preserve">
     <value>Linhas correspondentes: {{count}}</value>
   </data>
+  <data name="FindReplaceCurrentMatch" xml:space="preserve">
+    <value>{{current}} / {{count}}</value>
+  </data>
   <data name="FindReplaceNext" xml:space="preserve">
     <value>Próximo</value>
   </data>
@@ -818,7 +821,10 @@
       <data name="QuestionInteger" xml:space="preserve">
       <value>Inteiro</value>
     </data>
-      <data name="QuestionIsLinked" xml:space="preserve">
+      <data name="QuestionNonNegative" xml:space="preserve">
+    <value>Não negativo</value>
+  </data>
+  <data name="QuestionIsLinked" xml:space="preserve">
       <value>Está vinculado</value>
     </data>
       <data name="QuestionMaxListCount" xml:space="preserve">

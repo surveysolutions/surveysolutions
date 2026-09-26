@@ -329,7 +329,7 @@ export default {
         },
 
         copyItem() {
-            copyItem(this.questionnaireId, this.item);
+            copyItem(this.questionnaire, this.item);
         },
 
         async pasteItemAfter() {
