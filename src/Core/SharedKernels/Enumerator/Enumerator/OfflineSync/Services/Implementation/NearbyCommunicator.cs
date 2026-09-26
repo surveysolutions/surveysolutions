@@ -232,15 +232,22 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 if (allowDeferral && (update.Status == TransferStatus.Success || update.Status == TransferStatus.Failure))
                 {
                     var key = (endpoint, update.Id);
-                    var deferredUpdates = deferredTransferUpdates.GetOrAdd(key, _ => new DeferredTransferUpdatesQueue());
-                    await deferredUpdates.Gate.WaitAsync();
-                    try
+                    while (true)
                     {
-                        deferredUpdates.Updates.Enqueue(update);
-                    }
-                    finally
-                    {
-                        deferredUpdates.Gate.Release();
+                        var deferredUpdates = deferredTransferUpdates.GetOrAdd(key, _ => new DeferredTransferUpdatesQueue());
+                        await deferredUpdates.Gate.WaitAsync();
+                        try
+                        {
+                            if (deferredUpdates.IsDetached)
+                                continue;
+
+                            deferredUpdates.Updates.Enqueue(update);
+                            break;
+                        }
+                        finally
+                        {
+                            deferredUpdates.Gate.Release();
+                        }
                     }
 
                     logger.Warn(
@@ -361,7 +368,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     await ReceivePayloadTransferUpdateInternal(connection, endpoint, deferredUpdate, allowDeferral: false);
                 }
 
-                deferredTransferUpdates.TryRemove(new KeyValuePair<(string Endpoint, long PayloadId), DeferredTransferUpdatesQueue>(key, deferredUpdates));
+                if (deferredUpdates.Updates.Count == 0)
+                {
+                    deferredUpdates.IsDetached = true;
+                    deferredTransferUpdates.TryRemove(new KeyValuePair<(string Endpoint, long PayloadId), DeferredTransferUpdatesQueue>(key, deferredUpdates));
+                }
             }
             finally
             {
@@ -375,6 +386,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         {
             public Queue<NearbyPayloadTransferUpdate> Updates { get; } = new Queue<NearbyPayloadTransferUpdate>();
             public SemaphoreSlim Gate { get; } = new SemaphoreSlim(1, 1);
+            public bool IsDetached { get; set; }
         }
 
         private async Task HandlePayloadContent(INearbyConnection nearbyConnection, string endpoint,
