@@ -151,6 +151,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
                     criticalItemsTransferred = true;
 
+                    IsLoading = false;
                     RaisePropertyChanged(nameof(IsAllOk));
                 });
             }
@@ -162,8 +163,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                     topUnansweredCriticalQuestions?.ForEach(vm => vm.DisposeIfDisposable());
                 }
             }
-            
-            await base.OnTabDataLoadedAsync(interviewId, navigationState, loadVersion, cancellationToken);
         }
 
         public IMvxAsyncCommand Approve => new MvxAsyncCommand(async () =>
