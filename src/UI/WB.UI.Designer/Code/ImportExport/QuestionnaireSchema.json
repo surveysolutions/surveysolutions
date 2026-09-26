@@ -466,6 +466,7 @@
         "SpecialValues": { "$ref": "#/definitions/SpecialValues" },
         "DecimalPlaces": { "type": "integer", "minimum": 0 },
         "IsInteger": { "type": "boolean", "default": true },
+        "IsNonNegative": { "type": "boolean", "default": false },
         "UseThousandsSeparator": { "type": "boolean", "default": false }
       },
       "additionalProperties": false,

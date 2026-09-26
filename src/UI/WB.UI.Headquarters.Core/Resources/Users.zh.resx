@@ -273,4 +273,62 @@
   <data name="ObserversCountDescription" xml:space="preserve">
       <value>观测员 ({{count}})</value>
   </data>
+
+
+  <data name="CreateAdministrator" xml:space="preserve">
+    <value>创建管理员</value>
+  </data>
+
+  <data name="ResetPassword" xml:space="preserve">
+    <value>重置密码</value>
+  </data>
+
+  <data name="ResetPasswordTitle" xml:space="preserve">
+    <value>重置用户密码</value>
+  </data>
+
+  <data name="UserNotFound" xml:space="preserve">
+    <value>未找到用户</value>
+  </data>
+
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>用户 {0} 的密码已更改</value>
+  </data>
+
+
+  <data name="Filter_AllUsers" xml:space="preserve">
+    <value>所有用户</value>
+  </data>
+
+  <data name="Filter_WithMissingWorkspace" xml:space="preserve">
+    <value>缺少工作区</value>
+  </data>
+
+  <data name="Filter_WithDisabledWorkspaces" xml:space="preserve">
+    <value>仅显示已禁用工作区</value>
+  </data>
+
+  <data name="Filter_Locked" xml:space="preserve">
+    <value>已锁定用户</value>
+  </data>
+
+  <data name="Filter_Archived" xml:space="preserve">
+    <value>已归档用户</value>
+  </data>
+
+  <data name="UsersTitle" xml:space="preserve">
+    <value>用户</value>
+  </data>
+
+  <data name="AddUser" xml:space="preserve">
+    <value>添加用户</value>
+  </data>
+
+  <data name="UploadUsers" xml:space="preserve">
+    <value>上传用户</value>
+  </data>
+
+  <data name="ApiTokenTitle" xml:space="preserve">
+      <value>用户 API 令牌</value>
+  </data>
 </root>

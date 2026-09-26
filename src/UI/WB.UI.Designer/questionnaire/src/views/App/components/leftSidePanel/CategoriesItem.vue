@@ -120,6 +120,7 @@ export default {
                 title: message,
                 okButtonTitle: this.$t('QuestionnaireEditor.Delete'),
                 cancelButtonTitle: this.$t('QuestionnaireEditor.Cancel'),
+                isDanger: true,
                 callback: confirm => {
                     if (confirm) {
                         deleteCategories(this.questionnaireId, this.categories.categoriesId)

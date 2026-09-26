@@ -1,21 +1,21 @@
 //import Vue from 'vue'
 
-import Headquarters from './Headquarters'
-import Manage from './Manage'
-import UserWorkspaces from './UserWorkspaces'
-import Observers from './Observers'
-import ApiUsers from './ApiUsers'
-import Create from './Create'
-import Supervisors from './Supervisors'
-import Interviewers from './Interviewers'
-import TwoFactorAuthentication from './TwoFactorAuthentication'
-import SetupAuthenticator from './SetupAuthenticator'
-import ResetAuthenticator from './ResetAuthenticator'
-import ShowRecoveryCodes from './ShowRecoveryCodes'
-import ResetRecoveryCodes from './ResetRecoveryCodes'
-import Disable2fa from './Disable2fa'
-import ChangePassword from './ChangePassword'
-import ApiTokens from './ApiTokens'
+const Headquarters = () => import('./Headquarters')
+const Manage = () => import('./Manage')
+const UserWorkspaces = () => import('./UserWorkspaces')
+const Observers = () => import('./Observers')
+const ApiUsers = () => import('./ApiUsers')
+const Create = () => import('./Create')
+const Supervisors = () => import('./Supervisors')
+const Interviewers = () => import('./Interviewers')
+const TwoFactorAuthentication = () => import('./TwoFactorAuthentication')
+const SetupAuthenticator = () => import('./SetupAuthenticator')
+const ResetAuthenticator = () => import('./ResetAuthenticator')
+const ShowRecoveryCodes = () => import('./ShowRecoveryCodes')
+const ResetRecoveryCodes = () => import('./ResetRecoveryCodes')
+const Disable2fa = () => import('./Disable2fa')
+const ChangePassword = () => import('./ChangePassword')
+const ApiTokens = () => import('./ApiTokens')
 
 export default class UsersComponent {
     constructor(rootStore) {

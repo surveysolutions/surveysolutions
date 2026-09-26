@@ -473,6 +473,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var documentTranslations = designerTranslationService
                 .GetFromQuestionnaire(clonedDocument)
                 .ToList();
+            var translationIdsToCopy = clonedDocument.Translations
+                .Where(t => t.Id != translationInfo.Id)
+                .Select(t => t.Id)
+                .ToList();
             
             var newTranslationId = Guid.NewGuid();
 
@@ -509,6 +513,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 
                 AddOrUpdateCategoriesImpl(clonedDocument, newCategoryId, categories.Id, categories.Name, categories.Description);
 
+                designerTranslationService.CopyCategoriesTranslations(
+                    clonedDocument.PublicKey, categories.Id, newCategoryId, translationIdsToCopy);
                 reusableCategoriesService.Store(clonedDocument.PublicKey, newCategoryId, newCategoryItems);
             }
             
@@ -1280,7 +1286,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 false,
                 null,
                 null,
-                null);
+                null,
+                command.IsNonNegative);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
@@ -2426,7 +2433,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             int? maxAnswerCount, bool? isFilteredCombobox, Guid? cascadeFromQuestionId,
             bool? yesNoView, IList<ValidationCondition> validationConditions,
             string? linkedFilterExpression, bool isTimestamp,
-            bool? showAsList, int? showAsListThreshold, Guid? categoriesId = null)
+            bool? showAsList, int? showAsListThreshold, Guid? categoriesId = null,
+            bool isNonNegative = false)
         {
             AbstractQuestion question;
 
@@ -2471,7 +2479,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         IsInteger = questionType == QuestionType.AutoPropagate ? true : isInteger ?? false,
                         CountOfDecimalPlaces = countOfDecimalPlaces,
-                        UseFormatting = questionProperties?.UseFormatting ?? false
+                        UseFormatting = questionProperties?.UseFormatting ?? false,
+                        IsNonNegative = isNonNegative
                     };
                     UpdateAnswerList(answers, question, linkedToQuestionId);
                     break;

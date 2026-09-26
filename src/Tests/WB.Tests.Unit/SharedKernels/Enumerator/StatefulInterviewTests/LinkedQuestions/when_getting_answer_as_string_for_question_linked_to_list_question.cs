@@ -17,12 +17,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
         readonly Guid linkedMultiOptionQuestionid  = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         readonly Guid textWithSubstitutionOnSingleQuestionid = Guid.Parse("11111111111111111111111111111111");
         readonly Guid textWithSubstitutionOnMultiQuestionid = Guid.Parse("22222222222222222222222222222222");
+        readonly Guid textListQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private readonly Guid userId = Guid.NewGuid();
 
         [SetUp]
         public void Context()
         {
-            Guid textListQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             Guid rosterId = Guid.Parse("11111111111111111111111111111111");
             
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
@@ -78,6 +78,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
 
             var question = this.interview.GetQuestion(Create.Entity.Identity(this.textWithSubstitutionOnMultiQuestionid));
             Assert.That(question.Title.Text, Is.EqualTo("Result: one, two"));
+        }
+
+        [Test]
+        public void Should_return_empty_string_when_linked_multi_option_question_is_answered_but_source_list_is_removed()
+        {
+            interview.AnswerMultipleOptionsQuestion(userId, this.linkedMultiOptionQuestionid, RosterVector.Empty, DateTime.Now, new int[] {1, 2});
+            interview.GetQuestion(Create.Entity.Identity(this.textListQuestionId)).RemoveAnswer();
+
+            var answerAsString = this.interview.GetAnswerAsString(Create.Entity.Identity(this.linkedMultiOptionQuestionid));
+            Assert.That(answerAsString, Is.EqualTo(string.Empty));
         }
     }
 }

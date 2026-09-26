@@ -33,7 +33,7 @@ public class ImageButtonSelectedSupportClickBinding : BaseBinding<ImageButton, I
 
     private void ImageButtonClicked(object sender, EventArgs e)
     {
-        if (this.Target != null)
+        if (this.Target != null && mvxCommand != null)
         {
             if (mvxCommand.CanExecute(Target.Selected))
             {

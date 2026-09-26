@@ -111,14 +111,16 @@ export default {
             this.dirty = false;
         },
         deleteComment(commentId) {
+            const comment = this.comments.find(c => c.id === commentId);
             const params = {
                 title: this.$t('QuestionnaireEditor.DeleteCommentConfirm'),
                 okButtonTitle: this.$t('QuestionnaireEditor.Delete'),
                 cancelButtonTitle: this.$t('QuestionnaireEditor.Cancel'),
+                isDanger: true,
                 isReadOnly: this.questionnaire.isReadOnlyForUser,
                 callback: async confirm => {
                     if (confirm) {
-                        deleteComment(this.questionnaire.questionnaireId, commentId, this.entityId);
+                        deleteComment(this.questionnaire.questionnaireId, commentId, this.entityId, comment?.resolveDate);
                     }
                 }
             };
