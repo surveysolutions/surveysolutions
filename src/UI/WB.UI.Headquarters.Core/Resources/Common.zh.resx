@@ -313,4 +313,137 @@
   <data name="QuestionnaireVersion" xml:space="preserve">
     <value>问卷版本</value>
   </data>
+
+
+  <data name="ViewAssignmentDetails" xml:space="preserve">
+    <value>查看任务详情</value>
+  </data>
+
+  <data name="Apply" xml:space="preserve">
+        <value>应用</value>
+  </data>
+
+  <data name="Assignments" xml:space="preserve">
+    <value>任务</value>
+  </data>
+
+  <data name="EmailProviders" xml:space="preserve">
+    <value>电子邮件提供商</value>
+  </data>
+
+  <data name="Clear" xml:space="preserve">
+    <value>清除</value>
+  </data>
+
+  <data name="MapDashboard" xml:space="preserve">
+    <value>地图仪表板</value>
+  </data>
+
+  <data name="OpenAssignment" xml:space="preserve">
+    <value>打开任务</value>
+  </data>
+
+  <data name="Reset" xml:space="preserve">
+    <value>重置</value>
+  </data>
+
+  <data name="EqualValues" xml:space="preserve">
+    <value>等于</value>
+  </data>
+
+  <data name="NotEquals" xml:space="preserve">
+    <value>不等于</value>
+  </data>
+
+  <data name="SelectOption" xml:space="preserve">
+    <value>选择选项</value>
+  </data>
+
+  <data name="StartsWith" xml:space="preserve">
+    <value>开头为</value>
+  </data>
+
+  <data name="Unknown" xml:space="preserve">
+    <value>未知</value>
+  </data>
+
+  <data name="EditCalendarEvent" xml:space="preserve">
+    <value>编辑日历事件</value>
+  </data>
+
+  <data name="CalendarEvent" xml:space="preserve">
+    <value>日历事件</value>
+  </data>
+
+  <data name="Add" xml:space="preserve">
+    <value>添加</value>
+  </data>
+
+  <data name="Remove" xml:space="preserve">
+    <value>移除</value>
+  </data>
+
+  <data name="Return" xml:space="preserve">
+    <value>返回</value>
+  </data>
+
+  <data name="ChangeToCAPI" xml:space="preserve">
+    <value>切换为 CAPI</value>
+  </data>
+
+  <data name="ChangeToCAPIConfirmHQ" xml:space="preserve">
+    <value>已选中的 {{count}} 个访谈的模式将切换为 CAPI</value>
+  </data>
+
+  <data name="ChangeToCAWI" xml:space="preserve">
+    <value>切换为 CAWI</value>
+  </data>
+
+  <data name="ChangeToCAWIConfirmHQ" xml:space="preserve">
+    <value>已选中的 {{count}} 个访谈的模式将切换为 CAWI</value>
+  </data>
+
+  <data name="InterviewMode" xml:space="preserve">
+    <value>访谈模式</value>
+  </data>
+
+  <data name="Capi" xml:space="preserve">
+    <value>CAPI</value>
+  </data>
+
+  <data name="Cawi" xml:space="preserve">
+    <value>CAWI</value>
+  </data>
+
+  <data name="Enable" xml:space="preserve">
+    <value>启用</value>
+  </data>
+
+  <data name="Disable" xml:space="preserve">
+    <value>禁用</value>
+  </data>
+
+  <data name="Properties" xml:space="preserve">
+      <value>属性</value>
+  </data>
+
+  <data name="LinkedUsers" xml:space="preserve">
+      <value>关联用户</value>
+  </data>
+
+  <data name="LinkUser" xml:space="preserve">
+      <value>用户</value>
+  </data>
+
+  <data name="GeoTrackNumber" xml:space="preserve">
+      <value>轨迹</value>
+  </data>
+
+  <data name="DateRange" xml:space="preserve">
+      <value>日期范围</value>
+  </data>
+
+  <data name="AllGeoTracks" xml:space="preserve">
+      <value>所有地理轨迹</value>
+  </data>
 </root>

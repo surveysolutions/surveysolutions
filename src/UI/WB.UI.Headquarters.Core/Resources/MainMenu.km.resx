@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="ApiUsers" xml:space="preserve"><value>អ្នកប្រើប្រាស់ API</value></data>
+  <data name="Assignments" xml:space="preserve"><value>ការចាត់ការ</value></data>
+  <data name="AuditLog" xml:space="preserve"><value>កំណត់ត្រាសំរួល</value></data>
+  <data name="CumulativeChart" xml:space="preserve"><value>គំនូសតាងការសំភាសន៍ប្រមូលផ្ដុំ</value></data>
+  <data name="DataExport" xml:space="preserve"><value>នាំចេញទិន្នន័យ</value></data>
+  <data name="DeviceLogs" xml:space="preserve"><value>កំណត់ត្រាឧបករណ៍</value></data>
+  <data name="Diagnostics" xml:space="preserve"><value>ការវិនិច្ឆ័យ</value></data>
+  <data name="Headquarters" xml:space="preserve"><value>ទីស្នាក់ការ</value></data>
+  <data name="Help" xml:space="preserve"><value>ជំនួយ</value></data>
+  <data name="Interviewers" xml:space="preserve"><value>អ្នកសំភាសន៍</value></data>
+  <data name="InterviewPackages" xml:space="preserve"><value>កញ្ចប់ការសំភាសន៍</value></data>
+  <data name="Interviews" xml:space="preserve"><value>ការសំភាសន៍</value></data>
+  <data name="MapReport" xml:space="preserve"><value>របាយការណ៍ផែនទី</value></data>
+  <data name="Observers" xml:space="preserve"><value>អ្នកសង្កេតការណ៍</value></data>
+  <data name="Settings" xml:space="preserve"><value>ការកំណត់</value></data>
+  <data name="WorkspaceSettings" xml:space="preserve"><value>ការកំណត់កន្លែងធ្វើការ</value></data>
+  <data name="EmailProviders" xml:space="preserve"><value>អ្នកផ្ដល់សេវាអ៊ីម៉ែល</value></data>
+  <data name="Quantity" xml:space="preserve"><value>បរិមាណ</value></data>
+  <data name="SurveySetup" xml:space="preserve"><value>ការដំឡើងការស្ទង់មតិ</value></data>
+  <data name="Maps" xml:space="preserve"><value>ផែនទី</value></data>
+  <data name="QueueSizeTitle" xml:space="preserve"><value>ចំនួនការសំភាសន៍ដែលបានធ្វើសមកាលកម្ម ប៉ុន្តែមិនទាន់ដំណើរការ</value></data>
+  <data name="Reports" xml:space="preserve"><value>របាយការណ៍</value></data>
+  <data name="Speed" xml:space="preserve"><value>ល្បឿន</value></data>
+  <data name="SurveyStatistics" xml:space="preserve"><value>ស្ថិតិការស្ទង់មតិ</value></data>
+  <data name="StatusDuration" xml:space="preserve"><value>រយៈពេលស្ថានភាព</value></data>
+  <data name="Supervisors" xml:space="preserve"><value>អ្នកត្រួតពិនិត្យ</value></data>
+  <data name="CreateNew" xml:space="preserve"><value>បង្កើតថ្មី</value></data>
+  <data name="Started" xml:space="preserve"><value>បានចាប់ផ្តើម</value></data>
+  <data name="Completed" xml:space="preserve"><value>បានបញ្ចប់</value></data>
+  <data name="Rejected" xml:space="preserve"><value>បានបដិសេធ</value></data>
+  <data name="MapDashboard" xml:space="preserve"><value>ផ្ទាំងគ្រប់គ្រងផែនទី</value></data>
+  <data name="SurveysAndStatuses" xml:space="preserve"><value>ការស្ទង់មតិ និងស្ថានភាព</value></data>
+  <data name="TabletInfos" xml:space="preserve"><value>ព័ត៌មានថេប្លេត</value></data>
+  <data name="TeamAndRoles" xml:space="preserve"><value>ក្រុម និងតួនាទី</value></data>
+  <data name="TeamMembersAndStatuses" xml:space="preserve"><value>សមាជិកក្រុម និងស្ថានភាព</value></data>
+  <data name="TeamsAndRoles" xml:space="preserve"><value>ក្រុម និងតួនាទី</value></data>
+  <data name="TeamsAndStatuses" xml:space="preserve"><value>ក្រុម និងស្ថានភាព</value></data>
+  <data name="DevicesInterviewers" xml:space="preserve"><value>ឧបករណ៍/អ្នកសំភាសន៍</value></data>
+  <data name="Troubleshooting" xml:space="preserve"><value>ការដោះស្រាយបញ្ហា</value></data>
+  <data name="UserBatchUpload" xml:space="preserve"><value>ផ្ទុកឡើងអ្នកប្រើប្រាស់ជាបាច់</value></data>
+  <data name="Users" xml:space="preserve"><value>អ្នកប្រើប្រាស់</value></data>
+  <data name="Questionnaires" xml:space="preserve"><value>កម្រងសំណួរ</value></data>
+  <data name="Administration" xml:space="preserve"><value>ការគ្រប់គ្រង</value></data>
+  <data name="Workspaces" xml:space="preserve"><value>កន្លែងធ្វើការ</value></data>
+  <data name="ServerAdministration" xml:space="preserve"><value>ការគ្រប់គ្រងម៉ាស៊ីនមេ</value></data>
+</root>

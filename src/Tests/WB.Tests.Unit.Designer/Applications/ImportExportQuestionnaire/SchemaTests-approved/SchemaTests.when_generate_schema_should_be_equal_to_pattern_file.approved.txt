@@ -1,4 +1,4 @@
-{
+﻿{
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Questionnaire",
   "type": "object",
@@ -315,6 +315,9 @@
               "items": {
                 "$ref": "#/definitions/SpecialValue"
               }
+            },
+            "IsNonNegative": {
+              "type": "boolean"
             }
           }
         }

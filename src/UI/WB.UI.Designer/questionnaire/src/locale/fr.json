@@ -465,7 +465,7 @@
     "QuestionShowListLimit": "Si pas plus de",
     "RosterDisplayMode_SubSection": "Sous-section",
     "RosterDisplayMode_Flat": "Plat",
-    "RosterDisplayMode_Table": "Table",
+    "RosterDisplayMode_Table": "Tableau",
     "RosterDisplayMode_Matrix": "Matrice",
     "RosterDisplayMode": "Mode d'affichage :",
     "AreYouSure": "Êtes-vous sûr ?",
@@ -521,7 +521,7 @@
   "AccountResources": {
     "AllRights": "Tout droit reservé",
     "AppDescription": "Ceci est un instrument pour la conception d'enquête pour la plateforme CAPI de la Banque Mondiale, doté de fonctionnalité de collaboration et d'exportation vers PDF",
-    "AppName": "Questionnaire Designer",
+    "AppName": "Concepteur de questionnaire",
     "BackToLogin": "Retour au login",
     "Change": "Changer",
     "ChangePassword": "Changer de mot de passe",
@@ -579,7 +579,8 @@
     "LockedOutText": "Votre compte est verrouillé. Contactez l'administrateur pour déverrouiller votre compte",
     "PasswordEmailSent": "Veuillez vérifier votre e-mail pour réinitialiser votre mot de passe.",
     "EmailChangeShouldBeConfirmed": "Veuillez suivre les instructions envoyées à l'e-mail fourni ({0}) pour confirmer le changement d'e-mail.",
-    "PendingEmailUpdate": "Mise à jour en attente vers {0}"
+    "PendingEmailUpdate": "Mise à jour en attente vers {0}",
+    "LastLoginDate": "Date de dernière connexion"
   },
   "QuestionnaireController": {
     "Action": "Action",

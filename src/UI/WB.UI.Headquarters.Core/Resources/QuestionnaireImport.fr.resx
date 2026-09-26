@@ -175,7 +175,7 @@
     <value>Importer</value>
   </data>
   <data name="Rosters" xml:space="preserve">
-    <value>Rosters</value>
+    <value>Listes</value>
   </data>
     <data name="Importing" xml:space="preserve">
   <value>Importation {{percent}}%</value>

@@ -579,7 +579,8 @@
     "UserCreationRequestCanceled": "Žádost o vytvoření uživatele byla zrušena. Ověřte zadané údaje a zkuste to znovu. Pokud problém přetrvává, obraťte se na správce systému.",
     "UserNameExists": "Uživatelské jméno již existuje. Zadejte jiné uživatelské jméno.",
     "UserNameForEmailExists": "Uživatelské jméno pro tuto e-mailovou adresu již existuje. Zadejte prosím jinou e-mailovou adresu.",
-    "Welcome": "Vítejte v Survey Solutions"
+    "Welcome": "Vítejte v Survey Solutions",
+    "LastLoginDate": "Datum posledního přihlášení"
   },
   "QuestionnaireController": {
     "Action": "Akce",

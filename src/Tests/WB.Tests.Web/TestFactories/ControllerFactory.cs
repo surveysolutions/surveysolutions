@@ -127,7 +127,8 @@ namespace WB.Tests.Web.TestFactories
                 serializer ?? Mock.Of<ISerializer>(),
                 Mock.Of<IInvitationService>(),
                 Mock.Of<IWebInterviewLinkProvider>(),
-                scopeExecutor);
+                scopeExecutor,
+                Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>());
 
             return result;
         }

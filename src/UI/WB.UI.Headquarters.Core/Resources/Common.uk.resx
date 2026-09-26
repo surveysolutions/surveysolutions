@@ -343,4 +343,17 @@
   <data name="НasErrors" xml:space="preserve">
     <value>Мають помилки</value>
   </data>
+
+
+  <data name="GeoTrackNumber" xml:space="preserve">
+  <value>Трек</value>
+  </data>
+
+  <data name="DateRange" xml:space="preserve">
+  <value>Діапазон дат</value>
+  </data>
+
+  <data name="AllGeoTracks" xml:space="preserve">
+  <value>Усі треки</value>
+  </data>
 </root>

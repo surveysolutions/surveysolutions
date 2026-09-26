@@ -1,8 +1,10 @@
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using SixLabors.ImageSharp;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -18,7 +20,6 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
 {
     [Localizable(false)]
     [Route("api/{controller}/{action}")]
-    [WebInterviewResourcesAuthorize(InterviewIdQueryString = "interviewId")]
     public class WebInterviewResourcesController : ControllerBase
     {
         private readonly IAuthorizedUser authorizedUser;
@@ -27,6 +28,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
         private readonly IImageProcessingService imageProcessingService;
         private readonly IPlainStorageAccessor<AttachmentContent> attachmentStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly ILogger<WebInterviewResourcesController> logger;
 
         public WebInterviewResourcesController(
             IAuthorizedUser authorizedUser,
@@ -34,7 +36,8 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
             IStatefulInterviewRepository statefulInterviewRepository,
             IImageProcessingService imageProcessingService,
             IPlainStorageAccessor<AttachmentContent> attachmentStorage,
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage,
+            ILogger<WebInterviewResourcesController> logger)
         {
             this.authorizedUser = authorizedUser;
             this.imageFileStorage = imageFileStorage;
@@ -42,10 +45,12 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
             this.imageProcessingService = imageProcessingService;
             this.attachmentStorage = attachmentStorage;
             this.questionnaireStorage = questionnaireStorage;
+            this.logger = logger;
         }
 
         [HttpHead]
         [ActionName("Content")]
+        [WebInterviewResourcesAuthorize(InterviewIdQueryString = "interviewId")]
         public IActionResult ContentHead([FromQuery] string interviewId, [FromQuery] string contentId)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
@@ -71,6 +76,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
         }
 
         [HttpGet]
+        [WebInterviewResourcesAuthorize(InterviewIdQueryString = "interviewId")]
         public new IActionResult Content([FromQuery] string interviewId, [FromQuery] string contentId)
         {
             return GetAttachmentContentByContentId(interviewId, contentId, 200);
@@ -100,17 +106,25 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
             {
                 var fullSize = GetQueryStringValue("fullSize") != null;
 
-                var resultFile = fullSize
-                    ? attachment.Content
-                    : this.imageProcessingService.ResizeImage(attachment.Content, thumbSize, 1920);
+                byte[] resultFile;
+                if (fullSize)
+                    resultFile = IsSupportedImage(attachment.Content, interviewId, contentId, attachment.FileName)
+                        ? attachment.Content
+                        : null;
+                else
+                    resultFile = CreateThumbnailOrNull(attachment.Content, thumbSize, interviewId, contentId, attachment.FileName);
 
-                return this.BinaryResponseMessageWithEtag(resultFile);
+                if (resultFile != null)
+                    return this.BinaryResponseMessageWithEtag(resultFile);
+
+                return DownloadBinaryFile(attachment.Content, attachment.FileName);
             }
 
             return File(attachment.Content, attachment.ContentType, enableRangeProcessing: true);
         }
 
         [HttpGet]
+        [WebInterviewResourcesAuthorize(InterviewIdQueryString = "interviewId")]
         public async Task<IActionResult> Image([FromQuery] string interviewId, [FromQuery] string questionId)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
@@ -139,15 +153,25 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
                 return NoContent();
 
             var fullSize = GetQueryStringValue("fullSize") != null;
-            var resultFile = fullSize
-                ? file
-                : this.imageProcessingService.ResizeImage(file, 200, 1920);
-            var contentType = ContentTypeHelper.GetImageContentType(fileName);
+            if (fullSize)
+            {
+                if (!IsSupportedImage(file, interviewId, questionId, fileName))
+                    return DownloadBinaryFile(file, fileName);
 
-            return this.BinaryResponseMessageWithEtag(resultFile, contentType);
+                var fullSizeContentType = ContentTypeHelper.GetImageContentType(fileName);
+                return this.BinaryResponseMessageWithEtag(file, fullSizeContentType);
+            }
+
+            var thumbnail = CreateThumbnailOrNull(file, 200, interviewId, questionId, fileName);
+            if (thumbnail == null)
+                return DownloadBinaryFile(file, fileName);
+
+            var contentType = ContentTypeHelper.GetImageContentType(fileName);
+            return this.BinaryResponseMessageWithEtag(thumbnail, contentType);
         }
         
         [HttpGet]
+        [WebInterviewResourcesAuthorize(InterviewIdQueryString = "interviewId")]
         public IActionResult Attachment([FromQuery] string interviewId, [FromQuery] string attachment)
         {
             if (GetAttachmentById(interviewId, attachment, out var attachmentObj) && attachmentObj != null)
@@ -174,11 +198,50 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
 
         [HttpHead]
         [ActionName("Attachment")]
+        [WebInterviewResourcesAuthorize(InterviewIdQueryString = "interviewId")]
         public IActionResult AttachmentHead([FromQuery] string interviewId, [FromQuery] string attachment)
         {
             if (GetAttachmentById(interviewId, attachment, out var attachmentObj) && attachmentObj != null)
                 return ContentHead(interviewId, attachmentObj.ContentId);
             return NotFound();
+        }
+
+        private byte[] CreateThumbnailOrNull(byte[] content, int thumbSize,
+            string interviewId, string resourceId, string fileName)
+        {
+            try
+            {
+                return this.imageProcessingService.ResizeImage(content, thumbSize, 1920);
+            }
+            catch (Exception exception) when (exception is ImageFormatException || exception is NotSupportedException)
+            {
+                this.logger.LogWarning(exception,
+                    "Thumbnail cannot be created because image format is not supported. Original file is returned as download. Interview: {interviewId}, resource: {resourceId}, file: {fileName}",
+                    interviewId, resourceId, fileName);
+                return null;
+            }
+        }
+
+        private bool IsSupportedImage(byte[] content, string interviewId, string resourceId, string fileName)
+        {
+            try
+            {
+                this.imageProcessingService.Validate(content);
+                return true;
+            }
+            catch (Exception exception) when (exception is ImageFormatException || exception is NotSupportedException)
+            {
+                this.logger.LogWarning(exception,
+                    "Image cannot be served inline because image format is not supported. Original file is returned as download. Interview: {interviewId}, resource: {resourceId}, file: {fileName}",
+                    interviewId, resourceId, fileName);
+                return false;
+            }
+        }
+
+        private FileContentResult DownloadBinaryFile(byte[] content, string fileName)
+        {
+            this.Response.Headers["X-Content-Type-Options"] = "nosniff";
+            return File(content, "application/octet-stream", fileName);
         }
 
         private string GetQueryStringValue(string key)
