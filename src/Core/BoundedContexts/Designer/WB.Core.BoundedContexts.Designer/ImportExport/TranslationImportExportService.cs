@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Web;
-using AutoMapper;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.Commands;
@@ -22,15 +21,12 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
     public class TranslationImportExportService : ITranslationImportExportService
     {
         private readonly DesignerDbContext dbContext;
-        private readonly IMapper mapper;
         private readonly IQuestionnaireSerializer questionnaireSerializer;
 
         public TranslationImportExportService(DesignerDbContext dbContext,
-            IMapper mapper,
             IQuestionnaireSerializer questionnaireSerializer)
         {
             this.dbContext = dbContext;
-            this.mapper = mapper;
             this.questionnaireSerializer = questionnaireSerializer;
         }
 

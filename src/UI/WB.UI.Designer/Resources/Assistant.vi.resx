@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ClearHistory" xml:space="preserve">
+        <value>Xóa lịch sử</value>
+        </data>
+    <data name="NotHelpful" xml:space="preserve">
+        <value>Hoàn tác</value>
+        </data>
+    <data name="Helpful" xml:space="preserve">
+        <value>Hữu ích</value>
+        </data>
+    <data name="Dislike" xml:space="preserve">
+        <value>Không thích</value>
+        </data>
+    <data name="Unhelpful" xml:space="preserve">
+        <value>Không hữu ích</value>
+        </data>
+    <data name="NotUnhelpful" xml:space="preserve">
+        <value>Hoàn tác</value>
+        </data>
+    <data name="UnhelpfulCommentTitle" xml:space="preserve">
+        <value>Thêm một bình luận</value>
+        </data>
+    <data name="UnhelpfulCommentPlaceholder" xml:space="preserve">
+        <value>Viết bình luận ngắn (tùy chọn)</value>
+        </data>
+    <data name="UnhelpfulCommentHint" xml:space="preserve">
+        <value>Câu trả lời này có gì sai?</value>
+        </data>
+    <data name="Send" xml:space="preserve">
+        <value>Gửi</value>
+        </data>
+    <data name="SendFeedback" xml:space="preserve">
+        <value>Gửi phản hồi</value>
+        </data>
+    <data name="NotHelpfulCommentTitle" xml:space="preserve">
+        <value>Thêm một bình luận</value>
+        </data>
+    <data name="NotHelpfulCommentPlaceholder" xml:space="preserve">
+        <value>Viết bình luận ngắn (tùy chọn)</value>
+        </data>
+    <data name="TypeMessage" xml:space="preserve">
+        <value>Nhập tin nhắn của bạn...</value>
+        </data>
+    <data name="Title" xml:space="preserve">
+        <value>Trợ lý AI</value>
+        </data>
+    <data name="WelcomeMessage" xml:space="preserve">
+        <value>Bắt đầu cuộc trò chuyện với trợ lý AI. Tin nhắn của bạn có thể được sử dụng để cải thiện sản phẩm. Không chia sẻ thông tin nhạy cảm hoặc cá nhân trong cuộc trò chuyện này.</value>
+        </data>
+    <data name="Disclaimer" xml:space="preserve">
+        <value>Nội dung này được tạo bởi hệ thống AI tự động và không cấu thành thông tin có thẩm quyền hoặc được xác minh. Nó có thể chứa lỗi hoặc thiếu sót. Người dùng có trách nhiệm xem xét, xác nhận và đưa ra phán quyết trước khi sử dụng.</value>
+        </data>
+    <data name="DisclaimerLabel" xml:space="preserve">
+        <value>Nội dung do AI tạo ra</value>
+        </data>
+    <data name="ConnectionError" xml:space="preserve">
+        <value>Không kết nối được với Trợ lý.</value>
+        </data>
+    <data name="RateLimitExceeded" xml:space="preserve">
+        <value>Đã vượt quá giới hạn tỷ lệ. Vui lòng thử lại sau.</value>
+        </data>
+    <data name="StopRequest" xml:space="preserve">
+        <value>Dừng lại</value>
+        </data>
+    <data name="Copy" xml:space="preserve">
+        <value>Sao chép</value>
+        </data>
+    <data name="CopyCode" xml:space="preserve">
+        <value>Sao chép mã</value>
+        </data>
+    <data name="NotAuthorized" xml:space="preserve">
+        <value>Không được ủy quyền.</value>
+        </data>
+    <data name="InvalidRequest" xml:space="preserve">
+        <value>Yêu cầu không hợp lệ. Vui lòng kiểm tra định dạng tin nhắn của bạn.</value>
+        </data>
+    <data name="AccessDenied" xml:space="preserve">
+        <value>Truy cập bị từ chối. Khóa API của bạn có thể không có các quyền cần thiết.</value>
+        </data>
+    <data name="ModelNotFound" xml:space="preserve">
+        <value>Không tìm thấy mô hình trợ lý. Vui lòng kiểm tra xem bạn có quyền truy cập vào mô hình đã định cấu hình hay không.</value>
+        </data>
+    <data name="ServiceUnavailable" xml:space="preserve">
+        <value>Dịch vụ trợ lý tạm thời không khả dụng. Vui lòng thử lại sau.</value>
+        </data>
+</root>

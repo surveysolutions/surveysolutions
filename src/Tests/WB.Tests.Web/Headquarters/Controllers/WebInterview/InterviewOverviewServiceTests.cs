@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AutoMapper;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;

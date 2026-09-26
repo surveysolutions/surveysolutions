@@ -80,8 +80,12 @@
                     <div>
                         <div v-if="step == 'search'">
                             <p class="wb-label">
-                                {{ $t('QuestionnaireEditor.FindReplaceMatchingLines', { count: foundReferences.length })
-                                }}
+                                <span v-if="indexOfCurrentReference >= 0">
+                                    {{ $t('QuestionnaireEditor.FindReplaceCurrentMatch', { current: indexOfCurrentReference + 1, count: foundReferences.length }) }}
+                                </span>
+                                <span v-else>
+                                    {{ $t('QuestionnaireEditor.FindReplaceMatchingLines', { count: foundReferences.length }) }}
+                                </span>
                             </p>
                             <button type="button" class="btn btn-lg btn-primary"
                                 :disabled="searchForm.searchFor.length === 0" @click="findAll()">{{
@@ -145,13 +149,16 @@ export default {
     expose: ['open', 'close'],
     mounted() {
         this.$emitter.on('openMacrosList', this.openLeftPanel);
+        this.$emitter.on('openCriticalRules', this.openLeftPanel);
     },
     unmounted() {
         this.$emitter.off('openMacrosList', this.openLeftPanel);
+        this.$emitter.off('openCriticalRules', this.openLeftPanel);
     },
     methods: {
         close() {
             this.visible = false;
+            this.indexOfCurrentReference = -1;
         },
         open() {
 
@@ -163,6 +170,7 @@ export default {
 
             this.step = 'search';
             this.foundReferences = [];
+            this.indexOfCurrentReference = -1;
 
             this.visible = true;
 
@@ -175,6 +183,7 @@ export default {
         backToSearch() {
             this.step = 'search';
             this.foundReferences.splice(0, this.foundReferences.length);
+            this.indexOfCurrentReference = -1;
         },
         confirmReplaceAll() {
             this.step = 'confirm';
@@ -192,25 +201,7 @@ export default {
 
             const reference = this.foundReferences[this.indexOfCurrentReference];
 
-            const name = reference.type.toLowerCase();
-            if (name === "macro") {
-                this.$emitter.emit("openMacrosList", { focusOn: reference.itemId });
-            }
-            else {
-                this.$router.push({
-                    name: name,
-                    params: {
-                        chapterId: reference.chapterId,
-                        entityId: reference.itemId,
-                    },
-                    force: true,
-                    state: {
-                        indexOfEntityInProperty: reference.indexOfEntityInProperty,
-                        property: reference.property
-                    }
-                });
-            }
-
+            this.navigateTo(reference);
         },
         navigatePrev() {
             this.indexOfCurrentReference--;
@@ -219,12 +210,15 @@ export default {
             }
 
             const reference = this.foundReferences[this.indexOfCurrentReference];
+            this.navigateTo(reference);
+        },
+        navigateTo(reference) {
             const name = reference.type.toLowerCase();
-
             if (name === "macro") {
                 this.$emitter.emit("openMacrosList", { focusOn: reference.itemId });
-            }
-            else {
+            } else if (name === "criticalrule") {
+                this.$emitter.emit("openCriticalRules", { focusOn: reference.itemId });
+            } else {
                 this.$router.push({
                     name: name,
                     params: {
@@ -238,7 +232,6 @@ export default {
                     }
                 });
             }
-
         },
 
         async findAll() {

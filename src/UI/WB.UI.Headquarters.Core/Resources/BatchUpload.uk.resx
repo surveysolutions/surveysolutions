@@ -185,6 +185,7 @@
 &lt;b&gt;_password&lt;/b&gt; - пароль для початку інтерв'ю (тільки для веб-інтерв'ю);&lt;br/&gt;
 &lt;b&gt;_webmode&lt;/b&gt; - режим для завдання (1 для CAWI, 0 або пусте для CAPI);&lt;br/&gt;
 &lt;b&gt;_record_audio&lt;/b&gt; - чи ввімкнено аудіозапис для інтерв'ю (1 - ввімкнено, 0 - вимкнено, пусте - отримати це значення з анкети);&lt;br/&gt;
+&lt;b&gt;_aascope&lt;/b&gt; - імена змінних (через кому) секцій, груп або ростерів для запису аудіо, коли _record_audio вимкнено (вибірковий аудіозапис);&lt;br/&gt;
 &lt;b&gt;_comment&lt;/b&gt; - коментар до завдання</value>
   </data>
   <data name="CreateAssignments" xml:space="preserve">

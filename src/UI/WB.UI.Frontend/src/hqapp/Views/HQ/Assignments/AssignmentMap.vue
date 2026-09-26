@@ -80,7 +80,6 @@
 
 <script>
 import routeSync from '~/shared/routeSync'
-import { Form, Field } from 'vee-validate'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 import GoogleMap from '../../../components/GoogleMap.vue'
@@ -90,7 +89,7 @@ let tracksPath = []
 export default {
     mixins: [routeSync],
 
-    components: { GoogleMap, Form, Field },
+    components: { GoogleMap },
 
     data() {
         return {
@@ -133,16 +132,16 @@ export default {
                 QuestionnaireId: (this.selectedQuestionnaireId || {}).key || null,
                 QuestionnaireVersion: this.selectedVersionValue,
                 ResponsibleId: (this.responsibleId || {}).key || null,
-                AssignmentId: this.assignmentId
+                AssignmentId: this.assignmentId,
             }
         },
 
         assignmentId() {
-            return this.model.assignmentId;
+            return this.model.assignmentId
         },
 
         shapefileName() {
-            return this.model.targetArea;
+            return this.model.targetArea
         },
 
         isLoading() {
@@ -190,8 +189,8 @@ export default {
                     }
 
                     self.onChange((q) => {
-                        q.start = self.dateRange == null ? null : moment(self.dateRange.startDate).format(DateFormats.date);
-                        q.end = self.dateRange == null ? null : moment(self.dateRange.endDate).format(DateFormats.date);
+                        q.start = self.dateRange == null ? null : moment(self.dateRange.startDate).format(DateFormats.date)
+                        q.end = self.dateRange == null ? null : moment(self.dateRange.endDate).format(DateFormats.date)
                     })
 
                     self.refreshGeoTrackingHistory()
@@ -203,7 +202,7 @@ export default {
     methods: {
 
         async mapInitialized() {
-            await this.refreshGeoTrackingHistory();
+            await this.refreshGeoTrackingHistory()
         },
 
         selectedGeoTracking(value) {
@@ -255,23 +254,23 @@ export default {
         displayGeoTrackingHistory() {
 
             tracksPath.forEach(track => {
-                track.setMap(null);
+                track.setMap(null)
             })
             tracksPath = []
 
-            const latlngBounds = new google.maps.LatLngBounds();
+            const latlngBounds = new google.maps.LatLngBounds()
 
             this.tracks.forEach(t => {
                 const polyline = new google.maps.Polyline({
                     path: t.points,
                     geodesic: true,
-                    strokeColor: "#0000FF",
+                    strokeColor: '#0000FF',
                     strokeOpacity: 0.8,
                     strokeWeight: 4,
-                });
+                })
 
-                polyline.setMap(this.map);
-                tracksPath.push(polyline);
+                polyline.setMap(this.map)
+                tracksPath.push(polyline)
 
                 /*t.points.forEach((point) => {
                     new google.maps.Marker({
@@ -280,10 +279,10 @@ export default {
                     });
                 });*/
 
-                const path = polyline.getPath();
+                const path = polyline.getPath()
                 path.forEach((latLng) => {
-                    latlngBounds.extend(latLng);
-                });
+                    latlngBounds.extend(latLng)
+                })
             })
 
             if (tracksPath.length > 0)

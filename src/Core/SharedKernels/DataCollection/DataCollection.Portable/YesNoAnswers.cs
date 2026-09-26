@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection
         }
     }
 
-    // new type with interger arrays for ExpressionStorage
+    // new type with integer arrays for ExpressionStorage
     public class YesNoAndAnswersMissings
     {
         public YesNoAndAnswersMissings(IEnumerable<int> allOptionCodes, IReadOnlyCollection<CheckedYesNoAnswerOption> checkedOptions = null)

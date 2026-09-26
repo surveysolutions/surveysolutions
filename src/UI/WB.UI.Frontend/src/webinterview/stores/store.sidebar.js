@@ -1,4 +1,4 @@
-import { forEach, groupBy } from 'lodash'
+import { forEach, groupBy } from 'lodash-es'
 
 import { batchedAction } from '../helpers'
 import { api } from '../api/http'
