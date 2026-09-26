@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Generated" xml:space="preserve"><value>Đã tạo</value></data>
+  <data name="PageOf" xml:space="preserve"><value> / </value></data>
+  <data name="Comments" xml:space="preserve"><value>Nhận xét</value></data>
+  <data name="YesNo" xml:space="preserve"><value>Có / Không</value></data>
+  <data name="TableOfContent" xml:space="preserve"><value>Mục lục</value></data>
+  <data name="Error" xml:space="preserve"><value>Lỗi</value></data>
+  <data name="Warning" xml:space="preserve"><value>Cảnh báo</value></data>
+  <data name="Version" xml:space="preserve"><value>phiên bản {0}</value></data>
+  <data name="Started" xml:space="preserve"><value>Phỏng vấn đã bắt đầu</value></data>
+  <data name="Completed" xml:space="preserve"><value>Phỏng vấn đã hoàn thành</value></data>
+  <data name="InterviewVolume" xml:space="preserve"><value>Khối lượng phỏng vấn</value></data>
+  <data name="InterviewStatisticsSections" xml:space="preserve"><value>{0} phần</value></data>
+  <data name="InterviewStatisticsAnswered" xml:space="preserve"><value>{0} câu hỏi đã trả lời</value></data>
+  <data name="InterviewStatisticsUnanswered" xml:space="preserve"><value>{0} câu hỏi chưa trả lời</value></data>
+  <data name="InterviewStatisticsErrors" xml:space="preserve"><value>{0} lỗi</value></data>
+  <data name="InterviewStatisticsWarnings" xml:space="preserve"><value>{0} cảnh báo</value></data>
+  <data name="InterviewStatisticsCommented" xml:space="preserve"><value>{0} câu hỏi có nhận xét</value></data>
+  <data name="GeneratedBy" xml:space="preserve"><value>Tạo bởi {0}</value></data>
+  <data name="GeneratedAt" xml:space="preserve"><value>vào {0}</value></data>
+  <data name="SurveySolutions" xml:space="preserve"><value>Survey Solutions</value></data>
+  <data name="InterviewTranscript" xml:space="preserve"><value>Bản ghi phỏng vấn</value></data>
+  <data name="Cover" xml:space="preserve"><value>Trang bìa</value></data>
+  <data name="Questionnaire" xml:space="preserve"><value>Bảng câu hỏi</value></data>
+  <data name="Yes" xml:space="preserve"><value>Có</value></data>
+  <data name="No" xml:space="preserve"><value>Không</value></data>
+  <data name="NotAnswered" xml:space="preserve"><value>Chưa trả lời</value></data>
+  <data name="NotCalculated" xml:space="preserve"><value>Không có giá trị</value></data>
+  <data name="InterviewKey" xml:space="preserve"><value>Khóa phỏng vấn</value></data>
+  <data name="UserRoles_Administrator" xml:space="preserve"><value>Quản trị viên</value></data>
+  <data name="UserRoles_Headquarter" xml:space="preserve"><value>Văn phòng trung tâm</value></data>
+  <data name="UserRoles_Supervisor" xml:space="preserve"><value>Giám sát viên</value></data>
+  <data name="UserRoles_Interviewer" xml:space="preserve"><value>Phỏng vấn viên</value></data>
+  <data name="UserRoles_Observer" xml:space="preserve"><value>Quan sát viên</value></data>
+  <data name="UserRoles_ApiUser" xml:space="preserve"><value>Người dùng API</value></data>
+  <data name="AreaQestion_Area" xml:space="preserve"><value>Diện tích</value></data>
+  <data name="AreaQestion_Length" xml:space="preserve"><value>Chiều dài</value></data>
+  <data name="AreaQestion_Points" xml:space="preserve"><value>Điểm</value></data>
+  <data name="AreaQestion_RequestedAccuracy" xml:space="preserve"><value>Độ chính xác</value></data>
+  <data name="AreaQestion_RequestedFrequency" xml:space="preserve"><value>Tần số</value></data>
+  <data name="AreaQestion_AreaUnitMeter" xml:space="preserve"><value>mét vuông</value></data>
+  <data name="AreaQestion_AreaMeter" xml:space="preserve"><value>mét</value></data>
+</root>

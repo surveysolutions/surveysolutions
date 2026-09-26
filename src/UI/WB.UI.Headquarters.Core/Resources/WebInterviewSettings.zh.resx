@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="CustomizeDisplayedText" xml:space="preserve">
+        <value>自定义向受访者展示的文本</value>
+    </data>
+    <data name="WebInterviewSetupFor_Title" xml:space="preserve">
+        <value>网络访谈设置： </value>
+    </data>
+    <data name="ExampleWelcomePage" xml:space="preserve">
+        <value>欢迎页面示例</value>
+    </data>
+    <data name="ExampleResumePage" xml:space="preserve">
+        <value>继续页面示例</value>
+    </data>
+    <data name="ExampleFinishPage" xml:space="preserve">
+        <value>完成页面示例</value>
+    </data>
+    <data name="CustomizeEmailsText" xml:space="preserve">
+        <value>自定义电子邮件文本</value>
+    </data>
+    <data name="Invitation" xml:space="preserve">
+        <value>邀请</value>
+    </data>
+    <data name="Reminder" xml:space="preserve">
+        <value>提醒</value>
+    </data>
+    <data name="Reject" xml:space="preserve">
+        <value>拒绝</value>
+    </data>
+    <data name="ExampleInvitationEmailMessage" xml:space="preserve">
+        <value>邀请电子邮件消息示例</value>
+    </data>
+    <data name="EmailMessage" xml:space="preserve">
+        <value>消息：</value>
+    </data>
+    <data name="EmailSubject" xml:space="preserve">
+        <value>主题：</value>
+    </data>
+    <data name="MainText" xml:space="preserve">
+        <value>正文：</value>
+    </data>
+    <data name="DescriptionForPassword" xml:space="preserve">
+        <value>密码说明：</value>
+    </data>
+    <data name="StartInterviewButton" xml:space="preserve">
+        <value>"开始访谈"按钮</value>
+    </data>
+    <data name="ShownPasswordIsRequired" xml:space="preserve">
+        <value>仅在需要并设置了密码时显示</value>
+    </data>
+    <data name="ExampleReminderEmailMessage" xml:space="preserve">
+        <value>提醒电子邮件消息示例</value>
+    </data>
+    <data name="ExampleRejectEmailMessage" xml:space="preserve">
+        <value>拒绝电子邮件消息示例</value>
+    </data>
+    <data name="ReminderSetting" xml:space="preserve">
+        <value>提醒设置</value>
+    </data>
+    <data name="WelcomePage" xml:space="preserve">
+        <value>欢迎页面</value>
+    </data>
+    <data name="ResumePage" xml:space="preserve">
+        <value>继续页面</value>
+    </data>
+    <data name="FinishPage" xml:space="preserve">
+        <value>完成页面</value>
+    </data>
+    <data name="LinkToInterviewPage" xml:space="preserve">
+        <value>网络访谈登陆页</value>
+    </data>
+    <data name="Save" xml:space="preserve">
+        <value>保存</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>取消</value>
+    </data>
+    <data name="RejectEmailMessage" xml:space="preserve">
+        <value>拒绝</value>
+    </data>
+    <data name="CompleteEmailMessage" xml:space="preserve">
+        <value>完成</value>
+    </data>
+    <data name="InvitationEmailMessage" xml:space="preserve">
+        <value>邀请</value>
+    </data>
+    <data name="ResumeEmailMessage" xml:space="preserve">
+        <value>继续</value>
+    </data>
+    <data name="ReminderNoResponseEmailMessage" xml:space="preserve">
+        <value>无回应</value>
+    </data>
+    <data name="ReminderPartialResponseEmailMessage" xml:space="preserve">
+        <value>部分回应</value>
+    </data>
+    <data name="AdditionalSettings" xml:space="preserve">
+        <value>附加设置</value>
+    </data>
+    <data name="SendWithNoResponse" xml:space="preserve">
+        <value>向未作回应的人发送提醒</value>
+    </data>
+    <data name="SendWithPartialResponse" xml:space="preserve">
+        <value>向部分回应的人发送提醒</value>
+    </data>
+    <data name="DoNotSend" xml:space="preserve">
+        <value>不发送</value>
+    </data>
+    <data name="AfterXDay" xml:space="preserve">
+        <value>{{count}} 天后</value>
+    </data>
+    <data name="AfterXDay_other" xml:space="preserve">
+        <value>{{count}} 天后</value>
+    </data>
+    <data name="AfterXWeek" xml:space="preserve">
+        <value>{{count}} 周后</value>
+    </data>
+    <data name="AfterXWeek_other" xml:space="preserve">
+        <value>{{count}} 周后</value>
+    </data>
+    <data name="Description" xml:space="preserve">
+        <value>描述：</value>
+    </data>
+    <data name="FieldRequired" xml:space="preserve">
+        <value>该字段为必填项。</value>
+    </data>
+    <data name="Title" xml:space="preserve">
+        <value>标题：</value>
+    </data>
+    <data name="EmailTemplateDescription" xml:space="preserve">
+        <value>您可以在文本中使用 %SURVEYNAME% 占位符表示调查名称</value>
+    </data>
+    <data name="InterviewDataInsertInTextDescription" xml:space="preserve">
+        <value>在此电子邮件模板中,您可以在文本中使用 %question_variable% 占位符,以表示访谈中某个问题的答案。该问题必须位于问卷的顶层（不在名册内）。</value>
+    </data>
+    <data name="InterviewDataInsertBarcodeDescription" xml:space="preserve">
+        <value>%question_variable:barcode% - 将答案显示为 Code 128 条形码</value>
+    </data>
+    <data name="InterviewDataInsertQrCodeDescription" xml:space="preserve">
+        <value>%question_variable:qrcode% - 将答案显示为二维码</value>
+    </data>
+    <data name="AnswerOn" xml:space="preserve">
+        <value>{{variable}} 的答案</value>
+    </data>
+    <data name="CompletePage" xml:space="preserve">
+        <value>完成</value>
+    </data>
+    <data name="Complete" xml:space="preserve">
+        <value>完成</value>
+    </data>
+    <data name="NoteToSupervisor" xml:space="preserve">
+        <value>给督导员的备注</value>
+    </data>
+    <data name="Resume" xml:space="preserve">
+        <value>继续</value>
+    </data>
+    <data name="StartNew" xml:space="preserve">
+        <value>开始新访谈</value>
+    </data>
+    <data name="Sending" xml:space="preserve">
+        <value>正在发送</value>
+    </data>
+    <data name="NoErrors" xml:space="preserve">
+        <value>无错误</value>
+    </data>
+    <data name="NothingWasSent" xml:space="preserve">
+        <value>未发送任何内容</value>
+    </data>
+    <data name="ProcessCancelled" xml:space="preserve">
+        <value>该过程已被取消</value>
+    </data>
+    <data name="DownloadErrors" xml:space="preserve">
+        <value>下载有错误的任务列表</value>
+    </data>
+    <data name="SendingFailed" xml:space="preserve">
+        <value>发送邀请失败。请联系您的服务器管理员检查电子邮件提供商设置</value>
+    </data>
+    <data name="TotalSent" xml:space="preserve">
+        <value>待发送 {{ totalCount }} 份邀请</value>
+    </data>
+    <data name="TotalProcessed" xml:space="preserve">
+        <value>已成功发送 {{ processedCount }} 份</value>
+    </data>
+    <data name="TotalWithErrors" xml:space="preserve">
+        <value>由于错误，{{ withErrorsCount }} 份未发送。</value>
+    </data>
+</root>

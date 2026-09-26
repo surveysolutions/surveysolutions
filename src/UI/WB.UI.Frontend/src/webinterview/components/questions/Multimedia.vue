@@ -14,7 +14,7 @@
                 <input name="file"
                     ref="uploader"
                     v-show="false"
-                    accept="image/*"
+                    accept=".heic,.heif,.svg,image/*"
                     type="file"
                     @change="onFileChange"
                     class="btn btn-default btn-lg btn-action-questionnaire" />
@@ -32,6 +32,19 @@
 import { entityDetails } from '../mixins'
 
 const imageFileSizeLimit = 30 * 1024 * 1024 // mb
+const additionalImageExtensions = ['.heic', '.heif', '.svg']
+
+function hasSupportedImageExtension(fileName) {
+    if (!fileName)
+        return false
+
+    const lowerCaseFileName = fileName.toLowerCase()
+    return additionalImageExtensions.some(extension => lowerCaseFileName.endsWith(extension))
+}
+
+function isImageFile(file) {
+    return file?.type?.startsWith('image/') || hasSupportedImageExtension(file?.name)
+}
 
 export default {
     name: 'picture-question',
@@ -44,6 +57,9 @@ export default {
     computed: {
         cache() {
             return this.$me.answerTimeUtc == null ? null : new Date(this.$me.answerTimeUtc).getTime()
+        },
+        errorMessage() {
+            return this.$me.validity.errorMessage
         },
         answerVisible() {
             if(this.$me.answer){
@@ -60,12 +76,25 @@ export default {
         '$me.answer'() {
             this.uploadingImage = null
         },
+        errorMessage(val) {
+            if (val) {
+                this.uploadingImage = null
+                const uploader = this.$refs.uploader
+                if (uploader) {
+                    uploader.type = ''
+                    uploader.type = 'file'
+                }
+            }
+        },
     },
 
     methods: {
         answerRemoved() {
-            this.$refs.uploader.type = ''
-            this.$refs.uploader.type = 'file'
+            const uploader = this.$refs.uploader
+            if (uploader) {
+                uploader.type = ''
+                uploader.type = 'file'
+            }
         },
         onFileChange(e) {
             this.sendAnswer(() => {
@@ -85,30 +114,28 @@ export default {
                 return
             }
 
+            if (!isImageFile(file)) {
+                this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoIsNotImage'))
+                return
+            }
+
+            this.cleanValidity()
+            this.$store.dispatch('answerMultimediaQuestion', {
+                identity: this.id,
+                file,
+            })
+
             const image = new Image()
             const self = this
+            const objectUrl = URL.createObjectURL(file)
 
             image.onerror = () => {
-                self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoIsNotImage') )
+                URL.revokeObjectURL(objectUrl)
             }
 
             image.onload = () => {
-                self.cleanValidity()
-
-                if ('naturalHeight' in this) {
-                    if (this.naturalHeight + this.naturalWidth === 0) {
-                        self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoIsNotImage') )
-                        return
-                    }
-                } else if (this.width + this.height == 0) {
-                    self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoIsNotImage') )
-                    return
-                } else {
-                    self.$store.dispatch('answerMultimediaQuestion', {
-                        identity: self.id,
-                        file: self.$refs.uploader.files[0],
-                    })
-
+                if (('naturalHeight' in this && this.naturalHeight + this.naturalWidth !== 0)
+                    || (this.width + this.height !== 0)) {
                     const reader = new FileReader()
                     reader.onload = (e) => {
                         const imageUri = (e.target ).result
@@ -117,9 +144,11 @@ export default {
 
                     reader.readAsDataURL(file)
                 }
+
+                URL.revokeObjectURL(objectUrl)
             }
 
-            image.src = URL.createObjectURL(file)
+            image.src = objectUrl
         },
     },
 }
