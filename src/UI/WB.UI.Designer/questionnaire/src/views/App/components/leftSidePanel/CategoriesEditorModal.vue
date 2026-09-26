@@ -415,6 +415,7 @@ export default {
     flex-direction: column;
     width: 100%;
     background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.12);
     border-radius: 4px;
     box-shadow: 0 12px 36px rgba(0, 0, 0, 0.24);
     overflow: hidden;
@@ -498,6 +499,8 @@ export default {
 
 .options-editor-errors {
     margin: 12px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
 }
 
 .options-editor-modal-footer {

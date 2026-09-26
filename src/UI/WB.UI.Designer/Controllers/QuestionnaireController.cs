@@ -376,7 +376,8 @@ namespace WB.UI.Designer.Controllers
 
         [Authorize]
         [AntiForgeryFilter]
-        public async Task<IActionResult> QuestionnaireHistory(QuestionnaireRevision id, int? p)
+        public async Task<IActionResult> QuestionnaireHistory(QuestionnaireRevision id, int? p, string? search,
+            bool searchIdsOnly = false, bool searchWholeWord = false)
         {
             bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, this.User.GetIdOrNull());
             if (!hasAccess)
@@ -388,7 +389,8 @@ namespace WB.UI.Designer.Controllers
             if (questionnaireInfoView == null) return NotFound();
 
             QuestionnaireChangeHistory? questionnairePublicListViewModels = 
-                await questionnaireChangeHistoryFactory.LoadAsync(id.QuestionnaireId, p ?? 1, GlobalHelper.GridPageItemsCount, this.User);
+                await questionnaireChangeHistoryFactory.LoadAsync(id.QuestionnaireId, p ?? 1, GlobalHelper.GridPageItemsCount,
+                    this.User, search, searchIdsOnly, searchWholeWord);
             if (questionnairePublicListViewModels == null)
                 return NotFound();
 
