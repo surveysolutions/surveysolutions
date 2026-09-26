@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using StackExchange.Exceptional;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Exceptions;
 
 namespace WB.UI.Designer.Controllers
-{ [Route("error")]
+{
+    [NoTransaction]
+    [Route("error")]
     public class ErrorController : Controller
     {
         private const int MaxLengthToSave = 1000;

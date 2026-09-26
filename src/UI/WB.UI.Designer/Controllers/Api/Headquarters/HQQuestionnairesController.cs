@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -19,6 +20,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
@@ -101,11 +103,40 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             return Ok(questionnaires);
         }
 
+        // Legacy import endpoint: the download also records import history. The request filter rolls back GETs, so
+        // run the write in its own committed transaction - which also lets the advisory history lock engage (it is a no-op
+        // without an ambient transaction), serializing sequence allocation through commit across concurrent imports.
         [HttpGet]
         [Route("{id:Guid}")]
+        [NoTransaction]
         public async Task<IActionResult> Get(Guid id, int clientQuestionnaireContentVersion, 
             [FromQuery]int? minSupportedQuestionnaireVersion = null,
             [FromQuery]string? instanceId = null)
+        {
+            await using var transaction = await this.listItemStorage.Database.BeginTransactionAsync();
+            try
+            {
+                var result = await this.GetForImport(id, clientQuestionnaireContentVersion, minSupportedQuestionnaireVersion, instanceId);
+                await transaction.CommitAsync();
+                return result;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+
+        [HttpPost]
+        [Route("{id:Guid}")]
+        public Task<IActionResult> Post(Guid id, int clientQuestionnaireContentVersion, 
+            [FromQuery]int? minSupportedQuestionnaireVersion = null,
+            [FromQuery]string? instanceId = null)
+            => this.GetForImport(id, clientQuestionnaireContentVersion, minSupportedQuestionnaireVersion, instanceId);
+
+        private async Task<IActionResult> GetForImport(Guid id, int clientQuestionnaireContentVersion, 
+            int? minSupportedQuestionnaireVersion,
+            string? instanceId)
         {
             QuestionnaireView? questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
 

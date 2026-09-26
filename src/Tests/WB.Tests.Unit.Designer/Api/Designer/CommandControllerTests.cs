@@ -493,7 +493,7 @@ namespace WB.Tests.Unit.Designer.Api.Designer
         {
             var controller = CreateController();
 
-            Assert.ThrowsAsync<InvalidOperationException>(() => controller.Post(null!));
+            Assert.Throws<InvalidOperationException>(() => controller.Post(null!));
         }
 
         [Test]
@@ -502,7 +502,7 @@ namespace WB.Tests.Unit.Designer.Api.Designer
             var controller = CreateController();
             var model = new CommandController.CommandExecutionModel { Type = null, Command = "{}" };
 
-            Assert.ThrowsAsync<InvalidOperationException>(() => controller.Post(model));
+            Assert.Throws<InvalidOperationException>(() => controller.Post(model));
         }
 
         [Test]
@@ -511,11 +511,11 @@ namespace WB.Tests.Unit.Designer.Api.Designer
             var controller = CreateController();
             var model = new CommandController.CommandExecutionModel { Type = "UpdateQuestionnaire", Command = null };
 
-            Assert.ThrowsAsync<InvalidOperationException>(() => controller.Post(model));
+            Assert.Throws<InvalidOperationException>(() => controller.Post(model));
         }
 
         [Test]
-        public async Task Post_unknown_command_type_returns_406_with_generic_message()
+        public void Post_unknown_command_type_returns_406_with_generic_message()
         {
             var controller = CreateController();
             var model = new CommandController.CommandExecutionModel
@@ -524,14 +524,14 @@ namespace WB.Tests.Unit.Designer.Api.Designer
                 Command = "{}"
             };
 
-            var result = await controller.Post(model);
+            var result = controller.Post(model);
 
             Assert.That(StatusCodeOf(result), Is.EqualTo((int)HttpStatusCode.NotAcceptable));
             Assert.That(MessageOf(result), Is.EqualTo("Invalid command"));
         }
 
         [Test]
-        public async Task Post_malformed_json_returns_406_with_generic_message()
+        public void Post_malformed_json_returns_406_with_generic_message()
         {
             var controller = CreateController();
             var model = new CommandController.CommandExecutionModel
@@ -540,14 +540,14 @@ namespace WB.Tests.Unit.Designer.Api.Designer
                 Command = "not { valid } json [[["
             };
 
-            var result = await controller.Post(model);
+            var result = controller.Post(model);
 
             Assert.That(StatusCodeOf(result), Is.EqualTo((int)HttpStatusCode.NotAcceptable));
             Assert.That(MessageOf(result), Is.EqualTo("Invalid command"));
         }
 
         [Test]
-        public async Task Post_valid_command_executes_and_returns_ok()
+        public void Post_valid_command_executes_and_returns_ok()
         {
             var commandService = new Mock<ICommandService>();
             var controller = CreateController(commandService: commandService.Object);
@@ -558,14 +558,14 @@ namespace WB.Tests.Unit.Designer.Api.Designer
                 Command = ValidUpdateQuestionnaireJson()
             };
 
-            var result = await controller.Post(model);
+            var result = controller.Post(model);
 
             Assert.That(result, Is.InstanceOf<OkResult>());
             commandService.Verify(s => s.Execute(It.IsAny<ICommand>(), It.IsAny<string>()), Times.Once);
         }
 
         [Test]
-        public async Task Post_command_service_throws_argument_exception_returns_406_with_original_message()
+        public void Post_command_service_throws_argument_exception_returns_406_with_original_message()
         {
             const string errorMessage = "Business rule violated";
             var commandService = new Mock<ICommandService>();
@@ -580,14 +580,14 @@ namespace WB.Tests.Unit.Designer.Api.Designer
                 Command = ValidUpdateQuestionnaireJson()
             };
 
-            var result = await controller.Post(model);
+            var result = controller.Post(model);
 
             Assert.That(StatusCodeOf(result), Is.EqualTo((int)HttpStatusCode.NotAcceptable));
             Assert.That(MessageOf(result), Is.EqualTo(errorMessage));
         }
 
         [Test]
-        public async Task Post_command_inflater_throws_forbidden_exception_returns_403()
+        public void Post_command_inflater_throws_forbidden_exception_returns_403()
         {
             var commandInflater = new Mock<ICommandInflater>();
             commandInflater
@@ -601,13 +601,13 @@ namespace WB.Tests.Unit.Designer.Api.Designer
                 Command = ValidUpdateQuestionnaireJson()
             };
 
-            var result = await controller.Post(model);
+            var result = controller.Post(model);
 
             Assert.That(StatusCodeOf(result), Is.EqualTo(StatusCodes.Status403Forbidden));
         }
 
         [Test]
-        public async Task Post_command_service_throws_questionnaire_domain_exception_returns_406()
+        public void Post_command_service_throws_questionnaire_domain_exception_returns_406()
         {
             var commandService = new Mock<ICommandService>();
             commandService
@@ -621,13 +621,13 @@ namespace WB.Tests.Unit.Designer.Api.Designer
                 Command = ValidUpdateQuestionnaireJson()
             };
 
-            var result = await controller.Post(model);
+            var result = controller.Post(model);
 
             Assert.That(StatusCodeOf(result), Is.EqualTo(StatusCodes.Status406NotAcceptable));
         }
 
         [Test]
-        public async Task Post_command_service_throws_forbidden_domain_exception_returns_403()
+        public void Post_command_service_throws_forbidden_domain_exception_returns_403()
         {
             var commandService = new Mock<ICommandService>();
             commandService
@@ -641,7 +641,7 @@ namespace WB.Tests.Unit.Designer.Api.Designer
                 Command = ValidUpdateQuestionnaireJson()
             };
 
-            var result = await controller.Post(model);
+            var result = controller.Post(model);
 
             Assert.That(StatusCodeOf(result), Is.EqualTo(StatusCodes.Status403Forbidden));
         }

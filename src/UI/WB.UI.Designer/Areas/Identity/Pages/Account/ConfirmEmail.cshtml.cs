@@ -21,20 +21,41 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> OnGetAsync(string userId, string code)
+        [BindProperty]
+        public string? UserId { get; set; }
+
+        [BindProperty]
+        public string? Code { get; set; }
+
+        public bool AutoSubmit { get; private set; }
+
+        public IActionResult OnGet(string userId, string code)
         {
             if (userId == null || code == null)
             {
                 return RedirectToPage("/Index");
             }
 
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            this.UserId = userId;
+            this.Code = code;
+            this.AutoSubmit = true;
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (UserId == null || Code == null)
             {
-                return NotFound($"Unable to load user with ID '{userId}'.");
+                return RedirectToPage("/Index");
             }
 
-            var result = await _userManager.ConfirmEmailAsync(user, code);
+            var user = await _userManager.FindByIdAsync(UserId);
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{UserId}'.");
+            }
+
+            var result = await _userManager.ConfirmEmailAsync(user, Code);
             if (!result.Succeeded)
             {
                 var error = result.Errors.First();
