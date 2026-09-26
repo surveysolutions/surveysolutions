@@ -121,7 +121,8 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
                 var server = Create.Service.NearbyConnectionManager(serverhandler, maxBytesLength: 0);
                 var client = Create.Service.NearbyConnectionManager(maxBytesLength: 0);
 
-                var clientCommunicator = new OutOfOrderPayloadTransferConnection()
+                var clientCommunicator = new OutOfOrderPayloadTransferConnection((from, _, payload) =>
+                    payload.Type == PayloadType.Bytes ? (TransferStatus?)null : TransferStatus.Success)
                     .WithTwoWayClientServerConnectionMap(server, client);
 
                 var id = Guid.NewGuid();
@@ -133,10 +134,42 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
             }
         }
 
+        [Test]
+        public void should_cancel_pending_response_when_failure_update_arrives_before_payload_registration()
+        {
+            using (new CommunicationSession())
+            using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5)))
+            {
+                var serverhandler = Create.Service.GoogleConnectionsRequestHandler()
+                    .WithSampleEchoHandler();
+
+                var server = Create.Service.NearbyConnectionManager(serverhandler, maxBytesLength: 0);
+                var client = Create.Service.NearbyConnectionManager(maxBytesLength: 0);
+
+                var clientCommunicator = new OutOfOrderPayloadTransferConnection((from, _, payload) =>
+                    payload.Type != PayloadType.Bytes && from == "server"
+                        ? TransferStatus.Failure
+                        : (TransferStatus?)null)
+                    .WithTwoWayClientServerConnectionMap(server, client);
+
+                var id = Guid.NewGuid();
+
+                Assert.CatchAsync<OperationCanceledException>(async () => await client.SendAsync<PingMessage, PongMessage>(
+                    clientCommunicator, "server", new PingMessage { Id = id }, null, cts.Token));
+                Assert.That(cts.IsCancellationRequested, Is.False);
+            }
+        }
+
         private sealed class OutOfOrderPayloadTransferConnection : INearbyConnection
         {
             private readonly IDictionary<string, INearbyCommunicator> clientsMap = new Dictionary<string, INearbyCommunicator>();
             private readonly IDictionary<string, string> connectionMap = new Dictionary<string, string>();
+            private readonly Func<string, string, IPayload, TransferStatus?> receiverTerminalStatusSelector;
+
+            public OutOfOrderPayloadTransferConnection(Func<string, string, IPayload, TransferStatus?> receiverTerminalStatusSelector)
+            {
+                this.receiverTerminalStatusSelector = receiverTerminalStatusSelector;
+            }
 
             public OutOfOrderPayloadTransferConnection WithTwoWayClientServerConnectionMap(INearbyCommunicator server,
                 INearbyCommunicator client)
@@ -167,6 +200,7 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
                 var payloadForReceiver = payload.Type == PayloadType.Bytes
                     ? payload
                     : new PayloadThatMustBeReadBeforeReceiveReturns(payload);
+                var receiverTerminalStatus = receiverTerminalStatusSelector(from, to, payload);
 
                 if (payload.Type != PayloadType.Bytes)
                 {
@@ -185,7 +219,19 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
                     Id = payload.Id
                 });
 
-                if (payload.Type != PayloadType.Bytes)
+                if (payload.Type != PayloadType.Bytes && receiverTerminalStatus.HasValue)
+                {
+                    toClient.ReceivePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
+                    {
+                        Status = receiverTerminalStatus.Value,
+                        BytesTransferred = 100,
+                        Id = payload.Id
+                    });
+                }
+
+                await toClient.ReceivePayloadAsync(this, from, payloadForReceiver);
+
+                if (payload.Type != PayloadType.Bytes && !receiverTerminalStatus.HasValue)
                 {
                     toClient.ReceivePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
                     {
@@ -194,8 +240,6 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
                         Id = payload.Id
                     });
                 }
-
-                await toClient.ReceivePayloadAsync(this, from, payloadForReceiver);
 
                 if (payloadForReceiver is PayloadThatMustBeReadBeforeReceiveReturns guardedPayload)
                 {

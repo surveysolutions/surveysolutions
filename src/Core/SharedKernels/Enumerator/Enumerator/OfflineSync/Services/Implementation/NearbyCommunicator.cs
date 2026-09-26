@@ -38,8 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         private readonly ConcurrentDictionary<long, IPayload> outgoingPayloads =
             new ConcurrentDictionary<long, IPayload>();
 
-        private readonly ConcurrentDictionary<(string Endpoint, long PayloadId), NearbyPayloadTransferUpdate> deferredTransferUpdates =
-            new ConcurrentDictionary<(string Endpoint, long PayloadId), NearbyPayloadTransferUpdate>();
+        private readonly ConcurrentDictionary<(string Endpoint, long PayloadId), ConcurrentQueue<NearbyPayloadTransferUpdate>> deferredTransferUpdates =
+            new ConcurrentDictionary<(string Endpoint, long PayloadId), ConcurrentQueue<NearbyPayloadTransferUpdate>>();
 
         private readonly IRequestHandler requestHandler;
 
@@ -165,11 +165,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         {
             incomingPayloads.GetOrAdd(payload.Id, payload);
 
-            if (payload.Type == PayloadType.Stream &&
-                deferredTransferUpdates.TryRemove((endpoint, payload.Id), out var deferredStreamUpdate))
+            if (payload.Type == PayloadType.Stream)
             {
-                await ReceivePayloadTransferUpdateInternal(nearbyConnection, endpoint, deferredStreamUpdate);
-                return;
+                var deferredStreamUpdateHandled = await ReplayDeferredTransferUpdatesAsync(nearbyConnection, endpoint, payload.Id);
+                if (deferredStreamUpdateHandled)
+                    return;
             }
 
             switch (payload.Type)
@@ -204,20 +204,24 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     throw new ArgumentOutOfRangeException();
             }
 
-            if (deferredTransferUpdates.TryRemove((endpoint, payload.Id), out var deferredUpdate))
-            {
-                await ReceivePayloadTransferUpdateInternal(nearbyConnection, endpoint, deferredUpdate);
-            }
+            await ReplayDeferredTransferUpdatesAsync(nearbyConnection, endpoint, payload.Id);
         }
 
         public async void ReceivePayloadTransferUpdate(INearbyConnection connection, string endpoint,
             NearbyPayloadTransferUpdate update)
         {
-            await ReceivePayloadTransferUpdateInternal(connection, endpoint, update);
+            try
+            {
+                await ReceivePayloadTransferUpdateInternal(connection, endpoint, update);
+            }
+            catch (Exception e)
+            {
+                logger.Error("Failed to process payload transfer update. " + e);
+            }
         }
 
         private async Task ReceivePayloadTransferUpdateInternal(INearbyConnection connection, string endpoint,
-            NearbyPayloadTransferUpdate update)
+            NearbyPayloadTransferUpdate update, bool allowDeferral = true)
         {
             var isIncoming = false;
             if (incomingPayloads.TryGetValue(update.Id, out var payload))
@@ -231,9 +235,13 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
             else
             {
-                if (update.Status == TransferStatus.Success || update.Status == TransferStatus.Failure)
+                if (allowDeferral && (update.Status == TransferStatus.Success || update.Status == TransferStatus.Failure))
                 {
-                    deferredTransferUpdates.AddOrUpdate((endpoint, update.Id), update, (_, _) => update);
+                    var key = (endpoint, update.Id);
+                    var deferredUpdates = deferredTransferUpdates.GetOrAdd(key,
+                        _ => new ConcurrentQueue<NearbyPayloadTransferUpdate>());
+
+                    deferredUpdates.Enqueue(update);
                     logger.Warn(
                         $"Deferring payload transfer update until payload is registered. Endpoint: {endpoint}, PayloadId: {update.Id}, Status: {update.Status}");
                     return;
@@ -333,6 +341,19 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private async Task<bool> ReplayDeferredTransferUpdatesAsync(INearbyConnection connection, string endpoint, long payloadId)
+        {
+            if (!deferredTransferUpdates.TryRemove((endpoint, payloadId), out var deferredUpdates))
+                return false;
+
+            while (deferredUpdates.TryDequeue(out var deferredUpdate))
+            {
+                await ReceivePayloadTransferUpdateInternal(connection, endpoint, deferredUpdate, allowDeferral: false);
+            }
+
+            return true;
         }
 
         private async Task HandlePayloadContent(INearbyConnection nearbyConnection, string endpoint,
