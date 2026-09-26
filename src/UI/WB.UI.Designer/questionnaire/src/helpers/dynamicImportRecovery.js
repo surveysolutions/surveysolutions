@@ -13,10 +13,8 @@ const dynamicImportErrorPatterns = [
     'importing a module script failed',
     'unable to preload css for'
 ];
-let recoveryScheduled = false;
 let activeRouteName = null;
-let recoveryTimeoutId = null;
-let scheduledRecoveryScope = null;
+const recoveryTimeoutIds = new Map();
 
 export function isDynamicImportError(error) {
     const message = (error instanceof Error ? error.message : String(error)).toLowerCase();
@@ -87,20 +85,26 @@ export function setActiveDynamicImportRouteName(routeName) {
 }
 
 function confirmDynamicImportRecovery(routeName, requireReloadConfirmation) {
-    if (!requireReloadConfirmation && !hasUnsavedChanges(routeName)) {
+    if (hasUnsavedChanges(routeName)) {
+        return window.confirm(
+            i18n.t('QuestionnaireEditor.UnsavedChangesReload')
+        );
+    }
+
+    if (!requireReloadConfirmation) {
         return true;
     }
 
     return window.confirm(
-        i18n.t('QuestionnaireEditor.UnsavedChangesReload')
+        i18n.t('QuestionnaireEditor.RefreshPageConfirm')
     );
 }
 
 export function scheduleDynamicImportRecovery(error, options = {}) {
-    if (recoveryScheduled) return;
-
     const { recoveryScope, routeName, requireReloadConfirmation = false } = options;
     const scope = getDynamicImportRecoveryScope(recoveryScope);
+    if (recoveryTimeoutIds.has(scope)) return;
+
     const retryCount = getRetryCount(scope);
 
     if (retryCount === null) {
@@ -113,34 +117,27 @@ export function scheduleDynamicImportRecovery(error, options = {}) {
         return;
     }
 
-    recoveryScheduled = true;
-    scheduledRecoveryScope = scope;
-
     if (!confirmDynamicImportRecovery(routeName, requireReloadConfirmation)) {
-        recoveryScheduled = false;
-        scheduledRecoveryScope = null;
         return;
     }
 
     if (!setRetryCount(retryCount + 1, scope)) {
-        recoveryScheduled = false;
-        scheduledRecoveryScope = null;
         console.error('Dynamic import recovery skipped: session storage is unavailable.', error);
         return;
     }
 
-    recoveryTimeoutId = window.setTimeout(() => {
-        recoveryTimeoutId = null;
+    const timeoutId = window.setTimeout(() => {
+        recoveryTimeoutIds.delete(scope);
         window.location.reload();
     }, getDynamicImportRetryDelay(retryCount));
+    recoveryTimeoutIds.set(scope, timeoutId);
 }
 
 export function clearDynamicImportRecovery(recoveryScope) {
-    if (recoveryTimeoutId !== null && scheduledRecoveryScope === recoveryScope) {
-        window.clearTimeout(recoveryTimeoutId);
-        recoveryTimeoutId = null;
-        recoveryScheduled = false;
-        scheduledRecoveryScope = null;
+    const timeoutId = recoveryTimeoutIds.get(recoveryScope);
+    if (timeoutId !== undefined) {
+        window.clearTimeout(timeoutId);
+        recoveryTimeoutIds.delete(recoveryScope);
     }
 
     clearRetryCount(recoveryScope);
