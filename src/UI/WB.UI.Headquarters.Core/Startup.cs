@@ -74,6 +74,7 @@ using WB.UI.Headquarters.Models.Users;
 using WB.UI.Headquarters.Services;
 using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Headquarters.Services.Quartz;
+using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Integrity;
@@ -360,7 +361,8 @@ namespace WB.UI.Headquarters
             services.AddMvc(mvc =>
                 {
                     mvc.Filters.Add<WorkspaceInfoFilter>();
-                    mvc.Filters.AddService<UnitOfWorkActionFilter>(1);
+                    // Outermost action filter: include post-action writes such as WriteToSyncLog.
+                    mvc.Filters.AddService<UnitOfWorkActionFilter>(int.MinValue);
                     mvc.Filters.AddService<InstallationFilter>(100);
                     mvc.Filters.AddService<WorkspaceAccessActionFilter>(150);
                     mvc.Filters.AddService<GlobalNotificationResultFilter>(200);
@@ -524,7 +526,19 @@ namespace WB.UI.Headquarters
             });
 
             app.UseUnderConstruction();
-            
+
+            if (!env.IsDevelopment())
+            {
+                // Cover workspace creation/disposal and API requests too. Keep the inner
+                // workspace-aware error pages, but do not re-enter MVC after scope disposal.
+                app.UseExceptionHandler(errorApp => errorApp.Run(async context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                    context.Response.ContentType = "text/plain; charset=utf-8";
+                    await context.Response.WriteAsync(Pages.GlobalSettings_UnhandledExceptionMessage);
+                }));
+            }
+
             app.UseWorkspaces();
 
             if (!env.IsDevelopment())
