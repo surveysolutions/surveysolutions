@@ -369,8 +369,10 @@ namespace WB.Core.Infrastructure.HttpServices.Services
                 userCancellationToken: ctoken, request: null, queryString: queryString, customHeaders: customHeaders)
                 .ConfigureAwait(false);
 
-            var contentLength = response.Content.Headers.ContentLength;
             var isPartialContent = response.StatusCode == System.Net.HttpStatusCode.PartialContent;
+            var contentLength = isPartialContent
+                ? response.Content.Headers.ContentRange?.Length ?? response.Content.Headers.ContentLength
+                : response.Content.Headers.ContentLength;
             var eTag = response.Headers.ETag?.Tag;
 
             var contentCompressionType = this.GetContentCompressionType(response.Content.Headers);

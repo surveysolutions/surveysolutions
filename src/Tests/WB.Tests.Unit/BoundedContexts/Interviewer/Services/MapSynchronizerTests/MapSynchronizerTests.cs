@@ -220,6 +220,46 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
         }
 
         [Test]
+        public async Task when_resume_response_reports_total_file_size_should_calculate_progress_from_total_size()
+        {
+            var synchronizationService = new Mock<IOnlineSynchronizationService>();
+            synchronizationService.Setup(x => x.GetMapList(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<MapView> { new MapView { MapName = "progress-map.tpk" } });
+
+            var sourceBytes = new byte[] { 4, 5, 6 };
+            synchronizationService.Setup(x => x.GetMapContentStream("progress-map.tpk", It.IsAny<CancellationToken>(), 3, "etag-1"))
+                .ReturnsAsync(new RestStreamResult
+                {
+                    ContentLength = 6,
+                    Stream = new MemoryStream(sourceBytes),
+                    IsPartialContent = true,
+                    ETag = "etag-1"
+                });
+
+            var tempStream = new NonDisposingMemoryStream();
+            tempStream.Write(new byte[] { 1, 2, 3 }, 0, 3);
+
+            var mapService = new Mock<IMapService>();
+            mapService.Setup(x => x.GetAvailableMaps(false)).Returns(new List<MapDescription>());
+            mapService.Setup(x => x.GetAvailableShapefiles()).Returns(new List<ShapefileDescription>());
+            mapService.Setup(x => x.DoesMapExist("progress-map.tpk")).Returns(false);
+            mapService.Setup(x => x.GetTempMapOffset("progress-map.tpk")).Returns(3);
+            mapService.Setup(x => x.GetTempMapETag("progress-map.tpk")).Returns("etag-1");
+            mapService.Setup(x => x.GetTempMapSaveStream("progress-map.tpk", true)).Returns(tempStream);
+
+            var service = Create.Service.MapSyncProvider(
+                synchronizationService: synchronizationService.Object,
+                mapService: mapService.Object);
+            var progress = new ImmediateProgress();
+
+            await service.Synchronize(progress, CancellationToken.None, new SynchronizationStatistics());
+
+            var downloadProgress = progress.Items.Single(x => x.Status == SynchronizationStatus.Download).TransferProgress;
+            Assert.That(downloadProgress.TotalBytesToReceive, Is.EqualTo(6));
+            Assert.That(downloadProgress.ProgressPercentage, Is.EqualTo(100));
+        }
+
+        [Test]
         public async Task should_report_download_progress_for_unknown_content_length_without_spam()
         {
             var synchronizationService = new Mock<IOnlineSynchronizationService>();

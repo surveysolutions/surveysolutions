@@ -195,7 +195,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                             var buffer = new byte[DownloadBufferSize];
                             var downloadProgressChangedEventArgs = new TransferProgress()
                             {
-                                TotalBytesToReceive = contentStreamResult.ContentLength + offset
+                                TotalBytesToReceive = contentStreamResult.ContentLength
                             };
 
                             int read;
@@ -213,7 +213,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
 
                                 if (contentStreamResult.ContentLength != null)
                                     downloadProgressChangedEventArgs.ProgressPercentage =
-                                        Math.Min(Math.Round((decimal)(100 * downloaded) / (contentStreamResult.ContentLength.Value + offset)), 100);
+                                        Math.Min(Math.Round((decimal)(100 * downloaded) / contentStreamResult.ContentLength.Value), 100);
 
                                 downloadProgressChangedEventArgs.BytesReceived = downloaded;
                                 OnDownloadProgressChanged(downloadProgressChangedEventArgs);
