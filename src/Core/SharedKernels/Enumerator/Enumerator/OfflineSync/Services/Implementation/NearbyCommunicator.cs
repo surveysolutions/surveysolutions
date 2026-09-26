@@ -166,7 +166,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         {
             incomingPayloads.GetOrAdd(payload.Id, payload);
 
-            if (payload.Type == PayloadType.Stream)
+            if (payload.Type == PayloadType.Stream && HasDeferredSuccessUpdate(endpoint, payload.Id))
             {
                 await ReplayDeferredTransferUpdatesAsync(nearbyConnection, endpoint, payload.Id);
             }
@@ -399,6 +399,19 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
                 handledDeferredUpdate = true;
                 await ReceivePayloadTransferUpdateInternal(connection, endpoint, deferredUpdate, allowDeferral: false);
+            }
+        }
+
+        private bool HasDeferredSuccessUpdate(string endpoint, long payloadId)
+        {
+            if (!deferredTransferUpdates.TryGetValue((endpoint, payloadId), out var deferredUpdates))
+                return false;
+
+            lock (deferredUpdates.SyncRoot)
+            {
+                return !deferredUpdates.IsDetached
+                    && deferredUpdates.Updates.Count > 0
+                    && deferredUpdates.Updates.Peek().Status == TransferStatus.Success;
             }
         }
 
