@@ -1,8 +1,13 @@
 <template>
-    <div id="questionsList" class="unit-section section" :class="sectionClass">
+    <div id="questionsList"
+        class="unit-section section"
+        :class="sectionClass">
         <SectionLoadingProgress />
         <Breadcrumbs :showHumburger="showHumburger" />
-        <component v-for="entity in entities" :key="entity.identity" :is="entity.entityType" :id="entity.identity">
+        <component v-for="entity in entities"
+            :key="entity.identity"
+            :is="entity.entityType"
+            :id="entity.identity">
         </component>
     </div>
 </template>
@@ -11,7 +16,7 @@
 import SectionProgress from './SectionLoadProgress'
 import Breadcrumbs from './Breadcrumbs.vue'
 
-import { GroupStatus } from './questions'
+import { GroupStatus } from './questionConstants'
 
 // import Vue from 'vue'
 
@@ -51,6 +56,11 @@ export default {
     watch: {
         ['$route.params.sectionId']() {
             this.loadSection()
+        },
+        ['$route.hash'](hash) {
+            if (hash) {
+                this.$store.dispatch('sectionRequireScroll', { id: hash })
+            }
         },
     },
 

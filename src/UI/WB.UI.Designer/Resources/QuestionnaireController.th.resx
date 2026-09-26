@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Action" xml:space="preserve">
+        <value>การกระทำ</value>
+    </data>
+    <data name="BackToList" xml:space="preserve">
+        <value>กลับไปที่รายการ</value>
+    </data>
+    <data name="Backup" xml:space="preserve">
+        <value>สำรองข้อมูล</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>ยกเลิก</value>
+    </data>
+    <data name="Assign" xml:space="preserve">
+        <value>กำหนด</value>
+    </data>
+    <data name="Assigning" xml:space="preserve">
+        <value>การมอบหมาย</value>
+    </data>
+    <data name="CancelSearch" xml:space="preserve">
+        <value>ยกเลิกการค้นหา</value>
+    </data>
+    <data name="Close" xml:space="preserve">
+        <value>ปิด</value>
+    </data>
+    <data name="Confirmation" xml:space="preserve">
+        <value>การยืนยัน</value>
+    </data>
+    <data name="Copy" xml:space="preserve">
+        <value>สำเนา</value>
+    </data>
+    <data name="CopyQuestionnaire" xml:space="preserve">
+        <value>คัดลอกแบบสอบถาม</value>
+    </data>
+    <data name="Create" xml:space="preserve">
+        <value>สร้าง</value>
+    </data>
+    <data name="CreatedBy" xml:space="preserve">
+        <value>สร้างโดย</value>
+    </data>
+    <data name="CreatedDate" xml:space="preserve">
+        <value>สร้างเมื่อ</value>
+    </data>
+    <data name="CreateNew" xml:space="preserve">
+        <value>สร้างใหม่</value>
+    </data>
+    <data name="NewFolder" xml:space="preserve">
+        <value>โฟลเดอร์ใหม่</value>
+    </data>
+    <data name="CreateNewQuestionnaire" xml:space="preserve">
+        <value>สร้างแบบสอบถามใหม่</value>
+    </data>
+    <data name="Delete" xml:space="preserve">
+        <value>ลบ</value>
+    </data>
+    <data name="DeleteFolderConfirmation" xml:space="preserve">
+        <value>คุณแน่ใจหรือไม่ว่าต้องการลบโฟลเดอร์ {0}</value>
+    </data>
+    <data name="CreateSubFolder" xml:space="preserve">
+        <value>สร้างโฟลเดอร์ย่อย</value>
+    </data>
+    <data name="Rename" xml:space="preserve">
+        <value>เปลี่ยนชื่อ</value>
+    </data>
+    <data name="AssignFolder" xml:space="preserve">
+        <value>กำหนดโฟลเดอร์</value>
+    </data>
+    <data name="DeleteConfirmationText" xml:space="preserve">
+        <value>คุณต้องการลบแบบสอบถาม "{0}" จริงหรือ?</value>
+    </data>
+    <data name="AssignFolderText" xml:space="preserve">
+        <value>กรุณากำหนดโฟลเดอร์สำหรับแบบสอบถาม "{0}"</value>
+    </data>
+    <data name="Deleting" xml:space="preserve">
+        <value>กำลังลบ</value>
+    </data>
+    <data name="Designer" xml:space="preserve">
+        <value>ดีไซเนอร์</value>
+    </data>
+    <data name="DownloadPdf" xml:space="preserve">
+        <value>ดาวน์โหลดไฟล์ PDF</value>
+    </data>
+    <data name="EmptyList" xml:space="preserve">
+        <value>รายการนี้ไม่มีบันทึกใดๆ</value>
+    </data>
+    <data name="Location" xml:space="preserve">
+        <value>ที่ตั้ง:</value>
+    </data>
+    <data name="Error" xml:space="preserve">
+        <value>ข้อผิดพลาด</value>
+    </data>
+    <data name="ErrorDescription" xml:space="preserve">
+        <value>เกิดข้อผิดพลาดขณะประมวลผลคำขอของคุณ</value>
+    </data>
+    <data name="ExportAsPDF" xml:space="preserve">
+        <value>ส่งออกเป็น PDF</value>
+    </data>
+    <data name="ExportAsHtml" xml:space="preserve">
+        <value>ส่งออกเป็น Html</value>
+    </data>
+    <data name="Forbidden" xml:space="preserve">
+        <value>คุณไม่ได้รับอนุญาตให้แก้ไขแบบสอบถามนี้</value>
+    </data>
+    <data name="ForbiddenDelete" xml:space="preserve">
+        <value>คุณไม่ได้รับอนุญาตให้ลบแบบสอบถามนี้</value>
+    </data>
+    <data name="ForbiddenRevert" xml:space="preserve">
+        <value>คุณไม่ได้รับอนุญาตให้กู้คืนการดำเนินการสำหรับแบบสอบถามนี้</value>
+    </data>
+    <data name="GeneratingPdf" xml:space="preserve">
+        <value>กำลังสร้าง pdf สำหรับ "{0}"</value>
+    </data>
+    <data name="CreatingHtml" xml:space="preserve">
+        <value>การสร้าง Html สำหรับ "{0}"</value>
+    </data>
+    <data name="GeneratePdf" xml:space="preserve">
+        <value>สร้างไฟล์ PDF</value>
+    </data>
+    <data name="GetHtml" xml:space="preserve">
+        <value>ส่งออก HTML</value>
+    </data>
+    <data name="ChooseLanguageTitle" xml:space="preserve">
+        <value>กรุณาเลือกคำแปล</value>
+    </data>
+    <data name="ChooseLanguage" xml:space="preserve">
+        <value>เลือกการแปล</value>
+    </data>
+    <data name="Initializing" xml:space="preserve">
+        <value>กำลังเริ่มต้น</value>
+    </data>
+    <data name="LastModified" xml:space="preserve">
+        <value>แก้ไขเมื่อ</value>
+    </data>
+    <data name="ManageUsers" xml:space="preserve">
+        <value>จัดการผู้ใช้</value>
+    </data>
+    <data name="MyQuestionnaires" xml:space="preserve">
+        <value>แบบสอบถามของฉัน</value>
+    </data>
+    <data name="ControlPanel" xml:space="preserve">
+        <value>แผงควบคุม</value>
+    </data>
+    <data name="Hello" xml:space="preserve">
+        <value>สวัสดี {0}</value>
+    </data>
+    <data name="Open" xml:space="preserve">
+        <value>เปิด</value>
+    </data>
+    <data name="PublicQuestionnaires" xml:space="preserve">
+        <value>แบบสอบถามสาธารณะ</value>
+    </data>
+    <data name="QuestionnaireTreeFolders" xml:space="preserve">
+        <value>โฟลเดอร์</value>
+    </data>
+    <data name="FoldersManagement" xml:space="preserve">
+        <value>การจัดการโฟลเดอร์</value>
+    </data>
+    <data name="FoldersDescription" xml:space="preserve">
+        <value>คุณสามารถกำหนดโครงสร้างของโฟลเดอร์สำหรับหน้าแบบสอบถามสาธารณะได้ สำหรับการคลิกที่โฟลเดอร์ด้วยปุ่มขวาจากนั้นใช้การดำเนินการอย่างใดอย่างหนึ่ง:
+&lt;br/&gt;- "สร้างโฟลเดอร์ย่อย" ใช้สำหรับสร้างโฟลเดอร์ย่อย 
+&lt;br/&gt;- "เปลี่ยนชื่อ" เพื่อเปลี่ยนชื่อโฟลเดอร์
+&lt;br/&gt;- "Delete" เพื่อลบโฟลเดอร์ที่มีโฟลเดอร์ย่อย</value>
+    </data>
+    <data name="QuestionnaireTitle" xml:space="preserve">
+        <value>ชื่อแบบสอบถาม</value>
+    </data>
+    <data name="RestoreQuestionnaire" xml:space="preserve">
+        <value>คืนค่าแบบสอบถาม</value>
+    </data>
+    <data name="RestoreQuestionnaireDocument" xml:space="preserve">
+        <value>เรียกคืนเอกสารแบบสอบถาม (เก่า)</value>
+    </data>
+    <data name="RetryExportPDF" xml:space="preserve">
+        <value>ลองส่งออกเป็น PDF อีกครั้ง</value>
+    </data>
+    <data name="SelectTabFile" xml:space="preserve">
+        <value>โปรดเลือกไฟล์ค่าที่คั่นด้วยแท็บเพื่ออัปโหลด</value>
+    </data>
+    <data name="SuccessDeleteMessage" xml:space="preserve">
+        <value>ลบแบบสอบถาม "{0}" เรียบร้อยแล้ว</value>
+    </data>
+    <data name="TabFilesOnly" xml:space="preserve">
+        <value>ยอมรับเฉพาะไฟล์ค่าที่คั่นด้วยแท็บเท่านั้น</value>
+    </data>
+    <data name="ExcelOrTabFilesOnly" xml:space="preserve">
+        <value>ยอมรับเฉพาะไฟล์ Excel หรือไฟล์ค่าที่คั่นด้วยแท็บเท่านั้น</value>
+    </data>
+    <data name="Title" xml:space="preserve">
+        <value>ชื่อ</value>
+    </data>
+    <data name="You" xml:space="preserve">
+        <value>คุณ</value>
+    </data>
+    <data name="Untitled" xml:space="preserve">
+        <value>ไม่มีชื่อ</value>
+    </data>
+    <data name="SharedQuestionnaires" xml:space="preserve">
+        <value>แบบสอบถามที่แบ่งปันกับฉัน</value>
+    </data>
+    <data name="NotSupportedBrowserUsed" xml:space="preserve">
+        <value>ไม่รองรับอินเทอร์เน็ตเบราว์เซอร์ กรุณาใช้เบราว์เซอร์อื่น</value>
+    </data>
+    <data name="NotSupportedBrowserUsedDescr" xml:space="preserve">
+        <value>คุณกำลังใช้เบราว์เซอร์ Internet Explorer ที่ไม่รองรับ คุณสมบัติบางอย่างอาจทำงานไม่ถูกต้อง</value>
+    </data>
+    <data name="Classifications" xml:space="preserve">
+        <value>การจำแนกประเภท</value>
+    </data>
+    <data name="SaveAs" xml:space="preserve">
+        <value>บันทึกเป็น</value>
+    </data>
+    <data name="CloneDeletedWarning" xml:space="preserve">
+        <value>คุณกำลังสร้างสำเนาของแบบสอบถามที่ถูกลบ อาจสูญหายไปบางส่วน..</value>
+    </data>
+    <data name="IncludeScenarios" xml:space="preserve">
+        <value>รวมสถานการณ์</value>
+    </data>
+</root>

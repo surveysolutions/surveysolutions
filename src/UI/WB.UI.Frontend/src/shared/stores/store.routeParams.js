@@ -9,7 +9,7 @@ export default {
 
     mutations: {
         SET_ROUTE(state, to) {
-            state.params = to.params;
+            state.params = to.params
             state.hash = to.hash
         },
     },

@@ -25,7 +25,6 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly ICommandService commandService;
-        private readonly IImageProcessingService imageProcessingService;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioProcessingService audioProcessingService;
@@ -34,7 +33,6 @@ namespace WB.UI.Headquarters.Controllers
         public WebInterviewBinaryController(
             IStatefulInterviewRepository statefulInterviewRepository, 
             ICommandService commandService,
-            IImageProcessingService imageProcessingService, 
             IWebInterviewNotificationService webInterviewNotificationService, 
             IAudioFileStorage audioFileStorage, 
             IAudioProcessingService audioProcessingService, 
@@ -42,7 +40,6 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.commandService = commandService;
-            this.imageProcessingService = imageProcessingService;
             this.webInterviewNotificationService = webInterviewNotificationService;
             this.audioFileStorage = audioFileStorage;
             this.audioProcessingService = audioProcessingService;
@@ -123,8 +120,6 @@ namespace WB.UI.Headquarters.Controllers
                 await using var ms = new MemoryStream();
 
                 await file.CopyToAsync(ms);
-
-                this.imageProcessingService.Validate(ms.ToArray());
 
                 var extension = Path.GetExtension(file.FileName);
                 filename = AnswerUtils.GetPictureFileName(question.VariableName, questionIdentity.RosterVector, extension);

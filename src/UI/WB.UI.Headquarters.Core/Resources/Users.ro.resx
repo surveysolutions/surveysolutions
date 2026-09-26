@@ -181,7 +181,7 @@
     <value>Editați: {0}</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>E-mail</value>
   </data>
   <data name="FinishInstallation" xml:space="preserve">
     <value>Încheierea instalării</value>
@@ -302,5 +302,22 @@
   </data>
   <data name="Filter_WithMissingWorkspace" xml:space="preserve">
     <value>Spațiile de lucru lipsesc</value>
+  </data>
+
+
+  <data name="UsersTitle" xml:space="preserve">
+    <value>Utilizatori</value>
+  </data>
+
+  <data name="AddUser" xml:space="preserve">
+    <value>Adăugare utilizator</value>
+  </data>
+
+  <data name="UploadUsers" xml:space="preserve">
+    <value>Încărcare utilizatori</value>
+  </data>
+
+  <data name="ApiTokenTitle" xml:space="preserve">
+      <value>Token API utilizator</value>
   </data>
 </root>

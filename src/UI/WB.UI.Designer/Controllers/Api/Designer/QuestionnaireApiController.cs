@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.AnonymousQuestionnaires;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -36,6 +39,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
         private readonly IWebTesterService webTesterService;
+        private readonly UserManager<DesignerIdentityUser> userManager;
         private readonly DesignerDbContext dbContext;
         private const int MaxCountOfOptionForFilteredCombobox = 200;
         public const int MaxVerificationErrorsOrWarnings = 100;
@@ -48,6 +52,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             IQuestionnaireInfoFactory questionnaireInfoFactory,
             IOptions<WebTesterSettings> webTesterSettings,
             IWebTesterService webTesterService,
+            UserManager<DesignerIdentityUser> userManager,
             DesignerDbContext dbContext)
         {
             this.chapterInfoViewFactory = chapterInfoViewFactory;
@@ -58,6 +63,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.questionnaireInfoFactory = questionnaireInfoFactory;
             this.webTesterSettings = webTesterSettings;
             this.webTesterService = webTesterService;
+            this.userManager = userManager;
             this.dbContext = dbContext;
         }
 
@@ -219,12 +225,58 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             ));
         }
 
+        /// <summary>
+        /// Initiates a WebTester session for the specified questionnaire using a
+        /// <b>one-time code exchange flow</b>. The JWT never reaches the browser.
+        /// </summary>
+        /// <remarks>
+        /// <para><b>Flow:</b></para>
+        /// <list type="number">
+        ///   <item>Designer creates a short-lived, single-use code scoped to the questionnaire and user.</item>
+        ///   <item>Returns a WebTester URL of the form <c>{BaseUri}/{id}?code=&lt;code&gt;</c>.</item>
+        ///   <item>The browser is navigated to that URL (client-side redirect, not a server redirect).</item>
+        ///   <item>WebTester's <c>Run</c> action receives the code, calls Designer's
+        ///         <c>POST /api/internal/auth/exchange</c> <b>server-to-server</b>, and receives
+        ///         a short-lived delegated JWT.</item>
+        ///   <item>The JWT is stored server-side in <c>IWebTesterJwtStore</c> and attached to
+        ///         outbound Designer API calls — it is never exposed to the browser.</item>
+        /// </list>
+        /// <para>
+        /// <b>Note:</b> this endpoint does NOT return an <c>X-WebTester-Token</c> header,
+        /// and the frontend does NOT append <c>?jwt=</c> to the URL.
+        /// Those patterns belong to an earlier design and are no longer used.
+        /// </para>
+        /// </remarks>
+        /// <returns>
+        /// <c>200 OK</c> with the WebTester redirect URL as a plain string,
+        /// e.g. <c>https://webtester.example.com/{id}?code=&lt;one-time-code&gt;</c>.
+        /// </returns>
         [HttpGet]
         [Route("WebTest/{id:guid}")]
-        public string WebTest(Guid id)
+        public async Task<IActionResult> WebTest(Guid id)
         {
-            var token = this.webTesterService.CreateTestQuestionnaire(id);
-            return $"{webTesterSettings.Value.BaseUri}/{token}";
+            if (string.IsNullOrWhiteSpace(webTesterSettings.Value.JwtSecretKey))
+                return StatusCode(406, new
+                {
+                    error = "WebTester is not configured",
+                    message = "WebTester:JwtSecretKey must be set in application configuration."
+                });
+
+            var userId = User.GetIdOrNull();
+            DesignerIdentityUser? user = userId.HasValue
+                ? await userManager.FindByIdAsync(userId.Value.ToString())
+                : null;
+
+            var correlationId = Guid.NewGuid().ToString("N");
+
+            // Returns a one-time code in the URL — JWT never leaves the server.
+            var code = await webTesterService.CreateOneTimeCodeAsync(
+                id,
+                user?.Id.ToString(),
+                correlationId);
+
+            var redirectUrl = $"{webTesterSettings.Value.BaseUri}/{id}?code={Uri.EscapeDataString(code)}";
+            return Ok(redirectUrl);
         }
 
         [HttpGet]

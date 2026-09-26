@@ -6,9 +6,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
 {
     public interface IOAuth2Api
     {
-        [Post("/token")]
+        [Post("")]
         Task<ApiResponse<ExternalStorageTokenResponse>> GetTokensByAuthorizationCodeAsync([Body(BodySerializationMethod.UrlEncoded)] ExternalStorageAccessTokenRequest request);
-        [Post("/token")]
+        [Post("")]
         Task<ApiResponse<ExternalStorageTokenResponse>> GetAccessTokenByRefreshTokenAsync([Body(BodySerializationMethod.UrlEncoded)] ExternalStorageRefreshTokenRequest request);
     }
     
@@ -24,6 +24,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
         public string RedirectUri { get; set; }
         [AliasAs("grant_type")]
         public string GrantType { get; set; }
+        [AliasAs("scope")]
+        public string Scope { get; set; }
     }
     
     public class ExternalStorageRefreshTokenRequest
@@ -36,6 +38,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
         public string ClientSecret { get; set; }
         [AliasAs("grant_type")]
         public string GrantType { get; set; }
+        [AliasAs("scope")]
+        public string Scope { get; set; }
     }
 
     public class ExternalStorageTokenResponse

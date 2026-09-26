@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AddAPIUser" xml:space="preserve"><value>បន្ថែមអ្នកប្រើប្រាស់ API</value></data>
+  <data name="AddHeadquarters" xml:space="preserve"><value>បន្ថែមទីស្នាក់ការ</value></data>
+  <data name="AddSupervisor" xml:space="preserve"><value>បន្ថែមអ្នកត្រួតពិនិត្យ</value></data>
+  <data name="APIUsers" xml:space="preserve"><value>អ្នកប្រើប្រាស់ API</value></data>
+  <data name="CreateAPIUser" xml:space="preserve"><value>បង្កើតអ្នកប្រើប្រាស់ API</value></data>
+  <data name="CreateHeadquarters" xml:space="preserve"><value>បង្កើតទីស្នាក់ការ</value></data>
+  <data name="CreateObserver" xml:space="preserve"><value>បង្កើតអ្នកសង្កេតការណ៍</value></data>
+  <data name="CreateSupervisor" xml:space="preserve"><value>បង្កើតអ្នកត្រួតពិនិត្យ</value></data>
+  <data name="CreateAdministrator" xml:space="preserve"><value>បង្កើតអ្នកគ្រប់គ្រង</value></data>
+  <data name="ArchivedSupervisors" xml:space="preserve"><value>អ្នកត្រួតពិនិត្យដែលបានបណ្ណសារ</value></data>
+  <data name="ClickToReturn" xml:space="preserve"><value>ចុចដើម្បីត្រឡប់ទៅគណនីរបស់អ្នក</value></data>
+  <data name="CreateAdmin" xml:space="preserve"><value>ដើម្បីបញ្ចប់ការដំឡើង សូមបង្កើតអ្នកប្រើប្រាស់ Administrator ថ្មី</value></data>
+  <data name="FinishInstallation" xml:space="preserve"><value>បញ្ចប់ការដំឡើង</value></data>
+  <data name="Headquarters" xml:space="preserve"><value>ទីស្នាក់ការ</value></data>
+  <data name="ImpersonateAsUser" xml:space="preserve"><value>មើលជាអ្នកប្រើប្រាស់នេះក្នុងរបៀបអាន</value></data>
+  <data name="Remove" xml:space="preserve"><value>ដកចេញ</value></data>
+  <data name="Observer" xml:space="preserve"><value>អ្នកសង្កេតការណ៍</value></data>
+  <data name="ObserverDisclaimerFormat" xml:space="preserve"><value>នេះជាខ្លឹមសារដែល &lt;b&gt;{0}&lt;/b&gt; ឃើញ</value></data>
+  <data name="Observers" xml:space="preserve"><value>អ្នកសង្កេតការណ៍</value></data>
+  <data name="Supervisor" xml:space="preserve"><value>អ្នកត្រួតពិនិត្យ</value></data>
+  <data name="Supervisors" xml:space="preserve"><value>អ្នកត្រួតពិនិត្យ</value></data>
+  <data name="SupervisorsCountDescription" xml:space="preserve"><value>អ្នកត្រួតពិនិត្យ ({{count}})</value></data>
+  <data name="InterviewersCountDescription" xml:space="preserve"><value>អ្នកសំភាសន៍ ({{count}})</value></data>
+  <data name="ApiUsersCountDescription" xml:space="preserve"><value>អ្នកប្រើប្រាស់ API ({{count}})</value></data>
+  <data name="HeadquartersCountDescription" xml:space="preserve"><value>ទីស្នាក់ការ ({{count}})</value></data>
+  <data name="ObserversCountDescription" xml:space="preserve"><value>អ្នកសង្កេតការណ៍ ({{count}})</value></data>
+  <data name="Supervisors_Edit" xml:space="preserve"><value>កែប្រែអ្នកត្រួតពិនិត្យ</value></data>
+  <data name="SupervisorsInTeam" xml:space="preserve"><value>អ្នកត្រួតពិនិត្យក្នុងក្រុមរបស់អ្នក</value></data>
+  <data name="Admin" xml:space="preserve"><value>អ្នកគ្រប់គ្រង</value></data>
+  <data name="CreateAndTryLogin" xml:space="preserve"><value>បង្កើតហើយព្យាយាមចូល</value></data>
+  <data name="CreationDate" xml:space="preserve"><value>គណនីបានបង្កើតនៅ</value></data>
+  <data name="Edit" xml:space="preserve"><value>កែប្រែ</value></data>
+  <data name="EditFormat" xml:space="preserve"><value>កែប្រែ: {0}</value></data>
+  <data name="Email" xml:space="preserve"><value>អ៊ីម៉ែល</value></data>
+  <data name="Interviewer" xml:space="preserve"><value>អ្នកសំភាសន៍</value></data>
+  <data name="Interviewers" xml:space="preserve"><value>អ្នកសំភាសន៍</value></data>
+  <data name="Locked" xml:space="preserve"><value>ត្រូវបានចាក់សោ</value></data>
+  <data name="NotLinkedToDevice" xml:space="preserve"><value>មិនបានភ្ជាប់ទៅឧបករណ៍</value></data>
+  <data name="TotalInterviewers" xml:space="preserve"><value>អ្នកសំភាសន៍សរុប</value></data>
+  <data name="UserName" xml:space="preserve"><value>ឈ្មោះចូល</value></data>
+  <data name="AddObserver" xml:space="preserve"><value>បន្ថែមអ្នកសង្កេតការណ៍</value></data>
+  <data name="TryLater" xml:space="preserve"><value>សូមព្យាយាមម្ដងទៀតនៅពេលក្រោយ</value></data>
+  <data name="HeadquarterAccountCreationDate" xml:space="preserve"><value>ថ្ងៃបង្កើតគណនីទីស្នាក់ការ</value></data>
+  <data name="SupervisorAccountCreationDate" xml:space="preserve"><value>ថ្ងៃបង្កើតគណនីអ្នកត្រួតពិនិត្យ</value></data>
+  <data name="NotLinkedToDeviceTitle" xml:space="preserve"><value>ចំនួនអ្នកសំភាសន៍ដែលមិនបានធ្វើសមកាលកម្មថេប្លេតរបស់ពួកគេ</value></data>
+  <data name="NumberOfInterviewersInTeam" xml:space="preserve"><value>ចំនួនអ្នកសំភាសន៍ក្នុងក្រុម</value></data>
+  <data name="AccountCreationDateTooltip" xml:space="preserve"><value>ថ្ងៃបង្កើតគណនី</value></data>
+  <data name="ObserversEmail" xml:space="preserve"><value>អ៊ីម៉ែលអ្នកសង្កេតការណ៍</value></data>
+  <data name="SupervisorEmail" xml:space="preserve"><value>អ៊ីម៉ែលអ្នកត្រួតពិនិត្យ</value></data>
+  <data name="HeadquartersEmail" xml:space="preserve"><value>អ៊ីម៉ែលទីស្នាក់ការ</value></data>
+  <data name="AddInterviewer" xml:space="preserve"><value>បន្ថែមអ្នកសំភាសន៍</value></data>
+  <data name="ArchivingStatusTitle" xml:space="preserve"><value>ស្ថានភាពបណ្ណសារ</value></data>
+  <data name="InterviewerIssues" xml:space="preserve"><value>បញ្ហារបស់អ្នកសំភាសន៍</value></data>
+  <data name="ResetPassword" xml:space="preserve"><value>កំណត់ពាក្យសម្ងាត់ឡើងវិញ</value></data>
+  <data name="ResetPasswordTitle" xml:space="preserve"><value>កំណត់ពាក្យសម្ងាត់អ្នកប្រើប្រាស់ឡើងវិញ</value></data>
+  <data name="UserNotFound" xml:space="preserve"><value>រកមិនឃើញអ្នកប្រើប្រាស់</value></data>
+  <data name="PasswordChanged" xml:space="preserve"><value>ពាក្យសម្ងាត់សម្រាប់អ្នកប្រើប្រាស់ {0} បានផ្លាស់ប្ដូរ</value></data>
+  <data name="Filter_AllUsers" xml:space="preserve"><value>អ្នកប្រើប្រាស់ទាំងអស់</value></data>
+  <data name="Filter_WithMissingWorkspace" xml:space="preserve"><value>កន្លែងធ្វើការបាត់</value></data>
+  <data name="Filter_WithDisabledWorkspaces" xml:space="preserve"><value>ជាមួយកន្លែងធ្វើការដែលបិទ</value></data>
+  <data name="Filter_Locked" xml:space="preserve"><value>អ្នកប្រើប្រាស់ដែលត្រូវបានចាក់សោ</value></data>
+  <data name="Filter_Archived" xml:space="preserve"><value>អ្នកប្រើប្រាស់ដែលបានបណ្ណសារ</value></data>
+  <data name="UsersTitle" xml:space="preserve"><value>អ្នកប្រើប្រាស់</value></data>
+  <data name="AddUser" xml:space="preserve"><value>បន្ថែមអ្នកប្រើប្រាស់</value></data>
+  <data name="UploadUsers" xml:space="preserve"><value>ផ្ទុកឡើងអ្នកប្រើប្រាស់</value></data>
+  <data name="ApiTokenTitle" xml:space="preserve"><value>Token API របស់អ្នកប្រើប្រាស់</value></data>
+</root>

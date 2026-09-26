@@ -192,4 +192,7 @@
   <data name="MapFileNameHasInvalidChars" xml:space="preserve">
     <value>O nome do arquivo {0} inclui caracteres inválidos.</value>
   </data>
+  <data name="MapFileNameTooLong" xml:space="preserve">
+    <value>O nome do arquivo '{0}' excede o comprimento máximo permitido de {1} caracteres.</value>
+  </data>
 </root>
