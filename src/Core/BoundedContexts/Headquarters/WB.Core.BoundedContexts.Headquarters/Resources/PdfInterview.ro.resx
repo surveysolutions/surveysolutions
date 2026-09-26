@@ -248,4 +248,13 @@
   <data name="AreaQestion_AreaMeter" xml:space="preserve">
     <value>metri</value>
   </data>
+  <data name="AreaQestion_Coordinates" xml:space="preserve">
+    <value>Coordinates</value>
+  </data>
+  <data name="AreaQestion_Latitude" xml:space="preserve">
+    <value>Latitude</value>
+  </data>
+  <data name="AreaQestion_Longitude" xml:space="preserve">
+    <value>Longitude</value>
+  </data>
 </root>
