@@ -356,14 +356,17 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     return handledDeferredUpdate;
 
                 NearbyPayloadTransferUpdate deferredUpdate = null;
+                var shouldRemoveDetachedQueue = false;
                 var shouldDetachQueue = false;
 
                 lock (deferredUpdates.SyncRoot)
                 {
                     if (deferredUpdates.IsDetached)
-                        continue;
+                    {
+                        shouldRemoveDetachedQueue = true;
+                    }
 
-                    if (deferredUpdates.Updates.Count > 0)
+                    else if (deferredUpdates.Updates.Count > 0)
                     {
                         deferredUpdate = deferredUpdates.Updates.Dequeue();
                     }
@@ -372,6 +375,12 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                         deferredUpdates.IsDetached = true;
                         shouldDetachQueue = true;
                     }
+                }
+
+                if (shouldRemoveDetachedQueue)
+                {
+                    deferredTransferUpdates.TryRemove(new KeyValuePair<(string Endpoint, long PayloadId), DeferredTransferUpdatesQueue>(key, deferredUpdates));
+                    continue;
                 }
 
                 if (shouldDetachQueue)
