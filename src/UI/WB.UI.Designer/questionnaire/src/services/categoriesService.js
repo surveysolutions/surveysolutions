@@ -10,7 +10,8 @@ export async function updateCategories(
     var command = {
         questionnaireId: questionnaireId,
         categoriesId: categories.categoriesId,
-        name: categories.name
+        name: categories.name,
+        description: categories.description || ''
     };
 
     if (!isNew && categories.file !== null && categories.file !== undefined) {
