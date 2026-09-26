@@ -199,7 +199,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         private void RemoveSharedPerson(string questionnaireId, Guid responsibleId, Guid personId, string? personEmail)
         {
-            var questionnaireListViewItem = this.dbContext.Questionnaires.Find(questionnaireId);
+            var questionnaireListViewItem = this.dbContext.Questionnaires
+                .Include(x => x.SharedPersons)
+                .FirstOrDefault(x => x.QuestionnaireId == questionnaireId);
             if (questionnaireListViewItem == null) return;
 
             if (questionnaireListViewItem.SharedPersons.Any(x => x.UserId == personId))
@@ -220,7 +222,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         
         private void AddSharedPerson(string questionnaireId, Guid responsibleId, Guid personId, string personEmail, ShareType shareType)
         {
-            var questionnaireListViewItem = this.dbContext.Questionnaires.Find(questionnaireId);
+            var questionnaireListViewItem = this.dbContext.Questionnaires
+                .Include(x => x.SharedPersons)
+                .FirstOrDefault(x => x.QuestionnaireId == questionnaireId);
             if (questionnaireListViewItem == null) return;
 
             if (questionnaireListViewItem.SharedPersons.Any(x => x.UserId == personId))
@@ -246,7 +250,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                
         public void Process(Questionnaire aggregate, PassOwnershipFromQuestionnaire command)
         {
-            var questionnaireListViewItem = this.dbContext.Questionnaires.Find(command.QuestionnaireId.FormatGuid());
+            var questionnaireListViewItem = this.dbContext.Questionnaires
+                .Include(x => x.SharedPersons)
+                .FirstOrDefault(x => x.QuestionnaireId == command.QuestionnaireId.FormatGuid());
             if (questionnaireListViewItem == null) return;
 
             var newOwner = this.dbContext.Users.SingleOrDefault(u => u.Id == command.NewOwnerId);
