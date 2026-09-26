@@ -84,7 +84,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             }
             catch (Exception e)
             {
-                LogError("Unable to open stream from ]{key}] {request_key}", e, key, getObject.Key);
+                LogError("Unable to open stream from [{key}] {request_key}", e, key, getObject.Key);
                 throw;
             }
         }

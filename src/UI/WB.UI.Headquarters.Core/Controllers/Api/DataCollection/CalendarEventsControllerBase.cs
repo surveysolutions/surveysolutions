@@ -16,7 +16,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
     [RequestSizeLimit(1 * 10 * 1024 * 1024)]
     [RequestFormLimits(MultipartBodyLengthLimit = 10 * 1024 * 1024)]
-    public abstract class CalendarEventsControllerBase: ControllerBase
+    public abstract class CalendarEventsControllerBase: DataCollectionControllerBase
     {
         protected readonly IHeadquartersEventStore eventStore;
         protected readonly ICalendarEventService calendarEventService;

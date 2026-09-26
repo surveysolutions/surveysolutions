@@ -360,6 +360,9 @@
   <data name="MaxAnswersCountSelected" xml:space="preserve">
     <value>У цьому питанні було зроблено максимальну кількість виборів ({{value}})</value>
   </data>
+  <data name="ImageFormatNotSupported" xml:space="preserve">
+    <value>Формат зображення не підтримується вашим браузером.</value>
+  </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>Відтворення мультимедіа не підтримується вашим браузером. Замість цього ви можете завантажити його.</value>
   </data>
