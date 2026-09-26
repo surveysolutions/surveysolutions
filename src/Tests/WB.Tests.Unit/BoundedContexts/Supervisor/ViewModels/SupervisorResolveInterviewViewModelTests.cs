@@ -232,6 +232,33 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
                      .EqualTo(WB.Core.SharedKernels.Enumerator.Properties.UIResources.Interview_Complete_Entities_With_Errors + " 2"));
         }
 
+        [Test]
+        public async Task should_show_retryable_error_state_when_background_load_fails()
+        {
+            var interview = Create.AggregateRoot.StatefulInterview(interviewId: InterviewId);
+            var interviewRepository = Abc.SetUp.StatefulInterviewRepository(interview);
+            var entitiesListViewModelFactory = new Mock<IEntitiesListViewModelFactory>();
+
+            entitiesListViewModelFactory
+                .Setup(x => x.GetTopUnansweredQuestions(It.IsAny<string>(), It.IsAny<NavigationState>(), It.IsAny<bool>()))
+                .Throws(new InvalidOperationException("load failed"));
+            entitiesListViewModelFactory.SetupGet(x => x.MaxNumberOfEntities).Returns(10);
+
+            var viewModel = CreateViewModel(
+                interviewRepository: interviewRepository,
+                entitiesListViewModelFactory: entitiesListViewModelFactory.Object);
+
+            viewModel.Configure(InterviewId.FormatGuid(), Create.Other.NavigationState(interviewRepository));
+            await WaitForLoadingToFinishAsync(viewModel);
+
+            viewModel.HasLoadingError.Should().BeTrue();
+            viewModel.LoadingErrorMessage.Should().Contain("load failed");
+            viewModel.AnsweredCount.Should().Be(0);
+            viewModel.ErrorsCount.Should().Be(0);
+            viewModel.UnansweredCount.Should().Be(0);
+            viewModel.RetryLoadCommand.CanExecute().Should().BeTrue();
+        }
+
         private static async Task WaitForLoadingToFinishAsync(SupervisorResolveInterviewViewModel viewModel)
         {
             if (!viewModel.IsLoading)

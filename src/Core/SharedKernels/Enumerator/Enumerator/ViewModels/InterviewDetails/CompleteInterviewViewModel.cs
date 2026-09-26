@@ -147,7 +147,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             _loadingCts = new CancellationTokenSource();
             var loadVersion = Interlocked.Increment(ref this.activeLoadVersion);
             var cancellationToken = _loadingCts.Token;
-            this.loadingTask = LoadDataForDisplayWithErrorHandlingAsync(interviewId, navigationState, forSupervisor, loadVersion, cancellationToken);
+            var loadingTask = LoadDataForDisplayWithErrorHandlingAsync(interviewId, navigationState, forSupervisor, loadVersion, cancellationToken);
+            loadingTask.ContinueWith(t => _ = t.Exception,
+                CancellationToken.None,
+                TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously,
+                TaskScheduler.Default);
         }
 
         /// <summary>
@@ -168,10 +172,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             catch (Exception ex)
             {
                 Logger.Error("Failed to load complete screen data", ex);
+                var loadingErrorMessage = string.IsNullOrWhiteSpace(ex.Message)
+                    ? $"{UIResources.Interview_Complete_Screen_Title}: {EnumeratorUIResources.UnexpectedException}"
+                    : $"{UIResources.Interview_Complete_Screen_Title}: {ex.Message}";
                 await InvokeOnMainThreadAsync(() =>
                 {
                     if (ShouldSkipLoadUpdate(loadVersion, cancellationToken)) return;
-                    LoadingErrorMessage = $"{UIResources.Interview_Complete_Screen_Title}: {EnumeratorUIResources.UnexpectedException}";
+                    LoadingErrorMessage = loadingErrorMessage;
                     HasLoadingError = true;
                     IsCompletionAllowed = false;
                     IsLoading = false;
@@ -419,7 +426,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private bool requestWebInterview;
         private bool canSwitchToWebMode;
         private CancellationTokenSource _loadingCts;
-        private Task loadingTask;
         private string currentInterviewId;
         private NavigationState currentNavigationState;
         private int activeLoadVersion;

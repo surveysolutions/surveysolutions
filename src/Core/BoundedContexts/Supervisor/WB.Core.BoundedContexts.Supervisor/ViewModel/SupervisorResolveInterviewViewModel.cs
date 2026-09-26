@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.CommentLabel = InterviewDetails.ResolveComment;
 
             // Load the interview for fast fields needed by Approve/Reject/Assign canExecute predicates.
-            interview = this.interviewRepository.Get(interviewId);
+            interview = this.interviewRepository.GetOrThrow(interviewId);
             this.status = interview.Status;
 
             var interviewKey = interview.GetInterviewKey()?.ToString();
