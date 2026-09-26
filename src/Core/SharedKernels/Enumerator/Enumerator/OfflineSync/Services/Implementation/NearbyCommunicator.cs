@@ -165,12 +165,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         public async Task ReceivePayloadAsync(INearbyConnection nearbyConnection, string endpoint, IPayload payload)
         {
             incomingPayloads.GetOrAdd(payload.Id, payload);
-            var replayedDeferredStreamUpdate = false;
-
-            if (payload.Type == PayloadType.Stream && HasDeferredTerminalUpdate(endpoint, payload.Id))
-            {
-                replayedDeferredStreamUpdate = await ReplayDeferredTransferUpdatesAsync(nearbyConnection, endpoint, payload.Id);
-            }
 
             switch (payload.Type)
             {
@@ -197,6 +191,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     break;
                 case PayloadType.Stream:
                     this.logger.Verbose($"Got stream");
+                    payload.ReadStream();
                     break;
                 case PayloadType.File:
                     break;
@@ -204,10 +199,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     throw new ArgumentOutOfRangeException();
             }
 
-            if (!replayedDeferredStreamUpdate || payload.Type != PayloadType.Stream)
-            {
-                await ReplayDeferredTransferUpdatesAsync(nearbyConnection, endpoint, payload.Id);
-            }
+            await ReplayDeferredTransferUpdatesAsync(nearbyConnection, endpoint, payload.Id);
         }
 
         public async Task ReceivePayloadTransferUpdate(INearbyConnection connection, string endpoint,
@@ -403,18 +395,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
                 handledDeferredUpdate = true;
                 await ReceivePayloadTransferUpdateInternal(connection, endpoint, deferredUpdate, allowDeferral: false);
-            }
-        }
-
-        private bool HasDeferredTerminalUpdate(string endpoint, long payloadId)
-        {
-            if (!deferredTransferUpdates.TryGetValue((endpoint, payloadId), out var deferredUpdates))
-                return false;
-
-            lock (deferredUpdates.SyncRoot)
-            {
-                return !deferredUpdates.IsDetached
-                    && deferredUpdates.Updates.Count > 0;
             }
         }
 
