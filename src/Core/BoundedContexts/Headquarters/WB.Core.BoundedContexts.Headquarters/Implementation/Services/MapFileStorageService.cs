@@ -701,7 +701,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return this.fileSystemAccessor.ReadAllBytes(filePath);
         }
 
-        public async Task<string> GetMapContentHashAsync(string mapName)
+#nullable enable
+        public async Task<string?> GetMapContentHashAsync(string mapName)
+#nullable restore
         {
             var fileName = fileSystemAccessor.GetFileName(mapName);
             var map = await this.mapPlainStorageAccessor.GetByIdAsync(fileName);
@@ -718,7 +720,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (!this.fileSystemAccessor.IsFileExists(filePath))
                 return null;
 
-            var hash = this.TryReadCachedHash(filePath) ?? this.fileSystemAccessor.ReadHash(filePath);
+            var hash = this.TryReadCachedHash(filePath);
+            if (hash == null)
+            {
+                hash = this.fileSystemAccessor.ReadHash(filePath);
+                this.PersistCachedHash(filePath, hash);
+            }
+
             return hash == null ? null : Convert.ToBase64String(hash);
         }
 
