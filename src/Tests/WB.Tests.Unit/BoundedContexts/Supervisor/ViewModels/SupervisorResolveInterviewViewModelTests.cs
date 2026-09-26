@@ -259,6 +259,46 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             viewModel.RetryLoadCommand.CanExecute().Should().BeTrue();
         }
 
+        [Test]
+        public async Task should_retry_loading_after_background_failure()
+        {
+            var interview = Mock.Of<IStatefulInterview>(
+                x => x.CountActiveAnsweredQuestionsInInterviewForSupervisor() == 3
+                     && x.CountInvalidEntitiesInInterviewForSupervisor() == 2
+                     && x.CountActiveQuestionsInInterviewForSupervisor() == 8
+            );
+            var interviewRepository = new Mock<IStatefulInterviewRepository>();
+            interviewRepository.Setup(x => x.Get(It.IsAny<string>())).Returns(interview);
+            interviewRepository.Setup(x => x.GetOrThrow(It.IsAny<string>())).Returns(interview);
+
+            var defaultResult = new EntitiesListViewModelFactoryResult(Enumerable.Empty<EntityWithErrorsViewModel>(), 0);
+            var entitiesListViewModelFactory = new Mock<IEntitiesListViewModelFactory>();
+            entitiesListViewModelFactory
+                .SetupSequence(x => x.GetTopUnansweredQuestions(It.IsAny<string>(), It.IsAny<NavigationState>(), It.IsAny<bool>()))
+                .Throws(new InvalidOperationException("load failed"))
+                .Returns(defaultResult);
+            entitiesListViewModelFactory.Setup(x => x.GetTopEntitiesWithErrors(It.IsAny<string>(), It.IsAny<NavigationState>())).Returns(defaultResult);
+            entitiesListViewModelFactory.Setup(x => x.GetTopFailedCriticalRulesFromState(It.IsAny<string>(), It.IsAny<NavigationState>())).Returns(defaultResult);
+            entitiesListViewModelFactory.Setup(x => x.GetTopUnansweredCriticalQuestions(It.IsAny<string>(), It.IsAny<NavigationState>())).Returns(defaultResult);
+            entitiesListViewModelFactory.SetupGet(x => x.MaxNumberOfEntities).Returns(10);
+
+            var viewModel = CreateViewModel(
+                interviewRepository: interviewRepository.Object,
+                entitiesListViewModelFactory: entitiesListViewModelFactory.Object);
+
+            viewModel.Configure(Id.g1.FormatGuid(), Create.Other.NavigationState(interviewRepository.Object));
+            await WaitForLoadingToFinishAsync(viewModel);
+            viewModel.HasLoadingError.Should().BeTrue();
+
+            viewModel.RetryLoadCommand.Execute();
+            await WaitForLoadingToFinishAsync(viewModel);
+
+            viewModel.HasLoadingError.Should().BeFalse();
+            viewModel.ErrorsCount.Should().Be(2);
+            viewModel.AnsweredCount.Should().Be(3);
+            viewModel.UnansweredCount.Should().Be(5);
+        }
+
         private static async Task WaitForLoadingToFinishAsync(SupervisorResolveInterviewViewModel viewModel)
         {
             if (!viewModel.IsLoading)

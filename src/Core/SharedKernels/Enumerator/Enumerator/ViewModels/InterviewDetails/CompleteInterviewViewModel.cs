@@ -196,7 +196,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             try
             {
                 if (ShouldSkipLoadUpdate(loadVersion, cancellationToken)) return;
-                var loadData = await Task.Run(() => LoadBaseTabData(interviewId, navigationState, forSupervisor, loadVersion, cancellationToken), cancellationToken);
+                var interviewStateData = await LoadInterviewStateDataAsync(interviewId, loadVersion, cancellationToken);
+                if (interviewStateData == null) return;
+
+                var loadData = await Task.Run(
+                    () => LoadBaseTabData(interviewId, navigationState, forSupervisor, interviewStateData, loadVersion, cancellationToken),
+                    cancellationToken);
                 if (loadData == null) return;
                 unansweredQuestions = loadData.UnansweredQuestions;
                 entitiesWithErrors = loadData.EntitiesWithErrors;
@@ -245,18 +250,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private LoadDataResult LoadBaseTabData(string interviewId, NavigationState navigationState, bool forSupervisor, int loadVersion, CancellationToken cancellationToken)
+        private async Task<InterviewStateData> LoadInterviewStateDataAsync(string interviewId, int loadVersion, CancellationToken cancellationToken)
+        {
+            GroupStatus status = default;
+            int answeredCount = 0;
+            int unansweredCount = 0;
+            int errorsCount = 0;
+
+            await InvokeOnMainThreadAsync(() =>
+            {
+                if (ShouldSkipLoadUpdate(loadVersion, cancellationToken))
+                    return;
+
+                this.InterviewState.Init(interviewId, null);
+                status = InterviewState.Status;
+                var questionsCount = InterviewState.QuestionsCount;
+                answeredCount = InterviewState.AnsweredQuestionsCount;
+                unansweredCount = questionsCount - answeredCount;
+                errorsCount = InterviewState.InvalidAnswersCount;
+            });
+
+            return ShouldSkipLoadUpdate(loadVersion, cancellationToken)
+                ? null
+                : new InterviewStateData(status, answeredCount, unansweredCount, errorsCount);
+        }
+
+        private LoadDataResult LoadBaseTabData(string interviewId, NavigationState navigationState, bool forSupervisor, InterviewStateData interviewStateData, int loadVersion, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (ShouldSkipLoadUpdate(loadVersion, cancellationToken))
                 return null;
-
-            this.InterviewState.Init(interviewId, null);
-            var status = InterviewState.Status;
-            var questionsCount = InterviewState.QuestionsCount;
-            var answeredCount = InterviewState.AnsweredQuestionsCount;
-            var unansweredCount = questionsCount - answeredCount;
-            var errorsCount = InterviewState.InvalidAnswersCount;
 
             cancellationToken.ThrowIfCancellationRequested();
             var topUnansweredResult = this.entitiesListViewModelFactory.GetTopUnansweredQuestions(interviewId, navigationState, forSupervisor);
@@ -267,11 +290,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var entitiesWithErrors = topErrorsResult.Entities.ToList();
 
             return new LoadDataResult(
-                status,
-                answeredCount,
-                unansweredCount,
-                errorsCount,
-                UIResources.Interview_Complete_Entities_With_Errors + " " + MoreThan(errorsCount),
+                interviewStateData.Status,
+                interviewStateData.AnsweredCount,
+                interviewStateData.UnansweredCount,
+                interviewStateData.ErrorsCount,
+                UIResources.Interview_Complete_Entities_With_Errors + " " + MoreThan(interviewStateData.ErrorsCount),
                 topErrorsResult.Total,
                 topUnansweredResult.Total,
                 entitiesWithErrors,
@@ -451,6 +474,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         protected bool ShouldSkipLoadUpdate(int loadVersion, CancellationToken cancellationToken) =>
             isDisposed || cancellationToken.IsCancellationRequested || loadVersion != this.activeLoadVersion;
+
+        private sealed class InterviewStateData(GroupStatus status, int answeredCount, int unansweredCount, int errorsCount)
+        {
+            public GroupStatus Status { get; } = status;
+            public int AnsweredCount { get; } = answeredCount;
+            public int UnansweredCount { get; } = unansweredCount;
+            public int ErrorsCount { get; } = errorsCount;
+        }
 
         private sealed class LoadDataResult
         {

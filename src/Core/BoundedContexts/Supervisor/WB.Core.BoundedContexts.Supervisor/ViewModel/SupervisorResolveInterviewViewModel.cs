@@ -172,7 +172,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         {
             try
             {
-                if (this.interview.Status != InterviewStatus.ApprovedBySupervisor)
+                var currentInterview = this.interviewRepository.GetOrThrow(InterviewId.FormatGuid());
+                if (currentInterview.Status != InterviewStatus.ApprovedBySupervisor)
                 {
                     if (receivedByInterviewerTabletAt != null)
                     {
@@ -190,7 +191,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                     var command = new ApproveInterviewCommand(InterviewId, this.principal.CurrentUserIdentity.UserId,
                         Comment);
                     await this.commandService.ExecuteAsync(command);
-                    auditLogService.Write(new ApproveInterviewAuditLogEntity(this.InterviewId, interview.GetInterviewKey().ToString()));
+                    auditLogService.Write(new ApproveInterviewAuditLogEntity(this.InterviewId, currentInterview.GetInterviewKey().ToString()));
 
                     CompleteCalendarEventIfExists();
                 }
@@ -209,13 +210,14 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         {
             try
             {
-                if (this.interview.Status != InterviewStatus.RejectedBySupervisor)
+                var currentInterview = this.interviewRepository.GetOrThrow(InterviewId.FormatGuid());
+                if (currentInterview.Status != InterviewStatus.RejectedBySupervisor)
                 {
                     var command = new RejectInterviewCommand(InterviewId, this.principal.CurrentUserIdentity.UserId,
                         Comment);
                     await this.commandService.ExecuteAsync(command);
                     auditLogService.Write(new RejectInterviewAuditLogEntity(this.InterviewId,
-                        interview.GetInterviewKey().ToString()));
+                        currentInterview.GetInterviewKey().ToString()));
 
                     CompleteCalendarEventIfExists();
                 }
@@ -235,12 +237,14 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             if (calendarEvent == null)
                 return;
 
+            var currentInterview = this.interviewRepository.GetOrThrow(InterviewId.FormatGuid());
+
             var command = new CompleteCalendarEventCommand(calendarEvent.Id, this.principal.CurrentUserIdentity.UserId, 
                 new QuestionnaireIdentity() //dummy
                 );
             this.commandService.Execute(command);
 
-            Logger.Info($"Calendar event {calendarEvent.Id} completed after approve/reject interview {interview.GetInterviewKey()?.ToString()} ({InterviewId})");
+            Logger.Info($"Calendar event {calendarEvent.Id} completed after approve/reject interview {currentInterview.GetInterviewKey()?.ToString()} ({InterviewId})");
         }
 
         public IMvxAsyncCommand Assign => new MvxAsyncCommand(SelectInterviewer, () => 
