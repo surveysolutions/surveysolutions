@@ -235,18 +235,13 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     while (true)
                     {
                         var deferredUpdates = deferredTransferUpdates.GetOrAdd(key, _ => new DeferredTransferUpdatesQueue());
-                        await deferredUpdates.Gate.WaitAsync();
-                        try
+                        lock (deferredUpdates.SyncRoot)
                         {
                             if (deferredUpdates.IsDetached)
                                 continue;
 
                             deferredUpdates.Updates.Enqueue(update);
                             break;
-                        }
-                        finally
-                        {
-                            deferredUpdates.Gate.Release();
                         }
                     }
 
@@ -355,37 +350,45 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             var key = (endpoint, payloadId);
             var handledDeferredUpdate = false;
 
-            if (!deferredTransferUpdates.TryGetValue(key, out var deferredUpdates))
-                return false;
-
-            await deferredUpdates.Gate.WaitAsync();
-            try
+            while (true)
             {
-                while (deferredUpdates.Updates.Count > 0)
+                if (!deferredTransferUpdates.TryGetValue(key, out var deferredUpdates))
+                    return handledDeferredUpdate;
+
+                NearbyPayloadTransferUpdate deferredUpdate = null;
+                var shouldDetachQueue = false;
+
+                lock (deferredUpdates.SyncRoot)
                 {
-                    handledDeferredUpdate = true;
-                    var deferredUpdate = deferredUpdates.Updates.Dequeue();
-                    await ReceivePayloadTransferUpdateInternal(connection, endpoint, deferredUpdate, allowDeferral: false);
+                    if (deferredUpdates.IsDetached)
+                        continue;
+
+                    if (deferredUpdates.Updates.Count > 0)
+                    {
+                        deferredUpdate = deferredUpdates.Updates.Dequeue();
+                    }
+                    else
+                    {
+                        deferredUpdates.IsDetached = true;
+                        shouldDetachQueue = true;
+                    }
                 }
 
-                if (deferredUpdates.Updates.Count == 0)
+                if (shouldDetachQueue)
                 {
-                    deferredUpdates.IsDetached = true;
                     deferredTransferUpdates.TryRemove(new KeyValuePair<(string Endpoint, long PayloadId), DeferredTransferUpdatesQueue>(key, deferredUpdates));
+                    continue;
                 }
-            }
-            finally
-            {
-                deferredUpdates.Gate.Release();
-            }
 
-            return handledDeferredUpdate;
+                handledDeferredUpdate = true;
+                await ReceivePayloadTransferUpdateInternal(connection, endpoint, deferredUpdate, allowDeferral: false);
+            }
         }
 
         private sealed class DeferredTransferUpdatesQueue
         {
+            public object SyncRoot { get; } = new object();
             public Queue<NearbyPayloadTransferUpdate> Updates { get; } = new Queue<NearbyPayloadTransferUpdate>();
-            public SemaphoreSlim Gate { get; } = new SemaphoreSlim(1, 1);
             public bool IsDetached { get; set; }
         }
 
