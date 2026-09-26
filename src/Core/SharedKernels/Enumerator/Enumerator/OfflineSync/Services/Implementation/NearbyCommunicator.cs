@@ -207,17 +207,10 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             await ReplayDeferredTransferUpdatesAsync(nearbyConnection, endpoint, payload.Id);
         }
 
-        public async void ReceivePayloadTransferUpdate(INearbyConnection connection, string endpoint,
+        public async Task ReceivePayloadTransferUpdate(INearbyConnection connection, string endpoint,
             NearbyPayloadTransferUpdate update)
         {
-            try
-            {
-                await ReceivePayloadTransferUpdateInternal(connection, endpoint, update);
-            }
-            catch (Exception e)
-            {
-                logger.Error("Failed to process payload transfer update. " + e);
-            }
+            await ReceivePayloadTransferUpdateInternal(connection, endpoint, update);
         }
 
         private async Task ReceivePayloadTransferUpdateInternal(INearbyConnection connection, string endpoint,

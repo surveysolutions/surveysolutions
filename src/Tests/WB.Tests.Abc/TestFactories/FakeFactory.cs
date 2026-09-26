@@ -334,7 +334,7 @@ namespace WB.Tests.Abc.TestFactories
                 if (payload.Type != PayloadType.Bytes)
                 {
                     // google services notify on outgoing progress
-                    fromClient.ReceivePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
+                    await fromClient.ReceivePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
                     {
                         Status = TransferStatus.InProgress,
                         BytesTransferred = 0,
@@ -342,7 +342,7 @@ namespace WB.Tests.Abc.TestFactories
                     });
                 }
 
-                fromClient.ReceivePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
+                await fromClient.ReceivePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
                 {
                     Status = TransferStatus.Success,
                     BytesTransferred = 100,
@@ -358,7 +358,7 @@ namespace WB.Tests.Abc.TestFactories
 
                 if (payload.Type != PayloadType.Bytes)
                 {
-                    toClient.ReceivePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
+                    await toClient.ReceivePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
                     {
                         Status = TransferStatus.InProgress,
                         BytesTransferred = 0,
@@ -368,7 +368,7 @@ namespace WB.Tests.Abc.TestFactories
 
                 await NextDelay();
 
-                toClient.ReceivePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
+                await toClient.ReceivePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
                 {
                     Status = TransferStatus.Success,
                     BytesTransferred = 100,

@@ -204,7 +204,7 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
 
                 if (payload.Type != PayloadType.Bytes)
                 {
-                    fromClient.ReceivePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
+                    await fromClient.ReceivePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
                     {
                         Status = TransferStatus.InProgress,
                         BytesTransferred = 0,
@@ -212,7 +212,7 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
                     });
                 }
 
-                fromClient.ReceivePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
+                await fromClient.ReceivePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
                 {
                     Status = TransferStatus.Success,
                     BytesTransferred = 100,
@@ -221,7 +221,7 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
 
                 if (payload.Type != PayloadType.Bytes && receiverTerminalStatus.HasValue)
                 {
-                    toClient.ReceivePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
+                    await toClient.ReceivePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
                     {
                         Status = receiverTerminalStatus.Value,
                         BytesTransferred = 100,
@@ -233,7 +233,7 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
 
                 if (payload.Type != PayloadType.Bytes && !receiverTerminalStatus.HasValue)
                 {
-                    toClient.ReceivePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
+                    await toClient.ReceivePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
                     {
                         Status = TransferStatus.Success,
                         BytesTransferred = 100,
