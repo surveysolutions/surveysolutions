@@ -170,6 +170,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             DateTime to,
             InterviewExportedAction[] statuses)
         {
+            // Use List<> to avoid C# 14+ compiling Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T)
+            // which puts an op_Implicit call into the expression tree that NHibernate cannot evaluate.
+            var statusList = statuses.ToList();
             return this.interviewSummaryStorage.Query(
                 _ =>
                 {
@@ -191,7 +194,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     return query.SelectMany(x => x.InterviewCommentedStatuses)
                                 .Where(ics =>
                                     ics.Timestamp >= @from && ics.Timestamp < to &&
-                                    statuses.Contains(ics.Status));
+                                    statusList.Contains(ics.Status));
                 });
         }
 
