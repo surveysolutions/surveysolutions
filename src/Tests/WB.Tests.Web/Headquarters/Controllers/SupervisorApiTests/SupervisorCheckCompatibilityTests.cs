@@ -60,9 +60,12 @@ namespace WB.Tests.Web.Headquarters.Controllers.SupervisorApiTests
         }
 
         [Test]
-        public void when_server_build_is_requested_should_return_current_server_build()
+        public async Task when_latest_version_is_requested_for_compatibility_and_apk_is_not_stored_should_return_current_server_build()
         {
             const int currentServerBuildNumber = 38141;
+            var clientApkProvider = new Mock<IClientApkProvider>();
+            clientApkProvider.Setup(x => x.GetApplicationBuildNumber(ClientApkInfo.SupervisorFileName))
+                .ReturnsAsync((int?)null);
 
             var controller = new SupervisorControllerBase(
                 Mock.Of<ITabletInformationService>(),
@@ -70,13 +73,15 @@ namespace WB.Tests.Web.Headquarters.Controllers.SupervisorApiTests
                 Mock.Of<IUserViewFactory>(),
                 Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(),
                 new TestPlainStorage<ServerSettings>(),
-                Mock.Of<IClientApkProvider>(),
+                clientApkProvider.Object,
                 Mock.Of<IAuthorizedUser>(),
                 Mock.Of<IInterviewInformationFactory>(),
                 Mock.Of<IInterviewerVersionReader>(),
                 Mock.Of<IProductVersion>(x => x.GetBuildNumber() == currentServerBuildNumber));
 
-            Assert.That(controller.GetServerVersion(), Is.EqualTo(currentServerBuildNumber));
+            var latestVersion = await controller.GetLatestVersion(forCompatibilityCheck: true);
+
+            Assert.That(latestVersion, Is.EqualTo(currentServerBuildNumber));
         }
 
         [Test]

@@ -110,16 +110,19 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
         }
 
         [Test]
-        public void when_server_build_is_requested_should_return_current_server_build()
+        public async Task when_latest_version_is_requested_for_compatibility_and_apk_is_not_stored_should_return_current_server_build()
         {
             const int currentServerBuildNumber = 38141;
+            var clientApkProvider = new Mock<IClientApkProvider>();
+            clientApkProvider.Setup(x => x.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName))
+                .ReturnsAsync((int?)null);
 
             var interviewerApiController = new InterviewerControllerBase(
                 Mock.Of<ITabletInformationService>(),
                 Mock.Of<IUserViewFactory>(),
                 new InterviewerSyncProtocolVersionProvider(),
                 Mock.Of<IAuthorizedUser>(),
-                Mock.Of<IClientApkProvider>(),
+                clientApkProvider.Object,
                 Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(),
                 new TestPlainStorage<ServerSettings>(),
                 Mock.Of<IInterviewerVersionReader>(),
@@ -130,7 +133,14 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
                 }),
                 Mock.Of<IProductVersion>(x => x.GetBuildNumber() == currentServerBuildNumber));
 
-            Assert.That(interviewerApiController.GetServerVersion(), Is.EqualTo(currentServerBuildNumber));
+            interviewerApiController.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext()
+            };
+
+            var latestVersion = await interviewerApiController.GetLatestVersion(forCompatibilityCheck: true);
+
+            Assert.That(latestVersion, Is.EqualTo(currentServerBuildNumber));
         }
 
         [Test]

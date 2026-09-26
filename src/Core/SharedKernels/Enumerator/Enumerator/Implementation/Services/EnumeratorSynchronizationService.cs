@@ -607,30 +607,22 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
         public Task<int?> GetLatestApplicationVersionAsync(CancellationToken token = default)
-        {
-            return this.TryGetRestResponseOrThrowAsync(async () =>
-            {
-                try
-                {
-                    return await this.restService.GetAsync<int?>(
-                        url: string.Concat(this.checkVersionUriProvider.CheckVersionUrl, "latestversion"),
-                        credentials: this.restCredentials, token: token).ConfigureAwait(false);
-                }
-                catch (RestException rest) when (rest.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return null;
-                }
-            });
-        }
+            => this.GetLatestApplicationVersionAsync(token, false);
 
-        public Task<int?> GetServerBuildNumberAsync(CancellationToken token = default)
+        public Task<int?> GetLatestApplicationVersionAsync(CancellationToken token, bool forCompatibilityCheck)
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
             {
                 try
                 {
+                    var url = string.Concat(this.checkVersionUriProvider.CheckVersionUrl, "latestversion");
+                    if (forCompatibilityCheck)
+                    {
+                        url += "?forCompatibilityCheck=true";
+                    }
+
                     return await this.restService.GetAsync<int?>(
-                        url: string.Concat(this.checkVersionUriProvider.CheckVersionUrl, "serverversion"),
+                        url: url,
                         credentials: this.restCredentials, token: token).ConfigureAwait(false);
                 }
                 catch (RestException rest) when (rest.StatusCode == HttpStatusCode.NotFound)

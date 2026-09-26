@@ -106,7 +106,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services.Synchronization
 
             var settings = Mock.Of<ISupervisorSettings>(x => x.GetApplicationVersionCode() == appVersion);
             var synchronizationService = new Mock<ISynchronizationService>();
-            synchronizationService.Setup(x => x.GetServerBuildNumberAsync(It.IsAny<CancellationToken>()))
+            synchronizationService.Setup(x => x.GetLatestApplicationVersionAsync(
+                    It.IsAny<CancellationToken>(), true))
                 .ReturnsAsync((int?)serverVersion);
 
             var step = CreateSupervisorUpdateApplication(settings: settings, synchronizationService: synchronizationService.Object);
@@ -123,7 +124,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services.Synchronization
 
             var settings = Mock.Of<ISupervisorSettings>(x => x.GetApplicationVersionCode() == appVersion);
             var synchronizationService = new Mock<ISynchronizationService>();
-            synchronizationService.Setup(x => x.GetServerBuildNumberAsync(It.IsAny<CancellationToken>()))
+            synchronizationService.Setup(x => x.GetLatestApplicationVersionAsync(
+                    It.IsAny<CancellationToken>(), true))
                 .ReturnsAsync((int?)appVersion);
 
             var step = CreateSupervisorUpdateApplication(settings: settings, synchronizationService: synchronizationService.Object);
@@ -138,7 +140,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services.Synchronization
 
             var settings = Mock.Of<ISupervisorSettings>(x => x.GetApplicationVersionCode() == appVersion);
             var synchronizationService = new Mock<ISynchronizationService>();
-            synchronizationService.Setup(x => x.GetServerBuildNumberAsync(It.IsAny<CancellationToken>()))
+            synchronizationService.Setup(x => x.GetLatestApplicationVersionAsync(
+                    It.IsAny<CancellationToken>(), true))
                 .ReturnsAsync((int?)null);
 
             var step = CreateSupervisorUpdateApplication(settings: settings, synchronizationService: synchronizationService.Object);

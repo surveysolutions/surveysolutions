@@ -122,38 +122,39 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
         [AllowAnonymous]
         [HttpGet]
         [Route("latestversion")]
-        public virtual async Task<int?> GetLatestVersion()
+        public virtual async Task<int?> GetLatestVersion(bool forCompatibilityCheck = false)
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
+            int? latestVersion;
             if (clientVersion == ClientVersionFromUserAgent.WithMaps)
             {
-                return await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
+                latestVersion = await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
+            }
+            else
+            {
+                latestVersion = await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
             }
 
-            return await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
+            return latestVersion ?? (forCompatibilityCheck ? this.productVersion.GetBuildNumber() : null);
         }
 
         [AllowAnonymous]
         [HttpGet]
         [Route("extended/latestversion")]
-        public virtual async Task<int?> GetLatestExtendedVersion()
+        public virtual async Task<int?> GetLatestExtendedVersion(bool forCompatibilityCheck = false)
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
+            int? latestVersion;
             if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
             {
-                return await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
+                latestVersion = await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerFileName);
+            }
+            else
+            {
+                latestVersion = await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
             }
 
-            return await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.InterviewerExtendedFileName);
-        }
-
-        [AllowAnonymous]
-        [HttpGet]
-        [Route("serverversion")]
-        [Route("extended/serverversion")]
-        public virtual int GetServerVersion()
-        {
-            return this.productVersion.GetBuildNumber();
+            return latestVersion ?? (forCompatibilityCheck ? this.productVersion.GetBuildNumber() : null);
         }
 
         [AllowAnonymous]
