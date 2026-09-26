@@ -304,7 +304,7 @@
     <value>Sfera:</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
-    <value>&lt;font color="red"&gt;No internet connection&lt;/font&gt;</value>
+    <value>&lt;font color="red"&gt;Nuk ka lidhje me internetin&lt;/font&gt;</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
     <value>Lidhja është &lt;font color="red"&gt;jo e mirë &lt;/font&gt;</value>
@@ -1061,5 +1061,14 @@
   </data>
   <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
     <value>Keni përdorur Gjurmimin Gjeografik ose Geo Fencing gjatë krijimit të një interviste. Ju lutemi aktivizojeni sërish nëse dëshironi ta përdorni.</value>
+  </data>
+  <data name="Error_NoSuitableLocationProvider" xml:space="preserve">
+    <value>Nuk ka ofrues të përshtatshëm për të përcaktuar vendndodhjen</value>
+  </data>
+  <data name="Error_GpsProviderDisabled" xml:space="preserve">
+    <value>Ofruesi GPS është i çaktivizuar</value>
+  </data>
+  <data name="Error_RestrictedLocationSource" xml:space="preserve">
+    <value>Vendndodhja e marrë u refuzua sepse nuk përputhet me burimin e pranueshëm të vendndodhjes të konfiguruar për këtë hapësirë pune</value>
   </data>
 </root>

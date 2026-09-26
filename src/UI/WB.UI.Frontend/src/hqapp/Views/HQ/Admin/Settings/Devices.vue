@@ -56,8 +56,8 @@
                 <div class="block-filter">
                     <div class="form-group">
                         <input class="checkbox-filter single-checkbox"
-                            v-model="allowSupervisorChangeAssignmentStatusModel"
-                            @change="updateDeviceSettings" id="allowSupervisorChangeAssignmentStatus" type="checkbox" />
+                            v-model="allowSupervisorChangeAssignmentStatusModel" @change="updateDeviceSettings"
+                            id="allowSupervisorChangeAssignmentStatus" type="checkbox" />
                         <label for="allowSupervisorChangeAssignmentStatus" style="font-weight: bold">
                             <span class="tick"></span>
                             {{ $t('Settings.AllowSupervisorChangeAssignmentStatus') }}
@@ -72,8 +72,8 @@
                 <div class="block-filter" style="padding-left: 30px">
                     <div class="form-group">
                         <input class="checkbox-filter single-checkbox"
-                            v-model="allowInterviewerChangeAssignmentStatusModel"
-                            @change="updateDeviceSettings" id="allowInterviewerChangeAssignmentStatus" type="checkbox"
+                            v-model="allowInterviewerChangeAssignmentStatusModel" @change="updateDeviceSettings"
+                            id="allowInterviewerChangeAssignmentStatus" type="checkbox"
                             :disabled="!allowSupervisorChangeAssignmentStatusModel" />
                         <label for="allowInterviewerChangeAssignmentStatus" style="font-weight: bold">
                             <span class="tick"></span>
@@ -82,6 +82,42 @@
                                 {{ $t('Settings.AllowInterviewerChangeAssignmentStatusDescription') }}
                             </p>
                         </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="block-filter" style="padding-left: 30px">
+                    <div class="form-group">
+                        <label for="audioRecordingQuality" style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{ $t('Settings.AudioRecordingQuality') }}
+                            <p style="font-weight: normal;margin-bottom: 0px">
+                                {{ $t('Settings.AudioRecordingQualityDescription') }}
+                            </p>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <Typeahead control-id="audioRecordingQuality" noSearch noClear
+                            :values="audioRecordingQualityOptions" :value="audioRecordingQualityValue"
+                            @selected="onAudioRecordingQualitySelected" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="block-filter" style="padding-left: 30px">
+                    <div class="form-group">
+                        <label for="acceptableGpsLocationSource" style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{ $t('Settings.AcceptableGpsLocationSource') }}
+                            <p style="font-weight: normal;margin-bottom: 0px">
+                                {{ $t('Settings.AcceptableGpsLocationSourceDescription') }}
+                            </p>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <Typeahead control-id="acceptableGpsLocationSource" noSearch noClear
+                            :values="acceptableGpsLocationSourceOptions" :value="acceptableGpsLocationSourceValue"
+                            @selected="onAcceptableGpsLocationSourceSelected" />
                     </div>
                 </div>
             </div>
@@ -207,6 +243,22 @@
                     </label>
                 </div>
             </div>
+            <div class="col-sm-9">
+                <div class="block-filter">
+                    <div class="form-group">
+                        <input class="checkbox-filter single-checkbox"
+                            v-model="allowSupervisorAudioAuditPlaybackModel" @change="updateDeviceSettings"
+                            id="allowSupervisorAudioAuditPlayback" type="checkbox" />
+                        <label for="allowSupervisorAudioAuditPlayback" style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{ $t('Settings.AllowSupervisorAudioAuditPlayback') }}
+                            <p style="font-weight: normal">
+                                {{ $t('Settings.AllowSupervisorAudioAuditPlaybackDescription') }}
+                            </p>
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -238,6 +290,11 @@
 .block-filter .error {
     color: red;
 }
+
+:deep(#acceptableGpsLocationSource) {
+    width: 450px;
+    max-width: 100%;
+}
 </style>
 
 <script>
@@ -257,6 +314,9 @@ export default {
         esriApiKeyInitial: String,
         allowSupervisorChangeAssignmentStatus: Boolean,
         allowInterviewerChangeAssignmentStatus: Boolean,
+        audioRecordingQuality: String,
+        acceptableGpsLocationSource: String,
+        allowSupervisorAudioAuditPlayback: Boolean,
     },
     emits: ['update:isInterviewerAutomaticUpdatesEnabled',
         'update:isDeviceNotificationsEnabled',
@@ -269,6 +329,9 @@ export default {
         'update:esriApiKeyInitial',
         'update:allowSupervisorChangeAssignmentStatus',
         'update:allowInterviewerChangeAssignmentStatus',
+        'update:audioRecordingQuality',
+        'update:acceptableGpsLocationSource',
+        'update:allowSupervisorAudioAuditPlayback',
     ],
     computed: {
         isInterviewerAutomaticUpdatesEnabledModel: {
@@ -277,7 +340,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:isInterviewerAutomaticUpdatesEnabled', value)
-            }
+            },
         },
         isDeviceNotificationsEnabledModel: {
             get() {
@@ -285,7 +348,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:isDeviceNotificationsEnabled', value)
-            }
+            },
         },
         isPartialSynchronizationEnabledModel: {
             get() {
@@ -293,7 +356,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:isPartialSynchronizationEnabled', value)
-            }
+            },
         },
 
         geographyQuestionAccuracyInMetersModel: {
@@ -302,7 +365,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:geographyQuestionAccuracyInMeters', value)
-            }
+            },
         },
         geographyQuestionAccuracyInMetersCancelModel: {
             get() {
@@ -310,7 +373,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:geographyQuestionAccuracyInMetersCancel', value)
-            }
+            },
         },
 
         geographyQuestionPeriodInSecondsModel: {
@@ -319,7 +382,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:geographyQuestionPeriodInSeconds', value)
-            }
+            },
         },
         geographyQuestionPeriodInSecondsCancelModel: {
             get() {
@@ -327,7 +390,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:geographyQuestionPeriodInSecondsCancel', value)
-            }
+            },
         },
         esriApiKeyModel: {
             get() {
@@ -335,7 +398,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:esriApiKey', value)
-            }
+            },
         },
         esriApiKeyInitialModel: {
             get() {
@@ -343,7 +406,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:esriApiKeyInitial', value)
-            }
+            },
         },
         allowSupervisorChangeAssignmentStatusModel: {
             get() {
@@ -351,7 +414,7 @@ export default {
             },
             set(value) {
                 this.$emit('update:allowSupervisorChangeAssignmentStatus', value)
-            }
+            },
         },
         allowInterviewerChangeAssignmentStatusModel: {
             get() {
@@ -359,7 +422,54 @@ export default {
             },
             set(value) {
                 this.$emit('update:allowInterviewerChangeAssignmentStatus', value)
-            }
+            },
+        },
+        audioRecordingQualityModel: {
+            get() {
+                return this.audioRecordingQuality
+            },
+            set(value) {
+                this.$emit('update:audioRecordingQuality', value)
+            },
+        },
+        allowSupervisorAudioAuditPlaybackModel: {
+            get() {
+                return this.allowSupervisorAudioAuditPlayback
+            },
+            set(value) {
+                this.$emit('update:allowSupervisorAudioAuditPlayback', value)
+            },
+        },
+        audioRecordingQualityOptions() {
+            return [
+                { key: 'Mono16kHz', value: this.$t('Settings.AudioRecordingQuality_Mono16kHz') },
+                { key: 'Mono22kHz', value: this.$t('Settings.AudioRecordingQuality_Mono22kHz') },
+                { key: 'Mono44kHz', value: this.$t('Settings.AudioRecordingQuality_Mono44kHz') },
+                { key: 'Stereo44kHz', value: this.$t('Settings.AudioRecordingQuality_Stereo44kHz') },
+                { key: 'Stereo48kHz', value: this.$t('Settings.AudioRecordingQuality_Stereo48kHz') },
+            ]
+        },
+        audioRecordingQualityValue() {
+            return this.audioRecordingQualityOptions.find(o => o.key === this.audioRecordingQuality) || null
+        },
+        acceptableGpsLocationSourceModel: {
+            get() {
+                return this.acceptableGpsLocationSource
+            },
+            set(value) {
+                this.$emit('update:acceptableGpsLocationSource', value)
+            },
+        },
+        acceptableGpsLocationSourceOptions() {
+            return [
+                { key: 'BuiltInGpsOnly', value: this.$t('Settings.AcceptableGpsLocationSource_BuiltInGpsOnly') },
+                { key: 'BuiltInOrExternalGps', value: this.$t('Settings.AcceptableGpsLocationSource_BuiltInOrExternalGps') },
+                { key: 'AnyNonMock', value: this.$t('Settings.AcceptableGpsLocationSource_AnyNonMock') },
+                { key: 'Any', value: this.$t('Settings.AcceptableGpsLocationSource_Any') },
+            ]
+        },
+        acceptableGpsLocationSourceValue() {
+            return this.acceptableGpsLocationSourceOptions.find(o => o.key === this.acceptableGpsLocationSource) || null
         },
     },
 
@@ -379,8 +489,25 @@ export default {
                     this.isPartialSynchronizationEnabledModel,
                     this.allowSupervisorChangeAssignmentStatusModel,
                     this.allowInterviewerChangeAssignmentStatusModel,
+                    this.audioRecordingQualityModel,
+                    this.allowSupervisorAudioAuditPlaybackModel,
+                    this.acceptableGpsLocationSourceModel
                 )
             })
+        },
+
+        onAudioRecordingQualitySelected(item) {
+            if (item != null) {
+                this.audioRecordingQualityModel = item.key
+                this.updateDeviceSettings()
+            }
+        },
+
+        onAcceptableGpsLocationSourceSelected(item) {
+            if (item != null) {
+                this.acceptableGpsLocationSourceModel = item.key
+                this.updateDeviceSettings()
+            }
         },
 
         async updateGeographyQuestionAccuracyInMeters() {
@@ -389,7 +516,7 @@ export default {
             else
                 nextTick(() => {
                     this.$hq.AdminSettings.setGeographyQuestionAccuracyInMeters(
-                        this.geographyQuestionAccuracyInMetersModel,
+                        this.geographyQuestionAccuracyInMetersModel
                     ).then(() => {
                         this.geographyQuestionAccuracyInMetersCancelModel =
                             this.geographyQuestionAccuracyInMetersModel
@@ -406,7 +533,7 @@ export default {
             else
                 nextTick(() => {
                     this.$hq.AdminSettings.setGeographyQuestionPeriodInSeconds(
-                        this.geographyQuestionPeriodInSecondsModel,
+                        this.geographyQuestionPeriodInSecondsModel
                     ).then(() => {
                         this.geographyQuestionPeriodInSecondsCancelModel =
                             this.geographyQuestionPeriodInSecondsModel
@@ -420,7 +547,7 @@ export default {
         async updateEsriApiKey() {
             nextTick(() => {
                 return this.$hq.AdminSettings.setEsriApiKey(
-                    this.esriApiKeyModel,
+                    this.esriApiKeyModel
                 ).then(() => {
                     this.esriApiKeyInitialModel = this.esriApiKeyModel
                 })
@@ -430,7 +557,7 @@ export default {
         noAction() {
             // Do nothing
         },
-    }
+    },
 }
 
 </script>

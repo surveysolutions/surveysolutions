@@ -67,10 +67,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
             EventRegistry = new Mock<IViewModelEventRegistry>();
         }
 
-        protected static IQuestionnaireStorage SetupQuestionnaireRepositoryWithNumericQuestion(bool isRosterSize = true, bool isLongRosterSize = false)
+        protected static IQuestionnaireStorage SetupQuestionnaireRepositoryWithNumericQuestion(bool isRosterSize = true, bool isLongRosterSize = false, bool isNonNegative = false)
         {
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.IsRosterSizeQuestion(questionIdentity.Id) == isRosterSize
+                   && _.IsQuestionNonNegative(questionIdentity.Id) == isNonNegative
             );
             return Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
         }

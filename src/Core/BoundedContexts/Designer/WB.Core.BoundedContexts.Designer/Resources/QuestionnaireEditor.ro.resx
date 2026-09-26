@@ -160,7 +160,7 @@
     <value>Categorie: selectare multiplă (răspuns unic)</value>
   </data>
   <data name="QuestionTypeNumeric" xml:space="preserve">
-    <value>Numeric</value>
+    <value>Numerică</value>
   </data>
   <data name="QuestionTypePicture" xml:space="preserve">
     <value>Imagine</value>
@@ -170,5 +170,22 @@
   </data>
   <data name="QuestionTypeText" xml:space="preserve">
     <value>Text</value>
+  </data>
+
+
+  <data name="GeometryTypePolygon" xml:space="preserve">
+    <value>Poligon</value>
+  </data>
+
+    <data name="GeometryTypePolyline" xml:space="preserve">
+    <value>Polilinie</value>
+  </data>
+
+    <data name="GeometryTypePoint" xml:space="preserve">
+    <value>Punct</value>
+  </data>
+
+    <data name="GeometryTypeMultipoint" xml:space="preserve">
+    <value>Multipunct</value>
   </data>
 </root>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Name" xml:space="preserve"><value>Tên</value></data>
+  <data name="DisplayName" xml:space="preserve"><value>Tên hiển thị</value></data>
+  <data name="NameRequired" xml:space="preserve"><value>Tên là bắt buộc</value></data>
+  <data name="DisplayNameRequired" xml:space="preserve"><value>Tên hiển thị là bắt buộc</value></data>
+  <data name="InvalidName" xml:space="preserve"><value>Chỉ cho phép chữ số và chữ thường</value></data>
+  <data name="NameShouldBeUnique" xml:space="preserve"><value>Tên phải duy nhất</value></data>
+  <data name="EditWorkspace" xml:space="preserve"><value>Chỉnh sửa không gian làm việc "{{name}}"</value></data>
+  <data name="WorkspacesSubtitle" xml:space="preserve"><value>Mỗi không gian làm việc có các bảng câu hỏi, cuộc phỏng vấn và nhiệm vụ riêng biệt.</value></data>
+  <data name="AddNew" xml:space="preserve"><value>Tạo mới</value></data>
+  <data name="NameShouldNotBeOneOfForbidden" xml:space="preserve"><value>Tên không gian làm việc được cung cấp không được phép</value></data>
+  <data name="CurrentWorkspace" xml:space="preserve"><value>Không gian làm việc hiện tại</value></data>
+  <data name="CreateWorkspace" xml:space="preserve"><value>Tạo không gian làm việc</value></data>
+  <data name="CanNotBeChanged" xml:space="preserve"><value>Không thể thay đổi sau khi tạo</value></data>
+  <data name="DisplayNameHelpText" xml:space="preserve"><value>Sẽ được dùng để hiển thị không gian làm việc trong menu</value></data>
+  <data name="WorkspaceSettings" xml:space="preserve"><value>Cài đặt</value></data>
+  <data name="Edit" xml:space="preserve"><value>Chỉnh sửa</value></data>
+  <data name="AssignedWorkspaces" xml:space="preserve"><value>Chọn các không gian làm việc mà người dùng có quyền truy cập</value></data>
+  <data name="UserWorkspacesTab" xml:space="preserve"><value>Không gian làm việc</value></data>
+  <data name="WorkspacesUpdated" xml:space="preserve"><value>Danh sách không gian làm việc đã được cập nhật</value></data>
+  <data name="DisableWorkspacePopupTitle" xml:space="preserve"><value>Xác nhận vô hiệu hóa "{{name}}"</value></data>
+  <data name="Disable" xml:space="preserve"><value>Vô hiệu hóa</value></data>
+  <data name="DisableExplanation" xml:space="preserve"><value>Vô hiệu hóa không gian làm việc sẽ ngừng quyền truy cập của tất cả người dùng</value></data>
+  <data name="Enable" xml:space="preserve"><value>Kích hoạt</value></data>
+  <data name="DeleteWorkspacePopupTitle" xml:space="preserve"><value>Xóa không gian làm việc "{{name}}"</value></data>
+  <data name="DeleteExplanation" xml:space="preserve"><value>Bạn có chắc muốn xóa không gian làm việc &amp;lt;strong&amp;gt;{{name}}&amp;lt;/strong&amp;gt;?</value></data>
+  <data name="CantDeleteExplanation" xml:space="preserve"><value>Không thể xóa không gian làm việc. Có ít nhất một bảng câu hỏi được liên kết với không gian làm việc này.</value></data>
+  <data name="InterviewersCount" xml:space="preserve"><value>Phỏng vấn viên: {{count}}</value></data>
+  <data name="SupervisorsCount" xml:space="preserve"><value>Giám sát viên: {{count}}</value></data>
+  <data name="MapsCount" xml:space="preserve"><value>Bản đồ đã tải lên: {{count}}</value></data>
+  <data name="AgreeToDelete" xml:space="preserve"><value>Tôi hiểu rằng thao tác này không thể đảo ngược</value></data>
+  <data name="WorkspaceDisabledReason" xml:space="preserve"><value>Không gian làm việc bị vô hiệu hóa. Liên hệ quản trị viên máy chủ của bạn.</value></data>
+  <data name="WorkspaceAccessDisabledReason" xml:space="preserve"><value>Tài khoản của bạn nằm trong không gian làm việc bị vô hiệu hóa.</value></data>
+  <data name="WorkspaceCantBeRemoved" xml:space="preserve"><value>Không thể xóa không gian làm việc vì người dùng có công việc được giao. Phỏng vấn: {0}, Nhiệm vụ: {1}, Thành viên nhóm: {2}</value></data>
+  <data name="Open" xml:space="preserve"><value>Mở</value></data>
+  <data name="CreatedAt" xml:space="preserve"><value>Tạo ngày</value></data>
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve"><value>Khi không gian làm việc được tạo lần đầu tiên</value></data>
+</root>

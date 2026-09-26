@@ -196,13 +196,13 @@
     <value>Завантажуються дані карти</value>
   </data>
   <data name="Max" xml:space="preserve">
-    <value>Max</value>
+    <value>Макс.</value>
   </data>
   <data name="Median" xml:space="preserve">
     <value>Медіана</value>
   </data>
   <data name="Min" xml:space="preserve">
-    <value>Min</value>
+    <value>Мін.</value>
   </data>
   <data name="Percentile05" xml:space="preserve">
     <value>Перцентиль 05</value>

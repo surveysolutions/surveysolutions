@@ -14,5 +14,7 @@ namespace Main.Core.Entities.SubEntities.Question
         public int? CountOfDecimalPlaces { get; set; }
 
         public bool UseFormatting { get; set; }
+
+        public bool IsNonNegative { get; set; }
     }
 }

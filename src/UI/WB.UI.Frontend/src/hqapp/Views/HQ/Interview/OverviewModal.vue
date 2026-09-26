@@ -1,21 +1,30 @@
 <template>
-    <ModalFrame ref="modal" id="overview">
+    <ModalFrame ref="modal"
+        id="overview">
         <template v-slot:title>
             <div>
                 <h3>{{ $t("Pages.InterviewOverview") }}</h3>
             </div>
         </template>
 
-        <OverviewItem v-for="item in items" :key="item.id" :item="item" @showAdditionalInfo="onShowAdditionalInfo" />
+        <OverviewItem v-for="item in items"
+            :key="item.id"
+            :item="item"
+            @showAdditionalInfo="onShowAdditionalInfo" />
 
         <div ref="sentinel"></div>
 
         <template v-slot:actions>
             <div>
-                <button type="button" class="btn btn-link" @click="hide">
+                <button type="button"
+                    class="btn btn-link"
+                    @click="hide">
                     {{ $t("Pages.CloseLabel") }}
                 </button>
-                <button type="button" class="btn btn-link" style="float:right" @click="print">
+                <button type="button"
+                    class="btn btn-link"
+                    style="float:right"
+                    @click="print">
                     {{ $t("Pages.Print") }}
                 </button>
             </div>
@@ -66,7 +75,7 @@
 
 <script>
 import OverviewItem from './components/OverviewItem'
-import { slice } from 'lodash'
+import { slice } from 'lodash-es'
 
 export default {
     components: { OverviewItem },
