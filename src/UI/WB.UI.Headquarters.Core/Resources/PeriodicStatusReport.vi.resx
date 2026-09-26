@@ -1,0 +1,193 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Average" xml:space="preserve">
+        <value>Trung bình</value>
+        </data>
+    <data name="BackToSupervisors" xml:space="preserve">
+        <value>Quay lại với người giám sát</value>
+        </data>
+    <data name="BackToTeams" xml:space="preserve">
+        <value>Quay lại đội</value>
+        </data>
+    <data name="Day" xml:space="preserve">
+        <value>Ngày</value>
+        </data>
+    <data name="Month" xml:space="preserve">
+        <value>Tháng</value>
+        </data>
+    <data name="NumberOfCompletedInterviews" xml:space="preserve">
+        <value>Số cuộc phỏng vấn đã hoàn thành</value>
+        </data>
+    <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
+        <value>Số lượt phỏng vấn được HQ phê duyệt</value>
+        </data>
+    <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
+        <value>Số lượng giao dịch phỏng vấn của HQ</value>
+        </data>
+    <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
+        <value>Số giao dịch phỏng vấn của Giám sát viên</value>
+        </data>
+    <data name="LastDateToShowLabel" xml:space="preserve">
+        <value>Bắt đầu từ</value>
+        </data>
+    <data name="OverTheLast" xml:space="preserve">
+        <value>Hơn trước</value>
+        </data>
+    <data name="Period" xml:space="preserve">
+        <value>Giai đoạn</value>
+        </data>
+    <data name="PeriodUnit" xml:space="preserve">
+        <value>Đơn vị thời gian</value>
+        </data>
+    <data name="PeriodCount" xml:space="preserve">
+        <value>Số lượng thời gian</value>
+        </data>
+    <data name="Questionnaire" xml:space="preserve">
+        <value>Bảng câu hỏi</value>
+        </data>
+    <data name="Team" xml:space="preserve">
+        <value>Đội</value>
+        </data>
+    <data name="TeamMember" xml:space="preserve">
+        <value>Thành viên nhóm</value>
+        </data>
+    <data name="TimeSpentToCompleteInterviewInHours" xml:space="preserve">
+        <value>Thời gian trung bình hoàn thành cuộc phỏng vấn</value>
+        </data>
+    <data name="Total" xml:space="preserve">
+        <value>Tổng cộng</value>
+        </data>
+    <data name="Type" xml:space="preserve">
+        <value>Kiểu</value>
+        </data>
+    <data name="InterviewActions" xml:space="preserve">
+        <value>Hành động phỏng vấn</value>
+        </data>
+    <data name="Version" xml:space="preserve">
+        <value>ver.</value>
+        </data>
+    <data name="Week" xml:space="preserve">
+        <value>Tuần</value>
+        </data>
+    <data name="AverageCaseAssignmentDuration" xml:space="preserve">
+        <value>Thời gian phân công trường hợp trung bình</value>
+        </data>
+    <data name="AverageHQProcessingTime" xml:space="preserve">
+        <value>Thời gian xử lý HQ trung bình</value>
+        </data>
+    <data name="AverageInterviewDuration" xml:space="preserve">
+        <value>Thời gian phỏng vấn trung bình</value>
+        </data>
+    <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
+        <value>Thời gian xử lý trường hợp tổng thể trung bình</value>
+        </data>
+    <data name="AverageSupervisorProcessingTime" xml:space="preserve">
+        <value>Thời gian xử lý trung bình của người giám sát</value>
+        </data>
+    <data name="AverageCaseAssignmentDurationDescription" xml:space="preserve">
+        <value>Thời gian trung bình từ khi một cuộc phỏng vấn được giao cho người phỏng vấn cho đến khi nhấn nút hoàn thành trên máy tính bảng.</value>
+        </data>
+    <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
+        <value>Thời gian trung bình từ khi người giám sát phê duyệt một cuộc phỏng vấn cho đến khi cuộc phỏng vấn đó được HQ phê duyệt hoặc từ chối.</value>
+        </data>
+    <data name="AverageInterviewDurationDescription" xml:space="preserve">
+        <value>Thời gian trung bình cuộc phỏng vấn đó được trình bày trên màn hình của người phỏng vấn trước khi hoàn thành đối với mỗi người phỏng vấn.</value>
+        </data>
+    <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
+        <value>Thời gian trung bình cuộc phỏng vấn đó được trình bày trên màn hình của người phỏng vấn trước khi hoàn thành đối với mỗi người giám sát.</value>
+        </data>
+    <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
+        <value>Thời gian trung bình kể từ khi cuộc phỏng vấn đầu tiên được chỉ định cho đến khi HQ phê duyệt cuộc phỏng vấn đó.</value>
+        </data>
+    <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
+        <value>Thời gian trung bình từ khi người phỏng vấn nhấn nút Hoàn thành cho đến khi người giám sát chấp nhận hoặc từ chối cuộc phỏng vấn đó.</value>
+        </data>
+    <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
+        <value>Số lần hoàn thành phỏng vấn theo nhóm. Các cuộc phỏng vấn bị từ chối và sau đó đã hoàn thành được tính là các sự kiện hoàn thành riêng biệt.</value>
+        </data>
+    <data name="NumberOfCompletedInterviewsDescriptionPerInterviewer" xml:space="preserve">
+        <value>Số lần hoàn thành cuộc phỏng vấn của người phỏng vấn. Các cuộc phỏng vấn bị từ chối và sau đó đã hoàn thành được tính là các sự kiện hoàn thành riêng biệt.</value>
+        </data>
+    <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
+        <value>Số cuộc phỏng vấn được thu thập bởi {0} được HQ phê duyệt.</value>
+        </data>
+    <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
+        <value>Số lượng phê duyệt và từ chối của HQ đối với các cuộc phỏng vấn được thu thập bởi {0}.</value>
+        </data>
+    <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
+        <value>Số lần phê duyệt và từ chối của người giám sát đối với các cuộc phỏng vấn được thu thập bởi {0}.</value>
+        </data>
+    <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer" xml:space="preserve">
+        <value>Số lần phê duyệt và từ chối của người giám sát đối với các cuộc phỏng vấn do người phỏng vấn thu thập</value>
+        </data>
+    <data name="By" xml:space="preserve">
+        <value>Qua</value>
+        </data>
+    <data name="InThe" xml:space="preserve">
+        <value>trong</value>
+        </data>
+    <data name="From" xml:space="preserve">
+        <value>Từ</value>
+        </data>
+    <data name="InTheSupervisorTeamFormat" xml:space="preserve">
+        <value>trong đội {0}</value>
+        </data>
+</root>

@@ -1,7 +1,10 @@
 <template>
-    <aside class="filters-results" :class="{ 'active': searchResultsAreVisible }">
+    <aside class="filters-results"
+        :class="{ 'active': searchResultsAreVisible }">
         <div>
-            <button class="btn btn-link close-btn" type="button" @click="hideSearchResults">
+            <button class="btn btn-link close-btn"
+                type="button"
+                @click="hideSearchResults">
                 <span class="cancel"></span>
             </button>
 
@@ -12,7 +15,8 @@
                 {{ $t("Details.NoSearchResults") }}
             </h2>
 
-            <search-section-result v-for="(search, index) in searchResult.results" :key="search.sectionId + index"
+            <search-section-result v-for="(search, index) in searchResult.results"
+                :key="search.sectionId + index"
                 :search="search">
             </search-section-result>
 

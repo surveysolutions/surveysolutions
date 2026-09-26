@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AllData" xml:space="preserve"><value>ទិន្នន័យទាំងអស់</value></data>
+  <data name="AllDataSpss" xml:space="preserve"><value>ទិន្នន័យទាំងអស់ Spss</value></data>
+  <data name="AllDataStata" xml:space="preserve"><value>ទិន្នន័យទាំងអស់ Stata</value></data>
+  <data name="ApprovedData" xml:space="preserve"><value>ទិន្នន័យដែលបានអនុម័ត</value></data>
+  <data name="ApprovedDataSpss" xml:space="preserve"><value>ទិន្នន័យដែលបានអនុម័ត Spss</value></data>
+  <data name="ApprovedDataStata" xml:space="preserve"><value>ទិន្នន័យដែលបានអនុម័ត Stata</value></data>
+  <data name="BinaryData" xml:space="preserve"><value>ទិន្នន័យគោល 2</value></data>
+  <data name="CloneQuestionnaire" xml:space="preserve"><value>ចម្លងកម្រងសំណួរ</value></data>
+  <data name="CreationDate" xml:space="preserve"><value>បានបង្កើតនៅ</value></data>
+  <data name="History" xml:space="preserve"><value>ប្រវត្តិ</value></data>
+  <data name="ImportTemplate" xml:space="preserve"><value>នាំចូលកម្រងសំណួរ</value></data>
+  <data name="LastEntryDate" xml:space="preserve"><value>បានកែប្រែនៅ</value></data>
+  <data name="NewAssignment" xml:space="preserve"><value>ការចាត់ការថ្មី</value></data>
+  <data name="Questionnaires" xml:space="preserve"><value>កម្រងសំណួរ</value></data>
+  <data name="Maps" xml:space="preserve"><value>ផែនទី</value></data>
+  <data name="Title" xml:space="preserve"><value>ចំណងជើង</value></data>
+  <data name="Version" xml:space="preserve"><value>កំណែ</value></data>
+  <data name="MapDashboard" xml:space="preserve"><value>ផ្ទាំងគ្រប់គ្រងផែនទី</value></data>
+  <data name="ImportDate" xml:space="preserve"><value>បាននាំចូលនៅ</value></data>
+  <data name="Actions" xml:space="preserve"><value>សកម្មភាព</value></data>
+  <data name="DeleteQuestionnaire" xml:space="preserve"><value>លុបកម្រងសំណួរ</value></data>
+  <data name="ExportQuestionnaire" xml:space="preserve"><value>នាំចេញកម្រងសំណួរ</value></data>
+  <data name="SaveQuestionnaire" xml:space="preserve"><value>រក្សាទុកឯកសារកម្រងសំណួរ</value></data>
+  <data name="Questionnaire" xml:space="preserve"><value>កម្រងសំណួរ</value></data>
+  <data name="SurveySetupIntroMessage1" xml:space="preserve"><value>ចុចប៊ូតុងនាំចូលកម្រងសំណួរ ដើម្បីផ្ទុកកម្រងសំណួរពី Designer</value></data>
+  <data name="SurveySetupIntroMessage2" xml:space="preserve"><value>ចុចលើកម្រងសំណួរពីបញ្ជីដើម្បីបង្កើតការចាត់ការសំភាសន៍</value></data>
+  <data name="WebInterviewSetup" xml:space="preserve"><value>ការដំឡើងការសំភាសន៍តាមវែប</value></data>
+  <data name="RecordAudio" xml:space="preserve"><value>ថតអូឌីយ៉ូ</value></data>
+  <data name="QuestionnairePreview" xml:space="preserve"><value>ការមើលឃើញជាមុននៃកម្រងសំណួរ</value></data>
+  <data name="UploadAssignments" xml:space="preserve"><value>ផ្ទុកឡើងការចាត់ការ</value></data>
+  <data name="DeleteMap" xml:space="preserve"><value>លុបផែនទី</value></data>
+  <data name="DeleteMapUser" xml:space="preserve"><value>លុបអ្នកប្រើប្រាស់ផែនទី</value></data>
+  <data name="UpgradeAssignments" xml:space="preserve"><value>ធ្វើឱ្យប្រសើរការចាត់ការ</value></data>
+  <data name="RecordAudioTitle" xml:space="preserve"><value>កម្មវិធីអ្នកសំភាសន៍នឹងថតអូឌីយ៉ូនៃការសំភាសន៍នៅពេលសកម្មភាពនេះត្រូវបានបើក</value></data>
+  <data name="SendInvitations" xml:space="preserve"><value>ផ្ញើការអញ្ជើញ</value></data>
+  <data name="DownloadLinks" xml:space="preserve"><value>ទាញយកតំណភ្ជាប់</value></data>
+  <data name="WebMode" xml:space="preserve"><value>របៀប</value></data>
+  <data name="Details" xml:space="preserve"><value>ព័ត៌មានលម្អិត</value></data>
+  <data name="ShowOnDesigner" xml:space="preserve"><value>បង្ហាញនៅ Designer</value></data>
+  <data name="ImportedBy" xml:space="preserve"><value>បាននាំចូលដោយ</value></data>
+  <data name="ImportedByText" xml:space="preserve"><value>អ្នកប្រើប្រាស់ {{role}} {{name}}</value></data>
+  <data name="QuestionnaireDeleteWarn" xml:space="preserve"><value>ការសំភាសន៍ {{receivedInterviews}} និងការចាត់ការ {{receivedAssignments}} នឹងត្រូវបានលុប</value></data>
+  <data name="TypeQuestionnaireName" xml:space="preserve"><value>សូមវាយ '{{questionnaireTitle}}' ដើម្បីបញ្ជាក់</value></data>
+  <data name="UsersManagement" xml:space="preserve"><value>ការគ្រប់គ្រងអ្នកប្រើប្រាស់</value></data>
+  <data name="CreateUser" xml:space="preserve"><value>បង្កើតអ្នកប្រើប្រាស់</value></data>
+  <data name="ExposedVariables" xml:space="preserve"><value>អថេរដែលបញ្ចេញ</value></data>
+  <data name="Edit" xml:space="preserve"><value>កែប្រែ</value></data>
+</root>

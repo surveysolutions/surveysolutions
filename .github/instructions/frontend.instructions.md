@@ -4,6 +4,8 @@ applyTo: "{src/UI/WB.UI.Frontend/src/**,src/UI/WB.UI.Designer/questionnaire/src/
 
 # Frontend Conventions — Survey Solutions
 
+When performing a pull request review, include the token `frontend` in the `Instruction trace:` line at the end of every finding comment about a matching frontend file.
+
 There are **two distinct frontend applications** with different technology choices.
 
 ---

@@ -147,4 +147,9 @@
   <data name="TeamSize" xml:space="preserve">
     <value>总人数</value>
   </data>
+
+
+  <data name="Interviewers" xml:space="preserve">
+    <value>访问员</value>
+  </data>
 </root>

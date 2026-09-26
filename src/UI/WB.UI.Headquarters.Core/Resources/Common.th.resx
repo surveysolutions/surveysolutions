@@ -58,4 +58,397 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+
+
+  <data name="Search" xml:space="preserve">
+  <value>ค้นหา</value>
+  </data>
+
+  <data name="Create" xml:space="preserve">
+  <value>สร้าง</value>
+  </data>
+
+  <data name="ViewAssignmentDetails" xml:space="preserve">
+  <value>ดูรายละเอียดการมอบหมาย</value>
+  </data>
+
+  <data name="SaveChanges" xml:space="preserve">
+  <value>บันทึกการเปลี่ยนแปลง</value>
+  </data>
+
+  <data name="Template" xml:space="preserve">
+  <value>แม่แบบ</value>
+  </data>
+
+  <data name="Status" xml:space="preserve">
+  <value>สถานะ</value>
+  </data>
+
+  <data name="Assignment" xml:space="preserve">
+  <value>การมอบหมาย</value>
+  </data>
+
+  <data name="Responsible" xml:space="preserve">
+  <value>ผู้รับผิดชอบ</value>
+  </data>
+
+  <data name="Save" xml:space="preserve">
+  <value>บันทึก</value>
+  </data>
+
+  <data name="Apply" xml:space="preserve">
+    <value>นำไปใช้</value>
+  </data>
+
+  <data name="ErrorsLog" xml:space="preserve">
+  <value>บันทึกข้อผิดพลาด</value>
+  </data>
+
+  <data name="Questionnaires" xml:space="preserve">
+  <value>แบบสอบถาม</value>
+  </data>
+
+  <data name="Questionnaire" xml:space="preserve">
+  <value>แบบสอบถาม</value>
+  </data>
+
+  <data name="Assignments" xml:space="preserve">
+  <value>การมอบหมาย</value>
+  </data>
+
+  <data name="Interviews" xml:space="preserve">
+  <value>การสัมภาษณ์</value>
+  </data>
+
+  <data name="PrefilledQuestions" xml:space="preserve">
+  <value>คำถามระบุตัวตน</value>
+  </data>
+
+  <data name="ShowIdentifying" xml:space="preserve">
+  <value>แสดงข้อมูลระบุตัวตน</value>
+  </data>
+
+  <data name="HideIdentifying" xml:space="preserve">
+  <value>ซ่อน</value>
+  </data>
+
+  <data name="InterviewKey" xml:space="preserve">
+  <value>รหัสการสัมภาษณ์</value>
+  </data>
+
+  <data name="LastUpdate" xml:space="preserve">
+  <value>อัปเดตเมื่อ</value>
+  </data>
+
+  <data name="НasErrors" xml:space="preserve">
+  <value>มีข้อผิดพลาด</value>
+  </data>
+
+  <data name="ReceivedByInterviewer" xml:space="preserve">
+  <value>ได้รับโดยแท็บเล็ต</value>
+  </data>
+
+  <data name="CreatedOnClient" xml:space="preserve">
+  <value>สร้างบนแท็บเล็ต</value>
+  </data>
+
+  <data name="Any" xml:space="preserve">
+  <value>ใด ๆ</value>
+  </data>
+
+  <data name="AllAssignments" xml:space="preserve">
+  <value>การมอบหมายทั้งหมด</value>
+  </data>
+
+  <data name="NoResultsFound" xml:space="preserve">
+  <value>ไม่พบผลลัพธ์</value>
+  </data>
+
+  <data name="Processing" xml:space="preserve">
+  <value>กำลังประมวลผล…</value>
+  </data>
+
+  <data name="Refresh" xml:space="preserve">
+  <value>รีเฟรช</value>
+  </data>
+
+  <data name="Total" xml:space="preserve">
+  <value>ทั้งหมด</value>
+  </data>
+
+  <data name="CreateNewAssignment" xml:space="preserve">
+  <value>สร้างการมอบหมายใหม่</value>
+  </data>
+
+  <data name="Name" xml:space="preserve">
+  <value>ชื่อ</value>
+  </data>
+
+  <data name="GetInterviewerApp" xml:space="preserve">
+  <value>รับแอปผู้สัมภาษณ์</value>
+  </data>
+
+  <data name="Loading" xml:space="preserve">
+  <value>กำลังโหลด โปรดรอ</value>
+  </data>
+
+  <data name="Admin" xml:space="preserve">
+  <value>ผู้ดูแลระบบ</value>
+  </data>
+
+  <data name="Approve" xml:space="preserve">
+  <value>อนุมัติ</value>
+  </data>
+
+  <data name="Assign" xml:space="preserve">
+  <value>มอบหมาย</value>
+  </data>
+
+  <data name="Reject" xml:space="preserve">
+  <value>ปฏิเสธ</value>
+  </data>
+
+  <data name="Unapprove" xml:space="preserve">
+  <value>ยกเลิกการอนุมัติ</value>
+  </data>
+
+  <data name="Delete" xml:space="preserve">
+  <value>ลบ</value>
+  </data>
+
+  <data name="SignIn" xml:space="preserve">
+  <value>ลงชื่อเข้าใช้</value>
+  </data>
+
+  <data name="Title" xml:space="preserve">
+  <value>ชื่อเรื่อง</value>
+  </data>
+
+  <data name="AlRightsReserved" xml:space="preserve">
+  <value>สงวนลิขสิทธิ์</value>
+  </data>
+
+  <data name="Legal" xml:space="preserve">
+  <value>ข้อกฎหมาย</value>
+  </data>
+
+  <data name="TheWorldBankGroup" xml:space="preserve">
+  <value>The World Bank Group</value>
+  </data>
+
+  <data name="Settings" xml:space="preserve">
+  <value>การตั้งค่า</value>
+  </data>
+
+  <data name="EmailProviders" xml:space="preserve">
+  <value>ผู้ให้บริการอีเมล</value>
+  </data>
+
+  <data name="AuditLog" xml:space="preserve">
+  <value>บันทึกการตรวจสอบ</value>
+  </data>
+
+  <data name="Logoff" xml:space="preserve">
+  <value>ออกจากระบบ</value>
+  </data>
+
+  <data name="Cancel" xml:space="preserve">
+  <value>ยกเลิก</value>
+  </data>
+
+  <data name="Clear" xml:space="preserve">
+  <value>ล้าง</value>
+  </data>
+
+  <data name="NewVersionAvailable" xml:space="preserve">
+  <value>มีเวอร์ชันใหม่:</value>
+  </data>
+
+  <data name="No" xml:space="preserve">
+  <value>ไม่</value>
+  </data>
+
+  <data name="Yes" xml:space="preserve">
+  <value>ใช่</value>
+  </data>
+
+  <data name="Ok" xml:space="preserve">
+  <value>OK</value>
+  </data>
+
+  <data name="Download" xml:space="preserve">
+  <value>ดาวน์โหลด</value>
+  </data>
+
+  <data name="DownloadSupervisor" xml:space="preserve">
+  <value>ดาวน์โหลดแอปหัวหน้างาน</value>
+  </data>
+
+  <data name="Open" xml:space="preserve">
+  <value>เปิด</value>
+  </data>
+
+  <data name="ShowStatusHistory" xml:space="preserve">
+  <value>แสดงประวัติสถานะ</value>
+  </data>
+
+  <data name="AllStatuses" xml:space="preserve">
+  <value>สถานะทั้งหมด</value>
+  </data>
+
+  <data name="AllSupervisors" xml:space="preserve">
+  <value>หัวหน้างานทั้งหมด</value>
+  </data>
+
+  <data name="AllResponsible" xml:space="preserve">
+  <value>ผู้รับผิดชอบใด ๆ</value>
+  </data>
+
+  <data name="AllQuestionnaires" xml:space="preserve">
+  <value>แบบสอบถามทั้งหมด</value>
+  </data>
+
+  <data name="AllGpsQuestions" xml:space="preserve">
+  <value>คำถาม GPS ทั้งหมด</value>
+  </data>
+
+  <data name="OpenResponsiblesProfile" xml:space="preserve">
+  <value>เปิดโปรไฟล์ของผู้รับผิดชอบ</value>
+  </data>
+
+  <data name="MapDashboard" xml:space="preserve">
+  <value>แดชบอร์ดแผนที่</value>
+  </data>
+
+  <data name="OpenAssignment" xml:space="preserve">
+  <value>เปิดการมอบหมาย</value>
+  </data>
+
+  <data name="Confirm" xml:space="preserve">
+  <value>ยืนยัน</value>
+  </data>
+
+  <data name="Archived" xml:space="preserve">
+  <value>เก็บถาวรแล้ว</value>
+  </data>
+
+  <data name="NothingSelected" xml:space="preserve">
+  <value>ไม่ได้เลือกอะไร</value>
+  </data>
+
+  <data name="QuestionnaireVersion" xml:space="preserve">
+  <value>เวอร์ชันแบบสอบถาม</value>
+  </data>
+
+  <data name="AllVersions" xml:space="preserve">
+  <value>ทุกเวอร์ชัน</value>
+  </data>
+
+  <data name="SelectQuestionnaire" xml:space="preserve">
+  <value>เลือกแบบสอบถาม</value>
+  </data>
+
+  <data name="Reset" xml:space="preserve">
+  <value>รีเซ็ต</value>
+  </data>
+
+  <data name="EqualValues" xml:space="preserve">
+  <value>เท่ากับ</value>
+  </data>
+
+  <data name="NotEquals" xml:space="preserve">
+  <value>ไม่เท่ากับ</value>
+  </data>
+
+  <data name="SelectOption" xml:space="preserve">
+  <value>เลือกตัวเลือก</value>
+  </data>
+
+  <data name="StartsWith" xml:space="preserve">
+  <value>ขึ้นต้นด้วย</value>
+  </data>
+
+  <data name="Unknown" xml:space="preserve">
+  <value>ไม่ทราบ</value>
+  </data>
+
+  <data name="EditCalendarEvent" xml:space="preserve">
+  <value>แก้ไขเหตุการณ์ในปฏิทิน</value>
+  </data>
+
+  <data name="CalendarEvent" xml:space="preserve">
+  <value>เหตุการณ์ในปฏิทิน</value>
+  </data>
+
+  <data name="Add" xml:space="preserve">
+  <value>เพิ่ม</value>
+  </data>
+
+  <data name="Remove" xml:space="preserve">
+  <value>ลบออก</value>
+  </data>
+
+  <data name="Return" xml:space="preserve">
+  <value>ส่งกลับ</value>
+  </data>
+
+  <data name="ChangeToCAPI" xml:space="preserve">
+  <value>เปลี่ยนเป็น CAPI</value>
+  </data>
+
+  <data name="ChangeToCAPIConfirmHQ" xml:space="preserve">
+  <value>โหมดของการสัมภาษณ์ที่เลือก {{count}} รายการจะถูกเปลี่ยนเป็น CAPI</value>
+  </data>
+
+  <data name="ChangeToCAWI" xml:space="preserve">
+  <value>เปลี่ยนเป็น CAWI</value>
+  </data>
+
+  <data name="ChangeToCAWIConfirmHQ" xml:space="preserve">
+  <value>โหมดของการสัมภาษณ์ที่เลือก {{count}} รายการจะถูกเปลี่ยนเป็น CAWI</value>
+  </data>
+
+  <data name="InterviewMode" xml:space="preserve">
+  <value>โหมดการสัมภาษณ์</value>
+  </data>
+
+  <data name="Capi" xml:space="preserve">
+  <value>CAPI</value>
+  </data>
+
+  <data name="Cawi" xml:space="preserve">
+  <value>CAWI</value>
+  </data>
+
+  <data name="Enable" xml:space="preserve">
+  <value>เปิดใช้งาน</value>
+  </data>
+
+  <data name="Disable" xml:space="preserve">
+  <value>ปิดใช้งาน</value>
+  </data>
+
+  <data name="Properties" xml:space="preserve">
+  <value>คุณสมบัติ</value>
+  </data>
+
+  <data name="LinkedUsers" xml:space="preserve">
+  <value>ผู้ใช้ที่เชื่อมโยง</value>
+  </data>
+
+  <data name="LinkUser" xml:space="preserve">
+  <value>ผู้ใช้</value>
+  </data>
+
+  <data name="GeoTrackNumber" xml:space="preserve">
+  <value>แทร็ก</value>
+  </data>
+
+  <data name="DateRange" xml:space="preserve">
+  <value>ช่วงวันที่</value>
+  </data>
+
+  <data name="AllGeoTracks" xml:space="preserve">
+  <value>แทร็กภูมิศาสตร์ทั้งหมด</value>
+  </data>
 </root>

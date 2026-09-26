@@ -157,10 +157,10 @@
     <value>Condition critique:</value>
   </data>
   <data name="CriticalityMessage" xml:space="preserve">
-    <value>Message:</value>
+    <value>Message :</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Description:</value>
+    <value>Description :</value>
   </data>
   <data name="GeneratedBy" xml:space="preserve">
     <value>Généré par {0}</value>
