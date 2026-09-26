@@ -126,8 +126,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             Func<ICommand, Guid> aggregateRootIdResolver = CommandRegistry.GetAggregateRootIdResolver(command);
             Guid aggregateId = aggregateRootIdResolver.Invoke(command);
 
-            var inScopeExecutor = TryGetInScopeExecutor();
-            if (inScopeExecutor == null)
+            if (!TryGetInScopeExecutor(out var inScopeExecutor))
             {
                 this.aggregateLock.RunWithLock(aggregateId.FormatGuid(), () =>
                 {
@@ -145,15 +144,17 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             });
         }
 
-        private IInScopeExecutor TryGetInScopeExecutor()
+        private bool TryGetInScopeExecutor(out IInScopeExecutor inScopeExecutor)
         {
             try
             {
-                return serviceLocator.GetInstance<IInScopeExecutor>();
+                inScopeExecutor = serviceLocator.GetInstance<IInScopeExecutor>();
+                return true;
             }
             catch (ActivationException)
             {
-                return null;
+                inScopeExecutor = null;
+                return false;
             }
         }
     }
