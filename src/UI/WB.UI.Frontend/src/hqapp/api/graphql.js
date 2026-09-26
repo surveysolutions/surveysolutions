@@ -1,38 +1,85 @@
-import { ApolloClient } from '@apollo/client/core'
-import { ApolloLink } from '@apollo/client/core'
-import { createHttpLink } from '@apollo/client/core'
-import { onError } from '@apollo/client/link/error'
-import { InMemoryCache } from '@apollo/client/cache'
-import fetch from 'isomorphic-unfetch'
+import { gql } from 'graphql-request'
 import { validateFetchResponse } from '~/shared/serverValidator'
 
-const validatingFetch = async (uri, options) => {
-    const response = await fetch(uri, options)
-    validateFetchResponse(response)
-    return response
+export { gql }
+
+// Fixed same-origin endpoint. Using a relative path keeps the request free of any
+// dynamic input (no SSRF surface) and avoids graphql-request's absolute-URL requirement.
+const GRAPHQL_ENDPOINT = '/graphql'
+
+class GraphQLRequestError extends Error {
+    constructor(message, response) {
+        super(message)
+        this.name = 'GraphQLRequestError'
+        this.response = response
+    }
 }
 
-const link = createHttpLink({
-    fetch: validatingFetch,
-    uri: '/graphql',
-})
+function documentToString(document) {
+    if (typeof document === 'string') return document
+    const body = document?.loc?.source?.body
+    if (typeof body === 'string') return body
+    throw new TypeError('gqlRequest: document must be a GraphQL query string or a DocumentNode produced by gql`...`')
+}
 
-const logoutLink = onError(({ graphQLErrors, networkError }) => {
+export async function gqlRequest(document, variables) {
+    const response = await fetch(GRAPHQL_ENDPOINT, {
+        method: 'POST',
+        mode: 'same-origin',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+        },
+        body: JSON.stringify({
+            query: documentToString(document),
+            variables,
+        }),
+    })
 
-    //not enough, sometimes errors are returned as graphQLErrors
-    if (networkError && networkError.statusCode === 401)
+    validateFetchResponse(response)
+
+    if (response.status === 401) {
         location.reload()
+        return
+    }
 
-    if (graphQLErrors)
-        graphQLErrors.forEach(({ extensions }) => {
-            if (extensions && extensions.code && extensions.code === 'AUTH_NOT_AUTHENTICATED')
-                location.reload()
+    const body = await response.text()
+    let result = null
+    if (body) {
+        try {
+            result = JSON.parse(body)
+        } catch {
+            result = null
+        }
+    }
+
+    const errors = result?.errors ?? []
+
+    if (errors.some(e => e.extensions?.code === 'AUTH_NOT_AUTHENTICATED')) {
+        location.reload()
+        return
+    }
+
+    // Throw unless this is a successful GraphQL envelope ({ data, ... }) without errors.
+    // Guards against non-GraphQL responses on /graphql (e.g. 403 { Message: ... } from
+    // ResetPasswordMiddleware), non-JSON bodies, and GraphQL error responses — all of
+    // which would otherwise cause gqlRequest to silently return undefined.
+    if (!response.ok || errors.length > 0 || result === null || result?.data === undefined) {
+        const message =
+            errors.map(e => e.message).join('\n') ||
+            result?.Message ||
+            result?.message ||
+            body ||
+            response.statusText ||
+            `GraphQL request failed with status ${response.status}`
+        throw new GraphQLRequestError(message, {
+            status: response.status,
+            errors,
+            data: result?.data,
+            body,
         })
-})
+    }
 
-const cache = new InMemoryCache()
-
-export default new ApolloClient({
-    link: ApolloLink.from([logoutLink, link]),
-    cache,
-})
+    return result.data
+}

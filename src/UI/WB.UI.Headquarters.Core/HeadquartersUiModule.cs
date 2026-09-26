@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters.PdfInterview;
@@ -50,6 +49,7 @@ namespace WB.UI.Headquarters
             registry.Bind<IWebInterviewInterviewEntityFactory, HqWebInterviewInterviewEntityFactory>();
             registry.Bind<IWebNavigationService, WebNavigationService>();
             registry.Bind<IReviewAllowedService, ReviewAllowedService>();
+            registry.Bind<IAudioAuditAccessService, AudioAuditAccessService>();
             registry.Bind<IQuestionnaireAssemblyAccessor, QuestionnaireAssemblyAccessor>();
             registry.Bind<IViewRenderService, ViewRenderService>();
             registry.Bind<IUploadPackageAnalyzer, UploadPackageAnalyzer>();
@@ -66,15 +66,6 @@ namespace WB.UI.Headquarters
             registry.Bind<IWebInterviewTimezoneSetter, WebInterviewTimezoneSetter>();
             registry.Bind<ITokenProvider, TokenProvider>();
 
-            registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new WebInterviewAutoMapProfile());
-                cfg.AddProfile(new AssignmentProfile());
-                cfg.AddProfile(new AssignmentsPublicApiMapProfile());
-                cfg.AddProfile(new WorkspacePublicApiMapProfile());
-                cfg.ConstructServicesUsing(_.Get);
-            }).CreateMapper());
-
             var captchaSection = this.configuration.CaptchaOptionsSection();
 
             ConfigureEventBus(registry);
@@ -85,8 +76,10 @@ namespace WB.UI.Headquarters
             switch (provider)
             {
                 case CaptchaProviderType.Recaptcha:
-                    services.AddTransient<IRecaptchaService, RecaptchaService>();
                     services.AddTransient<ICaptchaProvider, RecaptchaProvider>();
+                    break;
+                case CaptchaProviderType.RecaptchaV3:
+                    services.AddTransient<ICaptchaProvider, RecaptchaV3Provider>();
                     break;
                 case CaptchaProviderType.Hosted:
                     services.AddTransient<ICaptchaProvider, HostedCaptchaProvider>();

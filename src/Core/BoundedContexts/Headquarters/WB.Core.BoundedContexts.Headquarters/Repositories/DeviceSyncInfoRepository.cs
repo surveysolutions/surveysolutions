@@ -48,7 +48,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public Dictionary<Guid, long> GetInterviewersTrafficUsage(Guid[] interviewersIds)
         {
-            var trafficUsage = this.dbContext.Query(devices => devices.Where(x => interviewersIds.Contains(x.InterviewerId))
+            // NOTE: List<Guid> is used in LINQ expression trees on purpose. For an array the C# compiler
+            // (C# 14+) binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an
+            // op_Implicit call into the expression tree that NHibernate cannot evaluate.
+            var ids = interviewersIds.ToList();
+
+            var trafficUsage = this.dbContext.Query(devices => devices.Where(x => ids.Contains(x.InterviewerId))
                 .Select(x => new {x.InterviewerId, Traffic = x.Statistics.TotalDownloadedBytes + x.Statistics.TotalUploadedBytes})
                 .GroupBy(x => x.InterviewerId)
                 .Select(x => new {InterviewerId = x.Key, Traffic = x.Sum(s => (long?)s.Traffic) ?? 0})
@@ -59,9 +64,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public Dictionary<Guid, SyncStats> GetSynchronizationsStats(Guid[] interviewerIds)
         {
+            var ids = interviewerIds.ToList();
+
             var syncStat = this.dbContext.Query(devices =>
                 (from device in devices
-                    where interviewerIds.Contains(device.InterviewerId)
+                    where ids.Contains(device.InterviewerId)
                     group device by device.InterviewerId
                     into grouping
                     select new
@@ -78,9 +85,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public IEnumerable<DeviceSyncInfo> GetLastSyncByInterviewersList(Guid[] interviewerIds)
         {
+            var ids = interviewerIds.ToList();
+
             var syncWithNotEmptyStat = this.dbContext.Query(devices => 
                 (from device in devices
-                where interviewerIds.Contains(device.InterviewerId)
+                where ids.Contains(device.InterviewerId)
                       && (device.Statistics != null &&
                           device.Statistics.DownloadedInterviewsCount +
                           device.Statistics.UploadedInterviewsCount +
@@ -97,7 +106,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                 }).ToList());
 
             var lastSync = this.dbContext.Query(devices => (from device in devices
-                where interviewerIds.Contains(device.InterviewerId)
+                where ids.Contains(device.InterviewerId)
                 group device by device.InterviewerId
                 into grouping
                 select new
@@ -131,31 +140,42 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public List<InterviewerDailyTrafficUsage> GetTrafficUsageForInterviewer(Guid interviewerId)
         {
+            // NOTE: grouping/ordering by `x.SyncDate.Date` makes NHibernate generate
+            // `cast(... as date)` in SQL. With Npgsql 10 the "date" backend type is read back
+            // as System.DateOnly, which NHibernate's AbstractDateTimeType cannot convert
+            // (DateOnly does not implement IConvertible), causing a FormatException/InvalidCastException.
+            // Grouping by the individual Year/Month/Day components avoids the date cast entirely.
             var dbData = this.dbContext.Query(devices =>
             {
                 return devices
                     .Where(deviceInfo => deviceInfo.InterviewerId == interviewerId)
-                    .GroupBy(x => x.SyncDate.Date)
+                    .GroupBy(x => new { x.SyncDate.Year, x.SyncDate.Month, x.SyncDate.Day })
                     .Select(group => new
                     {
-                        Key = group.Key,
+                        group.Key.Year,
+                        group.Key.Month,
+                        group.Key.Day,
                         DownloadBytes = group.Sum(s => (long?)s.Statistics.TotalDownloadedBytes),
                         UploadedBytes = group.Sum(s => (long?)s.Statistics.TotalUploadedBytes)
                     })
-                    .OrderByDescending(x => x.Key)
+                    .OrderByDescending(x => x.Year)
+                    .ThenByDescending(x => x.Month)
+                    .ThenByDescending(x => x.Day)
                     .Take(30)
                     .ToList();
             });
 
             var list = dbData
-                .OrderBy(x => x.Key)
+                .OrderBy(x => x.Year)
+                .ThenBy(x => x.Month)
+                .ThenBy(x => x.Day)
                 .Select(x => new InterviewerDailyTrafficUsage
                 {
                     DownloadedBytes = x.DownloadBytes ?? 0,
                     UploadedBytes = x.UploadedBytes ?? 0,
-                    Year = x.Key.Year,
-                    Month = x.Key.Month,
-                    Day = x.Key.Day
+                    Year = x.Year,
+                    Month = x.Month,
+                    Day = x.Day
                 }).ToList();
 
             return list;
@@ -186,9 +206,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public Dictionary<Guid, double> GetAverageSynchronizationSpeedInBytesPerSeconds(Guid[] interviewerIds)
         {
+            var ids = interviewerIds.ToList();
+
             var syncWithEmptyStat = this.dbContext.Query(devices =>
                 (from device in devices
-                    where interviewerIds.Contains(device.InterviewerId)
+                    where ids.Contains(device.InterviewerId)
                           && device.Statistics != null
                     group device by device.InterviewerId
                     into grouping
@@ -204,9 +226,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public IEnumerable<DeviceSyncInfo> GetLastFailedByInterviewerIds(Guid[] interviewerIds)
         {
+            var ids = interviewerIds.ToList();
+
             var syncWithEmptyStat = this.dbContext.Query(devices =>
                 (from device in devices
-                    where interviewerIds.Contains(device.InterviewerId)
+                    where ids.Contains(device.InterviewerId)
                           && device.Statistics == null
                     group device by device.InterviewerId
                     into grouping

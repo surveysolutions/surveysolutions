@@ -32,7 +32,7 @@ export const entityPartial = {
             }
         },
     },
-    props: ['id']
+    props: ['id'],
 }
 
 // Questions

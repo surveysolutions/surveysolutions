@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Complete" xml:space="preserve"><value>เสร็จสิ้น</value></data>
+  <data name="FinishInterviewText" xml:space="preserve"><value>การสัมภาษณ์นี้เสร็จสมบูรณ์แล้ว</value></data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve"><value>ไม่สามารถแก้ไขการสัมภาษณ์ที่ได้รับโดยอุปกรณ์</value></data>
+  <data name="InvitationText" xml:space="preserve"><value>คุณได้รับเชิญให้มีส่วนร่วมในการสำรวจต่อไปนี้: "%QUESTIONNAIRE%"</value></data>
+  <data name="NoteForSupervisor" xml:space="preserve"><value>ความคิดเห็น</value></data>
+  <data name="Resume_InvitationText" xml:space="preserve"><value>คุณสามารถนำทางไปยังการสัมภาษณ์ในการสำรวจต่อไปนี้: "%QUESTIONNAIRE%"</value></data>
+  <data name="Resume_WelcomeText" xml:space="preserve"><value>สวัสดีและยินดีต้อนรับสู่การสำรวจทางเว็บของ Survey Solutions</value></data>
+  <data name="SurveyFormatText" xml:space="preserve"><value>การสำรวจ: "%QUESTIONNAIRE%"</value></data>
+  <data name="WebSurvey" xml:space="preserve"><value>การสำรวจทางเว็บของ Survey Solutions</value></data>
+  <data name="WelcomeText" xml:space="preserve"><value>สวัสดีและยินดีต้อนรับสู่การสำรวจทางเว็บของ Survey Solutions</value></data>
+  <data name="StartNewInterview" xml:space="preserve"><value>เริ่มการสัมภาษณ์ใหม่</value></data>
+  <data name="ResumeInterview" xml:space="preserve"><value>ดำเนินการสัมภาษณ์ต่อ</value></data>
+  <data name="LinkInvitation" xml:space="preserve"><value>คุณได้รับเชิญให้มีส่วนร่วมในการสำรวจต่อไปนี้: "%QUESTIONNAIRE%" การสัมภาษณ์ของคุณยังไม่พร้อม</value></data>
+  <data name="LinkToInterviewPage" xml:space="preserve"><value>การสัมภาษณ์ทางเว็บ</value></data>
+  <data name="LinkWelcome" xml:space="preserve"><value>สวัสดีและยินดีต้อนรับสู่การสำรวจทางเว็บของ Survey Solutions</value></data>
+</root>

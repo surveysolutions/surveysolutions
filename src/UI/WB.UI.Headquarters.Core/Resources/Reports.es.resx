@@ -292,13 +292,13 @@
     <value>Se están cargando los datos del mapa</value>
   </data>
   <data name="Max" xml:space="preserve">
-    <value>Max</value>
+    <value>Máx</value>
   </data>
   <data name="Median" xml:space="preserve">
     <value>Mediana</value>
   </data>
   <data name="Min" xml:space="preserve">
-    <value>Min</value>
+    <value>Mín</value>
   </data>
   <data name="Percentile05" xml:space="preserve">
     <value>Percentil 05</value>

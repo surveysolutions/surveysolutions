@@ -216,4 +216,53 @@
   <data name="Users" xml:space="preserve">
     <value>Përdoruesit</value>
   </data>
+
+
+  <data name="AuditLog" xml:space="preserve">
+    <value>Regjistri i auditimit</value>
+  </data>
+
+  <data name="DeviceLogs" xml:space="preserve">
+    <value>Regjistrat e pajisjeve</value>
+  </data>
+    
+  <data name="Diagnostics" xml:space="preserve">
+    <value>Diagnostikimi</value>
+  </data>
+
+  <data name="InterviewPackages" xml:space="preserve">
+    <value>Paketat e intervistës</value>
+  </data>
+
+  <data name="Settings" xml:space="preserve">
+    <value>Cilësimet</value>
+  </data>
+
+  <data name="WorkspaceSettings" xml:space="preserve">
+    <value>Cilësimet e hapësirës së punës</value>
+  </data>
+
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Ofruesit e email-it</value>
+  </data>
+
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Paneli i hartës</value>
+  </data>
+
+  <data name="TabletInfos" xml:space="preserve">
+    <value>Të dhënat e tabletëve</value>
+  </data>
+
+  <data name="Administration" xml:space="preserve">
+    <value>Administrim</value>
+  </data>
+
+  <data name="Workspaces" xml:space="preserve">
+      <value>Hapësirat e punës</value>
+  </data>
+
+  <data name="ServerAdministration">
+    <value>Administrimi i serverit</value>
+  </data>
 </root>

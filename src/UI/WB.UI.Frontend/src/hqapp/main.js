@@ -1,19 +1,22 @@
-import 'bootstrap'
-import * as bootstrap from 'bootstrap'
-window.bootstrap = bootstrap
-window.Dropdown = bootstrap.Dropdown
+import Alert from 'bootstrap/js/dist/alert'
+import Dropdown from 'bootstrap/js/dist/dropdown'
+import Modal from 'bootstrap/js/dist/modal'
+import Tab from 'bootstrap/js/dist/tab'
+import Tooltip from 'bootstrap/js/dist/tooltip'
+window.bootstrap = { Alert, Dropdown, Modal, Tab, Tooltip }
+window.Dropdown = Dropdown
 
 import '../assets/css/markup.scss'
 import '../assets/css/markup-specific.scss'
 
 import { createApp } from 'vue'
-import App from './App.vue';
+import App from './App.vue'
 import { validatePageLoad } from '~/shared/serverValidator'
 
 const vue = createApp(App)
 
 import { setupErrorHandler } from '../shared/errorHandler.js'
-setupErrorHandler(vue);
+setupErrorHandler(vue)
 
 import Vuei18n from '~/shared/plugins/locale'
 import { browserLanguage } from '~/shared/helpers'
@@ -41,35 +44,22 @@ vue.component('ProfileLayout', ProfileLayout)
 
 import './compatibility.js'
 
-import PortalVue from 'portal-vue'
-vue.use(PortalVue)
-
-import VueDOMPurifyHTML from 'vue-dompurify-html';
+import VueDOMPurifyHTML from 'vue-dompurify-html'
 vue.use(VueDOMPurifyHTML)
 
-import { Popover } from 'uiv'
-vue.component('popover', Popover)
+import Bootstrap5Popover from '~/shared/components/Bootstrap5Popover.vue'
+vue.component('popover', Bootstrap5Popover)
 
 import './validate.js'
 
 import box from '@/shared/modal'
 box.init(i18n, browserLanguage)
 
-import 'flatpickr/dist/flatpickr.css'
 import 'toastr/build/toastr.css'
 import * as toastr from 'toastr'
 toastr.options.escapeHtml = true
 
-import * as poly from 'smoothscroll-polyfill'
-poly.polyfill()
-
 import hqApi from './api'
-import apolloClient from './api/graphql'
-import { createApolloProvider } from '@vue/apollo-option'
-const apolloProvider = createApolloProvider({
-    defaultClient: apolloClient,
-})
-vue.use(apolloProvider)
 
 vue.use(config)
 vue.use(http)
@@ -82,16 +72,22 @@ const views = viewsProvider(store)
 
 const router = new Router({
     routes: views.routes,
-    store: store
+    store: store,
 }).router
+
+router.beforeEach(async (to, from, next) => {
+    try {
+        next()
+    } catch (error) {
+        next(error)
+    }
+})
 
 vue.use(router)
 
-import { registerGlobalComponents } from '~/webinterview/componentsRegistry'
-registerGlobalComponents(vue, { router, store })
+import { registerBaseGlobalComponents } from '~/webinterview/componentsRegistry'
+registerBaseGlobalComponents(vue, { router, store })
 
-import { pageTitle } from 'vue-page-title'
-vue.use(pageTitle)
 
 vue.config.globalProperties.$eventHub = vue
 
@@ -99,5 +95,5 @@ import emitter from '~/shared/emitter'
 vue.config.globalProperties.$emitter = emitter
 
 router.isReady().then(() => {
-    vue.mount('#vueApp');
-});
+    vue.mount('#vueApp')
+})
