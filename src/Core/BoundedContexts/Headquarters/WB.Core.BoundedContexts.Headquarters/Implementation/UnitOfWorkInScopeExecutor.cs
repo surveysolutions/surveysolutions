@@ -10,7 +10,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
 {
     public class UnitOfWorkInScopeExecutor<TService> : UnitOfWorkInScopeExecutor, IInScopeExecutor<TService>
     {
-        public UnitOfWorkInScopeExecutor(ILifetimeScope rootScope) : base(rootScope)
+        public UnitOfWorkInScopeExecutor(ILifetimeScope rootScope, AmbientUnitOfWorkAccessor ambientUnitOfWorkAccessor)
+            : base(rootScope, ambientUnitOfWorkAccessor)
         {
         }
 
@@ -19,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             using var scope = this.CreateChildContainer(workspace);
             var service = scope.Resolve<TService>();
             var unitOfWork = scope.Resolve<IUnitOfWork>();
-            using var unitOfWorkScope = scope.Resolve<AmbientUnitOfWorkAccessor>().Use(unitOfWork);
+            using var unitOfWorkScope = this.ambientUnitOfWorkAccessor.Use(unitOfWork);
             action(service);
             unitOfWork.AcceptChanges();
         }
@@ -29,7 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             using var scope = this.CreateChildContainer(workspace);
             var service = scope.Resolve<TService>();
             var unitOfWork = scope.Resolve<IUnitOfWork>();
-            using var unitOfWorkScope = scope.Resolve<AmbientUnitOfWorkAccessor>().Use(unitOfWork);
+            using var unitOfWorkScope = this.ambientUnitOfWorkAccessor.Use(unitOfWork);
             var result = action(service);
             unitOfWork.AcceptChanges();
             return result;
@@ -40,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             using var scope = this.CreateChildContainer(workspace);
             var service = scope.Resolve<TService>();
             var unitOfWork = scope.Resolve<IUnitOfWork>();
-            using var unitOfWorkScope = scope.Resolve<AmbientUnitOfWorkAccessor>().Use(unitOfWork);
+            using var unitOfWorkScope = this.ambientUnitOfWorkAccessor.Use(unitOfWork);
             await action(service);
             unitOfWork.AcceptChanges();
         }        
@@ -50,7 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             using var scope = this.CreateChildContainer(workspace);
             var service = scope.Resolve<TService>();
             var unitOfWork = scope.Resolve<IUnitOfWork>();
-            using var unitOfWorkScope = scope.Resolve<AmbientUnitOfWorkAccessor>().Use(unitOfWork);
+            using var unitOfWorkScope = this.ambientUnitOfWorkAccessor.Use(unitOfWork);
             var res = await action(service);
             unitOfWork.AcceptChanges();
             return res;
@@ -60,7 +61,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
     public class UnitOfWorkInScopeExecutor<TService1, TService2> 
         : UnitOfWorkInScopeExecutor, IInScopeExecutor<TService1, TService2>
     {
-        public UnitOfWorkInScopeExecutor(ILifetimeScope rootScope) : base(rootScope)
+        public UnitOfWorkInScopeExecutor(ILifetimeScope rootScope, AmbientUnitOfWorkAccessor ambientUnitOfWorkAccessor)
+            : base(rootScope, ambientUnitOfWorkAccessor)
         {
         }
 
@@ -70,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             var service1 = scope.Resolve<TService1>();
             var service2 = scope.Resolve<TService2>();
             var unitOfWork = scope.Resolve<IUnitOfWork>();
-            using var unitOfWorkScope = scope.Resolve<AmbientUnitOfWorkAccessor>().Use(unitOfWork);
+            using var unitOfWorkScope = this.ambientUnitOfWorkAccessor.Use(unitOfWork);
             action(service1, service2);
             unitOfWork.AcceptChanges();
         }
@@ -81,7 +83,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             var service1 = scope.Resolve<TService1>();
             var service2 = scope.Resolve<TService2>();
             var unitOfWork = scope.Resolve<IUnitOfWork>();
-            using var unitOfWorkScope = scope.Resolve<AmbientUnitOfWorkAccessor>().Use(unitOfWork);
+            using var unitOfWorkScope = this.ambientUnitOfWorkAccessor.Use(unitOfWork);
             await action(service1, service2);
             unitOfWork.AcceptChanges();
         }
@@ -92,7 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             var service1 = scope.Resolve<TService1>();
             var service2 = scope.Resolve<TService2>();
             var unitOfWork = scope.Resolve<IUnitOfWork>();
-            using var unitOfWorkScope = scope.Resolve<AmbientUnitOfWorkAccessor>().Use(unitOfWork);
+            using var unitOfWorkScope = this.ambientUnitOfWorkAccessor.Use(unitOfWork);
             var result = action(service1, service2);
             unitOfWork.AcceptChanges();
             return result;
@@ -102,11 +104,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
     public class UnitOfWorkInScopeExecutor : IInScopeExecutor
     {
         private readonly ILifetimeScope lifetimeScope;
+        protected readonly AmbientUnitOfWorkAccessor ambientUnitOfWorkAccessor;
         private long Depth = 0;
 
-        public UnitOfWorkInScopeExecutor(ILifetimeScope rootScope)
+        public UnitOfWorkInScopeExecutor(ILifetimeScope rootScope, AmbientUnitOfWorkAccessor ambientUnitOfWorkAccessor)
         {
             lifetimeScope = rootScope;
+            this.ambientUnitOfWorkAccessor = ambientUnitOfWorkAccessor;
 
             if (rootScope.Tag is long depth)
             {
@@ -142,7 +146,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             using var scope = CreateChildContainer(workspace);
             var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
             var unitOfWork = scope.Resolve<IUnitOfWork>();
-            using var unitOfWorkScope = scope.Resolve<AmbientUnitOfWorkAccessor>().Use(unitOfWork);
+            using var unitOfWorkScope = this.ambientUnitOfWorkAccessor.Use(unitOfWork);
 
             action(serviceLocatorLocal);
 
@@ -154,7 +158,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             using var scope = CreateChildContainer(workspace);
             var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
             var unitOfWork = scope.Resolve<IUnitOfWork>();
-            using var unitOfWorkScope = scope.Resolve<AmbientUnitOfWorkAccessor>().Use(unitOfWork);
+            using var unitOfWorkScope = this.ambientUnitOfWorkAccessor.Use(unitOfWork);
 
             var result = func(serviceLocatorLocal);
 
@@ -169,7 +173,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
 
             var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
             var unitOfWork = scope.Resolve<IUnitOfWork>();
-            using var unitOfWorkScope = scope.Resolve<AmbientUnitOfWorkAccessor>().Use(unitOfWork);
+            using var unitOfWorkScope = this.ambientUnitOfWorkAccessor.Use(unitOfWork);
             var result = await func(serviceLocatorLocal);
 
             unitOfWork.AcceptChanges();
@@ -182,7 +186,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             using var scope = CreateChildContainer(workspace);
             var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
             var unitOfWork = scope.Resolve<IUnitOfWork>();
-            using var unitOfWorkScope = scope.Resolve<AmbientUnitOfWorkAccessor>().Use(unitOfWork);
+            using var unitOfWorkScope = this.ambientUnitOfWorkAccessor.Use(unitOfWork);
 
             await func(serviceLocatorLocal);
 

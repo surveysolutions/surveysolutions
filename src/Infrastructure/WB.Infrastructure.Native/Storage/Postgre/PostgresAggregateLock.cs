@@ -16,6 +16,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
     /// PostgreSQL advisory lock-based implementation of <see cref="IAggregateLock"/>.
     /// Supports farm mode (multi-server deployments) by using database-level advisory locks
     /// that are visible across all server instances sharing the same PostgreSQL instance.
+    /// When command execution already runs inside a unit-of-work transaction, the advisory
+    /// lock is acquired on that ambient transaction. Otherwise, it falls back to a dedicated
+    /// transaction on a separate connection for the duration of the protected delegate.
     /// Uses a local in-process lock as a first layer to avoid unnecessary DB round-trips
     /// when multiple threads on the same server compete for the same aggregate.
     /// </summary>
