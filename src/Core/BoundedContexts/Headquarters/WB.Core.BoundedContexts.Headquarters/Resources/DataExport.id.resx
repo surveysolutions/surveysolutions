@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="DataExport_Title" xml:space="preserve">
+        <value>Ekspor Data</value>
+    </data>
+    <data name="DataExport_Header" xml:space="preserve">
+        <value>Pilih jenis dan format data yang akan diekspor</value>
+    </data>
+    <data name="BinaryData" xml:space="preserve">
+        <value>Data Biner</value>
+    </data>
+    <data name="DDI" xml:space="preserve">
+        <value>DDI</value>
+    </data>
+    <data name="ParaData" xml:space="preserve">
+        <value>Paradata</value>
+    </data>
+    <data name="Name" xml:space="preserve">
+        <value>Nama</value>
+    </data>
+    <data name="Format" xml:space="preserve">
+        <value>Format</value>
+    </data>
+    <data name="StartDate" xml:space="preserve">
+        <value>Tanggal mulai</value>
+    </data>
+    <data name="LastUpdateDate" xml:space="preserve">
+        <value>Tanggal pembaruan terakhir</value>
+    </data>
+    <data name="Progress" xml:space="preserve">
+        <value>Kemajuan</value>
+    </data>
+    <data name="ConfirmStop" xml:space="preserve">
+        <value>Apakah Anda yakin ingin berhenti</value>
+    </data>
+    <data name="export" xml:space="preserve">
+        <value>proses ekspor</value>
+    </data>
+    <data name="Metadata" xml:space="preserve">
+        <value>Metadata</value>
+    </data>
+    <data name="BinaryDescription" xml:space="preserve">
+        <value>Arsip dengan data biner (misalnya gambar, audio)</value>
+    </data>
+    <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
+        <value>Anda tidak dapat mengubah pengaturan ekspor karena proses ekspor sudah berjalan.</value>
+    </data>
+    <data name="Bytes" xml:space="preserve">
+        <value>MB</value>
+    </data>
+    <data name="Completed" xml:space="preserve">
+        <value>Selesai</value>
+    </data>
+    <data name="DataWasNotGenerated" xml:space="preserve">
+        <value>Tidak dihasilkan</value>
+    </data>
+    <data name="DDIDescription" xml:space="preserve">
+        <value>Data XML Inisiatif Dokumentasi Data</value>
+    </data>
+    <data name="Download" xml:space="preserve">
+        <value>Unduh</value>
+    </data>
+    <data name="ExportRange" xml:space="preserve">
+        <value>Kisaran ekspor:</value>
+    </data>
+    <data name="FileSizeTitle" xml:space="preserve">
+        <value>Ukuran berkas</value>
+    </data>
+    <data name="FormatTitle" xml:space="preserve">
+        <value>format</value>
+    </data>
+    <data name="Generate" xml:space="preserve">
+        <value>Menghasilkan</value>
+    </data>
+    <data name="Generating" xml:space="preserve">
+        <value>Menghasilkan</value>
+    </data>
+    <data name="Preparing" xml:space="preserve">
+        <value>Mempersiapkan</value>
+    </data>
+    <data name="Compressing" xml:space="preserve">
+        <value>Mengompresi</value>
+    </data>
+    <data name="LastGeneratedTitle" xml:space="preserve">
+        <value>Dihasilkan pada</value>
+    </data>
+    <data name="MainSurveyDataTitle" xml:space="preserve">
+        <value>Data Survei Utama</value>
+    </data>
+    <data name="NoDataAvailable" xml:space="preserve">
+        <value>Tidak ada Data yang tersedia</value>
+    </data>
+    <data name="ParadataDescription" xml:space="preserve">
+        <value>Metadata pada proses wawancara (peristiwa dan waktu)</value>
+    </data>
+    <data name="QueuedTitle" xml:space="preserve">
+        <value>Mengantri</value>
+    </data>
+    <data name="StatusOfExportTitle" xml:space="preserve">
+        <value>Status wawancara yang diekspor</value>
+    </data>
+    <data name="FromDate" xml:space="preserve">
+        <value>Dari</value>
+    </data>
+    <data name="ToDate" xml:space="preserve">
+        <value>Ke</value>
+    </data>
+    <data name="SurveyTemplateTitle" xml:space="preserve">
+        <value>(versi) Kuesioner survei</value>
+    </data>
+    <data name="ZipArchiveDescription" xml:space="preserve">
+        <value>Arsip zip dengan data wawancara utama</value>
+    </data>
+    <data name="XMLFileDescription" xml:space="preserve">
+        <value>format XML</value>
+    </data>
+    <data name="ItemsInQueue" xml:space="preserve">
+        <value>Item dalam antrian ekspor:</value>
+    </data>
+    <data name="TabularFormat" xml:space="preserve">
+        <value>Format Tabel</value>
+    </data>
+    <data name="ExportExplanation" xml:space="preserve">
+        <value>Menekan tombol "Tambahkan ke antrian" akan membuat arsip data wawancara yang tersedia di server pada saat itu. Waktu pembuatan arsip dan ukuran arsip ditunjukkan pada tabel. Arsip data yang terakhir dihasilkan dapat diunduh dengan menekan tombol Unduh. Tekan tombol "Tambahkan ke antrian" lagi untuk membuat arsip baru.</value>
+    </data>
+    <data name="ZipFile" xml:space="preserve">
+        <value>berkas zip</value>
+    </data>
+    <data name="Dropbox" xml:space="preserve">
+        <value>Dropbox</value>
+    </data>
+    <data name="OneDrive" xml:space="preserve">
+        <value>OneDrive</value>
+    </data>
+    <data name="GoogleDrive" xml:space="preserve">
+        <value>Google Drive</value>
+    </data>
+    <data name="SaveBinaryDataTo" xml:space="preserve">
+        <value>Simpan data biner ke:</value>
+    </data>
+    <data name="ExportBtn" xml:space="preserve">
+        <value>Ekspor</value>
+    </data>
+    <data name="DataExport_Destination_Dropbox" xml:space="preserve">
+        <value>File ekspor akan diunggah ke Dropbox</value>
+    </data>
+    <data name="DataExport_Destination_File" xml:space="preserve">
+        <value>File ekspor akan tersedia untuk diunduh</value>
+    </data>
+    <data name="DataExport_Destination_GoogleDrive" xml:space="preserve">
+        <value>File ekspor akan diunggah ke Google Drive</value>
+    </data>
+    <data name="DataExport_Destination_OneDrive" xml:space="preserve">
+        <value>File ekspor akan diunggah ke OneDrive</value>
+    </data>
+    <data name="DataExport_QueuedOn" xml:space="preserve">
+        <value>Antri di {{date}}</value>
+    </data>
+    <data name="DataExport_CompletedOn" xml:space="preserve">
+        <value>Selesai pada {{date}}</value>
+    </data>
+    <data name="DataExport_QuestionnaireWithVersion" xml:space="preserve">
+        <value>{{title}} (ver. {{version}})</value>
+    </data>
+    <data name="DataExport_Regenerate" xml:space="preserve">
+        <value>Diperbarui</value>
+    </data>
+    <data name="DataExport_RegenerateDesc" xml:space="preserve">
+        <value>Ekspor antrian dengan parameter yang sama</value>
+    </data>
+    <data name="DataExport_FileLastUpdate" xml:space="preserve">
+        <value>Terakhir diperbarui: {{date}}</value>
+    </data>
+    <data name="DataExport_FileWasRegenerated" xml:space="preserve">
+        <value>File telah dibuat ulang atau dihapus</value>
+    </data>
+    <data name="DataExport_FileSize" xml:space="preserve">
+        <value>Ukuran file: {{size}} MB</value>
+    </data>
+    <data name="DataExport_ProducedIn" xml:space="preserve">
+        <value>Diproduksi di:</value>
+    </data>
+    <data name="DataExport_InQueue" xml:space="preserve">
+        <value>Dalam antrian:</value>
+    </data>
+    <data name="DataExport_Destination" xml:space="preserve">
+        <value>Tujuan: {{dest}}</value>
+    </data>
+    <data name="DataExport_ServiceIsNotAvailable" xml:space="preserve">
+        <value>Layanan ekspor tidak tersedia</value>
+    </data>
+    <data name="DataType" xml:space="preserve">
+        <value>Tipe data</value>
+    </data>
+    <data name="DataType_Binary" xml:space="preserve">
+        <value>Data Biner. Arsip dengan data biner (misalnya gambar, audio)</value>
+    </data>
+    <data name="DataType_Ddi" xml:space="preserve">
+        <value>DDI. Data XML Inisiatif Dokumentasi Data</value>
+    </data>
+    <data name="DataType_MainSurveyData" xml:space="preserve">
+        <value>Data Survei Utama. Arsip zip dengan data wawancara utama</value>
+    </data>
+    <data name="FilterTitle" xml:space="preserve">
+        <value>Filter wawancara untuk diekspor</value>
+    </data>
+    <data name="SurveyQuestionnaire" xml:space="preserve">
+        <value>Daftar pertanyaan</value>
+    </data>
+    <data name="SurveyQuestionnaireVersion" xml:space="preserve">
+        <value>Versi kuesioner</value>
+    </data>
+    <data name="DataType_Paradata" xml:space="preserve">
+        <value>Paradata. Metadata pada proses wawancara (peristiwa dan waktu)</value>
+    </data>
+    <data name="DataDestination" xml:space="preserve">
+        <value>Ekspor file tujuan</value>
+    </data>
+    <data name="DataFormat" xml:space="preserve">
+        <value>Format datanya</value>
+    </data>
+    <data name="DataDestination_Dropbox" xml:space="preserve">
+        <value>Unggah ke Dropbox</value>
+    </data>
+    <data name="DataDestination_GoogleDrive" xml:space="preserve">
+        <value>Unggah ke Google Drive</value>
+    </data>
+    <data name="DataDestination_OneDrive" xml:space="preserve">
+        <value>Unggah ke OneDrive</value>
+    </data>
+    <data name="DataDestination_Zip" xml:space="preserve">
+        <value>Unduh</value>
+    </data>
+    <data name="DataFormat_Spss" xml:space="preserve">
+        <value>format SPSS</value>
+    </data>
+    <data name="DataFormat_Stata" xml:space="preserve">
+        <value>Format Status 14</value>
+    </data>
+    <data name="DataFormat_Tab" xml:space="preserve">
+        <value>Data dipisahkan tab</value>
+    </data>
+    <data name="QuestionnaireInformation" xml:space="preserve">
+        <value>Informasi kuesioner</value>
+    </data>
+    <data name="QuestionnaireInformation_Include" xml:space="preserve">
+        <value>Sertakan informasi meta tentang kuesioner</value>
+    </data>
+    <data name="QuestionnaireInformation_Exclude" xml:space="preserve">
+        <value>Kecualikan informasi meta tentang kuesioner</value>
+    </data>
+    <data name="AddToQueue" xml:space="preserve">
+        <value>Tambahkan ke antrean</value>
+    </data>
+    <data name="GeneratedDataSets" xml:space="preserve">
+        <value>Kumpulan ekspor yang dibuat sebelumnya</value>
+    </data>
+    <data name="GeneratedDataSets_Desc" xml:space="preserve">
+        <value>Data diekspor dalam arsip zip yang berisi file data dengan konten dan jenis tertentu. Di bawah ini adalah daftar file data yang diekspor sebelumnya.</value>
+    </data>
+    <data name="NoDataSets" xml:space="preserve">
+        <value>Belum ada kumpulan data yang dihasilkan</value>
+    </data>
+    <data name="DataExportApi" xml:space="preserve">
+        <value>API ekspor data</value>
+    </data>
+    <data name="DataExportApiDesc" xml:space="preserve">
+        <value>Anda dapat mengatur ekspor otomatis data wawancara yang dikumpulkan menggunakan perangkat API kami untuk informasi lebih lanjut dan penggunaan instruksi:</value>
+    </data>
+    <data name="DataExportApiInfoPage" xml:space="preserve">
+        <value>Referensi API Ekspor Data</value>
+    </data>
+    <data name="Error_Canceled" xml:space="preserve">
+        <value>Tugas ekspor dibatalkan oleh pengguna.</value>
+    </data>
+    <data name="Error_NotEnoughExternalStorageSpace" xml:space="preserve">
+        <value>Tidak cukup ruang untuk penyimpanan cloud yang dipilih. Harap kosongkan ruang dan mulai ulang pekerjaan atau pilih penyedia lain.</value>
+    </data>
+    <data name="Error_Unhandled" xml:space="preserve">
+        <value>Terjadi kesalahan tak terduga selama ekspor. Kami mohon maaf atas ketidaknyamanan ini. Silakan hubungi tim dukungan server Anda. Informasi tambahan untuk masalah ini tersedia di halaman dukungan: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
+    </data>
+    <data name="AllStatuses" xml:space="preserve">
+        <value>semua status</value>
+    </data>
+    <data name="ApprovedByHeadquarters" xml:space="preserve">
+        <value>Disetujui dengan status Markas Besar</value>
+    </data>
+    <data name="ApprovedBySupervisor" xml:space="preserve">
+        <value>Disetujui dengan status Supervisor</value>
+    </data>
+    <data name="DataExport_InterviewsStatus" xml:space="preserve">
+        <value>Wawancara di {{status}}.</value>
+    </data>
+    <data name="InterviewerAssigned" xml:space="preserve">
+        <value>Status yang ditetapkan pewawancara</value>
+    </data>
+    <data name="QuestionnaireTranslation" xml:space="preserve">
+        <value>Terjemahan</value>
+    </data>
+    <data name="Translation_CardLabel" xml:space="preserve">
+        <value>Terjemahan: {{language}}</value>
+    </data>
+    <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
+        <value>Terjemahan</value>
+    </data>
+    <data name="SurveyQuestionnaireDateRange" xml:space="preserve">
+        <value>Rentang tanggal</value>
+    </data>
+    <data name="DateRangeAllTime" xml:space="preserve">
+        <value>Sepanjang waktu</value>
+    </data>
+    <data name="DateRangeLast24hours" xml:space="preserve">
+        <value>24 jam terakhir</value>
+    </data>
+    <data name="DateRangeLast7days" xml:space="preserve">
+        <value>7 hari terakhir</value>
+    </data>
+    <data name="DateRangeLast30days" xml:space="preserve">
+        <value>30 hari terakhir</value>
+    </data>
+    <data name="DateRangeLastToday" xml:space="preserve">
+        <value>Hari ini</value>
+    </data>
+    <data name="DateRangeLastYesterday" xml:space="preserve">
+        <value>Kemarin</value>
+    </data>
+    <data name="DateRangeCustom" xml:space="preserve">
+        <value>Kebiasaan</value>
+    </data>
+    <data name="SurveyQuestionnaireDateRangeFrom" xml:space="preserve">
+        <value>Dari</value>
+    </data>
+    <data name="DateRangeFromAll" xml:space="preserve">
+        <value>Tersedia paling awal</value>
+    </data>
+    <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
+        <value>Ke</value>
+    </data>
+    <data name="DateRangeToAll" xml:space="preserve">
+        <value>Momen saat ini</value>
+    </data>
+    <data name="DataType_AudioAuditFiles" xml:space="preserve">
+        <value>Audit Audio. Arsip zip yang berisi data Audit Audio</value>
+    </data>
+    <data name="ParadataEventsFilter" xml:space="preserve">
+        <value>Filter acara</value>
+    </data>
+    <data name="ParadataEventsFilter_All" xml:space="preserve">
+        <value>Semua</value>
+    </data>
+    <data name="ParadataEventsFilter_Reduced" xml:space="preserve">
+        <value>Dikurangi</value>
+    </data>
+    <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
+        <value>Kumpulan paradata yang dikurangi tidak mencakup peristiwa dengan kode berikut: QuestionEnabled (13), QuestionDisabled (14), GroupEnabled (15), GroupDisabled (16), QuestionDeclaredValid (17), QuestionDeclaredInvalid (18), VariableEnabled (23), VariableDisabled (24).</value>
+    </data>
+    <data name="Validation_FromDateInvalid" xml:space="preserve">
+        <value>Tanggal "Dari" harus merupakan tanggal yang valid.</value>
+    </data>
+    <data name="Validation_FromDateInFuture" xml:space="preserve">
+        <value>Tanggal "Dari" tidak boleh berada di masa depan.</value>
+    </data>
+    <data name="Validation_ToDateInvalid" xml:space="preserve">
+        <value>Tanggal "Sampai" harus merupakan tanggal yang valid.</value>
+    </data>
+    <data name="Validation_FromDateInvalidBeforeTo" xml:space="preserve">
+        <value>Tanggal "Dari" harus valid sebelum memvalidasi tanggal "Sampai".</value>
+    </data>
+    <data name="Validation_ToDateBeforeFrom" xml:space="preserve">
+        <value>Tanggal "Sampai" harus lebih besar dari tanggal "Dari".</value>
+    </data>
+</root>

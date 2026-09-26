@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="CustomizeDisplayedText" xml:space="preserve"><value>កែប្រែអត្ថបទដែលបង្ហាញ</value></data>
+  <data name="WebInterviewSetupFor_Title" xml:space="preserve"><value>ការដំឡើងការសំភាសន៍តាមវែបសម្រាប់ {}</value></data>
+  <data name="ExampleWelcomePage" xml:space="preserve"><value>ទំព័រស្វាគមន៍ตัวอย่าง</value></data>
+  <data name="ExampleResumePage" xml:space="preserve"><value>ទំព័របន្ត​ตัวอย่าง</value></data>
+  <data name="ExampleFinishPage" xml:space="preserve"><value>ទំព័របញ្ចប់ตัวอย่าง</value></data>
+  <data name="CustomizeEmailsText" xml:space="preserve"><value>កែប្រែអ៊ីម៉ែល</value></data>
+  <data name="Invitation" xml:space="preserve"><value>ការអញ្ជើញ</value></data>
+  <data name="Reminder" xml:space="preserve"><value>ការរំលឹក</value></data>
+  <data name="Reject" xml:space="preserve"><value>ការបដិសេធ</value></data>
+  <data name="Save" xml:space="preserve"><value>រក្សាទុក</value></data>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <data name="ExampleInvitationEmailMessage" xml:space="preserve">
+        <value>ឧទាហរណ៍នៃសារអ៊ីមែលអញ្ជើញ</value>
+    </data>
+    <data name="EmailMessage" xml:space="preserve">
+        <value>សារ៖</value>
+    </data>
+    <data name="EmailSubject" xml:space="preserve">
+        <value>ប្រធានបទ៖</value>
+    </data>
+    <data name="MainText" xml:space="preserve">
+        <value>អត្ថបទចម្បង៖</value>
+    </data>
+    <data name="DescriptionForPassword" xml:space="preserve">
+        <value>ការពិពណ៌នាអំពីពាក្យសម្ងាត់៖</value>
+    </data>
+    <data name="StartInterviewButton" xml:space="preserve">
+        <value>ប៊ូតុងចាប់ផ្តើមសម្ភាសន៍</value>
+    </data>
+    <data name="ShownPasswordIsRequired" xml:space="preserve">
+        <value>បង្ហាញតែក្នុងករណីដែលទាមទារ និងកំណត់ពាក្យសម្ងាត់ប៉ុណ្ណោះ។</value>
+    </data>
+    <data name="ExampleReminderEmailMessage" xml:space="preserve">
+        <value>ឧទាហរណ៍នៃសារអ៊ីមែលរំលឹក</value>
+    </data>
+    <data name="ExampleRejectEmailMessage" xml:space="preserve">
+        <value>ឧទាហរណ៍នៃសារបដិសេធអ៊ីមែល</value>
+    </data>
+    <data name="ReminderSetting" xml:space="preserve">
+        <value>ការកំណត់ការរំលឹក</value>
+    </data>
+    <data name="WelcomePage" xml:space="preserve">
+        <value>ទំព័រស្វាគមន៍</value>
+    </data>
+    <data name="ResumePage" xml:space="preserve">
+        <value>ទំព័របន្ត</value>
+    </data>
+    <data name="FinishPage" xml:space="preserve">
+        <value>ទំព័របញ្ចប់</value>
+    </data>
+    <data name="LinkToInterviewPage" xml:space="preserve">
+        <value>ការចុះចតសម្ភាសន៍តាមអ៊ីនធឺណិត</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>បោះបង់</value>
+    </data>
+    <data name="RejectEmailMessage" xml:space="preserve">
+        <value>បដិសេធ</value>
+    </data>
+    <data name="CompleteEmailMessage" xml:space="preserve">
+        <value>បញ្ចប់</value>
+    </data>
+    <data name="InvitationEmailMessage" xml:space="preserve">
+        <value>ការអញ្ជើញ</value>
+    </data>
+    <data name="ResumeEmailMessage" xml:space="preserve">
+        <value>បន្ត</value>
+    </data>
+    <data name="ReminderNoResponseEmailMessage" xml:space="preserve">
+        <value>គ្មានការឆ្លើយតប</value>
+    </data>
+    <data name="ReminderPartialResponseEmailMessage" xml:space="preserve">
+        <value>ការឆ្លើយតបដោយផ្នែក</value>
+    </data>
+    <data name="AdditionalSettings" xml:space="preserve">
+        <value>ការកំណត់បន្ថែម</value>
+    </data>
+    <data name="SendWithNoResponse" xml:space="preserve">
+        <value>ផ្ញើការរំលឹកទៅមនុស្សដែលគ្មានការឆ្លើយតប</value>
+    </data>
+    <data name="SendWithPartialResponse" xml:space="preserve">
+        <value>ផ្ញើការរំលឹកទៅកាន់មនុស្សដែលមានការឆ្លើយតបដោយផ្នែក</value>
+    </data>
+    <data name="DoNotSend" xml:space="preserve">
+        <value>កុំផ្ញើ</value>
+    </data>
+    <data name="AfterXDay" xml:space="preserve">
+        <value>បន្ទាប់ពីថ្ងៃ {{count}}</value>
+    </data>
+    <data name="AfterXWeek" xml:space="preserve">
+        <value>បន្ទាប់ពីសប្តាហ៍ {{count}}</value>
+    </data>
+    <data name="Description" xml:space="preserve">
+        <value>ការពិពណ៌នា៖</value>
+    </data>
+    <data name="FieldRequired" xml:space="preserve">
+        <value>វាលត្រូវបានទាមទារ។</value>
+    </data>
+    <data name="Title" xml:space="preserve">
+        <value>ចំណងជើង៖</value>
+    </data>
+    <data name="EmailTemplateDescription" xml:space="preserve">
+        <value>អ្នកអាចប្រើកន្លែងដាក់ %SURVEYNAME% នៅក្នុងអត្ថបទជាឈ្មោះនៃការស្ទង់មតិ</value>
+    </data>
+    <data name="InterviewDataInsertInTextDescription" xml:space="preserve">
+        <value>នៅក្នុងគំរូអ៊ីមែលនេះ អ្នកអាចប្រើកន្លែងដាក់ %question_variable% នៅក្នុងអត្ថបទជាចម្លើយលើសំណួរនៅក្នុងការសម្ភាសន៍។ សំណួរត្រូវតែមកពីកម្រិតកំពូលនៃកម្រងសំណួរ (មិនមែននៅក្នុងបញ្ជីឈ្មោះ)។</value>
+    </data>
+    <data name="InterviewDataInsertBarcodeDescription" xml:space="preserve">
+        <value>%question_variable:barcode% - បង្ហាញចម្លើយជា Barcode Code 128</value>
+    </data>
+    <data name="InterviewDataInsertQrCodeDescription" xml:space="preserve">
+        <value>%question_variable:qrcode% - បង្ហាញចម្លើយជា QR Code</value>
+    </data>
+    <data name="AnswerOn" xml:space="preserve">
+        <value>ចម្លើយនៅលើ {{variable}}</value>
+    </data>
+    <data name="CompletePage" xml:space="preserve">
+        <value>បញ្ចប់</value>
+    </data>
+    <data name="Complete" xml:space="preserve">
+        <value>បញ្ចប់</value>
+    </data>
+    <data name="NoteToSupervisor" xml:space="preserve">
+        <value>ចំណាំសម្រាប់អ្នកគ្រប់គ្រង</value>
+    </data>
+    <data name="Resume" xml:space="preserve">
+        <value>បន្ត</value>
+    </data>
+    <data name="StartNew" xml:space="preserve">
+        <value>ចាប់ផ្តើមសម្ភាសន៍ថ្មី។</value>
+    </data>
+    <data name="Sending" xml:space="preserve">
+        <value>កំពុងផ្ញើ</value>
+    </data>
+    <data name="NoErrors" xml:space="preserve">
+        <value>គ្មាន​កំហុស</value>
+    </data>
+    <data name="NothingWasSent" xml:space="preserve">
+        <value>គ្មានអ្វីត្រូវបានផ្ញើទេ។</value>
+    </data>
+    <data name="ProcessCancelled" xml:space="preserve">
+        <value>ដំណើរការនេះត្រូវបានលុបចោល</value>
+    </data>
+    <data name="DownloadErrors" xml:space="preserve">
+        <value>ទាញយកបញ្ជីកិច្ចការដែលមានកំហុស</value>
+    </data>
+    <data name="SendingFailed" xml:space="preserve">
+        <value>ការផ្ញើការអញ្ជើញបានបរាជ័យ។ សូមទាក់ទងអ្នកគ្រប់គ្រងម៉ាស៊ីនមេរបស់អ្នក ដើម្បីពិនិត្យមើលការកំណត់អ្នកផ្តល់អ៊ីមែល</value>
+    </data>
+    <data name="TotalSent" xml:space="preserve">
+        <value>ការអញ្ជើញ {{ totalCount }} ដើម្បីផ្ញើ</value>
+    </data>
+    <data name="TotalProcessed" xml:space="preserve">
+        <value>{{ processedCount }} បានផ្ញើដោយជោគជ័យ</value>
+    </data>
+    <data name="TotalWithErrors" xml:space="preserve">
+        <value>{{ withErrorsCount }} មិនត្រូវបានផ្ញើដោយសារតែមានកំហុស។</value>
+    </data>
+</root>

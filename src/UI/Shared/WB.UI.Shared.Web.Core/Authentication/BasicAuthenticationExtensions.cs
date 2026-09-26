@@ -8,10 +8,15 @@ namespace WB.UI.Shared.Web.Authentication
 {
     public static class BasicAuthenticationExtensions
     {
-        public static BasicCredentials? ParseBasicCredentials(this IHeaderDictionary headerDictionary)
+        public static BasicCredentials? ParseBasicCredentials(this IHeaderDictionary headerDictionary,
+            string? authenticationScheme = null)
         {
             var authorizationHeader = headerDictionary[HeaderNames.Authorization];
             AuthenticationHeaderValue authHeader = AuthenticationHeaderValue.Parse(authorizationHeader!);
+            if (authenticationScheme != null
+                && !string.Equals(authHeader.Scheme, authenticationScheme, StringComparison.OrdinalIgnoreCase))
+                return null;
+
             if (authHeader.Parameter == null)
                 return null;
             

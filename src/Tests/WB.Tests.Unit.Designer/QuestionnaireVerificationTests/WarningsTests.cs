@@ -604,7 +604,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
         [Test]
         public void section_with_4_questions_and_other_big_section()
-            => Create.QuestionnaireDocument(children: new IComposite[]
+            => Create.QuestionnaireDocumentWithoutChildren(children: new IComposite[]
                 {
                     Create.Section(children: new []
                     {
@@ -664,6 +664,34 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     }),
                 })
                 .ExpectNoWarning("WB0223");
+
+        [Test]
+        public void cover_page_with_4_questions_and_other_big_section()
+        {
+            var coverId = Guid.NewGuid();
+            var document = Create.QuestionnaireDocumentWithoutChildren(children: new IComposite[]
+                {
+                    Create.Section(sectionId: coverId, children: new []
+                    {
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                    }),
+                    Create.Section(children: new []
+                    {
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                    }),
+                });
+            document.CoverPageSectionId = coverId;
+            document.ExpectNoWarning("WB0223");
+        }
 
         [Test]
         public void section_with_10_subsections_at_one_level()

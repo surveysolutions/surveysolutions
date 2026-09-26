@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="CannotUpdate_CurrentUserDoesNotExists" xml:space="preserve">
+        <value>Tidak dapat memperbarui informasi pengguna karena pengguna saat ini tidak ada</value>
+    </data>
+    <data name="CannotUpdate_CurrentUserIsArchived" xml:space="preserve">
+        <value>Tidak dapat memperbarui informasi pengguna karena pengguna saat ini diarsipkan</value>
+    </data>
+    <data name="ConfirmPasswordErrorMassage" xml:space="preserve">
+        <value>Kata sandi dan kata sandi konfirmasi tidak cocok</value>
+    </data>
+    <data name="ConfirmPasswordFieldName" xml:space="preserve">
+        <value>Konfirmasikan kata sandi</value>
+    </data>
+    <data name="EmailErrorMessage" xml:space="preserve">
+        <value>Bukan alamat email yang valid</value>
+    </data>
+    <data name="EmailFieldName" xml:space="preserve">
+        <value>Alamat email</value>
+    </data>
+    <data name="AllowRelinkTablet" xml:space="preserve">
+        <value>Izinkan penautan ulang ke perangkat lain jika data di perangkat asli hilang.</value>
+    </data>
+    <data name="IsLockedFieldName" xml:space="preserve">
+        <value>Dikunci oleh Admin atau HQ</value>
+    </data>
+    <data name="PasswordErrorMessage" xml:space="preserve">
+        <value>Kata sandi harus mengandung setidaknya satu angka, satu karakter huruf besar, dan satu karakter huruf kecil</value>
+    </data>
+    <data name="PasswordFieldName" xml:space="preserve">
+        <value>Kata sandi</value>
+    </data>
+    <data name="PasswordLengthMessage" xml:space="preserve">
+        <value>Kata sandi minimal harus berisi {2} karakter</value>
+    </data>
+    <data name="RequiredEmailErrorMessage" xml:space="preserve">
+        <value>Email diperlukan</value>
+    </data>
+    <data name="RequiredPasswordErrorMessage" xml:space="preserve">
+        <value>Kata sandi diperlukan</value>
+    </data>
+    <data name="RequiredUserNameErrorMessage" xml:space="preserve">
+        <value>Nama pengguna diperlukan</value>
+    </data>
+    <data name="UserNameErrorMessage" xml:space="preserve">
+        <value>Nama login harus terdiri dari 3 hingga 15 karakter, dan hanya boleh berisi huruf, angka, dan simbol garis bawah. Huruf harus dari alfabet Latin (Inggris) saja: 'A'..'Z' atau 'a'..'z'. Huruf lain (Sirilik, Arab, dll.) tidak valid untuk digunakan dalam nama login.</value>
+    </data>
+    <data name="UserNameFieldName" xml:space="preserve">
+        <value>Nama belakang</value>
+    </data>
+    <data name="InvalidUser" xml:space="preserve">
+        <value>Pengguna tidak valid</value>
+    </data>
+    <data name="PersonNameFieldName" xml:space="preserve">
+        <value>Nama lengkap</value>
+    </data>
+    <data name="PhoneNumberFieldName" xml:space="preserve">
+        <value>Nomor telepon</value>
+    </data>
+    <data name="VerificationCodeFieldName" xml:space="preserve">
+        <value>Kode verifikasi</value>
+    </data>
+    <data name="PhoneErrorMessage" xml:space="preserve">
+        <value>Nomor telepon tidak valid</value>
+    </data>
+    <data name="PersonNameErrorMessage" xml:space="preserve">
+        <value>Nama orang tidak boleh berisi lebih dari karakter {1}</value>
+    </data>
+    <data name="IsLockedBySupervisorFieldName" xml:space="preserve">
+        <value>Dikunci oleh Supervisor</value>
+    </data>
+    <data name="RequiredSupervisorErrorMessage" xml:space="preserve">
+        <value>Diperlukan penyelia</value>
+    </data>
+    <data name="SupervisorFieldName" xml:space="preserve">
+        <value>Pengawas</value>
+    </data>
+    <data name="LogOnModel_UserName" xml:space="preserve">
+        <value>Nama belakang</value>
+    </data>
+    <data name="LogOnModel_Password" xml:space="preserve">
+        <value>Kata sandi</value>
+    </data>
+    <data name="TroubleshootModel_InterviewId_ErrorMessage" xml:space="preserve">
+        <value>Silakan masukkan GUID yang valid dalam format berikut xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</value>
+    </data>
+    <data name="UserBatchUploadModel_Required_ErrorMessage" xml:space="preserve">
+        <value>Anda harus memilih file untuk diunggah</value>
+    </data>
+    <data name="UserBatchUploadModel_Validation_ErrorMessage" xml:space="preserve">
+        <value>Silakan pilih file</value>
+    </data>
+    <data name="UserBatchUploadModel_File_CSV_File" xml:space="preserve">
+        <value>Berkas CSV</value>
+    </data>
+    <data name="BatchUploadModel_Required" xml:space="preserve">
+        <value>Anda harus memilih file untuk diunggah</value>
+    </data>
+    <data name="BatchUploadModel_ValidationErrorMessage" xml:space="preserve">
+        <value>Silakan pilih file</value>
+    </data>
+    <data name="BatchUploadModel_FileName" xml:space="preserve">
+        <value>Berkas CSV</value>
+    </data>
+    <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
+        <value>Judul kuesioner wajib diisi</value>
+    </data>
+    <data name="CloneQuestionnaireModel_NewTitle_Label" xml:space="preserve">
+        <value>Judul</value>
+    </data>
+    <data name="PersonNameAllowedCharactersErrorMessage" xml:space="preserve">
+        <value>Nama orang memiliki karakter yang tidak valid. Hanya huruf, titik, spasi, dan apostrof yang diperbolehkan</value>
+    </data>
+    <data name="PhoneErrorLength" xml:space="preserve">
+        <value>Nomor telepon tidak boleh berisi lebih dari karakter {1}</value>
+    </data>
+    <data name="OldPasswordErrorMessage" xml:space="preserve">
+        <value>Untuk mengubah kata sandi, berikan kata sandi yang sudah ada dan valid</value>
+    </data>
+    <data name="OldPasswordFieldName" xml:space="preserve">
+        <value>Kata sandi lama</value>
+    </data>
+    <data name="RestrictedAccountMessage" xml:space="preserve">
+        <value>Akun ini dibatasi untuk melakukan tindakan ini</value>
+    </data>
+    <data name="RestrictedAccount" xml:space="preserve">
+        <value>Akun ini dibatasi</value>
+    </data>
+    <data name="UserName_Taken" xml:space="preserve">
+        <value>Silakan pilih nama pengguna lain</value>
+    </data>
+    <data name="ConfirmNewPasswordFieldName" xml:space="preserve">
+        <value>Konfirmasikan kata sandi baru</value>
+    </data>
+    <data name="NewPasswordFieldName" xml:space="preserve">
+        <value>Kata sandi baru</value>
+    </data>
+    <data name="ConfirmPasswordRequired" xml:space="preserve">
+        <value>Konfirmasi kata sandi diperlukan</value>
+    </data>
+    <data name="WorkspaceRequired" xml:space="preserve">
+        <value>Ruang kerja diperlukan</value>
+    </data>
+    <data name="WorkspaceMissing" xml:space="preserve">
+        <value>Ruang kerja tidak ditemukan</value>
+    </data>
+    <data name="UserRoleRequired" xml:space="preserve">
+        <value>Peran pengguna diperlukan</value>
+    </data>
+    <data name="UserIsLockedByHq" xml:space="preserve">
+        <value>Pengguna dikunci oleh Kantor Pusat</value>
+    </data>
+    <data name="MandatoryField" xml:space="preserve">
+        <value>Bidang ini wajib diisi</value>
+    </data>
+    <data name="PasswordRequiresDigit" xml:space="preserve">
+        <value>Kata sandi harus memiliki setidaknya satu digit ('0'-'9').</value>
+    </data>
+    <data name="PasswordRequiresLower" xml:space="preserve">
+        <value>Kata sandi harus memiliki setidaknya satu huruf kecil ('a'-'z').</value>
+    </data>
+    <data name="PasswordRequiresNonAlphanumeric" xml:space="preserve">
+        <value>Kata sandi harus memiliki setidaknya satu karakter non alfanumerik.</value>
+    </data>
+    <data name="PasswordRequiresUniqueChars" xml:space="preserve">
+        <value>Kata sandi harus menggunakan setidaknya {0} karakter yang berbeda.</value>
+    </data>
+    <data name="PasswordRequiresUpper" xml:space="preserve">
+        <value>Kata sandi harus memiliki setidaknya satu huruf besar ('A'-'Z').</value>
+    </data>
+    <data name="PasswordTooShort" xml:space="preserve">
+        <value>Kata sandi minimal harus berupa karakter {0}.</value>
+    </data>
+    <data name="PasswordChangeRequired" xml:space="preserve">
+        <value>Kata sandi Anda telah disetel ulang. Anda harus mengubahnya untuk mendapatkan akses ke situs.</value>
+    </data>
+</root>

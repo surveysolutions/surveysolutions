@@ -145,7 +145,7 @@
     <value>Shkarkoni formatin .tab për t’u ngarkuar nga përdoruesi </value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>Email-i</value>
   </data>
   <data name="EstimatedTime" xml:space="preserve">
     <value>Ka mbetur afërsisht {{estimatedTime}} </value>
@@ -227,5 +227,18 @@
   </data>
   <data name="VerificationFailed" xml:space="preserve">
     <value>Verifikimi dështoi</value>
+  </data>
+
+
+  <data name="Workspace" xml:space="preserve">
+    <value>Hapësira e punës</value>
+  </data>
+
+  <data name="SelectWorkspace" xml:space="preserve">
+    <value>Zgjidh hapësirën e punës</value>
+  </data>
+
+  <data name="SelectWorkspaceDescription" xml:space="preserve">
+    <value>Nëse në skedarin e grupit nuk është caktuar hapësirë pune, përdor këtë hapësirë pune si parazgjedhje</value>
   </data>
 </root>

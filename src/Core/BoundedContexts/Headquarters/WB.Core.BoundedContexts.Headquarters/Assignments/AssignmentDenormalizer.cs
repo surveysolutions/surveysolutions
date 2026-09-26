@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
@@ -12,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Assignment;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
@@ -25,7 +27,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         IUpdateHandler<Assignment, AssignmentAudioRecordingChanged>,
         IUpdateHandler<Assignment, AssignmentQuantityChanged>,
         IUpdateHandler<Assignment, AssignmentTargetAreaChanged>,
-        IUpdateHandler<Assignment, AssignmentReceivedByTablet>
+        IUpdateHandler<Assignment, AssignmentReceivedByTablet>,
+        IUpdateHandler<Assignment, AssignmentCompleted>,
+        IUpdateHandler<Assignment, AssignmentClosed>,
+        IUpdateHandler<Assignment, AssignmentReopened>
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
 
@@ -54,6 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             state.Answers = @event.Payload.Answers;
             state.ProtectedVariables = @event.Payload.ProtectedVariables.ToList();
+            state.AudioAuditScope = @event.Payload.AudioAuditScope?.ToList() ?? new List<string>();
             
             var questionnaire = questionnaireStorage.GetQuestionnaireOrThrow(state.QuestionnaireId, null);
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToImmutableHashSet();
@@ -171,6 +177,36 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentDeleted> @event)
         {
             return null;
+        }
+
+        public Assignment Update(Assignment state, IPublishedEvent<AssignmentCompleted> @event)
+        {
+            return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
+                assignment =>
+                {
+                    assignment.Status = AssignmentStatus.Completed;
+                    assignment.StatusComment = @event.Payload.Comment;
+                });
+        }
+
+        public Assignment Update(Assignment state, IPublishedEvent<AssignmentClosed> @event)
+        {
+            return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
+                assignment =>
+                {
+                    assignment.Status = AssignmentStatus.Closed;
+                    assignment.StatusComment = @event.Payload.Comment;
+                });
+        }
+
+        public Assignment Update(Assignment state, IPublishedEvent<AssignmentReopened> @event)
+        {
+            return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
+                assignment =>
+                {
+                    assignment.Status = AssignmentStatus.Open;
+                    assignment.StatusComment = @event.Payload.Comment;
+                });
         }
 
         private Assignment UpdateAssignment(Assignment assignment, DateTimeOffset dateTimeOffset, Action<Assignment> updater)

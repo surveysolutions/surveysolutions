@@ -12,7 +12,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Enumerator
 {
     [AuthorizeByRole(UserRoles.Interviewer, UserRoles.Supervisor)]
     [Route("api/enumerator/v3/interviews")]
-    public class EnumeratorInterviewsApiV1Controller : ControllerBase
+    public class EnumeratorInterviewsApiV1Controller : DataCollectionControllerBase
     {
         private readonly IHeadquartersEventStore eventStore;
 

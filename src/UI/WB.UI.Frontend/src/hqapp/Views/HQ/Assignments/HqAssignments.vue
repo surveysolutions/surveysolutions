@@ -1,14 +1,22 @@
 <template>
-    <HqLayout :title="title" :hasFilter="true" :topicButton="$t('Assignments.NewAssignment')"
+    <HqLayout :title="title"
+        :hasFilter="true"
+        :topicButton="$t('Assignments.NewAssignment')"
         :topicButtonRef="config.isSupervisor ? null : config.api.surveySetup">
         <template v-slot:headers>
             <div class="topic-with-button">
                 <h1 v-dompurify-html='title'></h1>
-                <a href="MapDashboard" class="btn" style="margin-right:30px;padding:0;">
-                    <img style="padding-top:2px;" height="26px;" src="/img/google-maps-markers/map.png"
-                        alt="Map Dashboard" :title="$t('Common.MapDashboard')" />
+                <a href="MapDashboard"
+                    class="btn"
+                    style="margin-right:30px;padding:0;">
+                    <img style="padding-top:2px;"
+                        height="26px;"
+                        src="/img/google-maps-markers/map.png"
+                        alt="Map Dashboard"
+                        :title="$t('Common.MapDashboard')" />
                 </a>
-                <a v-if="!config.isSupervisor" class="btn btn-success"
+                <a v-if="!config.isSupervisor"
+                    class="btn btn-success"
                     :href="config.isSupervisor ? null : config.api.surveySetup">
                     {{ $t('Assignments.NewAssignment') }}
                 </a>
@@ -19,115 +27,262 @@
             <Filters>
                 <FilterBlock :title="$t('Common.Questionnaire')"
                     :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')">
-                    <Typeahead control-id="questionnaireId" :placeholder="$t('Common.AllQuestionnaires')"
-                        :value="questionnaireId" :values="config.questionnaires"
+                    <Typeahead control-id="questionnaireId"
+                        :placeholder="$t('Common.AllQuestionnaires')"
+                        :value="questionnaireId"
+                        :values="config.questionnaires"
                         v-on:selected="questionnaireSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Common.QuestionnaireVersion')"
                     :tooltip="$t('Assignments.Tooltip_Filter_QuestionnaireVersion')">
-                    <Typeahead control-id="questionnaireVersion" :placeholder="$t('Common.AllVersions')"
+                    <Typeahead control-id="questionnaireVersion"
+                        :placeholder="$t('Common.AllVersions')"
                         :values="questionnaireId == null ? null : questionnaireId.versions"
-                        :value="questionnaireVersion" :disabled="questionnaireId == null"
+                        :value="questionnaireVersion"
+                        :disabled="questionnaireId == null"
                         v-on:selected="questionnaireVersionSelected" />
                 </FilterBlock>
 
-                <FilterBlock :title="$t('Common.Responsible')" :tooltip="$t('Assignments.Tooltip_Filter_Responsible')">
-                    <Typeahead control-id="responsibleId" :placeholder="$t('Common.AllResponsible')"
-                        :value="responsibleId" :ajax-params="responsibleParams" v-on:selected="userSelected"
+                <FilterBlock :title="$t('Common.Responsible')"
+                    :tooltip="$t('Assignments.Tooltip_Filter_Responsible')">
+                    <Typeahead control-id="responsibleId"
+                        :placeholder="$t('Common.AllResponsible')"
+                        :value="responsibleId"
+                        :ajax-params="responsibleParams"
+                        v-on:selected="userSelected"
                         :fetch-url="config.api.responsible">
                     </Typeahead>
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Assignments.ReceivedByTablet')"
                     :tooltip="$t('Assignments.Tooltip_Filter_Received')">
-                    <Typeahead control-id="recieved-by-tablet" noSearch noClear :values="ddlReceivedByTablet"
-                        :value="receivedByTablet" v-on:selected="receivedByTabletSelected" />
+                    <Typeahead control-id="recieved-by-tablet"
+                        noSearch
+                        noClear
+                        :values="ddlReceivedByTablet"
+                        :value="receivedByTablet"
+                        v-on:selected="receivedByTabletSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Assignments.ShowArchived')"
                     :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')">
-                    <Typeahead control-id="show_archived" noSearch noClear :values="ddlShowArchive" :value="showArchive"
+                    <Typeahead control-id="show_archived"
+                        noSearch
+                        noClear
+                        :values="ddlShowArchive"
+                        :value="showArchive"
                         v-on:selected="showArchiveSelected" />
+                </FilterBlock>
+
+                <FilterBlock :title="$t('Assignments.Status')">
+                    <Typeahead control-id="status_filter"
+                        noSearch
+                        noClear
+                        allowEmpty
+                        :values="ddlStatus"
+                        :value="status"
+                        v-on:selected="statusSelected" />
                 </FilterBlock>
             </Filters>
         </template>
 
-        <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addParamsToRequest"
-            :wrapperClass="{ 'table-wrapper': true }" @cell-clicked="cellClicked"
-            @selectedRowsChanged="rows => selectedRows = rows" @totalRows="(rows) => totalRows = rows"
-            @ajaxComlpete="isLoading = false" @page="resetSelection" :selectable="showSelectors">
-            <div class="panel panel-table" id="pnlAssignmentsContextActions" v-if="selectedRows.length">
+        <DataTables ref="table"
+            :tableOptions="tableOptions"
+            :addParamsToRequest="addParamsToRequest"
+            :wrapperClass="{ 'table-wrapper': true }"
+            @cell-clicked="cellClicked"
+            @selectedRowsChanged="rows => selectedRows = rows"
+            @totalRows="(rows) => totalRows = rows"
+            @ajaxComlpete="isLoading = false"
+            @page="resetSelection"
+            :selectable="showSelectors">
+            <div class="panel panel-table"
+                id="pnlAssignmentsContextActions"
+                v-if="selectedRows.length">
                 <div class="panel-body">
-                    <input class="double-checkbox-white" type="checkbox" checked disabled />
+                    <input class="double-checkbox-white"
+                        type="checkbox"
+                        checked
+                        disabled />
                     <label>
                         <span class="tick"></span>
                         {{ $t("Assignments.AssignmentsSelected", { count: selectedRows.length }) }}
                     </label>
 
-                    <button class="btn btn-lg btn-primary" id="btnUnarchiveSelected"
-                        v-if="showArchive.key && config.isHeadquarter" @click="unarchiveSelected">{{
-                            $t("Assignments.Unarchive") }}</button>
+                    <button class="btn btn-lg btn-primary"
+                        id="btnUnarchiveSelected"
+                        v-if="showArchive.key && config.isHeadquarter"
+                        @click="unarchiveSelected">{{
+                        $t("Assignments.Unarchive") }}</button>
 
-                    <button class="btn btn-lg btn-primary" id="btnAssignSelected" v-if="!showArchive.key"
+                    <button class="btn btn-lg btn-primary"
+                        id="btnAssignSelected"
+                        v-if="!showArchive.key"
                         @click="assignSelected">{{ $t("Common.Assign") }}</button>
 
-                    <button class="btn btn-lg btn-warning" id="btnCloseSelected"
-                        v-if="config.isHeadquarter && !showArchive.key" @click="closeSelected">{{
-                            $t("Assignments.Close")
-                        }}</button>
+                    <button class="btn btn-lg btn-warning"
+                        id="btnDownsizeSelected"
+                        v-if="config.isHeadquarter && !showArchive.key"
+                        @click="downsizeSelected">{{
+                        $t("Assignments.Downsize")
+                    }}</button>
 
-                    <button class="btn btn-lg btn-danger" id="btnArchiveSelected"
-                        v-if="!showArchive.key && config.isHeadquarter" @click="archiveSelected">{{
-                            $t("Assignments.Archive") }}</button>
+                    <button class="btn btn-lg btn-primary"
+                        id="btnCloseSelected"
+                        v-if="(config.isHeadquarter || (config.isSupervisor && config.allowSupervisorChangeAssignmentStatus)) && !showArchive.key"
+                        :disabled="!canComplete"
+                        @click="bulkChangeStatus('Closed', 'closeModal')">{{
+                        $t("Assignments.Close") }}</button>
+
+                    <button class="btn btn-lg btn-primary"
+                        id="btnReopenSelected"
+                        v-if="(config.isHeadquarter || (config.isSupervisor && config.allowSupervisorChangeAssignmentStatus)) && !showArchive.key"
+                        :disabled="!canReopen"
+                        @click="bulkChangeStatus('Open', 'reopenModal')">{{
+                        $t("Assignments.Reopen") }}</button>
+
+                    <button class="btn btn-lg btn-danger"
+                        id="btnArchiveSelected"
+                        v-if="!showArchive.key && config.isHeadquarter"
+                        @click="archiveSelected">{{
+                        $t("Assignments.Archive") }}</button>
                 </div>
             </div>
         </DataTables>
 
-        <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
-            <p>{{ $t("Assignments.NumberOfAssignmentsAffected", { count: selectedRows.length }) }}</p>
+        <ModalFrame ref="closeModal"
+            :title="$t('Assignments.CloseAssignmentTitle')">
+            <p>{{ $t('Assignments.CloseAssignmentMessage') }}</p>
             <form onsubmit="return false;">
-                <div class="form-group" :class="{ 'has-warning': showWebModeReassignWarning }">
-                    <label class="control-label" for="newResponsibleId">{{ $t("Assignments.SelectResponsible")
-                        }}</label>
-                    <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
-                        :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
-                        :fetch-url="config.api.responsible"></Typeahead>
-                    <span class="help-block" v-if="showWebModeReassignWarning">
-                        {{ $t('Assignments.WebModeReassignToNonInterviewer', { count: selectedRows.length }) }}
-                    </span>
-                </div>
-
                 <div class="form-group">
-                    <label class="control-label" for="commentsId">
+                    <label class="control-label"
+                        for="completeCommentId">
                         {{ $t("Assignments.Comments") }}
                     </label>
-                    <textarea control-id="commentsId" v-model="reassignComment"
-                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="6" maxlength="500"
+                    <textarea control-id="completeCommentId"
+                        v-model="statusChangeComment"
+                        :placeholder="$t('Assignments.EnterComments')"
+                        name="comments"
+                        rows="4"
+                        maxlength="500"
+                        autocomplete="off"
                         class="form-control" />
                 </div>
             </form>
             <template v-slot:actions>
                 <div>
-                    <button type="button" class="btn btn-primary" @click="assign" :disabled="!newResponsibleId">{{
-                        $t("Common.Assign") }}</button>
-                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                        }}</button>
+                    <button type="button"
+                        class="btn btn-primary"
+                        @click="confirmStatusChange">{{
+                            $t("Assignments.Close") }}</button>
+                    <button type="button"
+                        class="btn btn-link"
+                        data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                    }}</button>
                 </div>
             </template>
         </ModalFrame>
 
-        <ModalFrame ref="closeModal" :title="$t('Pages.ConfirmationNeededTitle')">
+        <ModalFrame ref="reopenModal"
+            :title="$t('Assignments.ReopenAssignmentTitle')">
+            <p>{{ $t('Assignments.ReopenAssignmentMessage') }}</p>
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label class="control-label"
+                        for="reopenCommentId">
+                        {{ $t("Assignments.Comments") }}
+                    </label>
+                    <textarea control-id="reopenCommentId"
+                        v-model="statusChangeComment"
+                        :placeholder="$t('Assignments.EnterComments')"
+                        name="comments"
+                        rows="4"
+                        maxlength="500"
+                        autocomplete="off"
+                        class="form-control" />
+                </div>
+            </form>
+            <template v-slot:actions>
+                <div>
+                    <button type="button"
+                        class="btn btn-primary"
+                        @click="confirmStatusChange">{{
+                            $t("Assignments.Reopen") }}</button>
+                    <button type="button"
+                        class="btn btn-link"
+                        data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                    }}</button>
+                </div>
+            </template>
+        </ModalFrame>
+
+        <ModalFrame ref="assignModal"
+            :title="$t('Common.Assign')">
+            <p>{{ $t("Assignments.NumberOfAssignmentsAffected", { count: selectedRows.length }) }}</p>
+            <form onsubmit="return false;">
+                <div class="form-group"
+                    :class="{ 'has-warning': showWebModeReassignWarning }">
+                    <label class="control-label"
+                        for="newResponsibleId">{{ $t("Assignments.SelectResponsible")
+                        }}</label>
+                    <Typeahead control-id="newResponsibleId"
+                        :placeholder="$t('Common.Responsible')"
+                        :value="newResponsibleId"
+                        :ajax-params="{}"
+                        @selected="newResponsibleSelected"
+                        :fetch-url="config.api.responsible"></Typeahead>
+                    <span class="help-block"
+                        v-if="showWebModeReassignWarning">
+                        {{ $t('Assignments.WebModeReassignToNonInterviewer', { count: selectedRows.length }) }}
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label"
+                        for="commentsId">
+                        {{ $t("Assignments.Comments") }}
+                    </label>
+                    <textarea control-id="commentsId"
+                        v-model="reassignComment"
+                        :placeholder="$t('Assignments.EnterComments')"
+                        name="comments"
+                        rows="6"
+                        maxlength="500"
+                        class="form-control" />
+                </div>
+            </form>
+            <template v-slot:actions>
+                <div>
+                    <button type="button"
+                        class="btn btn-primary"
+                        @click="assign"
+                        :disabled="!newResponsibleId">{{
+                            $t("Common.Assign") }}</button>
+                    <button type="button"
+                        class="btn btn-link"
+                        data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                    }}</button>
+                </div>
+            </template>
+        </ModalFrame>
+
+        <ModalFrame ref="downsizeModal"
+            :title="$t('Pages.ConfirmationNeededTitle')">
             <p v-if="selectedRows.length === 1">{{ singleCloseMessage }}</p>
             <p v-else>{{ $t("Assignments.MultipleAssignmentsClose", { count: selectedRows.length }) }}</p>
 
             <template v-slot:actions>
                 <div>
-                    <button type="button" class="btn btn-primary" :disabled="isWebModeAssignmentSelected"
+                    <button type="button"
+                        class="btn btn-primary"
+                        :disabled="isWebModeAssignmentSelected"
                         @click="close">{{
-                            $t("Assignments.Close") }}</button>
-                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                        }}</button>
+                            $t("Assignments.Downsize") }}</button>
+                    <button type="button"
+                        class="btn btn-link"
+                        data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                    }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -135,19 +290,27 @@
         <ModalFrame ref="editAudioEnabledModal"
             :title="$t('Assignments.ChangeAudioRecordingModalTitle', { id: editedRowId })">
             <p>{{ $t("Assignments.AudioRecordingExplanation") }}</p>
+            <p v-if="editedHasAudioAuditScope" class="text-info">
+                {{ $t("Assignments.AudioRecordingScopeNotice") }}
+            </p>
             <form onsubmit="return false;">
                 <div class="form-group">
-                    <Checkbox :label="$t('Assignments.AudioRecordingEnable')" name="audioRecordingEnabled"
+                    <Checkbox :label="$t('Assignments.AudioRecordingEnable')"
+                        name="audioRecordingEnabled"
                         v-model="editedAudioRecordingEnabled" />
                 </div>
             </form>
             <template v-slot:actions>
                 <div>
-                    <button type="button" class="btn btn-primary" @click="upateAudioRecording"
+                    <button type="button"
+                        class="btn btn-primary"
+                        @click="upateAudioRecording"
                         :disabled="!showSelectors">{{
                             $t("Common.Save") }}</button>
-                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                        }}</button>
+                    <button type="button"
+                        class="btn btn-link"
+                        data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                    }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -158,15 +321,29 @@
             <p v-if="!canEditQuantity">
                 <b>{{ $t("Assignments.AssignmentExpectedInWebMode") }}</b>
             </p>
-            <Form ref="quantityForm" onsubmit="return false;" v-slot="{ meta }">
-                <div class="form-group" v-bind:class="{ 'has-error': meta.valid == false }">
-                    <label class="control-label" for="newQuantity">
+            <Form ref="quantityForm"
+                onsubmit="return false;"
+                v-slot="{ meta }">
+                <div class="form-group"
+                    v-bind:class="{ 'has-error': meta.valid == false }">
+                    <label class="control-label"
+                        for="newQuantity">
                         {{ $t("Assignments.Expected") }}
                     </label>
-                    <Field type="text" class="form-control" v-model.trim="editedQuantity" name="editedQuantity"
-                        :rules="validateQuantity" :data-vv-as="$t('Assignments.Expected')" maxlength="5"
-                        autocomplete="off" @keyup.enter="updateQuantity" id="newQuantity" :disabled="!canEditQuantity"
-                        :validateOnBlur="true" :validateOnChange="true" :validateOnInput="true" />
+                    <Field type="text"
+                        class="form-control"
+                        v-model.trim="editedQuantity"
+                        name="editedQuantity"
+                        :rules="validateQuantity"
+                        :data-vv-as="$t('Assignments.Expected')"
+                        maxlength="5"
+                        autocomplete="off"
+                        @keyup.enter="updateQuantity"
+                        id="newQuantity"
+                        :disabled="!canEditQuantity"
+                        :validateOnBlur="true"
+                        :validateOnChange="true"
+                        :validateOnInput="true" />
                     <span class="text-danger">
                         <ErrorMessage name="editedQuantity" />
                     </span>
@@ -174,10 +351,14 @@
             </Form>
             <template v-slot:actions>
                 <div>
-                    <button type="button" class="btn btn-primary" :disabled="!showSelectors || !canEditQuantity"
+                    <button type="button"
+                        class="btn btn-primary"
+                        :disabled="!showSelectors || !canEditQuantity"
                         @click="updateQuantity">{{ $t("Common.Save") }}</button>
-                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                        }}</button>
+                    <button type="button"
+                        class="btn btn-link"
+                        data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                    }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -214,7 +395,7 @@
 
 <script>
 import * as toastr from 'toastr'
-import { isEqual, map, join, assign, findIndex } from 'lodash'
+import { isEqual, map, join, assign, findIndex } from 'lodash-es'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 import { RoleNames } from '~/shared/constants'
@@ -243,13 +424,18 @@ export default {
             totalRows: 0,
             showArchive: null,
             receivedByTablet: null,
+            status: null,
             newResponsibleId: null,
             reassignComment: null,
             editedRowId: null,
             editedQuantity: null,
             editedAudioRecordingEnabled: null,
+            editedHasAudioAuditScope: false,
             canEditQuantity: null,
             mode: null,
+            statusChangeIds: [],
+            statusChangeTargetStatus: null,
+            statusChangeComment: null,
         }
     },
 
@@ -287,9 +473,21 @@ export default {
             return this.anyWebModeAssignmentSelected && this.newResponsibleId.iconClass !== RoleNames.INTERVIEWER.toLowerCase()
         },
 
+        canComplete() {
+            if (this.selectedRows.length === 0 || (this.showArchive && this.showArchive.key)) return false
+            const data = this.$refs.table.table.rows({ selected: true }).data()
+            return Array.from(data).some(r => r.status === 'Open' || r.status === 'Completed')
+        },
+
+        canReopen() {
+            if (this.selectedRows.length === 0 || (this.showArchive && this.showArchive.key)) return false
+            const data = this.$refs.table.table.rows({ selected: true }).data()
+            return Array.from(data).some(r => r.status === 'Completed' || r.status === 'Closed')
+        },
+
         ddlReceivedByTablet() {
             return [
-                { key: 'All', value: this.$t('Assignments.ReceivedByTablet_All') },
+                { key: 'All', value: this.$t('Assignments.Filter_ShowAll') },
                 { key: 'Received', value: this.$t('Assignments.ReceivedByTablet_Received') },
                 { key: 'NotReceived', value: this.$t('Assignments.ReceivedByTablet_NotReceived') },
             ]
@@ -298,6 +496,14 @@ export default {
             return [
                 { key: false, value: this.$t('Assignments.Active') },
                 { key: true, value: this.$t('Assignments.Archived') },
+            ]
+        },
+        ddlStatus() {
+            return [
+                { key: null, value: this.$t('Assignments.Filter_ShowAll') },
+                { key: 'Open', value: this.$t('Assignments.StatusOpen') },
+                { key: 'Completed', value: this.$t('Assignments.StatusCompleted') },
+                { key: 'Closed', value: this.$t('Assignments.StatusClosed') },
             ]
         },
 
@@ -351,6 +557,21 @@ export default {
                         }
                         resultString += '</span>'
                         return resultString
+                    },
+                },
+                {
+                    data: 'status',
+                    name: 'Status',
+                    title: this.$t('Assignments.Status'),
+                    searchable: false,
+                    orderable: true,
+                    render(data) {
+                        const statusMap = {
+                            'Open': self.$t('Assignments.StatusOpen'),
+                            'Completed': self.$t('Assignments.StatusCompleted'),
+                            'Closed': self.$t('Assignments.StatusClosed'),
+                        }
+                        return statusMap[data] || data
                     },
                 },
                 {
@@ -444,8 +665,11 @@ export default {
                     title: this.$t('Assignments.IsAudioRecordingEnabled'),
                     tooltip: this.$t('Assignments.Tooltip_Table_IsAudioRecordingEnabled'),
                     searchable: false,
-                    render(data) {
-                        return data ? self.$t('Common.Yes') : self.$t('Common.No')
+                    orderable: false,
+                    render(data, type, row) {
+                        if (data) return self.$t('Common.Yes')
+                        if (row.hasAudioAuditScope) return self.$t('Assignments.AudioRecordingSelective')
+                        return self.$t('Common.No')
                     },
                 },
                 {
@@ -547,6 +771,7 @@ export default {
             requestData.receivedByTablet = (this.receivedByTablet || {}).key
             requestData.teamId = this.teamId
             requestData.id = this.id
+            requestData.status = (this.status || {}).key
         },
 
         userSelected(newValue) {
@@ -568,6 +793,10 @@ export default {
 
         receivedByTabletSelected(newValue) {
             this.receivedByTablet = newValue
+        },
+
+        statusSelected(newValue) {
+            this.status = newValue
         },
 
         showArchiveSelected(newValue) {
@@ -641,8 +870,8 @@ export default {
             })
         },
 
-        closeSelected() {
-            this.$refs.closeModal.modal({
+        downsizeSelected() {
+            this.$refs.downsizeModal.modal({
                 keyboard: false,
             })
         },
@@ -663,7 +892,7 @@ export default {
                     })
                 })
             )
-            this.$refs.closeModal.hide()
+            this.$refs.downsizeModal.hide()
             this.reloadTable()
         },
 
@@ -694,8 +923,10 @@ export default {
             else if (columnName === 'AudioRecording' && this.config.isHeadquarter && !this.showArchive.key) {
                 this.editedRowId = parsedRowId
                 this.editedAudioRecordingEnabled = null
+                this.editedHasAudioAuditScope = false
                 this.$hq.Assignments.audioSettings(this.editedRowId).then(data => {
                     this.editedAudioRecordingEnabled = data.Enabled
+                    this.editedHasAudioAuditScope = data.AudioAuditScope != null && data.AudioAuditScope.length > 0
                     this.$refs.editAudioEnabledModal.modal()
                 })
             }
@@ -788,20 +1019,56 @@ export default {
         },
 
         validateQuantity(value) {
-            const regex = /^-?([0-9]+)$/i;
+            const regex = /^-?([0-9]+)$/i
 
             if (!regex.test(value)) {
-                return 'This field must be a valid number';
+                return 'This field must be a valid number'
             }
 
             if (value <= -2)
-                return 'This field must be greater or equal to -1';
+                return 'This field must be greater or equal to -1'
 
             if (value > this.config.maxInterviewsByAssignment)
-                return 'This field must be less than limit';
+                return 'This field must be less than limit'
 
-            return true;
+            return true
 
+        },
+
+        bulkChangeStatus(targetStatus, modalRef) {
+            const validStatuses = targetStatus === 'Closed' ? ['Open', 'Completed'] : ['Completed', 'Closed']
+            const data = this.$refs.table.table.rows({ selected: true }).data()
+            this.statusChangeIds = Array.from(data)
+                .filter(r => validStatuses.includes(r.status))
+                .map(r => r.id)
+            this.statusChangeTargetStatus = targetStatus
+            this.statusChangeComment = null
+            this.$refs[modalRef].modal()
+        },
+
+        async confirmStatusChange() {
+            const modalRef = this.statusChangeTargetStatus === 'Closed'
+                ? this.$refs.closeModal
+                : this.$refs.reopenModal
+            try {
+                await Promise.all(
+                    this.statusChangeIds.map(id =>
+                        this.$hq.Assignments.changeStatus(
+                            id,
+                            this.statusChangeTargetStatus,
+                            this.statusChangeComment
+                        )
+                    )
+                )
+                modalRef.hide()
+                this.statusChangeIds = []
+                this.statusChangeTargetStatus = null
+                this.statusChangeComment = null
+                this.reloadTable()
+            } catch (error) {
+                const msg = error?.response?.data?.message || error?.message || this.$t('Common.Error')
+                toastr.error(msg)
+            }
         },
 
     },
@@ -822,6 +1089,7 @@ export default {
         this.id = this.$route.query.id
 
         this.receivedByTabletSelected(this.ddlReceivedByTablet[0])
+        this.statusSelected(this.ddlStatus[0])
 
 
         self.loadQuestionnaireId((questionnaireId, version) => {
@@ -844,7 +1112,7 @@ export default {
 
                 self.reloadTable()
                 self.startWatchers(
-                    ['responsibleId', 'questionnaireId', 'showArchive', 'receivedByTablet', 'questionnaireVersion'],
+                    ['responsibleId', 'questionnaireId', 'showArchive', 'receivedByTablet', 'questionnaireVersion', 'status'],
                     self.reloadTable.bind(self)
                 )
             })

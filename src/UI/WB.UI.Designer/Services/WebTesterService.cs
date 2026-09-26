@@ -1,45 +1,73 @@
 using System;
-using Microsoft.Extensions.Caching.Memory;
+using System.Security.Cryptography;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace WB.UI.Designer.Services
 {
     public class WebTesterService : IWebTesterService
     {
-        private readonly IMemoryCache memoryCache;
-        private readonly IOptions<WebTesterSettings> settings;
+        private readonly IOneTimeCodeStore codeStore;
+        private readonly WebTesterSettings settings;
+        private readonly ILogger<WebTesterService> logger;
 
-        public WebTesterService(IMemoryCache memoryCache, IOptions<WebTesterSettings> settings)
+        public WebTesterService(
+            IOneTimeCodeStore codeStore,
+            IOptions<WebTesterSettings> settings,
+            ILogger<WebTesterService> logger)
         {
-            this.memoryCache = memoryCache;
-            this.settings = settings;
-        }
+            this.codeStore = codeStore;
+            this.settings = settings.Value;
+            this.logger = logger;
 
-        string cacheKey(string token) => $"wbtester:{token}";
-
-        public Guid? GetQuestionnaire(string token)
-        {
-            var questionnaire = memoryCache.Get(cacheKey(token)) as string;
-            if (Guid.TryParse(questionnaire, out var result)) return result;
-
-            return null;
-        }
-
-        private void AddToCache(string token, Guid questionnaireId)
-        {
-            memoryCache.Set(cacheKey(token), questionnaireId.ToString(), new MemoryCacheEntryOptions
+            if (string.IsNullOrWhiteSpace(this.settings.ServiceApiKey))
             {
-                SlidingExpiration = TimeSpan.FromMinutes(settings.Value.ExpirationAmountMinutes)
-            });
+                logger.LogWarning(
+                    "WebTester:ServiceApiKey is not configured. " +
+                    "The /api/internal/auth/exchange endpoint will reject all requests. " +
+                    "Set WebTester:ServiceApiKey in both Designer and WebTester to enable the integration.");
+            }
         }
 
-        public string CreateTestQuestionnaire(Guid questionnaireId)
+        public async Task<string> CreateOneTimeCodeAsync(
+            Guid questionnaireId,
+            string? userId,
+            string correlationId,
+            CancellationToken ct = default)
         {
-            string token = Guid.NewGuid().ToString();
+            var ttl = settings.CodeTtlSeconds > 0 ? settings.CodeTtlSeconds : 60;
+            var now = DateTime.UtcNow;
+            var code = GenerateSecureCode();
 
-            AddToCache(token, questionnaireId);
+            var entity = new OneTimeCodeEntity
+            {
+                Code            = code,
+                UserId          = userId,
+                CorrelationId   = correlationId,
+                TargetService   = WebTesterConstants.ServiceName,
+                QuestionnaireId = questionnaireId,
+                CreatedAt       = now,
+                ExpiresAt       = now.AddSeconds(ttl),
+                Used            = false
+            };
 
-            return token;
+            await codeStore.SaveAsync(entity, ct);
+
+            logger.LogInformation(
+                "One-time code created. CorrelationId={CorrelationId}, UserId={UserId}, " +
+                "TargetService={TargetService}, ExpiresAt={ExpiresAt}",
+                correlationId, userId ?? "anonymous", entity.TargetService, entity.ExpiresAt);
+
+            return code;
+        }
+
+        private static string GenerateSecureCode()
+        {
+            var bytes = RandomNumberGenerator.GetBytes(32); // 256-bit entropy
+            return Convert.ToBase64String(bytes)
+                .Replace("+", "-").Replace("/", "_").TrimEnd('=');
         }
     }
 }

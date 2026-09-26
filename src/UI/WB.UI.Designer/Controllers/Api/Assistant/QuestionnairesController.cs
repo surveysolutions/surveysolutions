@@ -14,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.UI.Designer.Controllers.Api.Designer;
+using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Controllers.Api.Assistant
 {

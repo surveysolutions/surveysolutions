@@ -207,4 +207,125 @@
   <data name="ViewHelpers_Invalid_property" xml:space="preserve">
     <value>არასწორი თვისება</value>
   </data>
+
+
+  <data name="WithErrors" xml:space="preserve">
+    <value>შეცდომებით</value>
+  </data>
+
+  <data name="HQ_Views_TwoFactorAuthentication_Title" xml:space="preserve">
+    <value>ორფაქტორიანი ავთენტიფიკაცია</value>
+  </data>
+
+  <data name="HQ_Views_TwoFactorAuthentication_Description" xml:space="preserve">
+    <value>ორფაქტორიანი ავთენტიფიკაცია უსაფრთხოების დამატებითი ფუნქციაა, რომელიც ართულებს ჰაკერისთვის თქვენს ანგარიშში შესვლას მხოლოდ მოპარული პაროლით.</value>
+  </data>
+
+  <data name="HQ_Views_TwoFactorAuthentication_Enabled" xml:space="preserve">
+    <value>ჩართულია</value>
+  </data>
+
+  <data name="HQ_Views_TwoFactorAuthentication_Disabled" xml:space="preserve">
+    <value>გამორთულია</value>
+  </data>
+
+  <data name="HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description" xml:space="preserve">
+    <value>ორფაქტორიანი ავთენტიფიკაციისთვის ახალი მოწყობილობის დაყენება. შეგიძლიათ ერთდროულად რამდენიმე მოწყობილობა დააყენოთ.</value>
+  </data>
+
+  <data name="HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description" xml:space="preserve">
+    <value>თუ ორფაქტორიანი ავთენტიფიკაციისთვის გამოყენებული რომელიმე მოწყობილობა დაიკარგა ან მოიპარეს, შეცვალეთ იგი ახალ საიდუმლო კოდზე.</value>
+  </data>
+
+  <data name="HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description" xml:space="preserve">
+    <value>გააუქმეთ ყველა გამოუყენებელი აღდგენის კოდი და შექმენით 10 ახალი.</value>
+  </data>
+
+  <data name="HQ_Views_TwoFactorAuthentication_Disable2fa_Description" xml:space="preserve">
+    <value>გამორთეთ ორფაქტორიანი ავთენტიფიკაცია და დატოვეთ ანგარიში მხოლოდ პაროლით დაცული.</value>
+  </data>
+
+  <data name="HQ_Views_EnableAuthenticator_Title" xml:space="preserve">
+    <value>ავთენტიფიკატორის აპის დაყენება</value>
+  </data>
+
+  <data name="HQ_Views_ResetAuthenticator_Title" xml:space="preserve">
+    <value>ავთენტიფიკატორის გასაღების განულება</value>
+  </data>
+
+  <data name="HQ_Views_ShowRecoveryCodes_Title" xml:space="preserve">
+    <value>აღდგენის კოდები</value>
+  </data>
+
+  <data name="HQ_Views_DisableTwoFactorAuth_Title" xml:space="preserve">
+    <value>ორფაქტორიანი ავთენტიფიკაციის გამორთვა</value>
+  </data>
+
+  <data name="HQ_Views_ResetRecoveryCodes_Title" xml:space="preserve">
+    <value>აღდგენის კოდების განულება</value>
+  </data>
+
+  <data name="SurverManagement_MainMenu_ChangePassword" xml:space="preserve">
+    <value>პაროლის შეცვლა</value>
+  </data>
+
+  <data name="Assignments" xml:space="preserve">
+    <value>დავალებები</value>
+  </data>
+
+  <data name="Interviews" xml:space="preserve">
+    <value>ინტერვიუები</value>
+  </data>
+
+  <data name="AllTeams" xml:space="preserve">
+    <value>ყველა გუნდი</value>
+  </data>
+
+  <data name="Teams" xml:space="preserve">
+    <value>გუნდები</value>
+  </data>
+
+  <data name="AllPeriods" xml:space="preserve">
+    <value>ყველა პერიოდი</value>
+  </data>
+
+  <data name="AllQuestionnaires" xml:space="preserve">
+    <value>ყველა კითხვარი</value>
+  </data>
+
+  <data name="AllInterviewers" xml:space="preserve">
+    <value>ყველა ინტერვიუერი</value>
+  </data>
+
+  <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
+    <value>არ არის დამტკიცებული Headquarters-ის მიერ</value>
+  </data>
+
+  <data name="AllInterviewersExceptAssignedToInterviewer" xml:space="preserve">
+    <value>არ არის მინიჭებული Interviewer-ზე</value>
+  </data>
+
+  <data name="NoPermissionsToExecute" xml:space="preserve">
+    <value>მომხმარებელი არ არის ავტორიზებული მითითებული მოქმედების შესასრულებლად</value>
+  </data>
+
+  <data name="HQ_Views_ApiTokens_Title" xml:space="preserve">
+      <value>API წვდომა</value>
+  </data>
+
+  <data name="HQ_Views_Api_Token_Description" xml:space="preserve">
+    <value>API token გამოიყენება სისტემასთან API გამოძახებების შესასრულებლად</value>
+  </data>
+    
+  <data name="HQ_Views_Api_Token_Issued" xml:space="preserve">
+    <value>ჩართულია</value>
+  </data>
+
+    <data name="HQ_Views_Api_Token_Not_Issued" xml:space="preserve">
+  <value>გამორთულია</value>
+  </data>
+
+  <data name="HQ_Views_Api_Token_Generate_Description" xml:space="preserve">
+    <value>გთხოვთ, შეინახოთ token ახლა. მისი ნახვას მხოლოდ ერთხელ შეძლებთ!</value>
+  </data>
 </root>
