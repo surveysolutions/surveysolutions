@@ -1,5 +1,9 @@
 #nullable enable
 using System;
+using System.Buffers.Binary;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
 using Dapper;
 using Npgsql;
 using WB.Core.GenericSubdomains.Portable;
@@ -17,11 +21,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre
     public class PostgresAggregateLock : IAggregateLock
     {
         private readonly string connectionString;
+        private readonly AmbientUnitOfWorkAccessor ambientUnitOfWorkAccessor;
         private readonly NamedLocker localLocker = new NamedLocker();
 
-        public PostgresAggregateLock(UnitOfWorkConnectionSettings connectionSettings)
+        public PostgresAggregateLock(
+            UnitOfWorkConnectionSettings connectionSettings,
+            AmbientUnitOfWorkAccessor ambientUnitOfWorkAccessor)
         {
             this.connectionString = connectionSettings.ConnectionString;
+            this.ambientUnitOfWorkAccessor = ambientUnitOfWorkAccessor;
         }
 
         public T RunWithLock<T>(string aggregateGuid, Func<T> run)
@@ -32,23 +40,45 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             {
                 var lockKey = GetAdvisoryLockKey(aggregateGuid);
 
+                var currentUnitOfWork = this.ambientUnitOfWorkAccessor.Current;
+                if (currentUnitOfWork != null)
+                {
+                    currentUnitOfWork.Session
+                        .CreateSQLQuery("SELECT pg_advisory_xact_lock(:key)")
+                        .SetInt64("key", lockKey)
+                        .UniqueResult();
+
+                    return run();
+                }
+
                 var connection = new NpgsqlConnection(connectionString);
                 try
                 {
                     connection.Open();
 
-                    // Acquire PostgreSQL session-level advisory lock.
-                    // Blocks until the lock is available (cross-server synchronization).
-                    connection.Execute("SELECT pg_advisory_lock(@key)", new { key = lockKey });
+                    using var transaction = connection.BeginTransaction();
+                    Exception? executionException = null;
+
                     try
                     {
+                        connection.Execute("SELECT pg_advisory_xact_lock(@key)", new { key = lockKey }, transaction);
                         return run();
+                    }
+                    catch (Exception ex)
+                    {
+                        executionException = ex;
+                        throw;
                     }
                     finally
                     {
-                        // Release the advisory lock explicitly before closing the connection
-                        // to ensure deterministic unlock and avoid spurious errors on connection close.
-                        connection.Execute("SELECT pg_advisory_unlock(@key)", new { key = lockKey });
+                        try
+                        {
+                            transaction.Dispose();
+                        }
+                        catch when (executionException != null)
+                        {
+                            NpgsqlConnection.ClearPool(connection);
+                        }
                     }
                 }
                 finally
@@ -74,14 +104,55 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             if (Guid.TryParse(aggregateGuid, out var guid))
             {
                 var bytes = guid.ToByteArray();
-                return BitConverter.ToInt64(bytes, 0) ^ BitConverter.ToInt64(bytes, 8);
+                return ReadInt64LittleEndian(bytes, 0) ^ ReadInt64LittleEndian(bytes, 8);
             }
 
             // Fallback for non-GUID aggregate identifiers: use SHA-256 to get a full 64-bit hash
             // and avoid the narrow collision domain of a 32-bit GetHashCode().
-            var stringBytes = System.Text.Encoding.UTF8.GetBytes(aggregateGuid);
-            var hash = System.Security.Cryptography.SHA256.HashData(stringBytes);
-            return BitConverter.ToInt64(hash, 0);
+            var stringBytes = Encoding.UTF8.GetBytes(aggregateGuid);
+            var hash = SHA256.HashData(stringBytes);
+            return ReadInt64LittleEndian(hash, 0);
+        }
+
+        private static long ReadInt64LittleEndian(byte[] bytes, int offset)
+        {
+            return BinaryPrimitives.ReadInt64LittleEndian(bytes.AsSpan(offset, sizeof(long)));
+        }
+    }
+
+    public sealed class AmbientUnitOfWorkAccessor
+    {
+        private readonly AsyncLocal<IUnitOfWork?> current = new AsyncLocal<IUnitOfWork?>();
+
+        public IUnitOfWork? Current => this.current.Value;
+
+        public IDisposable Use(IUnitOfWork unitOfWork)
+        {
+            var previous = this.current.Value;
+            this.current.Value = unitOfWork;
+            return new RestoreCurrentUnitOfWork(this, previous);
+        }
+
+        private sealed class RestoreCurrentUnitOfWork : IDisposable
+        {
+            private readonly AmbientUnitOfWorkAccessor accessor;
+            private readonly IUnitOfWork? previous;
+            private bool disposed;
+
+            public RestoreCurrentUnitOfWork(AmbientUnitOfWorkAccessor accessor, IUnitOfWork? previous)
+            {
+                this.accessor = accessor;
+                this.previous = previous;
+            }
+
+            public void Dispose()
+            {
+                if (this.disposed)
+                    return;
+
+                this.accessor.current.Value = this.previous;
+                this.disposed = true;
+            }
         }
     }
 }

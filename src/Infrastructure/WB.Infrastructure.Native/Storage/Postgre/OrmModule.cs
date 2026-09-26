@@ -209,6 +209,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 externallyOwned: true);
 
             registry.BindInPerLifetimeScope<IUnitOfWork, UnitOfWork>();
+            registry.BindAsSingleton<AmbientUnitOfWorkAccessor, AmbientUnitOfWorkAccessor>();
 
             // Override the in-memory AggregateLock from InfrastructureModule with a PostgreSQL advisory
             // lock implementation that supports farm mode (multi-server deployments).
