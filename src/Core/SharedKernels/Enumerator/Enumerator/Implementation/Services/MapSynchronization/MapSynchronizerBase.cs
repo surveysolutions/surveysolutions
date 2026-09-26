@@ -165,7 +165,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                         // If we requested a range but server returned full content (200 OK),
                         // either range requests are unsupported or the file has changed on the server.
                         // Reset and download from scratch.
-                        if (offset > 0 && !contentStreamResult.IsPartialContent)
+                        var restartedFromFullResponse = offset > 0 && !contentStreamResult.IsPartialContent;
+                        if (restartedFromFullResponse)
                         {
                             logger.Info($"Server returned full content for map '{mapDescription.MapName}' (range not satisfied or file changed). Restarting download from the beginning.");
                             offset = 0;
@@ -175,7 +176,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                         // Store ETag from the (first or resumed) response so the next resume
                         // can use If-Range to detect server-side file changes.
                         if (!string.IsNullOrEmpty(contentStreamResult.ETag)
-                            && !contentStreamResult.ETag.StartsWith("W/", StringComparison.Ordinal))
+                            && !contentStreamResult.ETag.StartsWith("W/", StringComparison.Ordinal)
+                            && !restartedFromFullResponse)
                             this.mapService.SaveTempMapETag(mapDescription.MapName, contentStreamResult.ETag);
 
                         var appendToTempFile = offset > 0 && contentStreamResult.IsPartialContent;

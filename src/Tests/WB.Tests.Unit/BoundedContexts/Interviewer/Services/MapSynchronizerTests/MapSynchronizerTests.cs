@@ -155,7 +155,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
                     ContentLength = sourceBytes.Length,
                     Stream = new MemoryStream(sourceBytes),
                     IsPartialContent = false,
-                    ETag = null
+                    ETag = "\"etag-2\""
                 });
 
             var tempStream = new NonDisposingMemoryStream();
