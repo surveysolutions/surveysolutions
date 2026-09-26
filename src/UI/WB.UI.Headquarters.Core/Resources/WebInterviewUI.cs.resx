@@ -331,6 +331,9 @@ Požádejte o pomoc svého garanta.</value>
   <data name="NoResultsFound" xml:space="preserve">
     <value>Nic nebylo nalezeno</value>
   </data>
+  <data name="TypeToFilterForMore" xml:space="preserve">
+    <value>Zobrazuje se prvních {{count}} možností. Další vyhledejte psaním.</value>
+  </data>
   <data name="NotCalculated" xml:space="preserve">
     <value>Nevypočítáno</value>
   </data>

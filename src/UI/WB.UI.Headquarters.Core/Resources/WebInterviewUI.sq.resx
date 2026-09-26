@@ -361,6 +361,9 @@
   <data name="NoResultsFound" xml:space="preserve">
     <value>Nuk u gjet asnjë rezultat</value>
   </data>
+  <data name="TypeToFilterForMore" xml:space="preserve">
+    <value>Po shfaqen {{count}} opsionet e para. Shkruani për të kërkuar më shumë.</value>
+  </data>
   <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
     <value>Vlera e vendosur nuk mund të jetë më e vogël sesa përgjigjja e mbrojtur</value>
   </data>
