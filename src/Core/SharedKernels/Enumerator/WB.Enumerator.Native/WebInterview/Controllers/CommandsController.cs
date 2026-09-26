@@ -42,6 +42,9 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         protected virtual Guid GetCommandResponsibleId(Guid interviewId)
         {
             var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
+            if (interview == null)
+                throw new InterviewException($"Interview {interviewId} not found", InterviewDomainExceptionType.InterviewHardDeleted);
+
             return interview.CurrentResponsibleId;
         }
 
