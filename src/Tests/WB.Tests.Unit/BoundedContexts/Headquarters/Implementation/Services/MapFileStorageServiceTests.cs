@@ -19,6 +19,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.SharedKernels.Configs;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -338,6 +339,31 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
             {
                 Directory.Delete(tempBase, true);
             }
+        }
+
+        [Test]
+        public async Task GetMapContentHashAsync_should_create_missing_hash_for_external_map()
+        {
+            const string mapName = "map.tif";
+            var mapContent = new byte[] { 1, 2, 3, 4 };
+            var mapStorage = new TestPlainStorage<MapBrowseItem>();
+            mapStorage.Store(Create.Entity.MapBrowseItem(mapName), mapName);
+
+            var externalStorage = new Mock<IExternalFileStorage>();
+            externalStorage.Setup(x => x.IsEnabled()).Returns(true);
+            externalStorage.Setup(x => x.GetBinaryAsync("maps/map.tif.md5")).ReturnsAsync((byte[])null);
+            externalStorage.Setup(x => x.GetBinaryAsync("maps/map.tif")).ReturnsAsync(mapContent);
+            externalStorage.Setup(x => x.StoreAsync("maps/map.tif.md5", It.IsAny<Stream>(), "text/plain", null))
+                .ReturnsAsync(new FileObject());
+
+            var service = Create.Service.MapFileStorageService(
+                mapsStorage: mapStorage,
+                externalFileStorage: externalStorage.Object);
+
+            var result = await service.GetMapContentHashAsync(mapName);
+
+            Assert.That(result, Is.EqualTo(Convert.ToBase64String(MD5.HashData(mapContent))));
+            externalStorage.Verify(x => x.StoreAsync("maps/map.tif.md5", It.IsAny<Stream>(), "text/plain", null), Times.Once);
         }
 
         [Test]

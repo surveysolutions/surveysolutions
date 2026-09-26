@@ -174,7 +174,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
 
                         // Store ETag from the (first or resumed) response so the next resume
                         // can use If-Range to detect server-side file changes.
-                        if (contentStreamResult.ETag != null)
+                        if (!string.IsNullOrEmpty(contentStreamResult.ETag)
+                            && !contentStreamResult.ETag.StartsWith("W/", StringComparison.Ordinal))
                             this.mapService.SaveTempMapETag(mapDescription.MapName, contentStreamResult.ETag);
 
                         var appendToTempFile = offset > 0 && contentStreamResult.IsPartialContent;

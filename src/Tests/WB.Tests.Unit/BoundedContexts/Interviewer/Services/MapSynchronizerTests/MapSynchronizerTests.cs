@@ -265,6 +265,36 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
         }
 
         [Test]
+        public async Task when_server_returns_weak_etag_should_not_store_it_for_resume()
+        {
+            var synchronizationService = new Mock<IOnlineSynchronizationService>();
+            synchronizationService.Setup(x => x.GetMapList(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<MapView> { new MapView { MapName = "weak-etag-map.tpk" } });
+
+            synchronizationService.Setup(x => x.GetMapContentStream("weak-etag-map.tpk", It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new RestStreamResult
+                {
+                    ContentLength = 3,
+                    Stream = new MemoryStream(new byte[] { 1, 2, 3 }),
+                    ETag = "W/\"etag-1\""
+                });
+
+            var mapService = new Mock<IMapService>();
+            mapService.Setup(x => x.GetAvailableMaps(false)).Returns(new List<MapDescription>());
+            mapService.Setup(x => x.GetAvailableShapefiles()).Returns(new List<ShapefileDescription>());
+            mapService.Setup(x => x.DoesMapExist("weak-etag-map.tpk")).Returns(false);
+            mapService.Setup(x => x.GetTempMapSaveStream("weak-etag-map.tpk", false)).Returns(new MemoryStream());
+
+            var service = Create.Service.MapSyncProvider(
+                synchronizationService: synchronizationService.Object,
+                mapService: mapService.Object);
+
+            await service.Synchronize(new Progress<SyncProgressInfo>(), CancellationToken.None, new SynchronizationStatistics());
+
+            mapService.Verify(x => x.SaveTempMapETag("weak-etag-map.tpk", It.IsAny<string>()), Times.Never);
+        }
+
+        [Test]
         public async Task should_report_download_progress_for_unknown_content_length_without_spam()
         {
             var synchronizationService = new Mock<IOnlineSynchronizationService>();

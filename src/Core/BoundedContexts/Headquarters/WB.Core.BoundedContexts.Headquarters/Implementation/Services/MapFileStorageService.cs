@@ -713,7 +713,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (externalFileStorage.IsEnabled())
             {
                 var storedHash = await this.externalFileStorage.GetBinaryAsync(GetExternalStorageHashPath(map.FileName));
-                return storedHash == null ? null : Encoding.UTF8.GetString(storedHash);
+                if (storedHash != null)
+                    return Encoding.UTF8.GetString(storedHash);
+
+                var mapContent = await this.externalFileStorage.GetBinaryAsync(GetExternalStoragePath(map.FileName));
+                if (mapContent == null)
+                    return null;
+
+                var computedHash = Convert.ToBase64String(this.fileSystemAccessor.ReadHash(new MemoryStream(mapContent)));
+                await using var hashStream = new MemoryStream(Encoding.UTF8.GetBytes(computedHash));
+                await this.externalFileStorage.StoreAsync(GetExternalStorageHashPath(map.FileName), hashStream, "text/plain");
+                return computedHash;
             }
 
             var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, map.FileName);
