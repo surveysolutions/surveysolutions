@@ -114,11 +114,11 @@ export function clearDynamicImportRecovery() {
     recoveryScheduled = false;
 }
 
-export function wrapDynamicImport(loader, getRouteName = () => null) {
+export function wrapDynamicImport(loader) {
     return () =>
         loader().catch(error => {
             if (isDynamicImportError(error)) {
-                scheduleDynamicImportRecovery(error, getRouteName());
+                scheduleDynamicImportRecovery(error);
             }
 
             throw error;
