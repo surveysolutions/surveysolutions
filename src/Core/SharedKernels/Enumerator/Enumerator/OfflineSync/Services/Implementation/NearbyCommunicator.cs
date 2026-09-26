@@ -165,10 +165,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         public async Task ReceivePayloadAsync(INearbyConnection nearbyConnection, string endpoint, IPayload payload)
         {
             incomingPayloads.GetOrAdd(payload.Id, payload);
+            var replayedDeferredStreamUpdate = false;
 
-            if (payload.Type == PayloadType.Stream && HasDeferredSuccessUpdate(endpoint, payload.Id))
+            if (payload.Type == PayloadType.Stream && HasDeferredTerminalUpdate(endpoint, payload.Id))
             {
-                await ReplayDeferredTransferUpdatesAsync(nearbyConnection, endpoint, payload.Id);
+                replayedDeferredStreamUpdate = await ReplayDeferredTransferUpdatesAsync(nearbyConnection, endpoint, payload.Id);
             }
 
             switch (payload.Type)
@@ -203,7 +204,10 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     throw new ArgumentOutOfRangeException();
             }
 
-            await ReplayDeferredTransferUpdatesAsync(nearbyConnection, endpoint, payload.Id);
+            if (!replayedDeferredStreamUpdate || payload.Type != PayloadType.Stream)
+            {
+                await ReplayDeferredTransferUpdatesAsync(nearbyConnection, endpoint, payload.Id);
+            }
         }
 
         public async Task ReceivePayloadTransferUpdate(INearbyConnection connection, string endpoint,
@@ -402,7 +406,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
         }
 
-        private bool HasDeferredSuccessUpdate(string endpoint, long payloadId)
+        private bool HasDeferredTerminalUpdate(string endpoint, long payloadId)
         {
             if (!deferredTransferUpdates.TryGetValue((endpoint, payloadId), out var deferredUpdates))
                 return false;
@@ -410,8 +414,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             lock (deferredUpdates.SyncRoot)
             {
                 return !deferredUpdates.IsDetached
-                    && deferredUpdates.Updates.Count > 0
-                    && deferredUpdates.Updates.Peek().Status == TransferStatus.Success;
+                    && deferredUpdates.Updates.Count > 0;
             }
         }
 
