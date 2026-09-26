@@ -1,14 +1,19 @@
 using System;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Models.Maps;
 
@@ -42,6 +47,19 @@ public class MapsControllerTests
         var model = result!.Model as MapDetailsModel;
         Assert.That(model, Is.Not.Null);
         Assert.That(model!.UploadedBy, Is.EqualTo(uploaderName));
+    }
+
+    [Test]
+    public async Task GetMapContent_should_use_content_hash_as_etag()
+    {
+        var mapContent = new byte[] { 1, 2, 3, 4 };
+        var controller = CreateApiController(mapContent);
+
+        var result = await controller.GetMapContent("map.tif") as FileStreamResult;
+
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result!.EnableRangeProcessing, Is.True);
+        Assert.That(result.EntityTag?.Tag, Is.EqualTo($"\"{Convert.ToHexString(SHA256.HashData(mapContent))}\""));
     }
 
     private static MapsController CreateController(Guid uploaderId, UserRoles uploaderRole, out string uploaderName)
@@ -81,5 +99,35 @@ public class MapsControllerTests
         controller.Url = urlHelper.Object;
 
         return controller;
+    }
+
+    private static MapsApiV2Controller CreateApiController(byte[] mapContent)
+    {
+        var map = new MapBrowseItem
+        {
+            Id = "map.tif",
+            FileName = "map.tif",
+            Size = mapContent.Length,
+            ImportDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+        };
+        map.Users.Add(new UserMap { UserName = "interviewer" });
+
+        var mapStorage = new Mock<IPlainStorageAccessor<MapBrowseItem>>();
+        mapStorage.Setup(x => x.GetByIdAsync("map.tif")).ReturnsAsync(map);
+
+        var mapRepository = new Mock<IMapStorageService>();
+        mapRepository.Setup(x => x.GetMapContentAsync("map.tif")).ReturnsAsync(mapContent);
+
+        var authorizedUser = Mock.Of<IAuthorizedUser>(u => u.UserName == "interviewer" && u.IsSupervisor == false);
+
+        var fileSystemAccessor = new Mock<IFileSystemAccessor>();
+        fileSystemAccessor.Setup(x => x.GetFileName("map.tif")).Returns("map.tif");
+
+        return new MapsApiV2Controller(
+            mapRepository.Object,
+            authorizedUser,
+            mapStorage.Object,
+            Mock.Of<IUserRepository>(),
+            fileSystemAccessor.Object);
     }
 }

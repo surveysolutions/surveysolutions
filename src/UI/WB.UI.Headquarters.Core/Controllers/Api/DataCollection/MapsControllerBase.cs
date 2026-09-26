@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
@@ -78,7 +80,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             var result = new FileStreamResult(exportFileStream, "application/octet-stream")
             {
                 EnableRangeProcessing = true,
-                EntityTag = new EntityTagHeaderValue($"\"{map.Id}-{map.Size}-{map.ImportDate?.Ticks ?? 0}\"")
+                EntityTag = new EntityTagHeaderValue($"\"{Convert.ToHexString(SHA256.HashData(mapContent))}\"")
             };
             return result;
         }
