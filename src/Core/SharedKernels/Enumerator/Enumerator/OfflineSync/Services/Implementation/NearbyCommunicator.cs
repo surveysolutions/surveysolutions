@@ -359,11 +359,21 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         {
             var key = (endpoint, payloadId);
             var handledDeferredUpdate = false;
+            var waitForReplacementQueue = false;
 
             while (true)
             {
                 if (!deferredTransferUpdates.TryGetValue(key, out var deferredUpdates))
-                    return handledDeferredUpdate;
+                {
+                    if (!waitForReplacementQueue)
+                        return handledDeferredUpdate;
+
+                    waitForReplacementQueue = false;
+                    await Task.Yield();
+                    continue;
+                }
+
+                waitForReplacementQueue = false;
 
                 NearbyPayloadTransferUpdate deferredUpdate = null;
                 var shouldRemoveDetachedQueue = false;
@@ -390,12 +400,14 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 if (shouldRemoveDetachedQueue)
                 {
                     deferredTransferUpdates.TryRemove(new KeyValuePair<(string Endpoint, long PayloadId), DeferredTransferUpdatesQueue>(key, deferredUpdates));
+                    waitForReplacementQueue = true;
                     continue;
                 }
 
                 if (shouldDetachQueue)
                 {
                     deferredTransferUpdates.TryRemove(new KeyValuePair<(string Endpoint, long PayloadId), DeferredTransferUpdatesQueue>(key, deferredUpdates));
+                    waitForReplacementQueue = true;
                     continue;
                 }
 
