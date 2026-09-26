@@ -38,8 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         private readonly ConcurrentDictionary<long, IPayload> outgoingPayloads =
             new ConcurrentDictionary<long, IPayload>();
 
-        private readonly ConcurrentDictionary<long, NearbyPayloadTransferUpdate> deferredTransferUpdates =
-            new ConcurrentDictionary<long, NearbyPayloadTransferUpdate>();
+        private readonly ConcurrentDictionary<(string Endpoint, long PayloadId), NearbyPayloadTransferUpdate> deferredTransferUpdates =
+            new ConcurrentDictionary<(string Endpoint, long PayloadId), NearbyPayloadTransferUpdate>();
 
         private readonly IRequestHandler requestHandler;
 
@@ -198,7 +198,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     throw new ArgumentOutOfRangeException();
             }
 
-            if (deferredTransferUpdates.TryRemove(payload.Id, out var deferredUpdate))
+            if (deferredTransferUpdates.TryRemove((endpoint, payload.Id), out var deferredUpdate))
             {
                 await ReceivePayloadTransferUpdateInternal(nearbyConnection, endpoint, deferredUpdate);
             }
@@ -227,7 +227,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             {
                 if (update.Status == TransferStatus.Success || update.Status == TransferStatus.Failure)
                 {
-                    deferredTransferUpdates.AddOrUpdate(update.Id, update, (_, _) => update);
+                    deferredTransferUpdates.AddOrUpdate((endpoint, update.Id), update, (_, _) => update);
                     logger.Warn(
                         $"Deferring payload transfer update until payload is registered. Endpoint: {endpoint}, PayloadId: {update.Id}, Status: {update.Status}");
                     return;
