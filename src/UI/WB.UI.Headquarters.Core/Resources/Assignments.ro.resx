@@ -606,6 +606,9 @@
   <data name="TargetAreaExplanation" xml:space="preserve">
     <value>Specificați numele hărții zonei țintă pentru sarcină</value>
   </data>
+  <data name="TargetAreaNameTooLong" xml:space="preserve">
+      <value>Numele hărții zonei țintă este prea lung. Lungimea maximă permisă este de {{limit}} caractere.</value>
+  </data>
   <data name="Tooltip_Table_Email" xml:space="preserve">
     <value>Email pentru notificări</value>
   </data>
@@ -617,5 +620,14 @@
   </data>
   <data name="Value" xml:space="preserve">
     <value>Valoare</value>
+  </data>
+  <data name="AudioRecordingSelective" xml:space="preserve">
+      <value>Selectiv</value>
+  </data>
+  <data name="AudioAuditScopeLabel" xml:space="preserve">
+      <value>Domeniu audit audio</value>
+  </data>
+  <data name="AudioRecordingScopeNotice" xml:space="preserve">
+      <value>Această atribuire are un domeniu selectiv de audit audio. Activarea înregistrării audio complete va înregistra toate secțiunile. Dezactivarea va reveni la înregistrarea doar a secțiunilor selectate.</value>
   </data>
 </root>

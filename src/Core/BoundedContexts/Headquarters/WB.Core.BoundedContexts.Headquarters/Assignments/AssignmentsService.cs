@@ -357,6 +357,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 Quantity = assignment.InterviewsNeeded,
                 CreatedAtUtc = assignment.CreatedAtUtc,
                 ProtectedVariables = assignment.ProtectedVariables,
+                AudioAuditScope = assignment.AudioAuditScope,
                 ResponsibleId = assignment.ResponsibleId,
                 ResponsibleName = assignment.Responsible.Name,
                 IsAudioRecordingEnabled = assignment.AudioRecording,

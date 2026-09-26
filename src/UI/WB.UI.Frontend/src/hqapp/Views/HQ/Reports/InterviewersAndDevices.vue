@@ -1,15 +1,21 @@
 <template>
-    <HqLayout :title="$t('Pages.InterviewersAndDevicesTitle')" :subtitle="$t('Pages.InterviewersAndDevicesSubtitle')"
+    <HqLayout :title="$t('Pages.InterviewersAndDevicesTitle')"
+        :subtitle="$t('Pages.InterviewersAndDevicesSubtitle')"
         :hasSearch="true">
         <template v-slot:subtitle>
             <div>
-                <a v-if="supervisorId" :href="interviewersAndDevicesUrl" class="btn btn-default">
+                <a v-if="supervisorId"
+                    :href="interviewersAndDevicesUrl"
+                    class="btn btn-default">
                     <span class="glyphicon glyphicon-arrow-left"></span>
                     {{ $t('PeriodicStatusReport.BackToTeams') }}
                 </a>
             </div>
         </template>
-        <DataTables ref="table" :tableOptions="tableOptions" exportable hasTotalRow></DataTables>
+        <DataTables ref="table"
+            :tableOptions="tableOptions"
+            exportable
+            hasTotalRow></DataTables>
     </HqLayout>
 </template>
 

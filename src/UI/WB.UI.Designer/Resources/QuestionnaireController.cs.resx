@@ -330,4 +330,7 @@
   <data name="CloneDeletedWarning" xml:space="preserve">
       <value>Vytváříte kopii smazaného dotazníku. Některé části mohou být ztraceny.</value>
   </data>
+  <data name="IncludeScenarios" xml:space="preserve">
+      <value>Zahrnout scénáře</value>
+  </data>
 </root>

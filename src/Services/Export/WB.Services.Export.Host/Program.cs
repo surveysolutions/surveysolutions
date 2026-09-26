@@ -61,7 +61,7 @@ namespace WB.Services.Export.Host
                     
                     logConfig
                         .Enrich.WithProperty("workerId", "root")
-                        .Destructure.ByMaskingProperties("Password", "ArchivePassword")
+                        .Destructure.ByMaskingProperties("Password", "ArchivePassword", "AccessToken", "RefreshToken")
                         .WriteTo.Postgres(connectionString);
                 })
                 .ConfigureSurveySolutionsAppConfiguration<Startup>("Export_", args, useWebDefaults, (host, c) =>

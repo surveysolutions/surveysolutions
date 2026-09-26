@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -227,6 +228,8 @@ namespace WB.UI.Headquarters.Controllers
                 IsObserving = this.currentUser.IsObserving,
                 Password = assignment.Password,
                 ProtectedVariables = assignment.ProtectedVariables,
+                AudioAuditScope = assignment.AudioAuditScope,
+                AudioAuditScopeVariableNames = assignment.AudioAuditScope ?? new List<string>(),
                 Quantity = assignment.Quantity,
                 Questionnaire = new 
                 {

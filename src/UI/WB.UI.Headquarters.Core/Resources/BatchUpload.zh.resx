@@ -589,6 +589,7 @@
 &lt;b&gt;_password&lt;/b&gt; - 开始访谈所需的密码（仅适用于网络访谈）；&lt;br/&gt;
 &lt;b&gt;_webmode&lt;/b&gt; - 任务模式（1 表示 CAWI，0 或留空表示 CAPI）；&lt;br/&gt;
 &lt;b&gt;_record_audio&lt;/b&gt; - 是否为访谈启用录音（1 - 启用，0 - 禁用，留空 - 从问卷获取此值）；&lt;br/&gt;
+&lt;b&gt;_aascope&lt;/b&gt; - 当 _record_audio 关闭时需要录音的章节、组或滚动表的变量名（以逗号分隔）（选择性音频审核范围）；&lt;br/&gt;
 &lt;b&gt;_comment&lt;/b&gt; - 任务备注；&lt;br/&gt;
 &lt;b&gt;_target_area&lt;/b&gt; - 任务目标区域</value>
     <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
