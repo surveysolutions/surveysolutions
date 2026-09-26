@@ -168,9 +168,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
             if (payload.Type == PayloadType.Stream)
             {
-                var deferredStreamUpdateHandled = await ReplayDeferredTransferUpdatesAsync(nearbyConnection, endpoint, payload.Id);
-                if (deferredStreamUpdateHandled)
-                    return;
+                await ReplayDeferredTransferUpdatesAsync(nearbyConnection, endpoint, payload.Id);
             }
 
             switch (payload.Type)
