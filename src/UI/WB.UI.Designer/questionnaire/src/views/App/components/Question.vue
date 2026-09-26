@@ -247,6 +247,7 @@ import _ from 'lodash'
 import { deleteQuestion } from '../../../services/questionService';
 import { answerTypeClass, geometryInputModeOptions, questionsWithOnlyInterviewerScope, questionTypesDoesNotSupportValidations } from '../../../helpers/question'
 import { createQuestionForDeleteConfirmationPopup, scrollToValidationCondition, scrollToElement, setFocusIn } from '../../../services/utilityService'
+import { wrapDynamicImport } from '../../../helpers/dynamicImportRecovery';
 
 import AreaQuestion from './parts/AreaQuestion.vue'
 import DateTimeQuestion from './parts/DateTimeQuestion.vue'
@@ -261,7 +262,9 @@ import TextQuestion from './parts/TextQuestion.vue'
 import { useKeyShortcut } from '../../../composables/useKeyShortcut';
 import emitter from '../../../services/emitter';
 
-const loadOptionsEditorModal = () => import('./leftSidePanel/CategoriesEditorModal.vue');
+const loadOptionsEditorModal = wrapDynamicImport(
+    () => import('./leftSidePanel/CategoriesEditorModal.vue')
+);
 const OptionsEditorModal = defineAsyncComponent(loadOptionsEditorModal);
 
 export default {
