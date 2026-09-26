@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using MvvmCross.Base;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -80,14 +78,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 );
             }
             
-            if (!this.HasCriticalFeature(interviewUid) 
+            // IsLoading stays true; OnTabDataLoadedAsync handles criticality and clears it.
+        }
+
+        protected override async Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState, int loadVersion, CancellationToken cancellationToken)
+        {
+            if (!this.HasCriticalFeature(interviewId)
                 || CriticalityLevel == SharedKernels.DataCollection.ValueObjects.Interview.CriticalityLevel.Ignore)
             {
-                IsCompletionAllowed = true;
-                IsLoading = false;
+                await base.OnTabDataLoadedAsync(interviewId, navigationState, loadVersion, cancellationToken);
             }
             else
-                Task.Run(() => CollectCriticalityInfo(interviewUid, navigationState));
+            {
+                await CollectCriticalityInfo(interviewId, navigationState, loadVersion, cancellationToken);
+            }
         }
         
         public override string Comment
