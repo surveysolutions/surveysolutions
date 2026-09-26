@@ -14,6 +14,7 @@ const dynamicImportErrorPatterns = [
     'unable to preload css for'
 ];
 let recoveryScheduled = false;
+let activeRouteName = null;
 
 export function isDynamicImportError(error) {
     const message = (error instanceof Error ? error.message : String(error)).toLowerCase();
@@ -52,32 +53,24 @@ function clearRetryCount() {
 }
 
 function hasUnsavedChanges(routeName) {
-    const dirtyStates = {
-        roster: useRosterStore().getIsDirty,
-        group: useGroupStore().getIsDirty,
-        question: useQuestionStore().getIsDirty,
-        statictext: useStaticTextStore().getIsDirty,
-        variable: useVariableStore().getIsDirty
-    };
-
-    if (routeName == null) {
-        return Object.values(dirtyStates).some(Boolean);
-    }
-
-    switch (routeName) {
+    switch (routeName ?? activeRouteName) {
         case 'roster':
-            return dirtyStates.roster;
+            return useRosterStore().getIsDirty;
         case 'group':
-            return dirtyStates.group;
+            return useGroupStore().getIsDirty;
         case 'question':
-            return dirtyStates.question;
+            return useQuestionStore().getIsDirty;
         case 'statictext':
-            return dirtyStates.statictext;
+            return useStaticTextStore().getIsDirty;
         case 'variable':
-            return dirtyStates.variable;
+            return useVariableStore().getIsDirty;
         default:
             return false;
     }
+}
+
+export function setActiveDynamicImportRouteName(routeName) {
+    activeRouteName = routeName ?? null;
 }
 
 export function scheduleDynamicImportRecovery(error, routeName) {
