@@ -432,4 +432,21 @@
   <data name="VariableExcludedFromExport" xml:space="preserve">
     <value>Ця змінна не включається до експортованих даних</value>
   </data>
+
+
+  <data name="Appendix_CriticalRules" xml:space="preserve">
+    <value>Додаток {0} {1} критичних правил</value>
+  </data>
+
+  <data name="CriticalityCondition" xml:space="preserve">
+    <value>Критична умова:</value>
+  </data>
+
+  <data name="CriticalityMessage" xml:space="preserve">
+    <value>Повідомлення:</value>
+  </data>
+
+  <data name="Description" xml:space="preserve">
+    <value>Опис:</value>
+  </data>
 </root>

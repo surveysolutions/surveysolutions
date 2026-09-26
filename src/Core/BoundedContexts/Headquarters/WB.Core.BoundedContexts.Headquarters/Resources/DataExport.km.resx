@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="DataExport_Title" xml:space="preserve">
+        <value>ការនាំចេញទិន្នន័យ</value>
+    </data>
+    <data name="DataExport_Header" xml:space="preserve">
+        <value>ជ្រើសរើសប្រភេទ និងទម្រង់ទិន្នន័យដែលត្រូវនាំចេញ</value>
+    </data>
+    <data name="BinaryData" xml:space="preserve">
+        <value>ទិន្នន័យគោលពីរ</value>
+    </data>
+    <data name="DDI" xml:space="preserve">
+        <value>ឌីឌីអាយ</value>
+    </data>
+    <data name="ParaData" xml:space="preserve">
+        <value>ប៉ារ៉ាដាតា</value>
+    </data>
+    <data name="Name" xml:space="preserve">
+        <value>ឈ្មោះ</value>
+    </data>
+    <data name="Format" xml:space="preserve">
+        <value>ទម្រង់</value>
+    </data>
+    <data name="StartDate" xml:space="preserve">
+        <value>កាលបរិច្ឆេទចាប់ផ្តើម</value>
+    </data>
+    <data name="LastUpdateDate" xml:space="preserve">
+        <value>កាលបរិច្ឆេទអាប់ដេតចុងក្រោយ</value>
+    </data>
+    <data name="Progress" xml:space="preserve">
+        <value>វឌ្ឍនភាព</value>
+    </data>
+    <data name="ConfirmStop" xml:space="preserve">
+        <value>តើអ្នកប្រាកដទេថាអ្នកចង់ឈប់</value>
+    </data>
+    <data name="export" xml:space="preserve">
+        <value>ដំណើរការនាំចេញ</value>
+    </data>
+    <data name="Metadata" xml:space="preserve">
+        <value>ទិន្នន័យមេតា</value>
+    </data>
+    <data name="BinaryDescription" xml:space="preserve">
+        <value>បណ្ណសារជាមួយទិន្នន័យគោលពីរ (ឧ. រូបភាព អូឌីយ៉ូ)</value>
+    </data>
+    <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
+        <value>អ្នក​មិន​អាច​ផ្លាស់​ប្តូ​រ​ការ​កំណត់​ការ​នាំ​ចេញ​ដោយ​សារ​តែ​ដំណើរ​ការ​នៃ​ការ​នាំ​ចេញ​កំពុង​ដំណើរ​ការ​។</value>
+    </data>
+    <data name="Bytes" xml:space="preserve">
+        <value>MB</value>
+    </data>
+    <data name="Completed" xml:space="preserve">
+        <value>បានបញ្ចប់</value>
+    </data>
+    <data name="DataWasNotGenerated" xml:space="preserve">
+        <value>មិនបានបង្កើត</value>
+    </data>
+    <data name="DDIDescription" xml:space="preserve">
+        <value>Data Documentation Initiative ទិន្នន័យ XML</value>
+    </data>
+    <data name="Download" xml:space="preserve">
+        <value>ទាញយក</value>
+    </data>
+    <data name="ExportRange" xml:space="preserve">
+        <value>ជួរនាំចេញ៖</value>
+    </data>
+    <data name="FileSizeTitle" xml:space="preserve">
+        <value>ទំហំឯកសារ</value>
+    </data>
+    <data name="FormatTitle" xml:space="preserve">
+        <value>ទម្រង់</value>
+    </data>
+    <data name="Generate" xml:space="preserve">
+        <value>បង្កើត</value>
+    </data>
+    <data name="Generating" xml:space="preserve">
+        <value>ការបង្កើត</value>
+    </data>
+    <data name="Preparing" xml:space="preserve">
+        <value>កំពុងរៀបចំ</value>
+    </data>
+    <data name="Compressing" xml:space="preserve">
+        <value>ការបង្ហាប់</value>
+    </data>
+    <data name="LastGeneratedTitle" xml:space="preserve">
+        <value>បានបង្កើតនៅលើ</value>
+    </data>
+    <data name="MainSurveyDataTitle" xml:space="preserve">
+        <value>ទិន្នន័យស្ទង់មតិចម្បង</value>
+    </data>
+    <data name="NoDataAvailable" xml:space="preserve">
+        <value>មិនមានទិន្នន័យទេ។</value>
+    </data>
+    <data name="ParadataDescription" xml:space="preserve">
+        <value>ទិន្នន័យមេតាលើដំណើរការសម្ភាសន៍ (ព្រឹត្តិការណ៍ និងពេលវេលា)</value>
+    </data>
+    <data name="QueuedTitle" xml:space="preserve">
+        <value>តម្រង់ជួរ</value>
+    </data>
+    <data name="StatusOfExportTitle" xml:space="preserve">
+        <value>ស្ថានភាពនៃការសម្ភាសន៍ដែលបាននាំចេញ</value>
+    </data>
+    <data name="FromDate" xml:space="preserve">
+        <value>ពី</value>
+    </data>
+    <data name="ToDate" xml:space="preserve">
+        <value>ទៅ</value>
+    </data>
+    <data name="SurveyTemplateTitle" xml:space="preserve">
+        <value>(កំណែ) កម្រងសំណួរស្ទង់មតិ</value>
+    </data>
+    <data name="ZipArchiveDescription" xml:space="preserve">
+        <value>ប័ណ្ណសារហ្ស៊ីបជាមួយទិន្នន័យសំភាសន៍សំខាន់ៗ</value>
+    </data>
+    <data name="XMLFileDescription" xml:space="preserve">
+        <value>ទ្រង់ទ្រាយ XML</value>
+    </data>
+    <data name="ItemsInQueue" xml:space="preserve">
+        <value>ធាតុនៅក្នុងជួរនាំចេញ៖</value>
+    </data>
+    <data name="TabularFormat" xml:space="preserve">
+        <value>ទម្រង់តារាង</value>
+    </data>
+    <data name="ExportExplanation" xml:space="preserve">
+        <value>ការចុចប៊ូតុង "បន្ថែមទៅជួរ" បង្កើតបណ្ណសារទិន្នន័យនៃការសម្ភាសន៍ដែលមាននៅលើម៉ាស៊ីនមេនៅពេលនោះ។ ពេលវេលានៃការបង្កើតបណ្ណសារ និងទំហំបណ្ណសារត្រូវបានបង្ហាញក្នុងតារាង។ បណ្ណសារទិន្នន័យដែលបានបង្កើតចុងក្រោយអាចទាញយកបានដោយចុចប៊ូតុងទាញយក។ ចុចប៊ូតុង "បន្ថែមទៅជួរ" ម្តងទៀតដើម្បីបង្កើតប័ណ្ណសារថ្មី។</value>
+    </data>
+    <data name="ZipFile" xml:space="preserve">
+        <value>ឯកសារហ្ស៊ីប</value>
+    </data>
+    <data name="Dropbox" xml:space="preserve">
+        <value>Dropbox</value>
+    </data>
+    <data name="OneDrive" xml:space="preserve">
+        <value>OneDrive</value>
+    </data>
+    <data name="GoogleDrive" xml:space="preserve">
+        <value>ថាស Google</value>
+    </data>
+    <data name="SaveBinaryDataTo" xml:space="preserve">
+        <value>រក្សាទុកទិន្នន័យគោលពីរទៅ៖</value>
+    </data>
+    <data name="ExportBtn" xml:space="preserve">
+        <value>នាំចេញ</value>
+    </data>
+    <data name="DataExport_Destination_Dropbox" xml:space="preserve">
+        <value>ឯកសារនាំចេញនឹងត្រូវបានផ្ទុកឡើងទៅកាន់ Dropbox</value>
+    </data>
+    <data name="DataExport_Destination_File" xml:space="preserve">
+        <value>ឯកសារនាំចេញនឹងមានសម្រាប់ទាញយក</value>
+    </data>
+    <data name="DataExport_Destination_GoogleDrive" xml:space="preserve">
+        <value>ឯកសារនាំចេញនឹងត្រូវបានផ្ទុកឡើងទៅ Google Drive</value>
+    </data>
+    <data name="DataExport_Destination_OneDrive" xml:space="preserve">
+        <value>ឯកសារនាំចេញនឹងត្រូវបានផ្ទុកឡើងទៅ OneDrive</value>
+    </data>
+    <data name="DataExport_QueuedOn" xml:space="preserve">
+        <value>បានដាក់ជួរនៅលើ {{date}}</value>
+    </data>
+    <data name="DataExport_CompletedOn" xml:space="preserve">
+        <value>បានបញ្ចប់នៅលើ {{date}}</value>
+    </data>
+    <data name="DataExport_QuestionnaireWithVersion" xml:space="preserve">
+        <value>{{title}} (ver. {{version}})</value>
+    </data>
+    <data name="DataExport_Regenerate" xml:space="preserve">
+        <value>បង្កើតឡើងវិញ</value>
+    </data>
+    <data name="DataExport_RegenerateDesc" xml:space="preserve">
+        <value>ការនាំចេញជួរជាមួយប៉ារ៉ាម៉ែត្រដូចគ្នា។</value>
+    </data>
+    <data name="DataExport_FileLastUpdate" xml:space="preserve">
+        <value>ធ្វើបច្ចុប្បន្នភាពចុងក្រោយ៖ {{date}}</value>
+    </data>
+    <data name="DataExport_FileWasRegenerated" xml:space="preserve">
+        <value>ឯកសារត្រូវបានបង្កើតឡើងវិញ ឬលុបចេញ</value>
+    </data>
+    <data name="DataExport_FileSize" xml:space="preserve">
+        <value>ទំហំឯកសារ៖ {{size}} MB</value>
+    </data>
+    <data name="DataExport_ProducedIn" xml:space="preserve">
+        <value>ផលិតក្នុង៖</value>
+    </data>
+    <data name="DataExport_InQueue" xml:space="preserve">
+        <value>នៅក្នុងជួរ៖</value>
+    </data>
+    <data name="DataExport_Destination" xml:space="preserve">
+        <value>ទិសដៅ៖ {{dest}}</value>
+    </data>
+    <data name="DataExport_ServiceIsNotAvailable" xml:space="preserve">
+        <value>សេវាកម្មនាំចេញមិនមានទេ។</value>
+    </data>
+    <data name="DataType" xml:space="preserve">
+        <value>ប្រភេទទិន្នន័យ</value>
+    </data>
+    <data name="DataType_Binary" xml:space="preserve">
+        <value>ទិន្នន័យគោលពីរ។ បណ្ណសារជាមួយទិន្នន័យគោលពីរ (ឧ. រូបភាព អូឌីយ៉ូ)</value>
+    </data>
+    <data name="DataType_Ddi" xml:space="preserve">
+        <value>ឌីឌីអាយ។ Data Documentation Initiative ទិន្នន័យ XML</value>
+    </data>
+    <data name="DataType_MainSurveyData" xml:space="preserve">
+        <value>ទិន្នន័យស្ទង់មតិចម្បង។ ប័ណ្ណសារហ្ស៊ីបជាមួយទិន្នន័យសំភាសន៍សំខាន់ៗ</value>
+    </data>
+    <data name="FilterTitle" xml:space="preserve">
+        <value>ត្រងសំភាសន៍ដើម្បីនាំចេញ</value>
+    </data>
+    <data name="SurveyQuestionnaire" xml:space="preserve">
+        <value>កម្រងសំណួរ</value>
+    </data>
+    <data name="SurveyQuestionnaireVersion" xml:space="preserve">
+        <value>កំណែកម្រងសំណួរ</value>
+    </data>
+    <data name="DataType_Paradata" xml:space="preserve">
+        <value>ប៉ារ៉ាដាតា។ ទិន្នន័យមេតាលើដំណើរការសម្ភាសន៍ (ព្រឹត្តិការណ៍ និងពេលវេលា)</value>
+    </data>
+    <data name="DataDestination" xml:space="preserve">
+        <value>នាំចេញឯកសារគោលដៅ</value>
+    </data>
+    <data name="DataFormat" xml:space="preserve">
+        <value>ទម្រង់ទិន្នន័យ</value>
+    </data>
+    <data name="DataDestination_Dropbox" xml:space="preserve">
+        <value>បង្ហោះទៅ Dropbox</value>
+    </data>
+    <data name="DataDestination_GoogleDrive" xml:space="preserve">
+        <value>បង្ហោះទៅ Google Drive</value>
+    </data>
+    <data name="DataDestination_OneDrive" xml:space="preserve">
+        <value>បង្ហោះទៅ OneDrive</value>
+    </data>
+    <data name="DataDestination_Zip" xml:space="preserve">
+        <value>ទាញយក</value>
+    </data>
+    <data name="DataFormat_Spss" xml:space="preserve">
+        <value>ទម្រង់ SPSS</value>
+    </data>
+    <data name="DataFormat_Stata" xml:space="preserve">
+        <value>ទម្រង់ Stata 14</value>
+    </data>
+    <data name="DataFormat_Tab" xml:space="preserve">
+        <value>ទិន្នន័យបំបែកផ្ទាំង</value>
+    </data>
+    <data name="QuestionnaireInformation" xml:space="preserve">
+        <value>ព័ត៌មានអំពីកម្រងសំណួរ</value>
+    </data>
+    <data name="QuestionnaireInformation_Include" xml:space="preserve">
+        <value>រួមបញ្ចូលព័ត៌មានមេតាអំពីកម្រងសំណួរ</value>
+    </data>
+    <data name="QuestionnaireInformation_Exclude" xml:space="preserve">
+        <value>មិនរាប់បញ្ចូលព័ត៌មានមេតាអំពីកម្រងសំណួរ</value>
+    </data>
+    <data name="AddToQueue" xml:space="preserve">
+        <value>បន្ថែមទៅជួរ</value>
+    </data>
+    <data name="GeneratedDataSets" xml:space="preserve">
+        <value>សំណុំនាំចេញដែលបានបង្កើតពីមុន</value>
+    </data>
+    <data name="GeneratedDataSets_Desc" xml:space="preserve">
+        <value>ទិន្នន័យត្រូវបាននាំចេញនៅក្នុងប័ណ្ណសារហ្ស៊ីបដែលមានឯកសារទិន្នន័យនៃមាតិកា និងប្រភេទដែលបានបញ្ជាក់។ ខាងក្រោមនេះគឺជាបញ្ជីនៃឯកសារទិន្នន័យដែលបាននាំចេញពីមុន។</value>
+    </data>
+    <data name="NoDataSets" xml:space="preserve">
+        <value>មិនមានសំណុំទិន្នន័យដែលបានបង្កើតនៅឡើយទេ</value>
+    </data>
+    <data name="DataExportApi" xml:space="preserve">
+        <value>API នាំចេញទិន្នន័យ</value>
+    </data>
+    <data name="DataExportApiDesc" xml:space="preserve">
+        <value>អ្នកអាចរៀបចំការនាំចេញទិន្នន័យសំភាសន៍ដែលប្រមូលបានដោយស្វ័យប្រវត្តិដោយប្រើឧបករណ៍ API របស់យើងសម្រាប់ព័ត៌មានបន្ថែម និងការប្រើប្រាស់ការណែនាំ៖</value>
+    </data>
+    <data name="DataExportApiInfoPage" xml:space="preserve">
+        <value>ឯកសារយោង API នាំចេញទិន្នន័យ</value>
+    </data>
+    <data name="Error_Canceled" xml:space="preserve">
+        <value>ការងារនាំចេញត្រូវបានលុបចោលដោយអ្នកប្រើប្រាស់។</value>
+    </data>
+    <data name="Error_NotEnoughExternalStorageSpace" xml:space="preserve">
+        <value>មិនមានទំហំគ្រប់គ្រាន់សម្រាប់ទំហំផ្ទុកពពកដែលបានជ្រើសរើស។ សូមបង្កើនទំហំទំនេរ ហើយចាប់ផ្តើមការងារឡើងវិញ ឬជ្រើសរើសអ្នកផ្តល់សេវាផ្សេងទៀត។</value>
+    </data>
+    <data name="Error_Unhandled" xml:space="preserve">
+        <value>កំហុសដែលមិនបានរំពឹងទុកបានកើតឡើងកំឡុងពេលនាំចេញ។ យើងខ្ញុំសូមអភ័យទោសចំពោះការរអាក់រអួល។ សូមទាក់ទងក្រុមគាំទ្រម៉ាស៊ីនមេរបស់អ្នក។ ព័ត៌មានបន្ថែមចំពោះបញ្ហានេះមាននៅទំព័រជំនួយ៖ https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
+    </data>
+    <data name="AllStatuses" xml:space="preserve">
+        <value>ស្ថានភាពទាំងអស់។</value>
+    </data>
+    <data name="ApprovedByHeadquarters" xml:space="preserve">
+        <value>ត្រូវបានអនុម័តដោយស្ថានភាពការិយាល័យកណ្តាល</value>
+    </data>
+    <data name="ApprovedBySupervisor" xml:space="preserve">
+        <value>អនុម័តដោយស្ថានភាពអ្នកគ្រប់គ្រង</value>
+    </data>
+    <data name="DataExport_InterviewsStatus" xml:space="preserve">
+        <value>បទសម្ភាសន៍ក្នុង {{status}} ។</value>
+    </data>
+    <data name="InterviewerAssigned" xml:space="preserve">
+        <value>ស្ថានភាពដែលបានកំណត់អ្នកសម្ភាសន៍</value>
+    </data>
+    <data name="QuestionnaireTranslation" xml:space="preserve">
+        <value>ការបកប្រែ</value>
+    </data>
+    <data name="Translation_CardLabel" xml:space="preserve">
+        <value>ការបកប្រែ៖ {{language}}</value>
+    </data>
+    <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
+        <value>ការបកប្រែ</value>
+    </data>
+    <data name="SurveyQuestionnaireDateRange" xml:space="preserve">
+        <value>ជួរកាលបរិច្ឆេទ</value>
+    </data>
+    <data name="DateRangeAllTime" xml:space="preserve">
+        <value>គ្រប់ពេលវេលា</value>
+    </data>
+    <data name="DateRangeLast24hours" xml:space="preserve">
+        <value>24 ម៉ោងចុងក្រោយ</value>
+    </data>
+    <data name="DateRangeLast7days" xml:space="preserve">
+        <value>7 ថ្ងៃចុងក្រោយ</value>
+    </data>
+    <data name="DateRangeLast30days" xml:space="preserve">
+        <value>30 ថ្ងៃចុងក្រោយ</value>
+    </data>
+    <data name="DateRangeLastToday" xml:space="preserve">
+        <value>ថ្ងៃនេះ</value>
+    </data>
+    <data name="DateRangeLastYesterday" xml:space="preserve">
+        <value>ម្សិលមិញ</value>
+    </data>
+    <data name="DateRangeCustom" xml:space="preserve">
+        <value>ផ្ទាល់ខ្លួន</value>
+    </data>
+    <data name="SurveyQuestionnaireDateRangeFrom" xml:space="preserve">
+        <value>ពី</value>
+    </data>
+    <data name="DateRangeFromAll" xml:space="preserve">
+        <value>អាចប្រើបានមុនគេ</value>
+    </data>
+    <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
+        <value>ទៅ</value>
+    </data>
+    <data name="DateRangeToAll" xml:space="preserve">
+        <value>ពេលបច្ចុប្បន្ន</value>
+    </data>
+    <data name="DataType_AudioAuditFiles" xml:space="preserve">
+        <value>សវនកម្មសំឡេង។ បណ្ណសារហ្ស៊ីបដែលមានទិន្នន័យសវនកម្មសំឡេង</value>
+    </data>
+    <data name="ParadataEventsFilter" xml:space="preserve">
+        <value>តម្រងព្រឹត្តិការណ៍</value>
+    </data>
+    <data name="ParadataEventsFilter_All" xml:space="preserve">
+        <value>ទាំងអស់។</value>
+    </data>
+    <data name="ParadataEventsFilter_Reduced" xml:space="preserve">
+        <value>កាត់បន្ថយ</value>
+    </data>
+    <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
+        <value>សំណុំប៉ារ៉ាម៉ែត្រដែលបានកាត់បន្ថយមិនរាប់បញ្ចូលព្រឹត្តិការណ៍ដែលមានលេខកូដខាងក្រោម៖ សំណួរបើកដំណើរការ (13), សំណួរបិទ (14), បើកដំណើរការក្រុម (15), បិទក្រុម (16), សំណួរប្រកាសសុពលភាព (17), សំណួរប្រកាសមិនសុពលភាព (18), វ៉ារ្យង់បានបើកដំណើរការ (23), វ៉ារ្យង់ 24 អនុញ្ញាត។</value>
+    </data>
+    <data name="Validation_FromDateInvalid" xml:space="preserve">
+        <value>កាលបរិច្ឆេទ "ចាប់ពី" ត្រូវតែជាកាលបរិច្ឆេទត្រឹមត្រូវ។</value>
+    </data>
+    <data name="Validation_FromDateInFuture" xml:space="preserve">
+        <value>កាលបរិច្ឆេទ "ពី" មិនអាចមាននាពេលអនាគតទេ។</value>
+    </data>
+    <data name="Validation_ToDateInvalid" xml:space="preserve">
+        <value>កាលបរិច្ឆេទ "ទៅ" ត្រូវតែជាកាលបរិច្ឆេទត្រឹមត្រូវ។</value>
+    </data>
+    <data name="Validation_FromDateInvalidBeforeTo" xml:space="preserve">
+        <value>កាលបរិច្ឆេទ "ពី" ត្រូវតែមានសុពលភាពមុនពេលកំណត់កាលបរិច្ឆេទ "ដល់" ។</value>
+    </data>
+    <data name="Validation_ToDateBeforeFrom" xml:space="preserve">
+        <value>កាលបរិច្ឆេទ "ទៅ" ត្រូវតែធំជាងកាលបរិច្ឆេទ "ពី" ។</value>
+    </data>
+</root>

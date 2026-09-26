@@ -1,5 +1,7 @@
 <template>
-    <HqLayout :hasFilter="false" :title="title" :topicButtonRef="this.model.createUrl"
+    <HqLayout :hasFilter="false"
+        :title="title"
+        :topicButtonRef="this.model.createUrl"
         :topicButton="$t('Users.AddAPIUser')">
         <template v-slot:subtitle>
             <div class="neighbor-block-to-search">
@@ -10,7 +12,11 @@
             </div>
         </template>
 
-        <DataTables ref="table" :tableOptions="tableOptions" @ajaxComplete="onTableReload" noSelect :noPaging="false">
+        <DataTables ref="table"
+            :tableOptions="tableOptions"
+            @ajaxComplete="onTableReload"
+            noSelect
+            :noPaging="false">
         </DataTables>
 
     </HqLayout>

@@ -217,7 +217,7 @@
     <value>Chargement. S'il vous plaît, attendez</value>
   </data>
   <data name="Admin" xml:space="preserve">
-    <value>Admin</value>
+    <value>Administrateur</value>
   </data>
   <data name="Approve" xml:space="preserve">
     <value>Approuver</value>

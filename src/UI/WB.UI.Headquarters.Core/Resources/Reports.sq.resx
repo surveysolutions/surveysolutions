@@ -384,4 +384,17 @@
   <data name="WithInterviewers" xml:space="preserve">
     <value>Sipas Pjesëtarëve të Ekipit</value>
   </data>
+
+
+  <data name="ClusterInfo" xml:space="preserve">
+    <value>Kjo zonë përmban</value>
+  </data>
+
+  <data name="AssignReceivedConfirm" xml:space="preserve">
+    <value>E kuptova që kjo intervistë është marrë tashmë nga tableti</value>
+  </data>
+
+  <data name="AssignReceivedWarning" xml:space="preserve">
+    <value>Intervistuesi përgjegjës aktual nuk do të njoftohet për ricaktimin deri në sinkronizimin e ardhshëm. Nëse ai ka filluar tashmë të punojë me intervistën, të gjitha të dhënat që ai ka futur para sinkronizimit të ardhshëm do të FSHIHEN!</value>
+  </data>
 </root>

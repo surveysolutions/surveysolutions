@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AdministrativeRecords" xml:space="preserve">
+        <value>Hồ sơ hành chính</value>
+    </data>
+    <data name="AgriculturalCensus" xml:space="preserve">
+        <value>Tổng điều tra nông nghiệp</value>
+    </data>
+    <data name="AgriculturalSurvey" xml:space="preserve">
+        <value>Khảo sát nông nghiệp</value>
+    </data>
+    <data name="ChildLaborSurvey" xml:space="preserve">
+        <value>Khảo sát lao động trẻ em</value>
+    </data>
+    <data name="CoreWelfareIndicatorsQuestionnaire" xml:space="preserve">
+        <value>Bảng câu hỏi chỉ số phúc lợi cốt lõi</value>
+    </data>
+    <data name="DemographicAndHealthSurvey" xml:space="preserve">
+        <value>Khảo sát nhân khẩu học và y tế</value>
+    </data>
+    <data name="EnterpriseCensus" xml:space="preserve">
+        <value>Tổng điều tra doanh nghiệp</value>
+    </data>
+    <data name="EnterpriseSurvey" xml:space="preserve">
+        <value>Khảo sát doanh nghiệp</value>
+    </data>
+    <data name="HouseholdHealthSurvey" xml:space="preserve">
+        <value>Khảo sát sức khỏe hộ gia đình</value>
+    </data>
+    <data name="HouseholdSurvey" xml:space="preserve">
+        <value>Khảo sát hộ gia đình</value>
+    </data>
+    <data name="InformalSectorSurvey" xml:space="preserve">
+        <value>Khảo sát khu vực phi chính thức</value>
+    </data>
+    <data name="IntegratedSurvey" xml:space="preserve">
+        <value>Khảo sát tích hợp</value>
+    </data>
+    <data name="LaborForceSurvey" xml:space="preserve">
+        <value>Khảo sát lực lượng lao động</value>
+    </data>
+    <data name="LivingStandardsMeasurementStudy" xml:space="preserve">
+        <value>Nghiên cứu đo lường mức sống</value>
+    </data>
+    <data name="MultipleIndicatorClusterSurvey" xml:space="preserve">
+        <value>Khảo sát cụm chỉ số đa mục tiêu</value>
+    </data>
+    <data name="PopulationAndHousingCensus" xml:space="preserve">
+        <value>Tổng điều tra dân số và nhà ở</value>
+    </data>
+    <data name="PriceSurvey" xml:space="preserve">
+        <value>Khảo sát giá cả</value>
+    </data>
+    <data name="PrioritySurvey" xml:space="preserve">
+        <value>Khảo sát ưu tiên</value>
+    </data>
+    <data name="SampleFrame" xml:space="preserve">
+        <value>Khung mẫu</value>
+    </data>
+    <data name="ServiceProvisionAssessments" xml:space="preserve">
+        <value>Đánh giá cung ứng dịch vụ</value>
+    </data>
+    <data name="SocioEconomicMonitoringSurvey" xml:space="preserve">
+        <value>Khảo sát kinh tế - xã hội / giám sát</value>
+    </data>
+    <data name="StatisticalInfoAndMonitoringProg" xml:space="preserve">
+        <value>Chương trình thông tin thống kê và giám sát</value>
+    </data>
+    <data name="WorldFertilitySurvey" xml:space="preserve">
+        <value>Khảo sát sinh sản thế giới</value>
+    </data>
+    <data name="WorldHealthSurvey" xml:space="preserve">
+        <value>Khảo sát sức khỏe thế giới</value>
+    </data>
+</root>

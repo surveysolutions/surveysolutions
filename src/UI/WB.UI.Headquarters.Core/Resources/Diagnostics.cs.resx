@@ -133,7 +133,7 @@
     <value>Chyba připojení k databázi: {0}</value>
   </data>
   <data name="embedded_export_service_check" xml:space="preserve">
-    <value>Embedded Export Service Host</value>
+    <value>Hostitel vestavěné exportní služby</value>
   </data>
   <data name="embedded_export_service_check_Degraded" xml:space="preserve">
     <value>Služba Export nefunguje</value>
@@ -160,7 +160,7 @@
     <value>Služba Export v {0} odpověděla stavem {1}</value>
   </data>
   <data name="HealthCheckStatus" xml:space="preserve">
-    <value>Health status: {{status}}</value>
+    <value>Stav systému: {{status}}</value>
   </data>
   <data name="hq_baseurl_check" xml:space="preserve">
     <value>Kontrola konfigurace BaseUrl</value>
@@ -172,7 +172,7 @@
     <value>Ústředí nakonfigurováno pomocí Headquarters:BaseUrl: {0} je stejné jako aktuální adresa URL v adresním řádku prohlížeče.</value>
   </data>
   <data name="ServerMetrics" xml:space="preserve">
-    <value>Server metrics</value>
+    <value>Metriky serveru</value>
   </data>
   <data name="UnexpectedBrokenPackages" xml:space="preserve">
     <value>Bylo zjištěno {0} neočekávaně poškozených balíčků</value>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AllData" xml:space="preserve"><value>Semua data</value></data>
+  <data name="AllDataSpss" xml:space="preserve"><value>Semua data Spss</value></data>
+  <data name="AllDataStata" xml:space="preserve"><value>Semua data Stata</value></data>
+  <data name="ApprovedData" xml:space="preserve"><value>Data yang disetujui</value></data>
+  <data name="ApprovedDataSpss" xml:space="preserve"><value>Data yang disetujui Spss</value></data>
+  <data name="ApprovedDataStata" xml:space="preserve"><value>Data yang disetujui Stata</value></data>
+  <data name="BinaryData" xml:space="preserve"><value>Data biner</value></data>
+  <data name="CloneQuestionnaire" xml:space="preserve"><value>Salin kuesioner</value></data>
+  <data name="CreationDate" xml:space="preserve"><value>Dibuat pada</value></data>
+  <data name="History" xml:space="preserve"><value>Riwayat</value></data>
+  <data name="ImportTemplate" xml:space="preserve"><value>Impor kuesioner</value></data>
+  <data name="LastEntryDate" xml:space="preserve"><value>Diubah pada</value></data>
+  <data name="NewAssignment" xml:space="preserve"><value>Tugas baru</value></data>
+  <data name="Questionnaires" xml:space="preserve"><value>Kuesioner</value></data>
+  <data name="Maps" xml:space="preserve"><value>Peta</value></data>
+  <data name="Title" xml:space="preserve"><value>Judul</value></data>
+  <data name="Version" xml:space="preserve"><value>Versi</value></data>
+  <data name="MapDashboard" xml:space="preserve"><value>Dasbor Peta</value></data>
+  <data name="ImportDate" xml:space="preserve"><value>Diimpor pada</value></data>
+  <data name="Actions" xml:space="preserve"><value>Tindakan</value></data>
+  <data name="DeleteQuestionnaire" xml:space="preserve"><value>Hapus kuesioner</value></data>
+  <data name="ExportQuestionnaire" xml:space="preserve"><value>Ekspor kuesioner</value></data>
+  <data name="SaveQuestionnaire" xml:space="preserve"><value>Simpan dokumen kuesioner</value></data>
+  <data name="Questionnaire" xml:space="preserve"><value>Kuesioner</value></data>
+  <data name="SurveySetupIntroMessage1" xml:space="preserve"><value>Klik tombol Impor Kuesioner untuk memuat kuesioner dari Designer</value></data>
+  <data name="SurveySetupIntroMessage2" xml:space="preserve"><value>Klik pada kuesioner dari daftar untuk membuat tugas wawancara</value></data>
+  <data name="WebInterviewSetup" xml:space="preserve"><value>Pengaturan wawancara web</value></data>
+  <data name="RecordAudio" xml:space="preserve"><value>Rekam audio</value></data>
+  <data name="QuestionnairePreview" xml:space="preserve"><value>Pratinjau kuesioner</value></data>
+  <data name="UploadAssignments" xml:space="preserve"><value>Unggah tugas</value></data>
+  <data name="DeleteMap" xml:space="preserve"><value>Hapus peta</value></data>
+  <data name="DeleteMapUser" xml:space="preserve"><value>Hapus pengguna peta</value></data>
+  <data name="UpgradeAssignments" xml:space="preserve"><value>Tingkatkan tugas</value></data>
+  <data name="RecordAudioTitle" xml:space="preserve"><value>Aplikasi Pewawancara akan merekam audio wawancara saat fitur ini diaktifkan</value></data>
+  <data name="SendInvitations" xml:space="preserve"><value>Kirim undangan</value></data>
+  <data name="DownloadLinks" xml:space="preserve"><value>Unduh tautan web</value></data>
+  <data name="WebMode" xml:space="preserve"><value>Mode</value></data>
+  <data name="Details" xml:space="preserve"><value>Detail</value></data>
+  <data name="ShowOnDesigner" xml:space="preserve"><value>Tampilkan di Designer</value></data>
+  <data name="ImportedBy" xml:space="preserve"><value>Diimpor oleh</value></data>
+  <data name="ImportedByText" xml:space="preserve"><value>Pengguna {{role}} {{name}}</value></data>
+  <data name="QuestionnaireDeleteWarn" xml:space="preserve"><value>{{receivedInterviews}} wawancara dan {{receivedAssignments}} tugas akan dihapus</value></data>
+  <data name="TypeQuestionnaireName" xml:space="preserve"><value>Silakan ketik '{{questionnaireTitle}}' untuk mengonfirmasi</value></data>
+  <data name="UsersManagement" xml:space="preserve"><value>Manajemen Pengguna</value></data>
+  <data name="CreateUser" xml:space="preserve"><value>Buat Pengguna</value></data>
+  <data name="ExposedVariables" xml:space="preserve"><value>Variabel yang Diekspos</value></data>
+  <data name="Edit" xml:space="preserve"><value>Edit</value></data>
+</root>
