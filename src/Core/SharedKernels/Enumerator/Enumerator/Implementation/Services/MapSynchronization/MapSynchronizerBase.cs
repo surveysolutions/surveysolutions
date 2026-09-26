@@ -189,7 +189,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
 
                             // Store ETag from the (first or resumed) response so the next resume
                             // can use If-Range to detect server-side file changes.
-                            this.mapService.SaveTempMapETag(mapDescription.MapName, contentStreamResult.ETag);
+                            if (contentStreamResult.ETag != null || offset == 0 || !contentStreamResult.IsPartialContent)
+                                this.mapService.SaveTempMapETag(mapDescription.MapName, contentStreamResult.ETag);
                          
                             var buffer = new byte[DownloadBufferSize];
                             var downloadProgressChangedEventArgs = new TransferProgress()

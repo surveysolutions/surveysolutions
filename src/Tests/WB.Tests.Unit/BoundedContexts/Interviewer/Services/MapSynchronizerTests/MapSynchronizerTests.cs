@@ -182,6 +182,44 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
         }
 
         [Test]
+        public async Task when_partial_resume_response_has_no_etag_should_keep_existing_resume_token()
+        {
+            var synchronizationService = new Mock<IOnlineSynchronizationService>();
+            synchronizationService.Setup(x => x.GetMapList(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<MapView> { new MapView { MapName = "partial-map.tpk" } });
+
+            var sourceBytes = new byte[] { 7, 8, 9 };
+            synchronizationService.Setup(x => x.GetMapContentStream("partial-map.tpk", It.IsAny<CancellationToken>(), 3, "etag-1"))
+                .ReturnsAsync(new RestStreamResult
+                {
+                    ContentLength = sourceBytes.Length,
+                    Stream = new MemoryStream(sourceBytes),
+                    IsPartialContent = true,
+                    ETag = null
+                });
+
+            var tempStream = new NonDisposingMemoryStream();
+            tempStream.Write(new byte[] { 1, 2, 3 }, 0, 3);
+
+            var mapService = new Mock<IMapService>();
+            mapService.Setup(x => x.GetAvailableMaps(false)).Returns(new List<MapDescription>());
+            mapService.Setup(x => x.GetAvailableShapefiles()).Returns(new List<ShapefileDescription>());
+            mapService.Setup(x => x.DoesMapExist("partial-map.tpk")).Returns(false);
+            mapService.Setup(x => x.GetTempMapOffset("partial-map.tpk")).Returns(3);
+            mapService.Setup(x => x.GetTempMapETag("partial-map.tpk")).Returns("etag-1");
+            mapService.Setup(x => x.GetTempMapSaveStream("partial-map.tpk", true)).Returns(tempStream);
+
+            var service = Create.Service.MapSyncProvider(
+                synchronizationService: synchronizationService.Object,
+                mapService: mapService.Object);
+
+            await service.Synchronize(new Progress<SyncProgressInfo>(), CancellationToken.None, new SynchronizationStatistics());
+
+            mapService.Verify(x => x.SaveTempMapETag("partial-map.tpk", It.IsAny<string>()), Times.Never);
+            mapService.Verify(x => x.MoveTempMapToPermanent("partial-map.tpk"), Times.Once);
+        }
+
+        [Test]
         public async Task should_report_download_progress_for_unknown_content_length_without_spam()
         {
             var synchronizationService = new Mock<IOnlineSynchronizationService>();
