@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                         invitationService.MigrateInvitationToNewAssignment(assignmentId, newAssignment.Id);
                         commandService.Execute(new UpgradeAssignmentCommand(oldAssignment.PublicKey, userId, oldAssignment.QuestionnaireId));
                     }
-                    catch (AssignmentException e)
+                    catch (AssignmentException e) when (e.ExceptionType == AssignmentDomainExceptionType.InvalidResponsible)
                     {
                         throw new AssignmentUpgradeException(e.Message, e);
                     }
