@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -183,7 +184,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
         }
 
         [Test]
-        public void should_include_supervisor_questions_in_counters()
+        public async Task should_include_supervisor_questions_in_counters()
         {
             var interview = Mock.Of<IStatefulInterview>(
                 x => x.CountActiveAnsweredQuestionsInInterviewForSupervisor() == 3
@@ -200,6 +201,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
 
             // Act
             viewModel.Configure(Id.g1.FormatGuid(), Create.Other.NavigationState(interviewRepository.Object));
+            await WaitForLoadingToFinishAsync(viewModel);
 
             // Assert
             Assert.That(viewModel, Has.Property(nameof(viewModel.ErrorsCount)).EqualTo(2));
@@ -208,7 +210,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
         }
         
         [Test]
-        public void should_update_entities_with_errors_description_from_supervisor_errors_count()
+        public async Task should_update_entities_with_errors_description_from_supervisor_errors_count()
         {
             var interview = Mock.Of<IStatefulInterview>(
                      x => x.CountActiveAnsweredQuestionsInInterviewForSupervisor() == 3
@@ -224,9 +226,39 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var viewModel = CreateViewModel(interviewRepository: interviewRepository.Object);
 
             viewModel.Configure(Id.g1.FormatGuid(), Create.Other.NavigationState(interviewRepository.Object));
+            await WaitForLoadingToFinishAsync(viewModel);
 
             Assert.That(viewModel, Has.Property(nameof(viewModel.EntitiesWithErrorsDescription))
                      .EqualTo(WB.Core.SharedKernels.Enumerator.Properties.UIResources.Interview_Complete_Entities_With_Errors + " 2"));
+        }
+
+        private static async Task WaitForLoadingToFinishAsync(SupervisorResolveInterviewViewModel viewModel)
+        {
+            if (!viewModel.IsLoading)
+                return;
+
+            var loadingFinished = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+            void OnPropertyChanged(object sender, PropertyChangedEventArgs args)
+            {
+                if (args.PropertyName == nameof(viewModel.IsLoading) && !viewModel.IsLoading)
+                    loadingFinished.TrySetResult(true);
+            }
+
+            viewModel.PropertyChanged += OnPropertyChanged;
+            try
+            {
+                if (!viewModel.IsLoading)
+                    return;
+
+                var completedTask = await Task.WhenAny(loadingFinished.Task, Task.Delay(TimeSpan.FromSeconds(5)));
+                completedTask.Should().Be(loadingFinished.Task);
+                await loadingFinished.Task;
+            }
+            finally
+            {
+                viewModel.PropertyChanged -= OnPropertyChanged;
+            }
         }
 
         [Test]

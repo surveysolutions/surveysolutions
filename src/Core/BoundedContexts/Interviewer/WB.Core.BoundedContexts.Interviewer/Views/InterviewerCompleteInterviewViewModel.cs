@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -80,21 +81,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             // IsLoading stays true; OnTabDataLoadedAsync handles criticality and clears it.
         }
 
-        protected override async Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState)
+        protected override async Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState, CancellationToken cancellationToken)
         {
             if (!this.HasCriticalFeature(interviewId)
                 || CriticalityLevel == SharedKernels.DataCollection.ValueObjects.Interview.CriticalityLevel.Ignore)
             {
-                await InvokeOnMainThreadAsync(() =>
-                {
-                    if (isDisposed) return;
-                    IsCompletionAllowed = true;
-                    IsLoading = false;
-                });
+                await base.OnTabDataLoadedAsync(interviewId, navigationState, cancellationToken);
             }
             else
             {
-                await CollectCriticalityInfo(interviewId, navigationState);
+                await CollectCriticalityInfo(interviewId, navigationState, cancellationToken);
             }
         }
         

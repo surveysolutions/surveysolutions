@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.Commands;
@@ -93,58 +95,73 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
             // IsLoading stays true; OnTabDataLoadedAsync loads supervisor-specific counts and clears it.
         }
-
-        protected override async Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState)
+        protected override async Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState, CancellationToken cancellationToken)
         {
-            // Override base counts with supervisor-specific values (run on background thread).
-            var iv = this.interviewRepository.GetOrThrow(interviewId);
-            var answeredCount = iv.CountActiveAnsweredQuestionsInInterviewForSupervisor();
-            var errorsCount = iv.CountInvalidEntitiesInInterviewForSupervisor();
-            var unansweredCount = iv.CountActiveQuestionsInInterviewForSupervisor() - answeredCount;
-            var errorsDescription = UIResources.Interview_Complete_Entities_With_Errors + " " + MoreThan(errorsCount);
+            List<EntityWithErrorsViewModel> topFailedCriticalRules = null;
+            List<EntityWithErrorsViewModel> topUnansweredCriticalQuestions = null;
+            var criticalItemsTransferred = false;
 
-            var topFailedCriticalRulesFromState = this.entitiesListViewModelFactory.GetTopFailedCriticalRulesFromState(interviewId, navigationState);
-            var topFailedCriticalRules = topFailedCriticalRulesFromState.Entities.ToList();
-
-            var topUnansweredCriticalQuestionsInfo = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState);
-            var topUnansweredCriticalQuestions = topUnansweredCriticalQuestionsInfo.Entities.ToList();
-
-            await InvokeOnMainThreadAsync(() =>
+            try
             {
-                if (isDisposed)
+                // Override base counts with supervisor-specific values (run on background thread).
+                cancellationToken.ThrowIfCancellationRequested();
+                var iv = this.interviewRepository.GetOrThrow(interviewId);
+                var answeredCount = iv.CountActiveAnsweredQuestionsInInterviewForSupervisor();
+                var errorsCount = iv.CountInvalidEntitiesInInterviewForSupervisor();
+                var unansweredCount = iv.CountActiveQuestionsInInterviewForSupervisor() - answeredCount;
+                var errorsDescription = UIResources.Interview_Complete_Entities_With_Errors + " " + MoreThan(errorsCount);
+
+                var topFailedCriticalRulesFromState = this.entitiesListViewModelFactory.GetTopFailedCriticalRulesFromState(interviewId, navigationState);
+                topFailedCriticalRules = topFailedCriticalRulesFromState.Entities.ToList();
+
+                cancellationToken.ThrowIfCancellationRequested();
+                var topUnansweredCriticalQuestionsInfo = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState);
+                topUnansweredCriticalQuestions = topUnansweredCriticalQuestionsInfo.Entities.ToList();
+                cancellationToken.ThrowIfCancellationRequested();
+
+                await InvokeOnMainThreadAsync(() =>
                 {
-                    topFailedCriticalRules.ForEach(vm => vm.DisposeIfDisposable());
-                    topUnansweredCriticalQuestions.ForEach(vm => vm.DisposeIfDisposable());
-                    return;
-                }
+                    if (isDisposed || cancellationToken.IsCancellationRequested)
+                        return;
 
-                base.AnsweredCount = answeredCount;
-                base.ErrorsCount = errorsCount;
-                base.UnansweredCount = unansweredCount;
-                base.EntitiesWithErrorsDescription = errorsDescription;
-                RaisePropertyChanged(nameof(AnsweredCount));
-                RaisePropertyChanged(nameof(ErrorsCount));
-                RaisePropertyChanged(nameof(UnansweredCount));
-                RaisePropertyChanged(nameof(EntitiesWithErrorsDescription));
+                    base.AnsweredCount = answeredCount;
+                    base.ErrorsCount = errorsCount;
+                    base.UnansweredCount = unansweredCount;
+                    base.EntitiesWithErrorsDescription = errorsDescription;
+                    RaisePropertyChanged(nameof(AnsweredCount));
+                    RaisePropertyChanged(nameof(ErrorsCount));
+                    RaisePropertyChanged(nameof(UnansweredCount));
+                    RaisePropertyChanged(nameof(EntitiesWithErrorsDescription));
 
-                if (topFailedCriticalRules.Count > 0)
+                    if (topFailedCriticalRules.Count > 0)
+                    {
+                        var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
+                        tabViewModel.Items.AddRange(topFailedCriticalRules);
+                        tabViewModel.Total += topFailedCriticalRulesFromState.Total;
+                    }
+
+                    if (topUnansweredCriticalQuestions.Count > 0)
+                    {
+                        var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
+                        tabViewModel.Items.AddRange(topUnansweredCriticalQuestions);
+                        tabViewModel.Total += topUnansweredCriticalQuestionsInfo.Total;
+                    }
+
+                    criticalItemsTransferred = true;
+
+                    RaisePropertyChanged(nameof(IsAllOk));
+                });
+            }
+            finally
+            {
+                if (!criticalItemsTransferred)
                 {
-                    var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
-                    tabViewModel.Items.AddRange(topFailedCriticalRules);
-                    tabViewModel.Total += topFailedCriticalRulesFromState.Total;
+                    topFailedCriticalRules?.ForEach(vm => vm.DisposeIfDisposable());
+                    topUnansweredCriticalQuestions?.ForEach(vm => vm.DisposeIfDisposable());
                 }
-
-                if (topUnansweredCriticalQuestions.Count > 0)
-                {
-                    var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
-                    tabViewModel.Items.AddRange(topUnansweredCriticalQuestions);
-                    tabViewModel.Total += topUnansweredCriticalQuestionsInfo.Total;
-                }
-
-                RaisePropertyChanged(nameof(IsAllOk));
-            });
+            }
             
-            await base.OnTabDataLoadedAsync(interviewId, navigationState);
+            await base.OnTabDataLoadedAsync(interviewId, navigationState, cancellationToken);
         }
 
         public IMvxAsyncCommand Approve => new MvxAsyncCommand(async () =>

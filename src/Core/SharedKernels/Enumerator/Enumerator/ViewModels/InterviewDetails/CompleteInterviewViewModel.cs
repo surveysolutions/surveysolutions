@@ -80,6 +80,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             this.InterviewId = Guid.Parse(interviewId);
+            this.currentInterviewId = interviewId;
+            this.currentNavigationState = navigationState;
+
+            var previousTabs = this.Tabs;
 
             // Fast synchronous setup: just enough to show the screen immediately.
             // All expensive interview traversals are deferred to the background task below.
@@ -114,8 +118,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 },
             };
 
+            previousTabs?.ForEach(t => t.Dispose());
+            previousTabs?.DisposeIfDisposable();
+
             this.Comment = lastCompletionComments.Get(this.InterviewId);
             this.CommentLabel = UIResources.Interview_Complete_Note_For_Supervisor;
+            this.AnsweredCount = 0;
+            this.UnansweredCount = 0;
+            this.ErrorsCount = 0;
+            this.EntitiesWithErrorsDescription = string.Empty;
+            this.HasCriticalIssues = false;
+            this.CompleteButtonComment = string.Empty;
+            this.LoadingErrorMessage = string.Empty;
+            this.HasLoadingError = false;
+            this.IsCompletionAllowed = false;
+            this.IsLoading = true;
+            RaisePropertyChanged(nameof(Tabs));
+            RaisePropertyChanged(nameof(AnsweredCount));
+            RaisePropertyChanged(nameof(UnansweredCount));
+            RaisePropertyChanged(nameof(ErrorsCount));
+            RaisePropertyChanged(nameof(EntitiesWithErrorsDescription));
+            RaisePropertyChanged(nameof(IsAllOk));
 
             // IsLoading is true by default — the screen opens immediately with a loading indicator.
             // Load counts and entity lists on a background thread.
@@ -138,8 +161,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     Logger.Error("Failed to load complete screen data", ex);
                     await InvokeOnMainThreadAsync(() =>
                     {
-                        if (isDisposed) return;
+                        if (isDisposed || cancellationToken.IsCancellationRequested) return;
+                        LoadingErrorMessage = EnumeratorUIResources.UnexpectedException;
+                        HasLoadingError = true;
+                        IsCompletionAllowed = false;
                         IsLoading = false;
+                        RaisePropertyChanged(nameof(IsAllOk));
                     });
                 }
             }, cancellationToken);
@@ -152,63 +179,75 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         /// </summary>
         protected virtual async Task LoadDataForDisplayAsync(string interviewId, NavigationState navigationState, bool forSupervisor = false, CancellationToken cancellationToken = default)
         {
-            // --- Heavy work on background thread ---
-            if (isDisposed) return;
-            cancellationToken.ThrowIfCancellationRequested();
-            this.InterviewState.Init(interviewId, null);
-            var status = InterviewState.Status;
-            var questionsCount = InterviewState.QuestionsCount;
-            var answeredCount = InterviewState.AnsweredQuestionsCount;
-            var unansweredCount = questionsCount - answeredCount;
-            var errorsCount = InterviewState.InvalidAnswersCount;
+            List<EntityWithErrorsViewModel> unansweredQuestions = null;
+            List<EntityWithErrorsViewModel> entitiesWithErrors = null;
+            var itemsTransferredToTabs = false;
 
-            cancellationToken.ThrowIfCancellationRequested();
-            var topUnansweredResult = this.entitiesListViewModelFactory.GetTopUnansweredQuestions(interviewId, navigationState, forSupervisor);
-            var unansweredQuestions = topUnansweredResult.Entities.ToList();
-
-            cancellationToken.ThrowIfCancellationRequested();
-            var topErrorsResult = this.entitiesListViewModelFactory.GetTopEntitiesWithErrors(interviewId, navigationState);
-            var entitiesWithErrors = topErrorsResult.Entities.ToList();
-
-            var errorsDescription = UIResources.Interview_Complete_Entities_With_Errors + " " + MoreThan(errorsCount);
-            cancellationToken.ThrowIfCancellationRequested();
-
-            // --- Marshal UI updates to main thread ---
-            await InvokeOnMainThreadAsync(() =>
+            try
             {
-                if (isDisposed || cancellationToken.IsCancellationRequested)
+                // --- Heavy work on background thread ---
+                if (isDisposed) return;
+                cancellationToken.ThrowIfCancellationRequested();
+                this.InterviewState.Init(interviewId, null);
+                var status = InterviewState.Status;
+                var questionsCount = InterviewState.QuestionsCount;
+                var answeredCount = InterviewState.AnsweredQuestionsCount;
+                var unansweredCount = questionsCount - answeredCount;
+                var errorsCount = InterviewState.InvalidAnswersCount;
+
+                cancellationToken.ThrowIfCancellationRequested();
+                var topUnansweredResult = this.entitiesListViewModelFactory.GetTopUnansweredQuestions(interviewId, navigationState, forSupervisor);
+                unansweredQuestions = topUnansweredResult.Entities.ToList();
+
+                cancellationToken.ThrowIfCancellationRequested();
+                var topErrorsResult = this.entitiesListViewModelFactory.GetTopEntitiesWithErrors(interviewId, navigationState);
+                entitiesWithErrors = topErrorsResult.Entities.ToList();
+
+                var errorsDescription = UIResources.Interview_Complete_Entities_With_Errors + " " + MoreThan(errorsCount);
+                cancellationToken.ThrowIfCancellationRequested();
+
+                // --- Marshal UI updates to main thread ---
+                await InvokeOnMainThreadAsync(() =>
                 {
-                    // Dispose ViewModels that were created but won't be added to any tab.
-                    entitiesWithErrors.ForEach(vm => vm.DisposeIfDisposable());
-                    unansweredQuestions.ForEach(vm => vm.DisposeIfDisposable());
-                    return;
+                    if (isDisposed || cancellationToken.IsCancellationRequested)
+                        return;
+
+                    this.CompleteStatus = status;
+                    this.AnsweredCount = answeredCount;
+                    this.UnansweredCount = unansweredCount;
+                    this.ErrorsCount = errorsCount;
+                    this.EntitiesWithErrorsDescription = errorsDescription;
+
+                    var errorsTab = this.Tabs.First(t => t.TabContent == CompleteTabContent.Error);
+                    errorsTab.Items.AddRange(entitiesWithErrors);
+                    errorsTab.Total = topErrorsResult.Total;
+
+                    var unansweredTab = this.Tabs.First(t => t.TabContent == CompleteTabContent.Unanswered);
+                    unansweredTab.Items.AddRange(unansweredQuestions);
+                    unansweredTab.Total = topUnansweredResult.Total;
+
+                    itemsTransferredToTabs = true;
+
+                    RaisePropertyChanged(nameof(AnsweredCount));
+                    RaisePropertyChanged(nameof(UnansweredCount));
+                    RaisePropertyChanged(nameof(ErrorsCount));
+                    RaisePropertyChanged(nameof(EntitiesWithErrorsDescription));
+                    RaisePropertyChanged(nameof(Tabs));
+                    RaisePropertyChanged(nameof(IsAllOk));
+                });
+
+                cancellationToken.ThrowIfCancellationRequested();
+                if (isDisposed) return;
+                await OnTabDataLoadedAsync(interviewId, navigationState, cancellationToken);
+            }
+            finally
+            {
+                if (!itemsTransferredToTabs)
+                {
+                    entitiesWithErrors?.ForEach(vm => vm.DisposeIfDisposable());
+                    unansweredQuestions?.ForEach(vm => vm.DisposeIfDisposable());
                 }
-
-                this.CompleteStatus = status;
-                this.AnsweredCount = answeredCount;
-                this.UnansweredCount = unansweredCount;
-                this.ErrorsCount = errorsCount;
-                this.EntitiesWithErrorsDescription = errorsDescription;
-
-                var errorsTab = this.Tabs.First(t => t.TabContent == CompleteTabContent.Error);
-                errorsTab.Items.AddRange(entitiesWithErrors);
-                errorsTab.Total = topErrorsResult.Total;
-
-                var unansweredTab = this.Tabs.First(t => t.TabContent == CompleteTabContent.Unanswered);
-                unansweredTab.Items.AddRange(unansweredQuestions);
-                unansweredTab.Total = topUnansweredResult.Total;
-
-                RaisePropertyChanged(nameof(AnsweredCount));
-                RaisePropertyChanged(nameof(UnansweredCount));
-                RaisePropertyChanged(nameof(ErrorsCount));
-                RaisePropertyChanged(nameof(EntitiesWithErrorsDescription));
-                RaisePropertyChanged(nameof(Tabs));
-                RaisePropertyChanged(nameof(IsAllOk));
-            });
-
-            cancellationToken.ThrowIfCancellationRequested();
-            if (isDisposed) return;
-            await OnTabDataLoadedAsync(interviewId, navigationState);
+            }
         }
 
         /// <summary>
@@ -216,11 +255,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         /// Base implementation marks loading complete and computes completion eligibility.
         /// Subclasses override to add criticality, supervisor-specific counts, etc.
         /// </summary>
-        protected virtual async Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState)
+        protected virtual async Task OnTabDataLoadedAsync(string interviewId, NavigationState navigationState, CancellationToken cancellationToken)
         {
             await InvokeOnMainThreadAsync(() =>
             {
-                if (isDisposed) return;
+                if (isDisposed || cancellationToken.IsCancellationRequested) return;
 
                 IsCompletionAllowed = CalculateIsCompletionAllowed();
                 IsLoading = false;
@@ -244,6 +283,33 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             set => this.RaiseAndSetIfChanged(ref this.canSwitchToWebMode, value);
         }
 
+        public bool HasLoadingError
+        {
+            get => hasLoadingError;
+            set
+            {
+                if (!SetProperty(ref hasLoadingError, value))
+                    return;
+
+                retryLoadCommand?.RaiseCanExecuteChanged();
+            }
+        }
+
+        public string LoadingErrorMessage
+        {
+            get => loadingErrorMessage;
+            set => SetProperty(ref loadingErrorMessage, value);
+        }
+
+        public IMvxCommand RetryLoadCommand =>
+            retryLoadCommand ??= new MvxCommand(() =>
+            {
+                if (string.IsNullOrWhiteSpace(currentInterviewId) || currentNavigationState == null)
+                    return;
+
+                Configure(currentInterviewId, currentNavigationState);
+            }, () => HasLoadingError && !IsLoading);
+
         public virtual bool RequestWebInterview
         {
             get => requestWebInterview;
@@ -254,7 +320,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public bool IsLoading
         {
             get => isLoading;
-            set => this.RaiseAndSetIfChanged(ref this.isLoading, value);
+            set
+            {
+                if (value == this.isLoading)
+                    return;
+
+                this.RaiseAndSetIfChanged(ref this.isLoading, value);
+                retryLoadCommand?.RaiseCanExecuteChanged();
+            }
         }
 
         private GroupStatus completeStatus;
@@ -325,8 +398,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private bool requestWebInterview;
         private bool canSwitchToWebMode;
         private CancellationTokenSource _loadingCts;
+        private string currentInterviewId;
+        private NavigationState currentNavigationState;
         protected bool isDisposed;
         private bool isCompletionAllowed;
+        private bool hasLoadingError;
+        private string loadingErrorMessage;
+        private MvxCommand retryLoadCommand;
         
         private bool hasCriticalIssues;
         private string completeButtonComment;
@@ -342,57 +420,73 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             return true;
         }
 
-        protected async Task CollectCriticalityInfo(string interviewId, NavigationState navigationState)
+        protected async Task CollectCriticalityInfo(string interviewId, NavigationState navigationState, CancellationToken cancellationToken)
         {
-            var topFailedCriticalRulesInfo = this.entitiesListViewModelFactory.GetTopFailedCriticalRules(interviewId, navigationState);
-            var topFailedCriticalRules = topFailedCriticalRulesInfo.Entities.ToList();
+            List<EntityWithErrorsViewModel> topFailedCriticalRules = null;
+            List<EntityWithErrorsViewModel> topUnansweredCriticalQuestions = null;
+            var criticalItemsTransferred = false;
 
-            var topUnansweredCriticalQuestionsInfo = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState);
-            var topUnansweredCriticalQuestions = topUnansweredCriticalQuestionsInfo.Entities.ToList();
-            
-            await InvokeOnMainThreadAsync(() =>
+            try
             {
-                if (isDisposed)
-                {
-                    topFailedCriticalRules.ForEach(vm => vm.DisposeIfDisposable());
-                    topUnansweredCriticalQuestions.ForEach(vm => vm.DisposeIfDisposable());
-                    return;
-                }
+                cancellationToken.ThrowIfCancellationRequested();
+                var topFailedCriticalRulesInfo = this.entitiesListViewModelFactory.GetTopFailedCriticalRules(interviewId, navigationState);
+                topFailedCriticalRules = topFailedCriticalRulesInfo.Entities.ToList();
 
-                var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
-                if (topFailedCriticalRules.Count > 0)
-                {
-                    var takeCount = Math.Max(0, entitiesListViewModelFactory.MaxNumberOfEntities - tabViewModel.Items.Count);
-                    tabViewModel.Items.AddRange(topFailedCriticalRules.Take(takeCount));
-                    tabViewModel.Total += topFailedCriticalRulesInfo.Total;
-                }
+                cancellationToken.ThrowIfCancellationRequested();
+                var topUnansweredCriticalQuestionsInfo = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState);
+                topUnansweredCriticalQuestions = topUnansweredCriticalQuestionsInfo.Entities.ToList();
+                cancellationToken.ThrowIfCancellationRequested();
 
-                if (topUnansweredCriticalQuestions.Count > 0)
+                await InvokeOnMainThreadAsync(() =>
                 {
-                    var takeCount = Math.Max(0, entitiesListViewModelFactory.MaxNumberOfEntities - tabViewModel.Items.Count);
-                    tabViewModel.Items.AddRange(topUnansweredCriticalQuestions.Take(takeCount));
-                    tabViewModel.Total += topUnansweredCriticalQuestionsInfo.Total;
-                }
+                    if (isDisposed || cancellationToken.IsCancellationRequested)
+                        return;
 
-                HasCriticalIssues = topUnansweredCriticalQuestions.Count > 0 || topFailedCriticalRules.Count > 0;
-                if (HasCriticalIssues)
-                {
-                    CompleteStatus = GroupStatus.CompletedInvalid;
-
-                    if (CriticalityLevel == SharedKernels.DataCollection.ValueObjects.Interview.CriticalityLevel.Warn)
+                    var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
+                    if (topFailedCriticalRules.Count > 0)
                     {
-                        this.CompleteButtonComment = UIResources.Interview_Complete_Note_For_Supervisor_with_Criticality;
+                        var takeCount = Math.Max(0, entitiesListViewModelFactory.MaxNumberOfEntities - tabViewModel.Items.Count);
+                        tabViewModel.Items.AddRange(topFailedCriticalRules.Take(takeCount));
+                        tabViewModel.Total += topFailedCriticalRulesInfo.Total;
                     }
-                    else
-                    {
-                        this.CompleteButtonComment = UIResources.Interview_Complete_CriticalIssues_Instrunction;
-                    }
-                }
 
-                IsCompletionAllowed = CalculateIsCompletionAllowed();
-                RaisePropertyChanged(nameof(IsAllOk));
-                IsLoading = false;
-            });
+                    if (topUnansweredCriticalQuestions.Count > 0)
+                    {
+                        var takeCount = Math.Max(0, entitiesListViewModelFactory.MaxNumberOfEntities - tabViewModel.Items.Count);
+                        tabViewModel.Items.AddRange(topUnansweredCriticalQuestions.Take(takeCount));
+                        tabViewModel.Total += topUnansweredCriticalQuestionsInfo.Total;
+                    }
+
+                    criticalItemsTransferred = true;
+
+                    HasCriticalIssues = topUnansweredCriticalQuestions.Count > 0 || topFailedCriticalRules.Count > 0;
+                    if (HasCriticalIssues)
+                    {
+                        CompleteStatus = GroupStatus.CompletedInvalid;
+
+                        if (CriticalityLevel == SharedKernels.DataCollection.ValueObjects.Interview.CriticalityLevel.Warn)
+                        {
+                            this.CompleteButtonComment = UIResources.Interview_Complete_Note_For_Supervisor_with_Criticality;
+                        }
+                        else
+                        {
+                            this.CompleteButtonComment = UIResources.Interview_Complete_CriticalIssues_Instrunction;
+                        }
+                    }
+
+                    IsCompletionAllowed = CalculateIsCompletionAllowed();
+                    RaisePropertyChanged(nameof(IsAllOk));
+                    IsLoading = false;
+                });
+            }
+            finally
+            {
+                if (!criticalItemsTransferred)
+                {
+                    topFailedCriticalRules?.ForEach(vm => vm.DisposeIfDisposable());
+                    topUnansweredCriticalQuestions?.ForEach(vm => vm.DisposeIfDisposable());
+                }
+            }
         }
         
         protected virtual async Task CompleteInterviewAsync()

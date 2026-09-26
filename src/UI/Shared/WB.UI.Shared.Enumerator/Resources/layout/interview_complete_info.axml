@@ -11,7 +11,7 @@
             style="@style/Interview_Complete_Success_Text"
             android:layout_marginLeft="@dimen/Interview_Entity_margin_left"
             android:id="@+id/tv_Complete_Screen_Title_Success_Text"
-            local:MvxBind="Text Localization('Interview_Complete_Success_Text'); Visible And(Not(IsLoading), IsAllOk);" />
+            local:MvxBind="Text Localization('Interview_Complete_Success_Text'); Visible And(Not(IsLoading), Not(HasLoadingError), IsAllOk);" />
 
 
     <ProgressBar
@@ -23,10 +23,25 @@
     
 
     <LinearLayout
+            style="@style/Interview_Question"
+            android:orientation="vertical"
+            android:layout_marginRight="@dimen/Interview_Entity_margin_left"
+            local:MvxBind="Visible And(Not(IsLoading), HasLoadingError)">
+        <TextView
+                style="@style/Interview_Complete_Screen_Text"
+                android:id="@+id/tv_Complete_Screen_Error_Text"
+                local:MvxBind="Text LoadingErrorMessage" />
+        <Button
+                style="@style/Widget.App.Button"
+                android:id="@+id/btn_Complete_Screen_Retry"
+                local:MvxBind="Click RetryLoadCommand; Text Localization('OfflineSync_Retry');" />
+    </LinearLayout>
+
+    <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            local:MvxBind="Visible And(Not(IsLoading), Not(IsAllOk));">
+            local:MvxBind="Visible And(Not(IsLoading), Not(HasLoadingError), Not(IsAllOk));">
 
         <View style="@style/Interview_Complete_Divider"
               android:layout_gravity="bottom"
@@ -38,7 +53,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                local:MvxBind="Visible And(Not(IsLoading), Not(IsAllOk));">
+                local:MvxBind="Visible And(Not(IsLoading), Not(HasLoadingError), Not(IsAllOk));">
 
             <View style="@style/Interview_Complete_Divider"
                   android:layout_gravity="bottom"
@@ -71,14 +86,14 @@
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            local:MvxBind="Visible And(Not(IsLoading), Not(IsAllOk));" />
+            local:MvxBind="Visible And(Not(IsLoading), Not(HasLoadingError), Not(IsAllOk));" />
     
     <View style="@style/Interview_Complete_Divider" />
 
     <LinearLayout style="@style/Interview_Question" 
                   android:orientation="vertical"
                   android:layout_marginRight="@dimen/Interview_Entity_margin_left"
-                  local:MvxBind="Visible Not(IsLoading)">
+                  local:MvxBind="Visible And(Not(IsLoading), Not(HasLoadingError))">
         <TextView
           style="@style/Interview_Complete_Note"
           android:id="@+id/tv_Complete_NoteToSupervisorTxt"
@@ -96,5 +111,5 @@
     </LinearLayout>
 
     <View style="@style/Interview_Entity_Divider"
-          local:MvxBind="Visible Not(IsLoading)"/>
+          local:MvxBind="Visible And(Not(IsLoading), Not(HasLoadingError))"/>
 </merge>
