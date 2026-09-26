@@ -568,4 +568,7 @@
     <data name="AudioRecordingScopeNotice" xml:space="preserve">
         <value>Nhiệm vụ này có phạm vi kiểm tra âm thanh chọn lọc. Bật ghi âm đầy đủ sẽ ghi lại tất cả các phần. Việc tắt nó sẽ trở lại trạng thái chỉ ghi các phần đã chọn.</value>
         </data>
+    <data name="TargetAreaNameTooLong" xml:space="preserve">
+        <value>Tên bản đồ vùng mục tiêu quá dài. Độ dài tối đa cho phép là {{limit}} ký tự.</value>
+    </data>
 </root>
