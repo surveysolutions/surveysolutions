@@ -148,9 +148,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             // callback on the ThreadPool without any ordering guarantees. Multiple callbacks can
             // therefore execute concurrently, so the check-and-update of the shared throttling
             // state must be atomic to avoid emitting extra reports.
+            Stopwatch stopWatch;
             lock (progressState.SyncRoot)
             {
                 if (progressState.StopWatch == null) progressState.StopWatch = Stopwatch.StartNew();
+                stopWatch = progressState.StopWatch;
 
                 if (!downloadProgress.TotalBytesToReceive.HasValue || downloadProgress.TotalBytesToReceive.Value <= 0)
                 {
@@ -169,9 +171,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
                     progressState.LastReportedProgressBucket = currentProgressBucket;
                 }
             }
-            
+
             var receivedDataHumanized = NumericTextFormatter.FormatBytesHumanized(downloadProgress.BytesReceived);
-            var receivedSpeedHumanized = NumericTextFormatter.FormatSpeedHumanized(downloadProgress.BytesReceived, progressState.StopWatch.Elapsed);
+            var receivedSpeedHumanized = NumericTextFormatter.FormatSpeedHumanized(downloadProgress.BytesReceived, stopWatch.Elapsed);
             var hasKnownTotalLength = downloadProgress.TotalBytesToReceive.HasValue && downloadProgress.TotalBytesToReceive.Value > 0;
             var totalSizeHumanized = hasKnownTotalLength
                 ? NumericTextFormatter.FormatBytesHumanized(downloadProgress.TotalBytesToReceive.Value)

@@ -823,6 +823,9 @@
     <data name="QuestionInteger" xml:space="preserve">
         <value>მთელი რიცხვი</value>
         </data>
+    <data name="QuestionNonNegative" xml:space="preserve">
+        <value>არაუარყოფითი</value>
+        </data>
     <data name="QuestionIsLinked" xml:space="preserve">
         <value>დაკავშირებულია</value>
         </data>
