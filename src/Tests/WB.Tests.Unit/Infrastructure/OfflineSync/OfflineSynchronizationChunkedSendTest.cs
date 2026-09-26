@@ -104,9 +104,7 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
             }
 
             public Task ReceivePayloadTransferUpdate(INearbyConnection connection, string endpoint, NearbyPayloadTransferUpdate update)
-            {
-                throw new NotImplementedException();
-            }
+                => throw new NotImplementedException();
 
             public IObservable<IncomingDataInfo> IncomingInfo { get; }
         }
