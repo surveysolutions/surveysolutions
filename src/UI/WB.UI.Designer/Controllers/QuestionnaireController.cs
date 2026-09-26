@@ -552,7 +552,6 @@ namespace WB.UI.Designer.Controllers
                 return;
             }
 
-            var userName = User.GetUserName();
             var questionnaireTitle = questionnaireView.Title;
             var sharingLink = Url.Action("Details", "Q", new { id = anonymousQuestionnaireId }, Request.Scheme);
             if (sharingLink == null)
@@ -567,6 +566,7 @@ namespace WB.UI.Designer.Controllers
             // creates its own DefaultHttpContext, and MailSender uses only singleton options.
             try
             {
+                var userName = User.GetUserNameOrNull() ?? user.UserName ?? string.Empty;
                 var sendTask = SendEmailAsync(user.Email, userName, sharingLink, questionnaireTitle);
                 using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(requestAborted);
                 timeoutCts.CancelAfter(TimeSpan.FromSeconds(AnonymousSharingEmailTimeoutSeconds));

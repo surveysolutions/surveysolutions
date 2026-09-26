@@ -53,7 +53,7 @@ namespace WB.UI.Designer.CommonWeb
 
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 client.EnableSsl = config.EnableSSL;
-                client.Timeout = config.Timeout;
+                client.Timeout = config.Timeout > 0 ? config.Timeout : 30_000;
 
                 if (this.settings.Value.UsePickupFolder)
                 {

@@ -1,4 +1,5 @@
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -174,6 +175,35 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             var result = await controller.RegenerateAnonymousQuestionnaireLink(questionnaireId);
 
             Assert.That(result, Is.InstanceOf<NotFoundResult>());
+        }
+
+        [Test]
+        public async Task UpdateAnonymousQuestionnaireSettings_when_name_claim_is_missing_should_still_return_success()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var dbContext = Create.InMemoryDbContext();
+            var emailSender = new Mock<IEmailSender>();
+            var user = new DesignerIdentityUser { Email = "test@example.com", UserName = "testuser" };
+            var userManager = CreateUserManager(returnUser: user);
+
+            var controller = CreateQuestionnaireController(
+                dbContext: dbContext,
+                questionnaireViewFactory: CreateQuestionnaireViewFactory(),
+                emailSender: emailSender.Object,
+                viewRenderService: Mock.Of<IViewRenderService>(),
+                userManager: userManager);
+            controller.Url = CreateUrlHelper();
+            controller.ControllerContext.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity());
+
+            var result = await controller.UpdateAnonymousQuestionnaireSettings(
+                questionnaireId,
+                new QuestionnaireController.UpdateAnonymousQuestionnaireSettingsModel { IsActive = true });
+
+            Assert.That(result, Is.InstanceOf<JsonResult>(), "Should return JsonResult, not an error response");
+            emailSender.Verify(
+                s => s.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()),
+                Times.Once,
+                "Email sender should have been called even when the name claim is missing");
         }
     }
 }
