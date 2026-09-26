@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net.Mime;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -34,7 +33,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
     public class WorkspacesPublicApiController : ControllerBase
     {
         private readonly IWorkspacesStorage workspaces;
-        private readonly IMapper mapper;
         private readonly IWorkspacesService workspacesService;
         private readonly IWorkspacesCache workspacesCache;
         private readonly IUnitOfWork unitOfWork;
@@ -45,7 +43,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IInScopeExecutor<IWebInterviewInvoker> webInterviewNotification;
 
         public WorkspacesPublicApiController(IWorkspacesStorage workspaces,
-            IMapper mapper,
             IWorkspacesService workspacesService,
             IWorkspacesCache workspacesCache,
             IUnitOfWork unitOfWork,
@@ -55,7 +52,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IInScopeExecutor<IWebInterviewInvoker> webInterviewNotification)
         {
             this.workspaces = workspaces;
-            this.mapper = mapper;
             this.workspacesService = workspacesService;
             this.workspacesCache = workspacesCache;
             this.unitOfWork = unitOfWork;
@@ -118,7 +114,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NotFound();
             }
 
-            return mapper.Map<WorkspaceApiView>(workspace);
+            return workspace.ToApiView();
         }
 
         /// <summary>
@@ -145,7 +141,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 this.systemLog.WorkspaceCreated(workspace.Name, workspace.DisplayName);
 
                 return CreatedAtAction("Details", routeValues: new { name = workspace.Name },
-                    value: this.mapper.Map<WorkspaceApiView>(workspace));
+                    value: workspace.ToApiView());
             }
 
             unitOfWork.DiscardChanges();

@@ -310,7 +310,7 @@
     <value>No fué posible extraer las categorías del archivo cargado</value>
   </data>
   <data name="Column" xml:space="preserve">
-    <value>column</value>
+    <value>columna</value>
   </data>
   <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
     <value>La sección de portada debe ser la primera sección del cuestionario</value>

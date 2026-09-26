@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="CustomizeDisplayedText" xml:space="preserve"><value>Tùy chỉnh văn bản hiển thị</value></data>
+  <data name="WebInterviewSetupFor_Title" xml:space="preserve"><value>Thiết lập phỏng vấn web</value></data>
+  <data name="ExampleWelcomePage" xml:space="preserve"><value>Trang chào mừng ví dụ</value></data>
+  <data name="ExampleResumePage" xml:space="preserve"><value>Trang tiếp tục ví dụ</value></data>
+  <data name="ExampleFinishPage" xml:space="preserve"><value>Trang hoàn thành ví dụ</value></data>
+  <data name="CustomizeEmailsText" xml:space="preserve"><value>Tùy chỉnh email</value></data>
+  <data name="Invitation" xml:space="preserve"><value>Lời mời</value></data>
+  <data name="Reminder" xml:space="preserve"><value>Nhắc nhở</value></data>
+  <data name="Reject" xml:space="preserve"><value>Từ chối</value></data>
+  <data name="Save" xml:space="preserve"><value>Lưu</value></data>
+    <data name="ExampleInvitationEmailMessage" xml:space="preserve">
+        <value>Ví dụ về nội dung email lời mời</value>
+    </data>
+    <data name="EmailMessage" xml:space="preserve">
+        <value>Nội dung:</value>
+    </data>
+    <data name="EmailSubject" xml:space="preserve">
+        <value>Tiêu đề:</value>
+    </data>
+    <data name="MainText" xml:space="preserve">
+        <value>Nội dung chính:</value>
+    </data>
+    <data name="DescriptionForPassword" xml:space="preserve">
+        <value>Mô tả cho mật khẩu:</value>
+    </data>
+    <data name="StartInterviewButton" xml:space="preserve">
+        <value>Nút bắt đầu phỏng vấn</value>
+    </data>
+    <data name="ShownPasswordIsRequired" xml:space="preserve">
+        <value>Chỉ hiển thị khi mật khẩu được yêu cầu và đã thiết lập</value>
+    </data>
+    <data name="ExampleReminderEmailMessage" xml:space="preserve">
+        <value>Ví dụ về nội dung email nhắc nhở</value>
+    </data>
+    <data name="ExampleRejectEmailMessage" xml:space="preserve">
+        <value>Ví dụ về nội dung email từ chối</value>
+    </data>
+    <data name="ReminderSetting" xml:space="preserve">
+        <value>Thiết lập nhắc nhở</value>
+    </data>
+    <data name="WelcomePage" xml:space="preserve">
+        <value>Trang chào mừng</value>
+    </data>
+    <data name="ResumePage" xml:space="preserve">
+        <value>Trang tiếp tục</value>
+    </data>
+    <data name="FinishPage" xml:space="preserve">
+        <value>Trang hoàn thành</value>
+    </data>
+    <data name="LinkToInterviewPage" xml:space="preserve">
+        <value>Trang đích phỏng vấn web</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>Hủy</value>
+    </data>
+    <data name="RejectEmailMessage" xml:space="preserve">
+        <value>Từ chối</value>
+    </data>
+    <data name="CompleteEmailMessage" xml:space="preserve">
+        <value>Hoàn thành</value>
+    </data>
+    <data name="InvitationEmailMessage" xml:space="preserve">
+        <value>Lời mời</value>
+    </data>
+    <data name="ResumeEmailMessage" xml:space="preserve">
+        <value>Tiếp tục</value>
+    </data>
+    <data name="ReminderNoResponseEmailMessage" xml:space="preserve">
+        <value>Không phản hồi</value>
+    </data>
+    <data name="ReminderPartialResponseEmailMessage" xml:space="preserve">
+        <value>Phản hồi một phần</value>
+    </data>
+    <data name="AdditionalSettings" xml:space="preserve">
+        <value>Cài đặt bổ sung</value>
+    </data>
+    <data name="SendWithNoResponse" xml:space="preserve">
+        <value>Gửi lời nhắc cho những người chưa phản hồi</value>
+    </data>
+    <data name="SendWithPartialResponse" xml:space="preserve">
+        <value>Gửi lời nhắc cho những người phản hồi một phần</value>
+    </data>
+    <data name="DoNotSend" xml:space="preserve">
+        <value>Không gửi</value>
+    </data>
+    <data name="AfterXDay" xml:space="preserve">
+        <value>Sau {{count}} ngày</value>
+    </data>
+    <data name="AfterXWeek" xml:space="preserve">
+        <value>Sau {{count}} tuần</value>
+    </data>
+    <data name="Description" xml:space="preserve">
+        <value>Mô tả:</value>
+    </data>
+    <data name="FieldRequired" xml:space="preserve">
+        <value>Trường này là bắt buộc.</value>
+    </data>
+    <data name="Title" xml:space="preserve">
+        <value>Tiêu đề:</value>
+    </data>
+    <data name="EmailTemplateDescription" xml:space="preserve">
+        <value>Bạn có thể dùng chỗ giữ chỗ %SURVEYNAME% trong nội dung dưới dạng tên khảo sát</value>
+    </data>
+    <data name="InterviewDataInsertInTextDescription" xml:space="preserve">
+        <value>Trong mẫu email này, bạn có thể dùng chỗ giữ chỗ %question_variable% trong nội dung dưới dạng câu trả lời cho câu hỏi trong phỏng vấn. Câu hỏi phải thuộc cấp cao nhất của bảng câu hỏi (không nằm trong roster).</value>
+    </data>
+    <data name="InterviewDataInsertBarcodeDescription" xml:space="preserve">
+        <value>%question_variable:barcode% - hiển thị câu trả lời dưới dạng mã vạch Code 128</value>
+    </data>
+    <data name="InterviewDataInsertQrCodeDescription" xml:space="preserve">
+        <value>%question_variable:qrcode% - hiển thị câu trả lời dưới dạng mã QR</value>
+    </data>
+    <data name="AnswerOn" xml:space="preserve">
+        <value>câu trả lời cho {{variable}}</value>
+    </data>
+    <data name="CompletePage" xml:space="preserve">
+        <value>Hoàn thành</value>
+    </data>
+    <data name="Complete" xml:space="preserve">
+        <value>Hoàn thành</value>
+    </data>
+    <data name="NoteToSupervisor" xml:space="preserve">
+        <value>Ghi chú cho giám sát viên</value>
+    </data>
+    <data name="Resume" xml:space="preserve">
+        <value>Tiếp tục</value>
+    </data>
+    <data name="StartNew" xml:space="preserve">
+        <value>Bắt đầu phỏng vấn mới</value>
+    </data>
+    <data name="Sending" xml:space="preserve">
+        <value>Đang gửi</value>
+    </data>
+    <data name="NoErrors" xml:space="preserve">
+        <value>Không có lỗi</value>
+    </data>
+    <data name="NothingWasSent" xml:space="preserve">
+        <value>Không có gì được gửi</value>
+    </data>
+    <data name="ProcessCancelled" xml:space="preserve">
+        <value>Quy trình đã bị hủy</value>
+    </data>
+    <data name="DownloadErrors" xml:space="preserve">
+        <value>Tải xuống danh sách phiếu phân công có lỗi</value>
+    </data>
+    <data name="SendingFailed" xml:space="preserve">
+        <value>Gửi lời mời thất bại. Vui lòng liên hệ quản trị viên máy chủ để kiểm tra cài đặt nhà cung cấp email</value>
+    </data>
+    <data name="TotalSent" xml:space="preserve">
+        <value>{{ totalCount }} lời mời cần gửi</value>
+    </data>
+    <data name="TotalProcessed" xml:space="preserve">
+        <value>{{ processedCount }} đã gửi thành công</value>
+    </data>
+    <data name="TotalWithErrors" xml:space="preserve">
+        <value>{{ withErrorsCount }} không được gửi do lỗi.</value>
+    </data>
+</root>

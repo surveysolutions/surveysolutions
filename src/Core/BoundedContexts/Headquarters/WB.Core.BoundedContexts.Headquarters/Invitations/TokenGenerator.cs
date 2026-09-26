@@ -25,7 +25,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public string GenerateUnique()
         {
-            var tokens = Enumerable.Range(1, 10).Select(_ => GetRandomString(tokenLength, Encode_32_Chars)).ToArray();
+            // NOTE: List<string> is used in the LINQ expression tree on purpose. For an array the C# compiler
+            // (C# 14+) binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an
+            // op_Implicit call into the expression tree that NHibernate cannot evaluate.
+            var tokens = Enumerable.Range(1, 10).Select(_ => GetRandomString(tokenLength, Encode_32_Chars)).ToList();
             List<string> usedTokens = this.invitationStorage.Query(_ => _.Where(x => tokens.Contains(x.Token)).Select(x => x.Token).ToList());
 
             var availableTokens = tokens.Except(usedTokens).ToList();
