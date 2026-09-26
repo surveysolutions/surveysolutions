@@ -22,15 +22,15 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             }
         }
 
-        public Task WaitWhileUserInterfaceIsRefreshingAsync()
+        public Task WaitWhileUserInterfaceIsRefreshingAsync(CancellationToken cancellationToken)
         {
-            return Task.Run((async () =>
+            return Task.Run(async () =>
             {
                 while (count > 0)
                 {
-                    await Task.Delay(100);
+                    await Task.Delay(100, cancellationToken);
                 }
-            }));
+            }, cancellationToken);
         }
 
         public void ThrottledActionStarted()

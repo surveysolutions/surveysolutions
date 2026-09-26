@@ -94,7 +94,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             navigationState = Create.Other.NavigationState();
             QuestionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
             var userInterfaceStateService = Mock.Of<IUserInterfaceStateService>(
-                x => x.WaitWhileUserInterfaceIsRefreshingAsync() == Task.FromResult(true));
+                x => x.WaitWhileUserInterfaceIsRefreshingAsync(It.IsAny<System.Threading.CancellationToken>()) == Task.FromResult(true));
             
             AnsweringViewModelMock = new Mock<AnsweringViewModel>(Mock.Of<ICommandService>(), userInterfaceStateService, Mock.Of<ILogger>());
             

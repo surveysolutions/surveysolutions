@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -82,13 +83,24 @@ namespace WB.UI.WebTester.Controllers
                 return this.Json("fail");
             }
 
+            var uploadLock = InterviewFileOperationLocks.Get(interview.Id);
+            await uploadLock.WaitAsync();
+            MultimediaFile? previousFile = null;
+            string? fileName = null;
+            var fileWriteAttempted = false;
+            var commandExecutionStarted = false;
+            AnswerAudioQuestionCommand? command = null;
             try
             {
+                interview = this.statefulInterviewRepository.Get(id) ??
+                    throw new InvalidOperationException("Interview must not be null.");
+                question = interview.GetQuestion(questionIdentity)!;
                 await using var ms = new MemoryStream();
                 await file.CopyToAsync(ms);
                 byte[] bytes = ms.ToArray();
                 string contentType = file.ContentType;
-                var fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.aac";
+                fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.aac";
+                previousFile = this.mediaStorage.Get(fileName, interview.Id);
                 
                 var audioDuration = TimeSpan.Zero;
                 if(contentType is "audio/wav" or "audio/x-wav")
@@ -100,6 +112,7 @@ namespace WB.UI.WebTester.Controllers
                         : audioFile.Duration;
                     
                     var entity = new  MultimediaFile(fileName, audioFile.Binary, audioDuration, audioFile.MimeType);
+                    fileWriteAttempted = true;
                     mediaStorage.Store(entity, fileName, interview.Id);
                 }
                 else
@@ -107,20 +120,45 @@ namespace WB.UI.WebTester.Controllers
                     audioDuration = (Double.TryParse(duration, out var dur)
                         ? TimeSpan.FromSeconds(dur)
                         : TimeSpan.Zero);
+                    fileWriteAttempted = true;
                     mediaStorage.Store(new  MultimediaFile(fileName, bytes, audioDuration, contentType), fileName, interview.Id);
                 }
 
-                var command = new AnswerAudioQuestionCommand(interview.Id,
+                command = new AnswerAudioQuestionCommand(interview.Id,
                     interview.CurrentResponsibleId, questionIdentity.Id, questionIdentity.RosterVector,
                     fileName, audioDuration);
 
+                commandExecutionStarted = true;
                 this.commandService.Execute(command);
             }
             catch (Exception e)
             {
-                webInterviewNotificationService.MarkAnswerAsNotSaved(Guid.Parse(id), questionIdentity, e);
-                //webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId, WebInterview.GetUiMessageFromException(e));
+                var savedQuestion = commandExecutionStarted
+                    ? this.statefulInterviewRepository.Get(id)?.GetAudioQuestion(questionIdentity)
+                    : null;
+                var savedAnswer = savedQuestion?.GetAnswer();
+
+                var answerSaved = savedAnswer != null
+                    && string.Equals(savedAnswer.FileName, fileName, StringComparison.Ordinal)
+                    && savedQuestion != null
+                    && command != null
+                    && savedQuestion.AnswerTime?.UtcDateTime == command.OriginDate.UtcDateTime;
+
+                if (fileWriteAttempted && fileName != null && !answerSaved)
+                {
+                    if (previousFile != null)
+                        this.mediaStorage.Store(previousFile, fileName, interview.Id);
+                    else
+                        this.mediaStorage.Remove(fileName, interview.Id);
+                }
+
+                if (!answerSaved)
+                    webInterviewNotificationService.MarkAnswerAsNotSaved(Guid.Parse(id), questionIdentity, e);
                 throw;
+            }
+            finally
+            {
+                uploadLock.Dispose();
             }
 
             return this.Json("ok");
@@ -138,6 +176,9 @@ namespace WB.UI.WebTester.Controllers
 
             var questionIdentity = Identity.Parse(questionId);
             var question = interview.GetQuestion(questionIdentity);
+            string? oldFileName = null;
+            MultimediaFile? previousFileByNewName = null;
+            AnswerPictureQuestionCommand? command = null;
 
             if (!interview.AcceptsInterviewerAnswers() && question.IsMultimedia)
             {
@@ -145,9 +186,16 @@ namespace WB.UI.WebTester.Controllers
             }
 
             string? fileName = null;
+            var operationLock = InterviewFileOperationLocks.Get(interview.Id);
+            await operationLock.WaitAsync();
 
             try
             {
+                interview = this.statefulInterviewRepository.Get(id) ??
+                    throw new InvalidOperationException("Interview must not be null.");
+                question = interview.GetQuestion(questionIdentity)!;
+                oldFileName = interview.GetMultimediaQuestion(questionIdentity)?.GetAnswer()?.FileName;
+
                 await using var ms = new MemoryStream();
                 await file.CopyToAsync(ms);
 
@@ -155,21 +203,69 @@ namespace WB.UI.WebTester.Controllers
                 this.imageProcessingService.Validate(fileContent);
 
                 var extension = Path.GetExtension(file.FileName);
-                fileName = GetPictureFileName(question.VariableName, questionIdentity.RosterVector, extension);
+                var candidateFileName = GetPictureFileName(question.VariableName, questionIdentity.RosterVector, extension);
+                previousFileByNewName = this.mediaStorage.Get(candidateFileName, interview.Id);
+                fileName = candidateFileName;
 
                 var responsibleId = interview.CurrentResponsibleId;
 
                 var entity = new MultimediaFile(fileName, fileContent, null,file.ContentType);
                 this.mediaStorage.Store(entity, fileName, interview.Id);
 
-                this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
-                    responsibleId, questionIdentity.Id, questionIdentity.RosterVector, fileName));
+                command = new AnswerPictureQuestionCommand(interview.Id,
+                    responsibleId, questionIdentity.Id, questionIdentity.RosterVector, fileName);
+                this.commandService.Execute(command);
+
+                if (!string.IsNullOrEmpty(oldFileName) && oldFileName != fileName)
+                {
+                    try
+                    {
+                        this.mediaStorage.Remove(oldFileName, interview.Id);
+                    }
+                    catch (Exception cleanupException)
+                    {
+                        Trace.TraceError("Failed to clean up replaced picture file for interview {0}: {1}",
+                            interview.Id, cleanupException);
+                    }
+                }
             }
             catch (Exception e)
             {
-                if (fileName != null)
+                var savedAnswer = command != null
+                    ? this.statefulInterviewRepository.Get(id)?.GetMultimediaQuestion(questionIdentity)?.GetAnswer()
+                    : null;
+
+                var answerSaved = savedAnswer != null
+                    && string.Equals(savedAnswer.FileName, fileName, StringComparison.Ordinal)
+                    && command != null
+                    && savedAnswer.AnswerTimeUtc == command.OriginDate.UtcDateTime;
+
+                if (answerSaved && !string.IsNullOrEmpty(oldFileName) && oldFileName != fileName)
+                {
+                    try
+                    {
+                        this.mediaStorage.Remove(oldFileName, interview.Id);
+                    }
+                    catch (Exception cleanupException)
+                    {
+                        Trace.TraceError("Failed to clean up replaced picture file for interview {0}: {1}",
+                            interview.Id, cleanupException);
+                    }
+                }
+                else if (fileName != null)
+                {
+                    if (previousFileByNewName != null)
+                        this.mediaStorage.Store(previousFileByNewName, fileName, interview.Id);
+                    else
+                        this.mediaStorage.Remove(fileName, interview.Id);
+
                     webInterviewNotificationService.MarkAnswerAsNotSaved(Guid.Parse(id), questionIdentity, e);
+                }
                 throw;
+            }
+            finally
+            {
+                operationLock.Dispose();
             }
 
             return this.Json("ok");
