@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import PageNotFound from '../views/PageNotFound.vue';
+import { clearDynamicImportRecovery, getRouteDynamicImportRecoveryScope, isDynamicImportError, scheduleDynamicImportRecovery, setActiveDynamicImportRouteName } from '../helpers/dynamicImportRecovery';
 
 const OptionsEditor = () => import('../views/OptionsEditor/OptionsEditor.vue');
 
@@ -17,8 +18,7 @@ const QuestionnaireHeader = () => import('../views/App/components/Header.vue');
 const Comments = () => import('../views/App/components/Comments.vue');
 
 const DesignerLayout = () => import('../views/Designer/Layout.vue');
-const Classifications = () =>
-    import('../views/Designer/pages/Classifications.vue');
+const Classifications = () => import('../views/Designer/pages/Classifications.vue');
 
 import { useUnsavedChanges } from '../stores/unsavedChanges';
 
@@ -173,14 +173,39 @@ const router = createRouter({
     routes
 });
 
+let pendingDynamicImportRouteName = null;
+
 router.beforeEach((to, from, next) => {
     const { getUnsavedChanges, confirmLeave } = useUnsavedChanges();
+    pendingDynamicImportRouteName = to.name;
 
     if (getUnsavedChanges(from.name) && !confirmLeave()) {
+        pendingDynamicImportRouteName = null;
         next(false);
     } else {
         next();
     }
+});
+
+router.onError(error => {
+    if (isDynamicImportError(error)) {
+        scheduleDynamicImportRecovery(error, {
+            routeName: pendingDynamicImportRouteName,
+            recoveryScope: getRouteDynamicImportRecoveryScope(pendingDynamicImportRouteName)
+        });
+        return;
+    }
+
+    console.error('Router error:', error);
+});
+
+router.afterEach((to, from, failure) => {
+    if (!failure) {
+        setActiveDynamicImportRouteName(to.name);
+        clearDynamicImportRecovery(getRouteDynamicImportRecoveryScope(to.name));
+    }
+
+    pendingDynamicImportRouteName = null;
 });
 
 export default router;

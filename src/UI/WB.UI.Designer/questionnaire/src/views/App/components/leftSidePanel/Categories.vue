@@ -61,8 +61,16 @@ import { isNull, isUndefined } from 'lodash'
 import { updateCategories } from '../../../../services/categoriesService'
 import { notice } from '../../../../services/notificationService';
 import dayjs from 'dayjs';
+import { hasUnsavedQuestionnaireCategoryChanges, wrapDynamicImport } from '../../../../helpers/dynamicImportRecovery';
 
-const loadOptionsEditorModal = () => import('./CategoriesEditorModal.vue');
+const loadOptionsEditorModal = wrapDynamicImport(
+    () => import('./CategoriesEditorModal.vue'),
+    {
+        hasUnsavedChanges: hasUnsavedQuestionnaireCategoryChanges,
+        recoveryScope: 'categories-editor-modal',
+        requireReloadConfirmation: true
+    }
+);
 const OptionsEditorModal = defineAsyncComponent(loadOptionsEditorModal);
 
 export default {
