@@ -81,7 +81,7 @@
                         </table>
                     </div>
 
-                    <iframe width="100%" height="250px" title="geography" frameborder="0" :src="answerUrl"></iframe>
+                    <iframe width="100%" height="250px" :title="$t('WebInterviewUI.GeographyPreview')" frameborder="0" :src="answerUrl"></iframe>
                 </div>
                 <div class="action-btn-holder">
                     <button type="button" disabled class="btn btn-default btn-lg btn-action-questionnaire">{{
