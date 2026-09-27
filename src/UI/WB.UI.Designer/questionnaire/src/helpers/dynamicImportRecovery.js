@@ -133,6 +133,7 @@ export function scheduleDynamicImportRecovery(error, options = {}) {
     }
 
     if (retryCount >= MAX_DYNAMIC_IMPORT_RETRIES) {
+        clearRetryCount(scope);
         console.error('Dynamic import retry budget exhausted:', error);
         return;
     }
