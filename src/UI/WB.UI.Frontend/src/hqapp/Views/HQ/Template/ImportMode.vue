@@ -192,7 +192,8 @@
     </HqLayout>
 </template>
 <script>
-import { DateFormats, formatUtcDate } from '~/shared/helpers'
+import { DateFormats } from '~/shared/helpers'
+import moment from 'moment'
 export default {
     data() {
         return {
@@ -214,7 +215,8 @@ export default {
             this.criticalityLevel = value
         },
         formatDate(date) {
-            return formatUtcDate(date, DateFormats.dateTime)
+            if (!date) return ''
+            return moment.utc(date).local().format(DateFormats.dateTime)
         },
         selectQuestionnaire(value) {
             this.questionnaireId = value

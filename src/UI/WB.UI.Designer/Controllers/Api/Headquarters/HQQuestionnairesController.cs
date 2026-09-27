@@ -240,8 +240,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             {
                 Id = questionnaire.PublicKey,
                 Name = questionnaire.Title,
-                CreatedAt = listItem.CreationDate,
-                LastUpdatedAt = listItem.LastEntryDate,
+                CreatedAt = EnsureUtc(listItem.CreationDate),
+                LastUpdatedAt = EnsureUtc(listItem.LastEntryDate),
                 HasCriticalityCheck = this.engineVersionService.DoesQuestionnaireSupportCriticality(questionnaireView.Source)
             };
 
@@ -276,6 +276,16 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             }
 
             return Ok(result);
+        }
+
+        private static DateTime EnsureUtc(DateTime value)
+        {
+            return value.Kind switch
+            {
+                DateTimeKind.Utc => value,
+                DateTimeKind.Local => value.ToUniversalTime(),
+                _ => DateTime.SpecifyKind(value, DateTimeKind.Utc)
+            };
         }
     }
 }
