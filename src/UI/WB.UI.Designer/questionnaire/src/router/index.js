@@ -179,7 +179,7 @@ router.beforeEach((to, from, next) => {
     const { getUnsavedChanges, confirmLeave } = useUnsavedChanges();
     pendingDynamicImportRouteName = to.name;
 
-    if ((getUnsavedChanges(from.name) || hasUnsavedQuestionnaireCategoryChanges()) && !confirmLeave()) {
+    if (getUnsavedChanges(from.name) && !confirmLeave()) {
         pendingDynamicImportRouteName = null;
         next(false);
     } else {

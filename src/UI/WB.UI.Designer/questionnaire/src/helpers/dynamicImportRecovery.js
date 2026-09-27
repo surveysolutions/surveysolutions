@@ -1,4 +1,3 @@
-import { isEqual } from 'lodash';
 import { useRosterStore } from '../stores/roster';
 import { useGroupStore } from '../stores/group';
 import { useQuestionStore } from '../stores/question';
@@ -91,9 +90,14 @@ export function hasUnsavedQuestionnaireCategoryChanges() {
     return questionnaireStore.getInfo.categories?.some(category => {
         if (!category?.editCategories) return false;
 
-        const { editCategories, ...savedCategory } = category;
-        return !isEqual(editCategories, savedCategory);
+        return editCategoriesChanged(category);
     }) ?? false;
+}
+
+function editCategoriesChanged(category) {
+    return category.editCategories.name !== category.name
+        || (category.editCategories.file !== null
+            && category.editCategories.file !== undefined);
 }
 
 function confirmDynamicImportRecovery(routeName, requireReloadConfirmation, hasUnsavedChangesCallback) {
@@ -133,7 +137,6 @@ export function scheduleDynamicImportRecovery(error, options = {}) {
     }
 
     if (retryCount >= MAX_DYNAMIC_IMPORT_RETRIES) {
-        clearRetryCount(scope);
         console.error('Dynamic import retry budget exhausted:', error);
         return;
     }
