@@ -30,7 +30,7 @@
                 android:background="@drawable/default_input_button"
                 android:padding="8dp"
                 local:srcCompat="@drawable/fullscreen_icon"
-                local:MvxBind="Click OpenFullScreenCommand;" />
+                local:MvxBind="Click OpenFullScreenCommand; Tag Localization('PlayVideo_OpenFullScreen');" />
         <View
                 android:layout_width="@dimen/calendar_event_buttons_space"
                 android:layout_height="0dp"

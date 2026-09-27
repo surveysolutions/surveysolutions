@@ -23,5 +23,5 @@
             android:padding="12dp"
             android:background="@android:color/transparent"
             local:srcCompat="@drawable/back_arrow_white"
-            local:MvxBind="Click CloseCommand;" />
+            local:MvxBind="Click CloseCommand; Tag Localization('Close');" />
 </FrameLayout>
