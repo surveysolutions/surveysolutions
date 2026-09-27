@@ -192,7 +192,8 @@ router.onError(error => {
         scheduleDynamicImportRecovery(error, {
             routeName: pendingDynamicImportRouteName,
             recoveryScope: getRouteDynamicImportRecoveryScope(pendingDynamicImportRouteName),
-            hasUnsavedChanges: hasUnsavedQuestionnaireCategoryChanges
+            hasUnsavedChanges: hasUnsavedQuestionnaireCategoryChanges,
+            requireReloadConfirmation: true
         });
         return;
     }
