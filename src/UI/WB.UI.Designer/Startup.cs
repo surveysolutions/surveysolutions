@@ -8,6 +8,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.RegularExpressions;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -514,6 +515,32 @@ namespace WB.UI.Designer
             });
 
             app.UseHealthChecks("/.hc");
+
+            // Safety net for handlers that own their transaction ([NoTransaction]) and therefore never reach
+            // TransactionFilter's flush; flushing twice is a no-op.
+            app.Use(async (context, next) =>
+            {
+                ExceptionDispatchInfo? capturedException = null;
+                try
+                {
+                    await next();
+                }
+                catch (Exception exception)
+                {
+                    capturedException = ExceptionDispatchInfo.Capture(exception);
+                }
+
+                try
+                {
+                    context.RequestServices.GetService<ITransactionalMemoryCacheInvalidation>()?.Flush();
+                }
+                catch when (capturedException != null)
+                {
+                    // Keep the original request failure if cache cleanup also faults.
+                }
+
+                capturedException?.Throw();
+            });
 
             app.UseRouting();
             app.UseAuthorization();

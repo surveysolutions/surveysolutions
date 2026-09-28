@@ -80,6 +80,20 @@ public class TransactionFilterTests
     }
 
     [Test]
+    public async Task when_write_request_is_short_circuited_staged_writes_are_rolled_back()
+    {
+        var db = NewDatabase();
+        var invalidation = new Mock<ITransactionalMemoryCacheInvalidation>();
+        var id = Guid.NewGuid().ToString("N");
+
+        await InvokeActionAsync(db, invalidation.Object, HttpMethods.Post, new ForbidResult(),
+            throwInHandler: false, stageItemId: id, canceled: true);
+
+        StoredIds(db).Should().NotContain(id);
+        invalidation.Verify(x => x.Flush(), Times.Once);
+    }
+
+    [Test]
     public async Task when_handler_throws_it_rolls_back_and_propagates_and_flushes()
     {
         var db = NewDatabase();
@@ -153,6 +167,19 @@ public class TransactionFilterTests
         invalidation.Verify(x => x.Flush(), Times.Once);
     }
 
+    [Test]
+    public async Task when_write_page_handler_is_short_circuited_staged_writes_are_rolled_back()
+    {
+        var db = NewDatabase();
+        var invalidation = new Mock<ITransactionalMemoryCacheInvalidation>();
+        var id = Guid.NewGuid().ToString("N");
+
+        await InvokePageAsync(db, invalidation.Object, HttpMethods.Post, new PageResult(), stageItemId: id, canceled: true);
+
+        StoredIds(db).Should().NotContain(id);
+        invalidation.Verify(x => x.Flush(), Times.Once);
+    }
+
     // ---- Helpers ------------------------------------------------------------------------------------
 
     private sealed class TestDatabase
@@ -205,7 +232,8 @@ public class TransactionFilterTests
         IActionResult? result,
         bool throwInHandler,
         string? stageItemId,
-        IList<IFilterMetadata>? filters = null)
+        IList<IFilterMetadata>? filters = null,
+        bool canceled = false)
     {
         var httpContext = HttpContextFor(db.Filter, invalidation, method);
         var filterList = filters ?? new List<IFilterMetadata>();
@@ -219,7 +247,7 @@ public class TransactionFilterTests
             if (throwInHandler)
                 throw new InvalidOperationException("handler failure");
 
-            return new ActionExecutedContext(actionContext, filterList, controller: new object()) { Result = result };
+            return new ActionExecutedContext(actionContext, filterList, controller: new object()) { Result = result, Canceled = canceled };
         };
 
         await new TransactionFilter().OnActionExecutionAsync(executing, next);
@@ -231,7 +259,8 @@ public class TransactionFilterTests
         string method,
         IActionResult? result,
         string? stageItemId,
-        IList<IFilterMetadata>? filters = null)
+        IList<IFilterMetadata>? filters = null,
+        bool canceled = false)
     {
         var httpContext = HttpContextFor(db.Filter, invalidation, method);
         var filterList = filters ?? new List<IFilterMetadata>();
@@ -244,7 +273,7 @@ public class TransactionFilterTests
         {
             Stage(db.Filter, stageItemId);
             await Task.Yield();
-            return new PageHandlerExecutedContext(pageContext, filterList, handlerMethod, handlerInstance: new object()) { Result = result };
+            return new PageHandlerExecutedContext(pageContext, filterList, handlerMethod, handlerInstance: new object()) { Result = result, Canceled = canceled };
         };
 
         await new TransactionFilter().OnPageHandlerExecutionAsync(executing, next);

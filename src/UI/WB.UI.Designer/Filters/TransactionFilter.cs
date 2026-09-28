@@ -19,9 +19,9 @@ namespace WB.UI.Designer.Filters
     // filters, and any writes/errors produced while the result executes are outside this transaction.
     // Because of that timing, the filter does NOT inspect IActionResult types, result status codes, or
     // HttpResponse.StatusCode when deciding to commit. For write requests, any handler that returns without
-    // an unhandled exception is treated as successful and committed; only safe (read-only) methods and
-    // unhandled exceptions trigger rollback. It also starts after authentication, authorization, and model
-    // binding.
+    // an unhandled exception is treated as successful and committed; only safe (read-only) methods,
+    // short-circuited handlers, and unhandled exceptions trigger rollback. It also starts after
+    // authentication, authorization, and model binding.
     public class TransactionFilter : IAsyncActionFilter, IAsyncPageFilter
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -36,7 +36,8 @@ namespace WB.UI.Designer.Filters
             await ExecuteInTransactionAsync(context.HttpContext, dbContext, async () =>
             {
                 var executedContext = await next();
-                return executedContext.Exception == null;
+                // Canceled means an inner filter short-circuited: the handler never ran, so nothing may commit.
+                return executedContext.Exception == null && !executedContext.Canceled;
             });
         }
 
@@ -54,7 +55,7 @@ namespace WB.UI.Designer.Filters
             await ExecuteInTransactionAsync(context.HttpContext, dbContext, async () =>
             {
                 var executedContext = await next();
-                return executedContext.Exception == null;
+                return executedContext.Exception == null && !executedContext.Canceled;
             });
         }
 
