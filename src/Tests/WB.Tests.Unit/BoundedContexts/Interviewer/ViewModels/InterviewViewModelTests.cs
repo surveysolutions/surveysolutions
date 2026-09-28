@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Tests.Abc;
 using InterviewerInterviewViewModel = WB.UI.Interviewer.ViewModel.InterviewViewModel;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
@@ -206,14 +207,20 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
 
         [TestFixture]
         [TestOf(typeof(InterviewerInterviewViewModel))]
-        public class InterviewerInterviewViewModelTests
+        public class InterviewerInterviewViewModelTests : MvxIoCSupportingTest
         {
+            public InterviewerInterviewViewModelTests()
+            {
+                base.Setup();
+                Ioc.RegisterSingleton<IMvxMessenger>(Mock.Of<IMvxMessenger>());
+            }
+
             [Test]
             public void when_dispatcher_fails_while_applying_complete_status_exception_should_be_observed()
             {
                 var sut = new TestableInterviewerInterviewViewModel(new BackgroundFaultingDispatcher());
 
-                Action act = () => sut.InvokeApplyCompleteViewModelStatus(new TestCompleteViewModel());
+                Action act = () => sut.InvokeApplyCompleteViewModelStatus(Create.ViewModel.CompleteInterviewViewModel());
 
                 act.Should().Throw<InvalidOperationException>();
             }
@@ -223,7 +230,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             {
                 var sut = new TestableInterviewerInterviewViewModel(new MainThreadDispatcherThatMustNotBeCalled());
 
-                Action act = () => sut.InvokeApplyCompleteViewModelStatus(new TestCompleteViewModel());
+                Action act = () => sut.InvokeApplyCompleteViewModelStatus(Create.ViewModel.CompleteInterviewViewModel());
 
                 act.Should().NotThrow();
             }
@@ -271,13 +278,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     => throw new InvalidOperationException("dispatcher should not be used on the main thread");
 
                 public bool IsOnMainThread => true;
-            }
-
-            private class TestCompleteViewModel : CompleteInterviewViewModel
-            {
-                public TestCompleteViewModel() : base(null, null, null, null, null, null, null, null, null, null) { }
-
-                public override void Configure(string interviewId, NavigationState navigationState) { }
             }
         }
     }
