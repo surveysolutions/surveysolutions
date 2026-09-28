@@ -409,8 +409,13 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 {
                     { WebInterviewUserMessages.WelcomeText, "Hello!" }
                 },
-                EmailTemplates = new Dictionary<EmailTextTemplateType, EmailTextTemplate>(),
+                EmailTemplates = new Dictionary<EmailTextTemplateType, EmailTextTemplate>
+                {
+                    { EmailTextTemplateType.InvitationTemplate, new EmailTextTemplate("Subject", "Message", "PasswordDescription", "LinkText") }
+                },
             };
+
+            WebInterviewConfig storedConfig = null;
 
             var questionnaireVersionProvider = new Mock<IQuestionnaireVersionProvider>();
             questionnaireVersionProvider.Setup(x => x.GetNextVersion(questionnaireId)).Returns(2);
@@ -419,6 +424,9 @@ namespace WB.Tests.Unit.Applications.Headquarters
             webInterviewConfigProvider
                 .Setup(x => x.Get(It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == questionnaireId && q.Version == 1)))
                 .Returns(previousConfig);
+            webInterviewConfigProvider
+                .Setup(x => x.Store(It.IsAny<QuestionnaireIdentity>(), It.IsAny<WebInterviewConfig>()))
+                .Callback<QuestionnaireIdentity, WebInterviewConfig>((_, config) => storedConfig = config);
 
             var zipUtils = SetUp.StringCompressor_Decompress(new QuestionnaireDocument { PublicKey = questionnaireId });
             var designerApi = new Mock<IDesignerApi>();
@@ -446,8 +454,15 @@ namespace WB.Tests.Unit.Applications.Headquarters
                     c.EmailOnComplete == true &&
                     c.ReminderAfterDaysIfNoResponse == 5 &&
                     c.ReminderAfterDaysIfPartialResponse == 3 &&
-                    c.CustomMessages.ContainsKey(WebInterviewUserMessages.WelcomeText))),
+                    c.CustomMessages.ContainsKey(WebInterviewUserMessages.WelcomeText) &&
+                    c.EmailTemplates.ContainsKey(EmailTextTemplateType.InvitationTemplate))),
                 Times.Once);
+
+            Assert.That(storedConfig, Is.Not.Null);
+            Assert.That(storedConfig.EmailTemplates[EmailTextTemplateType.InvitationTemplate],
+                Is.Not.SameAs(previousConfig.EmailTemplates[EmailTextTemplateType.InvitationTemplate]));
+            Assert.That(storedConfig.EmailTemplates[EmailTextTemplateType.InvitationTemplate].Subject,
+                Is.EqualTo(previousConfig.EmailTemplates[EmailTextTemplateType.InvitationTemplate].Subject));
         }
 
         [Test]

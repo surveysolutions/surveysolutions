@@ -300,7 +300,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                 ? new Dictionary<WebInterviewUserMessages, string>(previousConfig.CustomMessages)
                                 : new Dictionary<WebInterviewUserMessages, string>(),
                             EmailTemplates = previousConfig.EmailTemplates != null
-                                ? new Dictionary<EmailTextTemplateType, EmailTextTemplate>(previousConfig.EmailTemplates)
+                                ? previousConfig.EmailTemplates.ToDictionary(
+                                    template => template.Key,
+                                    template => new EmailTextTemplate(
+                                        template.Value.Subject,
+                                        template.Value.Message,
+                                        template.Value.PasswordDescription,
+                                        template.Value.LinkText))
                                 : new Dictionary<EmailTextTemplateType, EmailTextTemplate>(),
                         };
 
