@@ -149,10 +149,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                 get
                 {
                     // MvvmCross stores PropertyChanged as a regular C# event field on MvxNotifyPropertyChanged.
-                    var field = typeof(MvvmCross.ViewModels.MvxNotifyPropertyChanged)
+                    var propertyChangedField = typeof(MvvmCross.ViewModels.MvxNotifyPropertyChanged)
                         .GetField("PropertyChanged",
                             System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                    var del = field?.GetValue(this) as System.Delegate;
+                    var del = propertyChangedField?.GetValue(this) as System.Delegate;
                     return del?.GetInvocationList().Length ?? 0;
                 }
             }
