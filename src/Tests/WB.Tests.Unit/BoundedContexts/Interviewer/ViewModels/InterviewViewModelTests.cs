@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
 
             // simulate navigating away — the next UpdateCurrentScreenViewModel call for a non-Complete
             // screen unsubscribes from the old VM
-            navState.CurrentScreenType.Returns(ScreenType.Group);
+            navState.CurrentScreenType.Returns(ScreenType.Identifying);
             sut.SimulateNavigateToCurrentScreen();
 
             // act — stale notification arrives from the old complete VM
@@ -88,7 +88,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             int handlerCount = firstCompleteVm.PropertyChangedHandlerCount;
 
             // act — navigate away from the Complete screen
-            navState.CurrentScreenType.Returns(ScreenType.Group);
+            navState.CurrentScreenType.Returns(ScreenType.Identifying);
             sut.SimulateNavigateToCurrentScreen();
 
             // assert — PropertyChanged handler was removed
@@ -110,7 +110,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
 
             sut.SimulateNavigateToComplete();        // subscribes to firstCompleteVm
 
-            navState.CurrentScreenType.Returns(ScreenType.Group);
+            navState.CurrentScreenType.Returns(ScreenType.Identifying);
             sut.SimulateNavigateToCurrentScreen();  // unsubscribes from firstCompleteVm
 
             navState.CurrentScreenType.Returns(ScreenType.Complete);
@@ -189,10 +189,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             /// <summary>Directly invokes <see cref="UpdateCurrentScreenViewModel"/> for the current screen type.</summary>
             public void SimulateNavigateToCurrentScreen()
             {
-                // ScreenType.Identifying hits the default branch in the base switch and returns null,
-                // so no factory mocks are needed when simulating navigation away from the Complete screen.
-                NavigationState.CurrentScreenType.Returns(ScreenType.Identifying);
-                var eventArgs = new ScreenChangedEventArgs(ScreenType.Identifying, null, null, ScreenType.Complete, null);
+                // Tests configure a non-Complete screen before calling this helper. Identifying hits the
+                // default branch in the base switch and avoids extra factory mocks.
+                var eventArgs = new ScreenChangedEventArgs(NavigationState.CurrentScreenType, null, null, ScreenType.Complete, null);
                 UpdateCurrentScreenViewModel(eventArgs);
             }
 
