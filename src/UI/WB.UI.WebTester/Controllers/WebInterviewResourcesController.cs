@@ -154,10 +154,16 @@ namespace WB.UI.WebTester.Controllers
             {
                 return this.imageProcessingService.ResizeImage(content, height, 1920);
             }
+            catch (UnknownImageFormatException)
+            {
+                return ReturnOriginalContent(content);
+            }
             catch (ImageFormatException)
             {
-                return content;
+                return ReturnOriginalContent(content);
             }
         }
+
+        private static byte[] ReturnOriginalContent(byte[] content) => content;
     }
 }
