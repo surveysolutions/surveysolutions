@@ -290,7 +290,8 @@ export default {
             return this.$config.model.questionnaireInfo != null
         },
         canCopyWebInterviewSettings() {
-            return !this.shouldMigrateAssignments || this.questionnaireId != null
+            return this.$config.model.newVersionNumber > 1
+                && (!this.shouldMigrateAssignments || this.questionnaireId != null)
         },
         progressText() {
             var text = ''
