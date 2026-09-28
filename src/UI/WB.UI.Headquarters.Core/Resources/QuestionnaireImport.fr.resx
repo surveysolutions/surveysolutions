@@ -187,6 +187,6 @@
       <value>Mettre à jour les affectations</value>
   </data>
   <data name="CopyWebInterviewSettings" xml:space="preserve">
-    <value>Copy Web Interview settings from the previous version (including email templates and screen texts)</value>
+    <value>Copier les paramètres de Web Interview depuis la version précédente (y compris les modèles d'e-mail et les textes d'écran)</value>
   </data>
 </root>

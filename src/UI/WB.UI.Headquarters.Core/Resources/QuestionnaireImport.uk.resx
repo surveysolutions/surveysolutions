@@ -187,6 +187,6 @@
     <value>Оновлення завдання</value>
   </data>
   <data name="CopyWebInterviewSettings" xml:space="preserve">
-    <value>Copy Web Interview settings from the previous version (including email templates and screen texts)</value>
+    <value>Скопіювати налаштування Web Interview з попередньої версії (включно з шаблонами email і текстами екранів)</value>
   </data>
 </root>

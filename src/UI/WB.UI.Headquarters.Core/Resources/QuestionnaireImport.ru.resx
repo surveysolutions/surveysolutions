@@ -187,6 +187,6 @@
     <value>Получение данных опросника</value>
   </data>
   <data name="CopyWebInterviewSettings" xml:space="preserve">
-    <value>Copy Web Interview settings from the previous version (including email templates and screen texts)</value>
+    <value>Скопировать настройки Web Interview из предыдущей версии (включая шаблоны email и тексты экранов)</value>
   </data>
 </root>
