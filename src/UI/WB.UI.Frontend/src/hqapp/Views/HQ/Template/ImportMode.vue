@@ -133,8 +133,11 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group">
-                            <input class="checkbox-filter single-checkbox" id="ckbCopyWebInterviewSettings"
-                                type="checkbox" value="True" name="CopyWebInterviewSettings"
+                            <input class="checkbox-filter single-checkbox"
+                                id="ckbCopyWebInterviewSettings"
+                                type="checkbox"
+                                value="True"
+                                name="CopyWebInterviewSettings"
                                 :disabled="!canCopyWebInterviewSettings"
                                 v-model="copyWebInterviewSettings" />
                             <label for="ckbCopyWebInterviewSettings">
@@ -291,7 +294,6 @@ export default {
         },
         canCopyWebInterviewSettings() {
             return this.$config.model.newVersionNumber > 1
-                && (!this.shouldMigrateAssignments || this.questionnaireId != null)
         },
         progressText() {
             var text = ''

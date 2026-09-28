@@ -466,22 +466,23 @@ namespace WB.Tests.Unit.Applications.Headquarters
         }
 
         [Test]
-        public async Task when_importing_new_version_with_copy_web_interview_settings_should_use_selected_source_identity()
+        public async Task when_importing_new_version_with_copy_web_interview_settings_should_use_previous_questionnaire_version()
         {
             var questionnaireId = Id.gA;
             var sourceQuestionnaireId = Guid.NewGuid();
             var versionProvider = SetUp.SupportedVersionProvider(1);
 
             var sourceVersionIdentity = new QuestionnaireIdentity(sourceQuestionnaireId, 1);
+            var previousVersionIdentity = new QuestionnaireIdentity(questionnaireId, 2);
             var questionnaireVersionProvider = new Mock<IQuestionnaireVersionProvider>();
             questionnaireVersionProvider.Setup(x => x.GetNextVersion(questionnaireId)).Returns(3);
 
             var webInterviewConfigProvider = new Mock<IWebInterviewConfigProvider>();
             webInterviewConfigProvider
-                .Setup(x => x.Get(It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == sourceQuestionnaireId && q.Version == 1)))
+                .Setup(x => x.Get(It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == questionnaireId && q.Version == 2)))
                 .Returns(new WebInterviewConfig
                 {
-                    QuestionnaireId = sourceVersionIdentity,
+                    QuestionnaireId = previousVersionIdentity,
                     CustomMessages = new Dictionary<WebInterviewUserMessages, string>(),
                     EmailTemplates = new Dictionary<EmailTextTemplateType, EmailTextTemplate>()
                 });
@@ -502,10 +503,10 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 criticalityLevel: null, copyWebInterviewSettings: true);
 
             webInterviewConfigProvider.Verify(x => x.Get(
-                It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == sourceQuestionnaireId && q.Version == 1)),
+                It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == questionnaireId && q.Version == 2)),
                 Times.Once);
             webInterviewConfigProvider.Verify(x => x.Get(
-                It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == questionnaireId && q.Version == 2)),
+                It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == sourceQuestionnaireId && q.Version == 1)),
                 Times.Never);
         }
 
@@ -563,6 +564,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
         public async Task when_importing_first_version_with_copy_web_interview_settings_should_not_store_config()
         {
             var questionnaireId = Id.gA;
+            var sourceVersionIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
             var versionProvider = SetUp.SupportedVersionProvider(1);
 
             var questionnaireVersionProvider = new Mock<IQuestionnaireVersionProvider>();
@@ -583,10 +585,11 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             // Act
             await service.ImportAndMigrateAssignments(questionnaireId, "q", false, null, null,
-                includePdf: false, shouldMigrateAssignments: false, migrateFrom: null,
+                includePdf: false, shouldMigrateAssignments: false, migrateFrom: sourceVersionIdentity,
                 criticalityLevel: null, copyWebInterviewSettings: true);
 
             // Assert: Store must not be called when this is version 1 (no previous version)
+            webInterviewConfigProvider.Verify(x => x.Get(It.IsAny<QuestionnaireIdentity>()), Times.Never);
             webInterviewConfigProvider.Verify(x => x.Store(It.IsAny<QuestionnaireIdentity>(), It.IsAny<WebInterviewConfig>()), Times.Never);
         }
 
