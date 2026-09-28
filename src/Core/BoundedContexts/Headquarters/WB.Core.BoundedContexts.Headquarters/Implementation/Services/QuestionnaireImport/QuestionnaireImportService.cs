@@ -304,11 +304,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             EmailTemplates = previousConfig.EmailTemplates != null
                                 ? previousConfig.EmailTemplates.ToDictionary(
                                     template => template.Key,
-                                    template => new EmailTextTemplate(
-                                        template.Value.Subject,
-                                        template.Value.Message,
-                                        template.Value.PasswordDescription,
-                                        template.Value.LinkText))
+                                    template => template.Value == null
+                                        ? null
+                                        : new EmailTextTemplate(
+                                            template.Value.Subject,
+                                            template.Value.Message,
+                                            template.Value.PasswordDescription,
+                                            template.Value.LinkText))
                                 : new Dictionary<EmailTextTemplateType, EmailTextTemplate>(),
                         };
 
