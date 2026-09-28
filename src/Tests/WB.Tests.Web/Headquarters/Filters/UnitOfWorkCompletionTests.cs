@@ -43,7 +43,7 @@ namespace WB.Tests.Web.Headquarters.Filters
         }
 
         [Test]
-        public void should_commit_once_and_keep_session_open_for_read_only_rendering()
+        public void should_commit_once_and_keep_session_open_until_read_only_rendering_is_needed()
         {
             Assert.That(unitOfWork.Session, Is.SameAs(first.Session.Object));
             unitOfWork.AcceptChanges();
@@ -52,11 +52,16 @@ namespace WB.Tests.Web.Headquarters.Filters
             unitOfWork.Complete();
 
             first.WriteTransaction.Verify(x => x.Commit(), Times.Once);
+            first.WriteTransaction.Verify(x => x.Dispose(), Times.Never);
             first.Session.Verify(x => x.Dispose(), Times.Never);
+            first.Session.VerifySet(x => x.DefaultReadOnly = true, Times.Never);
+            first.Session.VerifySet(x => x.FlushMode = FlushMode.Manual, Times.Never);
+            first.Session.Verify(x => x.CreateSQLQuery("SET TRANSACTION READ ONLY"), Times.Never);
+            Assert.That(unitOfWork.Session, Is.SameAs(first.Session.Object));
+            first.WriteTransaction.Verify(x => x.Dispose(), Times.Once);
             first.Session.VerifySet(x => x.DefaultReadOnly = true, Times.Once);
             first.Session.VerifySet(x => x.FlushMode = FlushMode.Manual, Times.Once);
             first.Session.Verify(x => x.CreateSQLQuery("SET TRANSACTION READ ONLY"), Times.Once);
-            Assert.That(unitOfWork.Session, Is.SameAs(first.Session.Object));
             Assert.Throws<InvalidOperationException>(() => unitOfWork.AcceptChanges());
             Assert.Throws<InvalidOperationException>(() => unitOfWork.DiscardChanges());
 

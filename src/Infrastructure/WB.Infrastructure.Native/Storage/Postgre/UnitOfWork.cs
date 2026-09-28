@@ -77,16 +77,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             EnsureCanChange();
 
             CompleteTransactions();
-
-            // Result filters, views and lazy-loaded properties may still need these sessions.
-            // A separate read-only transaction prevents rendering from introducing late writes.
-            foreach (var entry in unitOfWorks)
-            {
-                entry.Value.transaction.Dispose();
-                var transaction = BeginTransaction(entry.Value.session, readOnly: true);
-                unitOfWorks[entry.Key] = (entry.Value.session, transaction);
-            }
-
             completionSucceeded = true;
         }
 
@@ -150,8 +140,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     throw new InvalidOperationException("Unit of work transaction completion failed.");
 
                 var ws = this.workspaceContextAccessor.CurrentWorkspace();
+                var workspaceName = ws?.Name ?? WorkspaceConstants.SchemaName;
 
-                var unitOfWork = unitOfWorks.GetOrAdd(ws?.Name ?? WorkspaceConstants.SchemaName, workspace =>
+                var unitOfWork = unitOfWorks.GetOrAdd(workspaceName, workspace =>
                 {
                     //resolving when needed but not when injected
                     var session = scope.Resolve<Lazy<ISessionFactory>>().Value.OpenSession();
@@ -166,6 +157,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                         throw;
                     }
                 });
+
+                if (completionSucceeded && !unitOfWork.transaction.IsActive)
+                {
+                    unitOfWork.transaction.Dispose();
+                    var readOnlyTransaction = BeginTransaction(unitOfWork.session, readOnly: true);
+                    unitOfWorks[workspaceName] = unitOfWork = (unitOfWork.session, readOnlyTransaction);
+                }
 
                 return unitOfWork.session;
             }
