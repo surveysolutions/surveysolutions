@@ -418,8 +418,9 @@ namespace WB.UI.Designer.Controllers
         {
             var jsonResult = Json(commandResult);
 
-            // A failed command returns a 200 IsSuccess=false envelope; give it an error status so
-            // TransactionFilter rolls back the command's tracked changes instead of committing them.
+            // A failed command still uses the IsSuccess=false envelope. The 400 status helps clients treat
+            // it as an error, but TransactionFilter commits/rolls back BEFORE result execution and does not
+            // inspect result or response status when deciding whether to save staged changes.
             if (commandResult is IDictionary<string, object?> result
                 && result.TryGetValue("IsSuccess", out var isSuccessObj)
                 && isSuccessObj is bool isSuccess

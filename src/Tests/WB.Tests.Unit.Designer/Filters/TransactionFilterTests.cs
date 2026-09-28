@@ -66,7 +66,8 @@ public class TransactionFilterTests
     [Test]
     public async Task when_write_request_returns_error_status_it_still_commits()
     {
-        // The filter no longer inspects the HTTP result/status: only an unhandled exception (or a safe method) rolls back.
+        // Status-bearing results are only for the caller: the filter decides before result execution and
+        // still commits any staged writes unless the handler throws or the method is treated as safe.
         var db = NewDatabase();
         var invalidation = new Mock<ITransactionalMemoryCacheInvalidation>();
         var id = Guid.NewGuid().ToString("N");

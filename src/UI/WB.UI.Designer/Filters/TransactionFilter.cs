@@ -16,8 +16,11 @@ namespace WB.UI.Designer.Filters
     // or roll back atomically. The boundary is handler completion, NOT the whole request: commit happens
     // after the handler returns but BEFORE result execution, so view rendering, JSON serialization, result
     // filters, and any writes/errors produced while the result executes are outside this transaction.
-    // It also starts after authentication, authorization, and model binding. Safe (read-only) requests are
-    // always rolled back so accidental writes never persist.
+    // Because of that timing, the filter does NOT inspect IActionResult types, result status codes, or
+    // HttpResponse.StatusCode when deciding to commit. For write requests, any handler that returns without
+    // an unhandled exception is treated as successful and committed; only safe (read-only) methods and
+    // unhandled exceptions trigger rollback. It also starts after authentication, authorization, and model
+    // binding.
     public class TransactionFilter : IAsyncActionFilter, IAsyncPageFilter
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
