@@ -894,6 +894,12 @@
   <data name="Dashboard_CloseAssignment" xml:space="preserve">
     <value>Aprovo</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>Mbyll</value>
+  </data>
+  <data name="PlayVideo_OpenFullScreen" xml:space="preserve">
+    <value>Hap në ekran të plotë</value>
+  </data>
   <data name="Dashboard_CloseAssignment_Title" xml:space="preserve">
     <value>Mbyll detyrën</value>
   </data>
