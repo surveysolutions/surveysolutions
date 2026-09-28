@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -104,7 +105,7 @@ namespace WB.Tests.Web.WebTester.Controllers
             var interview = new Mock<IStatefulInterview>();
             interview.Setup(x => x.Id).Returns(interviewId);
             interview.Setup(x => x.QuestionnaireIdentity).Returns(questionnaireIdentity);
-            interview.Setup(x => x.Language).Returns((string)null);
+            interview.Setup(x => x.Language).Returns(() => null!);
 
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
             interviewRepository.Setup(x => x.Get(interviewIdString)).Returns(interview.Object);
