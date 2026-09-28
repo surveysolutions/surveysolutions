@@ -489,29 +489,38 @@ namespace WB.Tests.Unit.Designer.Api.Designer
         #region Post
 
         [Test]
-        public void Post_null_model_throws_InvalidOperationException()
+        public void Post_null_model_returns_406_with_generic_message()
         {
             var controller = CreateController();
 
-            Assert.Throws<InvalidOperationException>(() => controller.Post(null!));
+            var result = controller.Post(null!);
+
+            Assert.That(StatusCodeOf(result), Is.EqualTo((int)HttpStatusCode.NotAcceptable));
+            Assert.That(MessageOf(result), Is.EqualTo("Invalid command"));
         }
 
         [Test]
-        public void Post_null_type_throws_InvalidOperationException()
+        public void Post_null_type_returns_406_with_generic_message()
         {
             var controller = CreateController();
             var model = new CommandController.CommandExecutionModel { Type = null, Command = "{}" };
 
-            Assert.Throws<InvalidOperationException>(() => controller.Post(model));
+            var result = controller.Post(model);
+
+            Assert.That(StatusCodeOf(result), Is.EqualTo((int)HttpStatusCode.NotAcceptable));
+            Assert.That(MessageOf(result), Is.EqualTo("Invalid command"));
         }
 
         [Test]
-        public void Post_null_command_throws_InvalidOperationException()
+        public void Post_null_command_returns_406_with_generic_message()
         {
             var controller = CreateController();
             var model = new CommandController.CommandExecutionModel { Type = "UpdateQuestionnaire", Command = null };
 
-            Assert.Throws<InvalidOperationException>(() => controller.Post(model));
+            var result = controller.Post(model);
+
+            Assert.That(StatusCodeOf(result), Is.EqualTo((int)HttpStatusCode.NotAcceptable));
+            Assert.That(MessageOf(result), Is.EqualTo("Invalid command"));
         }
 
         [Test]
