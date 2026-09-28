@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
+using Npgsql;
 using SkiaSharp;
 using SkiaSharp.QrCode.Image;
 using Vite.Extensions.AspNetCore;
@@ -526,49 +528,66 @@ namespace WB.UI.Designer.Controllers
             Guid responsibleId,
             string responsibleName)
         {
-            await using var transaction = await dbContext.Database.BeginTransactionAsync();
-
-            var anonymousQuestionnaire = await dbContext.AnonymousQuestionnaires
-                .SingleOrDefaultAsync(a => a.QuestionnaireId == questionnaireId);
-
-            if (anonymousQuestionnaire == null)
+            for (var attempt = 0; ; attempt++)
             {
-                anonymousQuestionnaire = new AnonymousQuestionnaire
+                await using var transaction =
+                    await dbContext.Database.BeginTransactionAsync(IsolationLevel.Serializable);
+
+                try
                 {
-                    QuestionnaireId = questionnaireId,
-                    AnonymousQuestionnaireId = Guid.NewGuid(),
-                    IsActive = isActive,
-                    GeneratedAtUtc = DateTime.UtcNow
-                };
-                dbContext.AnonymousQuestionnaires.Add(anonymousQuestionnaire);
+                    var anonymousQuestionnaire = await dbContext.AnonymousQuestionnaires
+                        .SingleOrDefaultAsync(a => a.QuestionnaireId == questionnaireId);
+
+                    if (anonymousQuestionnaire == null)
+                    {
+                        anonymousQuestionnaire = new AnonymousQuestionnaire
+                        {
+                            QuestionnaireId = questionnaireId,
+                            AnonymousQuestionnaireId = Guid.NewGuid(),
+                            IsActive = isActive,
+                            GeneratedAtUtc = DateTime.UtcNow
+                        };
+                        dbContext.AnonymousQuestionnaires.Add(anonymousQuestionnaire);
+                    }
+                    else
+                    {
+                        anonymousQuestionnaire.IsActive = isActive;
+                        dbContext.AnonymousQuestionnaires.Update(anonymousQuestionnaire);
+                    }
+
+                    anonymousQuestionnaire.IsActive = isActive;
+
+                    await dbContext.SaveChangesAsync();
+
+                    var actionType = isActive
+                        ? QuestionnaireActionType.AnonymousSharingEnabled
+                        : QuestionnaireActionType.AnonymousSharingDisabled;
+
+                    await questionnaireHistoryVersionsService.AddQuestionnaireChangeItemAsync(
+                        questionnaireId,
+                        responsibleId,
+                        responsibleName,
+                        actionType,
+                        QuestionnaireItemType.Questionnaire,
+                        questionnaireId,
+                        questionnaireTitle,
+                        null, null, null, null);
+
+                    await transaction.CommitAsync();
+
+                    return anonymousQuestionnaire;
+                }
+                catch (DbUpdateException exception)
+                    when (attempt == 0 && exception.InnerException is PostgresException { SqlState: "40001" })
+                {
+                    dbContext.ChangeTracker.Clear();
+                }
+                catch (PostgresException exception)
+                    when (attempt == 0 && exception.SqlState == "40001")
+                {
+                    dbContext.ChangeTracker.Clear();
+                }
             }
-            else
-            {
-                anonymousQuestionnaire.IsActive = isActive;
-                dbContext.AnonymousQuestionnaires.Update(anonymousQuestionnaire);
-            }
-
-            anonymousQuestionnaire.IsActive = isActive;
-
-            await dbContext.SaveChangesAsync();
-
-            var actionType = isActive
-                ? QuestionnaireActionType.AnonymousSharingEnabled
-                : QuestionnaireActionType.AnonymousSharingDisabled;
-
-            await questionnaireHistoryVersionsService.AddQuestionnaireChangeItemAsync(
-                questionnaireId,
-                responsibleId,
-                responsibleName,
-                actionType,
-                QuestionnaireItemType.Questionnaire,
-                questionnaireId,
-                questionnaireTitle,
-                null, null, null, null);
-
-            await transaction.CommitAsync();
-
-            return anonymousQuestionnaire;
         }
 
         [Authorize]

@@ -1375,6 +1375,62 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
 
         [Test]
+        public async Task When_AnonymousSharing_enabled_async_with_existing_history_Then_sequence_and_snapshot_linkage_should_match_sync_path()
+        {
+            // arrange
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            string userName = "responsible";
+            var firstVersion = Create.QuestionnaireDocument(id: questionnaireId, title: "Version 1");
+            var secondVersion = Create.QuestionnaireDocument(id: questionnaireId, title: "Version 2");
+
+            var dbContext = Create.InMemoryDbContext();
+            var historyVersionsService = Create.QuestionnireHistoryVersionsService(dbContext);
+
+            historyVersionsService.AddQuestionnaireChangeItem(
+                questionnaireId,
+                responsibleId,
+                userName,
+                QuestionnaireActionType.AnonymousSharingDisabled,
+                QuestionnaireItemType.Questionnaire,
+                questionnaireId,
+                firstVersion.Title,
+                null,
+                null,
+                null,
+                firstVersion);
+
+            // act
+            await historyVersionsService.AddQuestionnaireChangeItemAsync(
+                questionnaireId,
+                responsibleId,
+                userName,
+                QuestionnaireActionType.AnonymousSharingEnabled,
+                QuestionnaireItemType.Questionnaire,
+                questionnaireId,
+                secondVersion.Title,
+                null,
+                null,
+                null,
+                secondVersion);
+
+            // assert
+            var historyItems = dbContext.QuestionnaireChangeRecords
+                .Where(h => h.QuestionnaireId == questionnaireId.FormatGuid())
+                .OrderBy(h => h.Sequence)
+                .ToList();
+
+            Assert.That(historyItems.Count, Is.EqualTo(2));
+            Assert.That(historyItems[0].Sequence, Is.EqualTo(0));
+            Assert.That(historyItems[0].ResultingQuestionnaireDocument, Is.Null);
+            Assert.That(historyItems[0].Patch, Is.Not.Null);
+            Assert.That(historyItems[1].Sequence, Is.EqualTo(1));
+            Assert.That(historyItems[1].ActionType, Is.EqualTo(QuestionnaireActionType.AnonymousSharingEnabled));
+            Assert.That(historyItems[1].ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(historyItems[1].Patch, Is.Null);
+        }
+
+        [Test]
         public async Task When_AnonymousSharing_enabled_async_Then_history_item_should_be_added_with_AnonymousSharingEnabled_action_type()
         {
             // arrange
