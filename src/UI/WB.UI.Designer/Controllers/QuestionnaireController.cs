@@ -528,7 +528,7 @@ namespace WB.UI.Designer.Controllers
             Guid responsibleId,
             string responsibleName)
         {
-            for (var attempt = 0; ; attempt++)
+            for (var attempt = 0; attempt < 2; attempt++)
             {
                 await using var transaction =
                     await dbContext.Database.BeginTransactionAsync(IsolationLevel.Serializable);
@@ -596,6 +596,8 @@ namespace WB.UI.Designer.Controllers
                     dbContext.ChangeTracker.Clear();
                 }
             }
+
+            throw new InvalidOperationException("Anonymous sharing state update retry limit exceeded.");
         }
 
         [Authorize]
