@@ -276,9 +276,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     criticalityLevel));
                 questionnaireProgress.Report(80);
 
-                if (copyWebInterviewSettings && questionnaireIdentity.Version > 1)
+                if (copyWebInterviewSettings && (migrateFrom != null || questionnaireIdentity.Version > 1))
                 {
-                    var sourceConfigIdentity = migrateFrom ?? new QuestionnaireIdentity(questionnaireId, questionnaireIdentity.Version - 1);
+                    var sourceConfigIdentity = migrateFrom != null
+                        ? new QuestionnaireIdentity(migrateFrom.QuestionnaireId, migrateFrom.Version)
+                        : new QuestionnaireIdentity(questionnaireId, questionnaireIdentity.Version - 1);
                     var webInterviewConfigProvider = serviceLocator.GetInstance<IWebInterviewConfigProvider>();
                     var previousConfig = webInterviewConfigProvider.Get(sourceConfigIdentity);
 
