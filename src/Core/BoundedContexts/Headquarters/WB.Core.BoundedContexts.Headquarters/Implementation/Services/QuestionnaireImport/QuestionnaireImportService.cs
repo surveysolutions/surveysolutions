@@ -278,9 +278,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 if (copyWebInterviewSettings && questionnaireIdentity.Version > 1)
                 {
-                    var previousVersionIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireIdentity.Version - 1);
+                    var sourceConfigIdentity = migrateFrom ?? new QuestionnaireIdentity(questionnaireId, questionnaireIdentity.Version - 1);
                     var webInterviewConfigProvider = serviceLocator.GetInstance<IWebInterviewConfigProvider>();
-                    var previousConfig = webInterviewConfigProvider.Get(previousVersionIdentity);
+                    var previousConfig = webInterviewConfigProvider.Get(sourceConfigIdentity);
 
                     if (previousConfig != null)
                     {
@@ -311,7 +311,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         };
 
                         webInterviewConfigProvider.Store(questionnaireIdentity, newConfig);
-                        logger.Verbose($"Copied web interview settings from version {previousVersionIdentity.Version} to {questionnaireIdentity.Version} for questionnaire {questionnaireId}");
+                        logger.Verbose($"Copied web interview settings from version {sourceConfigIdentity.Version} to {questionnaireIdentity.Version} for questionnaire {questionnaireId}");
                     }
                 }
 
