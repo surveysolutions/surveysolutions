@@ -20,7 +20,7 @@ namespace WB.Tests.Web.WebTester.Controllers
     internal class WebInterviewResourcesControllerTests
     {
         [Test]
-        public void when_image_resize_is_not_supported_should_return_original_stream()
+        public void when_requesting_image_and_resize_is_not_supported_should_return_original_stream()
         {
             var interview = new Mock<IStatefulInterview>();
             interview.Setup(x => x.Id).Returns(interviewId);
@@ -55,7 +55,7 @@ namespace WB.Tests.Web.WebTester.Controllers
         }
 
         [Test]
-        public void when_attachment_resize_is_not_supported_should_return_original_stream()
+        public void when_requesting_attachment_and_resize_is_not_supported_should_return_original_stream()
         {
             var attachmentStorage = new Mock<ICacheStorage<QuestionnaireAttachment, string>>();
             attachmentStorage
