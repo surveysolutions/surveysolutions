@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Runtime.ExceptionServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
@@ -76,7 +77,32 @@ namespace WB.UI.Designer.Filters
             }
 
             var isWrite = IsWriteMethod(httpContext.Request.Method);
+            ExceptionDispatchInfo? capturedException = null;
 
+            try
+            {
+                await ExecuteOwnedTransactionAsync(dbContext, action, isWrite);
+            }
+            catch (Exception exception)
+            {
+                capturedException = ExceptionDispatchInfo.Capture(exception);
+            }
+
+            try
+            {
+                // Publish cache invalidations only once the transaction has fully committed or rolled back.
+                httpContext.RequestServices.GetRequiredService<ITransactionalMemoryCacheInvalidation>().Flush();
+            }
+            catch when (capturedException != null)
+            {
+                // Keep the original handler/transaction failure if cleanup also faults.
+            }
+
+            capturedException?.Throw();
+        }
+
+        private static async Task ExecuteOwnedTransactionAsync(DesignerDbContext dbContext, Func<Task<bool>> action, bool isWrite)
+        {
             await using var transaction = await dbContext.Database.BeginTransactionAsync(CancellationToken.None);
             try
             {
@@ -97,11 +123,6 @@ namespace WB.UI.Designer.Filters
             {
                 dbContext.ChangeTracker.Clear();
                 throw;
-            }
-            finally
-            {
-                // Publish cache invalidations only once the transaction has settled, so no rolled-back state remains cached.
-                httpContext.RequestServices.GetRequiredService<ITransactionalMemoryCacheInvalidation>().Flush();
             }
         }
     }

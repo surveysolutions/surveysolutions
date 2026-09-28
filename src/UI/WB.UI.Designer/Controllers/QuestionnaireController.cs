@@ -475,6 +475,8 @@ namespace WB.UI.Designer.Controllers
         [QuestionnairePermissions(true)]
         [Route("questionnaire/updateAnonymousQuestionnaireSettings/{id}")]
         [ValidateAntiForgeryToken]
+        // Sends an email as a side effect, so its writes must commit immediately rather than in the deferred filter transaction.
+        [NoTransaction]
         public async Task<IActionResult> UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
         {
             bool isActive = postModel.IsActive;

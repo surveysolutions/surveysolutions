@@ -40,6 +40,20 @@ namespace WB.Tests.Integration.Designer
         }
 
         [Test]
+        public void when_write_handler_throws_cache_invalidation_runs_after_transaction_disposal()
+        {
+            var dbContext = ServiceLocator.GetInstance<DesignerDbContext>();
+            var id = Guid.NewGuid();
+            var invalidation = new AssertTransactionSettledInvalidation(dbContext, () => RowExists(dbContext, id));
+
+            Assert.ThrowsAsync<InvalidOperationException>(() =>
+                RunThroughActionFilter(dbContext, HttpMethods.Post, throwInHandler: true,
+                    handlerBody: () => StageAndFlush(dbContext, id), invalidation: invalidation));
+
+            Assert.That(invalidation.FlushCalled, Is.True);
+        }
+
+        [Test]
         public async Task when_write_handler_flushes_changes_and_succeeds_row_is_committed()
         {
             var dbContext = ServiceLocator.GetInstance<DesignerDbContext>();
@@ -79,11 +93,11 @@ namespace WB.Tests.Integration.Designer
             return fresh.Questionnaires.AsNoTracking().Any(x => x.QuestionnaireId == key);
         }
 
-        private static async Task RunThroughActionFilter(DesignerDbContext dbContext, string method, bool throwInHandler, Action handlerBody)
+        private static async Task RunThroughActionFilter(DesignerDbContext dbContext, string method, bool throwInHandler, Action handlerBody, ITransactionalMemoryCacheInvalidation? invalidation = null)
         {
             var services = new ServiceCollection()
                 .AddSingleton(dbContext)
-                .AddSingleton<ITransactionalMemoryCacheInvalidation>(new NoopCacheInvalidation())
+                .AddSingleton<ITransactionalMemoryCacheInvalidation>(invalidation ?? new NoopCacheInvalidation())
                 .BuildServiceProvider();
 
             var httpContext = new DefaultHttpContext { RequestServices = services };
@@ -103,6 +117,29 @@ namespace WB.Tests.Integration.Designer
             };
 
             await new TransactionFilter().OnActionExecutionAsync(executing, next);
+        }
+
+        private sealed class AssertTransactionSettledInvalidation : ITransactionalMemoryCacheInvalidation
+        {
+            private readonly DesignerDbContext dbContext;
+            private readonly Func<bool> rowExists;
+
+            public AssertTransactionSettledInvalidation(DesignerDbContext dbContext, Func<bool> rowExists)
+            {
+                this.dbContext = dbContext;
+                this.rowExists = rowExists;
+            }
+
+            public bool FlushCalled { get; private set; }
+
+            public void Enqueue(string cacheKey) { }
+
+            public void Flush()
+            {
+                FlushCalled = true;
+                Assert.That(this.dbContext.Database.CurrentTransaction, Is.Null);
+                Assert.That(this.rowExists(), Is.False);
+            }
         }
 
         private sealed class NoopCacheInvalidation : ITransactionalMemoryCacheInvalidation

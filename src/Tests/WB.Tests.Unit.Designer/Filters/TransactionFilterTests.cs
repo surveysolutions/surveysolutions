@@ -95,6 +95,21 @@ public class TransactionFilterTests
     }
 
     [Test]
+    public async Task when_handler_and_flush_throw_it_preserves_the_original_exception()
+    {
+        var db = NewDatabase();
+        var invalidation = new Mock<ITransactionalMemoryCacheInvalidation>();
+        invalidation.Setup(x => x.Flush()).Throws(new ApplicationException("flush failure"));
+
+        var act = () => InvokeActionAsync(db, invalidation.Object, HttpMethods.Post, result: null,
+            throwInHandler: true, stageItemId: Guid.NewGuid().ToString("N"));
+
+        var exception = await act.Should().ThrowAsync<InvalidOperationException>();
+        exception.Which.Message.Should().Be("handler failure");
+        invalidation.Verify(x => x.Flush(), Times.Once);
+    }
+
+    [Test]
     public async Task when_marked_no_transaction_the_filter_is_bypassed()
     {
         var db = NewDatabase();
