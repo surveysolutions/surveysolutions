@@ -109,7 +109,8 @@ namespace WB.UI.Interviewer.ViewModel
             // raised from the Task.Run path in InterviewerCompleteInterviewViewModel.Configure, and
             // accessing subscribedCompleteViewModel or assigning Status off the UI thread causes
             // cross-thread UI updates and racey state.
-            asyncDispatcher.ExecuteOnMainThreadAsync(() => base.ApplyCompleteViewModelStatus(vm));
+            this.asyncDispatcher.ExecuteOnMainThreadAsync(() => base.ApplyCompleteViewModelStatus(vm))
+                .WaitAndUnwrapException();
         }
 
         public override void ViewAppeared()

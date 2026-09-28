@@ -1,4 +1,6 @@
+using System;
 using System.Threading.Tasks;
+using MvvmCross.Base;
 using FluentAssertions;
 using Moq;
 using MvvmCross.Commands;
@@ -6,11 +8,18 @@ using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
 using NSubstitute;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using InterviewerInterviewViewModel = WB.UI.Interviewer.ViewModel.InterviewViewModel;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
 {
@@ -156,6 +165,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     return del?.GetInvocationList().Length ?? 0;
                 }
             }
+
         }
 
         /// <summary>
@@ -192,6 +202,62 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                 NavigationState.CurrentScreenType.Returns(ScreenType.Complete);
                 var eventArgs = new ScreenChangedEventArgs(ScreenType.Complete, null, null, ScreenType.Group, null);
                 UpdateCurrentScreenViewModel(eventArgs);
+            }
+        }
+
+        [TestFixture]
+        [TestOf(typeof(InterviewerInterviewViewModel))]
+        public class InterviewerInterviewViewModelTests
+        {
+            [Test]
+            public void when_dispatcher_fails_while_applying_complete_status_exception_should_be_observed()
+            {
+                var sut = new TestableInterviewerInterviewViewModel(new FaultingDispatcher());
+
+                Action act = () => sut.InvokeApplyCompleteViewModelStatus(new TestCompleteViewModel());
+
+                act.Should().Throw<InvalidOperationException>();
+            }
+
+            private class TestableInterviewerInterviewViewModel : InterviewerInterviewViewModel
+            {
+                public TestableInterviewerInterviewViewModel(IMvxMainThreadAsyncDispatcher dispatcher)
+                    : base(null, null, null, null, Substitute.For<NavigationState>(), null,
+                        Mock.Of<IViewModelNavigationService>(), Mock.Of<IPrincipal>(),
+                        null, null, null, Substitute.For<IInterviewViewModelFactory>(), null, null, null,
+                        null, null, Mock.Of<ILogger>(), null, null, dispatcher,
+                        Mock.Of<IAudioAuditRecordingExecutor>())
+                {
+                }
+
+                public void InvokeApplyCompleteViewModelStatus(CompleteInterviewViewModel vm)
+                {
+                    this.ApplyCompleteViewModelStatus(vm);
+                }
+
+                public override IMvxCommand ReloadCommand { get; }
+                public override Task NavigateBack() => Task.CompletedTask;
+            }
+
+            private class FaultingDispatcher : IMvxMainThreadAsyncDispatcher
+            {
+                public Task ExecuteOnMainThreadAsync(Action action, bool maskExceptions = true)
+                {
+                    action();
+                    return Task.FromException(new InvalidOperationException("dispatcher failure"));
+                }
+
+                public Task ExecuteOnMainThreadAsync(Func<Task> action, bool maskExceptions = true)
+                    => Task.FromException(new InvalidOperationException("dispatcher failure"));
+
+                public bool IsOnMainThread => true;
+            }
+
+            private class TestCompleteViewModel : CompleteInterviewViewModel
+            {
+                public TestCompleteViewModel() : base(null, null, null, null, null, null, null, null, null, null) { }
+
+                public override void Configure(string interviewId, NavigationState navigationState) { }
             }
         }
     }
