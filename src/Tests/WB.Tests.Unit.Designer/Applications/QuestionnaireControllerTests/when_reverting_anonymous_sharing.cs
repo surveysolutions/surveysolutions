@@ -45,22 +45,14 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             await dbContext.SaveChangesAsync();
 
             var commandService = new Mock<ICommandService>();
-            var anonymousQuestionnaire = new AnonymousQuestionnaire
-            {
-                QuestionnaireId = questionnaireId,
-                AnonymousQuestionnaireId = Guid.NewGuid(),
-                IsActive = true,
-                GeneratedAtUtc = DateTime.UtcNow
-            };
-            var anonymousQuestionnaireStateService = new Mock<IAnonymousQuestionnaireStateService>();
-            anonymousQuestionnaireStateService
-                .Setup(x => x.SaveStateAsync(
+            var questionnaireHistoryRevertService = new Mock<IQuestionnaireHistoryRevertService>();
+            questionnaireHistoryRevertService
+                .Setup(x => x.TryRevertAsync(
                     questionnaireId,
-                    true,
-                    "Questionnaire title",
+                    It.Is<QuestionnaireChangeRecord>(record => record.QuestionnaireChangeRecordId == historyRecordId.FormatGuid()),
                     userId,
                     "designer-user"))
-                .ReturnsAsync(anonymousQuestionnaire);
+                .ReturnsAsync(true);
             var questionnaireViewFactory = new Mock<IQuestionnaireViewFactory>();
             questionnaireViewFactory
                 .Setup(x => x.HasUserChangeAccessToQuestionnaire(questionnaireId, userId))
@@ -69,7 +61,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             var controller = CreateQuestionnaireController(
                 commandService: commandService.Object,
                 questionnaireViewFactory: questionnaireViewFactory.Object,
-                anonymousQuestionnaireStateService: anonymousQuestionnaireStateService.Object,
+                questionnaireHistoryRevertService: questionnaireHistoryRevertService.Object,
                 dbContext: dbContext);
             controller.ControllerContext = new ControllerContext
             {
@@ -85,10 +77,9 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
             var result = await controller.Revert(questionnaireId, historyRecordId);
 
-            anonymousQuestionnaireStateService.Verify(x => x.SaveStateAsync(
+            questionnaireHistoryRevertService.Verify(x => x.TryRevertAsync(
                     questionnaireId,
-                    true,
-                    "Questionnaire title",
+                    It.Is<QuestionnaireChangeRecord>(record => record.QuestionnaireChangeRecordId == historyRecordId.FormatGuid()),
                     userId,
                     "designer-user"),
                 Times.Once);

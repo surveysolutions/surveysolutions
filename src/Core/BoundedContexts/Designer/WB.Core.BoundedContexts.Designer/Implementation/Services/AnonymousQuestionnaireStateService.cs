@@ -37,6 +37,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                 try
                 {
+                    if (this.dbContext.Database.IsNpgsql())
+                    {
+                        var questionnaireLockId = BitConverter.ToInt64(questionnaireId.ToByteArray(), 0);
+                        await this.dbContext.Database.ExecuteSqlInterpolatedAsync(
+                            $"select pg_advisory_xact_lock({questionnaireLockId})");
+                    }
+
                     var anonymousQuestionnaire = await this.dbContext.AnonymousQuestionnaires
                         .SingleOrDefaultAsync(a => a.QuestionnaireId == questionnaireId);
                     var shouldAddHistoryRecord = anonymousQuestionnaire == null || anonymousQuestionnaire.IsActive != isActive;

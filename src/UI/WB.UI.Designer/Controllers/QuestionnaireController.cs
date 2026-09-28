@@ -98,6 +98,7 @@ namespace WB.UI.Designer.Controllers
         private readonly UserManager<DesignerIdentityUser> users;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
         private readonly IAnonymousQuestionnaireStateService anonymousQuestionnaireStateService;
+        private readonly IQuestionnaireHistoryRevertService questionnaireHistoryRevertService;
         private readonly ITagHelperComponentManager tagHelperComponentManager;
         private readonly IWebHostEnvironment webHost;
         private readonly IOptions<ViteTagOptions> options;
@@ -111,6 +112,7 @@ namespace WB.UI.Designer.Controllers
             IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory,
             IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
             IAnonymousQuestionnaireStateService anonymousQuestionnaireStateService,
+            IQuestionnaireHistoryRevertService questionnaireHistoryRevertService,
             ILookupTableService lookupTableService,
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
             ICategoricalOptionsImportService categoricalOptionsImportService,
@@ -140,6 +142,7 @@ namespace WB.UI.Designer.Controllers
             this.users = users;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
             this.anonymousQuestionnaireStateService = anonymousQuestionnaireStateService;
+            this.questionnaireHistoryRevertService = questionnaireHistoryRevertService;
             this.tagHelperComponentManager = tagHelperComponentManager;
             this.webHost = webHost;
             this.options = options;
@@ -357,17 +360,12 @@ namespace WB.UI.Designer.Controllers
                     record.QuestionnaireChangeRecordId == historyReferenceId.FormatGuid()
                     && record.QuestionnaireId == id.FormatGuid());
 
-            if (historicalRecord?.ActionType == QuestionnaireActionType.AnonymousSharingEnabled
-                || historicalRecord?.ActionType == QuestionnaireActionType.AnonymousSharingDisabled)
-            {
-                var questionnaireTitle = historicalRecord.TargetItemTitle ?? GetQuestionnaireView(id)?.Title ?? string.Empty;
-                await anonymousQuestionnaireStateService.SaveStateAsync(
+            if (historicalRecord != null && await this.questionnaireHistoryRevertService.TryRevertAsync(
                     id,
-                    historicalRecord.ActionType == QuestionnaireActionType.AnonymousSharingEnabled,
-                    questionnaireTitle,
+                    historicalRecord,
                     this.User.GetId(),
-                    User.GetUserName());
-
+                    User.GetUserName()))
+            {
                 string questionnaireId = id.FormatGuid();
                 return Redirect($"/q/details/{questionnaireId}");
             }
