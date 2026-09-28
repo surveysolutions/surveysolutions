@@ -92,5 +92,70 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             result.Should().BeOfType<RedirectResult>()
                 .Which.Url.Should().Be($"/q/details/{questionnaireId.FormatGuid()}");
         }
+
+        [Test]
+        public async Task should_not_append_history_when_anonymous_sharing_is_already_in_requested_state()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var historyRecordId = Guid.NewGuid();
+            var userId = Guid.NewGuid();
+
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.AnonymousQuestionnaires.Add(new AnonymousQuestionnaire
+            {
+                QuestionnaireId = questionnaireId,
+                AnonymousQuestionnaireId = Guid.NewGuid(),
+                IsActive = true,
+                GeneratedAtUtc = DateTime.UtcNow
+            });
+            dbContext.QuestionnaireChangeRecords.Add(Create.QuestionnaireChangeRecord(
+                questionnaireChangeRecordId: historyRecordId.FormatGuid(),
+                questionnaireId: questionnaireId.FormatGuid(),
+                action: QuestionnaireActionType.AnonymousSharingEnabled,
+                targetId: questionnaireId,
+                targetType: QuestionnaireItemType.Questionnaire,
+                targetTitle: "Questionnaire title"));
+            await dbContext.SaveChangesAsync();
+
+            var historyService = new Mock<IQuestionnaireHistoryVersionsService>();
+            var questionnaireViewFactory = new Mock<IQuestionnaireViewFactory>();
+            questionnaireViewFactory
+                .Setup(x => x.HasUserChangeAccessToQuestionnaire(questionnaireId, userId))
+                .Returns(true);
+
+            var controller = CreateQuestionnaireController(
+                questionnaireViewFactory: questionnaireViewFactory.Object,
+                questionnaireHistoryVersionsService: historyService.Object,
+                dbContext: dbContext);
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+                        new Claim(ClaimTypes.Name, "designer-user")
+                    }))
+                }
+            };
+
+            await controller.Revert(questionnaireId, historyRecordId);
+
+            historyService.Verify(x => x.AddQuestionnaireChangeItemAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<Guid>(),
+                    It.IsAny<string>(),
+                    It.IsAny<QuestionnaireActionType>(),
+                    It.IsAny<QuestionnaireItemType>(),
+                    It.IsAny<Guid>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<int?>(),
+                    It.IsAny<DateTime?>(),
+                    It.IsAny<Main.Core.Documents.QuestionnaireDocument>(),
+                    It.IsAny<QuestionnaireChangeReference>(),
+                    It.IsAny<QuestionnaireChangeRecordMetadata>()),
+                Times.Never);
+        }
     }
 }

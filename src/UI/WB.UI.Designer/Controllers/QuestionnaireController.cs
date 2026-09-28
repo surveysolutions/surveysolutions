@@ -537,6 +537,7 @@ namespace WB.UI.Designer.Controllers
                 {
                     var anonymousQuestionnaire = await dbContext.AnonymousQuestionnaires
                         .SingleOrDefaultAsync(a => a.QuestionnaireId == questionnaireId);
+                    var shouldAddHistoryRecord = anonymousQuestionnaire == null || anonymousQuestionnaire.IsActive != isActive;
 
                     if (anonymousQuestionnaire == null)
                     {
@@ -563,15 +564,18 @@ namespace WB.UI.Designer.Controllers
                         ? QuestionnaireActionType.AnonymousSharingEnabled
                         : QuestionnaireActionType.AnonymousSharingDisabled;
 
-                    await questionnaireHistoryVersionsService.AddQuestionnaireChangeItemAsync(
-                        questionnaireId,
-                        responsibleId,
-                        responsibleName,
-                        actionType,
-                        QuestionnaireItemType.Questionnaire,
-                        questionnaireId,
-                        questionnaireTitle,
-                        null, null, null, null);
+                    if (shouldAddHistoryRecord)
+                    {
+                        await questionnaireHistoryVersionsService.AddQuestionnaireChangeItemAsync(
+                            questionnaireId,
+                            responsibleId,
+                            responsibleName,
+                            actionType,
+                            QuestionnaireItemType.Questionnaire,
+                            questionnaireId,
+                            questionnaireTitle,
+                            null, null, null, null);
+                    }
 
                     await transaction.CommitAsync();
 
