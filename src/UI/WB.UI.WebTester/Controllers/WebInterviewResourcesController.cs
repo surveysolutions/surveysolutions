@@ -154,10 +154,6 @@ namespace WB.UI.WebTester.Controllers
             {
                 return this.imageProcessingService.ResizeImage(content, height, 1920);
             }
-            catch (UnknownImageFormatException)
-            {
-                return ReturnOriginalContent(content);
-            }
             catch (ImageFormatException)
             {
                 return ReturnOriginalContent(content);

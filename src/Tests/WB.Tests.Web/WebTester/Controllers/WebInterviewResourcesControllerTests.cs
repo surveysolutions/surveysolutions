@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Runtime.CompilerServices;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -37,7 +38,7 @@ namespace WB.Tests.Web.WebTester.Controllers
             var imageProcessingService = new Mock<IImageProcessingService>();
             imageProcessingService
                 .Setup(x => x.ResizeImage(fileContent, 200, 1920))
-                .Throws(new UnknownImageFormatException("Unsupported image format"));
+                .Throws(CreateImageFormatException());
 
             var controller = new WebInterviewResourcesController(
                 Mock.Of<ICacheStorage<QuestionnaireAttachment, string>>(),
@@ -71,7 +72,7 @@ namespace WB.Tests.Web.WebTester.Controllers
             var imageProcessingService = new Mock<IImageProcessingService>();
             imageProcessingService
                 .Setup(x => x.ResizeImage(fileContent, 200, 1920))
-                .Throws(new UnknownImageFormatException("Unsupported image format"));
+                .Throws(CreateImageFormatException());
 
             var controller = new WebInterviewResourcesController(
                 attachmentStorage.Object,
@@ -131,7 +132,7 @@ namespace WB.Tests.Web.WebTester.Controllers
             var imageProcessingService = new Mock<IImageProcessingService>();
             imageProcessingService
                 .Setup(x => x.ResizeImage(fileContent, 100, 1920))
-                .Throws(new UnknownImageFormatException("Unsupported image format"));
+                .Throws(CreateImageFormatException());
 
             var controller = new WebInterviewResourcesController(
                 attachmentStorage.Object,
@@ -158,5 +159,8 @@ namespace WB.Tests.Web.WebTester.Controllers
         private const string fileName = "image.heic";
         private const string mimeType = "image/heic";
         private static readonly byte[] fileContent = { 1, 234, 21, 0, 54, 1, 66, 78 };
+
+        private static ImageFormatException CreateImageFormatException() =>
+            (ImageFormatException)RuntimeHelpers.GetUninitializedObject(typeof(ImageFormatException));
     }
 }
