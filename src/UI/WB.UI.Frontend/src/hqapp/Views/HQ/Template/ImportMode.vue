@@ -135,6 +135,7 @@
                         <div class="form-group">
                             <input class="checkbox-filter single-checkbox" id="ckbCopyWebInterviewSettings"
                                 type="checkbox" value="True" name="CopyWebInterviewSettings"
+                                :disabled="!canCopyWebInterviewSettings"
                                 v-model="copyWebInterviewSettings" />
                             <label for="ckbCopyWebInterviewSettings">
                                 <span class="tick"></span>
@@ -286,6 +287,9 @@ export default {
         hasQuestionnaireInfo() {
             return this.$config.model.questionnaireInfo != null
         },
+        canCopyWebInterviewSettings() {
+            return !this.shouldMigrateAssignments || this.questionnaireId != null
+        },
         progressText() {
             var text = ''
             if (this.progressPercent === 0) {
@@ -296,6 +300,12 @@ export default {
             }
             text += '...'.substring(0, this.dotsCount)
             return text
+        },
+    },
+    watch: {
+        canCopyWebInterviewSettings(value) {
+            if (!value)
+                this.copyWebInterviewSettings = false
         },
     },
 }
