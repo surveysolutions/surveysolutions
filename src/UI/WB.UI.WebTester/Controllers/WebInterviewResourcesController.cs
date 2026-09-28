@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SixLabors.ImageSharp;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Shared.Web.Modules;
@@ -69,9 +70,9 @@ namespace WB.UI.WebTester.Controllers
 
                 var resultFile = fullSize
                     ? attachment.Content.Content
-                    : this.imageProcessingService.ResizeImage(attachment.Content.Content, thumbSize, 1920);
+                    : ResizeImageOrOriginal(attachment.Content.Content, thumbSize);
 
-                return this.BinaryResponseMessageWithEtag(resultFile);
+                return this.BinaryResponseMessageWithEtag(resultFile, attachment.Content.ContentType);
             }
 
             MemoryStream stream = new MemoryStream(attachment.Content.Content);
@@ -99,9 +100,9 @@ namespace WB.UI.WebTester.Controllers
             var fullSize = GetQueryStringValue("fullSize") != null;
             var resultFile = fullSize
                 ? file!.Data
-                : this.imageProcessingService.ResizeImage(file!.Data, 200, 1920);
+                : ResizeImageOrOriginal(file!.Data, 200);
             
-            return this.BinaryResponseMessageWithEtag(resultFile);
+            return this.BinaryResponseMessageWithEtag(resultFile, file.MimeType);
         }
 
         [HttpGet]
@@ -145,6 +146,18 @@ namespace WB.UI.WebTester.Controllers
         {
             return (this.Request.Query.Where(query => query.Key == key).Select(query => query.Value))
                 .FirstOrDefault();
+        }
+
+        private byte[] ResizeImageOrOriginal(byte[] content, int height)
+        {
+            try
+            {
+                return this.imageProcessingService.ResizeImage(content, height, 1920);
+            }
+            catch (Exception exception) when (exception is ImageFormatException || exception is NotSupportedException)
+            {
+                return content;
+            }
         }
     }
 }
