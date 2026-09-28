@@ -17,7 +17,7 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
 {
-    public class QuestionnaireHistoryVersionsService : IQuestionnaireHistoryVersionsService
+    public class QuestionnaireHistoryVersionsService : IQuestionnaireHistoryVersionsService, IQuestionnaireHistoryMutationService
     {
         private readonly DesignerDbContext dbContext;
         private readonly IEntitySerializer<QuestionnaireDocument> entitySerializer;
@@ -163,8 +163,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
             QuestionnaireChangeReference? reference = null,
             QuestionnaireChangeRecordMetadata? meta = null)
         {
-            await AddQuestionnaireChangeItemToContextAsync(
-                this.dbContext,
+            await StageQuestionnaireChangeItemAsync(
                 questionnaireId,
                 responsibleId,
                 userName,
@@ -181,8 +180,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
             await this.dbContext.SaveChangesAsync();
         }
 
-        public async Task AddQuestionnaireChangeItemToContextAsync(
-            DesignerDbContext dbContext,
+        public async Task StageQuestionnaireChangeItemAsync(
             Guid questionnaireId,
             Guid responsibleId,
             string? userName,
@@ -199,10 +197,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
         {
             var sQuestionnaireId = questionnaireId.FormatGuid();
 
-            var maxSequenceByQuestionnaire = await dbContext.QuestionnaireChangeRecords
+            var maxSequenceByQuestionnaire = await this.dbContext.QuestionnaireChangeRecords
                 .Where(y => y.QuestionnaireId == sQuestionnaireId).Select(y => (int?) y.Sequence).MaxAsync();
 
-            var previousChange = await (from h in dbContext.QuestionnaireChangeRecords
+            var previousChange = await (from h in this.dbContext.QuestionnaireChangeRecords
                                         where h.QuestionnaireId == sQuestionnaireId && h.ResultingQuestionnaireDocument != null
                                         orderby h.Sequence descending
                                         select h
@@ -213,10 +211,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
                 targetTitle, targetNewTitle, affectedEntries, targetDateTime, questionnaireDocument,
                 previousChange, (maxSequenceByQuestionnaire ?? -1) + 1, reference, meta);
 
-            dbContext.QuestionnaireChangeRecords.Add(questionnaireChangeItem);
+            this.dbContext.QuestionnaireChangeRecords.Add(questionnaireChangeItem);
 
             // -1 is to take into account newly added change record that is not yet in DB
-            RemoveOldQuestionnaireHistory(dbContext, sQuestionnaireId, historySettings.Value.QuestionnaireChangeHistoryLimit - 1);
+            RemoveOldQuestionnaireHistory(this.dbContext, sQuestionnaireId, historySettings.Value.QuestionnaireChangeHistoryLimit - 1);
         }
 
         private QuestionnaireChangeRecord BuildChangeRecord(

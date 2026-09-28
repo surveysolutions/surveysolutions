@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +15,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
-using Npgsql;
 using SkiaSharp;
 using SkiaSharp.QrCode.Image;
 using Vite.Extensions.AspNetCore;
@@ -99,6 +97,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IViewRenderService viewRenderService;
         private readonly UserManager<DesignerIdentityUser> users;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
+        private readonly IAnonymousQuestionnaireStateService anonymousQuestionnaireStateService;
         private readonly ITagHelperComponentManager tagHelperComponentManager;
         private readonly IWebHostEnvironment webHost;
         private readonly IOptions<ViteTagOptions> options;
@@ -111,6 +110,7 @@ namespace WB.UI.Designer.Controllers
             IQuestionnaireInfoFactory questionnaireInfoFactory,
             IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory,
             IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
+            IAnonymousQuestionnaireStateService anonymousQuestionnaireStateService,
             ILookupTableService lookupTableService,
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
             ICategoricalOptionsImportService categoricalOptionsImportService,
@@ -139,6 +139,7 @@ namespace WB.UI.Designer.Controllers
             this.viewRenderService = viewRenderService;
             this.users = users;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
+            this.anonymousQuestionnaireStateService = anonymousQuestionnaireStateService;
             this.tagHelperComponentManager = tagHelperComponentManager;
             this.webHost = webHost;
             this.options = options;
@@ -360,7 +361,7 @@ namespace WB.UI.Designer.Controllers
                 || historicalRecord?.ActionType == QuestionnaireActionType.AnonymousSharingDisabled)
             {
                 var questionnaireTitle = historicalRecord.TargetItemTitle ?? GetQuestionnaireView(id)?.Title ?? string.Empty;
-                await SaveAnonymousQuestionnaireStateAsync(
+                await anonymousQuestionnaireStateService.SaveStateAsync(
                     id,
                     historicalRecord.ActionType == QuestionnaireActionType.AnonymousSharingEnabled,
                     questionnaireTitle,
@@ -503,7 +504,7 @@ namespace WB.UI.Designer.Controllers
 
             var questionnaireView = GetQuestionnaireView(id);
             var questionnaireTitle = questionnaireView?.Title ?? string.Empty;
-            var anonymousQuestionnaire = await SaveAnonymousQuestionnaireStateAsync(
+            var anonymousQuestionnaire = await anonymousQuestionnaireStateService.SaveStateAsync(
                 id,
                 isActive,
                 questionnaireTitle,
@@ -519,87 +520,6 @@ namespace WB.UI.Designer.Controllers
                 IsActive = isActive,
                 GeneratedAtUtc = anonymousQuestionnaire.GeneratedAtUtc,
             });
-        }
-
-        private async Task<AnonymousQuestionnaire> SaveAnonymousQuestionnaireStateAsync(
-            Guid questionnaireId,
-            bool isActive,
-            string questionnaireTitle,
-            Guid responsibleId,
-            string responsibleName)
-        {
-            for (var attempt = 0; attempt < 2; attempt++)
-            {
-                await using var transaction =
-                    await dbContext.Database.BeginTransactionAsync(IsolationLevel.Serializable);
-
-                try
-                {
-                    var anonymousQuestionnaire = await dbContext.AnonymousQuestionnaires
-                        .SingleOrDefaultAsync(a => a.QuestionnaireId == questionnaireId);
-                    var shouldAddHistoryRecord = anonymousQuestionnaire == null || anonymousQuestionnaire.IsActive != isActive;
-
-                    if (anonymousQuestionnaire == null)
-                    {
-                        anonymousQuestionnaire = new AnonymousQuestionnaire
-                        {
-                            QuestionnaireId = questionnaireId,
-                            AnonymousQuestionnaireId = Guid.NewGuid(),
-                            IsActive = isActive,
-                            GeneratedAtUtc = DateTime.UtcNow
-                        };
-                        dbContext.AnonymousQuestionnaires.Add(anonymousQuestionnaire);
-                    }
-                    else
-                    {
-                        anonymousQuestionnaire.IsActive = isActive;
-                        dbContext.AnonymousQuestionnaires.Update(anonymousQuestionnaire);
-                    }
-
-                    anonymousQuestionnaire.IsActive = isActive;
-
-                    await dbContext.SaveChangesAsync();
-
-                    var actionType = isActive
-                        ? QuestionnaireActionType.AnonymousSharingEnabled
-                        : QuestionnaireActionType.AnonymousSharingDisabled;
-
-                    if (shouldAddHistoryRecord)
-                    {
-                        await questionnaireHistoryVersionsService.AddQuestionnaireChangeItemToContextAsync(
-                            dbContext,
-                            questionnaireId,
-                            responsibleId,
-                            responsibleName,
-                            actionType,
-                            QuestionnaireItemType.Questionnaire,
-                            questionnaireId,
-                            questionnaireTitle,
-                            null, null, null, null);
-                        await dbContext.SaveChangesAsync();
-                    }
-
-                    await transaction.CommitAsync();
-
-                    return anonymousQuestionnaire;
-                }
-                catch (DbUpdateException exception)
-                    when (attempt == 0
-                          && exception.InnerException is PostgresException
-                          {
-                              SqlState: "40001" or "23505"
-                          })
-                {
-                    dbContext.ChangeTracker.Clear();
-                }
-                catch (PostgresException exception)
-                    when (attempt == 0 && exception.SqlState is "40001" or "23505")
-                {
-                    dbContext.ChangeTracker.Clear();
-                }
-            }
-
-            throw new InvalidOperationException("Anonymous sharing state update retry limit exceeded.");
         }
 
         [Authorize]
