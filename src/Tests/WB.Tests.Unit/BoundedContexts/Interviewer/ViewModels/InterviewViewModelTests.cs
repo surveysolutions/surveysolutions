@@ -211,11 +211,21 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             [Test]
             public void when_dispatcher_fails_while_applying_complete_status_exception_should_be_observed()
             {
-                var sut = new TestableInterviewerInterviewViewModel(new FaultingDispatcher());
+                var sut = new TestableInterviewerInterviewViewModel(new BackgroundFaultingDispatcher());
 
                 Action act = () => sut.InvokeApplyCompleteViewModelStatus(new TestCompleteViewModel());
 
                 act.Should().Throw<InvalidOperationException>();
+            }
+
+            [Test]
+            public void when_already_on_main_thread_apply_complete_status_should_not_dispatch()
+            {
+                var sut = new TestableInterviewerInterviewViewModel(new MainThreadDispatcherThatMustNotBeCalled());
+
+                Action act = () => sut.InvokeApplyCompleteViewModelStatus(new TestCompleteViewModel());
+
+                act.Should().NotThrow();
             }
 
             private class TestableInterviewerInterviewViewModel : InterviewerInterviewViewModel
@@ -238,7 +248,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                 public override Task NavigateBack() => Task.CompletedTask;
             }
 
-            private class FaultingDispatcher : IMvxMainThreadAsyncDispatcher
+            private class BackgroundFaultingDispatcher : IMvxMainThreadAsyncDispatcher
             {
                 public Task ExecuteOnMainThreadAsync(Action action, bool maskExceptions = true)
                 {
@@ -248,6 +258,17 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
 
                 public Task ExecuteOnMainThreadAsync(Func<Task> action, bool maskExceptions = true)
                     => Task.FromException(new InvalidOperationException("dispatcher failure"));
+
+                public bool IsOnMainThread => false;
+            }
+
+            private class MainThreadDispatcherThatMustNotBeCalled : IMvxMainThreadAsyncDispatcher
+            {
+                public Task ExecuteOnMainThreadAsync(Action action, bool maskExceptions = true)
+                    => throw new InvalidOperationException("dispatcher should not be used on the main thread");
+
+                public Task ExecuteOnMainThreadAsync(Func<Task> action, bool maskExceptions = true)
+                    => throw new InvalidOperationException("dispatcher should not be used on the main thread");
 
                 public bool IsOnMainThread => true;
             }
