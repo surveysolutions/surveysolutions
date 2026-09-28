@@ -240,6 +240,8 @@ export default {
             this.errorMessage = ''
 
             var formData = new FormData(this.$refs.importingForm)
+            formData.set('CopyWebInterviewSettings',
+                this.copyWebInterviewSettings && this.canCopyWebInterviewSettings ? 'True' : 'False')
             var currentStatus = await this.$http.post(window.location, formData)
 
             await this.timeout(1000)
