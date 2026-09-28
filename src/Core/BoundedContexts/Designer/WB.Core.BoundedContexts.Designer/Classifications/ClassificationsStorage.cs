@@ -147,6 +147,8 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             {
                 dbContext.ClassificationEntities.Add(classificationEntity);
             }
+
+            dbContext.SaveChanges();
         }
 
         public async Task<List<Category>> GetCategories(Guid classificationId)

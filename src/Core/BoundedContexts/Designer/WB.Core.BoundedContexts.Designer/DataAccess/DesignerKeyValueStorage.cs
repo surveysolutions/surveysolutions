@@ -45,13 +45,15 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
                     : this.serializer.Deserialize(pending.Entity.Value);
             }
 
-            if (dbContext.Database.CurrentTransaction != null)
+            if (dbContext.Database.CurrentTransaction != null && dbContext.BypassSharedKeyValueCacheInCurrentTransaction)
             {
                 // Inside a write transaction the read-modify-write must see freshly committed state: a prior writer
                 // releases its advisory lock at commit but flushes the shared-cache invalidation only afterwards, so
                 // the cache can still hold that writer's pre-commit document. Read the store directly, bypassing it.
-                var current = FindEntry(id);
-                return current == null || current.State == EntityState.Deleted
+                var current = FindTrackedEntry(id);
+                current?.Reload();
+                current ??= FindEntry(id);
+                return current == null || current.State == EntityState.Deleted || current.State == EntityState.Detached
                     ? null
                     : this.serializer.Deserialize(current.Entity.Value);
             }
@@ -94,6 +96,20 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             foreach (var entry in dbContext.ChangeTracker.Entries<KeyValueEntity>())
             {
                 if (entry.State == EntityState.Unchanged || entry.State == EntityState.Detached)
+                    continue;
+
+                if (entry.Entity.GetType() == QueryType && entry.Entity.Id == id)
+                    return entry;
+            }
+
+            return null;
+        }
+
+        private EntityEntry<KeyValueEntity>? FindTrackedEntry(string id)
+        {
+            foreach (var entry in dbContext.ChangeTracker.Entries<KeyValueEntity>())
+            {
+                if (entry.State == EntityState.Detached)
                     continue;
 
                 if (entry.Entity.GetType() == QueryType && entry.Entity.Id == id)

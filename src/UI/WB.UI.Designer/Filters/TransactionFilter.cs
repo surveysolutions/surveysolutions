@@ -69,14 +69,15 @@ namespace WB.UI.Designer.Filters
 
         private static async Task ExecuteInTransactionAsync(HttpContext httpContext, DesignerDbContext dbContext, Func<Task<bool>> action)
         {
+            var isWrite = IsWriteMethod(httpContext.Request.Method);
+
             // If a transaction is already open on this context, its opener owns commit/rollback; just run inside it.
             if (dbContext.Database.CurrentTransaction != null)
             {
-                await action();
+                await ExecuteWithSharedCachePolicyAsync(dbContext, isWrite, action);
                 return;
             }
 
-            var isWrite = IsWriteMethod(httpContext.Request.Method);
             ExceptionDispatchInfo? capturedException = null;
 
             try
@@ -106,7 +107,7 @@ namespace WB.UI.Designer.Filters
             await using var transaction = await dbContext.Database.BeginTransactionAsync(CancellationToken.None);
             try
             {
-                var succeeded = await action();
+                var succeeded = await ExecuteWithSharedCachePolicyAsync(dbContext, isWrite, action);
                 if (succeeded && isWrite)
                 {
                     await dbContext.SaveChangesAsync(CancellationToken.None);
@@ -123,6 +124,21 @@ namespace WB.UI.Designer.Filters
             {
                 dbContext.ChangeTracker.Clear();
                 throw;
+            }
+        }
+
+        private static async Task<T> ExecuteWithSharedCachePolicyAsync<T>(DesignerDbContext dbContext, bool bypassSharedCache, Func<Task<T>> action)
+        {
+            var previousValue = dbContext.BypassSharedKeyValueCacheInCurrentTransaction;
+            dbContext.BypassSharedKeyValueCacheInCurrentTransaction = previousValue || bypassSharedCache;
+
+            try
+            {
+                return await action();
+            }
+            finally
+            {
+                dbContext.BypassSharedKeyValueCacheInCurrentTransaction = previousValue;
             }
         }
     }

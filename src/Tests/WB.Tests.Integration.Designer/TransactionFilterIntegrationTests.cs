@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Documents;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -10,10 +11,15 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.DataAccess;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Filters;
 
 namespace WB.Tests.Integration.Designer
@@ -77,11 +83,91 @@ namespace WB.Tests.Integration.Designer
             Assert.That(RowExists(dbContext, id), Is.False);
         }
 
+        [Test]
+        public async Task when_safe_request_uses_transaction_filter_questionnaire_reads_can_still_use_shared_cache()
+        {
+            var dbContext = ServiceLocator.GetInstance<DesignerDbContext>();
+            var questionnaireId = Guid.NewGuid();
+            SeedQuestionnaireDocument(dbContext, questionnaireId, "database");
+
+            var serializer = new EntitySerializer<QuestionnaireDocument>();
+            using var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
+            var evictionTokens = new KeyValueCacheEvictionTokens();
+            var invalidation = new TransactionalMemoryCacheInvalidation(memoryCache, evictionTokens);
+            var storage = new DesignerKeyValueStorage<QuestionnaireDocument>(dbContext, memoryCache, serializer, invalidation, evictionTokens);
+            var cacheKey = nameof(StoredQuestionnaireDocument) + questionnaireId.FormatGuid();
+            memoryCache.Set(cacheKey, serializer.Serialize(CreateQuestionnaireDocument(questionnaireId, "cached")));
+
+            QuestionnaireDocument? loaded = null;
+
+            await RunThroughActionFilter(dbContext, HttpMethods.Get, throwInHandler: false,
+                handlerBody: () => loaded = storage.GetById(questionnaireId.FormatGuid()));
+
+            Assert.That(loaded?.Title, Is.EqualTo("cached"));
+        }
+
+        [Test]
+        public async Task when_write_request_uses_transaction_filter_tracked_questionnaire_reads_are_reloaded()
+        {
+            var dbContext = ServiceLocator.GetInstance<DesignerDbContext>();
+            var questionnaireId = Guid.NewGuid();
+            SeedQuestionnaireDocument(dbContext, questionnaireId, "stale");
+
+            _ = dbContext.QuestionnaireDocuments.Find(questionnaireId.FormatGuid());
+            SeedQuestionnaireDocument(dbContext, questionnaireId, "fresh");
+
+            var serializer = new EntitySerializer<QuestionnaireDocument>();
+            using var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
+            var evictionTokens = new KeyValueCacheEvictionTokens();
+            var invalidation = new TransactionalMemoryCacheInvalidation(memoryCache, evictionTokens);
+            var storage = new DesignerKeyValueStorage<QuestionnaireDocument>(dbContext, memoryCache, serializer, invalidation, evictionTokens);
+
+            QuestionnaireDocument? loaded = null;
+
+            await RunThroughActionFilter(dbContext, HttpMethods.Post, throwInHandler: false,
+                handlerBody: () => loaded = storage.GetById(questionnaireId.FormatGuid()));
+
+            Assert.That(loaded?.Title, Is.EqualTo("fresh"));
+        }
+
         private static void StageAndFlush(DesignerDbContext dbContext, Guid id)
         {
             dbContext.Questionnaires.Add(Create.Questionnaire.ListViewItem(id, "test"));
             dbContext.SaveChanges();
         }
+
+        private static void SeedQuestionnaireDocument(DesignerDbContext dbContext, Guid questionnaireId, string title)
+        {
+            using var fresh = new DesignerDbContext(new DbContextOptionsBuilder<DesignerDbContext>()
+                .UseNpgsql(dbContext.Database.GetConnectionString())
+                .Options);
+
+            var serializer = new EntitySerializer<QuestionnaireDocument>();
+            var id = questionnaireId.FormatGuid();
+            var stored = fresh.QuestionnaireDocuments.Find(id);
+            if (stored == null)
+            {
+                fresh.QuestionnaireDocuments.Add(new StoredQuestionnaireDocument
+                {
+                    Id = id,
+                    Value = serializer.Serialize(CreateQuestionnaireDocument(questionnaireId, title))
+                });
+            }
+            else
+            {
+                stored.Value = serializer.Serialize(CreateQuestionnaireDocument(questionnaireId, title));
+            }
+
+            fresh.SaveChanges();
+        }
+
+        private static QuestionnaireDocument CreateQuestionnaireDocument(Guid questionnaireId, string title)
+            => new QuestionnaireDocument
+            {
+                PublicKey = questionnaireId,
+                Title = title,
+                HideIfDisabled = true
+            };
 
         private static bool RowExists(DesignerDbContext filterContext, Guid id)
         {
