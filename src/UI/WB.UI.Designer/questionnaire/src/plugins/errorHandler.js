@@ -3,6 +3,7 @@ import {
     getOnlineVersion,
     getCurrentVersion
 } from '../services/designerService';
+import { isDynamicImportError } from '../helpers/dynamicImportRecovery';
 import { i18n } from './localization';
 
 const api = mande('/error/report');
@@ -119,6 +120,11 @@ export function setupErrorHandler(app) {
     });
 
     window.addEventListener('vite:preloadError', event => {
+        if (isDynamicImportError(event.payload)) {
+            event.preventDefault();
+            return;
+        }
+
         checkIsNeedUpdate();
     });
 
