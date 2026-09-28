@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Main.Core.Documents;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 
 namespace WB.Core.BoundedContexts.Designer.Services
@@ -25,6 +26,22 @@ namespace WB.Core.BoundedContexts.Designer.Services
             QuestionnaireChangeRecordMetadata? meta = null);
 
         Task AddQuestionnaireChangeItemAsync(
+            Guid questionnaireId,
+            Guid responsibleId,
+            string? userName,
+            QuestionnaireActionType actionType,
+            QuestionnaireItemType targetType,
+            Guid targetId,
+            string? targetTitle,
+            string? targetNewTitle,
+            int? affectedEntries,
+            DateTime? targetDateTime,
+            QuestionnaireDocument? questionnaireDocument,
+            QuestionnaireChangeReference? reference = null,
+            QuestionnaireChangeRecordMetadata? meta = null);
+
+        Task AddQuestionnaireChangeItemToContextAsync(
+            DesignerDbContext dbContext,
             Guid questionnaireId,
             Guid responsibleId,
             string? userName,

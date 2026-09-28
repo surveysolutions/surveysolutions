@@ -566,7 +566,8 @@ namespace WB.UI.Designer.Controllers
 
                     if (shouldAddHistoryRecord)
                     {
-                        await questionnaireHistoryVersionsService.AddQuestionnaireChangeItemAsync(
+                        await questionnaireHistoryVersionsService.AddQuestionnaireChangeItemToContextAsync(
+                            dbContext,
                             questionnaireId,
                             responsibleId,
                             responsibleName,
@@ -575,6 +576,7 @@ namespace WB.UI.Designer.Controllers
                             questionnaireId,
                             questionnaireTitle,
                             null, null, null, null);
+                        await dbContext.SaveChangesAsync();
                     }
 
                     await transaction.CommitAsync();

@@ -93,9 +93,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
             return entitySerializer.Deserialize(questionnaire);
         }
 
-        private void RemoveOldQuestionnaireHistory(string sQuestionnaireId, int maxHistoryDepth)
+        private static void RemoveOldQuestionnaireHistory(DesignerDbContext dbContext, string sQuestionnaireId, int maxHistoryDepth)
         {
-            var oldChangeRecord = this.dbContext.QuestionnaireChangeRecords
+            var oldChangeRecord = dbContext.QuestionnaireChangeRecords
                 .Where(x => 
                     x.QuestionnaireId == sQuestionnaireId 
                     && x.ActionType != QuestionnaireActionType.ImportToHq)
@@ -144,7 +144,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
             this.dbContext.QuestionnaireChangeRecords.Add(questionnaireChangeItem);
             
             // -1 is to take into account newly added change record that is not yet in DB
-            this.RemoveOldQuestionnaireHistory(sQuestionnaireId, historySettings.Value.QuestionnaireChangeHistoryLimit - 1);
+            RemoveOldQuestionnaireHistory(this.dbContext, sQuestionnaireId, historySettings.Value.QuestionnaireChangeHistoryLimit - 1);
             this.dbContext.SaveChanges();
         }
 
@@ -163,12 +163,46 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
             QuestionnaireChangeReference? reference = null,
             QuestionnaireChangeRecordMetadata? meta = null)
         {
+            await AddQuestionnaireChangeItemToContextAsync(
+                this.dbContext,
+                questionnaireId,
+                responsibleId,
+                userName,
+                actionType,
+                targetType,
+                targetId,
+                targetTitle,
+                targetNewTitle,
+                affectedEntries,
+                targetDateTime,
+                questionnaireDocument,
+                reference,
+                meta);
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task AddQuestionnaireChangeItemToContextAsync(
+            DesignerDbContext dbContext,
+            Guid questionnaireId,
+            Guid responsibleId,
+            string? userName,
+            QuestionnaireActionType actionType,
+            QuestionnaireItemType targetType,
+            Guid targetId,
+            string? targetTitle,
+            string? targetNewTitle,
+            int? affectedEntries,
+            DateTime? targetDateTime,
+            QuestionnaireDocument? questionnaireDocument,
+            QuestionnaireChangeReference? reference = null,
+            QuestionnaireChangeRecordMetadata? meta = null)
+        {
             var sQuestionnaireId = questionnaireId.FormatGuid();
 
-            var maxSequenceByQuestionnaire = await this.dbContext.QuestionnaireChangeRecords
+            var maxSequenceByQuestionnaire = await dbContext.QuestionnaireChangeRecords
                 .Where(y => y.QuestionnaireId == sQuestionnaireId).Select(y => (int?) y.Sequence).MaxAsync();
 
-            var previousChange = await (from h in this.dbContext.QuestionnaireChangeRecords
+            var previousChange = await (from h in dbContext.QuestionnaireChangeRecords
                                         where h.QuestionnaireId == sQuestionnaireId && h.ResultingQuestionnaireDocument != null
                                         orderby h.Sequence descending
                                         select h
@@ -179,11 +213,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
                 targetTitle, targetNewTitle, affectedEntries, targetDateTime, questionnaireDocument,
                 previousChange, (maxSequenceByQuestionnaire ?? -1) + 1, reference, meta);
 
-            this.dbContext.QuestionnaireChangeRecords.Add(questionnaireChangeItem);
+            dbContext.QuestionnaireChangeRecords.Add(questionnaireChangeItem);
 
             // -1 is to take into account newly added change record that is not yet in DB
-            this.RemoveOldQuestionnaireHistory(sQuestionnaireId, historySettings.Value.QuestionnaireChangeHistoryLimit - 1);
-            await this.dbContext.SaveChangesAsync();
+            RemoveOldQuestionnaireHistory(dbContext, sQuestionnaireId, historySettings.Value.QuestionnaireChangeHistoryLimit - 1);
         }
 
         private QuestionnaireChangeRecord BuildChangeRecord(

@@ -73,7 +73,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             var result = await controller.Revert(questionnaireId, historyRecordId);
 
             dbContext.AnonymousQuestionnaires.Single(a => a.QuestionnaireId == questionnaireId).IsActive.Should().BeTrue();
-            historyService.Verify(x => x.AddQuestionnaireChangeItemAsync(
+            historyService.Verify(x => x.AddQuestionnaireChangeItemToContextAsync(
+                    dbContext,
                     questionnaireId,
                     userId,
                     "designer-user",
@@ -141,7 +142,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
             await controller.Revert(questionnaireId, historyRecordId);
 
-            historyService.Verify(x => x.AddQuestionnaireChangeItemAsync(
+            historyService.Verify(x => x.AddQuestionnaireChangeItemToContextAsync(
+                    It.IsAny<WB.Core.BoundedContexts.Designer.DataAccess.DesignerDbContext>(),
                     It.IsAny<Guid>(),
                     It.IsAny<Guid>(),
                     It.IsAny<string>(),
