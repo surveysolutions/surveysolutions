@@ -19,11 +19,17 @@ namespace WB.UI.Designer.Filters
     // filters, and any writes/errors produced while the result executes are outside this transaction.
     // Because of that timing, the filter does NOT inspect IActionResult types, result status codes, or
     // HttpResponse.StatusCode when deciding to commit. For write requests, any handler that returns without
-    // an unhandled exception is treated as successful and committed; only safe (read-only) methods,
-    // short-circuited handlers, and unhandled exceptions trigger rollback. It also starts after
+    // an unhandled exception is treated as successful and committed unless the handler marks the request
+    // rollback-only; safe (read-only) methods, short-circuited handlers, and unhandled exceptions trigger rollback.
+    // It also starts after
     // authentication, authorization, and model binding.
     public class TransactionFilter : IAsyncActionFilter, IAsyncPageFilter
     {
+        private static readonly object RollbackOnlyKey = new();
+
+        public static void MarkRollbackOnly(HttpContext httpContext)
+            => httpContext.Items[RollbackOnlyKey] = true;
+
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             if (SkipTransaction(context))
@@ -37,7 +43,8 @@ namespace WB.UI.Designer.Filters
             {
                 var executedContext = await next();
                 // Canceled means an inner filter short-circuited: the handler never ran, so nothing may commit.
-                return executedContext.Exception == null && !executedContext.Canceled;
+                return executedContext.Exception == null && !executedContext.Canceled
+                    && !IsRollbackOnly(context.HttpContext);
             });
         }
 
@@ -55,9 +62,13 @@ namespace WB.UI.Designer.Filters
             await ExecuteInTransactionAsync(context.HttpContext, dbContext, async () =>
             {
                 var executedContext = await next();
-                return executedContext.Exception == null && !executedContext.Canceled;
+                return executedContext.Exception == null && !executedContext.Canceled
+                    && !IsRollbackOnly(context.HttpContext);
             });
         }
+
+        private static bool IsRollbackOnly(HttpContext httpContext)
+            => httpContext.Items.TryGetValue(RollbackOnlyKey, out var value) && value is true;
 
         private static bool SkipTransaction(FilterContext context)
             => context.Filters.OfType<NoTransactionAttribute>().Any();

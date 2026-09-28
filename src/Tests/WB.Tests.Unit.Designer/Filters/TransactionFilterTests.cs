@@ -80,6 +80,20 @@ public class TransactionFilterTests
     }
 
     [Test]
+    public async Task when_write_request_is_marked_rollback_only_it_rolls_back()
+    {
+        var db = NewDatabase();
+        var invalidation = new Mock<ITransactionalMemoryCacheInvalidation>();
+        var id = Guid.NewGuid().ToString("N");
+
+        await InvokeActionAsync(db, invalidation.Object, HttpMethods.Post, new BadRequestResult(),
+            throwInHandler: false, stageItemId: id, markRollbackOnly: true);
+
+        StoredIds(db).Should().NotContain(id);
+        invalidation.Verify(x => x.Flush(), Times.Once);
+    }
+
+    [Test]
     public async Task when_write_request_is_short_circuited_staged_writes_are_rolled_back()
     {
         var db = NewDatabase();
@@ -233,7 +247,8 @@ public class TransactionFilterTests
         bool throwInHandler,
         string? stageItemId,
         IList<IFilterMetadata>? filters = null,
-        bool canceled = false)
+        bool canceled = false,
+        bool markRollbackOnly = false)
     {
         var httpContext = HttpContextFor(db.Filter, invalidation, method);
         var filterList = filters ?? new List<IFilterMetadata>();
@@ -243,6 +258,8 @@ public class TransactionFilterTests
         ActionExecutionDelegate next = async () =>
         {
             Stage(db.Filter, stageItemId);
+            if (markRollbackOnly)
+                TransactionFilter.MarkRollbackOnly(httpContext);
             await Task.Yield();
             if (throwInHandler)
                 throw new InvalidOperationException("handler failure");

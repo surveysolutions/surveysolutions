@@ -20,6 +20,7 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Controllers.Api.Designer;
+using WB.UI.Designer.Filters;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -293,7 +294,10 @@ namespace WB.UI.Designer.Controllers
             [FromBody] UpdateCategoriesModel? categoriesModel)
         {
             if (categoriesModel?.Categories == null)
+            {
+                TransactionFilter.MarkRollbackOnly(HttpContext);
                 return CommandJsonResult(GetNotFoundResponseObject());
+            }
 
             if (isCategory)
             {
@@ -316,6 +320,7 @@ namespace WB.UI.Designer.Controllers
                 catch (Exception e)
                 {
                     this.logger.LogError(e, "Error on categories saving");
+                    TransactionFilter.MarkRollbackOnly(HttpContext);
 
                     dynamic commandResult = new ExpandoObject();
                     commandResult.IsSuccess = false;
@@ -328,6 +333,7 @@ namespace WB.UI.Designer.Controllers
 
                 if (model.Value == null)
                 {
+                    TransactionFilter.MarkRollbackOnly(HttpContext);
                     return model.Result;
                 }
 
@@ -400,6 +406,7 @@ namespace WB.UI.Designer.Controllers
             }
             catch (Exception e)
             {
+                TransactionFilter.MarkRollbackOnly(HttpContext);
                 var domainEx = e.GetSelfOrInnerAs<QuestionnaireException>();
                 if (domainEx == null)
                 {
