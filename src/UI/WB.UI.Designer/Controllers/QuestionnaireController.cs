@@ -578,12 +578,16 @@ namespace WB.UI.Designer.Controllers
                     return anonymousQuestionnaire;
                 }
                 catch (DbUpdateException exception)
-                    when (attempt == 0 && exception.InnerException is PostgresException { SqlState: "40001" })
+                    when (attempt == 0
+                          && exception.InnerException is PostgresException
+                          {
+                              SqlState: "40001" or "23505"
+                          })
                 {
                     dbContext.ChangeTracker.Clear();
                 }
                 catch (PostgresException exception)
-                    when (attempt == 0 && exception.SqlState == "40001")
+                    when (attempt == 0 && exception.SqlState is "40001" or "23505")
                 {
                     dbContext.ChangeTracker.Clear();
                 }
