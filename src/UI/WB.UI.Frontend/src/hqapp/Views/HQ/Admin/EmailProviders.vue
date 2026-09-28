@@ -761,7 +761,7 @@ export default {
             return (this.sendGridIsSetUp || this.awsIsSetUp || this.smtpIsSetUp) && !this.isFormDirty
         },
     },
-    watch: {
+    watch: {
         /*isFormDirty(val) {
             console.log(val)
             if (val) {
@@ -779,12 +779,12 @@ export default {
                 this.$refs.settigsForm.validate()
             }
         },
-        testEmailAddress: function () {
-            this.testEmailRequestId += 1
-            this.sendEmailResult = null
-            this.sendingErrors = []
-        },
-    },
+        testEmailAddress: function () {
+            this.testEmailRequestId += 1
+            this.sendEmailResult = null
+            this.sendingErrors = []
+        },
+    },
     methods: {
         noAction() {
             return false
