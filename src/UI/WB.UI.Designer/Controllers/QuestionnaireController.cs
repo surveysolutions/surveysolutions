@@ -337,7 +337,7 @@ namespace WB.UI.Designer.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Revert(Guid id, Guid commandId)
+        public async Task<IActionResult> Revert(Guid id, Guid commandId)
         {
             var historyReferenceId = commandId;
 
@@ -346,6 +346,27 @@ namespace WB.UI.Designer.Controllers
             {
                 this.Error(Resources.QuestionnaireController.ForbiddenRevert);
                 return this.RedirectToAction("Index", "QuestionnaireList");
+            }
+
+            var historicalRecord = await dbContext.QuestionnaireChangeRecords
+                .AsNoTracking()
+                .SingleOrDefaultAsync(record =>
+                    record.QuestionnaireChangeRecordId == historyReferenceId.FormatGuid()
+                    && record.QuestionnaireId == id.FormatGuid());
+
+            if (historicalRecord?.ActionType == QuestionnaireActionType.AnonymousSharingEnabled
+                || historicalRecord?.ActionType == QuestionnaireActionType.AnonymousSharingDisabled)
+            {
+                var questionnaireTitle = historicalRecord.TargetItemTitle ?? GetQuestionnaireView(id)?.Title ?? string.Empty;
+                await SaveAnonymousQuestionnaireStateAsync(
+                    id,
+                    historicalRecord.ActionType == QuestionnaireActionType.AnonymousSharingEnabled,
+                    questionnaireTitle,
+                    this.User.GetId(),
+                    User.GetUserName());
+
+                string questionnaireId = id.FormatGuid();
+                return Redirect($"/q/details/{questionnaireId}");
             }
 
             var command = new RevertVersionQuestionnaire(id, historyReferenceId, this.User.GetId());
@@ -480,34 +501,12 @@ namespace WB.UI.Designer.Controllers
 
             var questionnaireView = GetQuestionnaireView(id);
             var questionnaireTitle = questionnaireView?.Title ?? string.Empty;
-
-            var anonymousQuestionnaire = dbContext.AnonymousQuestionnaires.FirstOrDefault(a => a.QuestionnaireId == id);
-            if (anonymousQuestionnaire == null)
-            {
-                anonymousQuestionnaire = new AnonymousQuestionnaire()
-                    { QuestionnaireId = id, AnonymousQuestionnaireId = Guid.NewGuid(), IsActive = isActive, GeneratedAtUtc = DateTime.UtcNow };
-                dbContext.AnonymousQuestionnaires.Add(anonymousQuestionnaire);
-            }
-
-            anonymousQuestionnaire.IsActive = isActive;
-
-            var actionType = isActive
-                ? QuestionnaireActionType.AnonymousSharingEnabled
-                : QuestionnaireActionType.AnonymousSharingDisabled;
-
-            // Save the anonymous questionnaire change and the history entry atomically.
-            await using var transaction = await dbContext.Database.BeginTransactionAsync();
-            await dbContext.SaveChangesAsync();
-            await questionnaireHistoryVersionsService.AddQuestionnaireChangeItemAsync(
+            var anonymousQuestionnaire = await SaveAnonymousQuestionnaireStateAsync(
                 id,
-                User.GetId(),
-                User.GetUserName(),
-                actionType,
-                QuestionnaireItemType.Questionnaire,
-                id,
+                isActive,
                 questionnaireTitle,
-                null, null, null, null);
-            await transaction.CommitAsync();
+                User.GetId(),
+                User.GetUserName());
 
             if (isActive)
                 await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
@@ -518,6 +517,58 @@ namespace WB.UI.Designer.Controllers
                 IsActive = isActive,
                 GeneratedAtUtc = anonymousQuestionnaire.GeneratedAtUtc,
             });
+        }
+
+        private async Task<AnonymousQuestionnaire> SaveAnonymousQuestionnaireStateAsync(
+            Guid questionnaireId,
+            bool isActive,
+            string questionnaireTitle,
+            Guid responsibleId,
+            string responsibleName)
+        {
+            await using var transaction = await dbContext.Database.BeginTransactionAsync();
+
+            var anonymousQuestionnaire = await dbContext.AnonymousQuestionnaires
+                .SingleOrDefaultAsync(a => a.QuestionnaireId == questionnaireId);
+
+            if (anonymousQuestionnaire == null)
+            {
+                anonymousQuestionnaire = new AnonymousQuestionnaire
+                {
+                    QuestionnaireId = questionnaireId,
+                    AnonymousQuestionnaireId = Guid.NewGuid(),
+                    IsActive = isActive,
+                    GeneratedAtUtc = DateTime.UtcNow
+                };
+                dbContext.AnonymousQuestionnaires.Add(anonymousQuestionnaire);
+            }
+            else
+            {
+                anonymousQuestionnaire.IsActive = isActive;
+                dbContext.AnonymousQuestionnaires.Update(anonymousQuestionnaire);
+            }
+
+            anonymousQuestionnaire.IsActive = isActive;
+
+            await dbContext.SaveChangesAsync();
+
+            var actionType = isActive
+                ? QuestionnaireActionType.AnonymousSharingEnabled
+                : QuestionnaireActionType.AnonymousSharingDisabled;
+
+            await questionnaireHistoryVersionsService.AddQuestionnaireChangeItemAsync(
+                questionnaireId,
+                responsibleId,
+                responsibleName,
+                actionType,
+                QuestionnaireItemType.Questionnaire,
+                questionnaireId,
+                questionnaireTitle,
+                null, null, null, null);
+
+            await transaction.CommitAsync();
+
+            return anonymousQuestionnaire;
         }
 
         [Authorize]
