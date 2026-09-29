@@ -102,4 +102,7 @@
     <data name="ServiceUnavailable" xml:space="preserve">
         <value>Le service d'assistant est temporairement indisponible. Veuillez réessayer plus tard.</value>
     </data>
+    <data name="MessageTooLong" xml:space="preserve">
+        <value>Le message est trop long et a été tronqué. Veuillez le raccourcir avant de l'envoyer.</value>
+    </data>
 </root>
