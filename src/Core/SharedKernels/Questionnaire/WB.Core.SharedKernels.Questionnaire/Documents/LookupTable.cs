@@ -6,13 +6,15 @@ namespace WB.Core.SharedKernels.SurveySolutions.Documents
     {
         public string TableName { get; set; } = String.Empty;
         public string FileName { get; set; } = String.Empty;
+        public string Description { get; set; } = String.Empty;
 
         public LookupTable Clone()
         {
             return new LookupTable
             {
                 TableName = this.TableName,
-                FileName =  this.FileName
+                FileName =  this.FileName,
+                Description = this.Description
             };
         }
     }

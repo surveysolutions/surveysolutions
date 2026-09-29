@@ -183,7 +183,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 {
                     ItemId = x.Key.FormatGuid(),
                     Name = x.Value.TableName ?? "",
-                    FileName = x.Value.FileName ?? ""
+                    FileName = x.Value.FileName ?? "",
+                    Description = x.Value.Description ?? ""
                 })
                 .OrderBy(x => x.Name)
                 .ToList();
@@ -213,7 +214,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 .ToList();
 
             questionnaireInfoView.Categories = questionnaireDocument.Categories
-                .Select(categoriesIdentity => new CategoriesView(categoriesId : categoriesIdentity.Id.FormatGuid(), name : categoriesIdentity.Name))
+                .Select(categoriesIdentity => new CategoriesView(categoriesId : categoriesIdentity.Id.FormatGuid(), name : categoriesIdentity.Name, description: categoriesIdentity.Description))
                 .OrderBy(x => x.Name)
                 .ToList();
 

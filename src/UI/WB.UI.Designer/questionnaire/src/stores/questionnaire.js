@@ -126,11 +126,13 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
 
             forEach(this.info.categories, categoriesItem => {
                 var editCategories = cloneDeep(categoriesItem);
+                editCategories.isDescriptionVisible = !isEmpty(categoriesItem.description);
                 categoriesItem.editCategories = editCategories;
             });
 
             forEach(this.info.lookupTables, lookupTable => {
                 var editLookupTable = cloneDeep(lookupTable);
+                editLookupTable.isDescriptionVisible = !isEmpty(lookupTable.description);
                 lookupTable.editLookupTable = editLookupTable;
             });
 
@@ -350,6 +352,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             const newCategories = cloneDeep(payload.categories);
             newCategories.file = null;
             newCategories.editCategories = cloneDeep(newCategories);
+            newCategories.editCategories.isDescriptionVisible = !isEmpty(newCategories.description);
 
             const indexInit = findIndex(this.info.categories, function(i) {
                 return i.categoriesId === payload.categories.categoriesId;
@@ -468,6 +471,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', {
             const newLookupTable = cloneDeep(payload.lookupTable);
             newLookupTable.file = null;
             newLookupTable.editLookupTable = cloneDeep(newLookupTable);
+            newLookupTable.editLookupTable.isDescriptionVisible = !isEmpty(newLookupTable.description);
 
             const indexInit = findIndex(this.info.lookupTables, function(i) {
                 return i.itemId === payload.lookupTable.itemId;

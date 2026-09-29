@@ -54,12 +54,19 @@
             "string",
             "null"
           ]
+        },
+        "Description": {
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
       "required": [
         "Id",
         "Name",
-        "FileName"
+        "FileName",
+        "Description"
       ]
     },
     "CoverPage": {},
@@ -182,11 +189,18 @@
             "string",
             "null"
           ]
+        },
+        "Description": {
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
       "required": [
         "TableName",
-        "FileName"
+        "FileName",
+        "Description"
       ]
     },
     "Macro": {
