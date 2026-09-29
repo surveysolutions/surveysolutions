@@ -4,7 +4,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              local:MvxBind="HideKeyboardOnClick .">
+              local:MvxBind="HideKeyboardOnClick .; MarginLeftIndent QuestionState.Enablement.Indent">
     <TextView android:layout_width="match_parent"
               android:layout_height="wrap_content"
               style="@style/Interview_Question_Instruction_Title"

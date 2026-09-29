@@ -65,6 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             this.HideIfDisabled = questionnaire.ShouldBeHiddenIfDisabled(entityIdentity.Id);
+            this.Indent = questionnaire.GetQuestionIndent(entityIdentity.Id);
             
             this.eventRegistry.Subscribe(this, interviewId);
             initiated = true;
@@ -79,6 +80,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public bool HideIfDisabled { get; private set; }
+
+        public int Indent { get; private set; }
 
         private bool enabled;
         private List<PropertyChangedEventHandler> propertyChangedHandlers = new List<PropertyChangedEventHandler>();

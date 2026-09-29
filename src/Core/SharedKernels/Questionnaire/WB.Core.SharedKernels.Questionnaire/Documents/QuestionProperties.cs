@@ -30,5 +30,7 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
         public DateTime? DefaultDate { get; set; }
         
         public bool IsCritical { get; set; }
+        
+        public int Indent { get; set; }
     }
 }

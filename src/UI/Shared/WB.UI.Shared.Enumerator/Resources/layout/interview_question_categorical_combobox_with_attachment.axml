@@ -5,7 +5,8 @@
     style="@style/Interview_Question_Answer_Option_Background"
     android:orientation="vertical"
     local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutOptionBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false, false, true));
-                             LongClick QuestionState.ShowCommentEditorCommand">
+                             LongClick QuestionState.ShowCommentEditorCommand;
+                             MarginLeftIndent QuestionState.Enablement.Indent">
 
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="wrap_content"

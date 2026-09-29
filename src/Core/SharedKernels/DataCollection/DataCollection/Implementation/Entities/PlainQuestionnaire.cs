@@ -1204,6 +1204,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.GetQuestion(questionId).Properties.HideInstructions;
         }
 
+        public int GetQuestionIndent(Guid questionId)
+        {
+            return this.GetQuestion(questionId)?.Properties?.Indent ?? 0;
+        }
+
         public bool ShouldUseFormatting(Guid questionId)
         {
             var numericQuestion = this.GetQuestion(questionId) as INumericQuestion;
