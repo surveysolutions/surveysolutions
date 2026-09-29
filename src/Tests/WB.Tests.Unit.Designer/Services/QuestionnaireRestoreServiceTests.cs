@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.ImportExport;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -43,7 +44,8 @@ namespace WB.Tests.Unit.Designer.Services
         {
             var attachmentId = Guid.NewGuid();
             var document = DocumentWithAttachment(attachmentId);
-            var service = CreateService(document);
+            var questionnaireStorage = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            var service = CreateService(document, questionnaireStorage: questionnaireStorage);
             var state = new RestoreState();
 
             service.RestoreQuestionnaire(CreateArchive(
@@ -53,6 +55,7 @@ namespace WB.Tests.Unit.Designer.Services
 
             Assert.That(state.HasFailures, Is.True);
             Assert.That(state.Error, Does.Contain(attachmentId.FormatGuid()));
+            questionnaireStorage.Verify(s => s.Store(It.IsAny<QuestionnaireDocument>(), It.IsAny<string>()), Times.Never);
         }
 
         [Test]
@@ -79,7 +82,8 @@ namespace WB.Tests.Unit.Designer.Services
             return document;
         }
 
-        private static QuestionnaireRestoreService CreateService(QuestionnaireDocument document)
+        private static QuestionnaireRestoreService CreateService(QuestionnaireDocument document,
+            Mock<IPlainKeyValueStorage<QuestionnaireDocument>> questionnaireStorage = null)
         {
             var serializer = new Mock<ISerializer>();
             serializer.Setup(s => s.Deserialize<QuestionnaireDocument>(It.IsAny<string>())).Returns(document);
@@ -97,7 +101,8 @@ namespace WB.Tests.Unit.Designer.Services
                 Create.InMemoryDbContext(),
                 Mock.Of<IReusableCategoriesService>(),
                 Mock.Of<IImportExportQuestionnaireMapper>(),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>());
+                (questionnaireStorage ?? new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>()).Object,
+                Mock.Of<ITransactionalMemoryCacheInvalidation>());
         }
 
         private static Stream CreateArchive(params (string Path, byte[] Content)[] entries)

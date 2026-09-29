@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Extensions;
@@ -15,10 +16,13 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
     public class ConfirmEmailModel : PageModel
     {
         private readonly UserManager<DesignerIdentityUser> _userManager;
+        private readonly ITransactionRollbackState _transactionRollbackState;
 
-        public ConfirmEmailModel(UserManager<DesignerIdentityUser> userManager)
+        public ConfirmEmailModel(UserManager<DesignerIdentityUser> userManager,
+            ITransactionRollbackState transactionRollbackState)
         {
             _userManager = userManager;
+            _transactionRollbackState = transactionRollbackState;
         }
 
         [BindProperty]
@@ -58,6 +62,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             var result = await _userManager.ConfirmEmailAsync(user, Code);
             if (!result.Succeeded)
             {
+                _transactionRollbackState.MarkRollbackOnly();
                 var error = result.Errors.First();
                 TempData[Alerts.ERROR] = error.Description;
                 return Page();

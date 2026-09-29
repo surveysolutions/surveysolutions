@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -91,6 +92,29 @@ namespace WB.Tests.Unit.Designer.Areas.Identity.Pages.Account
 
             Assert.That(rollbackState.IsRollbackOnly, Is.False);
             Assert.That(user.PasswordSalt, Is.Null);
+        }
+
+        [Test]
+        public async Task ConfirmEmail_when_confirmation_fails_marks_rollback()
+        {
+            var user = new DesignerIdentityUser();
+            var userManager = CreateUserManager();
+            userManager.Setup(m => m.FindByIdAsync("user")).ReturnsAsync(user);
+            userManager.Setup(m => m.ConfirmEmailAsync(user, "code"))
+                .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "Email is already in use." }));
+
+            var rollbackState = new TransactionRollbackState();
+            var page = new ConfirmEmailModel(userManager.Object, rollbackState)
+            {
+                UserId = "user",
+                Code = "code",
+                PageContext = new PageContext { HttpContext = new DefaultHttpContext() }
+            };
+            page.TempData = new TempDataDictionary(page.PageContext.HttpContext, Mock.Of<ITempDataProvider>());
+
+            await page.OnPostAsync();
+
+            Assert.That(rollbackState.IsRollbackOnly, Is.True);
         }
 
         private static ChangePasswordModel CreateChangePasswordPage(Mock<UserManager<DesignerIdentityUser>> userManager,
