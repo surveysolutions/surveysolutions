@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -239,5 +239,14 @@
   </data>
   <data name="AreaQestion_AreaMeter" xml:space="preserve">
     <value>mètres</value>
+  </data>
+  <data name="AreaQestion_Coordinates" xml:space="preserve">
+    <value>Coordinates</value>
+  </data>
+  <data name="AreaQestion_Latitude" xml:space="preserve">
+    <value>Latitude</value>
+  </data>
+  <data name="AreaQestion_Longitude" xml:space="preserve">
+    <value>Longitude</value>
   </data>
 </root>
