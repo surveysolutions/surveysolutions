@@ -25,11 +25,6 @@ namespace WB.UI.Designer.Filters
     // authentication, authorization, and model binding.
     public class TransactionFilter : IAsyncActionFilter, IAsyncPageFilter
     {
-        private static readonly object RollbackOnlyKey = new();
-
-        public static void MarkRollbackOnly(HttpContext httpContext)
-            => httpContext.Items[RollbackOnlyKey] = true;
-
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             if (SkipTransaction(context))
@@ -39,12 +34,13 @@ namespace WB.UI.Designer.Filters
             }
 
             var dbContext = context.HttpContext.RequestServices.GetRequiredService<DesignerDbContext>();
+            var rollbackState = context.HttpContext.RequestServices.GetRequiredService<ITransactionRollbackState>();
             await ExecuteInTransactionAsync(context.HttpContext, dbContext, async () =>
             {
                 var executedContext = await next();
                 // Canceled means an inner filter short-circuited: the handler never ran, so nothing may commit.
                 return executedContext.Exception == null && !executedContext.Canceled
-                    && !IsRollbackOnly(context.HttpContext);
+                    && !rollbackState.IsRollbackOnly;
             });
         }
 
@@ -59,16 +55,14 @@ namespace WB.UI.Designer.Filters
             }
 
             var dbContext = context.HttpContext.RequestServices.GetRequiredService<DesignerDbContext>();
+            var rollbackState = context.HttpContext.RequestServices.GetRequiredService<ITransactionRollbackState>();
             await ExecuteInTransactionAsync(context.HttpContext, dbContext, async () =>
             {
                 var executedContext = await next();
                 return executedContext.Exception == null && !executedContext.Canceled
-                    && !IsRollbackOnly(context.HttpContext);
+                    && !rollbackState.IsRollbackOnly;
             });
         }
-
-        private static bool IsRollbackOnly(HttpContext httpContext)
-            => httpContext.Items.TryGetValue(RollbackOnlyKey, out var value) && value is true;
 
         private static bool SkipTransaction(FilterContext context)
             => context.Filters.OfType<NoTransactionAttribute>().Any();

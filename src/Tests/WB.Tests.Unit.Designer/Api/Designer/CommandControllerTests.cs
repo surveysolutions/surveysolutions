@@ -47,7 +47,8 @@ namespace WB.Tests.Unit.Designer.Api.Designer
             IAttachmentService attachmentService = null,
             IDesignerTranslationService translationsService = null,
             IReusableCategoriesService reusableCategoriesService = null,
-            IFileSystemAccessor fileSystemAccessor = null)
+            IFileSystemAccessor fileSystemAccessor = null,
+            ITransactionRollbackState transactionRollbackState = null)
         {
             var controller = new CommandController(
                 commandService ?? Mock.Of<ICommandService>(),
@@ -58,7 +59,8 @@ namespace WB.Tests.Unit.Designer.Api.Designer
                 attachmentService ?? Mock.Of<IAttachmentService>(),
                 translationsService ?? Mock.Of<IDesignerTranslationService>(),
                 reusableCategoriesService ?? Mock.Of<IReusableCategoriesService>(),
-                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                transactionRollbackState ?? new TransactionRollbackState());
 
             controller.ControllerContext = new ControllerContext
             {
@@ -889,6 +891,141 @@ namespace WB.Tests.Unit.Designer.Api.Designer
             Assert.That(result, Is.InstanceOf<OkObjectResult>());
             reusableCategoriesService.Verify(s =>
                 s.Store(questionnaireId, categoriesId, It.IsAny<Stream>(), CategoriesFileType.Excel), Times.Once);
+        }
+
+        #endregion
+
+        #region Transaction rollback on rejected commands
+
+        [Test]
+        public async Task UpdateAttachment_when_command_is_rejected_marks_request_rollback_only()
+        {
+            var json = ValidAddOrUpdateAttachmentJson();
+            var mockFile = CreateMockFormFile("photo.png", "image/png");
+            var model = new CommandController.AttachmentModel { Command = json, File = mockFile.Object };
+
+            var attachmentService = new Mock<IAttachmentService>();
+            attachmentService.Setup(s => s.CreateAttachmentContentId(It.IsAny<byte[]>()))
+                .Returns("new-content-id");
+
+            var commandService = new Mock<ICommandService>();
+            commandService
+                .Setup(s => s.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
+                .Throws(new QuestionnaireException(DomainExceptionType.DoesNotHavePermissionsForEdit, "Forbidden"));
+
+            var rollbackState = new TransactionRollbackState();
+            var controller = CreateController(
+                commandService: commandService.Object,
+                attachmentService: attachmentService.Object,
+                transactionRollbackState: rollbackState);
+
+            var result = await controller.UpdateAttachment(model);
+
+            Assert.That(StatusCodeOf(result), Is.EqualTo(StatusCodes.Status403Forbidden));
+            Assert.That(rollbackState.IsRollbackOnly, Is.True);
+        }
+
+        [Test]
+        public async Task UpdateAttachment_when_command_succeeds_does_not_mark_request_rollback_only()
+        {
+            var json = ValidAddOrUpdateAttachmentJson();
+            var mockFile = CreateMockFormFile("photo.png", "image/png");
+            var model = new CommandController.AttachmentModel { Command = json, File = mockFile.Object };
+
+            var attachmentService = new Mock<IAttachmentService>();
+            attachmentService.Setup(s => s.CreateAttachmentContentId(It.IsAny<byte[]>()))
+                .Returns("new-content-id");
+
+            var rollbackState = new TransactionRollbackState();
+            var controller = CreateController(
+                attachmentService: attachmentService.Object,
+                transactionRollbackState: rollbackState);
+
+            var result = await controller.UpdateAttachment(model);
+
+            Assert.That(result, Is.InstanceOf<OkResult>());
+            Assert.That(rollbackState.IsRollbackOnly, Is.False);
+        }
+
+        [Test]
+        public async Task UpdateCategories_when_command_is_rejected_marks_request_rollback_only()
+        {
+            var (json, _, _) = ValidAddOrUpdateCategoriesJson();
+
+            var fileSystemAccessor = new Mock<IFileSystemAccessor>();
+            fileSystemAccessor.Setup(f => f.GetFileExtension(It.IsAny<string>())).Returns(".xlsx");
+
+            var commandService = new Mock<ICommandService>();
+            commandService
+                .Setup(s => s.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
+                .Throws(new QuestionnaireException(DomainExceptionType.DoesNotHavePermissionsForEdit, "Forbidden"));
+
+            var model = new CommandController.FileModel
+            {
+                Command = json,
+                File = CreateMockFormFile("categories.xlsx").Object
+            };
+
+            var rollbackState = new TransactionRollbackState();
+            var controller = CreateController(
+                commandService: commandService.Object,
+                fileSystemAccessor: fileSystemAccessor.Object,
+                transactionRollbackState: rollbackState);
+
+            var result = await controller.UpdateCategories(model);
+
+            Assert.That(StatusCodeOf(result), Is.EqualTo(StatusCodes.Status403Forbidden));
+            Assert.That(rollbackState.IsRollbackOnly, Is.True);
+        }
+
+        [Test]
+        public async Task UpdateTranslation_when_command_is_rejected_marks_request_rollback_only()
+        {
+            var (json, _, _) = ValidAddOrUpdateTranslationJson();
+
+            var commandService = new Mock<ICommandService>();
+            commandService
+                .Setup(s => s.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
+                .Throws(new QuestionnaireException(DomainExceptionType.DoesNotHavePermissionsForEdit, "Forbidden"));
+
+            var model = new CommandController.FileModel
+            {
+                Command = json,
+                File = CreateMockFormFile("translation.xlsx").Object
+            };
+
+            var rollbackState = new TransactionRollbackState();
+            var controller = CreateController(
+                commandService: commandService.Object,
+                transactionRollbackState: rollbackState);
+
+            var result = await controller.UpdateTranslation(model);
+
+            Assert.That(StatusCodeOf(result), Is.EqualTo(StatusCodes.Status403Forbidden));
+            Assert.That(rollbackState.IsRollbackOnly, Is.True);
+        }
+
+        [Test]
+        public void Post_when_command_is_rejected_marks_request_rollback_only()
+        {
+            var commandService = new Mock<ICommandService>();
+            commandService
+                .Setup(s => s.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
+                .Throws(new QuestionnaireException(DomainExceptionType.Undefined, "Domain error"));
+
+            var rollbackState = new TransactionRollbackState();
+            var controller = CreateController(
+                commandService: commandService.Object,
+                transactionRollbackState: rollbackState);
+            var model = new CommandController.CommandExecutionModel
+            {
+                Type = "UpdateQuestionnaire",
+                Command = ValidUpdateQuestionnaireJson()
+            };
+
+            controller.Post(model);
+
+            Assert.That(rollbackState.IsRollbackOnly, Is.True);
         }
 
         #endregion

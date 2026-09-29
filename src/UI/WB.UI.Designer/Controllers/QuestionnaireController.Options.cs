@@ -295,7 +295,7 @@ namespace WB.UI.Designer.Controllers
         {
             if (categoriesModel?.Categories == null)
             {
-                TransactionFilter.MarkRollbackOnly(HttpContext);
+                this.transactionRollbackState.MarkRollbackOnly();
                 return CommandJsonResult(GetNotFoundResponseObject());
             }
 
@@ -320,7 +320,7 @@ namespace WB.UI.Designer.Controllers
                 catch (Exception e)
                 {
                     this.logger.LogError(e, "Error on categories saving");
-                    TransactionFilter.MarkRollbackOnly(HttpContext);
+                    this.transactionRollbackState.MarkRollbackOnly();
 
                     dynamic commandResult = new ExpandoObject();
                     commandResult.IsSuccess = false;
@@ -333,7 +333,7 @@ namespace WB.UI.Designer.Controllers
 
                 if (model.Value == null)
                 {
-                    TransactionFilter.MarkRollbackOnly(HttpContext);
+                    this.transactionRollbackState.MarkRollbackOnly();
                     return model.Result;
                 }
 
@@ -406,7 +406,7 @@ namespace WB.UI.Designer.Controllers
             }
             catch (Exception e)
             {
-                TransactionFilter.MarkRollbackOnly(HttpContext);
+                this.transactionRollbackState.MarkRollbackOnly();
                 var domainEx = e.GetSelfOrInnerAs<QuestionnaireException>();
                 if (domainEx == null)
                 {

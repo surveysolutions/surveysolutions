@@ -45,5 +45,8 @@ namespace WB.UI.Designer.Services.Restore
 
         public StringBuilder Success { get; } = new StringBuilder();
         public string? Error { get; set; }
+
+        // Set when a failure was swallowed and the restore continued, so the caller can still reject the whole restore.
+        public bool HasFailures { get; set; }
     }
 }

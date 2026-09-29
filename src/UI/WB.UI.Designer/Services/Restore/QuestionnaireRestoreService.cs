@@ -117,6 +117,7 @@ namespace WB.UI.Designer.Services.Restore
                 {
                         this.logger.LogWarning(exception, $"Error processing zip file entry '{zipEntry.FullName}' during questionnaire restore from backup.");
                         state.Error = $"Error processing zip file entry '{zipEntry.FullName}'.{Environment.NewLine}{exception}";
+                        state.HasFailures = true;
                         logger.LogError(state.Error);
                 }
             }
@@ -247,6 +248,7 @@ namespace WB.UI.Designer.Services.Restore
             {
                 this.logger.LogWarning(exception, $"Error processing zip file entry '{zipEntry.FullName}' during questionnaire restore from backup.");
                 state.Error = $"Error processing zip file entry '{zipEntry.FullName}'.{Environment.NewLine}{exception}";
+                state.HasFailures = true;
                 logger.LogError(state.Error);
             }
         }

@@ -224,6 +224,7 @@ public class TransactionFilterTests
         => new ServiceCollection()
             .AddSingleton(dbContext)
             .AddSingleton(invalidation)
+            .AddSingleton<ITransactionRollbackState, TransactionRollbackState>()
             .BuildServiceProvider();
 
     private static DefaultHttpContext HttpContextFor(DesignerDbContext dbContext, ITransactionalMemoryCacheInvalidation invalidation, string method)
@@ -259,7 +260,7 @@ public class TransactionFilterTests
         {
             Stage(db.Filter, stageItemId);
             if (markRollbackOnly)
-                TransactionFilter.MarkRollbackOnly(httpContext);
+                httpContext.RequestServices.GetRequiredService<ITransactionRollbackState>().MarkRollbackOnly();
             await Task.Yield();
             if (throwInHandler)
                 throw new InvalidOperationException("handler failure");

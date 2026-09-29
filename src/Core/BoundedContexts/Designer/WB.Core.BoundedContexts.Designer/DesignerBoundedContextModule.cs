@@ -104,6 +104,7 @@ namespace WB.Core.BoundedContexts.Designer
             
             registry.BindAsSingleton<IKeyValueCacheEvictionTokens, KeyValueCacheEvictionTokens>();
             registry.BindAsScoped<ITransactionalMemoryCacheInvalidation, TransactionalMemoryCacheInvalidation>();
+            registry.BindAsScoped<ITransactionRollbackState, TransactionRollbackState>();
             registry.Bind(typeof(IPlainKeyValueStorage<>), typeof(DesignerKeyValueStorage<>));
             registry.Bind(typeof(IEntitySerializer<>), typeof(EntitySerializer<>));
             registry.Bind(typeof(IPlainAggregateRootRepository), typeof(QuestionnaireRepository));
