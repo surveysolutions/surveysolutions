@@ -17,7 +17,7 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
 {
-    public class QuestionnaireHistoryVersionsService : IQuestionnaireHistoryVersionsService
+    public class QuestionnaireHistoryVersionsService : IQuestionnaireHistoryVersionsService, IQuestionnaireHistoryMutationService
     {
         private readonly DesignerDbContext dbContext;
         private readonly IEntitySerializer<QuestionnaireDocument> entitySerializer;
@@ -93,9 +93,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
             return entitySerializer.Deserialize(questionnaire);
         }
 
-        private void RemoveOldQuestionnaireHistory(string sQuestionnaireId, int maxHistoryDepth)
+        private static void RemoveOldQuestionnaireHistory(DesignerDbContext dbContext, string sQuestionnaireId, int maxHistoryDepth)
         {
-            var oldChangeRecord = this.dbContext.QuestionnaireChangeRecords
+            var oldChangeRecord = dbContext.QuestionnaireChangeRecords
                 .Where(x => 
                     x.QuestionnaireId == sQuestionnaireId 
                     && x.ActionType != QuestionnaireActionType.ImportToHq)
@@ -136,6 +136,104 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
                                 select h
                                     ).FirstOrDefault();
 
+            var questionnaireChangeItem = this.BuildChangeRecord(
+                questionnaireId, responsibleId, userName, actionType, targetType, targetId,
+                targetTitle, targetNewTitle, affectedEntries, targetDateTime, questionnaireDocument,
+                previousChange, (maxSequenceByQuestionnaire ?? -1) + 1, reference, meta);
+
+            this.dbContext.QuestionnaireChangeRecords.Add(questionnaireChangeItem);
+            
+            // -1 is to take into account newly added change record that is not yet in DB
+            RemoveOldQuestionnaireHistory(this.dbContext, sQuestionnaireId, historySettings.Value.QuestionnaireChangeHistoryLimit - 1);
+            this.dbContext.SaveChanges();
+        }
+
+        public async Task AddQuestionnaireChangeItemAsync(
+            Guid questionnaireId,
+            Guid responsibleId,
+            string? userName,
+            QuestionnaireActionType actionType,
+            QuestionnaireItemType targetType,
+            Guid targetId,
+            string? targetTitle,
+            string? targetNewTitle,
+            int? affectedEntries,
+            DateTime? targetDateTime,
+            QuestionnaireDocument? questionnaireDocument,
+            QuestionnaireChangeReference? reference = null,
+            QuestionnaireChangeRecordMetadata? meta = null)
+        {
+            await StageQuestionnaireChangeItemAsync(
+                questionnaireId,
+                responsibleId,
+                userName,
+                actionType,
+                targetType,
+                targetId,
+                targetTitle,
+                targetNewTitle,
+                affectedEntries,
+                targetDateTime,
+                questionnaireDocument,
+                reference,
+                meta);
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task StageQuestionnaireChangeItemAsync(
+            Guid questionnaireId,
+            Guid responsibleId,
+            string? userName,
+            QuestionnaireActionType actionType,
+            QuestionnaireItemType targetType,
+            Guid targetId,
+            string? targetTitle,
+            string? targetNewTitle,
+            int? affectedEntries,
+            DateTime? targetDateTime,
+            QuestionnaireDocument? questionnaireDocument,
+            QuestionnaireChangeReference? reference = null,
+            QuestionnaireChangeRecordMetadata? meta = null)
+        {
+            var sQuestionnaireId = questionnaireId.FormatGuid();
+
+            var maxSequenceByQuestionnaire = await this.dbContext.QuestionnaireChangeRecords
+                .Where(y => y.QuestionnaireId == sQuestionnaireId).Select(y => (int?) y.Sequence).MaxAsync();
+
+            var previousChange = await (from h in this.dbContext.QuestionnaireChangeRecords
+                                        where h.QuestionnaireId == sQuestionnaireId && h.ResultingQuestionnaireDocument != null
+                                        orderby h.Sequence descending
+                                        select h
+                                       ).FirstOrDefaultAsync();
+
+            var questionnaireChangeItem = this.BuildChangeRecord(
+                questionnaireId, responsibleId, userName, actionType, targetType, targetId,
+                targetTitle, targetNewTitle, affectedEntries, targetDateTime, questionnaireDocument,
+                previousChange, (maxSequenceByQuestionnaire ?? -1) + 1, reference, meta);
+
+            this.dbContext.QuestionnaireChangeRecords.Add(questionnaireChangeItem);
+
+            // -1 is to take into account newly added change record that is not yet in DB
+            RemoveOldQuestionnaireHistory(this.dbContext, sQuestionnaireId, historySettings.Value.QuestionnaireChangeHistoryLimit - 1);
+        }
+
+        private QuestionnaireChangeRecord BuildChangeRecord(
+            Guid questionnaireId,
+            Guid responsibleId,
+            string? userName,
+            QuestionnaireActionType actionType,
+            QuestionnaireItemType targetType,
+            Guid targetId,
+            string? targetTitle,
+            string? targetNewTitle,
+            int? affectedEntries,
+            DateTime? targetDateTime,
+            QuestionnaireDocument? questionnaireDocument,
+            QuestionnaireChangeRecord? previousChange,
+            int sequence,
+            QuestionnaireChangeReference? reference,
+            QuestionnaireChangeRecordMetadata? meta)
+        {
             if (previousChange != null && questionnaireDocument != null)
             {
                 var previousVersion = previousChange.ResultingQuestionnaireDocument;
@@ -154,7 +252,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
                 UserId = responsibleId,
                 UserName = userName,
                 Timestamp = DateTime.UtcNow,
-                Sequence = maxSequenceByQuestionnaire + 1 ?? 0,
+                Sequence = sequence,
                 ActionType = actionType,
                 TargetItemId = targetId,
                 TargetItemTitle = targetTitle,
@@ -176,11 +274,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
                 questionnaireChangeItem.ResultingQuestionnaireDocument = this.entitySerializer.Serialize(questionnaireDocument);
             }
 
-            this.dbContext.QuestionnaireChangeRecords.Add(questionnaireChangeItem);
-            
-            // -1 is to take into account newly added change record that is not yet in DB
-            this.RemoveOldQuestionnaireHistory(sQuestionnaireId, historySettings.Value.QuestionnaireChangeHistoryLimit - 1);
-            this.dbContext.SaveChanges();
+            return questionnaireChangeItem;
         }
 
         public async Task<bool> UpdateRevisionCommentaryAsync(string questionnaireChangeRecordId, string comment)

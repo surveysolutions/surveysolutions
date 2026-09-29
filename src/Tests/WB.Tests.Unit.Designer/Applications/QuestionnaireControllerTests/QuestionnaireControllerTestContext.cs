@@ -43,6 +43,9 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             ILogger<QuestionnaireController> logger = null,
             IQuestionnaireInfoFactory questionnaireInfoFactory = null,
             ICategoricalOptionsImportService categoricalOptionsImportService = null,
+            IAnonymousQuestionnaireStateService anonymousQuestionnaireStateService = null,
+            IQuestionnaireHistoryRevertService questionnaireHistoryRevertService = null,
+            IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService = null,
             DesignerDbContext dbContext = null)
         {
             var questionnaireController = new QuestionnaireController(
@@ -51,7 +54,9 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 logger ?? Mock.Of<ILogger<QuestionnaireController>>(),
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),                
                 Mock.Of<IQuestionnaireChangeHistoryFactory>(),
-                Mock.Of<IQuestionnaireHistoryVersionsService>(),
+                questionnaireHistoryVersionsService ?? Mock.Of<IQuestionnaireHistoryVersionsService>(),
+                anonymousQuestionnaireStateService ?? Mock.Of<IAnonymousQuestionnaireStateService>(),
+                questionnaireHistoryRevertService ?? Mock.Of<IQuestionnaireHistoryRevertService>(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IQuestionnaireInfoViewFactory>(),
                 categoricalOptionsImportService ?? Mock.Of<ICategoricalOptionsImportService>(),
