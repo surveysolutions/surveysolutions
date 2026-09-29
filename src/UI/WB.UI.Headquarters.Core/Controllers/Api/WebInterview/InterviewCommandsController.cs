@@ -72,10 +72,10 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
         protected override Guid GetCommandResponsibleId(Guid interviewId)
         {
+            var statefulInterview = GetInterviewOrThrow(interviewId);
             if (IsReviewMode())
                 return this.authorizedUser.Id;
 
-            var statefulInterview = statefulInterviewRepository.Get(interviewId.FormatGuid());
             return statefulInterview.CurrentResponsibleId;
         }
 
