@@ -223,6 +223,9 @@
   <data name="NoResultsFound" xml:space="preserve">
     <value>Ненайдено результатов</value>
   </data>
+  <data name="TypeToFilterForMore" xml:space="preserve">
+    <value>Показаны первые {{count}} вариантов. Начните ввод, чтобы найти больше.</value>
+  </data>
   <data name="Done" xml:space="preserve">
     <value>Готово</value>
   </data>

@@ -166,6 +166,9 @@
     <data name="NoResultsFound" xml:space="preserve">
         <value>Tidak ada hasil yang ditemukan</value>
     </data>
+    <data name="TypeToFilterForMore" xml:space="preserve">
+        <value>Menampilkan {{count}} opsi pertama. Ketik untuk mencari lebih banyak.</value>
+    </data>
     <data name="Done" xml:space="preserve">
         <value>Selesai</value>
     </data>

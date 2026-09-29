@@ -322,6 +322,9 @@
   <data name="NoResultsFound" xml:space="preserve">
     <value>未找到结果</value>
   </data>
+  <data name="TypeToFilterForMore" xml:space="preserve">
+    <value>显示前 {{count}} 个选项。输入内容以搜索更多。</value>
+  </data>
   <data name="NumberCannotParse" xml:space="preserve">
     <value>输入的内容不是整数型</value>
   </data>

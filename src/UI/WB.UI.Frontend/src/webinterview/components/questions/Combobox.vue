@@ -11,6 +11,7 @@
                             :value="$me.answer"
                             :disabled="!$me.acceptAnswer"
                             :optionsSource="optionsSource"
+                            :optionsCount="50"
                             @input="answerComboboxQuestion"
                             :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null" />
                         <wb-remove-answer />

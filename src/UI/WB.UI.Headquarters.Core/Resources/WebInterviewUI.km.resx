@@ -166,6 +166,9 @@
     <data name="NoResultsFound" xml:space="preserve">
         <value>រកមិនឃើញលទ្ធផលទេ។</value>
     </data>
+    <data name="TypeToFilterForMore" xml:space="preserve">
+        <value>កំពុងបង្ហាញជម្រើស {{count}} ដំបូង។ វាយបញ្ចូលដើម្បីស្វែងរកបន្ថែម។</value>
+    </data>
     <data name="Done" xml:space="preserve">
         <value>រួចរាល់</value>
     </data>

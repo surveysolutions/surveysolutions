@@ -313,6 +313,9 @@
   <data name="NoResultsFound" xml:space="preserve">
     <value>შედეგები არ მოიძებნა</value>
   </data>
+  <data name="TypeToFilterForMore" xml:space="preserve">
+    <value>ნაჩვენებია პირველი {{count}} ვარიანტი. მეტის საპოვნელად აკრიფეთ.</value>
+  </data>
   <data name="NumberCannotParse" xml:space="preserve">
     <value>შეტანილი მნიშვნელობა არ შეიძლება იყოს გააზრებული, როგორც მთელი რიცხვი</value>
   </data>
