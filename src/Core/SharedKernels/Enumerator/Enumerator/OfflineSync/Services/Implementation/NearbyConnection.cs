@@ -289,7 +289,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
                 if (queue is NearbyPayloadTransferUpdate update)
                 {
-                    communicator.ReceivePayloadTransferUpdate(this, update.Endpoint, update);
+                    await communicator.ReceivePayloadTransferUpdate(this, update.Endpoint, update);
                 }
             }
         }
