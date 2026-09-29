@@ -25,6 +25,10 @@ namespace WB.UI.Designer.Filters
     // authentication, authorization, and model binding.
     public class TransactionFilter : IAsyncActionFilter, IAsyncPageFilter
     {
+        // MVC usually reports a handler failure through the executed context instead of throwing from next(),
+        // so the exception is carried alongside the commit decision: cleanup faults must never replace it.
+        private readonly record struct HandlerOutcome(bool ShouldCommit, Exception? HandlerException);
+
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             if (SkipTransaction(context))
@@ -39,8 +43,9 @@ namespace WB.UI.Designer.Filters
             {
                 var executedContext = await next();
                 // Canceled means an inner filter short-circuited: the handler never ran, so nothing may commit.
-                return executedContext.Exception == null && !executedContext.Canceled
+                var shouldCommit = executedContext.Exception == null && !executedContext.Canceled
                     && !rollbackState.IsRollbackOnly;
+                return new HandlerOutcome(shouldCommit, executedContext.Exception);
             });
         }
 
@@ -59,8 +64,9 @@ namespace WB.UI.Designer.Filters
             await ExecuteInTransactionAsync(context.HttpContext, dbContext, async () =>
             {
                 var executedContext = await next();
-                return executedContext.Exception == null && !executedContext.Canceled
+                var shouldCommit = executedContext.Exception == null && !executedContext.Canceled
                     && !rollbackState.IsRollbackOnly;
+                return new HandlerOutcome(shouldCommit, executedContext.Exception);
             });
         }
 
@@ -73,7 +79,7 @@ namespace WB.UI.Designer.Filters
                || HttpMethods.IsPatch(method)
                || HttpMethods.IsDelete(method);
 
-        private static async Task ExecuteInTransactionAsync(HttpContext httpContext, DesignerDbContext dbContext, Func<Task<bool>> action)
+        private static async Task ExecuteInTransactionAsync(HttpContext httpContext, DesignerDbContext dbContext, Func<Task<HandlerOutcome>> action)
         {
             var isWrite = IsWriteMethod(httpContext.Request.Method);
 
@@ -85,10 +91,11 @@ namespace WB.UI.Designer.Filters
             }
 
             ExceptionDispatchInfo? capturedException = null;
+            Exception? handlerException = null;
 
             try
             {
-                await ExecuteOwnedTransactionAsync(dbContext, action, isWrite);
+                handlerException = await ExecuteOwnedTransactionAsync(dbContext, action, isWrite);
             }
             catch (Exception exception)
             {
@@ -100,7 +107,7 @@ namespace WB.UI.Designer.Filters
                 // Publish cache invalidations only once the transaction has fully committed or rolled back.
                 httpContext.RequestServices.GetRequiredService<ITransactionalMemoryCacheInvalidation>().Flush();
             }
-            catch when (capturedException != null)
+            catch when (capturedException != null || handlerException != null)
             {
                 // Keep the original handler/transaction failure if cleanup also faults.
             }
@@ -108,13 +115,18 @@ namespace WB.UI.Designer.Filters
             capturedException?.Throw();
         }
 
-        private static async Task ExecuteOwnedTransactionAsync(DesignerDbContext dbContext, Func<Task<bool>> action, bool isWrite)
+        // Returns the handler exception MVC delivered without throwing, so the caller can tell a primary failure
+        // from a cleanup failure. Rethrows only failures that MVC is not already about to surface itself.
+        private static async Task<Exception?> ExecuteOwnedTransactionAsync(DesignerDbContext dbContext, Func<Task<HandlerOutcome>> action, bool isWrite)
         {
-            await using var transaction = await dbContext.Database.BeginTransactionAsync(CancellationToken.None);
+            var transaction = await dbContext.Database.BeginTransactionAsync(CancellationToken.None);
+            HandlerOutcome outcome = default;
+            ExceptionDispatchInfo? transactionFailure = null;
+
             try
             {
-                var succeeded = await ExecuteWithSharedCachePolicyAsync(dbContext, isWrite, action);
-                if (succeeded && isWrite)
+                outcome = await ExecuteWithSharedCachePolicyAsync(dbContext, isWrite, action);
+                if (outcome.ShouldCommit && isWrite)
                 {
                     await dbContext.SaveChangesAsync(CancellationToken.None);
                     await transaction.CommitAsync(CancellationToken.None);
@@ -126,11 +138,25 @@ namespace WB.UI.Designer.Filters
                     dbContext.ChangeTracker.Clear();
                 }
             }
-            catch
+            catch (Exception exception)
             {
                 dbContext.ChangeTracker.Clear();
-                throw;
+                transactionFailure = ExceptionDispatchInfo.Capture(exception);
             }
+
+            try
+            {
+                await transaction.DisposeAsync();
+            }
+            catch when (transactionFailure != null || outcome.HandlerException != null)
+            {
+                // Disposal must not replace a failure that is already on its way to the caller.
+            }
+
+            if (outcome.HandlerException == null)
+                transactionFailure?.Throw();
+
+            return outcome.HandlerException;
         }
 
         private static async Task<T> ExecuteWithSharedCachePolicyAsync<T>(DesignerDbContext dbContext, bool bypassSharedCache, Func<Task<T>> action)

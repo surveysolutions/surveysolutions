@@ -138,6 +138,65 @@ public class TransactionFilterTests
     }
 
     [Test]
+    public async Task when_executed_context_carries_the_handler_exception_it_rolls_back_without_rethrowing()
+    {
+        // MVC reports a handler failure through ActionExecutedContext.Exception instead of throwing from next();
+        // it rethrows once the whole filter chain has run, so this filter must not throw on its own here.
+        var db = NewDatabase();
+        var invalidation = new Mock<ITransactionalMemoryCacheInvalidation>();
+        var id = Guid.NewGuid().ToString("N");
+
+        await InvokeActionAsync(db, invalidation.Object, HttpMethods.Post, result: null,
+            throwInHandler: false, stageItemId: id,
+            exceptionInExecutedContext: new InvalidOperationException("handler failure"));
+
+        StoredIds(db).Should().NotContain(id);
+        invalidation.Verify(x => x.Flush(), Times.Once);
+    }
+
+    [Test]
+    public async Task when_executed_context_carries_the_handler_exception_and_flush_throws_the_cleanup_failure_is_suppressed()
+    {
+        var db = NewDatabase();
+        var invalidation = new Mock<ITransactionalMemoryCacheInvalidation>();
+        invalidation.Setup(x => x.Flush()).Throws(new ApplicationException("flush failure"));
+
+        var act = () => InvokeActionAsync(db, invalidation.Object, HttpMethods.Post, result: null,
+            throwInHandler: false, stageItemId: Guid.NewGuid().ToString("N"),
+            exceptionInExecutedContext: new InvalidOperationException("handler failure"));
+
+        // Throwing the flush failure here would replace the handler exception MVC is about to surface.
+        await act.Should().NotThrowAsync();
+    }
+
+    [Test]
+    public async Task when_flush_throws_without_a_pending_failure_it_propagates()
+    {
+        var db = NewDatabase();
+        var invalidation = new Mock<ITransactionalMemoryCacheInvalidation>();
+        invalidation.Setup(x => x.Flush()).Throws(new ApplicationException("flush failure"));
+
+        var act = () => InvokeActionAsync(db, invalidation.Object, HttpMethods.Post, new OkResult(),
+            throwInHandler: false, stageItemId: Guid.NewGuid().ToString("N"));
+
+        await act.Should().ThrowAsync<ApplicationException>();
+    }
+
+    [Test]
+    public async Task when_page_executed_context_carries_the_handler_exception_it_rolls_back_without_rethrowing()
+    {
+        var db = NewDatabase();
+        var invalidation = new Mock<ITransactionalMemoryCacheInvalidation>();
+        var id = Guid.NewGuid().ToString("N");
+
+        await InvokePageAsync(db, invalidation.Object, HttpMethods.Post, result: null, stageItemId: id,
+            exceptionInExecutedContext: new InvalidOperationException("handler failure"));
+
+        StoredIds(db).Should().NotContain(id);
+        invalidation.Verify(x => x.Flush(), Times.Once);
+    }
+
+    [Test]
     public async Task when_marked_no_transaction_the_filter_is_bypassed()
     {
         var db = NewDatabase();
@@ -249,7 +308,8 @@ public class TransactionFilterTests
         string? stageItemId,
         IList<IFilterMetadata>? filters = null,
         bool canceled = false,
-        bool markRollbackOnly = false)
+        bool markRollbackOnly = false,
+        Exception? exceptionInExecutedContext = null)
     {
         var httpContext = HttpContextFor(db.Filter, invalidation, method);
         var filterList = filters ?? new List<IFilterMetadata>();
@@ -265,7 +325,12 @@ public class TransactionFilterTests
             if (throwInHandler)
                 throw new InvalidOperationException("handler failure");
 
-            return new ActionExecutedContext(actionContext, filterList, controller: new object()) { Result = result, Canceled = canceled };
+            return new ActionExecutedContext(actionContext, filterList, controller: new object())
+            {
+                Result = result,
+                Canceled = canceled,
+                Exception = exceptionInExecutedContext
+            };
         };
 
         await new TransactionFilter().OnActionExecutionAsync(executing, next);
@@ -278,7 +343,8 @@ public class TransactionFilterTests
         IActionResult? result,
         string? stageItemId,
         IList<IFilterMetadata>? filters = null,
-        bool canceled = false)
+        bool canceled = false,
+        Exception? exceptionInExecutedContext = null)
     {
         var httpContext = HttpContextFor(db.Filter, invalidation, method);
         var filterList = filters ?? new List<IFilterMetadata>();
@@ -291,7 +357,12 @@ public class TransactionFilterTests
         {
             Stage(db.Filter, stageItemId);
             await Task.Yield();
-            return new PageHandlerExecutedContext(pageContext, filterList, handlerMethod, handlerInstance: new object()) { Result = result, Canceled = canceled };
+            return new PageHandlerExecutedContext(pageContext, filterList, handlerMethod, handlerInstance: new object())
+            {
+                Result = result,
+                Canceled = canceled,
+                Exception = exceptionInExecutedContext
+            };
         };
 
         await new TransactionFilter().OnPageHandlerExecutionAsync(executing, next);
