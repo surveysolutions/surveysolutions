@@ -1170,8 +1170,8 @@ namespace WB.Tests.Abc.TestFactories
                     BaseAppUrl = "http://localhost"
                 }), Mock.Of<IWorkspaceContextAccessor>()));
 
-            return new SendRemindersJob(
-                Mock.Of<ILogger<SendRemindersJob>>(),
+            var reminderEmailSender = new ReminderEmailSender(
+                Mock.Of<ILogger<ReminderEmailSender>>(),
                 invService,
                 emailService ?? emailServiceMock.Object,
                 webInterviewConfigProvider1,
@@ -1180,6 +1180,13 @@ namespace WB.Tests.Abc.TestFactories
                 Create.Service.InScopeExecutor(Mock.Of<IServiceLocator>(sl => sl.GetInstance<IInvitationService>() ==
                                                                               invService)),
                 linkProvider);
+
+            return new SendRemindersJob(
+                Mock.Of<ILogger<SendRemindersJob>>(),
+                invService,
+                emailService ?? emailServiceMock.Object,
+                webInterviewConfigProvider1,
+                reminderEmailSender);
         }
 
         public SendInvitationsJob SendInvitationsJob(

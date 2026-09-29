@@ -81,6 +81,24 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string CustomizeAndSendEmailsText {
+            get {
+                return ResourceManager.GetString("CustomizeAndSendEmailsText", resourceCulture);
+            }
+        }
+        
+        public static string SendNow {
+            get {
+                return ResourceManager.GetString("SendNow", resourceCulture);
+            }
+        }
+        
+        public static string SendNowTooltip {
+            get {
+                return ResourceManager.GetString("SendNowTooltip", resourceCulture);
+            }
+        }
+        
         public static string Invitation {
             get {
                 return ResourceManager.GetString("Invitation", resourceCulture);
