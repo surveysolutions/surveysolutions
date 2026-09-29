@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             RosterVector rosterVector, string comment)
             : base(interviewId, userId, questionId, rosterVector)
         {
-            this.Comment = comment;
+            this.Comment = comment?.Trim();
         }
     }
 }
