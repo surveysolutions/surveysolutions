@@ -470,6 +470,7 @@
     "SideBarTab": "Tab",
     "SideBarTranslationGetTemplateLinkTextCsv": "Tab (txt)",
     "AttachmentSizeIsTooBig": "Attachment size is too big. Max size: {{size}}",
+    "AttachmentTypeIsNotSupported": "Attachment type is not supported.",
     "SideBarCriticalityConditionsTitle": "Critical rules",
     "AddFilter": "Add filter",
     "SettingsAnonymous": "Anonymous",

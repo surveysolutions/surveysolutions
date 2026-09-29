@@ -504,6 +504,7 @@
     "HelpCriticalityConditionExpression": "Выражение критического условия.",
     "HelpCriticalityConditionMessage": "Сообщение критического условия.",
     "AttachmentSizeIsTooBig": "Размер вложения слишком большой. Максимальный размер: {{size}}",
+    "AttachmentTypeIsNotSupported": "Данный тип вложения не поддерживается.",
     "SwitchTo": "Переключить на",
     "SwitchToTranslationConfirm": "Переключить на изменит язык отображения опросника. Перевод должен содержать текст для всех элементов.",
     "AIAssistant": "ИИ",
