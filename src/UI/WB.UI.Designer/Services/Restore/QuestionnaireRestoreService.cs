@@ -56,9 +56,16 @@ namespace WB.UI.Designer.Services.Restore
                 this.RestoreDataFromZipFileEntry(zipEntry, zipStream, responsibleId, state, questionnaire);
             }
 
-            foreach (Guid attachmentId in state.GetPendingAttachments())
+            // An attachment with no folder in the archive never becomes pending, yet the restored document still
+            // references it, so both cases have to fail the restore.
+            var unrestoredAttachments = questionnaire.Attachments
+                .Select(attachment => attachment.AttachmentId)
+                .Where(attachmentId => !state.IsAttachmentRestored(attachmentId))
+                .Union(state.GetPendingAttachments())
+                .ToList();
+
+            foreach (Guid attachmentId in unrestoredAttachments)
             {
-                // The restored document still references this attachment, so the questionnaire is incomplete.
                 state.MarkFailed();
                 state.Error += $"Attachment '{attachmentId.FormatGuid()}' was not restored because there are not enough data for it in it's folder." + Environment.NewLine;
             }
@@ -190,7 +197,7 @@ namespace WB.UI.Designer.Services.Restore
                         this.attachmentService.SaveContent(attachmentContentId, attachment.ContentType!, attachment.BinaryContent!);
                         this.attachmentService.SaveMeta(attachmentId, questionnaireId, attachmentContentId, attachment.FileName!);
 
-                        state.RemoveAttachment(attachmentId);
+                        state.MarkAttachmentRestored(attachmentId);
 
                         state.Success.AppendLine($"    Restored attachment '{attachmentId.FormatGuid()}' for questionnaire '{questionnaireId.FormatGuid()}' using file '{attachment.FileName}' and content-type '{attachment.ContentType}'.");
                         state.RestoredEntitiesCount++;
