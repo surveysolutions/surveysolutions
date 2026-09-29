@@ -125,9 +125,12 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             Func<ICommand, Guid> aggregateRootIdResolver = CommandRegistry.GetAggregateRootIdResolver(command);
             Guid aggregateId = aggregateRootIdResolver.Invoke(command);
 
-            this.aggregateLock.RunWithLock(aggregateId.FormatGuid(), () =>
+            serviceLocator.ExecuteInScope<ICommandExecutor>(commandExecutor =>
             {
-                serviceLocator.ExecuteInScope<ICommandExecutor>(ce => ce.ExecuteCommand(command, origin, cancellationToken, aggregateId));
+                this.aggregateLock.RunWithLock(aggregateId.FormatGuid(), () =>
+                {
+                    commandExecutor.ExecuteCommand(command, origin, cancellationToken, aggregateId);
+                });
             });
         }
     }
