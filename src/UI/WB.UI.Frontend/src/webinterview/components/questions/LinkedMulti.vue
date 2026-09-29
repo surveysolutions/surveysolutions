@@ -16,7 +16,9 @@
                         v-model="answer"
                         v-disabledWhenUnchecked="{ maxAnswerReached: allAnswersGiven, answerNotAllowed: !$me.acceptAnswer }">
                     <label :for="$me.id + '_' + option.value">
-                        <span class="tick"></span> {{ option.title }}
+                        <span class="tick"></span>
+                        <span v-if="isDevMode" class="option-value-code">[{{ option.value }}]</span>
+                        {{ option.title }}
                     </label>
                     <div class="badge"
                         v-if="$me.ordered">

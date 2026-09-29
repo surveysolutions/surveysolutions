@@ -29,6 +29,7 @@
                             forceDisabled: isProtected(option.value) }"/>
                     <label :for="$me.id + '_' + option.value">
                         <span class="tick"></span>
+                        <span v-if="isDevMode" class="option-value-code">[{{ option.value }}]</span>
                         {{option.title}}
                     </label>
                     <div class="badge"
