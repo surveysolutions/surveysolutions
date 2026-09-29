@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             "System.Console", 
             "System.Environment", 
             "System.GC",
+            "System.Random",
             "System.Type",
         };
 
