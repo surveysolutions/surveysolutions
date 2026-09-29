@@ -184,6 +184,7 @@ namespace WB.Tests.Integration.Designer
             var services = new ServiceCollection()
                 .AddSingleton(dbContext)
                 .AddSingleton<ITransactionalMemoryCacheInvalidation>(invalidation ?? new NoopCacheInvalidation())
+                .AddSingleton<ITransactionRollbackState, TransactionRollbackState>()
                 .BuildServiceProvider();
 
             var httpContext = new DefaultHttpContext { RequestServices = services };
