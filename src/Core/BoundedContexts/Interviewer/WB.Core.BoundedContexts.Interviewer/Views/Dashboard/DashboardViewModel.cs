@@ -91,6 +91,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(async r =>
             {
                 await this.RefreshDashboard();
+                if (this.RejectedInterviews?.ItemsCount > 0)
+                    this.TypeOfInterviews = this.RejectedInterviews.DashboardType;
             });
 
             this.CreateNew = createNewViewModel;
