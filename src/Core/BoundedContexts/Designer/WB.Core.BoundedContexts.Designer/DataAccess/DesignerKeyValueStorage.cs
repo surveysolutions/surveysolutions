@@ -50,18 +50,14 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
                 // Inside a write transaction the read-modify-write must see freshly committed state: a prior writer
                 // releases its advisory lock at commit but flushes the shared-cache invalidation only afterwards, so
                 // the cache can still hold that writer's pre-commit document. Read the store directly, bypassing it.
-                var current = FindTrackedEntry(id);
-                current?.Reload();
-                current ??= FindEntry(id);
-                return current == null || current.State == EntityState.Deleted || current.State == EntityState.Detached
-                    ? null
-                    : this.serializer.Deserialize(current.Entity.Value);
+                var current = ReadCommittedValue(id);
+                return current == null ? null : this.serializer.Deserialize(current);
             }
 
             var storedValue = memoryCache.GetOrCreate(CacheKey(id), cache =>
             {
                 // Lease the eviction source before reading the store: a concurrent commit that invalidates this key
-                // while FindEntry runs cancels the token, so this entry is evicted instead of caching stale data.
+                // while the read runs cancels the token, so this entry is evicted instead of caching stale data.
                 var lease = evictionTokens.Acquire(CacheKey(id));
                 try
                 {
@@ -70,13 +66,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
                     cache.RegisterPostEvictionCallback((_, _, _, state) => ((ICacheEvictionLease)state!).Release(), lease);
                     cache.SetSlidingExpiration(TimeSpan.FromMinutes(5));
 
-                    var entry = FindEntry(id);
-                    if (entry == null || entry.State == EntityState.Deleted)
-                    {
-                        return null;
-                    }
-
-                    return entry.Entity.Value;
+                    return ReadCommittedValue(id);
                 }
                 catch
                 {
@@ -88,6 +78,20 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 
             // Deserialize a fresh instance per call so callers never mutate the shared cached value.
             return storedValue == null ? null : this.serializer.Deserialize(storedValue);
+        }
+
+        // Refreshes any request-local snapshot before returning it: the change tracker may hold a value that a
+        // concurrent commit has already superseded, and publishing that into the shared cache would outlive the
+        // invalidation of the row it was read from.
+        private string? ReadCommittedValue(string id)
+        {
+            var current = FindTrackedEntry(id);
+            current?.Reload();
+            current ??= FindEntry(id);
+
+            return current == null || current.State == EntityState.Deleted || current.State == EntityState.Detached
+                ? null
+                : current.Entity.Value;
         }
 
         // Looks only at the change tracker (no DB query) so uncommitted writes made in this request are visible locally.

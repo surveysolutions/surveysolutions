@@ -131,6 +131,34 @@ namespace WB.Tests.Integration.Designer
         }
 
         [Test]
+        public async Task when_safe_request_holds_a_stale_tracked_questionnaire_it_is_not_republished_to_shared_cache()
+        {
+            var dbContext = ServiceLocator.GetInstance<DesignerDbContext>();
+            var questionnaireId = Guid.NewGuid();
+            SeedQuestionnaireDocument(dbContext, questionnaireId, "stale");
+
+            // The request loads the row, then a concurrent writer commits and invalidates the shared cache entry.
+            _ = dbContext.QuestionnaireDocuments.Find(questionnaireId.FormatGuid());
+            SeedQuestionnaireDocument(dbContext, questionnaireId, "fresh");
+
+            var serializer = new EntitySerializer<QuestionnaireDocument>();
+            using var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
+            var evictionTokens = new KeyValueCacheEvictionTokens();
+            var invalidation = new TransactionalMemoryCacheInvalidation(memoryCache, evictionTokens);
+            var storage = new DesignerKeyValueStorage<QuestionnaireDocument>(dbContext, memoryCache, serializer, invalidation, evictionTokens);
+            var cacheKey = nameof(StoredQuestionnaireDocument) + questionnaireId.FormatGuid();
+
+            QuestionnaireDocument? loaded = null;
+
+            await RunThroughActionFilter(dbContext, HttpMethods.Get, throwInHandler: false,
+                handlerBody: () => loaded = storage.GetById(questionnaireId.FormatGuid()), invalidation);
+
+            Assert.That(loaded?.Title, Is.EqualTo("fresh"));
+            Assert.That(memoryCache.TryGetValue(cacheKey, out var cached), Is.True);
+            Assert.That(serializer.Deserialize((string)cached!).Title, Is.EqualTo("fresh"));
+        }
+
+        [Test]
         public async Task when_safe_request_writes_then_reads_it_sees_its_own_write_instead_of_stale_shared_cache()
         {
             var dbContext = ServiceLocator.GetInstance<DesignerDbContext>();
