@@ -169,7 +169,13 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
         private void InvalidateCache(string id)
         {
             if (dbContext.Database.CurrentTransaction != null)
+            {
+                // Once this transaction holds an uncommitted key-value write, its reads must neither consult nor
+                // populate the shared cache: SaveChanges resets the entity to Unchanged, so the pending-change probe
+                // stops seeing it and the cache path would otherwise publish a value that may still be rolled back.
+                dbContext.BypassSharedKeyValueCacheInCurrentTransaction = true;
                 cacheInvalidation.Enqueue(CacheKey(id));
+            }
             else
             {
                 evictionTokens.Invalidate(CacheKey(id));

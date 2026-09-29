@@ -130,6 +130,78 @@ namespace WB.Tests.Integration.Designer
             Assert.That(loaded?.Title, Is.EqualTo("fresh"));
         }
 
+        [Test]
+        public async Task when_safe_request_writes_then_reads_it_sees_its_own_write_instead_of_stale_shared_cache()
+        {
+            var dbContext = ServiceLocator.GetInstance<DesignerDbContext>();
+            var questionnaireId = Guid.NewGuid();
+            SeedQuestionnaireDocument(dbContext, questionnaireId, "database");
+
+            var serializer = new EntitySerializer<QuestionnaireDocument>();
+            using var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
+            var evictionTokens = new KeyValueCacheEvictionTokens();
+            var invalidation = new TransactionalMemoryCacheInvalidation(memoryCache, evictionTokens);
+            var storage = new DesignerKeyValueStorage<QuestionnaireDocument>(dbContext, memoryCache, serializer, invalidation, evictionTokens);
+            var cacheKey = nameof(StoredQuestionnaireDocument) + questionnaireId.FormatGuid();
+            memoryCache.Set(cacheKey, serializer.Serialize(CreateQuestionnaireDocument(questionnaireId, "cached")));
+
+            QuestionnaireDocument? loaded = null;
+
+            await RunThroughActionFilter(dbContext, HttpMethods.Get, throwInHandler: false,
+                handlerBody: () =>
+                {
+                    storage.Store(CreateQuestionnaireDocument(questionnaireId, "written"), questionnaireId.FormatGuid());
+                    // SaveChanges resets the entity to Unchanged, which is what previously routed the next read back to the shared cache.
+                    dbContext.SaveChanges();
+                    loaded = storage.GetById(questionnaireId.FormatGuid());
+                }, invalidation);
+
+            Assert.That(loaded?.Title, Is.EqualTo("written"));
+            Assert.That(ReadCommittedTitle(dbContext, questionnaireId, serializer), Is.EqualTo("database"));
+        }
+
+        [Test]
+        public async Task when_safe_request_writes_then_reads_it_does_not_publish_uncommitted_value_to_shared_cache()
+        {
+            var dbContext = ServiceLocator.GetInstance<DesignerDbContext>();
+            var questionnaireId = Guid.NewGuid();
+            SeedQuestionnaireDocument(dbContext, questionnaireId, "database");
+
+            var serializer = new EntitySerializer<QuestionnaireDocument>();
+            using var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
+            var evictionTokens = new KeyValueCacheEvictionTokens();
+            var invalidation = new TransactionalMemoryCacheInvalidation(memoryCache, evictionTokens);
+            var storage = new DesignerKeyValueStorage<QuestionnaireDocument>(dbContext, memoryCache, serializer, invalidation, evictionTokens);
+            var cacheKey = nameof(StoredQuestionnaireDocument) + questionnaireId.FormatGuid();
+
+            var cachePopulatedByRead = true;
+
+            await RunThroughActionFilter(dbContext, HttpMethods.Get, throwInHandler: false,
+                handlerBody: () =>
+                {
+                    storage.Store(CreateQuestionnaireDocument(questionnaireId, "written"), questionnaireId.FormatGuid());
+                    dbContext.SaveChanges();
+                    storage.GetById(questionnaireId.FormatGuid());
+                    // Asserted inside the handler: after rollback the invalidation flush would hide a poisoned entry.
+                    cachePopulatedByRead = memoryCache.TryGetValue(cacheKey, out _);
+                }, invalidation);
+
+            Assert.That(cachePopulatedByRead, Is.False);
+            Assert.That(ReadCommittedTitle(dbContext, questionnaireId, serializer), Is.EqualTo("database"));
+        }
+
+        private static string? ReadCommittedTitle(DesignerDbContext filterContext, Guid questionnaireId, EntitySerializer<QuestionnaireDocument> serializer)
+        {
+            using var fresh = new DesignerDbContext(new DbContextOptionsBuilder<DesignerDbContext>()
+                .UseNpgsql(filterContext.Database.GetConnectionString())
+                .Options);
+
+            var stored = fresh.QuestionnaireDocuments.AsNoTracking()
+                .SingleOrDefault(x => x.Id == questionnaireId.FormatGuid());
+
+            return stored == null ? null : serializer.Deserialize(stored.Value).Title;
+        }
+
         private static void StageAndFlush(DesignerDbContext dbContext, Guid id)
         {
             dbContext.Questionnaires.Add(Create.Questionnaire.ListViewItem(id, "test"));
