@@ -19,5 +19,40 @@ namespace WB.Tests.Unit.GenericSubdomains.Portable
             Assert.That(call1, Is.EquivalentTo(new []{ "m1" }));
             Assert.That(call2, Is.EquivalentTo(new []{ "m2" }));
         }
+
+        [Test]
+        public void when_text_contains_at_prefixed_variable_should_extract_it()
+        {
+            var service = Create.Service.SubstitutionService();
+
+            string[] names = service.GetAllSubstitutionVariableNames("code: %@rowcode%", null);
+
+            Assert.That(names, Is.EquivalentTo(new[] { "@rowcode" }));
+        }
+
+        [Test]
+        public void when_text_contains_rowcode_without_at_should_extract_it()
+        {
+            var service = Create.Service.SubstitutionService();
+
+            string[] names = service.GetAllSubstitutionVariableNames("code: %rowcode%", null);
+
+            Assert.That(names, Is.EquivalentTo(new[] { "rowcode" }));
+        }
+
+        [TestCase("@rowcode", true)]
+        [TestCase("rowcode", true)]
+        [TestCase("@rowindex", true)]
+        [TestCase("rowindex", true)]
+        [TestCase("@rowname", true)]
+        [TestCase("rowname", true)]
+        [TestCase("myvar", false)]
+        [TestCase("rostertitle", false)]
+        public void IsRosterServiceVariable_should_correctly_identify_service_variables(string variableName, bool expected)
+        {
+            var service = Create.Service.SubstitutionService();
+
+            Assert.That(service.IsRosterServiceVariable(variableName), Is.EqualTo(expected));
+        }
     }
 }

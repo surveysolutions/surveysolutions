@@ -510,5 +510,143 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.That(substitionText.HasSubstitutions, Is.True);
             Assert.That(substitionText.Text, Is.EqualTo("title: title 2 title 2.1 test1"));
         }
+
+        [Test]
+        public void When_ReplaceSubstitutions_with_at_rowcode_substitution_should_return_roster_vector_code()
+        {
+            //arrange
+            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.Entity.Roster(Id.g1, variable: "r1", fixedRosterTitles: new[]
+                {
+                    Create.Entity.FixedTitle(5, "Fixed 5"),
+                }, children: new IComposite[]
+                {
+                    Create.Entity.TextQuestion(Id.g2, variable: "q1")
+                })
+            });
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+
+            var sourceTreeMainSection = Create.Entity.InterviewTreeSection(children: new IInterviewTreeNode[]
+            {
+                Create.Entity.InterviewTreeRoster(Create.Entity.Identity(Id.g1, new decimal[] { 5 }), rosterTitle: "Fixed 5",
+                    children: new IInterviewTreeNode[]
+                    {
+                        Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Id.g2, new decimal[] { 5 }), questionType: QuestionType.Text)
+                    })
+            });
+            var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection);
+
+            var substitutionTextFactory = Create.Service.SubstitutionTextFactory();
+            var questionIdentity = Create.Entity.Identity(Id.g2, new decimal[] { 5 });
+
+            // Act - using %@rowcode% form
+            var substitutionTextAt = substitutionTextFactory.CreateText(questionIdentity, "code: %@rowcode%", questionnaire);
+            substitutionTextAt.ReplaceSubstitutions(tree);
+
+            // Act - using %rowcode% form
+            var substitutionTextNoAt = substitutionTextFactory.CreateText(questionIdentity, "code: %rowcode%", questionnaire);
+            substitutionTextNoAt.ReplaceSubstitutions(tree);
+
+            //assert
+            Assert.That(substitutionTextAt.HasSubstitutions, Is.True);
+            Assert.That(substitutionTextAt.Text, Is.EqualTo("code: 5"));
+            Assert.That(substitutionTextNoAt.HasSubstitutions, Is.True);
+            Assert.That(substitutionTextNoAt.Text, Is.EqualTo("code: 5"));
+        }
+
+        [Test]
+        public void When_ReplaceSubstitutions_with_rowindex_substitution_should_return_sort_index()
+        {
+            //arrange
+            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.Entity.Roster(Id.g1, variable: "r1", fixedRosterTitles: new[]
+                {
+                    Create.Entity.FixedTitle(1, "A"),
+                    Create.Entity.FixedTitle(2, "B"),
+                }, children: new IComposite[]
+                {
+                    Create.Entity.TextQuestion(Id.g2, variable: "q1")
+                })
+            });
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+
+            var roster1 = Create.Entity.InterviewTreeRoster(Create.Entity.Identity(Id.g1, new decimal[] { 1 }), rosterTitle: "A",
+                children: new IInterviewTreeNode[]
+                {
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Id.g2, new decimal[] { 1 }), questionType: QuestionType.Text)
+                });
+            roster1.SortIndex = 0;
+
+            var roster2 = Create.Entity.InterviewTreeRoster(Create.Entity.Identity(Id.g1, new decimal[] { 2 }), rosterTitle: "B",
+                children: new IInterviewTreeNode[]
+                {
+                    Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Id.g2, new decimal[] { 2 }), questionType: QuestionType.Text)
+                });
+            roster2.SortIndex = 1;
+
+            var sourceTreeMainSection = Create.Entity.InterviewTreeSection(children: new IInterviewTreeNode[] { roster1, roster2 });
+            var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection);
+
+            var substitutionTextFactory = Create.Service.SubstitutionTextFactory();
+
+            // Act - using %@rowindex% form for first row
+            var substText1 = substitutionTextFactory.CreateText(Create.Entity.Identity(Id.g2, new decimal[] { 1 }), "index: %@rowindex%", questionnaire);
+            substText1.ReplaceSubstitutions(tree);
+
+            // Act - using %rowindex% form for second row
+            var substText2 = substitutionTextFactory.CreateText(Create.Entity.Identity(Id.g2, new decimal[] { 2 }), "index: %rowindex%", questionnaire);
+            substText2.ReplaceSubstitutions(tree);
+
+            //assert
+            Assert.That(substText1.Text, Is.EqualTo("index: 0"));
+            Assert.That(substText2.Text, Is.EqualTo("index: 1"));
+        }
+
+        [Test]
+        public void When_ReplaceSubstitutions_with_rowname_substitution_should_return_roster_title()
+        {
+            //arrange
+            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.Entity.Roster(Id.g1, variable: "r1", fixedRosterTitles: new[]
+                {
+                    Create.Entity.FixedTitle(3, "MyRosterName"),
+                }, children: new IComposite[]
+                {
+                    Create.Entity.TextQuestion(Id.g2, variable: "q1")
+                })
+            });
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+
+            var sourceTreeMainSection = Create.Entity.InterviewTreeSection(children: new IInterviewTreeNode[]
+            {
+                Create.Entity.InterviewTreeRoster(Create.Entity.Identity(Id.g1, new decimal[] { 3 }), rosterTitle: "MyRosterName",
+                    children: new IInterviewTreeNode[]
+                    {
+                        Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(Id.g2, new decimal[] { 3 }), questionType: QuestionType.Text)
+                    })
+            });
+            var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection);
+
+            var substitutionTextFactory = Create.Service.SubstitutionTextFactory();
+            var questionIdentity = Create.Entity.Identity(Id.g2, new decimal[] { 3 });
+
+            // Act - using %@rowname% form
+            var substTextAt = substitutionTextFactory.CreateText(questionIdentity, "name: %@rowname%", questionnaire);
+            substTextAt.ReplaceSubstitutions(tree);
+
+            // Act - using %rowname% form
+            var substTextNoAt = substitutionTextFactory.CreateText(questionIdentity, "name: %rowname%", questionnaire);
+            substTextNoAt.ReplaceSubstitutions(tree);
+
+            //assert
+            Assert.That(substTextAt.Text, Is.EqualTo("name: MyRosterName"));
+            Assert.That(substTextNoAt.Text, Is.EqualTo("name: MyRosterName"));
+        }
     }
 }
