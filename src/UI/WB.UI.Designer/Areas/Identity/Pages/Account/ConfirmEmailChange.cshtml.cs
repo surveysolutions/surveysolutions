@@ -1,7 +1,9 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Extensions;
@@ -11,10 +13,13 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
     public class ConfirmEmailChangeModel : PageModel
     {
         private readonly UserManager<DesignerIdentityUser> _userManager;
+        private readonly ITransactionRollbackState _transactionRollbackState;
 
-        public ConfirmEmailChangeModel(UserManager<DesignerIdentityUser> userManager)
+        public ConfirmEmailChangeModel(UserManager<DesignerIdentityUser> userManager,
+            ITransactionRollbackState transactionRollbackState)
         {
             _userManager = userManager;
+            _transactionRollbackState = transactionRollbackState;
         }
 
         [BindProperty]
@@ -58,7 +63,14 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
 
             if (tokenIsValid)
             {
-                await _userManager.SetEmailAsync(user, user.PendingEmail);
+                var emailChanged = await _userManager.SetEmailAsync(user, user.PendingEmail);
+                if (!emailChanged.Succeeded)
+                {
+                    // SetEmailAsync mutates email and security stamp before validating; the failed values must not be committed.
+                    _transactionRollbackState.MarkRollbackOnly();
+                    TempData[Alerts.ERROR] = emailChanged.Errors.First().Description;
+                    return RedirectToPage("Login");
+                }
 
                 user.EmailConfirmed = true;
                 user.PendingEmail = null;

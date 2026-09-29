@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.GenericSubdomains.Portable;
@@ -20,10 +21,13 @@ namespace WB.UI.Designer.Areas.Admin.Pages
     public class EditUserModel : PageModel
     {
         private readonly UserManager<DesignerIdentityUser> userManager;
+        private readonly ITransactionRollbackState transactionRollbackState;
 
-        public EditUserModel(UserManager<DesignerIdentityUser> userManager)
+        public EditUserModel(UserManager<DesignerIdentityUser> userManager,
+            ITransactionRollbackState transactionRollbackState)
         {
             this.userManager = userManager;
+            this.transactionRollbackState = transactionRollbackState;
         }
 
         [TempData]
@@ -92,6 +96,8 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                     var emailChanged = await userManager.SetEmailAsync(user, Input.Email);
                     if (!emailChanged.Succeeded)
                     {
+                        // SetEmailAsync mutates email and security stamp before validating; the failed values must not be committed.
+                        this.transactionRollbackState.MarkRollbackOnly();
                         this.ErrorMessage = emailChanged.Errors.First().Description;
                         return RedirectToPage(new {id = id});
                     }
