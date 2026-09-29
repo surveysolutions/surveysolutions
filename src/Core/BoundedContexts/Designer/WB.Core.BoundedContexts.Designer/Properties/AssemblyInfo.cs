@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("WB.Tests.Unit")]
 [assembly: InternalsVisibleTo("WB.Tests.Unit.Designer")]
 [assembly: InternalsVisibleTo("WB.Tests.Integration")]
+[assembly: InternalsVisibleTo("WB.Tests.Integration.Designer")]
 [assembly: InternalsVisibleTo("WB.Tests.Abc")]
 [assembly: InternalsVisibleTo("WB.Tests.Web")]
 [assembly: InternalsVisibleTo("PerformanceTest")]
