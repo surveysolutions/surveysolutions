@@ -56,9 +56,10 @@ namespace WB.UI.Designer.Services.Restore
                 this.RestoreDataFromZipFileEntry(zipEntry, zipStream, responsibleId, state, questionnaire);
             }
 
-            state.Error = "";
             foreach (Guid attachmentId in state.GetPendingAttachments())
             {
+                // The restored document still references this attachment, so the questionnaire is incomplete.
+                state.MarkFailed();
                 state.Error += $"Attachment '{attachmentId.FormatGuid()}' was not restored because there are not enough data for it in it's folder." + Environment.NewLine;
             }
 
@@ -117,7 +118,7 @@ namespace WB.UI.Designer.Services.Restore
                 {
                         this.logger.LogWarning(exception, $"Error processing zip file entry '{zipEntry.FullName}' during questionnaire restore from backup.");
                         state.Error = $"Error processing zip file entry '{zipEntry.FullName}'.{Environment.NewLine}{exception}";
-                        state.HasFailures = true;
+                        state.MarkFailed();
                         logger.LogError(state.Error);
                 }
             }
@@ -248,7 +249,7 @@ namespace WB.UI.Designer.Services.Restore
             {
                 this.logger.LogWarning(exception, $"Error processing zip file entry '{zipEntry.FullName}' during questionnaire restore from backup.");
                 state.Error = $"Error processing zip file entry '{zipEntry.FullName}'.{Environment.NewLine}{exception}";
-                state.HasFailures = true;
+                state.MarkFailed();
                 logger.LogError(state.Error);
             }
         }

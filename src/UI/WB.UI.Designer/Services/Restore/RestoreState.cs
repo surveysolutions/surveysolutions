@@ -46,7 +46,12 @@ namespace WB.UI.Designer.Services.Restore
         public StringBuilder Success { get; } = new StringBuilder();
         public string? Error { get; set; }
 
-        // Set when a failure was swallowed and the restore continued, so the caller can still reject the whole restore.
-        public bool HasFailures { get; set; }
+        private bool failed;
+
+        // Any reported error means the restore did not complete: some failures are swallowed to keep going, others
+        // (an attachment whose content never arrived) are reported only through Error.
+        public bool HasFailures => this.failed || !string.IsNullOrWhiteSpace(this.Error);
+
+        public void MarkFailed() => this.failed = true;
     }
 }
