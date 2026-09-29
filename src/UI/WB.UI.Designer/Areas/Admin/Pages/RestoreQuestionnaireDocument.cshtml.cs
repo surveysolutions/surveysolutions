@@ -70,7 +70,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 
                 var questionnaireId = restoreService.RestoreQuestionnaire(openReadStream, User.GetId(), state, CreateNew);
 
-                if (state.HasFailures)
+if (state.HasFailures || !string.IsNullOrEmpty(state.Error))
                 {
                     // A restore deletes existing translations and categories before rewriting them, so a partial
                     // restore must not be committed.
