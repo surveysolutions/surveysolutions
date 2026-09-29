@@ -83,12 +83,12 @@ namespace WB.UI.Designer.Filters
         {
             var isWrite = IsWriteMethod(httpContext.Request.Method);
 
-            // If a transaction is already open on this context, its opener owns commit/rollback; just run inside it.
+            // Running inside a transaction someone else commits would silently drop every guarantee below:
+            // rollback-only marks, short-circuits and safe-method rollbacks would all be decided by that owner.
             if (dbContext.Database.CurrentTransaction != null)
-            {
-                await ExecuteWithSharedCachePolicyAsync(dbContext, isWrite, action);
-                return;
-            }
+                throw new InvalidOperationException(
+                    $"{nameof(TransactionFilter)} cannot run inside an externally owned transaction. " +
+                    $"Mark the endpoint with [{nameof(NoTransactionAttribute)}] when it manages its own transaction.");
 
             ExceptionDispatchInfo? capturedException = null;
             Exception? handlerException = null;

@@ -190,8 +190,21 @@ namespace WB.Tests.Integration.Designer
             Assert.That(ReadCommittedTitle(dbContext, questionnaireId, serializer), Is.EqualTo("database"));
         }
 
-        private static string? ReadCommittedTitle(DesignerDbContext filterContext, Guid questionnaireId, EntitySerializer<QuestionnaireDocument> serializer)
+        [Test]
+        public async Task when_a_transaction_is_already_owned_elsewhere_the_filter_refuses_to_run_the_handler()
         {
+            var dbContext = ServiceLocator.GetInstance<DesignerDbContext>();
+            await using var externallyOwned = await dbContext.Database.BeginTransactionAsync();
+            var handlerRan = false;
+
+            Assert.ThrowsAsync<InvalidOperationException>(() =>
+                RunThroughActionFilter(dbContext, HttpMethods.Post, throwInHandler: false,
+                    handlerBody: () => handlerRan = true));
+
+            Assert.That(handlerRan, Is.False);
+        }
+
+        private static string? ReadCommittedTitle(DesignerDbContext filterContext, Guid questionnaireId, EntitySerializer<QuestionnaireDocument> serializer)        {
             using var fresh = new DesignerDbContext(new DbContextOptionsBuilder<DesignerDbContext>()
                 .UseNpgsql(filterContext.Database.GetConnectionString())
                 .Options);
