@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -141,42 +142,78 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
 
                 try
                 {
-                    long downloaded = 0;
-                    using (var streamToSave = this.mapService.GetTempMapSaveStream(mapDescription.MapName))
+                    var offset = this.mapService.GetTempMapOffset(mapDescription.MapName);
+                    var hadPartialTempFile = offset > 0;
+                    var storedETag = offset > 0 ? this.mapService.GetTempMapETag(mapDescription.MapName) : null;
+                    var restartDownloadFromBeginning = offset > 0 && string.IsNullOrWhiteSpace(storedETag);
+                    if (restartDownloadFromBeginning)
+                    {
+                        logger.Info($"Partial download for map '{mapDescription.MapName}' has no stored ETag. Restarting download from the beginning.");
+                        offset = 0;
+                        storedETag = null;
+                    }
+
+                    long downloaded = offset;
                     using (var contentStreamResult = await this.synchronizationService
-                        .GetMapContentStream(mapDescription.MapName, cancellationToken)
+                        .GetMapContentStream(mapDescription.MapName, cancellationToken, offset, storedETag)
                         .ConfigureAwait(false))
                     {
                         if (cancellationToken.IsCancellationRequested)
                         {
                             cancellationToken.ThrowIfCancellationRequested();
                         }
-                        
-                        var buffer = new byte[DownloadBufferSize];
-                        var downloadProgressChangedEventArgs = new TransferProgress()
-                        {
-                            TotalBytesToReceive = contentStreamResult.ContentLength
-                        };
 
-                        int read;
-                        while ((read = await contentStreamResult.Stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken)
-                                   .ConfigureAwait(false)) > 0)
+                        // If we requested a range but server returned full content (200 OK),
+                        // either range requests are unsupported or the file has changed on the server.
+                        // Reset and download from scratch.
+                        var restartedFromFullResponse = offset > 0 && !contentStreamResult.IsPartialContent;
+                        if (restartedFromFullResponse)
                         {
-                            if (cancellationToken.IsCancellationRequested)
+                            logger.Info($"Server returned full content for map '{mapDescription.MapName}' (range not satisfied or file changed). Restarting download from the beginning.");
+                            offset = 0;
+                            downloaded = 0;
+                        }
+
+                        var appendToTempFile = offset > 0 && contentStreamResult.IsPartialContent;
+                        using (var streamToSave = this.mapService.GetTempMapSaveStream(mapDescription.MapName, appendToTempFile))
+                        {
+                            if (restartedFromFullResponse)
                             {
-                                cancellationToken.ThrowIfCancellationRequested();
+                                this.mapService.SaveTempMapETag(mapDescription.MapName, null);
+                            }
+                            else if (!string.IsNullOrEmpty(contentStreamResult.ETag)
+                                && !contentStreamResult.ETag.StartsWith("W/", StringComparison.Ordinal))
+                            {
+                                if (!hadPartialTempFile || contentStreamResult.IsPartialContent)
+                                    this.mapService.SaveTempMapETag(mapDescription.MapName, NormalizeStrongETag(contentStreamResult.ETag));
                             }
 
-                            downloaded += read;
+                            var buffer = new byte[DownloadBufferSize];
+                            var downloadProgressChangedEventArgs = new TransferProgress()
+                            {
+                                TotalBytesToReceive = contentStreamResult.ContentLength
+                            };
+                         
+                            int read;
+                            while ((read = await contentStreamResult.Stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken)
+                                       .ConfigureAwait(false)) > 0)
+                            {
+                                if (cancellationToken.IsCancellationRequested)
+                                {
+                                    cancellationToken.ThrowIfCancellationRequested();
+                                }
 
-                            await streamToSave.WriteAsync(buffer, 0, read, cancellationToken).ConfigureAwait(false);
+                                downloaded += read;
 
-                            if (contentStreamResult.ContentLength != null)
-                                downloadProgressChangedEventArgs.ProgressPercentage =
-                                    Math.Min(Math.Round((decimal)(100 * downloaded) / contentStreamResult.ContentLength.Value), 100);
+                                await streamToSave.WriteAsync(buffer, 0, read, cancellationToken).ConfigureAwait(false);
 
-                            downloadProgressChangedEventArgs.BytesReceived = downloaded;
-                            OnDownloadProgressChanged(downloadProgressChangedEventArgs);
+                                if (contentStreamResult.ContentLength != null)
+                                    downloadProgressChangedEventArgs.ProgressPercentage =
+                                        Math.Min(Math.Round((decimal)(100 * downloaded) / contentStreamResult.ContentLength.Value), 100);
+
+                                downloadProgressChangedEventArgs.BytesReceived = downloaded;
+                                OnDownloadProgressChanged(downloadProgressChangedEventArgs);
+                            }
                         }
                     }
                     
@@ -213,5 +250,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
         
         protected override Task ChangeWorkspaceAndNavigateToItAsync()
             => throw new NotImplementedException("Remove workspace by offline synchronization no supported");
+
+        private static string NormalizeStrongETag(string etag)
+        {
+            if (etag.Length > 1 && etag[0] == '"' && etag[etag.Length - 1] == '"')
+                return etag.Substring(1, etag.Length - 2);
+
+            return etag;
+        }
     }
 }
