@@ -73,8 +73,8 @@
     "SideBarScenarioCounter_other": "{{count}} Scenarios:",
     "SideBarScenarioEmptyLine1": "Use this tab to view your scenarios.",
     "SideBarScenarioEmptyLine2": "A scenario is a snapshot of tester state, you can save it on tester by click on button \"Save Scenario\".",
-    "SideBarScenarioName": "scenario title",
     "SideBarScenarioRecordNew": "Record New Scenario",
+    "SideBarScenarioName": "scenario title",
     "SideBarSectionsCounter": "{{count}} Section:",
     "SideBarSectionsCounter_other": "{{count}} Sections:",
     "SideBarTranslationDownloadXlsx": "Download xlsx",
@@ -168,7 +168,6 @@
     "FindReplaceInAllFound": "in {{count}} found entity?",
     "FindReplaceInAllFound_other": "in {{count}} found entities?",
     "FindReplaceMatchingLines": "Matching lines: {{count}}",
-    "FindReplaceCurrentMatch": "{{current}} / {{count}}",
     "FindReplaceNext": "Next",
     "FindReplacePrevious": "Previous",
     "FindReplaceReplaceAll": "Replace all ({{count}})",
@@ -583,7 +582,7 @@
     "PasswordEmailSent": "Please check your email to reset your password.",
     "EmailChangeShouldBeConfirmed": "Please follow instructions sent to provided email ({0}) to confirm email change.",
     "PendingEmailUpdate": "Pending update to {0}",
-    "LastLoginDate": "Last login"
+    "LastLoginDate": "Last login date"
   },
   "QuestionnaireController": {
     "Action": "Action",

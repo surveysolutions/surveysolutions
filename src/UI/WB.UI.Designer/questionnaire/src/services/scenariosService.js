@@ -35,7 +35,7 @@ export function isPopupBlockedError(error) {
 }
 
 export async function runScenario(questionnaireId, scenarioId) {
-    var webTesterWindow = window.open('about:blank', '_blank', 'noopener,noreferrer');
+    var webTesterWindow = window.open('about:blank', '_blank');
 
     if (!webTesterWindow) {
         const err = new Error('popup_blocked');

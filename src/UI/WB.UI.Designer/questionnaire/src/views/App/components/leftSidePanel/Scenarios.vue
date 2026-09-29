@@ -65,9 +65,7 @@ export default {
             } catch (error) {
                 if (isPopupBlockedError(error)) {
                     notice(this.$t('QuestionnaireEditor.PopupBlocked'));
-                    return;
                 }
-                notice(error?.message || this.$t('QuestionnaireEditor.CommunicationError'));
             }
         },
     }
