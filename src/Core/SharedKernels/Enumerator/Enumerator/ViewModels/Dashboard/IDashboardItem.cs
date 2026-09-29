@@ -20,6 +20,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         event EventHandler? OnItemUpdated;
 
         void RefreshDataTime();
+
+        /// <summary>
+        /// Re-fetches the backing data and rebinds all properties and actions in-place.
+        /// The default implementation is a no-op; override in view-models that support it.
+        /// </summary>
+        void Refresh() { }
     }
 
     public interface IDashboardViewItem

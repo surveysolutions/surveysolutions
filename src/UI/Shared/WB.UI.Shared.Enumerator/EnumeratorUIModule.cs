@@ -134,7 +134,7 @@ namespace WB.UI.Shared.Enumerator
             var pathToLocalDirectory = AndroidPathUtils.GetPathToInternalDirectory();
             var logsDirectory = Path.Combine(pathToLocalDirectory, "Logs");
 
-            var logMessageLayout = "${date:format=HH\\:mm\\:ss}[${logger:shortName=true}][${level}][${message}]${onexception:${exception:format=toString,Data:exceptionDataSeparator=\r\n}|${stacktrace}}";
+            var logMessageLayout = "${date:format=HH\\:mm\\:ss:culture=invariant}[${logger:shortName=true}][${level}][${message}]${onexception:${exception:format=toString,Data:exceptionDataSeparator=\r\n}|${stacktrace}}";
             var traceMessageLayout = logMessageLayout;
 
             var fileTarget = new FileTarget("persistedLog")

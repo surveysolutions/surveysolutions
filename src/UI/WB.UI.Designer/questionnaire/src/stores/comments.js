@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import _ from 'lodash';
 import { getComments, postComment } from '../services/commentsService';
 import emitter from '../services/emitter';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 export const useCommentsStore = defineStore('comments', {
     state: () => ({
@@ -47,7 +47,7 @@ export const useCommentsStore = defineStore('comments', {
             this.entityId = entityId;
 
             _.forEach(data, function(comment) {
-                comment.date = moment.utc(comment.date);
+                comment.date = dayjs.utc(comment.date);
                 comment.isResolved = !_.isNull(comment.resolveDate || null);
             });
 

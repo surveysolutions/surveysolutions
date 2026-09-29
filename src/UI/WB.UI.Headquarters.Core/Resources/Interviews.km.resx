@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="ApproveConfirmMessage" xml:space="preserve"><value>ការសំភាសន៍ {{count}} នឹងត្រូវបានអនុម័ត</value></data>
+  <data name="ApproveConfirmMessageHQ" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{}&lt;/b&gt; ការសំភាសន៍នឹងត្រូវបានអនុម័ត&lt;/h3&gt; {{count}} {{status1}} {{status2}} {{status3}}</value></data>
+  <data name="AssignConfirmMessage" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{}&lt;/b&gt; ការសំភាសន៍ត្រូវបានជ្រើសរើសសម្រាប់ការចាត់ចែងឡើងវិញ&lt;/h3&gt; {{count}} {{status1}} {{status2}} {{status3}}</value></data>
+  <data name="AssignReceivedConfirm" xml:space="preserve"><value>អនុវត្តទៅ {{count}} ការសំភាសន៍ដែលអ្នកសំភាសន៍បានទទួលរួចហើយ</value></data>
+  <data name="AssignReceivedWarning" xml:space="preserve"><value>អ្នកសំភាសន៍ដែលទទួលខុសត្រូវបច្ចុប្បន្ននឹងមិនត្រូវបានជូនដំណឹងអំពីការចាត់ចែងឡើងវិញ</value></data>
+  <data name="ApproveReceivedWarning" xml:space="preserve"><value>អ្នកសំភាសន៍ដែលទទួលខុសត្រូវបច្ចុប្បន្ននឹងមិនត្រូវបានជូនដំណឹងអំពីការអនុម័ត</value></data>
+  <data name="SwitchToCawiReceivedWarning" xml:space="preserve"><value>អ្នកសំភាសន៍ដែលទទួលខុសត្រូវបច្ចុប្បន្ននឹងមិនត្រូវបានជូនដំណឹងអំពីការប្ដូររបៀប</value></data>
+  <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{}&lt;/b&gt; ការសំភាសន៍នឹងត្រូវបានចាត់ចែង&lt;/h3&gt; {{count}} {{status1}} {{status2}}</value></data>
+  <data name="ChooseResponsibleInterviewer" xml:space="preserve"><value>សូមជ្រើសរើសអ្នកសំភាសន៍</value></data>
+  <data name="ChooseResponsibleSupervisor" xml:space="preserve"><value>សូមជ្រើសរើសអ្នកត្រួតពិនិត្យ</value></data>
+  <data name="ChooseResponsible" xml:space="preserve"><value>សូមជ្រើសរើសអ្នកត្រួតពិនិត្យ ឬអ្នកសំភាសន៍</value></data>
+  <data name="ContinueConfirmMessage" xml:space="preserve"><value>តើអ្នកចង់បន្ត?</value></data>
+  <data name="ContinueConfirmMessageHQ" xml:space="preserve"><value>តើអ្នកចង់បន្ត?</value></data>
+  <data name="DeleteConfirmMessageHQ" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{}&lt;/b&gt; ការសំភាសន៍នឹងត្រូវបានលុប&lt;/h3&gt; {{count}} {{status1}} {{status2}}</value></data>
+  <data name="RejectConfirmMessage" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{}&lt;/b&gt; ការសំភាសន៍នឹងត្រូវបានបដិសេធ&lt;/h3&gt; {{count}} {{status1}} {{status2}}</value></data>
+  <data name="RejectConfirmMessageHQ" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{}&lt;/b&gt; ការសំភាសន៍នឹងត្រូវបានបដិសេធ&lt;/h3&gt; {{count}} {{status1}} {{status2}}</value></data>
+  <data name="RejectToOriginal" xml:space="preserve"><value>បដិសេធទៅអ្នកទទួលខុសត្រូវដើម</value></data>
+  <data name="RejectToNewResponsible" xml:space="preserve"><value>បដិសេធ និងជ្រើសរើសអ្នកទទួលខុសត្រូវថ្មី</value></data>
+  <data name="UnapproveConfirmMessageHQ" xml:space="preserve"><value>&lt;h3&gt;&lt;b&gt;{}&lt;/b&gt; ការសំភាសន៍នឹងត្រូវបានដកការអនុម័ត&lt;/h3&gt; {{count}} {{status1}}</value></data>
+  <data name="Assignment" xml:space="preserve"><value>លេខសម្គាល់ការចាត់ការ</value></data>
+  <data name="ClientKeyTitle" xml:space="preserve"><value>សោដែលបង្កើតនៅក្នុងឧបករណ៍</value></data>
+  <data name="Tooltip_Filter_Assignment" xml:space="preserve"><value>លេខសម្គាល់ការចាត់ការ</value></data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve"><value>ជ្រើសរើសកម្រងសំណួរ ដើម្បីមើលការសំភាសន៍ដែលពាក់ព័ន្ធ</value></data>
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve"><value>អ្នកប្រើប្រាស់ដែលទទួលខុសត្រូវ</value></data>
+  <data name="Tooltip_Filter_Status" xml:space="preserve"><value>ស្ថានភាពការសំភាសន៍</value></data>
+  <data name="Tooltip_Table_Assignment" xml:space="preserve"><value>លេខសម្គាល់សម្រាប់ការចាត់ការ</value></data>
+  <data name="Tooltip_Table_HideShowIdentifying" xml:space="preserve"><value>ចុចនៅទីនេះដើម្បីលាក់ ឬបង្ហាញសំណួរកំណត់អត្តសញ្ញាណ</value></data>
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve"><value>ព័ត៌មានដែលកំណត់អត្តសញ្ញាណការចាត់ការម្នាក់ៗ</value></data>
+  <data name="Tooltip_Table_InterviewKey" xml:space="preserve"><value>លេខសម្គាល់ករណីខ្លី</value></data>
+  <data name="Tooltip_Table_LastUpdate" xml:space="preserve"><value>ពេលដែលការផ្លាស់ប្ដូរចំពោះការសំភាសន៍ត្រូវបានបង្ហោះដល់ម៉ាស៊ីនមេ</value></data>
+  <data name="Tooltip_Table_ReceivedByInterviewer" xml:space="preserve"><value>សូចនាករថាតើការសំភាសន៍ត្រូវបានទាញយកទៅក្នុងថេប្លេតរបស់អ្នកសំភាសន៍</value></data>
+  <data name="Tooltip_Table_Responsible" xml:space="preserve"><value>អ្នកប្រើប្រាស់ដែលទទួលខុសត្រូវបច្ចុប្បន្ន</value></data>
+  <data name="Tooltip_Table_Status" xml:space="preserve"><value>ស្ថានភាពការសំភាសន៍ក្នុងលំហូរការងារ</value></data>
+  <data name="Tooltip_Table_ErrorsCount" xml:space="preserve"><value>បង្ហាញចំនួនសំណួរ និងអត្ថបទដែលមិនត្រឹមត្រូវ</value></data>
+  <data name="Errors" xml:space="preserve"><value>ចំនួនកំហុស</value></data>
+  <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve"><value>ចំនួនសំណួរដែលគ្មានចម្លើយ</value></data>
+  <data name="Tooltip_Table_InterviewMode" xml:space="preserve"><value>បង្ហាញស្ថានភាពបច្ចុប្បន្ន (CAPI ឬ CAWI) នៃការសំភាសន៍ម្នាក់ៗ</value></data>
+  <data name="NotAnsweredCount" xml:space="preserve"><value>មិនបានឆ្លើយ</value></data>
+  <data name="ChooseQuestionsTitle" xml:space="preserve"><value>ជ្រើសរើសសំណួរកំណត់អត្តសញ្ញាណដើម្បីប្រើក្នុងតម្រង</value></data>
+  <data name="DynamicFilter" xml:space="preserve"><value>តម្រងឆ្លាតវៃ</value></data>
+  <data name="FiltersByQuestions" xml:space="preserve"><value>តម្រងតាមសំណួរ</value></data>
+  <data name="QuestionsSelector" xml:space="preserve"><value>ការជ្រើសរើសសំណួរ</value></data>
+  <data name="AdvancedFilterSelector" xml:space="preserve"><value>តម្រងឆ្លាតវៃ</value></data>
+  <data name="QuestionsFilterNotAvailable" xml:space="preserve"><value>តម្រងតាមសំណួរមានតែនៅពេលជ្រើសរើសកំណែកម្រងសំណួរជាក់លាក់</value></data>
+  <data name="DynamicFilterNotAvailable" xml:space="preserve"><value>គ្មានទិន្នន័យ</value></data>
+  <data name="ApproveConfirmMessage_other" xml:space="preserve"><value>ការសំភាសន៍ {{count}} នឹងត្រូវបានអនុម័ត</value></data>
+  <data name="Note" xml:space="preserve"><value>ចំណាំ!</value></data>
+  <data name="ApproveConfirmMessage_Statuses" xml:space="preserve"><value>អ្នកអាចអនុម័តការសំភាសន៍ដែលមានស្ថានភាពខាងក្រោមប៉ុណ្ណោះ: {}, {} {{status1}} {{status2}} {{status3}}</value></data>
+  <data name="DynamicFilter_MatchType" xml:space="preserve"><value>ប្រភេទការផ្គូផ្គង</value></data>
+  <data name="DynamicFilter_MatchTypes_And" xml:space="preserve"><value>ហើយ</value></data>
+  <data name="DynamicFilter_MatchTypes_Or" xml:space="preserve"><value>ឬ</value></data>
+  <data name="DynamicFilter_MatchTypes_AddRule" xml:space="preserve"><value>បន្ថែមច្បាប់</value></data>
+  <data name="DynamicFilter_MatchTypes_AddGroup" xml:space="preserve"><value>បន្ថែមក្រុម</value></data>
+  <data name="DynamicFilter_MatchTypes_ValuePlaceholder" xml:space="preserve"><value>តម្លៃ</value></data>
+  <data name="WebInterviewResponsibleWarning" xml:space="preserve"><value>អ្នកទទួលខុសត្រូវមិនមែនជាអ្នកសំភាសន៍ទេ។ តំណភ្ជាប់នឹងមិនដំណើរការ</value></data>
+</root>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="NoData_ContactSupport" xml:space="preserve">
+        <value>ទិន្នន័យពីការសម្ភាសន៍ {0} ត្រូវបានខូច។ ទាក់ទងផ្នែកជំនួយដើម្បីសង្គ្រោះការសម្ភាសន៍នោះ។</value>
+    </data>
+    <data name="NoData_ContactSupportWithMoreDetails" xml:space="preserve">
+        <value>សូមទាក់ទងផ្នែកជំនួយ ដើម្បីផ្តល់ព័ត៌មានលម្អិតបន្ថែម</value>
+    </data>
+    <data name="NoData_InterveiwWasNotUploadedYet" xml:space="preserve">
+        <value>សំភាសន៍ {0} មិនទាន់ត្រូវបានធ្វើសមកាលកម្មនៅឡើយទេ</value>
+    </data>
+    <data name="NoData_InterviewDeleted" xml:space="preserve">
+        <value>សំភាសន៍ {0} ត្រូវបានលុបដោយ HQ ឬ Administrator ដូច្នេះហើយមិនអាចយកមកវិញបានទេ</value>
+    </data>
+    <data name="NoData_InterviewerChangedDevice" xml:space="preserve">
+        <value>អ្នកសម្ភាសន៍បានផ្លាស់ប្តូរថេប្លេត។ ទិន្នន័យសម្រាប់ការសម្ភាសន៍ {0} អាចនឹងបាត់បង់ ដោយសារទិន្នន័យត្រូវបានលុបនៅពេលដែលអ្នកសម្ភាសន៍ផ្លាស់ទីពីកុំព្យូទ័របន្ទះមួយទៅកុំព្យូទ័របន្ទះមួយទៀត។ បើ​ជា​ករណី​នេះ ការ​សម្ភាសន៍​នោះ​មិន​អាច​យក​មក​វិញ​បាន​ទេ។</value>
+    </data>
+    <data name="NoData_InterviewWasNotReceived" xml:space="preserve">
+        <value>សំភាសន៍ {0} មិនទាន់ទទួលបានដោយអ្នកសម្ភាសន៍ {1} នៅឡើយទេ។</value>
+    </data>
+    <data name="NoData_InterviewWasReassigned" xml:space="preserve">
+        <value>សំភាសន៍ {0} ត្រូវបានចាត់តាំងម្តងទៀតទៅអ្នកសម្ភាសន៍ផ្សេង។ ការសំភាសន៍កំពុងស្ថិតនៅលើថេប្លេតរបស់អ្នកសម្ភាសន៍ចុងក្រោយនោះ។</value>
+    </data>
+    <data name="NoData_NoIssuesInterviewOnServer" xml:space="preserve">
+        <value>សំភាសន៍ {0} មិនមានបញ្ហាដែលបានកត់ត្រានៅលើម៉ាស៊ីនមេទេ។&lt;br /&gt;សូមទទួលបានព័ត៌មានបន្ថែមពីអ្នកទទួលខុសត្រូវបច្ចុប្បន្នសម្រាប់ការសម្ភាសន៍នោះ។&lt;br /&gt;ប្រសិនបើបញ្ហានៅតែបន្តកើតមាន សូមទាក់ទងផ្នែកជំនួយដើម្បីផ្តល់ព័ត៌មានលម្អិតបន្ថែម។</value>
+    </data>
+    <data name="NoData_NotFound" xml:space="preserve">
+        <value>សំភាសន៍ {0} រកមិនឃើញទេ។</value>
+    </data>
+    <data name="NoData_QuestionnaireDeleted" xml:space="preserve">
+        <value>អ្នកគ្រប់គ្រងម៉ាស៊ីនមេបានលុបកម្រងសំណួរសម្រាប់ការសម្ភាសន៍ {0} ។ ជាលទ្ធផល ការសម្ភាសន៍ទាំងអស់ដែលទាក់ទងនឹងកម្រងសំណួរនេះត្រូវបានលុប ហើយមិនអាចស្តារឡើងវិញបានទេ។</value>
+    </data>
+    <data name="MissingCensusInterviews_NoBrokenPackages_Message" xml:space="preserve">
+        <value>ប្រសិនបើសំភាសន៍ដែលអ្នកកំពុងព្យាយាមកំណត់ទីតាំងមិនមាននៅក្នុងបញ្ជីទេ សូមណែនាំអ្នកសម្ភាសន៍ឱ្យបញ្ចប់ការសម្ភាសន៍ ហើយធ្វើសមកាលកម្មម្តងទៀត។</value>
+    </data>
+    <data name="MissingCensusInterviews_SomeBrokenPackages_Message" xml:space="preserve">
+        <value>ប្រសិនបើសំភាសន៍ដែលអ្នកកំពុងព្យាយាមកំណត់ទីតាំងមិនមាននៅក្នុងបញ្ជីទេ សូមណែនាំអ្នកសម្ភាសន៍ឱ្យបញ្ចប់ការសម្ភាសន៍ ហើយធ្វើសមកាលកម្មម្តងទៀត។ បន្ទាប់មកស្វែងរកការសម្ភាសន៍ម្តងទៀត។ ប្រសិនបើការសម្ភាសន៍មិនមានទីតាំងនៅលើការស្វែងរកទីពីរទេ សូមទាក់ទងក្រុមគាំទ្រ។</value>
+    </data>
+</root>

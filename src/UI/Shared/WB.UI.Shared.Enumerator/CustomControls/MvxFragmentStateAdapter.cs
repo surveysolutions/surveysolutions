@@ -58,7 +58,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 ViewModel = model,
                 TitlePropertyName = titlePropertyName
             });
-            NotifyDataSetChanged();
+            NotifyItemInserted(positionsToInsert);
         }
 
         private void RemoveTab(int position)
@@ -66,7 +66,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             this.pagerItems[position].ViewModel.PropertyChanged -= this.ViewModel_PropertyChanged;
             this.pagerItems.RemoveAt(position);
             
-            NotifyDataSetChanged();
+            NotifyItemRemoved(position);
         }
 
         public void RemoveTabByViewModel(MvxViewModel viewModel)

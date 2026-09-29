@@ -106,6 +106,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
                 _ => throw new ArgumentOutOfRangeException()
             });
 
+            registry.Bind<WorkspaceFileSystemBinaryDataStorage>();
+            registry.Bind<WorkspaceS3BinaryDataStorage>();
+            registry.BindToMethod<IWorkspaceBinaryDataStorage>(c => StorageType(c) switch
+            {
+                StorageProviderType.AmazonS3 => c.Get<WorkspaceS3BinaryDataStorage>(),
+                StorageProviderType.FileSystem => c.Get<WorkspaceFileSystemBinaryDataStorage>(),
+                _ => throw new ArgumentOutOfRangeException()
+            });
+
             registry.BindToMethod<ITransferUtility>(c => new TransferUtility(c.Get<IAmazonS3>()));
 
             registry.BindToMethod<IOptions<FileStorageConfig>>(sp =>

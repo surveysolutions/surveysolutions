@@ -204,4 +204,35 @@
   <data name="SynchronizationStarted" xml:space="preserve">
     <value>同步已经开始({0})</value>
   </data>
+
+
+  <data name="RestartInterview" xml:space="preserve">
+    <value>访谈 {0} 已重新启动</value>
+  </data>
+
+  <data name="RejectInterviewToInterviewer" xml:space="preserve">
+    <value>访谈 {0} 已退回给访问员 {1}</value>
+  </data>
+
+  <data name="FinishInstallation" xml:space="preserve">
+      <value>安装完成</value>
+  </data>
+
+  <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve">
+    <value>已从总部更新 {0} 个访谈</value>
+  </data>
+
+  <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve">
+    <value>已部分上传 {0} 个访谈</value>
+
+  </data>
+
+  <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve">
+    <value>收到评论后已重新打开 {0} 个访谈</value>
+
+  </data>
+
+  <data name="SwitchInterviewMode" xml:space="preserve">
+    <value>访谈 {0} 已切换到 {1} 模式</value>
+  </data>
 </root>

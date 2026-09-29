@@ -21,12 +21,12 @@
                         </button>
                         <button type="button" class="btn lighter-hover" @click.self="cancel()">{{
                             $t('QuestionnaireEditor.Cancel')
-                        }}</button>
+                            }}</button>
                     </div>
 
                     <span class="default-label" v-if="translation.isDefault">{{
                         $t('QuestionnaireEditor.Default')
-                    }}</span>
+                        }}</span>
 
                     <button type="button" class="btn btn-default" v-if="!isReadOnlyForUser"
                         v-show="translation.isDefault && !translation.isOriginalTranslation"
@@ -67,7 +67,7 @@
 <script>
 
 import { isUndefined, isNull, cloneDeep } from 'lodash'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { notice } from '../../../../services/notificationService';
 import { trimText, createQuestionForDeleteConfirmationPopup, createSwitchToTranslationConfirmationPopup } from '../../../../services/utilityService'
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';
@@ -139,7 +139,7 @@ export default {
 
             translation.meta = {};
             translation.meta.fileName = file.name;
-            translation.meta.lastUpdated = moment();
+            translation.meta.lastUpdated = dayjs();
 
             var maxNameLength = 32;
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="UserWasCreatedFormat" xml:space="preserve"><value>Pengguna Kantor Pusat {0} berhasil dibuat.</value></data>
+  <data name="UserNotExists" xml:space="preserve"><value>Tidak dapat memperbarui informasi pengguna karena pengguna tidak ada</value></data>
+  <data name="SupervisorNotFound" xml:space="preserve"><value>Tidak dapat membuat pewawancara. Supervisor yang dipilih tidak ada, dikunci, atau diarsipkan</value></data>
+  <data name="NoPermission" xml:space="preserve"><value>Tidak dapat memperbarui informasi pengguna karena Anda tidak memiliki izin</value></data>
+  <data name="UserWasUpdatedFormat" xml:space="preserve"><value>Informasi tentang &lt;b&gt;{0}&lt;/b&gt; berhasil diperbarui</value></data>
+  <data name="InterviewWasCreated" xml:space="preserve"><value>Wawancara berhasil dibuat.</value></data>
+  <data name="CreateOneMore" xml:space="preserve"><value>Buat satu lagi?</value></data>
+  <data name="QuestionnaireNotFoundFormat" xml:space="preserve"><value>Kuesioner dengan id {0} dan versi {1} tidak dapat ditemukan.</value></data>
+  <data name="QuestionnaireClonedFormat" xml:space="preserve"><value>Kuesioner '{0}' berhasil disalin.</value></data>
+  <data name="QuestionnaireClonedAndRenamedFormat" xml:space="preserve"><value>Kuesioner '{0}' berhasil disalin dengan judul baru '{1}'.</value></data>
+  <data name="ObserverCreatedFormat" xml:space="preserve"><value>Pengguna pengamat &lt;b&gt;{0}&lt;/b&gt; berhasil dibuat.</value></data>
+  <data name="SuccessfullyCreatedFormat" xml:space="preserve"><value>Supervisor &lt;b&gt;{0}&lt;/b&gt; berhasil dibuat.</value></data>
+</root>

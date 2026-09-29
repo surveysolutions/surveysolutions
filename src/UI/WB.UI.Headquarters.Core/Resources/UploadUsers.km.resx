@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AssignedTo" xml:space="preserve"><value>អ្នកត្រួតពិនិត្យ</value></data>
+  <data name="Description" xml:space="preserve"><value>បង្កើតក្រុមអ្នកប្រើប្រាស់ដោយផ្ទុកឡើងឯកសារ</value></data>
+  <data name="Profile" xml:space="preserve"><value>ប្រវត្តិរូបដោយដៃ</value></data>
+  <data name="DownloadTemplateLink" xml:space="preserve"><value>ទាញយកគំរូ .tab សម្រាប់ការផ្ទុកឡើងអ្នកប្រើប្រាស់</value></data>
+  <data name="Email" xml:space="preserve"><value>អ៊ីម៉ែល</value></data>
+  <data name="FullName" xml:space="preserve"><value>ឈ្មោះពេញ</value></data>
+  <data name="ManualSupervisorCreateLink" xml:space="preserve"><value>អ្នកត្រួតពិនិត្យ</value></data>
+  <data name="ManualInterviewerCreateLink" xml:space="preserve"><value>អ្នកសំភាសន៍</value></data>
+  <data name="OptionalInformation" xml:space="preserve"><value>ព័ត៌មានផ្ទាល់ខ្លួនស្ម័គ្រចិត្ត</value></data>
+  <data name="Or" xml:space="preserve"><value>ឬ</value></data>
+  <data name="Password" xml:space="preserve"><value>ពាក្យសម្ងាត់</value></data>
+  <data name="PasswordDescription" xml:space="preserve"><value>ពាក្យសម្ងាត់ត្រូវតែមានលេខយ៉ាងតិចមួយ អក្សរធំមួយ និងអក្សរតូចមួយ</value></data>
+  <data name="Phone" xml:space="preserve"><value>លេខទូរស័ព្ទ</value></data>
+  <data name="RequiredData" xml:space="preserve"><value>ទិន្នន័យដែលត្រូវការសម្រាប់ការបង្កើតអ្នកសំភាសន៍ និងអ្នកត្រួតពិនិត្យ</value></data>
+  <data name="Role" xml:space="preserve"><value>តួនាទី</value></data>
+  <data name="Title" xml:space="preserve"><value>ការបង្កើតអ្នកប្រើប្រាស់ជាច្រើនដោយការផ្ទុកឡើងជាបាច់</value></data>
+  <data name="UploadBtn" xml:space="preserve"><value>ផ្ទុកឡើងឯកសារ .tab</value></data>
+  <data name="UserName" xml:space="preserve"><value>ការចូល</value></data>
+  <data name="UserNameDescription" xml:space="preserve"><value>ឈ្មោះអ្នកប្រើប្រាស់ត្រូវតែរវាង 3 និង 15 តួអក្សរ</value></data>
+  <data name="VerificationFailed" xml:space="preserve"><value>ការផ្ទៀងផ្ទាត់បានបរាជ័យ</value></data>
+  <data name="NoCreatedUsers" xml:space="preserve"><value>គ្មានគណនីអ្នកប្រើប្រាស់ណាត្រូវបានបង្កើត</value></data>
+  <data name="ImportingUserInfo" xml:space="preserve"><value>ការនាំចូលព័ត៌មានអ្នកប្រើប្រាស់ពី</value></data>
+  <data name="ReUploadTabFile" xml:space="preserve"><value>ផ្ទុកឡើងឯកសារ .tab ឡើងវិញ</value></data>
+  <data name="BackToImport" xml:space="preserve"><value>ត្រឡប់ទៅការនាំចូលអ្នកប្រើប្រាស់</value></data>
+  <data name="Uploading" xml:space="preserve"><value>ការនាំចូល {{importedUsersCount}} ពី {{totalUsersToImportCount}}</value></data>
+  <data name="Cancel" xml:space="preserve"><value>បោះបង់</value></data>
+  <data name="Column" xml:space="preserve"><value>ជួរឈរ</value></data>
+  <data name="Line" xml:space="preserve"><value>ជួរដេក</value></data>
+  <data name="AllAccountsCreated" xml:space="preserve"><value>គណនីទាំងអស់ {{total}} ត្រូវបានបង្កើតដោយជោគជ័យ:</value></data>
+  <data name="InterviewersAndSupervisorsCount" xml:space="preserve"><value>អ្នកត្រួតពិនិត្យ {{supervisorsCount}} និងអ្នកសំភាសន៍ {{interviewersCount}}</value></data>
+  <data name="CompleteDescription" xml:space="preserve"><value>អ្នកអាចធ្វើការចាត់ការសម្រាប់ក្រុមទាំងនេះពីផ្នែក 'kuesioner'</value></data>
+  <data name="Questionnaires" xml:space="preserve"><value>កម្រងសំណួរ</value></data>
+  <data name="UploadInProgress" xml:space="preserve"><value>ការព្រមាន: ការផ្ទុកឡើងជាបាច់ដោយ "{{userName}}" កំពុងដំណើរការ</value></data>
+  <data name="UploadInProgressDescription" xml:space="preserve"><value>អ្នកអាចចាប់ផ្តើមរបស់អ្នកនៅពេលដែលបច្ចុប្បន្នបានបញ្ចប់</value></data>
+  <data name="EstimatedTime" xml:space="preserve"><value>ប្រហែល {{estimatedTime}} នៅសល់</value></data>
+  <data name="TimeDetermination" xml:space="preserve"><value>ការកំណត់ពេលវេលា</value></data>
+  <data name="Workspace" xml:space="preserve"><value>កន្លែងធ្វើការ</value></data>
+  <data name="SelectWorkspace" xml:space="preserve"><value>ជ្រើសរើសកន្លែងធ្វើការ</value></data>
+  <data name="SelectWorkspaceDescription" xml:space="preserve"><value>ប្រសិនបើគ្មានកន្លែងធ្វើការដែលបានចាត់ចែងក្នុងឯកសារជាបាច់ ប្រើកន្លែងធ្វើការនេះជាលំនាំដើម</value></data>
+    <data name="AssignedToDescription" xml:space="preserve">
+        <value>ត្រូវការសម្រាប់អ្នកសំភាសន៍ មានឈ្មោះអ្នកប្រើប្រាស់របស់អ្នកត្រួតពិនិត្យ ដែលបុគ្គលនេះនឹងត្រូវបានចាត់តាំងឱ្យ</value>
+    </data>
+</root>

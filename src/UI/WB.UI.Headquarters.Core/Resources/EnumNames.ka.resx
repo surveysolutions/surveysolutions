@@ -162,4 +162,57 @@
   <data name="UserRoles_Supervisor" xml:space="preserve">
     <value>ზედამხედველი</value>
   </data>
+
+
+  <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve">
+    <value>დასრულების ტექსტი</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_Invitation" xml:space="preserve">
+    <value>მისასალმებელი მოწვევა</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_ResumeInvitation" xml:space="preserve">
+    <value>გაგრძელების მოწვევა</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_ResumeWelcome" xml:space="preserve">
+    <value>გაგრძელების სათაური</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve">
+    <value>გამოკითხვის სახელი</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve">
+    <value>დასრულების სათაური</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
+    <value>მისასალმებელი სათაური</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
+    <value>შენიშვნა ზედამხედველისთვის</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
+    <value>დასრულება</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
+    <value>ახალი ინტერვიუს დაწყება</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
+    <value>გაგრძელება</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve">
+    <value>მოწვევა</value>
+  </data>
+
+  <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
+    <value>მისასალმებელი სათაური</value>
+  </data>
 </root>

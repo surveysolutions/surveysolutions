@@ -1,10 +1,17 @@
 import { commandCall } from './apiService';
 import emitter from './emitter';
 import { newGuid } from '../helpers/guid';
-import { useCookies } from 'vue3-cookies';
 import { ref, computed } from 'vue';
-
+import { getCookie, setCookie, removeCookie, hasCookie } from '../helpers/cookies';
 const readyToPaste = ref(null);
+
+function createSourceQuestionnaireRevision(questionnaireId, questionnaireRevision) {
+    if (!questionnaireId) return null;
+
+    return questionnaireRevision
+        ? { questionnaireId, revision: questionnaireRevision }
+        : { questionnaireId };
+}
 
 export const canPaste = computed(() => {
     //console.log('canPaste: ' + readyToPaste.value);
@@ -12,34 +19,33 @@ export const canPaste = computed(() => {
         return readyToPaste.value;
     }
 
-    const cookies = useCookies();
-    readyToPaste.value = cookies.cookies.isKey('itemToCopy');
+    readyToPaste.value = hasCookie('itemToCopy');
     return readyToPaste.value;
 });
 
-export function copyItem(questionnaireId, item) {
-    const cookies = useCookies();
-
+export function copyItem(questionnaire, item) {
     var itemIdToCopy = item.itemId;
 
     var itemToCopyType = (item.itemType === 'Group' && item.isRoster === true) ? 'Roster' : item.itemType;
 
     var itemToCopy = {
-        questionnaireId: questionnaireId,
+        questionnaireId: questionnaire.questionnaireId,
+        questionnaireRevision: createSourceQuestionnaireRevision(
+            questionnaire.questionnaireId,
+            questionnaire.questionnaireRevision
+        ),
         itemId: itemIdToCopy,
         itemType: itemToCopyType
     };
 
-    cookies.cookies.remove('itemToCopy');
-    cookies.cookies.set('itemToCopy', itemToCopy, { expires: 7 });
+    removeCookie('itemToCopy');
+    setCookie('itemToCopy', itemToCopy, 7);
 
     readyToPaste.value = true;
 }
 
 export async function pasteItemInto(questionnaireId, parentId) {
-    const cookies = useCookies();
-
-    var itemToCopy = cookies.cookies.get('itemToCopy');
+    var itemToCopy = getCookie('itemToCopy');
     if (!itemToCopy) return;
 
     const newId = newGuid();
@@ -49,7 +55,8 @@ export async function pasteItemInto(questionnaireId, parentId) {
         parentId,
         itemToCopy.questionnaireId,
         itemToCopy.itemId,
-        newId
+        newId,
+        itemToCopy.questionnaireRevision
     );
 
     return {
@@ -59,15 +66,14 @@ export async function pasteItemInto(questionnaireId, parentId) {
 }
 
 export async function pasteItemAfter(questionnaireId, afterNodeId) {
-    const cookies = useCookies();
-
-    var itemToCopy = cookies.cookies.get('itemToCopy');
+    var itemToCopy = getCookie('itemToCopy');
     if (!itemToCopy) return;
 
     const newId = newGuid();
 
     var command = {
         sourceQuestionnaireId: itemToCopy.questionnaireId,
+        sourceQuestionnaireRevision: itemToCopy.questionnaireRevision,
         sourceItemId: itemToCopy.itemId,
         entityId: newId,
         questionnaireId: questionnaireId,
@@ -92,10 +98,12 @@ export function pasteItemIntoDetailed(
     parentId,
     sourceQuestionnaireId,
     sourceItemId,
-    newId
+    newId,
+    sourceQuestionnaireRevision = null
 ) {
     var command = {
         sourceQuestionnaireId: sourceQuestionnaireId,
+        sourceQuestionnaireRevision: sourceQuestionnaireRevision,
         sourceItemId: sourceItemId,
         parentId: parentId,
         entityId: newId,

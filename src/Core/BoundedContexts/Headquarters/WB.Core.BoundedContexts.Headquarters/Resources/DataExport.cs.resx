@@ -163,7 +163,7 @@
     <value>Export dat</value>
   </data>
   <data name="DataExportApi" xml:space="preserve">
-    <value>Data export API</value>
+    <value>API exportu dat</value>
   </data>
   <data name="DataFormat" xml:space="preserve">
     <value>Formát dat</value>
@@ -271,7 +271,7 @@
     <value>Binární data. Archivujte s binárními daty (např. obrázky, zvuk)</value>
   </data>
   <data name="DataType_Ddi" xml:space="preserve">
-    <value>DDI. Data Documentation Initiative XML data</value>
+    <value>DDI. XML data iniciativy Data Documentation Initiative</value>
   </data>
   <data name="DataType_MainSurveyData" xml:space="preserve">
     <value>Údaje z hlavního šetření. Zip archiv s hlavními daty rozhovoru</value>
@@ -286,7 +286,7 @@
     <value>DDI</value>
   </data>
   <data name="DDIDescription" xml:space="preserve">
-    <value>Data Documentation Initiative XML data</value>
+    <value>XML data iniciativy Data Documentation Initiative</value>
   </data>
   <data name="Dropbox" xml:space="preserve">
     <value>Dropbox</value>

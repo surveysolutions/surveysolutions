@@ -63,7 +63,8 @@ namespace WB.UI.Shared.Enumerator.Activities.Dashboard
 
         public void MenuClick(object o, EventArgs eventArgs)
         {
-            if (GetItem() is IDashboardViewItem dashboardItem)
+            var item = GetItem();
+            if (item is IDashboardViewItem dashboardItem)
             {
                 var popup = new PopupMenu(this.DashboardItem.Context, this.MenuHandle, GravityFlags.Left);
                 var actions = dashboardItem.ContextMenu.Where(a => a.Command.CanExecute());

@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import { gql, gqlRequest } from '~/hqapp/api/graphql'
 import * as toastr from 'toastr'
 
 const deleteCalendarEventMutation =
@@ -16,7 +16,7 @@ const updateCalendarEventMutation =
         }`
 
 const addAssignmentCalendarEventMutation =
-        gql`mutation addAssignmentCalendarEvent($workspace: String!, $assignmentId: Int!, $newStart: DateTime!, $comment: String, $startTimezone: String!) {
+    gql`mutation addAssignmentCalendarEvent($workspace: String!, $assignmentId: Int!, $newStart: DateTime!, $comment: String, $startTimezone: String!) {
             addAssignmentCalendarEvent(workspace: $workspace, assignmentId: $assignmentId, newStart: $newStart, comment: $comment, startTimezone: $startTimezone) {
                     publicKey
                 }
@@ -29,30 +29,23 @@ const addInterviewCalendarEventMutation =
             }
         }`
 
-export function deleteCalendarEvent(apollo, variables, callback) {
-
-    executeMutation(apollo, deleteCalendarEventMutation, variables, callback)
+export function deleteCalendarEvent(variables, callback) {
+    executeMutation(deleteCalendarEventMutation, variables, callback)
 }
 
-export function addAssignmentCalendarEvent(apollo, variables, callback) {
-
-    executeMutation(apollo, addAssignmentCalendarEventMutation, variables, callback)
+export function addAssignmentCalendarEvent(variables, callback) {
+    executeMutation(addAssignmentCalendarEventMutation, variables, callback)
 }
 
-export function updateCalendarEvent(apollo, variables, callback) {
-
-    executeMutation(apollo, updateCalendarEventMutation, variables, callback)
+export function updateCalendarEvent(variables, callback) {
+    executeMutation(updateCalendarEventMutation, variables, callback)
 }
-export function addInterviewCalendarEvent(apollo, variables, callback) {
-
-    executeMutation(apollo, addInterviewCalendarEventMutation, variables, callback)
+export function addInterviewCalendarEvent(variables, callback) {
+    executeMutation(addInterviewCalendarEventMutation, variables, callback)
 }
 
-function executeMutation(apollo, mutation, variables, callback) {
-    apollo.mutate({
-        mutation: mutation,
-        variables: variables,
-    }).then(response => {
+function executeMutation(mutation, variables, callback) {
+    gqlRequest(mutation, variables).then(() => {
         callback()
     }).catch(err => {
         console.error(err)

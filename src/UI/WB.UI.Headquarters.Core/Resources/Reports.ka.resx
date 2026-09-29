@@ -243,4 +243,205 @@
   <data name="Version" xml:space="preserve">
     <value>ვერსია</value>
   </data>
+
+
+  <data name="CumulativeInterviewChartSubtitle" xml:space="preserve">
+    <value>ინტერვიუების კუმულაციური დიაგრამა აჩვენებს თითოეულ სტატუსში მყოფი ინტერვიუების რაოდენობის ცვლილებას დროში</value>
+  </data>
+
+  <data name="Interviewers" xml:space="preserve">
+    <value>ინტერვიუერები</value>
+  </data>
+
+  <data name="ImportUsersTemplate" xml:space="preserve">
+    <value>მომხმარებლების იმპორტის შაბლონი</value>
+  </data>
+
+  <data name="TeamsAndStatuses_SupervisorSubtitle" xml:space="preserve">
+    <value>გუნდებისა და სტატუსების ანგარიში აჩვენებს თითოეულ სტატუსში მყოფი ინტერვიუების რაოდენობას ინტერვიუერის მიხედვით</value>
+  </data>
+
+  <data name="TeamsAndStatuses_HeadquartersSubtitle" xml:space="preserve">
+    <value>გუნდებისა და სტატუსების ანგარიში აჩვენებს თითოეულ სტატუსში მყოფი ინტერვიუების რაოდენობას გუნდების მიხედვით</value>
+  </data>
+
+  <data name="StatusDuration" xml:space="preserve">
+    <value>ინტერვიუს სტატუსში ყოფნის დღეების რაოდენობა</value>
+  </data>
+
+  <data name="LastUpdatedDate" xml:space="preserve">
+    <value>განახლდა</value>
+  </data>
+
+  <data name="Updated" xml:space="preserve">
+    <value>განახლდა {0}</value>
+  </data>
+
+  <data name="Updating" xml:space="preserve">
+    <value>მიმდინარეობს განახლება</value>
+  </data>
+
+  <data name="UpdateNow" xml:space="preserve">
+    <value>ახლავე განახლება</value>
+  </data>
+
+  <data name="Question" xml:space="preserve">
+    <value>კითხვა</value>
+  </data>
+
+  <data name="SelectQuestion" xml:space="preserve">
+    <value>აირჩიეთ კითხვა</value>
+  </data>
+
+  <data name="ConditionQuestion" xml:space="preserve">
+    <value>პირობის კითხვა</value>
+  </data>
+
+  <data name="TeamLeadsOnly" xml:space="preserve">
+    <value>გუნდების მიხედვით</value>
+  </data>
+
+  <data name="WithInterviewers" xml:space="preserve">
+    <value>გუნდის წევრების მიხედვით</value>
+  </data>
+
+  <data name="PivotView" xml:space="preserve">
+    <value>პივოტ ცხრილი</value>
+  </data>
+
+  <data name="QuestionText" xml:space="preserve">
+    <value>კითხვის ტექსტი</value>
+  </data>
+
+  <data name="Average" xml:space="preserve">
+    <value>საშუალო</value>
+  </data>
+
+  <data name="ByAnswerValue" xml:space="preserve">
+    <value>ფილტრი რიცხვითი მნიშვნელობით</value>
+  </data>
+
+  <data name="Count" xml:space="preserve">
+    <value>რაოდენობა</value>
+  </data>
+
+  <data name="Max" xml:space="preserve">
+    <value>მაქსიმუმი</value>
+  </data>
+
+  <data name="Min" xml:space="preserve">
+    <value>მინიმუმი</value>
+  </data>
+
+  <data name="Percentile05" xml:space="preserve">
+    <value>პროცენტილი 05</value>
+  </data>
+
+  <data name="Percentile50" xml:space="preserve">
+    <value>პროცენტილი 50</value>
+  </data>
+
+  <data name="Percentile95" xml:space="preserve">
+    <value>პროცენტილი 95</value>
+  </data>
+
+  <data name="SelectConditionQuestion" xml:space="preserve">
+    <value>აირჩიეთ პირობის კითხვა</value>
+  </data>
+
+  <data name="Sum" xml:space="preserve">
+    <value>ჯამი</value>
+  </data>
+
+  <data name="ViewOptions" xml:space="preserve">
+    <value>ხედვის პარამეტრები</value>
+  </data>
+
+  <data name="QuestionLabel" xml:space="preserve">
+    <value>კითხვის იარლიყი</value>
+  </data>
+
+  <data name="Median" xml:space="preserve">
+    <value>მედიანა</value>
+  </data>
+
+  <data name="Supervisor" xml:space="preserve">
+    <value>სუპერვაიზერი</value>
+  </data>
+
+  <data name="HeatMapView" xml:space="preserve">
+    <value>თბური რუკის ფენის ჩვენება</value>
+  </data>
+
+  <data name="HeatRadius" xml:space="preserve">
+    <value>თბური რუკის რადიუსი</value>
+  </data>
+
+  <data name="MapDataLoading" xml:space="preserve">
+    <value>რუკის მონაცემები იტვირთება</value>
+  </data>
+
+  <data name="ClusterInfo" xml:space="preserve">
+    <value>ეს არეალი შეიცავს</value>
+  </data>
+
+  <data name="AssignReceivedConfirm" xml:space="preserve">
+    <value>ვაცნობიერებ, რომ ეს ინტერვიუ უკვე მიღებულია ტაბლეტზე</value>
+  </data>
+
+  <data name="AssignReceivedWarning" xml:space="preserve">
+    <value>ამჟამინდელ პასუხისმგებელ ინტერვიუერს გადანაწილების შესახებ შეტყობინება არ გაეგზავნება მომდევნო სინქრონიზაციამდე. თუ მან უკვე დაიწყო ინტერვიუზე მუშაობა, მომდევნო სინქრონიზაციამდე შეყვანილი ყველა მონაცემი წაიშლება!</value>
+  </data>
+
+  <data name="QuestionnaireCompatibilityIssues_UnknownAnswer" xml:space="preserve">
+    <value>არსებობს კითხვარის ვერსიებს შორის თავსებადობის პრობლემები. კითხვარის ადრინდელ ვერსიებში მოცემული პასუხები, რომლებიც ბოლო ვერსიაში აღარ არსებობს, იგნორირებული იქნა.</value>
+  </data>
+
+  <data name="ToAllQuestionnaires" xml:space="preserve">
+    <value>კითხვარებზე დაბრუნება</value>
+  </data>
+
+  <data name="SaveAsImage" xml:space="preserve">
+    <value>სურათად შენახვა</value>
+  </data>
+
+  <data name="ThisWeek" xml:space="preserve">
+    <value>ეს კვირა</value>
+  </data>
+
+  <data name="LastWeek" xml:space="preserve">
+    <value>გასული კვირა</value>
+  </data>
+
+  <data name="ThisMonth" xml:space="preserve">
+    <value>ეს თვე</value>
+  </data>
+
+  <data name="LastMonth" xml:space="preserve">
+    <value>გასული თვე</value>
+  </data>
+
+  <data name="PreviousWeek" xml:space="preserve">
+    <value>წინა კვირა</value>
+  </data>
+
+  <data name="PreviousMonth" xml:space="preserve">
+    <value>წინა თვე</value>
+  </data>
+
+  <data name="LastNDays" xml:space="preserve">
+    <value>ბოლო {{days}} დღე</value>
+  </data>
+
+  <data name="QuickRanges" xml:space="preserve">
+    <value>სწრაფი დიაპაზონები</value>
+  </data>
+
+  <data name="RangeRelativeToData" xml:space="preserve">
+    <value>დიაპაზონი მონაცემებთან მიმართებით</value>
+  </data>
+
+  <data name="AllData" xml:space="preserve">
+    <value>ყველა მონაცემი</value>
+  </data>
 </root>

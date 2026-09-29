@@ -196,8 +196,10 @@
 </template>
 <script lang="js">
 import axios from 'axios'
-import { filter } from 'lodash'
-import { Modal } from 'bootstrap'
+import { filter } from 'lodash-es'
+import Modal from 'bootstrap/js/dist/modal'
+import Collapse from 'bootstrap/js/dist/collapse'
+import 'bootstrap/js/dist/dropdown'
 import { nextTick } from 'vue'
 
 export default {
@@ -218,15 +220,19 @@ export default {
         }
     },
     mounted() {
-
-        $('.navbar-toggle').click(function () {
-            $('.navbar-collapse').fadeToggle()
-            $('.navbar-collapse').animate({ height: '100%' }, 0)
-            $('.top-menu').toggleClass('top-animate')
-            $('.mid-menu').toggleClass('mid-animate')
-            $('.bottom-menu').toggleClass('bottom-animate')
-
-        })
+        const navbarEl = document.querySelector('#navbar')
+        if (navbarEl) {
+            navbarEl.addEventListener('show.bs.collapse', () => {
+                document.querySelector('.top-menu')?.classList.add('top-animate')
+                document.querySelector('.mid-menu')?.classList.add('mid-animate')
+                document.querySelector('.bottom-menu')?.classList.add('bottom-animate')
+            })
+            navbarEl.addEventListener('hide.bs.collapse', () => {
+                document.querySelector('.top-menu')?.classList.remove('top-animate')
+                document.querySelector('.mid-menu')?.classList.remove('mid-animate')
+                document.querySelector('.bottom-menu')?.classList.remove('bottom-animate')
+            })
+        }
     },
     updated() {
         document.title = this.$config.splashScreen ? this.$t('WebInterviewUI.LoadingQuestionnaire') : `${this.$store.state.webinterview.interviewKey} | ${this.questionnaireTitle} | ${this.$t('WebInterviewUI.WebInterview')}`
@@ -274,7 +280,7 @@ export default {
             return this.$config.getScenarioUrl
         },
         inDevMode() {
-            return this.$store.state.webinterview.isDevMode || false;
+            return this.$store.state.webinterview.isDevMode || false
         },
     },
     methods: {
@@ -297,11 +303,11 @@ export default {
             }).then(function (response) {
                 if (response && response.data !== '' && response.data.link) {
                     try {
-                        const linkUrl = new URL(response.data.link);
+                        const linkUrl = new URL(response.data.link)
                         if (linkUrl.hostname === window.location.hostname)
                             self.continueLink = response.data.link
                     } catch (e) {
-                        return false;
+                        return false
                     }
                 }
             }).catch(function (error) {

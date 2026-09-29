@@ -1,13 +1,20 @@
 <template>
-    <ProfileLayout ref="profile" :role="userInfo.role" :isOwnProfile="userInfo.isOwnProfile"
-        :userName="userInfo.userName" :canChangePassword="userInfo.canChangePassword" :userId="userInfo.userId"
-        :currentTab="currentTab" :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted">
+    <ProfileLayout ref="profile"
+        :role="userInfo.role"
+        :isOwnProfile="userInfo.isOwnProfile"
+        :userName="userInfo.userName"
+        :canChangePassword="userInfo.canChangePassword"
+        :userId="userInfo.userId"
+        :currentTab="currentTab"
+        :canGenerateToken="userInfo.canGetApiToken"
+        :isRestricted="userInfo.isRestricted">
 
         <div>
             <h2>{{ $t('Strings.HQ_Views_DisableTwoFactorAuth_Title') }}</h2>
         </div>
         <div>
-            <div class="alert alert-warning" role="alert">
+            <div class="alert alert-warning"
+                role="alert">
                 <p>
                     <strong>{{ $t('Pages.Disable2faLine1') }}</strong>
                 </p>
@@ -19,9 +26,12 @@
         </div>
         <div>
             <div class="block-filter">
-                <button type="submit" class="btn btn-danger" id="btnDisable2fa"
-                    v-bind:disabled="userInfo.isObserving || userInfo.isRestricted" @click="disable2fa">{{
-                        $t('Pages.Disable2fa') }}</button>
+                <button type="submit"
+                    class="btn btn-danger"
+                    id="btnDisable2fa"
+                    v-bind:disabled="userInfo.isObserving || userInfo.isRestricted"
+                    @click="disable2fa">{{
+                    $t('Pages.Disable2fa') }}</button>
             </div>
         </div>
 

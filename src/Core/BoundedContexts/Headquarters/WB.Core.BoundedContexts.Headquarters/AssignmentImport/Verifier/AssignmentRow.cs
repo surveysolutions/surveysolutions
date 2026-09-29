@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         public AssignmentRecordAudio RecordAudio { get; set; }
         public AssignmentComments Comments { get; set; }
         public AssignmentTargetArea TargetArea { get; set; }
+        public AssignmentAudioAuditScope AudioAuditScope { get; set; }
 
         public override string ToString() =>
             $"{InterviewIdValue?.Value}[{string.Join("_", RosterInstanceCodes.Select(x => x.Value))}]";
@@ -212,4 +213,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
     
     [DebuggerDisplay("{Value}")]
     public class AssignmentTargetArea : AssignmentValue { }
+
+    [DebuggerDisplay("{Value}")]
+    public class AssignmentAudioAuditScope : AssignmentValue
+    {
+        public string[] VariableNames { get; set; } = Array.Empty<string>();
+    }
 }

@@ -1,4 +1,5 @@
 <template>
+
     <div class="questionnaire-tree-holder col-xs-6">
         <div class="chapter-title" :class="{ selected: chapterId === selectedItemId }" @click.stop="
             $router.push({
@@ -15,8 +16,9 @@
                         :title="$t('QuestionnaireEditor.Search')"></span>
                     <input id="chapterSearch" type="text" v-model="search.searchText" focus-on-out="focusSearch"
                         hotkey="{esc: hideSearch}" hotkey-allow-in="INPUT" />
-                    <span class="input-group-addon glyphicon glyphicon-option-horizontal pointer" style="padding-top:10px;"
-                        @click="showFindReplaceDialog()" :title="$t('QuestionnaireEditor.FindReplaceTitle')"></span>
+                    <span class="input-group-addon glyphicon glyphicon-option-horizontal pointer"
+                        style="padding-top:10px;" @click="showFindReplaceDialog()"
+                        :title="$t('QuestionnaireEditor.FindReplaceTitle')"></span>
                 </div>
                 <button @click.stop="hideSearch()" type="button" :title="$t('QuestionnaireEditor.Cancel')"></button>
             </div>
@@ -112,17 +114,15 @@
                 <div class="start-box" v-if="showStartScreen">
                     <p>{{ $t('QuestionnaireEditor.EmptySectionLine1') }}</p>
                     <p>
-                        <span v-dompurify-html="emptySectionHtmlLine1"> </span>
+                        <span v-html="sanitizeMarkup(emptySectionHtmlLine1)"> </span>
                         <br />
-                        <span v-dompurify-html="emptySectionHtmlLine3">
-                            <span class="left-panel-glyph"></span>
-                        </span>
+                        <span v-html="sanitizeMarkup(emptySectionHtmlLine3)"></span>
                     </p>
 
                     <p>
                         <span>{{ $t('QuestionnaireEditor.EmptySectionLine4') }}</span>
                         <br />
-                        <span v-dompurify-html="emptySectionHtmlLine2"></span>
+                        <span v-html="sanitizeMarkup(emptySectionHtmlLine2)"></span>
                     </p>
                 </div>
             </div>
@@ -167,7 +167,8 @@ import { canPaste, pasteItemInto } from '../../../services/copyPasteService'
 import Help from './Help.vue';
 
 import { migrateToNewVersion } from '../../../services/questionnaireService'
-import { useMagicKeys } from '@vueuse/core';
+import { useKeyShortcut } from '../../../composables/useKeyShortcut';
+import { sanitizeMarkup } from '../../../services/utilityService';
 
 export default {
     name: 'Tree',
@@ -218,28 +219,17 @@ export default {
         const treeStore = useTreeStore();
         const searchDialog = ref(null);
 
-        const { ctrl_f } = useMagicKeys({
-            passive: false,
-            onEventFired(e) {
-                if (e.ctrlKey && e.key === 'f' && e.type === 'keydown')
-                    e.preventDefault()
-            },
-        })
+        const ctrl_f = useKeyShortcut(e => e.ctrlKey && e.key === 'f');
 
-        const { ctrl_h } = useMagicKeys({
-            passive: false,
-            onEventFired(e) {
-                if (e.ctrlKey && e.key === 'h' && e.type === 'keydown')
-                    e.preventDefault()
-            },
-        })
+        const ctrl_h = useKeyShortcut(e => e.ctrlKey && e.key === 'h');
 
         return {
             treeStore,
             searchDialog,
             ctrl_f,
             ctrl_h,
-            canPaste
+            canPaste,
+            sanitizeMarkup
         };
     },
     async beforeMount() {
@@ -330,6 +320,7 @@ export default {
         emptySectionHtmlLine3() {
             const panel = '<span class="left-panel-glyph"></span>';
             return this.$t('QuestionnaireEditor.EmptySectionLine3', { panel: panel });
+
         }
     },
 

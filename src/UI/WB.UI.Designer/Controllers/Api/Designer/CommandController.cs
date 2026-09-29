@@ -258,7 +258,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         public async Task<IActionResult> Post([FromBody]CommandExecutionModel model)
         {
             if (model?.Command == null || model?.Type == null)
-                throw new InvalidOperationException("Invalid command");
+                return this.Error((int)HttpStatusCode.NotAcceptable, "Invalid command");
 
             try
             {

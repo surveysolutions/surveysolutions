@@ -127,7 +127,7 @@
     <value>Një instrument bashkëpunues për të krijuar pyetësorë për platformën CAPI/CAWI të Bankës Botërore.</value>
   </data>
   <data name="AppName" xml:space="preserve">
-    <value>Questionnaire Designer</value>
+    <value>Projektues pyetësorësh</value>
   </data>
   <data name="BackToLogin" xml:space="preserve">
     <value>Kthehu te Hyrja</value>
@@ -278,5 +278,37 @@
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Mirë se vini në Survey Solutions</value>
+  </data>
+  <data name="LastLoginDate" xml:space="preserve">
+    <value>Data e hyrjes së fundit</value>
+  </data>
+
+
+  <data name="Forum" xml:space="preserve">
+    <value>Forum</value>
+  </data>
+
+  <data name="LogoutText" xml:space="preserve">
+    <value>Ju u larguat me sukses nga aplikacioni.</value>
+  </data>
+
+  <data name="LockedOut" xml:space="preserve">
+    <value>Llogari e bllokuar</value>
+  </data>
+
+  <data name="LockedOutText" xml:space="preserve">
+    <value>Llogaria juaj është e bllokuar. Kontaktoni administratorin për të zhbllokuar llogarinë tuaj</value>
+  </data>
+
+  <data name="PasswordEmailSent" xml:space="preserve">
+    <value>Ju lutemi, kontrolloni emailin tuaj për të rivendosur fjalëkalimin.</value>
+  </data>
+
+  <data name="EmailChangeShouldBeConfirmed" xml:space="preserve">
+    <value>Ju lutemi, ndiqni udhëzimet e dërguara në emailin e dhënë ({0}) për të konfirmuar ndryshimin e emailit.</value>
+  </data>
+
+  <data name="PendingEmailUpdate" xml:space="preserve">
+    <value>Përditësim në pritje te {0}</value>
   </data>
 </root>

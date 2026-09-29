@@ -663,7 +663,8 @@ namespace WB.Tests.Abc.TestFactories
             string questionText = null,
             IEnumerable<ValidationCondition> validationConditions = null, 
             Guid? linkedToRosterId = null,
-            IEnumerable<Answer> specialValues = null)
+            IEnumerable<Answer> specialValues = null,
+            bool isNonNegative = false)
             => new NumericQuestion
             {
                 QuestionText = questionText ?? "text",
@@ -678,7 +679,8 @@ namespace WB.Tests.Abc.TestFactories
                 UseFormatting = useFormatting,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 LinkedToRosterId = linkedToRosterId,
-                Answers = new List<Answer>(specialValues ?? new Answer[] { })
+                Answers = new List<Answer>(specialValues ?? new Answer[] { }),
+                IsNonNegative = isNonNegative
             };
 
         public NumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -705,7 +707,8 @@ namespace WB.Tests.Abc.TestFactories
             IEnumerable<ValidationCondition> validationConditions = null,
             int? countOfDecimalPlaces = null,
             IEnumerable<Answer> specialValues = null, 
-            bool preFilled = false)
+            bool preFilled = false,
+            bool isNonNegative = false)
             => new NumericQuestion
             {
                 PublicKey = id ?? Guid.NewGuid(),
@@ -718,6 +721,7 @@ namespace WB.Tests.Abc.TestFactories
                 CountOfDecimalPlaces = countOfDecimalPlaces,
                 Answers = new List<Answer>(specialValues ?? new Answer[] { }),
                 Featured = preFilled,
+                IsNonNegative = isNonNegative,
             };
 
         public Answer Option(string value = null, string text = null, string parentValue = null, Guid? id = null)
@@ -1619,6 +1623,10 @@ namespace WB.Tests.Abc.TestFactories
             => Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
                     .NumericIntegerAnswer.FromInt(i);
 
+        public NumericRealAnswer NumericRealAnswer(double d)
+            => Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
+                    .NumericRealAnswer.FromDouble(d);
+
         public YesNoAnswer YesNoAnswer(IEnumerable<AnsweredYesNoOption> answer)
             => Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
                     .YesNoAnswer.FromAnsweredYesNoOptions(answer);
@@ -1783,7 +1791,8 @@ namespace WB.Tests.Abc.TestFactories
             Guid? publicKey = null,
             bool isAudioRecordingEnabled = false,
             List<InterviewAnswer> answers = null,
-            List<IdentifyingAnswer> identifyingAnswers = null
+            List<IdentifyingAnswer> identifyingAnswers = null,
+            List<string> audioAuditScope = null
             )
         {
             var result = new Assignment();
@@ -1835,6 +1844,7 @@ namespace WB.Tests.Abc.TestFactories
             result.Password = password;
             result.WebMode = webMode;
             result.AudioRecording = isAudioRecordingEnabled;
+            result.AudioAuditScope = audioAuditScope ?? new List<string>();
             result.Answers = answers ?? new List<InterviewAnswer>();
             result.IdentifyingData = identifyingAnswers ?? new List<IdentifyingAnswer>();
 
@@ -1914,6 +1924,12 @@ namespace WB.Tests.Abc.TestFactories
             public AssignmentDocumentBuilder WithResponsible(Guid responsibleId)
             {
                 this._entity.ResponsibleId = responsibleId;
+                return this;
+            }
+
+            public AssignmentDocumentBuilder WithAudioAuditScope(params string[] variableNames)
+            {
+                this._entity.AudioAuditScope = variableNames?.ToList() ?? new List<string>();
                 return this;
             }
 
@@ -2105,6 +2121,7 @@ namespace WB.Tests.Abc.TestFactories
             AssignmentEmail assignmentEmail = null,
             AssignmentPassword assignmentPassword = null,
             AssignmentWebMode assignmentWebMode = null,
+            AssignmentTargetArea targetArea = null,
             params BaseAssignmentValue[] answers) => new PreloadingAssignmentRow
         {
             FileName = fileName,
@@ -2116,7 +2133,8 @@ namespace WB.Tests.Abc.TestFactories
             Answers = answers,
             Email = assignmentEmail,
             Password = assignmentPassword,
-            WebMode = assignmentWebMode
+            WebMode = assignmentWebMode,
+            TargetArea = targetArea
             };
 
         public AssignmentResponsible AssignmentResponsible(string responsibleName, UserToVerify userInfo = null) => new AssignmentResponsible
@@ -2130,6 +2148,12 @@ namespace WB.Tests.Abc.TestFactories
         {
             Value = email,
             Column = ServiceColumns.EmailColumnName
+        };
+
+        public AssignmentTargetArea AssignmentTargetArea(string targetArea) => new AssignmentTargetArea
+        {
+            Value = targetArea,
+            Column = ServiceColumns.TargetAreaColumnName
         };
 
         public AssignmentWebMode AssignmentWebMode(bool? webMode) => new AssignmentWebMode
@@ -2354,7 +2378,17 @@ namespace WB.Tests.Abc.TestFactories
             IServiceLocator serviceLocator,
             IViewModelNavigationService viewModelNavigationService = null)
         {
-            return new InterviewerAssignmentDashboardItemViewModel(serviceLocator, 
+            // Ensure IEnumeratorSettings is available (callers may pass a partial mock)
+            var settings = Mock.Of<IEnumeratorSettings>(s =>
+                s.AllowSupervisorChangeAssignmentStatus == true &&
+                s.AllowInterviewerChangeAssignmentStatus == true);
+            var locatorMock = new Mock<IServiceLocator>();
+            locatorMock.Setup(l => l.GetInstance<IEnumeratorSettings>()).Returns(settings);
+            // Forward all other calls to the provided locator
+            locatorMock.Setup(l => l.GetInstance(It.IsAny<Type>()))
+                .Returns<Type>(t => serviceLocator.GetInstance(t));
+
+            return new InterviewerAssignmentDashboardItemViewModel(locatorMock.Object, 
                 viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
                 Mock.Of<IMapInteractionService>(),
                 Mock.Of<IUserInteractionService>());

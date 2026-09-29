@@ -124,7 +124,7 @@
     <value>Tipo de evento</value>
   </data>
   <data name="Log" xml:space="preserve">
-    <value>Log</value>
+    <value>Registro</value>
   </data>
   <data name="LogDate" xml:space="preserve">
     <value>Data do log</value>

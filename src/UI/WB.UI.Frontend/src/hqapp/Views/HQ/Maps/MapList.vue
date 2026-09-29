@@ -46,7 +46,7 @@
 import { DateFormats, humanFileSize } from '~/shared/helpers'
 import moment from 'moment'
 import * as toastr from 'toastr'
-import gql from 'graphql-tag'
+import { gql, gqlRequest } from '~/hqapp/api/graphql'
 const query = gql`query MapsList($workspace: String!, $order: [MapsSort!], $skip: Int, $take: Int, $where: MapsFilter) {
   maps(workspace: $workspace, order: $order, skip: $skip, take: $take, where: $where) {
     totalCount
@@ -96,7 +96,7 @@ export default {
                 return
             }
 
-            const self = this;
+            const self = this
 
             const statusupdater = this.updateStatus
             const reloader = this.reload
@@ -104,9 +104,7 @@ export default {
             const fd = new FormData()
             var fileToUpload = this.$refs.uploader.files[0]
 
-            var filesize = ((fileToUpload.size / 1024) / 1024).toFixed(4)
-
-            if (filesize >= 1024) {
+            if (fileToUpload.size >= 500 * 1024 * 1024) {
                 statusupdater(self.$t('Pages.Map_UploadingFileTooBig'))
                 return
             }
@@ -163,18 +161,18 @@ export default {
             this.deleteMapName = fileName
             this.$refs.confirmDiscard.promt(ok => {
                 if (ok) {
-                    self.$apollo.mutate({
-                        mutation: gql`
+                    gqlRequest(
+                        gql`
                                 mutation deleteMap($workspace: String!, $fileName: String!) {
                                     deleteMap(workspace: $workspace, fileName: $fileName) {
                                         fileName
                                     }
                                 }`,
-                        variables: {
+                        {
                             'fileName': fileName,
                             workspace: self.$store.getters.workspace,
                         },
-                    }).then(response => {
+                    ).then(response => {
                         self.$refs.table.reload()
                     }).catch(err => {
                         console.error(err)
@@ -206,7 +204,7 @@ export default {
                         title: this.$t('Pages.MapList_MapName'),
                         render(data) {
                             return `<a href="${self.$hq.basePath}Maps/Details?mapname=${encodeURIComponent(data)}">${data}</a>`
-                        }
+                        },
                     },
                     {
                         data: 'fileName',
@@ -284,12 +282,8 @@ export default {
                         variables.where = where
                     }
 
-                    self.$apollo.query({
-                        query,
-                        variables: variables,
-                        fetchPolicy: 'network-only',
-                    }).then(response => {
-                        const data = response.data.maps
+                    gqlRequest(query, variables).then(response => {
+                        const data = response.maps
                         self.totalRows = data.totalCount
                         self.filteredCount = data.filteredCount
                         callback({

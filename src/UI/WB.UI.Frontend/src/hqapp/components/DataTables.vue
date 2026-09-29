@@ -30,6 +30,8 @@
             </a>
         </div>
         <slot />
+        <DataTableContextMenu :visible="contextMenu.visible" :items="contextMenu.items" :x="contextMenu.x"
+            :y="contextMenu.y" @close="contextMenu.visible = false" />
     </div>
 </template>
 
@@ -40,11 +42,9 @@ import DataTablesLib from 'datatables.net'
 import 'datatables.net-select'
 DataTable.use(DataTablesLib)
 
-import 'jquery-contextmenu'
-import 'jquery-contextmenu/dist/jquery.contextMenu.css'
-import 'jquery-highlight'
 import './datatable.plugins'
-import { template, debounce, includes, without, assign } from 'lodash'
+import DataTableContextMenu from './DataTableContextMenu.vue'
+import { template, debounce, includes, without, assign } from 'lodash-es'
 
 $.fn.dataTable.ext.errMode = function (a, b, c, d) {
     // swallow all errors for production
@@ -66,6 +66,7 @@ var checkBox = template(
 
 export default {
     name: 'DataTable',
+    components: { DataTableContextMenu },
     props: {
         addParamsToRequest: {
             type: Function,
@@ -148,6 +149,18 @@ export default {
                 csv: null,
                 tab: null,
             },
+            contextMenu: {
+                visible: false,
+                items: [],
+                x: 0,
+                y: 0,
+            },
+        }
+    },
+
+    beforeUnmount() {
+        if (this.$refs.table) {
+            $(this.$refs.table).off('click.dt-contextmenu')
         }
     },
 
@@ -202,15 +215,15 @@ export default {
                     },
                 },
                 orderMulti: this.multiorder,
-                searchHighlight: true,
                 pagingType: this.pagingType,
                 lengthChange: false, // do not show page size selector
                 pageLength: this.pageLength, // page size
                 dom: 'frtp',
                 conditionalPaging: true,
+                searchHighlight: true,
                 paging: !this.noPaging,
                 searching: !this.noSearch,
-                autoWidth: false
+                autoWidth: false,
             }
 
             if (this.mutliRowSelect) {
@@ -319,16 +332,18 @@ export default {
             }
 
             if (shouldDestroy && this.table != null) {
+                $(this.$refs.table).off('click.dt-contextmenu')
+                this.contextMenu.visible = false
                 this.table.destroy()
                 $(this.$refs.header).empty()
                 $(this.$refs.body).empty()
             }
 
             $.extend(true, $.fn.dataTable.defaults, {
-                "columnDefs": [
-                    { "targets": '_all', "render": $.fn.dataTable.render.text() }
-                ]
-            });
+                'columnDefs': [
+                    { 'targets': '_all', 'render': $.fn.dataTable.render.text() },
+                ],
+            })
 
             this.table = $(this.$refs.table).DataTable(options)
 
@@ -472,24 +487,33 @@ export default {
         },
 
         initContextMenu() {
-            if (this.supportContextMenu != true) return
+            if (this.supportContextMenu !== true) return
             if (this.contextMenuItems == null) return
-            var contextMenuOptions = {
-                selector: '#' + this.$refs.table.attributes.id.value + ' tbody tr td:not(.checkbox-cell)',
-                autoHide: false,
-                build: $trigger => {
-                    var selectedRow = this.selectRowAndGetData($trigger)
 
-                    if (selectedRow.rowData == null) return false
+            $(this.$refs.table).on('click.dt-contextmenu', 'tbody tr td:not(.checkbox-cell)', (event) => {
+                if ($(event.target).closest('a').length > 0) {
+                    this.contextMenu.visible = false
+                    return
+                }
 
-                    var items = this.contextMenuItems(selectedRow)
-                    if (items == null) return
-                    return { items: items }
-                },
-                trigger: 'left',
-            }
+                const selectedRow = this.selectRowAndGetData($(event.currentTarget))
 
-            $.contextMenu(contextMenuOptions)
+                if (selectedRow.rowData == null) {
+                    this.contextMenu.visible = false
+                    return
+                }
+
+                const items = this.contextMenuItems(selectedRow)
+                if (items == null || items.length === 0) {
+                    this.contextMenu.visible = false
+                    return
+                }
+
+                this.contextMenu.items = items
+                this.contextMenu.x = event.clientX
+                this.contextMenu.y = event.clientY
+                this.contextMenu.visible = true
+            })
         },
 
         rowsSelected(e, dt, type, ar) {

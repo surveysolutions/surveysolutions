@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Name" xml:space="preserve"><value>ឈ្មោះ</value></data>
+  <data name="DisplayName" xml:space="preserve"><value>ឈ្មោះដែលបង្ហាញ</value></data>
+  <data name="NameRequired" xml:space="preserve"><value>ត្រូវការឈ្មោះ</value></data>
+  <data name="DisplayNameRequired" xml:space="preserve"><value>ត្រូវការឈ្មោះដែលបង្ហាញ</value></data>
+  <data name="InvalidName" xml:space="preserve"><value>អនុញ្ញាតតែលេខ​ ​និងអក្សរ​តូចប៉ុណ្ណោះ</value></data>
+  <data name="NameShouldBeUnique" xml:space="preserve"><value>ឈ្មោះត្រូវតែមានតែមួយ</value></data>
+  <data name="EditWorkspace" xml:space="preserve"><value>កែប្រែកន្លែងធ្វើការ "{{name}}"</value></data>
+  <data name="WorkspacesSubtitle" xml:space="preserve"><value>កន្លែងធ្វើការម្នាក់ៗមានកម្រងសំណួរ ការសំភាសន៍ និងការចាត់ការដាច់ដោយឡែក</value></data>
+  <data name="AddNew" xml:space="preserve"><value>បង្កើតថ្មី</value></data>
+  <data name="NameShouldNotBeOneOfForbidden" xml:space="preserve"><value>ឈ្មោះកន្លែងធ្វើការដែលបានផ្ដល់មិនត្រូវបានអនុញ្ញាត</value></data>
+  <data name="CurrentWorkspace" xml:space="preserve"><value>កន្លែងធ្វើការបច្ចុប្បន្ន</value></data>
+  <data name="CreateWorkspace" xml:space="preserve"><value>ការបង្កើតកន្លែងធ្វើការ</value></data>
+  <data name="CanNotBeChanged" xml:space="preserve"><value>មិនអាចផ្លាស់ប្ដូរបន្ទាប់ពីការបង្កើត</value></data>
+  <data name="DisplayNameHelpText" xml:space="preserve"><value>នឹងត្រូវបានប្រើដើម្បីបង្ហាញកន្លែងធ្វើការក្នុងម៉ឺនុយ</value></data>
+  <data name="WorkspaceSettings" xml:space="preserve"><value>ការកំណត់</value></data>
+  <data name="Edit" xml:space="preserve"><value>កែប្រែ</value></data>
+  <data name="AssignedWorkspaces" xml:space="preserve"><value>ជ្រើសរើសកន្លែងធ្វើការដែលអ្នកប្រើប្រាស់អាចចូលប្រើ</value></data>
+  <data name="UserWorkspacesTab" xml:space="preserve"><value>កន្លែងធ្វើការ</value></data>
+  <data name="WorkspacesUpdated" xml:space="preserve"><value>បញ្ជីកន្លែងធ្វើការត្រូវបានធ្វើបច្ចុប្បន្នភាព</value></data>
+  <data name="DisableWorkspacePopupTitle" xml:space="preserve"><value>បញ្ជាក់ការបិទ "{{name}}"</value></data>
+  <data name="Disable" xml:space="preserve"><value>បិទ</value></data>
+  <data name="DisableExplanation" xml:space="preserve"><value>ការបិទកន្លែងធ្វើការនឹងបញ្ឈប់ការចូលប្រើរបស់អ្នកប្រើប្រាស់ទាំងអស់</value></data>
+  <data name="Enable" xml:space="preserve"><value>បើក</value></data>
+  <data name="DeleteWorkspacePopupTitle" xml:space="preserve"><value>លុបកន្លែងធ្វើការ "{{name}}"</value></data>
+  <data name="DeleteExplanation" xml:space="preserve"><value>តើអ្នកប្រាកដជាចង់លុបកន្លែងធ្វើការ &amp;lt;strong&amp;gt;{{name}}&amp;lt;/strong&amp;gt; ទេ?</value></data>
+  <data name="CantDeleteExplanation" xml:space="preserve"><value>មិនអាចលុបកន្លែងធ្វើការ។ មានកម្រងសំណួរយ៉ាងតិចមួយដែលភ្ជាប់ជាមួយកន្លែងធ្វើការនេះ</value></data>
+  <data name="InterviewersCount" xml:space="preserve"><value>អ្នកសំភាសន៍: {{count}}</value></data>
+  <data name="SupervisorsCount" xml:space="preserve"><value>អ្នកត្រួតពិនិត្យ: {{count}}</value></data>
+  <data name="MapsCount" xml:space="preserve"><value>ផែនទីដែលបានផ្ទុកឡើង: {{count}}</value></data>
+  <data name="AgreeToDelete" xml:space="preserve"><value>ខ្ញុំយល់ថាប្រតិបត្តិការនេះមិនអាចត្រឡប់វិញ</value></data>
+  <data name="WorkspaceDisabledReason" xml:space="preserve"><value>កន្លែងធ្វើការត្រូវបានបិទ។ ទំនាក់ទំនងអ្នកគ្រប់គ្រងម៉ាស៊ីនមេរបស់អ្នក</value></data>
+  <data name="WorkspaceAccessDisabledReason" xml:space="preserve"><value>គណនីរបស់អ្នកស្ថិតក្នុងកន្លែងធ្វើការដែលបានបិទ</value></data>
+  <data name="WorkspaceCantBeRemoved" xml:space="preserve"><value>មិនអាចដកកន្លែងធ្វើការ ដោយសារអ្នកប្រើប្រាស់មានការងារដែលបានចាត់ចែង។ ការសំភាសន៍: {0}, ការចាត់ការ: {1}, សមាជិកក្រុម: {2}</value></data>
+  <data name="Open" xml:space="preserve"><value>បើក</value></data>
+  <data name="CreatedAt" xml:space="preserve"><value>បានបង្កើតនៅ</value></data>
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve"><value>ពេលដែលកន្លែងធ្វើការត្រូវបានបង្កើតដំបូង</value></data>
+</root>

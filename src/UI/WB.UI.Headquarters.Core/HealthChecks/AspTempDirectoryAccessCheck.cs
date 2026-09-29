@@ -36,7 +36,7 @@ namespace WB.UI.Headquarters.HealthChecks
                 their associated requests.
              */
             
-            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+            if (!OperatingSystem.IsWindows())
                 return Task.FromResult(HealthCheckResult.Healthy(Diagnostics.temp_folder_permissions_Windows_check));
             
             var aspTempFolder = Environment.GetEnvironmentVariable(AspTempEnvironmentVariable);
@@ -54,7 +54,7 @@ namespace WB.UI.Headquarters.HealthChecks
                         ? HealthCheckResult.Healthy(Diagnostics.temp_folder_permissions_Healthy) 
                         : HealthCheckResult.Unhealthy(Diagnostics.temp_folder_permissions_Unhealty_without_permissions.FormatString(aspTempFolder)));
             }
-            catch (PrivilegeNotHeldException e)
+            catch (PrivilegeNotHeldException)
             {
                 bool success = TryToWriteTempFile(aspTempFolder);
                 return Task.FromResult(success
@@ -97,7 +97,7 @@ namespace WB.UI.Headquarters.HealthChecks
 
         private bool CheckDirectoryPermissions(string path)
         {
-            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+            if (!OperatingSystem.IsWindows())
                 throw new ArgumentException("This check supports only windows");
             
             DirectoryInfo di = new DirectoryInfo(path);

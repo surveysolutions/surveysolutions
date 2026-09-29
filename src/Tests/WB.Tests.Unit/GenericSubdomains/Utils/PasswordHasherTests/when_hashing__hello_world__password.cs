@@ -88,10 +88,8 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.PasswordHasherTests
 
         private string Pre11662HashingAlgo(string password)
         {
-            var rng = new RNGCryptoServiceProvider();
             var data = Encoding.UTF8.GetBytes(password);
-            var saltBuffer = new byte[20];
-            rng.GetBytes(saltBuffer);
+            var saltBuffer = RandomNumberGenerator.GetBytes(20);
             var hash = SHA512.Create().ComputeHash(data.Union(saltBuffer).ToArray());
             return Convert.ToBase64String(saltBuffer) + ":" + Convert.ToBase64String(hash);
         }

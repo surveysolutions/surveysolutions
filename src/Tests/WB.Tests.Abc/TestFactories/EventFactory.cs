@@ -139,12 +139,12 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewHardDeleted InterviewHardDeleted(Guid? userId = null, DateTimeOffset? originDate = null)
             => new InterviewHardDeleted(userId: userId ?? Guid.NewGuid(), originDate: originDate ?? DateTimeOffset.Now);
 
-        public InterviewOnClientCreated InterviewOnClientCreated(Guid? questionnaireId = null, long? questionnaireVersion = null, DateTimeOffset? originDate = null)
+        public InterviewOnClientCreated InterviewOnClientCreated(Guid? questionnaireId = null, long? questionnaireVersion = null, DateTimeOffset? originDate = null, int? assignmentId = null)
             => new InterviewOnClientCreated(
                 Guid.NewGuid(),
                 questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion ?? 1, 
-                null,
+                assignmentId,
                 originDate ?? DateTimeOffset.Now);
 
         public InterviewReceivedByInterviewer InterviewReceivedByInterviewer(string deviceId = null, 
@@ -354,6 +354,16 @@ namespace WB.Tests.Abc.TestFactories
                 rosterVector ?? RosterVector.Empty,
                 originDate ?? DateTimeOffset.Now,
                 answer ?? "answer");
+
+        public QRBarcodeQuestionAnswered QRBarcodeQuestionAnswered(
+            Guid? questionId = null, decimal[] rosterVector = null, string answer = null, Guid? userId = null, DateTimeOffset? originDate = null)
+            => new QRBarcodeQuestionAnswered(
+                userId ?? Guid.NewGuid(),
+                questionId ?? Guid.NewGuid(),
+                rosterVector ?? RosterVector.Empty,
+                originDate ?? DateTimeOffset.Now,
+                answer ?? "barcode");
+
 
         public AnswerCommented AnswerCommented(
             Guid? questionId = null, 

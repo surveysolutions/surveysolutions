@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AssignedTo" xml:space="preserve"><value>Giám sát viên</value></data>
+  <data name="Description" xml:space="preserve"><value>Tạo bộ người dùng bằng cách tải lên tệp</value></data>
+  <data name="Profile" xml:space="preserve"><value>hồ sơ thủ công</value></data>
+  <data name="DownloadTemplateLink" xml:space="preserve"><value>Tải xuống mẫu .tab để tải lên người dùng</value></data>
+  <data name="Email" xml:space="preserve"><value>Email</value></data>
+  <data name="FullName" xml:space="preserve"><value>Tên đầy đủ</value></data>
+  <data name="ManualSupervisorCreateLink" xml:space="preserve"><value>giám sát viên</value></data>
+  <data name="ManualInterviewerCreateLink" xml:space="preserve"><value>phỏng vấn viên</value></data>
+  <data name="OptionalInformation" xml:space="preserve"><value>Thông tin cá nhân tùy chọn</value></data>
+  <data name="Or" xml:space="preserve"><value>hoặc</value></data>
+  <data name="Password" xml:space="preserve"><value>Mật khẩu</value></data>
+  <data name="PasswordDescription" xml:space="preserve"><value>mật khẩu phải có ít nhất một số, một chữ hoa và một chữ thường</value></data>
+  <data name="Phone" xml:space="preserve"><value>Số điện thoại</value></data>
+  <data name="RequiredData" xml:space="preserve"><value>Dữ liệu bắt buộc để tạo phỏng vấn viên và giám sát viên</value></data>
+  <data name="Role" xml:space="preserve"><value>Vai trò</value></data>
+  <data name="Title" xml:space="preserve"><value>Tạo nhiều người dùng bằng tải lên hàng loạt</value></data>
+  <data name="UploadBtn" xml:space="preserve"><value>Tải lên tệp .tab</value></data>
+  <data name="UserName" xml:space="preserve"><value>Đăng nhập</value></data>
+  <data name="UserNameDescription" xml:space="preserve"><value>tên người dùng phải từ 3 đến 15 ký tự</value></data>
+  <data name="VerificationFailed" xml:space="preserve"><value>Xác minh thất bại</value></data>
+  <data name="NoCreatedUsers" xml:space="preserve"><value>Không có tài khoản người dùng nào được tạo</value></data>
+  <data name="ImportingUserInfo" xml:space="preserve"><value>Đang nhập thông tin người dùng từ</value></data>
+  <data name="ReUploadTabFile" xml:space="preserve"><value>Tải lên lại tệp .tab</value></data>
+  <data name="BackToImport" xml:space="preserve"><value>Quay lại nhập người dùng</value></data>
+  <data name="Uploading" xml:space="preserve"><value>Đang nhập {{importedUsersCount}} trong số {{totalUsersToImportCount}}</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Hủy</value></data>
+  <data name="Column" xml:space="preserve"><value>cột</value></data>
+  <data name="Line" xml:space="preserve"><value>dòng</value></data>
+  <data name="AllAccountsCreated" xml:space="preserve"><value>Tất cả {{total}} tài khoản đã được tạo thành công:</value></data>
+  <data name="InterviewersAndSupervisorsCount" xml:space="preserve"><value>{{supervisorsCount}} giám sát viên và {{interviewersCount}} phỏng vấn viên</value></data>
+  <data name="CompleteDescription" xml:space="preserve"><value>Bạn có thể tạo nhiệm vụ cho các nhóm này từ phần 'bảng câu hỏi'</value></data>
+  <data name="Questionnaires" xml:space="preserve"><value>Bảng câu hỏi</value></data>
+  <data name="UploadInProgress" xml:space="preserve"><value>Cảnh báo: Tải lên hàng loạt bởi "{{userName}}" đang diễn ra.</value></data>
+  <data name="UploadInProgressDescription" xml:space="preserve"><value>Bạn có thể bắt đầu khi cái hiện tại hoàn thành.</value></data>
+  <data name="EstimatedTime" xml:space="preserve"><value>Ước tính còn {{estimatedTime}}</value></data>
+  <data name="TimeDetermination" xml:space="preserve"><value>xác định thời gian</value></data>
+  <data name="Workspace" xml:space="preserve"><value>Không gian làm việc</value></data>
+  <data name="SelectWorkspace" xml:space="preserve"><value>Chọn không gian làm việc</value></data>
+  <data name="SelectWorkspaceDescription" xml:space="preserve"><value>Nếu không có không gian làm việc được chỉ định trong tệp hàng loạt, hãy dùng không gian làm việc này làm mặc định</value></data>
+    <data name="AssignedToDescription" xml:space="preserve">
+        <value>bắt buộc cho phỏng vấn viên, chứa tên người dùng của giám sát viên mà người này sẽ được phân công</value>
+    </data>
+</root>

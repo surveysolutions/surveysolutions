@@ -588,6 +588,7 @@ Toate fișierele de date trebuie să conțină o variabilă denumită interviu__
 &lt;b&gt;_password&lt;/b&gt; - parola pentru a începe un interviu (numai pentru interviuri web);&lt;br/&gt;
 &lt;b&gt;_webmode&lt;/b&gt; - dacă această sarcină este în modul web (1 - CAWI, 0 sau necompletată - CAPI );&lt;br/&gt;
 &lt;b&gt;_record_audio&lt;/b&gt; - înregistrarea audio este activată pentru interviuri (1 - activată, 0 - dezactivată, necompletată - obțineți această valoare din chestionar);&lt;br/&gt;
+&lt;b&gt;_aascope&lt;/b&gt; - nume de variabile (separate prin virgulă) ale secțiunilor, grupurilor sau rosterelor pentru înregistrarea audio când _record_audio este dezactivat (domeniu selectiv de audit audio);&lt;br/&gt;
 &lt;b&gt;_comment&lt;/b&gt; - comentarii pentru sarcină</value>
     <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
   </data>

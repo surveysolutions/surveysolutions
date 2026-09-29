@@ -1467,6 +1467,78 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Dashboard_CompleteAssignment {
+            get {
+                return ResourceManager.GetString("Dashboard_CompleteAssignment", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_CompleteAssignment_Title {
+            get {
+                return ResourceManager.GetString("Dashboard_CompleteAssignment_Title", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_CompleteAssignment_Message {
+            get {
+                return ResourceManager.GetString("Dashboard_CompleteAssignment_Message", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_ReopenAssignment_Title {
+            get {
+                return ResourceManager.GetString("Dashboard_ReopenAssignment_Title", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_ReopenAssignment_Message {
+            get {
+                return ResourceManager.GetString("Dashboard_ReopenAssignment_Message", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_CloseAssignment {
+            get {
+                return ResourceManager.GetString("Dashboard_CloseAssignment", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_CloseAssignment_Title {
+            get {
+                return ResourceManager.GetString("Dashboard_CloseAssignment_Title", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_CloseAssignment_Message {
+            get {
+                return ResourceManager.GetString("Dashboard_CloseAssignment_Message", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_Assignment_Comment {
+            get {
+                return ResourceManager.GetString("Dashboard_Assignment_Comment", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_Assignment_Status_Completed {
+            get {
+                return ResourceManager.GetString("Dashboard_Assignment_Status_Completed", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_Assignment_Status_Closed {
+            get {
+                return ResourceManager.GetString("Dashboard_Assignment_Status_Closed", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_Assignment_Status_Open {
+            get {
+                return ResourceManager.GetString("Dashboard_Assignment_Status_Open", resourceCulture);
+            }
+        }
+        
         public static string Dashboard_ShowLocation {
             get {
                 return ResourceManager.GetString("Dashboard_ShowLocation", resourceCulture);
@@ -1824,6 +1896,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Error_NoGpsProvider {
             get {
                 return ResourceManager.GetString("Error_NoGpsProvider", resourceCulture);
+            }
+        }
+        
+        public static string Error_NoSuitableLocationProvider {
+            get {
+                return ResourceManager.GetString("Error_NoSuitableLocationProvider", resourceCulture);
+            }
+        }
+        
+        public static string Error_GpsProviderDisabled {
+            get {
+                return ResourceManager.GetString("Error_GpsProviderDisabled", resourceCulture);
+            }
+        }
+        
+        public static string Error_RestrictedLocationSource {
+            get {
+                return ResourceManager.GetString("Error_RestrictedLocationSource", resourceCulture);
             }
         }
         

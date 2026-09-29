@@ -1,10 +1,13 @@
 <template>
-    <div v-if="visible" :class="cssClass" @click="toggleSidebarPanel">
+    <div v-if="visible"
+        :class="cssClass"
+        @click="toggleSidebarPanel">
         <span v-if="showFoldbackButtonAsHamburger"></span>
         <template v-else>
             <span class="arrow"></span>
             <span class="arrow"></span>
-            <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon-tasks"
+                aria-hidden="true"></span>
         </template>
     </div>
 </template>

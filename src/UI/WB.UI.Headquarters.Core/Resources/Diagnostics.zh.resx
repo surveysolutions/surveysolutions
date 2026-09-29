@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="WaitForHealthcheck" xml:space="preserve">
+        <value>正在等待健康检查结果</value>
+    </data>
+    <data name="HealthCheckStatus" xml:space="preserve">
+        <value>健康状态：{{status}}</value>
+    </data>
+    <data name="ServerMetrics" xml:space="preserve">
+        <value>服务器指标</value>
+    </data>
+    <data name="WaitingForMetrics" xml:space="preserve">
+        <value>正在计算指标</value>
+    </data>
+    <data name="hq_baseurl_check" xml:space="preserve">
+        <value>BaseUrl 配置检查</value>
+    </data>
+    <data name="export_service_check" xml:space="preserve">
+        <value>导出服务检查</value>
+    </data>
+    <data name="export_service_connectivity_check" xml:space="preserve">
+        <value>导出服务连接检查</value>
+    </data>
+    <data name="broken_packages_check" xml:space="preserve">
+        <value>损坏数据包检查</value>
+    </data>
+    <data name="database_connection_check" xml:space="preserve">
+        <value>数据库连接检查</value>
+    </data>
+    <data name="designer_check" xml:space="preserve">
+        <value>Designer 连接检查</value>
+    </data>
+    <data name="temp_folder_permissions" xml:space="preserve">
+        <value>临时文件夹权限检查</value>
+    </data>
+    <data name="temp_folder_permissions_Healthy" xml:space="preserve">
+        <value>成功访问临时文件夹</value>
+    </data>
+    <data name="temp_folder_permissions_Unhealty_without_permissions" xml:space="preserve">
+        <value>应用程序无法向以下位置写入临时文件：{0}</value>
+    </data>
+    <data name="temp_folder_permissions_Unhealty_can_not_check" xml:space="preserve">
+        <value>无法检查临时文件夹权限 {0}。错误：{1}</value>
+    </data>
+    <data name="temp_folder_permissions_Degraded_without_permissions" xml:space="preserve">
+        <value>应用程序没有权限检查临时文件夹 {0} 的权限</value>
+    </data>
+    <data name="temp_folder_permissions_Windows_check" xml:space="preserve">
+        <value>系统不是 Windows</value>
+    </data>
+    <data name="UnexpectedBrokenPackages" xml:space="preserve">
+        <value>检测到 {0} 个意外损坏的数据包</value>
+    </data>
+    <data name="database_connection_check_Healthy" xml:space="preserve">
+        <value>成功连接到数据库</value>
+    </data>
+    <data name="database_connection_check_Unhealty" xml:space="preserve">
+        <value>连接数据库出错：{0}</value>
+    </data>
+    <data name="export_service_connectivity_check_Healthy" xml:space="preserve">
+        <value>位于 {0} 的导出服务响应状态为 {1}</value>
+    </data>
+    <data name="export_service_connectivity_check_Degraded" xml:space="preserve">
+        <value>无法连接到位于 {0} 的导出服务</value>
+    </data>
+    <data name="designer_connectivity_check_Degraded" xml:space="preserve">
+        <value>无法连接到位于 {0} 的 Designer</value>
+    </data>
+    <data name="export_service_connectivity_check_Unhealthy" xml:space="preserve">
+        <value>位于 {0} 的导出服务响应状态为 {1}</value>
+    </data>
+    <data name="export_service_check_Healthy" xml:space="preserve">
+        <value>位于 {0} 的导出服务响应版本为：v{1}</value>
+    </data>
+    <data name="designer_service_check_Healthy" xml:space="preserve">
+        <value>位于 {0} 的 Designer 响应版本为：v{1}</value>
+    </data>
+    <data name="hq_baseurl_check_Healthy" xml:space="preserve">
+        <value>Headquarters 配置的 Headquarters:BaseUrl：{0} 与浏览器地址栏中的当前网址相同。</value>
+    </data>
+    <data name="hq_baseurl_check_Degraded" xml:space="preserve">
+        <value>Headquarters 配置的 Headquarters:BaseUrl：{0} 与浏览器地址栏中的当前网址不同。这可能导致电子邮件链接和导出服务功能出现问题</value>
+    </data>
+    <data name="embedded_export_service_check" xml:space="preserve">
+        <value>内嵌导出服务主机</value>
+    </data>
+    <data name="embedded_export_service_check_Healty" xml:space="preserve">
+        <value>导出服务正在运行</value>
+    </data>
+    <data name="embedded_export_service_check_Degraded" xml:space="preserve">
+        <value>导出服务未运行</value>
+    </data>
+    <data name="Connectivity" xml:space="preserve">
+        <value>网络套接字连接</value>
+    </data>
+    <data name="ServerStatuses" xml:space="preserve">
+        <value>响应状态</value>
+    </data>
+</root>

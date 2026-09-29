@@ -237,4 +237,192 @@
   <data name="WelcomeText" xml:space="preserve">
     <value>您好，欢迎使用Survey Solutions网络访谈</value>
   </data>
+
+
+  <data name="DownloadAnswers" xml:space="preserve">
+    <value>下载访谈记录</value>
+  </data>
+
+  <data name="DownloadAnswersHint" xml:space="preserve">
+    <value>将访谈答案下载为 PDF 文件</value>
+  </data>
+
+  <data name="Start" xml:space="preserve">
+    <value>开始新访谈</value>
+  </data>
+
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>密码错误</value>
+  </data>
+
+  <data name="ResumeInterview" xml:space="preserve">
+    <value>继续访谈</value>
+  </data>
+
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve">
+    <value>无法修改已由设备接收的访谈</value>
+  </data>
+
+  <data name="EnterPasswordText" xml:space="preserve">
+    <value>此链接受密码保护，密码已随链接一并分发。请在此输入密码</value>
+  </data>
+
+  <data name="Error_Forbidden" xml:space="preserve">
+    <value>禁止访问</value>
+  </data>
+
+  <data name="Error_UserNotAuthorised" xml:space="preserve">
+    <value>用户未获授权</value>
+  </data>
+
+  <data name="CompleteInterview" xml:space="preserve">
+    <value>完成访谈</value>
+  </data>
+
+  <data name="Filters_Title" xml:space="preserve">
+    <value>筛选问题</value>
+  </data>
+
+  <data name="Filters_Flagged" xml:space="preserve">
+    <value>已标记</value>
+  </data>
+
+  <data name="Filters_WithComments" xml:space="preserve">
+    <value>有评论</value>
+  </data>
+
+  <data name="Filters_Invalid" xml:space="preserve">
+    <value>无效</value>
+  </data>
+
+  <data name="Filters_Valid" xml:space="preserve">
+    <value>有效</value>
+  </data>
+
+  <data name="Filters_Answered" xml:space="preserve">
+    <value>已回答</value>
+  </data>
+
+  <data name="Filters_NotAnswered" xml:space="preserve">
+    <value>未回答</value>
+  </data>
+
+  <data name="Filters_ForSupervisor" xml:space="preserve">
+    <value>给督导</value>
+  </data>
+
+  <data name="Filters_ForInterviewer" xml:space="preserve">
+    <value>给访问员</value>
+  </data>
+
+  <data name="Filters_NotFlagged" xml:space="preserve">
+    <value>未标记</value>
+  </data>
+
+  <data name="Filters_CriticalQuestions" xml:space="preserve">
+    <value>关键问题</value>
+  </data>
+
+  <data name="Filters_CriticalRules" xml:space="preserve">
+    <value>关键规则</value>
+  </data>
+
+  <data name="PoweredBy" xml:space="preserve">
+    <value>技术支持</value>
+  </data>
+
+  <data name="Filters_ClearSelection" xml:space="preserve">
+    <value>重置所有筛选器</value>
+  </data>
+
+  <data name="Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+
+  <data name="Warning" xml:space="preserve">
+    <value>警告</value>
+  </data>
+
+  <data name="QuestionnaireNameFormat" xml:space="preserve">
+    <value>{0} (ver. {1})</value>
+  </data>
+
+  <data name="InterviewSizeLimitReached" xml:space="preserve">
+    <value>访谈包含的名单实例和问题总数超过了系统限制。</value>
+  </data>
+
+  <data name="AssignmentLimitReached" xml:space="preserve">
+    <value>此调查中的所有访谈均已收集完毕。</value>
+  </data>
+
+  <data name="InterviewNotFound" xml:space="preserve">
+    <value>未找到访谈。</value>
+  </data>
+
+  <data name="Email_InvitationTemplate_Subject" xml:space="preserve">
+    <value>邀请您参与 %SURVEYNAME%</value>
+  </data>
+
+  <data name="Email_InvitationTemplate_Message" xml:space="preserve">
+    <value>欢迎参加 %SURVEYNAME%!
+
+要参加此调查，请点击以下链接：%SURVEYLINK%，并输入您的密码：%PASSWORD%
+ 
+感谢您的配合！</value>
+  </data>
+
+  <data name="Email_NoResponse_Subject" xml:space="preserve">
+    <value>提醒：请不要忘记参与 %SURVEYNAME%</value>
+  </data>
+
+  <data name="Email_NoResponse_Message" xml:space="preserve">
+    <value>您收到此提醒，是因为您尚未开始回答 %SURVEYNAME%!
+ 
+要参加此调查，请点击以下链接：%SURVEYLINK%，并输入您的密码：%PASSWORD%
+ 
+感谢您的配合！</value>
+  </data>
+
+  <data name="Email_PartialResponse_Subject" xml:space="preserve">
+    <value>提醒：请完成您对 %SURVEYNAME% 的答复</value>
+  </data>
+
+  <data name="Email_PartialResponse_Message" xml:space="preserve">
+    <value>您收到此提醒，是因为您已开始回答 %SURVEYNAME%，但尚未完成整个过程。
+ 
+要继续此调查，请点击以下链接：%SURVEYLINK%，并输入您的密码：%PASSWORD%。
+ 
+请回答所有适用的问题，并点击“COMPLETE”按钮提交您的答复。
+ 
+感谢您的配合！</value>
+  </data>
+
+  <data name="Email_RejectEmail_Subject" xml:space="preserve">
+    <value>您需要在 %SURVEYNAME% 中采取操作</value>
+  </data>
+
+  <data name="Email_RejectEmail_Message" xml:space="preserve">
+    <value>感谢您参与 %SURVEYNAME%!
+ 
+在处理您的答复时，我们的工作人员发现了一些问题，现请您进行查看。
+ 
+要继续此调查，请点击以下链接：%SURVEYLINK%，并输入您的密码：%PASSWORD%。
+ 
+如果您能处理答复中标记的所有问题，并点击“COMPLETE”按钮提交您的答复，我们将不胜感激。
+ 
+感谢您的配合！</value>
+  </data>
+
+  <data name="NoteForSupervisor" xml:space="preserve">
+    <value>督导备注</value>
+  </data>
+
+  <data name="Complete" xml:space="preserve">
+    <value>完成</value>
+    <comment>Complete interview button text</comment>
+  </data>
+
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+    <value>网络访谈落地页链接示例</value>
+  </data>
 </root>

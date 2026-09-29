@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="InvalidDeviceIdentifier" xml:space="preserve">
+        <value>Mã định danh thiết bị không hợp lệ. Đã xảy ra lỗi khi cài đặt ứng dụng khách, vui lòng gửi thông tin máy tính bảng.</value>
+        </data>
+    <data name="InvalidUserFormat" xml:space="preserve">
+        <value>Đồng bộ hóa không thành công. Người dùng không được ủy quyền. Vui lòng kiểm tra thông tin đăng nhập/mật khẩu của bạn để tìm {0}.</value>
+        </data>
+    <data name="NoClientIdentifier" xml:space="preserve">
+        <value>Đồng bộ hóa không thành công. Vui lòng cài đặt lại ứng dụng. Mã định danh cài đặt bị thiếu. Vui lòng liên hệ với nhà phát triển.</value>
+        </data>
+    <data name="InterviewerApplicationShouldBeUpdated" xml:space="preserve">
+        <value>Đồng bộ hóa không thành công. Ứng dụng của bạn không tương thích, vui lòng cập nhật ứng dụng Người phỏng vấn của bạn.</value>
+        </data>
+    <data name="InterviewerIsNotCompatibleWithThisVersion" xml:space="preserve">
+        <value>Đồng bộ hóa không thành công. Ứng dụng của bạn không tương thích. Gỡ cài đặt ứng dụng của bạn và tải xuống phiên bản mới của ứng dụng Người phỏng vấn</value>
+        </data>
+    <data name="AndroidDeviceIdWasNotProvided" xml:space="preserve">
+        <value>Đồng bộ hóa không thành công. Id thiết bị Android không được cung cấp. Vui lòng liên hệ với nhà phát triển.</value>
+        </data>
+    <data name="WrongAndroidDeviceIdWasProvided" xml:space="preserve">
+        <value>Đồng bộ hóa không thành công. Id thiết bị Android sai đã được cung cấp. Vui lòng liên hệ với nhà phát triển.</value>
+        </data>
+    <data name="ServerError" xml:space="preserve">
+        <value>Đồng bộ hóa không thành công. Đã xảy ra lỗi máy chủ nội bộ. Vui lòng liên hệ với nhà phát triển.</value>
+        </data>
+    <data name="FileWasNotFound" xml:space="preserve">
+        <value>Đồng bộ hóa không thành công. Không tìm thấy tập tin có phiên bản mới nhất. Vui lòng liên hệ với nhà phát triển.</value>
+        </data>
+    <data name="IncorrectFilesCount" xml:space="preserve">
+        <value>Đồng bộ hóa không thành công. Số tập tin không chính xác. Vui lòng liên hệ với nhà phát triển.</value>
+        </data>
+    <data name="IncorrectMediaType" xml:space="preserve">
+        <value>Đồng bộ hóa không thành công. Loại phương tiện không chính xác. Vui lòng liên hệ với nhà phát triển.</value>
+        </data>
+    <data name="InvalidSequenceIdentifier" xml:space="preserve">
+        <value>Đồng bộ hóa không thành công. Mã định danh trình tự không hợp lệ. Đã xảy ra sự cố khi cài đặt ứng dụng khách, hãy nhấn nút "Gửi thông tin máy tính bảng".</value>
+        </data>
+    <data name="Sync_package_with_id__0__was_not_found_on_serverFormat" xml:space="preserve">
+        <value>Đồng bộ hóa không thành công.  Không tìm thấy gói đồng bộ hóa có id '{0}' trên máy chủ. Vui lòng liên hệ với nhà phát triển.</value>
+        </data>
+    <data name="InvalidUserRole" xml:space="preserve">
+        <value>Tài khoản của bạn không có vai trò cho phép hoạt động này.</value>
+        </data>
+    <data name="Maintenance" xml:space="preserve">
+        <value>Server hiện đang ở chế độ bảo trì. Xin lỗi vì sự bất tiện này. Vui lòng thử lại sau.</value>
+        </data>
+    <data name="OldInterviewerNeedsCleanup" xml:space="preserve">
+        <value>Đồng bộ hóa không thành công một phần. Các cuộc phỏng vấn đã hoàn thành đã được gửi đến máy chủ nhưng bạn sẽ không nhận được bài tập mới. Vui lòng điều hướng đến cài đặt Android -&gt; Ứng dụng -&gt; Người phỏng vấn và nhấn nút Xóa dữ liệu. Sau đó đồng bộ lại từ đầu.</value>
+        </data>
+</root>

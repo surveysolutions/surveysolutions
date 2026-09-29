@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
                 this.Type = variableData.Type;
                 this.Name = variableData.Name;
                 this.Expression = variableData.Expression;
-                this.Label = variableData.Label;
+                this.Label = variableData.Label ?? string.Empty;
                 this.DoNotExport = variableData.DoNotExport;
             }
         }

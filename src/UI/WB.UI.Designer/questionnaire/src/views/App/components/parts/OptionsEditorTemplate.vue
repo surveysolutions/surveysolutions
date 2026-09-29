@@ -126,6 +126,7 @@ export default {
     },
     unmounted() {
         this.$emitter.off('questionChangesDiscarded', this.questionChangesDiscarded);
+        this.setValidityState(true);
     },
     computed: {
         optionsCount() {

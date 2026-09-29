@@ -64,7 +64,7 @@ const fetch = {
         SET_UPLOAD_PROGRESS(state, { entity, now, total }) {
             entity.fetchState = {
                 uploaded: now,
-                total: total
+                total: total,
             }
         },
         SET_FETCH(state, { id, ids, done }) {

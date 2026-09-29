@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Action" xml:space="preserve">
-    <value>Action</value>
+    <value>Acción</value>
   </data>
   <data name="Assign" xml:space="preserve">
     <value>Asignar</value>
@@ -326,5 +326,8 @@
 </data>
     <data name="SaveAs" xml:space="preserve">
   <value>Guardar como</value>
+</data>
+    <data name="IncludeScenarios" xml:space="preserve">
+  <value>Incluir escenarios</value>
 </data>
 </root>

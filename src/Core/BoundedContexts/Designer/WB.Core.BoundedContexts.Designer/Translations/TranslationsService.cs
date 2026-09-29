@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Packaging;
 using ClosedXML.Graphics;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -252,6 +253,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             {
                 throw new InvalidFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
             }
+            catch (OpenXmlPackageException e)
+            {
+                throw new InvalidFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
+            }
         }
         
         public void Store(IEnumerable<TranslationInstance> translationInstances)
@@ -269,6 +274,31 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             }
 
             this.dbContext.SaveChanges();
+        }
+
+        public void CopyCategoriesTranslations(Guid questionnaireId, Guid oldCategoriesId, Guid newCategoriesId,
+            IEnumerable<Guid> translationIds)
+        {
+            if (translationIds == null) throw new ArgumentNullException(nameof(translationIds));
+
+            var translationIdsToCopy = translationIds.Distinct().ToArray();
+            if (!translationIdsToCopy.Any())
+                return;
+
+            var storedTranslations = this.dbContext.TranslationInstances
+                .Where(x => x.QuestionnaireId == questionnaireId
+                    && x.QuestionnaireEntityId == oldCategoriesId
+                    && translationIdsToCopy.Contains(x.TranslationId)
+                    && x.Type == TranslationType.Categories)
+                .ToList();
+
+            foreach (var storedTranslation in storedTranslations)
+            {
+                var translationCopy = storedTranslation.Clone();
+                translationCopy.Id = Guid.NewGuid();
+                translationCopy.QuestionnaireEntityId = newCategoriesId;
+                this.dbContext.TranslationInstances.Add(translationCopy);
+            }
         }
 
         private IEnumerable<TranslationInstance> GetWorksheetTranslations(
@@ -500,6 +530,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             {
                 var importedTranslation = GetExcelTranslation(worksheetWithHeadersMap, rowNumber);
 
+                if (string.IsNullOrWhiteSpace(importedTranslation.Translation)) continue;
+
                 if (!Guid.TryParse(importedTranslation.EntityId, out _))
                 {
                     var cellAddress = $"{worksheetWithHeadersMap.EntityIdIndex}{rowNumber}";
@@ -566,6 +598,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             for (int rowNumber = 2; rowNumber <= end; rowNumber++)
             {
                 var importedTranslation = GetExcelTranslation(worksheetWithHeadersMap, rowNumber);
+
+                if (string.IsNullOrWhiteSpace(importedTranslation.Translation)) continue;
 
                 if (string.IsNullOrWhiteSpace(importedTranslation.OptionValueOrValidationIndexOrFixedRosterId))
                 {

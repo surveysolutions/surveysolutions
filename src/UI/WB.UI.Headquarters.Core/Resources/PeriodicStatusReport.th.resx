@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Average" xml:space="preserve">
+        <value>เฉลี่ย</value>
+    </data>
+    <data name="BackToSupervisors" xml:space="preserve">
+        <value>กลับไปหาผู้บังคับบัญชา</value>
+    </data>
+    <data name="BackToTeams" xml:space="preserve">
+        <value>กลับไปที่ทีม</value>
+    </data>
+    <data name="Day" xml:space="preserve">
+        <value>วัน</value>
+    </data>
+    <data name="Month" xml:space="preserve">
+        <value>เดือน</value>
+    </data>
+    <data name="NumberOfCompletedInterviews" xml:space="preserve">
+        <value>จำนวนการสัมภาษณ์ที่เสร็จสิ้น</value>
+    </data>
+    <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
+        <value>จำนวนการสัมภาษณ์ที่ได้รับอนุมัติจากสำนักงานใหญ่</value>
+    </data>
+    <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
+        <value>จำนวนธุรกรรมการสัมภาษณ์ตามสำนักงานใหญ่</value>
+    </data>
+    <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
+        <value>จำนวนรายการสัมภาษณ์โดยหัวหน้างาน</value>
+    </data>
+    <data name="LastDateToShowLabel" xml:space="preserve">
+        <value>เริ่มตั้งแต่</value>
+    </data>
+    <data name="OverTheLast" xml:space="preserve">
+        <value>กว่าครั้งก่อน</value>
+    </data>
+    <data name="Period" xml:space="preserve">
+        <value>ระยะเวลา</value>
+    </data>
+    <data name="PeriodUnit" xml:space="preserve">
+        <value>หน่วยงวด</value>
+    </data>
+    <data name="PeriodCount" xml:space="preserve">
+        <value>การนับงวด</value>
+    </data>
+    <data name="Questionnaire" xml:space="preserve">
+        <value>แบบสอบถาม</value>
+    </data>
+    <data name="Team" xml:space="preserve">
+        <value>ทีม</value>
+    </data>
+    <data name="TeamMember" xml:space="preserve">
+        <value>สมาชิกในทีม</value>
+    </data>
+    <data name="TimeSpentToCompleteInterviewInHours" xml:space="preserve">
+        <value>เวลาเฉลี่ยเมื่อเสร็จสิ้นการสัมภาษณ์</value>
+    </data>
+    <data name="Total" xml:space="preserve">
+        <value>ทั้งหมด</value>
+    </data>
+    <data name="Type" xml:space="preserve">
+        <value>พิมพ์</value>
+    </data>
+    <data name="InterviewActions" xml:space="preserve">
+        <value>การดำเนินการสัมภาษณ์</value>
+    </data>
+    <data name="Version" xml:space="preserve">
+        <value>เวอร์ชั่น</value>
+    </data>
+    <data name="Week" xml:space="preserve">
+        <value>สัปดาห์</value>
+    </data>
+    <data name="AverageCaseAssignmentDuration" xml:space="preserve">
+        <value>ระยะเวลาการมอบหมายกรณีและปัญหาโดยเฉลี่ย</value>
+    </data>
+    <data name="AverageHQProcessingTime" xml:space="preserve">
+        <value>เวลาประมวลผลเฉลี่ยของ HQ</value>
+    </data>
+    <data name="AverageInterviewDuration" xml:space="preserve">
+        <value>ระยะเวลาการสัมภาษณ์โดยเฉลี่ย</value>
+    </data>
+    <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
+        <value>เวลาประมวลผลเคสโดยรวมโดยเฉลี่ย</value>
+    </data>
+    <data name="AverageSupervisorProcessingTime" xml:space="preserve">
+        <value>ระยะเวลาดำเนินการโดยเฉลี่ยของหัวหน้างาน</value>
+    </data>
+    <data name="AverageCaseAssignmentDurationDescription" xml:space="preserve">
+        <value>เวลาเฉลี่ยตั้งแต่มอบหมายการสัมภาษณ์ให้กับผู้สัมภาษณ์จนถึงเมื่อกดปุ่มทั้งหมดบนแท็บเล็ต</value>
+    </data>
+    <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
+        <value>เวลาเฉลี่ยตั้งแต่หัวหน้างานอนุมัติการสัมภาษณ์จนถึงเวลาที่สำนักงานใหญ่อนุมัติหรือปฏิเสธการสัมภาษณ์นั้น</value>
+    </data>
+    <data name="AverageInterviewDurationDescription" xml:space="preserve">
+        <value>เวลาเฉลี่ยที่แสดงการสัมภาษณ์บนหน้าจอของผู้สัมภาษณ์ก่อนเสร็จสิ้นการสัมภาษณ์ต่อผู้สัมภาษณ์</value>
+    </data>
+    <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
+        <value>เวลาเฉลี่ยที่การสัมภาษณ์ถูกนำเสนอบนหน้าจอของผู้สัมภาษณ์ก่อนที่จะเสร็จสิ้นต่อหัวหน้างาน</value>
+    </data>
+    <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
+        <value>เวลาเฉลี่ยตั้งแต่ที่ได้รับมอบหมายการสัมภาษณ์ครั้งแรกจนถึงเมื่อ HQ อนุมัติการสัมภาษณ์นั้น</value>
+    </data>
+    <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
+        <value>เวลาเฉลี่ยตั้งแต่เมื่อผู้สัมภาษณ์กดปุ่มเสร็จสิ้น จนถึงเวลาที่หัวหน้างานยอมรับหรือปฏิเสธการสัมภาษณ์นั้น</value>
+    </data>
+    <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
+        <value>จำนวนการสัมภาษณ์ที่เสร็จสิ้นโดยทีม การสัมภาษณ์ที่ถูกปฏิเสธและเสร็จสิ้นแล้วจะถูกนับเป็นเหตุการณ์ที่เสร็จสิ้นแยกกัน</value>
+    </data>
+    <data name="NumberOfCompletedInterviewsDescriptionPerInterviewer" xml:space="preserve">
+        <value>จำนวนการสัมภาษณ์ที่เสร็จสิ้นโดยผู้สัมภาษณ์ การสัมภาษณ์ที่ถูกปฏิเสธและเสร็จสิ้นแล้วจะถูกนับเป็นเหตุการณ์ที่เสร็จสิ้นแยกกัน</value>
+    </data>
+    <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
+        <value>จำนวนการสัมภาษณ์ที่รวบรวมโดย {0} ที่ได้รับการอนุมัติโดย HQ</value>
+    </data>
+    <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
+        <value>จำนวนการอนุมัติและการปฏิเสธโดย HQ ในการสัมภาษณ์ที่รวบรวมโดย {0}</value>
+    </data>
+    <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
+        <value>จำนวนการอนุมัติและการปฏิเสธโดยหัวหน้างานในการสัมภาษณ์ที่รวบรวมโดย {0}</value>
+    </data>
+    <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer" xml:space="preserve">
+        <value>จำนวนการอนุมัติและการปฏิเสธโดยหัวหน้างานในการสัมภาษณ์ที่รวบรวมโดยผู้สัมภาษณ์</value>
+    </data>
+    <data name="By" xml:space="preserve">
+        <value>โดย</value>
+    </data>
+    <data name="InThe" xml:space="preserve">
+        <value>ใน</value>
+    </data>
+    <data name="From" xml:space="preserve">
+        <value>จาก</value>
+    </data>
+    <data name="InTheSupervisorTeamFormat" xml:space="preserve">
+        <value>ในทีม {0}</value>
+    </data>
+</root>

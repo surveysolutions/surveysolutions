@@ -141,4 +141,45 @@
   <data name="Overview" xml:space="preserve">
     <value>მიმოხილვა</value>
   </data>
+
+
+  <data name="Area_Coordinates" xml:space="preserve">
+    <value>კოორდინატები</value>
+  </data>
+
+  <data name="YouCanChangeResponsibleInterviewer" xml:space="preserve">
+    <value>უარყოფისას შეგიძლიათ შეცვალოთ ინტერვიუს პასუხისმგებელი. გთხოვთ, აირჩიოთ პასუხისმგებელი ინტერვიუერი</value>
+  </data>
+
+  <data name="FlagTitleFlagged" xml:space="preserve">
+    <value>მონიშნული</value>
+  </data>
+
+  <data name="FlagTitleUnflagged" xml:space="preserve">
+    <value>მოუნიშნავი</value>
+  </data>
+
+  <data name="NoSearchResults" xml:space="preserve">
+    <value>ვერაფერი მოიძებნა</value>
+  </data>
+
+  <data name="SearchResult_Count" xml:space="preserve">
+    <value>{{ count }} ელემენტი მოიძებნა:</value>
+  </data>
+
+  <data name="SearchResult_Count_other" xml:space="preserve">
+    <value>{{ count }} ელემენტი მოიძებნა:</value>
+  </data>
+
+  <data name="Status" xml:space="preserve">
+    <value>სტატუსი: {{ name }}</value>
+  </data>
+
+  <data name="ShowQuestionnaireDetails" xml:space="preserve">
+    <value>კითხვარის დეტალების ჩვენება</value>
+  </data>
+
+  <data name="InterviewMode" xml:space="preserve">
+    <value>რეჟიმი</value>
+  </data>
 </root>

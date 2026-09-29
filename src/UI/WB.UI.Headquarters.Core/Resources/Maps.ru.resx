@@ -192,4 +192,7 @@
   <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve">
     <value>Имя файл {0} содержит не UTF-8 символы.</value>
   </data>
+  <data name="MapFileNameTooLong" xml:space="preserve">
+    <value>Имя файла '{0}' превышает максимально допустимую длину {1} символов.</value>
+  </data>
 </root>

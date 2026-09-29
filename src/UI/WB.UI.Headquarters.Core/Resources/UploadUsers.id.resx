@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AssignedTo" xml:space="preserve"><value>Supervisor</value></data>
+  <data name="Description" xml:space="preserve"><value>Buat kumpulan pengguna dengan mengunggah file.</value></data>
+  <data name="Profile" xml:space="preserve"><value>profil secara manual</value></data>
+  <data name="DownloadTemplateLink" xml:space="preserve"><value>Unduh template .tab untuk unggah pengguna</value></data>
+  <data name="Email" xml:space="preserve"><value>Email</value></data>
+  <data name="FullName" xml:space="preserve"><value>Nama lengkap</value></data>
+  <data name="ManualSupervisorCreateLink" xml:space="preserve"><value>supervisor</value></data>
+  <data name="ManualInterviewerCreateLink" xml:space="preserve"><value>pewawancara</value></data>
+  <data name="OptionalInformation" xml:space="preserve"><value>Informasi pribadi opsional</value></data>
+  <data name="Or" xml:space="preserve"><value>atau</value></data>
+  <data name="Password" xml:space="preserve"><value>Kata sandi</value></data>
+  <data name="PasswordDescription" xml:space="preserve"><value>kata sandi harus mengandung setidaknya satu angka, satu huruf kapital dan satu huruf kecil</value></data>
+  <data name="Phone" xml:space="preserve"><value>Nomor telepon</value></data>
+  <data name="RequiredData" xml:space="preserve"><value>Data yang diperlukan untuk membuat pewawancara dan supervisor</value></data>
+  <data name="Role" xml:space="preserve"><value>Peran</value></data>
+  <data name="Title" xml:space="preserve"><value>Membuat beberapa pengguna dengan unggahan massal</value></data>
+  <data name="UploadBtn" xml:space="preserve"><value>Unggah file .tab</value></data>
+  <data name="UserName" xml:space="preserve"><value>Login</value></data>
+  <data name="UserNameDescription" xml:space="preserve"><value>nama pengguna harus antara 3 dan 15 karakter dan hanya mengandung huruf, angka, tanda hubung atau garis bawah</value></data>
+  <data name="VerificationFailed" xml:space="preserve"><value>Verifikasi gagal</value></data>
+  <data name="NoCreatedUsers" xml:space="preserve"><value>Tidak ada akun pengguna yang dibuat</value></data>
+  <data name="ImportingUserInfo" xml:space="preserve"><value>Mengimpor informasi pengguna dari</value></data>
+  <data name="ReUploadTabFile" xml:space="preserve"><value>Unggah ulang file .tab</value></data>
+  <data name="BackToImport" xml:space="preserve"><value>Kembali ke impor pengguna</value></data>
+  <data name="Uploading" xml:space="preserve"><value>Mengimpor {{importedUsersCount}} dari {{totalUsersToImportCount}}</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Batal</value></data>
+  <data name="Column" xml:space="preserve"><value>kolom</value></data>
+  <data name="Line" xml:space="preserve"><value>baris</value></data>
+  <data name="AllAccountsCreated" xml:space="preserve"><value>Semua {{total}} akun berhasil dibuat:</value></data>
+  <data name="InterviewersAndSupervisorsCount" xml:space="preserve"><value>{{supervisorsCount}} supervisor dan {{interviewersCount}} pewawancara</value></data>
+  <data name="CompleteDescription" xml:space="preserve"><value>Anda dapat membuat tugas untuk tim ini dari bagian 'kuesioner'</value></data>
+  <data name="Questionnaires" xml:space="preserve"><value>Kuesioner</value></data>
+  <data name="UploadInProgress" xml:space="preserve"><value>Peringatan: Unggah massal oleh "{{userName}}" sedang berlangsung.</value></data>
+  <data name="UploadInProgressDescription" xml:space="preserve"><value>Anda dapat memulai milik Anda saat yang sedang berjalan selesai.</value></data>
+  <data name="EstimatedTime" xml:space="preserve"><value>Perkiraan {{estimatedTime}} tersisa</value></data>
+  <data name="TimeDetermination" xml:space="preserve"><value>penentuan waktu</value></data>
+  <data name="Workspace" xml:space="preserve"><value>Ruang Kerja</value></data>
+  <data name="SelectWorkspace" xml:space="preserve"><value>Pilih Ruang Kerja</value></data>
+  <data name="SelectWorkspaceDescription" xml:space="preserve"><value>Jika tidak ada ruang kerja yang ditetapkan dalam file massal, gunakan ruang kerja ini sebagai default</value></data>
+    <data name="AssignedToDescription" xml:space="preserve">
+        <value>wajib untuk pewawancara, berisi nama pengguna supervisor tempat orang ini akan ditugaskan</value>
+    </data>
+</root>

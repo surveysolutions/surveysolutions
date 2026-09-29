@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
+        <value>[PL0002] Tidak ada. Hubungi dukungan server Anda.</value>
+    </data>
+    <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
+        <value>Kolom tidak dapat dipetakan ke pertanyaan apa pun dalam kuesioner.</value>
+    </data>
+    <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
+        <value>File tidak dapat dipetakan ke daftar nama mana pun dalam kuesioner.</value>
+    </data>
+    <data name="PL0006_IdDublication" xml:space="preserve">
+        <value>Nilai Id duplikat ditemukan.</value>
+    </data>
+    <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
+        <value>Satu atau beberapa kolom ID induk tidak ada.</value>
+    </data>
+    <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
+        <value>Catatan roster tidak memiliki orang tua.</value>
+    </data>
+    <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
+        <value>Id Roster tidak sesuai dengan ukuran roster.</value>
+    </data>
+    <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+        <value>Nilai pertanyaan tidak diperbolehkan.</value>
+    </data>
+    <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+        <value>Nilai Tanggal atau Waktu yang dimasukkan dalam pertanyaan tanggal tidak valid.</value>
+    </data>
+    <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
+        <value>Nilai GPS tidak valid.</value>
+    </data>
+    <data name="PL0018_ExpectedIntNotParsed" xml:space="preserve">
+        <value>Hanya nilai integer yang diperbolehkan.</value>
+    </data>
+    <data name="PL0019_ExpectedDecimalNotParsed" xml:space="preserve">
+        <value>Hanya nilai nyata yang diperbolehkan.</value>
+    </data>
+    <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
+        <value>Pertanyaan ukuran daftar nama tidak boleh bernilai negatif.</value>
+    </data>
+    <data name="PL0024_DataWasNotFound" xml:space="preserve">
+        <value>Data pramuat tidak ditemukan.</value>
+    </data>
+    <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+        <value>Penanggung jawab tidak ada untuk 1 observasi atau lebih.</value>
+    </data>
+    <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
+        <value>Bertanggung jawab adalah pengguna yang terkunci untuk 1 atau lebih observasi.</value>
+    </data>
+    <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
+        <value>Pengguna bukan Markas Besar, Supervisor atau Pewawancara untuk 1 observasi atau lebih.</value>
+    </data>
+    <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
+        <value>Jawaban atas pertanyaan ukuran roster tidak boleh lebih besar dari {0}.</value>
+    </data>
+    <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
+        <value>Pertanyaan GPS memerlukan kolom terpisah untuk Lintang dan Bujur</value>
+    </data>
+    <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
+        <value>Pertanyaan GPS memerlukan pengaturan Lintang dan Bujur.</value>
+    </data>
+    <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
+        <value>Dua kolom atau lebih mempunyai nama yang sama.</value>
+    </data>
+    <data name="PL0032_LatitudeMustBeGeaterThenN90AndLessThen90" xml:space="preserve">
+        <value>Garis lintang harus lebih besar dari -90° dan kurang dari 90°.</value>
+    </data>
+    <data name="PL0033_LongitudeMustBeGeaterThenN180AndLessThen180" xml:space="preserve">
+        <value>Garis bujur harus lebih besar dari -180° dan kurang dari 180°.</value>
+    </data>
+    <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
+        <value>Pemisah desimal tidak valid. Simbol "," tidak diperbolehkan dalam jawaban numerik. Silakan gunakan "." alih-alih.</value>
+    </data>
+    <data name="PL0035_QuantityNotParsed" xml:space="preserve">
+        <value>Hanya nilai integer yang diperbolehkan.</value>
+    </data>
+    <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
+        <value>Kuantitas harus lebih besar atau sama dengan -1.</value>
+    </data>
+    <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+        <value>File dengan data tingkat kuesioner tidak ada.</value>
+    </data>
+    <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+        <value>Pilihan yang dijawab dihitung untuk pertanyaan pilihan ganda tidak boleh lebih dari jumlah jawaban maksimal yang diperbolehkan.</value>
+    </data>
+    <data name="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
+        <value>Nilai negatif tidak diperbolehkan untuk pertanyaan Pilihan Multi Kategoris.</value>
+    </data>
+    <data name="PL0042_IdIsEmpty" xml:space="preserve">
+        <value>Kolom Id tidak memiliki nilai apa pun.</value>
+    </data>
+    <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+        <value>Arsip yang dilindungi kata sandi tidak didukung</value>
+    </data>
+    <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
+        <value>Daftar daftar harus memiliki kolom untuk jawaban daftar teks</value>
+    </data>
+    <data name="PL0047_ProtectedVariables_MissingColumn" xml:space="preserve">
+        <value>Kolom wajib {0} tidak ada.</value>
+    </data>
+    <data name="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" xml:space="preserve">
+        <value>Variabel yang dilindungi tidak ditemukan dalam kuesioner yang disediakan.</value>
+    </data>
+    <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
+        <value>Tipe variabel tidak dapat dilindungi.</value>
+    </data>
+    <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
+        <value>Kode roster tidak konsisten untuk roster numerik. Urutan kode daftar nama harus 0, 1, ... untuk menghitung contoh daftar nama</value>
+    </data>
+    <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
+        <value>Kuantitas maksimal tidak boleh lebih dari {0}.</value>
+    </data>
+    <data name="PL0055_InvalidEmail" xml:space="preserve">
+        <value>Email tidak valid</value>
+    </data>
+    <data name="PL0056_InvalidPassword" xml:space="preserve">
+        <value>Kata Sandi Tidak Valid. Minimal 6 angka dan huruf besar atau simbol tunggal '?' untuk menghasilkan kata sandi</value>
+    </data>
+    <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
+        <value>Untuk tugas dengan email yang disediakan, jumlah yang diperbolehkan adalah 1</value>
+    </data>
+    <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
+        <value>Mode Web harus diaktifkan untuk tugas yang memiliki Email</value>
+    </data>
+    <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
+        <value>Mode Web harus diaktifkan untuk tugas yang memiliki Kata Sandi</value>
+    </data>
+    <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
+        <value>Tugas dengan ukuran 1 untuk mode web harus menyediakan email atau kata sandi</value>
+    </data>
+    <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
+        <value>Kata sandi tidak unik. Kata sandi berdasarkan tugas untuk mode web dengan nomor 1 harus unik</value>
+    </data>
+    <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
+        <value>Semua tugas untuk wawancara web harus diberikan kepada pewawancara</value>
+    </data>
+    <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
+        <value>Jawaban atas pertanyaan dengan nama variabel {0} tidak dapat dimuat sebelumnya, karena tipenya tidak didukung. Lihat artikel dukungan berikut https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type untuk detail tentang apa yang dapat dimuat sebelumnya di versi saat ini.</value>
+    </data>
+    <data name="PL0064_AudioAuditScopeInvalidEntity" xml:space="preserve">
+        <value>Nama variabel cakupan audit audio '{0}' tidak valid. Itu harus merujuk pada bagian, grup, atau daftar nama yang ada (pertanyaan dan daftar nama datar tidak diperbolehkan).</value>
+    </data>
+  <data name="PL0065_TargetAreaTooLong" xml:space="preserve">
+    <value>Area target terlalu panjang. Harus {0} karakter atau kurang.</value>
+  </data>
+    <data name="AssignmentUpgrade_SelectiveAudioAuditNotMigrated" xml:space="preserve">
+        <value>Penugasan tidak dimigrasi karena menggunakan Audit Audio selektif (cakupan rekaman audio), yang tidak dapat dimigrasi secara otomatis ke versi kuesioner baru. Buat ulang penugasan secara manual dan konfigurasikan kembali cakupan audit audio.</value>
+    </data>
+</root>

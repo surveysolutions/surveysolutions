@@ -1,12 +1,13 @@
 <template>
-    <ModalFrame ref="modal" id="statusesHistoryModal">
+    <ModalFrame ref="modal"
+        id="statusesHistoryModal">
         <template v-slot:title>
             <div>
                 <h3>{{ $t("Pages.HistoryOfStatuses_Interview") }} {{ $config.model.key }}</h3>
                 <p>
                     {{ $t('Details.Responsible') }}: <span
                         v-bind:class="[$config.model.responsibleRole.toLowerCase()]">{{
-                            $config.model.responsible }}</span>
+                        $config.model.responsible }}</span>
                 </p>
             </div>
         </template>
@@ -23,7 +24,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in items" :key="item.id">
+                    <tr v-for="item in items"
+                        :key="item.id">
                         <td>{{ item.statusHumanized }}</td>
                         <td class="date">
                             {{ formatDate(item.date) }}
@@ -43,7 +45,9 @@
         </div>
         <template v-slot:actions>
             <div>
-                <button type="button" class="btn btn-link" @click="hide">
+                <button type="button"
+                    class="btn btn-link"
+                    @click="hide">
                     {{ $t("Pages.CloseLabel") }}
                 </button>
             </div>

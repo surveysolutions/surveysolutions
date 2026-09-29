@@ -518,12 +518,12 @@ namespace WB.Services.Export.Tests
         }
 
 
-        public static TenantDbContext NpgsqlTenantDbContext(string connectionString, string tenantName = null)
+        public static TenantDbContext NpgsqlTenantDbContext(string connectionString, string tenantName = null, TenantId tenantId = null)
         {
             var options = new DbContextOptionsBuilder<TenantDbContext>().Options;
             var dbContext = new TenantDbContext(
                 Mock.Of<ITenantContext>(x => x.Tenant == new TenantInfo(
-                    "", TenantId.None,
+                    "", tenantId ?? TenantId.None,
                     tenantName ?? "none", TenantInfo.DefaultWorkspace
                 )),
                 Mock.Of<IOptions<DbConnectionSettings>>(x => x.Value == new DbConnectionSettings()

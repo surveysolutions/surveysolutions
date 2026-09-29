@@ -283,6 +283,27 @@ namespace WB.Services.Export.Tests.Questionnaire
             Assert.That(areaColumnHeaders[3].Name, Is.EqualTo(variable + "__num"));
             Assert.That(areaColumnHeaders[4].Name, Is.EqualTo(variable + "__racc"));
         }
+        
+        [Test]
+        public void when_exists_area_question_without_geometry_type_then_should_use_polygon_geometry_type()
+        {
+            // arrange
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(new IQuestionnaireEntity[]
+            {
+                Create.AreaQuestion(Id.g1),
+            });
+
+            var questionnaireExportStructureFactory = CreateExportViewFactory();
+
+            // act
+            var questionnaireExportStructure = questionnaireExportStructureFactory.CreateQuestionnaireExportStructure(questionnaire);
+
+            // assert
+            HeaderStructureForLevel level = questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()];
+            var header = (ExportedQuestionHeaderItem)level.HeaderItems[Id.g1];
+
+            Assert.That(header.GeometryType, Is.EqualTo(GeometryType.Polygon));
+        }
 
         [Test]
         public void when_exists_area_question_with_long_variable_then_should_generate_all_columns_with_short_name()

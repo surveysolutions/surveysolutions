@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer;
@@ -19,11 +20,14 @@ using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Api.WebTester;
+using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Controllers.Api.WebTester
 {
+    [ApiController]
     [Route("api/webtester")]
+    [Authorize(AuthenticationSchemes = DelegatedTokenService.DelegatedScheme)]
     public class WebTesterController : ControllerBase
     {
         private readonly IQuestionnairePackageComposer questionnairePackageComposer;
@@ -31,7 +35,6 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IAttachmentService attachmentService;
         private readonly DesignerDbContext designerDbContext;
-        private readonly IWebTesterService webTesterService;
         private readonly ISerializer serializer;
 
         public WebTesterController(
@@ -39,28 +42,23 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             IQuestionnaireViewFactory questionnaireViewFactory,
             IAttachmentService attachmentService,
             DesignerDbContext designerDbContext,
-            IWebTesterService webTesterService,
             ISerializer serializer)
         {
             this.questionnairePackageComposer = questionnairePackageComposer;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.attachmentService = attachmentService;
             this.designerDbContext = designerDbContext;
-            this.webTesterService = webTesterService;
             this.serializer = serializer;
         }
 
-        [Route("{token:Guid}/info")]
+        [Route("{questionnaireId:Guid}/info")]
         [HttpGet]
-        public IActionResult Info(string token)
+        public IActionResult Info(Guid questionnaireId)
         {
-            var questionnaireId = this.webTesterService.GetQuestionnaire(token);
-            if (questionnaireId == null)
-            {
-                return NotFound();
-            }
+            if (!User.HasMatchingQuestionnaireId(questionnaireId))
+                return Forbid();
 
-            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId.Value));
+            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId));
             if (questionnaireView == null)
             {
                 return NotFound();
@@ -73,37 +71,34 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             });
         }
         
-        [Route("{token:Guid}/settings")]
+        [Route("{questionnaireId:Guid}/settings")]
         [HttpGet]
-        public IActionResult Settings(string token)
+        public IActionResult Settings(Guid questionnaireId)
         {
-            var questionnaireId = this.webTesterService.GetQuestionnaire(token);
-            if (questionnaireId == null)
-            {
-                return NotFound();
-            }
+            if (!User.HasMatchingQuestionnaireId(questionnaireId))
+                return Forbid();
             
             var anonymousQuestionnaire = this.designerDbContext.AnonymousQuestionnaires.FirstOrDefault(a =>
                 a.AnonymousQuestionnaireId == questionnaireId && a.IsActive == true);
 
             return Ok(new QuestionnaireSettings
             {
-                IsAnonymousMode = anonymousQuestionnaire == null
+                IsAnonymousMode = anonymousQuestionnaire != null
             });
         }
 
-        [Route("{token:Guid}/questionnaire")]
+        [Route("{questionnaireId:Guid}/questionnaire")]
         [HttpGet]
-        public IActionResult QuestionnaireAsync(string token)
+        public IActionResult QuestionnaireAsync(Guid questionnaireId)
         {
-            var questionnaireId = this.webTesterService.GetQuestionnaire(token);
-            if (questionnaireId == null) return NotFound();
+            if (!User.HasMatchingQuestionnaireId(questionnaireId))
+                return Forbid();
 
             try
             {
-                var composeQuestionnaire = this.questionnairePackageComposer.ComposeQuestionnaire(questionnaireId.Value);
+                var composeQuestionnaire = this.questionnairePackageComposer.ComposeQuestionnaire(questionnaireId);
                 if(composeQuestionnaire == null)
-                    if (questionnaireId == null) return NotFound();
+                    return NotFound();
                 
                 return Ok(this.serializer.Serialize(composeQuestionnaire));
             }
@@ -122,18 +117,26 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             return qId;
         }
 
-        [Route("{token:Guid}/attachment/{attachmentContentId}")]
+        [Route("{questionnaireId:Guid}/attachment/{attachmentContentId}")]
         [HttpGet]
-        public IActionResult AttachmentContentAsync(string token, string attachmentContentId)
+        public IActionResult AttachmentContentAsync(Guid questionnaireId, string attachmentContentId)
         {
-            var questionnaireId = this.webTesterService.GetQuestionnaire(token);
-            if (questionnaireId == null) return NotFound();
+            if (!User.HasMatchingQuestionnaireId(questionnaireId))
+                return Forbid();
+
             var qId = GetOriginalQuestionnaireId(questionnaireId);
 
             if (this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(qId)) == null)
             {
                 return NotFound();
             }
+
+            // IDOR guard: verify the requested attachment belongs to this questionnaire
+            var questionnaireAttachments = this.attachmentService.GetAttachmentsByQuestionnaire(qId);
+            var attachmentBelongsToQuestionnaire = questionnaireAttachments
+                .Any(a => string.Equals(a.ContentId, attachmentContentId, StringComparison.OrdinalIgnoreCase));
+            if (!attachmentBelongsToQuestionnaire)
+                return Forbid();
 
             var attachmentContent = this.attachmentService.GetContent(attachmentContentId);
 
@@ -149,15 +152,13 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             });
         }
 
-        [Route("{token:Guid}/translations")]
+        [Route("{questionnaireId:Guid}/translations")]
         [HttpGet]
-        public IActionResult TranslationsAsync(string token)
+        public IActionResult TranslationsAsync(Guid questionnaireId)
         {
-            var questionnaireId = this.webTesterService.GetQuestionnaire(token);
-            if (questionnaireId == null)
-            {
-                return NotFound();
-            }
+            if (!User.HasMatchingQuestionnaireId(questionnaireId))
+                return Forbid();
+
             var qId = GetOriginalQuestionnaireId(questionnaireId);
 
             var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(qId));
@@ -179,15 +180,13 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             return Ok(model);
         }
 
-        [Route("{token:Guid}/categories")]
+        [Route("{questionnaireId:Guid}/categories")]
         [HttpGet]
-        public IActionResult CategoriesAsync(string token)
+        public IActionResult CategoriesAsync(Guid questionnaireId)
         {
-            var questionnaireId = this.webTesterService.GetQuestionnaire(token);
-            if (questionnaireId == null)
-            {
-                return NotFound();
-            }
+            if (!User.HasMatchingQuestionnaireId(questionnaireId))
+                return Forbid();
+
             var qId = GetOriginalQuestionnaireId(questionnaireId);
 
             var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(qId));

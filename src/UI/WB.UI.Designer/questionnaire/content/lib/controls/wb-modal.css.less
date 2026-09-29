@@ -28,7 +28,7 @@
             border-radius: 5px 5px 0 0;
 
             &.blue-strip {
-                border-top: 8px solid #d7e4ee;
+                border-top: 8px solid @panel-light-border-color;
             }
 
             h1 {
@@ -41,12 +41,12 @@
             h2 {
                 .arial-font();
                 font-size: 18px;
-                color: #3f3f3f;
+                color: @designer-editor-title-color;
 
                 small {
                     .lucida-console-font();
                     font-size: 14px;
-                    color: #b9c3ca;
+                    color: @designer-editor-mediumblue-bg-color;
                 }
             }
         }
@@ -60,8 +60,8 @@
 }
 
 .modal-header {
-    border-top: 8px solid #d7e4ee;
-    border-bottom: 2px solid @verification-modal-content-border-color;
+    border-top: 8px solid @panel-light-border-color;
+    border-bottom: 2px solid @neutral-button-bg-color;
 
     button.close {
         @s: 40px;
@@ -105,19 +105,19 @@
 }
 
 .alert-warning {
-    border-top-color: #2a81cb;
+    border-top-color: @primary-link-color;
 }
 
 .alert-info {
-    border-top-color: #2a81cb;
+    border-top-color: @primary-link-color;
 }
 
 .alert-success {
-    border-top-color: #2fc507;
+    border-top-color: @success-button-color;
 }
 
 .alert-danger {
-    border-top-color: #ff2b2b;
+    border-top-color: @modal-error-color;
 }
 
 .ui-pnotify .ui-pnotify-shadow {

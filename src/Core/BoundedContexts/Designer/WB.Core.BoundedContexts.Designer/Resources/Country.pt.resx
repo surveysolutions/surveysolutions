@@ -122,7 +122,7 @@
     <value>Benim</value>
   </data>
   <data name="BFA" xml:space="preserve">
-    <value>Burkina Faso</value>
+    <value>Burquina Faso</value>
   </data>
   <data name="BGD" xml:space="preserve">
     <value>Bangladesh</value>
@@ -497,7 +497,7 @@
     <value>Malta</value>
   </data>
   <data name="MMR" xml:space="preserve">
-    <value>Myanmar</value>
+    <value>Mianmar (Birmânia)</value>
   </data>
   <data name="MNE" xml:space="preserve">
     <value>Montenegro</value>
@@ -524,13 +524,13 @@
     <value>Maurício</value>
   </data>
   <data name="MWI" xml:space="preserve">
-    <value>Malawi</value>
+    <value>Malaui</value>
   </data>
   <data name="MYS" xml:space="preserve">
     <value>Malásia</value>
   </data>
   <data name="MYT" xml:space="preserve">
-    <value>Mayotte</value>
+    <value>Maiote</value>
   </data>
   <data name="NAM" xml:space="preserve">
     <value>Namíbia</value>
@@ -692,7 +692,7 @@
     <value>Suazilândia</value>
   </data>
   <data name="SYC" xml:space="preserve">
-    <value>Seychelles</value>
+    <value>Seicheles</value>
   </data>
   <data name="SYR" xml:space="preserve">
     <value>República Árabe Síria</value>
@@ -767,7 +767,7 @@
     <value>São Vicente e Granadinas</value>
   </data>
   <data name="VEN" xml:space="preserve">
-    <value>Venezuela, RB</value>
+    <value>Venezuela</value>
   </data>
   <data name="VGB" xml:space="preserve">
     <value>Ilhas Virgens Britânicas</value>

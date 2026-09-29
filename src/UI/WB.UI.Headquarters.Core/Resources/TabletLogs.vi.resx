@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="DeviceId" xml:space="preserve"><value>ID thiết bị</value></data>
+  <data name="PageSubTitle" xml:space="preserve"><value>Phỏng vấn viên có thể điều hướng đến trang chẩn đoán trên thiết bị và nhấn liên kết "Gửi nhật ký theo dõi" để gửi nhật ký chi tiết</value></data>
+  <data name="PageTitle" xml:space="preserve"><value>Nhật ký thiết bị</value></data>
+  <data name="ReceiveDateUtc" xml:space="preserve"><value>Nhận lúc</value></data>
+  <data name="UserName" xml:space="preserve"><value>Tên người dùng</value></data>
+</root>

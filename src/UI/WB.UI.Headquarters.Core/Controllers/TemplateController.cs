@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Resources;
@@ -21,7 +20,6 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.Headquarters.Configs;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.ComponentModels;
@@ -49,8 +47,7 @@ namespace WB.UI.Headquarters.Controllers
             IDesignerUserCredentials designerUserCredentials, 
             IAllUsersAndQuestionnairesFactory questionnaires,
             IAuthorizedUser authorizedUser,
-            ILogger<TemplateController> logger,
-            IOptions<DesignerConfig> designerConfig)
+            ILogger<TemplateController> logger)
         {
             this.designerApi = designerApi;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
@@ -59,12 +56,6 @@ namespace WB.UI.Headquarters.Controllers
             this.questionnaires = questionnaires;
             this.authorizedUser = authorizedUser;
             this.logger = logger;
-
-            if (designerConfig.Value.AcceptUnsignedCertificate)
-            {
-                ServicePointManager.ServerCertificateValidationCallback =
-                    (self, certificate, chain, sslPolicyErrors) => true;
-            }
         }
 
         public ActionResult Import()

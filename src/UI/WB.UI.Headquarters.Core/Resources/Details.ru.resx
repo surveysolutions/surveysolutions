@@ -170,4 +170,9 @@
   <data name="InterviewMode" xml:space="preserve">
     <value>Режим</value>
   </data>
+
+
+  <data name="SearchResult_Count_other" xml:space="preserve">
+    <value>{{ count }} элементов найдено:</value>
+  </data>
 </root>

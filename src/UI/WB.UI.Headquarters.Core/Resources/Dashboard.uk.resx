@@ -255,4 +255,9 @@
   <data name="WebMode" xml:space="preserve">
     <value>Режим</value>
   </data>
+
+
+  <data name="SaveQuestionnaire" xml:space="preserve">
+    <value>Зберегти документ анкети</value>
+  </data>
 </root>

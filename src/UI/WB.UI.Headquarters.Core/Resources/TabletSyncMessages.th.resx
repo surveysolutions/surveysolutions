@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="InvalidDeviceIdentifier" xml:space="preserve">
+        <value>ตัวระบุอุปกรณ์ไม่ถูกต้อง มีบางอย่างเกิดขึ้นกับการติดตั้งแอปไคลเอ็นต์ โปรดส่งข้อมูลแท็บเล็ต</value>
+    </data>
+    <data name="InvalidUserFormat" xml:space="preserve">
+        <value>การซิงโครไนซ์ล้มเหลว ผู้ใช้ไม่ได้รับอนุญาต โปรดตรวจสอบข้อมูลเข้าสู่ระบบ/รหัสผ่านของคุณสำหรับ {0}</value>
+    </data>
+    <data name="NoClientIdentifier" xml:space="preserve">
+        <value>การซิงโครไนซ์ล้มเหลว กรุณาติดตั้งแอปพลิเคชันใหม่ ตัวระบุการติดตั้งหายไป โปรดติดต่อผู้พัฒนา</value>
+    </data>
+    <data name="InterviewerApplicationShouldBeUpdated" xml:space="preserve">
+        <value>การซิงโครไนซ์ล้มเหลว ใบสมัครของคุณเข้ากันไม่ได้ โปรดอัปเดตแอปผู้สัมภาษณ์ของคุณ</value>
+    </data>
+    <data name="InterviewerIsNotCompatibleWithThisVersion" xml:space="preserve">
+        <value>การซิงโครไนซ์ล้มเหลว แอปพลิเคชันของคุณเข้ากันไม่ได้ ถอนการติดตั้งแอปพลิเคชันของคุณและดาวน์โหลดแอป Interviewer เวอร์ชันใหม่</value>
+    </data>
+    <data name="AndroidDeviceIdWasNotProvided" xml:space="preserve">
+        <value>การซิงโครไนซ์ล้มเหลว ไม่ได้ระบุรหัสอุปกรณ์ Android โปรดติดต่อผู้พัฒนา</value>
+    </data>
+    <data name="WrongAndroidDeviceIdWasProvided" xml:space="preserve">
+        <value>การซิงโครไนซ์ล้มเหลว ระบุรหัสอุปกรณ์ Android ไม่ถูกต้อง โปรดติดต่อผู้พัฒนา</value>
+    </data>
+    <data name="ServerError" xml:space="preserve">
+        <value>การซิงโครไนซ์ล้มเหลว เกิดข้อผิดพลาดเซิร์ฟเวอร์ภายใน โปรดติดต่อผู้พัฒนา</value>
+    </data>
+    <data name="FileWasNotFound" xml:space="preserve">
+        <value>การซิงโครไนซ์ล้มเหลว ไม่พบไฟล์ที่เป็นเวอร์ชันล่าสุด โปรดติดต่อผู้พัฒนา</value>
+    </data>
+    <data name="IncorrectFilesCount" xml:space="preserve">
+        <value>การซิงโครไนซ์ล้มเหลว จำนวนไฟล์ที่ไม่ถูกต้อง โปรดติดต่อผู้พัฒนา</value>
+    </data>
+    <data name="IncorrectMediaType" xml:space="preserve">
+        <value>การซิงโครไนซ์ล้มเหลว ประเภทสื่อไม่ถูกต้อง โปรดติดต่อผู้พัฒนา</value>
+    </data>
+    <data name="InvalidSequenceIdentifier" xml:space="preserve">
+        <value>การซิงโครไนซ์ล้มเหลว ตัวระบุลำดับไม่ถูกต้อง มีบางอย่างเกิดขึ้นกับการติดตั้งแอปไคลเอนต์ กดปุ่ม "ส่งข้อมูลแท็บเล็ต"</value>
+    </data>
+    <data name="Sync_package_with_id__0__was_not_found_on_serverFormat" xml:space="preserve">
+        <value>การซิงโครไนซ์ล้มเหลว  ไม่พบแพ็คเกจการซิงค์ที่มีรหัส '{0}' บนเซิร์ฟเวอร์ โปรดติดต่อผู้พัฒนา</value>
+    </data>
+    <data name="InvalidUserRole" xml:space="preserve">
+        <value>บัญชีของคุณไม่มีบทบาทในการอนุญาตการดำเนินการนี้</value>
+    </data>
+    <data name="Maintenance" xml:space="preserve">
+        <value>ขณะนี้เซิร์ฟเวอร์อยู่ในโหมดบำรุงรักษา ขออภัยในความไม่สะดวก กรุณาลองอีกครั้งในภายหลัง</value>
+    </data>
+    <data name="OldInterviewerNeedsCleanup" xml:space="preserve">
+        <value>การซิงโครไนซ์ล้มเหลวบางส่วน การสัมภาษณ์ที่เสร็จสมบูรณ์จะถูกส่งไปยังเซิร์ฟเวอร์ แต่คุณจะไม่ได้รับงานใหม่ โปรดไปที่การตั้งค่า Android -&gt; แอป -&gt; ผู้สัมภาษณ์ และกดปุ่มล้างข้อมูล จากนั้นซิงโครไนซ์ตั้งแต่เริ่มต้น</value>
+    </data>
+</root>

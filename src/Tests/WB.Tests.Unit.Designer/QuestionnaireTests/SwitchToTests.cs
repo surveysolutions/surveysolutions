@@ -5,7 +5,9 @@ using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
@@ -86,5 +88,61 @@ internal class SwitchToTests : QuestionnaireTestsContext
         Assert.That(questionnaire.QuestionnaireDocument.Translations[0].Id, Is.Not.EqualTo(translationId));
         Assert.That(questionnaire.QuestionnaireDocument.Translations[0].Name, Is.EqualTo(questionnaireDocumentDefaultLanguageName));
         Assert.That(questionnaire.QuestionnaireDocument.DefaultLanguageName, Is.EqualTo("Translation_Title"));
+    }
+
+    [Test]
+    public void SwitchTo_when_questionnaire_has_reusable_categories_should_copy_translations_to_new_categories_id()
+    {
+        var responsibleId = Guid.NewGuid();
+        var questionnaireId = Guid.NewGuid();
+        var translationId = Guid.NewGuid();
+        var remainingTranslationId = Guid.NewGuid();
+        var categoriesId = Guid.NewGuid();
+
+        var questionnaireDocument = CreateQuestionnaireDocument(createdBy: responsibleId);
+        questionnaireDocument.Categories = new List<Categories>
+        {
+            new() { Id = categoriesId, Name = "categories" }
+        };
+        questionnaireDocument.Translations = new List<Translation>
+        {
+            Create.Translation(translationId: translationId, name: "Translation"),
+            Create.Translation(translationId: remainingTranslationId, name: "Other translation")
+        };
+
+        var translation = new Mock<ITranslation>();
+        translation.Setup(x => x.GetCategoriesText(categoriesId, 1, null)).Returns("translated");
+
+        var translationsService = Mock.Of<ITranslationsService>(x =>
+            x.Get(questionnaireDocument.PublicKey, translationId) == translation.Object);
+        var designerTranslationService = new Mock<IDesignerTranslationService>();
+        designerTranslationService.Setup(x => x.IsFullTranslated(It.IsAny<QuestionnaireDocument>(), translation.Object))
+            .Returns(true);
+        designerTranslationService.Setup(x => x.GetFromQuestionnaire(It.IsAny<QuestionnaireDocument>()))
+            .Returns(Array.Empty<TranslationInstance>());
+
+        var reusableCategoriesService = new Mock<IReusableCategoriesService>();
+        reusableCategoriesService.Setup(x => x.GetCategoriesById(questionnaireDocument.PublicKey, categoriesId))
+            .Returns(new[] { new CategoriesItem { Id = 1, Text = "original" } }.AsQueryable());
+
+        var questionnaireTranslator = new Mock<IQuestionnaireTranslator>();
+        questionnaireTranslator.Setup(x => x.Translate(It.IsAny<QuestionnaireDocument>(), translation.Object, false))
+            .Returns<QuestionnaireDocument, ITranslation, bool>((document, _, _) => document);
+
+        var questionnaire = Create.Questionnaire(
+            questionnaireTranslator: questionnaireTranslator.Object,
+            translationsService: translationsService,
+            designerTranslationService: designerTranslationService.Object,
+            reusableCategoriesService: reusableCategoriesService.Object);
+        questionnaire.Initialize(questionnaireId, questionnaireDocument, []);
+
+        questionnaire.SwitchToTranslation(Create.Command.SwitchToTranslation(
+            questionnaireId, responsibleId, translationId));
+
+        var newCategoriesId = questionnaire.QuestionnaireDocument.Categories.Single().Id;
+        Assert.That(newCategoriesId, Is.Not.EqualTo(categoriesId));
+        designerTranslationService.Verify(x => x.CopyCategoriesTranslations(
+            questionnaireDocument.PublicKey, categoriesId, newCategoriesId,
+            It.Is<IEnumerable<Guid>>(ids => ids.SequenceEqual(new[] { remainingTranslationId }))), Times.Once);
     }
 }

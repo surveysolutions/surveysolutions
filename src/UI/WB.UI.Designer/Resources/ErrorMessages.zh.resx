@@ -264,4 +264,17 @@
   <data name="InvalidLoginAttempt" xml:space="preserve">
       <value>无效的登录尝试</value>
   </data>
+
+
+  <data name="EmailOrLogin_required" xml:space="preserve">
+    <value>需要登录名或电子邮件</value>
+  </data>
+
+  <data name="QuestionnaireTitle_rules" xml:space="preserve">
+    <value>问卷标题只能使用以下字符：A..Z a..z 0..9 ( ) \ / _ - 和空格，且不能包含两个或更多连续的下划线字符。</value>
+  </data>
+
+  <data name="QuestionnaireTitle_MaxLength" xml:space="preserve">
+    <value>问卷标题不能超过 {1} 个字符。</value>
+  </data>
 </root>

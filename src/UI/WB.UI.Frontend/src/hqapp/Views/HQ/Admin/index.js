@@ -1,8 +1,8 @@
-import EmailProviders from './EmailProviders'
-import TabletLogs from './TabletLogs'
-import Settings from './Settings'
-import AuditLog from './AuditLog'
-import TabletInfos from './TabletInfos'
+const EmailProviders = () => import('./EmailProviders')
+const TabletLogs = () => import('./TabletLogs')
+const Settings = () => import('./Settings')
+const AuditLog = () => import('./AuditLog')
+const TabletInfos = () => import('./TabletInfos')
 const InterviewPackages = () => import('./InterviewPackages')
 
 export default class AdminComponent {

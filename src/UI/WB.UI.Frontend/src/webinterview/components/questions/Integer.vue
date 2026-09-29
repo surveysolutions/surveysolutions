@@ -22,7 +22,7 @@
                                 digitGroupSeparator: groupSeparator,
                                 decimalCharacter: decimalSeparator,
                                 decimalPlaces: 0,
-                                minimumValue: '-2147483648',
+                                minimumValue: minimumValue,
                                 maximumValue: '2147483647'
                             }" />
                         <wb-remove-answer v-if="!isSpecialValueSelected && !$me.isProtected"
@@ -65,7 +65,7 @@ export default {
     props: ['noComments'],
     computed: {
         autoNumericElement() {
-            return this.$refs.inputInt.autoNumericElement
+            return this.$refs.inputInt?.autoNumericElement
         },
         isSpecialValueSelected() {
             if (this.$me.answer == null || this.$me.answer == undefined)
@@ -80,6 +80,20 @@ export default {
         },
         decimalSeparator() {
             return getDecimalSeparator(this.$me)
+        },
+        hasNegativeSpecialValues() {
+            return (this.$me.options || []).some(o => o.value < 0)
+        },
+        hasNegativeCurrentNonSpecialAnswer() {
+            return this.$me.answer < 0 && !this.isSpecialValue(this.$me.answer)
+        },
+        minimumValue() {
+            if (!this.$me.isNonNegative)
+                return '-2147483648'
+
+            return (this.hasNegativeSpecialValues || this.hasNegativeCurrentNonSpecialAnswer)
+                ? '-2147483648'
+                : '0'
         },
         specialValue: {
             get() {
@@ -109,6 +123,11 @@ export default {
 
                 if (answer > 2147483647 || answer < -2147483648 || answer % 1 !== 0) {
                     this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberCannotParse'), answer)
+                    return
+                }
+
+                if (this.$me.isNonNegative && answer < 0 && !this.isSpecialValue(answer)) {
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberNonNegativeError'), answer)
                     return
                 }
 
@@ -207,7 +226,7 @@ export default {
             return false
         },
     },
-    beforeDestroy() {
+    beforeUnmount() {
         if (this.autoNumericElement) {
             this.autoNumericElement.remove()
         }

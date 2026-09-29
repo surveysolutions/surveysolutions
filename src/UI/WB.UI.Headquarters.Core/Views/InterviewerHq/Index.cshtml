@@ -6,7 +6,8 @@
     @Html.RenderHqConfig(new
     {
         AssignmentsEndpoint = Url.Action("Get", "AssignmentsApi"),
-        InterviewerHqEndpoint = Url.Content(@"~/interviewerHq")
+        InterviewerHqEndpoint = Url.Content(@"~/interviewerHq"),
+        AllowInterviewerChangeAssignmentStatus = Model.AllowInterviewerChangeAssignmentStatus
     })
 }
 <div id="vueApp"></div>

@@ -219,4 +219,37 @@
   <data name="ReloadInterviewErrorMessage" xml:space="preserve">
     <value>Të dhënat e intervistës nuk mund të përdoren në versionin e ri të pyetësorit. Ne do të hapim intervistë bosh</value>
   </data>
+
+
+  <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
+    <value>URL-ja e pyetësorit anonim</value>
+  </data>
+
+  <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
+    <value>Hape</value>
+  </data>
+
+  <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
+    <value>Nuk mund të hapet pyetësori. Pyetësori nuk mund të gjendet.</value>
+  </data>
+
+  <data name="AnonymousQuestionnaires_Error_Confirm" xml:space="preserve">
+    <value>Nuk mund të hapet pyetësori. Ta heqim nga lista?</value>
+  </data>
+
+  <data name="Login_Error_EmptyName" xml:space="preserve">
+    <value>Ju lutemi, shkruani login-in e saktë</value>
+  </data>
+
+  <data name="TesterLoginAccountHintText" xml:space="preserve">
+    <value>Hyni në këtë aplikacion duke përdorur kredencialet që keni krijuar në https://designer.mysurvey.solutions. Për të regjistruar një llogari të re, vizitoni të njëjtën faqe.</value>
+  </data>
+
+  <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
+    <value>Pyetësorë anonimë</value>
+  </data>
+
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>Hyrje</value>
+  </data>
 </root>

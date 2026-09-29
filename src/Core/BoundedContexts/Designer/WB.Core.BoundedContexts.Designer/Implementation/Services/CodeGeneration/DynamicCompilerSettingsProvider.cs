@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         private readonly string[] assemblies =
         {
+            "netstandard",
             "System.Globalization",
             "System.Reflection",
             "System.IO",

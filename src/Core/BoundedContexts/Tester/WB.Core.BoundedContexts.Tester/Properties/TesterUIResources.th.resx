@@ -189,4 +189,77 @@
   <data name="Prefs_VersionTitle" xml:space="preserve">
     <value>เวอร์ชันของแอพพลิเคชัน</value>
   </data>
+
+
+  <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
+    <value>กำลังดาวน์โหลดไฟล์แนบของแบบสอบถาม -  {0}%</value>
+  </data>
+
+  <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
+    <value>URL แบบสอบถามแบบไม่ระบุตัวตน</value>
+  </data>
+
+  <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
+    <value>เปิด</value>
+  </data>
+
+  <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
+    <value>ไม่สามารถเปิดแบบสอบถามได้ ไม่พบแบบสอบถาม</value>
+  </data>
+
+  <data name="AnonymousQuestionnaires_Error_Confirm" xml:space="preserve">
+    <value>ไม่สามารถเปิดแบบสอบถามได้ ลบออกจากรายการหรือไม่</value>
+  </data>
+
+  <data name="Login_Error_EmptyName" xml:space="preserve">
+    <value>โปรดป้อนข้อมูลเข้าสู่ระบบที่ถูกต้อง</value>
+  </data>
+
+  <data name="TesterLoginAccountHintText" xml:space="preserve">
+    <value>เข้าสู่ระบบแอปนี้โดยใช้ข้อมูลประจำตัวที่คุณสร้างไว้ที่ https://designer.mysurvey.solutions หากต้องการลงทะเบียนบัญชีใหม่ โปรดเยี่ยมชมไซต์เดียวกัน</value>
+  </data>
+
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>ภาษา</value>
+  </data>
+
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>ต้นฉบับ</value>
+  </data>
+
+  <data name="MenuItem_Title_Reload" xml:space="preserve">
+    <value>โหลดแบบสอบถามใหม่</value>
+  </data>
+
+  <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
+    <value>แบบสอบถามแบบไม่ระบุตัวตน</value>
+  </data>
+
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>เข้าสู่ระบบ</value>
+  </data>
+
+  <data name="Prefs_ShowAnswerTime" xml:space="preserve">
+    <value>แสดงเวลาที่ใช้ต่อคำตอบ</value>
+  </data>
+
+  <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
+    <value>วัดเวลาในการเปิดใช้งาน การตรวจสอบความถูกต้อง และการเผยแพร่บัญชีรายชื่อ ไม่รวมเวลาในการรับข้อมูล GPS หรือการถ่ายภาพ</value>
+  </data>
+
+  <data name="Prefs_ShowVariables" xml:space="preserve">
+    <value>แสดงตัวแปร</value>
+  </data>
+
+  <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
+    <value>ตัวแปรจะแสดงในการสัมภาษณ์พร้อมค่าและคำอธิบาย</value>
+  </data>
+
+  <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
+    <value>ตัวแปรถูกซ่อน</value>
+  </data>
+
+  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
+    <value>ไม่สามารถนำข้อมูลการสัมภาษณ์ไปใช้กับแบบสอบถามเวอร์ชันใหม่ได้ เราจะเปิดการสัมภาษณ์ว่าง</value>
+  </data>
 </root>

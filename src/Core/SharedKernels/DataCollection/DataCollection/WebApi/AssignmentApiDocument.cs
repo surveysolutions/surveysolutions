@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 
 namespace WB.Core.SharedKernels.DataCollection.WebApi
 {
@@ -28,6 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
 
         public DateTime CreatedAtUtc { get; set; }
         public List<string> ProtectedVariables { get; set; }
+        public List<string> AudioAuditScope { get; set; }
         public string Comments { get; set; }
         public string TargetArea { get; set; }
 
@@ -61,5 +63,24 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         
         [JsonProperty("area")]
         public string TargetArea { get; set; }
+
+        [JsonProperty("status")]
+        public AssignmentStatus Status { get; set; }
+
+        [JsonProperty("statusComment")]
+        public string StatusComment { get; set; }
+
+        [JsonProperty("updatedAt")]
+        public DateTime UpdatedAtUtc { get; set; }
+    }
+
+    public class AssignmentStatusChangeApiView
+    {
+        [JsonProperty("status")]
+        public AssignmentStatus Status { get; set; }
+
+        [JsonProperty("comment")]
+        [System.ComponentModel.DataAnnotations.MaxLength(500)]
+        public string Comment { get; set; }
     }
 }

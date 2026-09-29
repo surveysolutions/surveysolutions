@@ -2,126 +2,225 @@
     <div class="md-editor-container">
         <div class="editor-toolbar">
             <div class="dropdown">
-                <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                    :class="{ active: isActive.heading }" :aria-pressed="isActive.heading" aria-label="Heading"
+                <button type="button"
+                    data-bs-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    :class="{ active: isActive.heading }"
+                    :aria-pressed="isActive.heading"
+                    aria-label="Heading"
                     title="Heading">
                     <span class="glyphicon glyphicon-header"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a href="javascript:void(0);" @click="setHeading(1)">
-                            <h1>Heading 1</h1>
-                        </a></li>
-                    <li><a href="javascript:void(0);" @click="setHeading(2)">
-                            <h2>Heading 2</h2>
-                        </a></li>
-                    <li><a href="javascript:void(0);" @click="setHeading(3)">
-                            <h3>Heading 3</h3>
-                        </a></li>
-                    <li><a href="javascript:void(0);" @click="setHeading(4)">
-                            <h4>Heading 4</h4>
-                        </a></li>
-                    <li><a href="javascript:void(0);" @click="setHeading(5)">
-                            <h5>Heading 5</h5>
-                        </a></li>
-                    <li><a href="javascript:void(0);" @click="setHeading(6)">
-                            <h6>Heading 6</h6>
-                        </a></li>
+                    <li><a href="javascript:void(0);"
+                        @click="setHeading(1)">
+                        <h1>Heading 1</h1>
+                    </a></li>
+                    <li><a href="javascript:void(0);"
+                        @click="setHeading(2)">
+                        <h2>Heading 2</h2>
+                    </a></li>
+                    <li><a href="javascript:void(0);"
+                        @click="setHeading(3)">
+                        <h3>Heading 3</h3>
+                    </a></li>
+                    <li><a href="javascript:void(0);"
+                        @click="setHeading(4)">
+                        <h4>Heading 4</h4>
+                    </a></li>
+                    <li><a href="javascript:void(0);"
+                        @click="setHeading(5)">
+                        <h5>Heading 5</h5>
+                    </a></li>
+                    <li><a href="javascript:void(0);"
+                        @click="setHeading(6)">
+                        <h6>Heading 6</h6>
+                    </a></li>
                 </ul>
             </div>
-            <button type="button" @click="toggleBold" :class="{ active: isActive.bold }" :aria-pressed="isActive.bold"
-                aria-label="Bold" title="Bold">
+            <button type="button"
+                @click="toggleBold"
+                :class="{ active: isActive.bold }"
+                :aria-pressed="isActive.bold"
+                aria-label="Bold"
+                title="Bold">
                 <span class="glyphicon glyphicon-bold"></span>
             </button>
-            <button type="button" @click="toggleItalic" :class="{ active: isActive.italic }"
-                :aria-pressed="isActive.italic" aria-label="Italic" title="Italic">
+            <button type="button"
+                @click="toggleItalic"
+                :class="{ active: isActive.italic }"
+                :aria-pressed="isActive.italic"
+                aria-label="Italic"
+                title="Italic">
                 <span class="glyphicon glyphicon-italic"></span>
             </button>
-            <button type="button" @click="toggleBulletList" :class="{ active: isActive.bulletList }"
-                :aria-pressed="isActive.bulletList" aria-label="Bullet List" title="Bullet List">
+            <button type="button"
+                @click="toggleBulletList"
+                :class="{ active: isActive.bulletList }"
+                :aria-pressed="isActive.bulletList"
+                aria-label="Bullet List"
+                title="Bullet List">
                 <span class="glyphicon glyphicon-list"></span>
             </button>
-            <button type="button" @click="toggleOrderedList" :class="{ active: isActive.orderedList }"
-                :aria-pressed="isActive.orderedList" aria-label="Ordered List" title="Ordered List">
+            <button type="button"
+                @click="toggleOrderedList"
+                :class="{ active: isActive.orderedList }"
+                :aria-pressed="isActive.orderedList"
+                aria-label="Ordered List"
+                title="Ordered List">
                 <span class="glyphicon glyphicon-sort-by-order"></span>
             </button>
-            <button type="button" @click="addImage" aria-label="Insert Image" title="Insert Image">
+            <button type="button"
+                @click="addImage"
+                aria-label="Insert Image"
+                title="Insert Image">
                 <span class="glyphicon glyphicon-picture"></span>
             </button>
-            <button type="button" @click="openLinkModal" :class="{ active: isActive.link }"
-                :aria-pressed="isActive.link" aria-label="Insert Link" title="Insert Link">
+            <button type="button"
+                @click="openLinkModal"
+                :class="{ active: isActive.link }"
+                :aria-pressed="isActive.link"
+                aria-label="Insert Link"
+                title="Insert Link">
                 <span class="glyphicon glyphicon-link"></span>
             </button>
         </div>
-        <textarea ref="textarea" @input="onInput" class="markdown-editor"></textarea>
+        <textarea ref="textarea"
+            @input="onInput"
+            class="markdown-editor"></textarea>
 
         <!-- Link Modal -->
-        <div class="modal fade" :class="{ in: showLinkModal }" tabindex="-1" role="dialog"
+        <div class="modal fade"
+            :class="{ in: showLinkModal }"
+            tabindex="-1"
+            role="dialog"
             :style="{ display: showLinkModal ? 'block' : 'none' }">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog"
+                role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" @click="closeLinkModal" aria-label="Close">
+                        <button type="button"
+                            class="close"
+                            @click="closeLinkModal"
+                            aria-label="Close">
                             <span aria-hidden="true"></span>
                         </button>
-                        <h4 class="modal-title">{{ isActive.link ? 'Edit Link' : 'Add Link' }}</h4>
+                        <h4 class="modal-title">
+                            {{ isActive.link ? 'Edit Link' : 'Add Link' }}
+                        </h4>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="linkText">Link Text</label>
-                            <input type="text" id="linkText" ref="linkText" v-model="linkText" class="form-control"
-                                placeholder="Enter link text" @keyup.enter="isLinkFormValid && applyLink()" />
+                            <label for="linkText">
+                                Link Text
+                            </label>
+                            <input type="text"
+                                id="linkText"
+                                ref="linkText"
+                                v-model="linkText"
+                                class="form-control"
+                                placeholder="Enter link text"
+                                @keyup.enter="isLinkFormValid && applyLink()" />
                         </div>
                         <div class="form-group">
-                            <label for="linkUrl">URL</label>
-                            <input type="text" id="linkUrl" ref="linkUrl" v-model="linkUrl" class="form-control"
-                                placeholder="https://example.com" @keyup.enter="isLinkFormValid && applyLink()" />
+                            <label for="linkUrl">
+                                URL
+                            </label>
+                            <input type="text"
+                                id="linkUrl"
+                                ref="linkUrl"
+                                v-model="linkUrl"
+                                class="form-control"
+                                placeholder="https://example.com"
+                                @keyup.enter="isLinkFormValid && applyLink()" />
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" @click="applyLink"
+                        <button type="button"
+                            class="btn btn-success"
+                            @click="applyLink"
                             :disabled="!isLinkFormValid">OK</button>
-                        <button type="button" class="btn btn-link" @click="closeLinkModal">Cancel</button>
+                        <button type="button"
+                            class="btn btn-link"
+                            @click="closeLinkModal">
+                            Cancel
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="modal-backdrop in" :style="{ display: showLinkModal ? 'block' : 'none' }"></div>
+        <div class="modal-backdrop in"
+            :style="{ display: showLinkModal ? 'block' : 'none' }"></div>
 
         <!-- Image Modal -->
-        <div class="modal fade" :class="{ in: showImageModal }" tabindex="-1" role="dialog"
+        <div class="modal fade"
+            :class="{ in: showImageModal }"
+            tabindex="-1"
+            role="dialog"
             :style="{ display: showImageModal ? 'block' : 'none' }">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog"
+                role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" @click="closeImageModal" aria-label="Close">
+                        <button type="button"
+                            class="close"
+                            @click="closeImageModal"
+                            aria-label="Close">
                             <span aria-hidden="true"></span>
                         </button>
-                        <h4 class="modal-title">Insert Image</h4>
+                        <h4 class="modal-title">
+                            Insert Image
+                        </h4>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="imageFile">Image File</label>
-                            <input type="file" id="imageFile" ref="imageFile" @change="handleImageFileChange"
-                                class="form-control" accept="image/*" />
-                            <small class="help-block" v-if="imagePreview">Preview:</small>
-                            <img v-if="imagePreview" :src="imagePreview" alt="Preview"
+                            <label for="imageFile">
+                                Image File
+                            </label>
+                            <input type="file"
+                                id="imageFile"
+                                ref="imageFile"
+                                @change="handleImageFileChange"
+                                class="form-control"
+                                accept="image/*" />
+                            <small class="help-block"
+                                v-if="imagePreview">
+                                Preview:
+                            </small>
+                            <img v-if="imagePreview"
+                                :src="imagePreview"
+                                alt="Preview"
                                 style="max-width: 100%; max-height: 200px; margin-top: 10px;" />
                         </div>
                         <div class="form-group">
-                            <label for="imageDescription">Description (Alt Text)</label>
-                            <input type="text" id="imageDescription" v-model="imageDescription" class="form-control"
-                                placeholder="Enter image description" @keyup.enter="isImageFormValid && applyImage()" />
+                            <label for="imageDescription">
+                                Description (Alt Text)
+                            </label>
+                            <input type="text"
+                                id="imageDescription"
+                                v-model="imageDescription"
+                                class="form-control"
+                                placeholder="Enter image description"
+                                @keyup.enter="isImageFormValid && applyImage()" />
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" @click="applyImage"
+                        <button type="button"
+                            class="btn btn-success"
+                            @click="applyImage"
                             :disabled="!isImageFormValid">OK</button>
-                        <button type="button" class="btn btn-link" @click="closeImageModal">Cancel</button>
+                        <button type="button"
+                            class="btn btn-link"
+                            @click="closeImageModal">
+                            Cancel
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="modal-backdrop in" :style="{ display: showImageModal ? 'block' : 'none' }"></div>
+        <div class="modal-backdrop in"
+            :style="{ display: showImageModal ? 'block' : 'none' }"></div>
     </div>
 </template>
 
@@ -262,7 +361,7 @@
 </style>
 
 <script>
-import { escape, unescape } from 'lodash'
+import { escape, unescape } from 'lodash-es'
 
 export default {
     emits: ['input', 'update:modelValue'],
@@ -279,7 +378,7 @@ export default {
                 italic: false,
                 bulletList: false,
                 orderedList: false,
-                link: false
+                link: false,
             },
             showLinkModal: false,
             linkUrl: '',
@@ -287,7 +386,7 @@ export default {
             showImageModal: false,
             imageFile: null,
             imagePreview: '',
-            imageDescription: ''
+            imageDescription: '',
         }
     },
     mounted() {
@@ -317,7 +416,7 @@ export default {
                     this.content = val
                 }
             }
-        }
+        },
     },
     computed: {
         isLinkFormValid() {
@@ -325,7 +424,7 @@ export default {
         },
         isImageFormValid() {
             return this.imageFile !== null || this.imagePreview !== ''
-        }
+        },
     },
     expose: ['refresh'],
     methods: {
@@ -348,7 +447,7 @@ export default {
             return {
                 start: textarea.selectionStart,
                 end: textarea.selectionEnd,
-                text: textarea.value.substring(textarea.selectionStart, textarea.selectionEnd)
+                text: textarea.value.substring(textarea.selectionStart, textarea.selectionEnd),
             }
         },
         insertAtCursor(text, cursorOffset = text.length) {
@@ -620,7 +719,7 @@ export default {
                 this.$refs.textarea.focus()
                 this.$refs.textarea.setSelectionRange(0, 0)
             }, 100)
-        }
-    }
+        },
+    },
 }
 </script>

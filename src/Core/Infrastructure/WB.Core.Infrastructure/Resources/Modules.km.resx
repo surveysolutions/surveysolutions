@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="ErrorConnectingToDatabase" xml:space="preserve"><value>កម្មវិធីមិនអាចភ្ជាប់ទៅមូលដ្ឋានទិន្នន័យដោយប្រើខ្សែអក្សរភ្ជាប់ដែលបានផ្តល់។ សូមពិនិត្យមើលឯកសារកំណត់ហេតុកម្មវិធីសម្រាប់ព័ត៌មានលម្អិត</value></data>
+  <data name="ErrorDuringRunningMigrations" xml:space="preserve"><value>មានកំហុសក្នុងពេលដំណើរការផ្លាស់ប្តូររចនាសម្ព័ន្ធមូលដ្ឋានទិន្នន័យ។ សូមពិនិត្យមើលឯកសារកំណត់ហេតុកម្មវិធីសម្រាប់ព័ត៌មានលម្អិត</value></data>
+  <data name="ErrorDuringSiteInitialization" xml:space="preserve"><value>មានកំហុសក្នុងពេលចាប់ផ្តើមគេហទំព័រ។ សូមពិនិត្យមើលឯកសារកំណត់ហេតុកម្មវិធីសម្រាប់ព័ត៌មានលម្អិត</value></data>
+  <data name="InitializingDb" xml:space="preserve"><value>កំពុងចាប់ផ្តើមមូលដ្ឋានទិន្នន័យ</value></data>
+  <data name="MigrateDb" xml:space="preserve"><value>កំពុងផ្លាស់ប្តូររចនាសម្ព័ន្ធមូលដ្ឋានទិន្នន័យ</value></data>
+  <data name="ErrorDatabaseUnauthorized" xml:space="preserve"><value>កម្មវិធីមិនត្រូវបានអនុញ្ញាតឱ្យភ្ជាប់ទៅមូលដ្ឋានទិន្នន័យ។ សូមពិនិត្យមើលឯកសារកំណត់ហេតុកម្មវិធីសម្រាប់ព័ត៌មានលម្អិត</value></data>
+</root>
+

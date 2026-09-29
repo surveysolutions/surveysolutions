@@ -1,10 +1,10 @@
 <template>
     <v-dialog v-model="shownModel" persistent max-width="600px">
-        <v-card>
+    <v-card class="option-item-dialog__card" elevation="0">
             <v-card-title>
                 <span class="headline">{{ title }}</span>
             </v-card-title>
-            <v-card-text>
+            <v-card-text class="option-item-dialog__body">
                 <v-container>
                     <v-form ref="form" v-model="valid" validate-on="input" fast-fail>
                         <v-row>
@@ -15,7 +15,8 @@
                                         $t('QuestionnaireEditor.GroupTitle') +
                                             '*'
                                     "
-                                    :rules="[required]"                                    
+                                    :rules="[required]"
+                                    variant="outlined"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12" :sm="showParentValue ? 6 : 12">
@@ -27,7 +28,8 @@
                                         ) + '*'
                                     "
                                     :rules="[required, maxValue]"
-                                    type="number"                                    
+                                    type="number"
+                                    variant="outlined"
                                 ></v-text-field>
                             </v-col>
                             <v-col v-if="showParentValue" cols="12" sm="6">
@@ -39,7 +41,8 @@
                                     single-line
                                     :items="parentCategories"
                                     :item-title="getTitle"
-                                    item-value="value"                                    
+                                    item-value="value"
+                                    variant="outlined"
                                 />
                                 <v-text-field
                                     v-else
@@ -50,7 +53,8 @@
                                         ) + '*'
                                     "
                                     :rules="[required, maxValue]"
-                                    type="number"                                    
+                                    type="number"
+                                    variant="outlined"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12">
@@ -59,6 +63,7 @@
                                     :label="
                                         $t('QuestionnaireEditor.AttachmentName')
                                     "
+                                    variant="outlined"
                                 ></v-text-field>
                             </v-col>
                         </v-row>
@@ -82,9 +87,13 @@
     </v-dialog>
 </template>
 
-<style lang="scss">
-body {
-    overflow: scroll;
+<style scoped lang="scss">
+.option-item-dialog__card {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.option-item-dialog__body {
+    overflow: auto;
 }
 </style>
 

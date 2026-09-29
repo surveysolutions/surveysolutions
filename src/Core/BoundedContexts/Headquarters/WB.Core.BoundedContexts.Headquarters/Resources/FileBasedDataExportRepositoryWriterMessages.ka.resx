@@ -139,9 +139,9 @@
     <value>ზედამხედველი</value>
   </data>
   <data name="UnknownRole" xml:space="preserve">
-    <value>&lt;UNKNOWN ROLE&gt;</value>
+    <value>&lt;უცნობი როლი&gt;</value>
   </data>
   <data name="UnknownUser" xml:space="preserve">
-    <value>&lt;UNKNOWN USER&gt;</value>
+    <value>&lt;უცნობი მომხმარებელი&gt;</value>
   </data>
 </root>

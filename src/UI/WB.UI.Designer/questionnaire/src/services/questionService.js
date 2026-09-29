@@ -1,7 +1,7 @@
 import { get, commandCall } from '../services/apiService';
 import emitter from './emitter';
 import _ from 'lodash';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { getItemIndexByIdFromParentItemsList } from './utilityService';
 import { newGuid } from '../helpers/guid';
 import { i18n } from '../plugins/localization';
@@ -110,13 +110,14 @@ export function updateQuestion(
             command.maxValue = question.maxValue;
             command.useFormatting = question.useFormatting;
             command.options = question.options;
+            command.isNonNegative = question.isNonNegative;
             break;
         case 'DateTime':
             command.isTimestamp = question.isTimestamp;
             command.defaultDate =
                 question.isTimestamp || !question.defaultDate
                     ? null
-                    : moment.utc(question.defaultDate);
+                    : dayjs.utc(question.defaultDate);
             break;
         case 'GpsCoordinates':
         case 'Text':

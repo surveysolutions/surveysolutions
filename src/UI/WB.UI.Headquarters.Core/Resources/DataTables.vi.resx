@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Aria_SortAscending" xml:space="preserve">
+        <value>: kích hoạt để sắp xếp cột theo thứ tự tăng dần</value>
+        </data>
+    <data name="Aria_SortDescending" xml:space="preserve">
+        <value>: kích hoạt để sắp xếp cột theo thứ tự giảm dần</value>
+        </data>
+    <data name="EmptyTable" xml:space="preserve">
+        <value>Không có dữ liệu trong bảng</value>
+        </data>
+    <data name="Info" xml:space="preserve">
+        <value>Hiển thị _START_ đến _END_ trong số _TOTAL_ mục nhập</value>
+        </data>
+    <data name="InfoEmpty" xml:space="preserve">
+        <value>Hiển thị 0 đến 0 trong 0 mục</value>
+        </data>
+    <data name="InfoFiltered" xml:space="preserve">
+        <value>(được lọc từ tổng số _MAX_ mục)</value>
+        </data>
+    <data name="InfoPostFix" xml:space="preserve">
+        <value />
+        </data>
+    <data name="InfoThousands" xml:space="preserve">
+        <value>.</value>
+        </data>
+    <data name="LengthMenu" xml:space="preserve">
+        <value>Hiển thị mục _MENU_</value>
+        </data>
+    <data name="LoadingRecords" xml:space="preserve">
+        <value>Đang tải...</value>
+        </data>
+    <data name="Paginate_First" xml:space="preserve">
+        <value>Đầu tiên</value>
+        </data>
+    <data name="Paginate_Last" xml:space="preserve">
+        <value>Cuối cùng</value>
+        </data>
+    <data name="Paginate_Next" xml:space="preserve">
+        <value>Kế tiếp</value>
+        </data>
+    <data name="Paginate_Previous" xml:space="preserve">
+        <value>Trước</value>
+        </data>
+    <data name="Processing" xml:space="preserve">
+        <value>Xử lý...</value>
+        </data>
+    <data name="Search" xml:space="preserve">
+        <value>Tìm kiếm:</value>
+        </data>
+    <data name="SearchPlaceholder" xml:space="preserve">
+        <value>Tìm kiếm...</value>
+        </data>
+    <data name="ZeroRecords" xml:space="preserve">
+        <value>Không tìm thấy hồ sơ phù hợp</value>
+        </data>
+</root>

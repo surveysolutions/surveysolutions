@@ -177,6 +177,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return response;
         }
 
+        public Task ChangeAssignmentStatusAsync(int id, AssignmentStatusChangeApiView statusChange, CancellationToken token = default)
+        {
+            var response = this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+                url: $"{this.AssignmentsController}/{id}/ChangeStatus",
+                request: statusChange,
+                credentials: this.restCredentials,
+                token: token));
+
+            return response;
+        }
+
         public Task<string> GetPublicKeyForEncryptionAsync(CancellationToken token = default)
             => this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<string>(
                 url: this.PublicKeyForEncryptionUrl, credentials: this.restCredentials, token: token));

@@ -1,5 +1,7 @@
 <template>
-    <HqLayout :hasFilter="false" :hasRow="false" :mainClass="'settings'">
+    <HqLayout :hasFilter="false"
+        :hasRow="false"
+        :mainClass="'settings'">
         <template v-slot:headers>
             <div>
                 <ol class="breadcrumb">
@@ -14,17 +16,20 @@
                     {{ $t('InterviewerAuditRecord.DetailedActionLog') }} ({{ $config.model.interviewerName }})
                 </h1>
 
-                <ul v-if="$config.model.hasDeviceInfo" class="list-unstyled">
+                <ul v-if="$config.model.hasDeviceInfo"
+                    class="list-unstyled">
                     <li><b>{{ $config.model.deviceModel }} (id {{ $config.model.deviceId }})</b></li>
                     <li>
                         <b>
                             {{ $t('Pages.InterviewerProfile_InterviewerAppVersion') }}:
                             {{ $config.model.interviewerAppVersion }} &mdash;
 
-                            <span v-if="!$config.model.hasUpdateForInterviewerApp" class="success-text">{{
+                            <span v-if="!$config.model.hasUpdateForInterviewerApp"
+                                class="success-text">{{
                                 $t('Pages.InterviewerProfile_InterviewerUpToDate') }}</span>
-                            <span v-else class="error-text">{{ $t('Pages.InterviewerProfile_InterviewerCanBeUpdated')
-                                }}</span>
+                            <span v-else
+                                class="error-text">{{ $t('Pages.InterviewerProfile_InterviewerCanBeUpdated')
+                            }}</span>
                         </b>
                     </li>
                 </ul>
@@ -32,7 +37,8 @@
         </template>
         <div class="row  extra-margin-bottom">
             <div class="col-sm-7 ">
-                <a v-if="$config.model.recordsByDate.length > 0" :href="$config.model.downloadLogUrl">
+                <a v-if="$config.model.recordsByDate.length > 0"
+                    :href="$config.model.downloadLogUrl">
                     {{ $t('InterviewerAuditRecord.DownloadTabLog') }}
                 </a>
                 <template v-else>
@@ -40,12 +46,15 @@
                 </template>
             </div>
         </div>
-        <div class="row" v-for="dateRecords in $config.model.recordsByDate" :key="dateRecords.date">
+        <div class="row"
+            v-for="dateRecords in $config.model.recordsByDate"
+            :key="dateRecords.date">
             <div class="col-sm-7">
                 <h2>{{ formatDateWithoutTime(dateRecords.date) }}</h2>
                 <table class="table timestamps-table">
                     <tbody>
-                        <tr v-for="record in dateRecords.recordsByDate" :key="record.time">
+                        <tr v-for="record in dateRecords.recordsByDate"
+                            :key="record.time">
                             <td class="gray-text date">
                                 {{ formatTime(record.time) }}
                             </td>
@@ -63,7 +72,8 @@
                 </table>
             </div>
         </div>
-        <div v-if="$config.model.startDateTime" class="row">
+        <div v-if="$config.model.startDateTime"
+            class="row">
             <div class="col-sm-7 ">
                 <a :href="`${$config.model.selfUrl}?startDateTime=${$config.model.startDateTime}`">
                     {{ $t('InterviewerAuditRecord.ShowPrevious7Days') }}

@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                     pagedResults = queryResult.Skip((input.Page - 1) * input.PageSize.Value).Take(input.PageSize.Value);
                 }
 
-                var itemIds = pagedResults.Select(x => x.Id).ToArray();
+                var itemIds = pagedResults.Select(x => x.Id).ToList();
                 var actualItems = queryable.Where(x => itemIds.Contains(x.Id))
                                            .OrderUsingSortExpression(input.Order)
                                            .Fetch(x => x.FeaturedQuestions)
@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
         public List<QuestionnaireBrowseItem> GetByIds(params QuestionnaireIdentity[] identities)
         {
-            var ids = identities.Select(id => id.ToString()).ToArray();
+            var ids = identities.Select(id => id.ToString()).ToList();
             return this.reader.Query(x => x.Where(qbi => ids.Contains(qbi.Id))).ToList();
         }
 

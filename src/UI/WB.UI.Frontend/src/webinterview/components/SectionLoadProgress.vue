@@ -5,7 +5,7 @@
     </div>
 </template>
 <script lang="js">
-import { delay } from 'lodash'
+import { delay } from 'lodash-es'
 
 export default {
     data() {

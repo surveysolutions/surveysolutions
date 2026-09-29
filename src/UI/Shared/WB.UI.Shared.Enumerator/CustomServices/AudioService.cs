@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.UI.Shared.Enumerator.Services;
@@ -29,6 +30,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         private readonly ILogger logger;
         private readonly IWorkspaceAccessor workspaceAccessor;
+        private readonly IEnumeratorSettings enumeratorSettings;
 
         private const int MaxDuration = 3 * 60 * 1000;
         private const double MaxReportableAmp = 32767f;
@@ -57,12 +59,14 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public AudioService(string audioDirectory, 
             IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
-            IWorkspaceAccessor workspaceAccessor)
+            IWorkspaceAccessor workspaceAccessor,
+            IEnumeratorSettings enumeratorSettings)
         {
             this.audioDirectory = audioDirectory;
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.workspaceAccessor = workspaceAccessor;
+            this.enumeratorSettings = enumeratorSettings;
             
             this.tempFileName = Path.GetTempFileName();
             mediaPlayer.Completion += MediaPlayerOnCompletion;
@@ -112,6 +116,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             lock (this.lockObject)
             {
+                if (this.disposed)
+                    return;
+
                 if (this.mediaPlayer.IsPlaying)
                 {
                     this.mediaPlayer.Stop();
@@ -133,8 +140,14 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public void Stop()
         {
+            if (this.disposed)
+                return;
+
             lock (this.lockObject)
             {
+                if (this.disposed)
+                    return;
+
                 if (this.mediaPlayer.IsPlaying)
                 {
                     this.mediaPlayer.Reset();
@@ -202,9 +215,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 this.recorder.SetAudioSource(AudioSource.Mic);
                 this.recorder.SetOutputFormat(OutputFormat.Mpeg4);
                 this.recorder.SetAudioEncoder(AudioEncoder.Aac);
-                this.recorder.SetAudioChannels(1);
-                this.recorder.SetAudioSamplingRate(44100);
-                this.recorder.SetAudioEncodingBitRate(64000);
+
+                var audioRecordingQuality = this.enumeratorSettings.AudioRecordingQuality;
+                this.recorder.SetAudioChannels(audioRecordingQuality.GetAudioChannels());
+                this.recorder.SetAudioSamplingRate(audioRecordingQuality.GetSamplingRate());
+                this.recorder.SetAudioEncodingBitRate(audioRecordingQuality.GetEncodingBitRate());
                 this.recorder.SetOutputFile(audioFilePath);
                 this.recorder.SetMaxDuration(maxDuration);
 
@@ -374,6 +389,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             
             lock (this.lockObject)
             {
+                if (disposed) return;
+
+                this.disposed = true;
                 this.ReleaseAudioRecorder();
 
                 try
@@ -399,8 +417,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 {
                     // Ignore cleanup errors
                 }
-
-                this.disposed = true;
             }
         }
 

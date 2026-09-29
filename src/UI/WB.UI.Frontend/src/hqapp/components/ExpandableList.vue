@@ -1,14 +1,19 @@
 <template>
     <div class="wrapper-info">
-        <div class="container-info" :class="[cssClass]">
+        <div class="container-info"
+            :class="[cssClass]">
             <h2>
-                <button class="btn btn-link btn-plus" v-if="hasChild" :class="{ collapsed: !isExpanded }" type="button"
+                <button class="btn btn-link btn-plus"
+                    v-if="hasChild"
+                    :class="{ collapsed: !isExpanded }"
+                    type="button"
                     @click="() => (isExpanded = !isExpanded)">
                     <span></span>
                 </button>
                 <span @click="() => (isExpanded = !isExpanded)">{{ title }}</span>
             </h2>
-            <div class="list-item-body p-8 wrapper-info-details" v-show="isExpanded">
+            <div class="list-item-body p-8 wrapper-info-details"
+                v-show="isExpanded">
                 <slot />
             </div>
         </div>

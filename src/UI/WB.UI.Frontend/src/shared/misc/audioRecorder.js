@@ -252,7 +252,7 @@ if (!window.AudioRecorder) {
                 'audio/aac',
                 'audio/mp4;codecs=mp4a.40.2', // AAC-LC
                 'audio/mp4',
-                'audio/webm;codecs=opus' // Opus as fallback
+                'audio/webm;codecs=opus', // Opus as fallback
             ]
             for (var i = 0; i < mimeTypes.length; i++) {
                 if (MediaRecorder.isTypeSupported(mimeTypes[i])) {
@@ -288,7 +288,7 @@ if (!window.AudioRecorder) {
                 try {
                     mediaRecorder = new MediaRecorder(stream, {
                         mimeType: supportedMimeType,
-                        audioBitsPerSecond: 128000 // 128 kbps for good quality
+                        audioBitsPerSecond: 128000, // 128 kbps for good quality
                     })
 
                     mediaRecorder.ondataavailable = function (event) {
@@ -501,7 +501,7 @@ if (!window.AudioRecorder) {
         self.getCompressionInfo = function () {
             return {
                 usingCompression: useAACCompression,
-                codec: useAACCompression && mediaRecorder ? mediaRecorder.mimeType : 'audio/wav'
+                codec: useAACCompression && mediaRecorder ? mediaRecorder.mimeType : 'audio/wav',
             }
         }
 

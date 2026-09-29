@@ -3,6 +3,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 
 namespace WB.UI.Headquarters.Services.Impl
@@ -33,8 +34,20 @@ namespace WB.UI.Headquarters.Services.Impl
 
         private bool CurrentUserCanAccessInterview(IStatefulInterview interview)
         {
-            return this.authorizedUser.IsAdministrator || this.authorizedUser.IsHeadquarter ||
-                   (this.authorizedUser.IsSupervisor && this.authorizedUser.Id == interview.SupervisorId);
+            return this.authorizedUser.IsAdministrator
+                   || this.authorizedUser.IsHeadquarter
+                   || (this.authorizedUser.IsSupervisor
+                       && this.authorizedUser.Id == interview.SupervisorId
+                       && SupervisorCanAccessInterviewByStatus(interview.Status));
+        }
+
+        private static bool SupervisorCanAccessInterviewByStatus(InterviewStatus status)
+        {
+            return status == InterviewStatus.InterviewerAssigned
+                   || status == InterviewStatus.SupervisorAssigned
+                   || status == InterviewStatus.Completed
+                   || status == InterviewStatus.RejectedBySupervisor
+                   || status == InterviewStatus.RejectedByHeadquarters;
         }
     }
 }

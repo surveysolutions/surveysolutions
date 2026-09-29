@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
@@ -19,6 +20,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public bool Archived { get; set; }
         public string QuestionnaireTitle { get; set; }
         public bool IsAudioRecordingEnabled { get; set; }
+        public bool HasAudioAuditScope { get; set; }
+        public List<string> AudioAuditScope { get; set; }
 
         public List<AssignmentIdentifyingQuestionRow> IdentifyingQuestions { get; set; }
         public string Email { get; set; }
@@ -33,5 +36,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public bool WebModeEnabledOnQuestionnaire { get; set; }
 
         public CalendarEventView CalendarEvent { get; set; }
+        
+        public AssignmentStatus Status { get; set; }
+        public string StatusComment { get; set; }
     }
 }

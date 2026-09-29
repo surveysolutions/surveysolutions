@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="PLU0001Description" xml:space="preserve">
+        <value>Pengguna '{0}' sudah ada</value>
+    </data>
+    <data name="PLU0002Description" xml:space="preserve">
+        <value>Ada pengguna duplikat dengan login '{0}' di file</value>
+    </data>
+    <data name="PLU0003Description" xml:space="preserve">
+        <value>Pengguna '{0}' diarsipkan dan menjadi milik tim lain</value>
+    </data>
+    <data name="PLU0004Description" xml:space="preserve">
+        <value>Pengguna '{0}' diarsipkan dan memiliki peran lain</value>
+    </data>
+    <data name="PLU0005Description" xml:space="preserve">
+        <value>Login '{0}' dalam format yang salah</value>
+    </data>
+    <data name="PLU0006Description" xml:space="preserve">
+        <value>Kata sandi '{0}' salah format</value>
+    </data>
+    <data name="PLU0007Description" xml:space="preserve">
+        <value>Email '{0}' dalam format yang salah</value>
+    </data>
+    <data name="PLU0008Description" xml:space="preserve">
+        <value>Nomor telepon '{0}' dalam format yang salah</value>
+    </data>
+    <data name="PLU0009Description" xml:space="preserve">
+        <value>Peran '{0}' tidak valid</value>
+    </data>
+    <data name="PLU0010Description" xml:space="preserve">
+        <value>Supervisor '{0}' tidak ditemukan di ruang kerja</value>
+    </data>
+    <data name="PLU0011Description" xml:space="preserve">
+        <value>Kolom supervisor harus kosong untuk peran supervisor</value>
+    </data>
+    <data name="PLU0012Description" xml:space="preserve">
+        <value>Nama lengkap '{0}' dalam format yang salah</value>
+    </data>
+    <data name="PLU0013Description" xml:space="preserve">
+        <value>Nomor telepon '{0}' dalam format yang salah</value>
+    </data>
+    <data name="PLU0014Description" xml:space="preserve">
+        <value>Nama lengkap '{0}' memiliki karakter yang tidak valid</value>
+    </data>
+    <data name="PLU0001" xml:space="preserve">
+        <value>Login tidak unik</value>
+    </data>
+    <data name="PLU0002" xml:space="preserve">
+        <value>Duplikat</value>
+    </data>
+    <data name="PLU0003" xml:space="preserve">
+        <value>Tim yang salah</value>
+    </data>
+    <data name="PLU0004" xml:space="preserve">
+        <value>Peran yang salah</value>
+    </data>
+    <data name="PLU0005" xml:space="preserve">
+        <value>Format login salah</value>
+    </data>
+    <data name="PLU0006" xml:space="preserve">
+        <value>Format kata sandi salah</value>
+    </data>
+    <data name="PLU0007" xml:space="preserve">
+        <value>Format email salah</value>
+    </data>
+    <data name="PLU0008" xml:space="preserve">
+        <value>Format nomor telepon salah</value>
+    </data>
+    <data name="PLU0009" xml:space="preserve">
+        <value>Peran tidak valid</value>
+    </data>
+    <data name="PLU0010" xml:space="preserve">
+        <value>Kesalahan ketergantungan</value>
+    </data>
+    <data name="PLU0011" xml:space="preserve">
+        <value>Kesalahan ketergantungan</value>
+    </data>
+    <data name="PLU0012" xml:space="preserve">
+        <value>Panjang nama lengkap salah</value>
+    </data>
+    <data name="PLU0013" xml:space="preserve">
+        <value>Panjang nomor telepon salah</value>
+    </data>
+    <data name="PLU0014" xml:space="preserve">
+        <value>Format nama lengkap salah</value>
+    </data>
+    <data name="PLU0001Recommendation" xml:space="preserve">
+        <value>Pengguna harus unik</value>
+    </data>
+    <data name="PLU0002Recommendation" xml:space="preserve">
+        <value>Selesaikan duplikat</value>
+    </data>
+    <data name="PLU0003Recommendation" xml:space="preserve">
+        <value>Pengguna yang diarsipkan tidak dapat digunakan kembali karena milik tim lain</value>
+    </data>
+    <data name="PLU0004Recommendation" xml:space="preserve">
+        <value>Pengguna yang diarsipkan tidak dapat digunakan kembali karena ada di peran lain</value>
+    </data>
+    <data name="PLU0005Recommendation" xml:space="preserve">
+        <value>Nama login harus terdiri dari 3 hingga 15 karakter, dan hanya boleh berisi huruf, angka, dan simbol garis bawah. Huruf harus dari alfabet Latin (Inggris) saja: 'A'..'Z' atau 'a'..'z'. Huruf lain (Sirilik, Arab, dll.) tidak valid untuk digunakan dalam nama login.</value>
+    </data>
+    <data name="PLU0006Recommendation" xml:space="preserve">
+        <value>Itu harus berisi setidaknya satu angka, satu karakter huruf besar, dan satu karakter huruf kecil. Panjangnya harus antara 10 dan 100 karakter</value>
+    </data>
+    <data name="PLU0007Recommendation" xml:space="preserve">
+        <value>Perbaiki email</value>
+    </data>
+    <data name="PLU0008Recommendation" xml:space="preserve">
+        <value>Perbaiki nomor telepon</value>
+    </data>
+    <data name="PLU0009Recommendation" xml:space="preserve">
+        <value>Hanya "supervisor" atau "pewawancara" yang diperbolehkan</value>
+    </data>
+    <data name="PLU0010Recommendation" xml:space="preserve">
+        <value>Verifikasi nilai untuk penyelia</value>
+    </data>
+    <data name="PLU0011Recommendation" xml:space="preserve">
+        <value>Hapus nilai supervisor</value>
+    </data>
+    <data name="PLU0012Recommendation" xml:space="preserve">
+        <value>Itu tidak boleh berisi lebih dari 100 karakter</value>
+    </data>
+    <data name="PLU0013Recommendation" xml:space="preserve">
+        <value>Itu tidak boleh berisi lebih dari 15 karakter</value>
+    </data>
+    <data name="PLU0014Recommendation" xml:space="preserve">
+        <value>Hanya huruf, titik, spasi, dan apostrof yang diperbolehkan</value>
+    </data>
+    <data name="PLU0015" xml:space="preserve">
+        <value>Kata sandi terlalu pendek</value>
+    </data>
+    <data name="PLU0015Description" xml:space="preserve">
+        <value>Kata sandi '{0}' terlalu pendek</value>
+    </data>
+    <data name="PLU0015Recommendation" xml:space="preserve">
+        <value>Kata sandi harus terdiri dari minimal 10 karakter</value>
+    </data>
+    <data name="PLU0016" xml:space="preserve">
+        <value>Kata sandi sederhana</value>
+    </data>
+    <data name="PLU0016Description" xml:space="preserve">
+        <value>Kata sandi '{0}' tidak mengandung karakter selain alfanumerik</value>
+    </data>
+    <data name="PLU0016Recommendation" xml:space="preserve">
+        <value>Tambahkan setidaknya satu karakter non alfanumerik</value>
+    </data>
+    <data name="PLU0017" xml:space="preserve">
+        <value>Kata sandi sederhana</value>
+    </data>
+    <data name="PLU0017Description" xml:space="preserve">
+        <value>Kata sandi '{0}' tidak mengandung angka</value>
+    </data>
+    <data name="PLU0017Recommendation" xml:space="preserve">
+        <value>Tambahkan setidaknya satu digit ('0'-'9').</value>
+    </data>
+    <data name="PLU0018" xml:space="preserve">
+        <value>Kata sandi sederhana</value>
+    </data>
+    <data name="PLU0018Description" xml:space="preserve">
+        <value>Kata sandi '{0}' tidak mengandung karakter huruf kecil</value>
+    </data>
+    <data name="PLU0018Recommendation" xml:space="preserve">
+        <value>Tambahkan setidaknya satu karakter huruf kecil ('a'-'z').</value>
+    </data>
+    <data name="PLU0019" xml:space="preserve">
+        <value>Kata sandi sederhana</value>
+    </data>
+    <data name="PLU0019Description" xml:space="preserve">
+        <value>Kata sandi '{0}' tidak mengandung karakter huruf besar</value>
+    </data>
+    <data name="PLU0019Recommendation" xml:space="preserve">
+        <value>Tambahkan setidaknya satu huruf besar ('A'-'Z').</value>
+    </data>
+    <data name="PLU0020" xml:space="preserve">
+        <value>Kata sandi sederhana</value>
+    </data>
+    <data name="PLU0020Description" xml:space="preserve">
+        <value>Kata sandi '{0}' tidak mengandung cukup karakter unik</value>
+    </data>
+    <data name="PLU0020Recommendation" xml:space="preserve">
+        <value>Tambahkan karakter yang berbeda.</value>
+    </data>
+    <data name="PLU0021" xml:space="preserve">
+        <value>Diperlukan kata sandi</value>
+    </data>
+    <data name="PLU0021Description" xml:space="preserve">
+        <value>Kata sandi diperlukan</value>
+    </data>
+    <data name="PLU0021Recommendation" xml:space="preserve">
+        <value>Tambahkan kata sandi</value>
+    </data>
+    <data name="PLU0022" xml:space="preserve">
+        <value>Ruang kerja tidak ditemukan</value>
+    </data>
+    <data name="PLU0022Description" xml:space="preserve">
+        <value>Ruang kerja harus ada dan diaktifkan</value>
+    </data>
+    <data name="PLU0022Recommendation" xml:space="preserve">
+        <value>Periksa nama ruang kerja</value>
+    </data>
+</root>

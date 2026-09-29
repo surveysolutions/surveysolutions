@@ -84,6 +84,8 @@
 import '../../../content/designer-start/bootstrap-custom.less';
 import '../../../content/designer-start/designer-list.less'
 
+import { useClassificationsStore } from './pages/classifications/store';
+
 export default {
     name: 'DesignerLayout',
 
@@ -91,36 +93,17 @@ export default {
         activePage: { type: String, required: true },
     },
 
-    data() {
-        return {
-
-        };
+    setup() {
+        return { store: useClassificationsStore() };
     },
 
     computed: {
         userName() {
-            return this.$store.state.userName;
+            return this.store.userName;
         },
         isAdmin() {
-            return this.$store.state.isAdmin;
+            return this.store.isAdmin;
         },
     },
-
-    mounted() {
-        /*if (window.moment) {
-            moment.locale('@CultureInfo.CurrentUICulture');
-
-            $('time').each(function () {
-                var me = $(this);
-                var date = me.attr('datetime') || me.attr('time');
-                var momentDate = moment.utc(date).local().format('MMM DD, YYYY HH:mm');
-                me.text(momentDate);
-            });
-        }*/
-    },
-
-    methods: {
-
-    }
 };
 </script>

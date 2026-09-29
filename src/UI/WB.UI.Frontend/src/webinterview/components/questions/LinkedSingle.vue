@@ -54,7 +54,7 @@
 </template>
 <script lang="js">
 import { entityDetails } from '../mixins'
-import { find, isEqual } from 'lodash'
+import { find, isEqual } from 'lodash-es'
 import { shouldShowAnsweredOptionsOnlyForSingle } from './question_helpers'
 
 export default {

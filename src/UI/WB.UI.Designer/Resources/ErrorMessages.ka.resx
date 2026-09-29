@@ -1,0 +1,217 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ClientVersionIsNotSupported" xml:space="preserve">
+        <value>კითხვარის გახსნა ვერ მოხერხდა. თქვენი ვერსია არის {0}. გთხოვთ განაახლოთ.</value>
+        </data>
+    <data name="TemplateNotFound" xml:space="preserve">
+        <value>კითხვარი id={0}-ით ვერ მოიძებნა. გთხოვთ, შეამოწმოთ ხელმისაწვდომი კითხვარების სია, ან დაუკავშირდით კოლეგას, რომელმაც გაგიზიარათ კითხვარის ბმული.</value>
+        </data>
+    <data name="Questionnaire_verification_failed" xml:space="preserve">
+        <value>თქვენს კითხვარს აქვს შეცდომები. გთხოვთ, გადაამოწმოთ კითხვარი დიზაინერზე.</value>
+        </data>
+    <data name="User_Not_authorized" xml:space="preserve">
+        <value>მომხმარებელი არ არის ავტორიზებული. გთხოვთ, შეამოწმოთ თქვენი შესვლა და პაროლი.</value>
+        </data>
+    <data name="OldClientPleaseUpdate" xml:space="preserve">
+        <value>თქვენ გაქვთ შტაბის აპლიკაციის მოძველებული ვერსია. გთხოვთ, დაუკავშირდეთ თქვენი სერვერის ადმინისტრატორს, რათა მოითხოვოთ განახლება.</value>
+        </data>
+    <data name="VersionParameterIsIncorrect" xml:space="preserve">
+        <value>თქვენი კითხვარის ვერსიასთან არის პრობლემა. გთხოვთ, დაუკავშირდეთ support@mysurvey.solutions.</value>
+        </data>
+    <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
+        <value>კითხვარის იმპორტი ვერ მოხერხდა. თქვენს კითხვარს "{0}" აქვს {1} ვერსია. სათაო ოფისის აპლიკაცია მხარს უჭერს მხოლოდ {2} ვერსიას.</value>
+        </data>
+    <data name="UserLockedOut" xml:space="preserve">
+        <value>თქვენი ანგარიში დაბლოკილია. გთხოვთ, დაუკავშირდეთ support@mysurvey.solutions, რათა განბლოკოთ იგი.</value>
+        </data>
+    <data name="ApplicationUpdateRequired" xml:space="preserve">
+        <value>საჭიროა აპლიკაციის განახლება.</value>
+        </data>
+    <data name="ServerError" xml:space="preserve">
+        <value>სერვერის შეცდომა მოხდა. გთხოვთ, დაუკავშირდეთ support@mysurvey.solutions.</value>
+        </data>
+    <data name="The_user_name_or_password_provided_is_incorrect" xml:space="preserve">
+        <value>მოწოდებული მომხმარებლის სახელი ან პაროლი არასწორია. გთხოვთ, ხელახლა შედით.</value>
+        </data>
+    <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
+        <value>დამადასტურებელი სიტყვა არასწორია. გთხოვთ, სცადოთ ხელახლა.</value>
+        </data>
+    <data name="EmptyUserNameOrPassword" xml:space="preserve">
+        <value>მომხმარებლის სახელი ან პაროლი ცარიელია.</value>
+        </data>
+    <data name="IncorrectUserNameOrPassword" xml:space="preserve">
+        <value>შესვლა ან პაროლი არასწორია. გთხოვთ, სცადოთ ხელახლა.</value>
+        </data>
+    <data name="AccountBlocked" xml:space="preserve">
+        <value>თქვენი ანგარიში დაბლოკილია. დაუკავშირდით ადმინისტრატორს თქვენი ანგარიშის განბლოკვის მიზნით.</value>
+        </data>
+    <data name="PasswordResetNotAllowed" xml:space="preserve">
+        <value>პაროლის გადაყენება დაუშვებელია</value>
+        </data>
+    <data name="ConfirmAccount" xml:space="preserve">
+        <value>გთხოვთ, ჯერ დაადასტუროთ თქვენი ანგარიში. ჩვენ გავაგზავნეთ დადასტურების ბმული {0}-ზე. ვერ გაიგე?</value>
+        </data>
+    <data name="RequestAnotherEmail" xml:space="preserve">
+        <value>მოითხოვეთ კიდევ ერთი.</value>
+        </data>
+    <data name="Your_email_is_verified" xml:space="preserve">
+        <value>დიზაინერმა წარმატებით დაადასტურა თქვენი ელფოსტა.</value>
+        </data>
+    <data name="Unexpected_error_occurred_Please_try_again_later" xml:space="preserve">
+        <value>მოხდა მოულოდნელი შეცდომა. გთხოვთ, მოგვიანებით სცადოთ დიზაინერზე წვდომა.</value>
+        </data>
+    <data name="User_does_not_exist" xml:space="preserve">
+        <value>მომხმარებელი {0} არ არსებობს. გთხოვთ, შეიყვანოთ სწორი მომხმარებლის სახელი ან ელფოსტა.</value>
+        </data>
+    <data name="The_current_password_is_incorrect_or_the_new_password_is_invalid" xml:space="preserve">
+        <value>პაროლის მიმდინარე/ახალი კომბინაცია არასწორია, გთხოვთ ხელახლა შეიყვანოთ.</value>
+        </data>
+    <data name="User_already_confirmed_in_system" xml:space="preserve">
+        <value>მომხმარებელი {0} უკვე დადასტურებულია სისტემაში. გთხოვთ, შეიყვანოთ თქვენი შესვლა და პაროლი დიზაინერის გამოყენების დასაწყებად.</value>
+        </data>
+    <data name="User_does_not_exist_Please_enter_a_valid_user_name" xml:space="preserve">
+        <value>მომხმარებელი {0} არ არსებობს. გთხოვთ, შეიყვანოთ სწორი მომხმარებლის სახელი ან ელფოსტა.</value>
+        </data>
+    <data name="Your_password_successfully_changed" xml:space="preserve">
+        <value>თქვენ წარმატებით შეცვალეთ პაროლი.</value>
+        </data>
+    <data name="The_password_and_confirmation_password_do_not_match" xml:space="preserve">
+        <value>პაროლი და დამადასტურებელი პაროლი არ ემთხვევა.</value>
+        </data>
+    <data name="Password_must_be_at_least_characters_long" xml:space="preserve">
+        <value>პაროლი უნდა შეიცავდეს მინიმუმ {2} სიმბოლოს.</value>
+        </data>
+    <data name="Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character" xml:space="preserve">
+        <value>პაროლი უნდა შეიცავდეს მინიმუმ ერთ რიცხვს, ერთ დიდ და პატარას.</value>
+        </data>
+    <data name="User_name_needs_to_be_between_3_and_15_characters" xml:space="preserve">
+        <value>შესვლის სახელი უნდა იყოს 3-დან 15 სიმბოლომდე და შეიძლება შეიცავდეს მხოლოდ ასოებს, ციფრებს და ქვედა ხაზის სიმბოლოს. ასოები უნდა იყოს მხოლოდ ლათინური (ინგლისური) ანბანიდან: 'A'..'Z' ან 'a'..'z'. სხვა ასოები (კირილიცა, არაბული და ა.შ.) არ არის მოქმედი შესვლის სახელებში გამოსაყენებლად.</value>
+        </data>
+    <data name="Maintenance" xml:space="preserve">
+        <value>სერვერი ახლა შენარჩუნების რეჟიმშია. ბოდიშს გიხდით უხერხულობისთვის. გთხოვთ, სცადოთ მოგვიანებით.</value>
+        </data>
+    <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
+        <value>თქვენი კითხვარი "{0}" შეიცავს ახალ ფუნქციას: {1}. ახალი ფუნქცია(ები) არ არის მხარდაჭერილი თქვენი ინსტალაციის მიერ. გთხოვთ განაახლოთ.</value>
+        </data>
+    <data name="UserNotApproved" xml:space="preserve">
+        <value>თქვენი ანგარიში არ არის დამტკიცებული. გთხოვთ, ჯერ დაადასტუროთ თქვენი ანგარიში. ჩვენ გავაგზავნეთ დადასტურების ბმული {0}-ზე.</value>
+        </data>
+    <data name="RestorePassword_EmailSentInstructions" xml:space="preserve">
+        <value>შეტყობინება გაიგზავნა თქვენს ელ.ფოსტის ანგარიშზე. გთხოვთ, მიჰყევით ელფოსტაში მითითებებს პაროლის აღსადგენად.</value>
+        </data>
+    <data name="EmptyTranslationFile" xml:space="preserve">
+        <value>არჩეული თარგმანის ფაილი ცარიელია</value>
+        </data>
+    <data name="NoAccessToQuestionnaire" xml:space="preserve">
+        <value>მომხმარებელს არ აქვს მოთხოვნილ კითხვარზე წვდომის უფლება.</value>
+        </data>
+    <data name="UserNeedToContactSupportFormat" xml:space="preserve">
+        <value>თქვენ არ ხართ უფლებამოსილი, განახორციელოთ ეს მოქმედება. გთხოვთ დაუკავშირდეთ მხარდაჭერას. IP:{0}</value>
+        </data>
+    <data name="Email_required" xml:space="preserve">
+        <value>საჭიროა ელ.ფოსტა</value>
+        </data>
+    <data name="EmailOrLogin_required" xml:space="preserve">
+        <value>საჭიროა შესვლა ან ელ.ფოსტა</value>
+        </data>
+    <data name="InvalidEmailAddress" xml:space="preserve">
+        <value>არასწორი ელფოსტის მისამართი</value>
+        </data>
+    <data name="OldPassword_required" xml:space="preserve">
+        <value>საჭიროა მიმდინარე პაროლი</value>
+        </data>
+    <data name="Password_required" xml:space="preserve">
+        <value>საჭიროა პაროლი</value>
+        </data>
+    <data name="UserName_required" xml:space="preserve">
+        <value>შესვლა აუცილებელია</value>
+        </data>
+    <data name="QuestionnaireTitle_required" xml:space="preserve">
+        <value>კითხვარის სათაური აუცილებელია</value>
+        </data>
+    <data name="NoQuestionnaireIdToValidatePremissions" xml:space="preserve">
+        <value>კითხვარის ID არ იყო მოწოდებული ნებართვების დასადასტურებლად</value>
+        </data>
+    <data name="UnhandledExceptionDuringUpdateUserInfo" xml:space="preserve">
+        <value>მომხმარებლის ინფორმაციის განახლება ვერ მოხერხდა. გთხოვთ, სცადოთ მოგვიანებით.</value>
+        </data>
+    <data name="FullNameMaxLengthError" xml:space="preserve">
+        <value>სრული სახელი არ შეიძლება შეიცავდეს {1}-ზე მეტ სიმბოლოს</value>
+        </data>
+    <data name="QuestionnaireVariable_required" xml:space="preserve">
+        <value>საჭიროა კითხვარის ცვლადი</value>
+        </data>
+    <data name="QuestionnaireVariable_rules" xml:space="preserve">
+        <value>კითხვარის ცვლადი გამოიყენება როგორც პრეფიქსი ექსპორტის ფაილების სახელების ფორმირებისთვის. ცვლადების სახელები და სიაში ID უნდა შეიცავდეს მხოლოდ შემდეგ სიმბოლოებს: a-z, A-Z, _, ან 0-9. პირველი სიმბოლო არ შეიძლება იყოს 0-9 ან _ და ბოლო არ შეიძლება იყოს _.</value>
+        </data>
+    <data name="QuestionnaireVariable_MaxLength" xml:space="preserve">
+        <value>ცვლადის სახელები და ჩამონათვალის ID შეიძლება იყოს 1-დან {1} სიმბოლომდე</value>
+        </data>
+    <data name="QuestionnaireTitle_rules" xml:space="preserve">
+        <value>კითხვარის სათაურში შეიძლება გამოყენებულ იქნას მხოლოდ შემდეგი სიმბოლოები: A..Z a..z 0..9 ( ) \ / _ - და ინტერვალი, და არ უნდა იყოს ორი და მეტი თანმიმდევრული ხაზგასმული სიმბოლო.</value>
+        </data>
+    <data name="QuestionnaireTitle_MaxLength" xml:space="preserve">
+        <value>კითხვარის სათაურს არ შეიძლება ჰქონდეს {1} სიმბოლოზე მეტი.</value>
+        </data>
+    <data name="InvalidLoginAttempt" xml:space="preserve">
+        <value>შესვლის არასწორი მცდელობა</value>
+        </data>
+</root>

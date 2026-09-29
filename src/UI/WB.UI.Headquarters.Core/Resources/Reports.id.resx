@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+
+
+
+
+  <data name="ApprovedByHQ" xml:space="preserve"><value>Disetujui oleh Kantor Pusat</value></data>
+  <data name="ApprovedBySupervisor" xml:space="preserve"><value>Disetujui oleh Supervisor</value></data>
+
+
+
+
+  <data name="Completed" xml:space="preserve"><value>Selesai</value></data>
+
+
+
+
+
+
+
+
+
+
+
+
+  <data name="InterviewerAssigned" xml:space="preserve"><value>Pewawancara ditugaskan</value></data>
+  <data name="Interviewers" xml:space="preserve"><value>Pewawancara</value></data>
+
+
+
+
+
+
+
+
+
+  <data name="RejectedBySupervisor" xml:space="preserve"><value>Ditolak oleh supervisor</value></data>
+  <data name="RejectedByHQ" xml:space="preserve"><value>Ditolak oleh Kantor Pusat</value></data>
+
+
+
+
+  <data name="StatusDuration" xml:space="preserve"><value>Durasi status</value></data>
+
+  <data name="Supervisor" xml:space="preserve"><value>Supervisor</value></data>
+
+
+  <data name="Version" xml:space="preserve"><value>Versi</value></data>
+
+    <data name="CumulativeInterviewChart" xml:space="preserve">
+        <value>Bagan Wawancara Kumulatif</value>
+    </data>
+    <data name="CumulativeInterviewChartSubtitle" xml:space="preserve">
+        <value>Bagan Wawancara Kumulatif menunjukkan evolusi jumlah wawancara di setiap status dari waktu ke waktu</value>
+    </data>
+    <data name="InterviewChart" xml:space="preserve">
+        <value>Bagan Wawancara</value>
+    </data>
+    <data name="ImportUsersTemplate" xml:space="preserve">
+        <value>Impor templat pengguna</value>
+    </data>
+    <data name="DatesRange" xml:space="preserve">
+        <value>Rentang tanggal</value>
+    </data>
+    <data name="SupervisorsAndSurveys" xml:space="preserve">
+        <value>Pengawas dan Survei</value>
+    </data>
+    <data name="SurveysAndStatuses" xml:space="preserve">
+        <value>Survei dan Status</value>
+    </data>
+    <data name="TeamsAndStatuses" xml:space="preserve">
+        <value>Tim dan Status</value>
+    </data>
+    <data name="TeamsAndStatuses_SupervisorSubtitle" xml:space="preserve">
+        <value>Laporan Tim dan Status menunjukkan jumlah wawancara di setiap status oleh pewawancara</value>
+    </data>
+    <data name="TeamsAndStatuses_HeadquartersSubtitle" xml:space="preserve">
+        <value>Laporan Tim dan Status menunjukkan jumlah wawancara di setiap status berdasarkan tim</value>
+    </data>
+    <data name="SurveyName" xml:space="preserve">
+        <value>Judul Kuesioner</value>
+    </data>
+    <data name="TemplateVersion" xml:space="preserve">
+        <value>Versi Kuesioner</value>
+    </data>
+    <data name="SupervisorAssigned" xml:space="preserve">
+        <value>Penyelia ditugaskan</value>
+    </data>
+    <data name="Restarted" xml:space="preserve">
+        <value>Dimulai ulang</value>
+    </data>
+    <data name="CompletionDate" xml:space="preserve">
+        <value>Tanggal penyelesaian</value>
+    </data>
+    <data name="Questionnaire" xml:space="preserve">
+        <value>Daftar pertanyaan</value>
+    </data>
+    <data name="Variables" xml:space="preserve">
+        <value>Variabel</value>
+    </data>
+    <data name="Report_Surveys_and_Statuses" xml:space="preserve">
+        <value>Survei dan Status</value>
+    </data>
+    <data name="Report_Teams_and_Statuses" xml:space="preserve">
+        <value>Tim dan Status</value>
+    </data>
+    <data name="Report_Quantity_By_Interviewers" xml:space="preserve">
+        <value>Kuantitas Menurut Pewawancara</value>
+    </data>
+    <data name="Report_Quantity_By_Supervisors" xml:space="preserve">
+        <value>Kuantitas Berdasarkan Supervisor</value>
+    </data>
+    <data name="Report_Speed_By_Interviewers" xml:space="preserve">
+        <value>Kecepatan Oleh Pewawancara</value>
+    </data>
+    <data name="Report_Speed_Between_Statuses_By_Supervisors" xml:space="preserve">
+        <value>Kecepatan Antar Status Oleh Supervisor</value>
+    </data>
+    <data name="Report_Speed_Between_Statuses_By_Interviewers" xml:space="preserve">
+        <value>Kecepatan Antar Status Oleh Pewawancara</value>
+    </data>
+    <data name="Report_Speed_By_Supervisors" xml:space="preserve">
+        <value>Kecepatan Oleh Supervisor</value>
+    </data>
+    <data name="Report_Supervisors_And_Statuses" xml:space="preserve">
+        <value>Pengawas Dan Status</value>
+    </data>
+    <data name="Report_Devices_and_Interviewers" xml:space="preserve">
+        <value>Perangkat dan Pewawancara</value>
+    </data>
+    <data name="Report_Days_by_Interview_Status" xml:space="preserve">
+        <value>Hari berdasarkan Status Wawancara</value>
+    </data>
+    <data name="Report_Average_Interview_Duration" xml:space="preserve">
+        <value>Durasi wawancara rata-rata</value>
+    </data>
+    <data name="Report_Number_of_Completed_Interviews" xml:space="preserve">
+        <value>Jumlah wawancara yang diselesaikan</value>
+    </data>
+    <data name="Report_Status_Duration" xml:space="preserve">
+        <value>Durasi Status</value>
+    </data>
+    <data name="Report_Team_Members_and_Statuses" xml:space="preserve">
+        <value>Anggota Tim dan Status</value>
+    </data>
+    <data name="Report_Average_case_assignment_duration" xml:space="preserve">
+        <value>Durasi penugasan kasus rata-rata</value>
+    </data>
+    <data name="Report_Average_HQ_processing_time" xml:space="preserve">
+        <value>Waktu pemrosesan markas rata-rata</value>
+    </data>
+    <data name="Report_Average_overall_case_processing_time" xml:space="preserve">
+        <value>Rata-rata waktu pemrosesan kasus secara keseluruhan</value>
+    </data>
+    <data name="Report_Average_supervisor_processing_time" xml:space="preserve">
+        <value>Waktu pemrosesan rata-rata supervisor</value>
+    </data>
+    <data name="Report_Number_of_interviews_approved_by_HQ" xml:space="preserve">
+        <value>Jumlah wawancara yang disetujui oleh HQ</value>
+    </data>
+    <data name="Report_Number_of_interview_transactions_by_HQ" xml:space="preserve">
+        <value>Jumlah transaksi wawancara berdasarkan HQ</value>
+    </data>
+    <data name="Report_Number_of_interview_transactions_by_Supervisor" xml:space="preserve">
+        <value>Banyaknya transaksi wawancara oleh Supervisor</value>
+    </data>
+    <data name="LastUpdatedDate" xml:space="preserve">
+        <value>Diperbarui pada</value>
+    </data>
+    <data name="Updated" xml:space="preserve">
+        <value>{0} yang diperbarui</value>
+    </data>
+    <data name="Updating" xml:space="preserve">
+        <value>Pembaruan sedang berlangsung</value>
+    </data>
+    <data name="UpdateNow" xml:space="preserve">
+        <value>Perbarui sekarang</value>
+    </data>
+    <data name="Question" xml:space="preserve">
+        <value>Pertanyaan</value>
+    </data>
+    <data name="SelectQuestion" xml:space="preserve">
+        <value>Pilih pertanyaan</value>
+    </data>
+    <data name="ConditionQuestion" xml:space="preserve">
+        <value>Pertanyaan Kondisi</value>
+    </data>
+    <data name="TeamLeadsOnly" xml:space="preserve">
+        <value>Oleh Tim</value>
+    </data>
+    <data name="WithInterviewers" xml:space="preserve">
+        <value>Oleh Anggota Tim</value>
+    </data>
+    <data name="PivotView" xml:space="preserve">
+        <value>Tabel pivot</value>
+    </data>
+    <data name="QuestionText" xml:space="preserve">
+        <value>Teks pertanyaan</value>
+    </data>
+    <data name="Average" xml:space="preserve">
+        <value>Rata-rata</value>
+    </data>
+    <data name="ByAnswerValue" xml:space="preserve">
+        <value>Filter berdasarkan nilai numerik</value>
+    </data>
+    <data name="Count" xml:space="preserve">
+        <value>Menghitung</value>
+    </data>
+    <data name="Max" xml:space="preserve">
+        <value>Maks</value>
+    </data>
+    <data name="Min" xml:space="preserve">
+        <value>Minimal</value>
+    </data>
+    <data name="Percentile05" xml:space="preserve">
+        <value>Persentil 05</value>
+    </data>
+    <data name="Percentile50" xml:space="preserve">
+        <value>Persentil 50</value>
+    </data>
+    <data name="Percentile95" xml:space="preserve">
+        <value>Persentil 95</value>
+    </data>
+    <data name="SelectConditionQuestion" xml:space="preserve">
+        <value>Pilih pertanyaan kondisi</value>
+    </data>
+    <data name="Sum" xml:space="preserve">
+        <value>Jumlah</value>
+    </data>
+    <data name="ViewOptions" xml:space="preserve">
+        <value>Lihat opsi</value>
+    </data>
+    <data name="QuestionLabel" xml:space="preserve">
+        <value>Label Pertanyaan</value>
+    </data>
+    <data name="Median" xml:space="preserve">
+        <value>median</value>
+    </data>
+    <data name="HeatMapView" xml:space="preserve">
+        <value>Tampilkan hamparan peta panas</value>
+    </data>
+    <data name="HeatRadius" xml:space="preserve">
+        <value>Radius Panas</value>
+    </data>
+    <data name="MapDataLoading" xml:space="preserve">
+        <value>Data peta sedang dimuat</value>
+    </data>
+    <data name="ClusterInfo" xml:space="preserve">
+        <value>Daerah ini berisi</value>
+    </data>
+    <data name="AssignReceivedConfirm" xml:space="preserve">
+        <value>Saya memahami wawancara ini sudah diterima melalui tablet</value>
+    </data>
+    <data name="AssignReceivedWarning" xml:space="preserve">
+        <value>Pewawancara yang bertanggung jawab saat ini tidak akan diberitahu tentang penugasan kembali sampai sinkronisasi berikutnya. Jika dia sudah mulai mengerjakan wawancara, semua data yang dia masukkan sebelum sinkronisasi berikutnya akan DIBUANG!</value>
+    </data>
+    <data name="QuestionnaireCompatibilityIssues_UnknownAnswer" xml:space="preserve">
+        <value>Ada masalah kompatibilitas antar versi kuesioner. Jawaban pada kuesioner versi sebelumnya yang sudah tidak ada lagi pada kuesioner versi terbaru akan diabaikan.</value>
+    </data>
+    <data name="ToAllQuestionnaires" xml:space="preserve">
+        <value>Kembali ke kuesioner</value>
+    </data>
+    <data name="SaveAsImage" xml:space="preserve">
+        <value>Simpan sebagai gambar</value>
+    </data>
+    <data name="ThisWeek" xml:space="preserve">
+        <value>Minggu ini</value>
+    </data>
+    <data name="LastWeek" xml:space="preserve">
+        <value>Minggu lalu</value>
+    </data>
+    <data name="ThisMonth" xml:space="preserve">
+        <value>Bulan ini</value>
+    </data>
+    <data name="LastMonth" xml:space="preserve">
+        <value>Bulan lalu</value>
+    </data>
+    <data name="PreviousWeek" xml:space="preserve">
+        <value>Minggu sebelumnya</value>
+    </data>
+    <data name="PreviousMonth" xml:space="preserve">
+        <value>Bulan sebelumnya</value>
+    </data>
+    <data name="LastNDays" xml:space="preserve">
+        <value>{{days}} hari terakhir</value>
+    </data>
+    <data name="QuickRanges" xml:space="preserve">
+        <value>Rentang tanggal yang cepat</value>
+    </data>
+    <data name="RangeRelativeToData" xml:space="preserve">
+        <value>Rentang relatif terhadap data</value>
+    </data>
+    <data name="AllData" xml:space="preserve">
+        <value>Semua data</value>
+    </data>
+</root>

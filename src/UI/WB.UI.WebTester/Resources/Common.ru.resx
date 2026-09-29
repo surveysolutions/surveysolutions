@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AlRightsReserved" xml:space="preserve">
-    <value>All Rights Reserved</value>
+    <value>Все права защищены</value>
   </data>
   <data name="Legal" xml:space="preserve">
-    <value>Legal</value>
+    <value>Правовая информация</value>
   </data>
   <data name="TheWorldBankGroup" xml:space="preserve">
     <value>The World Bank Group</value>

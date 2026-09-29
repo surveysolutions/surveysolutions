@@ -58,4 +58,397 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+
+
+  <data name="Search" xml:space="preserve">
+  <value>Tìm kiếm</value>
+  </data>
+
+  <data name="Create" xml:space="preserve">
+  <value>Tạo</value>
+  </data>
+
+  <data name="ViewAssignmentDetails" xml:space="preserve">
+  <value>Xem chi tiết nhiệm vụ</value>
+  </data>
+
+  <data name="SaveChanges" xml:space="preserve">
+  <value>Lưu thay đổi</value>
+  </data>
+
+  <data name="Template" xml:space="preserve">
+  <value>Mẫu</value>
+  </data>
+
+  <data name="Status" xml:space="preserve">
+  <value>Trạng thái</value>
+  </data>
+
+  <data name="Assignment" xml:space="preserve">
+  <value>Nhiệm vụ</value>
+  </data>
+
+  <data name="Responsible" xml:space="preserve">
+  <value>Người phụ trách</value>
+  </data>
+
+  <data name="Save" xml:space="preserve">
+  <value>Lưu</value>
+  </data>
+
+  <data name="Apply" xml:space="preserve">
+    <value>Áp dụng</value>
+  </data>
+
+  <data name="ErrorsLog" xml:space="preserve">
+  <value>Nhật ký lỗi</value>
+  </data>
+
+  <data name="Questionnaires" xml:space="preserve">
+  <value>Bảng câu hỏi</value>
+  </data>
+
+  <data name="Questionnaire" xml:space="preserve">
+  <value>Bảng câu hỏi</value>
+  </data>
+
+  <data name="Assignments" xml:space="preserve">
+  <value>Nhiệm vụ</value>
+  </data>
+
+  <data name="Interviews" xml:space="preserve">
+  <value>Phỏng vấn</value>
+  </data>
+
+  <data name="PrefilledQuestions" xml:space="preserve">
+  <value>Câu hỏi định danh</value>
+  </data>
+
+  <data name="ShowIdentifying" xml:space="preserve">
+  <value>Hiển thị phần định danh</value>
+  </data>
+
+  <data name="HideIdentifying" xml:space="preserve">
+  <value>Ẩn</value>
+  </data>
+
+  <data name="InterviewKey" xml:space="preserve">
+  <value>Khóa phỏng vấn</value>
+  </data>
+
+  <data name="LastUpdate" xml:space="preserve">
+  <value>Cập nhật vào</value>
+  </data>
+
+  <data name="НasErrors" xml:space="preserve">
+  <value>Có lỗi</value>
+  </data>
+
+  <data name="ReceivedByInterviewer" xml:space="preserve">
+  <value>Đã nhận bởi máy tính bảng</value>
+  </data>
+
+  <data name="CreatedOnClient" xml:space="preserve">
+  <value>Được tạo trên máy tính bảng</value>
+  </data>
+
+  <data name="Any" xml:space="preserve">
+  <value>Bất kỳ</value>
+  </data>
+
+  <data name="AllAssignments" xml:space="preserve">
+  <value>Tất cả nhiệm vụ</value>
+  </data>
+
+  <data name="NoResultsFound" xml:space="preserve">
+  <value>Không tìm thấy kết quả</value>
+  </data>
+
+  <data name="Processing" xml:space="preserve">
+  <value>Đang xử lý…</value>
+  </data>
+
+  <data name="Refresh" xml:space="preserve">
+  <value>Làm mới</value>
+  </data>
+
+  <data name="Total" xml:space="preserve">
+  <value>Tổng cộng</value>
+  </data>
+
+  <data name="CreateNewAssignment" xml:space="preserve">
+  <value>Tạo nhiệm vụ mới</value>
+  </data>
+
+  <data name="Name" xml:space="preserve">
+  <value>Tên</value>
+  </data>
+
+  <data name="GetInterviewerApp" xml:space="preserve">
+  <value>Tải ứng dụng Interviewer</value>
+  </data>
+
+  <data name="Loading" xml:space="preserve">
+  <value>Đang tải. Vui lòng chờ</value>
+  </data>
+
+  <data name="Admin" xml:space="preserve">
+  <value>Quản trị viên</value>
+  </data>
+
+  <data name="Approve" xml:space="preserve">
+  <value>Phê duyệt</value>
+  </data>
+
+  <data name="Assign" xml:space="preserve">
+  <value>Giao</value>
+  </data>
+
+  <data name="Reject" xml:space="preserve">
+  <value>Từ chối</value>
+  </data>
+
+  <data name="Unapprove" xml:space="preserve">
+  <value>Hủy phê duyệt</value>
+  </data>
+
+  <data name="Delete" xml:space="preserve">
+  <value>Xóa</value>
+  </data>
+
+  <data name="SignIn" xml:space="preserve">
+  <value>Đăng nhập</value>
+  </data>
+
+  <data name="Title" xml:space="preserve">
+  <value>Tiêu đề</value>
+  </data>
+
+  <data name="AlRightsReserved" xml:space="preserve">
+  <value>Bản quyền được bảo lưu</value>
+  </data>
+
+  <data name="Legal" xml:space="preserve">
+  <value>Pháp lý</value>
+  </data>
+
+  <data name="TheWorldBankGroup" xml:space="preserve">
+  <value>The World Bank Group</value>
+  </data>
+
+  <data name="Settings" xml:space="preserve">
+  <value>Cài đặt</value>
+  </data>
+
+  <data name="EmailProviders" xml:space="preserve">
+  <value>Nhà cung cấp email</value>
+  </data>
+
+  <data name="AuditLog" xml:space="preserve">
+  <value>Nhật ký kiểm tra</value>
+  </data>
+
+  <data name="Logoff" xml:space="preserve">
+  <value>Đăng xuất</value>
+  </data>
+
+  <data name="Cancel" xml:space="preserve">
+  <value>Hủy</value>
+  </data>
+
+  <data name="Clear" xml:space="preserve">
+  <value>Xóa</value>
+  </data>
+
+  <data name="NewVersionAvailable" xml:space="preserve">
+  <value>Đã có phiên bản mới:</value>
+  </data>
+
+  <data name="No" xml:space="preserve">
+  <value>Không</value>
+  </data>
+
+  <data name="Yes" xml:space="preserve">
+  <value>Có</value>
+  </data>
+
+  <data name="Ok" xml:space="preserve">
+  <value>OK</value>
+  </data>
+
+  <data name="Download" xml:space="preserve">
+  <value>Tải xuống</value>
+  </data>
+
+  <data name="DownloadSupervisor" xml:space="preserve">
+  <value>Tải ứng dụng Giám sát viên</value>
+  </data>
+
+  <data name="Open" xml:space="preserve">
+  <value>Mở</value>
+  </data>
+
+  <data name="ShowStatusHistory" xml:space="preserve">
+  <value>Hiển thị lịch sử trạng thái</value>
+  </data>
+
+  <data name="AllStatuses" xml:space="preserve">
+  <value>Tất cả trạng thái</value>
+  </data>
+
+  <data name="AllSupervisors" xml:space="preserve">
+  <value>Tất cả giám sát viên</value>
+  </data>
+
+  <data name="AllResponsible" xml:space="preserve">
+  <value>Bất kỳ người phụ trách nào</value>
+  </data>
+
+  <data name="AllQuestionnaires" xml:space="preserve">
+  <value>Tất cả bảng câu hỏi</value>
+  </data>
+
+  <data name="AllGpsQuestions" xml:space="preserve">
+  <value>Tất cả câu hỏi GPS</value>
+  </data>
+
+  <data name="OpenResponsiblesProfile" xml:space="preserve">
+  <value>Mở hồ sơ của người phụ trách</value>
+  </data>
+
+  <data name="MapDashboard" xml:space="preserve">
+  <value>Bảng điều khiển bản đồ</value>
+  </data>
+
+  <data name="OpenAssignment" xml:space="preserve">
+  <value>Mở nhiệm vụ</value>
+  </data>
+
+  <data name="Confirm" xml:space="preserve">
+  <value>Xác nhận</value>
+  </data>
+
+  <data name="Archived" xml:space="preserve">
+  <value>Đã lưu trữ</value>
+  </data>
+
+  <data name="NothingSelected" xml:space="preserve">
+  <value>Chưa chọn gì</value>
+  </data>
+
+  <data name="QuestionnaireVersion" xml:space="preserve">
+  <value>Phiên bản bảng câu hỏi</value>
+  </data>
+
+  <data name="AllVersions" xml:space="preserve">
+  <value>Tất cả phiên bản</value>
+  </data>
+
+  <data name="SelectQuestionnaire" xml:space="preserve">
+  <value>Chọn bảng câu hỏi</value>
+  </data>
+
+  <data name="Reset" xml:space="preserve">
+  <value>Đặt lại</value>
+  </data>
+
+  <data name="EqualValues" xml:space="preserve">
+  <value>Bằng</value>
+  </data>
+
+  <data name="NotEquals" xml:space="preserve">
+  <value>Không bằng</value>
+  </data>
+
+  <data name="SelectOption" xml:space="preserve">
+  <value>Chọn tùy chọn</value>
+  </data>
+
+  <data name="StartsWith" xml:space="preserve">
+  <value>Bắt đầu bằng</value>
+  </data>
+
+  <data name="Unknown" xml:space="preserve">
+  <value>Không xác định</value>
+  </data>
+
+  <data name="EditCalendarEvent" xml:space="preserve">
+  <value>Chỉnh sửa sự kiện lịch</value>
+  </data>
+
+  <data name="CalendarEvent" xml:space="preserve">
+  <value>Sự kiện lịch</value>
+  </data>
+
+  <data name="Add" xml:space="preserve">
+  <value>Thêm</value>
+  </data>
+
+  <data name="Remove" xml:space="preserve">
+  <value>Xóa</value>
+  </data>
+
+  <data name="Return" xml:space="preserve">
+  <value>Quay lại</value>
+  </data>
+
+  <data name="ChangeToCAPI" xml:space="preserve">
+  <value>Chuyển sang CAPI</value>
+  </data>
+
+  <data name="ChangeToCAPIConfirmHQ" xml:space="preserve">
+  <value>Chế độ của {{count}} cuộc phỏng vấn đã chọn sẽ được chuyển thành CAPI</value>
+  </data>
+
+  <data name="ChangeToCAWI" xml:space="preserve">
+  <value>Chuyển sang CAWI</value>
+  </data>
+
+  <data name="ChangeToCAWIConfirmHQ" xml:space="preserve">
+  <value>Chế độ của {{count}} cuộc phỏng vấn đã chọn sẽ được chuyển thành CAWI</value>
+  </data>
+
+  <data name="InterviewMode" xml:space="preserve">
+  <value>Chế độ phỏng vấn</value>
+  </data>
+
+  <data name="Capi" xml:space="preserve">
+  <value>CAPI</value>
+  </data>
+
+  <data name="Cawi" xml:space="preserve">
+  <value>CAWI</value>
+  </data>
+
+  <data name="Enable" xml:space="preserve">
+  <value>Bật</value>
+  </data>
+
+  <data name="Disable" xml:space="preserve">
+  <value>Tắt</value>
+  </data>
+
+  <data name="Properties" xml:space="preserve">
+  <value>Thuộc tính</value>
+  </data>
+
+  <data name="LinkedUsers" xml:space="preserve">
+  <value>Người dùng được liên kết</value>
+  </data>
+
+  <data name="LinkUser" xml:space="preserve">
+  <value>Người dùng</value>
+  </data>
+
+  <data name="GeoTrackNumber" xml:space="preserve">
+  <value>Lộ trình</value>
+  </data>
+
+  <data name="DateRange" xml:space="preserve">
+  <value>Khoảng ngày</value>
+  </data>
+
+  <data name="AllGeoTracks" xml:space="preserve">
+  <value>Tất cả lộ trình địa lý</value>
+  </data>
 </root>

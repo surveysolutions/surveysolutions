@@ -1,5 +1,5 @@
-import Profile from './Profile'
-import InterviewerAuditLog from './InterviewerAuditLog'
+const Profile = () => import('./Profile')
+const InterviewerAuditLog = () => import('./InterviewerAuditLog')
 
 export default class ProfileComponent {
     get routes() {

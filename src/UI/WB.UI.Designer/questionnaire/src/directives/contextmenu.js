@@ -1,5 +1,3 @@
-import { createPopper } from '@popperjs/core';
-
 // Global state to track the active menu
 const activeMenu = {
     current: null,
@@ -14,7 +12,6 @@ const activeMenu = {
 const contextmenu = app => {
     app.directive('contextmenu', {
         mounted(el, binding) {
-            let popperInstance = null;
             const menuId = binding.value;
             const menu = document.getElementById(menuId);
 
@@ -43,30 +40,33 @@ const contextmenu = app => {
                 }
 
                 requestAnimationFrame(() => {
-                    let mouseX = event.clientX;
-                    let mouseY = event.clientY;
+                    const isFixedPositioned =
+                        window.getComputedStyle(menu).position === 'fixed';
+
+                    let mouseX = isFixedPositioned ? event.clientX : event.pageX;
+                    let mouseY = isFixedPositioned ? event.clientY : event.pageY;
 
                     const menuWidth = menu.scrollWidth;
                     const menuHeight = menu.scrollHeight;
+                    const minX = isFixedPositioned ? 0 : window.scrollX;
+                    const minY = isFixedPositioned ? 0 : window.scrollY;
+                    const maxX = Math.max(minX, (isFixedPositioned ? window.innerWidth : window.scrollX + window.innerWidth) - menuWidth);
+                    const maxY = Math.max(minY, (isFixedPositioned ? window.innerHeight : window.scrollY + window.innerHeight) - menuHeight);
 
-                    if (mouseX + menuWidth > window.innerWidth) {
-                        mouseX = window.innerWidth - menuWidth;
+                    if (mouseX < minX) {
+                        mouseX = minX;
+                    } else if (mouseX > maxX) {
+                        mouseX = maxX;
                     }
 
-                    if (mouseY + menuHeight > window.innerHeight) {
-                        mouseY = window.innerHeight - menuHeight;
+                    if (mouseY < minY) {
+                        mouseY = minY;
+                    } else if (mouseY > maxY) {
+                        mouseY = maxY;
                     }
 
                     menu.style.top = `${mouseY}px`;
                     menu.style.left = `${mouseX}px`;
-
-                    if (!popperInstance) {
-                        popperInstance = createPopper(menu, {
-                            placement: 'bottom-start'
-                        });
-                    }
-
-                    popperInstance.update();
 
                     const menuItems =
                         menuItemClass === 'a'
@@ -97,30 +97,27 @@ const contextmenu = app => {
                     item.removeEventListener('click', hideMenu);
                 });
 
-                if (popperInstance) {
-                    popperInstance.destroy();
-                    popperInstance = null;
-                }
-
                 activeMenu.current = null;
             };
 
-            el.addEventListener('contextmenu', showMenu);
-            document.addEventListener('click', event => {
+            const onDocumentClick = event => {
                 if (!menu.contains(event.target)) {
                     hideMenu();
                 }
-            });
+            };
 
-            el._contextMenu = { el, menu, popperInstance, showMenu, hideMenu };
+            el.addEventListener('contextmenu', showMenu);
+            document.addEventListener('click', onDocumentClick);
+
+            el._contextMenu = { el, menu, showMenu, hideMenu, onDocumentClick };
         },
         unmounted(el) {
             if (!el._contextMenu)
                 return
 
-            let { menu, popperInstance, showMenu, hideMenu } = el._contextMenu;
+            let { menu, showMenu, hideMenu, onDocumentClick } = el._contextMenu;
             el.removeEventListener('contextmenu', showMenu);
-            document.removeEventListener('click', hideMenu);
+            document.removeEventListener('click', onDocumentClick);
 
             const menuItemClass = el.getAttribute('menu-item-class') || 'a';
             const menuItems =
@@ -131,9 +128,6 @@ const contextmenu = app => {
                 item.removeEventListener('click', hideMenu);
             });
 
-            if (popperInstance) {
-                popperInstance.destroy();
-            }
         }
     });
 };
