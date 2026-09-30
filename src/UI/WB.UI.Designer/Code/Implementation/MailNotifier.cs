@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -17,18 +20,24 @@ using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Code.Implementation
 {
-    public class MailNotifier : IRecipientNotifier
+    public class MailNotifier : IRecipientNotifier, IPendingNotificationsSender
     {
         private readonly IEmailSender mailer;
         private readonly IViewRenderService renderingService;
         private readonly IHttpContextAccessor contextAccessor;
         private readonly IUrlHelperFactory urlHelperFactory;
+        private readonly ILogger<MailNotifier> logger;
+        private readonly List<PendingNotification> pendingNotifications = new List<PendingNotification>();
+
+        private record PendingNotification(string Email, Func<Task<string>> RenderMessage);
 
         public MailNotifier(IEmailSender mailer,
             IViewRenderService renderingService,
             IHttpContextAccessor contextAccessor,
-            IUrlHelperFactory urlHelperFactory)
+            IUrlHelperFactory urlHelperFactory,
+            ILogger<MailNotifier> logger)
         {
+            this.logger = logger;
             this.mailer = mailer;
             this.renderingService = renderingService;
             this.contextAccessor = contextAccessor;
@@ -66,14 +75,8 @@ namespace WB.UI.Designer.Code.Implementation
                 QuestionnaireLink = urlHelper.Action("Details", "Q", new { id = questionnaireId }, "https")
             };
 
-            var message = this.GetShareChangeNotificationEmail(sharingNotificationModel);
-
-            message.ContinueWith(s =>
-            {
-                this.mailer.SendEmailAsync(email,
-                    NotificationResources.SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification,
-                    message.Result);
-            });
+            this.pendingNotifications.Add(new PendingNotification(email,
+                () => this.GetShareChangeNotificationEmail(sharingNotificationModel)));
         }
 
         public void NotifyOwnerAboutShareChange(ShareChangeType shareChangeType, string email, string userName, string questionnaireId, string questionnaireTitle, ShareType shareType, string? actionPersonEmail, string sharedWithPersonEmail)
@@ -96,15 +99,33 @@ namespace WB.UI.Designer.Code.Implementation
                 SharedWithPersonEmail = String.IsNullOrWhiteSpace(sharedWithPersonEmail) ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_user : sharedWithPersonEmail,
                 QuestionnaireLink = urlHelper.Action("Details", "Q", new { id = questionnaireId }, "https")
             };
-            var message = this.GetOwnerShareChangeNotificationEmail(sharingNotificationModel);
 
-            message.ContinueWith((state) =>
-            {
-                this.mailer.SendEmailAsync(email,
-                    NotificationResources.SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification,
-                    message.Result);
-            });
+            this.pendingNotifications.Add(new PendingNotification(email,
+                () => this.GetOwnerShareChangeNotificationEmail(sharingNotificationModel)));
         }
+
+        public async Task SendPendingNotificationsAsync()
+        {
+            var notifications = this.pendingNotifications.ToList();
+            this.pendingNotifications.Clear();
+
+            foreach (var notification in notifications)
+            {
+                try
+                {
+                    var message = await notification.RenderMessage();
+                    await this.mailer.SendEmailAsync(notification.Email,
+                        NotificationResources.SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification,
+                        message);
+                }
+                catch (Exception e)
+                {
+                    this.logger.LogError(e, "Failed to send questionnaire sharing notification");
+                }
+            }
+        }
+
+        public void DiscardPendingNotifications() => this.pendingNotifications.Clear();
 
         public async Task<string> GetShareChangeNotificationEmail(SharingNotificationModel model)
         {

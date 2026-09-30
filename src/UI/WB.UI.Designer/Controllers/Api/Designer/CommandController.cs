@@ -62,6 +62,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IDesignerTranslationService translationsService;
         private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IPendingNotificationsSender pendingNotificationsSender;
 
         // Get the default form options so that we can use them to set the default limits for
         // request body data
@@ -79,7 +80,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             IAttachmentService attachmentService,
             IDesignerTranslationService translationsService,
             IReusableCategoriesService reusableCategoriesService,
-            IFileSystemAccessor fileSystemAccessor)
+            IFileSystemAccessor fileSystemAccessor,
+            IPendingNotificationsSender pendingNotificationsSender)
         {
             this.logger = logger;
             this.commandInflater = commandPreprocessor;
@@ -90,6 +92,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.translationsService = translationsService;
             this.reusableCategoriesService = reusableCategoriesService;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.pendingNotificationsSender = pendingNotificationsSender;
         }
 
         public class AttachmentModel
@@ -273,9 +276,11 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     {
                         await dbContext.SaveChangesAsync();
                         transaction.Commit();
+                        await pendingNotificationsSender.SendPendingNotificationsAsync();
                     }
                     else
                     {
+                        pendingNotificationsSender.DiscardPendingNotifications();
                         transaction.Rollback();
                     }
 

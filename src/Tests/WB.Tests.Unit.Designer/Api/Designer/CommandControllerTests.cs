@@ -47,7 +47,8 @@ namespace WB.Tests.Unit.Designer.Api.Designer
             IAttachmentService attachmentService = null,
             IDesignerTranslationService translationsService = null,
             IReusableCategoriesService reusableCategoriesService = null,
-            IFileSystemAccessor fileSystemAccessor = null)
+            IFileSystemAccessor fileSystemAccessor = null,
+            IPendingNotificationsSender pendingNotificationsSender = null)
         {
             var controller = new CommandController(
                 commandService ?? Mock.Of<ICommandService>(),
@@ -58,7 +59,8 @@ namespace WB.Tests.Unit.Designer.Api.Designer
                 attachmentService ?? Mock.Of<IAttachmentService>(),
                 translationsService ?? Mock.Of<IDesignerTranslationService>(),
                 reusableCategoriesService ?? Mock.Of<IReusableCategoriesService>(),
-                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                pendingNotificationsSender ?? Mock.Of<IPendingNotificationsSender>());
 
             controller.ControllerContext = new ControllerContext
             {
@@ -571,6 +573,66 @@ namespace WB.Tests.Unit.Designer.Api.Designer
 
             Assert.That(result, Is.InstanceOf<OkResult>());
             commandService.Verify(s => s.Execute(It.IsAny<ICommand>(), It.IsAny<string>()), Times.Once);
+        }
+
+        [Test]
+        public async Task Post_valid_command_sends_pending_notifications_after_commit()
+        {
+            var pendingNotificationsSender = new Mock<IPendingNotificationsSender>();
+            var controller = CreateController(pendingNotificationsSender: pendingNotificationsSender.Object);
+            var model = new CommandController.CommandExecutionModel
+            {
+                Type = "UpdateQuestionnaire",
+                Command = ValidUpdateQuestionnaireJson()
+            };
+
+            await controller.Post(model);
+
+            pendingNotificationsSender.Verify(s => s.SendPendingNotificationsAsync(), Times.Once);
+            pendingNotificationsSender.Verify(s => s.DiscardPendingNotifications(), Times.Never);
+        }
+
+        [Test]
+        public async Task Post_command_with_errors_discards_pending_notifications()
+        {
+            var commandService = new Mock<ICommandService>();
+            commandService
+                .Setup(s => s.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
+                .Throws(new QuestionnaireException(DomainExceptionType.Undefined, "Domain error"));
+            var pendingNotificationsSender = new Mock<IPendingNotificationsSender>();
+            var controller = CreateController(commandService: commandService.Object,
+                pendingNotificationsSender: pendingNotificationsSender.Object);
+            var model = new CommandController.CommandExecutionModel
+            {
+                Type = "UpdateQuestionnaire",
+                Command = ValidUpdateQuestionnaireJson()
+            };
+
+            await controller.Post(model);
+
+            pendingNotificationsSender.Verify(s => s.SendPendingNotificationsAsync(), Times.Never);
+            pendingNotificationsSender.Verify(s => s.DiscardPendingNotifications(), Times.Once);
+        }
+
+        [Test]
+        public async Task Post_command_throws_unexpected_exception_does_not_send_pending_notifications()
+        {
+            var commandService = new Mock<ICommandService>();
+            commandService
+                .Setup(s => s.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
+                .Throws(new InvalidOperationException("Post-processor failed"));
+            var pendingNotificationsSender = new Mock<IPendingNotificationsSender>();
+            var controller = CreateController(commandService: commandService.Object,
+                pendingNotificationsSender: pendingNotificationsSender.Object);
+            var model = new CommandController.CommandExecutionModel
+            {
+                Type = "UpdateQuestionnaire",
+                Command = ValidUpdateQuestionnaireJson()
+            };
+
+            await controller.Post(model);
+
+            pendingNotificationsSender.Verify(s => s.SendPendingNotificationsAsync(), Times.Never);
         }
 
         [Test]
