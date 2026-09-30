@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -30,6 +31,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         private readonly IWorkspaceService workspaceService;
         private readonly IPlainStorage<SupervisorIdentity> supervisorPlainStorage;
         private readonly IViewModelNavigationService navigationService;
+        private readonly ISupervisorSettings supervisorSettings;
 
         public SupervisorSynchronizationProcess(
             ISupervisorSynchronizationService synchronizationService,
@@ -58,9 +60,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             this.workspaceService = workspaceService;
             this.supervisorPlainStorage = supervisorPlainStorage;
             this.navigationService = navigationService;
+            this.supervisorSettings = supervisorSettings;
         }
-
-        protected override bool ShouldCheckServerVersionBeforeSynchronization => true;
 
         protected override Task CheckAfterStartSynchronization(CancellationToken cancellationToken)
         {
@@ -72,6 +73,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             {
                 throw new NullReferenceException("Rest credentials not set");
             }
+
+            var serverVersion = await this.synchronizationService
+                .GetLatestApplicationVersionAsync(cancellationToken)
+                .ConfigureAwait(false);
+            if (serverVersion.HasValue && serverVersion.Value < this.supervisorSettings.GetApplicationVersionCode())
+                throw new SynchronizationException(SynchronizationExceptionType.NotSupportedServerSyncProtocolVersion,
+                    EnumeratorUIResources.NotSupportedServerSyncProtocolVersion);
             
             SupervisorApiView supervisor = await this.synchronizationService.GetSupervisorAsync(this.RestCredentials, token: cancellationToken).ConfigureAwait(false);
             if (supervisor.Workspaces.Count == 0)

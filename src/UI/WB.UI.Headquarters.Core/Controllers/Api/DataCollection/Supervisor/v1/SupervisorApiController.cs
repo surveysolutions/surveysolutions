@@ -32,7 +32,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         private readonly IAuthorizedUser authorizedUser;
         private readonly IInterviewInformationFactory interviewFactory;
         private readonly IInterviewerVersionReader interviewerVersionReader;
-        private readonly IProductVersion productVersion;
 
         public SupervisorControllerBase(ITabletInformationService tabletInformationService, 
             ISupervisorSyncProtocolVersionProvider syncVersionProvider,
@@ -42,8 +41,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             IClientApkProvider clientApkProvider,
             IAuthorizedUser authorizedUser,
             IInterviewInformationFactory interviewFactory,
-            IInterviewerVersionReader interviewerVersionReader,
-            IProductVersion productVersion)
+            IInterviewerVersionReader interviewerVersionReader)
             : base(settingsStorage, tenantSettings, userViewFactory, tabletInformationService)
         {
             this.tabletInformationService = tabletInformationService;
@@ -53,7 +51,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             this.authorizedUser = authorizedUser;
             this.interviewFactory = interviewFactory;
             this.interviewerVersionReader = interviewerVersionReader;
-            this.productVersion = productVersion;
         }
 
         [AllowAnonymous]
@@ -80,10 +77,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [AllowAnonymous]
         [HttpGet]
         [Route("v1/extended/latestversion")]
-        public virtual async Task<int?> GetLatestVersion(bool forCompatibilityCheck = false)
+        public virtual Task<int?> GetLatestVersion()
         {
-            var latestVersion = await this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.SupervisorFileName);
-            return latestVersion ?? (forCompatibilityCheck ? this.productVersion.GetBuildNumber() : null);
+            return this.clientApkProvider.GetApplicationBuildNumber(ClientApkInfo.SupervisorFileName);
         }
 
         [Authorize(Roles = "Supervisor")]
@@ -114,14 +110,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 
             var serverApkBuildNumber = await interviewerVersionReader.SupervisorBuildNumber();
             var clientApkBuildNumber = this.Request.GetBuildNumberFromUserAgent();
-
-            if (clientApkBuildNumber != null
-                && serverApkBuildNumber.HasValue
-                && clientApkBuildNumber > serverApkBuildNumber.Value)
-            {
-                return StatusCode(StatusCodes.Status406NotAcceptable);
-            }
-
+            
             if (IsNeedUpdateAppBySettings(clientApkBuildNumber, serverApkBuildNumber))
             {
                 return StatusCode(StatusCodes.Status426UpgradeRequired);
@@ -130,6 +119,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             if (clientApkBuildNumber != null && this.syncVersionProvider.GetBlackListedBuildNumbers().Contains(clientApkBuildNumber.Value))
             {
                 return StatusCode(StatusCodes.Status426UpgradeRequired);
+            }
+
+            if (clientApkBuildNumber != null && clientApkBuildNumber > serverApkBuildNumber)
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable);
             }
 
             if (deviceSyncProtocolVersion == SupervisorSyncProtocolVersionProvider.V1_BeforeResolvedCommentsIntroduced) 

@@ -479,10 +479,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public Task<byte[]?> GetApplicationPatchAsync(IProgress<TransferProgress>? transferProgress = null, CancellationToken token = default) 
             => Task.FromResult(default(byte[]));
 
-        public Task<int?> GetLatestApplicationVersionAsync(CancellationToken token = default)
-            => this.GetLatestApplicationVersionAsync(token, false);
-
-        public async Task<int?> GetLatestApplicationVersionAsync(CancellationToken token, bool forCompatibilityCheck)
+        public async Task<int?> GetLatestApplicationVersionAsync(CancellationToken token = default)
         {
             var response = await this.syncClient.SendAsync<GetLatestApplicationVersionRequest, GetLatestApplicationVersionResponse>(
                 new GetLatestApplicationVersionRequest(), token);

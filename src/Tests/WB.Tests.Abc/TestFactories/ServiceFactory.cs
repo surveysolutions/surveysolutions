@@ -521,10 +521,6 @@ namespace WB.Tests.Abc.TestFactories
             IWorkspaceService workspaceService = null)
         {
             var syncServiceMock = synchronizationService ?? Mock.Of<IOnlineSynchronizationService>();
-            var updateApplicationStep = Mock.Of<IUpdateApplicationSynchronizationStep>(
-                step => step.CheckServerVersionAsync(It.IsAny<CancellationToken>()) == Task.CompletedTask);
-            var syncServiceLocator = serviceLocator ?? Mock.Of<IServiceLocator>(
-                sl => sl.GetInstance<IUpdateApplicationSynchronizationStep>() == updateApplicationStep);
 
             return new InterviewerOnlineSynchronizationProcess(
                 syncServiceMock,
@@ -538,7 +534,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAuditLogService>(),
                 Mock.Of<IDeviceInformationService>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
-                syncServiceLocator,
+                serviceLocator ?? Mock.Of<IServiceLocator>(),
                 workspaceService ?? Mock.Of<IWorkspaceService>(),
                 Mock.Of<IViewModelNavigationService>());
         }
@@ -549,8 +545,7 @@ namespace WB.Tests.Abc.TestFactories
             IPasswordHasher passwordHasher = null,
             IInterviewerPrincipal principal = null,
             IHttpStatistician httpStatistician = null,
-            IOfflineSynchronizationService synchronizationService = null,
-            IServiceLocator serviceLocator = null)
+            IOfflineSynchronizationService synchronizationService = null)
         {
             var syncServiceMock = synchronizationService ?? Mock.Of<IOfflineSynchronizationService>();
 
@@ -564,7 +559,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAuditLogService>(),
                 Mock.Of<IInterviewerSettings>(),
                 Mock.Of<IDeviceInformationService>(),
-                serviceLocator ?? Mock.Of<IServiceLocator>(),
+                Mock.Of<IServiceLocator>(),
                 Mock.Of<IUserInteractionService>());
         }
 
