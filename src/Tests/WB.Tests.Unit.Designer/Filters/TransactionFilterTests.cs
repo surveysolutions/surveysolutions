@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.DataAccess;
@@ -212,6 +213,67 @@ public class TransactionFilterTests
         db.Filter.ChangeTracker.Entries<QuestionnaireListViewItem>().Should().ContainSingle();
     }
 
+    // ---- Post-commit actions ------------------------------------------------------------------------
+
+    [Test]
+    public async Task when_write_request_commits_post_commit_actions_run_after_commit()
+    {
+        var db = NewDatabase();
+        var id = Guid.NewGuid().ToString("N");
+        bool? committedWhenActionRan = null;
+
+        await InvokeActionAsync(db, Mock.Of<ITransactionalMemoryCacheInvalidation>(), HttpMethods.Post, new OkResult(),
+            throwInHandler: false, stageItemId: id,
+            postCommitAction: () =>
+            {
+                committedWhenActionRan = db.Filter.Database.CurrentTransaction == null && StoredIds(db).Contains(id);
+                return Task.CompletedTask;
+            });
+
+        committedWhenActionRan.Should().BeTrue();
+    }
+
+    [Test]
+    public async Task when_write_request_is_marked_rollback_only_post_commit_actions_are_discarded()
+    {
+        var db = NewDatabase();
+        var actionRan = false;
+
+        await InvokeActionAsync(db, Mock.Of<ITransactionalMemoryCacheInvalidation>(), HttpMethods.Post, new BadRequestResult(),
+            throwInHandler: false, stageItemId: Guid.NewGuid().ToString("N"), markRollbackOnly: true,
+            postCommitAction: () => { actionRan = true; return Task.CompletedTask; });
+
+        actionRan.Should().BeFalse();
+    }
+
+    [Test]
+    public async Task when_handler_throws_post_commit_actions_are_discarded()
+    {
+        var db = NewDatabase();
+        var actionRan = false;
+
+        var act = () => InvokeActionAsync(db, Mock.Of<ITransactionalMemoryCacheInvalidation>(), HttpMethods.Post, result: null,
+            throwInHandler: true, stageItemId: Guid.NewGuid().ToString("N"),
+            postCommitAction: () => { actionRan = true; return Task.CompletedTask; });
+
+        await act.Should().ThrowAsync<InvalidOperationException>();
+        actionRan.Should().BeFalse();
+    }
+
+    [Test]
+    public async Task when_post_commit_action_fails_the_committed_request_does_not_fail()
+    {
+        var db = NewDatabase();
+        var id = Guid.NewGuid().ToString("N");
+
+        var act = () => InvokeActionAsync(db, Mock.Of<ITransactionalMemoryCacheInvalidation>(), HttpMethods.Post, new OkResult(),
+            throwInHandler: false, stageItemId: id,
+            postCommitAction: () => throw new ApplicationException("smtp failure"));
+
+        await act.Should().NotThrowAsync();
+        StoredIds(db).Should().Contain(id);
+    }
+
     // ---- Public Razor page filter -------------------------------------------------------------------
 
     [Test]
@@ -284,6 +346,7 @@ public class TransactionFilterTests
             .AddSingleton(dbContext)
             .AddSingleton(invalidation)
             .AddSingleton<ITransactionRollbackState, TransactionRollbackState>()
+            .AddSingleton<IPostCommitActions>(new PostCommitActions(NullLogger<PostCommitActions>.Instance))
             .BuildServiceProvider();
 
     private static DefaultHttpContext HttpContextFor(DesignerDbContext dbContext, ITransactionalMemoryCacheInvalidation invalidation, string method)
@@ -309,7 +372,8 @@ public class TransactionFilterTests
         IList<IFilterMetadata>? filters = null,
         bool canceled = false,
         bool markRollbackOnly = false,
-        Exception? exceptionInExecutedContext = null)
+        Exception? exceptionInExecutedContext = null,
+        Func<Task>? postCommitAction = null)
     {
         var httpContext = HttpContextFor(db.Filter, invalidation, method);
         var filterList = filters ?? new List<IFilterMetadata>();
@@ -319,6 +383,8 @@ public class TransactionFilterTests
         ActionExecutionDelegate next = async () =>
         {
             Stage(db.Filter, stageItemId);
+            if (postCommitAction != null)
+                httpContext.RequestServices.GetRequiredService<IPostCommitActions>().Enqueue(postCommitAction);
             if (markRollbackOnly)
                 httpContext.RequestServices.GetRequiredService<ITransactionRollbackState>().MarkRollbackOnly();
             await Task.Yield();

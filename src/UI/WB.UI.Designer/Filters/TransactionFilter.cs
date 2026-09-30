@@ -92,10 +92,11 @@ namespace WB.UI.Designer.Filters
 
             ExceptionDispatchInfo? capturedException = null;
             Exception? handlerException = null;
+            var committed = false;
 
             try
             {
-                handlerException = await ExecuteOwnedTransactionAsync(dbContext, action, isWrite);
+                (handlerException, committed) = await ExecuteOwnedTransactionAsync(dbContext, action, isWrite);
             }
             catch (Exception exception)
             {
@@ -111,17 +112,26 @@ namespace WB.UI.Designer.Filters
             {
                 // Keep the original handler/transaction failure if cleanup also faults.
             }
+            finally
+            {
+                var postCommitActions = httpContext.RequestServices.GetRequiredService<IPostCommitActions>();
+                if (committed)
+                    await postCommitActions.ExecuteAsync();
+                else
+                    postCommitActions.Discard();
+            }
 
             capturedException?.Throw();
         }
 
         // Returns the handler exception MVC delivered without throwing, so the caller can tell a primary failure
         // from a cleanup failure. Rethrows only failures that MVC is not already about to surface itself.
-        private static async Task<Exception?> ExecuteOwnedTransactionAsync(DesignerDbContext dbContext, Func<Task<HandlerOutcome>> action, bool isWrite)
+        private static async Task<(Exception? HandlerException, bool Committed)> ExecuteOwnedTransactionAsync(DesignerDbContext dbContext, Func<Task<HandlerOutcome>> action, bool isWrite)
         {
             var transaction = await dbContext.Database.BeginTransactionAsync(CancellationToken.None);
             HandlerOutcome outcome = default;
             ExceptionDispatchInfo? transactionFailure = null;
+            var committed = false;
 
             try
             {
@@ -130,6 +140,7 @@ namespace WB.UI.Designer.Filters
                 {
                     await dbContext.SaveChangesAsync(CancellationToken.None);
                     await transaction.CommitAsync(CancellationToken.None);
+                    committed = true;
                 }
                 else
                 {
@@ -156,7 +167,7 @@ namespace WB.UI.Designer.Filters
             if (outcome.HandlerException == null)
                 transactionFailure?.Throw();
 
-            return outcome.HandlerException;
+            return (outcome.HandlerException, committed);
         }
 
         private static async Task<T> ExecuteWithSharedCachePolicyAsync<T>(DesignerDbContext dbContext, bool bypassSharedCache, Func<Task<T>> action)

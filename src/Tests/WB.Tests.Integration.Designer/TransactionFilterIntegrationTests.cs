@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -298,6 +299,7 @@ namespace WB.Tests.Integration.Designer
                 .AddSingleton(dbContext)
                 .AddSingleton<ITransactionalMemoryCacheInvalidation>(invalidation ?? new NoopCacheInvalidation())
                 .AddSingleton<ITransactionRollbackState, TransactionRollbackState>()
+                .AddSingleton<IPostCommitActions>(new PostCommitActions(NullLogger<PostCommitActions>.Instance))
                 .BuildServiceProvider();
 
             var httpContext = new DefaultHttpContext { RequestServices = services };
