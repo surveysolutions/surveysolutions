@@ -7,6 +7,7 @@ import { useVariableStore } from './variable';
 import { useQuestionnaireStore } from './questionnaire';
 import { i18n } from '../plugins/localization';
 import { useRoute } from 'vue-router';
+import { hasUnsavedQuestionnaireCategoryChanges } from '../helpers/dynamicImportRecovery';
 
 export const useUnsavedChanges = () => {
     const route = useRoute();
@@ -19,21 +20,22 @@ export const useUnsavedChanges = () => {
 
     const getUnsavedChanges = routeName => {
         if (routeName == 'roster') {
-            return rosterStore.getIsDirty;
+            return rosterStore.getIsDirty || hasUnsavedQuestionnaireCategoryChanges();
         }
         if (routeName == 'group') {
-            return groupStore.getIsDirty;
+            return groupStore.getIsDirty || hasUnsavedQuestionnaireCategoryChanges();
         }
         if (routeName == 'question') {
-            return questionStore.getIsDirty;
+            return questionStore.getIsDirty || hasUnsavedQuestionnaireCategoryChanges();
         }
         if (routeName == 'statictext') {
-            return staticTextStore.getIsDirty;
+            return staticTextStore.getIsDirty || hasUnsavedQuestionnaireCategoryChanges();
         }
         if (routeName == 'variable') {
-            return variableStore.getIsDirty;
+            return variableStore.getIsDirty || hasUnsavedQuestionnaireCategoryChanges();
         }
-        return false;
+        return ['q', 'questionnaire', 'chapter'].includes(routeName) &&
+            hasUnsavedQuestionnaireCategoryChanges();
     };
 
     const confirmLeave = () => {
