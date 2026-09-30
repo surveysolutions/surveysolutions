@@ -34,7 +34,8 @@ export const useUnsavedChanges = () => {
         if (routeName == 'variable') {
             return variableStore.getIsDirty || hasUnsavedQuestionnaireCategoryChanges();
         }
-        return hasUnsavedQuestionnaireCategoryChanges();
+        return ['q', 'questionnaire', 'chapter'].includes(routeName) &&
+            hasUnsavedQuestionnaireCategoryChanges();
     };
 
     const confirmLeave = () => {

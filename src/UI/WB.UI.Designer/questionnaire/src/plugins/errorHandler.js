@@ -121,7 +121,6 @@ export function setupErrorHandler(app) {
 
     window.addEventListener('vite:preloadError', event => {
         if (isDynamicImportError(event.payload)) {
-            event.preventDefault();
             return;
         }
 
