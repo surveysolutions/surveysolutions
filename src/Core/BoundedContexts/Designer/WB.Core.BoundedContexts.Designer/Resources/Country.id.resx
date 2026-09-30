@@ -209,7 +209,7 @@
         <value>Komoro</value>
     </data>
     <data name="CPV" xml:space="preserve">
-        <value>Republik Cabo Verde</value>
+        <value>Cabo Verde</value>
     </data>
     <data name="CRI" xml:space="preserve">
         <value>Kosta Rika</value>
@@ -227,7 +227,7 @@
         <value>Siprus</value>
     </data>
     <data name="CZE" xml:space="preserve">
-        <value>Republik Ceko</value>
+        <value>Ceko</value>
     </data>
     <data name="DEU" xml:space="preserve">
         <value>Jerman</value>
@@ -488,7 +488,7 @@
         <value>Pulau Marshall.</value>
     </data>
     <data name="MKD" xml:space="preserve">
-        <value>Makedonia, TA</value>
+        <value>Makedonia Utara</value>
     </data>
     <data name="MLI" xml:space="preserve">
         <value>Mali</value>
@@ -662,7 +662,7 @@
         <value>San Marino</value>
     </data>
     <data name="SOM" xml:space="preserve">
-        <value>Somalia</value>
+        <value>Republik Federal Somalia</value>
     </data>
     <data name="SPM" xml:space="preserve">
         <value>St Pierre dan Miquelon</value>
@@ -689,7 +689,7 @@
         <value>Swedia</value>
     </data>
     <data name="SWZ" xml:space="preserve">
-        <value>Swaziland</value>
+        <value>Eswatini</value>
     </data>
     <data name="SYC" xml:space="preserve">
         <value>Seychelles</value>
