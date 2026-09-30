@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 {
     [Authorize(Roles = "Supervisor")]
-    public class InterviewerStatisticsApiV1Controller : ControllerBase
+    public class InterviewerStatisticsApiV1Controller : DataCollectionControllerBase
     {
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
 
