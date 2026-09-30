@@ -183,6 +183,42 @@ public class TransactionFilterTests
         await act.Should().ThrowAsync<ApplicationException>();
     }
 
+    // A handled exception is never rethrown by MVC, so it must roll back without masking cleanup failures.
+    [TestCase(true, TestName = "when_inner_filter_handles_exception_and_keeps_it_it_rolls_back_and_surfaces_cleanup_failure")]
+    [TestCase(false, TestName = "when_inner_filter_handles_exception_and_clears_it_it_rolls_back_and_surfaces_cleanup_failure")]
+    public async Task handled_exception_in_action(bool keepException)
+    {
+        var db = NewDatabase();
+        var invalidation = new Mock<ITransactionalMemoryCacheInvalidation>();
+        invalidation.Setup(x => x.Flush()).Throws(new ApplicationException("flush failure"));
+        var id = Guid.NewGuid().ToString("N");
+
+        var act = () => InvokeActionAsync(db, invalidation.Object, HttpMethods.Post, new OkResult(),
+            throwInHandler: false, stageItemId: id,
+            exceptionInExecutedContext: keepException ? new InvalidOperationException("handled failure") : null,
+            exceptionHandled: true);
+
+        await act.Should().ThrowAsync<ApplicationException>();
+        StoredIds(db).Should().NotContain(id);
+    }
+
+    [TestCase(true, TestName = "when_inner_page_filter_handles_exception_and_keeps_it_it_rolls_back_and_surfaces_cleanup_failure")]
+    [TestCase(false, TestName = "when_inner_page_filter_handles_exception_and_clears_it_it_rolls_back_and_surfaces_cleanup_failure")]
+    public async Task handled_exception_in_page(bool keepException)
+    {
+        var db = NewDatabase();
+        var invalidation = new Mock<ITransactionalMemoryCacheInvalidation>();
+        invalidation.Setup(x => x.Flush()).Throws(new ApplicationException("flush failure"));
+        var id = Guid.NewGuid().ToString("N");
+
+        var act = () => InvokePageAsync(db, invalidation.Object, HttpMethods.Post, new PageResult(), stageItemId: id,
+            exceptionInExecutedContext: keepException ? new InvalidOperationException("handled failure") : null,
+            exceptionHandled: true);
+
+        await act.Should().ThrowAsync<ApplicationException>();
+        StoredIds(db).Should().NotContain(id);
+    }
+
     [Test]
     public async Task when_page_executed_context_carries_the_handler_exception_it_rolls_back_without_rethrowing()
     {
@@ -373,7 +409,8 @@ public class TransactionFilterTests
         bool canceled = false,
         bool markRollbackOnly = false,
         Exception? exceptionInExecutedContext = null,
-        Func<Task>? postCommitAction = null)
+        Func<Task>? postCommitAction = null,
+        bool exceptionHandled = false)
     {
         var httpContext = HttpContextFor(db.Filter, invalidation, method);
         var filterList = filters ?? new List<IFilterMetadata>();
@@ -395,7 +432,8 @@ public class TransactionFilterTests
             {
                 Result = result,
                 Canceled = canceled,
-                Exception = exceptionInExecutedContext
+                Exception = exceptionInExecutedContext,
+                ExceptionHandled = exceptionHandled
             };
         };
 
@@ -410,7 +448,8 @@ public class TransactionFilterTests
         string? stageItemId,
         IList<IFilterMetadata>? filters = null,
         bool canceled = false,
-        Exception? exceptionInExecutedContext = null)
+        Exception? exceptionInExecutedContext = null,
+        bool exceptionHandled = false)
     {
         var httpContext = HttpContextFor(db.Filter, invalidation, method);
         var filterList = filters ?? new List<IFilterMetadata>();
@@ -427,7 +466,8 @@ public class TransactionFilterTests
             {
                 Result = result,
                 Canceled = canceled,
-                Exception = exceptionInExecutedContext
+                Exception = exceptionInExecutedContext,
+                ExceptionHandled = exceptionHandled
             };
         };
 

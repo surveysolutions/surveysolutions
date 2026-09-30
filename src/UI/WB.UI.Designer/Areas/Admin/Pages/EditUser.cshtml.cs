@@ -95,12 +95,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 {
                     var emailChanged = await userManager.SetEmailAsync(user, Input.Email);
                     if (!emailChanged.Succeeded)
-                    {
-                        // SetEmailAsync mutates email and security stamp before validating; the failed values must not be committed.
-                        this.transactionRollbackState.MarkRollbackOnly();
-                        this.ErrorMessage = emailChanged.Errors.First().Description;
-                        return RedirectToPage(new {id = id});
-                    }
+                        return RollbackWithError(emailChanged, id);
                 }
 
                 user.EmailConfirmed = Input.IsApproved;
@@ -113,33 +108,51 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 var existingFullName = claims.FirstOrDefault(x => x.Type == ClaimTypes.Name);
                 if (existingFullName?.Value != Input.FullName)
                 {
+                    IdentityResult claimChanged;
                     if (string.IsNullOrWhiteSpace(Input.FullName) && existingFullName != null)
                     {
-                        await userManager.RemoveClaimAsync(user, existingFullName);
+                        claimChanged = await userManager.RemoveClaimAsync(user, existingFullName);
                     }
                     else
                     {
                         if (existingFullName == null)
                         {
-                            await userManager.AddClaimAsync(user, new Claim(ClaimTypes.Name, 
+                            claimChanged = await userManager.AddClaimAsync(user, new Claim(ClaimTypes.Name, 
                                 Input.FullName!));
                         }
                         else
                         {
-                            await userManager.ReplaceClaimAsync(user, existingFullName,
+                            claimChanged = await userManager.ReplaceClaimAsync(user, existingFullName,
                                 new Claim(ClaimTypes.Name, Input.FullName!));
                         }
                     }
+
+                    if (!claimChanged.Succeeded)
+                        return RollbackWithError(claimChanged, id);
+                }
+
+                var updated = await this.userManager.UpdateAsync(user);
+                if (!updated.Succeeded)
+                    return RollbackWithError(updated, id);
+
+                if (Input.IsLockedOut)
+                {
+                    var stampUpdated = await userManager.UpdateSecurityStampAsync(user);
+                    if (!stampUpdated.Succeeded)
+                        return RollbackWithError(stampUpdated, id);
                 }
 
                 this.Message = "Account updated";
-
-                await this.userManager.UpdateAsync(user);
-
-                if (Input.IsLockedOut)
-                    await userManager.UpdateSecurityStampAsync(user);
             }
 
+            return RedirectToPage(new { id = id });
+        }
+
+        private IActionResult RollbackWithError(IdentityResult result, string id)
+        {
+            // Identity mutates the tracked user before validating; rejected values must not be committed by TransactionFilter.
+            this.transactionRollbackState.MarkRollbackOnly();
+            this.ErrorMessage = result.Errors.FirstOrDefault()?.Description;
             return RedirectToPage(new { id = id });
         }
     }

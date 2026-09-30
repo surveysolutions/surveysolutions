@@ -20,14 +20,14 @@ namespace WB.UI.Designer.Filters
     // Because of that timing, the filter does NOT inspect IActionResult types, result status codes, or
     // HttpResponse.StatusCode when deciding to commit. For write requests, any handler that returns without
     // an unhandled exception is treated as successful and committed unless the handler marks the request
-    // rollback-only; safe (read-only) methods, short-circuited handlers, and unhandled exceptions trigger rollback.
+    // rollback-only; safe (read-only) methods, short-circuited handlers, and handler exceptions (handled or not) trigger rollback.
     // It also starts after
     // authentication, authorization, and model binding.
     public class TransactionFilter : IAsyncActionFilter, IAsyncPageFilter
     {
-        // MVC usually reports a handler failure through the executed context instead of throwing from next(),
-        // so the exception is carried alongside the commit decision: cleanup faults must never replace it.
-        private readonly record struct HandlerOutcome(bool ShouldCommit, Exception? HandlerException);
+        // MVC usually reports a handler failure through the executed context instead of throwing from next(). Only an
+        // unhandled one is rethrown by MVC, so only that one is carried as pending: cleanup faults must never replace it.
+        private readonly record struct HandlerOutcome(bool ShouldCommit, Exception? PendingException);
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
@@ -42,10 +42,7 @@ namespace WB.UI.Designer.Filters
             await ExecuteInTransactionAsync(context.HttpContext, dbContext, async () =>
             {
                 var executedContext = await next();
-                // Canceled means an inner filter short-circuited: the handler never ran, so nothing may commit.
-                var shouldCommit = executedContext.Exception == null && !executedContext.Canceled
-                    && !rollbackState.IsRollbackOnly;
-                return new HandlerOutcome(shouldCommit, executedContext.Exception);
+                return Outcome(executedContext.Exception, executedContext.ExceptionHandled, executedContext.Canceled, rollbackState);
             });
         }
 
@@ -64,10 +61,16 @@ namespace WB.UI.Designer.Filters
             await ExecuteInTransactionAsync(context.HttpContext, dbContext, async () =>
             {
                 var executedContext = await next();
-                var shouldCommit = executedContext.Exception == null && !executedContext.Canceled
-                    && !rollbackState.IsRollbackOnly;
-                return new HandlerOutcome(shouldCommit, executedContext.Exception);
+                return Outcome(executedContext.Exception, executedContext.ExceptionHandled, executedContext.Canceled, rollbackState);
             });
+        }
+
+        // Canceled means an inner filter short-circuited: the handler never ran, so nothing may commit.
+        // A handled exception (kept or cleared) still means the handler failed, so it rolls back but is not pending.
+        private static HandlerOutcome Outcome(Exception? exception, bool exceptionHandled, bool canceled, ITransactionRollbackState rollbackState)
+        {
+            var shouldCommit = exception == null && !exceptionHandled && !canceled && !rollbackState.IsRollbackOnly;
+            return new HandlerOutcome(shouldCommit, exceptionHandled ? null : exception);
         }
 
         private static bool SkipTransaction(FilterContext context)
@@ -91,12 +94,12 @@ namespace WB.UI.Designer.Filters
                     $"Mark the endpoint with [{nameof(NoTransactionAttribute)}] when it manages its own transaction.");
 
             ExceptionDispatchInfo? capturedException = null;
-            Exception? handlerException = null;
+            Exception? pendingException = null;
             var committed = false;
 
             try
             {
-                (handlerException, committed) = await ExecuteOwnedTransactionAsync(dbContext, action, isWrite);
+                (pendingException, committed) = await ExecuteOwnedTransactionAsync(dbContext, action, isWrite);
             }
             catch (Exception exception)
             {
@@ -108,7 +111,7 @@ namespace WB.UI.Designer.Filters
                 // Publish cache invalidations only once the transaction has fully committed or rolled back.
                 httpContext.RequestServices.GetRequiredService<ITransactionalMemoryCacheInvalidation>().Flush();
             }
-            catch when (capturedException != null || handlerException != null)
+            catch when (capturedException != null || pendingException != null)
             {
                 // Keep the original handler/transaction failure if cleanup also faults.
             }
@@ -124,9 +127,9 @@ namespace WB.UI.Designer.Filters
             capturedException?.Throw();
         }
 
-        // Returns the handler exception MVC delivered without throwing, so the caller can tell a primary failure
+        // Returns the unhandled handler exception MVC delivered without throwing, so the caller can tell a primary failure
         // from a cleanup failure. Rethrows only failures that MVC is not already about to surface itself.
-        private static async Task<(Exception? HandlerException, bool Committed)> ExecuteOwnedTransactionAsync(DesignerDbContext dbContext, Func<Task<HandlerOutcome>> action, bool isWrite)
+        private static async Task<(Exception? PendingException, bool Committed)> ExecuteOwnedTransactionAsync(DesignerDbContext dbContext, Func<Task<HandlerOutcome>> action, bool isWrite)
         {
             var transaction = await dbContext.Database.BeginTransactionAsync(CancellationToken.None);
             HandlerOutcome outcome = default;
@@ -159,15 +162,15 @@ namespace WB.UI.Designer.Filters
             {
                 await transaction.DisposeAsync();
             }
-            catch when (transactionFailure != null || outcome.HandlerException != null)
+            catch when (transactionFailure != null || outcome.PendingException != null)
             {
                 // Disposal must not replace a failure that is already on its way to the caller.
             }
 
-            if (outcome.HandlerException == null)
+            if (outcome.PendingException == null)
                 transactionFailure?.Throw();
 
-            return (outcome.HandlerException, committed);
+            return (outcome.PendingException, committed);
         }
 
         private static async Task<T> ExecuteWithSharedCachePolicyAsync<T>(DesignerDbContext dbContext, bool bypassSharedCache, Func<Task<T>> action)
