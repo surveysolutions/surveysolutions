@@ -459,29 +459,38 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         protected async Task LoadShapefileByPath(string fullPathToShapefile)
         {
+            var stage = "opening the shapefile";
             try 
             {
                 LoadedShapefile = await ShapefileFeatureTable.OpenAsync(fullPathToShapefile);
                 
+                stage = "creating and styling the feature layer";
                 var newFeatureLayer = await mapUtilityService.GetShapefileAsFeatureLayer(LoadedShapefile);
                 newFeatureLayer.Name = ShapefileLayerName;
                 
+                stage = "removing the previous shapefile layer";
                 RemoveShapefileLayer();
 
                 // Add the feature layer to the map
+                stage = "adding the feature layer to the map";
                 this.MapView.Map.OperationalLayers.Add(newFeatureLayer);
 
                 // Zoom the map to the extent of the shapefile
+                stage = "zooming to the shapefile extent";
                 if(newFeatureLayer.FullExtent != null)
                     await this.MapView.SetViewpointGeometryAsync(newFeatureLayer.FullExtent);
 
+                stage = "updating shapefile state and running the post-load handler";
                 ShapeFileLoaded = true;
                 await AfterShapefileLoadedHandler();
             }
             catch (Exception e)
             {
                 LoadedShapefile = null;
-                logger.Error("Error on shapefile loading", e);
+                var message = $"Error on shapefile loading while {stage}";
+                // Release builds have no NLog Logcat target. Keep this diagnostic independent of NLog.
+                Android.Util.Log.Error("WB.Shapefile", $"{message}: {e}");
+                logger.Error(message, e);
                 UserInteractionService.ShowToast(UIResources.AreaMap_ErrorOnShapefileLoading);
             }
         }
@@ -531,6 +540,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
             catch (Exception e)
             {
+                Android.Util.Log.Error("WB.Shapefile", $"Error on shapefile hiding: {e}");
                 logger.Error("Error on shapefile handling", e);
                 UserInteractionService.ShowToast(UIResources.AreaMap_ErrorOnShapefileLoading);
             }
