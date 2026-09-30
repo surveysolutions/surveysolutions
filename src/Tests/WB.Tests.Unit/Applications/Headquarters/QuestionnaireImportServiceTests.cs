@@ -511,7 +511,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
         }
 
         [Test]
-        public async Task when_importing_new_version_with_copy_web_interview_settings_and_null_email_template_should_preserve_null_template()
+        public async Task when_importing_new_version_with_copy_web_interview_settings_and_null_email_template_should_use_default_template()
         {
             var questionnaireId = Id.gA;
             var versionProvider = SetUp.SupportedVersionProvider(1);
@@ -556,8 +556,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 criticalityLevel: null, copyWebInterviewSettings: true);
 
             Assert.That(storedConfig, Is.Not.Null);
-            Assert.That(storedConfig.EmailTemplates.ContainsKey(EmailTextTemplateType.InvitationTemplate), Is.True);
-            Assert.That(storedConfig.EmailTemplates[EmailTextTemplateType.InvitationTemplate], Is.Null);
+            Assert.That(storedConfig.EmailTemplates.ContainsKey(EmailTextTemplateType.InvitationTemplate), Is.False);
+            Assert.That(storedConfig.GetEmailTemplate(EmailTextTemplateType.InvitationTemplate), Is.Not.Null);
         }
 
         [Test]
