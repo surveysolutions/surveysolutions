@@ -15,7 +15,7 @@ using WB.UI.Headquarters.Models.CompanyLogo;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
-    public abstract class SettingsControllerBase : ControllerBase
+    public abstract class SettingsControllerBase : DataCollectionControllerBase
     {
         private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;
         private readonly IPlainStorageAccessor<ServerSettings> tenantSettings;

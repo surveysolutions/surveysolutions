@@ -123,10 +123,10 @@ namespace WB.UI.Headquarters.Controllers.Api
         [ObservingNotAllowed]
         [RequestSizeLimit(500 * 1024 * 1024)]
         [RequestFormLimits(MultipartBodyLengthLimit = 500 * 1024 * 1024)]
-        public async Task<JsonMapResponse> Upload(IFormFile file)
+        public async Task<ActionResult<JsonMapResponse>> Upload(IFormFile file)
         {
             if (file == null || file.Length == 0)
-                throw new ArgumentNullException(nameof(file), "Map archive is empty");
+                return this.StatusCode(StatusCodes.Status406NotAcceptable, "Map archive is invalid");
             
             var response = new JsonMapResponse();
 

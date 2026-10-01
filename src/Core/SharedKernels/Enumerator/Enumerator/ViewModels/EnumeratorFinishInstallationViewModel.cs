@@ -351,7 +351,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     if (!string.IsNullOrWhiteSpace(token))
                     {
                         this.ErrorMessage = EnumeratorUIResources.YouChangeYouPasswordTryToLoginAgainWithNewPassword;
-                        await SignInAsync(callback.DialogResult.NewPassword, token);
+                        this.Password = null;
                         return;
                     }
                 }

@@ -12,7 +12,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 {
     [UseApprovalSubdirectory("../../QuestionsExportDoFiles-approved")]
     [IgnoreLineEndings(true)]
-    [UseReporter(typeof(DiffReporter), typeof(NUnitReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(NUnit4Reporter))]
     [TestOf(typeof(InterviewsDoFilesExporter))]
     internal class QuestionsExportDoFiles : QuestionsExportDoFilesContext
     {

@@ -15,7 +15,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 {
     [UseApprovalSubdirectory("../../CategoricalQuestionExportDoFiles-approved")]
     [IgnoreLineEndings(true)]
-    [UseReporter(typeof(DiffReporter), typeof(NUnitReporter))]
+    [UseReporter(typeof(DiffReporter), typeof(NUnit4Reporter))]
     [TestOf(typeof(InterviewsDoFilesExporter))]
     internal class CategoricalQuestionExportDoFiles : QuestionsExportDoFilesContext
     {

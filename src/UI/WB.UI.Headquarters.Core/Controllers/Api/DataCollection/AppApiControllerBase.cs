@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ using WB.UI.Shared.Web.Controllers;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
-    public class AppControllerBaseBase : ControllerBase
+    public class AppControllerBaseBase : DataCollectionControllerBase
     {
         // version from the sky, discussed on scrum 12/04/2019
         //revision is used to compare version of client apk
@@ -84,6 +85,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             return true;
         }
 
+        // Devices upload diagnostic tablet information before/without a valid Basic/AuthToken
+        // session (e.g. right after install, before first successful login), so this endpoint
+        // must remain reachable without authentication.
+        [AllowAnonymous]
         [RequestSizeLimit(10L * 1024 * 1024 * 1024)]
         [RequestFormLimits(MultipartBodyLengthLimit = 10L * 1024* 1024 * 1024)]
         public virtual async Task<IActionResult> PostTabletInformation()

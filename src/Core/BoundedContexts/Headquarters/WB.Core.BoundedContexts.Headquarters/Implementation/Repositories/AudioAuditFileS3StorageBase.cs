@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,7 +33,7 @@ public abstract class AudioAuditFileS3StorageBase<T> : AudioAuditStorageBase
         var audioAuditData = filePlainStorageAccessor.GetById(fileId);
         if (audioAuditData?.Data == null)
         {
-            return await externalFileStorage.GetBinaryAsync(AudioAuditS3Folder + fileId);
+            return (await externalFileStorage.GetBinaryAsync(AudioAuditS3Folder + fileId).ConfigureAwait(false))!;
         }
 
         return audioAuditData.Data;
@@ -90,7 +91,7 @@ public abstract class AudioAuditFileS3StorageBase<T> : AudioAuditStorageBase
         filePlainStorageAccessor.Remove(q => q.Where(f => interviewIds.Contains(f.InterviewId)));
     }
 
-    private async Task<Stream> GetInterviewBinaryDataStreamAsync(Guid interviewId, string fileName)
+    private async Task<Stream?> GetInterviewBinaryDataStreamAsync(Guid interviewId, string fileName)
     {
         var fileId = GetFileId(interviewId, fileName);
         var audioAuditData = filePlainStorageAccessor.GetById(fileId);
