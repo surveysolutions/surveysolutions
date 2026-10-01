@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -22,6 +23,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Questionnaire.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -384,6 +386,244 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 )), Times.Once);
         }
 
+        [Test]
+        public async Task when_importing_new_version_with_copy_web_interview_settings_should_store_config_from_previous_version()
+        {
+            var questionnaireId = Id.gA;
+            var versionProvider = SetUp.SupportedVersionProvider(1);
+
+            var previousVersionIdentity = new QuestionnaireIdentity(questionnaireId, 1);
+            var previousConfig = new WebInterviewConfig
+            {
+                QuestionnaireId = previousVersionIdentity,
+                Started = true,
+                UseCaptcha = true,
+                SingleResponse = false,
+                EmailOnComplete = true,
+                AttachAnswersInEmail = true,
+                AllowSwitchToCawiForInterviewer = true,
+                AllowTranscriptDownloading = true,
+                ReminderAfterDaysIfNoResponse = 5,
+                ReminderAfterDaysIfPartialResponse = 3,
+                CustomMessages = new Dictionary<WebInterviewUserMessages, string>
+                {
+                    { WebInterviewUserMessages.WelcomeText, "Hello!" }
+                },
+                EmailTemplates = new Dictionary<EmailTextTemplateType, EmailTextTemplate>
+                {
+                    { EmailTextTemplateType.InvitationTemplate, new EmailTextTemplate("Subject", "Message", "PasswordDescription", "LinkText") }
+                },
+            };
+
+            WebInterviewConfig storedConfig = null;
+
+            var questionnaireVersionProvider = new Mock<IQuestionnaireVersionProvider>();
+            questionnaireVersionProvider.Setup(x => x.GetNextVersion(questionnaireId)).Returns(2);
+
+            var webInterviewConfigProvider = new Mock<IWebInterviewConfigProvider>();
+            webInterviewConfigProvider
+                .Setup(x => x.Get(It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == questionnaireId && q.Version == 1)))
+                .Returns(previousConfig);
+            webInterviewConfigProvider
+                .Setup(x => x.Store(It.IsAny<QuestionnaireIdentity>(), It.IsAny<WebInterviewConfig>()))
+                .Callback<QuestionnaireIdentity, WebInterviewConfig>((_, config) => storedConfig = config);
+
+            var zipUtils = SetUp.StringCompressor_Decompress(new QuestionnaireDocument { PublicKey = questionnaireId });
+            var designerApi = new Mock<IDesignerApi>();
+            SetupGetQuestionnaire(designerApi);
+
+            var service = CreateIQuestionnaireImportService(
+                supportedVersionProvider: versionProvider,
+                zipUtils: zipUtils,
+                designerApi: designerApi.Object,
+                questionnaireVersionProvider: questionnaireVersionProvider.Object,
+                webInterviewConfigProvider: webInterviewConfigProvider.Object);
+
+            // Act
+            await service.ImportAndMigrateAssignments(questionnaireId, "q", false, null, null,
+                includePdf: false, shouldMigrateAssignments: false, migrateFrom: null,
+                criticalityLevel: null, copyWebInterviewSettings: true);
+
+            // Assert
+            webInterviewConfigProvider.Verify(x => x.Store(
+                It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == questionnaireId && q.Version == 2),
+                It.Is<WebInterviewConfig>(c =>
+                    c.Started == false &&
+                    c.UseCaptcha == true &&
+                    c.SingleResponse == false &&
+                    c.EmailOnComplete == true &&
+                    c.ReminderAfterDaysIfNoResponse == 5 &&
+                    c.ReminderAfterDaysIfPartialResponse == 3 &&
+                    c.CustomMessages.ContainsKey(WebInterviewUserMessages.WelcomeText) &&
+                    c.EmailTemplates.ContainsKey(EmailTextTemplateType.InvitationTemplate))),
+                Times.Once);
+
+            Assert.That(storedConfig, Is.Not.Null);
+            Assert.That(storedConfig.EmailTemplates[EmailTextTemplateType.InvitationTemplate],
+                Is.Not.SameAs(previousConfig.EmailTemplates[EmailTextTemplateType.InvitationTemplate]));
+            Assert.That(storedConfig.EmailTemplates[EmailTextTemplateType.InvitationTemplate].Subject,
+                Is.EqualTo(previousConfig.EmailTemplates[EmailTextTemplateType.InvitationTemplate].Subject));
+        }
+
+        [Test]
+        public async Task when_importing_new_version_with_copy_web_interview_settings_should_use_previous_questionnaire_version()
+        {
+            var questionnaireId = Id.gA;
+            var sourceQuestionnaireId = Guid.NewGuid();
+            var versionProvider = SetUp.SupportedVersionProvider(1);
+
+            var sourceVersionIdentity = new QuestionnaireIdentity(sourceQuestionnaireId, 1);
+            var previousVersionIdentity = new QuestionnaireIdentity(questionnaireId, 2);
+            var questionnaireVersionProvider = new Mock<IQuestionnaireVersionProvider>();
+            questionnaireVersionProvider.Setup(x => x.GetNextVersion(questionnaireId)).Returns(3);
+
+            var webInterviewConfigProvider = new Mock<IWebInterviewConfigProvider>();
+            webInterviewConfigProvider
+                .Setup(x => x.Get(It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == questionnaireId && q.Version == 2)))
+                .Returns(new WebInterviewConfig
+                {
+                    QuestionnaireId = previousVersionIdentity,
+                    CustomMessages = new Dictionary<WebInterviewUserMessages, string>(),
+                    EmailTemplates = new Dictionary<EmailTextTemplateType, EmailTextTemplate>()
+                });
+
+            var zipUtils = SetUp.StringCompressor_Decompress(new QuestionnaireDocument { PublicKey = questionnaireId });
+            var designerApi = new Mock<IDesignerApi>();
+            SetupGetQuestionnaire(designerApi);
+
+            var service = CreateIQuestionnaireImportService(
+                supportedVersionProvider: versionProvider,
+                zipUtils: zipUtils,
+                designerApi: designerApi.Object,
+                questionnaireVersionProvider: questionnaireVersionProvider.Object,
+                webInterviewConfigProvider: webInterviewConfigProvider.Object);
+
+            await service.ImportAndMigrateAssignments(questionnaireId, "q", false, null, null,
+                includePdf: false, shouldMigrateAssignments: false, migrateFrom: sourceVersionIdentity,
+                criticalityLevel: null, copyWebInterviewSettings: true);
+
+            webInterviewConfigProvider.Verify(x => x.Get(
+                It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == questionnaireId && q.Version == 2)),
+                Times.Once);
+            webInterviewConfigProvider.Verify(x => x.Get(
+                It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == sourceQuestionnaireId && q.Version == 1)),
+                Times.Never);
+        }
+
+        [Test]
+        public async Task when_importing_new_version_with_copy_web_interview_settings_and_null_email_template_should_use_default_template()
+        {
+            var questionnaireId = Id.gA;
+            var versionProvider = SetUp.SupportedVersionProvider(1);
+
+            var previousVersionIdentity = new QuestionnaireIdentity(questionnaireId, 1);
+            var previousConfig = new WebInterviewConfig
+            {
+                QuestionnaireId = previousVersionIdentity,
+                CustomMessages = new Dictionary<WebInterviewUserMessages, string>(),
+                EmailTemplates = new Dictionary<EmailTextTemplateType, EmailTextTemplate>
+                {
+                    { EmailTextTemplateType.InvitationTemplate, null }
+                },
+            };
+
+            WebInterviewConfig storedConfig = null;
+
+            var questionnaireVersionProvider = new Mock<IQuestionnaireVersionProvider>();
+            questionnaireVersionProvider.Setup(x => x.GetNextVersion(questionnaireId)).Returns(2);
+
+            var webInterviewConfigProvider = new Mock<IWebInterviewConfigProvider>();
+            webInterviewConfigProvider
+                .Setup(x => x.Get(It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == questionnaireId && q.Version == 1)))
+                .Returns(previousConfig);
+            webInterviewConfigProvider
+                .Setup(x => x.Store(It.IsAny<QuestionnaireIdentity>(), It.IsAny<WebInterviewConfig>()))
+                .Callback<QuestionnaireIdentity, WebInterviewConfig>((_, config) => storedConfig = config);
+
+            var zipUtils = SetUp.StringCompressor_Decompress(new QuestionnaireDocument { PublicKey = questionnaireId });
+            var designerApi = new Mock<IDesignerApi>();
+            SetupGetQuestionnaire(designerApi);
+
+            var service = CreateIQuestionnaireImportService(
+                supportedVersionProvider: versionProvider,
+                zipUtils: zipUtils,
+                designerApi: designerApi.Object,
+                questionnaireVersionProvider: questionnaireVersionProvider.Object,
+                webInterviewConfigProvider: webInterviewConfigProvider.Object);
+
+            await service.ImportAndMigrateAssignments(questionnaireId, "q", false, null, null,
+                includePdf: false, shouldMigrateAssignments: false, migrateFrom: null,
+                criticalityLevel: null, copyWebInterviewSettings: true);
+
+            Assert.That(storedConfig, Is.Not.Null);
+            Assert.That(storedConfig.EmailTemplates.ContainsKey(EmailTextTemplateType.InvitationTemplate), Is.False);
+            Assert.That(storedConfig.GetEmailTemplate(EmailTextTemplateType.InvitationTemplate), Is.Not.Null);
+        }
+
+        [Test]
+        public async Task when_importing_first_version_with_copy_web_interview_settings_should_not_store_config()
+        {
+            var questionnaireId = Id.gA;
+            var sourceVersionIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
+            var versionProvider = SetUp.SupportedVersionProvider(1);
+
+            var questionnaireVersionProvider = new Mock<IQuestionnaireVersionProvider>();
+            questionnaireVersionProvider.Setup(x => x.GetNextVersion(questionnaireId)).Returns(1);
+
+            var webInterviewConfigProvider = new Mock<IWebInterviewConfigProvider>();
+
+            var zipUtils = SetUp.StringCompressor_Decompress(new QuestionnaireDocument { PublicKey = questionnaireId });
+            var designerApi = new Mock<IDesignerApi>();
+            SetupGetQuestionnaire(designerApi);
+
+            var service = CreateIQuestionnaireImportService(
+                supportedVersionProvider: versionProvider,
+                zipUtils: zipUtils,
+                designerApi: designerApi.Object,
+                questionnaireVersionProvider: questionnaireVersionProvider.Object,
+                webInterviewConfigProvider: webInterviewConfigProvider.Object);
+
+            // Act
+            await service.ImportAndMigrateAssignments(questionnaireId, "q", false, null, null,
+                includePdf: false, shouldMigrateAssignments: false, migrateFrom: sourceVersionIdentity,
+                criticalityLevel: null, copyWebInterviewSettings: true);
+
+            // Assert: Store must not be called when this is version 1 (no previous version)
+            webInterviewConfigProvider.Verify(x => x.Get(It.IsAny<QuestionnaireIdentity>()), Times.Never);
+            webInterviewConfigProvider.Verify(x => x.Store(It.IsAny<QuestionnaireIdentity>(), It.IsAny<WebInterviewConfig>()), Times.Never);
+        }
+
+        [Test]
+        public async Task when_importing_new_version_without_copy_web_interview_settings_should_not_store_config()
+        {
+            var questionnaireId = Id.gA;
+            var versionProvider = SetUp.SupportedVersionProvider(1);
+
+            var questionnaireVersionProvider = new Mock<IQuestionnaireVersionProvider>();
+            questionnaireVersionProvider.Setup(x => x.GetNextVersion(questionnaireId)).Returns(2);
+
+            var webInterviewConfigProvider = new Mock<IWebInterviewConfigProvider>();
+
+            var zipUtils = SetUp.StringCompressor_Decompress(new QuestionnaireDocument { PublicKey = questionnaireId });
+            var designerApi = new Mock<IDesignerApi>();
+            SetupGetQuestionnaire(designerApi);
+
+            var service = CreateIQuestionnaireImportService(
+                supportedVersionProvider: versionProvider,
+                zipUtils: zipUtils,
+                designerApi: designerApi.Object,
+                questionnaireVersionProvider: questionnaireVersionProvider.Object,
+                webInterviewConfigProvider: webInterviewConfigProvider.Object);
+
+            // Act
+            await service.ImportAndMigrateAssignments(questionnaireId, "q", false, null, null,
+                includePdf: false, shouldMigrateAssignments: false, migrateFrom: null,
+                criticalityLevel: null, copyWebInterviewSettings: false);
+
+            // Assert: Store must not be called when copyWebInterviewSettings is false
+            webInterviewConfigProvider.Verify(x => x.Store(It.IsAny<QuestionnaireIdentity>(), It.IsAny<WebInterviewConfig>()), Times.Never);
+        }
+
         private static Mock<IUnitOfWork> GetUnitOfWorkMock()
         {
             var session = Mock.Of<NHibernate.ISession>(s => s.CreateSQLQuery(It.IsAny<string>()) == Mock.Of<ISQLQuery>());
@@ -407,7 +647,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
           IUnitOfWork unitOfWork = null,
           IArchiveUtils archiveUtils = null,
           ICategoriesImporter categoriesImporter = null,
-          ITranslationImporter translationImporter = null
+          ITranslationImporter translationImporter = null,
+          IWebInterviewConfigProvider webInterviewConfigProvider = null
       )
         {
             var globalInfoProvider = authorizedUser ?? new Mock<IAuthorizedUser> { DefaultValue = DefaultValue.Mock }.Object;
@@ -458,6 +699,9 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<ITranslationImporter>())
                 .Returns(translationImporter ?? Mock.Of<ITranslationImporter>());
+
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<IWebInterviewConfigProvider>())
+                .Returns(webInterviewConfigProvider ?? Mock.Of<IWebInterviewConfigProvider>());
 
             return questionnaireImportService;
         }
