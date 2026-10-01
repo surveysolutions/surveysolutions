@@ -31,7 +31,7 @@ namespace WB.Tests.Web.WebTester.Controllers
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
             interviewRepository.Setup(x => x.Get(interviewIdString)).Returns(interview.Object);
 
-            var multimediaFile = new MultimediaFile(fileName, fileContent, null, mimeType);
+            var multimediaFile = new MultimediaFile(fileName, fileContent, null, "text/html");
             var mediaStorage = new Mock<ICacheStorage<MultimediaFile, string>>();
             mediaStorage.Setup(x => x.Get(fileName, interviewId)).Returns(multimediaFile);
 
@@ -54,7 +54,9 @@ namespace WB.Tests.Web.WebTester.Controllers
 
             result.Should().NotBeNull();
             result!.FileContents.Should().BeEquivalentTo(fileContent);
-            result.ContentType.Should().Be(mimeType);
+            result.ContentType.Should().Be("application/octet-stream");
+            result.FileDownloadName.Should().Be(fileName);
+            controller.Response.Headers["X-Content-Type-Options"].ToString().Should().Be("nosniff");
         }
 
         [Test]
@@ -88,7 +90,83 @@ namespace WB.Tests.Web.WebTester.Controllers
 
             result.Should().NotBeNull();
             result!.FileContents.Should().BeEquivalentTo(fileContent);
-            result.ContentType.Should().Be(mimeType);
+            result.ContentType.Should().Be("application/octet-stream");
+            result.FileDownloadName.Should().Be(contentId);
+            controller.Response.Headers["X-Content-Type-Options"].ToString().Should().Be("nosniff");
+        }
+
+        [Test]
+        public void when_requesting_full_size_unsupported_image_should_return_safe_download()
+        {
+            var interview = new Mock<IStatefulInterview>();
+            interview.Setup(x => x.Id).Returns(interviewId);
+
+            var interviewRepository = new Mock<IStatefulInterviewRepository>();
+            interviewRepository.Setup(x => x.Get(interviewIdString)).Returns(interview.Object);
+
+            var multimediaFile = new MultimediaFile(fileName, fileContent, null, "text/html");
+            var mediaStorage = new Mock<ICacheStorage<MultimediaFile, string>>();
+            mediaStorage.Setup(x => x.Get(fileName, interviewId)).Returns(multimediaFile);
+
+            var imageProcessingService = new Mock<IImageProcessingService>();
+            imageProcessingService
+                .Setup(x => x.Validate(fileContent))
+                .Throws(CreateImageFormatException());
+
+            var controller = new WebInterviewResourcesController(
+                Mock.Of<ICacheStorage<QuestionnaireAttachment, string>>(),
+                imageProcessingService.Object,
+                mediaStorage.Object,
+                interviewRepository.Object,
+                Mock.Of<IQuestionnaireStorage>())
+            {
+                ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() }
+            };
+            controller.ControllerContext.HttpContext.Request.QueryString = new QueryString("?fullSize=1");
+
+            var result = controller.Image(interviewIdString, questionId, fileName) as FileContentResult;
+
+            result.Should().NotBeNull();
+            result!.FileContents.Should().BeEquivalentTo(fileContent);
+            result.ContentType.Should().Be("application/octet-stream");
+            result.FileDownloadName.Should().Be(fileName);
+            controller.Response.Headers["X-Content-Type-Options"].ToString().Should().Be("nosniff");
+            imageProcessingService.Verify(x => x.ResizeImage(It.IsAny<byte[]>(), It.IsAny<int>(), It.IsAny<int>()), Times.Never);
+        }
+
+        [Test]
+        public void when_requesting_attachment_thumbnail_and_resize_succeeds_should_return_png_content_type()
+        {
+            var attachmentStorage = new Mock<ICacheStorage<QuestionnaireAttachment, string>>();
+            attachmentStorage
+                .Setup(x => x.Get(contentId, interviewId))
+                .Returns(new QuestionnaireAttachment(Guid.NewGuid(), new AttachmentContent
+                {
+                    Content = fileContent,
+                    ContentType = mimeType
+                }));
+
+            var resizedContent = new byte[] { 1, 2, 3 };
+            var imageProcessingService = new Mock<IImageProcessingService>();
+            imageProcessingService
+                .Setup(x => x.ResizeImage(fileContent, 200, 1920))
+                .Returns(resizedContent);
+
+            var controller = new WebInterviewResourcesController(
+                attachmentStorage.Object,
+                imageProcessingService.Object,
+                Mock.Of<ICacheStorage<MultimediaFile, string>>(),
+                Mock.Of<IStatefulInterviewRepository>(),
+                Mock.Of<IQuestionnaireStorage>())
+            {
+                ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() }
+            };
+
+            var result = controller.GetContent(interviewIdString, contentId) as FileContentResult;
+
+            result.Should().NotBeNull();
+            result!.FileContents.Should().BeEquivalentTo(resizedContent);
+            result.ContentType.Should().Be("image/png");
         }
 
         [Test]
@@ -148,7 +226,45 @@ namespace WB.Tests.Web.WebTester.Controllers
 
             result.Should().NotBeNull();
             result!.FileContents.Should().BeEquivalentTo(fileContent);
-            result.ContentType.Should().Be(mimeType);
+            result.ContentType.Should().Be("application/octet-stream");
+            result.FileDownloadName.Should().Be(contentId);
+            controller.Response.Headers["X-Content-Type-Options"].ToString().Should().Be("nosniff");
+        }
+
+        [Test]
+        public void when_requesting_image_thumbnail_and_resize_succeeds_should_return_png_content_type()
+        {
+            var interview = new Mock<IStatefulInterview>();
+            interview.Setup(x => x.Id).Returns(interviewId);
+
+            var interviewRepository = new Mock<IStatefulInterviewRepository>();
+            interviewRepository.Setup(x => x.Get(interviewIdString)).Returns(interview.Object);
+
+            var multimediaFile = new MultimediaFile(fileName, fileContent, null, mimeType);
+            var mediaStorage = new Mock<ICacheStorage<MultimediaFile, string>>();
+            mediaStorage.Setup(x => x.Get(fileName, interviewId)).Returns(multimediaFile);
+
+            var resizedContent = new byte[] { 1, 2, 3 };
+            var imageProcessingService = new Mock<IImageProcessingService>();
+            imageProcessingService
+                .Setup(x => x.ResizeImage(fileContent, 200, 1920))
+                .Returns(resizedContent);
+
+            var controller = new WebInterviewResourcesController(
+                Mock.Of<ICacheStorage<QuestionnaireAttachment, string>>(),
+                imageProcessingService.Object,
+                mediaStorage.Object,
+                interviewRepository.Object,
+                Mock.Of<IQuestionnaireStorage>())
+            {
+                ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() }
+            };
+
+            var result = controller.Image(interviewIdString, questionId, fileName) as FileContentResult;
+
+            result.Should().NotBeNull();
+            result!.FileContents.Should().BeEquivalentTo(resizedContent);
+            result.ContentType.Should().Be("image/png");
         }
 
         private const string interviewIdString = "11111111111111111111111111111111";
