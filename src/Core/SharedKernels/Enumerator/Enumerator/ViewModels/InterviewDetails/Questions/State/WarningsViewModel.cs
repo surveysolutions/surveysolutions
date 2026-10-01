@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.navigationState = navigationState;
             this.UpdateValidStateAsync().WaitAndUnwrapException();
 
-            this.liteEventRegistry.Subscribe(this, interviewId);
+            this.liteEventRegistry.Subscribe(this, interviewId, entityIdentity);
         }
         
         private bool isImplausible;
