@@ -223,6 +223,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         this.MapView?.RefreshDrawableState();
         
         backgroundServiceManager.LocationReceived += BackgroundServiceManagerOnLocationReceived;
+        backgroundServiceManager.LocationRejected += BackgroundServiceManagerOnLocationRejected;
         
         await DrawGeoTrackingAsync();
         if (!reminderWasShown && (lastGeoFencingStateOnInterviewCreation || lastGeoTrackingStateOnInterviewCreation))
@@ -239,6 +240,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         base.ViewDisappeared();
         
         backgroundServiceManager.LocationReceived -= BackgroundServiceManagerOnLocationReceived;
+        backgroundServiceManager.LocationRejected -= BackgroundServiceManagerOnLocationRejected;
     }
 
     private void CheckExistingOfGpsProvider()
@@ -413,6 +415,12 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     
     private async Task ToggleGeofencingService()
     {
+        if (!IsEnabledGeofencing && LoadedShapefile != null && !backgroundServiceManager.HasGpsProvider())
+        {
+            ShowNoGpsProviderWarning();
+            return;
+        }
+
         if (!CanStartGeofencing())
             return;
         
@@ -422,7 +430,11 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
             {
                 await permissionsService.AssureHasPermissionOrThrow<Permissions.LocationAlways>();
                 this.geofencingListener.Init(LoadedShapefile);
-                await this.backgroundServiceManager.StartListen(geofencingListener);
+                if (!await this.backgroundServiceManager.StartListen(geofencingListener))
+                {
+                    ShowNoGpsProviderWarning();
+                    return;
+                }
                 
                 await SwitchLocator();
             }
@@ -456,8 +468,11 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     
     private async Task ToggleGeoTrackingService()
     {
-        if (!backgroundServiceManager.HasGpsProvider())
+        if (!IsEnabledGeoTracking && !backgroundServiceManager.HasGpsProvider())
+        {
+            ShowNoGpsProviderWarning();
             return;
+        }
 
         try
         {
@@ -466,7 +481,11 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
                 await permissionsService.AssureHasPermissionOrThrow<Permissions.LocationAlways>();
                 lastRecordWithPoints = new RecordWithPoints() { Points = new List<GeoTrackingPoint>()};
                 this.geoTrackingListener.Init(assignment.Id);
-                await this.backgroundServiceManager.StartListen(geoTrackingListener);
+                if (!await this.backgroundServiceManager.StartListen(geoTrackingListener))
+                {
+                    ShowNoGpsProviderWarning();
+                    return;
+                }
 
                 await SwitchLocator();
             }
@@ -474,6 +493,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
             {
                 this.backgroundServiceManager.StopListen(geoTrackingListener);
                 this.geoTrackingListener.Stop();
+                HideRestrictedLocationSourceWarning();
             }
 
             IsEnabledGeoTracking = !IsEnabledGeoTracking;
@@ -491,8 +511,30 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
     private async void BackgroundServiceManagerOnLocationReceived(object sender, LocationReceivedEventArgs e)
     {
+        HideRestrictedLocationSourceWarning();
         ShowGeofencingWarningIfNeed(e);
         await UpdateGeoTrackingPointsAsync(e.Location);
+    }
+
+    private void BackgroundServiceManagerOnLocationRejected(object sender, LocationReceivedEventArgs e)
+    {
+        if (!IsEnabledGeoTracking && !IsEnabledGeofencing)
+            return;
+
+        Warning = EnumeratorUIResources.Error_RestrictedLocationSource;
+        IsWarningVisible = true;
+    }
+
+    private void HideRestrictedLocationSourceWarning()
+    {
+        if (IsWarningVisible && Warning == EnumeratorUIResources.Error_RestrictedLocationSource)
+            IsWarningVisible = false;
+    }
+
+    private void ShowNoGpsProviderWarning()
+    {
+        Warning = EnumeratorUIResources.Error_NoGpsProvider;
+        IsWarningVisible = true;
     }
 
     public const string GeoTrackingLayerName = "GeoTrackingLayer";
@@ -739,6 +781,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
             return;
         
         backgroundServiceManager.LocationReceived -= BackgroundServiceManagerOnLocationReceived;
+        backgroundServiceManager.LocationRejected -= BackgroundServiceManagerOnLocationRejected;
 
         if (geoTrackingListener != null)
             backgroundServiceManager.StopListen(geoTrackingListener);

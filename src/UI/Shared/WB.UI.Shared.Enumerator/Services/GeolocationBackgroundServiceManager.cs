@@ -16,6 +16,7 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
 
     private Intent GetGeolocationServiceIntent() => new Intent(ServiceContext, typeof(GeolocationBackgroundService));
     public event EventHandler<LocationReceivedEventArgs> LocationReceived;
+    public event EventHandler<LocationReceivedEventArgs> LocationRejected;
     
     public GeolocationBackgroundServiceManager(IEnumeratorSettings settings)
     {
@@ -90,7 +91,10 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
         // permitted, so background tracking cannot be spoofed with mock/non-GPS locations.
         bool isFromGpsProvider = e.Location.Provider == LocationManager.GpsProvider;
         if (!settings.AcceptableGpsLocationSource.IsLocationAcceptable(isFromGpsProvider, e.IsFromMockProvider))
+        {
+            LocationRejected?.Invoke(sender, e);
             return;
+        }
 
         // Keep the external GPS sensor exemption (mock provider): those adapters often report a
         // fixed or vendor-specific accuracy value that does not reflect actual signal quality.
