@@ -1,8 +1,10 @@
 ﻿#nullable enable
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using Autofac;
 using Autofac.Core.Lifetime;
@@ -19,6 +21,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         
         private bool shouldAcceptChanges = false;
         private bool shouldDiscardChanges = false;
+        private bool completionAttempted;
+        private bool completionSucceeded;
         private readonly bool rootScopeExecution = false;
         private static long counter = 0;
         public long Id { get; }
@@ -50,14 +54,67 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public void AcceptChanges()
         {
-            if (disposeCount > 0) throw new ObjectDisposedException(nameof(UnitOfWork));
+            EnsureCanChange();
             shouldAcceptChanges = true;
         }
 
         public void DiscardChanges()
         {
-            if (disposeCount > 0) throw new ObjectDisposedException(nameof(UnitOfWork));
+            EnsureCanChange();
             shouldDiscardChanges = true;
+        }
+
+        private void EnsureCanChange()
+        {
+            if (disposeCount > 0) throw new ObjectDisposedException(nameof(UnitOfWork));
+            if (completionAttempted) throw new InvalidOperationException("Unit of work transaction completion has already been attempted.");
+        }
+
+        public void Complete()
+        {
+            if (disposeCount > 0) throw new ObjectDisposedException(nameof(UnitOfWork));
+            if (completionSucceeded) return;
+            EnsureCanChange();
+
+            CompleteTransactions();
+            completionSucceeded = true;
+        }
+
+        private void CompleteTransactions()
+        {
+            // Set before the first commit: a failed/ambiguous commit must never be retried by Dispose.
+            completionAttempted = true;
+            foreach (var (_, transaction) in unitOfWorks.Values)
+            {
+                if (!transaction.IsActive) continue;
+                if (shouldAcceptChanges && !shouldDiscardChanges)
+                    transaction.Commit();
+                else
+                    transaction.Rollback();
+            }
+        }
+
+        private static ITransaction BeginTransaction(ISession session, bool readOnly)
+        {
+            if (readOnly)
+            {
+                session.FlushMode = FlushMode.Manual;
+                session.DefaultReadOnly = true;
+            }
+
+            var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
+            try
+            {
+                // DefaultReadOnly alone does not prevent inserts, deletes or explicit SQL writes.
+                if (readOnly)
+                    session.CreateSQLQuery("SET TRANSACTION READ ONLY").ExecuteUpdate();
+                return transaction;
+            }
+            catch
+            {
+                transaction.Dispose();
+                throw;
+            }
         }
 
         readonly ConcurrentDictionary<string, (ISession session, ITransaction transaction)> unitOfWorks = new();
@@ -79,15 +136,34 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     throw new ObjectDisposedException(nameof(UnitOfWork));
                 }
 
-                var ws = this.workspaceContextAccessor.CurrentWorkspace();
+                if (completionAttempted && !completionSucceeded)
+                    throw new InvalidOperationException("Unit of work transaction completion failed.");
 
-                var unitOfWork = unitOfWorks.GetOrAdd(ws?.Name ?? WorkspaceConstants.SchemaName, workspace =>
+                var ws = this.workspaceContextAccessor.CurrentWorkspace();
+                var workspaceName = ws?.Name ?? WorkspaceConstants.SchemaName;
+
+                var unitOfWork = unitOfWorks.GetOrAdd(workspaceName, workspace =>
                 {
                     //resolving when needed but not when injected
                     var session = scope.Resolve<Lazy<ISessionFactory>>().Value.OpenSession();
-                    var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
-                    return (session, transaction);
+                    try
+                    {
+                        var transaction = BeginTransaction(session, readOnly: completionSucceeded);
+                        return (session, transaction);
+                    }
+                    catch
+                    {
+                        session.Dispose();
+                        throw;
+                    }
                 });
+
+                if (completionSucceeded && !unitOfWork.transaction.IsActive)
+                {
+                    unitOfWork.transaction.Dispose();
+                    var readOnlyTransaction = BeginTransaction(unitOfWork.session, readOnly: true);
+                    unitOfWorks[workspaceName] = unitOfWork = (unitOfWork.session, readOnlyTransaction);
+                }
 
                 return unitOfWork.session;
             }
@@ -97,29 +173,51 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             if (Interlocked.Increment(ref disposeCount) == 1)
             {
+                var errors = new List<Exception>();
+                if (!completionAttempted)
+                {
+                    // Preserve deferred completion for non-HTTP callers.
+                    try
+                    {
+                        CompleteTransactions();
+                    }
+                    catch (Exception exception)
+                    {
+                        errors.Add(exception);
+                    }
+                }
+
                 foreach (var (session, transaction) in unitOfWorks.Values)
                 {
                     try
                     {
-                        if (transaction.IsActive == true)
+                        try
                         {
-                            if (shouldAcceptChanges && !shouldDiscardChanges)
-                            {
-                                transaction.Commit();
-                            }
-                            else
-                            {
+                            if (transaction.IsActive)
                                 transaction.Rollback();
-                            }
                         }
-                        
-                        transaction.Dispose();
+                        finally
+                        {
+                            transaction.Dispose();
+                        }
                     }
-                    finally
+                    catch (Exception exception)
+                    {
+                        errors.Add(exception);
+                    }
+
+                    try
                     {
                         session.Dispose();
                     }
+                    catch (Exception exception)
+                    {
+                        errors.Add(exception);
+                    }
                 }
+
+                if (errors.Count == 1) ExceptionDispatchInfo.Capture(errors[0]).Throw();
+                if (errors.Count > 1) throw new AggregateException(errors);
             }
         }
     }
