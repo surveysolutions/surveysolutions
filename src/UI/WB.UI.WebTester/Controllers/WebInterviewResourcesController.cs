@@ -67,12 +67,20 @@ namespace WB.UI.WebTester.Controllers
             if (attachment.Content.IsImage())
             {
                 var fullSize = GetQueryStringValue("fullSize") != null;
+                var content = attachment.Content.Content;
 
-                var resultFile = fullSize
-                    ? attachment.Content.Content
-                    : ResizeImageOrOriginal(attachment.Content.Content, thumbSize);
+                if (fullSize)
+                {
+                    var contentType = GetSupportedImageContentType(content);
+                    return contentType == null
+                        ? DownloadBinaryFile(content, contentId)
+                        : this.BinaryResponseMessageWithEtag(content, contentType);
+                }
 
-                return this.BinaryResponseMessageWithEtag(resultFile, attachment.Content.ContentType);
+                var thumbnail = TryResizeImage(content, thumbSize);
+                return thumbnail == null
+                    ? DownloadBinaryFile(content, contentId)
+                    : this.BinaryResponseMessageWithEtag(thumbnail, "image/png");
             }
 
             MemoryStream stream = new MemoryStream(attachment.Content.Content);
@@ -98,11 +106,18 @@ namespace WB.UI.WebTester.Controllers
                 return NoContent();
 
             var fullSize = GetQueryStringValue("fullSize") != null;
-            var resultFile = fullSize
-                ? file!.Data
-                : ResizeImageOrOriginal(file!.Data, 200);
-            
-            return this.BinaryResponseMessageWithEtag(resultFile, file.MimeType);
+            if (fullSize)
+            {
+                var contentType = GetSupportedImageContentType(file!.Data);
+                return contentType == null
+                    ? DownloadBinaryFile(file.Data, file.Filename)
+                    : this.BinaryResponseMessageWithEtag(file.Data, contentType);
+            }
+
+            var thumbnail = TryResizeImage(file!.Data, 200);
+            return thumbnail == null
+                ? DownloadBinaryFile(file.Data, file.Filename)
+                : this.BinaryResponseMessageWithEtag(thumbnail, "image/png");
         }
 
         [HttpGet]
@@ -148,18 +163,35 @@ namespace WB.UI.WebTester.Controllers
                 .FirstOrDefault();
         }
 
-        private byte[] ResizeImageOrOriginal(byte[] content, int height)
+        private byte[]? TryResizeImage(byte[] content, int height)
         {
             try
             {
                 return this.imageProcessingService.ResizeImage(content, height, 1920);
             }
-            catch (ImageFormatException)
+            catch (Exception exception) when (exception is ImageFormatException || exception is NotSupportedException)
             {
-                return ReturnOriginalContent(content);
+                return null;
             }
         }
 
-        private static byte[] ReturnOriginalContent(byte[] content) => content;
+        private string? GetSupportedImageContentType(byte[] content)
+        {
+            try
+            {
+                this.imageProcessingService.Validate(content);
+                return SixLabors.ImageSharp.Image.DetectFormat(content)?.DefaultMimeType;
+            }
+            catch (Exception exception) when (exception is ImageFormatException || exception is NotSupportedException)
+            {
+                return null;
+            }
+        }
+
+        private FileContentResult DownloadBinaryFile(byte[] content, string fileName)
+        {
+            this.Response.Headers["X-Content-Type-Options"] = "nosniff";
+            return File(content, "application/octet-stream", fileName);
+        }
     }
 }
