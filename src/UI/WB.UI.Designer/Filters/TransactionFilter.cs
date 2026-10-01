@@ -99,7 +99,7 @@ namespace WB.UI.Designer.Filters
 
             try
             {
-                (pendingException, committed) = await ExecuteOwnedTransactionAsync(dbContext, action, isWrite);
+                (pendingException, committed, capturedException) = await ExecuteOwnedTransactionAsync(dbContext, action, isWrite);
             }
             catch (Exception exception)
             {
@@ -127,9 +127,9 @@ namespace WB.UI.Designer.Filters
             capturedException?.Throw();
         }
 
-        // Returns the unhandled handler exception MVC delivered without throwing, so the caller can tell a primary failure
-        // from a cleanup failure. Rethrows only failures that MVC is not already about to surface itself.
-        private static async Task<(Exception? PendingException, bool Committed)> ExecuteOwnedTransactionAsync(DesignerDbContext dbContext, Func<Task<HandlerOutcome>> action, bool isWrite)
+        // Return the commit outcome alongside failures: a disposal failure must not erase a successful commit
+        // and discard its notifications. The caller rethrows failures MVC is not already about to surface.
+        private static async Task<(Exception? PendingException, bool Committed, ExceptionDispatchInfo? Failure)> ExecuteOwnedTransactionAsync(DesignerDbContext dbContext, Func<Task<HandlerOutcome>> action, bool isWrite)
         {
             var transaction = await dbContext.Database.BeginTransactionAsync(CancellationToken.None);
             HandlerOutcome outcome = default;
@@ -162,15 +162,13 @@ namespace WB.UI.Designer.Filters
             {
                 await transaction.DisposeAsync();
             }
-            catch when (transactionFailure != null || outcome.PendingException != null)
+            catch (Exception exception)
             {
                 // Disposal must not replace a failure that is already on its way to the caller.
+                transactionFailure ??= ExceptionDispatchInfo.Capture(exception);
             }
 
-            if (outcome.PendingException == null)
-                transactionFailure?.Throw();
-
-            return (outcome.PendingException, committed);
+            return (outcome.PendingException, committed, outcome.PendingException == null ? transactionFailure : null);
         }
 
         private static async Task<T> ExecuteWithSharedCachePolicyAsync<T>(DesignerDbContext dbContext, bool bypassSharedCache, Func<Task<T>> action)

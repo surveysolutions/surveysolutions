@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
@@ -310,6 +313,63 @@ public class TransactionFilterTests
         StoredIds(db).Should().Contain(id);
     }
 
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task when_disposal_fails_after_commit_notifications_run_and_disposal_failure_is_preserved(bool flushFails)
+    {
+        var events = new List<string>();
+        var disposalFailure = new ApplicationException("disposal failure");
+        var transaction = new Mock<IDbContextTransaction>();
+        transaction.Setup(x => x.CommitAsync(It.IsAny<CancellationToken>()))
+            .Callback(() => events.Add("commit"))
+            .Returns(Task.CompletedTask);
+        transaction.Setup(x => x.DisposeAsync())
+            .Callback(() => events.Add("dispose"))
+            .Returns(() => new ValueTask(Task.FromException(disposalFailure)));
+        var db = NewDatabase(transaction.Object);
+        var id = Guid.NewGuid().ToString("N");
+        var invalidation = new Mock<ITransactionalMemoryCacheInvalidation>();
+        invalidation.Setup(x => x.Flush()).Callback(() =>
+        {
+            events.Add("flush");
+            if (flushFails)
+                throw new InvalidOperationException("flush failure");
+        });
+
+        var act = () => InvokeActionAsync(db, invalidation.Object, HttpMethods.Post, new OkResult(),
+            throwInHandler: false, stageItemId: id,
+            postCommitAction: () => { events.Add("notification"); return Task.CompletedTask; });
+
+        var exception = await act.Should().ThrowAsync<ApplicationException>();
+        exception.Which.Should().BeSameAs(disposalFailure);
+        events.Should().Equal("commit", "dispose", "flush", "notification");
+        StoredIds(db).Should().Contain(id);
+        transaction.Verify(x => x.RollbackAsync(It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [Test]
+    public async Task when_commit_and_disposal_fail_notifications_are_discarded_and_commit_failure_is_preserved()
+    {
+        var commitFailure = new InvalidOperationException("commit failure");
+        var transaction = new Mock<IDbContextTransaction>();
+        transaction.Setup(x => x.CommitAsync(It.IsAny<CancellationToken>())).ThrowsAsync(commitFailure);
+        transaction.Setup(x => x.DisposeAsync())
+            .Returns(() => new ValueTask(Task.FromException(new ApplicationException("disposal failure"))));
+        var db = NewDatabase(transaction.Object);
+        var invalidation = new Mock<ITransactionalMemoryCacheInvalidation>();
+        var actionRan = false;
+
+        var act = () => InvokeActionAsync(db, invalidation.Object, HttpMethods.Post, new OkResult(),
+            throwInHandler: false, stageItemId: Guid.NewGuid().ToString("N"),
+            postCommitAction: () => { actionRan = true; return Task.CompletedTask; });
+
+        var exception = await act.Should().ThrowAsync<InvalidOperationException>();
+        exception.Which.Should().BeSameAs(commitFailure);
+        actionRan.Should().BeFalse();
+        transaction.Verify(x => x.DisposeAsync(), Times.Once);
+        invalidation.Verify(x => x.Flush(), Times.Once);
+    }
+
     // ---- Public Razor page filter -------------------------------------------------------------------
 
     [Test]
@@ -359,14 +419,26 @@ public class TransactionFilterTests
         public required Func<DesignerDbContext> Fresh { get; init; }
     }
 
-    private static TestDatabase NewDatabase()
+    private static TestDatabase NewDatabase(IDbContextTransaction? transaction = null)
     {
         var name = Guid.NewGuid().ToString("N");
 
-        DesignerDbContext Build() => new(new DbContextOptionsBuilder<DesignerDbContext>()
+        var options = new DbContextOptionsBuilder<DesignerDbContext>()
             .UseInMemoryDatabase(name)
             .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning))
-            .Options);
+            .Options;
+        DesignerDbContext Build() => new(options);
+
+        if (transaction != null)
+        {
+            // Keep real change tracking/SaveChanges, but inject transaction lifecycle faults independently
+            // of the InMemory provider (which does not implement relational transactions).
+            var context = new Mock<DesignerDbContext>(options) { CallBase = true };
+            var database = new Mock<DatabaseFacade>(context.Object);
+            database.Setup(x => x.BeginTransactionAsync(It.IsAny<CancellationToken>())).ReturnsAsync(transaction);
+            context.SetupGet(x => x.Database).Returns(database.Object);
+            return new TestDatabase { Filter = context.Object, Fresh = Build };
+        }
 
         return new TestDatabase { Filter = Build(), Fresh = Build };
     }
