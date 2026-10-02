@@ -57,26 +57,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         }
 
 
-        public class Message
-        {
-            [Required]
-            [RegularExpression("^(user|assistant)$", ErrorMessage = "Invalid message role.")]
-            [StringLength(20)]
-            public string Role { get; set; } = string.Empty;
-
-            [Required]
-            [StringLength(4000)]
-            public string Content { get; set; } = string.Empty;
-        }
-
         public class AssistanceRequest
         {
             [Required]
             [StringLength(4000)]
             public string Prompt { get; set; } = string.Empty;
 
-            [MaxLength(50)]
-            public List<Message>? Messages { get; set; }
             public Guid? EntityId { get; set; }
             public Guid? ConversationId { get; set; }
         }
@@ -126,14 +112,10 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if (!request.EntityId.HasValue)
                 return BadRequest("Either 'entityId' must be provided.");
 
-            var hasPrompt = !string.IsNullOrWhiteSpace(request.Prompt);
-            var hasMessages = request.Messages != null && request.Messages.Count > 0;
-            if (!hasPrompt && !hasMessages)
-                return BadRequest("Either 'prompt' must be provided or 'messages' must contain at least one item.");
+            if (string.IsNullOrWhiteSpace(request.Prompt))
+                return BadRequest("'prompt' must be provided.");
 
-            var promptToSend = hasPrompt
-                ? request.Prompt
-                : request.Messages!.Last().Content;
+            var promptToSend = request.Prompt;
 
             var questionnaireRevision = questionnaireHelper.GetLastRevision(id);
 
@@ -173,12 +155,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     QuestionnaireId = $"{questionnaireRevision.QuestionnaireId}${questionnaireRevision.Version}",
                     EntityId = request.EntityId.Value,
                     Prompt = promptToSend,
-                    Messages = request.Messages == null
-                        ? new List<object>()
-                        : request.Messages.Take(Math.Max(0, request.Messages.Count - 1))
-                            .Select(m => new { m.Role, m.Content })
-                            .Cast<object>()
-                            .ToList(),
                     conversationId = request.ConversationId
                 };
 
@@ -324,7 +300,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 if (user != null)
                 {
                     httpRequest.Headers.TryAddWithoutValidation("X-User-Id", user.Id.ToString());
-                    
+
                     try
                     {
                         var jwtToken = jwtTokenService.GenerateToken(user);
