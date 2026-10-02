@@ -14,6 +14,7 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
     private Dictionary<string, IGeolocationListener> listeners = new();
     private ServiceConnection<GeolocationBackgroundService> serviceConnection;
     private readonly SemaphoreSlim locationProcessingLock = new(1, 1);
+    private long listenerRegistrationGeneration;
 
     private Intent GetGeolocationServiceIntent() => new Intent(ServiceContext, typeof(GeolocationBackgroundService));
     public event EventHandler<LocationReceivedEventArgs> LocationReceived;
@@ -67,6 +68,7 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
             return false;
         
         listeners[geolocationListener.GetType().Name] = geolocationListener;
+        Interlocked.Increment(ref listenerRegistrationGeneration);
 
         if (listeners.Count > 0 && serviceConnection == null)
         {
@@ -86,11 +88,16 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
 
     private async void ServiceOnLocationReceived(object sender, LocationReceivedEventArgs e)
     {
+        var registrationGeneration = Interlocked.Read(ref listenerRegistrationGeneration);
+
         // Process fixes one at a time and in arrival order, so a rejection raised for a newer fix
         // is not overtaken by the LocationReceived of an older fix whose listeners are still awaited.
         await locationProcessingLock.WaitAsync();
         try
         {
+            if (registrationGeneration != Interlocked.Read(ref listenerRegistrationGeneration))
+                return;
+
             var service = serviceConnection?.Service;
             if (service == null)
                 return;
@@ -134,7 +141,8 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
 
     public void StopListen(IGeolocationListener geolocationListener)
     {
-        listeners.Remove(geolocationListener.GetType().Name);
+        if (listeners.Remove(geolocationListener.GetType().Name))
+            Interlocked.Increment(ref listenerRegistrationGeneration);
 
         if (listeners.Count == 0)
             UnbindService();
@@ -156,6 +164,9 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
 
     public bool StopAll()
     {
+        if (listeners.Count > 0)
+            Interlocked.Increment(ref listenerRegistrationGeneration);
+
         listeners.Clear();
         return UnbindService();
     }
@@ -163,6 +174,9 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
     {
         UnbindService();
         
+        if (listeners.Count > 0)
+            Interlocked.Increment(ref listenerRegistrationGeneration);
+
         listeners = new();
         serviceConnection?.Dispose();
         //geolocationServiceIntent?.Dispose();
