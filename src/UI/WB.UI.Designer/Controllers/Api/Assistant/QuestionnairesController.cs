@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -85,7 +86,16 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
         [Route("{id}/lookup/{lookupTableId}/headers")]
         public IActionResult GetLookupTableHeaders(QuestionnaireRevision id, Guid lookupTableId)
         {
-            var lookupTableContentFile = this.lookupTableService.GetLookupTableContentFile(id, lookupTableId);
+            LookupTableContentFile? lookupTableContentFile;
+            try
+            {
+                lookupTableContentFile = this.lookupTableService.GetLookupTableContentFile(id, lookupTableId);
+            }
+            catch (ArgumentException)
+            {
+                return NotFound();
+            }
+
             if (lookupTableContentFile?.Content == null)
                 return NotFound();
 
