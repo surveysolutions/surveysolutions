@@ -42,15 +42,40 @@ namespace WB.Tests.Web.WebTester.Services
             userContextStore.Verify(x => x.Remove(interviewId), Times.Once);
         }
 
+        [Test]
+        public void when_evicting_runtime_should_keep_import_status()
+        {
+            var interviewId = Guid.NewGuid();
+            var importStatusStore = new Mock<IImportStatusStore>();
+            var eviction = CreateEviction(Mock.Of<IWebTesterJwtStore>(), Mock.Of<IUserContextStore>(), importStatusStore.Object);
+
+            eviction.Evict(interviewId);
+
+            importStatusStore.Verify(x => x.Remove(interviewId), Times.Never);
+        }
+
+        [Test]
+        public void when_completing_interview_should_remove_import_status()
+        {
+            var interviewId = Guid.NewGuid();
+            var importStatusStore = new Mock<IImportStatusStore>();
+            var eviction = CreateEviction(Mock.Of<IWebTesterJwtStore>(), Mock.Of<IUserContextStore>(), importStatusStore.Object);
+
+            eviction.Complete(interviewId);
+
+            importStatusStore.Verify(x => x.Remove(interviewId), Times.Once);
+        }
+
         private static TokenEviction CreateEviction(
             IWebTesterJwtStore jwtStore,
-            IUserContextStore userContextStore)
+            IUserContextStore userContextStore,
+            IImportStatusStore importStatusStore = null)
             => new(
                 Mock.Of<IWebInterviewInvoker>(),
                 Mock.Of<IAppdomainsPerInterviewManager>(),
                 Mock.Of<IQuestionnaireImportService>(),
                 Mock.Of<ICacheStorage<List<ICommand>, Guid>>(),
-                Mock.Of<IImportStatusStore>(),
+                importStatusStore ?? Mock.Of<IImportStatusStore>(),
                 jwtStore,
                 userContextStore);
     }
