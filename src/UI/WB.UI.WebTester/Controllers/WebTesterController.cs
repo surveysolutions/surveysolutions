@@ -82,7 +82,7 @@ namespace WB.UI.WebTester.Controllers
         [Route("Run/{questionnaireId:Guid}")]
         [SkipWebTesterSessionAuthorize]
         public async Task<IActionResult> Run(Guid questionnaireId, Guid? sid, int? scenarioId = null,
-            [FromQuery] string? code = null)
+            [FromQuery] string? code = null, [FromQuery] Guid? runId = null)
         {
             Guid interviewId;
 
@@ -170,17 +170,22 @@ namespace WB.UI.WebTester.Controllers
                 // (Designer returns 400) and bounce the user to the error page despite holding a
                 // valid session. Redirecting to the same action without ?code= routes refreshes
                 // through the session-based path and starts the import there.
-                return this.RedirectToAction("Run", "WebTester", new { questionnaireId, sid, scenarioId });
+                return this.RedirectToAction("Run", "WebTester", new { questionnaireId, sid, scenarioId, runId = interviewId });
             }
             else
             {
                 // No code provided — only allowed if this browser session already holds a valid
                 // authorization AND the delegated JWT is still alive in the store (not expired).
                 // If either is missing, starting the import would trigger 401s from Designer.
-                var existingInterviewId = sessionService.GetInterviewId(HttpContext.Session, questionnaireId);
-                bool sessionOk = existingInterviewId.HasValue
+                var existingInterviewId = runId
+                    ?? sessionService.GetInterviewId(HttpContext.Session, questionnaireId);
+                bool mappingOk = !runId.HasValue
+                    || sessionService.GetQuestionnaireId(HttpContext.Session, runId.Value) == questionnaireId;
+                bool sessionOk = mappingOk
+                    && existingInterviewId.HasValue
                     && sessionService.IsAuthorized(HttpContext.Session, existingInterviewId.Value);
-                bool tokenOk = existingInterviewId.HasValue
+                bool tokenOk = mappingOk
+                    && existingInterviewId.HasValue
                     && jwtStore.GetToken(existingInterviewId.Value) != null;
 
                 if (!sessionOk || !tokenOk)
