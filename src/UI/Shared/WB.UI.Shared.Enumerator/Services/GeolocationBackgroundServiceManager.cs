@@ -13,6 +13,7 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
     private readonly IEnumeratorSettings settings;
     private Dictionary<string, IGeolocationListener> listeners = new();
     private ServiceConnection<GeolocationBackgroundService> serviceConnection;
+    private readonly SemaphoreSlim locationProcessingLock = new(1, 1);
 
     private Intent GetGeolocationServiceIntent() => new Intent(ServiceContext, typeof(GeolocationBackgroundService));
     public event EventHandler<LocationReceivedEventArgs> LocationReceived;
@@ -85,36 +86,50 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
 
     private async void ServiceOnLocationReceived(object sender, LocationReceivedEventArgs e)
     {
-        // Enforce the workspace-configured acceptable location source for geo-tracking and
-        // geofencing, mirroring the enforcement applied when answering GPS questions: reject
-        // fixes that do not come from the required provider, or that are mock when mock is not
-        // permitted, so background tracking cannot be spoofed with mock/non-GPS locations.
-        bool isFromGpsProvider = e.Location.Provider == LocationManager.GpsProvider;
-        if (!settings.AcceptableGpsLocationSource.IsLocationAcceptable(isFromGpsProvider, e.IsFromMockProvider))
+        // Process fixes one at a time and in arrival order, so a rejection raised for a newer fix
+        // is not overtaken by the LocationReceived of an older fix whose listeners are still awaited.
+        await locationProcessingLock.WaitAsync();
+        try
         {
-            LocationRejected?.Invoke(sender, e);
-            return;
-        }
-
-        // Keep the external GPS sensor exemption (mock provider): those adapters often report a
-        // fixed or vendor-specific accuracy value that does not reflect actual signal quality.
-        // For all other (non-mock) fixes, enforce the configured threshold before forwarding the
-        // coordinate to geo-tracking/geofencing listeners.
-        if (!e.IsFromMockProvider)
-        {
-            var accuracyInMeters = settings.GeographyQuestionAccuracyInMeters;
-            if (e.Location.Accuracy > accuracyInMeters)
+            var service = serviceConnection?.Service;
+            if (service == null)
                 return;
-        }
 
-        // Create a snapshot to avoid collection modification during enumeration
-        var listenersCopy = listeners.Values.ToArray();
-        foreach (var geolocationListener in listenersCopy)
-        {
-            await geolocationListener.OnGpsLocationChanged(e.Location, serviceConnection.Service);
+            // Enforce the workspace-configured acceptable location source for geo-tracking and
+            // geofencing, mirroring the enforcement applied when answering GPS questions: reject
+            // fixes that do not come from the required provider, or that are mock when mock is not
+            // permitted, so background tracking cannot be spoofed with mock/non-GPS locations.
+            bool isFromGpsProvider = e.Location.Provider == LocationManager.GpsProvider;
+            if (!settings.AcceptableGpsLocationSource.IsLocationAcceptable(isFromGpsProvider, e.IsFromMockProvider))
+            {
+                LocationRejected?.Invoke(sender, e);
+                return;
+            }
+
+            // Keep the external GPS sensor exemption (mock provider): those adapters often report a
+            // fixed or vendor-specific accuracy value that does not reflect actual signal quality.
+            // For all other (non-mock) fixes, enforce the configured threshold before forwarding the
+            // coordinate to geo-tracking/geofencing listeners.
+            if (!e.IsFromMockProvider)
+            {
+                var accuracyInMeters = settings.GeographyQuestionAccuracyInMeters;
+                if (e.Location.Accuracy > accuracyInMeters)
+                    return;
+            }
+
+            // Create a snapshot to avoid collection modification during enumeration
+            var listenersCopy = listeners.Values.ToArray();
+            foreach (var geolocationListener in listenersCopy)
+            {
+                await geolocationListener.OnGpsLocationChanged(e.Location, service);
+            }
+            
+            LocationReceived?.Invoke(sender, e);
         }
-        
-        LocationReceived?.Invoke(sender, e);
+        finally
+        {
+            locationProcessingLock.Release();
+        }
     }
 
     public void StopListen(IGeolocationListener geolocationListener)

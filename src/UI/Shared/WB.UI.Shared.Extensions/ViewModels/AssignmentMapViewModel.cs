@@ -444,7 +444,8 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
             else
             {
                 this.backgroundServiceManager.StopListen(geofencingListener);
-                this.IsWarningVisible = false;
+                if (!IsEnabledGeoTracking || Warning != EnumeratorUIResources.Error_RestrictedLocationSource)
+                    this.IsWarningVisible = false;
             }
 
             IsEnabledGeofencing = !IsEnabledGeofencing;
@@ -496,7 +497,8 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
             {
                 this.backgroundServiceManager.StopListen(geoTrackingListener);
                 this.geoTrackingListener.Stop();
-                HideRestrictedLocationSourceWarning();
+                if (!IsEnabledGeofencing)
+                    HideRestrictedLocationSourceWarning();
             }
 
             IsEnabledGeoTracking = !IsEnabledGeoTracking;
