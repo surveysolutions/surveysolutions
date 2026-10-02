@@ -415,14 +415,17 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     
     private async Task ToggleGeofencingService()
     {
-        if (!IsEnabledGeofencing && LoadedShapefile != null && !backgroundServiceManager.HasGpsProvider())
+        if (!IsEnabledGeofencing)
         {
-            ShowNoGpsProviderWarning();
-            return;
-        }
+            if (LoadedShapefile == null)
+                return;
 
-        if (!CanStartGeofencing())
-            return;
+            if (!backgroundServiceManager.HasGpsProvider())
+            {
+                ShowNoGpsProviderWarning();
+                return;
+            }
+        }
         
         try
         {
