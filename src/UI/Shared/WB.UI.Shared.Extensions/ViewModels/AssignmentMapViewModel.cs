@@ -444,7 +444,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
             else
             {
                 this.backgroundServiceManager.StopListen(geofencingListener);
-                if (!IsEnabledGeoTracking || !IsRestrictedLocationSourceWarning)
+                if (!IsEnabledGeoTracking || !IsGeoLocationRejectionWarning)
                     this.IsWarningVisible = false;
             }
 
@@ -498,7 +498,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
                 this.backgroundServiceManager.StopListen(geoTrackingListener);
                 this.geoTrackingListener.Stop();
                 if (!IsEnabledGeofencing)
-                    HideRestrictedLocationSourceWarning();
+                    HideGeoLocationRejectionWarning();
             }
 
             IsEnabledGeoTracking = !IsEnabledGeoTracking;
@@ -516,7 +516,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
     private async void BackgroundServiceManagerOnLocationReceived(object sender, LocationReceivedEventArgs e)
     {
-        HideRestrictedLocationSourceWarning();
+        HideGeoLocationRejectionWarning();
         ShowGeofencingWarningIfNeed(e);
         await UpdateGeoTrackingPointsAsync(e.Location);
     }
@@ -526,18 +526,25 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         if (!IsEnabledGeoTracking && !IsEnabledGeofencing)
             return;
 
-        var provider = e.Location.Provider ?? "unknown";
-        var mockProvider = e.IsFromMockProvider ? ", mock" : string.Empty;
-        Warning = $"{EnumeratorUIResources.Error_RestrictedLocationSource} (provider: {provider}{mockProvider})";
+        if (e.AccuracyLimitInMeters is int accuracyLimit && e.Location.Accuracy is double accuracy)
+        {
+            Warning = $"{EnumeratorUIResources.Error_RestrictedLocationSource} (reported accuracy: {accuracy:0.##} m; configured limit: {accuracyLimit} m)";
+        }
+        else
+        {
+            var provider = e.Location.Provider ?? "unknown";
+            var mockProvider = e.IsFromMockProvider ? ", mock" : string.Empty;
+            Warning = $"{EnumeratorUIResources.Error_RestrictedLocationSource} (provider: {provider}{mockProvider})";
+        }
         IsWarningVisible = true;
     }
 
-    private bool IsRestrictedLocationSourceWarning =>
+    private bool IsGeoLocationRejectionWarning =>
         IsWarningVisible && Warning?.StartsWith(EnumeratorUIResources.Error_RestrictedLocationSource, StringComparison.Ordinal) == true;
 
-    private void HideRestrictedLocationSourceWarning()
+    private void HideGeoLocationRejectionWarning()
     {
-        if (IsRestrictedLocationSourceWarning)
+        if (IsGeoLocationRejectionWarning)
             IsWarningVisible = false;
     }
 

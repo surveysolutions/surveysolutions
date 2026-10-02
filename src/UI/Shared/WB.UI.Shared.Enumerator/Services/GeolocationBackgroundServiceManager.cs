@@ -121,7 +121,11 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
             {
                 var accuracyInMeters = settings.GeographyQuestionAccuracyInMeters;
                 if (e.Location.Accuracy > accuracyInMeters)
+                {
+                    LocationRejected?.Invoke(sender,
+                        new LocationReceivedEventArgs(e.Location, e.IsFromMockProvider, accuracyInMeters));
                     return;
+                }
             }
 
             // Create a snapshot to avoid collection modification during enumeration

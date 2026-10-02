@@ -16,13 +16,15 @@ namespace WB.UI.Shared.Enumerator.Services;
 
 public class LocationReceivedEventArgs : EventArgs
 {
-    public LocationReceivedEventArgs(GpsLocation location, bool isFromMockProvider = false)
+    public LocationReceivedEventArgs(GpsLocation location, bool isFromMockProvider = false, int? accuracyLimitInMeters = null)
     {
         Location = location;
         IsFromMockProvider = isFromMockProvider;
+        AccuracyLimitInMeters = accuracyLimitInMeters;
     }
 
     public GpsLocation Location { get; }
+    public int? AccuracyLimitInMeters { get; }
 
     /// <summary>
     /// True when the fix was injected by an external GPS sensor via Android's mock
