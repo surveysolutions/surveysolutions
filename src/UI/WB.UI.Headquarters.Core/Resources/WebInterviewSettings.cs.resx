@@ -300,4 +300,10 @@
     <data name="TotalWithErrors" xml:space="preserve">
     <value>{{ withErrorsCount }} nebylo odesláno kvůli chybám.</value>
 </data>
+  <data name="EnterText" xml:space="preserve">
+      <value>Zadejte prosím text</value>
+  </data>
+  <data name="AddressDescription" xml:space="preserve">
+      <value>Zde se zobrazí adresa vaší organizace, jak je uvedena ve vašem účtu na serveru pro hromadné rozesílání.</value>
+  </data>
 </root>

@@ -200,4 +200,10 @@
     <data name="TotalWithErrors" xml:space="preserve">
         <value>{{ withErrorsCount }} tidak terkirim karena kesalahan.</value>
     </data>
+    <data name="EnterText" xml:space="preserve">
+      <value>Silakan masukkan teks</value>
+  </data>
+    <data name="AddressDescription" xml:space="preserve">
+      <value>Di sini alamat organisasi Anda akan muncul sebagaimana ditentukan dalam akun Anda di server pengiriman massal.</value>
+  </data>
 </root>

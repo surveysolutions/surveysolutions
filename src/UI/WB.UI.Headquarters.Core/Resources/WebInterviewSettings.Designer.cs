@@ -410,5 +410,17 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("TotalWithErrors", resourceCulture);
             }
         }
+        
+        public static string EnterText {
+            get {
+                return ResourceManager.GetString("EnterText", resourceCulture);
+            }
+        }
+        
+        public static string AddressDescription {
+            get {
+                return ResourceManager.GetString("AddressDescription", resourceCulture);
+            }
+        }
     }
 }

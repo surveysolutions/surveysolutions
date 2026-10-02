@@ -1708,4 +1708,10 @@
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>Переключення змінить мову відображення анкети. Переклад має містити текст для всіх елементів.</value>
   </data>
+  <data name="Edit" xml:space="preserve">
+      <value>Редагувати</value>
+  </data>
+  <data name="Stick" xml:space="preserve">
+      <value>Прикріпити</value>
+  </data>
 </root>

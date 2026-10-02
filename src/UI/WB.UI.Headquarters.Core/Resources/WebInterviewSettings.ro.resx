@@ -302,4 +302,10 @@
   <data name="LinkToInterviewPage" xml:space="preserve">
     <value>Pagina de destinație pentru interviuri web</value>
   </data>
+  <data name="EnterText" xml:space="preserve">
+      <value>Vă rugăm să introduceți textul</value>
+  </data>
+  <data name="AddressDescription" xml:space="preserve">
+      <value>Aici va apărea adresa organizației dumneavoastră, așa cum este specificată în contul dumneavoastră de pe serverul de trimitere în masă.</value>
+  </data>
 </root>

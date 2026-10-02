@@ -12,7 +12,7 @@
                                 <Field as="textarea" v-autosize v-model="webInterviewPageMessages['linkWelcome'].text"
                                     rules="required" name="linkWelcome" data-vv-name="linkWelcome" ref="linkWelcome"
                                     :min-height="77" maxlength="200" class="form-control js-elasticArea font-bold"
-                                    placeholder="Please enter the main text">
+                                    :placeholder="$t('WebInterviewSettings.EnterText')">
                                 </Field>
                                 <button type="button" @click="webInterviewPageMessages['linkWelcome'].text = ''"
                                     class="btn btn-link btn-clear">

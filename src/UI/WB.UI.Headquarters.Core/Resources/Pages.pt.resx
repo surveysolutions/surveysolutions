@@ -1321,6 +1321,9 @@
   <data name="MapDetails_MapTitle" xml:space="preserve">
     <value>Mapa</value>
   </data>
+  <data name="MapPreview" xml:space="preserve">
+      <value>Pré-visualização do mapa</value>
+  </data>
   <data name="MapDetails_ImportedOn" xml:space="preserve">
     <value>Importado em</value>
   </data>
@@ -1790,4 +1793,10 @@
   <data name="Observer_Memo2" xml:space="preserve">
     <value>Clique em uma conta e selecione "Visualizar como este usuário no modo somente leitura" para começar. Use o link amarelo na parte superior para retornar à sua conta.</value>
 </data>
+  <data name="Successful" xml:space="preserve">
+      <value>Bem-sucedido</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+      <value>Falhou</value>
+  </data>
 </root>

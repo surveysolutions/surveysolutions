@@ -56,7 +56,6 @@
                                         <span aria-hidden="true" class="glyphicon add"></span>
                                     </button>
                                 </div>
-
                             </div>
 
                             <DataTables ref="table" :tableOptions="tableOptions"
@@ -86,8 +85,9 @@
             </div>
         </template>
         <div style="display: flex; width: 100%; height: 100%; flex-direction: column;">
-            <iframe title="Map preview" style="flex-grow: 1; border: none; margin: 0; padding: 0; min-height: 550px;"
-                id="map-iframe" :src="$config.model.mapPreviewUrl"></iframe>
+            <iframe :title="$t('Pages.MapPreview')"
+                style="flex-grow: 1; border: none; margin: 0; padding: 0; min-height: 550px;" id="map-iframe"
+                :src="$config.model.mapPreviewUrl"></iframe>
             <p> {{ mapDisclaimer }} </p>
         </div>
 
@@ -149,7 +149,7 @@ export default {
                             'fileName': fileName,
                             'userName': userName,
                             workspace: self.$store.getters.workspace,
-                        },
+                        }
                     ).then(response => {
                         self.$refs.table.reload()
                     }).catch(err => {
@@ -182,7 +182,7 @@ export default {
                         'fileName': fileName,
                         'userName': userName,
                         workspace: self.$store.getters.workspace,
-                    },
+                    }
                 ).then(response => {
                     self.$refs.table.reload()
                 }).catch(err => {

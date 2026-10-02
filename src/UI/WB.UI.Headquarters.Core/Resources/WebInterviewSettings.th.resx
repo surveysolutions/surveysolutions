@@ -184,4 +184,10 @@
     <data name="TotalWithErrors" xml:space="preserve">
         <value>{{ withErrorsCount }} ไม่ได้ส่งเนื่องจากข้อผิดพลาด</value>
     </data>
+    <data name="EnterText" xml:space="preserve">
+      <value>กรุณาป้อนข้อความ</value>
+  </data>
+    <data name="AddressDescription" xml:space="preserve">
+      <value>ที่นี่จะแสดงที่อยู่ขององค์กรของคุณตามที่ระบุไว้ในบัญชีของคุณบนเซิร์ฟเวอร์ส่งอีเมลจำนวนมาก</value>
+  </data>
 </root>

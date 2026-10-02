@@ -614,4 +614,10 @@ Veuillez vérifier que toutes les informations sont correctes.</value>
   <data name="CompleteReviewSubmitInterview" xml:space="preserve">
       <value>Entretien {{key}}</value>
   </data>
+  <data name="GeographyPreview" xml:space="preserve">
+      <value>Aper&#231;u g&#233;ographique</value>
+  </data>
+  <data name="RealQuestion_Hint" xml:space="preserve">
+      <value>Appuyez pour saisir un nombre</value>
+  </data>
 </root>

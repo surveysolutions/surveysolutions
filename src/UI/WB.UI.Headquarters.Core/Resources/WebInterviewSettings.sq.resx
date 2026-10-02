@@ -320,4 +320,10 @@
   <data name="TotalWithErrors" xml:space="preserve">
       <value>{{ withErrorsCount }} nuk u dërguan për shkak të gabimeve.</value>
   </data>
+  <data name="EnterText" xml:space="preserve">
+      <value>Ju lutemi shkruani tekstin</value>
+  </data>
+  <data name="AddressDescription" xml:space="preserve">
+      <value>Këtu do të shfaqet adresa e organizatës suaj siç është specifikuar në llogarinë tuaj në serverin e postimeve masive.</value>
+  </data>
 </root>
