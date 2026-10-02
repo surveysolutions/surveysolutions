@@ -444,7 +444,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
             else
             {
                 this.backgroundServiceManager.StopListen(geofencingListener);
-                if (!IsEnabledGeoTracking || Warning != EnumeratorUIResources.Error_RestrictedLocationSource)
+                if (!IsEnabledGeoTracking || !IsRestrictedLocationSourceWarning)
                     this.IsWarningVisible = false;
             }
 
@@ -526,13 +526,18 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         if (!IsEnabledGeoTracking && !IsEnabledGeofencing)
             return;
 
-        Warning = EnumeratorUIResources.Error_RestrictedLocationSource;
+        var provider = e.Location.Provider ?? "unknown";
+        var mockProvider = e.IsFromMockProvider ? ", mock" : string.Empty;
+        Warning = $"{EnumeratorUIResources.Error_RestrictedLocationSource} (provider: {provider}{mockProvider})";
         IsWarningVisible = true;
     }
 
+    private bool IsRestrictedLocationSourceWarning =>
+        IsWarningVisible && Warning?.StartsWith(EnumeratorUIResources.Error_RestrictedLocationSource, StringComparison.Ordinal) == true;
+
     private void HideRestrictedLocationSourceWarning()
     {
-        if (IsWarningVisible && Warning == EnumeratorUIResources.Error_RestrictedLocationSource)
+        if (IsRestrictedLocationSourceWarning)
             IsWarningVisible = false;
     }
 
