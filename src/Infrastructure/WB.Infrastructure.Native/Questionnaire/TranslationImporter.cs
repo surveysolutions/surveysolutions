@@ -81,6 +81,10 @@ namespace WB.Infrastructure.Native.Questionnaire
             {
                 throw new InvalidOperationException("Translation cannot be extracted.", e);
             }
+            catch (FormatException e)
+            {
+                throw new InvalidOperationException("Translation cannot be extracted.", e);
+            }
             catch (InvalidDataException e)
             {
                 throw new InvalidOperationException("Translation cannot be extracted.", e);

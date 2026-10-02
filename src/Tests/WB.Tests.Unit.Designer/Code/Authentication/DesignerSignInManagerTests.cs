@@ -114,6 +114,52 @@ namespace WB.Tests.Unit.Designer.Code.Authentication
             user.LastLoginAtUtc.Should().BeNull();
         }
 
+        [Test]
+        public async Task when_sign_in_succeeds_but_no_two_factor_user_should_return_result_without_update()
+        {
+            var userManagerMock = CreateUserManagerMock();
+            var manager = CreateTestableManager(userManagerMock.Object, SignInResult.Success, null!);
+
+            var r1 = await manager.TwoFactorAuthenticatorSignInAsync("code", false, false);
+            var r2 = await manager.TwoFactorRecoveryCodeSignInAsync("code");
+            var r3 = await manager.TwoFactorSignInAsync("Email", "code", false, false);
+
+            r1.Succeeded.Should().BeTrue();
+            r2.Succeeded.Should().BeTrue();
+            r3.Succeeded.Should().BeTrue();
+            userManagerMock.Verify(x => x.UpdateAsync(It.IsAny<DesignerIdentityUser>()), Times.Never);
+        }
+
+        [Test]
+        public async Task when_sign_in_is_locked_out_or_requires_two_factor_should_return_base_result_unchanged()
+        {
+            var user = new DesignerIdentityUser { UserName = "tester" };
+            var userManagerMock = CreateUserManagerMock();
+
+            var locked = await CreateTestableManager(userManagerMock.Object, SignInResult.LockedOut, user)
+                .TwoFactorSignInAsync("Email", "code", false, false);
+            var twoFactor = await CreateTestableManager(userManagerMock.Object, SignInResult.TwoFactorRequired, user)
+                .TwoFactorRecoveryCodeSignInAsync("code");
+
+            locked.IsLockedOut.Should().BeTrue();
+            twoFactor.RequiresTwoFactor.Should().BeTrue();
+            userManagerMock.Verify(x => x.UpdateAsync(It.IsAny<DesignerIdentityUser>()), Times.Never);
+            user.LastLoginAtUtc.Should().BeNull();
+        }
+
+        [Test]
+        public async Task when_sign_in_succeeds_should_return_base_result()
+        {
+            var user = new DesignerIdentityUser { UserName = "tester" };
+            var userManagerMock = CreateUserManagerMock();
+            userManagerMock.Setup(x => x.UpdateAsync(user)).ReturnsAsync(IdentityResult.Success);
+
+            var result = await CreateTestableManager(userManagerMock.Object, SignInResult.Success, user)
+                .TwoFactorAuthenticatorSignInAsync("code", true, true);
+
+            result.Should().BeSameAs(SignInResult.Success);
+        }
+
         private static TestableDesignerSignInManager CreateTestableManager(
             UserManager<DesignerIdentityUser> userManager,
             SignInResult baseResult,

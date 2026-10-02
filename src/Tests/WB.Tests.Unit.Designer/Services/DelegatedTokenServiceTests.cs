@@ -101,6 +101,141 @@ namespace WB.Tests.Unit.Designer.Services
                     new ConfigurationBuilder().Build()));
         }
 
+        [Test]
+        public void Token_validates_with_signing_key_and_audience()
+        {
+            var token = Svc().CreateDelegatedToken(new DelegatedTokenRequest
+            {
+                UserId = "u", CorrelationId = "c", QuestionnaireId = Id.g1,
+                AuthorizedParty = "WB.WebTester", Scope = "webtester"
+            });
+            var parameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+            {
+                ValidIssuer = "WB.Designer",
+                ValidAudience = DelegatedTokenService.DelegatedAudience,
+                IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
+                    System.Text.Encoding.UTF8.GetBytes(TestSecret))
+            };
+
+            new JwtSecurityTokenHandler().ValidateToken(token, parameters, out var validated);
+
+            Assert.That(validated, Is.Not.Null);
+        }
+
+        [Test]
+        public void Token_is_rejected_for_wrong_audience_and_wrong_key()
+        {
+            var token = Svc().CreateDelegatedToken(new DelegatedTokenRequest
+                { UserId = "u", CorrelationId = "c", QuestionnaireId = Id.g1 });
+            var handler = new JwtSecurityTokenHandler();
+
+            Assert.Catch<Microsoft.IdentityModel.Tokens.SecurityTokenValidationException>(() =>
+                handler.ValidateToken(token, new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidAudience = "WB.Other",
+                    IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
+                        System.Text.Encoding.UTF8.GetBytes(TestSecret))
+                }, out _));
+
+            Assert.Catch<Microsoft.IdentityModel.Tokens.SecurityTokenValidationException>(() =>
+                handler.ValidateToken(token, new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
+                        System.Text.Encoding.UTF8.GetBytes("a-different-secret-key-at-least-32-chars"))
+                }, out _));
+        }
+
+        [TestCase(0)]
+        [TestCase(-5)]
+        public void Falls_back_to_10_minutes_for_non_positive_expiration(int minutes)
+        {
+            var before = DateTime.UtcNow;
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(
+                Svc(minutes).CreateDelegatedToken(new DelegatedTokenRequest
+                    { CorrelationId = "c", QuestionnaireId = Id.g1 }));
+            Assert.That(jwt.ValidTo, Is.EqualTo(before.AddMinutes(10)).Within(TimeSpan.FromMinutes(1)));
+        }
+
+        [Test]
+        public void Uses_configured_expiration()
+        {
+            var before = DateTime.UtcNow;
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(
+                Svc(3).CreateDelegatedToken(new DelegatedTokenRequest
+                    { CorrelationId = "c", QuestionnaireId = Id.g1 }));
+            Assert.That(jwt.ValidTo, Is.EqualTo(before.AddMinutes(3)).Within(TimeSpan.FromMinutes(1)));
+        }
+
+        [Test]
+        public void Uses_issuer_from_configuration_when_provided()
+        {
+            var c = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string?> { ["Providers:Assistant:JwtIssuer"] = "Custom" })
+                .Build();
+            var svc = new DelegatedTokenService(
+                Options.Create(new WebTesterSettings { JwtSecretKey = TestSecret }), c);
+
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(
+                svc.CreateDelegatedToken(new DelegatedTokenRequest { CorrelationId = "c", QuestionnaireId = Id.g1 }));
+
+            Assert.That(jwt.Issuer, Is.EqualTo("Custom"));
+        }
+
+        [Test]
+        public void Defaults_issuer_when_not_configured()
+        {
+            var svc = new DelegatedTokenService(
+                Options.Create(new WebTesterSettings { JwtSecretKey = TestSecret }),
+                new ConfigurationBuilder().Build());
+
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(
+                svc.CreateDelegatedToken(new DelegatedTokenRequest { CorrelationId = "c", QuestionnaireId = Id.g1 }));
+
+            Assert.That(jwt.Issuer, Is.EqualTo("WB.Designer"));
+        }
+
+        [Test]
+        public void Omits_sub_when_userId_is_whitespace()
+        {
+            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(
+                Svc().CreateDelegatedToken(new DelegatedTokenRequest
+                    { UserId = "  ", CorrelationId = "c", QuestionnaireId = Id.g1 }));
+            Assert.That(jwt.Subject, Is.Null.Or.Empty);
+        }
+
+        [Test]
+        public void Generates_unique_jti_and_sets_not_before()
+        {
+            var req = new DelegatedTokenRequest { UserId = "u", CorrelationId = "c", QuestionnaireId = Id.g1 };
+            var svc = Svc();
+            var before = DateTime.UtcNow.AddSeconds(-5);
+
+            var a = new JwtSecurityTokenHandler().ReadJwtToken(svc.CreateDelegatedToken(req));
+            var b = new JwtSecurityTokenHandler().ReadJwtToken(svc.CreateDelegatedToken(req));
+
+            Assert.That(a.Id, Is.Not.EqualTo(b.Id));
+            Assert.That(a.ValidFrom, Is.GreaterThan(before));
+        }
+
+        [Test]
+        public void Throws_when_secret_key_is_whitespace()
+        {
+            Assert.Throws<InvalidOperationException>(() =>
+                new DelegatedTokenService(
+                    Options.Create(new WebTesterSettings { JwtSecretKey = "  " }),
+                    new ConfigurationBuilder().Build()));
+        }
+
+        [Test]
+        public void Exposes_scheme_constants()
+        {
+            Assert.That(DelegatedTokenService.DelegatedAudience, Is.EqualTo("WB.Designer"));
+            Assert.That(DelegatedTokenService.DelegatedScheme, Is.EqualTo("webtester-delegated"));
+        }
+
         // --- Integration: flow tests ---
 
         [Test]

@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
         private static readonly Dictionary<string, Guid> RoleIds = new Dictionary<string, Guid>
         {
             {nameof(SimpleRoleEnum.Administrator), Guid.Parse("11111111111111111111111111111111")},
-            {nameof(SimpleRoleEnum.Administrator), Guid.Parse("22222222222222222222222222222222")}
+            {nameof(SimpleRoleEnum.User), Guid.Parse("22222222222222222222222222222222")}
         };
 
         public static IQueryable<DesignerIdentityUser> FilterAccounts(this DesignerDbContext dbContext, AccountListViewInputModel input)

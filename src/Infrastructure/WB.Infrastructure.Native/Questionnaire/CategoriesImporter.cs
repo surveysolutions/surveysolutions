@@ -53,7 +53,9 @@ namespace WB.Infrastructure.Native.Questionnaire
                 new Tuple<string, string>(worksheet.Cell("B1").GetString(), "B"),
                 new Tuple<string, string>(worksheet.Cell("C1").GetString(), "C"),
                 new Tuple<string, string>(worksheet.Cell("D1").GetString(), "D"),
-            }.Where(kv => kv.Item1 != null).ToDictionary(k => k.Item1.Trim(), v => v.Item2);
+            }.Where(kv => !string.IsNullOrWhiteSpace(kv.Item1))
+             .GroupBy(kv => kv.Item1.Trim().ToLowerInvariant())
+             .ToDictionary(g => g.Key, g => g.First().Item2);
 
             return new CategoriesHeaderMap()
             {
@@ -67,7 +69,9 @@ namespace WB.Infrastructure.Native.Questionnaire
         private CategoriesItem GetRowValues(IXLWorksheet worksheet, CategoriesHeaderMap headers, int rowNumber)
         {
             var id = worksheet.Cell($"{headers.IdIndex}{rowNumber}").GetString();
-            var parentId = worksheet.Cell($"{headers.ParentIdIndex}{rowNumber}").GetString();
+            var parentId = headers.ParentIdIndex == null
+                ? null
+                : worksheet.Cell($"{headers.ParentIdIndex}{rowNumber}").GetString();
 
             if (string.IsNullOrEmpty(id))
                 return null;
@@ -77,7 +81,9 @@ namespace WB.Infrastructure.Native.Questionnaire
                 Id = int.Parse(id),
                 Text = worksheet.Cell($"{headers.TextIndex}{rowNumber}").GetString(),
                 ParentId = string.IsNullOrEmpty(parentId) ? (int?)null : int.Parse(parentId),
-                AttachmentName = worksheet.Cell($"{headers.AttachmentNameIndex}{rowNumber}").GetString(),
+                AttachmentName = headers.AttachmentNameIndex == null
+                    ? null
+                    : worksheet.Cell($"{headers.AttachmentNameIndex}{rowNumber}").GetString(),
             };
         }
 

@@ -83,6 +83,76 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(forbiddenClassesUsed, Has.Count.EqualTo(0));
         }
 
+        [TestCase("new List<int>().Count")]
+        [TestCase("new[] { 1, 2 }.Where(x => x > 1).Count()")]
+        [TestCase("System.Text.RegularExpressions.Regex.IsMatch(\"a\", \"a\")")]
+        public void should_allow_classes_from_whitelisted_namespaces(string codeToCheck)
+        {
+            string code = string.Format(TestClassToCompile, codeToCheck);
+            var syntaxTree = SyntaxFactory.ParseSyntaxTree(code);
+            var compilation = CreateCompilation(syntaxTree.ToEnumerable());
+
+            var forbidden = GetCodeSecurityChecker().FindForbiddenClassesUsage(syntaxTree, compilation).ToList();
+
+            Assert.That(forbidden, Is.Empty);
+        }
+
+        [Test]
+        public void should_report_each_forbidden_class_only_once_per_tree()
+        {
+            string code = string.Format(TestClassToCompile, "Environment.Exit(1); Environment.Exit(2)");
+            var syntaxTree = SyntaxFactory.ParseSyntaxTree(code);
+            var compilation = CreateCompilation(syntaxTree.ToEnumerable());
+
+            var forbidden = GetCodeSecurityChecker().FindForbiddenClassesUsage(syntaxTree, compilation).ToList();
+
+            Assert.That(forbidden, Is.EqualTo(new[] { "System.Environment" }));
+        }
+
+        [Test]
+        public void should_report_multiple_distinct_forbidden_classes()
+        {
+            string code = string.Format(TestClassToCompile, "GC.Collect(); Environment.Exit(1)");
+            var syntaxTree = SyntaxFactory.ParseSyntaxTree(code);
+            var compilation = CreateCompilation(syntaxTree.ToEnumerable());
+
+            var forbidden = GetCodeSecurityChecker().FindForbiddenClassesUsage(syntaxTree, compilation).ToList();
+
+            Assert.That(forbidden, Is.EquivalentTo(new[] { "System.GC", "System.Environment" }));
+        }
+
+        [Test]
+        public void should_check_all_syntax_trees()
+        {
+            var clean = SyntaxFactory.ParseSyntaxTree(string.Format(TestClassToCompile, "2 + 2"));
+            var dirty = SyntaxFactory.ParseSyntaxTree(
+                string.Format(TestClassToCompile, "GC.Collect()").Replace("InterviewEvaluator", "Other"));
+            var compilation = CreateCompilation(new[] { clean, dirty });
+
+            var forbidden = GetCodeSecurityChecker()
+                .FindForbiddenClassesUsage(new[] { clean, dirty }, compilation).ToList();
+
+            Assert.That(forbidden, Is.EqualTo(new[] { "System.GC" }));
+        }
+
+        [Test]
+        public void should_throw_when_syntax_trees_array_is_empty()
+        {
+            var compilation = CreateCompilation(new SyntaxTree[0]);
+
+            Assert.Throws<System.ArgumentException>(
+                () => GetCodeSecurityChecker().FindForbiddenClassesUsage(new SyntaxTree[0], compilation).ToList());
+        }
+
+        [Test]
+        public void should_throw_when_syntax_trees_array_is_null()
+        {
+            var compilation = CreateCompilation(new SyntaxTree[0]);
+
+            Assert.Throws<System.ArgumentException>(
+                () => GetCodeSecurityChecker().FindForbiddenClassesUsage((SyntaxTree[])null, compilation).ToList());
+        }
+
         private static CodeSecurityChecker GetCodeSecurityChecker()
         {
             return new CodeSecurityChecker();
