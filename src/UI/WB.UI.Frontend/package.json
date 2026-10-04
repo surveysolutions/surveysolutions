@@ -20,7 +20,7 @@
         "ag-grid-community": "^36.1.0",
         "ag-grid-vue3": "^36.1.0",
         "autonumeric": "^4.10.5",
-        "axios": "^1.18.0",
+        "axios": "^1.20.0",
         "bootstrap": "^5.3.3",
         "chart.js": "^4.5.1",
         "chartjs-adapter-dayjs-4": "^1.0.4",
