@@ -103,6 +103,9 @@
     <data name="ReconnectAttempt" xml:space="preserve">
         <value>ลอง {{count}}</value>
     </data>
+    <data name="CommunicationError" xml:space="preserve">
+        <value>ข้อผิดพลาดในการสื่อสาร</value>
+    </data>
     <data name="CommentAdd" xml:space="preserve">
         <value>เพิ่มความคิดเห็น</value>
     </data>
@@ -237,6 +240,9 @@
     </data>
     <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
         <value>ค่าที่ป้อนต้องไม่น้อยกว่าคำตอบที่ได้รับการป้องกัน</value>
+    </data>
+    <data name="NumberNonNegativeError" xml:space="preserve">
+        <value>ไม่อนุญาตให้ใช้ค่าติดลบสำหรับคำถามนี้</value>
     </data>
     <data name="NumberRosterError" xml:space="preserve">
         <value>คำตอบ '{{answer}}' ไม่ถูกต้องเนื่องจากคำถามถูกใช้เป็นขนาดของบัญชีรายชื่อและคำตอบที่ระบุเป็นค่าลบ</value>
@@ -435,6 +441,9 @@
     </data>
     <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
         <value>ข้อมูลคำถามเพิ่มเติม</value>
+    </data>
+    <data name="ImageFormatNotSupported" xml:space="preserve">
+        <value>เบราว์เซอร์ของคุณไม่รองรับรูปแบบของภาพนี้</value>
     </data>
     <data name="MultimediaNotSupported" xml:space="preserve">
         <value>เบราว์เซอร์ของคุณไม่รองรับการเล่นมัลติมีเดีย คุณสามารถดาวน์โหลดแทนได้</value>

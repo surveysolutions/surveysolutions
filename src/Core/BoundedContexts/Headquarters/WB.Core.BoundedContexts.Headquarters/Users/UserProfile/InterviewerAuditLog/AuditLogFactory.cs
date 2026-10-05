@@ -24,13 +24,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserProfile.InterviewerAudi
 
         public AuditLogResult GetLastExisted7DaysRecords(Guid responsibleId, DateTime dateTime)
         {
-            var last8Days = storageAccessor.Query(_ => _.Where(r => r.ResponsibleId == responsibleId && r.TimeUtc.Date <= dateTime)
-                .Select(r => r.Time.Date)
-                .GroupBy(r => r.Date)
-                .Select(r => r.Key)
-                .OrderByDescending(r => r)
+            // NOTE: grouping/selecting `r.Time.Date` makes NHibernate generate `cast(... as date)`
+            // in SQL. With Npgsql 10 the "date" backend type is read back as System.DateOnly, which
+            // NHibernate's AbstractDateTimeType cannot convert (DateOnly does not implement
+            // IConvertible), causing a FormatException/InvalidCastException.
+            // Grouping by the individual Year/Month/Day components avoids the date cast entirely.
+            var last8DaysParts = storageAccessor.Query(_ => _.Where(r => r.ResponsibleId == responsibleId && r.TimeUtc <= dateTime)
+                .GroupBy(r => new { r.Time.Year, r.Time.Month, r.Time.Day })
+                .Select(g => g.Key)
+                .OrderByDescending(r => r.Year)
+                .ThenByDescending(r => r.Month)
+                .ThenByDescending(r => r.Day)
                 .Take(8))
                 .ToList();
+
+            var last8Days = last8DaysParts.Select(x => new DateTime(x.Year, x.Month, x.Day)).ToList();
 
             var last7Days = last8Days.Take(7).ToList();
 

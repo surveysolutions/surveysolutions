@@ -578,10 +578,11 @@
 .static-text {
     h5 {
         margin: 0;
-        font-family: "RobotoRegular";
+        font-family: "RobotoRegular", sans-serif;
 
-        b, strong {
-            font-family: "RobotoBold";
+        b,
+        strong {
+            font-family: "RobotoBold", sans-serif;
             font-weight: normal;
         }
 
@@ -603,7 +604,7 @@
     @extend .static-text;
 
     h5 {
-        font-family: "RobotoBold";
+        font-family: "RobotoBold", sans-serif;
     }
 }
 

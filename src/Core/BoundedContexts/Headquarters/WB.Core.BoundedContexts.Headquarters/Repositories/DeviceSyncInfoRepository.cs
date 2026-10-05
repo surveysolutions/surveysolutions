@@ -143,31 +143,42 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public List<InterviewerDailyTrafficUsage> GetTrafficUsageForInterviewer(Guid interviewerId)
         {
+            // NOTE: grouping/ordering by `x.SyncDate.Date` makes NHibernate generate
+            // `cast(... as date)` in SQL. With Npgsql 10 the "date" backend type is read back
+            // as System.DateOnly, which NHibernate's AbstractDateTimeType cannot convert
+            // (DateOnly does not implement IConvertible), causing a FormatException/InvalidCastException.
+            // Grouping by the individual Year/Month/Day components avoids the date cast entirely.
             var dbData = this.dbContext.Query(devices =>
             {
                 return devices
                     .Where(deviceInfo => deviceInfo.InterviewerId == interviewerId)
-                    .GroupBy(x => x.SyncDate.Date)
+                    .GroupBy(x => new { x.SyncDate.Year, x.SyncDate.Month, x.SyncDate.Day })
                     .Select(group => new
                     {
-                        Key = group.Key,
+                        group.Key.Year,
+                        group.Key.Month,
+                        group.Key.Day,
                         DownloadBytes = group.Sum(s => (long?)s.Statistics.TotalDownloadedBytes),
                         UploadedBytes = group.Sum(s => (long?)s.Statistics.TotalUploadedBytes)
                     })
-                    .OrderByDescending(x => x.Key)
+                    .OrderByDescending(x => x.Year)
+                    .ThenByDescending(x => x.Month)
+                    .ThenByDescending(x => x.Day)
                     .Take(30)
                     .ToList();
             });
 
             var list = dbData
-                .OrderBy(x => x.Key)
+                .OrderBy(x => x.Year)
+                .ThenBy(x => x.Month)
+                .ThenBy(x => x.Day)
                 .Select(x => new InterviewerDailyTrafficUsage
                 {
                     DownloadedBytes = x.DownloadBytes ?? 0,
                     UploadedBytes = x.UploadedBytes ?? 0,
-                    Year = x.Key.Year,
-                    Month = x.Key.Month,
-                    Day = x.Key.Day
+                    Year = x.Year,
+                    Month = x.Month,
+                    Day = x.Day
                 }).ToList();
 
             return list;

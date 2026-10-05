@@ -239,7 +239,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<ExportSettingsModel>> ChangeRetentionState(
+        public IActionResult ChangeRetentionState(
             [FromBody] ChangeSettingsModel changeSettingsState)
         {
             if (!ModelState.IsValid)

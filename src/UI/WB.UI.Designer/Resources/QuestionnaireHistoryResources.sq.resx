@@ -381,4 +381,13 @@
   <data name="MigratedNewCoverSupport" xml:space="preserve">
     <value>Faqja e kopertinës u gjenerua</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Kërko</value>
+  </data>
+  <data name="SearchButton" xml:space="preserve">
+    <value>Kërko</value>
+  </data>
+  <data name="SearchClear" xml:space="preserve">
+    <value>Pastro</value>
+  </data>
 </root>

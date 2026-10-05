@@ -26,7 +26,16 @@
                 <FilterBlock :title="$t('Pages.AccountManage_Role')" v-if="$config.model.roles.length > 0">
                     <Typeahead no-search control-id="roleSelector"
                         :placeholder="$t('Pages.UsersManage_RoleFilterPlaceholder')" :value="selectedRole"
-                        :values="$config.model.roles" v-on:selected="onRoleSelected" />
+                        :values="$config.model.roles" :disabled="selectedSupervisor != null"
+                        v-on:selected="onRoleSelected" />
+                </FilterBlock>
+
+                <FilterBlock :title="$t('Pages.UsersManage_SupervisorFilterTitle')">
+                    <Typeahead control-id="supervisorSelector"
+                        :placeholder="$t('Pages.UsersManage_SupervisorFilterPlaceholder')"
+                        :value="selectedSupervisor" :fetch-url="model.supervisorsUrl"
+                        :disabled="selectedRole != null && selectedRole.key !== 'Interviewer'"
+                        v-on:selected="onSupervisorSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Pages.UsersManage_TeamFilter')" v-if="selectedWorkspace">
@@ -153,6 +162,7 @@ export default {
         return {
             workspaces: [],
             selectedWorkspace: null,
+            selectedSupervisor: null,
             selectedTeam: null,
             selectedRole: null,
             selectedFilter: null,
@@ -186,6 +196,10 @@ export default {
                     this.selectedWorkspace = find(this.workspaces, { key: this.queryString.workspace })
                 }
 
+                if (this.queryString.supervisor) {
+                    this.selectedSupervisor = { key: this.queryString.supervisor, value: this.queryString.supervisorName }
+                }
+
                 if (this.queryString.team) {
                     this.selectedTeam = { key: this.queryString.team, value: this.queryString.teamName }
                 }
@@ -208,7 +222,9 @@ export default {
         },
 
         supervisorsUri() {
-            return `/${this.selectedWorkspace.key}/api/v1/users/supervisors`
+            return this.selectedWorkspace
+                ? `/${this.selectedWorkspace.key}/api/v1/users/supervisors`
+                : this.model.supervisorsUrl
         },
 
         model() {
@@ -326,6 +342,8 @@ export default {
                 role: this.query.role,
                 filter: this.query.filter,
                 archive: this.query.archive,
+                supervisor: this.query.supervisor,
+                supervisorName: this.query.supervisorName,
                 team: this.query.team,
                 teamName: this.query.teamName,
             }
@@ -427,6 +445,10 @@ export default {
                 requestData.role = this.selectedRole.key
             }
 
+            if (this.selectedSupervisor) {
+                requestData.supervisorId = this.selectedSupervisor.key
+            }
+
             if (this.selectedFilter) {
                 requestData.filter = this.selectedFilter.key
             }
@@ -456,10 +478,30 @@ export default {
         },
 
         onRoleSelected(role) {
+            if (this.selectedSupervisor != null) {
+                return
+            }
+
             this.selectedRole = role
 
             this.onChange(query => {
                 query.role = role == null ? null : role.key
+            })
+        },
+
+        onSupervisorSelected(supervisor) {
+            this.selectedSupervisor = supervisor
+
+            if (supervisor != null && (!this.selectedRole || this.selectedRole.key !== 'Interviewer')) {
+                this.selectedRole = find(this.$config.model.roles, { key: 'Interviewer' })
+            }
+
+            this.onChange(query => {
+                query.supervisor = supervisor == null ? null : supervisor.key
+                query.supervisorName = supervisor == null ? null : supervisor.value
+                query.role = supervisor == null
+                    ? (this.selectedRole == null ? null : this.selectedRole.key)
+                    : 'Interviewer'
             })
         },
 

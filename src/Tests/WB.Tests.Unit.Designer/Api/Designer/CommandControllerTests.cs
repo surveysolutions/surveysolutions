@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -16,6 +17,7 @@ using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -152,6 +154,50 @@ namespace WB.Tests.Unit.Designer.Api.Designer
             var result = controller.Deserialize("UpdateQuestionnaire", json);
 
             Assert.That(result, Is.InstanceOf<UpdateQuestionnaire>());
+        }
+
+        [Test]
+        public void Deserialize_valid_numeric_question_json_with_isNonNegative_returns_correct_command_instance()
+        {
+            var controller = CreateController();
+            var questionnaireId = Guid.NewGuid();
+            var questionId = Guid.NewGuid();
+            var responsibleId = Guid.NewGuid();
+
+            var json = SerializeCommand(new
+            {
+                questionnaireId,
+                questionId,
+                isPreFilled = false,
+                scope = QuestionScope.Interviewer,
+                isInteger = true,
+                useFormatting = false,
+                countOfDecimalPlaces = (int?)null,
+                validationConditions = Array.Empty<object>(),
+                options = Array.Empty<object>(),
+                isNonNegative = true,
+                commonQuestionParameters = new
+                {
+                    title = "Question title",
+                    variableName = "q1",
+                    variableLabel = "Question label",
+                    enablementCondition = "",
+                    hideIfDisabled = false,
+                    instructions = "",
+                    hideInstructions = false,
+                    optionsFilterExpression = (string)null,
+                    geometryType = (string)null,
+                    geometryInputMode = (string)null,
+                    geometryOverlapDetection = false,
+                    isCritical = false
+                },
+                responsibleId
+            });
+
+            var result = controller.Deserialize(nameof(UpdateNumericQuestion), json);
+
+            Assert.That(result, Is.InstanceOf<UpdateNumericQuestion>());
+            Assert.That(((UpdateNumericQuestion)result).IsNonNegative, Is.True);
         }
 
         [Test]
@@ -443,29 +489,38 @@ namespace WB.Tests.Unit.Designer.Api.Designer
         #region Post
 
         [Test]
-        public void Post_null_model_throws_InvalidOperationException()
+        public async Task Post_null_model_returns_406_with_generic_message()
         {
             var controller = CreateController();
 
-            Assert.ThrowsAsync<InvalidOperationException>(() => controller.Post(null!));
+            var result = await controller.Post(null!);
+
+            Assert.That(StatusCodeOf(result), Is.EqualTo((int)HttpStatusCode.NotAcceptable));
+            Assert.That(MessageOf(result), Is.EqualTo("Invalid command"));
         }
 
         [Test]
-        public void Post_null_type_throws_InvalidOperationException()
+        public async Task Post_null_type_returns_406_with_generic_message()
         {
             var controller = CreateController();
             var model = new CommandController.CommandExecutionModel { Type = null, Command = "{}" };
 
-            Assert.ThrowsAsync<InvalidOperationException>(() => controller.Post(model));
+            var result = await controller.Post(model);
+
+            Assert.That(StatusCodeOf(result), Is.EqualTo((int)HttpStatusCode.NotAcceptable));
+            Assert.That(MessageOf(result), Is.EqualTo("Invalid command"));
         }
 
         [Test]
-        public void Post_null_command_throws_InvalidOperationException()
+        public async Task Post_null_command_returns_406_with_generic_message()
         {
             var controller = CreateController();
             var model = new CommandController.CommandExecutionModel { Type = "UpdateQuestionnaire", Command = null };
 
-            Assert.ThrowsAsync<InvalidOperationException>(() => controller.Post(model));
+            var result = await controller.Post(model);
+
+            Assert.That(StatusCodeOf(result), Is.EqualTo((int)HttpStatusCode.NotAcceptable));
+            Assert.That(MessageOf(result), Is.EqualTo("Invalid command"));
         }
 
         [Test]
@@ -839,7 +894,3 @@ namespace WB.Tests.Unit.Designer.Api.Designer
         #endregion
     }
 }
-
-
-
-

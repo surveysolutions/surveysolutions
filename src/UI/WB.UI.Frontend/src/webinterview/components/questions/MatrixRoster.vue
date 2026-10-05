@@ -1,33 +1,18 @@
 <template>
-    <div class="question table-view scroller"
-        :id="hash"
-        v-if="rowData.length > 0">
+    <div class="question table-view scroller" :id="hash" v-if="rowData.length > 0">
         <div class="question-editor">
             <h5>
-                <a class="open-designer"
-                    v-if="this.$config.inWebTesterMode && name"
-                    href="javascript:void(0);"
-                    @click="openDesigner($me.id)"
-                    v-dompurify-html="'[' + name + ']'"></a>
-                <span v-dateTimeFormatting
-                    v-dompurify-html="title"></span>
+                <a class="open-designer" v-if="this.$config.inWebTesterMode && name" href="javascript:void(0);"
+                    @click="openDesigner($me.id)" v-dompurify-html="'[' + name + ']'"></a>
+                <span v-dateTimeFormatting v-dompurify-html="title"></span>
             </h5>
-            <div class="information-block instruction"
-                v-if="instructions">
-                <p v-dateTimeFormatting
-                    v-dompurify-html="instructions"></p>
+            <div class="information-block instruction" v-if="instructions">
+                <p v-dateTimeFormatting v-dompurify-html="instructions"></p>
             </div>
         </div>
-        <ag-grid-vue ref="matrixRoster"
-            class="ag-theme-customStyles roster-matrix"
-            domLayout="autoHeight"
-            :rowHeight="40"
-            :headerHeight="50"
-            :defaultColDef="defaultColDef"
-            :columnDefs="columnDefs"
-            :rowData="rowData"
-            :grid-options="gridOptions"
-            @grid-ready="onGridReady"
+        <ag-grid-vue ref="matrixRoster" class="ag-theme-customStyles roster-matrix" domLayout="autoHeight"
+            :rowHeight="40" :headerHeight="50" :defaultColDef="defaultColDef" :columnDefs="columnDefs"
+            :rowData="rowData" :grid-options="gridOptions" @grid-ready="onGridReady"
             @column-resized="autosizeHeaders"></ag-grid-vue>
     </div>
 </template>
@@ -72,8 +57,7 @@ export default {
 
     beforeMount() {
         this.countOfInstances = this.$me.instances.length
-        this.title =
-            this.$me.questions.length > 0 ? this.$me.questions[0].title : null
+        this.title = this.getTitle()
         this.instructions =
             this.$me.questions.length > 0
                 ? this.$me.questions[0].instruction
@@ -111,9 +95,10 @@ export default {
                     ? this.$me.questions[0].instruction
                     : null
             this.name = this.$me.questions.length > 0 ? this.$me.questions[0].name : null
+            this.title = this.getTitle()
         },
         ['$me.title']() {
-            this.title = this.$me.title
+            this.title = this.getTitle()
         },
         ['$config.inWebTesterMode']() {
             this.name = this.$me.questions.length > 0 ? this.$me.questions[0].name : null
@@ -138,6 +123,14 @@ export default {
         },
     },
     methods: {
+        getTitle() {
+            return (
+                (this.$me.questions.length === 1
+                    ? this.$me.questions[0].title
+                    : this.$me.title) ?? ''
+            )
+        },
+
         initQuestionAsColumns() {
             var self = this
             var columnsFromQuestions = map(

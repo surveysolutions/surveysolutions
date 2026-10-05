@@ -11,5 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport.Models.Question
         public bool UseThousandsSeparator { get; set; }
     
         public List<SpecialValue>? SpecialValues { get; set; }
+
+        public bool IsNonNegative { get; set; }
     }
 }

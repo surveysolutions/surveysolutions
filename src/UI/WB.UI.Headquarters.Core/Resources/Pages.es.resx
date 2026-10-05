@@ -1686,7 +1686,7 @@
     <value>Todos los espacios de trabajo</value>
   </data>
   <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
-    <value>Supervisor (los entrevistadores se agregarán a su equipo)</value>
+    <value>Supervisor</value>
   </data>
   <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
     <value>Seleccione supervisor</value>

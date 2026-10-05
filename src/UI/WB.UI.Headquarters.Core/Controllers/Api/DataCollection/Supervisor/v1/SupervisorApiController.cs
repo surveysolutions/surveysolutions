@@ -53,24 +53,28 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             this.interviewerVersionReader = interviewerVersionReader;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetSupervisorApk)]
         [Route("v1/extended")]
         public virtual Task<IActionResult> GetSupervisor() =>
             this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.SupervisorFileName, ClientApkInfo.SupervisorFileName);
 
+        [AllowAnonymous]
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetApk)]
         [Route("v1/apk/interviewer")]
         public virtual Task<IActionResult> GetInterviewer() =>
             this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerFileName, ClientApkInfo.InterviewerFileName);
 
+        [AllowAnonymous]
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetExtendedApk)]
         [Route("v1/apk/interviewer-with-maps")]
         public virtual Task<IActionResult> GetInterviewerWithMaps() =>
             this.clientApkProvider.GetApkAsHttpResponse(Request, ClientApkInfo.InterviewerExtendedFileName, ClientApkInfo.InterviewerFileName);
         
+        [AllowAnonymous]
         [HttpGet]
         [Route("v1/extended/latestversion")]
         public virtual Task<int?> GetLatestVersion()
@@ -144,6 +148,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             return new JsonResult("158329303");
         }
             
+        [AllowAnonymous]
         [HttpPost]
         [Route("v1/tabletInfo")]
         public override Task<IActionResult> PostTabletInformation()
@@ -151,6 +156,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             return base.PostTabletInformation();
         }
      
+        [AllowAnonymous]
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetSupervisorApkPatch)]
         [Route("v1/extended/patch/{deviceVersion}")]

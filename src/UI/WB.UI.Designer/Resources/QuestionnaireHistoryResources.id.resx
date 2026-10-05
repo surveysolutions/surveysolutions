@@ -307,4 +307,13 @@
     <data name="MigratedNewCoverSupport" xml:space="preserve">
         <value>Halaman sampul dibuat</value>
     </data>
+  <data name="Search" xml:space="preserve">
+    <value>Cari</value>
+  </data>
+  <data name="SearchButton" xml:space="preserve">
+    <value>Cari</value>
+  </data>
+  <data name="SearchClear" xml:space="preserve">
+    <value>Hapus</value>
+  </data>
 </root>

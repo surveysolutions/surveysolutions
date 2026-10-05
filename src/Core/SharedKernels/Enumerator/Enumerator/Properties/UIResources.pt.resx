@@ -335,6 +335,9 @@ Você pode criar ou editar seus questionários no Survey Solutions Designer</val
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
     <value>A resposta '{0}' está incorreta porque a pergunta é uma pergunta de origem do roster e a resposta especificada é negativa</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>Valores negativos não são permitidos para esta pergunta</value>
+  </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
     <value>A resposta '{0}' está incorreta porque a resposta é maior que o limite superior do Roster '{1}'.</value>
   </data>
@@ -580,6 +583,9 @@ Você pode criar ou editar seus questionários no Survey Solutions Designer</val
   </data>
   <data name="Multimedia_PictureSource" xml:space="preserve">
     <value>Selecione uma opção</value>
+  </data>
+  <data name="Multimedia_PhotoProcessingFailed" xml:space="preserve">
+    <value>Não é possível processar a foto porque o seu formato não é suportado. Por favor, tire a foto novamente.</value>
   </data>
   <data name="Multimedia_TakePhoto" xml:space="preserve">
     <value>Tirar foto</value>

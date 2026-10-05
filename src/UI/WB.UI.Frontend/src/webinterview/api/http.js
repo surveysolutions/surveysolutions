@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { config } from '~/shared/config'
+import { $t } from '~/shared/plugins/locale'
 import { installAxiosInterceptors } from '~/shared/serverValidator'
 
 let api = {}
@@ -131,16 +132,23 @@ const httpPlugin = {
                         onUploadProgress(ev) {
                             var entity = state.webinterview.entityDetails[id]
                             if (entity != undefined) {
+                                const total = ev.total == null ? 100 : ev.total
                                 dispatch('uploadProgress', {
                                     id,
                                     now: ev.loaded,
-                                    total: ev.total,
+                                    total: total,
                                 })
                             }
                         },
                     })
-                } catch (error) {
-                    throw error
+                } catch (err) {
+                    if (state.webinterview.entityDetails[id] != undefined) {
+                        dispatch('setAnswerAsNotSaved', { id, message: $t('WebInterviewUI.CommunicationError') })
+                    }
+                } finally {
+                    if (state.webinterview.entityDetails[id] != undefined) {
+                        dispatch('uploadProgress', { id, now: 0, total: 0 })
+                    }
                 }
             },
         }

@@ -603,6 +603,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     questionView.CountOfDecimalPlaces = numericQuestion.CountOfDecimalPlaces;
                     questionView.IsInteger = numericQuestion.IsInteger;
                     questionView.UseFormatting = numericQuestion.UseFormatting;
+                    questionView.IsNonNegative = numericQuestion.IsNonNegative;
                     questionView.Options = CreateCategoricalOptions(numericQuestion.Answers);
                     return questionView;
                 case QuestionType.SingleOption:

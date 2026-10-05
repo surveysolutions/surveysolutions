@@ -78,6 +78,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public List<CategoricalOption> Options { get; set; }
         public bool IsProtected { get; set; }
         public int? ProtectedAnswer { get; set; }
+        public bool IsNonNegative { get; set; }
     }
 
     public class InterviewDoubleQuestion : GenericQuestion
@@ -86,6 +87,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public int? CountOfDecimalPlaces { get; set; }
         public bool UseFormatting { get; set; }
         public List<CategoricalOption> Options { get; set; }
+        public bool IsNonNegative { get; set; }
     }
 
     public class InterviewSingleOptionQuestion : CategoricalQuestion

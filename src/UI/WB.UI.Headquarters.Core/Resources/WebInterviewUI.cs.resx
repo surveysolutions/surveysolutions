@@ -73,6 +73,9 @@
   <data name="Error" xml:space="preserve">
     <value>Chyba</value>
   </data>
+  <data name="ImageFormatNotSupported" xml:space="preserve">
+    <value>Formát obrázku není podporován vaším prohlížečem.</value>
+  </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>Váš prohlížeč nepodporuje přehrávání multimédií. Je možné si jej stáhnout.</value>
   </data>
@@ -102,6 +105,9 @@
   </data>
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>Odpověď nebyla uložena</value>
+  </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Chyba komunikace</value>
   </data>
   <data name="AreaRecord" xml:space="preserve">
     <value>Upravit oblast</value>
@@ -336,6 +342,9 @@ Požádejte o pomoc svého garanta.</value>
   </data>
   <data name="NumberEnter" xml:space="preserve">
     <value>Vložit číslo</value>
+  </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Záporné hodnoty nejsou pro tuto otázku povoleny</value>
   </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>Odpověď '{{answer}}' je chybná, protože otázka je využívá velikost seznamu (rosteru) a zadaná odpověď je záporná</value>

@@ -1725,7 +1725,7 @@
     <value>Все рабочие области</value>
   </data>
   <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
-    <value>Супервизор (Интервьюеры будут добавлены в команду этого супервизора)</value>
+    <value>Супервизор</value>
 
   </data>
   <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">

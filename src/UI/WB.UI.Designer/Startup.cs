@@ -385,10 +385,9 @@ namespace WB.UI.Designer
             services.AddTransient<IBasicAuthenticationService, BasicBasicAuthenticationService>();
 
             services.Configure<CaptchaConfig>(Configuration.GetSection("Captcha"));
-            services.Configure<RecaptchaSettings>(Configuration.GetSection("Captcha"));
-            services.AddTransient<IRecaptchaService, RecaptchaService>();
+            services.AddRecaptcha(Configuration.GetSection("Captcha"));
             services.AddTransient<IRecipientNotifier, MailNotifier>();
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.Configure<UiConfig>(Configuration.GetSection("UI"));
             services.Configure<IntegrationsConfig>(Configuration.GetSection("Integrations"));
 
@@ -467,6 +466,7 @@ namespace WB.UI.Designer
             }
 
             app.UseResponseCompression();
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
