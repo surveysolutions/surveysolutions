@@ -16,7 +16,13 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
     private readonly SemaphoreSlim locationProcessingLock = new(1, 1);
     private long listenerRegistrationGeneration;
 
-    private Intent GetGeolocationServiceIntent() => new Intent(ServiceContext, typeof(GeolocationBackgroundService));
+    private Intent GetGeolocationServiceIntent()
+    {
+        var intent = new Intent(ServiceContext, typeof(GeolocationBackgroundService));
+        intent.PutExtra(GeolocationBackgroundService.AcceptableGpsLocationSourceExtra,
+            (int)settings.AcceptableGpsLocationSource);
+        return intent;
+    }
     public event EventHandler<LocationReceivedEventArgs> LocationReceived;
     public event EventHandler<LocationReceivedEventArgs> LocationRejected;
     
