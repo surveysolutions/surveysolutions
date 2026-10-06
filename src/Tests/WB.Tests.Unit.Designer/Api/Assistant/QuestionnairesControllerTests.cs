@@ -1,9 +1,7 @@
 using System;
-using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -23,7 +21,7 @@ namespace WB.Tests.Unit.Designer.Api.Assistant
         {
             var lookupTableService = new Mock<ILookupTableService>();
             lookupTableService
-                .Setup(service => service.GetLookupTableContentFile(
+                .Setup(service => service.GetLookupTableHeaders(
                     It.IsAny<QuestionnaireRevision>(), It.IsAny<Guid>()))
                 .Throws(new ArgumentException());
 
@@ -37,9 +35,9 @@ namespace WB.Tests.Unit.Designer.Api.Assistant
         }
 
         [Test]
-        public void GetLookupTableHeaders_when_content_is_tab_separated_should_return_trimmed_headers_in_order()
+        public void GetLookupTableHeaders_when_headers_exist_should_return_them_in_order()
         {
-            var controller = CreateControllerWithContent("\r\n rowcode\t price \tname\r\n1\t2\t3\r\n");
+            var controller = CreateControllerWithHeaders("rowcode", "price", "name");
 
             var result = controller.GetLookupTableHeaders(
                 new QuestionnaireRevision(Guid.NewGuid(), version: 1),
@@ -50,38 +48,30 @@ namespace WB.Tests.Unit.Designer.Api.Assistant
         }
 
         [Test]
-        public void GetLookupTableHeaders_when_content_is_comma_separated_should_return_headers()
-        {
-            var controller = CreateControllerWithContent("rowcode,price\n1,2\n");
-
-            var result = controller.GetLookupTableHeaders(
-                new QuestionnaireRevision(Guid.NewGuid(), version: 1),
-                Guid.NewGuid());
-
-            Assert.That(result, Is.InstanceOf<OkObjectResult>());
-            Assert.That(((OkObjectResult)result).Value, Is.EqualTo(new[] { "rowcode", "price" }));
-        }
-
-        [Test]
-        public void GetLookupTableHeaders_when_content_is_empty_should_return_empty_headers()
-        {
-            var controller = CreateControllerWithContent("\r\n \r\n");
-
-            var result = controller.GetLookupTableHeaders(
-                new QuestionnaireRevision(Guid.NewGuid(), version: 1),
-                Guid.NewGuid());
-
-            Assert.That(result, Is.InstanceOf<OkObjectResult>());
-            Assert.That(((OkObjectResult)result).Value, Is.Empty);
-        }
-
-        private static QuestionnairesController CreateControllerWithContent(string content)
+        public void GetLookupTableHeaders_when_content_is_missing_should_return_not_found()
         {
             var lookupTableService = new Mock<ILookupTableService>();
             lookupTableService
-                .Setup(service => service.GetLookupTableContentFile(
+                .Setup(service => service.GetLookupTableHeaders(
                     It.IsAny<QuestionnaireRevision>(), It.IsAny<Guid>()))
-                .Returns(new LookupTableContentFile("lookup.tab", Encoding.UTF8.GetBytes(content)));
+                .Returns((string[])null);
+
+            var controller = CreateController(lookupTableService.Object);
+
+            var result = controller.GetLookupTableHeaders(
+                new QuestionnaireRevision(Guid.NewGuid(), version: 1),
+                Guid.NewGuid());
+
+            Assert.That(result, Is.InstanceOf<NotFoundResult>());
+        }
+
+        private static QuestionnairesController CreateControllerWithHeaders(params string[] headers)
+        {
+            var lookupTableService = new Mock<ILookupTableService>();
+            lookupTableService
+                .Setup(service => service.GetLookupTableHeaders(
+                    It.IsAny<QuestionnaireRevision>(), It.IsAny<Guid>()))
+                .Returns(headers);
 
             return CreateController(lookupTableService.Object);
         }

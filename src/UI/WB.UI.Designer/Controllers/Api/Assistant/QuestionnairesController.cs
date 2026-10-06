@@ -86,35 +86,18 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
         [Route("{id}/lookup/{lookupTableId}/headers")]
         public IActionResult GetLookupTableHeaders(QuestionnaireRevision id, Guid lookupTableId)
         {
-            LookupTableContentFile? lookupTableContentFile;
+            string[]? headers;
             try
             {
-                lookupTableContentFile = this.lookupTableService.GetLookupTableContentFile(id, lookupTableId);
+                headers = this.lookupTableService.GetLookupTableHeaders(id, lookupTableId);
             }
             catch (ArgumentException)
             {
                 return NotFound();
             }
 
-            if (lookupTableContentFile?.Content == null)
+            if (headers == null)
                 return NotFound();
-
-            var content = Encoding.UTF8.GetString(lookupTableContentFile.Content);
-            var headerLine = content
-                .Split('\n')
-                .Select(line => line.Trim('\r', ' '))
-                .FirstOrDefault(line => line.Length > 0);
-
-            if (string.IsNullOrEmpty(headerLine))
-                return Ok(Array.Empty<string>());
-
-            // Lookup tables are tab-separated; fall back to comma for legacy CSV content.
-            var separator = headerLine.Contains('\t') ? '\t' : ',';
-            var headers = headerLine
-                .Split(separator)
-                .Select(header => header.Trim())
-                .Where(header => header.Length > 0)
-                .ToArray();
 
             return Ok(headers);
         }
