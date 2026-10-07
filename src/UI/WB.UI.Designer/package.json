@@ -72,7 +72,7 @@
         "async": ">=3.2.3",
         "browserslist": ">=4.20.3",
         "braces": ">=3.0.3",
-        "brace-expansion": ">=5.0.8",
+        "brace-expansion": ">=5.0.12",
         "chokidar": ">=3.5.3",
         "compressing": ">=1.10.4",
         "follow-redirects": ">=1.16.0",
