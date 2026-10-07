@@ -79,7 +79,7 @@
         "@babel/traverse": ">=7.23.3",
         "@types/ejs": "3.1.8",
         "async": ">=3.2.3",
-        "brace-expansion": "5.0.12",
+        "brace-expansion": ">=5.0.12",
         "braces": ">=2.3.1",
         "compressing": ">=1.10.4",
         "core-js": "^3.28.0",
