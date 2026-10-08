@@ -33,7 +33,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             for (var attempt = 0; attempt < 2; attempt++)
             {
                 await using var transaction =
-                    await this.dbContext.Database.BeginTransactionAsync(IsolationLevel.Serializable);
+                    this.dbContext.Database.CurrentTransaction == null
+                        ? await this.dbContext.Database.BeginTransactionAsync(IsolationLevel.Serializable)
+                        : null;
 
                 try
                 {
@@ -90,12 +92,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         await this.dbContext.SaveChangesAsync();
                     }
 
-                    await transaction.CommitAsync();
+                    if (transaction != null)
+                        await transaction.CommitAsync();
 
                     return anonymousQuestionnaire;
                 }
                 catch (DbUpdateException exception)
-                    when (attempt == 0
+                    when (transaction != null && attempt == 0
                           && exception.InnerException is PostgresException
                           {
                               SqlState: "40001" or "23505"
@@ -105,7 +108,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     this.dbContext.ChangeTracker.Clear();
                 }
                 catch (PostgresException exception)
-                    when (attempt == 0 && exception.SqlState is "40001" or "23505")
+                    when (transaction != null && attempt == 0 && exception.SqlState is "40001" or "23505")
                 {
                     await transaction.RollbackAsync();
                     this.dbContext.ChangeTracker.Clear();
