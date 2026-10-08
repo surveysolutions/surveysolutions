@@ -1,18 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using SixLabors.Fonts;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Drawing.Processing;
-using SixLabors.ImageSharp.Formats.Jpeg;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Processing.Processors.Convolution;
-using SixLabors.ImageSharp.Processing.Processors.Quantization;
-using Color = SixLabors.ImageSharp.Color;
-using FontStyle = SixLabors.Fonts.FontStyle;
-using SystemFonts = SixLabors.Fonts.SystemFonts;
+using SkiaSharp;
 
 namespace WB.UI.Shared.Web.Captcha
 {
@@ -21,8 +10,8 @@ namespace WB.UI.Shared.Web.Captcha
         public bool IsFontFound { get; private set; }
         
         string[] fontFamilies = [];
-        static readonly Color[] colors = { Color.Red, Color.DarkBlue, Color.Chocolate, Color.DarkCyan, Color.Orange };
-        private static readonly FontStyle[] fontStyles = { FontStyle.Bold, FontStyle.Italic, FontStyle.Regular };
+        static readonly SKColor[] colors = { SKColors.Red, SKColors.DarkBlue, SKColors.Chocolate, SKColors.DarkCyan, SKColors.Orange };
+        private static readonly SKFontStyle[] fontStyles = { SKFontStyle.Bold, SKFontStyle.Italic, SKFontStyle.Normal };
 
         public const int ReduceLines = 30;
         public const int ReducePoints = 15;
@@ -37,7 +26,8 @@ namespace WB.UI.Shared.Web.Captcha
 
         public void SetFonts(params string[] fontFamilies)
         {
-            IsFontFound = fontFamilies.All(font => SystemFonts.Collection.TryGet(font, out var fontFamily));
+            var installedFamilies = SKFontManager.Default.GetFontFamilies();
+            IsFontFound = fontFamilies.All(font => installedFamilies.Contains(font, StringComparer.OrdinalIgnoreCase));
             this.fontFamilies = fontFamilies;
         }
         
@@ -46,18 +36,18 @@ namespace WB.UI.Shared.Web.Captcha
             return collection[rnd.Next(0, collection.Length)];
         }
 
-        IEnumerable<(PointF a, PointF b)> GetRandomPointsAtCircle(double radius, float cx, float cy)
+        IEnumerable<(SKPoint a, SKPoint b)> GetRandomPointsAtCircle(double radius, float cx, float cy)
         {
             while (true)
             {
-                PointF GetPointAtCircle(int deg)
+                SKPoint GetPointAtCircle(int deg)
                 {
                     double angle = Math.PI * deg / 180.0;
 
                     float x = (float)(Math.Cos(angle) * radius) + cx;
                     float y = (float)(Math.Sin(angle) * radius) + cy;
 
-                    return new PointF(x, y);
+                    return new SKPoint(x, y);
                 }
 
                 int degree = rnd.Next(0, 360);
@@ -82,100 +72,212 @@ namespace WB.UI.Shared.Web.Captcha
         {
             if (!IsFontFound)
                 return null;
-            
-            using var imgText = new Image<Rgba32>(width, height);
 
-            var totalWidth = 0f;
-            var totalHeight = 0f;
-            var builder = new AffineTransformBuilder();
+            using var bitmap = new SKBitmap(new SKImageInfo(width, height, SKColorType.Rgba8888, SKAlphaType.Premul));
 
-            (float x, float y) center = (width / 2.0f, height / 2.0f);
-
-            imgText.Mutate(ctx =>
+            using (var canvas = new SKCanvas(bitmap))
             {
-                ctx.BackgroundColor(Color.Transparent);
+                canvas.Clear(SKColors.WhiteSmoke);
 
+                DrawCode(canvas, code, width, height);
+                DrawRandomPoints(canvas, width, height);
+            }
+
+            DetectEdgesAndInvert(bitmap);
+
+            using (var canvas = new SKCanvas(bitmap))
+            {
+                DrawRandomLines(canvas, width, height);
+            }
+
+            QuantizeToWebSafePalette(bitmap);
+
+            using var image = SKImage.FromBitmap(bitmap);
+            using var data = image.Encode(SKEncodedImageFormat.Jpeg, 75);
+            return data.ToArray();
+        }
+
+        private void DrawCode(SKCanvas canvas, string code, int width, int height)
+        {
+            var disposables = new List<IDisposable>();
+            try
+            {
+                var letters = new List<(string text, SKFont font, SKColor color, float x, float y)>();
+                var totalWidth = 0f;
+                var totalHeight = 0f;
                 float position = 0;
+
+                (float x, float y) center = (width / 2.0f, height / 2.0f);
+
                 foreach (char c in code)
                 {
                     // choose random size and font for each letter
                     var size = rnd.Next((int)(center.y / 2.0 * 0.8), (int)(center.y * 1.2));
-                    var font = SystemFonts.CreateFont(
-                        RandomItemFrom(fontFamilies), 
-                        Math.Max(60, size), 
-                        RandomItemFrom(fontStyles));
+                    var typeface = SKTypeface.FromFamilyName(RandomItemFrom(fontFamilies), RandomItemFrom(fontStyles));
+                    var font = new SKFont(typeface, Math.Max(60, size)) { Edging = SKFontEdging.Antialias };
+                    disposables.Add(typeface);
+                    disposables.Add(font);
 
-                    // allowing letters to overlap each other a bit
-                    var location = new PointF(0 + position, rnd.Next(-10, 5));
+                    var metrics = font.Metrics;
+                    var text = c.ToString();
 
-                    ctx.DrawText(c.ToString(), font, RandomItemFrom(colors), location);
+                    // allowing letters to overlap each other a bit; skia draws text by baseline, not by top of the line
+                    letters.Add((text, font, RandomItemFrom(colors), position, rnd.Next(-10, 5) - metrics.Ascent));
 
                     // determine next letter position
-                    var fontSize = TextMeasurer.MeasureSize(c.ToString(), new TextOptions(font));
-                    totalWidth = position + fontSize.Width;
+                    totalWidth = position + font.MeasureText(text);
                     position = totalWidth + rnd.Next(-3, 5);
-                    totalHeight = Math.Max(totalHeight, fontSize.Height);
+                    totalHeight = Math.Max(totalHeight, metrics.Descent - metrics.Ascent);
                 }
 
-                var maxScew = 15;
-                ctx.Transform(builder.PrependSkewDegrees(rnd.Next(-maxScew, maxScew), rnd.Next(-3, 3)));
-            });
+                var maxSkew = 15;
+                var skewX = (float)Math.Tan(rnd.Next(-maxSkew, maxSkew) * Math.PI / 180);
+                var skewY = (float)Math.Tan(rnd.Next(-3, 3) * Math.PI / 180);
 
-            using var img = new Image<Rgba32>(width, height);
-
-            var backColor = Color.WhiteSmoke;
-
-            img.Mutate(ctx =>
-            {
-                ctx.BackgroundColor(backColor);
+                canvas.Save();
 
                 // moving captcha code to the center
-                var location = new Point((int)((width - totalWidth) / 2), (int)((height - totalHeight) / 2));
+                canvas.Translate((width - totalWidth) / 2, (height - totalHeight) / 2);
 
-                // ReSharper disable once AccessToDisposedClosure
-                ctx.DrawImage(imgText, location, 1.0f);
+                canvas.Translate(totalWidth / 2, totalHeight / 2);
+                canvas.Skew(skewX, skewY);
+                canvas.Translate(-totalWidth / 2, -totalHeight / 2);
 
-                DrawRandomPoints(ctx, width, height);
+                foreach (var letter in letters)
+                {
+                    using var paint = new SKPaint { IsAntialias = true, Color = letter.color };
+                    canvas.DrawText(letter.text, letter.x, letter.y, letter.font, paint);
+                }
 
-                ctx.ApplyProcessor(new EdgeDetectorProcessor(EdgeDetectorKernel.LaplacianOfGaussian, false));
-                ctx.Invert();
-
-                DrawRandomLines(ctx, width, height);
-                ctx.ApplyProcessor(new QuantizeProcessor(new WebSafePaletteQuantizer()));
-            });
-
-            using var ms = new MemoryStream();
-            img.SaveAsJpeg(ms, new JpegEncoder(){Quality = 75});
-            return ms.ToArray();
+                canvas.Restore();
+            }
+            finally
+            {
+                foreach (var disposable in disposables)
+                    disposable.Dispose();
+            }
         }
 
-        private void DrawRandomLines(IImageProcessingContext ctx, int width, int height)
+        // Laplacian of Gaussian 5x5 kernel
+        private static readonly int[,] edgeKernel =
+        {
+            { 0, 0, -1, 0, 0 },
+            { 0, -1, -2, -1, 0 },
+            { -1, -2, 16, -2, -1 },
+            { 0, -1, -2, -1, 0 },
+            { 0, 0, -1, 0, 0 }
+        };
+
+        private static void DetectEdgesAndInvert(SKBitmap bitmap)
+        {
+            var width = bitmap.Width;
+            var height = bitmap.Height;
+            var stride = bitmap.RowBytes;
+
+            var pixels = bitmap.GetPixelSpan();
+            var source = pixels.ToArray();
+
+            for (var y = 0; y < height; y++)
+            {
+                for (var x = 0; x < width; x++)
+                {
+                    var offset = y * stride + x * 4;
+
+                    for (var channel = 0; channel < 3; channel++)
+                    {
+                        var sum = 0;
+                        for (var ky = 0; ky < 5; ky++)
+                        {
+                            var sy = Math.Clamp(y + ky - 2, 0, height - 1);
+                            for (var kx = 0; kx < 5; kx++)
+                            {
+                                var kernelValue = edgeKernel[ky, kx];
+                                if (kernelValue == 0)
+                                    continue;
+
+                                var sx = Math.Clamp(x + kx - 2, 0, width - 1);
+                                sum += kernelValue * source[sy * stride + sx * 4 + channel];
+                            }
+                        }
+
+                        pixels[offset + channel] = (byte)(255 - Math.Clamp(sum, 0, 255));
+                    }
+
+                    pixels[offset + 3] = 255;
+                }
+            }
+        }
+
+        private static void QuantizeToWebSafePalette(SKBitmap bitmap)
+        {
+            var pixels = bitmap.GetPixelSpan();
+            for (var i = 0; i < pixels.Length; i++)
+            {
+                if (i % 4 == 3)
+                    continue;
+
+                pixels[i] = (byte)(Math.Round(pixels[i] / 51.0) * 51);
+            }
+        }
+
+        private void DrawRandomLines(SKCanvas canvas, int width, int height)
         {
             foreach (var pair in GetRandomPointsAtCircle(width / 2f, width / 2f, height / 2f).Take(width / ReducePoints))
             {
-                ctx.DrawLine(
-                    RandomItemFrom(colors).WithAlpha((float)rnd.NextDouble()), // random color with some transparency
-                   (float) NextDoubleBetween(0.2, 3), // random thickness
-                   pair.a, pair.b);
+                using var paint = new SKPaint
+                {
+                    IsAntialias = true,
+                    Style = SKPaintStyle.Stroke,
+                    Color = RandomColorWithAlpha(), // random color with some transparency
+                    StrokeWidth = (float)NextDoubleBetween(0.2, 3) // random thickness
+                };
+                canvas.DrawLine(pair.a, pair.b, paint);
             }
         }
 
-        private void DrawRandomPoints(IImageProcessingContext ctx, int width, int height)
+        private void DrawRandomPoints(SKCanvas canvas, int width, int height)
         {
             foreach (var pair in GetRandomPointsAtCircle(width / 2f, width / 2f, height / 2f).Take(width * height / ReduceLines))
             {
-                var point = new PointF(
+                var point = new SKPoint(
                     GetRandomBetween(pair.a.X, pair.b.X),
                     GetRandomBetween(pair.a.Y, pair.b.Y));
-                ctx.Draw(
-                    new SolidPen(new SolidBrush(RandomItemFrom(colors).WithAlpha((float)rnd.NextDouble())), (float)NextDoubleBetween(0.2, 2)), 
-                    new SixLabors.ImageSharp.Drawing.Star(point, 3, 0.1f, 0.2f));
-                // var point2 = new PointF(point.X + 0.1f, point.Y + 0.1f);
-                // ctx.DrawLine(
-                //     RandomItemFrom(colors).WithAlpha((float)rnd.NextDouble()),  // random color with some transparency
-                //     (float)NextDoubleBetween(0.2, 2), // random thickness
-                //     point, point2);
+
+                using var paint = new SKPaint
+                {
+                    IsAntialias = true,
+                    Style = SKPaintStyle.Stroke,
+                    Color = RandomColorWithAlpha(),
+                    StrokeWidth = (float)NextDoubleBetween(0.2, 2)
+                };
+                using var star = CreateStar(point, 3, 0.1f, 0.2f);
+                canvas.DrawPath(star, paint);
             }
+        }
+
+        private SKColor RandomColorWithAlpha() =>
+            RandomItemFrom(colors).WithAlpha((byte)(rnd.NextDouble() * 255));
+
+        private static SKPath CreateStar(SKPoint center, int prongs, float innerRadius, float outerRadius)
+        {
+            var path = new SKPath();
+            var step = Math.PI / prongs;
+            for (var i = 0; i < prongs * 2; i++)
+            {
+                var radius = i % 2 == 0 ? outerRadius : innerRadius;
+                var angle = -Math.PI / 2 + i * step;
+                var vertex = new SKPoint(
+                    center.X + (float)(Math.Cos(angle) * radius),
+                    center.Y + (float)(Math.Sin(angle) * radius));
+
+                if (i == 0)
+                    path.MoveTo(vertex);
+                else
+                    path.LineTo(vertex);
+            }
+
+            path.Close();
+            return path;
         }
 
         int GetRandomBetween(float a, float b)

@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SixLabors.ImageSharp;
+using WB.Core.Infrastructure.Exceptions;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -213,7 +213,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
             {
                 return this.imageProcessingService.ResizeImage(content, thumbSize, 1920);
             }
-            catch (Exception exception) when (exception is ImageFormatException || exception is NotSupportedException)
+            catch (Exception exception) when (exception is InvalidImageException || exception is NotSupportedException)
             {
                 this.logger.LogWarning(exception,
                     "Thumbnail cannot be created because image format is not supported. Original file is returned as download. Interview: {interviewId}, resource: {resourceId}, file: {fileName}",
@@ -229,7 +229,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
                 this.imageProcessingService.Validate(content);
                 return true;
             }
-            catch (Exception exception) when (exception is ImageFormatException || exception is NotSupportedException)
+            catch (Exception exception) when (exception is InvalidImageException || exception is NotSupportedException)
             {
                 this.logger.LogWarning(exception,
                     "Image cannot be served inline because image format is not supported. Original file is returned as download. Interview: {interviewId}, resource: {resourceId}, file: {fileName}",

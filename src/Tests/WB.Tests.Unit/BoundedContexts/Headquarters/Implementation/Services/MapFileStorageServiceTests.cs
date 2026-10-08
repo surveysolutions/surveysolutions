@@ -300,9 +300,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
         /// <summary>Writes a plain (non-georeferenced) 8×8 TIFF that carries no GeoTIFF tags.</summary>
         private static void WritePlainTiff(string path)
         {
-            using var image = new SixLabors.ImageSharp.Image<SixLabors.ImageSharp.PixelFormats.Rgba32>(8, 8);
-            using var stream = File.Create(path);
-            image.Save(stream, new SixLabors.ImageSharp.Formats.Tiff.TiffEncoder());
+            File.WriteAllBytes(path, GeoTiffInfoReaderTests.TiffBuilder.PlainTiff(8, 8));
         }
 
         private static MapFiles BuildTiffMapFiles(string mapName) => new MapFiles

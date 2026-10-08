@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             IFontResolver pdfInterviewFontResolver = new PdfInterviewFontResolver();
             GlobalFontSettings.FontResolver = pdfInterviewFontResolver;
             
-            ImageSource.ImageSourceImpl = new ImageSharpSource<SixLabors.ImageSharp.PixelFormats.Rgba32>();
+            ImageSource.ImageSourceImpl = new SkiaImageSource();
         }
 
         public Stream? Generate(Guid interviewId)

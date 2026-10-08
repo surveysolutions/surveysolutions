@@ -1,38 +1,72 @@
-﻿using System.IO;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Memory;
-using SixLabors.ImageSharp.Processing;
-using Image = SixLabors.ImageSharp.Image;
+using System;
+using SkiaSharp;
+using WB.Core.Infrastructure.Exceptions;
 
 namespace WB.UI.Shared.Web.Services
 {
     public class ImageProcessingService : IImageProcessingService
     {
-        static ImageProcessingService()
-        {
-            SixLabors.ImageSharp.Configuration.Default.MemoryAllocator = MemoryAllocator.Default;
-        }
-
         public void Validate(byte[] source)
         {
-            using var _ = Image.Load(source);
+            using var bitmap = Decode(source, out _);
         }
 
         public byte[] ResizeImage(byte[] source, int height, int width)
         {
-            using var outputStream = new MemoryStream();
-            using var image = Image.Load(source);
+            using var bitmap = Decode(source, out _);
+            return Encode(FitInto(bitmap, width, height), SKEncodedImageFormat.Png);
+        }
 
-            image.Mutate(x => x.Resize(new ResizeOptions
+        public byte[] ResizeImageKeepingFormat(byte[] source, int size)
+        {
+            using var bitmap = Decode(source, out var format);
+
+            // Skia cannot encode some decodable formats (e.g. GIF, BMP), PNG is used for them
+            var targetFormat = format is SKEncodedImageFormat.Jpeg or SKEncodedImageFormat.Png or SKEncodedImageFormat.Webp
+                ? format
+                : SKEncodedImageFormat.Png;
+
+            return Encode(FitInto(bitmap, size, size), targetFormat);
+        }
+
+        private static SKBitmap Decode(byte[] source, out SKEncodedImageFormat format)
+        {
+            using var codec = SKCodec.Create(new SKMemoryStream(source));
+            if (codec == null)
+                throw new InvalidImageException("Image format is not supported");
+
+            format = codec.EncodedFormat;
+
+            var bitmap = SKBitmap.Decode(codec);
+            if (bitmap == null)
+                throw new InvalidImageException("Image content is corrupted");
+
+            return bitmap;
+        }
+
+        private static SKBitmap FitInto(SKBitmap bitmap, int maxWidth, int maxHeight)
+        {
+            var ratio = Math.Min(maxWidth / (float)bitmap.Width, maxHeight / (float)bitmap.Height);
+            var targetWidth = Math.Max(1, (int)Math.Round(bitmap.Width * ratio));
+            var targetHeight = Math.Max(1, (int)Math.Round(bitmap.Height * ratio));
+
+            var resized = bitmap.Resize(bitmap.Info.WithSize(targetWidth, targetHeight),
+                new SKSamplingOptions(SKCubicResampler.Mitchell));
+
+            return resized ?? throw new InvalidImageException("Image cannot be resized");
+        }
+
+        private static byte[] Encode(SKBitmap bitmap, SKEncodedImageFormat format)
+        {
+            using (bitmap)
+            using (var image = SKImage.FromBitmap(bitmap))
+            using (var data = image.Encode(format, 100))
             {
-                Position = AnchorPositionMode.Center,
-                Mode = ResizeMode.Max,
-                Size = new Size(width, height)
-            }));
+                if (data == null)
+                    throw new InvalidImageException("Image cannot be encoded");
 
-            image.SaveAsPng(outputStream);
-
-            return outputStream.ToArray();
+                return data.ToArray();
+            }
         }
     }
 }

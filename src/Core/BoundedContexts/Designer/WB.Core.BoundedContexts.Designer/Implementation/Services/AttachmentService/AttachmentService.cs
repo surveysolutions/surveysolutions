@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
+using SkiaSharp;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
@@ -195,11 +196,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             AttachmentDetails details;
             try
             {
-                using var image = SixLabors.ImageSharp.Image.Load(binaryContent);
+                using var bitmap = SKBitmap.Decode(binaryContent)
+                    ?? throw new FormatException("Image cannot be decoded");
                 details = new AttachmentDetails
                 {
-                    Height = image.Height,
-                    Width = image.Width
+                    Height = bitmap.Height,
+                    Width = bitmap.Width
                 };
             }
             catch (Exception e)
