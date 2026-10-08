@@ -15,6 +15,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         /// </summary>
         void Complete();
 
+        /// <summary>
+        /// Registers a non-transactional side effect (e.g. physical file deletion) to run only after
+        /// the database transaction has been successfully committed. Dropped on rollback/discard.
+        /// </summary>
+        void OnCommitted(Action action);
+
         ISession Session { get; }
     }
 }

@@ -1272,6 +1272,13 @@ namespace WB.Tests.Abc.TestFactories
         public ISerializer NewtonJsonSerializer()
             => new NewtonJsonSerializer();
 
+        private static WB.Infrastructure.Native.Storage.Postgre.IUnitOfWork ImmediateUnitOfWork()
+        {
+            var uow = new Mock<WB.Infrastructure.Native.Storage.Postgre.IUnitOfWork>();
+            uow.Setup(x => x.OnCommitted(It.IsAny<Action>())).Callback<Action>(a => a());
+            return uow.Object;
+        }
+
         public MapFileStorageService MapFileStorageService(
             IFileSystemAccessor fileSystemAccessor = null, 
             IOptions<FileStorageConfig> fileStorageConfig = null,
