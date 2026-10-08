@@ -22,16 +22,14 @@ namespace WB.UI.WebTester.Controllers
         private readonly ICommandService commandService;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
-        private readonly ICacheStorage<MultimediaFile,string> mediaStorage;
+        private readonly ICacheStorage<MultimediaFile, string> mediaStorage;
         private readonly IAudioProcessingService audioProcessingService;
-        private readonly IImageProcessingService imageProcessingService;
 
         public MultimediaController(ICommandService commandService,
             IStatefulInterviewRepository statefulInterviewRepository,
             IWebInterviewNotificationService webInterviewNotificationService,
             ICacheStorage<MultimediaFile, string> mediaStorage,
-            IAudioProcessingService audioProcessingService,
-            IImageProcessingService imageProcessingService)
+            IAudioProcessingService audioProcessingService)
         {
             this.commandService = commandService;
             this.statefulInterviewRepository = statefulInterviewRepository ??
@@ -41,7 +39,6 @@ namespace WB.UI.WebTester.Controllers
                                                        nameof(webInterviewNotificationService));
             this.mediaStorage = mediaStorage;
             this.audioProcessingService = audioProcessingService;
-            this.imageProcessingService = imageProcessingService;
         }
 
         public IActionResult AudioRecord(string interviewId, string fileName)
@@ -89,17 +86,17 @@ namespace WB.UI.WebTester.Controllers
                 byte[] bytes = ms.ToArray();
                 string contentType = file.ContentType;
                 var fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.aac";
-                
+
                 var audioDuration = TimeSpan.Zero;
-                if(contentType is "audio/wav" or "audio/x-wav")
+                if (contentType is "audio/wav" or "audio/x-wav")
                 {
                     var audioFile = await this.audioProcessingService.CompressAudioFileAsync(bytes, contentType);
-                    
-                    audioDuration = audioFile.Duration == TimeSpan.Zero 
+
+                    audioDuration = audioFile.Duration == TimeSpan.Zero
                         ? (Double.TryParse(duration, out var dur) ? TimeSpan.FromSeconds(dur) : TimeSpan.Zero)
                         : audioFile.Duration;
-                    
-                    var entity = new  MultimediaFile(fileName, audioFile.Binary, audioDuration, audioFile.MimeType);
+
+                    var entity = new MultimediaFile(fileName, audioFile.Binary, audioDuration, audioFile.MimeType);
                     mediaStorage.Store(entity, fileName, interview.Id);
                 }
                 else
@@ -107,7 +104,7 @@ namespace WB.UI.WebTester.Controllers
                     audioDuration = (Double.TryParse(duration, out var dur)
                         ? TimeSpan.FromSeconds(dur)
                         : TimeSpan.Zero);
-                    mediaStorage.Store(new  MultimediaFile(fileName, bytes, audioDuration, contentType), fileName, interview.Id);
+                    mediaStorage.Store(new MultimediaFile(fileName, bytes, audioDuration, contentType), fileName, interview.Id);
                 }
 
                 var command = new AnswerAudioQuestionCommand(interview.Id,
@@ -127,7 +124,7 @@ namespace WB.UI.WebTester.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Image(string id, [FromForm]  string questionId, [FromForm]  IFormFile file)
+        public async Task<ActionResult> Image(string id, [FromForm] string questionId, [FromForm] IFormFile file)
         {
             var interview = this.statefulInterviewRepository.Get(id);
 
@@ -152,14 +149,13 @@ namespace WB.UI.WebTester.Controllers
                 await file.CopyToAsync(ms);
 
                 var fileContent = ms.ToArray();
-                this.imageProcessingService.Validate(fileContent);
 
                 var extension = Path.GetExtension(file.FileName);
                 fileName = GetPictureFileName(question.VariableName, questionIdentity.RosterVector, extension);
 
                 var responsibleId = interview.CurrentResponsibleId;
 
-                var entity = new MultimediaFile(fileName, fileContent, null,file.ContentType);
+                var entity = new MultimediaFile(fileName, fileContent, null, file.ContentType);
                 this.mediaStorage.Store(entity, fileName, interview.Id);
 
                 this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
@@ -175,7 +171,7 @@ namespace WB.UI.WebTester.Controllers
             return this.Json("ok");
         }
 
-        private string GetPictureFileName(string variableName, RosterVector rosterVector, string extension) 
+        private string GetPictureFileName(string variableName, RosterVector rosterVector, string extension)
             => AnswerUtils.GetPictureFileName(variableName, rosterVector, extension);
     }
 }
