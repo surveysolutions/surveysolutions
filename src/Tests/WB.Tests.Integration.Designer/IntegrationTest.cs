@@ -19,6 +19,8 @@ namespace WB.Tests.Integration.Designer
     {
         private IServiceLocator serviceLocator;
 
+        protected IServiceLocator ServiceLocator => this.serviceLocator;
+
         [SetUp]
         public void InitEnvironment()
         {
