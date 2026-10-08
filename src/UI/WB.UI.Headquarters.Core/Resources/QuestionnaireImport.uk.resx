@@ -186,4 +186,7 @@
   <data name="UpgradeAssignments" xml:space="preserve">
     <value>Оновлення завдання</value>
   </data>
+  <data name="CopyWebInterviewSettings" xml:space="preserve">
+    <value>Скопіювати налаштування Web Interview з попередньої версії (включно з шаблонами email і текстами екранів)</value>
+  </data>
 </root>
