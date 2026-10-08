@@ -39,6 +39,7 @@ using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Controllers
@@ -103,6 +104,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IWebHostEnvironment webHost;
         private readonly IOptions<ViteTagOptions> options;
         private readonly IMemoryCache memoryCache;
+        private readonly ITransactionRollbackState transactionRollbackState;
 
         public QuestionnaireController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -125,7 +127,8 @@ namespace WB.UI.Designer.Controllers
             ITagHelperComponentManager tagHelperComponentManager,
             IWebHostEnvironment webHost,
             IOptions<ViteTagOptions> options,
-            IMemoryCache memoryCache)
+            IMemoryCache memoryCache,
+            ITransactionRollbackState transactionRollbackState)
             : base(dbContext, questionnaireViewFactory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -147,6 +150,7 @@ namespace WB.UI.Designer.Controllers
             this.webHost = webHost;
             this.options = options;
             this.memoryCache = memoryCache;
+            this.transactionRollbackState = transactionRollbackState;
         }
 
         [Route("questionnaire/details/{id}/nosection/{entityType}/{entityId}")]
@@ -264,6 +268,8 @@ namespace WB.UI.Designer.Controllers
                     var domainException = e.GetSelfOrInnerAs<QuestionnaireException>();
                     if (domainException != null)
                     {
+                        // The failed command may have staged partial writes; the handler returns a view, so mark the transaction.
+                        this.transactionRollbackState.MarkRollbackOnly();
                         this.Error(domainException.Message);
                         logger.LogError(domainException, "Questionnaire controller -> clone: " + domainException.Message);
                     }
@@ -308,6 +314,8 @@ namespace WB.UI.Designer.Controllers
                 }
                 catch (QuestionnaireException e)
                 {
+                    // The failed command may have staged partial writes; the handler returns a view, so mark the transaction.
+                    this.transactionRollbackState.MarkRollbackOnly();
                     this.Error(e.Message);
                     logger.LogError(e, "Error on questionnaire creation.");
                 }
@@ -496,6 +504,8 @@ namespace WB.UI.Designer.Controllers
         [QuestionnairePermissions(true)]
         [Route("questionnaire/updateAnonymousQuestionnaireSettings/{id}")]
         [ValidateAntiForgeryToken]
+        // Sends an email as a side effect, so its writes must commit immediately rather than in the deferred filter transaction.
+        [NoTransaction]
         public async Task<IActionResult> UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
         {
             bool isActive = postModel.IsActive;
@@ -525,6 +535,8 @@ namespace WB.UI.Designer.Controllers
         [QuestionnairePermissions(true)]
         [Route("questionnaire/regenerateAnonymousQuestionnaireLink/{id}")]
         [ValidateAntiForgeryToken]
+        // Sends an email as a side effect, so its writes must commit immediately rather than in the deferred filter transaction.
+        [NoTransaction]
         public async Task<IActionResult> RegenerateAnonymousQuestionnaireLink(Guid id)
         {
             var existedRecord = dbContext.AnonymousQuestionnaires.First(a => a.QuestionnaireId == id);

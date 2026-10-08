@@ -16,6 +16,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Services;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.Tests.Unit.Designer.Api.Designer
 {
@@ -23,6 +24,10 @@ namespace WB.Tests.Unit.Designer.Api.Designer
     [TestOf(typeof(AssistanceController))]
     public class AssistanceControllerTests
     {
+        [Test]
+        public void should_not_hold_request_transaction_during_external_assistant_calls()
+            => Assert.That(typeof(AssistanceController).IsDefined(typeof(NoTransactionAttribute), inherit: true), Is.True);
+
         private static UserManager<DesignerIdentityUser> CreateUserManager(DesignerIdentityUser returnUser = null)
         {
             var store = new Mock<IUserStore<DesignerIdentityUser>>();
