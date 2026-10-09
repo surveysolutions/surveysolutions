@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -36,9 +37,22 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public ISessionFactory SessionFactoryBinder(IModuleContext context)
         {
             var workspace = context.Resolve<IWorkspaceContextAccessor>().CurrentWorkspace();
+            var key = workspace?.Name ?? WorkspaceConstants.SchemaName;
 
-            return sessionFactories.GetOrAdd(workspace?.Name ?? WorkspaceConstants.SchemaName,
-                space => new Lazy<ISessionFactory>(() => BuildSessionFactory(workspace?.SchemaName ?? WorkspaceConstants.SchemaName))).Value;
+            var lazy = sessionFactories.GetOrAdd(key,
+                space => new Lazy<ISessionFactory>(() => BuildSessionFactory(workspace?.SchemaName ?? WorkspaceConstants.SchemaName)));
+
+            try
+            {
+                return lazy.Value;
+            }
+            catch
+            {
+                // Lazy<T> caches exceptions forever. Without removing the failed entry, a single transient
+                // failure (e.g. DB out of connection slots) would break the workspace until app restart.
+                sessionFactories.TryRemove(new KeyValuePair<string, Lazy<ISessionFactory>>(key, lazy));
+                throw;
+            }
         }
 
         private static readonly ConcurrentDictionary<string, Lazy<ISessionFactory>> sessionFactories
