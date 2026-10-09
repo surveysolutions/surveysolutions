@@ -175,32 +175,43 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 var ws = this.workspaceContextAccessor.CurrentWorkspace();
                 var workspaceName = ws?.Name ?? WorkspaceConstants.SchemaName;
 
-                var unitOfWork = unitOfWorks.GetOrAdd(workspaceName, workspace =>
+                // ConcurrentDictionary.GetOrAdd may invoke the factory more than once under contention,
+                // which would open a session + transaction (i.e. a DB connection) that is never disposed.
+                lock (sessionLock)
                 {
+                    if (disposeCount > 0)
+                        throw new ObjectDisposedException(nameof(UnitOfWork));
+
+                    if (unitOfWorks.TryGetValue(workspaceName, out var existing))
+                    {
+                        if (completionSucceeded && !existing.transaction.IsActive)
+                        {
+                            existing.transaction.Dispose();
+                            var readOnlyTransaction = BeginTransaction(existing.session, readOnly: true);
+                            unitOfWorks[workspaceName] = existing = (existing.session, readOnlyTransaction);
+                        }
+
+                        return existing.session;
+                    }
+
                     //resolving when needed but not when injected
                     var session = scope.Resolve<Lazy<ISessionFactory>>().Value.OpenSession();
                     try
                     {
                         var transaction = BeginTransaction(session, readOnly: completionSucceeded);
-                        return (session, transaction);
+                        unitOfWorks[workspaceName] = (session, transaction);
+                        return session;
                     }
                     catch
                     {
                         session.Dispose();
                         throw;
                     }
-                });
-
-                if (completionSucceeded && !unitOfWork.transaction.IsActive)
-                {
-                    unitOfWork.transaction.Dispose();
-                    var readOnlyTransaction = BeginTransaction(unitOfWork.session, readOnly: true);
-                    unitOfWorks[workspaceName] = unitOfWork = (unitOfWork.session, readOnlyTransaction);
                 }
-
-                return unitOfWork.session;
             }
         }
+
+        private readonly object sessionLock = new();
 
         public void Dispose()
         {
@@ -220,7 +231,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     }
                 }
 
-                foreach (var (session, transaction) in unitOfWorks.Values)
+                (ISession session, ITransaction transaction)[] items;
+                lock (sessionLock)
+                {
+                    items = new (ISession, ITransaction)[unitOfWorks.Count];
+                    unitOfWorks.Values.CopyTo(items, 0);
+                    unitOfWorks.Clear();
+                }
+
+                foreach (var (session, transaction) in items)
                 {
                     try
                     {
