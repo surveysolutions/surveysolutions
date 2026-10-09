@@ -10,7 +10,7 @@
                 </div>
                 <button type="button" :disabled="!meta.dirty ? 'disabled' : null" @click="save"
                     class="btn btn-success">{{
-        $t('QuestionnaireEditor.Save') }}</button>
+                        $t('QuestionnaireEditor.Save') }}</button>
                 <button type="button" @click="cancel()" class="btn btn-link">{{ $t('QuestionnaireEditor.Cancel')
                     }}</button>
             </vee-form>
@@ -23,11 +23,11 @@
         <ul v-if="isContextMenuSupport" class="context-menu-list context-menu-root" style="z-index: 2;"
             :id="'classification-context-menu-' + index">
             <li class="context-menu-item context-menu-icon context-menu-icon-edit context-menu-visible" @click="edit()">
-                <span>Edit</span>
+                <span>{{ $t('QuestionnaireEditor.Edit') }}</span>
             </li>
             <li class="context-menu-item context-menu-separator context-menu-not-selectable"></li>
             <li class="context-menu-item context-menu-icon context-menu-icon-delete" @click="deleteItem()">
-                <span>Delete</span>
+                <span>{{ $t('QuestionnaireEditor.Delete') }}</span>
             </li>
         </ul>
     </Teleport>

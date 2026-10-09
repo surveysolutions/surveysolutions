@@ -544,4 +544,10 @@ Liên hệ hỗ trợ để được hỗ trợ.</value>
     <data name="CompleteReviewSubmitInterview" xml:space="preserve">
         <value>Phỏng vấn {{key}}</value>
         </data>
+  <data name="GeographyPreview" xml:space="preserve">
+      <value>Xem tr&#432;&#7899;c &#273;&#7883;a l&#253;</value>
+  </data>
+  <data name="RealQuestion_Hint" xml:space="preserve">
+      <value>Chạm để nhập số</value>
+  </data>
 </root>

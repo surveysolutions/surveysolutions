@@ -43,15 +43,15 @@
             <p>
                 <button type="button" class="btn btn-link" v-if="activeQuestion.type == 'Numeric'"
                     v-show="activeQuestion.options.length < MAX_OPTIONS_COUNT" @click="addOption()">{{
-            $t('QuestionnaireEditor.QuestionAddSpecialValues') }}</button>
+                        $t('QuestionnaireEditor.QuestionAddSpecialValues') }}</button>
                 <button type="button" class="btn btn-link" v-if="activeQuestion.type != 'Numeric'"
                     v-show="activeQuestion.options.length < MAX_OPTIONS_COUNT" @click="addOption()">{{
-            $t('QuestionnaireEditor.QuestionAddOption') }}</button>
+                        $t('QuestionnaireEditor.QuestionAddOption') }}</button>
                 <button type="button" class="btn btn-link" @click="showAddClassificationModal()">{{
-            $t('QuestionnaireEditor.QuestionAddClassification') }}</button>
+                    $t('QuestionnaireEditor.QuestionAddClassification') }}</button>
 
                 <button type="button" class="btn btn-link pull-right" @click="showOptionsInTextarea()">{{
-            $t('QuestionnaireEditor.StringsView') }}</button>
+                    $t('QuestionnaireEditor.StringsView') }}</button>
             </p>
         </div>
         <div v-if="!useListAsOptionsEditor">
@@ -62,14 +62,13 @@
                     v-autosize></textarea>
                 <p class="help-block">
                     <input class="btn btn-link" type="button" :value="$t('QuestionnaireEditor.TableView')"
-                        value="Show list" @click="showOptionsInList()"
-                        :disabled="!stringifiedCategoriesValidity.valid" />
+                        @click="showOptionsInList()" :disabled="!stringifiedCategoriesValidity.valid" />
                 </p>
                 <p class="help-block v-cloak" v-show="stringifiedCategoriesValidity.$error.matchOptionsPattern">{{
-            $t('QuestionnaireEditor.OptionsListError') }}
+                    $t('QuestionnaireEditor.OptionsListError') }}
                 </p>
                 <p class="help-block v-cloak" v-show="stringifiedCategoriesValidity.$error.maxOptionsCount">{{
-            $t('QuestionnaireEditor.EnteredMoreThanAllowed', { count: 200 }) }}
+                    $t('QuestionnaireEditor.EnteredMoreThanAllowed', { count: 200 }) }}
                 </p>
             </div>
         </div>

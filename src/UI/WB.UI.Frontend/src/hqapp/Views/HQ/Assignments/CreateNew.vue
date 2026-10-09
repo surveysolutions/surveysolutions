@@ -28,8 +28,9 @@
                             <div class="options-group">
                                 <div class="form-group">
                                     <div class="field" :class="{ answered: newResponsibleId != null }">
-                                        <Field v-slot="{ field }" label="Responsible" name="newResponsibleId"
-                                            :value="newResponsibleId" :rules="responsibleValidations">
+                                        <Field v-slot="{ field }" :label="$t('Common.Responsible')"
+                                            name="newResponsibleId" :value="newResponsibleId"
+                                            :rules="responsibleValidations">
                                             <Typeahead v-bind="field" control-id="newResponsibleId"
                                                 :placeholder="$t('Common.Responsible')" :value="newResponsibleId"
                                                 :ajax-params="{}" @selected="newResponsibleSelected"
@@ -172,8 +173,8 @@
                                         <Field v-model="targetAreaQuestion.answer"
                                             :title="this.$t('Assignments.TargetAreaExplanation')"
                                             :placeholder="$t('Assignments.EnterTargetArea')" name="targetArea"
-                                           type="text" autocomplete="off" class="field-to-fill"
-                                           :rules="validateTargetArea" />
+                                            type="text" autocomplete="off" class="field-to-fill"
+                                            :rules="validateTargetArea" />
                                     </div>
                                 </div>
                             </div>

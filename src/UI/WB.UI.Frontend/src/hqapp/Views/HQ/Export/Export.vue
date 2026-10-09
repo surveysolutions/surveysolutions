@@ -50,7 +50,8 @@
                                         </h5>
                                         <div class="form-group" :class="{ 'has-error': errors.questionnaireVersion }">
                                             <Field v-slot="{ field }" name="questionnaireVersion"
-                                                label="questionnaire version" :value="questionnaireVersion"
+                                                :label="$t('DataExport.SurveyQuestionnaireVersion')"
+                                                :value="questionnaireVersion"
                                                 :rules="{ required: questionnaireId != null && !$refs.questionnaireVersionControl.isLoading }">
                                                 <Typeahead v-bind="field" noClear control-id="questionnaireVersion"
                                                     ref="questionnaireVersionControl" name="questionnaireVersion"

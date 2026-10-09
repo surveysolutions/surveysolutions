@@ -22,11 +22,11 @@
         <ul v-if="isContextMenuSupport" class="context-menu-list context-menu-root" :id="'group-context-menu-' + index"
             style="z-index: 2;">
             <li class="context-menu-item context-menu-icon context-menu-icon-edit context-menu-visible" @click="edit()">
-                <span>Edit</span>
+                <span>{{ $t('QuestionnaireEditor.Edit') }}</span>
             </li>
             <li class="context-menu-item context-menu-separator context-menu-not-selectable"></li>
             <li class="context-menu-item context-menu-icon context-menu-icon-delete" @click="deleteItem()">
-                <span>Delete</span>
+                <span>{{ $t('QuestionnaireEditor.Delete') }}</span>
             </li>
         </ul>
     </Teleport>

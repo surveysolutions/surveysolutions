@@ -303,4 +303,10 @@
     <data name="TotalWithErrors" xml:space="preserve">
     <value>{{ withErrorsCount }} لم يتم إرسالها بسبب الأخطاء.</value>
 </data>
+    <data name="EnterText" xml:space="preserve">
+      <value>يرجى إدخال النص</value>
+  </data>
+    <data name="AddressDescription" xml:space="preserve">
+      <value>هنا سيظهر عنوان مؤسستك كما هو محدد في حسابك على خادم البريد الجماعي.</value>
+  </data>
 </root>
