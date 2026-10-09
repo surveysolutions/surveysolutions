@@ -9,5 +9,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public virtual Guid InterviewId { get; set; }
         public virtual DateTime RequestTime { get; set; }
         public virtual int FailedCount { get; set; }
+        public virtual DateTime? NextAttemptAt { get; set; }
     }
 }
