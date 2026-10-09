@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import PageNotFound from '../views/PageNotFound.vue';
-import { clearDynamicImportRecovery, getRouteDynamicImportRecoveryScope, hasUnsavedQuestionnaireCategoryChanges, isDynamicImportError, scheduleDynamicImportRecovery, setActiveDynamicImportRouteName } from '../helpers/dynamicImportRecovery';
+import { clearDynamicImportRecovery, getRouteDynamicImportRecoveryScope, hasUnsavedQuestionnaireChanges, isDynamicImportError, scheduleDynamicImportRecovery, setActiveDynamicImportRouteName } from '../helpers/dynamicImportRecovery';
 
 const OptionsEditor = () => import('../views/OptionsEditor/OptionsEditor.vue');
 
@@ -179,7 +179,13 @@ router.beforeEach((to, from, next) => {
     const { getUnsavedChanges, confirmLeave } = useUnsavedChanges();
     pendingDynamicImportRouteName = to.name;
 
-    if (getUnsavedChanges(from.name) && !confirmLeave()) {
+    const isLeavingQuestionnaire = from.matched.some(route => route.name === 'q')
+        && (!to.matched.some(route => route.name === 'q')
+            || from.params.questionnaireId !== to.params.questionnaireId);
+    const hasUnsavedChanges = getUnsavedChanges(from.name)
+        || (isLeavingQuestionnaire && hasUnsavedQuestionnaireChanges());
+
+    if (hasUnsavedChanges && !confirmLeave()) {
         pendingDynamicImportRouteName = null;
         next(false);
     } else {
@@ -192,7 +198,7 @@ router.onError(error => {
         scheduleDynamicImportRecovery(error, {
             routeName: pendingDynamicImportRouteName,
             recoveryScope: getRouteDynamicImportRecoveryScope(pendingDynamicImportRouteName),
-            hasUnsavedChanges: hasUnsavedQuestionnaireCategoryChanges,
+            hasUnsavedChanges: hasUnsavedQuestionnaireChanges,
             requireReloadConfirmation: true
         });
         return;

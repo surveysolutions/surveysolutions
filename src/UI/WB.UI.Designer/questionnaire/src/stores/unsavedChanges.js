@@ -7,7 +7,7 @@ import { useVariableStore } from './variable';
 import { useQuestionnaireStore } from './questionnaire';
 import { i18n } from '../plugins/localization';
 import { useRoute } from 'vue-router';
-import { hasUnsavedQuestionnaireCategoryChanges } from '../helpers/dynamicImportRecovery';
+import { hasUnsavedQuestionnaireChanges } from '../helpers/dynamicImportRecovery';
 
 export const useUnsavedChanges = () => {
     const route = useRoute();
@@ -20,22 +20,21 @@ export const useUnsavedChanges = () => {
 
     const getUnsavedChanges = routeName => {
         if (routeName == 'roster') {
-            return rosterStore.getIsDirty || hasUnsavedQuestionnaireCategoryChanges();
+            return rosterStore.getIsDirty;
         }
         if (routeName == 'group') {
-            return groupStore.getIsDirty || hasUnsavedQuestionnaireCategoryChanges();
+            return groupStore.getIsDirty;
         }
         if (routeName == 'question') {
-            return questionStore.getIsDirty || hasUnsavedQuestionnaireCategoryChanges();
+            return questionStore.getIsDirty;
         }
         if (routeName == 'statictext') {
-            return staticTextStore.getIsDirty || hasUnsavedQuestionnaireCategoryChanges();
+            return staticTextStore.getIsDirty;
         }
         if (routeName == 'variable') {
-            return variableStore.getIsDirty || hasUnsavedQuestionnaireCategoryChanges();
+            return variableStore.getIsDirty;
         }
-        return ['q', 'questionnaire', 'chapter'].includes(routeName) &&
-            hasUnsavedQuestionnaireCategoryChanges();
+        return false;
     };
 
     const confirmLeave = () => {
@@ -48,7 +47,7 @@ export const useUnsavedChanges = () => {
         const isReadOnlyForUser = questionnaireStore.info.isReadOnlyForUser;
         if (isReadOnlyForUser) return;
 
-        const isDirty = getUnsavedChanges(route.name);
+        const isDirty = getUnsavedChanges(route.name) || hasUnsavedQuestionnaireChanges();
         if (isDirty && !confirmLeave()) {
             event.preventDefault();
             event.returnValue = ''; //for chrome

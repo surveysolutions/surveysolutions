@@ -94,6 +94,49 @@ export function hasUnsavedQuestionnaireCategoryChanges() {
     }) ?? false;
 }
 
+export function hasUnsavedQuestionnaireChanges() {
+    const questionnaireStore = useQuestionnaireStore();
+    const questionnaire = questionnaireStore.getInfo;
+    if (!questionnaire?.questionnaireId) return false;
+
+    const hasUnsavedScenarioChanges = questionnaireStore.getEdittingScenarios?.some(scenario => {
+        const persistedScenario = questionnaire.scenarios?.find(item => item.id === scenario.id);
+        return persistedScenario?.title !== scenario.title;
+    }) ?? false;
+
+    return questionnaireStore.getIsDirtyMetadata
+        || questionnaireStore.getQuestionnaireEditDataDirty
+        || hasUnsavedQuestionnaireCategoryChanges()
+        || questionnaire.lookupTables?.some(table =>
+            hasNameOrFileDraftChanged(table, 'editLookupTable')
+        )
+        || questionnaire.translations?.some(translation =>
+            hasNameOrFileDraftChanged(translation, 'editTranslation')
+        )
+        || questionnaire.attachments?.some(attachment =>
+            hasNameOrFileDraftChanged(attachment, 'editAttachment')
+        )
+        || questionnaire.macros?.some(macro =>
+            macro.editMacro
+            && ['name', 'content', 'description'].some(property =>
+                macro[property] !== macro.editMacro[property]
+            )
+        )
+        || questionnaire.criticalityConditions?.some(condition =>
+            condition.edit
+            && (['message', 'expression', 'description'].some(property =>
+                condition[property] !== condition.edit[property]
+            ) || (condition.edit.description === '' && condition.edit.isDescriptionVisible))
+        )
+        || hasUnsavedScenarioChanges;
+}
+
+function hasNameOrFileDraftChanged(item, draftProperty) {
+    const draft = item?.[draftProperty];
+    return draft != null
+        && (draft.name !== item.name || (draft.file !== null && draft.file !== undefined));
+}
+
 function editCategoriesChanged(category) {
     return category.editCategories.name !== category.name
         || (category.editCategories.file !== null
