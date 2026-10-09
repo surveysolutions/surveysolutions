@@ -61,12 +61,12 @@ import { isNull, isUndefined } from 'lodash'
 import { updateCategories } from '../../../../services/categoriesService'
 import { notice } from '../../../../services/notificationService';
 import dayjs from 'dayjs';
-import { hasUnsavedQuestionnaireCategoryChanges, wrapDynamicImport } from '../../../../helpers/dynamicImportRecovery';
+import { hasUnsavedQuestionnaireChanges, wrapDynamicImport } from '../../../../helpers/dynamicImportRecovery';
 
 const loadOptionsEditorModal = wrapDynamicImport(
     () => import('./CategoriesEditorModal.vue'),
     {
-        hasUnsavedChanges: hasUnsavedQuestionnaireCategoryChanges,
+        hasUnsavedChanges: hasUnsavedQuestionnaireChanges,
         recoveryScope: 'categories-editor-modal',
         requireReloadConfirmation: true
     }
