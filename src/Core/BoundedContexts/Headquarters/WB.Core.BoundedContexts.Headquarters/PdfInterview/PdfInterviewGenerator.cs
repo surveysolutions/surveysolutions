@@ -6,15 +6,14 @@ using System.IO;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Options;
-using MigraDocCore.DocumentObjectModel;
-using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
-using MigraDocCore.DocumentObjectModel.Tables;
-using MigraDocCore.Rendering;
-using PdfSharpCore.Drawing;
-using PdfSharpCore.Drawing.BarCodes;
-using PdfSharpCore.Fonts;
-using PdfSharpCore.Pdf;
-using PdfSharpCore.Utils;
+using MigraDoc.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel.Tables;
+using MigraDoc.Rendering;
+using PdfSharp;
+using PdfSharp.Drawing;
+using PdfSharp.Drawing.BarCodes;
+using PdfSharp.Fonts;
+using PdfSharp.Pdf;
 using WB.Core.BoundedContexts.Headquarters.Configs;
 using WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -60,8 +59,6 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
         {
             IFontResolver pdfInterviewFontResolver = new PdfInterviewFontResolver();
             GlobalFontSettings.FontResolver = pdfInterviewFontResolver;
-            
-            ImageSource.ImageSourceImpl = new SkiaImageSource();
         }
 
         public Stream? Generate(Guid interviewId)
@@ -107,7 +104,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             SetPagesMargins(document);
             WriteFooterToAllPages(document, questionnaire, interview);
             
-            PdfDocumentRenderer renderer = new PdfDocumentRenderer(true);
+            PdfDocumentRenderer renderer = new PdfDocumentRenderer();
             renderer.Document = document;
             renderer.PdfDocument = pdfDocument;
             renderer.RenderDocument();
@@ -291,7 +288,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
         private void SetPagesMargins(Document document)
         {
-            foreach (Section section in document.Sections)
+            foreach (var section in document.Sections.OfType<Section>())
             {
                 section.PageSetup.PageFormat = PageFormat.A4;
                 
@@ -314,7 +311,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             barcode.StartChar = Convert.ToChar("*");
             barcode.EndChar = Convert.ToChar("*");
             barcode.Direction = CodeDirection.LeftToRight;
-            XFont fontBarcode = new XFont(DefinePdfStyles.DefaultFonts, 14, XFontStyle.Regular);
+            XFont fontBarcode = new XFont(DefinePdfStyles.DefaultFonts, 14, XFontStyleEx.Regular);
             var position = new XPoint(Convert.ToDouble(37), Convert.ToDouble(0));
             XSize size = new XSize(Convert.ToDouble(149), Convert.ToDouble(53));
             barcode.Size = size;
@@ -335,7 +332,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
         private void WriteFooterToAllPages(Document document, IQuestionnaire questionnaire, IStatefulInterview interview)
         {
-            foreach (Section section in document.Sections)
+            foreach (var section in document.Sections.OfType<Section>())
             {
                 //section.Footers.Primary.Format.SpaceAfter = Unit.FromPoint(10);
                 //section.Footers.Primary.Format. SpaceBefore = Unit.FromPoint(10);
@@ -347,22 +344,24 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                     Width = Unit.FromPoint(1)
                 };
                 
-                Paragraph leftFooter = section.Footers.Primary.AddParagraph();
-                leftFooter.AddPageField();
-                leftFooter.AddText(PdfInterviewRes.PageOf);
-                leftFooter.AddNumPagesField();
-                leftFooter.Format.Font.Size = Unit.FromPoint(6);
-                leftFooter.Format.Alignment = ParagraphAlignment.Left;            
-                
-                Paragraph centerFooter = section.Footers.Primary.AddParagraph();
-                centerFooter.AddText(questionnaire.Title);
-                centerFooter.Format.Font.Size = Unit.FromPoint(6);
-                centerFooter.Format.Alignment = ParagraphAlignment.Center;            
+                var pageSetup = section.PageSetup;
+                PageSetup.GetPageSize(pageSetup.PageFormat, out var pageWidth, out _);
+                var contentWidth = pageWidth.Point - pageSetup.LeftMargin.Point - pageSetup.RightMargin.Point;
 
-                Paragraph rightFooter = section.Footers.Primary.AddParagraph();
-                rightFooter.AddText(interview.GetInterviewKey().ToString());
-                rightFooter.Format.Font.Size = Unit.FromPoint(6);
-                rightFooter.Format.Alignment = ParagraphAlignment.Right;            
+                // page number, questionnaire title and interview key are printed in one line
+                Paragraph footer = section.Footers.Primary.AddParagraph();
+                footer.Format.Font.Size = Unit.FromPoint(6);
+                footer.Format.Alignment = ParagraphAlignment.Left;
+                footer.Format.TabStops.AddTabStop(Unit.FromPoint(contentWidth / 2), TabAlignment.Center);
+                footer.Format.TabStops.AddTabStop(Unit.FromPoint(contentWidth), TabAlignment.Right);
+
+                footer.AddPageField();
+                footer.AddText(PdfInterviewRes.PageOf);
+                footer.AddNumPagesField();
+                footer.AddTab();
+                footer.AddText(questionnaire.Title);
+                footer.AddTab();
+                footer.AddText(interview.GetInterviewKey().ToString());
             }
         }
 

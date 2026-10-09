@@ -4,8 +4,7 @@ using System;
 using System.Linq;
 using Humanizer;
 using Microsoft.Extensions.Options;
-using MigraDocCore.DocumentObjectModel;
-using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
+using MigraDoc.DocumentObjectModel;
 using WB.Core.Infrastructure.Exceptions;
 using WB.Core.BoundedContexts.Headquarters.Configs;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -81,8 +80,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                     {
                         try
                         {
-                            ImageSource.IImageSource imageSource = ImageSource.FromBinary(fileName, () => binaryData);
-                            var image = paragraph.AddImage(imageSource);
+                            var image = paragraph.AddImage(PdfImageSource.FromBinary(binaryData));
                             image.Width = Unit.FromPoint(300);
                             image.Height = Unit.FromPoint(300);
                         }

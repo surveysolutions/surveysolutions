@@ -2,7 +2,7 @@
 
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using MigraDocCore.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using PdfInterviewRes = WB.Core.BoundedContexts.Headquarters.Resources.PdfInterview;
 

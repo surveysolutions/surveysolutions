@@ -1,8 +1,8 @@
 ﻿#nullable enable
 
 using System.Net;
-using MigraDocCore.DocumentObjectModel;
-using MigraDocCore.DocumentObjectModel.Tables;
+using MigraDoc.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel.Tables;
 
 namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 {

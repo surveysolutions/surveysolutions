@@ -1,6 +1,5 @@
 using System;
-using MigraDocCore.DocumentObjectModel;
-using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
+using MigraDoc.DocumentObjectModel;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.PdfInterview;
@@ -18,8 +17,6 @@ public class AttachmentPdfWriterTests
     [Test]
     public void when_attachment_image_format_is_not_supported_should_not_throw()
     {
-        ImageSource.ImageSourceImpl = new SkiaImageSource();
-
         var attachmentInfo = Create.Entity.Attachment("content-id");
         var interview = Mock.Of<IStatefulInterview>();
         var questionnaire = Mock.Of<IQuestionnaire>(x => x.GetAttachmentById(attachmentInfo.AttachmentId) == attachmentInfo);

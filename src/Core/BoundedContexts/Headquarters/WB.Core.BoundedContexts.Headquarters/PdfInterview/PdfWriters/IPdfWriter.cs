@@ -1,6 +1,6 @@
 ﻿#nullable enable
 
-using MigraDocCore.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel;
 
 namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
 {
