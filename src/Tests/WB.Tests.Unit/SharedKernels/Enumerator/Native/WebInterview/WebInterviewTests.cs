@@ -18,11 +18,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Native.WebInterview
     [TestFixture]
     public class WebInterviewTests
     {
-        [TestCase(true, false)]
-        [TestCase(false, false)]
-        [TestCase(true, true)]
-        [TestCase(false, true)]
-        public async Task should_disconnect_after_request_scope_is_disposed(bool hasWorkspace, bool throwOnDisconnect)
+        [TestCase(true, false, false)]
+        [TestCase(false, false, false)]
+        [TestCase(true, true, false)]
+        [TestCase(false, true, false)]
+        [TestCase(true, false, true)]
+        [TestCase(false, false, true)]
+        public async Task should_disconnect_after_request_scope_is_disposed(bool hasWorkspace, bool throwOnDisconnect, bool throwOnConnect)
         {
             var services = new ServiceCollection();
             if (hasWorkspace)
@@ -34,10 +36,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Native.WebInterview
 
             var modules = new List<RecordingPipelineModule>();
             var cleanupError = throwOnDisconnect ? new InvalidOperationException("Cleanup failed") : null;
+            var connectError = throwOnConnect ? new InvalidOperationException("Connect failed") : null;
             services.AddScoped<IPipelineModule>(sp =>
             {
                 var module = new RecordingPipelineModule(
-                    sp.GetService<IWorkspaceContextAccessor>()?.CurrentWorkspace(), cleanupError);
+                    sp.GetService<IWorkspaceContextAccessor>()?.CurrentWorkspace(), cleanupError, connectError);
                 modules.Add(module);
                 return module;
             });
@@ -66,7 +69,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Native.WebInterview
             using (var connectedHub = new WebInterviewHub(connectedScope.ServiceProvider)
                    { Context = context, Groups = groups.Object })
             {
-                await connectedHub.OnConnectedAsync();
+                if (throwOnConnect)
+                    Assert.That(Assert.ThrowsAsync<InvalidOperationException>(() => connectedHub.OnConnectedAsync()), Is.SameAs(connectError));
+                else
+                    await connectedHub.OnConnectedAsync();
+
+                // Both the hub lifecycle scope and transport request are still alive here.
+                Assert.That(modules[0].Disposed, Is.True);
             }
 
             Assert.That(modules.Count, Is.EqualTo(1));
@@ -111,11 +120,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Native.WebInterview
         private class RecordingPipelineModule : IPipelineModule, IDisposable
         {
             private readonly Exception cleanupError;
+            private readonly Exception connectError;
 
-            public RecordingPipelineModule(WorkspaceContext workspace, Exception cleanupError)
+            public RecordingPipelineModule(WorkspaceContext workspace, Exception cleanupError, Exception connectError)
             {
                 Workspace = workspace;
                 this.cleanupError = cleanupError;
+                this.connectError = connectError;
             }
 
             public WorkspaceContext Workspace { get; }
@@ -126,6 +137,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Native.WebInterview
             public Task OnConnected(Hub hub)
             {
                 Connected = true;
+                if (connectError != null)
+                    throw connectError;
                 return Task.CompletedTask;
             }
 
