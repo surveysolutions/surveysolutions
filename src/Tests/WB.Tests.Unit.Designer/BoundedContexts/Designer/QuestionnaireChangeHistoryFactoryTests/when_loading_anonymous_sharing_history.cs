@@ -43,6 +43,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
 
             result!.ChangeHistory.Should().ContainSingle();
             result.ChangeHistory[0].HasRevertTo.Should().BeTrue();
+            result.ChangeHistory[0].HasQuestionnaireVersion.Should().BeFalse();
         }
 
         private static IPrincipal CreateUser()
