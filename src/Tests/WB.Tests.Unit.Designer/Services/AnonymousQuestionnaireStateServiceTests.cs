@@ -91,5 +91,35 @@ namespace WB.Tests.Unit.Designer.Services
                     It.IsAny<QuestionnaireChangeRecordMetadata>()),
                 Times.Never);
         }
+
+        [Test]
+        public async Task when_missing_state_is_requested_disabled_should_not_append_history()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var responsibleId = Guid.NewGuid();
+            var dbContext = Create.InMemoryDbContext();
+            var historyMutationService = new Mock<IQuestionnaireHistoryMutationService>();
+            var service = new AnonymousQuestionnaireStateService(dbContext, historyMutationService.Object);
+
+            var result = await service.SaveStateAsync(questionnaireId, false, "Questionnaire title", responsibleId, "designer-user");
+
+            result.IsActive.Should().BeFalse();
+            dbContext.AnonymousQuestionnaires.Single(x => x.QuestionnaireId == questionnaireId).IsActive.Should().BeFalse();
+            historyMutationService.Verify(x => x.StageQuestionnaireChangeItemAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<Guid>(),
+                    It.IsAny<string>(),
+                    It.IsAny<QuestionnaireActionType>(),
+                    It.IsAny<QuestionnaireItemType>(),
+                    It.IsAny<Guid>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<int?>(),
+                    It.IsAny<DateTime?>(),
+                    It.IsAny<Main.Core.Documents.QuestionnaireDocument>(),
+                    It.IsAny<QuestionnaireChangeReference>(),
+                    It.IsAny<QuestionnaireChangeRecordMetadata>()),
+                Times.Never);
+        }
     }
 }

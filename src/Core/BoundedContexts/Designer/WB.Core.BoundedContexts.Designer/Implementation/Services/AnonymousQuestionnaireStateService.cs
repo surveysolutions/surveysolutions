@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                     var anonymousQuestionnaire = await this.dbContext.AnonymousQuestionnaires
                         .SingleOrDefaultAsync(a => a.QuestionnaireId == questionnaireId);
-                    var shouldAddHistoryRecord = anonymousQuestionnaire == null || anonymousQuestionnaire.IsActive != isActive;
+                    var shouldAddHistoryRecord = (anonymousQuestionnaire?.IsActive ?? false) != isActive;
 
                     if (anonymousQuestionnaire == null)
                     {

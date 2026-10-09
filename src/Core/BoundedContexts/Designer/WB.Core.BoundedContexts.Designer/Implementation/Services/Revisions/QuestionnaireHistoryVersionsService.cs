@@ -200,6 +200,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
             QuestionnaireChangeReference? reference = null,
             QuestionnaireChangeRecordMetadata? meta = null)
         {
+            await this.LockQuestionnaireHistoryForUpdateAsync(questionnaireId);
+
             var sQuestionnaireId = questionnaireId.FormatGuid();
 
             var maxSequenceByQuestionnaire = await this.dbContext.QuestionnaireChangeRecords
@@ -220,6 +222,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
 
             // -1 is to take into account newly added change record that is not yet in DB
             RemoveOldQuestionnaireHistory(this.dbContext, sQuestionnaireId, historySettings.Value.QuestionnaireChangeHistoryLimit - 1);
+        }
+
+        private async Task LockQuestionnaireHistoryForUpdateAsync(Guid questionnaireId)
+        {
+            if (!this.dbContext.Database.IsNpgsql() || this.dbContext.Database.CurrentTransaction == null)
+                return;
+
+            var bytes = questionnaireId.ToByteArray();
+            var key = BitConverter.ToInt32(bytes, 0) ^ BitConverter.ToInt32(bytes, 4)
+                    ^ BitConverter.ToInt32(bytes, 8) ^ BitConverter.ToInt32(bytes, 12);
+
+            await this.dbContext.Database.ExecuteSqlInterpolatedAsync(
+                $"SELECT pg_advisory_xact_lock({HistoryLockClass}, {key})");
         }
 
         private QuestionnaireChangeRecord BuildChangeRecord(
