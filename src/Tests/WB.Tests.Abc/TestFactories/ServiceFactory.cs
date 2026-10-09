@@ -1272,39 +1272,32 @@ namespace WB.Tests.Abc.TestFactories
         public ISerializer NewtonJsonSerializer()
             => new NewtonJsonSerializer();
 
-        private static WB.Infrastructure.Native.Storage.Postgre.IUnitOfWork ImmediateUnitOfWork()
-        {
-            var uow = new Mock<WB.Infrastructure.Native.Storage.Postgre.IUnitOfWork>();
-            uow.Setup(x => x.OnCommitted(It.IsAny<Action>())).Callback<Action>(a => a());
-            return uow.Object;
-        }
-
         public MapFileStorageService MapFileStorageService(
             IFileSystemAccessor fileSystemAccessor = null, 
             IOptions<FileStorageConfig> fileStorageConfig = null,
             IArchiveUtils archiveUtils = null,
             IPlainStorageAccessor<MapBrowseItem> mapsStorage = null,
+            IPlainStorageAccessor<MapFileDeletionRequest> mapFileDeletionRequests = null,
             IPlainStorageAccessor<UserMap> userMapsStorage = null,
             ISerializer serializer = null,
             IUserRepository userStorage = null,
             IExternalFileStorage externalFileStorage = null,
             IAuthorizedUser authorizedUser = null,
-            IOptions<GeospatialConfig> geospatialConfig = null,
-            WB.Infrastructure.Native.Storage.Postgre.IUnitOfWork unitOfWork = null)
+            IOptions<GeospatialConfig> geospatialConfig = null)
         {
            return new MapFileStorageService(
              fileSystemAccessor ?? Create.Service.FileSystemIOAccessor(), 
              fileStorageConfig ?? Options.Create(new FileStorageConfig()),
              archiveUtils ?? Create.Service.ArchiveUtils(),
              mapsStorage ?? new TestPlainStorage<MapBrowseItem>(),
+             mapFileDeletionRequests ?? new TestPlainStorage<MapFileDeletionRequest>(),
              userMapsStorage ?? new TestPlainStorage<UserMap>(),
              serializer ?? Create.Service.NewtonJsonSerializer(),
              userStorage ?? Create.Storage.UserRepository(),
              externalFileStorage ?? Mock.Of<IExternalFileStorage>(),
              geospatialConfig ?? Mock.Of<IOptions<GeospatialConfig>>(),
              authorizedUser ?? Mock.Of<IAuthorizedUser>(),
-             Mock.Of<ILogger<MapFileStorageService>>(),
-             unitOfWork ?? ImmediateUnitOfWork()
+             Mock.Of<ILogger<MapFileStorageService>>()
              ); 
         }
 

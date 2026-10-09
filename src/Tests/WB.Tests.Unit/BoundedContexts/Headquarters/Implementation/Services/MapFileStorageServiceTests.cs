@@ -156,6 +156,23 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
         }
 
         [Test]
+        public async Task DeleteMap_should_store_a_pending_file_deletion_request()
+        {
+            const string mapName = "mapFile.tpk";
+            var mapsStorage = new TestPlainStorage<MapBrowseItem>();
+            mapsStorage.Store(Create.Entity.MapBrowseItem(mapName), mapName);
+            var deletionRequests = new TestPlainStorage<MapFileDeletionRequest>();
+            var service = Create.Service.MapFileStorageService(
+                mapsStorage: mapsStorage,
+                mapFileDeletionRequests: deletionRequests);
+
+            await service.DeleteMap(mapName);
+
+            Assert.That(mapsStorage.GetById(mapName), Is.Null);
+            Assert.That(deletionRequests.GetById(mapName)?.FileName, Is.EqualTo(mapName));
+        }
+
+        [Test]
         public async Task SaveOrUpdateMapAsync_when_shapefile_has_duplicate_label_values_HasDuplicateLabels_is_true()
         {
             var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));

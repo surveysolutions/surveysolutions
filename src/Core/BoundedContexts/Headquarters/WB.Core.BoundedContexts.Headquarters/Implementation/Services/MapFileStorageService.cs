@@ -36,6 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     public class MapFileStorageService : IMapStorageService
     {
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
+        private readonly IPlainStorageAccessor<MapFileDeletionRequest> mapFileDeletionRequests;
         private readonly IPlainStorageAccessor<UserMap> userMapsStorage;
         private readonly ISerializer serializer;
         private readonly IUserRepository userStorage;
@@ -45,7 +46,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ILogger<MapFileStorageService> logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
-        private readonly IUnitOfWork unitOfWork;
 
         private const int WGS84Wkid = 4326; //https://epsg.io/4326
         private const string MapsFolderName = "MapsData";
@@ -58,18 +58,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IOptions<FileStorageConfig> fileStorageConfig,
             IArchiveUtils archiveUtils,
             IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
+            IPlainStorageAccessor<MapFileDeletionRequest> mapFileDeletionRequests,
             IPlainStorageAccessor<UserMap> userMapsStorage,
             ISerializer serializer,
             IUserRepository userStorage,
             IExternalFileStorage externalFileStorage,
             IOptions<GeospatialConfig> geospatialConfig,
             IAuthorizedUser authorizedUser,
-            ILogger<MapFileStorageService> logger,
-            IUnitOfWork unitOfWork)
+            ILogger<MapFileStorageService> logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
             this.mapPlainStorageAccessor = mapPlainStorageAccessor;
+            this.mapFileDeletionRequests = mapFileDeletionRequests;
             this.userMapsStorage = userMapsStorage;
             this.serializer = serializer;
             this.userStorage = userStorage;
@@ -77,7 +78,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.authorizedUser = authorizedUser;
             this.logger = logger;
             this.geospatialConfig = geospatialConfig;
-            this.unitOfWork = unitOfWork;
 
             this.mapsFolderPath = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, MapsFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.mapsFolderPath))
@@ -409,25 +409,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 throw new Exception("Map was not found.");
 
             this.mapPlainStorageAccessor.Remove(map.FileName);
-
-            this.unitOfWork.OnCommitted(() =>
+            this.mapFileDeletionRequests.Store(new MapFileDeletionRequest
             {
-                if (externalFileStorage.IsEnabled())
-                {
-                    this.logger.LogWarning("Deleting map: '{map}' from external storage", map.FileName);
-                    externalFileStorage.RemoveAsync(GetExternalStoragePath(map.FileName)).GetAwaiter().GetResult();
-                }
-                else
-                {
-                    this.logger.LogWarning("Deleting map: '{map}' from {folder}", map.FileName, this.mapsFolderPath);
-                    var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, map.FileName);
-
-                    if (this.fileSystemAccessor.IsFileExists(filePath))
-                        fileSystemAccessor.DeleteFile(filePath);
-                }
-            });
+                Id = map.FileName,
+                FileName = map.FileName
+            }, map.FileName);
 
             return map;
+        }
+
+        public async Task RemoveMapFileAsync(string fileName)
+        {
+            if (externalFileStorage.IsEnabled())
+            {
+                this.logger.LogWarning("Deleting map: '{map}' from external storage", fileName);
+                await externalFileStorage.RemoveAsync(GetExternalStoragePath(fileName));
+                return;
+            }
+
+            this.logger.LogWarning("Deleting map: '{map}' from {folder}", fileName, this.mapsFolderPath);
+            var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, fileName);
+
+            if (this.fileSystemAccessor.IsFileExists(filePath))
+                fileSystemAccessor.DeleteFile(filePath);
         }
 
         public async Task DeleteAllMaps()
