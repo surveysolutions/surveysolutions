@@ -1620,7 +1620,7 @@
         <value>การเข้าถึงพื้นที่ทำงาน</value>
     </data>
     <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
-        <value>หัวหน้างาน (ผู้สัมภาษณ์จะถูกเพิ่มเข้าไปในทีมของเขา)</value>
+        <value>หัวหน้างาน</value>
     </data>
     <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
         <value>เลือกหัวหน้างาน</value>

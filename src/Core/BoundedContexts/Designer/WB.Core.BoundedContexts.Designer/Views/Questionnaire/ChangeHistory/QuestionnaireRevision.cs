@@ -1,9 +1,11 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 {
     public class QuestionnaireRevision
     {
+        [JsonConstructor]
         public QuestionnaireRevision(Guid questionnaireId, Guid? revision = null, int? version = null)
         {
             this.QuestionnaireId = questionnaireId;

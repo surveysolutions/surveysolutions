@@ -199,9 +199,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// </summary>
         /// <param name="id">User id</param>
         /// <response code="200">User archived</response>
-        /// <response code="400">User id cannot be parsed</response>
+        /// <response code="400">User id cannot be parsed or user is not an interviewer or supervisor</response>
         /// <response code="404">User with provided id does not exist</response>
-        /// <response code="406">User is not an interviewer or supervisor</response>
         [HttpPatch]
         [Route("users/{id}/archive")]
         [Produces(MediaTypeNames.Application.Json)]
@@ -222,7 +221,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }
             if (!(user.Roles.Contains(UserRoles.Interviewer) || user.Roles.Contains(UserRoles.Supervisor)))
             {
-                return StatusCode(StatusCodes.Status406NotAcceptable);
+                ModelState.AddModelError("user", "Only interviewers and supervisors can be archived.");
+                return ValidationProblem();
             }
 
             if (user.IsSupervisor())
@@ -242,9 +242,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// </summary>
         /// <param name="id">User id</param>
         /// <response code="200">User unarchived</response>
-        /// <response code="400">User id cannot be parsed</response>
+        /// <response code="400">User id cannot be parsed or user is not an interviewer or supervisor</response>
         /// <response code="404">User with provided id does not exist</response>
-        /// <response code="406">User is not an interviewer or supervisor</response>
         /// <response code="409">User cannot be unarchived</response>
         [HttpPatch]
         [Route("users/{id}/unarchive")]
@@ -267,7 +266,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             if (!(user.Roles.Contains(UserRoles.Interviewer) || user.Roles.Contains(UserRoles.Supervisor)))
             {
-                return StatusCode(StatusCodes.Status406NotAcceptable);
+                ModelState.AddModelError("user", "Only interviewers and supervisors can be unarchived.");
+                return ValidationProblem();
             }
 
             try

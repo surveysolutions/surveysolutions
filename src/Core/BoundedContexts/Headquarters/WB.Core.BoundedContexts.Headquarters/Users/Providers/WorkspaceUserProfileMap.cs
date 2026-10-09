@@ -1,6 +1,7 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
 {
@@ -16,7 +17,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
             Id(x => x.Id, p => p.Column("id"));
             //Property(x => x.Id, p => p.Column("id"));
             Property(x => x.DeviceId, p => p.Column("device_id"));
-            Property(x => x.DeviceRegistrationDate, p => p.Column("device_registration_date"));
+            Property(x => x.DeviceRegistrationDate, p =>
+            {
+                p.Column("device_registration_date");
+                p.Type<PostgresDateType>();
+            });
             Property(x => x.SupervisorId, p => p.Column("supervisor_id"));
             Property(x => x.DeviceAppVersion, p => p.Column("device_app_version"));
             Property(x => x.StorageFreeInBytes, p => p.Column("storage_free_in_bytes"));

@@ -123,6 +123,9 @@
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>Përgjigjja nuk u ruajt</value>
   </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Gabim komunikimi</value>
+  </data>
   <data name="AreaRecord" xml:space="preserve">
     <value>Hapësira e redaktimit</value>
   </data>
@@ -340,6 +343,9 @@
   <data name="LoadingWait" xml:space="preserve">
     <value>Po ngarkohet, ju lutemi, pritni</value>
   </data>
+  <data name="ImageFormatNotSupported" xml:space="preserve">
+    <value>Formati i imazhit nuk mbështetet nga shfletuesi juaj.</value>
+  </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>Shfletuesi juaj nuk e mbështet përsëritjen në multimedia. Në vend të kësaj, ju mund ta shkarkoni.</value>
   </data>
@@ -363,6 +369,9 @@
   </data>
   <data name="NumberEnter" xml:space="preserve">
     <value>Vendosni numrin</value>
+  </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Vlerat negative nuk lejohen për këtë pyetje</value>
   </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>Përgjigjja '{{answer}}' është e pasaktë, pasi pyetja është përdorur si madhësi e rosterit dhe përgjigjja e specifikuar është negative </value>

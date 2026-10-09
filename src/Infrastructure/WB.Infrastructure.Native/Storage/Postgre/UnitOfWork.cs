@@ -80,30 +80,63 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 }
 
                 var ws = this.workspaceContextAccessor.CurrentWorkspace();
+                var key = ws?.Name ?? WorkspaceConstants.SchemaName;
 
-                var unitOfWork = unitOfWorks.GetOrAdd(ws?.Name ?? WorkspaceConstants.SchemaName, workspace =>
+                if (unitOfWorks.TryGetValue(key, out var existing))
+                    return existing.session;
+
+                // ConcurrentDictionary.GetOrAdd may invoke the factory more than once under contention,
+                // which would open a session + transaction (i.e. a DB connection) that is never disposed.
+                lock (sessionLock)
                 {
+                    if (disposeCount > 0)
+                        throw new ObjectDisposedException(nameof(UnitOfWork));
+
+                    if (unitOfWorks.TryGetValue(key, out existing))
+                        return existing.session;
+
                     //resolving when needed but not when injected
                     var session = scope.Resolve<Lazy<ISessionFactory>>().Value.OpenSession();
-                    var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
-                    return (session, transaction);
-                });
+                    try
+                    {
+                        var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
+                        unitOfWorks[key] = (session, transaction);
+                    }
+                    catch
+                    {
+                        session.Dispose();
+                        throw;
+                    }
 
-                return unitOfWork.session;
+                    return session;
+                }
             }
         }
+
+        private readonly object sessionLock = new();
 
         public void Dispose()
         {
             if (Interlocked.Increment(ref disposeCount) == 1)
             {
-                foreach (var (session, transaction) in unitOfWorks.Values)
+                (ISession session, ITransaction transaction)[] items;
+                lock (sessionLock)
+                {
+                    items = new (ISession, ITransaction)[unitOfWorks.Count];
+                    unitOfWorks.Values.CopyTo(items, 0);
+                    unitOfWorks.Clear();
+                }
+
+                Exception? firstError = null;
+                var commitRemaining = shouldAcceptChanges && !shouldDiscardChanges;
+
+                foreach (var (session, transaction) in items)
                 {
                     try
                     {
                         if (transaction.IsActive == true)
                         {
-                            if (shouldAcceptChanges && !shouldDiscardChanges)
+                            if (commitRemaining)
                             {
                                 transaction.Commit();
                             }
@@ -112,14 +145,33 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                                 transaction.Rollback();
                             }
                         }
-                        
-                        transaction.Dispose();
+                    }
+                    catch (Exception e)
+                    {
+                        // Clean up all workspaces, but do not commit more writes after a failure.
+                        commitRemaining = false;
+                        firstError ??= e;
                     }
                     finally
                     {
-                        session.Dispose();
+                        try { transaction.Dispose(); }
+                        catch (Exception e)
+                        {
+                            commitRemaining = false;
+                            firstError ??= e;
+                        }
+
+                        try { session.Dispose(); }
+                        catch (Exception e)
+                        {
+                            commitRemaining = false;
+                            firstError ??= e;
+                        }
                     }
                 }
+
+                if (firstError != null)
+                    System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(firstError).Throw();
             }
         }
     }

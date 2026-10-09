@@ -4,8 +4,6 @@ using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using Group = Main.Core.Entities.SubEntities.Group;
 
-using it = Moq.It;
-
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 {
     internal class when_handling_StaticTextDeleted_event : QuestionnaireDenormalizerTestsContext

@@ -1,5 +1,6 @@
 using Main.Core.Entities.SubEntities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Dapper;
 using NHibernate.Linq;
@@ -69,33 +70,37 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             new { InterviewId = interviewId });
         }
 
-        private static readonly InterviewStatus[] DisabledStatusesForGps =
-        {
+        // NOTE: List<InterviewStatus> is used in LINQ expression trees on purpose. For an array the C# compiler
+        // (C# 14+) binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an
+        // op_Implicit call into the expression tree that NHibernate cannot evaluate
+        // ("Evaluation failure on op_Implicit(value(InterviewStatus[]))").
+        private static readonly List<InterviewStatus> DisabledStatusesForGps =
+        [
             InterviewStatus.ApprovedBySupervisor,
             InterviewStatus.ApprovedByHeadquarters
-        };
+        ];
 
-        private static readonly InterviewStatus[] InterviewerStatusesForGps =
-        {
+        private static readonly List<InterviewStatus> InterviewerStatusesForGps =
+        [
             InterviewStatus.Created,
             InterviewStatus.InterviewerAssigned,
             InterviewStatus.Restarted,
             InterviewStatus.RejectedBySupervisor,
             InterviewStatus.Completed,
-        };
+        ];
 
-        private static readonly InterviewStatus[] SupervisorStatusesForGps =
+        private static readonly List<InterviewStatus> SupervisorStatusesForGps =
             InterviewerStatusesForGps.Concat(new []
         {
             InterviewStatus.SupervisorAssigned,
             InterviewStatus.RejectedByHeadquarters,
-        }).ToArray();
+        }).ToList();
         
-        private static readonly InterviewStatus[] HeadquartersStatusesForGps =
+        private static readonly List<InterviewStatus> HeadquartersStatusesForGps =
             SupervisorStatusesForGps.Concat(new []
         {
             InterviewStatus.ApprovedBySupervisor
-        }).ToArray();
+        }).ToList();
 
         public InterviewGpsAnswer[] GetGpsAnswers(Guid questionnaireId, long? questionnaireVersion,
             string gpsQuestionVariableName, int? maxAnswersCount, Guid? supervisorId)

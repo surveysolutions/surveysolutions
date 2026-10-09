@@ -15,7 +15,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Enumerator.Native.WebInterview;
-using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
 {
@@ -27,13 +26,13 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             ICommandService commandService, IMetaInfoBuilder metaBuilder, 
             IJsonAllTypesSerializer synchronizationSerializer, IHeadquartersEventStore eventStore, 
             IAudioAuditFileStorage audioAuditFileStorage, IUserToDeviceService userToDeviceService,
-            IWebHostEnvironment webHostEnvironment, IImageProcessingService imageProcessingService,
+            IWebHostEnvironment webHostEnvironment,
             IBrokenImageFileStorage brokenImageFileStorage,
             IBrokenAudioFileStorage brokenAudioFileStorage,
             IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage) 
             : base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, packagesService, 
                 commandService, metaBuilder, synchronizationSerializer, eventStore, audioAuditFileStorage, 
-                userToDeviceService, webHostEnvironment, imageProcessingService, brokenImageFileStorage,
+                userToDeviceService, webHostEnvironment, brokenImageFileStorage,
                 brokenAudioFileStorage, brokenAudioAuditFileStorage)
         {
         }

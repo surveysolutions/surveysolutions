@@ -119,6 +119,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             return Task.CompletedTask;
         }
 
+        public Task RemoveAllBinaryDataForInterviewsAsync(List<Guid> interviewIds)
+        {
+            foreach (var interviewId in interviewIds)
+            {
+                var metadataViews = this.fileMetadataViewStorage.Where(metadata => metadata.InterviewId == interviewId);
+
+                foreach (var metadataView in metadataViews)
+                    this.fileViewStorage.Remove(metadataView.FileId);
+
+                this.fileMetadataViewStorage.Remove(metadataViews);
+            }
+
+            return Task.CompletedTask;
+        }
+
         private TMetadataView GetMetadata(Guid interviewId, string fileName)
         {
             return this.fileMetadataViewStorage

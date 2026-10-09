@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.BoundedContexts.Headquarters.Workspaces.Jobs;
 using WB.Core.Infrastructure.Domain;
@@ -19,6 +20,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
         private readonly IInScopeExecutor<IQuestionnaireBrowseViewFactory> questionnaireViewFactory;
         private readonly IInScopeExecutor<IMapStorageService, IWorkspacesService> deleteService;
         private readonly IInScopeExecutor<IExportServiceApi> exportService;
+        private readonly IInScopeExecutor<IWorkspaceBinaryDataStorage> binaryDataDeleteService;
         private readonly IScheduledTask<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData> scheduledTask;
         private readonly IWorkspacesCache workspacesCache;
         private readonly ISystemLog systemLog;
@@ -28,6 +30,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
             IInScopeExecutor<IQuestionnaireBrowseViewFactory> questionnaireViewFactory,
             IInScopeExecutor<IMapStorageService, IWorkspacesService> deleteService,
             IInScopeExecutor<IExportServiceApi> exportService,
+            IInScopeExecutor<IWorkspaceBinaryDataStorage> binaryDataDeleteService,
             IScheduledTask<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData> scheduledTask,
             ISystemLog systemLog)
         {
@@ -35,6 +38,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
             this.workspacesCache = workspacesCache;
             this.deleteService = deleteService;
             this.exportService = exportService;
+            this.binaryDataDeleteService = binaryDataDeleteService;
             this.scheduledTask = scheduledTask;
             this.systemLog = systemLog;
         }
@@ -75,6 +79,11 @@ namespace WB.UI.Headquarters.Code.Workspaces
             await exportService.ExecuteAsync(async export =>
             {
                 await export.DropTenant();
+            }, workspace.Name);
+
+            await binaryDataDeleteService.ExecuteAsync(async storage =>
+            {
+                await storage.DeleteAllBinaryDataForWorkspaceAsync();
             }, workspace.Name);
 
             await deleteService.ExecuteAsync(async (map, workspacesService) =>

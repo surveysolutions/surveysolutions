@@ -123,6 +123,9 @@
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>答案未保存</value>
   </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>通信错误</value>
+  </data>
   <data name="AreaRecord" xml:space="preserve">
     <value>编辑区域</value>
   </data>
@@ -325,6 +328,9 @@
   <data name="NumberEnter" xml:space="preserve">
     <value>输入数字</value>
   </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>此问题不允许负值</value>
+  </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>答案 '{{answer}}' 出错，因为此答案被当成二维表的大小且该答案被驳回</value>
   </data>
@@ -428,6 +434,9 @@
   </data>
   <data name="Interview_Overview_NotAnswered" xml:space="preserve">
     <value>未回答</value>
+  </data>
+  <data name="ImageFormatNotSupported" xml:space="preserve">
+    <value>您的浏览器不支持该图片格式。</value>
   </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value> 多媒体文件回放不被您的浏览器支持。您可以下载后观看。</value>

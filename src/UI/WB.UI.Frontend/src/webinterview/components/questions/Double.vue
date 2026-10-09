@@ -21,7 +21,7 @@
                             :class="{ 'special-value-selected': isSpecialValueSelected }"
                             v-numericFormatting="{
 
-                                minimumValue: '-999999999999999.99999999999999',
+                                minimumValue: minimumValue,
                                 maximumValue: '999999999999999.99999999999999',
 
                                 digitGroupSeparator: groupSeparator,
@@ -95,6 +95,20 @@ export default {
         decimalPlacesCount() {
             return getDecimalPlacesCount(this.$me)
         },
+        hasNegativeSpecialValues() {
+            return (this.$me.options || []).some(o => o.value < 0)
+        },
+        hasNegativeCurrentNonSpecialAnswer() {
+            return this.$me.answer < 0 && !this.isSpecialValue(this.$me.answer)
+        },
+        minimumValue() {
+            if (!this.$me.isNonNegative)
+                return '-999999999999999.99999999999999'
+
+            return (this.hasNegativeSpecialValues || this.hasNegativeCurrentNonSpecialAnswer)
+                ? '-999999999999999.99999999999999'
+                : '0'
+        },
         specialValue: {
             get() {
                 return this.$me.answer
@@ -126,6 +140,11 @@ export default {
                 }
                 if (answer > 999999999999999 || answer < -999999999999999) {
                     this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalCannotParse'), answer)
+                    return
+                }
+
+                if (this.$me.isNonNegative && answer < 0 && !isSpecialValue) {
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberNonNegativeError'), answer)
                     return
                 }
 

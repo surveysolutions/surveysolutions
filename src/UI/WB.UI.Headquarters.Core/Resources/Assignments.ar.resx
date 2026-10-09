@@ -550,6 +550,9 @@
     <data name="TargetAreaExplanation" xml:space="preserve">
     <value>حدد اسم خريطة المنطقة المستهدفة للتعيين</value>
 </data>
+    <data name="TargetAreaNameTooLong" xml:space="preserve">
+        <value>اسم خريطة المنطقة المستهدفة طويل جدًا. الحد الأقصى المسموح به هو {{limit}} حرفًا.</value>
+    </data>
     <data name="Action_TargetAreaChanged" xml:space="preserve">
     <value>تم تغيير المنطقة المستهدفة</value>
 </data>

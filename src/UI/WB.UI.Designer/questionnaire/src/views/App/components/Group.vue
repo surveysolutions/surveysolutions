@@ -170,6 +170,10 @@ export default {
     },
     mounted() {
         this.scrollTo();
+        this.$emitter.on('saveCurrentEntityRequested', this.saveGroup);
+    },
+    unmounted() {
+        this.$emitter.off('saveCurrentEntityRequested', this.saveGroup);
     },
     computed: {
         activeGroup() {

@@ -300,6 +300,14 @@ namespace WB.UI.Shared.Enumerator.Services
             this.SaveCurrentSettings(settings => settings.AudioRecordingQuality = quality);
         }
 
+        public AcceptableGpsLocationSource AcceptableGpsLocationSource =>
+            this.CurrentWorkspaceSettings?.AcceptableGpsLocationSource ?? AcceptableGpsLocationSource.BuiltInGpsOnly;
+
+        public void SetAcceptableGpsLocationSource(AcceptableGpsLocationSource source)
+        {
+            this.SaveCurrentSettings(settings => settings.AcceptableGpsLocationSource = source);
+        }
+
         public bool SupportOfflineMaps => true;
     }
 }

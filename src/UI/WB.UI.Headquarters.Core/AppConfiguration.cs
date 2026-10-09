@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters
             services.Configure<GoogleMapsConfig>(configuration.GetSection("GoogleMap"));
             
             services.Configure<PreloadingConfig>(configuration.GetSection("PreLoading"));
-            services.Configure<RecaptchaSettings>(configuration.CaptchaOptionsSection());
+            services.AddRecaptcha(configuration.CaptchaOptionsSection());
             services.Configure<SchedulerConfig>(configuration.GetSection("Scheduler"));
            
             services.Configure<GeospatialConfig>(configuration.GetSection("Geospatial"));

@@ -366,4 +366,13 @@
   <data name="Translation_Replace" xml:space="preserve">
     <value>Le document a été basculé vers la traduction {0}</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Rechercher</value>
+  </data>
+  <data name="SearchButton" xml:space="preserve">
+    <value>Rechercher</value>
+  </data>
+  <data name="SearchClear" xml:space="preserve">
+    <value>Effacer</value>
+  </data>
 </root>

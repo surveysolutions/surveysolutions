@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
@@ -85,6 +86,44 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
 
             var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName, quantity: Create.Entity.AssignmentQuantity(parsedQuantity: -1));
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Is.Empty);
+        }
+
+        [Test]
+        public void when_verify_target_area_longer_than_limit_should_return_PL0065_error()
+        {
+            // arrange
+            var fileName = "mainfile.tab";
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
+
+            var targetArea = new string('a', AssignmentConstants.TargetAreaLengthLimit + 1);
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName, targetArea: Create.Entity.AssignmentTargetArea(targetArea));
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0065"));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
+        }
+
+        [Test]
+        public void when_verify_target_area_at_limit_should_return_empty_errors()
+        {
+            // arrange
+            var fileName = "mainfile.tab";
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
+
+            var targetArea = new string('a', AssignmentConstants.TargetAreaLengthLimit);
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName, targetArea: Create.Entity.AssignmentTargetArea(targetArea));
             var verifier = Create.Service.ImportDataVerifier();
 
             // act

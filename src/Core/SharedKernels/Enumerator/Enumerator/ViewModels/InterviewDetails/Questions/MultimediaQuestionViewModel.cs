@@ -218,6 +218,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         }
                     }
                 }
+                catch (PictureProcessingException ppe)
+                {
+                    await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(ppe.Message);
+                }
                 catch (MissingPermissionsException e) when (e.PermissionType == typeof(Permissions.Camera))
                 {
                     await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources

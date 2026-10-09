@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Routing;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.UI.Designer.CommonWeb;
+using WB.UI.Designer.Filters;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Services;
@@ -19,18 +22,21 @@ namespace WB.UI.Designer.Code.Implementation
     {
         private readonly IEmailSender mailer;
         private readonly IViewRenderService renderingService;
-        private readonly IActionContextAccessor contextAccessor;
+        private readonly IHttpContextAccessor contextAccessor;
         private readonly IUrlHelperFactory urlHelperFactory;
+        private readonly IPostCommitActions postCommitActions;
 
         public MailNotifier(IEmailSender mailer,
             IViewRenderService renderingService,
-            IActionContextAccessor contextAccessor,
-            IUrlHelperFactory urlHelperFactory)
+            IHttpContextAccessor contextAccessor,
+            IUrlHelperFactory urlHelperFactory,
+            IPostCommitActions postCommitActions)
         {
             this.mailer = mailer;
             this.renderingService = renderingService;
             this.contextAccessor = contextAccessor;
             this.urlHelperFactory = urlHelperFactory;
+            this.postCommitActions = postCommitActions;
         }
 
         public void NotifyTargetPersonAboutShareChange(ShareChangeType shareChangeType,
@@ -41,10 +47,10 @@ namespace WB.UI.Designer.Code.Implementation
             ShareType shareType,
             string? actionPersonEmail)
         {
-            if (contextAccessor?.ActionContext == null)
+            if (contextAccessor.HttpContext == null)
                 throw new Exception("Invalid context");
             
-            IUrlHelper urlHelper = urlHelperFactory.GetUrlHelper(contextAccessor.ActionContext);
+            IUrlHelper urlHelper = this.GetUrlHelper(contextAccessor.HttpContext);
 
             var sharingNotificationModel = new SharingNotificationModel
             {
@@ -64,22 +70,21 @@ namespace WB.UI.Designer.Code.Implementation
                 QuestionnaireLink = urlHelper.Action("Details", "Q", new { id = questionnaireId }, "https")
             };
 
-            var message = this.GetShareChangeNotificationEmail(sharingNotificationModel);
-
-            message.ContinueWith(s =>
+            this.postCommitActions.Enqueue(async () =>
             {
-                this.mailer.SendEmailAsync(email,
+                var message = await this.GetShareChangeNotificationEmail(sharingNotificationModel);
+                await this.mailer.SendEmailAsync(email,
                     NotificationResources.SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification,
-                    message.Result);
+                    message);
             });
         }
 
         public void NotifyOwnerAboutShareChange(ShareChangeType shareChangeType, string email, string userName, string questionnaireId, string questionnaireTitle, ShareType shareType, string? actionPersonEmail, string sharedWithPersonEmail)
         {
-            if (contextAccessor?.ActionContext == null)
+            if (contextAccessor.HttpContext == null)
                 throw new Exception("Invalid context");
             
-            IUrlHelper urlHelper = urlHelperFactory.GetUrlHelper(contextAccessor.ActionContext);
+            IUrlHelper urlHelper = this.GetUrlHelper(contextAccessor.HttpContext);
             var sharingNotificationModel = new SharingNotificationModel
             {
                 ShareChangeType = shareChangeType,
@@ -94,13 +99,12 @@ namespace WB.UI.Designer.Code.Implementation
                 SharedWithPersonEmail = String.IsNullOrWhiteSpace(sharedWithPersonEmail) ? NotificationResources.MailNotifier_NotifyTargetPersonAboutShareChange_user : sharedWithPersonEmail,
                 QuestionnaireLink = urlHelper.Action("Details", "Q", new { id = questionnaireId }, "https")
             };
-            var message = this.GetOwnerShareChangeNotificationEmail(sharingNotificationModel);
-
-            message.ContinueWith((state) =>
+            this.postCommitActions.Enqueue(async () =>
             {
-                this.mailer.SendEmailAsync(email,
+                var message = await this.GetOwnerShareChangeNotificationEmail(sharingNotificationModel);
+                await this.mailer.SendEmailAsync(email,
                     NotificationResources.SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification,
-                    message.Result);
+                    message);
             });
         }
 
@@ -127,6 +131,16 @@ namespace WB.UI.Designer.Code.Implementation
                     ? "Emails/OwnerShareNotification"
                     : "Emails/OwnerStopShareNotification", model);
             return view;
+        }
+
+        private IUrlHelper GetUrlHelper(HttpContext httpContext)
+        {
+            var actionContext = new ActionContext(
+                httpContext,
+                httpContext.GetRouteData(),
+                new ActionDescriptor());
+
+            return this.urlHelperFactory.GetUrlHelper(actionContext);
         }
     }
 }

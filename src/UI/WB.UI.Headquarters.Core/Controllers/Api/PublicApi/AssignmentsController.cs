@@ -479,6 +479,13 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NotFound();
             }
 
+            if (targetArea != null && targetArea.Length > AssignmentConstants.TargetAreaLengthLimit)
+            {
+                var truncatedName = targetArea.Length > 100 ? targetArea.Substring(0, 100) + "…" : targetArea;
+                return StatusCode(StatusCodes.Status406NotAcceptable,
+                    string.Format(WB.UI.Headquarters.Resources.Maps.MapFileNameTooLong, truncatedName, AssignmentConstants.TargetAreaLengthLimit));
+            }
+
             commandService.Execute(
                 new UpdateAssignmentTargetArea(assignment.PublicKey, authorizedUser.Id, targetArea, assignment.QuestionnaireId));
             this.auditLog.AssignmentTargetAreaChanged(id, targetArea);

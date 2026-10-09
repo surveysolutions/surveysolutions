@@ -135,9 +135,11 @@ namespace WB.UI.WebTester
 
             app.UseIntegrityHelper();
             
+            app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
+                appBuilder => appBuilder.UseStatusCodePagesWithReExecute("/error/{0}"));
+            
             if (!env.IsDevelopment())
             {
-                app.UseStatusCodePagesWithReExecute("/error/{0}");
                 app.UseHttpsRedirection();
             }
 
@@ -185,6 +187,10 @@ namespace WB.UI.WebTester
             {
                 endpoints.MapVersionEndpoint();
                 endpoints.MapHealthChecks(".hc");
+                endpoints.MapControllerRoute(
+                    name: "error-pages",
+                    pattern: "error/{statusCode:int}",
+                    defaults: new { controller = "Error", action = "Error" });
 
                 endpoints.MapDefaultControllerRoute();
 

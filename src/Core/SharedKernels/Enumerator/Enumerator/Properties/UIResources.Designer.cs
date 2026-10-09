@@ -495,6 +495,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Interview_Question_Integer_NegativeAnswer {
+            get {
+                return ResourceManager.GetString("Interview_Question_Integer_NegativeAnswer", resourceCulture);
+            }
+        }
+        
         public static string Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue {
             get {
                 return ResourceManager.GetString("Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue", resourceCulture);
@@ -990,6 +996,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Multimedia_PictureSource {
             get {
                 return ResourceManager.GetString("Multimedia_PictureSource", resourceCulture);
+            }
+        }
+        
+        public static string Multimedia_PhotoProcessingFailed {
+            get {
+                return ResourceManager.GetString("Multimedia_PhotoProcessingFailed", resourceCulture);
             }
         }
         

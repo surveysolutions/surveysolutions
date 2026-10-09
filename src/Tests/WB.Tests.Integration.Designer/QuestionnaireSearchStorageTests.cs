@@ -248,5 +248,97 @@ namespace WB.Tests.Integration.Designer
             Assert.That(searchResult.Items.Single().QuestionnaireTitle, Is.EqualTo(questionnaireTitle));
         }
 
+        [Test]
+        public void when_search_query_contains_tsquery_special_characters_should_not_throw()
+        {
+            var questionId = Guid.NewGuid();
+            var questionnaireId = Guid.NewGuid();
+            var questionnaireTitle = "q-title";
+
+            RunActionInScope(sl =>
+            {
+                var dbContext = sl.GetInstance<DesignerDbContext>();
+                dbContext.Questionnaires.Add(Create.Questionnaire.ListViewItem(questionnaireId, questionnaireTitle));
+                dbContext.SaveChanges();
+
+                var searchStorage = sl.GetInstance<IQuestionnaireSearchStorage>();
+                searchStorage.AddOrUpdateEntity(questionnaireId,
+                    new TextQuestion() { QuestionText = "question text", PublicKey = questionId });
+            });
+
+            SearchResult searchResult = null;
+
+            RunActionInScope(sl =>
+            {
+                var searchStorage = sl.GetInstance<IQuestionnaireSearchStorage>();
+                Assert.DoesNotThrow(() =>
+                    searchResult = searchStorage.Search(new SearchInput() { Query = "<<<", PageSize = 20 }));
+            });
+
+            Assert.That(searchResult.Items.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void when_entity_title_contains_html_tags_should_search_and_return_title_by_visible_text_without_tags()
+        {
+            var questionId = Guid.NewGuid();
+            var questionnaireId = Guid.NewGuid();
+            var questionnaireTitle = "q-title";
+
+            RunActionInScope(sl =>
+            {
+                var dbContext = sl.GetInstance<DesignerDbContext>();
+                dbContext.Questionnaires.Add(Create.Questionnaire.ListViewItem(questionnaireId, questionnaireTitle));
+                dbContext.SaveChanges();
+
+                var searchStorage = sl.GetInstance<IQuestionnaireSearchStorage>();
+                searchStorage.AddOrUpdateEntity(questionnaireId,
+                    new TextQuestion() { QuestionText = "<p>question text</p>", PublicKey = questionId });
+            });
+
+            SearchResult searchResult = null;
+
+            RunActionInScope(sl =>
+            {
+                var searchStorage = sl.GetInstance<IQuestionnaireSearchStorage>();
+                searchResult = searchStorage.Search(new SearchInput() { Query = "question", PageSize = 20 });
+            });
+
+            Assert.That(searchResult.Items.Count, Is.EqualTo(1));
+            Assert.That(searchResult.Items.Single().EntityId, Is.EqualTo(questionId));
+            Assert.That(searchResult.Items.Single().Title, Is.EqualTo("question text"));
+        }
+
+        [Test]
+        public void when_entity_title_contains_visible_special_characters_should_store_decoded_title_and_be_searchable_by_visible_text()
+        {
+            var questionId = Guid.NewGuid();
+            var questionnaireId = Guid.NewGuid();
+            var questionnaireTitle = "q-title";
+
+            RunActionInScope(sl =>
+            {
+                var dbContext = sl.GetInstance<DesignerDbContext>();
+                dbContext.Questionnaires.Add(Create.Questionnaire.ListViewItem(questionnaireId, questionnaireTitle));
+                dbContext.SaveChanges();
+
+                var searchStorage = sl.GetInstance<IQuestionnaireSearchStorage>();
+                searchStorage.AddOrUpdateEntity(questionnaireId,
+                    new TextQuestion() { QuestionText = "price < 100 usd", PublicKey = questionId });
+            });
+
+            SearchResult searchResult = null;
+
+            RunActionInScope(sl =>
+            {
+                var searchStorage = sl.GetInstance<IQuestionnaireSearchStorage>();
+                searchResult = searchStorage.Search(new SearchInput() { Query = "price", PageSize = 20 });
+            });
+
+            Assert.That(searchResult.Items.Count, Is.EqualTo(1));
+            Assert.That(searchResult.Items.Single().EntityId, Is.EqualTo(questionId));
+            Assert.That(searchResult.Items.Single().Title, Is.EqualTo("price < 100 usd"));
+        }
+
     }
 }

@@ -224,6 +224,10 @@ export default {
     },
     mounted() {
         this.scrollTo();
+        this.$emitter.on('saveCurrentEntityRequested', this.saveStaticText);
+    },
+    unmounted() {
+        this.$emitter.off('saveCurrentEntityRequested', this.saveStaticText);
     },
     computed: {
         commentsCount() {

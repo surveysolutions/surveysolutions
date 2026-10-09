@@ -312,6 +312,12 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public bool HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(long sequence, Guid eventSourceId,
             params string[] typeNames)
         {
+            // NOTE: List<string> is used here on purpose. For a string[] the C# compiler (C# 14+)
+            // binds Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T) which adds an
+            // op_Implicit call into the expression tree and sqlite-net translates it
+            // into invalid SQL ("... in op_implicit(...)" => "no such table: op_implicit").
+            var eventTypes = typeNames.ToList();
+
             var connection = this.GetOrCreateConnection(eventSourceId);
             using (connection.Lock())
             {
@@ -319,7 +325,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                     .Table<EventView>()
                     .FirstOrDefault(ev => ev.EventSequence > sequence 
                                           && ev.EventSourceId == eventSourceId 
-                                          && typeNames.Contains(ev.EventType));
+                                          && eventTypes.Contains(ev.EventType));
                 return @event != null;
             }
         }
@@ -340,13 +346,17 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         public int GetMaxSequenceForAnyEvent(Guid eventSourceId, params string[] typeNames)
         {
+            // NOTE: List<T> is used on purpose. For an array the C# 14+ compiler binds Contains
+            // to MemoryExtensions.Contains(ReadOnlySpan<T>, T), which puts an op_Implicit call
+            // into the expression tree that sqlite-net cannot translate ("no such table: op_implicit").
+            var eventTypes = typeNames.ToList();
             var connection = this.GetOrCreateConnection(eventSourceId);
             using (connection.Lock())
             {
                 var sequence = connection
                     .Table<EventView>()
                     .Where(ev => ev.EventSourceId == eventSourceId
-                                 && typeNames.Contains(ev.EventType))
+                                 && eventTypes.Contains(ev.EventType))
                     .Max(ev => ev.EventSequence);
                 return sequence;
             }

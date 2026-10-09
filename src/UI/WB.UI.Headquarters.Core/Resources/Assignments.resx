@@ -556,6 +556,9 @@
   <data name="TargetAreaExplanation" xml:space="preserve">
       <value>Specify Target Area map name for assignment</value>
   </data>
+  <data name="TargetAreaNameTooLong" xml:space="preserve">
+      <value>Target area map name is too long. The maximum allowed length is {{limit}} characters.</value>
+  </data>
   <data name="EnterTargetArea" xml:space="preserve">
       <value>Enter Target area</value>
   </data>

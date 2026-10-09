@@ -1,4 +1,6 @@
 using System;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -13,10 +15,10 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
         {
             controller = CreateInterviewerInterviewsController(
                 imageFileStorage: mockOflainInterviewFileStorage.Object);
-            BecauseOf();
+            result = BecauseOf();
         }
 
-        public void BecauseOf() => controller.PostImage(new PostFileRequest
+        public IActionResult BecauseOf() => controller.PostImage(new PostFileRequest
             {InterviewId = interviewId, FileName = imageFileName, Data = imageAsBase64String});
 
         [NUnit.Framework.Test]
@@ -24,8 +26,12 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
             mockOflainInterviewFileStorage.Verify(
                 x => x.StoreInterviewBinaryData(interviewId, imageFileName, imageBytes, null), Times.Once);
 
+        [NUnit.Framework.Test]
+        public void should_return_no_content() =>
+            NUnit.Framework.Assert.That(((StatusCodeResult)result).StatusCode, NUnit.Framework.Is.EqualTo(StatusCodes.Status204NoContent));
 
         private static InterviewsApiV2Controller controller;
+        private static IActionResult result;
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static readonly string imageFileName = "image.png";
         private static readonly byte[] imageBytes = {1, 234, 21, 0, 54, 1, 66, 78};

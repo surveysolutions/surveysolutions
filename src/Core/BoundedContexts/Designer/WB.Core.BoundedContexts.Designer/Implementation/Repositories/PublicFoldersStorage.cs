@@ -59,7 +59,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
             };
 
             dbContext.QuestionnaireFolders.Add(folder);
-            dbContext.SaveChanges();
             return folder;
         }
 
@@ -77,7 +76,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
             var folder = dbContext.QuestionnaireFolders.Find(id);
             if(folder != null)
                 dbContext.Remove(folder);
-            dbContext.SaveChanges();
         }
 
         public void AssignFolderToQuestionnaire(Guid questionnaireId, Guid? folderId)
@@ -85,7 +83,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
             var item = dbContext.Questionnaires.Find(questionnaireId.FormatGuid());
             if (item == null) throw new InvalidOperationException($"Questionnaire not found {questionnaireId} to assign folder");
             item.FolderId = folderId;
-            dbContext.SaveChanges();
         }
 
         public IEnumerable<QuestionnaireListViewFolder> GetFoldersPath(Guid? folderId)
