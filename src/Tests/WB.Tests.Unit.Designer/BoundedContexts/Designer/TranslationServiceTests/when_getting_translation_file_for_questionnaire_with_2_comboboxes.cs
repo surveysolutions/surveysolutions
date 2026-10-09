@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
+using ClosedXML.Graphics;
 using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -62,8 +63,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         [NUnit.Framework.Test]
         public void should_exported_excel_file_has_3_specified_worksheets()
         {
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
             
-            using var excelWorkbook = new XLWorkbook(new MemoryStream(translationFile.ContentAsExcelFile));
+            using var excelWorkbook = new XLWorkbook(new MemoryStream(translationFile.ContentAsExcelFile), loadOptions);
             var worksheetNames = excelWorkbook.Worksheets.Select(x => x.Name).ToList();
 
             worksheetNames.Should().BeEquivalentTo("Translations", "@@_singlequestionwithdiffinlast", "@@_singlequestionwithdiffinl_03");

@@ -2,7 +2,9 @@ using System;
 using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
+using ClosedXML.Graphics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
 {
@@ -13,7 +15,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             var headers = report.Headers;
             var data = report.Data;
 
-            using (XLWorkbook excelPackage = new XLWorkbook())
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
+            
+            using (XLWorkbook excelPackage = new XLWorkbook(loadOptions))
             {
                 var sheetName = report.Name == null
                         ? "Data"

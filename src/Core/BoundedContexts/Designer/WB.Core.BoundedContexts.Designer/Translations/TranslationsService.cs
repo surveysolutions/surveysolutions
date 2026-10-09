@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Packaging;
+using ClosedXML.Graphics;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -21,6 +22,7 @@ using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Designer.Translations
 {
@@ -192,7 +194,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             try
             {
 
-                using var package = new XLWorkbook(stream);
+                var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
+                
+                using var package = new XLWorkbook(stream, loadOptions);
 
                 if (package.Worksheets.Count == 0)
                     throw new InvalidFileException(ExceptionMessages.TranslationFileIsEmpty);

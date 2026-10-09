@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
+using ClosedXML.Graphics;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -794,7 +795,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         private static byte[] CreateExcel(Dictionary<string, string[][]> datas)
         {
-            using XLWorkbook package = new XLWorkbook();
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
+            
+            using XLWorkbook package = new XLWorkbook(loadOptions);
+            package.Style.Font.FontName = FontsHelper.DefaultFontName;
 
             foreach (var data in datas)
             {
@@ -805,6 +809,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                     {
                         var value = data.Value[row][column];
                         worksheet.Cell(row + 1, column + 1).SetValue(value);
+                        worksheet.Cell(row + 1, column + 1).Style.Font.FontName = FontsHelper.DefaultFontName;
                     }
             }
 

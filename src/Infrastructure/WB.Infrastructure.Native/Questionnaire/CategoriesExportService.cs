@@ -2,9 +2,11 @@
 using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
+using ClosedXML.Graphics;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.ReusableCategories;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Infrastructure.Native.Questionnaire
 {
@@ -12,7 +14,8 @@ namespace WB.Infrastructure.Native.Questionnaire
     {
         public byte[] GetAsExcelFile(IEnumerable<CategoriesItem> items, bool isCascading, bool hqImport)
         {
-            using (var excelPackage = new XLWorkbook())
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
+            using (var excelPackage = new XLWorkbook(loadOptions))
             {
                 var worksheet = excelPackage.Worksheets.Add("Categories");
 
