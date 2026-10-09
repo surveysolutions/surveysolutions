@@ -6,4 +6,14 @@
     <Company>World Bank Group</Company>
     <WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8610;CS8613;CS8614;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8634;CS8714</WarningsAsErrors>
   </PropertyGroup>
+  <ItemGroup>
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-2cmq-823j-5qj8" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-63p8-c4ww-9cg7" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-65x7-c272-7g7r" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-5x7m-6737-26cr" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-g85r-6x2q-45w7" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-gwg2-r3hj-4w44" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-qxrv-gp6x-rc23" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-rxmq-m78w-7wmc" />
+  </ItemGroup>
 </Project>
