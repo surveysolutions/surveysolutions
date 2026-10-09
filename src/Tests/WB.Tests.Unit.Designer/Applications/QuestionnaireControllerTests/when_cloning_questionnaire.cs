@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Scenarios;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -127,6 +129,56 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             copiedScenario.QuestionnaireId.Should().NotBe(sourceQuestionnaireId);
             copiedScenario.Title.Should().Be("My Scenario");
             copiedScenario.Steps.Should().Be("[{}]");
+        }
+
+        [Test]
+        public async Task and_command_is_rejected_should_mark_request_rollback_only()
+        {
+            var sourceQuestionnaireId = Guid.NewGuid();
+            var questionnaireView = Create.QuestionnaireView(Create.QuestionnaireDocument(id: sourceQuestionnaireId));
+            var viewFactoryMock = new Mock<IQuestionnaireViewFactory>();
+            viewFactoryMock.Setup(f => f.Load(It.IsAny<QuestionnaireRevision>())).Returns(questionnaireView);
+
+            var commandService = new Mock<ICommandService>();
+            commandService
+                .Setup(s => s.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
+                .Throws(new QuestionnaireException(DomainExceptionType.DoesNotHavePermissionsForEdit, "Forbidden"));
+
+            var rollbackState = new TransactionRollbackState();
+            var controller = CreateQuestionnaireController(
+                commandService: commandService.Object,
+                questionnaireViewFactory: viewFactoryMock.Object,
+                transactionRollbackState: rollbackState);
+            controller.SetupLoggedInUser(Guid.NewGuid());
+
+            var model = new QuestionnaireController.QuestionnaireCloneModel
+            {
+                QuestionnaireId = sourceQuestionnaireId,
+                Title = "Copy of questionnaire"
+            };
+
+            await controller.Clone(model);
+
+            rollbackState.IsRollbackOnly.Should().BeTrue();
+        }
+
+        [Test]
+        public void and_creation_command_is_rejected_should_mark_request_rollback_only()
+        {
+            var commandService = new Mock<ICommandService>();
+            commandService
+                .Setup(s => s.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
+                .Throws(new QuestionnaireException(DomainExceptionType.DoesNotHavePermissionsForEdit, "Forbidden"));
+
+            var rollbackState = new TransactionRollbackState();
+            var controller = CreateQuestionnaireController(
+                commandService: commandService.Object,
+                transactionRollbackState: rollbackState);
+            controller.SetupLoggedInUser(Guid.NewGuid());
+
+            controller.Create(new QuestionnaireController.QuestionnaireViewModel { Title = "New questionnaire", Variable = "q1" });
+
+            rollbackState.IsRollbackOnly.Should().BeTrue();
         }
     }
 }

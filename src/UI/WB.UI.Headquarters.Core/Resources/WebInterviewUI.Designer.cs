@@ -777,6 +777,12 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string ImageFormatNotSupported {
+            get {
+                return ResourceManager.GetString("ImageFormatNotSupported", resourceCulture);
+            }
+        }
+        
         public static string MultimediaNotSupported {
             get {
                 return ResourceManager.GetString("MultimediaNotSupported", resourceCulture);

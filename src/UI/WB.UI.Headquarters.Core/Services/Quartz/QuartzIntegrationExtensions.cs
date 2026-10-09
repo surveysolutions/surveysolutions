@@ -67,7 +67,7 @@ namespace WB.UI.Headquarters.Services.Quartz
 
                     c.UseProperties = true;
                     c.UseClustering();
-                    c.UseJsonSerializer();
+                    c.UseNewtonsoftJsonSerializer();
                 });
             });
 

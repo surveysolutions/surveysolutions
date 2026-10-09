@@ -49,7 +49,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 
             return services
                 .AddGraphQLServer()
-                .AllowIntrospection(true) 
+                .DisableIntrospection(false) 
                 .ModifyOptions(o => o.EnableDirectiveIntrospection = true)
                 .InitializeOnStartup()
                 .ConfigureSchema(x=>

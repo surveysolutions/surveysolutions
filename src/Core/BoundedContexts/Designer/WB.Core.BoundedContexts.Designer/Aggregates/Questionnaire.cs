@@ -1284,7 +1284,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 false,
                 null,
                 null,
-                null);
+                null,
+                command.IsNonNegative);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
@@ -2430,7 +2431,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             int? maxAnswerCount, bool? isFilteredCombobox, Guid? cascadeFromQuestionId,
             bool? yesNoView, IList<ValidationCondition> validationConditions,
             string? linkedFilterExpression, bool isTimestamp,
-            bool? showAsList, int? showAsListThreshold, Guid? categoriesId = null)
+            bool? showAsList, int? showAsListThreshold, Guid? categoriesId = null,
+            bool isNonNegative = false)
         {
             AbstractQuestion question;
 
@@ -2475,7 +2477,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         IsInteger = questionType == QuestionType.AutoPropagate ? true : isInteger ?? false,
                         CountOfDecimalPlaces = countOfDecimalPlaces,
-                        UseFormatting = questionProperties?.UseFormatting ?? false
+                        UseFormatting = questionProperties?.UseFormatting ?? false,
+                        IsNonNegative = isNonNegative
                     };
                     UpdateAnswerList(answers, question, linkedToQuestionId);
                     break;

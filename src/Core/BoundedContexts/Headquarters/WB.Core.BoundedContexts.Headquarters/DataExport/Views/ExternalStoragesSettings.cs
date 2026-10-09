@@ -1,4 +1,6 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
+﻿using System;
+
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
     public class FakeExternalStoragesSettings : ExternalStoragesSettings
     {
@@ -23,6 +25,20 @@
             public string AuthorizationUri { get; set; }
             public string TokenUri { get; set; }
             public string Scope { get; set; }
+
+            public Uri GetTokenEndpointUri()
+            {
+                if (!Uri.TryCreate(this.TokenUri, UriKind.Absolute, out var tokenUri))
+                    throw new InvalidOperationException("External storage token URI must be an absolute URI.");
+
+                var uriBuilder = new UriBuilder(tokenUri);
+                var path = uriBuilder.Path.TrimEnd('/');
+                if (!path.EndsWith("/token", StringComparison.OrdinalIgnoreCase))
+                    path += "/token";
+
+                uriBuilder.Path = path;
+                return uriBuilder.Uri;
+            }
         }
 
         public OAuth2Settings OAuth2 { get; set; }

@@ -296,6 +296,24 @@
     <data name="AudioRecordingQuality_Stereo48kHz" xml:space="preserve">
         <value>128 kbps, ស្តេរ៉េអូ, 48 kHz</value>
     </data>
+    <data name="AcceptableGpsLocationSource" xml:space="preserve">
+        <value>ប្រភពទីតាំងដែលអាចទទួលយកបាន</value>
+    </data>
+    <data name="AcceptableGpsLocationSourceDescription" xml:space="preserve">
+        <value>គ្រប់គ្រងថាតើប្រភពនៃទីតាំងដែលបានវាស់ណាមួយអាចទទួលយកបានក្នុងកម្មវិធីអ្នកសម្ភាសន៍ ពេលឆ្លើយសំណួរ GPS។ ទីតាំងពីប្រភពដែលមិនអាចទទួលយកបានត្រូវបានបដិសេធ។</value>
+    </data>
+    <data name="AcceptableGpsLocationSource_Any" xml:space="preserve">
+        <value>ប្រភពណាមួយ (រួមទាំងទីតាំងក្លែងក្លាយ)</value>
+    </data>
+    <data name="AcceptableGpsLocationSource_AnyNonMock" xml:space="preserve">
+        <value>ប្រភពណាមួយដែលមិនមែនជាទីតាំងក្លែងក្លាយ</value>
+    </data>
+    <data name="AcceptableGpsLocationSource_BuiltInOrExternalGps" xml:space="preserve">
+        <value>GPS ដែលភ្ជាប់មកជាមួយ ឬខាងក្រៅ (អនុញ្ញាតទីតាំងក្លែងក្លាយ)</value>
+    </data>
+    <data name="AcceptableGpsLocationSource_BuiltInGpsOnly" xml:space="preserve">
+        <value>តែ GPS ដែលភ្ជាប់មកជាមួយប៉ុណ្ណោះ (គ្មានខាងក្រៅ គ្មានទីតាំងក្លែងក្លាយ)</value>
+    </data>
   <data name="AllowSupervisorAudioAuditPlayback" xml:space="preserve">
     <value>អនុញ្ញាតឱ្យអ្នកត្រួតពិនិត្យចាក់កំណត់ត្រាសវនកម្មសំឡេង</value>
   </data>

@@ -75,7 +75,7 @@ namespace WB.UI.Headquarters.Filters
         { 
             if(context.HttpContext.Response.Headers.ContainsKey(key))
                     context.HttpContext.Response.Headers.Remove(key);
-                context.HttpContext.Response.Headers.Add(key, value);
+                context.HttpContext.Response.Headers.Append(key, value);
         }
     }
 }

@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CommentsServiceTests
         }
 
         [Test]
-        public async Task DeleteCommentAsync_when_comment_does_not_exist_then_no_exception_is_thrown()
+        public void DeleteCommentAsync_when_comment_does_not_exist_then_no_exception_is_thrown()
         {
             var service = CreateService(out _);
             var questionnaireId = Guid.NewGuid();

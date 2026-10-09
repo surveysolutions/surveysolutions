@@ -371,4 +371,13 @@
   <data name="Translation_Replace" xml:space="preserve">
     <value>Documentul a fost schimbat la traducerea {0}</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Căutare</value>
+  </data>
+  <data name="SearchButton" xml:space="preserve">
+    <value>Căutare</value>
+  </data>
+  <data name="SearchClear" xml:space="preserve">
+    <value>Șterge</value>
+  </data>
 </root>
