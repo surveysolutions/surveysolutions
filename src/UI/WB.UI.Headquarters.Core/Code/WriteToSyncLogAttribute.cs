@@ -42,18 +42,31 @@ namespace WB.UI.Headquarters.Code
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var actionExecutedContext = await next();
-            IServiceProvider currentContextScope = context.HttpContext.RequestServices;
+            ActionExecutedContext actionExecutedContext;
+            try
+            {
+                actionExecutedContext = await next();
+            }
+            catch (Exception exception)
+            {
+                WriteFailureLog(context, exception);
+                throw;
+            }
 
-            IQuestionnaireBrowseViewFactory questionnaireBrowseItemFactory =
-                currentContextScope.GetRequiredService<IQuestionnaireBrowseViewFactory>();
-
-            var questionnaireStorage = currentContextScope.GetRequiredService<IQuestionnaireStorage>();
-            var answerSerializer = currentContextScope.GetRequiredService<IInterviewAnswerSerializer>();
-            var userToDeviceService = currentContextScope.GetRequiredService<IUserToDeviceService>();
+            if (actionExecutedContext.Exception != null)
+            {
+                WriteFailureLog(context, actionExecutedContext.Exception);
+                return;
+            }
 
             try
             {
+                IServiceProvider currentContextScope = context.HttpContext.RequestServices;
+                var questionnaireBrowseItemFactory = currentContextScope.GetRequiredService<IQuestionnaireBrowseViewFactory>();
+                var questionnaireStorage = currentContextScope.GetRequiredService<IQuestionnaireStorage>();
+                var answerSerializer = currentContextScope.GetRequiredService<IInterviewAnswerSerializer>();
+                var userToDeviceService = currentContextScope.GetRequiredService<IUserToDeviceService>();
+
                 var userIdentity = context.HttpContext.User;
                 var userId = userIdentity.UserId();
                 var logItem = new SynchronizationLogItem
@@ -257,8 +270,56 @@ namespace WB.UI.Headquarters.Code
             }
             catch (Exception exception)
             {
-                ILogger logger = (currentContextScope.GetService(typeof(ILoggerProvider)) as ILoggerProvider).GetFor<WriteToSyncLogAttribute>();
-                logger.Error($"Error updating sync log on action '{this.logAction}'.", exception);
+                ReportLoggingFailure(context, exception);
+            }
+        }
+
+        private void WriteFailureLog(ActionExecutingContext context, Exception actionException)
+        {
+            try
+            {
+                // Do not enrich failures through the request session: it may be aborted or
+                // awaiting rollback. In particular, device/questionnaire lookups are unsafe.
+                var user = context.HttpContext.User;
+                var deviceId = context.GetActionArgumentOrDefault<string>("deviceId", null);
+                if (logAction == SynchronizationLogType.CanSynchronize || logAction == SynchronizationLogType.LinkToDevice)
+                    deviceId ??= context.GetActionArgumentOrDefault<string>("id", null);
+
+                var logItem = new SynchronizationLogItem
+                {
+                    InterviewerId = user.UserId() ?? Guid.Empty,
+                    InterviewerName = user.UserName() ?? string.Empty,
+                    DeviceId = deviceId,
+                    LogDate = DateTime.UtcNow,
+                    Type = logAction,
+                    Log = logAction.ToString(),
+                    ActionExceptionType = actionException.GetType().Name,
+                    ActionExceptionMessage = actionException.Message
+                };
+
+                var executor = context.HttpContext.RequestServices
+                    .GetRequiredService<IInScopeExecutor<IPlainStorageAccessor<SynchronizationLogItem>>>();
+                // Execute inherits the workspace and commits its own UoW on scope disposal.
+                // Keep the entire call inside the try so commit failures are contained too.
+                executor.Execute(storage => storage.Store(logItem, Guid.NewGuid()));
+                messagesTotal.Labels(logAction.ToString()).Inc();
+            }
+            catch (Exception exception)
+            {
+                ReportLoggingFailure(context, exception);
+            }
+        }
+
+        private void ReportLoggingFailure(ActionExecutingContext context, Exception exception)
+        {
+            try
+            {
+                var logger = context.HttpContext.RequestServices.GetService<ILoggerProvider>()?.GetFor<WriteToSyncLogAttribute>();
+                logger?.Error($"Error updating sync log on action '{logAction}'.", exception);
+            }
+            catch
+            {
+                // Diagnostic logging must not replace the original action exception either.
             }
         }
 

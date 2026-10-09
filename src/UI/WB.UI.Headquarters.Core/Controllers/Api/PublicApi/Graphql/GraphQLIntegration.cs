@@ -49,6 +49,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 
             return services
                 .AddGraphQLServer()
+                .AddTransactionScopeHandler<UnitOfWorkTransactionScopeHandler>()
                 .DisableIntrospection(false) 
                 .ModifyOptions(o => o.EnableDirectiveIntrospection = true)
                 .InitializeOnStartup()

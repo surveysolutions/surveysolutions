@@ -18,6 +18,7 @@ using Serilog;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Tasks;
@@ -113,6 +114,7 @@ namespace WB.UI.Headquarters.Services.Quartz
             await services.GetRequiredService<SendInterviewCompletedTask>().Schedule(repeatIntervalInSeconds: 60);
             
             await services.GetRequiredService<ExportDataRetentionTask>().Schedule(repeatIntervalInSeconds: 60 * 60 * 6);
+            await services.GetRequiredService<MapFileCleanupTask>().Schedule(repeatIntervalInSeconds: 60);
             
             var scheduler = await services.GetRequiredService<ISchedulerFactory>().GetScheduler();
             
