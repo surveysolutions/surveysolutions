@@ -6,4 +6,37 @@
     <Company>World Bank Group</Company>
     <WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8610;CS8613;CS8614;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8634;CS8714</WarningsAsErrors>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'WB.Core.BoundedContexts.Designer' Or
+                            '$(MSBuildProjectName)' == 'WB.Core.BoundedContexts.Headquarters' Or
+                            '$(MSBuildProjectName)' == 'WB.Persistence.Headquarters' Or
+                            '$(MSBuildProjectName)' == 'WB.Tests.Abc' Or
+                            '$(MSBuildProjectName)' == 'WB.Tests.Integration' Or
+                            '$(MSBuildProjectName)' == 'WB.Tests.Integration.Designer' Or
+                            '$(MSBuildProjectName)' == 'WB.Tests.Unit' Or
+                            '$(MSBuildProjectName)' == 'WB.Tests.Unit.Designer' Or
+                            '$(MSBuildProjectName)' == 'WB.Tests.Web' Or
+                            '$(MSBuildProjectName)' == 'WB.UI.Designer' Or
+                            '$(MSBuildProjectName)' == 'WB.UI.Headquarters' Or
+                            '$(MSBuildProjectName)' == 'WB.UI.Shared.Web.Core' Or
+                            '$(MSBuildProjectName)' == 'WB.UI.WebTester'">
+    <_ImageSharpAuditException>true</_ImageSharpAuditException>
+    <_ImageSharpAuditExceptionExpires>20261231</_ImageSharpAuditExceptionExpires>
+    <_ImageSharpAuditExceptionCurrentDate>$([System.DateTime]::UtcNow.ToString('yyyyMMdd'))</_ImageSharpAuditExceptionCurrentDate>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(_ImageSharpAuditException)' == 'true'">
+    <NuGetAuditSuppress>
+      <RiskAcceptance>ImageSharp 3.x is retained temporarily because 4.x requires a license key and API migration; uploaded images may reach affected decoder paths. Upgrade or remove this exception before expiry.</RiskAcceptance>
+      <ExpiresOn>2026-12-31</ExpiresOn>
+    </NuGetAuditSuppress>
+  </ItemDefinitionGroup>
+  <ItemGroup Condition="'$(_ImageSharpAuditException)' == 'true'">
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-gwg2-r3hj-4w44" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-j3p4-wp97-rph4" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-j9gm-c75j-xc9q" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-jjfr-hcj7-qf5w" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-wmxv-xphr-5c9g" />
+  </ItemGroup>
+  <Target Name="ValidateImageSharpAuditExceptionExpiry" BeforeTargets="Restore" Condition="'$(_ImageSharpAuditException)' == 'true' And '$(_ImageSharpAuditExceptionCurrentDate)' &gt; '$(_ImageSharpAuditExceptionExpires)'">
+    <Error Text="The temporary ImageSharp NuGet audit exception has expired; upgrade or remove the suppression." />
+  </Target>
 </Project>
