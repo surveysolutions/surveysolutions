@@ -11,6 +11,24 @@ namespace WB.UI.Shared.Web.Services
             using var bitmap = Decode(source, out _);
         }
 
+        public string GetImageMimeType(byte[] source)
+        {
+            using var bitmap = Decode(source, out var format);
+
+            return format switch
+            {
+                SKEncodedImageFormat.Png => "image/png",
+                SKEncodedImageFormat.Jpeg => "image/jpeg",
+                SKEncodedImageFormat.Gif => "image/gif",
+                SKEncodedImageFormat.Bmp => "image/bmp",
+                SKEncodedImageFormat.Webp => "image/webp",
+                SKEncodedImageFormat.Ico => "image/x-icon",
+                SKEncodedImageFormat.Heif => "image/heif",
+                SKEncodedImageFormat.Avif => "image/avif",
+                _ => throw new InvalidImageException("Image format is not supported")
+            };
+        }
+
         public byte[] ResizeImage(byte[] source, int height, int width)
         {
             using var bitmap = Decode(source, out _);

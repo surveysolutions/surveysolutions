@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using SixLabors.ImageSharp;
+using WB.Core.Infrastructure.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -37,7 +37,7 @@ namespace WB.Tests.Web.WebTester.Controllers
             var imageProcessingService = new Mock<IImageProcessingService>();
             imageProcessingService
                 .Setup(x => x.ResizeImage(fileContent, 200, 1920))
-                .Throws(new UnknownImageFormatException("Unsupported image format"));
+                .Throws(new InvalidImageException("Unsupported image format"));
 
             var controller = new WebInterviewResourcesController(
                 Mock.Of<ICacheStorage<QuestionnaireAttachment, string>>(),
@@ -73,7 +73,7 @@ namespace WB.Tests.Web.WebTester.Controllers
             var imageProcessingService = new Mock<IImageProcessingService>();
             imageProcessingService
                 .Setup(x => x.ResizeImage(fileContent, 200, 1920))
-                .Throws(new UnknownImageFormatException("Unsupported image format"));
+                .Throws(new InvalidImageException("Unsupported image format"));
 
             var controller = new WebInterviewResourcesController(
                 attachmentStorage.Object,
@@ -109,8 +109,8 @@ namespace WB.Tests.Web.WebTester.Controllers
 
             var imageProcessingService = new Mock<IImageProcessingService>();
             imageProcessingService
-                .Setup(x => x.Validate(fileContent))
-                .Throws(new UnknownImageFormatException("Unsupported image format"));
+                .Setup(x => x.GetImageMimeType(fileContent))
+                .Throws(new InvalidImageException("Unsupported image format"));
 
             var controller = new WebInterviewResourcesController(
                 Mock.Of<ICacheStorage<QuestionnaireAttachment, string>>(),
@@ -209,7 +209,7 @@ namespace WB.Tests.Web.WebTester.Controllers
             var imageProcessingService = new Mock<IImageProcessingService>();
             imageProcessingService
                 .Setup(x => x.ResizeImage(fileContent, 100, 1920))
-                .Throws(new UnknownImageFormatException("Unsupported image format"));
+                .Throws(new InvalidImageException("Unsupported image format"));
 
             var controller = new WebInterviewResourcesController(
                 attachmentStorage.Object,

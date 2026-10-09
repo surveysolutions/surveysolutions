@@ -69,6 +69,22 @@ public class ImageProcessingServiceTests
         Assert.That(height, Is.EqualTo(50));
     }
 
+    [TestCase(SKEncodedImageFormat.Jpeg, "image/jpeg")]
+    [TestCase(SKEncodedImageFormat.Png, "image/png")]
+    [TestCase(SKEncodedImageFormat.Webp, "image/webp")]
+    public void when_getting_mime_type_should_return_type_of_image_format(SKEncodedImageFormat format, string expectedMimeType)
+    {
+        var image = CreateImage(format, 10, 10);
+
+        Assert.That(service.GetImageMimeType(image), Is.EqualTo(expectedMimeType));
+    }
+
+    [Test]
+    public void when_getting_mime_type_of_not_an_image_should_throw_invalid_image_exception()
+    {
+        Assert.Throws<InvalidImageException>(() => service.GetImageMimeType(new byte[] { 1, 2, 3, 4 }));
+    }
+
     private static byte[] CreateImage(SKEncodedImageFormat format, int width, int height)
     {
         using var bitmap = new SKBitmap(width, height);
