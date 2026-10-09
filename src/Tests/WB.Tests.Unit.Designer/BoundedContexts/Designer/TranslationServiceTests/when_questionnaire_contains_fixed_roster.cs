@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
-using ClosedXML.Graphics;
 using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
-using SixLabors.Fonts;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -61,10 +59,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         private void BecauseOf()
         {
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
             
             excelFile = service.GetAsExcelFile(new QuestionnaireRevision(questionnaireId), translationId);
-            workbook = new XLWorkbook(new MemoryStream(excelFile.ContentAsExcelFile), loadOptions);
+            workbook = new XLWorkbook(new MemoryStream(excelFile.ContentAsExcelFile));
             cells = workbook.Worksheets.First();
         }
 

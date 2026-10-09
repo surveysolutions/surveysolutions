@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
-using ClosedXML.Graphics;
-using SixLabors.Fonts;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Categories;
-using WB.Infrastructure.Native.Utils;
 
 namespace WB.Infrastructure.Native.Questionnaire
 {
@@ -15,10 +12,8 @@ namespace WB.Infrastructure.Native.Questionnaire
     {
         public List<CategoriesItem> ExtractCategoriesFromExcelFile(Stream xmlFile)
         {
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
-            
             var categories = new List<CategoriesItem>();
-            using XLWorkbook package = new XLWorkbook(xmlFile, loadOptions);
+            using XLWorkbook package = new XLWorkbook(xmlFile);
             var worksheet = package.Worksheets.First();
             var headers = GetHeaders(worksheet);
 

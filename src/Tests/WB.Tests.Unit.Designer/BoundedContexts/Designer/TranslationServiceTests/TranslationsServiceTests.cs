@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
-using ClosedXML.Graphics;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
-using SixLabors.Fonts;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -796,10 +794,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         private static byte[] CreateExcel(Dictionary<string, string[][]> datas)
         {
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
-            
-            using XLWorkbook package = new XLWorkbook(loadOptions);
-            package.Style.Font.FontName = FontsHelper.DefaultFontName;
+            using XLWorkbook package = new XLWorkbook();
 
             foreach (var data in datas)
             {
@@ -810,7 +805,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                     {
                         var value = data.Value[row][column];
                         worksheet.Cell(row + 1, column + 1).SetValue(value);
-                        worksheet.Cell(row + 1, column + 1).Style.Font.FontName = FontsHelper.DefaultFontName;
                     }
             }
 

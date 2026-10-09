@@ -4,13 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using ClosedXML.Excel;
-using ClosedXML.Graphics;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
-using SixLabors.Fonts;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
@@ -61,20 +59,14 @@ namespace WB.Tests.Unit.Designer.Services
 
         private static Stream CreateExcelFile(string[][] data)
         {
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
-
-            
-            using XLWorkbook package = new XLWorkbook(loadOptions);
+            using XLWorkbook package = new XLWorkbook();
             
             var worksheet = package.Worksheets.Add("Categories");
 
             for (var row = 0; row < data.Length; row++)
                 for (var column = 0; column < data[row].Length; column++) {
                     worksheet.Cell(row + 1, column + 1).Value = data[row][column];
-                    worksheet.Cell(row + 1, column + 1).Style.Font.FontName = FontsHelper.DefaultFontName;
                 }
-            package.Style.Font.FontName = FontsHelper.DefaultFontName;     
-
             var ms = new MemoryStream();
             package.SaveAs(ms);
             ms.Seek(0, SeekOrigin.Begin);

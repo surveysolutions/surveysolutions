@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
-using ClosedXML.Graphics;
-using SixLabors.Fonts;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Verifier;
@@ -13,7 +11,6 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.ReusableCategories;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
-using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
@@ -34,9 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         public byte[] GetTemplateFile(bool isCascading)
         {
 
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
-            
-            using XLWorkbook excelPackage = new XLWorkbook(loadOptions);
+            using XLWorkbook excelPackage = new XLWorkbook();
             var worksheet = excelPackage.Worksheets.Add("Categories");
 
             void FormatCell(string address)
@@ -81,10 +76,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
         private List<CategoriesRow> ExtractCategoriesFromExcelFile(Stream xmlFile)
         {
 
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
-            
             var categories = new List<CategoriesRow>();
-            using XLWorkbook package = new XLWorkbook(xmlFile, loadOptions);
+            using XLWorkbook package = new XLWorkbook(xmlFile);
             var worksheet = package.Worksheets.First();
             var headers = GetHeaders(worksheet);
             int firstDataRow = 2;

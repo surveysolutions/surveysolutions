@@ -4,15 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using ClosedXML.Excel;
-using ClosedXML.Graphics;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using SixLabors.Fonts;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Enumerator.Native.Questionnaire;
-using WB.Infrastructure.Native.Utils;
 
 namespace WB.Infrastructure.Native.Questionnaire
 {
@@ -38,9 +35,7 @@ namespace WB.Infrastructure.Native.Questionnaire
 
             try
             {
-                var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
-                
-                using var package = new XLWorkbook(stream, loadOptions);
+                using var package = new XLWorkbook(stream);
 
                 if (package.Worksheets.Count == 0)
                     throw new InvalidOperationException("Translation file is empty");
