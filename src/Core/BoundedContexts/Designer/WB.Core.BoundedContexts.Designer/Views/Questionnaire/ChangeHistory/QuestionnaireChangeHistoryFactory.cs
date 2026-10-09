@@ -225,6 +225,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 revision.TargetItemType,
                 revision.TargetItemNewTitle,
                 revision.AffectedEntriesCount,
+                revision.Patch != null
+                    || revision.ResultingQuestionnaireDocument != null
+                    || revision.ActionType == QuestionnaireActionType.AnonymousSharingEnabled
+                    || revision.ActionType == QuestionnaireActionType.AnonymousSharingDisabled,
                 revision.Patch != null || revision.ResultingQuestionnaireDocument != null,
                 revision.TargetItemDateTime,
                 references,

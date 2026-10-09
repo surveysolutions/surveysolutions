@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
@@ -98,6 +98,8 @@ namespace WB.UI.Designer.Controllers
         private readonly IViewRenderService viewRenderService;
         private readonly UserManager<DesignerIdentityUser> users;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
+        private readonly IAnonymousQuestionnaireStateService anonymousQuestionnaireStateService;
+        private readonly IQuestionnaireHistoryRevertService questionnaireHistoryRevertService;
         private readonly ITagHelperComponentManager tagHelperComponentManager;
         private readonly IWebHostEnvironment webHost;
         private readonly IOptions<ViteTagOptions> options;
@@ -111,6 +113,8 @@ namespace WB.UI.Designer.Controllers
             IQuestionnaireInfoFactory questionnaireInfoFactory,
             IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory,
             IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
+            IAnonymousQuestionnaireStateService anonymousQuestionnaireStateService,
+            IQuestionnaireHistoryRevertService questionnaireHistoryRevertService,
             ILookupTableService lookupTableService,
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
             ICategoricalOptionsImportService categoricalOptionsImportService,
@@ -140,6 +144,8 @@ namespace WB.UI.Designer.Controllers
             this.viewRenderService = viewRenderService;
             this.users = users;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
+            this.anonymousQuestionnaireStateService = anonymousQuestionnaireStateService;
+            this.questionnaireHistoryRevertService = questionnaireHistoryRevertService;
             this.tagHelperComponentManager = tagHelperComponentManager;
             this.webHost = webHost;
             this.options = options;
@@ -345,7 +351,7 @@ namespace WB.UI.Designer.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Revert(Guid id, Guid commandId)
+        public async Task<IActionResult> Revert(Guid id, Guid commandId)
         {
             var historyReferenceId = commandId;
 
@@ -354,6 +360,22 @@ namespace WB.UI.Designer.Controllers
             {
                 this.Error(Resources.QuestionnaireController.ForbiddenRevert);
                 return this.RedirectToAction("Index", "QuestionnaireList");
+            }
+
+            var historicalRecord = await dbContext.QuestionnaireChangeRecords
+                .AsNoTracking()
+                .SingleOrDefaultAsync(record =>
+                    record.QuestionnaireChangeRecordId == historyReferenceId.FormatGuid()
+                    && record.QuestionnaireId == id.FormatGuid());
+
+            if (historicalRecord != null && await this.questionnaireHistoryRevertService.TryRevertAsync(
+                    id,
+                    historicalRecord,
+                    this.User.GetId(),
+                    User.GetUserName()))
+            {
+                string questionnaireId = id.FormatGuid();
+                return Redirect($"/q/details/{questionnaireId}");
             }
 
             var command = new RevertVersionQuestionnaire(id, historyReferenceId, this.User.GetId());
@@ -487,18 +509,15 @@ namespace WB.UI.Designer.Controllers
         public async Task<IActionResult> UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
         {
             bool isActive = postModel.IsActive;
-            var anonymousQuestionnaire = dbContext.AnonymousQuestionnaires.FirstOrDefault(a => a.QuestionnaireId == id);
-            if (anonymousQuestionnaire == null)
-            {
-                anonymousQuestionnaire = new AnonymousQuestionnaire()
-                    { QuestionnaireId = id, AnonymousQuestionnaireId = Guid.NewGuid(), IsActive = isActive, GeneratedAtUtc = DateTime.UtcNow };
-                dbContext.AnonymousQuestionnaires.Add(anonymousQuestionnaire);
-                await dbContext.SaveChangesAsync();
-            }
 
-            anonymousQuestionnaire.IsActive = isActive;
-            dbContext.AnonymousQuestionnaires.Update(anonymousQuestionnaire);
-            await dbContext.SaveChangesAsync();
+            var questionnaireView = GetQuestionnaireView(id);
+            var questionnaireTitle = questionnaireView?.Title ?? string.Empty;
+            var anonymousQuestionnaire = await anonymousQuestionnaireStateService.SaveStateAsync(
+                id,
+                isActive,
+                questionnaireTitle,
+                User.GetId(),
+                User.GetUserName());
 
             if (isActive)
                 await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
