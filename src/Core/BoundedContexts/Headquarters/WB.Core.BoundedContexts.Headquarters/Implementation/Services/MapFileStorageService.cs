@@ -45,6 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ILogger<MapFileStorageService> logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
+        private readonly IUnitOfWork unitOfWork;
 
         private const int WGS84Wkid = 4326; //https://epsg.io/4326
         private const string MapsFolderName = "MapsData";
@@ -63,7 +64,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IExternalFileStorage externalFileStorage,
             IOptions<GeospatialConfig> geospatialConfig,
             IAuthorizedUser authorizedUser,
-            ILogger<MapFileStorageService> logger)
+            ILogger<MapFileStorageService> logger,
+            IUnitOfWork unitOfWork)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
@@ -75,6 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.authorizedUser = authorizedUser;
             this.logger = logger;
             this.geospatialConfig = geospatialConfig;
+            this.unitOfWork = unitOfWork;
 
             this.mapsFolderPath = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, MapsFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.mapsFolderPath))
@@ -407,19 +410,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             this.mapPlainStorageAccessor.Remove(map.FileName);
 
-            if (externalFileStorage.IsEnabled())
+            this.unitOfWork.OnCommitted(() =>
             {
-                this.logger.LogWarning("Deleting map: '{map}' from external storage", map.FileName);
-                await this.externalFileStorage.RemoveAsync(GetExternalStoragePath(map.FileName));
-            }
-            else
-            {
-                this.logger.LogWarning("Deleting map: '{map}' from {folder}", map.FileName, this.mapsFolderPath);
-                var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, map.FileName);
+                if (externalFileStorage.IsEnabled())
+                {
+                    this.logger.LogWarning("Deleting map: '{map}' from external storage", map.FileName);
+                    externalFileStorage.RemoveAsync(GetExternalStoragePath(map.FileName)).GetAwaiter().GetResult();
+                }
+                else
+                {
+                    this.logger.LogWarning("Deleting map: '{map}' from {folder}", map.FileName, this.mapsFolderPath);
+                    var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, map.FileName);
 
-                if (this.fileSystemAccessor.IsFileExists(filePath))
-                    fileSystemAccessor.DeleteFile(filePath);
-            }
+                    if (this.fileSystemAccessor.IsFileExists(filePath))
+                        fileSystemAccessor.DeleteFile(filePath);
+                }
+            });
 
             return map;
         }

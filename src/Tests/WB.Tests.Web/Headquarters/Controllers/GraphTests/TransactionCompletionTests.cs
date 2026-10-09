@@ -143,7 +143,9 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
         {
             await using var result = await Execute($"mutation {{ first: change {failingField} last: change }}");
 
-            Assert.That(result.ExpectOperationResult().Errors, Is.Not.Empty);
+            var operation = result.ExpectOperationResult();
+            Assert.That(operation.Errors, Is.Not.Empty);
+            Assert.That(operation.Data, Is.Null);
             Assert.That(fieldsExecuted, Is.EqualTo(2));
             transaction.Verify(x => x.Commit(), Times.Never);
             transaction.Verify(x => x.Rollback(), Times.Once);
@@ -218,4 +220,3 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
         }
     }
 }
-

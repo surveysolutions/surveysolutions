@@ -1289,7 +1289,8 @@ namespace WB.Tests.Abc.TestFactories
             IUserRepository userStorage = null,
             IExternalFileStorage externalFileStorage = null,
             IAuthorizedUser authorizedUser = null,
-            IOptions<GeospatialConfig> geospatialConfig = null)
+            IOptions<GeospatialConfig> geospatialConfig = null,
+            WB.Infrastructure.Native.Storage.Postgre.IUnitOfWork unitOfWork = null)
         {
            return new MapFileStorageService(
              fileSystemAccessor ?? Create.Service.FileSystemIOAccessor(), 
@@ -1302,7 +1303,8 @@ namespace WB.Tests.Abc.TestFactories
              externalFileStorage ?? Mock.Of<IExternalFileStorage>(),
              geospatialConfig ?? Mock.Of<IOptions<GeospatialConfig>>(),
              authorizedUser ?? Mock.Of<IAuthorizedUser>(),
-             Mock.Of<ILogger<MapFileStorageService>>()
+             Mock.Of<ILogger<MapFileStorageService>>(),
+             unitOfWork ?? ImmediateUnitOfWork()
              ); 
         }
 
