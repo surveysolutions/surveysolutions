@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -26,6 +27,7 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IQuestionnaireDocumentTransformer questionnaireDocumentTransformer;
         private readonly IReusableCategoriesService reusableCategoriesService;
+        private readonly ILookupTableService lookupTableService;
         
         private readonly ISerializer serializer;
 
@@ -33,12 +35,14 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
             IQuestionnaireViewFactory questionnaireViewFactory,
             IQuestionnaireDocumentTransformer questionnaireDocumentTransformer, 
             IReusableCategoriesService reusableCategoriesService,
+            ILookupTableService lookupTableService,
             ISerializer serializer)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.questionnaireDocumentTransformer = questionnaireDocumentTransformer;
             this.serializer = serializer;
             this.reusableCategoriesService = reusableCategoriesService;
+            this.lookupTableService = lookupTableService;
         }
         
         [HttpGet]
@@ -76,6 +80,26 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
             });
 
             return Content(result, "application/json", Encoding.UTF8);
+        }
+        
+        [HttpGet]
+        [Route("{id}/lookup/{lookupTableId}/headers")]
+        public IActionResult GetLookupTableHeaders(QuestionnaireRevision id, Guid lookupTableId)
+        {
+            string[]? headers;
+            try
+            {
+                headers = this.lookupTableService.GetLookupTableHeaders(id, lookupTableId);
+            }
+            catch (ArgumentException)
+            {
+                return NotFound();
+            }
+
+            if (headers == null)
+                return NotFound();
+
+            return Ok(headers);
         }
         
         [HttpGet]

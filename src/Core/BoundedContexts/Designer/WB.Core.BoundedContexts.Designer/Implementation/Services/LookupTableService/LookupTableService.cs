@@ -103,6 +103,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             return GetLookupTableContentFileImpl(questionnaire, lookupTableId);
         }
 
+        public string[]? GetLookupTableHeaders(QuestionnaireRevision questionnaireId, Guid lookupTableId)
+        {
+            var questionnaire = this.documentStorage.Get(questionnaireId);
+
+            if (questionnaire == null)
+                throw new ArgumentException(string.Format(ExceptionMessages.QuestionCannotBeFound, questionnaireId));
+
+            var lookupTableContent = GetLookupTableContent(questionnaire, lookupTableId);
+            if (lookupTableContent == null)
+                return null;
+
+            return new[] { ROWCODE }.Concat(lookupTableContent.VariableNames).ToArray();
+        }
+
         public Dictionary<Guid, string> GetQuestionnairesLookupTables(Guid questionnaireId)
         {
             var questionnaire = this.documentStorage.Get(questionnaireId);
