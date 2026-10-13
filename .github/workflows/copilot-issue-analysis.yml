@@ -31,15 +31,16 @@ jobs:
       - name: Close open issue-analyst PRs linked to the issue
         run: |
           prs=$(gh api graphql -F owner="${REPO%/*}" -F name="${REPO#*/}" -F number="$ISSUE" -f query='
-            query($owner: String!, $name: String!, $number: Int!) {
+            query($owner: String!, $name: String!, $number: Int!, $endCursor: String) {
               repository(owner: $owner, name: $name) {
                 issue(number: $number) {
-                  closedByPullRequestsReferences(first: 10, includeClosedPrs: false) {
+                  closedByPullRequestsReferences(first: 100, after: $endCursor, includeClosedPrs: false) {
                     nodes { number isDraft author { login } body }
+                    pageInfo { hasNextPage endCursor }
                   }
                 }
               }
-            }' --jq '.data.repository.issue.closedByPullRequestsReferences.nodes[]
+            }' --paginate --jq '.data.repository.issue.closedByPullRequestsReferences.nodes[]?
               | select(.author.login == "copilot-swe-agent" and .isDraft and (.body | contains("## Assessment")))
               | .number')
           for pr in $prs; do

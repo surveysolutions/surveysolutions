@@ -2,7 +2,7 @@
 name: issue-analyst
 description: Assesses a Survey Solutions issue, suggests an approach, and asks blocking questions. Does not implement.
 target: github-copilot
-tools: ["read", "search", "github/*"]
+tools: ["read", "search", "github/issue_read", "github/search_issues", "github/search_code", "github/get_file_contents", "github/pull_request_read", "github/update_pull_request_body"]
 disable-model-invocation: true
 ---
 You analyze the assigned issue. Never create, modify, or delete files and never run builds or tests.
