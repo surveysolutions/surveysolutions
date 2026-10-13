@@ -7,7 +7,6 @@ using Quartz;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -25,17 +24,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Maps
             requests.Store(new MapFileDeletionRequest { Id = fileName, FileName = fileName }, fileName);
             var mapStorage = new Mock<IMapStorageService>();
             mapStorage.Setup(x => x.RemoveMapFileIfNotInUseAsync(fileName)).ThrowsAsync(new IOException());
-            var unitOfWork = new Mock<IUnitOfWork>();
             var job = new MapFileCleanupJob(
                 requests,
                 mapStorage.Object,
-                unitOfWork.Object,
                 Mock.Of<ILogger<MapFileCleanupJob>>());
 
             await job.Execute(Mock.Of<IJobExecutionContext>());
 
             Assert.That(requests.GetById(fileName), Is.Not.Null);
-            unitOfWork.Verify(x => x.Complete(), Times.Never);
         }
 
         [Test]
@@ -45,19 +41,15 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Maps
             var requests = new TestPlainStorage<MapFileDeletionRequest>();
             requests.Store(new MapFileDeletionRequest { Id = fileName, FileName = fileName }, fileName);
             var mapStorage = new Mock<IMapStorageService>();
-            var unitOfWork = new Mock<IUnitOfWork>();
             var job = new MapFileCleanupJob(
                 requests,
                 mapStorage.Object,
-                unitOfWork.Object,
                 Mock.Of<ILogger<MapFileCleanupJob>>());
 
             await job.Execute(Mock.Of<IJobExecutionContext>());
 
             Assert.That(requests.GetById(fileName), Is.Null);
             mapStorage.Verify(x => x.RemoveMapFileIfNotInUseAsync(fileName), Times.Once);
-            unitOfWork.Verify(x => x.AcceptChanges(), Times.Once);
-            unitOfWork.Verify(x => x.Complete(), Times.Once);
         }
 
         [Test]
@@ -68,18 +60,15 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Maps
             requests.Store(new MapFileDeletionRequest { Id = fileName, FileName = fileName }, fileName);
             var mapStorage = new Mock<IMapStorageService>();
             mapStorage.Setup(x => x.RemoveMapFileIfNotInUseAsync(fileName)).ReturnsAsync(false);
-            var unitOfWork = new Mock<IUnitOfWork>();
             var job = new MapFileCleanupJob(
                 requests,
                 mapStorage.Object,
-                unitOfWork.Object,
                 Mock.Of<ILogger<MapFileCleanupJob>>());
 
             await job.Execute(Mock.Of<IJobExecutionContext>());
 
             Assert.That(requests.GetById(fileName), Is.Null);
             mapStorage.Verify(x => x.RemoveMapFileIfNotInUseAsync(fileName), Times.Once);
-            unitOfWork.Verify(x => x.Complete(), Times.Once);
         }
     }
 }

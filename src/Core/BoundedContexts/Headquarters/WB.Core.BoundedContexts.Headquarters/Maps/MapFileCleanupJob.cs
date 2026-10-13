@@ -7,7 +7,6 @@ using Quartz;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Maps
 {
@@ -17,25 +16,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Maps
     {
         private readonly IPlainStorageAccessor<MapFileDeletionRequest> requests;
         private readonly IMapStorageService mapStorageService;
-        private readonly IUnitOfWork unitOfWork;
         private readonly ILogger<MapFileCleanupJob> logger;
 
         public MapFileCleanupJob(
             IPlainStorageAccessor<MapFileDeletionRequest> requests,
             IMapStorageService mapStorageService,
-            IUnitOfWork unitOfWork,
             ILogger<MapFileCleanupJob> logger)
         {
             this.requests = requests;
             this.mapStorageService = mapStorageService;
-            this.unitOfWork = unitOfWork;
             this.logger = logger;
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
             var pendingRequests = requests.Query(query => query.ToArray());
-            var deletedAny = false;
 
             foreach (var request in pendingRequests)
             {
@@ -43,7 +38,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Maps
                 {
                     await mapStorageService.RemoveMapFileIfNotInUseAsync(request.FileName);
                     requests.Remove(request.Id);
-                    deletedAny = true;
                 }
                 catch (Exception exception)
                 {
@@ -51,12 +45,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Maps
                         request.FileName);
                 }
             }
-
-            if (!deletedAny)
-                return;
-
-            unitOfWork.AcceptChanges();
-            unitOfWork.Complete();
         }
     }
 }
