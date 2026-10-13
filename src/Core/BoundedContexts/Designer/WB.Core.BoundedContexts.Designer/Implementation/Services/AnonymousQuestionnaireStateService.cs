@@ -30,6 +30,38 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Guid responsibleId,
             string responsibleName)
         {
+            return await SaveStateAsync(
+                questionnaireId,
+                isActive,
+                questionnaireTitle,
+                responsibleId,
+                responsibleName,
+                regenerateLink: false);
+        }
+
+        public async Task<AnonymousQuestionnaire> RegenerateLinkAsync(
+            Guid questionnaireId,
+            string questionnaireTitle,
+            Guid responsibleId,
+            string responsibleName)
+        {
+            return await SaveStateAsync(
+                questionnaireId,
+                isActive: true,
+                questionnaireTitle,
+                responsibleId,
+                responsibleName,
+                regenerateLink: true);
+        }
+
+        private async Task<AnonymousQuestionnaire> SaveStateAsync(
+            Guid questionnaireId,
+            bool isActive,
+            string questionnaireTitle,
+            Guid responsibleId,
+            string responsibleName,
+            bool regenerateLink)
+        {
             for (var attempt = 0; attempt < 2; attempt++)
             {
                 await using var transaction =
@@ -57,6 +89,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             QuestionnaireId = questionnaireId,
                             AnonymousQuestionnaireId = Guid.NewGuid(),
                             IsActive = isActive,
+                            GeneratedAtUtc = DateTime.UtcNow
+                        };
+                        this.dbContext.AnonymousQuestionnaires.Add(anonymousQuestionnaire);
+                    }
+                    else if (regenerateLink)
+                    {
+                        this.dbContext.AnonymousQuestionnaires.Remove(anonymousQuestionnaire);
+                        anonymousQuestionnaire = new AnonymousQuestionnaire
+                        {
+                            QuestionnaireId = questionnaireId,
+                            AnonymousQuestionnaireId = Guid.NewGuid(),
+                            IsActive = true,
                             GeneratedAtUtc = DateTime.UtcNow
                         };
                         this.dbContext.AnonymousQuestionnaires.Add(anonymousQuestionnaire);

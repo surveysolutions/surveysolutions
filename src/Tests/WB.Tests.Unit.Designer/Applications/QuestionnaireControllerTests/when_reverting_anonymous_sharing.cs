@@ -57,6 +57,9 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             questionnaireViewFactory
                 .Setup(x => x.HasUserChangeAccessToQuestionnaire(questionnaireId, userId))
                 .Returns(true);
+            questionnaireViewFactory
+                .Setup(x => x.HasUserOwnerAccessToQuestionnaire(questionnaireId, userId))
+                .Returns(true);
 
             var controller = CreateQuestionnaireController(
                 commandService: commandService.Object,
@@ -86,6 +89,59 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             commandService.Verify(x => x.Execute(It.IsAny<WB.Core.BoundedContexts.Designer.Commands.Questionnaire.RevertVersionQuestionnaire>()), Times.Never);
             result.Should().BeOfType<RedirectResult>()
                 .Which.Url.Should().Be($"/q/details/{questionnaireId.FormatGuid()}");
+        }
+
+        [Test]
+        public async Task should_reject_anonymous_sharing_revert_for_non_owners()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var historyRecordId = Guid.NewGuid();
+            var userId = Guid.NewGuid();
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.QuestionnaireChangeRecords.Add(Create.QuestionnaireChangeRecord(
+                questionnaireChangeRecordId: historyRecordId.FormatGuid(),
+                questionnaireId: questionnaireId.FormatGuid(),
+                action: QuestionnaireActionType.AnonymousSharingEnabled,
+                targetId: questionnaireId,
+                targetType: QuestionnaireItemType.Questionnaire,
+                targetTitle: "Questionnaire title"));
+            await dbContext.SaveChangesAsync();
+
+            var historyRevertService = new Mock<IQuestionnaireHistoryRevertService>();
+            var questionnaireViewFactory = new Mock<IQuestionnaireViewFactory>();
+            questionnaireViewFactory
+                .Setup(x => x.HasUserChangeAccessToQuestionnaire(questionnaireId, userId))
+                .Returns(true);
+            questionnaireViewFactory
+                .Setup(x => x.HasUserOwnerAccessToQuestionnaire(questionnaireId, userId))
+                .Returns(false);
+
+            var controller = CreateQuestionnaireController(
+                questionnaireViewFactory: questionnaireViewFactory.Object,
+                questionnaireHistoryRevertService: historyRevertService.Object,
+                dbContext: dbContext);
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+                        new Claim(ClaimTypes.Name, "designer-user")
+                    }))
+                }
+            };
+
+            var result = await controller.Revert(questionnaireId, historyRecordId);
+
+            historyRevertService.Verify(x => x.TryRevertAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<QuestionnaireChangeRecord>(),
+                    It.IsAny<Guid>(),
+                    It.IsAny<string>()),
+                Times.Never);
+            result.Should().BeOfType<RedirectToActionResult>()
+                .Which.ActionName.Should().Be("Index");
         }
     }
 }

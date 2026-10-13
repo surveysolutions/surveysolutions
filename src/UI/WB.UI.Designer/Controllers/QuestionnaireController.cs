@@ -354,8 +354,10 @@ namespace WB.UI.Designer.Controllers
         public async Task<IActionResult> Revert(Guid id, Guid commandId)
         {
             var historyReferenceId = commandId;
+            var userId = this.User.GetId();
+            var isAdmin = this.User.IsAdmin();
 
-            bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(id, this.User.GetId());
+            bool hasAccess = isAdmin || this.questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(id, userId);
             if (!hasAccess)
             {
                 this.Error(Resources.QuestionnaireController.ForbiddenRevert);
@@ -367,6 +369,16 @@ namespace WB.UI.Designer.Controllers
                 .SingleOrDefaultAsync(record =>
                     record.QuestionnaireChangeRecordId == historyReferenceId.FormatGuid()
                     && record.QuestionnaireId == id.FormatGuid());
+
+            if (historicalRecord != null
+                && (historicalRecord.ActionType == QuestionnaireActionType.AnonymousSharingEnabled
+                    || historicalRecord.ActionType == QuestionnaireActionType.AnonymousSharingDisabled)
+                && !isAdmin
+                && !this.questionnaireViewFactory.HasUserOwnerAccessToQuestionnaire(id, userId))
+            {
+                this.Error(Resources.QuestionnaireController.ForbiddenRevert);
+                return this.RedirectToAction("Index", "QuestionnaireList");
+            }
 
             if (historicalRecord != null && await this.questionnaireHistoryRevertService.TryRevertAsync(
                     id,
@@ -539,13 +551,12 @@ namespace WB.UI.Designer.Controllers
         [NoTransaction]
         public async Task<IActionResult> RegenerateAnonymousQuestionnaireLink(Guid id)
         {
-            var existedRecord = dbContext.AnonymousQuestionnaires.First(a => a.QuestionnaireId == id);
-            dbContext.Remove(existedRecord);
-           
-            var anonymousQuestionnaire = new AnonymousQuestionnaire()
-                { QuestionnaireId = id, AnonymousQuestionnaireId = Guid.NewGuid(), IsActive = true, GeneratedAtUtc = DateTime.UtcNow };
-            await dbContext.AnonymousQuestionnaires.AddAsync(anonymousQuestionnaire);
-            await dbContext.SaveChangesAsync();
+            var questionnaireView = GetQuestionnaireView(id);
+            var anonymousQuestionnaire = await anonymousQuestionnaireStateService.RegenerateLinkAsync(
+                id,
+                questionnaireView?.Title ?? string.Empty,
+                User.GetId(),
+                User.GetUserName());
 
             await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
             

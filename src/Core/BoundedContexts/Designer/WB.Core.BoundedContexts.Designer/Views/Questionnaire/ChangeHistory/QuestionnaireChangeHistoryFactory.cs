@@ -141,10 +141,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             }
 
             var userId = user.GetId();
+            var canRevertAnonymousSharing = isAdmin
+                || questionnaireViewFactory.HasUserOwnerAccessToQuestionnaire(questionnaireId, userId);
 
             return new QuestionnaireChangeHistory(questionnaireId, questionnaire.Title,
                 questionnaireHistory.Select(h =>
-                    CreateQuestionnaireChangeHistoryWebItem(questionnaire, h, userId))
+                    CreateQuestionnaireChangeHistoryWebItem(questionnaire, h, userId, canRevertAnonymousSharing))
                     .ToList(), page, count, pageSize, search?.Trim(), searchIdsOnly, searchWholeWord);
         }
 
@@ -206,7 +208,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(
             QuestionnaireDocument questionnaire,
             QuestionnaireChangeRecord revision,
-            Guid userId)
+            Guid userId,
+            bool canRevertAnonymousSharing)
         {
             var references =
                 revision.References.Select(
@@ -227,8 +230,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 revision.AffectedEntriesCount,
                 revision.Patch != null
                     || revision.ResultingQuestionnaireDocument != null
-                    || revision.ActionType == QuestionnaireActionType.AnonymousSharingEnabled
-                    || revision.ActionType == QuestionnaireActionType.AnonymousSharingDisabled,
+                    || (canRevertAnonymousSharing
+                        && (revision.ActionType == QuestionnaireActionType.AnonymousSharingEnabled
+                            || revision.ActionType == QuestionnaireActionType.AnonymousSharingDisabled)),
                 revision.Patch != null || revision.ResultingQuestionnaireDocument != null,
                 revision.TargetItemDateTime,
                 references,

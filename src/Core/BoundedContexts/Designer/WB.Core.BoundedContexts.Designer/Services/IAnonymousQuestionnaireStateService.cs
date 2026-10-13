@@ -12,5 +12,11 @@ namespace WB.Core.BoundedContexts.Designer.Services
             string questionnaireTitle,
             Guid responsibleId,
             string responsibleName);
+
+        Task<AnonymousQuestionnaire> RegenerateLinkAsync(
+            Guid questionnaireId,
+            string questionnaireTitle,
+            Guid responsibleId,
+            string responsibleName);
     }
 }

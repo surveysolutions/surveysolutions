@@ -121,5 +121,93 @@ namespace WB.Tests.Unit.Designer.Services
                     It.IsAny<QuestionnaireChangeRecordMetadata>()),
                 Times.Never);
         }
+
+        [Test]
+        public async Task when_regenerating_link_for_disabled_questionnaire_should_enable_and_append_history()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var responsibleId = Guid.NewGuid();
+            var oldAnonymousQuestionnaireId = Guid.NewGuid();
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.AnonymousQuestionnaires.Add(new AnonymousQuestionnaire
+            {
+                QuestionnaireId = questionnaireId,
+                AnonymousQuestionnaireId = oldAnonymousQuestionnaireId,
+                IsActive = false,
+                GeneratedAtUtc = DateTime.UtcNow
+            });
+            await dbContext.SaveChangesAsync();
+
+            var historyMutationService = new Mock<IQuestionnaireHistoryMutationService>();
+            var service = new AnonymousQuestionnaireStateService(dbContext, historyMutationService.Object);
+
+            var result = await service.RegenerateLinkAsync(
+                questionnaireId,
+                "Questionnaire title",
+                responsibleId,
+                "designer-user");
+
+            result.IsActive.Should().BeTrue();
+            result.AnonymousQuestionnaireId.Should().NotBe(oldAnonymousQuestionnaireId);
+            dbContext.AnonymousQuestionnaires.Single(x => x.QuestionnaireId == questionnaireId).IsActive.Should().BeTrue();
+            historyMutationService.Verify(x => x.StageQuestionnaireChangeItemAsync(
+                    questionnaireId,
+                    responsibleId,
+                    "designer-user",
+                    QuestionnaireActionType.AnonymousSharingEnabled,
+                    QuestionnaireItemType.Questionnaire,
+                    questionnaireId,
+                    "Questionnaire title",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null),
+                Times.Once);
+        }
+
+        [Test]
+        public async Task when_regenerating_link_for_active_questionnaire_should_not_append_history()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var oldAnonymousQuestionnaireId = Guid.NewGuid();
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.AnonymousQuestionnaires.Add(new AnonymousQuestionnaire
+            {
+                QuestionnaireId = questionnaireId,
+                AnonymousQuestionnaireId = oldAnonymousQuestionnaireId,
+                IsActive = true,
+                GeneratedAtUtc = DateTime.UtcNow
+            });
+            await dbContext.SaveChangesAsync();
+
+            var historyMutationService = new Mock<IQuestionnaireHistoryMutationService>();
+            var service = new AnonymousQuestionnaireStateService(dbContext, historyMutationService.Object);
+
+            var result = await service.RegenerateLinkAsync(
+                questionnaireId,
+                "Questionnaire title",
+                Guid.NewGuid(),
+                "designer-user");
+
+            result.IsActive.Should().BeTrue();
+            result.AnonymousQuestionnaireId.Should().NotBe(oldAnonymousQuestionnaireId);
+            historyMutationService.Verify(x => x.StageQuestionnaireChangeItemAsync(
+                    It.IsAny<Guid>(),
+                    It.IsAny<Guid>(),
+                    It.IsAny<string>(),
+                    It.IsAny<QuestionnaireActionType>(),
+                    It.IsAny<QuestionnaireItemType>(),
+                    It.IsAny<Guid>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<int?>(),
+                    It.IsAny<DateTime?>(),
+                    It.IsAny<Main.Core.Documents.QuestionnaireDocument>(),
+                    It.IsAny<QuestionnaireChangeReference>(),
+                    It.IsAny<QuestionnaireChangeRecordMetadata>()),
+                Times.Never);
+        }
     }
 }
