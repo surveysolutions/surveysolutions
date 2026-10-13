@@ -241,4 +241,10 @@
     <data name="TotalWithErrors" xml:space="preserve">
         <value>由于错误，{{ withErrorsCount }} 份未发送。</value>
     </data>
+    <data name="EnterText" xml:space="preserve">
+      <value>请输入文本</value>
+  </data>
+    <data name="AddressDescription" xml:space="preserve">
+      <value>此处将显示您在群发邮件服务器账户中指定的组织地址。</value>
+  </data>
 </root>
