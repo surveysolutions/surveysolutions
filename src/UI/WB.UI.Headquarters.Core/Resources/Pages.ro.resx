@@ -846,6 +846,9 @@
   <data name="MapDetails_MapTitle" xml:space="preserve">
     <value>Hartă</value>
   </data>
+  <data name="MapPreview" xml:space="preserve">
+      <value>Previzualizare hartă</value>
+  </data>
   <data name="MapDetails_MaxScale" xml:space="preserve">
     <value>Dimensionare la scară maximă</value>
   </data>
@@ -1785,5 +1788,11 @@
   </data>
   <data name="Observer_Memo2" xml:space="preserve">
     <value>Faceți clic pe un cont și selectați 'Vizualizați ca acest utilizator în modul doar citire' pentru a începe. Folosiți linkul galben din partea de sus pentru a reveni la contul dvs.</value>
+  </data>
+  <data name="Successful" xml:space="preserve">
+      <value>Reușit</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+      <value>Eșuat</value>
   </data>
 </root>
