@@ -173,6 +173,63 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
         }
 
         [Test]
+        public async Task DeleteAllMaps_should_delete_files_without_queuing_cleanup_requests()
+        {
+            const string mapName = "mapFile.tpk";
+            var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(tempBase);
+            try
+            {
+                var mapsStorage = new TestPlainStorage<MapBrowseItem>();
+                mapsStorage.Store(Create.Entity.MapBrowseItem(mapName), mapName);
+                var deletionRequests = new TestPlainStorage<MapFileDeletionRequest>();
+                var service = Create.Service.MapFileStorageService(
+                    mapsStorage: mapsStorage,
+                    mapFileDeletionRequests: deletionRequests,
+                    fileStorageConfig: Options.Create(new FileStorageConfig { TempData = tempBase }));
+                var filePath = Path.Combine(tempBase, "MapsData", mapName);
+                File.WriteAllText(filePath, "map");
+
+                await service.DeleteAllMaps();
+
+                Assert.That(mapsStorage.GetById(mapName), Is.Null);
+                Assert.That(File.Exists(filePath), Is.False);
+                Assert.That(deletionRequests.GetById(mapName), Is.Null);
+            }
+            finally
+            {
+                Directory.Delete(tempBase, true);
+            }
+        }
+
+        [Test]
+        public async Task RemoveMapFileIfNotInUseAsync_when_map_exists_should_keep_its_file()
+        {
+            const string mapName = "mapFile.tpk";
+            var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(tempBase);
+            try
+            {
+                var mapsStorage = new TestPlainStorage<MapBrowseItem>();
+                mapsStorage.Store(Create.Entity.MapBrowseItem(mapName), mapName);
+                var service = Create.Service.MapFileStorageService(
+                    mapsStorage: mapsStorage,
+                    fileStorageConfig: Options.Create(new FileStorageConfig { TempData = tempBase }));
+                var filePath = Path.Combine(tempBase, "MapsData", mapName);
+                File.WriteAllText(filePath, "map");
+
+                var deleted = await service.RemoveMapFileIfNotInUseAsync(mapName);
+
+                Assert.That(deleted, Is.False);
+                Assert.That(File.Exists(filePath), Is.True);
+            }
+            finally
+            {
+                Directory.Delete(tempBase, true);
+            }
+        }
+
+        [Test]
         public async Task SaveOrUpdateMapAsync_when_shapefile_has_duplicate_label_values_HasDuplicateLabels_is_true()
         {
             var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));

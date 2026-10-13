@@ -46,10 +46,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ILogger<MapFileStorageService> logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
+        private readonly IUnitOfWork unitOfWork;
 
         private const int WGS84Wkid = 4326; //https://epsg.io/4326
         private const string MapsFolderName = "MapsData";
         private const string LabelFieldName = "label";
+        private const int MapFileLockClass = 601321;
 
         private readonly string mapsFolderPath;
 
@@ -65,7 +67,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IExternalFileStorage externalFileStorage,
             IOptions<GeospatialConfig> geospatialConfig,
             IAuthorizedUser authorizedUser,
-            ILogger<MapFileStorageService> logger)
+            ILogger<MapFileStorageService> logger,
+            IUnitOfWork unitOfWork)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
@@ -78,6 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.authorizedUser = authorizedUser;
             this.logger = logger;
             this.geospatialConfig = geospatialConfig;
+            this.unitOfWork = unitOfWork;
 
             this.mapsFolderPath = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, MapsFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.mapsFolderPath))
@@ -107,6 +111,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 }
 
                 var mapName = mapFiles.IsShapeFile ? mapFiles.Name + ".shp" : mapFiles.Name; 
+                await AcquireMapFileLockAsync(mapName).ConfigureAwait(false);
                 if (externalFileStorage.IsEnabled())
                 {
                     await using FileStream file = File.OpenRead(tempFile);
@@ -434,6 +439,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 fileSystemAccessor.DeleteFile(filePath);
         }
 
+        public async Task<bool> RemoveMapFileIfNotInUseAsync(string fileName)
+        {
+            await AcquireMapFileLockAsync(fileName).ConfigureAwait(false);
+            if (mapPlainStorageAccessor.GetById(fileName) != null)
+                return false;
+
+            await RemoveMapFileAsync(fileName).ConfigureAwait(false);
+            return true;
+        }
+
+        private async Task AcquireMapFileLockAsync(string fileName)
+        {
+            await unitOfWork.Session
+                .CreateSQLQuery($"select pg_advisory_xact_lock({MapFileLockClass}, hashtext(:fileName))")
+                .SetString("fileName", fileName)
+                .ExecuteUpdateAsync()
+                .ConfigureAwait(false);
+        }
+
         public async Task DeleteAllMaps()
         {
             this.logger.LogWarning("Deleting all maps execution started");
@@ -441,7 +465,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             
             foreach (var map in maps)
             {
-                await this.DeleteMap(map.FileName);
+                await RemoveMapFileAsync(map.FileName);
+                this.mapPlainStorageAccessor.Remove(map.Id);
             }
         }
 

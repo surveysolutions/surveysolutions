@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
-using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre;
 
@@ -17,20 +16,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Maps
     public class MapFileCleanupJob : IJob
     {
         private readonly IPlainStorageAccessor<MapFileDeletionRequest> requests;
-        private readonly IPlainStorageAccessor<MapBrowseItem> maps;
         private readonly IMapStorageService mapStorageService;
         private readonly IUnitOfWork unitOfWork;
         private readonly ILogger<MapFileCleanupJob> logger;
 
         public MapFileCleanupJob(
             IPlainStorageAccessor<MapFileDeletionRequest> requests,
-            IPlainStorageAccessor<MapBrowseItem> maps,
             IMapStorageService mapStorageService,
             IUnitOfWork unitOfWork,
             ILogger<MapFileCleanupJob> logger)
         {
             this.requests = requests;
-            this.maps = maps;
             this.mapStorageService = mapStorageService;
             this.unitOfWork = unitOfWork;
             this.logger = logger;
@@ -45,14 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Maps
             {
                 try
                 {
-                    if (maps.GetById(request.FileName) != null)
-                    {
-                        requests.Remove(request.Id);
-                        deletedAny = true;
-                        continue;
-                    }
-
-                    await mapStorageService.RemoveMapFileAsync(request.FileName);
+                    await mapStorageService.RemoveMapFileIfNotInUseAsync(request.FileName);
                     requests.Remove(request.Id);
                     deletedAny = true;
                 }
