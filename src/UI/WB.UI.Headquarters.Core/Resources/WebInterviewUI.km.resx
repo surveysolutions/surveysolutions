@@ -544,4 +544,10 @@
     <data name="CompleteReviewSubmitInterview" xml:space="preserve">
         <value>បទសម្ភាសន៍ {{key}}</value>
     </data>
+    <data name="GeographyPreview" xml:space="preserve">
+        <value>ការមើលជាមុននៃភូមិសាស្ត្រ</value>
+    </data>
+    <data name="RealQuestion_Hint" xml:space="preserve">
+        <value>ប៉ះដើម្បីបញ្ចូលលេខ</value>
+    </data>
 </root>
