@@ -25,4 +25,4 @@ Write the result as the pull request description with exactly these sections:
 Numbered; only questions whose answers change the implementation. Write "None" if there are none.
 
 ## Next step
-Answer in the issue, replace `needs-human` with `copilot:ready`, close this PR, and reassign Copilot with the default agent.
+Answer in the issue, add `copilot:ready` (this PR closes automatically), and reassign Copilot with the default agent.
