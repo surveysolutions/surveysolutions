@@ -55,6 +55,55 @@ namespace WB.Tests.Unit.Designer.Services
         }
 
         [Test]
+        public async Task when_duplicate_rows_exist_should_keep_active_row_and_remove_duplicates()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var activeId = Guid.NewGuid();
+            var dbContext = Create.InMemoryDbContext();
+            dbContext.AnonymousQuestionnaires.AddRange(
+                new AnonymousQuestionnaire
+                {
+                    QuestionnaireId = questionnaireId,
+                    AnonymousQuestionnaireId = Guid.NewGuid(),
+                    IsActive = false,
+                    GeneratedAtUtc = DateTime.UtcNow.AddMinutes(1)
+                },
+                new AnonymousQuestionnaire
+                {
+                    QuestionnaireId = questionnaireId,
+                    AnonymousQuestionnaireId = activeId,
+                    IsActive = true,
+                    GeneratedAtUtc = DateTime.UtcNow
+                });
+            await dbContext.SaveChangesAsync();
+
+            var historyMutationService = new Mock<IQuestionnaireHistoryMutationService>();
+            var service = new AnonymousQuestionnaireStateService(dbContext, historyMutationService.Object);
+
+            var result = await service.SaveStateAsync(
+                questionnaireId, false, "Questionnaire title", Guid.NewGuid(), "designer-user");
+
+            result.AnonymousQuestionnaireId.Should().Be(activeId);
+            result.IsActive.Should().BeFalse();
+            dbContext.AnonymousQuestionnaires.Count(x => x.QuestionnaireId == questionnaireId).Should().Be(1);
+            historyMutationService.Verify(x => x.StageQuestionnaireChangeItemAsync(
+                    questionnaireId,
+                    It.IsAny<Guid>(),
+                    "designer-user",
+                    QuestionnaireActionType.AnonymousSharingDisabled,
+                    QuestionnaireItemType.Questionnaire,
+                    questionnaireId,
+                    "Questionnaire title",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null),
+                Times.Once);
+        }
+
+        [Test]
         public async Task when_state_is_already_requested_value_should_not_append_history()
         {
             var questionnaireId = Guid.NewGuid();

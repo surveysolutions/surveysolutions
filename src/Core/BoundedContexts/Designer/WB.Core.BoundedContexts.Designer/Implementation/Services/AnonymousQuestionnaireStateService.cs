@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -78,8 +79,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             $"select pg_advisory_xact_lock({questionnaireLockId})");
                     }
 
-                    var anonymousQuestionnaire = await this.dbContext.AnonymousQuestionnaires
-                        .SingleOrDefaultAsync(a => a.QuestionnaireId == questionnaireId);
+                    var anonymousQuestionnaires = await this.dbContext.AnonymousQuestionnaires
+                        .Where(a => a.QuestionnaireId == questionnaireId)
+                        .OrderByDescending(a => a.IsActive)
+                        .ThenByDescending(a => a.GeneratedAtUtc)
+                        .ThenBy(a => a.AnonymousQuestionnaireId)
+                        .ToListAsync();
+                    var anonymousQuestionnaire = anonymousQuestionnaires.FirstOrDefault();
+                    if (anonymousQuestionnaires.Count > 1)
+                        this.dbContext.AnonymousQuestionnaires.RemoveRange(anonymousQuestionnaires.Skip(1));
+
                     var shouldAddHistoryRecord = (anonymousQuestionnaire?.IsActive ?? false) != isActive;
 
                     if (anonymousQuestionnaire == null)

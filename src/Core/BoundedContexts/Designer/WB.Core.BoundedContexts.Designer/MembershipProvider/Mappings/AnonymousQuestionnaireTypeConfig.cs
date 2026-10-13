@@ -17,6 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
                 .HasColumnName("anonymous_questionnaire_id").ValueGeneratedNever();
 
             builder.Property(e => e.QuestionnaireId).HasColumnName("questionnaire_id");
+            builder.HasIndex(e => e.QuestionnaireId).IsUnique();
 
             builder.Property(e => e.IsActive).HasColumnName("is_active");
             builder.Property(e => e.GeneratedAtUtc).HasColumnName("generated_at_utc");
