@@ -34,13 +34,11 @@
                 </p>
                 <p>
                     <input type="button" :value="$t('QuestionnaireEditor.SideBarCategoriesAddNew')"
-                        value="ADD new category" class="btn lighter-hover" @click.stop="addNewCategory()"
-                        v-if="!isReadOnlyForUser" />
+                        class="btn lighter-hover" @click.stop="addNewCategory()" v-if="!isReadOnlyForUser" />
                 </p>
                 <p>
                     <input type="button" :value="$t('QuestionnaireEditor.SideBarCategoriesUploadNew')"
-                        @click.stop="openFileDialog()" value="Upload new categories" class="btn lighter-hover"
-                        v-if="!isReadOnlyForUser" capture />
+                        @click.stop="openFileDialog()" class="btn lighter-hover" v-if="!isReadOnlyForUser" capture />
 
                     <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'cfunew'" v-model="file"
                         :size="10 * 1024 * 1024" :drop="false" :drop-directory="false" @input-file="createAndUploadFile"
