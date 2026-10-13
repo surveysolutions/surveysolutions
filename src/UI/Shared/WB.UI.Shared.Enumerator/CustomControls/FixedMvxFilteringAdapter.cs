@@ -204,6 +204,11 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             }
         }
 
+        public override int ViewTypeCount => base.ViewTypeCount + 1;
+
+        public override int GetItemViewType(int position)
+            => Loading ? base.ViewTypeCount : base.GetItemViewType(position);
+
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
             if (Loading)
