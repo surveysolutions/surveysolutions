@@ -102,4 +102,7 @@
     <data name="ServiceUnavailable" xml:space="preserve">
         <value>Shërbimi i asistentit është përkohësisht i padisponueshëm. Ju lutemi provoni përsëri më vonë.</value>
     </data>
+    <data name="MessageTooLong" xml:space="preserve">
+        <value>Mesazhi është shumë i gjatë dhe është prerë. Ju lutemi shkurtojeni para dërgimit.</value>
+    </data>
 </root>
