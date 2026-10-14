@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             var headers = report.Headers;
             var data = report.Data;
 
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(FontsHelper.DefaultFontName) };
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine("Noto Sans") };
             
             using (XLWorkbook excelPackage = new XLWorkbook(loadOptions))
             {
