@@ -45,7 +45,9 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             }
 
             var any = fonts.Value.FirstOrDefault();
-            return any.Value == null ? null : new FontResolverInfo(any.Value);
+            return any.Value == null
+                ? null
+                : ResolveFamily(any.Key.family, isBold, isItalic) ?? new FontResolverInfo(any.Value);
         }
 
         public byte[]? GetFont(string faceName) => File.ReadAllBytes(faceName);
