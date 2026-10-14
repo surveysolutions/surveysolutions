@@ -14,7 +14,7 @@
         style="@style/Interview_Question"
         android:orientation="vertical"
         android:layout_marginTop="@dimen/Interview_Group_margin_top"
-        local:MvxBind="Visible And(CanSwitchToWebMode, Not(IsLoading)) ;">
+        local:MvxBind="Visible And(CanSwitchToWebMode, Not(IsLoading), Not(HasLoadingError)) ;">
       <CheckBox
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
         style="@style/Interview_Question"
         android:orientation="vertical"
         android:layout_marginTop="@dimen/Interview_Group_margin_top"
-        local:MvxBind="Visible And(RequestWebInterview, Not(IsLoading))">
+        local:MvxBind="Visible And(RequestWebInterview, Not(IsLoading), Not(HasLoadingError))">
         <View
                 style="@style/Interview_Complete_Divider" />
 
@@ -54,7 +54,7 @@
         style="@style/Interview_Question"
         android:orientation="vertical"
         android:layout_marginTop="@dimen/Interview_Group_margin_top"
-        local:MvxBind="Visible Not(IsLoading)">
+        local:MvxBind="Visible And(Not(IsLoading), Not(HasLoadingError))">
 
         <TextView
                 style="@style/Interview_Complete_Screen_Text"

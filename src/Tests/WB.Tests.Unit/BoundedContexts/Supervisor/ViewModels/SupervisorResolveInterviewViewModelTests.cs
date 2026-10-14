@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -183,7 +184,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
         }
 
         [Test]
-        public void should_include_supervisor_questions_in_counters()
+        public async Task should_include_supervisor_questions_in_counters()
         {
             var interview = Mock.Of<IStatefulInterview>(
                 x => x.CountActiveAnsweredQuestionsInInterviewForSupervisor() == 3
@@ -193,16 +194,138 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
             interviewRepository.Setup(x => x.Get(It.IsAny<string>()))
                 .Returns(interview);
+            interviewRepository.Setup(x => x.GetOrThrow(It.IsAny<string>()))
+                .Returns(interview);
 
             var viewModel = CreateViewModel(interviewRepository: interviewRepository.Object);
 
             // Act
             viewModel.Configure(Id.g1.FormatGuid(), Create.Other.NavigationState(interviewRepository.Object));
+            await WaitForLoadingToFinishAsync(viewModel);
 
             // Assert
             Assert.That(viewModel, Has.Property(nameof(viewModel.ErrorsCount)).EqualTo(2));
             Assert.That(viewModel, Has.Property(nameof(viewModel.AnsweredCount)).EqualTo(3));
             Assert.That(viewModel, Has.Property(nameof(viewModel.UnansweredCount)).EqualTo(5));
+        }
+        
+        [Test]
+        public async Task should_update_entities_with_errors_description_from_supervisor_errors_count()
+        {
+            var interview = Mock.Of<IStatefulInterview>(
+                     x => x.CountActiveAnsweredQuestionsInInterviewForSupervisor() == 3
+                     && x.CountInvalidEntitiesInInterviewForSupervisor() == 2
+                          && x.CountActiveQuestionsInInterviewForSupervisor() == 8
+            );
+            var interviewRepository = new Mock<IStatefulInterviewRepository>();
+            interviewRepository.Setup(x => x.Get(It.IsAny<string>()))
+                     .Returns(interview);
+            interviewRepository.Setup(x => x.GetOrThrow(It.IsAny<string>()))
+                     .Returns(interview);
+
+            var viewModel = CreateViewModel(interviewRepository: interviewRepository.Object);
+
+            viewModel.Configure(Id.g1.FormatGuid(), Create.Other.NavigationState(interviewRepository.Object));
+            await WaitForLoadingToFinishAsync(viewModel);
+
+            Assert.That(viewModel, Has.Property(nameof(viewModel.EntitiesWithErrorsDescription))
+                     .EqualTo(WB.Core.SharedKernels.Enumerator.Properties.UIResources.Interview_Complete_Entities_With_Errors + " 2"));
+        }
+
+        [Test]
+        public async Task should_show_retryable_error_state_when_background_load_fails()
+        {
+            var interview = Create.AggregateRoot.StatefulInterview(interviewId: InterviewId);
+            var interviewRepository = Abc.SetUp.StatefulInterviewRepository(interview);
+            var entitiesListViewModelFactory = new Mock<IEntitiesListViewModelFactory>();
+
+            entitiesListViewModelFactory
+                .Setup(x => x.GetTopUnansweredQuestions(It.IsAny<string>(), It.IsAny<NavigationState>(), It.IsAny<bool>()))
+                .Throws(new InvalidOperationException("load failed"));
+            entitiesListViewModelFactory.SetupGet(x => x.MaxNumberOfEntities).Returns(10);
+
+            var viewModel = CreateViewModel(
+                interviewRepository: interviewRepository,
+                entitiesListViewModelFactory: entitiesListViewModelFactory.Object);
+
+            viewModel.Configure(InterviewId.FormatGuid(), Create.Other.NavigationState(interviewRepository));
+            await WaitForLoadingToFinishAsync(viewModel);
+
+            viewModel.HasLoadingError.Should().BeTrue();
+            viewModel.LoadingErrorMessage.Should().Contain("load failed");
+            viewModel.AnsweredCount.Should().Be(0);
+            viewModel.ErrorsCount.Should().Be(0);
+            viewModel.UnansweredCount.Should().Be(0);
+            viewModel.RetryLoadCommand.CanExecute().Should().BeTrue();
+        }
+
+        [Test]
+        public async Task should_retry_loading_after_background_failure()
+        {
+            var interview = Mock.Of<IStatefulInterview>(
+                x => x.CountActiveAnsweredQuestionsInInterviewForSupervisor() == 3
+                     && x.CountInvalidEntitiesInInterviewForSupervisor() == 2
+                     && x.CountActiveQuestionsInInterviewForSupervisor() == 8
+            );
+            var interviewRepository = new Mock<IStatefulInterviewRepository>();
+            interviewRepository.Setup(x => x.Get(It.IsAny<string>())).Returns(interview);
+            interviewRepository.Setup(x => x.GetOrThrow(It.IsAny<string>())).Returns(interview);
+
+            var defaultResult = new EntitiesListViewModelFactoryResult(Enumerable.Empty<EntityWithErrorsViewModel>(), 0);
+            var entitiesListViewModelFactory = new Mock<IEntitiesListViewModelFactory>();
+            entitiesListViewModelFactory
+                .SetupSequence(x => x.GetTopUnansweredQuestions(It.IsAny<string>(), It.IsAny<NavigationState>(), It.IsAny<bool>()))
+                .Throws(new InvalidOperationException("load failed"))
+                .Returns(defaultResult);
+            entitiesListViewModelFactory.Setup(x => x.GetTopEntitiesWithErrors(It.IsAny<string>(), It.IsAny<NavigationState>())).Returns(defaultResult);
+            entitiesListViewModelFactory.Setup(x => x.GetTopFailedCriticalRulesFromState(It.IsAny<string>(), It.IsAny<NavigationState>())).Returns(defaultResult);
+            entitiesListViewModelFactory.Setup(x => x.GetTopUnansweredCriticalQuestions(It.IsAny<string>(), It.IsAny<NavigationState>())).Returns(defaultResult);
+            entitiesListViewModelFactory.SetupGet(x => x.MaxNumberOfEntities).Returns(10);
+
+            var viewModel = CreateViewModel(
+                interviewRepository: interviewRepository.Object,
+                entitiesListViewModelFactory: entitiesListViewModelFactory.Object);
+
+            viewModel.Configure(Id.g1.FormatGuid(), Create.Other.NavigationState(interviewRepository.Object));
+            await WaitForLoadingToFinishAsync(viewModel);
+            viewModel.HasLoadingError.Should().BeTrue();
+
+            viewModel.RetryLoadCommand.Execute();
+            await WaitForLoadingToFinishAsync(viewModel);
+
+            viewModel.HasLoadingError.Should().BeFalse();
+            viewModel.ErrorsCount.Should().Be(2);
+            viewModel.AnsweredCount.Should().Be(3);
+            viewModel.UnansweredCount.Should().Be(5);
+        }
+
+        private static async Task WaitForLoadingToFinishAsync(SupervisorResolveInterviewViewModel viewModel)
+        {
+            if (!viewModel.IsLoading)
+                return;
+
+            var loadingFinished = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+            void OnPropertyChanged(object sender, PropertyChangedEventArgs args)
+            {
+                if (args.PropertyName == nameof(viewModel.IsLoading) && !viewModel.IsLoading)
+                    loadingFinished.TrySetResult(true);
+            }
+
+            viewModel.PropertyChanged += OnPropertyChanged;
+            try
+            {
+                if (!viewModel.IsLoading)
+                    return;
+
+                var completedTask = await Task.WhenAny(loadingFinished.Task, Task.Delay(TimeSpan.FromSeconds(5)));
+                completedTask.Should().Be(loadingFinished.Task);
+                await loadingFinished.Task;
+            }
+            finally
+            {
+                viewModel.PropertyChanged -= OnPropertyChanged;
+            }
         }
 
         [Test]
