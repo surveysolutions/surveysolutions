@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Options;
@@ -9,6 +10,7 @@ using Moq;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Esri;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Maps;
@@ -17,6 +19,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.SharedKernels.Configs;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -260,6 +263,107 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
             {
                 Directory.Delete(tempBase, true);
             }
+        }
+
+        [Test]
+        public async Task GetMapContentHashAsync_should_return_cached_hash_for_local_map()
+        {
+            var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            var storageDirectory = Path.Combine(tempBase, "storage");
+            var mapsFolder = Path.Combine(storageDirectory, "MapsData");
+            Directory.CreateDirectory(mapsFolder);
+
+            try
+            {
+                const string mapName = "map.tif";
+                var mapContent = new byte[] { 1, 2, 3, 4 };
+                var mapPath = Path.Combine(mapsFolder, mapName);
+                await File.WriteAllBytesAsync(mapPath, mapContent);
+                await File.WriteAllTextAsync(mapPath + ".md5", JsonConvert.SerializeObject(new
+                {
+                    MD5 = MD5.HashData(mapContent),
+                    LastWriteTime = new DateTimeOffset(File.GetLastWriteTimeUtc(mapPath)).ToUnixTimeMilliseconds()
+                }));
+
+                var mapStorage = new TestPlainStorage<MapBrowseItem>();
+                mapStorage.Store(Create.Entity.MapBrowseItem(mapName), mapName);
+
+                var service = Create.Service.MapFileStorageService(
+                    mapsStorage: mapStorage,
+                    fileStorageConfig: Options.Create(new FileStorageConfig { TempData = storageDirectory }),
+                    geospatialConfig: Options.Create(new GeospatialConfig()));
+
+                var result = await service.GetMapContentHashAsync(mapName);
+
+                Assert.That(result, Is.EqualTo(Convert.ToBase64String(MD5.HashData(mapContent))));
+            }
+            finally
+            {
+                Directory.Delete(tempBase, true);
+            }
+        }
+
+        [Test]
+        public async Task GetMapContentHashAsync_should_ignore_stale_cached_hash_for_local_map()
+        {
+            var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            var storageDirectory = Path.Combine(tempBase, "storage");
+            var mapsFolder = Path.Combine(storageDirectory, "MapsData");
+            Directory.CreateDirectory(mapsFolder);
+
+            try
+            {
+                const string mapName = "map.tif";
+                var mapContent = new byte[] { 1, 2, 3, 4 };
+                var mapPath = Path.Combine(mapsFolder, mapName);
+                await File.WriteAllBytesAsync(mapPath, mapContent);
+                await File.WriteAllTextAsync(mapPath + ".md5", JsonConvert.SerializeObject(new
+                {
+                    MD5 = new byte[] { 9, 9, 9, 9 },
+                    LastWriteTime = 0L
+                }));
+
+                var mapStorage = new TestPlainStorage<MapBrowseItem>();
+                mapStorage.Store(Create.Entity.MapBrowseItem(mapName), mapName);
+
+                var service = Create.Service.MapFileStorageService(
+                    mapsStorage: mapStorage,
+                    fileStorageConfig: Options.Create(new FileStorageConfig { TempData = storageDirectory }),
+                    geospatialConfig: Options.Create(new GeospatialConfig()));
+
+                var result = await service.GetMapContentHashAsync(mapName);
+
+                Assert.That(result, Is.EqualTo(Convert.ToBase64String(MD5.HashData(mapContent))));
+            }
+            finally
+            {
+                Directory.Delete(tempBase, true);
+            }
+        }
+
+        [Test]
+        public async Task GetMapContentHashAsync_should_create_missing_hash_for_external_map()
+        {
+            const string mapName = "map.tif";
+            var mapContent = new byte[] { 1, 2, 3, 4 };
+            var mapStorage = new TestPlainStorage<MapBrowseItem>();
+            mapStorage.Store(Create.Entity.MapBrowseItem(mapName), mapName);
+
+            var externalStorage = new Mock<IExternalFileStorage>();
+            externalStorage.Setup(x => x.IsEnabled()).Returns(true);
+            externalStorage.Setup(x => x.GetBinaryAsync("maps/map.tif.md5")).ReturnsAsync((byte[])null);
+            externalStorage.Setup(x => x.GetBinaryAsync("maps/map.tif")).ReturnsAsync(mapContent);
+            externalStorage.Setup(x => x.StoreAsync("maps/map.tif.md5", It.IsAny<Stream>(), "text/plain", null))
+                .ReturnsAsync(new FileObject());
+
+            var service = Create.Service.MapFileStorageService(
+                mapsStorage: mapStorage,
+                externalFileStorage: externalStorage.Object);
+
+            var result = await service.GetMapContentHashAsync(mapName);
+
+            Assert.That(result, Is.EqualTo(Convert.ToBase64String(MD5.HashData(mapContent))));
+            externalStorage.Verify(x => x.StoreAsync("maps/map.tif.md5", It.IsAny<Stream>(), "text/plain", null), Times.Once);
         }
 
         [Test]

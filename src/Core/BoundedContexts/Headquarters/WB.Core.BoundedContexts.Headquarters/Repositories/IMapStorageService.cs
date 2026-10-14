@@ -14,6 +14,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         Task<MapBrowseItem> DeleteMap(string map);
         Task DeleteAllMaps();
         Task<byte[]> GetMapContentAsync(string mapName);
+#nullable enable
+        Task<string?> GetMapContentHashAsync(string mapName);
+#nullable restore
 
         MapBrowseItem DeleteMapUserLink(string map, string user);
         ReportView GetAllMapUsersReportView();

@@ -84,7 +84,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
             mapService.Setup(x => x.GetAvailableMaps(false)).Returns(new List<MapDescription>());
             mapService.Setup(x => x.GetAvailableShapefiles()).Returns(new List<ShapefileDescription>());
             mapService.Setup(x => x.DoesMapExist("big-map.tpk")).Returns(false);
-            mapService.Setup(x => x.GetTempMapSaveStream("big-map.tpk")).Returns(tempStream);
+            mapService.Setup(x => x.GetTempMapSaveStream("big-map.tpk", false)).Returns(tempStream);
 
             var service = Create.Service.MapSyncProvider(
                 synchronizationService: synchronizationService.Object,
@@ -97,6 +97,231 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
             var downloadReports = progress.Items.Count(p => p.Status == SynchronizationStatus.Download);
             Assert.That(downloadReports, Is.EqualTo(3));
             mapService.Verify(x => x.MoveTempMapToPermanent("big-map.tpk"), Times.Once);
+        }
+
+        [Test]
+        public async Task when_partial_map_has_no_stored_etag_should_restart_download_from_beginning()
+        {
+            var synchronizationService = new Mock<IOnlineSynchronizationService>();
+            synchronizationService.Setup(x => x.GetMapList(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<MapView> { new MapView { MapName = "resume-map.tpk" } });
+
+            var sourceBytes = new byte[] { 4, 5, 6 };
+            synchronizationService.Setup(x => x.GetMapContentStream("resume-map.tpk", It.IsAny<CancellationToken>(), 0, null))
+                .ReturnsAsync(new RestStreamResult
+                {
+                    ContentLength = sourceBytes.Length,
+                    Stream = new MemoryStream(sourceBytes)
+                });
+
+            var tempStream = new NonDisposingMemoryStream();
+            tempStream.Write(new byte[] { 1, 2, 3 }, 0, 3);
+
+            var mapService = new Mock<IMapService>();
+            mapService.Setup(x => x.GetAvailableMaps(false)).Returns(new List<MapDescription>());
+            mapService.Setup(x => x.GetAvailableShapefiles()).Returns(new List<ShapefileDescription>());
+            mapService.Setup(x => x.DoesMapExist("resume-map.tpk")).Returns(false);
+            mapService.Setup(x => x.GetTempMapOffset("resume-map.tpk")).Returns(3);
+            mapService.Setup(x => x.GetTempMapETag("resume-map.tpk")).Returns((string)null);
+            mapService.Setup(x => x.GetTempMapSaveStream("resume-map.tpk", false)).Returns(() =>
+            {
+                tempStream.Position = 0;
+                tempStream.SetLength(0);
+                return tempStream;
+            });
+
+            var service = Create.Service.MapSyncProvider(
+                synchronizationService: synchronizationService.Object,
+                mapService: mapService.Object);
+
+            await service.Synchronize(new Progress<SyncProgressInfo>(), CancellationToken.None, new SynchronizationStatistics());
+
+            synchronizationService.Verify(x => x.GetMapContentStream("resume-map.tpk", It.IsAny<CancellationToken>(), 0, null), Times.Once);
+            Assert.That(tempStream.ToArray(), Is.EqualTo(sourceBytes));
+            mapService.Verify(x => x.MoveTempMapToPermanent("resume-map.tpk"), Times.Once);
+        }
+
+        [Test]
+        public async Task when_server_returns_full_content_for_resumed_download_should_restart_from_beginning()
+        {
+            var synchronizationService = new Mock<IOnlineSynchronizationService>();
+            synchronizationService.Setup(x => x.GetMapList(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<MapView> { new MapView { MapName = "range-fallback-map.tpk" } });
+
+            var sourceBytes = new byte[] { 7, 8, 9 };
+            synchronizationService.Setup(x => x.GetMapContentStream("range-fallback-map.tpk", It.IsAny<CancellationToken>(), 3, "etag-1"))
+                .ReturnsAsync(new RestStreamResult
+                {
+                    ContentLength = sourceBytes.Length,
+                    Stream = new MemoryStream(sourceBytes),
+                    IsPartialContent = false,
+                    ETag = "\"etag-2\""
+                });
+
+            var tempStream = new NonDisposingMemoryStream();
+            tempStream.Write(new byte[] { 1, 2, 3 }, 0, 3);
+
+            var mapService = new Mock<IMapService>();
+            mapService.Setup(x => x.GetAvailableMaps(false)).Returns(new List<MapDescription>());
+            mapService.Setup(x => x.GetAvailableShapefiles()).Returns(new List<ShapefileDescription>());
+            mapService.Setup(x => x.DoesMapExist("range-fallback-map.tpk")).Returns(false);
+            mapService.Setup(x => x.GetTempMapOffset("range-fallback-map.tpk")).Returns(3);
+            mapService.Setup(x => x.GetTempMapETag("range-fallback-map.tpk")).Returns("etag-1");
+            mapService.Setup(x => x.GetTempMapSaveStream("range-fallback-map.tpk", false)).Returns(() =>
+            {
+                tempStream.Position = 0;
+                tempStream.SetLength(0);
+                return tempStream;
+            });
+
+            var service = Create.Service.MapSyncProvider(
+                synchronizationService: synchronizationService.Object,
+                mapService: mapService.Object);
+
+            await service.Synchronize(new Progress<SyncProgressInfo>(), CancellationToken.None, new SynchronizationStatistics());
+
+            synchronizationService.Verify(x => x.GetMapContentStream("range-fallback-map.tpk", It.IsAny<CancellationToken>(), 3, "etag-1"), Times.Once);
+            mapService.Verify(x => x.SaveTempMapETag("range-fallback-map.tpk", null), Times.Once);
+            Assert.That(tempStream.ToArray(), Is.EqualTo(sourceBytes));
+            mapService.Verify(x => x.MoveTempMapToPermanent("range-fallback-map.tpk"), Times.Once);
+        }
+
+        [Test]
+        public async Task when_partial_resume_response_has_no_etag_should_keep_existing_resume_token()
+        {
+            var synchronizationService = new Mock<IOnlineSynchronizationService>();
+            synchronizationService.Setup(x => x.GetMapList(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<MapView> { new MapView { MapName = "partial-map.tpk" } });
+
+            var sourceBytes = new byte[] { 7, 8, 9 };
+            synchronizationService.Setup(x => x.GetMapContentStream("partial-map.tpk", It.IsAny<CancellationToken>(), 3, "etag-1"))
+                .ReturnsAsync(new RestStreamResult
+                {
+                    ContentLength = sourceBytes.Length,
+                    Stream = new MemoryStream(sourceBytes),
+                    IsPartialContent = true,
+                    ETag = null
+                });
+
+            var tempStream = new NonDisposingMemoryStream();
+            tempStream.Write(new byte[] { 1, 2, 3 }, 0, 3);
+
+            var mapService = new Mock<IMapService>();
+            mapService.Setup(x => x.GetAvailableMaps(false)).Returns(new List<MapDescription>());
+            mapService.Setup(x => x.GetAvailableShapefiles()).Returns(new List<ShapefileDescription>());
+            mapService.Setup(x => x.DoesMapExist("partial-map.tpk")).Returns(false);
+            mapService.Setup(x => x.GetTempMapOffset("partial-map.tpk")).Returns(3);
+            mapService.Setup(x => x.GetTempMapETag("partial-map.tpk")).Returns("etag-1");
+            mapService.Setup(x => x.GetTempMapSaveStream("partial-map.tpk", true)).Returns(tempStream);
+
+            var service = Create.Service.MapSyncProvider(
+                synchronizationService: synchronizationService.Object,
+                mapService: mapService.Object);
+
+            await service.Synchronize(new Progress<SyncProgressInfo>(), CancellationToken.None, new SynchronizationStatistics());
+
+            mapService.Verify(x => x.SaveTempMapETag("partial-map.tpk", It.IsAny<string>()), Times.Never);
+            mapService.Verify(x => x.MoveTempMapToPermanent("partial-map.tpk"), Times.Once);
+        }
+
+        [Test]
+        public async Task when_resume_response_reports_total_file_size_should_calculate_progress_from_total_size()
+        {
+            var synchronizationService = new Mock<IOnlineSynchronizationService>();
+            synchronizationService.Setup(x => x.GetMapList(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<MapView> { new MapView { MapName = "progress-map.tpk" } });
+
+            var sourceBytes = new byte[] { 4, 5, 6 };
+            synchronizationService.Setup(x => x.GetMapContentStream("progress-map.tpk", It.IsAny<CancellationToken>(), 3, "etag-1"))
+                .ReturnsAsync(new RestStreamResult
+                {
+                    ContentLength = 6,
+                    Stream = new MemoryStream(sourceBytes),
+                    IsPartialContent = true,
+                    ETag = "etag-1"
+                });
+
+            var tempStream = new NonDisposingMemoryStream();
+            tempStream.Write(new byte[] { 1, 2, 3 }, 0, 3);
+
+            var mapService = new Mock<IMapService>();
+            mapService.Setup(x => x.GetAvailableMaps(false)).Returns(new List<MapDescription>());
+            mapService.Setup(x => x.GetAvailableShapefiles()).Returns(new List<ShapefileDescription>());
+            mapService.Setup(x => x.DoesMapExist("progress-map.tpk")).Returns(false);
+            mapService.Setup(x => x.GetTempMapOffset("progress-map.tpk")).Returns(3);
+            mapService.Setup(x => x.GetTempMapETag("progress-map.tpk")).Returns("etag-1");
+            mapService.Setup(x => x.GetTempMapSaveStream("progress-map.tpk", true)).Returns(tempStream);
+
+            var service = Create.Service.MapSyncProvider(
+                synchronizationService: synchronizationService.Object,
+                mapService: mapService.Object);
+            var progress = new ImmediateProgress();
+
+            await service.Synchronize(progress, CancellationToken.None, new SynchronizationStatistics());
+
+            var downloadProgress = progress.Items.Single(x => x.Status == SynchronizationStatus.Download).TransferProgress;
+            Assert.That(downloadProgress.TotalBytesToReceive, Is.EqualTo(6));
+            Assert.That(downloadProgress.ProgressPercentage, Is.EqualTo(100));
+        }
+
+        [Test]
+        public async Task when_server_returns_weak_etag_should_not_store_it_for_resume()
+        {
+            var synchronizationService = new Mock<IOnlineSynchronizationService>();
+            synchronizationService.Setup(x => x.GetMapList(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<MapView> { new MapView { MapName = "weak-etag-map.tpk" } });
+
+            synchronizationService.Setup(x => x.GetMapContentStream("weak-etag-map.tpk", It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new RestStreamResult
+                {
+                    ContentLength = 3,
+                    Stream = new MemoryStream(new byte[] { 1, 2, 3 }),
+                    ETag = "W/\"etag-1\""
+                });
+
+            var mapService = new Mock<IMapService>();
+            mapService.Setup(x => x.GetAvailableMaps(false)).Returns(new List<MapDescription>());
+            mapService.Setup(x => x.GetAvailableShapefiles()).Returns(new List<ShapefileDescription>());
+            mapService.Setup(x => x.DoesMapExist("weak-etag-map.tpk")).Returns(false);
+            mapService.Setup(x => x.GetTempMapSaveStream("weak-etag-map.tpk", false)).Returns(new MemoryStream());
+
+            var service = Create.Service.MapSyncProvider(
+                synchronizationService: synchronizationService.Object,
+                mapService: mapService.Object);
+
+            await service.Synchronize(new Progress<SyncProgressInfo>(), CancellationToken.None, new SynchronizationStatistics());
+
+            mapService.Verify(x => x.SaveTempMapETag("weak-etag-map.tpk", It.IsAny<string>()), Times.Never);
+        }
+
+        [Test]
+        public async Task when_server_returns_strong_etag_should_store_it_without_quotes()
+        {
+            var synchronizationService = new Mock<IOnlineSynchronizationService>();
+            synchronizationService.Setup(x => x.GetMapList(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<MapView> { new MapView { MapName = "strong-etag-map.tpk" } });
+
+            synchronizationService.Setup(x => x.GetMapContentStream("strong-etag-map.tpk", It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new RestStreamResult
+                {
+                    ContentLength = 3,
+                    Stream = new MemoryStream(new byte[] { 1, 2, 3 }),
+                    ETag = "\"etag-1\""
+                });
+
+            var mapService = new Mock<IMapService>();
+            mapService.Setup(x => x.GetAvailableMaps(false)).Returns(new List<MapDescription>());
+            mapService.Setup(x => x.GetAvailableShapefiles()).Returns(new List<ShapefileDescription>());
+            mapService.Setup(x => x.DoesMapExist("strong-etag-map.tpk")).Returns(false);
+            mapService.Setup(x => x.GetTempMapSaveStream("strong-etag-map.tpk", false)).Returns(new MemoryStream());
+
+            var service = Create.Service.MapSyncProvider(
+                synchronizationService: synchronizationService.Object,
+                mapService: mapService.Object);
+
+            await service.Synchronize(new Progress<SyncProgressInfo>(), CancellationToken.None, new SynchronizationStatistics());
+
+            mapService.Verify(x => x.SaveTempMapETag("strong-etag-map.tpk", "etag-1"), Times.Once);
         }
 
         [Test]
@@ -119,7 +344,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
             mapService.Setup(x => x.GetAvailableMaps(false)).Returns(new List<MapDescription>());
             mapService.Setup(x => x.GetAvailableShapefiles()).Returns(new List<ShapefileDescription>());
             mapService.Setup(x => x.DoesMapExist("chunked-map.tpk")).Returns(false);
-            mapService.Setup(x => x.GetTempMapSaveStream("chunked-map.tpk")).Returns(tempStream);
+            mapService.Setup(x => x.GetTempMapSaveStream("chunked-map.tpk", false)).Returns(tempStream);
 
             var service = Create.Service.MapSyncProvider(
                 synchronizationService: synchronizationService.Object,
@@ -184,6 +409,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
                     this.inner.Dispose();
 
                 base.Dispose(disposing);
+            }
+        }
+
+        private sealed class NonDisposingMemoryStream : MemoryStream
+        {
+            protected override void Dispose(bool disposing)
+            {
             }
         }
     }

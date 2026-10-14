@@ -107,8 +107,11 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             };
 
             request.Headers.UserAgent.ParseAdd(this.restServiceSettings.UserAgent);
-            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
-            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
+            if (customHeaders == null || !customHeaders.ContainsKey("Accept-Encoding"))
+            {
+                request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+                request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
+            }
 
             try
             {
@@ -369,7 +372,11 @@ namespace WB.Core.Infrastructure.HttpServices.Services
                 userCancellationToken: ctoken, request: null, queryString: queryString, customHeaders: customHeaders)
                 .ConfigureAwait(false);
 
-            var contentLength = response.Content.Headers.ContentLength;
+            var isPartialContent = response.StatusCode == System.Net.HttpStatusCode.PartialContent;
+            var contentLength = isPartialContent
+                ? response.Content.Headers.ContentRange?.Length ?? response.Content.Headers.ContentLength
+                : response.Content.Headers.ContentLength;
+            var eTag = response.Headers.ETag?.Tag;
 
             var contentCompressionType = this.GetContentCompressionType(response.Content.Headers);
 
@@ -381,20 +388,26 @@ namespace WB.Core.Infrastructure.HttpServices.Services
                     return new RestStreamResult
                     {
                         Stream = this.stringCompressor.GetDecompressingGZipStream(responseStream),
-                        ContentLength = contentLength
+                        ContentLength = contentLength,
+                        IsPartialContent = isPartialContent,
+                        ETag = eTag
                     };
 
                 case RestContentCompressionType.Deflate:
                     return new RestStreamResult
                     {
                         Stream = this.stringCompressor.GetDecompressingDeflateStream(responseStream),
-                        ContentLength = contentLength
+                        ContentLength = contentLength,
+                        IsPartialContent = isPartialContent,
+                        ETag = eTag
                     };
                 default:
                     return new RestStreamResult
                     {
                         Stream = responseStream,
-                        ContentLength = contentLength
+                        ContentLength = contentLength,
+                        IsPartialContent = isPartialContent,
+                        ETag = eTag
                     };
             }
         }
