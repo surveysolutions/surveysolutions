@@ -10,12 +10,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
 {
     public class ExcelExportFile : ExportFile
     {
+        private const string DefaultFontName = "Noto Sans";
+
         public override byte[] GetFileBytes(ReportView report)
         {
             var headers = report.Headers;
             var data = report.Data;
 
-            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine("Noto Sans") };
+            var loadOptions = new LoadOptions { GraphicEngine = new DefaultGraphicEngine(DefaultFontName) };
             
             using (XLWorkbook excelPackage = new XLWorkbook(loadOptions))
             {
