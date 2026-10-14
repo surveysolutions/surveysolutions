@@ -548,6 +548,17 @@ class WebInterviewSettingsApi {
                 headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             })
     }
+
+    sendRemindersNow(questionnaireId, type) {
+        var url = `${this.base}/${questionnaireId}/sendReminders`
+        return this.http(
+            {
+                method: 'post',
+                url: url,
+                data: { type: type },
+                headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
+            })
+    }
 }
 
 class ExportSettings {

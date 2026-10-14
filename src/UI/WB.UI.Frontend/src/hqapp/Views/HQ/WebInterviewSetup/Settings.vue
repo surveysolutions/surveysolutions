@@ -111,7 +111,7 @@
 
                 <div class="col-md-12">
                     <h3>
-                        {{ $t('WebInterviewSettings.CustomizeEmailsText') }}
+                        {{ $t('WebInterviewSettings.CustomizeAndSendEmailsText') }}
                     </h3>
                     <div>
                         <ul class="nav nav-tabs" role="tablist">
@@ -275,6 +275,14 @@
                                                         @click="cancelEditEmailTemplate(emailTemplate)"
                                                         class="btn btn-md btn-link">
                                                         {{ $t('WebInterviewSettings.Cancel') }}
+                                                    </button>
+                                                    <button v-if="isReminderTemplate(emailTemplate)"
+                                                        type="button"
+                                                        :disabled="!started"
+                                                        @click="sendRemindersNow(emailTemplate)"
+                                                        :title="$t('WebInterviewSettings.SendNowTooltip', { reminderType: emailTemplate.buttonTitle })"
+                                                        class="btn btn-md btn-warning">
+                                                        {{ $t('WebInterviewSettings.SendNow') }}
                                                     </button>
                                                 </div>
                                             </div>
@@ -1002,6 +1010,27 @@ export default {
         },
         isMessageSupportedInterviewData(emailTemplate) {
             return emailTemplate.value == 'completeInterviewEmail'
+        },
+        isReminderTemplate(emailTemplate) {
+            return (
+                emailTemplate.value === 'reminder_NoResponse' ||
+                emailTemplate.value === 'reminder_PartialResponse' ||
+                emailTemplate.value === 'rejectEmail'
+            )
+        },
+        async sendRemindersNow(emailTemplate) {
+            var self = this
+            self.$store.dispatch('showProgress')
+            await this.$hq.WebInterviewSettings.sendRemindersNow(
+                this.questionnaireId,
+                emailTemplate.value
+            )
+                .catch(function (error) {
+                    self.$errorHandler(error, self)
+                })
+                .then(function () {
+                    self.$store.dispatch('hideProgress')
+                })
         },
     },
     computed: {
