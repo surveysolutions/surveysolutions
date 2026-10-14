@@ -13,7 +13,7 @@
                                     rules="required" name="resumeWelcome" data-vv-name="resumeWelcome"
                                     ref="resumeWelcome" :min-height="77" maxlength="200"
                                     class="form-control js-elasticArea font-bold"
-                                    placeholder="Please enter the main text">
+                                    :placeholder="$t('WebInterviewSettings.EnterText')">
                                 </Field>
                                 <button type="button" @click="webInterviewPageMessages['resumeWelcome'].text = ''"
                                     class="btn btn-link btn-clear">
