@@ -20,12 +20,15 @@ using Newtonsoft.Json.Linq;
 using System.Threading;
 using System.ComponentModel.DataAnnotations;
 using WB.UI.Designer.Extensions;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
     [Authorize]
     [ApiController]
     [QuestionnairePermissions]
+    // Read-only proxy to a slow external service; a request transaction would pin a DB connection for the whole call.
+    [NoTransaction]
     [Route("api/[controller]")]
     public class AssistanceController : ControllerBase
     {

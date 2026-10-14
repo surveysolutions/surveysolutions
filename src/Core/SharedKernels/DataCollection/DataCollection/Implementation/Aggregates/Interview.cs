@@ -993,7 +993,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvents(treeDifference, userId, originDate);
         }
 
-#nullable enable annotations
+#nullable enable
         public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTimeOffset originDate, double latitude, double longitude,
             double? accuracy, double? altitude, DateTimeOffset timestamp, string? gpsProvider = null, bool isFromMockProvider = false)
 #nullable restore
