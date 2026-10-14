@@ -56,6 +56,11 @@
                             :title="$t('WebInterviewUI.EmailLink_EmailResumeLink')">{{
                                 $t('WebInterviewUI.EmailLink_EmailResumeLink') }}</a>
                     </li>
+                    <li v-if="this.$config.pdfUrl">
+                        <a :href="this.$config.pdfUrl" target="_blank"
+                            download :title="$t('WebInterview.DownloadAnswersHint')">{{
+                                $t('WebInterview.DownloadAnswers') }}</a>
+                    </li>
                     <li v-if="this.$config.inWebTesterMode">
                         <button v-if="inDevMode" type="button" class="btn btn-default btn-link btn-icon"
                             @click="turnOffDevMode" :title="$t('WebInterviewUI.TurnOffDevMode')">

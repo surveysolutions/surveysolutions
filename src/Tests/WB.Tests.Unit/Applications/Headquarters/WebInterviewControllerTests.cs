@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using reCAPTCHA.AspNetCore;
+using Main.Core.Documents;
 using WB.Enumerator.Native.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
@@ -20,6 +21,7 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Domain;
@@ -34,6 +36,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Code.WebInterview;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Shared.Web.Captcha;
@@ -119,6 +122,90 @@ namespace WB.Tests.Unit.Applications.Headquarters
             var model = getResumeModel?.Invoke(controller, new object[] { interviewId }) as ResumeWebInterview;
             Assert.That(model, Is.Not.Null);
             Assert.That(model!.UseRecaptchaV3, Is.True);
+        }
+
+        [TestCase(InterviewMode.CAWI, null, true, ExpectedResult = true)]
+        [TestCase(InterviewMode.CAWI, true, true, ExpectedResult = true)]
+        [TestCase(InterviewMode.CAWI, false, true, ExpectedResult = false)]
+        [TestCase(InterviewMode.CAWI, true, false, ExpectedResult = false)]
+        [TestCase(InterviewMode.CAPI, true, true, ExpectedResult = false)]
+        public bool when_getting_interview_model_should_set_pdf_url_based_on_mode_setting_and_access(
+            InterviewMode mode, bool? allowTranscriptDownloading, bool hasSessionAccess)
+        {
+            const string interviewId = "11111111111111111111111111111111";
+            var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
+            var interviewGuid = Guid.NewGuid();
+            var interview = Mock.Of<IStatefulInterview>(i =>
+                i.Id == interviewGuid
+                && i.QuestionnaireIdentity == questionnaireIdentity
+                && i.Mode == mode
+                && i.GetAssignmentId() == 1);
+
+            var webInterviewConfig = new WebInterviewConfig
+            {
+                AllowTranscriptDownloading = allowTranscriptDownloading,
+                CustomMessages = new Dictionary<WebInterviewUserMessages, string>()
+            };
+
+            var controller = CreateControllerForPdfUrlTest(interview, webInterviewConfig);
+
+            if (hasSessionAccess)
+            {
+                controller.HttpContext.Session.SaveWebInterviewAccessForCurrentUser(interviewGuid.FormatGuid());
+            }
+
+            var getInterviewModel = typeof(WebInterviewController).GetMethod("GetInterviewModel",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            var model = getInterviewModel?.Invoke(controller,
+                new object[] { interviewId, interview, webInterviewConfig }) as WebInterviewIndexPageModel;
+
+            Assert.That(model, Is.Not.Null);
+            return model!.PdfUrl != null;
+        }
+
+        private WebInterviewController CreateControllerForPdfUrlTest(IStatefulInterview interview, WebInterviewConfig webInterviewConfig)
+        {
+            var questionnaireDocument = new QuestionnaireDocument { Title = "Test Questionnaire" };
+            var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(s =>
+                s.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument);
+
+            var webInterviewConfigProvider = Mock.Of<IWebInterviewConfigProvider>(c =>
+                c.Get(It.IsAny<QuestionnaireIdentity>()) == webInterviewConfig);
+
+            var assignment = Mock.Of<Assignment>();
+            var assignments = Mock.Of<IAssignmentsService>(a => a.GetAssignment(It.IsAny<int>()) == assignment);
+            var invitationService = Mock.Of<IInvitationService>(i =>
+                i.GetInvitationForPublicLinkOrNull(It.IsAny<Assignment>(), It.IsAny<string>()) == null);
+
+            var controller = new WebInterviewController(
+                Mock.Of<ICommandService>(),
+                webInterviewConfigProvider,
+                Mock.Of<IStatefulInterviewRepository>(),
+                Mock.Of<IUserViewFactory>(),
+                Mock.Of<IInterviewUniqueKeyGenerator>(),
+                Mock.Of<ICaptchaProvider>(),
+                assignments,
+                invitationService,
+                Mock.Of<INativeReadSideStorage<InterviewSummary>>(),
+                Mock.Of<IInvitationMailingService>(),
+                Mock.Of<IPlainKeyValueStorage<EmailProviderSettings>>(),
+                Mock.Of<IOptions<RecaptchaSettings>>(),
+                Mock.Of<IOptions<CaptchaConfig>>(),
+                Mock.Of<IServiceLocator>(),
+                questionnaireStorage,
+                Mock.Of<IInScopeExecutor>(),
+                Mock.Of<IMemoryCache>(),
+                calendarEventService: Mock.Of<ICalendarEventService>(),
+                webInterviewConfigProvider: webInterviewConfigProvider,
+                webInterviewLinkProvider: Mock.Of<IWebInterviewLinkProvider>());
+
+            controller.ControllerContext.HttpContext = Mock.Of<HttpContext>(c =>
+                c.Session == new MockHttpSession()
+                && c.Request == Mock.Of<HttpRequest>(r => r.Cookies == Mock.Of<IRequestCookieCollection>())
+                && c.Response == Mock.Of<HttpResponse>(r => r.Cookies == Mock.Of<IResponseCookies>()));
+            controller.Url = Mock.Of<IUrlHelper>(x => x.Action(It.IsAny<UrlActionContext>()) == "pdf-url");
+
+            return controller;
         }
 
         [Test]

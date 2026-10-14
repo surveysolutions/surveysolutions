@@ -55,7 +55,8 @@
             },
             mayBeSwitchedToWebMode: @(Model.MayBeSwitchedToWebMode ? "true" : "false"),
             webInterviewUrl: '@Model.WebInterviewUrl',
-            continueLink: '@Model.ContinueLink'
+            continueLink: '@Model.ContinueLink',
+            pdfUrl: @(Model.PdfUrl == null ? "null" : "'" + Model.PdfUrl + "'")
         }
     </script>
     <locale component="webinterview"></locale>
