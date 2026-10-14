@@ -9,6 +9,13 @@
         <input :placeholder="$t('QuestionnaireEditor.SideBarLookupTableFileName')" required="" spellcheck="false"
             v-model="table.fileName" name="fileName" class="form-control" disabled="" type="text" />
 
+        <div v-if="isDescriptionVisible">
+            <div class="divider"></div>
+            <textarea :placeholder="$t('QuestionnaireEditor.SideBarLookupTableDescription')" type="text"
+                v-model="table.description" class="form-control macros-description"
+                v-autosize></textarea>
+        </div>
+
         <div class="drop-box">{{ $t('QuestionnaireEditor.SideBarLookupTableDropFile') }}</div>
 
         <div class="actions clearfix" :class="{ 'dirty': isDirty }">
@@ -19,6 +26,11 @@
                 <button type="button" class="btn lighter-hover" @click.self="cancel()">{{
         $t('QuestionnaireEditor.Cancel')
     }}</button>
+                <button class="btn btn-default pull-right" v-if="isDescriptionEmpty" type="button"
+                    @click.stop="toggleDescription()">
+                    {{ isDescriptionVisible ? $t('QuestionnaireEditor.SideBarMacroHideDescription') :
+                    $t('QuestionnaireEditor.SideBarMacroShowDescription') }}
+                </button>
             </div>
             <div class="permanent-actions clearfix">
                 <a :href="sanitizeUrl(downloadLookupFileBaseUrl + questionnaireId + '?lookupTableId=' + table.itemId)"
@@ -67,14 +79,22 @@ export default {
             return this.tableItem.editLookupTable;
         },
         isDirty() {
-            return this.table.name != this.tableItem.name || (this.table.file !== null && this.table.file !== undefined);
+            return this.table.name != this.tableItem.name
+                || this.table.description != this.tableItem.description
+                || (this.table.file !== null && this.table.file !== undefined);
         },
         isInvalid() {
             return (this.table.name) ? false : true;
         },
         hasUploadedFile() {
             return !isEmpty(this.table.fileName)
-        }
+        },
+        isDescriptionEmpty() {
+            return !this.table.description || this.table.description.trim().length === 0;
+        },
+        isDescriptionVisible() {
+            return this.table.isDescriptionVisible || !isEmpty(this.table.description);
+        },
     },
     methods: {
         fileSelected(file) {
@@ -93,6 +113,10 @@ export default {
 
             table.meta = {};
             table.meta.fileName = file.name;
+        },
+
+        toggleDescription() {
+            this.table.isDescriptionVisible = !this.table.isDescriptionVisible;
         },
 
         async saveLookupTable() {
