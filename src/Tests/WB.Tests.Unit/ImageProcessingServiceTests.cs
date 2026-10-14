@@ -25,6 +25,14 @@ public class ImageProcessingServiceTests
     }
 
     [Test]
+    public void when_validating_incomplete_image_should_throw_invalid_image_exception()
+    {
+        var image = CreateImage(SKEncodedImageFormat.Jpeg, 200, 200);
+
+        Assert.Throws<InvalidImageException>(() => service.Validate(image[..^2]));
+    }
+
+    [Test]
     public void when_resizing_not_an_image_should_throw_invalid_image_exception()
     {
         Assert.Throws<InvalidImageException>(() => service.ResizeImage(new byte[] { 1, 2, 3, 4 }, 100, 100));

@@ -196,8 +196,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             AttachmentDetails details;
             try
             {
-                using var bitmap = SKBitmap.Decode(binaryContent)
+                using var codec = SKCodec.Create(new SKMemoryStream(binaryContent))
                     ?? throw new FormatException("Image cannot be decoded");
+                using var bitmap = new SKBitmap(codec.Info);
+                if (codec.GetPixels(bitmap.Info, bitmap.GetPixels()) != SKCodecResult.Success)
+                    throw new FormatException("Image cannot be decoded");
+
                 details = new AttachmentDetails
                 {
                     Height = bitmap.Height,

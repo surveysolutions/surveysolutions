@@ -16,6 +16,14 @@ public class PdfImageSourceTests
     }
 
     [Test]
+    public void when_content_is_incomplete_image_should_throw_invalid_image_exception()
+    {
+        var image = CreateImage(SKEncodedImageFormat.Jpeg, 200, 200);
+
+        Assert.Throws<InvalidImageException>(() => PdfImageSource.FromBinary(image[..^2]));
+    }
+
+    [Test]
     public void when_image_is_png_should_keep_png_to_preserve_transparency()
     {
         var source = PdfImageSource.FromBinary(CreateImage(SKEncodedImageFormat.Png, 3, 2));

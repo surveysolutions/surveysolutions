@@ -20,8 +20,8 @@ public static class PdfImageSource
         if (codec == null)
             throw new InvalidImageException("Image format is not supported");
 
-        using var bitmap = SKBitmap.Decode(codec);
-        if (bitmap == null)
+        using var bitmap = new SKBitmap(codec.Info);
+        if (codec.GetPixels(bitmap.Info, bitmap.GetPixels()) != SKCodecResult.Success)
             throw new InvalidImageException("Image content is corrupted");
 
         var keepTransparency = codec.EncodedFormat == SKEncodedImageFormat.Png;

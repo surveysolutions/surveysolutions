@@ -55,9 +55,12 @@ namespace WB.UI.Shared.Web.Services
 
             format = codec.EncodedFormat;
 
-            var bitmap = SKBitmap.Decode(codec);
-            if (bitmap == null)
+            var bitmap = new SKBitmap(codec.Info);
+            if (codec.GetPixels(bitmap.Info, bitmap.GetPixels()) != SKCodecResult.Success)
+            {
+                bitmap.Dispose();
                 throw new InvalidImageException("Image content is corrupted");
+            }
 
             return bitmap;
         }
