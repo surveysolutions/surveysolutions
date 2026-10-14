@@ -1,5 +1,6 @@
 ﻿using Moq;
 using NSubstitute;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -22,7 +23,8 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
             IAttachmentService attachmentService = null,
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider = null,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService = null,
-            IMacrosSubstitutionService macrosSubstitutionService = null)
+            IMacrosSubstitutionService macrosSubstitutionService = null,
+            DesignerDbContext listItemStorage = null)
         {
             var hqQuestionnairesController = new HQQuestionnairesController(
                 questionnaireViewFactory: questionnaireViewFactory ?? Mock.Of<IQuestionnaireViewFactory>(),
@@ -32,7 +34,7 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
                 engineVersionService: engineVersionService ?? Mock.Of<IDesignerEngineVersionService>(),
                 serializer: serializer ?? Mock.Of<ISerializer>(),
                 zipUtils: zipUtils ?? Mock.Of<IStringCompressor>(),
-                listItemStorage: Create.InMemoryDbContext(),
+                listItemStorage: listItemStorage ?? Create.InMemoryDbContext(),
                 expressionsPlayOrderProvider: expressionsPlayOrderProvider ??
                                               Substitute.For<IExpressionsPlayOrderProvider>(),
                 questionnaireCompilationVersionService: questionnaireCompilationVersionService ??
