@@ -309,6 +309,9 @@
   <data name="Min" xml:space="preserve">
     <value>Min</value>
   </data>
+  <data name="InvalidNumericFilter" xml:space="preserve">
+    <value>Min/Max filter value is not valid. Please correct it to see the report.</value>
+  </data>
   <data name="Percentile05" xml:space="preserve">
     <value>Percentile 05</value>
   </data>
