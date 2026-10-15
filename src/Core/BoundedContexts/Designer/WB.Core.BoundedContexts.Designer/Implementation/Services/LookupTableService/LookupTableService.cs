@@ -76,7 +76,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
         public LookupTableContent? GetLookupTableContent(QuestionnaireRevision questionnaireId, Guid lookupTableId)
         {
             var questionnaire = this.documentStorage.Get(questionnaireId);
-            if (questionnaire == null)
+            if (questionnaire == null ||
+                questionnaire.PublicKey != (questionnaireId.OriginalQuestionnaireId ?? questionnaireId.QuestionnaireId))
                 throw new ArgumentException(string.Format(ExceptionMessages.QuestionCannotBeFound, questionnaireId));
 
             if (!questionnaire.LookupTables.ContainsKey(lookupTableId))
