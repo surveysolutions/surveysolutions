@@ -110,9 +110,7 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
         [Route("{id}/lookup/{lookupTableId}/headers")]
         public IActionResult GetLookupTableHeaders(QuestionnaireRevision id, Guid lookupTableId)
         {
-            var questionnaireId = id.OriginalQuestionnaireId ?? id.QuestionnaireId;
-
-            var content = this.lookupTableService.GetLookupTableContent(questionnaireId, lookupTableId);
+            var content = this.lookupTableService.GetLookupTableContent(id, lookupTableId);
             if (content == null)
                 return NotFound();
 
