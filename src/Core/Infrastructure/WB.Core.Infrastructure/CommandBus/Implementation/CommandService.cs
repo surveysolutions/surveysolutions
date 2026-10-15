@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
@@ -128,9 +129,13 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
             serviceLocator.GetInstance<IInScopeExecutor>().Execute(locator =>
             {
-                var unitOfWork = locator.GetInstance<IUnitOfWorkCompletion>();
-                aggregateLock.RunWithLock(aggregateId.FormatGuid(), unitOfWork, () =>
-                    locator.GetInstance<ICommandExecutor>().ExecuteCommand(command, origin, cancellationToken, aggregateId));
+                var execute = () => locator.GetInstance<ICommandExecutor>()
+                    .ExecuteCommand(command, origin, cancellationToken, aggregateId);
+                var unitOfWork = locator.GetAllInstances<IUnitOfWorkCompletion>()?.FirstOrDefault();
+                if (unitOfWork == null)
+                    aggregateLock.RunWithLock(aggregateId.FormatGuid(), execute);
+                else
+                    aggregateLock.RunWithLock(aggregateId.FormatGuid(), unitOfWork, execute);
             });
         }
     }

@@ -128,11 +128,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     completionActions.Clear();
                 }
 
-                foreach (var callback in callbacks)
+                for (var i = callbacks.Length - 1; i >= 0; i--)
                 {
                     try
                     {
-                        callback(completed);
+                        callbacks[i](completed);
                     }
                     catch (Exception exception)
                     {

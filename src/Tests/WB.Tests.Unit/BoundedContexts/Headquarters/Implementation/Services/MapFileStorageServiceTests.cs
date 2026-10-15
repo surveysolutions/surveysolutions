@@ -365,12 +365,19 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
                 const string mapName = "testmap";
                 const string oldStorageKey = "old-generation";
                 WriteShapefileWithLabels(mapsDirectory, mapName, new[] { "region1" });
-                var mapStorage = new TestPlainStorage<MapBrowseItem>();
                 var existingMap = Create.Entity.MapBrowseItem(mapName + ".shp");
                 existingMap.StorageKey = oldStorageKey;
-                mapStorage.Store(existingMap, existingMap.Id);
+                var userMap = new UserMap { Map = existingMap };
+                existingMap.Users.Add(userMap);
+                var mapStorage = new Mock<IPlainStorageAccessor<MapBrowseItem>>();
+                mapStorage.Setup(storage => storage.GetByIdAsync(existingMap.Id)).ReturnsAsync(existingMap);
+                mapStorage.Setup(storage => storage.Store(It.IsAny<MapBrowseItem>(), It.IsAny<object>()))
+                    .Callback<MapBrowseItem, object>((storedMap, _) =>
+                        Assert.That(storedMap, Is.SameAs(existingMap)));
+                var deletionRequests = new TestPlainStorage<MapFileDeletionRequest>();
                 var service = Create.Service.MapFileStorageService(
-                    mapsStorage: mapStorage,
+                    mapsStorage: mapStorage.Object,
+                    mapFileDeletionRequests: deletionRequests,
                     fileStorageConfig: Options.Create(new FileStorageConfig { TempData = storageDirectory }),
                     geospatialConfig: Options.Create(new GeospatialConfig()));
                 var oldFilePath = Path.Combine(storageDirectory, "MapsData", oldStorageKey);
@@ -378,7 +385,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
 
                 var result = await service.SaveOrUpdateMapAsync(BuildShapeMapFiles(mapName), mapsDirectory);
 
+                Assert.That(result, Is.SameAs(existingMap));
                 Assert.That(result.StorageKey, Is.Not.EqualTo(oldStorageKey));
+                Assert.That(result.Users, Does.Contain(userMap));
+                Assert.That(deletionRequests.GetById(oldStorageKey)?.StorageKey, Is.EqualTo(oldStorageKey));
                 Assert.That(File.Exists(oldFilePath), Is.True);
                 Assert.That(File.Exists(Path.Combine(storageDirectory, "MapsData", result.StorageKey)), Is.True);
             }

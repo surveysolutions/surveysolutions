@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Runtime.CompilerServices;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Domain;
 
@@ -11,18 +10,43 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 {
     public class AggregateLock : IAggregateLock
     {
-        private readonly NamedLocker locker = new NamedLocker();
         private readonly ConcurrentDictionary<string, SemaphoreSlim> semaphores = new();
         private readonly ConditionalWeakTable<IUnitOfWorkCompletion, TransactionLocks> transactionLocks = new();
-        
+        private readonly ThreadLocal<TransactionLocks> currentTransactionLocks = new();
+        private readonly ThreadLocal<HashSet<string>> currentlyHeldLocks =
+            new(() => new HashSet<string>(StringComparer.Ordinal));
+
         public T RunWithLock<T>(string aggregateGuid, Func<T> run)
         {
-            return this.locker.RunWithLock(aggregateGuid, run);
+            if (currentlyHeldLocks.Value.Contains(aggregateGuid))
+                return run();
+
+            var transaction = currentTransactionLocks.Value;
+            if (transaction != null)
+            {
+                transaction.Acquire(aggregateGuid, GetSemaphore(aggregateGuid));
+                return RunWithCurrentLock(aggregateGuid, run);
+            }
+
+            var semaphore = GetSemaphore(aggregateGuid);
+            semaphore.Wait();
+            try
+            {
+                return RunWithCurrentLock(aggregateGuid, run);
+            }
+            finally
+            {
+                semaphore.Release();
+            }
         }
 
         public void RunWithLock(string aggregateGuid, Action run)
         {
-            this.locker.RunWithLock(aggregateGuid, run);
+            RunWithLock(aggregateGuid, () =>
+            {
+                run();
+                return true;
+            });
         }
 
         public void RunWithLock(string aggregateGuid, IUnitOfWorkCompletion unitOfWork, Action run)
@@ -34,13 +58,43 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
                 return locks;
             });
 
-            if (!transaction.Acquire(aggregateGuid, semaphores.GetOrAdd(aggregateGuid, _ => new SemaphoreSlim(1, 1))))
+            var previousTransaction = currentTransactionLocks.Value;
+            currentTransactionLocks.Value = transaction;
+            try
+            {
+                transaction.Acquire(aggregateGuid, GetSemaphore(aggregateGuid));
+                RunWithCurrentLock(aggregateGuid, run);
+            }
+            finally
+            {
+                currentTransactionLocks.Value = previousTransaction;
+            }
+        }
+
+        private SemaphoreSlim GetSemaphore(string aggregateGuid) =>
+            semaphores.GetOrAdd(aggregateGuid, _ => new SemaphoreSlim(1, 1));
+
+        private T RunWithCurrentLock<T>(string aggregateGuid, Func<T> run)
+        {
+            var heldLocks = currentlyHeldLocks.Value;
+            heldLocks.Add(aggregateGuid);
+            try
+            {
+                return run();
+            }
+            finally
+            {
+                heldLocks.Remove(aggregateGuid);
+            }
+        }
+
+        private void RunWithCurrentLock(string aggregateGuid, Action run)
+        {
+            RunWithCurrentLock(aggregateGuid, () =>
             {
                 run();
-                return;
-            }
-
-            run();
+                return true;
+            });
         }
 
         private sealed class TransactionLocks
@@ -55,8 +109,12 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
                     if (heldLocks.ContainsKey(key))
                         return false;
 
+                    if (lastAcquiredKey != null && string.CompareOrdinal(key, lastAcquiredKey) < 0)
+                        throw new InvalidOperationException("Aggregate locks must be acquired in ascending order.");
+
                     semaphore.Wait();
                     heldLocks.Add(key, semaphore);
+                    lastAcquiredKey = key;
                     return true;
                 }
             }
@@ -69,8 +127,11 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
                         semaphore.Release();
 
                     heldLocks.Clear();
+                    lastAcquiredKey = null;
                 }
             }
+
+            private string lastAcquiredKey;
         }
     }
 }

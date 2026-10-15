@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Data;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -57,6 +58,22 @@ namespace WB.Tests.Unit.Infrastructure
             Assert.That(Assert.Throws<InvalidOperationException>(() => { _ = uow.Session; }), Is.SameAs(failure));
             failed.Verify(s => s.Dispose(), Times.Once);
             Assert.That(uow.Session, Is.SameAs(next.Object));
+        }
+
+        [Test]
+        public void should_run_transaction_completion_callbacks_in_reverse_registration_order()
+        {
+            using var container = CreateContainer(Mock.Of<ISessionFactory>());
+            using var scope = container.BeginLifetimeScope();
+            using var uow = new UnitOfWork(NullLogger<UnitOfWork>.Instance, Mock.Of<IWorkspaceContextAccessor>(), scope);
+            var callbackOrder = new List<int>();
+            uow.OnCompleted(_ => callbackOrder.Add(1));
+            uow.OnCompleted(_ => callbackOrder.Add(2));
+            uow.AcceptChanges();
+
+            uow.Complete();
+
+            Assert.That(callbackOrder, Is.EqualTo(new[] { 2, 1 }));
         }
 
         [TestCase("commit")]

@@ -122,6 +122,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 await AcquireMapFileLockAsync(mapName).ConfigureAwait(false);
                 await AcquireMapFileLockAsync(mapItem.StorageKey).ConfigureAwait(false);
                 var previousMap = await mapPlainStorageAccessor.GetByIdAsync(mapName).ConfigureAwait(false);
+                var previousStorageKey = previousMap == null ? null : GetStorageKey(previousMap);
                 if (externalFileStorage.IsEnabled())
                 {
                     await using FileStream file = File.OpenRead(tempFile);
@@ -134,10 +135,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     fileSystemAccessor.MoveFile(tempFile, targetFile);
                 }
                 
+                if (previousMap != null)
+                {
+                    previousMap.UpdateFrom(mapItem);
+                    mapItem = previousMap;
+                }
+
                 this.mapPlainStorageAccessor.Store(mapItem, mapItem.Id);
                 if (previousMap != null)
                 {
-                    var previousStorageKey = GetStorageKey(previousMap);
                     mapFileDeletionRequests.Store(new MapFileDeletionRequest
                     {
                         Id = previousStorageKey,
