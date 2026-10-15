@@ -63,7 +63,7 @@
                             <div class="text-example">
                                 <div class="row-element mb-20">
                                     <div class="h2">
-                                        {{ $t('WebInterviewUI.CompleteAbout') }}
+                                        {{ $t('WebInterviewUI.CompleteReviewSubmit') }}
                                     </div>
                                 </div>
                                 <div class="row-element mb-40">
@@ -91,17 +91,16 @@
 
 <script>
 import settings from './settingsMixin'
-import { Form, Field, ErrorMessage } from 'vee-validate'
+import { Form, Field } from 'vee-validate'
 
 export default {
     components: {
         Form,
         Field,
-        ErrorMessage,
     },
     mixins: [settings],
     mounted() {
         this.$refs.completePage.resetForm({ values: this.$refs.completePage.values })
-    }
+    },
 }
 </script>

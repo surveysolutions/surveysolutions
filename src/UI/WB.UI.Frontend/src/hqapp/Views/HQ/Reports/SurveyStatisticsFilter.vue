@@ -79,8 +79,8 @@
 
 <script>
 import routeSync from '~/shared/routeSync'
-import { xor, find, assign, isEqual, chain, filter } from 'lodash'
-import { Form, Field, ErrorMessage } from 'vee-validate'
+import { xor, find, assign, isEqual, orderBy, filter, uniqWith } from 'lodash-es'
+import { Form, Field } from 'vee-validate'
 
 export default {
     mixins: [
@@ -90,7 +90,6 @@ export default {
     components: {
         Form,
         Field,
-        ErrorMessage
     },
     data() {
         return {
@@ -317,32 +316,27 @@ export default {
         },
 
         questionnaireList() {
-            return chain(this.questionnaires)
-                .orderBy(['Title'], ['asc'])
-                .map(q => {
-                    return {
-                        key: q.Id,
-                        value: q.Title,
-                    }
-                })
-                .uniqWith(isEqual)
-                .value()
+            return uniqWith(
+                orderBy(this.questionnaires, ['Title'], ['asc']).map(q => ({
+                    key: q.Id,
+                    value: q.Title,
+                })),
+                isEqual
+            )
         },
 
         questionnaireVersionsList() {
-            var val = chain(this.questionnaires)
-                .filter(c => this.selectedQuestionnaire != null && this.selectedQuestionnaire.key == c.Id)
-                .orderBy(['Title', 'Version'], ['asc', 'asc'])
-                .map(q => {
-                    return {
-                        key: q.Version,
-                        value: `ver. ${q.Version}`,
-                    }
-                })
-                .uniqWith(isEqual)
-                .value()
-
-            return val
+            return uniqWith(
+                orderBy(
+                    filter(this.questionnaires, c => this.selectedQuestionnaire != null && this.selectedQuestionnaire.key == c.Id),
+                    ['Title', 'Version'],
+                    ['asc', 'asc']
+                ).map(q => ({
+                    key: q.Version,
+                    value: `ver. ${q.Version}`,
+                })),
+                isEqual
+            )
         },
 
         questionsList() {
@@ -358,25 +352,17 @@ export default {
                 return result
             }
 
-            const questions = chain(this.questions)
-                .map(q => {
-                    return {
-                        key: q.Id,
-                        name: q.VariableName,
-                        supportConditions: q.SupportConditions,
-                        value: getValue(q),
-                        breadcrumbs: q.Breadcrumbs,
-                    }
-                })
-                .value()
-            return questions
+            return this.questions.map(q => ({
+                key: q.Id,
+                name: q.VariableName,
+                supportConditions: q.SupportConditions,
+                value: getValue(q),
+                breadcrumbs: q.Breadcrumbs,
+            }))
         },
 
         conditionVariablesList() {
-            return chain(this.questionsList)
-                .filter('supportConditions', true)
-                .filter(q => q.key != this.selectedQuestion.key)
-                .value()
+            return this.questionsList.filter(q => q.supportConditions && q.key != this.selectedQuestion.key)
         },
 
         questionnaire() {

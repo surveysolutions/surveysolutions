@@ -14,6 +14,7 @@ using WB.UI.Designer.Models;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
+    [Authorize]
     [ResponseCache(NoStore = true)]
     [Route("api/questionnaire/{questionnaireId:Guid}/scenarios")]
     public class ScenariosController : ControllerBase
@@ -46,8 +47,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             scenario.Title = model.Title ?? "";
 
-            await dbContext.SaveChangesAsync();
-
             return Ok();
         }
 
@@ -64,7 +63,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return NotFound(new { Message = "Scenario not found" });
 
             scenario.Steps = content.Steps ?? "";
-            await this.dbContext.SaveChangesAsync();
 
             return Ok(scenario.Steps);
         }
@@ -82,7 +80,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return NotFound();
 
             dbContext.Scenarios.Remove(scenario);
-            await dbContext.SaveChangesAsync();
 
             return Ok();
         }

@@ -39,6 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 var preloadingRecordAudio = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.RecordAudioColumnName);
                 var preloadingComments = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.CommentsColumnName);
                 var preloadingTargetArea = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.TargetAreaColumnName);
+                var preloadingAudioAuditScope = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.AudioAuditScopeColumnName);
 
                 yield return new PreloadingAssignmentRow
                 {
@@ -56,6 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     RecordAudio = preloadingRecordAudio?.ToAssignmentRecordAudio(),
                     Comments = preloadingComments?.ToAssignmentComments(),
                     TargetArea = preloadingTargetArea?.ToAssignmentTargetArea(),
+                    AudioAuditScope = preloadingAudioAuditScope?.ToAssignmentAudioAuditScope(),
                 };
             }
         }

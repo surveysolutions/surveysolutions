@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve"><value>Seksioni u kompletua: {{value}}</value></data>
+  <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve"><value>{{value}} përgjigje</value></data>
+  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve"><value>{{value}} nëngrupe</value></data>
+  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve"><value>asnjë nëngrupi</value></data>
+  <data name="Interview_Group_Status_NotStarted" xml:space="preserve"><value>Seksioni nuk ka filluar</value></data>
+  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve"><value>një përgjigje</value></data>
+  <data name="Interview_Group_Subgroups_One" xml:space="preserve"><value>një nëngrup</value></data>
+  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve"><value>Seksioni filloi: {{value}}</value></data>
+  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve"><value>{{value}} gabime</value></data>
+  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve"><value>një gabim</value></data>
+  <data name="ServerUnderLoad" xml:space="preserve"><value>Na vjen keq, shumë njerëz po aksesojnë këtë faqe interneti në të njëjtën kohë. Ne po punojmë në këtë problem. Ju lutemi provoni përsëri më vonë.</value></data>
+  <data name="RefreshPage" xml:space="preserve"><value>Rifresko faqen</value></data>
+  <data name="InvitationSmallText" xml:space="preserve"><value>Procesi i intervistimit kërkon lidhje interneti. Nuk nevojitet softuer shtesë.</value></data>
+  <data name="InvitationText" xml:space="preserve"><value>Jeni ftuar të merrni pjesë në anketën e mëposhtme: "%QUESTIONNAIRE%"</value></data>
+  <data name="WelcomeText" xml:space="preserve"><value>Mirë se vini në Anketën Web të Survey Solutions</value></data>
+  <data name="WebSurvey" xml:space="preserve"><value>Anketa Web e Survey Solutions</value></data>
+  <data name="CompletionText" xml:space="preserve"><value>Kjo intervistë është kompletuar</value></data>
+  <data name="InProgressText" xml:space="preserve"><value>Në vazhdim</value></data>
+  <data name="NotStartedText" xml:space="preserve"><value>Nuk ka filluar</value></data>
+  <data name="FinishInterviewText" xml:space="preserve"><value>Kjo intervistë është kompletuar</value></data>
+  <data name="StartedInterviewText" xml:space="preserve"><value>Kjo intervistë nuk është kompletuar</value></data>
+  <data name="SurveyFormatText" xml:space="preserve"><value>Anketa: "%QUESTIONNAIRE%"</value></data>
+  <data name="InterviewIdFormatText" xml:space="preserve"><value>ID e intervistës: {0}</value></data>
+  <data name="InterviewStartDateFormatText" xml:space="preserve"><value>Data e fillimit të intervistës: </value></data>
+  <data name="InterviewCompletionDateFormatText" xml:space="preserve"><value>Data e kompletimit të intervistës: </value></data>
+  <data name="DownloadAnswers" xml:space="preserve"><value>Shkarkoni transkriptin e intervistës</value></data>
+  <data name="DownloadAnswersHint" xml:space="preserve"><value>Shkarkoni përgjigjet e intervistës si skedar pdf</value></data>
+  <data name="Start" xml:space="preserve"><value>Filloni intervistën e re</value></data>
+  <data name="StartPageTitle" xml:space="preserve"><value>Anketa Web</value></data>
+  <data name="PleaseFillCaptcha" xml:space="preserve"><value>Ju lutemi plotësoni fushën captcha</value></data>
+  <data name="InvalidPassword" xml:space="preserve"><value>Fjalëkalim i gabuar</value></data>
+  <data name="Original_Language" xml:space="preserve"><value>Origjinale</value></data>
+  <data name="ToInterview" xml:space="preserve"><value>Në intervistë</value></data>
+  <data name="ResumeInterview" xml:space="preserve"><value>Vazhdoni intervistën</value></data>
+  <data name="DiscardAndStart" xml:space="preserve"><value>Rihapni</value></data>
+  <data name="OrStartInterview" xml:space="preserve"><value>Ose mund të filloni një intervistë të re</value></data>
+  <data name="HasPreviousStartedInterview" xml:space="preserve"><value>Keni filluar një intervistë</value></data>
+  <data name="Resume_InvitationSmallText" xml:space="preserve"><value>Procesi i intervistimit kërkon lidhje interneti, nuk nevojitet softuer shtesë</value></data>
+  <data name="Resume_InvitationText" xml:space="preserve"><value>Mund të navigoni tek intervista në anketën e mëposhtme: "%QUESTIONNAIRE%"</value></data>
+  <data name="Resume_WelcomeText" xml:space="preserve"><value>Mirë se vini në Anketën Web të Survey Solutions</value></data>
+  <data name="Error_InterviewExpired" xml:space="preserve"><value>Lidhja ka skaduar</value></data>
+  <data name="Error_NoActionsNeeded" xml:space="preserve"><value>Informacioni mbi atë intervistë është regjistruar. Nuk kërkohen veprime të mëtejshme</value></data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve"><value>Nuk mund të modifikohet intervista e marrë nga pajisja</value></data>
+  <data name="Error_NotFound" xml:space="preserve"><value>Intervista nuk u gjet ose nuk nevojitet intervistë e re</value></data>
+  <data name="EnterPasswordText" xml:space="preserve"><value>Kjo lidhje mbrohet me fjalëkalim, i cili u shpërnda me lidhjen. Ju lutemi shkruajeni këtu</value></data>
+  <data name="PictureQuestionNotAPicture" xml:space="preserve"><value>Pranohen vetëm skedarët e imazhit</value></data>
+  <data name="Error_CookiesTurnedOff" xml:space="preserve"><value>Cookies-at nuk janë aktivizuar në shfletuesin tuaj. Ju lutemi aktivizoni cookies-at në preferencat e shfletuesit tuaj për të vazhduar</value></data>
+  <data name="Error_Forbidden" xml:space="preserve"><value>E ndaluar</value></data>
+  <data name="Error_UserNotAuthorised" xml:space="preserve"><value>Përdoruesi nuk është i autorizuar</value></data>
+  <data name="CompleteInterview" xml:space="preserve"><value>Kompletoni intervistën</value></data>
+  <data name="Filters_Title" xml:space="preserve"><value>Filtro pyetjet</value></data>
+  <data name="Filters_Flagged" xml:space="preserve"><value>Të shënuara</value></data>
+  <data name="Filters_WithComments" xml:space="preserve"><value>Me komente</value></data>
+  <data name="Filters_Invalid" xml:space="preserve"><value>Të pavlefshme</value></data>
+  <data name="Filters_Valid" xml:space="preserve"><value>Të vlefshme</value></data>
+  <data name="Filters_Answered" xml:space="preserve"><value>Të përgjigJura</value></data>
+  <data name="Filters_NotAnswered" xml:space="preserve"><value>Të paiu përgjigJura</value></data>
+  <data name="Filters_ForSupervisor" xml:space="preserve"><value>Për mbikëqyrësin</value></data>
+  <data name="Filters_ForInterviewer" xml:space="preserve"><value>Për anketuesin</value></data>
+  <data name="Filters_NotFlagged" xml:space="preserve"><value>Pa shenjë</value></data>
+  <data name="Filters_CriticalQuestions" xml:space="preserve"><value>Pyetje kritike</value></data>
+  <data name="Filters_CriticalRules" xml:space="preserve"><value>Rregulla kritike</value></data>
+  <data name="PoweredBy" xml:space="preserve"><value>Mundësuar nga</value></data>
+  <data name="Filters_ClearSelection" xml:space="preserve"><value>Fshini të gjitha filtrat</value></data>
+  <data name="Error" xml:space="preserve"><value>Gabim</value></data>
+  <data name="Warning" xml:space="preserve"><value>Paralajmërim</value></data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve"><value>{0} (ver. {1})</value></data>
+  <data name="InterviewSizeLimitReached" xml:space="preserve"><value>Intervista përmban numrin total të instancave të regjistrit dhe pyetjeve që tejkalon kufijtë e sistemit.</value></data>
+  <data name="AssignmentLimitReached" xml:space="preserve"><value>Ne mbledhim të gjitha intervistat në këtë anketë.</value></data>
+  <data name="InterviewNotFound" xml:space="preserve"><value>Intervista nuk u gjet.</value></data>
+  <data name="Email_InvitationTemplate_Subject" xml:space="preserve"><value>Ftesë për të marrë pjesë në %SURVEYNAME%</value></data>
+  <data name="Email_InvitationTemplate_Message" xml:space="preserve"><value>Mirë se vini në %SURVEYNAME%!</value></data>
+  <data name="Email_NoResponse_Subject" xml:space="preserve"><value>Kujtesë, mos harroni të merrni pjesë në %SURVEYNAME%</value></data>
+  <data name="Email_NoResponse_Message" xml:space="preserve"><value>Ju po merrni këtë kujtesë sepse nuk keni filluar të përgjigjeni ndaj %SURVEYNAME%!</value></data>
+  <data name="Email_PartialResponse_Subject" xml:space="preserve"><value>Kujtesë, ju lutemi kompletoni përgjigjen tuaj ndaj %SURVEYNAME%</value></data>
+  <data name="Email_PartialResponse_Message" xml:space="preserve"><value>Ju po merrni këtë kujtesë sepse keni filluar të përgjigjeni ndaj %SURVEYNAME%, por nuk e keni kompletuar procesin.</value></data>
+  <data name="Email_RejectEmail_Subject" xml:space="preserve"><value>Kërkohet veprimi juaj në %SURVEYNAME%</value></data>
+  <data name="Email_RejectEmail_Message" xml:space="preserve"><value>Faleminderit për marrjen e pjesës në %SURVEYNAME%!</value></data>
+  <data name="NoteForSupervisor" xml:space="preserve"><value>Koment</value></data>
+  <data name="Complete" xml:space="preserve"><value>Kompletoni</value></data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve"><value>Shembull i lidhjes drejt faqes hyrëse të intervistës web</value></data>
+</root>

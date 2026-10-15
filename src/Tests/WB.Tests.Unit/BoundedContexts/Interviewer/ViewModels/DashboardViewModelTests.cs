@@ -118,7 +118,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                 Substitute.For<IPlainStorage<InterviewView>>(),
                 Substitute.For<IInterviewViewModelFactory>(),
                 Substitute.For<IPlainStorage<PrefilledQuestionView>>(),
-                Substitute.For<IPrincipal>());
+                Substitute.For<IPrincipal>(),
+                Substitute.For<IAssignmentDocumentsStorage>());
 
         private static RejectedInterviewsViewModel DashboardRejectedInterviewsViewModel()
             => new RejectedInterviewsViewModel(

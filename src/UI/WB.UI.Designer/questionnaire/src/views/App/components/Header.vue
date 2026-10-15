@@ -5,7 +5,7 @@
             <div class="header-menu">
                 <div class="buttons">
                     <button v-if="aiAvailable" class="btn" @click="showChat()">
-                        {{ $t('QuestionnaireEditor.AIAssistant', 'AI') }}
+                        {{ $t('Assistant.Title') }}
                     </button>
                     <a class="btn" href="http://support.mysurvey.solutions/designer" target="_blank" rel="noopener">{{
                         $t('QuestionnaireEditor.Help') }}</a>
@@ -159,15 +159,19 @@
 import VerificationDialog from './VerificationDialog.vue';
 import SharedInfoDialog from './SharedInfoDialog.vue';
 import DownloadPDFDialog from './DownloadPDFDialog.vue';
-import { useMagicKeys } from '@vueuse/core';
+import { useKeyShortcut } from '../../../composables/useKeyShortcut';
 
 import { useVerificationStore } from '../../../stores/verification';
 import { useChatStore } from '../../../stores/chat';
+import { useProgressStore } from '../../../stores/progress';
 import WebTesterApi from '../../../api/webTester';
-import { ref, computed } from 'vue';
+import { ref, computed, inject } from 'vue';
 import { useRoute } from 'vue-router';
 
-import { sanitizeUrl } from '@braintree/sanitize-url';
+import { sanitizeUrl } from '../../../utils/sanitizeUrl';
+
+const pendingSaveWaitRetries = 50;
+const pendingSaveWaitDelayMs = 100;
 
 export default {
     name: 'QuestionnaireHeader',
@@ -186,27 +190,27 @@ export default {
     setup(props) {
         const verificationStore = useVerificationStore();
         const chatStore = useChatStore();
+        const progressStore = useProgressStore();
         const route = useRoute();
+        const questionnaire = inject('questionnaire');
 
         const verificationDialog = ref(null);
         const sharedInfoDialog = ref(null);
         const downloadPDFDialog = ref(null);
 
-        const { ctrl_b } = useMagicKeys({
-            passive: false,
-            onEventFired(e) {
-                if (e.ctrlKey && e.key === 'b' && e.type === 'keydown')
-                    e.preventDefault()
-            },
-        })
+        const ctrl_b = useKeyShortcut(e => e.ctrlKey && e.key === 'b');
+        const ctrl_i = useKeyShortcut(e => e.ctrlKey && e.key === 'i' &&
+            questionnaire.value?.webTestAvailable && questionnaire.value?.questionnaireRevision === null);
 
         return {
             verificationStore,
             chatStore,
+            progressStore,
             verificationDialog,
             sharedInfoDialog,
             downloadPDFDialog,
             ctrl_b,
+            ctrl_i,
             route
         };
     },
@@ -224,6 +228,10 @@ export default {
         ctrl_b: function (v) {
             if (v)
                 this.verify();
+        },
+        ctrl_i: function (v) {
+            if (v && this.questionnaire.webTestAvailable && this.questionnaire.questionnaireRevision === null)
+                this.webTest();
         }
     },
     computed: {
@@ -236,8 +244,7 @@ export default {
             return warnings ? warnings.length : null;
         },
         savedAtTimestamp() {
-            const time = this.verificationStore.status.time;
-            return this.$t('QuestionnaireEditor.SavedAtTimestamp', { dateTime: time })
+            return this.$t('QuestionnaireEditor.SavedAtTimestamp', { dateTime: this.verificationStore.status.time });
         },
         aiAvailable() {
             return this.currentUser.aiAvailable &&
@@ -245,8 +252,31 @@ export default {
         }
     },
     methods: {
-        webTest() {
-            WebTesterApi.run(this.questionnaireId);
+        async webTest() {
+            const webTesterWindow = WebTesterApi.openWindow();
+            try {
+                await this.savePendingChangesBeforeWebTest();
+                await WebTesterApi.run(this.questionnaireId, null, webTesterWindow);
+            } catch (e) {
+                webTesterWindow?.close();
+                throw e;
+            }
+        },
+        async savePendingChangesBeforeWebTest() {
+            this.$emitter.emit('saveCurrentEntityRequested');
+            await this.waitForPendingSaves();
+        },
+        async waitForPendingSaves() {
+            for (let i = 0; i < pendingSaveWaitRetries; i++) {
+                if (!this.progressStore.getIsRunning) return;
+                await new Promise(resolve =>
+                    setTimeout(resolve, pendingSaveWaitDelayMs)
+                );
+            }
+
+            throw new Error(
+                'Saving questionnaire changes timed out before launching test. Please save manually and try again.'
+            );
         },
         showDownloadPdf() {
             this.downloadPDFDialog.open();
@@ -254,7 +284,7 @@ export default {
         showChat() {
             this.chatStore.open({
                 questionnaireId: this.questionnaireId,
-                entityId: this.route.params.entityId || null,
+                entityId: this.route.params.entityId,
             });
         },
         saveAsQuestionnaire() {

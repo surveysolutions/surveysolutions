@@ -7,12 +7,13 @@
         </div>
         <div class="wrapper-info">
             <div class="container-info">
-                <h2
-                    v-dompurify-html="$t('WebInterviewUI.CompleteReviewSubmit', { key: $store.state.webinterview.interviewKey })">
+                <h2 v-dompurify-html="$t('WebInterviewUI.CompleteReviewSubmit')">
                 </h2>
+                <h3
+                    v-dompurify-html="$t('WebInterviewUI.CompleteReviewSubmitInterview', { key: $store.state.webinterview.interviewKey })">
+                </h3>
             </div>
         </div>
-
 
         <div class="wrapper-info" v-if="!hasAnyIssue">
             <div class="container-info info-block">
@@ -24,27 +25,27 @@
         <ul class="wrapper-info complete-tabs" v-else role="tablist">
             <li v-for="(completeGroup, idx) in completeGroups" :key="idx"
                 :class="['tab-item', completeGroup.cssClass, { active: idx === activeCompleteGroupIndex, disabled: !(completeGroup.items?.length > 0) }]"
-                role="presentation" @click.stop="setActive(idx)">
+                :aria-label="completeGroup.ariaLabel" role="presentation" @click.stop="setActive(idx)">
                 <div class="tab-count">{{ completeGroup.total }}</div>
                 <div class="tab-title" v-dompurify-html="completeGroup.title"></div>
             </li>
         </ul>
 
-        <div v-if="hasAnyIssue" class="tab-content wrapper-info list-unstyled marked-questions" :class="activeGroup.cssClass">
+        <div v-if="hasAnyIssue" class="tab-content wrapper-info list-unstyled marked-questions"
+            :class="activeGroup.cssClass">
             <div class="tab-content-item" v-for="item in activeGroup.items" :key="item.id" @click="navigateTo(item)"
                 :class="{ 'critical-rule': item.type === 'critical-rule' }">
                 <a class="item-title" v-if="item.parentId || item.isPrefilled" href="javascript:void(0);"
                     v-dompurify-html="item.title"></a>
                 <div class="item-title" v-else v-dompurify-html="item.title"></div>
 
-                <div class="item-error" v-if="item.error"
-                    v-dompurify-html="$t('WebInterviewUI.Complete_Error') + ' ' + item.error"></div>
-                <div class="item-comment" v-if="item.comment"
-                    v-dompurify-html="$t('WebInterviewUI.Complete_LastComment') + ' ' + item.comment">
+                <div class="item-error" v-if="item.error" v-dompurify-html="item.error"></div>
+                <div class="item-comment" v-if="item.comment" v-dompurify-html="item.comment">
                 </div>
             </div>
 
-            <div class="and-more" v-if="moreCount > 0">{{ $t('WebInterviewUI.Complete_AndMore', { count: moreCount }) }}</div>
+            <div class="and-more" v-if="moreCount > 0">{{ $t('WebInterviewUI.Complete_AndMore', { count: moreCount }) }}
+            </div>
         </div>
 
         <div class="wrapper-info note-supervisor">
@@ -73,7 +74,7 @@
                 </label>
             </div>
             <div class="container-info action-block" v-if="switchToWeb">
-                <p calss="info-block gray-uppercase">
+                <p class="info-block gray-uppercase">
                     {{ $t('WebInterviewUI.SwitchToWebMode_LinkDescription') }}
                 </p>
                 <p class="font-bold">
@@ -102,7 +103,9 @@
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '../../assets/css/_variables.scss';
+
 .submit-info {
     color: #343434;
     font-family: RobotoRegular;
@@ -178,15 +181,15 @@
 }
 
 .tab-item.errors {
-    color: #DB3913;
+    color: $red_error;
 }
 
 .tab-item.unanswered {
-    color: #2878BE;
+    color: $blue;
 }
 
 .tab-item.critical-rule-errors {
-    color: #DB3913;
+    color: $red_error;
 }
 
 .tab-item.disabled {
@@ -237,7 +240,7 @@
 }
 
 .tab-content-item .item-title {
-    color: rgba(0, 0, 0, 1);
+    color: $gray_text;
     font-family: RobotoRegular;
     font-weight: Bold;
     font-size: 14px;
@@ -246,7 +249,7 @@
 }
 
 .tab-content-item .item-error {
-    color: rgba(219, 57, 18, 1);
+    color: $red_error;
     font-family: RobotoRegular;
     font-size: 14px;
     opacity: 1;
@@ -254,11 +257,12 @@
 }
 
 .tab-content-item .item-comment {
-    color: rgba(0, 0, 0, 1);
+    color: $gray_text;
     font-family: RobotoRegular;
     font-size: 14px;
     opacity: 1;
     text-align: left;
+    font-style: italic;
 }
 
 /* Left colored stripe based on active group type */
@@ -270,11 +274,11 @@
 
 .tab-content.errors .tab-content-item::before,
 .tab-content.critical-rule-errors .tab-content-item::before {
-    background: #DB3913;
+    background: $red_error;
 }
 
 .tab-content.unanswered .tab-content-item::before {
-    background: #2878BE;
+    background: $blue;
 }
 
 .tab-content .tab-content-item::before {
@@ -291,6 +295,7 @@
     border-top: 1px solid #000000;
     padding-top: 40px;
     margin-top: 0px;
+    white-space: pre-line;
 }
 
 
@@ -362,26 +367,26 @@ export default {
         }
     },
     beforeMount() {
-        this.wasCriticalityInfoLoaded = false;
+        this.wasCriticalityInfoLoaded = false
         this.fetchCompleteInfo()
     },
     watch: {
         completeGroups(newVal) {
             if (Array.isArray(newVal) && newVal.length > 0) {
-                let targetIndex = null;
+                let targetIndex = null
 
                 for (let i = 0; i < newVal.length; i++) {
-                    const group = newVal[i];
+                    const group = newVal[i]
                     if (Array.isArray(group.items) && group.items.length > 0) {
-                        targetIndex = i;
-                        break;
+                        targetIndex = i
+                        break
                     }
                 }
 
                 if (targetIndex !== null && (this.activeCompleteGroupIndex === null || this.shouldUpdateActiveTab(newVal))) {
-                    this.activeCompleteGroupIndex = targetIndex;
+                    this.activeCompleteGroupIndex = targetIndex
                 } else if (this.activeCompleteGroupIndex === null) {
-                    this.activeCompleteGroupIndex = 0;
+                    this.activeCompleteGroupIndex = 0
                 }
             }
         },
@@ -395,9 +400,9 @@ export default {
         },
         criticalityInfo(to, from) {
             if (to) {
-                this.wasCriticalityInfoLoaded = true;
+                this.wasCriticalityInfoLoaded = true
             }
-        }
+        },
     },
     computed: {
         completeInfo() {
@@ -413,29 +418,32 @@ export default {
             const criticalUnanswered = this.criticalityInfo?.unansweredCriticalQuestions || []
             const critical = criticalFailedRules.concat(criticalUnanswered)
             const criticalTotal = (this.criticalityInfo?.failedCriticalRulesTotal || 0)
-                                + (this.criticalityInfo?.unansweredCriticalQuestionsTotal || 0);
+                + (this.criticalityInfo?.unansweredCriticalQuestionsTotal || 0)
             groups.push({
                 title: this.$t('WebInterviewUI.Complete_Tab_CriticalErrors'),
                 items: critical,
                 total: criticalTotal,
-                cssClass: 'errors'
+                cssClass: 'errors',
+                ariaLabel: 'Critical errors tab',
             })
 
             groups.push({
                 title: this.$t('WebInterviewUI.Complete_Tab_QuestionsWithErrors'),
                 items: this.completeInfo?.entitiesWithError,
                 total: this.completeInfo?.errorsCount,
-                cssClass: 'errors'
+                cssClass: 'errors',
+                ariaLabel: 'Errors tab',
             })
 
             groups.push({
                 title: this.$t('WebInterviewUI.Complete_Tab_UnansweredQuestions'),
                 items: this.completeInfo?.unansweredQuestions,
                 total: this.completeInfo?.unansweredCount,
-                cssClass: 'unanswered'
+                cssClass: 'unanswered',
+                ariaLabel: 'Unanswered questions tab',
             })
 
-            return groups;
+            return groups
         },
         activeGroup() {
             const active = this.completeGroups[this.activeCompleteGroupIndex]
@@ -449,23 +457,23 @@ export default {
         },
         isCompletionPermitted() {
             if (this.mayBeSwitchedToWebMode && this.switchToWeb)
-                return true;
+                return true
 
             if (this.wasCriticalityInfoLoaded === false) {
-                return false;
+                return false
             }
 
             if (this.doesSupportCriticality !== false) {
                 if (this.hasCriticalIssues) {
                     if (this.criticalityLevel == 'Block') {
-                        return false;
+                        return false
                     }
                     if (this.criticalityLevel == 'Warn') {
                         return this.comment && this.comment.length > 0
                     }
                 }
             }
-            return true;
+            return true
         },
         completeButtionComment() {
             if (this.hasCriticalIssues) {
@@ -475,7 +483,7 @@ export default {
                     return this.$t('WebInterviewUI.CompleteCommentCriticalityLevelWarn')
                 }
             }
-            return '';
+            return ''
         },
         shouldCloseWindow() {
             return this.$store.state.webinterview.interviewCompleted && this.$config.inWebTesterMode
@@ -513,7 +521,7 @@ export default {
         errorsCount() {
             if (this.hasCriticalIssues)
                 return this.completeInfo.errorsCount + this.criticalityInfo.unansweredCriticalQuestions.length + this.criticalityInfo.failedCriticalRules.length
-            return this.completeInfo.errorsCount;
+            return this.completeInfo.errorsCount
         },
         invalidQuestionsCountString() {
             return this.hasErrors ? this.errorsCount : this.$t('WebInterviewUI.No')
@@ -544,10 +552,10 @@ export default {
             return this.hasErrors || this.hasUnansweredQuestions || this.hasCriticalIssues
         },
         moreCount() {
-            const activeGroup = this.activeGroup;
-            if (!activeGroup) return 0;
-            const displayedItemsCount = activeGroup.items ? activeGroup.items.length : 0;
-            return activeGroup.total - displayedItemsCount;
+            const activeGroup = this.activeGroup
+            if (!activeGroup) return 0
+            const displayedItemsCount = activeGroup.items ? activeGroup.items.length : 0
+            return activeGroup.total - displayedItemsCount
         },
     },
     methods: {
@@ -557,7 +565,7 @@ export default {
 
         completeInterview() {
             if (!this.isCompletionPermitted)
-                return;
+                return
 
             if (this.shouldCloseWindow) {
                 modal.dialog({
@@ -628,17 +636,17 @@ export default {
         },
 
         shouldUpdateActiveTab(newGroups) {
-            if (!Array.isArray(newGroups) || newGroups.length === 0) return false;
+            if (!Array.isArray(newGroups) || newGroups.length === 0) return false
 
-            const criticalErrorsGroup = newGroups[0];
+            const criticalErrorsGroup = newGroups[0]
 
             if (Array.isArray(criticalErrorsGroup.items) &&
                 criticalErrorsGroup.items.length > 0 &&
                 this.activeCompleteGroupIndex !== 0) {
-                return true;
+                return true
             }
 
-            return false;
+            return false
         },
     },
 }

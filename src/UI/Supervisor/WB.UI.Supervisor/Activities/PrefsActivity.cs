@@ -86,6 +86,11 @@ namespace WB.UI.Supervisor.Activities
                     settings.SetShowLocationOnMap(ParseBooleanSettingsValue(e.NewValue, settings.ShowLocationOnMap));
                     this.UpdateSettings();
                 };
+                this.FindPreference(SettingsNames.CommunicationIntegrityValidationIgnore).PreferenceChange += (sender, e) =>
+                {
+                    settings.SetCommunicationIntegrityValidationIgnore(ParseBooleanSettingsValue(e.NewValue, settings.CommunicationIntegrityValidationIgnore));
+                    this.UpdateSettings();
+                };
                 this.FindPreference(SettingsNames.DownloadUpdatesForInterviewerApp).PreferenceChange += (sender, e) =>
                 {
                     settings.SetDownloadUpdatesForInterviewerApp(ParseBooleanSettingsValue(e.NewValue,
@@ -120,6 +125,11 @@ namespace WB.UI.Supervisor.Activities
                     UIResources.Prefs_ShowLocationOnMap,
                     UIResources.Prefs_ShowLocationOnMapSummary,
                     settings.ShowLocationOnMap);
+
+                this.SetBooleanPreferenceTitleAndSummary(SettingsNames.CommunicationIntegrityValidationIgnore,
+                    UIResources.Prefs_CommunicationIntegrityValidationIgnoreTitle,
+                    UIResources.Prefs_CommunicationIntegrityValidationIgnoreSummary,
+                    settings.CommunicationIntegrityValidationIgnore);
 
                 this.SetBooleanPreferenceTitleAndSummary(SettingsNames.DownloadUpdatesForInterviewerApp,
                     UIResources.Prefs_DownloadUpdatesForInterviewerApp,

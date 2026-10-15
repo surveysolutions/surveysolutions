@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AutoMapper;
 using Main.Core.Documents;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -60,7 +59,9 @@ namespace WB.UI.WebTester
             registry.Bind<IImportQuestionnaireAndCreateInterviewService, ImportQuestionnaireAndCreateInterviewService>();
 
             registry.BindAsSingleton<IEvictionObservable, IEvictionNotifier, TokenEviction>();
-
+            registry.BindAsSingleton<IWebTesterJwtStore, WebTesterJwtStore>();
+            registry.BindAsSingleton<IUserContextStore, InMemoryUserContextStore>();
+            registry.BindAsSingleton<IImportStatusStore, InMemoryImportStatusStore>();
             registry.Bind<IEnumeratorGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
             registry.Bind<ISupervisorGroupStateCalculationStrategy, SupervisorGroupStateCalculationStrategy>();
             registry.BindAsSingleton<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
@@ -99,11 +100,6 @@ namespace WB.UI.WebTester
                 
                 return Options.Create(fileStorageConfig);
             });
-
-            registry.BindToMethodInSingletonScope(context => new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new WebInterviewAutoMapProfile());
-            }).CreateMapper());
 
             registry.BindToConstant(() => JsonSerializer.Create(new JsonSerializerSettings
             {
@@ -162,7 +158,7 @@ namespace WB.UI.WebTester
               .Setup<StatefulInterview>()
               .InitializesWith<CreateInterview>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterview(command))
               .Handles<AnswerDateTimeQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerDateTimeQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.Answer))
-              .Handles<AnswerGeoLocationQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerGeoLocationQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.Latitude, command.Longitude, command.Accuracy, command.Altitude, command.Timestamp))
+              .Handles<AnswerGeoLocationQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerGeoLocationQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.Latitude, command.Longitude, command.Accuracy, command.Altitude, command.Timestamp, command.GpsProvider, command.IsFromMockProvider))
               .Handles<AnswerMultipleOptionsLinkedQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerMultipleOptionsLinkedQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.SelectedRosterVectors))
               .Handles<AnswerMultipleOptionsQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerMultipleOptionsQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.SelectedValues))
               .Handles<AnswerYesNoQuestion>(command => command.InterviewId, aggregate => aggregate.AnswerYesNoQuestion)

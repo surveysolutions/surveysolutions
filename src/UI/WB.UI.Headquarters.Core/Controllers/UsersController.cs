@@ -17,7 +17,6 @@ using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
-using WB.Core.BoundedContexts.Headquarters.Workspaces.Impl;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -46,6 +45,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IWorkspacesStorage workspaces;
         private readonly ITokenProvider tokenProvider;
         private readonly UsersManagementSettings usersManagementSettings;
+        private readonly IWorkspaceContextAccessor workspaceContextAccessor;
         
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
@@ -59,7 +59,8 @@ namespace WB.UI.Headquarters.Controllers
             IOptions<HeadquartersConfig> options,
             IWorkspacesStorage workspaces,
             ITokenProvider tokenProvider,
-            UsersManagementSettings usersManagementSettings)
+            UsersManagementSettings usersManagementSettings,
+            IWorkspaceContextAccessor workspaceContextAccessor)
         {
             this.authorizedUser = authorizedUser;
             this.userManager = userManager;
@@ -69,6 +70,7 @@ namespace WB.UI.Headquarters.Controllers
             this.workspaces = workspaces;
             this.tokenProvider = tokenProvider;
             this.usersManagementSettings = usersManagementSettings;
+            this.workspaceContextAccessor = workspaceContextAccessor;
         }
         
         [Authorize(Roles = "Administrator, Observer")]
@@ -287,7 +289,11 @@ namespace WB.UI.Headquarters.Controllers
                     TokenIssued = await this.tokenProvider.DoesTokenExist(user),
                     CanSetupTwoFactorAuthentication = HasPermissionsToSetupTwoFactorAuthentication(user),
                     IsRelinkAllowed = user.Profile?.IsRelinkAllowed() ?? false,
-                    IsRestricted = IsAccountRestricted(user.Id)
+                    IsRestricted = IsAccountRestricted(user.Id),
+                    CanChangeContactInfo =
+                        !authorizedUser.IsInterviewer
+                        || (workspaceContextAccessor.CurrentWorkspace()?.Name != WorkspaceConstants.WorkspaceNames.UsersWorkspaceName 
+                            && (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false))
                 },
                 Api = new
                 {
@@ -378,7 +384,11 @@ namespace WB.UI.Headquarters.Controllers
                     CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
                     RecoveryCodes = string.Join(" ", RecoveryCodes),
                     CanSetupTwoFactorAuthentication =  tokenProvider.CanGenerate && HasPermissionsToSetupTwoFactorAuthentication(user),
-                    IsRestricted = IsAccountRestricted(user.Id)
+                    IsRestricted = IsAccountRestricted(user.Id),
+                    CanChangeContactInfo =
+                        !authorizedUser.IsInterviewer
+                        || (workspaceContextAccessor.CurrentWorkspace()?.Name != WorkspaceConstants.WorkspaceNames.UsersWorkspaceName 
+                            && (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false))
                 },
                 Api = new
                 {
@@ -481,7 +491,11 @@ namespace WB.UI.Headquarters.Controllers
                     CanChangeWorkspacesList = authorizedUser.IsAdministrator && userRole is UserRoles.Headquarter or UserRoles.ApiUser or UserRoles.Supervisor,
                     CanGetApiToken = (userRole is UserRoles.Administrator or UserRoles.ApiUser) && tokenProvider.CanGenerate,
                     CanSetupTwoFactorAuthentication = tokenProvider.CanGenerate && HasPermissionsToSetupTwoFactorAuthentication(user),
-                    IsRestricted = IsAccountRestricted(user.Id)
+                    IsRestricted = IsAccountRestricted(user.Id),
+                    CanChangeContactInfo =
+                        !authorizedUser.IsInterviewer
+                        || (workspaceContextAccessor.CurrentWorkspace()?.Name != WorkspaceConstants.WorkspaceNames.UsersWorkspaceName 
+                            && (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false))
                 },
                 Api = new
                 {
@@ -593,6 +607,9 @@ namespace WB.UI.Headquarters.Controllers
             if (this.authorizedUser.IsHeadquarter && !new[] {UserRoles.Supervisor, UserRoles.Interviewer}.Contains(role))
                 return Forbid();
 
+            if (role == UserRoles.Administrator)
+                return Forbid();
+            
             if (role == UserRoles.Interviewer && !model.SupervisorId.HasValue)
                 this.ModelState.AddModelError(nameof(CreateUserModel.SupervisorId), FieldsAndValidations.RequiredSupervisorErrorMessage);
 
@@ -663,7 +680,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var userToUpdate = await this.userManager.FindByIdAsync(model.UserId.FormatGuid());
             if (userToUpdate == null) return NotFound("User not found");
-
+            
             if (!HasPermissionsToChangeUserPassword(userToUpdate)) 
                 return StatusCode(StatusCodes.Status403Forbidden, new
                 {
@@ -762,6 +779,14 @@ namespace WB.UI.Headquarters.Controllers
             if (currentUser == null) return NotFound("User not found");
 
             if (!HasPermissionsToManageUser(currentUser)) return this.Forbid();
+            
+            // Interviewers cannot update their own contact info when profile updates are disabled
+            if (currentUser.Id == authorizedUser.Id 
+                && authorizedUser.IsInterviewer
+                && (workspaceContextAccessor.CurrentWorkspace()?.Name == WorkspaceConstants.WorkspaceNames.UsersWorkspaceName 
+                    ||
+                    !(this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false)))
+                return this.Forbid();
 
             if (currentUser.IsArchived)
             {
@@ -1127,22 +1152,24 @@ namespace WB.UI.Headquarters.Controllers
 
         private bool HasPermissionsToManageUser(HqUser user)
         {
+            // Own profile can always be accessed (e.g., for password and 2FA management)
+            if (user.Id == this.authorizedUser.Id)
+                return true;
+
+            // Administrators can manage all users
             if (this.authorizedUser.IsAdministrator)
                 return true;
 
-            if (this.authorizedUser.IsHeadquarter && (user.Id == this.authorizedUser.Id  || user.IsInRole(UserRoles.Supervisor) || user.IsInRole(UserRoles.Interviewer)))
+            // Headquarters can manage supervisors and interviewers
+            if (this.authorizedUser.IsHeadquarter 
+                && (user.IsInRole(UserRoles.Supervisor) || user.IsInRole(UserRoles.Interviewer))
+                && user.Workspaces.Any(x => this.authorizedUser.Workspaces.Contains(x.Workspace.Name)))
                 return true;
 
+            // Supervisors can manage their interviewers
             if (this.authorizedUser.IsSupervisor 
-                && (user.Id == this.authorizedUser.Id || (user.IsInRole(UserRoles.Interviewer) && user.Workspaces.Any(u => u.Supervisor?.Id == this.authorizedUser.Id))))
-                return true;
-
-            if (this.authorizedUser.IsInterviewer 
-                && user.Id == this.authorizedUser.Id
-                && (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false))
-                return true;
-
-            if (this.authorizedUser.IsObserver && user.Id == this.authorizedUser.Id)
+                && user.IsInRole(UserRoles.Interviewer) 
+                && user.Workspaces.Any(u => u.Supervisor?.Id == this.authorizedUser.Id))
                 return true;
 
             return false;
@@ -1150,27 +1177,18 @@ namespace WB.UI.Headquarters.Controllers
 
         private bool HasPermissionsToChangeUserPassword(HqUser user)
         {
+            if (user.Id == this.authorizedUser.Id)
+                return true;
+
+            // Only administrators and headquarters can change other users' passwords
+            //Admin can change password for any user except other admins
             if (this.authorizedUser.IsAdministrator)
-                return true;
+                return !user.IsInRole(UserRoles.Administrator);
 
-            if (this.authorizedUser.IsHeadquarter)
-            {
-                if (user.Id == this.authorizedUser.Id)
-                    return true;
-
-                if(user.Workspaces.All(x => this.authorizedUser.Workspaces.Contains(x.Workspace.Name)))
-                    return true;
-
-                return false;
-            }
-
-            if (this.authorizedUser.IsSupervisor && user.Id == this.authorizedUser.Id)
-                return true;
-
-            if (this.authorizedUser.IsInterviewer && user.Id == this.authorizedUser.Id)
-                return true;
-
-            if (this.authorizedUser.IsObserver && user.Id == this.authorizedUser.Id)
+            // Headquarters can change passwords for supervisors/interviewers in their workspaces
+            if (this.authorizedUser.IsHeadquarter
+                && (user.IsInRole(UserRoles.Supervisor) || user.IsInRole(UserRoles.Interviewer))
+                && user.Workspaces.All(x => this.authorizedUser.Workspaces.Contains(x.Workspace.Name)))
                 return true;
 
             return false;

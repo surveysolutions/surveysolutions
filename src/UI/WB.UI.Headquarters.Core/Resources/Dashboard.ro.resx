@@ -243,4 +243,25 @@
   <data name="UsersManagement" xml:space="preserve">
     <value>Managementul utilizatorilor</value>
   </data>
+
+
+  <data name="SaveQuestionnaire" xml:space="preserve">
+    <value>Salvați documentul chestionarului</value>
+  </data>
+
+  <data name="QuestionnairePreview" xml:space="preserve">
+    <value>Previzualizare chestionar</value>
+  </data>
+
+  <data name="CreateUser" xml:space="preserve">
+      <value>Creați utilizator</value>
+  </data>
+
+  <data name="ExposedVariables" xml:space="preserve">
+    <value>Variabile expuse</value>
+  </data>
+
+  <data name="Edit" xml:space="preserve">
+    <value>Editare</value>
+  </data>
 </root>

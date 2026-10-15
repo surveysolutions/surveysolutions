@@ -14,7 +14,7 @@ namespace WB.UI.Designer.Resources {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Assistant {
+    public class Assistant {
         
         private static System.Resources.ResourceManager resourceMan;
         
@@ -25,7 +25,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static System.Resources.ResourceManager ResourceManager {
+        public static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
                     System.Resources.ResourceManager temp = new System.Resources.ResourceManager("WB.UI.Designer.Resources.Assistant", typeof(Assistant).Assembly);
@@ -36,7 +36,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static System.Globalization.CultureInfo Culture {
+        public static System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -45,51 +45,165 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
-        internal static string ClearHistory {
+        public static string ClearHistory {
             get {
                 return ResourceManager.GetString("ClearHistory", resourceCulture);
             }
         }
         
-        internal static string Unlike {
+        public static string NotHelpful {
             get {
-                return ResourceManager.GetString("Unlike", resourceCulture);
+                return ResourceManager.GetString("NotHelpful", resourceCulture);
             }
         }
         
-        internal static string Like {
+        public static string Helpful {
             get {
-                return ResourceManager.GetString("Like", resourceCulture);
+                return ResourceManager.GetString("Helpful", resourceCulture);
             }
         }
         
-        internal static string Dislike {
+        public static string Dislike {
             get {
                 return ResourceManager.GetString("Dislike", resourceCulture);
             }
         }
         
-        internal static string Undislike {
+        public static string Unhelpful {
             get {
-                return ResourceManager.GetString("Undislike", resourceCulture);
+                return ResourceManager.GetString("Unhelpful", resourceCulture);
             }
         }
         
-        internal static string TypeMessage {
+        public static string NotUnhelpful {
+            get {
+                return ResourceManager.GetString("NotUnhelpful", resourceCulture);
+            }
+        }
+        
+        public static string UnhelpfulCommentTitle {
+            get {
+                return ResourceManager.GetString("UnhelpfulCommentTitle", resourceCulture);
+            }
+        }
+        
+        public static string UnhelpfulCommentPlaceholder {
+            get {
+                return ResourceManager.GetString("UnhelpfulCommentPlaceholder", resourceCulture);
+            }
+        }
+        
+        public static string UnhelpfulCommentHint {
+            get {
+                return ResourceManager.GetString("UnhelpfulCommentHint", resourceCulture);
+            }
+        }
+        
+        public static string Send {
+            get {
+                return ResourceManager.GetString("Send", resourceCulture);
+            }
+        }
+        
+        public static string SendFeedback {
+            get {
+                return ResourceManager.GetString("SendFeedback", resourceCulture);
+            }
+        }
+        
+        public static string NotHelpfulCommentTitle {
+            get {
+                return ResourceManager.GetString("NotHelpfulCommentTitle", resourceCulture);
+            }
+        }
+        
+        public static string NotHelpfulCommentPlaceholder {
+            get {
+                return ResourceManager.GetString("NotHelpfulCommentPlaceholder", resourceCulture);
+            }
+        }
+        
+        public static string TypeMessage {
             get {
                 return ResourceManager.GetString("TypeMessage", resourceCulture);
             }
         }
         
-        internal static string Title {
+        public static string Title {
             get {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }
         
-        internal static string WelcomeMessage {
+        public static string WelcomeMessage {
             get {
                 return ResourceManager.GetString("WelcomeMessage", resourceCulture);
+            }
+        }
+        
+        public static string Disclaimer {
+            get {
+                return ResourceManager.GetString("Disclaimer", resourceCulture);
+            }
+        }
+        
+        public static string ConnectionError {
+            get {
+                return ResourceManager.GetString("ConnectionError", resourceCulture);
+            }
+        }
+        
+        public static string RateLimitExceeded {
+            get {
+                return ResourceManager.GetString("RateLimitExceeded", resourceCulture);
+            }
+        }
+        
+        public static string StopRequest {
+            get {
+                return ResourceManager.GetString("StopRequest", resourceCulture);
+            }
+        }
+        
+        public static string Copy {
+            get {
+                return ResourceManager.GetString("Copy", resourceCulture);
+            }
+        }
+        
+        public static string CopyCode {
+            get {
+                return ResourceManager.GetString("CopyCode", resourceCulture);
+            }
+        }
+        
+        public static string NotAuthorized {
+            get {
+                return ResourceManager.GetString("NotAuthorized", resourceCulture);
+            }
+        }
+        
+        public static string InvalidRequest {
+            get {
+                return ResourceManager.GetString("InvalidRequest", resourceCulture);
+            }
+        }
+        
+        public static string AccessDenied {
+            get {
+                return ResourceManager.GetString("AccessDenied", resourceCulture);
+            }
+        }
+        
+        public static string ModelNotFound {
+            get {
+                return ResourceManager.GetString("ModelNotFound", resourceCulture);
+            }
+        }
+        
+        public static string ServiceUnavailable {
+            get {
+                return ResourceManager.GetString("ServiceUnavailable", resourceCulture);
             }
         }
     }

@@ -65,6 +65,7 @@ namespace WB.UI.Tester.Infrastructure
             registry.Bind<INetworkService, AndroidNetworkService>();
             registry.Bind<IEnumeratorSettings, TesterSettings>();
             registry.Bind<IHttpClientFactory, AndroidHttpClientFactory>();
+            registry.Bind<IIntegrityService, IntegrityService>();
             registry.Bind<IRestService, RestService>();
             registry.Bind<IFastBinaryFilesHttpHandler, FastBinaryFilesHttpHandler>();
             registry.Bind<ISerializer, PortableJsonSerializer>();

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using AutoMapper;
 using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
@@ -45,14 +44,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
             document = GetDocument();
             questionnaire = Create.Entity.PlainQuestionnaire(document);
 
-            var autoMapperConfig = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new WebInterviewAutoMapProfile());
-            });
-
             authorizedUserMock = new Mock<IAuthorizedUser>();
 
-            Subject = new HqWebInterviewInterviewEntityFactory(autoMapperConfig.CreateMapper(),
+            Subject = new HqWebInterviewInterviewEntityFactory(
                 authorizedUserMock.Object,
                 new EnumeratorGroupGroupStateCalculationStrategy(), 
                 new SupervisorGroupStateCalculationStrategy(), 

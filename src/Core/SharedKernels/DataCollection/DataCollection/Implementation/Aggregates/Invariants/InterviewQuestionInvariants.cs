@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireQuestionDeclared(questionType)
                 .RequireQuestionInstanceExists();
 
-        public InterviewQuestionInvariants RequireQuestionEnabled()
+        public InterviewQuestionInvariants RequireQuestionIsEnabledAndNotReadOnly()
         {
             var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
 
@@ -71,6 +71,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     }
                 };
 
+            if (question.IsReadonly)
+            {
+                throw new InterviewException("Answer cannot be changed for preloaded question.")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, question.Identity.ToString() },
+                        {ExceptionKeys.Variable, question.VariableName }
+                    }
+                };
+            }
+
             return this;
         }
 
@@ -82,14 +95,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         public void RequireTextAnswerAllowed()
             => this
                 .RequireQuestionExists(QuestionType.Text)
-                .RequireQuestionEnabled();
+                .RequireQuestionIsEnabledAndNotReadOnly();
 
         public void RequireNumericIntegerPreloadValueAllowed(int answer)
             => this
                 .RequireQuestionExists(QuestionType.Numeric)
                 .RequireNumericIntegerQuestionDeclared()
                 .RequireRosterSizeAnswerNotNegative(answer)
-                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answer);
+                .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answer)
+                .RequireNonNegativeIntegerAnswer(answer);
 
         public void RequireNumericIntegerAnswerAllowed(int answer, int? protectedAnswer)
             => this
@@ -97,7 +111,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireNumericIntegerQuestionDeclared()
                 .RequireRosterSizeAnswerNotNegative(answer)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answer)
-                .RequireQuestionEnabled()
+                .RequireNonNegativeIntegerAnswer(answer)
+                .RequireQuestionIsEnabledAndNotReadOnly()
                 .RequireProtectedAnswersNotReduced(answer, protectedAnswer);
 
         private void RequireProtectedAnswersNotReduced(int answer, int? protectedAnswer)
@@ -120,17 +135,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             }
         }
 
-        public void RequireNumericRealPreloadValueAllowed()
+        public void RequireNumericRealPreloadValueAllowed(double answer)
             => this
                 .RequireQuestionExists(QuestionType.Numeric)
-                .RequireNumericRealQuestionDeclared();
+                .RequireNumericRealQuestionDeclared()
+                .RequireNonNegativeRealAnswer(answer);
 
         public void RequireNumericRealAnswerAllowed(double answer)
             => this
                 .RequireQuestionExists(QuestionType.Numeric)
                 .RequireNumericRealQuestionDeclared()
                 .RequireAllowedDecimalPlaces(answer)
-                .RequireQuestionEnabled();
+                .RequireNonNegativeRealAnswer(answer)
+                .RequireQuestionIsEnabledAndNotReadOnly();
 
         public void RequireDateTimePreloadValueAllowed()
             => this
@@ -139,7 +156,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         public void RequireDateTimeAnswerAllowed()
             => this
                 .RequireQuestionExists(QuestionType.DateTime)
-                .RequireQuestionEnabled();
+                .RequireQuestionIsEnabledAndNotReadOnly();
 
         public void RequireFixedSingleOptionPreloadValueAllowed(decimal selectedValue, int? parentValue)
             => this
@@ -150,18 +167,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             => this
                 .RequireQuestionExists(QuestionType.SingleOption)
                 .RequireOptionExists(selectedValue, parentValue)
-                .RequireQuestionEnabled();
+                .RequireQuestionIsEnabledAndNotReadOnly();
 
         public void RequireLinkedToListSingleOptionAnswerAllowed(int selectedValue)
             => this
                 .RequireQuestionExists(QuestionType.SingleOption)
-                .RequireQuestionEnabled()
+                .RequireQuestionIsEnabledAndNotReadOnly()
                 .RequireLinkedToListOptionIsAvailable(selectedValue);
 
         public void RequireLinkedToRosterSingleOptionAnswerAllowed(decimal[] selectedLinkedOption)
             => this
                 .RequireQuestionExists(QuestionType.SingleOption)
-                .RequireQuestionEnabled()
+                .RequireQuestionIsEnabledAndNotReadOnly()
                 .RequireLinkedOptionIsAvailable(selectedLinkedOption);
 
         public void RequireFixedMultipleOptionsPreloadValueAllowed(IReadOnlyCollection<int> selectedValues)
@@ -182,7 +199,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireRosterSizeAnswerNotNegative(selectedValues.Count)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(selectedValues.Count)
                 .RequireMaxAnswersCountLimit(selectedValues.Count)
-                .RequireQuestionEnabled()
+                .RequireQuestionIsEnabledAndNotReadOnly()
                 .RequireProtectedAnswersNotRemoved(selectedValues, protectedValues);
 
         public void RequireProtectedAnswersNotRemoved(IReadOnlyCollection<int> selectedValues, IReadOnlyCollection<int> protectedValues)
@@ -211,12 +228,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireRosterSizeAnswerNotNegative(selectedValues.Count)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(selectedValues.Count)
                 .RequireMaxAnswersCountLimit(selectedValues.Count)
-                .RequireQuestionEnabled();
+                .RequireQuestionIsEnabledAndNotReadOnly();
 
         public void RequireLinkedToRosterMultipleOptionsAnswerAllowed(RosterVector[] selectedLinkedOptions)
             => this
                 .RequireQuestionExists(QuestionType.MultyOption)
-                .RequireQuestionEnabled()
+                .RequireQuestionIsEnabledAndNotReadOnly()
                 .RequireLinkedOptionsAreAvailable(selectedLinkedOptions)
                 .RequireMaxAnswersCountLimitForLinked(selectedLinkedOptions.Length)
                 .RequireMaxAnswersCountLimit(selectedLinkedOptions.Length);
@@ -245,7 +262,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireRosterSizeAnswerNotNegative(yesAnswersCount)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(yesAnswersCount)
                 .RequireMaxAnswersCountLimit(yesAnswersCount)
-                .RequireQuestionEnabled();
+                .RequireQuestionIsEnabledAndNotReadOnly();
         }
 
         public void RequireTextListPreloadValueAllowed(Tuple<decimal, string>[] answers)
@@ -261,7 +278,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireRosterSizeAnswerNotNegative(answers.Length)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answers.Length)
                 .RequireMaxAnswersCountLimit(answers.Length)
-                .RequireQuestionEnabled()
+                .RequireQuestionIsEnabledAndNotReadOnly()
                 .RequireUniqueValues(answers)
                 .RequireNotEmptyTexts(answers)
                 .RequireMaxAnswersCountLimit(answers)
@@ -295,7 +312,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         public void RequireGpsCoordinatesAnswerAllowed()
             => this
                 .RequireQuestionExists(QuestionType.GpsCoordinates)
-                .RequireQuestionEnabled();
+                .RequireQuestionIsEnabledAndNotReadOnly();
 
         public void RequireQRBarcodePreloadValueAllowed()
             => this
@@ -304,22 +321,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         public void RequireQRBarcodeAnswerAllowed()
             => this
                 .RequireQuestionExists(QuestionType.QRBarcode)
-                .RequireQuestionEnabled();
+                .RequireQuestionIsEnabledAndNotReadOnly();
 
         public void RequireAudioAnswerAllowed()
             => this
                 .RequireQuestionExists(QuestionType.Audio)
-                .RequireQuestionEnabled();
+                .RequireQuestionIsEnabledAndNotReadOnly();
 
         public void RequirePictureAnswerAllowed()
             => this
                 .RequireQuestionExists(QuestionType.Multimedia)
-                .RequireQuestionEnabled();
+                .RequireQuestionIsEnabledAndNotReadOnly();
 
         public void RequireAreaAnswerAllowed()
             => this
                 .RequireQuestionExists(QuestionType.Area)
-                .RequireQuestionEnabled();
+                .RequireQuestionIsEnabledAndNotReadOnly();
 
         private InterviewQuestionInvariants RequireQuestionDeclared()
         {
@@ -623,6 +640,66 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 {
                     throw new AnswerNotAcceptedException(
                         $"Answer is incorrect because question is used as size of roster and specified answer is negative")
+                    {
+                        Data =
+                        {
+                            {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                            {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
+                            {ExceptionKeys.ProvidedAnswerValue, answer}
+                        }
+                    };
+                }
+            }
+
+            return this;
+        }
+
+        private InterviewQuestionInvariants RequireNonNegativeIntegerAnswer(int answer)
+        {
+            if (!this.Questionnaire.IsQuestionNonNegative(this.QuestionId))
+                return this;
+
+            if (answer < 0)
+            {
+                if (this.Questionnaire.GetOptionForQuestionByOptionValue(this.QuestionId, answer, null) == null)
+                {
+                    throw new AnswerNotAcceptedException(
+                        $"Answer '{answer}' is not allowed because the question is set as non-negative")
+                    {
+                        Data =
+                        {
+                            {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                            {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
+                            {ExceptionKeys.ProvidedAnswerValue, answer}
+                        }
+                    };
+                }
+            }
+
+            return this;
+        }
+
+        private InterviewQuestionInvariants RequireNonNegativeRealAnswer(double answer)
+        {
+            if (!this.Questionnaire.IsQuestionNonNegative(this.QuestionId))
+                return this;
+
+            if (answer < 0)
+            {
+                bool isSpecialValue = false;
+                try
+                {
+                    isSpecialValue = this.Questionnaire.GetOptionForQuestionByOptionValue(this.QuestionId, (decimal)answer, null) != null;
+                }
+                catch (OverflowException)
+                {
+                    // value is outside decimal range, so it cannot be a special value
+                }
+
+                if (!isSpecialValue)
+                {
+                    throw new AnswerNotAcceptedException(
+                        $"Answer '{answer}' is not allowed because the question is set as non-negative")
                     {
                         Data =
                         {

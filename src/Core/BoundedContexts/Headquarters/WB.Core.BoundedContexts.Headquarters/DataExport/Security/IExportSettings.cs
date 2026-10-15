@@ -15,5 +15,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
         
         ExportRetentionSettings? GetExportRetentionSettings();
         void SetExportRetentionSettings(bool enabled, int? daysToKeep, int? countToKeep);
+
+        GeographyExportFormat GetGeographyExportFormat();
+        void SetGeographyExportFormat(GeographyExportFormat format);
     }
 }

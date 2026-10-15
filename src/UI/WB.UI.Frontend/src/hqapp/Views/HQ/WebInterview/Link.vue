@@ -1,5 +1,5 @@
 <template>
-    <div class="centered-box-table">
+    <div class="centered-box-table web-interview-page">
         <div class="row-element mb-20">
             <div class="h2">
                 {{ $config.model.linkWelcome }}
@@ -12,7 +12,8 @@
 
         <div class="additional-info-block">
             <ul class="list-unstyled">
-                <li v-if="$config.model.startedDate" v-dateTimeFormatting>
+                <li v-if="$config.model.startedDate"
+                    v-dateTimeFormatting>
                     {{ $t('WebInterview.InterviewStartDateFormatText') }}
                     <time :datetime="$config.model.startedDate"></time>
                 </li>

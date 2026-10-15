@@ -2,7 +2,8 @@
     <aside class="content" v-if="sections" style="transform: translateZ(0);">
         <div v-if="interviewState != null" class="interview-progress">
             <div class="progress-counts">
-                {{ this.$t('WebInterviewUI.Progress') }}:{{ interviewState.answeredQuestionsCount }}/{{ interviewState.activeQuestionCount }}
+                {{ this.$t('WebInterviewUI.Progress') }}:{{ interviewState.answeredQuestionsCount }}/{{
+                    interviewState.activeQuestionCount }}
             </div>
             <wb-progress :striped=false :visible="interviewState != null" :valuemax="interviewState.activeQuestionCount"
                 :valuenow="interviewState.answeredQuestionsCount" />
@@ -21,7 +22,7 @@
 <script lang="js">
 import SidebarPanel from './SidebarPanel'
 import { nextTick } from 'vue'
-import { GroupStatus } from './questions'
+import { GroupStatus } from './questionConstants'
 
 export default {
     name: 'sidebar',

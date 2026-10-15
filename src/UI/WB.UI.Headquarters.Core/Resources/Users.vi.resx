@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AddAPIUser" xml:space="preserve"><value>Thêm người dùng API</value></data>
+  <data name="AddHeadquarters" xml:space="preserve"><value>Thêm văn phòng trung tâm</value></data>
+  <data name="AddSupervisor" xml:space="preserve"><value>Thêm giám sát viên</value></data>
+  <data name="APIUsers" xml:space="preserve"><value>Người dùng API</value></data>
+  <data name="CreateAPIUser" xml:space="preserve"><value>Tạo người dùng API</value></data>
+  <data name="CreateHeadquarters" xml:space="preserve"><value>Tạo văn phòng trung tâm</value></data>
+  <data name="CreateObserver" xml:space="preserve"><value>Tạo quan sát viên</value></data>
+  <data name="CreateSupervisor" xml:space="preserve"><value>Tạo giám sát viên</value></data>
+  <data name="CreateAdministrator" xml:space="preserve"><value>Tạo quản trị viên</value></data>
+  <data name="ArchivedSupervisors" xml:space="preserve"><value>Giám sát viên đã lưu trữ</value></data>
+  <data name="ClickToReturn" xml:space="preserve"><value>Nhấp để quay lại tài khoản của bạn.</value></data>
+  <data name="CreateAdmin" xml:space="preserve"><value>Để hoàn tất cài đặt, vui lòng tạo người dùng Administrator mới</value></data>
+  <data name="FinishInstallation" xml:space="preserve"><value>Hoàn tất cài đặt</value></data>
+  <data name="Headquarters" xml:space="preserve"><value>Văn phòng trung tâm</value></data>
+  <data name="ImpersonateAsUser" xml:space="preserve"><value>Xem với tư cách người dùng này ở chế độ chỉ đọc</value></data>
+  <data name="Remove" xml:space="preserve"><value>Xóa</value></data>
+  <data name="Observer" xml:space="preserve"><value>Quan sát viên</value></data>
+  <data name="ObserverDisclaimerFormat" xml:space="preserve"><value>Đây là nội dung mà &lt;b&gt;{0}&lt;/b&gt; thấy.</value></data>
+  <data name="Observers" xml:space="preserve"><value>Quan sát viên</value></data>
+  <data name="Supervisor" xml:space="preserve"><value>Giám sát viên</value></data>
+  <data name="Supervisors" xml:space="preserve"><value>Giám sát viên</value></data>
+  <data name="SupervisorsCountDescription" xml:space="preserve"><value>Giám sát viên ({{count}})</value></data>
+  <data name="InterviewersCountDescription" xml:space="preserve"><value>Phỏng vấn viên ({{count}})</value></data>
+  <data name="ApiUsersCountDescription" xml:space="preserve"><value>Người dùng API ({{count}})</value></data>
+  <data name="HeadquartersCountDescription" xml:space="preserve"><value>Văn phòng trung tâm ({{count}})</value></data>
+  <data name="ObserversCountDescription" xml:space="preserve"><value>Quan sát viên ({{count}})</value></data>
+  <data name="Supervisors_Edit" xml:space="preserve"><value>Chỉnh sửa Giám sát viên</value></data>
+  <data name="SupervisorsInTeam" xml:space="preserve"><value>giám sát viên trong nhóm của bạn</value></data>
+  <data name="Admin" xml:space="preserve"><value>Quản trị</value></data>
+  <data name="CreateAndTryLogin" xml:space="preserve"><value>Tạo và thử đăng nhập</value></data>
+  <data name="CreationDate" xml:space="preserve"><value>Tài khoản được tạo ngày</value></data>
+  <data name="Edit" xml:space="preserve"><value>Chỉnh sửa</value></data>
+  <data name="EditFormat" xml:space="preserve"><value>Chỉnh sửa: {0}</value></data>
+  <data name="Email" xml:space="preserve"><value>Email</value></data>
+  <data name="Interviewer" xml:space="preserve"><value>Phỏng vấn viên</value></data>
+  <data name="Interviewers" xml:space="preserve"><value>Phỏng vấn viên</value></data>
+  <data name="Locked" xml:space="preserve"><value>Bị khóa</value></data>
+  <data name="NotLinkedToDevice" xml:space="preserve"><value>Không liên kết với thiết bị</value></data>
+  <data name="TotalInterviewers" xml:space="preserve"><value>Tổng phỏng vấn viên</value></data>
+  <data name="UserName" xml:space="preserve"><value>Tên đăng nhập</value></data>
+  <data name="AddObserver" xml:space="preserve"><value>Thêm quan sát viên</value></data>
+  <data name="TryLater" xml:space="preserve"><value>Vui lòng thử lại sau</value></data>
+  <data name="HeadquarterAccountCreationDate" xml:space="preserve"><value>Ngày tạo tài khoản văn phòng trung tâm</value></data>
+  <data name="SupervisorAccountCreationDate" xml:space="preserve"><value>Ngày tạo tài khoản giám sát viên</value></data>
+  <data name="NotLinkedToDeviceTitle" xml:space="preserve"><value>Số phỏng vấn viên chưa đồng bộ máy tính bảng</value></data>
+  <data name="NumberOfInterviewersInTeam" xml:space="preserve"><value>Số phỏng vấn viên trong nhóm</value></data>
+  <data name="AccountCreationDateTooltip" xml:space="preserve"><value>Ngày tạo tài khoản</value></data>
+  <data name="ObserversEmail" xml:space="preserve"><value>Email quan sát viên</value></data>
+  <data name="SupervisorEmail" xml:space="preserve"><value>Email giám sát viên</value></data>
+  <data name="HeadquartersEmail" xml:space="preserve"><value>Email văn phòng trung tâm</value></data>
+  <data name="AddInterviewer" xml:space="preserve"><value>Thêm phỏng vấn viên</value></data>
+  <data name="ArchivingStatusTitle" xml:space="preserve"><value>Trạng thái lưu trữ</value></data>
+  <data name="InterviewerIssues" xml:space="preserve"><value>Vấn đề phỏng vấn viên</value></data>
+  <data name="ResetPassword" xml:space="preserve"><value>Đặt lại mật khẩu</value></data>
+  <data name="ResetPasswordTitle" xml:space="preserve"><value>Đặt lại mật khẩu người dùng</value></data>
+  <data name="UserNotFound" xml:space="preserve"><value>Không tìm thấy người dùng</value></data>
+  <data name="PasswordChanged" xml:space="preserve"><value>Mật khẩu cho người dùng {0} đã thay đổi</value></data>
+  <data name="Filter_AllUsers" xml:space="preserve"><value>Tất cả người dùng</value></data>
+  <data name="Filter_WithMissingWorkspace" xml:space="preserve"><value>Thiếu không gian làm việc</value></data>
+  <data name="Filter_WithDisabledWorkspaces" xml:space="preserve"><value>Chỉ với không gian làm việc bị vô hiệu hóa</value></data>
+  <data name="Filter_Locked" xml:space="preserve"><value>Người dùng bị khóa</value></data>
+  <data name="Filter_Archived" xml:space="preserve"><value>Người dùng đã lưu trữ</value></data>
+  <data name="UsersTitle" xml:space="preserve"><value>Người dùng</value></data>
+  <data name="AddUser" xml:space="preserve"><value>Thêm người dùng</value></data>
+  <data name="UploadUsers" xml:space="preserve"><value>Tải lên người dùng</value></data>
+  <data name="ApiTokenTitle" xml:space="preserve"><value>Token API người dùng</value></data>
+</root>

@@ -23,10 +23,12 @@
     </div>
 </template>
 <script lang="js">
-import { escape, escapeRegExp } from 'lodash'
+import { escape, escapeRegExp } from 'lodash-es'
+import 'bootstrap/js/dist/dropdown'
 
 export default {
     name: 'wb-typeahead',
+    emits: ['input'],
     props: {
         value: {
             type: Object,

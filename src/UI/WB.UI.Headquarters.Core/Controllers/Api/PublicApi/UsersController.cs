@@ -38,6 +38,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly ISystemLog systemLog;
         private readonly IWorkspaceContextAccessor workspaceContextAccessor;
         private readonly IWorkspacesStorage workspaces;
+        private readonly IAuthorizedUser authorizedUser;
 
         private const int MaxPageSize = 100;
 
@@ -48,7 +49,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IUnitOfWork unitOfWork,
             ISystemLog systemLog,
             IWorkspaceContextAccessor workspaceContextAccessor,
-            IWorkspacesStorage workspaces)
+            IWorkspacesStorage workspaces,
+            IAuthorizedUser authorizedUser)
         {
             this.usersFactory = usersFactory;
             this.archiveService = archiveService;
@@ -58,6 +60,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.systemLog = systemLog;
             this.workspaceContextAccessor = workspaceContextAccessor;
             this.workspaces = workspaces;
+            this.authorizedUser = authorizedUser;
         }
 
         /// <summary>
@@ -164,6 +167,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 }
             }
 
+            if (user.Roles.Any(x => x == UserRoles.Administrator))
+                return NotFound();
+
             return new UserApiDetails(user);
         }
         
@@ -193,9 +199,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// </summary>
         /// <param name="id">User id</param>
         /// <response code="200">User archived</response>
-        /// <response code="400">User id cannot be parsed</response>
+        /// <response code="400">User id cannot be parsed or user is not an interviewer or supervisor</response>
         /// <response code="404">User with provided id does not exist</response>
-        /// <response code="406">User is not an interviewer or supervisor</response>
         [HttpPatch]
         [Route("users/{id}/archive")]
         [Produces(MediaTypeNames.Application.Json)]
@@ -216,7 +221,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             }
             if (!(user.Roles.Contains(UserRoles.Interviewer) || user.Roles.Contains(UserRoles.Supervisor)))
             {
-                return StatusCode(StatusCodes.Status406NotAcceptable);
+                ModelState.AddModelError("user", "Only interviewers and supervisors can be archived.");
+                return ValidationProblem();
             }
 
             if (user.IsSupervisor())
@@ -236,9 +242,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         /// </summary>
         /// <param name="id">User id</param>
         /// <response code="200">User unarchived</response>
-        /// <response code="400">User id cannot be parsed</response>
+        /// <response code="400">User id cannot be parsed or user is not an interviewer or supervisor</response>
         /// <response code="404">User with provided id does not exist</response>
-        /// <response code="406">User is not an interviewer or supervisor</response>
         /// <response code="409">User cannot be unarchived</response>
         [HttpPatch]
         [Route("users/{id}/unarchive")]
@@ -261,7 +266,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             if (!(user.Roles.Contains(UserRoles.Interviewer) || user.Roles.Contains(UserRoles.Supervisor)))
             {
-                return StatusCode(StatusCodes.Status406NotAcceptable);
+                ModelState.AddModelError("user", "Only interviewers and supervisors can be unarchived.");
+                return ValidationProblem();
             }
 
             try
@@ -327,8 +333,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (createdUserRole == UserRoles.Administrator)
             {
                 ModelState.AddModelError(nameof(model.Role), "Administrator user cannot be created with api");
+                return ValidationProblem();
             }
-            
+
+            if ((this.authorizedUser.IsHeadquarter || this.authorizedUser.IsApiUser) &&
+                !new[] { UserRoles.Supervisor, UserRoles.Interviewer }.Contains(createdUserRole))
+            {
+                ModelState.AddModelError(nameof(model.Role), "You can create only Supervisor or Interviewer users");
+                return ValidationProblem();
+            }
+
             var workspaceContext = workspaceContextAccessor.CurrentWorkspace();
             if (workspaceContext == null)
                 throw new ArgumentException("Workspace context must exists");
@@ -406,6 +420,5 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             return ValidationProblem();
         }
-        
     }
 }

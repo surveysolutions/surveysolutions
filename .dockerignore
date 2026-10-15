@@ -3,6 +3,9 @@
 !/build
 !/libs
 !/artifacts
+!/installer/src
+!/installer/src/SurveySolutionsProduct
+!/installer/src/SurveySolutionsProduct/Fonts
 **/.classpath
 **/.dockerignore
 **/.env

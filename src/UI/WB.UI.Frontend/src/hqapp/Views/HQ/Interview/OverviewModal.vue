@@ -1,26 +1,30 @@
 <template>
-    <ModalFrame ref="modal" id="overview">
+    <ModalFrame ref="modal"
+        id="overview">
         <template v-slot:title>
             <div>
                 <h3>{{ $t("Pages.InterviewOverview") }}</h3>
             </div>
         </template>
 
-        <OverviewItem v-for="item in items" :key="item.id" :item="item" @showAdditionalInfo="onShowAdditionalInfo" />
+        <OverviewItem v-for="item in items"
+            :key="item.id"
+            :item="item"
+            @showAdditionalInfo="onShowAdditionalInfo" />
 
-        <infinite-loading ref="loader" v-if="overview.total > 0 && items.length > 0" @infinite="infiniteHandler"
-            :distance="1000">
-            <template #complete>
-                <span slot="no-more"></span>
-            </template>
-        </infinite-loading>
+        <div ref="sentinel"></div>
 
         <template v-slot:actions>
             <div>
-                <button type="button" class="btn btn-link" @click="hide">
+                <button type="button"
+                    class="btn btn-link"
+                    @click="hide">
                     {{ $t("Pages.CloseLabel") }}
                 </button>
-                <button type="button" class="btn btn-link" style="float:right" @click="print">
+                <button type="button"
+                    class="btn btn-link"
+                    style="float:right"
+                    @click="print">
                     {{ $t("Pages.Print") }}
                 </button>
             </div>
@@ -70,17 +74,11 @@
 </style>
 
 <script>
-import InfiniteLoading from "v3-infinite-loading";
-import "v3-infinite-loading/lib/style.css";
-
 import OverviewItem from './components/OverviewItem'
-import { slice } from 'lodash'
+import { slice } from 'lodash-es'
 
 export default {
-    components: {
-        InfiniteLoading,
-        OverviewItem
-    },
+    components: { OverviewItem },
     data: function () {
         return {
             loaded: 100,
@@ -109,6 +107,7 @@ export default {
     methods: {
         hide() {
             document.removeEventListener('scroll', this.handleScroll)
+            this._observer?.disconnect()
             this.$refs.modal.hide()
             $('body').removeClass('overviewOpenned')
         },
@@ -123,19 +122,26 @@ export default {
             })
 
             $('body').addClass('overviewOpenned')
+
+            this._observer?.disconnect()
+            this.$nextTick(() => {
+                const sentinel = this.$refs.sentinel
+                if (!sentinel) return
+
+                const observerRoot = sentinel.closest('.modal-body')
+                this._observer = new IntersectionObserver(([entry]) => {
+                    if (entry.isIntersecting) this.loadMore()
+                }, {
+                    root: observerRoot,
+                    rootMargin: '1000px',
+                })
+                this._observer.observe(sentinel)
+            })
         },
 
-        infiniteHandler($state) {
-            const self = this
-
-            self.loaded += 500
-
-            if (self.overview.isLoaded && self.loaded >= self.overview.total) {
-                $state.complete()
-            }
-            else {
-                $state.loaded()
-            }
+        loadMore() {
+            if (this.overview.isLoaded && this.loaded >= this.overview.total) return
+            this.loaded += 500
         },
 
         handleScroll(args, a, b, c) {

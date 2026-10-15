@@ -111,11 +111,9 @@
         {
             "name": "list",
             "inputFiles": [
-                "node_modules/jquery-mousewheel/jquery.mousewheel.js",
                 "node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js",
                 "node_modules/dompurify/dist/purify.js",
                 "Scripts/custom/common.js",
-                "node_modules/moment/min/moment-with-locales.js",
                 "node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css",
                 "questionnaire/content/designer-start/bootstrap-custom.less",
                 "Styles/designer-list.less"
@@ -126,9 +124,7 @@
             "inputFiles": [
                 "node_modules/jquery-validation/dist/jquery.validate.js",
                 "Scripts/custom/jquery.validate.unobtrusive-custom-for-bootstrap.js",
-                "Scripts/custom/bootstrap3-unobtrusive-hack.js",
-                "node_modules/bootstrap-select/dist/js/bootstrap-select.js",
-                "node_modules/bootstrap-select/dist/css/bootstrap-select.min.css"
+                "Scripts/custom/bootstrap3-unobtrusive-hack.js"
             ]
         },
         {

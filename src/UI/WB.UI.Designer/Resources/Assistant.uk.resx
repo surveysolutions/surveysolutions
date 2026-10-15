@@ -21,17 +21,41 @@
     <data name="ClearHistory" xml:space="preserve">
         <value>Очистити історію</value>
     </data>
-    <data name="Unlike" xml:space="preserve">
-        <value>Прибрати вподобання</value>
+    <data name="NotHelpful" xml:space="preserve">
+        <value>Скасувати</value>
     </data>
-    <data name="Like" xml:space="preserve">
+    <data name="Unhelpful" xml:space="preserve">
+        <value>Не допомогло</value>
+    </data>
+    <data name="Helpful" xml:space="preserve">
         <value>Подобається</value>
+    </data>
+    <data name="UnhelpfulCommentTitle" xml:space="preserve">
+        <value>Додати коментар</value>
+    </data>
+    <data name="UnhelpfulCommentPlaceholder" xml:space="preserve">
+        <value>Напишіть короткий коментар (необов’язково)</value>
+    </data>
+    <data name="UnhelpfulCommentHint" xml:space="preserve">
+        <value>Що було не так у цій відповіді?</value>
+    </data>
+    <data name="Send" xml:space="preserve">
+        <value>Надіслати</value>
+    </data>
+    <data name="SendFeedback" xml:space="preserve">
+        <value>Надіслати відгук</value>
+    </data>
+    <data name="NotHelpfulCommentTitle" xml:space="preserve">
+        <value>Додати коментар</value>
+    </data>
+    <data name="NotHelpfulCommentPlaceholder" xml:space="preserve">
+        <value>Напишіть короткий коментар (необов’язково)</value>
     </data>
     <data name="Dislike" xml:space="preserve">
         <value>Не подобається</value>
     </data>
-    <data name="Undislike" xml:space="preserve">
-        <value>Прибрати невподобання</value>
+    <data name="NotUnhelpful" xml:space="preserve">
+        <value>Скасувати</value>
     </data>
     <data name="TypeMessage" xml:space="preserve">
         <value>Введіть ваше повідомлення...</value>
@@ -40,6 +64,42 @@
         <value>ШІ Помічник</value>
     </data>
     <data name="WelcomeMessage" xml:space="preserve">
-        <value>Почніть розмову з ШІ помічником</value>
+        <value>Почніть розмову з ШІ помічником. Ваші повідомлення можуть використовуватись для вдосконалення продукту. Не передавайте конфіденційну або особисту інформацію в цьому чаті.</value>
+    </data>
+    <data name="Disclaimer" xml:space="preserve">
+        <value>Цей вміст був створений автоматизованою системою штучного інтелекту і не є авторитетною або перевіреною інформацією. Він може містити помилки або упущення. Користувачі несуть відповідальність за перевірку, валідацію та прийняття обґрунтованих рішень перед використанням.</value>
+    </data>
+    <data name="DisclaimerLabel" xml:space="preserve">
+        <value>Вміст створено штучним інтелектом</value>
+    </data>
+    <data name="ConnectionError" xml:space="preserve">
+        <value>Не вдалося підключитися до помічника.</value>
+    </data>
+    <data name="RateLimitExceeded" xml:space="preserve">
+        <value>Перевищено ліміт запитів. Будь ласка, спробуйте знову пізніше.</value>
+    </data>
+    <data name="StopRequest" xml:space="preserve">
+        <value>Зупинити</value>
+    </data>
+    <data name="Copy" xml:space="preserve">
+        <value>Копіювати</value>
+    </data>
+    <data name="CopyCode" xml:space="preserve">
+        <value>Копіювати код</value>
+    </data>
+    <data name="NotAuthorized" xml:space="preserve">
+        <value>Не авторизовано.</value>
+    </data>
+    <data name="InvalidRequest" xml:space="preserve">
+        <value>Недійсний запит. Будь ласка, перевірте формат повідомлення.</value>
+    </data>
+    <data name="AccessDenied" xml:space="preserve">
+        <value>Доступ заборонено. Ваш ключ API може не мати необхідних дозволів.</value>
+    </data>
+    <data name="ModelNotFound" xml:space="preserve">
+        <value>Модель асистента не знайдено. Будь ласка, перевірте, чи маєте ви доступ до налаштованої моделі.</value>
+    </data>
+    <data name="ServiceUnavailable" xml:space="preserve">
+        <value>Сервіс асистента тимчасово недоступний. Будь ласка, спробуйте пізніше.</value>
     </data>
 </root>

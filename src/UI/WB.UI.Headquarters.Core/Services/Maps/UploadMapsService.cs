@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Configs;
-using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.UI.Headquarters.Services.Maps;
 
@@ -76,7 +75,7 @@ class UploadMapsService : IUploadMapsService
         }
         catch (Exception ex)
         {
-            logger.LogError($"Invalid map archive", ex);
+            logger.LogError(ex, "Invalid map archive");
 
             result.Errors.Add(Resources.Maps.MapsLoadingError);
             return result;
@@ -84,7 +83,7 @@ class UploadMapsService : IUploadMapsService
 
         var invalidMaps = new List<Tuple<string, Exception>>();
         string mapsInTempDirectory = null;
-        
+
         try
         {
             mapsInTempDirectory = ExtractMapsToTempDirectory(content);
@@ -93,23 +92,24 @@ class UploadMapsService : IUploadMapsService
             {
                 try
                 {
-                    result.Maps.Add(await mapStorageService.SaveOrUpdateMapAsync(map, mapsInTempDirectory));
+                    var saved = await mapStorageService.SaveOrUpdateMapAsync(map, mapsInTempDirectory).ConfigureAwait(false);
+                    result.Maps.Add(saved);
                 }
                 catch (Exception e)
                 {
-                    logger.LogError($"Error on maps import map {map.Name}", e);
+                    logger.LogError(e, "Error on maps import. '{MapName}' map.", map.Name);
                     invalidMaps.Add(new Tuple<string, Exception>(map.Name, e));
                 }
             }
 
             if (invalidMaps.Count > 0)
-                result.Errors.AddRange(invalidMaps.Select(x => String.Format(Resources.Maps.MapLoadingInvalidFile, x.Item1, x.Item2.Message)).ToList());
+                result.Errors.AddRange(invalidMaps.Select(x => String.Format(Resources.Maps.MapLoadingInvalidFile, x.Item1, x.Item2.GetType().Name)).ToList());
             else
                 result.IsSuccess = true;
         }
         catch (Exception e)
         {
-            logger.LogError("Error on maps import", e);
+            logger.LogError(e, "Error on maps import");
             result.Errors.Add(Resources.Maps.MapsLoadingError);
             return result;
         }

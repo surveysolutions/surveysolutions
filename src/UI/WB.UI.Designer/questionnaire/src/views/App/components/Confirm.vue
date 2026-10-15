@@ -1,8 +1,9 @@
 <template>
     <teleport to="body">
-        <div v-if="isOpen" uib-modal-window="modal-window" class="modal confirm-window fade ng-scope ng-isolate-scope in"
-            role="dialog" index="0" animate="animate" tabindex="-1" uib-modal-animation-class="fade" modal-in-class="in"
-            modal-animation="true" style="z-index: 1050; display: block;">
+        <div v-if="isOpen" uib-modal-window="modal-window"
+            class="modal confirm-window fade ng-scope ng-isolate-scope in" role="dialog" index="0" animate="animate"
+            tabindex="-1" uib-modal-animation-class="fade" modal-in-class="in" modal-animation="true"
+            style="z-index: 1050; display: block;">
             <div class="modal-dialog ">
                 <div class="modal-content" uib-modal-transclude="">
                     <div class="modal-header">
@@ -11,10 +12,11 @@
                             {{ header || $t('QuestionnaireEditor.ModalConfirm') }}
                         </h3>
                     </div>
-                    <div class="modal-body" v-dompurify-html="title">
+                    <div class="modal-body" v-html="sanitizedTitle">
                     </div>
                     <div class="modal-footer" v-if="!noControls">
-                        <button class="btn btn-primary btn-lg" v-if="!isReadOnly" @click="ok()">
+                        <button :class="['btn', 'btn-lg', isDanger ? 'btn-danger' : 'btn-primary']" v-if="!isReadOnly"
+                            @click="ok()">
                             {{ okButtonTitle || $t('QuestionnaireEditor.OK') }}
                         </button>
                         <button v-if="!isAlert" class="btn btn-link" @click="cancel()">
@@ -29,11 +31,13 @@
         </div>
         <div v-if="isOpen" uib-modal-backdrop="modal-backdrop" class="modal-backdrop fade ng-scope in"
             uib-modal-animation-class="fade" modal-in-class="in" modal-animation="true"
-            data-bootstrap-modal-aria-hidden-count="1" aria-hidden="true" style="z-index: 1040;" @click="cancel()"></div>
+            data-bootstrap-modal-aria-hidden-count="1" aria-hidden="true" style="z-index: 1040;" @click="cancel()">
+        </div>
     </teleport>
 </template>
 
 <script>
+import DOMPurify from 'dompurify';
 import event from '../../../plugins/events';
 
 const confirmDialog = {
@@ -48,8 +52,38 @@ const confirmDialog = {
             callback: { type: Function, required: false },
             noControls: { type: Boolean, required: false },
             isAlert: { type: Boolean, required: false, default: false },
+            isDanger: { type: Boolean, required: false, default: false },
+            sanitizeOptions: null,
             isOpen: false
         };
+    },
+    computed: {
+        sanitizedTitle() {
+            const defaultOptions = {
+                ALLOWED_TAGS: [],
+                KEEP_CONTENT: true
+            };
+
+            const hasSafeOptions = this.sanitizeOptions
+                && typeof this.sanitizeOptions === 'object'
+                && !Array.isArray(this.sanitizeOptions)
+                && Array.isArray(this.sanitizeOptions.ALLOWED_TAGS)
+                && Array.isArray(this.sanitizeOptions.ALLOWED_ATTR);
+
+            const options = hasSafeOptions
+                ? {
+                    ...defaultOptions,
+                    FORBID_TAGS: ['script', 'style', 'svg', 'math', 'iframe', 'object', 'embed', 'link', 'meta', 'base'],
+                    FORBID_ATTR: ['style'],
+                    ALLOWED_URI_REGEXP: /^(?:https?:|\/)/i,
+                    ALLOWED_TAGS: this.sanitizeOptions.ALLOWED_TAGS.filter(t => typeof t === 'string'),
+                    ALLOWED_ATTR: this.sanitizeOptions.ALLOWED_ATTR
+                        .filter(a => typeof a === 'string' && !a.toLowerCase().startsWith('on') && a.toLowerCase() !== 'style')
+                }
+                : defaultOptions;
+
+            return DOMPurify.sanitize(this.title || '', options);
+        }
     },
     mounted() {
         event.on('open', params => {
@@ -67,8 +101,10 @@ const confirmDialog = {
             this.cancelButtonTitle = params.cancelButtonTitle;
             this.isReadOnly = params.isReadOnly || false;
             this.isAlert = params.isAlert || false;
+            this.isDanger = params.isDanger || false;
             this.callback = params.callback;
             this.noControls = params.noControls || false;
+            this.sanitizeOptions = params.sanitizeOptions || null;
             this.isOpen = true;
         },
         cancel() {

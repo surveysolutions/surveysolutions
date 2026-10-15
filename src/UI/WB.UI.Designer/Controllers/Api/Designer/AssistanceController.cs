@@ -17,28 +17,38 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Services;
 using Newtonsoft.Json.Linq;
+using System.Threading;
+using System.ComponentModel.DataAnnotations;
+using WB.UI.Designer.Extensions;
+using WB.UI.Shared.Web.Attributes;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
     [Authorize]
     [ApiController]
     [QuestionnairePermissions]
+    // Read-only proxy to a slow external service; a request transaction would pin a DB connection for the whole call.
+    [NoTransaction]
     [Route("api/[controller]")]
     public class AssistanceController : ControllerBase
     {
+        private const string AssistantProviderHttpClientName = AssistantProviderHttpClientExtensions.AssistantProviderHttpClientName;
+
         private readonly IConfiguration configuration;
         private readonly ILogger<AssistanceController> logger;
         private readonly UserManager<DesignerIdentityUser> userManager;
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IJwtTokenService jwtTokenService;
         private readonly IPlainKeyValueStorage<AssistantSettings> appSettingsStorage;
+        private readonly IHttpClientFactory httpClientFactory;
 
         public AssistanceController(IConfiguration configuration,
             ILogger<AssistanceController> logger,
             IPlainKeyValueStorage<AssistantSettings> appSettingsStorage,
             UserManager<DesignerIdentityUser> userManager,
             IQuestionnaireHelper questionnaireHelper,
-            IJwtTokenService jwtTokenService)
+            IJwtTokenService jwtTokenService,
+            IHttpClientFactory httpClientFactory)
         {
             this.configuration = configuration;
             this.logger = logger;
@@ -46,19 +56,32 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.userManager = userManager;
             this.questionnaireHelper = questionnaireHelper;
             this.jwtTokenService = jwtTokenService;
+            this.httpClientFactory = httpClientFactory;
         }
+
 
         public class Message
         {
+            [Required]
+            [RegularExpression("^(user|assistant)$", ErrorMessage = "Invalid message role.")]
+            [StringLength(20)]
             public string Role { get; set; } = string.Empty;
+
+            [Required]
+            [StringLength(4000)]
             public string Content { get; set; } = string.Empty;
         }
 
         public class AssistanceRequest
         {
+            [Required]
+            [StringLength(4000)]
             public string Prompt { get; set; } = string.Empty;
-            public List<Message> Messages { get; set; } = new List<Message>();
+
+            [MaxLength(50)]
+            public List<Message>? Messages { get; set; }
             public Guid? EntityId { get; set; }
+            public Guid? ConversationId { get; set; }
         }
 
         public class AssistanceReactionRequest
@@ -66,14 +89,29 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             public Guid? EntityId { get; set; }
             public long? ClientMessageId { get; set; }
             public long? ClientTimestamp { get; set; }
+            [StringLength(4000)]
             public string Prompt { get; set; } = string.Empty;
+            [StringLength(16000)]
             public string AssistantResponse { get; set; } = string.Empty;
-            public int Reaction { get; set; }
+            public long? AssistantCallId { get; set; }
+            public AssistantResponseReaction Reaction { get; set; }
+            [StringLength(2000)]
+            public string? Comment { get; set; }
         }
+
+        public enum AssistantResponseReaction
+        {
+            None = 0,
+            Helpful = 1,
+            Unhelpful = 2
+        }
+
+        public record ReactionRequest(AssistantResponseReaction Reaction, string? Comment = null);
+
 
         [HttpPost]
         [Route("{id}")]
-        public async Task<IActionResult> Post(Guid id, [FromBody] AssistanceRequest request)
+        public async Task<IActionResult> Post(Guid id, [FromBody] AssistanceRequest request, CancellationToken cancellationToken)
         {
             var setting = appSettingsStorage.GetById(AssistantSettings.AssistantSettingsKey);
 
@@ -91,6 +129,15 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if (!request.EntityId.HasValue)
                 return BadRequest("Either 'entityId' must be provided.");
 
+            var hasPrompt = !string.IsNullOrWhiteSpace(request.Prompt);
+            var hasMessages = request.Messages != null && request.Messages.Count > 0;
+            if (!hasPrompt && !hasMessages)
+                return BadRequest("Either 'prompt' must be provided or 'messages' must contain at least one item.");
+
+            var promptToSend = hasPrompt
+                ? request.Prompt
+                : request.Messages!.Last().Content;
+
             var questionnaireRevision = questionnaireHelper.GetLastRevision(id);
 
             try
@@ -101,45 +148,66 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     return StatusCode(500, "Assistant service address is not configured.");
                 }
 
-                var httpClient = new HttpClient();
+                var httpClient = httpClientFactory.CreateClient(AssistantProviderHttpClientName);
 
-                var apiKey = configuration["Providers:Assistant:ApiKey"];
-                if (!string.IsNullOrWhiteSpace(apiKey))
-                {
-                    httpClient.DefaultRequestHeaders.Add("X-Client-Api-Key", apiKey);
-                }
+                using var httpRequest = new HttpRequestMessage(HttpMethod.Post, assistantAddress);
 
                 if (user != null)
                 {
                     // forward user id explicitly for downstream auditing/rate-limiting
-                    httpClient.DefaultRequestHeaders.Add("X-User-Id", user.Id.ToString());
+                    httpRequest.Headers.TryAddWithoutValidation("X-User-Id", user.Id.ToString());
 
-                    var jwtToken = jwtTokenService.GenerateToken(user);
-                    httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + jwtToken);
+                    try
+                    {
+                        var jwtToken = jwtTokenService.GenerateToken(user);
+                        if (!string.IsNullOrWhiteSpace(jwtToken))
+                            httpRequest.Headers.TryAddWithoutValidation("Authorization", "Bearer " + jwtToken);
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        // If JWT secret key is not configured, log and continue without Authorization header,
+                        // allowing other authentication mechanisms (e.g. provider API key) to be used.
+                        logger.LogWarning(ex, "JWT token generation skipped because Assistant JWT secret key is not configured.");
+                    }
                 }
 
                 var proxyRequest = new
                 {
                     QuestionnaireId = $"{questionnaireRevision.QuestionnaireId}${questionnaireRevision.Version}",
                     EntityId = request.EntityId.Value,
-                    Prompt = !string.IsNullOrWhiteSpace(request.Prompt) ? request.Prompt : request.Messages.Last().Content,
-                    Messages = request.Messages.SkipLast(1).Select(m => new { m.Role, m.Content }).ToList()
+                    Prompt = promptToSend,
+                    Messages = request.Messages == null
+                        ? new List<object>()
+                        : request.Messages.Take(Math.Max(0, request.Messages.Count - 1))
+                            .Select(m => new { m.Role, m.Content })
+                            .Cast<object>()
+                            .ToList(),
+                    conversationId = request.ConversationId
                 };
 
                 var jsonContent = JsonSerializer.Serialize(proxyRequest);
-                var httpContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+                httpRequest.Content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-                var httpResponse = await httpClient.PostAsync(assistantAddress, httpContent);
+                using var httpResponse = await httpClient.SendAsync(httpRequest, cancellationToken);
 
                 if (!httpResponse.IsSuccessStatusCode)
                 {
-                    var errorContent = await httpResponse.Content.ReadAsStringAsync();
-                    logger.LogError("Assistant service returned error: {StatusCode} - {Content}", httpResponse.StatusCode, errorContent);
-                    return StatusCode((int)httpResponse.StatusCode, "Error from assistant service.");
+                    var correlationId = Guid.NewGuid();
+                    logger.LogError("Assistant service returned error: {StatusCode}. CorrelationId: {CorrelationId}",
+                        httpResponse.StatusCode, correlationId);
+                    return StatusCode((int)httpResponse.StatusCode,
+                        $"Error from assistant service. CorrelationId: {correlationId}");
                 }
 
-                var responseContent = await httpResponse.Content.ReadAsStringAsync();
+                var responseContent = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
                 var responseData = JsonSerializer.Deserialize<JsonElement>(responseContent);
+
+                long? callLogId = null;
+                if (responseData.TryGetProperty("callLogId", out var callLogIdProperty)
+                    && callLogIdProperty.TryGetInt64(out var parsedCallLogId))
+                {
+                    callLogId = parsedCallLogId;
+                }
 
                 JToken? metaToken = null;
                 if (responseData.TryGetProperty("meta", out var meta))
@@ -149,12 +217,33 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     metaToken = JToken.Parse(meta.GetRawText());
                 }
 
+                string? expression = null;
+                if (responseData.TryGetProperty("expression", out var expr)) expression = expr.GetString();
+
+                string? message = null;
+                if (responseData.TryGetProperty("message", out var msg)) message = msg.GetString();
+
+                Guid? conversationId = null;
+                if (responseData.TryGetProperty("conversationId", out var conv)
+                    && conv.ValueKind == JsonValueKind.String
+                    && Guid.TryParse(conv.GetString(), out var parsedConv))
+                {
+                    conversationId = parsedConv;
+                }
+
                 return Ok(new
                 {
-                    Expression = responseData.TryGetProperty("expression", out var expr) ? expr.GetString() : null,
-                    Message = responseData.TryGetProperty("message", out var msg) ? msg.GetString() : null,
-                    Meta = metaToken
+                    Expression = expression,
+                    Message = message,
+                    Meta = metaToken,
+                    conversationId = conversationId,
+                    callLogId = callLogId
                 });
+            }
+            catch (OperationCanceledException)
+            {
+                // Request aborted or timeout hit.
+                return StatusCode(499);
             }
             catch (Exception ex)
             {
@@ -166,7 +255,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpPost]
         [Route("{id}/reaction")]
-        public async Task<IActionResult> Reaction(Guid id, [FromBody] AssistanceReactionRequest request)
+        public async Task<IActionResult> Reaction(Guid id, [FromBody] AssistanceReactionRequest request, CancellationToken cancellationToken)
         {
             var setting = appSettingsStorage.GetById(AssistantSettings.AssistantSettingsKey);
             var user = await userManager.GetUserAsync(User);
@@ -184,8 +273,11 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if (string.IsNullOrWhiteSpace(request.AssistantResponse))
                 return BadRequest("'assistantResponse' must be provided.");
 
-            if (request.Reaction < -1 || request.Reaction > 1)
-                return BadRequest("'reaction' must be -1, 0 or 1.");
+            if (!request.AssistantCallId.HasValue || request.AssistantCallId.Value <= 0)
+                return BadRequest("'assistantCallId' must be provided.");
+
+            if (!Enum.IsDefined(typeof(AssistantResponseReaction), request.Reaction))
+                return BadRequest("'reaction' must be 0 (None), 1 (Helpful) or 2 (Unhelpful).");
 
             var questionnaireRevision = questionnaireHelper.GetLastRevision(id);
 
@@ -199,18 +291,78 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 ? null
                 : Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(request.Prompt)));
 
+            // Sanitize user-provided entity id to avoid log forging via control characters.
+            var entityIdSafe = Convert.ToString(request.EntityId)?.Replace("\r", string.Empty).Replace("\n", string.Empty);
+
             logger.LogInformation(
-                "Assistant reaction: userId={UserId} questionnaire={QuestionnaireId}${Version} entityId={EntityId} reaction={Reaction} clientMsgId={ClientMessageId} clientTs={ClientTimestamp} promptHash={PromptHash} responseHash={ResponseHash}",
+                "Assistant reaction: userId={UserId} questionnaire={QuestionnaireId}${Version} entityId={EntityId} reaction={Reaction} assistantCallId={AssistantCallId} clientMsgId={ClientMessageId} clientTs={ClientTimestamp} promptHash={PromptHash} responseHash={ResponseHash}",
                 user?.Id,
                 questionnaireRevision.QuestionnaireId,
                 questionnaireRevision.Version,
-                request.EntityId,
+                entityIdSafe,
                 request.Reaction,
+                request.AssistantCallId,
                 request.ClientMessageId,
                 request.ClientTimestamp,
                 promptHash,
                 assistantResponseHash
             );
+
+            try
+            {
+                var assistantBaseAddress = configuration["Providers:Assistant:AssistantAddress"];
+                if (string.IsNullOrWhiteSpace(assistantBaseAddress))
+                    return StatusCode(500, "Assistant service address is not configured.");
+
+                // For reaction we call provider API directly.
+                // AssistantAddress may be configured either as full chat endpoint or as base URL.
+                // We normalize it here to base URL and append the reaction route.
+                var baseUri = new Uri(assistantBaseAddress, UriKind.Absolute);
+                var reactionUri = new Uri(baseUri, $"/api/v1/AssistantCalls/{request.AssistantCallId.Value}/reaction");
+
+                var httpClient = httpClientFactory.CreateClient(AssistantProviderHttpClientName);
+
+                using var httpRequest = new HttpRequestMessage(HttpMethod.Post, reactionUri);
+
+                if (user != null)
+                {
+                    httpRequest.Headers.TryAddWithoutValidation("X-User-Id", user.Id.ToString());
+                    
+                    try
+                    {
+                        var jwtToken = jwtTokenService.GenerateToken(user);
+                        if (!string.IsNullOrWhiteSpace(jwtToken))
+                            httpRequest.Headers.TryAddWithoutValidation("Authorization", "Bearer " + jwtToken);
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        // If JWT secret key is not configured, log and continue without Authorization header,
+                        // allowing other authentication mechanisms (e.g. provider API key) to be used.
+                        logger.LogWarning(ex, "JWT token generation skipped because Assistant JWT secret key is not configured.");
+                    }
+                }
+
+                var providerRequest = new ReactionRequest(request.Reaction, request.Comment);
+                var jsonContent = JsonSerializer.Serialize(providerRequest);
+                httpRequest.Content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                using var httpResponse = await httpClient.SendAsync(httpRequest, cancellationToken);
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    var errorContent = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
+                    logger.LogError("Assistant reaction endpoint returned error: {StatusCode} - {Content}", httpResponse.StatusCode, errorContent);
+                    return StatusCode((int)httpResponse.StatusCode, "Error from assistant service.");
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                // Don't fail the UI action hard just because reaction collecting is slow/unavailable.
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+                // Don't fail the UI action hard just because reaction collecting is down.
+            }
 
             return Ok();
         }

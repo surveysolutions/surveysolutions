@@ -267,4 +267,13 @@
   <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
     <value>Pyetësori juaj "{0}" përmban një funksion të ri: {1}. Tipari(et) i ri/të reja nuk mbështeten nga instalimi juaj. Ju lutemi, përditësoni.</value>
   </data>
+
+
+  <data name="EmailOrLogin_required" xml:space="preserve">
+    <value>Kërkohet emri i regjistrimit ose email-i</value>
+  </data>
+
+  <data name="InvalidLoginAttempt" xml:space="preserve">
+      <value>Tentativë hyrjeje e pavlefshme</value>
+  </data>
 </root>

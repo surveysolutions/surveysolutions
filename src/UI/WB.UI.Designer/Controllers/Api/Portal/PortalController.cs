@@ -55,7 +55,8 @@ namespace WB.UI.Designer.Api.Portal
         [HttpGet]
         public async Task<IActionResult> QuestionnairesForUser(string userId, string filter)
         {
-            if (string.IsNullOrWhiteSpace(userId)) throw new ArgumentNullException(nameof(userId));
+            if (string.IsNullOrWhiteSpace(userId)) 
+                return BadRequest(new {ReasonPhrase = $"Param {nameof(userId)} is empty or missing"});
 
             var account = await this.accountRepository.FindByNameAsync(userId);
 

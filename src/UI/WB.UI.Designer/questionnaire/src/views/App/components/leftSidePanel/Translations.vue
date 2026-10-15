@@ -27,8 +27,8 @@
                 </p>
                 <p>
                     <input type="button" :value="$t('QuestionnaireEditor.SideBarTranslationsUploadNew')"
-                        @click.stop="openFileDialog()" value="Upload new categories" class="btn lighter-hover"
-                        ngf-select v-if="!isReadOnlyForUser" capture />
+                        @click.stop="openFileDialog()" class="btn lighter-hover" ngf-select v-if="!isReadOnlyForUser"
+                        capture />
 
                     <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfunew'" v-model="file"
                         :size="10 * 1024 * 1024" :drop="false" :drop-directory="false" @input-file="createAndUploadFile"
@@ -43,7 +43,7 @@
 <script>
 
 import { reactive } from 'vue';
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { isUndefined, isNull, some, cloneDeep } from 'lodash'
 import TranslationItem from './TranslationItem.vue';
 
@@ -126,7 +126,7 @@ export default {
 
             translation.meta = {};
             translation.meta.fileName = file.name;
-            translation.meta.lastUpdated = moment();
+            translation.meta.lastUpdated = dayjs();
 
             var match = this.matchFirstBalancedBraces(translation.meta.fileName);
             if (match && match.length > 1) {

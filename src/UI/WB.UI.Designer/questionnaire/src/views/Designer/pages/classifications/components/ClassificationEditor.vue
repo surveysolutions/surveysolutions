@@ -10,7 +10,7 @@
                 </div>
                 <button type="button" :disabled="!meta.dirty ? 'disabled' : null" @click="save"
                     class="btn btn-success">{{
-        $t('QuestionnaireEditor.Save') }}</button>
+                        $t('QuestionnaireEditor.Save') }}</button>
                 <button type="button" @click="cancel()" class="btn btn-link">{{ $t('QuestionnaireEditor.Cancel')
                     }}</button>
             </vee-form>
@@ -23,11 +23,11 @@
         <ul v-if="isContextMenuSupport" class="context-menu-list context-menu-root" style="z-index: 2;"
             :id="'classification-context-menu-' + index">
             <li class="context-menu-item context-menu-icon context-menu-icon-edit context-menu-visible" @click="edit()">
-                <span>Edit</span>
+                <span>{{ $t('QuestionnaireEditor.Edit') }}</span>
             </li>
             <li class="context-menu-item context-menu-separator context-menu-not-selectable"></li>
             <li class="context-menu-item context-menu-icon context-menu-icon-delete" @click="deleteItem()">
-                <span>Delete</span>
+                <span>{{ $t('QuestionnaireEditor.Delete') }}</span>
             </li>
         </ul>
     </Teleport>
@@ -35,6 +35,7 @@
 <script>
 
 import { Form, Field, ErrorMessage } from 'vee-validate';
+import { useClassificationsStore } from '../store';
 
 export default {
     name: 'ClassificationEditor',
@@ -42,6 +43,9 @@ export default {
         VeeForm: Form,
         VeeField: Field,
         ErrorMessage: ErrorMessage,
+    },
+    setup() {
+        return { store: useClassificationsStore() };
     },
     data: function () {
         return {
@@ -55,19 +59,19 @@ export default {
     },
     computed: {
         isPrivate() {
-            return this.$store.state.userId === this.classification.userId;
+            return this.store.userId === this.classification.userId;
         },
         isContextMenuSupport() {
             return !(
-                !this.$store.state.isAdmin &&
-                this.$store.state.userId !== this.classification.userId
+                !this.store.isAdmin &&
+                this.store.userId !== this.classification.userId
             )
         }
     },
     methods: {
         cancel() {
             if (this.classification.isNew) {
-                this.$store.dispatch('deleteClassification', this.index);
+                this.store.deleteClassification(this.index);
             } else {
                 this.title = this.classification.title;
                 this.isEditMode = false;
@@ -77,7 +81,7 @@ export default {
             this.isEditMode = true;
         },
         select() {
-            this.$store.dispatch('selectClassification', this.index);
+            this.store.selectClassification(this.index);
         },
         deleteItem() {
             if (
@@ -85,7 +89,7 @@ export default {
                     `Are you sure you want to delete classification '${this.title}'?`
                 )
             ) {
-                this.$store.dispatch('deleteClassification', this.index);
+                this.store.deleteClassification(this.index);
             }
         },
         save() {
@@ -100,8 +104,8 @@ export default {
 
             this.$refs.form.validate().then(result => {
                 if (result.valid) {
-                    self.$store
-                        .dispatch('updateClassification', classification)
+                    self.store
+                        .updateClassification(classification)
                         .then(function () {
                             self.isEditMode = false;
                         });

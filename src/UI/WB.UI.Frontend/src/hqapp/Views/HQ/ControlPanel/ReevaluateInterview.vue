@@ -13,19 +13,26 @@
         <div class="extra-margin-bottom">
             <div class="profile">
                 <div class="col-sm-12">
-                    <form-group :label="$t('Pages.Admin_ReevaluateInterview_InterviewId')" :error="errorByInterviewId"
+                    <form-group :label="$t('Pages.Admin_ReevaluateInterview_InterviewId')"
+                        :error="errorByInterviewId"
                         :mandatory="true">
-                        <TextInput v-model.trim="interviewId" :haserror="errorByInterviewId !== undefined"
+                        <TextInput v-model.trim="interviewId"
+                            :haserror="errorByInterviewId !== undefined"
                             id="InterviewId" />
                     </form-group>
                 </div>
                 <div class="col-sm-12">
                     <div class="block-filter">
-                        <button type="submit" class="btn btn-success" style="margin-right:5px" id="btnReevaluate"
+                        <button type="submit"
+                            class="btn btn-success"
+                            style="margin-right:5px"
+                            id="btnReevaluate"
                             @click="reevaluateInterview"
                             :disabled="interviewId == null || errorByInterviewId != undefined">{{
                                 $t('Pages.Admin_Reevaluate') }}</button>
-                        <a class="btn btn-default" href="/ControlPanel" id="lnkCancel">
+                        <a class="btn btn-default"
+                            href="/ControlPanel"
+                            id="lnkCancel">
                             {{ $t('Common.Cancel') }}
                         </a>
                     </div>

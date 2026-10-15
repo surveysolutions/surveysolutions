@@ -24,7 +24,6 @@ const dragAndDrop = app => {
 
                 // Get current visual position BEFORE any changes
                 const rect = element.getBoundingClientRect();
-                const computedStyle = window.getComputedStyle(element);
                 
                 // Store the offset from mouse to element's current position
                 offsetX = event.clientX - rect.left;

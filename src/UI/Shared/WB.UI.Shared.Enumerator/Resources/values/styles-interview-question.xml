@@ -48,6 +48,10 @@
     <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_top</item>
   </style>
 
+  <style name="Interview_StaticText_Title" parent="Interview_Question_Title">
+    <item name="android:textStyle">normal</item>
+  </style>
+
   <style name="Interview_Question_Instruction" parent="Interview_Question_Header">
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_with_border_left</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_with_border_right</item>

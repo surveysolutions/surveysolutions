@@ -1,12 +1,12 @@
 import path from 'path';
 import { defineConfig } from 'vite';
 import inject from '@rollup/plugin-inject';
-import { ViteFilemanager } from 'filemanager-plugin';
 import Vue from '@vitejs/plugin-vue';
 import Vuetify from 'vite-plugin-vuetify';
 import LocalizationPlugin from './questionnaire/tools/vite-plugin-localization';
 import { normalizePath } from 'vite';
 import fs from 'fs';
+import { globSync } from 'glob';
 
 const baseDir = path.resolve(__dirname, './');
 const join = path.join.bind(path, baseDir);
@@ -20,14 +20,14 @@ const pages = {
             'Areas',
             'Identity',
             'Pages',
-            'Layout.Account.cshtml'
+            'Layout.Account.cshtml',
         ),
         template: path.join(
             baseDir,
             'Areas',
             'Identity',
             'Pages',
-            'Layout.Account.Template.cshtml'
+            'Layout.Account.Template.cshtml',
         ),
     },
     folders: {
@@ -37,7 +37,7 @@ const pages = {
             'Admin',
             'Views',
             'PublicFolders',
-            'Index.cshtml'
+            'Index.cshtml',
         ),
         template: path.join(
             baseDir,
@@ -45,7 +45,7 @@ const pages = {
             'Admin',
             'Views',
             'PublicFolders',
-            'Index.Template.cshtml'
+            'Index.Template.cshtml',
         ),
     },
     editform: {
@@ -55,7 +55,7 @@ const pages = {
             'Admin',
             'Views',
             'ControlPanel',
-            'MakeAdmin.cshtml'
+            'MakeAdmin.cshtml',
         ),
         template: path.join(
             baseDir,
@@ -63,17 +63,17 @@ const pages = {
             'Admin',
             'Views',
             'ControlPanel',
-            'MakeAdmin.Template.cshtml'
+            'MakeAdmin.Template.cshtml',
         ),
     },
     foldersScript: {
         filename: path.join(
             baseDir,
-            'Views/QuestionnaireList/_FoldersScript.cshtml'
+            'Views/QuestionnaireList/_FoldersScript.cshtml',
         ),
         template: path.join(
             baseDir,
-            'Views/QuestionnaireList/_FoldersScript.Template.cshtml'
+            'Views/QuestionnaireList/_FoldersScript.Template.cshtml',
         ),
     },
     sharedLayout: {
@@ -84,17 +84,17 @@ const pages = {
         filename: path.join(baseDir, 'Views/Error/Layout.Error.cshtml'),
         template: path.join(
             baseDir,
-            'Views/Error/Layout.Error.Template.cshtml'
+            'Views/Error/Layout.Error.Template.cshtml',
         ),
     },
     controlPanel: {
         filename: path.join(
             baseDir,
-            'Areas/Admin/Views/Shared/Layout.ControlPanel.cshtml'
+            'Areas/Admin/Views/Shared/Layout.ControlPanel.cshtml',
         ),
         template: path.join(
             baseDir,
-            'Areas/Admin/Views/Shared/Layout.ControlPanel.Template.cshtml'
+            'Areas/Admin/Views/Shared/Layout.ControlPanel.Template.cshtml',
         ),
     },
     pdf: {
@@ -194,13 +194,44 @@ for (var attr in pages) {
     inputPages[attr] = templateHtmlPath;
 }
 
-inputPages.questionnare = path.join(baseDir, 'questionnaire/src/main.js')
+inputPages.questionnare = path.join(baseDir, 'questionnaire/src/main.js');
 //inputPages.questionnare = path.join(baseDir, 'questionnaire/index.html')
 
-
+function fileManagerPlugin({ sources, targets, cleanDirs }) {
+    return {
+        name: 'file-manager',
+        options() {
+            for (const dir of cleanDirs?.before ?? []) {
+                fs.rmSync(dir, { recursive: true, force: true });
+            }
+            for (const item of sources ?? []) {
+                const files = globSync(normalizePath(item.source)); // <-- normalize
+                fs.mkdirSync(item.destination, { recursive: true });
+                for (const file of files) {
+                    const dest = path.join(item.destination, item.name ?? path.basename(file));
+                    fs.copyFileSync(file, dest);
+                }
+            }
+        },
+        closeBundle() {
+            for (const item of targets ?? []) {
+                const files = globSync(normalizePath(item.source)); // <-- normalize
+                fs.mkdirSync(item.destination, { recursive: true });
+                for (const file of files) {
+                    const dest = path.join(item.destination, item.name ?? path.basename(file));
+                    if (fs.existsSync(file)) {
+                        fs.copyFileSync(file, dest);
+                    }
+                }
+            }
+            for (const dir of cleanDirs?.after ?? []) {
+                fs.rmSync(dir, { recursive: true, force: true });
+            }
+        },
+    };
+};
 
 export default defineConfig(({ mode, command }) => {
-
     const isDevMode = mode === 'development';
     const isProdMode = !isDevMode;
 
@@ -208,7 +239,7 @@ export default defineConfig(({ mode, command }) => {
     const base = command == 'serve' ? '/.vite/' : '/';
 
     if (command == 'serve' && mode != 'test') {
-        fs.rmSync(destinationFolder, { recursive: true, force: true });        
+        fs.rmSync(destinationFolder, { recursive: true, force: true });
         fs.mkdirSync(outDir);
     }
 
@@ -224,60 +255,36 @@ export default defineConfig(({ mode, command }) => {
                 noHash: true,
                 inline: true,
                 patterns: [
-                    normalizePath(join('./Resources/QuestionnaireEditor.resx')),
                     normalizePath(
-                        join('./Resources/QuestionnaireEditor.*.resx')
+                        join('./Resources/QuestionnaireEditor*.resx'),
                     ),
-                    normalizePath(join('./Resources/AccountResources.resx')),
-                    normalizePath(join('./Resources/AccountResources.*.resx')),
+                    normalizePath(join('./Resources/AccountResources*.resx')),
                     normalizePath(
-                        join('./Resources/QuestionnaireController.resx')
+                        join('./Resources/QuestionnaireController*.resx'),
                     ),
-                    normalizePath(
-                        join('./Resources/QuestionnaireController.*.resx')
-                    ),
+                    normalizePath(join('./Resources/Assistant*.resx')),
                 ],
                 destination: './questionnaire/src/locale',
                 locales: {
                     '.': [
                         'QuestionnaireEditor',
                         'AccountResources',
-                        'QuestionnaireController'
-                    ]
-                }
-            }),
-            ViteFilemanager({
-                customHooks: [
-                    {
-                        hookName: 'options',
-                        commands: {
-                            del: {
-                                items: [outDir],
-                            },
-                            copy: { items: pagesSources },
-                        },
-                    },
-                    {
-                        hookName: 'closeBundle',
-                        commands: {
-                            copy: {
-                                items: pagesTargets.concat(fileTargets),
-                            },
-                            del: {
-                                items: ['./.templates', outDir + '/.templates'],
-                            },
-                        },
-                    },
-                ],
-                options: {
-                    parallel: 1,
-                    //log: 'all',
-                    log: 'error',
+                        'QuestionnaireController',
+                        'Assistant',
+                    ],
                 },
             }),
+            fileManagerPlugin({
+                cleanDirs: {
+                    before: [outDir],
+                    after: ['./.templates', outDir + '/.templates'],
+                },
+                sources: pagesSources,
+                targets: pagesTargets.concat(fileTargets),
+            }),
             {
-                name: 'CopyManifest'
-            }
+                name: 'CopyManifest',
+            },
         ],
         css: {
             preprocessorOptions: {
@@ -323,10 +330,9 @@ export default defineConfig(({ mode, command }) => {
             minify: isProdMode,
             outDir,
             manifest: true,
-            rollupOptions: {
+            rolldownOptions: {
                 //external: ['jquery'],
                 //preserveEntrySignatures: true,
-                cache: false,
                 //maxParallelFileOps: 2,
                 plugins: [
                     inject({

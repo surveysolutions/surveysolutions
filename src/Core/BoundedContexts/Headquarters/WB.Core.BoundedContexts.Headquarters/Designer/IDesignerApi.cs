@@ -17,11 +17,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
         [Post("/api/hq/v3/questionnaires/{id}/revision/{rev}/metadata")]
         Task UpdateRevisionMetadata(Guid id, int rev, [Body] QuestionnaireRevisionMetadataModel model);
 
-        [Get("/api/hq/v3/questionnaires/{id}")]
+        [Post("/api/hq/v3/questionnaires/{id}")]
         Task<QuestionnaireCommunicationPackage> GetQuestionnaire(
             Guid id,
             int clientQuestionnaireContentVersion,
-            [Query] int? minSupportedQuestionnaireVersion);
+            [Query] int? minSupportedQuestionnaireVersion,
+            [Query] string instanceId);
 
         [Get("/api/hq/attachment/{contentId}")]
         Task<RestFile> DownloadQuestionnaireAttachment(string contentId, [Query] Guid attachmentId);

@@ -15,7 +15,7 @@ using WB.UI.Headquarters.Models.CompanyLogo;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
-    public abstract class SettingsControllerBase : ControllerBase
+    public abstract class SettingsControllerBase : DataCollectionControllerBase
     {
         private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;
         private readonly IPlainStorageAccessor<ServerSettings> tenantSettings;
@@ -80,24 +80,33 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         
         [HttpGet]
         [Route("tabletsettings")]
-        public virtual RemoteTabletSettingsApiView TabletSettings() => new()
+        public virtual RemoteTabletSettingsApiView TabletSettings()
         {
-            PartialSynchronizationEnabled = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
-                .IsPartialSynchronizationEnabled(),
+            var settings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
 
-            WebInterviewUrlTemplate = this.webInterviewLinkProvider.WebInterviewRequestLink(
-                "{assignment}", "{interviewId}"),
-            
-            GeographyQuestionAccuracyInMeters = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
-                .GetGeographyQuestionAccuracyInMeters(),
-            
-            GeographyQuestionPeriodInSeconds = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
-                .GetGeographyQuestionPeriodInSeconds(),
-            
-            NotificationsEnabled = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
-                .IsDeviceNotificationsEnabled(),
-            
-            EsriApiKey = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings).GetEsriApiKey()
-        };
+            return new()
+            {
+                PartialSynchronizationEnabled = settings.IsPartialSynchronizationEnabled(),
+
+                WebInterviewUrlTemplate = this.webInterviewLinkProvider.WebInterviewRequestLink(
+                    "{assignment}", "{interviewId}"),
+
+                GeographyQuestionAccuracyInMeters = settings.GetGeographyQuestionAccuracyInMeters(),
+
+                GeographyQuestionPeriodInSeconds = settings.GetGeographyQuestionPeriodInSeconds(),
+
+                NotificationsEnabled = settings.IsDeviceNotificationsEnabled(),
+
+                EsriApiKey = settings.GetEsriApiKey(),
+
+                AllowSupervisorChangeAssignmentStatus = settings.IsAllowSupervisorChangeAssignmentStatus(),
+
+                AllowInterviewerChangeAssignmentStatus = settings.IsAllowInterviewerChangeAssignmentStatus(),
+
+                AudioRecordingQuality = settings.GetAudioRecordingQuality(),
+
+                AcceptableGpsLocationSource = settings.GetAcceptableGpsLocationSource()
+            };
+        }
     }
 }

@@ -14,13 +14,16 @@ namespace WB.UI.WebTester.Controllers
     public class InterviewCommandsController : CommandsController
     {
         private readonly IEvictionNotifier evictionNotify;
+        private readonly IWebTesterSessionService sessionService;
 
         public InterviewCommandsController(ICommandService commandService, IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, 
             IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository statefulInterviewRepository, 
-            IWebInterviewNotificationService webInterviewNotificationService, IEvictionNotifier evictionNotify) 
+            IWebInterviewNotificationService webInterviewNotificationService, IEvictionNotifier evictionNotify,
+            IWebTesterSessionService sessionService)
             : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService)
         {
             this.evictionNotify = evictionNotify;
+            this.sessionService = sessionService;
         }
 
         [HttpPost]
@@ -41,11 +44,11 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpPost]
         [Route("answerDateQuestion")]
-        public override IActionResult AnswerDateQuestion(Guid interviewId, [FromBody] AnswerRequest<DateTime> answerRequest) => base.AnswerDateQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerDateQuestion(Guid interviewId, [FromBody] AnswerRequest<DateTime?> answerRequest) => base.AnswerDateQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("answerSingleOptionQuestion")]
-        public override IActionResult AnswerSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest) => base.AnswerSingleOptionQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int?> answerRequest) => base.AnswerSingleOptionQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("answerLinkedSingleOptionQuestion")]
@@ -65,11 +68,11 @@ namespace WB.UI.WebTester.Controllers
 
         [HttpPost]
         [Route("answerIntegerQuestion")]
-        public override IActionResult AnswerIntegerQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest) => base.AnswerIntegerQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerIntegerQuestion(Guid interviewId, [FromBody] AnswerRequest<int?> answerRequest) => base.AnswerIntegerQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("answerDoubleQuestion")]
-        public override IActionResult AnswerDoubleQuestion(Guid interviewId, [FromBody] AnswerRequest<double> answerRequest) => base.AnswerDoubleQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerDoubleQuestion(Guid interviewId, [FromBody] AnswerRequest<double?> answerRequest) => base.AnswerDoubleQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("answerQRBarcodeQuestion")]
@@ -87,7 +90,11 @@ namespace WB.UI.WebTester.Controllers
         [Route("completeInterview")]
         public override IActionResult CompleteInterview(Guid interviewId, [FromBody]CompleteInterviewRequest completeInterviewRequest)
         {
-            evictionNotify.Evict(interviewId);
+            var questionnaireId = sessionService.GetQuestionnaireId(HttpContext.Session, interviewId);
+            if (questionnaireId.HasValue)
+                sessionService.RevokeQuestionnaire(HttpContext.Session, interviewId, questionnaireId.Value);
+
+            evictionNotify.Complete(interviewId);
             return Ok();
         }
 

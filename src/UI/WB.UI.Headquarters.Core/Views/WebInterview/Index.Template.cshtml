@@ -45,6 +45,7 @@
             googleApiKey: '@(googleMapsConfig.Value.ApiKey)',
             googleMapsApiBaseUrl: '@googleMapsConfig.Value.ApiBaseUrl',
             googleMapsBaseUrl: '@googleMapsConfig.Value.BaseUrl',
+            googleMapsMapId: '@Html.ToSafeJavascriptMessage(googleMapsConfig.Value.MapId)',
             hqLink : @Html.Raw(this.User.Identity.IsAuthenticated && this.User.IsInRole("Interviewer")
                          ? "'" + Url.Content(@"~/InterviewerHq/Started") + "'"
                          : "null"),

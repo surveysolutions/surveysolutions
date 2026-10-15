@@ -14,10 +14,12 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.UI.Designer.Controllers.Api.Designer;
+using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Controllers.Api.Assistant
 {
     [Authorize]
+    [QuestionnairePermissions]
     [Route("api/v1/assistant/questionnaires")]
     public class QuestionnairesController : Controller
     {
@@ -40,8 +42,6 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
             this.reusableCategoriesService = reusableCategoriesService;
             this.lookupTableService = lookupTableService;
         }
-
-        [QuestionnairePermissions]
         [HttpGet]
         [Route("{id}")]
         public IActionResult Get(QuestionnaireRevision id)
@@ -68,7 +68,8 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
         [Route("{id}/category/{categoryId}")]
         public IActionResult GetCategory(QuestionnaireRevision id, Guid categoryId)
         {
-            var categories = this.reusableCategoriesService.GetCategoriesById(id.QuestionnaireId, categoryId);
+            var questionnaireId = id.OriginalQuestionnaireId ?? id.QuestionnaireId;
+            var categories = this.reusableCategoriesService.GetCategoriesById(questionnaireId, categoryId);
             if (categories == null) return NotFound();
 
             var result = JsonConvert.SerializeObject(categories, Formatting.None, new JsonSerializerSettings

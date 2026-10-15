@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
+using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
 
 namespace WB.Services.Export.CsvExport.Exporters
@@ -12,9 +13,17 @@ namespace WB.Services.Export.CsvExport.Exporters
     {
         private static readonly CultureInfo ExportCulture = CultureInfo.InvariantCulture;
 
-        public string[] GetExportedQuestion(InterviewEntity? question, ExportedQuestionHeaderItem header)
+        private readonly IGeographySerializer geographySerializer;
+
+        public ExportQuestionService(IGeographySerializer geographySerializer)
         {
-            var answers = this.GetAnswers(question, header);
+            this.geographySerializer = geographySerializer;
+        }
+
+        public string[] GetExportedQuestion(InterviewEntity? question, ExportedQuestionHeaderItem header,
+            GeographyExportFormat geographyExportFormat = GeographyExportFormat.Wkt)
+        {
+            var answers = this.GetAnswers(question, header, geographyExportFormat);
 
             if (answers.Length != header.ColumnHeaders.Count)
                 throw new InvalidOperationException(
@@ -54,7 +63,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             }
         }
 
-        private string[] GetAnswers(InterviewEntity? question, ExportedQuestionHeaderItem header)
+        private string[] GetAnswers(InterviewEntity? question, ExportedQuestionHeaderItem header, GeographyExportFormat geographyExportFormat = GeographyExportFormat.Wkt)
         {
             if (question == null)
                 return BuildMissingValueAnswer(header);
@@ -83,7 +92,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 return new[]
                 {
-                    this.ConvertAnswerToStringValue(question.AsObject(), header),
+                    geographySerializer.Serialize(areaQuestion, header.GeometryType, geographyExportFormat),
                     areaQuestion.AreaSize?.ToString(ExportCulture) ?? string.Empty,
                     areaQuestion.Length?.ToString(ExportCulture) ?? string.Empty,
                     areaQuestion.NumberOfPoints?.ToString(ExportCulture) ?? string.Empty,

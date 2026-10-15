@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="BeforeSignInToDesigner" xml:space="preserve"><value>Sebelum masuk ke Designer</value></data>
+  <data name="LoginToDesignerError" xml:space="preserve"><value>Kesalahan saat masuk ke Designer {0}</value></data>
+  <data name="SignInToDesigner" xml:space="preserve"><value>Masuk ke Designer</value></data>
+  <data name="SignInToDesignerTitle" xml:space="preserve"><value>Masuk ke Designer</value></data>
+  <data name="DesignerQuestionnaires" xml:space="preserve"><value>Kuesioner Designer</value></data>
+  <data name="ImportModeTitle" xml:space="preserve"><value>Mode impor</value></data>
+  <data name="ImportModePageTitle" xml:space="preserve"><value>Impor kuesioner</value></data>
+  <data name="ListOfMyQuestionnaires" xml:space="preserve"><value>Daftar kuesioner saya</value></data>
+  <data name="Chapters" xml:space="preserve"><value>Bab</value></data>
+  <data name="CreatedAt" xml:space="preserve"><value>Dibuat pada</value></data>
+
+
+
+  <data name="Questions" xml:space="preserve"><value>Pertanyaan</value></data>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <data name="Importing" xml:space="preserve"><value>Mengimpor {{percent}}%</value></data>
+  <data name="Prepare" xml:space="preserve"><value>Menerima data kuesioner</value></data>
+  <data name="Gropus" xml:space="preserve"><value>Grup</value></data>
+  <data name="LastModifiedAt" xml:space="preserve"><value>Terakhir diubah pada</value></data>
+  <data name="QuestionsWithConditions" xml:space="preserve"><value>Pertanyaan dengan kondisi {{count}}</value></data>
+  <data name="Rosters" xml:space="preserve"><value>Daftar</value></data>
+  <data name="QuestionnaireExists" xml:space="preserve"><value>Kuesioner sudah ada</value></data>
+  <data name="ImportAsNewVersion" xml:space="preserve"><value>Impor sebagai versi baru {{version}}</value></data>
+  <data name="RegularImportTitle" xml:space="preserve"><value>Impor kuesioner</value></data>
+  <data name="RegularImportSubTitle" xml:space="preserve"><value>Pilih kuesioner untuk diimpor</value></data>
+  <data name="MyQuestionnairesTitle" xml:space="preserve"><value>Kuesioner saya</value></data>
+  <data name="UpgradeAssignments" xml:space="preserve"><value>Tingkatkan tugas</value></data>
+
+
+
+
+
+
+</root>

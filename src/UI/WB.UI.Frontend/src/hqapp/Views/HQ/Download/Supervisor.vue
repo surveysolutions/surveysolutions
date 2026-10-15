@@ -20,15 +20,22 @@
                             <div class="hq-apps-wrapper">
                                 <h2>{{ $t('Pages.DownloadSupervisorPage_Welcome') }}</h2>
                                 <div class="form-actions">
-                                    <a :href="model.apkUrl" class="get-supervisor-app">
+                                    <a :href="model.apkUrl"
+                                        class="get-supervisor-app">
                                         <span>{{ $t('Pages.GetLatestSupervisorApp') }}</span>
                                         <span class="version">{{ $t('Pages.DownloadPage_Version') + ' ' +
                                             model.supervisorVersion }}</span>
-                                        <span v-if="supervisorSize" class="version">{{ $t('Pages.DownloadPage_Size') +
+                                        <span v-if="supervisorSize"
+                                            class="version">{{ $t('Pages.DownloadPage_Size') +
                                             ' ' + formattedSupervisorSize }}</span>
                                     </a>
-                                    <img v-if="model.supportQRCodeGeneration" id="download-qr" class="download-qr"
-                                        alt="QR Code" width="250" height="250" :src="model.apkQRUrl" />
+                                    <img v-if="model.supportQRCodeGeneration"
+                                        id="download-qr"
+                                        class="download-qr"
+                                        alt="QR Code"
+                                        width="250"
+                                        height="250"
+                                        :src="model.apkQRUrl" />
                                 </div>
                             </div>
                         </div>
@@ -47,6 +54,11 @@ export default {
     data() {
         return {
         }
+    },
+    mounted() {
+        // No API calls are made on this page, so we explicitly validate
+        // the X-Survey-Solutions response header via the interceptor-equipped $http instance.
+        this.$http.get('/.version').catch(() => {})
     },
     methods: {
     },
