@@ -336,7 +336,7 @@ export default {
             try {
                 document.activeElement?.blur()
                 await new Promise(resolve => setTimeout(resolve, 0))
-                while (this.$store.state.fetch.inProgress) {
+                while (this.$store.state.webinterview.fetch.inProgress) {
                     await new Promise(resolve => setTimeout(resolve, 50))
                 }
 
