@@ -1285,7 +1285,7 @@ namespace WB.Tests.Abc.TestFactories
             IAuthorizedUser authorizedUser = null,
             IOptions<GeospatialConfig> geospatialConfig = null,
             IUnitOfWork unitOfWork = null,
-            IInScopeExecutor inScopeExecutor = null)
+            IWorkspaceContextAccessor workspaceContextAccessor = null)
         {
             if (unitOfWork == null)
             {
@@ -1313,7 +1313,7 @@ namespace WB.Tests.Abc.TestFactories
              authorizedUser ?? Mock.Of<IAuthorizedUser>(),
              Mock.Of<ILogger<MapFileStorageService>>(),
              unitOfWork,
-             inScopeExecutor ?? Mock.Of<IInScopeExecutor>()
+             workspaceContextAccessor ?? Create.Service.WorkspaceContextAccessor()
              ); 
         }
 

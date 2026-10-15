@@ -24,6 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Maps
             requests.Store(new MapFileDeletionRequest { Id = fileName, FileName = fileName }, fileName);
             var mapStorage = new Mock<IMapStorageService>();
             mapStorage.Setup(x => x.RemoveMapFileIfNotInUseAsync(fileName, fileName)).ThrowsAsync(new IOException());
+            mapStorage.Setup(x => x.CleanupOrphanedMapFilesAsync()).Returns(Task.CompletedTask);
             var job = new MapFileCleanupJob(
                 requests,
                 mapStorage.Object,
@@ -41,6 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Maps
             var requests = new TestPlainStorage<MapFileDeletionRequest>();
             requests.Store(new MapFileDeletionRequest { Id = fileName, FileName = fileName }, fileName);
             var mapStorage = new Mock<IMapStorageService>();
+            mapStorage.Setup(x => x.CleanupOrphanedMapFilesAsync()).Returns(Task.CompletedTask);
             var job = new MapFileCleanupJob(
                 requests,
                 mapStorage.Object,
@@ -60,6 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Maps
             requests.Store(new MapFileDeletionRequest { Id = fileName, FileName = fileName }, fileName);
             var mapStorage = new Mock<IMapStorageService>();
             mapStorage.Setup(x => x.RemoveMapFileIfNotInUseAsync(fileName, fileName)).ReturnsAsync(false);
+            mapStorage.Setup(x => x.CleanupOrphanedMapFilesAsync()).Returns(Task.CompletedTask);
             var job = new MapFileCleanupJob(
                 requests,
                 mapStorage.Object,

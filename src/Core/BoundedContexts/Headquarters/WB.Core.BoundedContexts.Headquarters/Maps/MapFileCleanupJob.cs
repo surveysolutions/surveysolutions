@@ -46,6 +46,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Maps
                         request.FileName);
                 }
             }
+
+            await mapStorageService.CleanupOrphanedMapFilesAsync();
         }
     }
 }

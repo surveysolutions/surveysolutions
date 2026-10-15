@@ -24,15 +24,13 @@ using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.BoundedContexts.Headquarters.Implementation;
-using WB.Core.Infrastructure.Domain;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Configs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Workspaces;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
@@ -50,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
         private readonly IUnitOfWork unitOfWork;
-        private readonly IInScopeExecutor inScopeExecutor;
+        private readonly IWorkspaceContextAccessor workspaceContextAccessor;
 
         private const int WGS84Wkid = 4326; //https://epsg.io/4326
         private const string MapsFolderName = "MapsData";
@@ -73,7 +71,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IAuthorizedUser authorizedUser,
             ILogger<MapFileStorageService> logger,
             IUnitOfWork unitOfWork,
-            IInScopeExecutor inScopeExecutor)
+            IWorkspaceContextAccessor workspaceContextAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
@@ -87,14 +85,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.logger = logger;
             this.geospatialConfig = geospatialConfig;
             this.unitOfWork = unitOfWork;
-            this.inScopeExecutor = inScopeExecutor;
+            this.workspaceContextAccessor = workspaceContextAccessor;
 
             this.mapsFolderPath = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, MapsFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.mapsFolderPath))
                 fileSystemAccessor.CreateDirectory(this.mapsFolderPath);
         }
 
-        public string GetExternalStoragePath(string name) => $"maps/" + name;
+        public string GetExternalStoragePath(string name) => name.StartsWith(
+            GetWorkspaceStorageKeyPrefix(), StringComparison.Ordinal)
+            ? $"{GetWorkspaceStoragePathPrefix()}{name}"
+            : $"maps/{name}";
 
         public async Task<MapBrowseItem> SaveOrUpdateMapAsync(MapFiles mapFiles, string mapsDirectory)
         {
@@ -117,10 +118,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 }
 
                 var mapName = mapFiles.IsShapeFile ? mapFiles.Name + ".shp" : mapFiles.Name;
-                mapItem.StorageKey = Guid.NewGuid().ToString("N");
+                mapItem.StorageKey = CreateStorageKey();
                 await AcquireMapFileLockAsync(mapName).ConfigureAwait(false);
+                await AcquireMapFileLockAsync(mapItem.StorageKey).ConfigureAwait(false);
                 var previousMap = await mapPlainStorageAccessor.GetByIdAsync(mapName).ConfigureAwait(false);
-                RegisterUploadForCleanup(mapName, mapItem.StorageKey);
                 if (externalFileStorage.IsEnabled())
                 {
                     await using FileStream file = File.OpenRead(tempFile);
@@ -432,8 +433,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (map == null)
                 throw new Exception("Map was not found.");
 
-            this.mapPlainStorageAccessor.Remove(map.FileName);
             var storageKey = GetStorageKey(map);
+            await AcquireMapFileLockAsync(storageKey).ConfigureAwait(false);
+            this.mapPlainStorageAccessor.Remove(map.FileName);
             this.mapFileDeletionRequests.Store(new MapFileDeletionRequest
             {
                 Id = storageKey,
@@ -462,10 +464,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         public async Task<bool> RemoveMapFileIfNotInUseAsync(string fileName, string storageKey = null)
         {
-            await AcquireMapFileLockAsync(fileName).ConfigureAwait(false);
-            var map = await mapPlainStorageAccessor.GetByIdAsync(fileName).ConfigureAwait(false);
             storageKey ??= fileName;
-            if (map != null && string.Equals(GetStorageKey(map), storageKey, StringComparison.Ordinal))
+            await AcquireMapFileLockAsync(storageKey).ConfigureAwait(false);
+            var inUse = mapPlainStorageAccessor.Query(query => query.Any(map =>
+                map.StorageKey == storageKey || (map.StorageKey == null && map.FileName == storageKey)));
+            if (inUse)
                 return false;
 
             await RemoveMapFileAsync(storageKey).ConfigureAwait(false);
@@ -474,19 +477,58 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         private static string GetStorageKey(MapBrowseItem map) => map.StorageKey ?? map.FileName;
 
-        private void RegisterUploadForCleanup(string fileName, string storageKey)
+        public async Task CleanupOrphanedMapFilesAsync()
         {
-            using (UnitOfWorkAmbientContext.Push(null))
+            if (externalFileStorage.IsEnabled())
             {
-                inScopeExecutor.Execute(locator =>
-                    locator.GetInstance<IPlainStorageAccessor<MapFileDeletionRequest>>().Store(
-                        new MapFileDeletionRequest
-                        {
-                            Id = storageKey,
-                            FileName = fileName,
-                            StorageKey = storageKey
-                        }, storageKey));
+                var files = await externalFileStorage.ListAsync(GetWorkspaceStoragePathPrefix()).ConfigureAwait(false);
+                foreach (var file in files ?? new List<FileObject>())
+                    await CleanupOrphanedMapFileAsync(fileSystemAccessor.GetFileName(file.Path)).ConfigureAwait(false);
+                return;
             }
+
+            foreach (var path in fileSystemAccessor.GetFilesInDirectory(mapsFolderPath))
+                await CleanupOrphanedMapFileAsync(fileSystemAccessor.GetFileName(path)).ConfigureAwait(false);
+        }
+
+        private async Task CleanupOrphanedMapFileAsync(string storageKey)
+        {
+            var prefix = GetWorkspaceStorageKeyPrefix();
+            if (storageKey == null
+                || !storageKey.StartsWith(prefix, StringComparison.Ordinal)
+                || !Guid.TryParseExact(storageKey[prefix.Length..], "N", out _))
+                return;
+
+            try
+            {
+                await RemoveMapFileIfNotInUseAsync(null, storageKey).ConfigureAwait(false);
+            }
+            catch (Exception exception)
+            {
+                logger.LogError(exception, "Failed to clean up unreferenced map file {StorageKey}", storageKey);
+            }
+        }
+
+        private string CreateStorageKey()
+        {
+            var workspaceName = workspaceContextAccessor.CurrentWorkspace()?.Name ?? WorkspaceConstants.SchemaName;
+            var encodedName = Convert.ToBase64String(Encoding.UTF8.GetBytes(workspaceName))
+                .TrimEnd('=').Replace('+', '-').Replace('/', '_');
+            return $"g_{encodedName}_{Guid.NewGuid():N}";
+        }
+
+        private string GetWorkspaceStorageKeyPrefix()
+        {
+            return $"g_{GetWorkspaceNameEncoded()}_";
+        }
+
+        private string GetWorkspaceStoragePathPrefix() => $"maps/{GetWorkspaceNameEncoded()}/";
+
+        private string GetWorkspaceNameEncoded()
+        {
+            var workspaceName = workspaceContextAccessor.CurrentWorkspace()?.Name ?? WorkspaceConstants.SchemaName;
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(workspaceName))
+                .TrimEnd('=').Replace('+', '-').Replace('/', '_');
         }
 
         private async Task AcquireMapFileLockAsync(string fileName)

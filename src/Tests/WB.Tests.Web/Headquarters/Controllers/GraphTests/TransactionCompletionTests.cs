@@ -144,6 +144,32 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
         }
 
         [Test]
+        public void should_notify_completion_callbacks_after_commit()
+        {
+            bool? completed = null;
+            unitOfWork.OnCompleted(success => completed = success);
+            _ = unitOfWork.Session;
+            unitOfWork.AcceptChanges();
+
+            unitOfWork.Complete();
+
+            Assert.That(completed, Is.True);
+        }
+
+        [Test]
+        public void should_notify_completion_callbacks_after_rollback()
+        {
+            bool? completed = null;
+            unitOfWork.OnCompleted(success => completed = success);
+            _ = unitOfWork.Session;
+            unitOfWork.DiscardChanges();
+
+            unitOfWork.Complete();
+
+            Assert.That(completed, Is.False);
+        }
+
+        [Test]
         public async Task should_return_commit_failure_before_response_and_not_retry_on_disposal()
         {
             var failure = new InvalidOperationException("Commit failed");

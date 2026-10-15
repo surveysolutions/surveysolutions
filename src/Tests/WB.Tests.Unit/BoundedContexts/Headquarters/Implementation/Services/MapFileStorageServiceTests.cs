@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
@@ -203,7 +204,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
 
             await service.DeleteMap(mapName);
 
-            Assert.That(calls, Is.EqualTo(new[] { "lock", "load" }));
+            Assert.That(calls, Is.EqualTo(new[] { "lock", "load", "lock" }));
         }
 
         [Test]
@@ -307,6 +308,79 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
                 Assert.That(deleted, Is.True);
                 Assert.That(File.Exists(oldFilePath), Is.False);
                 Assert.That(mapsStorage.GetById(mapName).StorageKey, Is.EqualTo("current-generation"));
+            }
+            finally
+            {
+                Directory.Delete(tempBase, true);
+            }
+        }
+
+        [Test]
+        public async Task CleanupOrphanedMapFilesAsync_should_remove_rolled_back_uploads_and_keep_current_generations()
+        {
+            const string mapName = "current-map.tpk";
+            var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(tempBase);
+            try
+            {
+                var encodedName = Convert.ToBase64String(Encoding.UTF8.GetBytes("primary"))
+                    .TrimEnd('=').Replace('+', '-').Replace('/', '_');
+                var currentStorageKey = $"g_{encodedName}_{Guid.NewGuid():N}";
+                var orphanStorageKey = $"g_{encodedName}_{Guid.NewGuid():N}";
+                var mapsStorage = new TestPlainStorage<MapBrowseItem>();
+                var map = Create.Entity.MapBrowseItem(mapName);
+                map.StorageKey = currentStorageKey;
+                mapsStorage.Store(map, mapName);
+                var service = Create.Service.MapFileStorageService(
+                    mapsStorage: mapsStorage,
+                    fileStorageConfig: Options.Create(new FileStorageConfig { TempData = tempBase }));
+                var mapsDirectory = Path.Combine(tempBase, "MapsData");
+                var currentPath = Path.Combine(mapsDirectory, currentStorageKey);
+                var orphanPath = Path.Combine(mapsDirectory, orphanStorageKey);
+                File.WriteAllText(currentPath, "current");
+                File.WriteAllText(orphanPath, "orphan");
+
+                await service.CleanupOrphanedMapFilesAsync();
+
+                Assert.That(File.Exists(currentPath), Is.True);
+                Assert.That(File.Exists(orphanPath), Is.False);
+            }
+            finally
+            {
+                Directory.Delete(tempBase, true);
+            }
+        }
+
+        [Test]
+        public async Task SaveOrUpdateMapAsync_should_store_replacement_under_a_new_generation()
+        {
+            var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            var mapsDirectory = Path.Combine(tempBase, "source");
+            var storageDirectory = Path.Combine(tempBase, "storage");
+            Directory.CreateDirectory(mapsDirectory);
+            Directory.CreateDirectory(storageDirectory);
+
+            try
+            {
+                const string mapName = "testmap";
+                const string oldStorageKey = "old-generation";
+                WriteShapefileWithLabels(mapsDirectory, mapName, new[] { "region1" });
+                var mapStorage = new TestPlainStorage<MapBrowseItem>();
+                var existingMap = Create.Entity.MapBrowseItem(mapName + ".shp");
+                existingMap.StorageKey = oldStorageKey;
+                mapStorage.Store(existingMap, existingMap.Id);
+                var service = Create.Service.MapFileStorageService(
+                    mapsStorage: mapStorage,
+                    fileStorageConfig: Options.Create(new FileStorageConfig { TempData = storageDirectory }),
+                    geospatialConfig: Options.Create(new GeospatialConfig()));
+                var oldFilePath = Path.Combine(storageDirectory, "MapsData", oldStorageKey);
+                File.WriteAllText(oldFilePath, "previous map");
+
+                var result = await service.SaveOrUpdateMapAsync(BuildShapeMapFiles(mapName), mapsDirectory);
+
+                Assert.That(result.StorageKey, Is.Not.EqualTo(oldStorageKey));
+                Assert.That(File.Exists(oldFilePath), Is.True);
+                Assert.That(File.Exists(Path.Combine(storageDirectory, "MapsData", result.StorageKey)), Is.True);
             }
             finally
             {
