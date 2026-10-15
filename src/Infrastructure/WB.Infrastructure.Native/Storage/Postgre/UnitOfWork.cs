@@ -85,37 +85,75 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             // Set before the first commit: a failed/ambiguous commit must never be retried by Dispose.
             completionAttempted = true;
             var commit = shouldAcceptChanges && !shouldDiscardChanges;
-            foreach (var (_, transaction) in unitOfWorks.Values)
+            var completed = false;
+            try
             {
-                if (!transaction.IsActive) continue;
-                if (commit)
-                    transaction.Commit();
-                else
-                    transaction.Rollback();
-            }
-
-            Action[] actions;
-            lock (afterCommitActions)
-            {
-                actions = commit ? afterCommitActions.ToArray() : Array.Empty<Action>();
-                afterCommitActions.Clear();
-            }
-
-            foreach (var action in actions)
-            {
-                try
+                foreach (var (_, transaction) in unitOfWorks.Values)
                 {
-                    action();
+                    if (!transaction.IsActive) continue;
+                    if (commit)
+                        transaction.Commit();
+                    else
+                        transaction.Rollback();
                 }
-                catch (Exception exception)
+
+                Action[] actions;
+                lock (afterCommitActions)
                 {
-                    // The transaction is already committed; failing here must not report a failed commit.
-                    logger.LogError(exception, "After-commit action failed. Unit of work Id: {UnitOfWorkId}", Id);
+                    actions = commit ? afterCommitActions.ToArray() : Array.Empty<Action>();
+                    afterCommitActions.Clear();
+                }
+
+                foreach (var action in actions)
+                {
+                    try
+                    {
+                        action();
+                    }
+                    catch (Exception exception)
+                    {
+                        // The transaction is already committed; failing here must not report a failed commit.
+                        logger.LogError(exception, "After-commit action failed. Unit of work Id: {UnitOfWorkId}", Id);
+                    }
+                }
+
+                completed = commit;
+            }
+            finally
+            {
+                Action<bool>[] callbacks;
+                lock (completionActions)
+                {
+                    callbacks = completionActions.ToArray();
+                    completionActions.Clear();
+                }
+
+                foreach (var callback in callbacks)
+                {
+                    try
+                    {
+                        callback(completed);
+                    }
+                    catch (Exception exception)
+                    {
+                        logger.LogError(exception, "Transaction completion callback failed. Unit of work Id: {UnitOfWorkId}", Id);
+                    }
                 }
             }
         }
 
         private readonly List<Action> afterCommitActions = new();
+        private readonly List<Action<bool>> completionActions = new();
+
+        public void OnCompleted(Action<bool> action)
+        {
+            if (action == null) throw new ArgumentNullException(nameof(action));
+            EnsureCanChange();
+            lock (completionActions)
+            {
+                completionActions.Add(action);
+            }
+        }
 
         public void OnCommitted(Action action)
         {

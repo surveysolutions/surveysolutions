@@ -79,8 +79,9 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
             unitOfWork = new UnitOfWork(NullLogger<UnitOfWork>.Instance,
                 Mock.Of<IWorkspaceContextAccessor>(), lifetimeScope);
             var aggregateLock = new Mock<IAggregateLock>();
-            aggregateLock.Setup(x => x.RunWithLock(It.IsAny<string>(), It.IsAny<Action>()))
-                .Callback<string, Action>((_, action) => action());
+            aggregateLock.Setup(x => x.RunWithLock(
+                    It.IsAny<string>(), It.IsAny<IUnitOfWorkCompletion>(), It.IsAny<Action>()))
+                .Callback<string, IUnitOfWorkCompletion, Action>((_, _, action) => action());
             commandService = new CommandService(new AutofacServiceLocatorAdapter(container), aggregateLock.Object);
 
             var serviceCollection = new ServiceCollection();

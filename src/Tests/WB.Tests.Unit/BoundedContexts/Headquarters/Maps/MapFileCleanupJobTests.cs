@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Maps
             var requests = new TestPlainStorage<MapFileDeletionRequest>();
             requests.Store(new MapFileDeletionRequest { Id = fileName, FileName = fileName }, fileName);
             var mapStorage = new Mock<IMapStorageService>();
-            mapStorage.Setup(x => x.RemoveMapFileIfNotInUseAsync(fileName)).ThrowsAsync(new IOException());
+            mapStorage.Setup(x => x.RemoveMapFileIfNotInUseAsync(fileName, fileName)).ThrowsAsync(new IOException());
             var job = new MapFileCleanupJob(
                 requests,
                 mapStorage.Object,
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Maps
             await job.Execute(Mock.Of<IJobExecutionContext>());
 
             Assert.That(requests.GetById(fileName), Is.Null);
-            mapStorage.Verify(x => x.RemoveMapFileIfNotInUseAsync(fileName), Times.Once);
+            mapStorage.Verify(x => x.RemoveMapFileIfNotInUseAsync(fileName, fileName), Times.Once);
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Maps
             var requests = new TestPlainStorage<MapFileDeletionRequest>();
             requests.Store(new MapFileDeletionRequest { Id = fileName, FileName = fileName }, fileName);
             var mapStorage = new Mock<IMapStorageService>();
-            mapStorage.Setup(x => x.RemoveMapFileIfNotInUseAsync(fileName)).ReturnsAsync(false);
+            mapStorage.Setup(x => x.RemoveMapFileIfNotInUseAsync(fileName, fileName)).ReturnsAsync(false);
             var job = new MapFileCleanupJob(
                 requests,
                 mapStorage.Object,
@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Maps
             await job.Execute(Mock.Of<IJobExecutionContext>());
 
             Assert.That(requests.GetById(fileName), Is.Null);
-            mapStorage.Verify(x => x.RemoveMapFileIfNotInUseAsync(fileName), Times.Once);
+            mapStorage.Verify(x => x.RemoveMapFileIfNotInUseAsync(fileName, fileName), Times.Once);
         }
     }
 }

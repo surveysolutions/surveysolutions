@@ -16,6 +16,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 m.Column("filename");
                 m.Length(255);
             });
+            Property(x => x.StorageKey, m =>
+            {
+                m.Column("storagekey");
+                m.Length(255);
+            });
         }
     }
 }

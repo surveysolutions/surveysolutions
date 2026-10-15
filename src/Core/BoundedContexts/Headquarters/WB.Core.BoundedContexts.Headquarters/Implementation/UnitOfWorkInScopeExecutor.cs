@@ -110,6 +110,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
                 : lifetimeScope.BeginLifetimeScope(Depth + 1, builder => builder
                     .RegisterInstance(ambientUnitOfWork)
                     .As<IUnitOfWork>()
+                    .As<IUnitOfWorkCompletion>()
                     .ExternallyOwned());
 
             if (workspace == null)

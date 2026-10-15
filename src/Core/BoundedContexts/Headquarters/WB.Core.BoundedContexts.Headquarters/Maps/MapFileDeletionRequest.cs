@@ -4,5 +4,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Maps
     {
         public virtual string Id { get; set; }
         public virtual string FileName { get; set; }
+        public virtual string StorageKey { get; set; }
     }
 }

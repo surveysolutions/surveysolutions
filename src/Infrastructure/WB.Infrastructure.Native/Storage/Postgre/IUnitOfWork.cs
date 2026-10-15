@@ -1,9 +1,10 @@
 ﻿using System;
 using NHibernate;
+using WB.Core.Infrastructure.Domain;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork : IDisposable, IUnitOfWorkCompletion
     {
         void AcceptChanges();
         void DiscardChanges();

@@ -36,7 +36,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Maps
             {
                 try
                 {
-                    await mapStorageService.RemoveMapFileIfNotInUseAsync(request.FileName);
+                    await mapStorageService.RemoveMapFileIfNotInUseAsync(
+                        request.FileName, request.StorageKey ?? request.FileName);
                     requests.Remove(request.Id);
                 }
                 catch (Exception exception)

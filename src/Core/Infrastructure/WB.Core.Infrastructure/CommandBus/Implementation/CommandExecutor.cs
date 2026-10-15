@@ -150,6 +150,13 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             if (!aggregate.HasUncommittedChanges())
                 return;
 
+            var unitOfWork = serviceLocator.GetInstance<WB.Core.Infrastructure.Domain.IUnitOfWorkCompletion>();
+            unitOfWork.OnCompleted(committed =>
+            {
+                if (!committed)
+                    aggregateRootCache.EvictAggregateRoot(aggregateId);
+            });
+
             var committedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
 
             aggregate.MarkChangesAsCommitted();

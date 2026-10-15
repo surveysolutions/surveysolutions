@@ -276,6 +276,38 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
                 Assert.That(deleted, Is.False);
                 Assert.That(File.Exists(filePath), Is.True);
             }
+
+            finally
+            {
+                Directory.Delete(tempBase, true);
+            }
+        }
+
+        [Test]
+        public async Task RemoveMapFileIfNotInUseAsync_when_map_uses_another_generation_should_delete_old_file()
+        {
+            const string mapName = "mapFile.tpk";
+            const string oldStorageKey = "old-generation";
+            var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(tempBase);
+            try
+            {
+                var mapsStorage = new TestPlainStorage<MapBrowseItem>();
+                var map = Create.Entity.MapBrowseItem(mapName);
+                map.StorageKey = "current-generation";
+                mapsStorage.Store(map, mapName);
+                var service = Create.Service.MapFileStorageService(
+                    mapsStorage: mapsStorage,
+                    fileStorageConfig: Options.Create(new FileStorageConfig { TempData = tempBase }));
+                var oldFilePath = Path.Combine(tempBase, "MapsData", oldStorageKey);
+                File.WriteAllText(oldFilePath, "old map");
+
+                var deleted = await service.RemoveMapFileIfNotInUseAsync(mapName, oldStorageKey);
+
+                Assert.That(deleted, Is.True);
+                Assert.That(File.Exists(oldFilePath), Is.False);
+                Assert.That(mapsStorage.GetById(mapName).StorageKey, Is.EqualTo("current-generation"));
+            }
             finally
             {
                 Directory.Delete(tempBase, true);
