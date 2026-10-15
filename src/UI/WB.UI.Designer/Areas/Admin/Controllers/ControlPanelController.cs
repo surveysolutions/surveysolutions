@@ -163,7 +163,6 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
                     IsAvailableToAllUsers = model.IsAvailableToAllUsers
                 };
                 this.appSettingsStorage.Store(settings, AppSetting.AssistantSettingsKey);
-                dbContext.SaveChanges();
                 this.Success("Assistant settings successfully updated");
             }
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -1621,5 +1621,11 @@ Silakan periksa koneksi jaringan Anda atau hubungi dukungan TI Anda.</value>
     </data>
     <data name="AIAssistant" xml:space="preserve">
         <value>AI</value>
+    </data>
+    <data name="Edit" xml:space="preserve">
+        <value>Sunting</value>
+    </data>
+    <data name="Stick" xml:space="preserve">
+        <value>Tempelkan</value>
     </data>
 </root>
