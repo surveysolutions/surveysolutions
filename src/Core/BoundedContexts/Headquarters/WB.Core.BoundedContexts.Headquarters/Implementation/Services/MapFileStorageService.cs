@@ -409,6 +409,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public async Task<MapBrowseItem> DeleteMap(string mapName)
         {
             var fileName = fileSystemAccessor.GetFileName(mapName);
+            await AcquireMapFileLockAsync(fileName).ConfigureAwait(false);
             var map = await this.mapPlainStorageAccessor.GetByIdAsync(fileName);
             if (map == null)
                 throw new Exception("Map was not found.");
@@ -462,12 +463,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         {
             this.logger.LogWarning("Deleting all maps execution started");
             var maps = await this.mapPlainStorageAccessor.Query(m => m.ToListAsync());
-            
+            var pendingDeletions = await this.mapFileDeletionRequests.Query(m => m.ToListAsync());
+            var fileNames = maps.Select(map => map.FileName)
+                .Concat(pendingDeletions.Select(request => request.FileName))
+                .Distinct()
+                .ToArray();
+
+            foreach (var fileName in fileNames)
+                await RemoveMapFileAsync(fileName);
+
             foreach (var map in maps)
             {
-                await RemoveMapFileAsync(map.FileName);
                 this.mapPlainStorageAccessor.Remove(map.Id);
             }
+
+            this.mapFileDeletionRequests.Remove(pendingDeletions);
         }
 
         public MapBrowseItem DeleteMapUserLink(string mapName, string user)

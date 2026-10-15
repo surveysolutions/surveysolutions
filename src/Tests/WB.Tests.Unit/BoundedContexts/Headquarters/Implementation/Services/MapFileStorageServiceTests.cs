@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Options;
@@ -9,6 +10,7 @@ using Moq;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Esri;
+using NHibernate;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Maps;
@@ -16,7 +18,9 @@ using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Configs;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -173,6 +177,36 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
         }
 
         [Test]
+        public async Task DeleteMap_should_acquire_file_lock_before_loading_map_metadata()
+        {
+            const string mapName = "mapFile.tpk";
+            var calls = new List<string>();
+            var map = Create.Entity.MapBrowseItem(mapName);
+            var mapsStorage = new Mock<IPlainStorageAccessor<MapBrowseItem>>();
+            mapsStorage.Setup(storage => storage.GetByIdAsync(mapName))
+                .Callback<object>(_ => calls.Add("load"))
+                .ReturnsAsync(map);
+            var deletionRequests = new TestPlainStorage<MapFileDeletionRequest>();
+            var sqlQuery = new Mock<ISQLQuery>();
+            sqlQuery.Setup(query => query.SetString("fileName", mapName)).Returns(sqlQuery.Object);
+            sqlQuery.Setup(query => query.ExecuteUpdateAsync(It.IsAny<CancellationToken>()))
+                .Callback(() => calls.Add("lock"))
+                .ReturnsAsync(1);
+            var session = new Mock<ISession>();
+            session.Setup(x => x.CreateSQLQuery(It.IsAny<string>())).Returns(sqlQuery.Object);
+            var unitOfWork = new Mock<IUnitOfWork>();
+            unitOfWork.Setup(x => x.Session).Returns(session.Object);
+            var service = Create.Service.MapFileStorageService(
+                mapsStorage: mapsStorage.Object,
+                mapFileDeletionRequests: deletionRequests,
+                unitOfWork: unitOfWork.Object);
+
+            await service.DeleteMap(mapName);
+
+            Assert.That(calls, Is.EqualTo(new[] { "lock", "load" }));
+        }
+
+        [Test]
         public async Task DeleteAllMaps_should_delete_files_without_queuing_cleanup_requests()
         {
             const string mapName = "mapFile.tpk";
@@ -183,18 +217,37 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
                 var mapsStorage = new TestPlainStorage<MapBrowseItem>();
                 mapsStorage.Store(Create.Entity.MapBrowseItem(mapName), mapName);
                 var deletionRequests = new TestPlainStorage<MapFileDeletionRequest>();
+                deletionRequests.Store(new MapFileDeletionRequest { Id = "deleted-map.tpk", FileName = "deleted-map.tpk" }, "deleted-map.tpk");
+                var mapsAccessor = new Mock<IPlainStorageAccessor<MapBrowseItem>>();
+                mapsAccessor
+                    .Setup(accessor => accessor.Query(It.IsAny<Func<IQueryable<MapBrowseItem>, Task<List<MapBrowseItem>>>>()))
+                    .Returns((Func<IQueryable<MapBrowseItem>, Task<List<MapBrowseItem>>> query) =>
+                        query(new TestingQueryable<MapBrowseItem>(mapsStorage.Query(items => items))));
+                mapsAccessor.Setup(accessor => accessor.Remove(It.IsAny<object>()))
+                    .Callback<object>(mapsStorage.Remove);
+                var deletionRequestsAccessor = new Mock<IPlainStorageAccessor<MapFileDeletionRequest>>();
+                deletionRequestsAccessor
+                    .Setup(accessor => accessor.Query(It.IsAny<Func<IQueryable<MapFileDeletionRequest>, Task<List<MapFileDeletionRequest>>>>()))
+                    .Returns((Func<IQueryable<MapFileDeletionRequest>, Task<List<MapFileDeletionRequest>>> query) =>
+                        query(new TestingQueryable<MapFileDeletionRequest>(deletionRequests.Query(items => items))));
+                deletionRequestsAccessor.Setup(accessor => accessor.Remove(It.IsAny<IEnumerable<MapFileDeletionRequest>>()))
+                    .Callback<IEnumerable<MapFileDeletionRequest>>(deletionRequests.Remove);
                 var service = Create.Service.MapFileStorageService(
-                    mapsStorage: mapsStorage,
-                    mapFileDeletionRequests: deletionRequests,
+                    mapsStorage: mapsAccessor.Object,
+                    mapFileDeletionRequests: deletionRequestsAccessor.Object,
                     fileStorageConfig: Options.Create(new FileStorageConfig { TempData = tempBase }));
                 var filePath = Path.Combine(tempBase, "MapsData", mapName);
+                var pendingFilePath = Path.Combine(tempBase, "MapsData", "deleted-map.tpk");
                 File.WriteAllText(filePath, "map");
+                File.WriteAllText(pendingFilePath, "pending map");
 
                 await service.DeleteAllMaps();
 
                 Assert.That(mapsStorage.GetById(mapName), Is.Null);
                 Assert.That(File.Exists(filePath), Is.False);
                 Assert.That(deletionRequests.GetById(mapName), Is.Null);
+                Assert.That(File.Exists(pendingFilePath), Is.False);
+                Assert.That(deletionRequests.GetById("deleted-map.tpk"), Is.Null);
             }
             finally
             {

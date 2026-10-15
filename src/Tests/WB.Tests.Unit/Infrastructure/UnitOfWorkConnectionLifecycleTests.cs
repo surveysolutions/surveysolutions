@@ -72,13 +72,19 @@ namespace WB.Tests.Unit.Infrastructure
             Mock<ISession> CreateSession()
             {
                 var tx = new Mock<ITransaction>();
-                tx.SetupGet(t => t.IsActive).Returns(true);
+                var isActive = true;
+                tx.SetupGet(t => t.IsActive).Returns(() => isActive);
                 tx.Setup(t => t.Commit()).Callback(() =>
                 {
                     commits++;
                     if (failureStage == "commit") throw error;
+                    isActive = false;
                 });
-                tx.Setup(t => t.Rollback()).Callback(() => rollbacks++);
+                tx.Setup(t => t.Rollback()).Callback(() =>
+                {
+                    rollbacks++;
+                    isActive = false;
+                });
                 tx.Setup(t => t.Dispose()).Callback(() =>
                 {
                     if (++transactionDisposals == 1 && failureStage == "transaction-dispose") throw error;
@@ -105,8 +111,8 @@ namespace WB.Tests.Unit.Infrastructure
             uow.AcceptChanges();
 
             Assert.That(Assert.Throws<InvalidOperationException>(() => uow.Dispose()), Is.SameAs(error));
-            Assert.That(commits, Is.EqualTo(1));
-            Assert.That(rollbacks, Is.EqualTo(1));
+            Assert.That(commits, Is.EqualTo(failureStage == "commit" ? 1 : 2));
+            Assert.That(rollbacks, Is.EqualTo(failureStage == "commit" ? 2 : 0));
             Assert.That(transactionDisposals, Is.EqualTo(2));
             Assert.That(sessionDisposals, Is.EqualTo(2));
             Assert.DoesNotThrow(() => uow.Dispose());
@@ -157,4 +163,3 @@ namespace WB.Tests.Unit.Infrastructure
         }
     }
 }
-

@@ -15,6 +15,16 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NHibernate;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.CommandBus.Implementation;
+using WB.Core.Infrastructure.Domain;
+using WB.Core.Infrastructure.Modularity.Autofac;
+using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql;
@@ -31,6 +41,8 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
         private IServiceScope requestScope;
         private IRequestExecutor executor;
         private UnitOfWork unitOfWork;
+        private ICommandService commandService;
+        private CommandExecutionObservation commandExecution;
         private Mock<ISession> session;
         private Mock<ITransaction> transaction;
         private int fieldsExecuted;
@@ -47,12 +59,29 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
                 .Returns(Mock.Of<ISQLQuery>());
             var sessionFactory = new Mock<ISessionFactory>();
             sessionFactory.Setup(x => x.OpenSession()).Returns(session.Object);
+            commandExecution = new CommandExecutionObservation();
+            var calendarCommand = NewCalendarCommand();
+            if (!CommandRegistry.Contains(calendarCommand))
+            {
+                CommandRegistry.Setup<CalendarEvent>()
+                    .ResolvesIdFrom<CalendarEventCommand>(command => command.PublicKey)
+                    .InitializesWith<CreateCalendarEventCommand>(aggregate => aggregate.CreateCalendarEvent);
+            }
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterInstance(sessionFactory.Object).As<ISessionFactory>();
+            containerBuilder.RegisterInstance(Mock.Of<IWorkspaceContextAccessor>()).As<IWorkspaceContextAccessor>();
+            containerBuilder.RegisterInstance(commandExecution);
+            containerBuilder.RegisterType<CalendarCommandExecutor>().As<ICommandExecutor>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<UnitOfWorkInScopeExecutor>().As<IInScopeExecutor>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<AutofacServiceLocatorAdapter>().As<IServiceLocator>().InstancePerLifetimeScope();
             container = containerBuilder.Build();
             lifetimeScope = container.BeginLifetimeScope();
             unitOfWork = new UnitOfWork(NullLogger<UnitOfWork>.Instance,
                 Mock.Of<IWorkspaceContextAccessor>(), lifetimeScope);
+            var aggregateLock = new Mock<IAggregateLock>();
+            aggregateLock.Setup(x => x.RunWithLock(It.IsAny<string>(), It.IsAny<Action>()))
+                .Callback<string, Action>((_, action) => action());
+            commandService = new CommandService(new AutofacServiceLocatorAdapter(container), aggregateLock.Object);
 
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddScoped<IUnitOfWork>(_ => unitOfWork);
@@ -72,6 +101,11 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
                     });
                     x.Field("throwError").Type<IntType>().Use<TransactionMiddleware>()
                         .Resolve(_ => ThrowError());
+                    x.Field("scopedCommand").Type<IntType>().Use<TransactionMiddleware>().Resolve(_ =>
+                    {
+                        commandService.Execute(NewCalendarCommand());
+                        return ++fieldsExecuted;
+                    });
                 });
             services = serviceCollection.BuildServiceProvider();
             requestScope = services.CreateScope();
@@ -155,6 +189,21 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
             transaction.Verify(x => x.Rollback(), Times.Once);
         }
 
+        [Test]
+        public async Task should_roll_back_command_scope_changes_when_a_later_mutation_field_errors()
+        {
+            await using var result = await Execute("mutation { calendarCommand: scopedCommand reportError }");
+
+            var operation = result.ExpectOperationResult();
+            Assert.That(operation.Errors, Is.Not.Empty);
+            Assert.That(fieldsExecuted, Is.EqualTo(1));
+            Assert.That(commandExecution.Command, Is.TypeOf<CreateCalendarEventCommand>());
+            Assert.That(commandExecution.UnitOfWork, Is.SameAs(unitOfWork));
+            Assert.That(commandExecution.Session, Is.SameAs(session.Object));
+            transaction.Verify(x => x.Commit(), Times.Never);
+            transaction.Verify(x => x.Rollback(), Times.Once);
+        }
+
         [TestCase("{ value }")]
         [TestCase("mutation { missingField }")]
         public async Task should_not_complete_queries_or_invalid_mutations(string document)
@@ -194,6 +243,10 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
 
         private static int ThrowError() => throw new InvalidOperationException("Resolver failed");
 
+        private static CreateCalendarEventCommand NewCalendarCommand() => new(
+            Guid.NewGuid(), Guid.NewGuid(), DateTimeOffset.UtcNow, "America/New_York",
+            null, string.Empty, 0, string.Empty, new QuestionnaireIdentity());
+
         private Task<IExecutionResult> Execute(string document) => executor.ExecuteAsync(
             OperationRequestBuilder.New().SetDocument(document).SetServices(requestScope.ServiceProvider).Build());
 
@@ -217,6 +270,32 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
             result.Setup(x => x.Commit()).Callback(() => active = false);
             result.Setup(x => x.Rollback()).Callback(() => active = false);
             return result;
+        }
+
+        private sealed class CommandExecutionObservation
+        {
+            public ICommand Command { get; set; }
+            public IUnitOfWork UnitOfWork { get; set; }
+            public ISession Session { get; set; }
+        }
+
+        private sealed class CalendarCommandExecutor : ICommandExecutor
+        {
+            private readonly IUnitOfWork unitOfWork;
+            private readonly CommandExecutionObservation observation;
+
+            public CalendarCommandExecutor(IUnitOfWork unitOfWork, CommandExecutionObservation observation)
+            {
+                this.unitOfWork = unitOfWork;
+                this.observation = observation;
+            }
+
+            public void ExecuteCommand(ICommand command, string origin, CancellationToken cancellationToken, Guid aggregateId)
+            {
+                observation.Command = command;
+                observation.UnitOfWork = unitOfWork;
+                observation.Session = unitOfWork.Session;
+            }
         }
     }
 }

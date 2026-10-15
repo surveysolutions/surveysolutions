@@ -1,6 +1,8 @@
+using System;
 using HotChocolate.Execution;
 using HotChocolate.Execution.Processing;
 using Microsoft.Extensions.DependencyInjection;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
@@ -16,12 +18,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
         {
             private readonly IRequestContext context;
             private readonly IUnitOfWork unitOfWork;
+            private readonly IDisposable ambientScope;
             private bool completionAttempted;
 
             public MutationScope(IRequestContext context, IUnitOfWork unitOfWork)
             {
                 this.context = context;
                 this.unitOfWork = unitOfWork;
+                ambientScope = UnitOfWorkAmbientContext.Push(unitOfWork);
             }
 
             public void Complete()
@@ -44,8 +48,15 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 
             public void Dispose()
             {
-                if (!completionAttempted)
-                    unitOfWork.DiscardChanges();
+                try
+                {
+                    if (!completionAttempted)
+                        unitOfWork.DiscardChanges();
+                }
+                finally
+                {
+                    ambientScope.Dispose();
+                }
 
                 // The workspace scope owns the unit of work and its sessions.
             }
