@@ -114,7 +114,7 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
             if (content == null)
                 return NotFound();
 
-            var result = JsonConvert.SerializeObject(content.VariableNames, Formatting.None);
+            var result = JsonConvert.SerializeObject(new[] { "rowcode" }.Concat(content.VariableNames).ToArray(), Formatting.None);
             return Content(result, "application/json", Encoding.UTF8);
         }
     }
