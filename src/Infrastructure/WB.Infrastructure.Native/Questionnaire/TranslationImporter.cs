@@ -126,15 +126,17 @@ namespace WB.Infrastructure.Native.Questionnaire
 
         private TranslationRow GetExcelTranslation(TranslationsWithHeaderMap worksheetWithHeadersMap, int rowNumber)
         {
-            var entityId = worksheetWithHeadersMap.Worksheet.Cell($"{worksheetWithHeadersMap.EntityIdIndex}{rowNumber}")
+            // header map has no index for a column that is absent in the sheet (e.g. categories sheet has no entity id and type)
+            var worksheet = worksheetWithHeadersMap.Worksheet;
+            var entityId = GetCell(worksheet, worksheetWithHeadersMap.EntityIdIndex, rowNumber)
                 ?.GetValue<string>();
-            var type = worksheetWithHeadersMap.Worksheet.Cell($"{worksheetWithHeadersMap.TypeIndex}{rowNumber}")
+            var type = GetCell(worksheet, worksheetWithHeadersMap.TypeIndex, rowNumber)
                 ?.GetString();
-            var optionValueOrValidationIndexOrFixedRosterId = worksheetWithHeadersMap.Worksheet
-                .Cell($"{worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex}{rowNumber}")
+            var optionValueOrValidationIndexOrFixedRosterId = GetCell(worksheet,
+                    worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex, rowNumber)
                 ?.GetString();
-            var translation = worksheetWithHeadersMap.Worksheet
-                .Cell($"{worksheetWithHeadersMap.TranslationIndex}{rowNumber}")?.GetString();
+            var translation = GetCell(worksheet, worksheetWithHeadersMap.TranslationIndex, rowNumber)
+                ?.GetString();
             return this.AdjustIndexValue(new TranslationRow
             {
                 EntityId = entityId.NullIfEmpty(),
@@ -143,6 +145,9 @@ namespace WB.Infrastructure.Native.Questionnaire
                 Translation = translation.NullIfEmpty()
             });
         }
+
+        private static IXLCell GetCell(IXLWorksheet worksheet, string columnIndex, int rowNumber)
+            => columnIndex == null ? null : worksheet.Cell($"{columnIndex}{rowNumber}");
 
         private TranslationRow AdjustIndexValue(TranslationRow row)
         {
