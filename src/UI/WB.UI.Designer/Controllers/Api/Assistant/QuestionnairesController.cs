@@ -28,12 +28,11 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
         private readonly IQuestionnaireDocumentTransformer questionnaireDocumentTransformer;
         private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly ILookupTableService lookupTableService;
-        
         private readonly ISerializer serializer;
 
         public QuestionnairesController(
             IQuestionnaireViewFactory questionnaireViewFactory,
-            IQuestionnaireDocumentTransformer questionnaireDocumentTransformer, 
+            IQuestionnaireDocumentTransformer questionnaireDocumentTransformer,
             IReusableCategoriesService reusableCategoriesService,
             ILookupTableService lookupTableService,
             ISerializer serializer)
@@ -44,7 +43,8 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
             this.reusableCategoriesService = reusableCategoriesService;
             this.lookupTableService = lookupTableService;
         }
-        
+
+        [QuestionnairePermissions]
         [HttpGet]
         [Route("{id}")]
         public IActionResult Get(QuestionnaireRevision id)
@@ -57,7 +57,7 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
 
             var questionnaire = questionnaireView.GetClientReadyDocument();
             questionnaireDocumentTransformer.TransformInPlace(questionnaire);
-            
+
             // Clear macros as they are not needed for assistant
             questionnaire.Macros = new Dictionary<Guid, Macro>();
 
@@ -65,7 +65,8 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
 
             return Content(response, MediaTypeNames.Application.Json);
         }
-        
+
+        [QuestionnairePermissions]
         [HttpGet]
         [Route("{id}/category/{categoryId}")]
         public IActionResult GetCategory(QuestionnaireRevision id, Guid categoryId)
@@ -75,13 +76,14 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
             if (categories == null) return NotFound();
 
             var result = JsonConvert.SerializeObject(categories, Formatting.None, new JsonSerializerSettings
-            { 
+            {
                 TypeNameHandling = TypeNameHandling.None
             });
 
             return Content(result, "application/json", Encoding.UTF8);
         }
-        
+
+        [QuestionnairePermissions]
         [HttpGet]
         [Route("{id}/lookup/{lookupTableId}/headers")]
         public IActionResult GetLookupTableHeaders(QuestionnaireRevision id, Guid lookupTableId)
@@ -123,5 +125,6 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
                 };
             }));
         }
+
     }
 }
