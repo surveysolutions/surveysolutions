@@ -44,4 +44,5 @@
   <data name="MapFileSizeLimit" xml:space="preserve"><value>ფაილი {0}-ის ზომა მაქსიმალურ ლიმიტს {1} აჭარბებს</value></data>
   <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve"><value>ფაილი {0}-ის სახელი შეიცავს არა-UTF-8 სიმბოლოებს.</value></data>
   <data name="MapFileNameHasInvalidChars" xml:space="preserve"><value>ფაილი {0}-ის სახელი შეიცავს დაუშვებელ სიმბოლოებს.</value></data>
+  <data name="MapFileNameTooLong" xml:space="preserve"><value>ფაილის სახელი '{0}' აჭარბებს მაქსიმალურად დაშვებულ სიგრძეს {1} სიმბოლოს.</value></data>
 </root>

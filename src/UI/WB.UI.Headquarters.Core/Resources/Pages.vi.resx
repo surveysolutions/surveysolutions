@@ -1262,6 +1262,9 @@
     <data name="MapDetails_MapTitle" xml:space="preserve">
         <value>Bản đồ</value>
         </data>
+    <data name="MapPreview" xml:space="preserve">
+        <value>Xem trước bản đồ</value>
+        </data>
     <data name="MapDetails_ImportedOn" xml:space="preserve">
         <value>Đã nhập vào</value>
         </data>
@@ -1620,7 +1623,7 @@
         <value>Truy cập vào không gian làm việc</value>
         </data>
     <data name="UsersManage_SupervisorFilterTitle" xml:space="preserve">
-        <value>Người giám sát (Người phỏng vấn sẽ được thêm vào nhóm của anh ấy)</value>
+        <value>Người giám sát</value>
         </data>
     <data name="UsersManage_SupervisorFilterPlaceholder" xml:space="preserve">
         <value>Chọn người giám sát</value>
@@ -1727,4 +1730,10 @@
     <data name="Observer_Memo2" xml:space="preserve">
         <value>Nhấp vào một tài khoản và chọn 'Xem với tư cách người dùng này ở chế độ chỉ đọc' để bắt đầu. Sử dụng liên kết màu vàng ở trên cùng để quay lại tài khoản của bạn.</value>
         </data>
+    <data name="Successful" xml:space="preserve">
+      <value>Thành công</value>
+  </data>
+    <data name="Failed" xml:space="preserve">
+      <value>Thất bại</value>
+  </data>
 </root>

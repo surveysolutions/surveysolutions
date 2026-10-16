@@ -579,6 +579,9 @@
   <data name="TargetAreaExplanation" xml:space="preserve">
     <value>为任务指定目标区域地图名称</value>
   </data>
+  <data name="TargetAreaNameTooLong" xml:space="preserve">
+      <value>目标区域地图名称过长。允许的最大长度为 {{limit}} 个字符。</value>
+  </data>
   <data name="Tooltip_Table_Email" xml:space="preserve">
     <value>用于通知的 Email</value>
   </data>

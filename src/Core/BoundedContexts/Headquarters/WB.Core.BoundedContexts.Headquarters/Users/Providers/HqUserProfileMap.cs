@@ -2,6 +2,7 @@
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.Services;
+using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
 {
@@ -19,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
             });
 
             Property(x => x.DeviceId);
-            Property(x => x.DeviceRegistrationDate);
+            Property(x => x.DeviceRegistrationDate, map => map.Type<PostgresDateType>());
             Property(x => x.DeviceAppVersion);
             Property(x => x.StorageFreeInBytes);
             Property(x => x.DeviceAppBuildVersion);

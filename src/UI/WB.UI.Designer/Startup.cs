@@ -8,6 +8,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.RegularExpressions;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -347,7 +348,11 @@ namespace WB.UI.Designer
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                     options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
                 })
-                .AddMvcOptions(options => options.ModelBinderProviders.Insert(0, new QuestionnaireRevisionBinderProvider()));
+                .AddMvcOptions(options =>
+                {
+                    options.ModelBinderProviders.Insert(0, new QuestionnaireRevisionBinderProvider());
+                    options.Filters.Add<TransactionFilter>();
+                });
 
             services.AddCors(corsOpt =>
             {
@@ -383,10 +388,9 @@ namespace WB.UI.Designer
             services.AddTransient<IBasicAuthenticationService, BasicBasicAuthenticationService>();
 
             services.Configure<CaptchaConfig>(Configuration.GetSection("Captcha"));
-            services.Configure<RecaptchaSettings>(Configuration.GetSection("Captcha"));
-            services.AddTransient<IRecaptchaService, RecaptchaService>();
+            services.AddRecaptcha(Configuration.GetSection("Captcha"));
             services.AddTransient<IRecipientNotifier, MailNotifier>();
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.Configure<UiConfig>(Configuration.GetSection("UI"));
             services.Configure<IntegrationsConfig>(Configuration.GetSection("Integrations"));
 
@@ -465,6 +469,7 @@ namespace WB.UI.Designer
             }
 
             app.UseResponseCompression();
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
@@ -475,7 +480,7 @@ namespace WB.UI.Designer
                     }
                 }
             });
-            
+
             app.UseCookiePolicy();
             app.UseSession();
             app.UseAuthentication();
@@ -510,6 +515,32 @@ namespace WB.UI.Designer
             });
 
             app.UseHealthChecks("/.hc");
+
+            // Safety net for handlers that own their transaction ([NoTransaction]) and therefore never reach
+            // TransactionFilter's flush; flushing twice is a no-op.
+            app.Use(async (context, next) =>
+            {
+                ExceptionDispatchInfo? capturedException = null;
+                try
+                {
+                    await next();
+                }
+                catch (Exception exception)
+                {
+                    capturedException = ExceptionDispatchInfo.Capture(exception);
+                }
+
+                try
+                {
+                    context.RequestServices.GetService<ITransactionalMemoryCacheInvalidation>()?.Flush();
+                }
+                catch when (capturedException != null)
+                {
+                    // Keep the original request failure if cache cleanup also faults.
+                }
+
+                capturedException?.Throw();
+            });
 
             app.UseRouting();
             app.UseAuthorization();

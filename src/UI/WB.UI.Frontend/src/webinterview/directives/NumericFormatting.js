@@ -35,6 +35,11 @@ export function registerNumericFormatting(app) {
 
             el.addEventListener('autoNumeric:rawValueModified', el.__numericFormattingListener)
         },
+        updated(el, binding) {
+            if (el.autoNumericElement && binding.value) {
+                el.autoNumericElement.update(binding.value)
+            }
+        },
         beforeUnmount(el) {
             el.__numericFormattingDisposed = true
 

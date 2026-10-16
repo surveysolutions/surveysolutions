@@ -24,6 +24,9 @@ namespace WB.UI.Shared.Enumerator.Activities
         private ViewPager2.OnPageChangeCallback pageChangeCallback;
         private TabConfigurationStrategy tabConfigurationStrategy;
         private TabLayoutMediator tabLayoutMediator;
+        private int recalculateRequestId;
+        private const int RecalculateRetryDelayMs = 50;
+        private const int MaxRecalculateAttempts = 10;
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -71,7 +74,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         internal void OnPageChangedFromCallback()
         {
             UpdateTabIndicator();
-            viewPager?.Post(RecalculateRecyclerViewHeight);
+            RecalculateRecyclerViewHeight();
         }
 
         public class TabConfigurationStrategy : Java.Lang.Object, TabLayoutMediator.ITabConfigurationStrategy
@@ -258,46 +261,36 @@ namespace WB.UI.Shared.Enumerator.Activities
             }
         }
         
-        private int CalculateTotalHeight(MvxRecyclerView recyclerView)
-        {
-            int totalHeight = 0;
-            var adapter = recyclerView.GetAdapter();
-            if (adapter == null) return 0;
-
-            int width = recyclerView.MeasuredWidth > 0 ? recyclerView.MeasuredWidth : recyclerView.Width;
-            if (width <= 0) return 0;
-            int widthSpec = View.MeasureSpec.MakeMeasureSpec(width, MeasureSpecMode.Exactly);
-
-            for (int i = 0; i < adapter.ItemCount; i++)
-            {
-                int viewType = adapter.GetItemViewType(i);
-                var viewHolder = (RecyclerView.ViewHolder)adapter.CreateViewHolder(recyclerView, viewType);
-                adapter.BindViewHolder(viewHolder, i);
-                var itemView = viewHolder.ItemView;
-                itemView.Measure(widthSpec, View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified));
-                int h = itemView.MeasuredHeight;
-                if (itemView.LayoutParameters is ViewGroup.MarginLayoutParams mlp)
-                    h += mlp.TopMargin + mlp.BottomMargin;
-                totalHeight += h;
-            }
-
-            totalHeight += recyclerView.PaddingTop + recyclerView.PaddingBottom;
-            if (recyclerView.LayoutParameters is ViewGroup.MarginLayoutParams lp)
-                totalHeight += lp.TopMargin + lp.BottomMargin;
-
-            return totalHeight;
-        }
-
         private int GetRecyclerContentHeight(MvxRecyclerView recyclerView)
         {
-            return CalculateTotalHeight(recyclerView);
+            var computedHeight = recyclerView.ComputeVerticalScrollRange();
+            if (computedHeight > 0)
+            {
+                return computedHeight + recyclerView.PaddingTop + recyclerView.PaddingBottom;
+            }
+
+            if (!recyclerView.CanScrollVertically(1) && !recyclerView.CanScrollVertically(-1))
+                return recyclerView.MeasuredHeight;
+
+            return 0;
         }
 
         private void RecalculateRecyclerViewHeight()
         {
+            int requestId = ++recalculateRequestId;
+            RecalculateRecyclerViewHeight(requestId, 0);
+        }
+
+        private void RecalculateRecyclerViewHeight(int requestId, int attempt)
+        {
             viewPager?.Post(() =>
             {
-                if (viewPager == null) return;
+                if (requestId != recalculateRequestId)
+                    return;
+
+                if (View == null || IsDetached || viewPager == null)
+                    return;
+
                 int currentItem = viewPager.CurrentItem;
                 
                 // Get the RecyclerView that ViewPager2 uses internally
@@ -308,7 +301,8 @@ namespace WB.UI.Shared.Enumerator.Activities
                 var viewHolder = recyclerView2.FindViewHolderForAdapterPosition(currentItem);
                 if (viewHolder == null)
                 {
-                    viewPager.PostDelayed(RecalculateRecyclerViewHeight, 50);
+                    if (attempt < MaxRecalculateAttempts)
+                        viewPager.PostDelayed(() => RecalculateRecyclerViewHeight(requestId, attempt + 1), RecalculateRetryDelayMs);
                     return;
                 }
                 
@@ -316,20 +310,23 @@ namespace WB.UI.Shared.Enumerator.Activities
                 var recyclerView = currentView?.FindViewById<MvxRecyclerView>(Resource.Id.recyclerView);
                 if (recyclerView == null || recyclerView.Visibility != ViewStates.Visible)
                 {
-                    viewPager.PostDelayed(RecalculateRecyclerViewHeight, 50);
+                    if (attempt < MaxRecalculateAttempts)
+                        viewPager.PostDelayed(() => RecalculateRecyclerViewHeight(requestId, attempt + 1), RecalculateRetryDelayMs);
                     return;
                 }
 
                 if (recyclerView.Width == 0 && recyclerView.MeasuredWidth == 0)
                 {
-                    recyclerView.Post(RecalculateRecyclerViewHeight);
+                    if (attempt < MaxRecalculateAttempts)
+                        recyclerView.PostDelayed(() => RecalculateRecyclerViewHeight(requestId, attempt + 1), RecalculateRetryDelayMs);
                     return;
                 }
 
                 int contentHeight = GetRecyclerContentHeight(recyclerView);
                 if (contentHeight == 0)
                 {
-                    recyclerView.PostDelayed(RecalculateRecyclerViewHeight, 50);
+                    if (attempt < MaxRecalculateAttempts)
+                        recyclerView.PostDelayed(() => RecalculateRecyclerViewHeight(requestId, attempt + 1), RecalculateRetryDelayMs);
                     return;
                 }
                 

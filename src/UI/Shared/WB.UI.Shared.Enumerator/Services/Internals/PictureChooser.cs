@@ -3,8 +3,8 @@ using Android.Media;
 using MvvmCross.Base;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using Xamarin.Essentials;
@@ -55,8 +55,11 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             MediaImplementation androidMedia = new MediaImplementation();
             using (var originalMetadata = new ExifInterface(photo.FullPath))
             {
-                androidMedia.FixOrientationAndResizeAsync(photo.FullPath, storeCameraMediaOptions, originalMetadata)
-                    .WaitAndUnwrapException();    
+                var isProcessed = await androidMedia.FixOrientationAndResizeAsync(photo.FullPath, storeCameraMediaOptions, originalMetadata)
+                    .ConfigureAwait(false);
+
+                if (!isProcessed)
+                    throw new PictureProcessingException(UIResources.Multimedia_PhotoProcessingFailed);
             }
 
             return await photo.OpenReadAsync();

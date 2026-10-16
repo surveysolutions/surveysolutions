@@ -106,7 +106,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             
             if (input.Statuses?.Length > 0)
             {
-                items = items.Where(x => input.Statuses.Contains(x.Status));
+                // Use List<> to avoid C# 14+ compiling Contains to MemoryExtensions.Contains(ReadOnlySpan<T>, T)
+                // which puts an op_Implicit call into the expression tree that NHibernate cannot evaluate.
+                var statusList = input.Statuses.ToList();
+                items = items.Where(x => statusList.Contains(x.Status));
             }
 
             if (!string.IsNullOrWhiteSpace(input.SupervisorOrInterviewerName))
