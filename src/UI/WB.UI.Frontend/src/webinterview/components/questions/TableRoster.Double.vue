@@ -14,7 +14,7 @@
             digitGroupSeparator: groupSeparator,
             decimalCharacter: decimalSeparator,
             decimalPlaces: decimalPlacesCount,
-            allowDecimalPadding: 'floats'
+            allowDecimalPadding: false
         }" />
 </template>
 
