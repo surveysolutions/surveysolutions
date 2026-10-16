@@ -769,6 +769,44 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             Assert.That(plainStorageAccessor.TranslationInstances.First().Value, Is.EqualTo("один"));
         }
 
+        [Test]
+        public void when_storing_translations_with_rtl_and_latin_text_containing_bidi_controls_should_remove_controls_breaking_substitutions_and_tags()
+        {
+            Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            Guid translationId   = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            Guid questionId      = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            byte[] fileStream = CreateExcel(new Dictionary<string, string[][]>
+            {
+                {
+                    "Translations", new[]
+                    {
+                        new[] { "Entity Id", "Variable", "Type", "Index", "Original text", "Translation" },
+                        new[] { questionId.ToString("N"), "age", "Title", "", "What is %\u200Fname%'s <b>age</b>?",
+                            "\u202Bما هو عمر %\u200Fname\u200E% <\u200Fb>John</\u200Fb>\u200F؟\u202C" },
+                        new[] { questionId.ToString("N"), "age", "Instruction", "", "Ask %name%",
+                            "اسأل \u2067%name%\u2069 Smith" },
+                    }
+                }
+            });
+
+            var plainStorageAccessor = Create.InMemoryDbContext();
+            var questionnaire = Create.QuestionnaireDocument(questionnaireId,
+                Create.TextQuestion(questionId, variable: "age", instruction: "Ask %name%"));
+            var questionnaires = new Mock<IQuestionnaireViewFactory>();
+            questionnaires.SetReturnsDefault(Create.QuestionnaireView(questionnaire));
+
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+
+            service.Store(questionnaireId, translationId, fileStream);
+
+            var title = plainStorageAccessor.TranslationInstances.Single(x => x.Type == TranslationType.Title);
+            Assert.That(title.Value, Is.EqualTo("ما هو عمر %name% <b>John</b>\u200F؟"));
+
+            var instruction = plainStorageAccessor.TranslationInstances.Single(x => x.Type == TranslationType.Instruction);
+            Assert.That(instruction.Value, Is.EqualTo("اسأل %name% Smith"));
+        }
+
         private byte[] GetEmbendedFileContent(string fileName)
         {
            
