@@ -27,6 +27,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
         }
 
         [Test]
+        public void should_return_headers_for_historical_revision()
+        {
+            var revision = new QuestionnaireRevision(questionnaireId, Guid.NewGuid());
+            var questionnaire = new QuestionnaireDocument
+            {
+                PublicKey = questionnaireId,
+                LookupTables = new Dictionary<Guid, LookupTable> { { lookupTableId, new LookupTable() } }
+            };
+            var documentStorage = new Mock<IDesignerQuestionnaireStorage>();
+            documentStorage.Setup(x => x.Get(revision)).Returns(questionnaire);
+            var contentStorage = new Mock<IPlainKeyValueStorage<LookupTableContent>>();
+            contentStorage.Setup(x => x.GetById(It.IsAny<string>()))
+                .Returns(Create.LookupTableContent(new[] { "price", "name" }));
+            var service = Create.LookupTableService(contentStorage.Object, documentStorage.Object);
+
+            var headers = service.GetLookupTableHeaders(revision, lookupTableId);
+
+            Assert.That(headers, Is.EqualTo(new[] { "rowcode", "price", "name" }));
+            documentStorage.Verify(x => x.Get(revision), Times.Once);
+        }
+
+        [Test]
         public void should_return_null_when_content_is_not_stored()
         {
             var service = CreateService(null);
