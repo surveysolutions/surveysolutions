@@ -419,6 +419,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var questionnaireVersionProvider = new Mock<IQuestionnaireVersionProvider>();
             questionnaireVersionProvider.Setup(x => x.GetNextVersion(questionnaireId)).Returns(2);
+            questionnaireVersionProvider.Setup(x => x.GetPreviousVersion(questionnaireId, 2)).Returns(1);
 
             var webInterviewConfigProvider = new Mock<IWebInterviewConfigProvider>();
             webInterviewConfigProvider
@@ -448,10 +449,13 @@ namespace WB.Tests.Unit.Applications.Headquarters
             webInterviewConfigProvider.Verify(x => x.Store(
                 It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == questionnaireId && q.Version == 2),
                 It.Is<WebInterviewConfig>(c =>
-                    c.Started == false &&
+                    c.Started == true &&
                     c.UseCaptcha == true &&
                     c.SingleResponse == false &&
                     c.EmailOnComplete == true &&
+                    c.AttachAnswersInEmail == true &&
+                    c.AllowSwitchToCawiForInterviewer == true &&
+                    c.AllowTranscriptDownloading == true &&
                     c.ReminderAfterDaysIfNoResponse == 5 &&
                     c.ReminderAfterDaysIfPartialResponse == 3 &&
                     c.CustomMessages.ContainsKey(WebInterviewUserMessages.WelcomeText) &&
@@ -466,20 +470,21 @@ namespace WB.Tests.Unit.Applications.Headquarters
         }
 
         [Test]
-        public async Task when_importing_new_version_with_copy_web_interview_settings_should_use_previous_questionnaire_version()
+        public async Task when_importing_new_version_with_copy_web_interview_settings_should_use_previous_existing_questionnaire_version()
         {
             var questionnaireId = Id.gA;
             var sourceQuestionnaireId = Guid.NewGuid();
             var versionProvider = SetUp.SupportedVersionProvider(1);
 
             var sourceVersionIdentity = new QuestionnaireIdentity(sourceQuestionnaireId, 1);
-            var previousVersionIdentity = new QuestionnaireIdentity(questionnaireId, 2);
+            var previousVersionIdentity = new QuestionnaireIdentity(questionnaireId, 1);
             var questionnaireVersionProvider = new Mock<IQuestionnaireVersionProvider>();
             questionnaireVersionProvider.Setup(x => x.GetNextVersion(questionnaireId)).Returns(3);
+            questionnaireVersionProvider.Setup(x => x.GetPreviousVersion(questionnaireId, 3)).Returns(1);
 
             var webInterviewConfigProvider = new Mock<IWebInterviewConfigProvider>();
             webInterviewConfigProvider
-                .Setup(x => x.Get(It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == questionnaireId && q.Version == 2)))
+                .Setup(x => x.Get(It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == questionnaireId && q.Version == 1)))
                 .Returns(new WebInterviewConfig
                 {
                     QuestionnaireId = previousVersionIdentity,
@@ -503,10 +508,13 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 criticalityLevel: null, copyWebInterviewSettings: true);
 
             webInterviewConfigProvider.Verify(x => x.Get(
-                It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == questionnaireId && q.Version == 2)),
+                It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == questionnaireId && q.Version == 1)),
                 Times.Once);
             webInterviewConfigProvider.Verify(x => x.Get(
                 It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == sourceQuestionnaireId && q.Version == 1)),
+                Times.Never);
+            webInterviewConfigProvider.Verify(x => x.Get(
+                It.Is<QuestionnaireIdentity>(q => q.QuestionnaireId == questionnaireId && q.Version == 2)),
                 Times.Never);
         }
 
@@ -531,6 +539,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var questionnaireVersionProvider = new Mock<IQuestionnaireVersionProvider>();
             questionnaireVersionProvider.Setup(x => x.GetNextVersion(questionnaireId)).Returns(2);
+            questionnaireVersionProvider.Setup(x => x.GetPreviousVersion(questionnaireId, 2)).Returns(1);
 
             var webInterviewConfigProvider = new Mock<IWebInterviewConfigProvider>();
             webInterviewConfigProvider

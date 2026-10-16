@@ -276,9 +276,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     criticalityLevel));
                 questionnaireProgress.Report(80);
 
-                if (copyWebInterviewSettings && questionnaireIdentity.Version > 1)
+                var previousVersion = copyWebInterviewSettings && questionnaireIdentity.Version > 1
+                    ? questionnaireVersionProvider.GetPreviousVersion(questionnaireId, questionnaireIdentity.Version)
+                    : null;
+                if (previousVersion.HasValue)
                 {
-                    var sourceConfigIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireIdentity.Version - 1);
+                    var sourceConfigIdentity = new QuestionnaireIdentity(questionnaireId, previousVersion.Value);
                     var webInterviewConfigProvider = serviceLocator.GetInstance<IWebInterviewConfigProvider>();
                     var previousConfig = webInterviewConfigProvider.Get(sourceConfigIdentity);
 
@@ -287,7 +290,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         var newConfig = new WebInterviewConfig
                         {
                             QuestionnaireId = questionnaireIdentity,
-                            Started = false,
+                            Started = previousConfig.Started,
                             UseCaptcha = previousConfig.UseCaptcha,
                             SingleResponse = previousConfig.SingleResponse,
                             EmailOnComplete = previousConfig.EmailOnComplete,
