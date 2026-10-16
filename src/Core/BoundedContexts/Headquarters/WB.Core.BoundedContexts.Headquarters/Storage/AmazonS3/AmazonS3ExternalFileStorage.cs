@@ -99,16 +99,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 
             try
             {
-                ListObjectsV2Response response = await client.ListObjectsV2Async(listObjects).ConfigureAwait(false);
-                logger.LogTrace("Got list of objects from S3. Prefix: [{prefix}] {request_prefix}, Count: {count}",
-                    prefix, listObjects.Prefix, response.S3Objects.Count);
-
-                return response.S3Objects.Select(s3 => new FileObject
+                var files = new List<FileObject>();
+                ListObjectsV2Response response;
+                do
                 {
-                    Path = s3.Key.Substring(BucketInfo.PathPrefix.Length),
-                    Size = s3.Size,
-                    LastModified = s3.LastModified,
-                }).ToList();
+                    response = await client.ListObjectsV2Async(listObjects).ConfigureAwait(false);
+                    files.AddRange(response.S3Objects.Select(s3 => new FileObject
+                    {
+                        Path = s3.Key.Substring(BucketInfo.PathPrefix.Length),
+                        Size = s3.Size,
+                        LastModified = s3.LastModified,
+                    }));
+                    listObjects.ContinuationToken = response.NextContinuationToken;
+                } while (response.IsTruncated);
+
+                logger.LogTrace("Got list of objects from S3. Prefix: [{prefix}] {request_prefix}, Count: {count}",
+                    prefix, listObjects.Prefix, files.Count);
+
+                return files;
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {

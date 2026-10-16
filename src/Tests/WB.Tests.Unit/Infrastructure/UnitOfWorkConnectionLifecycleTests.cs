@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Data;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -59,6 +60,22 @@ namespace WB.Tests.Unit.Infrastructure
             Assert.That(uow.Session, Is.SameAs(next.Object));
         }
 
+        [Test]
+        public void should_run_transaction_completion_callbacks_in_reverse_registration_order()
+        {
+            using var container = CreateContainer(Mock.Of<ISessionFactory>());
+            using var scope = container.BeginLifetimeScope();
+            using var uow = new UnitOfWork(NullLogger<UnitOfWork>.Instance, Mock.Of<IWorkspaceContextAccessor>(), scope);
+            var callbackOrder = new List<int>();
+            uow.OnCompleted(_ => callbackOrder.Add(1));
+            uow.OnCompleted(_ => callbackOrder.Add(2));
+            uow.AcceptChanges();
+
+            uow.Complete();
+
+            Assert.That(callbackOrder, Is.EqualTo(new[] { 2, 1 }));
+        }
+
         [TestCase("commit")]
         [TestCase("transaction-dispose")]
         [TestCase("session-dispose")]
@@ -72,13 +89,19 @@ namespace WB.Tests.Unit.Infrastructure
             Mock<ISession> CreateSession()
             {
                 var tx = new Mock<ITransaction>();
-                tx.SetupGet(t => t.IsActive).Returns(true);
+                var isActive = true;
+                tx.SetupGet(t => t.IsActive).Returns(() => isActive);
                 tx.Setup(t => t.Commit()).Callback(() =>
                 {
                     commits++;
                     if (failureStage == "commit") throw error;
+                    isActive = false;
                 });
-                tx.Setup(t => t.Rollback()).Callback(() => rollbacks++);
+                tx.Setup(t => t.Rollback()).Callback(() =>
+                {
+                    rollbacks++;
+                    isActive = false;
+                });
                 tx.Setup(t => t.Dispose()).Callback(() =>
                 {
                     if (++transactionDisposals == 1 && failureStage == "transaction-dispose") throw error;
@@ -105,8 +128,8 @@ namespace WB.Tests.Unit.Infrastructure
             uow.AcceptChanges();
 
             Assert.That(Assert.Throws<InvalidOperationException>(() => uow.Dispose()), Is.SameAs(error));
-            Assert.That(commits, Is.EqualTo(1));
-            Assert.That(rollbacks, Is.EqualTo(1));
+            Assert.That(commits, Is.EqualTo(failureStage == "commit" ? 1 : 2));
+            Assert.That(rollbacks, Is.EqualTo(failureStage == "commit" ? 2 : 0));
             Assert.That(transactionDisposals, Is.EqualTo(2));
             Assert.That(sessionDisposals, Is.EqualTo(2));
             Assert.DoesNotThrow(() => uow.Dispose());
@@ -157,4 +180,3 @@ namespace WB.Tests.Unit.Infrastructure
         }
     }
 }
-

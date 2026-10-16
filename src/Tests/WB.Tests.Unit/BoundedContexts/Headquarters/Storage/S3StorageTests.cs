@@ -121,6 +121,33 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
         }
 
         [Test]
+        public async Task should_list_all_pages()
+        {
+            var continuationTokens = new List<string>();
+            client.Setup(c => c.ListObjectsV2Async(It.IsAny<ListObjectsV2Request>(), It.IsAny<CancellationToken>()))
+                .Returns((ListObjectsV2Request request, CancellationToken _) =>
+                {
+                    continuationTokens.Add(request.ContinuationToken);
+                    return Task.FromResult(continuationTokens.Count == 1
+                        ? new ListObjectsV2Response
+                        {
+                            IsTruncated = true,
+                            NextContinuationToken = "next",
+                            S3Objects = new List<S3Object> { new() { Key = bucketInfo.PathTo("/one") } }
+                        }
+                        : new ListObjectsV2Response
+                        {
+                            S3Objects = new List<S3Object> { new() { Key = bucketInfo.PathTo("/two") } }
+                        });
+                });
+
+            var result = await storage.ListAsync("maps/");
+
+            Assert.That(result, Has.Count.EqualTo(2));
+            Assert.That(continuationTokens, Is.EqualTo(new string[] { null, "next" }));
+        }
+
+        [Test]
         public void should_provide_proper_prefix_to_key_when_get_direct_link()
         {
             client.Setup(c => c.GetPreSignedURL(It.IsAny<GetPreSignedUrlRequest>()))
