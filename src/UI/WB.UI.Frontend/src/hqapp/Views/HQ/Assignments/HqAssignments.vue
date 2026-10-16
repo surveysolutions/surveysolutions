@@ -84,6 +84,14 @@
                         :value="status"
                         v-on:selected="statusSelected" />
                 </FilterBlock>
+
+                <template v-slot:additional>
+                    <InterviewFilter
+                        :questionnaireId="questionnaireId ? questionnaireId.key : null"
+                        :questionnaireVersion="questionnaireVersion ? questionnaireVersion.key : null"
+                        :value="conditions"
+                        @change="questionFilterChanged" />
+                </template>
             </Filters>
         </template>
 
@@ -404,12 +412,48 @@ import DOMPurify from 'dompurify'
 const sanitizeHtml = text => DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
 
 import { Form, Field, ErrorMessage } from 'vee-validate'
+import InterviewFilter from '../Interviews/InterviewQuestionsFilters'
+
+/**
+ * Serialize conditions array to query string format:
+ * [{variable, field, value}] => ["variable,field,jsonValue"]
+ */
+function conditionToQueryString(conditions) {
+    const result = []
+    conditions.forEach((c) => {
+        result.push(`${c.variable},${c.field},${JSON.stringify(c.value)}`)
+    })
+    return result.length > 0 ? result : null
+}
+
+/**
+ * Deserialize conditions from query string format:
+ * ["variable,field,jsonValue"] => [{variable, field, value}]
+ */
+function queryStringToCondition(queryStringArray) {
+    const result = []
+    queryStringArray.forEach((q) => {
+        const parts = q.split(',')
+        const value = parts.slice(2).join(',')
+        try {
+            result.push({
+                variable: parts[0],
+                field: parts[1],
+                value: JSON.parse(value),
+            })
+        } catch {
+            // skip malformed condition
+        }
+    })
+    return result
+}
 
 export default {
     components: {
         Field,
         Form,
         ErrorMessage,
+        InterviewFilter,
     },
     data() {
         return {
@@ -436,6 +480,7 @@ export default {
             statusChangeIds: [],
             statusChangeTargetStatus: null,
             statusChangeComment: null,
+            conditions: [],
         }
     },
 
@@ -772,6 +817,9 @@ export default {
             requestData.teamId = this.teamId
             requestData.id = this.id
             requestData.status = (this.status || {}).key
+            if (this.conditions && this.conditions.length > 0) {
+                requestData.conditions = conditionToQueryString(this.conditions)
+            }
         },
 
         userSelected(newValue) {
@@ -781,6 +829,7 @@ export default {
         questionnaireSelected(newValue) {
             this.questionnaireId = newValue
             this.questionnaireVersionSelected(null)
+            this.conditions = []
         },
 
         questionnaireVersionSelected(newValue) {
@@ -797,6 +846,11 @@ export default {
 
         statusSelected(newValue) {
             this.status = newValue
+        },
+
+        questionFilterChanged(conditions) {
+            this.conditions = conditions
+            this.reloadTable()
         },
 
         showArchiveSelected(newValue) {
@@ -835,6 +889,11 @@ export default {
             if (this.receivedByTablet != null) queryString.receivedByTablet = this.receivedByTablet.key
             if (this.teamId) queryString.teamId = this.teamId
             if (this.id) queryString.id = this.id
+
+            const conditionStrings = conditionToQueryString(this.conditions)
+            if (conditionStrings != null) {
+                queryString.conditions = conditionStrings
+            }
 
             if (!isEqual(this.$route.query, queryString)) {
                 this.$router.push({ query: queryString }).catch(() => { })
@@ -1087,6 +1146,13 @@ export default {
         this.userRole = this.$route.query.userRole
         this.teamId = this.$route.query.teamId
         this.id = this.$route.query.id
+
+        if (this.$route.query.conditions) {
+            const conditionsRaw = Array.isArray(this.$route.query.conditions)
+                ? this.$route.query.conditions
+                : [this.$route.query.conditions]
+            this.conditions = queryStringToCondition(conditionsRaw)
+        }
 
         this.receivedByTabletSelected(this.ddlReceivedByTablet[0])
         this.statusSelected(this.ddlStatus[0])
