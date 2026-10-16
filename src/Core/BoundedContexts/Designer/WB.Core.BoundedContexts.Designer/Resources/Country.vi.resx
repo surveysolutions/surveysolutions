@@ -209,7 +209,7 @@
         <value>Comoros</value>
         </data>
     <data name="CPV" xml:space="preserve">
-        <value>Cộng hòa Cabo Verde</value>
+        <value>Cabo Verde</value>
         </data>
     <data name="CRI" xml:space="preserve">
         <value>Costa Rica</value>
@@ -227,7 +227,7 @@
         <value>Síp</value>
         </data>
     <data name="CZE" xml:space="preserve">
-        <value>Cộng hòa Séc</value>
+        <value>Séc</value>
         </data>
     <data name="DEU" xml:space="preserve">
         <value>nước Đức</value>
@@ -488,7 +488,7 @@
         <value>Đảo Marshall.</value>
         </data>
     <data name="MKD" xml:space="preserve">
-        <value>Macedonia, FYR</value>
+        <value>Bắc Macedonia</value>
         </data>
     <data name="MLI" xml:space="preserve">
         <value>Mali</value>
@@ -662,7 +662,7 @@
         <value>San Marino</value>
         </data>
     <data name="SOM" xml:space="preserve">
-        <value>Somali</value>
+        <value>Cộng hòa Liên bang Somalia</value>
         </data>
     <data name="SPM" xml:space="preserve">
         <value>Thánh Pierre và Miquelon</value>
@@ -689,7 +689,7 @@
         <value>Thụy Điển</value>
         </data>
     <data name="SWZ" xml:space="preserve">
-        <value>Swaziland</value>
+        <value>Eswatini</value>
         </data>
     <data name="SYC" xml:space="preserve">
         <value>Seychelles</value>
