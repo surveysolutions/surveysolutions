@@ -41,6 +41,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
         private IServiceScope requestScope;
         private IRequestExecutor executor;
         private UnitOfWork unitOfWork;
+        private IUnitOfWorkCompletion completionUsedByCommandLock;
         private ICommandService commandService;
         private CommandExecutionObservation commandExecution;
         private Mock<ISession> session;
@@ -51,6 +52,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
         public async Task SetUp()
         {
             fieldsExecuted = 0;
+            completionUsedByCommandLock = null;
             transaction = CreateTransaction();
             session = new Mock<ISession>();
             session.SetupSequence(x => x.BeginTransaction(IsolationLevel.ReadCommitted))
@@ -70,6 +72,9 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterInstance(sessionFactory.Object).As<ISessionFactory>();
             containerBuilder.RegisterInstance(Mock.Of<IWorkspaceContextAccessor>()).As<IWorkspaceContextAccessor>();
+            containerBuilder.RegisterInstance(Mock.Of<IUnitOfWork>())
+                .As<IUnitOfWork>()
+                .As<IUnitOfWorkCompletion>();
             containerBuilder.RegisterInstance(commandExecution);
             containerBuilder.RegisterType<CalendarCommandExecutor>().As<ICommandExecutor>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<UnitOfWorkInScopeExecutor>().As<IInScopeExecutor>().InstancePerLifetimeScope();
@@ -81,7 +86,11 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
             var aggregateLock = new Mock<IAggregateLock>();
             aggregateLock.Setup(x => x.RunWithLock(
                     It.IsAny<string>(), It.IsAny<IUnitOfWorkCompletion>(), It.IsAny<Action>()))
-                .Callback<string, IUnitOfWorkCompletion, Action>((_, _, action) => action());
+                .Callback<string, IUnitOfWorkCompletion, Action>((_, completion, action) =>
+                {
+                    completionUsedByCommandLock = completion;
+                    action();
+                });
             commandService = new CommandService(new AutofacServiceLocatorAdapter(container), aggregateLock.Object);
 
             var serviceCollection = new ServiceCollection();
@@ -227,6 +236,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
             Assert.That(commandExecution.Command, Is.TypeOf<CreateCalendarEventCommand>());
             Assert.That(commandExecution.UnitOfWork, Is.SameAs(unitOfWork));
             Assert.That(commandExecution.Session, Is.SameAs(session.Object));
+            Assert.That(completionUsedByCommandLock, Is.SameAs(unitOfWork));
             transaction.Verify(x => x.Commit(), Times.Never);
             transaction.Verify(x => x.Rollback(), Times.Once);
         }

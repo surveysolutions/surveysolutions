@@ -90,8 +90,9 @@ namespace WB.Tests.Unit.Infrastructure
             var serviceLocator = new Mock<IServiceLocator>();
             serviceLocator.Setup(locator => locator.GetInstance(typeof(CalendarEvent))).Returns(aggregate);
             var unitOfWork = NewCompletion(out var completed);
+            var inheritedUnitOfWork = new Mock<IUnitOfWorkCompletion>();
             serviceLocator.Setup(locator => locator.GetAllInstances<IUnitOfWorkCompletion>())
-                .Returns(new[] { unitOfWork });
+                .Returns(new[] { inheritedUnitOfWork.Object, unitOfWork });
 
             var eventBus = new Mock<ILiteEventBus>();
             eventBus.Setup(bus => bus.CommitUncommittedEvents(aggregate, It.IsAny<string>()))
@@ -112,6 +113,7 @@ namespace WB.Tests.Unit.Infrastructure
             executor.ExecuteCommand(command, "test", CancellationToken.None, aggregateId);
 
             Assert.That(cache.GetAggregateRoot(aggregateId), Is.SameAs(aggregate));
+            inheritedUnitOfWork.Verify(x => x.OnCompleted(It.IsAny<Action<bool>>()), Times.Never);
             completed(false);
             Assert.That(cache.GetAggregateRoot(aggregateId), Is.Null);
         }

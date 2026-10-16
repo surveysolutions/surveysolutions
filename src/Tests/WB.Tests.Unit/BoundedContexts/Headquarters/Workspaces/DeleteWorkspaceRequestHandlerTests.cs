@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -57,13 +58,16 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
                 this.workspaces.Query(_ => _.Select(w => w.AsContext())
                 .ToList()));
 
-            var executor = new NoScopeInScopeExecutor<IMapStorageService, IWorkspacesService>(
-                mapStorage.Object, workspaceService.Object);
+            var executor = new Mock<IInScopeExecutor<IMapStorageService, IWorkspacesService>>();
+            executor.Setup(x => x.ExecuteAsync(
+                    It.IsAny<Func<IMapStorageService, IWorkspacesService, Task>>(), It.IsAny<string>()))
+                .Returns((Func<IMapStorageService, IWorkspacesService, Task> action, string _) =>
+                    action(mapStorage.Object, workspaceService.Object));
 
             Subject = new DeleteWorkspaceRequestHandler(
                  cache.Object,
                  questionnaireViewFactory.Object.AsNoScopeExecutor(),
-                 executor,
+                 executor.Object,
                  exportApi.Object.AsNoScopeExecutor(),
                  binaryDataStorage.Object.AsNoScopeExecutor(),
                  scheduler.Object, Mock.Of<ISystemLog>());
@@ -113,6 +117,20 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Workspaces
             mapStorage.Verify(m => m.DeleteAllMaps(), Times.Once);
 
             Assert.That(response, Has.Property(nameof(DeleteWorkspaceResponse.Success)).True);
+        }
+
+        [Test]
+        public void should_not_remove_workspace_when_map_deletion_fails()
+        {
+            var failure = new InvalidOperationException("Map deletion failed");
+            mapStorage.Setup(m => m.DeleteAllMaps()).ThrowsAsync(failure);
+
+            var exception = Assert.ThrowsAsync<InvalidOperationException>(
+                () => Subject.Handle(new DeleteWorkspaceRequest(Workspace.Name)));
+
+            Assert.That(exception, Is.SameAs(failure));
+            workspaceService.Verify(s => s.Delete(It.IsAny<WorkspaceContext>()), Times.Never);
+            scheduler.Verify(s => s.Schedule(It.IsAny<DeleteWorkspaceJobData>()), Times.Never);
         }
 
         [Test]

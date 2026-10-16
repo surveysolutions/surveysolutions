@@ -152,7 +152,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
                 return;
 
             var unitOfWork = serviceLocator.GetAllInstances<WB.Core.Infrastructure.Domain.IUnitOfWorkCompletion>()
-                ?.FirstOrDefault();
+                ?.LastOrDefault();
             unitOfWork?.OnCompleted(committed =>
             {
                 if (!committed)

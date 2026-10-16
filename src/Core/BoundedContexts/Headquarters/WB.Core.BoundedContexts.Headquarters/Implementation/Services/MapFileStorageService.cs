@@ -499,10 +499,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         private async Task CleanupOrphanedMapFileAsync(string storageKey)
         {
-            var prefix = GetWorkspaceStorageKeyPrefix();
-            if (storageKey == null
-                || !storageKey.StartsWith(prefix, StringComparison.Ordinal)
-                || !Guid.TryParseExact(storageKey[prefix.Length..], "N", out _))
+            if (!IsWorkspaceGenerationStorageKey(storageKey))
                 return;
 
             try
@@ -513,6 +510,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             {
                 logger.LogError(exception, "Failed to clean up unreferenced map file {StorageKey}", storageKey);
             }
+        }
+
+        private bool IsWorkspaceGenerationStorageKey(string storageKey)
+        {
+            var prefix = GetWorkspaceStorageKeyPrefix();
+            return storageKey != null
+                   && storageKey.StartsWith(prefix, StringComparison.Ordinal)
+                   && Guid.TryParseExact(storageKey[prefix.Length..], "N", out _);
         }
 
         private string CreateStorageKey()
@@ -551,13 +556,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.logger.LogWarning("Deleting all maps execution started");
             var maps = await this.mapPlainStorageAccessor.Query(m => m.ToListAsync());
             var pendingDeletions = await this.mapFileDeletionRequests.Query(m => m.ToListAsync());
+            var externalStorageEnabled = externalFileStorage.IsEnabled();
+            var localGenerationKeys = fileSystemAccessor.GetFilesInDirectory(mapsFolderPath)
+                .Select(fileSystemAccessor.GetFileName)
+                .Where(IsWorkspaceGenerationStorageKey)
+                .ToArray();
             var fileNames = maps.Select(GetStorageKey)
                 .Concat(pendingDeletions.Select(request => request.StorageKey ?? request.FileName))
+                .Concat(externalStorageEnabled ? Array.Empty<string>() : localGenerationKeys)
                 .Distinct()
                 .ToArray();
 
             foreach (var fileName in fileNames)
                 await RemoveMapFileAsync(fileName);
+
+            if (externalStorageEnabled)
+            {
+                foreach (var fileName in localGenerationKeys)
+                {
+                    var filePath = fileSystemAccessor.CombinePath(mapsFolderPath, fileName);
+                    if (fileSystemAccessor.IsFileExists(filePath))
+                        fileSystemAccessor.DeleteFile(filePath);
+                }
+            }
 
             foreach (var map in maps)
             {

@@ -131,7 +131,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             {
                 var execute = () => locator.GetInstance<ICommandExecutor>()
                     .ExecuteCommand(command, origin, cancellationToken, aggregateId);
-                var unitOfWork = locator.GetAllInstances<IUnitOfWorkCompletion>()?.FirstOrDefault();
+                var unitOfWork = locator.GetAllInstances<IUnitOfWorkCompletion>()?.LastOrDefault();
                 if (unitOfWork == null)
                     aggregateLock.RunWithLock(aggregateId.FormatGuid(), execute);
                 else

@@ -352,6 +352,52 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
         }
 
         [Test]
+        public async Task DeleteAllMaps_should_remove_local_generations_for_the_current_workspace()
+        {
+            var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(tempBase);
+            try
+            {
+                var encodedName = Convert.ToBase64String(Encoding.UTF8.GetBytes("primary"))
+                    .TrimEnd('=').Replace('+', '-').Replace('/', '_');
+                var otherEncodedName = Convert.ToBase64String(Encoding.UTF8.GetBytes("other"))
+                    .TrimEnd('=').Replace('+', '-').Replace('/', '_');
+                var workspaceKey = $"g_{encodedName}_{Guid.NewGuid():N}";
+                var otherWorkspaceKey = $"g_{otherEncodedName}_{Guid.NewGuid():N}";
+                var invalidWorkspaceKey = $"g_{encodedName}_not-a-guid";
+                var mapsStorage = new Mock<IPlainStorageAccessor<MapBrowseItem>>();
+                mapsStorage.Setup(x => x.Query(
+                        It.IsAny<Func<IQueryable<MapBrowseItem>, Task<List<MapBrowseItem>>>>()))
+                    .Returns(Task.FromResult(new List<MapBrowseItem>()));
+                var deletionRequests = new Mock<IPlainStorageAccessor<MapFileDeletionRequest>>();
+                deletionRequests.Setup(x => x.Query(
+                        It.IsAny<Func<IQueryable<MapFileDeletionRequest>, Task<List<MapFileDeletionRequest>>>>()))
+                    .Returns(Task.FromResult(new List<MapFileDeletionRequest>()));
+                var service = Create.Service.MapFileStorageService(
+                    mapsStorage: mapsStorage.Object,
+                    mapFileDeletionRequests: deletionRequests.Object,
+                    fileStorageConfig: Options.Create(new FileStorageConfig { TempData = tempBase }));
+                var mapsDirectory = Path.Combine(tempBase, "MapsData");
+                var workspacePath = Path.Combine(mapsDirectory, workspaceKey);
+                var otherWorkspacePath = Path.Combine(mapsDirectory, otherWorkspaceKey);
+                var invalidWorkspacePath = Path.Combine(mapsDirectory, invalidWorkspaceKey);
+                File.WriteAllText(workspacePath, "orphan");
+                File.WriteAllText(otherWorkspacePath, "other workspace");
+                File.WriteAllText(invalidWorkspacePath, "invalid generation");
+
+                await service.DeleteAllMaps();
+
+                Assert.That(File.Exists(workspacePath), Is.False);
+                Assert.That(File.Exists(otherWorkspacePath), Is.True);
+                Assert.That(File.Exists(invalidWorkspacePath), Is.True);
+            }
+            finally
+            {
+                Directory.Delete(tempBase, true);
+            }
+        }
+
+        [Test]
         public async Task SaveOrUpdateMapAsync_should_store_replacement_under_a_new_generation()
         {
             var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
