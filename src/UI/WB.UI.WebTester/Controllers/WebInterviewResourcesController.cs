@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SixLabors.ImageSharp;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Shared.Web.Modules;
@@ -66,12 +67,20 @@ namespace WB.UI.WebTester.Controllers
             if (attachment.Content.IsImage())
             {
                 var fullSize = GetQueryStringValue("fullSize") != null;
+                var content = attachment.Content.Content;
 
-                var resultFile = fullSize
-                    ? attachment.Content.Content
-                    : this.imageProcessingService.ResizeImage(attachment.Content.Content, thumbSize, 1920);
+                if (fullSize)
+                {
+                    var contentType = GetSupportedImageContentType(content);
+                    return contentType == null
+                        ? DownloadBinaryFile(content, contentId)
+                        : this.BinaryResponseMessageWithEtag(content, contentType);
+                }
 
-                return this.BinaryResponseMessageWithEtag(resultFile);
+                var thumbnail = TryResizeImage(content, thumbSize);
+                return thumbnail == null
+                    ? DownloadBinaryFile(content, contentId)
+                    : this.BinaryResponseMessageWithEtag(thumbnail, "image/png");
             }
 
             MemoryStream stream = new MemoryStream(attachment.Content.Content);
@@ -97,11 +106,18 @@ namespace WB.UI.WebTester.Controllers
                 return NoContent();
 
             var fullSize = GetQueryStringValue("fullSize") != null;
-            var resultFile = fullSize
-                ? file!.Data
-                : this.imageProcessingService.ResizeImage(file!.Data, 200, 1920);
-            
-            return this.BinaryResponseMessageWithEtag(resultFile);
+            if (fullSize)
+            {
+                var contentType = GetSupportedImageContentType(file!.Data);
+                return contentType == null
+                    ? DownloadBinaryFile(file.Data, file.Filename)
+                    : this.BinaryResponseMessageWithEtag(file.Data, contentType);
+            }
+
+            var thumbnail = TryResizeImage(file!.Data, 200);
+            return thumbnail == null
+                ? DownloadBinaryFile(file.Data, file.Filename)
+                : this.BinaryResponseMessageWithEtag(thumbnail, "image/png");
         }
 
         [HttpGet]
@@ -145,6 +161,37 @@ namespace WB.UI.WebTester.Controllers
         {
             return (this.Request.Query.Where(query => query.Key == key).Select(query => query.Value))
                 .FirstOrDefault();
+        }
+
+        private byte[]? TryResizeImage(byte[] content, int height)
+        {
+            try
+            {
+                return this.imageProcessingService.ResizeImage(content, height, 1920);
+            }
+            catch (Exception exception) when (exception is ImageFormatException || exception is NotSupportedException)
+            {
+                return null;
+            }
+        }
+
+        private string? GetSupportedImageContentType(byte[] content)
+        {
+            try
+            {
+                this.imageProcessingService.Validate(content);
+                return SixLabors.ImageSharp.Image.DetectFormat(content)?.DefaultMimeType;
+            }
+            catch (Exception exception) when (exception is ImageFormatException || exception is NotSupportedException)
+            {
+                return null;
+            }
+        }
+
+        private FileContentResult DownloadBinaryFile(byte[] content, string fileName)
+        {
+            this.Response.Headers["X-Content-Type-Options"] = "nosniff";
+            return File(content, "application/octet-stream", fileName);
         }
     }
 }
