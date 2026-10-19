@@ -332,37 +332,59 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
         private void WriteFooterToAllPages(Document document, IQuestionnaire questionnaire, IStatefulInterview interview)
         {
+            var interviewKey = interview.GetInterviewKey().ToString();
+
             foreach (var section in document.Sections.OfType<Section>())
-            {
-                //section.Footers.Primary.Format.SpaceAfter = Unit.FromPoint(10);
-                //section.Footers.Primary.Format. SpaceBefore = Unit.FromPoint(10);
-                section.Footers.Primary.Format.LeftIndent = Unit.FromPoint(0);
-                section.Footers.Primary.Format.RightIndent = Unit.FromPoint(0);
-                section.Footers.Primary.Format.Borders.Top = new Border()
-                {
-                    Style = BorderStyle.DashLargeGap,
-                    Width = Unit.FromPoint(1)
-                };
-                
-                var pageSetup = section.PageSetup;
-                PageSetup.GetPageSize(pageSetup.PageFormat, out var pageWidth, out _);
-                var contentWidth = pageWidth.Point - pageSetup.LeftMargin.Point - pageSetup.RightMargin.Point;
+                WriteFooter(section, questionnaire.Title, interviewKey);
+        }
 
-                // page number, questionnaire title and interview key are printed in one line
-                Paragraph footer = section.Footers.Primary.AddParagraph();
-                footer.Format.Font.Size = Unit.FromPoint(6);
-                footer.Format.Alignment = ParagraphAlignment.Left;
-                footer.Format.TabStops.AddTabStop(Unit.FromPoint(contentWidth / 2), TabAlignment.Center);
-                footer.Format.TabStops.AddTabStop(Unit.FromPoint(contentWidth), TabAlignment.Right);
+        internal static void WriteFooter(Section section, string? questionnaireTitle, string interviewKey)
+        {
+            var pageSetup = section.PageSetup;
+            PageSetup.GetPageSize(pageSetup.PageFormat, out var pageWidth, out _);
+            var contentWidth = pageWidth.Point - pageSetup.LeftMargin.Point - pageSetup.RightMargin.Point;
 
-                footer.AddPageField();
-                footer.AddText(PdfInterviewRes.PageOf);
-                footer.AddNumPagesField();
-                footer.AddTab();
-                footer.AddText(questionnaire.Title);
-                footer.AddTab();
-                footer.AddText(interview.GetInterviewKey().ToString());
-            }
+            // columns have fixed widths, so a long title is wrapped inside its column and does not move page number and key
+            var table = section.Footers.Primary.AddTable();
+            table.Format.Font.Size = Unit.FromPoint(6);
+            table.LeftPadding = Unit.FromPoint(0);
+            table.RightPadding = Unit.FromPoint(0);
+            table.Borders.Top.Style = BorderStyle.DashLargeGap;
+            table.Borders.Top.Width = Unit.FromPoint(1);
+            table.AddColumn(Unit.FromPoint(FooterSideColumnWidth));
+            table.AddColumn(Unit.FromPoint(contentWidth - 2 * FooterSideColumnWidth));
+            table.AddColumn(Unit.FromPoint(FooterSideColumnWidth));
+            var row = table.AddRow();
+
+            Paragraph pageNumber = row.Cells[0].AddParagraph();
+            pageNumber.Format.Alignment = ParagraphAlignment.Left;
+            pageNumber.AddPageField();
+            pageNumber.AddText(PdfInterviewRes.PageOf);
+            pageNumber.AddNumPagesField();
+
+            Paragraph centerFooter = row.Cells[1].AddParagraph();
+            centerFooter.Format.Alignment = ParagraphAlignment.Center;
+            centerFooter.AddText(ShortenFooterTitle(questionnaireTitle));
+
+            Paragraph rightFooter = row.Cells[2].AddParagraph();
+            rightFooter.Format.Alignment = ParagraphAlignment.Right;
+            rightFooter.AddText(interviewKey);
+        }
+
+        // footer must fit the bottom margin of the page and not touch the body, titles can be up to 2000 characters long
+        internal const int FooterTitleMaxLength = 150;
+        private const double FooterSideColumnWidth = 70;
+
+        internal static string ShortenFooterTitle(string? title)
+        {
+            if (title == null || title.Length <= FooterTitleMaxLength)
+                return title ?? string.Empty;
+
+            var length = FooterTitleMaxLength - 1;
+            if (char.IsHighSurrogate(title[length - 1]))
+                length--;
+
+            return title[..length].TrimEnd() + "…";
         }
 
         private void WritePageOfContentRecord(Paragraph paragraph, string text)
