@@ -12,12 +12,32 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
     /// <summary>
     /// Resolves TrueType fonts installed in the system (or shipped with the product) for PDFsharp.
     /// Font family could be a comma separated list, the first installed family is used.
+    /// Among faces of a family the one with the closest weight is used (400 for regular, 700 for bold),
+    /// faces with a non-normal width (condensed, expanded) are ignored while there are faces with a normal width.
     /// </summary>
     public class PdfInterviewFontResolver : IFontResolver
     {
         private static readonly string[] DefaultFamilies = { "Arial", "Noto Sans", "DejaVu Sans" };
 
-        private readonly Lazy<Dictionary<(string family, bool bold, bool italic), string>> fonts;
+        // PDFsharp can not use CFF based OpenType fonts, true type collections are split to separate faces
+        private static readonly string[] FontExtensions = { ".ttf", ".ttc" };
+
+        private const int RegularWeight = (int)SKFontStyleWeight.Normal;
+        private const int BoldWeight = (int)SKFontStyleWeight.Bold;
+        private const int MaxFacesInCollection = 256;
+
+        private sealed record FontFace(
+            string FaceName,
+            string Path,
+            int CollectionIndex,
+            bool IsCollection,
+            string Family,
+            int Weight,
+            int Width,
+            bool Italic);
+
+        private readonly Lazy<List<FontFace>> faces;
+        private readonly Lazy<Dictionary<string, FontFace>> facesByName;
 
         public PdfInterviewFontResolver() : this(GetSystemFontDirectories())
         {
@@ -25,7 +45,8 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
         public PdfInterviewFontResolver(IEnumerable<string> fontDirectories)
         {
-            fonts = new Lazy<Dictionary<(string, bool, bool), string>>(() => ScanFonts(fontDirectories.ToList()));
+            faces = new Lazy<List<FontFace>>(() => ScanFonts(fontDirectories.ToList()));
+            facesByName = new Lazy<Dictionary<string, FontFace>>(() => faces.Value.ToDictionary(face => face.FaceName));
         }
 
         public FontResolverInfo? ResolveTypeface(string familyName, bool isBold, bool isItalic)
@@ -44,48 +65,85 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                     return info;
             }
 
-            var any = fonts.Value.FirstOrDefault();
-            return any.Value == null
+            var any = faces.Value.FirstOrDefault();
+            return any == null
                 ? null
-                : ResolveFamily(any.Key.family, isBold, isItalic) ?? new FontResolverInfo(any.Value);
+                : ResolveFamily(any.Family, isBold, isItalic) ?? new FontResolverInfo(any.FaceName);
         }
 
-        public byte[]? GetFont(string faceName) => File.ReadAllBytes(faceName);
+        public byte[]? GetFont(string faceName)
+        {
+            // only faces found by the resolver are served, any other path must not be read
+            if (!facesByName.Value.TryGetValue(faceName, out var face))
+                return null;
+
+            return face.IsCollection
+                ? FontFileExtractor.ExtractFace(face.Path, face.CollectionIndex)
+                : File.ReadAllBytes(face.Path);
+        }
 
         private FontResolverInfo? ResolveFamily(string family, bool isBold, bool isItalic)
         {
             if (string.IsNullOrWhiteSpace(family))
                 return null;
 
-            var key = family.ToLowerInvariant();
+            var candidates = faces.Value
+                .Where(face => string.Equals(face.Family, family, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+            if (candidates.Count == 0)
+                return null;
 
-            if (fonts.Value.TryGetValue((key, isBold, isItalic), out var exact))
-                return new FontResolverInfo(exact);
+            // condensed or expanded faces have the same family name, but must not replace the normal ones
+            var normalWidth = candidates.Where(face => face.Width == (int)SKFontStyleWidth.Normal).ToList();
+            if (normalWidth.Count > 0)
+                candidates = normalWidth;
+
+            // sorting is stable: faces with equal style stay in the order of the font directories and file names
+            var best = candidates
+                .OrderBy(face => WeightRank(face.Weight, isBold))
+                .ThenBy(face => face.Italic == isItalic ? 0 : 1)
+                .First();
 
             // requested style is not installed, closest available face is used with simulated style
-            foreach (var (bold, italic) in new[] { (isBold, false), (false, isItalic), (false, false) })
-            {
-                if (fonts.Value.TryGetValue((key, bold, italic), out var fallback))
-                    return new FontResolverInfo(fallback, isBold && !bold, isItalic && !italic);
-            }
-
-            return null;
+            return new FontResolverInfo(best.FaceName,
+                isBold && best.Weight < (int)SKFontStyleWeight.SemiBold,
+                isItalic && !best.Italic);
         }
 
-        private static Dictionary<(string family, bool bold, bool italic), string> ScanFonts(List<string> fontDirectories)
+        /// <summary>
+        /// Orders weights by closeness to the requested one, in the way css does it:
+        /// for regular 400, then 500, then lighter ones, then heavier ones; for bold 700 or heavier, then lighter ones.
+        /// </summary>
+        private static int WeightRank(int weight, bool isBold)
         {
-            var result = new Dictionary<(string, bool, bool), string>();
+            if (isBold)
+                return weight >= BoldWeight ? weight - BoldWeight : 10_000 + (BoldWeight - weight);
+
+            if (weight is >= RegularWeight and <= (int)SKFontStyleWeight.Medium)
+                return weight - RegularWeight;
+
+            return weight < RegularWeight ? 10_000 + (RegularWeight - weight) : 20_000 + weight;
+        }
+
+        private static List<FontFace> ScanFonts(List<string> fontDirectories)
+        {
+            var result = new List<FontFace>();
+            var foundFaces = new HashSet<string>();
 
             foreach (var directory in fontDirectories.Where(Directory.Exists))
             {
-                IEnumerable<string> files;
+                List<string> files;
                 try
                 {
-                    files = Directory.EnumerateFiles(directory, "*.ttf", new EnumerationOptions
+                    // extension is compared here and not by a search pattern, because the pattern is case sensitive on Linux
+                    files = Directory.EnumerateFiles(directory, "*", new EnumerationOptions
                     {
                         RecurseSubdirectories = true,
                         IgnoreInaccessible = true
-                    }).ToList();
+                    })
+                    .Where(file => FontExtensions.Contains(Path.GetExtension(file), StringComparer.OrdinalIgnoreCase))
+                    .OrderBy(file => file, StringComparer.Ordinal)
+                    .ToList();
                 }
                 catch (Exception e) when (e is IOException or UnauthorizedAccessException)
                 {
@@ -94,19 +152,40 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
                 foreach (var file in files)
                 {
-                    using var typeface = SKTypeface.FromFile(file);
-                    if (typeface == null)
-                        continue;
-
-                    var key = (typeface.FamilyName.ToLowerInvariant(),
-                        typeface.FontWeight >= (int)SKFontStyleWeight.SemiBold,
-                        typeface.FontSlant != SKFontStyleSlant.Upright);
-
-                    result.TryAdd(key, file);
+                    foreach (var face in ReadFaces(file))
+                    {
+                        if (foundFaces.Add(face.FaceName))
+                            result.Add(face);
+                    }
                 }
             }
 
             return result;
+        }
+
+        private static IEnumerable<FontFace> ReadFaces(string file)
+        {
+            var isCollection = string.Equals(Path.GetExtension(file), ".ttc", StringComparison.OrdinalIgnoreCase);
+            var count = isCollection ? FontFileExtractor.GetCollectionSize(file) : 1;
+
+            for (var index = 0; index < Math.Min(count, MaxFacesInCollection); index++)
+            {
+                using var typeface = SKTypeface.FromFile(file, index);
+
+                // PDFsharp can use only fonts with true type outlines
+                if (typeface == null || !FontFileExtractor.HasTrueTypeOutlines(typeface))
+                    continue;
+
+                yield return new FontFace(
+                    isCollection ? $"{file}#{index}" : file,
+                    file,
+                    index,
+                    isCollection,
+                    typeface.FamilyName,
+                    typeface.FontWeight,
+                    typeface.FontWidth,
+                    typeface.FontSlant != SKFontStyleSlant.Upright);
+            }
         }
 
         private static IEnumerable<string> GetSystemFontDirectories()
