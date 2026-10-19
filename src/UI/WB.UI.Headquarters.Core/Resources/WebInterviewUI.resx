@@ -511,6 +511,9 @@ Contact support for assistance.</value>
   <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
     <value>Additional question information</value>
   </data>
+  <data name="ImageFormatNotSupported" xml:space="preserve">
+    <value>The image format is not supported by your browser.</value>
+  </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>Multimedia playback is not supported by your browser. You can download it instead.</value>
   </data>
@@ -610,5 +613,11 @@ Contact support for assistance.</value>
   </data>
   <data name="CompleteReviewSubmitInterview" xml:space="preserve">
       <value>Interview {{key}}</value>
+  </data>
+  <data name="GeographyPreview" xml:space="preserve">
+      <value>Geography preview</value>
+  </data>
+  <data name="RealQuestion_Hint" xml:space="preserve">
+      <value>Tap to enter number</value>
   </data>
 </root>

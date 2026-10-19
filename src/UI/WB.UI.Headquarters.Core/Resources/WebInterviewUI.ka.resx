@@ -552,6 +552,9 @@
     <value>დამატებითი ინფორმაცია კითხვაზე</value>
   </data>
 
+  <data name="ImageFormatNotSupported" xml:space="preserve">
+    <value>სურათის ფორმატს თქვენი ბრაუზერი მხარს არ უჭერს.</value>
+  </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>თქვენი ბრაუზერი არ უჭერს მხარს მულტიმედიის დაკვრას. შეგიძლიათ ამის ნაცვლად ჩამოტვირთოთ.</value>
   </data>
@@ -655,5 +658,11 @@
 
   <data name="Complete_QuestionsWithErrors" xml:space="preserve">
       <value>შეცდომების მქონე კითხვები: {{count}}</value>
+  </data>
+  <data name="GeographyPreview" xml:space="preserve">
+      <value>გეოგრაფიის გადახედვა</value>
+  </data>
+  <data name="RealQuestion_Hint" xml:space="preserve">
+      <value>შეეხეთ რიცხვის შესაყვანად</value>
   </data>
 </root>

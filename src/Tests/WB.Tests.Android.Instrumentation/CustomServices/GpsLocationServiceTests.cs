@@ -1,5 +1,6 @@
 using Android.Locations;
 using Android.OS;
+using AndroidX.Core.Location;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -11,7 +12,7 @@ namespace WB.Tests.Android.Instrumentation.CustomServices
     public class GpsLocationServiceTests
     {
         [Test]
-        public async Task when_acceptable_fix_received_should_capture_coordinates()
+        public void when_acceptable_fix_received_should_capture_coordinates()
         {
             var tcs = new TaskCompletionSource<GpsLocation>(TaskCreationOptions.RunContinuationsAsynchronously);
             ILocationListener listener = new GpsLocationService.SingleShotLocationListener(
@@ -26,7 +27,8 @@ namespace WB.Tests.Android.Instrumentation.CustomServices
 
             listener.OnLocationChanged(androidLocation);
 
-            var gpsLocation = await tcs.Task.WaitAsync(TimeSpan.FromSeconds(1));
+            Assert.That(tcs.Task.IsCompleted, Is.True);
+            var gpsLocation = tcs.Task.Result;
 
             Assert.That(gpsLocation, Is.Not.Null);
             Assert.That(gpsLocation!.Latitude, Is.EqualTo(49.842957d));
@@ -36,7 +38,7 @@ namespace WB.Tests.Android.Instrumentation.CustomServices
         }
 
         [Test]
-        public async Task when_non_gps_coarse_fix_received_in_any_non_mock_mode_should_capture_coordinates_as_fallback()
+        public void when_non_gps_coarse_fix_received_in_any_non_mock_mode_should_capture_coordinates_as_fallback()
         {
             // Mode A (AnyNonMock) accepts WiFi/network/fused fixes, but a fast coarse fix must not be
             // reported immediately as the result — it is retained as a fallback so a subsequent
@@ -57,15 +59,13 @@ namespace WB.Tests.Android.Instrumentation.CustomServices
 
             ((ILocationListener)listener).OnLocationChanged(androidLocation);
 
-            await Task.Yield();
-
             Assert.That(tcs.Task.IsCompleted, Is.False);
             Assert.That(listener.BestFallbackLocation, Is.Null,
                 "A coarse non-GPS fix (250 m) exceeding desired accuracy (10 m) must not be captured as a fallback.");
         }
 
         [Test]
-        public async Task when_accurate_non_gps_fix_received_in_any_non_mock_mode_should_capture_as_fallback()
+        public void when_accurate_non_gps_fix_received_in_any_non_mock_mode_should_capture_as_fallback()
         {
             // A non-GPS fix that meets the desired accuracy should be captured as a fallback.
             var tcs = new TaskCompletionSource<GpsLocation>(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -82,15 +82,13 @@ namespace WB.Tests.Android.Instrumentation.CustomServices
 
             ((ILocationListener)listener).OnLocationChanged(androidLocation);
 
-            await Task.Yield();
-
             Assert.That(tcs.Task.IsCompleted, Is.False);
             Assert.That(listener.BestFallbackLocation, Is.Not.Null);
             Assert.That(listener.BestFallbackLocation!.Provider, Is.EqualTo(LocationManager.NetworkProvider));
         }
 
         [Test]
-        public async Task when_coarse_fix_precedes_accurate_gps_fix_should_report_gps_source()
+        public void when_coarse_fix_precedes_accurate_gps_fix_should_report_gps_source()
         {
             // A fast coarse network fix arrives first, then an accurate GPS fix. The result must show
             // the GPS-provider coordinates, not the earlier coarse network fix.
@@ -114,7 +112,7 @@ namespace WB.Tests.Android.Instrumentation.CustomServices
                 Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
             });
 
-            var gpsLocation = await tcs.Task.WaitAsync(TimeSpan.FromSeconds(1));
+            var gpsLocation = tcs.Task.Result;
 
             Assert.That(gpsLocation, Is.Not.Null);
             Assert.That(gpsLocation!.Provider, Is.EqualTo(LocationManager.GpsProvider));
@@ -157,8 +155,8 @@ namespace WB.Tests.Android.Instrumentation.CustomServices
                 Latitude = 49.842957d,
                 Longitude = 24.031111d,
                 Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-                IsFromMockProvider = true,
             };
+            LocationCompat.SetMock(androidLocation, true);
 
             ((ILocationListener)listener).OnLocationChanged(androidLocation);
 
@@ -167,7 +165,7 @@ namespace WB.Tests.Android.Instrumentation.CustomServices
         }
 
         [Test]
-        public async Task when_cached_fix_from_before_request_received_should_wait_for_current_fix()
+        public void when_cached_fix_from_before_request_received_should_wait_for_current_fix()
         {
             // A provider may deliver a fix cached before the request. Such a fix reports the source
             // that produced it earlier (an older built-in GPS fix) and must not be captured instead of
@@ -186,16 +184,18 @@ namespace WB.Tests.Android.Instrumentation.CustomServices
 
             Assert.That(tcs.Task.IsCompleted, Is.False);
 
-            listener.OnLocationChanged(new Location(LocationManager.GpsProvider)
+            var currentFix = new Location(LocationManager.GpsProvider)
             {
                 Latitude = 49.842957d,
                 Longitude = 24.031111d,
                 Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
                 ElapsedRealtimeNanos = SystemClock.ElapsedRealtimeNanos(),
-                IsFromMockProvider = true,
-            });
+            };
+            LocationCompat.SetMock(currentFix, true);
 
-            var gpsLocation = await tcs.Task.WaitAsync(TimeSpan.FromSeconds(1));
+            listener.OnLocationChanged(currentFix);
+
+            var gpsLocation = tcs.Task.Result;
 
             Assert.That(gpsLocation, Is.Not.Null);
             Assert.That(gpsLocation!.Latitude, Is.EqualTo(49.842957d));

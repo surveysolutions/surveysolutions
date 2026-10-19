@@ -124,7 +124,7 @@
     <value>Додати</value>
   </data>
   <data name="AddEnablingCondition" xml:space="preserve">
-    <value>Додайте умову включення</value>
+    <value>Додати умову включення</value>
   </data>
   <data name="AddFilter" xml:space="preserve">
     <value>Додати фільтр</value>
@@ -1707,5 +1707,11 @@
 
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>Переключення змінить мову відображення анкети. Переклад має містити текст для всіх елементів.</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+      <value>Редагувати</value>
+  </data>
+  <data name="Stick" xml:space="preserve">
+      <value>Прикріпити</value>
   </data>
 </root>

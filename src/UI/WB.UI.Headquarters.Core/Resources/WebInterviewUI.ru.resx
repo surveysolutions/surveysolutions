@@ -462,6 +462,9 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
     <value>Дополнительная информация о вопросе</value>
   </data>
+  <data name="ImageFormatNotSupported" xml:space="preserve">
+    <value>Формат изображения не поддерживается вашим браузером.</value>
+  </data>
   <data name="MultimediaNotSupported" xml:space="preserve">
     <value>Воспроизведение мультимедиа не поддерживается вашим браузером. Вы можете скачать файл.</value>
   </data>
@@ -600,5 +603,11 @@ Oбратитесь в тех. поддержку за помощью</value>
   </data>
   <data name="CompleteReviewSubmitInterview" xml:space="preserve">
       <value>Интервью {{key}}</value>
+  </data>
+  <data name="GeographyPreview" xml:space="preserve">
+      <value>Предварительный просмотр географии</value>
+  </data>
+  <data name="RealQuestion_Hint" xml:space="preserve">
+      <value>Нажмите, чтобы ввести число</value>
   </data>
 </root>
