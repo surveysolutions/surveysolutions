@@ -1,6 +1,7 @@
 using System;
 using SkiaSharp;
 using WB.Core.Infrastructure.Exceptions;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.UI.Shared.Web.Services
 {
@@ -48,22 +49,7 @@ namespace WB.UI.Shared.Web.Services
         }
 
         private static SKBitmap Decode(byte[] source, out SKEncodedImageFormat format)
-        {
-            using var codec = SKCodec.Create(new SKMemoryStream(source));
-            if (codec == null)
-                throw new InvalidImageException("Image format is not supported");
-
-            format = codec.EncodedFormat;
-
-            var bitmap = new SKBitmap(codec.Info);
-            if (codec.GetPixels(bitmap.Info, bitmap.GetPixels()) != SKCodecResult.Success)
-            {
-                bitmap.Dispose();
-                throw new InvalidImageException("Image content is corrupted");
-            }
-
-            return bitmap;
-        }
+            => SkiaImageDecoder.Decode(source, out format);
 
         private static SKBitmap FitInto(SKBitmap bitmap, int maxWidth, int maxHeight)
         {

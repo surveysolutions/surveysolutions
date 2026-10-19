@@ -16,6 +16,15 @@ public class PdfImageSourceTests
     }
 
     [Test]
+    public void when_image_declares_huge_size_should_throw_invalid_image_exception_instead_of_allocating_memory()
+    {
+        // 600 megapixels, about 2.4 GB of memory for a file of a few dozen bytes
+        var content = PngTestData.WithDeclaredSize(20_000, 30_000);
+
+        Assert.That(() => PdfImageSource.FromBinary(content), Throws.TypeOf<InvalidImageException>().With.Message.Contains("too large"));
+    }
+
+    [Test]
     public void when_content_is_incomplete_image_should_throw_invalid_image_exception()
     {
         var image = CreateImage(SKEncodedImageFormat.Jpeg, 200, 200);

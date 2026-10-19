@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService
 {
@@ -193,32 +194,37 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
         private static AttachmentDetails GetImageAttachmentDetails(byte[] binaryContent)
         {
-            AttachmentDetails details;
+            SKImageInfo info;
             try
             {
-                using var codec = SKCodec.Create(new SKMemoryStream(binaryContent))
-                    ?? throw new FormatException("Image cannot be decoded");
-                using var bitmap = new SKBitmap(codec.Info);
-                if (codec.GetPixels(bitmap.Info, bitmap.GetPixels()) != SKCodecResult.Success)
-                    throw new FormatException("Image cannot be decoded");
-
-                details = new AttachmentDetails
-                {
-                    Height = bitmap.Height,
-                    Width = bitmap.Width
-                };
+                info = SkiaImageDecoder.ReadInfo(binaryContent, out _);
             }
             catch (Exception e)
             {
                 throw new FormatException(ExceptionMessages.Attachments_uploaded_file_is_not_image, e);
             }
-            
-            if (details.Height > maxImageDimension || details.Width > maxImageDimension)
+
+            // size is declared in the header, it is checked before any memory is allocated for the decoded image
+            if (info.Height > maxImageDimension || info.Width > maxImageDimension)
             {
                 throw new FormatException(ExceptionMessages.Attachments_uploaded_file_image_is_too_big);
             }
 
-            return details;
+            try
+            {
+                // decoding makes sure that the content is not corrupted
+                using var bitmap = SkiaImageDecoder.Decode(binaryContent, out _, (long)maxImageDimension * maxImageDimension);
+            }
+            catch (Exception e)
+            {
+                throw new FormatException(ExceptionMessages.Attachments_uploaded_file_is_not_image, e);
+            }
+
+            return new AttachmentDetails
+            {
+                Height = info.Height,
+                Width = info.Width
+            };
         }
     }
 }

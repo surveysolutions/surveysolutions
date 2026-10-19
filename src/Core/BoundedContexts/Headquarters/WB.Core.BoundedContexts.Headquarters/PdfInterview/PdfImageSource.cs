@@ -1,6 +1,7 @@
 using System;
 using SkiaSharp;
 using WB.Core.Infrastructure.Exceptions;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.PdfInterview;
 
@@ -16,15 +17,9 @@ public static class PdfImageSource
     /// <exception cref="InvalidImageException">Content is not a supported image</exception>
     public static string FromBinary(byte[] content)
     {
-        using var codec = SKCodec.Create(new SKMemoryStream(content));
-        if (codec == null)
-            throw new InvalidImageException("Image format is not supported");
+        using var bitmap = SkiaImageDecoder.Decode(content, out var format);
 
-        using var bitmap = new SKBitmap(codec.Info);
-        if (codec.GetPixels(bitmap.Info, bitmap.GetPixels()) != SKCodecResult.Success)
-            throw new InvalidImageException("Image content is corrupted");
-
-        var keepTransparency = codec.EncodedFormat == SKEncodedImageFormat.Png;
+        var keepTransparency = format == SKEncodedImageFormat.Png;
 
         using var image = SKImage.FromBitmap(bitmap);
         using var data = keepTransparency

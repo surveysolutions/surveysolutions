@@ -39,6 +39,18 @@ public class ImageProcessingServiceTests
     }
 
     [Test]
+    public void when_image_declares_huge_size_should_throw_invalid_image_exception_instead_of_allocating_memory()
+    {
+        // 600 megapixels, about 2.4 GB of memory for a file of a few dozen bytes
+        var content = PngTestData.WithDeclaredSize(20_000, 30_000);
+
+        Assert.That(() => service.Validate(content), Throws.TypeOf<InvalidImageException>().With.Message.Contains("too large"));
+        Assert.That(() => service.GetImageMimeType(content), Throws.TypeOf<InvalidImageException>().With.Message.Contains("too large"));
+        Assert.That(() => service.ResizeImage(content, 100, 100), Throws.TypeOf<InvalidImageException>().With.Message.Contains("too large"));
+        Assert.That(() => service.ResizeImageKeepingFormat(content, 100), Throws.TypeOf<InvalidImageException>().With.Message.Contains("too large"));
+    }
+
+    [Test]
     public void when_resizing_should_keep_aspect_ratio_and_return_png()
     {
         var image = CreateImage(SKEncodedImageFormat.Jpeg, 200, 100);
