@@ -6,6 +6,7 @@ using MvvmCross;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -41,6 +42,8 @@ public interface INotificationManager
 [Service(ForegroundServiceType = global::Android.Content.PM.ForegroundService.TypeLocation)]
 public class GeolocationBackgroundService : Service, ILocationListener, INotificationManager
 {
+    internal const string AcceptableGpsLocationSourceExtra = "acceptableGpsLocationSource";
+
     private ServiceBinder<GeolocationBackgroundService> binder;
 
     private const int NotificationId = 1;
@@ -100,20 +103,27 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
 
         long minTimeMs = 5000;
         float minDistanceM = 1;
-        // Register for GPS_PROVIDER plus every currently-enabled provider so that fixes
-        // from an external Bluetooth/USB GPS sensor (which may register under a custom
-        // provider name via the mock location API) are also received.
-        // RemoveUpdates(this) in OnDestroy removes all registrations at once.
-        var allProviders = locationManager.GetProviders(enabledOnly: true)
-                                          .Append(LocationManager.GpsProvider)
-                                          .Distinct();
-        foreach (var provider in allProviders)
+        var source = (AcceptableGpsLocationSource)(intent?.GetIntExtra(
+            AcceptableGpsLocationSourceExtra, (int)AcceptableGpsLocationSource.BuiltInGpsOnly)
+            ?? (int)AcceptableGpsLocationSource.BuiltInGpsOnly);
+        // Match provider registration to the workspace mode, as the GPS question service does:
+        // GPS-only modes listen exclusively to GPS_PROVIDER; other modes can use any enabled provider.
+        var providers = GetProvidersForSource(source, locationManager.GetProviders(enabledOnly: true));
+        foreach (var provider in providers)
         {
             try { locationManager.RequestLocationUpdates(provider, minTimeMs, minDistanceM, this); }
             catch { /* provider may have disappeared between enumeration and registration */ }
         }
 
         return StartCommandResult.NotSticky;
+    }
+
+    internal static IEnumerable<string> GetProvidersForSource(
+        AcceptableGpsLocationSource source, IEnumerable<string> enabledProviders)
+    {
+        return source.RequiresGpsProvider()
+            ? new[] { LocationManager.GpsProvider }.AsEnumerable()
+            : enabledProviders.Append(LocationManager.GpsProvider).Distinct();
     }
 
     public override void OnTaskRemoved(Intent rootIntent)
