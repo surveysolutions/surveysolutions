@@ -340,7 +340,9 @@ export default {
                     await new Promise(resolve => setTimeout(resolve, 50))
                 }
 
-                if (answerWasNotSaved) {
+                const hasUnsavedAnswer = Object.values(this.$store.state.webinterview.entityDetails)
+                    .some(entity => entity.validity?.errorMessage)
+                if (answerWasNotSaved || hasUnsavedAnswer) {
                     downloadWindow?.close()
                     toastr.error(this.$t('WebInterviewUI.AnswerWasNotSaved'))
                     return
