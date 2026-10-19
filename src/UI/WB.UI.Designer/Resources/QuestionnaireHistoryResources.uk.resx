@@ -379,6 +379,9 @@
     <value>Анонімний доступ вимкнено для {0}</value>
   </data>
 
+  <data name="AnonymousSharingLinkRegenerated" xml:space="preserve">
+    <value>Посилання для анонімного доступу повторно створено для {0}</value>
+  </data>
   <data name="Search" xml:space="preserve">
     <value>Пошук</value>
   </data>

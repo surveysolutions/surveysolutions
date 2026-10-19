@@ -389,6 +389,9 @@
     <value>Ndarja anonime është çaktivizuar për {0}</value>
   </data>
 
+  <data name="AnonymousSharingLinkRegenerated" xml:space="preserve">
+    <value>Lidhja e ndarjes anonime u rigjenerua për {0}</value>
+  </data>
   <data name="Search" xml:space="preserve">
     <value>Kërko</value>
   </data>

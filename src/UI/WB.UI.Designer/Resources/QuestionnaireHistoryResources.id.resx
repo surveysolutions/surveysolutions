@@ -313,6 +313,9 @@
     <data name="AnonymousSharingDisabled" xml:space="preserve">
         <value>Pembagian anonim dinonaktifkan untuk {0}</value>
     </data>
+    <data name="AnonymousSharingLinkRegenerated" xml:space="preserve">
+        <value>Tautan berbagi anonim dibuat ulang untuk {0}</value>
+    </data>
   <data name="Search" xml:space="preserve">
     <value>Cari</value>
   </data>

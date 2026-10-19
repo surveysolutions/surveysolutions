@@ -313,6 +313,9 @@
     <data name="AnonymousSharingDisabled" xml:space="preserve">
         <value>ანონიმური გაზიარება გამოირთო {0}-ისთვის</value>
         </data>
+    <data name="AnonymousSharingLinkRegenerated" xml:space="preserve">
+        <value>ანონიმური გაზიარების ბმული ხელახლა შეიქმნა {0}-ისთვის</value>
+        </data>
   <data name="Search" xml:space="preserve">
     <value>ძებნა</value>
   </data>

@@ -103,6 +103,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IOptions<ViteTagOptions> options;
         private readonly IMemoryCache memoryCache;
         private readonly ITransactionRollbackState transactionRollbackState;
+        private readonly IPostCommitActions postCommitActions;
 
         public QuestionnaireController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -124,7 +125,8 @@ namespace WB.UI.Designer.Controllers
             IWebHostEnvironment webHost,
             IOptions<ViteTagOptions> options,
             IMemoryCache memoryCache,
-            ITransactionRollbackState transactionRollbackState)
+            ITransactionRollbackState transactionRollbackState,
+            IPostCommitActions postCommitActions)
             : base(dbContext, questionnaireViewFactory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -145,6 +147,7 @@ namespace WB.UI.Designer.Controllers
             this.options = options;
             this.memoryCache = memoryCache;
             this.transactionRollbackState = transactionRollbackState;
+            this.postCommitActions = postCommitActions;
         }
 
         [Route("questionnaire/details/{id}/nosection/{entityType}/{entityId}")]
@@ -482,9 +485,7 @@ namespace WB.UI.Designer.Controllers
         [QuestionnairePermissions(true)]
         [Route("questionnaire/updateAnonymousQuestionnaireSettings/{id}")]
         [ValidateAntiForgeryToken]
-        // Sends an email as a side effect, so its writes must commit immediately rather than in the deferred filter transaction.
-        [NoTransaction]
-        public async Task<IActionResult> UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
+        public Task<IActionResult> UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
         {
             bool isActive = postModel.IsActive;
             var anonymousQuestionnaire = this.GetAnonymousQuestionnaire(id);
@@ -500,17 +501,18 @@ namespace WB.UI.Designer.Controllers
             }
 
             if (anonymousQuestionnaire == null)
-                return NotFound();
+                return Task.FromResult<IActionResult>(NotFound());
 
             if (isActive)
-                await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
+                this.postCommitActions.Enqueue(
+                    () => SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId));
             
-            return Json(new
+            return Task.FromResult<IActionResult>(Json(new
             {
                 AnonymousQuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId, 
                 IsActive = isActive,
                 GeneratedAtUtc = anonymousQuestionnaire.GeneratedAtUtc,
-            });
+            }));
         }
 
         [Authorize]
@@ -518,24 +520,23 @@ namespace WB.UI.Designer.Controllers
         [QuestionnairePermissions(true)]
         [Route("questionnaire/regenerateAnonymousQuestionnaireLink/{id}")]
         [ValidateAntiForgeryToken]
-        // Sends an email as a side effect, so its writes must commit immediately rather than in the deferred filter transaction.
-        [NoTransaction]
-        public async Task<IActionResult> RegenerateAnonymousQuestionnaireLink(Guid id)
+        public Task<IActionResult> RegenerateAnonymousQuestionnaireLink(Guid id)
         {
             this.commandService.Execute(new RegenerateAnonymousSharingLink(id, User.GetId(), User.IsAdmin()));
 
             var anonymousQuestionnaire = this.GetAnonymousQuestionnaire(id);
             if (anonymousQuestionnaire == null)
-                return NotFound();
+                return Task.FromResult<IActionResult>(NotFound());
 
-            await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
+            this.postCommitActions.Enqueue(
+                () => SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId));
             
-            return Json(new
+            return Task.FromResult<IActionResult>(Json(new
             {
                 AnonymousQuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId, 
                 IsActive = true,
                 GeneratedAtUtc = anonymousQuestionnaire.GeneratedAtUtc,
-            });
+            }));
         }
 
         private AnonymousQuestionnaire? GetAnonymousQuestionnaire(Guid questionnaireId)

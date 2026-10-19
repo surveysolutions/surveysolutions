@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Controllers;
+using WB.UI.Designer.Filters;
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 {
@@ -28,11 +29,12 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         public async Task when_enabling_not_shared_questionnaire_should_execute_enable_command()
         {
             var commandService = new Mock<ICommandService>();
+            var postCommitActions = new Mock<IPostCommitActions>();
             var dbContext = Create.InMemoryDbContext();
             commandService
                 .Setup(x => x.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
                 .Callback<ICommand, string>((_, _) => AddRecord(dbContext, isActive: true));
-            var controller = CreateController(commandService.Object, dbContext);
+            var controller = CreateController(commandService.Object, dbContext, postCommitActions: postCommitActions.Object);
 
             var result = await controller.UpdateAnonymousQuestionnaireSettings(QuestionnaireId,
                 new QuestionnaireController.UpdateAnonymousQuestionnaireSettingsModel { IsActive = true });
@@ -44,6 +46,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                                      && ((EnableAnonymousSharing) c).ResponsibleId == UserId
                                      && !((EnableAnonymousSharing) c).IsResponsibleAdmin),
                 It.IsAny<string>()), Times.Once);
+            postCommitActions.Verify(x => x.Enqueue(It.IsAny<Func<Task>>()), Times.Once);
         }
 
         [Test]
@@ -80,9 +83,11 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         public async Task when_regenerating_link_should_execute_regenerate_command_with_admin_flag()
         {
             var commandService = new Mock<ICommandService>();
+            var postCommitActions = new Mock<IPostCommitActions>();
             var dbContext = Create.InMemoryDbContext();
             AddRecord(dbContext, isActive: true);
-            var controller = CreateController(commandService.Object, dbContext, isAdmin: true);
+            var controller = CreateController(commandService.Object, dbContext,
+                isAdmin: true, postCommitActions: postCommitActions.Object);
 
             var result = await controller.RegenerateAnonymousQuestionnaireLink(QuestionnaireId);
 
@@ -92,6 +97,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                                      && ((RegenerateAnonymousSharingLink) c).QuestionnaireId == QuestionnaireId
                                      && ((RegenerateAnonymousSharingLink) c).IsResponsibleAdmin),
                 It.IsAny<string>()), Times.Once);
+            postCommitActions.Verify(x => x.Enqueue(It.IsAny<Func<Task>>()), Times.Once);
         }
 
         private static void AddRecord(DesignerDbContext dbContext, bool isActive)
@@ -106,7 +112,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             dbContext.SaveChanges();
         }
 
-        private static QuestionnaireController CreateController(ICommandService commandService, DesignerDbContext dbContext, bool isAdmin = false)
+        private static QuestionnaireController CreateController(ICommandService commandService, DesignerDbContext dbContext,
+            bool isAdmin = false, IPostCommitActions postCommitActions = null)
         {
             var users = new Mock<UserManager<DesignerIdentityUser>>(
                 Mock.Of<IUserStore<DesignerIdentityUser>>(), null, null, null, null, null, null, null, null);
@@ -116,6 +123,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             var controller = CreateQuestionnaireController(
                 commandService: commandService,
                 dbContext: dbContext,
+                postCommitActions: postCommitActions,
                 users: users.Object);
 
             var claims = new[]
@@ -131,4 +139,3 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         }
     }
 }
-

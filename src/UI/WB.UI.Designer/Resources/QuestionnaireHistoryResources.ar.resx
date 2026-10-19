@@ -315,6 +315,9 @@
     <value>تم إلغاء تفعيل المشاركة المجهولة لـ {0}</value>
   </data>
 
+  <data name="AnonymousSharingLinkRegenerated" xml:space="preserve">
+    <value>تم تجديد رابط المشاركة المجهولة لـ {0}</value>
+  </data>
   <data name="Search" xml:space="preserve">
     <value>بحث</value>
   </data>

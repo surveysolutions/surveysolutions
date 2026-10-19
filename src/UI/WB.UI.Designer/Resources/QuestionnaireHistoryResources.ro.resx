@@ -379,6 +379,9 @@
     <value>Partajarea anonimă a fost dezactivată pentru {0}</value>
   </data>
 
+  <data name="AnonymousSharingLinkRegenerated" xml:space="preserve">
+    <value>Linkul de partajare anonimă a fost regenerat pentru {0}</value>
+  </data>
   <data name="Search" xml:space="preserve">
     <value>Căutare</value>
   </data>

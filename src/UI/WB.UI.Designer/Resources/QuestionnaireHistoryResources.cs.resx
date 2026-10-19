@@ -374,6 +374,9 @@
     <value>Anonymní sdílení bylo vypnuto pro {0}</value>
   </data>
 
+  <data name="AnonymousSharingLinkRegenerated" xml:space="preserve">
+    <value>Odkaz pro anonymní sdílení byl znovu vygenerován pro {0}</value>
+  </data>
   <data name="Search" xml:space="preserve">
     <value>Hledat</value>
   </data>

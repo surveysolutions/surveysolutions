@@ -315,6 +315,9 @@
     <value>O compartilhamento anônimo está desativado para {0}</value>
   </data>
 
+  <data name="AnonymousSharingLinkRegenerated" xml:space="preserve">
+    <value>O link de compartilhamento anônimo foi regenerado para {0}</value>
+  </data>
   <data name="Search" xml:space="preserve">
     <value>Pesquisar</value>
   </data>

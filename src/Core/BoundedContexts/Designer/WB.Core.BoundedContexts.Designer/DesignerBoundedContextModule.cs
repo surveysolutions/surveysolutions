@@ -111,6 +111,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<Questionnaire, Questionnaire>();
             registry.Bind<ListViewPostProcessor, ListViewPostProcessor>();
             registry.Bind<HistoryPostProcessor, HistoryPostProcessor>();
+            registry.Bind<AnonymousSharingPostProcessor, AnonymousSharingPostProcessor>();
             registry.Bind<SearchPostProcessors, SearchPostProcessors>();
             registry.Bind<ResourcesPreProcessor, ResourcesPreProcessor>();
             registry.Bind<ResourcesPostProcessor, ResourcesPostProcessor>();

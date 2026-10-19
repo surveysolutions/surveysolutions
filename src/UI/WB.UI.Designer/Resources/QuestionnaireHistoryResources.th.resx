@@ -313,6 +313,9 @@
     <data name="AnonymousSharingDisabled" xml:space="preserve">
         <value>ปิดการแชร์แบบไม่ระบุตัวตนสำหรับ {0}</value>
     </data>
+    <data name="AnonymousSharingLinkRegenerated" xml:space="preserve">
+        <value>สร้างลิงก์แชร์แบบไม่ระบุตัวตนใหม่สำหรับ {0}</value>
+    </data>
   <data name="Search" xml:space="preserve">
     <value>ค้นหา</value>
   </data>

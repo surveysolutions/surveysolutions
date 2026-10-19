@@ -313,6 +313,9 @@
     <data name="AnonymousSharingDisabled" xml:space="preserve">
         <value>Chia sẻ ẩn danh đã được tắt cho {0}</value>
         </data>
+        <data name="AnonymousSharingLinkRegenerated" xml:space="preserve">
+            <value>Liên kết chia sẻ ẩn danh đã được tạo lại cho {0}</value>
+        </data>
   <data name="Search" xml:space="preserve">
     <value>Tìm kiếm</value>
   </data>

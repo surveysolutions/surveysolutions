@@ -313,6 +313,9 @@
     <data name="AnonymousSharingDisabled" xml:space="preserve">
         <value>ការចែករំលែកអនាមិកត្រូវបានបិទសម្រាប់ {0}</value>
     </data>
+    <data name="AnonymousSharingLinkRegenerated" xml:space="preserve">
+        <value>តំណចែករំលែកអនាមិកត្រូវបានបង្កើតឡើងវិញសម្រាប់ {0}</value>
+        </data>
   <data name="Search" xml:space="preserve">
     <value>ស្វែងរក</value>
   </data>

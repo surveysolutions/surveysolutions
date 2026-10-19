@@ -374,6 +374,9 @@
     <value>Le partage anonyme est désactivé pour {0}</value>
   </data>
 
+  <data name="AnonymousSharingLinkRegenerated" xml:space="preserve">
+    <value>Le lien de partage anonyme a été régénéré pour {0}</value>
+  </data>
   <data name="Search" xml:space="preserve">
     <value>Rechercher</value>
   </data>
