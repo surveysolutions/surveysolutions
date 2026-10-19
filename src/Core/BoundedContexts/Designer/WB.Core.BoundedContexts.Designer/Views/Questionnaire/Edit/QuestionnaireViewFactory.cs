@@ -20,7 +20,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         bool HasUserAccessToQuestionnaire(QuestionnaireRevision id, Guid? userId);
 
         bool HasUserChangeAccessToQuestionnaire(Guid questionnaireId, Guid userId);
-        bool HasUserOwnerAccessToQuestionnaire(Guid questionnaireId, Guid userId);
         bool HasUserAccessToEditComments(QuestionnaireChangeRecord changeRecord, QuestionnaireDocument questionnaire, Guid userId);
         bool HasUserAccessToEditComments(Guid revisionId, Guid userId);
         bool IsAnonymousQuestionnaire(Guid questionnaireId, out Guid? originQuestionnaireId);
@@ -116,14 +115,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             
             var sharedPersons = listViewItem.SharedPersons;
             return sharedPersons.Any(x => x.UserId == userId && x.ShareType == ShareType.Edit);
-        }
-
-        public bool HasUserOwnerAccessToQuestionnaire(Guid questionnaireId, Guid userId)
-        {
-            return this.dbContext.Questionnaires.Any(x =>
-                x.QuestionnaireId == questionnaireId.FormatGuid()
-                && !x.IsDeleted
-                && x.OwnerId == userId);
         }
 
         private List<SharedPersonView> GetSharedPersons(Guid questionnaireId)

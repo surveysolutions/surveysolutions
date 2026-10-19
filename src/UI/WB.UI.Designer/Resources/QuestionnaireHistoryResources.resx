@@ -374,6 +374,10 @@
     <value>Anonymous sharing is turned off for {0}</value>
   </data>
 
+  <data name="AnonymousSharingLinkRegenerated" xml:space="preserve">
+    <value>Anonymous sharing link is regenerated for {0}</value>
+  </data>
+
   <data name="Search" xml:space="preserve">
     <value>Search</value>
   </data>

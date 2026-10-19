@@ -212,7 +212,20 @@ namespace WB.Core.BoundedContexts.Designer
 
                 .Handles<PassOwnershipFromQuestionnaire>(
                     (command, aggregate) => aggregate.TransferOwnership(command.ResponsibleId, command.NewOwnerId, command.OwnerEmail, command.NewOwnerEmail),
-                    config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>());
+                    config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
+
+                // Anonymous sharing
+                .Handles<EnableAnonymousSharing>(
+                    (command, aggregate) => aggregate.EnableAnonymousSharing(command),
+                    config => config.PostProcessBy<AnonymousSharingPostProcessor>().PostProcessBy<HistoryPostProcessor>())
+
+                .Handles<DisableAnonymousSharing>(
+                    (command, aggregate) => aggregate.DisableAnonymousSharing(command),
+                    config => config.PostProcessBy<AnonymousSharingPostProcessor>().PostProcessBy<HistoryPostProcessor>())
+
+                .Handles<RegenerateAnonymousSharingLink>(
+                    (command, aggregate) => aggregate.RegenerateAnonymousSharingLink(command),
+                    config => config.PostProcessBy<AnonymousSharingPostProcessor>().PostProcessBy<HistoryPostProcessor>());
 
             return Task.CompletedTask;
         }        

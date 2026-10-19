@@ -18,5 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         MigrateToNewVersion = 13,
         AnonymousSharingEnabled = 14,
         AnonymousSharingDisabled = 15,
+        AnonymousSharingLinkRegenerated = 16,
+
     }
 }

@@ -110,6 +110,9 @@ namespace WB.UI.Designer.Code
                 case QuestionnaireActionType.AnonymousSharingDisabled:
                     text = string.Format(QuestionnaireHistoryResources.AnonymousSharingDisabled, helper.Encode(record.TargetTitle ?? string.Empty));
                     break;
+                case QuestionnaireActionType.AnonymousSharingLinkRegenerated:
+                    text = string.Format(QuestionnaireHistoryResources.AnonymousSharingLinkRegenerated, helper.Encode(record.TargetTitle ?? string.Empty));
+                    break;
                 case QuestionnaireActionType.ImportToHq:
                 {
                     

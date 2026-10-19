@@ -87,6 +87,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateMetadata>,
         ICommandPostProcessor<Questionnaire, PassOwnershipFromQuestionnaire>,
+        ICommandPostProcessor<Questionnaire, EnableAnonymousSharing>,
+        ICommandPostProcessor<Questionnaire, DisableAnonymousSharing>,
+        ICommandPostProcessor<Questionnaire, RegenerateAnonymousSharingLink>,
         ICommandPostProcessor<Questionnaire, ImportQuestionnaireToHq>,
         ICommandPostProcessor<Questionnaire, AddOrUpdateCategories>,
         ICommandPostProcessor<Questionnaire, DeleteCategories>,
@@ -227,6 +230,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Move,
                 QuestionnaireItemType.Questionnaire, command.NewOwnerId, this.GetUserEmail(command.NewOwnerId), null);
         }
+
+        #endregion
+
+        #region Anonymous sharing
+
+        public void Process(Questionnaire aggregate, EnableAnonymousSharing command)
+            => this.AddAnonymousSharingChangeItem(aggregate, command, QuestionnaireActionType.AnonymousSharingEnabled);
+
+        public void Process(Questionnaire aggregate, DisableAnonymousSharing command)
+            => this.AddAnonymousSharingChangeItem(aggregate, command, QuestionnaireActionType.AnonymousSharingDisabled);
+
+        public void Process(Questionnaire aggregate, RegenerateAnonymousSharingLink command)
+            => this.AddAnonymousSharingChangeItem(aggregate, command, QuestionnaireActionType.AnonymousSharingLinkRegenerated);
+
+        // No questionnaire document is stored for these records: they are not revertible
+        // and only the "Leave a comment" action is available for them in the history.
+        private void AddAnonymousSharingChangeItem(Questionnaire aggregate, QuestionnaireCommand command, QuestionnaireActionType actionType)
+            => this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, actionType,
+                QuestionnaireItemType.Questionnaire, command.QuestionnaireId, aggregate.QuestionnaireDocument.Title, null);
 
         #endregion
 

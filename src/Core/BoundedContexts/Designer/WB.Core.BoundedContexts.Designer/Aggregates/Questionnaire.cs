@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.CriticalRules;
@@ -1712,6 +1713,27 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.QuestionnaireDocument.CreatedBy = newOwnerId;
 
             this.AddSharedPerson(ownerId, ownerEmail, ShareType.Edit, newOwnerId);
+        }
+
+        #endregion
+
+        #region Anonymous sharing command handlers
+
+        // The anonymous sharing state itself is not part of the questionnaire document:
+        // it is persisted by AnonymousSharingPostProcessor, the aggregate only guards access.
+        public void EnableAnonymousSharing(EnableAnonymousSharing command)
+            => this.ThrowIfViewerCannotManageAnonymousSharing(command);
+
+        public void DisableAnonymousSharing(DisableAnonymousSharing command)
+            => this.ThrowIfViewerCannotManageAnonymousSharing(command);
+
+        public void RegenerateAnonymousSharingLink(RegenerateAnonymousSharingLink command)
+            => this.ThrowIfViewerCannotManageAnonymousSharing(command);
+
+        private void ThrowIfViewerCannotManageAnonymousSharing(QuestionnaireCommandBase command)
+        {
+            if (!command.IsResponsibleAdmin)
+                this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         }
 
         #endregion

@@ -19,9 +19,6 @@ namespace WB.UI.Designer.Modules
             registry.Bind<IAuthenticationService, AuthenticationService>();
             registry.Bind<IRecaptchaService, RecaptchaService>();
             registry.Bind<IQuestionnaireHistoryVersionsService, QuestionnaireHistoryVersionsService>();
-            registry.Bind<IQuestionnaireHistoryMutationService, QuestionnaireHistoryVersionsService>();
-            registry.Bind<IAnonymousQuestionnaireStateService, AnonymousQuestionnaireStateService>();
-            registry.Bind<IQuestionnaireHistoryRevertService, QuestionnaireHistoryRevertService>();
             registry.Bind<IVideoConverter, VideoConverter>();
         }
 

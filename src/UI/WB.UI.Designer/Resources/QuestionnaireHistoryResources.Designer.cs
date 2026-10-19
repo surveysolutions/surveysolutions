@@ -555,18 +555,24 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
+        public static string AnonymousSharingLinkRegenerated {
+            get {
+                return ResourceManager.GetString("AnonymousSharingLinkRegenerated", resourceCulture);
+            }
+        }
+        
         public static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
             }
         }
-
+        
         public static string SearchButton {
             get {
                 return ResourceManager.GetString("SearchButton", resourceCulture);
             }
         }
-
+        
         public static string SearchClear {
             get {
                 return ResourceManager.GetString("SearchClear", resourceCulture);

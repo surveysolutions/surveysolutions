@@ -43,11 +43,9 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             ILogger<QuestionnaireController> logger = null,
             IQuestionnaireInfoFactory questionnaireInfoFactory = null,
             ICategoricalOptionsImportService categoricalOptionsImportService = null,
-            IAnonymousQuestionnaireStateService anonymousQuestionnaireStateService = null,
-            IQuestionnaireHistoryRevertService questionnaireHistoryRevertService = null,
-            IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService = null,
             DesignerDbContext dbContext = null,
-            ITransactionRollbackState transactionRollbackState = null)
+            ITransactionRollbackState transactionRollbackState = null,
+            UserManager<DesignerIdentityUser> users = null)
         {
             var questionnaireController = new QuestionnaireController(
                 questionnaireViewFactory ?? Mock.Of<IQuestionnaireViewFactory>(),
@@ -55,9 +53,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 logger ?? Mock.Of<ILogger<QuestionnaireController>>(),
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),                
                 Mock.Of<IQuestionnaireChangeHistoryFactory>(),
-                questionnaireHistoryVersionsService ?? Mock.Of<IQuestionnaireHistoryVersionsService>(),
-                anonymousQuestionnaireStateService ?? Mock.Of<IAnonymousQuestionnaireStateService>(),
-                questionnaireHistoryRevertService ?? Mock.Of<IQuestionnaireHistoryRevertService>(),
+                Mock.Of<IQuestionnaireHistoryVersionsService>(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IQuestionnaireInfoViewFactory>(),
                 categoricalOptionsImportService ?? Mock.Of<ICategoricalOptionsImportService>(),
@@ -66,7 +62,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 reusableCategoriesService: Mock.Of<IReusableCategoriesService>(),
                 Mock.Of<IEmailSender>(),
                 Mock.Of<IViewRenderService>(),
-                null!,
+                users,
                 Mock.Of<ITagHelperComponentManager>(),
                 Mock.Of<IWebHostEnvironment>(),
                 Mock.Of<IOptions<ViteTagOptions>>(),

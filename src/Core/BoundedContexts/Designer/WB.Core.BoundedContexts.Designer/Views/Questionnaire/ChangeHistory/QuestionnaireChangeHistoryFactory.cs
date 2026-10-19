@@ -141,12 +141,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             }
 
             var userId = user.GetId();
-            var canRevertAnonymousSharing = isAdmin
-                || questionnaireViewFactory.HasUserOwnerAccessToQuestionnaire(questionnaireId, userId);
 
             return new QuestionnaireChangeHistory(questionnaireId, questionnaire.Title,
                 questionnaireHistory.Select(h =>
-                    CreateQuestionnaireChangeHistoryWebItem(questionnaire, h, userId, canRevertAnonymousSharing))
+                    CreateQuestionnaireChangeHistoryWebItem(questionnaire, h, userId))
                     .ToList(), page, count, pageSize, search?.Trim(), searchIdsOnly, searchWholeWord);
         }
 
@@ -208,8 +206,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(
             QuestionnaireDocument questionnaire,
             QuestionnaireChangeRecord revision,
-            Guid userId,
-            bool canRevertAnonymousSharing)
+            Guid userId)
         {
             var references =
                 revision.References.Select(
@@ -228,11 +225,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 revision.TargetItemType,
                 revision.TargetItemNewTitle,
                 revision.AffectedEntriesCount,
-                revision.Patch != null
-                    || revision.ResultingQuestionnaireDocument != null
-                    || (canRevertAnonymousSharing
-                        && (revision.ActionType == QuestionnaireActionType.AnonymousSharingEnabled
-                            || revision.ActionType == QuestionnaireActionType.AnonymousSharingDisabled)),
                 revision.Patch != null || revision.ResultingQuestionnaireDocument != null,
                 revision.TargetItemDateTime,
                 references,

@@ -17,7 +17,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             string? targetNewTitle,
             int? affectedEntries,
             bool hasRevertTo,
-            bool hasQuestionnaireVersion,
             DateTime? targetDateTime,
             List<QuestionnaireChangeHistoricalRecordReference> historicalRecordReferences,
             string? comment, string? hqVersion, long? hqQuestionnaireVersion, bool canEditComment)
@@ -34,7 +33,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             this.TargetNewTitle = targetNewTitle;
             this.AffectedEntries = affectedEntries;
             this.HasRevertTo = hasRevertTo;
-            this.HasQuestionnaireVersion = hasQuestionnaireVersion;
             this.TargetDateTime = targetDateTime;
             this.Comment = comment;
             this.HqVersion = hqVersion;
@@ -57,7 +55,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public int? AffectedEntries { get; private set; }
 
         public bool HasRevertTo { get; }
-        public bool HasQuestionnaireVersion { get; }
         public List<QuestionnaireChangeHistoricalRecordReference> HistoricalRecordReferences { get; }
         public string? Comment { get; }
         public bool CanEditComment { get; set; }
