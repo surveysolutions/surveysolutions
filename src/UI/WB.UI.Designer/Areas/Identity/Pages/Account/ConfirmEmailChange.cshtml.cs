@@ -1,7 +1,9 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Extensions;
@@ -11,33 +13,64 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
     public class ConfirmEmailChangeModel : PageModel
     {
         private readonly UserManager<DesignerIdentityUser> _userManager;
+        private readonly ITransactionRollbackState _transactionRollbackState;
 
-        public ConfirmEmailChangeModel(UserManager<DesignerIdentityUser> userManager)
+        public ConfirmEmailChangeModel(UserManager<DesignerIdentityUser> userManager,
+            ITransactionRollbackState transactionRollbackState)
         {
             _userManager = userManager;
+            _transactionRollbackState = transactionRollbackState;
         }
 
-        public async Task<IActionResult> OnGet(string userId, string code)
+        [BindProperty]
+        public string? UserId { get; set; }
+
+        [BindProperty]
+        public string? Code { get; set; }
+
+        public bool AutoSubmit { get; private set; }
+
+        public IActionResult OnGet(string userId, string code)
         {
             if (userId == null || code == null)
             {
                 return RedirectToPage("/Index");
             }
 
-            var user = await _userManager.FindByIdAsync(userId);
+            this.UserId = userId;
+            this.Code = code;
+            this.AutoSubmit = true;
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (UserId == null || Code == null)
+            {
+                return RedirectToPage("/Index");
+            }
+
+            var user = await _userManager.FindByIdAsync(UserId);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{userId}'.");
+                return NotFound($"Unable to load user with ID '{UserId}'.");
             }
 
             var tokenIsValid = await _userManager.VerifyUserTokenAsync(user,
                 _userManager.Options.Tokens.EmailConfirmationTokenProvider,
                 UserManager<DesignerIdentityUser>.ConfirmEmailTokenPurpose, 
-                code);
+                Code);
 
             if (tokenIsValid)
             {
-                await _userManager.SetEmailAsync(user, user.PendingEmail);
+                var emailChanged = await _userManager.SetEmailAsync(user, user.PendingEmail);
+                if (!emailChanged.Succeeded)
+                {
+                    // SetEmailAsync mutates email and security stamp before validating; the failed values must not be committed.
+                    _transactionRollbackState.MarkRollbackOnly();
+                    TempData[Alerts.ERROR] = emailChanged.Errors.First().Description;
+                    return RedirectToPage("Login");
+                }
 
                 user.EmailConfirmed = true;
                 user.PendingEmail = null;

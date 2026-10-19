@@ -303,4 +303,10 @@
     <data name="TotalWithErrors" xml:space="preserve">
     <value>{{ withErrorsCount }} não enviados devido a erros.</value>
 </data>
+  <data name="EnterText" xml:space="preserve">
+      <value>Por favor, insira o texto</value>
+  </data>
+  <data name="AddressDescription" xml:space="preserve">
+      <value>Aqui aparecerá o endereço da sua organização conforme especificado na sua conta no servidor de envio em massa.</value>
+  </data>
 </root>

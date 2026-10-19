@@ -544,4 +544,10 @@ Hubungi dukungan untuk mendapatkan bantuan.</value>
     <data name="CompleteReviewSubmitInterview" xml:space="preserve">
         <value>Wawancara {{key}}</value>
     </data>
+    <data name="GeographyPreview" xml:space="preserve">
+        <value>Pratinjau geografis</value>
+    </data>
+    <data name="RealQuestion_Hint" xml:space="preserve">
+        <value>Ketuk untuk memasukkan angka</value>
+    </data>
 </root>
