@@ -230,6 +230,7 @@
     <item name="android:textColor">@color/editorTextColor</item>
     <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
     <item name="android:paddingBottom">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:singleLine">false</item>
   </style>
 
   <style name="Interview_Question_Answer_FilteredComboBox_Item_Background">
@@ -333,6 +334,11 @@
     <item name="android:textColorHint">@color/editorHintTextColor</item>
     <item name="android:textColor">@color/editorTextColor</item>
     <item name="android:textStyle">bold</item>
+  </style>
+
+  <style name="Interview_Question_Answer_ComboBox_SelectedOption" parent="Interview_Question_Answer_Text_Editor">
+    <item name="android:singleLine">false</item>
+    <item name="android:maxLines">100</item>
   </style>
 
   <style name="Interview_Question_Answer_List_NewItem_Editor" parent="Interview_Question_TextEditor">

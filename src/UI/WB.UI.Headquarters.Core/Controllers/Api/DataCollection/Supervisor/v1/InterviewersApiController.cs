@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 {
-    public class InterviewersControllerBase : ControllerBase
+    public class InterviewersControllerBase : DataCollectionControllerBase
     {
         protected readonly IUserViewFactory userViewFactory;
         protected readonly IAuthorizedUser authorizedUser;

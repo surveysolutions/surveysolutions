@@ -659,4 +659,10 @@
   <data name="Complete_QuestionsWithErrors" xml:space="preserve">
       <value>შეცდომების მქონე კითხვები: {{count}}</value>
   </data>
+  <data name="GeographyPreview" xml:space="preserve">
+      <value>გეოგრაფიის გადახედვა</value>
+  </data>
+  <data name="RealQuestion_Hint" xml:space="preserve">
+      <value>შეეხეთ რიცხვის შესაყვანად</value>
+  </data>
 </root>

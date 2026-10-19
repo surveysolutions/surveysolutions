@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.Headquarters.Models.Api.DataTable
@@ -20,64 +18,36 @@ namespace WB.UI.Headquarters.Models.Api.DataTable
 
             if (typeof(DataTableRequest).IsAssignableFrom(context.Metadata.ModelType))
             {
-                var propertyBinders = new Dictionary<ModelMetadata, IModelBinder>();
-                for (var i = 0; i < context.Metadata.Properties.Count; i++)
-                {
-                    var property = context.Metadata.Properties[i];
-                    propertyBinders.Add(property, context.CreateBinder(property));
-                }
-
-                var loggerFactory = context.Services.GetRequiredService<ILoggerFactory>();
                 return new DataTablesRequestModelBinder(
-                    propertyBinders,
-                    loggerFactory,
-                    allowValidatingTopLevelNodes: true);
+                    new ComplexObjectModelBinderProvider().GetBinder(context));
             }
 
             return null;
         }
     }
 
-    class DataTablesRequestModelBinder : ComplexTypeModelBinder
+    class DataTablesRequestModelBinder : IModelBinder
     {
-        public DataTablesRequestModelBinder(IDictionary<ModelMetadata, IModelBinder> propertyBinders,
-            ILoggerFactory loggerFactory,
-            bool allowValidatingTopLevelNodes) : base(propertyBinders, loggerFactory, allowValidatingTopLevelNodes)
+        private readonly IModelBinder complexObjectModelBinder;
+
+        public DataTablesRequestModelBinder(IModelBinder complexObjectModelBinder)
         {
+            this.complexObjectModelBinder = complexObjectModelBinder;
         }
 
-        protected override Task BindProperty(ModelBindingContext bindingContext)
+        public async Task BindModelAsync(ModelBindingContext bindingContext)
         {
-            if (bindingContext.FieldName == nameof(DataTableRequest.Search))
-            {
-                var search = TryGetSearch(bindingContext.ValueProvider);
+            await complexObjectModelBinder.BindModelAsync(bindingContext);
 
-                bindingContext.Result = ModelBindingResult.Success(search);
-                return Task.CompletedTask;
-            }
+            if (bindingContext.Result.Model is not DataTableRequest request)
+                return;
 
-            if (bindingContext.FieldName == nameof(DataTableRequest.Order))
-            {
-                var order = TryGetOrders(bindingContext.ValueProvider);
-                bindingContext.Result = ModelBindingResult.Success(order);
-                return Task.CompletedTask;
-            }
+            request.Search = TryGetSearch(bindingContext.ValueProvider);
+            request.Order = TryGetOrders(bindingContext.ValueProvider);
 
-            if (bindingContext.FieldName == nameof(DataTableRequest._C))
-            {
-                var order = TryGetColumns(bindingContext.ValueProvider);
-                bindingContext.Result = ModelBindingResult.Success(order);
-                return Task.CompletedTask;
-            }
-
-            if (bindingContext.FieldName == nameof(DataTableRequest.Columns))
-            {
-                var columns = TryGetColumns(bindingContext.ValueProvider);
-                bindingContext.Result = ModelBindingResult.Success(columns);
-                return Task.CompletedTask;
-            }
-
-            return base.BindProperty(bindingContext);
+            var columns = TryGetColumns(bindingContext.ValueProvider);
+            request._C = columns;
+            request.Columns = columns;
         }
 
         private DataTableRequest.SearchInfo TryGetSearch(IValueProvider valueProvider)

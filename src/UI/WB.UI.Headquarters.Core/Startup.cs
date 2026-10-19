@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO.Compression;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Refit;
@@ -337,6 +339,13 @@ namespace WB.UI.Headquarters
                 DesignerRestServiceHandler>(new RefitSettings
                 {
                     ContentSerializer = new DesignerContentSerializer()
+                }, (handler, serviceProvider) =>
+                {
+                    if (serviceProvider.GetRequiredService<IOptions<DesignerConfig>>().Value.AcceptUnsignedCertificate)
+                    {
+                        handler.ServerCertificateCustomValidationCallback =
+                            HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                    }
                 });
             
 
@@ -443,7 +452,7 @@ namespace WB.UI.Headquarters
                 {
                     if (!env.IsDevelopment())
                     {
-                        ctx.Context.Response.Headers.Add("Cache-Control", "public, max-age=31536000");
+                        ctx.Context.Response.Headers.Append("Cache-Control", "public, max-age=31536000");
                     }
                 }
             });
