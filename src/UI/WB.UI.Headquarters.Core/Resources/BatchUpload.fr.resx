@@ -376,6 +376,7 @@ Tous les fichiers de données doivent contenir la variable interview__id avec un
 &lt;b&gt;_password&lt;/b&gt; - mot de passe pour démarrer un entretien (uniquement pour les entretiens web);&lt;br/&gt;
 &lt;b&gt;_webmode&lt;/b&gt; - mode pour l'affectation (1 pour CAWI, 0 ou vide pour CAPI);&lt;br/&gt;
 &lt;b&gt;_record_audio&lt;/b&gt; - l'enregistrement audio est activé pour les entretiens (1 - activé, 0 - désactivé, vide - obtenir cette valeur du questionnaire);&lt;br/&gt;
+&lt;b&gt;_aascope&lt;/b&gt; - noms de variables (séparés par des virgules) des sections, groupes ou rosters à enregistrer en audio lorsque _record_audio est désactivé (audit audio sélectif);&lt;br/&gt;
 &lt;b&gt;_comment&lt;/b&gt; - commentaires pour l'affectation</value>
     <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
   </data>

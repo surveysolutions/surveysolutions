@@ -1,0 +1,9 @@
+// Vuetify styles with the global CSS reset disabled.
+// The reset (ress.css) applies rules like `button { background-color: transparent; color: inherit; }`
+// to every element on the page. Since the Vuetify options/categories editor is now rendered
+// in-page (inside the Designer app) instead of a separate window, importing the default
+// `vuetify/styles` would strip the colors from the surrounding Bootstrap buttons.
+// Bootstrap already provides its own reset/box-sizing on these pages, so the Vuetify reset is not needed.
+@use 'vuetify/lib/styles/main.sass' with (
+    $reset: false
+);

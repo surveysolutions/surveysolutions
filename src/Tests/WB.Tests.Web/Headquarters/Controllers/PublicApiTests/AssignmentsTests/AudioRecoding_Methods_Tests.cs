@@ -34,6 +34,26 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         }
 
         [Test]
+        public void should_return_audio_audit_scope()
+        {
+            var assignment = Abc.Create.Entity.Assignment(id: 15,
+                audioAuditScope: new System.Collections.Generic.List<string> { "section1", "roster2" });
+
+            var assignments = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
+            assignments.Store(assignment, assignment.PublicKey);
+
+            var assignmentsService = Abc.Create.Service.AssignmentsService(assignments);
+
+            var controller = Create.Controller.AssignmentsPublicApiController(assignmentsService: assignmentsService);
+
+            // Act
+            var response = controller.AudioRecoding(15);
+
+            // Assert
+            Assert.That(response.Value.AudioAuditScope, Is.EquivalentTo(new[] { "section1", "roster2" }));
+        }
+
+        [Test]
         public void should_throw_404_when_assignment_archived()
         {
             var assignment = Abc.Create.Entity.Assignment(id: 15, isArchived: true);
@@ -71,6 +91,59 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             // Assert
             Assert.That(response, Is.InstanceOf<NoContentResult>());
             Mock.Get(commandService).Verify(c => c.Execute(It.Is<UpdateAssignmentAudioRecording>(a => a.PublicKey == assignment.PublicKey), null), Times.Once);
+        }
+
+        [Test]
+        public void should_set_audio_recording_when_audio_audit_scope_unchanged()
+        {
+            var assignment = Abc.Create.Entity.Assignment(id: 15,
+                audioAuditScope: new System.Collections.Generic.List<string> { "section1", "roster2" });
+
+            var assignments = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
+            assignments.Store(assignment, assignment.PublicKey);
+
+            var assignmentsService = Abc.Create.Service.AssignmentsService(assignments);
+            var commandService = Mock.Of<ICommandService>();
+
+            var controller = Create.Controller.AssignmentsPublicApiController(assignmentsService: assignmentsService, commandService: commandService);
+
+            // Act
+            var response = controller.AudioRecodingPatch(15, new UpdateRecordingRequest
+            {
+                Enabled = true,
+                AudioAuditScope = new System.Collections.Generic.List<string> { "roster2", "section1" }
+            });
+
+            // Assert
+            Assert.That(response, Is.InstanceOf<NoContentResult>());
+            Mock.Get(commandService).Verify(c => c.Execute(It.Is<UpdateAssignmentAudioRecording>(a => a.PublicKey == assignment.PublicKey), null), Times.Once);
+        }
+
+        [Test]
+        public void should_return_bad_request_when_trying_to_change_audio_audit_scope()
+        {
+            var assignment = Abc.Create.Entity.Assignment(id: 15,
+                audioAuditScope: new System.Collections.Generic.List<string> { "section1" });
+
+            var assignments = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
+            assignments.Store(assignment, assignment.PublicKey);
+
+            var assignmentsService = Abc.Create.Service.AssignmentsService(assignments);
+            var commandService = Mock.Of<ICommandService>();
+
+            var controller = Create.Controller.AssignmentsPublicApiController(assignmentsService: assignmentsService, commandService: commandService);
+
+            // Act
+            var response = controller.AudioRecodingPatch(15, new UpdateRecordingRequest
+            {
+                Enabled = true,
+                AudioAuditScope = new System.Collections.Generic.List<string> { "section1", "section2" }
+            });
+
+            // Assert
+            Assert.That(response, Is.InstanceOf<ObjectResult>());
+            Assert.That(((ObjectResult)response).StatusCode, Is.EqualTo(400));
+            Mock.Get(commandService).Verify(c => c.Execute(It.IsAny<UpdateAssignmentAudioRecording>(), null), Times.Never);
         }
     }
 }

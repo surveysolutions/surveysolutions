@@ -1,5 +1,5 @@
 import { nextTick } from 'vue'
-import { debounce } from 'lodash'
+import { debounce } from 'lodash-es'
 
 function forEachIfNeeded(data, each) {
     if (Array.isArray(data)) {

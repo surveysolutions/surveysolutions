@@ -47,6 +47,33 @@ namespace WB.Tests.Unit.Designer.QuestionnaireTests
         }
 
         [Test]
+        public void When_update_numeric_question_with_non_negative_flag()
+        {
+            // arrange
+            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(Id.gA,
+                Create.Group(Id.g1, children: new IComposite[]
+                {
+                    Create.NumericIntegerQuestion(Id.g2, "n1")
+                }));
+            Questionnaire questionnaire = Create.Questionnaire(responsible: Id.gF, document: questionnaireDocument);
+
+            // act
+            var command = Create.Command.UpdateNumericQuestion(
+                questionnaireId: Id.gA,
+                questionId: Id.g2,
+                responsibleId: Id.gF,
+                title: "Title",
+                isInteger: true,
+                isNonNegative: true);
+            questionnaire.UpdateNumericQuestion(command);
+
+            // assert
+            var question = questionnaire.QuestionnaireDocument.Find<INumericQuestion>(Id.g2);
+            Assert.That(question, Is.Not.Null);
+            Assert.That(question.IsNonNegative, Is.True);
+        }
+
+        [Test]
         public void When_update_numeric_question_with_special_values_with_new_special_values()
         {
             // arrange

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="BackToQuestionnaires" xml:space="preserve">
+        <value>ត្រលប់ទៅការដំឡើងការស្ទង់មតិ</value>
+    </data>
+    <data name="Done" xml:space="preserve">
+        <value>រួចរាល់</value>
+    </data>
+    <data name="SelectInterviwer" xml:space="preserve">
+        <value>ជ្រើសរើសអ្នកសម្ភាសន៍</value>
+    </data>
+    <data name="Start" xml:space="preserve">
+        <value>ចាប់ផ្តើម</value>
+    </data>
+    <data name="Started_Title" xml:space="preserve">
+        <value>ការសម្ភាសន៍តាមអ៊ីនធឺណិតបានចាប់ផ្តើម</value>
+    </data>
+    <data name="StartInfo" xml:space="preserve">
+        <value>ចាប់ផ្តើមសំភាសន៍តាមគេហទំព័រសម្រាប់ {{name}}</value>
+    </data>
+    <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
+        <value>ការរៀបចំសំភាសន៍តាមអ៊ីនធឺណិត</value>
+    </data>
+    <data name="WebInterviewSetup_Title" xml:space="preserve">
+        <value>ការរៀបចំសំភាសន៍តាមអ៊ីនធឺណិត</value>
+    </data>
+    <data name="WebInterviewStarted" xml:space="preserve">
+        <value>ការសម្ភាសន៍តាមអ៊ីនធឺណិតសម្រាប់ {{name}} បានចាប់ផ្តើម</value>
+    </data>
+    <data name="UseCaptcha" xml:space="preserve">
+        <value>ប្រើ CAPTCHA មុនពេលចាប់ផ្តើមសម្ភាសន៍</value>
+    </data>
+    <data name="DownloadTitle" xml:space="preserve">
+        <value>ទាញយក ({{count}})</value>
+    </data>
+    <data name="ExportAssignmentsTitle" xml:space="preserve">
+        <value>អ្នក​អាច​ទាញយក​បញ្ជី​នៃ​កិច្ចការ​ដែល​បាន​បង្កើត​ដែល​ត្រូវ​បាន​ផ្តល់​ឱ្យ​ទៅ​អ្នក​សម្ភាស​ដើម្បី​បញ្ជូន​តំណ​បណ្ដាញ​ទៅ​អ្នក​ឆ្លើយតប</value>
+    </data>
+    <data name="StopWebInterview" xml:space="preserve">
+        <value>បញ្ឈប់ការសម្ភាសន៍តាមគេហទំព័រ</value>
+    </data>
+    <data name="WebInterviewUserMessages_FinishInterview_Descr" xml:space="preserve">
+        <value>អត្ថបទបង្ហាញនៅទំព័រចុងក្រោយ នៅពេលដែលការសម្ភាសន៍ត្រូវបានបញ្ចប់</value>
+    </data>
+    <data name="WebInterviewUserMessages_Invitation_Descr" xml:space="preserve">
+        <value>អត្ថបទអញ្ជើញបង្ហាញដល់អ្នកប្រើប្រាស់នៅលើទំព័រដំបូង។ %QUESTIONNAIRE% ត្រូវបានជំនួសដោយឈ្មោះកម្រងសំណួរ</value>
+    </data>
+    <data name="WebInterviewUserMessages_ResumeInvitation_Descr" xml:space="preserve">
+        <value>អត្ថបទដែលបង្ហាញដល់អ្នកប្រើប្រាស់ដែលត្រលប់មកវិញ នៅពេលសម្ភាសន៍ត្រូវបានបន្ត។ %QUESTIONNAIRE% ត្រូវបានជំនួសដោយឈ្មោះកម្រងសំណួរ</value>
+    </data>
+    <data name="WebInterviewUserMessages_ResumeWelcome_Descr" xml:space="preserve">
+        <value>អត្ថបទ​បឋមកថា​បង្ហាញ​ដល់​អ្នក​ប្រើ​ដែល​ត្រឡប់​មក​វិញ​មុន​នឹង​បន្ត​ការ​សម្ភាសន៍</value>
+    </data>
+    <data name="WebInterviewUserMessages_SurveyName_Descr" xml:space="preserve">
+        <value>ឈ្មោះនៃការស្ទង់មតិដែលបានធ្វើឡើង។ %QUESTIONNAIRE% ត្រូវបានជំនួសដោយឈ្មោះកម្រងសំណួរ</value>
+    </data>
+    <data name="WebInterviewUserMessages_WebSurveyHeader_Descr" xml:space="preserve">
+        <value>អត្ថបទបឋមកថាបង្ហាញបន្ទាប់ពីបញ្ចប់ការសម្ភាសន៍</value>
+    </data>
+    <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
+        <value>អត្ថបទស្វាគមន៍បឋមកថានៅលើទំព័រដំបូង</value>
+    </data>
+    <data name="CustomText" xml:space="preserve">
+        <value>ប្រើអត្ថបទផ្ទាល់ខ្លួន</value>
+    </data>
+    <data name="TextsUpdated" xml:space="preserve">
+        <value>អត្ថបទបានធ្វើបច្ចុប្បន្នភាព</value>
+    </data>
+    <data name="SaveAll" xml:space="preserve">
+        <value>រក្សាទុកទាំងអស់។</value>
+    </data>
+    <data name="TextCustomize" xml:space="preserve">
+        <value>អត្ថបទដែលរំសាយទៅអ្នកឆ្លើយតបអាចត្រូវបានប្ដូរតាមបំណង</value>
+    </data>
+    <data name="CustomMessageTooLong" xml:space="preserve">
+        <value>សារផ្ទាល់ខ្លួនមិនគួរមានច្រើនជាងតួអក្សរ {0} (រួមទាំង html)</value>
+    </data>
+    <data name="WebInterviewSetup_SendInvitationsTitle" xml:space="preserve">
+        <value>ផ្ញើការអញ្ជើញ</value>
+    </data>
+    <data name="Invitations" xml:space="preserve">
+        <value>ការអញ្ជើញ</value>
+    </data>
+    <data name="Invitations_TotalInvitations" xml:space="preserve">
+        <value>ការអញ្ជើញសរុប {{count}} ។</value>
+    </data>
+    <data name="Invitations_Sent" xml:space="preserve">
+        <value>ការអញ្ជើញ {{count}} ត្រូវបានផ្ញើរួចហើយ។</value>
+    </data>
+    <data name="Invitations_NothingSent" xml:space="preserve">
+        <value>មិន​ទាន់​មាន​ការ​អញ្ជើញ​ត្រូវ​បាន​ផ្ញើ​នៅ​ឡើយ​ទេ។</value>
+    </data>
+    <data name="Invitations_ToSend" xml:space="preserve">
+        <value>ការអញ្ជើញ {{count}} ដើម្បីផ្ញើ។</value>
+    </data>
+    <data name="Invitations_NothingToSend" xml:space="preserve">
+        <value>មិន​មាន​ការ​អញ្ជើញ​ដើម្បី​ផ្ញើ​នៅ​ពេល​នេះ​។</value>
+    </data>
+    <data name="Invitations_SetupError" xml:space="preserve">
+        <value>ការអញ្ជើញមិនអាចផ្ញើបានទេ។</value>
+    </data>
+    <data name="Invitations_EmailIsNotSetUp" xml:space="preserve">
+        <value>អ្នកផ្តល់អ៊ីមែលមិនត្រូវបានតំឡើងទេ។</value>
+    </data>
+    <data name="Invitations_ChangeEmailSettingsAdmin" xml:space="preserve">
+        <value>អ្នកអាចផ្លាស់ប្តូរការកំណត់ទាំងនេះនៅទំព័រ &lt;a href="{{url}}"&gt;'អ្នកផ្តល់អ៊ីមែល'&lt;/a&gt;។</value>
+    </data>
+    <data name="Invitations_ChangeEmailSettingsNotAdmin" xml:space="preserve">
+        <value>ប្រាប់អ្នកប្រើប្រាស់អ្នកគ្រប់គ្រងរបស់អ្នកឱ្យផ្លាស់ប្តូរការកំណត់ទាំងនេះនៅទំព័រ 'អ្នកផ្តល់អ៊ីមែល' ។</value>
+    </data>
+    <data name="Invitations_SurveyIsNotStarted" xml:space="preserve">
+        <value>ការស្ទង់មតិលើបណ្តាញមិនត្រូវបានចាប់ផ្តើមទេ។ រៀបចំ និង &lt;a href="{{url}}"&gt;ចាប់ផ្តើមការស្ទង់មតិលើបណ្តាញ&lt;/a&gt; មុនពេលផ្ញើការអញ្ជើញ។</value>
+    </data>
+    <data name="Invitations_SuccessfulSetup" xml:space="preserve">
+        <value>ការស្ទង់មតិលើបណ្តាញត្រូវបានចាប់ផ្តើម ហើយអ្នកផ្តល់អ៊ីមែលត្រូវបានតំឡើងយ៉ាងត្រឹមត្រូវ។ ប្រព័ន្ធត្រៀមរួចរាល់ក្នុងការផ្ញើការអញ្ជើញ។</value>
+    </data>
+    <data name="Invitations_SendAction" xml:space="preserve">
+        <value>ផ្ញើការអញ្ជើញ {{count}}</value>
+    </data>
+    <data name="WebInterviewUserMessages_CompleteButton_Descr" xml:space="preserve">
+        <value>បញ្ចប់</value>
+    </data>
+    <data name="WebInterviewUserMessages_CompleteNoteToSupervisor_Descr" xml:space="preserve">
+        <value>កំណត់ចំណាំសម្រាប់អ្នកគ្រប់គ្រង</value>
+    </data>
+    <data name="SingleResponse" xml:space="preserve">
+        <value>កំណត់ចំពោះសំភាសន៍ម្នាក់ក្នុងម្នាក់</value>
+    </data>
+    <data name="WebInterviewUserMessages_StartNewButton_Descr" xml:space="preserve">
+        <value>ចាប់ផ្តើមសម្ភាសន៍ថ្មី។</value>
+    </data>
+    <data name="WebInterviewUserMessages_ResumeButton_Descr" xml:space="preserve">
+        <value>បន្ត</value>
+    </data>
+    <data name="EmailOnComplete" xml:space="preserve">
+        <value>ផ្ញើអ៊ីមែលបន្ទាប់ពីបញ្ចប់ការសម្ភាសន៍តាមអ៊ីនធឺណិត</value>
+    </data>
+    <data name="AttachAnswersToCompleteEmail" xml:space="preserve">
+        <value>ភ្ជាប់ប្រតិចារិក Pdf</value>
+    </data>
+    <data name="AllowSwitchToCawiForInterviewer" xml:space="preserve">
+        <value>អនុញ្ញាតឱ្យអ្នកសម្ភាសន៍ប្តូរទៅរបៀប CAWI</value>
+    </data>
+    <data name="WebInterviewUserMessages_LinkInvitation_Descr" xml:space="preserve">
+        <value>អត្ថបទ​ដែល​បង្ហាញ​ដល់​អ្នក​ប្រើ​នៅ​ពេល​ពួកគេ​រុករក​ដើម្បី​ភ្ជាប់​ទៅ​បទសម្ភាសន៍​ដែល​មិន​ទាន់​បាន​ធ្វើ​សមកាលកម្ម​ទៅ​ម៉ាស៊ីន​មេ</value>
+    </data>
+    <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
+        <value>បឋមកថាអត្ថបទស្វាគមន៍នៅលើទំព័រចុះចតនៃតំណសំភាសន៍គេហទំព័រ</value>
+    </data>
+    <data name="AllowTranscriptDownloading" xml:space="preserve">
+        <value>អនុញ្ញាតឱ្យទាញយកប្រតិចារិកសំភាសន៍បន្ទាប់ពីដាក់ស្នើ</value>
+    </data>
+</root>

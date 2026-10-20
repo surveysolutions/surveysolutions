@@ -271,7 +271,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     var features = await shapefileFeatureTable.QueryFeaturesAsync(new QueryParameters()
                     {
                         Geometry = sPoint,
-                        
                     }).ConfigureAwait(false);
                     var featuresField = features.Fields[labelFieldIndex];
                     var featuresFieldName = featuresField.Name;
@@ -366,7 +365,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     this.MapView.ViewpointChanged += MapViewPointChanged;
                 }
                 
-                if (this.MapView?.VisibleArea != null)
+                if (this.MapView?.VisibleArea != null
+                    && this.Map.Basemap?.BaseLayers[0]?.SpatialReference != null)
                 {
                     logger.Debug("projecting areas" );
                     await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() =>

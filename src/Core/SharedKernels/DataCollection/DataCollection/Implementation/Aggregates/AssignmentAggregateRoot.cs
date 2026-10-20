@@ -6,6 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Assignment;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.AssignmentInfrastructure;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -38,6 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.properties.Answers = @event.Answers;
             this.properties.ProtectedVariables = @event.ProtectedVariables;
             this.properties.Comment = @event.Comment;
+            this.properties.AudioAuditScope = @event.AudioAuditScope ?? Array.Empty<string>();
 
             this.properties.CreatedAt = @event.OriginDate;
             this.properties.UpdatedAt = @event.OriginDate;
@@ -99,6 +101,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.properties.UpdatedAt = @event.OriginDate;
         }
 
+        protected void Apply(AssignmentCompleted @event)
+        {
+            this.properties.Status = AssignmentStatus.Completed;
+            this.properties.UpdatedAt = @event.OriginDate;
+        }
+
+        protected void Apply(AssignmentClosed @event)
+        {
+            this.properties.Status = AssignmentStatus.Closed;
+            this.properties.UpdatedAt = @event.OriginDate;
+        }
+
+        protected void Apply(AssignmentReopened @event)
+        {
+            this.properties.Status = AssignmentStatus.Open;
+            this.properties.UpdatedAt = @event.OriginDate;
+        }
+
         #endregion
 
         public void CreateAssignment(CreateAssignment command)
@@ -119,7 +139,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.ProtectedVariables.ToArray(),
                 command.Comment,
                 command.TargetArea,
-                command.UpgradedFromId));
+                command.UpgradedFromId,
+                command.AudioAuditScope));
         }
 
         public void DeleteAssignment(DeleteAssignment command)
@@ -190,6 +211,33 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             invariants.ThrowIfAssignmentDeleted();
 
             ApplyEvent(new AssignmentWebModeChanged(command.UserId, command.OriginDate, command.WebMode));
+        }
+
+        public void CompleteAssignment(CompleteAssignment command)
+        {
+            AssignmentPropertiesInvariants invariants = new AssignmentPropertiesInvariants(this.properties);
+            invariants.ThrowIfAssignmentDeleted();
+            invariants.ThrowIfCannotComplete();
+
+            ApplyEvent(new AssignmentCompleted(command.UserId, command.OriginDate, command.Comment));
+        }
+
+        public void CloseAssignment(CloseAssignment command)
+        {
+            AssignmentPropertiesInvariants invariants = new AssignmentPropertiesInvariants(this.properties);
+            invariants.ThrowIfAssignmentDeleted();
+            invariants.ThrowIfCannotClose();
+
+            ApplyEvent(new AssignmentClosed(command.UserId, command.OriginDate, command.Comment));
+        }
+
+        public void ReopenAssignment(ReopenAssignment command)
+        {
+            AssignmentPropertiesInvariants invariants = new AssignmentPropertiesInvariants(this.properties);
+            invariants.ThrowIfAssignmentDeleted();
+            invariants.ThrowIfCannotReopen();
+
+            ApplyEvent(new AssignmentReopened(command.UserId, command.OriginDate, command.Comment));
         }
 
         public void UpgradeAssignment(UpgradeAssignmentCommand command)

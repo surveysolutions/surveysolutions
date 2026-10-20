@@ -10,6 +10,7 @@ namespace WB.UI.Interviewer.SharedPreferences
         public const string GpsDesiredAccuracy = "GpsDesiredAccuracy";
         public const string EventChunkSize = "EventChunkSize";
         public const string VibrateOnError = "VibrateOnError";
+        public const string CommunicationIntegrityValidationIgnore = "CommunicationIntegrityValidationIgnore";
         public const string ShowLocationOnMap = "ShowLocationOnMap";
         public const string AllowSyncWithHq = "AllowSyncWithHq";
     }

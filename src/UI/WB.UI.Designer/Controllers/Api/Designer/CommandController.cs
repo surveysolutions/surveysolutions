@@ -28,7 +28,6 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.DataAccess;
-using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
@@ -36,10 +35,9 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.Questionnaire.Categories;
-using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
+using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Controllers;
 using QuestionnaireEditor = WB.UI.Designer.Resources.QuestionnaireEditor;
 
@@ -64,10 +62,22 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IDesignerTranslationService translationsService;
         private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly ITransactionRollbackState transactionRollbackState;
 
         // Get the default form options so that we can use them to set the default limits for
         // request body data
         private static readonly FormOptions defaultFormOptions = new FormOptions();
+
+        // Message to return to client when an ArgumentException occurs (do not expose internal exception messages)
+        private const string ArgumentExceptionClientMessage = "Invalid command";
+
+        // Upload endpoints stage content and metadata before the command is validated, so every failure path
+        // must veto the ambient transaction - otherwise the staged writes are committed by TransactionFilter.
+        private IActionResult ErrorAndRollback(int statusCode, string message)
+        {
+            this.transactionRollbackState.MarkRollbackOnly();
+            return this.Error(statusCode, message);
+        }
 
         public CommandController(
             ICommandService commandService,
@@ -78,7 +88,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             IAttachmentService attachmentService,
             IDesignerTranslationService translationsService,
             IReusableCategoriesService reusableCategoriesService,
-            IFileSystemAccessor fileSystemAccessor)
+            IFileSystemAccessor fileSystemAccessor,
+            ITransactionRollbackState transactionRollbackState)
         {
             this.logger = logger;
             this.commandInflater = commandPreprocessor;
@@ -89,6 +100,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.translationsService = translationsService;
             this.reusableCategoriesService = reusableCategoriesService;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.transactionRollbackState = transactionRollbackState;
         }
 
         public class AttachmentModel
@@ -102,8 +114,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [HttpPost]
         public async Task<IActionResult> UpdateAttachment(AttachmentModel model)
         {
-            if(model?.Command == null)
-                return this.Error((int)HttpStatusCode.NotAcceptable, "Invalid command");
+            if (model?.Command == null)
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, "Invalid command");
 
             var commandType = typeof(AddOrUpdateAttachment).Name;
             AddOrUpdateAttachment command;
@@ -130,30 +142,38 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 {
                     if (!command.OldAttachmentId.HasValue)
                         throw new ArgumentException(string.Format(ExceptionMessages.OldAttachmentIdIsEmpty, command.AttachmentId, command.QuestionnaireId));
-                    
-                    command.AttachmentContentId = 
-                        this.attachmentService.GetAttachmentContentId(command.OldAttachmentId.Value) 
+
+                    command.AttachmentContentId =
+                        this.attachmentService.GetAttachmentContentId(command.OldAttachmentId.Value)
                         ?? throw new ArgumentException(string.Format(ExceptionMessages.OldAttachmentIdIsEmpty, command.AttachmentId, command.QuestionnaireId));
                 }
 
                 this.attachmentService.SaveMeta(
                     attachmentId: command.AttachmentId,
                     questionnaireId: command.QuestionnaireId,
-                    attachmentContentId: command.AttachmentContentId, 
+                    attachmentContentId: command.AttachmentContentId,
                     fileName: model.File?.FileName ?? model.FileName);
             }
             catch (FormatException e)
             {
-                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, e.Message);
+            }
+            catch (CommandDeserializationException e)
+            {
+                // Internal deserialization failures should not expose details to client
+                this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, ArgumentExceptionClientMessage);
             }
             catch (ArgumentException e)
             {
+                // This ArgumentException represents a user-actionable validation error
+                // (for example: invalid file extension). Return the original message
+                // so the UI can display a helpful error to the user.
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
-                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, e.Message);
             }
 
             var updateAttachment = this.ProcessCommand(command).Response;
-            await dbContext.SaveChangesAsync();
             return updateAttachment;
         }
 
@@ -166,7 +186,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             if (Request.ContentType == null || !MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
             {
-                return this.Error((int)HttpStatusCode.UnsupportedMediaType, string.Empty);
+                return this.ErrorAndRollback((int)HttpStatusCode.UnsupportedMediaType, string.Empty);
             }
 
             UpdateLookupTable updateLookupTableCommand;
@@ -202,7 +222,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 if (string.IsNullOrWhiteSpace(fileStreamContent) && updateLookupTableCommand.OldLookupTableId.HasValue)
                 {
                     var lookupContent = this.lookupTableService.GetLookupTableContentFile(
-                        new QuestionnaireRevision(updateLookupTableCommand.QuestionnaireId), 
+                        new QuestionnaireRevision(updateLookupTableCommand.QuestionnaireId),
                         updateLookupTableCommand.OldLookupTableId.Value);
 
                     if (lookupContent != null)
@@ -222,54 +242,55 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
             catch (FormatException)
             {
-                return this.Error((int)HttpStatusCode.NotAcceptable,
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable,
                     Resources.QuestionnaireController.SelectTabFile);
+            }
+            catch (CommandDeserializationException e)
+            {
+                this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, ArgumentExceptionClientMessage);
             }
             catch (ArgumentException e)
             {
+                // Preserve user-visible validation messages (e.g. wrong file format)
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
-                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, e.Message);
             }
 
             var updateLookupTable = this.ProcessCommand(updateLookupTableCommand).Response;
-
-            await dbContext.SaveChangesAsync();
 
             return updateLookupTable;
         }
 
         [Route("~/api/command")]
-        public async Task<IActionResult> Post([FromBody]CommandExecutionModel model)
+        public IActionResult Post([FromBody] CommandExecutionModel model)
         {
             if (model?.Command == null || model?.Type == null)
-                throw new InvalidOperationException("Invalid command");
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, "Invalid command");
 
             try
             {
-                using (var transaction = await dbContext.Database.BeginTransactionAsync())
-                {
-                    var concreteCommand = this.Deserialize(model.Type, model.Command);
-                    var commandProcessResult = this.ProcessCommand(concreteCommand);
+                var concreteCommand = this.Deserialize(model.Type, model.Command);
+                var commandProcessResult = this.ProcessCommand(concreteCommand);
 
-                    IActionResult actionResult = commandProcessResult.Response;
-
-                    if (!commandProcessResult.HasErrors)
-                    {
-                        await dbContext.SaveChangesAsync();
-                        transaction.Commit();
-                    }
-                    else
-                    {
-                        transaction.Rollback();
-                    }
-
-                    return actionResult;
-                }
+                return commandProcessResult.Response;
             }
             catch (InvalidOperationException exc)
             {
                 this.logger.LogError(exc, $"Error on command of type ({model.Type.Replace('\n', '_').Replace('\r', '_')}) handling ");
-                return this.Error((int)HttpStatusCode.NotAcceptable, $"{exc.Message} Please reload page.");
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, $"{exc.Message} Please reload page.");
+            }
+            catch (CommandDeserializationException e)
+            {
+                // Internal deserialization failures should not expose details to client
+                this.logger.LogError(e, $"Error on command of type ({model.Type.Replace('\n', '_').Replace('\r', '_')}) handling ");
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, ArgumentExceptionClientMessage);
+            }
+            catch (ArgumentException e)
+            {
+                // This represents a user-actionable validation error; surface message to UI
+                this.logger.LogError(e, $"Error on command of type ({model.Type.Replace('\n', '_').Replace('\r', '_')}) handling ");
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, e.Message);
             }
             catch (Exception e)
             {
@@ -290,7 +311,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         public async Task<IActionResult> UpdateTranslation(FileModel model)
         {
             if (model?.Command == null)
-                return this.Error((int)HttpStatusCode.NotAcceptable, "Invalid command");
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, "Invalid command");
 
             var commandType = nameof(AddOrUpdateTranslation);
             AddOrUpdateTranslation command;
@@ -313,12 +334,19 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
             catch (FormatException e)
             {
-                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, e.Message);
+            }
+            catch (CommandDeserializationException e)
+            {
+                // Internal deserialization failures should not expose details to client
+                this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, ArgumentExceptionClientMessage);
             }
             catch (ArgumentException e)
             {
+                // Validation errors from user input should surface their message to the client
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
-                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, e.Message);
             }
             catch (InvalidFileException e)
             {
@@ -328,14 +356,13 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 sb.AppendLine(e.Message);
                 e.FoundErrors?.ForEach(x => sb.AppendLine(x.Message));
 
-                return this.Error((int)HttpStatusCode.NotAcceptable, sb.ToString());
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, sb.ToString());
             }
 
             var commandResponse = this.ProcessCommand(command);
 
             if (commandResponse.HasErrors || model.File == null)
             {
-                await dbContext.SaveChangesAsync();
                 return commandResponse.Response;
             }
 
@@ -345,8 +372,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 ? string.Format(QuestionnaireEditor.TranslationsObtained, storedTranslationsCount)
                 : string.Format(QuestionnaireEditor.TranslationsObtained_plural, storedTranslationsCount);
 
-            await dbContext.SaveChangesAsync();
-
             return Ok(resultMessage);
         }
 
@@ -355,7 +380,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         public async Task<IActionResult> UpdateCategories(FileModel model)
         {
             if (model?.Command == null)
-                return this.Error((int)HttpStatusCode.NotAcceptable, "Invalid command");
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, "Invalid command");
 
             var commandType = typeof(AddOrUpdateCategories).Name;
             AddOrUpdateCategories command;
@@ -366,10 +391,10 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 {
                     var extension = this.fileSystemAccessor.GetFileExtension(model.File.FileName);
 
-                    var excelExtensions = new[] {".xlsx", ".ods", ".xls"};
-                    var tsvExtensions = new[] {".txt", ".tab", ".tsv"};
+                    var excelExtensions = new[] { ".xlsx", ".ods", ".xls" };
+                    var tsvExtensions = new[] { ".txt", ".tab", ".tsv" };
 
-                    if(!excelExtensions.Union(tsvExtensions).Contains(extension))
+                    if (!excelExtensions.Union(tsvExtensions).Contains(extension))
                         throw new ArgumentException(ExceptionMessages.ImportOptions_Tab_Or_Excel_Only);
 
                     var fileType = excelExtensions.Contains(extension)
@@ -381,12 +406,19 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
             catch (FormatException e)
             {
-                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, e.Message);
+            }
+            catch (CommandDeserializationException e)
+            {
+                // Internal deserialization failures should not expose details to client
+                this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, ArgumentExceptionClientMessage);
             }
             catch (ArgumentException e)
             {
+                // Preserve validation error messages for the client UI
                 this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
-                return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, e.Message);
             }
             catch (InvalidFileException e)
             {
@@ -396,7 +428,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 sb.AppendLine(e.Message);
                 e.FoundErrors?.ForEach(x => sb.AppendLine(x.Message));
 
-                return this.Error((int)HttpStatusCode.NotAcceptable, sb.ToString());
+                return this.ErrorAndRollback((int)HttpStatusCode.NotAcceptable, sb.ToString());
             }
 
             var commandResponse = this.ProcessCommand(command);
@@ -420,13 +452,43 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             try
             {
                 Type resultCommandType = GetTypeOfResultCommandOrThrowArgumentException(commandType);
-                return JsonConvert.DeserializeObject(serializedCommand, resultCommandType) as ICommand 
-                       ?? throw new ArgumentException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", commandType, serializedCommand));
+                ICommand? deserialized;
+                try
+                {
+                    deserialized = JsonConvert.DeserializeObject(serializedCommand, resultCommandType) as ICommand;
+                }
+                catch (ArgumentException ae)
+                {
+                    // Wrap any ArgumentException thrown by Json.NET to avoid leaking
+                    // implementation details to callers.
+                    logger.LogError(ae, "ArgumentException during JSON deserialization.");
+                    throw new CommandDeserializationException(
+                        $"Failed to deserialize command of type '{commandType}':\r\n{serializedCommand}", ae);
+                }
+                if (deserialized == null)
+                    throw new CommandDeserializationException(
+                        $"Failed to deserialize command of type '{commandType}':\r\n{serializedCommand}");
+
+                return deserialized;
+            }
+            catch (ArgumentException e)
+            {
+                // Wrap ArgumentException occurred during deserialization to avoid leaking
+                // internal details and to ensure callers can distinguish user validation
+                // errors from deserialization failures.
+                logger.LogError(e, "ArgumentException during command deserialization.");
+                throw new CommandDeserializationException(
+                    $"Failed to deserialize command of type '{commandType}':\r\n{serializedCommand}", e);
             }
             catch (Exception e)
             {
                 logger.LogError(e, "Error on command deserialization.");
-                throw new ArgumentException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", commandType, serializedCommand));
+                // Throw a dedicated exception so callers can distinguish between
+                // user-actionable ArgumentExceptions (validation errors) and
+                // internal deserialization failures that should not leak details
+                // to the client.
+                throw new CommandDeserializationException(
+                    $"Failed to deserialize command of type '{commandType}':\r\n{serializedCommand}", e);
             }
         }
 
@@ -504,7 +566,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private Type GetTypeOfResultCommandOrThrowArgumentException(string commandType)
         {
             if (!KnownCommandTypes.ContainsKey(commandType))
-                throw new Exception(string.Format("Command type '{0}' is not supported.", commandType));
+                throw new CommandDeserializationException(string.Format("Command type '{0}' is not supported.", commandType));
 
             return KnownCommandTypes[commandType];
         }
@@ -521,15 +583,15 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             {
                 if (exc.ExceptionType == CommandInflatingExceptionType.Forbidden)
                 {
-                    return new CommandProcessResult(this.Error(StatusCodes.Status403Forbidden, exc.Message));
+                    return new CommandProcessResult(this.ErrorAndRollback(StatusCodes.Status403Forbidden, exc.Message));
                 }
 
                 if (exc.ExceptionType == CommandInflatingExceptionType.EntityNotFound)
                 {
-                    return new CommandProcessResult(this.Error(StatusCodes.Status404NotFound, exc.Message));
+                    return new CommandProcessResult(this.ErrorAndRollback(StatusCodes.Status404NotFound, exc.Message));
                 }
 
-                return new CommandProcessResult(this.Error(StatusCodes.Status406NotAcceptable, exc.Message));
+                return new CommandProcessResult(this.ErrorAndRollback(StatusCodes.Status406NotAcceptable, exc.Message));
             }
             catch (Exception e)
             {
@@ -542,10 +604,10 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
                 if (domainEx.ErrorType == DomainExceptionType.DoesNotHavePermissionsForEdit)
                 {
-                    return new CommandProcessResult(this.Error(StatusCodes.Status403Forbidden, domainEx.Message));
+                    return new CommandProcessResult(this.ErrorAndRollback(StatusCodes.Status403Forbidden, domainEx.Message));
                 }
 
-                return new CommandProcessResult(this.Error(StatusCodes.Status406NotAcceptable, domainEx.Message));
+                return new CommandProcessResult(this.ErrorAndRollback(StatusCodes.Status406NotAcceptable, domainEx.Message));
             }
 
             return new CommandProcessResult(Ok(), false);
@@ -564,5 +626,5 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         public IActionResult Response { get; set; }
     }
 
-  
+
 }

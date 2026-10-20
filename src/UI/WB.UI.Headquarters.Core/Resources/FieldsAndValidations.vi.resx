@@ -1,0 +1,235 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema id="root">
+        <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xs:element name="root" ns1:IsDataSet="true">
+            <xs:complexType>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metadata">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="xsd:string" />
+                            <xs:attribute name="type" type="xsd:string" />
+                            <xs:attribute name="mimetype" type="xsd:string" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="assembly">
+                        <xs:complexType>
+                            <xs:attribute name="alias" type="xsd:string" />
+                            <xs:attribute name="name" type="xsd:string" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="data">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+                            <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+                            <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+                            <xs:attribute ref="xml:space" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="resheader">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xsd:string" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="CannotUpdate_CurrentUserDoesNotExists" xml:space="preserve">
+        <value>Không thể cập nhật thông tin người dùng vì người dùng hiện tại không tồn tại</value>
+        </data>
+    <data name="CannotUpdate_CurrentUserIsArchived" xml:space="preserve">
+        <value>Không thể cập nhật thông tin người dùng vì người dùng hiện tại đã được lưu trữ</value>
+        </data>
+    <data name="ConfirmPasswordErrorMassage" xml:space="preserve">
+        <value>Mật khẩu và mật khẩu xác nhận không khớp</value>
+        </data>
+    <data name="ConfirmPasswordFieldName" xml:space="preserve">
+        <value>Xác nhận mật khẩu</value>
+        </data>
+    <data name="EmailErrorMessage" xml:space="preserve">
+        <value>Không phải là địa chỉ email hợp lệ</value>
+        </data>
+    <data name="EmailFieldName" xml:space="preserve">
+        <value>Địa chỉ email</value>
+        </data>
+    <data name="AllowRelinkTablet" xml:space="preserve">
+        <value>Cho phép liên kết lại sang thiết bị khác bị mất dữ liệu trên thiết bị gốc.</value>
+        </data>
+    <data name="IsLockedFieldName" xml:space="preserve">
+        <value>Bị khóa bởi Admin hoặc HQ</value>
+        </data>
+    <data name="PasswordErrorMessage" xml:space="preserve">
+        <value>Mật khẩu phải chứa ít nhất một số, một ký tự chữ hoa và một ký tự chữ thường</value>
+        </data>
+    <data name="PasswordFieldName" xml:space="preserve">
+        <value>Mật khẩu</value>
+        </data>
+    <data name="PasswordLengthMessage" xml:space="preserve">
+        <value>Mật khẩu phải dài ít nhất {2} ký tự</value>
+        </data>
+    <data name="RequiredEmailErrorMessage" xml:space="preserve">
+        <value>Email là bắt buộc</value>
+        </data>
+    <data name="RequiredPasswordErrorMessage" xml:space="preserve">
+        <value>Cần có mật khẩu</value>
+        </data>
+    <data name="RequiredUserNameErrorMessage" xml:space="preserve">
+        <value>Tên người dùng là bắt buộc</value>
+        </data>
+    <data name="UserNameErrorMessage" xml:space="preserve">
+        <value>Tên đăng nhập phải dài từ 3 đến 15 ký tự và chỉ được chứa các chữ cái, chữ số và ký hiệu gạch dưới. Các chữ cái chỉ được lấy từ bảng chữ cái Latinh (tiếng Anh): 'A'..'Z' hoặc 'a'..'z'. Các chữ cái khác (Cyrillic, Ả Rập, v.v.) không hợp lệ để sử dụng trong tên đăng nhập.</value>
+        </data>
+    <data name="UserNameFieldName" xml:space="preserve">
+        <value>Tên người dùng</value>
+        </data>
+    <data name="InvalidUser" xml:space="preserve">
+        <value>Người dùng không hợp lệ</value>
+        </data>
+    <data name="PersonNameFieldName" xml:space="preserve">
+        <value>Tên đầy đủ</value>
+        </data>
+    <data name="PhoneNumberFieldName" xml:space="preserve">
+        <value>Số điện thoại</value>
+        </data>
+    <data name="VerificationCodeFieldName" xml:space="preserve">
+        <value>Mã xác minh</value>
+        </data>
+    <data name="PhoneErrorMessage" xml:space="preserve">
+        <value>Số điện thoại không hợp lệ</value>
+        </data>
+    <data name="PersonNameErrorMessage" xml:space="preserve">
+        <value>Tên người không được chứa nhiều hơn {1} ký tự</value>
+        </data>
+    <data name="IsLockedBySupervisorFieldName" xml:space="preserve">
+        <value>Bị người giám sát khóa</value>
+        </data>
+    <data name="RequiredSupervisorErrorMessage" xml:space="preserve">
+        <value>Cần có người giám sát</value>
+        </data>
+    <data name="SupervisorFieldName" xml:space="preserve">
+        <value>Người giám sát</value>
+        </data>
+    <data name="LogOnModel_UserName" xml:space="preserve">
+        <value>Tên người dùng</value>
+        </data>
+    <data name="LogOnModel_Password" xml:space="preserve">
+        <value>Mật khẩu</value>
+        </data>
+    <data name="TroubleshootModel_InterviewId_ErrorMessage" xml:space="preserve">
+        <value>Vui lòng nhập GUID hợp lệ theo định dạng sau xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</value>
+        </data>
+    <data name="UserBatchUploadModel_Required_ErrorMessage" xml:space="preserve">
+        <value>Bạn phải chọn một tập tin để tải lên</value>
+        </data>
+    <data name="UserBatchUploadModel_Validation_ErrorMessage" xml:space="preserve">
+        <value>Vui lòng chọn tập tin</value>
+        </data>
+    <data name="UserBatchUploadModel_File_CSV_File" xml:space="preserve">
+        <value>Tệp CSV</value>
+        </data>
+    <data name="BatchUploadModel_Required" xml:space="preserve">
+        <value>Bạn phải chọn một tập tin để tải lên</value>
+        </data>
+    <data name="BatchUploadModel_ValidationErrorMessage" xml:space="preserve">
+        <value>Vui lòng chọn một tập tin</value>
+        </data>
+    <data name="BatchUploadModel_FileName" xml:space="preserve">
+        <value>Tệp CSV</value>
+        </data>
+    <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
+        <value>Tiêu đề bảng câu hỏi là bắt buộc</value>
+        </data>
+    <data name="CloneQuestionnaireModel_NewTitle_Label" xml:space="preserve">
+        <value>Tiêu đề</value>
+        </data>
+    <data name="PersonNameAllowedCharactersErrorMessage" xml:space="preserve">
+        <value>Tên người có ký tự không hợp lệ. Chỉ cho phép các chữ cái, dấu chấm, dấu cách và dấu nháy đơn</value>
+        </data>
+    <data name="PhoneErrorLength" xml:space="preserve">
+        <value>Số điện thoại không được chứa nhiều hơn {1} ký tự</value>
+        </data>
+    <data name="OldPasswordErrorMessage" xml:space="preserve">
+        <value>Để thay đổi mật khẩu, hãy cung cấp mật khẩu hiện có hợp lệ</value>
+        </data>
+    <data name="OldPasswordFieldName" xml:space="preserve">
+        <value>Mật khẩu cũ</value>
+        </data>
+    <data name="RestrictedAccountMessage" xml:space="preserve">
+        <value>Tài khoản này bị hạn chế thực hiện hành động này</value>
+        </data>
+    <data name="RestrictedAccount" xml:space="preserve">
+        <value>Tài khoản này bị hạn chế</value>
+        </data>
+    <data name="UserName_Taken" xml:space="preserve">
+        <value>Vui lòng chọn tên người dùng khác</value>
+        </data>
+    <data name="ConfirmNewPasswordFieldName" xml:space="preserve">
+        <value>Xác nhận mật khẩu mới</value>
+        </data>
+    <data name="NewPasswordFieldName" xml:space="preserve">
+        <value>Mật khẩu mới</value>
+        </data>
+    <data name="ConfirmPasswordRequired" xml:space="preserve">
+        <value>Xác nhận mật khẩu là bắt buộc</value>
+        </data>
+    <data name="WorkspaceRequired" xml:space="preserve">
+        <value>Cần có không gian làm việc</value>
+        </data>
+    <data name="WorkspaceMissing" xml:space="preserve">
+        <value>Không tìm thấy không gian làm việc</value>
+        </data>
+    <data name="UserRoleRequired" xml:space="preserve">
+        <value>Cần có vai trò của người dùng</value>
+        </data>
+    <data name="UserIsLockedByHq" xml:space="preserve">
+        <value>Người dùng bị khóa bởi Trụ sở chính</value>
+        </data>
+    <data name="MandatoryField" xml:space="preserve">
+        <value>Trường này là bắt buộc</value>
+        </data>
+    <data name="PasswordRequiresDigit" xml:space="preserve">
+        <value>Mật khẩu phải có ít nhất một chữ số ('0'-'9').</value>
+        </data>
+    <data name="PasswordRequiresLower" xml:space="preserve">
+        <value>Mật khẩu phải có ít nhất một chữ thường ('a'-'z').</value>
+        </data>
+    <data name="PasswordRequiresNonAlphanumeric" xml:space="preserve">
+        <value>Mật khẩu phải có ít nhất một ký tự không phải chữ và số.</value>
+        </data>
+    <data name="PasswordRequiresUniqueChars" xml:space="preserve">
+        <value>Mật khẩu phải sử dụng ít nhất {0} ký tự khác nhau.</value>
+        </data>
+    <data name="PasswordRequiresUpper" xml:space="preserve">
+        <value>Mật khẩu phải có ít nhất một chữ hoa ('A'-'Z').</value>
+        </data>
+    <data name="PasswordTooShort" xml:space="preserve">
+        <value>Mật khẩu phải có ít nhất {0} ký tự.</value>
+        </data>
+    <data name="PasswordChangeRequired" xml:space="preserve">
+        <value>Mật khẩu của bạn đã được đặt lại. Bạn phải thay đổi nó để có quyền truy cập vào trang web.</value>
+        </data>
+</root>

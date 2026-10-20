@@ -6,6 +6,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
     public interface IInterviewerSettings : IEnumeratorSettings, IDeviceSettings
     {
         void SetVibrateOnError(bool vibrate);
+        void SetCommunicationIntegrityValidationIgnore(bool ignore);
         void SetShowLocationOnMap(bool showLocationOnMap);
         void SetAllowSyncWithHq(bool allowSyncWithHq);
         bool AllowSyncWithHq { get; }

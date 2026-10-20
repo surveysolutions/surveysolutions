@@ -9,7 +9,8 @@
             <router-view name="leftSidePanel"></router-view>
             <router-view />
         </section>
-        <vue-progress-bar></vue-progress-bar>
+        <v-progress-linear :active="progressStore.getIsRunning" indeterminate color="#29d" height="3"
+            style="position:fixed;top:0;left:0;right:0;z-index:9999" />
     </div>
     <div id="loading-logo" v-if="isActionRunning"></div>
     <confirm-dialog></confirm-dialog>
@@ -21,11 +22,11 @@
                     'alert-warning': props.item.type != 'error',
                     'alert-danger': props.item.type == 'error'
                 }" role="alert" style="min-height: 16px;">
-                    <div class="ui-pnotify-closer" aria-role="button" tabindex="0" title="Close" @click="props.close"
-                        style="cursor: pointer;">
+                    <div class="ui-pnotify-closer" aria-role="button" tabindex="0"
+                        :title="$t('QuestionnaireEditor.Close')" @click="props.close" style="cursor: pointer;">
                         <span class="glyphicon glyphicon-remove"></span>
                     </div>
-                    <div class="ui-pnotify-sticker" aria-role="button" aria-pressed="false" tabindex="0" title="Stick"
+                    <div class="ui-pnotify-sticker" aria-role="button" aria-pressed="false" tabindex="0" :title="$t('QuestionnaireEditor.Stick')"
                         style="cursor: pointer; visibility: hidden;">
                         <span class="glyphicon glyphicon-pause" aria-pressed="false"></span>
                     </div>
@@ -35,7 +36,7 @@
                     <h4 class="ui-pnotify-title" style="display: none;">
                         {{ props.item.title }}
                     </h4>
-                    <div class="ui-pnotify-text" aria-role="alert" v-dompurify-html="props.item.text"></div>
+                    <div class="ui-pnotify-text" role="alert" v-sanitize-html="props.item.text"></div>
                     <div class="ui-pnotify-action-bar"
                         style="margin-top: 5px; clear: both; text-align: right; display: none;"></div>
                 </div>
@@ -45,7 +46,7 @@
     <div v-if="isBlocked" block-ui-container="" class="block-ui-container ng-scope">
         <div class="block-ui-overlay"></div>
         <div class="block-ui-message-container" aria-live="assertive" aria-atomic="true">
-            <div class="block-ui-message ng-binding">Please wait...</div>
+            <div class="block-ui-message ng-binding">{{ $t('QuestionnaireEditor.PleaseWait') }}</div>
         </div>
     </div>
     <div class="cfp-hotkeys-container fade" :class="{ 'in': cheatSheetVisible }" v-if="cheatSheetVisible"
@@ -91,7 +92,7 @@ import { useTreeStore } from '../stores/tree';
 import { useUserStore } from '../stores/user';
 import { useHotkeysStore } from '../stores/hotkeys';
 import { useUnsavedChanges } from '../stores/unsavedChanges';
-import { useMagicKeys } from '@vueuse/core';
+import { useKeyShortcut } from '../composables/useKeyShortcut';
 
 import '../../content/external/angular-block-ui.css';
 import '../../content/external/hotkeys.css';
@@ -129,29 +130,12 @@ export default {
         const hotkeysStore = useHotkeysStore();
         const unsavedChanges = useUnsavedChanges();
 
-        const { shift_question } = useMagicKeys({
-            aliasMap: {
-                question: '?',
-            },
-            passive: false,
-            onEventFired(e) {
-                if (e.shiftKey && e.key === '?' && e.type === 'keydown') {
-                    //workaround for the issue with useMagicKeys useActiveElement      
-                    if (!(document.activeElement?.tagName.toUpperCase() == 'INPUT'
-                        || document.activeElement?.tagName.toUpperCase() == 'TEXTAREA')) {
-                        e.preventDefault();
-                    }
-                }
-            },
-        })
+        const shift_question = useKeyShortcut(e =>
+            e.shiftKey && e.key === '?' &&
+            !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName?.toUpperCase() ?? '')
+        );
 
-        const { ctrl_p } = useMagicKeys({
-            passive: false,
-            onEventFired(e) {
-                if (e.ctrlKey && e.key === 'p' && e.type === 'keydown')
-                    e.preventDefault()
-            },
-        })
+        const ctrl_p = useKeyShortcut(e => e.ctrlKey && e.key === 'p');
 
         return {
             questionnaireStore,
@@ -191,7 +175,6 @@ export default {
         }
     },
     mounted() {
-        this.$Progress.finish();
     },
     computed: {
         questionnaire() {
@@ -207,14 +190,6 @@ export default {
             return this.hotkeysStore.getHotkeys;
         },
         isActionRunning() {
-            var progress = this.$Progress;
-            if (progress) {
-                this.$nextTick(() => {
-                    if (this.progressStore.getIsRunning) progress.start();
-                    else progress.finish();
-                });
-            }
-
             return this.progressStore.getIsRunning || false;
         },
         isCover() {

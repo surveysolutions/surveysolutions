@@ -33,5 +33,6 @@
         RetentionPolicyStateChanged = 28,
         RetentionPolicyFilesToKeepChanged = 29,
         RetentionPolicyDaysToKeepChanged = 30,
+        GeographyExportFormatChanged = 31,
     }
 }

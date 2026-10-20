@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import _ from 'lodash';
 import { getComments, postComment } from '../services/commentsService';
 import emitter from '../services/emitter';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 export const useCommentsStore = defineStore('comments', {
     state: () => ({
@@ -14,7 +14,7 @@ export const useCommentsStore = defineStore('comments', {
     }),
     getters: {
         getComments: state => state.comments,
-        getCommentsCount: state => state.comments.length,
+        getCommentsCount: state => state.comments?.length ?? 0,
         getIsCommentsBlockVisible: state => state.isCommentsBlockVisible
     },
     actions: {
@@ -47,7 +47,7 @@ export const useCommentsStore = defineStore('comments', {
             this.entityId = entityId;
 
             _.forEach(data, function(comment) {
-                comment.date = moment.utc(comment.date);
+                comment.date = dayjs.utc(comment.date);
                 comment.isResolved = !_.isNull(comment.resolveDate || null);
             });
 
@@ -61,9 +61,9 @@ export const useCommentsStore = defineStore('comments', {
         },
 
         setComments(data) {
-            this.comments = data;
+            this.comments = data ?? [];
             this.isCommentsBlockVisible =
-                this.isCommentsBlockVisible == true && data && data.length > 0;
+                this.isCommentsBlockVisible == true && this.comments.length > 0;
         },
 
         toggleComments() {

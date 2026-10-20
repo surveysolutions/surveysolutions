@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="CloseInterview" xml:space="preserve"><value>បិទការសំភាសន៍ {0}</value></data>
+  <data name="CompleteInterview" xml:space="preserve"><value>បញ្ចប់ការសំភាសន៍ {0}</value></data>
+  <data name="RestartInterview" xml:space="preserve"><value>ចាប់ផ្តើមការសំភាសន៍ឡើងវិញ {0}</value></data>
+  <data name="ApproveInterview" xml:space="preserve"><value>អនុម័តការសំភាសន៍ {0}</value></data>
+  <data name="RejectInterview" xml:space="preserve"><value>បដិសេធការសំភាសន៍ {0}</value></data>
+  <data name="RejectInterviewToInterviewer" xml:space="preserve"><value>ត្រឡប់ការសំភាសន៍ទៅអ្នកសំភាសន៍ {0} {1}</value></data>
+  <data name="CreateInterviewFromAssignment" xml:space="preserve"><value>បង្កើតការសំភាសន៍ពីការចាត់ការ {0} {1}</value></data>
+  <data name="DeleteInterview" xml:space="preserve"><value>លុបការសំភាសន៍ {0}</value></data>
+  <data name="DetailedActionLog" xml:space="preserve"><value>កំណត់ត្រាសកម្មភាពលម្អិត</value></data>
+  <data name="PageTitle" xml:space="preserve"><value>កំណត់ត្រាសកម្មភាពអ្នកសំភាសន៍</value></data>
+  <data name="OpenInterview" xml:space="preserve"><value>បើកការសំភាសន៍ {0}</value></data>
+  <data name="SynchronizationCompleted" xml:space="preserve"><value>ការធ្វើសមកាលកម្មបានបញ្ចប់</value></data>
+  <data name="SynchronizationFailed" xml:space="preserve"><value>ការធ្វើសមកាលកម្មបានបរាជ័យ</value></data>
+  <data name="SynchronizationCanceled" xml:space="preserve"><value>ការធ្វើសមកាលកម្មត្រូវបានបោះបង់</value></data>
+  <data name="SynchronizationStarted" xml:space="preserve"><value>ការធ្វើសមកាលកម្មបានចាប់ផ្តើម {0}</value></data>
+  <data name="Login" xml:space="preserve"><value>ចូល {0}</value></data>
+  <data name="Logout" xml:space="preserve"><value>ចេញ {0}</value></data>
+  <data name="Relink" xml:space="preserve"><value>ភ្ជាប់ឡើងវិញ</value></data>
+
+
+
+
+
+
+
+
+
+  <data name="DownloadTabLog" xml:space="preserve"><value>ទាញយកកំណត់ត្រាពេញក្នុងទ្រង់ទ្រាយ Tab</value></data>
+  <data name="RecordsMissing" xml:space="preserve"><value>មិនទាន់មានកំណត់ត្រា</value></data>
+  <data name="OpenApplication" xml:space="preserve"><value>បើកដំណើរការកម្មវិធី</value></data>
+  <data name="AssignResponsibleToInterview" xml:space="preserve"><value>ចាត់ចែងអ្នកទទួលខុសត្រូវ {0} ទៅការសំភាសន៍ {1}</value></data>
+  <data name="AssignResponsibleToAssignment" xml:space="preserve"><value>ចាត់ចែងអ្នកទទួលខុសត្រូវ {0} ទៅការចាត់ការ #{1}</value></data>
+  <data name="FinishInstallation" xml:space="preserve"><value>ការដំឡើងបានបញ្ចប់</value></data>
+  <data name="ShowPrevious7Days" xml:space="preserve"><value>បង្ហាញ 7 ថ្ងៃសកម្មចុងក្រោយ</value></data>
+  <data name="SynchronizationCompleted_InterviewsUploaded" xml:space="preserve"><value>ការសំភាសន៍ {0} ត្រូវបានផ្ទុកឡើង</value></data>
+  <data name="SynchronizationCompleted_InterviewsRemoved" xml:space="preserve"><value>ការសំភាសន៍ {0} ត្រូវបានដកចេញ</value></data>
+  <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve"><value>ការសំភាសន៍ {0} ត្រូវបានទាញយកដោយផ្នែក</value></data>
+  <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve"><value>ការសំភាសន៍ {0} ត្រូវបានផ្ទុកឡើងដោយផ្នែក</value></data>
+  <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve"><value>ការសំភាសន៍ {0} ត្រូវបានបើកឡើងវិញបន្ទាប់ពីទទួលយោបល់</value></data>
+  <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve"><value>ការសំភាសន៍ {0} ត្រូវបានបដិសេធ</value></data>
+
+
+  <data name="SynchronizationCompleted_AssignmentsRemoved" xml:space="preserve"><value>ការចាត់ការ {0} ត្រូវបានដកចេញ</value></data>
+  <data name="SynchronizationCompleted_NothingToSync" xml:space="preserve"><value>គ្មានអ្វីត្រូវធ្វើសមកាលកម្ម</value></data>
+
+  <data name="SynchronizationCompleted_InterviewsDownloaded" xml:space="preserve"><value>ការសំភាសន៍ថ្មី {0} ត្រូវបានទាញយក</value></data>
+  <data name="SynchronizationCompleted_AssignmentsDownloaded" xml:space="preserve"><value>ការចាត់ការថ្មី {0} ត្រូវបានទាញយក</value></data>
+  <data name="SwitchInterviewMode" xml:space="preserve"><value>ការសំភាសន៍ {0} បានប្ដូរទៅរបៀប {1}</value></data>
+</root>

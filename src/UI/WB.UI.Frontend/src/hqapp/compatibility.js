@@ -1,4 +1,5 @@
 import $ from '~/shared/jquery'
+import { validateJQueryXhr } from '~/shared/serverValidator'
 
 $.fn.preventDoubleSubmission = function () {
     $(this).on('submit', function (e) {
@@ -35,6 +36,21 @@ window.ajustDetailsPanelHeight = function () {
     $('main').css('margin-top', height + 'px')
 }
 
+function updateNavigationOffset() {
+    var navbar = document.querySelector('header .navbar.navbar-fixed-top')
+    if (!navbar || !document.body) return
+
+    var navbarHeight = Math.ceil(navbar.getBoundingClientRect().height)
+    if (navbarHeight <= 0) return
+
+    var offset = navbarHeight + 'px'
+    document.body.style.paddingTop = offset
+
+    document.querySelectorAll('.view-mode').forEach(function (el) {
+        el.style.top = offset
+    })
+}
+
 $(function () {
     $('main').removeClass('hold-transition')
     $('footer').removeClass('hold-transition')
@@ -48,6 +64,7 @@ $(function () {
 
     $('form').preventDoubleSubmission()
 
+    updateNavigationOffset()
     window.ajustNoticeHeight()
     window.ajustDetailsPanelHeight()
 
@@ -57,7 +74,16 @@ $(function () {
     })
 })
 
+window.addEventListener('load', updateNavigationOffset)
+
 $(window).resize(function () {
+    updateNavigationOffset()
     window.ajustNoticeHeight()
     window.ajustDetailsPanelHeight()
 })
+
+$(document).ajaxComplete(function (event, jqXHR, settings) {
+    validateJQueryXhr(jqXHR, settings)
+})
+
+

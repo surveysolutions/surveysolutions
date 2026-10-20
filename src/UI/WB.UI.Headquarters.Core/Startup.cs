@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO.Compression;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Anemonis.AspNetCore.RequestDecompression;
 using Autofac;
-using AutoMapper;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -18,16 +17,18 @@ using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Refit;
 using Serilog;
+using Serilog.Events;
+using WB.Core.Infrastructure.Modularity;
 using Vite.Extensions.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
@@ -75,6 +76,7 @@ using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Headquarters.Services.Quartz;
 using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.Exceptions;
+using WB.UI.Shared.Web.Integrity;
 using WB.UI.Shared.Web.LoggingIntegration;
 using WB.UI.Shared.Web.Mappings;
 using WB.UI.Shared.Web.UnderConstruction;
@@ -298,7 +300,6 @@ namespace WB.UI.Headquarters
             services.AddSignalR().AddNewtonsoftJsonProtocol();
 
             services.AddHttpContextAccessor();
-            services.AddAutoMapper(cfg => { }, typeof(Startup));
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -338,6 +339,13 @@ namespace WB.UI.Headquarters
                 DesignerRestServiceHandler>(new RefitSettings
                 {
                     ContentSerializer = new DesignerContentSerializer()
+                }, (handler, serviceProvider) =>
+                {
+                    if (serviceProvider.GetRequiredService<IOptions<DesignerConfig>>().Value.AcceptUnsignedCertificate)
+                    {
+                        handler.ServerCertificateCustomValidationCallback =
+                            HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                    }
                 });
             
 
@@ -427,9 +435,10 @@ namespace WB.UI.Headquarters
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseIntegrityHelper();
+            
             app.UseViteForwarder();
             app.UseForwardedHeaders();
-
             app.UseExceptional();
 
             if (!env.IsDevelopment())
@@ -443,7 +452,7 @@ namespace WB.UI.Headquarters
                 {
                     if (!env.IsDevelopment())
                     {
-                        ctx.Context.Response.Headers.Add("Cache-Control", "public, max-age=31536000");
+                        ctx.Context.Response.Headers.Append("Cache-Control", "public, max-age=31536000");
                     }
                 }
             });
@@ -473,12 +482,48 @@ namespace WB.UI.Headquarters
                     new CultureInfo("ro"),
                     new CultureInfo("cs"),
                     new CultureInfo("uk"),
+                    new CultureInfo("ka"),
+                    new CultureInfo("km"),
+                    new CultureInfo("th"),
+                    new CultureInfo("vi"),
+                    new CultureInfo("sq")
+                };
+            });
+
+            var underConstructionInfo = app.ApplicationServices.GetRequiredService<UnderConstructionInfo>();
+
+            // Capture under-construction status at the start of each request so logging
+            // can use the per-request value instead of reading mutable global state.
+            // Must run before UseUnderConstruction() so the captured status matches the
+            // decision made by UnderConstructionMiddleware for this request.
+            app.Use(async (context, next) =>
+            {
+                context.Items["UnderConstructionStatusAtRequestStart"] = underConstructionInfo.Status;
+                await next();
+            });
+
+            app.UseSerilogRequestLogging(o =>
+            {
+                o.Logger = app.ApplicationServices.GetService<ILogger>();
+                o.GetLevel = (ctx, elapsed, ex) =>
+                {
+                    if (ex == null
+                        && ctx.Response.StatusCode == StatusCodes.Status503ServiceUnavailable
+                        && ctx.Items.TryGetValue("UnderConstructionStatusAtRequestStart", out var statusObj)
+                        && statusObj is UnderConstructionStatus statusAtRequestStart
+                        && statusAtRequestStart != UnderConstructionStatus.Finished
+                        && statusAtRequestStart != UnderConstructionStatus.Error)
+                    {
+                        return LogEventLevel.Warning;
+                    }
+
+                    return ex != null || ctx.Response.StatusCode > 499
+                        ? LogEventLevel.Error
+                        : LogEventLevel.Information;
                 };
             });
 
             app.UseUnderConstruction();
-
-            app.UseSerilogRequestLogging(o => o.Logger = app.ApplicationServices.GetService<ILogger>());
             
             app.UseWorkspaces();
 

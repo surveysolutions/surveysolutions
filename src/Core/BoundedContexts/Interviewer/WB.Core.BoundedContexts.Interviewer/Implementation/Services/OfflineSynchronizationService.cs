@@ -346,6 +346,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return syncClient.SendAsync(new LogAssignmentAsHandledRequest { Id = id }, token);
         }
 
+        public Task ChangeAssignmentStatusAsync(int id, AssignmentStatusChangeApiView statusChange, CancellationToken token = default)
+        {
+            return syncClient.SendAsync(
+                new ChangeAssignmentStatusRequest { Id = id, StatusChange = statusChange }, token);
+        }
+
         public async Task<string> GetPublicKeyForEncryptionAsync(CancellationToken token = default)
         {
             var response = await syncClient.SendAsync<GetPublicKeyForEncryptionRequest, GetPublicKeyForEncryptionResponse>(

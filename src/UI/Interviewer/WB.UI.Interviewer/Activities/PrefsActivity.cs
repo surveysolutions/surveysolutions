@@ -101,6 +101,11 @@ namespace WB.UI.Interviewer.Activities
                     interviewerSettings.SetVibrateOnError(ParseBooleanSettingsValue(e.NewValue, interviewerSettings.VibrateOnError));
                     this.UpdateSettings();
                 };
+                this.FindPreference(SettingsNames.CommunicationIntegrityValidationIgnore).PreferenceChange += (sender, e) =>
+                {
+                    interviewerSettings.SetCommunicationIntegrityValidationIgnore(ParseBooleanSettingsValue(e.NewValue, interviewerSettings.CommunicationIntegrityValidationIgnore));
+                    this.UpdateSettings();
+                };
                 this.FindPreference(SettingsNames.ShowLocationOnMap).PreferenceChange += (sender, e) =>
                 {
                     interviewerSettings.SetShowLocationOnMap(ParseBooleanSettingsValue(e.NewValue, interviewerSettings.ShowLocationOnMap));
@@ -150,6 +155,11 @@ namespace WB.UI.Interviewer.Activities
 
                 this.SetBooleanPreferenceTitleAndSummary(SettingsNames.VibrateOnError, UIResources.Prefs_VibrateOnErrorTitle,
                     UIResources.Prefs_VibrateOnErrorSummary, interviewerSettings.VibrateOnError);
+
+                this.SetBooleanPreferenceTitleAndSummary(SettingsNames.CommunicationIntegrityValidationIgnore,
+                    UIResources.Prefs_CommunicationIntegrityValidationIgnoreTitle,
+                    UIResources.Prefs_CommunicationIntegrityValidationIgnoreSummary,
+                    interviewerSettings.CommunicationIntegrityValidationIgnore);
 
                 this.SetBooleanPreferenceTitleAndSummary(SettingsNames.ShowLocationOnMap, 
                     UIResources.Prefs_ShowLocationOnMap,

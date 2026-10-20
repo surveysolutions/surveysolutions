@@ -83,6 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             }
         }
         private CancellationTokenSource synchronizationCancellationTokenSource;
+        private MapSyncProgressStatus subscribedProgress;
 
         public IMvxCommand CancelSynchronizationCommand => new MvxCommand(this.CancelSynchronizaion);
         public IMvxCommand HideSynchronizationCommand => new MvxCommand(this.HideSynchronizaion);
@@ -95,15 +96,34 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         private void CancelSynchronizaion()
         {
             this.IsSynchronizationInfoShowed = false;
-            if (this.synchronizationCancellationTokenSource != null && !this.synchronizationCancellationTokenSource.IsCancellationRequested)
-                this.synchronizationCancellationTokenSource.Cancel();
+            try
+            {
+                if (this.synchronizationCancellationTokenSource != null &&
+                    !this.synchronizationCancellationTokenSource.IsCancellationRequested)
+                    this.synchronizationCancellationTokenSource.Cancel();
+            }
+            catch (ObjectDisposedException)
+            {
+                // CTS was already disposed by the service after sync completed normally
+            }
         }
 
         public void Init()
         {
             var mapSyncProgressStatus = this.MapSyncBackgroundService?.CurrentProgress;
+            if (ReferenceEquals(mapSyncProgressStatus, this.subscribedProgress))
+                return;
+
+            if (this.subscribedProgress != null)
+            {
+                this.subscribedProgress.Progress.ProgressChanged -= ProgressOnProgressChanged;
+                this.subscribedProgress = null;
+                this.synchronizationCancellationTokenSource = null;
+            }
+
             if (mapSyncProgressStatus != null)
             {
+                this.subscribedProgress = mapSyncProgressStatus;
                 mapSyncProgressStatus.Progress.ProgressChanged += ProgressOnProgressChanged;
                 this.synchronizationCancellationTokenSource = mapSyncProgressStatus.CancellationTokenSource;
             }
@@ -120,6 +140,9 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             var mapSyncProgressStatus = this.MapSyncBackgroundService.CurrentProgress;
             if (mapSyncProgressStatus != null)
             {
+                if (this.subscribedProgress != null)
+                    this.subscribedProgress.Progress.ProgressChanged -= ProgressOnProgressChanged;
+                this.subscribedProgress = mapSyncProgressStatus;
                 mapSyncProgressStatus.Progress.ProgressChanged += ProgressOnProgressChanged;
                 this.synchronizationCancellationTokenSource = mapSyncProgressStatus.CancellationTokenSource;
             }
@@ -138,6 +161,10 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
                 if (!syncProgressInfo.IsRunning)
                 {
+                    if (this.subscribedProgress != null)
+                        this.subscribedProgress.Progress.ProgressChanged -= ProgressOnProgressChanged;
+                    this.subscribedProgress = null;
+                    this.synchronizationCancellationTokenSource = null;
                     this.OnSyncCompleted();
                 }
             });

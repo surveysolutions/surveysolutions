@@ -24,6 +24,7 @@ using WB.Core.BoundedContexts.Designer.AnonymousQuestionnaires;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Scenarios;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
@@ -38,6 +39,7 @@ using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Controllers
@@ -59,6 +61,8 @@ namespace WB.UI.Designer.Controllers
             public string? Title { get; set; }
 
             public bool IsDeleted { get; set; }
+
+            public bool IncludeScenarios { get; set; } = true;
         }
 
         public class QuestionnaireViewModel
@@ -98,6 +102,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IWebHostEnvironment webHost;
         private readonly IOptions<ViteTagOptions> options;
         private readonly IMemoryCache memoryCache;
+        private readonly ITransactionRollbackState transactionRollbackState;
 
         public QuestionnaireController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -118,7 +123,8 @@ namespace WB.UI.Designer.Controllers
             ITagHelperComponentManager tagHelperComponentManager,
             IWebHostEnvironment webHost,
             IOptions<ViteTagOptions> options,
-            IMemoryCache memoryCache)
+            IMemoryCache memoryCache,
+            ITransactionRollbackState transactionRollbackState)
             : base(dbContext, questionnaireViewFactory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -138,6 +144,7 @@ namespace WB.UI.Designer.Controllers
             this.webHost = webHost;
             this.options = options;
             this.memoryCache = memoryCache;
+            this.transactionRollbackState = transactionRollbackState;
         }
 
         [Route("questionnaire/details/{id}/nosection/{entityType}/{entityId}")]
@@ -228,6 +235,22 @@ namespace WB.UI.Designer.Controllers
 
                     this.commandService.Execute(command);
 
+                    if (model.IncludeScenarios)
+                    {
+                        var sourceScenarios = await dbContext.Scenarios
+                            .AsNoTracking()
+                            .Where(s => s.QuestionnaireId == model.QuestionnaireId)
+                            .Select(s => new StoredScenario
+                            {
+                                QuestionnaireId = questionnaireId,
+                                Title = s.Title,
+                                Steps = s.Steps
+                            })
+                            .ToListAsync();
+
+                        dbContext.Scenarios.AddRange(sourceScenarios);
+                    }
+
                     await dbContext.SaveChangesAsync();
 
                     return this.RedirectToAction("Details", "Q", new { id = questionnaireId.FormatGuid() });
@@ -239,6 +262,8 @@ namespace WB.UI.Designer.Controllers
                     var domainException = e.GetSelfOrInnerAs<QuestionnaireException>();
                     if (domainException != null)
                     {
+                        // The failed command may have staged partial writes; the handler returns a view, so mark the transaction.
+                        this.transactionRollbackState.MarkRollbackOnly();
                         this.Error(domainException.Message);
                         logger.LogError(domainException, "Questionnaire controller -> clone: " + domainException.Message);
                     }
@@ -283,6 +308,8 @@ namespace WB.UI.Designer.Controllers
                 }
                 catch (QuestionnaireException e)
                 {
+                    // The failed command may have staged partial writes; the handler returns a view, so mark the transaction.
+                    this.transactionRollbackState.MarkRollbackOnly();
                     this.Error(e.Message);
                     logger.LogError(e, "Error on questionnaire creation.");
                 }
@@ -357,7 +384,8 @@ namespace WB.UI.Designer.Controllers
 
         [Authorize]
         [AntiForgeryFilter]
-        public async Task<IActionResult> QuestionnaireHistory(QuestionnaireRevision id, int? p)
+        public async Task<IActionResult> QuestionnaireHistory(QuestionnaireRevision id, int? p, string? search,
+            bool searchIdsOnly = false, bool searchWholeWord = false)
         {
             bool hasAccess = this.User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, this.User.GetIdOrNull());
             if (!hasAccess)
@@ -369,7 +397,8 @@ namespace WB.UI.Designer.Controllers
             if (questionnaireInfoView == null) return NotFound();
 
             QuestionnaireChangeHistory? questionnairePublicListViewModels = 
-                await questionnaireChangeHistoryFactory.LoadAsync(id.QuestionnaireId, p ?? 1, GlobalHelper.GridPageItemsCount, this.User);
+                await questionnaireChangeHistoryFactory.LoadAsync(id.QuestionnaireId, p ?? 1, GlobalHelper.GridPageItemsCount,
+                    this.User, search, searchIdsOnly, searchWholeWord);
             if (questionnairePublicListViewModels == null)
                 return NotFound();
 
@@ -450,8 +479,11 @@ namespace WB.UI.Designer.Controllers
         
         [Authorize]
         [HttpPost]
+        [QuestionnairePermissions(true)]
         [Route("questionnaire/updateAnonymousQuestionnaireSettings/{id}")]
         [ValidateAntiForgeryToken]
+        // Sends an email as a side effect, so its writes must commit immediately rather than in the deferred filter transaction.
+        [NoTransaction]
         public async Task<IActionResult> UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
         {
             bool isActive = postModel.IsActive;
@@ -481,8 +513,11 @@ namespace WB.UI.Designer.Controllers
 
         [Authorize]
         [HttpPost]
+        [QuestionnairePermissions(true)]
         [Route("questionnaire/regenerateAnonymousQuestionnaireLink/{id}")]
         [ValidateAntiForgeryToken]
+        // Sends an email as a side effect, so its writes must commit immediately rather than in the deferred filter transaction.
+        [NoTransaction]
         public async Task<IActionResult> RegenerateAnonymousQuestionnaireLink(Guid id)
         {
             var existedRecord = dbContext.AnonymousQuestionnaires.First(a => a.QuestionnaireId == id);

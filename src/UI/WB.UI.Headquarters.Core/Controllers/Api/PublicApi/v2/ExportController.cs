@@ -123,7 +123,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
                 (WB.Core.BoundedContexts.Headquarters.DataExport.Dtos.ExternalStorageType?) requestBody.StorageType,
                 requestBody.TranslationId,
                 requestBody.IncludeMeta,
-                requestBody.ParadataReduced);
+                requestBody.ParadataReduced,
+                exportSettings.GetGeographyExportFormat());
 
             this.auditLog.ExportStared(
                 $@"{questionnaireBrowseItem.Title} v{questionnaireBrowseItem.Version} {requestBody.InterviewStatus.ToString() ?? ""}",

@@ -93,6 +93,18 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string InvalidServerResponseMessage {
+            get {
+                return ResourceManager.GetString("InvalidServerResponseMessage", resourceCulture);
+            }
+        }
+        
+        public static string InvalidServerResponseTitle {
+            get {
+                return ResourceManager.GetString("InvalidServerResponseTitle", resourceCulture);
+            }
+        }
+        
         public static string ConnectionLostTitle {
             get {
                 return ResourceManager.GetString("ConnectionLostTitle", resourceCulture);
@@ -108,6 +120,18 @@ namespace WB.UI.Headquarters.Resources {
         public static string CloseInterviewMessage {
             get {
                 return ResourceManager.GetString("CloseInterviewMessage", resourceCulture);
+            }
+        }
+        
+        public static string Reconnecting {
+            get {
+                return ResourceManager.GetString("Reconnecting", resourceCulture);
+            }
+        }
+        
+        public static string ReconnectAttempt {
+            get {
+                return ResourceManager.GetString("ReconnectAttempt", resourceCulture);
             }
         }
         
@@ -204,6 +228,12 @@ namespace WB.UI.Headquarters.Resources {
         public static string AnswerWasNotSaved {
             get {
                 return ResourceManager.GetString("AnswerWasNotSaved", resourceCulture);
+            }
+        }
+        
+        public static string CommunicationError {
+            get {
+                return ResourceManager.GetString("CommunicationError", resourceCulture);
             }
         }
         
@@ -378,6 +408,12 @@ namespace WB.UI.Headquarters.Resources {
         public static string NumberCannotBeLessThanProtected {
             get {
                 return ResourceManager.GetString("NumberCannotBeLessThanProtected", resourceCulture);
+            }
+        }
+        
+        public static string NumberNonNegativeError {
+            get {
+                return ResourceManager.GetString("NumberNonNegativeError", resourceCulture);
             }
         }
         
@@ -765,6 +801,12 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string ImageFormatNotSupported {
+            get {
+                return ResourceManager.GetString("ImageFormatNotSupported", resourceCulture);
+            }
+        }
+        
         public static string MultimediaNotSupported {
             get {
                 return ResourceManager.GetString("MultimediaNotSupported", resourceCulture);
@@ -960,6 +1002,18 @@ namespace WB.UI.Headquarters.Resources {
         public static string CompleteReviewSubmitInterview {
             get {
                 return ResourceManager.GetString("CompleteReviewSubmitInterview", resourceCulture);
+            }
+        }
+        
+        public static string GeographyPreview {
+            get {
+                return ResourceManager.GetString("GeographyPreview", resourceCulture);
+            }
+        }
+        
+        public static string RealQuestion_Hint {
+            get {
+                return ResourceManager.GetString("RealQuestion_Hint", resourceCulture);
             }
         }
     }

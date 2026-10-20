@@ -241,4 +241,7 @@
   <data name="Login_Error_EmptyName" xml:space="preserve">
     <value>Введите имя</value>
   </data>
+  <data name="TesterLoginAccountHintText" xml:space="preserve">
+    <value>Войдите в это приложение, используя учетные данные, созданные на сайте https://designer.mysurvey.solutions. Чтобы зарегистрировать новую учетную запись, посетите этот же сайт.</value>
+  </data>
 </root>

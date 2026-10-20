@@ -13,6 +13,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
             descriptor.Field(x => x.Id).Name("fileName");
             descriptor.Field(x => x.ImportDate).Name("importDateUtc");
             descriptor.Field(x => x.Size);
+            descriptor.Field(x => x.HasDuplicateLabels);
         }
     }
 }

@@ -18,5 +18,6 @@ namespace WB.Services.Export.Questionnaire
         public int[] ColumnValues { get; set; } = new int[0];
         public bool IsIdentifyingQuestion { get; internal set; }
         public Guid? LabelReferenceId { get; set; }
+        public GeometryType? GeometryType { get; set; }
     }
 }

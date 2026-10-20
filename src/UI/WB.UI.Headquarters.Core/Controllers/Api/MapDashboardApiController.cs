@@ -113,6 +113,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             public int assignmentId { get; set; }
             public UserRoles responsibleRole { get; set; }
+            public string status { get; set; }
         }
 
         public class MapDashboardRequest
@@ -179,6 +180,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                         {
                             assignmentId = a.AssignmentId,
                             responsibleRole = a.ResponsibleRoleId.ToUserRole(),
+                            status = a.Status.ToString(),
                         })))
                 .ToList();
             
@@ -285,6 +287,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                     {
                         assignmentId = g.AssignmentId,
                         responsibleRole = g.ResponsibleRoleId.ToUserRole(),
+                        status = g.Status.ToString(),
                     });
             })).ToList();
 

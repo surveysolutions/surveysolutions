@@ -376,4 +376,13 @@
   <data name="WelcomeText" xml:space="preserve">
     <value>Привіт і ласкаво просимо до веб-опитування Survey Solutions</value>
   </data>
+
+
+  <data name="Filters_CriticalQuestions" xml:space="preserve">
+    <value>Критичні питання</value>
+  </data>
+
+  <data name="Filters_CriticalRules" xml:space="preserve">
+    <value>Критичні правила</value>
+  </data>
 </root>

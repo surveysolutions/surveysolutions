@@ -2,18 +2,21 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
-import VueProgressBar from '@aacassandra/vue3-progressbar';
-import VueDOMPurifyHTML from 'vue-dompurify-html';
 import i18next from './plugins/localization';
 import I18NextVue from 'i18next-vue';
 import { vuetify } from './plugins/vuetify';
 import { setupErrorHandler } from './plugins/errorHandler';
+import './plugins/dayjs';
+
+// Import Material Design Icons
+import '@mdi/font/css/materialdesignicons.css';
 
 //import '../../questionnaire/content/markup.less';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 
 import ConfirmDialog from './plugins/confirm';
+import ConfirmPromptDialog from './plugins/confirmPrompt';
 
 import { PerfectScrollbarPlugin } from 'vue3-perfect-scrollbar';
 import 'vue3-perfect-scrollbar/style.css';
@@ -26,6 +29,9 @@ import './extensions';
 import directives from './directives/';
 
 import emitter from './services/emitter';
+import { installServerGuards } from './services/serverGuard';
+
+installServerGuards({ page: true, fetch: true });
 
 const pinia = createPinia();
 pinia.use(({ store }) => {
@@ -47,35 +53,18 @@ vue.use(I18NextVue, { i18next });
 //vue.use(uiv);
 vue.use(vuetify); //reqired by options component. consider either remove or use.
 vue.use(PerfectScrollbarPlugin);
-vue.use(VueDOMPurifyHTML);
 vue.component('file-upload', VueUploadComponent);
 vue.use(Notifications);
-
-const options = {
-    color: '#29d',
-    failedColor: '#874b4b',
-    thickness: '3px',
-    transition: {
-        speed: '0.2s',
-        opacity: '0.6s',
-        termination: 300
-    },
-    autoRevert: true,
-    location: 'top',
-    inverse: false,
-    autoFinish: false
-};
-
-vue.use(VueProgressBar, options);
 
 vue.use(ConfirmDialog);
 vue.component('confirm-dialog', ConfirmDialog.default);
 
+vue.use(ConfirmPromptDialog);
+vue.component('confirm-prompt-dialog', ConfirmPromptDialog.default);
+
 directives(vue);
 
 import './views/Designer/pages/classifications/validationRules';
-import store from './views/Designer/pages/classifications/store';
-vue.use(store);
 
 // Run!
 router.isReady().then(() => {

@@ -277,7 +277,7 @@
     <value>Terminé le {{date}}</value>
   </data>
   <data name="DataExport_QuestionnaireWithVersion" xml:space="preserve">
-    <value>{{title}} (ver. {{version}})</value>
+    <value>{{title}} (v. {{version}})</value>
   </data>
   <data name="DataExport_Regenerate" xml:space="preserve">
     <value>Régénérer</value>
@@ -301,7 +301,7 @@
     <value>En file d'attente:</value>
   </data>
   <data name="DataExport_Destination" xml:space="preserve">
-    <value>Destination: {{dest}}</value>
+    <value>Destination : {{dest}}</value>
   </data>
   <data name="DataExport_ServiceIsNotAvailable" xml:space="preserve">
     <value>Le service d'exportation n'est pas disponible</value>
