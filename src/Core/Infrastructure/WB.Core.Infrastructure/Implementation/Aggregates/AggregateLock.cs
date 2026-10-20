@@ -109,12 +109,10 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
                     if (heldLocks.ContainsKey(key))
                         return false;
 
-                    if (lastAcquiredKey != null && string.CompareOrdinal(key, lastAcquiredKey) < 0)
-                        throw new InvalidOperationException("Aggregate locks must be acquired in ascending order.");
+                    if (!semaphore.Wait(0))
+                        throw new InvalidOperationException("Aggregate lock is currently held by another transaction.");
 
-                    semaphore.Wait();
                     heldLocks.Add(key, semaphore);
-                    lastAcquiredKey = key;
                     return true;
                 }
             }
@@ -127,11 +125,9 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
                         semaphore.Release();
 
                     heldLocks.Clear();
-                    lastAcquiredKey = null;
                 }
             }
 
-            private string lastAcquiredKey;
         }
     }
 }

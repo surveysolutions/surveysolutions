@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Text.Json;
@@ -21,6 +22,7 @@ using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.Domain;
+using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -47,11 +49,13 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
         private Mock<ISession> session;
         private Mock<ITransaction> transaction;
         private int fieldsExecuted;
+        private readonly Queue<CreateCalendarEventCommand> calendarCommands = new();
 
         [SetUp]
         public async Task SetUp()
         {
             fieldsExecuted = 0;
+            calendarCommands.Clear();
             completionUsedByCommandLock = null;
             transaction = CreateTransaction();
             session = new Mock<ISession>();
@@ -113,7 +117,9 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
                         .Resolve(_ => ThrowError());
                     x.Field("scopedCommand").Type<IntType>().Use<TransactionMiddleware>().Resolve(_ =>
                     {
-                        commandService.Execute(NewCalendarCommand());
+                        commandService.Execute(calendarCommands.Count == 0
+                            ? NewCalendarCommand()
+                            : calendarCommands.Dequeue());
                         return ++fieldsExecuted;
                     });
                 });
@@ -241,6 +247,19 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
             transaction.Verify(x => x.Rollback(), Times.Once);
         }
 
+        [Test]
+        public async Task should_allow_multiple_calendar_creations_with_descending_generated_ids()
+        {
+            calendarCommands.Enqueue(NewCalendarCommand(Guid.Parse("ffffffff-ffff-ffff-ffff-ffffffffffff")));
+            calendarCommands.Enqueue(NewCalendarCommand(Guid.Parse("00000000-0000-0000-0000-000000000000")));
+            commandService = new CommandService(new AutofacServiceLocatorAdapter(container), new AggregateLock());
+
+            await using var result = await Execute("mutation { first: scopedCommand second: scopedCommand }");
+
+            Assert.That(result.ExpectOperationResult().Errors, Is.Null.Or.Empty);
+            Assert.That(fieldsExecuted, Is.EqualTo(2));
+        }
+
         [TestCase("{ value }")]
         [TestCase("mutation { missingField }")]
         public async Task should_not_complete_queries_or_invalid_mutations(string document)
@@ -280,8 +299,8 @@ namespace WB.Tests.Web.Headquarters.Controllers.GraphTests
 
         private static int ThrowError() => throw new InvalidOperationException("Resolver failed");
 
-        private static CreateCalendarEventCommand NewCalendarCommand() => new(
-            Guid.NewGuid(), Guid.NewGuid(), DateTimeOffset.UtcNow, "America/New_York",
+        private static CreateCalendarEventCommand NewCalendarCommand(Guid? publicKey = null) => new(
+            publicKey ?? Guid.NewGuid(), Guid.NewGuid(), DateTimeOffset.UtcNow, "America/New_York",
             null, string.Empty, 0, string.Empty, new QuestionnaireIdentity());
 
         private Task<IExecutionResult> Execute(string document) => executor.ExecuteAsync(

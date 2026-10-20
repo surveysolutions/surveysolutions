@@ -58,17 +58,34 @@ namespace WB.Tests.Unit.Infrastructure
         }
 
         [Test]
-        public void RunWithLock_should_reject_aggregate_lock_order_inversions()
+        public void RunWithLock_should_allow_uncontended_aggregate_locks_in_any_order()
         {
             var aggregateLock = new AggregateLock();
             var completion = NewCompletion(out var completed);
 
             aggregateLock.RunWithLock("b", completion, () => { });
+            Assert.DoesNotThrow(() => aggregateLock.RunWithLock("a", completion, () => { }));
+
+            completed(false);
+        }
+
+        [Test]
+        public void RunWithLock_should_abort_when_a_transaction_lock_is_contended()
+        {
+            var aggregateLock = new AggregateLock();
+            var firstCompletion = NewCompletion(out var firstCompleted);
+            var secondCompletion = NewCompletion(out var secondCompleted);
+
+            aggregateLock.RunWithLock("b", firstCompletion, () => { });
+            aggregateLock.RunWithLock("a", secondCompletion, () => { });
 
             Assert.That(
-                () => aggregateLock.RunWithLock("a", completion, () => { }),
+                () => aggregateLock.RunWithLock("a", firstCompletion, () => { }),
                 Throws.InvalidOperationException);
-            completed(false);
+
+            firstCompleted(false);
+            Assert.DoesNotThrow(() => aggregateLock.RunWithLock("b", secondCompletion, () => { }));
+            secondCompleted(false);
         }
 
         [Test]
