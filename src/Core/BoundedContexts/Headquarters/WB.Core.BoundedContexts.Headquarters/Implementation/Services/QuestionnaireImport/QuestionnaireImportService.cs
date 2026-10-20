@@ -290,7 +290,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         var newConfig = new WebInterviewConfig
                         {
                             QuestionnaireId = questionnaireIdentity,
-                            Started = previousConfig.Started,
+                            Started = false,
                             UseCaptcha = previousConfig.UseCaptcha,
                             SingleResponse = previousConfig.SingleResponse,
                             EmailOnComplete = previousConfig.EmailOnComplete,
