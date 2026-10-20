@@ -485,21 +485,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         public async Task CleanupOrphanedMapFilesAsync()
         {
+            var referencedStorageKeys = mapPlainStorageAccessor
+                .Query(query => query.Select(map => map.StorageKey ?? map.FileName).ToList())
+                .ToHashSet(StringComparer.Ordinal);
+
             if (externalFileStorage.IsEnabled())
             {
                 var files = await externalFileStorage.ListAsync(GetWorkspaceStoragePathPrefix()).ConfigureAwait(false);
                 foreach (var file in files ?? new List<FileObject>())
-                    await CleanupOrphanedMapFileAsync(fileSystemAccessor.GetFileName(file.Path)).ConfigureAwait(false);
+                    await CleanupOrphanedMapFileAsync(fileSystemAccessor.GetFileName(file.Path), referencedStorageKeys).ConfigureAwait(false);
                 return;
             }
 
             foreach (var path in fileSystemAccessor.GetFilesInDirectory(mapsFolderPath))
-                await CleanupOrphanedMapFileAsync(fileSystemAccessor.GetFileName(path)).ConfigureAwait(false);
+                await CleanupOrphanedMapFileAsync(fileSystemAccessor.GetFileName(path), referencedStorageKeys).ConfigureAwait(false);
         }
 
-        private async Task CleanupOrphanedMapFileAsync(string storageKey)
+        private async Task CleanupOrphanedMapFileAsync(string storageKey, HashSet<string> referencedStorageKeys)
         {
-            if (!IsWorkspaceGenerationStorageKey(storageKey))
+            if (!IsWorkspaceGenerationStorageKey(storageKey) || referencedStorageKeys.Contains(storageKey))
                 return;
 
             try

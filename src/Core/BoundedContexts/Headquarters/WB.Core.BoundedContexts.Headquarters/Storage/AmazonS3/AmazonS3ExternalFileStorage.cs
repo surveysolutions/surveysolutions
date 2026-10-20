@@ -15,6 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 {
     public class AmazonS3ExternalFileStorage : IExternalFileStorage
     {
+        private const int MaxDeleteObjectsPerRequest = 1000;
         private readonly IAmazonS3Configuration s3Configuration;
         private readonly IAmazonS3 client;
         private readonly ITransferUtility transferUtility;
@@ -255,15 +256,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
         {
             try
             {
-                var deleteRequest = new DeleteObjectsRequest();
-                deleteRequest.BucketName = BucketInfo.BucketName;
-                deleteRequest.Quiet = true; 
-
-                foreach (var path in paths)
-                    deleteRequest.AddKey(BucketInfo.PathTo(path));
-
-                if (deleteRequest.Objects.Any())
+                foreach (var batch in paths.Chunk(MaxDeleteObjectsPerRequest))
                 {
+                    var deleteRequest = new DeleteObjectsRequest
+                    {
+                        BucketName = BucketInfo.BucketName,
+                        Quiet = true
+                    };
+
+                    foreach (var path in batch)
+                        deleteRequest.AddKey(BucketInfo.PathTo(path));
+
                     var response = await client.DeleteObjectsAsync(deleteRequest).ConfigureAwait(false);
                     if (response.DeleteErrors.Count > 0)
                     {
