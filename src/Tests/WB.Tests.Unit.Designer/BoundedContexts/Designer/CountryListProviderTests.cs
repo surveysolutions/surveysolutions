@@ -24,6 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         [TestCase("GBR", "United Kingdom of Great Britain and Northern Ireland")]
         [TestCase("USA", "United States of America")]
         [TestCase("VEN", "Bolivarian Republic of Venezuela")]
+        [SetUICulture("en")]
         public void when_getting_country_title_by_code_should_return_requested_official_name(string code, string expectedTitle)
         {
             CountryListProvider.GetCountryTitleByCode(code).Should().Be(expectedTitle);
